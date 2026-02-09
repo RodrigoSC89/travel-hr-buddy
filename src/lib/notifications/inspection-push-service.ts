@@ -126,14 +126,16 @@ class InspectionNotificationService {
   private handleNotificationAction(action: { actionId: string; notification: { data?: Record<string, unknown> } }) {
     const data = action.notification.data;
     if (data?.route) {
-      window.location.href = data.route as string;
+      window.history.pushState({}, '', data.route as string);
+      window.dispatchEvent(new PopStateEvent('popstate'));
     }
   }
 
   private handleLocalNotificationAction(action: { actionId: string; notification: { extra?: Record<string, unknown> } }) {
     const data = action.notification.extra;
     if (data?.route) {
-      window.location.href = data.route as string;
+      window.history.pushState({}, '', data.route as string);
+      window.dispatchEvent(new PopStateEvent('popstate'));
     }
   }
 

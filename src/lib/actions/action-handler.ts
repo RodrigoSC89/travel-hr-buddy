@@ -220,7 +220,9 @@ export const commonActions = {
     if (newTab) {
       window.open(url, '_blank', 'noopener,noreferrer');
     } else {
-      window.location.href = url;
+      // Use history API for SPA navigation
+      window.history.pushState({}, '', url);
+      window.dispatchEvent(new PopStateEvent('popstate'));
     }
     return { success: true };
   },

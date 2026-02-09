@@ -15,7 +15,7 @@ export default function OfflinePage() {
   };
 
   const handleGoHome = () => {
-    window.location.href = "/";
+    window.location.replace("/");
   };
 
   return (

@@ -29,6 +29,14 @@ class DeepLinkingService {
   }
 
   /**
+   * Navigate using History API (SPA-safe)
+   */
+  private navigateTo(path: string): void {
+    window.history.pushState({}, '', path);
+    window.dispatchEvent(new PopStateEvent('popstate'));
+  }
+
+  /**
    * Initialize deep linking listener
    */
   async initialize(): Promise<void> {
@@ -81,27 +89,27 @@ class DeepLinkingService {
   private registerDefaultRoutes(): void {
     // Crew module
     this.registerRoute("/crew/:id", (params) => {
-      window.location.href = `/crew?id=${params.id}`;
+      this.navigateTo(`/crew?id=${params.id}`);
     });
 
     // Vessel module
     this.registerRoute("/vessel/:id", (params) => {
-      window.location.href = `/vessels?id=${params.id}`;
+      this.navigateTo(`/vessels?id=${params.id}`);
     });
 
     // Documents
     this.registerRoute("/document/:id", (params) => {
-      window.location.href = `/documents?id=${params.id}`;
+      this.navigateTo(`/documents?id=${params.id}`);
     });
 
     // Checklist
     this.registerRoute("/checklist/:id", (params) => {
-      window.location.href = `/checklists?id=${params.id}`;
+      this.navigateTo(`/checklists?id=${params.id}`);
     });
 
     // Training
     this.registerRoute("/training/:courseId", (params) => {
-      window.location.href = `/academy?course=${params.courseId}`;
+      this.navigateTo(`/academy?course=${params.courseId}`);
     });
 
     // Notification action
@@ -111,12 +119,12 @@ class DeepLinkingService {
 
     // Travel booking
     this.registerRoute("/travel/:bookingId", (params) => {
-      window.location.href = `/travel-command?booking=${params.bookingId}`;
+      this.navigateTo(`/travel-command?booking=${params.bookingId}`);
     });
 
     // ESG report
     this.registerRoute("/esg/report/:id", (params) => {
-      window.location.href = `/esg-emissions?report=${params.id}`;
+      this.navigateTo(`/esg-emissions?report=${params.id}`);
     });
   }
 

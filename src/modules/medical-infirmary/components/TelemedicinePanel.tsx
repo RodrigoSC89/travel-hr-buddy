@@ -3,7 +3,7 @@
  * Real-time video consultation with remote doctors
  */
 
-import React, { useState } from "react";
+import React, { useState, useRef, useCallback } from "react";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -107,39 +107,44 @@ export default function TelemedicinePanel() {
   const scheduledConsultations = consultations.filter(c => c.status === "scheduled");
   const completedConsultations = consultations.filter(c => c.status === "completed");
 
-  const startCall = (doctor: Doctor) => {
+  const callIntervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
+
+  const startCall = useCallback((doctor: Doctor) => {
     setSelectedDoctor(doctor);
     setCallState("connecting");
     setShowCallDialog(true);
     
-    // Simulate connection
-    setTimeout(() => {
+    // Simulate WebRTC connection establishment (real latency ~2-3s)
+    const connectTimeout = setTimeout(() => {
       setCallState("connected");
       toast.success(`Conectado com ${doctor.name}`);
       
       // Start duration counter
-      const interval = setInterval(() => {
+      callIntervalRef.current = setInterval(() => {
         setCallDuration(prev => prev + 1);
       }, 1000);
-      
-      // Store interval for cleanup
-      (window as any).callInterval = interval;
     }, 3000);
-  };
 
-  const endCall = () => {
-    if ((window as any).callInterval) {
-      clearInterval((window as any).callInterval);
+    // Store timeout for cleanup
+    return () => clearTimeout(connectTimeout);
+  }, []);
+
+  const endCall = useCallback(() => {
+    if (callIntervalRef.current) {
+      clearInterval(callIntervalRef.current);
+      callIntervalRef.current = null;
     }
     setCallState("ended");
     toast.info("Chamada encerrada");
-    setTimeout(() => {
+    // Small delay for UX feedback before closing dialog
+    const closeTimeout = setTimeout(() => {
       setShowCallDialog(false);
       setCallState("idle");
       setCallDuration(0);
       setSelectedDoctor(null);
     }, 2000);
-  };
+    return () => clearTimeout(closeTimeout);
+  }, []);
 
   const formatDuration = (seconds: number) => {
     const mins = Math.floor(seconds / 60);
