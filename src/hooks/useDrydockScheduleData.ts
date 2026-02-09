@@ -66,7 +66,7 @@ export function useDrydockScheduleData() {
         allEvents.push({
           id: m.id,
           vesselId: m.vessel_id,
-          vesselName: (m.vessels as any)?.name || "Embarcação",
+          vesselName: (m.vessels as Record<string, unknown> | null)?.name as string || "Embarcação",
           type: "maintenance",
           title: m.title || "Manutenção",
           description: m.description || "",

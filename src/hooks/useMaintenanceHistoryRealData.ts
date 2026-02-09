@@ -56,7 +56,7 @@ export function useMaintenanceHistoryRealData() {
       return (maintenanceData || []).map(record => ({
         id: record.id,
         title: record.description || "Manutenção",
-        vesselName: (record.vessels as any)?.name || "Embarcação",
+        vesselName: (record.vessels as Record<string, unknown> | null)?.name as string || "Embarcação",
         systemName: record.maintenance_type || "Sistema Geral",
         completedAt: new Date(record.completed_date || record.scheduled_date || Date.now()),
         type: mapMaintenanceType(record.maintenance_type),

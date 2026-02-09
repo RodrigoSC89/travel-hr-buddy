@@ -43,26 +43,28 @@ export function useNotificationsCenterData() {
       if (error2) throw error2;
 
       // Map intelligent_notifications
-      const fromNotifs: Notification[] = (intelligentNotifs || []).map((n: any) => ({
-        id: n.id,
-        title: n.title || "Notificação",
-        message: n.message || n.content || "",
-        type: mapPriorityToType(n.priority),
-        category: mapChannelToCategory(n.channel),
+      type NotifRow = Record<string, unknown>;
+      const fromNotifs: Notification[] = (intelligentNotifs || []).map((n: NotifRow) => ({
+        id: n.id as string,
+        title: (n.title as string) || "Notificação",
+        message: (n.message as string) || (n.content as string) || "",
+        type: mapPriorityToType(n.priority as string),
+        category: mapChannelToCategory(n.channel as string),
         read: n.read_at !== null,
-        timestamp: n.created_at,
-        actionUrl: n.action_url || undefined,
+        timestamp: n.created_at as string,
+        actionUrl: (n.action_url as string) || undefined,
       }));
 
       // Map soc_alerts
-      const fromAlerts: Notification[] = (socAlerts || []).map((a: any) => ({
-        id: a.id,
-        title: a.title || "Alerta",
-        message: a.message || a.description || "",
-        type: mapSeverityToType(a.severity),
-        category: mapAlertTypeToCategory(a.alert_type),
+      type AlertRow = Record<string, unknown>;
+      const fromAlerts: Notification[] = (socAlerts || []).map((a: AlertRow) => ({
+        id: a.id as string,
+        title: (a.title as string) || "Alerta",
+        message: (a.message as string) || (a.description as string) || "",
+        type: mapSeverityToType(a.severity as string),
+        category: mapAlertTypeToCategory(a.alert_type as string),
         read: a.is_resolved === true,
-        timestamp: a.created_at,
+        timestamp: a.created_at as string,
         actionUrl: undefined,
       }));
 
@@ -76,15 +78,13 @@ export function useNotificationsCenterData() {
   const markAsReadMutation = useMutation({
     mutationFn: async (id: string) => {
       // Try intelligent_notifications first - update status field
-      const { error: error1 } = await supabase
-        .from("intelligent_notifications")
-        .update({ status: "read" } as any)
+      const { error: error1 } = await (supabase.from as Function)("intelligent_notifications")
+        .update({ status: "read" })
         .eq("id", id);
 
       // Try soc_alerts - update acknowledged fields
-      const { error: error2 } = await supabase
-        .from("soc_alerts")
-        .update({ acknowledged_at: new Date().toISOString() } as any)
+      const { error: error2 } = await (supabase.from as Function)("soc_alerts")
+        .update({ acknowledged_at: new Date().toISOString() })
         .eq("id", id);
 
       if (error1 && error2) throw error1;
@@ -100,9 +100,8 @@ export function useNotificationsCenterData() {
       const { data: { user } } = await supabase.auth.getUser();
       if (!user) return;
 
-      await supabase
-        .from("intelligent_notifications")
-        .update({ status: "read" } as any)
+      await (supabase.from as Function)("intelligent_notifications")
+        .update({ status: "read" })
         .eq("user_id", user.id)
         .neq("status", "read");
     },
