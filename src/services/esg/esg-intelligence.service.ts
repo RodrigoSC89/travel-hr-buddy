@@ -86,8 +86,8 @@ export class ESGIntelligenceService {
     const vessels = vesselsRes.data || [];
 
     // Map emissions
-    const emissions: EmissionsData[] = rawEmissions.map((e: any) => {
-      const vessel = vessels.find((v: any) => v.id === e.vessel_id);
+    const emissions: EmissionsData[] = rawEmissions.map((e) => {
+      const vessel = vessels.find((v) => v.id === e.vessel_id);
       return {
         vesselId: e.vessel_id || '',
         vesselName: vessel?.name || 'Embarcação',
@@ -97,14 +97,14 @@ export class ESGIntelligenceService {
         pm: Number(e.pm_kg) || 0,
         fuelConsumed: Number(e.fuel_consumed_mt) || 0,
         distance: Number(e.distance_nm) || 0,
-        ciiRating: (e.carbon_intensity && e.carbon_intensity < 5 ? 'A' : e.carbon_intensity < 10 ? 'B' : e.carbon_intensity < 15 ? 'C' : e.carbon_intensity < 20 ? 'D' : 'E') as EmissionsData['ciiRating'],
+        ciiRating: ((ci) => ci != null && ci < 5 ? 'A' : ci != null && ci < 10 ? 'B' : ci != null && ci < 15 ? 'C' : ci != null && ci < 20 ? 'D' : 'E')(e.carbon_intensity) as EmissionsData['ciiRating'],
         eexiCompliant: true,
         period: e.recorded_date?.slice(0, 7) || new Date().toISOString().slice(0, 7),
       };
     });
 
     // Map waste tanks to categories
-    const wasteCategories: WasteCategory[] = rawTanks.map((t: any) => {
+    const wasteCategories: WasteCategory[] = rawTanks.map((t) => {
       const pct = t.capacity > 0 ? (Number(t.current_level) / Number(t.capacity)) * 100 : 0;
       const status: WasteCategory['status'] = pct >= 90 ? 'critical' : pct >= 75 ? 'warning' : 'ok';
       return {
