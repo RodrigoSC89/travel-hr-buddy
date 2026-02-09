@@ -22,6 +22,7 @@ import { useQueryClient } from '@tanstack/react-query';
 import { useOperationsCommandData } from '@/hooks/useOperationsCommandData';
 import { useRealActionHandlers } from '@/hooks/useRealActionHandlers';
 import { toast } from 'sonner';
+import { NewVoyageDialog } from '@/components/operations/QuickActionDialogs';
 // Lazy load sub-components
 const OperationsCommandHub = lazy(() => import('@/pages/OperationsCommandHubEnhanced'));
 const MaritimeCommandCenter = lazy(() => import('@/pages/MaritimeCommandCenter'));
@@ -57,6 +58,7 @@ export default function OpsMegaHub() {
   const [searchParams, setSearchParams] = useSearchParams();
   const activeTab = searchParams.get('tab') || 'overview';
   const [showActionPanel, setShowActionPanel] = useState(true);
+  const [voyageDialogOpen, setVoyageDialogOpen] = useState(false);
   const queryClient = useQueryClient();
   const { vessels, voyages, metrics, isLoading } = useOperationsCommandData();
   const { exportToCSV } = useRealActionHandlers();
@@ -82,11 +84,17 @@ export default function OpsMegaHub() {
   const handleActionBarAction = (action: string) => {
     switch (action) {
       case 'new-voyage':
-        setSearchParams({ tab: 'overview' });
-        toast.warning('Nova Viagem — Em implantação. Formulário de criação de viagem será entregue em breve.');
+        setVoyageDialogOpen(true);
         break;
       case 'bulk-approve':
-        toast.warning('Aprovação em Lote — Em implantação. Workflow de aprovação será entregue em breve.');
+        // Scroll to OperationsActionPanel where bulk select is available
+        const panel = document.querySelector('[data-testid="operations-action-panel"]');
+        if (panel) {
+          panel.scrollIntoView({ behavior: 'smooth' });
+          toast.info('Selecione as operações na lista abaixo e clique em "Aprovar"');
+        } else {
+          toast.info('Selecione operações na lista e use o botão "Aprovar"');
+        }
         break;
       default:
         setSearchParams({ tab: action });
@@ -226,7 +234,7 @@ export default function OpsMegaHub() {
               {!isLoading && metrics.totalVessels === 0 && (
                 <HubEmptyState 
                   hub="ops" 
-                  onPrimaryAction={() => toast.warning('Nova Viagem — Em implantação.')} 
+                  onPrimaryAction={() => setVoyageDialogOpen(true)} 
                 />
               )}
 
@@ -260,6 +268,9 @@ export default function OpsMegaHub() {
           </Suspense>
         </div>
       </Tabs>
+
+      {/* New Voyage Dialog */}
+      <NewVoyageDialog open={voyageDialogOpen} onOpenChange={setVoyageDialogOpen} />
     </div>
   );
 }
