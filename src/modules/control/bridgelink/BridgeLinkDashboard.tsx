@@ -196,7 +196,7 @@ export default function BridgeLinkDashboard() {
                   <Badge variant="outline" className="bg-yellow-500/10">⚠</Badge>
                   <div>
                     <p className="font-medium">NautilusBrain AI</p>
-                    <p className="text-xs text-muted-foreground">Análise semântica de eventos (em desenvolvimento)</p>
+                    <p className="text-xs text-muted-foreground">Análise semântica de eventos (🚧 em implantação — Q2/2026)</p>
                   </div>
                 </div>
                 <div className="flex items-start gap-2">

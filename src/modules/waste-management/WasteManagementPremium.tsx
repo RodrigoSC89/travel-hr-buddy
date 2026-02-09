@@ -4,6 +4,7 @@
  */
 
 import React from "react";
+import { useSearchParams } from "react-router-dom";
 import { 
   Recycle, LayoutDashboard, Droplets, Trash2, FileText, 
   AlertTriangle, Ship, Calendar, CheckCircle2, TrendingDown,
@@ -45,6 +46,15 @@ function TankVisualization({ tank }: { tank: { name: string; currentVolume: numb
 // Dashboard Content - now with real data
 function DashboardContent() {
   const { data, isLoading } = useWasteIntelligenceData();
+  const [, setSearchParams] = useSearchParams();
+  
+  const navigateToTab = (tab: string) => {
+    setSearchParams(prev => {
+      const next = new URLSearchParams(prev);
+      next.set("tab", tab);
+      return next;
+    });
+  };
   
   const wasteCategories = data?.wasteCategories || [];
   const dischargeRecords = data?.dischargeRecords || [];
@@ -179,19 +189,19 @@ function DashboardContent() {
             </CardTitle>
           </CardHeader>
           <CardContent className="space-y-3">
-            <Button className="w-full justify-start gap-2" variant="outline" onClick={() => toast.info("Navegue à aba 'Record Books' para registrar")}>
+            <Button className="w-full justify-start gap-2" variant="outline" onClick={() => navigateToTab("records")}>
               <FileText className="h-4 w-4" />
               Novo Registro no Oil Record Book (ORB)
             </Button>
-            <Button className="w-full justify-start gap-2" variant="outline" onClick={() => toast.info("Navegue à aba 'Resíduos' para registrar")}>
+            <Button className="w-full justify-start gap-2" variant="outline" onClick={() => navigateToTab("garbage")}>
               <Trash2 className="h-4 w-4" />
               Novo Registro no Garbage Record Book (GRB)
             </Button>
-            <Button className="w-full justify-start gap-2" variant="outline" onClick={() => toast.info("Navegue à aba 'Tanques' para registrar descarte")}>
+            <Button className="w-full justify-start gap-2" variant="outline" onClick={() => navigateToTab("tanks")}>
               <Recycle className="h-4 w-4" />
               Registrar Descarte em Porto
             </Button>
-            <Button className="w-full justify-start gap-2" variant="outline" onClick={() => toast.info("Funcionalidade de assinatura digital disponível nos Record Books")}>
+            <Button className="w-full justify-start gap-2" variant="outline" onClick={() => navigateToTab("records")}>
               <Signature className="h-4 w-4" />
               Assinatura Digital do Comandante
             </Button>
