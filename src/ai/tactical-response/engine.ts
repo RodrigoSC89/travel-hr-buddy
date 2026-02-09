@@ -14,6 +14,12 @@
 import { BridgeLink } from "@/core/BridgeLink";
 import { situationalAwareness } from "@/ai/situational-awareness";
 import { logger } from "@/lib/logger";
+
+// Typed bridge interface for extended events not in BridgeLinkEventType
+const bridge = BridgeLink as unknown as {
+  emit: (event: string, source: string, data: Record<string, unknown>) => void;
+  on: (event: string, callback: (source: string, data: Record<string, unknown>) => void) => void;
+};
 import {
   TacticalEvent,
   TacticalRule,
@@ -83,7 +89,7 @@ export class TacticalResponseEngine {
       maxConcurrentExecutions: this.maxConcurrentExecutions,
     });
 
-    (BridgeLink as any).emit("tactical-response:initialized", "TacticalResponse", {
+    bridge.emit("tactical-response:initialized", "TacticalResponse", {
       timestamp: Date.now(),
       rulesCount: this.rules.size,
     });
@@ -148,7 +154,7 @@ export class TacticalResponseEngine {
         logger.warn("Performance degraded", { duration: duration.toFixed(2) });
       }
 
-      (BridgeLink as any).emit("tactical-response:event-processed", "TacticalResponse", {
+      bridge.emit("tactical-response:event-processed", "TacticalResponse", {
         eventId: event.id,
         executionsCount: executions.length,
         duration,
@@ -239,7 +245,7 @@ export class TacticalResponseEngine {
         this.executionHistory = this.executionHistory.slice(-5000);
       }
 
-      (BridgeLink as any).emit("tactical-response:execution-complete", "TacticalResponse", {
+      bridge.emit("tactical-response:execution-complete", "TacticalResponse", {
         executionId: execution.id,
         ruleId: rule.id,
         status: execution.status,
@@ -418,86 +424,86 @@ export class TacticalResponseEngine {
    * Action implementations
    */
   private executeAlertAction(action: ResponseAction, event: TacticalEvent): any {
-    (BridgeLink as any).emit("tactical-response:alert", "TacticalResponse", {
+    bridge.emit("tactical-response:alert", "TacticalResponse", {
       action: action.description,
-      event: event,
+      event: event as unknown as Record<string, unknown>,
       timestamp: Date.now(),
     });
     return { status: "alert_sent", parameters: action.parameters };
   }
 
   private executeNotificationAction(action: ResponseAction, event: TacticalEvent): any {
-    (BridgeLink as any).emit("tactical-response:notification", "TacticalResponse", {
+    bridge.emit("tactical-response:notification", "TacticalResponse", {
       message: action.description,
-      event: event,
+      event: event as unknown as Record<string, unknown>,
       timestamp: Date.now(),
     });
     return { status: "notification_sent" };
   }
 
   private executeAutomatedCorrectionAction(action: ResponseAction, event: TacticalEvent): any {
-    (BridgeLink as any).emit("tactical-response:correction", "TacticalResponse", {
+    bridge.emit("tactical-response:correction", "TacticalResponse", {
       action: action.description,
-      event: event,
-      parameters: action.parameters,
+      event: event as unknown as Record<string, unknown>,
+      parameters: action.parameters as unknown as Record<string, unknown>,
     });
     return { status: "correction_initiated", parameters: action.parameters };
   }
 
   private executeEscalationAction(action: ResponseAction, event: TacticalEvent): any {
-    (BridgeLink as any).emit("tactical-response:escalation", "TacticalResponse", {
-      level: action.parameters.level || "high",
-      event: event,
+    bridge.emit("tactical-response:escalation", "TacticalResponse", {
+      level: (action.parameters.level as string) || "high",
+      event: event as unknown as Record<string, unknown>,
     });
     return { status: "escalated", level: action.parameters.level };
   }
 
   private executeDataCollectionAction(action: ResponseAction, event: TacticalEvent): any {
-    (BridgeLink as any).emit("tactical-response:data-collection", "TacticalResponse", {
-      sources: action.parameters.sources,
-      event: event,
+    bridge.emit("tactical-response:data-collection", "TacticalResponse", {
+      sources: action.parameters.sources as unknown as Record<string, unknown>,
+      event: event as unknown as Record<string, unknown>,
     });
     return { status: "data_collection_started", sources: action.parameters.sources };
   }
 
   private executeSystemAdjustmentAction(action: ResponseAction, event: TacticalEvent): any {
-    (BridgeLink as any).emit("tactical-response:system-adjustment", "TacticalResponse", {
-      adjustments: action.parameters,
-      event: event,
+    bridge.emit("tactical-response:system-adjustment", "TacticalResponse", {
+      adjustments: action.parameters as unknown as Record<string, unknown>,
+      event: event as unknown as Record<string, unknown>,
     });
     return { status: "system_adjusted", adjustments: action.parameters };
   }
 
   private executeCrewNotificationAction(action: ResponseAction, event: TacticalEvent): any {
-    (BridgeLink as any).emit("tactical-response:crew-notification", "TacticalResponse", {
-      crew: action.parameters.crew,
+    bridge.emit("tactical-response:crew-notification", "TacticalResponse", {
+      crew: action.parameters.crew as unknown as Record<string, unknown>,
       message: action.description,
-      event: event,
+      event: event as unknown as Record<string, unknown>,
     });
     return { status: "crew_notified", crew: action.parameters.crew };
   }
 
   private executeReportGenerationAction(action: ResponseAction, event: TacticalEvent): any {
-    (BridgeLink as any).emit("tactical-response:report-generation", "TacticalResponse", {
-      reportType: action.parameters.reportType,
-      event: event,
+    bridge.emit("tactical-response:report-generation", "TacticalResponse", {
+      reportType: action.parameters.reportType as string,
+      event: event as unknown as Record<string, unknown>,
     });
     return { status: "report_generated", reportType: action.parameters.reportType };
   }
 
   private executeFailoverAction(action: ResponseAction, event: TacticalEvent): any {
-    (BridgeLink as any).emit("tactical-response:failover", "TacticalResponse", {
-      target: action.parameters.target,
-      backup: action.parameters.backup,
-      event: event,
+    bridge.emit("tactical-response:failover", "TacticalResponse", {
+      target: action.parameters.target as string,
+      backup: action.parameters.backup as string,
+      event: event as unknown as Record<string, unknown>,
     });
     return { status: "failover_initiated", target: action.parameters.target };
   }
 
   private executeDiagnosticRunAction(action: ResponseAction, event: TacticalEvent): any {
-    (BridgeLink as any).emit("tactical-response:diagnostic", "TacticalResponse", {
-      diagnosticType: action.parameters.diagnosticType,
-      event: event,
+    bridge.emit("tactical-response:diagnostic", "TacticalResponse", {
+      diagnosticType: action.parameters.diagnosticType as string,
+      event: event as unknown as Record<string, unknown>,
     });
     return { status: "diagnostic_started", type: action.parameters.diagnosticType };
   }
@@ -606,7 +612,7 @@ export class TacticalResponseEngine {
    */
   private setupEventListeners(): void {
     // Listen for situational awareness insights
-    (BridgeLink as any).on("situational-awareness:analysis-complete", async (_source: any, data: any) => {
+    bridge.on("situational-awareness:analysis-complete", async (_source: string, _data: Record<string, unknown>) => {
       // Create events from insights
       const state = situationalAwareness.getCurrentState();
       
@@ -682,7 +688,7 @@ export class TacticalResponseEngine {
     this.statistics = this.getInitialStatistics();
     this.isInitialized = false;
     
-    (BridgeLink as any).emit("tactical-response:cleanup", "TacticalResponse", {
+    bridge.emit("tactical-response:cleanup", "TacticalResponse", {
       timestamp: Date.now(),
     });
   }

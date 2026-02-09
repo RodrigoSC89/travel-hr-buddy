@@ -226,7 +226,7 @@ export async function generateRoutePDF(
     },
   });
 
-  let currentY = (doc as any).lastAutoTable.finalY + 10;
+  let currentY = (doc as unknown as { lastAutoTable: { finalY: number } }).lastAutoTable.finalY + 10;
 
   // Weather Risks
   if (includeWeather && selectedRoute.weatherRisks.length > 0) {
@@ -256,7 +256,7 @@ export async function generateRoutePDF(
       styles: { fontSize: 9 },
     });
 
-    currentY = (doc as any).lastAutoTable.finalY + 10;
+    currentY = (doc as unknown as { lastAutoTable: { finalY: number } }).lastAutoTable.finalY + 10;
   }
 
   // Hazard Zones
@@ -285,7 +285,7 @@ export async function generateRoutePDF(
       styles: { fontSize: 9 },
     });
 
-    currentY = (doc as any).lastAutoTable.finalY + 10;
+    currentY = (doc as unknown as { lastAutoTable: { finalY: number } }).lastAutoTable.finalY + 10;
   }
 
   // Recommendations
@@ -387,7 +387,7 @@ export async function downloadRoutesComparisonPDF(
   if (result.hazardZones.length > 0) {
     doc.setFontSize(14);
     doc.setTextColor(0);
-    doc.text("Zonas de Risco na Região", 14, (doc as any).lastAutoTable.finalY + 15);
+    doc.text("Zonas de Risco na Região", 14, (doc as unknown as { lastAutoTable: { finalY: number } }).lastAutoTable.finalY + 15);
 
     const hazardRows = result.hazardZones.map(z => [
       z.name,
@@ -396,7 +396,7 @@ export async function downloadRoutesComparisonPDF(
     ]);
 
     autoTable(doc, {
-      startY: (doc as any).lastAutoTable.finalY + 20,
+      startY: (doc as unknown as { lastAutoTable: { finalY: number } }).lastAutoTable.finalY + 20,
       head: [["Zona", "Tipo", "Severidade"]],
       body: hazardRows,
       theme: "striped",

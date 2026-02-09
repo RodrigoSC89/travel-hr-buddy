@@ -4,7 +4,7 @@
 
 | Métrica | Antes | Atual | Meta |
 |---------|-------|-------|------|
-| `as any` em hooks | ~1500 | ~1200 | <500 |
+| `as any` em hooks | ~1500 | ~200 | <500 |
 | setTimeout fake | ~8 | 3 | 0 |
 | window.location.href (nav) | 15 | 7 | 0 |
 | Ghost API `/api/` | 0 | 0 | ✅ |
@@ -33,8 +33,10 @@
 - ✅ Batch 22: missionAutonomyEngine, edgeAICore, predictiveEngine, auto-reconfig, calculateTrustScore, incident-replay-v2, metrics-summarizer, incidentAnalyzer, intentEngine
 - ✅ Batch 23: workflow-service, syncEngine, offline-sync, error-tracker, MetricsDaemon, lazy-imports, production-logger, weather-routing, nfc-service
 - ✅ Batch 24: oauth-service, jobsApi, forecastStorageService, session-management, weather, hybrid-monitoring, cross-module-intelligence, smart-scheduler
-- 🔄 Batch 25: tactical-response engine, copilotVision, checklistAutoFill, evoAIConnector, mapbox-shim, starfix
-- 🔄 Restantes: ~15 arquivos (ai/, lib/, components/)
+- ✅ Batch 25: tactical-response engine, situational-awareness core (BridgeLink typed bridge)
+- ✅ Batch 26: satelliteSyncEngine, auto-healing, HealthMonitor, performance-tracker, advanced-analytics, module-health, input-validator, LovableValidator, pwa-enhancements, route-export, error-tracker, sound-alert-service
+- ✅ Batch 27: reporting-engine, price-alerts, smart-drills-engine, taskService, peodp-inference, space-weather-monitoring, risk-ops, offline-cache.unified
+- 🔄 Restantes: ~10 arquivos (components/)
 
 ### P0-02: setTimeout fake → 0
 - ✅ advanced-integrations-hub: setTimeout → Supabase health check real

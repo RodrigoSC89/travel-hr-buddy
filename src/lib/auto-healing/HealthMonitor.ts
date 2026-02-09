@@ -365,8 +365,9 @@ class HealthMonitor {
    * Get memory usage (if available)
    */
   private getMemoryUsage(): number {
-    if (typeof performance !== "undefined" && (performance as any).memory) {
-      return (performance as any).memory.usedJSHeapSize / 1048576; // MB
+    const perfWithMemory = performance as unknown as { memory?: { usedJSHeapSize: number } };
+    if (typeof performance !== "undefined" && perfWithMemory.memory) {
+      return perfWithMemory.memory.usedJSHeapSize / 1048576; // MB
     }
     return 0;
   }

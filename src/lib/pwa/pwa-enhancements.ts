@@ -184,7 +184,7 @@ export async function requestBackgroundSync(tag: string): Promise<boolean> {
   try {
     const registration = await navigator.serviceWorker.ready;
     if ('sync' in registration) {
-      await (registration as any).sync.register(tag);
+      await (registration as unknown as { sync: { register: (tag: string) => Promise<void> } }).sync.register(tag);
       logger.debug('[PWA] Background sync registered:', tag);
       return true;
     }
@@ -258,9 +258,11 @@ export async function setAppBadge(count: number): Promise<void> {
   
   try {
     if (count > 0) {
-      await (navigator as any).setAppBadge(count);
+      const nav = navigator as unknown as { setAppBadge: (count: number) => Promise<void>; clearAppBadge: () => Promise<void> };
+      await nav.setAppBadge(count);
     } else {
-      await (navigator as any).clearAppBadge();
+      const nav = navigator as unknown as { clearAppBadge: () => Promise<void> };
+      await nav.clearAppBadge();
     }
     logger.debug('[PWA] App badge set:', count);
   } catch (error) {

@@ -134,9 +134,9 @@ class ErrorTracker {
           width: window.innerWidth,
           height: window.innerHeight,
         },
-        memory: (performance as any).memory ? {
-          usedJSHeapSize: (performance as any).memory.usedJSHeapSize,
-          totalJSHeapSize: (performance as any).memory.totalJSHeapSize,
+        memory: (performance as unknown as { memory?: { usedJSHeapSize: number; totalJSHeapSize: number } }).memory ? {
+          usedJSHeapSize: (performance as unknown as { memory: { usedJSHeapSize: number; totalJSHeapSize: number } }).memory.usedJSHeapSize,
+          totalJSHeapSize: (performance as unknown as { memory: { usedJSHeapSize: number; totalJSHeapSize: number } }).memory.totalJSHeapSize,
         } : undefined,
       },
       url: window.location.href,

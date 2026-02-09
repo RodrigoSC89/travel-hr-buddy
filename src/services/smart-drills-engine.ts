@@ -580,7 +580,7 @@ export async function recordDrillResponse(
       strengths: toJson(response.strengths),
     };
 
-    const { error } = await smartDrillsClient.from("drill_responses").insert(payload as any);
+    const { error } = await (smartDrillsClient.from as Function)("drill_responses").insert(payload);
 
     if (error) {
       throw new Error(`Error recording drill response: ${error.message}`);
@@ -615,7 +615,7 @@ export async function evaluateDrillPerformance(
 
     for (const response of responses) {
       const prompt = buildEvaluationPrompt(
-        execution.drill_scenarios as any,
+        execution.drill_scenarios as never,
         response
       );
 
@@ -779,7 +779,7 @@ Format as JSON array:
 
     const { error: insertError } = await smartDrillsClient
       .from("drill_corrective_actions")
-      .insert(inserts as any);
+      .insert(inserts as never);
 
     if (insertError) {
       throw new Error(`Failed to store corrective actions: ${insertError.message}`);

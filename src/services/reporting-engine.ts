@@ -340,7 +340,7 @@ export async function generateIntelligentReport(
 
 		const { data: report, error: reportError } = await reportingClient
 			.from("generated_reports")
-			.insert(payload as any)
+			.insert(payload as never)
 			.select("*")
 			.single();
 
@@ -518,7 +518,7 @@ async function generateAISummary(
 	reportData: ReportData
 ): Promise<AISummaryContent> {
 	try {
-		const apiKey = (import.meta as any).env.VITE_OPENAI_API_KEY as string | undefined;
+		const apiKey = import.meta.env.VITE_OPENAI_API_KEY as string | undefined;
 
 		if (!apiKey) {
 			throw new Error("OpenAI API key not configured");
@@ -637,7 +637,7 @@ export async function createReportSchedule(
 
 	const { data, error } = await reportingClient
 		.from("report_schedules")
-		.insert(payload as any)
+		.insert(payload as never)
 		.select("*, report_templates(*)")
 		.single();
 
@@ -692,7 +692,7 @@ export async function recordReportExport(
 		expires_at: input.expiresAt?.toISOString() ?? null,
 	};
 
-	const { error } = await reportingClient.from("report_exports").insert(payload as any);
+	const { error } = await reportingClient.from("report_exports").insert(payload as never);
 	if (error) {
 		logger.error("Failed to record report export", error, { input });
 		throw new Error(error.message);
@@ -717,7 +717,7 @@ export async function listGeneratedReports(
 }
 
 async function logReportGeneration(payload: ReportGenerationLogInsert): Promise<void> {
-	const { error } = await reportingClient.from("report_generation_log").insert(payload as any);
+	const { error } = await reportingClient.from("report_generation_log").insert(payload as never);
 	if (error) {
 		logger.error("Failed to insert report generation log", error, { payload });
 	}

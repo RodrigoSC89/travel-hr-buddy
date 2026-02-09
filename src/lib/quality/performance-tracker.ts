@@ -77,8 +77,9 @@ class PerformanceTracker {
         let clsValue = 0;
         const clsObserver = new PerformanceObserver((list) => {
           list.getEntries().forEach((entry) => {
-            if ("hadRecentInput" in entry && !(entry as any).hadRecentInput) {
-              clsValue += (entry as any).value || 0;
+            const layoutEntry = entry as unknown as { hadRecentInput: boolean; value: number };
+            if ("hadRecentInput" in entry && !layoutEntry.hadRecentInput) {
+              clsValue += layoutEntry.value || 0;
               this.webVitals.cls = clsValue;
               this.recordMetric("cls", clsValue, "count");
             }

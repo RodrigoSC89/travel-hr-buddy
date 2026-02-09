@@ -127,36 +127,34 @@ export class PEODPInferenceService {
     if (vesselError) throw vesselError;
 
     // Fetch performance metrics
-    const { data: metrics } = await supabase
-      .from("vessel_performance_metrics" as any)
+    const { data: metrics } = await (supabase.from as Function)("vessel_performance_metrics")
       .select("*")
       .eq("vessel_id", vesselId)
       .order("recorded_at", { ascending: false })
       .limit(30);
 
     // Fetch incident history
-    const { data: incidents } = await supabase
-      .from("incidents" as any)
+    const { data: incidents } = await (supabase.from as Function)("incidents")
       .select("id")
       .eq("vessel_id", vesselId)
       .gte("occurred_at", new Date(Date.now() - 365 * 24 * 60 * 60 * 1000).toISOString());
 
     const avgAccuracy = metrics && metrics.length > 0
-      ? metrics.reduce((sum: number, m: any) => sum + (m.positioning_accuracy || 0), 0) / metrics.length
+      ? metrics.reduce((sum: number, m: Record<string, unknown>) => sum + (Number(m.positioning_accuracy) || 0), 0) / metrics.length
       : 95;
 
     const avgFuelEfficiency = metrics && metrics.length > 0
-      ? metrics.reduce((sum: number, m: any) => sum + (m.fuel_efficiency || 0), 0) / metrics.length
+      ? metrics.reduce((sum: number, m: Record<string, unknown>) => sum + (Number(m.fuel_efficiency) || 0), 0) / metrics.length
       : 85;
 
     return {
       vessel_id: vesselId,
-      dp_class: (vessel as any)?.dp_class || "DP2",
+      dp_class: (vessel as Record<string, unknown>)?.dp_class as string || "DP2",
       operational_hours: vessel?.operational_hours || 0,
       incidents_count: incidents?.length || 0,
       avg_positioning_accuracy: avgAccuracy,
       fuel_efficiency: avgFuelEfficiency,
-      maintenance_status: (vessel as any)?.maintenance_status || "good"
+      maintenance_status: (vessel as Record<string, unknown>)?.maintenance_status as string || "good"
     };
   }
 
@@ -205,8 +203,7 @@ export class PEODPInferenceService {
    * Fetch existing PEO-DP plan
    */
   private static async fetchPEODPPlan(vesselId: string): Promise<PEODPPlan | null> {
-    const { data, error } = await supabase
-      .from("peodp_plans" as any)
+    const { data, error } = await (supabase.from as Function)("peodp_plans")
       .select("*")
       .eq("vessel_id", vesselId)
       .eq("status", "active")
