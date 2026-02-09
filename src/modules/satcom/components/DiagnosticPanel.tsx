@@ -117,8 +117,7 @@ export const DiagnosticPanel: React.FC<DiagnosticPanelProps> = ({
       "Diagnostic test - simulated connection loss"
     );
 
-    // Wait for simulated recovery
-    await new Promise((resolve) => setTimeout(resolve, 2000));
+    // Proceed to log restoration
 
     // Log restoration
     await satcomFailoverService.logFailover({
@@ -165,7 +164,7 @@ export const DiagnosticPanel: React.FC<DiagnosticPanelProps> = ({
       success: true,
     });
 
-    await new Promise((resolve) => setTimeout(resolve, 1500));
+    // Proceed to log recovery completion
 
     await satcomFailoverService.logFailover({
       vessel_id: vesselId,
@@ -189,9 +188,7 @@ export const DiagnosticPanel: React.FC<DiagnosticPanelProps> = ({
   const testFullCycle = async () => {
     // Run all tests in sequence
     await testConnectionLoss();
-    await new Promise((resolve) => setTimeout(resolve, 1000));
     await testFailover();
-    await new Promise((resolve) => setTimeout(resolve, 1000));
     await testRecovery();
   };
 

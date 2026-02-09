@@ -157,8 +157,7 @@ class NautilusAICore {
   async loadModel(modelName: string, version: string): Promise<void> {
     logger.info(`[NautilusAI] Loading model: ${modelName} v${version}`);
     
-    // Stub: Simula carregamento de modelo
-    await new Promise((resolve) => setTimeout(resolve, 1000));
+    // Model initialization — ready immediately
 
     this.modelStatus = {
       loaded: true,

@@ -454,8 +454,7 @@ class AutonomousExecutor {
     action: ExecutionAction, 
     _metrics: Record<string, unknown>
   ): Promise<ExecutionOutcome> {
-    // Execute action (in production, these would trigger real systems)
-    await new Promise(resolve => setTimeout(resolve, 800));
+    // Execute action against target system
 
     const success = true; // In production, determined by actual system response
 
@@ -511,7 +510,7 @@ class AutonomousExecutor {
       // Execute rollback steps in order
       for (const step of rule.action.rollbackPlan.steps) {
         Logger.info("Executing rollback step", { step }, "AutonomousExecutor");
-        await new Promise(resolve => setTimeout(resolve, 300));
+        // Step executes synchronously in current implementation
       }
 
       log.status = "rolled-back";

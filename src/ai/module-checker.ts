@@ -124,8 +124,7 @@ export async function runModuleHealthCheck(): Promise<ModuleCheckResult[]> {
     );
     results.push(...batchResults);
 
-    // Pequeno delay entre lotes
-    await new Promise(resolve => setTimeout(resolve, 1000));
+    // Batch processed
   }
 
   logger.info(`[Module Checker] Health check completed. ${results.length} modules tested.`);
