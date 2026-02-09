@@ -58,7 +58,7 @@ export function usePEODPAudits() {
         .order('audit_date', { ascending: false }).limit(50);
       if (error) throw error;
       return (data || []).map(r => ({
-        id: r.id, type: 'peo_dp' as const, vessel_name: (r.metadata as any)?.vessel_name || 'N/A',
+        id: r.id, type: 'peo_dp' as const, vessel_name: (r.metadata as Record<string, unknown> | null)?.vessel_name as string || 'N/A',
         status: mapStatus(r.status), compliance_score: r.compliance_score || 0, total_items: 85,
         completed_items: Math.round((r.compliance_score || 0) * 0.85), non_conformities: r.non_conformities_count || 0,
         created_at: r.audit_date || new Date().toISOString(),
@@ -99,7 +99,7 @@ export function usePEOTRAMAudits() {
         .order('audit_date', { ascending: false }).limit(50);
       if (error) throw error;
       return (data || []).map(r => ({
-        id: r.id, type: 'peotram' as const, vessel_name: (r.metadata as any)?.vessel_name || 'N/A',
+        id: r.id, type: 'peotram' as const, vessel_name: (r.metadata as Record<string, unknown> | null)?.vessel_name as string || 'N/A',
         status: mapStatus(r.status), compliance_score: r.compliance_score || 0, total_items: 150,
         completed_items: Math.round((r.compliance_score || 0) * 1.5), non_conformities: r.non_conformities_count || 0,
         created_at: r.audit_date, scheduled_date: r.audit_date,
@@ -118,7 +118,7 @@ export function useSGSOAudits() {
         .order('audit_date', { ascending: false }).limit(50);
       if (error) throw error;
       return (data || []).map(r => ({
-        id: r.id, type: 'sgso' as const, vessel_name: (r.metadata as any)?.vessel_name || 'Embarcação',
+        id: r.id, type: 'sgso' as const, vessel_name: (r.metadata as Record<string, unknown> | null)?.vessel_name as string || 'Embarcação',
         status: mapStatus(r.status), compliance_score: r.compliance_score || 0, total_items: 170,
         completed_items: Math.round((r.compliance_score || 0) * 1.7), non_conformities: r.non_conformities_count || 0,
         created_at: r.audit_date || new Date().toISOString(),
@@ -158,7 +158,7 @@ export function usePreOVIDAudits() {
         .order('audit_date', { ascending: false }).limit(50);
       if (error) throw error;
       return (data || []).map(r => ({
-        id: r.id, type: 'pre_ovid' as const, vessel_name: (r.metadata as any)?.vessel_name || 'N/A',
+        id: r.id, type: 'pre_ovid' as const, vessel_name: (r.metadata as Record<string, unknown> | null)?.vessel_name as string || 'N/A',
         status: 'completed' as const, compliance_score: r.overall_score || 0, total_items: 200,
         completed_items: (r.compliant_count || 0) + (r.non_compliant_count || 0),
         non_conformities: r.non_compliant_count || 0, created_at: r.audit_date, auditor_name: r.inspector_name,

@@ -61,7 +61,7 @@ export function useMaintenanceTasks(vesselId?: string) {
         estimatedDuration: Number(task.estimated_hours) || 4,
         status: (task.status as MaintenanceTask["status"]) || "scheduled",
         assignedTo: "Equipe",
-        parts: Array.isArray(task.parts_required) ? task.parts_required as any[] : [],
+        parts: Array.isArray(task.parts_required) ? (task.parts_required as { name: string; quantity: number; inStock: boolean }[]) : [],
         description: task.description || "",
         aiScore: undefined,
         healthTrend: undefined,

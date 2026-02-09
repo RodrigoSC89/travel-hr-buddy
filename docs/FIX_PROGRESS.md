@@ -26,7 +26,10 @@
 - ✅ Batch 15: usePerformance, useVoiceInput, usePeopleAnalytics, useMaintenanceCommandData, useAIPEOTRAM
 - ✅ Batch 16: useOperationsGanttData, use-peotram-voice, useAutonomousAgentsData, useComplianceIntelligenceData, useNotifications.unified
 - ✅ Batch 17: useMaritimeHR, useSuppliersRealData, useCrewManagementData, useNautiPeopleData, useWorkflowAI
-- 🔄 Restantes: ~81 arquivos em src/hooks
+- ✅ Batch 18: useSystemAlertsData, useFuelOptimizerData, useVoyagePnL, useAuditModules, useSmartMaintenanceData
+- ✅ Batch 19: useCoordination, usePeopleHubData, useOKRsData, useNOCMonitoringData, useVoiceNLU
+- ✅ Batch 20: module-integration.ts (as any → as Function)
+- 🔄 Restantes: ~40 arquivos (lib/, services/, browser APIs legítimas)
 
 ### P0-02: setTimeout fake → 0
 - ✅ advanced-integrations-hub: setTimeout → Supabase health check real

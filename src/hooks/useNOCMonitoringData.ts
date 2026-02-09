@@ -176,7 +176,7 @@ export function useNOCMonitoringData() {
             description: n.message || "",
             source: n.type || "System",
             timestamp: n.created_at,
-            aiSuggestion: (n.metadata as any)?.ai_suggestion || undefined,
+            aiSuggestion: (n.metadata as Record<string, unknown> | null)?.ai_suggestion as string || undefined,
             webhookSent: false
           }));
         }
@@ -191,8 +191,8 @@ export function useNOCMonitoringData() {
         description: alert.message || "",
         source: alert.source_module || "System",
         timestamp: alert.created_at,
-        aiSuggestion: (alert.metadata as any)?.ai_suggestion || undefined,
-        webhookSent: (alert.metadata as any)?.webhook_sent || false
+        aiSuggestion: (alert.metadata as Record<string, unknown> | null)?.ai_suggestion as string || undefined,
+        webhookSent: ((alert.metadata as Record<string, unknown> | null)?.webhook_sent as boolean) || false
       }));
     },
     staleTime: 1000 * 30,
@@ -214,9 +214,9 @@ export function useNOCMonitoringData() {
           id: c.id,
           name: c.display_name,
           url: c.base_url || "",
-          eventTypes: (c.metadata as any)?.event_types || ["critical", "warning"],
+          eventTypes: ((c.metadata as Record<string, unknown> | null)?.event_types as string[]) || ["critical", "warning"],
           isActive: c.is_active || false,
-          lastTriggered: (c.metadata as any)?.last_triggered
+          lastTriggered: (c.metadata as Record<string, unknown> | null)?.last_triggered as string | undefined
         }));
       }
 
@@ -303,7 +303,7 @@ export function useNOCMonitoringData() {
         { event: "INSERT", schema: "public", table: "soc_alerts" },
         (payload) => {
           queryClient.invalidateQueries({ queryKey: ["noc-alerts"] });
-          const alert = payload.new as any;
+          const alert = payload.new as Record<string, unknown>;
           if (alert.severity === "critical") {
             toast.error(`Alerta Crítico: ${alert.title}`, {
               duration: 10000

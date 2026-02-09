@@ -78,7 +78,7 @@ export function useSystemAlerts() {
             isRead: notif.is_read || false,
             module: notif.type || "Sistema",
             severity: notif.priority || undefined,
-            vesselId: (notif.metadata as any)?.vessel_id || undefined,
+            vesselId: (notif.metadata as Record<string, unknown>)?.vessel_id as string || undefined,
           }))
         );
       }

@@ -62,7 +62,7 @@ export function useVoyagePnL() {
       // Priority: voyage_accounting (has financial data)
       for (const row of accounting || []) {
         const vesselName =
-          (row as any).vessels?.name || "Embarcação Desconhecida";
+          (row.vessels as Record<string, unknown> | null)?.name as string || "Embarcação Desconhecida";
         const revenue = Number(row.actual_revenue) || Number(row.budget_revenue) || 0;
         const costs = Number(row.actual_costs) || Number(row.budget_costs) || 0;
         const profit = Number(row.net_result) || revenue - costs;
@@ -103,7 +103,7 @@ export function useVoyagePnL() {
       for (const plan of plans || []) {
         if (plan.voyage_number && seenVoyageNumbers.has(plan.voyage_number)) continue;
 
-        const vesselName = (plan as any).vessels?.name || "Embarcação Desconhecida";
+        const vesselName = (plan.vessels as Record<string, unknown> | null)?.name as string || "Embarcação Desconhecida";
         const fuelCost = Number(plan.estimated_fuel_consumption || 0) * 600; // ~$600/ton estimate
 
         voyages.push({
