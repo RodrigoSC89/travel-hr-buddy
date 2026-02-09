@@ -7,13 +7,16 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { MapPin } from "lucide-react";
 import { logger } from '@/lib/logger';
 
-// Lazy load mapbox-gl via shim
-let mapboxgl: any = null;
+// Mapbox GL module — dynamically loaded, typed as record for flexibility
+type MapboxGL = Record<string, unknown>;
 
-export const loadMapbox = async (): Promise<any> => {
+// Lazy load mapbox-gl via shim
+let mapboxgl: MapboxGL | null = null;
+
+export const loadMapbox = async (): Promise<MapboxGL> => {
   if (!mapboxgl) {
     const { getMapboxGLAsync } = await import("@/lib/mapbox-shim");
-    mapboxgl = await getMapboxGLAsync();
+    mapboxgl = await getMapboxGLAsync() as MapboxGL;
   }
   return mapboxgl;
 };
@@ -25,7 +28,7 @@ interface LazyMapboxProps {
   style?: string;
   projection?: string;
   pitch?: number;
-  onMapLoad?: (map: any) => void;
+  onMapLoad?: (map: MapboxGL) => void;
   className?: string;
   children?: React.ReactNode;
 }
@@ -42,7 +45,7 @@ export const LazyMapbox: React.FC<LazyMapboxProps> = ({
   children
 }) => {
   const mapContainer = useRef<HTMLDivElement>(null);
-  const map = useRef<mapboxgl.Map | null>(null);
+  const map = useRef<MapboxGL | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -61,30 +64,36 @@ export const LazyMapbox: React.FC<LazyMapboxProps> = ({
         
         if (!mounted || !mapContainer.current) return;
 
-        mb.accessToken = token;
+        (mb as Record<string, unknown>).accessToken = token;
 
-        const mapInstance = new mb.Map({
+        const MapClass = mb.Map as new (options: Record<string, unknown>) => MapboxGL;
+        const mapInstance = new MapClass({
           container: mapContainer.current,
           style,
           center,
           zoom,
           pitch,
-          projection: projection as any
+          projection,
         });
         
         map.current = mapInstance;
 
-        mapInstance.addControl(new mb.NavigationControl(), "top-right");
-        mapInstance.addControl(new mb.ScaleControl(), "bottom-left");
+        const NavControl = mb.NavigationControl as new () => unknown;
+        const ScaleCtrl = mb.ScaleControl as new () => unknown;
+        const addControl = (mapInstance as Record<string, unknown>).addControl as (ctrl: unknown, pos: string) => void;
+        addControl(new NavControl(), "top-right");
+        addControl(new ScaleCtrl(), "bottom-left");
 
-        mapInstance.on("load", () => {
+        const on = (mapInstance as Record<string, unknown>).on as (event: string, handler: (e?: unknown) => void) => void;
+
+        on("load", () => {
           if (mounted) {
             setIsLoading(false);
             onMapLoad?.(mapInstance);
           }
         });
 
-        mapInstance.on("error", (e: any) => {
+        on("error", (e: unknown) => {
           logger.error("Mapbox error:", e);
           if (mounted) {
             setError("Failed to load map");
@@ -104,7 +113,10 @@ export const LazyMapbox: React.FC<LazyMapboxProps> = ({
 
     return () => {
       mounted = false;
-      map.current?.remove();
+      if (map.current) {
+        const remove = (map.current as Record<string, unknown>).remove as (() => void) | undefined;
+        remove?.();
+      }
       map.current = null;
     };
   }, [token, style, projection]);

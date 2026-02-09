@@ -8,17 +8,27 @@ import { Skeleton } from "@/components/ui/skeleton";
 
 type ChartType = "line" | "bar" | "doughnut" | "pie" | "radar" | "polarArea";
 
+interface ChartDataset {
+  label?: string;
+  data: number[];
+  backgroundColor?: string | string[];
+  borderColor?: string | string[];
+  [key: string]: unknown;
+}
+
+interface ChartData {
+  labels?: string[];
+  datasets: ChartDataset[];
+}
+
 interface LazyChartProps {
   type: ChartType;
-  data: any;
-  options?: any;
+  data: ChartData;
+  options?: Record<string, unknown>;
   className?: string;
   height?: number;
   width?: number;
 }
-
-// Chart instance type
-type ChartInstance = any;
 
 export const LazyChart: React.FC<LazyChartProps> = ({
   type,
@@ -29,7 +39,8 @@ export const LazyChart: React.FC<LazyChartProps> = ({
   width,
 }) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  const chartRef = useRef<ChartInstance | null>(null);
+  // Chart.js instance — stored as unknown since it's dynamically loaded
+  const chartRef = useRef<{ destroy: () => void; update: (mode?: string) => void; data: unknown } | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -57,17 +68,18 @@ export const LazyChart: React.FC<LazyChartProps> = ({
           chartRef.current.destroy();
         }
 
-        // Create new chart
-        chartRef.current = new Chart(canvasRef.current, {
+        // Create new chart — cast to controlled interface
+        const instance = new Chart(canvasRef.current, {
           type,
-          data: memoizedData,
+          data: memoizedData as never,
           options: {
             responsive: true,
             maintainAspectRatio: false,
             ...memoizedOptions,
-          },
+          } as never,
         });
 
+        chartRef.current = instance as unknown as typeof chartRef.current;
         setIsLoading(false);
       } catch (err) {
         if (mounted) {
