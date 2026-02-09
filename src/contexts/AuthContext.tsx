@@ -124,11 +124,12 @@ export function AuthProvider({ children }: AuthProviderProps): JSX.Element {
     let mounted = true;
     let subscription: { unsubscribe: () => void } | null = null;
     
-    // Safety timeout - ALWAYS exit loading state
+    // Safety timeout - show error state but NEVER grant access
     const safetyTimeout = setTimeout(() => {
       if (mounted && isLoading) {
-        logger.warn("[AuthContext] Safety timeout (20s) - forcing ready state");
+        logger.warn("[AuthContext] Safety timeout (20s) - showing auth error, NOT granting access");
         setIsLoading(false);
+        // Do NOT set user/session - leave them null (unauthenticated)
       }
     }, 20000);
 

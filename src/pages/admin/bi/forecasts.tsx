@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer } from "recharts";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
+import { supabase } from "@/integrations/supabase/client";
 import { logger } from '@/lib/logger';
 
 type ChartData = {
@@ -16,10 +17,11 @@ export default function BIForecastsPage() {
 
   useEffect(() => {
     setLoading(true);
-    fetch("/api/mmi/forecast/all")
-      .then(res => res.json())
-      .then((forecasts) => {
-        const grouped = forecasts.reduce((acc: any, item: any) => {
+    supabase.functions.invoke("jobs-forecast", { body: { action: "list" } })
+      .then(({ data: forecasts, error }) => {
+        if (error) throw error;
+        const items = Array.isArray(forecasts) ? forecasts : (forecasts?.items || []);
+        const grouped = items.reduce((acc: any, item: any) => {
           const key = item.system_name;
           acc[key] = (acc[key] || 0) + 1;
           return acc;

@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer } from "recharts";
+import { supabase } from "@/integrations/supabase/client";
 import { logger } from "@/lib/logger";
 import type { MMIBISummary } from "@/types/mmi";
 
@@ -16,34 +17,21 @@ export default function MMIDashboard() {
     const fetchData = async () => {
       try {
         setLoading(true);
-        const response = await fetch("/api/mmi/bi/summary");
-        
-        // Check if response is JSON
-        const contentType = response.headers.get("content-type");
-        if (contentType && contentType.includes("application/json")) {
-          const json = await response.json();
-          setData(json);
-        } else {
-          // Use mock data for development if API is not available
-          logger.info("Using mock data for MMI BI Dashboard");
+        const { data, error } = await supabase.functions.invoke("mmi-copilot", {
+          body: { action: "summary" },
+        });
+
+        if (error) throw error;
+
+        if (data && typeof data === "object") {
           setData({
-            failuresBySystem: [
-              { system: "Hidráulico", count: 12 },
-              { system: "Elétrico", count: 8 },
-              { system: "Mecânico", count: 15 },
-              { system: "Eletrônico", count: 6 }
-            ],
-            jobsByVessel: [
-              { vessel: "Navio A", jobs: 45 },
-              { vessel: "Navio B", jobs: 38 },
-              { vessel: "Navio C", jobs: 52 },
-              { vessel: "Navio D", jobs: 31 }
-            ],
-            postponements: [
-              { status: "No prazo", count: 120 },
-              { status: "Postergado", count: 25 }
-            ]
+            failuresBySystem: data.failuresBySystem || [],
+            jobsByVessel: data.jobsByVessel || [],
+            postponements: data.postponements || [],
           });
+        } else {
+          logger.warn("MMI summary returned empty data, using empty state");
+          setData({ failuresBySystem: [], jobsByVessel: [], postponements: [] });
         }
       } catch (error) {
         logger.error("Error fetching MMI BI summary:", error);

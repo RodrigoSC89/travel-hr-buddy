@@ -5,6 +5,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
 import { createOSFromForecast } from "@/services/mmi/ordersService";
+import { supabase } from "@/integrations/supabase/client";
 
 type Forecast = {
   id: string
@@ -75,19 +76,17 @@ export default function ForecastHistoryPage() {
 
   useEffect(() => {
     setLoading(true);
-    fetch("/api/mmi/forecast/all")
-      .then(res => res.json())
-      .then((forecasts) => {
-        // Transform the data to match expected format
-        const transformed = forecasts.map((f: any) => ({
+    supabase.functions.invoke("jobs-forecast", { body: { action: "list" } })
+      .then(({ data: forecasts, error }) => {
+        if (error) throw error;
+        const items = Array.isArray(forecasts) ? forecasts : (forecasts?.items || []);
+        const transformed = items.map((f: any) => ({
           ...f,
-          last_maintenance: Array.isArray(f.last_maintenance) 
-            ? f.last_maintenance 
-            : []
+          last_maintenance: Array.isArray(f.last_maintenance) ? f.last_maintenance : []
         }));
         setData(transformed);
       })
-      .catch((err) => {
+      .catch(() => {
         // Forecasts loading error - using empty data
         setData([]);
       })

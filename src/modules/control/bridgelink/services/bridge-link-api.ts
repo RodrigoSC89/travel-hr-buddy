@@ -1,103 +1,155 @@
 import type { BridgeLinkData } from "../types";
-
+import { supabase } from "@/integrations/supabase/client";
 import { logger } from "@/lib/logger";
+import { FF_BRIDGELINK_LIVE_WS } from "@/lib/feature-flags";
+
 /**
- * Fetch BridgeLink data from API
- * Connects to DP Intelligence Center and SGSO systems
+ * Fetch BridgeLink data from Supabase (real data)
+ * Queries dp_events and risk alerts tables directly
  */
 export async function getBridgeLinkData(): Promise<BridgeLinkData> {
   try {
-    const response = await fetch("/api/bridgelink/data");
-    
-    if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`);
+    // Fetch DP events from Supabase
+    const { data: eventsData, error: eventsError } = await (supabase.from as Function)("dp_events")
+      .select("*")
+      .order("created_at", { ascending: false })
+      .limit(50);
+
+    if (eventsError) {
+      logger.warn("dp_events table not available, using empty state", eventsError);
     }
-    
-    const data = await response.json();
+
+    // Fetch risk alerts
+    const { data: alertsData, error: alertsError } = await (supabase.from as Function)("risk_alerts")
+      .select("*")
+      .order("created_at", { ascending: false })
+      .limit(20);
+
+    if (alertsError) {
+      logger.warn("risk_alerts table not available, using empty state", alertsError);
+    }
+
+    // Determine system status based on data
+    const dpEvents = (eventsData || []).map((e: any) => ({
+      id: e.id,
+      timestamp: e.created_at || e.timestamp,
+      type: e.event_type || e.type || "unknown",
+      severity: e.severity || "normal",
+      system: e.system || "DP",
+      description: e.description || "",
+      vessel: e.vessel_name || e.vessel,
+      location: e.location,
+    }));
+
+    const riskAlerts = (alertsData || []).map((a: any) => ({
+      id: a.id,
+      level: a.level || a.severity || "low",
+      title: a.title || a.alert_type || "Alert",
+      description: a.description || "",
+      timestamp: a.created_at || a.timestamp,
+      source: a.source || "system",
+      recommendations: a.recommendations,
+    }));
+
+    const hasCritical = dpEvents.some((e: any) => e.severity === "critical");
+    const hasDegraded = dpEvents.some((e: any) => e.severity === "degradation");
+    const status = hasCritical ? "Critical" : hasDegraded ? "Degradation" : dpEvents.length > 0 ? "Normal" : "Sem dados";
 
     return {
-      dpEvents: data.events || [],
-      riskAlerts: data.alerts || [],
-      status: data.status || "Desconhecido",
-      systemStatus: data.systemStatus,
+      dpEvents,
+      riskAlerts,
+      status,
     };
   } catch (error) {
     logger.error("Erro ao carregar dados do BridgeLink:", error);
-    
-    // Return empty data with offline status on error
     return {
       dpEvents: [],
       riskAlerts: [],
-      status: "Offline",
+      status: "Erro de conexão",
     };
   }
 }
 
 /**
- * Connect to WebSocket stream for real-time DP events
+ * Connect to live updates for DP events
+ * Uses polling (real Supabase queries) as WebSocket substitute
+ * Feature flag FF_BRIDGELINK_LIVE_WS controls this behavior
  * @param onMessage Callback for new events
- * @returns Cleanup function to close the connection
+ * @returns Cleanup function
  */
 export function connectToLiveStream(
   onMessage: (event: any) => void
 ): () => void {
-  const protocol = window.location.protocol === "https:" ? "wss:" : "ws:";
-  const wsUrl = `${protocol}//${window.location.host}/api/dp-intelligence/stream`;
-  
-  let ws: WebSocket | null = null;
-  
-  try {
-    ws = new WebSocket(wsUrl);
-    
-    ws.onopen = () => {
-      logger.info("🟢 BridgeLink WebSocket conectado");
-    };
-    
-    ws.onmessage = (event) => {
-      try {
-        const data = JSON.parse(event.data);
-        onMessage(data);
-      } catch (error) {
-        logger.error("Erro ao processar mensagem WebSocket:", error);
-      }
-    };
-    
-    ws.onerror = (error) => {
-      logger.error("❌ Erro no WebSocket BridgeLink:", error);
-    };
-    
-    ws.onclose = () => {
-      logger.info("🔴 BridgeLink WebSocket desconectado");
-    };
-  } catch (error) {
-    logger.error("Erro ao conectar WebSocket:", error);
+  if (FF_BRIDGELINK_LIVE_WS) {
+    // Future: Real WebSocket implementation
+    logger.info("🟢 BridgeLink WebSocket modo não implementado - usando polling");
   }
+
+  // Polling-based live updates (every 5 seconds)
+  let lastEventTime = new Date().toISOString();
   
-  // Return cleanup function
-  return () => {
-    if (ws && ws.readyState === WebSocket.OPEN) {
-      ws.close();
+  const pollInterval = setInterval(async () => {
+    try {
+      const { data, error } = await (supabase.from as Function)("dp_events")
+        .select("*")
+        .gt("created_at", lastEventTime)
+        .order("created_at", { ascending: true })
+        .limit(10);
+
+      if (error) return;
+
+      if (data && data.length > 0) {
+        lastEventTime = data[data.length - 1].created_at;
+        data.forEach((event: any) => {
+          onMessage({
+            type: event.event_type || event.type,
+            description: event.description,
+            severity: event.severity,
+            timestamp: event.created_at,
+          });
+        });
+      }
+    } catch (err) {
+      logger.error("Erro no polling BridgeLink:", err);
     }
+  }, 5000);
+
+  logger.info("🟢 BridgeLink polling ativo (5s interval)");
+
+  return () => {
+    clearInterval(pollInterval);
+    logger.info("🔴 BridgeLink polling desconectado");
   };
 }
 
 /**
- * Export report in PDF format
+ * Export report in PDF format via Edge Function
  */
 export async function exportReportPDF(data: BridgeLinkData): Promise<Blob> {
-  const response = await fetch("/api/bridgelink/export/pdf", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
+  const { data: pdfData, error } = await supabase.functions.invoke("pdf-generator", {
+    body: {
+      type: "bridgelink-report",
+      content: data,
+      title: "BridgeLink Report",
+      timestamp: new Date().toISOString(),
     },
-    body: JSON.stringify(data),
   });
-  
-  if (!response.ok) {
+
+  if (error) {
     throw new Error("Falha ao exportar relatório PDF");
   }
-  
-  return response.blob();
+
+  // If the Edge Function returns base64 PDF
+  if (pdfData?.pdf) {
+    const binaryString = atob(pdfData.pdf);
+    const bytes = new Uint8Array(binaryString.length);
+    for (let i = 0; i < binaryString.length; i++) {
+      bytes[i] = binaryString.charCodeAt(i);
+    }
+    return new Blob([bytes], { type: "application/pdf" });
+  }
+
+  throw new Error("Formato de resposta PDF inválido");
 }
 
 /**
@@ -109,7 +161,6 @@ export function exportReportJSON(data: BridgeLinkData): string {
     data,
     signature: generateDigitalSignature(data),
   };
-  
   return JSON.stringify(exportData, null, 2);
 }
 
@@ -117,16 +168,12 @@ export function exportReportJSON(data: BridgeLinkData): string {
  * Generate digital signature for audit trail
  */
 function generateDigitalSignature(data: BridgeLinkData): string {
-  // Simple signature based on data hash
-  // In production, use proper cryptographic signing
   const dataString = JSON.stringify(data);
   let hash = 0;
-  
   for (let i = 0; i < dataString.length; i++) {
     const char = dataString.charCodeAt(i);
     hash = ((hash << 5) - hash) + char;
-    hash = hash & hash; // Convert to 32bit integer
+    hash = hash & hash;
   }
-  
   return `BRIDGE-${Math.abs(hash).toString(16).toUpperCase()}-${Date.now()}`;
 }

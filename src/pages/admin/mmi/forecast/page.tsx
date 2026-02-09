@@ -12,6 +12,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { useToast } from "@/hooks/use-toast";
+import { supabase } from "@/integrations/supabase/client";
 
 type Forecast = {
   id: string
@@ -42,19 +43,16 @@ export default function ForecastPage() {
   useEffect(() => {
     const fetchForecasts = async () => {
       try {
-        const res = await fetch("/api/mmi/forecast/all");
-        if (!res.ok) throw new Error("Failed to fetch forecasts");
-        const data = await res.json();
-        
-        // Transform data to ensure correct format
-        const transformed = data.map((f: any) => ({
+        const { data, error } = await supabase.functions.invoke("jobs-forecast", {
+          body: { action: "list" },
+        });
+        if (error) throw error;
+        const items = Array.isArray(data) ? data : (data?.items || []);
+        const transformed = items.map((f: any) => ({
           ...f,
-          last_maintenance: Array.isArray(f.last_maintenance) 
-            ? f.last_maintenance 
-            : [],
+          last_maintenance: Array.isArray(f.last_maintenance) ? f.last_maintenance : [],
           priority: f.priority || "medium"
         }));
-        
         setForecasts(transformed);
         setFilteredForecasts(transformed);
       } catch (error) {
@@ -133,32 +131,26 @@ export default function ForecastPage() {
     try {
       const priority = getPriorityLabel(forecast.priority);
       
-      const res = await fetch("/api/os/create", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
+      const { data: osResult, error: osError } = await supabase.functions.invoke("mmi-os-create", {
+        body: {
           forecast_id: forecast.id,
           vessel_name: forecast.vessel_name,
           system_name: forecast.system_name,
           description: forecast.forecast_text,
           priority: priority.value,
-        }),
+        },
       });
 
-      const data = await res.json();
-
-      if (data.success) {
+      if (osError) {
         toast({
-          title: "✅ OS criada com sucesso!",
-          description: `Ordem de Serviço para ${forecast.system_name}`,
+          title: "❌ Falha ao gerar OS",
+          description: osError.message || "Erro desconhecido",
+          variant: "destructive",
         });
       } else {
         toast({
-          title: "❌ Falha ao gerar OS",
-          description: data.error || "Erro desconhecido",
-          variant: "destructive",
+          title: "✅ OS criada com sucesso!",
+          description: `Ordem de Serviço para ${forecast.system_name}`,
         });
       }
     } catch (error) {

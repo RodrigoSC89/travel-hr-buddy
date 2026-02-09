@@ -1,11 +1,10 @@
 /**
  * AI Template Generation Utility
- * Provides functions for generating template content using GPT-4 AI
+ * Provides functions for generating template content using Edge Functions
  */
 
-/**
- * Template types supported for AI generation
- */
+import { supabase } from "@/integrations/supabase/client";
+
 export type TemplateType = 
   | "certificate"
   | "email"
@@ -18,14 +17,6 @@ export type TemplateType =
   | "memo"
   | "invoice";
 
-/**
- * Generates template content using AI based on type and context
- * @param type - Type of template to generate
- * @param context - Context information for the template
- * @returns Generated template content
- * @example
- * const content = await generateTemplateWithAI('certificate', 'STCW training completion');
- */
 export async function generateTemplateWithAI(
   type: TemplateType | string,
   context: string
@@ -38,51 +29,18 @@ Use formato estruturado e técnico com espaços reservados {{variavel}} para cam
   return await generateTemplateWithCustomPrompt(prompt);
 }
 
-/**
- * Generates template content using a custom AI prompt
- * @param prompt - Custom prompt for AI generation
- * @returns Generated template content
- * @example
- * const content = await generateTemplateWithCustomPrompt(
- *   'Create a professional email template for customer support'
- * );
- */
 export async function generateTemplateWithCustomPrompt(prompt: string): Promise<string> {
-  try {
-    const res = await fetch("/api/ai/generate-template", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ prompt }),
-    });
+  const { data, error } = await supabase.functions.invoke("generate-template", {
+    body: { prompt },
+  });
 
-    if (!res.ok) {
-      const error = await res.json();
-      throw new Error(error.error || "Failed to generate template");
-    }
-
-    const json = await res.json();
-    return json.output || "";
-  } catch (error: unknown) {
-    const errorMessage = error instanceof Error ? error.message : "Failed to generate template with AI";
-    throw new Error(errorMessage);
+  if (error) {
+    throw new Error(error.message || "Failed to generate template");
   }
+
+  return data?.output || data?.content || "";
 }
 
-/**
- * Generates a template with AI and automatically includes common variables
- * @param type - Type of template to generate
- * @param context - Context information for the template
- * @param includeVariables - Additional variables to include in the template
- * @returns Generated template content with variables
- * @example
- * const content = await generateTemplateWithVariables(
- *   'email',
- *   'Welcome message',
- *   ['name', 'company', 'date']
- * );
- */
 export async function generateTemplateWithVariables(
   type: TemplateType | string,
   context: string,
@@ -100,13 +58,6 @@ Use formato estruturado e técnico com espaços reservados {{variavel}} para cam
   return await generateTemplateWithCustomPrompt(prompt);
 }
 
-/**
- * Rewrite existing template content with AI to improve clarity and structure
- * @param content - Original template content
- * @returns Rewritten template content
- * @example
- * const improved = await rewriteTemplateWithAI(originalContent);
- */
 export async function rewriteTemplateWithAI(content: string): Promise<string> {
   const prompt = `Reformule o seguinte template de forma mais clara, profissional e estruturada, mantendo todas as variáveis {{}} intactas:
 

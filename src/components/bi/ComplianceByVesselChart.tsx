@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, Legend } from "recharts";
+import { supabase } from "@/integrations/supabase/client";
 import { logger } from "@/lib/logger";
 
 interface ComplianceByVesselData {
@@ -23,41 +24,38 @@ export function ComplianceByVesselChart() {
       try {
         setLoading(true);
         setError(null);
-        const response = await fetch("/api/bi/compliance-by-vessel");
-        
-        if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`);
+        const { data: vessels, error: fetchError } = await (supabase.from as Function)("vessels")
+          .select("id, name");
+
+        if (fetchError) throw new Error(fetchError.message);
+
+        const results: ComplianceByVesselData[] = [];
+        for (const vessel of (vessels || [])) {
+          const { count: total } = await (supabase.from as Function)("compliance_inspections")
+            .select("*", { count: "exact", head: true })
+            .eq("vessel_id", vessel.id);
+          const { count: concluido } = await (supabase.from as Function)("compliance_inspections")
+            .select("*", { count: "exact", head: true })
+            .eq("vessel_id", vessel.id)
+            .eq("status", "completed");
+          const { count: andamento } = await (supabase.from as Function)("compliance_inspections")
+            .select("*", { count: "exact", head: true })
+            .eq("vessel_id", vessel.id)
+            .eq("status", "in_progress");
+
+          results.push({
+            vessel: vessel.name,
+            total: total || 0,
+            concluido: concluido || 0,
+            andamento: andamento || 0,
+            pendente: (total || 0) - (concluido || 0) - (andamento || 0),
+          });
         }
-        
-        const responseData = await response.json();
-        setData(responseData);
+        setData(results);
       } catch (err) {
         logger.error("[ComplianceByVesselChart] Error fetching data:", err as Error);
-        setError("Erro ao carregar dados de conformidade por navio");
-        // Set sample data on error
-        setData([
-          {
-            vessel: "Ocean Star",
-            total: 15,
-            concluido: 8,
-            andamento: 5,
-            pendente: 2,
-          },
-          {
-            vessel: "Sea Pioneer",
-            total: 12,
-            concluido: 10,
-            andamento: 1,
-            pendente: 1,
-          },
-          {
-            vessel: "Marine Explorer",
-            total: 20,
-            concluido: 5,
-            andamento: 10,
-            pendente: 5,
-          },
-        ]);
+        setError("Erro ao carregar dados. Verifique se as tabelas existem.");
+        setData([]);
       } finally {
         setLoading(false);
       }

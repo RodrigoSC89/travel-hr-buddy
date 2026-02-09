@@ -60,22 +60,15 @@ export default function AdminDashboard() {
     : "";
 
   useEffect(() => {
-    fetch("/api/cron-status")
-      .then(async res => {
-        const contentType = res.headers.get("content-type");
-        // If we get HTML instead of JSON, we're in dev mode without backend
-        if (contentType && contentType.includes("text/html")) {
-          // Use mock data for development
-          return {
-            status: "ok",
-            message: "Cron diário executado com sucesso nas últimas 24h (Dev Mode)"
-          };
+    supabase.functions.invoke("cron-status")
+      .then(({ data, error }) => {
+        if (error) {
+          setCronStatus("warning");
+          setCronMessage("Não foi possível verificar status do cron");
+          return;
         }
-        return res.json();
-      })
-      .then(data => {
-        setCronStatus(data.status);
-        setCronMessage(data.message);
+        setCronStatus(data?.status || "ok");
+        setCronMessage(data?.message || "Status verificado");
       })
       .catch(error => {
         logger.error("Error fetching cron status:", error);

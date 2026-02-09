@@ -7,6 +7,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Loader2, Sparkles, Save, AlertCircle } from "lucide-react";
 import { toast } from "sonner";
 import { Alert, AlertDescription } from "@/components/ui/alert";
+import { supabase } from "@/integrations/supabase/client";
 import { logger } from "@/lib/logger";
 
 export default function MMIForecastPage() {
@@ -28,18 +29,18 @@ export default function MMIForecastPage() {
     setForecast("");
 
     try {
-      const response = await fetch("/api/mmi/forecast", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
+      const { data: response, error } = await supabase.functions.invoke("jobs-forecast", {
+        body: {
+          action: "generate",
           vessel_name: vesselName,
           system_name: systemName,
           last_maintenance_dates: maintenanceDates.split("\n").filter((line) => line.trim()),
           current_hourmeter: Number(hourmeter),
-        }),
+        },
       });
+
+      if (error) throw new Error(error.message);
+      setForecast(response?.forecast || response?.content || JSON.stringify(response));
 
       if (!response.ok) {
         throw new Error("Erro ao gerar forecast");
@@ -97,27 +98,20 @@ export default function MMIForecastPage() {
     setSaving(true);
 
     try {
-      const res = await fetch("/api/mmi/save-forecast", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
+      const { data: saveResult, error: saveError } = await supabase.functions.invoke("jobs-forecast", {
+        body: {
+          action: "save",
           vessel_name: vesselName,
           system_name: systemName,
           hourmeter: Number(hourmeter),
           last_maintenance: maintenanceDates.split("\n").filter((line) => line.trim()),
           forecast_text: forecast,
-        }),
+        },
       });
 
-      const data = await res.json();
+      if (saveError) throw saveError;
 
-      if (data.success) {
-        toast.success("📦 Forecast salvo com sucesso!");
-      } else {
-        toast.error(data.error || "Erro ao salvar forecast");
-      }
+      toast.success("📦 Forecast salvo com sucesso!");
     } catch (error) {
       logger.error("Error saving forecast", { error, vesselName, systemName, forecastLength: forecast.length });
       toast.error("Erro ao salvar forecast");
