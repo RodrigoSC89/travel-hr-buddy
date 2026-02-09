@@ -258,10 +258,28 @@ export default function CharterPartyV2() {
   ];
 
   const contractActions = [
-    { label: "Ver Detalhes", icon: Eye, onClick: (item: CharterContract) => toast.info(`Detalhes: ${item.contract_number}`) },
+    { label: "Ver Detalhes", icon: Eye, onClick: (item: CharterContract) => { 
+      toast.info(`${item.contract_number} - ${item.vessel_name}`, { description: `${item.charterer} | ${item.charter_type.toUpperCase()} | USD ${item.daily_hire.toLocaleString()}/dia` });
+    }},
     { label: "Analisar com IA", icon: Brain, onClick: (item: CharterContract) => analyzeContractWithAI(item.id) },
     { label: "Calculadora", icon: Calculator, onClick: (item: CharterContract) => { setShowCalculator(true); setCalculatorData(prev => ({ ...prev, dailyHire: item.daily_hire.toString() })); } },
-    { label: "Editar", icon: Edit, onClick: (item: CharterContract) => toast.info(`Editando: ${item.contract_number}`) },
+    { label: "Editar", icon: Edit, onClick: (item: CharterContract) => { 
+      setNewContract({
+        contract_number: item.contract_number,
+        vessel_name: item.vessel_name,
+        charterer: item.charterer,
+        owner: item.owner,
+        charter_type: item.charter_type,
+        start_date: item.start_date,
+        end_date: item.end_date,
+        daily_hire: item.daily_hire.toString(),
+        currency: item.currency,
+        payment_terms: item.payment_terms || '',
+        demurrage_rate: item.demurrage_rate?.toString() || '',
+        despatch_rate: item.despatch_rate?.toString() || ''
+      });
+      setShowNewContract(true);
+    }},
   ];
 
   const calculation = calculateHire();

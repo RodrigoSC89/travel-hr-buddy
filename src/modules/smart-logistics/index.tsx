@@ -4,6 +4,7 @@
  */
 
 import React, { useState } from "react";
+import { supabase } from "@/integrations/supabase/client";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -430,7 +431,17 @@ export default function SmartLogistics() {
                               size="sm" 
                               variant="outline" 
                               className="mt-3 w-full"
-                              onClick={() => toast.success(`Ação executada: ${rec.action}`)}
+                              onClick={() => {
+                                // Log AI recommendation action to audit trail
+                                (supabase.from as Function)('ai_audit_logs').insert({
+                                  user_input: rec.action,
+                                  ai_response: `Recommendation applied: ${rec.title}`,
+                                  interaction_type: 'logistics_recommendation',
+                                  module_name: 'smart_logistics'
+                                }).then(() => {
+                                  toast.success(`Ação executada: ${rec.action}`);
+                                });
+                              }}
                             >
                               {rec.action}
                             </Button>
