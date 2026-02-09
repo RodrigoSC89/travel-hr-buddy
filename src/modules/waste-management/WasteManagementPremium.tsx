@@ -286,8 +286,31 @@ export default function WasteManagementPremium() {
     // Real refresh handled by React Query invalidation
   };
 
-  const handleExport = () => {
-    toast.success("Relatório MARPOL exportado");
+  const handleExport = async () => {
+    try {
+      const { data: wasteRecords } = await (await import("@/integrations/supabase/client")).supabase
+        .from('waste_records')
+        .select('*')
+        .order('created_at', { ascending: false })
+        .limit(200);
+
+      const csvRows = [
+        "Data;Tipo;Categoria;Volume;Unidade;Embarcação;Status",
+        ...(wasteRecords || []).map((r: any) => 
+          `${new Date(r.created_at).toLocaleDateString()};${r.waste_type || ''};${r.category || ''};${r.volume || ''};${r.unit || ''};${r.vessel_id || ''};${r.status || ''}`
+        )
+      ];
+      const blob = new Blob(['\uFEFF' + csvRows.join('\n')], { type: 'text/csv;charset=utf-8;' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `marpol-report-${new Date().toISOString().slice(0,10)}.csv`;
+      a.click();
+      URL.revokeObjectURL(url);
+      toast.success("Relatório MARPOL exportado com sucesso!");
+    } catch {
+      toast.error("Erro ao exportar relatório MARPOL");
+    }
   };
 
   const tabs: ModuleTab[] = [

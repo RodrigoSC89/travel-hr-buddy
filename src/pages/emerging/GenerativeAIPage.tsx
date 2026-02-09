@@ -308,7 +308,15 @@ Este documento foi gerado automaticamente e deve ser revisado antes do uso ofici
                         <Copy className="h-4 w-4 mr-1" />
                         Copiar
                       </Button>
-                      <Button size="sm" variant="outline">
+                      <Button size="sm" variant="outline" onClick={() => {
+                        const blob = new Blob([generatedContent || ''], { type: 'text/plain;charset=utf-8;' });
+                        const url = URL.createObjectURL(blob);
+                        const a = document.createElement('a');
+                        a.href = url;
+                        a.download = `ai-generated-${new Date().toISOString().slice(0,10)}.txt`;
+                        a.click();
+                        URL.revokeObjectURL(url);
+                      }}>
                         <Download className="h-4 w-4 mr-1" />
                         Exportar
                       </Button>
