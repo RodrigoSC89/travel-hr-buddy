@@ -232,7 +232,6 @@ function PeopleDashboard() {
                   <div className="flex items-center gap-4">
                     <div className="text-right">
                       <p className="text-sm">{member.nationality || "Brasileiro"}</p>
-                      <p className="text-xs text-muted-foreground">{member.department || "Deck"}</p>
                     </div>
                     <Badge variant={
                       member.status === "active" || member.status === "on_board" ? "default" :
@@ -257,8 +256,22 @@ export default function NautiPeoplePremium() {
     // Real refresh handled by React Query invalidation
   };
 
-  const handleExport = () => {
-    toast.success("Relatório de tripulação exportado");
+  const handleExport = async () => {
+    try {
+      const { data } = await supabase.from('crew_members').select('full_name, rank, nationality, status').order('full_name');
+      if (!data || data.length === 0) { toast.error("Sem dados para exportar"); return; }
+      const csvRows = ['Nome;Posto;Nacionalidade;Status', ...(data as any[]).map(c => `${c.full_name};${c.rank || ''};${c.nationality || ''};${c.status || ''}`)];
+      const blob = new Blob(['\uFEFF' + csvRows.join('\n')], { type: 'text/csv;charset=utf-8;' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `tripulacao-${new Date().toISOString().slice(0,10)}.csv`;
+      a.click();
+      URL.revokeObjectURL(url);
+      toast.success("Relatório de tripulação exportado");
+    } catch {
+      toast.error("Erro ao exportar relatório");
+    }
   };
 
   const tabs: ModuleTab[] = [

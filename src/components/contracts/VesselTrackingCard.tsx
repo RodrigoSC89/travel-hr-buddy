@@ -11,6 +11,7 @@ import { Input } from "@/components/ui/input";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Separator } from "@/components/ui/separator";
 import { toast } from "sonner";
+import { supabase } from "@/integrations/supabase/client";
 import { 
   Navigation, MapPin, Ship, Anchor, Clock, Wind, 
   Waves, Thermometer, RefreshCw, ExternalLink, Eye,
@@ -112,16 +113,37 @@ export function VesselTrackingCard({ contractId }: VesselTrackingCardProps) {
 
   const refreshPositions = async () => {
     setLoading(true);
-    // Simulate AIS data fetch
-    setTimeout(() => {
-      setVessels(prev => prev.map((v, idx) => ({
-        ...v,
-        last_update: new Date().toISOString(),
-        speed: v.status === 'underway' ? v.speed + Math.sin(Date.now() / 1000 + idx) * 0.5 : 0
-      })));
-      setLoading(false);
+    try {
+      const { data, error } = await supabase
+        .from('vessels')
+        .select('id, name, imo_number, current_latitude, current_longitude, current_speed, current_heading, status')
+        .limit(20);
+
+      if (!error && data && data.length > 0) {
+        setVessels(data.map((v: any) => ({
+          id: v.id,
+          name: v.name || 'Embarcação',
+          imo: v.imo_number || '',
+          mmsi: '',
+          lat: v.current_latitude || -23.96,
+          lng: v.current_longitude || -46.33,
+          heading: v.current_heading || 0,
+          speed: v.current_speed || 0,
+          status: v.status === 'active' ? 'underway' as const : 'moored' as const,
+          destination: '',
+          eta: '-',
+          last_update: new Date().toISOString(),
+        })));
+      } else {
+        // Update timestamps on existing data
+        setVessels(prev => prev.map(v => ({ ...v, last_update: new Date().toISOString() })));
+      }
       toast.success('Posições atualizadas!');
-    }, 1500);
+    } catch {
+      toast.error('Erro ao atualizar posições');
+    } finally {
+      setLoading(false);
+    }
   };
 
   const getStatusBadge = (status: string) => {

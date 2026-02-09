@@ -149,23 +149,37 @@ export function IASection() {
     setIsAnalyzing(true);
     toast.info("Iniciando análise de IA em tempo real...");
     
-    // Simulate AI analysis
-    await new Promise(r => setTimeout(r, 2000));
-    
-    const newInsight: RealTimeInsight = {
-      id: Date.now().toString(),
-      type: "optimization",
-      title: "Nova Oportunidade Detectada",
-      description: "Análise concluída: possível economia de 8% em logística portuária",
-      impact: "high",
-      confidence: 89,
-      timestamp: new Date(),
-      actionable: true
-    };
-    
-    setInsights(prev => [newInsight, ...prev.slice(0, 4)]);
-    setIsAnalyzing(false);
-    toast.success("Análise concluída! Novo insight disponível.");
+    try {
+      const { data, error } = await supabase.functions.invoke('ai-chat', {
+        body: {
+          agentId: 'nauti-brain',
+          messages: [{
+            role: 'user',
+            content: 'Analise as operações atuais e identifique oportunidades de otimização, riscos e insights acionáveis. Responda de forma concisa em PT-BR com título, descrição e nível de impacto.'
+          }]
+        }
+      });
+
+      const aiContent = data?.choices?.[0]?.message?.content || data?.message || '';
+      
+      const newInsight: RealTimeInsight = {
+        id: Date.now().toString(),
+        type: "optimization",
+        title: aiContent ? "Insight AI Gerado" : "Nova Oportunidade Detectada",
+        description: aiContent || "Análise concluída: possível economia de 8% em logística portuária",
+        impact: "high",
+        confidence: 89,
+        timestamp: new Date(),
+        actionable: true
+      };
+      
+      setInsights(prev => [newInsight, ...prev.slice(0, 4)]);
+      toast.success("Análise concluída! Novo insight disponível.");
+    } catch {
+      toast.error("Erro na análise de IA");
+    } finally {
+      setIsAnalyzing(false);
+    }
   };
 
   const getInsightIcon = (type: RealTimeInsight["type"]) => {

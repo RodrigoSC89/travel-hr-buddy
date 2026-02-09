@@ -190,11 +190,23 @@ export function NOCMonitoringCenter() {
     ));
   };
 
-  const testWebhook = (webhook: WebhookConfig) => {
+  const testWebhook = async (webhook: WebhookConfig) => {
     toast.info(`Testando webhook: ${webhook.name}...`);
-    setTimeout(() => {
-      toast.success(`Webhook ${webhook.name} respondeu com sucesso!`);
-    }, 1500);
+    try {
+      const response = await fetch(webhook.url, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ test: true, source: 'noc-monitoring', timestamp: new Date().toISOString() }),
+      });
+      if (response.ok) {
+        setLocalWebhooks(prev => prev.map(w => w.id === webhook.id ? { ...w, lastTriggered: new Date().toISOString() } : w));
+        toast.success(`Webhook ${webhook.name} respondeu com sucesso!`);
+      } else {
+        toast.error(`Webhook ${webhook.name} retornou status ${response.status}`);
+      }
+    } catch {
+      toast.error(`Falha ao conectar com webhook ${webhook.name}`);
+    }
   };
 
   const acknowledgeAlert = async (id: string) => {

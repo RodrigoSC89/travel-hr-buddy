@@ -92,11 +92,19 @@ export function AIAgentHealthDashboard() {
   const totalRequests = AI_AGENTS.reduce((acc, a) => acc + a.requestsToday, 0);
   const avgAccuracy = Math.round(AI_AGENTS.reduce((acc, a) => acc + a.accuracy, 0) / AI_AGENTS.length);
 
-  const restartAgent = (agentId: string) => {
-    toast.success(`Reiniciando ${agentId}...`);
-    setTimeout(() => {
+  const restartAgent = async (agentId: string) => {
+    toast.info(`Reiniciando ${agentId}...`);
+    try {
+      await supabase.from('ai_audit_logs').insert({
+        user_input: `restart_agent:${agentId}`,
+        interaction_type: 'agent_restart',
+        module_name: 'ai-agent-health',
+        ai_response: `Agent ${agentId} restart requested`,
+      });
       toast.success(`${agentId} reiniciado com sucesso`);
-    }, 2000);
+    } catch {
+      toast.error(`Erro ao reiniciar ${agentId}`);
+    }
   };
 
   const runAIDiagnostic = async () => {

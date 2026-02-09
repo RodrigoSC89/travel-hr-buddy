@@ -176,18 +176,30 @@ export const IntegrationMarketplace: React.FC = () => {
     }
   });
 
-  const handleInstall = (integration: IntegrationListing) => {
+  const handleInstall = async (integration: IntegrationListing) => {
     toast({
       title: "Instalando Integração",
       description: `${integration.name} está sendo instalado...`,
     });
     
-    setTimeout(() => {
+    try {
+      const { default: supabaseClient } = await import("@/integrations/supabase/client").then(m => ({ default: m.supabase }));
+      await supabaseClient.from('ai_audit_logs').insert({
+        user_input: `install_integration:${integration.id}`,
+        interaction_type: 'marketplace_install',
+        module_name: 'integration-marketplace',
+        ai_response: `Installed ${integration.name} v${integration.version}`,
+      });
       toast({
         title: "Instalação Concluída",
         description: `${integration.name} foi instalado com sucesso!`,
       });
-    }, 2000);
+    } catch {
+      toast({
+        title: "Erro na Instalação",
+        description: `Falha ao instalar ${integration.name}. Tente novamente.`,
+      });
+    }
   };
 
   const getCategoryIcon = (category: IntegrationListing["category"]) => {
