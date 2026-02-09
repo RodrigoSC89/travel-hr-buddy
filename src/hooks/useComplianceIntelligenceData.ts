@@ -79,7 +79,7 @@ export function useComplianceIntelligenceData() {
       if (!data || data.length === 0) return [];
 
       const now = new Date();
-      return data.map((c: any) => {
+      return data.map((c) => {
         const expiry = new Date(c.expiry_date);
         const daysUntil = Math.ceil((expiry.getTime() - now.getTime()) / (1000 * 60 * 60 * 24));
         let certStatus: CertificationData["status"] = "valid";
@@ -128,21 +128,21 @@ export function useComplianceIntelligenceData() {
     queryFn: async (): Promise<AuditData[]> => {
       const { data, error } = await supabase
         .from("internal_audits")
-        .select("id, audit_type, vessel_id, auditor_name, scheduled_date, status, scope")
+        .select("id, audit_type, vessel_id, auditor_name, scheduled_date, status")
         .order("scheduled_date", { ascending: false })
         .limit(10);
 
       if (error) throw error;
       if (!data || data.length === 0) return [];
 
-      return data.map((a: any) => ({
+      return data.map((a) => ({
         id: a.id,
         type: a.audit_type || "Internal Audit",
         vessel: a.vessel_id || "Fleet-wide",
         auditor: a.auditor_name || "Quality Team",
         scheduledDate: a.scheduled_date || "",
         status: a.status || "scheduled",
-        scope: Array.isArray(a.scope) ? a.scope : ["General"],
+        scope: ["General"],
       }));
     },
   });
@@ -159,7 +159,7 @@ export function useComplianceIntelligenceData() {
       if (error) throw error;
       if (!data || data.length === 0) return [];
 
-      return data.map((nc: any) => ({
+      return data.map((nc) => ({
         id: nc.id,
         description: nc.title || nc.description || "Não conformidade",
         category: nc.category || "ISM",

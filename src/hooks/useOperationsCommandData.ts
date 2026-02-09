@@ -42,7 +42,7 @@ export interface PortData {
   latitude: number | null;
   longitude: number | null;
   port_type: string | null;
-  facilities: any;
+  facilities: Record<string, unknown> | null;
   status: string | null;
 }
 
@@ -116,7 +116,7 @@ export function useOperationsCommandData() {
 
   // Calculate logistics metrics from voyages (no separate logistics table)
   const logisticsLoading = false;
-  const logistics: any[] = [];
+  const logistics: Record<string, unknown>[] = [];
 
   // Create voyage mutation
   const createVoyage = useMutation({
@@ -212,13 +212,13 @@ export function useOperationsCommandData() {
 
   // Calculate operational metrics
   const operationalMetrics = {
-    activeVoyages: voyages.filter((v: any) => v.status === "in_progress" || v.status === "active").length,
-    plannedVoyages: voyages.filter((v: any) => v.status === "planned" || v.status === "scheduled").length,
-    completedVoyages: voyages.filter((v: any) => v.status === "completed").length,
-    activeMissions: missions.filter((m: any) => m.status === "active" || m.status === "in_progress").length,
+    activeVoyages: voyages.filter((v) => v.status === "in_progress" || v.status === "active").length,
+    plannedVoyages: voyages.filter((v) => v.status === "planned" || v.status === "scheduled").length,
+    completedVoyages: voyages.filter((v) => v.status === "completed").length,
+    activeMissions: missions.filter((m) => m.status === "active" || m.status === "in_progress").length,
     totalVessels: vessels.length,
-    operationalVessels: vessels.filter((v: any) => v.status === "active" || v.status === "operational").length,
-    pendingLogistics: logistics.filter((l: any) => l.status === "pending").length,
+    operationalVessels: vessels.filter((v) => v.status === "active" || v.status === "operational").length,
+    pendingLogistics: logistics.filter((l) => l.status === "pending").length,
     totalPorts: ports.length,
   };
 

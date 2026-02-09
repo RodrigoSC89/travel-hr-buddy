@@ -44,25 +44,25 @@ export function useMedicalIntelligenceData() {
       if (checkErr) throw checkErr;
 
       // Map checkins by crew member name
-      const checkinMap = new Map<string, any>();
+      const checkinMap = new Map<string, typeof checkins extends (infer T)[] ? T : never>();
       for (const c of checkins || []) {
         if (c.crew_member_name && !checkinMap.has(c.crew_member_name)) {
           checkinMap.set(c.crew_member_name, c);
         }
       }
 
-      return (members || []).map((m: any): MedicalCrewMember => {
-        const fullName = `${m.first_name || ""} ${m.last_name || ""}`.trim() || "Tripulante";
+      return (members || []).map((m): MedicalCrewMember => {
+        const fullName = `${m.full_name || ""}`.trim() || "Tripulante";
         const checkin = checkinMap.get(fullName);
 
         const alerts: string[] = [];
         let riskLevel: "low" | "medium" | "high" = "low";
 
         if (checkin) {
-          const stress = checkin.stress_level || 5;
-          const sleep = checkin.sleep_quality || 5;
-          const energy = checkin.energy_level || 5;
-          const physical = checkin.physical_health || 5;
+          const stress = Number(checkin.stress_level) || 5;
+          const sleep = Number(checkin.sleep_quality) || 5;
+          const energy = Number(checkin.energy_level) || 5;
+          const physical = Number(checkin.physical_health) || 5;
 
           if (stress >= 8 || physical <= 3) {
             riskLevel = "high";
@@ -83,7 +83,7 @@ export function useMedicalIntelligenceData() {
             id: m.id,
             name: fullName,
             role: m.rank || m.position || "Tripulante",
-            vessel: m.vessels?.name || "—",
+            vessel: (m.vessels as { name?: string } | null)?.name || "—",
             vitals: {
               heartRate,
               oxygenLevel,
@@ -91,7 +91,7 @@ export function useMedicalIntelligenceData() {
               bloodPressure: `${110 + stress * 3}/${70 + stress * 2}`,
             },
             riskLevel,
-            lastCheckup: checkin.created_at?.split("T")[0] || "",
+            lastCheckup: String(checkin.created_at || "").split("T")[0] || "",
             alerts,
           };
         }
@@ -101,7 +101,7 @@ export function useMedicalIntelligenceData() {
           id: m.id,
           name: fullName,
           role: m.rank || m.position || "Tripulante",
-          vessel: m.vessels?.name || "—",
+          vessel: (m.vessels as { name?: string } | null)?.name || "—",
           vitals: { heartRate: 72, oxygenLevel: 98, temperature: 36.5, bloodPressure: "120/80" },
           riskLevel: "low",
           lastCheckup: "",
