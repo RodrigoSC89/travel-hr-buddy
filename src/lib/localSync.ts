@@ -10,7 +10,7 @@ export interface OfflineRecord {
   id?: number;
   table: string;
   action: "create" | "update" | "delete";
-  data: any;
+  data: unknown;
   timestamp: number;
   synced: boolean;
 }
@@ -57,7 +57,7 @@ class LocalSyncManager {
   /**
    * Save data locally when offline
    */
-  async saveLocally(data: any, table: string, action: "create" | "update" | "delete" = "create"): Promise<void> {
+  async saveLocally(data: unknown, table: string, action: "create" | "update" | "delete" = "create"): Promise<void> {
     if (!this.db) await this.init();
 
     return new Promise((resolve, reject) => {
@@ -86,7 +86,7 @@ class LocalSyncManager {
   /**
    * Cache data for offline access
    */
-  async cacheData(key: string, data: any, table: string): Promise<void> {
+  async cacheData(key: string, data: unknown, table: string): Promise<void> {
     if (!this.db) await this.init();
 
     return new Promise((resolve, reject) => {

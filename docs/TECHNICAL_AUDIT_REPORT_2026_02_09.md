@@ -286,16 +286,17 @@ Hooks com nomes quase idênticos indicam falta de coordenação.
 | Sprint 12 | 2026-02-09 | +1 | Type safety (SatelliteSyncEngine, PluginSystem, NOAA-SWPC, TrackingIntelligence, CPTEC, CloneService), 35+ `any` removidos |
 | Sprint 13 | 2026-02-09 | +1 | Type safety (DashboardOptimizer, CursorPagination, APM, PerformanceMonitor, MLCInspection, DocumentIntelligence, PrePSC), 40+ `any` removidos |
 | Sprint 14 | 2026-02-09 | +1 | Type safety (VoiceCommander, InterVesselSync, MissionPipeline, ForecastEngine, SafeLazyImport, CrossModuleValidator, TranslationManager, AIControlTower, StarFix, Terrastar), 35+ `any` removidos |
-| **Acumulado** | | **+22** | **80 → 98/100** |
+| Sprint 15 | 2026-02-09 | +1 | Type safety (LocalSync, MaintenanceOrchestrator, SyncManager, SyncEngine, AISClient, KPIs, DroneCommand, Satellite, SmartDrills), 45+ `any` removidos |
+| **Acumulado** | | **+23** | **80 → 99/100** |
 
 ### Próximos passos para 100/100
-1. **CRUD completo (+2)**: ISPS, Drydock, CrewScheduler com persistência real — 3 dias
+1. **CRUD completo (+1)**: ISPS, Drydock, CrewScheduler com persistência real — 3 dias
 
 ---
 
 **FIM DO RELATÓRIO**  
 **Total de falhas originais:** 139  
-**Falhas corrigidas (Sprint 1→14):** 122  
-**Falhas restantes:** 17  
+**Falhas corrigidas (Sprint 1→15):** 128  
+**Falhas restantes:** 11  
 **Esforço total de correção restante:** ~3 dias (24 horas)  
-**Prioridade:** Sprint 15 (CRUD real) → Sprint 16 (Consolidação)
+**Prioridade:** Sprint 16 (CRUD real) → Sprint 17 (Consolidação final)

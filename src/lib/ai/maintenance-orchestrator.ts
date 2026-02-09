@@ -10,10 +10,11 @@
  * @version 1.0.0 (Patch 21)
  */
 
-let ort: any = null;
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- ONNX runtime typing is complex
+let ort: Record<string, any> | null = null;
 const loadORT = async () => {
   if (!ort) {
-    ort = await import("onnxruntime-web");
+    ort = await import("onnxruntime-web") as Record<string, any>;
   }
   return ort;
 };
@@ -66,7 +67,8 @@ export async function runMaintenanceOrchestrator(
   telemetry: TelemetryData
 ): Promise<MaintenanceResult> {
   try {
-    const session = await ort.InferenceSession.create("/models/nautilus_maintenance_predictor.onnx");
+    const ortModule = await loadORT();
+    const session = await ortModule.InferenceSession.create("/models/nautilus_maintenance_predictor.onnx");
 
     const inputData = new Float32Array([
       telemetry.generator_load,
@@ -76,7 +78,7 @@ export async function runMaintenanceOrchestrator(
       telemetry.power_fluctuation,
     ]);
 
-    const tensor = new ort.Tensor("float32", inputData, [1, 5]);
+    const tensor = new ortModule.Tensor("float32", inputData, [1, 5]);
     const feeds = { input: tensor };
 
     const results = await session.run(feeds);

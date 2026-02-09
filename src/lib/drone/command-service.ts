@@ -231,11 +231,12 @@ export class DroneCommandService {
   /**
    * Validate position
    */
-  private isValidPosition(position: any): boolean {
+  private isValidPosition(position: unknown): boolean {
     if (!position || typeof position !== "object") return false;
-    if (typeof position.lat !== "number" || typeof position.lng !== "number") return false;
-    if (position.lat < -90 || position.lat > 90) return false;
-    if (position.lng < -180 || position.lng > 180) return false;
+    const pos = position as { lat?: unknown; lng?: unknown };
+    if (typeof pos.lat !== "number" || typeof pos.lng !== "number") return false;
+    if (pos.lat < -90 || pos.lat > 90) return false;
+    if (pos.lng < -180 || pos.lng > 180) return false;
     return true;
   }
 
