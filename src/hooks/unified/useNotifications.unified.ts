@@ -213,7 +213,7 @@ export function useNotifications(options: UseNotificationsOptions = {}): UseNoti
       const seenIds = new Set<string>();
 
       // Process intelligent_notifications
-      (intelligentData || []).forEach((n: any) => {
+      (intelligentData || []).forEach((n) => {
         if (!seenIds.has(n.id)) {
           seenIds.add(n.id);
           combined.push({
@@ -223,35 +223,35 @@ export function useNotifications(options: UseNotificationsOptions = {}): UseNoti
             message: n.message,
             type: normalizeType(n.type),
             priority: normalizePriority(n.priority),
-            category: normalizeCategory(n.category),
+            category: normalizeCategory(null),
             read: n.is_read || false,
             timestamp: new Date(n.created_at),
             createdAt: n.created_at,
-            actionUrl: n.action_url,
-            actionLabel: n.action_label,
-            metadata: n.metadata,
-            autoDismiss: n.auto_dismiss,
-            expiresAt: n.expires_at,
+            actionUrl: undefined,
+            actionLabel: n.action_text ?? undefined,
+            metadata: n.metadata as Record<string, unknown> | undefined,
+            autoDismiss: undefined,
+            expiresAt: undefined,
           });
         }
       });
 
       // Process employee_notifications
-      (employeeData || []).forEach((n: any) => {
+      (employeeData || []).forEach((n) => {
         if (!seenIds.has(n.id)) {
           seenIds.add(n.id);
           combined.push({
             id: n.id,
             persistentId: n.id,
             title: n.title,
-            message: n.message,
+            message: n.message || '',
             type: normalizeType(n.type),
-            priority: "normal",
-            category: "general",
+            priority: "normal" as const,
+            category: "general" as const,
             read: n.is_read || false,
-            timestamp: new Date(n.created_at),
-            createdAt: n.created_at,
-            actionUrl: n.action_url,
+            timestamp: new Date(n.created_at || new Date().toISOString()),
+            createdAt: n.created_at || new Date().toISOString(),
+            actionUrl: n.action_url ?? undefined,
           });
         }
       });
