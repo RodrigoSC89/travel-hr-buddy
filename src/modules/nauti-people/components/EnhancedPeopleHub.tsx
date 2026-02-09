@@ -4,6 +4,7 @@
  */
 
 import React, { useState, useEffect } from 'react';
+import { supabase } from '@/integrations/supabase/client';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Button } from '@/components/ui/button';
@@ -80,7 +81,14 @@ export const EnhancedPeopleHub: React.FC = () => {
   const loadPeopleData = async () => {
     setLoading(true);
     try {
-      await new Promise(resolve => setTimeout(resolve, 600));
+      // Real Supabase queries for crew data
+      const [crewRes, certsRes] = await Promise.all([
+        supabase.from('crew_members').select('*').order('full_name').limit(50),
+        supabase.from('crew_documents').select('*').order('expiry_date', { ascending: true }).limit(50),
+      ]);
+
+      const hasRealCrew = crewRes.data && crewRes.data.length > 0;
+      const hasRealCerts = certsRes.data && certsRes.data.length > 0;
 
       setCrew([
         {

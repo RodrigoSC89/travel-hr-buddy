@@ -31,6 +31,21 @@ export const FF_NAUTILUS_BRAIN_AI = (import.meta as any).env?.VITE_FF_NAUTILUS_B
 /** FMEA System full integration in BridgeLink */
 export const FF_FMEA_SYSTEM = (import.meta as any).env?.VITE_FF_FMEA_SYSTEM === 'true';
 
+/** IoT Sensor Analytics - time-series charts */
+export const FF_IOT_ANALYTICS = (import.meta as any).env?.VITE_FF_IOT_ANALYTICS === 'true';
+
+/** STCW AI Training recommendations engine */
+export const FF_STCW_AI_TRAINING = (import.meta as any).env?.VITE_FF_STCW_AI_TRAINING === 'true';
+
+/** Audit calendar visualization */
+export const FF_AUDIT_CALENDAR = (import.meta as any).env?.VITE_FF_AUDIT_CALENDAR === 'true';
+
+/** Advanced dashboard analytics */
+export const FF_DASHBOARD_ANALYTICS = (import.meta as any).env?.VITE_FF_DASHBOARD_ANALYTICS === 'true';
+
+/** AI Checklist generation (requires AI Edge Function) */
+export const FF_AI_CHECKLIST_GEN = (import.meta as any).env?.VITE_FF_AI_CHECKLIST_GEN === 'true';
+
 /**
  * Check if mock data should be blocked (production mode)
  */

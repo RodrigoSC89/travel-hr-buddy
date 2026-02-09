@@ -173,13 +173,8 @@ export default function UnifiedOptimizationDashboard() {
     setIsRunning(true);
     setModules(prev => prev.map(m => ({ ...m, status: "running" as const })));
 
-    // Simulate sequential module execution
-    for (let i = 0; i < modules.length; i++) {
-      await new Promise(resolve => setTimeout(resolve, 1500));
-      setModules(prev => prev.map((m, idx) => 
-        idx === i ? { ...m, status: "complete" as const, lastRun: new Date() } : m
-      ));
-    }
+    // Mark all modules as complete immediately (real analysis would come from edge function)
+    setModules(prev => prev.map(m => ({ ...m, status: "complete" as const, lastRun: new Date() })));
 
     setIsRunning(false);
   };

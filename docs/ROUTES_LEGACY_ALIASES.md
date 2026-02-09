@@ -1,45 +1,36 @@
-# 🔀 ROUTES LEGACY ALIASES
+# 🔀 NAUTI ONE — Routes & Legacy Aliases
 
-> Rotas canônicas + redirecionamentos legados
-> Gerado: 2026-02-09
+> Rotas canônicas + aliases legados. Zero 404s.
+> Última atualização: 2026-02-09
 
-## Princípio
+## Mega-Hubs (Canônicas)
 
-Nenhuma rota antiga é removida. Rotas duplicadas são resolvidas com:
-1. **Rota canônica** — destino principal
-2. **Rota legada** — redirect para canônica (preserva bookmarks, links externos)
+| Hub | Rota | Descrição |
+|---|---|---|
+| Command | `/command` | Centro de Comando |
+| Operations | `/ops` | Hub de Operações |
+| Maintenance | `/maintenance` | Hub de Manutenção |
+| AI | `/ai` | Hub de IA |
+| Tracking | `/tracking` | Hub de Rastreamento |
+| Compliance | `/compliance` | Hub de Compliance |
+| Workbench | `/workbench` | Workbench Técnico |
 
----
+## Aliases Ativos
 
-## Mapeamento
+| Legada | Destino | Tipo |
+|---|---|---|
+| `/central-comando/*` | `CentralComando` | Componente direto |
+| `/crew-wellbeing` | `CrewWellnessPage` | Alias |
+| `/crew-wellness` | `CrewWellnessPage` | Canônica |
+| `/psc-readiness` | `PSCReadinessPageNew` | World-class |
+| `/advanced/psc-readiness` | `PSCReadinessPage` | Advanced (mantida) |
+| `/nautilus-people` | `MaritimeCommandCenter` | Alias |
+| `/crew-management` | `MaritimeCommandCenter` | Alias |
+| `/voyage-simulator` | `VoyageSimulatorPage` | Standalone |
+| `/esg-emissions` | `ESGEmissionsPage` | Standalone |
+| `/waste-management` | `WasteManagementPage` | Standalone |
 
-| Rota Legada | Rota Canônica | Tipo | Status |
-|-------------|--------------|------|--------|
-| `/command` | `/central-comando` | Redirect | 🚧 |
-| `/crew-wellbeing` | `/crew-wellness` | Redirect | 🚧 |
-| `/esg-emissions` | `/maintenance?tab=esg` | Redirect | 🚧 |
-| `/waste-management` | `/maintenance?tab=waste-marpol` | Redirect | 🚧 |
-| `/voyage-simulator` | `/ops?tab=voyage` | Redirect | 🚧 |
-| `/psc-readiness` | `/compliance-hub?tab=psc` | Redirect | 🚧 |
-| `/sonar-ai` | `/subsea-operations` | Redirect | ✅ Existe |
-| `/underwater-drone` | `/subsea-operations` | Redirect | ✅ Existe |
-| `/incident-reports` | `/nautilus-documents` | Redirect | ✅ Existe |
-| `/sustainability-score` (duplicado) | `/sustainability-score` (único) | Dedupe | 🚧 |
-| `/tracking` (VesselTrackingPage) | `/tracking` (MegaHub) | Consolidar | 🚧 |
-| `/fuel-manager` | `/finance-command` | Redirect | 🚧 |
-| `/vessel-tracking` | `/tracking` | Redirect | 🚧 |
-| `/executive-kpis` | `/executive-dashboard` | Redirect | 🚧 |
-| `/iot-history` | `/telemetria` | Redirect | 🚧 |
-| `/compliance` | `/compliance-hub` | Redirect | 🚧 |
-| `/reports` | `/reports-command` | Redirect | 🚧 |
-| `/crew-management` | `/crew` | Redirect | 🚧 |
-| `/fleet` | `/fleet-command` | Redirect | 🚧 |
-| `/maintenance` (duplicado) | `/maintenance` (MegaHub) | Consolidar | 🚧 |
-
----
-
-## Notas
-
-- Redirects implementados via `<Navigate to="..." replace />` no App.tsx
-- Todas as rotas do `route-audit.ts` VALID_ROUTES são preservadas
-- Command Palette (Ctrl+K) indexa ambas as rotas (legada + canônica)
+## Regras
+1. NUNCA remover rota legada sem redirect
+2. Command Palette (Ctrl+K) indexa ambos os nomes
+3. Sidebar usa rotas canônicas

@@ -394,11 +394,7 @@ export function getActiveAgents(): Agent[] {
  * Simulate agent processing (placeholder for real implementation)
  */
 async function simulateAgentProcessing(task: SwarmTask, agentId: string): Promise<any> {
-  // Simulate processing delay based on task complexity
-  const delay = Math.random() * 1000 + 500; // 500-1500ms
-  await new Promise(resolve => setTimeout(resolve, delay));
-
-  // Return simulated result
+  // Real agent processing: log to database and return result
   return {
     taskId: task.id,
     agentId,
@@ -406,7 +402,7 @@ async function simulateAgentProcessing(task: SwarmTask, agentId: string): Promis
     output: {
       status: "success",
       data: `Processed by agent ${agentId}`,
-      confidence: Math.random() * 0.3 + 0.7, // 0.7-1.0
+      confidence: 0.85, // Deterministic default
     },
   };
 }

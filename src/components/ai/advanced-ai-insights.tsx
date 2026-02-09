@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { supabase } from "@/integrations/supabase/client";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -124,32 +125,58 @@ const AdvancedAIInsights = () => {
       description: "Processando dados e gerando insights...",
     });
 
-    await new Promise(resolve => setTimeout(resolve, 4000));
-    
-    // Simular novos insights
-    const newInsight = {
-      id: Date.now(),
-      title: "Novo Insight Descoberto",
-      description: "IA identificou padrão emergente nos dados",
-      confidence: 88,
-      impact: "medium",
-      category: "emerging",
-      recommendations: [
-        "Implementar nova estratégia",
-        "Monitorar tendência",
-        "Ajustar parâmetros"
-      ],
-      estimatedSavings: "18% melhoria",
-      status: "new"
-    };
+    try {
+      // Real query: fetch AI insights from database
+      const { data, error } = await supabase
+        .from('ai_insights')
+        .select('*')
+        .order('created_at', { ascending: false })
+        .limit(5);
 
-    setAiInsights(prev => [newInsight, ...prev]);
-    setIsAnalyzing(false);
-    
-    toast({
-      title: "Análise concluída",
-      description: "Novos insights foram gerados pela IA",
-    });
+      if (error) throw error;
+
+      if (data && data.length > 0) {
+        const mapped = data.map((d: any) => ({
+          id: d.id,
+          title: d.title,
+          description: d.description,
+          confidence: Math.round(d.confidence * 100),
+          impact: d.priority === 'high' ? 'high' : d.priority === 'medium' ? 'medium' : 'low',
+          category: d.category || 'emerging',
+          recommendations: (d.metadata as any)?.recommendations || ['Monitorar tendência'],
+          estimatedSavings: d.impact_value || 'N/A',
+          status: d.status === 'implemented' ? 'implemented' : d.status === 'active' ? 'active' : 'new',
+        }));
+        setAiInsights(prev => [...mapped, ...prev]);
+      } else {
+        // No insights in DB — generate a local analysis result  
+        const newInsight = {
+          id: Date.now(),
+          title: "Análise Concluída",
+          description: "Nenhum insight novo identificado. Sistema operando dentro dos parâmetros esperados.",
+          confidence: 95,
+          impact: "low",
+          category: "status",
+          recommendations: ["Manter monitoramento contínuo"],
+          estimatedSavings: "N/A",
+          status: "new"
+        };
+        setAiInsights(prev => [newInsight, ...prev]);
+      }
+
+      toast({
+        title: "Análise concluída",
+        description: "Insights atualizados com dados do banco",
+      });
+    } catch (error) {
+      toast({
+        title: "Erro na análise",
+        description: "Falha ao buscar insights. Tente novamente.",
+        variant: "destructive",
+      });
+    } finally {
+      setIsAnalyzing(false);
+    }
   };
 
   const getImpactColor = (impact: string) => {

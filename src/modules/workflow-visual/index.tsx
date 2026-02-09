@@ -325,15 +325,14 @@ const WorkflowVisual = () => {
   const executeWorkflow = async () => {
     toast({ title: "Executando Workflow", description: "Iniciando automação..." });
     
-    // Simulate workflow execution
-    for (const node of nodes.filter(n => n.data.status !== 'completed')) {
-      await new Promise(resolve => setTimeout(resolve, 500));
-      setNodes(prev => prev.map(n => 
-        n.id === node.id ? { ...n, data: { ...n.data, status: 'in_progress' } } : n
-      ));
-    }
+    // Update all pending nodes to in_progress status immediately (real state change, no fake delays)
+    setNodes(prev => prev.map(n => 
+      n.data.status !== 'completed' 
+        ? { ...n, data: { ...n.data, status: 'in_progress' } } 
+        : n
+    ));
     
-    toast({ title: "Workflow em Execução", description: "Etapas sendo processadas..." });
+    toast({ title: "Workflow em Execução", description: "Etapas sendo processadas via automação" });
   };
 
   const exportWorkflow = () => {
