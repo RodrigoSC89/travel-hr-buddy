@@ -121,8 +121,7 @@ export default function DrydockManagement() {
           </div>
           <div className="flex gap-2">
             <Button variant="outline" className="gap-2" onClick={() => {
-              toast.loading("Gerando relatório de docagens...", { id: "drydock-report" });
-              setTimeout(() => toast.success("Relatório de Docagem exportado com sucesso!", { id: "drydock-report" }), 1500);
+              toast.warning("Geração de relatório de docagens — Em implantação. Requer integração com motor de relatórios.");
             }}>
               <FileText className="h-4 w-4" />
               Relatórios

@@ -83,10 +83,10 @@ export default function OpsMegaHub() {
     switch (action) {
       case 'new-voyage':
         setSearchParams({ tab: 'overview' });
-        window.dispatchEvent(new CustomEvent('ops:new-voyage'));
+        toast.warning('Nova Viagem — Em implantação. Formulário de criação de viagem será entregue em breve.');
         break;
       case 'bulk-approve':
-        window.dispatchEvent(new CustomEvent('ops:bulk-approve'));
+        toast.warning('Aprovação em Lote — Em implantação. Workflow de aprovação será entregue em breve.');
         break;
       default:
         setSearchParams({ tab: action });
@@ -226,7 +226,7 @@ export default function OpsMegaHub() {
               {!isLoading && metrics.totalVessels === 0 && (
                 <HubEmptyState 
                   hub="ops" 
-                  onPrimaryAction={() => window.dispatchEvent(new CustomEvent('ops:new-voyage'))} 
+                  onPrimaryAction={() => toast.warning('Nova Viagem — Em implantação.')} 
                 />
               )}
 

@@ -168,8 +168,7 @@ export const ComputerVisionInspector: React.FC = () => {
             onChange={handleFileUpload}
           />
           <Button variant="outline" onClick={() => {
-            toast.loading("Conectando câmera...", { id: "camera" });
-            setTimeout(() => toast.success("Câmera conectada!", { id: "camera" }), 1500);
+            toast.warning("Câmera ao Vivo — Em implantação. Requer integração com hardware de inspeção visual.");
           }}>
             <Camera className="w-4 h-4 mr-2" />
             Câmera ao Vivo

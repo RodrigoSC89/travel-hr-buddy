@@ -155,8 +155,7 @@ export function ISPSModule() {
         </div>
         <div className="flex gap-2">
           <Button variant="outline" size="sm" onClick={() => {
-            toast.loading("Exportando Ship Security Plan...", { id: "ssp-export" });
-            setTimeout(() => toast.success("SSP exportado com sucesso!", { id: "ssp-export" }), 1500);
+            toast.warning("Exportação SSP — Em implantação. Requer geração real do documento Ship Security Plan.");
           }}>
             <Download className="h-4 w-4 mr-2" />
             Export SSP

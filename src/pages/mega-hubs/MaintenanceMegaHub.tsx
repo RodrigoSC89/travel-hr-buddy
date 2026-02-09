@@ -121,12 +121,8 @@ export default function MaintenanceMegaHub() {
   }, [queryClient]);
 
   const handleNewWorkOrder = useCallback(() => {
-    createMaintenanceOrder.mutate({
-      title: `OS-${Date.now().toString().slice(-6)}`,
-      description: 'Nova ordem de serviço',
-      priority: 'medium',
-    });
-  }, [createMaintenanceOrder]);
+    toast.warning('Nova Ordem de Serviço — Em implantação. Formulário completo com embarcação, equipamento e prioridade será entregue em breve.');
+  }, []);
 
   const handleExport = useCallback(async () => {
     exportToCSV(maintenanceRecords, 'maintenance-records');

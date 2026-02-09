@@ -502,13 +502,13 @@ export default function Payroll() {
                   eSocial / SEFIP
                 </CardTitle>
                 <CardDescription>
-                  Arquivo para envio ao eSocial (em desenvolvimento)
+                  Arquivo para envio ao eSocial — Em implantação
                 </CardDescription>
               </CardHeader>
               <CardContent>
                 <Button variant="outline" className="w-full" disabled>
                   <Download className="h-4 w-4 mr-2" />
-                  Em breve
+                  Em implantação — Requer integração com layout eSocial S-1200/S-2200
                 </Button>
               </CardContent>
             </Card>
