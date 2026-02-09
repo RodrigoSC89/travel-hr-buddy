@@ -543,7 +543,7 @@ export default function VesselContractsV2() {
                         <FileCheck className="h-4 w-4 mr-2" />
                         Gerar BROA
                       </Button>
-                      <Button variant="outline" size="sm" onClick={() => toast.info('Análise IA')}>
+                      <Button variant="outline" size="sm" onClick={() => toast.info('Análise IA do evento off-hire via edge function. Selecione o evento e clique em "Gerar BROA" para análise completa.', { duration: 5000 })}>
                         <Brain className="h-4 w-4" />
                       </Button>
                     </div>

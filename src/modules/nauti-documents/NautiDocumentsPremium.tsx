@@ -149,19 +149,19 @@ function DocumentsDashboard() {
             </CardTitle>
           </CardHeader>
           <CardContent className="space-y-3">
-            <Button className="w-full justify-start gap-2" variant="outline" onClick={() => toast.success("Upload iniciado")}>
+            <Button className="w-full justify-start gap-2" variant="outline" onClick={() => toast.info("Upload de documentos disponível via módulo Document Center.", { duration: 4000 })}>
               <Upload className="h-4 w-4" />
               Fazer Upload de Documento
             </Button>
-            <Button className="w-full justify-start gap-2" variant="outline" onClick={() => toast.success("Iniciando OCR")}>
+            <Button className="w-full justify-start gap-2" variant="outline" onClick={() => toast.info("OCR disponível via edge function 'nautilus-ocr'. Faça upload primeiro.", { duration: 4000 })}>
               <Scan className="h-4 w-4" />
               Processar com OCR
             </Button>
-            <Button className="w-full justify-start gap-2" variant="outline" onClick={() => toast.success("Análise IA")}>
+            <Button className="w-full justify-start gap-2" variant="outline" onClick={() => toast.info("Análise IA disponível via edge function 'ai-chat'. Selecione um documento primeiro.", { duration: 4000 })}>
               <Bot className="h-4 w-4" />
               Análise com IA
             </Button>
-            <Button className="w-full justify-start gap-2" variant="outline" onClick={() => toast.success("Template gerado")}>
+            <Button className="w-full justify-start gap-2" variant="outline" onClick={() => toast.info("Geração de documentos disponível via Templates. Acesse a aba Templates.", { duration: 4000 })}>
               <FileCheck className="h-4 w-4" />
               Gerar Documento
             </Button>
@@ -217,7 +217,7 @@ function DocumentsDashboard() {
             <div className="text-center py-8 text-muted-foreground">
               <FileText className="h-12 w-12 mx-auto mb-4 opacity-50" />
               <p>Nenhum documento encontrado</p>
-              <Button className="mt-4" onClick={() => toast.success("Upload")}>
+              <Button className="mt-4" onClick={() => toast.info("Upload de documentos disponível via Document Center.", { duration: 4000 })}>
                 <Upload className="h-4 w-4 mr-2" />
                 Fazer Upload
               </Button>

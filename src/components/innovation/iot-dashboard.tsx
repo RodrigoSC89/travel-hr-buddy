@@ -414,7 +414,7 @@ export const IoTDashboard: React.FC = () => {
                     setSensors(prev => prev.map(s => s.type === "humidity" ? { ...s, status: "online" as const } : s));
                     toast.success("Alerta de bateria baixa marcado como resolvido");
                   }}>Marcar como Resolvido</Button>
-                  <Button variant="outline" size="sm" onClick={() => toast.info("Detalhes: Sensor Umidade, bateria 45%, Ponte de Comando")}>Ver Detalhes</Button>
+                  <Button variant="outline" size="sm" onClick={() => toast.info("Sensor Umidade — Bateria: 45% | Local: Ponte de Comando | Última leitura: 72% umidade relativa", { duration: 6000 })}>Ver Detalhes</Button>
                 </div>
               </CardContent>
             </Card>
@@ -436,7 +436,7 @@ export const IoTDashboard: React.FC = () => {
                     setDevices(prev => prev.map(d => d.name === "Sensor Node A" ? { ...d, status: "online" as const, lastSeen: "just now", signalStrength: 75 } : d));
                     toast.success("Sensor Node A reiniciado com sucesso");
                   }}>Reiniciar Dispositivo</Button>
-                  <Button variant="outline" size="sm" onClick={() => toast.info("Diagnóstico: Sensor Node A, Sala de Máquinas, sinal: 0%, último visto: 2h atrás")}>Diagnosticar</Button>
+                  <Button variant="outline" size="sm" onClick={() => toast.info("Sensor Node A — Local: Sala de Máquinas | Sinal: 0% | Último contato: 2h atrás | Ação: Verificar alimentação e conexão de rede", { duration: 8000 })}>Diagnosticar</Button>
                 </div>
               </CardContent>
             </Card>

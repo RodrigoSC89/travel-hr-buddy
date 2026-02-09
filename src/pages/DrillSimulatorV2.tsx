@@ -131,7 +131,10 @@ export default function DrillSimulatorV2() {
                     <drill.icon className="h-12 w-12 mx-auto mb-2 opacity-50" />
                     <p className="text-sm text-muted-foreground">Clique para iniciar simulação</p>
                   </div>
-                  <Button className="w-full" onClick={() => toast.success(`Iniciando drill de ${drill.type}`)}>
+                  <Button className="w-full" onClick={async () => {
+                    const { error } = await (await import("@/integrations/supabase/client")).supabase.from("action_items").insert({ title: `Drill: ${drill.type}`, description: drill.description, source_module: "drill-simulator", status: "in_progress", priority: "high" });
+                    if (error) { toast.error("Erro ao registrar drill: " + error.message); } else { toast.success(`Drill de ${drill.type} registrado e iniciado!`); }
+                  }}>
                     <Play className="h-4 w-4 mr-2" />
                     Iniciar Simulação
                   </Button>

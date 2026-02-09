@@ -442,7 +442,7 @@ export function CertificateExpirationAlerts() {
                                 </div>
                               </div>
                               <DialogFooter>
-                                <Button onClick={() => toast.success('Configuração salva!')}>
+                                <Button onClick={() => { updateAlertConfig(config.id, config); toast.success('Configuração de alerta salva!'); }}>
                                   Salvar
                                 </Button>
                               </DialogFooter>

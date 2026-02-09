@@ -407,7 +407,7 @@ export function AuditWorkflowManager() {
                   ) : (
                     <p className="text-sm text-muted-foreground">Nenhuma evidência anexada</p>
                   )}
-                  <Button variant="outline" size="sm" className="mt-2 gap-2" onClick={() => toast.info('Upload de evidência via Document Center')}>
+                  <Button variant="outline" size="sm" className="mt-2 gap-2" onClick={() => toast.info('Upload de evidência disponível via Document Center. Navegue até Documentos para anexar arquivos a esta auditoria.', { duration: 5000 })}>
                     <Upload className="h-4 w-4" />
                     Anexar Evidência
                   </Button>
