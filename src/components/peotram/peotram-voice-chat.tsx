@@ -4,16 +4,7 @@
  * Focus on critical elements 4 (Execução Operacional) and 6 (Gestão de Risco)
  */
 
-interface SpeechRecognitionInstance {
-  start: () => void;
-  stop: () => void;
-  continuous: boolean;
-  interimResults: boolean;
-  lang: string;
-  onresult: ((event: { results: ArrayLike<{ 0: { transcript: string } }> }) => void) | null;
-  onerror: ((event: Record<string, unknown>) => void) | null;
-  onend: (() => void) | null;
-}
+import { getSpeechRecognitionAPI, type SpeechRecognitionInstance } from "@/types/speech-recognition";
 
 import React, { useState, useRef, useCallback, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -86,15 +77,15 @@ export function PeotramVoiceChat() {
 
   // Initialize speech recognition
   useEffect(() => {
-    if (typeof window !== 'undefined' && ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window)) {
-      const win = window as unknown as Record<string, unknown>;
-      const SpeechRecognitionCtor = (win.webkitSpeechRecognition || win.SpeechRecognition) as { new(): SpeechRecognitionInstance };
-      recognitionRef.current = new SpeechRecognitionCtor();
+    if (typeof window !== 'undefined') {
+      const SpeechRecognitionCtor = getSpeechRecognitionAPI();
+      if (SpeechRecognitionCtor) {
+        recognitionRef.current = new SpeechRecognitionCtor();
       recognitionRef.current.continuous = false;
       recognitionRef.current.interimResults = true;
       recognitionRef.current.lang = 'pt-BR';
 
-      recognitionRef.current.onresult = (event: { results: ArrayLike<{ 0: { transcript: string } }> }) => {
+      recognitionRef.current.onresult = (event) => {
         const transcript = Array.from(event.results)
           .map((result) => result[0].transcript)
           .join('');
@@ -108,11 +99,12 @@ export function PeotramVoiceChat() {
         }
       };
 
-      recognitionRef.current.onerror = (event: Record<string, unknown>) => {
+      recognitionRef.current.onerror = (event) => {
         logger.error('Speech recognition error:', event.error);
         setIsListening(false);
         toast.error("Erro no reconhecimento de voz");
       };
+      }
     }
   }, [transcript]);
 

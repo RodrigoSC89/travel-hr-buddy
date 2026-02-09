@@ -144,18 +144,18 @@ export const NotificationCenter: React.FC<NotificationCenterProps> = ({
 
       const formattedNotifications: Notification[] = data?.map(n => ({
         id: n.id,
-        type: n.type as any,
+        type: n.type as Notification["type"],
         title: n.title,
         message: n.message,
         description: n.message,
-        priority: n.priority as any,
+        priority: n.priority as Notification["priority"],
         isRead: n.is_read,
         is_read: n.is_read,
         createdAt: new Date(n.created_at),
         timestamp: n.created_at,
         actionData: n.action_data,
         metadata: typeof n.metadata === "object" && n.metadata !== null && !Array.isArray(n.metadata)
-          ? n.metadata as Record<string, any>
+          ? n.metadata as Record<string, unknown>
           : {}
       })) || [];
 

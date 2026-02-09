@@ -6,6 +6,7 @@
  */
 
 import { useState, useCallback, useRef, useEffect } from 'react';
+import { getSpeechRecognitionAPI } from '@/types/speech-recognition';
 import { useNavigate } from 'react-router-dom';
 import { Mic, MicOff, X, Volume2, Bot, Sparkles, Wifi, WifiOff, Send, Loader2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -145,7 +146,7 @@ export function VoiceAssistantWithHotword({
   };
 
   const startHotwordListening = async () => {
-    const SpeechRecognitionAPI = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
+    const SpeechRecognitionAPI = getSpeechRecognitionAPI();
     if (!SpeechRecognitionAPI) {
       toast.error('Reconhecimento de voz não suportado neste navegador');
       return;
@@ -158,7 +159,7 @@ export function VoiceAssistantWithHotword({
     recognition.interimResults = true;
     recognition.lang = 'pt-BR';
 
-    recognition.onresult = (event: any) => {
+    recognition.onresult = (event) => {
       for (let i = event.resultIndex; i < event.results.length; i++) {
         const transcript = event.results[i][0].transcript.toLowerCase().trim();
         logger.debug('[HotwordDetector] Heard', { transcript });
@@ -173,7 +174,7 @@ export function VoiceAssistantWithHotword({
       }
     };
 
-    recognition.onerror = (event: any) => {
+    recognition.onerror = (event) => {
       if (event.error !== 'no-speech' && event.error !== 'aborted') {
         logger.debug('[HotwordDetector] Error', { error: event.error });
       }
@@ -234,7 +235,7 @@ export function VoiceAssistantWithHotword({
   };
 
   const startCommandListening = async () => {
-    const SpeechRecognitionAPI = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
+    const SpeechRecognitionAPI = getSpeechRecognitionAPI();
     if (!SpeechRecognitionAPI) {
       toast.error('Reconhecimento de voz não suportado');
       return;
@@ -247,13 +248,13 @@ export function VoiceAssistantWithHotword({
     recognition.interimResults = false;
     recognition.lang = 'pt-BR';
 
-    recognition.onresult = (event: any) => {
+    recognition.onresult = (event) => {
       const command = event.results[0][0].transcript;
       logger.debug('[VoiceAssistant] Command', { command });
       handleUserCommand(command);
     };
 
-    recognition.onerror = (event: any) => {
+    recognition.onerror = (event) => {
       logger.debug('[VoiceAssistant] Command error', { error: event.error });
       setIsListeningForCommand(false);
       if (event.error !== 'no-speech') {

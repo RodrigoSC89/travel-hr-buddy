@@ -130,7 +130,7 @@ export const EnhancedMobileSupport: React.FC = () => {
       // Battery API (se disponível)
       if ("getBattery" in navigator) {
         try {
-          const battery = await (navigator as any).getBattery();
+          const battery = await (navigator as unknown as { getBattery: () => Promise<{ level: number; charging: boolean }> }).getBattery();
           info.batteryLevel = Math.round(battery.level * 100);
           info.isCharging = battery.charging;
         } catch (error) {
@@ -139,7 +139,7 @@ export const EnhancedMobileSupport: React.FC = () => {
 
       // Connection API (se disponível)
       if ("connection" in navigator) {
-        const connection = (navigator as any).connection;
+        const connection = (navigator as unknown as { connection: { effectiveType: string } }).connection;
         info.connection = connection.effectiveType;
       }
 
@@ -152,15 +152,15 @@ export const EnhancedMobileSupport: React.FC = () => {
 
   const setupPWAListeners = () => {
     // Listener para o evento beforeinstallprompt
-    window.addEventListener("beforeinstallprompt", (e: any) => {
+    window.addEventListener("beforeinstallprompt", (e) => {
       e.preventDefault();
-      setInstallPrompt(e);
+      setInstallPrompt(e as unknown as { prompt: () => void; userChoice: Promise<{ outcome: string }> });
       setPwaStatus(prev => ({ ...prev, canInstall: true }));
     });
 
     // Verificar se está rodando como PWA
     const isStandalone = window.matchMedia("(display-mode: standalone)").matches ||
-                        (window.navigator as any).standalone === true;
+                        (window.navigator as unknown as { standalone?: boolean }).standalone === true;
     
     setPwaStatus(prev => ({ 
       ...prev, 

@@ -4,6 +4,7 @@
  */
 
 import React, { useState, useRef, useEffect } from "react";
+import { getSpeechRecognitionAPI } from "@/types/speech-recognition";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -106,20 +107,21 @@ export default function VoiceAssistantNLU() {
     setTranscript("");
     toast.info("Ouvindo... Fale seu comando");
 
-    const SpeechRecognitionAPI = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
+    const SpeechRecognitionAPI = getSpeechRecognitionAPI();
+    if (!SpeechRecognitionAPI) return;
     const recognition = new SpeechRecognitionAPI();
     recognition.lang = 'pt-BR';
     recognition.interimResults = false;
     recognition.maxAlternatives = 1;
 
-    recognition.onresult = (event: any) => {
+    recognition.onresult = (event) => {
       const text = event.results[0][0].transcript;
       setTranscript(text);
       handleProcessCommand(text);
       setIsListening(false);
     };
 
-    recognition.onerror = (event: any) => {
+    recognition.onerror = (event) => {
       toast.error(`Erro no reconhecimento: ${event.error}`);
       setIsListening(false);
     };

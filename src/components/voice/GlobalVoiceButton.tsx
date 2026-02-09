@@ -4,6 +4,7 @@
  */
 
 import React, { useState, useCallback, useEffect } from "react";
+import { getSpeechRecognitionAPI, type SpeechRecognitionInstance } from "@/types/speech-recognition";
 import { motion, AnimatePresence } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -46,41 +47,43 @@ export function GlobalVoiceButton() {
   const [isSpeaking, setIsSpeaking] = useState(false);
   const [transcript, setTranscript] = useState("");
   const [showPanel, setShowPanel] = useState(false);
-  const [recognition, setRecognition] = useState<any>(null);
+  const [recognition, setRecognition] = useState<SpeechRecognitionInstance | null>(null);
 
   // Initialize Speech Recognition
   useEffect(() => {
-    if (typeof window !== "undefined" && ("SpeechRecognition" in window || "webkitSpeechRecognition" in window)) {
-      const SpeechRecognitionClass = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
-      const recognitionInstance = new SpeechRecognitionClass();
+    if (typeof window !== "undefined") {
+      const SpeechRecognitionClass = getSpeechRecognitionAPI();
+      if (SpeechRecognitionClass) {
+        const recognitionInstance = new SpeechRecognitionClass();
       
-      recognitionInstance.continuous = false;
-      recognitionInstance.interimResults = true;
-      recognitionInstance.lang = "pt-BR";
+        recognitionInstance.continuous = false;
+        recognitionInstance.interimResults = true;
+        recognitionInstance.lang = "pt-BR";
 
-      recognitionInstance.onresult = (event: any) => {
-        const current = event.resultIndex;
-        const transcriptText = event.results[current][0].transcript;
-        setTranscript(transcriptText);
+        recognitionInstance.onresult = (event) => {
+          const current = event.resultIndex;
+          const transcriptText = event.results[current][0].transcript;
+          setTranscript(transcriptText);
 
         if (event.results[current].isFinal) {
           processCommand(transcriptText);
         }
       };
 
-      recognitionInstance.onerror = (event: any) => {
-        logger.error("Speech recognition error:", event.error);
-        setIsListening(false);
-        if (event.error === "not-allowed") {
-          toast.error("Permissão de microfone negada");
-        }
-      };
+        recognitionInstance.onerror = (event) => {
+          logger.error("Speech recognition error:", event.error);
+          setIsListening(false);
+          if (event.error === "not-allowed") {
+            toast.error("Permissão de microfone negada");
+          }
+        };
 
-      recognitionInstance.onend = () => {
-        setIsListening(false);
-      };
+        recognitionInstance.onend = () => {
+          setIsListening(false);
+        };
 
-      setRecognition(recognitionInstance);
+        setRecognition(recognitionInstance);
+      }
     }
 
     return () => {

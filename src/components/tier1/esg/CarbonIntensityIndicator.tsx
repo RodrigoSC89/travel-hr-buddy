@@ -341,7 +341,7 @@ export function CarbonIntensityIndicator() {
                         </div>
                         <div className="flex items-center gap-2 mt-1">
                           <span className="text-sm text-muted-foreground">Projected:</span>
-                          <Badge variant={getRatingBadge(vessel.projectedRating) as any}>
+                          <Badge variant={getRatingBadge(vessel.projectedRating) as "default" | "destructive" | "outline" | "secondary"}>
                             {vessel.projectedRating}
                           </Badge>
                           {vessel.trend === 'improving' && (
