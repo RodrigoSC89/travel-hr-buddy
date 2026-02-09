@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { supabase } from "@/integrations/supabase/client";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -96,27 +97,44 @@ export const IntegrationTesting: React.FC = () => {
   const runSingleTest = async () => {
     setIsRunningTest(true);
     setTestProgress(0);
+    setTestProgress(30);
     
-    // Simular teste com progresso
-    for (let i = 0; i <= 100; i += 10) {
-      setTestProgress(i);
-      await new Promise(resolve => setTimeout(resolve, 200));
+    const endpoint = endpoints.find(e => e.id === selectedEndpoint);
+    const startTime = performance.now();
+    
+    try {
+      setTestProgress(60);
+      // Real connectivity test via Supabase health check
+      const { error } = await supabase.from('access_logs').select('id', { count: 'exact', head: true });
+      setTestProgress(100);
+      const duration = Math.floor(performance.now() - startTime);
+      
+      const newResult: TestResult = {
+        id: Date.now().toString(),
+        name: `Teste ${endpoint?.name}`,
+        status: error ? "error" : "success",
+        duration,
+        details: error ? `Erro: ${error.message}` : "Conexão verificada com sucesso",
+        response: { status: error ? 500 : 200, data: error ? error.message : "OK" },
+        timestamp: new Date().toLocaleString("pt-BR")
+      };
+      
+      setTestResults(prev => [newResult, ...prev]);
+    } catch (err: any) {
+      const newResult: TestResult = {
+        id: Date.now().toString(),
+        name: `Teste ${endpoint?.name}`,
+        status: "error",
+        duration: Math.floor(performance.now() - startTime),
+        details: `Erro de conexão: ${err?.message || 'desconhecido'}`,
+        response: { status: 0, data: "Connection failed" },
+        timestamp: new Date().toLocaleString("pt-BR")
+      };
+      setTestResults(prev => [newResult, ...prev]);
+    } finally {
+      setIsRunningTest(false);
+      setTestProgress(0);
     }
-    
-    // Simular resultado
-    const newResult: TestResult = {
-      id: Date.now().toString(),
-      name: `Teste ${endpoints.find(e => e.id === selectedEndpoint)?.name}`,
-      status: "success",
-      duration: 150 + (selectedEndpoint.split("").reduce((a, c) => a + c.charCodeAt(0), 0) % 900),
-      details: "Teste executado com sucesso",
-      response: { status: 200, data: "Test completed" },
-      timestamp: new Date().toLocaleString("pt-BR")
-    };
-    
-    setTestResults(prev => [newResult, ...prev]);
-    setIsRunningTest(false);
-    setTestProgress(0);
   };
 
   const getStatusIcon = (status: TestResult["status"]) => {

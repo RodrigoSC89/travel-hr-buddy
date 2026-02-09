@@ -4,6 +4,7 @@
  */
 
 import React, { useState, useEffect } from "react";
+import { supabase } from "@/integrations/supabase/client";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -71,7 +72,6 @@ export const AutonomousProcurementAI: React.FC = () => {
 
   const loadProcurementData = async () => {
     setIsAnalyzing(true);
-    await new Promise(resolve => setTimeout(resolve, 1200));
 
     const mockStock: StockItem[] = [
       {
@@ -217,14 +217,22 @@ export const AutonomousProcurementAI: React.FC = () => {
 
   const executeAutoPurchase = async (rec: PurchaseRecommendation) => {
     toast.loading(`Processando pedido de ${rec.item.name}...`, { id: 'purchase' });
-    
-    // Simular processamento
-    await new Promise(resolve => setTimeout(resolve, 1500));
-    
-    toast.success(`Pedido de compra criado com sucesso!`, {
-      id: 'purchase',
-      description: `${rec.suggestedQuantity} ${rec.item.unit} de ${rec.item.name} - R$ ${rec.estimatedCost.toLocaleString()}`
-    });
+    try {
+      const { error } = await supabase.from('action_items').insert({
+        title: `Pedido: ${rec.suggestedQuantity} ${rec.item.unit} de ${rec.item.name}`,
+        description: `Compra automática - R$ ${rec.estimatedCost.toLocaleString()}`,
+        source_module: 'procurement-ai',
+        priority: rec.urgency === 'immediate' ? 'critical' : rec.urgency === 'soon' ? 'high' : 'medium',
+        status: 'pending',
+      });
+      if (error) throw error;
+      toast.success(`Pedido de compra registrado!`, {
+        id: 'purchase',
+        description: `${rec.suggestedQuantity} ${rec.item.unit} de ${rec.item.name} - R$ ${rec.estimatedCost.toLocaleString()}`
+      });
+    } catch {
+      toast.error('Erro ao registrar pedido de compra', { id: 'purchase' });
+    }
   };
 
   return (

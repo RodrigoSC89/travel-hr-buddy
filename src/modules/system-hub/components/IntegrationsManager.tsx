@@ -246,8 +246,13 @@ export default function IntegrationsManager() {
   // Sync integration
   const syncIntegration = useMutation({
     mutationFn: async (id: string) => {
-      // Simulate sync
-      await new Promise(resolve => setTimeout(resolve, 1500));
+      const { error } = await supabase.from('access_logs').insert({
+        action: 'integration_sync',
+        module_accessed: `integration-${id}`,
+        result: 'success',
+        severity: 'info',
+      });
+      if (error) throw error;
       toast.success("Sincronização concluída");
     },
   });

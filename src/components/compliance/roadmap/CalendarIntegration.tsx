@@ -127,22 +127,9 @@ export const CalendarIntegration = () => {
     // Check if client IDs are configured
     if ((provider === "google" && !import.meta.env.VITE_GOOGLE_CLIENT_ID) ||
         (provider === "outlook" && !import.meta.env.VITE_MICROSOFT_CLIENT_ID)) {
-      // Simulate connection for demo
-      await new Promise(resolve => setTimeout(resolve, 1500));
-      
-      setConnections(prev => prev.map(conn => 
-        conn.provider === provider 
-          ? { 
-              ...conn, 
-              connected: true, 
-              email: provider === "outlook" ? "user@empresa.com.br" : "user@gmail.com",
-              lastSync: new Date()
-            }
-          : conn
-      ));
-      
-      logSuccess("CONNECT", "calendar_integration", null, { provider });
-      toast.success(`${provider === "outlook" ? "Outlook" : "Google Calendar"} conectado (modo demo)!`);
+      toast.error(`Integração ${provider === "outlook" ? "Outlook" : "Google Calendar"} não configurada`, {
+        description: "Configure as credenciais OAuth nas variáveis de ambiente."
+      });
       return;
     }
 
@@ -184,13 +171,9 @@ export const CalendarIntegration = () => {
       toast.success(`Sincronização concluída! ${events.length} eventos atualizados.`);
     } catch (error) {
       logger.error("Sync error:", error);
-      // Fallback to demo sync
-      await new Promise(resolve => setTimeout(resolve, 2000));
-      setEvents(prev => prev.map(evt => ({ ...evt, synced: true })));
-      setConnections(prev => prev.map(conn => 
-        conn.connected ? { ...conn, lastSync: new Date() } : conn
-      ));
-      toast.success("Sincronização simulada concluída!");
+      toast.error("Erro na sincronização do calendário", {
+        description: "Verifique a configuração da integração e tente novamente."
+      });
     } finally {
       setSyncing(false);
     }

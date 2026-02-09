@@ -4,6 +4,7 @@
  */
 
 import React, { useState } from "react";
+import { supabase } from "@/integrations/supabase/client";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -74,15 +75,27 @@ export const RotationPlanningDialog: React.FC<RotationPlanningDialogProps> = ({
 
   const handleOptimize = async () => {
     setIsOptimizing(true);
-    
-    // Simulate AI optimization
-    await new Promise(resolve => setTimeout(resolve, 2000));
-    
-    setIsOptimizing(false);
-    toast({
-      title: "✨ Otimização Concluída",
-      description: "IA identificou 3 oportunidades de rotação para maximizar eficiência",
-    });
+    try {
+      const { data, error } = await supabase.functions.invoke('ai-chat', {
+        body: { 
+          prompt: 'Analisar oportunidades de rotação de tripulação para otimização',
+          module: 'crew-rotation'
+        }
+      });
+      if (error) throw error;
+      toast({
+        title: "✨ Otimização Concluída",
+        description: data?.message || "IA identificou oportunidades de rotação para maximizar eficiência",
+      });
+    } catch {
+      toast({
+        title: "⚠️ Otimização indisponível",
+        description: "Serviço de IA não respondeu. Tente novamente.",
+        variant: "destructive",
+      });
+    } finally {
+      setIsOptimizing(false);
+    }
   };
 
   const handleApplySuggestion = (suggestion: RotationSuggestion) => {

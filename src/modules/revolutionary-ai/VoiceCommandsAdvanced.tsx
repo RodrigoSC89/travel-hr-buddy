@@ -4,6 +4,7 @@
  */
 
 import React, { useState, useEffect, useCallback } from 'react';
+import { supabase } from "@/integrations/supabase/client";
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -83,20 +84,28 @@ export function VoiceCommandsAdvanced() {
     
     setCommandHistory(prev => [newCommand, ...prev]);
 
-    // Simulate command processing
-    await new Promise(resolve => setTimeout(resolve, 1500));
-
-    // Update command with result
-    setCommandHistory(prev => prev.map(cmd => 
-      cmd.id === newCommand.id 
-        ? { 
-            ...cmd, 
-            status: 'success' as const, 
-            result: `Comando "${text}" executado com sucesso`,
-            action: 'executed'
-          }
-        : cmd
-    ));
+    try {
+      const { data, error } = await supabase.functions.invoke('ai-chat', {
+        body: { prompt: text, module: 'voice-command' }
+      });
+      
+      setCommandHistory(prev => prev.map(cmd => 
+        cmd.id === newCommand.id 
+          ? { 
+              ...cmd, 
+              status: (error ? 'error' : 'success') as any, 
+              result: error ? `Erro: ${error.message}` : (data?.message || `Comando "${text}" processado`),
+              action: error ? 'failed' : 'executed'
+            }
+          : cmd
+      ));
+    } catch {
+      setCommandHistory(prev => prev.map(cmd => 
+        cmd.id === newCommand.id 
+          ? { ...cmd, status: 'error' as any, result: 'Serviço indisponível', action: 'failed' }
+          : cmd
+      ));
+    }
 
     setIsProcessing(false);
     setTranscript('');
