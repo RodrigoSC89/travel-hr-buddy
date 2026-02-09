@@ -120,8 +120,13 @@ export default function DrydockManagement() {
             </p>
           </div>
           <div className="flex gap-2">
-            <Button variant="outline" className="gap-2" onClick={() => {
-              toast.warning("Geração de relatório de docagens — Em implantação. Requer integração com motor de relatórios.");
+            <Button variant="outline" className="gap-2" onClick={async () => {
+              const { data } = await supabase.from('drydock_events').select('*');
+              if (!data || data.length === 0) { toast.info('Sem dados de docagem para exportar'); return; }
+              const csvRows = ['Estaleiro;Local;Início Planejado;Fim Planejado;Status;Custo Estimado', ...data.map((d: any) => `${d.shipyard_name};${d.shipyard_location};${d.planned_start_date};${d.planned_end_date};${d.status};${d.estimated_cost}`)];
+              const blob = new Blob(['\uFEFF' + csvRows.join('\n')], { type: 'text/csv;charset=utf-8;' });
+              const url = URL.createObjectURL(blob); const a = document.createElement('a'); a.href = url; a.download = `drydock-report-${new Date().toISOString().slice(0,10)}.csv`; a.click(); URL.revokeObjectURL(url);
+              toast.success('Relatório de docagens exportado');
             }}>
               <FileText className="h-4 w-4" />
               Relatórios
