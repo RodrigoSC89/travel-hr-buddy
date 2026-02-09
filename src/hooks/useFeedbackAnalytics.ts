@@ -24,7 +24,7 @@ interface FeedbackItem {
   priority?: string;
   module?: string;
   createdAt: string;
-  userId?: string;
+  userId?: string | null;
 }
 
 interface FeedbackAnalytics {
@@ -54,24 +54,28 @@ export function useFeedbackAnalytics() {
       thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
 
       const { data, error: queryError } = await supabase
-        .from('ai_feedback_scores' as any)
+        .from('ai_feedback_scores')
         .select('*')
         .gte('created_at', thirtyDaysAgo.toISOString())
         .order('created_at', { ascending: false });
 
       if (queryError) throw queryError;
 
-      const feedback: FeedbackItem[] = (data || []).map((item: any) => ({
-        id: item.id,
-        type: item.command_type as 'nps' | 'bug' | 'feature',
-        title: item.feedback_data?.title,
-        description: item.feedback_data?.description || '',
-        score: item.self_score,
-        priority: item.feedback_data?.priority,
-        module: item.feedback_data?.module,
-        createdAt: item.created_at,
-        userId: item.user_id,
-      }));
+      type FeedbackRow = typeof data extends (infer R)[] ? R : Record<string, unknown>;
+      const feedback: FeedbackItem[] = (data || []).map((item: FeedbackRow) => {
+        const feedbackData = item.feedback_data as Record<string, unknown> | null;
+        return {
+          id: item.id,
+          type: item.command_type as 'nps' | 'bug' | 'feature',
+          title: (feedbackData?.title as string) || undefined,
+          description: (feedbackData?.description as string) || '',
+          score: item.self_score,
+          priority: (feedbackData?.priority as string) || undefined,
+          module: (feedbackData?.module as string) || undefined,
+          createdAt: item.created_at,
+          userId: item.user_id,
+        };
+      });
 
       // Calculate NPS
       const npsResponses = feedback.filter(f => f.type === 'nps' && f.score !== undefined);

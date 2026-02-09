@@ -36,7 +36,7 @@ export interface PredictiveInsight {
 
 export interface GeneratedContent {
   type: "course_outline" | "quiz" | "summary" | "learning_path";
-  content: any;
+  content: Record<string, unknown>;
 }
 
 export const useTrainingAI = () => {
@@ -48,7 +48,7 @@ export const useTrainingAI = () => {
   const [predictiveInsights, setPredictiveInsights] = useState<PredictiveInsight[]>([]);
 
   // Call AI edge function
-  const callAI = useCallback(async (action: string, data: any): Promise<any> => {
+  const callAI = useCallback(async (action: string, data: Record<string, unknown>): Promise<Record<string, unknown> | null> => {
     try {
       const { data: result, error } = await supabase.functions.invoke("training-ai-assistant", {
         body: { action, data },
@@ -63,14 +63,14 @@ export const useTrainingAI = () => {
   }, []);
 
   // Generate personalized recommendations
-  const generateRecommendations = useCallback(async (crewData: any[], coursesData: any[]) => {
+  const generateRecommendations = useCallback(async <T extends Record<string, unknown>>(crewData: T[], coursesData: T[]) => {
     setIsAnalyzing(true);
     try {
       const result = await callAI("generate_recommendations", { crew: crewData, courses: coursesData });
       
       if (result?.recommendations) {
-        setRecommendations(result.recommendations);
-        return result.recommendations;
+        setRecommendations(result.recommendations as AIRecommendation[]);
+        return result.recommendations as AIRecommendation[];
       }
 
       // Fallback local generation
@@ -88,14 +88,14 @@ export const useTrainingAI = () => {
   }, [callAI]);
 
   // Analyze training gaps
-  const analyzeTrainingGaps = useCallback(async (crewData: any[], progressData: any[]) => {
+  const analyzeTrainingGaps = useCallback(async <T extends Record<string, unknown>>(crewData: T[], progressData: T[]) => {
     setIsAnalyzing(true);
     try {
       const result = await callAI("analyze_gaps", { crew: crewData, progress: progressData });
       
       if (result?.gaps) {
-        setTrainingGaps(result.gaps);
-        return result.gaps;
+        setTrainingGaps(result.gaps as TrainingGap[]);
+        return result.gaps as TrainingGap[];
       }
 
       const localGaps = generateLocalGaps(crewData);
@@ -112,14 +112,14 @@ export const useTrainingAI = () => {
   }, [callAI]);
 
   // Generate predictive insights
-  const generatePredictiveInsights = useCallback(async (data: any) => {
+  const generatePredictiveInsights = useCallback(async (data: Record<string, unknown>) => {
     setIsAnalyzing(true);
     try {
       const result = await callAI("predictive_insights", data);
       
       if (result?.insights) {
-        setPredictiveInsights(result.insights);
-        return result.insights;
+        setPredictiveInsights(result.insights as PredictiveInsight[]);
+        return result.insights as PredictiveInsight[];
       }
 
       const localInsights = generateLocalInsights();
@@ -143,7 +143,7 @@ export const useTrainingAI = () => {
       
       if (result?.content) {
         toast({ title: "Conteúdo gerado", description: "O conteúdo foi gerado com IA." });
-        return { type: type as any, content: result.content };
+        return { type: type as GeneratedContent["type"], content: result.content as Record<string, unknown> };
       }
 
       // Fallback
@@ -176,7 +176,7 @@ export const useTrainingAI = () => {
   }, [callAI]);
 
   // Analyze crew performance
-  const analyzePerformance = useCallback(async (crewId: string, trainingHistory: any[]) => {
+  const analyzePerformance = useCallback(async (crewId: string, trainingHistory: Record<string, unknown>[]) => {
     setIsAnalyzing(true);
     try {
       const result = await callAI("analyze_performance", { crewId, history: trainingHistory });
@@ -190,10 +190,10 @@ export const useTrainingAI = () => {
   }, [callAI]);
 
   // Chat with AI training assistant
-  const chatWithAssistant = useCallback(async (message: string, context?: any): Promise<string> => {
+  const chatWithAssistant = useCallback(async (message: string, context?: Record<string, unknown>): Promise<string> => {
     try {
-      const result = await callAI("chat", { message, context });
-      return result?.response || "Desculpe, não consegui processar sua solicitação no momento.";
+      const result = await callAI("chat", { message, context: context || {} });
+      return (result?.response as string) || "Desculpe, não consegui processar sua solicitação no momento.";
     } catch (err) {
       logger.error("Chat error:", err);
       return "Erro ao conectar com o assistente de IA. Tente novamente.";
@@ -217,20 +217,20 @@ export const useTrainingAI = () => {
 };
 
 // Local fallback functions
-function generateLocalRecommendations(crew: any[], courses: any[]): AIRecommendation[] {
+function generateLocalRecommendations<T extends Record<string, unknown>>(crew: T[], courses: T[]): AIRecommendation[] {
   return crew.slice(0, 5).map((c, i) => ({
     id: `rec-${i}`,
-    crewMemberId: c.id,
-    crewMemberName: c.name,
-    recommendedCourses: courses.slice(0, 2).map((course) => course.course_name || course.name),
-    priority: i === 0 ? "high" : i < 3 ? "medium" : "low",
+    crewMemberId: c.id as string,
+    crewMemberName: c.name as string,
+    recommendedCourses: courses.slice(0, 2).map((course) => (course.course_name as string) || (course.name as string)),
+    priority: i === 0 ? "high" as const : i < 3 ? "medium" as const : "low" as const,
     reason: `Baseado no histórico de treinamento e certificações próximas do vencimento de ${c.name}.`,
     predictedImpact: "Melhoria de 15% na conformidade de segurança",
     dueDate: new Date(Date.now() + (i + 1) * 7 * 24 * 60 * 60 * 1000).toISOString(),
   }));
 }
 
-function generateLocalGaps(crew: any[]): TrainingGap[] {
+function generateLocalGaps<T extends Record<string, unknown>>(crew: T[]): TrainingGap[] {
   return [
     {
       id: "gap-1",
@@ -321,7 +321,7 @@ function generateLocalContent(topic: string, type: string): GeneratedContent {
     };
   }
   
-  return { type: type as any, content: { generated: true, topic } };
+  return { type: type as GeneratedContent["type"], content: { generated: true, topic } };
 }
 
 function generateLocalQuiz(difficulty: string) {

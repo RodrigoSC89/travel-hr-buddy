@@ -99,7 +99,7 @@ Responda em JSON com o formato:
         const jsonMatch = responseText.match(/\{[\s\S]*\}/);
         if (jsonMatch) {
           const parsed = JSON.parse(jsonMatch[0]);
-          parsedInsights = (parsed.insights || []).map((i: any, idx: number) => ({
+          parsedInsights = (parsed.insights || []).map((i: Record<string, unknown>, idx: number) => ({
             id: `insight-${Date.now()}-${idx}`,
             type: i.type || "anomaly",
             title: i.title || "Insight detectado",
@@ -130,7 +130,7 @@ Responda em JSON com o formato:
       // Store insights in database (table may not be in types yet)
       if (parsedInsights.length > 0) {
         try {
-          await (supabase.from("telemetry_insights" as any) as any).insert(
+          await (supabase.from as Function)("telemetry_insights").insert(
             parsedInsights.slice(0, 5).map(i => ({
               sensor_id: i.sensor_id,
               insight_type: i.type,
