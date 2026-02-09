@@ -4,6 +4,7 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
+import type { Json } from "@/integrations/supabase/types";
 
 export interface VoyageScenario {
   name: string;
@@ -44,8 +45,8 @@ export function useVoyageSimulator() {
         .order("created_at", { ascending: false })
         .limit(20);
       if (error) throw error;
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      return (data || []).map((d: any) => ({
+      type SimRow = Record<string, unknown>;
+      return (data || []).map((d: SimRow) => ({
         ...d,
         scenarios: Array.isArray(d.scenarios) ? d.scenarios : [],
         risk_factors: Array.isArray(d.risk_factors) ? d.risk_factors : [],
@@ -69,7 +70,7 @@ export function useVoyageSimulator() {
           simulation_name: input.simulation_name,
           origin_port: input.origin_port,
           destination_port: input.destination_port,
-          scenarios: input.scenarios as any,
+          scenarios: input.scenarios as unknown as Json,
           status: "analyzing",
         })
         .select()
