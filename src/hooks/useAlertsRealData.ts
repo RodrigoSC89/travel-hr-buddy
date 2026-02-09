@@ -38,6 +38,7 @@ export interface SystemHealth {
 }
 
 // Map database alert to SmartAlert interface
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 function mapAlertToSmartAlert(alert: any): SmartAlert {
   const severityMap: Record<string, SmartAlert['type']> = {
     critical: 'critical',
@@ -51,20 +52,20 @@ function mapAlertToSmartAlert(alert: any): SmartAlert {
   };
 
   return {
-    id: alert.id,
-    type: severityMap[alert.severity] || severityMap[alert.level] || 'info',
-    category: alert.category || alert.alert_type || 'system',
-    title: alert.title || alert.message || 'Alerta',
-    description: alert.description || alert.message || '',
-    vessel_id: alert.vessel_id,
-    vessel_name: alert.vessel_name,
-    priority: alert.priority || (alert.severity === 'critical' ? 'high' : 'medium'),
+    id: String(alert.id || ''),
+    type: severityMap[String(alert.severity || '')] || severityMap[String(alert.level || '')] || 'info',
+    category: (alert.category || alert.alert_type || 'system') as SmartAlert['category'],
+    title: String(alert.title || alert.message || 'Alerta'),
+    description: String(alert.description || alert.message || ''),
+    vessel_id: alert.vessel_id as string | undefined,
+    vessel_name: alert.vessel_name as string | undefined,
+    priority: (alert.priority || (alert.severity === 'critical' ? 'high' : 'medium')) as SmartAlert['priority'],
     status: alert.acknowledged ? 'acknowledged' : (alert.resolved ? 'resolved' : 'new'),
-    created_at: alert.created_at,
-    resolved_at: alert.resolved_at,
-    ai_confidence: alert.ai_confidence || 85,
-    recommended_actions: alert.recommended_action ? [alert.recommended_action] : [],
-    impact_assessment: alert.impact_assessment || 'Avaliação pendente',
+    created_at: String(alert.created_at || ''),
+    resolved_at: alert.resolved_at as string | undefined,
+    ai_confidence: Number(alert.ai_confidence || 85),
+    recommended_actions: alert.recommended_action ? [String(alert.recommended_action)] : [],
+    impact_assessment: String(alert.impact_assessment || 'Avaliação pendente'),
   };
 }
 

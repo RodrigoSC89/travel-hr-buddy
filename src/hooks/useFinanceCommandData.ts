@@ -14,7 +14,7 @@ export interface RouteCost {
   id: string;
   route: string;
   vessel: string;
-  vessel_id?: string;
+  vessel_id?: string | null;
   period: string;
   totalCost: number;
   breakdown: {
@@ -191,13 +191,12 @@ export function useFinanceCommandData() {
           .from("voyage_plans")
           .select(`
             id,
-            origin,
-            destination,
+            origin_port,
+            destination_port,
             vessel_id,
             departure_date,
             arrival_date,
-            fuel_consumption,
-            estimated_cost,
+            estimated_fuel_consumption,
             vessels(name)
           `)
           .order("departure_date", { ascending: false })
@@ -208,15 +207,15 @@ export function useFinanceCommandData() {
           return [];
         }
 
-        return (voyages || []).map((v: any, index) => ({
+        return (voyages || []).map((v, index) => ({
           id: v.id,
-          route: `${v.origin || "Porto A"} → ${v.destination || "Porto B"}`,
+          route: `${v.origin_port || "Porto A"} → ${v.destination_port || "Porto B"}`,
           vessel: v.vessels?.name || `Embarcação ${index + 1}`,
           vessel_id: v.vessel_id,
           period: v.departure_date?.substring(0, 7) || new Date().toISOString().substring(0, 7),
-          totalCost: v.estimated_cost || v.fuel_consumption * 500 || 100000,
+          totalCost: (v.estimated_fuel_consumption || 100) * 500,
           breakdown: {
-            fuel: (v.fuel_consumption || 100) * 500,
+            fuel: (v.estimated_fuel_consumption || 100) * 500,
             crew: 50000,
             maintenance: 25000,
             port: 15000,

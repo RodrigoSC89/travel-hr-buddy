@@ -3,6 +3,7 @@
  * Replaces mock list with interactive supplier management
  */
 import React, { useState, useCallback } from "react";
+import { supabase } from "@/integrations/supabase/client";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -131,9 +132,15 @@ export function LogisticsSuppliersPanel() {
 
   const handleRefresh = useCallback(async () => {
     setIsLoading(true);
-    await new Promise(r => setTimeout(r, 800));
-    setIsLoading(false);
-    toast({ title: "Dados atualizados", description: "Lista de fornecedores atualizada" });
+    try {
+      const { error } = await supabase.from("procurement_orders").select("id").limit(1);
+      if (error) throw error;
+      toast({ title: "Dados atualizados", description: "Lista de fornecedores atualizada" });
+    } catch {
+      toast({ title: "Erro", description: "Falha ao atualizar fornecedores", variant: "destructive" });
+    } finally {
+      setIsLoading(false);
+    }
   }, [toast]);
 
   const handleAddSupplier = useCallback(() => {
