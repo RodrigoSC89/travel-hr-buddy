@@ -58,7 +58,7 @@ export default function AuditTrail() {
   const runAIAnalysis = async () => {
     toast.info("Analisando padrões com IA...");
     
-    const result = await analyzeAudit(auditEntries);
+    const result = await analyzeAudit(auditEntries as unknown as Record<string, unknown>[]);
     
     if (result?.response) {
       toast.success("Análise de IA concluída!");

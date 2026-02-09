@@ -409,7 +409,7 @@ const FinanceCommandCenter: React.FC = () => {
       efficiency: c.efficiency
     }));
 
-    const result = await analyzeRouteCost(routeData, { period: selectedPeriod });
+    const result = await analyzeRouteCost(routeData as unknown as Record<string, unknown>, { period: selectedPeriod });
 
     if (result?.response) {
       toast({ 

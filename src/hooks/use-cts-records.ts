@@ -7,6 +7,7 @@ import { useState, useEffect, useCallback } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
 import { logger } from '@/lib/logger';
+import type { Json } from '@/integrations/supabase/types';
 
 export interface CTSRecord {
   id: string;
@@ -17,10 +18,10 @@ export interface CTSRecord {
   classification_society: string | null;
   issue_date: string;
   expiry_date: string;
-  vessel_categories: any;
-  certified_equipment: any;
-  required_positions: any;
-  certification_docs: any;
+  vessel_categories: Json | null;
+  certified_equipment: Json | null;
+  required_positions: Json | null;
+  certification_docs: Json | null;
   status: string | null;
   created_at: string | null;
   updated_at: string | null;
