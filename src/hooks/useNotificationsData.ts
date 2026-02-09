@@ -81,7 +81,7 @@ export function useNotificationsData() {
           read: n.is_read || false,
           createdAt: new Date(n.created_at),
           source: n.type || "Sistema",
-          link: (n.action_data as any)?.url || undefined,
+          link: ((n.action_data as Record<string, unknown>)?.url as string) || undefined,
           actionRequired: n.action_type === "required" || false,
         });
       });

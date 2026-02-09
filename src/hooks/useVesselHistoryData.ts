@@ -53,16 +53,16 @@ export function useVesselHistory(vesselId?: string) {
         .limit(10);
 
       (auditData || []).forEach((log) => {
-        const metadata = log.metadata as any || {};
+        const metadata = (log.metadata as Record<string, unknown>) || {};
         events.push({
           id: log.id,
-          vesselId: metadata.vessel_id || "",
+          vesselId: (metadata.vessel_id as string) || "",
           type: "inspection",
-          title: metadata.title || log.action || "Inspeção",
-          description: metadata.notes || "",
+          title: (metadata.title as string) || log.action || "Inspeção",
+          description: (metadata.notes as string) || "",
           date: new Date(log.event_timestamp || log.created_at || Date.now()),
-          location: metadata.location,
-          createdBy: metadata.auditor_name || "Auditor",
+          location: metadata.location as string | undefined,
+          createdBy: (metadata.auditor_name as string) || "Auditor",
         });
       });
 

@@ -82,19 +82,23 @@ export function useMoodDashboardData(options?: {
       const { data, error } = await query;
       if (error) throw error;
 
-      return (data || []).map(entry => ({
-        id: entry.id,
-        crew_member_id: entry.crew_member_id || '',
-        crew_member_name: (entry.crew_members as any)?.full_name,
-        mood_score: entry.mood_score || 3,
-        energy_level: entry.energy_level || 3,
-        stress_level: entry.stress_level || 3,
-        notes: entry.notes ?? undefined,
-        factors: (entry.factors as string[]) || [],
-        recorded_at: entry.recorded_at,
-        vessel_id: entry.vessel_id ?? undefined,
-        vessel_name: (entry.vessels as any)?.name,
-      }));
+      return (data || []).map(entry => {
+        const crewJoin = entry.crew_members as Record<string, unknown> | null;
+        const vesselJoin = entry.vessels as Record<string, unknown> | null;
+        return {
+          id: entry.id,
+          crew_member_id: entry.crew_member_id || '',
+          crew_member_name: (crewJoin?.full_name as string) ?? undefined,
+          mood_score: entry.mood_score || 3,
+          energy_level: entry.energy_level || 3,
+          stress_level: entry.stress_level || 3,
+          notes: entry.notes ?? undefined,
+          factors: (entry.factors as string[]) || [],
+          recorded_at: entry.recorded_at,
+          vessel_id: entry.vessel_id ?? undefined,
+          vessel_name: (vesselJoin?.name as string) ?? undefined,
+        };
+      });
     },
     staleTime: 2 * 60 * 1000,
   });
