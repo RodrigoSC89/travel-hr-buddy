@@ -511,10 +511,9 @@ export default function CompetitiveIntelligenceDashboard() {
       
       el.addEventListener("click", () => flyToVessel(vessel));
 
-      const marker = new mb.Marker({ element: el })
-        .setLngLat([vessel.longitude, vessel.latitude])
-        .setPopup(
-          new mb.Popup({ offset: 25 }).setHTML(`
+      const MarkerCtor = mb.Marker as new (opts: Record<string, unknown>) => { setLngLat: (coords: [number, number]) => unknown; setPopup: (popup: unknown) => unknown; addTo: (m: unknown) => unknown };
+      const PopupCtor = mb.Popup as new (opts: Record<string, unknown>) => { setHTML: (html: string) => unknown };
+      const popup = new PopupCtor({ offset: 25 }).setHTML(`
             <div class="p-2">
               <div class="flex items-center gap-2 mb-1">
                 <div class="w-3 h-3 rounded-full" style="background-color: ${companyColor}"></div>
@@ -523,11 +522,14 @@ export default function CompetitiveIntelligenceDashboard() {
               <span class="text-sm">${vessel.company || vessel.shipType}</span><br/>
               <span class="text-xs text-gray-500">${vessel.speed.toFixed(1)} kn → ${vessel.destination || "N/A"}</span>
             </div>
-          `)
-        )
+          `);
+      const markerInstance = new MarkerCtor({ element: el });
+      (markerInstance as unknown as { setLngLat: (c: [number, number]) => { setPopup: (p: unknown) => { addTo: (m: unknown) => unknown } } })
+        .setLngLat([vessel.longitude, vessel.latitude])
+        .setPopup(popup)
         .addTo(map);
       
-      markersRef.current.push(marker);
+      markersRef.current.push(markerInstance as never);
     });
 
     // Fit bounds to show all vessels

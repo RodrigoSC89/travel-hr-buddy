@@ -31,8 +31,10 @@ export interface FilterField {
   placeholder?: string;
 }
 
+export type FilterFieldValue = string | number | boolean | string[] | undefined | null;
+
 export interface FilterValue {
-  [key: string]: any;
+  [key: string]: FilterFieldValue;
 }
 
 interface AdvancedFilterPanelProps {
@@ -63,13 +65,12 @@ export function AdvancedFilterPanel({
   React.useEffect(() => {
     const count = Object.entries(values).filter(([_, v]) => {
       if (Array.isArray(v)) return v.length > 0;
-      if (typeof v === "object" && v !== null) return Object.values(v).some(Boolean);
       return v !== undefined && v !== "" && v !== null;
     }).length;
     setActiveFiltersCount(count);
   }, [values]);
 
-  const handleFieldChange = useCallback((fieldId: string, value: any) => {
+  const handleFieldChange = useCallback((fieldId: string, value: FilterFieldValue) => {
     onChange({ ...values, [fieldId]: value });
   }, [values, onChange]);
 
@@ -100,7 +101,7 @@ export function AdvancedFilterPanel({
             <Search className="absolute left-2 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
             <Input
               placeholder={field.placeholder || `Buscar ${field.label.toLowerCase()}...`}
-              value={value || ""}
+              value={(typeof value === "string" ? value : "") || ""}
               onChange={(e) => handleFieldChange(field.id, e.target.value)}
               className="pl-8"
             />
@@ -110,7 +111,7 @@ export function AdvancedFilterPanel({
       case "select":
         return (
           <Select 
-            value={value || ""} 
+            value={typeof value === "string" ? value : ""} 
             onValueChange={(v) => handleFieldChange(field.id, v)}
           >
             <SelectTrigger>
@@ -126,22 +127,22 @@ export function AdvancedFilterPanel({
           </Select>
         );
 
-      case "multiselect":
+      case "multiselect": {
+        const selectedValues = Array.isArray(value) ? value : [];
         return (
           <div className="space-y-2">
             <ScrollArea className="h-[120px] border rounded-lg p-2">
               {field.options?.map((option) => {
-                const isSelected = (value || []).includes(option.value);
+                const isSelected = selectedValues.includes(option.value);
                 return (
                   <div key={option.value} className="flex items-center space-x-2 py-1">
                     <Checkbox
                       id={`${field.id}-${option.value}`}
                       checked={isSelected}
                       onCheckedChange={(checked) => {
-                        const current = value || [];
                         const newValue = checked
-                          ? [...current, option.value]
-                          : current.filter((v: string) => v !== option.value);
+                          ? [...selectedValues, option.value]
+                          : selectedValues.filter((v: string) => v !== option.value);
                         handleFieldChange(field.id, newValue);
                       }}
                     />
@@ -155,14 +156,14 @@ export function AdvancedFilterPanel({
                 );
               })}
             </ScrollArea>
-            {value?.length > 0 && (
+            {selectedValues.length > 0 && (
               <div className="flex flex-wrap gap-1">
-                {value.map((v: string) => (
+                {selectedValues.map((v: string) => (
                   <Badge key={v} variant="secondary" className="gap-1">
                     {field.options?.find(o => o.value === v)?.label || v}
                     <X 
                       className="h-3 w-3 cursor-pointer" 
-                      onClick={() => handleFieldChange(field.id, value.filter((x: string) => x !== v))}
+                      onClick={() => handleFieldChange(field.id, selectedValues.filter((x: string) => x !== v))}
                     />
                   </Badge>
                 ))}
@@ -170,6 +171,7 @@ export function AdvancedFilterPanel({
             )}
           </div>
         );
+      }
 
       case "date":
         return (
@@ -183,13 +185,15 @@ export function AdvancedFilterPanel({
                 )}
               >
                 <CalendarIcon className="mr-2 h-4 w-4" />
-                {value ? format(new Date(value), "PPP", { locale: ptBR }) : "Selecionar data..."}
+                {typeof value === "string" && value
+                  ? format(new Date(value), "PPP", { locale: ptBR })
+                  : "Selecionar data..."}
               </Button>
             </PopoverTrigger>
             <PopoverContent className="w-auto p-0">
               <Calendar
                 mode="single"
-                selected={value ? new Date(value) : undefined}
+                selected={typeof value === "string" && value ? new Date(value) : undefined}
                 onSelect={(date) => handleFieldChange(field.id, date?.toISOString())}
                 locale={ptBR}
               />
@@ -202,7 +206,7 @@ export function AdvancedFilterPanel({
           <Input
             type="number"
             placeholder={field.placeholder || "0"}
-            value={value || ""}
+            value={typeof value === "number" ? value : (typeof value === "string" ? value : "")}
             onChange={(e) => handleFieldChange(field.id, e.target.value ? Number(e.target.value) : undefined)}
           />
         );
@@ -212,8 +216,8 @@ export function AdvancedFilterPanel({
           <div className="flex items-center space-x-2">
             <Checkbox
               id={field.id}
-              checked={value || false}
-              onCheckedChange={(checked) => handleFieldChange(field.id, checked)}
+              checked={typeof value === "boolean" ? value : false}
+              onCheckedChange={(checked) => handleFieldChange(field.id, !!checked)}
             />
             <Label htmlFor={field.id} className="cursor-pointer">
               {field.placeholder || "Sim"}
@@ -249,7 +253,7 @@ export function AdvancedFilterPanel({
         {/* Active Filter Badges */}
         <AnimatePresence>
           {Object.entries(values).map(([key, value]) => {
-            if (!value || (Array.isArray(value) && value.length === 0)) return null;
+            if (value === undefined || value === null || value === "" || (Array.isArray(value) && value.length === 0)) return null;
             const field = fields.find(f => f.id === key);
             if (!field) return null;
 
@@ -265,9 +269,7 @@ export function AdvancedFilterPanel({
                   <span className="font-normal">
                     {Array.isArray(value) 
                       ? `${value.length} selecionados` 
-                      : typeof value === "object" && value !== null
-                        ? "Período"
-                        : String(value).substring(0, 20)}
+                      : String(value).substring(0, 20)}
                   </span>
                   <X 
                     className="h-3 w-3 cursor-pointer hover:text-destructive" 
@@ -288,7 +290,7 @@ export function AdvancedFilterPanel({
 
         {/* AI Suggestion */}
         {showAISuggestion && (
-          <Button variant="ghost" size="sm" className="gap-1 text-purple-600 ml-auto">
+          <Button variant="ghost" size="sm" className="gap-1 text-primary ml-auto">
             <Sparkles className="h-3 w-3" />
             Sugestão IA
           </Button>
