@@ -26,12 +26,12 @@ export function useModuleIntegration(moduleName: string) {
     return unsubscribe;
   }, [moduleName]);
 
-  const emit = useCallback((type: string, data: any, target?: string) => {
+  const emit = useCallback((type: string, data: unknown, target?: string) => {
     moduleIntegration.emit({
       type,
       source: moduleName,
       target,
-      data,
+      data: data as Record<string, unknown>,
       timestamp: new Date()
     });
   }, [moduleName]);

@@ -19,7 +19,7 @@ interface QueuedRequest {
   options: RequestInit;
   config: RequestConfig;
   resolve: (value: Response) => void;
-  reject: (reason: any) => void;
+  reject: (reason: unknown) => void;
   attempts: number;
   timestamp: number;
 }
@@ -28,7 +28,7 @@ class RequestOptimizer {
   private queue: QueuedRequest[] = [];
   private activeRequests = 0;
   private maxConcurrent = 6;
-  private cache = new Map<string, { data: any; timestamp: number; ttl: number }>();
+  private cache = new Map<string, { data: unknown; timestamp: number; ttl: number }>();
   private isProcessing = false;
 
   constructor() {
@@ -37,7 +37,7 @@ class RequestOptimizer {
   }
 
   private updateConcurrency() {
-    const connection = (navigator as any).connection;
+    const connection = (navigator as unknown as { connection?: { effectiveType: string } }).connection;
     const connectionType = connection?.effectiveType || '4g';
     
     switch (connectionType) {
@@ -56,7 +56,7 @@ class RequestOptimizer {
   }
 
   private setupConnectionListener() {
-    const connection = (navigator as any).connection;
+    const connection = (navigator as unknown as { connection?: { addEventListener: (type: string, cb: () => void) => void } }).connection;
     if (connection) {
       connection.addEventListener('change', () => {
         this.updateConcurrency();

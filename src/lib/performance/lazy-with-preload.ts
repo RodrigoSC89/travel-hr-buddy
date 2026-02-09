@@ -5,7 +5,7 @@
 
 import { lazy, ComponentType } from "react";
 
-interface PreloadableComponent<T extends ComponentType<any>> extends React.LazyExoticComponent<T> {
+interface PreloadableComponent<T extends ComponentType<Record<string, unknown>>> extends React.LazyExoticComponent<T> {
   preload: () => Promise<{ default: T }>;
 }
 
@@ -13,7 +13,7 @@ interface PreloadableComponent<T extends ComponentType<any>> extends React.LazyE
  * Cria um componente lazy com capacidade de preload
  * Útil para pré-carregar rotas que o usuário provavelmente acessará
  */
-export function lazyWithPreload<T extends ComponentType<any>>(
+export function lazyWithPreload<T extends ComponentType<Record<string, unknown>>>(
   importFunc: () => Promise<{ default: T }>
 ): PreloadableComponent<T> {
   const LazyComponent = lazy(importFunc) as PreloadableComponent<T>;
@@ -27,7 +27,7 @@ export function lazyWithPreload<T extends ComponentType<any>>(
  */
 export const preloadStrategy = {
   // Precarrega durante idle time
-  idle: (preloadFn: () => Promise<any>) => {
+  idle: (preloadFn: () => Promise<unknown>) => {
     if ("requestIdleCallback" in window) {
       requestIdleCallback(() => preloadFn());
     } else {
@@ -37,12 +37,12 @@ export const preloadStrategy = {
   },
 
   // Precarrega após delay específico
-  delayed: (preloadFn: () => Promise<any>, delay: number = 2000) => {
+  delayed: (preloadFn: () => Promise<unknown>, delay: number = 2000) => {
     setTimeout(() => preloadFn(), delay);
   },
 
   // Precarrega no hover (mouseenter)
-  hover: (element: HTMLElement, preloadFn: () => Promise<any>) => {
+  hover: (element: HTMLElement, preloadFn: () => Promise<unknown>) => {
     const handleMouseEnter = () => {
       preloadFn();
       element.removeEventListener("mouseenter", handleMouseEnter);
@@ -51,7 +51,7 @@ export const preloadStrategy = {
   },
 
   // Precarrega quando visível no viewport
-  visible: (element: HTMLElement, preloadFn: () => Promise<any>) => {
+  visible: (element: HTMLElement, preloadFn: () => Promise<unknown>) => {
     if ("IntersectionObserver" in window) {
       const observer = new IntersectionObserver((entries) => {
         entries.forEach((entry) => {
@@ -66,7 +66,7 @@ export const preloadStrategy = {
   },
 
   // Precarrega módulos críticos imediatamente
-  critical: (preloadFns: Array<() => Promise<any>>) => {
+  critical: (preloadFns: Array<() => Promise<unknown>>) => {
     preloadFns.forEach(fn => fn());
   },
 };
@@ -75,9 +75,9 @@ export const preloadStrategy = {
  * Cache de módulos carregados para evitar recarregamento
  */
 class ModuleCache {
-  private cache = new Map<string, any>();
+  private cache = new Map<string, unknown>();
 
-  set(key: string, value: any) {
+  set(key: string, value: unknown) {
     this.cache.set(key, value);
   }
 

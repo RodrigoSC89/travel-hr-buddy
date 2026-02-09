@@ -88,7 +88,7 @@ export function useAIPEODP(vesselId?: string) {
 
   // Mutation: Analisar conformidade com IA
   const analyzeComplianceMutation = useMutation({
-    mutationFn: async (params: { vesselId: string; vesselName: string; documentData?: any }) => {
+    mutationFn: async (params: { vesselId: string; vesselName: string; documentData?: unknown }) => {
       setAnalysisProgress(0);
 
       const { data, error } = await supabase.functions.invoke('peo-dp-ai', {
@@ -152,7 +152,7 @@ export function useAIPEODP(vesselId?: string) {
 
   // Analisar conformidade
   const analyzeCompliance = useCallback(
-    async (vesselName: string, documentData?: any) => {
+    async (vesselName: string, documentData?: unknown) => {
       if (!vesselId) {
         toast.error('Selecione uma embarcação');
         return null;

@@ -9,8 +9,8 @@ export interface WatchdogLog {
   severity: "low" | "medium" | "high" | "critical";
   message: string;
   stack_trace?: string;
-  context?: any;
-  ai_analysis?: any;
+  context?: Record<string, unknown>;
+  ai_analysis?: Record<string, unknown>;
   auto_fix_attempted: boolean;
   auto_fix_success?: boolean;
   module_name?: string;

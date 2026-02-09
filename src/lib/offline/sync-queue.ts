@@ -8,7 +8,7 @@ import { logger } from "@/lib/logger";
 interface QueuedAction {
   id: string;
   type: string;
-  payload: any;
+  payload: unknown;
   timestamp: number;
   retries: number;
   maxRetries: number;
@@ -48,7 +48,7 @@ async function getDB(): Promise<IDBPDatabase> {
  */
 export async function queueAction(
   type: string,
-  payload: any,
+  payload: unknown,
   maxRetries: number = 3
 ): Promise<string> {
   const database = await getDB();
@@ -112,7 +112,7 @@ export async function incrementRetry(id: string): Promise<boolean> {
  */
 export async function cacheData(
   key: string,
-  data: any,
+  data: unknown,
   ttlMs: number = 5 * 60 * 1000 // 5 minutes default
 ): Promise<void> {
   const database = await getDB();

@@ -279,8 +279,9 @@ export function useWebVitals(): WebVitals {
     try {
       // FID
       const fidObserver = new PerformanceObserver((list) => {
-        list.getEntries().forEach((entry: any) => {
-          setVitals(prev => ({ ...prev, fid: entry.processingStart - entry.startTime }));
+        list.getEntries().forEach((entry) => {
+          const fidEntry = entry as PerformanceEventTiming;
+          setVitals(prev => ({ ...prev, fid: fidEntry.processingStart - fidEntry.startTime }));
         });
       });
       fidObserver.observe({ entryTypes: ['first-input'], buffered: true });
@@ -291,9 +292,10 @@ export function useWebVitals(): WebVitals {
       // CLS
       let clsValue = 0;
       const clsObserver = new PerformanceObserver((list) => {
-        list.getEntries().forEach((entry: any) => {
-          if (!entry.hadRecentInput) {
-            clsValue += entry.value;
+        list.getEntries().forEach((entry) => {
+          const layoutShift = entry as LayoutShift;
+          if (!layoutShift.hadRecentInput) {
+            clsValue += layoutShift.value;
           }
         });
         setVitals(prev => ({ ...prev, cls: clsValue }));

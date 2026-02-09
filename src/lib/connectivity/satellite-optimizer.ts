@@ -25,7 +25,7 @@ interface ConnectivityWindow {
 interface SyncItem {
   id: string;
   type: string;
-  data: any;
+  data: unknown;
   priority: 'critical' | 'high' | 'normal' | 'low';
   size: number;
   timestamp: Date;
@@ -49,7 +49,7 @@ export class SatelliteOptimizer {
   }
   
   // Optimize data for satellite transmission
-  static async optimizeForSatellite(data: any): Promise<ChunkedData> {
+  static async optimizeForSatellite(data: unknown): Promise<ChunkedData> {
     // Serialize data
     const serialized = JSON.stringify(data);
     const originalSize = new TextEncoder().encode(serialized).length;
@@ -184,12 +184,12 @@ export class SatelliteOptimizer {
     lastSyncTimestamp: Date,
     tables: string[]
   ): Promise<{
-    changes: Array<{ table: string; operation: string; data: any }>;
+    changes: Array<{ table: string; operation: string; data: unknown }>;
     totalSize: number;
     compressedSize: number;
   }> {
     // In production, this would query the database for changes since lastSync
-    const changes: Array<{ table: string; operation: string; data: any }> = [];
+    const changes: Array<{ table: string; operation: string; data: unknown }> = [];
     
     // Simulate getting changes
     // Would use Supabase realtime or change data capture
@@ -292,19 +292,20 @@ export class SatelliteOptimizer {
   }
   
   // Private: Calculate priority based on data type
-  private static calculatePriority(data: any): 'critical' | 'high' | 'normal' | 'low' {
+  private static calculatePriority(data: unknown): 'critical' | 'high' | 'normal' | 'low' {
     if (!data || typeof data !== 'object') return 'normal';
     
+    const record = data as Record<string, unknown>;
     // Check for critical data types
-    if (data.type === 'emergency' || data.type === 'mayday' || data.type === 'distress') {
+    if (record.type === 'emergency' || record.type === 'mayday' || record.type === 'distress') {
       return 'critical';
     }
     
-    if (data.type === 'safety' || data.type === 'security' || data.type === 'medical') {
+    if (record.type === 'safety' || record.type === 'security' || record.type === 'medical') {
       return 'high';
     }
     
-    if (data.type === 'report' || data.type === 'log' || data.type === 'status') {
+    if (record.type === 'report' || record.type === 'log' || record.type === 'status') {
       return 'normal';
     }
     
@@ -322,7 +323,7 @@ export class SatelliteOptimizer {
     // In production, this would check actual satellite signal
     // For now, simulate based on navigator.connection
     
-    const connection = (navigator as any).connection;
+    const connection = (navigator as unknown as { connection?: { effectiveType: string } }).connection;
     
     if (connection) {
       const effectiveType = connection.effectiveType;

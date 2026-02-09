@@ -140,7 +140,7 @@ export async function verifyInspectionIntegrity(
     vessel_id: string;
     inspector_name: string;
     inspection_date: string;
-    findings: any;
+    findings: unknown;
     signature_hash?: string;
   }
 ): Promise<SignatureValidationResult> {

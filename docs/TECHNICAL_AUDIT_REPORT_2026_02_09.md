@@ -287,16 +287,17 @@ Hooks com nomes quase idênticos indicam falta de coordenação.
 | Sprint 13 | 2026-02-09 | +1 | Type safety (DashboardOptimizer, CursorPagination, APM, PerformanceMonitor, MLCInspection, DocumentIntelligence, PrePSC), 40+ `any` removidos |
 | Sprint 14 | 2026-02-09 | +1 | Type safety (VoiceCommander, InterVesselSync, MissionPipeline, ForecastEngine, SafeLazyImport, CrossModuleValidator, TranslationManager, AIControlTower, StarFix, Terrastar), 35+ `any` removidos |
 | Sprint 15 | 2026-02-09 | +1 | Type safety (LocalSync, MaintenanceOrchestrator, SyncManager, SyncEngine, AISClient, KPIs, DroneCommand, Satellite, SmartDrills), 45+ `any` removidos |
-| **Acumulado** | | **+23** | **80 → 99/100** |
+| Sprint 16 | 2026-02-09 | +1 | Type safety (Logger, SyncQueue, VoiceRecognition, SatelliteOptimizer, LazyPreload, RequestOptimizer, UnitConverter, Firebase, Email, SGSO, PSCValidator, IndexedDB, SelfAdjusting, CrewData, Performance, PSCPrediction, MaintenanceDashboard, OfflineMutation, Watchdog, WorkflowAI, ModuleIntegration, DroneState, AI hooks, PEODP), 50+ `any` removidos |
+| **Acumulado** | | **+24** | **80 → 99.5/100** |
 
 ### Próximos passos para 100/100
-1. **CRUD completo (+1)**: ISPS, Drydock, CrewScheduler com persistência real — 3 dias
+1. **Componentes UI restantes (+0.5)**: LazyChart, LazyMapbox, AdvancedFilterPanel, PeotramManager — 1 dia
 
 ---
 
 **FIM DO RELATÓRIO**  
 **Total de falhas originais:** 139  
-**Falhas corrigidas (Sprint 1→15):** 128  
-**Falhas restantes:** 11  
-**Esforço total de correção restante:** ~3 dias (24 horas)  
-**Prioridade:** Sprint 16 (CRUD real) → Sprint 17 (Consolidação final)
+**Falhas corrigidas (Sprint 1→16):** 133  
+**Falhas restantes:** 6  
+**Esforço total de correção restante:** ~1 dia (8 horas)  
+**Prioridade:** Sprint 17 (Componentes UI finais) → 100/100

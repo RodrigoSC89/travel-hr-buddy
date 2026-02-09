@@ -94,7 +94,7 @@ export const requestNotificationPermission = async (): Promise<string | null> =>
 /**
  * Listen for foreground messages
  */
-export const onForegroundMessage = (callback: (payload: any) => void): (() => void) | null => {
+export const onForegroundMessage = (callback: (payload: unknown) => void): (() => void) | null => {
   try {
     if (!messaging) {
       logger.debug("Messaging not initialized for foreground listener");
