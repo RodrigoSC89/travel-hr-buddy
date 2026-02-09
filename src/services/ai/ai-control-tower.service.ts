@@ -157,32 +157,32 @@ export class AIControlTowerService {
       supabase.from('ai_blockchain_audit').select('*').order('block_number', { ascending: false }).limit(50),
     ]);
 
-    const decisions: DecisionRecord[] = (decisionsRes.data || []).map((d: any) => ({
-      id: d.id,
-      title: d.title,
-      description: d.description,
-      type: d.type,
-      status: d.status,
-      confidence: d.confidence,
-      confidenceLevel: d.confidence_level,
-      impact: d.impact,
-      reasoning: d.justification_reasoning,
-      createdAt: d.created_at,
-      executedAt: d.executed_at,
-      feedbackCorrect: d.feedback_was_correct,
+    const decisions: DecisionRecord[] = (decisionsRes.data || []).map((d) => ({
+      id: String(d.id),
+      title: String(d.title),
+      description: String(d.description),
+      type: String(d.type),
+      status: String(d.status),
+      confidence: Number(d.confidence),
+      confidenceLevel: String(d.confidence_level),
+      impact: String(d.impact),
+      reasoning: String(d.justification_reasoning),
+      createdAt: String(d.created_at),
+      executedAt: d.executed_at ? String(d.executed_at) : null,
+      feedbackCorrect: d.feedback_was_correct != null ? Boolean(d.feedback_was_correct) : null,
     }));
 
-    const blockchainRecords: BlockchainBlock[] = (blockchainRes.data || []).map((b: any) => ({
-      id: b.id,
-      blockNumber: b.block_number,
-      agentName: b.agent_name,
-      module: b.module,
-      actionType: b.action_type,
-      actionDescription: b.action_description,
-      confidence: b.confidence,
-      humanOverride: b.human_override,
-      hash: b.hash,
-      previousHash: b.previous_hash,
+    const blockchainRecords: BlockchainBlock[] = (blockchainRes.data || []).map((b) => ({
+      id: String(b.id),
+      blockNumber: Number(b.block_number),
+      agentName: String(b.agent_name),
+      module: String(b.module),
+      actionType: String(b.action_type),
+      actionDescription: String(b.action_description),
+      confidence: b.confidence != null ? Number(b.confidence) : null,
+      humanOverride: Boolean(b.human_override),
+      hash: String(b.hash),
+      previousHash: String(b.previous_hash),
       timestamp: b.timestamp,
     }));
 

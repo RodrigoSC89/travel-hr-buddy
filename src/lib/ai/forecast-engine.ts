@@ -3,9 +3,10 @@
  * DEBT-FIX: Removed (supabase as any) - dp_telemetry doesn't exist, using system_observations with metadata
  */
 
-let ort: any = null;
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- ONNX runtime typing is complex
+let ort: Record<string, any> | null = null;
 const loadORT = async () => {
-  if (!ort) { ort = await import("onnxruntime-web"); }
+  if (!ort) { ort = await import("onnxruntime-web") as Record<string, any>; }
   return ort;
 };
 import { logger } from "@/lib/logger";
@@ -27,7 +28,8 @@ export interface RiskClassification {
 
 export async function runForecastAnalysis(): Promise<ForecastResult> {
   try {
-    const session = await ort.InferenceSession.create("/models/nautilus_forecast.onnx");
+    const ortModule = await loadORT();
+    const session = await ortModule.InferenceSession.create("/models/nautilus_forecast.onnx");
 
     // Use system_observations for telemetry since dp_telemetry table doesn't exist
     const { data, error } = await supabase
@@ -48,13 +50,15 @@ export async function runForecastAnalysis(): Promise<ForecastResult> {
 
     // Extract values from metadata field
     const values = data.map((x) => {
-      const meta = x.metadata as Record<string, any> | null;
+      const meta = x.metadata as Record<string, unknown> | null;
       return Number(meta?.value) || 0;
     });
-    const input = new ort.Tensor("float32", new Float32Array(values), [1, values.length]);
+    const ortModule2 = await loadORT();
+    const input = new ortModule2.Tensor("float32", new Float32Array(values), [1, values.length]);
 
     const output = await session.run({ input });
-    const prediction = Number((output as any).probabilities?.data?.[0] ?? (output as any).output?.data?.[0] ?? 0);
+    const outputRecord = output as Record<string, { data?: unknown[] }>;
+    const prediction = Number(outputRecord.probabilities?.data?.[0] ?? outputRecord.output?.data?.[0] ?? 0);
 
     const risk = classifyRisk(prediction);
     if (risk.level !== "OK") publishForecastAlert(risk);

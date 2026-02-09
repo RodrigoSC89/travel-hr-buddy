@@ -334,9 +334,9 @@ export async function getCorrectionStatistics(
       };
     }
 
-    const accuracies = corrections.map((c: any) => c.horizontal_accuracy);
-    const correctionAges = corrections.map((c: any) => c.correction_age);
-    const signalQualities = corrections.map((c: any) => c.signal_quality);
+    const accuracies = corrections.map((c: Record<string, unknown>) => Number(c.horizontal_accuracy));
+    const correctionAges = corrections.map((c: Record<string, unknown>) => Number(c.correction_age));
+    const signalQualities = corrections.map((c: Record<string, unknown>) => Number(c.signal_quality));
 
     return {
       total_corrections: corrections.length,

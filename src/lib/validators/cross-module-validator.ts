@@ -207,9 +207,9 @@ export async function validateCrewToOperations(): Promise<ValidationResult> {
     if (crewWithVessels && crewWithVessels.length > 0) {
       // Verify each vessel_id exists
       const vesselIds = crewWithVessels
-        .filter((crew: any) => crew.vessel_id)
-        .map((crew: any) => crew.vessel_id)
-        .filter((id: any, index: number, self: any[]) => self.indexOf(id) === index);
+        .filter((crew) => crew.vessel_id)
+        .map((crew) => crew.vessel_id as string)
+        .filter((id, index, self) => self.indexOf(id) === index);
       
       if (vesselIds.length > 0) {
         const { count: validVessels } = await supabase
