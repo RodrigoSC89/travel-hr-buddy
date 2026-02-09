@@ -130,7 +130,7 @@ export function useDPMentorData(): DPMentorStats {
       cpdRequired: 6,
       simulatorHours: simHours,
       status,
-      vessel: (c.vessels as any)?.name || "Não atribuído",
+      vessel: (c.vessels && typeof c.vessels === 'object' && 'name' in c.vessels) ? String((c.vessels as Record<string, unknown>).name) : "Não atribuído",
     };
   });
 

@@ -28,14 +28,15 @@ interface UseOCRReturn {
 }
 
 // Cached worker
-let tesseractWorker: any = null;
+// Tesseract worker instance - typed loosely due to dynamic import
+let tesseractWorker: { recognize: Function; terminate: Function } | null = null;
 
 const initWorker = async (language: string = "eng") => {
   if (!tesseractWorker) {
     const Tesseract = await import("tesseract.js");
     tesseractWorker = await Tesseract.createWorker(language, 1, {
-      logger: (m: any) => {
-        if (m.status === "recognizing text") {
+      logger: (m: Record<string, unknown>) => {
+        if (String(m.status) === "recognizing text") {
           // Progress callback handled separately
         }
       }
@@ -63,9 +64,9 @@ export const useOCR = (options: UseOCROptions = {}): UseOCRReturn => {
       const Tesseract = await import("tesseract.js");
       
       const worker = await Tesseract.createWorker(language, 1, {
-        logger: (m: any) => {
-          if (m.status === "recognizing text" && m.progress) {
-            const progressValue = Math.round(m.progress * 100);
+        logger: (m: Record<string, unknown>) => {
+          if (String(m.status) === "recognizing text" && m.progress) {
+            const progressValue = Math.round(Number(m.progress) * 100);
             setProgress(progressValue);
             onProgress?.(progressValue);
           }
