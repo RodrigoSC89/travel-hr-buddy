@@ -7,15 +7,30 @@ import { supabase } from "@/integrations/supabase/client";
 import { logger } from "@/lib/logger";
 import type { Json } from "@/integrations/supabase/types";
 
+// eslint-disable-next-line @typescript-eslint/no-empty-interface
+interface SpeechRecognitionLike {
+  continuous: boolean;
+  interimResults: boolean;
+  lang: string;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  onresult: ((event: any) => void) | null;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  onerror: ((event: any) => void) | null;
+  onend: (() => void) | null;
+  start: () => void;
+  stop: () => void;
+}
+type SpeechRecognitionInstance = SpeechRecognitionLike;
+
 export interface IntentInput {
   voiceCommand?: string;
   gestureInput?: {
     type: string;
     confidence: number;
-    data: any;
+    data: Record<string, unknown>;
   };
   typedQuery?: string;
-  context?: Record<string, any>;
+  context?: Record<string, unknown>;
 }
 
 export interface IntentOutput {
@@ -34,7 +49,7 @@ export interface IntentOutput {
  */
 export class MultimodalIntentEngine {
   private isInitialized = false;
-  private recognitionService: any = null;
+  private recognitionService: SpeechRecognitionInstance | null = null;
   
   constructor() {
     this.initialize();
@@ -43,7 +58,8 @@ export class MultimodalIntentEngine {
   private async initialize() {
     try {
       if ("webkitSpeechRecognition" in window || "SpeechRecognition" in window) {
-        const SpeechRecognitionAPI = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
+        const win = window as Window & { SpeechRecognition?: new () => SpeechRecognitionInstance; webkitSpeechRecognition?: new () => SpeechRecognitionInstance };
+        const SpeechRecognitionAPI = win.SpeechRecognition || win.webkitSpeechRecognition;
         this.recognitionService = new SpeechRecognitionAPI();
         if (this.recognitionService) {
           this.recognitionService.continuous = false;
@@ -83,37 +99,37 @@ export class MultimodalIntentEngine {
 
   async processVoiceCommand(
     onResult: (transcript: string) => void,
-    onError?: (error: any) => void
+    onError?: (error: string) => void
   ): Promise<void> {
     if (!this.recognitionService) {
       throw new Error("Speech recognition not available");
     }
 
     return new Promise((resolve, reject) => {
-      this.recognitionService.onresult = (event: any) => {
+      this.recognitionService!.onresult = (event) => {
         const transcript = event.results[0][0].transcript;
         onResult(transcript);
         resolve();
       };
 
-      this.recognitionService.onerror = (event: any) => {
+      this.recognitionService!.onerror = (event) => {
         if (onError) onError(event.error);
         reject(event.error);
       };
 
-      this.recognitionService.onend = () => {
+      this.recognitionService!.onend = () => {
         resolve();
       };
 
-      this.recognitionService.start();
+      this.recognitionService!.start();
     });
   }
 
-  async processGesture(gestureData: any): Promise<IntentOutput> {
+  async processGesture(gestureData: IntentInput["gestureInput"]): Promise<IntentOutput> {
     return this.processIntent({ gestureInput: gestureData });
   }
 
-  async processTextQuery(query: string, context?: Record<string, any>): Promise<IntentOutput> {
+  async processTextQuery(query: string, context?: Record<string, unknown>): Promise<IntentOutput> {
     return this.processIntent({ typedQuery: query, context });
   }
 

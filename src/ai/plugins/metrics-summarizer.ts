@@ -17,7 +17,7 @@ export class MetricsSummarizerPlugin extends BaseAIPlugin {
 
   async run(input: AIPluginInput): Promise<AIPluginOutput> {
     try {
-      const metrics = input.data as any[];
+      const metrics = input.data as Record<string, unknown>[];
       
       if (!Array.isArray(metrics) || metrics.length === 0) {
         return {
@@ -29,9 +29,9 @@ export class MetricsSummarizerPlugin extends BaseAIPlugin {
       // Calculate summary statistics
       const summary = {
         total: metrics.length,
-        average: metrics.reduce((sum, m) => sum + (m.value || 0), 0) / metrics.length,
-        max: Math.max(...metrics.map(m => m.value || 0)),
-        min: Math.min(...metrics.map(m => m.value || 0)),
+        average: metrics.reduce((sum, m) => sum + (Number(m.value) || 0), 0) / metrics.length,
+        max: Math.max(...metrics.map(m => Number(m.value) || 0)),
+        min: Math.min(...metrics.map(m => Number(m.value) || 0)),
         trend: this.calculateTrend(metrics),
         insights: this.generateInsights(metrics),
       };
@@ -52,14 +52,14 @@ export class MetricsSummarizerPlugin extends BaseAIPlugin {
     }
   }
 
-  private calculateTrend(metrics: any[]): "increasing" | "decreasing" | "stable" {
+  private calculateTrend(metrics: Record<string, unknown>[]): "increasing" | "decreasing" | "stable" {
     if (metrics.length < 2) return "stable";
     
     const firstHalf = metrics.slice(0, Math.floor(metrics.length / 2));
     const secondHalf = metrics.slice(Math.floor(metrics.length / 2));
     
-    const firstAvg = firstHalf.reduce((sum, m) => sum + (m.value || 0), 0) / firstHalf.length;
-    const secondAvg = secondHalf.reduce((sum, m) => sum + (m.value || 0), 0) / secondHalf.length;
+    const firstAvg = firstHalf.reduce((sum, m) => sum + ((m.value as number) || 0), 0) / firstHalf.length;
+    const secondAvg = secondHalf.reduce((sum, m) => sum + ((m.value as number) || 0), 0) / secondHalf.length;
     
     const difference = ((secondAvg - firstAvg) / firstAvg) * 100;
     
@@ -68,7 +68,7 @@ export class MetricsSummarizerPlugin extends BaseAIPlugin {
     return "stable";
   }
 
-  private generateInsights(metrics: any[]): string[] {
+  private generateInsights(metrics: Record<string, unknown>[]): string[] {
     const insights: string[] = [];
     const trend = this.calculateTrend(metrics);
     

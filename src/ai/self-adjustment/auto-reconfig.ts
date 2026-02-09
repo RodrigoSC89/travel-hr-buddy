@@ -542,7 +542,7 @@ export class AutoReconfigurationEngine {
           resource_allocation: config.resourceAllocation,
           priorities: config.priorities,
           timestamp: config.timestamp,
-        } as any,
+        },
         description: `Auto-reconfig: ${config.modelName}`,
       });
     } catch (error) {
