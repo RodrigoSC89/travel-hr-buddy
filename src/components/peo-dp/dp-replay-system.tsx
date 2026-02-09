@@ -127,7 +127,19 @@ export const DPReplaySystem: React.FC = () => {
   };
 
   const handleExport = () => {
-    toast.success("Exportando replay para análise...");
+    const sessionEvents = selectedSession?.events || [];
+    const csvRows = [
+      "Timestamp;Tipo;Severidade;Descrição",
+      ...sessionEvents.map((e: any) => `${e.timestamp};${e.type};${e.severity};${e.description || ""}`)
+    ];
+    const blob = new Blob(['\uFEFF' + csvRows.join('\n')], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `dp-replay-${selectedSession?.id || "export"}-${new Date().toISOString().slice(0,10)}.csv`;
+    a.click();
+    URL.revokeObjectURL(url);
+    toast.success("Replay exportado para análise!");
   };
 
   const getSeverityColor = (severity: string) => {

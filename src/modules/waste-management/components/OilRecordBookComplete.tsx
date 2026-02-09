@@ -253,7 +253,18 @@ export function OilRecordBookComplete() {
   };
 
   const handleExportPDF = () => {
-    toast.success("Gerando PDF do Oil Record Book...");
+    const rows = [
+      "Nº;Data;Hora;Código;Descrição;Tanque;Qtd (m³);Posição;Verificado",
+      ...entries.map(e => `${e.entry_number};${e.date};${e.time};${e.operation_code};${e.operation_description};${e.tank_name};${e.quantity_m3};${e.position_lat} ${e.position_lon};${e.master_verified ? "Sim" : "Não"}`)
+    ];
+    const blob = new Blob(['\uFEFF' + rows.join('\n')], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `oil-record-book-${new Date().toISOString().slice(0,10)}.csv`;
+    a.click();
+    URL.revokeObjectURL(url);
+    toast.success("Oil Record Book exportado!");
   };
 
   return (

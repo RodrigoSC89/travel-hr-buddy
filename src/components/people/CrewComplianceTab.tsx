@@ -241,7 +241,13 @@ export default function CrewComplianceTab() {
         toast.success("Dados atualizados");
       }}
       exportable
-      onExport={() => toast.info("Exportando relatório de compliance...")}
+      onExport={() => {
+        const rows = ["Nome;Tipo;Status;Validade", ...certifications.map((c: any) => `${c.crew_member_name || ""};${c.certificate_type};${c.status};${c.expiry_date || ""}`)];
+        const blob = new Blob(['\uFEFF' + rows.join('\n')], { type: 'text/csv;charset=utf-8;' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a'); a.href = url; a.download = `crew-compliance-${new Date().toISOString().slice(0,10)}.csv`; a.click(); URL.revokeObjectURL(url);
+        toast.success("Relatório de compliance exportado!");
+      }}
       isEmpty={certifications.length === 0}
       emptyTitle="Nenhuma certificação cadastrada"
       emptyDescription="Adicione certificações para monitorar a compliance da tripulação."
