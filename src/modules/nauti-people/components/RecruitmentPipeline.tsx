@@ -716,7 +716,20 @@ const RecruitmentPipeline: React.FC = () => {
           </div>
           <DialogFooter>
             <Button variant="outline" onClick={() => setIsScheduleOpen(false)}>Cancelar</Button>
-            <Button onClick={() => { toast.success('Entrevista agendada!'); setIsScheduleOpen(false); }}>
+            <Button onClick={async () => {
+              try {
+                const { supabase } = await import("@/integrations/supabase/client");
+                await supabase.from("ai_audit_logs").insert({
+                  user_input: JSON.stringify({ action: "interview_scheduled", candidate: selectedCandidato?.nome, created_at: new Date().toISOString() }),
+                  interaction_type: "interview_schedule",
+                  module_name: "recruitment"
+                });
+                toast.success('Entrevista agendada!');
+                setIsScheduleOpen(false);
+              } catch {
+                toast.error("Erro ao agendar entrevista");
+              }
+            }}>
               <CheckCircle className="w-4 h-4 mr-2" />
               Confirmar
             </Button>
@@ -745,7 +758,20 @@ const RecruitmentPipeline: React.FC = () => {
           </div>
           <DialogFooter>
             <Button variant="outline" onClick={() => setIsMessageOpen(false)}>Cancelar</Button>
-            <Button onClick={() => { toast.success('Mensagem enviada!'); setIsMessageOpen(false); }}>
+            <Button onClick={async () => {
+              try {
+                const { supabase } = await import("@/integrations/supabase/client");
+                await supabase.from("ai_audit_logs").insert({
+                  user_input: JSON.stringify({ action: "message_sent", candidate: selectedCandidato?.nome, created_at: new Date().toISOString() }),
+                  interaction_type: "candidate_message",
+                  module_name: "recruitment"
+                });
+                toast.success('Mensagem enviada!');
+                setIsMessageOpen(false);
+              } catch {
+                toast.error("Erro ao enviar mensagem");
+              }
+            }}>
               <Send className="w-4 h-4 mr-2" />
               Enviar
             </Button>

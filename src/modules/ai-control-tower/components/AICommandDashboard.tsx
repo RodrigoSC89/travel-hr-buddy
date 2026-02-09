@@ -467,7 +467,20 @@ export function AICommandDashboard() {
                   min={10} max={200} step={10}
                 />
               </div>
-              <Button onClick={() => toast.success("Configurações salvas")}>Salvar Configurações</Button>
+              <Button onClick={async () => {
+                try {
+                  const { supabase } = await import("@/integrations/supabase/client");
+                  const { error } = await supabase.from("ai_configurations").upsert({
+                    config_key: "agent_settings",
+                    config_value: agentSettings as any,
+                    description: "AI Agent global settings"
+                  }, { onConflict: "config_key" });
+                  if (error) throw error;
+                  toast.success("Configurações salvas no banco de dados");
+                } catch {
+                  toast.error("Erro ao salvar configurações");
+                }
+              }}>Salvar Configurações</Button>
             </CardContent>
           </Card>
         </TabsContent>

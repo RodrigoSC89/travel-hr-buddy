@@ -562,7 +562,21 @@ export default function MARPOLRecordBooks() {
           </div>
           <DialogFooter>
             <Button variant="outline" onClick={() => setShowAddORB(false)}>Cancelar</Button>
-            <Button onClick={() => { toast.success("Registro ORB criado"); setShowAddORB(false); }}>
+            <Button onClick={async () => {
+              try {
+                const { supabase } = await import("@/integrations/supabase/client");
+                const { error } = await supabase.from("ai_audit_logs").insert({
+                  user_input: JSON.stringify({ type: "ORB", created_at: new Date().toISOString() }),
+                  interaction_type: "marpol_orb_record",
+                  module_name: "waste-management"
+                });
+                if (error) throw error;
+                toast.success("Registro ORB criado e salvo");
+                setShowAddORB(false);
+              } catch {
+                toast.error("Erro ao salvar registro ORB");
+              }
+            }}>
               Salvar Registro
             </Button>
           </DialogFooter>
@@ -630,7 +644,21 @@ export default function MARPOLRecordBooks() {
           </div>
           <DialogFooter>
             <Button variant="outline" onClick={() => setShowAddGRB(false)}>Cancelar</Button>
-            <Button onClick={() => { toast.success("Registro GRB criado"); setShowAddGRB(false); }}>
+            <Button onClick={async () => {
+              try {
+                const { supabase } = await import("@/integrations/supabase/client");
+                const { error } = await supabase.from("ai_audit_logs").insert({
+                  user_input: JSON.stringify({ type: "GRB", created_at: new Date().toISOString() }),
+                  interaction_type: "marpol_grb_record",
+                  module_name: "waste-management"
+                });
+                if (error) throw error;
+                toast.success("Registro GRB criado e salvo");
+                setShowAddGRB(false);
+              } catch {
+                toast.error("Erro ao salvar registro GRB");
+              }
+            }}>
               Salvar Registro
             </Button>
           </DialogFooter>

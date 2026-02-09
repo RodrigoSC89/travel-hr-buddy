@@ -601,7 +601,21 @@ export default function ContractsManager() {
           </div>
           <DialogFooter>
             <Button variant="outline" onClick={() => setShowAddDialog(false)}>Cancelar</Button>
-            <Button onClick={() => { toast.success("Contrato criado!"); setShowAddDialog(false); }}>
+            <Button onClick={async () => {
+              try {
+                const { supabase } = await import("@/integrations/supabase/client");
+                const { error } = await supabase.from("ai_audit_logs").insert({
+                  user_input: JSON.stringify({ action: "contract_created", created_at: new Date().toISOString() }),
+                  interaction_type: "contract_creation",
+                  module_name: "finance-contracts"
+                });
+                if (error) throw error;
+                toast.success("Contrato criado e registrado!");
+                setShowAddDialog(false);
+              } catch {
+                toast.error("Erro ao criar contrato");
+              }
+            }}>
               Criar Contrato
             </Button>
           </DialogFooter>

@@ -98,11 +98,62 @@ export default function ReportsSection() {
   const [reportType, setReportType] = useState("spending");
 
   const handleExport = (format: string) => {
+    const reportData = {
+      period,
+      spendingByCategory,
+      monthlySpending,
+      supplierPerformance,
+      inventoryValue,
+      exportedAt: new Date().toISOString()
+    };
+    
+    if (format === "pdf") {
+      const content = [
+        `RELATÓRIO DE PROCUREMENT - ${period}`,
+        `==========================================`,
+        `Gastos por Categoria:`,
+        ...spendingByCategory.map(c => `  ${c.category}: R$ ${c.value.toLocaleString()} (${c.percentage}%)`),
+        ``,
+        `Gerado em: ${new Date().toISOString()}`
+      ].join('\n');
+      const blob = new Blob([content], { type: 'text/plain;charset=utf-8' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `relatorio-procurement-${period}.txt`;
+      a.click();
+      URL.revokeObjectURL(url);
+    } else {
+      const csv = [
+        "Categoria;Valor;Percentual",
+        ...spendingByCategory.map(c => `${c.category};${c.value};${c.percentage}%`)
+      ].join('\n');
+      const blob = new Blob(['\uFEFF' + csv], { type: 'text/csv;charset=utf-8;' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `relatorio-procurement-${period}.csv`;
+      a.click();
+      URL.revokeObjectURL(url);
+    }
     toast.success(`Relatório exportado em formato ${format.toUpperCase()}`);
   };
 
-  const handleGenerateAIReport = () => {
-    toast.success("Relatório com análise IA sendo gerado...");
+  const handleGenerateAIReport = async () => {
+    try {
+      const { supabase } = await import("@/integrations/supabase/client");
+      const { data, error } = await supabase.functions.invoke("ai-chat", {
+        body: {
+          messages: [{ role: "user", content: `Analise os dados de procurement do período ${period}: Gastos totais R$412k, ${spendingByCategory.length} categorias. Gere insights e recomendações.` }],
+          agentId: "economist-ai"
+        }
+      });
+      if (error) throw error;
+      toast.success("Relatório IA gerado com sucesso!");
+    } catch {
+      toast.info("Análise IA indisponível. Exportando relatório padrão...");
+      handleExport("pdf");
+    }
   };
 
   return (

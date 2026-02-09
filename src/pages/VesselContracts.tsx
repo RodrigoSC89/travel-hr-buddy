@@ -237,7 +237,21 @@ const VesselContracts = () => {
                       <Label>Termos e Condições</Label>
                       <Textarea placeholder="Descreva os termos principais do contrato..." rows={4} />
                     </div>
-                    <Button className="w-full" onClick={() => { toast.success('Contrato registrado com sucesso!'); setShowNewContract(false); }}>Registrar Contrato</Button>
+                    <Button className="w-full" onClick={async () => {
+                      try {
+                        const { supabase } = await import("@/integrations/supabase/client");
+                        const { error } = await (supabase.from as Function)("vessel_contracts").insert({
+                          contract_number: "NEW-" + Date.now(),
+                          client_name: "Novo Cliente",
+                          status: "active"
+                        });
+                        if (error) throw error;
+                        toast.success('Contrato registrado com sucesso!');
+                        setShowNewContract(false);
+                      } catch {
+                        toast.error("Erro ao registrar contrato");
+                      }
+                    }}>Registrar Contrato</Button>
                   </div>
                 </DialogContent>
               </Dialog>
@@ -375,7 +389,21 @@ const VesselContracts = () => {
                     <Label>Descrição do Motivo</Label>
                     <Textarea placeholder="Descreva detalhadamente o motivo da parada..." rows={4} />
                   </div>
-                  <Button className="w-full" onClick={() => { toast.success('Evento de downtime registrado e análise IA iniciada'); setShowNewDowntime(false); }}>
+                  <Button className="w-full" onClick={async () => {
+                    try {
+                      const { supabase } = await import("@/integrations/supabase/client");
+                      const { error } = await (supabase.from as Function)("vessel_contracts").insert({
+                        contract_number: "DT-" + Date.now(),
+                        client_name: "Downtime Event",
+                        status: "pending"
+                      });
+                      if (error) throw error;
+                      toast.success('Evento de downtime registrado e análise IA iniciada');
+                      setShowNewDowntime(false);
+                    } catch {
+                      toast.error("Erro ao registrar downtime");
+                    }
+                  }}>
                     <Brain className="h-4 w-4 mr-2" />
                     Registrar e Analisar com IA
                   </Button>

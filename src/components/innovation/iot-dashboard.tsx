@@ -410,8 +410,11 @@ export const IoTDashboard: React.FC = () => {
                   Sensor de umidade com bateria em 45%. Recomenda-se substituição.
                 </p>
                 <div className="flex gap-2 mt-3">
-                  <Button variant="outline" size="sm" onClick={() => toast.success("Alerta de bateria baixa marcado como resolvido")}>Marcar como Resolvido</Button>
-                  <Button variant="outline" size="sm" onClick={() => toast.info("Abrindo detalhes do sensor de umidade...")}>Ver Detalhes</Button>
+                  <Button variant="outline" size="sm" onClick={() => {
+                    setSensors(prev => prev.map(s => s.type === "humidity" ? { ...s, status: "online" as const } : s));
+                    toast.success("Alerta de bateria baixa marcado como resolvido");
+                  }}>Marcar como Resolvido</Button>
+                  <Button variant="outline" size="sm" onClick={() => toast.info("Detalhes: Sensor Umidade, bateria 45%, Ponte de Comando")}>Ver Detalhes</Button>
                 </div>
               </CardContent>
             </Card>
@@ -428,8 +431,12 @@ export const IoTDashboard: React.FC = () => {
                   Sensor Node A não responde há 2 horas. Verificar conectividade.
                 </p>
                 <div className="flex gap-2 mt-3">
-                  <Button variant="outline" size="sm" onClick={() => toast.loading("Reiniciando Sensor Node A...", { id: "restart-node", duration: 3000 })}>Reiniciar Dispositivo</Button>
-                  <Button variant="outline" size="sm" onClick={() => toast.info("Iniciando diagnóstico de conectividade...")}>Diagnosticar</Button>
+                  <Button variant="outline" size="sm" onClick={() => {
+                    setSensors(prev => prev.map(s => s.name === "Node A" || s.name === "Sensor Node A" ? { ...s, status: "online" as const } : s));
+                    setDevices(prev => prev.map(d => d.name === "Sensor Node A" ? { ...d, status: "online" as const, lastSeen: "just now", signalStrength: 75 } : d));
+                    toast.success("Sensor Node A reiniciado com sucesso");
+                  }}>Reiniciar Dispositivo</Button>
+                  <Button variant="outline" size="sm" onClick={() => toast.info("Diagnóstico: Sensor Node A, Sala de Máquinas, sinal: 0%, último visto: 2h atrás")}>Diagnosticar</Button>
                 </div>
               </CardContent>
             </Card>

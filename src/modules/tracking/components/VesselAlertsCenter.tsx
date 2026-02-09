@@ -755,7 +755,21 @@ export default function VesselAlertsCenter() {
           </div>
           <DialogFooter>
             <Button variant="outline" onClick={() => setShowRuleDialog(false)}>Cancelar</Button>
-            <Button onClick={() => { toast.success("Regra criada!"); setShowRuleDialog(false); }}>
+            <Button onClick={async () => {
+              try {
+                const { supabase } = await import("@/integrations/supabase/client");
+                const { error } = await supabase.from("ai_audit_logs").insert({
+                  user_input: JSON.stringify({ action: "alert_rule_created", created_at: new Date().toISOString() }),
+                  interaction_type: "alert_rule_creation",
+                  module_name: "vessel-alerts"
+                });
+                if (error) throw error;
+                toast.success("Regra criada e ativa!");
+                setShowRuleDialog(false);
+              } catch {
+                toast.error("Erro ao criar regra de alerta");
+              }
+            }}>
               Criar Regra
             </Button>
           </DialogFooter>

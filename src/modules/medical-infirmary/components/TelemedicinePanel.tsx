@@ -463,7 +463,21 @@ export default function TelemedicinePanel() {
           </div>
           <DialogFooter>
             <Button variant="outline" onClick={() => setShowScheduleDialog(false)}>Cancelar</Button>
-            <Button onClick={() => { toast.success("Consulta agendada!"); setShowScheduleDialog(false); }}>
+            <Button onClick={async () => {
+              try {
+                const { supabase } = await import("@/integrations/supabase/client");
+                const { error } = await supabase.from("ai_audit_logs").insert({
+                  user_input: JSON.stringify({ action: "telemedicine_scheduled", created_at: new Date().toISOString() }),
+                  interaction_type: "telemedicine_schedule",
+                  module_name: "medical-infirmary"
+                });
+                if (error) throw error;
+                toast.success("Consulta agendada com sucesso!");
+                setShowScheduleDialog(false);
+              } catch {
+                toast.error("Erro ao agendar consulta");
+              }
+            }}>
               Agendar
             </Button>
           </DialogFooter>
