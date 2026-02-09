@@ -4,6 +4,7 @@
  */
 
 import React from "react";
+import { supabase } from "@/integrations/supabase/client";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -231,7 +232,16 @@ export default function CentralComandoAprimorada() {
                       </div>
                       <div className="flex items-center gap-4">
                         <span className="text-sm text-muted-foreground">Prazo: {alert.dueDate}</span>
-                        <Button size="sm" onClick={() => toast.success(`Ação: ${alert.action}`)}>
+                        <Button size="sm" onClick={async () => {
+                          try {
+                            await supabase.from("ai_audit_logs").insert({
+                              user_input: `Ação executada: ${alert.action} - ${alert.title}`,
+                              module_name: "central_comando",
+                              interaction_type: "alert_action"
+                            });
+                            toast.success(`Ação "${alert.action}" registrada com sucesso!`);
+                          } catch { toast.error("Erro ao registrar ação"); }
+                        }}>
                           {alert.action}
                         </Button>
                       </div>

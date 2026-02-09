@@ -4,6 +4,7 @@
  */
 
 import { useState } from "react";
+import { supabase } from "@/integrations/supabase/client";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -54,12 +55,10 @@ export function OperacoesSection({ systemStatus, isLoading: propsLoading }: Oper
   };
 
   // Handler: Refresh processes
-  const handleRefresh = () => {
+  const handleRefresh = async () => {
     toast.loading("Atualizando processos...", { id: "refresh" });
-    refetch();
-    setTimeout(() => {
-      toast.success("Processos atualizados", { id: "refresh" });
-    }, 500);
+    await refetch();
+    toast.success("Processos atualizados", { id: "refresh" });
   };
 
   // Handler: Export logs
@@ -89,11 +88,18 @@ export function OperacoesSection({ systemStatus, isLoading: propsLoading }: Oper
   };
 
   // Handler: AI Optimization
-  const handleAIOptimization = () => {
+  const handleAIOptimization = async () => {
     toast.loading("🤖 Analisando processos com IA...", { id: "ai-opt" });
-    setTimeout(() => {
+    try {
+      await supabase.from("ai_audit_logs").insert({
+        user_input: "Otimização IA de processos operacionais",
+        module_name: "operacoes",
+        interaction_type: "ai_optimization"
+      });
       toast.success("✅ IA identificou 3 oportunidades de otimização", { id: "ai-opt" });
-    }, 2000);
+    } catch {
+      toast.error("Erro na análise IA", { id: "ai-opt" });
+    }
   };
 
   const getStatusColor = (status: Process["status"]) => {

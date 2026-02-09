@@ -238,10 +238,20 @@ export function ExecutiveDashboard() {
   };
 
   const handleExport = () => {
-    toast.info("Gerando relatório PDF com IA...");
-    setTimeout(() => {
-      toast.success("Relatório exportado com sucesso!");
-    }, 2000);
+    const csvRows = [
+      "KPI;Valor;Meta;Tendência",
+      ...kpis.map(k => `${k.name};${k.value}${k.unit};${k.target}${k.unit};${k.trend}`)
+    ];
+    const metricsRows = metrics.map((m: SystemMetric) => `${m.name};${m.value}${m.unit};${m.status}`).join('\n');
+    const content = csvRows.join('\n') + '\n\nMétricas do Sistema\nMétrica;Valor;Status\n' + metricsRows;
+    const blob = new Blob(['\uFEFF' + content], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `dashboard-executivo-${new Date().toISOString().slice(0,10)}.csv`;
+    a.click();
+    URL.revokeObjectURL(url);
+    toast.success("Relatório exportado com sucesso!");
   };
 
   return (

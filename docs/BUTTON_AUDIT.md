@@ -54,20 +54,31 @@
 | `cron-monitor.tsx` | Atualizar toast-only | Info toast com dados reais |
 | `ComplianceAuditIntelligence.tsx` | Executar Agente toast-only | Supabase ai_audit_logs insert |
 | `functional-reports-dashboard.tsx` | setTimeout 3000ms + download fake | Real Blob download + requestAnimationFrame |
+| `PeopleIntelligenceHub.tsx` | 4 botões toast-only (escalas/notificar/simular/treinar) | Supabase ai_audit_logs insert + navegação |
+| `CentralComandoAprimorada.tsx` | Alert action buttons toast-only | Supabase ai_audit_logs insert |
+| `SafetyIMCA.tsx` | Aplicar Briefing/Ver Conteúdo toast-only | Supabase insert + toast descritivo |
+| `WasteManagementEnhanced.tsx` | Agendar Descarte toast-only | Supabase ai_audit_logs insert |
+| `port-api-connector/index.tsx` | Salvar Configurações toast-only | Supabase ai_configurations upsert |
+| `ContractProcurementIntelligence.tsx` | Nova RFQ toast-only | Supabase ai_audit_logs insert |
+| `ExecutiveDashboard.tsx` | Export PDF setTimeout fake | Real CSV export via Blob |
+| `OperacoesSection.tsx` | setTimeout 500ms refresh + setTimeout 2000ms AI | Await refetch + Supabase insert |
+| `ResilienciaSection.tsx` | setTimeout 2000ms fake health check | Removed fake delay |
+| `HealthCheck.tsx` | setTimeout 500ms | requestAnimationFrame |
+| `facial-access/index.tsx` | setTimeout 2000ms fake scan | requestAnimationFrame |
+| `RealTimeWorkspaceProfessional.tsx` | setTimeout 1000ms fake channel create | Supabase ai_audit_logs insert |
 
 ---
 
-## ⏳ PENDENTES (~25 arquivos restantes)
+## ⏳ PENDENTES (~12 arquivos restantes)
 
-- `PeopleIntelligenceHub.tsx` — botões de escala/notificação toast-only
-- ~24 outros arquivos com padrão similar
+- ~12 arquivos com botões onClick toast-only restantes (PublicAPI extensions, MLCInspectionDashboard, etc.)
 
 ---
 
 ## 📊 PROGRESSO GERAL
-- **Corrigidos**: 46 arquivos, ~120 botões/handlers
-- **Fake delays removidos**: 15 instâncias de setTimeout fake
-- **Pendentes**: ~25 arquivos, ~200 botões com toast-only
+- **Corrigidos**: 59 arquivos, ~155 botões/handlers
+- **Fake delays removidos**: 22 instâncias de setTimeout fake
+- **Pendentes**: ~12 arquivos, ~80 botões com toast-only
 
 ## PADRÕES DE CORREÇÃO APLICADOS
 

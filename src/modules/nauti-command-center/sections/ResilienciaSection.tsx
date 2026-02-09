@@ -140,9 +140,6 @@ export function ResilienciaSection() {
     setIsRunningHealthCheck(true);
     toast.info("Executando verificação de saúde do sistema...");
 
-    // Simulate health check
-    await new Promise(resolve => setTimeout(resolve, 2000));
-
     // Check Supabase connection
     try {
       const start = Date.now();

@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { supabase } from "@/integrations/supabase/client";
 import { ModulePageWrapper } from "@/components/ui/module-page-wrapper";
 import { ModuleHeader } from "@/components/ui/module-header";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -337,11 +338,20 @@ const SafetyIMCA = () => {
                     Este briefing aborda práticas de prevenção de dropped objects durante operações de mergulho...
                   </p>
                   <div className="flex gap-2">
-                    <Button size="sm" onClick={() => toast.success('Briefing de segurança aplicado com sucesso à tripulação!')}>
+                    <Button size="sm" onClick={async () => {
+                      try {
+                        await supabase.from("ai_audit_logs").insert({
+                          user_input: "Briefing aplicado: Prevenção de Queda de Objetos (SF-2024-002)",
+                          module_name: "safety_imca",
+                          interaction_type: "briefing_applied"
+                        });
+                        toast.success("Briefing de segurança registrado e aplicado à tripulação!");
+                      } catch { toast.error("Erro ao aplicar briefing"); }
+                    }}>
                       <Users className="h-4 w-4 mr-1" />
                       Aplicar Briefing
                     </Button>
-                    <Button variant="outline" size="sm" onClick={() => toast.info('Briefing: Prevenção de queda de objetos durante operações de mergulho - Técnicas de amarração e zonas de exclusão')}>
+                    <Button variant="outline" size="sm" onClick={() => toast.info('Briefing: Prevenção de queda de objetos durante operações de mergulho - Técnicas de amarração e zonas de exclusão', { duration: 8000 })}>
                       <FileText className="h-4 w-4 mr-1" />
                       Ver Conteúdo
                     </Button>
