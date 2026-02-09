@@ -28,8 +28,10 @@ import {
   Play,
   Save,
   Brain,
+  Loader2,
 } from 'lucide-react';
 import { toast } from 'sonner';
+import { supabase } from '@/integrations/supabase/client';
 
 // 17 Práticas de Gestão SGSO - ANP 46/2016
 export interface SGSOPractice {
@@ -310,6 +312,74 @@ export const SGSOAuditTrail: React.FC = () => {
   const [selectedPractice, setSelectedPractice] = useState<SGSOPractice | null>(null);
   const [checklistResponses, setChecklistResponses] = useState<Record<string, SGSOChecklistItem>>({});
   const [activeCategory, setActiveCategory] = useState<'leadership' | 'facilities' | 'operations'>('leadership');
+  const [isSaving, setIsSaving] = useState(false);
+  const [isExporting, setIsExporting] = useState(false);
+
+  const handleSaveAudit = async () => {
+    setIsSaving(true);
+    try {
+      const auditData = {
+        audit_type: 'sgso_anp_46',
+        responses: checklistResponses,
+        overall_score: calculateOverallScore(),
+        maturity_level: getMaturityLevel(calculateOverallScore()).level,
+        practices_audited: SGSO_PRACTICES.length,
+        items_answered: Object.keys(checklistResponses).filter(k => checklistResponses[k]?.conformity).length,
+        timestamp: new Date().toISOString(),
+      };
+      const { error } = await supabase
+        .from('ai_audit_logs')
+        .insert({
+          user_input: JSON.stringify(auditData),
+          interaction_type: 'sgso_audit',
+          module_name: 'SGSO',
+          ai_response: `Score: ${auditData.overall_score}% - ${auditData.maturity_level}`,
+        });
+      if (error) throw error;
+      toast.success('Trilha de auditoria salva com sucesso', {
+        description: `${auditData.items_answered} itens respondidos — Score: ${auditData.overall_score}%`
+      });
+    } catch (error: any) {
+      toast.error('Erro ao salvar auditoria', { description: error.message });
+    } finally {
+      setIsSaving(false);
+    }
+  };
+
+  const handleExportReport = () => {
+    setIsExporting(true);
+    try {
+      const headers = ['Prática', 'Código', 'Questão', 'Conformidade', 'Observações'];
+      const rows: string[][] = [];
+      SGSO_PRACTICES.forEach(practice => {
+        practice.items.forEach(item => {
+          const response = checklistResponses[item.id];
+          rows.push([
+            `PG ${practice.number} - ${practice.title}`,
+            item.code,
+            item.question,
+            response?.conformity || 'Não respondido',
+            response?.observations || '',
+          ]);
+        });
+      });
+      const csv = [headers.join(';'), ...rows.map(r => r.map(c => `"${c}"`).join(';'))].join('\n');
+      const blob = new Blob(['\uFEFF' + csv], { type: 'text/csv;charset=utf-8;' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `SGSO_Audit_Report_${new Date().toISOString().split('T')[0]}.csv`;
+      a.click();
+      URL.revokeObjectURL(url);
+      toast.success('Relatório SGSO exportado', {
+        description: `${rows.length} itens exportados — Score: ${calculateOverallScore()}%`
+      });
+    } catch (error: any) {
+      toast.error('Erro ao gerar relatório', { description: error.message });
+    } finally {
+      setIsExporting(false);
+    }
+  };
 
   const handleConformityChange = (itemId: string, value: 'sim' | 'nao' | 'parcial' | 'na') => {
     setChecklistResponses(prev => ({
@@ -374,13 +444,13 @@ export const SGSOAuditTrail: React.FC = () => {
           <p className="text-muted-foreground">17 Práticas de Gestão - ANP 46/2016</p>
         </div>
         <div className="flex gap-2">
-          <Button variant="outline" onClick={() => toast.success('Trilha salva como rascunho')}>
-            <Save className="h-4 w-4 mr-2" />
-            Salvar
+          <Button variant="outline" onClick={handleSaveAudit} disabled={isSaving}>
+            {isSaving ? <Loader2 className="h-4 w-4 mr-2 animate-spin" /> : <Save className="h-4 w-4 mr-2" />}
+            {isSaving ? 'Salvando...' : 'Salvar'}
           </Button>
-          <Button onClick={() => toast.success('Relatório gerado')}>
-            <Download className="h-4 w-4 mr-2" />
-            Gerar Relatório
+          <Button onClick={handleExportReport} disabled={isExporting}>
+            {isExporting ? <Loader2 className="h-4 w-4 mr-2 animate-spin" /> : <Download className="h-4 w-4 mr-2" />}
+            {isExporting ? 'Exportando...' : 'Gerar Relatório'}
           </Button>
         </div>
       </div>
