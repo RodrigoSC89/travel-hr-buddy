@@ -319,7 +319,7 @@ export class HybridSpaceWeatherService {
       kp: fullStatus.kp_current,
       pdop: fullStatus.pdop_current,
       message: fullStatus.recommendations[0] || 'No data',
-      source: (fullStatus as any).data_source,
+      source: (fullStatus as unknown as Record<string, unknown>).data_source as "CACHED" | "DP_ASOG" | "TYPESCRIPT",
     };
   }
 

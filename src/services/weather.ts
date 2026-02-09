@@ -103,7 +103,7 @@ export function logWeatherRequest(log: WeatherRequestLog): void {
 
     // Send to PostHog if available
     try {
-      const posthog = (window as any).posthog;
+      const posthog = (window as Window & { posthog?: { capture: (event: string, props: Record<string, unknown>) => void } }).posthog;
       if (posthog?.capture) {
         posthog.capture("weather_error", {
           api: log.api,

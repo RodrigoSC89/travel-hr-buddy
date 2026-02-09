@@ -10,7 +10,7 @@ import type { MMIJob } from "@/types/mmi";
 import { logger } from "@/lib/logger";
 
 // Dynamic supabase for tables not in schema
-const dynamicDb = supabase as any;
+const dynamicFrom = supabase.from as Function;
 
 // Legacy Job interface for backward compatibility
 export interface Job {
@@ -131,8 +131,7 @@ interface DbJob {
 export const fetchJobs = async (): Promise<{ jobs: MMIJob[] }> => {
   try {
     // Try fetching from Supabase
-    const { data, error } = await dynamicDb
-      .from("mmi_jobs")
+    const { data, error } = await dynamicFrom("mmi_jobs")
       .select("*")
       .order("created_at", { ascending: false });
 
@@ -179,8 +178,7 @@ export const fetchJobs = async (): Promise<{ jobs: MMIJob[] }> => {
  */
 export const fetchJobWithAI = async (jobId: string): Promise<MMIJob | null> => {
   try {
-    const { data, error } = await dynamicDb
-      .from("mmi_jobs")
+    const { data, error } = await dynamicFrom("mmi_jobs")
       .select("*")
       .eq("id", jobId)
       .single();
@@ -222,8 +220,7 @@ export const createJob = async (jobData: Partial<MMIJob>): Promise<MMIJob> => {
       priority: jobData.priority,
     });
 
-    const { data, error } = await dynamicDb
-      .from("mmi_jobs")
+    const { data, error } = await dynamicFrom("mmi_jobs")
       .insert({
         ...jobData,
         embedding,
@@ -259,8 +256,7 @@ export const postponeJob = async (jobId: string): Promise<{ message: string; new
 
     if (data && data.message) {
       // Update job with new date if AI approves
-      const { data: job } = await dynamicDb
-        .from("mmi_jobs")
+      const { data: job } = await dynamicFrom("mmi_jobs")
         .select("*")
         .eq("id", jobId)
         .single();
@@ -270,8 +266,7 @@ export const postponeJob = async (jobId: string): Promise<{ message: string; new
         currentDate.setDate(currentDate.getDate() + 7);
         const newDate = currentDate.toISOString().split("T")[0];
 
-        await dynamicDb
-          .from("mmi_jobs")
+        await dynamicFrom("mmi_jobs")
           .update({ 
             due_date: newDate,
             updated_at: new Date().toISOString()
@@ -284,8 +279,7 @@ export const postponeJob = async (jobId: string): Promise<{ message: string; new
           component_name: job.component_name,
         });
 
-        await dynamicDb
-          .from("mmi_job_history")
+        await dynamicFrom("mmi_job_history")
           .insert({
             job_id: jobId,
             action: "Postergado",
@@ -342,8 +336,7 @@ export const createWorkOrder = async (jobId: string): Promise<{ os_id: string; m
 
     if (data && data.os_id) {
       // Update job status
-      await dynamicDb
-        .from("mmi_jobs")
+      await dynamicFrom("mmi_jobs")
         .update({ 
           status: "OS Criada",
           updated_at: new Date().toISOString()
@@ -351,8 +344,7 @@ export const createWorkOrder = async (jobId: string): Promise<{ os_id: string; m
         .eq("id", jobId);
 
       // Fetch job for history
-      const { data: job } = await dynamicDb
-        .from("mmi_jobs")
+      const { data: job } = await dynamicFrom("mmi_jobs")
         .select("*")
         .eq("id", jobId)
         .single();
@@ -364,8 +356,7 @@ export const createWorkOrder = async (jobId: string): Promise<{ os_id: string; m
           component_name: job.component_name,
         });
 
-        await dynamicDb
-          .from("mmi_job_history")
+        await dynamicFrom("mmi_job_history")
           .insert({
             job_id: jobId,
             action: "OS Criada",

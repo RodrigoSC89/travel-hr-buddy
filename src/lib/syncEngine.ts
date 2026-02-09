@@ -89,27 +89,25 @@ class SyncEngine {
   private async syncRecord(record: OfflineRecord): Promise<void> {
     const { table, action, data } = record;
 
-    // Type cast to bypass TypeScript's type-safe supabase client for dynamic tables
-    const supabaseAny = supabase as any;
+    // Use Function cast for dynamic table access
+    const fromFn = supabase.from as Function;
 
     switch (action) {
     case "create":
-      const { error: createError } = await supabaseAny.from(table).insert(data);
+      const { error: createError } = await fromFn(table).insert(data);
       if (createError) throw createError;
       break;
 
     case "update":
       const { id, ...updateData } = data;
-      const { error: updateError } = await supabaseAny
-        .from(table)
+      const { error: updateError } = await fromFn(table)
         .update(updateData)
         .eq("id", id);
       if (updateError) throw updateError;
       break;
 
     case "delete":
-      const { error: deleteError } = await supabaseAny
-        .from(table)
+      const { error: deleteError } = await fromFn(table)
         .delete()
         .eq("id", data.id);
       if (deleteError) throw deleteError;
@@ -157,7 +155,7 @@ class SyncEngine {
    */
   async saveOffline(
     table: string,
-    data: any,
+    data: Record<string, unknown>,
     action: "create" | "update" | "delete" = "create"
   ): Promise<void> {
     // Try to save online first

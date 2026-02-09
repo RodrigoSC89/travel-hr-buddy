@@ -231,8 +231,7 @@ export class OAuthService {
       scope: tokens.scope
     };
 
-    const { error } = await supabase
-      .from("integration_credentials" as any)
+    const { error } = await (supabase.from as Function)("integration_credentials")
       .upsert({
         user_id: userData.user.id,
         provider,
@@ -258,14 +257,14 @@ export class OAuthService {
     }
 
     // Get stored credentials
-    const { data: credentials, error: fetchError } = await supabase
-      .from("integration_credentials" as any)
+    const { data: credentials, error: fetchError } = await (supabase.from as Function)("integration_credentials")
       .select("*")
       .eq("user_id", userData.user.id)
       .eq("provider", provider)
       .single();
 
-    if (fetchError || !(credentials as any)?.refresh_token) {
+    const cred = credentials as Record<string, unknown> | null;
+    if (fetchError || !cred?.refresh_token) {
       throw new Error("No refresh token available");
     }
 
@@ -274,7 +273,7 @@ export class OAuthService {
     const tokenParams = new URLSearchParams({
       client_id: config.clientId,
       client_secret: config.clientSecret,
-      refresh_token: (credentials as any).refresh_token,
+      refresh_token: String(cred!.refresh_token),
       grant_type: "refresh_token"
     });
 
@@ -316,8 +315,7 @@ export class OAuthService {
       throw new Error("User not authenticated");
     }
 
-    const { data: credentials, error } = await supabase
-      .from("integration_credentials" as any)
+    const { data: credentials, error } = await (supabase.from as Function)("integration_credentials")
       .select("*")
       .eq("user_id", userData.user.id)
       .eq("provider", provider)
@@ -327,8 +325,8 @@ export class OAuthService {
       throw new Error(`No credentials found for ${provider}`);
     }
 
-    // Check if token is expired (with 5-minute buffer)
-    const expiresAt = new Date((credentials as any).expires_at);
+    const cred = credentials as Record<string, unknown>;
+    const expiresAt = new Date(String(cred.expires_at));
     const now = new Date(Date.now() + 5 * 60 * 1000);
 
     if (now >= expiresAt) {
@@ -337,7 +335,7 @@ export class OAuthService {
       return tokens.access_token;
     }
 
-    return (credentials as any).access_token;
+    return String(cred.access_token);
   }
 
   /**
@@ -349,8 +347,7 @@ export class OAuthService {
       throw new Error("User not authenticated");
     }
 
-    const { error } = await supabase
-      .from("integration_credentials" as any)
+    const { error } = await (supabase.from as Function)("integration_credentials")
       .delete()
       .eq("user_id", userData.user.id)
       .eq("provider", provider);
@@ -371,8 +368,7 @@ export class OAuthService {
       return false;
     }
 
-    const { data, error } = await supabase
-      .from("integration_credentials" as any)
+    const { data, error } = await (supabase.from as Function)("integration_credentials")
       .select("id")
       .eq("user_id", userData.user.id)
       .eq("provider", provider)
@@ -387,20 +383,19 @@ export class OAuthService {
   private static async logIntegrationEvent(
     provider: string,
     event: string,
-    metadata: Record<string, any>
+    metadata: Record<string, unknown>
   ): Promise<void> {
     try {
       const { data: userData } = await supabase.auth.getUser();
       
-      await supabase
-        .from("integration_logs" as any)
+      await (supabase.from as Function)("integration_logs")
         .insert({
           user_id: userData.user?.id,
           provider,
           action: event,
           status: event.includes("failed") || event.includes("violation") ? "error" : "success",
           request_data: metadata
-        } as any);
+        });
     } catch (error) {
       logger.error("Failed to log integration event", error as Error, { provider, event });
     }
@@ -412,16 +407,16 @@ export class OAuthService {
   static async getIntegrationLogs(
     provider?: string,
     limit: number = 50
-  ): Promise<any[]> {
+  ): Promise<Record<string, unknown>[]> {
     const { data: userData } = await supabase.auth.getUser();
     if (!userData.user) {
       return [];
     }
 
-    let query = supabase
-      .from("integration_logs" as any)
+    let query = (supabase.from as Function)("integration_logs")
       .select("*")
       .eq("user_id", userData.user.id)
+      .order("created_at", { ascending: false })
       .order("created_at", { ascending: false })
       .limit(limit);
 

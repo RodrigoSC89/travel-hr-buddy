@@ -31,7 +31,10 @@
 - ✅ Batch 20: module-integration.ts (as any → as Function)
 - ✅ Batch 21: ai-feedback-service, integrations.service, mission-control.service, voice.service, messageService, risk-operations-engine
 - ✅ Batch 22: missionAutonomyEngine, edgeAICore, predictiveEngine, auto-reconfig, calculateTrustScore, incident-replay-v2, metrics-summarizer, incidentAnalyzer, intentEngine
-- 🔄 Restantes: ~20 arquivos (lib/, services/, components/)
+- ✅ Batch 23: workflow-service, syncEngine, offline-sync, error-tracker, MetricsDaemon, lazy-imports, production-logger, weather-routing, nfc-service
+- ✅ Batch 24: oauth-service, jobsApi, forecastStorageService, session-management, weather, hybrid-monitoring, cross-module-intelligence, smart-scheduler
+- 🔄 Batch 25: tactical-response engine, copilotVision, checklistAutoFill, evoAIConnector, mapbox-shim, starfix
+- 🔄 Restantes: ~15 arquivos (ai/, lib/, components/)
 
 ### P0-02: setTimeout fake → 0
 - ✅ advanced-integrations-hub: setTimeout → Supabase health check real

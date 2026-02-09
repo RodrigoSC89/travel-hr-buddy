@@ -141,7 +141,7 @@ export const loadReactFlow = async () => {
 export const preloadCriticalLibraries = () => {
   // Start preloading after 3 seconds of idle time
   if (typeof window !== "undefined" && "requestIdleCallback" in window) {
-    (window as any).requestIdleCallback(() => {
+    (window as Window & { requestIdleCallback: (cb: () => void, opts?: { timeout: number }) => void }).requestIdleCallback(() => {
       // Preload commonly used libraries
       loadMapboxGL().catch(() => {});
       loadChartJS().catch(() => {});

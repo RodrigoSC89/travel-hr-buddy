@@ -14,7 +14,7 @@ export interface ErrorContext {
   route?: string;
   component?: string;
   action?: string;
-  [key: string]: any;
+  [key: string]: unknown;
 }
 
 export interface TrackedError {
@@ -64,7 +64,7 @@ class ErrorTracker {
         this.captureError(new Error("Resource loading failed"), {
           category: "resource",
           element: (event.target as HTMLElement).tagName,
-          src: (event.target as any).src || (event.target as any).href,
+          src: (event.target as HTMLElement & { src?: string; href?: string }).src || (event.target as HTMLElement & { src?: string; href?: string }).href,
         });
       }
     }, true);
@@ -195,7 +195,7 @@ class ErrorTracker {
   private sendToSentry(trackedError: TrackedError, originalError: Error | string): void {
     if (import.meta.env.PROD && typeof window !== "undefined") {
       try {
-        const Sentry = (window as any).Sentry;
+        const Sentry = (window as Window & { Sentry?: { captureException: (err: Error, opts: Record<string, unknown>) => void } }).Sentry;
         if (Sentry) {
           Sentry.captureException(
             typeof originalError === "string" ? new Error(originalError) : originalError,

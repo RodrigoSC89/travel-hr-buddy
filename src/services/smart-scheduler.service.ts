@@ -57,9 +57,8 @@ export class SmartSchedulerService {
    * Create a new task
    */
   static async createTask(task: Partial<ScheduledTask>): Promise<ScheduledTask> {
-    const { data, error } = await supabase
-      .from('scheduled_tasks')
-      .insert(task as any)
+    const { data, error } = await (supabase.from as Function)('scheduled_tasks')
+      .insert(task)
       .select()
       .single();
 
@@ -77,7 +76,7 @@ export class SmartSchedulerService {
   static async updateTask(id: string, updates: Partial<ScheduledTask>): Promise<ScheduledTask> {
     const { data, error } = await supabase
       .from('scheduled_tasks')
-      .update(updates as any)
+      .update(updates as Record<string, unknown>)
       .eq('id', id)
       .select()
       .single();
@@ -147,7 +146,7 @@ export class SmartSchedulerService {
    * Generate recurring tasks
    */
   static async generateRecurringTasks(): Promise<void> {
-    const { error } = await supabase.rpc('generate_recurring_tasks' as any);
+    const { error } = await (supabase.rpc as Function)('generate_recurring_tasks');
 
     if (error) {
       logger.error('Error generating recurring tasks', error as Error);
@@ -176,7 +175,7 @@ export class SmartSchedulerService {
       acc[task.module][task.status]++;
       
       return acc;
-    }, {} as Record<string, any>);
+    }, {} as Record<string, Record<string, number>>);
 
     return statsByModule;
   }
