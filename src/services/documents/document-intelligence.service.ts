@@ -18,7 +18,7 @@ export interface DocumentOverview {
   ocrCompleted: number;
   ocrPending: number;
   avgConfidence: number;
-  recentDocuments: any[];
+  recentDocuments: Record<string, unknown>[];
 }
 
 export interface VersionHistory {
@@ -48,7 +48,7 @@ export class DocumentIntelligenceService {
     }
   }
 
-  async getVersionHistory(): Promise<{ versions: VersionHistory[]; stats: any }> {
+  async getVersionHistory(): Promise<{ versions: VersionHistory[]; stats: Record<string, unknown> }> {
     try {
       const { data, error } = await supabase.functions.invoke("document-intelligence", {
         body: { action: "version_history" },
@@ -61,7 +61,7 @@ export class DocumentIntelligenceService {
     }
   }
 
-  async getExpiringDocuments(): Promise<any> {
+  async getExpiringDocuments(): Promise<Record<string, unknown>> {
     try {
       const { data, error } = await supabase.functions.invoke("document-intelligence", {
         body: { action: "expiring_documents" },
@@ -74,7 +74,7 @@ export class DocumentIntelligenceService {
     }
   }
 
-  async getClassificationStats(): Promise<any> {
+  async getClassificationStats(): Promise<Record<string, unknown>> {
     try {
       const { data, error } = await supabase.functions.invoke("document-intelligence", {
         body: { action: "classification_stats" },
@@ -87,7 +87,7 @@ export class DocumentIntelligenceService {
     }
   }
 
-  async runAIAnalysis(): Promise<{ analysis: string; summary: any }> {
+  async runAIAnalysis(): Promise<{ analysis: string; summary: Record<string, unknown> }> {
     try {
       const { data, error } = await supabase.functions.invoke("document-intelligence", {
         body: { action: "ai_analysis" },

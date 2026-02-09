@@ -8,12 +8,12 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 interface DashboardWidget {
   id: string;
   priority: 'critical' | 'high' | 'medium' | 'low';
-  dataFn: () => Promise<any>;
+  dataFn: () => Promise<unknown>;
   visible?: boolean;
 }
 
 interface WidgetState {
-  data: any;
+  data: unknown;
   loading: boolean;
   error: string | null;
   lastUpdate: number;
@@ -182,7 +182,7 @@ class DashboardOptimizer {
    */
   async executeInWorker<T>(
     type: 'aggregate' | 'sort' | 'filter' | 'calculate',
-    data: any
+    data: unknown
   ): Promise<T> {
     this.initWorker();
     const worker = this.worker;
@@ -421,7 +421,7 @@ export function useVirtualDashboard<T>(
         setSortDesc(false);
       }
     },
-    filter: (field: string, value: any) => {
+    filter: (field: string, value: unknown) => {
       setFilters(f => ({ ...f, [field]: value }));
       setPage(0);
     },
@@ -440,7 +440,7 @@ export function useVirtualDashboard<T>(
  */
 export async function calculateInWorker<T>(
   type: 'aggregate' | 'sort' | 'filter' | 'calculate',
-  data: any
+  data: unknown
 ): Promise<T> {
   return dashboardOptimizer.executeInWorker<T>(type, data);
 }

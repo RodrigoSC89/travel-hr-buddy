@@ -42,11 +42,17 @@ export function decodeCursor(cursor: string): { id: string; ts: string } | null 
 /**
  * Build Supabase query with cursor pagination
  */
+interface SupabaseQueryChain {
+  or: (filter: string) => SupabaseQueryChain;
+  order: (column: string, opts?: { ascending: boolean }) => SupabaseQueryChain;
+  limit: (count: number) => SupabaseQueryChain;
+}
+
 export function buildCursorQuery<T extends { id: string; created_at?: string }>(
-  baseQuery: any,
+  baseQuery: SupabaseQueryChain,
   params: CursorPaginationParams
-): any {
-  let query = baseQuery;
+): SupabaseQueryChain {
+  let query: SupabaseQueryChain = baseQuery;
 
   if (params.cursor) {
     const decoded = decodeCursor(params.cursor);
