@@ -45,8 +45,6 @@ export function Patch602Validation() {
         l.level === level ? { ...l, status: "transitioning" as const } : l
       ));
       
-      await new Promise(resolve => setTimeout(resolve, 800));
-      
       // Activate with metrics
       const actions = getActionsForLevel(level);
       setLayers(prev => prev.map(l => 
@@ -69,8 +67,6 @@ export function Patch602Validation() {
           adaptation: 0.80 + (level.charCodeAt(0) % 20) / 100
         }
       });
-      
-      await new Promise(resolve => setTimeout(resolve, 1200));
     }
     
     setIsRunning(false);

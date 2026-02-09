@@ -4,6 +4,7 @@
  */
 
 import React, { useState, useCallback } from "react";
+import { supabase } from "@/integrations/supabase/client";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -193,7 +194,12 @@ const AIModelsLab: React.FC = () => {
       title: "Treinamento Iniciado",
       description: "O modelo começou a ser treinado. Isso pode levar alguns minutos.",
     });
-    setTimeout(() => setIsTraining(false), 3000);
+    // Log training request to audit
+    supabase.from("ai_audit_logs").insert({
+      user_input: `train_model:${modelId}`,
+      interaction_type: "model_training",
+      module_name: "ai-models-lab",
+    }).then(() => setIsTraining(false));
   }, [toast]);
 
   const handleExportModel = useCallback((modelId: string) => {

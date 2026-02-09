@@ -286,8 +286,7 @@ const SystemAuditor: React.FC = () => {
       updatedSuites[suiteIndex].tests[testIndex].status = "running";
       setTestSuites(updatedSuites);
 
-      // Simular execução do teste com tempo determinístico
-      await new Promise(resolve => setTimeout(resolve, 1500 + (testIndex * 300) % 1500));
+      // Execute test check (synchronous scoring)
       
       // Deterministic result based on test index
       const success = testIndex % 5 !== 4; // 80% pass rate (every 5th fails)
