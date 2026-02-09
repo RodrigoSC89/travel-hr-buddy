@@ -92,7 +92,7 @@ export function useComplianceHubData(vesselId?: string) {
         const now = new Date();
         const thirtyDays = new Date(now.getTime() + 30 * 24 * 60 * 60 * 1000);
 
-        return (data || []).map((c: any) => {
+        return (data || []).map((c) => {
           const expiry = c.expiry_date ? new Date(c.expiry_date) : null;
           let status: Certificate["status"] = "valid";
           
@@ -107,12 +107,12 @@ export function useComplianceHubData(vesselId?: string) {
             type: c.certificate_type || "general",
             vessel_id: undefined,
             vessel_name: undefined,
-            issued_by: c.issuing_authority,
-            issue_date: c.issue_date,
-            expiry_date: c.expiry_date,
+            issued_by: c.issuing_authority ?? undefined,
+            issue_date: c.issue_date ?? undefined,
+            expiry_date: c.expiry_date ?? undefined,
             status,
-            document_url: c.document_url,
-            notes: c.notes,
+            document_url: undefined,
+            notes: undefined,
           };
         });
       } catch (error) {
@@ -146,18 +146,18 @@ export function useComplianceHubData(vesselId?: string) {
         const { data, error } = await query;
         if (error) throw error;
 
-        return (data || []).map((a: any) => ({
+        return (data || []).map((a) => ({
           id: a.id,
-          title: a.audit_title || a.title || `Auditoria ${a.audit_type || "Interna"}`,
-          type: a.audit_type || "internal",
-          vessel_id: a.vessel_id,
+          title: a.audit_type ? `Auditoria ${a.audit_type}` : "Auditoria Interna",
+          type: (a.audit_type || "internal") as Audit["type"],
+          vessel_id: a.vessel_id ?? undefined,
           vessel_name: a.vessels?.name,
-          scheduled_date: a.scheduled_date,
-          completed_date: a.completed_date,
-          auditor: a.lead_auditor || a.auditor,
-          status: a.status || "scheduled",
+          scheduled_date: a.scheduled_date ?? undefined,
+          completed_date: a.completed_date ?? undefined,
+          auditor: a.auditor_name ?? undefined,
+          status: (a.status || "scheduled") as Audit["status"],
           findings_count: a.findings_count || 0,
-          score: a.compliance_score || a.score,
+          score: a.score ?? undefined,
         }));
       } catch (error) {
         logger.error("Failed to fetch audits", error);
@@ -189,21 +189,21 @@ export function useComplianceHubData(vesselId?: string) {
         const { data, error } = await query;
         if (error) throw error;
 
-        return (data || []).map((nc: any) => ({
+        return (data || []).map((nc) => ({
           id: nc.id,
-          code: nc.nc_code || nc.code || `NC-${nc.id.substring(0, 6)}`,
+          code: nc.nc_number || `NC-${nc.id.substring(0, 6)}`,
           title: nc.title,
-          description: nc.description,
-          vessel_id: nc.vessel_id,
+          description: nc.description ?? undefined,
+          vessel_id: nc.vessel_id ?? undefined,
           vessel_name: nc.vessels?.name,
-          severity: nc.severity || "minor",
-          status: nc.status || "open",
-          source: nc.source || nc.detected_during,
-          due_date: nc.due_date,
-          assigned_to: nc.responsible_person || nc.assigned_to,
-          root_cause: nc.root_cause_analysis || nc.root_cause,
-          corrective_action: nc.corrective_action,
-          created_at: nc.created_at,
+          severity: (nc.severity || "minor") as NonConformity["severity"],
+          status: (nc.status || "open") as NonConformity["status"],
+          source: nc.source ?? undefined,
+          due_date: nc.due_date ?? undefined,
+          assigned_to: nc.assigned_to ?? undefined,
+          root_cause: nc.root_cause ?? undefined,
+          corrective_action: nc.corrective_action ?? undefined,
+          created_at: nc.created_at || new Date().toISOString(),
         }));
       } catch (error) {
         logger.error("Failed to fetch non-conformities", error);
@@ -302,7 +302,7 @@ export function useComplianceHubData(vesselId?: string) {
       status: string; 
       action?: string 
     }) => {
-      const updates: any = { status };
+      const updates: Record<string, string> = { status };
       if (action) updates.corrective_action = action;
       if (status === "closed") updates.closed_at = new Date().toISOString();
 

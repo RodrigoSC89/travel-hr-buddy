@@ -50,7 +50,7 @@ export function useMaintenancePredictionsData() {
       if (error2) throw error2;
 
       // Map AI predictions
-      const fromAI: PredictedMaintenance[] = (aiPredictions || []).map((p: any) => ({
+      const fromAI: PredictedMaintenance[] = (aiPredictions || []).map((p) => ({
         id: p.id,
         equipment: p.equipment_name || "Equipamento",
         vessel: p.vessels?.name || "N/A",
@@ -58,23 +58,23 @@ export function useMaintenancePredictionsData() {
         priority: mapFailureProbabilityToPriority(p.failure_probability),
         predictedDate: new Date(p.predicted_failure_date || Date.now() + 7 * 24 * 60 * 60 * 1000),
         confidence: Math.round((p.confidence || 0.8) * 100),
-        estimatedCost: extractCostFromRiskFactors(p.risk_factors) || 10000,
-        partsNeeded: extractPartsFromRiskFactors(p.risk_factors),
+        estimatedCost: extractCostFromRiskFactors(p.risk_factors as Record<string, unknown> | null) || 10000,
+        partsNeeded: extractPartsFromRiskFactors(p.risk_factors as Record<string, unknown> | null),
         reason: p.recommended_action || "Manutenção preditiva recomendada pela IA",
         healthScore: Math.round((1 - (p.failure_probability || 0.3)) * 100),
       }));
 
       // Map maintenance records
-      const fromRecords: PredictedMaintenance[] = (maintenanceRecords || []).map((m: any) => ({
+      const fromRecords: PredictedMaintenance[] = (maintenanceRecords || []).map((m) => ({
         id: m.id,
-        equipment: m.component || m.title || "Equipamento",
+        equipment: m.title || "Equipamento",
         vessel: m.vessels?.name || "N/A",
-        type: mapMaintenanceType(m.maintenance_type),
-        priority: mapPriorityString(m.priority),
+        type: mapMaintenanceType(m.maintenance_type || ''),
+        priority: mapPriorityString(m.priority || ''),
         predictedDate: new Date(m.scheduled_date || m.created_at),
         confidence: m.priority === "critical" ? 95 : m.priority === "high" ? 88 : m.priority === "medium" ? 80 : 70,
         estimatedCost: m.cost_estimate || 0,
-        partsNeeded: extractPartsFromDescription(m.description),
+        partsNeeded: extractPartsFromDescription(m.description || ''),
         reason: m.description || "Manutenção programada",
         healthScore: m.priority === "critical" ? 35 : m.priority === "high" ? 55 : m.priority === "medium" ? 75 : 90,
       }));
@@ -143,27 +143,14 @@ function mapPriorityString(priority: string): PredictedMaintenance["priority"] {
   }
 }
 
-function extractCostFromRiskFactors(riskFactors: any): number {
+function extractCostFromRiskFactors(riskFactors: Record<string, unknown> | null): number {
   if (!riskFactors) return 10000;
-  if (typeof riskFactors === "string") {
-    try {
-      riskFactors = JSON.parse(riskFactors);
-    } catch {
-      return 10000;
-    }
-  }
-  return riskFactors?.estimated_cost || riskFactors?.cost || 10000;
+  const rf = riskFactors as Record<string, unknown>;
+  return (rf.estimated_cost as number) || (rf.cost as number) || 10000;
 }
 
-function extractPartsFromRiskFactors(riskFactors: any): PredictedMaintenance["partsNeeded"] {
+function extractPartsFromRiskFactors(riskFactors: Record<string, unknown> | null): PredictedMaintenance["partsNeeded"] {
   if (!riskFactors) return [{ name: "Peça genérica", quantity: 1, inStock: true }];
-  if (typeof riskFactors === "string") {
-    try {
-      riskFactors = JSON.parse(riskFactors);
-    } catch {
-      return [{ name: "Peça genérica", quantity: 1, inStock: true }];
-    }
-  }
   
   if (Array.isArray(riskFactors.parts)) {
     return riskFactors.parts;

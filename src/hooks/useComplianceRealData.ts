@@ -51,7 +51,18 @@ async function fetchThirdParties(): Promise<ThirdParty[]> {
 
   if (error || !data?.length) return [];
 
-  return data.map((s: any) => ({
+  interface SupplierRow {
+    id: string;
+    company_name: string | null;
+    trading_name: string | null;
+    category: string | null;
+    is_active: boolean | null;
+    rating: number | null;
+    created_at: string;
+    updated_at: string | null;
+  }
+
+  return (data as SupplierRow[]).map((s) => ({
     id: s.id,
     name: s.company_name || s.trading_name || "Terceiro",
     cnpj: "",
@@ -83,7 +94,8 @@ async function fetchComplianceReports(): Promise<ComplianceReport[]> {
 
     if (!audits?.length) return [];
 
-    return audits.map((a: any) => ({
+    interface AuditRow { id: string; audit_period: string | null; audit_type: string | null; status: string | null; created_at: string; auditor_name: string | null; }
+    return (audits as AuditRow[]).map((a) => ({
       id: a.id,
       title: `Auditoria ${a.audit_period || a.audit_type}`,
       type: a.audit_type || "compliance",
@@ -95,7 +107,8 @@ async function fetchComplianceReports(): Promise<ComplianceReport[]> {
     }));
   }
 
-  return data.map((d: any) => ({
+  interface DocRow { id: string; title: string | null; document_type: string | null; status: string | null; created_at: string; created_by: string | null; }
+  return (data as DocRow[]).map((d) => ({
     id: d.id,
     title: d.title || "Relatório",
     type: d.document_type || "report",
@@ -108,43 +121,45 @@ async function fetchComplianceReports(): Promise<ComplianceReport[]> {
 }
 
 async function fetchDrills(): Promise<DrillRecord[]> {
-  const { data, error } = await supabase
+    const { data, error } = await supabase
     .from("smart_drills")
-    .select("id, title, drill_type, execution_frequency, last_executed_at, status, total_executions")
-    .order("last_executed_at", { ascending: false })
+    .select("id, title, drill_type, scheduled_date, status, total_executions")
+    .order("scheduled_date", { ascending: false })
     .limit(20);
 
   if (error || !data?.length) {
     // Tentar drill_evaluations
     const { data: evals } = await supabase
       .from("drill_evaluations")
-      .select("id, drill_id, execution_date, overall_score, participants_count")
-      .order("execution_date", { ascending: false })
+      .select("id, drill_id, evaluated_at, overall_score, participants_count")
+      .order("evaluated_at", { ascending: false })
       .limit(20);
 
     if (!evals?.length) return [];
 
-    return evals.map((e: any) => ({
+    interface EvalRow { id: string; drill_id: string; evaluated_at: string | null; overall_score: number; participants_count: number | null; }
+    return (evals as unknown as EvalRow[]).map((e) => ({
       id: e.id,
       name: `Exercício ${e.drill_id?.slice(0, 8) || ""}`,
       type: "general",
       frequency: "Mensal",
-      lastExecution: e.execution_date,
-      nextDue: calculateNextDrillDate(e.execution_date),
-      status: "completed",
+      lastExecution: e.evaluated_at || '',
+      nextDue: calculateNextDrillDate(e.evaluated_at),
+      status: "completed" as const,
       participants: e.participants_count || 0,
       totalCrew: e.participants_count || 24
     }));
   }
 
-  return data.map((d: any) => ({
+  interface DrillRow { id: string; title: string; drill_type: string; scheduled_date: string | null; status: string | null; total_executions: number | null; }
+  return (data as unknown as DrillRow[]).map((d) => ({
     id: d.id,
     name: d.title || "Exercício",
     type: d.drill_type || "general",
-    frequency: d.execution_frequency || "Mensal",
-    lastExecution: d.last_executed_at || "",
-    nextDue: calculateNextDrillDate(d.last_executed_at),
-    status: mapDrillStatus(d.status, d.last_executed_at),
+    frequency: "Mensal",
+    lastExecution: d.scheduled_date || "",
+    nextDue: calculateNextDrillDate(d.scheduled_date),
+    status: mapDrillStatus(d.status, d.scheduled_date),
     participants: d.total_executions || 0,
     totalCrew: 24
   }));
