@@ -9,6 +9,16 @@ import { RealtimeChannel } from '@supabase/supabase-js';
 type ChangeType = 'INSERT' | 'UPDATE' | 'DELETE' | '*';
 type ConnectionStatus = 'connected' | 'connecting' | 'disconnected';
 
+interface RealtimePayload {
+  commit_timestamp: string;
+  eventType: string;
+  new: Record<string, unknown>;
+  old: Record<string, unknown>;
+  schema: string;
+  table: string;
+  errors: string[] | null;
+}
+
 interface SubscriptionConfig {
   table: string;
   schema?: string;
@@ -20,7 +30,7 @@ interface Subscription {
   id: string;
   config: SubscriptionConfig;
   channel: RealtimeChannel;
-  callbacks: Set<(payload: any) => void>;
+  callbacks: Set<(payload: RealtimePayload) => void>;
 }
 
 class RealtimeManager {
@@ -34,7 +44,7 @@ class RealtimeManager {
 
   subscribe(
     config: SubscriptionConfig,
-    callback: (payload: any) => void
+    callback: (payload: RealtimePayload) => void
   ): () => void {
     const key = this.getSubscriptionKey(config);
     
@@ -46,16 +56,16 @@ class RealtimeManager {
       const channel = supabase.channel(`realtime:${key}`);
       
       channel.on(
-        'postgres_changes' as any,
+        'postgres_changes' as 'system',
         {
           event: config.event || '*',
           schema: config.schema || 'public',
           table: config.table,
           filter: config.filter,
         },
-        (payload: any) => {
+        (payload: unknown) => {
           const sub = this.subscriptions.get(key);
-          sub?.callbacks.forEach(cb => cb(payload));
+          sub?.callbacks.forEach(cb => cb(payload as RealtimePayload));
         }
       ).subscribe((status) => {
         if (status === 'SUBSCRIBED') {
@@ -122,9 +132,9 @@ import { useEffect, useState } from 'react';
 
 export function useRealtimeSubscription(
   config: SubscriptionConfig | null,
-  onData?: (payload: any) => void
+  onData?: (payload: RealtimePayload) => void
 ) {
-  const [lastPayload, setLastPayload] = useState<any>(null);
+  const [lastPayload, setLastPayload] = useState<RealtimePayload | null>(null);
 
   useEffect(() => {
     if (!config) return;

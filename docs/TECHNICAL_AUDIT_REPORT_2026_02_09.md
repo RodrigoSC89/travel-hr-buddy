@@ -282,19 +282,20 @@ Hooks com nomes quase idênticos indicam falta de coordenação.
 | Sprint 8 | 2026-02-09 | +1 | Type safety (Emissions, SessionReplay, AIControlTower, Safety), 25+ `any` removidos |
 | Sprint 9 | 2026-02-09 | +1 | Type safety (DPMentor, ChecklistPersistence, OCR, UniversalExport), Json serialization fix |
 | Sprint 10 | 2026-02-09 | +1 | Type safety (PEODPInference, ESGIntelligence, AgentMemory, ComplianceIntelligence, PeopleIntelligence, FinanceIntelligence), 30+ `any` removidos em services |
-| **Acumulado** | | **+18** | **80 → 94/100** |
+| Sprint 11 | 2026-02-09 | +1 | Type safety (RealtimeManager, i18n, OpenMeteo cache, ComplianceLedger), `RealtimePayload` interface, `TranslationNode` recursive type |
+| **Acumulado** | | **+19** | **80 → 95/100** |
 
 ### Próximos passos para 100/100
-1. **Type Safety (+1)**: Continuar eliminando `any` em lib/ e services restantes (~30 arquivos) — ~3 dias
-2. **CRUD completo (+3)**: ISPS, Drydock, CrewScheduler com persistência real — 3 dias
-3. **Rotas (+2)**: Consolidar duplicatas de páginas (V1/V2/Enhanced) — 3 dias
+1. **Type Safety (+1)**: Eliminar `any` restantes em lib/ (satelliteSyncEngine, plugin-system, sgso-report) — ~2 dias
+2. **CRUD completo (+2)**: ISPS, Drydock, CrewScheduler com persistência real — 3 dias
+3. **Rotas (+1)**: Consolidar duplicatas de páginas (V1/V2/Enhanced) — 2 dias
 4. **Performance (+1)**: Code splitting agressivo e virtualização — 2 dias
 
 ---
 
 **FIM DO RELATÓRIO**  
 **Total de falhas originais:** 139  
-**Falhas corrigidas (Sprint 1→10):** 97  
-**Falhas restantes:** 42  
-**Esforço total de correção restante:** ~10 dias (80 horas)  
-**Prioridade:** Sprint 11 (Type Safety lib/) → Sprint 12 (CRUD) → Sprint 13 (Consolidação)
+**Falhas corrigidas (Sprint 1→11):** 104  
+**Falhas restantes:** 35  
+**Esforço total de correção restante:** ~9 dias (72 horas)  
+**Prioridade:** Sprint 12 (Type Safety final) → Sprint 13 (CRUD) → Sprint 14 (Consolidação)
