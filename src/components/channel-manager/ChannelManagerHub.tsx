@@ -86,7 +86,7 @@ export default function ChannelManagerHub() {
         .insert({
           name: channelName,
           created_by: user.id,
-        } as any)
+        } as never)
         .select()
         .single();
 

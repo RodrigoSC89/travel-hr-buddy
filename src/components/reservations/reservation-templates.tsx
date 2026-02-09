@@ -61,12 +61,26 @@ export const ReservationTemplates: React.FC<ReservationTemplatesProps> = ({
   const [loading, setLoading] = useState(false);
   const [showCreateDialog, setShowCreateDialog] = useState(false);
   const [editingTemplate, setEditingTemplate] = useState<ReservationTemplate | null>(null);
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<{
+    name: string;
+    template_type: string;
+    title: string;
+    description: string;
+    reservation_type: "hotel" | "transport" | "embarkation" | "flight" | "other";
+    location: string;
+    address: string;
+    contact_info: string;
+    supplier_url: string;
+    room_type: string;
+    currency: string;
+    notes: string;
+    is_public: boolean;
+  }>({
     name: "",
     template_type: "hotel",
     title: "",
     description: "",
-    reservation_type: "hotel" as const,
+    reservation_type: "hotel",
     location: "",
     address: "",
     contact_info: "",
@@ -101,7 +115,7 @@ export const ReservationTemplates: React.FC<ReservationTemplatesProps> = ({
           is_public: item.is_public ?? false,
           created_by: item.created_by ?? undefined,
           organization_id: item.organization_id ?? undefined,
-          template_data: item.template_data as any
+          template_data: item.template_data as ReservationTemplate["template_data"]
         })));
       }
     } catch (error) {
@@ -225,7 +239,7 @@ export const ReservationTemplates: React.FC<ReservationTemplatesProps> = ({
       template_type: template.template_type,
       title: template.template_data.title,
       description: template.template_data.description || "",
-      reservation_type: template.template_data.reservation_type as any,
+      reservation_type: template.template_data.reservation_type as "hotel" | "transport" | "embarkation" | "flight" | "other",
       location: template.template_data.location || "",
       address: template.template_data.address || "",
       contact_info: template.template_data.contact_info || "",
@@ -447,7 +461,7 @@ export const ReservationTemplates: React.FC<ReservationTemplatesProps> = ({
                   value={formData.reservation_type}
                   onChange={(e) => setFormData({ 
                     ...formData, 
-                    reservation_type: e.target.value as any,
+                    reservation_type: e.target.value as "hotel" | "transport" | "embarkation" | "flight" | "other",
                     template_type: e.target.value 
                   })}
                   className="w-full px-3 py-2 border border-gray-300 rounded-md"

@@ -19,9 +19,9 @@ interface PerformanceMetrics {
 }
 
 function getConnectionInfo(): PerformanceMetrics {
-  const connection = (navigator as any).connection || 
-                     (navigator as any).mozConnection || 
-                     (navigator as any).webkitConnection;
+  const nav = navigator as unknown as Record<string, unknown>;
+  const connection = (nav.connection || nav.mozConnection || nav.webkitConnection) as
+    { type?: string; downlink?: number; rtt?: number; saveData?: boolean; effectiveType?: string; addEventListener?: (type: string, fn: () => void) => void; removeEventListener?: (type: string, fn: () => void) => void } | undefined;
   
   return {
     connectionType: connection?.type || "unknown",
@@ -92,8 +92,9 @@ export const PerformanceStatus = memo(function PerformanceStatus({
     const updateMetrics = () => setMetrics(getConnectionInfo());
     
     // Listen for connection changes
-    const connection = (navigator as any).connection;
-    if (connection) {
+    const nav = navigator as unknown as Record<string, unknown>;
+    const connection = nav.connection as { addEventListener?: (type: string, fn: () => void) => void; removeEventListener?: (type: string, fn: () => void) => void } | undefined;
+    if (connection?.addEventListener) {
       connection.addEventListener("change", updateMetrics);
     }
     
@@ -101,7 +102,7 @@ export const PerformanceStatus = memo(function PerformanceStatus({
     window.addEventListener("offline", updateMetrics);
     
     return () => {
-      if (connection) {
+      if (connection?.removeEventListener) {
         connection.removeEventListener("change", updateMetrics);
       }
       window.removeEventListener("online", updateMetrics);
