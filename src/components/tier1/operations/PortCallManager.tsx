@@ -417,7 +417,7 @@ export function PortCallManager() {
             </CardHeader>
             <CardContent>
               <p className="text-muted-foreground text-center py-8">
-                Detailed port call table with advanced filtering coming soon...
+                ⚙️ Em implantação — Tabela de port calls com filtros avançados será habilitada em breve
               </p>
             </CardContent>
           </Card>

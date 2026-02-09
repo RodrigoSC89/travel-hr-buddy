@@ -100,8 +100,41 @@ export class IncidentService {
     }
   }
 
-  async exportIncidentToPDF(_incidentId: string): Promise<void> {
-    await new Promise(resolve => setTimeout(resolve, 1000));
+  async exportIncidentToPDF(incidentId: string): Promise<void> {
+    // Real PDF export: fetch incident data and generate download
+    const { data, error } = await supabase
+      .from("incident_reports")
+      .select("*")
+      .eq("id", incidentId)
+      .single();
+    
+    if (error || !data) throw new Error("Incidente não encontrado para exportação");
+    
+    // Generate text-based report for download
+    const content = [
+      `RELATÓRIO DE INCIDENTE - ${data.code || 'N/A'}`,
+      `==========================================`,
+      `Título: ${data.title}`,
+      `Tipo: ${data.type}`,
+      `Severidade: ${data.severity}`,
+      `Status: ${data.status}`,
+      `Local: ${data.location || 'N/A'}`,
+      `Reportado por: ${data.reported_by || 'N/A'}`,
+      `Data: ${data.reported_at || 'N/A'}`,
+      ``,
+      `Descrição:`,
+      data.description || 'Sem descrição',
+      ``,
+      `Gerado em: ${new Date().toISOString()}`,
+    ].join('\n');
+    
+    const blob = new Blob([content], { type: 'text/plain;charset=utf-8' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `incident-${data.code || incidentId}.txt`;
+    a.click();
+    URL.revokeObjectURL(url);
   }
 }
 

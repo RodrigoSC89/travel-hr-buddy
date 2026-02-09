@@ -1,41 +1,54 @@
-# 🚩 FEATURE FLAGS
+# 🚩 NAUTI ONE — Feature Flags Registry
 
-> Flags de funcionalidade para features em implantação
-> Gerado: 2026-02-09
-
-## Princípio
-
-Features que ainda não possuem backend real completo devem:
-1. Estar protegidas por feature flag
-2. Exibir estado visual "Em implantação" (claro e honesto)
-3. **NUNCA** simular dados ou gerar toast de sucesso falso
+> Todas as flags do sistema, escopo, impacto na UI, motivo e como ativar.
+> Última atualização: 2026-02-09
 
 ---
 
-## Flags Ativas
+## Production Safety
 
-| Flag | Default (Prod) | Escopo | Motivo | UI Impact | Como Ativar |
-|------|---------------|--------|--------|-----------|-------------|
-| `FF_BRIDGELINK_LIVE_WS` | `false` | BridgeLink Live Watch | WebSocket real não implementado; polling como substituto | Badge "Live via polling (beta)" | Env var `VITE_FF_BRIDGELINK_LIVE_WS=true` |
-| `FF_STARFIX_REAL_API` | `false` | StarFix Position Service | API real da Fugro não configurada | Estado "Integração não configurada" quando false | Env var `VITE_FF_STARFIX_REAL_API=true` + secret `STARFIX_API_KEY` |
-| `FF_TERRASTAR_REAL_API` | `false` | Terrastar Ionosphere | API real da Hexagon não configurada | Estado "Integração não configurada" quando false | Env var `VITE_FF_TERRASTAR_REAL_API=true` + secret `TERRASTAR_API_KEY` |
-| `FF_NAUTILUS_BRAIN_AI` | `false` | BridgeLink AI Analysis | Análise semântica via NautilusBrain | Badge "Em implantação" no card AI | Env var `VITE_FF_NAUTILUS_BRAIN_AI=true` |
-| `FF_FMEA_SYSTEM` | `false` | BridgeLink FMEA | Sistema FMEA completo | Badge "Planejado" no card FMEA | Env var `VITE_FF_FMEA_SYSTEM=true` |
+| Flag | Default | Env Var | Descrição |
+|---|---|---|---|
+| `STRICT_PROD` | `true` | `VITE_STRICT_PROD` | Bloqueia mocks e dados fake em produção |
 
----
+## Integration Flags
 
-## Flags de Segurança
+| Flag | Default | Env Var | Descrição | Como Ativar |
+|---|---|---|---|---|
+| `FF_BRIDGELINK_LIVE_WS` | `false` | `VITE_FF_BRIDGELINK_LIVE_WS` | WebSocket real para BridgeLink | Config WS server + `=true` |
+| `FF_STARFIX_REAL_API` | `false` | `VITE_FF_STARFIX_REAL_API` | API real StarFix | Secret `STARFIX_API_KEY` + `=true` |
+| `FF_TERRASTAR_REAL_API` | `false` | `VITE_FF_TERRASTAR_REAL_API` | API real Terrastar | Secret `TERRASTAR_API_KEY` + `=true` |
+| `FF_NAUTILUS_BRAIN_AI` | `false` | `VITE_FF_NAUTILUS_BRAIN_AI` | IA semântica BridgeLink | Deploy EF + `=true` |
+| `FF_FMEA_SYSTEM` | `false` | `VITE_FF_FMEA_SYSTEM` | FMEA completo BridgeLink | Deploy módulo + `=true` |
 
-| Flag | Default (Prod) | Escopo | Motivo |
-|------|---------------|--------|--------|
-| `VITE_STRICT_PROD` | `true` | Global | Bloqueia mocks, dados fake, e simulações em produção |
+## Module Flags (Env Var)
 
----
+| Flag | Default | Env Var | UI Impact |
+|---|---|---|---|
+| `FF_IOT_ANALYTICS` | `false` | `VITE_FF_IOT_ANALYTICS` | Tab Analytics IoT → "Em implantação" |
+| `FF_STCW_AI_TRAINING` | `false` | `VITE_FF_STCW_AI_TRAINING` | Tabs Crew/Training STCW → "Em implantação" |
+| `FF_AUDIT_CALENDAR` | `false` | `VITE_FF_AUDIT_CALENDAR` | Tab Calendar Auditorias → "Em implantação" |
+| `FF_DASHBOARD_ANALYTICS` | `false` | `VITE_FF_DASHBOARD_ANALYTICS` | Tab Analytics Dashboard → "Em implantação" |
+| `FF_AI_CHECKLIST_GEN` | `false` | `VITE_FF_AI_CHECKLIST_GEN` | Geração IA checklists usa fallback local |
 
-## Como adicionar nova flag
+## Module Flags (localStorage)
 
-1. Definir a variável de ambiente no `.env` (dev only)
-2. Criar helper em `src/lib/feature-flags.ts`
-3. Documentar neste arquivo
-4. Implementar UI guard no componente afetado
-5. **NUNCA** usar a flag para gerar dados falsos — apenas para habilitar/desabilitar funcionalidade
+Controladas via `nauti_feature_flags` em localStorage:
+
+| Flag | Default | Descrição |
+|---|---|---|
+| `UNDERWATER_ENABLED` | `false` | Módulos sonar/drone submarino |
+| `VRAR_ENABLED` | `true` | VR Training |
+| `AI_AUTONOMY_ENABLED` | `true` | Autonomia IA |
+| `BETA_MODULES_ENABLED` | `true` | Módulos beta |
+| `BLOCKCHAIN_AUDIT_ENABLED` | `true` | Blockchain audit |
+| `OCR_MULTIENGINE_ENABLED` | `true` | OCR multi-engine |
+| `DIGITAL_TWIN_3D_ENABLED` | `true` | Digital Twin 3D |
+| `PREDICTIVE_TELEMETRY_ENABLED` | `true` | Telemetria preditiva |
+
+## Mock Control
+
+| Env Var | Default (prod) | Descrição |
+|---|---|---|
+| `VITE_USE_MOCK_STARFIX` | `false` | Requer `=true` explícito + STRICT_PROD off |
+| `VITE_USE_MOCK_TERRASTAR` | `false` | Requer `=true` explícito + STRICT_PROD off |

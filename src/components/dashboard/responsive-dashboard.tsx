@@ -327,7 +327,7 @@ export const ResponsiveDashboard: React.FC = () => {
               <div className="text-center py-8">
                 <Activity className="h-12 w-12 mx-auto text-muted-foreground mb-4" />
                 <p className="text-muted-foreground">
-                  Analytics detalhados em desenvolvimento...
+                  ⚙️ Em implantação — Analytics avançados serão habilitados via flag FF_DASHBOARD_ANALYTICS
                 </p>
               </div>
             </CardContent>

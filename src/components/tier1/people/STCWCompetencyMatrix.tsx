@@ -468,7 +468,7 @@ export function STCWCompetencyMatrix() {
             </CardHeader>
             <CardContent>
               <p className="text-muted-foreground text-center py-8">
-                Detailed crew compliance dashboard coming soon...
+                ⚙️ Em implantação — Dashboard de compliance será habilitado em breve (FF_STCW_AI_TRAINING)
               </p>
             </CardContent>
           </Card>
@@ -534,7 +534,7 @@ export function STCWCompetencyMatrix() {
             </CardHeader>
             <CardContent>
               <p className="text-muted-foreground text-center py-8">
-                AI-powered training recommendations coming soon...
+                ⚙️ Em implantação — Recomendações de treinamento por IA serão habilitadas via flag FF_STCW_AI_TRAINING
               </p>
             </CardContent>
           </Card>

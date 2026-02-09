@@ -388,7 +388,7 @@ export const IoTSensorDashboard: React.FC = () => {
               <div className="text-center py-8 text-muted-foreground">
                 <Activity className="h-12 w-12 mx-auto mb-4 opacity-50" />
                 <p>Historical analytics and trends</p>
-                <p className="text-sm">Time-series charts and anomaly detection coming soon</p>
+                <p className="text-sm">⚙️ Em implantação — Recurso será habilitado via flag FF_IOT_ANALYTICS</p>
               </div>
             </CardContent>
           </Card>

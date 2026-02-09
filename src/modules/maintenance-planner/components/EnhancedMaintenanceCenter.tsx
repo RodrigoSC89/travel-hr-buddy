@@ -5,6 +5,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { logger } from '@/lib/logger';
+import { supabase } from '@/integrations/supabase/client';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Button } from '@/components/ui/button';
@@ -106,7 +107,14 @@ export const EnhancedMaintenanceCenter: React.FC = () => {
   const loadMaintenanceData = async () => {
     setLoading(true);
     try {
-      await new Promise(resolve => setTimeout(resolve, 800));
+      // Real Supabase queries for maintenance data
+      const [workOrdersRes, predictionsRes] = await Promise.all([
+        supabase.from('maintenance_orders').select('*').order('created_at', { ascending: false }).limit(20),
+        supabase.from('ai_maintenance_predictions').select('*').eq('status', 'active').order('failure_probability', { ascending: false }).limit(10),
+      ]);
+
+      const hasRealWorkOrders = workOrdersRes.data && workOrdersRes.data.length > 0;
+      const hasRealPredictions = predictionsRes.data && predictionsRes.data.length > 0;
 
       // KPIs
       setKpis([

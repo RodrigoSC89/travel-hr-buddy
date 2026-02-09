@@ -398,7 +398,7 @@ export default function AuditWorkflow() {
               <div className="text-center py-12 text-muted-foreground">
                 <Calendar className="h-12 w-12 mx-auto mb-3 opacity-50" />
                 <p className="font-medium">Calendário de Auditorias</p>
-                <p className="text-sm">Visualização em calendário em desenvolvimento</p>
+                <p className="text-sm">⚙️ Em implantação — Será habilitado via flag FF_AUDIT_CALENDAR</p>
               </div>
             </TabsContent>
 
