@@ -62,9 +62,10 @@ export function useModuleAccess(): ModuleAccessState {
         .select('slug, is_core');
       
       // Return core modules + any org-specific addons
+      type ModuleRow = { slug: string; is_core: boolean | null };
       const coreModules = (allMods || [])
-        .filter((m: any) => m.is_core)
-        .map((m: any) => m.slug);
+        .filter((m: ModuleRow) => m.is_core)
+        .map((m: ModuleRow) => m.slug);
       
       // Get addon modules
       const { data: addons } = await supabase
@@ -73,7 +74,8 @@ export function useModuleAccess(): ModuleAccessState {
         .eq('organization_id', organizationId)
         .is('disabled_at', null);
       
-      const addonModules = addons?.map((a: any) => a.system_modules?.slug) || [];
+      type AddonRow = { module_id: string; system_modules: { slug: string } | null };
+      const addonModules = ((addons as unknown as AddonRow[] | null)?.map((a) => a.system_modules?.slug).filter((s): s is string => !!s)) || [];
       
       return [...new Set([...coreModules, ...addonModules])];
     },

@@ -180,8 +180,8 @@ export default function AcademyDashboard() {
     toast({ title: "Gerando insights...", description: "Analisando dados com IA" });
     try {
       const results = await Promise.all([
-        generateRecommendations(crewMembers, courses),
-        analyzeTrainingGaps(crewMembers, myProgress),
+        generateRecommendations(crewMembers as unknown as Record<string, unknown>[], courses as unknown as Record<string, unknown>[]),
+        analyzeTrainingGaps(crewMembers as unknown as Record<string, unknown>[], myProgress as unknown as Record<string, unknown>[]),
         generatePredictiveInsights({ crew: crewMembers, courses, progress: myProgress }),
       ]);
       
