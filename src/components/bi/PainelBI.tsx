@@ -6,6 +6,7 @@ import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, Legend } fro
 import { Button } from "@/components/ui/button";
 import html2pdf from "html2pdf.js";
 import { toast } from "sonner";
+import { supabase } from "@/integrations/supabase/client";
 import { logger } from '@/lib/logger';
 
 interface ComplianceData {
@@ -36,34 +37,33 @@ export function PainelBI() {
       try {
         setLoading(true);
         setError(null);
-        const response = await fetch("/api/bi/conformidade");
-        
-        if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`);
+        const { data: inspections, error: fetchError } = await (supabase.from as Function)("compliance_inspections")
+          .select("vessel_name, inspection_date, status, findings_count")
+          .order("inspection_date", { ascending: false })
+          .limit(100);
+
+        if (fetchError) {
+          throw new Error(fetchError.message);
         }
-        
-        const data = await response.json();
-        setDados(data);
+
+        // Transform to compliance data format
+        const grouped: Record<string, ComplianceData> = {};
+        (inspections || []).forEach((ins: any) => {
+          const key = `${ins.vessel_name}-${ins.inspection_date?.slice(0, 7) || "N/A"}`;
+          if (!grouped[key]) {
+            grouped[key] = { navio: ins.vessel_name || "N/A", mes: ins.inspection_date?.slice(0, 7) || "N/A", conforme: 0, nao_conforme: 0, observacao: 0 };
+          }
+          if (ins.status === "compliant" || ins.status === "approved") grouped[key].conforme++;
+          else if (ins.status === "non_compliant" || ins.status === "failed") grouped[key].nao_conforme++;
+          else grouped[key].observacao++;
+        });
+
+        const result = Object.values(grouped);
+        setDados(result.length > 0 ? result : []);
       } catch (err) {
         logger.error("Error fetching compliance data:", err);
-        setError("Erro ao carregar dados de conformidade");
-        // Set sample data on error
-        setDados([
-          {
-            navio: "Ocean Star",
-            mes: "2025-09",
-            conforme: 12,
-            nao_conforme: 3,
-            observacao: 1,
-          },
-          {
-            navio: "Sea Pioneer",
-            mes: "2025-09",
-            conforme: 9,
-            nao_conforme: 2,
-            observacao: 4,
-          },
-        ]);
+        setError("Erro ao carregar dados de conformidade. Verifique se as tabelas existem.");
+        setDados([]);
       } finally {
         setLoading(false);
       }

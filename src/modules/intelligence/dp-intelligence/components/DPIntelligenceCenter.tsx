@@ -132,29 +132,21 @@ export default function DPIntelligenceCenter() {
   async function generateActionPlan(incident: DPIncident) {
     setGeneratingPlan(incident.id);
     try {
-      const response = await fetch("/api/dp-incidents/action", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ incident_id: incident.id })
+      const { data, error } = await supabase.functions.invoke("dp-intel-analyze", {
+        body: { incident_id: incident.id },
       });
 
-      if (response.ok) {
-        const data = await response.json();
-        if (data.ok && data.plan_of_action) {
-          // Update incident with generated plan
-          setIncidents(prev =>
-            prev.map(inc =>
-              inc.id === incident.id
-                ? { ...inc, plan_of_action: data.plan_of_action }
-                : inc
-            )
-          );
-          toast.success("Plano de ação gerado com sucesso");
-        } else {
-          toast.error("Erro ao gerar plano de ação");
-        }
+      if (!error && data?.plan_of_action) {
+        setIncidents(prev =>
+          prev.map(inc =>
+            inc.id === incident.id
+              ? { ...inc, plan_of_action: data.plan_of_action }
+              : inc
+          )
+        );
+        toast.success("Plano de ação gerado com sucesso");
       } else {
-        toast.error("Erro ao gerar plano de ação");
+        toast.error(error?.message || "Erro ao gerar plano de ação");
       }
     } catch (error) {
       toast.error("Erro ao gerar plano de ação");

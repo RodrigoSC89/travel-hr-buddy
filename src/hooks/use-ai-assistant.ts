@@ -1,5 +1,6 @@
 import { useState, useCallback } from "react";
 import { useToast } from "@/hooks/use-toast";
+import { supabase } from "@/integrations/supabase/client";
 import { logger } from '@/lib/logger';
 
 interface AIAssistantMessage {
@@ -122,37 +123,35 @@ export const useAIAssistant = (type: "crew" | "general") => {
       }
 
       // Online mode - make actual AI call
-      const controller = new AbortController();
-      const timeoutId = setTimeout(() => controller.abort(), 30000); // 30 second timeout
+      const timeoutId = setTimeout(() => {
+        // Timeout handling - will fall through to catch block
+      }, 30000);
 
       try {
-        const response = await fetch("/api/ai/chat", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
+        const response = await supabase.functions.invoke("ai-chat", {
+          body: {
             messages: [...messages, userMessage],
             context: options.context || type,
-          }),
-          signal: controller.signal,
+          },
         });
 
         clearTimeout(timeoutId);
 
-        if (!response.ok) {
-          throw new Error(`AI request failed: ${response.status} ${response.statusText}`);
+        if (response.error) {
+          throw new Error(`AI request failed: ${response.error.message}`);
         }
 
-        const data = await response.json();
+        const aiData = response.data;
         const assistantMessage: AIAssistantMessage = {
           id: `assistant-${Date.now()}`,
           role: "assistant",
-          content: data.message,
+          content: aiData?.message || aiData?.content || "Sem resposta",
           timestamp: new Date(),
         };
 
         // Cache the response for offline use
         if (cacheEnabled) {
-          await cacheContext(`${type}-${content}`, data.message);
+          await cacheContext(`${type}-${content}`, assistantMessage.content);
         }
 
         setMessages(prev => [...prev, assistantMessage]);

@@ -15,6 +15,7 @@ import {
 } from "recharts";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Loader2 } from "lucide-react";
+import { supabase } from "@/integrations/supabase/client";
 import { logger } from '@/lib/logger';
 
 interface StatsData {
@@ -29,22 +30,22 @@ export default function DPIntelligenceDashboard() {
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    fetch("/api/dp-intelligence/stats")
-      .then((res) => {
-        if (!res.ok) {
-          throw new Error(`HTTP error! status: ${res.status}`);
-        }
-        return res.json();
-      })
-      .then((data) => {
+    async function fetchStats() {
+      try {
+        const { data, error } = await supabase.functions.invoke("dp-intel-feed", {
+          body: { action: "stats" },
+        });
+
+        if (error) throw error;
         setStats(data);
+      } catch (err) {
+        logger.error("Error fetching DP stats:", err);
+        setError(err instanceof Error ? err.message : "Erro ao carregar dados");
+      } finally {
         setLoading(false);
-      })
-      .catch((err) => {
-        logger.error("Error fetching stats:", err);
-        setError(err.message);
-        setLoading(false);
-      });
+      }
+    }
+    fetchStats();
   }, []);
 
   if (loading) {

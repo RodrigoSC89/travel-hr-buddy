@@ -2,41 +2,59 @@
  * Feature Flags System - NAUTI ONE
  * Controle centralizado de funcionalidades por módulo
  * 
- * IMPORTANTE: Desabilitar módulos incompletos para produção
+ * REGRA: Features sem backend real completo devem usar flags.
+ * Em produção (STRICT_PROD=true), mocks e simulações são proibidos.
  */
 
+import { useState, useEffect } from 'react';
+import { logger } from '@/lib/logger';
+
+// ============================================
+// PRODUCTION SAFETY FLAGS
+// ============================================
+
+/** Global strict mode - blocks mocks and fake data in production */
+export const STRICT_PROD = (import.meta as any).env?.VITE_STRICT_PROD !== 'false';
+
+/** BridgeLink WebSocket live stream (real WS not yet implemented, polling as fallback) */
+export const FF_BRIDGELINK_LIVE_WS = (import.meta as any).env?.VITE_FF_BRIDGELINK_LIVE_WS === 'true';
+
+/** StarFix real API integration (requires STARFIX_API_KEY secret) */
+export const FF_STARFIX_REAL_API = (import.meta as any).env?.VITE_FF_STARFIX_REAL_API === 'true';
+
+/** Terrastar real API integration (requires TERRASTAR_API_KEY secret) */
+export const FF_TERRASTAR_REAL_API = (import.meta as any).env?.VITE_FF_TERRASTAR_REAL_API === 'true';
+
+/** NautilusBrain AI semantic analysis in BridgeLink */
+export const FF_NAUTILUS_BRAIN_AI = (import.meta as any).env?.VITE_FF_NAUTILUS_BRAIN_AI === 'true';
+
+/** FMEA System full integration in BridgeLink */
+export const FF_FMEA_SYSTEM = (import.meta as any).env?.VITE_FF_FMEA_SYSTEM === 'true';
+
+/**
+ * Check if mock data should be blocked (production mode)
+ */
+export function shouldBlockMocks(): boolean {
+  return STRICT_PROD;
+}
+
+// ============================================
+// MODULE FEATURE FLAGS (existing)
+// ============================================
+
 export interface FeatureFlags {
-  // Operações Submarinas - DESABILITADO por estar incompleto
   UNDERWATER_ENABLED: boolean;
-  
-  // VR/AR Training
   VRAR_ENABLED: boolean;
-  
-  // IA Autônoma (decisões automáticas)
   AI_AUTONOMY_ENABLED: boolean;
-  
-  // Módulos Beta
   BETA_MODULES_ENABLED: boolean;
-  
-  // Blockchain Audit
   BLOCKCHAIN_AUDIT_ENABLED: boolean;
-  
-  // OCR Multi-Engine
   OCR_MULTIENGINE_ENABLED: boolean;
-  
-  // Digital Twin 3D
   DIGITAL_TWIN_3D_ENABLED: boolean;
-  
-  // Telemetria Preditiva
   PREDICTIVE_TELEMETRY_ENABLED: boolean;
 }
 
-/**
- * Configurações padrão de feature flags
- * UNDERWATER_ENABLED = false conforme requisito
- */
 export const DEFAULT_FEATURE_FLAGS: FeatureFlags = {
-  UNDERWATER_ENABLED: false, // DESABILITADO - módulo incompleto
+  UNDERWATER_ENABLED: false,
   VRAR_ENABLED: true,
   AI_AUTONOMY_ENABLED: true,
   BETA_MODULES_ENABLED: true,
@@ -46,52 +64,35 @@ export const DEFAULT_FEATURE_FLAGS: FeatureFlags = {
   PREDICTIVE_TELEMETRY_ENABLED: true,
 };
 
-/**
- * Obter feature flags do ambiente ou usar padrão
- */
 export function getFeatureFlags(): FeatureFlags {
-  // Tentar carregar do localStorage para permitir override em dev
   if (typeof window !== 'undefined') {
     try {
       const stored = localStorage.getItem('nauti_feature_flags');
       if (stored) {
         return { ...DEFAULT_FEATURE_FLAGS, ...JSON.parse(stored) };
       }
-    } catch (e) {
+    } catch {
       logger.warn('Failed to parse feature flags from localStorage');
     }
   }
-  
   return DEFAULT_FEATURE_FLAGS;
 }
 
-/**
- * Verificar se uma feature está habilitada
- */
 export function isFeatureEnabled(flag: keyof FeatureFlags): boolean {
   const flags = getFeatureFlags();
   return flags[flag] ?? false;
 }
-
-/**
- * Hook para usar feature flags em componentes React
- */
-import { useState, useEffect } from 'react';
-import { logger } from '@/lib/logger';
 
 export function useFeatureFlags(): FeatureFlags {
   const [flags, setFlags] = useState<FeatureFlags>(DEFAULT_FEATURE_FLAGS);
   
   useEffect(() => {
     setFlags(getFeatureFlags());
-    
-    // Listener para mudanças no localStorage
     const handleStorageChange = (e: StorageEvent) => {
       if (e.key === 'nauti_feature_flags') {
         setFlags(getFeatureFlags());
       }
     };
-    
     window.addEventListener('storage', handleStorageChange);
     return () => window.removeEventListener('storage', handleStorageChange);
   }, []);
@@ -99,16 +100,11 @@ export function useFeatureFlags(): FeatureFlags {
   return flags;
 }
 
-/**
- * Atualizar feature flag (apenas dev)
- */
 export function setFeatureFlag(flag: keyof FeatureFlags, value: boolean): void {
   if (typeof window !== 'undefined') {
     const current = getFeatureFlags();
     const updated = { ...current, [flag]: value };
     localStorage.setItem('nauti_feature_flags', JSON.stringify(updated));
-    
-    // Disparar evento para atualizar componentes
     window.dispatchEvent(new StorageEvent('storage', {
       key: 'nauti_feature_flags',
       newValue: JSON.stringify(updated),
@@ -116,34 +112,18 @@ export function setFeatureFlag(flag: keyof FeatureFlags, value: boolean): void {
   }
 }
 
-/**
- * Rotas desabilitadas por feature flags
- */
 export function getDisabledRoutes(): string[] {
   const flags = getFeatureFlags();
   const disabled: string[] = [];
-  
   if (!flags.UNDERWATER_ENABLED) {
-    disabled.push(
-      '/ocean-sonar',
-      '/underwater-drone',
-      '/auto-sub',
-      '/sonar-ai',
-      '/deep-risk-ai',
-      '/subsea-operations'
-    );
+    disabled.push('/ocean-sonar', '/underwater-drone', '/auto-sub', '/sonar-ai', '/deep-risk-ai', '/subsea-operations');
   }
-  
   if (!flags.VRAR_ENABLED) {
     disabled.push('/advanced/vr-training');
   }
-  
   return disabled;
 }
 
-/**
- * Verificar se rota está desabilitada
- */
 export function isRouteDisabled(path: string): boolean {
   const disabledRoutes = getDisabledRoutes();
   return disabledRoutes.some(route => path.startsWith(route));

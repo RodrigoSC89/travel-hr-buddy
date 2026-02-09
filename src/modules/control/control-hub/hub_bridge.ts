@@ -1,41 +1,36 @@
 /**
  * Hub Bridge - BridgeLink Integration
- * Manages connection and communication with BridgeLink shore-based system
+ * Manages connection and communication with BridgeLink via Supabase
  */
 
 import { ConnectionQuality } from "./types";
 import config from "./hub_config.json";
+import { supabase } from "@/integrations/supabase/client";
+import { logger } from "@/lib/logger";
 
 export class HubBridge {
   private connectionQuality: ConnectionQuality = "offline";
   private lastCheck: Date | null = null;
-  private token: string | null = null;
 
   /**
-   * Check connection quality
+   * Check connection quality via Supabase health-check Edge Function
    */
-  // PATCH v22 iOS PWA: checkConnection apenas para métricas, nunca retorna "offline"
-  // Isso evita bloqueios falsos no iOS PWA onde navigator.onLine não é confiável
   async checkConnection(): Promise<ConnectionQuality> {
     this.lastCheck = new Date();
 
     try {
       const startTime = Date.now();
-      const response = await fetch("/api/bridgelink/ping", {
-        method: "GET",
-        headers: this.getHeaders(),
-        signal: AbortSignal.timeout(5000),
+      const { error } = await supabase.functions.invoke("health-check", {
+        body: { source: "bridgelink" },
       });
 
       const latency = Date.now() - startTime;
 
-      if (!response.ok) {
-        // PATCH v22: Retorna "poor" em vez de "offline" para não bloquear operações
+      if (error) {
         this.connectionQuality = "poor";
         return this.connectionQuality;
       }
 
-      // Classify connection quality based on latency
       if (latency < 200) {
         this.connectionQuality = "excellent";
       } else if (latency < 500) {
@@ -46,7 +41,6 @@ export class HubBridge {
 
       return this.connectionQuality;
     } catch (error) {
-      // PATCH v22: Nunca retorna "offline" - deixar operações tentarem
       this.connectionQuality = "poor";
       return this.connectionQuality;
     }
@@ -57,16 +51,11 @@ export class HubBridge {
    */
   async sendData(data: any, retryCount = 0): Promise<boolean> {
     try {
-      const response = await fetch(config.bridgelink.endpoint, {
-        method: "POST",
-        headers: this.getHeaders(),
-        body: JSON.stringify(data),
-        signal: AbortSignal.timeout(config.bridgelink.timeout),
+      const { error } = await supabase.functions.invoke("health-check", {
+        body: { action: "bridge-data", payload: data },
       });
-
-      return response.ok;
+      return !error;
     } catch (error) {
-      // Retry with exponential backoff
       if (retryCount < config.sync.retryAttempts) {
         const delay = config.sync.retryDelay * Math.pow(2, retryCount);
         await new Promise(resolve => setTimeout(resolve, delay));
@@ -77,49 +66,24 @@ export class HubBridge {
   }
 
   /**
-   * Authenticate with BridgeLink
+   * Authenticate - uses Supabase Auth natively (no custom endpoint needed)
    */
-  async authenticate(token: string): Promise<boolean> {
-    this.token = token;
+  async authenticate(_token: string): Promise<boolean> {
     try {
-      const response = await fetch("/api/bridgelink/auth", {
-        method: "POST",
-        headers: this.getHeaders(),
-        body: JSON.stringify({ token }),
-      });
-      return response.ok;
+      const { data } = await supabase.auth.getSession();
+      return !!data.session;
     } catch (error) {
+      logger.error("BridgeLink auth error:", error);
       return false;
     }
   }
 
-  /**
-   * Get current connection quality
-   */
   getConnectionQuality(): ConnectionQuality {
     return this.connectionQuality;
   }
 
-  /**
-   * Get last check timestamp
-   */
   getLastCheck(): Date | null {
     return this.lastCheck;
-  }
-
-  /**
-   * Get HTTP headers for requests
-   */
-  private getHeaders(): HeadersInit {
-    const headers: HeadersInit = {
-      "Content-Type": "application/json",
-    };
-
-    if (this.token && config.bridgelink.authRequired) {
-      headers["Authorization"] = `Bearer ${this.token}`;
-    }
-
-    return headers;
   }
 }
 

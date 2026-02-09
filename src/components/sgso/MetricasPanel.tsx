@@ -5,6 +5,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Download, Ship, AlertTriangle, TrendingUp, FileText } from "lucide-react";
 import { Line, Pie } from "react-chartjs-2";
+import { supabase } from "@/integrations/supabase/client";
 import { logger } from '@/lib/logger';
 import {
   Chart as ChartJS,
@@ -66,22 +67,31 @@ export const MetricasPanel = () => {
     try {
       setLoading(true);
 
-      // Fetch risk metrics
-      const riscoResponse = await fetch("/api/admin/metrics");
-      const riscoData = await riscoResponse.json();
+      // Fetch risk metrics from Supabase
+      const { data: riscoData, error: riscoErr } = await (supabase.from as Function)("sgso_audits")
+        .select("id, score, findings_count, vessel_name, created_at, total_auditorias:id")
+        .order("created_at", { ascending: false })
+        .limit(50);
+      if (riscoErr) logger.warn("sgso_audits fetch error:", riscoErr);
       setMetricsRisco(riscoData || []);
 
-      // Fetch monthly evolution
-      const evolucaoResponse = await fetch("/api/admin/metrics/evolucao-mensal");
-      const evolucaoData = await evolucaoResponse.json();
+      // Fetch monthly evolution from same table grouped by month
+      const { data: evolucaoData, error: evolErr } = await (supabase.from as Function)("sgso_audits")
+        .select("created_at, score, findings_count")
+        .order("created_at", { ascending: true })
+        .limit(100);
+      if (evolErr) logger.warn("evolucao fetch error:", evolErr);
       setEvolucaoMensal(evolucaoData || []);
 
       // Fetch vessel metrics
-      const embarcacaoUrl = selectedVessel === "all" 
-        ? "/api/admin/metrics/por-embarcacao"
-        : `/api/admin/metrics/por-embarcacao?nome_navio=${selectedVessel}`;
-      const embarcacaoResponse = await fetch(embarcacaoUrl);
-      const embarcacaoData = await embarcacaoResponse.json();
+      const vesselQuery = (supabase.from as Function)("sgso_audits")
+        .select("vessel_name, score, findings_count")
+        .order("created_at", { ascending: false });
+      if (selectedVessel !== "all") {
+        vesselQuery.eq("vessel_name", selectedVessel);
+      }
+      const { data: embarcacaoData, error: embErr } = await vesselQuery.limit(50);
+      if (embErr) logger.warn("embarcacao fetch error:", embErr);
       setMetricsEmbarcacao(embarcacaoData || []);
     } catch (error) {
       logger.error("Erro ao buscar métricas:", error);
