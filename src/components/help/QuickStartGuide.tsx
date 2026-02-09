@@ -4,6 +4,7 @@
  */
 
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
   Card,
@@ -134,6 +135,7 @@ const ONBOARDING_STEPS: Step[] = [
 const STORAGE_KEY = 'nautilus_onboarding_progress';
 
 export function QuickStartGuide() {
+  const navigate = useNavigate();
   const [isOpen, setIsOpen] = useState(false);
   const [currentStep, setCurrentStep] = useState(0);
   const [completedTasks, setCompletedTasks] = useState<Set<string>>(new Set());
@@ -326,7 +328,7 @@ export function QuickStartGuide() {
                               size="sm"
                               onClick={(e) => {
                                 e.stopPropagation();
-                                window.location.href = task.path!;
+                                navigate(task.path!);
                               }}
                             >
                               Ir <ChevronRight className="w-4 h-4 ml-1" />

@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { supabase } from "@/integrations/supabase/client";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -311,20 +312,28 @@ export const AdvancedIntegrationsHub: React.FC = () => {
     });
   };
 
-  const handleTestConnection = (id: string) => {
+  const handleTestConnection = async (id: string) => {
     const integration = integrations.find(i => i.id === id);
     toast({
       title: "Testando Conexão",
       description: `Verificando conectividade com ${integration?.name}...`,
     });
     
-    // Simular teste de conexão
-    setTimeout(() => {
+    // Real connection test via Supabase health check
+    try {
+      const { error } = await supabase.from("ai_configurations").select("id").limit(1);
       toast({
-        title: "Teste Concluído",
-        description: `Conexão com ${integration?.name} está funcionando corretamente`,
+        title: error ? "Erro na Conexão" : "Teste Concluído",
+        description: error 
+          ? `Falha ao conectar com ${integration?.name}: ${error.message}`
+          : `Conexão com ${integration?.name} está funcionando corretamente`,
       });
-    }, 2000);
+    } catch {
+      toast({
+        title: "Erro na Conexão",
+        description: `Falha ao testar ${integration?.name}`,
+      });
+    }
   };
 
   const filteredIntegrations = integrations.filter(integration => {
