@@ -315,7 +315,6 @@ const STCWMLCCompliance = lazy(() => import("@/pages/STCWMLCCompliance"));
 // ============================================
 const SustainabilityScorePage = lazy(() => import("@/pages/SustainabilityScorePage"));
 const ESGEmissionsPage = lazy(() => import("@/pages/ESGEmissionsPremium"));
-const ESGEmissionsPremium = lazy(() => import("@/pages/ESGEmissionsPremium"));
 const WasteManagementPage = lazy(() => import("@/pages/WasteManagementPage"));
 
 // ============================================
@@ -327,7 +326,6 @@ const SOLASISPSTrainingPage = lazy(() => import("@/pages/SOLASISPSTrainingPage")
 // VIAGENS & LOGÍSTICA
 // ============================================
 const TravelCommandCenter = lazy(() => import("@/pages/TravelCommandPremium"));
-const TravelCommandPremium = lazy(() => import("@/pages/TravelCommandPremium"));
 const WeatherCommandCenter = lazy(() => import("@/pages/WeatherCommandCenter"));
 
 // ============================================
@@ -455,7 +453,7 @@ const AdminDashboard = lazy(() => import("@/pages/admin/dashboard"));
 // Query client
 const queryClient = new QueryClient({
   defaultOptions: {
-    queries: { staleTime: 1000 * 60 * 5, retry: 1 },
+    queries: { staleTime: 1000 * 60 * 2, retry: 1 },
   },
 });
 
@@ -567,8 +565,7 @@ const AuthenticatedLayout = () => {
           <GlobalAIAssistant />
         </Suspense>
         
-        {/* Toast Notifications */}
-        <Toaster />
+        {/* Toast Notifications moved to App root to prevent duplicates */}
       </div>
     </SidebarProvider>
   );
@@ -759,7 +756,7 @@ const AppRoutes = () => (
       <Route path="/telemetria-command" element={<TelemetriaCommand />} />
       <Route path="/predictive-telemetry" element={<PredictiveTelemetry />} />
       <Route path="/satellite-optimizer" element={<SatelliteOptimizerPage />} />
-      <Route path="/tracking" element={<VesselTrackingPage />} />
+      <Route path="/vessel-tracking" element={<VesselTrackingPage />} />
       <Route path="/tracking/gnss-live" element={<VesselTrackingPage />} />
       <Route path="/tracking/alerts" element={<AlertsCommandCenter />} />
       <Route path="/simulador" element={<IncidentSimulator />} />
@@ -868,7 +865,7 @@ const AppRoutes = () => (
       <Route path="/crew-wellness" element={<CrewWellnessPage />} />
       <Route path="/crew-wellbeing" element={<CrewWellnessPage />} />
       {/* /recruitment, /agent-orchestration, /blockchain-compliance already defined in WORLD-CLASS section */}
-      <Route path="/company-financials" element={<CompanyFinancialPage />} />
+      {/* /company-financials already defined in WORLD-CLASS section - removed duplicate */}
       <Route path="/medical-infirmary" element={<MedicalInfirmaryPremium />} />
       <Route path="/enfermaria-digital" element={<MedicalInfirmaryPremium />} />
       <Route path="/users" element={<Users />} />
@@ -1062,8 +1059,8 @@ const AppRoutes = () => (
       <Route path="/dev-routes" element={<DevRoutesDashboard />} />
     </Route>
     
-    {/* Catch-all: Redirecionar para command hub */}
-    <Route path="*" element={<Navigate to="/command" replace />} />
+    {/* Catch-all: Página 404 real */}
+    <Route path="*" element={<NotFound />} />
   </Routes>
 );
 
@@ -1079,6 +1076,7 @@ function App() {
                   <AppRoutes />
                 </Suspense>
               </LazyLoadErrorBoundary>
+              {/* Toaster only here — removed duplicate from AuthenticatedLayout */}
               <Toaster />
             </TooltipProvider>
           </Router>

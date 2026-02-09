@@ -285,9 +285,9 @@ export function HRPayrollDashboard() {
           <Download className="h-4 w-4" />
           Exportar Excel
         </Button>
-        <Button variant="outline" className="gap-2" disabled>
+        <Button variant="outline" className="gap-2" disabled title="Em implantação — Requer integração com layout eSocial">
           <Download className="h-4 w-4" />
-          Exportar eSocial
+          eSocial (Em implantação)
         </Button>
       </div>
     </div>

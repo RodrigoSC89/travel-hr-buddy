@@ -1,7 +1,7 @@
 /**
- * ⚡ SIDEBAR ROUTES - v8.0 MEGA-FUSION FINAL
+ * ⚡ SIDEBAR ROUTES - v8.1 MEGA-FUSION FINAL
  * =========================================================
- * 7 MEGA-HUBs CANÔNICOS COM ROTAS CANÔNICAS
+ * 7 MEGA-HUBs CANÔNICOS + 1 SHOWCASE (World-Class)
  * 
  * MEGA-HUBS:
  * A) /command  - Central Operacional
@@ -11,13 +11,15 @@
  * E) /tracking - Tracking & Telemetry + Weather
  * F) /compliance - Compliance + 12 Audits + 10 AI Agents
  * G) /workbench - Docs + People + Finance + System
+ * H) World-Class - Atalhos para diferenciais (rotas avulsas, sem mega-hub dedicado)
  * 
  * GARANTIAS:
- * ✅ 7 itens principais no sidebar
+ * ✅ 7 mega-hubs canônicos + 1 grupo showcase
  * ✅ 180+ aliases para rotas antigas
  * ✅ 12 Auditorias Marítimas PRESERVADAS
  * ✅ 10 Agentes de Auditoria IA PRESERVADOS
  * ✅ Zero funcionalidades perdidas
+ * ✅ World-Class = atalhos diretos, não mega-hub
  * 
  * Legacy Redirects: src/routes/legacy-redirects-mega.tsx
  * =========================================================

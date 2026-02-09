@@ -307,9 +307,7 @@ function FinanceReports() {
       icon: BarChart3, 
       description: "Demonstrativo de resultados",
       action: () => {
-        toast.info("Gerando relatório DRE...");
-        // In real implementation, this would fetch and export data
-        setTimeout(() => toast.success("DRE gerado — navegue à aba Dashboard para visualizar"), 1000);
+        toast.warning("Relatório DRE — Em implantação. Requer integração com dados contábeis reais.");
       }
     },
     { 
@@ -317,8 +315,7 @@ function FinanceReports() {
       icon: TrendingUp,
       description: "Cash flow projetado",
       action: () => {
-        toast.info("Gerando fluxo de caixa...");
-        setTimeout(() => toast.success("Relatório disponível para download"), 1000);
+        toast.warning("Fluxo de Caixa — Em implantação. Requer integração com contas a pagar/receber.");
       }
     },
     { 

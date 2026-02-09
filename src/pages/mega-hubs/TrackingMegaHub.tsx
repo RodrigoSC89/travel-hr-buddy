@@ -11,7 +11,7 @@
  */
 
 import React, { Suspense, lazy, useMemo, useCallback } from 'react';
-import { useSearchParams } from 'react-router-dom';
+import { useSearchParams, useNavigate } from 'react-router-dom';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Badge } from '@/components/ui/badge';
 import { Satellite, Activity, Ship, Radio, Cloud, AlertTriangle, Map, RefreshCw, Download, Filter, Wifi, Bell } from 'lucide-react';
@@ -57,6 +57,7 @@ const tabConfig = [
 ];
 
 export default function TrackingMegaHub() {
+  const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
   const activeTab = searchParams.get('tab') || 'overview';
   const queryClient = useQueryClient();
@@ -267,7 +268,7 @@ export default function TrackingMegaHub() {
               {!vesselsLoading && trackingMetrics.totalVessels === 0 && (
                 <HubEmptyState 
                   hub="tracking" 
-                  onPrimaryAction={() => window.location.href = '/ops'} 
+                  onPrimaryAction={() => navigate('/ops')} 
                 />
               )}
 

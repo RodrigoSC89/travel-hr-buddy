@@ -110,20 +110,8 @@ export default function AIMegaHub() {
   }, [queryClient]);
 
   const handleDeployAgent = useCallback(async () => {
-    const agentId = `agent-${Date.now().toString().slice(-6)}`;
-    const { error } = await supabase.from('agent_registry').insert([{
-      agent_id: agentId,
-      name: `Agent ${agentId}`,
-      status: 'active',
-      capabilities: ['analysis', 'reporting'],
-    }]);
-    if (error) {
-      toast.error(`Erro ao criar agente: ${error.message}`);
-    } else {
-      toast.success('Agente implantado com sucesso');
-      queryClient.invalidateQueries({ queryKey: ['ai-agents-hub'] });
-    }
-  }, [queryClient]);
+    toast.warning('Deploy de Agente — Em implantação. Formulário de configuração com nome, capabilities e escopo será entregue em breve.');
+  }, []);
 
   const handleExportAgents = useCallback(async () => {
     if (agentData.length === 0) {

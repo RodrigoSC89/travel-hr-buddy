@@ -36,7 +36,7 @@ export default function DeepRiskAI() {
 
   const handleDelete = (id: string) => { if (confirm('Excluir?')) { setRisks(p => p.filter(r => r.id !== id)); toast.success('Excluído'); } };
   const handleMitigate = (id: string) => { setRisks(p => p.map(r => r.id === id ? { ...r, status: 'mitigated' } : r)); toast.success('Risco mitigado'); };
-  const handleAnalyze = (id: string) => { toast.info('IA analisando...'); setTimeout(() => toast.success('Análise concluída'), 2000); };
+  const handleAnalyze = (id: string) => { toast.warning('Análise de IA — Em implantação. Requer integração com motor ML de risco submarino.'); };
 
   const filtered = risks.filter(r => r.title.toLowerCase().includes(search.toLowerCase()));
   const severityColors = { low: 'bg-green-500', medium: 'bg-yellow-500', high: 'bg-orange-500', critical: 'bg-red-500' };

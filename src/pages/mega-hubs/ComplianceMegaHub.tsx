@@ -176,19 +176,8 @@ export default function ComplianceMegaHub() {
   }, [queryClient]);
 
   const handleNewAudit = useCallback(async () => {
-    const { error } = await supabase.from('internal_audits').insert([{
-      audit_number: `AUD-${Date.now().toString().slice(-6)}`,
-      audit_type: 'internal',
-      status: 'planned',
-      findings_count: 0,
-    }]);
-    if (error) {
-      toast.error(`Erro ao criar auditoria: ${error.message}`);
-    } else {
-      toast.success('Auditoria criada com sucesso');
-      queryClient.invalidateQueries({ queryKey: ['compliance-audits-hub'] });
-    }
-  }, [queryClient]);
+    toast.warning('Nova Auditoria — Em implantação. Formulário com tipo, escopo, auditor e embarcação será entregue em breve.');
+  }, []);
 
   const handleExportCompliance = useCallback(async () => {
     const allData = [...audits.map((a: any) => ({ tipo: 'Auditoria', ...a })), ...nonConformities.map((nc: any) => ({ tipo: 'NC', ...nc }))];

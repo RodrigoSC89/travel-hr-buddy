@@ -125,14 +125,15 @@ export default function WorkbenchMegaHub() {
     toast.success('Dados atualizados');
   }, [queryClient]);
 
-  // Document actions
+  // Document actions — navigate to the actual Document Center tab
   const handleDocUpload = useCallback(() => {
-    toast.info('Use o Document Center abaixo para fazer upload. Selecione "Upload" na interface do módulo.');
-  }, []);
+    setSearchParams({ section: 'docs' });
+    toast.info('Navegando ao Document Center para upload.');
+  }, [setSearchParams]);
 
   const handleNewTemplate = useCallback(() => {
-    toast.info('Abrindo criador de templates no Document Center...');
-  }, []);
+    navigate('/templates');
+  }, [navigate]);
 
   // People actions
   const handleAddCrew = useCallback(async () => {
@@ -170,15 +171,16 @@ export default function WorkbenchMegaHub() {
     })), 'finance-report');
   }, [vessels, exportToCSV]);
 
-  // Travel actions
+  // Travel actions — navigate to the Travel tab
   const handleNewBooking = useCallback(() => {
-    toast.info('Funcionalidade de reservas de viagem será implementada na próxima versão. Use o módulo Travel abaixo.');
-  }, []);
+    setSearchParams({ section: 'travel' });
+    toast.warning('Reservas de viagem — Em implantação. CRUD de reservas será entregue na próxima versão.');
+  }, [setSearchParams]);
 
-  // System actions
+  // System actions — navigate to the System tab
   const handleNewIntegration = useCallback(() => {
-    toast.info('Acesse System Hub abaixo para configurar novas integrações.');
-  }, []);
+    navigate('/integrations');
+  }, [navigate]);
 
   const handleExportSchedule = useCallback(async () => {
     if (crewMembers.length === 0) {
