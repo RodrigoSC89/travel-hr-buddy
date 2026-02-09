@@ -32,7 +32,7 @@ export interface IoTSensor {
   location: string | null;
   vesselId: string | null;
   lastReadingAt: string | null;
-  thresholds: any;
+  thresholds: Record<string, unknown> | null;
 }
 
 export interface IoTAlert {

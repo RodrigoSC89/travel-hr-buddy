@@ -78,18 +78,18 @@ export interface PluginInstance {
   status: 'active' | 'inactive' | 'error' | 'loading';
   loadedAt?: Date;
   error?: string;
-  component?: LazyExoticComponent<ComponentType<any>>;
+  component?: LazyExoticComponent<ComponentType<Record<string, unknown>>>;
 }
 
 // Plugin API that plugins can use
 export interface PluginAPI {
   // Data access
-  getData: <T>(table: string, filters?: Record<string, any>) => Promise<T[]>;
+  getData: <T>(table: string, filters?: Record<string, unknown>) => Promise<T[]>;
   saveData: <T>(table: string, data: T) => Promise<void>;
   
   // UI
   showNotification: (message: string, type: 'info' | 'success' | 'warning' | 'error') => void;
-  showDialog: (config: { title: string; content: string; actions?: any[] }) => void;
+  showDialog: (config: { title: string; content: string; actions?: Array<{ label: string; onClick: () => void }> }) => void;
   
   // AI
   queryAI: (prompt: string, context?: string) => Promise<string>;
@@ -102,15 +102,15 @@ export interface PluginAPI {
   navigate: (path: string) => void;
   
   // Events
-  emit: (event: string, data: any) => void;
-  on: (event: string, callback: (data: any) => void) => () => void;
+  emit: (event: string, data: unknown) => void;
+  on: (event: string, callback: (data: unknown) => void) => () => void;
 }
 
 // Plugin Registry
 class PluginRegistry {
   private plugins: Map<string, PluginInstance> = new Map();
-  private eventHandlers: Map<string, Set<(data: any) => void>> = new Map();
-  private hooks: Map<string, ((data: any) => any)[]> = new Map();
+  private eventHandlers: Map<string, Set<(data: unknown) => void>> = new Map();
+  private hooks: Map<string, ((data: unknown) => unknown)[]> = new Map();
 
   /**
    * Register a plugin
@@ -268,7 +268,7 @@ class PluginRegistry {
   /**
    * Register event handler
    */
-  on(event: string, callback: (data: any) => void): () => void {
+  on(event: string, callback: (data: unknown) => void): () => void {
     if (!this.eventHandlers.has(event)) {
       this.eventHandlers.set(event, new Set());
     }
@@ -283,7 +283,7 @@ class PluginRegistry {
   /**
    * Emit event
    */
-  emit(event: string, data: any): void {
+  emit(event: string, data: unknown): void {
     const handlers = this.eventHandlers.get(event);
     
     if (handlers) {
@@ -300,7 +300,7 @@ class PluginRegistry {
   /**
    * Register hook
    */
-  addHook(hookName: string, callback: (data: any) => any): void {
+  addHook(hookName: string, callback: (data: unknown) => unknown): void {
     if (!this.hooks.has(hookName)) {
       this.hooks.set(hookName, []);
     }
@@ -318,7 +318,7 @@ class PluginRegistry {
       return data;
     }
 
-    let result = data;
+    let result: unknown = data;
     
     for (const callback of callbacks) {
       try {
@@ -328,7 +328,7 @@ class PluginRegistry {
       }
     }
     
-    return result;
+    return result as T;
   }
 
   private validateManifest(manifest: PluginManifest): boolean {

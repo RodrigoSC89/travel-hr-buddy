@@ -31,9 +31,9 @@ export interface CloneConfiguration {
 export interface CloneSnapshot {
   configurationId: string;
   timestamp: Date;
-  modules: Record<string, any>[];
-  context: Record<string, any>;
-  llmState: any;
+  modules: Record<string, unknown>[];
+  context: Record<string, unknown>;
+  llmState: Record<string, unknown>;
   metadata: {
     version: string;
     environment: string;
@@ -106,10 +106,10 @@ export class CognitiveCloneService {
           preferences: {},
         },
         llmConfig: {
-          model: sourceSnapshot.llmState.model,
-          temperature: sourceSnapshot.llmState.temperature,
-          maxTokens: sourceSnapshot.llmState.maxTokens,
-          systemPrompt: sourceSnapshot.llmState.systemPrompt,
+          model: String(sourceSnapshot.llmState.model || ''),
+          temperature: Number(sourceSnapshot.llmState.temperature || 0),
+          maxTokens: Number(sourceSnapshot.llmState.maxTokens || 0),
+          systemPrompt: String(sourceSnapshot.llmState.systemPrompt || ''),
         },
         contextLimit: options.contextLimit || 1000,
         capabilities: options.capabilities || [],
