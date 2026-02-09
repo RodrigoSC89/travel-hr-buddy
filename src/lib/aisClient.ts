@@ -224,22 +224,22 @@ export class AISClient {
   /**
    * Parses raw API data into VesselPosition format
    */
-  private parseVesselData(data: any): VesselPosition[] {
+  private parseVesselData(data: unknown): VesselPosition[] {
     if (!Array.isArray(data)) {
       return [];
     }
 
-    return data.map((vessel: any) => ({
-      mmsi: vessel.MMSI || vessel.mmsi || "",
-      name: vessel.SHIPNAME || vessel.shipname || "Unknown Vessel",
-      latitude: parseFloat(vessel.LAT || vessel.latitude || 0),
-      longitude: parseFloat(vessel.LON || vessel.longitude || 0),
-      speed: parseFloat(vessel.SPEED || vessel.speed || 0),
-      course: parseFloat(vessel.COURSE || vessel.course || 0),
-      heading: parseFloat(vessel.HEADING || vessel.heading || 0),
-      timestamp: vessel.TIMESTAMP || vessel.timestamp || new Date().toISOString(),
-      status: this.parseStatus(vessel.STATUS || vessel.status || 0),
-      type: vessel.TYPE || vessel.type || "Unknown",
+    return data.map((vessel: Record<string, unknown>) => ({
+      mmsi: String(vessel.MMSI || vessel.mmsi || ""),
+      name: String(vessel.SHIPNAME || vessel.shipname || "Unknown Vessel"),
+      latitude: parseFloat(String(vessel.LAT || vessel.latitude || 0)),
+      longitude: parseFloat(String(vessel.LON || vessel.longitude || 0)),
+      speed: parseFloat(String(vessel.SPEED || vessel.speed || 0)),
+      course: parseFloat(String(vessel.COURSE || vessel.course || 0)),
+      heading: parseFloat(String(vessel.HEADING || vessel.heading || 0)),
+      timestamp: String(vessel.TIMESTAMP || vessel.timestamp || new Date().toISOString()),
+      status: this.parseStatus(Number(vessel.STATUS || vessel.status || 0)),
+      type: String(vessel.TYPE || vessel.type || "Unknown"),
     }));
   }
 

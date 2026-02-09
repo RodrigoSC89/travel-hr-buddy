@@ -414,7 +414,7 @@ export const SmartDrills = {
   // ============================================
 
   async getDrillStatistics(vesselId?: string): Promise<DrillStatistics> {
-    const { data, error } = await supabase.rpc('get_drill_statistics') as { data: DrillStatistics | null; error: any };
+    const { data, error } = await supabase.rpc('get_drill_statistics') as { data: DrillStatistics | null; error: Error | null };
 
     if (error) {
       logger.error('Error fetching drill statistics', error as Error, { vesselId });

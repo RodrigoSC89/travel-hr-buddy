@@ -246,13 +246,12 @@ export class SatelliteService {
     satelliteId: string,
     position: { latitude: number; longitude: number; altitude_km: number; velocity_kmh?: number }
   ): Promise<string> {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const rpcParams: any = {
+    const rpcParams = {
       p_satellite_id: satelliteId,
       p_latitude: position.latitude,
       p_longitude: position.longitude,
       p_altitude_km: position.altitude_km,
-      p_velocity_kmh: position.velocity_kmh ?? null,
+      p_velocity_kmh: position.velocity_kmh ?? undefined,
     };
 
     const { data, error } = await supabase.rpc("update_satellite_position", rpcParams);

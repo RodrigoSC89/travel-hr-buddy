@@ -272,8 +272,8 @@ export class KPITracker {
 
     // Fallback to localStorage
     const metrics = JSON.parse(localStorage.getItem('kpi_metrics') || '[]');
-    const latest = metrics.filter((m: any) => m.kpiId === kpi.id).pop();
-    return latest?.value ?? null;
+    const latest = metrics.filter((m: Record<string, unknown>) => m.kpiId === kpi.id).pop();
+    return (latest?.value as number) ?? null;
   }
 
   /**
@@ -297,8 +297,8 @@ export class KPITracker {
       return 0;
     }
 
-    const firstValue = (data[0] as any).metric_value;
-    const lastValue = (data[data.length - 1] as any).metric_value;
+    const firstValue = Number((data[0] as Record<string, unknown>).metric_value);
+    const lastValue = Number((data[data.length - 1] as Record<string, unknown>).metric_value);
 
     if (firstValue === 0) return lastValue > 0 ? 100 : 0;
     return ((lastValue - firstValue) / firstValue) * 100;
@@ -379,7 +379,7 @@ export class KPITracker {
       .gte('timestamp', dayStart.toISOString())
       .not('user_id', 'is', null);
 
-    const dau = new Set(dailyUsers?.map((u: any) => u.user_id) ?? []).size;
+    const dau = new Set((dailyUsers as Record<string, unknown>[] | null)?.map((u) => u.user_id) ?? []).size;
     await this.trackKPI('DAU', dau);
 
     // Get unique users this month
@@ -389,7 +389,7 @@ export class KPITracker {
       .gte('timestamp', monthStart.toISOString())
       .not('user_id', 'is', null);
 
-    const mau = new Set(monthlyUsers?.map((u: any) => u.user_id) ?? []).size;
+    const mau = new Set((monthlyUsers as Record<string, unknown>[] | null)?.map((u) => u.user_id) ?? []).size;
     await this.trackKPI('MAU', mau);
   }
 

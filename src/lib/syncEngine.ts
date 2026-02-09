@@ -87,7 +87,8 @@ class SyncEngine {
    * Sync a single record to Supabase
    */
   private async syncRecord(record: OfflineRecord): Promise<void> {
-    const { table, action, data } = record;
+    const { table, action } = record;
+    const data = record.data as Record<string, unknown>;
 
     // Use Function cast for dynamic table access
     const fromFn = supabase.from as Function;
@@ -98,18 +99,19 @@ class SyncEngine {
       if (createError) throw createError;
       break;
 
-    case "update":
+    case "update": {
       const { id, ...updateData } = data;
       const { error: updateError } = await fromFn(table)
         .update(updateData)
-        .eq("id", id);
+        .eq("id", String(id));
       if (updateError) throw updateError;
       break;
+    }
 
     case "delete":
       const { error: deleteError } = await fromFn(table)
         .delete()
-        .eq("id", data.id);
+        .eq("id", String(data.id));
       if (deleteError) throw deleteError;
       break;
 

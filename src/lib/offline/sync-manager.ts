@@ -18,7 +18,7 @@ export interface SyncQueueItem {
   id: string;
   operation: "insert" | "update" | "delete";
   table: string;
-  data: any;
+  data: unknown;
   timestamp: string;
   retryCount: number;
   maxRetries: number;
@@ -66,7 +66,7 @@ class OfflineSyncManager {
     }, 30000);
   }
 
-  public queueOperation(operation: "insert" | "update" | "delete", table: string, data: any): string {
+  public queueOperation(operation: "insert" | "update" | "delete", table: string, data: unknown): string {
     const item: SyncQueueItem = {
       id: `sync-${Date.now()}-${crypto.randomUUID().slice(0, 9)}`,
       operation,
@@ -115,14 +115,18 @@ class OfflineSyncManager {
 
       switch (item.operation) {
       case "insert":
-        result = await dynamicFrom(item.table).insert(item.data as any);
+        result = await dynamicFrom(item.table).insert(item.data as Record<string, unknown>);
         break;
-      case "update":
-        result = await dynamicFrom(item.table).update(item.data as any).eq("id", item.data.id);
+      case "update": {
+        const updateData = item.data as Record<string, unknown>;
+        result = await dynamicFrom(item.table).update(updateData).eq("id", String(updateData.id));
         break;
-      case "delete":
-        result = await dynamicFrom(item.table).delete().eq("id", item.data.id);
+      }
+      case "delete": {
+        const deleteData = item.data as Record<string, unknown>;
+        result = await dynamicFrom(item.table).delete().eq("id", String(deleteData.id));
         break;
+      }
       }
 
       if (result.error) throw result.error;
