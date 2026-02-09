@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { supabase } from "@/integrations/supabase/client";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -208,32 +209,32 @@ export const SmartOptimization: React.FC = () => {
     setIsScanning(true);
     setScanProgress(0);
     
-    // Simular análise progressiva
-    const steps = [
-      "Analisando padrões de tráfego...",
-      "Verificando performance de endpoints...",
-      "Examinando configurações de segurança...",
-      "Calculando otimizações possíveis...",
-      "Gerando recomendações..."
-    ];
-    
-    for (let i = 0; i < steps.length; i++) {
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      setScanProgress((i + 1) * 20);
+    try {
+      setScanProgress(30);
+      // Run real performance check
+      const startTime = performance.now();
+      const { count } = await supabase.from('access_logs').select('id', { count: 'exact', head: true });
+      setScanProgress(60);
+      
+      const { data: insights } = await supabase.from('ai_insights').select('id', { count: 'exact', head: true });
+      setScanProgress(90);
+      
+      const elapsed = Math.floor(performance.now() - startTime);
+      setScanProgress(100);
       
       toast({
-        title: "Análise em Progresso",
-        description: steps[i],
+        title: "Análise Concluída",
+        description: `Verificados ${count || 0} logs, ${insights?.length || 0} insights. Tempo: ${elapsed}ms`,
       });
+    } catch {
+      toast({
+        title: "Erro na Análise",
+        description: "Não foi possível completar a verificação.",
+      });
+    } finally {
+      setIsScanning(false);
+      setScanProgress(0);
     }
-    
-    setIsScanning(false);
-    setScanProgress(0);
-    
-    toast({
-      title: "Análise Concluída",
-      description: "4 novas otimizações foram identificadas.",
-    });
   };
 
   const implementSuggestion = (suggestionId: string) => {

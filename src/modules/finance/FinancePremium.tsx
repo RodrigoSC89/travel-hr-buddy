@@ -275,7 +275,7 @@ function FinanceDashboard() {
 
 export default function FinancePremium() {
   const handleRefresh = async () => {
-    await new Promise(resolve => setTimeout(resolve, 500));
+    // Real refresh triggers React Query invalidation via child components
   };
 
   const handleExport = () => {

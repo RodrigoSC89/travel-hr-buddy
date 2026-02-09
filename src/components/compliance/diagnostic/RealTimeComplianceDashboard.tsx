@@ -158,8 +158,28 @@ export function RealTimeComplianceDashboard() {
 
   const exportDashboard = async () => {
     toast.loading('Gerando relatório executivo...', { id: 'export' });
-    await new Promise(resolve => setTimeout(resolve, 1500));
-    toast.success('Relatório exportado em PDF!', { id: 'export' });
+    try {
+      const { data, error } = await supabase.functions.invoke('export-compliance-report', {
+        body: { format: 'pdf', type: 'executive-dashboard' }
+      });
+      if (error) throw error;
+      if (data?.url) {
+        window.open(data.url, '_blank');
+        toast.success('Relatório exportado em PDF!', { id: 'export' });
+      } else {
+        // Fallback: export as JSON download
+        const blob = new Blob([JSON.stringify({ metrics, timestamp: new Date().toISOString() }, null, 2)], { type: 'application/json' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `compliance-dashboard-${new Date().toISOString().split('T')[0]}.json`;
+        a.click();
+        URL.revokeObjectURL(url);
+        toast.success('Relatório exportado (JSON)!', { id: 'export' });
+      }
+    } catch {
+      toast.error('Erro ao exportar relatório', { id: 'export' });
+    }
   };
 
   return (

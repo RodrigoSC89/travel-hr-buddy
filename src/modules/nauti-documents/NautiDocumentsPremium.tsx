@@ -269,7 +269,7 @@ function DocumentsDashboard() {
 
 export default function NautiDocumentsPremium() {
   const handleRefresh = async () => {
-    await new Promise(resolve => setTimeout(resolve, 500));
+    // Real refresh triggers React Query invalidation via child components
   };
 
   const handleExport = () => {

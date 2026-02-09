@@ -178,9 +178,7 @@ export const SmartNotifications: React.FC = () => {
 
   const sendTestNotification = async () => {
     try {
-      // Simulate sending test notification
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      
+      // Persist notification to local state (notifications table may require user_id)
       const newNotification: NotificationHistory = {
         id: Date.now().toString(),
         type: testNotification.type,
@@ -189,14 +187,13 @@ export const SmartNotifications: React.FC = () => {
         sent_at: new Date().toISOString(),
         status: "sent"
       };
-      
       setHistory(prev => [newNotification, ...prev]);
       
       toast({
         title: "Notificação de teste enviada!",
         description: `Teste enviado via ${testNotification.type}`,
       });
-    } catch (error) {
+    } catch {
       toast({
         title: "Erro",
         description: "Não foi possível enviar a notificação de teste",

@@ -121,14 +121,14 @@ export function ComplianceMapWithGeofencing({
   const fetchGeofences = useCallback(async (): Promise<Geofence[]> => {
     try {
       const { data, error: err } = await supabase
-        .from('geofence_zones' as any)
+        .from('geofence_zones')
         .select('*')
         .eq('active', true);
 
       if (err) throw err;
 
-      if (data && Array.isArray(data) && data.length > 0) {
-        const mapped: Geofence[] = (data as any[]).map(zone => ({
+      if (data && data.length > 0) {
+        const mapped: Geofence[] = data.map(zone => ({
           id: zone.id,
           name: zone.name,
           type: zone.type as Geofence['type'],
