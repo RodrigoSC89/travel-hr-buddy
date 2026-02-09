@@ -4,6 +4,7 @@
  */
 
 import React, { useState } from "react";
+import { supabase } from "@/integrations/supabase/client";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -36,9 +37,15 @@ export const TelemetryDashboard360: React.FC<TelemetryDashboard360Props> = ({ us
 
   const handleRefresh = async () => {
     setIsRefreshing(true);
-    await new Promise(r => setTimeout(r, 1500));
-    setIsRefreshing(false);
-    toast.success("Dados atualizados");
+    try {
+      const { error } = await supabase.from("telemetry_insights").select("id").limit(1);
+      if (error) throw error;
+      toast.success("Dados atualizados");
+    } catch {
+      toast.error("Erro ao atualizar telemetria");
+    } finally {
+      setIsRefreshing(false);
+    }
   };
 
   const handleExport = () => {

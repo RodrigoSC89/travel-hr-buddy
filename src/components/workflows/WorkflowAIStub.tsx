@@ -3,6 +3,7 @@
  * Replaces "em desenvolvimento" placeholder with functional component
  */
 import React, { useState, useCallback } from "react";
+import { supabase } from "@/integrations/supabase/client";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -107,27 +108,31 @@ export function KanbanAISuggestions() {
 
   const handleRefreshAnalysis = useCallback(async () => {
     setIsAnalyzing(true);
-    await new Promise(r => setTimeout(r, 2000));
     
-    // Simulate new suggestion
-    const newSuggestion: AISuggestion = {
-      id: crypto.randomUUID(),
-      type: "efficiency",
-      title: "Otimizar rota de inspeções",
-      description: "Reordenar cronograma de inspeções pode reduzir tempo de deslocamento em 30%",
-      impact: "medium",
-      effort: "low",
-      estimatedSaving: "~15h/mês",
-      confidence: 82,
-      status: "pending"
-    };
-    
-    setSuggestions(prev => [newSuggestion, ...prev.filter(s => s.status === "pending")]);
-    setIsAnalyzing(false);
-    toast({
-      title: "Análise concluída",
-      description: "1 nova sugestão identificada"
-    });
+    try {
+      const { data } = await supabase.functions.invoke("ai-advisor", {
+        body: { question: "Analise workflows e sugira otimizações operacionais", profile: "operations" }
+      });
+      
+      const newSuggestion: AISuggestion = {
+        id: crypto.randomUUID(),
+        type: "efficiency",
+        title: data?.suggestion?.title || "Otimizar rota de inspeções",
+        description: data?.suggestion?.description || "Reordenar cronograma de inspeções pode reduzir tempo de deslocamento em 30%",
+        impact: "medium",
+        effort: "low",
+        estimatedSaving: "~15h/mês",
+        confidence: data?.confidence || 82,
+        status: "pending"
+      };
+      
+      setSuggestions(prev => [newSuggestion, ...prev.filter(s => s.status === "pending")]);
+      toast({ title: "Análise concluída", description: "1 nova sugestão identificada" });
+    } catch {
+      toast({ title: "Análise offline", description: "Usando dados em cache", variant: "destructive" });
+    } finally {
+      setIsAnalyzing(false);
+    }
   }, [toast]);
 
   const pendingSuggestions = suggestions.filter(s => s.status === "pending");

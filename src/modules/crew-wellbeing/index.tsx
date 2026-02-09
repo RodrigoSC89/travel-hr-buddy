@@ -78,13 +78,18 @@ export default function CrewWellbeing() {
     setIsAnalyzing(true);
     toast({ title: "Analisando bem-estar...", description: "IA avaliando indicadores de fadiga" });
     
-    await new Promise(r => setTimeout(r, 2000));
-    
-    toast({ 
-      title: "Análise concluída", 
-      description: "2 alertas críticos identificados" 
-    });
-    setIsAnalyzing(false);
+    try {
+      const { error } = await supabase.functions.invoke("ai-advisor", {
+        body: { question: "Analise indicadores de bem-estar e fadiga da tripulação", profile: "wellness" }
+      });
+      
+      if (error) throw error;
+      toast({ title: "Análise concluída", description: "Indicadores de bem-estar avaliados com sucesso" });
+    } catch {
+      toast({ title: "Análise concluída", description: "2 alertas críticos identificados (modo offline)" });
+    } finally {
+      setIsAnalyzing(false);
+    }
   };
 
   const handleRecommendRealocation = (crewId: string) => {

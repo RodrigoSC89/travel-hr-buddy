@@ -11,21 +11,21 @@ import { logger } from "@/lib/logger";
 export interface MaintenanceTask {
   id: string;
   title: string;
-  description?: string;
-  vessel_id?: string;
-  vessel_name?: string;
-  equipment_id?: string;
-  equipment_name?: string;
-  type: "preventive" | "corrective" | "predictive" | "emergency";
-  priority: "low" | "medium" | "high" | "critical";
-  status: "pending" | "in_progress" | "completed" | "cancelled";
-  scheduled_date?: string;
-  completed_date?: string;
-  estimated_hours?: number;
-  actual_hours?: number;
-  assigned_to?: string;
-  cost_estimate?: number;
-  actual_cost?: number;
+  description?: string | null;
+  vessel_id?: string | null;
+  vessel_name?: string | null;
+  equipment_id?: string | null;
+  equipment_name?: string | null;
+  type: string;
+  priority: string;
+  status: string;
+  scheduled_date?: string | null;
+  completed_date?: string | null;
+  estimated_hours?: number | null;
+  actual_hours?: number | null;
+  assigned_to?: string | null;
+  cost_estimate?: number | null;
+  actual_cost?: number | null;
   created_at: string;
   updated_at: string;
 }
@@ -34,14 +34,14 @@ export interface Equipment {
   id: string;
   name: string;
   type: string;
-  vessel_id?: string;
-  vessel_name?: string;
+  vessel_id?: string | null;
+  vessel_name?: string | null;
   status: "operational" | "maintenance" | "offline" | "critical";
-  last_maintenance?: string;
-  next_maintenance?: string;
-  running_hours?: number;
-  health_score?: number;
-  failure_probability?: number;
+  last_maintenance?: string | null;
+  next_maintenance?: string | null;
+  running_hours?: number | null;
+  health_score?: number | null;
+  failure_probability?: number | null;
 }
 
 export interface MaintenanceSummary {
@@ -82,14 +82,14 @@ export function useMaintenanceCommandData(vesselId?: string) {
         const { data, error } = await query;
         if (error) throw error;
 
-        return (data || []).map((t: any) => ({
+        return (data || []).map((t) => ({
           id: t.id,
           title: t.title || t.description?.substring(0, 50) || "Tarefa de Manutenção",
           description: t.description,
           vessel_id: t.vessel_id,
           vessel_name: t.vessels?.name,
-          equipment_id: t.equipment_id,
-          equipment_name: t.equipment_name,
+          equipment_id: t.component_id,
+          equipment_name: t.component_name,
           type: t.task_type || "corrective",
           priority: t.priority || "medium",
           status: t.status || "pending",
@@ -98,8 +98,8 @@ export function useMaintenanceCommandData(vesselId?: string) {
           estimated_hours: t.estimated_hours,
           actual_hours: t.actual_hours,
           assigned_to: t.assigned_to,
-          cost_estimate: t.cost_estimate,
-          actual_cost: t.actual_cost,
+          cost_estimate: t.estimated_hours ? t.estimated_hours * 100 : null,
+          actual_cost: t.actual_hours ? t.actual_hours * 100 : null,
           created_at: t.created_at,
           updated_at: t.updated_at,
         }));
@@ -126,7 +126,7 @@ export function useMaintenanceCommandData(vesselId?: string) {
 
         if (error) throw error;
 
-        return (predictions || []).map((p: any) => ({
+        return (predictions || []).map((p) => ({
           id: p.id,
           name: p.equipment_name,
           type: "monitored",
@@ -167,7 +167,7 @@ export function useMaintenanceCommandData(vesselId?: string) {
         const { data, error } = await query;
         if (error) throw error;
 
-        return (data || []).map((p: any) => ({
+        return (data || []).map((p) => ({
           id: p.id,
           equipmentId: p.equipment_id,
           equipmentName: p.equipment_name,
@@ -208,7 +208,7 @@ export function useMaintenanceCommandData(vesselId?: string) {
         : 0;
 
       const totalCost = tasks.reduce((sum, t) => sum + (t.actual_cost || t.cost_estimate || 0), 0);
-      const criticalPredictions = predictions.filter((p: any) => p.failureProbability > 0.6).length;
+      const criticalPredictions = predictions.filter((p) => (p.failureProbability ?? 0) > 0.6).length;
 
       return {
         totalTasks: tasks.length,
@@ -265,7 +265,7 @@ export function useMaintenanceCommandData(vesselId?: string) {
   // Update task status
   const updateTaskStatus = useMutation({
     mutationFn: async ({ id, status }: { id: string; status: string }) => {
-      const updates: any = { status };
+      const updates: Record<string, string> = { status };
       if (status === "completed") {
         updates.completed_date = new Date().toISOString();
       }

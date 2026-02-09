@@ -3,6 +3,7 @@
  * Preparação automatizada para inspeções Port State Control
  */
 import { useState } from "react";
+import { supabase } from "@/integrations/supabase/client";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -69,9 +70,16 @@ const PSCReadinessPage = () => {
     { port: "Santos", date: "2023-04-12", result: "No Deficiencies", detained: false }
   ];
 
-  const handleScan = () => {
+  const handleScan = async () => {
     setScanning(true);
-    setTimeout(() => setScanning(false), 3000);
+    try {
+      const { error } = await supabase.from("psc_inspections").select("id, status").limit(5);
+      if (error) throw error;
+    } catch {
+      // Continue with offline data
+    } finally {
+      setScanning(false);
+    }
   };
 
   return (

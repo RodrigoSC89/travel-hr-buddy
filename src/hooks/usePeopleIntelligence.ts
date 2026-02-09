@@ -86,7 +86,7 @@ export function useCrewCertifications() {
       if (error) throw error;
 
       const now = new Date();
-      return (data || []).map((cert: any) => {
+      return (data || []).map((cert) => {
         const expiry = cert.expiry_date ? new Date(cert.expiry_date) : null;
         const daysToExpiry = expiry
           ? Math.floor((expiry.getTime() - now.getTime()) / (1000 * 60 * 60 * 24))

@@ -102,11 +102,8 @@ export function useAIPEODP(vesselId?: string) {
 
       if (error) throw error;
 
-      // Simular progresso
-      for (let i = 0; i <= 100; i += 10) {
-        await new Promise((r) => setTimeout(r, 100));
-        setAnalysisProgress(i);
-      }
+      // Update progress based on real response
+      setAnalysisProgress(100);
 
       return data.report as ComplianceReport;
     },

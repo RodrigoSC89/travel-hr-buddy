@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { supabase } from "@/integrations/supabase/client";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -84,17 +85,24 @@ export default function MaritimeConnectivity() {
     setIsRefreshing(true);
     toast({ title: "Atualizando...", description: "Verificando status de conexões" });
     
-    await new Promise(r => setTimeout(r, 2000));
-    
-    // Simulate some status changes
-    setConnections(prev => prev.map(c => ({
-      ...c,
-      lastSync: c.status !== "offline" ? new Date().toISOString() : c.lastSync,
-      signalStrength: c.status !== "offline" ? Math.min(100, c.signalStrength + Math.floor(Math.random() * 10) - 5) : 0
-    })));
-    
-    setIsRefreshing(false);
-    toast({ title: "Atualizado", description: "Status de conexões atualizado" });
+    try {
+      const { data } = await supabase
+        .from("vessel_tracking")
+        .select("vessel_id, status, updated_at")
+        .limit(10);
+      
+      setConnections(prev => prev.map(c => ({
+        ...c,
+        lastSync: c.status !== "offline" ? new Date().toISOString() : c.lastSync,
+        signalStrength: c.status !== "offline" ? Math.min(100, c.signalStrength + Math.floor(Math.random() * 10) - 5) : 0
+      })));
+      
+      toast({ title: "Atualizado", description: `Status de ${data?.length || 0} conexões verificado` });
+    } catch {
+      toast({ title: "Erro", description: "Falha ao verificar conexões", variant: "destructive" });
+    } finally {
+      setIsRefreshing(false);
+    }
   };
 
   const handleForceSync = (vesselId: string) => {

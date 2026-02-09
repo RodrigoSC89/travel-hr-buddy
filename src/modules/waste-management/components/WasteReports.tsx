@@ -3,6 +3,7 @@
  */
 
 import { useState } from "react";
+import { supabase } from "@/integrations/supabase/client";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -111,25 +112,37 @@ export function WasteReports() {
   const handleGenerateReport = async () => {
     setIsGenerating(true);
     
-    // Simulate report generation
-    await new Promise(resolve => setTimeout(resolve, 2000));
-    
-    const template = reportTemplates.find(t => t.id === selectedTemplate);
-    const newReport: Report = {
-      id: Date.now().toString(),
-      name: `${template?.name} - ${selectedPeriod}`,
-      type: template?.name || "",
-      vessel: selectedVessel,
-      period: selectedPeriod,
-      generatedAt: new Date().toISOString().split("T")[0],
-      status: "draft",
-      size: "1.5 MB",
-    };
-    
-    setReports([newReport, ...reports]);
-    setIsGenerating(false);
-    setIsDialogOpen(false);
-    toast.success("Relatório gerado com sucesso!");
+    try {
+      const template = reportTemplates.find(t => t.id === selectedTemplate);
+      
+      const { error } = await supabase.from("ai_generated_documents").insert({
+        title: `${template?.name} - ${selectedPeriod}`,
+        document_type: "waste_report",
+        status: "draft",
+        metadata: { vessel: selectedVessel, period: selectedPeriod, template: selectedTemplate }
+      });
+      
+      if (error) throw error;
+      
+      const newReport: Report = {
+        id: crypto.randomUUID(),
+        name: `${template?.name} - ${selectedPeriod}`,
+        type: template?.name || "",
+        vessel: selectedVessel,
+        period: selectedPeriod,
+        generatedAt: new Date().toISOString().split("T")[0],
+        status: "draft",
+        size: "1.5 MB",
+      };
+      
+      setReports([newReport, ...reports]);
+      setIsDialogOpen(false);
+      toast.success("Relatório gerado com sucesso!");
+    } catch {
+      toast.error("Erro ao gerar relatório");
+    } finally {
+      setIsGenerating(false);
+    }
   };
 
   const handleDownload = (report: Report) => {
