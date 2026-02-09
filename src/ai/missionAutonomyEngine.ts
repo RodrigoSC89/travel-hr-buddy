@@ -67,8 +67,7 @@ class MissionAutonomyEngine {
     }
 
     try {
-      const { error } = await supabase
-        .from("autonomy_actions" as any)
+      const { error } = await (supabase.from as Function)("autonomy_actions")
         .select("id")
         .limit(1);
 
@@ -276,8 +275,7 @@ class MissionAutonomyEngine {
         return action;
       }
 
-      const { data, error } = await supabase
-        .from("autonomy_actions" as any)
+      const { data, error } = await (supabase.from as Function)("autonomy_actions")
         .insert({
           action_type,
           decision_level,
@@ -292,18 +290,18 @@ class MissionAutonomyEngine {
 
       if (error) throw error;
 
-      const record = data as any;
+      const record = data as Record<string, unknown>;
       const action: AutonomyAction = {
-        id: record.id,
-        action_type: record.action_type,
-        decision_level: record.decision_level,
-        status: record.status,
-        context: record.context,
-        reasoning: record.reasoning,
-        confidence_score: record.confidence_score,
-        risk_score: record.risk_score,
-        created_at: new Date(record.created_at),
-        updated_at: new Date(record.updated_at),
+        id: String(record.id),
+        action_type: String(record.action_type),
+        decision_level: record.decision_level as DecisionLevel,
+        status: record.status as ActionStatus,
+        context: record.context as Record<string, unknown>,
+        reasoning: String(record.reasoning),
+        confidence_score: Number(record.confidence_score),
+        risk_score: Number(record.risk_score),
+        created_at: new Date(String(record.created_at)),
+        updated_at: new Date(String(record.updated_at)),
       };
 
       logger.info("[MissionAutonomy] Action created", { actionId: action.id });
@@ -514,8 +512,7 @@ class MissionAutonomyEngine {
         return null;
       }
 
-      const { data, error } = await supabase
-        .from("autonomy_actions" as any)
+      const { data, error } = await (supabase.from as Function)("autonomy_actions")
         .select("*")
         .eq("id", actionId)
         .single();
@@ -523,21 +520,21 @@ class MissionAutonomyEngine {
       if (error) throw error;
       if (!data) return null;
 
-      const record = data as any;
+      const record = data as Record<string, unknown>;
       return {
-        id: record.id,
-        action_type: record.action_type,
-        decision_level: record.decision_level,
-        status: record.status,
-        context: record.context,
-        reasoning: record.reasoning,
-        confidence_score: record.confidence_score,
-        risk_score: record.risk_score,
-        approved_by: record.approved_by,
-        executed_at: record.executed_at ? new Date(record.executed_at) : undefined,
-        result: record.result,
-        created_at: new Date(record.created_at),
-        updated_at: new Date(record.updated_at),
+        id: String(record.id),
+        action_type: String(record.action_type),
+        decision_level: record.decision_level as DecisionLevel,
+        status: record.status as ActionStatus,
+        context: record.context as Record<string, unknown>,
+        reasoning: String(record.reasoning),
+        confidence_score: Number(record.confidence_score),
+        risk_score: Number(record.risk_score),
+        approved_by: record.approved_by as string | undefined,
+        executed_at: record.executed_at ? new Date(String(record.executed_at)) : undefined,
+        result: record.result as Record<string, unknown> | undefined,
+        created_at: new Date(String(record.created_at)),
+        updated_at: new Date(String(record.updated_at)),
       };
     } catch (error) {
       logger.warn("[MissionAutonomy] Failed to get action", { error });
@@ -561,8 +558,7 @@ class MissionAutonomyEngine {
         return;
       }
 
-      const { error } = await supabase
-        .from("autonomy_actions" as any)
+      const { error } = await (supabase.from as Function)("autonomy_actions")
         .update({
           status: action.status,
           approved_by: action.approved_by,
@@ -632,8 +628,7 @@ class MissionAutonomyEngine {
         return this.getMockAuditLogs();
       }
 
-      const { data, error } = await supabase
-        .from("autonomy_actions" as any)
+      const { data, error } = await (supabase.from as Function)("autonomy_actions")
         .select("*")
         .order("created_at", { ascending: false })
         .limit(limit);
@@ -643,21 +638,21 @@ class MissionAutonomyEngine {
         return this.getMockAuditLogs();
       }
 
-      const results = (data as any[] || []);
-      return results.map((d: any) => ({
-        id: d.id,
-        action_type: d.action_type,
-        decision_level: d.decision_level,
-        status: d.status,
-        context: d.context,
-        reasoning: d.reasoning,
-        confidence_score: d.confidence_score,
-        risk_score: d.risk_score,
-        approved_by: d.approved_by,
-        executed_at: d.executed_at ? new Date(d.executed_at) : undefined,
-        result: d.result,
-        created_at: new Date(d.created_at),
-        updated_at: new Date(d.updated_at),
+      const results = (data as Record<string, unknown>[] || []);
+      return results.map((d) => ({
+        id: String(d.id),
+        action_type: String(d.action_type),
+        decision_level: d.decision_level as DecisionLevel,
+        status: d.status as ActionStatus,
+        context: d.context as Record<string, unknown>,
+        reasoning: String(d.reasoning),
+        confidence_score: Number(d.confidence_score),
+        risk_score: Number(d.risk_score),
+        approved_by: d.approved_by as string | undefined,
+        executed_at: d.executed_at ? new Date(String(d.executed_at)) : undefined,
+        result: d.result as Record<string, unknown> | undefined,
+        created_at: new Date(String(d.created_at)),
+        updated_at: new Date(String(d.updated_at)),
       }));
     } catch (error) {
       logger.warn("[MissionAutonomy] Audit logs unavailable, using mock", { error });

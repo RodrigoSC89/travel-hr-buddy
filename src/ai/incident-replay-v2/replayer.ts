@@ -101,7 +101,7 @@ export class AIIncidentReplayerV2 {
 
       // BridgeLink event notification
       try {
-        (BridgeLink as any).emit("incident-replay-v2:reconstructed", "IncidentReplayerV2", {
+        (BridgeLink as unknown as { emit: (type: string, source: string, data: Record<string, unknown>) => void }).emit("incident-replay-v2:reconstructed", "IncidentReplayerV2", {
           incidentId: config.incidentId,
           replayId: this.replay.id,
           timestamp: Date.now(),
@@ -723,7 +723,7 @@ Respond only with valid JSON.`,
     
     // BridgeLink cleanup notification
     try {
-      (BridgeLink as any).emit("incident-replay-v2:cleanup", "IncidentReplayerV2", {
+      (BridgeLink as unknown as { emit: (type: string, source: string, data: Record<string, unknown>) => void }).emit("incident-replay-v2:cleanup", "IncidentReplayerV2", {
         incidentId: this.incidentId,
         timestamp: Date.now(),
       });

@@ -190,9 +190,8 @@ class EdgeAICore {
           from_cache: result.fromCache,
         },
       };
-      await supabase
-        .from("system_observations")
-        .insert(insertData as any);
+      await (supabase.from as Function)("system_observations")
+        .insert(insertData);
     } catch (error) {
       logger.error("[EdgeAI] Failed to log inference:", error);
     }

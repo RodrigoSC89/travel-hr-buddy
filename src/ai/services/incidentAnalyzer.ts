@@ -204,9 +204,9 @@ export const storeIncidentAnalysis = async (
     
     const { error } = await supabase.from('ai_memory').insert([{
       memory_type: 'incident_analysis',
-      content: memoryContent,
+      content: memoryContent as unknown as import("@/integrations/supabase/types").Json,
       importance: 7
-    }] as any);
+    }]);
 
     if (error) {
       logger.warn("Failed to store incident analysis", { error, incidentId });

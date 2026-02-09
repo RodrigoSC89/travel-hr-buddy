@@ -79,15 +79,17 @@ export async function calculateTrustScore(input: TrustInput): Promise<TrustScore
       historicalPerformance = Math.max(0, Math.min(100, 50 + historicalSum / historicalEvents.length * 2));
 
       // Compliance record (compliance-related events)
-      const complianceEvents = historicalEvents.filter(e => 
-        (e.details as any)?.compliance_status === "compliant" || e.event_type === "audit_passed"
-      );
+      const complianceEvents = historicalEvents.filter(e => {
+        const details = e.details as Record<string, unknown> | null;
+        return details?.compliance_status === "compliant" || e.event_type === "audit_passed";
+      });
       complianceRecord = Math.round((complianceEvents.length / historicalEvents.length) * 100);
 
       // Incident history (incident-related events)
-      const incidentEvents = historicalEvents.filter(e => 
-        e.event_type === "breach_detected" || (e.details as any)?.incident_created
-      );
+      const incidentEvents = historicalEvents.filter(e => {
+        const details = e.details as Record<string, unknown> | null;
+        return e.event_type === "breach_detected" || details?.incident_created;
+      });
       const resolvedIncidents = historicalEvents.filter(e => 
         e.event_type === "incident_resolved"
       );

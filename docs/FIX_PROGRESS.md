@@ -30,7 +30,8 @@
 - ✅ Batch 19: useCoordination, usePeopleHubData, useOKRsData, useNOCMonitoringData, useVoiceNLU
 - ✅ Batch 20: module-integration.ts (as any → as Function)
 - ✅ Batch 21: ai-feedback-service, integrations.service, mission-control.service, voice.service, messageService, risk-operations-engine
-- 🔄 Restantes: ~30 arquivos (lib/, ai/, modules/, components/)
+- ✅ Batch 22: missionAutonomyEngine, edgeAICore, predictiveEngine, auto-reconfig, calculateTrustScore, incident-replay-v2, metrics-summarizer, incidentAnalyzer, intentEngine
+- 🔄 Restantes: ~20 arquivos (lib/, services/, components/)
 
 ### P0-02: setTimeout fake → 0
 - ✅ advanced-integrations-hub: setTimeout → Supabase health check real

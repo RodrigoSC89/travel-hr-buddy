@@ -29,9 +29,9 @@ export interface PredictiveMetrics {
 }
 
 export interface TrainingData {
-  watchdogLogs: any[];
-  usageStats: any[];
-  incidentPatterns: any[];
+  watchdogLogs: Record<string, unknown>[];
+  usageStats: Record<string, unknown>[];
+  incidentPatterns: Record<string, unknown>[];
 }
 
 class PredictiveEngine {
@@ -96,49 +96,49 @@ class PredictiveEngine {
     }
   }
 
-  private analyzePatterns(data: TrainingData): Record<string, any> {
-    const patterns: Record<string, any> = {
+  private analyzePatterns(data: TrainingData): Record<string, unknown> {
+    const patterns: Record<string, Record<string, unknown>> = {
       errorFrequency: {},
       moduleHealth: {},
       timePatterns: {},
     };
 
-    data.watchdogLogs.forEach((log: any) => {
-      const moduleName = log.module_name || "unknown";
+    data.watchdogLogs.forEach((log) => {
+      const moduleName = (log.module_name as string) || "unknown";
       if (!patterns.errorFrequency[moduleName]) {
         patterns.errorFrequency[moduleName] = 0;
       }
-      patterns.errorFrequency[moduleName]++;
+      (patterns.errorFrequency[moduleName] as number)++;
     });
 
-    data.incidentPatterns.forEach((incident: any) => {
-      const moduleName = incident.module || "unknown";
+    data.incidentPatterns.forEach((incident) => {
+      const moduleName = (incident.module as string) || "unknown";
       if (!patterns.moduleHealth[moduleName]) {
-        patterns.moduleHealth[moduleName] = {
+        (patterns.moduleHealth as Record<string, Record<string, unknown>>)[moduleName] = {
           incidents: 0,
           avgResolutionTime: 0,
           severity: [],
         };
       }
-      patterns.moduleHealth[moduleName].incidents++;
-      patterns.moduleHealth[moduleName].severity.push(incident.severity);
+      const mod = (patterns.moduleHealth as Record<string, Record<string, unknown>>)[moduleName];
+      (mod.incidents as number)++;
+      (mod.severity as unknown[]).push(incident.severity);
     });
 
     return patterns;
   }
 
-  private async updateModelParameters(patterns: Record<string, any>): Promise<void> {
+  private async updateModelParameters(patterns: Record<string, unknown>): Promise<void> {
     try {
       // Store model config using ai_configurations table
-      await supabase
-        .from("ai_configurations")
+      await (supabase.from as Function)("ai_configurations")
         .upsert({
           config_key: "predictive_engine_params",
           config_value: {
             model_name: "predictive_engine",
             version: this.modelVersion,
             parameters: patterns,
-          } as any,
+          },
           description: "Predictive engine model parameters",
           updated_at: new Date().toISOString(),
         });
@@ -211,13 +211,13 @@ class PredictiveEngine {
 
       const totalIncidents = incidents?.length || 0;
       const statsArr = usageStats || [];
-      const avgResponseTime = statsArr.reduce((sum: number, stat: any) => sum + (stat.response_time || 0), 0) / Math.max(statsArr.length, 1);
+      const avgResponseTime = statsArr.reduce((sum: number, stat) => sum + ((stat as Record<string, unknown>).response_time as number || 0), 0) / Math.max(statsArr.length, 1);
       const errorRate = (errorCount || 0) / Math.max(statsArr.length, 1);
 
       let usagePattern: "stable" | "increasing" | "decreasing" | "volatile" = "stable";
       if (statsArr.length > 5) {
-        const recentAvg = statsArr.slice(0, 5).reduce((sum: number, s: any) => sum + (s.request_count || 0), 0) / 5;
-        const olderAvg = statsArr.slice(5).reduce((sum: number, s: any) => sum + (s.request_count || 0), 0) / Math.max(statsArr.length - 5, 1);
+        const recentAvg = statsArr.slice(0, 5).reduce((sum: number, s) => sum + ((s as Record<string, unknown>).request_count as number || 0), 0) / 5;
+        const olderAvg = statsArr.slice(5).reduce((sum: number, s) => sum + ((s as Record<string, unknown>).request_count as number || 0), 0) / Math.max(statsArr.length - 5, 1);
         const change = (recentAvg - olderAvg) / Math.max(olderAvg, 1);
 
         if (Math.abs(change) > 0.5) usagePattern = "volatile";
@@ -341,7 +341,7 @@ class PredictiveEngine {
     }
   }
 
-  async getRecentPredictions(limit = 50): Promise<any[]> {
+  async getRecentPredictions(limit = 50): Promise<Record<string, unknown>[]> {
     try {
       const { data, error } = await supabase
         .from("ai_insights")
