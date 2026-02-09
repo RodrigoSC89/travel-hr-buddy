@@ -51,32 +51,32 @@ async function fetchSuppliers(): Promise<Supplier[]> {
     return getDefaultSuppliers();
   }
 
-  return data.map((s: any) => ({
+  return data.map((s) => ({
     id: s.id,
-    name: s.name || s.company_name || "Fornecedor",
-    cnpj: s.cnpj || s.tax_id || "",
-    category: s.categories || s.category || ["Geral"],
-    status: mapSupplierStatus(s.status),
-    rating: s.rating || s.score || 4.0,
-    deliveryRate: s.delivery_rate || s.on_time_delivery || 90,
-    avgLeadTime: s.avg_lead_time || s.lead_time_days || 7,
+    name: s.company_name || "Fornecedor",
+    cnpj: "",
+    category: s.category || ["Geral"],
+    status: mapSupplierStatus(s.is_active ? "active" : "inactive"),
+    rating: s.rating || 4.0,
+    deliveryRate: 90,
+    avgLeadTime: s.lead_time_days || 7,
     totalOrders: s.total_orders || 0,
-    totalValue: s.total_value || s.total_spent || 0,
+    totalValue: s.total_value || 0,
     contact: {
-      name: s.contact_name || s.contact_person || "",
-      email: s.contact_email || s.email || "",
-      phone: s.contact_phone || s.phone || ""
+      name: s.contact_name || "",
+      email: s.contact_email || "",
+      phone: s.contact_phone || ""
     },
     address: {
       city: s.city || "",
-      state: s.state || "",
+      state: "",
       country: s.country || "Brasil"
     },
     paymentTerms: s.payment_terms || "30 dias",
     createdAt: s.created_at || new Date().toISOString(),
-    lastOrderDate: s.last_order_date || s.updated_at || "",
-    qualityScore: s.quality_score || 85,
-    priceCompetitiveness: s.price_competitiveness || s.price_score || 80
+    lastOrderDate: s.updated_at || "",
+    qualityScore: 85,
+    priceCompetitiveness: 80
   }));
 }
 

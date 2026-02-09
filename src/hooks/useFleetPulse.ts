@@ -57,10 +57,10 @@ export function useFleetPulse() {
         .neq("status", "completed");
 
       // Map vessels with enriched data
-      return (vessels || []).map((v: any) => {
-        const health = (healthScores || []).find((h: any) => h.vessel_id === v.id);
-        const vesselCrew = (crewMembers || []).filter((c: any) => c.vessel_id === v.id && c.status === "active");
-        const vesselTasks = (maintenanceTasks || []).filter((t: any) => t.vessel_id === v.id);
+      return (vessels || []).map((v): FleetPulseVessel => {
+        const health = (healthScores || []).find((h) => h.vessel_id === v.id);
+        const vesselCrew = (crewMembers || []).filter((c) => c.vessel_id === v.id && c.status === "active");
+        const vesselTasks = (maintenanceTasks || []).filter((t) => t.vessel_id === v.id);
 
         const maintenanceScore = health?.maintenance_score ?? (vesselTasks.length === 0 ? 95 : Math.max(50, 95 - vesselTasks.length * 5));
         const complianceScore = health?.compliance_score ?? 90;
@@ -70,7 +70,7 @@ export function useFleetPulse() {
 
         const riskLevel = overall >= 85 ? "low" : overall >= 70 ? "moderate" : overall >= 50 ? "high" : "critical";
 
-        const alerts: any[] = [];
+        const alerts: Array<{ type: string; message: string; severity: string }> = [];
         if (maintenanceScore < 70) alerts.push({ type: "maintenance", message: `${vesselTasks.length} tarefas pendentes`, severity: "warning" });
         if (complianceScore < 75) alerts.push({ type: "compliance", message: "Compliance abaixo do limite", severity: "error" });
         if (crewScore < 70) alerts.push({ type: "crew", message: "Score de tripulação baixo", severity: "warning" });
@@ -78,9 +78,9 @@ export function useFleetPulse() {
         return {
           id: v.id,
           name: v.name,
-          imo_number: v.imo_number,
+          imo_number: v.imo_number ?? undefined,
           vessel_type: v.vessel_type,
-          flag: v.flag,
+          flag: v.flag ?? undefined,
           status: v.status || "unknown",
           healthScore: overall,
           maintenanceScore,

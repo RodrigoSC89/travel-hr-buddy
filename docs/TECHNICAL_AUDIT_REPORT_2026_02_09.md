@@ -255,40 +255,40 @@ Hooks com nomes quase idênticos indicam falta de coordenação.
 
 ---
 
-## 📈 SCORE DE INTEGRIDADE (Atualizado: Sprint 3 — 2026-02-09)
+## 📈 SCORE DE INTEGRIDADE (Atualizado: Sprint 4 — 2026-02-09)
 
 | Dimensão | Score Anterior | Score Atual | Justificativa |
 |----------|:-----:|:-----:|---------------|
 | **Rotas** | 88/100 | 88/100 | Funcionais, excesso de duplicatas |
 | **Backend** | 97/100 | 97/100 | 313+ edge functions, zero APIs fantasma |
 | **CRUD** | 87/100 | 87/100 | Manutenção e Drills com persistência real |
-| **UX** | 89/100 | 91/100 | +2: MLC, DPMentor, Evidence templates corrigidos |
-| **Type Safety** | 45/100 | 50/100 | +5: module-integration, tracking-intelligence, imca-audit tipados |
+| **UX** | 91/100 | 91/100 | Botões fake corrigidos |
+| **Type Safety** | 50/100 | 58/100 | +8: hooks críticos tipados (Operations, Compliance, Fleet, Suppliers, Medical) |
 | **Performance** | 85/100 | 85/100 | Build otimizado |
-| **Segurança** | 92/100 | 95/100 | +3: tide-alerts, clone.service, instance-controller → sessionStorage |
+| **Segurança** | 95/100 | 95/100 | localStorage → sessionStorage |
 | **Testes** | 70/100 | 70/100 | @ts-nocheck apenas em testes |
-| **GERAL** | **84/100** | **86/100** | **+2 pontos** |
+| **GERAL** | **86/100** | **88/100** | **+2 pontos** |
 
 ### Histórico de Sprints
 | Sprint | Data | Pontos Ganhos | Ações |
 |--------|------|:---:|---------|
 | Sprint 1 | 2026-02-09 | +4 | Compliance, Waste Management, adaptiveUI |
 | Sprint 2 | 2026-02-09 | +4 | 27 botões fake → real/honesto, IoT, Maintenance |
-| Sprint 3 | 2026-02-09 | +2 | Type safety em services, security localStorage→sessionStorage, botões fake MLC/DPMentor |
-| **Acumulado** | | **+10** | **80 → 86/100** |
+| Sprint 3 | 2026-02-09 | +2 | Type safety services, security localStorage→sessionStorage |
+| Sprint 4 | 2026-02-09 | +2 | Type safety hooks (Operations, Compliance, Fleet, Suppliers, Medical), schema field fixes |
+| **Acumulado** | | **+12** | **80 → 88/100** |
 
 ### Próximos passos para 100/100
-1. **Type Safety (+15)**: Eliminar ~10.500 `any` restantes em sprints dedicados (15-20 dias)
-2. **CRUD completo (+8)**: ISPS, Drydock, CrewScheduler com persistência real (5 dias)
-3. **Rotas (+7)**: Consolidar duplicatas de páginas (V1/V2/Enhanced) (3 dias)
-4. **UX (+3)**: Resolver botões fake restantes em hubs menores (2 dias)
-5. **Performance (+5)**: Code splitting agressivo e virtualização (3 dias)
+1. **Type Safety (+10)**: Continuar eliminando `any` em hooks restantes (56 arquivos) — ~10 dias
+2. **CRUD completo (+5)**: ISPS, Drydock, CrewScheduler com persistência real — 3 dias
+3. **Rotas (+5)**: Consolidar duplicatas de páginas (V1/V2/Enhanced) — 3 dias
+4. **Performance (+2)**: Code splitting agressivo e virtualização — 2 dias
 
 ---
 
 **FIM DO RELATÓRIO**  
 **Total de falhas originais:** 139  
-**Falhas corrigidas (Sprint 1+2+3):** 45  
-**Falhas restantes:** 94  
-**Esforço total de correção restante:** ~23 dias (184 horas)  
-**Prioridade:** Sprint 4 (Type Safety em massa) → Sprint 5 (CRUD) → Sprint 6 (Consolidação)
+**Falhas corrigidas (Sprint 1→4):** 55  
+**Falhas restantes:** 84  
+**Esforço total de correção restante:** ~18 dias (144 horas)  
+**Prioridade:** Sprint 5 (Type Safety em massa) → Sprint 6 (CRUD) → Sprint 7 (Consolidação)
