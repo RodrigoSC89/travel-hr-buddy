@@ -15,7 +15,7 @@ export interface WorkflowStep {
   duration?: number;
   order: number;
   dependencies?: string[];
-  metadata?: Record<string, any>;
+  metadata?: Record<string, unknown>;
 }
 
 export interface Workflow {
@@ -89,7 +89,8 @@ export const useWorkflows = () => {
       }
 
       // Map database workflows to our interface
-      const mappedWorkflows: Workflow[] = (dbWorkflows || []).map((w: any) => ({
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const mappedWorkflows: Workflow[] = (dbWorkflows || []).map((w: Record<string, any>) => ({
         id: w.id,
         name: w.name,
         description: w.description,

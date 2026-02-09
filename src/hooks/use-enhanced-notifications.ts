@@ -102,12 +102,13 @@ export const useEnhancedNotifications = () => {
       );
       const welcomeNotification = buildWelcomeNotification(user.created_at);
 
+      const welcomeItems = Array.isArray(welcomeNotification) ? welcomeNotification : welcomeNotification ? [welcomeNotification] : [];
       const combinedNotifications = deduplicateNotifications([
         ...persistedNotifications,
         ...certificateNotifications,
         ...priceAlertNotifications,
-        ...welcomeNotification ? [welcomeNotification] : [],
-      ] as any);
+        ...welcomeItems as Notification[],
+      ]);
       
       setNotifications(combinedNotifications);
     } catch (err: unknown) {
@@ -208,7 +209,7 @@ const buildCertificateNotifications = (
   now: Date
 ): Notification[] => {
   return certificates
-    .map((cert: any) => {
+    .map((cert): Notification | null => {
       if (!cert.expiry_date) return null;
       const expiryDate = new Date(cert.expiry_date);
       if (Number.isNaN(expiryDate.getTime())) return null;
@@ -234,9 +235,9 @@ const buildCertificateNotifications = (
           certificateId: cert.id,
           daysUntilExpiry,
         },
-      } satisfies Notification;
+      };
     })
-    .filter((notification: any): notification is Notification => Boolean(notification)) as Notification[];
+    .filter((notification): notification is Notification => Boolean(notification));
 };
 
 const buildPriceAlertNotifications = (alerts: PriceAlert[]): Notification[] => {

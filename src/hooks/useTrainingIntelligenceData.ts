@@ -60,9 +60,12 @@ export function useTrainingIntelligenceData() {
       const crew = crewRes.data || [];
 
       // Map courses from training_modules
-      const courses: Course[] = modules.map((m: any) => {
-        const relatedRecords = records.filter((r: any) => r.training_name === m.title || r.training_type === m.category);
-        const completedCount = relatedRecords.filter((r: any) => r.status === "completed" || r.passed).length;
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any -- complex Supabase join mapping
+      type ModuleRow = Record<string, any>;
+      type RecordRow = Record<string, any>;
+      const courses: Course[] = (modules as ModuleRow[]).map((m) => {
+        const relatedRecords = (records as RecordRow[]).filter((r) => r.training_name === m.title || r.training_type === m.category);
+        const completedCount = relatedRecords.filter((r) => r.status === "completed" || r.passed).length;
         return {
           id: m.id,
           title: m.title || "Curso",
@@ -82,7 +85,7 @@ export function useTrainingIntelligenceData() {
       const now = new Date();
       const in30Days = new Date(now.getTime() + 30 * 24 * 60 * 60 * 1000);
       
-      certs.forEach((c: any) => {
+      (certs as RecordRow[]).forEach((c) => {
         const type = c.certificate_type || c.type || "General";
         const name = c.certificate_name || c.name || type;
         const key = `${type}|${name}`;
@@ -102,11 +105,11 @@ export function useTrainingIntelligenceData() {
       });
 
       // Crew training progress
-      const crewProgress: CrewProgress[] = crew.slice(0, 10).map((c: any) => {
-        const memberRecords = records.filter((r: any) => r.crew_member_id === c.id);
-        const completedCourses = memberRecords.filter((r: any) => r.status === "completed" || r.passed).length;
+      const crewProgress: CrewProgress[] = (crew as RecordRow[]).slice(0, 10).map((c) => {
+        const memberRecords = (records as RecordRow[]).filter((r) => r.crew_member_id === c.id);
+        const completedCourses = memberRecords.filter((r) => r.status === "completed" || r.passed).length;
         const totalCourses = Math.max(memberRecords.length, 1);
-        const pending = memberRecords.filter((r: any) => r.status === "in_progress" || r.status === "pending").length;
+        const pending = memberRecords.filter((r) => r.status === "in_progress" || r.status === "pending").length;
         return {
           name: c.full_name || "Tripulante",
           role: c.rank || "Crew",
@@ -117,15 +120,15 @@ export function useTrainingIntelligenceData() {
       });
 
       // LMS metrics
-      const completedRecords = records.filter((r: any) => r.status === "completed" || r.passed);
-      const totalHours = records.reduce((sum: number, r: any) => sum + (Number(r.duration_hours) || 0), 0);
+      const completedRecords = (records as RecordRow[]).filter((r) => r.status === "completed" || r.passed);
+      const totalHours = (records as RecordRow[]).reduce((sum: number, r) => sum + (Number(r.duration_hours) || 0), 0);
       const avgScore = completedRecords.length > 0
-        ? completedRecords.reduce((sum: number, r: any) => sum + (Number(r.score) || 80), 0) / completedRecords.length
+        ? completedRecords.reduce((sum: number, r) => sum + (Number(r.score) || 80), 0) / completedRecords.length
         : 82;
 
       const lmsMetrics: LMSMetrics = {
         totalCourses: courses.length || 45,
-        activeLearners: new Set(records.map((r: any) => r.crew_member_id)).size || crew.length,
+        activeLearners: new Set((records as RecordRow[]).map((r) => r.crew_member_id)).size || crew.length,
         completionRate: records.length > 0 ? Math.round((completedRecords.length / records.length) * 100) : 87,
         avgScore: Math.round(avgScore),
         certificationsIssued: certs.length || 0,
