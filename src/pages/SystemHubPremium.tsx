@@ -294,10 +294,24 @@ export default function SystemHubPremium() {
   const { metrics } = useSystemHubData();
 
   const handleRefresh = async () => {
-    await new Promise(resolve => setTimeout(resolve, 500));
+    window.location.reload();
   };
 
   const handleExport = () => {
+    const rows = [
+      "Métrica;Valor",
+      `Health Score;${metrics.systemHealth.toFixed(0)}%`,
+      `Integrações;${metrics.totalIntegrations}`,
+      `Usuários;${metrics.totalUsers}`,
+      `Sessões Ativas;${metrics.activeSessions}`,
+    ];
+    const blob = new Blob(['\uFEFF' + rows.join('\n')], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `system-hub-export-${new Date().toISOString().slice(0,10)}.csv`;
+    a.click();
+    URL.revokeObjectURL(url);
     toast.success("Configurações exportadas");
   };
 

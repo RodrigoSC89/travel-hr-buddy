@@ -17,11 +17,13 @@ import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
+import { useNavigate } from "react-router-dom";
 
 // Finance Dashboard
 function FinanceDashboard() {
   const [transactions, setTransactions] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
+  const navigate = useNavigate();
 
   useEffect(() => {
     async function loadTransactions() {
@@ -44,6 +46,38 @@ function FinanceDashboard() {
   const totalExpenses = transactions
     .filter(t => t.transaction_type === "expense")
     .reduce((acc, t) => acc + (t.amount || 0), 0);
+
+  const handleNewTransaction = async () => {
+    const { error } = await (supabase.from as Function)("financial_transactions").insert([{
+      description: "Nova Transação",
+      amount: 0,
+      transaction_type: "expense",
+      category: "Geral",
+      transaction_date: new Date().toISOString().slice(0, 10),
+      status: "pending",
+    }]);
+    if (error) {
+      toast.error("Erro ao criar transação");
+    } else {
+      toast.success("Transação criada - edite os detalhes");
+      const { data } = await supabase.from("financial_transactions").select("*").order("transaction_date", { ascending: false }).limit(20);
+      if (data) setTransactions(data);
+    }
+  };
+
+  const handleExportCSV = () => {
+    const rows = ["Descrição;Categoria;Tipo;Valor;Data", ...transactions.map(t =>
+      `${t.description || "N/A"};${t.category || "Geral"};${t.transaction_type};${t.amount};${t.transaction_date}`
+    )];
+    const blob = new Blob(['\uFEFF' + rows.join('\n')], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `relatorio-financeiro-${new Date().toISOString().slice(0,10)}.csv`;
+    a.click();
+    URL.revokeObjectURL(url);
+    toast.success("Relatório financeiro exportado");
+  };
 
   return (
     <div className="space-y-6">
@@ -96,7 +130,9 @@ function FinanceDashboard() {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-xs text-muted-foreground">Pendentes</p>
-                <p className="text-2xl font-bold text-warning">12</p>
+                <p className="text-2xl font-bold text-warning">
+                  {transactions.filter(t => t.status === "pending").length}
+                </p>
               </div>
               <Clock className="h-8 w-8 text-warning opacity-60" />
             </div>
@@ -126,19 +162,19 @@ function FinanceDashboard() {
             </CardTitle>
           </CardHeader>
           <CardContent className="space-y-3">
-            <Button className="w-full justify-start gap-2" variant="outline" onClick={() => toast.success("Nova transação")}>
+            <Button className="w-full justify-start gap-2" variant="outline" onClick={handleNewTransaction}>
               <Receipt className="h-4 w-4" />
               Registrar Transação
             </Button>
-            <Button className="w-full justify-start gap-2" variant="outline" onClick={() => toast.success("Novo contrato")}>
+            <Button className="w-full justify-start gap-2" variant="outline" onClick={() => navigate("/vessel-contracts")}>
               <FileText className="h-4 w-4" />
               Novo Contrato
             </Button>
-            <Button className="w-full justify-start gap-2" variant="outline" onClick={() => toast.success("Relatório gerado")}>
+            <Button className="w-full justify-start gap-2" variant="outline" onClick={handleExportCSV}>
               <BarChart3 className="h-4 w-4" />
               Relatório Financeiro
             </Button>
-            <Button className="w-full justify-start gap-2" variant="outline" onClick={() => toast.success("Análise IA")}>
+            <Button className="w-full justify-start gap-2" variant="outline" onClick={() => navigate("/finance-command-center")}>
               <Bot className="h-4 w-4" />
               Análise de Custos com IA
             </Button>
@@ -197,7 +233,7 @@ function FinanceDashboard() {
             <div className="text-center py-8 text-muted-foreground">
               <Receipt className="h-12 w-12 mx-auto mb-4 opacity-50" />
               <p>Nenhuma transação encontrada</p>
-              <Button className="mt-4" onClick={() => toast.success("Nova transação")}>
+              <Button className="mt-4" onClick={handleNewTransaction}>
                 <Plus className="h-4 w-4 mr-2" />
                 Primeira Transação
               </Button>
@@ -279,6 +315,13 @@ export default function FinancePremium() {
   };
 
   const handleExport = () => {
+    const blob = new Blob(['\uFEFF' + "Módulo;Status\nFinance Dashboard;Ativo\nTransações;Ativo\nContratos;Ativo"], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `finance-export-${new Date().toISOString().slice(0,10)}.csv`;
+    a.click();
+    URL.revokeObjectURL(url);
     toast.success("Relatório financeiro exportado");
   };
 
