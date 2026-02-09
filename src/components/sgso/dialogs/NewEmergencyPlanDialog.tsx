@@ -1,6 +1,6 @@
 /**
  * New Emergency Plan Dialog
- * Form to create a new emergency response plan
+ * Form to create a new emergency response plan with Zod validation
  */
 
 import React, { useState } from "react";
@@ -25,11 +25,23 @@ import {
 } from "@/components/ui/select";
 import { toast } from "sonner";
 import { AlertTriangle, Users, Phone, FileText, Save } from "lucide-react";
+import { z } from "zod";
+
+const emergencyPlanSchema = z.object({
+  title: z.string().trim().min(3, "Título deve ter ao menos 3 caracteres").max(200, "Título muito longo"),
+  type: z.string().min(1, "Tipo de emergência é obrigatório"),
+  responsible: z.string().trim().min(2, "Nome do responsável deve ter ao menos 2 caracteres").max(100, "Nome muito longo"),
+  alternateResponsible: z.string().max(100, "Nome muito longo").optional().or(z.literal('')),
+  description: z.string().max(2000, "Descrição muito longa").optional().or(z.literal('')),
+  procedures: z.string().max(5000, "Procedimentos muito longos").optional().or(z.literal('')),
+  equipmentRequired: z.string().max(2000, "Lista muito longa").optional().or(z.literal('')),
+  contacts: z.string().max(1000, "Contatos muito longos").optional().or(z.literal('')),
+});
 
 interface NewEmergencyPlanDialogProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
-  onPlanCreated?: (plan: any) => void;
+  onPlanCreated?: (plan: Record<string, unknown>) => void;
 }
 
 const PLAN_TYPES = [
@@ -56,6 +68,7 @@ export const NewEmergencyPlanDialog: React.FC<NewEmergencyPlanDialogProps> = ({
   onOpenChange,
   onPlanCreated,
 }) => {
+  const [errors, setErrors] = useState<Record<string, string>>({});
   const [formData, setFormData] = useState({
     title: "",
     type: "",
@@ -74,8 +87,15 @@ export const NewEmergencyPlanDialog: React.FC<NewEmergencyPlanDialogProps> = ({
   };
 
   const handleSubmit = async () => {
-    if (!formData.title || !formData.type || !formData.responsible) {
-      toast.error("Preencha todos os campos obrigatórios");
+    setErrors({});
+    const result = emergencyPlanSchema.safeParse(formData);
+    if (!result.success) {
+      const fieldErrors: Record<string, string> = {};
+      for (const err of result.error.issues) {
+        const key = String(err.path[0] ?? '');
+        if (key) fieldErrors[key] = err.message;
+      }
+      setErrors(fieldErrors);
       return;
     }
 

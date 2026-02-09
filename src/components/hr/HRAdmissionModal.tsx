@@ -1,6 +1,6 @@
 /**
  * HR Admission Modal - Create New Admission
- * Modal para criar nova admissão
+ * Modal para criar nova admissão com validação Zod
  */
 import { useState } from 'react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from '@/components/ui/dialog';
@@ -11,6 +11,17 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Loader2, Save, X, UserPlus } from 'lucide-react';
 import { useCreateHRAdmission, type CreateAdmissionInput } from '@/hooks/useHRAdmissions';
 import { logger } from '@/lib/logger';
+import { z } from 'zod';
+
+const admissionSchema = z.object({
+  candidate_name: z.string().trim().min(2, "Nome deve ter ao menos 2 caracteres").max(100, "Nome muito longo"),
+  candidate_email: z.string().trim().email("Email inválido").max(255, "Email muito longo"),
+  candidate_phone: z.string().max(20, "Telefone muito longo").optional().or(z.literal('')),
+  position: z.string().trim().min(2, "Cargo deve ter ao menos 2 caracteres").max(100, "Cargo muito longo"),
+  department: z.string().max(50).optional().or(z.literal('')),
+  proposed_salary: z.number().min(0, "Salário não pode ser negativo").optional(),
+  proposed_start_date: z.string().optional(),
+});
 
 interface HRAdmissionModalProps {
   open: boolean;
@@ -21,6 +32,7 @@ const DEPARTMENTS = ['Tecnologia', 'Operações', 'Financeiro', 'RH', 'Comercial
 
 export function HRAdmissionModal({ open, onClose }: HRAdmissionModalProps) {
   const createAdmission = useCreateHRAdmission();
+  const [errors, setErrors] = useState<Record<string, string>>({});
   
   const [formData, setFormData] = useState<CreateAdmissionInput>({
     candidate_name: '',
@@ -36,6 +48,18 @@ export function HRAdmissionModal({ open, onClose }: HRAdmissionModalProps) {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setErrors({});
+
+    const result = admissionSchema.safeParse(formData);
+    if (!result.success) {
+      const fieldErrors: Record<string, string> = {};
+      for (const err of result.error.issues) {
+        const key = String(err.path[0] ?? '');
+        if (key) fieldErrors[key] = err.message;
+      }
+      setErrors(fieldErrors);
+      return;
+    }
     
     try {
       await createAdmission.mutateAsync(formData);
@@ -79,6 +103,7 @@ export function HRAdmissionModal({ open, onClose }: HRAdmissionModalProps) {
               placeholder="Nome completo"
               required
             />
+            {errors.candidate_name && <p className="text-xs text-destructive mt-1">{errors.candidate_name}</p>}
           </div>
 
           {/* Email */}
@@ -92,6 +117,7 @@ export function HRAdmissionModal({ open, onClose }: HRAdmissionModalProps) {
               placeholder="email@candidato.com"
               required
             />
+            {errors.candidate_email && <p className="text-xs text-destructive mt-1">{errors.candidate_email}</p>}
           </div>
 
           {/* Telefone */}
@@ -115,6 +141,7 @@ export function HRAdmissionModal({ open, onClose }: HRAdmissionModalProps) {
               placeholder="Ex: Desenvolvedor Jr"
               required
             />
+            {errors.position && <p className="text-xs text-destructive mt-1">{errors.position}</p>}
           </div>
 
           {/* Departamento */}
