@@ -63,7 +63,8 @@ export function usePMSJobs(vesselId?: string) {
       const now = new Date();
       const oneWeek = new Date(now.getTime() + 7 * 24 * 60 * 60 * 1000);
 
-      return data.map((order: any) => {
+      type OrderRow = typeof data[number];
+      return data.map((order: OrderRow) => {
         const dueDate = order.due_date ? new Date(order.due_date) : new Date();
         let status: PMSJob['status'] = 'upcoming';
         
@@ -77,9 +78,8 @@ export function usePMSJobs(vesselId?: string) {
           status = 'due';
         }
 
-        const parts = Array.isArray(order.parts_required) 
-          ? order.parts_required.map((p: any) => typeof p === 'string' ? p : p?.name || 'Part')
-          : [];
+        const rawParts = Array.isArray(order.parts_required) ? order.parts_required : [];
+        const parts = rawParts.map((p: unknown) => typeof p === 'string' ? p : (p as Record<string, unknown>)?.name as string || 'Part');
 
         return {
           id: order.id,
@@ -159,8 +159,7 @@ export function useCreateMaintenanceOrder() {
 
   return useMutation({
     mutationFn: async (input: { title: string; equipment_name?: string; priority?: string; due_date?: string; vessel_id?: string; description?: string }) => {
-      const { data, error } = await supabase
-        .from('maintenance_orders')
+      const { data, error } = await (supabase.from as Function)('maintenance_orders')
         .insert({
           title: input.title,
           equipment_name: input.equipment_name,
@@ -169,7 +168,7 @@ export function useCreateMaintenanceOrder() {
           vessel_id: input.vessel_id,
           description: input.description,
           status: 'pending',
-        } as any)
+        })
         .select()
         .single();
 

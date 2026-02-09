@@ -72,16 +72,19 @@ export function useAccessLogsRealData() {
 
       if (error) throw error;
 
-      return (data || []).map(log => ({
-        id: log.id,
-        userId: log.user_id || "unknown",
-        userName: (log.details as any)?.user_name || "Usuário",
-        area: log.module_accessed || "Área Geral",
-        timestamp: new Date(log.timestamp),
-        status: mapAccessStatus(log.result),
-        method: mapAccessMethod(log.action),
-        confidence: (log.details as any)?.confidence || undefined,
-      }));
+      return (data || []).map(log => {
+        const details = log.details as Record<string, unknown> | null;
+        return {
+          id: log.id,
+          userId: log.user_id || "unknown",
+          userName: (details?.user_name as string) || "Usuário",
+          area: log.module_accessed || "Área Geral",
+          timestamp: new Date(log.timestamp),
+          status: mapAccessStatus(log.result),
+          method: mapAccessMethod(log.action),
+          confidence: (details?.confidence as number) || undefined,
+        };
+      });
     },
     staleTime: 10000,
     refetchInterval: 30000,
@@ -95,15 +98,16 @@ export function useAccessLogsRealData() {
         "postgres_changes",
         { event: "INSERT", schema: "public", table: "access_logs" },
         (payload) => {
+          const realtimeDetails = payload.new.details as Record<string, unknown> | null;
           const newLog: AccessLog = {
             id: payload.new.id,
             userId: payload.new.user_id || "unknown",
-            userName: (payload.new.details as any)?.user_name || "Usuário",
+            userName: (realtimeDetails?.user_name as string) || "Usuário",
             area: payload.new.module_accessed || "Área Geral",
             timestamp: new Date(payload.new.timestamp),
             status: mapAccessStatus(payload.new.result),
             method: mapAccessMethod(payload.new.action),
-            confidence: (payload.new.details as any)?.confidence,
+            confidence: (realtimeDetails?.confidence as number) || undefined,
           };
           setRealtimeLogs(prev => [newLog, ...prev].slice(0, 20));
         }

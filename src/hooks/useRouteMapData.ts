@@ -141,14 +141,14 @@ export function useRouteMapData() {
 
       // Add zones from alerts
       (alerts || []).forEach((alert, idx) => {
-        const metadata = alert.metadata as any;
+        const metadata = alert.metadata as Record<string, unknown> | null;
         if (metadata?.lat && metadata?.lng) {
           zones.push({
             id: alert.id,
             name: alert.title || "Alerta Ativo",
-            lat: metadata.lat,
-            lng: metadata.lng,
-            radius: metadata.radius || 50,
+            lat: metadata.lat as number,
+            lng: metadata.lng as number,
+            radius: (metadata.radius as number) || 50,
             riskLevel: mapAlertToRiskLevel(alert.severity),
             type: mapAlertType(alert.alert_type),
             description: alert.message || undefined,

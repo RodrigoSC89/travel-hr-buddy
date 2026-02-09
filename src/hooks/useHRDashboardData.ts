@@ -71,7 +71,7 @@ export function useHRDashboardData() {
         name: member.full_name,
         rank: member.rank || 'Unassigned',
         position: member.position || 'General',
-        vessel: (member.vessels as any)?.name || null,
+        vessel: (member.vessels as Record<string, unknown> | null)?.name as string || null,
         status: mapStatus(member.status),
         contract_end: member.contract_end,
         certifications_count: docCountMap.get(member.id) || 0,
