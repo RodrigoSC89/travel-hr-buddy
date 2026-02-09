@@ -276,10 +276,9 @@ class AdaptiveUI {
    * Get operational context
    */
   private getOperationalContext(): OperationalContext {
-    // This would be connected to contextMesh in real implementation
-    // For now, derive from localStorage or defaults
-    const missionType = (localStorage.getItem("current_mission_type") as MissionType) || "administrative";
-    const priority = (localStorage.getItem("current_priority") as "low" | "medium" | "high" | "critical") || "medium";
+    // Use sessionStorage for non-sensitive UI preferences (not localStorage for security)
+    const missionType = (sessionStorage.getItem("current_mission_type") as MissionType) || "administrative";
+    const priority = (sessionStorage.getItem("current_priority") as "low" | "medium" | "high" | "critical") || "medium";
     const isOffline = !navigator.onLine;
 
     return {

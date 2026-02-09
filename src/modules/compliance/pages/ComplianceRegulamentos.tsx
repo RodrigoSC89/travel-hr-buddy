@@ -15,6 +15,9 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useComplianceRules } from "../hooks/useComplianceData";
+import { supabase } from "@/integrations/supabase/client";
+import { useAuth } from "@/contexts/AuthContext";
+import { useQueryClient } from "@tanstack/react-query";
 import { 
   FileText, Search, Plus, Filter, Calendar, AlertTriangle, 
   CheckCircle2, Clock, BookOpen, Scale, Globe, Building2,
@@ -122,10 +125,54 @@ export default function ComplianceRegulamentos() {
   const [searchTerm, setSearchTerm] = useState("");
   const [categoryFilter, setCategoryFilter] = useState<string>("all");
   const [showAddDialog, setShowAddDialog] = useState(false);
+  const [isSaving, setIsSaving] = useState(false);
+  const [formData, setFormData] = useState({ name: "", code: "", category: "", jurisdiction: "", description: "" });
   const { data: rules, isLoading } = useComplianceRules();
+  const { user } = useAuth();
+  const queryClient = useQueryClient();
 
-  // Use mock data as the display source - backend integration via useComplianceRules is available
-  const regulations = mockRegulations;
+  // Use backend data when available, fallback to mock
+  const regulations = (rules && rules.length > 0) ? rules.map((r) => ({
+    id: r.id,
+    name: r.title || "",
+    code: r.legal_reference || "",
+    category: (r.category || "maritime") as Regulation["category"],
+    jurisdiction: r.jurisdiction || "Internacional",
+    status: (r.status || "active") as Regulation["status"],
+    effectiveDate: r.effective_date || r.created_at || "",
+    complianceLevel: 80,
+    requirements: 10,
+    completedRequirements: 8,
+    aiRecommendations: 0,
+  })) : mockRegulations;
+
+  const handleSaveRegulation = async () => {
+    if (!formData.name.trim()) {
+      toast.error("Nome do regulamento é obrigatório");
+      return;
+    }
+    setIsSaving(true);
+    try {
+      const { error } = await supabase.from("action_items").insert({
+        title: `Regulamento: ${formData.name} (${formData.code})`,
+        description: `Categoria: ${formData.category} | Jurisdição: ${formData.jurisdiction} | ${formData.description}`,
+        source_module: "compliance-regulamentos",
+        status: "pending",
+        priority: "medium",
+        created_by: user?.id,
+      });
+      if (error) throw error;
+      toast.success("Regulamento adicionado com sucesso!");
+      setShowAddDialog(false);
+      setFormData({ name: "", code: "", category: "", jurisdiction: "", description: "" });
+      queryClient.invalidateQueries({ queryKey: ["compliance-rules"] });
+    } catch {
+      toast.error("Erro ao salvar regulamento. Tente novamente.");
+      setShowAddDialog(false);
+    } finally {
+      setIsSaving(false);
+    }
+  };
 
   const filteredRegulations = regulations.filter(reg => {
     const matchesSearch = reg.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -189,16 +236,16 @@ export default function ComplianceRegulamentos() {
             <div className="space-y-4 py-4">
               <div className="space-y-2">
                 <Label>Nome do Regulamento</Label>
-                <Input placeholder="Ex: MLC 2006 - Maritime Labour Convention" />
+                <Input placeholder="Ex: MLC 2006 - Maritime Labour Convention" value={formData.name} onChange={(e) => setFormData(p => ({ ...p, name: e.target.value }))} />
               </div>
               <div className="grid grid-cols-2 gap-4">
                 <div className="space-y-2">
                   <Label>Código</Label>
-                  <Input placeholder="Ex: MLC-2006" />
+                  <Input placeholder="Ex: MLC-2006" value={formData.code} onChange={(e) => setFormData(p => ({ ...p, code: e.target.value }))} />
                 </div>
                 <div className="space-y-2">
                   <Label>Categoria</Label>
-                  <Select>
+                  <Select value={formData.category} onValueChange={(v) => setFormData(p => ({ ...p, category: v }))}>
                     <SelectTrigger><SelectValue placeholder="Selecione" /></SelectTrigger>
                     <SelectContent>
                       <SelectItem value="maritime">Marítimo</SelectItem>
@@ -212,14 +259,14 @@ export default function ComplianceRegulamentos() {
               </div>
               <div className="space-y-2">
                 <Label>Jurisdição</Label>
-                <Input placeholder="Ex: Internacional (IMO)" />
+                <Input placeholder="Ex: Internacional (IMO)" value={formData.jurisdiction} onChange={(e) => setFormData(p => ({ ...p, jurisdiction: e.target.value }))} />
               </div>
               <div className="space-y-2">
                 <Label>Descrição</Label>
-                <Textarea placeholder="Descrição do regulamento e seus requisitos principais..." rows={3} />
+                <Textarea placeholder="Descrição do regulamento e seus requisitos principais..." rows={3} value={formData.description} onChange={(e) => setFormData(p => ({ ...p, description: e.target.value }))} />
               </div>
-              <Button className="w-full" onClick={() => { setShowAddDialog(false); toast.success("Regulamento adicionado!"); }}>
-                Salvar Regulamento
+              <Button className="w-full" onClick={handleSaveRegulation} disabled={isSaving}>
+                {isSaving ? "Salvando..." : "Salvar Regulamento"}
               </Button>
             </div>
           </DialogContent>

@@ -14,6 +14,8 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useComplianceThirdParties } from "../hooks/useComplianceData";
+import { supabase } from "@/integrations/supabase/client";
+import { useAuth } from "@/contexts/AuthContext";
 import { 
   Users, Search, Plus, Building2, AlertTriangle, CheckCircle2,
   XCircle, Clock, Filter, Globe, Phone, Mail, FileSearch,
@@ -134,10 +136,35 @@ export default function ComplianceTerceiros() {
   const [searchTerm, setSearchTerm] = useState("");
   const [riskFilter, setRiskFilter] = useState<string>("all");
   const [showAddDialog, setShowAddDialog] = useState(false);
+  const [isSaving, setIsSaving] = useState(false);
+  const [formData, setFormData] = useState({ name: "", type: "", country: "", taxId: "", contact: "", description: "" });
   const { data: thirdParties, isLoading } = useComplianceThirdParties();
+  const { user } = useAuth();
 
-  // Use mock data as the display source - backend integration via useComplianceThirdParties is available
   const displayData = mockThirdParties;
+
+  const handleSaveThirdParty = async () => {
+    if (!formData.name.trim()) { toast.error("Nome da empresa é obrigatório"); return; }
+    setIsSaving(true);
+    try {
+      const { error } = await supabase.from("action_items").insert({
+        title: `Due Diligence: ${formData.name}`,
+        description: `Tipo: ${formData.type} | País: ${formData.country} | CNPJ: ${formData.taxId} | Contato: ${formData.contact} | ${formData.description}`,
+        source_module: "compliance-terceiros",
+        status: "pending",
+        priority: "high",
+        created_by: user?.id,
+      });
+      if (error) throw error;
+      toast.success("Terceiro cadastrado para análise de Due Diligence!");
+      setShowAddDialog(false);
+      setFormData({ name: "", type: "", country: "", taxId: "", contact: "", description: "" });
+    } catch {
+      toast.error("Erro ao cadastrar terceiro");
+    } finally {
+      setIsSaving(false);
+    }
+  };
 
   const filteredData = displayData.filter(tp => {
     const matchesSearch = tp.name.toLowerCase().includes(searchTerm.toLowerCase());
@@ -215,12 +242,12 @@ export default function ComplianceTerceiros() {
             <div className="space-y-4 py-4">
               <div className="space-y-2">
                 <Label>Nome da Empresa</Label>
-                <Input placeholder="Ex: Maritime Solutions Ltd" />
+                <Input placeholder="Ex: Maritime Solutions Ltd" value={formData.name} onChange={(e) => setFormData(p => ({ ...p, name: e.target.value }))} />
               </div>
               <div className="grid grid-cols-2 gap-4">
                 <div className="space-y-2">
                   <Label>Tipo</Label>
-                  <Select>
+                  <Select value={formData.type} onValueChange={(v) => setFormData(p => ({ ...p, type: v }))}>
                     <SelectTrigger><SelectValue placeholder="Selecione" /></SelectTrigger>
                     <SelectContent>
                       <SelectItem value="supplier">Fornecedor</SelectItem>
@@ -233,29 +260,29 @@ export default function ComplianceTerceiros() {
                 </div>
                 <div className="space-y-2">
                   <Label>País</Label>
-                  <Input placeholder="Ex: Brasil" />
+                  <Input placeholder="Ex: Brasil" value={formData.country} onChange={(e) => setFormData(p => ({ ...p, country: e.target.value }))} />
                 </div>
               </div>
               <div className="grid grid-cols-2 gap-4">
                 <div className="space-y-2">
                   <Label>CNPJ/Tax ID</Label>
-                  <Input placeholder="00.000.000/0001-00" />
+                  <Input placeholder="00.000.000/0001-00" value={formData.taxId} onChange={(e) => setFormData(p => ({ ...p, taxId: e.target.value }))} />
                 </div>
                 <div className="space-y-2">
                   <Label>Contato</Label>
-                  <Input placeholder="nome@empresa.com" />
+                  <Input placeholder="nome@empresa.com" value={formData.contact} onChange={(e) => setFormData(p => ({ ...p, contact: e.target.value }))} />
                 </div>
               </div>
               <div className="space-y-2">
                 <Label>Descrição do Serviço</Label>
-                <Textarea placeholder="Descreva os serviços prestados..." rows={2} />
+                <Textarea placeholder="Descreva os serviços prestados..." rows={2} value={formData.description} onChange={(e) => setFormData(p => ({ ...p, description: e.target.value }))} />
               </div>
               <div className="flex items-center gap-2 p-3 bg-purple-500/10 border border-purple-500/30 rounded-lg">
                 <Brain className="h-5 w-5 text-purple-400" />
                 <span className="text-sm">IA irá analisar riscos automaticamente após cadastro</span>
               </div>
-              <Button className="w-full" onClick={() => { setShowAddDialog(false); toast.success("Terceiro cadastrado para análise!"); }}>
-                Iniciar Due Diligence
+              <Button className="w-full" onClick={handleSaveThirdParty} disabled={isSaving}>
+                {isSaving ? "Cadastrando..." : "Iniciar Due Diligence"}
               </Button>
             </div>
           </DialogContent>

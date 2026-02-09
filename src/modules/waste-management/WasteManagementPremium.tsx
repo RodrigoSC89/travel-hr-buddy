@@ -363,7 +363,15 @@ export default function WasteManagementPremium() {
         <Download className="h-4 w-4" />
         ORB/GRB
       </Button>
-      <Button size="sm" className="gap-2" onClick={() => toast.info("Selecione uma aba para novo registro")}>
+      <Button size="sm" className="gap-2" onClick={() => {
+        const params = new URLSearchParams(window.location.search);
+        const currentTab = params.get("tab") || "dashboard";
+        if (currentTab === "dashboard") {
+          toast.info("Navegue para a aba Tanques, Resíduos ou Record Books para criar um registro.");
+        } else {
+          toast.info("Use o formulário disponível nesta aba para criar um novo registro.");
+        }
+      }}>
         <Plus className="h-4 w-4" />
         Novo Registro
       </Button>

@@ -5,7 +5,7 @@
  */
 
 import { useState, useMemo } from 'react';
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -132,6 +132,7 @@ const VESSELS_STATUS = [
 
 export function RealTimeComplianceDashboard() {
   const { data: metrics } = useComplianceMetrics();
+  const queryClient = useQueryClient();
   const [selectedPeriod, setSelectedPeriod] = useState('6m');
   const [isLive, setIsLive] = useState(true);
 
@@ -216,7 +217,7 @@ export function RealTimeComplianceDashboard() {
             <Download className="h-4 w-4 mr-2" />
             Exportar
           </Button>
-          <Button onClick={() => toast.success('Dashboard atualizado!')}>
+          <Button onClick={() => { queryClient.invalidateQueries({ queryKey: ['compliance-dashboard-metrics'] }); toast.success('Dashboard atualizado!'); }}>
             <RefreshCw className="h-4 w-4 mr-2" />
             Atualizar
           </Button>
