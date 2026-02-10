@@ -71,13 +71,14 @@ const MaritimeFleetManagement = () => {
         .limit(100);
       
       if (error) {
-        // Fallback stats when DB query fails
+        // On error: show zero stats (honest empty state)
+        logger.error("Failed to load fleet data", error);
         setFleetStats({
-          totalVessels: 18,
-          activeVessels: 15,
-          maintenanceVessels: 3,
-          criticalAlerts: 2,
-          efficiency: 87.5
+          totalVessels: 0,
+          activeVessels: 0,
+          maintenanceVessels: 0,
+          criticalAlerts: 0,
+          efficiency: 0
         });
         setVessels([]);
       } else {
@@ -86,12 +87,15 @@ const MaritimeFleetManagement = () => {
         const active = vesselsData?.filter(v => v.status === "active").length || 0;
         const maintenance = vesselsData?.filter(v => v.status === "maintenance").length || 0;
         
+        // Calculate efficiency from real data (active / total ratio)
+        const efficiency = total > 0 ? Math.round((active / total) * 100 * 10) / 10 : 0;
+        
         setFleetStats({
           totalVessels: total,
           activeVessels: active,
           maintenanceVessels: maintenance,
-          criticalAlerts: 2,
-          efficiency: 87.5
+          criticalAlerts: 0, // TODO: query from real alerts table when available
+          efficiency
         });
         setVessels(vesselsData || []);
       }
