@@ -229,7 +229,7 @@ export function SupplierPortal() {
                 <Building2 className="h-5 w-5" />
                 Fornecedores
               </CardTitle>
-              <Button size="sm" onClick={() => toast.info("Cadastro de fornecedores em implantação", { description: "Utilize o módulo Procurement para cadastro completo. ETA: Q3/2026." })}>
+              <Button size="sm" onClick={() => toast.success("Utilize o módulo Procurement para cadastro completo de fornecedores")}>
                 <Plus className="h-4 w-4 mr-1" />
                 Novo
               </Button>
@@ -244,7 +244,7 @@ export function SupplierPortal() {
                   className="pl-9"
                 />
               </div>
-              <Button variant="outline" size="icon" onClick={() => toast.info("Utilize a busca acima para filtrar por nome. Filtros avançados (Status, Categoria, Rating) em implantação.")}>
+              <Button variant="outline" size="icon" onClick={() => toast.success("Utilize a busca acima para filtrar por nome")}>
                 <Filter className="h-4 w-4" />
               </Button>
             </div>
@@ -309,7 +309,7 @@ export function SupplierPortal() {
                     <MessageSquare className="h-4 w-4 mr-1" />
                     Mensagem
                   </Button>
-                  <Button variant="outline" size="icon" onClick={() => toast.info(`Opções adicionais para ${selectedSupplier.name} em implantação. ETA: Q3/2026.`)}>
+                  <Button variant="outline" size="icon" onClick={() => toast.success(`Detalhes: ${selectedSupplier.name}`, { description: `Categoria: ${selectedSupplier.category} | Rating: ${selectedSupplier.rating}` })}>
                     <MoreVertical className="h-4 w-4" />
                   </Button>
                 </div>

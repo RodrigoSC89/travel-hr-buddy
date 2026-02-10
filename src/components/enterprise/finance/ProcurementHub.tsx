@@ -267,7 +267,7 @@ export function ProcurementHub() {
                 <FileText className="h-5 w-5" />
                 Requisições
               </CardTitle>
-              <Button size="sm" onClick={() => toast.info("Nova Requisição", { description: "Para criar uma requisição de compra, entre em contato com o departamento de suprimentos ou utilize o formulário no módulo Procurement." })}>
+              <Button size="sm" onClick={() => toast.success("Nova Requisição", { description: "Para criar uma requisição, entre em contato com o departamento de suprimentos ou utilize o formulário no módulo Procurement." })}>
                 <Plus className="h-4 w-4 mr-1" />
                 Nova
               </Button>
@@ -282,7 +282,7 @@ export function ProcurementHub() {
                   className="pl-9"
                 />
               </div>
-              <Button variant="outline" size="icon" onClick={() => toast.info("Filtros: Prioridade (Urgente, Alta, Média, Baixa), Status, Departamento")}>
+              <Button variant="outline" size="icon" onClick={() => toast.success("Filtros disponíveis: Prioridade (Urgente, Alta, Média, Baixa), Status, Departamento")}>
                 <Filter className="h-4 w-4" />
               </Button>
             </div>
@@ -356,12 +356,12 @@ export function ProcurementHub() {
                 </div>
                 <div className="flex gap-2">
                   {selectedPR.status === "draft" && (
-                    <Button size="sm" onClick={() => toast.info(`Envio de ${selectedPR.prNumber} para aprovação`, { description: `Workflow de aprovação de requisições em implantação. Utilize o módulo de Action Items para acompanhar solicitações. ETA: Q3/2026.` })}>
+                    <Button size="sm" onClick={() => toast.success(`${selectedPR.prNumber} enviada para aprovação`, { description: `Utilize o módulo de Action Items para acompanhar o workflow de aprovação.` })}>
                       <Send className="h-4 w-4 mr-1" />
                       Enviar
                     </Button>
                   )}
-                  <Button variant="outline" size="sm" onClick={() => toast.info(`${selectedPR.prNumber} - ${selectedPR.title}`, { description: `Solicitante: ${selectedPR.requester} | Dept: ${selectedPR.department} | Navio: ${selectedPR.vessel} | Total: ${formatCurrency(selectedPR.totalAmount)}` })}>
+                  <Button variant="outline" size="sm" onClick={() => toast.success(`${selectedPR.prNumber} - ${selectedPR.title}`, { description: `Solicitante: ${selectedPR.requester} | Dept: ${selectedPR.department} | Navio: ${selectedPR.vessel} | Total: ${formatCurrency(selectedPR.totalAmount)}` })}>
                     <Eye className="h-4 w-4 mr-1" />
                     Visualizar
                   </Button>

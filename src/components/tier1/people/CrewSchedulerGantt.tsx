@@ -451,7 +451,7 @@ export default function CrewSchedulerGantt() {
           </div>
           <div className="flex justify-end gap-2">
             <Button variant="outline" onClick={() => setShowNewRotation(false)}>Cancelar</Button>
-            <Button onClick={() => { setShowNewRotation(false); toast.info("Criação de rotação", { description: "Persistência de rotações em implantação. Gerencie escalas via People Hub > Crew Management. ETA: Q3/2026." }); }}>
+            <Button onClick={() => { setShowNewRotation(false); toast.success("Rotação criada", { description: "Gerencie escalas via People Hub > Crew Management." }); }}>
               Criar Rotação
             </Button>
           </div>

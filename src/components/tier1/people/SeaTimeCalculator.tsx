@@ -213,7 +213,7 @@ export function SeaTimeCalculator() {
             Export Records
           </Button>
           <Button size="sm" onClick={() => {
-            import("sonner").then(({ toast }) => toast.info("Para adicionar registro, selecione um tripulante na lista"));
+            import("sonner").then(({ toast }) => toast.success("Selecione um tripulante na lista abaixo para adicionar registro"));
           }}>
             <Plus className="h-4 w-4 mr-2" />
             Add Record
@@ -285,7 +285,7 @@ export function SeaTimeCalculator() {
           />
         </div>
         <Button variant="outline" onClick={() => {
-          import("sonner").then(({ toast }) => toast.info("Filtros de sea time disponíveis: Status, Rank, Vessel Type"));
+          import("sonner").then(({ toast }) => toast.success("Filtros disponíveis: Status, Rank, Vessel Type"));
         }}>
           <Filter className="h-4 w-4 mr-2" />
           Filters
@@ -399,7 +399,7 @@ export function SeaTimeCalculator() {
 
                           <Button variant="ghost" size="sm" onClick={() => {
                             setActiveTab("records");
-                            import("sonner").then(({ toast }) => toast.info(`Registros de ${crew.crewMemberName}`));
+                            import("sonner").then(({ toast }) => toast.success(`Carregando registros de ${crew.crewMemberName}`));
                           }}>
                             <ArrowRight className="h-4 w-4" />
                           </Button>

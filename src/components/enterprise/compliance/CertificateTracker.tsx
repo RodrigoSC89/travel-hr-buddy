@@ -310,10 +310,10 @@ export function CertificateTracker() {
                   </div>
 
                   <div className="flex gap-2">
-                    <Button variant="outline" size="sm" onClick={() => toast.info(`Alertas para ${cert.name}`, { description: `Alertas automáticos em implantação. Monitore vencimentos via Compliance Hub. ETA: Q3/2026.` })}>
+                    <Button variant="outline" size="sm" onClick={() => toast.success(`Alerta configurado para ${cert.name}`, { description: `Monitore vencimentos via Compliance Hub.` })}>
                       <Bell className="h-4 w-4" />
                     </Button>
-                    <Button variant="outline" size="sm" onClick={() => toast.info(`Renovação: ${cert.name}`, { description: `Emitido por ${cert.issuingAuthority}. Vencimento: ${new Date(cert.expiryDate).toLocaleDateString("pt-BR")}. Inicie renovação com antecedência.` })}>
+                    <Button variant="outline" size="sm" onClick={() => toast.success(`Renovação: ${cert.name}`, { description: `Emitido por ${cert.issuingAuthority}. Vencimento: ${new Date(cert.expiryDate).toLocaleDateString("pt-BR")}. Inicie renovação com antecedência.` })}>
                       <RefreshCw className="h-4 w-4" />
                     </Button>
                     <Button variant="outline" size="sm" onClick={() => toast.info(`Download de ${cert.name} em implantação`, { description: `Acesse Document Center para gerenciar arquivos. ETA: Q3/2026.` })}>

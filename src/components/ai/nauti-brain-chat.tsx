@@ -204,7 +204,7 @@ ${initialContext ? `\n📍 **Contexto:** ${initialContext}` : ''}
 
   const clearChat = () => {
     setMessages([]);
-    toast.info('Conversa limpa');
+    toast.success('Conversa limpa');
   };
   
   return (

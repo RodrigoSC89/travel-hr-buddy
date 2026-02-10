@@ -224,7 +224,7 @@ export function STCWCompetencyMatrix() {
             Export Report
           </Button>
           <Button size="sm" onClick={() => {
-            import("sonner").then(({ toast }) => toast.info("Para adicionar uma avaliação, selecione um tripulante na aba 'Crew Status'"));
+            import("sonner").then(({ toast }) => toast.success("Selecione um tripulante na aba 'Crew Status' para adicionar avaliação"));
           }}>
             <Plus className="h-4 w-4 mr-2" />
             Add Assessment
@@ -314,7 +314,7 @@ export function STCWCompetencyMatrix() {
         <Button variant="outline" onClick={() => {
           if (selectedFunction === "all") setSelectedFunction("Navigation");
           else setSelectedFunction("all");
-          import("sonner").then(({ toast }) => toast.info(selectedFunction === "all" ? "Filtrado por: Navigation" : "Filtros removidos"));
+          import("sonner").then(({ toast }) => toast.success(selectedFunction === "all" ? "Filtrado por: Navigation" : "Filtros removidos"));
         }}>
           <Filter className="h-4 w-4 mr-2" />
           Filters
