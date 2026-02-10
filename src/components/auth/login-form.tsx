@@ -64,6 +64,9 @@ export const LoginForm: React.FC = () => {
                 src={nautiLogo} 
                 alt="Nautilus One Logo" 
                 className="w-full h-full object-contain"
+                width={56}
+                height={56}
+                fetchPriority="high"
               />
             </div>
           </div>
