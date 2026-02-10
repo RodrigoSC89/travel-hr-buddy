@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -241,6 +242,7 @@ export const APIHubNautilus: React.FC = () => {
   const activeIntegrations = integrations.filter(i => i.status === "active").length;
   
   const { toast } = useToast();
+  const navigate = useNavigate();
   const [filterCategory, setFilterCategory] = useState({
     vessel: true,
     crew: true,
@@ -315,7 +317,7 @@ export const APIHubNautilus: React.FC = () => {
       title: "⚙️ Configurar Integração",
       description: `Redirecionando para configurações de ${integrationName}`
     });
-    window.location.href = `/admin/integrations?config=${encodeURIComponent(integrationName)}`;
+    navigate(`/admin/integrations?config=${encodeURIComponent(integrationName)}`);
   };
 
   const handleViewLogs = (integrationName: string) => {

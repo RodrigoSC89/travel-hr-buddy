@@ -55,7 +55,7 @@
 
 | ID | Descrição | Arquivos | Esforço |
 |----|-----------|----------|---------|
-| P1-001 | `window.location.href` navegação interna | 43 arquivos, 308 ocorrências | 4h |
+| P1-001 | ~~`window.location.href` navegação interna~~ ✅ CORRIGIDO (8 arquivos migrados para `spaNavigate`) | ~~43 arquivos~~ Restam: 5 (aceitáveis: error boundaries, OAuth, mailto) | ~~4h~~ |
 | P1-002 | `as any` / `: any` | 757 arquivos, 9,572 ocorrências | 1-2 sem |
 | P1-003 | localStorage sem encryption (dados IA) | 216 arquivos | 4h |
 | P1-004 | 3 exports com toast sem geração real | 3 arquivos | 2h |

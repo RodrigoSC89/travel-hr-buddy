@@ -1,4 +1,5 @@
 import { logger } from '@/lib/logger';
+import { spaNavigate } from '@/lib/navigation/spa-navigate';
 
 /**
  * Bunker Savings Notification Service
@@ -87,7 +88,7 @@ class BunkerSavingsNotificationService {
       const notification = new Notification(title, { body, icon: "/favicon.ico" });
       notification.onclick = () => {
         window.focus();
-        window.location.href = "/fuel-manager";
+        spaNavigate("/fuel-manager");
         notification.close();
       };
       return true;

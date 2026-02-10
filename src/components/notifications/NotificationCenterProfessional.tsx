@@ -46,6 +46,7 @@ import {
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
 import { supabase } from "@/integrations/supabase/client";
+import { useNavigate } from "react-router-dom";
 import { useToast } from "@/hooks/use-toast";
 import { logger } from '@/lib/logger';
 import {
@@ -209,6 +210,7 @@ const StatCard = ({ title, value, subtitle, icon, onClick, isActive }: {
 
 export default function NotificationCenterProfessional() {
   const { toast } = useToast();
+  const navigate = useNavigate();
   
   // States
   const [notifications, setNotifications] = useState<Notification[]>([]);
@@ -747,7 +749,7 @@ export default function NotificationCenterProfessional() {
                                     Ver detalhes
                                   </DropdownMenuItem>
                                   {notification.action && (
-                                    <DropdownMenuItem onClick={() => window.location.href = notification.action!.url}>
+                                    <DropdownMenuItem onClick={() => navigate(notification.action!.url)}>
                                       <ExternalLink className="h-4 w-4 mr-2" />
                                       {notification.action.label}
                                     </DropdownMenuItem>
@@ -777,7 +779,7 @@ export default function NotificationCenterProfessional() {
                               variant="outline"
                               size="sm"
                               className="mt-3 gap-2"
-                              onClick={(e) => { e.stopPropagation(); window.location.href = notification.action!.url; }}
+                              onClick={(e) => { e.stopPropagation(); navigate(notification.action!.url); }}
                             >
                               {notification.action.label}
                               <ExternalLink className="h-3 w-3" />
@@ -1095,7 +1097,7 @@ export default function NotificationCenterProfessional() {
               <p className="text-sm">{selectedNotification?.message}</p>
               
               {selectedNotification?.action && (
-                <Button className="w-full gap-2" onClick={() => window.location.href = selectedNotification.action!.url}>
+                <Button className="w-full gap-2" onClick={() => navigate(selectedNotification.action!.url)}>
                   {selectedNotification.action.label}
                   <ExternalLink className="h-4 w-4" />
                 </Button>

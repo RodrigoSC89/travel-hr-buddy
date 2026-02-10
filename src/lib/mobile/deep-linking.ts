@@ -6,6 +6,7 @@
 import { Capacitor } from "@capacitor/core";
 import { App, URLOpenListenerEvent } from "@capacitor/app";
 import { logger } from "@/lib/logger";
+import { spaNavigate } from "@/lib/navigation/spa-navigate";
 
 export interface DeepLinkRoute {
   path: string;
@@ -155,7 +156,7 @@ class DeepLinkingService {
       // No matching route, try direct navigation
       if (parsed.path) {
         logger.info("[DeepLink] No handler, navigating to:", parsed.path);
-        window.location.href = parsed.path;
+        spaNavigate(parsed.path);
         return true;
       }
 
@@ -248,20 +249,20 @@ class DeepLinkingService {
 
     switch (action) {
       case "view-document":
-        window.location.href = `/documents?id=${id}`;
+        spaNavigate(`/documents?id=${id}`);
         break;
       case "approve-request":
-        window.location.href = `/approvals?id=${id}&action=approve`;
+        spaNavigate(`/approvals?id=${id}&action=approve`);
         break;
       case "view-alert":
-        window.location.href = `/alerts?id=${id}`;
+        spaNavigate(`/alerts?id=${id}`);
         break;
       case "view-task":
-        window.location.href = `/tasks?id=${id}`;
+        spaNavigate(`/tasks?id=${id}`);
         break;
       default:
         logger.warn("[DeepLink] Unknown notification action:", action);
-        window.location.href = `/notifications`;
+        spaNavigate(`/notifications`);
     }
   }
 
