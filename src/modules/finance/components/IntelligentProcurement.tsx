@@ -122,7 +122,7 @@ export function IntelligentProcurement() {
             IA recomenda fornecedores e otimiza compras automaticamente
           </p>
         </div>
-        <Button onClick={() => toast.info("Requisição de compras em implantação", { description: "Utilize o formulário abaixo para buscar recomendações de fornecedores via IA. ETA: Q3/2026." })}>
+        <Button onClick={() => toast.success("Nova Requisição", { description: "Utilize o formulário de busca abaixo para encontrar recomendações de fornecedores via IA." })}>
           <Package className="h-4 w-4 mr-2" />
           Nova Requisição
         </Button>

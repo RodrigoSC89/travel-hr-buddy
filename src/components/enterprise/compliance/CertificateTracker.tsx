@@ -316,7 +316,7 @@ export function CertificateTracker() {
                     <Button variant="outline" size="sm" onClick={() => toast.success(`Renovação: ${cert.name}`, { description: `Emitido por ${cert.issuingAuthority}. Vencimento: ${new Date(cert.expiryDate).toLocaleDateString("pt-BR")}. Inicie renovação com antecedência.` })}>
                       <RefreshCw className="h-4 w-4" />
                     </Button>
-                    <Button variant="outline" size="sm" onClick={() => toast.info(`Download de ${cert.name} em implantação`, { description: `Acesse Document Center para gerenciar arquivos. ETA: Q3/2026.` })}>
+                    <Button variant="outline" size="sm" onClick={() => { window.history.pushState({}, '', '/workbench?tab=documents'); window.dispatchEvent(new PopStateEvent('popstate')); toast.success(`Navegando para Document Center para ${cert.name}`); }}>
                       <Download className="h-4 w-4" />
                     </Button>
                   </div>

@@ -317,7 +317,7 @@ export function AuditManagement() {
           <FileText className="h-4 w-4 mr-2" />
           Salvar Rascunho
         </Button>
-        <Button onClick={() => toast.info("Finalização de auditoria em implantação", { description: "Utilize o Compliance Hub > Auditorias para gerenciar auditorias completas. ETA: Q3/2026." })}>
+        <Button onClick={() => { window.history.pushState({}, '', '/compliance?tab=audits'); window.dispatchEvent(new PopStateEvent('popstate')); toast.success("Navegando para Compliance Hub > Auditorias"); }}>
           <CheckCircle2 className="h-4 w-4 mr-2" />
           Finalizar Auditoria
         </Button>
