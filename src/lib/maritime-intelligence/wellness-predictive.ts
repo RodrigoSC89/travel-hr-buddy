@@ -135,7 +135,10 @@ export class WellnessPredictiveSystem {
         date.setDate(date.getDate() - day);
         
         // Use realistic baseline values without simulated decline
-        const baseScore = 75 + Math.random() * 15;
+        // Deterministic baseline using day offset and crew index
+        const crewIdx = crewData.indexOf(crew);
+        const dayVar = ((day * 7 + crewIdx * 13) % 15);
+        const baseScore = 75 + dayVar;
         
         history.push({
           crewId: crew.id,
@@ -143,29 +146,29 @@ export class WellnessPredictiveSystem {
           rank: crew.rank,
           timestamp: date,
           metrics: {
-            overallScore: Math.max(60, Math.min(100, baseScore + Math.random() * 10 - 5)),
-            moodScore: 3 + Math.random() * 1.5,
-            fatigueLevel: 3 + Math.random() * 3,
-            stressLevel: 2 + Math.random() * 4,
-            satisfactionScore: 3.5 + Math.random(),
-            sleepQuality: 70 + Math.random() * 20
+            overallScore: Math.max(60, Math.min(100, baseScore + ((day % 10) - 5))),
+            moodScore: 3 + ((day + crewIdx) % 3) * 0.5,
+            fatigueLevel: 3 + (day % 6) * 0.5,
+            stressLevel: 2 + ((day * 3 + crewIdx) % 8) * 0.5,
+            satisfactionScore: 3.5 + ((day + crewIdx * 2) % 3) * 0.33,
+            sleepQuality: 70 + ((day * 2 + crewIdx) % 20)
           },
           wearableData: {
-            heartRate: 68 + Math.random() * 10,
-            heartRateVariability: 45 + Math.random() * 15,
-            stepsToday: 6000 + Math.random() * 4000,
-            sleepHours: 6.5 + Math.random() * 1.5,
-            deepSleepPercent: 18 + Math.random() * 8,
-            remSleepPercent: 20 + Math.random() * 8,
-            restingHeartRate: 58 + Math.random() * 8
+            heartRate: 68 + (day % 10),
+            heartRateVariability: 45 + ((day + crewIdx) % 15),
+            stepsToday: 6000 + ((day * 137 + crewIdx * 89) % 4000),
+            sleepHours: 6.5 + ((day + crewIdx) % 3) * 0.5,
+            deepSleepPercent: 18 + (day % 8),
+            remSleepPercent: 20 + ((day + crewIdx) % 8),
+            restingHeartRate: 58 + (crewIdx % 8)
           },
           workData: {
-            hoursWorked: 8 + Math.random() * 2,
-            tasksCompleted: 10 + Math.random() * 5,
-            errorsCommitted: Math.floor(Math.random() * 2),
-            breaksTaken: 3 + Math.floor(Math.random() * 2),
-            overtimeHours: Math.random() * 2,
-            consecutiveWorkDays: 3 + Math.floor(Math.random() * 5)
+            hoursWorked: 8 + (day % 3),
+            tasksCompleted: 10 + ((day * 2 + crewIdx) % 5),
+            errorsCommitted: day % 5 === 0 ? 1 : 0,
+            breaksTaken: 3 + (day % 2),
+            overtimeHours: (day % 4) * 0.5,
+            consecutiveWorkDays: 3 + (day % 5)
           }
         });
       }

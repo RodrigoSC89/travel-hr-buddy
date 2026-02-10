@@ -31,7 +31,7 @@ export function Patch603Validation() {
       id: `fb-${Date.now()}`,
       channel,
       content,
-      impact: Math.random() * 0.3 + 0.1,
+      impact: 0.2,
       timestamp: new Date().toISOString()
     };
     

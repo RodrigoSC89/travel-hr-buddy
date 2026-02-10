@@ -152,7 +152,7 @@ export class RealTimeCompliance {
 
   private async checkPEOTRAM(): Promise<ComplianceCategory> {
     // Simulate checking PEOTRAM compliance
-    const score = 85 + Math.random() * 15;
+    const score = 92;
     const issues = score < 90 ? this.generateIssues('PEOTRAM', 2) : [];
     
     return {
@@ -167,7 +167,7 @@ export class RealTimeCompliance {
   }
 
   private async checkPEODP(): Promise<ComplianceCategory> {
-    const score = 90 + Math.random() * 10;
+    const score = 94;
     const issues = score < 95 ? this.generateIssues('PEO-DP', 1) : [];
     
     return {
@@ -182,7 +182,7 @@ export class RealTimeCompliance {
   }
 
   private async checkSGSO(): Promise<ComplianceCategory> {
-    const score = 88 + Math.random() * 12;
+    const score = 93;
     
     return {
       id: 'sgso',
@@ -196,7 +196,7 @@ export class RealTimeCompliance {
   }
 
   private async checkMLC(): Promise<ComplianceCategory> {
-    const score = 92 + Math.random() * 8;
+    const score = 96;
     
     return {
       id: 'mlc',
@@ -210,7 +210,7 @@ export class RealTimeCompliance {
   }
 
   private async checkISPS(): Promise<ComplianceCategory> {
-    const score = 95 + Math.random() * 5;
+    const score = 97;
     
     return {
       id: 'isps',
@@ -224,7 +224,7 @@ export class RealTimeCompliance {
   }
 
   private async checkMARPOL(): Promise<ComplianceCategory> {
-    const score = 87 + Math.random() * 13;
+    const score = 91;
     const issues = score < 90 ? this.generateIssues('MARPOL', 1) : [];
     
     return {
@@ -239,7 +239,7 @@ export class RealTimeCompliance {
   }
 
   private async checkSTCW(): Promise<ComplianceCategory> {
-    const score = 91 + Math.random() * 9;
+    const score = 95;
     
     return {
       id: 'stcw',
@@ -252,7 +252,7 @@ export class RealTimeCompliance {
   }
 
   private async checkISM(): Promise<ComplianceCategory> {
-    const score = 93 + Math.random() * 7;
+    const score = 96;
     
     return {
       id: 'ism',
@@ -275,14 +275,14 @@ export class RealTimeCompliance {
     ];
 
     for (let i = 0; i < count; i++) {
-      const template = templates[Math.floor(Math.random() * templates.length)];
+      const template = templates[i % templates.length];
       issues.push({
         id: `issue-${category}-${i}-${Date.now()}`,
         category,
         severity: template.sev,
         description: template.desc,
         requirement: template.req,
-        dueDate: new Date(Date.now() + (7 + Math.random() * 30) * 24 * 60 * 60 * 1000),
+        dueDate: new Date(Date.now() + (14 + i * 7) * 24 * 60 * 60 * 1000),
         status: 'open'
       });
     }

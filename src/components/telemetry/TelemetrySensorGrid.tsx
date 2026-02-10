@@ -80,13 +80,12 @@ export function TelemetrySensorGrid({ vesselId, className }: TelemetrySensorGrid
     sensorTypes.forEach((type, typeIdx) => {
       locations.slice(0, 3).forEach((location, locIdx) => {
         const baseValue = getBaseValueForType(type);
-        const variance = (Math.random() - 0.5) * 0.2 * baseValue;
+        const variance = ((typeIdx * 7 + locIdx * 13) % 20 - 10) * 0.01 * baseValue;
         const value = baseValue + variance;
         
         const status: Sensor["status"] = 
-          Math.random() > 0.95 ? "critical" :
-          Math.random() > 0.85 ? "warning" :
-          Math.random() > 0.98 ? "offline" : "normal";
+          (typeIdx + locIdx) % 20 === 0 ? "critical" :
+          (typeIdx + locIdx) % 7 === 0 ? "warning" : "normal";
 
         fallbackSensors.push({
           id: `sensor-${typeIdx}-${locIdx}`,

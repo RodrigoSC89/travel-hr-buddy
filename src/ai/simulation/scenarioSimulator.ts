@@ -280,13 +280,13 @@ class ScenarioSimulator {
     for (let i = 0; i < 5; i++) {
       const containerGeometry = new THREE.BoxGeometry(3, 3, 6);
       const containerMaterial = new THREE.MeshStandardMaterial({ 
-        color: Math.random() * 0xffffff 
+        color: [0xff6633, 0x3366ff, 0x33cc66, 0xffcc00, 0xcc33ff][i]
       });
       const container = new THREE.Mesh(containerGeometry, containerMaterial);
       container.position.set(
-        (Math.random() - 0.5) * 20,
+        (i - 2) * 5,
         1.5,
-        (Math.random() - 0.5) * 20
+        (i % 2 === 0 ? 5 : -5)
       );
       container.castShadow = true;
       this.scene.add(container);
@@ -400,12 +400,13 @@ class ScenarioSimulator {
    */
   private async generateSimulationEvent(): Promise<void> {
     const eventTypes = ["warning", "alert", "info", "critical"];
+    const eventIdx = (Date.now() % (eventTypes.length * 1000)) / 1000 | 0;
     const event: SimulationEvent = {
       id: `event_${Date.now()}`,
-      type: eventTypes[Math.floor(Math.random() * eventTypes.length)],
+      type: eventTypes[eventIdx % eventTypes.length],
       description: `Simulated event at ${new Date().toLocaleTimeString()}`,
       timestamp: new Date().toISOString(),
-      impact: Math.random()
+      impact: 0.5
     };
 
     // Get AI response if enabled

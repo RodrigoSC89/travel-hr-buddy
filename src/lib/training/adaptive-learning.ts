@@ -297,17 +297,17 @@ export class AdaptiveLearningAI {
    */
   private async getTrainingModules(moduleIds: string[]): Promise<TrainingModule[]> {
     // Simulated module data
-    return moduleIds.map(id => ({
+    return moduleIds.map((id, idx) => ({
       id,
       title: `Training Module ${id}`,
       description: `Comprehensive training for ${id.split('-')[0]} skills`,
-      duration: 30 + Math.floor(Math.random() * 60),
-      difficulty: ['beginner', 'intermediate', 'advanced'][Math.floor(Math.random() * 3)] as any,
+      duration: [45, 60, 30, 90, 50][idx % 5],
+      difficulty: (['beginner', 'intermediate', 'advanced'] as const)[idx % 3],
       skills: [id.split('-')[0].toLowerCase()],
       prerequisites: [],
       deliveryMethods: ['video', 'interactive'],
-      completionRate: 75 + Math.floor(Math.random() * 20),
-      avgScore: 70 + Math.floor(Math.random() * 25)
+      completionRate: [82, 78, 90, 85, 76][idx % 5],
+      avgScore: [75, 82, 88, 71, 80][idx % 5]
     }));
   }
 
@@ -326,7 +326,7 @@ export class AdaptiveLearningAI {
     return {
       questions: Array(questionCount).fill(null).map((_, i) => ({
         id: `q-${skill}-${i}`,
-        type: Math.random() > 0.5 ? 'multiple_choice' : 'true_false',
+        type: i % 2 === 0 ? 'multiple_choice' : 'true_false',
         difficulty,
         skill,
         points: difficulty === 'advanced' ? 3 : difficulty === 'intermediate' ? 2 : 1
@@ -374,7 +374,7 @@ export class AdaptiveLearningAI {
       strengths,
       weaknesses,
       recommendations,
-      timeSpent: Math.floor(Math.random() * test.timeLimit) + 5
+      timeSpent: Math.floor(test.timeLimit * 0.7) + 5
     };
   }
 
@@ -444,7 +444,7 @@ export class AdaptiveLearningAI {
     improvementAreas: string[];
   }> {
     // Simulated result
-    const score = 60 + Math.floor(Math.random() * 40);
+    const score = 78;
     const completed = true;
 
     return {

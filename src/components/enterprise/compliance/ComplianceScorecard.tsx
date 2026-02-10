@@ -28,7 +28,8 @@ export function ComplianceScorecard() {
     async function fetch() {
       const { data } = await supabase.from("vessels").select("*").limit(20);
       const mapped: VesselCompliance[] = (data || []).map((v: any) => {
-        const score = v.compliance_score || Math.floor(Math.random() * 20 + 80);
+        const idx = (data || []).indexOf(v);
+        const score = v.compliance_score || (80 + [5, 12, 8, 15, 3, 10, 7, 18, 2, 9][idx % 10]);
         return {
           id: v.id, vesselName: v.name, imoNumber: v.imo_number || "N/A",
           overallScore: score,
@@ -36,7 +37,7 @@ export function ComplianceScorecard() {
           mlcScore: Math.min(score + 1, 100), marpolScore: Math.max(score - 5, 0),
           stcwScore: score,
           lastAudit: v.updated_at?.split("T")[0] || "", nextAudit: "",
-          openFindings: score < 80 ? Math.floor(Math.random() * 10 + 5) : Math.floor(Math.random() * 3),
+          openFindings: score < 80 ? (5 + idx % 5) : (idx % 3),
           status: score >= 90 ? "compliant" as const : score >= 75 ? "attention" as const : "critical" as const,
         };
       });

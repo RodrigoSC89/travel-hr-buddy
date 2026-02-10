@@ -85,7 +85,7 @@ export class DroneCommandService {
   private initialize() {
     try {
       this.client = mqtt.connect(MQTT_URL, {
-        clientId: `drone-commander-${Math.random().toString(16).substr(2, 8)}`,
+        clientId: `drone-commander-${Date.now().toString(16)}`,
         clean: true,
         reconnectPeriod: 5000
       });

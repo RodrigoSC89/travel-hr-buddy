@@ -542,9 +542,8 @@ export class MultiAgentPerformanceScanner {
 
   private async calculateTrend(agentId: string): Promise<"improving" | "stable" | "declining"> {
     // This would analyze historical data
-    // For simulation, return random trend
-    const trends: Array<"improving" | "stable" | "declining"> = ["improving", "stable", "declining"];
-    return trends[Math.floor(Math.random() * trends.length)];
+    // Default to stable when historical data is unavailable
+    return "stable";
   }
 
   private hasOverlappingSpecialization(spec1: string[], spec2: string[]): boolean {

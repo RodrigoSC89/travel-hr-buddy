@@ -11,7 +11,7 @@ import { logger } from "@/lib/logger";
 
 export type EmotionalState = "calm" | "stressed" | "anxious" | "focused" | "tired" | "energized";
 export type StressLevel = "low" | "moderate" | "high" | "critical";
-export type BiometricSource = "mock" | "wearable" | "manual";
+export type BiometricSource = "mock" | "wearable" | "manual" | "fallback";
 
 export interface BiometricData {
   heartRate?: number; // bpm
@@ -101,12 +101,12 @@ class EmpathyCore {
     }
 
     return {
-      heartRate: baseHeartRate + Math.random() * 10 - 5,
-      heartRateVariability: baseHRV + Math.random() * 10 - 5,
-      respirationRate: baseRespiration + Math.random() * 4 - 2,
-      skinTemperature: 36.5 + Math.random() * 0.5,
+      heartRate: baseHeartRate + 2,
+      heartRateVariability: baseHRV + 3,
+      respirationRate: baseRespiration + 1,
+      skinTemperature: 36.7,
       timestamp: new Date(),
-      source: "mock"
+      source: "fallback"
     };
   }
 

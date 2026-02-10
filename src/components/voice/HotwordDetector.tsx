@@ -416,7 +416,7 @@ export function HotwordDetector({
                     state.audioLevel > i / 8 ? 'opacity-100' : 'opacity-30'
                   )}
                   style={{
-                    height: `${Math.max(4, state.audioLevel * 24 * (1 + Math.random() * 0.3))}px`,
+                    height: `${Math.max(4, state.audioLevel * 24 * (1 + (i % 3) * 0.1))}px`,
                   }}
                 />
               ))}

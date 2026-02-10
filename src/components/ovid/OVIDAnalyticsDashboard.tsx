@@ -83,7 +83,7 @@ export const OVIDAnalyticsDashboard: React.FC = () => {
   const chapterPerformance = OVIQ4_CHAPTERS.slice(0, 8).map((ch, i) => ({
     chapter: `Cap ${ch.id}`,
     name: ch.name.substring(0, 20),
-    score: 85 - (i * 5) + Math.floor(Math.random() * 15),
+    score: 85 - (i * 5) + [7, 3, 11, 5, 9, 2, 8, 6][i],
   }));
 
   // Critical areas (chapters with lowest scores)
@@ -94,7 +94,7 @@ export const OVIDAnalyticsDashboard: React.FC = () => {
   // Radar data for chapter comparison
   const radarData = OVIQ4_CHAPTERS.slice(0, 8).map((ch, i) => ({
     subject: `Cap ${ch.id}`,
-    A: 85 - (i * 3) + Math.floor(Math.random() * 10),
+    A: 85 - (i * 3) + [4, 7, 2, 8, 5, 3, 6, 1][i],
     fullMark: 100,
   }));
 

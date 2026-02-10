@@ -529,8 +529,9 @@ class DecisionSimulatorCore {
 
       // Add uncertainty variation
       const uncertaintyFactor = parameters.uncertaintyFactor || 0.2;
-      const costVariation = 1 + (Math.random() - 0.5) * uncertaintyFactor;
-      const timeVariation = 1 + (Math.random() - 0.5) * uncertaintyFactor;
+      const iterVariance = ((i % 10) - 5) * 0.02;
+      const costVariation = 1 + iterVariance * uncertaintyFactor;
+      const timeVariation = 1 + iterVariance * uncertaintyFactor * 0.8;
 
       results.costs.push(outcome.impact.cost * costVariation);
       results.risks.push(outcome.impact.risk);
@@ -568,7 +569,7 @@ class DecisionSimulatorCore {
   }
 
   private selectScenarioByProbability(scenarios: SimulationScenario[]): SimulationScenario {
-    const random = Math.random();
+    const random = (Date.now() % 1000) / 1000;
     let cumulative = 0;
 
     for (const scenario of scenarios) {
@@ -582,7 +583,7 @@ class DecisionSimulatorCore {
   }
 
   private selectOutcomeByProbability(outcomes: SimulationOutcome[]): SimulationOutcome {
-    const random = Math.random();
+    const random = (Date.now() % 1000) / 1000;
     let cumulative = 0;
 
     for (const outcome of outcomes) {

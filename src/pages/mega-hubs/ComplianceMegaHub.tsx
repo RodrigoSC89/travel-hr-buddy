@@ -189,7 +189,7 @@ export default function ComplianceMegaHub() {
 
   const handleSubmitAudit = useCallback(async () => {
     if (!auditForm.audit_type) { toast.error('Tipo de auditoria obrigatório'); return; }
-    const auditNumber = `AUD-${new Date().getFullYear()}-${String(Math.floor(Math.random() * 9999)).padStart(4, '0')}`;
+    const auditNumber = `AUD-${new Date().getFullYear()}-${String(Date.now() % 9999).padStart(4, '0')}`;
     const { error } = await supabase.from('internal_audits').insert({
       audit_number: auditNumber,
       audit_type: auditForm.audit_type,

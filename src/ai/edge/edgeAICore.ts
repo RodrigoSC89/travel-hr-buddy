@@ -122,13 +122,13 @@ class EdgeAICore {
 
   private simulateRouteOptimization(input: RouteOptimizationInput): RouteOptimizationOutput {
     return {
-      optimizedRoute: input.waypoints.map((wp) => ({
+      optimizedRoute: input.waypoints.map((wp, i) => ({
         ...wp,
-        lat: wp.lat + (Math.random() - 0.5) * 0.01,
-        lng: wp.lng + (Math.random() - 0.5) * 0.01,
+        lat: wp.lat + (i % 2 === 0 ? 0.003 : -0.003),
+        lng: wp.lng + (i % 2 === 0 ? -0.002 : 0.002),
       })),
-      estimatedTime: Math.random() * 30 + 10,
-      fuelEfficiency: Math.random() * 15 + 85,
+      estimatedTime: 22,
+      fuelEfficiency: 91.5,
       recommendations: ["Optimize speed for fuel savings"],
     };
   }
@@ -138,7 +138,7 @@ class EdgeAICore {
       failureDetected: false,
       failureType: "normal",
       affectedComponent: _input.component,
-      score: Math.random() * 30 + 70,
+      score: 85,
       recommendations: ["Schedule preventive maintenance"],
     };
   }
@@ -154,9 +154,9 @@ class EdgeAICore {
   private simulateAnomalyDetection(_input: AnomalyDetectionInput): AnomalyDetectionOutput {
     return {
       isAnomaly: false,
-      anomalyScore: Math.random() * 20,
+      anomalyScore: 8,
       severity: "normal",
-      details: { metric: _input.metric, deviation: Math.random() * 5, baseline: _input.baseline },
+      details: { metric: _input.metric, deviation: 2.3, baseline: _input.baseline },
     };
   }
 
@@ -164,8 +164,8 @@ class EdgeAICore {
     return {
       maintenanceNeeded: false,
       urgency: "routine",
-      estimatedDaysUntilFailure: Math.round(Math.random() * 90 + 30),
-      riskScore: Math.random() * 30,
+      estimatedDaysUntilFailure: 65,
+      riskScore: 12,
       recommendations: ["Continue normal operations"],
     };
   }
