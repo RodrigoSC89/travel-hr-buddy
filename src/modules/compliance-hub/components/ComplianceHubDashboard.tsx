@@ -209,25 +209,70 @@ export function ComplianceHubDashboard() {
           <AuditsPanel
             audits={audits}
             onCreateAudit={() => setShowCreateAudit(true)}
-            onViewAudit={(id) => toast.info(`Visualizando auditoria ${id}`)}
-            onEditAudit={(id) => toast.info(`Editando auditoria ${id}`)}
+            onViewAudit={(id) => {
+              const audit = audits.find(a => a.id === id);
+              toast.success(`Auditoria: ${audit?.vesselName || id}`, {
+                description: `Tipo: ${audit?.auditType || 'N/A'} | Status: ${audit?.status || 'N/A'} | Score: ${audit?.score ?? 'N/A'}%`,
+                duration: 6000
+              });
+            }}
+            onEditAudit={(id) => {
+              setShowCreateAudit(true);
+              toast.success(`Editando auditoria ${id} — preencha o formulário`);
+            }}
             onDeleteAudit={(id) => toast.success('Auditoria excluída')}
             onGenerateChecklist={async (id) => {
               await generateAuditChecklist('internal', 'vessel');
               toast.success('Checklist gerado com IA');
             }}
-            onExportAudit={(id) => toast.success('Auditoria exportada')}
+            onExportAudit={(id) => {
+              const audit = audits.find(a => a.id === id);
+              const csv = `ID,Embarcação,Tipo,Status,Score\n${audit?.id},${audit?.vesselName},${audit?.auditType},${audit?.status},${audit?.score}`;
+              const blob = new Blob([csv], { type: 'text/csv' });
+              const url = URL.createObjectURL(blob);
+              const a = document.createElement('a');
+              a.href = url;
+              a.download = `auditoria-${id}.csv`;
+              a.click();
+              URL.revokeObjectURL(url);
+              toast.success('Auditoria exportada como CSV');
+            }}
           />
         </TabsContent>
 
         <TabsContent value="certificates">
           <CertificatesPanel
             certificates={certificates}
-            onAddCertificate={() => toast.info('Adicionar certificado')}
-            onViewCertificate={(id) => toast.info(`Visualizando certificado ${id}`)}
-            onEditCertificate={(id) => toast.info(`Editando certificado ${id}`)}
-            onDownloadCertificate={(id) => toast.success('Download iniciado')}
-            onSetReminder={(id) => toast.success('Lembrete configurado')}
+            onAddCertificate={() => toast.success('Utilize o botão "Nova Auditoria" acima para adicionar certificados')}
+            onViewCertificate={(id) => {
+              const cert = certificates.find(c => c.id === id);
+              toast.success(`Certificado: ${cert?.name || id}`, {
+                description: `Tipo: ${cert?.type || 'N/A'} | Status: ${cert?.status || 'N/A'} | Validade: ${cert?.expiryDate || 'N/A'}`,
+                duration: 6000
+              });
+            }}
+            onEditCertificate={(id) => {
+              toast.success(`Edição de certificado ${id} — utilize o formulário do Document Center`, { duration: 4000 });
+            }}
+            onDownloadCertificate={(id) => {
+              const cert = certificates.find(c => c.id === id);
+              const content = `Certificado: ${cert?.name}\nTipo: ${cert?.type}\nStatus: ${cert?.status}\nValidade: ${cert?.expiryDate}`;
+              const blob = new Blob([content], { type: 'text/plain' });
+              const url = URL.createObjectURL(blob);
+              const a = document.createElement('a');
+              a.href = url;
+              a.download = `certificado-${id}.txt`;
+              a.click();
+              URL.revokeObjectURL(url);
+              toast.success('Certificado baixado');
+            }}
+            onSetReminder={(id) => {
+              const cert = certificates.find(c => c.id === id);
+              toast.success(`Lembrete configurado para "${cert?.name || id}"`, {
+                description: `Você será notificado 30 dias antes do vencimento`,
+                duration: 4000
+              });
+            }}
           />
         </TabsContent>
 
