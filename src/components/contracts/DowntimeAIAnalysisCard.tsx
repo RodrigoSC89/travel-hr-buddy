@@ -28,7 +28,7 @@ interface DowntimeEvent {
   reason_category: string | null;
   impact_level: string | null;
   justification_status: string | null;
-  ai_analysis?: any;
+  ai_analysis?: Record<string, unknown>;
   contract_id?: string | null;
 }
 
@@ -124,10 +124,10 @@ export function DowntimeAIAnalysisCard({ events, contracts, onAnalysisComplete }
 
   const getRiskColor = (level: string) => {
     switch (level) {
-      case 'critical': return 'bg-red-500';
-      case 'high': return 'bg-orange-500';
-      case 'medium': return 'bg-yellow-500';
-      default: return 'bg-green-500';
+      case 'critical': return 'bg-destructive';
+      case 'high': return 'bg-warning';
+      case 'medium': return 'bg-warning/70';
+      default: return 'bg-success';
     }
   };
 

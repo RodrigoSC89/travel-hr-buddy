@@ -51,15 +51,15 @@ export function PSCReadinessDashboard() {
   };
 
   const riskColor = (score: number) => {
-    if (score <= 30) return "text-green-500";
-    if (score <= 60) return "text-yellow-500";
-    return "text-red-500";
+    if (score <= 30) return "text-success";
+    if (score <= 60) return "text-warning";
+    return "text-destructive";
   };
 
   const riskBg = (score: number) => {
-    if (score <= 30) return "bg-green-500/10 border-green-500/20";
-    if (score <= 60) return "bg-yellow-500/10 border-yellow-500/20";
-    return "bg-red-500/10 border-red-500/20";
+    if (score <= 30) return "bg-success/10 border-success/20";
+    if (score <= 60) return "bg-warning/10 border-warning/20";
+    return "bg-destructive/10 border-destructive/20";
   };
 
   // KPI calculations
@@ -96,7 +96,7 @@ export function PSCReadinessDashboard() {
                 <Select value={selectedVessel} onValueChange={setSelectedVessel}>
                   <SelectTrigger><SelectValue placeholder="Selecionar embarcação..." /></SelectTrigger>
                   <SelectContent>
-                    {(vessels || []).map((v: any) => (
+                    {(vessels || []).map((v) => (
                       <SelectItem key={v.id} value={v.id}>{v.name}</SelectItem>
                     ))}
                   </SelectContent>
@@ -149,7 +149,7 @@ export function PSCReadinessDashboard() {
         <Card>
           <CardContent className="p-4">
             <div className="flex items-center gap-3">
-              <AlertTriangle className={`h-8 w-8 ${avgRisk > 60 ? "text-red-500" : avgRisk > 30 ? "text-yellow-500" : "text-green-500"}`} />
+              <AlertTriangle className={`h-8 w-8 ${avgRisk > 60 ? "text-destructive" : avgRisk > 30 ? "text-warning" : "text-success"}`} />
               <div>
                 <p className="text-sm text-muted-foreground">Risco Médio</p>
                 <p className="text-2xl font-bold">{avgRisk}%</p>
@@ -160,7 +160,7 @@ export function PSCReadinessDashboard() {
         <Card>
           <CardContent className="p-4">
             <div className="flex items-center gap-3">
-              <Brain className="h-8 w-8 text-purple-500" />
+              <Brain className="h-8 w-8 text-accent-foreground" />
               <div>
                 <p className="text-sm text-muted-foreground">Briefings AI</p>
                 <p className="text-2xl font-bold">{withBriefing}/{totalInspections}</p>
@@ -263,10 +263,10 @@ export function PSCReadinessDashboard() {
                             <AlertTriangle className="h-4 w-4" /> Deficiências Previstas ({insp.predicted_deficiencies.length})
                           </h4>
                           <ul className="space-y-1">
-                            {insp.predicted_deficiencies.map((d: any, idx: number) => (
+                            {insp.predicted_deficiencies.map((d, idx: number) => (
                               <li key={idx} className="text-xs flex items-start gap-1">
                                 <span className="text-amber-500 mt-0.5">•</span>
-                                {typeof d === "string" ? d : d.description || JSON.stringify(d)}
+                                {typeof d === "string" ? d : (d as Record<string, string>)?.description || JSON.stringify(d)}
                               </li>
                             ))}
                           </ul>
@@ -279,10 +279,10 @@ export function PSCReadinessDashboard() {
                             <CheckCircle className="h-4 w-4" /> Checklist de Preparação ({insp.preparation_checklist.length})
                           </h4>
                           <ul className="space-y-1">
-                            {insp.preparation_checklist.map((item: any, idx: number) => (
+                            {insp.preparation_checklist.map((item, idx: number) => (
                               <li key={idx} className="text-xs flex items-start gap-1">
                                 <span className="text-green-500 mt-0.5">☐</span>
-                                {typeof item === "string" ? item : item.description || JSON.stringify(item)}
+                                {typeof item === "string" ? item : (item as Record<string, string>)?.description || JSON.stringify(item)}
                               </li>
                             ))}
                           </ul>

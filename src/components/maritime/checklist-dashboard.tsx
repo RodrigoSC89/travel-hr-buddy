@@ -74,22 +74,28 @@ export const ChecklistDashboard = ({ userId }: { userId: string }) => {
     });
   };
 
-  const MetricCard = ({ title, value, icon: Icon, variant = "default", subtitle }: any) => (
+  const MetricCard = ({ title, value, icon: Icon, variant = "default", subtitle }: {
+    title: string;
+    value: number | string;
+    icon: React.ElementType;
+    variant?: "default" | "success" | "warning" | "danger";
+    subtitle?: string;
+  }) => (
     <Card>
       <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
         <CardTitle className="text-sm font-medium">{title}</CardTitle>
         <Icon className={`h-4 w-4 ${
-          variant === "success" ? "text-green-600" :
-            variant === "warning" ? "text-yellow-600" :
-              variant === "danger" ? "text-red-600" :
+          variant === "success" ? "text-success" :
+            variant === "warning" ? "text-warning" :
+              variant === "danger" ? "text-destructive" :
                 "text-muted-foreground"
         }`} />
       </CardHeader>
       <CardContent>
         <div className={`text-2xl font-bold ${
-          variant === "success" ? "text-green-600" :
-            variant === "warning" ? "text-yellow-600" :
-              variant === "danger" ? "text-red-600" : ""
+          variant === "success" ? "text-success" :
+            variant === "warning" ? "text-warning" :
+              variant === "danger" ? "text-destructive" : ""
         }`}>
           {value}
         </div>
@@ -108,8 +114,8 @@ export const ChecklistDashboard = ({ userId }: { userId: string }) => {
             <Card key={i}>
               <CardContent className="p-6">
                 <div className="animate-pulse space-y-2">
-                  <div className="h-4 bg-gray-200 rounded w-3/4"></div>
-                  <div className="h-8 bg-gray-200 rounded w-1/2"></div>
+                  <div className="h-4 bg-muted rounded w-3/4"></div>
+                  <div className="h-8 bg-muted rounded w-1/2"></div>
                 </div>
               </CardContent>
             </Card>
@@ -175,7 +181,7 @@ export const ChecklistDashboard = ({ userId }: { userId: string }) => {
           <CardContent>
             <div className="space-y-2">
               <div className="flex items-center justify-between">
-                <span className="text-2xl font-bold text-green-600">
+                <span className="text-2xl font-bold text-success">
                   {metrics.complianceScore}%
                 </span>
                 <Badge variant={metrics.complianceScore > 85 ? "default" : "destructive"}>
@@ -212,7 +218,7 @@ export const ChecklistDashboard = ({ userId }: { userId: string }) => {
               </div>
               <div className="flex items-center justify-between">
                 <span className="text-sm font-medium">Itens Críticos</span>
-                <span className="text-sm text-red-600">3 pendentes</span>
+                <span className="text-sm text-destructive">3 pendentes</span>
               </div>
             </div>
           </CardContent>
@@ -233,9 +239,9 @@ export const ChecklistDashboard = ({ userId }: { userId: string }) => {
               <div key={checklist.id} className="flex items-center justify-between p-3 border rounded-lg">
                 <div className="flex items-center space-x-3">
                   <div className={`w-2 h-2 rounded-full ${
-                    checklist.status === "completed" ? "bg-green-500" :
-                      checklist.status === "in_progress" ? "bg-yellow-500" :
-                        "bg-gray-400"
+                    checklist.status === "completed" ? "bg-success" :
+                      checklist.status === "in_progress" ? "bg-warning" :
+                        "bg-muted-foreground"
                   }`} />
                   <div>
                     <p className="font-medium">{checklist.title}</p>

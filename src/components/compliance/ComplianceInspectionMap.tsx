@@ -42,8 +42,9 @@ export function ComplianceInspectionMap({
   showControls = true
 }: ComplianceInspectionMapProps) {
   const mapContainer = useRef<HTMLDivElement>(null);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Mapbox GL types not available
   const map = useRef<any>(null);
-  const markersRef = useRef<any[]>([]);
+  const markersRef = useRef<Array<{ remove: () => void }>>([]);
   const [mapboxToken, setMapboxToken] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -203,6 +204,7 @@ export function ComplianceInspectionMap({
   }, [mapboxToken]);
 
   // Add vessel markers
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Mapbox GL dynamic import
   const addVesselMarkers = useCallback((mapInstance: any, mapboxgl: any) => {
     // Clear existing markers
     markersRef.current.forEach(marker => marker.remove());
@@ -309,10 +311,10 @@ export function ComplianceInspectionMap({
 
   const getStatusBadge = (status: VesselInspection['status']) => {
     const variants: Record<string, string> = {
-      'overdue': 'bg-red-500 text-white',
-      'due-soon': 'bg-orange-500 text-white',
-      'compliant': 'bg-green-500 text-white',
-      'in-progress': 'bg-blue-500 text-white'
+      'overdue': 'bg-destructive text-destructive-foreground',
+      'due-soon': 'bg-warning text-warning-foreground',
+      'compliant': 'bg-success text-success-foreground',
+      'in-progress': 'bg-primary text-primary-foreground'
     };
     return <Badge className={variants[status]}>{getStatusLabel(status)}</Badge>;
   };
@@ -384,19 +386,19 @@ export function ComplianceInspectionMap({
         <div className="absolute bottom-4 left-4 bg-background/90 backdrop-blur rounded-lg p-3 shadow-lg">
           <div className="grid grid-cols-2 gap-2 text-xs">
             <div className="flex items-center gap-1">
-              <div className="w-3 h-3 rounded-full bg-red-500" />
+              <div className="w-3 h-3 rounded-full bg-destructive" />
               <span>Vencidas: {stats.overdue}</span>
             </div>
             <div className="flex items-center gap-1">
-              <div className="w-3 h-3 rounded-full bg-orange-500" />
+              <div className="w-3 h-3 rounded-full bg-warning" />
               <span>Próximas: {stats.dueSoon}</span>
             </div>
             <div className="flex items-center gap-1">
-              <div className="w-3 h-3 rounded-full bg-blue-500" />
+              <div className="w-3 h-3 rounded-full bg-primary" />
               <span>Em Andamento: {stats.inProgress}</span>
             </div>
             <div className="flex items-center gap-1">
-              <div className="w-3 h-3 rounded-full bg-green-500" />
+              <div className="w-3 h-3 rounded-full bg-success" />
               <span>Conformes: {stats.compliant}</span>
             </div>
           </div>

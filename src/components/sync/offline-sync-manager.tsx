@@ -24,7 +24,7 @@ import { useAuth } from "@/contexts/AuthContext";
 interface SyncItem {
   id: string;
   action: string;
-  data: any;
+  data: Record<string, unknown>;
   timestamp: number;
   synced: boolean;
   error?: string;
@@ -206,9 +206,9 @@ export const OfflineSyncManager: React.FC = () => {
 
   const getActionIcon = (action: string) => {
     switch (action) {
-    case "create_note": return <Upload className="h-4 w-4 text-blue-500" />;
-    case "update_profile": return <RefreshCw className="h-4 w-4 text-green-500" />;
-    case "save_preference": return <Database className="h-4 w-4 text-purple-500" />;
+    case "create_note": return <Upload className="h-4 w-4 text-primary" />;
+    case "update_profile": return <RefreshCw className="h-4 w-4 text-success" />;
+    case "save_preference": return <Database className="h-4 w-4 text-accent-foreground" />;
     default: return <Info className="h-4 w-4 text-muted-foreground" />;
     }
   };
@@ -236,9 +236,9 @@ export const OfflineSyncManager: React.FC = () => {
         <Card className="p-4">
           <div className="flex items-center gap-2">
             {isOnline ? (
-              <Wifi className="h-5 w-5 text-green-500" />
+              <Wifi className="h-5 w-5 text-success" />
             ) : (
-              <WifiOff className="h-5 w-5 text-red-500" />
+              <WifiOff className="h-5 w-5 text-destructive" />
             )}
             <div>
               <p className="text-2xl font-bold">{isOnline ? "Online" : "Offline"}</p>
@@ -249,7 +249,7 @@ export const OfflineSyncManager: React.FC = () => {
         
         <Card className="p-4">
           <div className="flex items-center gap-2">
-            <Database className="h-5 w-5 text-blue-500" />
+            <Database className="h-5 w-5 text-primary" />
             <div>
               <p className="text-2xl font-bold">{cacheSize}</p>
               <p className="text-sm text-muted-foreground">Itens em Cache</p>
@@ -259,7 +259,7 @@ export const OfflineSyncManager: React.FC = () => {
         
         <Card className="p-4">
           <div className="flex items-center gap-2">
-            <RefreshCw className="h-5 w-5 text-orange-500" />
+            <RefreshCw className="h-5 w-5 text-warning" />
             <div>
               <p className="text-2xl font-bold">{syncItems.length}</p>
               <p className="text-sm text-muted-foreground">Pendentes Sync</p>
@@ -269,7 +269,7 @@ export const OfflineSyncManager: React.FC = () => {
         
         <Card className="p-4">
           <div className="flex items-center gap-2">
-            <Clock className="h-5 w-5 text-purple-500" />
+            <Clock className="h-5 w-5 text-accent-foreground" />
             <div>
               <p className="text-2xl font-bold">
                 {lastSyncTime ? lastSyncTime.toLocaleTimeString("pt-BR") : "--:--"}
@@ -351,7 +351,7 @@ export const OfflineSyncManager: React.FC = () => {
                   </div>
                   <div className="flex items-center gap-2">
                     {item.synced ? (
-                      <Badge variant="default" className="bg-green-500 text-azure-50">
+                      <Badge variant="default" className="bg-success text-success-foreground">
                         <CheckCircle className="h-3 w-3 mr-1" />
                         Sincronizado
                       </Badge>
@@ -367,7 +367,7 @@ export const OfflineSyncManager: React.FC = () => {
             </div>
           ) : (
             <div className="text-center py-8">
-              <CheckCircle className="mx-auto h-12 w-12 text-green-500 mb-4" />
+              <CheckCircle className="mx-auto h-12 w-12 text-success mb-4" />
               <h3 className="text-lg font-semibold mb-2">Tudo Sincronizado!</h3>
               <p className="text-muted-foreground">
                 Não há itens pendentes de sincronização no momento.

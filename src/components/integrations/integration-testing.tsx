@@ -120,13 +120,13 @@ export const IntegrationTesting: React.FC = () => {
       };
       
       setTestResults(prev => [newResult, ...prev]);
-    } catch (err: any) {
+    } catch (err: unknown) {
       const newResult: TestResult = {
         id: Date.now().toString(),
         name: `Teste ${endpoint?.name}`,
         status: "error",
         duration: Math.floor(performance.now() - startTime),
-        details: `Erro de conexão: ${err?.message || 'desconhecido'}`,
+        details: `Erro de conexão: ${err instanceof Error ? err.message : 'desconhecido'}`,
         response: { status: 0, data: "Connection failed" },
         timestamp: new Date().toLocaleString("pt-BR")
       };

@@ -242,7 +242,7 @@ export default function CrewComplianceTab() {
       }}
       exportable
       onExport={() => {
-        const rows = ["Nome;Tipo;Status;Validade", ...certifications.map((c: any) => `${c.crew_member_name || ""};${c.certificate_type};${c.status};${c.expiry_date || ""}`)];
+        const rows = ["Nome;Tipo;Status;Validade", ...certifications.map((c) => `${(c as unknown as Record<string, unknown>).crew_member_name || ""};${c.type};${c.status};${c.expiry_date || ""}`)];
         const blob = new Blob(['\uFEFF' + rows.join('\n')], { type: 'text/csv;charset=utf-8;' });
         const url = URL.createObjectURL(blob);
         const a = document.createElement('a'); a.href = url; a.download = `crew-compliance-${new Date().toISOString().slice(0,10)}.csv`; a.click(); URL.revokeObjectURL(url);

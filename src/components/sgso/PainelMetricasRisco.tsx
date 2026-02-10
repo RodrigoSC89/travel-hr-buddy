@@ -41,19 +41,17 @@ export function PainelMetricasRisco() {
       try {
         const { data, error } = await supabase
           .from("internal_audits")
-          .select("id, vessel_name, findings, audit_date")
-          .order("audit_date", { ascending: false })
+          .select("id, scheduled_date, findings_count")
+          .order("scheduled_date", { ascending: false })
           .limit(200);
 
         if (error) throw error;
 
-        const mapped: MetricData[] = (data || []).map((d: any) => ({
+        const mapped: MetricData[] = (data || []).map((d) => ({
           auditoria_id: d.id,
-          nome_navio: d.vessel_name || "N/A",
-          falhas_criticas: Array.isArray(d.findings)
-            ? (d.findings as any[]).filter((f: any) => f?.severity === "critical").length
-            : 0,
-          data_auditoria: d.audit_date || "",
+          nome_navio: "N/A",
+          falhas_criticas: d.findings_count || 0,
+          data_auditoria: d.scheduled_date || "",
         }));
         setDados(mapped);
       } catch (error) {
