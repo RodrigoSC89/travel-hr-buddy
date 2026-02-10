@@ -13,7 +13,7 @@ import { Progress } from "@/components/ui/progress";
 import { useToast } from "@/hooks/use-toast";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
-import { createWorker } from "tesseract.js";
+import { createLazyWorker } from "@/lib/ocr/lazy-tesseract";
 import { SemanticDocumentSearch } from "@/components/documents/SemanticDocumentSearch";
 import { createSafeHTML } from "@/lib/utils/safe-html";
 import { logger } from "@/lib/logger";
@@ -200,7 +200,7 @@ export default function AIDocuments() {
       setOcrProgress(0);
 
       // Create worker with language specified
-      const worker = await createWorker("eng+por", 1, {
+      const worker = await createLazyWorker("eng+por", 1, {
         logger: (m: { status: string; progress: number }) => {
           if (m.status === "recognizing text") {
             setOcrProgress(30 + (m.progress * 50));

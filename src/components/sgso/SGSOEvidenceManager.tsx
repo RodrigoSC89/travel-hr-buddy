@@ -9,7 +9,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
-import { createWorker } from 'tesseract.js';
+import { createLazyWorker } from '@/lib/ocr/lazy-tesseract';
 import { logger } from '@/lib/logger';
 import {
   Upload,
@@ -132,7 +132,7 @@ export const SGSOEvidenceManager: React.FC = () => {
   const processOCR = async (file: File): Promise<{ text: string; confidence: number }> => {
     setIsProcessingOCR(true);
     try {
-      const worker = await createWorker('por');
+      const worker = await createLazyWorker('por');
       const imageUrl = URL.createObjectURL(file);
       const { data } = await worker.recognize(imageUrl);
       await worker.terminate();

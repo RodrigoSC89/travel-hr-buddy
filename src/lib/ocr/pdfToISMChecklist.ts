@@ -3,7 +3,7 @@
  * PATCH-609: Extract ISM checklist from scanned PDFs
  */
 
-import Tesseract from "tesseract.js";
+import { recognizeLazy } from "@/lib/ocr/lazy-tesseract";
 import type { ISMAuditItem } from "../../types/ism-audit";
 import { logger } from '@/lib/logger';
 
@@ -18,8 +18,8 @@ export interface OCRResult {
  */
 export async function extractTextFromPDF(file: File): Promise<OCRResult> {
   try {
-    const result = await Tesseract.recognize(file, "eng", {
-      logger: (_m) => {
+    const result = await recognizeLazy(file, "eng", {
+      logger: (_m: unknown) => {
         // OCR progress tracked internally
       },
     });
