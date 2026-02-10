@@ -83,7 +83,7 @@ export function AISettingsDialog({
 
   const handleReset = () => {
     setCurrentSettings(DEFAULT_SETTINGS);
-    toast.info("Configurações restauradas para o padrão");
+    toast.success("Configurações restauradas para o padrão");
   };
 
   return (

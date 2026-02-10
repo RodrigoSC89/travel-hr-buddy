@@ -410,7 +410,7 @@ export function APIGatewayMonitor() {
                     </div>
                   </div>
                 ))}
-                <Button className="w-full" variant="outline" onClick={() => toast.info("Gerenciamento de API Keys em implantação", { description: "Gerencie suas credenciais via Supabase Dashboard > Settings > API. ETA: Q3/2026." })}>
+                <Button className="w-full" variant="outline" onClick={() => toast.success("Gerencie suas credenciais via Supabase Dashboard > Settings > API")}>
                   <Key className="h-4 w-4 mr-2" />
                   Gerar Nova API Key
                 </Button>

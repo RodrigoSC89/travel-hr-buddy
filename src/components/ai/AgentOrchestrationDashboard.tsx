@@ -274,7 +274,7 @@ export function AgentOrchestrationDashboard() {
               if (pendingCount > 0) {
                 toast.success(`Consenso forçado para ${pendingCount} decisões pendentes`);
               } else {
-                toast.info("Nenhuma decisão pendente para consenso");
+                toast.success("Nenhuma decisão pendente para consenso");
               }
             }}
           >
@@ -538,7 +538,7 @@ export function AgentOrchestrationDashboard() {
                   variant="outline" 
                   className="flex-1"
                   onClick={() => {
-                    toast.info(`Histórico do ${selectedAgent.name} carregado`);
+                    toast.success(`Histórico do ${selectedAgent.name} carregado`);
                   }}
                 >
                   Ver Histórico
