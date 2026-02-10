@@ -306,34 +306,16 @@ const FuelOptimizerPage = () => {
     co2Reduced: optimizations.reduce((acc, opt) => acc + (opt.ai_analysis?.environmental_impact?.co2_reduction_tons || 0), 0)
   };
 
-  const chartData = {
-    labels: optimizations.slice(0, 6).map(o => o.route_name.split(" → ")[0]),
-    datasets: [
-      {
-        label: "Consumo Original (t)",
-        data: optimizations.slice(0, 6).map(o => o.estimated_consumption),
-        backgroundColor: "rgba(239, 68, 68, 0.7)",
-        borderColor: "rgb(239, 68, 68)",
-        borderWidth: 1
-      },
-      {
-        label: "Consumo Otimizado (t)",
-        data: optimizations.slice(0, 6).map(o => o.optimized_consumption || o.estimated_consumption * 0.85),
-        backgroundColor: "rgba(34, 197, 94, 0.7)",
-        borderColor: "rgb(34, 197, 94)",
-        borderWidth: 1
-      }
-    ]
-  };
+  const chartData = optimizations.slice(0, 6).map(o => ({
+    name: o.route_name.split(" → ")[0],
+    original: o.estimated_consumption,
+    optimized: o.optimized_consumption || o.estimated_consumption * 0.85,
+  }));
 
-  const savingsChartData = {
-    labels: ["Economia Alcançada", "Consumo Restante"],
-    datasets: [{
-      data: [stats.totalFuelSaved, optimizations.reduce((acc, o) => acc + (o.optimized_consumption || 0), 0)],
-      backgroundColor: ["rgba(34, 197, 94, 0.8)", "rgba(148, 163, 184, 0.4)"],
-      borderWidth: 0
-    }]
-  };
+  const savingsChartData = [
+    { name: "Economia Alcançada", value: stats.totalFuelSaved, color: "hsl(142, 71%, 45%)" },
+    { name: "Consumo Restante", value: optimizations.reduce((acc, o) => acc + (o.optimized_consumption || 0), 0), color: "hsl(215, 16%, 57%)" },
+  ];
 
   const getWeatherIcon = (condition: string) => {
     switch (condition) {
@@ -465,16 +447,17 @@ const FuelOptimizerPage = () => {
                 <CardDescription>Original vs Otimizado por rota</CardDescription>
               </CardHeader>
               <CardContent>
-                <div className="h-[300px]">
-                  <Bar 
-                    data={chartData} 
-                    options={{
-                      responsive: true,
-                      maintainAspectRatio: false,
-                      plugins: { legend: { position: "top" } }
-                    }}
-                  />
-                </div>
+                <ResponsiveContainer width="100%" height={300}>
+                  <BarChart data={chartData}>
+                    <CartesianGrid strokeDasharray="3 3" />
+                    <XAxis dataKey="name" />
+                    <YAxis />
+                    <Tooltip />
+                    <Legend />
+                    <Bar dataKey="original" fill="hsl(0, 84%, 60%)" name="Consumo Original (t)" radius={[4, 4, 0, 0]} />
+                    <Bar dataKey="optimized" fill="hsl(142, 71%, 45%)" name="Consumo Otimizado (t)" radius={[4, 4, 0, 0]} />
+                  </BarChart>
+                </ResponsiveContainer>
               </CardContent>
             </Card>
 
@@ -488,16 +471,17 @@ const FuelOptimizerPage = () => {
                 <CardDescription>Total de combustível economizado</CardDescription>
               </CardHeader>
               <CardContent className="flex items-center justify-center">
-                <div className="h-[280px] w-[280px]">
-                  <Doughnut 
-                    data={savingsChartData}
-                    options={{
-                      responsive: true,
-                      maintainAspectRatio: false,
-                      plugins: { legend: { position: "bottom" } }
-                    }}
-                  />
-                </div>
+                <ResponsiveContainer width={280} height={280}>
+                  <PieChart>
+                    <Pie data={savingsChartData} cx="50%" cy="50%" innerRadius={60} outerRadius={100} dataKey="value" paddingAngle={5}>
+                      {savingsChartData.map((entry, i) => (
+                        <Cell key={i} fill={entry.color} />
+                      ))}
+                    </Pie>
+                    <Tooltip />
+                    <Legend />
+                  </PieChart>
+                </ResponsiveContainer>
               </CardContent>
             </Card>
           </div>
