@@ -83,8 +83,8 @@ const AlertsDialog: React.FC<AlertsDialogProps> = ({ open, onOpenChange }) => {
                         <div className="flex items-center gap-2 mt-2 text-xs text-muted-foreground"><Clock className="h-3 w-3" />{formatDistanceToNow(alert.timestamp, { addSuffix: true, locale: ptBR })}</div>
                       </div>
                       <div className="flex gap-1">
-                        {!alert.isRead && <Button variant="ghost" size="icon" className="h-7 w-7" onClick={() => markAsRead(alert.id)} title="Marcar como lida"><Check className="h-3 w-3" /></Button>}
-                        <Button variant="ghost" size="icon" className="h-7 w-7 text-muted-foreground hover:text-destructive" onClick={() => deleteAlert(alert.id)} title="Excluir"><Trash2 className="h-3 w-3" /></Button>
+                        {!alert.isRead && <Button variant="ghost" size="icon" className="h-7 w-7" onClick={() => markAsRead(alert.id)} aria-label="Marcar como lida"><Check className="h-3 w-3" /></Button>}
+                        <Button variant="ghost" size="icon" className="h-7 w-7 text-muted-foreground hover:text-destructive" onClick={() => deleteAlert(alert.id)} aria-label="Excluir alerta"><Trash2 className="h-3 w-3" /></Button>
                       </div>
                     </div>
                   </div>

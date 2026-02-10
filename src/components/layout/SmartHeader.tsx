@@ -40,7 +40,7 @@ export function SmartHeader() {
 
   return (
     <>
-      <header className="sticky top-0 z-30 flex items-center justify-between px-6 py-3 bg-card dark:bg-card text-foreground shadow-md border-b border-border">
+      <header role="banner" className="sticky top-0 z-30 flex items-center justify-between px-6 py-3 bg-card dark:bg-card text-foreground shadow-md border-b border-border">
         <h1 className="text-xl font-semibold flex items-center gap-2">
           <span>🚀 Nautilus One</span>
         </h1>
@@ -56,7 +56,7 @@ export function SmartHeader() {
             size="icon"
             onClick={toggleTheme}
             className="rounded-full hover:bg-muted transition-colors"
-            title={theme === "dark" ? "Modo Claro" : "Modo Escuro"}
+            aria-label={theme === "dark" ? "Alternar para modo claro" : "Alternar para modo escuro"}
           >
             {theme === "dark" ? (
               <Sun className="w-5 h-5" />

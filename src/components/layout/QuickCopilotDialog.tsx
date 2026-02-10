@@ -272,7 +272,7 @@ export function QuickCopilotDialog({ open, onOpenChange }: QuickCopilotDialogPro
                   setIsTTSEnabled(!isTTSEnabled);
                   if (isSpeaking) stopSpeaking();
                 }}
-                title={isTTSEnabled ? "Desativar voz" : "Ativar voz"}
+                aria-label={isTTSEnabled ? "Desativar voz" : "Ativar voz"}
               >
                 {isTTSEnabled ? (
                   <Volume2 className={cn("h-4 w-4", isSpeaking && "text-primary animate-pulse")} />
@@ -341,7 +341,7 @@ export function QuickCopilotDialog({ open, onOpenChange }: QuickCopilotDialogPro
               size="icon"
               onClick={toggleVoice}
               className={cn(isListening && "animate-pulse")}
-              title={isListening ? "Parar" : "Falar"}
+              aria-label={isListening ? "Parar escuta de voz" : "Ativar comando de voz"}
             >
               {isListening ? (
                 <MicOff className="h-4 w-4" />
@@ -362,6 +362,7 @@ export function QuickCopilotDialog({ open, onOpenChange }: QuickCopilotDialogPro
             onClick={() => sendMessage()} 
             disabled={!input.trim() || isLoading}
             size="icon"
+            aria-label={isLoading ? "Enviando mensagem" : "Enviar mensagem"}
           >
             {isLoading ? (
               <Loader2 className="h-4 w-4 animate-spin" />
