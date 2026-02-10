@@ -235,6 +235,7 @@ export const TwoFactorSettings: React.FC<TwoFactorSettingsProps> = ({ onClose })
                 variant="outline"
                 size="icon"
                 onClick={() => copyToClipboard(secret)}
+                aria-label={copied ? "Código copiado" : "Copiar código secreto"}
               >
                 {copied ? <Check className="h-4 w-4" /> : <Copy className="h-4 w-4" />}
               </Button>
