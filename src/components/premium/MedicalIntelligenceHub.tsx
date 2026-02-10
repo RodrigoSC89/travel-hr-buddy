@@ -3,8 +3,10 @@
   * Based on HDHE (Human Digital Healthcare Engineering) framework
   */
  
-  import React, { useState } from "react";
+  import React, { useState, useEffect } from "react";
   import { useMedicalIntelligenceData } from "@/hooks/useMedicalIntelligenceData";
+  import { supabase } from "@/integrations/supabase/client";
+  import { logger } from "@/lib/logger";
   import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
  import { Badge } from "@/components/ui/badge";
  import { Button } from "@/components/ui/button";
@@ -21,14 +23,50 @@
 export default function MedicalIntelligenceHub() {
     const { crewHealth: mockCrewHealth, isLoading } = useMedicalIntelligenceData();
     const [activeTab, setActiveTab] = useState("monitoring");
+    const [supplies, setSupplies] = useState<any[]>([]);
 
-    // Static mock supplies (medical inventory not yet in DB)
-    const mockSupplies = [
-      { id: "1", name: "Paracetamol 500mg", category: "Analgésicos", quantity: 120, minStock: 50, expiryDate: "2027-06-15", batchNumber: "LOT-2024-A1", status: "ok" },
-      { id: "2", name: "Bandagem Elástica", category: "Curativos", quantity: 25, minStock: 30, expiryDate: "2028-01-01", batchNumber: "LOT-2024-B2", status: "low" },
-      { id: "3", name: "Epinefrina 1mg/mL", category: "Emergência", quantity: 5, minStock: 10, expiryDate: "2026-03-01", batchNumber: "LOT-2023-E1", status: "critical" },
-      { id: "4", name: "Antibiótico Amoxicilina", category: "Antibióticos", quantity: 0, minStock: 20, expiryDate: "2025-12-01", batchNumber: "LOT-2022-X1", status: "expired" }
-    ];
+    // Fetch real medical supplies from Supabase
+    useEffect(() => {
+      const fetchSupplies = async () => {
+        try {
+          const { data, error } = await supabase
+            .from('medical_supplies')
+            .select('*')
+            .order('name')
+            .limit(50);
+
+          if (error) {
+            logger.warn('medical_supplies query error', error);
+            return;
+          }
+
+          const mapped = (data || []).map((s: any) => {
+            const qty = s.quantity || 0;
+            const minStock = s.min_stock || 10;
+            const now = new Date();
+            const expiry = s.expiry_date ? new Date(s.expiry_date) : null;
+            const isExpired = expiry && expiry < now;
+            const status = isExpired ? 'expired' : qty === 0 ? 'critical' : qty < minStock ? 'low' : 'ok';
+
+            return {
+              id: s.id,
+              name: s.name,
+              category: s.category || 'Geral',
+              quantity: qty,
+              minStock,
+              expiryDate: s.expiry_date?.split('T')[0] || 'N/A',
+              batchNumber: s.batch_number || 'N/A',
+              status,
+            };
+          });
+
+          setSupplies(mapped);
+        } catch (err) {
+          logger.error('Error fetching medical supplies', err);
+        }
+      };
+      fetchSupplies();
+    }, []);
  
    const getRiskColor = (level: string) => {
      switch (level) {
@@ -311,7 +349,7 @@ export default function MedicalIntelligenceHub() {
              </CardHeader>
              <CardContent>
                <div className="space-y-3">
-                 {mockSupplies.map((supply) => (
+                 {supplies.map((supply: any) => (
                    <div key={supply.id} className="flex items-center justify-between p-3 border rounded-lg">
                      <div className="flex items-center gap-3">
                        <Syringe className="h-5 w-5 text-muted-foreground" />

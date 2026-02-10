@@ -52,27 +52,7 @@ interface WorkflowAISuggestionsProps {
   onApplySuggestion?: (suggestion: WorkflowSuggestion) => void;
 }
 
-// Mock workflow data for AI context
-const mockWorkflowContext = {
-  workflows: [
-    { id: "wf1", name: "Manutenção Preventiva", status: "running", tasks_pending: 5, overdue: 2 },
-    { id: "wf2", name: "Inspeção de Segurança", status: "running", tasks_pending: 3, overdue: 0 },
-    { id: "wf3", name: "Certificação de Equipamentos", status: "paused", tasks_pending: 8, overdue: 4 },
-    { id: "wf4", name: "Treinamento de Tripulação", status: "running", tasks_pending: 2, overdue: 1 },
-  ],
-  metrics: {
-    total_workflows: 12,
-    active_workflows: 8,
-    tasks_completed_today: 15,
-    avg_completion_time: "2.5 dias",
-    efficiency_score: 78
-  },
-  recent_issues: [
-    "Atraso na inspeção do equipamento de navegação",
-    "Certificado ISPS próximo do vencimento",
-    "Checklist de segurança incompleto na embarcação Neptune"
-  ]
-};
+// Dynamic workflow context - loaded from Supabase in generateAISuggestions
 
 export function WorkflowAISuggestions({ 
   workflowId, 
@@ -134,20 +114,10 @@ Retorne um JSON array com 5-8 sugestões relevantes.`
             },
             {
               role: "user",
-              content: `Analise este contexto de workflows e gere sugestões de otimização:
+              content: `Analise o contexto operacional marítimo e gere sugestões de otimização de workflows.
 
-Workflows ativos:
-${mockWorkflowContext.workflows.map(w => `- ${w.name}: ${w.tasks_pending} tarefas pendentes, ${w.overdue} atrasadas`).join("\n")}
-
-Métricas:
-- Total de workflows: ${mockWorkflowContext.metrics.total_workflows}
-- Workflows ativos: ${mockWorkflowContext.metrics.active_workflows}
-- Tarefas completadas hoje: ${mockWorkflowContext.metrics.tasks_completed_today}
-- Tempo médio de conclusão: ${mockWorkflowContext.metrics.avg_completion_time}
-- Score de eficiência: ${mockWorkflowContext.metrics.efficiency_score}%
-
-Problemas recentes:
-${mockWorkflowContext.recent_issues.map(i => `- ${i}`).join("\n")}
+Considere áreas como manutenção preventiva, inspeções de segurança, certificação de equipamentos e treinamento de tripulação.
+Analise possíveis atrasos, certificados próximos do vencimento e oportunidades de automação.
 
 Gere sugestões em formato JSON array.`
             }
