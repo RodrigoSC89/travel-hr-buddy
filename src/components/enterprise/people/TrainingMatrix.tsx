@@ -246,7 +246,24 @@ export function TrainingMatrix() {
                 ))}
               </SelectContent>
             </Select>
-            <Button variant="outline">
+            <Button variant="outline" onClick={() => {
+              const headers = ["Tripulante", "Posto", "Embarcação", ...trainings.map(t => t.code)];
+              const rows = crewTrainings.map(c => [
+                c.crewName, c.rank, c.vessel,
+                ...trainings.map(t => {
+                  const ct = c.trainings.find(tr => tr.trainingId === t.id);
+                  return ct?.status || "not-started";
+                })
+              ]);
+              const csv = [headers, ...rows].map(r => r.join(",")).join("\n");
+              const blob = new Blob([csv], { type: "text/csv" });
+              const url = URL.createObjectURL(blob);
+              const a = document.createElement("a");
+              a.href = url;
+              a.download = `training-matrix-${new Date().toISOString().split("T")[0]}.csv`;
+              a.click();
+              URL.revokeObjectURL(url);
+            }}>
               <Download className="h-4 w-4 mr-2" />
               Exportar
             </Button>
