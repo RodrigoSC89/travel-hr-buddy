@@ -39,10 +39,10 @@ interface AIMetric {
 }
 
 const metrics: AIMetric[] = [
-  { label: "Decisões Hoje", value: 0, change: 0, unit: "", icon: Brain, color: "text-purple-500" },
-  { label: "Precisão Média", value: 0, change: 0, unit: "%", icon: Target, color: "text-green-500" },
-  { label: "Tempo Resposta", value: 0, change: 0, unit: "ms", icon: Zap, color: "text-yellow-500" },
-  { label: "Taxa Sucesso", value: 0, change: 0, unit: "%", icon: CheckCircle2, color: "text-blue-500" },
+  { label: "Decisões Hoje", value: 0, change: 0, unit: "", icon: Brain, color: "text-accent-foreground" },
+  { label: "Precisão Média", value: 0, change: 0, unit: "%", icon: Target, color: "text-success" },
+  { label: "Tempo Resposta", value: 0, change: 0, unit: "ms", icon: Zap, color: "text-warning" },
+  { label: "Taxa Sucesso", value: 0, change: 0, unit: "%", icon: CheckCircle2, color: "text-primary" },
 ];
 
 const StatusBadge = ({ status }: { status: string }) => {
@@ -70,15 +70,16 @@ export default function AIPerformanceMetrics() {
           supabase.from("agent_swarm_metrics").select("*").limit(20),
         ]);
 
-        const metricsMap = new Map((swarmMetrics || []).map((m: any) => [m.agent_id, m]));
+        const metricsMap = new Map((swarmMetrics || []).map((m) => [m.agent_id, m]));
 
-        const mapped: AIAgent[] = (registry || []).map((r: any) => {
+        const mapped: AIAgent[] = (registry || []).map((r) => {
           const m = metricsMap.get(r.agent_id);
+          const capabilities = r.capabilities as Record<string, unknown> | null;
           return {
             id: r.id,
             name: r.name,
-            type: (r.capabilities as any)?.type || "Geral",
-            status: r.status as any || "idle",
+            type: (capabilities?.type as string) || "Geral",
+            status: (r.status as AIAgent["status"]) || "idle",
             accuracy: m ? Math.round((m.success_count / Math.max(m.task_count, 1)) * 100 * 10) / 10 : 0,
             responseTime: m?.avg_response_time_ms || 0,
             tasksCompleted: m?.task_count || 0,
@@ -96,10 +97,10 @@ export default function AIPerformanceMetrics() {
         const successRate = mapped.length ? mapped.reduce((s, a) => s + a.confidenceLevel, 0) / mapped.length : 0;
 
         setDynamicMetrics([
-          { label: "Tarefas Total", value: totalTasks, change: 0, unit: "", icon: Brain, color: "text-purple-500" },
-          { label: "Precisão Média", value: Math.round(avgAcc * 10) / 10, change: 0, unit: "%", icon: Target, color: "text-green-500" },
-          { label: "Tempo Resposta", value: Math.round(avgResp), change: 0, unit: "ms", icon: Zap, color: "text-yellow-500" },
-          { label: "Taxa Sucesso", value: Math.round(successRate * 10) / 10, change: 0, unit: "%", icon: CheckCircle2, color: "text-blue-500" },
+          { label: "Tarefas Total", value: totalTasks, change: 0, unit: "", icon: Brain, color: "text-accent-foreground" },
+          { label: "Precisão Média", value: Math.round(avgAcc * 10) / 10, change: 0, unit: "%", icon: Target, color: "text-success" },
+          { label: "Tempo Resposta", value: Math.round(avgResp), change: 0, unit: "ms", icon: Zap, color: "text-warning" },
+          { label: "Taxa Sucesso", value: Math.round(successRate * 10) / 10, change: 0, unit: "%", icon: CheckCircle2, color: "text-primary" },
         ]);
       } catch (err) {
         logger.error("Error fetching AI agents", err);
@@ -123,7 +124,7 @@ export default function AIPerformanceMetrics() {
       <div className="flex items-center justify-between">
         <div>
           <h2 className="text-2xl font-bold flex items-center gap-2">
-            <Brain className="h-6 w-6 text-purple-500" />
+            <Brain className="h-6 w-6 text-accent-foreground" />
             Performance da IA
           </h2>
           <p className="text-muted-foreground">
@@ -166,10 +167,10 @@ export default function AIPerformanceMetrics() {
       </div>
 
       {/* System Health */}
-      <Card className="bg-gradient-to-r from-purple-500/5 to-blue-500/5">
+      <Card className="bg-gradient-to-r from-accent/5 to-primary/5">
         <CardHeader className="pb-3">
           <CardTitle className="text-base flex items-center gap-2">
-            <Gauge className="h-5 w-5 text-purple-500" />
+            <Gauge className="h-5 w-5 text-accent-foreground" />
             Saúde do Sistema de IA
           </CardTitle>
         </CardHeader>
@@ -261,7 +262,7 @@ export default function AIPerformanceMetrics() {
       <Card>
         <CardHeader>
           <CardTitle className="text-base flex items-center gap-2">
-            <Sparkles className="h-5 w-5 text-yellow-500" />
+            <Sparkles className="h-5 w-5 text-warning" />
             Aprendizado Contínuo
           </CardTitle>
           <CardDescription>
@@ -272,8 +273,8 @@ export default function AIPerformanceMetrics() {
           <div className="space-y-4">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-3">
-                <div className="h-10 w-10 rounded-full bg-purple-100 dark:bg-purple-900 flex items-center justify-center">
-                  <Brain className="h-5 w-5 text-purple-500" />
+                <div className="h-10 w-10 rounded-full bg-accent/20 flex items-center justify-center">
+                  <Brain className="h-5 w-5 text-accent-foreground" />
                 </div>
                 <div>
                   <p className="font-medium">Modelo de Compliance</p>
@@ -289,8 +290,8 @@ export default function AIPerformanceMetrics() {
 
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-3">
-                <div className="h-10 w-10 rounded-full bg-blue-100 dark:bg-blue-900 flex items-center justify-center">
-                  <BarChart3 className="h-5 w-5 text-blue-500" />
+                <div className="h-10 w-10 rounded-full bg-primary/20 flex items-center justify-center">
+                  <BarChart3 className="h-5 w-5 text-primary" />
                 </div>
                 <div>
                   <p className="font-medium">Predição de Manutenção</p>
@@ -306,8 +307,8 @@ export default function AIPerformanceMetrics() {
 
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-3">
-                <div className="h-10 w-10 rounded-full bg-green-100 dark:bg-green-900 flex items-center justify-center">
-                  <TrendingUp className="h-5 w-5 text-green-500" />
+                <div className="h-10 w-10 rounded-full bg-success/20 flex items-center justify-center">
+                  <TrendingUp className="h-5 w-5 text-success" />
                 </div>
                 <div>
                   <p className="font-medium">Otimização de Rotas</p>

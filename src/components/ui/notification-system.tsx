@@ -39,11 +39,11 @@ const typeIcons = {
   info: Info
 };
 
-const priorityColors = {
-  low: "bg-gray-500",
-  medium: "bg-yellow-500",
-  high: "bg-orange-500",
-  critical: "bg-red-500"
+const priorityColors: Record<string, string> = {
+  low: "bg-muted-foreground",
+  medium: "bg-warning",
+  high: "bg-warning",
+  critical: "bg-destructive"
 };
 
 interface NotificationSystemProps {
@@ -66,15 +66,15 @@ export const NotificationSystem = ({ className }: NotificationSystemProps) => {
           .limit(10);
 
         if (data && data.length > 0) {
-          setNotifications(data.map((n: any) => ({
+          setNotifications(data.map((n) => ({
             id: n.id,
             type: n.priority === "critical" ? "alert" as const : n.priority === "high" ? "warning" as const : n.type === "success" ? "success" as const : "info" as const,
             title: n.title || "Notificação",
             message: n.message || "",
-            vessel: n.vessel_name || undefined,
+            vessel: undefined,
             timestamp: new Date(n.created_at),
             read: n.is_read || false,
-            priority: n.priority || "medium",
+            priority: (n.priority || "medium") as Notification["priority"],
           })));
         }
       } catch { /* empty state shown */ }

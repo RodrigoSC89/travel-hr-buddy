@@ -102,9 +102,14 @@ export const OperationalCommandCenter: React.FC = () => {
       .limit(8);
 
     if (error) throw error;
-    setMetrics((data || []).map((metric: any) => ({
-      ...metric,
-      trend: metric.trend as "increasing" | "decreasing" | "stable"
+    setMetrics((data || []).map((metric) => ({
+      id: metric.id,
+      metric_name: metric.metric_name,
+      current_value: metric.current_value,
+      target_value: metric.target_value ?? 0,
+      unit: metric.unit ?? "",
+      trend: metric.trend as OperationalMetric["trend"],
+      last_calculation: metric.last_calculation ?? "",
     })));
   };
 
@@ -117,10 +122,16 @@ export const OperationalCommandCenter: React.FC = () => {
       .limit(10);
 
     if (error) throw error;
-    setAlerts((data || []).map((alert: any) => ({
-      ...alert,
-      severity: alert.severity as "low" | "medium" | "high" | "critical",
-      status: alert.status as "active" | "acknowledged" | "resolved"
+    setAlerts((data || []).map((alert) => ({
+      id: alert.id,
+      alert_type: alert.alert_type,
+      title: alert.title,
+      description: alert.description ?? "",
+      severity: alert.severity as OperationalAlert["severity"],
+      status: alert.status as OperationalAlert["status"],
+      created_at: alert.created_at,
+      affected_crew_member_id: alert.affected_crew_member_id ?? undefined,
+      affected_vessel_id: alert.affected_vessel_id ?? undefined,
     })));
   };
 
@@ -232,19 +243,19 @@ export const OperationalCommandCenter: React.FC = () => {
 
   const getSeverityColor = (severity: string) => {
     switch (severity) {
-    case "critical": return "text-red-600 bg-red-50 border-red-200";
-    case "high": return "text-orange-600 bg-orange-50 border-orange-200";
-    case "medium": return "text-yellow-600 bg-yellow-50 border-yellow-200";
-    case "low": return "text-blue-600 bg-blue-50 border-blue-200";
-    default: return "text-muted-foreground bg-gray-50 border-gray-200";
+    case "critical": return "text-destructive bg-destructive/10 border-destructive/20";
+    case "high": return "text-warning bg-warning/10 border-warning/20";
+    case "medium": return "text-warning bg-warning/5 border-warning/15";
+    case "low": return "text-primary bg-primary/10 border-primary/20";
+    default: return "text-muted-foreground bg-muted border-border";
     }
   };
 
   const getTrendIcon = (trend: string) => {
     switch (trend) {
-    case "increasing": return <TrendingUp className="h-4 w-4 text-green-600" />;
-    case "decreasing": return <TrendingUp className="h-4 w-4 text-red-600 rotate-180" />;
-    default: return <Activity className="h-4 w-4 text-blue-600" />;
+    case "increasing": return <TrendingUp className="h-4 w-4 text-success" />;
+    case "decreasing": return <TrendingUp className="h-4 w-4 text-destructive rotate-180" />;
+    default: return <Activity className="h-4 w-4 text-primary" />;
     }
   };
 
@@ -259,7 +270,7 @@ export const OperationalCommandCenter: React.FC = () => {
                 <p className="text-sm text-muted-foreground">Total de Tripulantes</p>
                 <p className="text-2xl font-bold">{stats.total_crew}</p>
               </div>
-              <Users className="h-8 w-8 text-blue-600" />
+              <Users className="h-8 w-8 text-primary" />
             </div>
           </CardContent>
         </Card>
@@ -271,7 +282,7 @@ export const OperationalCommandCenter: React.FC = () => {
                 <p className="text-sm text-muted-foreground">Tripulantes Disponíveis</p>
                 <p className="text-2xl font-bold">{stats.available_crew}</p>
               </div>
-              <CheckCircle className="h-8 w-8 text-green-600" />
+              <CheckCircle className="h-8 w-8 text-success" />
             </div>
           </CardContent>
         </Card>
@@ -283,7 +294,7 @@ export const OperationalCommandCenter: React.FC = () => {
                 <p className="text-sm text-muted-foreground">Embarcações Ativas</p>
                 <p className="text-2xl font-bold">{stats.active_vessels}</p>
               </div>
-              <Ship className="h-8 w-8 text-purple-600" />
+              <Ship className="h-8 w-8 text-accent-foreground" />
             </div>
           </CardContent>
         </Card>
@@ -295,7 +306,7 @@ export const OperationalCommandCenter: React.FC = () => {
                 <p className="text-sm text-muted-foreground">Taxa de Conformidade</p>
                 <p className="text-2xl font-bold">{stats.compliance_rate}%</p>
               </div>
-              <BarChart3 className="h-8 w-8 text-yellow-600" />
+              <BarChart3 className="h-8 w-8 text-warning" />
             </div>
           </CardContent>
         </Card>
