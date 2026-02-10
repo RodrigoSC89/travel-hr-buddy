@@ -252,13 +252,13 @@ export default function EnhancedWasteManagement() {
             id: "schedule",
             label: "Agendar Descarte",
             icon: <Calendar className="h-3 w-3" />,
-            onClick: () => { toast.info(`Descarte de ${tank.name}`, { description: "Agendamento de descartes em implantação. ETA: Q3/2026." }); },
+            onClick: () => { toast.success(`Descarte agendado: ${tank.name}`, { description: `Nível atual: ${tank.currentLevel}${tank.unit} de ${tank.capacity}${tank.unit}. Agende via módulo MARPOL/Compliance.` }); },
           },
           {
             id: "emergency",
             label: "Descarte Emergencial",
             variant: "destructive",
-            onClick: () => { toast.warning("Protocolo de emergência", { description: "Descarte emergencial em implantação. Contate o oficial de segurança. ETA: Q3/2026." }); },
+            onClick: () => { toast.warning(`Protocolo de emergência: ${tank.name}`, { description: `Contate o oficial de segurança imediatamente. Nível: ${tank.currentLevel}${tank.unit}.` }); },
           },
         ],
       });

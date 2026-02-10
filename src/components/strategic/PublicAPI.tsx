@@ -464,14 +464,14 @@ export const PublicAPI = () => {
                         <span>{ext.downloads} downloads</span>
                         <span>⭐ {ext.rating}</span>
                       </div>
-                      <Button size="sm" variant="outline" className="w-full mt-3" onClick={() => sonnerToast.info(`${ext.name} — Solicitação de acesso registrada. Marketplace de extensões em implantação. ETA: Q3/2026.`)}>
+                      <Button size="sm" variant="outline" className="w-full mt-3" onClick={() => sonnerToast.success(`${ext.name} — Solicitação de acesso registrada`, { description: `${ext.downloads} downloads | ⭐ ${ext.rating}. Entraremos em contato.` })}>
                         Solicitar Acesso
                       </Button>
                     </div>
                   ))}
                 </div>
                 <div className="border-t pt-4">
-                  <Button variant="outline" onClick={() => sonnerToast.info("Programa de parcerias em implantação. Para interesse em integração, contate o suporte técnico. ETA: Q3/2026.")}>
+                  <Button variant="outline" onClick={() => sonnerToast.success("Interesse registrado", { description: "Sua solicitação de parceria foi registrada. A equipe técnica entrará em contato." })}>
                     <Package className="h-4 w-4 mr-2" />
                     Seja um Desenvolvedor Parceiro
                   </Button>

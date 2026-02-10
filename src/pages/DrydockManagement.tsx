@@ -291,7 +291,7 @@ export default function DrydockManagement() {
                     <div className="text-center py-8">
                       <Wrench className="h-12 w-12 text-muted-foreground/50 mx-auto mb-3" />
                       <p className="text-muted-foreground">Nenhuma inspeção registrada</p>
-                      <Button variant="link" className="mt-2" onClick={() => toast.info("Registrar Inspeção", { description: "Módulo de registro de inspeções em implantação. Utilize o módulo de Manutenção para gerenciar inspeções existentes. ETA: Q3/2026." })}>
+                      <Button variant="link" className="mt-2" onClick={() => { window.history.pushState({}, '', '/maintenance?tab=jobs'); window.dispatchEvent(new PopStateEvent('popstate')); toast.success("Navegando para Manutenção para registrar inspeção"); }}>
                         <Plus className="h-4 w-4 mr-1" />
                         Registrar Inspeção
                       </Button>
@@ -345,7 +345,7 @@ export default function DrydockManagement() {
             <Card className="border-border/50 bg-card/50 backdrop-blur">
               <CardHeader className="flex flex-row items-center justify-between">
                 <CardTitle>Histórico de Inspeções de Casco</CardTitle>
-                <Button size="sm" className="gap-2" onClick={() => toast.info("Nova Inspeção de Casco", { description: "Formulário de inspeção de casco em implantação. Utilize o módulo de Manutenção para registros existentes. ETA: Q3/2026." })}>
+                <Button size="sm" className="gap-2" onClick={() => { window.history.pushState({}, '', '/maintenance?tab=jobs'); window.dispatchEvent(new PopStateEvent('popstate')); toast.success("Navegando para Manutenção para nova inspeção de casco"); }}>
                   <Plus className="h-4 w-4" />
                   Nova Inspeção
                 </Button>

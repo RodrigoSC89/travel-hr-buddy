@@ -93,7 +93,7 @@ function BudgetManagement() {
         title="Sem dados orçamentários"
         message="Cadastre embarcações com daily rates para calcular o orçamento automaticamente."
         actionLabel="Ver Frota"
-        onAction={() => toast.info("Navegue ao módulo Ops → Fleet para cadastrar embarcações")}
+        onAction={() => { window.history.pushState({}, '', '/ops?tab=fleet'); window.dispatchEvent(new PopStateEvent('popstate')); toast.success("Navegando para Fleet Management"); }}
       />
     );
   }
@@ -274,7 +274,7 @@ function AccountsManagement() {
               title="Nenhum fornecedor cadastrado"
               message="Adicione fornecedores para gerenciar contas a pagar e receber."
               actionLabel="Ir para Fornecedores"
-              onAction={() => toast.info("Use a aba Fornecedores para cadastrar")}
+              onAction={() => toast.success("Use a aba Fornecedores acima para cadastrar novos fornecedores")}
             />
           ) : (
             <div className="space-y-2">
@@ -308,7 +308,7 @@ function FinanceReports() {
       description: "Demonstrativo de resultados",
       action: async () => {
         const { data } = await supabase.from("expenses").select("description, amount, date, category, status").order("date", { ascending: false }).limit(200);
-        if (!data || data.length === 0) { toast.info("Sem dados de despesas para gerar DRE"); return; }
+        if (!data || data.length === 0) { toast.warning("Sem dados de despesas para gerar DRE"); return; }
         const csv = ["Descrição;Valor;Data;Categoria;Status", ...data.map((d: any) => `${d.description};${d.amount};${d.date};${d.category || 'N/A'};${d.status}`)].join('\n');
         const blob = new Blob(['\uFEFF' + csv], { type: 'text/csv;charset=utf-8;' });
         const url = URL.createObjectURL(blob); const a = document.createElement('a'); a.href = url; a.download = `dre-mensal-${new Date().toISOString().slice(0,7)}.csv`; a.click(); URL.revokeObjectURL(url);
@@ -321,7 +321,7 @@ function FinanceReports() {
       description: "Cash flow projetado",
       action: async () => {
         const { data } = await supabase.from("expenses").select("amount, date, category, status").order("date", { ascending: false }).limit(200);
-        if (!data || data.length === 0) { toast.info("Sem dados para gerar fluxo de caixa"); return; }
+        if (!data || data.length === 0) { toast.warning("Sem dados para gerar fluxo de caixa"); return; }
         const csv = ["Data;Valor;Categoria;Status", ...data.map((d: any) => `${d.date};${d.amount};${d.category || 'N/A'};${d.status}`)].join('\n');
         const blob = new Blob(['\uFEFF' + csv], { type: 'text/csv;charset=utf-8;' });
         const url = URL.createObjectURL(blob); const a = document.createElement('a'); a.href = url; a.download = `cash-flow-${new Date().toISOString().slice(0,7)}.csv`; a.click(); URL.revokeObjectURL(url);
@@ -343,7 +343,7 @@ function FinanceReports() {
           URL.revokeObjectURL(url);
           toast.success("OPEX exportado com sucesso");
         } else {
-          toast.info("Sem dados de embarcações para exportar");
+          toast.warning("Sem dados de embarcações para exportar");
         }
       }
     },
@@ -352,7 +352,7 @@ function FinanceReports() {
       icon: PiggyBank,
       description: "Comparativo orçamentário",
       action: () => {
-        toast.info("Navegue à aba Orçamento para ver o comparativo completo");
+        toast.success("Navegue à aba Orçamento acima para ver o comparativo completo");
       }
     },
   ];

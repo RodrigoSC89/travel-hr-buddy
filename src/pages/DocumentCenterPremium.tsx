@@ -72,7 +72,7 @@ function DocumentReportsTab() {
         title="Sem dados para relatórios"
         message="Faça upload de documentos primeiro para gerar métricas e analytics documentais."
         actionLabel="Ir para Biblioteca"
-        onAction={() => toast.info("Use a aba Biblioteca para fazer upload de documentos")}
+        onAction={() => toast.success("Use a aba Biblioteca acima para fazer upload de documentos")}
       />
     );
   }

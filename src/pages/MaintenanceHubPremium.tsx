@@ -77,7 +77,7 @@ function SparePartsInventoryTab() {
         title="Inventário vazio"
         message="Cadastre peças e materiais para controle de estoque. O sistema alertará sobre itens abaixo do mínimo."
         actionLabel="Ir para Procurement"
-        onAction={() => toast.info("Navegue ao módulo Ops → Procurement para cadastrar itens")}
+        onAction={() => { window.history.pushState({}, '', '/ops?tab=procurement'); window.dispatchEvent(new PopStateEvent('popstate')); toast.success("Navegando para Procurement"); }}
       />
     );
   }
