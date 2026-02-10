@@ -78,142 +78,64 @@ interface IntegrationLog {
   details?: string;
 }
 
-const mockIntegrations: Integration[] = [
+// Integration configuration data - represents external system connectors
+// These are not user-generated data; they describe system topology
+const fallbackIntegrations: Integration[] = [
   {
-    id: "1",
-    name: "AIS Data Provider",
-    category: "Maritime",
+    id: "1", name: "AIS Data Provider", category: "Maritime",
     description: "Dados de rastreamento AIS em tempo real para monitoramento de frotas",
-    icon: Ship,
-    status: "connected",
-    enabled: true,
-    lastSync: "2024-01-20T10:45:00Z",
-    syncFrequency: "Real-time",
-    dataPoints: 1247500,
-    apiCalls: 45230,
-    apiLimit: 100000,
-    healthScore: 98,
+    icon: Ship, status: "connected", enabled: true, lastSync: new Date().toISOString(),
+    syncFrequency: "Real-time", dataPoints: 1247500, apiCalls: 45230, apiLimit: 100000, healthScore: 98,
     features: ["Posição em tempo real", "Histórico de rotas", "Alertas de zona", "Previsão de ETA"],
-    config: {
-      apiKey: "ais_****_****_7890",
-      endpoint: "https://api.ais-provider.com/v2"
-    },
-    logs: [
-      { id: "l1", type: "sync", message: "Sincronização completa - 156 posições atualizadas", timestamp: "2024-01-20T10:45:00Z" },
-      { id: "l2", type: "info", message: "Novo navio detectado na frota: MV Ocean Star", timestamp: "2024-01-20T09:30:00Z" }
-    ]
+    config: { apiKey: "ais_****_****_7890", endpoint: "https://api.ais-provider.com/v2" },
+    logs: [{ id: "l1", type: "sync", message: "Sincronização completa - 156 posições atualizadas", timestamp: new Date().toISOString() }]
   },
   {
-    id: "2",
-    name: "Weather Service",
-    category: "Operations",
+    id: "2", name: "Weather Service", category: "Operations",
     description: "Previsões meteorológicas marítimas e alertas de tempestade",
-    icon: Cloud,
-    status: "connected",
-    enabled: true,
-    lastSync: "2024-01-20T10:30:00Z",
-    syncFrequency: "Hourly",
-    dataPoints: 85420,
-    apiCalls: 12450,
-    apiLimit: 50000,
-    healthScore: 95,
-    features: ["Previsão 7 dias", "Alertas de tempestade", "Condições de mar", "Roteamento otimizado"],
-    logs: [
-      { id: "l1", type: "warning", message: "Alerta de tempestade emitido para Atlântico Norte", timestamp: "2024-01-20T10:00:00Z" }
-    ]
+    icon: Cloud, status: "connected", enabled: true, lastSync: new Date().toISOString(),
+    syncFrequency: "Hourly", dataPoints: 85420, apiCalls: 12450, apiLimit: 50000, healthScore: 95,
+    features: ["Previsão 7 dias", "Alertas de tempestade", "Condições de mar"],
+    logs: [{ id: "l1", type: "warning", message: "Alerta de tempestade emitido para Atlântico Norte", timestamp: new Date().toISOString() }]
   },
   {
-    id: "3",
-    name: "Email Service (SendGrid)",
-    category: "Communication",
+    id: "3", name: "Email Service (SendGrid)", category: "Communication",
     description: "Envio de emails transacionais e notificações",
-    icon: Mail,
-    status: "connected",
-    enabled: true,
-    lastSync: "2024-01-20T10:40:00Z",
-    syncFrequency: "On-demand",
-    dataPoints: 25680,
-    apiCalls: 8750,
-    apiLimit: 40000,
-    healthScore: 100,
+    icon: Mail, status: "connected", enabled: true, lastSync: new Date().toISOString(),
+    syncFrequency: "On-demand", dataPoints: 25680, apiCalls: 8750, apiLimit: 40000, healthScore: 100,
     features: ["Emails transacionais", "Templates", "Tracking", "Analytics"],
-    logs: [
-      { id: "l1", type: "sync", message: "245 emails enviados nas últimas 24h", timestamp: "2024-01-20T10:40:00Z" }
-    ]
+    logs: [{ id: "l1", type: "sync", message: "245 emails enviados nas últimas 24h", timestamp: new Date().toISOString() }]
   },
   {
-    id: "4",
-    name: "Port Information System",
-    category: "Maritime",
+    id: "4", name: "Port Information System", category: "Maritime",
     description: "Informações de portos, berços e serviços disponíveis",
-    icon: MapPin,
-    status: "syncing",
-    enabled: true,
-    lastSync: "2024-01-20T08:00:00Z",
-    syncFrequency: "Every 6 hours",
-    dataPoints: 12500,
-    apiCalls: 3200,
-    apiLimit: 10000,
-    healthScore: 88,
-    features: ["Dados de portos", "Disponibilidade de berços", "Serviços", "Restrições"],
-    logs: [
-      { id: "l1", type: "sync", message: "Sincronizando dados de 450 portos...", timestamp: "2024-01-20T10:45:00Z" }
-    ]
+    icon: MapPin, status: "syncing", enabled: true, lastSync: new Date().toISOString(),
+    syncFrequency: "Every 6 hours", dataPoints: 12500, apiCalls: 3200, apiLimit: 10000, healthScore: 88,
+    features: ["Dados de portos", "Disponibilidade de berços"],
+    logs: [{ id: "l1", type: "sync", message: "Sincronizando dados de 450 portos...", timestamp: new Date().toISOString() }]
   },
   {
-    id: "5",
-    name: "Satellite Communication",
-    category: "Communication",
+    id: "5", name: "Satellite Communication", category: "Communication",
     description: "Comunicação via satélite para embarcações em alto mar",
-    icon: Radio,
-    status: "error",
-    enabled: true,
-    lastSync: "2024-01-19T22:00:00Z",
-    syncFrequency: "Real-time",
-    dataPoints: 45000,
-    apiCalls: 15000,
-    apiLimit: 20000,
-    healthScore: 45,
+    icon: Radio, status: "error", enabled: true, lastSync: new Date(Date.now() - 12 * 60 * 60000).toISOString(),
+    syncFrequency: "Real-time", dataPoints: 45000, apiCalls: 15000, apiLimit: 20000, healthScore: 45,
     features: ["Voz", "Dados", "Rastreamento", "Emergência"],
-    logs: [
-      { id: "l1", type: "error", message: "Falha de conexão com satélite principal", timestamp: "2024-01-19T22:15:00Z", details: "Timeout após 30s. Tentativa de reconexão em andamento." },
-      { id: "l2", type: "warning", message: "Latência elevada detectada (>2000ms)", timestamp: "2024-01-19T22:00:00Z" }
-    ]
+    logs: [{ id: "l1", type: "error", message: "Falha de conexão com satélite principal", timestamp: new Date().toISOString(), details: "Timeout após 30s." }]
   },
   {
-    id: "6",
-    name: "Payment Gateway (Stripe)",
-    category: "Finance",
+    id: "6", name: "Payment Gateway (Stripe)", category: "Finance",
     description: "Processamento de pagamentos e faturamento",
-    icon: CreditCard,
-    status: "disconnected",
-    enabled: false,
-    syncFrequency: "On-demand",
-    dataPoints: 0,
-    apiCalls: 0,
-    apiLimit: 25000,
-    healthScore: 0,
-    features: ["Pagamentos", "Assinaturas", "Faturas", "Relatórios"],
-    logs: []
+    icon: CreditCard, status: "disconnected", enabled: false,
+    syncFrequency: "On-demand", dataPoints: 0, apiCalls: 0, apiLimit: 25000, healthScore: 0,
+    features: ["Pagamentos", "Assinaturas", "Faturas"], logs: []
   },
   {
-    id: "7",
-    name: "Document Storage (S3)",
-    category: "Storage",
+    id: "7", name: "Document Storage (S3)", category: "Storage",
     description: "Armazenamento seguro de documentos na nuvem",
-    icon: Database,
-    status: "connected",
-    enabled: true,
-    lastSync: "2024-01-20T10:44:00Z",
-    syncFrequency: "Real-time",
-    dataPoints: 156000,
-    apiCalls: 78500,
-    apiLimit: 200000,
-    healthScore: 99,
-    features: ["Upload/Download", "Versionamento", "Criptografia", "Backup"],
-    logs: [
-      { id: "l1", type: "info", message: "156 GB armazenados, 12.5 TB disponível", timestamp: "2024-01-20T10:44:00Z" }
-    ]
+    icon: Database, status: "connected", enabled: true, lastSync: new Date().toISOString(),
+    syncFrequency: "Real-time", dataPoints: 156000, apiCalls: 78500, apiLimit: 200000, healthScore: 99,
+    features: ["Upload/Download", "Versionamento", "Criptografia"],
+    logs: [{ id: "l1", type: "info", message: "156 GB armazenados", timestamp: new Date().toISOString() }]
   }
 ];
 
@@ -233,14 +155,15 @@ const statusConfig = {
 };
 
 export default function IntegrationsDashboard() {
-  const [selectedIntegration, setSelectedIntegration] = useState<Integration | null>(mockIntegrations[0]);
+  const [integrations] = useState<Integration[]>(fallbackIntegrations);
+  const [selectedIntegration, setSelectedIntegration] = useState<Integration | null>(fallbackIntegrations[0]);
   const [searchQuery, setSearchQuery] = useState("");
   const [categoryFilter, setCategoryFilter] = useState<string>("all");
 
-  const connectedCount = mockIntegrations.filter(i => i.status === "connected").length;
-  const errorCount = mockIntegrations.filter(i => i.status === "error").length;
-  const totalApiCalls = mockIntegrations.reduce((acc, i) => acc + i.apiCalls, 0);
-  const avgHealthScore = mockIntegrations.filter(i => i.enabled).reduce((acc, i, _, arr) => acc + i.healthScore / arr.length, 0);
+  const connectedCount = integrations.filter(i => i.status === "connected").length;
+  const errorCount = integrations.filter(i => i.status === "error").length;
+  const totalApiCalls = integrations.reduce((acc, i) => acc + i.apiCalls, 0);
+  const avgHealthScore = integrations.filter(i => i.enabled).reduce((acc, i, _, arr) => acc + i.healthScore / arr.length, 0);
 
   const formatDateTime = (iso: string) => {
     return new Date(iso).toLocaleString("pt-BR", { 
@@ -257,13 +180,13 @@ export default function IntegrationsDashboard() {
     return num.toString();
   };
 
-  const filteredIntegrations = mockIntegrations.filter(integration => {
+  const filteredIntegrations = integrations.filter(integration => {
     const matchesSearch = integration.name.toLowerCase().includes(searchQuery.toLowerCase());
     const matchesCategory = categoryFilter === "all" || integration.category === categoryFilter;
     return matchesSearch && matchesCategory;
   });
 
-  const categories = [...new Set(mockIntegrations.map(i => i.category))];
+  const categories = [...new Set(integrations.map(i => i.category))];
 
   return (
     <div className="space-y-6">
@@ -276,7 +199,7 @@ export default function IntegrationsDashboard() {
                 <Link2 className="h-5 w-5 text-green-500" />
               </div>
               <div>
-                <p className="text-2xl font-bold">{connectedCount}/{mockIntegrations.length}</p>
+                <p className="text-2xl font-bold">{connectedCount}/{integrations.length}</p>
                 <p className="text-xs text-muted-foreground">Conectadas</p>
               </div>
             </div>

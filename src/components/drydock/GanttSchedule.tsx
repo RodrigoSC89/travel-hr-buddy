@@ -1,4 +1,4 @@
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -11,6 +11,7 @@ import { format, addDays, startOfWeek, endOfWeek, eachDayOfInterval, isWithinInt
 import { ptBR } from "date-fns/locale";
 import { cn } from "@/lib/utils";
 import { toast } from "sonner";
+import { supabase } from "@/integrations/supabase/client";
 
 interface DrydockEvent {
   id: string;
@@ -24,7 +25,7 @@ interface DrydockEvent {
   cost: number;
 }
 
-const mockEvents: DrydockEvent[] = [
+const fallbackEvents: DrydockEvent[] = [
   {
     id: '1',
     vesselName: 'MV Nautilus Star',
@@ -87,7 +88,36 @@ const statusConfig = {
 export function GanttSchedule() {
   const [currentDate, setCurrentDate] = useState(new Date());
   const [viewMode, setViewMode] = useState<'week' | 'month'>('month');
-  const [events] = useState<DrydockEvent[]>(mockEvents);
+  const [events, setEvents] = useState<DrydockEvent[]>(fallbackEvents);
+
+  useEffect(() => {
+    const loadEvents = async () => {
+      try {
+        const { data, error } = await supabase
+          .from("maintenance_tasks")
+          .select("id, title, description, status, scheduled_date, due_date, vessel_id, estimated_cost, progress_percent")
+          .eq("task_type", "drydock")
+          .limit(20);
+
+        if (!error && data && data.length > 0) {
+          setEvents(data.map((t: any) => ({
+            id: t.id,
+            vesselName: t.title || "Embarcação",
+            shipyard: t.description || "Estaleiro TBD",
+            eventType: "drydock" as const,
+            startDate: new Date(t.scheduled_date || Date.now()),
+            endDate: new Date(t.due_date || Date.now()),
+            status: (t.status === "completed" ? "completed" : t.status === "in_progress" ? "in_progress" : "planned") as DrydockEvent["status"],
+            progress: t.progress_percent || 0,
+            cost: t.estimated_cost || 0
+          })));
+        }
+      } catch {
+        // keep fallback
+      }
+    };
+    loadEvents();
+  }, []);
 
   const days = useMemo(() => {
     if (viewMode === 'week') {

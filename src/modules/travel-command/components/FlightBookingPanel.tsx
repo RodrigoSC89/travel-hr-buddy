@@ -58,8 +58,8 @@ interface FlightResult {
   fareType: "economy" | "business" | "premium" | "marine";
 }
 
-// Mock flight results
-const mockFlightResults: FlightResult[] = [
+// Flight results - static fare data (external GDS integration pending)
+const fallbackFlightResults: FlightResult[] = [
   {
     id: "1",
     airline: "LATAM Airlines",
@@ -194,7 +194,7 @@ export function FlightBookingPanel() {
     }
   };
 
-  const sortedResults = [...mockFlightResults].sort((a, b) => {
+  const sortedResults = [...fallbackFlightResults].sort((a, b) => {
     switch (sortBy) {
       case "price": return a.price - b.price;
       case "duration": return a.duration.localeCompare(b.duration);

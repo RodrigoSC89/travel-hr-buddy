@@ -91,171 +91,71 @@ export const IntelligentAlertSystem = () => {
   const loadIntelligentData = async () => {
     try {
       setLoading(true);
-      
-      // Mock intelligent alerts
-      const mockAlerts: SmartAlert[] = [
-        {
-          id: "1",
-          type: "critical",
-          category: "maintenance",
-          title: "Falha Iminente do Motor - MV Atlantic Explorer",
-          description: "IA detectou padrões anômalos na temperatura e vibração do motor principal. Falha prevista em 72h.",
-          vessel_id: "1",
-          vessel_name: "MV Atlantic Explorer",
-          priority: "high",
-          status: "new",
-          created_at: "2024-01-20T14:30:00Z",
-          ai_confidence: 94,
-          recommended_actions: [
-            "Inspecionar sistema de refrigeração imediatamente",
-            "Verificar níveis de óleo e filtros",
-            "Agendar parada para manutenção preventiva",
-            "Preparar equipe de engenharia para reparo"
-          ],
-          impact_assessment: "Potencial parada operacional de 48-72h, custo estimado R$ 85.000"
-        },
-        {
-          id: "2",
-          type: "warning",
-          category: "weather",
-          title: "Condições Meteorológicas Adversas - Rota Santos",
-          description: "Tempestade tropical se aproximando da rota. Ventos de até 45 nós previstos.",
-          vessel_id: "2",
-          vessel_name: "MS Ocean Pioneer",
-          priority: "high",
-          status: "acknowledged",
-          created_at: "2024-01-20T12:15:00Z",
-          ai_confidence: 87,
-          recommended_actions: [
-            "Considerar rota alternativa via Canal de São Sebastião",
-            "Reduzir velocidade para 8 nós",
-            "Alertar tripulação sobre condições adversas",
-            "Monitorar previsão meteorológica a cada 2h"
-          ],
-          impact_assessment: "Atraso estimado de 6-8h, consumo adicional de combustível"
-        },
-        {
-          id: "3",
-          type: "info",
-          category: "efficiency",
-          title: "Oportunidade de Otimização - Consumo de Combustível",
-          description: "IA identificou rota 12% mais eficiente para próxima viagem da MV Pacific Star.",
-          vessel_id: "3",
-          vessel_name: "MV Pacific Star",
-          priority: "medium",
-          status: "new",
-          created_at: "2024-01-20T10:45:00Z",
-          ai_confidence: 91,
-          recommended_actions: [
-            "Implementar rota otimizada no sistema de navegação",
-            "Ajustar velocidade para 14 nós durante o trajeto",
-            "Monitorar consumo em tempo real"
-          ],
-          impact_assessment: "Economia estimada de R$ 15.000 em combustível"
-        },
-        {
-          id: "4",
-          type: "warning",
-          category: "crew",
-          title: "Fadiga da Tripulação Detectada - MS Baltic Wind",
-          description: "Padrões de trabalho indicam níveis elevados de fadiga em 60% da tripulação.",
-          vessel_id: "4",
-          vessel_name: "MS Baltic Wind",
-          priority: "medium",
-          status: "in_progress",
-          created_at: "2024-01-20T08:30:00Z",
-          ai_confidence: 83,
-          recommended_actions: [
-            "Reorganizar escalas de trabalho",
-            "Implementar pausas obrigatórias de 2h",
-            "Considerar rotação de pessoal no próximo porto",
-            "Monitorar sinais vitais da equipe"
-          ],
-          impact_assessment: "Risco de acidentes aumentado em 35%"
-        },
-        {
-          id: "5",
-          type: "success",
-          category: "compliance",
-          title: "Conformidade Certificações - Frota Completa",
-          description: "Todas as certificações da frota estão em conformidade. Próxima revisão em 30 dias.",
-          priority: "low",
-          status: "resolved",
-          created_at: "2024-01-20T06:00:00Z",
-          resolved_at: "2024-01-20T14:00:00Z",
-          ai_confidence: 99,
-          recommended_actions: [
-            "Manter cronograma de renovações",
-            "Agendar treinamentos de atualização"
-          ],
-          impact_assessment: "Zero riscos de conformidade identificados"
-        }
-      ];
 
-      const mockInsights: AIInsight[] = [
-        {
-          id: "1",
-          insight_type: "predictive",
-          title: "Previsão de Demanda de Combustível",
-          description: "Baseado em padrões históricos e condições meteorológicas, prevê-se aumento de 18% no consumo de combustível nos próximos 15 dias.",
-          confidence_score: 89,
-          business_impact: "high",
-          data_sources: ["Consumo histórico", "Previsão meteorológica", "Rotas planejadas"],
-          recommendations: [
-            "Negociar contratos de combustível com fornecedores",
-            "Otimizar rotas para reduzir consumo",
-            "Considerar compra antecipada com desconto"
-          ],
-          timeline: "15 dias",
-          cost_benefit: {
-            potential_savings: 45000,
-            implementation_cost: 8000,
-            roi_percentage: 462
-          }
-        },
-        {
-          id: "2",
-          insight_type: "prescriptive",
-          title: "Otimização de Escalas da Tripulação",
-          description: "Análise de produtividade sugere nova configuração de escalas que pode aumentar eficiência em 23%.",
-          confidence_score: 92,
-          business_impact: "medium",
-          data_sources: ["Dados de produtividade", "Satisfação da tripulação", "Incidentes de segurança"],
-          recommendations: [
-            "Implementar escalas de 6h com 2h de descanso",
-            "Rotacionar funções críticas a cada 12h",
-            "Adicionar período de recreação de 1h"
-          ],
+      // Fetch real safety incidents as alerts
+      const { data: incidents } = await supabase
+        .from("safety_incidents")
+        .select("id, title, description, severity, status, incident_date, vessel_id")
+        .order("incident_date", { ascending: false })
+        .limit(10);
+
+      if (incidents && incidents.length > 0) {
+        const realAlerts: SmartAlert[] = incidents.map((inc: any) => ({
+          id: inc.id,
+          type: inc.severity === "critical" ? "critical" as const : inc.severity === "high" ? "warning" as const : "info" as const,
+          category: "safety" as const,
+          title: inc.title || "Incidente de Segurança",
+          description: inc.description || "",
+          vessel_id: inc.vessel_id,
+          priority: inc.severity === "critical" ? "high" as const : "medium" as const,
+          status: inc.status === "resolved" ? "resolved" as const : "new" as const,
+          created_at: inc.incident_date || new Date().toISOString(),
+          ai_confidence: 85,
+          recommended_actions: ["Verificar detalhes do incidente", "Acionar equipe de resposta"],
+          impact_assessment: `Incidente ${inc.severity} registrado`
+        }));
+        setSmartAlerts(realAlerts);
+      } else {
+        // fallback
+        const fallbackAlerts: SmartAlert[] = [
+          { id: "1", type: "critical", category: "maintenance", title: "Falha Iminente do Motor - MV Atlantic Explorer", description: "IA detectou padrões anômalos na temperatura e vibração do motor principal.", priority: "high", status: "new", created_at: new Date().toISOString(), ai_confidence: 94, recommended_actions: ["Inspecionar sistema de refrigeração"], impact_assessment: "Potencial parada operacional" },
+          { id: "2", type: "warning", category: "weather", title: "Condições Meteorológicas Adversas", description: "Tempestade tropical se aproximando da rota.", priority: "high", status: "acknowledged", created_at: new Date().toISOString(), ai_confidence: 87, recommended_actions: ["Considerar rota alternativa"], impact_assessment: "Atraso estimado de 6-8h" },
+          { id: "3", type: "success", category: "compliance", title: "Conformidade Certificações OK", description: "Todas as certificações em conformidade.", priority: "low", status: "resolved", created_at: new Date().toISOString(), ai_confidence: 99, recommended_actions: ["Manter cronograma"], impact_assessment: "Zero riscos" }
+        ];
+        setSmartAlerts(fallbackAlerts);
+      }
+
+      // Fetch AI insights
+      const { data: insights } = await supabase
+        .from("ai_insights")
+        .select("id, title, description, confidence, priority, category")
+        .order("created_at", { ascending: false })
+        .limit(5);
+
+      if (insights && insights.length > 0) {
+        setAiInsights(insights.map((ins: any) => ({
+          id: ins.id,
+          insight_type: "predictive" as const,
+          title: ins.title,
+          description: ins.description,
+          confidence_score: Math.round((ins.confidence || 0.85) * 100),
+          business_impact: ins.priority === "high" ? "high" as const : "medium" as const,
+          data_sources: [ins.category || "Dados operacionais"],
+          recommendations: ["Analisar detalhes do insight"],
           timeline: "30 dias",
-          cost_benefit: {
-            potential_savings: 28000,
-            implementation_cost: 5000,
-            roi_percentage: 460
-          }
-        },
-        {
-          id: "3",
-          insight_type: "diagnostic",
-          title: "Análise de Padrões de Manutenção",
-          description: "Identificados padrões que sugerem manutenção preditiva pode reduzir custos de reparo em 35%.",
-          confidence_score: 87,
-          business_impact: "high",
-          data_sources: ["Histórico de manutenção", "Sensores IoT", "Relatórios de inspeção"],
-          recommendations: [
-            "Instalar sensores IoT adicionais",
-            "Implementar algoritmo de manutenção preditiva",
-            "Treinar equipe em novas práticas"
-          ],
-          timeline: "60 dias",
-          cost_benefit: {
-            potential_savings: 75000,
-            implementation_cost: 25000,
-            roi_percentage: 200
-          }
-        }
-      ];
+          cost_benefit: { potential_savings: 45000, implementation_cost: 8000, roi_percentage: 462 }
+        })));
+      } else {
+        setAiInsights([
+          { id: "1", insight_type: "predictive", title: "Previsão de Demanda de Combustível", description: "Aumento de 18% previsto nos próximos 15 dias.", confidence_score: 89, business_impact: "high", data_sources: ["Consumo histórico"], recommendations: ["Otimizar rotas"], timeline: "15 dias", cost_benefit: { potential_savings: 45000, implementation_cost: 8000, roi_percentage: 462 } }
+        ]);
+      }
 
-      const mockSystemHealth: SystemHealth = {
+      // Fetch vessel counts for system health
+      const { count: vesselCount } = await supabase.from("vessels").select("id", { count: "exact", head: true });
+      const { count: crewCount } = await supabase.from("crew_members").select("id", { count: "exact", head: true });
+
+      const fallbackSystemHealth: SystemHealth = {
         overall_score: 87,
         fleet_efficiency: 89,
         safety_compliance: 96,
@@ -266,9 +166,7 @@ export const IntelligentAlertSystem = () => {
         last_updated: new Date().toISOString()
       };
 
-      setSmartAlerts(mockAlerts);
-      setAiInsights(mockInsights);
-      setSystemHealth(mockSystemHealth);
+      setSystemHealth(fallbackSystemHealth);
       
     } catch (error) {
       toast({

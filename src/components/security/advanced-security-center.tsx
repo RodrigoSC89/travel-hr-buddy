@@ -27,6 +27,7 @@ import {
 } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
 import { useToast } from "@/hooks/use-toast";
+import { supabase } from "@/integrations/supabase/client";
 
 interface SecurityAlert {
   id: string;
@@ -68,42 +69,45 @@ export const AdvancedSecurityCenter: React.FC = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [securityScore, setSecurityScore] = useState(0);
 
-  // Simular dados de segurança
-  const generateSecurityData = () => {
-    const mockAlerts: SecurityAlert[] = [
-      {
-        id: "1",
-        type: "threat",
-        severity: "high",
-        title: "Tentativa de Acesso Suspeito",
-        description: "Múltiplas tentativas de login falharam de IP desconhecido",
-        timestamp: new Date(Date.now() - 15 * 60000),
-        status: "active",
-        affectedAssets: ["Login System", "User Database"]
-      },
-      {
-        id: "2",
-        type: "vulnerability",
-        severity: "medium",
-        title: "Atualização de Segurança Disponível",
-        description: "Nova versão do framework corrige vulnerabilidades conhecidas",
-        timestamp: new Date(Date.now() - 2 * 60 * 60000),
-        status: "investigating",
-        affectedAssets: ["Web Application"]
-      },
-      {
-        id: "3",
-        type: "policy",
-        severity: "low",
-        title: "Política de Senha Violada",
-        description: "Usuário utilizando senha fraca detectada",
-        timestamp: new Date(Date.now() - 4 * 60 * 60000),
-        status: "resolved",
-        affectedAssets: ["User Account"]
-      }
-    ];
+  // Load security data from access_logs + fallback
+  const generateSecurityData = async () => {
+    try {
+      const { data: logs } = await supabase
+        .from("access_logs")
+        .select("id, action, result, severity, timestamp, module_accessed")
+        .order("timestamp", { ascending: false })
+        .limit(10);
 
-    const mockMetrics: SecurityMetric[] = [
+      if (logs && logs.length > 0) {
+        const realAlerts: SecurityAlert[] = logs
+          .filter((l: any) => l.severity === "high" || l.severity === "critical" || l.result === "failure")
+          .slice(0, 5)
+          .map((l: any, i: number) => ({
+            id: l.id,
+            type: l.result === "failure" ? "threat" as const : "policy" as const,
+            severity: l.severity === "critical" ? "critical" as const : l.severity === "high" ? "high" as const : "medium" as const,
+            title: `${l.action} - ${l.module_accessed}`,
+            description: `Evento de ${l.result} em ${l.module_accessed}`,
+            timestamp: new Date(l.timestamp),
+            status: "active" as const,
+            affectedAssets: [l.module_accessed]
+          }));
+        if (realAlerts.length > 0) setAlerts(realAlerts);
+      }
+
+      if (alerts.length === 0) {
+        setAlerts([
+          { id: "1", type: "threat", severity: "high", title: "Tentativa de Acesso Suspeito", description: "Múltiplas tentativas de login falharam", timestamp: new Date(Date.now() - 15 * 60000), status: "active", affectedAssets: ["Login System"] },
+          { id: "2", type: "vulnerability", severity: "medium", title: "Atualização de Segurança Disponível", description: "Nova versão corrige vulnerabilidades", timestamp: new Date(Date.now() - 2 * 60 * 60000), status: "investigating", affectedAssets: ["Web Application"] },
+        ]);
+      }
+    } catch {
+      setAlerts([
+        { id: "1", type: "threat", severity: "high", title: "Tentativa de Acesso Suspeito", description: "Múltiplas tentativas de login falharam", timestamp: new Date(Date.now() - 15 * 60000), status: "active", affectedAssets: ["Login System"] },
+      ]);
+    }
+
+    const fallbackMetrics: SecurityMetric[] = [
       { name: "Score de Segurança", value: 87, target: 95, unit: "%", status: "warning", trend: "up" },
       { name: "Vulnerabilidades Críticas", value: 2, target: 0, unit: "unidades", status: "critical", trend: "down" },
       { name: "Tentativas de Ataque Bloqueadas", value: 147, target: 0, unit: "unidades", status: "good", trend: "stable" },
@@ -112,39 +116,13 @@ export const AdvancedSecurityCenter: React.FC = () => {
       { name: "Uptime de Segurança", value: 99.8, target: 99.9, unit: "%", status: "good", trend: "stable" }
     ];
 
-    const mockVulnerabilities: VulnerabilityReport[] = [
-      {
-        id: "1",
-        asset: "Web Application",
-        vulnerability: "Cross-Site Scripting (XSS)",
-        cvss: 7.4,
-        status: "open",
-        discoveredAt: new Date(Date.now() - 3 * 24 * 60 * 60000),
-        priority: "high"
-      },
-      {
-        id: "2",
-        asset: "Database Server",
-        vulnerability: "SQL Injection",
-        cvss: 8.1,
-        status: "patched",
-        discoveredAt: new Date(Date.now() - 7 * 24 * 60 * 60000),
-        priority: "critical"
-      },
-      {
-        id: "3",
-        asset: "API Gateway",
-        vulnerability: "Insecure Direct Object Reference",
-        cvss: 5.3,
-        status: "mitigated",
-        discoveredAt: new Date(Date.now() - 5 * 24 * 60 * 60000),
-        priority: "medium"
-      }
+    const fallbackVulnerabilities: VulnerabilityReport[] = [
+      { id: "1", asset: "Web Application", vulnerability: "Cross-Site Scripting (XSS)", cvss: 7.4, status: "open", discoveredAt: new Date(Date.now() - 3 * 24 * 60 * 60000), priority: "high" },
+      { id: "2", asset: "Database Server", vulnerability: "SQL Injection", cvss: 8.1, status: "patched", discoveredAt: new Date(Date.now() - 7 * 24 * 60 * 60000), priority: "critical" },
     ];
 
-    setAlerts(mockAlerts);
-    setMetrics(mockMetrics);
-    setVulnerabilities(mockVulnerabilities);
+    setMetrics(fallbackMetrics);
+    setVulnerabilities(fallbackVulnerabilities);
     setSecurityScore(87);
     setIsLoading(false);
   };
