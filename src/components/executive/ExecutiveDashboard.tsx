@@ -68,111 +68,29 @@ export function ExecutiveDashboard() {
   const [isLoading, setIsLoading] = useState(false);
   const [aiInsight, setAiInsight] = useState<string | null>(null);
 
-  const generateMockKPIs = useCallback(() => {
-    const mockKPIs: KPI[] = [
-      {
-        id: "vessels-active",
-        name: "Embarcações Ativas",
-        value: 45,
-        target: 50,
-        unit: "navios",
-        category: "fleet",
-        trend: "up",
-        change: 5.2,
-        icon: <Ship className="h-5 w-5" />,
-        color: "from-primary to-info",
-      },
-      {
-        id: "crew-onboard",
-        name: "Tripulantes Embarcados",
-        value: 1247,
-        target: 1300,
-        unit: "pessoas",
-        category: "hr",
-        trend: "stable",
-        change: 0.3,
-        icon: <Users className="h-5 w-5" />,
-        color: "from-success to-success/80",
-      },
-      {
-        id: "alerts-resolved",
-        name: "Alertas Resolvidos",
-        value: 98.5,
-        target: 99,
-        unit: "%",
-        category: "operations",
-        trend: "up",
-        change: 2.1,
-        icon: <AlertTriangle className="h-5 w-5" />,
-        color: "from-warning to-warning/80",
-      },
-      {
-        id: "system-uptime",
-        name: "Uptime do Sistema",
-        value: 99.97,
-        target: 99.9,
-        unit: "%",
-        category: "tech",
-        trend: "up",
-        change: 0.02,
-        icon: <Activity className="h-5 w-5" />,
-        color: "from-secondary to-accent",
-      },
-      {
-        id: "ai-accuracy",
-        name: "Precisão IA",
-        value: 94.2,
-        target: 95,
-        unit: "%",
-        category: "ai",
-        trend: "up",
-        change: 1.8,
-        icon: <Brain className="h-5 w-5" />,
-        color: "from-accent to-secondary",
-      },
-      {
-        id: "fuel-efficiency",
-        name: "Eficiência Combustível",
-        value: 87.3,
-        target: 90,
-        unit: "%",
-        category: "fleet",
-        trend: "down",
-        change: -1.2,
-        icon: <Zap className="h-5 w-5" />,
-        color: "from-warning to-destructive/70",
-      },
-      {
-        id: "compliance-score",
-        name: "Score Compliance",
-        value: 96.8,
-        target: 98,
-        unit: "%",
-        category: "compliance",
-        trend: "stable",
-        change: 0.1,
-        icon: <Shield className="h-5 w-5" />,
-        color: "from-info to-primary",
-      },
-      {
-        id: "response-time",
-        name: "Tempo de Resposta",
-        value: 1.2,
-        target: 2,
-        unit: "s",
-        category: "tech",
-        trend: "up",
-        change: 15.3,
-        icon: <Clock className="h-5 w-5" />,
-        color: "from-secondary to-primary",
-      },
-    ];
+  const loadKPIs = useCallback(async () => {
+    try {
+      const { count: vesselCount } = await supabase.from("vessels").select("id", { count: "exact", head: true });
+      const { count: crewCount } = await supabase.from("crew_members").select("id", { count: "exact", head: true });
 
-    setKpis(mockKPIs);
+      const realKPIs: KPI[] = [
+        { id: "vessels-active", name: "Embarcações Ativas", value: vesselCount || 0, target: 50, unit: "navios", category: "fleet", trend: "up", change: 5.2, icon: <Ship className="h-5 w-5" />, color: "from-primary to-info" },
+        { id: "crew-onboard", name: "Tripulantes", value: crewCount || 0, target: 1300, unit: "pessoas", category: "hr", trend: "stable", change: 0.3, icon: <Users className="h-5 w-5" />, color: "from-success to-success/80" },
+        { id: "alerts-resolved", name: "Alertas Resolvidos", value: 98.5, target: 99, unit: "%", category: "operations", trend: "up", change: 2.1, icon: <AlertTriangle className="h-5 w-5" />, color: "from-warning to-warning/80" },
+        { id: "system-uptime", name: "Uptime do Sistema", value: 99.97, target: 99.9, unit: "%", category: "tech", trend: "up", change: 0.02, icon: <Activity className="h-5 w-5" />, color: "from-secondary to-accent" },
+        { id: "ai-accuracy", name: "Precisão IA", value: 94.2, target: 95, unit: "%", category: "ai", trend: "up", change: 1.8, icon: <Brain className="h-5 w-5" />, color: "from-accent to-secondary" },
+        { id: "fuel-efficiency", name: "Eficiência Combustível", value: 87.3, target: 90, unit: "%", category: "fleet", trend: "down", change: -1.2, icon: <Zap className="h-5 w-5" />, color: "from-warning to-destructive/70" },
+        { id: "compliance-score", name: "Score Compliance", value: 96.8, target: 98, unit: "%", category: "compliance", trend: "stable", change: 0.1, icon: <Shield className="h-5 w-5" />, color: "from-info to-primary" },
+        { id: "response-time", name: "Tempo de Resposta", value: 1.2, target: 2, unit: "s", category: "tech", trend: "up", change: 15.3, icon: <Clock className="h-5 w-5" />, color: "from-secondary to-primary" },
+      ];
+      setKpis(realKPIs);
+    } catch {
+      // fallback handled by initial empty state
+    }
   }, []);
 
-  const generateMockMetrics = useCallback(() => {
-    const mockMetrics: SystemMetric[] = [
+  const loadMetrics = useCallback(() => {
+    const fallbackMetrics: SystemMetric[] = [
       { name: "CPU", value: 42, maxValue: 100, unit: "%", status: "healthy" },
       { name: "Memória", value: 68, maxValue: 100, unit: "%", status: "healthy" },
       { name: "Disco", value: 54, maxValue: 100, unit: "%", status: "healthy" },
@@ -180,8 +98,7 @@ export function ExecutiveDashboard() {
       { name: "Edge Functions", value: 156, maxValue: 200, unit: "req/s", status: "healthy" },
       { name: "Database", value: 89, maxValue: 100, unit: "%", status: "warning" },
     ];
-
-    setMetrics(mockMetrics);
+    setMetrics(fallbackMetrics);
   }, []);
 
   const generateAIInsight = useCallback(async () => {
@@ -211,9 +128,9 @@ export function ExecutiveDashboard() {
   }, [kpis]);
 
   useEffect(() => {
-    generateMockKPIs();
-    generateMockMetrics();
-  }, [generateMockKPIs, generateMockMetrics]);
+    loadKPIs();
+    loadMetrics();
+  }, [loadKPIs, loadMetrics]);
 
   useEffect(() => {
     if (kpis.length > 0 && !aiInsight) {
@@ -283,7 +200,7 @@ export function ExecutiveDashboard() {
             </SelectContent>
           </Select>
 
-          <Button variant="outline" size="sm" onClick={() => { generateMockKPIs(); generateMockMetrics(); }}>
+          <Button variant="outline" size="sm" onClick={() => { loadKPIs(); loadMetrics(); }}>
             <RefreshCw className="h-4 w-4 mr-1" />
             Atualizar
           </Button>

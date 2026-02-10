@@ -3,7 +3,8 @@
  * Enterprise-grade drydock scheduling with class society integration
  */
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { supabase } from "@/integrations/supabase/client";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -43,7 +44,7 @@ interface WorkItem {
   daysRequired: number;
 }
 
-const mockProjects: DrydockProject[] = [
+const fallbackProjects: DrydockProject[] = [
   {
     id: "1",
     vessel: "MV Atlantic Star",
@@ -109,8 +110,42 @@ const typeLabels = {
 };
 
 export function DrydockPlanningTimeline() {
-  const [selectedProject, setSelectedProject] = useState<DrydockProject>(mockProjects[0]);
+  const [projects, setProjects] = useState<DrydockProject[]>(fallbackProjects);
+  const [selectedProject, setSelectedProject] = useState<DrydockProject>(fallbackProjects[0]);
   const [activeTab, setActiveTab] = useState("overview");
+
+  useEffect(() => {
+    const load = async () => {
+      try {
+        const { data } = await supabase
+          .from("maintenance_tasks")
+          .select("id, title, description, status, scheduled_date, due_date, estimated_cost, progress_percent, vessel_id")
+          .eq("task_type", "drydock")
+          .limit(10);
+
+        if (data && data.length > 0) {
+          const mapped = data.map((t: any) => ({
+            id: t.id,
+            vessel: t.title || "Embarcação",
+            vesselId: t.vessel_id || "v1",
+            classSociety: "DNV" as const,
+            type: "special_survey" as const,
+            status: (t.status === "completed" ? "completed" : t.status === "in_progress" ? "in_progress" : "planning") as DrydockProject["status"],
+            shipyard: t.description || "TBD",
+            startDate: new Date(t.scheduled_date || Date.now()),
+            endDate: new Date(t.due_date || Date.now()),
+            budgetEstimated: t.estimated_cost || 0,
+            budgetActual: 0,
+            completionPercent: t.progress_percent || 0,
+            workItems: []
+          }));
+          setProjects(mapped);
+          setSelectedProject(mapped[0]);
+        }
+      } catch { /* keep fallback */ }
+    };
+    load();
+  }, []);
 
   const daysRemaining = differenceInDays(selectedProject.endDate, new Date());
   const totalDays = differenceInDays(selectedProject.endDate, selectedProject.startDate);
@@ -120,7 +155,7 @@ export function DrydockPlanningTimeline() {
     <div className="space-y-6">
       {/* Project Selector */}
       <div className="flex gap-4 overflow-x-auto pb-2">
-        {mockProjects.map((project) => (
+        {projects.map((project) => (
           <motion.div
             key={project.id}
             whileHover={{ scale: 1.02 }}

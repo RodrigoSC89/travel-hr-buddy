@@ -3,7 +3,7 @@
  * Matriz de treinamentos STCW com LMS integrado
  */
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -30,6 +30,7 @@ import {
   BookOpen,
   Download
 } from "lucide-react";
+import { supabase } from "@/integrations/supabase/client";
 
 interface Training {
   id: string;
@@ -37,7 +38,7 @@ interface Training {
   code: string;
   category: "STCW" | "Safety" | "Technical" | "Compliance" | "Soft Skills";
   duration: string;
-  validity: number; // months
+  validity: number;
   isMandatory: boolean;
 }
 
@@ -56,7 +57,7 @@ interface CrewTraining {
   }[];
 }
 
-const mockTrainings: Training[] = [
+const fallbackTrainings: Training[] = [
   { id: "1", name: "Basic Safety Training (BST)", code: "STCW-A-VI/1", category: "STCW", duration: "5 days", validity: 60, isMandatory: true },
   { id: "2", name: "Advanced Fire Fighting", code: "STCW-A-VI/3", category: "STCW", duration: "3 days", validity: 60, isMandatory: true },
   { id: "3", name: "Medical First Aid", code: "STCW-A-VI/4-1", category: "STCW", duration: "3 days", validity: 60, isMandatory: true },
@@ -65,12 +66,9 @@ const mockTrainings: Training[] = [
   { id: "6", name: "Engine Room Resource Management", code: "STCW-A-III/1", category: "Technical", duration: "5 days", validity: 60, isMandatory: false }
 ];
 
-const mockCrewTrainings: CrewTraining[] = [
+const fallbackCrewTrainings: CrewTraining[] = [
   {
-    crewId: "1",
-    crewName: "Carlos Santos",
-    rank: "Chief Officer",
-    vessel: "MV Atlantic Pioneer",
+    crewId: "1", crewName: "Carlos Santos", rank: "Chief Officer", vessel: "MV Atlantic Pioneer",
     trainings: [
       { trainingId: "1", status: "completed", completedDate: "2024-06-15", expiryDate: "2029-06-15", score: 92 },
       { trainingId: "2", status: "completed", completedDate: "2024-06-18", expiryDate: "2029-06-18", score: 88 },
@@ -81,10 +79,7 @@ const mockCrewTrainings: CrewTraining[] = [
     ]
   },
   {
-    crewId: "2",
-    crewName: "Maria Fernanda",
-    rank: "2nd Engineer",
-    vessel: "MV Pacific Voyager",
+    crewId: "2", crewName: "Maria Fernanda", rank: "2nd Engineer", vessel: "MV Pacific Voyager",
     trainings: [
       { trainingId: "1", status: "completed", completedDate: "2023-08-10", expiryDate: "2028-08-10", score: 90 },
       { trainingId: "2", status: "completed", completedDate: "2023-08-12", expiryDate: "2028-08-12", score: 85 },
@@ -97,6 +92,32 @@ const mockCrewTrainings: CrewTraining[] = [
 ];
 
 export function TrainingMatrix() {
+  const [trainings, setTrainings] = useState<Training[]>(fallbackTrainings);
+  const [crewTrainings, setCrewTrainings] = useState<CrewTraining[]>(fallbackCrewTrainings);
+
+  useEffect(() => {
+    const load = async () => {
+      try {
+        const { data: courses } = await supabase
+          .from("academy_courses")
+          .select("id, course_name, metadata")
+          .limit(10);
+
+        if (courses && courses.length > 0) {
+          setTrainings(courses.map((c: any) => ({
+            id: c.id,
+            name: c.course_name,
+            code: (c.metadata as any)?.code || "N/A",
+            category: "STCW" as const,
+            duration: `${(c.metadata as any)?.duration_days || 5} days`,
+            validity: 60,
+            isMandatory: true
+          })));
+        }
+      } catch { /* keep fallback */ }
+    };
+    load();
+  }, []);
   const [searchTerm, setSearchTerm] = useState("");
   const [filterVessel, setFilterVessel] = useState("all");
 
@@ -126,16 +147,16 @@ export function TrainingMatrix() {
     }
   };
 
-  const vessels = [...new Set(mockCrewTrainings.map(c => c.vessel))];
+  const vessels = [...new Set(crewTrainings.map(c => c.vessel))];
 
   const stats = {
-    totalTrainings: mockTrainings.length,
+    totalTrainings: trainings.length,
     completedRate: Math.round(
-      (mockCrewTrainings.flatMap(c => c.trainings).filter(t => t.status === "completed").length /
-        mockCrewTrainings.flatMap(c => c.trainings).length) * 100
+      (crewTrainings.flatMap(c => c.trainings).filter(t => t.status === "completed").length /
+        (crewTrainings.flatMap(c => c.trainings).length || 1)) * 100
     ),
-    expiredCount: mockCrewTrainings.flatMap(c => c.trainings).filter(t => t.status === "expired").length,
-    inProgressCount: mockCrewTrainings.flatMap(c => c.trainings).filter(t => t.status === "in-progress").length
+    expiredCount: crewTrainings.flatMap(c => c.trainings).filter(t => t.status === "expired").length,
+    inProgressCount: crewTrainings.flatMap(c => c.trainings).filter(t => t.status === "in-progress").length
   };
 
   return (
@@ -247,7 +268,7 @@ export function TrainingMatrix() {
               <thead>
                 <tr className="border-b">
                   <th className="text-left p-3 font-medium text-sm">Tripulante</th>
-                  {mockTrainings.map((training) => (
+                  {trainings.map((training: Training) => (
                     <th key={training.id} className="p-3 text-center min-w-[100px]">
                       <div className="text-xs font-medium">{training.code}</div>
                       <div className="text-xs text-muted-foreground truncate max-w-[100px]" title={training.name}>
@@ -258,7 +279,7 @@ export function TrainingMatrix() {
                 </tr>
               </thead>
               <tbody>
-                {mockCrewTrainings.map((crew) => (
+                {crewTrainings.map((crew: CrewTraining) => (
                   <tr key={crew.crewId} className="border-b hover:bg-muted/50">
                     <td className="p-3">
                       <div>
@@ -267,8 +288,8 @@ export function TrainingMatrix() {
                         <p className="text-xs text-muted-foreground">{crew.vessel}</p>
                       </div>
                     </td>
-                    {mockTrainings.map((training) => {
-                      const crewTraining = crew.trainings.find(t => t.trainingId === training.id);
+                    {trainings.map((training: Training) => {
+                      const crewTraining = crew.trainings.find((t: { trainingId: string }) => t.trainingId === training.id);
                       return (
                         <td key={training.id} className="p-2 text-center">
                           <div className={`p-2 rounded-lg ${getStatusBg(crewTraining?.status || "not-started")}`}>

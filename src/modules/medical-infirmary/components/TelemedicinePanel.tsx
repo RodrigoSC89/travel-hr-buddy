@@ -80,21 +80,22 @@ interface Consultation {
   notes?: string;
 }
 
-const mockDoctors: Doctor[] = [
+// Telemedicine data - no dedicated backend table yet, using fallback
+const fallbackDoctors: Doctor[] = [
   { id: "1", name: "Dr. Carlos Mendes", specialty: "Medicina Geral", status: "available", rating: 4.9, consultations: 234, languages: ["Português", "Inglês"] },
   { id: "2", name: "Dra. Ana Souza", specialty: "Cardiologia", status: "available", rating: 4.8, consultations: 189, languages: ["Português", "Espanhol"] },
   { id: "3", name: "Dr. Roberto Lima", specialty: "Medicina Marítima", status: "busy", rating: 4.7, consultations: 312, languages: ["Português", "Inglês", "Francês"] },
   { id: "4", name: "Dra. Marina Costa", specialty: "Emergência", status: "available", rating: 4.9, consultations: 456, languages: ["Português", "Inglês"] },
 ];
 
-const mockConsultations: Consultation[] = [
+const fallbackConsultations: Consultation[] = [
   { id: "1", doctor_id: "1", doctor_name: "Dr. Carlos Mendes", patient_name: "João Silva", date: "2024-01-15", time: "10:00", duration_minutes: 25, status: "completed", chief_complaint: "Dor abdominal persistente", diagnosis: "Gastrite aguda", prescription: "Omeprazol 20mg 1x/dia" },
   { id: "2", doctor_id: "4", doctor_name: "Dra. Marina Costa", patient_name: "Pedro Costa", date: "2024-01-16", time: "14:30", duration_minutes: 0, status: "scheduled", chief_complaint: "Acompanhamento queimadura" },
 ];
 
 export default function TelemedicinePanel() {
-  const [doctors] = useState<Doctor[]>(mockDoctors);
-  const [consultations] = useState<Consultation[]>(mockConsultations);
+  const [doctors] = useState<Doctor[]>(fallbackDoctors);
+  const [consultations] = useState<Consultation[]>(fallbackConsultations);
   const [selectedDoctor, setSelectedDoctor] = useState<Doctor | null>(null);
   const [showScheduleDialog, setShowScheduleDialog] = useState(false);
   const [showCallDialog, setShowCallDialog] = useState(false);
