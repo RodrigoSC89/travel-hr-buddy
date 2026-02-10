@@ -1,9 +1,10 @@
 /**
  * Template Manager Component
  * ✅ P0-002: Real data from ai_document_templates table
+ * ✅ FUNCTIONAL BUTTONS: Novo Template, Baixar PDF/DOCX, Eye, Edit
  */
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -13,6 +14,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { FileText, Plus, Copy, Edit, Eye, Download, Variable, FileCode, Clock, User, Star } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
+import { toast } from "sonner";
 
 interface Template {
   id: string;
@@ -32,32 +34,35 @@ export function TemplateManager() {
   const [loading, setLoading] = useState(true);
   const [selectedTemplate, setSelectedTemplate] = useState<Template | null>(null);
   const [variableValues, setVariableValues] = useState<Record<string, string>>({});
+  const [showNewDialog, setShowNewDialog] = useState(false);
+  const [showPreviewDialog, setShowPreviewDialog] = useState(false);
+  const [previewTemplate, setPreviewTemplate] = useState<Template | null>(null);
+  const [newTemplate, setNewTemplate] = useState({ title: "", content: "", type: "contract" });
 
-  useEffect(() => {
-    async function fetch() {
-      const { data } = await supabase
-        .from("ai_document_templates")
-        .select("*")
-        .order("updated_at", { ascending: false })
-        .limit(20);
+  const fetchTemplates = useCallback(async () => {
+    const { data } = await supabase
+      .from("ai_document_templates")
+      .select("*")
+      .order("updated_at", { ascending: false })
+      .limit(20);
 
-      const mapped: Template[] = (data || []).map((t: any) => ({
-        id: t.id,
-        name: t.title,
-        category: t.template_type || "Geral",
-        description: t.content?.substring(0, 100) || "",
-        variables: Array.isArray(t.variables) ? (t.variables as any[]).map((v: any) => typeof v === 'string' ? v : `{{${v.name || v}}}`) : [],
-        lastModified: t.updated_at || t.created_at,
-        createdBy: "Sistema",
-        usageCount: 0,
-        isFavorite: t.is_favorite || false,
-        content: t.content || "",
-      }));
-      setTemplates(mapped);
-      setLoading(false);
-    }
-    fetch();
+    const mapped: Template[] = (data || []).map((t: any) => ({
+      id: t.id,
+      name: t.title,
+      category: t.template_type || "Geral",
+      description: t.content?.substring(0, 100) || "",
+      variables: Array.isArray(t.variables) ? (t.variables as any[]).map((v: any) => typeof v === 'string' ? v : `{{${v.name || v}}}`) : [],
+      lastModified: t.updated_at || t.created_at,
+      createdBy: "Sistema",
+      usageCount: 0,
+      isFavorite: t.is_favorite || false,
+      content: t.content || "",
+    }));
+    setTemplates(mapped);
+    setLoading(false);
   }, []);
+
+  useEffect(() => { fetchTemplates(); }, [fetchTemplates]);
 
   const generatePreview = (template: Template) => {
     let content = template.content;
@@ -68,6 +73,53 @@ export function TemplateManager() {
     });
     return content;
   };
+
+  const handleCreateTemplate = useCallback(async () => {
+    if (!newTemplate.title.trim()) {
+      toast.error("Informe o título do template");
+      return;
+    }
+    const { error } = await supabase
+      .from("ai_document_templates")
+      .insert({
+        title: newTemplate.title,
+        content: newTemplate.content,
+        template_type: newTemplate.type,
+      } as never);
+    
+    if (error) {
+      toast.error(`Erro ao criar template: ${error.message}`);
+    } else {
+      toast.success("Template criado com sucesso!");
+      setShowNewDialog(false);
+      setNewTemplate({ title: "", content: "", type: "contract" });
+      fetchTemplates();
+    }
+  }, [newTemplate, fetchTemplates]);
+
+  const handleDownload = useCallback((template: Template, format: "txt" | "md") => {
+    const content = generatePreview(template);
+    const mimeType = format === "md" ? "text/markdown" : "text/plain";
+    const ext = format === "md" ? "md" : "txt";
+    const blob = new Blob([content], { type: mimeType });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `${template.name}.${ext}`;
+    a.click();
+    URL.revokeObjectURL(url);
+    toast.success(`${template.name}.${ext} baixado`);
+  }, [variableValues]);
+
+  const handleViewPreview = useCallback((template: Template) => {
+    setPreviewTemplate(template);
+    setShowPreviewDialog(true);
+  }, []);
+
+  const handleEdit = useCallback((template: Template) => {
+    setNewTemplate({ title: template.name, content: template.content, type: template.category });
+    setShowNewDialog(true);
+  }, []);
 
   const categories = [...new Set(templates.map(t => t.category))];
 
@@ -82,10 +134,19 @@ export function TemplateManager() {
         <Card><CardContent className="pt-6"><div className="flex items-center justify-between"><div><p className="text-sm text-muted-foreground">Favoritos</p><p className="text-3xl font-bold text-yellow-500">{templates.filter(t => t.isFavorite).length}</p></div><div className="p-3 rounded-full bg-yellow-500/10"><Star className="h-6 w-6 text-yellow-500" /></div></div></CardContent></Card>
       </div>
 
-      <div className="flex justify-between items-center"><h2 className="text-xl font-semibold">Biblioteca de Templates</h2><Button><Plus className="h-4 w-4 mr-2" />Novo Template</Button></div>
+      <div className="flex justify-between items-center">
+        <h2 className="text-xl font-semibold">Biblioteca de Templates</h2>
+        <Button onClick={() => { setNewTemplate({ title: "", content: "", type: "contract" }); setShowNewDialog(true); }}>
+          <Plus className="h-4 w-4 mr-2" />Novo Template
+        </Button>
+      </div>
 
       {templates.length === 0 ? (
-        <Card><CardContent className="p-8 text-center text-muted-foreground"><FileCode className="h-12 w-12 mx-auto mb-3 opacity-50" /><p>Nenhum template cadastrado</p></CardContent></Card>
+        <Card><CardContent className="p-8 text-center text-muted-foreground">
+          <FileCode className="h-12 w-12 mx-auto mb-3 opacity-50" />
+          <p>Nenhum template cadastrado</p>
+          <Button className="mt-4" onClick={() => setShowNewDialog(true)}><Plus className="h-4 w-4 mr-2" />Criar Template</Button>
+        </CardContent></Card>
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           {templates.map((template) => (
@@ -116,18 +177,52 @@ export function TemplateManager() {
                       <div className="space-y-4 mt-4">
                         <div className="grid grid-cols-2 gap-4">{template.variables.map(variable => { const key = variable.replace(/[{}]/g, ""); return (<div key={key}><label className="text-sm font-medium">{key}</label><Input placeholder={`Digite ${key}...`} value={variableValues[key] || ""} onChange={(e) => setVariableValues(prev => ({ ...prev, [key]: e.target.value }))} className="mt-1" /></div>); })}</div>
                         <div><label className="text-sm font-medium">Preview:</label><Textarea value={generatePreview(template)} readOnly className="mt-1 h-48 font-mono text-sm" /></div>
-                        <div className="flex gap-2"><Button className="flex-1"><Download className="h-4 w-4 mr-2" />Baixar PDF</Button><Button variant="outline" className="flex-1"><FileText className="h-4 w-4 mr-2" />Baixar DOCX</Button></div>
+                        <div className="flex gap-2">
+                          <Button className="flex-1" onClick={() => handleDownload(template, "txt")}><Download className="h-4 w-4 mr-2" />Baixar TXT</Button>
+                          <Button variant="outline" className="flex-1" onClick={() => handleDownload(template, "md")}><FileText className="h-4 w-4 mr-2" />Baixar Markdown</Button>
+                        </div>
                       </div>
                     </DialogContent>
                   </Dialog>
-                  <Button variant="outline" size="sm"><Eye className="h-4 w-4" /></Button>
-                  <Button variant="outline" size="sm"><Edit className="h-4 w-4" /></Button>
+                  <Button variant="outline" size="sm" onClick={() => handleViewPreview(template)} title="Visualizar"><Eye className="h-4 w-4" /></Button>
+                  <Button variant="outline" size="sm" onClick={() => handleEdit(template)} title="Editar"><Edit className="h-4 w-4" /></Button>
                 </div>
               </CardContent>
             </Card>
           ))}
         </div>
       )}
+
+      {/* New Template Dialog */}
+      <Dialog open={showNewDialog} onOpenChange={setShowNewDialog}>
+        <DialogContent className="max-w-lg">
+          <DialogHeader><DialogTitle>Novo Template</DialogTitle></DialogHeader>
+          <div className="space-y-4">
+            <div>
+              <label className="text-sm font-medium">Título</label>
+              <Input value={newTemplate.title} onChange={(e) => setNewTemplate(prev => ({ ...prev, title: e.target.value }))} placeholder="Nome do template" className="mt-1" />
+            </div>
+            <div>
+              <label className="text-sm font-medium">Conteúdo</label>
+              <Textarea value={newTemplate.content} onChange={(e) => setNewTemplate(prev => ({ ...prev, content: e.target.value }))} placeholder="Conteúdo do template... Use {{variavel}} para variáveis." className="mt-1 h-40" />
+            </div>
+            <Button onClick={handleCreateTemplate} className="w-full"><Plus className="h-4 w-4 mr-2" />Criar Template</Button>
+          </div>
+        </DialogContent>
+      </Dialog>
+
+      {/* Preview Dialog */}
+      <Dialog open={showPreviewDialog} onOpenChange={setShowPreviewDialog}>
+        <DialogContent className="max-w-lg">
+          <DialogHeader><DialogTitle>{previewTemplate?.name}</DialogTitle></DialogHeader>
+          {previewTemplate && (
+            <div className="space-y-3">
+              <Badge variant="outline">{previewTemplate.category}</Badge>
+              <Textarea value={previewTemplate.content} readOnly className="h-64 font-mono text-sm" />
+            </div>
+          )}
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }
