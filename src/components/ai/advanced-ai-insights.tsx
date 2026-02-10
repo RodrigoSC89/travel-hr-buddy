@@ -136,14 +136,14 @@ const AdvancedAIInsights = () => {
       if (error) throw error;
 
       if (data && data.length > 0) {
-        const mapped = data.map((d: any) => ({
-          id: d.id,
+        const mapped = data.map((d) => ({
+          id: Number(d.id.replace(/\D/g, '').slice(0, 8)) || Date.now(),
           title: d.title,
           description: d.description,
           confidence: Math.round(d.confidence * 100),
           impact: d.priority === 'high' ? 'high' : d.priority === 'medium' ? 'medium' : 'low',
           category: d.category || 'emerging',
-          recommendations: (d.metadata as any)?.recommendations || ['Monitorar tendência'],
+          recommendations: (d.metadata as Record<string, unknown> | null)?.recommendations as string[] || ['Monitorar tendência'],
           estimatedSavings: d.impact_value || 'N/A',
           status: d.status === 'implemented' ? 'implemented' : d.status === 'active' ? 'active' : 'new',
         }));
@@ -181,18 +181,18 @@ const AdvancedAIInsights = () => {
 
   const getImpactColor = (impact: string) => {
     switch (impact) {
-    case "high": return "text-red-600 bg-red-50 border-red-200";
-    case "medium": return "text-yellow-600 bg-yellow-50 border-yellow-200";
-    case "low": return "text-green-600 bg-green-50 border-green-200";
-    default: return "text-muted-foreground bg-gray-50 border-gray-200";
+    case "high": return "text-destructive bg-destructive/10 border-destructive/20";
+    case "medium": return "text-warning bg-warning/10 border-warning/20";
+    case "low": return "text-success bg-success/10 border-success/20";
+    default: return "text-muted-foreground bg-muted border-border";
     }
   };
 
   const getStatusIcon = (status: string) => {
     switch (status) {
-    case "implemented": return <CheckCircle className="w-4 h-4 text-green-600" />;
-    case "active": return <Activity className="w-4 h-4 text-blue-600" />;
-    case "new": return <Sparkles className="w-4 h-4 text-purple-600" />;
+    case "implemented": return <CheckCircle className="w-4 h-4 text-success" />;
+    case "active": return <Activity className="w-4 h-4 text-primary" />;
+    case "new": return <Sparkles className="w-4 h-4 text-accent-foreground" />;
     default: return <Clock className="w-4 h-4 text-muted-foreground" />;
     }
   };
@@ -234,7 +234,7 @@ const AdvancedAIInsights = () => {
         <div className="flex items-center gap-2">
           <Button 
             variant="outline"
-            onClick={() => { const csv = aiInsights.map((i: any) => `${i.title},${i.category},${i.priority},${i.confidence}`).join('\n'); const blob = new Blob([`Título,Categoria,Prioridade,Confiança\n${csv}`], { type: 'text/csv' }); const url = URL.createObjectURL(blob); const a = document.createElement('a'); a.href = url; a.download = `ai-insights-${new Date().toISOString().slice(0,10)}.csv`; a.click(); URL.revokeObjectURL(url); toast({ title: "Insights exportados", description: `${aiInsights.length} insights exportados como CSV` }); }}
+            onClick={() => { const csv = aiInsights.map((i) => `${i.title},${i.category},${i.impact},${i.confidence}`).join('\n'); const blob = new Blob([`Título,Categoria,Prioridade,Confiança\n${csv}`], { type: 'text/csv' }); const url = URL.createObjectURL(blob); const a = document.createElement('a'); a.href = url; a.download = `ai-insights-${new Date().toISOString().slice(0,10)}.csv`; a.click(); URL.revokeObjectURL(url); toast({ title: "Insights exportados", description: `${aiInsights.length} insights exportados como CSV` }); }}
           >
             <Download className="w-4 h-4 mr-2" />
             Exportar
@@ -285,20 +285,20 @@ const AdvancedAIInsights = () => {
           </CardContent>
         </Card>
 
-        <Card className="border-l-4 border-l-green-500">
+        <Card className="border-l-4 border-l-success">
           <CardContent className="p-4">
             <div className="text-center space-y-2">
-              <div className="text-2xl font-bold text-green-600">{performanceMetrics.insightValue}%</div>
+              <div className="text-2xl font-bold text-success">{performanceMetrics.insightValue}%</div>
               <div className="text-sm text-muted-foreground">Valor Insights</div>
               <Progress value={performanceMetrics.insightValue} className="h-2" />
             </div>
           </CardContent>
         </Card>
 
-        <Card className="border-l-4 border-l-purple-500">
+        <Card className="border-l-4 border-l-accent">
           <CardContent className="p-4">
             <div className="text-center space-y-2">
-              <div className="text-2xl font-bold text-purple-600">{performanceMetrics.userAdoption}%</div>
+              <div className="text-2xl font-bold text-accent-foreground">{performanceMetrics.userAdoption}%</div>
               <div className="text-sm text-muted-foreground">Adoção</div>
               <Progress value={performanceMetrics.userAdoption} className="h-2" />
             </div>
@@ -364,8 +364,8 @@ const AdvancedAIInsights = () => {
 
                   <div className="flex items-center justify-between pt-2">
                     <div className="flex items-center gap-2">
-                      <Target className="w-4 h-4 text-green-600" />
-                      <span className="text-sm font-medium text-green-600">
+                      <Target className="w-4 h-4 text-success" />
+                      <span className="text-sm font-medium text-success">
                         {insight.estimatedSavings}
                       </span>
                     </div>
@@ -441,59 +441,59 @@ const AdvancedAIInsights = () => {
 
         <TabsContent value="analysis" className="space-y-6">
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-            <Card className="border-l-4 border-l-blue-500">
+            <Card className="border-l-4 border-l-primary">
               <CardHeader>
-                <CardTitle className="flex items-center gap-2 text-blue-700">
+                <CardTitle className="flex items-center gap-2 text-primary">
                   <BarChart3 className="w-5 h-5" />
                   Análise de Tendências
                 </CardTitle>
               </CardHeader>
               <CardContent className="space-y-3">
-                <div className="p-3 bg-blue-50 rounded-lg">
-                  <p className="font-medium text-blue-800">Crescimento Sustentado</p>
-                  <p className="text-sm text-blue-600">+12% nos últimos 3 meses</p>
+                <div className="p-3 bg-primary/10 rounded-lg">
+                  <p className="font-medium text-primary">Crescimento Sustentado</p>
+                  <p className="text-sm text-primary/80">+12% nos últimos 3 meses</p>
                 </div>
-                <div className="p-3 bg-blue-50 rounded-lg">
-                  <p className="font-medium text-blue-800">Padrão Sazonal</p>
-                  <p className="text-sm text-blue-600">Picos identificados às terças</p>
+                <div className="p-3 bg-primary/10 rounded-lg">
+                  <p className="font-medium text-primary">Padrão Sazonal</p>
+                  <p className="text-sm text-primary/80">Picos identificados às terças</p>
                 </div>
               </CardContent>
             </Card>
 
-            <Card className="border-l-4 border-l-green-500">
+            <Card className="border-l-4 border-l-success">
               <CardHeader>
-                <CardTitle className="flex items-center gap-2 text-green-700">
+                <CardTitle className="flex items-center gap-2 text-success">
                   <CheckCircle className="w-5 h-5" />
                   Oportunidades
                 </CardTitle>
               </CardHeader>
               <CardContent className="space-y-3">
-                <div className="p-3 bg-green-50 rounded-lg">
-                  <p className="font-medium text-green-800">Automação</p>
-                  <p className="text-sm text-green-600">30% das tarefas podem ser automatizadas</p>
+                <div className="p-3 bg-success/10 rounded-lg">
+                  <p className="font-medium text-success">Automação</p>
+                  <p className="text-sm text-success/80">30% das tarefas podem ser automatizadas</p>
                 </div>
-                <div className="p-3 bg-green-50 rounded-lg">
-                  <p className="font-medium text-green-800">Otimização</p>
-                  <p className="text-sm text-green-600">Redução de 25% no tempo de processo</p>
+                <div className="p-3 bg-success/10 rounded-lg">
+                  <p className="font-medium text-success">Otimização</p>
+                  <p className="text-sm text-success/80">Redução de 25% no tempo de processo</p>
                 </div>
               </CardContent>
             </Card>
 
-            <Card className="border-l-4 border-l-orange-500">
+            <Card className="border-l-4 border-l-warning">
               <CardHeader>
-                <CardTitle className="flex items-center gap-2 text-orange-700">
+                <CardTitle className="flex items-center gap-2 text-warning">
                   <AlertTriangle className="w-5 h-5" />
                   Alertas
                 </CardTitle>
               </CardHeader>
               <CardContent className="space-y-3">
-                <div className="p-3 bg-orange-50 rounded-lg">
-                  <p className="font-medium text-orange-800">Gargalo Identificado</p>
-                  <p className="text-sm text-orange-600">Processo de aprovação lento</p>
+                <div className="p-3 bg-warning/10 rounded-lg">
+                  <p className="font-medium text-warning">Gargalo Identificado</p>
+                  <p className="text-sm text-warning/80">Processo de aprovação lento</p>
                 </div>
-                <div className="p-3 bg-orange-50 rounded-lg">
-                  <p className="font-medium text-orange-800">Anomalia</p>
-                  <p className="text-sm text-orange-600">Uso atípico nas manhãs</p>
+                <div className="p-3 bg-warning/10 rounded-lg">
+                  <p className="font-medium text-warning">Anomalia</p>
+                  <p className="text-sm text-warning/80">Uso atípico nas manhãs</p>
                 </div>
               </CardContent>
             </Card>

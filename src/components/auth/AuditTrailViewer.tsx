@@ -49,11 +49,11 @@ interface AccessLog {
   created_at: string;
 }
 
-const RESULT_CONFIG: Record<string, { label: string; icon: any; color: string }> = {
-  success: { label: "Sucesso", icon: CheckCircle, color: "text-green-500" },
-  failure: { label: "Falha", icon: XCircle, color: "text-red-500" },
-  denied: { label: "Negado", icon: XCircle, color: "text-orange-500" },
-  error: { label: "Erro", icon: AlertCircle, color: "text-yellow-500" },
+const RESULT_CONFIG: Record<string, { label: string; icon: React.ElementType; color: string }> = {
+  success: { label: "Sucesso", icon: CheckCircle, color: "text-success" },
+  failure: { label: "Falha", icon: XCircle, color: "text-destructive" },
+  denied: { label: "Negado", icon: XCircle, color: "text-warning" },
+  error: { label: "Erro", icon: AlertCircle, color: "text-warning" },
 };
 
 export const AuditTrailViewer: React.FC = () => {
@@ -254,25 +254,25 @@ export const AuditTrailViewer: React.FC = () => {
           <CardContent className="p-4">
             <div className="grid grid-cols-4 gap-4 text-center">
               <div>
-                <p className="text-2xl font-bold text-green-500">
+                <p className="text-2xl font-bold text-success">
                   {logs.filter(l => l.result === "success").length}
                 </p>
                 <p className="text-sm text-muted-foreground">Sucessos</p>
               </div>
               <div>
-                <p className="text-2xl font-bold text-red-500">
+                <p className="text-2xl font-bold text-destructive">
                   {logs.filter(l => l.result === "failure").length}
                 </p>
                 <p className="text-sm text-muted-foreground">Falhas</p>
               </div>
               <div>
-                <p className="text-2xl font-bold text-orange-500">
+                <p className="text-2xl font-bold text-warning">
                   {logs.filter(l => l.result === "denied").length}
                 </p>
                 <p className="text-sm text-muted-foreground">Negados</p>
               </div>
               <div>
-                <p className="text-2xl font-bold text-yellow-500">
+                <p className="text-2xl font-bold text-warning">
                   {logs.filter(l => l.result === "error").length}
                 </p>
                 <p className="text-sm text-muted-foreground">Erros</p>

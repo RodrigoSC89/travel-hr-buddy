@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Brain, AlertTriangle, CheckCircle, XCircle } from "lucide-react";
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- ONNX Runtime dynamic import
 let ort: any = null;
 const loadORT = async () => {
   if (!ort) {

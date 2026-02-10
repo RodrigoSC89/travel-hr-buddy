@@ -64,16 +64,16 @@ export const MaritimeHRDashboard: React.FC = () => {
           },
           certifications: [],
           medical: {
-            last_checkup: (d as any).last_medical_checkup || '',
-            next_due: (d as any).next_medical_due || '',
-            status: (d as any).medical_status || 'valid',
+            last_checkup: (d as Record<string, unknown>).last_medical_checkup as string || '',
+            next_due: (d as Record<string, unknown>).next_medical_due as string || '',
+            status: (d as Record<string, unknown>).medical_status as string || 'valid',
           },
           performance: {
-            rating: (d as any).performance_rating || 0,
-            last_evaluation: (d as any).last_evaluation || '',
+            rating: (d as Record<string, unknown>).performance_rating as number || 0,
+            last_evaluation: (d as Record<string, unknown>).last_evaluation as string || '',
           },
           sea_service: {
-            total_months: (d as any).sea_service_months || 0,
+            total_months: (d as Record<string, unknown>).sea_service_months as number || 0,
             vessels_served: [],
           },
         };
@@ -114,9 +114,9 @@ export const MaritimeHRDashboard: React.FC = () => {
 
   const getStatusColor = (status: string) => {
     const colors: Record<string, string> = {
-      onboard: "text-blue-600 bg-blue-100", on_leave: "text-green-600 bg-green-100",
-      available: "text-muted-foreground bg-muted", training: "text-purple-600 bg-purple-100",
-      medical_leave: "text-red-600 bg-red-100"
+      onboard: "text-primary bg-primary/10", on_leave: "text-success bg-success/10",
+      available: "text-muted-foreground bg-muted", training: "text-accent-foreground bg-accent/20",
+      medical_leave: "text-destructive bg-destructive/10"
     };
     return colors[status] || "text-muted-foreground bg-muted";
   };
@@ -267,7 +267,7 @@ export const MaritimeHRDashboard: React.FC = () => {
                 <div className="text-center py-12"><Shield className="h-12 w-12 mx-auto text-muted-foreground mb-4 opacity-50" /><h3 className="font-medium mb-2">Nenhuma certificação com alerta</h3><p className="text-sm text-muted-foreground">Todas as certificações estão em dia</p></div>
               ) : (
                 <div className="space-y-3">
-                  {(expiringCerts as any[]).map((cert: any) => (
+                  {(expiringCerts as Array<{ id: string; certificate_type: string; expiry_date: string | null; status: string; employee_id: string | null }>).map((cert) => (
                     <div key={cert.id} className="flex items-center justify-between p-4 border rounded-lg">
                       <div><h4 className="font-medium">{cert.certificate_type || 'Certificado'}</h4><p className="text-sm text-muted-foreground">Vencimento: {cert.expiry_date ? new Date(cert.expiry_date).toLocaleDateString('pt-BR') : 'N/A'}</p></div>
                       <Badge variant={cert.status === 'expired' ? 'destructive' : 'secondary'}>{cert.status === 'expired' ? 'Vencido' : cert.status === 'expiring' ? 'Vencendo' : 'Válido'}</Badge>
