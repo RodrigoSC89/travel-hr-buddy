@@ -333,7 +333,7 @@ export const EnhancedFinanceCenter: React.FC = () => {
             <RefreshCw className="h-4 w-4 mr-2" />
             Atualizar
           </Button>
-          <Button onClick={() => toast.success("Nova Transação", { description: "Utilize as abas abaixo para criar transações, faturas ou contratos." })}>
+          <Button onClick={() => toast.info("Nova Transação", { description: "Criação de transações em implantação. Utilize as abas abaixo para gerenciar dados existentes. ETA: Q3/2026." })}>
             <Plus className="h-4 w-4 mr-2" />
             Nova Transação
           </Button>

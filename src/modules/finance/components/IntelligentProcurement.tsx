@@ -122,7 +122,7 @@ export function IntelligentProcurement() {
             IA recomenda fornecedores e otimiza compras automaticamente
           </p>
         </div>
-        <Button onClick={() => toast.success("Nova Requisição", { description: "Funcionalidade de requisição de compras em implantação. Utilize o módulo Procurement para criar solicitações. ETA: Q3/2026." })}>
+        <Button onClick={() => toast.info("Nova Requisição", { description: "Requisição de compras em implantação. Utilize o módulo Procurement para criar solicitações. ETA: Q3/2026." })}>
           <Package className="h-4 w-4 mr-2" />
           Nova Requisição
         </Button>
@@ -271,7 +271,7 @@ export function IntelligentProcurement() {
                         </p>
                       </div>
 
-                      <Button className="w-full" variant={idx === 0 ? 'default' : 'outline'} onClick={() => toast.success(`Fornecedor ${rec.supplierName} selecionado`, { description: `Score: ${rec.overallScore}/100 | Prazo: ${rec.leadTime} dias | Preço: R$ ${rec.price.toLocaleString()}` })}>
+                      <Button className="w-full" variant={idx === 0 ? 'default' : 'outline'} onClick={() => toast.info(`Fornecedor ${rec.supplierName}`, { description: `Score: ${rec.overallScore}/100 | Prazo: ${rec.leadTime} dias | Preço: R$ ${rec.price.toLocaleString()}. Seleção de fornecedores em implantação. ETA: Q3/2026.` })}>
                         Selecionar Fornecedor
                       </Button>
                     </CardContent>

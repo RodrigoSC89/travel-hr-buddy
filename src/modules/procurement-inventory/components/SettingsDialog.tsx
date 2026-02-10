@@ -315,7 +315,7 @@ export default function SettingsDialog({ open, onOpenChange }: SettingsDialogPro
                 <p className="text-sm text-muted-foreground">
                   Configure integrações adicionais com APIs externas
                 </p>
-                <Button variant="outline" className="mt-2" onClick={() => toast.success("Gestão de APIs", { description: "Módulo de integração de APIs externas em implantação. ETA: Q3/2026." })}>
+                <Button variant="outline" className="mt-2" onClick={() => toast.info("Gestão de APIs", { description: "Módulo de integração de APIs externas em implantação. ETA: Q3/2026." })}>
                   Gerenciar APIs
                 </Button>
               </div>

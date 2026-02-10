@@ -229,7 +229,7 @@ export function SupplierPortal() {
                 <Building2 className="h-5 w-5" />
                 Fornecedores
               </CardTitle>
-              <Button size="sm" onClick={() => toast.success("Novo Fornecedor", { description: "Funcionalidade em implantação. Utilize o módulo Procurement para cadastro completo. ETA: Q3/2026." })}>
+              <Button size="sm" onClick={() => toast.info("Novo Fornecedor", { description: "Cadastro de fornecedores em implantação. Utilize o módulo Procurement para cadastro completo. ETA: Q3/2026." })}>
                 <Plus className="h-4 w-4 mr-1" />
                 Novo
               </Button>
@@ -303,7 +303,7 @@ export function SupplierPortal() {
                   </div>
                 </div>
                 <div className="flex gap-2">
-                  <Button variant="outline" size="sm" onClick={() => toast.success(`Mensagem para ${selectedSupplier.name}`, { description: `E-mail será enviado para ${selectedSupplier.contact.email}` })}>
+                  <Button variant="outline" size="sm" onClick={() => toast.info(`Mensagem para ${selectedSupplier.name}`, { description: `Mensageria de fornecedores em implantação. Contate via: ${selectedSupplier.contact.email}. ETA: Q3/2026.` })}>
                     <MessageSquare className="h-4 w-4 mr-1" />
                     Mensagem
                   </Button>

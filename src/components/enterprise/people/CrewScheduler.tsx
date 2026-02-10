@@ -380,7 +380,7 @@ export function CrewScheduler() {
                       </p>
                     </div>
                   </div>
-                  <Button variant="destructive" size="sm" onClick={() => toast.success(`Rendição planejada para ${rotation.crewName}`, { description: `${rotation.daysOnBoard} dias a bordo (máx: ${rotation.maxDays}). Processo de substituição iniciado.` })}>
+                  <Button variant="destructive" size="sm" onClick={() => toast.info(`Rendição de ${rotation.crewName}`, { description: `${rotation.daysOnBoard} dias a bordo (máx: ${rotation.maxDays}). Planejamento de rendições em implantação. Gerencie via People Hub > Crew Management. ETA: Q3/2026.` })}>
                     Planejar Rendição
                   </Button>
                 </div>

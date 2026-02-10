@@ -427,7 +427,7 @@ export default function FinanceCommandDashboard() {
                 <Download className="h-4 w-4 mr-2" />
                 Exportar
               </Button>
-              <Button size="sm" className="gap-2" onClick={() => toast.success("Nova transação", { description: "Utilize as Aprovações Pendentes acima para registrar novas solicitações financeiras." })}>
+              <Button size="sm" className="gap-2" onClick={() => toast.info("Nova transação", { description: "Criação de transações em implantação. Utilize Aprovações Pendentes acima. ETA: Q3/2026." })}>
                 <Plus className="h-4 w-4" />
                 Nova
               </Button>
