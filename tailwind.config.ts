@@ -182,6 +182,11 @@ const config: Config = {
         azure: "var(--shadow-azure)",
         depth: "var(--shadow-depth)",
         soft: "var(--shadow-soft)",
+        "premium-sm": "var(--shadow-premium-sm)",
+        "premium": "var(--shadow-premium)",
+        "premium-md": "var(--shadow-premium-md)",
+        "premium-lg": "var(--shadow-premium-lg)",
+        "premium-xl": "var(--shadow-premium-xl)",
       },
       backgroundImage: {
         "gradient-ocean": "var(--gradient-ocean)",
@@ -286,6 +291,9 @@ const config: Config = {
         "blur-in": {
           "0%": { filter: "blur(10px)", opacity: "0" },
           "100%": { filter: "blur(0)", opacity: "1" },
+        },
+        "shimmer": {
+          "100%": { transform: "translateX(100%)" },
         },
       },
       animation: {

@@ -7,7 +7,9 @@ export const Skeleton: FC<SkeletonProps> = ({ className, ...props }) => {
   return (
     <div
       className={cn(
-        "animate-pulse rounded-md bg-muted/60",
+        "rounded-md bg-muted/50 relative overflow-hidden",
+        "before:absolute before:inset-0 before:-translate-x-full before:animate-[shimmer_1.5s_infinite]",
+        "before:bg-gradient-to-r before:from-transparent before:via-white/20 before:to-transparent",
         className
       )}
       {...props}
@@ -17,7 +19,7 @@ export const Skeleton: FC<SkeletonProps> = ({ className, ...props }) => {
 
 // Skeleton específicos para diferentes componentes
 export const CardSkeleton: FC = () => (
-  <div className="p-6 space-y-4 bg-background border rounded-lg">
+  <div className="p-6 space-y-4 bg-card border border-border/50 rounded-xl shadow-sm">
     <Skeleton className="h-4 w-3/4" />
     <Skeleton className="h-8 w-1/2" />
     <div className="space-y-2">
@@ -56,11 +58,11 @@ export const DashboardSkeleton: FC = () => (
     <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
       <div className="space-y-4">
         <Skeleton className="h-6 w-1/3" />
-        <Skeleton className="h-64 w-full" />
+        <Skeleton className="h-64 w-full rounded-xl" />
       </div>
       <div className="space-y-4">
         <Skeleton className="h-6 w-1/3" />
-        <Skeleton className="h-64 w-full" />
+        <Skeleton className="h-64 w-full rounded-xl" />
       </div>
     </div>
   </div>
