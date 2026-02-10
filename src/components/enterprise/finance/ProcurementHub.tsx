@@ -356,7 +356,7 @@ export function ProcurementHub() {
                 </div>
                 <div className="flex gap-2">
                   {selectedPR.status === "draft" && (
-                    <Button size="sm" onClick={() => toast.success(`Requisição ${selectedPR.prNumber} enviada para aprovação`, { description: `${selectedPR.title} - ${formatCurrency(selectedPR.totalAmount)}` })}>
+                    <Button size="sm" onClick={() => toast.info(`Envio de ${selectedPR.prNumber} para aprovação`, { description: `Workflow de aprovação de requisições em implantação. Utilize o módulo de Action Items para acompanhar solicitações. ETA: Q3/2026.` })}>
                       <Send className="h-4 w-4 mr-1" />
                       Enviar
                     </Button>
