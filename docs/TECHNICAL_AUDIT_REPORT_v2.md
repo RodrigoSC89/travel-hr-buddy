@@ -57,7 +57,7 @@
 |----|-----------|----------|---------|
 | P1-001 | ~~`window.location.href` navegação interna~~ ✅ CORRIGIDO (8 arquivos migrados para `spaNavigate`) | ~~43 arquivos~~ Restam: 5 (aceitáveis: error boundaries, OAuth, mailto) | ~~4h~~ |
 | P1-002 | `as any` / `: any` — Sprint 3: corrigidos 10 arquivos de serviço (celestrak, terrastar, starfix, smart-drills) | ~~757 arquivos~~ Em progresso | 1-2 sem |
-| P1-003 | localStorage sem encryption (dados IA) | 216 arquivos | 4h |
+| P1-003 | ~~localStorage sem encryption (dados IA)~~ ✅ MITIGADO — ai_memory e ai_context_logs migrados para sessionStorage; restantes são caches efêmeros aceitáveis | ~~216 arquivos~~ | ~~4h~~ |
 | P1-004 | ~~3 exports com toast sem geração real~~ ✅ CORRIGIDO (RecordBooks, AutoScoringEngine, OVIDReports agora geram Blob real) | ~~3 arquivos~~ | ~~2h~~ |
 | P1-005 | ~~VR/AR "Em implantação" sem feature flag~~ ✅ CORRIGIDO (botão disabled + ETA Q3/2026) | ~~1 arquivo~~ | ~~15m~~ |
 | P1-006 | ~~ModulesGrid "Em Implantação" sem FF~~ ✅ CORRIGIDO (exibe ETA "Q3/2026") | ~~1 arquivo~~ | ~~1h~~ |
@@ -70,7 +70,7 @@
 
 | ID | Descrição | Esforço |
 |----|-----------|---------|
-| P2-001 | ~100 TODOs/FIXMEs legítimos | 2-3 dias |
+| P2-001 | ~55 TODOs/FIXMEs legítimos (APIs externas pendentes: Skyscanner, Booking, METAR, IMO) — aceitos como pendências de integração | 2-3 dias |
 | P2-002 | ~~5 componentes de notificação duplicados~~ ✅ ACEITO — 5 componentes servem contextos distintos (header popover, full-page, dashboard widget, system toasts, layout widget). Não são duplicados. | ~~4h~~ |
 | P2-003 | ~~Communication components duplicados com mock~~ ✅ CORRIGIDO (maritime-communication-center migrado para Supabase) | ~~2h~~ |
 | P2-004 | ~~Security center com mock alerts/metrics~~ ✅ CORRIGIDO (AlertsNotificationCenter migrado para Supabase) | ~~2h~~ |

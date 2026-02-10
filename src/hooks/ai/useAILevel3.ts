@@ -111,11 +111,11 @@ export function useAILevel3(options: UseAILevel3Options) {
       
       setMemory(prev => [newEntry, ...prev].slice(0, 100));
       
-      // Optional: persist to localStorage
-      const stored = localStorage.getItem('ai_memory') || '[]';
+      // Persist to sessionStorage (session-scoped, not persisted across tabs)
+      const stored = sessionStorage.getItem('ai_memory') || '[]';
       const memories = JSON.parse(stored);
       memories.unshift(newEntry);
-      localStorage.setItem('ai_memory', JSON.stringify(memories.slice(0, 100)));
+      sessionStorage.setItem('ai_memory', JSON.stringify(memories.slice(0, 100)));
     } catch (error) {
       logger.error('Failed to store AI memory:', error);
     }
