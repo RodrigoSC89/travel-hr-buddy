@@ -4,32 +4,10 @@
  */
 import React from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Line } from "react-chartjs-2";
-import {
-  Chart as ChartJS,
-  CategoryScale,
-  LinearScale,
-  PointElement,
-  LineElement,
-  Title,
-  Tooltip,
-  Legend,
-  Filler,
-} from "chart.js";
+import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from "recharts";
 import { TrendingUp, TrendingDown, Heart, Brain, Loader2 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { useMoodDashboardData } from "@/hooks/useMoodDashboardData";
-
-ChartJS.register(
-  CategoryScale,
-  LinearScale,
-  PointElement,
-  LineElement,
-  Title,
-  Tooltip,
-  Legend,
-  Filler
-);
 
 export const MoodDashboard = () => {
   const { entries, stats, trends, isLoading, error } = useMoodDashboardData();
@@ -40,56 +18,12 @@ export const MoodDashboard = () => {
     return <span className="text-xs text-muted-foreground">Estável</span>;
   };
 
-  const chartData = {
-    labels: trends.map(d => {
-      const date = new Date(d.date);
-      return date.toLocaleDateString("pt-BR", { day: "2-digit", month: "short" });
-    }),
-    datasets: [
-      {
-        label: "Humor",
-        data: trends.map(d => d.avgMood * 20), // Scale 1-5 to 0-100
-        borderColor: "hsl(var(--success))",
-        backgroundColor: "hsl(var(--success) / 0.1)",
-        fill: true,
-        tension: 0.4,
-      },
-      {
-        label: "Energia",
-        data: trends.map(d => d.avgEnergy * 20),
-        borderColor: "hsl(var(--primary))",
-        backgroundColor: "hsl(var(--primary) / 0.1)",
-        fill: true,
-        tension: 0.4,
-      },
-      {
-        label: "Estresse",
-        data: trends.map(d => (5 - d.avgStress) * 20), // Invert: lower stress = higher score
-        borderColor: "hsl(var(--warning))",
-        backgroundColor: "hsl(var(--warning) / 0.1)",
-        fill: true,
-        tension: 0.4,
-      },
-    ],
-  };
-
-  const chartOptions = {
-    responsive: true,
-    plugins: {
-      legend: {
-        position: "top" as const,
-      },
-    },
-    scales: {
-      y: {
-        min: 0,
-        max: 100,
-        ticks: {
-          callback: (value: number | string) => `${value}%`,
-        },
-      },
-    },
-  };
+  const chartData = trends.map(d => ({
+    name: new Date(d.date).toLocaleDateString("pt-BR", { day: "2-digit", month: "short" }),
+    humor: d.avgMood * 20,
+    energia: d.avgEnergy * 20,
+    estresse: (5 - d.avgStress) * 20,
+  }));
 
   if (isLoading) {
     return (
@@ -109,7 +43,6 @@ export const MoodDashboard = () => {
     );
   }
 
-  // Calculate trend values for display
   const moodTrend = stats?.trend === 'improving' ? 10 : stats?.trend === 'declining' ? -10 : 0;
 
   return (
@@ -185,7 +118,18 @@ export const MoodDashboard = () => {
         </CardHeader>
         <CardContent>
           {trends.length > 0 ? (
-            <Line data={chartData} options={chartOptions} />
+            <ResponsiveContainer width="100%" height={300}>
+              <LineChart data={chartData}>
+                <CartesianGrid strokeDasharray="3 3" />
+                <XAxis dataKey="name" />
+                <YAxis domain={[0, 100]} tickFormatter={(v) => `${v}%`} />
+                <Tooltip formatter={(value: number) => `${value.toFixed(0)}%`} />
+                <Legend />
+                <Line type="monotone" dataKey="humor" stroke="hsl(var(--success))" name="Humor" strokeWidth={2} />
+                <Line type="monotone" dataKey="energia" stroke="hsl(var(--primary))" name="Energia" strokeWidth={2} />
+                <Line type="monotone" dataKey="estresse" stroke="hsl(var(--warning))" name="Estresse" strokeWidth={2} />
+              </LineChart>
+            </ResponsiveContainer>
           ) : (
             <div className="text-center py-8 text-muted-foreground">
               <p>Nenhum dado de tendência disponível</p>

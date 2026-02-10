@@ -24,16 +24,7 @@ import {
   AlertCircle
 } from "lucide-react";
 import { Progress } from "@/components/ui/progress";
-import { Bar } from "react-chartjs-2";
-import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend } from "chart.js";
-import { FuelOptimizationService } from "@/services/fuel-optimization-service";
-import { FuelAICopilot } from "./FuelAICopilot";
-import { FuelAnalysisPanel } from "./FuelAnalysisPanel";
-import { FuelSimulator } from "./FuelSimulator";
-import { logger } from '@/lib/logger';
-import type { Database } from "@/integrations/supabase/types";
-
-ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
+import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from "recharts";
 
 // Types from Supabase schema
 type FuelRecordDB = Database["public"]["Tables"]["fuel_records"]["Row"];
@@ -369,21 +360,11 @@ export const FuelOptimizer = () => {
   };
 
   const getOptimizationChartData = () => {
-    return {
-      labels: optimizationResults.map((r) => r.route_name),
-      datasets: [
-        {
-          label: "Consumo Original (L)",
-          data: optimizationResults.map(r => r.original_consumption),
-          backgroundColor: "rgba(239, 68, 68, 0.6)",
-        },
-        {
-          label: "Consumo Otimizado (L)",
-          data: optimizationResults.map(r => r.optimized_consumption),
-          backgroundColor: "rgba(34, 197, 94, 0.6)",
-        }
-      ]
-    };
+    return optimizationResults.map((r) => ({
+      name: r.route_name,
+      original: r.original_consumption,
+      optimized: r.optimized_consumption,
+    }));
   };
 
   const fuelDataForCopilot = {

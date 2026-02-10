@@ -3,27 +3,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Badge } from "@/components/ui/badge";
 import { Loader2, Cloud, Droplets, Wind, Eye, Gauge, CloudRain } from "lucide-react";
 import { fetchMaritimeWeather, MARITIME_LOCATIONS, getWeatherSeverity } from "@/integrations/weather/api";
-import { Line } from "react-chartjs-2";
-import {
-  Chart as ChartJS,
-  CategoryScale,
-  LinearScale,
-  PointElement,
-  LineElement,
-  Title,
-  Tooltip,
-  Legend,
-} from "chart.js";
-
-ChartJS.register(
-  CategoryScale,
-  LinearScale,
-  PointElement,
-  LineElement,
-  Title,
-  Tooltip,
-  Legend
-);
+import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from "recharts";
 
 /**
  * PATCH 630: Weather Dashboard
@@ -33,8 +13,8 @@ export default function WeatherDashboard() {
   const { data: weatherData, isLoading, error } = useQuery({
     queryKey: ["maritime-weather"],
     queryFn: () => fetchMaritimeWeather(MARITIME_LOCATIONS),
-    refetchInterval: 60 * 60 * 1000, // Refetch every hour
-    staleTime: 30 * 60 * 1000, // Consider data stale after 30 minutes
+    refetchInterval: 60 * 60 * 1000,
+    staleTime: 30 * 60 * 1000,
   });
 
   if (isLoading) {
@@ -55,23 +35,11 @@ export default function WeatherDashboard() {
     );
   }
 
-  const chartData = {
-    labels: weatherData?.map(w => w.location.name) || [],
-    datasets: [
-      {
-        label: "Temperature (°C)",
-        data: weatherData?.map(w => w.temperature) || [],
-        borderColor: "rgb(255, 99, 132)",
-        backgroundColor: "rgba(255, 99, 132, 0.5)",
-      },
-      {
-        label: "Wind Speed (m/s)",
-        data: weatherData?.map(w => w.windSpeed) || [],
-        borderColor: "rgb(53, 162, 235)",
-        backgroundColor: "rgba(53, 162, 235, 0.5)",
-      },
-    ],
-  };
+  const chartData = (weatherData || []).map(w => ({
+    name: w.location.name,
+    temperature: w.temperature,
+    windSpeed: w.windSpeed,
+  }));
 
   return (
     <div className="container mx-auto py-8 space-y-6">
@@ -122,7 +90,6 @@ export default function WeatherDashboard() {
                       <p className="font-medium">{weather.humidity}%</p>
                     </div>
                   </div>
-
                   <div className="flex items-center gap-2">
                     <Wind className="h-4 w-4 text-gray-500" />
                     <div>
@@ -130,7 +97,6 @@ export default function WeatherDashboard() {
                       <p className="font-medium">{weather.windSpeed.toFixed(1)} m/s</p>
                     </div>
                   </div>
-
                   <div className="flex items-center gap-2">
                     <Gauge className="h-4 w-4 text-purple-500" />
                     <div>
@@ -138,7 +104,6 @@ export default function WeatherDashboard() {
                       <p className="font-medium">{weather.pressure} hPa</p>
                     </div>
                   </div>
-
                   <div className="flex items-center gap-2">
                     <Eye className="h-4 w-4 text-green-500" />
                     <div>
@@ -146,7 +111,6 @@ export default function WeatherDashboard() {
                       <p className="font-medium">{(weather.visibility / 1000).toFixed(1)} km</p>
                     </div>
                   </div>
-
                   <div className="flex items-center gap-2">
                     <Cloud className="h-4 w-4 text-gray-400" />
                     <div>
@@ -154,7 +118,6 @@ export default function WeatherDashboard() {
                       <p className="font-medium">{weather.cloudCoverage}%</p>
                     </div>
                   </div>
-
                   {weather.precipitation > 0 && (
                     <div className="flex items-center gap-2">
                       <CloudRain className="h-4 w-4 text-blue-600" />
@@ -177,7 +140,17 @@ export default function WeatherDashboard() {
           <CardDescription>Temperature and wind speed across all locations</CardDescription>
         </CardHeader>
         <CardContent>
-          <Line data={chartData} options={{ responsive: true, maintainAspectRatio: true }} />
+          <ResponsiveContainer width="100%" height={300}>
+            <LineChart data={chartData}>
+              <CartesianGrid strokeDasharray="3 3" />
+              <XAxis dataKey="name" />
+              <YAxis />
+              <Tooltip />
+              <Legend />
+              <Line type="monotone" dataKey="temperature" stroke="rgb(255, 99, 132)" name="Temperature (°C)" />
+              <Line type="monotone" dataKey="windSpeed" stroke="rgb(53, 162, 235)" name="Wind Speed (m/s)" />
+            </LineChart>
+          </ResponsiveContainer>
         </CardContent>
       </Card>
     </div>
