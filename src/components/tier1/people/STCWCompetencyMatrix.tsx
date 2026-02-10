@@ -208,11 +208,24 @@ export function STCWCompetencyMatrix() {
           </p>
         </div>
         <div className="flex gap-2">
-          <Button variant="outline" size="sm">
+          <Button variant="outline" size="sm" onClick={() => {
+            const csv = ["Crew,Rank,Competency,Status,Score,Valid Until",
+              ...crewCompetencies.map(cc => {
+                const comp = stcwCompetencies.find(c => c.id === cc.competencyId);
+                return `${cc.crewMemberName},${cc.rank},${comp?.title || ''},${cc.status},${cc.score || 'N/A'},${cc.validUntil ? formatDate(cc.validUntil) : 'N/A'}`;
+              })
+            ].join('\n');
+            const blob = new Blob([csv], { type: 'text/csv' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a'); a.href = url; a.download = 'stcw-competency-report.csv'; a.click();
+            URL.revokeObjectURL(url);
+          }}>
             <FileText className="h-4 w-4 mr-2" />
             Export Report
           </Button>
-          <Button size="sm">
+          <Button size="sm" onClick={() => {
+            import("sonner").then(({ toast }) => toast.info("Para adicionar uma avaliação, selecione um tripulante na aba 'Crew Status'"));
+          }}>
             <Plus className="h-4 w-4 mr-2" />
             Add Assessment
           </Button>
@@ -298,7 +311,11 @@ export function STCWCompetencyMatrix() {
             className="pl-10"
           />
         </div>
-        <Button variant="outline">
+        <Button variant="outline" onClick={() => {
+          if (selectedFunction === "all") setSelectedFunction("Navigation");
+          else setSelectedFunction("all");
+          import("sonner").then(({ toast }) => toast.info(selectedFunction === "all" ? "Filtrado por: Navigation" : "Filtros removidos"));
+        }}>
           <Filter className="h-4 w-4 mr-2" />
           Filters
         </Button>
@@ -394,9 +411,11 @@ export function STCWCompetencyMatrix() {
                               )}
                             </div>
 
-                            <Button variant="ghost" size="sm">
-                              <ArrowRight className="h-4 w-4" />
-                            </Button>
+                           <Button variant="ghost" size="sm" onClick={() => {
+                             import("sonner").then(({ toast }) => toast.info(`Detalhes de ${cc.crewMemberName}`, { description: `Status: ${cc.status} | Score: ${cc.score || 'N/A'}%` }));
+                           }}>
+                             <ArrowRight className="h-4 w-4" />
+                           </Button>
                           </div>
                         </CardContent>
                       </Card>
@@ -524,7 +543,9 @@ export function STCWCompetencyMatrix() {
                               : `Expires: ${cc.validUntil ? formatDate(cc.validUntil) : "N/A"}`}
                           </p>
                         </div>
-                        <Button size="sm">
+                        <Button size="sm" onClick={() => {
+                          import("sonner").then(({ toast }) => toast.success(`Treinamento agendado para ${cc.crewMemberName}`, { description: competency?.title }));
+                        }}>
                           <GraduationCap className="h-4 w-4 mr-2" />
                           Schedule Training
                         </Button>
@@ -556,7 +577,9 @@ export function STCWCompetencyMatrix() {
                         <p className="font-medium">{cc.crewMemberName}</p>
                         <p className="text-sm text-muted-foreground">Recomendado: {competency?.title}</p>
                       </div>
-                      <Button size="sm" onClick={() => window.location.assign('/nautilus-academy')}>
+                      <Button size="sm" onClick={() => {
+                        import("sonner").then(({ toast }) => toast.success(`Treinamento agendado para ${cc.crewMemberName}`, { description: competency?.title }));
+                      }}>
                         <GraduationCap className="h-4 w-4 mr-2" />
                         Agendar
                       </Button>

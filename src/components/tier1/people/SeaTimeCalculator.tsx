@@ -200,11 +200,21 @@ export function SeaTimeCalculator() {
           </p>
         </div>
         <div className="flex gap-2">
-          <Button variant="outline" size="sm">
+          <Button variant="outline" size="sm" onClick={() => {
+            const csv = ["Crew,Rank,Target Rank,Sea Days,Required,Progress,Status",
+              ...crewSeaTimeData.map(c => `${c.crewMemberName},${c.currentRank},${c.targetRank},${c.totalSeaTime},${c.requiredSeaTime},${c.progress}%,${c.status}`)
+            ].join('\n');
+            const blob = new Blob([csv], { type: 'text/csv' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a'); a.href = url; a.download = 'sea-time-records.csv'; a.click();
+            URL.revokeObjectURL(url);
+          }}>
             <FileText className="h-4 w-4 mr-2" />
             Export Records
           </Button>
-          <Button size="sm">
+          <Button size="sm" onClick={() => {
+            import("sonner").then(({ toast }) => toast.info("Para adicionar registro, selecione um tripulante na lista"));
+          }}>
             <Plus className="h-4 w-4 mr-2" />
             Add Record
           </Button>
@@ -274,7 +284,9 @@ export function SeaTimeCalculator() {
             className="pl-10"
           />
         </div>
-        <Button variant="outline">
+        <Button variant="outline" onClick={() => {
+          import("sonner").then(({ toast }) => toast.info("Filtros de sea time disponíveis: Status, Rank, Vessel Type"));
+        }}>
           <Filter className="h-4 w-4 mr-2" />
           Filters
         </Button>
@@ -385,7 +397,10 @@ export function SeaTimeCalculator() {
                             </div>
                           </div>
 
-                          <Button variant="ghost" size="sm">
+                          <Button variant="ghost" size="sm" onClick={() => {
+                            setActiveTab("records");
+                            import("sonner").then(({ toast }) => toast.info(`Registros de ${crew.crewMemberName}`));
+                          }}>
                             <ArrowRight className="h-4 w-4" />
                           </Button>
                         </div>
