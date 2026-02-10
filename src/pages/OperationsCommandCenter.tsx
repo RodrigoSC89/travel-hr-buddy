@@ -32,7 +32,7 @@ import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
-import jsPDF from "jspdf";
+import { getJsPDF } from '@/lib/pdf/lazy-pdf';
 import { logger } from '@/lib/logger';
 import {
   LineChart, Line, AreaChart, Area, BarChart, Bar, PieChart as RechartsPie, Pie, Cell,
@@ -450,7 +450,8 @@ export default function OperationsCommandCenter() {
     setIsGeneratingReport(true);
 
     try {
-      const doc = new jsPDF();
+      const JsPDF = await getJsPDF();
+      const doc = new JsPDF();
       const pageWidth = doc.internal.pageSize.getWidth();
       
       doc.setFillColor(30, 58, 138);

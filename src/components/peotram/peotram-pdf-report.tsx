@@ -10,8 +10,7 @@ import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import { Separator } from "@/components/ui/separator";
 import { toast } from "sonner";
-import { jsPDF } from "jspdf";
-import autoTable from "jspdf-autotable";
+import { getJsPDF, getAutoTable } from '@/lib/pdf/lazy-pdf';
 import { FileDown, FileText, Loader2, Star, CheckCircle, XCircle, AlertTriangle } from "lucide-react";
 import { logger } from '@/lib/logger';
 
@@ -68,7 +67,9 @@ export function PeotramPdfReport({ auditData, onGenerated }: PeotramPdfReportPro
     setIsGenerating(true);
 
     try {
-      const doc = new jsPDF('p', 'mm', 'a4');
+      const JsPDF = await getJsPDF();
+      const autoTable = await getAutoTable();
+      const doc = new JsPDF('p', 'mm', 'a4');
       const pageWidth = doc.internal.pageSize.getWidth();
       const pageHeight = doc.internal.pageSize.getHeight();
       let yPos = 20;

@@ -13,7 +13,7 @@ import {
 import { Link } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { toast } from "sonner";
-import jsPDF from 'jspdf';
+import { getJsPDF } from '@/lib/pdf/lazy-pdf';
 import { useComplianceRealtimeAlerts } from '@/hooks/use-compliance-realtime-alerts';
 import { 
   LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, 
@@ -213,8 +213,9 @@ export function UnifiedComplianceDashboard() {
   }, [modules]);
 
   // PDF Export function
-  const handleExportPDF = () => {
-    const doc = new jsPDF();
+  const handleExportPDF = async () => {
+    const JsPDF = await getJsPDF();
+    const doc = new JsPDF();
     const pageWidth = doc.internal.pageSize.getWidth();
     
     // Header with gradient-like styling

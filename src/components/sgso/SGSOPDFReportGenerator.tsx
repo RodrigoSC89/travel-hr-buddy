@@ -13,8 +13,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { useToast } from "@/hooks/use-toast";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
-import jsPDF from "jspdf";
-import autoTable from "jspdf-autotable";
+import { getJsPDF, getAutoTable } from '@/lib/pdf/lazy-pdf';
 import { logger } from '@/lib/logger';
 import { supabase } from "@/integrations/supabase/client";
 import { useQuery } from "@tanstack/react-query";
@@ -196,7 +195,9 @@ export const SGSOPDFReportGenerator: React.FC = () => {
     setIsGenerating(true);
     
     try {
-      const doc = new jsPDF();
+      const JsPDF = await getJsPDF();
+      const autoTable = await getAutoTable();
+      const doc = new JsPDF();
       const pageWidth = doc.internal.pageSize.getWidth();
       const pageHeight = doc.internal.pageSize.getHeight();
       let yPos = 20;

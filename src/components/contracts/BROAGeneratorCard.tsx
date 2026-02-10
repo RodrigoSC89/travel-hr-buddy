@@ -15,7 +15,7 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
-import jsPDF from "jspdf";
+import { getJsPDF } from '@/lib/pdf/lazy-pdf';
 import { logger } from '@/lib/logger';
 import {
   FileCheck, Brain, Download, Eye, Loader2, Ship, Calendar,
@@ -147,8 +147,9 @@ export function BROAGeneratorCard({ events, vessels = [], contracts = [], onBROA
     }
   };
 
-  const exportToPDF = (broa: BROARecord) => {
-    const doc = new jsPDF();
+  const exportToPDF = async (broa: BROARecord) => {
+    const JsPDF = await getJsPDF();
+    const doc = new JsPDF();
     const pageWidth = doc.internal.pageSize.getWidth();
     
     // Header

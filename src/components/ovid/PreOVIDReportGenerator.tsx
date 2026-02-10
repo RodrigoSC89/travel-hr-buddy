@@ -10,8 +10,7 @@ import {
   AlertTriangle, Ship, Calendar, User, BarChart3, Image, FileCheck
 } from 'lucide-react';
 import { toast } from 'sonner';
-import jsPDF from 'jspdf';
-import autoTable from 'jspdf-autotable';
+import { getJsPDF, getAutoTable } from '@/lib/pdf/lazy-pdf';
 import { logger } from '@/lib/logger';
 
 interface InspectionData {
@@ -88,7 +87,9 @@ export const PreOVIDReportGenerator: React.FC<PreOVIDReportGeneratorProps> = ({
     setIsGenerating(true);
 
     try {
-      const pdf = new jsPDF();
+      const JsPDF = await getJsPDF();
+      const autoTable = await getAutoTable();
+      const pdf = new JsPDF();
       const pageWidth = pdf.internal.pageSize.getWidth();
       const margin = 15;
 

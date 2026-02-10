@@ -9,8 +9,7 @@ import { MetricasPanel } from "@/components/sgso/MetricasPanel";
 import { SGSOTrendChart } from "@/components/sgso/SGSOTrendChart";
 import { IncidentsSGSOPanel } from "@/components/dp/IncidentsSGSOPanel";
 import { Shield, BarChart3, FileCheck, Mail, AlertTriangle, History, Download, Loader2 } from "lucide-react";
-import jsPDF from "jspdf";
-import autoTable from "jspdf-autotable";
+import { getJsPDF, getAutoTable } from '@/lib/pdf/lazy-pdf';
 import { logger } from '@/lib/logger';
 
 const AdminSGSO = () => {
@@ -21,7 +20,9 @@ const AdminSGSO = () => {
   const handleExportPDF = async () => {
     setIsExportingPDF(true);
     try {
-      const doc = new jsPDF();
+      const JsPDF = await getJsPDF();
+      const autoTable = await getAutoTable();
+      const doc = new JsPDF();
       const pageWidth = doc.internal.pageSize.getWidth();
       
       // Header

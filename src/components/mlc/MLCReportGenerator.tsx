@@ -6,8 +6,7 @@
  */
 
 import React, { useState, useRef } from 'react';
-import jsPDF from 'jspdf';
-import autoTable from 'jspdf-autotable';
+import { getJsPDF, getAutoTable } from '@/lib/pdf/lazy-pdf';
 import SignatureCanvas from 'react-signature-canvas';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
@@ -117,7 +116,9 @@ export const MLCReportGenerator: React.FC<MLCReportGeneratorProps> = ({
     setIsGenerating(true);
 
     try {
-      const pdf = new jsPDF();
+      const JsPDF = await getJsPDF();
+      const autoTable = await getAutoTable();
+      const pdf = new JsPDF();
       const pageWidth = pdf.internal.pageSize.getWidth();
       const pageHeight = pdf.internal.pageSize.getHeight();
       const margin = 15;
@@ -540,7 +541,9 @@ The undersigned parties hereby confirm that:
 
   // Generate PDF and return base64
   const generatePDFBase64 = async (): Promise<string> => {
-    const pdf = new jsPDF();
+    const JsPDF = await getJsPDF();
+    const autoTable = await getAutoTable();
+    const pdf = new JsPDF();
     const pageWidth = pdf.internal.pageSize.getWidth();
     const pageHeight = pdf.internal.pageSize.getHeight();
     const margin = 15;

@@ -10,8 +10,7 @@ import {
   Download, Loader2, Shield, Ship, Calendar, User
 } from 'lucide-react';
 import { toast } from 'sonner';
-import jsPDF from 'jspdf';
-import autoTable from 'jspdf-autotable';
+import { getJsPDF, getAutoTable } from '@/lib/pdf/lazy-pdf';
 import { OVIDInspection, OVIDAnswer } from '@/hooks/useOVIDInspection';
 import { OVIQ4_CHAPTERS } from '@/data/oviq4-complete-data';
 import { logger } from '@/lib/logger';
@@ -43,7 +42,9 @@ export const OVIDFinalizeInspection: React.FC<OVIDFinalizeInspectionProps> = ({
     setIsGenerating(true);
     
     try {
-      const pdf = new jsPDF();
+      const JsPDF = await getJsPDF();
+      const autoTable = await getAutoTable();
+      const pdf = new JsPDF();
       const pageWidth = pdf.internal.pageSize.getWidth();
       
       // Header

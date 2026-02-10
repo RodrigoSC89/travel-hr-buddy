@@ -8,8 +8,7 @@ import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer } from "recharts";
 import { format } from "date-fns";
-import jsPDF from "jspdf";
-import autoTable from "jspdf-autotable";
+import { getJsPDF, getAutoTable } from '@/lib/pdf/lazy-pdf';
 import { Mail, FileDown, TrendingUp, TrendingDown, Minus } from "lucide-react";
 import { logger } from '@/lib/logger';
 
@@ -124,13 +123,15 @@ export default function PersonalRestoreDashboard() {
     }
   }
 
-  function exportToPDF() {
+  async function exportToPDF() {
     if (!summary || trend.length === 0) {
       sonnerToast.warning("Não há dados para exportar");
       return;
     }
 
-    const doc = new jsPDF();
+    const JsPDF = await getJsPDF();
+    const autoTable = await getAutoTable();
+    const doc = new JsPDF();
     
     // Add title
     doc.setFontSize(16);

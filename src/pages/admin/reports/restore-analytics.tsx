@@ -14,8 +14,7 @@ import { toast } from "@/hooks/use-toast";
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from "recharts";
 import { format } from "date-fns";
 import { logger } from "@/lib/logger";
-import jsPDF from "jspdf";
-import autoTable from "jspdf-autotable";
+import { getJsPDF, getAutoTable } from '@/lib/pdf/lazy-pdf';
 
 interface RestoreSummary {
   total: number;
@@ -89,10 +88,12 @@ export default function RestoreAnalyticsPage() {
     }
   }
 
-  function exportToPDF() {
+  async function exportToPDF() {
     if (dailyData.length === 0) { toast({ title: "Sem dados", description: "Não há dados para exportar.", variant: "destructive" }); return; }
     try {
-      const doc = new jsPDF();
+      const JsPDF = await getJsPDF();
+      const autoTable = await getAutoTable();
+      const doc = new JsPDF();
       doc.setFontSize(16); doc.setFont("helvetica", "bold"); doc.text("Relatório de Restaurações", 14, 15);
       doc.setFontSize(12); doc.setFont("helvetica", "normal");
       let yPosition = 25;

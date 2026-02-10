@@ -14,7 +14,7 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { BookOpen, Award, TrendingUp, Users, CheckCircle, Clock, Download } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
-import jsPDF from "jspdf";
+import { getJsPDF } from '@/lib/pdf/lazy-pdf';
 
 interface CourseProgress {
   id: string;
@@ -95,8 +95,9 @@ export default function TrainingAcademyEnhanced() {
     }
   };
 
-  const downloadCertificatePDF = (certificate: Certificate) => {
-    const doc = new jsPDF({
+  const downloadCertificatePDF = async (certificate: Certificate) => {
+    const JsPDF = await getJsPDF();
+    const doc = new JsPDF({
       orientation: "landscape",
       unit: "mm",
       format: "a4"

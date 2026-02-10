@@ -25,7 +25,7 @@ import {
   ResponsiveContainer, BarChart, Bar, PieChart, Pie, Cell,
   AreaChart, Area, ComposedChart
 } from 'recharts';
-import jsPDF from 'jspdf';
+import { getJsPDF } from '@/lib/pdf/lazy-pdf';
 import { toast } from 'sonner';
 
 // Types
@@ -302,10 +302,11 @@ export function ExecutiveComplianceDashboard() {
   })), [modules]);
   
   // Export PDF
-  const handleExportPDF = () => {
+  const handleExportPDF = async () => {
     if (!metrics) return;
     
-    const doc = new jsPDF();
+    const JsPDF = await getJsPDF();
+    const doc = new JsPDF();
     const pageWidth = doc.internal.pageSize.getWidth();
     
     doc.setFillColor(15, 23, 42);

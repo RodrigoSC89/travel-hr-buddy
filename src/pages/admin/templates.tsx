@@ -29,7 +29,7 @@ import {
 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "@/hooks/use-toast";
-import jsPDF from "jspdf";
+import { getJsPDF } from '@/lib/pdf/lazy-pdf';
 import { logger } from "@/lib/logger";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { 
@@ -412,7 +412,8 @@ export default function TemplatesPage() {
   const exportToPDF = async (template: Template) => {
     setExporting(true);
     try {
-      const pdf = new jsPDF();
+      const JsPDF = await getJsPDF();
+      const pdf = new JsPDF();
       const pageWidth = pdf.internal.pageSize.getWidth();
       const pageHeight = pdf.internal.pageSize.getHeight();
       const margin = 20;
