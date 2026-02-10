@@ -355,7 +355,7 @@ export default function FinanceCommandDashboard() {
                 <Ship className="h-5 w-5 text-primary" />
                 OPEX por Embarcação
               </CardTitle>
-              <Button size="sm" variant="ghost" onClick={() => toast.success("Dados OPEX atualizados")}>
+              <Button size="sm" variant="ghost" onClick={() => toast.info("Dados OPEX exibidos são em tempo real via Supabase.")}>
                 <RefreshCw className="h-4 w-4" />
               </Button>
             </div>
