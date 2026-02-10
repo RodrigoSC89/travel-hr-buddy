@@ -3,7 +3,7 @@
  * Timeline de certificados com alertas de vencimento
  */
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -28,8 +28,11 @@ import {
   Bell,
   Ship,
   FileText,
-  RefreshCw
+  RefreshCw,
+  Loader2
 } from "lucide-react";
+import { supabase } from "@/integrations/supabase/client";
+import { logger } from "@/lib/logger";
 
 interface Certificate {
   id: string;
@@ -44,76 +47,54 @@ interface Certificate {
   documentUrl?: string;
 }
 
-const mockCertificates: Certificate[] = [
-  {
-    id: "1",
-    name: "Safety Management Certificate (SMC)",
-    type: "ISM",
-    vesselName: "MV Atlantic Pioneer",
-    issuingAuthority: "DNV",
-    issueDate: "2023-07-15",
-    expiryDate: "2028-07-14",
-    status: "valid",
-    daysRemaining: 1255
-  },
-  {
-    id: "2",
-    name: "International Ship Security Certificate (ISSC)",
-    type: "ISPS",
-    vesselName: "MV Atlantic Pioneer",
-    issuingAuthority: "Flag State",
-    issueDate: "2023-07-15",
-    expiryDate: "2025-03-15",
-    status: "expiring",
-    daysRemaining: 38
-  },
-  {
-    id: "3",
-    name: "Maritime Labour Certificate (MLC)",
-    type: "MLC",
-    vesselName: "MV Pacific Voyager",
-    issuingAuthority: "Lloyd's Register",
-    issueDate: "2022-06-01",
-    expiryDate: "2025-02-01",
-    status: "expired",
-    daysRemaining: -4
-  },
-  {
-    id: "4",
-    name: "IOPP Certificate",
-    type: "MARPOL",
-    vesselName: "MV Nordic Star",
-    issuingAuthority: "ClassNK",
-    issueDate: "2024-01-10",
-    expiryDate: "2029-01-09",
-    status: "valid",
-    daysRemaining: 1433
-  },
-  {
-    id: "5",
-    name: "Cargo Ship Safety Equipment Certificate",
-    type: "SOLAS",
-    vesselName: "MV Pacific Voyager",
-    issuingAuthority: "ABS",
-    issueDate: "2023-09-20",
-    expiryDate: "2025-04-20",
-    status: "expiring",
-    daysRemaining: 74
-  },
-  {
-    id: "6",
-    name: "Document of Compliance (DOC)",
-    type: "ISM",
-    vesselName: "Company",
-    issuingAuthority: "DNV",
-    issueDate: "2023-03-01",
-    expiryDate: "2028-02-28",
-    status: "valid",
-    daysRemaining: 1119
-  }
-];
-
 export function CertificateTracker() {
+  const [certificates, setCertificates] = useState<Certificate[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchCerts = async () => {
+      try {
+        const { data, error } = await supabase
+          .from("certificates")
+          .select("*, vessels(name)")
+          .order("expiry_date", { ascending: true })
+          .limit(100);
+
+        if (error) {
+          logger.warn("certificates query error", error);
+          setLoading(false);
+          return;
+        }
+
+        const now = new Date();
+        const mapped: Certificate[] = (data || []).map((c: any) => {
+          const expiry = c.expiry_date ? new Date(c.expiry_date) : new Date(Date.now() + 365 * 86400000);
+          const issue = c.issue_date ? new Date(c.issue_date) : new Date(c.created_at || Date.now());
+          const daysRemaining = Math.ceil((expiry.getTime() - now.getTime()) / 86400000);
+          const status: Certificate["status"] = daysRemaining < 0 ? "expired" : daysRemaining <= 90 ? "expiring" : "valid";
+
+          return {
+            id: c.id,
+            name: c.certificate_name || c.name || c.type || "Certificate",
+            type: c.certificate_type || c.type || "N/A",
+            vesselName: c.vessels?.name || "N/A",
+            issuingAuthority: c.issuing_authority || c.issued_by || "N/A",
+            issueDate: issue.toISOString().split("T")[0],
+            expiryDate: expiry.toISOString().split("T")[0],
+            status,
+            daysRemaining,
+          };
+        });
+
+        setCertificates(mapped);
+      } catch (err) {
+        logger.error("Error fetching certificates", err);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchCerts();
+  }, []);
   const [searchTerm, setSearchTerm] = useState("");
   const [filterVessel, setFilterVessel] = useState("all");
   const [filterStatus, setFilterStatus] = useState("all");
@@ -137,9 +118,9 @@ export function CertificateTracker() {
     return "bg-red-500";
   };
 
-  const vessels = [...new Set(mockCertificates.map(c => c.vesselName))];
+  const vessels = [...new Set(certificates.map(c => c.vesselName))];
 
-  const filteredCertificates = mockCertificates.filter(cert => {
+  const filteredCertificates = certificates.filter(cert => {
     const matchesSearch = cert.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
       cert.type.toLowerCase().includes(searchTerm.toLowerCase());
     const matchesVessel = filterVessel === "all" || cert.vesselName === filterVessel;
@@ -148,10 +129,10 @@ export function CertificateTracker() {
   });
 
   const stats = {
-    total: mockCertificates.length,
-    valid: mockCertificates.filter(c => c.status === "valid").length,
-    expiring: mockCertificates.filter(c => c.status === "expiring").length,
-    expired: mockCertificates.filter(c => c.status === "expired").length
+    total: certificates.length,
+    valid: certificates.filter(c => c.status === "valid").length,
+    expiring: certificates.filter(c => c.status === "expiring").length,
+    expired: certificates.filter(c => c.status === "expired").length
   };
 
   return (

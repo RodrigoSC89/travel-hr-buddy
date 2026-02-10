@@ -3,7 +3,7 @@
  * Monitoramento em tempo real dos agentes de IA
  */
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -12,8 +12,10 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { 
   Brain, Cpu, Zap, TrendingUp, Clock, CheckCircle2,
   AlertTriangle, Activity, BarChart3, Target, Gauge,
-  RefreshCw, Settings, Eye, Sparkles
+  RefreshCw, Settings, Eye, Sparkles, Loader2
 } from "lucide-react";
+import { supabase } from "@/integrations/supabase/client";
+import { logger } from "@/lib/logger";
 
 interface AIAgent {
   id: string;
@@ -36,20 +38,11 @@ interface AIMetric {
   color: string;
 }
 
-const mockAgents: AIAgent[] = [
-  { id: "1", name: "Compliance Guardian", type: "Auditoria", status: "active", accuracy: 98.5, responseTime: 120, tasksCompleted: 1547, confidenceLevel: 94, lastActive: "Agora" },
-  { id: "2", name: "Maintenance Oracle", type: "Manutenção", status: "active", accuracy: 96.2, responseTime: 85, tasksCompleted: 892, confidenceLevel: 91, lastActive: "2min" },
-  { id: "3", name: "Crew Wellness AI", type: "RH", status: "learning", accuracy: 94.8, responseTime: 150, tasksCompleted: 456, confidenceLevel: 88, lastActive: "5min" },
-  { id: "4", name: "Finance Analyzer", type: "Financeiro", status: "active", accuracy: 99.1, responseTime: 95, tasksCompleted: 2103, confidenceLevel: 97, lastActive: "Agora" },
-  { id: "5", name: "Document Processor", type: "Documentos", status: "idle", accuracy: 97.3, responseTime: 200, tasksCompleted: 3421, confidenceLevel: 93, lastActive: "15min" },
-  { id: "6", name: "Route Optimizer", type: "Operações", status: "active", accuracy: 95.7, responseTime: 180, tasksCompleted: 567, confidenceLevel: 90, lastActive: "1min" },
-];
-
 const metrics: AIMetric[] = [
-  { label: "Decisões Hoje", value: 1247, change: 12.5, unit: "", icon: Brain, color: "text-purple-500" },
-  { label: "Precisão Média", value: 97.2, change: 1.8, unit: "%", icon: Target, color: "text-green-500" },
-  { label: "Tempo Resposta", value: 135, change: -8.3, unit: "ms", icon: Zap, color: "text-yellow-500" },
-  { label: "Taxa Sucesso", value: 99.4, change: 0.5, unit: "%", icon: CheckCircle2, color: "text-blue-500" },
+  { label: "Decisões Hoje", value: 0, change: 0, unit: "", icon: Brain, color: "text-purple-500" },
+  { label: "Precisão Média", value: 0, change: 0, unit: "%", icon: Target, color: "text-green-500" },
+  { label: "Tempo Resposta", value: 0, change: 0, unit: "ms", icon: Zap, color: "text-yellow-500" },
+  { label: "Taxa Sucesso", value: 0, change: 0, unit: "%", icon: CheckCircle2, color: "text-blue-500" },
 ];
 
 const StatusBadge = ({ status }: { status: string }) => {
@@ -65,9 +58,64 @@ const StatusBadge = ({ status }: { status: string }) => {
 
 export default function AIPerformanceMetrics() {
   const [selectedAgent, setSelectedAgent] = useState<AIAgent | null>(null);
+  const [agents, setAgents] = useState<AIAgent[]>([]);
+  const [dynamicMetrics, setDynamicMetrics] = useState(metrics);
+  const [loading, setLoading] = useState(true);
 
-  const activeAgents = mockAgents.filter(a => a.status === "active").length;
-  const avgAccuracy = mockAgents.reduce((acc, a) => acc + a.accuracy, 0) / mockAgents.length;
+  useEffect(() => {
+    const fetchAgents = async () => {
+      try {
+        const [{ data: registry }, { data: swarmMetrics }] = await Promise.all([
+          supabase.from("agent_registry").select("*").order("name").limit(20),
+          supabase.from("agent_swarm_metrics").select("*").limit(20),
+        ]);
+
+        const metricsMap = new Map((swarmMetrics || []).map((m: any) => [m.agent_id, m]));
+
+        const mapped: AIAgent[] = (registry || []).map((r: any) => {
+          const m = metricsMap.get(r.agent_id);
+          return {
+            id: r.id,
+            name: r.name,
+            type: (r.capabilities as any)?.type || "Geral",
+            status: r.status as any || "idle",
+            accuracy: m ? Math.round((m.success_count / Math.max(m.task_count, 1)) * 100 * 10) / 10 : 0,
+            responseTime: m?.avg_response_time_ms || 0,
+            tasksCompleted: m?.task_count || 0,
+            confidenceLevel: m ? Math.round((m.success_count / Math.max(m.task_count, 1)) * 100) : 0,
+            lastActive: r.last_heartbeat ? new Date(r.last_heartbeat).toLocaleTimeString("pt-BR", { hour: "2-digit", minute: "2-digit" }) : "N/A",
+          };
+        });
+
+        setAgents(mapped);
+
+        // Calculate dynamic metrics
+        const totalTasks = mapped.reduce((s, a) => s + a.tasksCompleted, 0);
+        const avgAcc = mapped.length ? mapped.reduce((s, a) => s + a.accuracy, 0) / mapped.length : 0;
+        const avgResp = mapped.length ? mapped.reduce((s, a) => s + a.responseTime, 0) / mapped.length : 0;
+        const successRate = mapped.length ? mapped.reduce((s, a) => s + a.confidenceLevel, 0) / mapped.length : 0;
+
+        setDynamicMetrics([
+          { label: "Tarefas Total", value: totalTasks, change: 0, unit: "", icon: Brain, color: "text-purple-500" },
+          { label: "Precisão Média", value: Math.round(avgAcc * 10) / 10, change: 0, unit: "%", icon: Target, color: "text-green-500" },
+          { label: "Tempo Resposta", value: Math.round(avgResp), change: 0, unit: "ms", icon: Zap, color: "text-yellow-500" },
+          { label: "Taxa Sucesso", value: Math.round(successRate * 10) / 10, change: 0, unit: "%", icon: CheckCircle2, color: "text-blue-500" },
+        ]);
+      } catch (err) {
+        logger.error("Error fetching AI agents", err);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchAgents();
+  }, []);
+
+  const activeAgents = agents.filter(a => a.status === "active").length;
+  const avgAccuracy = agents.length ? agents.reduce((acc, a) => acc + a.accuracy, 0) / agents.length : 0;
+
+  if (loading) {
+    return <div className="flex items-center justify-center py-12"><Loader2 className="h-8 w-8 animate-spin text-primary" /></div>;
+  }
 
   return (
     <div className="space-y-6">
@@ -96,7 +144,7 @@ export default function AIPerformanceMetrics() {
 
       {/* Key Metrics */}
       <div className="grid grid-cols-4 gap-4">
-        {metrics.map((metric) => {
+        {dynamicMetrics.map((metric) => {
           const Icon = metric.icon;
           return (
             <Card key={metric.label}>
@@ -154,7 +202,7 @@ export default function AIPerformanceMetrics() {
 
       {/* Agents Grid */}
       <div className="grid grid-cols-2 gap-4">
-        {mockAgents.map((agent) => (
+        {agents.map((agent) => (
           <Card 
             key={agent.id}
             className={`cursor-pointer transition-all hover:shadow-md ${

@@ -3,7 +3,9 @@
  * Charter Party, Service Contracts, Afretamentos
  */
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { logger } from "@/lib/logger";
+import { supabase } from "@/integrations/supabase/client";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -77,79 +79,58 @@ interface Contract {
   risk_score?: number;
 }
 
-const mockContracts: Contract[] = [
-  {
-    id: "1",
-    contract_number: "CP-2024-001",
-    title: "Charter Party - MV Atlantic Star",
-    contract_type: "time_charter",
-    counterparty: "Petrobras S.A.",
-    vessel_name: "MV Atlantic Star",
-    start_date: "2024-01-01",
-    end_date: "2024-12-31",
-    total_value: 30000000,
-    currency: "BRL",
-    payment_terms: "Monthly in advance",
-    status: "active",
-    renewal_date: "2024-11-01",
-    terms_summary: "Time charter for offshore support operations",
-    key_clauses: ["Force Majeure", "Off-hire Provisions", "Fuel Adjustment"],
-    risk_score: 25,
-    created_at: "2024-01-01",
-  },
-  {
-    id: "2",
-    contract_number: "CP-2024-002",
-    title: "Voyage Charter - Pacific Route",
-    contract_type: "voyage_charter",
-    counterparty: "Shell Trading",
-    vessel_name: "MV Pacific Explorer",
-    start_date: "2024-02-15",
-    end_date: "2024-03-15",
-    total_value: 5000000,
-    currency: "USD",
-    payment_terms: "50% advance, 50% on completion",
-    status: "active",
-    terms_summary: "Single voyage charter for cargo transport",
-    key_clauses: ["Demurrage", "Laytime", "Cargo Handling"],
-    risk_score: 15,
-    created_at: "2024-01-15",
-  },
-  {
-    id: "3",
-    contract_number: "SVC-2024-001",
-    title: "Maintenance Service Agreement",
-    contract_type: "maintenance",
-    counterparty: "MarineTech Services",
-    start_date: "2024-01-01",
-    end_date: "2024-06-30",
-    total_value: 850000,
-    currency: "BRL",
-    payment_terms: "Monthly",
-    status: "renewal",
-    renewal_date: "2024-06-01",
-    terms_summary: "Annual maintenance and repair services",
-    risk_score: 10,
-    created_at: "2024-01-01",
-  },
-  {
-    id: "4",
-    contract_number: "CREW-2024-001",
-    title: "Crew Management Agreement",
-    contract_type: "crew",
-    counterparty: "Maritime HR Solutions",
-    start_date: "2024-01-01",
-    end_date: "2025-01-01",
-    total_value: 2400000,
-    currency: "BRL",
-    payment_terms: "Monthly",
-    status: "active",
-    terms_summary: "Full crew management and recruitment",
-    key_clauses: ["MLC Compliance", "Training Requirements", "Replacement Guarantee"],
-    risk_score: 20,
-    created_at: "2024-01-01",
-  },
-];
+export default function ContractsManager() {
+  const [contracts, setContracts] = useState<Contract[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchContracts = async () => {
+      try {
+        const { data, error } = await supabase
+          .from("ai_contract_analysis")
+          .select("*")
+          .order("created_at", { ascending: false })
+          .limit(50);
+
+        if (error) {
+          logger.warn("ai_contract_analysis error", error);
+          setLoading(false);
+          return;
+        }
+
+        const mapped: Contract[] = (data || []).map((c: any, i: number) => {
+          const parties = (c.parties as any) || {};
+          const dates = (c.key_dates as any) || {};
+          const financial = (c.financial_terms as any) || {};
+          return {
+            id: c.id,
+            contract_number: `CP-${new Date(c.created_at).getFullYear()}-${String(i + 1).padStart(3, "0")}`,
+            title: `${c.contract_type || "Contract"} Analysis`,
+            contract_type: (c.contract_type || "service") as any,
+            counterparty: parties?.counterparty || parties?.party_b || "N/A",
+            vessel_name: parties?.vessel || undefined,
+            start_date: dates?.start || c.created_at?.split("T")[0] || new Date().toISOString().split("T")[0],
+            end_date: dates?.end || new Date(Date.now() + 180 * 86400000).toISOString().split("T")[0],
+            total_value: financial?.total_value || c.total_potential_savings || 0,
+            currency: financial?.currency || "BRL",
+            payment_terms: financial?.payment_terms || "Monthly",
+            status: c.overall_risk_score && c.overall_risk_score > 70 ? "renewal" : "active",
+            terms_summary: c.contract_type || "",
+            key_clauses: (c.risk_clauses as any[])?.map((r: any) => r.clause || r) || [],
+            risk_score: c.overall_risk_score || 0,
+            created_at: c.created_at?.split("T")[0] || "",
+          };
+        });
+
+        setContracts(mapped);
+      } catch (err) {
+        logger.error("Error fetching contracts", err);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchContracts();
+  }, []);
 
 const CONTRACT_TYPES = [
   { value: "charter_party", label: "Charter Party" },
@@ -160,9 +141,6 @@ const CONTRACT_TYPES = [
   { value: "crew", label: "Crew Management" },
   { value: "maintenance", label: "Maintenance Contract" },
 ];
-
-export default function ContractsManager() {
-  const [contracts] = useState<Contract[]>(mockContracts);
   const [searchQuery, setSearchQuery] = useState("");
   const [typeFilter, setTypeFilter] = useState<string>("all");
   const [statusFilter, setStatusFilter] = useState<string>("all");
