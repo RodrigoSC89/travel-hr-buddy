@@ -30,11 +30,16 @@ interface ScheduledReport {
 export const ScheduledReports: React.FC = () => {
   const [reports, setReports] = useState<ScheduledReport[]>([]);
   const [showForm, setShowForm] = useState(false);
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<{
+    title: string;
+    template: string;
+    format: string;
+    frequency: ScheduledReport["frequency"];
+  }>({
     title: "",
     template: "",
     format: "pdf",
-    frequency: "monthly" as const,
+    frequency: "monthly",
   });
   const { toast } = useToast();
 
@@ -84,12 +89,18 @@ export const ScheduledReports: React.FC = () => {
       });
 
       if (error) {
-        logger.debug("Schedule not saved (table may not exist) - using mock data");
+        logger.warn("Schedule not saved — table 'scheduled_compliance_reports' not provisioned", { error });
+        toast({
+          title: "Tabela não configurada",
+          description: "A tabela de agendamentos ainda não foi provisionada. Contate o administrador.",
+          variant: "destructive",
+        });
+        return;
       }
 
       toast({
-        title: "Schedule Created (Demo)",
-        description: `Report will be generated ${formData.frequency}`,
+        title: "Agendamento Criado",
+        description: `Relatório será gerado ${formData.frequency}`,
       });
 
       setShowForm(false);
@@ -97,8 +108,9 @@ export const ScheduledReports: React.FC = () => {
     } catch (error) {
       logger.error("Error creating schedule:", error);
       toast({
-        title: "Schedule Created (Demo)",
-        description: "Feature demonstration - database not configured",
+        title: "Erro ao criar agendamento",
+        description: "Falha ao salvar no banco de dados.",
+        variant: "destructive",
       });
     }
   };
@@ -145,7 +157,9 @@ export const ScheduledReports: React.FC = () => {
         .eq("id", reportId);
 
       if (error) {
-        logger.debug("Report metadata not updated (table may not exist)");
+        logger.warn("Report metadata not updated — table may not exist", { error });
+        toast({ title: "Erro", description: "Tabela de agendamentos não configurada.", variant: "destructive" });
+        return;
       }
 
       toast({
@@ -172,20 +186,23 @@ export const ScheduledReports: React.FC = () => {
         .eq("id", reportId);
 
       if (error) {
-        logger.debug("Schedule not deleted (table may not exist)");
+        logger.warn("Schedule not deleted — table may not exist", { error });
+        toast({ title: "Erro", description: "Tabela de agendamentos não configurada.", variant: "destructive" });
+        return;
       }
 
       toast({
-        title: "Schedule Deleted",
-        description: "Report schedule has been removed",
+        title: "Agendamento Removido",
+        description: "O agendamento foi excluído com sucesso.",
       });
 
       fetchScheduledReports();
     } catch (error) {
       logger.error("Error deleting schedule:", error);
       toast({
-        title: "Schedule Deleted (Demo)",
-        description: "Feature demonstration - database not configured",
+        title: "Erro ao excluir",
+        description: "Falha ao remover agendamento.",
+        variant: "destructive",
       });
     }
   };
@@ -263,7 +280,7 @@ export const ScheduledReports: React.FC = () => {
                   <Label>Frequency</Label>
                   <Select
                     value={formData.frequency}
-                    onValueChange={(v: any) => setFormData({ ...formData, frequency: v })}
+                    onValueChange={(v) => setFormData({ ...formData, frequency: v as ScheduledReport["frequency"] })}
                   >
                     <SelectTrigger>
                       <SelectValue />
