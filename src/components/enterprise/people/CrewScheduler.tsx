@@ -29,6 +29,7 @@ import {
   Anchor,
   Loader2
 } from "lucide-react";
+import { toast } from "sonner";
 import { useCrewRealData } from "@/hooks/useCrewRealData";
 
 interface CrewRotation {
@@ -252,7 +253,7 @@ export function CrewScheduler() {
               </Button>
             </div>
 
-            <Button>
+            <Button onClick={() => toast.info("Selecione um tripulante no cronograma para planejar rotação", { description: "Ou navegue para People Hub > Crew Scheduler para gestão completa" })}>
               <Plus className="h-4 w-4 mr-2" />
               Nova Rotação
             </Button>
@@ -379,7 +380,7 @@ export function CrewScheduler() {
                       </p>
                     </div>
                   </div>
-                  <Button variant="destructive" size="sm">
+                  <Button variant="destructive" size="sm" onClick={() => toast.success(`Rendição planejada para ${rotation.crewName}`, { description: `${rotation.daysOnBoard} dias a bordo (máx: ${rotation.maxDays}). Processo de substituição iniciado.` })}>
                     Planejar Rendição
                   </Button>
                 </div>
