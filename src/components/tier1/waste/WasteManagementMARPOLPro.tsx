@@ -388,11 +388,27 @@ export default function WasteManagementMARPOLPro() {
           </div>
         </div>
         <div className="flex gap-2">
-          <Button variant="outline" className="gap-2">
+          <Button variant="outline" className="gap-2" onClick={() => {
+            const headers = ["ID","Date","Time","Category","Code","Quantity","Unit","Method","Port","Receipt","SignedBy","Remarks"];
+            const rows = garbageRecords.map(r => [r.id, r.date, r.time, r.category, r.categoryCode, r.quantity, r.unit, r.method, r.port || "", r.receiptNumber || "", r.signedBy, r.remarks || ""]);
+            const csv = [headers, ...rows].map(r => r.join(",")).join("\n");
+            const blob = new Blob([csv], { type: "text/csv" });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement("a"); a.href = url; a.download = `GRB-export-${new Date().toISOString().slice(0,10)}.csv`; a.click(); URL.revokeObjectURL(url);
+            toast.success("Garbage Record Book exportado com sucesso");
+          }}>
             <FileText className="h-4 w-4" />
             Export GRB
           </Button>
-          <Button variant="outline" className="gap-2">
+          <Button variant="outline" className="gap-2" onClick={() => {
+            const headers = ["ID","Date","Time","Category","Operation","Tank","Quantity","RetainedOnBoard","DischargedToShore","Incinerated","SignedBy"];
+            const rows = oilRecords.map(r => [r.id, r.date, r.time, r.category, r.operationType, r.tankName, r.quantity, r.retainedOnBoard, r.dischargedToShore, r.incineratedOrDisposed, r.signedBy]);
+            const csv = [headers, ...rows].map(r => r.join(",")).join("\n");
+            const blob = new Blob([csv], { type: "text/csv" });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement("a"); a.href = url; a.download = `ORB-export-${new Date().toISOString().slice(0,10)}.csv`; a.click(); URL.revokeObjectURL(url);
+            toast.success("Oil Record Book exportado com sucesso");
+          }}>
             <FileText className="h-4 w-4" />
             Export ORB
           </Button>
