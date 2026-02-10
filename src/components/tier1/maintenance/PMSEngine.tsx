@@ -314,8 +314,11 @@ export function PMSEngine() {
                 <Calendar className="h-12 w-12 text-muted-foreground mx-auto mb-3" />
                 <p className="text-muted-foreground font-medium">Calendário de Manutenção</p>
                 <p className="text-sm text-muted-foreground mt-1">
-                  Funcionalidade em implantação — consulte a aba de tarefas acima para planejamento.
+                  Consulte a aba de tarefas acima para planejamento detalhado.
                 </p>
+                <Button variant="outline" size="sm" className="mt-3" onClick={() => window.location.assign('/operational-calendar')}>
+                  Abrir Calendário Operacional
+                </Button>
               </div>
             </CardContent>
           </Card>

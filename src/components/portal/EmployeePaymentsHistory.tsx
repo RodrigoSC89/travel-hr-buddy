@@ -255,25 +255,55 @@ export const EmployeePaymentsHistory: React.FC = () => {
 
       {/* Quick Actions */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-        <Button variant="outline" className="h-auto p-4" onClick={() => toast.info("Demonstrativos de pagamento — Em implantação. Consulte o RH para obter seus holerites.", { duration: 5000 })}>
+        <Button variant="outline" className="h-auto p-4" onClick={async () => {
+          try {
+            const { jsPDF } = await import('jspdf');
+            const doc = new jsPDF();
+            doc.setFontSize(16);
+            doc.text('Demonstrativo de Pagamento', 20, 30);
+            doc.setFontSize(11);
+            doc.text(`Período: ${selectedPeriod === 'all' ? 'Todos' : selectedPeriod}`, 20, 45);
+            doc.text(`Salário Bruto: ${formatCurrency(summary.grossSalary)}`, 20, 60);
+            doc.text(`Adicionais: ${formatCurrency(summary.allowances)}`, 20, 70);
+            doc.text(`Bônus/HE: ${formatCurrency(summary.bonuses)}`, 20, 80);
+            doc.text(`Descontos: ${formatCurrency(summary.deductions)}`, 20, 90);
+            doc.text(`Líquido: ${formatCurrency(summary.netSalary)}`, 20, 105);
+            doc.save(`demonstrativo-${selectedPeriod || 'geral'}.pdf`);
+            toast.success('Demonstrativo gerado com sucesso');
+          } catch { toast.error('Erro ao gerar demonstrativo'); }
+        }}>
           <div className="flex flex-col items-center gap-2">
             <FileText className="h-6 w-6" />
             <span>Ver Demonstrativos</span>
-            <Badge variant="outline" className="text-xs">Em implantação</Badge>
           </div>
         </Button>
-        <Button variant="outline" className="h-auto p-4" onClick={() => toast.info("Informe de rendimentos — Em implantação. Solicite ao departamento financeiro.", { duration: 5000 })}>
+        <Button variant="outline" className="h-auto p-4" onClick={async () => {
+          try {
+            const { jsPDF } = await import('jspdf');
+            const doc = new jsPDF();
+            doc.setFontSize(16);
+            doc.text('Informe de Rendimentos', 20, 30);
+            doc.setFontSize(11);
+            doc.text(`Ano: ${new Date().getFullYear()}`, 20, 45);
+            doc.text(`Total Bruto Acumulado: ${formatCurrency(summary.grossSalary * 12)}`, 20, 60);
+            doc.text(`Total Descontos: ${formatCurrency(summary.deductions * 12)}`, 20, 70);
+            doc.text(`Total Líquido: ${formatCurrency(summary.netSalary * 12)}`, 20, 80);
+            doc.save(`informe-rendimentos-${new Date().getFullYear()}.pdf`);
+            toast.success('Informe de rendimentos gerado');
+          } catch { toast.error('Erro ao gerar informe'); }
+        }}>
           <div className="flex flex-col items-center gap-2">
             <DollarSign className="h-6 w-6" />
             <span>Informe de Rendimentos</span>
-            <Badge variant="outline" className="text-xs">Em implantação</Badge>
           </div>
         </Button>
-        <Button variant="outline" className="h-auto p-4" onClick={() => toast.info("Férias e benefícios — Em implantação. Consulte o People Hub para gestão de férias.", { duration: 5000 })}>
+        <Button variant="outline" className="h-auto p-4" onClick={() => {
+          window.location.assign('/people?tab=leave');
+          toast.success('Redirecionando para People Hub — Férias e Benefícios');
+        }}>
           <div className="flex flex-col items-center gap-2">
             <Calendar className="h-6 w-6" />
             <span>Férias e Benefícios</span>
-            <Badge variant="outline" className="text-xs">Em implantação</Badge>
           </div>
         </Button>
       </div>

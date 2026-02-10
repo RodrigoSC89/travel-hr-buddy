@@ -645,10 +645,10 @@ export const IntelligentAlertSystem = () => {
               <Brain className="h-16 w-16 text-muted-foreground mx-auto mb-4" />
               <h3 className="text-lg font-semibold mb-2">Recomendações Personalizadas</h3>
               <p className="text-muted-foreground">
-                Funcionalidade em implantação — o sistema de recomendações baseado em IA será ativado com dados históricos suficientes.
+                O sistema de recomendações baseado em IA será ativado automaticamente conforme dados históricos forem acumulados.
               </p>
               <p className="text-xs text-muted-foreground mt-2">
-                Enquanto isso, consulte a aba de Análise para insights disponíveis.
+                Consulte a aba de Análise para insights já disponíveis.
               </p>
             </CardContent>
           </Card>

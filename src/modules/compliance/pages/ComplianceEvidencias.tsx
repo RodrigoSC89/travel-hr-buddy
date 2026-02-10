@@ -223,9 +223,13 @@ export default function ComplianceEvidencias() {
                 <Brain className="h-5 w-5 text-purple-400" />
                 <span className="text-sm">IA irá verificar automaticamente a validade do documento</span>
               </div>
-              <Button className="w-full" onClick={() => { setShowUploadDialog(false); toast.info("Upload de arquivo em implantação. Registre evidências via módulo de Documentos."); }}>
-                Enviar para Análise
-                <Badge variant="outline" className="ml-2 text-xs">Em implantação</Badge>
+              <Button className="w-full" onClick={() => {
+                setShowUploadDialog(false);
+                window.location.assign('/documents?action=upload');
+                toast.success("Redirecionando para o módulo de Documentos para upload e análise IA.");
+              }}>
+                <Upload className="h-4 w-4 mr-2" />
+                Enviar para Análise via Documentos
               </Button>
             </div>
           </DialogContent>

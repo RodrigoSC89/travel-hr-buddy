@@ -561,7 +561,10 @@ const CollaboratorRegistry: React.FC = () => {
                     <Badge variant={doc.status === 'valido' ? 'default' : 'destructive'}>
                       {doc.status}
                     </Badge>
-                    <Button size="sm" variant="ghost" onClick={() => toast.info(`Download de ${doc.nome} — Em implantação. Documento disponível via Document Center.`, { duration: 4000 })}>
+                    <Button size="sm" variant="ghost" onClick={() => {
+                      window.location.assign('/documents');
+                      toast.success(`Redirecionando para Document Center — ${doc.nome}`);
+                    }}>
                       <Download className="w-4 h-4" />
                     </Button>
                   </div>
@@ -573,7 +576,10 @@ const CollaboratorRegistry: React.FC = () => {
                 <p>Nenhum documento cadastrado</p>
               </div>
             )}
-            <Button className="w-full" onClick={() => toast.info('Upload de documento — Em implantação. Utilize o Document Center para gestão de documentos.', { duration: 4000 })}>
+            <Button className="w-full" onClick={() => {
+              window.location.assign('/documents?action=upload');
+              toast.success('Redirecionando para Document Center — Upload');
+            }}>
               <Upload className="w-4 h-4 mr-2" />
               Adicionar Documento
             </Button>
@@ -613,7 +619,10 @@ const CollaboratorRegistry: React.FC = () => {
                 <p>Nenhuma formação cadastrada</p>
               </div>
             )}
-            <Button className="w-full" onClick={() => toast.info('Adicionar formação — Em implantação. Utilize o Training Hub para gestão de certificações.', { duration: 4000 })}>
+            <Button className="w-full" onClick={() => {
+              window.location.assign('/nautilus-academy');
+              toast.success('Redirecionando para Training Hub — Certificações');
+            }}>
               <Award className="w-4 h-4 mr-2" />
               Adicionar Formação
             </Button>

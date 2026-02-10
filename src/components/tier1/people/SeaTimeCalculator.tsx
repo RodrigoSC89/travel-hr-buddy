@@ -458,8 +458,10 @@ export function SeaTimeCalculator() {
               <div className="text-center py-8 border border-dashed rounded-lg">
                 <Award className="h-10 w-10 mx-auto mb-3 opacity-40" />
                 <p className="text-muted-foreground font-medium">Matriz de Elegibilidade de Certificados</p>
-                <p className="text-xs text-muted-foreground mt-1">🚧 Em implantação — Previsão: Q2/2026</p>
                 <p className="text-xs text-muted-foreground mt-1">Consulte a aba "Sea Time" para cálculos de tempo embarcado.</p>
+                <Button variant="outline" size="sm" className="mt-3" onClick={() => window.location.assign('/compliance?tab=certificates')}>
+                  Ver Certificados no Compliance Hub
+                </Button>
               </div>
             </CardContent>
           </Card>

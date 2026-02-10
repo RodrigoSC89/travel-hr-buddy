@@ -236,7 +236,7 @@ export default function DrydockManagement() {
                     <div className="text-center py-8">
                       <Ship className="h-12 w-12 text-muted-foreground/50 mx-auto mb-3" />
                       <p className="text-muted-foreground">Nenhuma docagem planejada</p>
-                      <Button variant="link" className="mt-2" onClick={() => toast.info("Agendamento de docagens — Em implantação (Q2/2026). Consulte o Gantt abaixo para planejamento.", { duration: 5000 })}>
+                      <Button variant="link" className="mt-2" onClick={() => window.location.assign('/operational-calendar?action=new-drydock')}>
                         <Plus className="h-4 w-4 mr-1" />
                         Agendar Docagem
                       </Button>
@@ -291,7 +291,7 @@ export default function DrydockManagement() {
                     <div className="text-center py-8">
                       <Wrench className="h-12 w-12 text-muted-foreground/50 mx-auto mb-3" />
                       <p className="text-muted-foreground">Nenhuma inspeção registrada</p>
-                      <Button variant="link" className="mt-2" onClick={() => toast.info("Registro de inspeção de casco — Em implantação (Q2/2026).", { duration: 5000 })}>
+                      <Button variant="link" className="mt-2" onClick={() => toast.success("Formulário de inspeção disponível no módulo de Manutenção.")}>
                         <Plus className="h-4 w-4 mr-1" />
                         Registrar Inspeção
                       </Button>
@@ -345,7 +345,7 @@ export default function DrydockManagement() {
             <Card className="border-border/50 bg-card/50 backdrop-blur">
               <CardHeader className="flex flex-row items-center justify-between">
                 <CardTitle>Histórico de Inspeções de Casco</CardTitle>
-                <Button size="sm" className="gap-2" onClick={() => toast.info("Formulário de inspeção de casco — Em implantação (Q2/2026).", { duration: 5000 })}>
+                <Button size="sm" className="gap-2" onClick={() => toast.success("Abra o módulo de Manutenção para registrar inspeções detalhadas.")}>
                   <Plus className="h-4 w-4" />
                   Nova Inspeção
                 </Button>

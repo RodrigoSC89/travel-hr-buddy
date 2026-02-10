@@ -434,8 +434,10 @@ export default function CrewScheduler() {
               <div className="text-center py-12 text-muted-foreground border border-dashed rounded-lg">
                 <Calendar className="h-12 w-12 mx-auto mb-3 opacity-50" />
                 <p className="font-medium">Calendário de Rotações</p>
-                <p className="text-sm">🚧 Em implantação — Previsão: Q2/2026</p>
-                <p className="text-xs mt-2">Use a aba "Rotações" para gerenciar escalas atuais.</p>
+                <p className="text-sm">Use a aba "Rotações" para gerenciar escalas atuais.</p>
+                <Button variant="outline" size="sm" className="mt-3" onClick={() => window.location.assign('/operational-calendar')}>
+                  Abrir Calendário Operacional
+                </Button>
               </div>
             </TabsContent>
 

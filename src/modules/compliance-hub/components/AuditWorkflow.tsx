@@ -395,10 +395,27 @@ export default function AuditWorkflow() {
             </TabsContent>
 
             <TabsContent value="calendar">
-              <div className="text-center py-12 text-muted-foreground">
-                <Calendar className="h-12 w-12 mx-auto mb-3 opacity-50" />
-                <p className="font-medium">Calendário de Auditorias</p>
-                <p className="text-sm">⚙️ Em implantação — Será habilitado via flag FF_AUDIT_CALENDAR</p>
+              <div className="space-y-4">
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                  {audits.slice(0, 6).map((audit) => (
+                    <Card key={audit.id} className="p-3">
+                      <div className="flex items-center gap-2 mb-2">
+                        <Calendar className="h-4 w-4 text-primary" />
+                        <span className="font-medium text-sm">{audit.title || audit.type}</span>
+                      </div>
+                      <p className="text-xs text-muted-foreground">
+                        {audit.scheduledDate ? new Date(audit.scheduledDate).toLocaleDateString('pt-BR') : 'Data a definir'}
+                      </p>
+                      <Badge variant="outline" className="mt-2 text-xs">{audit.status}</Badge>
+                    </Card>
+                  ))}
+                </div>
+                {audits.length === 0 && (
+                  <div className="text-center py-8 text-muted-foreground">
+                    <Calendar className="h-12 w-12 mx-auto mb-3 opacity-50" />
+                    <p>Nenhuma auditoria agendada</p>
+                  </div>
+                )}
               </div>
             </TabsContent>
 

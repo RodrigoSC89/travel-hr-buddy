@@ -359,7 +359,7 @@ export function SparePartsInventory() {
                 <ShoppingCart className="h-12 w-12 text-muted-foreground mx-auto mb-3" />
                 <p className="text-muted-foreground font-medium">Gestão de Ordens de Compra</p>
                 <p className="text-sm text-muted-foreground mt-1">
-                  Funcionalidade em implantação — utilize o módulo de Procurement para pedidos.
+                  Gerencie ordens de compra de peças no módulo de Procurement.
                 </p>
                 <Button variant="outline" size="sm" className="mt-3" onClick={() => window.location.assign('/procurement')}>
                   Ir para Procurement
