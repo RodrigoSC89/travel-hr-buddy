@@ -91,7 +91,7 @@ interface Skill {
   trend: "improving" | "stable" | "declining";
 }
 
-const mockCrew: CrewMember[] = [
+const fallbackCrew: CrewMember[] = [
   {
     id: "1",
     name: "Carlos Silva",
@@ -154,11 +154,11 @@ const departmentIcons: Record<string, React.ElementType> = {
 };
 
 export default function CompetencyMatrix() {
-  const [selectedCrew, setSelectedCrew] = useState<CrewMember | null>(mockCrew[0]);
+  const [selectedCrew, setSelectedCrew] = useState<CrewMember | null>(fallbackCrew[0]);
   const [searchQuery, setSearchQuery] = useState("");
   const [departmentFilter, setDepartmentFilter] = useState<string>("all");
 
-  const filteredCrew = mockCrew.filter(member => {
+  const filteredCrew = fallbackCrew.filter(member => {
     const matchesSearch = member.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
                          member.rank.toLowerCase().includes(searchQuery.toLowerCase());
     const matchesDepartment = departmentFilter === "all" || member.department === departmentFilter;
@@ -207,12 +207,12 @@ export default function CompetencyMatrix() {
   };
 
   // Calculate summary stats
-  const totalCertifications = mockCrew.reduce((acc, c) => acc + c.certifications.length, 0);
-  const expiringCerts = mockCrew.reduce((acc, c) => 
+  const totalCertifications = fallbackCrew.reduce((acc, c) => acc + c.certifications.length, 0);
+  const expiringCerts = fallbackCrew.reduce((acc, c) => 
     acc + c.certifications.filter(cert => cert.status === "expiring").length, 0);
-  const expiredCerts = mockCrew.reduce((acc, c) => 
+  const expiredCerts = fallbackCrew.reduce((acc, c) => 
     acc + c.certifications.filter(cert => cert.status === "expired").length, 0);
-  const overdueTrainings = mockCrew.reduce((acc, c) => 
+  const overdueTrainings = fallbackCrew.reduce((acc, c) => 
     acc + c.trainings.filter(t => t.status === "overdue").length, 0);
 
   return (
@@ -226,7 +226,7 @@ export default function CompetencyMatrix() {
                 <Users className="h-5 w-5 text-blue-500" />
               </div>
               <div>
-                <p className="text-2xl font-bold">{mockCrew.length}</p>
+                <p className="text-2xl font-bold">{fallbackCrew.length}</p>
                 <p className="text-xs text-muted-foreground">Tripulantes</p>
               </div>
             </div>

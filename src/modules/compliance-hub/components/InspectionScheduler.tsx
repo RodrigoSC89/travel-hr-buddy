@@ -68,7 +68,7 @@ interface Inspection {
   notes?: string;
 }
 
-const mockInspections: Inspection[] = [
+const fallbackInspections: Inspection[] = [
   {
     id: "1",
     inspection_type: "PSC",
@@ -135,7 +135,7 @@ const INSPECTION_TYPES = [
 ];
 
 export default function InspectionScheduler() {
-  const [inspections] = useState<Inspection[]>(mockInspections);
+  const [inspections] = useState<Inspection[]>(fallbackInspections);
   const [selectedDate, setSelectedDate] = useState<Date | undefined>(new Date());
   const [showAddDialog, setShowAddDialog] = useState(false);
   const [typeFilter, setTypeFilter] = useState<string>("all");

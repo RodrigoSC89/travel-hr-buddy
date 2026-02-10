@@ -99,8 +99,8 @@ const typeConfig = {
   coa: { label: "COA", icon: FileText },
 };
 
-// Mock data
-const mockContracts: CharterParty[] = [
+// Fallback data
+const fallbackContracts: CharterParty[] = [
   {
     id: "1",
     contractNumber: "TC-2025-0042",
@@ -156,7 +156,7 @@ const mockContracts: CharterParty[] = [
   },
 ];
 
-const mockLaytime: LaytimeCalculation[] = [
+const fallbackLaytime: LaytimeCalculation[] = [
   {
     id: "1",
     voyageRef: "VOY-2026-0042",
@@ -210,30 +210,30 @@ export function VesselContractsIntelligence() {
 
   // KPIs
   const kpis = useMemo(() => {
-    const expiringIn30Days = mockContracts.filter(c => {
+    const expiringIn30Days = fallbackContracts.filter(c => {
       const daysToExpiry = differenceInDays(c.expiryDate, new Date());
       return daysToExpiry > 0 && daysToExpiry <= 30;
     }).length;
 
-    const optionsToExercise = mockContracts.flatMap(c => c.options).filter(o => {
+    const optionsToExercise = fallbackContracts.flatMap(c => c.options).filter(o => {
       const daysToDeadline = differenceInDays(o.deadline, new Date());
       return !o.exercised && daysToDeadline > 0 && daysToDeadline <= 60;
     }).length;
 
-    const totalDailyRevenue = mockContracts
+    const totalDailyRevenue = fallbackContracts
       .filter(c => c.status === "active" && c.dailyRate)
       .reduce((acc, c) => acc + (c.dailyRate || 0), 0);
 
     return {
-      activeContracts: mockContracts.filter(c => c.status === "active").length,
+      activeContracts: fallbackContracts.filter(c => c.status === "active").length,
       expiringIn30Days,
       optionsToExercise,
       totalDailyRevenue,
-      pendingDemurrage: mockLaytime.reduce((acc, l) => acc + (l.demurrageAmount || 0), 0),
+      pendingDemurrage: fallbackLaytime.reduce((acc, l) => acc + (l.demurrageAmount || 0), 0),
     };
   }, []);
 
-  const filteredContracts = mockContracts.filter(c =>
+  const filteredContracts = fallbackContracts.filter(c =>
     c.contractNumber.toLowerCase().includes(searchQuery.toLowerCase()) ||
     c.vesselName.toLowerCase().includes(searchQuery.toLowerCase()) ||
     c.charterer.toLowerCase().includes(searchQuery.toLowerCase())
@@ -490,7 +490,7 @@ export function VesselContractsIntelligence() {
 
         {/* Laytime Tab */}
         <TabsContent value="laytime" className="space-y-4">
-          {mockLaytime.map((laytime) => (
+          {fallbackLaytime.map((laytime) => (
             <Card key={laytime.id}>
               <CardHeader>
                 <div className="flex items-center justify-between">
@@ -676,8 +676,8 @@ export function VesselContractsIntelligence() {
               <CardContent>
                 <div className="space-y-3">
                   {Object.entries(typeConfig).map(([type, config]) => {
-                    const count = mockContracts.filter(c => c.type === type).length;
-                    const percentage = (count / mockContracts.length) * 100;
+                    const count = fallbackContracts.filter(c => c.type === type).length;
+                    const percentage = (count / fallbackContracts.length) * 100;
                     return (
                       <div key={type} className="space-y-1">
                         <div className="flex justify-between text-sm">
@@ -701,7 +701,7 @@ export function VesselContractsIntelligence() {
               </CardHeader>
               <CardContent>
                 <div className="space-y-4">
-                  {mockContracts.filter(c => c.dailyRate && c.status === "active").map((contract) => (
+                  {fallbackContracts.filter(c => c.dailyRate && c.status === "active").map((contract) => (
                     <div key={contract.id} className="flex items-center justify-between">
                       <div className="flex items-center gap-2">
                         <Ship className="h-4 w-4 text-primary" />

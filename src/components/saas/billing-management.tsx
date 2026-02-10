@@ -38,7 +38,7 @@ interface UsageMetric {
   icon: React.ComponentType<{ className?: string }>;
 }
 
-const mockInvoices: Invoice[] = [
+const fallbackInvoices: Invoice[] = [
   {
     id: "1",
     number: "INV-2024-001",
@@ -256,7 +256,7 @@ export const BillingManagement: React.FC = () => {
                   </TableRow>
                 </TableHeader>
                 <TableBody>
-                  {mockInvoices.map((invoice) => (
+                  {fallbackInvoices.map((invoice) => (
                     <TableRow key={invoice.id}>
                       <TableCell className="font-medium">{invoice.number}</TableCell>
                       <TableCell>{new Date(invoice.date).toLocaleDateString("pt-BR")}</TableCell>

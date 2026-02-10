@@ -50,7 +50,7 @@ interface Supplier {
   status: "active" | "preferred" | "suspended";
 }
 
-const mockOrders: PurchaseOrder[] = [
+const fallbackOrders: PurchaseOrder[] = [
   { id: "PO-2024-001", item: "Filtro de óleo hidráulico", category: "Manutenção", quantity: 10, unit: "un", supplier: "HidroMar", status: "shipped", criticality: "high", estimatedDelivery: "2024-01-22", cost: 4500, aiGenerated: true },
   { id: "PO-2024-002", item: "Válvula de segurança DP", category: "DP System", quantity: 2, unit: "un", supplier: "NavTech", status: "ordered", criticality: "critical", estimatedDelivery: "2024-01-25", cost: 12800, aiGenerated: false },
   { id: "PO-2024-003", item: "EPI - Capacetes", category: "Segurança", quantity: 50, unit: "un", supplier: "SafetyFirst", status: "delayed", criticality: "medium", estimatedDelivery: "2024-01-20", cost: 3200, aiGenerated: true },
@@ -58,7 +58,7 @@ const mockOrders: PurchaseOrder[] = [
   { id: "PO-2024-005", item: "Juntas de vedação", category: "Manutenção", quantity: 30, unit: "un", supplier: "SealMaster", status: "pending", criticality: "low", estimatedDelivery: "2024-01-28", cost: 1500, aiGenerated: false },
 ];
 
-const mockSuppliers: Supplier[] = [
+const fallbackSuppliers: Supplier[] = [
   { id: "1", name: "HidroMar", rating: 4.8, deliveryRate: 97, avgLeadTime: 5, totalOrders: 234, status: "preferred" },
   { id: "2", name: "NavTech", rating: 4.9, deliveryRate: 99, avgLeadTime: 7, totalOrders: 156, status: "preferred" },
   { id: "3", name: "SafetyFirst", rating: 4.2, deliveryRate: 85, avgLeadTime: 8, totalOrders: 89, status: "active" },
@@ -95,9 +95,9 @@ export default function ProcurementDashboard() {
     setChatMessage("");
   };
 
-  const totalCost = mockOrders.reduce((sum, o) => sum + o.cost, 0);
-  const delayedOrders = mockOrders.filter(o => o.status === "delayed").length;
-  const aiGeneratedOrders = mockOrders.filter(o => o.aiGenerated).length;
+  const totalCost = fallbackOrders.reduce((sum, o) => sum + o.cost, 0);
+  const delayedOrders = fallbackOrders.filter(o => o.status === "delayed").length;
+  const aiGeneratedOrders = fallbackOrders.filter(o => o.aiGenerated).length;
 
   return (
     <div className="space-y-6">
@@ -108,7 +108,7 @@ export default function ProcurementDashboard() {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-muted-foreground">Pedidos Ativos</p>
-                <p className="text-2xl font-bold">{mockOrders.length}</p>
+                <p className="text-2xl font-bold">{fallbackOrders.length}</p>
                 <p className="text-xs text-muted-foreground">Este mês</p>
               </div>
               <ShoppingCart className="h-8 w-8 text-primary opacity-80" />
@@ -249,7 +249,7 @@ export default function ProcurementDashboard() {
           </CardHeader>
           <CardContent>
             <div className="space-y-3">
-              {mockOrders.map((order) => (
+              {fallbackOrders.map((order) => (
                 <div
                   key={order.id}
                   className="p-4 rounded-lg bg-muted/30 hover:bg-muted/50 transition-colors"
@@ -336,7 +336,7 @@ export default function ProcurementDashboard() {
         </CardHeader>
         <CardContent>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-            {mockSuppliers.map((supplier) => (
+            {fallbackSuppliers.map((supplier) => (
               <div key={supplier.id} className="p-4 rounded-lg bg-muted/30">
                 <div className="flex items-center justify-between mb-3">
                   <h4 className="font-semibold">{supplier.name}</h4>

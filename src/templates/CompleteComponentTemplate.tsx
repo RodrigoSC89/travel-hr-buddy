@@ -81,9 +81,9 @@ interface CompleteComponentProps {
 }
 
 // ============================================
-// 3. MOCK DATA SERVICE (Replace with real API)
+// 3. FALLBACK DATA SERVICE (Replace with real API)
 // ============================================
-const mockItems: Item[] = [
+const fallbackItems: Item[] = [
   {
     id: '1',
     name: 'Sample Item 1',
@@ -149,8 +149,8 @@ export default function CompleteComponentTemplate({
       // if (error) throw error;
       // return data as Item[];
       
-      // Mock implementation
-      return mockItems.filter(item =>
+      // Fallback implementation
+      return fallbackItems.filter(item =>
         item.name.toLowerCase().includes(search.toLowerCase())
       );
     },

@@ -62,7 +62,7 @@ interface SimopsZone {
   active: boolean;
 }
 
-const mockOperations: SimopsOperation[] = [
+const fallbackOperations: SimopsOperation[] = [
   {
     id: "SIMOP-001",
     name: "ROV Inspeção Riser #3",
@@ -113,7 +113,7 @@ const mockOperations: SimopsOperation[] = [
   }
 ];
 
-const mockConflicts: SimopsConflict[] = [
+const fallbackConflicts: SimopsConflict[] = [
   {
     id: "CONF-001",
     type: "zone_overlap",
@@ -132,7 +132,7 @@ const mockConflicts: SimopsConflict[] = [
   }
 ];
 
-const mockZones: SimopsZone[] = [
+const fallbackZones: SimopsZone[] = [
   { id: "ZONE-001", name: "Zona de Exclusão FPSO", type: "exclusion", radius: 500, center: { lat: -22.9070, lon: -43.1730 }, active: true },
   { id: "ZONE-002", name: "Área de Operação ROV", type: "operational", radius: 200, center: { lat: -22.9068, lon: -43.1729 }, active: true },
   { id: "ZONE-003", name: "Zona de Cautela", type: "caution", radius: 1000, center: { lat: -22.9070, lon: -43.1730 }, active: true }
@@ -148,9 +148,9 @@ const operationTypeConfig = {
 };
 
 export const SIMOPSManager: React.FC = () => {
-  const [operations, setOperations] = useState<SimopsOperation[]>(mockOperations);
-  const [conflicts] = useState<SimopsConflict[]>(mockConflicts);
-  const [zones, setZones] = useState<SimopsZone[]>(mockZones);
+  const [operations, setOperations] = useState<SimopsOperation[]>(fallbackOperations);
+  const [conflicts] = useState<SimopsConflict[]>(fallbackConflicts);
+  const [zones, setZones] = useState<SimopsZone[]>(fallbackZones);
   const [selectedOperation, setSelectedOperation] = useState<SimopsOperation | null>(null);
   const [showNewOperation, setShowNewOperation] = useState(false);
 

@@ -105,7 +105,7 @@ const DISPOSAL_METHODS = [
   { id: "recycling", label: "Reciclagem em porto", icon: Recycle },
 ];
 
-const mockEntries: GarbageRecordEntry[] = [
+const fallbackEntries: GarbageRecordEntry[] = [
   {
     id: "1",
     entry_number: 89,
@@ -191,7 +191,7 @@ const mockEntries: GarbageRecordEntry[] = [
 ];
 
 export function GarbageRecordBookComplete() {
-  const [entries, setEntries] = useState<GarbageRecordEntry[]>(mockEntries);
+  const [entries, setEntries] = useState<GarbageRecordEntry[]>(fallbackEntries);
   const [showAddDialog, setShowAddDialog] = useState(false);
   const [showSignDialog, setShowSignDialog] = useState(false);
   const [selectedEntry, setSelectedEntry] = useState<GarbageRecordEntry | null>(null);

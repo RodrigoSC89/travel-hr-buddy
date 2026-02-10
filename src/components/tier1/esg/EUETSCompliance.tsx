@@ -48,7 +48,7 @@ interface EUAPosition {
   status: 'compliant' | 'shortfall' | 'surplus';
 }
 
-const mockVoyages: VoyageEmission[] = [
+const fallbackVoyages: VoyageEmission[] = [
   {
     voyageId: "V2025-001",
     vesselName: "MV Atlantic Pioneer",
@@ -122,12 +122,12 @@ export function EUETSCompliance() {
   const shortfallCost = shortfall * euaPosition.euaPrice;
 
   const voyageStats = {
-    intraEU: mockVoyages.filter(v => v.voyageType === 'intra-eu').length,
-    euDeparture: mockVoyages.filter(v => v.voyageType === 'eu-departure').length,
-    euArrival: mockVoyages.filter(v => v.voyageType === 'eu-arrival').length,
-    nonEU: mockVoyages.filter(v => v.voyageType === 'non-eu').length,
-    totalEUACost: mockVoyages.reduce((acc, v) => acc + v.euaCost, 0),
-    unverified: mockVoyages.filter(v => !v.verified).length
+    intraEU: fallbackVoyages.filter(v => v.voyageType === 'intra-eu').length,
+    euDeparture: fallbackVoyages.filter(v => v.voyageType === 'eu-departure').length,
+    euArrival: fallbackVoyages.filter(v => v.voyageType === 'eu-arrival').length,
+    nonEU: fallbackVoyages.filter(v => v.voyageType === 'non-eu').length,
+    totalEUACost: fallbackVoyages.reduce((acc, v) => acc + v.euaCost, 0),
+    unverified: fallbackVoyages.filter(v => !v.verified).length
   };
 
   return (
@@ -240,7 +240,7 @@ export function EUETSCompliance() {
             </CardHeader>
             <CardContent>
               <div className="space-y-4">
-                {mockVoyages.map((voyage) => (
+                {fallbackVoyages.map((voyage) => (
                   <div key={voyage.voyageId} className="p-4 border rounded-lg">
                     <div className="flex items-center justify-between">
                       <div>

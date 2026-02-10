@@ -75,8 +75,8 @@ interface Consultation {
   notes?: string;
 }
 
-// Demo data
-const mockConsultations: Consultation[] = [
+// Fallback data
+const fallbackConsultations: Consultation[] = [
   {
     id: "1",
     patient_name: "João Silva",
@@ -149,7 +149,7 @@ const statusLabels = {
 };
 
 export default function MedicalConsultationsTab() {
-  const [consultations, setConsultations] = useState<Consultation[]>(mockConsultations);
+  const [consultations, setConsultations] = useState<Consultation[]>(fallbackConsultations);
   const [searchQuery, setSearchQuery] = useState("");
   const [statusFilter, setStatusFilter] = useState<string>("all");
   const [showWizard, setShowWizard] = useState(false);

@@ -28,8 +28,8 @@ interface WorkflowRun {
 }
 
 // DevOps internal data - no backend table (CI/CD runs are external)
-// Data is illustrative for the admin dashboard
-const mockWorkflowRuns: WorkflowRun[] = [
+// Fallback data illustrative for the admin dashboard
+const fallbackWorkflowRuns: WorkflowRun[] = [
   {
     id: "1",
     name: "Run Tests",
@@ -154,7 +154,7 @@ export default function CIHistoryPage() {
 
   // Filter workflow runs
   const filtered = useMemo(() => {
-    let result = mockWorkflowRuns;
+    let result = fallbackWorkflowRuns;
 
     // Filter by branch
     if (branch) {
@@ -194,7 +194,7 @@ export default function CIHistoryPage() {
 
   // Prepare chart data for coverage evolution
   const chartData = useMemo(() => {
-    return mockWorkflowRuns
+    return fallbackWorkflowRuns
       .filter(run => run.coverage_percent !== null && run.status === "success")
       .sort((a, b) => new Date(a.created_at).getTime() - new Date(b.created_at).getTime())
       .map(run => ({

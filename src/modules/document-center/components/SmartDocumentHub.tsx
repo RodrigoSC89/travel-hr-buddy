@@ -34,7 +34,7 @@ interface Document {
   tags: string[];
 }
 
-const mockDocuments: Document[] = [
+const fallbackDocuments: Document[] = [
   { id: "1", name: "Certificado SMC.pdf", type: "PDF", category: "Certificados", status: "approved", uploadedBy: "João Silva", uploadedAt: "2024-01-15", expiresAt: "2025-01-15", size: "2.4 MB", aiClassification: "Certificado de Segurança", aiConfidence: 98, tags: ["ISM", "Segurança"] },
   { id: "2", name: "Contrato_Afretamento_2024.docx", type: "DOCX", category: "Contratos", status: "pending", uploadedBy: "Maria Santos", uploadedAt: "2024-01-14", size: "1.8 MB", aiClassification: "Contrato Comercial", aiConfidence: 95, tags: ["Comercial", "Afretamento"] },
   { id: "3", name: "Relatório_Inspeção_PSC.pdf", type: "PDF", category: "Inspeções", status: "approved", uploadedBy: "Carlos Lima", uploadedAt: "2024-01-13", size: "5.2 MB", aiClassification: "Relatório de Inspeção", aiConfidence: 99, tags: ["PSC", "Compliance"] },
@@ -67,15 +67,15 @@ export default function SmartDocumentHub() {
   const [selectedCategory, setSelectedCategory] = useState("all");
   const [uploadProgress, setUploadProgress] = useState<number | null>(null);
 
-  const filteredDocs = mockDocuments.filter(doc => {
+  const filteredDocs = fallbackDocuments.filter(doc => {
     const matchesSearch = doc.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
                           doc.tags.some(t => t.toLowerCase().includes(searchTerm.toLowerCase()));
     const matchesCategory = selectedCategory === "all" || doc.category === selectedCategory;
     return matchesSearch && matchesCategory;
   });
 
-  const pendingDocs = mockDocuments.filter(d => d.status === "pending").length;
-  const expiringDocs = mockDocuments.filter(d => d.expiresAt && new Date(d.expiresAt) < new Date(Date.now() + 30 * 24 * 60 * 60 * 1000)).length;
+  const pendingDocs = fallbackDocuments.filter(d => d.status === "pending").length;
+  const expiringDocs = fallbackDocuments.filter(d => d.expiresAt && new Date(d.expiresAt) < new Date(Date.now() + 30 * 24 * 60 * 60 * 1000)).length;
 
   const simulateUpload = () => {
     setUploadProgress(0);

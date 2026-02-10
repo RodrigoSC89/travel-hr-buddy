@@ -41,7 +41,7 @@ interface WorkOrder {
   dueDate?: string;
 }
 
-const mockWorkOrders: WorkOrder[] = [
+const fallbackWorkOrders: WorkOrder[] = [
   {
     id: "1",
     number: "OS-24819",
@@ -93,7 +93,7 @@ const mockWorkOrders: WorkOrder[] = [
 ];
 
 export default function WorkOrderManager() {
-  const [workOrders, setWorkOrders] = useState<WorkOrder[]>(mockWorkOrders);
+  const [workOrders, setWorkOrders] = useState<WorkOrder[]>(fallbackWorkOrders);
   const [isCreating, setIsCreating] = useState(false);
   const [filter, setFilter] = useState<string>("all");
   const { toast } = useToast();

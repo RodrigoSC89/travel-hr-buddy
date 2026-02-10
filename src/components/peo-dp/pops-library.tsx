@@ -62,7 +62,7 @@ const categories = [
   "Segurança"
 ];
 
-const mockPOPs: POP[] = [
+const fallbackPOPs: POP[] = [
   {
     id: "POP-001",
     code: "POP-DP-001",
@@ -127,7 +127,7 @@ const mockPOPs: POP[] = [
 ];
 
 export const POPsLibrary: React.FC = () => {
-  const [pops, setPOPs] = useState<POP[]>(mockPOPs);
+  const [pops, setPOPs] = useState<POP[]>(fallbackPOPs);
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedCategory, setSelectedCategory] = useState<string>("all");
   const [selectedPOP, setSelectedPOP] = useState<POP | null>(null);

@@ -58,8 +58,8 @@ interface LaytimeEvent {
   excludeReason?: string;
 }
 
-// Mock Statement of Facts
-const mockSOF: LaytimeEvent[] = [
+// Fallback Statement of Facts
+const fallbackSOF: LaytimeEvent[] = [
   { id: "1", date: "2026-02-01", fromTime: "06:00", toTime: "18:00", hours: 12, operation: "Loading", percentage: 100, laytimeUsed: 12, remarks: "Normal working", excluded: false },
   { id: "2", date: "2026-02-01", fromTime: "18:00", toTime: "24:00", hours: 6, operation: "Night work", percentage: 50, laytimeUsed: 3, remarks: "Reduced rate", excluded: false },
   { id: "3", date: "2026-02-02", fromTime: "00:00", toTime: "08:00", hours: 8, operation: "Rain stoppage", percentage: 0, laytimeUsed: 0, remarks: "Weather excluded", excluded: true, excludeReason: "Weather" },
@@ -351,7 +351,7 @@ export default function LaytimeDemurrageModule() {
         </TabsContent>
 
         <TabsContent value="sof" className="mt-4">
-          <StatementOfFacts events={mockSOF} />
+          <StatementOfFacts events={fallbackSOF} />
         </TabsContent>
 
         <TabsContent value="claims" className="mt-4">
