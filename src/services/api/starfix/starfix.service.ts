@@ -71,9 +71,9 @@ export interface StarFixAPIConfig {
  * Get StarFix API configuration from environment
  */
 function getStarFixConfig(): StarFixAPIConfig {
-  const apiKey = (import.meta as any).env.VITE_STARFIX_API_KEY as string;
-  const apiUrl = (import.meta as any).env.VITE_STARFIX_API_URL as string || 'https://api.starfix.maritime.org/v1';
-  const organizationId = (import.meta as any).env.VITE_STARFIX_ORG_ID as string;
+  const apiKey = import.meta.env.VITE_STARFIX_API_KEY as string;
+  const apiUrl = (import.meta.env.VITE_STARFIX_API_URL as string) || 'https://api.starfix.maritime.org/v1';
+  const organizationId = import.meta.env.VITE_STARFIX_ORG_ID as string;
 
   if (!apiKey || !organizationId) {
     throw new Error("StarFix API credentials not configured");
@@ -121,7 +121,7 @@ export async function registerVesselInStarFix(vessel: StarFixVessel): Promise<{ 
         imo_number: vessel.imo_number,
         vessel_name: vessel.vessel_name,
         starfix_vessel_id: data.starfix_id,
-      } as any);
+      } as never);
 
     return { success: true, starfix_id: data.starfix_id };
   } catch (error) {
@@ -176,7 +176,7 @@ export async function fetchStarFixInspections(imoNumber: string): Promise<StarFi
     if (inspections.length > 0) {
       const { error } = await supabase
         .from('starfix_inspections')
-        .upsert(inspections as any);
+        .upsert(inspections as never);
 
       if (error) {
         logger.error('Error storing StarFix inspections', error, { imoNumber, count: inspections.length });
@@ -233,7 +233,7 @@ export async function getStarFixPerformanceMetrics(
     // Store metrics
     await supabase
       .from('starfix_performance_metrics')
-      .upsert(metrics as any);
+      .upsert(metrics as never);
 
     return metrics;
   } catch (error) {
@@ -329,7 +329,7 @@ export async function syncPendingInspections(): Promise<{ synced: number; failed
     let failed = 0;
 
     for (const inspection of pendingInspections) {
-      const result = await submitInspectionToStarFix(inspection as unknown as any);
+      const result = await submitInspectionToStarFix(inspection as unknown as StarFixInspection);
       if (result.success) {
         synced++;
       } else {
