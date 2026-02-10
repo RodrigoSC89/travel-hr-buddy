@@ -96,7 +96,7 @@ const PEODP = () => {
     if (createBtn) {
       createBtn.click();
     }
-    toast.info("Novo Plano DP", { description: "Criação de planos DP em implantação. ETA: Q3/2026." });
+    toast.success("Novo Plano DP", { description: "Utilize o formulário de criação de plano DP abaixo." });
   };
 
   return (

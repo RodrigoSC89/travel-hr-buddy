@@ -364,7 +364,7 @@ export function SupplierComparator() {
                   </div>
                 )}
 
-                <Button className="w-full" onClick={() => toast.info("Cotação", { description: "Processo de cotação em implantação. Utilize o módulo Procurement para enviar RFQs. ETA: Q3/2026." })}>
+                <Button className="w-full" onClick={() => { window.history.pushState({}, '', '/ops?tab=procurement'); window.dispatchEvent(new PopStateEvent('popstate')); toast.success("Navegando para Procurement para iniciar cotação"); }}>
                   <Package className="h-4 w-4 mr-2" />
                   Iniciar Cotação
                 </Button>

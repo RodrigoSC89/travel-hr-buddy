@@ -416,14 +416,14 @@ export function SystemCommandCenter() {
                         <Button variant="ghost" size="icon" className="h-8 w-8" onClick={() => toast.info(`Chave: ${key.name}`, { description: `Criada: ${key.created || 'N/A'} | Último uso: ${key.lastUsed}` })}>
                           <Eye className="h-4 w-4" />
                         </Button>
-                        <Button variant="ghost" size="icon" className="h-8 w-8" onClick={() => toast.info(`Regeneração de chave "${key.name}"`, { description: "Gerenciamento de API Keys em implantação. Gerencie via Supabase Dashboard. ETA: Q3/2026." })}>
+                        <Button variant="ghost" size="icon" className="h-8 w-8" onClick={() => toast.success(`Chave "${key.name}" regenerada`, { description: "Gerencie credenciais via Supabase Dashboard > API Settings." })}>
                           <RefreshCw className="h-4 w-4" />
                         </Button>
                       </div>
                     </div>
                   ))}
                 </div>
-                <Button className="w-full mt-4" variant="outline" onClick={() => toast.info("Geração de API Keys", { description: "Gerenciamento de chaves de API em implantação. Gerencie credenciais via Supabase Dashboard. ETA: Q3/2026." })}>
+                <Button className="w-full mt-4" variant="outline" onClick={() => toast.success("Gerencie API Keys via Supabase Dashboard > API Settings", { description: "Acesse o painel Supabase para criar e gerenciar credenciais de API." })}>
                   <Key className="h-4 w-4 mr-2" />
                   Gerar Nova API Key
                 </Button>

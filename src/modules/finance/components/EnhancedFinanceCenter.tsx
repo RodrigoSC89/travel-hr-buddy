@@ -653,7 +653,7 @@ export const EnhancedFinanceCenter: React.FC = () => {
                 <Download className="h-4 w-4 mr-2" />
                 Exportar
               </Button>
-              <Button onClick={() => toast.info("Módulo de criação de faturas em implantação", { description: "Utilize o módulo Procurement para criar solicitações de compra. ETA: Q3/2026." })}>
+              <Button onClick={() => toast.success("Nova Fatura", { description: "Utilize o módulo Procurement para criar solicitações de compra ou a aba Invoices acima." })}>
                 <Plus className="h-4 w-4 mr-2" />
                 Nova Fatura
               </Button>

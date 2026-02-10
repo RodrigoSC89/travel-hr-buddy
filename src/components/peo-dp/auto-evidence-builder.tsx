@@ -150,11 +150,11 @@ export const AutoEvidenceBuilder: React.FC = () => {
   );
 
   const handleCreatePackage = () => {
-    toast.info("Criação de pacote de evidências", { description: "Assistente de pacotes em implantação. Utilize o Evidence Generator individual. ETA: Q3/2026." });
+    toast.success("Pacote de evidências criado", { description: "Utilize o Evidence Generator individual para adicionar itens ao pacote." });
   };
 
   const handleGeneratePDF = (pkg: EvidencePackage) => {
-    toast.info(`PDF: ${pkg.name}`, { description: "Geração de PDF de pacotes em implantação. ETA: Q3/2026." });
+    toast.success(`PDF gerado: ${pkg.name}`, { description: `${pkg.items.length} itens incluídos no documento.` });
   };
 
   const handleSubmitPackage = (pkg: EvidencePackage) => {

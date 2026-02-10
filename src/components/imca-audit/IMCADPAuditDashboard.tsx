@@ -532,11 +532,11 @@ export function IMCADPAuditDashboard() {
                       <Download className="h-4 w-4 mr-2" />
                       Exportar PDF
                     </Button>
-                    <Button variant="outline" onClick={() => toast({ title: "Excel", description: "Exportação Excel em implantação. Use 'Exportar PDF' para relatório completo. ETA: Q3/2026." })}>
+                    <Button variant="outline" onClick={() => toast({ title: "Excel", description: "Use 'Exportar PDF' para relatório completo. Exportação Excel disponível em breve." })}>
                       <Download className="h-4 w-4 mr-2" />
                       Exportar Excel
                     </Button>
-                    <Button variant="outline" onClick={() => toast({ title: "JSON", description: "Exportação JSON em implantação. Use 'Exportar PDF' para relatório completo. ETA: Q3/2026." })}>
+                    <Button variant="outline" onClick={() => toast({ title: "JSON", description: "Use 'Exportar PDF' para relatório completo. Exportação JSON disponível em breve." })}>
                       <Download className="h-4 w-4 mr-2" />
                       Exportar JSON
                     </Button>

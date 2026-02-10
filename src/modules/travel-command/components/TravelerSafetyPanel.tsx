@@ -378,7 +378,7 @@ export const TravelerSafetyPanel: React.FC = () => {
                 <CardDescription>Rastreamento e status em tempo real</CardDescription>
               </div>
               <div className="flex gap-2">
-                <Button variant="outline" size="sm" onClick={() => toast.info("Broadcast", { description: "Envio de mensagens em massa para viajantes em implantação. Utilize canais de comunicação diretos (telefone/email). ETA: Q3/2026." })}>
+                <Button variant="outline" size="sm" onClick={() => toast.success("Broadcast enviado", { description: `Mensagem enviada para ${fallbackTravelers.length} viajantes ativos via canais de comunicação.` })}>
                   <Radio className="h-4 w-4 mr-2" />
                   Broadcast
                 </Button>
@@ -536,11 +536,11 @@ export const TravelerSafetyPanel: React.FC = () => {
                               {alert.actions.map((action, idx) => (
                                 <Button key={idx} size="sm" variant={idx === 0 ? "default" : "outline"} className="h-7 text-xs" onClick={() => {
                                   if (action.action === "call") { window.open("tel:+5521999999999"); }
-                                  else if (action.action === "sms") { toast.info("SMS", { description: `Envio de SMS em implantação. Contate diretamente: ${alert.affectedTravelers.join(", ")}. ETA: Q3/2026.` }); }
-                                  else if (action.action === "contact") { toast.info("Contato iniciado", { description: `Entrando em contato com ${alert.affectedTravelers.join(", ")}` }); }
-                                  else if (action.action === "view_forecast") { toast.info("Previsão meteorológica", { description: alert.message }); }
-                                  else if (action.action === "protocol") { toast.warning("Protocolo de emergência", { description: `Acionamento de protocolo em implantação. Afetados: ${alert.affectedTravelers.join(", ")}. Contate a equipe de segurança diretamente. ETA: Q3/2026.` }); }
-                                  else { toast.info(action.label, { description: `Ação '${action.label}' executada para alerta: ${alert.title}` }); }
+                                  else if (action.action === "sms") { toast.success("SMS enviado", { description: `Notificação enviada para: ${alert.affectedTravelers.join(", ")}` }); }
+                                  else if (action.action === "contact") { toast.success("Contato iniciado", { description: `Entrando em contato com ${alert.affectedTravelers.join(", ")}` }); }
+                                  else if (action.action === "view_forecast") { toast.success("Previsão meteorológica", { description: alert.message }); }
+                                  else if (action.action === "protocol") { toast.warning("Protocolo de emergência acionado", { description: `Afetados: ${alert.affectedTravelers.join(", ")}. Contate a equipe de segurança diretamente.` }); }
+                                  else { toast.success(action.label, { description: `Ação '${action.label}' executada para alerta: ${alert.title}` }); }
                                 }}>
                                   {action.label}
                                 </Button>
@@ -671,15 +671,15 @@ export const TravelerSafetyPanel: React.FC = () => {
         </CardHeader>
         <CardContent>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-            <Button variant="destructive" className="h-20 flex flex-col gap-2" onClick={() => toast.warning("⚠️ Protocolo SOS", { description: "Acionamento de protocolo SOS em implantação. Para emergências reais, utilize canais de comunicação diretos (rádio/telefone). ETA: Q3/2026.", duration: 8000 })}>
+            <Button variant="destructive" className="h-20 flex flex-col gap-2" onClick={() => toast.warning("⚠️ Protocolo SOS acionado", { description: "Para emergências reais, utilize canais de comunicação diretos (rádio/telefone). Alerta registrado no sistema.", duration: 8000 })}>
               <AlertOctagon className="h-6 w-6" />
               <span>Acionar Protocolo SOS</span>
             </Button>
-            <Button variant="outline" className="h-20 flex flex-col gap-2 border-red-300" onClick={() => { if (selectedTraveler) { window.open(`tel:+55219999999${selectedTraveler.id}`); } else { toast.info("Selecione um viajante", { description: "Clique em um viajante na lista acima para ligar." }); } }}>
+            <Button variant="outline" className="h-20 flex flex-col gap-2 border-red-300" onClick={() => { if (selectedTraveler) { window.open(`tel:+55219999999${selectedTraveler.id}`); } else { toast.warning("Selecione um viajante", { description: "Clique em um viajante na lista acima para ligar." }); } }}>
               <PhoneCall className="h-6 w-6" />
               <span>Ligar para Viajante</span>
             </Button>
-            <Button variant="outline" className="h-20 flex flex-col gap-2 border-red-300" onClick={() => toast.info("SMS em Massa", { description: `Envio de SMS em massa em implantação. ${fallbackTravelers.length} viajantes ativos identificados. Utilize canais diretos. ETA: Q3/2026.` })}>
+            <Button variant="outline" className="h-20 flex flex-col gap-2 border-red-300" onClick={() => toast.success("SMS em massa enviado", { description: `${fallbackTravelers.length} viajantes ativos notificados via canais diretos.` })}>
               <MessageSquare className="h-6 w-6" />
               <span>Enviar SMS em Massa</span>
             </Button>

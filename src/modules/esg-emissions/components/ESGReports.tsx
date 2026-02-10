@@ -117,7 +117,15 @@ export function ESGReports() {
   };
 
   const handleDownload = (report: Report) => {
-    toast.info(`Download de "${report.name}" em implantação. Use o módulo de Relatórios para exportações. ETA: Q3/2026.`);
+    const csv = `Nome;Status;Período;Tipo\n${report.name};${report.status};${report.period};${report.type}`;
+    const blob = new Blob(['\uFEFF' + csv], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `${report.name.replace(/\s+/g, '-').toLowerCase()}.csv`;
+    a.click();
+    URL.revokeObjectURL(url);
+    toast.success(`"${report.name}" exportado com sucesso`);
   };
 
   const handleSubmit = (id: string) => {
