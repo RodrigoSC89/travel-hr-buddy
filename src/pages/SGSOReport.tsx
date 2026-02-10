@@ -6,7 +6,7 @@ import { Progress } from "@/components/ui/progress";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Separator } from "@/components/ui/separator";
 import { toast } from "sonner";
-import jsPDF from "jspdf";
+import { getJsPDF } from '@/lib/pdf/lazy-pdf';
 import {
   FileCheck,
   Download,
@@ -67,7 +67,8 @@ const SGSOReportPage: React.FC = () => {
     setIsGenerating(true);
     
     try {
-      const pdf = new jsPDF('p', 'mm', 'a4');
+      const JsPDF = await getJsPDF();
+      const pdf = new JsPDF('p', 'mm', 'a4');
       const pageWidth = pdf.internal.pageSize.getWidth();
       const pageHeight = pdf.internal.pageSize.getHeight();
       const margin = 20;

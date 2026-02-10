@@ -13,7 +13,7 @@ import {
 import { toast } from "sonner";
 import { Download, FileJson, FileText, Loader2 } from "lucide-react";
 import { type ChatSession } from "@/hooks/use-audit-chat-persistence";
-import jsPDF from "jspdf";
+import { getJsPDF } from '@/lib/pdf/lazy-pdf';
 import { logger } from '@/lib/logger';
 
 interface HistoryExporterProps {
@@ -77,7 +77,8 @@ export function HistoryExporter({ sessions, activeModule }: HistoryExporterProps
 
     setIsExporting(true);
     try {
-      const doc = new jsPDF();
+      const JsPDF = await getJsPDF();
+      const doc = new JsPDF();
       const pageWidth = doc.internal.pageSize.getWidth();
       const margin = 20;
       const contentWidth = pageWidth - 2 * margin;

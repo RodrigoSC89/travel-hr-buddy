@@ -3,8 +3,7 @@
  * Generates weekly KPI reports with crew wellness, IoT sensors, and fleet data
  */
 
-import jsPDF from "jspdf";
-import autoTable from "jspdf-autotable";
+import { getJsPDF, getAutoTable } from '@/lib/pdf/lazy-pdf';
 import { supabase } from "@/integrations/supabase/client";
 
 interface ReportData {
@@ -103,7 +102,9 @@ export async function fetchReportData(): Promise<ReportData> {
 
 export async function generateExecutivePDF(): Promise<Blob> {
   const data = await fetchReportData();
-  const doc = new jsPDF();
+  const JsPDF = await getJsPDF();
+  const autoTable = await getAutoTable();
+  const doc = new JsPDF();
   
   const formatDate = (date: Date) => date.toLocaleDateString("pt-BR");
 

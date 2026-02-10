@@ -3,7 +3,7 @@
  * Formatos: Excel, CSV, SEFIP/eSocial
  */
 
-import * as XLSX from 'xlsx';
+import { getXLSX } from '@/lib/excel/lazy-xlsx';
 import { PayrollCalculation, PayrollSummary } from '@/hooks/usePayroll';
 
 export interface AccountingEntry {
@@ -120,11 +120,12 @@ export function generateAccountingEntries(
 }
 
 // Exportar para Excel
-export function exportPayrollToExcel(
+export async function exportPayrollToExcel(
   calculations: PayrollCalculation[],
   summary: PayrollSummary,
   referenceMonth: string
-): void {
+): Promise<void> {
+  const XLSX = await getXLSX();
   const wb = XLSX.utils.book_new();
 
   // Aba 1: Resumo da Folha

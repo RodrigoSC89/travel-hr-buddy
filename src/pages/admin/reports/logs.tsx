@@ -28,8 +28,7 @@ import {
 } from "lucide-react";
 import { format } from "date-fns";
 import { Alert, AlertDescription } from "@/components/ui/alert";
-import jsPDF from "jspdf";
-import autoTable from "jspdf-autotable";
+import { getJsPDF, getAutoTable } from '@/lib/pdf/lazy-pdf';
 import { toast } from "sonner";
 // Mapped from access_logs table
 interface RestoreReportLog {
@@ -233,10 +232,12 @@ export default function RestoreReportLogsPage() {
     });
   }
 
-  function exportToPDF() {
+  async function exportToPDF() {
     if (logs.length === 0) return;
 
-    const doc = new jsPDF();
+    const JsPDF = await getJsPDF();
+    const autoTable = await getAutoTable();
+    const doc = new JsPDF();
     
     // Add title with branded color
     doc.setFontSize(18);
