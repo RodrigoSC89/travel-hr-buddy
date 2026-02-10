@@ -474,7 +474,10 @@ export function SeaTimeCalculator() {
                 <Award className="h-10 w-10 mx-auto mb-3 opacity-40" />
                 <p className="text-muted-foreground font-medium">Matriz de Elegibilidade de Certificados</p>
                 <p className="text-xs text-muted-foreground mt-1">Consulte a aba "Sea Time" para cálculos de tempo embarcado.</p>
-                <Button variant="outline" size="sm" className="mt-3" onClick={() => window.location.assign('/compliance?tab=certificates')}>
+                <Button variant="outline" size="sm" className="mt-3" onClick={() => {
+                  window.history.pushState({}, "", "/compliance?tab=certificates");
+                  window.dispatchEvent(new PopStateEvent("popstate"));
+                }}>
                   Ver Certificados no Compliance Hub
                 </Button>
               </div>
