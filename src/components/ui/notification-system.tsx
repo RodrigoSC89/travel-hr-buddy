@@ -12,6 +12,7 @@ import {
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { supabase } from "@/integrations/supabase/client";
 
 interface Notification {
   id: string;
@@ -23,58 +24,6 @@ interface Notification {
   read: boolean;
   priority: "low" | "medium" | "high" | "critical";
 }
-
-const mockNotifications: Notification[] = [
-  {
-    id: "1",
-    type: "alert",
-    title: "Combustível Baixo",
-    message: "Embarcação Atlântida reporta 15% de combustível restante",
-    vessel: "Atlântida",
-    timestamp: new Date(Date.now() - 5 * 60 * 1000),
-    read: false,
-    priority: "high"
-  },
-  {
-    id: "2",
-    type: "warning",
-    title: "Manutenção Programada",
-    message: "Sistema DP da embarcação Pacífico requer manutenção em 3 dias",
-    vessel: "Pacífico",
-    timestamp: new Date(Date.now() - 2 * 60 * 60 * 1000),
-    read: false,
-    priority: "medium"
-  },
-  {
-    id: "3",
-    type: "success",
-    title: "Certificação Renovada",
-    message: "Certificado IMO da embarcação Índico renovado com sucesso",
-    vessel: "Índico",
-    timestamp: new Date(Date.now() - 4 * 60 * 60 * 1000),
-    read: true,
-    priority: "low"
-  },
-  {
-    id: "4",
-    type: "info",
-    title: "Previsão Meteorológica",
-    message: "Condições adversas previstas para área de operação 14B",
-    timestamp: new Date(Date.now() - 6 * 60 * 60 * 1000),
-    read: false,
-    priority: "medium"
-  },
-  {
-    id: "5",
-    type: "alert",
-    title: "Sistema DP Offline",
-    message: "Perda de comunicação com sistema DP da embarcação Ártico",
-    vessel: "Ártico",
-    timestamp: new Date(Date.now() - 10 * 60 * 1000),
-    read: false,
-    priority: "critical"
-  }
-];
 
 const typeStyles = {
   alert: "bg-danger/10 text-danger border-danger/20",
@@ -102,9 +51,36 @@ interface NotificationSystemProps {
 }
 
 export const NotificationSystem = ({ className }: NotificationSystemProps) => {
-  const [notifications, setNotifications] = useState<Notification[]>(mockNotifications);
+  const [notifications, setNotifications] = useState<Notification[]>([]);
   const [isOpen, setIsOpen] = useState(false);
   const [filter, setFilter] = useState<"all" | "unread" | "critical">("all");
+
+  // Load real notifications from Supabase
+  useEffect(() => {
+    const load = async () => {
+      try {
+        const { data } = await supabase
+          .from("intelligent_notifications")
+          .select("*")
+          .order("created_at", { ascending: false })
+          .limit(10);
+
+        if (data && data.length > 0) {
+          setNotifications(data.map((n: any) => ({
+            id: n.id,
+            type: n.priority === "critical" ? "alert" as const : n.priority === "high" ? "warning" as const : n.type === "success" ? "success" as const : "info" as const,
+            title: n.title || "Notificação",
+            message: n.message || "",
+            vessel: n.vessel_name || undefined,
+            timestamp: new Date(n.created_at),
+            read: n.is_read || false,
+            priority: n.priority || "medium",
+          })));
+        }
+      } catch { /* empty state shown */ }
+    };
+    load();
+  }, []);
 
   const unreadCount = notifications.filter(n => !n.read).length;
   const criticalCount = notifications.filter(n => n.priority === "critical" && !n.read).length;

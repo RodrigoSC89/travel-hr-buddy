@@ -28,6 +28,7 @@ import {
 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { useNavigate } from "react-router-dom";
+import { supabase } from "@/integrations/supabase/client";
 
 interface Notification {
   id: string;
@@ -66,132 +67,39 @@ const EnhancedNotifications: React.FC<EnhancedNotificationsProps> = ({ isOpen, o
   const { toast } = useToast();
   const navigate = useNavigate();
 
-  // Dados simulados de notificações em tempo real
+  // Load real notifications from Supabase
   useEffect(() => {
-    const initialNotifications: Notification[] = [
-      {
-        id: "1",
-        title: "Certificado STCW Vencendo",
-        description: "Certificado STCW da MV Ocean Explorer expira em 15 dias",
-        type: "warning",
-        priority: "high",
-        category: "Certificações",
-        timestamp: new Date(Date.now() - 2 * 60 * 60 * 1000),
-        read: false,
-        actionable: true,
-        metadata: {
-          module: "HR",
-          vessel: "MV Ocean Explorer",
-          deadline: new Date(Date.now() + 15 * 24 * 60 * 60 * 1000)
-        },
-        actions: [
-          {
-            label: "Renovar Certificado",
-            action: () => navigate("/hr"),
-            variant: "default"
-          },
-          {
-            label: "Ver Detalhes",
-            action: () => toast({ title: "Certificado", description: "Abrindo detalhes..." }),
-            variant: "outline"
-          }
-        ]
-      },
-      {
-        id: "2",
-        title: "Meta de Eficiência Atingida",
-        description: "Parabéns! Meta mensal de eficiência operacional de 94% foi atingida",
-        type: "success",
-        priority: "medium",
-        category: "Performance",
-        timestamp: new Date(Date.now() - 1 * 60 * 60 * 1000),
-        read: false,
-        actionable: true,
-        metadata: {
-          module: "Analytics",
-          progress: 94.2,
-          trend: "up"
-        },
-        actions: [
-          {
-            label: "Ver Relatório",
-            action: () => navigate("/advanced-analytics"),
-            variant: "default"
-          }
-        ]
-      },
-      {
-        id: "3",
-        title: "Auditoria PEOTRAM Concluída",
-        description: "Auditoria #2024-001 finalizada com score 98.5%",
-        type: "success",
-        priority: "medium",
-        category: "Auditorias",
-        timestamp: new Date(Date.now() - 3 * 60 * 60 * 1000),
-        read: true,
-        actionable: true,
-        metadata: {
-          module: "PEOTRAM",
-          vessel: "MV Atlantic Dawn",
-          progress: 98.5
-        },
-        actions: [
-          {
-            label: "Ver Auditoria",
-            action: () => navigate("/peotram"),
-            variant: "outline"
-          }
-        ]
-      },
-      {
-        id: "4",
-        title: "Sistema de Backup Completo",
-        description: "Backup automático da base de dados concluído (2.3GB)",
-        type: "info",
-        priority: "low",
-        category: "Sistema",
-        timestamp: new Date(Date.now() - 6 * 60 * 60 * 1000),
-        read: true,
-        actionable: false,
-        metadata: {
-          module: "System",
-          value: 2.3
+    const loadNotifications = async () => {
+      try {
+        const { data } = await supabase
+          .from("intelligent_notifications")
+          .select("*")
+          .order("created_at", { ascending: false })
+          .limit(20);
+
+        if (data && data.length > 0) {
+          const mapped: Notification[] = data.map((n: any) => ({
+            id: n.id,
+            title: n.title || "Notificação",
+            description: n.message || n.description || "",
+            type: n.priority === "critical" ? "error" : n.priority === "high" ? "warning" : n.type === "success" ? "success" : "info",
+            priority: n.priority || "medium",
+            category: n.category || "Sistema",
+            timestamp: new Date(n.created_at),
+            read: n.is_read || false,
+            actionable: !!n.action_type,
+            metadata: { module: n.source_module, vessel: n.vessel_name },
+          }));
+          setNotifications(mapped);
         }
-      },
-      {
-        id: "5",
-        title: "Anomalia Detectada na Frota",
-        description: "IA detectou padrão anômalo no consumo de combustível",
-        type: "error",
-        priority: "urgent",
-        category: "Frota",
-        timestamp: new Date(Date.now() - 30 * 60 * 1000),
-        read: false,
-        actionable: true,
-        metadata: {
-          module: "Fleet",
-          vessel: "MV Coastal Explorer",
-          trend: "down"
-        },
-        actions: [
-          {
-            label: "Investigar",
-            action: () => navigate("/fleet-dashboard"),
-            variant: "destructive"
-          },
-          {
-            label: "Contatar Engenharia",
-            action: () => toast({ title: "Contato", description: "Enviando alerta para engenharia..." }),
-            variant: "outline"
-          }
-        ]
+        // If no data, notifications stays empty — honest empty state
+      } catch {
+        // Silently fail — empty state is shown
       }
-    ];
+    };
 
-    setNotifications(initialNotifications);
-
-    // Real notifications come from Supabase - no random simulation needed
-  }, [soundEnabled]);
+    loadNotifications();
+  }, []);
 
   const getTypeIcon = (type: string) => {
     switch (type) {

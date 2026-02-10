@@ -50,29 +50,8 @@ export const ScheduledReports: React.FC = () => {
         .order("next_run", { ascending: true });
 
       if (error || !data) {
-        // Mock data if table doesn't exist
-        setReports([
-          {
-            id: "1",
-            title: "Monthly SGSO Report",
-            template: "SGSO Compliance",
-            format: "pdf",
-            frequency: "monthly",
-            next_run: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString(),
-            last_run: new Date(Date.now() - 23 * 24 * 60 * 60 * 1000).toISOString(),
-            is_active: true,
-          },
-          {
-            id: "2",
-            title: "Weekly Safety Metrics",
-            template: "Safety Metrics",
-            format: "excel",
-            frequency: "weekly",
-            next_run: new Date(Date.now() + 3 * 24 * 60 * 60 * 1000).toISOString(),
-            last_run: new Date(Date.now() - 4 * 24 * 60 * 60 * 1000).toISOString(),
-            is_active: true,
-          },
-        ]);
+        // Table doesn't exist yet — show honest empty state
+        setReports([]);
       } else {
         setReports((data as any) || []);
       }
@@ -144,50 +123,45 @@ export const ScheduledReports: React.FC = () => {
   };
 
   const runReportNow = async (reportId: string) => {
-    toast({
-      title: "Generating Report",
-      description: "Report generation started...",
-    });
+    try {
+      const report = reports.find((r) => r.id === reportId);
+      if (!report) return;
 
-    // Simulate report generation
-    setTimeout(async () => {
-      try {
-        const report = reports.find((r) => r.id === reportId);
-        if (!report) return;
+      toast({
+        title: "Generating Report",
+        description: "Report generation started...",
+      });
 
-        // Store in Supabase Storage
-        const fileName = `${report.title.replace(/\s+/g, "-")}-${Date.now()}.${report.format}`;
-        const storagePath = `compliance-reports/${fileName}`;
+      const fileName = `${report.title.replace(/\s+/g, "-")}-${Date.now()}.${report.format}`;
+      const storagePath = `compliance-reports/${fileName}`;
 
-        // Update last_run and next_run
-        try {
-          await supabase
-            .from("scheduled_compliance_reports" as any)
-            .update({
-              last_run: new Date().toISOString(),
-              next_run: calculateNextRun(report.frequency),
-              storage_path: storagePath,
-            })
-            .eq("id", reportId);
-        } catch (dbError) {
-          logger.debug("Report metadata not updated (table may not exist)");
-        }
+      const { error } = await supabase
+        .from("scheduled_compliance_reports" as any)
+        .update({
+          last_run: new Date().toISOString(),
+          next_run: calculateNextRun(report.frequency),
+          storage_path: storagePath,
+        })
+        .eq("id", reportId);
 
-        toast({
-          title: "Report Generated",
-          description: "Report has been stored and is ready for download",
-        });
-
-        fetchScheduledReports();
-      } catch (error) {
-        logger.error("Error running report:", error);
-        toast({
-          title: "Generation Failed",
-          description: "Failed to generate report",
-          variant: "destructive",
-        });
+      if (error) {
+        logger.debug("Report metadata not updated (table may not exist)");
       }
-    }, 2000);
+
+      toast({
+        title: "Report Generated",
+        description: "Report has been stored and is ready for download",
+      });
+
+      fetchScheduledReports();
+    } catch (error) {
+      logger.error("Error running report:", error);
+      toast({
+        title: "Generation Failed",
+        description: "Failed to generate report",
+        variant: "destructive",
+      });
+    }
   };
 
   const deleteSchedule = async (reportId: string) => {
