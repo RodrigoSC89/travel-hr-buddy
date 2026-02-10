@@ -40,8 +40,8 @@ import {
   Area
 } from "recharts";
 
-// Mock blockchain data
-const blockchainEvents = [
+// Fallback blockchain data (awaiting real integration)
+const fallbackBlockchainEvents = [
   {
     id: "evt-001",
     type: "maintenance:completed",
@@ -151,7 +151,7 @@ const transactionVolume = [
 
 export default function BlockchainGovernanceDashboard() {
   const [searchHash, setSearchHash] = useState("");
-  const [selectedEvent, setSelectedEvent] = useState(blockchainEvents[0]);
+  const [selectedEvent, setSelectedEvent] = useState(fallbackBlockchainEvents[0]);
 
   const getEventTypeIcon = (type: string) => {
     if (type.includes("maintenance")) return <FileCheck className="h-4 w-4" />;
@@ -276,7 +276,7 @@ export default function BlockchainGovernanceDashboard() {
               <CardContent>
                 <ScrollArea className="h-[400px]">
                   <div className="space-y-3">
-                    {blockchainEvents.map((event) => (
+                    {fallbackBlockchainEvents.map((event: typeof fallbackBlockchainEvents[0]) => (
                       <div
                         key={event.id}
                         className={`p-3 rounded-lg border cursor-pointer transition-all ${

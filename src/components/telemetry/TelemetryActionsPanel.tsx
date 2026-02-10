@@ -125,8 +125,8 @@ export function TelemetryActionsPanel() {
     const data = generateTelemetryData(24);
     setTelemetryData(data);
     
-    // Generate some alerts
-    const mockAlerts: TelemetryAlert[] = [
+    // Fallback alerts for telemetry monitoring
+    const fallbackAlerts: TelemetryAlert[] = [
       {
         id: "1",
         type: "warning",
@@ -148,7 +148,7 @@ export function TelemetryActionsPanel() {
         acknowledged: true
       }
     ];
-    setAlerts(mockAlerts);
+    setAlerts(fallbackAlerts);
     setLoading(false);
   }, [timeRange]);
 

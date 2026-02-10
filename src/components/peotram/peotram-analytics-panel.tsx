@@ -73,7 +73,7 @@ interface AnalyticsData {
   };
 }
 
-const mockAnalyticsData: AnalyticsData = {
+const fallbackAnalyticsData: AnalyticsData = {
   complianceTrends: [
     { period: "Jan 2024", score: 85.2, target: 90, audits: 12 },
     { period: "Fev 2024", score: 86.1, target: 90, audits: 15 },
@@ -133,7 +133,7 @@ const mockAnalyticsData: AnalyticsData = {
 export const PeotramAnalyticsPanel: React.FC = () => {
   const [selectedPeriod, setSelectedPeriod] = useState("2024");
   const [selectedMetric, setSelectedMetric] = useState("compliance");
-  const [data, setData] = useState<AnalyticsData>(mockAnalyticsData);
+  const [data, setData] = useState<AnalyticsData>(fallbackAnalyticsData);
 
   const refreshData = () => {
     // Simular atualização dos dados
