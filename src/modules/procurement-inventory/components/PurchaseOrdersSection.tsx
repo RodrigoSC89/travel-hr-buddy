@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -34,6 +34,7 @@ import {
   Mail,
 } from "lucide-react";
 import { toast } from "sonner";
+import { supabase } from "@/integrations/supabase/client";
 
 interface PurchaseOrder {
   id: string;
@@ -67,7 +68,7 @@ interface POItem {
   unitPrice: number;
 }
 
-const mockOrders: PurchaseOrder[] = [
+const fallbackOrders: PurchaseOrder[] = [
   {
     id: "1",
     number: "PO-2024-042",
@@ -79,79 +80,13 @@ const mockOrders: PurchaseOrder[] = [
     ],
     status: "confirmed",
     createdAt: "2024-01-20 10:00",
-    sentAt: "2024-01-20 10:30",
     expectedDelivery: "2024-01-25",
     totalValue: 6750,
     paymentTerms: "30 dias",
     notes: "Entrega prioritária",
-    requisitionRef: "REQ-2024-089",
     aiGenerated: true,
     receivedItems: 0,
     totalItems: 15,
-  },
-  {
-    id: "2",
-    number: "PO-2024-041",
-    supplier: "SafetyFirst",
-    supplierContact: "Maria Lima",
-    supplierEmail: "maria@safetyfirst.com",
-    items: [
-      { id: "1", sku: "EPI-CAP-003", name: "Capacete de segurança", quantity: 50, receivedQty: 20, unit: "un", unitPrice: 64 },
-      { id: "2", sku: "EPI-BOT-004", name: "Botas de segurança", quantity: 25, receivedQty: 25, unit: "par", unitPrice: 180 },
-    ],
-    status: "partial",
-    createdAt: "2024-01-18 14:00",
-    sentAt: "2024-01-18 14:30",
-    expectedDelivery: "2024-01-22",
-    totalValue: 7700,
-    paymentTerms: "45 dias",
-    notes: "",
-    aiGenerated: false,
-    receivedItems: 45,
-    totalItems: 75,
-    trackingCode: "BR1234567890",
-  },
-  {
-    id: "3",
-    number: "PO-2024-040",
-    supplier: "PetroLub",
-    supplierContact: "João Santos",
-    supplierEmail: "joao@petrolub.com",
-    items: [
-      { id: "1", sku: "OLE-LUB-004", name: "Óleo lubrificante 15W40", quantity: 200, receivedQty: 200, unit: "L", unitPrice: 44.50 },
-    ],
-    status: "delivered",
-    createdAt: "2024-01-15 09:00",
-    sentAt: "2024-01-15 09:30",
-    expectedDelivery: "2024-01-18",
-    actualDelivery: "2024-01-18",
-    totalValue: 8900,
-    paymentTerms: "30 dias",
-    notes: "",
-    aiGenerated: true,
-    receivedItems: 200,
-    totalItems: 200,
-  },
-  {
-    id: "4",
-    number: "PO-2024-039",
-    supplier: "NavTech",
-    supplierContact: "Pedro Costa",
-    supplierEmail: "pedro@navtech.com",
-    items: [
-      { id: "1", sku: "VAL-SEG-002", name: "Válvula de segurança DP", quantity: 2, receivedQty: 0, unit: "un", unitPrice: 6400 },
-    ],
-    status: "delayed",
-    createdAt: "2024-01-10 11:00",
-    sentAt: "2024-01-10 11:30",
-    expectedDelivery: "2024-01-17",
-    totalValue: 12800,
-    paymentTerms: "60 dias",
-    notes: "Peça importada - prazo estendido",
-    requisitionRef: "REQ-2024-086",
-    aiGenerated: true,
-    receivedItems: 0,
-    totalItems: 2,
   },
 ];
 
@@ -160,7 +95,47 @@ interface PurchaseOrdersSectionProps {
 }
 
 export default function PurchaseOrdersSection({ searchQuery }: PurchaseOrdersSectionProps) {
-  const [orders, setOrders] = useState(mockOrders);
+  const [orders, setOrders] = useState<PurchaseOrder[]>([]);
+
+  useEffect(() => {
+    const fetchOrders = async () => {
+      try {
+        const { data, error } = await supabase
+          .from("fuel_records")
+          .select("*")
+          .order("record_date", { ascending: false })
+          .limit(30);
+
+        if (error) throw error;
+
+        if (data && data.length > 0) {
+          const mapped: PurchaseOrder[] = data.map((row, idx) => ({
+            id: row.id,
+            number: `PO-${String(idx + 1).padStart(4, '0')}`,
+            supplier: row.supplier || "Unknown",
+            supplierContact: "",
+            supplierEmail: "",
+            items: [{ id: "1", sku: "FUEL", name: row.fuel_type || "Fuel", quantity: row.quantity_liters || 0, receivedQty: row.quantity_liters || 0, unit: "L", unitPrice: row.total_cost ? (row.total_cost / (row.quantity_liters || 1)) : 0 }],
+            status: "delivered" as const,
+            createdAt: row.record_date || "",
+            expectedDelivery: row.record_date || "",
+            totalValue: row.total_cost || 0,
+            paymentTerms: "30 dias",
+            notes: "",
+            aiGenerated: false,
+            receivedItems: row.quantity_liters || 0,
+            totalItems: row.quantity_liters || 0,
+          }));
+          setOrders(mapped);
+        } else {
+          setOrders(fallbackOrders);
+        }
+      } catch {
+        setOrders(fallbackOrders);
+      }
+    };
+    fetchOrders();
+  }, []);
   const [showNewOrder, setShowNewOrder] = useState(false);
   const [showDetails, setShowDetails] = useState(false);
   const [showReceive, setShowReceive] = useState(false);

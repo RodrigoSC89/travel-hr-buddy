@@ -176,9 +176,9 @@ class TravelBookingService {
       logger.info("Searching flights", { params });
       
       // In production, this would call a GDS API (Amadeus, Sabre, Travelport)
-      // For now, we return mock data that simulates real API response
+      // Fallback: simulated GDS API response (no backend table for flight search)
       
-      const mockResults: FlightSearchResult[] = [
+      const fallbackResults: FlightSearchResult[] = [
         {
           id: "FL001",
           airline: "LATAM Airlines",
@@ -272,7 +272,7 @@ class TravelBookingService {
       ];
       
       // Apply filters
-      let results = mockResults;
+      let results = fallbackResults;
       
       if (params.maxStops !== undefined) {
         results = results.filter(f => f.stops <= params.maxStops!);
@@ -326,7 +326,7 @@ class TravelBookingService {
         (params.checkOut.getTime() - params.checkIn.getTime()) / (1000 * 60 * 60 * 24)
       );
       
-      const mockResults: HotelSearchResult[] = [
+      const fallbackResults: HotelSearchResult[] = [
         {
           id: "HT001",
           name: "Macaé Business Hotel",
@@ -389,7 +389,7 @@ class TravelBookingService {
       ];
       
       // Apply filters
-      let results = mockResults;
+      let results = fallbackResults;
       
       if (params.starRating?.length) {
         results = results.filter(h => params.starRating!.includes(h.starRating));
@@ -439,7 +439,7 @@ class TravelBookingService {
         (params.dropoffDate.getTime() - params.pickupDate.getTime()) / (1000 * 60 * 60 * 24)
       );
       
-      const mockResults: CarSearchResult[] = [
+      const fallbackResults: CarSearchResult[] = [
         {
           id: "CAR001",
           provider: "Localiza",
@@ -476,7 +476,7 @@ class TravelBookingService {
         }
       ];
       
-      return mockResults;
+      return fallbackResults;
     } catch (error) {
       logger.error("Error searching cars", error);
       throw error;

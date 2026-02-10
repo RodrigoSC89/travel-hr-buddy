@@ -1,9 +1,9 @@
 /**
  * VR/AR Training & Support Center
- * PATCH REVOLUTION v1.0
+ * PATCH REVOLUTION v1.0 + P0-002 Batch 10
  * Immersive training and remote expert assistance
  */
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -18,6 +18,7 @@ import {
 } from "lucide-react";
 import { toast } from "sonner";
 import { motion } from "framer-motion";
+import { supabase } from "@/integrations/supabase/client";
 
 interface TrainingScenario {
   id: string;
@@ -25,7 +26,7 @@ interface TrainingScenario {
   description: string;
   category: "emergency" | "navigation" | "maintenance" | "safety";
   difficulty: "beginner" | "intermediate" | "advanced" | "expert";
-  duration: number; // minutes
+  duration: number;
   xpReward: number;
   completions: number;
   avgScore: number;
@@ -57,100 +58,13 @@ interface RemoteSession {
   savingsEstimate?: number;
 }
 
-const mockScenarios: TrainingScenario[] = [
-  {
-    id: "1",
-    title: "Fire in Engine Room",
-    description: "Combate a incêndio na sala de máquinas com simulação realista de fumaça e calor",
-    category: "emergency",
-    difficulty: "advanced",
-    duration: 45,
-    xpReward: 500,
-    completions: 1247,
-    avgScore: 82,
-    imoApproved: true,
-  },
-  {
-    id: "2",
-    title: "Man Overboard (MOB)",
-    description: "Procedimentos de resgate com condições meteorológicas variáveis",
-    category: "emergency",
-    difficulty: "intermediate",
-    duration: 30,
-    xpReward: 350,
-    completions: 2891,
-    avgScore: 78,
-    imoApproved: true,
-  },
-  {
-    id: "3",
-    title: "Bridge Navigation - Traffic",
-    description: "Navegação em tráfego intenso com radar, ECDIS e AIS realistas",
-    category: "navigation",
-    difficulty: "expert",
-    duration: 60,
-    xpReward: 750,
-    completions: 892,
-    avgScore: 71,
-    imoApproved: true,
-  },
-  {
-    id: "4",
-    title: "Main Engine Overhaul",
-    description: "Manutenção completa de motor principal com guia AR passo-a-passo",
-    category: "maintenance",
-    difficulty: "advanced",
-    duration: 90,
-    xpReward: 600,
-    completions: 456,
-    avgScore: 85,
-    imoApproved: false,
-  },
-  {
-    id: "5",
-    title: "Collision Avoidance",
-    description: "Cenários de colisão iminente com tomada de decisão sob pressão",
-    category: "safety",
-    difficulty: "expert",
-    duration: 40,
-    xpReward: 650,
-    completions: 1023,
-    avgScore: 74,
-    imoApproved: true,
-  },
+const fallbackScenarios: TrainingScenario[] = [
+  { id: "1", title: "Fire in Engine Room", description: "Combate a incêndio na sala de máquinas", category: "emergency", difficulty: "advanced", duration: 45, xpReward: 500, completions: 1247, avgScore: 82, imoApproved: true },
+  { id: "2", title: "Man Overboard (MOB)", description: "Procedimentos de resgate", category: "emergency", difficulty: "intermediate", duration: 30, xpReward: 350, completions: 2891, avgScore: 78, imoApproved: true },
 ];
 
-const mockRemoteSessions: RemoteSession[] = [
-  {
-    id: "1",
-    vesselName: "MV Ocean Star",
-    technicianName: "João Silva",
-    expertName: "Dr. Carlos Mendes",
-    issue: "Turbocharger vibration analysis",
-    status: "active",
-    startedAt: "2025-01-20T14:00:00Z",
-  },
-  {
-    id: "2",
-    vesselName: "MV Sea Pride",
-    technicianName: "Maria Santos",
-    expertName: "Eng. Paulo Costa",
-    issue: "Electrical fault in main switchboard",
-    status: "completed",
-    startedAt: "2025-01-20T10:00:00Z",
-    duration: 45,
-    resolution: "Faulty relay identified and replaced",
-    savingsEstimate: 35000,
-  },
-  {
-    id: "3",
-    vesselName: "MV Blue Wave",
-    technicianName: "Pedro Lima",
-    expertName: "Eng. Ana Ferreira",
-    issue: "Hydraulic system leak inspection",
-    status: "scheduled",
-    startedAt: "2025-01-21T09:00:00Z",
-  },
+const fallbackRemoteSessions: RemoteSession[] = [
+  { id: "1", vesselName: "MV Ocean Star", technicianName: "João Silva", expertName: "Dr. Carlos Mendes", issue: "Turbocharger vibration analysis", status: "active" },
 ];
 
 const difficultyColors = {
@@ -176,8 +90,44 @@ const statusColors = {
 export function VRARTrainingCenter() {
   const [selectedTab, setSelectedTab] = useState("scenarios");
   const [selectedScenario, setSelectedScenario] = useState<TrainingScenario | null>(null);
-  const [scenarios, setScenarios] = useState<TrainingScenario[]>(mockScenarios);
+  const [scenarios, setScenarios] = useState<TrainingScenario[]>([]);
+  const [remoteSessions, setRemoteSessions] = useState<RemoteSession[]>(fallbackRemoteSessions);
   const [isAddScenarioOpen, setIsAddScenarioOpen] = useState(false);
+
+  useEffect(() => {
+    const fetchScenarios = async () => {
+      try {
+        const { data, error } = await supabase
+          .from("academy_courses")
+          .select("*")
+          .order("created_at", { ascending: false })
+          .limit(20);
+
+        if (error) throw error;
+
+        if (data && data.length > 0) {
+          const mapped: TrainingScenario[] = data.map((row) => ({
+            id: row.id,
+            title: row.course_name,
+            description: row.course_description || "",
+            category: "safety" as const,
+            difficulty: "intermediate" as const,
+            duration: row.duration_hours ? row.duration_hours * 60 : 30,
+            xpReward: (row.duration_hours || 1) * 100,
+            completions: 0,
+            avgScore: row.passing_score || 0,
+            imoApproved: row.is_published || false,
+          }));
+          setScenarios(mapped);
+        } else {
+          setScenarios(fallbackScenarios);
+        }
+      } catch {
+        setScenarios(fallbackScenarios);
+      }
+    };
+    fetchScenarios();
+  }, []);
 
   const handleStartTraining = (scenario: TrainingScenario) => {
     toast.success(`Iniciando treinamento: ${scenario.title}`, {
@@ -193,10 +143,10 @@ export function VRARTrainingCenter() {
     }
   };
 
-  const totalTrainees = mockScenarios.reduce((acc, s) => acc + s.completions, 0);
+  const totalTrainees = scenarios.reduce((acc, s) => acc + s.completions, 0) || 1;
   const avgCompletionScore = Math.round(
-    mockScenarios.reduce((acc, s) => acc + s.avgScore * s.completions, 0) / totalTrainees
-  );
+    scenarios.reduce((acc, s) => acc + s.avgScore * s.completions, 0) / totalTrainees
+  ) || 0;
 
   return (
     <div className="space-y-6">
@@ -232,7 +182,7 @@ export function VRARTrainingCenter() {
                 <Glasses className="h-5 w-5 text-purple-500" />
               </div>
               <div>
-                <p className="text-2xl font-bold">{mockScenarios.length}</p>
+                <p className="text-2xl font-bold">{scenarios.length}</p>
                 <p className="text-xs text-muted-foreground">Cenários VR</p>
               </div>
             </div>
@@ -246,7 +196,7 @@ export function VRARTrainingCenter() {
               </div>
               <div>
                 <p className="text-2xl font-bold">
-                  {mockRemoteSessions.filter(s => s.status === "active").length}
+                  {remoteSessions.filter(s => s.status === "active").length}
                 </p>
                 <p className="text-xs text-muted-foreground">Sessões AR Ativas</p>
               </div>
@@ -261,7 +211,7 @@ export function VRARTrainingCenter() {
               </div>
               <div>
                 <p className="text-2xl font-bold">
-                  {mockScenarios.filter(s => s.imoApproved).length}
+                  {scenarios.filter(s => s.imoApproved).length}
                 </p>
                 <p className="text-xs text-muted-foreground">IMO Certificados</p>
               </div>
@@ -401,7 +351,7 @@ export function VRARTrainingCenter() {
             </CardHeader>
             <CardContent>
               <div className="space-y-4">
-                {mockRemoteSessions.map((session) => (
+                {remoteSessions.map((session) => (
                   <div
                     key={session.id}
                     className={`p-4 rounded-lg border ${

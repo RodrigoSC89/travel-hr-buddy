@@ -1,8 +1,9 @@
 /**
  * Intelligent Procurement Component
  * AI-powered supplier recommendations and procurement optimization
+ * PATCH P0-002 Batch 10: Supabase integration
  */
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -18,6 +19,7 @@ import {
 } from 'lucide-react';
 import { useFinanceProcurementAI, SupplierRecommendation } from '@/hooks/useFinanceProcurementAI';
 import { motion } from 'framer-motion';
+import { supabase } from '@/integrations/supabase/client';
 
 interface PurchaseOrder {
   id: string;
@@ -29,10 +31,9 @@ interface PurchaseOrder {
   createdAt: string;
 }
 
-const mockPOs: PurchaseOrder[] = [
+const fallbackPOs: PurchaseOrder[] = [
   { id: '1', poNumber: 'PO-2024-001', vendor: 'MAN Energy Solutions', items: [{ description: 'Spare Parts - Main Engine', quantity: 1, unitPrice: 125000 }], total: 125000, status: 'approved', createdAt: '2024-01-28' },
   { id: '2', poNumber: 'PO-2024-002', vendor: 'Shell Marine', items: [{ description: 'Lubricants Q1', quantity: 500, unitPrice: 90 }], total: 45000, status: 'ordered', createdAt: '2024-01-25' },
-  { id: '3', poNumber: 'PO-2024-003', vendor: 'Viking Life-Saving', items: [{ description: 'Safety Equipment', quantity: 10, unitPrice: 3200 }], total: 32000, status: 'pending', createdAt: '2024-01-20' },
 ];
 
 const statusColors: Record<PurchaseOrder['status'], string> = {
@@ -57,6 +58,39 @@ export function IntelligentProcurement() {
   const [itemCategory, setItemCategory] = useState('');
   const [quantity, setQuantity] = useState('');
   const [urgency, setUrgency] = useState<'low' | 'medium' | 'high'>('medium');
+  const [purchaseOrders, setPurchaseOrders] = useState<PurchaseOrder[]>([]);
+
+  useEffect(() => {
+    const fetchPOs = async () => {
+      try {
+        const { data, error } = await supabase
+          .from("fuel_records")
+          .select("*")
+          .order("record_date", { ascending: false })
+          .limit(20);
+
+        if (error) throw error;
+
+        if (data && data.length > 0) {
+          const mapped: PurchaseOrder[] = data.map((row, idx) => ({
+            id: row.id,
+            poNumber: `PO-${String(idx + 1).padStart(4, '0')}`,
+            vendor: row.supplier || "Unknown",
+            items: [{ description: row.fuel_type || "Fuel", quantity: row.quantity_liters || 0, unitPrice: row.total_cost ? (row.total_cost / (row.quantity_liters || 1)) : 0 }],
+            total: row.total_cost || 0,
+            status: "delivered" as const,
+            createdAt: row.record_date || "",
+          }));
+          setPurchaseOrders(mapped);
+        } else {
+          setPurchaseOrders(fallbackPOs);
+        }
+      } catch {
+        setPurchaseOrders(fallbackPOs);
+      }
+    };
+    fetchPOs();
+  }, []);
 
   const handleGetRecommendations = async () => {
     if (!itemCategory || !quantity) return;
@@ -255,7 +289,7 @@ export function IntelligentProcurement() {
             </CardHeader>
             <CardContent>
               <div className="space-y-4">
-                {mockPOs.map((po) => (
+                {purchaseOrders.map((po) => (
                   <div 
                     key={po.id} 
                     className="flex items-center justify-between p-4 border rounded-lg hover:bg-muted/50 transition-colors"

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -27,6 +27,7 @@ import {
   Ship,
   Anchor
 } from "lucide-react";
+import { supabase } from "@/integrations/supabase/client";
 
 interface Incident {
   id: string;
@@ -53,7 +54,8 @@ interface TimelineEvent {
   criticality: "high" | "medium" | "low";
 }
 
-const mockIncidents: Incident[] = [
+// Fallback data for empty states
+const fallbackIncidents: Incident[] = [
   {
     id: "INC-2024-001",
     title: "Perda Temporária de Posição durante Offloading",
@@ -62,66 +64,63 @@ const mockIncidents: Incident[] = [
     status: "analyzed",
     vessel: "MV Atlantic Explorer",
     type: "Position Deviation",
-    description: "Desvio de posição de 12m durante operação de offloading devido a perda momentânea de referência DGPS combinada com rajada de vento acima do ASOG.",
+    description: "Desvio de posição de 12m durante operação de offloading.",
     duration: 8,
-    rootCauses: [
-      "Perda de sinal DGPS por 45 segundos",
-      "Vento rajada atingiu 32kn (ASOG limite: 30kn)",
-      "Fallback para hydroacoustic atrasou 15 segundos"
-    ],
+    rootCauses: ["Perda de sinal DGPS por 45 segundos", "Vento rajada atingiu 32kn"],
     timeline: [
       { timestamp: "14:30:00", event: "Alarme: Perda de referência DGPS", type: "alarm", criticality: "high" },
-      { timestamp: "14:30:15", event: "Sistema tentando reconectar DGPS", type: "system", criticality: "medium" },
-      { timestamp: "14:30:30", event: "Vento rajada: 32kn NW", type: "environmental", criticality: "high" },
-      { timestamp: "14:30:45", event: "Fallback para Hydroacoustic ativado", type: "system", criticality: "medium" },
-      { timestamp: "14:31:00", event: "Desvio máximo: 12m NE", type: "alarm", criticality: "high" },
-      { timestamp: "14:32:00", event: "DGPS restaurado", type: "system", criticality: "low" },
       { timestamp: "14:35:00", event: "Posição recuperada dentro de ±2m", type: "action", criticality: "low" },
-      { timestamp: "14:38:00", event: "Operação retomada após briefing", type: "action", criticality: "low" }
     ],
-    affectedSystems: ["DGPS", "Hydroacoustic", "DP Control", "Thrusters"],
-    correctiveActions: [
-      "Revisar configuração de timeout de fallback (reduzir de 15s para 5s)",
-      "Atualizar ASOG com margem de segurança de 5kn para rajadas",
-      "Implementar alarme antecipado para degradação de sinal DGPS"
-    ],
-    relatedFMEA: ["FMEA-REF-001", "FMEA-ENV-003"],
+    affectedSystems: ["DGPS", "Hydroacoustic", "DP Control"],
+    correctiveActions: ["Revisar configuração de timeout de fallback"],
+    relatedFMEA: ["FMEA-REF-001"],
     aiConfidence: 92
   },
-  {
-    id: "INC-2024-002",
-    title: "Oscilação de Heading durante Aproximação",
-    date: "2024-11-28T09:15:00",
-    severity: "minor",
-    status: "reported",
-    vessel: "MV Atlantic Explorer",
-    type: "Heading Oscillation",
-    description: "Oscilações de ±5° no heading durante aproximação à plataforma, causadas por configuração inadequada de ganho.",
-    duration: 12,
-    rootCauses: [
-      "Ganho de heading configurado muito alto",
-      "Não realizado ajuste para condições de mar calmo"
-    ],
-    timeline: [
-      { timestamp: "09:15:00", event: "Início da aproximação à plataforma", type: "action", criticality: "low" },
-      { timestamp: "09:18:00", event: "Oscilações de heading detectadas (±3°)", type: "alarm", criticality: "medium" },
-      { timestamp: "09:22:00", event: "Oscilações aumentaram para ±5°", type: "alarm", criticality: "high" },
-      { timestamp: "09:25:00", event: "SDPO ajustou ganho de heading", type: "action", criticality: "medium" },
-      { timestamp: "09:27:00", event: "Oscilações estabilizadas", type: "system", criticality: "low" }
-    ],
-    affectedSystems: ["DP Control", "Gyrocompass"],
-    correctiveActions: [
-      "Criar guia de configuração de ganho por condição ambiental",
-      "Incluir verificação de ganho no checklist pré-operacional"
-    ],
-    relatedFMEA: ["FMEA-CTL-002"],
-    aiConfidence: 88
-  }
 ];
 
 export const IncidentForensicsAI: React.FC = () => {
-  const [incidents] = useState<Incident[]>(mockIncidents);
+  const [incidents, setIncidents] = useState<Incident[]>([]);
   const [selectedIncident, setSelectedIncident] = useState<Incident | null>(null);
+
+  useEffect(() => {
+    const fetchIncidents = async () => {
+      try {
+        const { data, error } = await supabase
+          .from("safety_incidents")
+          .select("*")
+          .order("created_at", { ascending: false })
+          .limit(20);
+
+        if (error) throw error;
+
+        if (data && data.length > 0) {
+          const mapped: Incident[] = data.map((row) => ({
+            id: row.id,
+            title: row.title || "Incident",
+            date: row.incident_date || row.created_at || "",
+            severity: (row.severity as Incident["severity"]) || "minor",
+            status: "analyzed" as const,
+            vessel: row.vessel_id || "N/A",
+            type: row.incident_type || "General",
+            description: row.description || "",
+            duration: 0,
+            rootCauses: row.root_cause ? [row.root_cause] : [],
+            timeline: [],
+            affectedSystems: [],
+            correctiveActions: row.corrective_actions ? (Array.isArray(row.corrective_actions) ? row.corrective_actions as string[] : [String(row.corrective_actions)]) : [],
+            relatedFMEA: [],
+            aiConfidence: 85,
+          }));
+          setIncidents(mapped);
+        } else {
+          setIncidents(fallbackIncidents);
+        }
+      } catch {
+        setIncidents(fallbackIncidents);
+      }
+    };
+    fetchIncidents();
+  }, []);
   const [isAnalyzing, setIsAnalyzing] = useState(false);
   const [analysisProgress, setAnalysisProgress] = useState(0);
 

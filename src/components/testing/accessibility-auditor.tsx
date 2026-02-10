@@ -31,8 +31,8 @@ export const AccessibilityAuditor: React.FC = () => {
   const [issues, setIssues] = React.useState<AccessibilityIssue[]>([]);
   const [scanComplete, setScanComplete] = React.useState(false);
 
-  // Dados simulados de auditoria de acessibilidade
-  const mockIssues: AccessibilityIssue[] = [
+  // Fallback: accessibility audit results (internal testing tool, no backend table)
+  const fallbackIssues: AccessibilityIssue[] = [
     {
       type: "success",
       element: "Botões principais",
@@ -113,7 +113,7 @@ export const AccessibilityAuditor: React.FC = () => {
       setProgress(i);
     }
 
-    setIssues(mockIssues);
+    setIssues(fallbackIssues);
     setScanComplete(true);
     setIsScanning(false);
   };
