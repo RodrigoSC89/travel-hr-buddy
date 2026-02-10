@@ -12,7 +12,7 @@ import { Loading } from "@/components/ui/Loading";
 import { FileText, Brain, Shield, Clock, Scale, DollarSign } from "lucide-react";
 
 // Lazy load components
-const VesselContractsV2 = lazy(() => import("./VesselContractsV2"));
+const VesselContractsV2 = lazy(() => import("./CharterPartyV2"));
 const ContractProcurementIntelligence = lazy(() => import("@/components/premium/ContractProcurementIntelligence"));
 
 function LoadingFallback() {

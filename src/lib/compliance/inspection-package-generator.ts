@@ -5,8 +5,7 @@
  */
 
 import JSZip from 'jszip';
-import jsPDF from 'jspdf';
-import autoTable from 'jspdf-autotable';
+import { getJsPDF, getAutoTable } from '@/lib/pdf/lazy-pdf';
 import { supabase } from '@/integrations/supabase/client';
 import { logger } from '@/lib/logger';
 import { runProactiveComplianceMonitor } from './proactive-monitor';
@@ -230,7 +229,8 @@ async function fetchCrewCertificates(): Promise<Array<{ name: string; position: 
  * Generate PDF inspection package
  */
 async function generatePDFPackage(request: InspectionPackageRequest): Promise<Blob> {
-  const doc = new jsPDF();
+  const [JsPDF, autoTable] = await Promise.all([getJsPDF(), getAutoTable()]);
+  const doc = new JsPDF();
   const pageWidth = doc.internal.pageSize.getWidth();
   const pageHeight = doc.internal.pageSize.getHeight();
   let yPos = 20;

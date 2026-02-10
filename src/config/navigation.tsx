@@ -46,7 +46,7 @@ export const NAVIGATION = [
   // REMOVED: Workflow redirect - use WorkflowCommandCenter directly
   { name: "Nauti People Hub", path: "/nautilus-people", component: safeLazyImport(() => import("@/modules/nauti-people"), "Nauti People Hub") },
   { name: "PEO-DP", path: "/peo-dp", component: safeLazyImport(() => import("@/modules/hr/peo-dp/PEODPPanel"), "PEO-DP") },
-  { name: "System Diagnostic", path: "/system-diagnostic", component: safeLazyImport(() => import("@/pages/SystemHub"), "System Hub") },
+  { name: "System Diagnostic", path: "/system-diagnostic", component: safeLazyImport(() => import("@/pages/SystemHubPremium"), "System Hub") },
   { name: "Execution Roadmap", path: "/execution-roadmap", component: safeLazyImport(() => import("@/pages/ExecutionRoadmap"), "Execution Roadmap") },
   { name: "Usage Simulation", path: "/usage-simulation", component: safeLazyImport(() => import("@/pages/UsageSimulation"), "Usage Simulation") },
 ];

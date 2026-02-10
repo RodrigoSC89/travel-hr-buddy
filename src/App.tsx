@@ -120,7 +120,7 @@ const EnhancedWasteManagement = lazy(() => import("@/pages/WasteManagementPremiu
 
 // PATCH PREMIUM-2.0 - Módulos Aprimorados
 const CentralComandoAprimorada = lazy(() => import("@/pages/dashboard/CentralComandoAprimorada"));
-const SystemHubAprimorado = lazy(() => import("@/pages/SystemHubAprimorado"));
+// SystemHubAprimorado removed — consolidated into SystemHubPremium
 const MedicalInfirmaryEnhanced = lazy(() => import("@/pages/MedicalInfirmaryEnhanced"));
 // WasteManagementEnhanced removed — consolidated into WasteManagementPremium
 const SatcomDashboardEnhanced = lazy(() => import("@/pages/SatcomDashboardEnhanced"));
@@ -279,7 +279,7 @@ const DPIntelligence = lazy(() => import("@/pages/DPIntelligence"));
 // ============================================
 // FINANÇAS & PROCUREMENT
 // ============================================
-const FinanceCommandCenter = lazy(() => import("@/pages/FinanceCommandCenter"));
+const FinanceCommandCenter = lazy(() => import("@/pages/FinanceCommandCenterPremium"));
 const VoyageAccountingPage = lazy(() => import("@/pages/VoyageAccountingPage"));
 const VoyagePnLPage = lazy(() => import("@/pages/VoyagePnLPage"));
 const CrewSchedulerPage = lazy(() => import("@/pages/CrewSchedulerPage"));

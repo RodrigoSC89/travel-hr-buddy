@@ -3,8 +3,7 @@
  * Formato padrão brasileiro CLT
  */
 
-import { jsPDF } from 'jspdf';
-import autoTable from 'jspdf-autotable';
+import { createPDF, getAutoTable } from '@/lib/pdf/lazy-pdf';
 
 export interface PayslipData {
   // Empresa
@@ -52,8 +51,8 @@ export interface PayslipData {
   fgtsBase: number;
 }
 
-export function generatePayslipPDF(data: PayslipData): void {
-  const doc = new jsPDF();
+export async function generatePayslipPDF(data: PayslipData): Promise<void> {
+  const [doc, autoTable] = await Promise.all([createPDF(), getAutoTable()]);
   const pageWidth = doc.internal.pageSize.getWidth();
   
   // Formatar moeda
@@ -227,8 +226,8 @@ export function generatePayslipPDF(data: PayslipData): void {
 }
 
 // Exportar todos os holerites em um único PDF
-export function generateBatchPayslipsPDF(payslips: PayslipData[]): void {
-  const doc = new jsPDF();
+export async function generateBatchPayslipsPDF(payslips: PayslipData[]): Promise<void> {
+  const doc = await createPDF();
   
   payslips.forEach((data, index) => {
     if (index > 0) {

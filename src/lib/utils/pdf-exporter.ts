@@ -3,9 +3,8 @@
  * PATCH: Feature Implementation - PDF Export for MMI Jobs and Reports
  */
 
-import jsPDF from "jspdf";
-import autoTable from "jspdf-autotable";
 import { format } from "date-fns";
+import { getJsPDF, getAutoTable } from "@/lib/pdf/lazy-pdf";
 import { ptBR } from "date-fns/locale";
 
 interface PDFExportOptions {
@@ -22,23 +21,29 @@ interface TableData {
 }
 
 class PDFExporter {
-  private doc: jsPDF;
+  private doc: any;
   private yPosition: number = 20;
-  private pageWidth: number;
-  private pageHeight: number;
+  private pageWidth: number = 210;
+  private pageHeight: number = 297;
   private margin: number = 20;
+  private autoTableFn: any;
 
-  constructor(options: PDFExportOptions) {
-    this.doc = new jsPDF({
+  private constructor() {}
+
+  static async create(options: PDFExportOptions): Promise<PDFExporter> {
+    const instance = new PDFExporter();
+    const [JsPDF, autoTableFn] = await Promise.all([getJsPDF(), getAutoTable()]);
+    instance.autoTableFn = autoTableFn;
+    instance.doc = new JsPDF({
       orientation: options.orientation || "portrait",
       unit: "mm",
       format: "a4",
     });
 
-    this.pageWidth = this.doc.internal.pageSize.getWidth();
-    this.pageHeight = this.doc.internal.pageSize.getHeight();
-
-    this.addHeader(options);
+    instance.pageWidth = instance.doc.internal.pageSize.getWidth();
+    instance.pageHeight = instance.doc.internal.pageSize.getHeight();
+    instance.addHeader(options);
+    return instance;
   }
 
   private addHeader(options: PDFExportOptions): void {
@@ -100,7 +105,7 @@ class PDFExporter {
   addTable(data: TableData): void {
     this.checkPageBreak(20);
 
-    autoTable(this.doc, {
+    this.autoTableFn(this.doc, {
       head: [data.headers],
       body: data.rows,
       startY: this.yPosition,
@@ -195,7 +200,7 @@ export async function exportJobToPDF(job: {
   dueDate?: Date;
   metrics?: Record<string, any>;
 }): Promise<void> {
-  const pdf = new PDFExporter({
+  const pdf = await PDFExporter.create({
     title: "Ordem de Serviço",
     subtitle: job.title,
   });
@@ -232,7 +237,7 @@ export async function exportTableToPDF(
   rows: (string | number)[][],
   filename: string
 ): Promise<void> {
-  const pdf = new PDFExporter({
+  const pdf = await PDFExporter.create({
     title,
     orientation: headers.length > 5 ? "landscape" : "portrait",
   });
@@ -246,7 +251,7 @@ export async function exportReportToPDF(
   sections: { title: string; content: string }[],
   filename: string
 ): Promise<void> {
-  const pdf = new PDFExporter({ title });
+  const pdf = await PDFExporter.create({ title });
 
   sections.forEach((section) => {
     pdf.addSection(section.title);
