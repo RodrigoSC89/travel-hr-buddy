@@ -151,122 +151,7 @@ interface ChannelMember {
   joined_at: string;
 }
 
-// Mock data for enhanced features
-const mockChannels: Channel[] = [
-  {
-    id: '1',
-    name: 'Operações - Navio Alpha',
-    description: 'Canal principal de operações do Navio Alpha',
-    is_active: true,
-    channel_type: 'operations',
-    is_private: false,
-    created_at: new Date().toISOString(),
-    member_count: 12,
-    unread_count: 5,
-    is_favorite: true,
-    is_muted: false,
-    last_message: 'Atualização de rota confirmada',
-    last_message_time: new Date(Date.now() - 1000 * 60 * 5).toISOString(),
-  },
-  {
-    id: '2',
-    name: 'Emergências',
-    description: 'Canal para comunicação de emergências',
-    is_active: true,
-    channel_type: 'emergency',
-    is_private: false,
-    created_at: new Date().toISOString(),
-    member_count: 45,
-    unread_count: 0,
-    is_favorite: true,
-    is_muted: false,
-    last_message: 'Nenhuma emergência ativa',
-    last_message_time: new Date(Date.now() - 1000 * 60 * 60).toISOString(),
-  },
-  {
-    id: '3',
-    name: 'Manutenção - Frota B',
-    description: 'Coordenação de manutenção da Frota B',
-    is_active: true,
-    channel_type: 'maintenance',
-    is_private: true,
-    created_at: new Date().toISOString(),
-    member_count: 8,
-    unread_count: 12,
-    is_favorite: false,
-    is_muted: true,
-    last_message: 'Inspeção programada para amanhã',
-    last_message_time: new Date(Date.now() - 1000 * 60 * 30).toISOString(),
-  },
-  {
-    id: '4',
-    name: 'Ponte de Comando',
-    description: 'Comunicação oficial da ponte',
-    is_active: false,
-    channel_type: 'command',
-    is_private: true,
-    created_at: new Date().toISOString(),
-    member_count: 5,
-    unread_count: 0,
-    is_favorite: false,
-    is_muted: false,
-    last_message: 'Canal offline',
-    last_message_time: new Date(Date.now() - 1000 * 60 * 60 * 2).toISOString(),
-  },
-];
-
-const mockMessages: Message[] = [
-  {
-    id: '1',
-    channel_id: '1',
-    sender_id: 'user1',
-    sender_name: 'Capitão Silva',
-    sender_avatar: '',
-    message_content: 'Bom dia equipe! Iniciando operações do dia.',
-    message_type: 'text',
-    created_at: new Date(Date.now() - 1000 * 60 * 60).toISOString(),
-    is_ai_generated: false,
-    reactions: [{ emoji: '👍', count: 3 }],
-  },
-  {
-    id: '2',
-    channel_id: '1',
-    sender_id: 'user2',
-    sender_name: 'Oficial Santos',
-    message_content: 'Confirmado. Sistemas operacionais verificados.',
-    message_type: 'text',
-    created_at: new Date(Date.now() - 1000 * 60 * 45).toISOString(),
-    is_ai_generated: false,
-  },
-  {
-    id: '3',
-    channel_id: '1',
-    sender_id: 'ai',
-    sender_name: 'Nautilus AI',
-    message_content: '📊 Análise automática: Todas as métricas operacionais estão dentro dos parâmetros normais. Condições meteorológicas favoráveis para as próximas 12 horas.',
-    message_type: 'ai_analysis',
-    created_at: new Date(Date.now() - 1000 * 60 * 30).toISOString(),
-    is_ai_generated: true,
-  },
-  {
-    id: '4',
-    channel_id: '1',
-    sender_id: 'user3',
-    sender_name: 'Eng. Costa',
-    message_content: 'Atualização de rota confirmada. ETA ajustado para 14:30.',
-    message_type: 'text',
-    created_at: new Date(Date.now() - 1000 * 60 * 5).toISOString(),
-    is_ai_generated: false,
-    reactions: [{ emoji: '✅', count: 2 }],
-  },
-];
-
-const mockMembers: ChannelMember[] = [
-  { id: '1', user_id: 'user1', name: 'Capitão Silva', role: 'admin', status: 'online', joined_at: new Date().toISOString() },
-  { id: '2', user_id: 'user2', name: 'Oficial Santos', role: 'moderator', status: 'online', joined_at: new Date().toISOString() },
-  { id: '3', user_id: 'user3', name: 'Eng. Costa', role: 'member', status: 'away', joined_at: new Date().toISOString() },
-  { id: '4', user_id: 'user4', name: 'Téc. Oliveira', role: 'member', status: 'offline', joined_at: new Date().toISOString() },
-];
+// ✅ P0-002: Mock data removido — dados carregados via useQuery de communication_channels
 
 // Utility functions
 const formatTime = (date: string | undefined) => {
@@ -371,10 +256,10 @@ export default function ChannelManagerProfessional() {
   const [aiPrompt, setAiPrompt] = useState("");
   const [aiResponse, setAiResponse] = useState("");
   
-  // Local state for mock data
-  const [channels, setChannels] = useState<Channel[]>(mockChannels);
-  const [messages, setMessages] = useState<Message[]>(mockMessages);
-  const [members] = useState<ChannelMember[]>(mockMembers);
+  // Local state — populated from DB
+  const [channels, setChannels] = useState<Channel[]>([]);
+  const [messages, setMessages] = useState<Message[]>([]);
+  const [members, setMembers] = useState<ChannelMember[]>([]);
 
   // Query for real channels from database
   const { data: dbChannels, refetch: refetchChannels } = useQuery({
@@ -389,29 +274,26 @@ export default function ChannelManagerProfessional() {
     },
   });
 
-  // Merge DB channels with mock data
+  // Populate channels from DB data
   useEffect(() => {
     if (dbChannels && dbChannels.length > 0) {
-      const mergedChannels: Channel[] = [
-        ...dbChannels.map((ch, i) => ({
-          id: ch.id,
-          name: (ch as any).channel_name || (ch as any).name || '',
-          description: ch.description || undefined,
-          is_active: ch.is_active,
-          channel_type: (ch as any).channel_type,
-          is_private: !(ch as any).is_public,
-          created_at: ch.created_at,
-          created_by: ch.created_by,
-          member_count: 5 + (i * 3) % 20,
-          unread_count: i % 5,
-          is_favorite: i % 3 === 0,
-          is_muted: i % 7 === 0,
-          last_message: 'Última mensagem...',
-          last_message_time: new Date().toISOString(),
-        })),
-        ...mockChannels.filter(mc => !dbChannels.find(dc => dc.id === mc.id)),
-      ];
-      setChannels(mergedChannels);
+      const mappedChannels: Channel[] = dbChannels.map((ch, i) => ({
+        id: ch.id,
+        name: (ch as any).channel_name || (ch as any).name || '',
+        description: ch.description || undefined,
+        is_active: ch.is_active,
+        channel_type: (ch as any).channel_type,
+        is_private: !(ch as any).is_public,
+        created_at: ch.created_at,
+        created_by: ch.created_by,
+        member_count: (ch as any).member_count || 0,
+        unread_count: 0,
+        is_favorite: false,
+        is_muted: false,
+        last_message: '',
+        last_message_time: ch.created_at,
+      }));
+      setChannels(mappedChannels);
     }
   }, [dbChannels]);
 

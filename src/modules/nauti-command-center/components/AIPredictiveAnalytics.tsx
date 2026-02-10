@@ -1,6 +1,6 @@
 /**
  * PATCH 855 - AI Predictive Analytics Panel
- * Real-time predictive analytics and trend forecasting
+ * ✅ P0-002: Migrado para dados reais do Supabase
  */
 
 import React, { useState, useEffect } from "react";
@@ -25,6 +25,8 @@ import {
 } from "lucide-react";
 import { motion } from "framer-motion";
 import { cn } from "@/lib/utils";
+import { supabase } from "@/integrations/supabase/client";
+import { logger } from "@/lib/logger";
 
 interface Prediction {
   id: string;
@@ -52,82 +54,106 @@ export function AIPredictiveAnalytics() {
   const [activeCategory, setActiveCategory] = useState("all");
 
   useEffect(() => {
-    loadPredictions();
-    loadTrends();
+    loadData();
   }, []);
 
-  const loadPredictions = async () => {
-    // Simulated predictions - in production, this would call AI service
-    const mockPredictions: Prediction[] = [
-      {
-        id: "1",
-        category: "maintenance",
-        title: "Manutenção Preventiva Necessária",
-        prediction: "Motor principal do MV-Atlas requer inspeção em 15 dias",
-        probability: 87,
-        timeframe: "2 semanas",
-        trend: "up",
-        impact: "negative",
-        actionRecommended: "Agendar inspeção preventiva imediata",
-      },
-      {
-        id: "2",
-        category: "fuel",
-        title: "Otimização de Combustível",
-        prediction: "Economia de 12% possível com ajuste de velocidade",
-        probability: 92,
-        timeframe: "Próxima viagem",
-        trend: "down",
-        impact: "positive",
-        actionRecommended: "Aplicar perfil de velocidade econômico",
-      },
-      {
-        id: "3",
-        category: "crew",
-        title: "Rotação de Tripulação",
-        prediction: "3 certificados expiram nos próximos 30 dias",
-        probability: 100,
-        timeframe: "1 mês",
-        trend: "up",
-        impact: "negative",
-        actionRecommended: "Iniciar processo de renovação",
-      },
-      {
-        id: "4",
-        category: "route",
-        title: "Condições Meteorológicas",
-        prediction: "Tempestade prevista na rota Santos-Rotterdam",
-        probability: 78,
-        timeframe: "5 dias",
-        trend: "up",
-        impact: "negative",
-        actionRecommended: "Considerar rota alternativa",
-      },
-      {
-        id: "5",
-        category: "risk",
-        title: "Risco Operacional Baixo",
-        prediction: "Operações dentro dos parâmetros seguros",
-        probability: 95,
-        timeframe: "7 dias",
-        trend: "stable",
-        impact: "positive",
-        actionRecommended: "Manter monitoramento regular",
-      },
-    ];
-
-    setPredictions(mockPredictions);
-    setLoading(false);
+  const loadData = async () => {
+    setLoading(true);
+    try {
+      await Promise.all([loadPredictions(), loadTrends()]);
+    } finally {
+      setLoading(false);
+    }
   };
 
-  const loadTrends = () => {
-    const mockTrends: TrendData[] = [
-      { label: "Eficiência Operacional", current: 94, predicted: 96, change: 2.1 },
-      { label: "Consumo de Combustível", current: 85, predicted: 78, change: -8.2 },
-      { label: "Índice de Segurança", current: 98, predicted: 99, change: 1.0 },
-      { label: "Custo por Milha", current: 72, predicted: 68, change: -5.5 },
-    ];
-    setTrends(mockTrends);
+  const loadPredictions = async () => {
+    try {
+      const [maintRes, insightsRes] = await Promise.all([
+        supabase.from("ai_maintenance_predictions").select("*").order("created_at", { ascending: false }).limit(10),
+        supabase.from("ai_insights").select("*").order("created_at", { ascending: false }).limit(10),
+      ]);
+
+      const mapped: Prediction[] = [];
+
+      (maintRes.data || []).forEach((m: any) => {
+        mapped.push({
+          id: m.id,
+          category: "maintenance",
+          title: m.equipment_name || "Manutenção Preditiva",
+          prediction: m.recommended_action || `Probabilidade de falha: ${(m.failure_probability * 100).toFixed(0)}%`,
+          probability: Math.round((m.failure_probability || 0) * 100),
+          timeframe: m.predicted_failure_date ? new Date(m.predicted_failure_date).toLocaleDateString("pt-BR") : "—",
+          trend: m.failure_probability > 0.7 ? "up" : "stable",
+          impact: m.failure_probability > 0.5 ? "negative" : "neutral",
+          actionRecommended: m.recommended_action || "Monitorar equipamento",
+        });
+      });
+
+      (insightsRes.data || []).forEach((i: any) => {
+        const cat = i.category === "crew" ? "crew" : i.category === "fuel" ? "fuel" : i.category === "route" ? "route" : "risk";
+        mapped.push({
+          id: i.id,
+          category: cat,
+          title: i.title,
+          prediction: i.description,
+          probability: Math.round((i.confidence || 0.5) * 100),
+          timeframe: "7 dias",
+          trend: i.priority === "high" ? "up" : "stable",
+          impact: i.priority === "high" ? "negative" : i.priority === "low" ? "positive" : "neutral",
+          actionRecommended: i.impact_value || "Analisar detalhes",
+        });
+      });
+
+      setPredictions(mapped);
+    } catch (err) {
+      logger.error("Error loading predictions:", err);
+    }
+  };
+
+  const loadTrends = async () => {
+    try {
+      const { data } = await supabase
+        .from("ai_behavior_snapshots")
+        .select("module_name, accuracy_score, confidence_avg")
+        .order("snapshot_date", { ascending: false })
+        .limit(20);
+
+      if (data && data.length > 0) {
+        const grouped = new Map<string, { scores: number[]; confidences: number[] }>();
+        data.forEach((d: any) => {
+          const key = d.module_name || "Geral";
+          if (!grouped.has(key)) grouped.set(key, { scores: [], confidences: [] });
+          const g = grouped.get(key)!;
+          if (d.accuracy_score) g.scores.push(d.accuracy_score);
+          if (d.confidence_avg) g.confidences.push(d.confidence_avg);
+        });
+
+        const trendData: TrendData[] = [];
+        grouped.forEach((v, k) => {
+          const current = v.scores.length > 0 ? Math.round(v.scores[0] * 100) : 80;
+          const prev = v.scores.length > 1 ? Math.round(v.scores[1] * 100) : current;
+          trendData.push({
+            label: k,
+            current,
+            predicted: Math.min(100, current + Math.round((current - prev) * 0.5)),
+            change: parseFloat((current - prev).toFixed(1)),
+          });
+        });
+
+        if (trendData.length > 0) {
+          setTrends(trendData.slice(0, 4));
+          return;
+        }
+      }
+
+      // Fallback if no data
+      setTrends([
+        { label: "Eficiência Operacional", current: 0, predicted: 0, change: 0 },
+        { label: "Índice de Segurança", current: 0, predicted: 0, change: 0 },
+      ]);
+    } catch (err) {
+      logger.error("Error loading trends:", err);
+    }
   };
 
   const getCategoryIcon = (category: string) => {
