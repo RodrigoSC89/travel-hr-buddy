@@ -40,10 +40,9 @@
 
 ## 🔴 P0 — CRÍTICO
 
-### P0-001: Mock Notifications (5 componentes)
-- `notification-center.tsx:128`, `IntelligentNotificationCenter.tsx:78`, `NotificationCenterProfessional.tsx:116`, `notification-system.tsx:27`, `AnalyticsCoreProfessional.tsx:281`
-- **Impacto**: Notificações falsas exibidas ao usuário
-- **Correção**: 3h — migrar para tabela Supabase
+### ~~P0-001: Mock Notifications (5 componentes)~~ ✅ CORRIGIDO
+- Todos os 5 componentes agora carregam dados reais via `intelligent_notifications` table
+- Componentes corrigidos: `notification-system.tsx`, `enhanced-notifications.tsx`, `IntelligentNotificationCenter.tsx`, `NotificationCenterProfessional.tsx`, `AnalyticsCoreProfessional.tsx`
 
 ### P0-002: Mock Data em ~99 componentes operacionais
 - Bunker prices, crew schedules, PEOTRAM metrics, P&L, emergency crew, blockchain, logistics, security alerts
@@ -63,7 +62,7 @@
 | P1-005 | VR/AR "Em implantação" sem feature flag | 1 arquivo | 15m |
 | P1-006 | ModulesGrid "Em Implantação" sem FF | 1 arquivo | 1h |
 | P1-007 | Admin pages com mock data | 3 arquivos | 4h |
-| P1-008 | ScheduledReports fallback mock silencioso | 1 arquivo | 30m |
+| P1-008 | ~~ScheduledReports fallback mock silencioso~~ ✅ CORRIGIDO | ~~1 arquivo~~ | ~~30m~~ |
 
 ---
 

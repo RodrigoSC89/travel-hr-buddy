@@ -267,64 +267,14 @@ const AnalyticsCoreProfessional: React.FC = () => {
       const mappedNotifications: Notification[] = [...insightNotifications, ...alertNotifications]
         .sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime());
 
-      if (mappedNotifications.length > 0) {
-        setNotifications(mappedNotifications);
-      } else {
-        setNotifications(generateMockNotifications());
-      }
+      setNotifications(mappedNotifications);
     } catch (error) {
       logger.error("Error loading notifications:", error);
-      setNotifications(generateMockNotifications());
+      setNotifications([]);
     }
   };
 
-  const generateMockNotifications = (): Notification[] => [
-    {
-      id: "1",
-      title: "Performance Otimizada",
-      message: "A eficiência operacional aumentou 12% no último mês",
-      type: "success",
-      category: "performance",
-      isRead: false,
-      createdAt: new Date()
-    },
-    {
-      id: "2",
-      title: "Alerta de Consumo",
-      message: "Consumo de combustível acima da média esperada",
-      type: "warning",
-      category: "consumption",
-      isRead: false,
-      createdAt: new Date(Date.now() - 3600000)
-    },
-    {
-      id: "3",
-      title: "Manutenção Agendada",
-      message: "Próxima manutenção preventiva em 5 dias",
-      type: "info",
-      category: "maintenance",
-      isRead: true,
-      createdAt: new Date(Date.now() - 86400000)
-    },
-    {
-      id: "4",
-      title: "Certificação Vencendo",
-      message: "3 certificações de tripulantes vencem nos próximos 30 dias",
-      type: "warning",
-      category: "hr",
-      isRead: false,
-      createdAt: new Date(Date.now() - 172800000)
-    },
-    {
-      id: "5",
-      title: "Meta Atingida",
-      message: "Redução de custos operacionais de 8% alcançada este trimestre",
-      type: "success",
-      category: "financial",
-      isRead: true,
-      createdAt: new Date(Date.now() - 259200000)
-    }
-  ];
+  // Mock notifications removed — real data only from Supabase queries above
 
   const loadMetrics = async () => {
     try {

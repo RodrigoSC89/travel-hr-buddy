@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useMemo } from "react";
+import React, { useState, useCallback, useMemo, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -112,201 +112,91 @@ interface Notification {
   metadata?: any;
 }
 
-// Mock data
-const mockNotifications: Notification[] = [
-  {
-    id: '1',
-    title: 'Alerta de Emergência - Navio Alpha',
-    message: 'Detectada anomalia no sistema de navegação. Verificação imediata necessária.',
-    type: 'critical',
-    category: 'operacoes',
-    isRead: false,
-    isStarred: true,
-    isArchived: false,
-    createdAt: new Date(Date.now() - 1000 * 60 * 5).toISOString(),
-    source: 'Sistema de Monitoramento',
-    action: { label: 'Ver Detalhes', url: '/operations' },
-  },
-  {
-    id: '2',
-    title: 'Certificado Expirando',
-    message: 'O certificado STCW do tripulante João Silva expira em 15 dias.',
-    type: 'warning',
-    category: 'rh',
-    isRead: false,
-    isStarred: false,
-    isArchived: false,
-    createdAt: new Date(Date.now() - 1000 * 60 * 30).toISOString(),
-    source: 'Gestão de Tripulação',
-    action: { label: 'Renovar', url: '/crew' },
-  },
-  {
-    id: '3',
-    title: 'Manutenção Programada',
-    message: 'Manutenção preventiva do motor principal agendada para amanhã às 08:00.',
-    type: 'info',
-    category: 'manutencao',
-    isRead: false,
-    isStarred: false,
-    isArchived: false,
-    createdAt: new Date(Date.now() - 1000 * 60 * 60).toISOString(),
-    source: 'Sistema de Manutenção',
-    action: { label: 'Ver Agenda', url: '/maintenance' },
-  },
-  {
-    id: '4',
-    title: 'Operação Concluída',
-    message: 'Descarga de carga no Porto de Santos finalizada com sucesso.',
-    type: 'success',
-    category: 'operacoes',
-    isRead: true,
-    isStarred: false,
-    isArchived: false,
-    createdAt: new Date(Date.now() - 1000 * 60 * 60 * 2).toISOString(),
-    source: 'Operações Portuárias',
-  },
-  {
-    id: '5',
-    title: 'Novo Documento Disponível',
-    message: 'Relatório de inspeção mensal da frota está disponível para download.',
-    type: 'info',
-    category: 'documentos',
-    isRead: true,
-    isStarred: true,
-    isArchived: false,
-    createdAt: new Date(Date.now() - 1000 * 60 * 60 * 3).toISOString(),
-    source: 'Central de Documentos',
-    action: { label: 'Download', url: '/documents' },
-  },
-  {
-    id: '6',
-    title: 'Fatura Pendente',
-    message: 'Fatura de combustível no valor de R$ 45.000,00 aguarda aprovação.',
-    type: 'warning',
-    category: 'financeiro',
-    isRead: false,
-    isStarred: false,
-    isArchived: false,
-    createdAt: new Date(Date.now() - 1000 * 60 * 60 * 4).toISOString(),
-    source: 'Financeiro',
-    action: { label: 'Aprovar', url: '/financial' },
-  },
-  {
-    id: '7',
-    title: 'Atualização do Sistema',
-    message: 'Nova versão do Nautilus One disponível. Atualize para acessar novos recursos.',
-    type: 'system',
-    category: 'sistema',
-    isRead: true,
-    isStarred: false,
-    isArchived: false,
-    createdAt: new Date(Date.now() - 1000 * 60 * 60 * 5).toISOString(),
-    source: 'Sistema',
-  },
-  {
-    id: '8',
-    title: 'Análise de IA Disponível',
-    message: 'O relatório de análise preditiva de manutenção foi gerado pela IA.',
-    type: 'info',
-    category: 'ia',
-    isRead: false,
-    isStarred: false,
-    isArchived: false,
-    createdAt: new Date(Date.now() - 1000 * 60 * 60 * 6).toISOString(),
-    source: 'Nautilus AI',
-    action: { label: 'Ver Análise', url: '/ai-insights' },
-  },
-  {
-    id: '9',
-    title: 'Alerta de Compliance',
-    message: 'Prazo de conformidade MARPOL se aproxima. 10 dias restantes.',
-    type: 'warning',
-    category: 'compliance',
-    isRead: false,
-    isStarred: true,
-    isArchived: false,
-    createdAt: new Date(Date.now() - 1000 * 60 * 60 * 8).toISOString(),
-    source: 'Compliance',
-    action: { label: 'Ver Requisitos', url: '/compliance' },
-  },
-  {
-    id: '10',
-    title: 'Viagem Confirmada',
-    message: 'Viagem Santos → Rotterdam confirmada. Partida em 48 horas.',
-    type: 'success',
-    category: 'operacoes',
-    isRead: true,
-    isStarred: false,
-    isArchived: false,
-    createdAt: new Date(Date.now() - 1000 * 60 * 60 * 12).toISOString(),
-    source: 'Planejamento de Viagens',
-  },
-];
+// Mock data removed — real notifications loaded from Supabase
+const loadNotificationsFromSupabase = async (): Promise<Notification[]> => {
+  try {
+    const { data, error } = await supabase
+      .from("intelligent_notifications")
+      .select("*")
+      .order("created_at", { ascending: false })
+      .limit(50);
 
-// Utility functions
-const formatTime = (date: string) => {
-  const d = new Date(date);
-  const now = new Date();
-  const diff = now.getTime() - d.getTime();
-  
-  if (diff < 60000) return 'Agora';
-  if (diff < 3600000) return `${Math.floor(diff / 60000)} min`;
-  if (diff < 86400000) return `${Math.floor(diff / 3600000)}h`;
-  if (diff < 604800000) return `${Math.floor(diff / 86400000)}d`;
-  return d.toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit' });
+    if (error || !data || data.length === 0) return [];
+
+    return data.map((n: any) => ({
+      id: n.id,
+      title: n.title || "Notificação",
+      message: n.message || "",
+      type: n.priority === "critical" ? "critical" as const : n.priority === "high" ? "warning" as const : "info" as const,
+      category: n.category || "sistema",
+      isRead: n.is_read || false,
+      isStarred: false,
+      isArchived: false,
+      createdAt: n.created_at,
+      source: n.source_module || "Sistema",
+      action: n.action_type ? { label: n.action_text || "Ver", url: n.action_data?.url || "#" } : undefined,
+    }));
+  } catch {
+    return [];
+  }
 };
 
+// Helper functions
 const getTypeIcon = (type: string) => {
   switch (type) {
-    case 'critical': return <AlertCircle className="h-5 w-5 text-destructive" />;
-    case 'warning': return <AlertTriangle className="h-5 w-5 text-yellow-500" />;
-    case 'success': return <CheckCircle className="h-5 w-5 text-green-500" />;
-    case 'system': return <Settings className="h-5 w-5 text-purple-500" />;
-    default: return <Info className="h-5 w-5 text-primary" />;
+    case 'critical': return <AlertTriangle className="h-4 w-4 text-destructive" />;
+    case 'warning': return <AlertTriangle className="h-4 w-4 text-warning" />;
+    case 'success': return <CheckCircle className="h-4 w-4 text-green-500" />;
+    case 'system': return <Settings className="h-4 w-4 text-muted-foreground" />;
+    default: return <Info className="h-4 w-4 text-primary" />;
   }
 };
 
 const getTypeBadge = (type: string) => {
-  switch (type) {
-    case 'critical': return <Badge variant="destructive" className="text-xs">Crítica</Badge>;
-    case 'warning': return <Badge className="text-xs bg-yellow-500/20 text-yellow-600">Atenção</Badge>;
-    case 'success': return <Badge className="text-xs bg-green-500/20 text-green-600">Sucesso</Badge>;
-    case 'system': return <Badge className="text-xs bg-purple-500/20 text-purple-500">Sistema</Badge>;
-    default: return <Badge variant="secondary" className="text-xs">Info</Badge>;
-  }
+  const variants: Record<string, string> = {
+    critical: "bg-destructive/10 text-destructive",
+    warning: "bg-warning/10 text-warning",
+    success: "bg-green-500/10 text-green-600",
+    info: "bg-primary/10 text-primary",
+    system: "bg-muted text-muted-foreground",
+  };
+  return <Badge className={variants[type] || variants.info}>{type}</Badge>;
 };
 
 const getCategoryIcon = (category: string) => {
   switch (category) {
-    case 'operacoes': return <Ship className="h-4 w-4" />;
-    case 'manutencao': return <Settings className="h-4 w-4" />;
-    case 'rh': return <Users className="h-4 w-4" />;
-    case 'financeiro': return <DollarSign className="h-4 w-4" />;
-    case 'documentos': return <FileText className="h-4 w-4" />;
-    case 'compliance': return <Shield className="h-4 w-4" />;
-    case 'ia': return <Sparkles className="h-4 w-4" />;
-    default: return <Bell className="h-4 w-4" />;
+    case 'operacoes': return <Ship className="h-3 w-3" />;
+    case 'rh': return <Users className="h-3 w-3" />;
+    case 'manutencao': return <Settings className="h-3 w-3" />;
+    case 'documentos': return <FileText className="h-3 w-3" />;
+    default: return <Bell className="h-3 w-3" />;
   }
 };
 
-// Stats Card Component
-const StatCard: React.FC<{
-  title: string;
-  value: number;
-  icon: React.ReactNode;
-  subtitle: string;
-  onClick?: () => void;
-  isActive?: boolean;
-}> = ({ title, value, icon, subtitle, onClick, isActive }) => (
-  <Card 
-    className={`bg-card/50 backdrop-blur border-border/50 cursor-pointer transition-all hover:border-primary/30 ${isActive ? 'border-primary ring-1 ring-primary/20' : ''}`}
-    onClick={onClick}
-  >
+const formatTime = (dateStr: string) => {
+  try {
+    const date = new Date(dateStr);
+    const now = new Date();
+    const diffMs = now.getTime() - date.getTime();
+    const diffMins = Math.floor(diffMs / 60000);
+    if (diffMins < 60) return `${diffMins}m atrás`;
+    const diffHours = Math.floor(diffMins / 60);
+    if (diffHours < 24) return `${diffHours}h atrás`;
+    return `${Math.floor(diffHours / 24)}d atrás`;
+  } catch { return dateStr; }
+};
+
+// StatCard component
+const StatCard = ({ title, value, subtitle, icon, onClick, isActive }: { 
+  title: string; value: string | number; subtitle: string; icon: React.ReactNode; 
+  onClick?: () => void; isActive?: boolean;
+}) => (
+  <Card className={`cursor-pointer transition-all ${isActive ? 'ring-2 ring-primary' : ''}`} onClick={onClick}>
     <CardContent className="p-4">
       <div className="flex items-center justify-between">
         <div>
-          <p className="text-xs text-muted-foreground font-medium">{title}</p>
-          <p className="text-2xl font-bold text-foreground">{value}</p>
+          <p className="text-sm text-muted-foreground">{title}</p>
+          <p className="text-2xl font-bold">{value}</p>
           <p className="text-xs text-muted-foreground">{subtitle}</p>
         </div>
         <div className="p-3 rounded-xl bg-primary/10">
@@ -321,7 +211,8 @@ export default function NotificationCenterProfessional() {
   const { toast } = useToast();
   
   // States
-  const [notifications, setNotifications] = useState<Notification[]>(mockNotifications);
+  const [notifications, setNotifications] = useState<Notification[]>([]);
+  const [isInitialLoading, setIsInitialLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState("");
   const [activeTab, setActiveTab] = useState("all");
   const [selectedType, setSelectedType] = useState<string | null>(null);
@@ -357,6 +248,17 @@ export default function NotificationCenterProfessional() {
     showRead: true,
     showUnread: true,
   });
+
+  // Load notifications from Supabase on mount
+  useEffect(() => {
+    const load = async () => {
+      setIsInitialLoading(true);
+      const data = await loadNotificationsFromSupabase();
+      setNotifications(data);
+      setIsInitialLoading(false);
+    };
+    load();
+  }, []);
 
   // AI Analysis
   const [aiSummary, setAiSummary] = useState("");
@@ -402,12 +304,12 @@ export default function NotificationCenterProfessional() {
   }, [notifications, activeTab, selectedType, searchQuery, filters]);
 
   // Handlers
-  const handleRefresh = useCallback(() => {
+  const handleRefresh = useCallback(async () => {
     setIsRefreshing(true);
-    setTimeout(() => {
-      setIsRefreshing(false);
-      toast({ title: "Atualizado", description: "Notificações atualizadas com sucesso." });
-    }, 1000);
+    const data = await loadNotificationsFromSupabase();
+    setNotifications(data);
+    setIsRefreshing(false);
+    toast({ title: "Atualizado", description: "Notificações atualizadas com sucesso." });
   }, [toast]);
 
   const handleMarkAllAsRead = useCallback(() => {

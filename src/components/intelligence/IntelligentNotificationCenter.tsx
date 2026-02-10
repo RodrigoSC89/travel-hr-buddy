@@ -74,67 +74,32 @@ export const IntelligentNotificationCenter: React.FC<IntelligentNotificationCent
 
     setIsLoading(true);
     try {
-      // For demo purposes, we'll generate some mock notifications
-      const mockNotifications: IntelligentNotification[] = [
-        {
-          id: "1",
-          type: "smart_alert",
-          priority: "high",
-          title: "Oportunidade de Economia Detectada",
-          message: "Identificamos uma oportunidade de economizar R$ 2.400 em viagens corporativas baseado no seu padrão de uso.",
-          actionText: "Ver Detalhes",
-          actionType: "navigate",
-          actionData: { module: "travel" },
-          isRead: false,
-          createdAt: new Date(Date.now() - 30 * 60 * 1000), // 30 minutes ago
-          category: "Economia",
-          estimatedReadTime: "1min"
-        },
-        {
-          id: "2",
-          type: "system_insight",
-          priority: "medium",
-          title: "Certificados Expiram em Breve",
-          message: "Você tem 3 certificados que expiram nos próximos 30 dias. Renovar agora evitará problemas de compliance.",
-          actionText: "Gerenciar Certificados",
-          actionType: "navigate",
-          actionData: { module: "hr" },
-          isRead: false,
-          createdAt: new Date(Date.now() - 2 * 60 * 60 * 1000), // 2 hours ago
-          category: "Compliance",
-          estimatedReadTime: "30s"
-        },
-        {
-          id: "3",
-          type: "recommendation_update",
-          priority: "low",
-          title: "Novas Recomendações Disponíveis",
-          message: "Baseado na sua atividade recente, temos 5 novas recomendações para otimizar seu fluxo de trabalho.",
-          actionText: "Ver Recomendações",
-          actionType: "navigate",
-          actionData: { module: "dashboard" },
-          isRead: true,
-          createdAt: new Date(Date.now() - 6 * 60 * 60 * 1000), // 6 hours ago
-          category: "Produtividade",
-          estimatedReadTime: "2min"
-        },
-        {
-          id: "4",
-          type: "performance_summary",
-          priority: "medium",
-          title: "Relatório Semanal de Performance",
-          message: "Sua eficiência aumentou 15% esta semana! Veja as métricas completas e continue melhorando.",
-          actionText: "Ver Relatório",
-          actionType: "navigate",
-          actionData: { module: "analytics" },
-          isRead: true,
-          createdAt: new Date(Date.now() - 24 * 60 * 60 * 1000), // 1 day ago
-          category: "Performance",
-          estimatedReadTime: "3min"
-        }
-      ];
+      // Load real notifications from Supabase
+      const { data, error } = await supabase
+        .from("intelligent_notifications")
+        .select("*")
+        .eq("user_id", user.id)
+        .order("created_at", { ascending: false })
+        .limit(20);
 
-      setNotifications(mockNotifications);
+      if (error) throw error;
+
+      const mapped: IntelligentNotification[] = (data || []).map((n: any) => ({
+        id: n.id,
+        type: n.notification_type || "system_insight",
+        priority: n.priority || "medium",
+        title: n.title || "Notificação",
+        message: n.message || "",
+        actionText: n.action_text || undefined,
+        actionType: n.action_type || undefined,
+        actionData: n.action_data || undefined,
+        isRead: n.is_read || false,
+        createdAt: new Date(n.created_at),
+        category: n.category || undefined,
+        estimatedReadTime: undefined,
+      }));
+
+      setNotifications(mapped);
     } catch (error) {
       toast({
         title: "Erro",
@@ -396,40 +361,7 @@ export const IntelligentNotificationCenter: React.FC<IntelligentNotificationCent
           </TabsContent>
         </Tabs>
 
-        {/* Demo buttons for testing */}
-        <div className="mt-6 p-4 border rounded-lg bg-muted/50">
-          <h4 className="font-medium mb-3">Gerar Notificações de Teste</h4>
-          <div className="flex flex-wrap gap-2">
-            <Button
-              onClick={() => generateIntelligentNotification("smart_alert")}
-              size="sm"
-              variant="outline"
-            >
-              Alerta Inteligente
-            </Button>
-            <Button
-              onClick={() => generateIntelligentNotification("system_insight")}
-              size="sm"
-              variant="outline"
-            >
-              Insight do Sistema
-            </Button>
-            <Button
-              onClick={() => generateIntelligentNotification("recommendation_update")}
-              size="sm"
-              variant="outline"
-            >
-              Atualização de Recomendação
-            </Button>
-            <Button
-              onClick={() => generateIntelligentNotification("performance_summary")}
-              size="sm"
-              variant="outline"
-            >
-              Resumo de Performance
-            </Button>
-          </div>
-        </div>
+        {/* Demo buttons removed — production mode */}
       </CardContent>
     </Card>
   );
