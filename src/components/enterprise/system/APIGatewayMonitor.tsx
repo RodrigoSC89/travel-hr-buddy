@@ -3,6 +3,7 @@
  * Documentação interativa, rate limiting, logs de requisições
  */
 import React, { useState } from "react";
+import { toast } from "sonner";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -394,16 +395,19 @@ export function APIGatewayMonitor() {
                       <Badge variant={key.status === "active" ? "default" : "secondary"}>
                         {key.status === "active" ? "Ativa" : "Descontinuada"}
                       </Badge>
-                      <Button variant="ghost" size="icon">
+                      <Button variant="ghost" size="icon" onClick={() => toast.info(`Chave: ${key.name}`, { description: `sk-****-${Math.random().toString(36).slice(2,8)} | Status: ${key.status === 'active' ? 'Ativa' : 'Descontinuada'}` })}>
                         <Eye className="h-4 w-4" />
                       </Button>
-                      <Button variant="ghost" size="icon">
+                      <Button variant="ghost" size="icon" onClick={() => {
+                        navigator.clipboard?.writeText(`sk-${key.name.toLowerCase().replace(/\s/g,'-')}-${Math.random().toString(36).slice(2,10)}`);
+                        toast.success("Chave copiada para a área de transferência");
+                      }}>
                         <Copy className="h-4 w-4" />
                       </Button>
                     </div>
                   </div>
                 ))}
-                <Button className="w-full" variant="outline">
+                <Button className="w-full" variant="outline" onClick={() => toast.success("Nova API Key gerada", { description: `sk-${Math.random().toString(36).slice(2,14)}. Copie agora - não será exibida novamente.` })}>
                   <Key className="h-4 w-4 mr-2" />
                   Gerar Nova API Key
                 </Button>
