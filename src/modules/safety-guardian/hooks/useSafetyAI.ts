@@ -109,7 +109,7 @@ export function useSafetyAI() {
         lessonsLearned: data.lessonsLearned || '',
         similarIncidents: data.similarIncidents || [],
         riskScore: data.riskScore || calculateRiskScore(incident.severity),
-        predictedRecurrence: data.predictedRecurrence || Math.random() * 30 + 10,
+        predictedRecurrence: data.predictedRecurrence || 15,
       };
 
       setAnalysisState({ loading: false, error: null, analysis });

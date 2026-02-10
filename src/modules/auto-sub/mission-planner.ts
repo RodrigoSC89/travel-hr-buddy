@@ -148,7 +148,7 @@ class MissionPlanner {
       
       for (let j = 0; j <= gridSize; j++) {
         const lon = lonRange.start + j * lonRange.step;
-        const depth = area.minDepth + (Math.random() * (area.maxDepth - area.minDepth));
+        const depth = area.minDepth + ((i * (gridSize + 1) + j) / ((gridSize + 1) * (gridSize + 1))) * (area.maxDepth - area.minDepth);
         
         waypoints.push({
           id: `wp-grid-${i}-${j}`,
@@ -186,7 +186,7 @@ class MissionPlanner {
       
       const lat = centerLat + radius * Math.cos(angle);
       const lon = centerLon + radius * Math.sin(angle);
-      const depth = area.minDepth + (Math.random() * (area.maxDepth - area.minDepth));
+      const depth = area.minDepth + (i / (spirals * pointsPerSpiral)) * (area.maxDepth - area.minDepth);
       
       waypoints.push({
         id: `wp-spiral-${i}`,
@@ -210,9 +210,10 @@ class MissionPlanner {
     const numPoints = 20;
     
     for (let i = 0; i < numPoints; i++) {
-      const lat = area.bounds.south + Math.random() * (area.bounds.north - area.bounds.south);
-      const lon = area.bounds.west + Math.random() * (area.bounds.east - area.bounds.west);
-      const depth = area.minDepth + Math.random() * (area.maxDepth - area.minDepth);
+      const t = i / numPoints;
+      const lat = area.bounds.south + t * (area.bounds.north - area.bounds.south);
+      const lon = area.bounds.west + ((i * 7) % numPoints) / numPoints * (area.bounds.east - area.bounds.west);
+      const depth = area.minDepth + t * (area.maxDepth - area.minDepth);
       
       waypoints.push({
         id: `wp-random-${i}`,

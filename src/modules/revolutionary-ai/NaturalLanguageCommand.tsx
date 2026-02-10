@@ -47,9 +47,9 @@ export function NaturalLanguageCommand() {
       const filtered = COMMAND_EXAMPLES.filter(ex => 
         ex.text.toLowerCase().includes(command.toLowerCase()) ||
         command.toLowerCase().includes(ex.category)
-      ).map(ex => ({
+      ).map((ex, idx) => ({
         ...ex,
-        confidence: Math.random() * 0.3 + 0.7
+        confidence: 0.95 - idx * 0.05
       }));
       setSuggestions(filtered.slice(0, 3));
     } else {

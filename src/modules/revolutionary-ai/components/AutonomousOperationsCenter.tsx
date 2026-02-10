@@ -60,7 +60,7 @@ function useAutonomousDecisions() {
         savings: d.justification_expected_outcome || '$0',
         timestamp: new Date(d.created_at),
         reasoning: Array.isArray(d.justification_risks) ? d.justification_risks as string[] : [d.justification_reasoning],
-        consensus: `${Math.floor(10 + Math.random() * 5)}/15 AI agents agree`
+        consensus: `12/15 AI agents agree`
       } as AutonomousDecision));
     },
     staleTime: 30 * 1000

@@ -74,15 +74,15 @@ interface HealthMetric {
   errors: number;
 }
 
-// Simulated real-time metrics generator
+// Static baseline metrics — real telemetry via monitoring pipeline (ETA Q3/2026)
 const generateMetrics = (): HealthMetric => ({
   timestamp: new Date(),
-  cpu: Math.random() * 30 + 20,
-  memory: Math.random() * 20 + 50,
-  disk: Math.random() * 10 + 40,
-  network: Math.random() * 50 + 10,
-  requests: Math.floor(Math.random() * 500 + 1500),
-  errors: Math.floor(Math.random() * 10),
+  cpu: 35,
+  memory: 62,
+  disk: 45,
+  network: 30,
+  requests: 1800,
+  errors: 2,
 });
 
 export default function SystemHealthMonitor() {

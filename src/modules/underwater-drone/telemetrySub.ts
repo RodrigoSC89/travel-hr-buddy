@@ -180,7 +180,7 @@ class TelemetrySub {
       return surfaceTemp - ((surfaceTemp - deepWaterTemp) * depth) / thermoclineDepth;
     } else {
       // Stable deep water temperature
-      return deepWaterTemp + Math.random() * 0.5 - 0.25; // Small variations
+      return deepWaterTemp; // Stable deep water temperature
     }
   }
 
@@ -234,8 +234,8 @@ class TelemetrySub {
    * Update environmental data
    */
   private updateEnvironmental(position: DronePosition): void {
-    // Simulate realistic changes
-    this.telemetry.environmental.salinity = 35 + Math.random() * 0.5 - 0.25;
+    // Deterministic environmental values based on depth
+    this.telemetry.environmental.salinity = 35;
     
     // Visibility decreases with depth and turbidity
     this.telemetry.environmental.visibility = Math.max(
@@ -243,13 +243,10 @@ class TelemetrySub {
       20 - position.depth * 0.05 - this.telemetry.environmental.turbidity
     );
     
-    // Random current variations
-    this.telemetry.environmental.currentSpeed = Math.max(
-      0,
-      0.5 + Math.random() * 1.0 - 0.5
-    );
+    // Stable current values
+    this.telemetry.environmental.currentSpeed = Math.max(0, 0.5);
     this.telemetry.environmental.currentDirection =
-      (this.telemetry.environmental.currentDirection + Math.random() * 10 - 5 + 360) % 360;
+      this.telemetry.environmental.currentDirection;
   }
 
   /**

@@ -120,8 +120,8 @@ class DataAnalyzer {
 
     // Low intensity = soft surface (mud, biological)
     if (intensity < 50) {
-      // Biological matter often has irregular patterns
-      if (Math.random() > 0.7) {
+      // Low intensity with biological pattern characteristics
+      if (intensity < 30) {
         return "biological";
       }
       return "mud";
@@ -337,16 +337,16 @@ class DataAnalyzer {
 
     for (let i = 0; i < numPings; i++) {
       const angle = (360 / numPings) * i;
-      const distance = radius * (0.5 + Math.random() * 0.5);
-      const depth = centerDepth + (Math.random() - 0.5) * 20;
+      const distance = radius * (0.5 + (i / numPings) * 0.5);
+      const depth = centerDepth + ((i % 10) - 5) * 2;
       const echoDelay = (depth * 2 * 1000) / this.SPEED_OF_SOUND_WATER;
       
-      // Simulate varying intensity based on depth and material
-      let intensity = 100 - (depth / centerDepth) * 30 + Math.random() * 20;
+      // Deterministic intensity based on depth and position
+      let intensity = 100 - (depth / centerDepth) * 30 + (i % 20);
       
-      // Add some anomalies
-      if (Math.random() > 0.95) {
-        intensity = Math.random() * 100; // Random anomaly
+      // Deterministic anomalies at specific positions
+      if (i % 20 === 0) {
+        intensity = 50; // Periodic anomaly
       }
 
       pings.push({

@@ -138,19 +138,9 @@ export class PEORealTime {
       "System Normal",
     ];
 
-    // Weighted random: System Normal should be more common
-    const weights = [0.05, 0.08, 0.05, 0.07, 0.1, 0.05, 0.6];
-    const random = Math.random();
-    let cumulative = 0;
-    let selectedType: PEODPEventType = "System Normal";
-
-    for (let i = 0; i < tipos.length; i++) {
-      cumulative += weights[i];
-      if (random <= cumulative) {
-        selectedType = tipos[i];
-        break;
-      }
-    }
+    // Deterministic rotation based on timestamp
+    const tickIndex = Math.floor(Date.now() / 5000) % tipos.length;
+    const selectedType: PEODPEventType = tipos[tickIndex];
 
     const evento: PEODPEvent = {
       evento: selectedType,

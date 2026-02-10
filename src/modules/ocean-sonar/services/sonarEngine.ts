@@ -67,8 +67,8 @@ export class SonarEngine {
           Math.pow(i - gridSize / 2, 2) + Math.pow(j - gridSize / 2, 2)
         );
         const baseDepth = 50 + distanceFromCenter * 15;
-        const randomVariation = (Math.random() - 0.5) * 40;
-        const depth = Math.max(10, baseDepth + randomVariation);
+        const deterministicVariation = Math.sin(i * 0.7 + j * 1.3) * 20;
+        const depth = Math.max(10, baseDepth + deterministicVariation);
 
         const terrain = this.classifyTerrain(depth);
         const riskLevel = this.assessRisk(depth, terrain);
@@ -129,15 +129,15 @@ export class SonarEngine {
       obstacles.push("Shallow water - risk of grounding");
     }
 
-    if (terrain === "shallow" && Math.random() > 0.7) {
+    if (terrain === "shallow" && depth < 35) {
       obstacles.push("Possible reef structure detected");
     }
 
-    if (terrain === "moderate" && Math.random() > 0.85) {
+    if (terrain === "moderate" && depth > 150) {
       obstacles.push("Underwater formation detected");
     }
 
-    if (depth < 50 && Math.random() > 0.9) {
+    if (depth < 50 && depth < 25) {
       obstacles.push("Possible wreckage signature");
     }
 

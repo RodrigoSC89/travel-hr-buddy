@@ -87,11 +87,11 @@ function usePredictiveMaintenanceData() {
           type: typeMap[rec.maintenance_type?.toLowerCase() || ''] || 'preventive',
           priority,
           predictedDate: rec.scheduled_date ? new Date(rec.scheduled_date) : new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
-          confidence: 80 + Math.floor(Math.random() * 15),
+          confidence: 85,
           estimatedCost: rec.cost_estimate || 5000 + idx * 2000,
           partsNeeded: [
             { name: 'Peça principal', quantity: 1, inStock: true },
-            { name: 'Componente auxiliar', quantity: 2, inStock: Math.random() > 0.3 },
+            { name: 'Componente auxiliar', quantity: 2, inStock: true },
           ],
           reason: rec.description || 'Manutenção programada baseada em análise preditiva',
           healthScore,

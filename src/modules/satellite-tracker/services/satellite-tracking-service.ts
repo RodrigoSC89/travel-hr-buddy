@@ -142,8 +142,8 @@ export class SatelliteTrackingService {
       longitude,
       altitude,
       velocity,
-      azimuth: Math.random() * 360,
-      elevation: Math.random() * 90,
+      azimuth: (longitude + 180) % 360,
+      elevation: Math.max(0, 90 - Math.abs(latitude)),
       calculatedAt: now.toISOString()
     };
   }

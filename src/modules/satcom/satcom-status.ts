@@ -214,8 +214,8 @@ class SatcomStatusMonitor {
   simulateLatencyMeasurement(connection: SatcomConnection): number {
     // Simulate realistic latency based on provider type
     const baseLatency = connection.latency;
-    const variance = baseLatency * 0.1; // 10% variance
-    const measured = baseLatency + (Math.random() - 0.5) * variance * 2;
+    // Deterministic — return baseline latency as measured value
+    const measured = baseLatency;
 
     this.updateLatency(connection.id, measured);
     return measured;
@@ -232,11 +232,11 @@ class SatcomStatusMonitor {
     switch (connection.status) {
     case "connected":
       // Low packet loss for good connections
-      packetsLost = Math.floor(Math.random() * 5);
+      packetsLost = 2;
       break;
     case "degraded":
       // Higher packet loss for degraded connections
-      packetsLost = Math.floor(Math.random() * 50 + 10);
+      packetsLost = 30;
       break;
     case "disconnected":
       // Complete packet loss

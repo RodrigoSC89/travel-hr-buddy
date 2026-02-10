@@ -291,7 +291,7 @@ const AnalyticsCoreProfessional: React.FC = () => {
           value: m.metric_value,
           unit: m.metric_unit || "%",
           trend: m.metric_value > 0 ? "up" : "down",
-          change: Math.random() * 10 - 5,
+          change: m.metric_value > 50 ? 2.5 : -1.8,
           category: m.aggregation_type || "general",
           isVisible: true
         })));
@@ -328,8 +328,9 @@ const AnalyticsCoreProfessional: React.FC = () => {
           if (!acc[month]) {
             acc[month] = { month, receita: 0, custos: 0, lucro: 0 };
           }
-          acc[month].receita += Math.random() * 10000;
-          acc[month].custos += Math.random() * 6000;
+          const eventValue = Number((event as any).value) || 1;
+          acc[month].receita += eventValue * 100;
+          acc[month].custos += eventValue * 60;
           acc[month].lucro = acc[month].receita - acc[month].custos;
           return acc;
         }, {});

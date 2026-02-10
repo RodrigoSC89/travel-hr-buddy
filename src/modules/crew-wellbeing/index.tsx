@@ -55,10 +55,10 @@ export default function CrewWellbeing() {
           position: member.position || 'N/A',
           vessel: member.current_vessel_id || 'N/A',
           fatigueLevel: 'low' as const,
-          hoursWorked: Math.floor(Math.random() * 50) + 30,
-          restHours: Math.floor(Math.random() * 30) + 20,
-          daysOnboard: Math.floor(Math.random() * 30) + 1,
-          healthScore: Math.floor(Math.random() * 40) + 60,
+          hoursWorked: 40,
+          restHours: 24,
+          daysOnboard: 15,
+          healthScore: 85,
           recommendations: [],
           alerts: []
         }));

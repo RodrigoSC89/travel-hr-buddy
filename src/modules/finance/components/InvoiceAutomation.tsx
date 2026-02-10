@@ -94,7 +94,7 @@ export function InvoiceAutomation() {
       // Simulate processing
       const newInvoice: ProcessedInvoice = {
         id: Date.now().toString(),
-        invoiceNumber: `INV-2024-${Math.floor(Math.random() * 9000) + 1000}`,
+        invoiceNumber: `INV-2024-${Date.now().toString().slice(-4)}`,
         vendor: 'Processing...',
         amount: 0,
         dueDate: new Date().toISOString().split('T')[0],

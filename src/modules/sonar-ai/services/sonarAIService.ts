@@ -140,13 +140,13 @@ class SonarAIService {
     });
 
     while (waveform.length < numSamples) {
-      waveform.push(Math.random() * 20);
+      waveform.push(10); // Baseline noise floor
     }
 
     const frequencySpectrum: { frequency: number; amplitude: number }[] = [];
     for (let i = 0; i < 50; i++) {
       const frequency = i * 100;
-      const baseAmplitude = Math.random() * 30;
+      const baseAmplitude = 15;
       const signalBoost = analysis.returns.some(
         (r) => r.ping.intensity > 50 && Math.abs(r.ping.angle - i * 7.2) < 10
       )

@@ -163,7 +163,7 @@ export default function ProcurementReportsPanel() {
       type: reportConfig.type as Report["type"],
       status: "ready",
       createdAt: new Date().toISOString(),
-      size: `${(Math.random() * 3 + 1).toFixed(1)} MB`,
+      size: "2.4 MB",
       format: reportConfig.format as Report["format"]
     };
     

@@ -62,17 +62,17 @@ function useSuppliers() {
         category: Array.isArray(s.category) ? s.category[0] || 'Geral' : 'Geral',
         rating: s.rating || 4.0,
         scores: {
-          price: 80 + Math.floor(Math.random() * 15),
-          quality: 80 + Math.floor(Math.random() * 15),
-          delivery: 80 + Math.floor(Math.random() * 15),
-          reliability: 80 + Math.floor(Math.random() * 15),
-          support: 80 + Math.floor(Math.random() * 15)
+          price: 85,
+          quality: 87,
+          delivery: 83,
+          reliability: 88,
+          support: 84
         },
-        averageDeliveryDays: 3 + Math.floor(Math.random() * 5),
-        onTimeDelivery: 85 + Math.floor(Math.random() * 10),
-        defectRate: Math.random() * 2,
-        totalOrders: s.total_orders || Math.floor(Math.random() * 300),
-        priceCompetitiveness: 80 + Math.floor(Math.random() * 15),
+        averageDeliveryDays: 5,
+        onTimeDelivery: 90,
+        defectRate: 1.2,
+        totalOrders: s.total_orders || 50 + idx * 20,
+        priceCompetitiveness: 86,
         aiRecommendation: idx === 0,
         aiReason: idx === 0 ? 'Melhor equilíbrio entre custo e qualidade' : undefined
       } as Supplier));

@@ -77,20 +77,20 @@ export default function FleetPositionMap() {
           .order("name", { ascending: true });
 
         if (!error && data && data.length > 0) {
-          const mapped: VesselPosition[] = data.map((v) => ({
+          const mapped: VesselPosition[] = data.map((v, i) => ({
             id: v.id,
             name: v.name,
             imo: v.imo_number || "",
             type: v.vessel_type || "Unknown",
             status: (v.status === "active" ? "underway" : v.status === "maintenance" ? "moored" : "anchored") as VesselPosition["status"],
-            lat: -23 + Math.random() * 5,
-            lon: -46 + Math.random() * 10,
-            course: Math.floor(Math.random() * 360),
-            speed: v.status === "active" ? 8 + Math.random() * 8 : 0,
+            lat: -23.0 - i * 0.5,
+            lon: -43.0 - i * 1.0,
+            course: i * 45 % 360,
+            speed: v.status === "active" ? 12 : 0,
             destination: v.current_location || "N/A",
             eta: v.status === "active" ? "Em trânsito" : "Atracado",
             lastUpdate: "1min",
-            signalStrength: 80 + Math.floor(Math.random() * 20),
+            signalStrength: 90,
           }));
           setVessels(mapped);
         }

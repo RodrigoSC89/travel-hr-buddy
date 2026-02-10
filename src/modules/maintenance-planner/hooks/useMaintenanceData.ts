@@ -113,10 +113,10 @@ export function useMaintenanceData() {
             vesselName: v.name || 'Embarcação',
             location: 'Casa de Máquinas',
             status: 'operational' as const,
-            healthScore: 75 + Math.random() * 20,
+            healthScore: 85,
             lastMaintenance: new Date(Date.now() - 30 * 24 * 60 * 60 * 1000),
             nextMaintenance: new Date(Date.now() + 60 * 24 * 60 * 60 * 1000),
-            runningHours: 5000 + Math.floor(Math.random() * 5000),
+            runningHours: 7500,
             criticalityLevel: 'high' as const,
           },
           {
@@ -130,10 +130,10 @@ export function useMaintenanceData() {
             vesselName: v.name || 'Embarcação',
             location: 'Casa de Máquinas',
             status: 'operational' as const,
-            healthScore: 80 + Math.random() * 15,
+            healthScore: 88,
             lastMaintenance: new Date(Date.now() - 45 * 24 * 60 * 60 * 1000),
             nextMaintenance: new Date(Date.now() + 45 * 24 * 60 * 60 * 1000),
-            runningHours: 3000 + Math.floor(Math.random() * 3000),
+            runningHours: 4500,
             criticalityLevel: 'high' as const,
           },
         ];
@@ -235,7 +235,7 @@ export function useMaintenanceData() {
             predictedFailureDate: addDays(new Date(), Math.ceil(e.healthScore / 2)),
             riskFactors: ['Horas de operação elevadas', 'Histórico de falhas'],
             recommendedAction: 'Manutenção preventiva recomendada',
-            confidence: 0.75 + Math.random() * 0.2,
+            confidence: 0.82,
           }));
       }
 

@@ -75,23 +75,23 @@ class EnhancedSonarAIService {
     if (frequency < 50 && amplitude > -40) {
       classification = "large_vessel";
       detectionType = "vessel";
-      confidence = 0.85 + Math.random() * 0.12;
+      confidence = 0.92;
     } else if (frequency >= 50 && frequency < 150 && amplitude > -50) {
       classification = "underwater_obstacle";
       detectionType = "underwater_obstacle";
-      confidence = 0.75 + Math.random() * 0.15;
+      confidence = 0.82;
     } else if (frequency >= 150 && frequency < 300) {
       classification = "marine_life";
       detectionType = "marine_life";
-      confidence = 0.70 + Math.random() * 0.20;
+      confidence = 0.78;
     } else if (amplitude < -70) {
       classification = "background_noise";
       detectionType = "unknown";
-      confidence = 0.60 + Math.random() * 0.20;
+      confidence = 0.70;
     } else {
       classification = "debris";
       detectionType = "debris";
-      confidence = 0.55 + Math.random() * 0.25;
+      confidence = 0.65;
     }
 
     return {
@@ -116,8 +116,8 @@ class EnhancedSonarAIService {
     for (let t = 0; t < timeSteps; t++) {
       const row: number[] = [];
       for (let f = 0; f < frequencies.length; f++) {
-        // Simulate intensity based on frequency and time
-        const baseIntensity = Math.random() * 50 + 20;
+        // Deterministic intensity based on frequency and time position
+        const baseIntensity = 45;
         const timeVariation = Math.sin(t / 10) * 10;
         const freqVariation = Math.cos(f / 5) * 10;
         row.push(baseIntensity + timeVariation + freqVariation);
