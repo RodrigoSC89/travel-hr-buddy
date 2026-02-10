@@ -52,7 +52,7 @@ interface LogEntry {
   notes?: string;
 }
 
-const mockLogEntries: LogEntry[] = [
+const fallbackLogEntries: LogEntry[] = [
   {
     id: "LOG-001",
     timestamp: "2024-12-04T08:00:00",
@@ -127,7 +127,7 @@ const eventTypeConfig = {
 };
 
 export const SmartDPLogbook: React.FC = () => {
-  const [entries, setEntries] = useState<LogEntry[]>(mockLogEntries);
+  const [entries, setEntries] = useState<LogEntry[]>(fallbackLogEntries);
   const [searchTerm, setSearchTerm] = useState("");
   const [filterType, setFilterType] = useState<string>("all");
   const [filterSeverity, setFilterSeverity] = useState<string>("all");

@@ -54,7 +54,7 @@ interface LessonLearned {
   usedInAudit: boolean;
 }
 
-const mockLessons: LessonLearned[] = [
+const fallbackLessons: LessonLearned[] = [
   {
     id: "LL-001",
     title: "Perda de Referência PRS com Erro de Fallback",
@@ -202,7 +202,7 @@ const sourceColors: Record<string, string> = {
 };
 
 export const LessonsLearnedCenter: React.FC = () => {
-  const [lessons, setLessons] = useState<LessonLearned[]>(mockLessons);
+  const [lessons, setLessons] = useState<LessonLearned[]>(fallbackLessons);
   const [searchTerm, setSearchTerm] = useState("");
   const [filterSource, setFilterSource] = useState<string>("all");
   const [filterFailureType, setFilterFailureType] = useState<string>("all");

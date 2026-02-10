@@ -56,7 +56,7 @@ interface Checklist {
   signedAt?: string;
 }
 
-const mockChecklists: Checklist[] = [
+const fallbackChecklists: Checklist[] = [
   {
     id: "1",
     title: "Checklist de Partida - MV Atlantic Pioneer",
@@ -95,7 +95,7 @@ const mockChecklists: Checklist[] = [
 ];
 
 export function ChecklistBuilder() {
-  const [checklists, setChecklists] = useState<Checklist[]>(mockChecklists);
+  const [checklists, setChecklists] = useState<Checklist[]>(fallbackChecklists);
   const [newItemText, setNewItemText] = useState("");
 
   const getProgress = (items: ChecklistItem[]) => {

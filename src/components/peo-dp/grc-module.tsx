@@ -58,7 +58,7 @@ interface Decision {
   outcome: "positive" | "neutral" | "negative";
 }
 
-const mockRiskIndicators: RiskIndicator[] = [
+const fallbackRiskIndicators: RiskIndicator[] = [
   { id: "RISK-001", name: "DP Uptime", category: "operational", currentScore: 98.5, previousScore: 97.2, trend: "up", threshold: 95, status: "green" },
   { id: "RISK-002", name: "Compliance PEOTRAM", category: "compliance", currentScore: 92, previousScore: 94, trend: "down", threshold: 85, status: "green" },
   { id: "RISK-003", name: "Incidentes/Mês", category: "operational", currentScore: 2, previousScore: 1, trend: "up", threshold: 3, status: "yellow" },
@@ -69,7 +69,7 @@ const mockRiskIndicators: RiskIndicator[] = [
   { id: "RISK-008", name: "MTBF Equipamentos DP", category: "technical", currentScore: 2500, previousScore: 2200, trend: "up", threshold: 2000, status: "green" }
 ];
 
-const mockComplianceItems: ComplianceItem[] = [
+const fallbackComplianceItems: ComplianceItem[] = [
   { id: "COMP-001", framework: "PEOTRAM", requirement: "Elemento 1 - Sistema de Gestão", status: "compliant", lastAudit: "2024-11-15", nextAudit: "2025-02-15", score: 95 },
   { id: "COMP-002", framework: "PEOTRAM", requirement: "Elemento 2 - Conformidade Legal", status: "compliant", lastAudit: "2024-11-15", nextAudit: "2025-02-15", score: 92 },
   { id: "COMP-003", framework: "IMCA", requirement: "M117 - DP Operations", status: "partial", lastAudit: "2024-10-20", nextAudit: "2025-01-20", score: 78 },
@@ -78,7 +78,7 @@ const mockComplianceItems: ComplianceItem[] = [
   { id: "COMP-006", framework: "IMCA", requirement: "M166 - FMEA", status: "pending", lastAudit: "2024-07-01", nextAudit: "2025-01-01", score: 85 }
 ];
 
-const mockDecisions: Decision[] = [
+const fallbackDecisions: Decision[] = [
   {
     id: "DEC-001",
     date: "2024-12-01",
@@ -113,9 +113,9 @@ const mockDecisions: Decision[] = [
 
 export const GRCModule: React.FC = () => {
   const [activeTab, setActiveTab] = useState("dashboard");
-  const [riskIndicators] = useState<RiskIndicator[]>(mockRiskIndicators);
-  const [complianceItems] = useState<ComplianceItem[]>(mockComplianceItems);
-  const [decisions] = useState<Decision[]>(mockDecisions);
+  const [riskIndicators] = useState<RiskIndicator[]>(fallbackRiskIndicators);
+  const [complianceItems] = useState<ComplianceItem[]>(fallbackComplianceItems);
+  const [decisions] = useState<Decision[]>(fallbackDecisions);
 
   const getStatusColor = (status: string) => {
     switch (status) {

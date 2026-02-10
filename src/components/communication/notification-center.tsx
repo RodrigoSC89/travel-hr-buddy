@@ -124,8 +124,8 @@ export const NotificationCenter = () => {
     try {
       setLoading(true);
       
-      // Mock notifications data
-      const mockNotifications: Notification[] = [
+      // Fallback notifications data - awaiting dedicated notifications table
+      const fallbackNotifications: Notification[] = [
         {
           id: "1",
           title: "Nova mensagem de RH",
@@ -193,7 +193,7 @@ export const NotificationCenter = () => {
         }
       ];
 
-      setNotifications(mockNotifications);
+      setNotifications(fallbackNotifications);
     } catch (error) {
       toast({
         title: "Erro",

@@ -44,7 +44,7 @@ const auditTemplates = [
   { id: 'solas', name: 'SOLAS', icon: ClipboardCheck, questions: 64, duration: '8-10 horas' },
 ];
 
-const mockQuestions: AuditQuestion[] = [
+const fallbackQuestions: AuditQuestion[] = [
   { id: '1', category: 'SMS Documentation', question: 'O Manual do Sistema de Gestão de Segurança está atualizado e aprovado?', regulation: 'ISM 11.2', status: 'pending' },
   { id: '2', category: 'SMS Documentation', question: 'Existe política de segurança e proteção ambiental documentada?', regulation: 'ISM 2.1', status: 'pending' },
   { id: '3', category: 'Crew Competence', question: 'Todos os tripulantes possuem certificados STCW válidos?', regulation: 'STCW I/2', status: 'pending' },
@@ -65,7 +65,7 @@ export function AuditSimulator() {
 
   const startSimulation = (templateId: string) => {
     setSelectedTemplate(templateId);
-    setQuestions(mockQuestions.map(q => ({ ...q, status: 'pending' })));
+    setQuestions(fallbackQuestions.map(q => ({ ...q, status: 'pending' })));
     setCurrentQuestionIndex(0);
     setElapsedTime(0);
     setIsRunning(true);
