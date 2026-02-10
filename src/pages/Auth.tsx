@@ -405,20 +405,20 @@ const Auth: React.FC = () => {
   );
 
   return (
-    <div className="min-h-screen bg-background flex items-center justify-center p-4">
-      <div className="w-full max-w-5xl grid lg:grid-cols-2 gap-8 items-center">
+    <div className="min-h-screen bg-gradient-to-br from-background via-background to-primary/5 flex items-center justify-center p-4">
+      <div className="w-full max-w-5xl grid lg:grid-cols-2 gap-12 items-center">
         {/* Left Side - System Showcase */}
-        <div className="hidden lg:flex flex-col space-y-6">
+        <div className="hidden lg:flex flex-col space-y-8 animate-fade-in">
           {/* Logo & Title */}
-          <div className="flex items-center space-x-3">
-            <div className="w-14 h-14 rounded-xl bg-card flex items-center justify-center shadow-lg p-2 border border-border">
+          <div className="flex items-center space-x-4">
+            <div className="w-16 h-16 rounded-2xl bg-card flex items-center justify-center shadow-premium-lg p-2.5 border border-border/50 ring-1 ring-primary/10">
               <img src={nautiLogo} alt="Nauti One Logo" className="w-full h-full object-contain" />
             </div>
             <div>
-              <h1 className="text-3xl font-bold bg-gradient-to-r from-primary to-primary/60 bg-clip-text text-transparent">
+              <h1 className="text-4xl font-bold tracking-tight bg-gradient-to-r from-primary to-azure-400 bg-clip-text text-transparent">
                 NAUTI ONE
               </h1>
-              <p className="text-xs text-muted-foreground font-medium tracking-wide uppercase">
+              <p className="text-xs text-muted-foreground font-medium tracking-widest uppercase mt-0.5">
                 Maritime Operations Platform
               </p>
             </div>
@@ -426,30 +426,30 @@ const Auth: React.FC = () => {
 
           {/* Live System Stats */}
           {systemStats && (
-            <div className="space-y-3">
+            <div className="space-y-4">
               <div className="flex items-center gap-2">
-                <Activity className="h-4 w-4 text-primary" />
+                <div className="h-2 w-2 rounded-full bg-success animate-pulse" />
                 <span className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">
                   Sistema Ativo — Dados em Tempo Real
                 </span>
               </div>
-              <div className="grid grid-cols-3 gap-2">
+              <div className="grid grid-cols-3 gap-3">
                 {[
-                  { label: 'Embarcações', value: systemStats.vessels, icon: Ship, color: 'text-blue-500' },
+                  { label: 'Embarcações', value: systemStats.vessels, icon: Ship, color: 'text-primary' },
                   { label: 'Tripulantes', value: systemStats.crew, icon: Users, color: 'text-emerald-500' },
-                  { label: 'Auditorias', value: systemStats.audits, icon: Shield, color: 'text-red-500' },
-                  { label: 'Documentos', value: systemStats.documents, icon: FileText, color: 'text-amber-500' },
-                  { label: 'Manutenções', value: systemStats.maintenance, icon: Wrench, color: 'text-orange-500' },
-                  { label: 'Certificados', value: systemStats.certificates, icon: CheckCircle, color: 'text-teal-500' },
+                  { label: 'Auditorias', value: systemStats.audits, icon: Shield, color: 'text-destructive' },
+                  { label: 'Documentos', value: systemStats.documents, icon: FileText, color: 'text-warning' },
+                  { label: 'Manutenções', value: systemStats.maintenance, icon: Wrench, color: 'text-hub-maintenance' },
+                  { label: 'Certificados', value: systemStats.certificates, icon: CheckCircle, color: 'text-info' },
                 ].map((stat) => (
                   <div
                     key={stat.label}
-                    className="bg-card/80 border border-border/50 rounded-lg p-3 flex items-center gap-2.5"
+                    className="bg-card/80 border border-border/40 rounded-xl p-3.5 flex items-center gap-3 shadow-premium-sm hover:shadow-premium transition-shadow duration-200"
                   >
-                    <stat.icon className={`h-4 w-4 ${stat.color} shrink-0`} />
+                    <stat.icon className={`h-4.5 w-4.5 ${stat.color} shrink-0`} />
                     <div className="min-w-0">
-                      <p className="text-lg font-bold leading-tight">{stat.value}</p>
-                      <p className="text-[10px] text-muted-foreground truncate">{stat.label}</p>
+                      <p className="text-xl font-bold leading-tight tracking-tight">{stat.value}</p>
+                      <p className="text-[10px] text-muted-foreground truncate font-medium">{stat.label}</p>
                     </div>
                   </div>
                 ))}
@@ -462,7 +462,7 @@ const Auth: React.FC = () => {
             <span className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">
               7 Mega-Hubs • 75+ Módulos
             </span>
-            <div className="grid grid-cols-2 gap-2">
+            <div className="grid grid-cols-2 gap-2.5">
               {[
                 { name: 'Comando', desc: 'NOC, SOC, Alertas', icon: Compass, badge: '7' },
                 { name: 'Operações', desc: 'Frota, Viagens', icon: Ship, badge: '7' },
@@ -473,13 +473,13 @@ const Auth: React.FC = () => {
               ].map((hub) => (
                 <div
                   key={hub.name}
-                  className="bg-card/60 border border-border/30 rounded-lg p-2.5 flex items-center gap-2.5"
+                  className="bg-card/50 border border-border/30 rounded-xl p-3 flex items-center gap-3 hover:bg-card/80 transition-colors duration-200"
                 >
                   <hub.icon className="h-4 w-4 text-primary shrink-0" />
                   <div className="min-w-0 flex-1">
                     <div className="flex items-center gap-1.5">
                       <span className="text-xs font-semibold truncate">{hub.name}</span>
-                      <Badge variant="secondary" className="text-[9px] px-1 py-0 h-3.5 shrink-0">
+                      <Badge variant="secondary" className="text-[9px] px-1.5 py-0 h-4 shrink-0 font-bold">
                         {hub.badge}
                       </Badge>
                     </div>
@@ -491,28 +491,28 @@ const Auth: React.FC = () => {
           </div>
 
           {/* Features */}
-          <div className="space-y-2">
+          <div className="space-y-2.5">
             {[
               "Controle de frota em tempo real",
               "12 Auditorias marítimas (ISM, MLC, SIRE, PSC...)",
               "10 Agentes IA especializados",
               "Compliance STCW, MLC 2006 & MARPOL"
             ].map((feature, index) => (
-              <div key={index} className="flex items-center space-x-2">
-                <CheckCircle className="h-3.5 w-3.5 text-primary shrink-0" />
-                <span className="text-xs text-foreground/80">{feature}</span>
+              <div key={index} className="flex items-center space-x-2.5">
+                <CheckCircle className="h-4 w-4 text-success shrink-0" />
+                <span className="text-sm text-foreground/80">{feature}</span>
               </div>
             ))}
           </div>
         </div>
 
         {/* Right Side - Auth Forms */}
-        <div className="w-full max-w-md mx-auto">
-          <Card className="shadow-xl border-border bg-card">
-            <CardHeader className="space-y-1 text-center">
+        <div className="w-full max-w-md mx-auto animate-fade-in">
+          <Card className="shadow-premium-xl border-border/50 bg-card/95 backdrop-blur-sm">
+            <CardHeader className="space-y-1.5 text-center pb-4">
               {/* Mobile logo */}
-              <div className="lg:hidden flex justify-center mb-4">
-                <div className="w-12 h-12 rounded-xl bg-white flex items-center justify-center shadow-lg p-1.5">
+              <div className="lg:hidden flex justify-center mb-5">
+                <div className="w-14 h-14 rounded-2xl bg-card flex items-center justify-center shadow-premium-lg p-2 ring-1 ring-primary/10">
                   <img src={nautiLogo} alt="Nauti One" className="w-full h-full object-contain" />
                 </div>
               </div>
@@ -529,11 +529,11 @@ const Auth: React.FC = () => {
             </CardHeader>
             <CardContent>
               <Tabs value={activeTab} onValueChange={setActiveTab}>
-                <TabsList className="grid w-full grid-cols-2 mb-6">
-                  <TabsTrigger value="signin" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">
+                <TabsList className="grid w-full grid-cols-2 mb-6 h-11 p-1 bg-muted/50 rounded-lg">
+                  <TabsTrigger value="signin" className="rounded-md data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-sm transition-all duration-200">
                     Entrar
                   </TabsTrigger>
-                  <TabsTrigger value="signup" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">
+                  <TabsTrigger value="signup" className="rounded-md data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-sm transition-all duration-200">
                     Cadastrar
                   </TabsTrigger>
                 </TabsList>
@@ -597,7 +597,7 @@ const Auth: React.FC = () => {
                       </Button>
                     </div>
 
-                    <Button type="submit" className="w-full" disabled={isLoading || authLoading}>
+                    <Button type="submit" className="w-full h-11 text-sm font-semibold" size="lg" disabled={isLoading || authLoading}>
                       {isLoading ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : null}
                       Entrar
                     </Button>
