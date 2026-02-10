@@ -1,9 +1,9 @@
 /**
  * PATCH: Reconhecimento Facial para Controle de Acesso
- * Sistema de identificação biométrica para áreas restritas
+ * ✅ P0-002: Migrado para dados reais do Supabase (access_logs)
  */
 
-import React, { useState, useRef, useCallback } from "react";
+import React, { useState, useRef, useCallback, useEffect } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -25,6 +25,8 @@ import {
 } from "lucide-react";
 import { toast } from "sonner";
 import { UserRegistrationForm } from "./components/UserRegistrationForm";
+import { supabase } from "@/integrations/supabase/client";
+import { logger } from "@/lib/logger";
 
 interface AccessLog {
   id: string;
@@ -46,14 +48,6 @@ interface RestrictedArea {
   requiresFacial: boolean;
 }
 
-const mockAccessLogs: AccessLog[] = [
-  { id: "1", userId: "u1", userName: "Carlos Silva", area: "Praça de Máquinas", timestamp: new Date(Date.now() - 300000), status: "granted", method: "facial", confidence: 98.5 },
-  { id: "2", userId: "u2", userName: "João Santos", area: "Ponte de Comando", timestamp: new Date(Date.now() - 600000), status: "granted", method: "facial", confidence: 99.2 },
-  { id: "3", userId: "u3", userName: "Desconhecido", area: "Sala de Carga", timestamp: new Date(Date.now() - 900000), status: "denied", method: "facial", confidence: 45.0 },
-  { id: "4", userId: "u4", userName: "Maria Oliveira", area: "Enfermaria", timestamp: new Date(Date.now() - 1200000), status: "granted", method: "card" },
-  { id: "5", userId: "u5", userName: "Pedro Costa", area: "Praça de Máquinas", timestamp: new Date(Date.now() - 1500000), status: "granted", method: "facial", confidence: 97.8 },
-];
-
 const restrictedAreas: RestrictedArea[] = [
   { id: "bridge", name: "Ponte de Comando", level: "critical", activeUsers: 3, maxCapacity: 5, requiresFacial: true },
   { id: "engine", name: "Praça de Máquinas", level: "high", activeUsers: 4, maxCapacity: 8, requiresFacial: true },
@@ -63,11 +57,45 @@ const restrictedAreas: RestrictedArea[] = [
 ];
 
 export default function FacialAccess() {
-  const [accessLogs, setAccessLogs] = useState<AccessLog[]>(mockAccessLogs);
+  const [accessLogs, setAccessLogs] = useState<AccessLog[]>([]);
   const [isScanning, setIsScanning] = useState(false);
   const [scanResult, setScanResult] = useState<{ success: boolean; message: string; confidence?: number } | null>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
   const [stream, setStream] = useState<MediaStream | null>(null);
+
+  useEffect(() => {
+    loadAccessLogs();
+  }, []);
+
+  const loadAccessLogs = async () => {
+    try {
+      const { data, error } = await supabase
+        .from("access_logs")
+        .select("*")
+        .order("timestamp", { ascending: false })
+        .limit(50);
+
+      if (error) {
+        logger.warn("access_logs query error:", error);
+        return;
+      }
+
+      const mapped: AccessLog[] = (data || []).map((r: any) => ({
+        id: r.id,
+        userId: r.user_id || "—",
+        userName: r.user_agent?.split("/")[0] || r.action || "Usuário",
+        area: r.module_accessed || "—",
+        timestamp: new Date(r.timestamp || r.created_at),
+        status: r.result === "success" ? "granted" : r.result === "denied" ? "denied" : "pending",
+        method: r.action?.includes("facial") ? "facial" : r.action?.includes("card") ? "card" : "pin",
+        confidence: r.details?.confidence,
+      }));
+
+      setAccessLogs(mapped);
+    } catch (err) {
+      logger.error("Error loading access logs:", err);
+    }
+  };
 
   const startCamera = useCallback(async () => {
     try {
