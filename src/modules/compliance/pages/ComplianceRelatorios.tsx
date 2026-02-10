@@ -155,7 +155,7 @@ export default function ComplianceRelatorios() {
             <Brain className="h-4 w-4" />
             Gerar com IA
           </Button>
-          <Button className="gap-2">
+          <Button className="gap-2" onClick={() => toast.info("Novo Relatório", { description: "Selecione um template abaixo na aba 'Templates' para gerar um relatório personalizado." })}>
             <FileText className="h-4 w-4" />
             Novo Relatório
           </Button>
@@ -310,13 +310,13 @@ export default function ComplianceRelatorios() {
                             <Download className="h-4 w-4 mr-1" />
                             {report.format}
                           </Button>
-                          <Button variant="ghost" size="icon">
+                          <Button variant="ghost" size="icon" onClick={() => toast.info(`Visualizando: ${report.name}`, { description: `Score: ${report.score}% | Findings: ${report.findings} | Período: ${report.period}` })}>
                             <Eye className="h-4 w-4" />
                           </Button>
-                          <Button variant="ghost" size="icon">
+                          <Button variant="ghost" size="icon" onClick={() => { navigator.clipboard.writeText(`${window.location.origin}/compliance/reports/${report.id}`); toast.success("Link copiado para compartilhamento"); }}>
                             <Share2 className="h-4 w-4" />
                           </Button>
-                          <Button variant="ghost" size="icon">
+                          <Button variant="ghost" size="icon" onClick={() => { window.print(); }}>
                             <Printer className="h-4 w-4" />
                           </Button>
                         </>

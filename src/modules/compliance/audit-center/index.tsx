@@ -228,7 +228,7 @@ const AuditCenter = () => {
               <Shield className="h-8 w-8 text-primary" />
               <h1 className="text-3xl font-bold">Audit Center</h1>
             </div>
-            <Button className="gap-2">
+            <Button className="gap-2" onClick={() => toast.info("Nova Auditoria", { description: "Selecione o tipo de auditoria (ISM, ISPS, MLC, MARPOL, SOLAS) e a embarcação para iniciar." })}>
               <Plus className="h-4 w-4" />
               New Audit
             </Button>

@@ -28,7 +28,7 @@ import {
   CheckCircle2,
   Clock
 } from "lucide-react";
-
+import { toast } from "sonner";
 interface Risk {
   id: string;
   title: string;
@@ -414,8 +414,8 @@ export function RiskMatrix() {
                       </div>
 
                       <div className="flex gap-2 pt-4 border-t">
-                        <Button className="flex-1">Editar Risco</Button>
-                        <Button variant="outline" className="flex-1">
+                        <Button className="flex-1" onClick={() => toast.info("Editor de risco em implantação", { description: "Funcionalidade de edição de riscos disponível em Q3/2026." })}>Editar Risco</Button>
+                        <Button variant="outline" className="flex-1" onClick={() => toast.info("Histórico de risco", { description: "Registro de alterações e avaliações anteriores deste risco." })}>
                           <FileText className="h-4 w-4 mr-2" />
                           Ver Histórico
                         </Button>

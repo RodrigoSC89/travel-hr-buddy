@@ -84,7 +84,7 @@ const ComplianceHub = () => {
               </CardContent>
             </Card>
 
-            <Card className="cursor-pointer hover:shadow-lg transition-shadow">
+            <Card className="cursor-pointer hover:shadow-lg transition-shadow" onClick={() => navigate('/mlc-inspection')}>
               <CardHeader>
                 <div className="flex items-center gap-3">
                   <FileText className="h-6 w-6 text-primary" />
@@ -95,13 +95,13 @@ const ComplianceHub = () => {
                 <p className="text-sm text-muted-foreground">
                   Maritime Labour Convention inspection and compliance tracking
                 </p>
-                <Button variant="link" className="p-0 h-auto mt-2">
+                <Button variant="link" className="p-0 h-auto mt-2" onClick={(e) => { e.stopPropagation(); navigate('/mlc-inspection'); }}>
                   View Module →
                 </Button>
               </CardContent>
             </Card>
 
-            <Card className="cursor-pointer hover:shadow-lg transition-shadow">
+            <Card className="cursor-pointer hover:shadow-lg transition-shadow" onClick={() => navigate('/sgso-report')}>
               <CardHeader>
                 <div className="flex items-center gap-3">
                   <Anchor className="h-6 w-6 text-primary" />
@@ -112,7 +112,7 @@ const ComplianceHub = () => {
                 <p className="text-sm text-muted-foreground">
                   Safety Management System plans and action tracking
                 </p>
-                <Button variant="link" className="p-0 h-auto mt-2">
+                <Button variant="link" className="p-0 h-auto mt-2" onClick={(e) => { e.stopPropagation(); navigate('/sgso-report'); }}>
                   View Module →
                 </Button>
               </CardContent>
