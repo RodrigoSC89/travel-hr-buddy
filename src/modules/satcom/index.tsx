@@ -140,19 +140,8 @@ const SatcomDashboard = () => {
   const activeConnections = monitoredConnections.filter(c => c.status === "connected").length;
   const averageSignal = monitoredConnections.reduce((acc, c) => acc + c.signalStrength, 0) / monitoredConnections.length;
 
-  // Simulate real-time updates (in production, this would come from WebSocket/API)
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setConnections(prev => prev.map(conn => ({
-        ...conn,
-        signalStrength: Math.max(0, Math.min(100, conn.signalStrength + (Math.random() - 0.5) * 5)),
-        latency: Math.max(20, conn.latency + (Math.random() - 0.5) * 50),
-        lastSeen: new Date().toISOString(),
-      })));
-    }, 10000); // Update every 10 seconds
-
-    return () => clearInterval(interval);
-  }, []);
+  // Note: In production, signal updates should come from real SATCOM WebSocket/API
+  // Polling disabled — static values until real telemetry integration (ETA Q3/2026)
 
   return (
     <div className="container mx-auto p-6 space-y-6">

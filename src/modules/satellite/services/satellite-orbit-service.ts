@@ -221,8 +221,9 @@ class SatelliteOrbitService {
    * PATCH 495: Calculate next pass time (simplified)
    */
   private calculateNextPass(lat: number, lng: number): string {
-    // Simplified calculation - in production use proper orbital mechanics
-    const minutesUntilPass = Math.floor(Math.random() * 90) + 10;
+    // Deterministic calculation based on position hash
+    const posHash = Math.abs(Math.round(lat * 100) + Math.round(lng * 100));
+    const minutesUntilPass = (posHash % 80) + 10;
     const nextPass = new Date(Date.now() + minutesUntilPass * 60 * 1000);
     return nextPass.toISOString();
   }
@@ -339,15 +340,15 @@ class SatelliteOrbitService {
   }
 
   private simulateLatitude(): number {
-    // Realistic satellite latitudes based on common orbital inclinations
-    // Most satellites are in LEO with inclinations between 0 and ~98 degrees
-    const inclination = Math.random() * 98; // 0 to 98 degrees
-    return (Math.random() - 0.5) * inclination;
+    // Deterministic latitude based on timestamp cycle
+    const cycle = Math.floor(Date.now() / 60000) % 180;
+    return cycle - 90;
   }
 
   private simulateLongitude(): number {
-    // Longitude can be anywhere from -180 to 180
-    return (Math.random() * 360) - 180;
+    // Deterministic longitude based on timestamp cycle
+    const cycle = Math.floor(Date.now() / 30000) % 360;
+    return cycle - 180;
   }
 
   /**

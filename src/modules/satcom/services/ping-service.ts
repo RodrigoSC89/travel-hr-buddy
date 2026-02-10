@@ -96,18 +96,15 @@ class SatcomPingService {
   async simulatePing(link: SatcomLink): Promise<PingResult> {
     const timestamp = new Date().toISOString();
     
-    // Simulate ping with random variations
+    // Deterministic ping based on provider baseline
     const baseLatency = this.getBaseLatency(link.provider);
-    const variation = (Math.random() - 0.5) * baseLatency * 0.3;
-    const latency = Math.max(10, baseLatency + variation);
+    const latency = baseLatency;
     
-    // Simulate signal strength with random variations
-    const baseSignal = link.signal_strength || 80;
-    const signalVariation = (Math.random() - 0.5) * 20;
-    const signalStrength = Math.max(0, Math.min(100, baseSignal + signalVariation));
+    // Use stored signal strength as-is
+    const signalStrength = link.signal_strength || 80;
     
-    // Simulate occasional failures (5% chance)
-    const success = Math.random() > 0.05;
+    // Deterministic success based on signal strength threshold
+    const success = signalStrength > 20;
     
     const result: PingResult = {
       linkId: link.id,

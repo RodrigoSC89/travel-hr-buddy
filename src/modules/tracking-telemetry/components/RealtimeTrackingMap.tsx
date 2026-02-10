@@ -73,14 +73,14 @@ export default function RealtimeTrackingMap() {
           flag: v.flag_state === "Brazil" ? "🇧🇷" : v.flag_state === "Norway" ? "🇳🇴" : "🏴",
           lat: -23 - idx * 1.5,
           lng: -46 + idx * 2,
-          course: Math.round(Math.random() * 360),
-          speed: v.status === "active" ? +(8 + Math.random() * 6).toFixed(1) : 0,
-          heading: Math.round(Math.random() * 360),
+          course: idx * 45 % 360,
+          speed: v.status === "active" ? 12 : 0,
+          heading: idx * 45 % 360,
           status: (v.status === "active" ? "underway" : v.status === "maintenance" ? "moored" : "anchored") as VesselPosition["status"],
           destination: v.next_port || v.current_location || "N/A",
           eta: v.eta ? new Date(v.eta) : new Date(Date.now() + (1 + idx) * 24 * 60 * 60 * 1000),
           lastUpdate: new Date(),
-          signalQuality: 85 + Math.round(Math.random() * 15),
+          signalQuality: 92,
         } satisfies VesselPosition;
       });
     },

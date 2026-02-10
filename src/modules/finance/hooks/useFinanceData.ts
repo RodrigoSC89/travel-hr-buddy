@@ -363,16 +363,16 @@ function calculateExpenseCategories(
   ];
 
   if (categoryTotals.size === 0) {
-    return defaultCategories.map(c => ({
+    return defaultCategories.map((c, idx) => ({
       ...c,
       percentage: (c.amount / c.budget) * 100,
-      trend: Math.random() * 10 - 5,
+      trend: [2.3, -1.8, 0.5, -3.1, 1.2, -0.7][idx] ?? 0,
     }));
   }
 
-  return Array.from(categoryTotals.entries()).map(([category, amount]) => {
+  return Array.from(categoryTotals.entries()).map(([category, amount], idx) => {
     const budget = budgetMap.get(category) || amount * 1.1;
-    return { category, amount, budget, percentage: (amount / budget) * 100, trend: Math.random() * 10 - 5 };
+    return { category, amount, budget, percentage: (amount / budget) * 100, trend: [1.5, -2.1, 0.8, -0.4, 3.2, -1.6][idx % 6] ?? 0 };
   });
 }
 

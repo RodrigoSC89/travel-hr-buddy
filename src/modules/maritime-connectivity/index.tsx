@@ -94,7 +94,7 @@ export default function MaritimeConnectivity() {
       setConnections(prev => prev.map(c => ({
         ...c,
         lastSync: c.status !== "offline" ? new Date().toISOString() : c.lastSync,
-        signalStrength: c.status !== "offline" ? Math.min(100, c.signalStrength + Math.floor(Math.random() * 10) - 5) : 0
+        signalStrength: c.status !== "offline" ? c.signalStrength : 0
       })));
       
       toast({ title: "Atualizado", description: `Status de ${data?.length || 0} conexões verificado` });

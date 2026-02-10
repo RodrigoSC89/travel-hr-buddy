@@ -113,14 +113,14 @@ export function useOperationsData() {
       // Generate telemetry from vessels
       return vessels.map((v: VesselStatus): TelemetryData => ({
         vesselId: v.id,
-        engineRpm: v.status === 'underway' ? 120 + Math.random() * 30 : 0,
-        engineTemp: v.status === 'underway' ? 75 + Math.random() * 15 : 25,
-        fuelConsumption: v.status === 'underway' ? 5 + Math.random() * 5 : 0.5,
+        engineRpm: v.status === 'underway' ? 135 : 0,
+        engineTemp: v.status === 'underway' ? 82 : 25,
+        fuelConsumption: v.status === 'underway' ? 7.5 : 0.5,
         speed: v.speed,
-        windSpeed: 10 + Math.random() * 10,
-        windDirection: Math.random() * 360,
-        waveHeight: 0.5 + Math.random() * 2,
-        seaTemp: 22 + Math.random() * 6,
+        windSpeed: 15,
+        windDirection: 180,
+        waveHeight: 1.2,
+        seaTemp: 25,
         timestamp: new Date(),
       }));
     },

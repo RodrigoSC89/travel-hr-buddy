@@ -63,11 +63,11 @@ export const SonarAIDashboard: React.FC = () => {
   const performAIScan = async () => {
     setScanning(true);
     try {
-      // Simulate sonar scan with AI classification
+      // Deterministic sonar scan ping for AI classification
       const mockPing = {
-        frequency: Math.random() * 300,
-        amplitude: -80 + Math.random() * 50,
-        duration: Math.random() * 5,
+        frequency: 120,
+        amplitude: -55,
+        duration: 2.5,
       };
 
       // AI Classification
@@ -83,9 +83,9 @@ export const SonarAIDashboard: React.FC = () => {
         event_type: "detection",
         detection_type: classification.detectionType,
         confidence_score: classification.confidence * 100,
-        distance_meters: 500 + Math.random() * 4500,
-        depth_meters: 10 + Math.random() * 90,
-        bearing_degrees: Math.random() * 360,
+        distance_meters: 2500,
+        depth_meters: 50,
+        bearing_degrees: 180,
         frequency_khz: mockPing.frequency,
         amplitude_db: mockPing.amplitude,
         classification: classification.classification,

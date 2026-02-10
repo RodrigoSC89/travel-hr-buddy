@@ -125,7 +125,7 @@ export default function SmartLogistics() {
         title: "Nova oportunidade identificada",
         description: `Análise de ${supplies.length} itens revelou padrão de consumo otimizável.`,
         impact: "Redução de 5% no custo total",
-        confidence: Math.floor(Math.random() * 15) + 80
+        confidence: 85
       };
       
       setRecommendations(prev => [newRec, ...prev]);

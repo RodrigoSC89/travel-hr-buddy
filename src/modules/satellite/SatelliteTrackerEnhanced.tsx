@@ -272,7 +272,7 @@ export const SatelliteTrackerEnhanced = () => {
           satellite_id: sat.satellite_id,
           coverage_geojson: { type: "Point", coordinates: [sat.longitude, sat.latitude] },
           elevation_angle_degrees: sat.elevation,
-          visibility_duration_minutes: Math.floor((Math.floor(Math.random() * COVERAGE_EVENT_MAX_DURATION_SEC) + COVERAGE_EVENT_MIN_DURATION_SEC) / 60),
+          visibility_duration_minutes: Math.floor((COVERAGE_EVENT_MIN_DURATION_SEC + (satIdx * 120)) / 60),
           next_pass_at: new Date(Date.now() + COVERAGE_EVENT_DURATION_MS).toISOString(),
         });
 

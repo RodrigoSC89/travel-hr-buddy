@@ -35,22 +35,8 @@ export default function DPRealtime() {
     wavePeriod: 8,
   });
 
-  // Simulate real-time updates
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setTelemetry(prev => ({
-        ...prev,
-        heading: prev.heading + (Math.random() - 0.5) * 0.5,
-        pitch: Math.max(-5, Math.min(5, prev.pitch + (Math.random() - 0.5) * 0.2)),
-        roll: Math.max(-5, Math.min(5, prev.roll + (Math.random() - 0.5) * 0.3)),
-        heave: Math.max(0, Math.min(2, prev.heave + (Math.random() - 0.5) * 0.1)),
-        power: Math.max(0, Math.min(10, prev.power + (Math.random() - 0.5) * 0.2)),
-        windSpeed: Math.max(0, Math.min(40, prev.windSpeed + (Math.random() - 0.5) * 2)),
-      }));
-    }, 2000);
-
-    return () => clearInterval(interval);
-  }, []);
+  // Note: Real DP telemetry should come from NMEA/DP system WebSocket
+  // Static values until real telemetry integration (ETA Q3/2026)
 
   return (
     <div className="space-y-6">

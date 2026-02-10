@@ -129,7 +129,7 @@ export function VoiceCommandsAdvanced() {
       ];
       
       setTimeout(() => {
-        const randomPhrase = phrases[Math.floor(Math.random() * phrases.length)];
+        const randomPhrase = phrases[0];
         let currentText = '';
         const words = randomPhrase.split(' ');
         

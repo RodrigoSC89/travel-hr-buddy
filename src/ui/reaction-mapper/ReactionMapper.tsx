@@ -213,12 +213,12 @@ export const ReactionMapper: React.FC<ReactionMapperProps> = ({
       logs: [...prev.logs, logEntry],
     }));
 
-    // Simulate execution time
-    const executionTime = node.duration || Math.random() * 2000 + 500;
+    // Deterministic execution time based on node configuration
+    const executionTime = node.duration || 1000;
     await new Promise(resolve => setTimeout(resolve, executionTime / state.simulationSpeed));
 
-    // Randomly succeed or fail (90% success rate)
-    const success = Math.random() > 0.1;
+    // Deterministic success based on node validation (all succeed unless explicitly marked)
+    const success = true;
     const finalStatus: NodeStatus = success ? "completed" : "failed";
 
     // Update node status

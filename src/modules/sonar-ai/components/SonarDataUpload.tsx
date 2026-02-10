@@ -65,31 +65,21 @@ export function SonarDataUpload() {
         input_id: "", // Will be set by service
         analysis_type: "frequency_analysis",
         ai_model: "sonar-detect-v1",
-        confidence_score: 85 + Math.random() * 15,
+        confidence_score: 90,
         patterns_detected: {
-          count: Math.floor(Math.random() * 10),
+          count: 3,
           types: ["echo", "noise", "object"],
         },
         frequency_data: {
           range: "20-200 kHz",
-          peak: Math.floor(50 + Math.random() * 100),
+          peak: 85,
         },
-        anomalies: Math.random() > 0.7 ? { detected: true, count: Math.floor(Math.random() * 5) } : null,
+        anomalies: null,
         recommendations: "Continue monitoring frequency patterns",
       };
 
-      // Fallback alerts
-      const fallbackAlerts = [];
-      if (fallbackAnalysis.anomalies) {
-        fallbackAlerts.push({
-          analysis_id: "", // Will be set by service
-          alert_type: "anomaly_detected",
-          severity: "medium" as const,
-          title: "Frequency Anomaly Detected",
-          description: `Detected ${fallbackAnalysis.anomalies.count} unusual patterns in sonar data`,
-          frequency_range: fallbackAnalysis.frequency_data.range,
-        });
-      }
+      // Fallback alerts (none when no anomalies detected)
+      const fallbackAlerts: Array<{ analysis_id: string; alert_type: string; severity: "medium"; title: string; description: string; frequency_range: string }> = [];
 
       // Save to database
       const result = await SonarAIService.saveScanComplete(

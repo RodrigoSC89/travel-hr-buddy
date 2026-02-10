@@ -31,7 +31,7 @@ function generateTerrainGrid(rows: number, cols: number, seed: number = 42): num
         Math.sin(nx * 6.28 + seed) * Math.cos(ny * 6.28 + seed * 0.7) * 120 +
         Math.sin(nx * 12.56 + seed * 1.3) * Math.cos(ny * 9.42) * 60 +
         Math.sin(nx * 25.12 + seed * 2.1) * Math.cos(ny * 18.84 + seed) * 30 +
-        (Math.random() - 0.5) * 15;
+        Math.sin(nx * 31.4 + seed * 3.7) * 7.5;
       // Depth range: -50m to -450m
       row.push(Math.round(Math.min(-50, Math.max(-450, -250 + val))));
     }

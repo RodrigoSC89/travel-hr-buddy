@@ -157,7 +157,7 @@ export const useSatcomMonitor = ({
         ? { 
           ...c, 
           status: "connected" as const, 
-          signalStrength: Math.floor(Math.random() * 20) + 80, // 80-100%
+          signalStrength: 90,
           lastSeen: new Date().toISOString(),
         }
         : c

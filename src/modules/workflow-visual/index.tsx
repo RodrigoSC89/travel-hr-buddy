@@ -297,7 +297,7 @@ const WorkflowVisual = () => {
     const newNode: Node = {
       id: Date.now().toString(),
       type: "workflow",
-      position: { x: Math.random() * 400 + 100, y: Math.random() * 300 + 100 },
+      position: { x: 200 + nodes.length * 50, y: 200 + nodes.length * 30 },
       data: { ...newNodeData }
     };
     setNodes(prev => [...prev, newNode]);
