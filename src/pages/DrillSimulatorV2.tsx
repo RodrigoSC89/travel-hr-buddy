@@ -112,8 +112,8 @@ export default function DrillSimulatorV2() {
             searchable
             onRefresh={() => toast.success("Dados atualizados")}
             actions={[
-              { label: "Avaliar com IA", icon: Brain, onClick: (item) => toast.success(`Avaliando drill`) },
-              { label: "Ver Relatório", icon: Target, onClick: (item) => toast.info(`Score: ${item.score}%`) },
+              { label: "Avaliar com IA", icon: Brain, onClick: (item) => toast.success(`Avaliando drill "${item.drill_type}"`, { description: `Participantes: ${item.participants} | Score: ${item.score}%` }) },
+              { label: "Ver Relatório", icon: Target, onClick: (item) => toast.info(`Relatório: ${item.drill_type}`, { description: `Score: ${item.score}% | Duração: ${item.duration_minutes} min | Data: ${new Date(item.date).toLocaleDateString('pt-BR')}`, duration: 6000 }) },
             ]}
           />
         </TabsContent>

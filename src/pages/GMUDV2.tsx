@@ -141,7 +141,7 @@ export default function GMUDV2() {
             onRefresh={() => toast.success("Dados atualizados")}
             loading={loading}
             actions={[
-              { label: "Ver Workflow", icon: Users, onClick: (item) => toast.info(`Workflow: ${item.id}`) },
+              { label: "Ver Workflow", icon: Users, onClick: (item) => handleOpenApproval(item) },
               { label: "Aprovar", icon: CheckCircle, onClick: (item) => handleOpenApproval(item) },
             ]}
           />
