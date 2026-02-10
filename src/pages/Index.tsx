@@ -280,7 +280,7 @@ const Index = () => {
         <LiveMetricsBar />
       </Suspense>
       
-      <div className="space-y-6 p-6 bg-gradient-to-br from-background via-background to-primary/5 min-h-screen">
+      <div className="space-y-6 p-6 bg-gradient-to-br from-background via-background to-primary/5 min-h-screen" data-testid="dashboard-page">
       <div className="flex items-center justify-between">
         <ProfessionalHeader
           title="Dashboard Executivo"

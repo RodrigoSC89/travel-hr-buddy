@@ -5,8 +5,7 @@
 
 import { supabase } from '@/integrations/supabase/client';
 import JSZip from 'jszip';
-import jsPDF from 'jspdf';
-import autoTable from 'jspdf-autotable';
+import { getJsPDF, getAutoTable } from '@/lib/pdf/lazy-pdf';
 import { logger } from '@/lib/logger';
 
 export interface PSCInspection {
@@ -280,7 +279,8 @@ export async function generatePDFPackage(
   deficiencies: PSCDeficiency[],
   vesselName: string
 ): Promise<Blob> {
-  const doc = new jsPDF();
+  const [JsPDF, autoTable] = await Promise.all([getJsPDF(), getAutoTable()]);
+  const doc = new JsPDF();
   const pageWidth = doc.internal.pageSize.getWidth();
 
   // Title

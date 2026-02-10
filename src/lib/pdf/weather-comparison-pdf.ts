@@ -4,8 +4,7 @@
  * PATCH WINDY-2.1
  */
 
-import jsPDF from 'jspdf';
-import autoTable from 'jspdf-autotable';
+import { getJsPDF, getAutoTable } from '@/lib/pdf/lazy-pdf';
 import type { WeatherLocation, CurrentWeather, DailyForecast } from '@/components/weather/windy/types';
 import { logger } from '@/lib/logger';
 
@@ -47,7 +46,8 @@ export async function generateWeatherComparisonPDF(
     language = 'pt'
   } = options;
 
-  const doc = new jsPDF({
+  const [JsPDF, autoTable] = await Promise.all([getJsPDF(), getAutoTable()]);
+  const doc = new JsPDF({
     orientation: 'landscape',
     unit: 'mm',
     format: 'a4'

@@ -5,7 +5,7 @@ import { FileText, Upload, Search, Shield } from "lucide-react";
 
 const DocumentsPage = () => {
   return (
-    <ModulePageWrapper gradient="purple">
+    <ModulePageWrapper gradient="purple" data-testid="documents-page">
       <ModuleHeader
         icon={FileText}
         title="Centro de Documentos"

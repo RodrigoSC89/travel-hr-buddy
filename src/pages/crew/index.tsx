@@ -137,7 +137,7 @@ export const ConsolidatedCrewManagement = () => {
   };
 
   return (
-    <div className="container mx-auto p-6 space-y-6">
+    <div className="container mx-auto p-6 space-y-6" data-testid="crew-management-page">
       {/* Header */}
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-3">
@@ -221,6 +221,7 @@ export const ConsolidatedCrewManagement = () => {
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
               className="max-w-sm"
+              data-testid="crew-search-input"
             />
           </div>
 

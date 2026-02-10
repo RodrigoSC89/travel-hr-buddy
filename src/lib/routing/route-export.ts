@@ -3,8 +3,7 @@
  * Exports calculated routes to PDF and GPX formats for navigation systems
  */
 
-import jsPDF from "jspdf";
-import autoTable from "jspdf-autotable";
+import { getJsPDF, getAutoTable } from "@/lib/pdf/lazy-pdf";
 import { AlternativeRoute, HazardZone, Waypoint, WeatherRoutingResult } from "./weather-routing";
 
 // ===============================
@@ -115,7 +114,8 @@ export async function generateRoutePDF(
   selectedRoute: AlternativeRoute,
   options: PDFOptions = {}
 ): Promise<Blob> {
-  const doc = new jsPDF();
+  const [JsPDF, autoTable] = await Promise.all([getJsPDF(), getAutoTable()]);
+  const doc = new JsPDF();
   const {
     vesselName = "MV Nautilus Explorer",
     voyageNumber = `V-${Date.now().toString(36).toUpperCase()}`,
@@ -350,7 +350,8 @@ export async function downloadRoutesComparisonPDF(
   result: WeatherRoutingResult,
   vesselName?: string
 ): Promise<void> {
-  const doc = new jsPDF();
+  const [JsPDF2, autoTable2] = await Promise.all([getJsPDF(), getAutoTable()]);
+  const doc = new JsPDF2();
 
   // Header
   doc.setFontSize(20);
@@ -374,7 +375,7 @@ export async function downloadRoutesComparisonPDF(
     route.weatherRisks.length.toString(),
   ]);
 
-  autoTable(doc, {
+  autoTable2(doc, {
     startY: 45,
     head: [["Rota", "Distância", "Duração", "Combustível", "Risco", "Alertas"]],
     body: routeRows,
@@ -395,7 +396,7 @@ export async function downloadRoutesComparisonPDF(
       z.severity.toUpperCase(),
     ]);
 
-    autoTable(doc, {
+    autoTable2(doc, {
       startY: (doc as unknown as { lastAutoTable: { finalY: number } }).lastAutoTable.finalY + 20,
       head: [["Zona", "Tipo", "Severidade"]],
       body: hazardRows,

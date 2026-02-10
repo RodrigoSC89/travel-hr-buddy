@@ -1,5 +1,5 @@
 import { format } from "date-fns";
-import jsPDF from "jspdf";
+import { createPDF } from "@/lib/pdf/lazy-pdf";
 
 interface RestoreLog {
   id: string;
@@ -36,8 +36,8 @@ export function exportRestoreLogsToCSV(logs: RestoreLog[]): void {
   URL.revokeObjectURL(url);
 }
 
-export function exportRestoreLogsToPDF(logs: RestoreLog[]): void {
-  const doc = new jsPDF();
+export async function exportRestoreLogsToPDF(logs: RestoreLog[]): Promise<void> {
+  const doc = await createPDF();
   const margin = 20;
   let y = margin;
 
