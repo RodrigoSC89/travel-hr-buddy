@@ -7,6 +7,7 @@ import React, { useState, useMemo } from "react";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Progress } from "@/components/ui/progress";
 import { Input } from "@/components/ui/input";
 import { ScrollArea } from "@/components/ui/scroll-area";
@@ -79,7 +80,7 @@ function RotationTypeBadge({ type }: { type: Rotation["type"] }) {
   );
 }
 
-function CrewCard({ crew }: { crew: CrewMember }) {
+function CrewCard({ crew, onViewProfile, onPlanRotation }: { crew: CrewMember; onViewProfile: (crew: CrewMember) => void; onPlanRotation: (crew: CrewMember) => void }) {
   const daysPercent = (crew.daysOnboard / crew.maxDays) * 100;
   const isOverdue = crew.daysOnboard > crew.maxDays * 0.9;
 
@@ -143,11 +144,11 @@ function CrewCard({ crew }: { crew: CrewMember }) {
         </div>
       </div>
       <div className="flex gap-2 mt-3">
-        <Button size="sm" variant="outline" className="flex-1 gap-1">
+        <Button size="sm" variant="outline" className="flex-1 gap-1" onClick={() => onViewProfile(crew)}>
           <FileText className="h-3 w-3" />
           Perfil
         </Button>
-        <Button size="sm" variant="outline" className="gap-1">
+        <Button size="sm" variant="outline" className="gap-1" onClick={() => onPlanRotation(crew)}>
           <ArrowRightLeft className="h-3 w-3" />
           Rotação
         </Button>
@@ -156,7 +157,7 @@ function CrewCard({ crew }: { crew: CrewMember }) {
   );
 }
 
-function RotationCard({ rotation }: { rotation: Rotation }) {
+function RotationCard({ rotation, onViewDetails, onConfirm }: { rotation: Rotation; onViewDetails: (rotation: Rotation) => void; onConfirm: (rotation: Rotation) => void }) {
   return (
     <motion.div
       initial={{ opacity: 0, x: -10 }}
@@ -203,11 +204,11 @@ function RotationCard({ rotation }: { rotation: Rotation }) {
         </div>
       </div>
       <div className="flex gap-2 mt-3">
-        <Button size="sm" variant="outline" className="flex-1 gap-1">
+        <Button size="sm" variant="outline" className="flex-1 gap-1" onClick={() => onViewDetails(rotation)}>
           Detalhes
         </Button>
         {rotation.status === "scheduled" && (
-          <Button size="sm" className="gap-1">
+          <Button size="sm" className="gap-1" onClick={() => onConfirm(rotation)}>
             <CheckCircle2 className="h-3 w-3" />
             Confirmar
           </Button>
@@ -221,6 +222,10 @@ export default function CrewScheduler() {
   const [activeTab, setActiveTab] = useState("crew");
   const [searchTerm, setSearchTerm] = useState("");
   const { data: realData, isLoading } = useCrewRealData();
+  const [selectedCrew, setSelectedCrew] = useState<CrewMember | null>(null);
+  const [showDetailDialog, setShowDetailDialog] = useState(false);
+  const [selectedRotation, setSelectedRotation] = useState<Rotation | null>(null);
+  const [showRotationDialog, setShowRotationDialog] = useState(false);
 
   // Map real data to component format
   const crewMembers: CrewMember[] = useMemo(() => {
@@ -262,6 +267,39 @@ export default function CrewScheduler() {
     onLeave: crewMembers.filter(c => c.status === "on-leave").length,
     upcomingRotations: upcomingRotations.length,
     overdueCrews: crewMembers.filter(c => c.daysOnboard > c.maxDays * 0.9).length,
+  };
+
+  const handleViewProfile = (crew: CrewMember) => {
+    setSelectedCrew(crew);
+    setShowDetailDialog(true);
+  };
+
+  const handlePlanRotation = (crew: CrewMember) => {
+    setSelectedRotation({
+      id: crew.id,
+      type: "disembark",
+      crewMember: crew.name,
+      rank: crew.rank,
+      vessel: crew.vessel,
+      port: "A definir",
+      date: crew.plannedDisembark || "A definir",
+      status: "scheduled",
+    });
+    setShowRotationDialog(true);
+  };
+
+  const handleConfirmRotation = (rotation: Rotation) => {
+    toast.success(`Rotação de ${rotation.crewMember} confirmada para ${rotation.date}`);
+  };
+
+  const handleViewRotationDetails = (rotation: Rotation) => {
+    setSelectedRotation(rotation);
+    setShowRotationDialog(true);
+  };
+
+  const handleNewRotation = () => {
+    setSelectedRotation(null);
+    setShowRotationDialog(true);
   };
 
   if (isLoading) {
@@ -366,7 +404,7 @@ export default function CrewScheduler() {
                 Sugestão: agendar rotação em Santos (02/15) para otimizar custos de logística.
               </p>
             </div>
-            <Button variant="outline" className="gap-2">
+            <Button variant="outline" className="gap-2" onClick={handleNewRotation}>
               <UserPlus className="h-4 w-4" />
               Planejar Rotação
             </Button>
@@ -392,7 +430,7 @@ export default function CrewScheduler() {
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
               />
-              <Button className="gap-2">
+              <Button className="gap-2" onClick={handleNewRotation}>
                 <Plus className="h-4 w-4" />
                 Nova Rotação
               </Button>
@@ -414,7 +452,7 @@ export default function CrewScheduler() {
               <ScrollArea className="h-[500px]">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                   {crewMembers.map((crew) => (
-                    <CrewCard key={crew.id} crew={crew} />
+                    <CrewCard key={crew.id} crew={crew} onViewProfile={handleViewProfile} onPlanRotation={handlePlanRotation} />
                   ))}
                 </div>
               </ScrollArea>
@@ -424,7 +462,7 @@ export default function CrewScheduler() {
               <ScrollArea className="h-[500px]">
                 <div className="space-y-3">
                   {upcomingRotations.map((rotation) => (
-                    <RotationCard key={rotation.id} rotation={rotation} />
+                    <RotationCard key={rotation.id} rotation={rotation} onViewDetails={handleViewRotationDetails} onConfirm={handleConfirmRotation} />
                   ))}
                 </div>
               </ScrollArea>
@@ -435,22 +473,110 @@ export default function CrewScheduler() {
                 <Calendar className="h-12 w-12 mx-auto mb-3 opacity-50" />
                 <p className="font-medium">Calendário de Rotações</p>
                 <p className="text-sm">Use a aba "Rotações" para gerenciar escalas atuais.</p>
-                <Button variant="outline" size="sm" className="mt-3" onClick={() => window.location.assign('/operational-calendar')}>
+                <Button variant="outline" size="sm" className="mt-3" onClick={() => setActiveTab("rotations")}>
                   Abrir Calendário Operacional
                 </Button>
               </div>
             </TabsContent>
 
             <TabsContent value="compliance">
-              <div className="text-center py-12 text-muted-foreground">
-                <CheckCircle2 className="h-12 w-12 mx-auto mb-3 opacity-50" />
-                <p className="font-medium">Dashboard de Conformidade MLC</p>
-                <p className="text-sm">Monitoramento de horas de trabalho e descanso</p>
+              <div className="space-y-4">
+                {crewMembers.filter(c => c.daysOnboard > c.maxDays * 0.75).length > 0 ? (
+                  crewMembers.filter(c => c.daysOnboard > c.maxDays * 0.75).map(c => (
+                    <div key={c.id} className="p-4 rounded-lg border flex items-center justify-between">
+                      <div>
+                        <p className="font-medium">{c.name}</p>
+                        <p className="text-sm text-muted-foreground">{c.rank} • {c.vessel}</p>
+                        <p className="text-xs text-destructive mt-1">{c.daysOnboard}/{c.maxDays} dias a bordo</p>
+                      </div>
+                      <Button size="sm" variant="outline" onClick={() => handlePlanRotation(c)}>
+                        Planejar Rotação
+                      </Button>
+                    </div>
+                  ))
+                ) : (
+                  <div className="text-center py-12 text-muted-foreground">
+                    <CheckCircle2 className="h-12 w-12 mx-auto mb-3 opacity-50" />
+                    <p className="font-medium">Conformidade MLC OK</p>
+                    <p className="text-sm">Todos os tripulantes dentro dos limites de dias a bordo.</p>
+                  </div>
+                )}
               </div>
             </TabsContent>
           </Tabs>
         </CardContent>
       </Card>
+
+      {/* Profile Dialog */}
+      {selectedCrew && showDetailDialog && (
+        <Dialog open={showDetailDialog} onOpenChange={setShowDetailDialog}>
+          <DialogContent className="sm:max-w-[500px]">
+            <DialogHeader>
+              <DialogTitle className="flex items-center gap-2">
+                <FileText className="h-5 w-5" />
+                Perfil - {selectedCrew.name}
+              </DialogTitle>
+            </DialogHeader>
+            <div className="space-y-4">
+              <div className="grid grid-cols-2 gap-4">
+                <div><p className="text-xs text-muted-foreground">Posto</p><p className="font-medium">{selectedCrew.rank}</p></div>
+                <div><p className="text-xs text-muted-foreground">Departamento</p><p className="font-medium">{selectedCrew.department}</p></div>
+                <div><p className="text-xs text-muted-foreground">Embarcação</p><p className="font-medium">{selectedCrew.vessel}</p></div>
+                <div><p className="text-xs text-muted-foreground">Status</p><StatusBadge status={selectedCrew.status} /></div>
+                <div><p className="text-xs text-muted-foreground">Dias a Bordo</p><p className="font-medium">{selectedCrew.daysOnboard} / {selectedCrew.maxDays}</p></div>
+                <div><p className="text-xs text-muted-foreground">Desembarque</p><p className="font-medium">{selectedCrew.plannedDisembark || "N/A"}</p></div>
+                <div><p className="text-xs text-muted-foreground">Certificações</p><p className="font-medium">{selectedCrew.certifications}</p></div>
+                <div><p className="text-xs text-muted-foreground">Vencendo</p><p className={`font-medium ${selectedCrew.expiringCerts > 0 ? 'text-warning' : ''}`}>{selectedCrew.expiringCerts}</p></div>
+              </div>
+            </div>
+          </DialogContent>
+        </Dialog>
+      )}
+
+      {/* Rotation Dialog */}
+      {showRotationDialog && (
+        <Dialog open={showRotationDialog} onOpenChange={setShowRotationDialog}>
+          <DialogContent className="sm:max-w-[500px]">
+            <DialogHeader>
+              <DialogTitle className="flex items-center gap-2">
+                <ArrowRightLeft className="h-5 w-5" />
+                {selectedRotation ? `Rotação - ${selectedRotation.crewMember}` : "Nova Rotação"}
+              </DialogTitle>
+            </DialogHeader>
+            {selectedRotation ? (
+              <div className="space-y-4">
+                <div className="grid grid-cols-2 gap-4">
+                  <div><p className="text-xs text-muted-foreground">Tripulante</p><p className="font-medium">{selectedRotation.crewMember}</p></div>
+                  <div><p className="text-xs text-muted-foreground">Posto</p><p className="font-medium">{selectedRotation.rank}</p></div>
+                  <div><p className="text-xs text-muted-foreground">Embarcação</p><p className="font-medium">{selectedRotation.vessel}</p></div>
+                  <div><p className="text-xs text-muted-foreground">Porto</p><p className="font-medium">{selectedRotation.port}</p></div>
+                  <div><p className="text-xs text-muted-foreground">Data</p><p className="font-medium">{selectedRotation.date}</p></div>
+                  <div><p className="text-xs text-muted-foreground">Status</p><Badge variant="outline">{selectedRotation.status}</Badge></div>
+                </div>
+                {selectedRotation.status === "scheduled" && (
+                  <Button className="w-full" onClick={() => {
+                    handleConfirmRotation(selectedRotation);
+                    setShowRotationDialog(false);
+                  }}>
+                    <CheckCircle2 className="h-4 w-4 mr-2" />
+                    Confirmar Rotação
+                  </Button>
+                )}
+              </div>
+            ) : (
+              <div className="space-y-4">
+                <p className="text-sm text-muted-foreground">Selecione um tripulante na aba "Tripulação" e clique em "Rotação" para planejar.</p>
+                <Button variant="outline" className="w-full" onClick={() => {
+                  setShowRotationDialog(false);
+                  setActiveTab("crew");
+                }}>
+                  Ir para Tripulação
+                </Button>
+              </div>
+            )}
+          </DialogContent>
+        </Dialog>
+      )}
     </div>
   );
 }

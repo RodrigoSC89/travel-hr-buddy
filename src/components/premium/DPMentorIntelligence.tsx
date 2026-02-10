@@ -517,13 +517,17 @@
                          <Badge variant="outline">{drill.frequency}</Badge>
                        </div>
                        <p className="text-sm text-muted-foreground">{drill.description}</p>
-                       <div className="flex items-center justify-between text-xs">
-                         <span>Último: {drill.lastPerformed}</span>
-                         <Button size="sm" variant="outline">
-                           <PlayCircle className="h-3 w-3 mr-1" />
-                           Iniciar
-                         </Button>
-                       </div>
+                        <div className="flex items-center justify-between text-xs">
+                          <span>Último: {drill.lastPerformed}</span>
+                          <Button size="sm" variant="outline" onClick={() => {
+                            toast.success(`Drill "${drill.type}" iniciado`, {
+                              description: `${drill.description} — Frequência: ${drill.frequency}`,
+                            });
+                          }}>
+                            <PlayCircle className="h-3 w-3 mr-1" />
+                            Iniciar
+                          </Button>
+                        </div>
                      </CardContent>
                    </Card>
                  ))}
