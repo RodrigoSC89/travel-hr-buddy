@@ -8,11 +8,16 @@ import React, { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { 
   Users, Calendar, AlertTriangle, Clock, Ship, 
   ChevronLeft, ChevronRight, Plus, Filter, Download
 } from "lucide-react";
 import { format, addMonths, startOfMonth, endOfMonth, eachDayOfInterval, isSameMonth, isToday, addDays } from "date-fns";
+import { toast } from "sonner";
 import { ptBR } from "date-fns/locale";
 
 // Sample crew data
@@ -91,6 +96,9 @@ const crewSchedule = [
 export default function CrewSchedulerGantt() {
   const [currentDate, setCurrentDate] = useState(new Date());
   const [viewMonths] = useState(3);
+  const [showNewRotation, setShowNewRotation] = useState(false);
+  const [showFilter, setShowFilter] = useState(false);
+  const [filterVessel, setFilterVessel] = useState("all");
   
   const startMonth = startOfMonth(currentDate);
   const endMonth = endOfMonth(addMonths(currentDate, viewMonths - 1));
@@ -99,6 +107,27 @@ export default function CrewSchedulerGantt() {
   const goToPrevMonth = () => setCurrentDate(addMonths(currentDate, -1));
   const goToNextMonth = () => setCurrentDate(addMonths(currentDate, 1));
   const goToToday = () => setCurrentDate(new Date());
+
+  const handleExportGantt = () => {
+    const csvRows = ["Tripulante,Posto,Embarcação,Status MLC,Dias a Bordo,Máx Dias"];
+    crewSchedule.forEach(c => {
+      csvRows.push(`"${c.name}","${c.rank}","${c.vessel}","${c.mlcStatus}",${c.daysOnboard},${c.maxDays}`);
+    });
+    const blob = new Blob([csvRows.join("\n")], { type: "text/csv;charset=utf-8;" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `crew-schedule-${format(currentDate, "yyyy-MM")}.csv`;
+    a.click();
+    URL.revokeObjectURL(url);
+    toast.success("Cronograma exportado com sucesso");
+  };
+
+  const filteredCrew = filterVessel === "all" 
+    ? crewSchedule 
+    : crewSchedule.filter(c => c.vessel === filterVessel);
+
+  const vessels = [...new Set(crewSchedule.map(c => c.vessel))];
 
   const getRotationStyle = (rotation: { start: string; end: string; type: string }) => {
     const startDate = new Date(rotation.start);
@@ -147,16 +176,39 @@ export default function CrewSchedulerGantt() {
           <Button variant="outline" size="sm" onClick={goToNextMonth}>
             <ChevronRight className="h-4 w-4" />
           </Button>
-          <Button variant="outline" size="sm">
+          <Button variant="outline" size="sm" onClick={handleExportGantt}>
+            <Download className="h-4 w-4 mr-1" />
+            Exportar
+          </Button>
+          <Button variant="outline" size="sm" onClick={() => setShowFilter(!showFilter)}>
             <Filter className="h-4 w-4 mr-1" />
             Filtrar
           </Button>
-          <Button size="sm">
+          <Button size="sm" onClick={() => setShowNewRotation(true)}>
             <Plus className="h-4 w-4 mr-1" />
             Nova Rotação
           </Button>
         </div>
       </div>
+
+      {/* Filter Bar */}
+      {showFilter && (
+        <div className="flex items-center gap-3 p-3 bg-muted/50 rounded-lg">
+          <Label className="text-sm">Embarcação:</Label>
+          <Select value={filterVessel} onValueChange={setFilterVessel}>
+            <SelectTrigger className="w-[200px]">
+              <SelectValue placeholder="Todas" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="all">Todas</SelectItem>
+              {vessels.map(v => (
+                <SelectItem key={v} value={v}>{v}</SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+          <Button variant="ghost" size="sm" onClick={() => { setFilterVessel("all"); setShowFilter(false); }}>Limpar</Button>
+        </div>
+      )}
 
       {/* MLC Compliance Summary */}
       <div className="grid grid-cols-4 gap-4">
@@ -247,7 +299,7 @@ export default function CrewSchedulerGantt() {
           </div>
 
           {/* Crew Rows */}
-          {crewSchedule.map((crew) => (
+          {filteredCrew.map((crew) => (
             <div key={crew.id} className="flex border-b hover:bg-accent/30 transition-colors">
               {/* Crew Info */}
               <div className="w-64 min-w-64 border-r p-3">
@@ -344,7 +396,9 @@ export default function CrewSchedulerGantt() {
                     <Badge variant={crew.mlcStatus === 'warning' ? 'secondary' : 'destructive'}>
                       {crew.mlcStatus === 'warning' ? 'Atenção' : 'Excedido'}
                     </Badge>
-                    <Button size="sm" variant="outline">
+                    <Button size="sm" variant="outline" onClick={() => {
+                      toast.success(`Troca agendada para ${crew.name}`, { description: `Rotação de ${crew.vessel} será planejada. Dias a bordo: ${crew.daysOnboard}/${crew.maxDays}` });
+                    }}>
                       Agendar Troca
                     </Button>
                   </div>
@@ -354,6 +408,55 @@ export default function CrewSchedulerGantt() {
           </CardContent>
         </Card>
       )}
+
+      {/* New Rotation Dialog */}
+      <Dialog open={showNewRotation} onOpenChange={setShowNewRotation}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Nova Rotação</DialogTitle>
+            <DialogDescription>Planeje uma nova rotação de tripulação</DialogDescription>
+          </DialogHeader>
+          <div className="space-y-4 py-4">
+            <div>
+              <Label>Tripulante</Label>
+              <Select>
+                <SelectTrigger><SelectValue placeholder="Selecione..." /></SelectTrigger>
+                <SelectContent>
+                  {crewSchedule.map(c => (
+                    <SelectItem key={c.id} value={c.id}>{c.name} - {c.rank}</SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+            <div className="grid grid-cols-2 gap-4">
+              <div>
+                <Label>Data Início</Label>
+                <Input type="date" />
+              </div>
+              <div>
+                <Label>Data Fim</Label>
+                <Input type="date" />
+              </div>
+            </div>
+            <div>
+              <Label>Tipo</Label>
+              <Select>
+                <SelectTrigger><SelectValue placeholder="Selecione..." /></SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="onboard">Embarque</SelectItem>
+                  <SelectItem value="leave">Licença</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+          </div>
+          <div className="flex justify-end gap-2">
+            <Button variant="outline" onClick={() => setShowNewRotation(false)}>Cancelar</Button>
+            <Button onClick={() => { setShowNewRotation(false); toast.success("Rotação criada com sucesso"); }}>
+              Criar Rotação
+            </Button>
+          </div>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }
