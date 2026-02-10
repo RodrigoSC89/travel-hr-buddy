@@ -247,7 +247,7 @@ export function TravelApprovalWorkflow() {
                   <ClipboardCheck className="h-5 w-5 text-primary" />
                   Solicitações de Viagem
                 </CardTitle>
-                <Button size="sm" className="gap-2">
+                <Button size="sm" className="gap-2" onClick={() => toast.info("Nova Solicitação", { description: "Preencha os dados da viagem na aba 'Passagens' e envie para aprovação." })}>
                   <Send className="h-4 w-4" />
                   Nova Solicitação
                 </Button>

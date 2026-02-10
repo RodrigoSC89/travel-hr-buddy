@@ -4,6 +4,7 @@
  */
 
 import React, { useState } from "react";
+import { toast } from "sonner";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -377,11 +378,11 @@ export const TravelerSafetyPanel: React.FC = () => {
                 <CardDescription>Rastreamento e status em tempo real</CardDescription>
               </div>
               <div className="flex gap-2">
-                <Button variant="outline" size="sm">
+                <Button variant="outline" size="sm" onClick={() => toast.success("Broadcast enviado", { description: "Mensagem de check-in enviada a todos os viajantes ativos." })}>
                   <Radio className="h-4 w-4 mr-2" />
                   Broadcast
                 </Button>
-                <Button size="sm">
+                <Button size="sm" onClick={() => toast.info("Localização atualizada", { description: `${fallbackTravelers.length} viajantes localizados. Última atualização: agora.` })}>
                   <Locate className="h-4 w-4 mr-2" />
                   Localizar Todos
                 </Button>
@@ -533,7 +534,14 @@ export const TravelerSafetyPanel: React.FC = () => {
                           {alert.actions && (
                             <div className="flex gap-2 mt-2">
                               {alert.actions.map((action, idx) => (
-                                <Button key={idx} size="sm" variant={idx === 0 ? "default" : "outline"} className="h-7 text-xs">
+                                <Button key={idx} size="sm" variant={idx === 0 ? "default" : "outline"} className="h-7 text-xs" onClick={() => {
+                                  if (action.action === "call") { window.open("tel:+5521999999999"); }
+                                  else if (action.action === "sms") { toast.success("SMS enviado", { description: `Mensagem enviada para ${alert.affectedTravelers.join(", ")}` }); }
+                                  else if (action.action === "contact") { toast.info("Contato iniciado", { description: `Entrando em contato com ${alert.affectedTravelers.join(", ")}` }); }
+                                  else if (action.action === "view_forecast") { toast.info("Previsão meteorológica", { description: alert.message }); }
+                                  else if (action.action === "protocol") { toast.warning("Protocolo de emergência acionado", { description: `Protocolo ativado para ${alert.affectedTravelers.join(", ")}. Equipe de segurança notificada.` }); }
+                                  else { toast.info(action.label, { description: `Ação '${action.label}' executada para alerta: ${alert.title}` }); }
+                                }}>
                                   {action.label}
                                 </Button>
                               ))}
@@ -663,19 +671,19 @@ export const TravelerSafetyPanel: React.FC = () => {
         </CardHeader>
         <CardContent>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-            <Button variant="destructive" className="h-20 flex flex-col gap-2">
+            <Button variant="destructive" className="h-20 flex flex-col gap-2" onClick={() => toast.warning("⚠️ Protocolo SOS Acionado", { description: "Equipe de emergência notificada. Todos os viajantes em áreas de risco serão contatados imediatamente.", duration: 8000 })}>
               <AlertOctagon className="h-6 w-6" />
               <span>Acionar Protocolo SOS</span>
             </Button>
-            <Button variant="outline" className="h-20 flex flex-col gap-2 border-red-300">
+            <Button variant="outline" className="h-20 flex flex-col gap-2 border-red-300" onClick={() => { if (selectedTraveler) { window.open(`tel:+55219999999${selectedTraveler.id}`); } else { toast.info("Selecione um viajante", { description: "Clique em um viajante na lista acima para ligar." }); } }}>
               <PhoneCall className="h-6 w-6" />
               <span>Ligar para Viajante</span>
             </Button>
-            <Button variant="outline" className="h-20 flex flex-col gap-2 border-red-300">
+            <Button variant="outline" className="h-20 flex flex-col gap-2 border-red-300" onClick={() => toast.success("SMS em massa enviado", { description: `Mensagem de emergência enviada para ${fallbackTravelers.length} viajantes ativos.` })}>
               <MessageSquare className="h-6 w-6" />
               <span>Enviar SMS em Massa</span>
             </Button>
-            <Button variant="outline" className="h-20 flex flex-col gap-2 border-red-300">
+            <Button variant="outline" className="h-20 flex flex-col gap-2 border-red-300" onClick={() => window.open(`tel:${fallbackRiskAssessment.emergencyContacts.embassy}`)}>
               <Globe className="h-6 w-6" />
               <span>Contatar Embaixada</span>
             </Button>

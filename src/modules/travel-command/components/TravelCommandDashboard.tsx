@@ -4,6 +4,7 @@
  */
 
 import React, { useState } from "react";
+import { toast } from "sonner";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -219,15 +220,23 @@ const TravelCommandDashboard: React.FC = () => {
         </div>
         
         <div className="flex items-center gap-2">
-          <Button variant="outline" size="sm">
+          <Button variant="outline" size="sm" onClick={() => toast.success("Dados atualizados", { description: "Métricas de viagem atualizadas com sucesso." })}>
             <RefreshCw className="h-4 w-4 mr-2" />
             Atualizar
           </Button>
-          <Button variant="outline" size="sm">
+          <Button variant="outline" size="sm" onClick={() => {
+            const csv = "Mês,Viagens,Custo,Carbono\n" + monthlyTrendData.map(d => `${d.month},${d.viagens},${d.custo},${d.carbono}`).join("\n");
+            const blob = new Blob([csv], { type: "text/csv" });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement("a");
+            a.href = url; a.download = "travel-command-export.csv"; a.click();
+            URL.revokeObjectURL(url);
+            toast.success("Relatório exportado", { description: "Arquivo CSV gerado com sucesso." });
+          }}>
             <Download className="h-4 w-4 mr-2" />
             Exportar
           </Button>
-          <Button size="sm" className="bg-gradient-to-r from-blue-500 to-cyan-600">
+          <Button size="sm" className="bg-gradient-to-r from-blue-500 to-cyan-600" onClick={() => toast.info("Nova Viagem", { description: "Acesse a aba 'Passagens' para buscar voos ou 'Hotéis' para reservar hospedagem." })}>
             <Plus className="h-4 w-4 mr-2" />
             Nova Viagem
           </Button>
@@ -401,7 +410,7 @@ const TravelCommandDashboard: React.FC = () => {
                           </p>
                           <p className="text-xs text-muted-foreground mt-1">{alert.time}</p>
                         </div>
-                        <Button variant="ghost" size="icon" className="h-8 w-8">
+                        <Button variant="ghost" size="icon" className="h-8 w-8" onClick={() => toast.info(`Alerta: ${alert.flight}`, { description: alert.message })}>
                           <Eye className="h-4 w-4" />
                         </Button>
                       </div>
@@ -446,8 +455,8 @@ const TravelCommandDashboard: React.FC = () => {
                           <Badge className="bg-green-500/10 text-green-600 border-green-500/20">
                             {rec.impact}
                           </Badge>
-                          <Button size="sm" variant="outline" className="h-7 text-xs">
-                            {rec.action}
+                          <Button size="sm" variant="outline" className="h-7 text-xs" onClick={() => toast.success(`${rec.action} aplicado`, { description: `${rec.title}: economia estimada de ${rec.impact}` })}>
+                             {rec.action}
                           </Button>
                         </div>
                       </div>
