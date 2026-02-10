@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useMemo } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -8,24 +8,20 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
-import { logger } from "@/lib/logger";
+import { useCertifications, type Certification } from "@/hooks/useCertificationData";
 import {
   Award, 
   AlertTriangle, 
   Calendar, 
   Plus,
   Download,
-  Upload,
   Search,
-  Filter,
   Bell,
   CheckCircle,
   XCircle,
   Clock,
   FileText,
-  Users
 } from "lucide-react";
 
 interface MaritimeCertificate {
@@ -53,121 +49,51 @@ interface CertificationAlert {
   alert_type: "expiring_soon" | "expired" | "renewal_required";
 }
 
+function mapCertToLocal(cert: Certification): MaritimeCertificate {
+  return {
+    id: cert.id,
+    crew_member_name: cert.crewMember.name,
+    certification_type: cert.name,
+    certificate_number: cert.name,
+    issuing_authority: cert.issuingAuthority,
+    issue_date: cert.issueDate.toISOString().split("T")[0],
+    expiry_date: cert.expiryDate.toISOString().split("T")[0],
+    status: cert.status === "pending" ? "pending_renewal" : cert.status,
+    document_url: cert.documentUrl,
+    renewal_cost: cert.renewalCost,
+    issuing_country: "Brasil",
+  };
+}
+
+function buildAlerts(certs: MaritimeCertificate[]): CertificationAlert[] {
+  const now = new Date();
+  return certs
+    .filter(c => c.status === "expiring" || c.status === "expired")
+    .map(c => {
+      const days = Math.ceil((new Date(c.expiry_date).getTime() - now.getTime()) / (1000 * 60 * 60 * 24));
+      return {
+        id: c.id,
+        certificate_id: c.id,
+        crew_member_name: c.crew_member_name,
+        certification_type: c.certification_type,
+        expiry_date: c.expiry_date,
+        days_until_expiry: days,
+        alert_type: days < 0 ? "expired" as const : "expiring_soon" as const,
+      };
+    })
+    .sort((a, b) => a.days_until_expiry - b.days_until_expiry);
+}
+
 export const MaritimeCertificationManager = () => {
-  const [certificates, setCertificates] = useState<MaritimeCertificate[]>([]);
-  const [alerts, setAlerts] = useState<CertificationAlert[]>([]);
+  const { data: rawCerts, isLoading: loading } = useCertifications();
   const [activeTab, setActiveTab] = useState("overview");
   const [searchTerm, setSearchTerm] = useState("");
   const [statusFilter, setStatusFilter] = useState("all");
   const [isAddDialogOpen, setIsAddDialogOpen] = useState(false);
-  const [loading, setLoading] = useState(true);
   const { toast } = useToast();
 
-  useEffect(() => {
-    loadCertifications();
-    loadAlerts();
-  }, []);
-
-  const loadCertifications = async () => {
-    try {
-      setLoading(true);
-      
-      // Simulando dados de certificações marítimas
-      const mockCertificates: MaritimeCertificate[] = [
-        {
-          id: "1",
-          crew_member_name: "João Silva",
-          certification_type: "STCW Basic Safety Training",
-          certificate_number: "BST-2024-001",
-          issuing_authority: "Marinha do Brasil",
-          issue_date: "2023-01-15",
-          expiry_date: "2028-01-15",
-          status: "valid",
-          issuing_country: "Brasil",
-          renewal_cost: 1500,
-          notes: "Renovação automática disponível"
-        },
-        {
-          id: "2",
-          crew_member_name: "Maria Santos",
-          certification_type: "Chief Officer License",
-          certificate_number: "COL-2023-045",
-          issuing_authority: "IMO",
-          issue_date: "2023-06-01",
-          expiry_date: "2024-12-31",
-          status: "expiring",
-          issuing_country: "Brasil",
-          renewal_cost: 2500,
-          notes: "Renovação urgente necessária"
-        },
-        {
-          id: "3",
-          crew_member_name: "Carlos Oliveira",
-          certification_type: "Medical Certificate",
-          certificate_number: "MED-2023-123",
-          issuing_authority: "Autoridade Portuária",
-          issue_date: "2023-03-10",
-          expiry_date: "2024-03-10",
-          status: "expired",
-          issuing_country: "Brasil",
-          renewal_cost: 800,
-          notes: "Exame médico necessário"
-        },
-        {
-          id: "4",
-          crew_member_name: "Ana Costa",
-          certification_type: "Radio Operator License",
-          certificate_number: "ROL-2024-078",
-          issuing_authority: "ANATEL",
-          issue_date: "2024-01-20",
-          expiry_date: "2026-01-20",
-          status: "valid",
-          issuing_country: "Brasil",
-          renewal_cost: 600
-        }
-      ];
-
-      setCertificates(mockCertificates);
-    } catch (error) {
-      toast({
-        title: "Erro",
-        description: "Erro ao carregar certificações",
-        variant: "destructive"
-      });
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const loadAlerts = async () => {
-    try {
-      // Simulando alertas baseados nas certificações
-      const mockAlerts: CertificationAlert[] = [
-        {
-          id: "1",
-          certificate_id: "2",
-          crew_member_name: "Maria Santos",
-          certification_type: "Chief Officer License",
-          expiry_date: "2024-12-31",
-          days_until_expiry: 45,
-          alert_type: "expiring_soon"
-        },
-        {
-          id: "2",
-          certificate_id: "3",
-          crew_member_name: "Carlos Oliveira",
-          certification_type: "Medical Certificate",
-          expiry_date: "2024-03-10",
-          days_until_expiry: -50,
-          alert_type: "expired"
-        }
-      ];
-
-      setAlerts(mockAlerts);
-    } catch (error) {
-      logger.error("Failed to load certification alerts:", error);
-    }
-  };
+  const certificates = useMemo(() => (rawCerts || []).map(mapCertToLocal), [rawCerts]);
+  const alerts = useMemo(() => buildAlerts(certificates), [certificates]);
 
   const getStatusColor = (status: MaritimeCertificate["status"]) => {
     switch (status) {
