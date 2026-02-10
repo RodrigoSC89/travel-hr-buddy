@@ -82,16 +82,18 @@ export const PriceAlertsTable: React.FC<PriceAlertsTableProps> = ({
 
     // Apply sorting
     filtered.sort((a, b) => {
-      let aValue: any = a[sortField];
-      let bValue: any = b[sortField];
+      let aValue: string | number | boolean | null | undefined = a[sortField];
+      let bValue: string | number | boolean | null | undefined = b[sortField];
 
       if (sortField === "created_at" || sortField === "travel_date") {
-        aValue = aValue ? new Date(aValue).getTime() : 0;
-        bValue = bValue ? new Date(bValue).getTime() : 0;
+        aValue = aValue ? new Date(aValue as string).getTime() : 0;
+        bValue = bValue ? new Date(bValue as string).getTime() : 0;
       }
 
-      if (aValue < bValue) return sortOrder === "asc" ? -1 : 1;
-      if (aValue > bValue) return sortOrder === "asc" ? 1 : -1;
+      const aComp = aValue ?? '';
+      const bComp = bValue ?? '';
+      if (aComp < bComp) return sortOrder === "asc" ? -1 : 1;
+      if (aComp > bComp) return sortOrder === "asc" ? 1 : -1;
       return 0;
     });
 
@@ -120,12 +122,12 @@ export const PriceAlertsTable: React.FC<PriceAlertsTableProps> = ({
     const trend = getPriceTrend(alert);
     
     if (trend === "above") {
-      return <TrendingUp className="w-4 h-4 text-red-500" />;
+      return <TrendingUp className="w-4 h-4 text-destructive" />;
     }
     if (trend === "below") {
-      return <TrendingDown className="w-4 h-4 text-green-500" />;
+      return <TrendingDown className="w-4 h-4 text-primary" />;
     }
-    return <Minus className="w-4 h-4 text-gray-400" />;
+    return <Minus className="w-4 h-4 text-muted-foreground" />;
   };
 
   return (
@@ -141,7 +143,7 @@ export const PriceAlertsTable: React.FC<PriceAlertsTableProps> = ({
           />
         </div>
         <div className="flex gap-2">
-          <Select value={filterStatus} onValueChange={(value: any) => setFilterStatus(value)}>
+          <Select value={filterStatus} onValueChange={(value: string) => setFilterStatus(value as "all" | "active" | "inactive")}>
             <SelectTrigger className="w-[180px]">
               <Filter className="w-4 h-4 mr-2" />
               <SelectValue placeholder="Filter by status" />
@@ -242,7 +244,7 @@ export const PriceAlertsTable: React.FC<PriceAlertsTableProps> = ({
                       <span className="text-muted-foreground">-</span>
                     )}
                   </TableCell>
-                  <TableCell className="font-semibold text-green-600">
+                  <TableCell className="font-semibold text-primary">
                     ${alert.target_price.toFixed(2)}
                   </TableCell>
                   <TableCell>
@@ -283,7 +285,7 @@ export const PriceAlertsTable: React.FC<PriceAlertsTableProps> = ({
                         </DropdownMenuItem>
                         <DropdownMenuItem
                           onClick={() => onDelete(alert.id)}
-                          className="text-red-600"
+                          className="text-destructive"
                         >
                           <Trash2 className="w-4 h-4 mr-2" />
                           Delete

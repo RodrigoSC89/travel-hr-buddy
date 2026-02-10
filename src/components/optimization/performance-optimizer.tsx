@@ -88,7 +88,7 @@ const PerformanceOptimizer = () => {
     { time: "20:00", cpu: 45, memory: 58, network: 35 }
   ];
 
-  const runOptimization = async (optimization: any) => {
+  const runOptimization = async (optimization: typeof optimizations[number]) => {
     setIsOptimizing(true);
     
     toast({
@@ -125,17 +125,17 @@ const PerformanceOptimizer = () => {
 
   const getImpactColor = (impact: string) => {
     switch (impact) {
-    case "high": return "text-red-600 bg-red-50 border-red-200";
-    case "medium": return "text-yellow-600 bg-yellow-50 border-yellow-200";
-    case "low": return "text-green-600 bg-green-50 border-green-200";
-    default: return "text-muted-foreground bg-gray-50 border-gray-200";
+    case "high": return "text-destructive bg-destructive/10 border-destructive/20";
+    case "medium": return "text-warning bg-warning/10 border-warning/20";
+    case "low": return "text-primary bg-primary/10 border-primary/20";
+    default: return "text-muted-foreground bg-muted border-border";
     }
   };
 
   const getStatusIcon = (status: string) => {
     switch (status) {
-    case "active": return <CheckCircle className="w-4 h-4 text-green-600" />;
-    case "recommended": return <AlertTriangle className="w-4 h-4 text-orange-600" />;
+    case "active": return <CheckCircle className="w-4 h-4 text-primary" />;
+    case "recommended": return <AlertTriangle className="w-4 h-4 text-warning" />;
     default: return <Clock className="w-4 h-4 text-muted-foreground" />;
     }
   };
@@ -259,10 +259,10 @@ const PerformanceOptimizer = () => {
         </Card>
 
         {/* Network */}
-        <Card className="border-l-4 border-l-green-500">
+        <Card className="border-l-4 border-l-primary">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">Rede</CardTitle>
-            <Wifi className="h-4 w-4 text-green-600" />
+            <Wifi className="h-4 w-4 text-primary" />
           </CardHeader>
           <CardContent>
             <div className="space-y-2">
@@ -276,10 +276,10 @@ const PerformanceOptimizer = () => {
         </Card>
 
         {/* Database */}
-        <Card className="border-l-4 border-l-purple-500">
+        <Card className="border-l-4 border-l-secondary">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">Database</CardTitle>
-            <Database className="h-4 w-4 text-purple-600" />
+            <Database className="h-4 w-4 text-secondary" />
           </CardHeader>
           <CardContent>
             <div className="space-y-2">
@@ -376,7 +376,7 @@ const PerformanceOptimizer = () => {
                       >
                         {optimization.impact}
                       </Badge>
-                      <span className="text-xs text-green-600 font-medium">
+                      <span className="text-xs text-primary font-medium">
                         {optimization.savings}
                       </span>
                     </div>
