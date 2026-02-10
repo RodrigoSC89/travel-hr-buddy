@@ -17,6 +17,7 @@ import {
 } from "lucide-react";
 import { motion } from "framer-motion";
 import { ResponsiveContainer, AreaChart, Area, XAxis, YAxis, Tooltip, PieChart, Pie, Cell, BarChart, Bar, Legend } from "recharts";
+import { toast } from "sonner";
 
 const emissionsData = [
   { month: "Jan", co2: 450, sox: 12, nox: 28, voc: 5 },
@@ -290,7 +291,15 @@ export default function EnvironmentalDashboard() {
               </CardTitle>
               <CardDescription>Regulamentações internacionais e certificações</CardDescription>
             </div>
-            <Button variant="outline" size="sm">
+            <Button variant="outline" size="sm" onClick={() => {
+              const headers = ["Regulação","Status","Score (%)","Detalhes"];
+              const rows = complianceMetrics.map(m => [m.regulation, m.status, m.score, m.details]);
+              const csv = [headers, ...rows].map(r => r.join(",")).join("\n");
+              const blob = new Blob([csv], { type: "text/csv" });
+              const url = URL.createObjectURL(blob);
+              const a = document.createElement("a"); a.href = url; a.download = `environmental-compliance-${new Date().toISOString().slice(0,10)}.csv`; a.click(); URL.revokeObjectURL(url);
+              toast.success("Relatório de conformidade ambiental exportado");
+            }}>
               <Download className="h-4 w-4 mr-2" />
               Relatório Completo
             </Button>
@@ -372,7 +381,9 @@ export default function EnvironmentalDashboard() {
                     <p className="text-sm text-muted-foreground mt-1">
                       Ajuste de velocidade em 2 nós pode reduzir emissões em 15% e economizar $12K/viagem
                     </p>
-                    <Button size="sm" className="mt-3" variant="outline">
+                    <Button size="sm" className="mt-3" variant="outline" onClick={() => {
+                      toast.info("Otimização de Rota: Redução de 2 nós na velocidade pode economizar 15% em emissões CO₂ (~$12K/viagem). Recomendação baseada em dados dos últimos 6 meses de consumo.");
+                    }}>
                       Ver Análise
                     </Button>
                   </div>
@@ -390,7 +401,9 @@ export default function EnvironmentalDashboard() {
                     <p className="text-sm text-muted-foreground mt-1">
                       Água de porão atingirá 95% em 48h. Porto de Santos tem recepção disponível.
                     </p>
-                    <Button size="sm" className="mt-3" variant="outline">
+                    <Button size="sm" className="mt-3" variant="outline" onClick={() => {
+                      toast.info("Previsão de Descarte: Água de porão a 95% em 48h. Porto de Santos (Terminal TEAG) tem recepção disponível. Contato: +55 13 3219-XXXX.");
+                    }}>
                       Agendar
                     </Button>
                   </div>
@@ -408,7 +421,9 @@ export default function EnvironmentalDashboard() {
                     <p className="text-sm text-muted-foreground mt-1">
                       Limpeza de casco pode melhorar eficiência em 8%. Última limpeza há 6 meses.
                     </p>
-                    <Button size="sm" className="mt-3" variant="outline">
+                    <Button size="sm" className="mt-3" variant="outline" onClick={() => {
+                      toast.info("Eficiência Energética: Limpeza de casco recomendada. Última limpeza há 6 meses. Melhoria estimada: +8% eficiência. Próximo dique seco disponível em Mar/2026.");
+                    }}>
                       Programar
                     </Button>
                   </div>
