@@ -5,9 +5,9 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
-import { Line, Bar } from "react-chartjs-2";
 import { Download, TrendingUp, BarChart3, FileText } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import { LineChart, Line, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, Area, AreaChart } from "recharts";
 
 // Lazy load jsPDF
 const loadJsPDF = async () => {
@@ -18,30 +18,6 @@ const loadJsPDF = async () => {
   return { jsPDF, autoTable: autoTableModule.default };
 };
 import { logger } from '@/lib/logger';
-import {
-  Chart as ChartJS,
-  CategoryScale,
-  LinearScale,
-  PointElement,
-  LineElement,
-  BarElement,
-  Title,
-  Tooltip,
-  Legend,
-  Filler,
-} from "chart.js";
-
-ChartJS.register(
-  CategoryScale,
-  LinearScale,
-  PointElement,
-  LineElement,
-  BarElement,
-  Title,
-  Tooltip,
-  Legend,
-  Filler
-);
 
 interface PriceHistory {
   id: string;
@@ -71,7 +47,6 @@ export function EnhancedHistoryStats() {
       const startDate = new Date();
       startDate.setDate(startDate.getDate() - daysAgo);
 
-      // Fetch flight price history
       const { data: flightData, error: flightError } = await supabase
         .from("flight_price_history")
         .select("*")
@@ -81,7 +56,6 @@ export function EnhancedHistoryStats() {
 
       if (flightError) throw flightError;
 
-      // Fetch hotel price history
       const { data: hotelData, error: hotelError } = await supabase
         .from("hotel_price_history")
         .select("*")
@@ -128,17 +102,10 @@ export function EnhancedHistoryStats() {
     );
   }, [flightHistory, hotelHistory]);
 
-  const chartData = useMemo(() => {
-    if (combinedHistory.length === 0) {
-      return {
-        labels: [],
-        datasets: [],
-      };
-    }
+  const lineChartData = useMemo(() => {
+    if (combinedHistory.length === 0) return [];
 
-    // Group by date
     const groupedByDate: Record<string, { flight: number[]; hotel: number[] }> = {};
-
     combinedHistory.forEach((item) => {
       const date = new Date(item.recorded_at).toLocaleDateString("pt-BR");
       if (!groupedByDate[date]) {
@@ -151,37 +118,11 @@ export function EnhancedHistoryStats() {
       }
     });
 
-    const labels = Object.keys(groupedByDate);
-    const flightPrices = labels.map((date) => {
-      const prices = groupedByDate[date].flight;
-      return prices.length > 0 ? prices.reduce((a, b) => a + b, 0) / prices.length : 0;
-    });
-    const hotelPrices = labels.map((date) => {
-      const prices = groupedByDate[date].hotel;
-      return prices.length > 0 ? prices.reduce((a, b) => a + b, 0) / prices.length : 0;
-    });
-
-    return {
-      labels,
-      datasets: [
-        {
-          label: "Voos",
-          data: flightPrices,
-          borderColor: "rgb(59, 130, 246)",
-          backgroundColor: "rgba(59, 130, 246, 0.1)",
-          fill: true,
-          tension: 0.4,
-        },
-        {
-          label: "Hotéis",
-          data: hotelPrices,
-          borderColor: "rgb(249, 115, 22)",
-          backgroundColor: "rgba(249, 115, 22, 0.1)",
-          fill: true,
-          tension: 0.4,
-        },
-      ],
-    };
+    return Object.entries(groupedByDate).map(([date, data]) => ({
+      date,
+      voos: data.flight.length > 0 ? data.flight.reduce((a, b) => a + b, 0) / data.flight.length : 0,
+      hoteis: data.hotel.length > 0 ? data.hotel.reduce((a, b) => a + b, 0) / data.hotel.length : 0,
+    }));
   }, [combinedHistory]);
 
   const barChartData = useMemo(() => {
@@ -199,22 +140,13 @@ export function EnhancedHistoryStats() {
       routeStats[route].avgPrice = routeStats[route].totalPrice / routeStats[route].count;
     });
 
-    const sortedRoutes = Object.entries(routeStats)
+    return Object.entries(routeStats)
       .sort(([, a], [, b]) => b.avgPrice - a.avgPrice)
-      .slice(0, 10);
-
-    return {
-      labels: sortedRoutes.map(([route]) => route),
-      datasets: [
-        {
-          label: "Preço Médio (R$)",
-          data: sortedRoutes.map(([, stats]) => stats.avgPrice),
-          backgroundColor: "rgba(59, 130, 246, 0.8)",
-          borderColor: "rgb(59, 130, 246)",
-          borderWidth: 1,
-        },
-      ],
-    };
+      .slice(0, 10)
+      .map(([route, stats]) => ({
+        route,
+        preco_medio: Math.round(stats.avgPrice * 100) / 100,
+      }));
   }, [combinedHistory]);
 
   const statistics = useMemo(() => {
@@ -228,24 +160,9 @@ export function EnhancedHistoryStats() {
     const max = (arr: number[]) => (arr.length > 0 ? Math.max(...arr) : 0);
 
     return {
-      overall: {
-        avg: avg(prices),
-        min: min(prices),
-        max: max(prices),
-        count: prices.length,
-      },
-      flights: {
-        avg: avg(flightPrices),
-        min: min(flightPrices),
-        max: max(flightPrices),
-        count: flightPrices.length,
-      },
-      hotels: {
-        avg: avg(hotelPrices),
-        min: min(hotelPrices),
-        max: max(hotelPrices),
-        count: hotelPrices.length,
-      },
+      overall: { avg: avg(prices), min: min(prices), max: max(prices), count: prices.length },
+      flights: { avg: avg(flightPrices), min: min(flightPrices), max: max(flightPrices), count: flightPrices.length },
+      hotels: { avg: avg(hotelPrices), min: min(hotelPrices), max: max(hotelPrices), count: hotelPrices.length },
     };
   }, [combinedHistory, flightHistory, hotelHistory]);
 
@@ -270,10 +187,7 @@ export function EnhancedHistoryStats() {
     a.click();
     URL.revokeObjectURL(url);
 
-    toast({
-      title: "CSV exportado",
-      description: "O arquivo foi baixado com sucesso",
-    });
+    toast({ title: "CSV exportado", description: "O arquivo foi baixado com sucesso" });
   };
 
   const exportToPDF = async () => {
@@ -286,39 +200,19 @@ export function EnhancedHistoryStats() {
     doc.text(`Período: ${dateFilter}`, 14, 30);
     doc.text(`Gerado em: ${new Date().toLocaleDateString("pt-BR")}`, 14, 36);
 
-    // Statistics
     doc.setFontSize(14);
     doc.text("Estatísticas", 14, 50);
     autoTable(doc, {
       startY: 55,
       head: [["Categoria", "Média", "Mínimo", "Máximo", "Total"]],
       body: [
-        [
-          "Geral",
-          `R$ ${statistics.overall.avg.toFixed(2)}`,
-          `R$ ${statistics.overall.min.toFixed(2)}`,
-          `R$ ${statistics.overall.max.toFixed(2)}`,
-          statistics.overall.count.toString(),
-        ],
-        [
-          "Voos",
-          `R$ ${statistics.flights.avg.toFixed(2)}`,
-          `R$ ${statistics.flights.min.toFixed(2)}`,
-          `R$ ${statistics.flights.max.toFixed(2)}`,
-          statistics.flights.count.toString(),
-        ],
-        [
-          "Hotéis",
-          `R$ ${statistics.hotels.avg.toFixed(2)}`,
-          `R$ ${statistics.hotels.min.toFixed(2)}`,
-          `R$ ${statistics.hotels.max.toFixed(2)}`,
-          statistics.hotels.count.toString(),
-        ],
+        ["Geral", `R$ ${statistics.overall.avg.toFixed(2)}`, `R$ ${statistics.overall.min.toFixed(2)}`, `R$ ${statistics.overall.max.toFixed(2)}`, statistics.overall.count.toString()],
+        ["Voos", `R$ ${statistics.flights.avg.toFixed(2)}`, `R$ ${statistics.flights.min.toFixed(2)}`, `R$ ${statistics.flights.max.toFixed(2)}`, statistics.flights.count.toString()],
+        ["Hotéis", `R$ ${statistics.hotels.avg.toFixed(2)}`, `R$ ${statistics.hotels.min.toFixed(2)}`, `R$ ${statistics.hotels.max.toFixed(2)}`, statistics.hotels.count.toString()],
       ],
     });
 
-    // History table
-    const finalY = (doc as any).lastAutoTable?.finalY || 100;
+    const finalY = ((doc as unknown as { lastAutoTable?: { finalY: number } }).lastAutoTable?.finalY) || 100;
     doc.setFontSize(14);
     doc.text("Histórico Detalhado", 14, finalY + 10);
     autoTable(doc, {
@@ -333,11 +227,7 @@ export function EnhancedHistoryStats() {
     });
 
     doc.save(`historico-precos-${dateFilter}-${Date.now()}.pdf`);
-
-    toast({
-      title: "PDF exportado",
-      description: "O arquivo foi baixado com sucesso",
-    });
+    toast({ title: "PDF exportado", description: "O arquivo foi baixado com sucesso" });
   };
 
   if (isLoading) {
@@ -430,32 +320,18 @@ export function EnhancedHistoryStats() {
             </TabsList>
             <TabsContent value="line" className="space-y-4">
               <div className="h-80">
-                {chartData.labels.length > 0 ? (
-                  <Line
-                    data={chartData}
-                    options={{
-                      responsive: true,
-                      maintainAspectRatio: false,
-                      plugins: {
-                        legend: {
-                          position: "top" as const,
-                        },
-                        title: {
-                          display: false,
-                        },
-                      },
-                      scales: {
-                        y: {
-                          beginAtZero: false,
-                          ticks: {
-                            callback: function (value) {
-                              return "R$ " + value;
-                            },
-                          },
-                        },
-                      },
-                    }}
-                  />
+                {lineChartData.length > 0 ? (
+                  <ResponsiveContainer width="100%" height="100%">
+                    <AreaChart data={lineChartData}>
+                      <CartesianGrid strokeDasharray="3 3" />
+                      <XAxis dataKey="date" tick={{ fontSize: 11 }} />
+                      <YAxis tickFormatter={(v) => `R$${v}`} />
+                      <Tooltip formatter={(value: number) => [`R$ ${value.toFixed(2)}`, undefined]} />
+                      <Legend />
+                      <Area type="monotone" dataKey="voos" name="Voos" stroke="hsl(var(--primary))" fill="hsl(var(--primary) / 0.1)" />
+                      <Area type="monotone" dataKey="hoteis" name="Hotéis" stroke="hsl(24, 95%, 53%)" fill="hsl(24, 95%, 53%, 0.1)" />
+                    </AreaChart>
+                  </ResponsiveContainer>
                 ) : (
                   <div className="flex items-center justify-center h-full text-muted-foreground">
                     Nenhum dado disponível para o período selecionado
@@ -465,29 +341,16 @@ export function EnhancedHistoryStats() {
             </TabsContent>
             <TabsContent value="bar" className="space-y-4">
               <div className="h-80">
-                {barChartData.labels.length > 0 ? (
-                  <Bar
-                    data={barChartData}
-                    options={{
-                      responsive: true,
-                      maintainAspectRatio: false,
-                      plugins: {
-                        legend: {
-                          display: false,
-                        },
-                      },
-                      scales: {
-                        y: {
-                          beginAtZero: true,
-                          ticks: {
-                            callback: function (value) {
-                              return "R$ " + value;
-                            },
-                          },
-                        },
-                      },
-                    }}
-                  />
+                {barChartData.length > 0 ? (
+                  <ResponsiveContainer width="100%" height="100%">
+                    <BarChart data={barChartData}>
+                      <CartesianGrid strokeDasharray="3 3" />
+                      <XAxis dataKey="route" tick={{ fontSize: 10 }} />
+                      <YAxis tickFormatter={(v) => `R$${v}`} />
+                      <Tooltip formatter={(value: number) => [`R$ ${value.toFixed(2)}`, "Preço Médio"]} />
+                      <Bar dataKey="preco_medio" name="Preço Médio (R$)" fill="hsl(var(--primary))" />
+                    </BarChart>
+                  </ResponsiveContainer>
                 ) : (
                   <div className="flex items-center justify-center h-full text-muted-foreground">
                     Nenhum dado disponível para o período selecionado

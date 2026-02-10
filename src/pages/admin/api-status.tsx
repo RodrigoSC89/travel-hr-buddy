@@ -10,28 +10,7 @@ import { testOpenAIConnection } from "@/services/openai";
 import { testMapboxConnection } from "@/services/mapbox";
 import { testAmadeusConnection } from "@/services/amadeus";
 import { testSupabaseConnection } from "@/services/supabase";
-import { Line } from "react-chartjs-2";
-import {
-  Chart as ChartJS,
-  CategoryScale,
-  LinearScale,
-  PointElement,
-  LineElement,
-  Title,
-  Tooltip,
-  Legend,
-} from "chart.js";
-
-// Register Chart.js components
-ChartJS.register(
-  CategoryScale,
-  LinearScale,
-  PointElement,
-  LineElement,
-  Title,
-  Tooltip,
-  Legend
-);
+import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from "recharts";
 
 type Status = "checking" | "valid" | "invalid" | "missing";
 
@@ -48,30 +27,10 @@ interface HistorySnapshot {
 }
 
 const services: Service[] = [
-  {
-    name: "OpenAI",
-    envKey: "VITE_OPENAI_API_KEY",
-    endpoint: "https://api.openai.com/v1/chat/completions",
-    validate: testOpenAIConnection,
-  },
-  {
-    name: "Mapbox",
-    envKey: "VITE_MAPBOX_ACCESS_TOKEN",
-    endpoint: "https://api.mapbox.com/geocoding/v5",
-    validate: testMapboxConnection,
-  },
-  {
-    name: "Amadeus",
-    envKey: "VITE_AMADEUS_API_KEY",
-    endpoint: "https://test.api.amadeus.com/v1/security/oauth2/token",
-    validate: testAmadeusConnection,
-  },
-  {
-    name: "Supabase",
-    envKey: "VITE_SUPABASE_URL",
-    endpoint: "supabase.auth.getSession()",
-    validate: testSupabaseConnection,
-  },
+  { name: "OpenAI", envKey: "VITE_OPENAI_API_KEY", endpoint: "https://api.openai.com/v1/chat/completions", validate: testOpenAIConnection },
+  { name: "Mapbox", envKey: "VITE_MAPBOX_ACCESS_TOKEN", endpoint: "https://api.mapbox.com/geocoding/v5", validate: testMapboxConnection },
+  { name: "Amadeus", envKey: "VITE_AMADEUS_API_KEY", endpoint: "https://test.api.amadeus.com/v1/security/oauth2/token", validate: testAmadeusConnection },
+  { name: "Supabase", envKey: "VITE_SUPABASE_URL", endpoint: "supabase.auth.getSession()", validate: testSupabaseConnection },
 ];
 
 export default function ApiStatusPage() {
@@ -91,22 +50,13 @@ export default function ApiStatusPage() {
       
       const result = await service.validate();
       results[service.name] = result.success ? "valid" : "invalid";
-      dataResults[service.name] = {
-        message: result.message,
-        responseTime: result.responseTime,
-        error: result.error,
-      };
+      dataResults[service.name] = { message: result.message, responseTime: result.responseTime, error: result.error };
       setStatus({ ...results });
       setResponseData({ ...dataResults });
     }
     
-    // Add to history
-    const snapshot: HistorySnapshot = {
-      timestamp: new Date().toISOString(),
-      ...results,
-    };
+    const snapshot: HistorySnapshot = { timestamp: new Date().toISOString(), ...results };
     setHistory((prev) => [...prev, snapshot]);
-    
     setLoading(false);
   };
 
@@ -115,9 +65,7 @@ export default function ApiStatusPage() {
   }, []);
 
   const downloadLog = () => {
-    const blob = new Blob([JSON.stringify(history, null, 2)], {
-      type: "application/json",
-    });
+    const blob = new Blob([JSON.stringify(history, null, 2)], { type: "application/json" });
     const url = URL.createObjectURL(blob);
     const a = document.createElement("a");
     a.href = url;
@@ -126,46 +74,16 @@ export default function ApiStatusPage() {
     URL.revokeObjectURL(url);
   };
 
-  // Prepare chart data
-  const labels = history.map((h) => new Date(h.timestamp).toLocaleTimeString());
-  
-  const chartData = {
-    labels,
-    datasets: services.map((s, i) => ({
-      label: s.name,
-      data: history.map((h) => (h[s.name] === "valid" ? 1 : 0)),
-      borderColor: `hsl(${(i * 80) % 360}, 70%, 50%)`,
-      backgroundColor: `hsla(${(i * 80) % 360}, 70%, 50%, 0.1)`,
-      fill: false,
-      tension: 0.1,
-    })),
-  };
-
-  const chartOptions = {
-    responsive: true,
-    maintainAspectRatio: false,
-    plugins: {
-      legend: {
-        position: "top" as const,
-      },
-      title: {
-        display: true,
-        text: "API Availability Over Time",
-      },
-    },
-    scales: {
-      y: {
-        beginAtZero: true,
-        max: 1,
-        ticks: {
-          stepSize: 1,
-          callback: function(value: number | string) {
-            return value === 1 ? "✅ Valid" : "❌ Invalid";
-          },
-        },
-      },
-    },
-  };
+  // Prepare recharts data
+  const chartData = history.map((h) => {
+    const point: Record<string, string | number> = {
+      time: new Date(h.timestamp).toLocaleTimeString(),
+    };
+    services.forEach((s) => {
+      point[s.name] = h[s.name] === "valid" ? 1 : 0;
+    });
+    return point;
+  });
 
   return (
     <MultiTenantWrapper>
@@ -176,40 +94,21 @@ export default function ApiStatusPage() {
           description="Monitor the health and connectivity of all external API integrations"
           gradient="purple"
           badges={[
-            {
-              icon: CheckCircle,
-              label: `${Object.values(status).filter((s) => s === "valid").length} Valid`,
-            },
-            {
-              icon: XCircle,
-              label: `${Object.values(status).filter((s) => s === "invalid").length} Invalid`,
-            },
-            {
-              icon: Clock,
-              label: `${Object.values(status).filter((s) => s === "checking").length} Checking`,
-            },
+            { icon: CheckCircle, label: `${Object.values(status).filter((s) => s === "valid").length} Valid` },
+            { icon: XCircle, label: `${Object.values(status).filter((s) => s === "invalid").length} Invalid` },
+            { icon: Clock, label: `${Object.values(status).filter((s) => s === "checking").length} Checking` },
           ]}
         />
 
         <div className="space-y-6">
-          {/* Action Buttons */}
           <Card>
             <CardContent className="pt-6">
               <div className="flex gap-3">
-                <Button 
-                  onClick={checkAll} 
-                  disabled={loading}
-                  className="flex items-center gap-2"
-                >
+                <Button onClick={checkAll} disabled={loading} className="flex items-center gap-2">
                   <RefreshCw className={`w-4 h-4 ${loading ? "animate-spin" : ""}`} />
                   {loading ? "Checking..." : "🔁 Retest APIs"}
                 </Button>
-                <Button 
-                  onClick={downloadLog}
-                  variant="outline"
-                  className="flex items-center gap-2"
-                  disabled={history.length === 0}
-                >
+                <Button onClick={downloadLog} variant="outline" className="flex items-center gap-2" disabled={history.length === 0}>
                   <Download className="w-4 h-4" />
                   📁 Download Log
                 </Button>
@@ -220,17 +119,12 @@ export default function ApiStatusPage() {
           <Card>
             <CardHeader>
               <CardTitle>API Services Status</CardTitle>
-              <CardDescription>
-                Real-time validation of API keys and service connectivity
-              </CardDescription>
+              <CardDescription>Real-time validation of API keys and service connectivity</CardDescription>
             </CardHeader>
             <CardContent>
               <ul className="space-y-4">
                 {services.map((s) => (
-                  <li
-                    key={s.name}
-                    className="flex items-center justify-between p-4 border border-border rounded-lg hover:bg-accent/50 transition-colors"
-                  >
+                  <li key={s.name} className="flex items-center justify-between p-4 border border-border rounded-lg hover:bg-accent/50 transition-colors">
                     <div className="flex-1">
                       <div className="flex items-center gap-3 mb-1">
                         <strong className="text-lg">{s.name}</strong>
@@ -246,14 +140,10 @@ export default function ApiStatusPage() {
                         <div>Environment: {s.envKey}</div>
                         <div>Endpoint: {s.endpoint}</div>
                         {responseData[s.name]?.message && (
-                          <div className="mt-1 font-medium">
-                            Status: {responseData[s.name].message}
-                          </div>
+                          <div className="mt-1 font-medium">Status: {responseData[s.name].message}</div>
                         )}
                         {responseData[s.name]?.error && (
-                          <div className="mt-1 text-red-600">
-                            Error: {responseData[s.name].error}
-                          </div>
+                          <div className="mt-1 text-red-600">Error: {responseData[s.name].error}</div>
                         )}
                       </div>
                     </div>
@@ -263,18 +153,26 @@ export default function ApiStatusPage() {
             </CardContent>
           </Card>
 
-          {/* Chart */}
           {history.length > 1 && (
             <Card>
               <CardHeader>
                 <CardTitle>📊 Availability History</CardTitle>
-                <CardDescription>
-                  Visual representation of API status over time
-                </CardDescription>
+                <CardDescription>Visual representation of API status over time</CardDescription>
               </CardHeader>
               <CardContent>
-                <div style={{ height: "300px" }}>
-                  <Line data={chartData} options={chartOptions} />
+                <div className="h-[300px]">
+                  <ResponsiveContainer width="100%" height="100%">
+                    <LineChart data={chartData}>
+                      <CartesianGrid strokeDasharray="3 3" />
+                      <XAxis dataKey="time" />
+                      <YAxis domain={[0, 1]} ticks={[0, 1]} tickFormatter={(v) => v === 1 ? "✅ Valid" : "❌ Invalid"} />
+                      <Tooltip />
+                      <Legend />
+                      {services.map((s, i) => (
+                        <Line key={s.name} type="stepAfter" dataKey={s.name} stroke={`hsl(${(i * 80) % 360}, 70%, 50%)`} strokeWidth={2} dot={false} />
+                      ))}
+                    </LineChart>
+                  </ResponsiveContainer>
                 </div>
               </CardContent>
             </Card>
@@ -308,29 +206,13 @@ VITE_SUPABASE_PUBLISHABLE_KEY=eyJ...`}
 function renderStatus(state: Status | undefined) {
   switch (state) {
   case "valid":
-    return (
-      <Badge variant="default" className="bg-green-600 text-white">
-          ✅ Valid
-      </Badge>
-    );
+    return <Badge variant="default" className="bg-green-600 text-white">✅ Valid</Badge>;
   case "invalid":
-    return (
-      <Badge variant="destructive" className="bg-red-600 text-white">
-          ❌ Invalid
-      </Badge>
-    );
+    return <Badge variant="destructive" className="bg-red-600 text-white">❌ Invalid</Badge>;
   case "missing":
-    return (
-      <Badge variant="outline" className="bg-yellow-50 text-yellow-700 border-yellow-300">
-          ⚠️ Missing Key
-      </Badge>
-    );
+    return <Badge variant="outline" className="bg-yellow-50 text-yellow-700 border-yellow-300">⚠️ Missing Key</Badge>;
   case "checking":
-    return (
-      <Badge variant="outline" className="bg-blue-50 text-blue-700 border-blue-300">
-          ⏳ Checking...
-      </Badge>
-    );
+    return <Badge variant="outline" className="bg-blue-50 text-blue-700 border-blue-300">⏳ Checking...</Badge>;
   default:
     return <Badge variant="outline">-</Badge>;
   }

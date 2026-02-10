@@ -1,6 +1,7 @@
 /**
  * PATCH 367 - Fleet Management - Telemetry & Maintenance Alerts
  * Real-time fleet telemetry monitoring with predictive maintenance
+ * Migrated: removed chart.js registration (no charts used in this component)
  */
 
 import React, { useState, useEffect, useCallback } from "react";
@@ -28,28 +29,6 @@ import type { Database, Json } from "@/integrations/supabase/types";
 import { toast } from "sonner";
 import { format } from "date-fns";
 import { logger } from '@/lib/logger';
-import {
-  Chart as ChartJS,
-  CategoryScale,
-  LinearScale,
-  PointElement,
-  LineElement,
-  BarElement,
-  Title,
-  Tooltip,
-  Legend,
-} from "chart.js";
-
-ChartJS.register(
-  CategoryScale,
-  LinearScale,
-  PointElement,
-  LineElement,
-  BarElement,
-  Title,
-  Tooltip,
-  Legend
-);
 
 // Use schema types
 type IotSensorData = Database["public"]["Tables"]["iot_sensor_data"]["Row"];
@@ -112,7 +91,6 @@ export const FleetTelemetryDashboard: React.FC = () => {
     try {
       setLoading(true);
 
-      // Load vessels
       const { data: vesselsData, error: vesselsError } = await supabase
         .from("vessels")
         .select("*")
@@ -120,7 +98,6 @@ export const FleetTelemetryDashboard: React.FC = () => {
 
       if (vesselsError) throw vesselsError;
 
-      // Load recent sensor data
       const { data: sensorReadings, error: sensorError } = await supabase
         .from("iot_sensor_data")
         .select("*")
@@ -129,7 +106,6 @@ export const FleetTelemetryDashboard: React.FC = () => {
 
       if (sensorError) throw sensorError;
 
-      // Transform sensor data to include computed fields
       const transformedSensors: SensorReading[] = (sensorReadings || []).map((sensor) => {
         const threshold = SENSOR_THRESHOLDS[sensor.sensor_type] || { min: 0, max: 100, critical: 120 };
         const isAlert = sensor.status === "critical" || sensor.status === "warning" || sensor.value > threshold.max;
@@ -145,27 +121,23 @@ export const FleetTelemetryDashboard: React.FC = () => {
 
       setSensorData(transformedSensors);
 
-      // Process telemetry by vessel
       const telemetryByVessel: VesselTelemetry[] = (vesselsData || []).map((vessel: Vessel) => {
         const vesselSensors = transformedSensors.filter(
           (s) => s.vessel_id === vessel.id
         );
         
-        // Calculate health score based on sensor status
         const healthScore = calculateHealthScore(vesselSensors);
 
         return {
           vessel_id: vessel.id,
           vessel_name: vessel.name,
-          sensors: vesselSensors.slice(0, 20), // Last 20 readings
+          sensors: vesselSensors.slice(0, 20),
           health_score: healthScore,
           last_update: vesselSensors[0]?.timestamp || new Date().toISOString(),
         };
       });
 
       setVessels(telemetryByVessel);
-
-      // Check for alerts
       await checkAndGenerateAlerts(transformedSensors);
     } catch (error) {
       logger.error("Error loading telemetry:", error);
@@ -176,7 +148,6 @@ export const FleetTelemetryDashboard: React.FC = () => {
   }, []);
 
   const simulateSensorReadings = useCallback(async () => {
-    // Simulate new sensor readings for demo purposes
     const { data: vesselsData } = await supabase.from("vessels").select("id").limit(3);
 
     if (!vesselsData) return;
@@ -190,8 +161,6 @@ export const FleetTelemetryDashboard: React.FC = () => {
         const baseValue = (threshold.min + threshold.max) / 2;
         const variation = (threshold.max - threshold.min) * 0.2;
         const value = baseValue + (Math.random() - 0.5) * variation;
-        
-        // Occasionally generate anomalies
         const anomalyValue = Math.random() > 0.95 ? threshold.critical : value;
 
         const status = 
@@ -227,7 +196,6 @@ export const FleetTelemetryDashboard: React.FC = () => {
   useEffect(() => {
     loadTelemetryData();
     
-    // Set up real-time subscription
     const subscription = supabase
       .channel("telemetry-changes")
       .on(
@@ -239,7 +207,6 @@ export const FleetTelemetryDashboard: React.FC = () => {
       )
       .subscribe();
 
-    // Auto-refresh every 10 seconds if enabled
     let interval: NodeJS.Timeout | null = null;
     if (autoRefresh) {
       interval = setInterval(() => {
@@ -278,7 +245,6 @@ export const FleetTelemetryDashboard: React.FC = () => {
     const newAlerts: MaintenanceAlert[] = [];
 
     readings.forEach((reading) => {
-      // Check threshold violations
       if (reading.value > reading.threshold_max) {
         newAlerts.push({
           id: `alert-${reading.id}`,
@@ -293,7 +259,6 @@ export const FleetTelemetryDashboard: React.FC = () => {
         });
       }
 
-      // Check for anomalous patterns (vibration)
       if (reading.sensor_type === "vibration" && reading.value > 7) {
         newAlerts.push({
           id: `alert-vibration-${reading.id}`,
@@ -309,7 +274,6 @@ export const FleetTelemetryDashboard: React.FC = () => {
         });
       }
 
-      // Check temperature trends
       if (reading.sensor_type === "temperature" && reading.value > 75) {
         newAlerts.push({
           id: `alert-temp-${reading.id}`,
@@ -327,7 +291,6 @@ export const FleetTelemetryDashboard: React.FC = () => {
 
     setAlerts(newAlerts);
 
-    // Send notifications for critical alerts
     if (newAlerts.length > 0) {
       const criticalAlerts = newAlerts.filter((a) => a.severity === "critical");
       if (criticalAlerts.length > 0) {
@@ -499,7 +462,7 @@ export const FleetTelemetryDashboard: React.FC = () => {
           <CardHeader>
             <CardTitle className="flex items-center gap-2 text-destructive">
               <AlertTriangle className="h-5 w-5" />
-              Critical Alerts Detected
+              Critical Alerts ({alerts.filter((a) => a.severity === "critical").length})
             </CardTitle>
           </CardHeader>
           <CardContent>
@@ -507,10 +470,15 @@ export const FleetTelemetryDashboard: React.FC = () => {
               {alerts
                 .filter((a) => a.severity === "critical")
                 .map((alert) => (
-                  <div key={alert.id} className="flex items-center justify-between p-2 bg-background rounded">
-                    <div className="flex-1">
+                  <div
+                    key={alert.id}
+                    className="flex items-center justify-between p-3 bg-destructive/5 rounded-lg"
+                  >
+                    <div>
                       <p className="font-medium">{alert.message}</p>
-                      <p className="text-sm text-muted-foreground">{alert.recommended_action}</p>
+                      <p className="text-sm text-muted-foreground">
+                        {alert.recommended_action}
+                      </p>
                     </div>
                     <Badge variant="destructive">Critical</Badge>
                   </div>
@@ -520,268 +488,116 @@ export const FleetTelemetryDashboard: React.FC = () => {
         </Card>
       )}
 
-      {/* Main Content */}
-      <Tabs defaultValue="overview">
-        <TabsList>
-          <TabsTrigger value="overview">Overview</TabsTrigger>
-          <TabsTrigger value="sensors">Sensors</TabsTrigger>
-          <TabsTrigger value="alerts">Alerts</TabsTrigger>
-          <TabsTrigger value="predictive">Predictive Maintenance</TabsTrigger>
-        </TabsList>
-
-        <TabsContent value="overview" className="space-y-4">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+      {/* Vessel Telemetry */}
+      <Card>
+        <CardHeader>
+          <CardTitle>Vessel Sensor Overview</CardTitle>
+          <CardDescription>
+            Latest sensor readings by vessel
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          <div className="space-y-6">
             {vessels.map((vessel) => (
-              <Card key={vessel.vessel_id}>
-                <CardHeader>
-                  <div className="flex items-center justify-between">
-                    <CardTitle className="text-lg">{vessel.vessel_name}</CardTitle>
-                    <Badge
-                      variant={
-                        vessel.health_score > 80
-                          ? "default"
-                          : vessel.health_score > 60
-                            ? "secondary"
-                            : "destructive"
-                      }
-                    >
-                      {vessel.health_score}%
-                    </Badge>
+              <div key={vessel.vessel_id} className="border rounded-lg p-4">
+                <div className="flex items-center justify-between mb-4">
+                  <div className="flex items-center gap-3">
+                    <Ship className="h-5 w-5 text-primary" />
+                    <div>
+                      <h3 className="font-semibold">{vessel.vessel_name}</h3>
+                      <p className="text-sm text-muted-foreground">
+                        Last update: {format(new Date(vessel.last_update), "HH:mm:ss")}
+                      </p>
+                    </div>
                   </div>
-                  <CardDescription>
-                    Last update: {format(new Date(vessel.last_update), "PPp")}
-                  </CardDescription>
-                </CardHeader>
-                <CardContent>
-                  <div className="space-y-2">
+                  <div className="flex items-center gap-3">
+                    <div className="text-right">
+                      <p className="text-sm text-muted-foreground">Health</p>
+                      <p className="font-bold">{vessel.health_score}%</p>
+                    </div>
+                    <Progress value={vessel.health_score} className="w-20" />
+                  </div>
+                </div>
+
+                {vessel.sensors.length > 0 ? (
+                  <div className="grid grid-cols-2 md:grid-cols-5 gap-3">
                     {vessel.sensors.slice(0, 5).map((sensor) => (
-                      <div key={sensor.id} className="flex items-center justify-between text-sm">
-                        <div className="flex items-center gap-2">
+                      <div
+                        key={sensor.id}
+                        className={`p-3 rounded-lg border ${
+                          sensor.is_alert ? "border-destructive bg-destructive/5" : "bg-muted/50"
+                        }`}
+                      >
+                        <div className="flex items-center gap-2 mb-1">
                           {getSensorIcon(sensor.sensor_type)}
-                          <span>{sensor.sensor_type}</span>
-                        </div>
-                        <div className="flex items-center gap-2">
-                          <span className="font-medium">
-                            {sensor.value}
-                            {sensor.unit}
+                          <span className="text-xs font-medium capitalize">
+                            {sensor.sensor_type.replace("_", " ")}
                           </span>
-                          <span className={getStatusColor(sensor.status)}>●</span>
                         </div>
+                        <p className={`text-lg font-bold ${getStatusColor(sensor.status)}`}>
+                          {sensor.value}{sensor.unit || ""}
+                        </p>
+                        <p className="text-xs text-muted-foreground">
+                          {sensor.sensor_location}
+                        </p>
                       </div>
                     ))}
                   </div>
-                  <Button
-                    variant="outline"
-                    className="w-full mt-4"
-                    onClick={() => setSelectedVessel(vessel.vessel_id)}
-                  >
-                    View Details
-                  </Button>
-                </CardContent>
-              </Card>
+                ) : (
+                  <p className="text-sm text-muted-foreground text-center py-4">
+                    No sensor data available
+                  </p>
+                )}
+              </div>
             ))}
           </div>
-        </TabsContent>
+        </CardContent>
+      </Card>
 
-        <TabsContent value="sensors" className="space-y-4">
-          {vessels.map((vessel) => (
-            <Card key={vessel.vessel_id}>
-              <CardHeader>
-                <CardTitle>{vessel.vessel_name} - Sensor Readings</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                  {vessel.sensors.map((sensor) => (
-                    <div
-                      key={sensor.id}
-                      className="p-4 border rounded-lg"
-                    >
-                      <div className="flex items-center justify-between mb-2">
-                        <div className="flex items-center gap-2">
-                          {getSensorIcon(sensor.sensor_type)}
-                          <span className="font-medium">{sensor.sensor_type}</span>
-                        </div>
-                        <Badge
-                          variant={
-                            sensor.status === "normal"
-                              ? "default"
-                              : sensor.status === "warning"
-                                ? "secondary"
-                                : "destructive"
-                          }
-                        >
-                          {sensor.status}
-                        </Badge>
-                      </div>
-                      <div className="text-2xl font-bold">
-                        {sensor.value}
-                        {sensor.unit}
-                      </div>
-                      <p className="text-xs text-muted-foreground mt-1">
-                        {sensor.sensor_location}
+      {/* All Alerts */}
+      {alerts.length > 0 && (
+        <Card>
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              <AlertTriangle className="h-5 w-5" />
+              All Alerts ({alerts.length})
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="space-y-2">
+              {alerts.map((alert) => (
+                <div
+                  key={alert.id}
+                  className="flex items-center justify-between p-3 border rounded-lg"
+                >
+                  <div className="flex-1">
+                    <p className="font-medium text-sm">{alert.message}</p>
+                    <p className="text-xs text-muted-foreground">
+                      {alert.recommended_action}
+                    </p>
+                    {alert.predicted_failure_date && (
+                      <p className="text-xs text-destructive mt-1">
+                        Predicted failure: {format(new Date(alert.predicted_failure_date), "dd/MM/yyyy")}
                       </p>
-                      <div className="mt-2 text-xs text-muted-foreground">
-                        Range: {sensor.threshold_min} - {sensor.threshold_max}
-                        {sensor.unit}
-                      </div>
-                      {sensor.is_alert && (
-                        <div className="mt-2 text-xs text-destructive flex items-center gap-1">
-                          <AlertTriangle className="h-3 w-3" />
-                          Threshold exceeded
-                        </div>
-                      )}
-                    </div>
-                  ))}
-                </div>
-              </CardContent>
-            </Card>
-          ))}
-        </TabsContent>
-
-        <TabsContent value="alerts">
-          <Card>
-            <CardHeader>
-              <CardTitle>Maintenance Alerts</CardTitle>
-              <CardDescription>
-                Active alerts requiring attention and action
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              {alerts.length === 0 ? (
-                <div className="text-center py-8 text-muted-foreground">
-                  <CheckCircle className="h-12 w-12 mx-auto mb-2 text-green-500" />
-                  <p>No active alerts</p>
-                  <p className="text-sm">All systems operating normally</p>
-                </div>
-              ) : (
-                <div className="space-y-4">
-                  {alerts.map((alert) => (
-                    <div
-                      key={alert.id}
-                      className="flex items-start gap-3 p-4 border rounded-lg"
-                    >
-                      <AlertTriangle
-                        className={`h-5 w-5 ${
-                          alert.severity === "critical"
-                            ? "text-red-500"
-                            : alert.severity === "high"
-                              ? "text-orange-500"
-                              : "text-yellow-500"
-                        }`}
-                      />
-                      <div className="flex-1">
-                        <div className="flex items-start justify-between">
-                          <div>
-                            <p className="font-medium">{alert.message}</p>
-                            <p className="text-sm text-muted-foreground mt-1">
-                              {alert.recommended_action}
-                            </p>
-                            {alert.predicted_failure_date && (
-                              <p className="text-xs text-muted-foreground mt-2">
-                                Predicted failure: {format(new Date(alert.predicted_failure_date), "PPP")}
-                              </p>
-                            )}
-                          </div>
-                          <Badge
-                            variant={
-                              alert.severity === "critical" ? "destructive" : "secondary"
-                            }
-                          >
-                            {alert.severity}
-                          </Badge>
-                        </div>
-                        <div className="flex gap-2 mt-3">
-                          <Button size="sm" variant="outline">
-                            Acknowledge
-                          </Button>
-                          <Button size="sm">Create Work Order</Button>
-                        </div>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              )}
-            </CardContent>
-          </Card>
-        </TabsContent>
-
-        <TabsContent value="predictive">
-          <Card>
-            <CardHeader>
-              <CardTitle>Predictive Maintenance Dashboard</CardTitle>
-              <CardDescription>
-                AI-powered maintenance predictions and KPIs
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
-                <div className="p-4 border rounded-lg">
-                  <div className="flex items-center justify-between mb-2">
-                    <span className="text-sm font-medium">Maintenance Efficiency</span>
-                    <TrendingUp className="h-4 w-4 text-green-500" />
+                    )}
                   </div>
-                  <div className="text-2xl font-bold">92.5%</div>
-                  <Progress value={92.5} className="mt-2" />
-                  <p className="text-xs text-muted-foreground mt-1">
-                    +5.2% from last month
-                  </p>
+                  <Badge
+                    variant={
+                      alert.severity === "critical"
+                        ? "destructive"
+                        : alert.severity === "high"
+                        ? "default"
+                        : "secondary"
+                    }
+                  >
+                    {alert.severity}
+                  </Badge>
                 </div>
-
-                <div className="p-4 border rounded-lg">
-                  <div className="flex items-center justify-between mb-2">
-                    <span className="text-sm font-medium">Predicted Failures</span>
-                    <AlertTriangle className="h-4 w-4 text-yellow-500" />
-                  </div>
-                  <div className="text-2xl font-bold">
-                    {alerts.filter((a) => a.predicted_failure_date).length}
-                  </div>
-                  <p className="text-xs text-muted-foreground mt-1">
-                    Next 30 days
-                  </p>
-                </div>
-
-                <div className="p-4 border rounded-lg">
-                  <div className="flex items-center justify-between mb-2">
-                    <span className="text-sm font-medium">Cost Savings</span>
-                    <TrendingUp className="h-4 w-4 text-green-500" />
-                  </div>
-                  <div className="text-2xl font-bold">$45.2K</div>
-                  <p className="text-xs text-muted-foreground mt-1">
-                    This quarter
-                  </p>
-                </div>
-              </div>
-
-              <div className="space-y-4">
-                <div>
-                  <h3 className="text-lg font-semibold mb-3">Upcoming Maintenance</h3>
-                  <div className="space-y-2">
-                    {alerts
-                      .filter((a) => a.predicted_failure_date)
-                      .map((alert) => (
-                        <div
-                          key={alert.id}
-                          className="flex items-center justify-between p-3 border rounded-lg"
-                        >
-                          <div className="flex items-center gap-3">
-                            <Settings className="h-5 w-5 text-muted-foreground" />
-                            <div>
-                              <p className="font-medium">{alert.message}</p>
-                              <p className="text-sm text-muted-foreground">
-                                Scheduled: {format(new Date(alert.predicted_failure_date!), "PPP")}
-                              </p>
-                            </div>
-                          </div>
-                          <Button size="sm">Schedule</Button>
-                        </div>
-                      ))}
-                  </div>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-        </TabsContent>
-      </Tabs>
+              ))}
+            </div>
+          </CardContent>
+        </Card>
+      )}
     </div>
   );
 };
