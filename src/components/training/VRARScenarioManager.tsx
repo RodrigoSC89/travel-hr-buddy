@@ -3,8 +3,9 @@
  * Criar, executar, avaliar e exportar cenários de treinamento
  */
 
-import React, { useState, useMemo } from "react";
+import React, { useState, useMemo, useEffect } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -107,120 +108,28 @@ interface TrainingSession {
   evaluation_notes?: string;
 }
 
-const mockScenarios: Scenario[] = [
+// Fallback data
+const fallbackScenarios: Scenario[] = [
   {
-    id: "scn-001",
-    title: "Evacuação de Emergência - Nível 1",
+    id: "scn-001", title: "Evacuação de Emergência - Nível 1",
     description: "Simulação VR de procedimentos de evacuação em caso de incêndio a bordo",
-    type: "vr",
-    category: "emergency",
-    difficulty: "beginner",
-    duration_minutes: 30,
+    type: "vr", category: "emergency", difficulty: "beginner", duration_minutes: 30,
     max_participants: 10,
-    objectives: [
-      "Identificar alarme de emergência",
-      "Localizar ponto de encontro",
-      "Vestir colete salva-vidas",
-      "Seguir rota de evacuação",
-    ],
-    equipment_required: ["Headset VR", "Controladores", "Área de movimento 2x2m"],
-    status: "published",
-    version: 3,
-    created_at: "2025-11-01T10:00:00Z",
-    updated_at: "2026-01-15T14:30:00Z",
-    sessions_count: 156,
-    avg_score: 87.5,
-  },
-  {
-    id: "scn-002",
-    title: "Operação de Guindaste - Carga Pesada",
-    description: "Treinamento AR para operação segura de guindastes de convés",
-    type: "ar",
-    category: "operations",
-    difficulty: "advanced",
-    duration_minutes: 45,
-    max_participants: 5,
-    objectives: [
-      "Inspecionar equipamento pré-operação",
-      "Calcular carga máxima segura",
-      "Executar movimentação de carga",
-      "Comunicação com equipe de terra",
-    ],
-    equipment_required: ["Óculos AR", "Tablet de controle", "EPI completo"],
-    status: "published",
-    version: 2,
-    created_at: "2025-10-15T08:00:00Z",
-    updated_at: "2026-01-10T11:20:00Z",
-    sessions_count: 89,
-    avg_score: 82.3,
-  },
-  {
-    id: "scn-003",
-    title: "Navegação em Condições Adversas",
-    description: "Simulação mista VR/AR de navegação em tempestade",
-    type: "mixed",
-    category: "navigation",
-    difficulty: "expert",
-    duration_minutes: 60,
-    max_participants: 3,
-    objectives: [
-      "Interpretar dados meteorológicos",
-      "Ajustar rota de navegação",
-      "Gerenciar equipe de ponte",
-      "Comunicar com autoridades portuárias",
-    ],
-    equipment_required: ["Headset VR", "Simulador de ponte", "Sistema de comunicação"],
-    status: "draft",
-    version: 1,
-    created_at: "2026-01-20T09:00:00Z",
-    updated_at: "2026-01-20T09:00:00Z",
-    sessions_count: 0,
-    avg_score: 0,
+    objectives: ["Identificar alarme", "Localizar ponto de encontro", "Vestir colete", "Seguir rota"],
+    equipment_required: ["Headset VR", "Controladores"],
+    status: "published", version: 3, created_at: "2025-11-01T10:00:00Z", updated_at: "2026-01-15T14:30:00Z",
+    sessions_count: 156, avg_score: 87.5,
   },
 ];
 
-const mockSessions: TrainingSession[] = [
+const fallbackSessions: TrainingSession[] = [
   {
-    id: "sess-001",
-    scenario_id: "scn-001",
-    participant_name: "Carlos Silva",
-    participant_role: "Marinheiro",
-    started_at: "2026-01-30T14:00:00Z",
-    completed_at: "2026-01-30T14:28:00Z",
-    status: "completed",
-    score: 92,
-    time_spent_minutes: 28,
-    objectives_completed: 4,
-    total_objectives: 4,
-    feedback: "Excelente desempenho, especialmente na identificação rápida do alarme.",
-    evaluator: "Cap. João Mendes",
+    id: "sess-001", scenario_id: "scn-001", participant_name: "Carlos Silva",
+    participant_role: "Marinheiro", started_at: "2026-01-30T14:00:00Z",
+    completed_at: "2026-01-30T14:28:00Z", status: "completed", score: 92,
+    time_spent_minutes: 28, objectives_completed: 4, total_objectives: 4,
+    feedback: "Excelente desempenho", evaluator: "Cap. João Mendes",
     evaluation_notes: "Recomendado para cenário avançado",
-  },
-  {
-    id: "sess-002",
-    scenario_id: "scn-001",
-    participant_name: "Ana Costa",
-    participant_role: "Oficial de Convés",
-    started_at: "2026-01-30T15:00:00Z",
-    status: "in_progress",
-    objectives_completed: 2,
-    total_objectives: 4,
-  },
-  {
-    id: "sess-003",
-    scenario_id: "scn-002",
-    participant_name: "Pedro Santos",
-    participant_role: "Operador de Guindaste",
-    started_at: "2026-01-29T10:00:00Z",
-    completed_at: "2026-01-29T10:52:00Z",
-    status: "completed",
-    score: 78,
-    time_spent_minutes: 52,
-    objectives_completed: 3,
-    total_objectives: 4,
-    feedback: "Precisa melhorar cálculo de carga máxima.",
-    evaluator: "Eng. Maria Oliveira",
-    evaluation_notes: "Agendar retreinamento em 30 dias",
   },
 ];
 
@@ -247,8 +156,29 @@ const typeLabels: Record<string, string> = {
 
 export function VRARScenarioManager() {
   const { toast } = useToast();
-  const [scenarios, setScenarios] = useState<Scenario[]>(mockScenarios);
-  const [sessions, setSessions] = useState<TrainingSession[]>(mockSessions);
+  const [scenarios, setScenarios] = useState<Scenario[]>(fallbackScenarios);
+  const [sessions, setSessions] = useState<TrainingSession[]>(fallbackSessions);
+
+  useEffect(() => {
+    const loadData = async () => {
+      try {
+        const { data } = await supabase.from("academy_courses").select("*").limit(10);
+        if (data && data.length > 0) {
+          const mapped: Scenario[] = data.map(c => ({
+            id: c.id, title: c.course_name, description: c.course_description || "",
+            type: "vr" as const, category: "safety" as const, difficulty: "intermediate" as const,
+            duration_minutes: (c.duration_hours || 1) * 60, max_participants: 10,
+            objectives: ((c.modules as unknown[]) || []).map(() => "Objetivo"), equipment_required: ["Headset VR"],
+            status: c.is_published ? "published" as const : "draft" as const, version: 1,
+            created_at: c.created_at || "", updated_at: c.updated_at || "",
+            sessions_count: 0, avg_score: 0,
+          }));
+          setScenarios(mapped);
+        }
+      } catch { /* fallback */ }
+    };
+    loadData();
+  }, []);
   const [searchQuery, setSearchQuery] = useState("");
   const [categoryFilter, setCategoryFilter] = useState<string>("all");
   const [statusFilter, setStatusFilter] = useState<string>("all");

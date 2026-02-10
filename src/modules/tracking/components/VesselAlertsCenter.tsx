@@ -1,9 +1,10 @@
 /**
  * Vessel Alerts Center - Real-time Alert Management
  * Geofencing, threshold alerts, emergency notifications
+ * PATCH P0-002 Batch 9 — Supabase integration
  */
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -12,48 +13,18 @@ import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogFooter,
-} from "@/components/ui/dialog";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import {
-  Bell,
-  AlertTriangle,
-  CheckCircle2,
-  Clock,
-  Ship,
-  MapPin,
-  Thermometer,
-  Gauge,
-  Droplets,
-  Volume2,
-  VolumeX,
-  Settings,
-  Filter,
-  Search,
-  Plus,
-  X,
-  Eye,
-  Radio,
-  Zap,
-  Shield,
-  Navigation,
-  Anchor,
+  Bell, AlertTriangle, CheckCircle2, Clock, Ship, MapPin,
+  Thermometer, Gauge, Droplets, Volume2, VolumeX, Settings,
+  Filter, Search, Plus, X, Eye, Radio, Zap, Shield, Navigation, Anchor,
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { toast } from "sonner";
 import { format, formatDistanceToNow } from "date-fns";
 import { ptBR } from "date-fns/locale";
+import { supabase } from "@/integrations/supabase/client";
 
 interface Alert {
   id: string;
@@ -89,126 +60,29 @@ interface AlertRule {
   auto_actions?: string[];
 }
 
-const mockAlerts: Alert[] = [
+const fallbackAlerts: Alert[] = [
   {
-    id: "1",
-    type: "threshold",
-    severity: "critical",
-    title: "Temperatura Motor Alta",
-    message: "Motor principal atingiu 95°C - limite máximo 90°C",
-    vessel_id: "v1",
-    vessel_name: "MV Atlantic Star",
-    sensor_type: "temperature",
-    current_value: 95,
-    threshold_value: 90,
-    unit: "°C",
-    status: "active",
+    id: "1", type: "threshold", severity: "critical",
+    title: "Temperatura Motor Alta", message: "Motor principal atingiu 95°C - limite máximo 90°C",
+    vessel_id: "v1", vessel_name: "MV Atlantic Star", sensor_type: "temperature",
+    current_value: 95, threshold_value: 90, unit: "°C", status: "active",
     created_at: new Date(Date.now() - 5 * 60000).toISOString(),
     auto_action: "Reduzir RPM automaticamente",
   },
   {
-    id: "2",
-    type: "geofence",
-    severity: "high",
-    title: "Saída de Zona Autorizada",
-    message: "Embarcação saiu da zona de operação designada",
-    vessel_id: "v2",
-    vessel_name: "MV Pacific Explorer",
-    zone_name: "Bacia de Santos",
-    location: { lat: -23.9618, lng: -46.3322 },
-    status: "acknowledged",
+    id: "2", type: "geofence", severity: "high",
+    title: "Saída de Zona Autorizada", message: "Embarcação saiu da zona de operação designada",
+    vessel_id: "v2", vessel_name: "MV Pacific Explorer", zone_name: "Bacia de Santos",
+    location: { lat: -23.9618, lng: -46.3322 }, status: "acknowledged",
     acknowledged_by: "Capitão Silva",
     acknowledged_at: new Date(Date.now() - 2 * 60000).toISOString(),
     created_at: new Date(Date.now() - 15 * 60000).toISOString(),
   },
-  {
-    id: "3",
-    type: "maintenance",
-    severity: "medium",
-    title: "Manutenção Programada",
-    message: "Gerador #2 atingiu 500 horas de operação",
-    vessel_id: "v1",
-    vessel_name: "MV Atlantic Star",
-    sensor_type: "hours",
-    current_value: 502,
-    threshold_value: 500,
-    unit: "h",
-    status: "active",
-    created_at: new Date(Date.now() - 60 * 60000).toISOString(),
-  },
-  {
-    id: "4",
-    type: "threshold",
-    severity: "low",
-    title: "Nível de Combustível Baixo",
-    message: "Tanque principal em 25% da capacidade",
-    vessel_id: "v3",
-    vessel_name: "MV Horizon",
-    sensor_type: "fuel",
-    current_value: 25,
-    threshold_value: 30,
-    unit: "%",
-    status: "resolved",
-    resolved_at: new Date(Date.now() - 30 * 60000).toISOString(),
-    created_at: new Date(Date.now() - 120 * 60000).toISOString(),
-  },
-  {
-    id: "5",
-    type: "weather",
-    severity: "high",
-    title: "Alerta de Tempestade",
-    message: "Condições adversas previstas nas próximas 6 horas",
-    vessel_id: "v2",
-    vessel_name: "MV Pacific Explorer",
-    status: "active",
-    created_at: new Date(Date.now() - 10 * 60000).toISOString(),
-  },
-  {
-    id: "6",
-    type: "emergency",
-    severity: "critical",
-    title: "Homem ao Mar (Drill)",
-    message: "Simulação de emergência iniciada",
-    vessel_id: "v1",
-    vessel_name: "MV Atlantic Star",
-    status: "resolved",
-    resolved_at: new Date(Date.now() - 45 * 60000).toISOString(),
-    created_at: new Date(Date.now() - 90 * 60000).toISOString(),
-  },
 ];
 
-const mockRules: AlertRule[] = [
-  {
-    id: "1",
-    name: "Temperatura Motor > 85°C",
-    type: "threshold",
-    condition: "motor_temp > 85",
-    vessels: ["all"],
-    severity: "high",
-    enabled: true,
-    notification_channels: ["push", "email", "sms"],
-    auto_actions: ["reduce_rpm"],
-  },
-  {
-    id: "2",
-    name: "Zona de Operação Bacia Santos",
-    type: "geofence",
-    condition: "outside_zone",
-    vessels: ["v1", "v2"],
-    severity: "high",
-    enabled: true,
-    notification_channels: ["push", "email"],
-  },
-  {
-    id: "3",
-    name: "Combustível < 30%",
-    type: "threshold",
-    condition: "fuel_level < 30",
-    vessels: ["all"],
-    severity: "medium",
-    enabled: true,
-    notification_channels: ["push"],
-  },
+const fallbackRules: AlertRule[] = [
+  { id: "1", name: "Temperatura Motor > 85°C", type: "threshold", condition: "motor_temp > 85", vessels: ["all"], severity: "high", enabled: true, notification_channels: ["push", "email", "sms"], auto_actions: ["reduce_rpm"] },
+  { id: "2", name: "Zona de Operação Bacia Santos", type: "geofence", condition: "outside_zone", vessels: ["v1", "v2"], severity: "high", enabled: true, notification_channels: ["push", "email"] },
 ];
 
 const SEVERITY_CONFIG = {
@@ -236,8 +110,8 @@ const STATUS_CONFIG = {
 };
 
 export default function VesselAlertsCenter() {
-  const [alerts, setAlerts] = useState<Alert[]>(mockAlerts);
-  const [rules, setRules] = useState<AlertRule[]>(mockRules);
+  const [alerts, setAlerts] = useState<Alert[]>(fallbackAlerts);
+  const [rules, setRules] = useState<AlertRule[]>(fallbackRules);
   const [searchQuery, setSearchQuery] = useState("");
   const [severityFilter, setSeverityFilter] = useState<string>("all");
   const [statusFilter, setStatusFilter] = useState<string>("all");
@@ -245,6 +119,26 @@ export default function VesselAlertsCenter() {
   const [selectedAlert, setSelectedAlert] = useState<Alert | null>(null);
   const [showAlertDetails, setShowAlertDetails] = useState(false);
   const [soundEnabled, setSoundEnabled] = useState(true);
+
+  useEffect(() => {
+    const loadData = async () => {
+      try {
+        const { data, error } = await supabase.from("safety_incidents").select("id, title, description, severity, status, vessel_id, created_at, vessels(name)").order("created_at", { ascending: false }).limit(20);
+        if (!error && data && data.length > 0) {
+          const mapped: Alert[] = data.map(row => ({
+            id: row.id, type: "system" as const,
+            severity: (row.severity === "critical" ? "critical" : row.severity === "high" ? "high" : "medium") as Alert["severity"],
+            title: row.title || "Alerta", message: row.description || "",
+            vessel_id: row.vessel_id || "", vessel_name: (row.vessels as { name?: string })?.name || "Embarcação",
+            status: (row.status === "resolved" ? "resolved" : "active") as Alert["status"],
+            created_at: row.created_at || new Date().toISOString(),
+          }));
+          setAlerts(mapped);
+        }
+      } catch { /* fallback data already set */ }
+    };
+    loadData();
+  }, []);
 
   const filteredAlerts = alerts.filter((a) => {
     const matchesSearch = a.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
