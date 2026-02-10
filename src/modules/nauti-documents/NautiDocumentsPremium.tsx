@@ -378,7 +378,7 @@ export default function NautiDocumentsPremium() {
 
   const actions = (
     <>
-      <Button variant="outline" size="sm" className="gap-2" onClick={() => toast.success("OCR em lote iniciado para documentos pendentes")}>
+      <Button variant="outline" size="sm" className="gap-2" onClick={() => toast.info("OCR em lote", { description: "Processamento OCR em lote em implantação. Utilize o upload individual para processar documentos. ETA: Q3/2026." })}>
         <Scan className="h-4 w-4" />
         OCR
       </Button>

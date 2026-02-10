@@ -142,12 +142,12 @@ const PeopleAnalytics: React.FC = () => {
               <SelectItem value="ytd">Ano atual</SelectItem>
             </SelectContent>
           </Select>
-          <Button variant="outline" onClick={() => toast.success("Filtros aplicados")}>
+          <Button variant="outline" onClick={() => toast.info("Filtros avançados em implantação. Utilize o seletor de período acima. ETA: Q3/2026.")}>
             <Filter className="w-4 h-4 mr-2" />
             Filtros
           </Button>
         </div>
-        <Button onClick={() => toast.success("Relatório de People Analytics exportado")}>
+        <Button onClick={() => toast.info("Exportação de People Analytics", { description: "Utilize o Export Center para gerar relatórios em PDF/CSV." })}>
           <Download className="w-4 h-4 mr-2" />
           Exportar Relatório
         </Button>
