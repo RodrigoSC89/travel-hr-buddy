@@ -51,7 +51,7 @@ function SystemDashboard() {
   const services = integrations.slice(0, 4).map((int: any) => ({
     name: int.name || "Serviço",
     status: int.status === "active" || int.status === "connected" ? "connected" : "offline",
-    uptime: 99.9 + Math.random() * 0.1,
+    uptime: 99.95,
   }));
 
   // Default services if no integrations

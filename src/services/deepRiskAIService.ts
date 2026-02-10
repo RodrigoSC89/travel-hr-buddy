@@ -170,7 +170,7 @@ class DeepRiskAIService {
     else if (score < 75) level = "high";
     else level = "critical";
 
-    const confidence = Math.max(75, Math.min(95, 85 + (Math.random() * 10 - 5)));
+    const confidence = Math.max(75, Math.min(95, 85 + (score * 0.1 - 5)));
     const inferenceTime = Math.round(performance.now() - startTime);
 
     return {

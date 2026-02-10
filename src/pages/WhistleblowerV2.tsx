@@ -171,7 +171,7 @@ export default function WhistleblowerV2() {
     // AI classification
     
     const aiResult = {
-      confidence: Math.floor(Math.random() * 15) + 85,
+      confidence: 92,
       suggested_severity: report.description?.includes("segurança") ? "high" : 
                           report.description?.includes("fraud") ? "high" : "medium",
       tags: generateTags(report.category, report.description || "")

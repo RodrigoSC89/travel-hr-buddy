@@ -214,15 +214,11 @@ class SmartSyncManager {
     const timeoutId = setTimeout(() => controller.abort(), this.config.timeoutMs);
     
     try {
-      // This is a placeholder - replace with actual sync logic
-      await new Promise((resolve, reject) => {
+      // Placeholder - replace with actual sync logic
+      await new Promise((resolve) => {
         setTimeout(() => {
-          if (Math.random() > 0.05) { // 95% success rate simulation
-            resolve(true);
-          } else {
-            reject(new Error('Simulated sync failure'));
-          }
-        }, 100 + Math.random() * 200);
+          resolve(true);
+        }, 150);
       });
     } finally {
       clearTimeout(timeoutId);
@@ -237,7 +233,7 @@ class SmartSyncManager {
     module: string
   ): Promise<void> {
     // Placeholder for chunk sync logic
-    await new Promise(r => setTimeout(r, 50 + Math.random() * 100));
+    await new Promise(r => setTimeout(r, 100));
   }
 
   private removeFromQueue(id: string): void {

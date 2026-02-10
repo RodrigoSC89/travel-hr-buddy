@@ -306,15 +306,15 @@ export default function OperationsCommandCenter() {
         totalVessels: vesselsList.length,
         crewMembers: crewList.length,
         activeCrew,
-        completedVoyages: Math.floor(Math.random() * 20) + 5,
+        completedVoyages: 12, // fallback - awaiting voyage_plans integration
         activeAlerts: alerts?.length || 0,
         fleetEfficiency: activeVessels > 0 ? Math.round((activeVessels / (vesselsList.length || 1)) * 100 * 10) / 10 : 0,
         vesselsInOperation,
         vesselsAtPort,
         vesselsInMaintenance,
-        fuelConsumption: Math.floor(Math.random() * 5000) + 10000,
+        fuelConsumption: 12500, // fallback - awaiting fuel_logs integration
         maintenancePending: maintenanceCount || 0,
-        complianceRate: 95 + Math.floor(Math.random() * 5),
+        complianceRate: 97, // fallback - awaiting compliance score calculation
       });
 
       setVesselDistribution([

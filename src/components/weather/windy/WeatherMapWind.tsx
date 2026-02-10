@@ -33,7 +33,10 @@ const MAP_CITIES = [
 ];
 
 // Wind particle animation
-const WindParticle: React.FC<{ delay: number; direction: number }> = ({ delay, direction }) => {
+const WindParticle: React.FC<{ id: number; delay: number; direction: number }> = ({ id, delay, direction }) => {
+  // Deterministic positions based on particle id
+  const left = ((id * 37 + 13) % 100);
+  const top = ((id * 53 + 7) % 100);
   const style: React.CSSProperties = {
     position: 'absolute',
     width: '60px',
@@ -41,8 +44,8 @@ const WindParticle: React.FC<{ delay: number; direction: number }> = ({ delay, d
     background: 'linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent)',
     transform: `rotate(${direction}deg)`,
     animationDelay: `${delay}s`,
-    left: `${Math.random() * 100}%`,
-    top: `${Math.random() * 100}%`,
+    left: `${left}%`,
+    top: `${top}%`,
   };
 
   return (
@@ -66,8 +69,8 @@ export const WeatherMapWind: React.FC<WeatherMapWindProps> = ({
   const windParticles = useMemo(() => 
     Array.from({ length: 30 }, (_, i) => ({
       id: i,
-      delay: Math.random() * 3,
-      direction: windDirection + (Math.random() * 30 - 15)
+      delay: (i * 0.1) % 3,
+      direction: windDirection + ((i * 17 % 30) - 15)
     })), [windDirection]
   );
 
@@ -112,7 +115,8 @@ export const WeatherMapWind: React.FC<WeatherMapWindProps> = ({
           <div className="absolute inset-0 overflow-hidden">
             {windParticles.map(particle => (
               <WindParticle 
-                key={particle.id} 
+                key={particle.id}
+                id={particle.id}
                 delay={particle.delay}
                 direction={particle.direction}
               />

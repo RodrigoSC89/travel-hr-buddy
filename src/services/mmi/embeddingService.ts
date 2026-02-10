@@ -11,7 +11,7 @@ const EMBEDDING_DIMENSIONS = 1536;
 
 // Mock embedding for fallback when API is not available
 const generateMockEmbedding = (): number[] => {
-  return Array.from({ length: EMBEDDING_DIMENSIONS }, () => Math.random() * 0.1);
+  return Array.from({ length: EMBEDDING_DIMENSIONS }, (_, i) => Math.sin(i * 0.1) * 0.05);
 };
 
 /**

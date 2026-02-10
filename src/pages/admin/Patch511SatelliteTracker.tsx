@@ -26,7 +26,7 @@ export default function Patch511SatelliteTracker() {
           ...prev.position,
           latitude: (prev.position.latitude + 0.5) % 90,
           longitude: (prev.position.longitude + 1.5) % 180,
-          altitude: 408.5 + Math.random() * 2,
+          altitude: 408.5 + Math.sin(Date.now() / 5000) * 1,
         }
       }));
     }, 3000);
