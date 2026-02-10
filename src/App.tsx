@@ -18,6 +18,7 @@ import { Header } from "./components/layout/header";
 import { MobileBottomNav } from "./components/layout/mobile-bottom-nav";
 import { ProductOnboardingTour } from "./components/onboarding/ProductOnboardingTour";
 import { logger } from "@/lib/logger";
+import { ShipLoader } from "@/components/ui/ship-loader";
 
 // ============================================
 // GLOBAL ERROR HANDLERS - Prevent white screens
@@ -492,8 +493,7 @@ const Loader = () => {
   return (
     <div className="min-h-screen flex items-center justify-center bg-background">
       <div className="text-center space-y-4">
-        <div className="animate-spin h-12 w-12 border-4 border-primary border-t-transparent rounded-full mx-auto" />
-        <p className="text-foreground">Carregando Nauti One...</p>
+        <ShipLoader size="lg" label="Carregando Nauti One..." />
         {showRetry && (
           <div className="space-y-2 pt-4">
             <p className="text-sm text-muted-foreground">

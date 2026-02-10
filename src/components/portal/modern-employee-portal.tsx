@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { ShipLoader } from "@/components/ui/ship-loader";
 import { EmployeeTrainingPortal } from "./EmployeeTrainingPortal";
 import { EmployeePaymentsHistory } from "./EmployeePaymentsHistory";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -413,12 +414,7 @@ export const ModernEmployeePortal: React.FC = () => {
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center min-h-[600px]">
-        <div className="text-center space-y-4">
-          <div className="animate-spin h-12 w-12 border-4 border-primary border-t-transparent rounded-full mx-auto"></div>
-          <p className="text-muted-foreground">Carregando portal...</p>
-        </div>
-      </div>
+      <ShipLoader size="lg" label="Carregando portal..." className="min-h-[600px]" />
     );
   }
 
