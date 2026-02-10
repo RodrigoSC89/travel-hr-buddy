@@ -42,6 +42,18 @@ interface SecurityAlert {
   source: string;
 }
 
+interface TelemetryAlertRow {
+  id: string;
+  severity: string | null;
+  title: string | null;
+  alert_type: string | null;
+  description: string | null;
+  message: string | null;
+  created_at: string;
+  status: string | null;
+  source: string | null;
+}
+
 export default function SecurityMonitoring() {
   const queryClient = useQueryClient();
   
@@ -54,14 +66,14 @@ export default function SecurityMonitoring() {
     }
   });
 
-  const alerts: SecurityAlert[] = alertsRaw.map((a: any) => ({
+  const alerts: SecurityAlert[] = alertsRaw.map((a) => ({
     id: a.id,
     type: a.severity === 'critical' || a.severity === 'high' ? 'critical' as const : a.severity === 'medium' || a.severity === 'warning' ? 'warning' as const : 'info' as const,
-    title: a.title || a.alert_type || 'Alert',
-    description: a.description || a.message || '',
+    title: a.alert_type || 'Alert',
+    description: a.message || '',
     timestamp: new Date(a.created_at),
-    status: a.status === 'resolved' || a.status === 'dismissed' ? 'resolved' as const : a.status === 'acknowledged' ? 'investigating' as const : 'open' as const,
-    source: a.source || 'Sistema',
+    status: 'open' as const,
+    source: 'Sistema',
   }));
 
   const securityMetrics = [
@@ -135,9 +147,9 @@ Forneça análises detalhadas e recomendações de segurança.`;
       case "critical":
         return <XCircle className="h-5 w-5 text-destructive" />;
       case "warning":
-        return <AlertTriangle className="h-5 w-5 text-yellow-500" />;
+        return <AlertTriangle className="h-5 w-5 text-warning" />;
       default:
-        return <CheckCircle2 className="h-5 w-5 text-green-500" />;
+        return <CheckCircle2 className="h-5 w-5 text-success" />;
     }
   };
 
@@ -146,9 +158,9 @@ Forneça análises detalhadas e recomendações de segurança.`;
       case "open":
         return <Badge variant="destructive">Aberto</Badge>;
       case "investigating":
-        return <Badge className="bg-yellow-500/20 text-yellow-500 border-yellow-500/30">Investigando</Badge>;
+        return <Badge className="bg-warning/20 text-warning border-warning/30">Investigando</Badge>;
       default:
-        return <Badge className="bg-green-500/20 text-green-500 border-green-500/30">Resolvido</Badge>;
+        return <Badge className="bg-success/20 text-success border-success/30">Resolvido</Badge>;
     }
   };
 
@@ -348,8 +360,8 @@ Forneça análises detalhadas e recomendações de segurança.`;
                     <Badge
                       className={
                         item.status === "compliant"
-                          ? "bg-green-500/20 text-green-500"
-                          : "bg-yellow-500/20 text-yellow-500"
+                          ? "bg-success/20 text-success"
+                          : "bg-warning/20 text-warning"
                       }
                     >
                       {item.status === "compliant" ? "Conforme" : "Parcial"}

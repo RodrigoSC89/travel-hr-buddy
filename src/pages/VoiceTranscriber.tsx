@@ -8,6 +8,15 @@ import { cn } from "@/lib/utils";
 import { toast } from "sonner";
 import { logger } from '@/lib/logger';
 
+interface SpeechRecognitionEvent {
+  resultIndex: number;
+  results: SpeechRecognitionResultList;
+}
+
+interface SpeechRecognitionErrorEvent {
+  error: string;
+}
+
 export default function VoiceTranscriber() {
   const [isRecording, setIsRecording] = useState(false);
   const [transcript, setTranscript] = useState("");
@@ -15,18 +24,33 @@ export default function VoiceTranscriber() {
   const [isSupported, setIsSupported] = useState(true);
   const [language, setLanguage] = useState("pt-BR");
   
-  const recognitionRef = useRef<any>(null);
+  const recognitionRef = useRef<ReturnType<typeof createRecognition> | null>(null);
+
+  function createRecognition() {
+    const SpeechRecognition = (window as unknown as Record<string, unknown>).SpeechRecognition || (window as unknown as Record<string, unknown>).webkitSpeechRecognition;
+    if (!SpeechRecognition) return null;
+    return new (SpeechRecognition as new () => {
+      lang: string;
+      continuous: boolean;
+      interimResults: boolean;
+      onstart: (() => void) | null;
+      onresult: ((event: SpeechRecognitionEvent) => void) | null;
+      onerror: ((event: SpeechRecognitionErrorEvent) => void) | null;
+      onend: (() => void) | null;
+      start: () => void;
+      stop: () => void;
+    })();
+  }
 
   const startRecording = useCallback(() => {
-    const SpeechRecognition = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
+    const recognition = createRecognition();
     
-    if (!SpeechRecognition) {
+    if (!recognition) {
       setIsSupported(false);
       toast.error("Reconhecimento de voz não suportado neste navegador");
       return;
     }
 
-    const recognition = new SpeechRecognition();
     recognition.lang = language;
     recognition.continuous = true;
     recognition.interimResults = true;
@@ -36,7 +60,7 @@ export default function VoiceTranscriber() {
       toast.success("Gravação iniciada");
     };
 
-    recognition.onresult = (event: any) => {
+    recognition.onresult = (event: SpeechRecognitionEvent) => {
       let interim = "";
       let final = "";
 
@@ -55,7 +79,7 @@ export default function VoiceTranscriber() {
       setInterimTranscript(interim);
     };
 
-    recognition.onerror = (event: any) => {
+    recognition.onerror = (event: SpeechRecognitionErrorEvent) => {
       logger.error("Speech recognition error:", event.error);
       if (event.error === "not-allowed") {
         toast.error("Permissão de microfone negada");
@@ -194,7 +218,7 @@ export default function VoiceTranscriber() {
               <div
                 className={cn(
                   "w-3 h-3 rounded-full transition-colors",
-                  isRecording ? "bg-red-500 animate-pulse" : "bg-gray-400"
+                  isRecording ? "bg-destructive animate-pulse" : "bg-muted-foreground"
                 )}
               />
               <span className="text-sm text-muted-foreground">

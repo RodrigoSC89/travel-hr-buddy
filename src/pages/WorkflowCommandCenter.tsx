@@ -56,19 +56,19 @@ interface WorkflowNode {
   type: "trigger" | "action" | "condition" | "delay" | "end";
   label: string;
   status: "pending" | "running" | "completed" | "error";
-  config?: Record<string, any>;
+  config?: Record<string, unknown>;
 }
 
 // Visual workflows derived from real workflow data
-const getVisualWorkflows = (workflows: any[]) => {
+const getVisualWorkflows = (workflows: { id: string; name: string; status: string; steps?: Record<string, unknown>[]; execution_count?: number; updated_at?: string }[]) => {
   if (workflows.length === 0) return [];
   return workflows.slice(0, 3).map((w, i) => ({
     id: `vw-${w.id || i}`,
     name: w.name || `Workflow ${i + 1}`,
-    nodes: (w.steps || []).map((step: any, si: number) => ({
+    nodes: (w.steps || []).map((step, si: number) => ({
       id: `n${si + 1}`,
-      type: si === 0 ? "trigger" as const : si === (w.steps?.length || 1) - 1 ? "end" as const : "action" as const,
-      label: step.name || step.title || `Etapa ${si + 1}`,
+      type: si === 0 ? "trigger" as const : si === ((w.steps?.length || 1) - 1) ? "end" as const : "action" as const,
+      label: (step.name as string) || (step.title as string) || `Etapa ${si + 1}`,
       status: w.status === "completed" ? "completed" as const : si === 0 ? "completed" as const : "pending" as const,
     })),
     status: w.status === "active" ? "running" : w.status || "draft",
@@ -99,11 +99,11 @@ export default function WorkflowCommandCenter() {
   const [showNewWorkflow, setShowNewWorkflow] = useState(false);
   const [showDetails, setShowDetails] = useState(false);
   const [showSettings, setShowSettings] = useState(false);
-  const [selectedWorkflow, setSelectedWorkflow] = useState<any>(null);
+  const [selectedWorkflow, setSelectedWorkflow] = useState<typeof workflows[number] | null>(null);
   const [newWorkflowData, setNewWorkflowData] = useState({ name: "", description: "", category: "custom", priority: "medium" });
 
   // Visual workflow state - derived from real workflows
-  const visualWorkflows = getVisualWorkflows(workflows);
+  const visualWorkflows = getVisualWorkflows(workflows as unknown as Parameters<typeof getVisualWorkflows>[0]);
   const [selectedVisualWorkflow, setSelectedVisualWorkflow] = useState<ReturnType<typeof getVisualWorkflows>[0] | null>(null);
 
   // Filtered workflows
@@ -136,8 +136,8 @@ export default function WorkflowCommandCenter() {
     await createWorkflow({
       name: newWorkflowData.name,
       description: newWorkflowData.description,
-      category: newWorkflowData.category as any,
-      priority: newWorkflowData.priority as any,
+      category: newWorkflowData.category as "custom" | "compliance" | "finance" | "hr" | "maintenance" | "marketing" | "operations",
+      priority: newWorkflowData.priority as "low" | "medium" | "high" | "urgent",
       status: "draft",
       steps: [],
     });
@@ -149,7 +149,7 @@ export default function WorkflowCommandCenter() {
     await createWorkflow({
       name: template.name,
       description: template.description,
-      category: template.category as any,
+      category: template.category as "custom" | "compliance" | "finance" | "hr" | "maintenance" | "marketing" | "operations",
       priority: "medium",
       status: "draft",
       steps: template.steps,
@@ -161,9 +161,9 @@ export default function WorkflowCommandCenter() {
 
   const getNodeStatusColor = (status: string) => {
     switch (status) {
-      case "completed": return "bg-green-500";
-      case "running": return "bg-blue-500 animate-pulse";
-      case "error": return "bg-red-500";
+      case "completed": return "bg-success";
+      case "running": return "bg-primary animate-pulse";
+      case "error": return "bg-destructive";
       default: return "bg-muted";
     }
   };
@@ -182,10 +182,10 @@ export default function WorkflowCommandCenter() {
   // Stats calculation
   const stats = {
     totalWorkflows: workflows.length,
-    activeWorkflows: workflows.filter((w: any) => w.status === "active").length,
-    completedToday: workflows.filter((w: any) => w.status === "completed").length,
-    automationRulesActive: automationRules.filter((r: any) => r.is_active).length,
-    totalExecutions: visualWorkflows.reduce((acc: number, w: any) => acc + w.executions, 0),
+    activeWorkflows: workflows.filter((w) => w.status === "active").length,
+    completedToday: workflows.filter((w) => w.status === "completed").length,
+    automationRulesActive: automationRules.filter((r) => r.is_active).length,
+    totalExecutions: visualWorkflows.reduce((acc: number, w) => acc + w.executions, 0),
     efficiencyScore: 87
   };
 
@@ -248,9 +248,9 @@ export default function WorkflowCommandCenter() {
           <Card>
             <CardContent className="pt-4">
               <div className="flex items-center gap-2">
-                <Play className="h-5 w-5 text-green-500" />
+                <Play className="h-5 w-5 text-success" />
                 <div>
-                  <p className="text-2xl font-bold text-green-500">{stats.activeWorkflows}</p>
+                  <p className="text-2xl font-bold text-success">{stats.activeWorkflows}</p>
                   <p className="text-xs text-muted-foreground">Em Execução</p>
                 </div>
               </div>
@@ -259,7 +259,7 @@ export default function WorkflowCommandCenter() {
           <Card>
             <CardContent className="pt-4">
               <div className="flex items-center gap-2">
-                <CheckCircle2 className="h-5 w-5 text-blue-500" />
+                <CheckCircle2 className="h-5 w-5 text-primary" />
                 <div>
                   <p className="text-2xl font-bold">{stats.completedToday}</p>
                   <p className="text-xs text-muted-foreground">Concluídos Hoje</p>
@@ -270,7 +270,7 @@ export default function WorkflowCommandCenter() {
           <Card>
             <CardContent className="pt-4">
               <div className="flex items-center gap-2">
-                <Zap className="h-5 w-5 text-yellow-500" />
+                <Zap className="h-5 w-5 text-warning" />
                 <div>
                   <p className="text-2xl font-bold">{stats.automationRulesActive}</p>
                   <p className="text-xs text-muted-foreground">Automações Ativas</p>
@@ -281,7 +281,7 @@ export default function WorkflowCommandCenter() {
           <Card>
             <CardContent className="pt-4">
               <div className="flex items-center gap-2">
-                <Target className="h-5 w-5 text-purple-500" />
+                <Target className="h-5 w-5 text-accent-foreground" />
                 <div>
                   <p className="text-2xl font-bold">{stats.totalExecutions}</p>
                   <p className="text-xs text-muted-foreground">Execuções Total</p>
@@ -292,7 +292,7 @@ export default function WorkflowCommandCenter() {
           <Card>
             <CardContent className="pt-4">
               <div className="flex items-center gap-2">
-                <TrendingUp className="h-5 w-5 text-green-500" />
+                <TrendingUp className="h-5 w-5 text-success" />
                 <div>
                   <p className="text-2xl font-bold">{stats.efficiencyScore}%</p>
                   <p className="text-xs text-muted-foreground">Eficiência</p>
@@ -348,7 +348,7 @@ export default function WorkflowCommandCenter() {
                   <CardDescription>Fluxos em execução com visualização de etapas</CardDescription>
                 </CardHeader>
                 <CardContent className="space-y-4">
-                  {visualWorkflows.filter((w: any) => w.status === "running").map((workflow: any) => (
+                  {visualWorkflows.filter((w) => w.status === "running").map((workflow) => (
                     <div 
                       key={workflow.id} 
                       className="p-4 border rounded-lg hover:bg-accent/50 transition-colors cursor-pointer"
@@ -359,7 +359,7 @@ export default function WorkflowCommandCenter() {
                         <Badge className="bg-blue-500/10 text-blue-500">Em execução</Badge>
                       </div>
                       <div className="flex items-center gap-2 overflow-x-auto pb-2">
-                        {workflow.nodes.map((node: any, i: number) => (
+                        {workflow.nodes.map((node, i: number) => (
                           <React.Fragment key={node.id}>
                             <div className={`flex items-center justify-center w-8 h-8 rounded-full ${getNodeStatusColor(node.status)} text-white`}>
                               {getNodeIcon(node.type)}
@@ -382,7 +382,7 @@ export default function WorkflowCommandCenter() {
               <Card>
                 <CardHeader>
                   <CardTitle className="flex items-center gap-2">
-                    <Bot className="h-5 w-5 text-yellow-500" />
+                    <Bot className="h-5 w-5 text-warning" />
                     Sugestões de IA Recentes
                   </CardTitle>
                   <CardDescription>Otimizações sugeridas pelo sistema</CardDescription>

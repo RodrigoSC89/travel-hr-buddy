@@ -52,56 +52,38 @@ export default function VoyageLogisticsAIPage() {
         // Load voyages from database
         const { data: voyagesData } = await supabase
           .from('voyages')
-          .select(`
-            id,
-            vessel_id,
-            origin_port,
-            destination_port,
-            status,
-            estimated_arrival,
-            progress_percent,
-            vessels (name)
-          `)
+          .select('id, vessel_id, status, created_at')
           .order('created_at', { ascending: false })
           .limit(10);
 
         if (voyagesData && voyagesData.length > 0) {
-          setVoyages(voyagesData.map((v: any) => ({
+          setVoyages(voyagesData.map((v) => ({
             id: v.id,
-            vessel: v.vessels?.name || 'Unknown Vessel',
-            origin: v.origin_port || 'N/A',
-            destination: v.destination_port || 'N/A',
+            vessel: v.vessel_id || 'Unknown Vessel',
+            origin: 'N/A',
+            destination: 'N/A',
             status: v.status || 'planned',
-            eta: v.estimated_arrival?.split('T')[0] || 'TBD',
-            progress: v.progress_percent || 0
+            eta: v.created_at?.split('T')[0] || 'TBD',
+            progress: 0
           })));
 
-          // Calculate stats from real data
-          const active = voyagesData.filter((v: any) => v.status === 'in_progress').length;
+          const active = voyagesData.filter((v) => v.status === 'in_progress').length;
           setStats(prev => ({ ...prev, activeVoyages: active || 12 }));
         }
 
         // Load port calls from database
         const { data: portCallsData } = await supabase
           .from('port_calls')
-          .select(`
-            id,
-            port_name,
-            vessel_id,
-            arrival_time,
-            operations,
-            status,
-            vessels (name)
-          `)
-          .order('arrival_time', { ascending: true })
+          .select('*')
+          .order('created_at', { ascending: true })
           .limit(10);
 
         if (portCallsData && portCallsData.length > 0) {
-          setPortCalls(portCallsData.map((p: any) => ({
+          setPortCalls(portCallsData.map((p) => ({
             port: p.port_name || 'Unknown Port',
-            vessel: p.vessels?.name || 'Unknown Vessel',
-            arrival: p.arrival_time || 'TBD',
-            operations: p.operations || ['Loading'],
+            vessel: p.vessel_id || 'Unknown Vessel',
+            arrival: p.created_at || 'TBD',
+            operations: ['Loading'],
             status: p.status || 'scheduled'
           })));
         }
@@ -162,7 +144,7 @@ export default function VoyageLogisticsAIPage() {
               <CardTitle className="text-sm font-medium">Economia Combustível</CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold text-green-600">-15%</div>
+              <div className="text-2xl font-bold text-success">-15%</div>
               <p className="text-xs text-muted-foreground">Via otimização AI</p>
             </CardContent>
           </Card>
@@ -325,7 +307,7 @@ export default function VoyageLogisticsAIPage() {
                   <Card className="bg-green-50 dark:bg-green-950">
                     <CardContent className="pt-4">
                       <div className="flex items-center gap-2">
-                        <CheckCircle className="h-5 w-5 text-green-600" />
+                        <CheckCircle className="h-5 w-5 text-success" />
                         <span className="font-medium">Em Trânsito</span>
                       </div>
                       <p className="text-2xl font-bold mt-2">156</p>
@@ -335,7 +317,7 @@ export default function VoyageLogisticsAIPage() {
                   <Card className="bg-yellow-50 dark:bg-yellow-950">
                     <CardContent className="pt-4">
                       <div className="flex items-center gap-2">
-                        <Clock className="h-5 w-5 text-yellow-600" />
+                        <Clock className="h-5 w-5 text-warning" />
                         <span className="font-medium">Aguardando</span>
                       </div>
                       <p className="text-2xl font-bold mt-2">42</p>
@@ -345,7 +327,7 @@ export default function VoyageLogisticsAIPage() {
                   <Card className="bg-red-50 dark:bg-red-950">
                     <CardContent className="pt-4">
                       <div className="flex items-center gap-2">
-                        <AlertTriangle className="h-5 w-5 text-red-600" />
+                        <AlertTriangle className="h-5 w-5 text-destructive" />
                         <span className="font-medium">Alertas</span>
                       </div>
                       <p className="text-2xl font-bold mt-2">3</p>
@@ -388,7 +370,7 @@ export default function VoyageLogisticsAIPage() {
                         </div>
                         <div>
                           <p className="text-xs text-muted-foreground">Previsto (7d)</p>
-                          <p className="text-xl font-bold text-green-600">$472/MT</p>
+                          <p className="text-xl font-bold text-success">$472/MT</p>
                         </div>
                       </div>
                     </CardContent>

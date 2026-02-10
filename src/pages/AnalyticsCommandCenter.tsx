@@ -109,14 +109,14 @@ const AnalyticsCommandCenter: React.FC = () => {
     crew_efficiency: 89, safety_score: 96, environmental_score: 88,
   } : null;
 
-  const insights: AIInsight[] = rawInsights.map((ins: any, i: number) => ({
+  const insights: AIInsight[] = rawInsights.map((ins, i: number) => ({
     id: ins.id || String(i), title: ins.title, content: ins.description,
     type: (ins.type === 'success' ? 'recommendation' : ins.type === 'warning' ? 'alert' : 'trend') as AIInsight['type'],
     confidence: 90 - i * 5, priority: (i === 0 ? "high" : "medium") as "high" | "medium" | "low",
     createdAt: new Date(), actionable: ins.actionable,
   }));
 
-  const predictions: PredictiveInsight[] = rawInsights.filter((i: any) => i.type === 'warning' || i.type === 'info').map((ins: any, i: number) => ({
+  const predictions: PredictiveInsight[] = rawInsights.filter((i) => i.type === 'warning' || i.type === 'info').map((ins, i: number) => ({
     id: `pred-${i}`, type: "maintenance" as const, title: ins.title, description: ins.description,
     impact: (i === 0 ? "high" : "medium") as "high" | "medium" | "low",
     confidence: 90 - i * 5, potential_savings: 15000 + i * 5000,
@@ -188,15 +188,15 @@ const AnalyticsCommandCenter: React.FC = () => {
   };
 
   const getHealthColor = (score: number) => {
-    if (score >= 90) return "text-green-600";
-    if (score >= 75) return "text-yellow-600";
-    return "text-red-600";
+    if (score >= 90) return "text-success";
+    if (score >= 75) return "text-warning";
+    return "text-destructive";
   };
 
   const getTrendIcon = (trend: string) => {
     switch (trend) {
-      case "up": return <TrendingUp className="h-4 w-4 text-green-600" />;
-      case "down": return <TrendingDown className="h-4 w-4 text-red-600" />;
+      case "up": return <TrendingUp className="h-4 w-4 text-success" />;
+      case "down": return <TrendingDown className="h-4 w-4 text-destructive" />;
       default: return <Activity className="h-4 w-4 text-muted-foreground" />;
     }
   };
