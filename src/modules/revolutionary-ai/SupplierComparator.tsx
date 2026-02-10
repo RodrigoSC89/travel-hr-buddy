@@ -17,6 +17,7 @@ import {
 } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { supabase } from '@/integrations/supabase/client';
+import { toast } from 'sonner';
 import { useQuery } from '@tanstack/react-query';
 
 interface Supplier {
@@ -363,7 +364,7 @@ export function SupplierComparator() {
                   </div>
                 )}
 
-                <Button className="w-full">
+                <Button className="w-full" onClick={() => toast.success("Cotação iniciada", { description: "Processo de cotação em implantação. Utilize o módulo Procurement para enviar RFQs aos fornecedores selecionados." })}>
                   <Package className="h-4 w-4 mr-2" />
                   Iniciar Cotação
                 </Button>

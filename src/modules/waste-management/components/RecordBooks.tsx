@@ -399,7 +399,7 @@ export function RecordBooks() {
                       </TableCell>
                       <TableCell className="text-right">
                         <div className="flex justify-end gap-1">
-                          <Button variant="ghost" size="sm">
+                          <Button variant="ghost" size="sm" onClick={() => toast.info(`Registro: ${record.date}`, { description: `Operação: ${record.operationType} | Tanque: ${record.tankInvolved} | Qtd: ${record.quantity} ${record.unit} | Oficial: ${record.officerName}` })}>
                             <Eye className="h-4 w-4" />
                           </Button>
                           {!record.verified && (
@@ -483,7 +483,7 @@ export function RecordBooks() {
                       </TableCell>
                       <TableCell className="text-right">
                         <div className="flex justify-end gap-1">
-                          <Button variant="ghost" size="sm">
+                          <Button variant="ghost" size="sm" onClick={() => toast.info(`Registro: ${record.date}`, { description: `Categoria: ${record.category} | Qtd: ${record.estimatedQuantity} ${record.unit} | Método: ${record.disposalMethod} | Oficial: ${record.officerName}` })}>
                             <Eye className="h-4 w-4" />
                           </Button>
                           {!record.verified && (

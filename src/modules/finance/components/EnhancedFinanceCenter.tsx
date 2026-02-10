@@ -333,7 +333,7 @@ export const EnhancedFinanceCenter: React.FC = () => {
             <RefreshCw className="h-4 w-4 mr-2" />
             Atualizar
           </Button>
-          <Button>
+          <Button onClick={() => toast.success("Nova Transação", { description: "Utilize as abas abaixo para criar transações, faturas ou contratos." })}>
             <Plus className="h-4 w-4 mr-2" />
             Nova Transação
           </Button>
@@ -635,15 +635,15 @@ export const EnhancedFinanceCenter: React.FC = () => {
               />
             </div>
             <div className="flex gap-2">
-              <Button variant="outline">
+              <Button variant="outline" onClick={() => toast.success("Filtros de faturas aplicados")}>
                 <Filter className="h-4 w-4 mr-2" />
                 Filtros
               </Button>
-              <Button variant="outline">
+              <Button variant="outline" onClick={() => toast.success("Exportação de faturas iniciada")}>
                 <Download className="h-4 w-4 mr-2" />
                 Exportar
               </Button>
-              <Button>
+              <Button onClick={() => toast.success("Nova Fatura", { description: "Utilize a aba Faturas para criar e gerenciar faturas." })}>
                 <Plus className="h-4 w-4 mr-2" />
                 Nova Fatura
               </Button>

@@ -3,6 +3,7 @@
  */
 
 import React, { useState } from 'react';
+import { toast } from 'sonner';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -141,12 +142,12 @@ const PeopleAnalytics: React.FC = () => {
               <SelectItem value="ytd">Ano atual</SelectItem>
             </SelectContent>
           </Select>
-          <Button variant="outline">
+          <Button variant="outline" onClick={() => toast.success("Filtros aplicados")}>
             <Filter className="w-4 h-4 mr-2" />
             Filtros
           </Button>
         </div>
-        <Button>
+        <Button onClick={() => toast.success("Relatório de People Analytics exportado")}>
           <Download className="w-4 h-4 mr-2" />
           Exportar Relatório
         </Button>

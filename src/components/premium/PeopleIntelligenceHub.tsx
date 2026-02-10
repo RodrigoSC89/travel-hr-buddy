@@ -343,7 +343,7 @@ export default function PeopleIntelligenceHub() {
                      <Users className="h-5 w-5" />
                      Tripulação
                    </span>
-                   <Button size="sm" variant="outline" onClick={() => toast.info("Use o botão 'Add Crew Member' na barra de ações do People Hub")}>
+                   <Button size="sm" variant="outline" onClick={() => { window.history.pushState({}, "", "/workbench?tab=people"); window.dispatchEvent(new PopStateEvent("popstate")); }}>
                      <UserPlus className="h-4 w-4" />
                    </Button>
                  </CardTitle>
