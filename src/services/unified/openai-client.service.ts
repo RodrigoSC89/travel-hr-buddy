@@ -254,7 +254,7 @@ export async function generateEmbedding(text: string): Promise<number[] | null> 
  * Generate mock embedding for testing/fallback
  */
 export function generateMockEmbedding(dimensions: number = 1536): number[] {
-  return Array.from({ length: dimensions }, () => Math.random() * 2 - 1);
+  return Array.from({ length: dimensions }, (_, i) => Math.sin(i * 0.1) * 0.5);
 }
 
 // ===== Testing =====

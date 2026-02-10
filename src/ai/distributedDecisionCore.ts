@@ -395,7 +395,7 @@ class DistributedDecisionCore {
     scenario: string,
     context: DecisionContext
   ): Promise<SimulationResult> {
-    const confidence = 0.5 + Math.random() * 0.5;
+    const confidence = 0.75; // Fallback baseline confidence
 
     return {
       scenario,

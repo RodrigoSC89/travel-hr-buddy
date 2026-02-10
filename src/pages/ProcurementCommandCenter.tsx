@@ -271,7 +271,7 @@ export default function ProcurementCommandCenter() {
         aiReasoning: item.status === 'critical' 
           ? `Estoque crítico com apenas ${item.daysUntilEmpty} dias de suprimento. Reposição urgente necessária.`
           : `Estoque abaixo do mínimo (${item.currentStock}/${item.minStock}). Pedido preventivo recomendado.`,
-        savingsOpportunity: Math.round(Math.random() * 500),
+        savingsOpportunity: Math.round((item.minStock - item.currentStock) * 2.5),
       }));
 
       setStockItems(realStock.length > 0 ? realStock : []);

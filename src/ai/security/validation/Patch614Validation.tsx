@@ -213,7 +213,7 @@ export function Patch614Validation() {
           location: threat.context.location,
           source: threat.context.source,
           affectedSystemsCount: threat.context.affectedSystems.length,
-          responseTime: Math.floor(Math.random() * 500) + 100, // 100-600ms
+          responseTime: 250, // baseline response time ms
           hasMetadata: true
         }
       }));

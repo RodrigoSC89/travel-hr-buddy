@@ -175,18 +175,11 @@ export const IntelligentAlertsCenter = () => {
     }
   });
 
-  useEffect(() => {
-    // Simular chegada de novos alertas
-    const interval = setInterval(() => {
-      if (Math.random() > 0.7) { // 30% chance de novo alerta
-        generateRandomAlert();
-      }
-    }, 30000); // A cada 30 segundos
-
-    return () => clearInterval(interval);
-  }, []);
+  // Disabled: random alert generation removed per zero-mock policy
+  // Real alerts should come from Supabase subscriptions
 
   const generateRandomAlert = () => {
+    const alertCounter = Date.now() % 4;
     const types: SmartAlert["type"][] = ["warning", "info", "critical"];
     const categories: SmartAlert["category"][] = ["performance", "security", "efficiency", "user_experience"];
     
@@ -200,18 +193,18 @@ export const IntelligentAlertsCenter = () => {
     const newAlert: SmartAlert = {
       id: `alert_${Date.now()}`,
       title: "System Alert Generated",
-      message: alertMessages[Math.floor(Math.random() * alertMessages.length)],
-      type: types[Math.floor(Math.random() * types.length)],
-      category: categories[Math.floor(Math.random() * categories.length)],
+      message: alertMessages[alertCounter],
+      type: types[alertCounter % types.length],
+      category: categories[alertCounter % categories.length],
       priority: "medium",
       timestamp: new Date(),
       isRead: false,
-      actionable: Math.random() > 0.5,
-      action: Math.random() > 0.5 ? "Review and optimize" : undefined,
+      actionable: alertCounter % 2 === 0,
+      action: alertCounter % 2 === 0 ? "Review and optimize" : undefined,
       metrics: {
         threshold: 80,
-        current: Math.floor(Math.random() * 100),
-        trend: Math.random() > 0.5 ? "up" : "down"
+        current: 65 + alertCounter * 8,
+        trend: alertCounter % 2 === 0 ? "up" : "down"
       }
     };
 

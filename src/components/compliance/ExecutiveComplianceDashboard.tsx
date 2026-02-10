@@ -226,8 +226,8 @@ const useExecutiveKPIs = () => {
         totalNCs: modules.reduce((sum, m) => sum + m.ncItems, 0),
         criticalNCs: modules.reduce((sum, m) => sum + m.criticalNCs, 0),
         pendingActions: modules.reduce((sum, m) => sum + m.pendingItems, 0),
-        averageResolutionDays: Math.floor(Math.random() * 10) + 5,
-        complianceROI: Math.floor(Math.random() * 50) + 150,
+        averageResolutionDays: 8, // fallback baseline
+        complianceROI: 175, // fallback baseline
       };
       
       // Generate 12-month trend data
@@ -240,10 +240,10 @@ const useExecutiveKPIs = () => {
         const progressFactor = (12 - i) / 12;
         trends.push({
           month: monthNames[monthIndex],
-          PEOTRAM: Math.round(60 + progressFactor * 20 + Math.random() * 8 - 4),
-          'PEO-DP': Math.round(65 + progressFactor * 18 + Math.random() * 8 - 4),
-          MLC: Math.round(70 + progressFactor * 16 + Math.random() * 8 - 4),
-          SGSO: Math.round(72 + progressFactor * 18 + Math.random() * 8 - 4),
+          PEOTRAM: Math.round(60 + progressFactor * 20 + Math.sin(i * 1.1) * 4),
+          'PEO-DP': Math.round(65 + progressFactor * 18 + Math.sin(i * 1.3) * 4),
+          MLC: Math.round(70 + progressFactor * 16 + Math.sin(i * 0.9) * 4),
+          SGSO: Math.round(72 + progressFactor * 18 + Math.sin(i * 1.5) * 4),
           average: 0,
         });
         trends[trends.length - 1].average = Math.round(

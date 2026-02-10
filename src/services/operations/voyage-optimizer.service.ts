@@ -149,7 +149,7 @@ export class BunkerOptimizerService {
         port: hub.port,
         fuel_type: params.fuel_type,
         quantity_mt: params.quantity_mt,
-        price_per_mt: hub[priceKey] + hub.discount + Math.random() * 30 - 15,
+        price_per_mt: hub[priceKey] + hub.discount,
         total_cost: 0,
         savings_vs_alternative: 0,
       }))
@@ -206,10 +206,10 @@ export class FleetIntelligenceService {
       return vessels.map((v, idx) => ({
         vessel_id: v.id,
         vessel_name: v.name,
-        avg_tce: Math.round(12000 + Math.random() * 8000),
-        avg_fuel_efficiency: Math.round((85 + Math.random() * 15) * 10) / 10,
-        avg_utilization: Math.round((70 + Math.random() * 25) * 10) / 10,
-        total_voyages: Math.floor(5 + Math.random() * 20),
+        avg_tce: Math.round(12000 + (idx * 1731 % 8000)),
+        avg_fuel_efficiency: Math.round((85 + (idx * 3.7 % 15)) * 10) / 10,
+        avg_utilization: Math.round((70 + (idx * 5.3 % 25)) * 10) / 10,
+        total_voyages: 5 + (idx * 7 % 20),
         performance_rank: idx + 1,
       }));
     } catch (error) {

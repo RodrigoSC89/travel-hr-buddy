@@ -98,15 +98,16 @@ export default function Patch517CoordinationAI() {
       },
     ];
 
-    const randomContext = contexts[Math.floor(Math.random() * contexts.length)];
+    const contextIdx = Date.now() % contexts.length;
+    const selectedContext = contexts[contextIdx];
     const newDecision: AIDecision = {
       id: Date.now().toString(),
       timestamp: new Date().toISOString(),
-      context: randomContext.context,
-      decision: randomContext.decision,
-      rationale: randomContext.rationale,
-      confidence: Math.floor(Math.random() * 15) + 85,
-      modules: randomContext.modules,
+      context: selectedContext.context,
+      decision: selectedContext.decision,
+      rationale: selectedContext.rationale,
+      confidence: 85 + (contextIdx * 3),
+      modules: selectedContext.modules,
       status: "pending",
     };
 

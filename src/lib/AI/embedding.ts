@@ -17,7 +17,7 @@ export const generateEmbedding = async (text: string): Promise<number[]> => {
     // Stub implementation - returns a mock embedding vector
     // In production, this would call an actual embedding service (e.g., OpenAI embeddings)
     const embeddingDimension = 128; // Standard dimension for demo
-    const embedding = Array.from({ length: embeddingDimension }, () => Math.random());
+    const embedding = Array.from({ length: embeddingDimension }, (_, i) => Math.sin(i * 0.1) * 0.5);
     
     return embedding;
   } catch (error) {

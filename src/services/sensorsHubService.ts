@@ -71,7 +71,8 @@ class SensorsHubService {
     const logs = sensorTypes.map(sensor => {
       const baseValue = this.getBaseValue(sensor.type);
       const variance = baseValue * 0.1;
-      const value = baseValue + (Math.random() - 0.5) * variance;
+      const sensorSeed = sensor.id.charCodeAt(0) + sensor.id.charCodeAt(sensor.id.length - 1);
+      const value = baseValue + Math.sin(Date.now() / 10000 + sensorSeed) * variance * 0.5;
       const status = this.getSensorStatus(sensor.type, value);
 
       return {

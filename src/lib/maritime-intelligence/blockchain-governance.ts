@@ -214,15 +214,15 @@ export class BlockchainGovernanceSystem {
   }
 
   private generateHash(): string {
-    return Array.from({ length: 64 }, () => 
-      Math.floor(Math.random() * 16).toString(16)
-    ).join('');
+    const arr = new Uint8Array(32);
+    crypto.getRandomValues(arr);
+    return Array.from(arr, b => b.toString(16).padStart(2, '0')).join('');
   }
 
   private generateSignature(): string {
-    return '0x' + Array.from({ length: 128 }, () => 
-      Math.floor(Math.random() * 16).toString(16)
-    ).join('');
+    const arr = new Uint8Array(64);
+    crypto.getRandomValues(arr);
+    return '0x' + Array.from(arr, b => b.toString(16).padStart(2, '0')).join('');
   }
 
   /**

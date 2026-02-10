@@ -9,20 +9,22 @@ export default function Patch513OceanSonar() {
 
   useEffect(() => {
     // Simulate sonar sweep
+    let tick = 0;
     const interval = setInterval(() => {
+      tick++;
       const newScan = Array.from({ length: 360 }, (_, i) => ({
         angle: i,
-        distance: Math.random() * 1000 + 500,
-        intensity: Math.random()
+        distance: 500 + Math.abs(Math.sin(i * 0.0174 + tick * 0.1)) * 1000,
+        intensity: Math.abs(Math.cos(i * 0.0349 + tick * 0.05))
       }));
       setSonarData(newScan);
 
-      // Random detection
-      if (Math.random() > 0.8) {
+      // Deterministic detection every 5 ticks
+      if (tick % 5 === 0) {
         setDetectionLogs(prev => [...prev, {
           time: new Date().toISOString(),
-          type: Math.random() > 0.5 ? "object" : "noise",
-          distance: Math.random() * 1000 + 500
+          type: tick % 10 === 0 ? "object" : "noise",
+          distance: 500 + (tick * 73 % 1000)
         }].slice(-20));
       }
     }, 2000);

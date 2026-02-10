@@ -497,8 +497,8 @@ class InstanceController {
    * Ping instance to check if alive
    */
   private async pingInstance(instanceId: string): Promise<boolean> {
-    // Simulate ping - in production, make actual HTTP request
-    return Math.random() > 0.1; // 90% uptime simulation
+    // Fallback: always report healthy until real HTTP ping is implemented
+    return true;
   }
 
   /**
