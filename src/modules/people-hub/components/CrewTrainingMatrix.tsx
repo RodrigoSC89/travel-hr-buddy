@@ -2,8 +2,9 @@
  * Crew Training Matrix - STCW Compliance Component
  * Matriz visual de treinamentos da tripulação
  */
-
-import React, { useState, useMemo } from "react";
+ 
+import React, { useState, useMemo, useEffect } from "react";
+import { supabase } from "@/integrations/supabase/client";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -79,19 +80,16 @@ interface TrainingRecord {
   score?: number;
 }
 
-// Mock data
-const mockCrew: CrewMember[] = [
+// Fallback data - used when no Supabase data available
+const fallbackCrew: CrewMember[] = [
   { id: "1", name: "João Silva", rank: "Master", vessel: "MV Atlântico Sul", department: "Deck" },
   { id: "2", name: "Maria Santos", rank: "Chief Officer", vessel: "MV Atlântico Sul", department: "Deck" },
   { id: "3", name: "Pedro Costa", rank: "2nd Officer", vessel: "MV Horizonte", department: "Deck" },
   { id: "4", name: "Ana Lima", rank: "Chief Engineer", vessel: "MV Oceano", department: "Engine" },
   { id: "5", name: "Carlos Mendes", rank: "2nd Engineer", vessel: "MV Pacífico", department: "Engine" },
-  { id: "6", name: "Luiza Ferreira", rank: "ETO", vessel: "MV Atlântico Sul", department: "Engine" },
-  { id: "7", name: "Roberto Alves", rank: "AB Seaman", vessel: "MV Horizonte", department: "Deck" },
-  { id: "8", name: "Fernanda Dias", rank: "Chief Cook", vessel: "MV Oceano", department: "Catering" },
 ];
 
-const mockTrainings: Training[] = [
+const fallbackTrainings: Training[] = [
   { id: "t1", code: "BST", name: "Basic Safety Training", category: "STCW", mandatory: true },
   { id: "t2", code: "PSCRB", name: "Proficiency in Survival Craft", category: "STCW", mandatory: true },
   { id: "t3", code: "AFF", name: "Advanced Fire Fighting", category: "STCW", mandatory: true },
@@ -104,27 +102,7 @@ const mockTrainings: Training[] = [
   { id: "t10", code: "HACCP", name: "Food Safety HACCP", category: "Company", mandatory: false },
 ];
 
-const mockRecords: TrainingRecord[] = [
-  { crewId: "1", trainingId: "t1", status: "completed", completedDate: "2025-01-15", expiryDate: "2030-01-15", score: 95 },
-  { crewId: "1", trainingId: "t2", status: "completed", completedDate: "2025-02-01", expiryDate: "2030-02-01", score: 92 },
-  { crewId: "1", trainingId: "t3", status: "expiring", completedDate: "2021-03-10", expiryDate: "2026-03-10", score: 88 },
-  { crewId: "1", trainingId: "t4", status: "completed", completedDate: "2024-06-20", expiryDate: "2029-06-20", score: 90 },
-  { crewId: "1", trainingId: "t5", status: "completed", completedDate: "2024-08-15", expiryDate: "2029-08-15", score: 94 },
-  { crewId: "1", trainingId: "t6", status: "completed", completedDate: "2025-01-05", expiryDate: "2030-01-05", score: 96 },
-  { crewId: "2", trainingId: "t1", status: "completed", completedDate: "2024-11-10", expiryDate: "2029-11-10", score: 91 },
-  { crewId: "2", trainingId: "t2", status: "expired", completedDate: "2020-12-01", expiryDate: "2025-12-01" },
-  { crewId: "2", trainingId: "t3", status: "scheduled", completedDate: undefined },
-  { crewId: "3", trainingId: "t1", status: "completed", completedDate: "2025-01-20", expiryDate: "2030-01-20", score: 89 },
-  { crewId: "3", trainingId: "t4", status: "pending" },
-  { crewId: "4", trainingId: "t1", status: "completed", completedDate: "2024-10-05", expiryDate: "2029-10-05", score: 93 },
-  { crewId: "4", trainingId: "t7", status: "completed", completedDate: "2025-01-08", expiryDate: "2030-01-08", score: 97 },
-  { crewId: "5", trainingId: "t1", status: "expiring", completedDate: "2021-02-15", expiryDate: "2026-02-28" },
-  { crewId: "6", trainingId: "t1", status: "completed", completedDate: "2024-09-12", expiryDate: "2029-09-12", score: 90 },
-  { crewId: "7", trainingId: "t1", status: "pending" },
-  { crewId: "7", trainingId: "t2", status: "scheduled" },
-  { crewId: "8", trainingId: "t1", status: "completed", completedDate: "2024-07-20", expiryDate: "2029-07-20", score: 87 },
-  { crewId: "8", trainingId: "t10", status: "completed", completedDate: "2025-01-10", expiryDate: "2028-01-10", score: 95 },
-];
+const fallbackRecords: TrainingRecord[] = [];
 
 const statusConfig = {
   completed: { icon: CheckCircle2, color: "text-success", bg: "bg-success/10", label: "Concluído" },
@@ -193,45 +171,88 @@ export default function CrewTrainingMatrix() {
   const [vesselFilter, setVesselFilter] = useState<string>("all");
   const [categoryFilter, setCategoryFilter] = useState<string>("all");
   const [selectedCrew, setSelectedCrew] = useState<CrewMember | null>(null);
+  const [crewData, setCrewData] = useState<CrewMember[]>(fallbackCrew);
+  const [trainingData] = useState<Training[]>(fallbackTrainings);
+  const [recordsData, setRecordsData] = useState<TrainingRecord[]>(fallbackRecords);
+
+  useEffect(() => {
+    async function loadFromSupabase() {
+      const { data: members } = await supabase
+        .from("crew_members")
+        .select("id, first_name, last_name, rank, department, vessel_id, vessels(name)")
+        .limit(50);
+      if (members && members.length > 0) {
+        setCrewData(members.map((m: any) => ({
+          id: m.id,
+          name: `${m.first_name || ""} ${m.last_name || ""}`.trim(),
+          rank: m.rank || "Crew",
+          vessel: (m.vessels as any)?.name || "Unassigned",
+          department: m.department || "Deck",
+        })));
+      }
+      const { data: certs } = await supabase
+        .from("crew_certifications")
+        .select("id, crew_member_id, certificate_name, issue_date, expiry_date, status")
+        .limit(200);
+      if (certs && certs.length > 0) {
+        const records: TrainingRecord[] = certs.map((c: any) => {
+          const now = new Date();
+          const expiry = c.expiry_date ? new Date(c.expiry_date) : null;
+          let status: TrainingRecord["status"] = "completed";
+          if (expiry && expiry < now) status = "expired";
+          else if (expiry && expiry.getTime() - now.getTime() < 90 * 86400000) status = "expiring";
+          return {
+            crewId: c.crew_member_id,
+            trainingId: c.certificate_name || c.id,
+            status,
+            completedDate: c.issue_date?.slice(0, 10),
+            expiryDate: c.expiry_date?.slice(0, 10),
+          };
+        });
+        setRecordsData(records);
+      }
+    }
+    loadFromSupabase();
+  }, []);
 
   // Filter crew
   const filteredCrew = useMemo(() => {
-    return mockCrew.filter((crew) => {
+    return crewData.filter((crew: CrewMember) => {
       const matchesSearch = crew.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
         crew.rank.toLowerCase().includes(searchTerm.toLowerCase());
       const matchesDepartment = departmentFilter === "all" || crew.department === departmentFilter;
       const matchesVessel = vesselFilter === "all" || crew.vessel === vesselFilter;
       return matchesSearch && matchesDepartment && matchesVessel;
     });
-  }, [searchTerm, departmentFilter, vesselFilter]);
+  }, [searchTerm, departmentFilter, vesselFilter, crewData]);
 
   // Filter trainings
   const filteredTrainings = useMemo(() => {
-    return mockTrainings.filter((training) => {
+    return trainingData.filter((training: Training) => {
       return categoryFilter === "all" || training.category === categoryFilter;
     });
-  }, [categoryFilter]);
+  }, [categoryFilter, trainingData]);
 
   // Get record for crew+training
   const getRecord = (crewId: string, trainingId: string) => {
-    return mockRecords.find((r) => r.crewId === crewId && r.trainingId === trainingId);
+    return recordsData.find((r: TrainingRecord) => r.crewId === crewId && r.trainingId === trainingId);
   };
 
   // Calculate compliance stats
   const stats = useMemo(() => {
-    const total = filteredCrew.length * filteredTrainings.filter(t => t.mandatory).length;
-    const completed = mockRecords.filter(r => 
+    const total = filteredCrew.length * filteredTrainings.filter((t: Training) => t.mandatory).length;
+    const completed = recordsData.filter((r: TrainingRecord) => 
       r.status === "completed" && 
-      filteredCrew.some(c => c.id === r.crewId) &&
-      filteredTrainings.some(t => t.id === r.trainingId && t.mandatory)
+      filteredCrew.some((c: CrewMember) => c.id === r.crewId) &&
+      filteredTrainings.some((t: Training) => t.id === r.trainingId && t.mandatory)
     ).length;
-    const expiring = mockRecords.filter(r => 
+    const expiring = recordsData.filter((r: TrainingRecord) => 
       r.status === "expiring" &&
-      filteredCrew.some(c => c.id === r.crewId)
+      filteredCrew.some((c: CrewMember) => c.id === r.crewId)
     ).length;
-    const expired = mockRecords.filter(r => 
+    const expired = recordsData.filter((r: TrainingRecord) => 
       r.status === "expired" &&
-      filteredCrew.some(c => c.id === r.crewId)
+      filteredCrew.some((c: CrewMember) => c.id === r.crewId)
     ).length;
 
     return {
@@ -241,11 +262,11 @@ export default function CrewTrainingMatrix() {
       expired,
       total,
     };
-  }, [filteredCrew, filteredTrainings]);
+  }, [filteredCrew, filteredTrainings, recordsData]);
 
-  const departments = [...new Set(mockCrew.map(c => c.department))];
-  const vessels = [...new Set(mockCrew.map(c => c.vessel))];
-  const categories = [...new Set(mockTrainings.map(t => t.category))];
+  const departments = [...new Set(crewData.map((c: CrewMember) => c.department))];
+  const vessels = [...new Set(crewData.map((c: CrewMember) => c.vessel))];
+  const categories = [...new Set(trainingData.map((t: Training) => t.category))];
 
   return (
     <div className="space-y-6">
@@ -480,7 +501,7 @@ export default function CrewTrainingMatrix() {
                   <Card>
                     <CardContent className="p-3 text-center">
                       <p className="text-2xl font-bold text-success">
-                        {mockRecords.filter(r => r.crewId === selectedCrew.id && r.status === "completed").length}
+                        {recordsData.filter((r: TrainingRecord) => r.crewId === selectedCrew.id && r.status === "completed").length}
                       </p>
                       <p className="text-xs text-muted-foreground">Concluídos</p>
                     </CardContent>
@@ -488,7 +509,7 @@ export default function CrewTrainingMatrix() {
                   <Card>
                     <CardContent className="p-3 text-center">
                       <p className="text-2xl font-bold text-warning">
-                        {mockRecords.filter(r => r.crewId === selectedCrew.id && r.status === "expiring").length}
+                        {recordsData.filter((r: TrainingRecord) => r.crewId === selectedCrew.id && r.status === "expiring").length}
                       </p>
                       <p className="text-xs text-muted-foreground">Expirando</p>
                     </CardContent>
@@ -496,7 +517,7 @@ export default function CrewTrainingMatrix() {
                   <Card>
                     <CardContent className="p-3 text-center">
                       <p className="text-2xl font-bold text-destructive">
-                        {mockRecords.filter(r => r.crewId === selectedCrew.id && r.status === "expired").length}
+                        {recordsData.filter((r: TrainingRecord) => r.crewId === selectedCrew.id && r.status === "expired").length}
                       </p>
                       <p className="text-xs text-muted-foreground">Expirados</p>
                     </CardContent>
@@ -506,7 +527,7 @@ export default function CrewTrainingMatrix() {
                   <p className="font-medium text-sm">Treinamentos</p>
                   <ScrollArea className="h-[300px]">
                     <div className="space-y-2">
-                      {mockTrainings.map((training) => {
+                      {trainingData.map((training: Training) => {
                         const record = getRecord(selectedCrew.id, training.id);
                         const config = record ? statusConfig[record.status] : statusConfig.pending;
                         const Icon = config.icon || Clock;

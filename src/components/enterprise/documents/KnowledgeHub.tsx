@@ -3,7 +3,8 @@
  * Base de conhecimento com FAQ e tutoriais
  */
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { supabase } from "@/integrations/supabase/client";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -58,7 +59,7 @@ interface Tutorial {
   views: number;
 }
 
-const mockArticles: Article[] = [
+const fallbackArticles: Article[] = [
   {
     id: "1",
     title: "Guia Completo do Código ISM",
@@ -88,7 +89,7 @@ const mockArticles: Article[] = [
   }
 ];
 
-const mockFAQs: FAQ[] = [
+const fallbackFAQs: FAQ[] = [
   {
     id: "1",
     question: "Como registrar uma não conformidade no sistema?",
@@ -119,7 +120,7 @@ const mockFAQs: FAQ[] = [
   }
 ];
 
-const mockTutorials: Tutorial[] = [
+const fallbackTutorials: Tutorial[] = [
   {
     id: "1",
     title: "Introdução ao Sistema - Tour Completo",
@@ -152,7 +153,7 @@ const mockTutorials: Tutorial[] = [
 export function KnowledgeHub() {
   const [searchTerm, setSearchTerm] = useState("");
 
-  const filteredFAQs = mockFAQs.filter(faq =>
+  const filteredFAQs = fallbackFAQs.filter((faq: FAQ) =>
     faq.question.toLowerCase().includes(searchTerm.toLowerCase()) ||
     faq.answer.toLowerCase().includes(searchTerm.toLowerCase())
   );
@@ -188,7 +189,7 @@ export function KnowledgeHub() {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-muted-foreground">Artigos</p>
-                <p className="text-3xl font-bold">{mockArticles.length}</p>
+                <p className="text-3xl font-bold">{fallbackArticles.length}</p>
               </div>
               <FileText className="h-8 w-8 text-primary opacity-50" />
             </div>
@@ -200,7 +201,7 @@ export function KnowledgeHub() {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-muted-foreground">FAQs</p>
-                <p className="text-3xl font-bold">{mockFAQs.length}</p>
+                <p className="text-3xl font-bold">{fallbackFAQs.length}</p>
               </div>
               <HelpCircle className="h-8 w-8 text-blue-500 opacity-50" />
             </div>
@@ -212,7 +213,7 @@ export function KnowledgeHub() {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-muted-foreground">Tutoriais</p>
-                <p className="text-3xl font-bold">{mockTutorials.length}</p>
+                <p className="text-3xl font-bold">{fallbackTutorials.length}</p>
               </div>
               <Video className="h-8 w-8 text-green-500 opacity-50" />
             </div>
@@ -225,7 +226,7 @@ export function KnowledgeHub() {
               <div>
                 <p className="text-sm text-muted-foreground">Visualizações</p>
                 <p className="text-3xl font-bold">
-                  {(mockArticles.reduce((a, b) => a + b.views, 0) / 1000).toFixed(1)}k
+                  {(fallbackArticles.reduce((a: number, b: Article) => a + b.views, 0) / 1000).toFixed(1)}k
                 </p>
               </div>
               <Eye className="h-8 w-8 text-yellow-500 opacity-50" />
@@ -290,7 +291,7 @@ export function KnowledgeHub() {
         {/* Articles Tab */}
         <TabsContent value="articles">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-            {mockArticles.map((article) => (
+            {fallbackArticles.map((article: Article) => (
               <Card key={article.id} className="hover:shadow-md transition-shadow cursor-pointer">
                 <CardHeader>
                   <div className="flex items-start justify-between">
@@ -325,7 +326,7 @@ export function KnowledgeHub() {
         {/* Tutorials Tab */}
         <TabsContent value="tutorials">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-            {mockTutorials.map((tutorial) => (
+            {fallbackTutorials.map((tutorial: Tutorial) => (
               <Card key={tutorial.id} className="hover:shadow-md transition-shadow cursor-pointer overflow-hidden">
                 <div className="relative aspect-video bg-muted">
                   <div className="absolute inset-0 flex items-center justify-center">

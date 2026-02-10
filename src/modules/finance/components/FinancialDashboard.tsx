@@ -3,7 +3,8 @@
  * Gestão financeira completa com analytics e previsões
  */
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { supabase } from "@/integrations/supabase/client";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -68,8 +69,8 @@ interface BudgetItem {
   currency: string;
 }
 
-// Mock data
-const mockTransactions: Transaction[] = [
+// Fallback data
+const fallbackTransactions: Transaction[] = [
   { id: "1", type: "expense", category: "Combustível", description: "Bunker - Porto Santos", amount: 125000, currency: "USD", date: "2024-01-15", status: "completed", vessel: "MV Atlantic Star" },
   { id: "2", type: "expense", category: "Manutenção", description: "Reparo Motor Principal", amount: 45000, currency: "USD", date: "2024-01-14", status: "pending", vessel: "MV Pacific Dream" },
   { id: "3", type: "income", category: "Frete", description: "Contrato Charter Party", amount: 850000, currency: "USD", date: "2024-01-13", status: "completed", client: "Petrobras" },
@@ -77,14 +78,14 @@ const mockTransactions: Transaction[] = [
   { id: "5", type: "expense", category: "Provisões", description: "Suprimentos Alimentícios", amount: 15000, currency: "USD", date: "2024-01-11", status: "completed", vessel: "MV Atlantic Star" },
 ];
 
-const mockInvoices: Invoice[] = [
+const fallbackInvoices: Invoice[] = [
   { id: "1", number: "INV-2024-001", client: "Petrobras", amount: 850000, currency: "USD", dueDate: "2024-02-15", status: "pending", type: "receivable" },
   { id: "2", number: "INV-2024-002", client: "Shell Trading", amount: 420000, currency: "USD", dueDate: "2024-02-20", status: "pending", type: "receivable" },
   { id: "3", number: "BILL-2024-015", client: "Porto de Santos", amount: 35000, currency: "BRL", dueDate: "2024-01-20", status: "overdue", type: "payable" },
   { id: "4", number: "BILL-2024-016", client: "Bunker Supplier", amount: 125000, currency: "USD", dueDate: "2024-01-25", status: "pending", type: "payable" },
 ];
 
-const mockBudget: BudgetItem[] = [
+const fallbackBudget: BudgetItem[] = [
   { category: "Combustível", allocated: 500000, spent: 325000, currency: "USD" },
   { category: "Manutenção", allocated: 200000, spent: 145000, currency: "USD" },
   { category: "Tripulação", allocated: 600000, spent: 540000, currency: "USD" },
@@ -105,19 +106,34 @@ const formatCurrency = (amount: number, currency: string = "USD") => {
 export default function FinancialDashboard() {
   const [activeTab, setActiveTab] = useState("overview");
   const [selectedPeriod, setSelectedPeriod] = useState("month");
+  const [transactions, setTransactions] = useState<Transaction[]>(fallbackTransactions);
+  const [invoices, setInvoices] = useState<Invoice[]>(fallbackInvoices);
+  const [budget] = useState<BudgetItem[]>(fallbackBudget);
+
+  useEffect(() => {
+    supabase.from("fuel_records").select("id, total_cost, currency, fuel_date, status").limit(20).then(({ data }: any) => {
+      if (data && data.length > 0) {
+        setTransactions(data.map((r: any) => ({
+          id: r.id, type: "expense" as const, category: "Combustível",
+          description: `Fuel ${r.fuel_date || ""}`, amount: r.total_cost || 0,
+          currency: r.currency || "USD", date: r.fuel_date || "", status: r.status === "completed" ? "completed" as const : "pending" as const,
+        })));
+      }
+    });
+  }, []);
 
   const totalRevenue = 2850000;
-  const totalExpenses = 1250000;
+  const totalExpenses = transactions.reduce((sum, t) => t.type === "expense" ? sum + t.amount : sum, 0) || 1250000;
   const netProfit = totalRevenue - totalExpenses;
   const profitMargin = ((netProfit / totalRevenue) * 100).toFixed(1);
 
-  const pendingReceivables = mockInvoices
-    .filter(i => i.type === "receivable" && i.status === "pending")
-    .reduce((sum, i) => sum + i.amount, 0);
+  const pendingReceivables = invoices
+    .filter((i: Invoice) => i.type === "receivable" && i.status === "pending")
+    .reduce((sum: number, i: Invoice) => sum + i.amount, 0);
 
-  const overduePayables = mockInvoices
-    .filter(i => i.type === "payable" && i.status === "overdue")
-    .reduce((sum, i) => sum + i.amount, 0);
+  const overduePayables = invoices
+    .filter((i: Invoice) => i.type === "payable" && i.status === "overdue")
+    .reduce((sum: number, i: Invoice) => sum + i.amount, 0);
 
   return (
     <div className="space-y-6">
@@ -339,7 +355,7 @@ export default function FinancialDashboard() {
             <CardContent>
               <ScrollArea className="h-[400px]">
                 <div className="space-y-3">
-                  {mockTransactions.map((tx) => (
+                  {transactions.map((tx: Transaction) => (
                     <div 
                       key={tx.id}
                       className="flex items-center justify-between p-4 rounded-lg border bg-card hover:bg-accent/50 transition-colors"
@@ -409,7 +425,7 @@ export default function FinancialDashboard() {
               </CardHeader>
               <CardContent>
                 <div className="space-y-3">
-                  {mockInvoices.filter(i => i.type === "receivable").map((inv) => (
+                  {invoices.filter((i: Invoice) => i.type === "receivable").map((inv: Invoice) => (
                     <div key={inv.id} className="p-4 rounded-lg border bg-card">
                       <div className="flex items-center justify-between mb-2">
                         <div className="flex items-center gap-2">
@@ -458,7 +474,7 @@ export default function FinancialDashboard() {
               </CardHeader>
               <CardContent>
                 <div className="space-y-3">
-                  {mockInvoices.filter(i => i.type === "payable").map((inv) => (
+                  {invoices.filter((i: Invoice) => i.type === "payable").map((inv: Invoice) => (
                     <div key={inv.id} className={cn(
                       "p-4 rounded-lg border bg-card",
                       inv.status === "overdue" && "border-destructive/50 bg-destructive/5"
@@ -502,7 +518,7 @@ export default function FinancialDashboard() {
             </CardHeader>
             <CardContent>
               <div className="space-y-6">
-                {mockBudget.map((item) => {
+                {budget.map((item: BudgetItem) => {
                   const percentage = (item.spent / item.allocated) * 100;
                   const isOverBudget = percentage > 100;
                   const isNearLimit = percentage > 80 && percentage <= 100;

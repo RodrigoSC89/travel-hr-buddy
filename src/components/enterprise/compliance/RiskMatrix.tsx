@@ -3,7 +3,8 @@
  * Mapa de calor de riscos com drill-down e planos de mitigação
  */
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { supabase } from "@/integrations/supabase/client";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -43,7 +44,7 @@ interface Risk {
   trend: "up" | "down" | "stable";
 }
 
-const mockRisks: Risk[] = [
+const fallbackRisks: Risk[] = [
   {
     id: "1",
     title: "Falha em equipamento crítico de navegação",
@@ -121,6 +122,23 @@ const IMPACT_LABELS = ["", "Insignificante", "Menor", "Moderado", "Maior", "Cata
 
 export function RiskMatrix() {
   const [selectedRisk, setSelectedRisk] = useState<Risk | null>(null);
+  const [risks, setRisks] = useState<Risk[]>(fallbackRisks);
+
+  useEffect(() => {
+    supabase.from("non_conformities").select("*").limit(20).then(({ data }) => {
+      if (data && data.length > 0) {
+        setRisks(data.map((nc: any, i: number) => ({
+          id: nc.id, title: nc.description || nc.title || `Risk ${i+1}`,
+          category: nc.category || "Operacional", likelihood: Math.min(5, Math.max(1, nc.severity || 3)) as any,
+          impact: Math.min(5, Math.max(1, nc.impact_level || 3)) as any,
+          riskScore: (nc.severity || 3) * (nc.impact_level || 3),
+          status: nc.status === "closed" ? "mitigated" as const : "open" as const,
+          owner: nc.responsible_person || "N/A", dueDate: nc.due_date || "",
+          mitigationPlan: nc.corrective_action || "", controls: [], trend: "stable" as const,
+        })));
+      }
+    });
+  }, []);
 
   const getRiskLevel = (score: number) => {
     if (score >= 15) return { label: "Crítico", color: "bg-red-500", textColor: "text-red-500" };
@@ -131,33 +149,23 @@ export function RiskMatrix() {
 
   const getStatusBadge = (status: Risk["status"]) => {
     switch (status) {
-      case "open":
-        return <Badge variant="destructive">Aberto</Badge>;
-      case "mitigating":
-        return <Badge className="bg-yellow-500/10 text-yellow-500">Em Mitigação</Badge>;
-      case "mitigated":
-        return <Badge className="bg-green-500/10 text-green-500">Mitigado</Badge>;
-      case "accepted":
-        return <Badge variant="secondary">Aceito</Badge>;
+      case "open": return <Badge variant="destructive">Aberto</Badge>;
+      case "mitigating": return <Badge className="bg-yellow-500/10 text-yellow-500">Em Mitigação</Badge>;
+      case "mitigated": return <Badge className="bg-green-500/10 text-green-500">Mitigado</Badge>;
+      case "accepted": return <Badge variant="secondary">Aceito</Badge>;
     }
   };
 
   const getTrendIcon = (trend: Risk["trend"]) => {
     switch (trend) {
-      case "up":
-        return <TrendingUp className="h-4 w-4 text-red-500" />;
-      case "down":
-        return <TrendingDown className="h-4 w-4 text-green-500" />;
-      default:
-        return <div className="h-4 w-4 border-t-2 border-muted-foreground" />;
+      case "up": return <TrendingUp className="h-4 w-4 text-red-500" />;
+      case "down": return <TrendingDown className="h-4 w-4 text-green-500" />;
+      default: return <div className="h-4 w-4 border-t-2 border-muted-foreground" />;
     }
   };
 
-  // Risk matrix grid
   const matrixGrid = Array(5).fill(null).map(() => Array(5).fill(null).map(() => [] as Risk[]));
-  mockRisks.forEach(risk => {
-    matrixGrid[5 - risk.impact][risk.likelihood - 1].push(risk);
-  });
+  risks.forEach((risk: Risk) => { matrixGrid[5 - risk.impact][risk.likelihood - 1].push(risk); });
 
   const getCellColor = (likelihood: number, impact: number) => {
     const score = likelihood * impact;
@@ -168,10 +176,10 @@ export function RiskMatrix() {
   };
 
   const stats = {
-    total: mockRisks.length,
-    critical: mockRisks.filter(r => r.riskScore >= 15).length,
-    high: mockRisks.filter(r => r.riskScore >= 10 && r.riskScore < 15).length,
-    mitigated: mockRisks.filter(r => r.status === "mitigated").length
+    total: risks.length,
+    critical: risks.filter((r: Risk) => r.riskScore >= 15).length,
+    high: risks.filter((r: Risk) => r.riskScore >= 10 && r.riskScore < 15).length,
+    mitigated: risks.filter((r: Risk) => r.status === "mitigated").length
   };
 
   return (
@@ -326,7 +334,7 @@ export function RiskMatrix() {
             </CardTitle>
           </CardHeader>
           <CardContent className="space-y-3">
-            {[...mockRisks].sort((a, b) => b.riskScore - a.riskScore).map((risk) => {
+            {[...risks].sort((a: Risk, b: Risk) => b.riskScore - a.riskScore).map((risk: Risk) => {
               const level = getRiskLevel(risk.riskScore);
               return (
                 <Dialog key={risk.id}>
