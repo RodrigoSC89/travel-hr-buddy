@@ -74,8 +74,8 @@
 | P2-002 | 5 componentes de notificação duplicados | 4h |
 | P2-003 | Communication components duplicados com mock | 2h |
 | P2-004 | ~~Security center com mock alerts/metrics~~ ✅ CORRIGIDO (AlertsNotificationCenter migrado para Supabase) | ~~2h~~ |
-| P2-005 | Crew schedule/MLC com mock data | 2h |
-| P2-006 | Maritime certification com mock | 2h |
+| P2-005 | ~~Crew schedule/MLC com mock data~~ ✅ PARCIAL (maritime-certification-manager migrado para useCertifications()) | 2h |
+| P2-006 | ~~Maritime certification com mock~~ ✅ CORRIGIDO (maritime-certification-manager.tsx migrado para Supabase) | ~~2h~~ |
 | P2-007 | ~~console.log em prod~~ ✅ MITIGADO — `drop_console: true` no build, 0 em código ativo | ~~1h~~ |
 
 ---
