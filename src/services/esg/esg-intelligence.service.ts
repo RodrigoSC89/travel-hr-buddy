@@ -238,7 +238,7 @@ export class ESGIntelligenceService {
     const months = ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'];
     return months.slice(0, 6).map((month, i) => ({
       month,
-      co2: emissions[i]?.co2Tons || Math.round(Math.random() * 500 + 200),
+      co2: emissions[i]?.co2Tons || [350, 420, 310, 380, 290, 360][i] || 350,
       target: 400,
     }));
   }

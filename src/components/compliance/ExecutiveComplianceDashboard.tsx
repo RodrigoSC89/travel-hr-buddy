@@ -119,12 +119,12 @@ const useExecutiveKPIs = () => {
             'sgso': 88
           };
           const baseScore = baseScores[moduleId] || 75;
-          const variance = Math.floor(Math.random() * 10) - 5;
+          const variance = [-3, 2, -1, 4][Object.keys(baseScores).indexOf(moduleId)] || 0;
           return {
             score: Math.max(40, Math.min(100, baseScore + variance)),
-            ncs: Math.floor(Math.random() * 10) + 2,
-            critical: Math.floor(Math.random() * 3),
-            total: Math.floor(Math.random() * 40) + 20
+            ncs: [5, 3, 7, 4][Object.keys(baseScores).indexOf(moduleId)] || 4,
+            critical: [1, 0, 2, 1][Object.keys(baseScores).indexOf(moduleId)] || 1,
+            total: [32, 28, 45, 38][Object.keys(baseScores).indexOf(moduleId)] || 30
           };
         }
         

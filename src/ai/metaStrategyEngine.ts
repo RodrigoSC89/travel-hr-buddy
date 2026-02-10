@@ -116,7 +116,6 @@ class MetaStrategyEngine {
       if (approach === "aggressive") score -= 15;
     }
 
-    score += Math.random() * 20 - 10;
     return Math.max(0, Math.min(100, score));
   }
 

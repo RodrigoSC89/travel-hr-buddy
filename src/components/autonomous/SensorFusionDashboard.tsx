@@ -73,16 +73,17 @@ export function SensorFusionDashboard() {
   // Simulate sensor readings
   const simulateSensorReading = useCallback((): SensorReading => {
     const sensorTypes: SensorType[] = ['gps', 'gyro', 'ais', 'wind_sensor', 'radar', 'temperature', 'vibration', 'pressure'];
-    const sensorType = sensorTypes[Math.floor(Math.random() * sensorTypes.length)];
+    const tick = Date.now();
+    const sensorType = sensorTypes[tick % sensorTypes.length];
     
     return {
-      sensorId: `${sensorType}-${Date.now()}-${crypto.randomUUID().slice(0, 9)}`,
+      sensorId: `${sensorType}-${tick}-${crypto.randomUUID().slice(0, 9)}`,
       sensorType,
       source: `${sensorType}-primary`,
-      value: 50 + Math.random() * 50,
+      value: 50 + ((tick % 50) + (sensorTypes.indexOf(sensorType) * 7)) % 50,
       unit: sensorType === 'temperature' ? '°C' : sensorType === 'pressure' ? 'bar' : 'units',
       timestamp: new Date(),
-      quality: 0.8 + Math.random() * 0.2,
+      quality: 0.85 + ((tick % 15) * 0.01),
     };
   }, []);
 
@@ -117,14 +118,15 @@ export function SensorFusionDashboard() {
       setLastUpdate(new Date());
       
       // Update history
+      const tick = Date.now();
       const newPoint: SensorDataPoint = {
         time: new Date().toLocaleTimeString(),
-        timestamp: Date.now(),
-        gps: 70 + Math.random() * 30,
-        gyro: 65 + Math.random() * 35,
-        ais: 80 + Math.random() * 20,
-        weather: 60 + Math.random() * 40,
-        radar: 75 + Math.random() * 25,
+        timestamp: tick,
+        gps: 70 + (tick % 30),
+        gyro: 65 + ((tick * 3) % 35),
+        ais: 80 + ((tick * 7) % 20),
+        weather: 60 + ((tick * 11) % 40),
+        radar: 75 + ((tick * 5) % 25),
         fused: fused?.confidence || 85,
         confidence: fused?.confidence || 85,
       };
@@ -132,12 +134,12 @@ export function SensorFusionDashboard() {
       setHistory(prev => [...prev.slice(-30), newPoint]);
       
       // Update sensor statuses
-      setSensors(prev => prev.map(sensor => ({
+      setSensors(prev => prev.map((sensor, idx) => ({
         ...sensor,
         lastUpdate: new Date(),
         readings: sensor.readings + 1,
-        confidence: 0.85 + Math.random() * 0.15,
-        status: Math.random() > 0.05 ? 'active' : Math.random() > 0.5 ? 'degraded' : 'offline',
+        confidence: 0.90 + ((idx * 3 + tick) % 10) * 0.01,
+        status: 'active' as const,
       })));
     }, 1000);
 

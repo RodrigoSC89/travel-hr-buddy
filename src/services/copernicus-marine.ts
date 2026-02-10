@@ -152,16 +152,16 @@ class CopernicusService {
     const baseTemp = 25 - Math.abs(request.lat) * 0.4;
 
     return {
-      seaSurfaceTemperature: baseTemp + (Math.random() * 4 - 2),
-      salinity: 35 + (Math.random() * 2 - 1),
-      chlorophyll: 0.3 + Math.random() * 0.5,
-      seaIceConcentration: request.lat > 60 || request.lat < -60 ? Math.random() * 30 : 0,
-      currentSpeed: 0.3 + Math.random() * 0.8,
-      currentDirection: Math.random() * 360,
-      waveHeight: 1 + Math.random() * 2,
-      wavePeriod: 6 + Math.random() * 4,
+      seaSurfaceTemperature: baseTemp + 1.2,
+      salinity: 35.3,
+      chlorophyll: 0.55,
+      seaIceConcentration: request.lat > 60 || request.lat < -60 ? 15 : 0,
+      currentSpeed: 0.65,
+      currentDirection: 180,
+      waveHeight: 1.8,
+      wavePeriod: 8.2,
       timestamp: new Date().toISOString(),
-      source: "Copernicus Marine Service (Demo)",
+      source: "Copernicus Marine Service (Fallback)",
     };
   }
 

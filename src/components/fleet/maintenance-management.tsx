@@ -167,7 +167,7 @@ const MaintenanceManagement: React.FC = () => {
 
   const handleAddMaintenance = () => {
     const newRecord: MaintenanceRecord = {
-      id: Math.random().toString(),
+      id: `maint-${Date.now()}`,
       vessel_name: newMaintenance.vessel_name,
       vessel_id: newMaintenance.vessel_id,
       maintenance_type: newMaintenance.maintenance_type as any,

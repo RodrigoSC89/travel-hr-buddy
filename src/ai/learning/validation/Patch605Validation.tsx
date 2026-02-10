@@ -39,7 +39,7 @@ export function Patch605Validation() {
       const event: LearningEvent = {
         iteration: i,
         decision: `Decision-${i}: ${getRandomDecision()}`,
-        initialWeight: 0.5 + (Math.random() * 0.2 - 0.1),
+        initialWeight: 0.5 + ((i % 5) * 0.04 - 0.1),
         adjustedWeight: 0,
         feedback: isPositive ? "positive" : "negative",
         accuracy: 0
@@ -78,7 +78,7 @@ export function Patch605Validation() {
       "Emergency response prioritization",
       "Maintenance schedule adjustment"
     ];
-    return decisions[Math.floor(Math.random() * decisions.length)];
+    return decisions[currentIteration % decisions.length];
   };
 
   const exportReport = () => {

@@ -92,7 +92,7 @@ export class SEVILearningEngine {
     if (contextValues.length > 0) {
       // Ensure weights array matches context size
       while (vector.weights.length < contextValues.length) {
-        vector.weights.push(Math.random() * 0.1 - 0.05);
+        vector.weights.push(0.01 * (vector.weights.length % 10 - 5));
       }
 
       // Gradient descent update

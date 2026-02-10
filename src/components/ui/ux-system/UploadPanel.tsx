@@ -108,7 +108,7 @@ export const UploadPanel: React.FC<UploadPanelProps> = ({
 
     for (const file of filesToUpload) {
       // Add file with uploading status
-      const tempId = `temp-${Date.now()}-${Math.random()}`;
+      const tempId = `temp-${Date.now()}-${crypto.randomUUID()}`;
       const newFile: UploadedFile = {
         id: tempId,
         name: file.name,

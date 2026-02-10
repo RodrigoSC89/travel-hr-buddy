@@ -410,7 +410,7 @@ export class SelfEvolutionModel {
   ): Promise<PerformanceMetrics> {
     // This would run actual tests
     // For simulation, add some variance to existing metrics
-    const variance = (Math.random() - 0.5) * 0.1;
+    const variance = 0.02;
 
     return {
       successRate: Math.min(1, Math.max(0, func.performanceMetrics.successRate + variance)),

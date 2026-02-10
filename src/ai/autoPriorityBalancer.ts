@@ -88,10 +88,10 @@ class AutoPriorityBalancer {
    */
   async rebalancePriorities(context?: BalancingContext): Promise<PriorityShift[]> {
     const ctx = context || {
-      system_load: Math.random() * 100,
-      available_resources: Math.random() * 100,
+      system_load: 50,
+      available_resources: 75,
       critical_threshold: 75,
-      time_pressure: Math.random() * 100
+      time_pressure: 40
     };
 
     logger.debug("Rebalancing priorities", { context: ctx });

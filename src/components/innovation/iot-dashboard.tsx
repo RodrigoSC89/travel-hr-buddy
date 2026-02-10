@@ -123,11 +123,15 @@ export const IoTDashboard: React.FC = () => {
   // Simulate real-time updates
   useEffect(() => {
     const interval = setInterval(() => {
-      setSensors(prev => prev.map(sensor => ({
-        ...sensor,
-        value: sensor.value + (Math.random() - 0.5) * 2,
-        lastUpdate: Math.random() > 0.7 ? "just now" : sensor.lastUpdate
-      })));
+      setSensors(prev => prev.map((sensor, idx) => {
+        const tick = Date.now();
+        const drift = Math.sin(tick / 3000 + idx) * 1;
+        return {
+          ...sensor,
+          value: sensor.value + drift,
+          lastUpdate: (tick + idx) % 3 === 0 ? "just now" : sensor.lastUpdate
+        };
+      }));
     }, 3000);
 
     return () => clearInterval(interval);

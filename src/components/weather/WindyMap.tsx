@@ -162,19 +162,19 @@ export const WindyMap: React.FC<WindyMapProps> = ({
               key={i}
               className="absolute rounded-full animate-pulse"
               style={{
-                left: `${Math.random() * 100}%`,
-                top: `${Math.random() * 100}%`,
-                width: `${30 + Math.random() * 60}px`,
-                height: `${30 + Math.random() * 60}px`,
+                left: `${(i * 37 + 13) % 100}%`,
+                top: `${(i * 53 + 7) % 100}%`,
+                width: `${30 + (i * 17) % 60}px`,
+                height: `${30 + (i * 23) % 60}px`,
                 background: selectedLayer === 'temp' 
-                  ? `radial-gradient(circle, rgba(255,${100 + Math.random() * 155},0,0.4) 0%, transparent 70%)`
+                  ? `radial-gradient(circle, rgba(255,${100 + (i * 11) % 155},0,0.4) 0%, transparent 70%)`
                   : selectedLayer === 'precipitation'
                   ? `radial-gradient(circle, rgba(0,100,255,0.4) 0%, transparent 70%)`
                   : selectedLayer === 'clouds'
                   ? `radial-gradient(circle, rgba(200,200,200,0.3) 0%, transparent 70%)`
                   : `radial-gradient(circle, rgba(0,255,200,0.3) 0%, transparent 70%)`,
-                animationDelay: `${Math.random() * 2}s`,
-                animationDuration: `${2 + Math.random() * 2}s`
+                animationDelay: `${(i * 0.3) % 2}s`,
+                animationDuration: `${2 + (i % 3)}s`
               }}
             />
           ))}
@@ -187,9 +187,9 @@ export const WindyMap: React.FC<WindyMapProps> = ({
               style={{
                 left: `-10%`,
                 top: `${10 + i * 6}%`,
-                width: `${60 + Math.random() * 40}%`,
-                opacity: 0.3 + Math.random() * 0.4,
-                transform: `rotate(${-10 + Math.random() * 20}deg)`,
+                width: `${60 + (i * 13) % 40}%`,
+                opacity: 0.3 + (i * 7 % 4) * 0.1,
+                transform: `rotate(${-10 + (i * 3) % 20}deg)`,
                 animationDelay: `${i * 0.2}s`,
               }}
             />

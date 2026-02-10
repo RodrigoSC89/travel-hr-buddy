@@ -63,14 +63,14 @@ export function Patch612Validation() {
         id: `node-${i + 1}`,
         type: i % 3 === 0 ? "sensor" : i % 3 === 1 ? "processor" : "actuator",
         status: "active",
-        connections: Math.floor(Math.random() * 5) + 1
+        connections: (i % 5) + 1
       }));
 
-      const graphEdges = graphNodes.flatMap(node => 
+      const graphEdges = graphNodes.flatMap((node, nodeIdx) => 
         Array.from({ length: node.connections }, (_, i) => ({
           from: node.id,
-          to: graphNodes[Math.floor(Math.random() * graphNodes.length)].id,
-          weight: Math.random()
+          to: graphNodes[(nodeIdx * 7 + i * 3) % graphNodes.length].id,
+          weight: ((nodeIdx + i) % 10) * 0.1
         }))
       );
 

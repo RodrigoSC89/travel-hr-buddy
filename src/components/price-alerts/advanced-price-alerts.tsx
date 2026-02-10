@@ -202,14 +202,16 @@ export const AdvancedPriceAlerts: React.FC = () => {
 
   const generateAIPredictions = async (alert: any) => {
     // Simulated AI predictions - in production, this would use real ML models
-    const trends = ["rising", "falling", "stable"] as const;
-    const trend = trends[Math.floor(Math.random() * trends.length)];
+    // Deterministic prediction based on price data
+    const trend = alert.current_price && alert.target_price 
+      ? (alert.current_price > alert.target_price ? "falling" as const : "rising" as const)
+      : "stable" as const;
     
     return {
       trend,
-      confidence: Math.random() * 0.4 + 0.6, // 0.6 to 1.0
+      confidence: 0.78,
       best_time_to_buy: trend === "falling" ? "Agora" : "Aguardar 1-2 semanas",
-      predicted_low: alert.current_price ? alert.current_price * (0.9 + Math.random() * 0.1) : undefined
+      predicted_low: alert.current_price ? alert.current_price * 0.95 : undefined
     };
   };
 

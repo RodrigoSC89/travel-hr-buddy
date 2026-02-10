@@ -342,12 +342,13 @@ class LangTrainingEngine {
         const hasMaritimeData = datasets.some(d => d.domain === 'maritime');
         const domainBonus = hasMaritimeData ? 0.05 : 0;
 
+        const epochVariance = ((epoch % 7) - 3) * 0.01;
         const metrics: TrainingMetrics = {
           epoch: epoch + 1,
-          loss: Math.max(0.05, baseLoss + (Math.random() - 0.5) * 0.1),
-          accuracy: Math.min(0.98, baseAccuracy + domainBonus + (Math.random() - 0.5) * 0.02),
-          bleu_score: Math.min(0.95, 0.4 + epochProgress * 0.5 + (Math.random() - 0.5) * 0.05),
-          perplexity: Math.max(1.2, 20 * Math.exp(-epochProgress * 2) + Math.random() * 0.5),
+          loss: Math.max(0.05, baseLoss + epochVariance),
+          accuracy: Math.min(0.98, baseAccuracy + domainBonus + epochVariance * 0.2),
+          bleu_score: Math.min(0.95, 0.4 + epochProgress * 0.5 + epochVariance * 0.5),
+          perplexity: Math.max(1.2, 20 * Math.exp(-epochProgress * 2) + 0.25),
           language_scores: {} as Record<SupportedLanguage, number>,
           domain_scores: hasMaritimeData ? {} : undefined,
           timestamp: new Date().toISOString(),
@@ -355,11 +356,11 @@ class LangTrainingEngine {
 
         // Calculate per-language scores
         for (const lang of config.languages) {
-          // PT and EN typically score higher due to more training data
           const langBonus = lang === 'pt' || lang === 'en' ? 0.03 : 0;
+          const langVariance = ((epoch + (lang === 'pt' ? 1 : lang === 'en' ? 2 : 3)) % 5 - 2) * 0.005;
           metrics.language_scores[lang] = Math.min(
             0.98,
-            0.55 + epochProgress * 0.38 + langBonus + (Math.random() - 0.5) * 0.03
+            0.55 + epochProgress * 0.38 + langBonus + langVariance
           );
         }
 
@@ -524,17 +525,12 @@ class LangTrainingEngine {
     // Find matching term/phrase in cache
     const term = this.maritimeTermsCache.find(t => t.translations.en === input);
     if (term) {
-      // Simulate 90% accuracy
-      if (Math.random() < 0.9) {
-        return term.translations[targetLang];
-      }
+      return term.translations[targetLang];
     }
 
     const phrase = this.maritimePhrasesCache.find(p => p.translations.en === input);
     if (phrase) {
-      if (Math.random() < 0.88) {
-        return phrase.translations[targetLang];
-      }
+      return phrase.translations[targetLang];
     }
 
     // Return slightly modified version for failed predictions
