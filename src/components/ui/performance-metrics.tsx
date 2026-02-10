@@ -131,7 +131,7 @@ export const PerformanceMetrics = ({ className, compact = false }: PerformanceMe
   useEffect(() => {
     const interval = setInterval(() => {
       setMetrics(prev => prev.map(metric => {
-        const variation = (Math.random() - 0.5) * 2; // -1 a +1
+        const variation = Math.sin(Date.now() / 5000 + metric.id.length) * 0.5;
         let newValue = metric.value;
         
         switch (metric.id) {
@@ -143,7 +143,7 @@ export const PerformanceMetrics = ({ className, compact = false }: PerformanceMe
           newValue = Math.max(0, Math.min(100, metric.value + variation * 0.5));
           break;
         case "incidents":
-          newValue = Math.max(0, metric.value + (Math.random() > 0.8 ? 1 : 0));
+          newValue = metric.value; // Don't randomly increment incidents
           break;
         }
         

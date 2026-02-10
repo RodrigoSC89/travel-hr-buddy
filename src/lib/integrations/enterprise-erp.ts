@@ -183,7 +183,7 @@ export class IntegrationManager {
     // Placeholder sync logic
     return {
       success: true,
-      recordsProcessed: Math.floor(Math.random() * 100),
+      recordsProcessed: 0, // Placeholder - real sync not implemented
       errors: [],
       timestamp: new Date().toISOString()
     };

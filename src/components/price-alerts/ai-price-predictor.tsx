@@ -126,12 +126,11 @@ export const AIPricePredictor: React.FC = () => {
 
   const generateAIPredictionData = async (productName: string, currentPrice: number): Promise<PricePrediction> => {
     // Simulated AI prediction logic - in production, this would use real ML models
-    const trendOptions: ("rising" | "falling" | "stable")[] = ["rising", "falling", "stable"];
-    const trend = trendOptions[Math.floor(Math.random() * trendOptions.length)];
+    const trend: "rising" | "falling" | "stable" = "stable";
     
-    // Generate price variations based on trend
-    const baseVariation = Math.random() * 0.2 - 0.1; // -10% to +10%
-    const trendMultiplier = trend === "rising" ? 1.1 : trend === "falling" ? 0.9 : 1.0;
+    // Deterministic price variations
+    const baseVariation = 0.03;
+    const trendMultiplier = 1.0;
     
     const nextWeekPrice = currentPrice * trendMultiplier * (1 + baseVariation);
     const nextMonthPrice = currentPrice * trendMultiplier * (1 + baseVariation * 2);
@@ -141,16 +140,14 @@ export const AIPricePredictor: React.FC = () => {
     for (let i = 30; i >= 0; i--) {
       const date = new Date();
       date.setDate(date.getDate() - i);
-      const priceVariation = (Math.random() - 0.5) * 0.3; // ±15% variation
+      const priceVariation = ((i * 7 % 30) - 15) * 0.01;
       historicalData.push({
         date: date.toISOString().split("T")[0],
         price: currentPrice * (1 + priceVariation)
       });
     }
 
-    const expectedSavings = trend === "falling" ? 
-      Math.abs(currentPrice - nextWeekPrice) : 
-      Math.random() * 200 + 50;
+    const expectedSavings = 100;
 
     return {
       product_name: productName,
@@ -158,12 +155,12 @@ export const AIPricePredictor: React.FC = () => {
       predicted_prices: {
         next_week: nextWeekPrice,
         next_month: nextMonthPrice,
-        confidence: Math.random() * 0.3 + 0.7 // 70-100% confidence
+        confidence: 0.82
       },
       trend,
       best_time_to_buy: {
-        recommendation: trend === "falling" ? "Aguardar" : trend === "rising" ? "Comprar agora" : "Monitorar",
-        timeframe: trend === "falling" ? "1-2 semanas" : trend === "rising" ? "Imediatamente" : "1 semana",
+        recommendation: "Monitorar",
+        timeframe: "1 semana",
         expected_savings: expectedSavings
       },
       market_factors: [

@@ -204,8 +204,8 @@ export const OperationsDashboardRealTime: React.FC = () => {
         topic: "vessel/telemetry",
         payload: {
           vessel_id: "vessel-1",
-          temperature: 45 + Math.random() * 10,
-          pressure: 100 + Math.random() * 20,
+          temperature: 50,
+          pressure: 110,
           location: { lat: 40.7128, lon: -74.006 },
           timestamp: new Date().toISOString(),
         },
@@ -225,7 +225,7 @@ export const OperationsDashboardRealTime: React.FC = () => {
     wsSimulationRef.current = setInterval(() => {
       const wsData = {
         type: "alert",
-        severity: ["low", "medium", "high"][Math.floor(Math.random() * 3)],
+        severity: "medium",
         message: "System alert from WebSocket",
         timestamp: new Date().toISOString(),
       };

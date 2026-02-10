@@ -59,8 +59,8 @@ export const LaunchCelebration: React.FC = () => {
       // Generate confetti particles
       const particles = Array.from({ length: 50 }, (_, i) => ({
         id: i,
-        x: Math.random() * 100,
-        delay: Math.random() * 2
+        x: (i * 37 + 13) % 100,
+        delay: (i * 0.04) % 2
       }));
       setConfetti(particles);
     }
@@ -110,7 +110,7 @@ export const LaunchCelebration: React.FC = () => {
             }}
             className="absolute w-3 h-3 rounded-full"
             style={{
-              background: `hsl(${Math.random() * 360}, 70%, 60%)`
+              background: `hsl(${(particle.id * 47) % 360}, 70%, 60%)`
             }}
           />
         ))}

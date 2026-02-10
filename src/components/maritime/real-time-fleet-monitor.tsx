@@ -62,15 +62,18 @@ export const RealTimeFleetMonitor = () => {
 
   const updateVesselPositions = async () => {
     // Simulate real-time position updates
-    setVessels(prev => prev.map(vessel => ({
-      ...vessel,
-      speed: Math.max(0, vessel.speed + (Math.random() - 0.5) * 2),
-      heading: (vessel.heading + (Math.random() - 0.5) * 10) % 360,
-      location: {
-        lat: vessel.location.lat + (Math.random() - 0.5) * 0.01,
-        lon: vessel.location.lon + (Math.random() - 0.5) * 0.01
-      }
-    })));
+    setVessels(prev => prev.map((vessel, idx) => {
+      const drift = Math.sin(Date.now() / 10000 + idx);
+      return {
+        ...vessel,
+        speed: Math.max(0, vessel.speed + drift * 0.5),
+        heading: (vessel.heading + drift * 2) % 360,
+        location: {
+          lat: vessel.location.lat + drift * 0.002,
+          lon: vessel.location.lon + Math.cos(Date.now() / 10000 + idx) * 0.002
+        }
+      };
+    }));
   };
 
   // Periodic vessel position updates with optimized polling

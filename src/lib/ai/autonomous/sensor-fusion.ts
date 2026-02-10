@@ -570,7 +570,7 @@ class SensorFusionEngine extends SimpleEventEmitter {
     this.ingestReading({
       sensorId: 'gyro_main',
       sensorType: 'gyro',
-      value: 145 + (Math.random() - 0.5) * 2,
+      value: 145.3,
       unit: 'deg',
       timestamp: now,
       quality: 0.98,
@@ -581,7 +581,7 @@ class SensorFusionEngine extends SimpleEventEmitter {
     this.ingestReading({
       sensorId: 'speed_log',
       sensorType: 'speed_log',
-      value: 12.5 + (Math.random() - 0.5),
+      value: 12.5,
       unit: 'kts',
       timestamp: now,
       quality: 0.92,
@@ -592,7 +592,7 @@ class SensorFusionEngine extends SimpleEventEmitter {
     this.ingestReading({
       sensorId: 'engine_rpm_me1',
       sensorType: 'engine_rpm',
-      value: 85 + (Math.random() - 0.5) * 5,
+      value: 85,
       unit: 'rpm',
       timestamp: now,
       quality: 0.99,
@@ -603,7 +603,7 @@ class SensorFusionEngine extends SimpleEventEmitter {
     this.ingestReading({
       sensorId: 'fuel_flow_me1',
       sensorType: 'fuel_flow',
-      value: 2.5 + (Math.random() - 0.5) * 0.2,
+      value: 2.5,
       unit: 'm³/h',
       timestamp: now,
       quality: 0.95,
@@ -614,7 +614,7 @@ class SensorFusionEngine extends SimpleEventEmitter {
     this.ingestReading({
       sensorId: 'wind_sensor',
       sensorType: 'wind_sensor',
-      value: 15 + (Math.random() - 0.5) * 5,
+      value: 15,
       unit: 'kts',
       timestamp: now,
       quality: 0.90,

@@ -327,7 +327,7 @@ class ContextMesh {
       
       history.unshift({
         ...message,
-        id: `local_${Date.now()}_${Math.random()}`,
+        id: `local_${Date.now()}_${crypto.randomUUID()}`,
         syncStatus: "synced"
       });
       
@@ -359,7 +359,7 @@ class ContextMesh {
         
         store.add({
           ...message,
-          id: `idb_${Date.now()}_${Math.random()}`,
+          id: `idb_${Date.now()}_${crypto.randomUUID()}`,
           syncStatus: "pending"
         });
         

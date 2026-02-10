@@ -82,7 +82,7 @@ export function Patch607Validation() {
       // Test 2: Logs com score de confiança
       const anomalyLogs = detectedAnomalies.map(a => ({
         ...a,
-        confidenceScore: Math.random() * 0.3 + 0.7, // 0.7-1.0
+        confidenceScore: 0.85,
         hasConfidenceScore: true
       }));
 

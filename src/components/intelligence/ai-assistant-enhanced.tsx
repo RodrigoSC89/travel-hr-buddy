@@ -182,7 +182,7 @@ const AIAssistantEnhanced: React.FC = () => {
     };
 
     const categoryResponses = responses[capability as keyof typeof responses] || responses.general;
-    return categoryResponses[Math.floor(Math.random() * categoryResponses.length)];
+    return categoryResponses[0];
   };
 
   const handleVoiceToggle = () => {

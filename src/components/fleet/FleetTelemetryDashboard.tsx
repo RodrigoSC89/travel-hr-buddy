@@ -160,8 +160,8 @@ export const FleetTelemetryDashboard: React.FC = () => {
         const threshold = SENSOR_THRESHOLDS[type];
         const baseValue = (threshold.min + threshold.max) / 2;
         const variation = (threshold.max - threshold.min) * 0.2;
-        const value = baseValue + (Math.random() - 0.5) * variation;
-        const anomalyValue = Math.random() > 0.95 ? threshold.critical : value;
+        const value = baseValue + ((vesselsData.indexOf(vessel) * 7 + sensorTypes.indexOf(type) * 13) % 20 - 10) * variation * 0.1;
+        const anomalyValue = value;
 
         const status = 
           anomalyValue > threshold.critical ? "critical" :

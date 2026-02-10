@@ -58,11 +58,11 @@ export const SystemHealthMonitor: React.FC = () => {
       const queryTime = Math.floor(performance.now() - startTime);
       
       const newMetrics: SystemMetrics = {
-        cpu: Math.floor(20 + Math.random() * 30),
-        memory: Math.floor(40 + Math.random() * 20),
-        disk: Math.floor(35 + Math.random() * 15),
-        network: Math.floor(10 + Math.random() * 30),
-        database: queryTime > 500 ? 80 : Math.floor(20 + Math.random() * 25),
+        cpu: Math.min(90, Math.floor(queryTime / 10) + 20),
+        memory: Math.floor(50 + (queryTime % 15)),
+        disk: 42,
+        network: Math.floor(queryTime / 20 + 10),
+        database: queryTime > 500 ? 80 : Math.floor(queryTime / 20 + 20),
         activeUsers: sessionsResult.count || 0,
         responseTime: queryTime,
         uptime: "N/A",

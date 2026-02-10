@@ -148,7 +148,8 @@ const useExecutiveKPIs = () => {
           return preovidAudits[0].created_at || new Date().toISOString();
         }
         
-        const daysAgo = Math.floor(Math.random() * 30) + 1;
+        const seedVal = moduleId.split("").reduce((a, c) => a + c.charCodeAt(0), 0);
+        const daysAgo = 5 + (seedVal * 3) % 25;
         return new Date(Date.now() - daysAgo * 24 * 60 * 60 * 1000).toISOString();
       };
       
@@ -180,7 +181,7 @@ const useExecutiveKPIs = () => {
           return 'Crítico';
         };
         
-        const daysUntil = Math.floor(Math.random() * 60) + 15;
+        const daysUntil = 15 + (seed % 60);
         
         return {
           id,
