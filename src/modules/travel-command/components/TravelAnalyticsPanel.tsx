@@ -607,7 +607,7 @@ export const TravelAnalyticsPanel: React.FC = () => {
                       <p className="text-xs text-muted-foreground">Impacto Estimado</p>
                       <p className="font-bold text-green-600">{prediction.impact}</p>
                     </div>
-                    <Button size="sm" onClick={() => toast.success(`Ação iniciada: ${prediction.action}`, { description: `${prediction.title} - Impacto estimado: ${prediction.impact}. Confiança: ${prediction.confidence}%` })}>
+                    <Button size="sm" onClick={() => toast.info(`${prediction.action}`, { description: `${prediction.title} - Impacto: ${prediction.impact}. Aplicação automática de predições em implantação. ETA: Q3/2026.` })}>
                       <Sparkles className="h-4 w-4 mr-2" />
                       {prediction.action}
                     </Button>

@@ -155,7 +155,7 @@ function ContractCard({ contract }: { contract: Contract }) {
           Detalhes
         </Button>
         {contract.renewalOption && contract.status === "expiring" && (
-          <Button size="sm" className="flex-1 gap-1" onClick={() => toast.success(`Processo de renovação iniciado para ${contract.number}`, { description: `${contract.title} - ${contract.counterparty}. Equipe jurídica será notificada.` })}>
+          <Button size="sm" className="flex-1 gap-1" onClick={() => toast.info(`Renovação de ${contract.number}`, { description: `Workflow de renovação contratual em implantação. ${contract.title} - ${contract.counterparty}. ETA: Q3/2026.` })}>
             <RefreshCw className="h-3 w-3" />
             Renovar
           </Button>

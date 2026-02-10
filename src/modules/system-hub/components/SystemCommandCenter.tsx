@@ -416,7 +416,7 @@ export function SystemCommandCenter() {
                         <Button variant="ghost" size="icon" className="h-8 w-8" onClick={() => toast.info(`Chave: ${key.name}`, { description: `Criada: ${key.created || 'N/A'} | Último uso: ${key.lastUsed}` })}>
                           <Eye className="h-4 w-4" />
                         </Button>
-                        <Button variant="ghost" size="icon" className="h-8 w-8" onClick={() => toast.success(`Chave "${key.name}" regenerada com sucesso`)}>
+                        <Button variant="ghost" size="icon" className="h-8 w-8" onClick={() => toast.info(`Regeneração de chave "${key.name}"`, { description: "Gerenciamento de API Keys em implantação. Gerencie via Supabase Dashboard. ETA: Q3/2026." })}>
                           <RefreshCw className="h-4 w-4" />
                         </Button>
                       </div>

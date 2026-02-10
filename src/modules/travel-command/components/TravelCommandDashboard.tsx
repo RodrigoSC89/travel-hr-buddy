@@ -455,7 +455,7 @@ const TravelCommandDashboard: React.FC = () => {
                           <Badge className="bg-green-500/10 text-green-600 border-green-500/20">
                             {rec.impact}
                           </Badge>
-                          <Button size="sm" variant="outline" className="h-7 text-xs" onClick={() => toast.success(`${rec.action} aplicado`, { description: `${rec.title}: economia estimada de ${rec.impact}` })}>
+                          <Button size="sm" variant="outline" className="h-7 text-xs" onClick={() => toast.info(`${rec.action}`, { description: `${rec.title}: economia estimada de ${rec.impact}. Aplicação automática de recomendações em implantação. ETA: Q3/2026.` })}>
                              {rec.action}
                           </Button>
                         </div>
