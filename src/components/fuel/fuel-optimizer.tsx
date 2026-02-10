@@ -25,10 +25,13 @@ import {
 } from "lucide-react";
 import { Progress } from "@/components/ui/progress";
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from "recharts";
+import { logger } from "@/lib/logger";
+import { FuelOptimizationService } from "@/services/fuel-optimization-service";
+import { FuelSimulator } from "./FuelSimulator";
+import { FuelAnalysisPanel } from "./FuelAnalysisPanel";
+import { FuelAICopilot } from "./FuelAICopilot";
 
-// Types from Supabase schema
-type FuelRecordDB = Database["public"]["Tables"]["fuel_records"]["Row"];
-type RouteConsumptionDB = Database["public"]["Tables"]["route_consumption"]["Row"];
+// Types defined locally (no longer need Database import)
 
 interface FuelRecord {
   id: string;
@@ -461,27 +464,17 @@ export const FuelOptimizer = () => {
             </CardHeader>
             <CardContent>
               <div className="h-[300px]">
-                <Bar
-                  data={getOptimizationChartData()}
-                  options={{
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: {
-                      legend: {
-                        position: "top" as const,
-                      },
-                    },
-                    scales: {
-                      y: {
-                        beginAtZero: true,
-                        title: {
-                          display: true,
-                          text: "Consumo (Litros)"
-                        }
-                      }
-                    }
-                  }}
-                />
+                <ResponsiveContainer width="100%" height="100%">
+                  <BarChart data={getOptimizationChartData()}>
+                    <CartesianGrid strokeDasharray="3 3" />
+                    <XAxis dataKey="name" tick={{ fontSize: 12 }} />
+                    <YAxis label={{ value: "Consumo (Litros)", angle: -90, position: "insideLeft" }} />
+                    <Tooltip />
+                    <Legend />
+                    <Bar dataKey="original" name="Original" fill="hsl(var(--muted-foreground))" />
+                    <Bar dataKey="optimized" name="Otimizado" fill="hsl(var(--primary))" />
+                  </BarChart>
+                </ResponsiveContainer>
               </div>
             </CardContent>
           </Card>
