@@ -27,7 +27,8 @@ import {
 import html2canvas from "html2canvas";
 import { usePDFExport } from "@/hooks/use-pdf-export";
 
-// Mock data for builds by branch
+// DevOps internal analytics - no backend table (CI/CD metrics are external)
+// Data is illustrative for the admin dashboard
 const mockBuildsByBranch = [
   { branch: "main", count: 45 },
   { branch: "develop", count: 32 },

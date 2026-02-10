@@ -1,9 +1,11 @@
 /**
  * AlertsNotificationCenter - Central de Alertas e Notificações
  * Enterprise-grade alert management with AI prioritization
+ * PATCH: Migrated from mock data to Supabase intelligent_notifications
  */
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { supabase } from "@/integrations/supabase/client";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -34,90 +36,36 @@ interface Alert {
   autoResolved?: boolean;
 }
 
-const mockAlerts: Alert[] = [
-  {
-    id: "1",
-    type: "critical",
-    category: "compliance",
-    title: "Certificado ISPS Expirando",
-    message: "O certificado ISPS do MV Atlantic Star expira em 7 dias. Ação imediata necessária.",
-    vessel: "MV Atlantic Star",
-    source: "Compliance Monitor",
-    timestamp: new Date(Date.now() - 5 * 60 * 1000),
-    read: false,
-    actionRequired: true,
-    actionUrl: "/compliance/certificates",
-    aiPriority: 95,
-  },
-  {
-    id: "2",
-    type: "warning",
-    category: "maintenance",
-    title: "Manutenção Preventiva Pendente",
-    message: "Motor auxiliar #2 precisa de troca de óleo. Programado para há 3 dias.",
-    vessel: "MV Pacific Dawn",
-    source: "Maintenance Predictor",
-    timestamp: new Date(Date.now() - 30 * 60 * 1000),
-    read: false,
-    actionRequired: true,
-    actionUrl: "/maintenance",
-    aiPriority: 78,
-  },
-  {
-    id: "3",
-    type: "warning",
-    category: "crew",
-    title: "Tripulante com Certificado Vencendo",
-    message: "STCW de Carlos Silva expira em 15 dias. Renovação deve ser iniciada.",
-    vessel: "MV Caribbean Blue",
-    source: "Crew Manager",
-    timestamp: new Date(Date.now() - 2 * 60 * 60 * 1000),
-    read: true,
-    actionRequired: true,
-    actionUrl: "/people/certifications",
-    aiPriority: 72,
-  },
-  {
-    id: "4",
-    type: "info",
-    category: "operations",
-    title: "ETA Atualizado",
-    message: "Devido a condições meteorológicas, ETA para Singapore alterado para 15/02 08:00.",
-    vessel: "MV Atlantic Star",
-    source: "Voyage Optimizer",
-    timestamp: new Date(Date.now() - 4 * 60 * 60 * 1000),
-    read: true,
-    actionRequired: false,
-    aiPriority: 45,
-  },
-  {
-    id: "5",
-    type: "success",
-    category: "compliance",
-    title: "Auditoria Concluída",
-    message: "Auditoria ISM anual concluída com sucesso. Zero não-conformidades.",
-    vessel: "MV Pacific Dawn",
-    source: "Audit Center",
-    timestamp: new Date(Date.now() - 6 * 60 * 60 * 1000),
-    read: true,
-    actionRequired: false,
-    aiPriority: 30,
-  },
-  {
-    id: "6",
-    type: "critical",
-    category: "safety",
-    title: "Desvio de Rota Detectado",
-    message: "MV Caribbean Blue desviou 15nm da rota planejada. Verificar situação.",
-    vessel: "MV Caribbean Blue",
-    source: "AIS Tracker",
-    timestamp: new Date(Date.now() - 10 * 60 * 1000),
-    read: false,
-    actionRequired: true,
-    actionUrl: "/tracking",
-    aiPriority: 92,
-  },
-];
+// Fallback alerts when no data in DB
+const fallbackAlerts: Alert[] = [];
+
+function mapSeverityToType(severity: string): Alert["type"] {
+  switch (severity) {
+    case "critical": return "critical";
+    case "high": return "warning";
+    case "low": return "success";
+    default: return "info";
+  }
+}
+
+function priorityToNumber(priority: string): number {
+  switch (priority) {
+    case "critical": return 95;
+    case "high": return 75;
+    case "medium": return 50;
+    case "low": return 25;
+    default: return 50;
+  }
+}
+
+function mapCategoryFromType(type: string): Alert["category"] {
+  if (type.includes("maintenance")) return "maintenance";
+  if (type.includes("compliance") || type.includes("certificate")) return "compliance";
+  if (type.includes("crew") || type.includes("stcw")) return "crew";
+  if (type.includes("safety") || type.includes("emergency")) return "safety";
+  if (type.includes("system")) return "system";
+  return "operations";
+}
 
 const typeConfig = {
   critical: { icon: AlertCircle, color: "bg-red-500 text-white", bgLight: "bg-red-50 border-red-200" },
@@ -136,10 +84,42 @@ const categoryIcons = {
 };
 
 export function AlertsNotificationCenter() {
-  const [alerts, setAlerts] = useState<Alert[]>(mockAlerts);
+  const [alerts, setAlerts] = useState<Alert[]>(fallbackAlerts);
   const [filter, setFilter] = useState<string>("all");
   const [soundEnabled, setSoundEnabled] = useState(true);
   const [showUnreadOnly, setShowUnreadOnly] = useState(false);
+
+  useEffect(() => {
+    async function loadAlerts() {
+      try {
+        const { data, error } = await supabase
+          .from('intelligent_notifications')
+          .select('*')
+          .order('created_at', { ascending: false })
+          .limit(50);
+
+        if (error || !data?.length) return;
+
+        const mapped: Alert[] = data.map(n => ({
+          id: n.id,
+          type: mapSeverityToType(n.priority || 'info'),
+          category: mapCategoryFromType(n.type || ''),
+          title: n.title,
+          message: n.message || '',
+          source: n.type || 'System',
+          timestamp: new Date(n.created_at || Date.now()),
+          read: n.is_read || false,
+          actionRequired: n.priority === 'critical' || n.priority === 'high',
+          actionUrl: (n.metadata as Record<string, unknown>)?.actionUrl as string | undefined,
+          aiPriority: priorityToNumber(n.priority),
+        }));
+        setAlerts(mapped);
+      } catch {
+        // Keep empty state
+      }
+    }
+    loadAlerts();
+  }, []);
 
   const markAsRead = (alertId: string) => {
     setAlerts(prev => prev.map(alert => 
