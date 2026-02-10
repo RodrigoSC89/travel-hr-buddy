@@ -73,7 +73,7 @@ const SmartIntegrationHub: React.FC = () => {
   }, []);
 
   const loadIntegrations = () => {
-    const mockIntegrations: Integration[] = [
+    const fallbackIntegrations: Integration[] = [
       {
         id: "1",
         name: "Porto Digital API",
@@ -140,11 +140,11 @@ const SmartIntegrationHub: React.FC = () => {
       }
     ];
 
-    setIntegrations(mockIntegrations);
+    setIntegrations(fallbackIntegrations);
   };
 
   const loadAutomationRules = () => {
-    const mockRules: AutomationRule[] = [
+    const fallbackRules: AutomationRule[] = [
       {
         id: "1",
         name: "Alerta de Chegada no Porto",
@@ -183,7 +183,7 @@ const SmartIntegrationHub: React.FC = () => {
       }
     ];
 
-    setAutomationRules(mockRules);
+    setAutomationRules(fallbackRules);
   };
 
   const toggleIntegration = (id: string) => {

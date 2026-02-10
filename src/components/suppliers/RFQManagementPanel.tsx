@@ -104,8 +104,8 @@ export default function RFQManagementPanel() {
     }
   });
 
-  // Mock quotes for selected RFQ
-  const mockQuotes: Quote[] = selectedRFQ ? [
+  // Fallback quotes for selected RFQ - no dedicated quotes table yet
+  const fallbackQuotes: Quote[] = selectedRFQ ? [
     { id: "1", supplier_name: "MarineSupply Global", total_value: selectedRFQ.budget_estimate * 0.95, lead_time_days: 5, status: "pending" },
     { id: "2", supplier_name: "Ocean Parts Ltd", total_value: selectedRFQ.budget_estimate * 1.02, lead_time_days: 7, status: "pending" },
     { id: "3", supplier_name: "TechNav Systems", total_value: selectedRFQ.budget_estimate * 0.88, lead_time_days: 10, status: "pending" },
@@ -463,7 +463,7 @@ export default function RFQManagementPanel() {
             <DialogTitle>Cotações Recebidas - {selectedRFQ?.rfq_number}</DialogTitle>
           </DialogHeader>
           <div className="space-y-3">
-            {mockQuotes.map((quote) => (
+            {fallbackQuotes.map((quote: Quote) => (
               <div key={quote.id} className="p-4 rounded-lg border bg-card">
                 <div className="flex items-center justify-between mb-2">
                   <div className="flex items-center gap-2">

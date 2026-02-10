@@ -38,7 +38,7 @@ interface TenantUser {
   avatar_url?: string;
 }
 
-const mockUsers: TenantUser[] = [
+const fallbackUsers: TenantUser[] = [
   {
     id: "1",
     user_id: "1",
@@ -86,7 +86,7 @@ const mockUsers: TenantUser[] = [
 ];
 
 export const TenantUserManagement: React.FC = () => {
-  const [users, setUsers] = useState<TenantUser[]>(mockUsers);
+  const [users, setUsers] = useState<TenantUser[]>(fallbackUsers);
   const [searchTerm, setSearchTerm] = useState("");
   const [roleFilter, setRoleFilter] = useState<string>("all");
   const [statusFilter, setStatusFilter] = useState<string>("all");

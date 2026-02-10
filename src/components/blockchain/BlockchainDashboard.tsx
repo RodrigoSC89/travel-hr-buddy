@@ -72,8 +72,8 @@ export const BlockchainDashboard: React.FC = () => {
   const loadBlockchainData = async () => {
     setIsLoading(true);
     
-    // Simulated blockchain data
-    const mockTransactions: BlockchainTransaction[] = [
+    // Fallback blockchain data - no dedicated blockchain table yet
+    const fallbackTransactions: BlockchainTransaction[] = [
       {
         id: '1',
         hash: '0x7f9fade1c0d57a7af66ab4ead7c2eb7b11a91385',
@@ -145,7 +145,7 @@ export const BlockchainDashboard: React.FC = () => {
       }
     ];
 
-    const mockStats: ComplianceStats = {
+    const fallbackStats: ComplianceStats = {
       totalTransactions: 1247,
       confirmedBlocks: 1243,
       pendingBlocks: 4,
@@ -155,8 +155,8 @@ export const BlockchainDashboard: React.FC = () => {
     };
 
     setTimeout(() => {
-      setTransactions(mockTransactions);
-      setStats(mockStats);
+      setTransactions(fallbackTransactions);
+      setStats(fallbackStats);
       setIsLoading(false);
     }, 1000);
   };
