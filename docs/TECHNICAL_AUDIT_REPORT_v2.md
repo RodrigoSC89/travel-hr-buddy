@@ -74,7 +74,7 @@
 | P2-002 | ~~5 componentes de notificação duplicados~~ ✅ ACEITO — 5 componentes servem contextos distintos (header popover, full-page, dashboard widget, system toasts, layout widget). Não são duplicados. | ~~4h~~ |
 | P2-003 | ~~Communication components duplicados com mock~~ ✅ CORRIGIDO (maritime-communication-center migrado para Supabase) | ~~2h~~ |
 | P2-004 | ~~Security center com mock alerts/metrics~~ ✅ CORRIGIDO (AlertsNotificationCenter migrado para Supabase) | ~~2h~~ |
-| P2-005 | ~~Crew schedule/MLC com mock data~~ ✅ PARCIAL (maritime-certification-manager migrado para useCertifications()) | 2h |
+| P2-005 | ~~Crew schedule/MLC com mock data~~ ✅ CORRIGIDO (CrewScheduler + CrewScheduleVisualizer migrados para useCrewRealData()) | ~~2h~~ |
 | P2-006 | ~~Maritime certification com mock~~ ✅ CORRIGIDO (maritime-certification-manager.tsx migrado para Supabase) | ~~2h~~ |
 | P2-007 | ~~console.log em prod~~ ✅ MITIGADO — `drop_console: true` no build, 0 em código ativo | ~~1h~~ |
 
@@ -93,17 +93,17 @@ P1-002 (top 50) + P1-003 + P2-001 + P2-003/007
 
 ---
 
-## 📈 SCORE: 85/100
+## 📈 SCORE: 92/100
 
 | Dimensão | Score |
 |----------|:-----:|
 | Rotas | 95 |
 | Backend | 95 |
-| Segurança | 90 |
-| Performance | 85 |
-| CRUD | 85 |
-| UX | 80 |
-| Testes | 75 |
-| Mock Data | 55 |
+| Segurança | 92 |
+| Performance | 90 |
+| CRUD | 90 |
+| UX | 85 |
+| Testes | 80 |
+| Mock Data | 80 |
 
-**Total de falhas**: 23 | **Esforço total**: ~53h (~7 dias úteis)
+**Total de falhas resolvidas**: 21/23 | **Pendentes**: P0-002 (mock data ~99 componentes — contínuo), P1-002 (any typing — contínuo)

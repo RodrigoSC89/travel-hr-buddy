@@ -1,9 +1,10 @@
 /**
  * Crew Scheduler Component
  * Planejador visual de escalas com compliance MLC
+ * Migrado para dados reais via useCrewRealData (P2-005)
  */
 
-import React, { useState } from "react";
+import React, { useState, useMemo } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -25,8 +26,10 @@ import {
   ChevronLeft,
   ChevronRight,
   Plane,
-  Anchor
+  Anchor,
+  Loader2
 } from "lucide-react";
+import { useCrewRealData } from "@/hooks/useCrewRealData";
 
 interface CrewRotation {
   crewId: string;
@@ -41,78 +44,46 @@ interface CrewRotation {
   mlcCompliant: boolean;
 }
 
-const mockRotations: CrewRotation[] = [
-  {
-    crewId: "1",
-    crewName: "Cap. João Silva",
-    rank: "Master",
-    vessel: "MV Atlantic Pioneer",
-    status: "on-board",
-    embarkDate: "2024-12-15",
-    disembarkDate: "2025-03-15",
-    daysOnBoard: 52,
-    maxDays: 90,
-    mlcCompliant: true
-  },
-  {
-    crewId: "2",
-    crewName: "Carlos Santos",
-    rank: "Chief Officer",
-    vessel: "MV Atlantic Pioneer",
-    status: "on-board",
-    embarkDate: "2025-01-10",
-    disembarkDate: "2025-04-10",
-    daysOnBoard: 26,
-    maxDays: 90,
-    mlcCompliant: true
-  },
-  {
-    crewId: "3",
-    crewName: "Pedro Oliveira",
-    rank: "2nd Officer",
-    vessel: "MV Atlantic Pioneer",
-    status: "on-board",
-    embarkDate: "2024-11-01",
-    disembarkDate: "2025-02-15",
-    daysOnBoard: 96,
-    maxDays: 90,
-    mlcCompliant: false
-  },
-  {
-    crewId: "4",
-    crewName: "Maria Fernanda",
-    rank: "Chief Engineer",
-    vessel: "MV Atlantic Pioneer",
-    status: "traveling",
-    embarkDate: "2025-02-08",
-    disembarkDate: "2025-05-08",
-    daysOnBoard: 0,
-    maxDays: 90,
-    mlcCompliant: true
-  },
-  {
-    crewId: "5",
-    crewName: "Ana Costa",
-    rank: "2nd Engineer",
-    vessel: "MV Atlantic Pioneer",
-    status: "on-leave",
-    embarkDate: "2025-03-01",
-    disembarkDate: "2025-06-01",
-    daysOnBoard: 0,
-    maxDays: 90,
-    mlcCompliant: true
-  }
-];
-
 const months = [
   "Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho",
   "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"
 ];
 
 export function CrewScheduler() {
-  const [selectedVessel, setSelectedVessel] = useState("MV Atlantic Pioneer");
+  const { data, isLoading } = useCrewRealData();
+  const [selectedVessel, setSelectedVessel] = useState("all");
   const [currentMonth, setCurrentMonth] = useState(new Date().getMonth());
   const [currentYear, setCurrentYear] = useState(new Date().getFullYear());
+
+  // Map real crew data to rotation format
+  const rotations = useMemo<CrewRotation[]>(() => {
+    if (!data?.crew) return [];
+    return data.crew.map(c => ({
+      crewId: c.id,
+      crewName: c.name,
+      rank: c.rank,
+      vessel: c.vessel,
+      status: c.status === "onboard" ? "on-board"
+        : c.status === "on-leave" ? "on-leave"
+        : c.status === "traveling" ? "traveling"
+        : "standby",
+      embarkDate: c.embarkedDate || "",
+      disembarkDate: c.plannedDisembark || "",
+      daysOnBoard: c.daysOnboard,
+      maxDays: c.maxDays,
+      mlcCompliant: c.daysOnboard <= c.maxDays,
+    }));
+  }, [data?.crew]);
+
+  // Get unique vessels for filter
+  const vessels = useMemo(() => {
+    return [...new Set(rotations.map(r => r.vessel).filter(v => v !== "—"))];
+  }, [rotations]);
+
+  const filteredRotations = useMemo(() => {
+    if (selectedVessel === "all") return rotations;
+    return rotations.filter(r => r.vessel === selectedVessel);
+  }, [rotations, selectedVessel]);
 
   const getStatusBadge = (status: CrewRotation["status"]) => {
     switch (status) {
@@ -144,18 +115,28 @@ export function CrewScheduler() {
   const days = Array.from({ length: daysInMonth }, (_, i) => i + 1);
 
   const stats = {
-    onBoard: mockRotations.filter(r => r.status === "on-board").length,
-    onLeave: mockRotations.filter(r => r.status === "on-leave").length,
-    traveling: mockRotations.filter(r => r.status === "traveling").length,
-    mlcViolations: mockRotations.filter(r => !r.mlcCompliant).length
+    onBoard: filteredRotations.filter(r => r.status === "on-board").length,
+    onLeave: filteredRotations.filter(r => r.status === "on-leave").length,
+    traveling: filteredRotations.filter(r => r.status === "traveling").length,
+    mlcViolations: filteredRotations.filter(r => !r.mlcCompliant).length
   };
 
   const isDateInRange = (day: number, embark: string, disembark: string) => {
+    if (!embark) return false;
     const date = new Date(currentYear, currentMonth, day);
     const embarkDate = new Date(embark);
-    const disembarkDate = new Date(disembark);
+    const disembarkDate = disembark ? new Date(disembark) : new Date(Date.now() + 90 * 86400000);
     return date >= embarkDate && date <= disembarkDate;
   };
+
+  if (isLoading) {
+    return (
+      <div className="flex items-center justify-center py-12">
+        <Loader2 className="h-8 w-8 animate-spin text-muted-foreground" />
+        <span className="ml-2 text-muted-foreground">Carregando escalas...</span>
+      </div>
+    );
+  }
 
   return (
     <div className="space-y-6">
@@ -226,12 +207,13 @@ export function CrewScheduler() {
               <Select value={selectedVessel} onValueChange={setSelectedVessel}>
                 <SelectTrigger className="w-[250px]">
                   <Ship className="h-4 w-4 mr-2" />
-                  <SelectValue />
+                  <SelectValue placeholder="Todos os navios" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="MV Atlantic Pioneer">MV Atlantic Pioneer</SelectItem>
-                  <SelectItem value="MV Pacific Voyager">MV Pacific Voyager</SelectItem>
-                  <SelectItem value="MV Nordic Star">MV Nordic Star</SelectItem>
+                  <SelectItem value="all">Todos os Navios</SelectItem>
+                  {vessels.map(v => (
+                    <SelectItem key={v} value={v}>{v}</SelectItem>
+                  ))}
                 </SelectContent>
               </Select>
             </div>
@@ -283,67 +265,75 @@ export function CrewScheduler() {
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
             <Users className="h-5 w-5" />
-            Cronograma de Rotações - {selectedVessel}
+            Cronograma de Rotações {selectedVessel !== "all" ? `- ${selectedVessel}` : ""}
+            <Badge variant="outline" className="ml-2">{filteredRotations.length} tripulantes</Badge>
           </CardTitle>
         </CardHeader>
         <CardContent>
-          <div className="overflow-x-auto">
-            <table className="w-full min-w-[1000px]">
-              <thead>
-                <tr className="border-b">
-                  <th className="text-left p-3 min-w-[200px] sticky left-0 bg-background">
-                    Tripulante
-                  </th>
-                  {days.map(day => (
-                    <th key={day} className="p-1 text-center text-xs min-w-[25px]">
-                      {day}
+          {filteredRotations.length === 0 ? (
+            <div className="text-center py-8 text-muted-foreground">
+              <Users className="h-8 w-8 mx-auto mb-2 opacity-50" />
+              <p>Nenhum tripulante encontrado</p>
+            </div>
+          ) : (
+            <div className="overflow-x-auto">
+              <table className="w-full min-w-[1000px]">
+                <thead>
+                  <tr className="border-b">
+                    <th className="text-left p-3 min-w-[200px] sticky left-0 bg-background">
+                      Tripulante
                     </th>
-                  ))}
-                </tr>
-              </thead>
-              <tbody>
-                {mockRotations.map((rotation) => (
-                  <tr key={rotation.crewId} className="border-b hover:bg-muted/50">
-                    <td className="p-3 sticky left-0 bg-background">
-                      <div className="flex items-center gap-3">
-                        {getStatusIcon(rotation.status)}
-                        <div>
-                          <p className="font-medium text-sm">{rotation.crewName}</p>
-                          <p className="text-xs text-muted-foreground">{rotation.rank}</p>
-                        </div>
-                        {!rotation.mlcCompliant && (
-                          <AlertTriangle className="h-4 w-4 text-red-500" />
-                        )}
-                      </div>
-                    </td>
-                    {days.map(day => {
-                      const inRange = isDateInRange(day, rotation.embarkDate, rotation.disembarkDate);
-                      const isEmbark = new Date(rotation.embarkDate).getDate() === day &&
-                        new Date(rotation.embarkDate).getMonth() === currentMonth;
-                      const isDisembark = new Date(rotation.disembarkDate).getDate() === day &&
-                        new Date(rotation.disembarkDate).getMonth() === currentMonth;
-
-                      return (
-                        <td key={day} className="p-0">
-                          {inRange && (
-                            <div
-                              className={`h-6 ${
-                                rotation.status === "on-board" 
-                                  ? rotation.mlcCompliant ? "bg-green-500" : "bg-red-500"
-                                  : rotation.status === "traveling" 
-                                    ? "bg-yellow-500" 
-                                    : "bg-blue-500"
-                              } ${isEmbark ? "rounded-l" : ""} ${isDisembark ? "rounded-r" : ""}`}
-                            />
-                          )}
-                        </td>
-                      );
-                    })}
+                    {days.map(day => (
+                      <th key={day} className="p-1 text-center text-xs min-w-[25px]">
+                        {day}
+                      </th>
+                    ))}
                   </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
+                </thead>
+                <tbody>
+                  {filteredRotations.map((rotation) => (
+                    <tr key={rotation.crewId} className="border-b hover:bg-muted/50">
+                      <td className="p-3 sticky left-0 bg-background">
+                        <div className="flex items-center gap-3">
+                          {getStatusIcon(rotation.status)}
+                          <div>
+                            <p className="font-medium text-sm">{rotation.crewName}</p>
+                            <p className="text-xs text-muted-foreground">{rotation.rank}</p>
+                          </div>
+                          {!rotation.mlcCompliant && (
+                            <AlertTriangle className="h-4 w-4 text-red-500" />
+                          )}
+                        </div>
+                      </td>
+                      {days.map(day => {
+                        const inRange = isDateInRange(day, rotation.embarkDate, rotation.disembarkDate);
+                        const isEmbark = rotation.embarkDate && new Date(rotation.embarkDate).getDate() === day &&
+                          new Date(rotation.embarkDate).getMonth() === currentMonth;
+                        const isDisembark = rotation.disembarkDate && new Date(rotation.disembarkDate).getDate() === day &&
+                          new Date(rotation.disembarkDate).getMonth() === currentMonth;
+
+                        return (
+                          <td key={day} className="p-0">
+                            {inRange && (
+                              <div
+                                className={`h-6 ${
+                                  rotation.status === "on-board" 
+                                    ? rotation.mlcCompliant ? "bg-green-500" : "bg-red-500"
+                                    : rotation.status === "traveling" 
+                                      ? "bg-yellow-500" 
+                                      : "bg-blue-500"
+                                } ${isEmbark ? "rounded-l" : ""} ${isDisembark ? "rounded-r" : ""}`}
+                              />
+                            )}
+                          </td>
+                        );
+                      })}
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          )}
 
           {/* Legend */}
           <div className="flex justify-center gap-6 mt-6 pt-4 border-t">
@@ -378,7 +368,7 @@ export function CrewScheduler() {
           </CardHeader>
           <CardContent>
             <div className="space-y-3">
-              {mockRotations.filter(r => !r.mlcCompliant).map((rotation) => (
+              {filteredRotations.filter(r => !r.mlcCompliant).map((rotation) => (
                 <div key={rotation.crewId} className="flex items-center justify-between p-3 bg-red-500/10 rounded-lg">
                   <div className="flex items-center gap-3">
                     <AlertTriangle className="h-5 w-5 text-red-500" />
