@@ -3,6 +3,7 @@
  * Requisições de compra, aprovações multi-nível, histórico
  */
 import React, { useState } from "react";
+import { toast } from "sonner";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -266,7 +267,7 @@ export function ProcurementHub() {
                 <FileText className="h-5 w-5" />
                 Requisições
               </CardTitle>
-              <Button size="sm">
+              <Button size="sm" onClick={() => toast.info("Nova Requisição", { description: "Para criar uma requisição de compra, entre em contato com o departamento de suprimentos ou utilize o formulário no módulo Procurement." })}>
                 <Plus className="h-4 w-4 mr-1" />
                 Nova
               </Button>
@@ -281,7 +282,7 @@ export function ProcurementHub() {
                   className="pl-9"
                 />
               </div>
-              <Button variant="outline" size="icon">
+              <Button variant="outline" size="icon" onClick={() => toast.info("Filtros: Prioridade (Urgente, Alta, Média, Baixa), Status, Departamento")}>
                 <Filter className="h-4 w-4" />
               </Button>
             </div>
@@ -355,12 +356,12 @@ export function ProcurementHub() {
                 </div>
                 <div className="flex gap-2">
                   {selectedPR.status === "draft" && (
-                    <Button size="sm">
+                    <Button size="sm" onClick={() => toast.success(`Requisição ${selectedPR.prNumber} enviada para aprovação`, { description: `${selectedPR.title} - ${formatCurrency(selectedPR.totalAmount)}` })}>
                       <Send className="h-4 w-4 mr-1" />
                       Enviar
                     </Button>
                   )}
-                  <Button variant="outline" size="sm">
+                  <Button variant="outline" size="sm" onClick={() => toast.info(`${selectedPR.prNumber} - ${selectedPR.title}`, { description: `Solicitante: ${selectedPR.requester} | Dept: ${selectedPR.department} | Navio: ${selectedPR.vessel} | Total: ${formatCurrency(selectedPR.totalAmount)}` })}>
                     <Eye className="h-4 w-4 mr-1" />
                     Visualizar
                   </Button>

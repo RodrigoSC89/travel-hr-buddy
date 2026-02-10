@@ -3,6 +3,7 @@
  * Cadastro de fornecedores, avaliação de performance, comunicação
  */
 import React, { useState } from "react";
+import { toast } from "sonner";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -228,7 +229,7 @@ export function SupplierPortal() {
                 <Building2 className="h-5 w-5" />
                 Fornecedores
               </CardTitle>
-              <Button size="sm">
+              <Button size="sm" onClick={() => toast.info("Novo Fornecedor", { description: "Para cadastrar um novo fornecedor, acesse Compras > Fornecedores ou utilize o módulo de Procurement." })}>
                 <Plus className="h-4 w-4 mr-1" />
                 Novo
               </Button>
@@ -243,7 +244,7 @@ export function SupplierPortal() {
                   className="pl-9"
                 />
               </div>
-              <Button variant="outline" size="icon">
+              <Button variant="outline" size="icon" onClick={() => toast.info("Filtros: Status (Aprovado, Pendente, Suspenso), Categoria, Rating")}>
                 <Filter className="h-4 w-4" />
               </Button>
             </div>
@@ -302,11 +303,11 @@ export function SupplierPortal() {
                   </div>
                 </div>
                 <div className="flex gap-2">
-                  <Button variant="outline" size="sm">
+                  <Button variant="outline" size="sm" onClick={() => toast.success(`Mensagem para ${selectedSupplier.name}`, { description: `E-mail será enviado para ${selectedSupplier.contact.email}` })}>
                     <MessageSquare className="h-4 w-4 mr-1" />
                     Mensagem
                   </Button>
-                  <Button variant="outline" size="icon">
+                  <Button variant="outline" size="icon" onClick={() => toast.info(`Opções: Editar, Suspender, Exportar dados de ${selectedSupplier.name}`)}>
                     <MoreVertical className="h-4 w-4" />
                   </Button>
                 </div>

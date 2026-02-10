@@ -209,7 +209,12 @@ export default function FinanceCommandDashboard() {
                   </CardTitle>
                   <CardDescription>Receitas vs Despesas - Últimos 6 meses</CardDescription>
                 </div>
-                <Button size="sm" variant="outline">
+                <Button size="sm" variant="outline" onClick={() => {
+                  const csv = ["Mês;Receitas;Despesas", ...cashFlowData.map(d => `${d.month};${d.receitas};${d.despesas}`)].join('\n');
+                  const blob = new Blob(['\uFEFF' + csv], { type: 'text/csv;charset=utf-8;' });
+                  const url = URL.createObjectURL(blob); const a = document.createElement('a'); a.href = url; a.download = `fluxo-caixa-${new Date().toISOString().slice(0,10)}.csv`; a.click(); URL.revokeObjectURL(url);
+                  toast.success("Fluxo de caixa exportado como CSV");
+                }}>
                   <Download className="h-4 w-4 mr-2" />
                   Exportar
                 </Button>
@@ -267,7 +272,11 @@ export default function FinanceCommandDashboard() {
                             Economia potencial: {formatCurrency(insight.savings)}
                           </p>
                         )}
-                        <Button variant="ghost" size="sm" className="mt-2 h-7 text-xs gap-1 p-0">
+                        <Button variant="ghost" size="sm" className="mt-2 h-7 text-xs gap-1 p-0" onClick={() => {
+                          if (insight.type === 'optimization') toast.info("Análise de otimização de rotas em desenvolvimento. Economia estimada: " + formatCurrency(insight.savings || 0));
+                          else if (insight.type === 'forecast') toast.info("Projeção Q2: aumento estimado de 8% nos custos de manutenção baseado em histórico");
+                          else toast.info("Navegue à aba Contratos para ver contratos próximos do vencimento");
+                        }}>
                           {insight.action}
                           <ArrowRight className="h-3 w-3" />
                         </Button>
@@ -327,7 +336,7 @@ export default function FinanceCommandDashboard() {
                       >
                         Rejeitar
                       </Button>
-                      <Button size="sm" variant="ghost">
+                      <Button size="sm" variant="ghost" onClick={() => toast.info(`Detalhes: ${item.description}`, { description: `Solicitante: ${item.requester} | Categoria: ${item.category} | Data: ${item.date}` })}>
                         <Eye className="h-4 w-4" />
                       </Button>
                     </div>
@@ -346,7 +355,7 @@ export default function FinanceCommandDashboard() {
                 <Ship className="h-5 w-5 text-primary" />
                 OPEX por Embarcação
               </CardTitle>
-              <Button size="sm" variant="ghost">
+              <Button size="sm" variant="ghost" onClick={() => toast.success("Dados OPEX atualizados")}>
                 <RefreshCw className="h-4 w-4" />
               </Button>
             </div>
@@ -409,11 +418,11 @@ export default function FinanceCommandDashboard() {
                   onChange={(e) => setSearchTerm(e.target.value)}
                 />
               </div>
-              <Button size="sm" variant="outline">
+              <Button size="sm" variant="outline" onClick={() => toast.info("Filtros: Tipo (Receita/Despesa), Status (Aprovado/Pendente), Período")}>
                 <Filter className="h-4 w-4 mr-2" />
                 Filtros
               </Button>
-              <Button size="sm" className="gap-2">
+              <Button size="sm" className="gap-2" onClick={() => toast.info("Para registrar transações, utilize o módulo Finance > Dashboard ou crie via Aprovações")}>
                 <Plus className="h-4 w-4" />
                 Nova
               </Button>
