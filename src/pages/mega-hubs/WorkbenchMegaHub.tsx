@@ -128,7 +128,7 @@ export default function WorkbenchMegaHub() {
   // Document actions — navigate to the actual Document Center tab
   const handleDocUpload = useCallback(() => {
     setSearchParams({ section: 'docs' });
-    toast.info('Navegando ao Document Center para upload.');
+    toast.success('Navegando ao Document Center para upload.');
   }, [setSearchParams]);
 
   const handleNewTemplate = useCallback(() => {
@@ -138,7 +138,7 @@ export default function WorkbenchMegaHub() {
   // People actions
   const handleAddCrew = useCallback(async () => {
     navigate('/workbench?section=people');
-    toast.info('Use o formulário do People Hub para adicionar tripulantes.');
+    toast.success('Navegando ao People Hub para adicionar tripulantes.');
   }, [navigate]);
 
   const handleExportCrew = useCallback(async () => {
@@ -157,7 +157,7 @@ export default function WorkbenchMegaHub() {
   // Finance actions
   const handleNewExpense = useCallback(() => {
     navigate('/workbench?section=finance');
-    toast.info('Use o Finance Command para registrar despesas.');
+    toast.success('Navegando ao Finance Command.');
   }, [navigate]);
 
   const handleExportFinance = useCallback(async () => {
@@ -382,7 +382,7 @@ export default function WorkbenchMegaHub() {
                     id: 'add-rotation',
                     label: 'New Rotation',
                     icon: <Plus className="h-4 w-4" />,
-                    onClick: () => { toast.info('Selecione um tripulante no Gantt abaixo para criar rotação'); },
+                    onClick: () => { toast.success('Selecione um tripulante no Gantt abaixo para criar rotação'); },
                     variant: 'default',
                     tooltip: 'Criar nova rotação de escala'
                   },
@@ -447,7 +447,7 @@ export default function WorkbenchMegaHub() {
                     id: 'bulk-approve',
                     label: 'Bulk Approve',
                     icon: <DollarSign className="h-4 w-4" />,
-                    onClick: () => { toast.info('Selecione itens no workflow abaixo para aprovação em lote'); },
+                    onClick: () => { toast.success('Selecione itens no workflow abaixo para aprovação em lote'); },
                     variant: 'default',
                     tooltip: 'Aprovar múltiplos itens de uma vez'
                   }

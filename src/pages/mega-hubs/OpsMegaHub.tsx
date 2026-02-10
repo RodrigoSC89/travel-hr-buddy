@@ -91,9 +91,9 @@ export default function OpsMegaHub() {
         const panel = document.querySelector('[data-testid="operations-action-panel"]');
         if (panel) {
           panel.scrollIntoView({ behavior: 'smooth' });
-          toast.info('Selecione as operações na lista abaixo e clique em "Aprovar"');
+          toast.success('Selecione as operações na lista abaixo e clique em "Aprovar"');
         } else {
-          toast.info('Selecione operações na lista e use o botão "Aprovar"');
+          toast.success('Selecione operações na lista e use o botão "Aprovar"');
         }
         break;
       default:

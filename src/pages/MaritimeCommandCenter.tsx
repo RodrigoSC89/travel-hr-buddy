@@ -558,8 +558,8 @@ export default function MaritimeCommandCenter() {
                       <p className="text-xs text-muted-foreground">Ação imediata necessária</p>
                     </div>
                     <Button size="sm" variant="outline" onClick={() => {
-                      toast.info("Abrindo painel de resolução de issues críticos...");
                       setActiveTab("crew-intelligence");
+                      toast.success("Navegando ao painel de Crew Intelligence para resolução");
                     }}>
                       Resolver
                     </Button>
@@ -734,8 +734,7 @@ export default function MaritimeCommandCenter() {
                         {getStatusLabel(member.status)}
                       </Badge>
                       <Button variant="ghost" size="sm" onClick={() => {
-                        toast.info(`Visualizando documentos de ${member.full_name}`);
-                        showInfo(`Documentos do tripulante ${member.full_name}`, "Abrindo pasta de documentos...");
+                        showInfo(`Documentos do tripulante ${member.full_name}`, `Status: ${getStatusLabel(member.status)} | Cargo: ${member.rank || 'N/A'}`);
                       }}>
                         <FileText className="h-4 w-4" />
                       </Button>

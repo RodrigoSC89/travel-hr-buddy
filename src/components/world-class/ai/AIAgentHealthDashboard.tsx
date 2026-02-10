@@ -93,7 +93,7 @@ export function AIAgentHealthDashboard() {
   const avgAccuracy = Math.round(AI_AGENTS.reduce((acc, a) => acc + a.accuracy, 0) / AI_AGENTS.length);
 
   const restartAgent = async (agentId: string) => {
-    toast.info(`Reiniciando ${agentId}...`);
+    toast.success(`Reiniciando agente ${agentId}...`);
     try {
       await supabase.from('ai_audit_logs').insert({
         user_input: `restart_agent:${agentId}`,

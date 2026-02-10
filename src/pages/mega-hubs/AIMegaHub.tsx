@@ -188,7 +188,7 @@ export default function AIMegaHub() {
 
   const handleConfigure = useCallback(() => {
     setSearchParams({ tab: 'agents' });
-    toast.info('Abrindo configuração dos agentes...');
+    toast.success('Navegando para configuração dos agentes');
   }, [setSearchParams]);
 
   const SubTabSelector = ({ 
