@@ -3,7 +3,7 @@
  * PATCH 624 - Transições suaves entre páginas
  */
 
-import { motion, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
 import { useLocation } from "react-router-dom";
 import { ReactNode, useMemo } from "react";
 
@@ -37,9 +37,15 @@ const pageVariants = {
 
 export function SmoothPageTransition({ children, className }: SmoothPageTransitionProps) {
   const location = useLocation();
+  const shouldReduceMotion = useReducedMotion();
   
   // Memoize key to prevent unnecessary re-renders
   const pageKey = useMemo(() => location.pathname, [location.pathname]);
+
+  // Skip animations for users who prefer reduced motion
+  if (shouldReduceMotion) {
+    return <div className={className}>{children}</div>;
+  }
 
   return (
     <AnimatePresence mode="wait" initial={false}>
