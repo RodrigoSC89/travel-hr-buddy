@@ -1,9 +1,10 @@
 /**
  * Waste Management Dashboard - Premium MARPOL Compliance
  * Gestão de resíduos e conformidade ambiental
+ * ✅ P0-002: Migrado para dados reais do Supabase (waste_tanks, waste_records)
  */
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -31,9 +32,12 @@ import {
   Recycle,
   ClipboardList,
   PenTool,
-  TrendingDown
+  TrendingDown,
+  Loader2
 } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { supabase } from "@/integrations/supabase/client";
+import { logger } from "@/lib/logger";
 
 interface WasteTank {
   id: string;
@@ -74,28 +78,6 @@ interface RecordBookEntry {
   status: "draft" | "signed" | "verified";
 }
 
-// Mock data
-const mockTanks: WasteTank[] = [
-  { id: "1", name: "Tanque de Lodo #1", type: "sludge", capacity: 50, currentLevel: 42, unit: "m³", vessel: "MV Atlantic Star", lastDischarge: "2024-01-10", status: "warning" },
-  { id: "2", name: "Tanque de Água de Lastro", type: "bilge", capacity: 100, currentLevel: 35, unit: "m³", vessel: "MV Atlantic Star", lastDischarge: "2024-01-12", status: "ok" },
-  { id: "3", name: "Tanque de Esgoto", type: "sewage", capacity: 30, currentLevel: 28, unit: "m³", vessel: "MV Pacific Dream", lastDischarge: "2024-01-08", status: "critical" },
-  { id: "4", name: "Compactador de Lixo", type: "garbage", capacity: 20, currentLevel: 8, unit: "m³", vessel: "MV Pacific Dream", lastDischarge: "2024-01-15", status: "ok" },
-  { id: "5", name: "Resíduo de Carga", type: "cargo_residue", capacity: 40, currentLevel: 12, unit: "m³", vessel: "MV Ocean Pride", lastDischarge: "2024-01-05", status: "ok" },
-];
-
-const mockDischarges: DischargeRecord[] = [
-  { id: "1", vessel: "MV Atlantic Star", type: "Sludge", quantity: 15, unit: "m³", method: "port", location: "Porto de Santos", date: "2024-01-10", signedBy: "Cap. João Silva", oilRecordBook: true, garbageRecordBook: false },
-  { id: "2", vessel: "MV Pacific Dream", type: "Garbage - Plastics", quantity: 0.5, unit: "m³", method: "port", location: "Rio de Janeiro", date: "2024-01-15", signedBy: "Cap. Carlos Santos", oilRecordBook: false, garbageRecordBook: true },
-  { id: "3", vessel: "MV Atlantic Star", type: "Bilge Water", quantity: 8, unit: "m³", method: "sea", location: "Lat -24.5, Lon -45.2", date: "2024-01-12", signedBy: "Cap. João Silva", oilRecordBook: true, garbageRecordBook: false },
-  { id: "4", vessel: "MV Ocean Pride", type: "Food Waste", quantity: 0.3, unit: "m³", method: "sea", location: "Lat -25.1, Lon -48.0", date: "2024-01-14", signedBy: "Cap. Pedro Costa", oilRecordBook: false, garbageRecordBook: true },
-];
-
-const mockRecordBooks: RecordBookEntry[] = [
-  { id: "1", bookType: "ORB", vessel: "MV Atlantic Star", operationType: "Descarga de lodo em porto", date: "2024-01-10", quantity: "15.0 m³", position: "Porto de Santos", remarks: "Recebido por empresa autorizada", signedBy: "Cap. João Silva", status: "verified" },
-  { id: "2", bookType: "ORB", vessel: "MV Atlantic Star", operationType: "Descarga de água oleosa no mar", date: "2024-01-12", quantity: "8.0 m³", position: "24°30'S 045°12'W", remarks: "Através do separador 15ppm", signedBy: "Cap. João Silva", status: "signed" },
-  { id: "3", bookType: "GRB", vessel: "MV Pacific Dream", operationType: "Entrega de plásticos em porto", date: "2024-01-15", quantity: "0.5 m³", position: "Rio de Janeiro", remarks: "Categoria A - Plásticos", signedBy: "Cap. Carlos Santos", status: "draft" },
-];
-
 const getTankIcon = (type: WasteTank["type"]) => {
   const icons = {
     "sludge": FlaskConical,
@@ -104,7 +86,7 @@ const getTankIcon = (type: WasteTank["type"]) => {
     "garbage": Trash2,
     "cargo_residue": Recycle
   };
-  return icons[type];
+  return icons[type] || Trash2;
 };
 
 const getStatusColor = (status: WasteTank["status"]) => {
@@ -116,13 +98,91 @@ const getStatusColor = (status: WasteTank["status"]) => {
   return colors[status];
 };
 
+function deriveTankStatus(currentLevel: number, capacity: number): "ok" | "warning" | "critical" {
+  const pct = capacity > 0 ? (currentLevel / capacity) * 100 : 0;
+  if (pct >= 90) return "critical";
+  if (pct >= 75) return "warning";
+  return "ok";
+}
+
 export default function WasteManagementDashboard() {
   const [activeTab, setActiveTab] = useState("overview");
+  const [tanks, setTanks] = useState<WasteTank[]>([]);
+  const [discharges, setDischarges] = useState<DischargeRecord[]>([]);
+  const [recordBooks, setRecordBooks] = useState<RecordBookEntry[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
 
-  const criticalTanks = mockTanks.filter(t => t.status === "critical").length;
-  const warningTanks = mockTanks.filter(t => t.status === "warning").length;
-  const totalDischarges = mockDischarges.length;
-  const pendingSignatures = mockRecordBooks.filter(r => r.status === "draft").length;
+  useEffect(() => {
+    loadData();
+  }, []);
+
+  const loadData = async () => {
+    setIsLoading(true);
+    try {
+      const [tanksRes, recordsRes] = await Promise.all([
+        (supabase.from as Function)("waste_tanks").select("*, vessels(name)").limit(50),
+        (supabase.from as Function)("waste_records").select("*, vessels(name)").order("created_at", { ascending: false }).limit(50),
+      ]);
+
+      // Map waste_tanks
+      const mappedTanks: WasteTank[] = (tanksRes.data || []).map((t: any) => {
+        const capacity = t.capacity || 100;
+        const currentLevel = t.current_level ?? t.currentLevel ?? 0;
+        return {
+          id: t.id,
+          name: t.name || t.tank_name || "Tanque",
+          type: t.waste_type || t.type || "garbage",
+          capacity,
+          currentLevel,
+          unit: t.unit || "m³",
+          vessel: t.vessels?.name || t.vessel_name || "—",
+          lastDischarge: t.last_discharge_date || t.updated_at || "—",
+          status: deriveTankStatus(currentLevel, capacity),
+        };
+      });
+
+      // Map waste_records to discharges and record books
+      const mappedDischarges: DischargeRecord[] = (recordsRes.data || []).map((r: any) => ({
+        id: r.id,
+        vessel: r.vessels?.name || r.vessel_name || "—",
+        type: r.waste_type || r.type || "Waste",
+        quantity: r.quantity || 0,
+        unit: r.unit || "m³",
+        method: r.disposal_method || r.method || "port",
+        location: r.location || r.position || "—",
+        date: r.record_date || r.created_at?.split("T")[0] || "—",
+        signedBy: r.signed_by || r.recorded_by || "—",
+        oilRecordBook: r.book_type === "ORB" || r.waste_type?.includes("oil") || r.waste_type?.includes("sludge") || r.waste_type?.includes("bilge"),
+        garbageRecordBook: r.book_type === "GRB" || r.waste_type?.includes("garbage") || r.waste_type?.includes("plastic") || r.waste_type?.includes("food"),
+      }));
+
+      const mappedRecordBooks: RecordBookEntry[] = (recordsRes.data || []).map((r: any) => ({
+        id: r.id,
+        bookType: (r.book_type === "GRB" || r.waste_type?.includes("garbage")) ? "GRB" : "ORB",
+        vessel: r.vessels?.name || r.vessel_name || "—",
+        operationType: r.operation_type || r.description || r.waste_type || "Operação",
+        date: r.record_date || r.created_at?.split("T")[0] || "—",
+        quantity: `${r.quantity || 0} ${r.unit || "m³"}`,
+        position: r.position || r.location || "—",
+        remarks: r.remarks || r.notes || "",
+        signedBy: r.signed_by || r.recorded_by || "—",
+        status: r.verification_status || r.status || "draft",
+      }));
+
+      setTanks(mappedTanks);
+      setDischarges(mappedDischarges);
+      setRecordBooks(mappedRecordBooks);
+    } catch (error) {
+      logger.error("Erro ao carregar dados de waste management:", error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const criticalTanks = tanks.filter(t => t.status === "critical").length;
+  const warningTanks = tanks.filter(t => t.status === "warning").length;
+  const totalDischarges = discharges.length;
+  const pendingSignatures = recordBooks.filter(r => r.status === "draft").length;
 
   return (
     <div className="space-y-6">
@@ -210,7 +270,7 @@ export default function WasteManagementDashboard() {
               <div className="flex-1">
                 <p className="font-medium text-destructive">Tanque(s) em Nível Crítico</p>
                 <p className="text-sm text-muted-foreground">
-                  {mockTanks.filter(t => t.status === "critical").map(t => `${t.name} (${t.vessel})`).join(", ")} - Agendar descarte imediatamente
+                  {tanks.filter(t => t.status === "critical").map(t => `${t.name} (${t.vessel})`).join(", ")} - Agendar descarte imediatamente
                 </p>
               </div>
               <Button variant="destructive" size="sm">
@@ -268,8 +328,8 @@ export default function WasteManagementDashboard() {
               </CardHeader>
               <CardContent>
                 <div className="space-y-6">
-                  {["MV Atlantic Star", "MV Pacific Dream", "MV Ocean Pride"].map((vessel) => {
-                    const vesselTanks = mockTanks.filter(t => t.vessel === vessel);
+                  {[...new Set(tanks.map(t => t.vessel))].map((vessel) => {
+                    const vesselTanks = tanks.filter(t => t.vessel === vessel);
                     
                     return (
                       <div key={vessel} className="space-y-3">
@@ -350,7 +410,7 @@ export default function WasteManagementDashboard() {
 
         <TabsContent value="tanks" className="mt-6">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-            {mockTanks.map((tank) => {
+            {tanks.map((tank) => {
               const percentage = (tank.currentLevel / tank.capacity) * 100;
               const TankIcon = getTankIcon(tank.type);
               
@@ -434,7 +494,7 @@ export default function WasteManagementDashboard() {
             <CardContent>
               <ScrollArea className="h-[400px]">
                 <div className="space-y-3">
-                  {mockDischarges.map((discharge) => (
+                  {discharges.map((discharge) => (
                     <div key={discharge.id} className="flex items-center justify-between p-4 rounded-lg border hover:bg-accent/50 transition-colors">
                       <div className="flex items-center gap-4">
                         <div className={cn(
@@ -496,7 +556,7 @@ export default function WasteManagementDashboard() {
             <CardContent>
               <ScrollArea className="h-[350px]">
                 <div className="space-y-3">
-                  {mockRecordBooks.filter(r => r.bookType === "ORB").map((entry) => (
+                  {recordBooks.filter(r => r.bookType === "ORB").map((entry) => (
                     <div key={entry.id} className="p-4 rounded-lg border bg-card">
                       <div className="flex items-start justify-between mb-3">
                         <div>
@@ -564,7 +624,7 @@ export default function WasteManagementDashboard() {
             <CardContent>
               <ScrollArea className="h-[350px]">
                 <div className="space-y-3">
-                  {mockRecordBooks.filter(r => r.bookType === "GRB").map((entry) => (
+                  {recordBooks.filter(r => r.bookType === "GRB").map((entry) => (
                     <div key={entry.id} className="p-4 rounded-lg border bg-card">
                       <div className="flex items-start justify-between mb-3">
                         <div>

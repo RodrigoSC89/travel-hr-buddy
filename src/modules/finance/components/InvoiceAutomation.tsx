@@ -1,8 +1,9 @@
 /**
  * Invoice Automation Component
  * OCR + AI for automatic invoice processing
+ * ✅ P0-002: Migrado para dados reais do Supabase
  */
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -14,6 +15,8 @@ import {
 } from 'lucide-react';
 import { useFinanceProcurementAI, InvoiceProcessingResult } from '@/hooks/useFinanceProcurementAI';
 import { motion } from 'framer-motion';
+import { supabase } from '@/integrations/supabase/client';
+import { logger } from '@/lib/logger';
 
 interface ProcessedInvoice {
   id: string;
@@ -27,16 +30,50 @@ interface ProcessedInvoice {
   issues: string[];
 }
 
-const mockInvoices: ProcessedInvoice[] = [
-  { id: '1', invoiceNumber: 'INV-2024-0125', vendor: 'Shell Marine', amount: 45000, dueDate: '2024-02-15', status: 'approved', confidence: 98, decision: 'auto_approve', issues: [] },
-  { id: '2', invoiceNumber: 'INV-2024-0126', vendor: 'MAN Energy', amount: 125000, dueDate: '2024-02-20', status: 'review', confidence: 72, decision: 'escalate', issues: ['Valor difere do PO em 5%'] },
-  { id: '3', invoiceNumber: 'INV-2024-0127', vendor: 'Unknown Vendor', amount: 8500, dueDate: '2024-02-10', status: 'rejected', confidence: 45, decision: 'reject', issues: ['Fornecedor não cadastrado', 'Sem PO correspondente'] },
-];
-
 export function InvoiceAutomation() {
   const { isLoading, processInvoice } = useFinanceProcurementAI();
-  const [invoices, setInvoices] = useState<ProcessedInvoice[]>(mockInvoices);
+  const [invoices, setInvoices] = useState<ProcessedInvoice[]>([]);
+  const [loadingData, setLoadingData] = useState(true);
   const [dragActive, setDragActive] = useState(false);
+
+  useEffect(() => {
+    loadInvoices();
+  }, []);
+
+  const loadInvoices = async () => {
+    try {
+      const { data, error } = await (supabase.from as Function)("ai_contract_analysis")
+        .select("*")
+        .order("created_at", { ascending: false })
+        .limit(20);
+
+      if (error) {
+        logger.warn("ai_contract_analysis not available:", error);
+        setLoadingData(false);
+        return;
+      }
+
+      const mapped: ProcessedInvoice[] = (data || []).map((r: any) => ({
+        id: r.id,
+        invoiceNumber: r.document_id || `INV-${r.id.slice(0, 8)}`,
+        vendor: r.parties?.[0] || r.contract_type || "—",
+        amount: r.total_potential_savings || r.financial_terms?.total || 0,
+        dueDate: r.key_dates?.[0] || r.created_at?.split("T")[0] || "—",
+        status: r.overall_risk_score != null && r.overall_risk_score < 30 ? "approved" :
+                r.overall_risk_score != null && r.overall_risk_score > 70 ? "rejected" : "review",
+        confidence: r.overall_risk_score != null ? (100 - r.overall_risk_score) : 50,
+        decision: r.overall_risk_score != null && r.overall_risk_score < 30 ? "auto_approve" :
+                  r.overall_risk_score != null && r.overall_risk_score > 70 ? "reject" : "escalate",
+        issues: (r.risk_clauses || []).map((c: any) => typeof c === "string" ? c : c?.description || "Risk").slice(0, 3),
+      }));
+
+      setInvoices(mapped);
+    } catch (err) {
+      logger.error("Error loading invoices:", err);
+    } finally {
+      setLoadingData(false);
+    }
+  };
 
   const handleDrag = useCallback((e: React.DragEvent) => {
     e.preventDefault();

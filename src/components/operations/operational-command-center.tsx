@@ -125,15 +125,28 @@ export const OperationalCommandCenter: React.FC = () => {
   };
 
   const loadStats = async () => {
-    // Simulated stats - in real implementation, these would come from aggregated queries
-    const mockStats: DashboardStats = {
-      total_crew: 156,
-      available_crew: 132,
-      active_vessels: 24,
-      compliance_rate: 94.5,
-      pending_alerts: alerts.filter(a => a.status === "active").length
-    };
-    setStats(mockStats);
+    try {
+      const [crewRes, activeCrewRes, vesselRes, complianceRes] = await Promise.all([
+        supabase.from("crew_members").select("*", { count: "exact", head: true }),
+        supabase.from("crew_members").select("*", { count: "exact", head: true }).eq("status", "active"),
+        supabase.from("vessels").select("*", { count: "exact", head: true }).in("status", ["active", "operational"]),
+        supabase.from("audit_center_logs").select("compliance_score").not("compliance_score", "is", null).limit(50),
+      ]);
+
+      const avgCompliance = complianceRes.data?.length
+        ? complianceRes.data.reduce((sum, a) => sum + (a.compliance_score || 0), 0) / complianceRes.data.length
+        : 95;
+
+      setStats({
+        total_crew: crewRes.count || 0,
+        available_crew: activeCrewRes.count || 0,
+        active_vessels: vesselRes.count || 0,
+        compliance_rate: Math.round(avgCompliance * 10) / 10,
+        pending_alerts: alerts.filter(a => a.status === "active").length
+      });
+    } catch {
+      // Keep existing stats on error
+    }
   };
 
   const setupRealTimeSubscriptions = () => {
