@@ -115,7 +115,7 @@ class MaintenanceIntelligenceService {
       const name = task.component_name || task.title || "Equipment";
       if (!equipmentMap.has(name)) {
         const baseHealth = this.calculateHealthFromPriority(task.priority);
-        const runHours = 5000 + Math.floor(Math.random() * 15000);
+        const runHours = 5000 + ((name.length * 137) % 15000);
         const maxHours = 25000;
 
         equipmentMap.set(name, {
@@ -243,11 +243,11 @@ class MaintenanceIntelligenceService {
 
   private calculateHealthFromPriority(priority: string | null): number {
     switch (priority) {
-      case "critical": return 35 + Math.random() * 15;
-      case "high": return 55 + Math.random() * 15;
-      case "medium": return 70 + Math.random() * 15;
-      case "low": return 85 + Math.random() * 10;
-      default: return 80 + Math.random() * 15;
+      case "critical": return 42;
+      case "high": return 62;
+      case "medium": return 77;
+      case "low": return 90;
+      default: return 87;
     }
   }
 

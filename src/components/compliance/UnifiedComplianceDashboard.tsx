@@ -40,21 +40,21 @@ const useUnifiedComplianceData = () => {
   return useQuery({
     queryKey: ['unified-compliance-status'],
     queryFn: async (): Promise<ModuleStatus[]> => {
-      const generateModuleStats = (baseScore: number, totalItems: number) => {
-        const variance = Math.floor(Math.random() * 15) - 7;
+      const generateModuleStats = (baseScore: number, totalItems: number, seed: number) => {
+        const variance = [-3, 5, -7, 2, -1][seed % 5];
         const score = Math.max(50, Math.min(100, baseScore + variance));
-        const openItems = Math.floor(Math.random() * Math.ceil(totalItems * 0.1));
-        const criticalItems = Math.floor(Math.random() * 3);
-        const daysAgo = Math.floor(Math.random() * 30);
+        const openItems = Math.floor(totalItems * 0.05) + (seed % 3);
+        const criticalItems = seed % 4 === 0 ? 1 : 0;
+        const daysAgo = 5 + (seed * 3) % 25;
         const lastAudit = new Date(Date.now() - daysAgo * 24 * 60 * 60 * 1000).toISOString();
         return { score, openItems, criticalItems, lastAudit };
       };
 
-      const mlcStats = generateModuleStats(82, 65);
-      const peotramStats = generateModuleStats(78, 84);
-      const peoStats = generateModuleStats(85, 61);
-      const sgsoStats = generateModuleStats(88, 16);
-      const ovidStats = generateModuleStats(75, 130);
+      const mlcStats = generateModuleStats(82, 65, 0);
+      const peotramStats = generateModuleStats(78, 84, 1);
+      const peoStats = generateModuleStats(85, 61, 2);
+      const sgsoStats = generateModuleStats(88, 16, 3);
+      const ovidStats = generateModuleStats(75, 130, 4);
 
       const getStatus = (score: number, critical: number): ModuleStatus['status'] => {
         if (critical > 0) return 'critical';
@@ -152,11 +152,11 @@ const generateHistoricalData = () => {
     const baseProgress = 60 + index * 5;
     return {
       month,
-      MLC: Math.min(100, baseProgress + Math.floor(Math.random() * 15)),
-      PEOTRAM: Math.min(100, baseProgress + Math.floor(Math.random() * 12)),
-      'PEO-DP': Math.min(100, baseProgress + Math.floor(Math.random() * 18)),
-      SGSO: Math.min(100, baseProgress + Math.floor(Math.random() * 10)),
-      'Pre-OVID': Math.min(100, baseProgress + Math.floor(Math.random() * 14)),
+      MLC: Math.min(100, baseProgress + [8, 5, 12, 7, 10, 14][index]),
+      PEOTRAM: Math.min(100, baseProgress + [6, 3, 9, 5, 8, 11][index]),
+      'PEO-DP': Math.min(100, baseProgress + [10, 7, 15, 9, 13, 17][index]),
+      SGSO: Math.min(100, baseProgress + [4, 2, 7, 5, 6, 9][index]),
+      'Pre-OVID': Math.min(100, baseProgress + [7, 4, 11, 6, 9, 13][index]),
     };
   });
 };

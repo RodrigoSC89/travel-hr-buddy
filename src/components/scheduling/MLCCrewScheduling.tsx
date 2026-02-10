@@ -67,8 +67,8 @@ export const MLCCrewScheduling: React.FC = () => {
         const ratio = daysOnboard / maxDays;
         const mlcStatus: 'compliant' | 'warning' | 'violation' = 
           ratio > 1 ? 'violation' : ratio > 0.85 ? 'warning' : 'compliant';
-        const restCompliance = mlcStatus === 'violation' ? 75 + Math.random() * 10 : 
-          mlcStatus === 'warning' ? 85 + Math.random() * 10 : 92 + Math.random() * 8;
+        const restCompliance = mlcStatus === 'violation' ? 80 : 
+          mlcStatus === 'warning' ? 89 : 95;
 
         return {
           id: a.id,
@@ -96,7 +96,7 @@ export const MLCCrewScheduling: React.FC = () => {
         const dateStr = d.toISOString().split('T')[0];
         // In a real system this would come from work_rest_hours table
         // For now derive from crew count as a proxy
-        const workH = 8 + Math.floor(Math.random() * 6);
+        const workH = 8 + (i % 6);
         const restH = 24 - workH;
         last7Days.push({
           date: dateStr,

@@ -359,8 +359,9 @@ export class IntegrationsService {
   static generateWebhookSecret(): string {
     const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
     let secret = "whsec_";
+    const randomBytes = crypto.getRandomValues(new Uint8Array(32));
     for (let i = 0; i < 32; i++) {
-      secret += chars.charAt(Math.floor(Math.random() * chars.length));
+      secret += chars.charAt(randomBytes[i] % chars.length);
     }
     return secret;
   }

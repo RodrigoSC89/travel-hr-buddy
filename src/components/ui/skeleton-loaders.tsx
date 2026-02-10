@@ -195,7 +195,7 @@ export function ChartSkeleton({ type = 'bar' }: { type?: 'bar' | 'line' | 'pie' 
           <Skeleton 
             key={i} 
             className="flex-1" 
-            style={{ height: `${30 + Math.random() * 70}%` }}
+            style={{ height: `${[50, 75, 40, 85, 60, 90, 45][i]}%` }}
           />
         ))}
       </div>

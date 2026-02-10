@@ -73,7 +73,7 @@ export const EmployeeManagement = () => {
         : c.status === "traveling" ? "travel" as const
         : "inactive" as const,
       certifications: Array.from({ length: c.certCount }, (_, i) => `Cert ${i + 1}`),
-      rating: 4.0 + Math.random() * 0.9,
+      rating: 4.0 + ((c.certCount || 0) % 9) * 0.1,
     }));
   }, [data?.crew]);
 
