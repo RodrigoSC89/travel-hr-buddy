@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -23,9 +23,11 @@ import {
   Globe,
   UserCheck,
   UserX,
-  FileText
+  FileText,
+  Loader2
 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import { useCrewRealData } from "@/hooks/useCrewRealData";
 
 interface CrewRotation {
   id: string;
@@ -61,87 +63,117 @@ interface OptimizationSuggestion {
 }
 
 export const CrewRotationPlanner: React.FC = () => {
-  const [rotations, setRotations] = useState<CrewRotation[]>([]);
+  const { data, isLoading } = useCrewRealData();
   const [selectedDate, setSelectedDate] = useState<Date | undefined>(new Date());
   const [activeTab, setActiveTab] = useState("schedule");
-  const [optimizations, setOptimizations] = useState<OptimizationSuggestion[]>([]);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const { toast } = useToast();
 
-  useEffect(() => {
-    // Mock data para demonstração
-    const mockRotations: CrewRotation[] = [
-      {
-        id: "1",
-        vesselName: "MV Ocean Pioneer",
-        crewMember: {
-          name: "Carlos Silva",
-          rank: "AB Seaman",
-          nationality: "Brazilian",
-          experience: 8
-        },
-        rotationType: "sign_off",
-        scheduledDate: new Date("2024-01-15"),
-        port: "Santos, BR",
-        status: "planned",
-        costs: {
-          travel: 800,
-          accommodation: 200,
-          visa: 0,
-          total: 1000
-        },
-        replacementCrew: {
-          name: "João Santos",
-          rank: "AB Seaman",
-          availability: new Date("2024-01-14")
-        }
-      },
-      {
-        id: "2",
-        vesselName: "MV Atlantic Star",
-        crewMember: {
-          name: "Maria Costa",
-          rank: "Cook",
-          nationality: "Brazilian",
-          experience: 5
-        },
-        rotationType: "sign_on",
-        scheduledDate: new Date("2024-01-20"),
-        port: "Rio de Janeiro, BR",
-        status: "confirmed",
-        costs: {
-          travel: 600,
-          accommodation: 150,
-          visa: 100,
-          total: 850
-        }
-      }
-    ];
+  // Map real crew data to rotation format
+  const rotations = useMemo<CrewRotation[]>(() => {
+    if (!data?.crew) return [];
+    return data.crew
+      .filter(c => c.embarkedDate || c.plannedDisembark)
+      .map(c => {
+        const isOnboard = c.status === "onboard";
+        const rotationType: CrewRotation["rotationType"] = isOnboard ? "sign_on" : "sign_off";
+        const status: CrewRotation["status"] = 
+          c.status === "onboard" ? "in_progress"
+          : c.status === "traveling" ? "planned"
+          : c.status === "standby" ? "confirmed"
+          : "completed";
 
-    const mockOptimizations: OptimizationSuggestion[] = [
-      {
+        return {
+          id: c.id,
+          vesselName: c.vessel,
+          crewMember: {
+            name: c.name,
+            rank: c.rank,
+            nationality: c.nationality,
+            experience: Math.floor(c.daysOnboard / 365) || 1,
+          },
+          rotationType,
+          scheduledDate: c.embarkedDate ? new Date(c.embarkedDate) : new Date(),
+          port: "—",
+          status,
+          costs: {
+            travel: 0,
+            accommodation: 0,
+            visa: 0,
+            total: 0,
+          },
+        };
+      });
+  }, [data?.crew]);
+
+  // AI-generated optimization suggestions based on real data
+  const optimizations = useMemo<OptimizationSuggestion[]>(() => {
+    if (!data?.crew) return [];
+    const suggestions: OptimizationSuggestion[] = [];
+    
+    const mlcViolations = data.crew.filter(c => c.daysOnboard > c.maxDays);
+    if (mlcViolations.length > 0) {
+      suggestions.push({
+        type: "compliance",
+        description: `${mlcViolations.length} tripulante(s) excedem o limite MLC de dias a bordo`,
+        potential_savings: 0,
+        impact: "high",
+      });
+    }
+
+    const expiringCerts = data.certAlerts.filter(a => a.priority === "critical");
+    if (expiringCerts.length > 0) {
+      suggestions.push({
+        type: "compliance",
+        description: `${expiringCerts.length} certificados em estado crítico de expiração`,
+        potential_savings: 0,
+        impact: "high",
+      });
+    }
+
+    if (rotations.length > 3) {
+      suggestions.push({
         type: "cost_reduction",
         description: "Combinar rotações no mesmo porto pode reduzir custos de logística",
         potential_savings: 2500,
-        impact: "high"
-      },
-      {
-        type: "efficiency",
-        description: "Antecipar rotação da MV Ocean Pioneer em 2 dias melhora eficiência",
-        potential_savings: 1200,
-        impact: "medium"
-      },
-      {
-        type: "compliance",
-        description: "Verificar documentação para rotação internacional",
-        potential_savings: 0,
-        impact: "high"
-      }
-    ];
+        impact: "high",
+      });
+    }
 
-    setRotations(mockRotations);
-    setOptimizations(mockOptimizations);
-  }, []);
+    return suggestions;
+  }, [data?.crew, data?.certAlerts, rotations]);
+
+  const handleOptimizeRotations = async () => {
+    toast({
+      title: "🧠 IA Analisando",
+      description: "Otimizando cronograma de rotações com IA...",
+    });
+    
+    try {
+      const { supabase } = await import('@/integrations/supabase/client');
+      const { data, error } = await supabase.functions.invoke('ai-chat', {
+        body: { prompt: 'Optimize crew rotation schedule for cost savings and fatigue reduction', module: 'crew-rotation' }
+      });
+      const savings = data?.savings || 15500;
+      toast({
+        title: "✅ Otimização Concluída",
+        description: `Economia potencial de R$ ${savings.toLocaleString()} identificada!`,
+      });
+    } catch {
+      toast({
+        title: "❌ Erro na Otimização",
+        description: "Não foi possível otimizar. Tente novamente.",
+        variant: "destructive",
+      });
+    }
+  };
+
+  const handleCreateRotation = () => {
+    setIsDialogOpen(true);
+  };
+
+  const totalCosts = rotations.reduce((sum, rotation) => sum + rotation.costs.total, 0);
+  const potentialSavings = optimizations.reduce((sum, opt) => sum + opt.potential_savings, 0);
 
   const getStatusColor = (status: string) => {
     switch (status) {
@@ -183,37 +215,14 @@ export const CrewRotationPlanner: React.FC = () => {
     }
   };
 
-  const handleOptimizeRotations = async () => {
-    toast({
-      title: "🧠 IA Analisando",
-      description: "Otimizando cronograma de rotações com IA...",
-    });
-    
-    try {
-      const { supabase } = await import('@/integrations/supabase/client');
-      const { data, error } = await supabase.functions.invoke('ai-chat', {
-        body: { prompt: 'Optimize crew rotation schedule for cost savings and fatigue reduction', module: 'crew-rotation' }
-      });
-      const savings = data?.savings || 15500;
-      toast({
-        title: "✅ Otimização Concluída",
-        description: `Economia potencial de R$ ${savings.toLocaleString()} identificada!`,
-      });
-    } catch {
-      toast({
-        title: "❌ Erro na Otimização",
-        description: "Não foi possível otimizar. Tente novamente.",
-        variant: "destructive",
-      });
-    }
-  };
-
-  const handleCreateRotation = () => {
-    setIsDialogOpen(true);
-  };
-
-  const totalCosts = rotations.reduce((sum, rotation) => sum + rotation.costs.total, 0);
-  const potentialSavings = optimizations.reduce((sum, opt) => sum + opt.potential_savings, 0);
+  if (isLoading) {
+    return (
+      <div className="flex items-center justify-center py-12">
+        <Loader2 className="h-8 w-8 animate-spin text-muted-foreground" />
+        <span className="ml-2 text-muted-foreground">Carregando rotações...</span>
+      </div>
+    );
+  }
 
   return (
     <div className="space-y-6">
@@ -261,9 +270,7 @@ export const CrewRotationPlanner: React.FC = () => {
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">R$ {totalCosts.toLocaleString()}</div>
-            <p className="text-xs text-muted-foreground">
-              Este mês
-            </p>
+            <p className="text-xs text-muted-foreground">Este mês</p>
           </CardContent>
         </Card>
 
@@ -274,9 +281,7 @@ export const CrewRotationPlanner: React.FC = () => {
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold text-green-600">R$ {potentialSavings.toLocaleString()}</div>
-            <p className="text-xs text-muted-foreground">
-              Com otimização IA
-            </p>
+            <p className="text-xs text-muted-foreground">Com otimização IA</p>
           </CardContent>
         </Card>
 
@@ -286,10 +291,12 @@ export const CrewRotationPlanner: React.FC = () => {
             <CheckCircle className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-green-600">98.5%</div>
-            <p className="text-xs text-muted-foreground">
-              Score de conformidade
-            </p>
+            <div className="text-2xl font-bold text-green-600">
+              {data?.crew && data.crew.length > 0
+                ? `${Math.round((data.crew.filter(c => c.daysOnboard <= c.maxDays).length / data.crew.length) * 100)}%`
+                : "—"}
+            </div>
+            <p className="text-xs text-muted-foreground">Score de conformidade</p>
           </CardContent>
         </Card>
       </div>
@@ -309,51 +316,47 @@ export const CrewRotationPlanner: React.FC = () => {
                 <CardHeader>
                   <CardTitle>Rotações Programadas</CardTitle>
                   <CardDescription>
-                    Embarques e desembarques nos próximos 30 dias
+                    Embarques e desembarques baseados em dados reais ({rotations.length} registros)
                   </CardDescription>
                 </CardHeader>
                 <CardContent>
-                  <div className="space-y-4">
-                    {rotations.map((rotation) => (
-                      <div key={rotation.id} className="flex items-center justify-between p-4 border rounded-lg hover:bg-gray-50">
-                        <div className="flex items-center gap-4">
-                          <div className="flex flex-col items-center">
-                            {getRotationTypeIcon(rotation.rotationType)}
-                            <span className="text-xs mt-1">{getRotationTypeLabel(rotation.rotationType)}</span>
+                  {rotations.length === 0 ? (
+                    <div className="text-center py-8 text-muted-foreground">
+                      <Users className="h-8 w-8 mx-auto mb-2 opacity-50" />
+                      <p>Nenhuma rotação encontrada</p>
+                    </div>
+                  ) : (
+                    <div className="space-y-4">
+                      {rotations.slice(0, 10).map((rotation) => (
+                        <div key={rotation.id} className="flex items-center justify-between p-4 border rounded-lg hover:bg-muted/50">
+                          <div className="flex items-center gap-4">
+                            <div className="flex flex-col items-center">
+                              {getRotationTypeIcon(rotation.rotationType)}
+                              <span className="text-xs mt-1">{getRotationTypeLabel(rotation.rotationType)}</span>
+                            </div>
+                            <div className="space-y-1">
+                              <h4 className="font-semibold">{rotation.crewMember.name}</h4>
+                              <p className="text-sm text-muted-foreground">{rotation.crewMember.rank}</p>
+                              <p className="text-xs text-muted-foreground flex items-center gap-1">
+                                <Ship className="h-3 w-3" />
+                                {rotation.vesselName}
+                              </p>
+                            </div>
                           </div>
-                          <div className="space-y-1">
-                            <h4 className="font-semibold">{rotation.crewMember.name}</h4>
-                            <p className="text-sm text-muted-foreground">{rotation.crewMember.rank}</p>
-                            <p className="text-xs text-muted-foreground flex items-center gap-1">
-                              <Ship className="h-3 w-3" />
-                              {rotation.vesselName}
-                            </p>
-                            <p className="text-xs text-muted-foreground flex items-center gap-1">
-                              <MapPin className="h-3 w-3" />
-                              {rotation.port}
-                            </p>
+                          <div className="flex items-center gap-4">
+                            <div className="text-center">
+                              <p className="text-sm font-medium">
+                                {rotation.scheduledDate.toLocaleDateString("pt-BR")}
+                              </p>
+                            </div>
+                            <Badge variant="secondary" className={getStatusColor(rotation.status)}>
+                              {getStatusLabel(rotation.status)}
+                            </Badge>
                           </div>
                         </div>
-                        <div className="flex items-center gap-4">
-                          <div className="text-center">
-                            <p className="text-sm font-medium">
-                              {rotation.scheduledDate.toLocaleDateString("pt-BR")}
-                            </p>
-                            <p className="text-xs text-muted-foreground">
-                              {rotation.scheduledDate.toLocaleDateString("pt-BR", { weekday: "short" })}
-                            </p>
-                          </div>
-                          <div className="text-center">
-                            <p className="text-sm font-medium">R$ {rotation.costs.total.toLocaleString()}</p>
-                            <p className="text-xs text-muted-foreground">Custo total</p>
-                          </div>
-                          <Badge variant="secondary" className={getStatusColor(rotation.status)}>
-                            {getStatusLabel(rotation.status)}
-                          </Badge>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
+                      ))}
+                    </div>
+                  )}
                 </CardContent>
               </Card>
             </div>
@@ -385,98 +388,55 @@ export const CrewRotationPlanner: React.FC = () => {
                   Sugestões de Otimização IA
                 </CardTitle>
                 <CardDescription>
-                  Algoritmos avançados analisam padrões e sugerem melhorias
+                  Análises baseadas em dados reais da tripulação
                 </CardDescription>
               </CardHeader>
               <CardContent>
-                <div className="space-y-4">
-                  {optimizations.map((opt, index) => (
-                    <div key={index} className="p-4 border rounded-lg">
-                      <div className="flex items-start justify-between mb-2">
-                        <div className="flex items-center gap-2">
-                          <Badge variant="outline" className={
-                            opt.type === "cost_reduction" ? "border-green-500 text-green-700" :
-                              opt.type === "efficiency" ? "border-blue-500 text-blue-700" :
-                                "border-yellow-500 text-yellow-700"
-                          }>
-                            {opt.type === "cost_reduction" ? "Economia" :
-                              opt.type === "efficiency" ? "Eficiência" : "Compliance"}
-                          </Badge>
-                          <Badge variant="secondary" className={
-                            opt.impact === "high" ? "bg-red-100 text-red-700" :
-                              opt.impact === "medium" ? "bg-yellow-100 text-yellow-700" :
-                                "bg-green-100 text-green-700"
-                          }>
-                            {opt.impact === "high" ? "Alto Impacto" :
-                              opt.impact === "medium" ? "Médio Impacto" : "Baixo Impacto"}
-                          </Badge>
+                {optimizations.length === 0 ? (
+                  <div className="text-center py-8 text-muted-foreground">
+                    <CheckCircle className="h-8 w-8 mx-auto mb-2 opacity-50" />
+                    <p>Nenhuma otimização necessária no momento</p>
+                  </div>
+                ) : (
+                  <div className="space-y-4">
+                    {optimizations.map((opt, index) => (
+                      <div key={index} className="p-4 border rounded-lg">
+                        <div className="flex items-start justify-between mb-2">
+                          <div className="flex items-center gap-2">
+                            <Badge variant="outline" className={
+                              opt.type === "cost_reduction" ? "border-green-500 text-green-700" :
+                                opt.type === "efficiency" ? "border-blue-500 text-blue-700" :
+                                  "border-yellow-500 text-yellow-700"
+                            }>
+                              {opt.type === "cost_reduction" ? "Economia" :
+                                opt.type === "efficiency" ? "Eficiência" : "Compliance"}
+                            </Badge>
+                            <Badge variant="secondary" className={
+                              opt.impact === "high" ? "bg-red-100 text-red-700" :
+                                opt.impact === "medium" ? "bg-yellow-100 text-yellow-700" :
+                                  "bg-green-100 text-green-700"
+                            }>
+                              {opt.impact === "high" ? "Alto Impacto" :
+                                opt.impact === "medium" ? "Médio Impacto" : "Baixo Impacto"}
+                            </Badge>
+                          </div>
+                          {opt.potential_savings > 0 && (
+                            <span className="text-green-600 font-semibold">
+                              R$ {opt.potential_savings.toLocaleString()}
+                            </span>
+                          )}
                         </div>
-                        {opt.potential_savings > 0 && (
-                          <span className="text-green-600 font-semibold">
-                            R$ {opt.potential_savings.toLocaleString()}
-                          </span>
-                        )}
+                        <p className="text-sm text-muted-foreground mb-3">{opt.description}</p>
+                        <div className="flex gap-2">
+                          <Button size="sm" variant="outline">Aplicar Sugestão</Button>
+                          <Button size="sm" variant="ghost">Ver Detalhes</Button>
+                        </div>
                       </div>
-                      <p className="text-sm text-muted-foreground mb-3">{opt.description}</p>
-                      <div className="flex gap-2">
-                        <Button size="sm" variant="outline">
-                          Aplicar Sugestão
-                        </Button>
-                        <Button size="sm" variant="ghost">
-                          Ver Detalhes
-                        </Button>
-                      </div>
-                    </div>
-                  ))}
-                </div>
+                    ))}
+                  </div>
+                )}
               </CardContent>
             </Card>
-
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <Card>
-                <CardHeader>
-                  <CardTitle>Análise Preditiva</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <div className="space-y-4">
-                    <div className="p-3 bg-blue-50 rounded-lg">
-                      <h4 className="font-semibold text-blue-800">Demanda Futura</h4>
-                      <p className="text-sm text-blue-600">
-                        IA prevê aumento de 15% nas rotações nos próximos 3 meses
-                      </p>
-                    </div>
-                    <div className="p-3 bg-green-50 rounded-lg">
-                      <h4 className="font-semibold text-green-800">Otimização de Rotas</h4>
-                      <p className="text-sm text-green-600">
-                        Combinação de rotações pode economizar 23% em custos de viagem
-                      </p>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-
-              <Card>
-                <CardHeader>
-                  <CardTitle>Machine Learning Insights</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <div className="space-y-4">
-                    <div className="p-3 bg-purple-50 rounded-lg">
-                      <h4 className="font-semibold text-purple-800">Padrões Identificados</h4>
-                      <p className="text-sm text-purple-600">
-                        Rotações às quartas-feiras têm 30% menos atrasos
-                      </p>
-                    </div>
-                    <div className="p-3 bg-orange-50 rounded-lg">
-                      <h4 className="font-semibold text-orange-800">Alerta Preventivo</h4>
-                      <p className="text-sm text-orange-600">
-                        Verificar disponibilidade de substitutos para próximo trimestre
-                      </p>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-            </div>
           </div>
         </TabsContent>
 
@@ -491,18 +451,13 @@ export const CrewRotationPlanner: React.FC = () => {
               </CardHeader>
               <CardContent>
                 <div className="space-y-4">
-                  {rotations.map((rotation) => (
+                  {rotations.slice(0, 5).map((rotation) => (
                     <div key={rotation.id} className="p-3 border rounded-lg">
                       <div className="flex justify-between items-start mb-2">
                         <h4 className="font-medium">{rotation.crewMember.name}</h4>
-                        <Badge variant="outline">{rotation.port}</Badge>
+                        <Badge variant="outline">{rotation.vesselName}</Badge>
                       </div>
-                      <div className="grid grid-cols-2 gap-2 text-sm text-muted-foreground">
-                        <div>Viagem: R$ {rotation.costs.travel}</div>
-                        <div>Acomodação: R$ {rotation.costs.accommodation}</div>
-                        <div>Visto: R$ {rotation.costs.visa}</div>
-                        <div className="font-semibold">Total: R$ {rotation.costs.total}</div>
-                      </div>
+                      <p className="text-sm text-muted-foreground">{rotation.crewMember.rank} • {rotation.crewMember.nationality}</p>
                     </div>
                   ))}
                 </div>
@@ -519,20 +474,16 @@ export const CrewRotationPlanner: React.FC = () => {
               <CardContent>
                 <div className="space-y-3">
                   <div className="flex items-center justify-between p-2 border rounded">
-                    <span className="text-sm">Passaportes Válidos</span>
-                    <CheckCircle className="h-4 w-4 text-green-500" />
+                    <span className="text-sm">Certificados Válidos</span>
+                    <Badge variant="outline">{data?.certAlerts.filter(a => a.priority === "info").length || 0}</Badge>
                   </div>
                   <div className="flex items-center justify-between p-2 border rounded">
-                    <span className="text-sm">Vistos em Ordem</span>
-                    <AlertTriangle className="h-4 w-4 text-yellow-500" />
+                    <span className="text-sm">Expirando em breve</span>
+                    <Badge variant="outline" className="text-yellow-600">{data?.certAlerts.filter(a => a.priority === "warning").length || 0}</Badge>
                   </div>
                   <div className="flex items-center justify-between p-2 border rounded">
-                    <span className="text-sm">Certificados Médicos</span>
-                    <CheckCircle className="h-4 w-4 text-green-500" />
-                  </div>
-                  <div className="flex items-center justify-between p-2 border rounded">
-                    <span className="text-sm">STCW Atualizado</span>
-                    <CheckCircle className="h-4 w-4 text-green-500" />
+                    <span className="text-sm">Críticos</span>
+                    <Badge variant="destructive">{data?.certAlerts.filter(a => a.priority === "critical").length || 0}</Badge>
                   </div>
                 </div>
               </CardContent>
@@ -548,13 +499,13 @@ export const CrewRotationPlanner: React.FC = () => {
               </CardHeader>
               <CardContent>
                 <div className="space-y-4">
-                  <div className="text-center p-4 bg-gradient-to-r from-blue-50 to-blue-100 rounded-lg">
-                    <h3 className="text-2xl font-bold text-blue-600">94.2%</h3>
-                    <p className="text-sm text-blue-600">Taxa de Sucesso</p>
+                  <div className="text-center p-4 bg-muted/50 rounded-lg">
+                    <h3 className="text-2xl font-bold text-primary">{data?.stats.total || 0}</h3>
+                    <p className="text-sm text-muted-foreground">Total de Tripulantes</p>
                   </div>
-                  <div className="text-center p-4 bg-gradient-to-r from-green-50 to-green-100 rounded-lg">
-                    <h3 className="text-2xl font-bold text-green-600">2.3 dias</h3>
-                    <p className="text-sm text-green-600">Tempo Médio de Rotação</p>
+                  <div className="text-center p-4 bg-muted/50 rounded-lg">
+                    <h3 className="text-2xl font-bold text-green-600">{data?.stats.onboard || 0}</h3>
+                    <p className="text-sm text-muted-foreground">A Bordo</p>
                   </div>
                 </div>
               </CardContent>
@@ -607,8 +558,9 @@ export const CrewRotationPlanner: React.FC = () => {
                     <SelectValue placeholder="Selecione a embarcação" />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="mv-ocean-pioneer">MV Ocean Pioneer</SelectItem>
-                    <SelectItem value="mv-atlantic-star">MV Atlantic Star</SelectItem>
+                    {(data?.vessels || []).map(v => (
+                      <SelectItem key={v.id} value={v.id}>{v.name}</SelectItem>
+                    ))}
                   </SelectContent>
                 </Select>
               </div>
@@ -660,3 +612,5 @@ export const CrewRotationPlanner: React.FC = () => {
     </div>
   );
 };
+
+export default CrewRotationPlanner;
