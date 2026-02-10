@@ -77,7 +77,15 @@ export default function MMIJobsPanelSection() {
   );
 
   const handleExport = (job: MMIJobForecast) => {
-    toast.info(`Exportação de PDF para "${job.title}" em implantação. Use o módulo de Relatórios para exportações. ETA: Q3/2026.`);
+    const csv = `Título,Previsão,Horímetro,Responsável,Prioridade,Status\n"${job.title}","${job.forecast || 'N/A'}",${job.hours || 0},"${job.responsible || 'N/A'}",${job.priority},${job.status}`;
+    const blob = new Blob([csv], { type: 'text/csv' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `job-${job.id}-${new Date().toISOString().slice(0,10)}.csv`;
+    a.click();
+    URL.revokeObjectURL(url);
+    toast.success(`Job "${job.title}" exportado como CSV`);
   };
 
   const getPriorityBadge = (priority: string) => {
@@ -148,7 +156,7 @@ export default function MMIJobsPanelSection() {
                   </DropdownMenuTrigger>
                   <DropdownMenuContent align="end">
                     <DropdownMenuItem onClick={() => {
-                      toast.info(`Job: ${job.title} | Status: ${job.status} | Prioridade: ${job.priority}`);
+                      toast.success(`Detalhes do Job: ${job.title}`, { description: `Status: ${job.status} | Prioridade: ${job.priority} | Horas: ${job.hours || 0}h | Responsável: ${job.responsible || 'N/A'}`, duration: 8000 });
                     }}>
                       <Eye className="h-4 w-4 mr-2" />
                       Ver Detalhes

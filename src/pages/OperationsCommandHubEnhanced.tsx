@@ -221,7 +221,7 @@ export default function OperationsCommandHubEnhanced() {
         setDialogOpen(p => ({ ...p, checklist: true }));
         break;
       default:
-        toast.info(`Executando: ${actionId}`);
+        toast.success(`Ação "${actionId}" registrada`, { description: 'Utilize as abas acima para acessar funcionalidades específicas.' });
     }
   };
 

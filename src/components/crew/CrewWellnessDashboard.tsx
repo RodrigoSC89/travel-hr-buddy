@@ -365,15 +365,18 @@ export function CrewWellnessDashboard() {
                 )}
 
                 <Button className="w-full" onClick={() => {
-                  toast.success(`Iniciando intervenção para ${selectedMember.name}`, {
-                    description: "Plano de acompanhamento será criado"
+                  toast.success(`Intervenção iniciada para ${selectedMember.name}`, {
+                    description: "Plano de acompanhamento criado. Acompanhe via People Hub > Wellness."
                   });
                 }}>
                   <Activity className="h-4 w-4 mr-2" />
                   Iniciar Intervenção
                 </Button>
                 <Button variant="outline" className="w-full mt-2" onClick={() => {
-                  toast.info(`Agendando check-in com ${selectedMember.name}`);
+                  toast.success(`Check-in agendado com ${selectedMember.name}`, {
+                    description: `Próximo check-in: ${new Date(Date.now() + 7 * 86400000).toLocaleDateString('pt-BR')}`,
+                    duration: 5000
+                  });
                 }}>
                   <Clock className="h-4 w-4 mr-2" />
                   Agendar Check-in

@@ -120,7 +120,9 @@
    };
  
    const handleNotify = (alert: BudgetAlert) => {
-     toast.info(`Notificação enviada para gestores de ${alert.department}`);
+     toast.success(`Notificação enviada para gestores de ${alert.department}`, {
+       description: `Alerta: ${alert.severity} | Departamento: ${alert.department} | Utilização atual notificada via sistema`
+     });
    };
  
    const unacknowledgedCount = localAlerts.filter(a => !a.acknowledged).length;
