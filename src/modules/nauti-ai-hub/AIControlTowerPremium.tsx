@@ -49,10 +49,10 @@ function AIDashboard() {
     },
   });
 
-  const activeAgents = agents.filter((a: any) => a.status === "active" || a.status === "online").length;
-  const totalTokens = aiLogs.reduce((sum: number, l: any) => sum + (l.tokens_input || 0) + (l.tokens_output || 0), 0);
+  const activeAgents = agents.filter((a) => a.status === "active" || a.status === "online").length;
+  const totalTokens = aiLogs.reduce((sum: number, l) => sum + ((l.tokens_input || 0) + (l.tokens_output || 0)), 0);
   const avgLatency = aiLogs.length > 0 
-    ? Math.round(aiLogs.reduce((sum: number, l: any) => sum + (l.response_time_ms || 0), 0) / aiLogs.length)
+    ? Math.round(aiLogs.reduce((sum: number, l) => sum + (l.response_time_ms || 0), 0) / aiLogs.length)
     : 0;
 
   const handleGlobalAnalysis = async () => {
@@ -69,8 +69,9 @@ function AIDashboard() {
         description: data?.response?.substring(0, 150) || "Análise gerada com sucesso",
         duration: 10000,
       });
-    } catch (error: any) {
-      toast.error("Erro na análise", { description: error.message });
+    } catch (error: unknown) {
+      const msg = error instanceof Error ? error.message : "Erro desconhecido";
+      toast.error("Erro na análise", { description: msg });
     } finally {
       setIsAnalyzing(false);
     }
@@ -128,14 +129,14 @@ function AIDashboard() {
           </CardContent>
         </Card>
 
-        <Card className="border-l-4 border-l-violet-500">
+        <Card className="border-l-4 border-l-accent-foreground">
           <CardContent className="p-4">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-xs text-muted-foreground">Agentes Total</p>
                 <p className="text-2xl font-bold">{agents.length}</p>
               </div>
-              <TrendingUp className="h-8 w-8 text-violet-500 opacity-60" />
+              <TrendingUp className="h-8 w-8 text-accent-foreground opacity-60" />
             </div>
           </CardContent>
         </Card>
@@ -153,13 +154,13 @@ function AIDashboard() {
         <CardContent>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             {(agents.length > 0 ? agents : [
-              { name: "Compliance Agent", capabilities: { mission: "MLC 2006 & STCW" }, status: "active" },
-              { name: "Maintenance Agent", capabilities: { mission: "Manutenção Preditiva" }, status: "active" },
-              { name: "Document Agent", capabilities: { mission: "OCR & Classificação" }, status: "active" },
-              { name: "Safety Agent", capabilities: { mission: "Análise de Riscos" }, status: "active" },
-              { name: "Crew Agent", capabilities: { mission: "Gestão de Tripulação" }, status: "active" },
-              { name: "Finance Agent", capabilities: { mission: "Análise de Custos" }, status: "learning" },
-            ]).map((agent: any, i: number) => (
+              { id: "f1", name: "Compliance Agent", capabilities: { mission: "MLC 2006 & STCW" }, status: "active", last_heartbeat: null },
+              { id: "f2", name: "Maintenance Agent", capabilities: { mission: "Manutenção Preditiva" }, status: "active", last_heartbeat: null },
+              { id: "f3", name: "Document Agent", capabilities: { mission: "OCR & Classificação" }, status: "active", last_heartbeat: null },
+              { id: "f4", name: "Safety Agent", capabilities: { mission: "Análise de Riscos" }, status: "active", last_heartbeat: null },
+              { id: "f5", name: "Crew Agent", capabilities: { mission: "Gestão de Tripulação" }, status: "active", last_heartbeat: null },
+              { id: "f6", name: "Finance Agent", capabilities: { mission: "Análise de Custos" }, status: "learning", last_heartbeat: null },
+            ]).map((agent, i: number) => (
               <div key={agent.id || i} className="p-4 border rounded-lg hover:bg-muted/50">
                 <div className="flex items-center justify-between mb-3">
                   <div className="flex items-center gap-2">
@@ -177,7 +178,7 @@ function AIDashboard() {
                   </Badge>
                 </div>
                 <p className="text-sm text-muted-foreground mb-2">
-                  {typeof agent.capabilities === "object" ? (agent.capabilities as any)?.mission || "Agente IA" : "Agente IA"}
+                  {typeof agent.capabilities === "object" ? (agent.capabilities as Record<string, string>)?.mission || "Agente IA" : "Agente IA"}
                 </p>
                 <div className="flex justify-between text-xs">
                   <span>{agent.last_heartbeat ? new Date(agent.last_heartbeat).toLocaleTimeString("pt-BR") : "—"}</span>
@@ -258,9 +259,9 @@ function AIDashboard() {
         </CardHeader>
         <CardContent>
           <div className="space-y-2 font-mono text-sm">
-            {aiLogs.length > 0 ? aiLogs.map((log: any, i: number) => (
+            {aiLogs.length > 0 ? aiLogs.map((log, i: number) => (
               <div key={i} className="flex items-center gap-4 p-2 rounded hover:bg-muted/50">
-                <span className="text-muted-foreground">{new Date(log.created_at).toLocaleTimeString("pt-BR")}</span>
+                <span className="text-muted-foreground">{new Date(log.created_at || "").toLocaleTimeString("pt-BR")}</span>
                 <Badge variant="outline" className="text-xs">{log.module_name || "System"}</Badge>
                 <span className="flex-1">{log.interaction_type || "query"} — {log.response_time_ms || 0}ms</span>
                 <CheckCircle className="h-4 w-4 text-success" />

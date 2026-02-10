@@ -111,12 +111,12 @@ export default function FinancialDashboard() {
   const [budget] = useState<BudgetItem[]>(fallbackBudget);
 
   useEffect(() => {
-    supabase.from("fuel_records").select("id, total_cost, currency, fuel_date, status").limit(20).then(({ data }: any) => {
+    (supabase.from as Function)("fuel_records").select("id, total_cost, fuel_date, status").limit(20).then(({ data }: { data: Record<string, unknown>[] | null }) => {
       if (data && data.length > 0) {
-        setTransactions(data.map((r: any) => ({
-          id: r.id, type: "expense" as const, category: "Combustível",
-          description: `Fuel ${r.fuel_date || ""}`, amount: r.total_cost || 0,
-          currency: r.currency || "USD", date: r.fuel_date || "", status: r.status === "completed" ? "completed" as const : "pending" as const,
+        setTransactions(data.map((r) => ({
+          id: String(r.id), type: "expense" as const, category: "Combustível",
+          description: `Fuel ${r.fuel_date || ""}`, amount: Number(r.total_cost) || 0,
+          currency: "USD", date: String(r.fuel_date || ""), status: r.status === "completed" ? "completed" as const : "pending" as const,
         })));
       }
     });
@@ -139,73 +139,73 @@ export default function FinancialDashboard() {
     <div className="space-y-6">
       {/* Header com KPIs principais */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-        <Card className="bg-gradient-to-br from-emerald-500/10 to-emerald-600/5 border-emerald-500/20">
+      <Card className="bg-gradient-to-br from-success/10 to-success/5 border-success/20">
           <CardContent className="p-6">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-muted-foreground">Receita Total</p>
-                <p className="text-2xl font-bold text-emerald-600">{formatCurrency(totalRevenue)}</p>
+                <p className="text-2xl font-bold text-success">{formatCurrency(totalRevenue)}</p>
                 <div className="flex items-center gap-1 mt-1">
-                  <ArrowUpRight className="h-4 w-4 text-emerald-500" />
-                  <span className="text-xs text-emerald-600">+12.5% vs mês anterior</span>
+                  <ArrowUpRight className="h-4 w-4 text-success" />
+                  <span className="text-xs text-success">+12.5% vs mês anterior</span>
                 </div>
               </div>
-              <div className="p-3 bg-emerald-500/20 rounded-xl">
-                <TrendingUp className="h-6 w-6 text-emerald-600" />
+              <div className="p-3 bg-success/20 rounded-xl">
+                <TrendingUp className="h-6 w-6 text-success" />
               </div>
             </div>
           </CardContent>
         </Card>
 
-        <Card className="bg-gradient-to-br from-red-500/10 to-red-600/5 border-red-500/20">
+        <Card className="bg-gradient-to-br from-destructive/10 to-destructive/5 border-destructive/20">
           <CardContent className="p-6">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-muted-foreground">Despesas Totais</p>
-                <p className="text-2xl font-bold text-red-600">{formatCurrency(totalExpenses)}</p>
+                <p className="text-2xl font-bold text-destructive">{formatCurrency(totalExpenses)}</p>
                 <div className="flex items-center gap-1 mt-1">
-                  <ArrowDownRight className="h-4 w-4 text-red-500" />
-                  <span className="text-xs text-red-600">-3.2% vs mês anterior</span>
+                  <ArrowDownRight className="h-4 w-4 text-destructive" />
+                  <span className="text-xs text-destructive">-3.2% vs mês anterior</span>
                 </div>
               </div>
-              <div className="p-3 bg-red-500/20 rounded-xl">
-                <TrendingDown className="h-6 w-6 text-red-600" />
+              <div className="p-3 bg-destructive/20 rounded-xl">
+                <TrendingDown className="h-6 w-6 text-destructive" />
               </div>
             </div>
           </CardContent>
         </Card>
 
-        <Card className="bg-gradient-to-br from-blue-500/10 to-blue-600/5 border-blue-500/20">
+        <Card className="bg-gradient-to-br from-primary/10 to-primary/5 border-primary/20">
           <CardContent className="p-6">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-muted-foreground">Lucro Líquido</p>
-                <p className="text-2xl font-bold text-blue-600">{formatCurrency(netProfit)}</p>
+                <p className="text-2xl font-bold text-primary">{formatCurrency(netProfit)}</p>
                 <div className="flex items-center gap-1 mt-1">
-                  <PieChart className="h-4 w-4 text-blue-500" />
-                  <span className="text-xs text-blue-600">Margem: {profitMargin}%</span>
+                  <PieChart className="h-4 w-4 text-primary" />
+                  <span className="text-xs text-primary">Margem: {profitMargin}%</span>
                 </div>
               </div>
-              <div className="p-3 bg-blue-500/20 rounded-xl">
-                <Wallet className="h-6 w-6 text-blue-600" />
+              <div className="p-3 bg-primary/20 rounded-xl">
+                <Wallet className="h-6 w-6 text-primary" />
               </div>
             </div>
           </CardContent>
         </Card>
 
-        <Card className="bg-gradient-to-br from-amber-500/10 to-amber-600/5 border-amber-500/20">
+        <Card className="bg-gradient-to-br from-warning/10 to-warning/5 border-warning/20">
           <CardContent className="p-6">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-muted-foreground">A Receber</p>
-                <p className="text-2xl font-bold text-amber-600">{formatCurrency(pendingReceivables)}</p>
+                <p className="text-2xl font-bold text-warning">{formatCurrency(pendingReceivables)}</p>
                 <div className="flex items-center gap-1 mt-1">
-                  <Clock className="h-4 w-4 text-amber-500" />
-                  <span className="text-xs text-amber-600">2 faturas pendentes</span>
+                  <Clock className="h-4 w-4 text-warning" />
+                  <span className="text-xs text-warning">2 faturas pendentes</span>
                 </div>
               </div>
-              <div className="p-3 bg-amber-500/20 rounded-xl">
-                <Receipt className="h-6 w-6 text-amber-600" />
+              <div className="p-3 bg-warning/20 rounded-xl">
+                <Receipt className="h-6 w-6 text-warning" />
               </div>
             </div>
           </CardContent>
@@ -286,11 +286,11 @@ export default function FinancialDashboard() {
                       <div key={month} className="flex-1 flex flex-col items-center gap-2">
                         <div className="flex gap-1 h-48 items-end">
                           <div 
-                            className="w-6 bg-emerald-500 rounded-t"
-                            style={{ height: `${(revenue / 3) * 100}%` }}
-                          />
-                          <div 
-                            className="w-6 bg-red-400 rounded-t"
+                          className="w-6 bg-success rounded-t"
+                          style={{ height: `${(revenue / 3) * 100}%` }}
+                        />
+                        <div 
+                          className="w-6 bg-destructive/70 rounded-t"
                             style={{ height: `${(expense / 3) * 100}%` }}
                           />
                         </div>
@@ -301,11 +301,11 @@ export default function FinancialDashboard() {
                 </div>
                 <div className="flex items-center justify-center gap-6 mt-4">
                   <div className="flex items-center gap-2">
-                    <div className="w-3 h-3 bg-emerald-500 rounded" />
+                    <div className="w-3 h-3 bg-success rounded" />
                     <span className="text-sm">Receitas</span>
                   </div>
                   <div className="flex items-center gap-2">
-                    <div className="w-3 h-3 bg-red-400 rounded" />
+                    <div className="w-3 h-3 bg-destructive/70 rounded" />
                     <span className="text-sm">Despesas</span>
                   </div>
                 </div>
@@ -321,11 +321,11 @@ export default function FinancialDashboard() {
               <CardContent>
                 <div className="space-y-4">
                   {[
-                    { name: "Combustível", value: 35, color: "bg-blue-500" },
-                    { name: "Tripulação", value: 28, color: "bg-emerald-500" },
-                    { name: "Manutenção", value: 18, color: "bg-amber-500" },
-                    { name: "Porto", value: 12, color: "bg-purple-500" },
-                    { name: "Outros", value: 7, color: "bg-gray-500" },
+                    { name: "Combustível", value: 35, color: "bg-primary" },
+                    { name: "Tripulação", value: 28, color: "bg-success" },
+                    { name: "Manutenção", value: 18, color: "bg-warning" },
+                    { name: "Porto", value: 12, color: "bg-accent-foreground" },
+                    { name: "Outros", value: 7, color: "bg-muted-foreground" },
                   ].map((item) => (
                     <div key={item.name} className="space-y-1">
                       <div className="flex items-center justify-between text-sm">
@@ -364,8 +364,8 @@ export default function FinancialDashboard() {
                         <div className={cn(
                           "p-2 rounded-full",
                           tx.type === "income" 
-                            ? "bg-emerald-500/20 text-emerald-600" 
-                            : "bg-red-500/20 text-red-600"
+                            ? "bg-success/20 text-success" 
+                            : "bg-destructive/20 text-destructive"
                         )}>
                           {tx.type === "income" ? (
                             <ArrowUpRight className="h-5 w-5" />
@@ -390,7 +390,7 @@ export default function FinancialDashboard() {
                       <div className="text-right">
                         <p className={cn(
                           "font-bold",
-                          tx.type === "income" ? "text-emerald-600" : "text-red-600"
+                          tx.type === "income" ? "text-success" : "text-destructive"
                         )}>
                           {tx.type === "income" ? "+" : "-"}{formatCurrency(tx.amount, tx.currency)}
                         </p>

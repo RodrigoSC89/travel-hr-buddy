@@ -309,9 +309,10 @@ function mapInvoiceStatus(status: string | null, dueDate: string | null): Invoic
   if (dueDate && new Date(dueDate) < new Date()) return 'overdue';
   return 'pending';
 }
+type TransactionRecord = Record<string, unknown>;
 
 function calculateKPIs(
-  transactions: any[],
+  transactions: TransactionRecord[],
   invoices: Invoice[],
   budgets: Budget[]
 ): FinanceKPI[] {
@@ -339,7 +340,7 @@ function calculateKPIs(
 }
 
 function calculateExpenseCategories(
-  transactions: any[],
+  transactions: TransactionRecord[],
   budgets: Budget[]
 ): ExpenseCategory[] {
   const categoryTotals = new Map<string, number>();
@@ -347,7 +348,7 @@ function calculateExpenseCategories(
   transactions
     .filter(t => t.type === 'expense' || t.transaction_type === 'debit')
     .forEach(t => {
-      const category = t.category || 'Outros';
+      const category = (t.category as string) || 'Outros';
       categoryTotals.set(category, (categoryTotals.get(category) || 0) + Math.abs(Number(t.amount) || 0));
     });
 
@@ -377,7 +378,7 @@ function calculateExpenseCategories(
 }
 
 function generateAIInsights(
-  transactions: any[],
+  transactions: TransactionRecord[],
   budgets: Budget[],
   invoices: Invoice[]
 ): AIFinanceInsight[] {

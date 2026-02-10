@@ -53,19 +53,23 @@ export function InvoiceAutomation() {
         return;
       }
 
-      const mapped: ProcessedInvoice[] = (data || []).map((r: any) => ({
-        id: r.id,
-        invoiceNumber: r.document_id || `INV-${r.id.slice(0, 8)}`,
-        vendor: r.parties?.[0] || r.contract_type || "—",
-        amount: r.total_potential_savings || r.financial_terms?.total || 0,
-        dueDate: r.key_dates?.[0] || r.created_at?.split("T")[0] || "—",
-        status: r.overall_risk_score != null && r.overall_risk_score < 30 ? "approved" :
-                r.overall_risk_score != null && r.overall_risk_score > 70 ? "rejected" : "review",
-        confidence: r.overall_risk_score != null ? (100 - r.overall_risk_score) : 50,
-        decision: r.overall_risk_score != null && r.overall_risk_score < 30 ? "auto_approve" :
-                  r.overall_risk_score != null && r.overall_risk_score > 70 ? "reject" : "escalate",
-        issues: (r.risk_clauses || []).map((c: any) => typeof c === "string" ? c : c?.description || "Risk").slice(0, 3),
-      }));
+      const mapped: ProcessedInvoice[] = (data || []).map((r: Record<string, unknown>) => {
+        const rec = r as unknown as Record<string, unknown>;
+        const id = String(rec.id);
+        const riskScore = Number(rec.overall_risk_score) || 0;
+        const createdAt = String(rec.created_at || "");
+        return {
+          id,
+          invoiceNumber: String(rec.document_id || `INV-${id.slice(0, 8)}`),
+          vendor: String((rec.parties as unknown[])?.[0] || rec.contract_type || "—"),
+          amount: Number(rec.total_potential_savings) || 0,
+          dueDate: String((rec.key_dates as unknown[])?.[0] || createdAt.split("T")[0] || "—"),
+          status: riskScore < 30 ? "approved" as const : riskScore > 70 ? "rejected" as const : "review" as const,
+          confidence: 100 - riskScore,
+          decision: riskScore < 30 ? "auto_approve" : riskScore > 70 ? "reject" : "escalate",
+          issues: ((rec.risk_clauses as unknown[]) || []).map((c) => typeof c === "string" ? c : (c as Record<string, string>)?.description || "Risk").slice(0, 3),
+        };
+      });
 
       setInvoices(mapped);
     } catch (err) {
@@ -126,11 +130,11 @@ export function InvoiceAutomation() {
   }, []);
 
   const statusConfig: Record<ProcessedInvoice['status'], { icon: React.ElementType; color: string; label: string }> = {
-    pending: { icon: Clock, color: 'bg-gray-500', label: 'Pendente' },
-    processing: { icon: Loader2, color: 'bg-blue-500', label: 'Processando' },
-    approved: { icon: Check, color: 'bg-green-500', label: 'Aprovado' },
-    rejected: { icon: X, color: 'bg-red-500', label: 'Rejeitado' },
-    review: { icon: AlertTriangle, color: 'bg-amber-500', label: 'Revisão' }
+    pending: { icon: Clock, color: 'bg-muted-foreground', label: 'Pendente' },
+    processing: { icon: Loader2, color: 'bg-primary', label: 'Processando' },
+    approved: { icon: Check, color: 'bg-success', label: 'Aprovado' },
+    rejected: { icon: X, color: 'bg-destructive', label: 'Rejeitado' },
+    review: { icon: AlertTriangle, color: 'bg-warning', label: 'Revisão' }
   };
 
   const stats = {
@@ -177,36 +181,36 @@ export function InvoiceAutomation() {
             </div>
           </CardContent>
         </Card>
-        <Card className="bg-green-50 dark:bg-green-950">
+        <Card className="bg-success/5 dark:bg-success/10">
           <CardContent className="pt-6">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-muted-foreground">Aprovados</p>
-                <p className="text-2xl font-bold text-green-600">{stats.approved}</p>
+                <p className="text-2xl font-bold text-success">{stats.approved}</p>
               </div>
-              <Check className="h-8 w-8 text-green-500" />
+              <Check className="h-8 w-8 text-success" />
             </div>
           </CardContent>
         </Card>
-        <Card className="bg-amber-50 dark:bg-amber-950">
+        <Card className="bg-warning/5 dark:bg-warning/10">
           <CardContent className="pt-6">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-muted-foreground">Em Revisão</p>
-                <p className="text-2xl font-bold text-amber-600">{stats.review}</p>
+                <p className="text-2xl font-bold text-warning">{stats.review}</p>
               </div>
-              <AlertTriangle className="h-8 w-8 text-amber-500" />
+              <AlertTriangle className="h-8 w-8 text-warning" />
             </div>
           </CardContent>
         </Card>
-        <Card className="bg-red-50 dark:bg-red-950">
+        <Card className="bg-destructive/5 dark:bg-destructive/10">
           <CardContent className="pt-6">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-muted-foreground">Rejeitados</p>
-                <p className="text-2xl font-bold text-red-600">{stats.rejected}</p>
+                <p className="text-2xl font-bold text-destructive">{stats.rejected}</p>
               </div>
-              <X className="h-8 w-8 text-red-500" />
+              <X className="h-8 w-8 text-destructive" />
             </div>
           </CardContent>
         </Card>

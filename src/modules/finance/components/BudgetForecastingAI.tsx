@@ -60,9 +60,9 @@ export function BudgetForecastingAI() {
           (supabase.from as Function)("payroll_records").select("net_salary").limit(100),
         ]);
 
-        const fuelSpent = (fuelData || []).reduce((s: number, r: any) => s + ((r.quantity || 0) * (r.unit_cost || 0)), 0);
-        const maintSpent = (maintData || []).reduce((s: number, r: any) => s + (r.total_cost || 0), 0);
-        const crewSpent = (crewData || []).reduce((s: number, r: any) => s + (r.net_salary || 0), 0);
+        const fuelSpent = (fuelData || []).reduce((s: number, r: unknown) => { const rec = r as Record<string, unknown>; return s + ((Number(rec.quantity) || 0) * (Number(rec.unit_cost) || 0)); }, 0);
+        const maintSpent = (maintData || []).reduce((s, r) => s + (Number((r as unknown as Record<string, unknown>).total_cost) || 0), 0);
+        const crewSpent = (crewData || []).reduce((s: number, r: unknown) => s + (Number((r as Record<string, unknown>).net_salary) || 0), 0);
 
         const cats: BudgetCategory[] = [
           { id: '1', name: 'Combustível', allocated: Math.max(fuelSpent * 1.2, 500000), spent: fuelSpent, forecast: fuelSpent * 1.1, trend: 'up' as const, variance: 0, aiConfidence: 88 },
@@ -215,8 +215,8 @@ ${s.name} (${s.probability}% probabilidade):
 
   const getTrendIcon = (trend: string) => {
     switch (trend) {
-      case 'up': return <TrendingUp className="h-4 w-4 text-red-500" />;
-      case 'down': return <TrendingDown className="h-4 w-4 text-green-500" />;
+      case 'up': return <TrendingUp className="h-4 w-4 text-destructive" />;
+      case 'down': return <TrendingDown className="h-4 w-4 text-success" />;
       default: return <span className="text-muted-foreground">→</span>;
     }
   };
@@ -274,7 +274,7 @@ ${s.name} (${s.probability}% probabilidade):
                 <p className="text-sm text-muted-foreground">Orçamento Total</p>
                 <p className="text-2xl font-bold">R$ {(totalAllocated / 1000000).toFixed(2)}M</p>
               </div>
-              <Wallet className="h-8 w-8 text-blue-500" />
+              <Wallet className="h-8 w-8 text-primary" />
             </div>
           </CardContent>
         </Card>
@@ -286,7 +286,7 @@ ${s.name} (${s.probability}% probabilidade):
                 <p className="text-2xl font-bold">R$ {(totalSpent / 1000000).toFixed(2)}M</p>
                 <p className="text-xs text-muted-foreground">{((totalSpent / totalAllocated) * 100).toFixed(0)}% do orçamento</p>
               </div>
-              <DollarSign className="h-8 w-8 text-green-500" />
+              <DollarSign className="h-8 w-8 text-success" />
             </div>
           </CardContent>
         </Card>
@@ -300,23 +300,23 @@ ${s.name} (${s.probability}% probabilidade):
                   {budgetHealth === 'healthy' ? 'Dentro do Orçamento' : budgetHealth === 'warning' ? 'Atenção' : 'Acima do Orçamento'}
                 </Badge>
               </div>
-              <Target className="h-8 w-8 text-purple-500" />
+              <Target className="h-8 w-8 text-accent-foreground" />
             </div>
           </CardContent>
         </Card>
-        <Card className={budgetHealth === 'healthy' ? 'bg-green-500/10 border-green-500/30' : budgetHealth === 'warning' ? 'bg-yellow-500/10 border-yellow-500/30' : 'bg-red-500/10 border-red-500/30'}>
+        <Card className={budgetHealth === 'healthy' ? 'bg-success/10 border-success/30' : budgetHealth === 'warning' ? 'bg-warning/10 border-warning/30' : 'bg-destructive/10 border-destructive/30'}>
           <CardContent className="pt-6">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-muted-foreground">Variação Prevista</p>
-                <p className={`text-2xl font-bold ${totalForecast <= totalAllocated ? 'text-green-600' : 'text-red-600'}`}>
+                <p className={`text-2xl font-bold ${totalForecast <= totalAllocated ? 'text-success' : 'text-destructive'}`}>
                   {totalForecast <= totalAllocated ? '-' : '+'}R$ {Math.abs(totalForecast - totalAllocated).toLocaleString('pt-BR')}
                 </p>
               </div>
               {budgetHealth === 'healthy' ? (
-                <CheckCircle className="h-8 w-8 text-green-500" />
+                <CheckCircle className="h-8 w-8 text-success" />
               ) : (
-                <AlertTriangle className="h-8 w-8 text-yellow-500" />
+                <AlertTriangle className="h-8 w-8 text-warning" />
               )}
             </div>
           </CardContent>
@@ -351,7 +351,7 @@ ${s.name} (${s.probability}% probabilidade):
                       </div>
                       <div className="text-right">
                         <p className="font-bold">R$ {category.forecast.toLocaleString('pt-BR')}</p>
-                        <p className={`text-xs ${category.variance >= 0 ? 'text-red-500' : 'text-green-500'}`}>
+                        <p className={`text-xs ${category.variance >= 0 ? 'text-destructive' : 'text-success'}`}>
                           {category.variance >= 0 ? '+' : ''}{category.variance}% vs orçado
                         </p>
                       </div>
