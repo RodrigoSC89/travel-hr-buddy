@@ -197,7 +197,11 @@ export default function SmartLogistics() {
             <Brain className={`h-4 w-4 mr-2 ${isAnalyzing ? 'animate-pulse' : ''}`} />
             {isAnalyzing ? "Analisando..." : "Análise IA"}
           </Button>
-          <Button onClick={() => toast.info("Novo Pedido", { description: "Criação de pedidos em implantação. Utilize o módulo Procurement. ETA: Q3/2026." })}>
+          <Button onClick={() => {
+            window.history.pushState({}, '', '/workbench?tab=procurement');
+            window.dispatchEvent(new PopStateEvent('popstate'));
+            toast.success("Navegando para Procurement para criar novo pedido");
+          }}>
             <ShoppingCart className="h-4 w-4 mr-2" />
             Novo Pedido
           </Button>

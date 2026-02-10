@@ -635,7 +635,7 @@ export const EnhancedFinanceCenter: React.FC = () => {
               />
             </div>
             <div className="flex gap-2">
-              <Button variant="outline" onClick={() => toast.info("Utilize a busca acima para localizar faturas por fornecedor, embarcação ou ID.")}>
+              <Button variant="outline" onClick={() => toast.success("Filtros disponíveis", { description: "Utilize a busca acima para localizar faturas por fornecedor, embarcação ou ID." })}>
                 <Filter className="h-4 w-4 mr-2" />
                 Filtros
               </Button>

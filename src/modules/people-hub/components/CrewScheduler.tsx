@@ -320,7 +320,7 @@ export default function CrewScheduler() {
         title="Nenhum tripulante cadastrado"
         message="Cadastre tripulantes para gerenciar escalas, rotações e conformidade MLC."
         actionLabel="Cadastrar Tripulante"
-        onAction={() => toast.info("Navegue para People Hub para cadastrar")}
+        onAction={() => { window.history.pushState({}, '', '/workbench?tab=people'); window.dispatchEvent(new PopStateEvent('popstate')); toast.success("Navegando para People Hub"); }}
       />
     );
   }

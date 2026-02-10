@@ -97,7 +97,7 @@ export default function CrewHealthTab() {
           title="Nenhum tripulante encontrado"
           description="Cadastre tripulantes no sistema para gerenciar suas fichas médicas."
           actionLabel="Cadastrar Tripulante"
-          onAction={() => toast.info("Navegue para a seção de Tripulação para cadastrar novos membros")}
+          onAction={() => { window.history.pushState({}, '', '/workbench?tab=people'); window.dispatchEvent(new PopStateEvent('popstate')); toast.success("Navegando para People Hub para cadastro"); }}
         />
       </div>
     );
