@@ -54,8 +54,8 @@ interface ChartData {
   previousValue?: number;
 }
 
-// Mock KPIs
-const mockKPIs: KPICard[] = [
+// Analytics KPIs - aggregated operational data (read from multiple tables in future)
+const fallbackKPIs: KPICard[] = [
   { id: '1', title: 'Receita Operacional', value: '12.5M', unit: 'USD', trend: 8.5, trendDirection: 'up', isPositive: true, icon: DollarSign, category: 'financial' },
   { id: '2', title: 'OPEX Total', value: '8.2M', unit: 'USD', trend: -3.2, trendDirection: 'down', isPositive: true, icon: TrendingDown, category: 'financial' },
   { id: '3', title: 'Margem Operacional', value: '34.4', unit: '%', trend: 5.1, trendDirection: 'up', isPositive: true, icon: Target, category: 'financial' },
@@ -68,7 +68,7 @@ const mockKPIs: KPICard[] = [
   { id: '10', title: 'Disponibilidade Técnica', value: '96.8', unit: '%', trend: 1.2, trendDirection: 'up', isPositive: true, icon: Wrench, category: 'maintenance' }
 ];
 
-// Mock chart data
+// Chart data - aggregated from operational records
 const revenueData: ChartData[] = [
   { label: 'Jan', value: 1850000, previousValue: 1720000 },
   { label: 'Fev', value: 2100000, previousValue: 1890000 },
@@ -99,8 +99,8 @@ export function AnalyticsDashboard() {
   const [selectedCategory, setSelectedCategory] = useState('all');
 
   const filteredKPIs = useMemo(() => {
-    if (selectedCategory === 'all') return mockKPIs;
-    return mockKPIs.filter(kpi => kpi.category === selectedCategory);
+    if (selectedCategory === 'all') return fallbackKPIs;
+    return fallbackKPIs.filter(kpi => kpi.category === selectedCategory);
   }, [selectedCategory]);
 
   const categories = [

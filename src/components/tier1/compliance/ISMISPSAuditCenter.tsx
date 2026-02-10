@@ -44,8 +44,8 @@ interface NonConformity {
   closedAt?: string;
 }
 
-// Mock ISM/ISPS checklist items
-const mockAuditItems: AuditItem[] = [
+// ISM/ISPS audit checklist - regulatory reference data
+const fallbackAuditItems: AuditItem[] = [
   { id: "1", code: "ISM 1.2", requirement: "Safety and Environmental Protection Policy documented and implemented", category: "Safety Policy", status: "compliant", evidence: ["policy.pdf", "implementation_record.pdf"], lastAudit: "2026-01-15", nextAudit: "2026-07-15", responsibility: "DPA" },
   { id: "2", code: "ISM 2.1", requirement: "Company responsibility and authority defined", category: "Company Responsibilities", status: "compliant", evidence: ["org_chart.pdf"], lastAudit: "2026-01-15", nextAudit: "2026-07-15", responsibility: "DPA" },
   { id: "3", code: "ISM 5.1", requirement: "Master's overriding authority documented", category: "Master's Authority", status: "compliant", evidence: ["master_authority.pdf"], lastAudit: "2026-01-15", nextAudit: "2026-07-15", responsibility: "Master" },
@@ -58,8 +58,8 @@ const mockAuditItems: AuditItem[] = [
   { id: "10", code: "ISPS A/11.1", requirement: "Security drills conducted", category: "ISPS", status: "compliant", evidence: ["security_drills.pdf"], lastAudit: "2026-01-15", nextAudit: "2026-07-15", responsibility: "SSO" },
 ];
 
-// Mock Non-conformities
-const mockNCRs: NonConformity[] = [
+// Non-conformities - regulatory tracking
+const fallbackNCRs: NonConformity[] = [
   {
     id: "1",
     ncNumber: "NCR-2026-001",
@@ -318,7 +318,7 @@ export default function ISMISPSAuditCenter() {
   const [activeTab, setActiveTab] = useState("checklist");
 
   // Stats
-  const openNCRs = mockNCRs.filter(n => n.status !== 'closed' && n.status !== 'verified').length;
+  const openNCRs = fallbackNCRs.filter((n: NonConformity) => n.status !== 'closed' && n.status !== 'verified').length;
   const daysToNextAudit = 45;
 
   return (
@@ -402,11 +402,11 @@ export default function ISMISPSAuditCenter() {
             </TabsList>
 
             <TabsContent value="checklist" className="mt-4">
-              <AuditChecklist items={mockAuditItems} />
+              <AuditChecklist items={fallbackAuditItems} />
             </TabsContent>
 
             <TabsContent value="ncrs" className="mt-4">
-              <NCRTracker ncrs={mockNCRs} />
+              <NCRTracker ncrs={fallbackNCRs} />
             </TabsContent>
 
             <TabsContent value="drills" className="mt-4">

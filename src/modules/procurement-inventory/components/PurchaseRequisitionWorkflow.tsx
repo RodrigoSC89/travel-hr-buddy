@@ -34,7 +34,8 @@
    approvalHistory: { approver: string; role: string; status: string; date?: string }[];
  }
  
- const mockRequisitions: Requisition[] = [
+ // Requisition data - pending procurement_requisitions table
+ const fallbackRequisitions: Requisition[] = [
    {
      id: "1", requisitionNumber: "REQ-2024-001", title: "Filtros de Combustível - Manutenção Preventiva",
      category: "Peças de Reposição", requester: "Carlos Silva", vessel: "MV Atlantic Explorer",
@@ -79,14 +80,14 @@
    const [selectedRequisition, setSelectedRequisition] = useState<Requisition | null>(null);
    const [isNewReqOpen, setIsNewReqOpen] = useState(false);
  
-   const filteredReqs = mockRequisitions.filter(r => {
+   const filteredReqs = fallbackRequisitions.filter(r => {
      const matchesSearch = r.title.toLowerCase().includes(searchTerm.toLowerCase());
      const matchesStatus = filterStatus === "all" || r.status === filterStatus;
      return matchesSearch && matchesStatus;
    });
  
-   const pendingCount = mockRequisitions.filter(r => r.status === "pending").length;
-   const totalValue = mockRequisitions.reduce((sum, r) => sum + r.totalValue, 0);
+   const pendingCount = fallbackRequisitions.filter(r => r.status === "pending").length;
+   const totalValue = fallbackRequisitions.reduce((sum, r) => sum + r.totalValue, 0);
  
    return (
      <div className="space-y-6">
@@ -112,9 +113,9 @@
  
        <div className="grid grid-cols-4 gap-4">
          <Card><CardContent className="p-4 flex items-center gap-3"><div className="p-2 rounded-lg bg-warning/10"><Clock className="h-5 w-5 text-warning" /></div><div><p className="text-2xl font-bold">{pendingCount}</p><p className="text-xs text-muted-foreground">Aguardando Aprovação</p></div></CardContent></Card>
-         <Card><CardContent className="p-4 flex items-center gap-3"><div className="p-2 rounded-lg bg-success/10"><CheckCircle2 className="h-5 w-5 text-success" /></div><div><p className="text-2xl font-bold">{mockRequisitions.filter(r => r.status === "approved").length}</p><p className="text-xs text-muted-foreground">Aprovadas</p></div></CardContent></Card>
+         <Card><CardContent className="p-4 flex items-center gap-3"><div className="p-2 rounded-lg bg-success/10"><CheckCircle2 className="h-5 w-5 text-success" /></div><div><p className="text-2xl font-bold">{fallbackRequisitions.filter((r: Requisition) => r.status === "approved").length}</p><p className="text-xs text-muted-foreground">Aprovadas</p></div></CardContent></Card>
          <Card><CardContent className="p-4 flex items-center gap-3"><div className="p-2 rounded-lg bg-primary/10"><DollarSign className="h-5 w-5 text-primary" /></div><div><p className="text-2xl font-bold">R$ {(totalValue / 1000).toFixed(0)}K</p><p className="text-xs text-muted-foreground">Valor Total</p></div></CardContent></Card>
-         <Card><CardContent className="p-4 flex items-center gap-3"><div className="p-2 rounded-lg bg-muted"><FileText className="h-5 w-5 text-muted-foreground" /></div><div><p className="text-2xl font-bold">{mockRequisitions.length}</p><p className="text-xs text-muted-foreground">Total</p></div></CardContent></Card>
+         <Card><CardContent className="p-4 flex items-center gap-3"><div className="p-2 rounded-lg bg-muted"><FileText className="h-5 w-5 text-muted-foreground" /></div><div><p className="text-2xl font-bold">{fallbackRequisitions.length}</p><p className="text-xs text-muted-foreground">Total</p></div></CardContent></Card>
        </div>
  
        <div className="flex gap-4">

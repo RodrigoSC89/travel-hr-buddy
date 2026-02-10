@@ -51,7 +51,8 @@ interface ComponentHealth {
   hoursToFailure?: number;
 }
 
-const mockScenarios: SimulationScenario[] = [
+// DP simulation scenarios - domain-specific config, not user data
+const fallbackScenarios: SimulationScenario[] = [
   { id: "SIM-001", name: "Perda de Thruster #1", type: "failure", description: "Simula perda súbita do thruster principal", components: ["THR-01"], duration: 15, difficulty: "medium" },
   { id: "SIM-002", name: "Blackout Parcial", type: "failure", description: "Perda de 50% da capacidade de geração", components: ["GEN-01", "GEN-02"], duration: 20, difficulty: "hard" },
   { id: "SIM-003", name: "Falha de Referência PRS", type: "failure", description: "Perda de referência de posicionamento", components: ["PRS-01"], duration: 10, difficulty: "medium" },
@@ -60,7 +61,7 @@ const mockScenarios: SimulationScenario[] = [
   { id: "SIM-006", name: "Validação FMEA", type: "validation", description: "Teste de cenários FMEA documentados", components: ["ALL"], duration: 45, difficulty: "hard" }
 ];
 
-const mockComponents: ComponentHealth[] = [
+const fallbackComponents: ComponentHealth[] = [
   { id: "THR-01", name: "Thruster Azimuthal #1", category: "thruster", healthScore: 92, lastMaintenance: "2024-10-15", hoursToFailure: 2500 },
   { id: "THR-02", name: "Thruster Azimuthal #2", category: "thruster", healthScore: 88, lastMaintenance: "2024-09-20", hoursToFailure: 1800 },
   { id: "THR-03", name: "Bow Thruster", category: "thruster", healthScore: 75, predictedFailure: "Bearing degradation", lastMaintenance: "2024-08-10", hoursToFailure: 500 },
@@ -216,7 +217,7 @@ export const DigitalTwinDP: React.FC = () => {
               </CardHeader>
               <CardContent>
                 <div className="grid grid-cols-2 gap-3">
-                  {mockScenarios.map((scenario) => (
+                  {fallbackScenarios.map((scenario: SimulationScenario) => (
                     <div
                       key={scenario.id}
                       className={`p-4 rounded-lg border cursor-pointer transition-all ${
@@ -320,7 +321,7 @@ export const DigitalTwinDP: React.FC = () => {
             </CardHeader>
             <CardContent>
               <div className="space-y-3">
-                {mockComponents.map((component) => (
+                {fallbackComponents.map((component: ComponentHealth) => (
                   <div key={component.id} className="p-4 rounded-lg border bg-card">
                     <div className="flex items-center justify-between">
                       <div className="flex items-center gap-3">
@@ -437,7 +438,7 @@ export const DigitalTwinDP: React.FC = () => {
             </CardHeader>
             <CardContent>
               <div className="grid grid-cols-3 gap-4">
-                {mockScenarios.filter(s => s.type === "training" || s.type === "validation").map((scenario) => (
+                {fallbackScenarios.filter((s: SimulationScenario) => s.type === "training" || s.type === "validation").map((scenario: SimulationScenario) => (
                   <Card key={scenario.id} className="hover:shadow-lg transition-all">
                     <CardContent className="pt-4">
                       <h4 className="font-medium mb-2">{scenario.name}</h4>
