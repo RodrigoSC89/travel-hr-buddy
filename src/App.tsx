@@ -451,10 +451,15 @@ const AdminReportsRestoreAnalytics = lazy(() => import("@/pages/admin/reports/re
 const AdminCollaboration = lazy(() => import("@/pages/admin/collaboration"));
 const AdminDashboard = lazy(() => import("@/pages/admin/dashboard"));
 
-// Query client
+// Query client - optimized for performance
 const queryClient = new QueryClient({
   defaultOptions: {
-    queries: { staleTime: 1000 * 60 * 2, retry: 1 },
+    queries: {
+      staleTime: 1000 * 60 * 2, // 2min
+      retry: 1,
+      refetchOnWindowFocus: false, // Reduce unnecessary refetches
+      gcTime: 1000 * 60 * 10, // 10min garbage collection
+    },
   },
 });
 
