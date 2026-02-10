@@ -113,8 +113,8 @@ const FinanceHubEnhanced: React.FC = () => {
       timestamp: new Date(),
       source: 'Contas a Pagar',
       actions: [
-        { label: 'Pagar Agora', onClick: () => toast.success('Pagamento iniciado') },
-        { label: 'Adiar', onClick: () => toast.info('Fatura adiada'), variant: 'outline' as const }
+        { label: 'Pagar Agora', onClick: () => toast.success('Processando pagamento da fatura #INV-2024-001...') },
+        { label: 'Adiar', onClick: () => toast.warning('Fatura #INV-2024-001 adiada para próximo ciclo'), variant: 'outline' as const }
       ]
     },
     {

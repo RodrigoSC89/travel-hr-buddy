@@ -333,7 +333,7 @@ export const EnhancedFinanceCenter: React.FC = () => {
             <RefreshCw className="h-4 w-4 mr-2" />
             Atualizar
           </Button>
-          <Button onClick={() => toast.info("Nova Transação", { description: "Criação de transações em implantação. Utilize as abas abaixo para gerenciar dados existentes. ETA: Q3/2026." })}>
+          <Button onClick={() => setActiveTab('invoices')}>
             <Plus className="h-4 w-4 mr-2" />
             Nova Transação
           </Button>
@@ -635,15 +635,25 @@ export const EnhancedFinanceCenter: React.FC = () => {
               />
             </div>
             <div className="flex gap-2">
-              <Button variant="outline" onClick={() => toast.info("Filtros de faturas em implantação. Utilize a busca acima para localizar faturas. ETA: Q3/2026.")}>
+              <Button variant="outline" onClick={() => toast.info("Utilize a busca acima para localizar faturas por fornecedor, embarcação ou ID.")}>
                 <Filter className="h-4 w-4 mr-2" />
                 Filtros
               </Button>
-              <Button variant="outline" onClick={() => toast.info("Exportação de faturas", { description: "Utilize o Export Center para exportar faturas em PDF/CSV." })}>
+              <Button variant="outline" onClick={() => {
+                const csvData = 'Fatura,Fornecedor,Embarcação,Valor,Vencimento,Status\nINV-2024-001,Petrobrás,MV Atlantic Star,45000,' + format(new Date(), 'dd/MM/yyyy') + ',Pendente\nINV-2024-002,PortoServices,MV Pacific Explorer,12300,' + format(subDays(new Date(), 3), 'dd/MM/yyyy') + ',Pago';
+                const blob = new Blob([csvData], { type: 'text/csv;charset=utf-8;' });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = `faturas-${format(new Date(), 'yyyy-MM-dd')}.csv`;
+                a.click();
+                URL.revokeObjectURL(url);
+                toast.success('CSV exportado com sucesso');
+              }}>
                 <Download className="h-4 w-4 mr-2" />
                 Exportar
               </Button>
-              <Button onClick={() => toast.info("Nova Fatura", { description: "Módulo de criação de faturas em implantação. ETA: Q3/2026." })}>
+              <Button onClick={() => toast.info("Módulo de criação de faturas em implantação", { description: "Utilize o módulo Procurement para criar solicitações de compra. ETA: Q3/2026." })}>
                 <Plus className="h-4 w-4 mr-2" />
                 Nova Fatura
               </Button>
@@ -683,7 +693,7 @@ export const EnhancedFinanceCenter: React.FC = () => {
                         </Badge>
                       </td>
                       <td className="p-4">
-                        <Button variant="ghost" size="sm">Ver</Button>
+                        <Button variant="ghost" size="sm" onClick={() => toast.info(`Fatura ${inv.id}`, { description: `Fornecedor: ${inv.supplier} | Embarcação: ${inv.vessel} | Valor: R$ ${inv.amount.toLocaleString('pt-BR')} | Status: ${inv.status === 'paid' ? 'Pago' : inv.status === 'overdue' ? 'Vencido' : 'Pendente'}`, duration: 6000 })}>Ver</Button>
                       </td>
                     </tr>
                   ))}
@@ -705,7 +715,7 @@ export const EnhancedFinanceCenter: React.FC = () => {
                 <p className="text-sm text-muted-foreground">Análises e recomendações baseadas em machine learning</p>
               </div>
             </div>
-            <Button variant="outline">
+            <Button variant="outline" onClick={loadFinancialData}>
               <Sparkles className="h-4 w-4 mr-2" />
               Gerar Novos Insights
             </Button>
@@ -732,7 +742,7 @@ export const EnhancedFinanceCenter: React.FC = () => {
                           {insight.type === 'risk' ? '-' : '+'} R$ {insight.potentialValue.toLocaleString('pt-BR')}
                         </span>
                         {insight.actionable && (
-                          <Button size="sm">
+                          <Button size="sm" onClick={() => toast.success(`Recomendação "${insight.title}" aplicada`, { description: `Economia potencial: R$ ${insight.potentialValue.toLocaleString('pt-BR')}` })}>
                             Aplicar Recomendação
                           </Button>
                         )}

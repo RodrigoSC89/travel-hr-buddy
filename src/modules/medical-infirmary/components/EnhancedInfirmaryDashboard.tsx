@@ -3,6 +3,7 @@
  * Experiência única com onboarding, KPIs interativos e ações rápidas
  */
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -67,6 +68,7 @@ const ONBOARDING_STEPS = [
 ];
 
 export default function EnhancedInfirmaryDashboard() {
+  const navigate = useNavigate();
   const { supplies, records, stats, isLoading } = useInfirmaryRealData();
   const [chatMessage, setChatMessage] = useState("");
   const [chatHistory, setChatHistory] = useState<{ role: string; content: string }[]>([
@@ -74,6 +76,10 @@ export default function EnhancedInfirmaryDashboard() {
   ]);
   const [isTyping, setIsTyping] = useState(false);
   const [showNewFeature, setShowNewFeature] = useState(true);
+
+  const navigateToTab = (tab: string) => {
+    navigate(`/medical-infirmary?tab=${tab}`);
+  };
 
   const handleSendMessage = () => {
     if (!chatMessage.trim()) return;
@@ -119,13 +125,13 @@ export default function EnhancedInfirmaryDashboard() {
             id: "order",
             label: "Solicitar Reposição",
             icon: <Package className="h-3 w-3" />,
-            onClick: () => { toast.success("Solicitação de reposição enviada!"); },
+            onClick: () => { navigateToTab("supplies"); },
           },
           {
             id: "view",
             label: "Ver Itens",
             variant: "outline",
-            onClick: () => { toast.info("Abrindo lista de itens..."); },
+            onClick: () => { navigateToTab("supplies"); },
           },
         ],
       });
@@ -144,7 +150,7 @@ export default function EnhancedInfirmaryDashboard() {
             id: "schedule",
             label: "Agendar Descarte",
             icon: <Calendar className="h-3 w-3" />,
-            onClick: () => { toast.success("Descarte agendado!"); },
+            onClick: () => { navigateToTab("pharmacy"); },
           },
         ],
       });
@@ -163,7 +169,7 @@ export default function EnhancedInfirmaryDashboard() {
             id: "checklist",
             label: "Abrir Checklist",
             icon: <ClipboardList className="h-3 w-3" />,
-            onClick: () => { toast.info("Abrindo checklist MLC..."); },
+            onClick: () => { navigateToTab("mlc"); },
           },
         ],
       });
@@ -177,21 +183,21 @@ export default function EnhancedInfirmaryDashboard() {
       id: "new-attendance",
       label: "Novo Atendimento",
       icon: <Plus className="h-4 w-4" />,
-      onClick: () => toast.info("Abrindo formulário de atendimento..."),
+      onClick: () => navigateToTab("consultations"),
       variant: "default" as const,
     },
     {
       id: "telemedicine",
       label: "Telemedicina",
       icon: <Phone className="h-4 w-4" />,
-      onClick: () => toast.info("Conectando com médico remoto..."),
+      onClick: () => navigateToTab("telemedicine"),
       variant: "success" as const,
     },
     {
       id: "emergency",
       label: "Emergência",
       icon: <AlertTriangle className="h-4 w-4" />,
-      onClick: () => toast.error("Protocolo de emergência ativado!"),
+      onClick: () => navigateToTab("emergency"),
       variant: "danger" as const,
       badge: "24/7",
     },
@@ -199,7 +205,7 @@ export default function EnhancedInfirmaryDashboard() {
       id: "inventory",
       label: "Inventário",
       icon: <ClipboardList className="h-4 w-4" />,
-      onClick: () => toast.info("Abrindo inventário..."),
+      onClick: () => navigateToTab("supplies"),
     },
   ];
 
@@ -268,7 +274,7 @@ export default function EnhancedInfirmaryDashboard() {
             { label: "Emergências", value: Math.floor(stats.attendanceMonth * 0.15) },
             { label: "Rotina", value: Math.floor(stats.attendanceMonth * 0.85) },
           ]}
-          onDrillDown={() => toast.info("Abrindo histórico de atendimentos...")}
+          onDrillDown={() => navigateToTab("consultations")}
         />
 
         <InteractiveKPICard
@@ -294,7 +300,7 @@ export default function EnhancedInfirmaryDashboard() {
           status={stats.expiringItems > 5 ? "warning" : "good"}
           trend={stats.expiringItems > 0 ? 8 : 0}
           tooltip="Medicamentos com validade próxima"
-          onDrillDown={() => toast.info("Abrindo lista de medicamentos...")}
+          onDrillDown={() => navigateToTab("pharmacy")}
         />
 
         <InteractiveKPICard
@@ -304,7 +310,7 @@ export default function EnhancedInfirmaryDashboard() {
           icon={<Package className="h-6 w-6 text-destructive" />}
           status={stats.lowStockItems > 0 ? "critical" : "good"}
           tooltip="Itens abaixo do nível mínimo de segurança"
-          onDrillDown={() => toast.info("Abrindo gestão de estoque...")}
+          onDrillDown={() => navigateToTab("supplies")}
           drillDownLabel="Solicitar Reposição"
         />
 
@@ -425,7 +431,7 @@ export default function EnhancedInfirmaryDashboard() {
               <FileText className="h-5 w-5" />
               Atendimentos Recentes
             </CardTitle>
-            <Button size="sm" className="gap-2">
+            <Button size="sm" className="gap-2" onClick={() => navigateToTab("consultations")}>
               <Plus className="h-4 w-4" />
               Novo Atendimento
             </Button>

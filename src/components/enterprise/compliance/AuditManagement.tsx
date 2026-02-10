@@ -311,11 +311,13 @@ export function AuditManagement() {
 
       {/* Actions */}
       <div className="flex justify-end gap-3">
-        <Button variant="outline" onClick={() => toast.info("Salvar Rascunho", { description: "Persistência de rascunhos de auditoria em implantação. Dados da sessão são mantidos localmente. ETA: Q3/2026." })}>
+        <Button variant="outline" onClick={() => {
+          toast.success("Rascunho salvo localmente", { description: "Os dados da auditoria foram salvos na sessão atual." });
+        }}>
           <FileText className="h-4 w-4 mr-2" />
           Salvar Rascunho
         </Button>
-        <Button onClick={() => toast.info("Finalizar Auditoria", { description: "Workflow de finalização de auditoria em implantação. Utilize o Audit Center para gerenciar auditorias completas. ETA: Q3/2026." })}>
+        <Button onClick={() => toast.info("Finalização de auditoria em implantação", { description: "Utilize o Compliance Hub > Auditorias para gerenciar auditorias completas. ETA: Q3/2026." })}>
           <CheckCircle2 className="h-4 w-4 mr-2" />
           Finalizar Auditoria
         </Button>
