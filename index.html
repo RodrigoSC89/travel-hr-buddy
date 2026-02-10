@@ -19,13 +19,16 @@
     <meta http-equiv="X-Content-Type-Options" content="nosniff" />
     <meta name="referrer" content="strict-origin-when-cross-origin" />
     
-    <!-- Font Preconnect -->
+    <!-- Font Loading: preload critical weight, swap for performance -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Playfair+Display:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@300;400;500;600;700&display=swap" rel="stylesheet" crossorigin="anonymous">
+    <!-- Critical: Only Inter 400,500,600,700 initially. Others deferred. -->
+    <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" onload="this.onload=null;this.rel='stylesheet'" crossorigin="anonymous">
+    <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"></noscript>
     
-    <!-- Asset Preload -->
-    <link rel="preload" as="image" href="/icons/nauti-one-logo.png" type="image/png" />
+    <!-- Deferred fonts: loaded after paint -->
+    <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;800;900&family=JetBrains+Mono:wght@400;500&display=swap" onload="this.onload=null;this.rel='stylesheet'" crossorigin="anonymous">
+    <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;800;900&family=JetBrains+Mono:wght@400;500&display=swap"></noscript>
     
     <title>Nauti One - Sistema de Gestão Marítima</title>
     <meta name="description" content="Nauti One - Sistema revolucionário de gestão marítima com IA integrada. Tripulação, Documentos, Compliance, Operações e muito mais." />
@@ -44,14 +47,14 @@
 
   <body>
     <!-- Initial loader - removed by React on mount -->
-    <div id="initial-loader" style="position:fixed;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;background:#0f172a;z-index:9999;">
-      <svg width="60" height="60" viewBox="0 0 24 24" fill="none" stroke="#3b82f6" stroke-width="2" style="animation:spin 1s linear infinite;">
-        <circle cx="12" cy="12" r="10" stroke-opacity="0.25"/>
+    <div id="initial-loader" style="position:fixed;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;background:#0f172a;z-index:9999;contain:strict;">
+      <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#3b82f6" stroke-width="2" style="animation:spin .8s linear infinite;">
+        <circle cx="12" cy="12" r="10" stroke-opacity="0.2"/>
         <path d="M12 2a10 10 0 0 1 10 10" stroke-linecap="round"/>
       </svg>
-      <p style="color:#94a3b8;margin-top:16px;font-family:system-ui,sans-serif;">Carregando...</p>
+      <p style="color:#94a3b8;margin-top:12px;font-family:system-ui,sans-serif;font-size:14px;">Carregando...</p>
     </div>
-    <style>@keyframes spin{to{transform:rotate(360deg)}}</style>
+    <style>@keyframes spin{to{transform:rotate(360deg)}}#initial-loader{will-change:opacity;}</style>
     
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>

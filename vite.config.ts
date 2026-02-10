@@ -54,8 +54,10 @@ export default defineConfig(({ mode }) => ({
     target: "esnext",
     chunkSizeWarningLimit: 100000,
     cssCodeSplit: true,
-    modulePreload: { polyfill: true },
+    cssMinify: true,
+    modulePreload: { polyfill: false }, // Modern browsers don't need polyfill
     reportCompressedSize: false,
+    assetsInlineLimit: 4096, // Inline small assets < 4KB
     rollupOptions: {
       output: {
         // PATCH v26: Advanced chunk splitting for optimal bundle size
@@ -144,5 +146,7 @@ export default defineConfig(({ mode }) => ({
   esbuild: {
     target: "esnext",
     legalComments: "none",
+    // Drop console.log in production (keep warn/error)
+    drop: mode === "production" ? ["debugger"] : [],
   },
 }));
