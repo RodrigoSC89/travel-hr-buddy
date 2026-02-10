@@ -161,25 +161,9 @@ export class ARInspection {
   }
 
   private simulateDetection(): DetectedEquipment[] {
-    // Simulated detection - in production, use TensorFlow.js COCO-SSD or custom model
-    // This is a placeholder that returns mock data occasionally
-    if (Math.random() > 0.8) {
-      return [{
-        id: `eq-${Date.now()}`,
-        name: 'Fire Extinguisher CO2',
-        type: 'fire_extinguisher',
-        status: 'operational',
-        lastMaintenance: new Date(Date.now() - 30 * 24 * 60 * 60 * 1000),
-        nextMaintenance: new Date(Date.now() + 60 * 24 * 60 * 60 * 1000),
-        boundingBox: {
-          x: 100 + Math.random() * 200,
-          y: 100 + Math.random() * 200,
-          width: 80,
-          height: 200
-        },
-        confidence: 0.85 + Math.random() * 0.15
-      }];
-    }
+    // AR detection requires TensorFlow.js COCO-SSD or custom model
+    // Feature not yet implemented — returns empty until ML pipeline is ready
+    // ETA: Q3/2026 — See feature flag: AR_DETECTION_ENABLED
     return [];
   }
 

@@ -91,9 +91,8 @@
 - Dados estáticos inline em vez de queries reais + empty states
 - **Correção estimada**: 8 dias
 
-### P1-004: FleetManagement.tsx — Hardcoded Fallback Stats (L75-81)
-- Hardcoda `totalVessels: 18, criticalAlerts: 2, efficiency: 87.5` no erro
-- **Correção estimada**: 1 hora
+### ~~P1-004: FleetManagement.tsx — Hardcoded Fallback Stats~~ ✅ CORRIGIDO
+- **Resolução Sprint 2**: Error fallback agora mostra zeros honestos. Stats de `efficiency` calculadas de dados reais (active/total ratio). `criticalAlerts` marcado para query real futura.
 
 ### ~~P1-005: CodeAuditor.ts — 5 Métodos com "Mock implementation"~~ ✅ CORRIGIDO
 - **Resolução**: Métodos agora retornam `-1` (unavailable) em vez de números hardcoded. Recommendations honestas direcionam para CI pipeline.
@@ -102,8 +101,7 @@
 - **Resolução**: `analyzeCodePatterns()` retorna `[]` (honesto). `getPerformanceMetrics()` usa `window.performance` API real em vez de `Math.random()`.
 
 ### P1-007: AR Inspection — Placeholder Logic (L155-166)
-- `Math.random() > 0.8` retorna equipamento fictício
-- **Correção estimada**: 1 hora (feature flag)
+- **Resolução Sprint 2**: `simulateDetection()` agora retorna `[]` (honesto) com comentário direcionando para ML pipeline ETA Q3/2026.
 
 ### P1-008: Tab Count Excessivo em Mega-Hubs
 - AIMegaHub consolidado de 15→8, verificar outros
@@ -141,9 +139,8 @@
 ### ~~P2-004: 5 Implementações de Logger~~ ✅ PARCIALMENTE CORRIGIDO
 - **Resolução Sprint 2**: `biometric-auth.ts` desduplicado (usava ambos loggers). `structuredLogger` mantido como versão mobile/performance (16 consumidores). `logger` é o logger principal (1300+ consumidores). `(window as any).Sentry` corrigido para tipagem segura em `structured-logger.ts`. Total: 2 loggers distintos com propósitos claros (simples vs estruturado).
 
-### P2-005: Dual Session Replay Hooks
-- `useSessionReplayData.ts` + `useSessionsReplayData.ts`
-- **Correção estimada**: 1 hora
+### ~~P2-005: Dual Session Replay Hooks~~ ✅ CORRIGIDO
+- **Resolução Sprint 2**: Ambos hooks (`useSessionReplayData.ts` + `useSessionsReplayData.ts`) eram órfãos — zero consumidores em produção. Deletados.
 
 ### P2-006: 340+ Edge Functions (potenciais órfãs)
 - **Correção estimada**: 5 dias (audit + cleanup)
@@ -257,7 +254,7 @@
 | **Segurança** | 93/100 | RLS zero issues, sanitizers OK, localStorage sensível corrigido |
 | **Testes** | 70/100 | 612 tests, coverage baixo, 15 @ts-nocheck em tests |
 | **Type Safety** | 72/100 | ~9.9k `any`, @ts-nocheck prod eliminado, loggers consolidados |
-| **GERAL** | **87/100** | Sprint 1+2 parcial concluídos |
+| **GERAL** | **88/100** | Sprint 1 completo + Sprint 2 em progresso |
 
 ---
 
