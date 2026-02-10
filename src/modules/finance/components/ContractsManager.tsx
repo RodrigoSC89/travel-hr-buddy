@@ -98,25 +98,28 @@ export default function ContractsManager() {
           return;
         }
 
-        const mapped: Contract[] = (data || []).map((c: any, i: number) => {
-          const parties = (c.parties as any) || {};
-          const dates = (c.key_dates as any) || {};
-          const financial = (c.financial_terms as any) || {};
+        const mapped: Contract[] = (data || []).map((c, i: number) => {
+          const parties = (c.parties as Record<string, string> | null) || {};
+          const dates = (c.key_dates as Record<string, string> | null) || {};
+          const financial = (c.financial_terms as Record<string, unknown> | null) || {};
           return {
             id: c.id,
             contract_number: `CP-${new Date(c.created_at).getFullYear()}-${String(i + 1).padStart(3, "0")}`,
             title: `${c.contract_type || "Contract"} Analysis`,
-            contract_type: (c.contract_type || "service") as any,
+            contract_type: (c.contract_type || "service") as Contract["contract_type"],
             counterparty: parties?.counterparty || parties?.party_b || "N/A",
             vessel_name: parties?.vessel || undefined,
             start_date: dates?.start || c.created_at?.split("T")[0] || new Date().toISOString().split("T")[0],
             end_date: dates?.end || new Date(Date.now() + 180 * 86400000).toISOString().split("T")[0],
-            total_value: financial?.total_value || c.total_potential_savings || 0,
-            currency: financial?.currency || "BRL",
-            payment_terms: financial?.payment_terms || "Monthly",
+            total_value: (financial?.total_value as number) || c.total_potential_savings || 0,
+            currency: (financial?.currency as string) || "BRL",
+            payment_terms: (financial?.payment_terms as string) || "Monthly",
             status: c.overall_risk_score && c.overall_risk_score > 70 ? "renewal" : "active",
             terms_summary: c.contract_type || "",
-            key_clauses: (c.risk_clauses as any[])?.map((r: any) => r.clause || r) || [],
+            key_clauses: (c.risk_clauses as unknown[])?.map((r) => {
+              if (typeof r === "string") return r;
+              return (r as Record<string, string>)?.clause || String(r);
+            }) || [],
             risk_score: c.overall_risk_score || 0,
             created_at: c.created_at?.split("T")[0] || "",
           };

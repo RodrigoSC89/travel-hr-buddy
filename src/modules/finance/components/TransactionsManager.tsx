@@ -133,10 +133,10 @@ export default function TransactionsManager() {
         .limit(100);
 
       if (error) throw error;
-      return (data || []).map((t: any) => ({
+      return (data || []).map((t) => ({
         ...t,
-        vessel_name: t.vessels?.name,
-      }));
+        vessel_name: (t.vessels as unknown as Record<string, string> | null)?.name,
+      })) as unknown as Transaction[];
     },
     staleTime: 1000 * 60,
   });
@@ -254,11 +254,11 @@ export default function TransactionsManager() {
     createMutation.mutate({
       description: formData.description,
       amount: parseFloat(formData.amount) || 0,
-      transaction_type: formData.transaction_type as any,
+      transaction_type: formData.transaction_type as Transaction["transaction_type"],
       category: formData.category,
       transaction_date: formData.transaction_date,
       due_date: formData.due_date || undefined,
-      status: formData.status as any,
+      status: formData.status as Transaction["status"],
       payment_method: formData.payment_method,
       reference_number: formData.reference_number,
       notes: formData.notes,

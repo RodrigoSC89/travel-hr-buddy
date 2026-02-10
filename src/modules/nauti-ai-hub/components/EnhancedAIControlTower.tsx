@@ -83,19 +83,19 @@ export const EnhancedAIControlTower: React.FC = () => {
       // Load agents from agent_registry
       const { data: agentData } = await supabase.from('agent_registry').select('*').limit(10);
       if (agentData?.length) {
-        setAgents(agentData.map((a: any) => ({
-          id: a.id, name: a.name, type: a.capabilities?.type || 'General',
-          status: a.status === 'active' ? 'active' : 'idle',
-          tasksCompleted: a.metadata?.tasks_completed || 0, accuracy: a.metadata?.accuracy || 90,
-          lastActive: new Date(a.last_heartbeat || a.updated_at), description: a.metadata?.description || ''
+        setAgents(agentData.map((a) => ({
+          id: a.id, name: a.name, type: (a.capabilities as Record<string, unknown>)?.type as string || 'General',
+          status: a.status === 'active' ? 'active' as const : 'idle' as const,
+          tasksCompleted: (a.metadata as Record<string, unknown>)?.tasks_completed as number || 0, accuracy: (a.metadata as Record<string, unknown>)?.accuracy as number || 90,
+          lastActive: new Date(a.last_heartbeat || a.updated_at), description: (a.metadata as Record<string, unknown>)?.description as string || ''
         })));
       }
 
       // Load insights from ai_insights
       const { data: insightData } = await supabase.from('ai_insights').select('*').order('created_at', { ascending: false }).limit(10);
       if (insightData?.length) {
-        setInsights(insightData.map((i: any) => ({
-          id: i.id, type: i.category as any, module: i.related_module || '',
+        setInsights(insightData.map((i) => ({
+          id: i.id, type: i.category as AIInsight['type'], module: i.related_module || '',
           title: i.title, description: i.description, confidence: i.confidence * 100,
           potentialImpact: i.impact_value || '', actionable: i.actionable, timestamp: new Date(i.created_at)
         })));
@@ -104,7 +104,7 @@ export const EnhancedAIControlTower: React.FC = () => {
       // Load metrics
       const { data: metricsData } = await supabase.from('ai_behavior_snapshots').select('*').order('created_at', { ascending: false }).limit(4);
       if (metricsData?.length) {
-        setMetrics(metricsData.map((m: any) => ({
+        setMetrics(metricsData.map((m) => ({
           label: m.module_name, value: (m.accuracy_score || 0) * 100, unit: '%',
           trend: 'up' as const, change: m.learning_rate || 0
         })));
@@ -167,20 +167,20 @@ export const EnhancedAIControlTower: React.FC = () => {
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case 'active': return 'bg-green-500/20 text-green-500';
-      case 'processing': return 'bg-blue-500/20 text-blue-500';
-      case 'idle': return 'bg-yellow-500/20 text-yellow-500';
-      case 'error': return 'bg-red-500/20 text-red-500';
+      case 'active': return 'bg-success/20 text-success';
+      case 'processing': return 'bg-primary/20 text-primary';
+      case 'idle': return 'bg-warning/20 text-warning';
+      case 'error': return 'bg-destructive/20 text-destructive';
       default: return 'bg-muted';
     }
   };
 
   const getInsightIcon = (type: string) => {
     switch (type) {
-      case 'optimization': return <Zap className="h-5 w-5 text-blue-500" />;
-      case 'prediction': return <TrendingUp className="h-5 w-5 text-purple-500" />;
-      case 'alert': return <AlertTriangle className="h-5 w-5 text-yellow-500" />;
-      case 'recommendation': return <Lightbulb className="h-5 w-5 text-green-500" />;
+      case 'optimization': return <Zap className="h-5 w-5 text-primary" />;
+      case 'prediction': return <TrendingUp className="h-5 w-5 text-accent-foreground" />;
+      case 'alert': return <AlertTriangle className="h-5 w-5 text-warning" />;
+      case 'recommendation': return <Lightbulb className="h-5 w-5 text-success" />;
       default: return <Brain className="h-5 w-5" />;
     }
   };
@@ -206,8 +206,8 @@ export const EnhancedAIControlTower: React.FC = () => {
         className="flex flex-col md:flex-row md:items-center justify-between gap-4"
       >
         <div className="flex items-center gap-4">
-          <div className="p-3 rounded-2xl bg-gradient-to-br from-purple-500/20 to-pink-500/10 border border-purple-500/20">
-            <Brain className="h-8 w-8 text-purple-500" />
+          <div className="p-3 rounded-2xl bg-gradient-to-br from-accent/20 to-accent/10 border border-accent/20">
+            <Brain className="h-8 w-8 text-accent-foreground" />
           </div>
           <div>
             <h1 className="text-3xl font-bold">AI Control Tower</h1>
@@ -215,8 +215,8 @@ export const EnhancedAIControlTower: React.FC = () => {
           </div>
         </div>
         <div className="flex items-center gap-2">
-          <Badge variant="outline" className="gap-1 bg-green-500/10 text-green-500">
-            <div className="h-2 w-2 rounded-full bg-green-500 animate-pulse" />
+          <Badge variant="outline" className="gap-1 bg-success/10 text-success">
+            <div className="h-2 w-2 rounded-full bg-success animate-pulse" />
             {agents.filter(a => a.status === 'active').length} agentes ativos
           </Badge>
           <Button variant="outline" onClick={loadAIData}>
@@ -239,7 +239,7 @@ export const EnhancedAIControlTower: React.FC = () => {
               <CardContent className="p-6">
                 <div className="flex items-center justify-between mb-2">
                   <span className="text-sm text-muted-foreground">{metric.label}</span>
-                  <Badge variant="outline" className={metric.trend === 'up' ? 'text-green-500' : metric.trend === 'down' && metric.label.includes('Tempo') ? 'text-green-500' : 'text-red-500'}>
+                  <Badge variant="outline" className={metric.trend === 'up' ? 'text-success' : metric.trend === 'down' && metric.label.includes('Tempo') ? 'text-success' : 'text-destructive'}>
                     {metric.change > 0 ? '+' : ''}{metric.change}%
                   </Badge>
                 </div>
