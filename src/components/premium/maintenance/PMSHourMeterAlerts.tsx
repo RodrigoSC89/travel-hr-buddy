@@ -58,11 +58,11 @@ export default function PMSHourMeterAlerts() {
       queryClient.invalidateQueries({ queryKey: ["maintenance"] });
       toast.success("Manutenção marcada como concluída");
     },
-    onError: (err: any) => toast.error(err.message),
+    onError: (err: Error) => toast.error(err.message),
   });
 
   const createOSMutation = useMutation({
-    mutationFn: async (record: any) => {
+    mutationFn: async (record: { id: string }) => {
       const { error } = await supabase
         .from("maintenance_records")
         .update({ status: "in_progress" })
@@ -73,7 +73,7 @@ export default function PMSHourMeterAlerts() {
       queryClient.invalidateQueries({ queryKey: ["pms-maintenance-records"] });
       toast.success("Ordem de serviço iniciada");
     },
-    onError: (err: any) => toast.error(err.message),
+    onError: (err: Error) => toast.error(err.message),
   });
 
   if (isLoading) {
@@ -97,9 +97,11 @@ export default function PMSHourMeterAlerts() {
     );
   }
 
-  const vesselMap = new Map(vessels.map((v: any) => [v.id, v.name]));
+  const vesselMap = new Map(vessels.map((v) => [v.id, v.name]));
 
-  const getStatus = (r: any) => {
+  type MaintenanceRecord = typeof records[number];
+
+  const getStatus = (r: MaintenanceRecord) => {
     if (r.status === "completed") return "ok";
     const scheduled = new Date(r.scheduled_date);
     const now = new Date();
@@ -109,15 +111,15 @@ export default function PMSHourMeterAlerts() {
     return "ok";
   };
 
-  const enrichedRecords = records.map((r: any) => ({
+  const enrichedRecords = records.map((r) => ({
     ...r,
     vesselName: vesselMap.get(r.vessel_id) || "N/A",
     computedStatus: getStatus(r),
   }));
 
-  const overdueCount = enrichedRecords.filter((r: any) => r.computedStatus === "overdue").length;
-  const warningCount = enrichedRecords.filter((r: any) => r.computedStatus === "warning").length;
-  const completedCount = enrichedRecords.filter((r: any) => r.status === "completed").length;
+  const overdueCount = enrichedRecords.filter((r) => r.computedStatus === "overdue").length;
+  const warningCount = enrichedRecords.filter((r) => r.computedStatus === "warning").length;
+  const completedCount = enrichedRecords.filter((r) => r.status === "completed").length;
 
   return (
     <div className="space-y-6">
@@ -180,12 +182,12 @@ export default function PMSHourMeterAlerts() {
 
         <TabsContent value="tasks" className="space-y-4 mt-4">
           {enrichedRecords
-            .filter((r: any) => r.status !== "completed")
-            .sort((a: any, b: any) => {
+            .filter((r) => r.status !== "completed")
+            .sort((a, b) => {
               const order: Record<string, number> = { critical: 0, high: 1, medium: 2, low: 3 };
-              return (order[a.priority] ?? 9) - (order[b.priority] ?? 9);
+              return (order[a.priority ?? ""] ?? 9) - (order[b.priority ?? ""] ?? 9);
             })
-            .map((task: any) => (
+            .map((task) => (
             <Card key={task.id} className={`border-l-4 ${
               task.computedStatus === "overdue" ? "border-l-destructive" :
               task.computedStatus === "warning" ? "border-l-warning" : "border-l-success"
@@ -225,13 +227,13 @@ export default function PMSHourMeterAlerts() {
         </TabsContent>
 
         <TabsContent value="overdue" className="space-y-4 mt-4">
-          {enrichedRecords.filter((r: any) => r.computedStatus === "overdue").length === 0 ? (
+          {enrichedRecords.filter((r) => r.computedStatus === "overdue").length === 0 ? (
             <Card><CardContent className="p-8 text-center text-muted-foreground">
               <CheckCircle className="h-8 w-8 mx-auto mb-2 text-success" />
               Nenhuma manutenção vencida!
             </CardContent></Card>
           ) : (
-            enrichedRecords.filter((r: any) => r.computedStatus === "overdue").map((task: any) => (
+            enrichedRecords.filter((r) => r.computedStatus === "overdue").map((task) => (
               <Card key={task.id} className="border-l-4 border-l-destructive">
                 <CardContent className="p-4">
                   <div className="flex items-start justify-between">
