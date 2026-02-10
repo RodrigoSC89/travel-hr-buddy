@@ -80,35 +80,9 @@ export function NOCModeLayout() {
     return () => clearInterval(interval);
   }, []);
 
-  // Simulate real-time alerts
+  // No demo alerts — real alerts populate from telemetry_alerts table
   useEffect(() => {
-    const demoAlerts: Alert[] = [
-      {
-        id: "1",
-        severity: "critical",
-        title: "High CPU Usage",
-        message: "Server API-01 CPU at 95%",
-        timestamp: new Date(Date.now() - 120000),
-        acknowledged: false
-      },
-      {
-        id: "2", 
-        severity: "warning",
-        title: "Memory Threshold",
-        message: "Edge Function memory at 80%",
-        timestamp: new Date(Date.now() - 300000),
-        acknowledged: true
-      },
-      {
-        id: "3",
-        severity: "info",
-        title: "Deployment Complete",
-        message: "nautilus-command v2.1.0 deployed",
-        timestamp: new Date(Date.now() - 600000),
-        acknowledged: true
-      }
-    ];
-    setAlerts(demoAlerts);
+    setAlerts([]);
   }, []);
 
   const toggleFullscreen = () => {

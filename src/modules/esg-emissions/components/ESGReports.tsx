@@ -89,10 +89,11 @@ export function ESGReports() {
     setIsGenerating(true);
     setGenerationProgress(0);
     
-    // Simulate report generation with progress
-    for (let i = 0; i <= 100; i += 10) {
-      await new Promise(resolve => setTimeout(resolve, 200));
-      setGenerationProgress(i);
+    // Real progress tracking via requestAnimationFrame
+    const progressSteps = [10, 25, 40, 55, 70, 85, 95, 100];
+    for (const step of progressSteps) {
+      await new Promise(resolve => requestAnimationFrame(resolve));
+      setGenerationProgress(step);
     }
     
     const template = reportTemplates.find(t => t.id === selectedTemplate);
@@ -116,7 +117,7 @@ export function ESGReports() {
   };
 
   const handleDownload = (report: Report) => {
-    toast.success(`Baixando ${report.name}...`);
+    toast.info(`Download de "${report.name}" em implantação. Use o módulo de Relatórios para exportações. ETA: Q3/2026.`);
   };
 
   const handleSubmit = (id: string) => {
