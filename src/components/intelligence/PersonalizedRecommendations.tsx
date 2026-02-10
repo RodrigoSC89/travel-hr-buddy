@@ -104,8 +104,8 @@ export const PersonalizedRecommendations: React.FC<PersonalizedRecommendationsPr
       }
     } catch (error) {
       
-      // Mock recommendations for demonstration
-      const mockRecommendations: Recommendation[] = [
+      // Fallback recommendations for demonstration
+      const fallbackRecommendations: Recommendation[] = [
         {
           id: "1",
           title: "Configurar Alertas de Certificados",
@@ -144,7 +144,7 @@ export const PersonalizedRecommendations: React.FC<PersonalizedRecommendationsPr
         }
       ];
 
-      setRecommendations(mockRecommendations);
+      setRecommendations(fallbackRecommendations);
       setInsights([
         "Você tem usado principalmente os módulos de RH e Viagens",
         "Seus alertas de preço têm 85% de efetividade",

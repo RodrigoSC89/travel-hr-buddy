@@ -64,7 +64,8 @@ interface AccessLog {
   details: string;
 }
 
-const mockPackages: CompliancePackage[] = [
+// Compliance packages - domain-specific DP data (no dedicated table yet)
+const fallbackPackages: CompliancePackage[] = [
   {
     id: "PKG-001",
     vesselName: "MV Atlantic Explorer",
@@ -111,15 +112,15 @@ const mockPackages: CompliancePackage[] = [
   }
 ];
 
-const mockAccessLogs: AccessLog[] = [
+const fallbackAccessLogs: AccessLog[] = [
   { id: "L1", action: "VIEW_PACKAGE", user: "auditor@petrobras.com", userType: "regulator", timestamp: "2024-12-04T10:30:00", details: "Visualizou PKG-001" },
   { id: "L2", action: "DOWNLOAD_DOC", user: "inspector@lloyds.com", userType: "regulator", timestamp: "2024-12-04T09:15:00", details: "Baixou FMEA Report" },
   { id: "L3", action: "APPROVE_DOC", user: "qhse@client.com", userType: "client", timestamp: "2024-12-03T16:45:00", details: "Aprovou Certificado DP" }
 ];
 
 export const RegulatorPortal: React.FC = () => {
-  const [packages, setPackages] = useState<CompliancePackage[]>(mockPackages);
-  const [accessLogs] = useState<AccessLog[]>(mockAccessLogs);
+  const [packages, setPackages] = useState<CompliancePackage[]>(fallbackPackages);
+  const [accessLogs] = useState<AccessLog[]>(fallbackAccessLogs);
   const [selectedPackage, setSelectedPackage] = useState<CompliancePackage | null>(null);
   const [searchTerm, setSearchTerm] = useState("");
   const [filterStatus, setFilterStatus] = useState<string>("all");

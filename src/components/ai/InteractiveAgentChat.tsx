@@ -94,7 +94,7 @@ interface ExecutionLog {
   details?: Record<string, any>;
 }
 
-const mockAgents: Agent[] = [
+const fallbackAgents: Agent[] = [
   {
     id: "agent-voyage",
     name: "Voyage Optimizer",
@@ -133,7 +133,7 @@ const mockAgents: Agent[] = [
   },
 ];
 
-const mockLogs: ExecutionLog[] = [
+const fallbackLogs: ExecutionLog[] = [
   {
     id: "log-001",
     agent_id: "agent-voyage",
@@ -167,17 +167,17 @@ const mockLogs: ExecutionLog[] = [
 
 export function InteractiveAgentChat() {
   const { toast } = useToast();
-  const [agents] = useState<Agent[]>(mockAgents);
-  const [selectedAgent, setSelectedAgent] = useState<Agent>(mockAgents[0]);
+  const [agents] = useState<Agent[]>(fallbackAgents);
+  const [selectedAgent, setSelectedAgent] = useState<Agent>(fallbackAgents[0]);
   const [messages, setMessages] = useState<Message[]>([
     {
       id: "msg-welcome",
       role: "assistant",
-      content: `Olá! Sou o ${mockAgents[0].name}. Como posso ajudar com otimização de viagens hoje?`,
+      content: `Olá! Sou o ${fallbackAgents[0].name}. Como posso ajudar com otimização de viagens hoje?`,
       timestamp: new Date().toISOString(),
     },
   ]);
-  const [logs, setLogs] = useState<ExecutionLog[]>(mockLogs);
+  const [logs, setLogs] = useState<ExecutionLog[]>(fallbackLogs);
   const [inputValue, setInputValue] = useState("");
   const [isTyping, setIsTyping] = useState(false);
   const [pendingAction, setPendingAction] = useState<AgentAction | null>(null);

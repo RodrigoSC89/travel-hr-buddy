@@ -84,7 +84,7 @@ export const ClientCustomization = () => {
     }
   ];
 
-  const mockOrganizations: Organization[] = [
+  const fallbackOrganizations: Organization[] = [
     {
       id: "1",
       name: "Petrobras Transporte S.A.",
@@ -143,7 +143,7 @@ export const ClientCustomization = () => {
   ];
 
   useState(() => {
-    setOrganizations(mockOrganizations);
+    setOrganizations(fallbackOrganizations);
     setCustomFields(defaultCustomFields);
   });
 

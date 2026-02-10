@@ -100,73 +100,80 @@ export const EnhancedFeedbackSystem: React.FC = () => {
     try {
       setIsLoading(true);
 
-      // Simular dados de feedback para demonstração
-      const mockFeedbacks: Feedback[] = [
-        {
-          id: "1",
-          user_id: "user1",
-          module: "dashboard",
-          type: "feature",
-          title: "Adicionar gráficos interativos",
-          description: "Seria útil ter gráficos que permitem drill-down nos dados.",
-          rating: 4,
-          status: "in_progress",
-          priority: "medium",
-          created_at: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000).toISOString(),
-          updated_at: new Date().toISOString(),
-          user_email: "usuario@empresa.com",
-          user_name: "João Silva"
-        },
-        {
-          id: "2",
-          user_id: "user2",
-          module: "hr",
-          type: "bug",
-          title: "Erro ao exportar relatório de certificados",
-          description: "O sistema retorna erro 500 ao tentar exportar relatório em PDF.",
-          rating: 2,
-          status: "completed",
-          priority: "high",
-          created_at: new Date(Date.now() - 5 * 24 * 60 * 60 * 1000).toISOString(),
-          updated_at: new Date().toISOString(),
-          admin_response: "Bug corrigido na versão 1.2.3",
-          user_email: "maria@empresa.com",
-          user_name: "Maria Santos"
-        },
-        {
-          id: "3",
-          user_id: "user3",
-          module: "maritime",
-          type: "praise",
-          title: "Excelente sistema de gestão marítima",
-          description: "O módulo marítimo está muito completo e intuitivo. Parabéns!",
-          rating: 5,
-          status: "pending",
-          priority: "low",
-          created_at: new Date(Date.now() - 1 * 24 * 60 * 60 * 1000).toISOString(),
-          updated_at: new Date().toISOString(),
-          user_email: "carlos@empresa.com",
-          user_name: "Carlos Oliveira"
-        }
-      ];
+      // Load feedback data from Supabase or use fallback
+      const { data: realFeedback } = await supabase
+        .from("ai_feedback_scores")
+        .select("id, command_type, self_score, feedback_data, created_at, user_id")
+        .order("created_at", { ascending: false })
+        .limit(20);
+
+      let feedbackList: Feedback[];
+
+      if (realFeedback && realFeedback.length > 0) {
+        feedbackList = realFeedback.map((f: any) => ({
+          id: f.id,
+          user_id: f.user_id || "unknown",
+          module: f.command_type || "general",
+          type: "feature" as const,
+          title: `Feedback: ${f.command_type}`,
+          description: (f.feedback_data as any)?.comment || "Feedback registrado",
+          rating: f.self_score || 3,
+          status: "pending" as const,
+          priority: f.self_score >= 4 ? "low" as const : "medium" as const,
+          created_at: f.created_at,
+          updated_at: f.created_at,
+          user_name: (f.feedback_data as any)?.user_name || "Usuário"
+        }));
+      } else {
+        feedbackList = [
+          {
+            id: "1", user_id: "user1", module: "dashboard", type: "feature",
+            title: "Adicionar gráficos interativos",
+            description: "Seria útil ter gráficos que permitem drill-down nos dados.",
+            rating: 4, status: "in_progress", priority: "medium",
+            created_at: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000).toISOString(),
+            updated_at: new Date().toISOString(),
+            user_email: "usuario@empresa.com", user_name: "João Silva"
+          },
+          {
+            id: "2", user_id: "user2", module: "hr", type: "bug",
+            title: "Erro ao exportar relatório de certificados",
+            description: "O sistema retorna erro 500 ao tentar exportar relatório em PDF.",
+            rating: 2, status: "completed", priority: "high",
+            created_at: new Date(Date.now() - 5 * 24 * 60 * 60 * 1000).toISOString(),
+            updated_at: new Date().toISOString(),
+            admin_response: "Bug corrigido na versão 1.2.3",
+            user_email: "maria@empresa.com", user_name: "Maria Santos"
+          },
+          {
+            id: "3", user_id: "user3", module: "maritime", type: "praise",
+            title: "Excelente sistema de gestão marítima",
+            description: "O módulo marítimo está muito completo e intuitivo. Parabéns!",
+            rating: 5, status: "pending", priority: "low",
+            created_at: new Date(Date.now() - 1 * 24 * 60 * 60 * 1000).toISOString(),
+            updated_at: new Date().toISOString(),
+            user_email: "carlos@empresa.com", user_name: "Carlos Oliveira"
+          }
+        ];
+      }
 
       // Calcular estatísticas
-      const mockStats: FeedbackStats = {
-        total: mockFeedbacks.length,
-        pending: mockFeedbacks.filter(f => f.status === "pending").length,
-        averageRating: mockFeedbacks.reduce((acc, f) => acc + f.rating, 0) / mockFeedbacks.length,
-        byType: mockFeedbacks.reduce((acc, f) => {
+      const calcStats: FeedbackStats = {
+        total: feedbackList.length,
+        pending: feedbackList.filter(f => f.status === "pending").length,
+        averageRating: feedbackList.reduce((acc, f) => acc + f.rating, 0) / (feedbackList.length || 1),
+        byType: feedbackList.reduce((acc, f) => {
           acc[f.type] = (acc[f.type] || 0) + 1;
           return acc;
         }, {} as Record<string, number>),
-        byModule: mockFeedbacks.reduce((acc, f) => {
+        byModule: feedbackList.reduce((acc, f) => {
           acc[f.module] = (acc[f.module] || 0) + 1;
           return acc;
         }, {} as Record<string, number>)
       };
 
-      setFeedbacks(mockFeedbacks);
-      setStats(mockStats);
+      setFeedbacks(feedbackList);
+      setStats(calcStats);
 
     } catch (error) {
       toast({

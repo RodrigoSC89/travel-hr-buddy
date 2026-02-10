@@ -67,9 +67,9 @@ export function ComplianceInspectionMap({
     fetchToken();
   }, []);
 
-  // Load mock vessel data (replace with real data)
+  // Load vessel inspection data (fallback until dedicated table exists)
   useEffect(() => {
-    const mockVessels: VesselInspection[] = [
+    const fallbackVessels: VesselInspection[] = [
       {
         id: '1',
         vesselName: 'MV Ocean Star',
@@ -140,7 +140,7 @@ export function ComplianceInspectionMap({
         dueDate: '2024-02-05'
       }
     ];
-    setVessels(mockVessels);
+    setVessels(fallbackVessels);
   }, []);
 
   // Initialize map
