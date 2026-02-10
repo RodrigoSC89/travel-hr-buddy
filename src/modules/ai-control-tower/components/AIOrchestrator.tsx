@@ -178,11 +178,11 @@ function AgentCard({ agent }: { agent: AIAgent }) {
 
 function DecisionCard({ decision }: { decision: AIDecision }) {
   const handleApprove = () => {
-    toast.success("Decisão aprovada e executando...");
+    toast.info("Aprovação de decisão IA", { description: "Workflow de aprovação de decisões autônomas em implantação. As decisões são registradas para auditoria. ETA: Q3/2026." });
   };
 
   const handleReject = () => {
-    toast.info("Decisão rejeitada");
+    toast.info("Rejeição de decisão IA", { description: "Workflow de rejeição em implantação. A decisão será marcada como rejeitada no audit trail. ETA: Q3/2026." });
   };
 
   return (

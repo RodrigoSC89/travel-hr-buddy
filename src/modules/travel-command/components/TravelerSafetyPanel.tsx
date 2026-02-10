@@ -378,7 +378,7 @@ export const TravelerSafetyPanel: React.FC = () => {
                 <CardDescription>Rastreamento e status em tempo real</CardDescription>
               </div>
               <div className="flex gap-2">
-                <Button variant="outline" size="sm" onClick={() => toast.success("Broadcast enviado", { description: "Mensagem de check-in enviada a todos os viajantes ativos." })}>
+                <Button variant="outline" size="sm" onClick={() => toast.info("Broadcast", { description: "Envio de mensagens em massa para viajantes em implantação. Utilize canais de comunicação diretos (telefone/email). ETA: Q3/2026." })}>
                   <Radio className="h-4 w-4 mr-2" />
                   Broadcast
                 </Button>
@@ -536,7 +536,7 @@ export const TravelerSafetyPanel: React.FC = () => {
                               {alert.actions.map((action, idx) => (
                                 <Button key={idx} size="sm" variant={idx === 0 ? "default" : "outline"} className="h-7 text-xs" onClick={() => {
                                   if (action.action === "call") { window.open("tel:+5521999999999"); }
-                                  else if (action.action === "sms") { toast.success("SMS enviado", { description: `Mensagem enviada para ${alert.affectedTravelers.join(", ")}` }); }
+                                  else if (action.action === "sms") { toast.info("SMS", { description: `Envio de SMS em implantação. Contate diretamente: ${alert.affectedTravelers.join(", ")}. ETA: Q3/2026.` }); }
                                   else if (action.action === "contact") { toast.info("Contato iniciado", { description: `Entrando em contato com ${alert.affectedTravelers.join(", ")}` }); }
                                   else if (action.action === "view_forecast") { toast.info("Previsão meteorológica", { description: alert.message }); }
                                   else if (action.action === "protocol") { toast.warning("Protocolo de emergência acionado", { description: `Protocolo ativado para ${alert.affectedTravelers.join(", ")}. Equipe de segurança notificada.` }); }
@@ -679,7 +679,7 @@ export const TravelerSafetyPanel: React.FC = () => {
               <PhoneCall className="h-6 w-6" />
               <span>Ligar para Viajante</span>
             </Button>
-            <Button variant="outline" className="h-20 flex flex-col gap-2 border-red-300" onClick={() => toast.success("SMS em massa enviado", { description: `Mensagem de emergência enviada para ${fallbackTravelers.length} viajantes ativos.` })}>
+            <Button variant="outline" className="h-20 flex flex-col gap-2 border-red-300" onClick={() => toast.info("SMS em Massa", { description: `Envio de SMS em massa em implantação. ${fallbackTravelers.length} viajantes ativos identificados. Utilize canais diretos. ETA: Q3/2026.` })}>
               <MessageSquare className="h-6 w-6" />
               <span>Enviar SMS em Massa</span>
             </Button>
