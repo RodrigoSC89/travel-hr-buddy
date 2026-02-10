@@ -251,9 +251,11 @@ export default function CargoManagementV2() {
   ];
 
   const cargoActions = [
-    { label: "Ver Detalhes", icon: Eye, onClick: (item: CargoItem) => toast.info(`Detalhes: ${item.cargo_name}`) },
+    { label: "Ver Detalhes", icon: Eye, onClick: (item: CargoItem) => toast.info(`${item.cargo_name}`, { description: `Tipo: ${item.cargo_type} | Peso: ${item.weight_mt} MT | Vol: ${item.volume_cbm} CBM | Posição: ${item.stowage_position} | BL: ${item.bill_of_lading} | Origem: ${item.origin_port} → Destino: ${item.destination_port}${item.imo_class ? ` | IMO: ${item.imo_class}` : ''}${item.un_number ? ` | UN: ${item.un_number}` : ''}`, duration: 8000 }) },
     { label: "Analisar com IA", icon: Brain, onClick: (item: CargoItem) => analyzeCargoWithAI(item.id) },
-    { label: "Editar", icon: Edit, onClick: (item: CargoItem) => toast.info(`Editando: ${item.cargo_name}`) },
+    { label: "Editar", icon: Edit, onClick: (item: CargoItem) => {
+      toast.info(`Editando: ${item.cargo_name}`, { description: `Tipo: ${item.cargo_type} | Peso: ${item.weight_mt} MT | Posição: ${item.stowage_position} | BL: ${item.bill_of_lading}. Use o formulário de Nova Carga para alterar.`, duration: 6000 });
+    }},
   ];
 
   return (

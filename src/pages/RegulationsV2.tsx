@@ -90,8 +90,8 @@ export default function RegulationsV2() {
               toast.success("Dados atualizados");
             }}
             actions={[
-              { label: "Consultar IA", icon: Brain, onClick: (item) => toast.success(`Consultando ${item.reg_code}`) },
-              { label: "Ver Detalhes", icon: FileText, onClick: (item) => toast.info(`Abrindo ${item.title}`) },
+              { label: "Consultar IA", icon: Brain, onClick: (item) => toast.success(`Consultando ${item.reg_code}`, { description: item.description || item.title }) },
+              { label: "Ver Detalhes", icon: FileText, onClick: (item) => toast.info(item.title, { description: `Código: ${item.reg_code} | Categoria: ${item.category} | ${item.description || 'Sem descrição adicional'}`, duration: 6000 }) },
             ]}
             filters={[
               { key: "category", label: "Categoria", options: [

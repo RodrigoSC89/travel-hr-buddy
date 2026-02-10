@@ -259,7 +259,11 @@ export function FinanceExecutiveDashboard() {
                 <p className="text-sm font-bold text-right mt-2">{formatFullCurrency(item.amount)}</p>
               </div>
             ))}
-            <Button variant="outline" className="w-full mt-2" onClick={() => toast.info("Ações Pendentes", { description: `${pendingItems.length} itens pendentes exibidos. Use o módulo Financeiro para gerenciar faturas e aprovações.` })}>Ver Todas</Button>
+            <Button variant="outline" className="w-full mt-2" onClick={() => {
+              const nav = document.querySelector('[data-tab="approvals"]') as HTMLElement;
+              if (nav) nav.click();
+              else toast.info(`${pendingItems.length} itens pendentes. Acesse a aba Aprovações no Centro Financeiro.`);
+            }}>Ver Todas</Button>
           </CardContent>
         </Card>
       </div>

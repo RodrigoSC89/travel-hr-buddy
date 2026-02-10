@@ -114,8 +114,8 @@ export default function RiskMatrixV2() {
             searchable
             onRefresh={() => toast.success("Dados atualizados")}
             actions={[
-              { label: "Analisar IA", icon: Brain, onClick: (item) => toast.success(`Analisando ${item.title}`) },
-              { label: "Mitigar", icon: Shield, onClick: (item) => toast.info(`Plano: ${item.mitigation}`) },
+              { label: "Analisar IA", icon: Brain, onClick: (item) => toast.success(`Analisando risco: ${item.title}`, { description: `Probabilidade: ${item.probability} | Impacto: ${item.impact} | Mitigação: ${item.mitigation}` }) },
+              { label: "Mitigar", icon: Shield, onClick: (item) => toast.info(`Plano de Mitigação: ${item.title}`, { description: item.mitigation || 'Nenhum plano definido', duration: 6000 }) },
             ]}
           />
         </TabsContent>

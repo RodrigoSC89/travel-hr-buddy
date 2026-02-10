@@ -121,10 +121,10 @@ export default function EvidencesV2() {
             searchPlaceholder="Buscar evidências..."
             onRefresh={() => toast.success("Dados atualizados")}
             actions={[
-              { label: "Visualizar", icon: FileText, onClick: (item) => toast.info(`Abrindo ${item.title}`) },
+              { label: "Visualizar", icon: FileText, onClick: (item) => toast.info(item.title, { description: `Categoria: ${item.category} | Status: ${item.status} | Módulo: ${item.module || 'N/A'}`, duration: 6000 }) },
               { label: "Aprovar", icon: CheckCircle, onClick: (item) => {
                 setEvidences(prev => prev.map(e => e.id === item.id ? { ...e, status: 'approved' } : e));
-                toast.success(`Evidência aprovada`);
+                toast.success(`Evidência "${item.title}" aprovada`);
               }},
             ]}
             filters={[
