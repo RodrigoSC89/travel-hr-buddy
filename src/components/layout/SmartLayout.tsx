@@ -8,6 +8,7 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { mobileClasses } from "@/styles/mobile-ui-kit";
 import { SkipToContent } from "@/components/ui/AccessibleButton";
 import { useScrollRestoration } from "@/hooks/useScrollRestoration";
+import { SmoothPageTransition } from "@/components/ui/SmoothPageTransition";
 
 // Lazy load notification prompt and offline status
 const NotificationPrompt = lazy(() => import("@/components/notifications/NotificationPrompt"));
@@ -52,9 +53,11 @@ export function SmartLayout() {
               tabIndex={-1}
               className={`flex-1 overflow-y-auto bg-background ${mobileClasses.responsivePadding} focus:outline-none`}
             >
-              <Suspense fallback={<LoadingFallback />}>
-                <Outlet />
-              </Suspense>
+              <SmoothPageTransition>
+                <Suspense fallback={<LoadingFallback />}>
+                  <Outlet />
+                </Suspense>
+              </SmoothPageTransition>
             </main>
           </div>
 
