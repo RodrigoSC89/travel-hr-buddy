@@ -20,7 +20,6 @@ const BiometricAuth = typeof window !== "undefined" && (window as any).Capacitor
 type BiometryType = "none" | "touchId" | "faceId" | "fingerprintAuthentication" | "faceAuthentication" | "irisAuthentication";
 import { structuredLogger } from "@/lib/logger/structured-logger";
 import { supabase } from "@/integrations/supabase/client";
-import { logger } from '@/lib/logger';
 
 interface BiometricAuthResult {
   success: boolean;
@@ -256,7 +255,7 @@ export class BiometricAuthService {
       return btoa(String.fromCharCode(...combined));
     } catch (error) {
       // Fallback to base64 if Web Crypto not available
-      logger.warn('[BiometricAuth] Crypto API unavailable, using fallback encoding');
+      structuredLogger.warn('Crypto API unavailable, using fallback encoding', { module: 'BiometricAuth' });
       const json = JSON.stringify(token);
       return btoa(json);
     }
@@ -289,7 +288,7 @@ export class BiometricAuthService {
       return JSON.parse(json);
     } catch (error) {
       // Fallback to base64 if decryption fails (legacy tokens)
-      logger.warn('[BiometricAuth] Decryption failed, trying fallback');
+      structuredLogger.warn('Decryption failed, trying fallback', { module: 'BiometricAuth' });
       const json = atob(encrypted);
       return JSON.parse(json);
     }
