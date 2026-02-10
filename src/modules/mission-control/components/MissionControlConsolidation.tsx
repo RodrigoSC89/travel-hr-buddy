@@ -5,6 +5,7 @@
  */
 
 import React, { useState, useEffect, lazy, Suspense } from "react";
+import { ShipLoader } from "@/components/ui/ship-loader";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
@@ -189,25 +190,25 @@ export const MissionControlConsolidation: React.FC = () => {
             </TabsList>
 
             <TabsContent value="workflows" className="mt-6">
-              <Suspense fallback={<div className="flex items-center justify-center p-8"><div className="animate-spin h-8 w-8 border-4 border-primary border-t-transparent rounded-full" /></div>}>
+              <Suspense fallback={<ShipLoader size="md" />}>
                 <MissionPlanner />
               </Suspense>
             </TabsContent>
 
             <TabsContent value="logs" className="mt-6">
-              <Suspense fallback={<div className="flex items-center justify-center p-8"><div className="animate-spin h-8 w-8 border-4 border-primary border-t-transparent rounded-full" /></div>}>
+              <Suspense fallback={<ShipLoader size="md" />}>
                 <MissionLogs logs={[]} onRefresh={loadMissionStats} />
               </Suspense>
             </TabsContent>
 
             <TabsContent value="ai-autonomy" className="mt-6">
-              <Suspense fallback={<div className="flex items-center justify-center p-8"><div className="animate-spin h-8 w-8 border-4 border-primary border-t-transparent rounded-full" /></div>}>
+              <Suspense fallback={<ShipLoader size="md" />}>
                 <AICommander />
               </Suspense>
             </TabsContent>
 
             <TabsContent value="analytics" className="mt-6">
-              <Suspense fallback={<div className="flex items-center justify-center p-8"><div className="animate-spin h-8 w-8 border-4 border-primary border-t-transparent rounded-full" /></div>}>
+              <Suspense fallback={<ShipLoader size="md" />}>
                 <KPIDashboard modules={[]} />
               </Suspense>
             </TabsContent>

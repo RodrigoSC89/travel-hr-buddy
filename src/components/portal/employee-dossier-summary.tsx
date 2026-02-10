@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { ShipLoader } from "@/components/ui/ship-loader";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -214,12 +215,7 @@ export const EmployeeDossierSummary: React.FC = () => {
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center p-8">
-        <div className="text-center">
-          <div className="animate-spin h-8 w-8 border-4 border-primary border-t-transparent rounded-full mx-auto mb-4"></div>
-          <p className="text-muted-foreground">Carregando dossiê...</p>
-        </div>
-      </div>
+      <ShipLoader size="md" label="Carregando dossiê..." />
     );
   }
 

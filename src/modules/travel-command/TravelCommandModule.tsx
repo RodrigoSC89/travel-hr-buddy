@@ -4,6 +4,7 @@
  */
 
 import React, { Suspense, lazy } from "react";
+import { ShipLoader } from "@/components/ui/ship-loader";
 import { ModulePageWrapper } from "@/components/ui/module-page-wrapper";
 import { ModuleHeader } from "@/components/ui/module-header";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -23,11 +24,7 @@ const CrewTrackingPanel = lazy(() => import("./components/CrewTrackingPanel"));
 const TravelerSafetyPanel = lazy(() => import("./components/TravelerSafetyPanel"));
 const TravelAnalyticsPanel = lazy(() => import("./components/TravelAnalyticsPanel"));
 
-const LoadingFallback = () => (
-  <div className="h-96 flex items-center justify-center">
-    <div className="animate-spin h-8 w-8 border-4 border-primary border-t-transparent rounded-full" />
-  </div>
-);
+const LoadingFallback = () => <ShipLoader size="md" className="h-96" />;
 
 const TravelCommandModule = () => {
   return (

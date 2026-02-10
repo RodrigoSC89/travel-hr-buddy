@@ -5,6 +5,7 @@
 
 import React from 'react';
 import { Skeleton } from '@/components/ui/skeleton';
+import { ShipLoader } from '@/components/ui/ship-loader';
 
 interface LoadingStateProps {
   /** Type of skeleton to render */
@@ -17,18 +18,13 @@ interface LoadingStateProps {
 export function LoadingState({ variant = 'spinner', count = 3, className = '' }: LoadingStateProps) {
   if (variant === 'spinner') {
     return (
-      <div className={`flex items-center justify-center py-12 ${className}`} data-testid="loading-state">
-        <div className="animate-spin h-8 w-8 border-4 border-primary border-t-transparent rounded-full" />
-      </div>
+      <ShipLoader size="md" className={className} />
     );
   }
 
   if (variant === 'inline') {
     return (
-      <div className={`flex items-center gap-2 ${className}`} data-testid="loading-state">
-        <div className="animate-spin h-4 w-4 border-2 border-primary border-t-transparent rounded-full" />
-        <span className="text-sm text-muted-foreground">Carregando...</span>
-      </div>
+      <ShipLoader size="sm" label="Carregando..." className={className} />
     );
   }
 
