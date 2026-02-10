@@ -408,7 +408,7 @@ export function EmergencyMode() {
                 <Button 
                   className="flex-1 bg-red-600"
                   onClick={() => {
-                    // Navigate away from emergency mode
+                    // Navigate away from emergency mode (full reload to clear emergency state)
                     window.location.href = '/';
                   }}
                 >

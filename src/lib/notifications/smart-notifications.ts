@@ -5,6 +5,7 @@
 
 import { useState, useEffect, useCallback } from 'react';
 import { logger } from '@/lib/logger';
+import { spaNavigate } from '@/lib/navigation/spa-navigate';
 
 export type NotificationPriority = 'urgent' | 'high' | 'normal' | 'low';
 export type NotificationCategory = 
@@ -258,7 +259,7 @@ class SmartNotificationManager {
       native.onclick = () => {
         window.focus();
         if (notification.actionUrl) {
-          window.location.href = notification.actionUrl;
+          spaNavigate(notification.actionUrl);
         }
         this.markAsRead(notification.id);
         native.close();

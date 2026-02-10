@@ -7,6 +7,7 @@
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { logger } from "@/lib/logger";
+import { spaNavigate } from "@/lib/navigation/spa-navigate";
 import type { Database } from "@/integrations/supabase/types";
 
 type TableName = keyof Database["public"]["Tables"];
@@ -47,7 +48,7 @@ class ModuleIntegrationService {
   private registerDefaultHandlers() {
     this.registerAction("navigate", async (payload) => {
       const path = payload.path as string | undefined;
-      if (path) window.location.href = path;
+      if (path) spaNavigate(path);
       return { success: true };
     });
 

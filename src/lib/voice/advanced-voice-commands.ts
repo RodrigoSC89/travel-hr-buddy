@@ -5,6 +5,7 @@
 
 import { useState, useEffect, useCallback, useRef } from 'react';
 import { hapticFeedback } from '@/lib/ux/haptic-feedback';
+import { spaNavigate } from '@/lib/navigation/spa-navigate';
 
 interface VoiceCommand {
   id: string;
@@ -118,7 +119,7 @@ class AdvancedVoiceEngine {
     this.registerCommand({
       id: 'nav-dashboard',
       patterns: ['ir para dashboard', 'abrir dashboard', 'mostrar dashboard', 'início'],
-      action: () => window.location.href = '/dashboard',
+      action: () => spaNavigate('/dashboard'),
       description: 'Navegar para o Dashboard',
       category: 'navigation',
     });
@@ -126,7 +127,7 @@ class AdvancedVoiceEngine {
     this.registerCommand({
       id: 'nav-travel',
       patterns: ['ir para viagens', 'abrir viagens', 'módulo de viagens'],
-      action: () => window.location.href = '/travel-command',
+      action: () => spaNavigate('/travel-command'),
       description: 'Navegar para Travel Command Center',
       category: 'navigation',
     });
@@ -134,7 +135,7 @@ class AdvancedVoiceEngine {
     this.registerCommand({
       id: 'nav-hr',
       patterns: ['ir para rh', 'recursos humanos', 'abrir rh', 'gestão de pessoas'],
-      action: () => window.location.href = '/hr',
+      action: () => spaNavigate('/hr'),
       description: 'Navegar para RH',
       category: 'navigation',
     });
@@ -142,7 +143,7 @@ class AdvancedVoiceEngine {
     this.registerCommand({
       id: 'nav-fleet',
       patterns: ['ir para frota', 'abrir frota', 'embarcações', 'navios'],
-      action: () => window.location.href = '/fleet',
+      action: () => spaNavigate('/fleet'),
       description: 'Navegar para Frota',
       category: 'navigation',
     });
@@ -150,7 +151,7 @@ class AdvancedVoiceEngine {
     this.registerCommand({
       id: 'nav-documents',
       patterns: ['ir para documentos', 'abrir documentos', 'meus documentos'],
-      action: () => window.location.href = '/documents',
+      action: () => spaNavigate('/documents'),
       description: 'Navegar para Documentos',
       category: 'navigation',
     });

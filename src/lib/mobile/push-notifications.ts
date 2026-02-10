@@ -8,6 +8,7 @@ import { PushNotifications, Token, PushNotificationSchema, ActionPerformed } fro
 import { LocalNotifications } from '@capacitor/local-notifications';
 import { supabase } from '@/integrations/supabase/client';
 import { logger } from '@/lib/logger';
+import { spaNavigate } from '@/lib/navigation/spa-navigate';
 
 interface NotificationPayload {
   title: string;
@@ -106,8 +107,8 @@ class PushNotificationManager {
         
         const data = action.notification.data;
         if (data?.route && typeof data.route === 'string') {
-          // Navigate to the specified route
-          window.location.href = data.route;
+          // Navigate to the specified route (SPA-safe)
+          spaNavigate(data.route);
         }
       }
     );
