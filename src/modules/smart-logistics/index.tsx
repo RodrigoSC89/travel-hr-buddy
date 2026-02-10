@@ -197,7 +197,7 @@ export default function SmartLogistics() {
             <Brain className={`h-4 w-4 mr-2 ${isAnalyzing ? 'animate-pulse' : ''}`} />
             {isAnalyzing ? "Analisando..." : "Análise IA"}
           </Button>
-          <Button>
+          <Button onClick={() => toast.success("Novo Pedido", { description: "Funcionalidade de criação de pedidos em implantação. Utilize o módulo Procurement." })}>
             <ShoppingCart className="h-4 w-4 mr-2" />
             Novo Pedido
           </Button>

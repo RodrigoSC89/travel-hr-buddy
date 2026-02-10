@@ -229,7 +229,7 @@ export function SupplierPortal() {
                 <Building2 className="h-5 w-5" />
                 Fornecedores
               </CardTitle>
-              <Button size="sm" onClick={() => toast.info("Novo Fornecedor", { description: "Para cadastrar um novo fornecedor, acesse Compras > Fornecedores ou utilize o módulo de Procurement." })}>
+              <Button size="sm" onClick={() => toast.success("Novo Fornecedor", { description: "Funcionalidade em implantação. Utilize o módulo Procurement para cadastro completo. ETA: Q3/2026." })}>
                 <Plus className="h-4 w-4 mr-1" />
                 Novo
               </Button>

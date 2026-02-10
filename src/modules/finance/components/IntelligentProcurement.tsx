@@ -20,6 +20,7 @@ import {
 import { useFinanceProcurementAI, SupplierRecommendation } from '@/hooks/useFinanceProcurementAI';
 import { motion } from 'framer-motion';
 import { supabase } from '@/integrations/supabase/client';
+import { toast } from 'sonner';
 
 interface PurchaseOrder {
   id: string;
@@ -121,7 +122,7 @@ export function IntelligentProcurement() {
             IA recomenda fornecedores e otimiza compras automaticamente
           </p>
         </div>
-        <Button>
+        <Button onClick={() => toast.success("Nova Requisição", { description: "Funcionalidade de requisição de compras em implantação. Utilize o módulo Procurement para criar solicitações. ETA: Q3/2026." })}>
           <Package className="h-4 w-4 mr-2" />
           Nova Requisição
         </Button>
@@ -270,7 +271,7 @@ export function IntelligentProcurement() {
                         </p>
                       </div>
 
-                      <Button className="w-full" variant={idx === 0 ? 'default' : 'outline'}>
+                      <Button className="w-full" variant={idx === 0 ? 'default' : 'outline'} onClick={() => toast.success(`Fornecedor ${rec.supplierName} selecionado`, { description: `Score: ${rec.overallScore}/100 | Prazo: ${rec.leadTime} dias | Preço: R$ ${rec.price.toLocaleString()}` })}>
                         Selecionar Fornecedor
                       </Button>
                     </CardContent>

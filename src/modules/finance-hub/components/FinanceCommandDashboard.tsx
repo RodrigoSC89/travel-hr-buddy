@@ -418,11 +418,16 @@ export default function FinanceCommandDashboard() {
                   onChange={(e) => setSearchTerm(e.target.value)}
                 />
               </div>
-              <Button size="sm" variant="outline" onClick={() => toast.info("Filtros: Tipo (Receita/Despesa), Status (Aprovado/Pendente), Período")}>
-                <Filter className="h-4 w-4 mr-2" />
-                Filtros
+              <Button size="sm" variant="outline" onClick={() => {
+                const csv = ["Descrição;Valor;Tipo;Status;Data", ...recentTransactions.map(t => `${t.description};${t.amount};${t.type};${t.status};${t.date}`)].join('\n');
+                const blob = new Blob(['\uFEFF' + csv], { type: 'text/csv;charset=utf-8;' });
+                const url = URL.createObjectURL(blob); const a = document.createElement('a'); a.href = url; a.download = `transacoes-${new Date().toISOString().slice(0,10)}.csv`; a.click(); URL.revokeObjectURL(url);
+                toast.success("Transações exportadas como CSV");
+              }}>
+                <Download className="h-4 w-4 mr-2" />
+                Exportar
               </Button>
-              <Button size="sm" className="gap-2" onClick={() => toast.info("Para registrar transações, utilize o módulo Finance > Dashboard ou crie via Aprovações")}>
+              <Button size="sm" className="gap-2" onClick={() => toast.success("Nova transação", { description: "Utilize as Aprovações Pendentes acima para registrar novas solicitações financeiras." })}>
                 <Plus className="h-4 w-4" />
                 Nova
               </Button>

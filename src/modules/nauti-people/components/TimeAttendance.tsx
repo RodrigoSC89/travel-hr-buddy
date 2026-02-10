@@ -3,6 +3,7 @@
  */
 
 import React, { useState } from 'react';
+import { toast } from 'sonner';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -214,7 +215,7 @@ const TimeAttendance: React.FC = () => {
                 </SelectContent>
               </Select>
             </div>
-            <Button>
+            <Button onClick={() => { toast.success("Exportando registros de ponto..."); }}>
               <Download className="w-4 h-4 mr-2" />
               Exportar
             </Button>
