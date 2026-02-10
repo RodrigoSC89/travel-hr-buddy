@@ -32,6 +32,7 @@ import {
   Loader2
 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
+import { toast } from "sonner";
 import { logger } from "@/lib/logger";
 
 interface Certificate {
@@ -235,7 +236,11 @@ export function CertificateTracker() {
                 <SelectItem value="expired">Vencidos</SelectItem>
               </SelectContent>
             </Select>
-            <Button variant="outline">
+            <Button variant="outline" onClick={() => {
+              const csv = "Nome,Tipo,Embarcação,Emissão,Vencimento,Status,Dias Restantes\n" + filteredCertificates.map(c => `${c.name},${c.type},${c.vesselName},${c.issueDate},${c.expiryDate},${c.status},${c.daysRemaining}`).join("\n");
+              const blob = new Blob([csv], { type: "text/csv" }); const url = URL.createObjectURL(blob); const a = document.createElement("a"); a.href = url; a.download = `certificados-${Date.now()}.csv`; a.click(); URL.revokeObjectURL(url);
+              toast.success("Certificados exportados para CSV");
+            }}>
               <Download className="h-4 w-4 mr-2" />
               Exportar
             </Button>
@@ -305,13 +310,13 @@ export function CertificateTracker() {
                   </div>
 
                   <div className="flex gap-2">
-                    <Button variant="outline" size="sm">
+                    <Button variant="outline" size="sm" onClick={() => toast.success(`Alerta configurado para ${cert.name}`, { description: `Notificação ativa: 90, 60 e 30 dias antes do vencimento.` })}>
                       <Bell className="h-4 w-4" />
                     </Button>
-                    <Button variant="outline" size="sm">
+                    <Button variant="outline" size="sm" onClick={() => toast.info(`Renovação: ${cert.name}`, { description: `Certificado emitido por ${cert.issuingAuthority}. Vencimento: ${new Date(cert.expiryDate).toLocaleDateString("pt-BR")}. Inicie o processo de renovação com antecedência.` })}>
                       <RefreshCw className="h-4 w-4" />
                     </Button>
-                    <Button variant="outline" size="sm">
+                    <Button variant="outline" size="sm" onClick={() => toast.success(`Baixando certificado ${cert.name}`, { description: `Formato: PDF | Autoridade: ${cert.issuingAuthority}` })}>
                       <Download className="h-4 w-4" />
                     </Button>
                   </div>

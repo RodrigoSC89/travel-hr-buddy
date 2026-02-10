@@ -378,7 +378,7 @@ export default function ComplianceRegulamentos() {
                     </div>
                     <div className="text-xs text-muted-foreground">Requisitos</div>
                   </div>
-                  <Button variant="outline" size="sm">
+                  <Button variant="outline" size="sm" onClick={() => toast.info(`${reg.name}`, { description: `${reg.completedRequirements}/${reg.requirements} requisitos atendidos. Jurisdição: ${reg.jurisdiction}. Código: ${reg.code}` })}>
                     <FileText className="h-4 w-4 mr-1" />
                     Detalhes
                   </Button>

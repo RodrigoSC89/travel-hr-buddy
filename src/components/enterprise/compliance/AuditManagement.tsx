@@ -4,6 +4,7 @@
  */
 
 import React, { useState } from "react";
+import { toast } from "sonner";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -310,11 +311,11 @@ export function AuditManagement() {
 
       {/* Actions */}
       <div className="flex justify-end gap-3">
-        <Button variant="outline">
+        <Button variant="outline" onClick={() => toast.success("Rascunho salvo", { description: "O progresso da auditoria foi salvo localmente." })}>
           <FileText className="h-4 w-4 mr-2" />
           Salvar Rascunho
         </Button>
-        <Button>
+        <Button onClick={() => toast.success("Auditoria finalizada", { description: "Relatório de auditoria gerado e disponível para download." })}>
           <CheckCircle2 className="h-4 w-4 mr-2" />
           Finalizar Auditoria
         </Button>

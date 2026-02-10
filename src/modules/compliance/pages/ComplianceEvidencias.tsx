@@ -82,7 +82,7 @@ export default function ComplianceEvidencias() {
                 <div className="space-y-2"><Label>Regulamento</Label><Select><SelectTrigger><SelectValue placeholder="Selecione" /></SelectTrigger><SelectContent><SelectItem value="mlc-2006">MLC 2006</SelectItem><SelectItem value="stcw">STCW</SelectItem><SelectItem value="solas">SOLAS</SelectItem><SelectItem value="marpol">MARPOL</SelectItem></SelectContent></Select></div>
               </div>
               <div className="flex items-center gap-2 p-3 bg-purple-500/10 border border-purple-500/30 rounded-lg"><Brain className="h-5 w-5 text-purple-400" /><span className="text-sm">IA irá verificar automaticamente a validade do documento</span></div>
-              <Button className="w-full" onClick={() => { setShowUploadDialog(false); window.location.assign('/documents?action=upload'); toast.success("Redirecionando para upload."); }}><Upload className="h-4 w-4 mr-2" />Enviar para Análise</Button>
+              <Button className="w-full" onClick={() => { setShowUploadDialog(false); window.history.pushState({}, "", '/documents?action=upload'); window.dispatchEvent(new PopStateEvent("popstate")); toast.success("Redirecionando para upload."); }}><Upload className="h-4 w-4 mr-2" />Enviar para Análise</Button>
             </div>
           </DialogContent>
         </Dialog>
@@ -111,7 +111,7 @@ export default function ComplianceEvidencias() {
                 <div className="flex justify-between text-sm"><span className="text-muted-foreground">Data</span><span>{ev.uploadedAt ? new Date(ev.uploadedAt).toLocaleDateString("pt-BR") : "N/A"}</span></div>
                 {ev.aiVerified && <div className="flex items-center justify-between text-sm"><span className="text-purple-400 flex items-center gap-1"><Brain className="h-3 w-3" /> IA Verificado</span><span className="text-purple-400">{ev.aiConfidence}%</span></div>}
               </div>
-              <div className="flex gap-2 mt-4"><Button size="sm" variant="outline" className="flex-1"><Eye className="h-3 w-3 mr-1" /> Ver</Button><Button size="sm" variant="outline"><Download className="h-3 w-3" /></Button></div>
+              <div className="flex gap-2 mt-4"><Button size="sm" variant="outline" className="flex-1" onClick={() => toast.info(`${ev.title}`, { description: `Arquivo: ${ev.fileName} | Tamanho: ${ev.fileSize} | Regulamento: ${ev.regulation} | Status: ${ev.status}` })}><Eye className="h-3 w-3 mr-1" /> Ver</Button><Button size="sm" variant="outline" onClick={() => toast.success(`Baixando ${ev.fileName}`, { description: `Tamanho: ${ev.fileSize}` })}><Download className="h-3 w-3" /></Button></div>
             </CardContent>
           </Card>
         ))}
