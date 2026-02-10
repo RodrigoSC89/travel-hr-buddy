@@ -116,19 +116,19 @@ export function VesselTrackingCard({ contractId }: VesselTrackingCardProps) {
     try {
       const { data, error } = await supabase
         .from('vessels')
-        .select('id, name, imo_number, current_latitude, current_longitude, current_speed, current_heading, status')
+        .select('id, name, imo_number, status')
         .limit(20);
 
       if (!error && data && data.length > 0) {
-        setVessels(data.map((v: any) => ({
+        setVessels(data.map((v) => ({
           id: v.id,
           name: v.name || 'Embarcação',
           imo: v.imo_number || '',
           mmsi: '',
-          lat: v.current_latitude || -23.96,
-          lng: v.current_longitude || -46.33,
-          heading: v.current_heading || 0,
-          speed: v.current_speed || 0,
+          lat: -23.96,
+          lng: -46.33,
+          heading: 0,
+          speed: 0,
           status: v.status === 'active' ? 'underway' as const : 'moored' as const,
           destination: '',
           eta: '-',
@@ -149,11 +149,11 @@ export function VesselTrackingCard({ contractId }: VesselTrackingCardProps) {
   const getStatusBadge = (status: string) => {
     switch (status) {
       case 'underway':
-        return <Badge className="bg-green-500">Em Navegação</Badge>;
+        return <Badge className="bg-primary">Em Navegação</Badge>;
       case 'anchored':
-        return <Badge className="bg-yellow-500">Fundeado</Badge>;
+        return <Badge className="bg-warning text-warning-foreground">Fundeado</Badge>;
       case 'moored':
-        return <Badge className="bg-blue-500">Atracado</Badge>;
+        return <Badge className="bg-secondary">Atracado</Badge>;
       case 'not_under_command':
         return <Badge variant="destructive">Sem Comando</Badge>;
       default:
@@ -258,7 +258,7 @@ export function VesselTrackingCard({ contractId }: VesselTrackingCardProps) {
             </div>
           </CardHeader>
           <CardContent>
-            <div className="relative h-[450px] rounded-lg border bg-gradient-to-br from-blue-900/20 to-blue-500/10 overflow-hidden">
+            <div className="relative h-[450px] rounded-lg border bg-gradient-to-br from-primary/20 to-secondary/10 overflow-hidden">
               {/* Simple Map Representation */}
               <div className="absolute inset-0 flex items-center justify-center">
                 <div className="text-center text-muted-foreground">
@@ -273,7 +273,7 @@ export function VesselTrackingCard({ contractId }: VesselTrackingCardProps) {
                 <div
                   key={vessel.id}
                   className={`absolute w-6 h-6 rounded-full flex items-center justify-center cursor-pointer transition-all
-                    ${vessel.status === 'underway' ? 'bg-green-500' : 'bg-blue-500'}
+                    ${vessel.status === 'underway' ? 'bg-primary' : 'bg-secondary'}
                     ${selectedVessel?.id === vessel.id ? 'ring-2 ring-white scale-125' : ''}
                   `}
                   style={{
@@ -283,7 +283,7 @@ export function VesselTrackingCard({ contractId }: VesselTrackingCardProps) {
                   }}
                   onClick={() => setSelectedVessel(vessel)}
                 >
-                  <Navigation className="h-3 w-3 text-white" />
+                  <Navigation className="h-3 w-3 text-primary-foreground" />
                 </div>
               ))}
 

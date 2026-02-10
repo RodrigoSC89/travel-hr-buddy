@@ -30,11 +30,11 @@ export function ActivityFeed({ activities, maxItems = 10, className, showTimesta
     if (activities) { setItems(activities.slice(0, maxItems)); return; }
     async function fetch() {
       const { data } = await supabase.from("access_logs").select("*").order("timestamp", { ascending: false }).limit(maxItems);
-      const mapped: Activity[] = (data || []).map((d: any) => ({
+      const mapped: Activity[] = (data || []).map((d) => ({
         id: d.id,
         type: d.module_accessed?.includes("fleet") ? "fleet" as const : d.module_accessed?.includes("doc") ? "document" as const : "system" as const,
         action: d.action || "Ação",
-        description: (d.details as any)?.description || d.action || "",
+        description: (d.details as Record<string, unknown>)?.description as string || d.action || "",
         timestamp: new Date(d.timestamp),
         status: d.result === "success" ? "success" as const : d.severity === "high" ? "error" as const : "info" as const,
       }));
