@@ -145,7 +145,24 @@ export function RecordBooks() {
   };
 
   const handleExport = (type: string) => {
-    toast.success(`Exportando ${type} em formato PDF...`);
+    try {
+      const csvContent = type === 'Oil Record Book' 
+        ? oilRecords.map(r => `${r.date},${r.operationType},${r.quantity},${r.unit},${r.verified}`).join('\n')
+        : garbageRecords.map(r => `${r.date},${r.category},${r.estimatedQuantity},${r.disposalMethod},${r.verified}`).join('\n');
+      const header = type === 'Oil Record Book' 
+        ? 'Date,Operation,Volume,Unit,Verified\n' 
+        : 'Date,WasteType,Quantity,DisposalMethod,Verified\n';
+      const blob = new Blob([header + csvContent], { type: 'text/csv' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `${type.replace(/\s+/g, '_').toLowerCase()}_${new Date().toISOString().split('T')[0]}.csv`;
+      a.click();
+      URL.revokeObjectURL(url);
+      toast.success(`${type} exportado com sucesso`);
+    } catch {
+      toast.error(`Erro ao exportar ${type}`);
+    }
   };
 
   return (

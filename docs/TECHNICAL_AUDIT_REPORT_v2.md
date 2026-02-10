@@ -58,9 +58,9 @@
 | P1-001 | ~~`window.location.href` navegação interna~~ ✅ CORRIGIDO (8 arquivos migrados para `spaNavigate`) | ~~43 arquivos~~ Restam: 5 (aceitáveis: error boundaries, OAuth, mailto) | ~~4h~~ |
 | P1-002 | `as any` / `: any` — Sprint 3: corrigidos 10 arquivos de serviço (celestrak, terrastar, starfix, smart-drills) | ~~757 arquivos~~ Em progresso | 1-2 sem |
 | P1-003 | localStorage sem encryption (dados IA) | 216 arquivos | 4h |
-| P1-004 | 3 exports com toast sem geração real | 3 arquivos | 2h |
-| P1-005 | VR/AR "Em implantação" sem feature flag | 1 arquivo | 15m |
-| P1-006 | ModulesGrid "Em Implantação" sem FF | 1 arquivo | 1h |
+| P1-004 | ~~3 exports com toast sem geração real~~ ✅ CORRIGIDO (RecordBooks, AutoScoringEngine, OVIDReports agora geram Blob real) | ~~3 arquivos~~ | ~~2h~~ |
+| P1-005 | ~~VR/AR "Em implantação" sem feature flag~~ ✅ CORRIGIDO (botão disabled + ETA Q3/2026) | ~~1 arquivo~~ | ~~15m~~ |
+| P1-006 | ~~ModulesGrid "Em Implantação" sem FF~~ ✅ CORRIGIDO (exibe ETA "Q3/2026") | ~~1 arquivo~~ | ~~1h~~ |
 | P1-007 | Admin pages com mock data | 3 arquivos | 4h |
 | P1-008 | ~~ScheduledReports fallback mock silencioso~~ ✅ CORRIGIDO | ~~1 arquivo~~ | ~~30m~~ |
 

@@ -23,7 +23,42 @@ export const OVIDReports: React.FC<OVIDReportsProps> = ({
   answers,
 }) => {
   const handleExport = (format: string) => {
-    toast.success(`Exportando relatório em formato ${format.toUpperCase()}...`);
+    try {
+      const reportData = {
+        vessel: vesselName,
+        imo: imoNumber,
+        inspector: inspectorName,
+        date: inspectionDate,
+        complianceScore: answeredCount > 0 ? Math.round(((status.compliant + status.notApplicable) / answeredCount) * 100) : 0,
+        status,
+        answers,
+        exportedAt: new Date().toISOString(),
+      };
+
+      let blob: Blob;
+      let filename: string;
+
+      if (format === 'json') {
+        blob = new Blob([JSON.stringify(reportData, null, 2)], { type: 'application/json' });
+        filename = `ovid-report-${imoNumber}_${inspectionDate}.json`;
+      } else {
+        // CSV for xlsx/pdf fallback
+        const rows = Object.entries(answers).map(([q, a]) => `"${q}","${a.answer || ''}","${a.observation || ''}"`);
+        const csv = `Question,Answer,Observation\n${rows.join('\n')}`;
+        blob = new Blob([csv], { type: 'text/csv' });
+        filename = `ovid-report-${imoNumber}_${inspectionDate}.csv`;
+      }
+
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = filename;
+      a.click();
+      URL.revokeObjectURL(url);
+      toast.success(`Relatório OVID exportado em ${format.toUpperCase()}`);
+    } catch {
+      toast.error('Erro ao exportar relatório');
+    }
   };
 
   const answeredCount = status.compliant + status.nonCompliant + status.notApplicable;
