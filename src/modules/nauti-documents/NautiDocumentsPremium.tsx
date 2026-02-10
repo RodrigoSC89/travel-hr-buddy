@@ -203,7 +203,7 @@ function DocumentsDashboard() {
             </Button>
             <Button className="w-full justify-start gap-2" variant="outline" onClick={() => {
               if (documents.length === 0) { toast.info("Faça upload de um documento primeiro"); return; }
-              toast.success("Análise IA iniciada", { description: `Analisando ${documents.length} documentos via NautilusBrain.` });
+              toast.info("Análise IA", { description: `${documents.length} documentos identificados. Análise em lote via NautilusBrain em implantação. ETA: Q3/2026.` });
             }}>
               <Bot className="h-4 w-4" />
               Análise com IA

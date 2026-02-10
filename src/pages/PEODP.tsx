@@ -36,7 +36,7 @@ const PEODP = () => {
     const planEl = document.getElementById('peo-dp-plan');
     if (planEl) {
       planEl.scrollIntoView({ behavior: 'smooth' });
-      toast.success("Plano Digitalizado", { description: "Navegando para o plano DP" });
+      toast.info("Plano Digitalizado", { description: "Navegando para o plano DP" });
     }
   };
 
@@ -45,9 +45,9 @@ const PEODP = () => {
     const dashboardTab = document.querySelector('[data-value="dashboard"]') as HTMLElement;
     if (dashboardTab) {
       dashboardTab.click();
-      toast.success("Dashboard Gerencial", { description: "Painel de indicadores carregado" });
+      toast.info("Dashboard Gerencial", { description: "Painel de indicadores carregado" });
     } else {
-      toast.success("Dashboard Gerencial", { description: "Painel de indicadores DP" });
+      toast.info("Dashboard Gerencial", { description: "Aba Dashboard não disponível nesta visualização" });
     }
   };
 
@@ -55,9 +55,9 @@ const PEODP = () => {
     const fmeaTab = document.querySelector('[data-value="fmea"]') as HTMLElement;
     if (fmeaTab) {
       fmeaTab.click();
-      toast.success("Integração FMEA", { description: "Análise de modos de falha" });
+      toast.info("Integração FMEA", { description: "Navegando para análise de modos de falha" });
     } else {
-      toast.success("Integração FMEA", { description: "Análise de modos de falha iniciada" });
+      toast.info("Integração FMEA", { description: "Aba FMEA não disponível nesta visualização" });
     }
   };
 
@@ -65,9 +65,9 @@ const PEODP = () => {
     const trialsTab = document.querySelector('[data-value="trials"]') as HTMLElement;
     if (trialsTab) {
       trialsTab.click();
-      toast.success("DP Trials", { description: "Registro de trials de DP" });
+      toast.info("DP Trials", { description: "Navegando para registro de trials" });
     } else {
-      toast.success("DP Trials", { description: "Registro de trials de DP aberto" });
+      toast.info("DP Trials", { description: "Aba Trials não disponível nesta visualização" });
     }
   };
 
@@ -75,9 +75,9 @@ const PEODP = () => {
     const aiTab = document.querySelector('[data-value="ai"]') as HTMLElement;
     if (aiTab) {
       aiTab.click();
-      toast.success("Validação IA", { description: "Validação com inteligência artificial" });
+      toast.info("Validação IA", { description: "Navegando para validação com inteligência artificial" });
     } else {
-      toast.success("Validação IA", { description: "Validação com inteligência artificial iniciada" });
+      toast.info("Validação IA", { description: "Aba IA não disponível nesta visualização" });
     }
   };
 
@@ -85,19 +85,18 @@ const PEODP = () => {
     const riskTab = document.querySelector('[data-value="risk"]') as HTMLElement;
     if (riskTab) {
       riskTab.click();
-      toast.success("Risk Assessment", { description: "Avaliação de riscos DP" });
+      toast.info("Risk Assessment", { description: "Navegando para avaliação de riscos DP" });
     } else {
-      toast.success("Risk Assessment", { description: "Avaliação de riscos DP aberta" });
+      toast.info("Risk Assessment", { description: "Aba Risk não disponível nesta visualização" });
     }
   };
 
   const handleNewPlan = () => {
-    // Trigger create action or open modal
     const createBtn = document.querySelector('[data-action="create-plan"]') as HTMLElement;
     if (createBtn) {
       createBtn.click();
     }
-    toast.success("Novo Plano DP", { description: "Formulário de novo plano aberto" });
+    toast.info("Novo Plano DP", { description: "Criação de planos DP em implantação. ETA: Q3/2026." });
   };
 
   return (
