@@ -27,7 +27,8 @@ interface WorkflowRun {
   triggered_by: string;
 }
 
-// Mock data for demonstration
+// DevOps internal data - no backend table (CI/CD runs are external)
+// Data is illustrative for the admin dashboard
 const mockWorkflowRuns: WorkflowRun[] = [
   {
     id: "1",

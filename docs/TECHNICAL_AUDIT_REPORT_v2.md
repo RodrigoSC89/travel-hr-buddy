@@ -61,7 +61,7 @@
 | P1-004 | ~~3 exports com toast sem geração real~~ ✅ CORRIGIDO (RecordBooks, AutoScoringEngine, OVIDReports agora geram Blob real) | ~~3 arquivos~~ | ~~2h~~ |
 | P1-005 | ~~VR/AR "Em implantação" sem feature flag~~ ✅ CORRIGIDO (botão disabled + ETA Q3/2026) | ~~1 arquivo~~ | ~~15m~~ |
 | P1-006 | ~~ModulesGrid "Em Implantação" sem FF~~ ✅ CORRIGIDO (exibe ETA "Q3/2026") | ~~1 arquivo~~ | ~~1h~~ |
-| P1-007 | Admin pages com mock data | 3 arquivos | 4h |
+| P1-007 | ~~Admin pages com mock data~~ ✅ CORRIGIDO (ci-history/analytics: labeled DevOps-only, AlertsNotificationCenter: migrado para Supabase) | ~~3 arquivos~~ | ~~4h~~ |
 | P1-008 | ~~ScheduledReports fallback mock silencioso~~ ✅ CORRIGIDO | ~~1 arquivo~~ | ~~30m~~ |
 
 ---
@@ -73,7 +73,7 @@
 | P2-001 | ~100 TODOs/FIXMEs legítimos | 2-3 dias |
 | P2-002 | 5 componentes de notificação duplicados | 4h |
 | P2-003 | Communication components duplicados com mock | 2h |
-| P2-004 | Security center com mock alerts/metrics | 2h |
+| P2-004 | ~~Security center com mock alerts/metrics~~ ✅ CORRIGIDO (AlertsNotificationCenter migrado para Supabase) | ~~2h~~ |
 | P2-005 | Crew schedule/MLC com mock data | 2h |
 | P2-006 | Maritime certification com mock | 2h |
 | P2-007 | ~~console.log em prod~~ ✅ MITIGADO — `drop_console: true` no build, 0 em código ativo | ~~1h~~ |
