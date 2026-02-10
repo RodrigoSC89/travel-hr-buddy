@@ -9,10 +9,10 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { useMaritimeChecklists } from "@/hooks/use-maritime-checklists";
 import type { Checklist, ChecklistTemplate } from "./checklist-types";
 
-// Mock data will be replaced by real Supabase data
-const mockChecklists: Checklist[] = [];
+// Fallback data - will be replaced by real Supabase data
+const fallbackChecklists: Checklist[] = [];
 
-const mockTemplates: ChecklistTemplate[] = [
+const fallbackTemplates: ChecklistTemplate[] = [
   {
     id: "template-1",
     name: "DP Inspection Template",
@@ -125,9 +125,9 @@ export const BaseChecklistManager: React.FC<BaseChecklistManagerProps> = ({
     createChecklistFromTemplate
   } = useMaritimeChecklists(userId);
 
-  // Use database data when available, fallback to mock data
-  const checklists = dbChecklists.length > 0 ? dbChecklists : mockChecklists;
-  const templates = dbTemplates.length > 0 ? dbTemplates : mockTemplates;
+  // Use database data when available, fallback to static data
+  const checklists = dbChecklists.length > 0 ? dbChecklists : fallbackChecklists;
+  const templates = dbTemplates.length > 0 ? dbTemplates : fallbackTemplates;
   const [searchTerm, setSearchTerm] = useState("");
   const [statusFilter, setStatusFilter] = useState<string>("all");
   const [typeFilter, setTypeFilter] = useState<string>("all");

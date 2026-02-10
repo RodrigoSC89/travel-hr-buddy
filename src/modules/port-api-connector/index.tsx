@@ -56,7 +56,7 @@ interface APILog {
   details: string;
 }
 
-const mockConnections: PortConnection[] = [
+const fallbackConnections: PortConnection[] = [
   {
     id: "1",
     portName: "Porto de Santos",
@@ -109,7 +109,7 @@ const mockConnections: PortConnection[] = [
   },
 ];
 
-const mockLogs: APILog[] = [
+const fallbackLogs: APILog[] = [
   { id: "1", timestamp: new Date(Date.now() - 60000), port: "Porto de Santos", action: "BERTH_REQUEST", status: "success", responseTime: 234, details: "Solicitação de berço aprovada" },
   { id: "2", timestamp: new Date(Date.now() - 120000), port: "Port of Rotterdam", action: "CARGO_MANIFEST", status: "success", responseTime: 456, details: "Manifesto de carga sincronizado" },
   { id: "3", timestamp: new Date(Date.now() - 180000), port: "Port of Hamburg", action: "CUSTOMS_CLEARANCE", status: "error", responseTime: 5000, details: "Timeout na conexão" },
@@ -119,8 +119,8 @@ const mockLogs: APILog[] = [
 
 export default function PortAPIConnector() {
   const { integratePort, isLoading: aiLoading } = useNautilusEnhancementAI();
-  const [connections, setConnections] = useState<PortConnection[]>(mockConnections);
-  const [logs, setLogs] = useState<APILog[]>(mockLogs);
+  const [connections, setConnections] = useState<PortConnection[]>(fallbackConnections);
+  const [logs, setLogs] = useState<APILog[]>(fallbackLogs);
   const [isSyncing, setIsSyncing] = useState(false);
   const [aiStatus, setAiStatus] = useState<Record<string, any>>({});
 

@@ -40,7 +40,7 @@ interface HealingEvent {
   automated: boolean;
 }
 
-const mockComponents: SystemComponent[] = [
+const fallbackComponents: SystemComponent[] = [
   {
     id: "1",
     name: "Main Engine #1",
@@ -118,7 +118,7 @@ const mockComponents: SystemComponent[] = [
   },
 ];
 
-const mockHealingEvents: HealingEvent[] = [
+const fallbackHealingEvents: HealingEvent[] = [
   {
     id: "1",
     component: "Cooling Pump Aux",
@@ -177,17 +177,17 @@ const categoryIcons = {
 };
 
 export function SelfHealingSystem() {
-  const healthyCount = mockComponents.filter(c => c.status === "healthy").length;
-  const warningCount = mockComponents.filter(c => c.status === "warning").length;
-  const criticalCount = mockComponents.filter(c => c.status === "critical").length;
-  const healingCount = mockComponents.filter(c => c.status === "healing").length;
+  const healthyCount = fallbackComponents.filter(c => c.status === "healthy").length;
+  const warningCount = fallbackComponents.filter(c => c.status === "warning").length;
+  const criticalCount = fallbackComponents.filter(c => c.status === "critical").length;
+  const healingCount = fallbackComponents.filter(c => c.status === "healing").length;
 
   const overallHealth = Math.round(
-    mockComponents.reduce((acc, c) => acc + c.health, 0) / mockComponents.length
+    fallbackComponents.reduce((acc, c) => acc + c.health, 0) / fallbackComponents.length
   );
 
   const avgUptime = (
-    mockComponents.reduce((acc, c) => acc + c.uptime, 0) / mockComponents.length
+    fallbackComponents.reduce((acc, c) => acc + c.uptime, 0) / fallbackComponents.length
   ).toFixed(3);
 
   return (
@@ -280,7 +280,7 @@ export function SelfHealingSystem() {
           <CardContent>
             <ScrollArea className="h-[400px]">
               <div className="space-y-3">
-                {mockComponents.map((component, index) => {
+                {fallbackComponents.map((component, index) => {
                   const CategoryIcon = categoryIcons[component.category];
                   return (
                     <motion.div
@@ -345,7 +345,7 @@ export function SelfHealingSystem() {
           <CardContent>
             <ScrollArea className="h-[400px]">
               <div className="space-y-3">
-                {mockHealingEvents.map((event, index) => (
+                {fallbackHealingEvents.map((event, index) => (
                   <motion.div
                     key={event.id}
                     initial={{ opacity: 0, y: 20 }}

@@ -63,7 +63,7 @@ export const UserExperienceEnhancer: React.FC = () => {
 
   const loadUXData = () => {
     // Métricas UX simuladas baseadas em análise real
-    const mockMetrics: UXMetric[] = [
+    const fallbackMetrics: UXMetric[] = [
       {
         id: "task_completion",
         name: "Taxa de Conclusão de Tarefas",
@@ -126,7 +126,7 @@ export const UserExperienceEnhancer: React.FC = () => {
       }
     ];
 
-    const mockImprovements: UXImprovement[] = [
+    const fallbackImprovements: UXImprovement[] = [
       {
         id: "dashboard_simplification",
         title: "Simplificar Dashboard Principal",
@@ -184,7 +184,7 @@ export const UserExperienceEnhancer: React.FC = () => {
       }
     ];
 
-    const mockUserJourney: UserJourneyStep[] = [
+    const fallbackUserJourney: UserJourneyStep[] = [
       {
         id: "login",
         name: "Login/Autenticação",
@@ -232,9 +232,9 @@ export const UserExperienceEnhancer: React.FC = () => {
       }
     ];
 
-    setUxMetrics(mockMetrics);
-    setImprovements(mockImprovements);
-    setUserJourney(mockUserJourney);
+    setUxMetrics(fallbackMetrics);
+    setImprovements(fallbackImprovements);
+    setUserJourney(fallbackUserJourney);
   };
 
   const applyImprovement = async (improvement: UXImprovement) => {

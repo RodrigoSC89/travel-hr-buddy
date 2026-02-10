@@ -57,7 +57,7 @@ interface RequisitionItem {
   suggestedSupplier?: string;
 }
 
-const mockRequisitions: Requisition[] = [
+const fallbackRequisitions: Requisition[] = [
   {
     id: "1",
     number: "REQ-2024-089",
@@ -141,7 +141,7 @@ interface RequisitionsSectionProps {
 }
 
 export default function RequisitionsSection({ searchQuery }: RequisitionsSectionProps) {
-  const [requisitions, setRequisitions] = useState(mockRequisitions);
+  const [requisitions, setRequisitions] = useState(fallbackRequisitions);
   const [showNewRequisition, setShowNewRequisition] = useState(false);
   const [showDetails, setShowDetails] = useState(false);
   const [selectedRequisition, setSelectedRequisition] = useState<Requisition | null>(null);

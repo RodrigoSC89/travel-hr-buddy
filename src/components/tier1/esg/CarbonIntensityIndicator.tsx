@@ -57,7 +57,7 @@ interface CIIDecarbonizationMeasure {
   priority: 'high' | 'medium' | 'low';
 }
 
-const mockVesselCII: VesselCII[] = [
+const fallbackVesselCII: VesselCII[] = [
   {
     vesselId: "v1",
     vesselName: "MV Atlantic Pioneer",
@@ -205,14 +205,14 @@ const getRatingBadge = (rating: string) => {
 };
 
 export function CarbonIntensityIndicator() {
-  const [selectedVessel, setSelectedVessel] = useState<VesselCII | null>(mockVesselCII[0]);
+  const [selectedVessel, setSelectedVessel] = useState<VesselCII | null>(fallbackVesselCII[0]);
 
   const fleetStats = {
-    avgCII: mockVesselCII.reduce((acc, v) => acc + v.currentCII, 0) / mockVesselCII.length,
-    compliantVessels: mockVesselCII.filter(v => ['A', 'B', 'C'].includes(v.rating)).length,
-    totalVessels: mockVesselCII.length,
-    totalCO2YTD: mockVesselCII.reduce((acc, v) => acc + v.yearToDate.totalCO2, 0),
-    atRiskVessels: mockVesselCII.filter(v => ['D', 'E'].includes(v.rating)).length
+    avgCII: fallbackVesselCII.reduce((acc, v) => acc + v.currentCII, 0) / fallbackVesselCII.length,
+    compliantVessels: fallbackVesselCII.filter(v => ['A', 'B', 'C'].includes(v.rating)).length,
+    totalVessels: fallbackVesselCII.length,
+    totalCO2YTD: fallbackVesselCII.reduce((acc, v) => acc + v.yearToDate.totalCO2, 0),
+    atRiskVessels: fallbackVesselCII.filter(v => ['D', 'E'].includes(v.rating)).length
   };
 
   return (
@@ -310,7 +310,7 @@ export function CarbonIntensityIndicator() {
             </CardHeader>
             <CardContent>
               <div className="space-y-4">
-                {mockVesselCII.map((vessel) => (
+                {fallbackVesselCII.map((vessel) => (
                   <div 
                     key={vessel.vesselId}
                     className={`p-4 border rounded-lg cursor-pointer transition-colors ${

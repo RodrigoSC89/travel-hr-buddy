@@ -30,8 +30,8 @@ export interface Job {
   can_postpone?: boolean;
 }
 
-// Mock data for fallback
-const mockJobs: Job[] = [
+// Fallback data for offline/error scenarios
+const fallbackJobs: Job[] = [
   {
     id: "JOB-001",
     title: "Manutenção preventiva do sistema hidráulico",
@@ -169,8 +169,8 @@ export const fetchJobs = async (): Promise<{ jobs: MMIJob[] }> => {
     logger.warn("Database not available, using mock data", { error: error instanceof Error ? error.message : String(error) });
   }
 
-  // Fallback to mock data
-  return { jobs: mockJobs.map(convertToMMIJob) };
+  // Fallback to static data
+  return { jobs: fallbackJobs.map(convertToMMIJob) };
 };
 
 /**
@@ -196,10 +196,10 @@ export const fetchJobWithAI = async (jobId: string): Promise<MMIJob | null> => {
     return job;
   } catch (error) {
     logger.warn("Failed to fetch job from database", { error: error instanceof Error ? error.message : String(error), jobId });
-    // Fallback to mock
-    const mockJob = mockJobs.find(j => j.id === jobId);
-    if (mockJob) {
-      const job = convertToMMIJob(mockJob);
+    // Fallback to static data
+    const fallbackJob = fallbackJobs.find(j => j.id === jobId);
+    if (fallbackJob) {
+      const job = convertToMMIJob(fallbackJob);
       const jobDescription = `${job.title} - ${job.component_name}`;
       job.ai_recommendation = await getAIRecommendation(jobDescription);
       return job;
@@ -297,8 +297,8 @@ export const postponeJob = async (jobId: string): Promise<{ message: string; new
     logger.warn("AI postpone analysis not available, using fallback logic", { error: error instanceof Error ? error.message : String(error), jobId });
   }
 
-  // Fallback to mock behavior
-  const job = mockJobs.find((j) => j.id === jobId);
+  // Fallback
+  const job = fallbackJobs.find((j) => j.id === jobId);
   if (!job) {
     throw new Error("Job não encontrado");
   }
@@ -375,7 +375,7 @@ export const createWorkOrder = async (jobId: string): Promise<{ os_id: string; m
   }
 
   // Fallback
-  const job = mockJobs.find((j) => j.id === jobId);
+  const job = fallbackJobs.find((j) => j.id === jobId);
   if (!job) {
     throw new Error("Job não encontrado");
   }

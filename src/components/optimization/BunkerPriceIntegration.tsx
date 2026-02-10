@@ -31,8 +31,8 @@ interface BunkerPriceIntegrationProps {
   className?: string;
 }
 
-// Mock data - in production, this would come from the bunker-prices edge function
-const mockBunkerPrices: BunkerPrice[] = [
+// Fallback data - in production, this would come from the bunker-prices edge function
+const fallbackBunkerPrices: BunkerPrice[] = [
   { port: "Rotterdam", portCode: "RTM", country: "NL", vlsfo: 615, mgo: 795, hfo: 445, trend: "down", change24h: -2.3, lastUpdated: new Date() },
   { port: "Singapore", portCode: "SIN", country: "SG", vlsfo: 628, mgo: 810, hfo: 458, trend: "up", change24h: 1.8, lastUpdated: new Date() },
   { port: "Fujairah", portCode: "FUJ", country: "AE", vlsfo: 605, mgo: 775, hfo: 435, trend: "stable", change24h: 0.2, lastUpdated: new Date() },
@@ -56,20 +56,20 @@ export function BunkerPriceIntegration({ onPriceSelect, selectedPort, className 
       const { data, error: fnError } = await supabase.functions.invoke("bunker-prices");
       
       if (fnError) {
-        logger.warn("Edge function error, using mock data", { error: fnError.message });
-        // Use mock data as fallback
-        setPrices(mockBunkerPrices);
+        logger.warn("Edge function error, using fallback data", { error: fnError.message });
+        // Use fallback data
+        setPrices(fallbackBunkerPrices);
       } else if (data?.prices) {
         setPrices(data.prices);
       } else {
-        setPrices(mockBunkerPrices);
+        setPrices(fallbackBunkerPrices);
       }
       
       setLastFetch(new Date());
     } catch (err) {
       logger.error("Error fetching bunker prices:", err);
-      // Fallback to mock data
-      setPrices(mockBunkerPrices);
+      // Fallback to static data
+      setPrices(fallbackBunkerPrices);
       setLastFetch(new Date());
     } finally {
       setIsLoading(false);

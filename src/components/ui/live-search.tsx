@@ -28,7 +28,7 @@ interface LiveSearchProps {
   type?: "flight" | "hotel";
 }
 
-const mockSuggestions: SearchSuggestion[] = [
+const fallbackSuggestions: SearchSuggestion[] = [
   { id: "1", city: "São Paulo", country: "Brasil", airport: "Aeroporto de Guarulhos", code: "GRU", type: "airport" },
   { id: "2", city: "Rio de Janeiro", country: "Brasil", airport: "Aeroporto Santos Dumont", code: "SDU", type: "airport" },
   { id: "3", city: "Rio de Janeiro", country: "Brasil", airport: "Aeroporto do Galeão", code: "GIG", type: "airport" },
@@ -57,7 +57,7 @@ export const LiveSearch = ({
   const [isLoading, setIsLoading] = useState(false);
   const [suggestions, setSuggestions] = useState<SearchSuggestion[]>([]);
   const [recentSearches] = useState<SearchSuggestion[]>(
-    mockSuggestions.slice(0, 3)
+    fallbackSuggestions.slice(0, 3)
   );
 
   useEffect(() => {
@@ -66,7 +66,7 @@ export const LiveSearch = ({
       
       // Simular busca com delay
       const timer = setTimeout(() => {
-        const filtered = mockSuggestions.filter(suggestion =>
+        const filtered = fallbackSuggestions.filter(suggestion =>
           suggestion.city.toLowerCase().includes(value.toLowerCase()) ||
           suggestion.airport.toLowerCase().includes(value.toLowerCase()) ||
           suggestion.code.toLowerCase().includes(value.toLowerCase())

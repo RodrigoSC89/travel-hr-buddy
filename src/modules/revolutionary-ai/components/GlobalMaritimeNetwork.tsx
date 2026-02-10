@@ -44,7 +44,7 @@ interface SharedAlert {
   confirmations: number;
 }
 
-const mockStats: NetworkStats = {
+const fallbackStats: NetworkStats = {
   totalVessels: 12847,
   activeNow: 8923,
   dataPointsToday: 2847391,
@@ -52,7 +52,7 @@ const mockStats: NetworkStats = {
   savingsGenerated: 4500000,
 };
 
-const mockPorts: PortIntelligence[] = [
+const fallbackPorts: PortIntelligence[] = [
   {
     id: "1",
     portName: "Singapore",
@@ -105,7 +105,7 @@ const mockPorts: PortIntelligence[] = [
   },
 ];
 
-const mockAlerts: SharedAlert[] = [
+const fallbackAlerts: SharedAlert[] = [
   {
     id: "1",
     type: "weather",
@@ -177,7 +177,7 @@ export function GlobalMaritimeNetwork() {
             Global Maritime Network (UMIN)
           </h2>
           <p className="text-muted-foreground">
-            Inteligência coletiva de {mockStats.totalVessels.toLocaleString()}+ embarcações
+            Inteligência coletiva de {fallbackStats.totalVessels.toLocaleString()}+ embarcações
           </p>
         </div>
         <Badge className="bg-gradient-to-r from-blue-500 to-cyan-500 text-white border-0">
@@ -193,7 +193,7 @@ export function GlobalMaritimeNetwork() {
             <div className="flex items-center gap-3">
               <Ship className="h-8 w-8 text-primary" />
               <div>
-                <p className="text-2xl font-bold">{mockStats.activeNow.toLocaleString()}</p>
+                <p className="text-2xl font-bold">{fallbackStats.activeNow.toLocaleString()}</p>
                 <p className="text-xs text-muted-foreground">Navios Online</p>
               </div>
             </div>
@@ -204,7 +204,7 @@ export function GlobalMaritimeNetwork() {
             <div className="flex items-center gap-3">
               <BarChart3 className="h-8 w-8 text-green-500" />
               <div>
-                <p className="text-2xl font-bold">{(mockStats.dataPointsToday / 1000000).toFixed(1)}M</p>
+                <p className="text-2xl font-bold">{(fallbackStats.dataPointsToday / 1000000).toFixed(1)}M</p>
                 <p className="text-xs text-muted-foreground">Dados/Dia</p>
               </div>
             </div>
@@ -215,7 +215,7 @@ export function GlobalMaritimeNetwork() {
             <div className="flex items-center gap-3">
               <AlertTriangle className="h-8 w-8 text-orange-500" />
               <div>
-                <p className="text-2xl font-bold">{mockStats.alertsShared}</p>
+                <p className="text-2xl font-bold">{fallbackStats.alertsShared}</p>
                 <p className="text-xs text-muted-foreground">Alertas Hoje</p>
               </div>
             </div>
@@ -226,7 +226,7 @@ export function GlobalMaritimeNetwork() {
             <div className="flex items-center gap-3">
               <Users className="h-8 w-8 text-purple-500" />
               <div>
-                <p className="text-2xl font-bold">{mockStats.totalVessels.toLocaleString()}</p>
+                <p className="text-2xl font-bold">{fallbackStats.totalVessels.toLocaleString()}</p>
                 <p className="text-xs text-muted-foreground">Total Network</p>
               </div>
             </div>
@@ -237,7 +237,7 @@ export function GlobalMaritimeNetwork() {
             <div className="flex items-center gap-3">
               <DollarSign className="h-8 w-8 text-green-500" />
               <div>
-                <p className="text-2xl font-bold">${(mockStats.savingsGenerated / 1000000).toFixed(1)}M</p>
+                <p className="text-2xl font-bold">${(fallbackStats.savingsGenerated / 1000000).toFixed(1)}M</p>
                 <p className="text-xs text-muted-foreground">Economia/Mês</p>
               </div>
             </div>
@@ -256,7 +256,7 @@ export function GlobalMaritimeNetwork() {
           </CardHeader>
           <CardContent>
             <div className="space-y-3">
-              {mockPorts.map((port, index) => (
+              {fallbackPorts.map((port, index) => (
                 <motion.div
                   key={port.id}
                   initial={{ opacity: 0, x: -20 }}
@@ -307,7 +307,7 @@ export function GlobalMaritimeNetwork() {
           </CardHeader>
           <CardContent>
             <div className="space-y-3">
-              {mockAlerts.map((alert, index) => {
+              {fallbackAlerts.map((alert, index) => {
                 const AlertIcon = alertTypeIcons[alert.type];
                 return (
                   <motion.div

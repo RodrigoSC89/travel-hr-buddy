@@ -105,7 +105,7 @@ interface WorkflowComment {
   type: "comment" | "approval" | "rejection" | "revision-request";
 }
 
-const mockDocuments: WorkflowDocument[] = [
+const fallbackDocuments: WorkflowDocument[] = [
   {
     id: "1",
     title: "Procedimento de Segurança - Operações de Carga",
@@ -223,15 +223,15 @@ const stepTypeIcons = {
 };
 
 export default function DocumentWorkflow() {
-  const [selectedDoc, setSelectedDoc] = useState<WorkflowDocument | null>(mockDocuments[0]);
+  const [selectedDoc, setSelectedDoc] = useState<WorkflowDocument | null>(fallbackDocuments[0]);
   const [searchQuery, setSearchQuery] = useState("");
   const [statusFilter, setStatusFilter] = useState<string>("all");
   const [commentText, setCommentText] = useState("");
   const [showApproveDialog, setShowApproveDialog] = useState(false);
 
-  const pendingDocs = mockDocuments.filter(d => d.status === "pending" || d.status === "in-review").length;
-  const approvedDocs = mockDocuments.filter(d => d.status === "approved").length;
-  const urgentDocs = mockDocuments.filter(d => d.priority === "urgent").length;
+  const pendingDocs = fallbackDocuments.filter(d => d.status === "pending" || d.status === "in-review").length;
+  const approvedDocs = fallbackDocuments.filter(d => d.status === "approved").length;
+  const urgentDocs = fallbackDocuments.filter(d => d.priority === "urgent").length;
 
   const formatDate = (iso: string) => {
     return new Date(iso).toLocaleDateString("pt-BR", { day: "2-digit", month: "short", year: "numeric" });
@@ -246,7 +246,7 @@ export default function DocumentWorkflow() {
     return days;
   };
 
-  const filteredDocs = mockDocuments.filter(doc => {
+  const filteredDocs = fallbackDocuments.filter(doc => {
     const matchesSearch = doc.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
                          doc.type.toLowerCase().includes(searchQuery.toLowerCase());
     const matchesStatus = statusFilter === "all" || doc.status === statusFilter;
@@ -306,7 +306,7 @@ export default function DocumentWorkflow() {
                 <FileText className="h-5 w-5 text-blue-500" />
               </div>
               <div>
-                <p className="text-2xl font-bold">{mockDocuments.length}</p>
+                <p className="text-2xl font-bold">{fallbackDocuments.length}</p>
                 <p className="text-xs text-muted-foreground">Total em Workflow</p>
               </div>
             </div>

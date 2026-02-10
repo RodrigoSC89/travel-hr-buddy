@@ -45,7 +45,7 @@ interface Evidence {
   linkedAudits: string[];
 }
 
-const mockEvidence: Evidence[] = [
+const fallbackEvidence: Evidence[] = [
   { id: '1', name: 'SMS_Manual_v4.2.pdf', type: 'document', category: 'SMS Documentation', regulation: 'ISM 11.2', status: 'approved', uploadedBy: 'Carlos Silva', uploadedAt: '2026-01-10', size: '2.4 MB', linkedAudits: ['ISM-2026-001'] },
   { id: '2', name: 'Safety_Policy_2026.pdf', type: 'document', category: 'Safety Policies', regulation: 'ISM 2.1', status: 'approved', uploadedBy: 'Maria Santos', uploadedAt: '2026-01-08', size: '1.1 MB', linkedAudits: ['ISM-2026-001', 'ISPS-2026-002'] },
   { id: '3', name: 'Drill_Record_Jan2026.xlsx', type: 'document', category: 'Training Records', regulation: 'SOLAS III/19', status: 'pending', uploadedBy: 'João Oliveira', uploadedAt: '2026-01-12', size: '856 KB', linkedAudits: [] },
@@ -67,7 +67,7 @@ export function EvidenceManager() {
   const { toast } = useToast();
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
-  const [evidence] = useState<Evidence[]>(mockEvidence);
+  const [evidence] = useState<Evidence[]>(fallbackEvidence);
 
   const getTypeIcon = (type: Evidence['type']) => {
     switch (type) {

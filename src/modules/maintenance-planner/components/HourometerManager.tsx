@@ -20,7 +20,7 @@ interface HourometerEntry {
   trendPercent: number;
 }
 
-const mockHourometers: HourometerEntry[] = [
+const fallbackHourometers: HourometerEntry[] = [
   {
     id: "1",
     equipment: "Motor Principal BB",
@@ -57,7 +57,7 @@ const mockHourometers: HourometerEntry[] = [
 ];
 
 export default function HourometerManager() {
-  const [hourometers, setHourometers] = useState<HourometerEntry[]>(mockHourometers);
+  const [hourometers, setHourometers] = useState<HourometerEntry[]>(fallbackHourometers);
   const [editingId, setEditingId] = useState<string | null>(null);
   const [newHours, setNewHours] = useState("");
   const { toast } = useToast();

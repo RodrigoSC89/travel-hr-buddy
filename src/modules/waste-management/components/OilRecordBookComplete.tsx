@@ -93,7 +93,7 @@ const OPERATION_CODES = [
   { code: "I", description: "Operações adicionais e observações gerais", category: "General" },
 ];
 
-const mockEntries: OilRecordEntry[] = [
+const fallbackEntries: OilRecordEntry[] = [
   {
     id: "1",
     entry_number: 47,
@@ -178,7 +178,7 @@ const mockEntries: OilRecordEntry[] = [
 ];
 
 export function OilRecordBookComplete() {
-  const [entries, setEntries] = useState<OilRecordEntry[]>(mockEntries);
+  const [entries, setEntries] = useState<OilRecordEntry[]>(fallbackEntries);
   const [showAddDialog, setShowAddDialog] = useState(false);
   const [showSignDialog, setShowSignDialog] = useState(false);
   const [selectedEntry, setSelectedEntry] = useState<OilRecordEntry | null>(null);

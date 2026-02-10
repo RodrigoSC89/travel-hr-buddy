@@ -39,7 +39,7 @@ interface ThirdParty {
   isBlocked: boolean;
 }
 
-const mockThirdParties: ThirdParty[] = [
+const fallbackThirdParties: ThirdParty[] = [
   {
     id: "1",
     name: "Maritime Solutions Ltd",
@@ -157,7 +157,7 @@ export default function ComplianceTerceiros() {
         aiRiskFlags: tp.ai_risk_flags || [],
         isBlocked: tp.is_blocked || false,
       }))
-    : mockThirdParties;
+    : fallbackThirdParties;
 
   const handleSaveThirdParty = async () => {
     if (!formData.name.trim()) { toast.error("Nome da empresa é obrigatório"); return; }

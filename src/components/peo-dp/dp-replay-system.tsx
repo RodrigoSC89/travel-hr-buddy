@@ -53,7 +53,7 @@ interface ReplaySession {
   anomaliesDetected: number;
 }
 
-const mockSessions: ReplaySession[] = [
+const fallbackSessions: ReplaySession[] = [
   {
     id: "REPLAY-001",
     vesselName: "MV Atlantic Explorer",
@@ -90,7 +90,7 @@ const mockSessions: ReplaySession[] = [
 ];
 
 export const DPReplaySystem: React.FC = () => {
-  const [sessions] = useState<ReplaySession[]>(mockSessions);
+  const [sessions] = useState<ReplaySession[]>(fallbackSessions);
   const [selectedSession, setSelectedSession] = useState<ReplaySession | null>(null);
   const [isPlaying, setIsPlaying] = useState(false);
   const [currentTime, setCurrentTime] = useState(0);

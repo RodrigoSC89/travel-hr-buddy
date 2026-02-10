@@ -121,7 +121,7 @@ interface RiskAssessment {
   };
 }
 
-const mockTravelers: TravelerStatus[] = [
+const fallbackTravelers: TravelerStatus[] = [
   {
     id: "1",
     name: "Carlos Silva",
@@ -189,7 +189,7 @@ const mockTravelers: TravelerStatus[] = [
   }
 ];
 
-const mockAlerts: TravelAlert[] = [
+const fallbackAlerts: TravelAlert[] = [
   {
     id: "1",
     type: "weather",
@@ -223,7 +223,7 @@ const mockAlerts: TravelAlert[] = [
   }
 ];
 
-const mockRiskAssessment: RiskAssessment = {
+const fallbackRiskAssessment: RiskAssessment = {
   destination: "Lagos",
   country: "Nigéria",
   overallRisk: "high",
@@ -391,7 +391,7 @@ export const TravelerSafetyPanel: React.FC = () => {
           <CardContent>
             <ScrollArea className="h-[400px]">
               <div className="space-y-3">
-                {mockTravelers.map((traveler) => (
+                {fallbackTravelers.map((traveler) => (
                   <Card
                     key={traveler.id}
                     className={`p-4 cursor-pointer transition-all hover:border-primary ${
@@ -481,7 +481,7 @@ export const TravelerSafetyPanel: React.FC = () => {
           <CardContent>
             <ScrollArea className="h-[400px]">
               <div className="space-y-3">
-                {mockAlerts.map((alert) => {
+                {fallbackAlerts.map((alert) => {
                   const AlertIcon = getAlertIcon(alert.type);
                   return (
                     <Card
@@ -584,7 +584,7 @@ export const TravelerSafetyPanel: React.FC = () => {
                   <Badge className="bg-red-500 text-white">ALTO</Badge>
                 </div>
                 <div className="space-y-3">
-                  {Object.entries(mockRiskAssessment.categories).map(([key, value]) => (
+                  {Object.entries(fallbackRiskAssessment.categories).map(([key, value]) => (
                     <div key={key}>
                       <div className="flex justify-between text-sm mb-1">
                         <span className="capitalize">{key.replace(/([A-Z])/g, " $1").trim()}</span>
@@ -602,7 +602,7 @@ export const TravelerSafetyPanel: React.FC = () => {
               <CardContent className="p-4">
                 <h4 className="font-semibold mb-3">Avisos de Viagem</h4>
                 <div className="space-y-2">
-                  {mockRiskAssessment.advisories.map((advisory, idx) => (
+                  {fallbackRiskAssessment.advisories.map((advisory, idx) => (
                     <div key={idx} className="flex items-start gap-2 text-sm">
                       <AlertTriangle className="h-4 w-4 text-yellow-500 mt-0.5 flex-shrink-0" />
                       <span>{advisory}</span>
@@ -620,9 +620,9 @@ export const TravelerSafetyPanel: React.FC = () => {
                   <div>
                     <p className="text-xs text-muted-foreground mb-1">Requisitos</p>
                     <div className="flex flex-wrap gap-1">
-                      {mockRiskAssessment.requirements.visa && <Badge variant="outline">Visto</Badge>}
-                      {mockRiskAssessment.requirements.insurance && <Badge variant="outline">Seguro</Badge>}
-                      {mockRiskAssessment.requirements.vaccination.map((v, i) => (
+                      {fallbackRiskAssessment.requirements.visa && <Badge variant="outline">Visto</Badge>}
+                      {fallbackRiskAssessment.requirements.insurance && <Badge variant="outline">Seguro</Badge>}
+                      {fallbackRiskAssessment.requirements.vaccination.map((v, i) => (
                         <Badge key={i} variant="outline" className="text-xs">{v.split(" ")[0]}</Badge>
                       ))}
                     </div>
@@ -632,17 +632,17 @@ export const TravelerSafetyPanel: React.FC = () => {
                     <div className="flex items-center gap-2">
                       <Phone className="h-4 w-4 text-muted-foreground" />
                       <span className="text-muted-foreground">Embaixada:</span>
-                      <span>{mockRiskAssessment.emergencyContacts.embassy}</span>
+                      <span>{fallbackRiskAssessment.emergencyContacts.embassy}</span>
                     </div>
                     <div className="flex items-center gap-2">
                       <Shield className="h-4 w-4 text-muted-foreground" />
                       <span className="text-muted-foreground">Polícia:</span>
-                      <span>{mockRiskAssessment.emergencyContacts.police}</span>
+                      <span>{fallbackRiskAssessment.emergencyContacts.police}</span>
                     </div>
                     <div className="flex items-center gap-2">
                       <Heart className="h-4 w-4 text-muted-foreground" />
                       <span className="text-muted-foreground">Emergência Médica:</span>
-                      <span>{mockRiskAssessment.emergencyContacts.medical}</span>
+                      <span>{fallbackRiskAssessment.emergencyContacts.medical}</span>
                     </div>
                   </div>
                 </div>

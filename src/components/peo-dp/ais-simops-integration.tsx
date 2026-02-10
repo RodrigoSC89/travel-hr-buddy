@@ -56,7 +56,7 @@ interface SimopsAlert {
   acknowledged: boolean;
 }
 
-const mockAISVessels: AISVessel[] = [
+const fallbackAISVessels: AISVessel[] = [
   {
     mmsi: "123456789",
     name: "FPSO Santos Basin",
@@ -117,7 +117,7 @@ const mockAISVessels: AISVessel[] = [
   }
 ];
 
-const mockAlerts: SimopsAlert[] = [
+const fallbackSimopsAlerts: SimopsAlert[] = [
   {
     id: "ALT-001",
     type: "approach",
@@ -139,8 +139,8 @@ const mockAlerts: SimopsAlert[] = [
 ];
 
 export const AISSimopsIntegration: React.FC = () => {
-  const [vessels, setVessels] = useState<AISVessel[]>(mockAISVessels);
-  const [alerts, setAlerts] = useState<SimopsAlert[]>(mockAlerts);
+  const [vessels, setVessels] = useState<AISVessel[]>(fallbackAISVessels);
+  const [alerts, setAlerts] = useState<SimopsAlert[]>(fallbackSimopsAlerts);
   const [selectedVessel, setSelectedVessel] = useState<AISVessel | null>(null);
   const [isAISEnabled, setIsAISEnabled] = useState(true);
   const [guardZone, setGuardZone] = useState(500);

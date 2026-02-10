@@ -77,8 +77,8 @@ interface Certificate {
   priority: "low" | "medium" | "high" | "critical";
 }
 
-// Mock data
-const mockCertificates: Certificate[] = [
+// Fallback data - awaiting backend integration
+const fallbackCertificates: Certificate[] = [
   { id: "1", holder: "João Silva", holderType: "crew", vessel: "MV Atlântico Sul", certificateType: "STCW Certificate", certificateCode: "STCW-BR-2024", issuedDate: "2021-02-15", expiryDate: "2026-02-15", issuingAuthority: "Marinha do Brasil", status: "expiring", renewalStatus: "in_progress", priority: "critical" },
   { id: "2", holder: "Maria Santos", holderType: "crew", vessel: "MV Atlântico Sul", certificateType: "GMDSS Certificate", certificateCode: "GMDSS-2023", issuedDate: "2023-02-28", expiryDate: "2026-02-28", issuingAuthority: "ANATEL", status: "expiring_soon", renewalStatus: "not_started", priority: "high" },
   { id: "3", holder: "MV Atlântico Sul", holderType: "vessel", certificateType: "Safety Management Certificate", certificateCode: "SMC-2024", issuedDate: "2024-03-10", expiryDate: "2026-03-10", issuingAuthority: "Lloyd's Register", status: "expiring_soon", renewalStatus: "in_progress", priority: "high" },
@@ -137,7 +137,7 @@ export default function CertificateExpiryPanel() {
 
   // Filter certificates
   const filteredCertificates = useMemo(() => {
-    return mockCertificates
+    return fallbackCertificates
       .filter((cert) => {
         const matchesSearch = 
           cert.holder.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -151,16 +151,16 @@ export default function CertificateExpiryPanel() {
 
   // Stats
   const stats = useMemo(() => {
-    const expiring30 = mockCertificates.filter(c => {
+    const expiring30 = fallbackCertificates.filter(c => {
       const days = getDaysUntilExpiry(c.expiryDate);
       return days >= 0 && days <= 30;
     }).length;
-    const expiring60 = mockCertificates.filter(c => {
+    const expiring60 = fallbackCertificates.filter(c => {
       const days = getDaysUntilExpiry(c.expiryDate);
       return days > 30 && days <= 60;
     }).length;
-    const expired = mockCertificates.filter(c => c.status === "expired").length;
-    const compliance = Math.round(((mockCertificates.length - expired) / mockCertificates.length) * 100);
+    const expired = fallbackCertificates.filter(c => c.status === "expired").length;
+    const compliance = Math.round(((fallbackCertificates.length - expired) / fallbackCertificates.length) * 100);
 
     return { expiring30, expiring60, expired, compliance };
   }, []);

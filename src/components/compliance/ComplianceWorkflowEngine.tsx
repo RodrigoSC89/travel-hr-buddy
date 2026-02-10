@@ -138,8 +138,8 @@ interface NCStep {
   notes?: string;
 }
 
-// Mock data
-const mockTemplates: AuditTemplate[] = [
+// Fallback data
+const fallbackTemplates: AuditTemplate[] = [
   {
     id: "tmpl-001",
     name: "ISM Code Audit - Full",
@@ -190,7 +190,7 @@ const mockTemplates: AuditTemplate[] = [
   },
 ];
 
-const mockAuditRuns: AuditRun[] = [
+const fallbackAuditRuns: AuditRun[] = [
   {
     id: "audit-001",
     template_id: "tmpl-001",
@@ -218,7 +218,7 @@ const mockAuditRuns: AuditRun[] = [
   },
 ];
 
-const mockFindings: Finding[] = [
+const fallbackFindings: Finding[] = [
   {
     id: "find-001",
     audit_id: "audit-001",
@@ -278,9 +278,9 @@ const statusLabels: Record<string, string> = {
 
 export function ComplianceWorkflowEngine() {
   const { toast } = useToast();
-  const [templates, setTemplates] = useState<AuditTemplate[]>(mockTemplates);
-  const [auditRuns, setAuditRuns] = useState<AuditRun[]>(mockAuditRuns);
-  const [findings, setFindings] = useState<Finding[]>(mockFindings);
+  const [templates, setTemplates] = useState<AuditTemplate[]>(fallbackTemplates);
+  const [auditRuns, setAuditRuns] = useState<AuditRun[]>(fallbackAuditRuns);
+  const [findings, setFindings] = useState<Finding[]>(fallbackFindings);
   const [activeTab, setActiveTab] = useState("audits");
   const [searchQuery, setSearchQuery] = useState("");
   const [statusFilter, setStatusFilter] = useState<string>("all");

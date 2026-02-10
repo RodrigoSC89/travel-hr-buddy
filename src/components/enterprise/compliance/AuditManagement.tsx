@@ -53,7 +53,7 @@ interface Audit {
   items: AuditItem[];
 }
 
-const mockAudit: Audit = {
+const fallbackAudit: Audit = {
   id: "1",
   vesselName: "MV Atlantic Pioneer",
   auditType: "ISM Internal Audit",
@@ -110,7 +110,7 @@ const mockAudit: Audit = {
 };
 
 export function AuditManagement() {
-  const [audit, setAudit] = useState<Audit>(mockAudit);
+  const [audit, setAudit] = useState<Audit>(fallbackAudit);
   const [selectedItem, setSelectedItem] = useState<AuditItem | null>(null);
 
   const getStatusBadge = (status: AuditItem["status"]) => {

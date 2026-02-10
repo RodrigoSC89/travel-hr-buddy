@@ -57,7 +57,7 @@ interface Trip {
   carbonFootprint: number;
 }
 
-const mockTrips: Trip[] = [
+const fallbackTrips: Trip[] = [
   {
     id: "1",
     crewMember: "Carlos Silva",
@@ -165,9 +165,9 @@ export default function MobilityDashboard() {
     setChatMessage("");
   };
 
-  const totalCost = mockTrips.reduce((sum, t) => sum + t.cost, 0);
-  const totalCarbon = mockTrips.reduce((sum, t) => sum + t.carbonFootprint, 0);
-  const delayedFlights = mockTrips.filter(t => t.flight.status === "delayed").length;
+  const totalCost = fallbackTrips.reduce((sum, t) => sum + t.cost, 0);
+  const totalCarbon = fallbackTrips.reduce((sum, t) => sum + t.carbonFootprint, 0);
+  const delayedFlights = fallbackTrips.filter(t => t.flight.status === "delayed").length;
 
   return (
     <div className="space-y-6">
@@ -313,7 +313,7 @@ export default function MobilityDashboard() {
           </CardHeader>
           <CardContent>
             <div className="space-y-4">
-              {mockTrips.map((trip) => (
+              {fallbackTrips.map((trip) => (
                 <div
                   key={trip.id}
                   className="p-4 rounded-lg bg-muted/30 hover:bg-muted/50 transition-colors"

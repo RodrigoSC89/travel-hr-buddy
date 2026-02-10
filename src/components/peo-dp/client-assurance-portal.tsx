@@ -57,7 +57,7 @@ interface OperationalEvent {
   severity: "info" | "warning" | "critical";
 }
 
-const mockVessel: VesselStatus = {
+const fallbackVessel: VesselStatus = {
   id: "VSL-001",
   name: "MV Atlantic Explorer",
   dpClass: "DP-2",
@@ -72,7 +72,7 @@ const mockVessel: VesselStatus = {
   asogStatus: "within_limits"
 };
 
-const mockComplianceItems: ComplianceItem[] = [
+const fallbackComplianceItems: ComplianceItem[] = [
   { id: "C001", category: "Documentação", item: "DPOM Atualizado", status: "compliant", lastVerified: "2024-12-01" },
   { id: "C002", category: "Documentação", item: "ASOG Revisado", status: "compliant", lastVerified: "2024-11-28" },
   { id: "C003", category: "Documentação", item: "FMEA Válido", status: "compliant", lastVerified: "2024-10-15" },
@@ -83,7 +83,7 @@ const mockComplianceItems: ComplianceItem[] = [
   { id: "C008", category: "Manutenção", item: "PMS DP Equipment", status: "compliant", lastVerified: "2024-11-30" }
 ];
 
-const mockEvents: OperationalEvent[] = [
+const fallbackEvents: OperationalEvent[] = [
   { id: "E001", timestamp: new Date().toISOString(), type: "Status", description: "Sistema DP operando normalmente em Auto DP", severity: "info" },
   { id: "E002", timestamp: new Date(Date.now() - 3600000).toISOString(), type: "Watch", description: "Watch handover concluído - SDPO assumiu", severity: "info" },
   { id: "E003", timestamp: new Date(Date.now() - 7200000).toISOString(), type: "Ambiental", description: "Condições ambientais dentro dos limites ASOG", severity: "info" },
@@ -91,9 +91,9 @@ const mockEvents: OperationalEvent[] = [
 ];
 
 export const ClientAssurancePortal: React.FC = () => {
-  const [vessel] = useState<VesselStatus>(mockVessel);
-  const [complianceItems] = useState<ComplianceItem[]>(mockComplianceItems);
-  const [events] = useState<OperationalEvent[]>(mockEvents);
+  const [vessel] = useState<VesselStatus>(fallbackVessel);
+  const [complianceItems] = useState<ComplianceItem[]>(fallbackComplianceItems);
+  const [events] = useState<OperationalEvent[]>(fallbackEvents);
   const [activeTab, setActiveTab] = useState("overview");
 
   const getStatusColor = (status: string) => {

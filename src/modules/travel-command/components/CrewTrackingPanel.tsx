@@ -48,8 +48,8 @@ interface TravelerStatus {
   }[];
 }
 
-// Mock travelers
-const mockTravelers: TravelerStatus[] = [
+// Fallback travelers
+const fallbackTravelers: TravelerStatus[] = [
   {
     id: "1",
     name: "Carlos Eduardo Santos",
@@ -157,7 +157,7 @@ export function CrewTrackingPanel() {
   const [filter, setFilter] = useState<"all" | "in_transit" | "at_destination" | "delayed" | "offline">("all");
   const [searchTerm, setSearchTerm] = useState("");
 
-  const filteredTravelers = mockTravelers.filter(t => {
+  const filteredTravelers = fallbackTravelers.filter(t => {
     if (filter !== "all" && t.status !== filter) return false;
     if (searchTerm && !t.name.toLowerCase().includes(searchTerm.toLowerCase())) return false;
     return true;

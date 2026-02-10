@@ -78,8 +78,8 @@ interface SafetyTraining {
   score?: number;
 }
 
-// Mock data
-const mockIncidents: Incident[] = [
+// Fallback data
+const fallbackIncidents: Incident[] = [
   {
     id: '1',
     type: 'near_miss',
@@ -122,14 +122,14 @@ const mockIncidents: Incident[] = [
   }
 ];
 
-const mockDDS: DDSRecord[] = [
+const fallbackDDS: DDSRecord[] = [
   { id: '1', date: '2024-06-15', topic: 'Trabalho em Altura', vessel: 'MV Atlantic Pioneer', conductor: 'Cap. João', participants: 12, duration: 15 },
   { id: '2', date: '2024-06-15', topic: 'Espaços Confinados', vessel: 'MV Pacific Star', conductor: 'SSO Pedro', participants: 8, duration: 20 },
   { id: '3', date: '2024-06-14', topic: 'Combate a Incêndio', vessel: 'MV Ocean Voyager', conductor: 'Of. Carlos', participants: 15, duration: 25 },
   { id: '4', date: '2024-06-14', topic: 'Primeiros Socorros', vessel: 'MV Atlantic Pioneer', conductor: 'Enf. Ana', participants: 10, duration: 15 }
 ];
 
-const mockTrainings: SafetyTraining[] = [
+const fallbackTrainings: SafetyTraining[] = [
   { id: '1', name: 'STCW Basic Safety', type: 'Mandatory', crewMember: 'João Silva', vessel: 'MV Atlantic Pioneer', status: 'completed', expiryDate: '2025-06-15', score: 95 },
   { id: '2', name: 'Fire Prevention', type: 'Mandatory', crewMember: 'Maria Santos', vessel: 'MV Pacific Star', status: 'expired', expiryDate: '2024-05-01' },
   { id: '3', name: 'First Aid at Sea', type: 'Mandatory', crewMember: 'Carlos Lima', vessel: 'MV Ocean Voyager', status: 'in-progress', score: 60 },
@@ -164,13 +164,13 @@ export function SafetyCommandCenter() {
   // Calculate KPIs
   const kpis = useMemo(() => {
     const daysWithoutLTI = 127; // Lost Time Injury
-    const totalIncidents = mockIncidents.filter(i => i.type === 'incident').length;
-    const nearMisses = mockIncidents.filter(i => i.type === 'near_miss').length;
-    const openItems = mockIncidents.filter(i => i.status !== 'resolved').length;
-    const ddsToday = mockDDS.filter(d => d.date === '2024-06-15').length;
+    const totalIncidents = fallbackIncidents.filter(i => i.type === 'incident').length;
+    const nearMisses = fallbackIncidents.filter(i => i.type === 'near_miss').length;
+    const openItems = fallbackIncidents.filter(i => i.status !== 'resolved').length;
+    const ddsToday = fallbackDDS.filter(d => d.date === '2024-06-15').length;
     const ddsCompliance = 85;
     const trainingCompliance = 78;
-    const expiredTrainings = mockTrainings.filter(t => t.status === 'expired').length;
+    const expiredTrainings = fallbackTrainings.filter(t => t.status === 'expired').length;
 
     return {
       daysWithoutLTI,
@@ -348,7 +348,7 @@ export function SafetyCommandCenter() {
               </CardHeader>
               <CardContent>
                 <div className="space-y-3">
-                  {mockIncidents.map(incident => {
+                  {fallbackIncidents.map(incident => {
                     const TypeIcon = typeConfig[incident.type].icon;
                     return (
                       <div key={incident.id} className="p-4 border rounded-lg hover:bg-accent/30 transition-colors">
@@ -402,7 +402,7 @@ export function SafetyCommandCenter() {
               </CardHeader>
               <CardContent>
                 <div className="space-y-3">
-                  {mockDDS.filter(d => d.date === '2024-06-15').map(dds => (
+                  {fallbackDDS.filter(d => d.date === '2024-06-15').map(dds => (
                     <div key={dds.id} className="p-3 border rounded-lg">
                       <div className="flex items-center justify-between mb-2">
                         <Badge variant="outline">{dds.topic}</Badge>
@@ -446,7 +446,7 @@ export function SafetyCommandCenter() {
                     </tr>
                   </thead>
                   <tbody>
-                    {mockIncidents.map(incident => {
+                    {fallbackIncidents.map(incident => {
                       const TypeIcon = typeConfig[incident.type].icon;
                       return (
                         <motion.tr 
@@ -503,7 +503,7 @@ export function SafetyCommandCenter() {
               <CardContent>
                 <ScrollArea className="h-[400px]">
                   <div className="space-y-3">
-                    {mockDDS.map(dds => (
+                    {fallbackDDS.map(dds => (
                       <div key={dds.id} className="p-4 border rounded-lg hover:bg-accent/30 transition-colors">
                         <div className="flex items-center justify-between mb-2">
                           <Badge>{dds.topic}</Badge>
@@ -557,7 +557,7 @@ export function SafetyCommandCenter() {
         {/* Training Tab */}
         <TabsContent value="training" className="mt-6">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-            {mockTrainings.map(training => {
+            {fallbackTrainings.map(training => {
               const statusColors = {
                 completed: 'border-success/50 bg-success/5',
                 'in-progress': 'border-warning/50 bg-warning/5',

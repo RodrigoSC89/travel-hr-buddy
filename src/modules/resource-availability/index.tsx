@@ -42,7 +42,7 @@ interface AIGarrafalo {
   eta: Date;
 }
 
-const mockResources: Resource[] = [
+const fallbackResources: Resource[] = [
   {
     id: "1",
     name: "Óleo Diesel MGO",
@@ -103,7 +103,7 @@ const mockResources: Resource[] = [
   }
 ];
 
-const mockGargalos: AIGarrafalo[] = [
+const fallbackGargalos: AIGarrafalo[] = [
   {
     id: "1",
     resource: "Peças de Reposição",
@@ -125,8 +125,8 @@ const mockGargalos: AIGarrafalo[] = [
 export default function ResourceAvailability() {
   const { toast } = useToast();
   const { checkResourceAvailability, isLoading } = useNautilusEnhancementAI();
-  const [resources, setResources] = useState<Resource[]>(mockResources);
-  const [gargalos, setGargalos] = useState<AIGarrafalo[]>(mockGargalos);
+  const [resources, setResources] = useState<Resource[]>(fallbackResources);
+  const [gargalos, setGargalos] = useState<AIGarrafalo[]>(fallbackGargalos);
 
   const handleAIPrediction = async () => {
     const result = await checkResourceAvailability(

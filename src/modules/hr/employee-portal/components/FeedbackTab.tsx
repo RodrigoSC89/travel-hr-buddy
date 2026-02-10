@@ -40,7 +40,7 @@ interface PeerFeedback {
   managerComment?: string;
 }
 
-const mockAssessments: SelfAssessment[] = [
+const fallbackAssessments: SelfAssessment[] = [
   {
     id: "1",
     period: "Q4 2024",
@@ -55,7 +55,7 @@ const mockAssessments: SelfAssessment[] = [
   }
 ];
 
-const mockPeerFeedbacks: PeerFeedback[] = [
+const fallbackPeerFeedbacks: PeerFeedback[] = [
   { 
     id: "1", 
     period: "Q3 2024", 
@@ -86,8 +86,8 @@ const mockPeerFeedbacks: PeerFeedback[] = [
 ];
 
 export function FeedbackTab() {
-  const [assessments, setAssessments] = useState<SelfAssessment[]>(mockAssessments);
-  const [peerFeedbacks] = useState<PeerFeedback[]>(mockPeerFeedbacks);
+  const [assessments, setAssessments] = useState<SelfAssessment[]>(fallbackAssessments);
+  const [peerFeedbacks] = useState<PeerFeedback[]>(fallbackPeerFeedbacks);
   
   // Dialog states
   const [showAssessmentDialog, setShowAssessmentDialog] = useState(false);
