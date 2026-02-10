@@ -141,7 +141,23 @@ export default function ComplianceTerceiros() {
   const { data: thirdParties, isLoading } = useComplianceThirdParties();
   const { user } = useAuth();
 
-  const displayData = mockThirdParties;
+  const displayData = (thirdParties && thirdParties.length > 0) 
+    ? thirdParties.map((tp: any) => ({
+        id: tp.id,
+        name: tp.name || tp.title || "Unknown",
+        type: tp.type || "supplier" as const,
+        country: tp.country || "Brasil",
+        riskLevel: tp.risk_level || "low" as const,
+        status: tp.status || "pending" as const,
+        dueDiligenceScore: tp.due_diligence_score || 0,
+        lastReview: tp.last_review || "",
+        nextReview: tp.next_review || "",
+        documentsComplete: tp.documents_complete || 0,
+        documentsRequired: tp.documents_required || 10,
+        aiRiskFlags: tp.ai_risk_flags || [],
+        isBlocked: tp.is_blocked || false,
+      }))
+    : mockThirdParties;
 
   const handleSaveThirdParty = async () => {
     if (!formData.name.trim()) { toast.error("Nome da empresa é obrigatório"); return; }
@@ -382,7 +398,7 @@ export default function ComplianceTerceiros() {
                   {tp.aiRiskFlags.length > 0 && (
                     <div className="flex items-center gap-2 flex-wrap mt-2">
                       <Brain className="h-4 w-4 text-purple-400" />
-                      {tp.aiRiskFlags.map((flag, i) => (
+                      {tp.aiRiskFlags.map((flag: string, i: number) => (
                         <Badge key={i} variant="outline" className="text-xs bg-purple-500/10 text-purple-400 border-purple-500/30">
                           {flag}
                         </Badge>

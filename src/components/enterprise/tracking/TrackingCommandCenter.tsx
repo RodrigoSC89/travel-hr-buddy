@@ -4,6 +4,7 @@
  */
 
 import React, { useState, useEffect } from "react";
+import { supabase } from "@/integrations/supabase/client";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -43,7 +44,7 @@ interface VesselPosition {
   };
 }
 
-const mockPositions: VesselPosition[] = [
+const fallbackPositions: VesselPosition[] = [
   {
     vesselId: "v1",
     vesselName: "MV Atlantic Star",
@@ -118,7 +119,7 @@ const signalColors = {
 };
 
 export function TrackingCommandCenter() {
-  const [positions, setPositions] = useState<VesselPosition[]>(mockPositions);
+  const [positions, setPositions] = useState<VesselPosition[]>(fallbackPositions);
   const [selectedVessel, setSelectedVessel] = useState<VesselPosition | null>(null);
   const [searchTerm, setSearchTerm] = useState("");
   const [statusFilter, setStatusFilter] = useState<string>("all");

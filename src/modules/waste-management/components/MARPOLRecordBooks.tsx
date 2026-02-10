@@ -2,8 +2,9 @@
  * MARPOL Record Books - Digital ORB & GRB
  * Oil Record Book & Garbage Record Book with digital signatures
  */
-
-import React, { useState } from "react";
+ 
+import React, { useState, useEffect } from "react";
+import { supabase } from "@/integrations/supabase/client";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -107,26 +108,80 @@ const GARBAGE_CATEGORIES = [
   { code: "K", name: "Cargo residues (non-HME)", color: "bg-teal-500" },
 ];
 
-const mockORBEntries: ORBEntry[] = [
+const defaultORBEntries: ORBEntry[] = [
   { id: "1", entry_number: "ORB-2024-001", date: "2024-01-15", time: "08:30", operation_code: "C", operation_type: "Collection and disposal of oil residues", quantity_m3: 2.5, tank_id: "T1", tank_name: "Slop Tank P", remarks: "Transferred to shore reception", signed_by: "Capt. João Silva", signature_date: "2024-01-15", status: "signed" },
   { id: "2", entry_number: "ORB-2024-002", date: "2024-01-14", time: "14:00", operation_code: "B", operation_type: "Discharge of dirty ballast", quantity_m3: 45.0, tank_id: "T2", tank_name: "Bilge Tank", remarks: "Via OWS to sea", signed_by: "Capt. João Silva", signature_date: "2024-01-14", status: "signed" },
   { id: "3", entry_number: "ORB-2024-003", date: "2024-01-16", time: "10:00", operation_code: "A", operation_type: "Cleaning of oil fuel tanks", quantity_m3: 0, tank_id: "T3", tank_name: "Fuel Tank 2", remarks: "Cleaning in progress", signed_by: "", status: "draft" },
 ];
 
-const mockGRBEntries: GRBEntry[] = [
+const defaultGRBEntries: GRBEntry[] = [
   { id: "1", entry_number: "GRB-2024-001", date: "2024-01-15", time: "09:00", garbage_category: "B - Food wastes", estimated_amount_m3: 0.5, discharge_location: "Porto de Macaé", discharge_method: "Shore reception", remarks: "Regular disposal", signed_by: "Capt. João Silva", signature_date: "2024-01-15", status: "signed" },
   { id: "2", entry_number: "GRB-2024-002", date: "2024-01-14", time: "16:30", garbage_category: "C - Domestic wastes", estimated_amount_m3: 0.3, discharge_location: "Porto de Macaé", discharge_method: "Shore reception", remarks: "Paper and cardboard", signed_by: "Capt. João Silva", signature_date: "2024-01-14", status: "signed" },
   { id: "3", entry_number: "GRB-2024-003", date: "2024-01-16", time: "11:00", garbage_category: "A - Plastics", estimated_amount_m3: 0.1, discharge_location: "", discharge_method: "", remarks: "Pending shore disposal", signed_by: "", status: "pending" },
 ];
 
 export default function MARPOLRecordBooks() {
-  const [orbEntries, setOrbEntries] = useState<ORBEntry[]>(mockORBEntries);
-  const [grbEntries, setGrbEntries] = useState<GRBEntry[]>(mockGRBEntries);
+  const [orbEntries, setOrbEntries] = useState<ORBEntry[]>([]);
+  const [grbEntries, setGrbEntries] = useState<GRBEntry[]>([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [showAddORB, setShowAddORB] = useState(false);
   const [showAddGRB, setShowAddGRB] = useState(false);
   const [showSignature, setShowSignature] = useState(false);
   const [selectedEntry, setSelectedEntry] = useState<ORBEntry | GRBEntry | null>(null);
+
+  useEffect(() => {
+    async function loadRecords() {
+      const { data: wasteRecords } = await supabase
+        .from("waste_records")
+        .select("*")
+        .order("created_at", { ascending: false })
+        .limit(50);
+
+      if (wasteRecords && wasteRecords.length > 0) {
+        const orb: ORBEntry[] = wasteRecords
+          .filter((r: any) => r.waste_type === "oil" || r.category?.includes("oil"))
+          .map((r: any, i: number) => ({
+            id: r.id,
+            entry_number: `ORB-${new Date(r.created_at).getFullYear()}-${String(i + 1).padStart(3, "0")}`,
+            date: r.created_at?.slice(0, 10) || "",
+            time: r.created_at?.slice(11, 16) || "00:00",
+            operation_code: "C",
+            operation_type: r.description || "Oil waste operation",
+            quantity_m3: r.quantity || 0,
+            tank_id: `T${i + 1}`,
+            tank_name: r.storage_location || "Tank",
+            remarks: r.notes || "",
+            signed_by: r.responsible_officer || "",
+            signature_date: r.created_at?.slice(0, 10),
+            status: r.status === "completed" ? "signed" as const : "draft" as const,
+          }));
+        const grb: GRBEntry[] = wasteRecords
+          .filter((r: any) => r.waste_type !== "oil" && !r.category?.includes("oil"))
+          .map((r: any, i: number) => ({
+            id: r.id,
+            entry_number: `GRB-${new Date(r.created_at).getFullYear()}-${String(i + 1).padStart(3, "0")}`,
+            date: r.created_at?.slice(0, 10) || "",
+            time: r.created_at?.slice(11, 16) || "00:00",
+            garbage_category: r.category || "B - Food wastes",
+            estimated_amount_m3: r.quantity || 0,
+            discharge_location: r.discharge_port || "",
+            discharge_method: r.disposal_method || "",
+            remarks: r.notes || "",
+            signed_by: r.responsible_officer || "",
+            signature_date: r.created_at?.slice(0, 10),
+            status: r.status === "completed" ? "signed" as const : "draft" as const,
+          }));
+        if (orb.length > 0) setOrbEntries(orb);
+        else setOrbEntries(defaultORBEntries);
+        if (grb.length > 0) setGrbEntries(grb);
+        else setGrbEntries(defaultGRBEntries);
+      } else {
+        setOrbEntries(defaultORBEntries);
+        setGrbEntries(defaultGRBEntries);
+      }
+    }
+    loadRecords();
+  }, []);
 
   const handleSign = (entry: ORBEntry | GRBEntry, type: "orb" | "grb") => {
     setSelectedEntry(entry);

@@ -36,7 +36,7 @@ interface Report {
   aiPriority?: number;
 }
 
-const mockReports: Report[] = [
+const fallbackReports: Report[] = [
   {
     id: "1",
     protocolNumber: "DEN-2024-0042",
@@ -114,8 +114,16 @@ export default function ComplianceDenuncias() {
   const { data: reports, isLoading } = useComplianceReports();
   const createReport = useCreateComplianceReport();
 
-  // Use mock data as the display source - backend integration via useComplianceReports is available
-  const displayReports = mockReports;
+  const displayReports = (reports && reports.length > 0) 
+    ? reports.map((r: any) => ({
+        id: r.id, protocolNumber: r.protocol_number || `DEN-${r.id.slice(0,4)}`,
+        category: r.category || "other" as const, severity: r.severity || "medium" as const,
+        status: r.status || "open" as const, isAnonymous: r.is_anonymous ?? true,
+        description: r.description || "", createdAt: r.created_at?.slice(0,10) || "",
+        updatedAt: r.updated_at?.slice(0,10) || "", aiClassification: r.ai_classification,
+        aiPriority: r.ai_priority,
+      }))
+    : fallbackReports;
 
   const filteredReports = displayReports.filter(r => {
     const matchesSearch = r.protocolNumber.toLowerCase().includes(searchTerm.toLowerCase()) ||

@@ -40,7 +40,7 @@ interface Regulation {
   aiRecommendations: number;
 }
 
-const mockRegulations: Regulation[] = [
+const fallbackRegulations: Regulation[] = [
   {
     id: "1",
     name: "MLC 2006 - Maritime Labour Convention",
@@ -144,7 +144,7 @@ export default function ComplianceRegulamentos() {
     requirements: 10,
     completedRequirements: 8,
     aiRecommendations: 0,
-  })) : mockRegulations;
+  })) : fallbackRegulations;
 
   const handleSaveRegulation = async () => {
     if (!formData.name.trim()) {
