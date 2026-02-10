@@ -2,32 +2,9 @@ import React from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { Line } from "react-chartjs-2";
-import {
-  Chart as ChartJS,
-  CategoryScale,
-  LinearScale,
-  PointElement,
-  LineElement,
-  Title,
-  Tooltip,
-  Legend,
-  Filler,
-} from "chart.js";
+import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from "recharts";
 import { Map, Activity } from "lucide-react";
 import type { DPEvent } from "../types";
-
-// Register Chart.js components
-ChartJS.register(
-  CategoryScale,
-  LinearScale,
-  PointElement,
-  LineElement,
-  Title,
-  Tooltip,
-  Legend,
-  Filler
-);
 
 interface LiveDecisionMapProps {
   events: DPEvent[];
@@ -66,96 +43,25 @@ export function LiveDecisionMap({ events }: LiveDecisionMapProps) {
     }
   };
 
-  // Prepare chart data from events
   const sortedEvents = [...events]
     .sort((a, b) => new Date(a.timestamp).getTime() - new Date(b.timestamp).getTime())
-    .slice(-20); // Show last 20 events
+    .slice(-20);
 
-  const chartData = {
-    labels: sortedEvents.map((event) =>
-      new Date(event.timestamp).toLocaleTimeString("pt-BR", {
-        hour: "2-digit",
-        minute: "2-digit",
-      })
-    ),
-    datasets: [
-      {
-        label: "Nível de Risco",
-        data: sortedEvents.map((event) => {
-          switch (event.severity) {
-          case "critical":
-            return 3;
-          case "degradation":
-            return 2;
-          case "normal":
-            return 1;
-          default:
-            return 0;
-          }
-        }),
-        borderColor: "rgb(59, 130, 246)",
-        backgroundColor: "rgba(59, 130, 246, 0.1)",
-        fill: true,
-        tension: 0.4,
-        pointBackgroundColor: sortedEvents.map((event) => {
-          switch (event.severity) {
-          case "critical":
-            return "rgb(239, 68, 68)";
-          case "degradation":
-            return "rgb(234, 179, 8)";
-          case "normal":
-            return "rgb(34, 197, 94)";
-          default:
-            return "rgb(156, 163, 175)";
-          }
-        }),
-        pointRadius: 6,
-        pointHoverRadius: 8,
-      },
-    ],
-  };
+  const chartData = sortedEvents.map((event) => ({
+    name: new Date(event.timestamp).toLocaleTimeString("pt-BR", { hour: "2-digit", minute: "2-digit" }),
+    risco: event.severity === "critical" ? 3 : event.severity === "degradation" ? 2 : event.severity === "normal" ? 1 : 0,
+    system: event.system,
+    type: event.type,
+    description: event.description,
+  }));
 
-  const chartOptions = {
-    responsive: true,
-    maintainAspectRatio: false,
-    plugins: {
-      legend: {
-        display: false,
-      },
-      tooltip: {
-        callbacks: {
-          label: function (context: { dataIndex: number }) {
-            const event = sortedEvents[context.dataIndex];
-            return [
-              `Sistema: ${event.system}`,
-              `Tipo: ${event.type}`,
-              `Descrição: ${event.description}`,
-            ];
-          },
-        },
-      },
-    },
-    scales: {
-      y: {
-        beginAtZero: true,
-        max: 3.5,
-        ticks: {
-          stepSize: 1,
-          callback: function (value: number | string) {
-            switch (value) {
-            case 3:
-              return "Crítico";
-            case 2:
-              return "Degradação";
-            case 1:
-              return "Normal";
-            default:
-              return "";
-            }
-          },
-        },
-      },
-    },
+  const formatYAxis = (value: number) => {
+    switch (value) {
+    case 3: return "Crítico";
+    case 2: return "Degradação";
+    case 1: return "Normal";
+    default: return "";
+    }
   };
 
   return (
@@ -181,7 +87,29 @@ export function LiveDecisionMap({ events }: LiveDecisionMapProps) {
         ) : (
           <>
             <div className="h-[200px] mb-4">
-              <Line data={chartData} options={chartOptions} />
+              <ResponsiveContainer width="100%" height="100%">
+                <LineChart data={chartData}>
+                  <CartesianGrid strokeDasharray="3 3" />
+                  <XAxis dataKey="name" />
+                  <YAxis domain={[0, 3.5]} ticks={[1, 2, 3]} tickFormatter={formatYAxis} />
+                  <Tooltip
+                    content={({ active, payload }) => {
+                      if (active && payload && payload.length) {
+                        const data = payload[0].payload;
+                        return (
+                          <div className="bg-background border rounded-lg p-2 text-sm shadow-md">
+                            <p>Sistema: {data.system}</p>
+                            <p>Tipo: {data.type}</p>
+                            <p>Descrição: {data.description}</p>
+                          </div>
+                        );
+                      }
+                      return null;
+                    }}
+                  />
+                  <Line type="monotone" dataKey="risco" stroke="rgb(59, 130, 246)" fill="rgba(59, 130, 246, 0.1)" strokeWidth={2} dot={{ r: 6 }} />
+                </LineChart>
+              </ResponsiveContainer>
             </div>
 
             <div className="flex gap-4 mb-4 text-xs">
