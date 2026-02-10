@@ -94,7 +94,7 @@ export function PerformanceMonitor() {
           updateBattery();
           battery.addEventListener('levelchange', updateBattery);
           battery.addEventListener('chargingchange', updateBattery);
-        } catch {}
+        } catch { /* Battery API not supported */ }
       }
     };
     initBattery();

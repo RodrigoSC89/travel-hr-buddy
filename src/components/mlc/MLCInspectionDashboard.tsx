@@ -86,7 +86,7 @@ export const MLCInspectionDashboard: React.FC = () => {
                     return [...prev, { role: 'assistant', content: assistantContent }];
                   });
                 }
-              } catch {}
+              } catch { /* expected: partial SSE JSON chunk */ }
             }
           }
         }

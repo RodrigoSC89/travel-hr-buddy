@@ -84,7 +84,7 @@ export default function DevRoutesDashboard() {
       try {
         // In production, this would fetch from GitHub API
         // For now, simulate based on local validation
-        const storedStatus = localStorage.getItem('route-audit-status');
+        const storedStatus = sessionStorage.getItem('route-audit-status');
         if (storedStatus) {
           const parsed = JSON.parse(storedStatus);
           setCIStatus(parsed.status);
@@ -96,7 +96,7 @@ export default function DevRoutesDashboard() {
           setCIStatus('success');
           const now = new Date();
           setLastCIRun(now);
-          localStorage.setItem('route-audit-status', JSON.stringify({
+          sessionStorage.setItem('route-audit-status', JSON.stringify({
             status: 'success',
             timestamp: now.toISOString()
           }));

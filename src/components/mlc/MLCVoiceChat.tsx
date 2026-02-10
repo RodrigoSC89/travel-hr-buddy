@@ -278,7 +278,7 @@ export function MLCVoiceChat({ onQuestionAsked }: MLCVoiceChatProps) {
                     }];
                   });
                 }
-              } catch {}
+              } catch { /* expected: partial SSE JSON chunk */ }
             }
           }
         }

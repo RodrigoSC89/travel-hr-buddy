@@ -5,6 +5,7 @@
 
 import { useState, useRef, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
+import { logger } from "@/lib/logger";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -74,7 +75,7 @@ export default function DocumentIntelligenceDashboard() {
           { name: "Logs de Manutenção", count: Math.round(total * 0.34) },
           { name: "Relatórios de Incidente", count: Math.round(total * 0.07) },
         ]});
-      } catch {}
+      } catch (err) { logger.error("[DocIntelligence] Failed to load stats", err); }
     };
     loadStats();
   }, []);

@@ -74,7 +74,7 @@ export const OVIDAIAssistant: React.FC<OVIDAIAssistantProps> = ({ vesselType }) 
                   return updated;
                 });
               }
-            } catch {}
+            } catch { /* expected: partial SSE JSON chunk */ }
           }
         }
       }

@@ -84,7 +84,7 @@ export const useMobileOptimization = (config: OptimizationConfig = {}) => {
         try {
           const battery = await (navigator as any).getBattery();
           isLowPowerMode = battery.level < 0.2 && !battery.charging;
-        } catch {}
+        } catch { /* Battery API not supported */ }
       }
 
       // Check memory (if available)

@@ -106,7 +106,7 @@ export function EmergencyMode() {
 
   // Load cached data
   useEffect(() => {
-    const cached = localStorage.getItem('emergency_incidents');
+    const cached = sessionStorage.getItem('emergency_incidents');
     if (cached) {
       try {
         setIncidents(JSON.parse(cached));
@@ -125,10 +125,10 @@ export function EmergencyMode() {
     ]);
   }, []);
 
-  // Save incidents to localStorage for offline access
+  // Save incidents to sessionStorage for offline access
   const saveIncidents = useCallback((newIncidents: IncidentRecord[]) => {
     setIncidents(newIncidents);
-    localStorage.setItem('emergency_incidents', JSON.stringify(newIncidents));
+    sessionStorage.setItem('emergency_incidents', JSON.stringify(newIncidents));
   }, []);
 
   // Record new incident

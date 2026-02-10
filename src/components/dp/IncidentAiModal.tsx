@@ -13,16 +13,16 @@ export default function IncidentAiModal() {
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    // Check localStorage on mount
+    // Check sessionStorage on mount
     const checkForIncident = () => {
-      const data = localStorage.getItem("incident_to_analyze");
+      const data = sessionStorage.getItem("incident_to_analyze");
       if (data) {
         try {
           const parsed = JSON.parse(data);
           setIncident(parsed);
           setOpen(true);
           setAnalysis(""); // Reset analysis when new incident is loaded
-          localStorage.removeItem("incident_to_analyze");
+          sessionStorage.removeItem("incident_to_analyze");
         } catch (error) {
           logger.error("Error parsing incident data:", error);
         }

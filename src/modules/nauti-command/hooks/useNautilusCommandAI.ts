@@ -149,7 +149,7 @@ export function useNautilusCommandAI() {
               fullResponse += chunk;
               onStream?.(chunk);
             }
-          } catch {}
+          } catch { /* expected: partial SSE JSON chunk */ }
         }
       }
 

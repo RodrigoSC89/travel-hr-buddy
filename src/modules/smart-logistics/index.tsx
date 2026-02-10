@@ -5,6 +5,7 @@
 
 import React, { useState, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
+import { logger } from "@/lib/logger";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -102,7 +103,7 @@ export default function SmartLogistics() {
           }));
           setSupplies(mapped);
         }
-      } catch {}
+      } catch (err) { logger.error("[SmartLogistics] Failed to load supplies", err); }
     };
     loadSupplies();
   }, []);

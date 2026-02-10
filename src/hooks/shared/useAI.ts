@@ -138,7 +138,7 @@ export function useAIChat(options?: {
                     return [...prev, { role: "assistant", content: assistantContent, timestamp: new Date() }];
                   });
                 }
-              } catch {}
+              } catch { /* expected: partial SSE JSON chunk */ }
             }
           }
         }
@@ -205,14 +205,14 @@ export function useAIMemory(namespace: string = "default") {
         );
         setMemory(valid);
       }
-    } catch {}
+    } catch { /* localStorage unavailable */ }
   }, [storageKey]);
 
   const saveMemory = useCallback((entries: AIMemoryEntry[]) => {
     setMemory(entries);
     try {
       localStorage.setItem(storageKey, JSON.stringify(entries));
-    } catch {}
+    } catch { /* localStorage unavailable */ }
   }, [storageKey]);
 
   const addEntry = useCallback((entry: Omit<AIMemoryEntry, "id" | "createdAt">) => {
@@ -248,7 +248,7 @@ export function useAIMemory(namespace: string = "default") {
     setMemory([]);
     try {
       localStorage.removeItem(storageKey);
-    } catch {}
+    } catch { /* localStorage unavailable */ }
   }, [storageKey]);
 
   return {
