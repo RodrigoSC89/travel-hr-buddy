@@ -60,9 +60,9 @@ export interface TerrastarAPIConfig {
  * Get Terrastar API configuration
  */
 function getTerrastarConfig(): TerrastarAPIConfig {
-  const apiKey = (import.meta as any).env.VITE_TERRASTAR_API_KEY as string;
-  const apiUrl = (import.meta as any).env.VITE_TERRASTAR_API_URL as string || 'https://api.terrastar.hexagon.com/v2';
-  const serviceLevel = ((import.meta as any).env.VITE_TERRASTAR_SERVICE_LEVEL as string || 'PREMIUM') as 'BASIC' | 'PREMIUM' | 'RTK';
+  const apiKey = import.meta.env.VITE_TERRASTAR_API_KEY as string;
+  const apiUrl = (import.meta.env.VITE_TERRASTAR_API_URL as string) || 'https://api.terrastar.hexagon.com/v2';
+  const serviceLevel = ((import.meta.env.VITE_TERRASTAR_SERVICE_LEVEL as string) || 'PREMIUM') as 'BASIC' | 'PREMIUM' | 'RTK';
 
   if (!apiKey) {
     throw new Error("Terrastar API key not configured");
@@ -171,7 +171,7 @@ export async function requestPositionCorrection(
     // Store correction in database
     await supabase
       .from('terrastar_corrections')
-      .insert(correction as any);
+      .insert(correction as never);
 
     return correction;
   } catch (error) {

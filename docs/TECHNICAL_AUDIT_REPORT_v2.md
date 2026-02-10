@@ -56,7 +56,7 @@
 | ID | Descrição | Arquivos | Esforço |
 |----|-----------|----------|---------|
 | P1-001 | ~~`window.location.href` navegação interna~~ ✅ CORRIGIDO (8 arquivos migrados para `spaNavigate`) | ~~43 arquivos~~ Restam: 5 (aceitáveis: error boundaries, OAuth, mailto) | ~~4h~~ |
-| P1-002 | `as any` / `: any` | 757 arquivos, 9,572 ocorrências | 1-2 sem |
+| P1-002 | `as any` / `: any` — Sprint 3: corrigidos 10 arquivos de serviço (celestrak, terrastar, starfix, smart-drills) | ~~757 arquivos~~ Em progresso | 1-2 sem |
 | P1-003 | localStorage sem encryption (dados IA) | 216 arquivos | 4h |
 | P1-004 | 3 exports com toast sem geração real | 3 arquivos | 2h |
 | P1-005 | VR/AR "Em implantação" sem feature flag | 1 arquivo | 15m |
@@ -76,7 +76,7 @@
 | P2-004 | Security center com mock alerts/metrics | 2h |
 | P2-005 | Crew schedule/MLC com mock data | 2h |
 | P2-006 | Maritime certification com mock | 2h |
-| P2-007 | ~12 console.log em prod (mitigado por build) | 1h |
+| P2-007 | ~~console.log em prod~~ ✅ MITIGADO — `drop_console: true` no build, 0 em código ativo | ~~1h~~ |
 
 ---
 
@@ -93,7 +93,7 @@ P1-002 (top 50) + P1-003 + P2-001 + P2-003/007
 
 ---
 
-## 📈 SCORE: 82/100
+## 📈 SCORE: 85/100
 
 | Dimensão | Score |
 |----------|:-----:|

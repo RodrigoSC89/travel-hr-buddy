@@ -15,7 +15,7 @@ import { logger } from '@/lib/logger';
 
 // Feature flag - controla se usa mock ou API real
 // PROD DEFAULT: false (real API). Only enabled explicitly in dev with VITE_USE_MOCK_STARFIX=true
-const USE_MOCK_API = (import.meta as any).env?.VITE_USE_MOCK_STARFIX === 'true' && !(import.meta as any).env?.VITE_STRICT_PROD;
+const USE_MOCK_API = import.meta.env?.VITE_USE_MOCK_STARFIX === 'true' && !import.meta.env?.VITE_STRICT_PROD;
 
 /**
  * Banco de dados mock de vessels

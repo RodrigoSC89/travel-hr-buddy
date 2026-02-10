@@ -206,7 +206,7 @@ export const SmartDrills = {
   async createDrill(drill: Partial<SmartDrill>): Promise<SmartDrill> {
     const { data, error } = await supabase
       .from('smart_drills')
-      .insert(drill as any)
+      .insert(drill as never)
       .select()
       .single();
 
@@ -221,7 +221,7 @@ export const SmartDrills = {
   async updateDrill(id: string, updates: Partial<SmartDrill>): Promise<SmartDrill> {
     const { data, error } = await supabase
       .from('smart_drills')
-      .update(updates as any)
+      .update(updates as never)
       .eq('id', id)
       .select()
       .single();
@@ -275,7 +275,7 @@ export const SmartDrills = {
   async submitDrillResponse(response: Partial<DrillResponse>): Promise<DrillResponse> {
     const { data, error } = await supabase
       .from('drill_responses')
-      .insert(response as any)
+      .insert(response as never)
       .select()
       .single();
 
@@ -309,7 +309,7 @@ export const SmartDrills = {
   async createDrillEvaluation(evaluation: Partial<DrillEvaluation>): Promise<DrillEvaluation> {
     const { data, error } = await supabase
       .from('drill_evaluations')
-      .insert(evaluation as any)
+      .insert(evaluation as never)
       .select()
       .single();
 
@@ -343,7 +343,7 @@ export const SmartDrills = {
   async createCorrectiveAction(action: Partial<DrillCorrectiveAction>): Promise<DrillCorrectiveAction> {
     const { data, error } = await supabase
       .from('drill_corrective_actions')
-      .insert(action as any)
+      .insert(action as never)
       .select()
       .single();
 
@@ -358,7 +358,7 @@ export const SmartDrills = {
   async updateCorrectiveAction(id: string, updates: Partial<DrillCorrectiveAction>): Promise<DrillCorrectiveAction> {
     const { data, error } = await supabase
       .from('drill_corrective_actions')
-      .update(updates as any)
+      .update(updates as never)
       .eq('id', id)
       .select()
       .single();

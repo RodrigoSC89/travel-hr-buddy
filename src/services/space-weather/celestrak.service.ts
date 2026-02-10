@@ -53,9 +53,10 @@ function gpElementToTLE(element: CelesTrakGPElement): { line1: string; line2: st
   try {
     // Se já tiver TLE_LINE1/TLE_LINE2, usar diretamente
     if ('TLE_LINE1' in element && 'TLE_LINE2' in element) {
+      const tleElement = element as CelesTrakGPElement & { TLE_LINE1: string; TLE_LINE2: string };
       return {
-        line1: (element as any).TLE_LINE1,
-        line2: (element as any).TLE_LINE2,
+        line1: tleElement.TLE_LINE1,
+        line2: tleElement.TLE_LINE2,
       };
     }
     
