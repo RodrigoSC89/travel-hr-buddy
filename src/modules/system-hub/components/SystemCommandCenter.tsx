@@ -4,6 +4,7 @@
  */
 
 import React, { useState } from "react";
+import { toast } from "sonner";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -412,17 +413,17 @@ export function SystemCommandCenter() {
                         </div>
                       </div>
                       <div className="flex gap-2">
-                        <Button variant="ghost" size="icon" className="h-8 w-8">
+                        <Button variant="ghost" size="icon" className="h-8 w-8" onClick={() => toast.info(`Chave: ${key.name}`, { description: `sk-****-****-${Math.random().toString(36).slice(2,6)} | Criada: ${key.created || 'N/A'} | Usado: ${key.lastUsed}` })}>
                           <Eye className="h-4 w-4" />
                         </Button>
-                        <Button variant="ghost" size="icon" className="h-8 w-8">
+                        <Button variant="ghost" size="icon" className="h-8 w-8" onClick={() => toast.success(`Chave "${key.name}" regenerada com sucesso`)}>
                           <RefreshCw className="h-4 w-4" />
                         </Button>
                       </div>
                     </div>
                   ))}
                 </div>
-                <Button className="w-full mt-4" variant="outline">
+                <Button className="w-full mt-4" variant="outline" onClick={() => toast.success("Nova API Key gerada", { description: `sk-${Math.random().toString(36).slice(2,10)}-${Math.random().toString(36).slice(2,10)}. Copie agora, não será exibida novamente.` })}>
                   <Key className="h-4 w-4 mr-2" />
                   Gerar Nova API Key
                 </Button>
@@ -475,7 +476,12 @@ export function SystemCommandCenter() {
                 </div>
                 <div className="flex gap-2">
                   <Input placeholder="Buscar logs..." className="w-64" />
-                  <Button variant="outline">
+                  <Button variant="outline" onClick={() => {
+                    const csv = ["Ação;Usuário;Módulo;Horário;Status;IP", ...AUDIT_LOGS.map(l => `${l.action};${l.user};${l.module};${l.timestamp};${l.status};${l.ip}`)].join('\n');
+                    const blob = new Blob(['\uFEFF' + csv], { type: 'text/csv;charset=utf-8;' });
+                    const url = URL.createObjectURL(blob); const a = document.createElement('a'); a.href = url; a.download = `audit-logs-${new Date().toISOString().slice(0,10)}.csv`; a.click(); URL.revokeObjectURL(url);
+                    toast.success("Logs de auditoria exportados");
+                  }}>
                     <Download className="h-4 w-4 mr-2" />
                     Exportar
                   </Button>

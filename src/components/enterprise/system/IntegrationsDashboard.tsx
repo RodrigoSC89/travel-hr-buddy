@@ -3,6 +3,7 @@
  * Status de conexões, logs de sync, configuração guiada
  */
 import React, { useState } from "react";
+import { toast } from "sonner";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -245,7 +246,7 @@ export function IntegrationsDashboard() {
                 <Plug className="h-5 w-5" />
                 Integrações Configuradas
               </CardTitle>
-              <Button size="sm">
+              <Button size="sm" onClick={() => toast.info("Nova Integração", { description: "Configure uma nova integração via System Hub > Integrações. Suporte a APIs REST, webhooks e feeds em tempo real." })}>
                 <Zap className="h-4 w-4 mr-1" />
                 Nova Integração
               </Button>

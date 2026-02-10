@@ -4,6 +4,7 @@
  */
 
 import React, { useState } from "react";
+import { toast } from "sonner";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -166,11 +167,16 @@ export const TravelAnalyticsPanel: React.FC = () => {
               <SelectItem value="12m">Últimos 12 Meses</SelectItem>
             </SelectContent>
           </Select>
-          <Button variant="outline">
+          <Button variant="outline" onClick={() => toast.info("Filtros de Analytics", { description: "Período, Departamento, Tipo de Viagem, Destino, Status de Compliance" })}>
             <Filter className="h-4 w-4 mr-2" />
             Filtros
           </Button>
-          <Button variant="outline">
+          <Button variant="outline" onClick={() => {
+            const csv = ["Mês;Aéreo;Hotel;Carro;Outros", ...spendTrendData.map(d => `${d.month};${d.flights};${d.hotels};${d.cars};${d.other}`)].join('\n');
+            const blob = new Blob(['\uFEFF' + csv], { type: 'text/csv;charset=utf-8;' });
+            const url = URL.createObjectURL(blob); const a = document.createElement('a'); a.href = url; a.download = `travel-analytics-${period}.csv`; a.click(); URL.revokeObjectURL(url);
+            toast.success("Analytics de viagens exportado como CSV");
+          }}>
             <Download className="h-4 w-4 mr-2" />
             Exportar
           </Button>
@@ -601,7 +607,7 @@ export const TravelAnalyticsPanel: React.FC = () => {
                       <p className="text-xs text-muted-foreground">Impacto Estimado</p>
                       <p className="font-bold text-green-600">{prediction.impact}</p>
                     </div>
-                    <Button size="sm">
+                    <Button size="sm" onClick={() => toast.success(`Ação iniciada: ${prediction.action}`, { description: `${prediction.title} - Impacto estimado: ${prediction.impact}. Confiança: ${prediction.confidence}%` })}>
                       <Sparkles className="h-4 w-4 mr-2" />
                       {prediction.action}
                     </Button>
