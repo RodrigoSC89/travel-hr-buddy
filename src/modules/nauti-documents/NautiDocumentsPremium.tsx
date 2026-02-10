@@ -273,7 +273,7 @@ export default function NautiDocumentsPremium() {
   };
 
   const handleExport = () => {
-    toast.success("Documentos exportados");
+    toast.info("Use a aba 'Documentos' para selecionar e exportar documentos individuais");
   };
 
   const tabs: ModuleTab[] = [

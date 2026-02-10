@@ -251,7 +251,24 @@ export function AutoScoringEngine() {
   };
 
   const handleExportReport = () => {
-    toast.success('Relatório exportado com sucesso');
+    try {
+      const report = {
+        scoreFinal: result.scoreFinal,
+        nivel: result.nivel,
+        items: items.map(i => ({ elemento: i.elemento, nome: i.nome, conforme: i.conforme })),
+        exportedAt: new Date().toISOString(),
+      };
+      const blob = new Blob([JSON.stringify(report, null, 2)], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `auto-scoring-report_${new Date().toISOString().split('T')[0]}.json`;
+      a.click();
+      URL.revokeObjectURL(url);
+      toast.success('Relatório exportado com sucesso');
+    } catch {
+      toast.error('Erro ao exportar relatório');
+    }
   };
 
   const nivelColors = getNivelColor(result.nivel);
