@@ -453,7 +453,7 @@ export const FleetCommandCenter: React.FC = () => {
                     style={{ left: `${vessel.x}%`, top: `${vessel.y}%` }}
                     onClick={() => {
                       setSelectedVessel(vessels?.find(v => v.name === vessel.name)?.id || null);
-                      toast.info(vessel.name, { description: `Status: ${vessel.status === 'active' ? 'Operacional' : 'Em Manutenção'}` });
+                      toast.success(vessel.name, { description: `Status: ${vessel.status === 'active' ? 'Operacional' : 'Em Manutenção'}` });
                     }}
                   >
                     <div className={`w-4 h-4 rounded-full ${vessel.status === 'active' ? 'bg-green-500' : 'bg-yellow-500'} animate-pulse`}></div>

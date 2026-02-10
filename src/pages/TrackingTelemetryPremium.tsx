@@ -4,7 +4,7 @@
  */
 
 import React, { Suspense, lazy, useMemo } from "react";
-import { useSearchParams } from "react-router-dom";
+import { useSearchParams, useNavigate } from "react-router-dom";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -44,6 +44,7 @@ function LoadingSkeleton() {
 
 // Fuel Consumption Tab - Real data
 function FuelConsumptionTab() {
+  const navigate = useNavigate();
   const { data: vessels = [], isLoading } = useQuery({
     queryKey: ["tracking-fuel-vessels"],
     queryFn: async () => {
@@ -80,7 +81,7 @@ function FuelConsumptionTab() {
         title="Sem registros de combustível"
         message="Registros de consumo, bunkering e ROB aparecerão aqui quando disponíveis. Cadastre embarcações primeiro."
         actionLabel="Ver Frota"
-        onAction={() => toast.info("Navegue ao módulo Ops → Fleet para cadastrar embarcações")}
+        onAction={() => navigate('/ops?tab=fleet')}
       />
     );
   }

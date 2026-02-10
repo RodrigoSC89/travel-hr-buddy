@@ -105,7 +105,7 @@ function CentralComandoContent() {
   const { isConnected, sendMessage, messages, isLoading: isAITyping } = useUnifiedCommandAI();
   const { isListening, toggleVoice, transcript, isSupported: voiceSupported } = useVoiceCommands({
     onCommand: (cmd: string) => {
-      toast.info(`Comando: ${cmd}`);
+      toast.success(`Comando recebido: ${cmd}`);
       sendMessage(cmd);
     }
   });

@@ -293,7 +293,7 @@ export default function TrackingMegaHub() {
                     id: 'filter',
                     label: 'Filters',
                     icon: <Filter className="h-4 w-4" />,
-                    onClick: () => { toast.info('Filtros de mapa: use as opções de tipo e status no mapa abaixo'); },
+                    onClick: () => { toast.success('Use as opções de tipo e status no mapa abaixo para filtrar embarcações'); },
                     variant: 'outline',
                     tooltip: 'Filtrar embarcações por tipo ou status'
                   }
