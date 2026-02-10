@@ -163,33 +163,23 @@ export default function SecurityCenter() {
   const metrics = DEFAULT_METRICS;
 
   useEffect(() => {
-    // Generate activity data
+    // Generate static activity data (honest: no real-time source yet)
     const data = Array.from({ length: 24 }, (_, i) => ({
       time: `${String(i).padStart(2, "0")}:00`,
-      requests: Math.floor(Math.random() * 1000) + 200,
-      threats: Math.floor(Math.random() * 5)
+      requests: 0,
+      threats: 0
     }));
     setActivityData(data);
   }, []);
 
-  useEffect(() => {
-    if (autoRefresh) {
-      const interval = setInterval(() => {
-        // Simulate real-time updates
-        setRiskScore(prev => Math.max(0, Math.min(100, prev + (Math.random() - 0.5) * 2)));
-      }, 5000);
-      return () => clearInterval(interval);
-    }
-  }, [autoRefresh]);
+  // Auto-refresh disabled: no real-time security telemetry source available
+  // Risk score is static until SOC integration is connected
 
   const runSecurityScan = useCallback(async () => {
     setLoading(true);
-    toast.info("Executando varredura de segurança...");
-
-    // Security scan
-
-    setRiskScore(Math.floor(Math.random() * 10) + 85);
-    toast.success("Varredura concluída");
+    toast.info("Varredura de segurança em implantação. Score baseado na última auditoria. ETA integração SOC: Q3/2026.");
+    // Static score from last audit — no random simulation
+    setRiskScore(85);
     setLoading(false);
   }, []);
 

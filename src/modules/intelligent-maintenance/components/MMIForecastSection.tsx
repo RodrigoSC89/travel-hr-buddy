@@ -3,6 +3,7 @@
  */
 
 import { useState } from "react";
+import { supabase } from "@/integrations/supabase/client";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -32,50 +33,41 @@ export default function MMIForecastSection() {
     setForecast("");
 
     try {
-      // Simulated AI forecast generation
-      const mockForecast = `
+      // Call AI edge function for real forecast
+      const { data: aiData, error: aiError } = await supabase.functions.invoke('ai-chat', {
+        body: {
+          message: `Gere um relatório de forecast de manutenção para: Embarcação: ${vesselName}, Sistema: ${systemName}, Horímetro: ${hourmeter}h, Histórico de manutenção: ${maintenanceDates}. Inclua: próxima manutenção preventiva, itens prioritários, alertas de vida útil, recomendações e previsão de custos.`,
+          context: 'maintenance-forecast'
+        }
+      });
+
+      if (aiError || !aiData?.response) {
+        // Honest fallback: inform user AI is unavailable
+        const fallbackForecast = `
 📊 RELATÓRIO DE FORECAST - ${systemName}
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 🚢 Embarcação: ${vesselName}
 ⏱️ Horímetro Atual: ${hourmeter}h
 
-📋 ANÁLISE DE MANUTENÇÃO:
+⚠️ IA indisponível no momento.
 
-Com base no histórico fornecido e nos padrões de desgaste típicos, a IA identificou os seguintes pontos:
+📋 INFORMAÇÕES REGISTRADAS:
+├─ Sistema: ${systemName}
+├─ Horímetro: ${hourmeter}h
+└─ Datas de manutenção: ${maintenanceDates}
 
-1. PRÓXIMA MANUTENÇÃO PREVENTIVA
-   ├─ Data Estimada: ${new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toLocaleDateString('pt-BR')}
-   ├─ Horímetro Previsto: ${Number(hourmeter) + 150}h
-   └─ Tipo: Manutenção preventiva de rotina
-
-2. ITENS PRIORITÁRIOS
-   ├─ Verificação de vedações hidráulicas
-   ├─ Análise de óleo e filtros
-   └─ Inspeção de componentes críticos
-
-3. ALERTAS
-   ⚠️ Componentes com vida útil próxima do fim:
-   ├─ Filtro principal: ~${Number(hourmeter) + 200}h
-   └─ Correia de transmissão: ~${Number(hourmeter) + 350}h
-
-4. RECOMENDAÇÕES
-   ✅ Realizar inspeção visual diária
-   ✅ Monitorar níveis de fluidos
-   ✅ Programar substituição preventiva
-
-📈 PREVISÃO DE CUSTOS:
-   └─ Estimativa: R$ 2.500,00 - R$ 4.200,00
+💡 Recomendação: Tente novamente em instantes ou consulte o módulo de Manutenção Preditiva para análises detalhadas.
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-🤖 Gerado por IA | ${new Date().toLocaleString('pt-BR')}
-      `.trim();
-
-      // Set forecast immediately
-      setForecast(mockForecast);
-      setForecast(mockForecast);
-
-      toast.success("Forecast gerado com sucesso!");
+📝 Dados registrados | ${new Date().toLocaleString('pt-BR')}
+        `.trim();
+        setForecast(fallbackForecast);
+        toast.info("Forecast gerado com dados locais — IA temporariamente indisponível.");
+      } else {
+        setForecast(aiData.response);
+        toast.success("Forecast gerado com sucesso via IA!");
+      }
     } catch (error) {
       logger.error("Error generating forecast", { error, vesselName, systemName, hourmeter });
       toast.error("Erro ao gerar forecast");

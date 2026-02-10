@@ -120,112 +120,23 @@ interface Props {
   versions?: DocumentVersion[];
 }
 
-// Sample version data for documents
-const SAMPLE_VERSIONS: DocumentVersion[] = [
+// Fallback version data — shown only when no real versions are provided via props
+const FALLBACK_VERSIONS: DocumentVersion[] = [
   {
-    id: "v3",
-    version: "2.1",
-    title: "Procedimento de Segurança - Operações de Carga",
-    content: `1. OBJETIVO
-Este procedimento estabelece as diretrizes para operações seguras de carga e descarga em embarcações.
-
-2. ESCOPO
-Aplica-se a todas as embarcações da frota que realizam operações de carga.
-
-3. RESPONSABILIDADES
-3.1 O Comandante é responsável pela segurança geral da operação.
-3.2 O Imediato supervisiona a equipe de convés durante as operações.
-3.3 O Oficial de Segurança verifica o cumprimento dos procedimentos.
-3.4 O Chefe de Máquinas monitora os sistemas de lastro e estabilidade.
-
-4. PROCEDIMENTOS DE SEGURANÇA
-4.1 Verificar condições meteorológicas antes de iniciar.
-4.2 Realizar briefing de segurança com toda a equipe.
-4.3 Inspecionar equipamentos de carga (guinchos, cabos, manilhas).
-4.4 Confirmar plano de carga aprovado pelo Comandante.
-4.5 Manter comunicação contínua via VHF canal 16 e canal de trabalho.
-4.6 Monitorar estabilidade durante toda a operação.
-
-5. PROCEDIMENTOS DE EMERGÊNCIA
-5.1 Em caso de falha de equipamento, interromper imediatamente.
-5.2 Acionar alarme geral se houver risco de lesão.
-5.3 Registrar qualquer incidente no sistema de bordo.
-
-6. REGISTRO E DOCUMENTAÇÃO
-Todos os eventos devem ser registrados no log de operações.`,
-    createdBy: { name: "Carlos Silva", role: "Safety Officer" },
-    createdAt: "2024-01-15T14:00:00Z",
-    changesSummary: "Adicionada seção 3.4 (Chefe de Máquinas), atualizado item 4.5 com canal VHF",
-    size: "2.4 MB",
+    id: "fallback-empty",
+    version: "—",
+    title: "Nenhuma versão disponível",
+    content: "Nenhum histórico de versões encontrado para este documento.",
+    createdBy: { name: "Sistema", role: "—" },
+    createdAt: new Date().toISOString(),
+    changesSummary: "Histórico de versões será exibido quando o documento tiver versões registradas.",
+    size: "—",
     status: "current",
-  },
-  {
-    id: "v2",
-    version: "2.0",
-    title: "Procedimento de Segurança - Operações de Carga",
-    content: `1. OBJETIVO
-Este procedimento estabelece as diretrizes para operações de carga e descarga em embarcações.
-
-2. ESCOPO
-Aplica-se a todas as embarcações da frota que realizam operações de carga.
-
-3. RESPONSABILIDADES
-3.1 O Comandante é responsável pela segurança geral da operação.
-3.2 O Imediato supervisiona a equipe de convés durante as operações.
-3.3 O Oficial de Segurança verifica o cumprimento dos procedimentos.
-
-4. PROCEDIMENTOS DE SEGURANÇA
-4.1 Verificar condições meteorológicas antes de iniciar.
-4.2 Realizar briefing de segurança com toda a equipe.
-4.3 Inspecionar equipamentos de carga (guinchos, cabos, manilhas).
-4.4 Confirmar plano de carga aprovado pelo Comandante.
-4.5 Manter comunicação contínua via rádio.
-4.6 Monitorar estabilidade durante toda a operação.
-
-5. PROCEDIMENTOS DE EMERGÊNCIA
-5.1 Em caso de falha de equipamento, interromper imediatamente.
-5.2 Acionar alarme geral se houver risco de lesão.
-
-6. REGISTRO E DOCUMENTAÇÃO
-Todos os eventos devem ser registrados no log de operações.`,
-    createdBy: { name: "Ana Rodrigues", role: "Chief Officer" },
-    createdAt: "2023-11-20T10:00:00Z",
-    changesSummary: "Revisão geral, adição da seção de emergência",
-    size: "2.1 MB",
-    status: "superseded",
-  },
-  {
-    id: "v1",
-    version: "1.0",
-    title: "Procedimento de Segurança - Operações de Carga",
-    content: `1. OBJETIVO
-Este procedimento define as diretrizes para operações de carga.
-
-2. ESCOPO
-Aplica-se a embarcações da frota.
-
-3. RESPONSABILIDADES
-3.1 O Comandante é responsável pela segurança da operação.
-3.2 O Imediato supervisiona a equipe de convés.
-
-4. PROCEDIMENTOS
-4.1 Verificar condições meteorológicas.
-4.2 Realizar briefing com a equipe.
-4.3 Inspecionar equipamentos.
-4.4 Confirmar plano de carga.
-
-5. REGISTRO
-Registrar eventos no log de operações.`,
-    createdBy: { name: "Roberto Santos", role: "DPA" },
-    createdAt: "2023-06-10T08:00:00Z",
-    changesSummary: "Versão inicial do procedimento",
-    size: "1.2 MB",
-    status: "archived",
   },
 ];
 
 export function DocumentVersionHistory({ documentTitle, versions }: Props) {
-  const versionList = versions || SAMPLE_VERSIONS;
+  const versionList = versions && versions.length > 0 ? versions : FALLBACK_VERSIONS;
   const [selectedVersions, setSelectedVersions] = useState<[string, string]>([
     versionList[1]?.id || "",
     versionList[0]?.id || "",

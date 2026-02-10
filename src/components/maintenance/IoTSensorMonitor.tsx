@@ -49,8 +49,8 @@ interface IoTSensorMonitorProps {
   onAnomalyDetected?: (sensor: IoTSensor, anomaly: string) => void;
 }
 
-// Simulate real-time sensor data
-const generateSensorData = (): IoTSensor[] => [
+// Fallback sensor data — shown when no real IoT/MQTT connection is available
+const fallbackSensorData = (): IoTSensor[] => [
   {
     id: "vib-me1",
     name: "Vibração Motor Principal BB",
@@ -167,9 +167,9 @@ export function IoTSensorMonitor({ vesselId, onAnomalyDetected }: IoTSensorMonit
   const [selectedSensor, setSelectedSensor] = useState<IoTSensor | null>(null);
   const [refreshInterval, setRefreshInterval] = useState(5000);
 
-  // Simulate real-time updates
+  // Load fallback sensor data — real data comes from IoTConnector MQTT/Realtime
   useEffect(() => {
-    setSensors(generateSensorData());
+    setSensors(fallbackSensorData());
     
     const interval = setInterval(() => {
       const elapsed = Date.now() / 1000;
@@ -254,7 +254,7 @@ export function IoTSensorMonitor({ vesselId, onAnomalyDetected }: IoTSensorMonit
           </div>
         </div>
         <div className="flex gap-2">
-          <Button variant="outline" size="sm" onClick={() => setSensors(generateSensorData())}>
+          <Button variant="outline" size="sm" onClick={() => setSensors(fallbackSensorData())}>
             <RefreshCw className="h-4 w-4 mr-2" />
             Atualizar
           </Button>

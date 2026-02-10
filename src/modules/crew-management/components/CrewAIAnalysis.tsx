@@ -65,8 +65,8 @@ interface AIInsight {
   crewId?: string;
 }
 
-// Simulated data generation
-const generateCrewAnalysis = (): CrewMemberAnalysis[] => [
+// Fallback crew analysis data — shown when no real crew data is available from Supabase
+const fallbackCrewAnalysis = (): CrewMemberAnalysis[] => [
   {
     id: "1",
     name: "Carlos Silva",
@@ -149,7 +149,7 @@ const generateCrewAnalysis = (): CrewMemberAnalysis[] => [
   }
 ];
 
-const generateCompetencyGaps = (): CompetencyGap[] => [
+const fallbackCompetencyGaps = (): CompetencyGap[] => [
   {
     skill: "Operação DP Avançada",
     currentLevel: 65,
@@ -388,16 +388,16 @@ export default function CrewAIAnalysis() {
             lastRestPeriod: new Date(),
             daysOnboard: Math.floor(Math.random() * 60) + 10,
           }))
-        : generateCrewAnalysis();
+        : fallbackCrewAnalysis();
       
       setCrewData(crew);
-      setCompetencyGaps(generateCompetencyGaps());
+      setCompetencyGaps(fallbackCompetencyGaps());
       setInsights(generateAIInsights(crew));
     } catch {
       // Fallback to generated data if query fails
-      const crew = generateCrewAnalysis();
+      const crew = fallbackCrewAnalysis();
       setCrewData(crew);
-      setCompetencyGaps(generateCompetencyGaps());
+      setCompetencyGaps(fallbackCompetencyGaps());
       setInsights(generateAIInsights(crew));
     }
     setIsAnalyzing(false);
