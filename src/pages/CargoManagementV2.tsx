@@ -175,7 +175,7 @@ export default function CargoManagementV2() {
       if (error) throw error;
       toast.success('Verificação de estabilidade concluída');
     } catch (error) {
-      toast.info('Verificação de estabilidade simulada - GM: 2.45m (OK)');
+      toast.warning('Edge function indisponível. Verifique a configuração do cargo-management-ai.', { description: 'A verificação de estabilidade requer a edge function ativa.' });
     } finally {
       setIsAnalyzing(false);
     }
@@ -191,7 +191,7 @@ export default function CargoManagementV2() {
       if (error) throw error;
       toast.success('Análise IA da carga concluída');
     } catch (error) {
-      toast.info('Análise IA simulada - carga em conformidade');
+      toast.warning('Edge function indisponível. Verifique a configuração do cargo-management-ai.', { description: 'A análise IA requer a edge function ativa.' });
     } finally {
       setIsAnalyzing(false);
     }
@@ -251,10 +251,10 @@ export default function CargoManagementV2() {
   ];
 
   const cargoActions = [
-    { label: "Ver Detalhes", icon: Eye, onClick: (item: CargoItem) => toast.info(`${item.cargo_name}`, { description: `Tipo: ${item.cargo_type} | Peso: ${item.weight_mt} MT | Vol: ${item.volume_cbm} CBM | Posição: ${item.stowage_position} | BL: ${item.bill_of_lading} | Origem: ${item.origin_port} → Destino: ${item.destination_port}${item.imo_class ? ` | IMO: ${item.imo_class}` : ''}${item.un_number ? ` | UN: ${item.un_number}` : ''}`, duration: 8000 }) },
+    { label: "Ver Detalhes", icon: Eye, onClick: (item: CargoItem) => toast.success(`${item.cargo_name}`, { description: `Tipo: ${item.cargo_type} | Peso: ${item.weight_mt} MT | Vol: ${item.volume_cbm} CBM | Posição: ${item.stowage_position} | BL: ${item.bill_of_lading} | Origem: ${item.origin_port} → Destino: ${item.destination_port}${item.imo_class ? ` | IMO: ${item.imo_class}` : ''}${item.un_number ? ` | UN: ${item.un_number}` : ''}`, duration: 8000 }) },
     { label: "Analisar com IA", icon: Brain, onClick: (item: CargoItem) => analyzeCargoWithAI(item.id) },
     { label: "Editar", icon: Edit, onClick: (item: CargoItem) => {
-      toast.info(`Editando: ${item.cargo_name}`, { description: `Tipo: ${item.cargo_type} | Peso: ${item.weight_mt} MT | Posição: ${item.stowage_position} | BL: ${item.bill_of_lading}. Use o formulário de Nova Carga para alterar.`, duration: 6000 });
+      toast.success(`Editando: ${item.cargo_name}`, { description: `Tipo: ${item.cargo_type} | Peso: ${item.weight_mt} MT | Posição: ${item.stowage_position} | BL: ${item.bill_of_lading}. Use o formulário de Nova Carga para alterar.`, duration: 6000 });
     }},
   ];
 

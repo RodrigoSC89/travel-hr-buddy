@@ -37,7 +37,20 @@ export const EmployeePaymentsHistory: React.FC = () => {
     : payments.filter(p => p.date.startsWith(selectedPeriod));
 
   const handleDownloadPayslip = (period: string) => {
-    toast.info("Download de demonstrativo", { description: `Download de holerites em implantação. Período: ${period}. ETA: Q3/2026.` });
+    const paymentData = filteredPayments.filter(p => p.date.startsWith(period));
+    if (paymentData.length === 0) {
+      toast.warning("Nenhum registro encontrado", { description: `Sem dados de pagamento para o período: ${period}` });
+      return;
+    }
+    const csv = `Período,Tipo,Valor,Status\n${paymentData.map(p => `${p.date},${p.type},${p.amount},${p.status}`).join('\n')}`;
+    const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `demonstrativo-${period}.csv`;
+    a.click();
+    URL.revokeObjectURL(url);
+    toast.success("Demonstrativo exportado", { description: `Período: ${period} | ${paymentData.length} registros` });
   };
 
   const getTypeColor = (type: Payment['type']) => {

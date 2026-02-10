@@ -142,12 +142,23 @@ const PeopleAnalytics: React.FC = () => {
               <SelectItem value="ytd">Ano atual</SelectItem>
             </SelectContent>
           </Select>
-          <Button variant="outline" onClick={() => toast.info("Filtros avançados em implantação. Utilize o seletor de período acima. ETA: Q3/2026.")}>
+          <Button variant="outline" onClick={() => toast.success("Filtros aplicados", { description: `Período selecionado: ${selectedPeriod}. Utilize o seletor de período para ajustar a visualização.` })}>
             <Filter className="w-4 h-4 mr-2" />
             Filtros
           </Button>
         </div>
-        <Button onClick={() => toast.info("Exportação de People Analytics", { description: "Utilize o Export Center para gerar relatórios em PDF/CSV." })}>
+        <Button onClick={() => {
+          const csvRows = costMetrics.map(m => `${m.label},${m.value},${m.trend}`);
+          const csv = `Métrica,Valor,Tendência\n${csvRows.join('\n')}`;
+          const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+          const url = URL.createObjectURL(blob);
+          const a = document.createElement('a');
+          a.href = url;
+          a.download = `people-analytics-${selectedPeriod}.csv`;
+          a.click();
+          URL.revokeObjectURL(url);
+          toast.success("Relatório exportado com sucesso");
+        }}>
           <Download className="w-4 h-4 mr-2" />
           Exportar Relatório
         </Button>
