@@ -395,7 +395,10 @@ export function APIGatewayMonitor() {
                       <Badge variant={key.status === "active" ? "default" : "secondary"}>
                         {key.status === "active" ? "Ativa" : "Descontinuada"}
                       </Badge>
-                      <Button variant="ghost" size="icon" onClick={() => toast.info(`Chave: ${key.name}`, { description: `Status: ${key.status === 'active' ? 'Ativa' : 'Descontinuada'} | Criada: ${new Date(key.created).toLocaleDateString("pt-BR")} | Último uso: ${new Date(key.lastUsed).toLocaleDateString("pt-BR")}` })}>
+                      <Button variant="ghost" size="icon" onClick={() => {
+                        navigator.clipboard?.writeText(`Key: ${key.name} | Status: ${key.status} | Created: ${new Date(key.created).toLocaleDateString("pt-BR")} | Last Used: ${new Date(key.lastUsed).toLocaleDateString("pt-BR")}`);
+                        toast.success("Detalhes da chave copiados");
+                      }}>
                         <Eye className="h-4 w-4" />
                       </Button>
                       <Button variant="ghost" size="icon" onClick={() => {
@@ -407,7 +410,7 @@ export function APIGatewayMonitor() {
                     </div>
                   </div>
                 ))}
-                <Button className="w-full" variant="outline" onClick={() => toast.info("Geração de API Keys", { description: "Gerenciamento de chaves de API em implantação. Gerencie suas credenciais via Supabase Dashboard. ETA: Q3/2026." })}>
+                <Button className="w-full" variant="outline" onClick={() => toast.info("Gerenciamento de API Keys em implantação", { description: "Gerencie suas credenciais via Supabase Dashboard > Settings > API. ETA: Q3/2026." })}>
                   <Key className="h-4 w-4 mr-2" />
                   Gerar Nova API Key
                 </Button>

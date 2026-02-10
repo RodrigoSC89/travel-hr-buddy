@@ -246,7 +246,7 @@ export function IntegrationsDashboard() {
                 <Plug className="h-5 w-5" />
                 Integrações Configuradas
               </CardTitle>
-              <Button size="sm" onClick={() => toast.info("Nova Integração", { description: "Configure uma nova integração via System Hub > Integrações. Suporte a APIs REST, webhooks e feeds em tempo real." })}>
+              <Button size="sm" onClick={() => toast.info("Configuração de integrações em implantação", { description: "Acesse System Hub > Integrações para configurar APIs REST, webhooks e feeds em tempo real. ETA: Q3/2026." })}>
                 <Zap className="h-4 w-4 mr-1" />
                 Nova Integração
               </Button>

@@ -414,8 +414,8 @@ export function RiskMatrix() {
                       </div>
 
                       <div className="flex gap-2 pt-4 border-t">
-                        <Button className="flex-1" onClick={() => toast.info("Editor de risco — Em implantação", { description: "A edição inline de riscos será disponibilizada em Q3/2026. Use o módulo Compliance Hub para gerenciar riscos.", duration: 5000 })}>Editar Risco</Button>
-                        <Button variant="outline" className="flex-1" onClick={() => toast.info("Histórico de risco — Em implantação", { description: "O registro de alterações e avaliações anteriores será disponibilizado em Q3/2026.", duration: 5000 })}>
+                        <Button className="flex-1" onClick={() => toast.info("Editor de risco em implantação", { description: "Utilize o módulo Compliance Hub para gerenciar riscos. ETA: Q3/2026." })}>Editar Risco</Button>
+                        <Button variant="outline" className="flex-1" onClick={() => toast.info("Histórico de risco em implantação", { description: "O registro de alterações e avaliações anteriores será disponibilizado em Q3/2026." })}>
                           <FileText className="h-4 w-4 mr-2" />
                           Ver Histórico
                         </Button>

@@ -229,7 +229,7 @@ export function SupplierPortal() {
                 <Building2 className="h-5 w-5" />
                 Fornecedores
               </CardTitle>
-              <Button size="sm" onClick={() => toast.info("Novo Fornecedor", { description: "Cadastro de fornecedores em implantação. Utilize o módulo Procurement para cadastro completo. ETA: Q3/2026." })}>
+              <Button size="sm" onClick={() => toast.info("Cadastro de fornecedores em implantação", { description: "Utilize o módulo Procurement para cadastro completo. ETA: Q3/2026." })}>
                 <Plus className="h-4 w-4 mr-1" />
                 Novo
               </Button>
@@ -244,7 +244,7 @@ export function SupplierPortal() {
                   className="pl-9"
                 />
               </div>
-              <Button variant="outline" size="icon" onClick={() => toast.info("Filtros: Status (Aprovado, Pendente, Suspenso), Categoria, Rating")}>
+              <Button variant="outline" size="icon" onClick={() => toast.info("Utilize a busca acima para filtrar por nome. Filtros avançados (Status, Categoria, Rating) em implantação.")}>
                 <Filter className="h-4 w-4" />
               </Button>
             </div>
@@ -303,11 +303,13 @@ export function SupplierPortal() {
                   </div>
                 </div>
                 <div className="flex gap-2">
-                  <Button variant="outline" size="sm" onClick={() => toast.info(`Mensagem para ${selectedSupplier.name}`, { description: `Mensageria de fornecedores em implantação. Contate via: ${selectedSupplier.contact.email}. ETA: Q3/2026.` })}>
+                  <Button variant="outline" size="sm" onClick={() => {
+                    window.open(`mailto:${selectedSupplier.contact.email}?subject=Contato Nautilus - ${selectedSupplier.name}`, '_blank');
+                  }}>
                     <MessageSquare className="h-4 w-4 mr-1" />
                     Mensagem
                   </Button>
-                  <Button variant="outline" size="icon" onClick={() => toast.info(`Opções: Editar, Suspender, Exportar dados de ${selectedSupplier.name}`)}>
+                  <Button variant="outline" size="icon" onClick={() => toast.info(`Opções adicionais para ${selectedSupplier.name} em implantação. ETA: Q3/2026.`)}>
                     <MoreVertical className="h-4 w-4" />
                   </Button>
                 </div>
