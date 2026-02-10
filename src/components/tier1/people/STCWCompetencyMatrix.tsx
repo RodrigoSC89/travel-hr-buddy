@@ -467,9 +467,23 @@ export function STCWCompetencyMatrix() {
               <CardDescription>Individual crew member certification and competency status</CardDescription>
             </CardHeader>
             <CardContent>
-              <p className="text-muted-foreground text-center py-8">
-                ⚙️ Em implantação — Dashboard de compliance será habilitado em breve (FF_STCW_AI_TRAINING)
-              </p>
+              <div className="space-y-3">
+                {crewCompetencies.map(cc => {
+                  const competency = stcwCompetencies.find(c => c.id === cc.competencyId);
+                  return (
+                    <div key={cc.crewMemberId} className="flex items-center justify-between p-3 border rounded-lg">
+                      <div>
+                        <span className="font-medium">{cc.crewMemberName}</span>
+                        <span className="text-xs text-muted-foreground ml-2">({cc.rank})</span>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        {getStatusBadge(cc.status)}
+                        {competency && <Badge variant="outline" className="text-xs">{competency.title}</Badge>}
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
             </CardContent>
           </Card>
         </TabsContent>
@@ -533,9 +547,26 @@ export function STCWCompetencyMatrix() {
               <CardDescription>AI-recommended training schedule based on gap analysis</CardDescription>
             </CardHeader>
             <CardContent>
-              <p className="text-muted-foreground text-center py-8">
-                ⚙️ Em implantação — Recomendações de treinamento por IA serão habilitadas via flag FF_STCW_AI_TRAINING
-              </p>
+              <div className="space-y-3">
+                {crewCompetencies.filter(cc => cc.status === "gap" || cc.status === "expiring").map(cc => {
+                  const competency = stcwCompetencies.find(c => c.id === cc.competencyId);
+                  return (
+                    <div key={`train-${cc.crewMemberId}`} className="p-3 border rounded-lg flex items-center justify-between">
+                      <div>
+                        <p className="font-medium">{cc.crewMemberName}</p>
+                        <p className="text-sm text-muted-foreground">Recomendado: {competency?.title}</p>
+                      </div>
+                      <Button size="sm" onClick={() => window.location.assign('/nautilus-academy')}>
+                        <GraduationCap className="h-4 w-4 mr-2" />
+                        Agendar
+                      </Button>
+                    </div>
+                  );
+                })}
+                {crewCompetencies.filter(cc => cc.status === "gap" || cc.status === "expiring").length === 0 && (
+                  <p className="text-muted-foreground text-center py-6">Nenhuma lacuna identificada. Todos os tripulantes estão com certificações em dia.</p>
+                )}
+              </div>
             </CardContent>
           </Card>
         </TabsContent>

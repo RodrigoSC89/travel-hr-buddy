@@ -282,9 +282,9 @@ export function HRPayrollDashboard() {
           <Download className="h-4 w-4" />
           Exportar Excel
         </Button>
-        <Button variant="outline" className="gap-2" disabled title="Em implantação — Requer integração com layout eSocial">
+        <Button variant="outline" className="gap-2" onClick={() => window.location.assign('/payroll?tab=esocial')}>
           <Download className="h-4 w-4" />
-          eSocial (Em implantação)
+          eSocial
         </Button>
       </div>
     </div>

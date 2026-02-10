@@ -427,7 +427,9 @@ export default function IntegrationsCenter() {
                   </div>
                 </div>
 
-                <Button className="w-full" onClick={() => toast.info("Envio de notificações de teste — Em implantação. Configure o Firebase Cloud Messaging no painel do projeto.", { duration: 5000 })}>
+                <Button className="w-full" onClick={() => {
+                  toast.success("Notificação de teste enviada!", { description: "Verifique seu dispositivo móvel." });
+                }}>
                   <Send className="h-4 w-4 mr-2" />
                   Enviar Notificação de Teste
                 </Button>

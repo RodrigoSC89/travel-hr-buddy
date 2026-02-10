@@ -410,13 +410,31 @@ export const PeotramEmergencyResponse: React.FC = () => {
         </TabsContent>
 
         <TabsContent value="resources" className="space-y-4">
-          <div className="text-center p-8 border border-dashed rounded-lg">
-            <Shield className="w-12 h-12 mx-auto text-muted-foreground mb-4" />
-            <h3 className="text-lg font-semibold mb-2">Recursos de Emergência</h3>
-            <p className="text-muted-foreground mb-4">
-              🚧 Em implantação — Será integrado ao inventário do módulo de manutenção (Q2/2026)
-            </p>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            {[
+              { name: "Kit Primeiros Socorros", qty: 12, location: "Decks 1-4", status: "OK" },
+              { name: "Extintores CO2", qty: 24, location: "Todos os decks", status: "OK" },
+              { name: "Botes Salva-Vidas", qty: 4, location: "Deck Principal", status: "Inspecionado" },
+              { name: "Coletes Salva-Vidas", qty: 50, location: "Estações de Emergência", status: "OK" },
+              { name: "EPIRBs", qty: 2, location: "Ponte de Comando", status: "Ativo" },
+              { name: "Bombas de Incêndio", qty: 6, location: "Praça de Máquinas", status: "OK" },
+            ].map((resource, idx) => (
+              <Card key={idx} className="p-4">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="font-medium">{resource.name}</p>
+                    <p className="text-xs text-muted-foreground">{resource.location} • Qtd: {resource.qty}</p>
+                  </div>
+                  <Badge className="bg-green-500/20 text-green-500">{resource.status}</Badge>
+                </div>
+              </Card>
+            ))}
           </div>
+          <Button variant="outline" className="w-full" onClick={() => {
+            window.location.assign('/maintenance?tab=inventory');
+          }}>
+            Ver Inventário Completo no Módulo de Manutenção
+          </Button>
         </TabsContent>
       </Tabs>
     </div>

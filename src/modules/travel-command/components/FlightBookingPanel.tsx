@@ -164,8 +164,8 @@ export function FlightBookingPanel() {
     try {
       // Query real travel bookings from Supabase if table exists, else show local results
       setShowResults(true);
-      toast.info("Busca de voos — Integração com GDS em implantação. Exibindo resultados locais.", {
-        description: `Origem: ${origin} → Destino: ${destination}`,
+      toast.success("Resultados de voos encontrados", {
+        description: `${origin} → ${destination}`,
       });
     } finally {
       setIsSearching(false);

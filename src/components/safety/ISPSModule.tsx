@@ -174,11 +174,11 @@ export function ISPSModule() {
             Export SSP
           </Button>
           <Button onClick={() => {
-            toast.info("Avaliação de segurança — Em implantação (Q2/2026). Use o módulo Compliance Hub para auditorias.", { duration: 5000 });
-          }} variant="outline" title="Em implantação — Q2/2026">
+            window.location.assign('/compliance?tab=audits');
+            toast.success("Redirecionando para o módulo de Compliance Hub — Auditorias");
+          }} variant="outline">
             <Plus className="h-4 w-4 mr-2" />
             New Assessment
-            <Badge variant="outline" className="ml-2 text-[10px]">Q2/2026</Badge>
           </Button>
         </div>
       </div>
@@ -390,7 +390,10 @@ export function ISPSModule() {
             <CardHeader>
               <div className="flex items-center justify-between">
                 <CardTitle>Security Assessments</CardTitle>
-                <Button size="sm" onClick={() => toast.info("Formulário de avaliação ISPS — Em implantação (Q2/2026). Consulte o Compliance Hub para auditorias.", { duration: 5000 })}>
+                <Button size="sm" onClick={() => {
+                  window.location.assign('/compliance?tab=audits');
+                  toast.success("Redirecionando para Compliance Hub — Nova Auditoria");
+                }}>
                   <Plus className="h-4 w-4 mr-2" />
                   Nova Avaliação
                 </Button>
@@ -433,7 +436,10 @@ export function ISPSModule() {
             <CardHeader>
               <div className="flex items-center justify-between">
                 <CardTitle>Security Drills</CardTitle>
-                <Button size="sm" onClick={() => toast.info("Agendamento de drills ISPS — Em implantação (Q2/2026).", { duration: 5000 })}>
+                <Button size="sm" onClick={() => {
+                  window.location.assign('/emergency-plans?action=new-drill');
+                  toast.success("Redirecionando para Planos de Emergência — Agendar Drill");
+                }}>
                   <Plus className="h-4 w-4 mr-2" />
                   Agendar Drill
                 </Button>
@@ -456,7 +462,21 @@ export function ISPSModule() {
                           </div>
                           <p className="text-sm mt-2">{drill.notes}</p>
                         </div>
-                        <Button variant="outline" size="sm" onClick={() => toast.info(`Relatório do drill "${drill.type}" — Exportação em implantação (Q2/2026).`, { duration: 5000 })}>
+                        <Button variant="outline" size="sm" onClick={async () => {
+                          try {
+                            const { jsPDF } = await import('jspdf');
+                            const doc = new jsPDF();
+                            doc.setFontSize(16);
+                            doc.text(`Drill Report: ${drill.type}`, 20, 30);
+                            doc.setFontSize(11);
+                            doc.text(`Date: ${drill.date.toLocaleDateString('pt-BR')}`, 20, 45);
+                            doc.text(`Participants: ${drill.participants}`, 20, 55);
+                            doc.text(`Result: ${drill.result}`, 20, 65);
+                            doc.text(`Notes: ${drill.notes}`, 20, 75);
+                            doc.save(`drill-report-${drill.type.replace(/\s/g, '-').toLowerCase()}.pdf`);
+                            toast.success('Relatório exportado com sucesso');
+                          } catch { toast.error('Erro ao gerar relatório'); }
+                        }}>
                           Ver Relatório
                         </Button>
                       </div>

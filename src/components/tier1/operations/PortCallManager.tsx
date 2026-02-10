@@ -416,9 +416,19 @@ export function PortCallManager() {
               <CardDescription>Complete list of port calls with filtering options</CardDescription>
             </CardHeader>
             <CardContent>
-              <p className="text-muted-foreground text-center py-8">
-                ⚙️ Em implantação — Tabela de port calls com filtros avançados será habilitada em breve
-              </p>
+              <div className="space-y-3">
+                {portCalls.length > 0 ? portCalls.map((pc) => (
+                  <div key={pc.id} className="p-3 border rounded-lg flex justify-between items-center">
+                    <div>
+                      <p className="font-medium">{pc.port} — {pc.terminal}</p>
+                      <p className="text-xs text-muted-foreground">{pc.eta ? new Date(pc.eta).toLocaleDateString('pt-BR') : 'TBD'}</p>
+                    </div>
+                    <Badge variant="outline">{pc.status}</Badge>
+                  </div>
+                )) : (
+                  <p className="text-muted-foreground text-center py-8">Nenhum port call registrado</p>
+                )}
+              </div>
             </CardContent>
           </Card>
         </TabsContent>

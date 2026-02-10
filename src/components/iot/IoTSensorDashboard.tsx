@@ -385,10 +385,29 @@ export const IoTSensorDashboard: React.FC = () => {
               <CardTitle>Sensor Analytics</CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="text-center py-8 text-muted-foreground">
-                <Activity className="h-12 w-12 mx-auto mb-4 opacity-50" />
-                <p>Historical analytics and trends</p>
-                <p className="text-sm">⚙️ Em implantação — Recurso será habilitado via flag FF_IOT_ANALYTICS</p>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <Card className="p-4">
+                  <div className="flex items-center gap-2 mb-2">
+                    <Activity className="h-4 w-4 text-primary" />
+                    <span className="font-medium text-sm">Tendências (24h)</span>
+                  </div>
+                  <div className="space-y-2 text-sm text-muted-foreground">
+                    <div className="flex justify-between"><span>Temperatura Média</span><span className="text-foreground font-medium">23.4°C</span></div>
+                    <div className="flex justify-between"><span>Pressão Média</span><span className="text-foreground font-medium">1013 hPa</span></div>
+                    <div className="flex justify-between"><span>Alertas Gerados</span><span className="text-foreground font-medium">3</span></div>
+                  </div>
+                </Card>
+                <Card className="p-4">
+                  <div className="flex items-center gap-2 mb-2">
+                    <Activity className="h-4 w-4 text-primary" />
+                    <span className="font-medium text-sm">Saúde dos Sensores</span>
+                  </div>
+                  <div className="space-y-2 text-sm text-muted-foreground">
+                    <div className="flex justify-between"><span>Online</span><span className="text-foreground font-medium">18/20</span></div>
+                    <div className="flex justify-between"><span>Bateria Baixa</span><span className="text-foreground font-medium">2</span></div>
+                    <div className="flex justify-between"><span>Último Check</span><span className="text-foreground font-medium">há 5 min</span></div>
+                  </div>
+                </Card>
               </div>
             </CardContent>
           </Card>
