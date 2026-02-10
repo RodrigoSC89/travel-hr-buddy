@@ -82,7 +82,7 @@ function SparePartsInventoryTab() {
     );
   }
 
-  const lowStock = inventory.filter((i: any) => i.quantity <= (i.min_quantity || 0));
+  const lowStock = inventory.filter((i) => (i.quantity ?? 0) <= (i.min_quantity || 0));
   const totalItems = inventory.length;
 
   return (
@@ -97,7 +97,7 @@ function SparePartsInventoryTab() {
             <Badge variant="destructive">{lowStock.length} abaixo do mínimo</Badge>
           )}
           <Button variant="outline" size="sm" onClick={() => {
-            const csv = ["Nome,Categoria,Quantidade,Unidade,Mínimo,Local,Status", ...inventory.map((i: any) =>
+            const csv = ["Nome,Categoria,Quantidade,Unidade,Mínimo,Local,Status", ...inventory.map((i) =>
               `"${i.name}",${i.category || 'N/A'},${i.quantity},${i.unit || 'un'},${i.min_quantity || 0},${i.location || 'N/A'},${i.status || 'active'}`
             )].join('\n');
             const blob = new Blob([csv], { type: 'text/csv' });
@@ -130,7 +130,7 @@ function SparePartsInventoryTab() {
           <CardContent className="p-4">
             <p className="text-xs text-muted-foreground">Categorias</p>
             <p className="text-2xl font-bold">
-              {new Set(inventory.map((i: any) => i.category)).size}
+              {new Set(inventory.map((i) => i.category)).size}
             </p>
           </CardContent>
         </Card>
@@ -143,8 +143,8 @@ function SparePartsInventoryTab() {
         </CardHeader>
         <CardContent>
           <div className="space-y-2">
-            {inventory.slice(0, 15).map((item: any) => {
-              const isLow = item.quantity <= (item.min_quantity || 0);
+            {inventory.slice(0, 15).map((item) => {
+              const isLow = (item.quantity ?? 0) <= (item.min_quantity || 0);
               return (
                 <div key={item.id} className={`flex items-center justify-between p-2 border rounded hover:bg-muted/50 transition-colors ${isLow ? 'border-destructive/30 bg-destructive/5' : ''}`}>
                   <div className="flex items-center gap-3">
@@ -188,7 +188,7 @@ export default function MaintenanceHubPremium() {
         .select("id, status");
       if (error) throw error;
       const total = records?.length || 0;
-      const completed = records?.filter((r: any) => r.status === 'completed').length || 0;
+      const completed = records?.filter((r) => r.status === 'completed').length || 0;
       const healthScore = total > 0 ? Math.round((completed / total) * 100) : 100;
       return { total, completed, healthScore };
     },

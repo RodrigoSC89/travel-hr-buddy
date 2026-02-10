@@ -79,7 +79,7 @@ export default function PeopleHubPremium() {
         .select("id, status");
       if (error) throw error;
       const total = data?.length || 0;
-      const active = data?.filter((c: any) => c.status === 'active' || c.status === 'onboard').length || 0;
+      const active = data?.filter((c) => c.status === 'active' || c.status === 'onboard').length || 0;
       return { total, active };
     },
     staleTime: 30000,
