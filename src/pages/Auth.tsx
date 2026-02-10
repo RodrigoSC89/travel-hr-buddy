@@ -412,7 +412,7 @@ const Auth: React.FC = () => {
           {/* Logo & Title */}
           <div className="flex items-center space-x-4">
             <div className="w-16 h-16 rounded-2xl bg-card flex items-center justify-center shadow-premium-lg p-2.5 border border-border/50 ring-1 ring-primary/10">
-              <img src={nautiLogo} alt="Nauti One Logo" className="w-full h-full object-contain" />
+              <img src={nautiLogo} alt="Nauti One Logo" className="w-full h-full object-contain" width={44} height={44} />
             </div>
             <div>
               <h1 className="text-4xl font-bold tracking-tight bg-gradient-to-r from-primary to-azure-400 bg-clip-text text-transparent">
@@ -513,7 +513,7 @@ const Auth: React.FC = () => {
               {/* Mobile logo */}
               <div className="lg:hidden flex justify-center mb-5">
                 <div className="w-14 h-14 rounded-2xl bg-card flex items-center justify-center shadow-premium-lg p-2 ring-1 ring-primary/10">
-                  <img src={nautiLogo} alt="Nauti One" className="w-full h-full object-contain" />
+                  <img src={nautiLogo} alt="Nauti One" className="w-full h-full object-contain" width={40} height={40} />
                 </div>
               </div>
               <CardTitle className="text-2xl font-bold text-card-foreground">
