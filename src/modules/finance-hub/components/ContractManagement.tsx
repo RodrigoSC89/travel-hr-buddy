@@ -150,17 +150,22 @@ function ContractCard({ contract }: { contract: Contract }) {
       </div>
 
       <div className="flex gap-2 mt-3">
-        <Button size="sm" variant="outline" className="flex-1 gap-1">
+        <Button size="sm" variant="outline" className="flex-1 gap-1" onClick={() => toast.info(`${contract.title}`, { description: `Contraparte: ${contract.counterparty} | Valor: ${formatCurrency(contract.value, contract.currency)} | Período: ${contract.startDate} a ${contract.endDate}${contract.vessel ? ` | Navio: ${contract.vessel}` : ''}` })}>
           <Eye className="h-3 w-3" />
           Detalhes
         </Button>
         {contract.renewalOption && contract.status === "expiring" && (
-          <Button size="sm" className="flex-1 gap-1">
+          <Button size="sm" className="flex-1 gap-1" onClick={() => toast.success(`Processo de renovação iniciado para ${contract.number}`, { description: `${contract.title} - ${contract.counterparty}. Equipe jurídica será notificada.` })}>
             <RefreshCw className="h-3 w-3" />
             Renovar
           </Button>
         )}
-        <Button size="sm" variant="ghost">
+        <Button size="sm" variant="ghost" onClick={() => {
+          const csv = `Contrato: ${contract.number}\nTítulo: ${contract.title}\nContraparte: ${contract.counterparty}\nValor: ${formatCurrency(contract.value, contract.currency)}\nInício: ${contract.startDate}\nFim: ${contract.endDate}\nStatus: ${contract.status}`;
+          const blob = new Blob([csv], { type: 'text/plain' });
+          const url = URL.createObjectURL(blob); const a = document.createElement('a'); a.href = url; a.download = `${contract.number}.txt`; a.click(); URL.revokeObjectURL(url);
+          toast.success(`Contrato ${contract.number} exportado`);
+        }}>
           <Download className="h-4 w-4" />
         </Button>
       </div>
@@ -270,7 +275,7 @@ export default function ContractManagement() {
                 Economia potencial de $120K com renegociação antecipada.
               </p>
             </div>
-            <Button className="gap-2">
+            <Button className="gap-2" onClick={() => toast.info("Análise IA de Contratos", { description: `${stats.expiring} contratos vencendo em 60 dias. Economia potencial de $120K com renegociação antecipada. Recomendação: iniciar negociação com ${contracts.filter(c => c.status === 'expiring').map(c => c.counterparty).join(', ')}.` })}>
               Ver Análise
               <ArrowRight className="h-4 w-4" />
             </Button>
@@ -299,10 +304,10 @@ export default function ContractManagement() {
                   onChange={(e) => setSearchTerm(e.target.value)}
                 />
               </div>
-              <Button variant="outline" size="icon">
+              <Button variant="outline" size="icon" onClick={() => toast.info("Filtros disponíveis: Tipo (Afretamento, Serviço, Fornecedor), Status, Valor, Vencimento")}>
                 <Filter className="h-4 w-4" />
               </Button>
-              <Button className="gap-2">
+              <Button className="gap-2" onClick={() => toast.info("Novo Contrato", { description: "Para criar um contrato, utilize Finance > Contratos no módulo financeiro completo ou entre em contato com o departamento jurídico." })}>
                 <Plus className="h-4 w-4" />
                 Novo Contrato
               </Button>
