@@ -395,19 +395,19 @@ export function APIGatewayMonitor() {
                       <Badge variant={key.status === "active" ? "default" : "secondary"}>
                         {key.status === "active" ? "Ativa" : "Descontinuada"}
                       </Badge>
-                      <Button variant="ghost" size="icon" onClick={() => toast.info(`Chave: ${key.name}`, { description: `sk-****-${Math.random().toString(36).slice(2,8)} | Status: ${key.status === 'active' ? 'Ativa' : 'Descontinuada'}` })}>
+                      <Button variant="ghost" size="icon" onClick={() => toast.info(`Chave: ${key.name}`, { description: `Status: ${key.status === 'active' ? 'Ativa' : 'Descontinuada'} | Criada: ${new Date(key.created).toLocaleDateString("pt-BR")} | Último uso: ${new Date(key.lastUsed).toLocaleDateString("pt-BR")}` })}>
                         <Eye className="h-4 w-4" />
                       </Button>
                       <Button variant="ghost" size="icon" onClick={() => {
-                        navigator.clipboard?.writeText(`sk-${key.name.toLowerCase().replace(/\s/g,'-')}-${Math.random().toString(36).slice(2,10)}`);
-                        toast.success("Chave copiada para a área de transferência");
+                        navigator.clipboard?.writeText(key.name);
+                        toast.success("Nome da chave copiado para a área de transferência");
                       }}>
                         <Copy className="h-4 w-4" />
                       </Button>
                     </div>
                   </div>
                 ))}
-                <Button className="w-full" variant="outline" onClick={() => toast.success("Nova API Key gerada", { description: `sk-${Math.random().toString(36).slice(2,14)}. Copie agora - não será exibida novamente.` })}>
+                <Button className="w-full" variant="outline" onClick={() => toast.info("Geração de API Keys", { description: "Gerenciamento de chaves de API em implantação. Gerencie suas credenciais via Supabase Dashboard. ETA: Q3/2026." })}>
                   <Key className="h-4 w-4 mr-2" />
                   Gerar Nova API Key
                 </Button>

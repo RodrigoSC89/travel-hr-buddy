@@ -413,7 +413,7 @@ export function SystemCommandCenter() {
                         </div>
                       </div>
                       <div className="flex gap-2">
-                        <Button variant="ghost" size="icon" className="h-8 w-8" onClick={() => toast.info(`Chave: ${key.name}`, { description: `sk-****-****-${Math.random().toString(36).slice(2,6)} | Criada: ${key.created || 'N/A'} | Usado: ${key.lastUsed}` })}>
+                        <Button variant="ghost" size="icon" className="h-8 w-8" onClick={() => toast.info(`Chave: ${key.name}`, { description: `Criada: ${key.created || 'N/A'} | Último uso: ${key.lastUsed}` })}>
                           <Eye className="h-4 w-4" />
                         </Button>
                         <Button variant="ghost" size="icon" className="h-8 w-8" onClick={() => toast.success(`Chave "${key.name}" regenerada com sucesso`)}>
@@ -423,7 +423,7 @@ export function SystemCommandCenter() {
                     </div>
                   ))}
                 </div>
-                <Button className="w-full mt-4" variant="outline" onClick={() => toast.success("Nova API Key gerada", { description: `sk-${Math.random().toString(36).slice(2,10)}-${Math.random().toString(36).slice(2,10)}. Copie agora, não será exibida novamente.` })}>
+                <Button className="w-full mt-4" variant="outline" onClick={() => toast.info("Geração de API Keys", { description: "Gerenciamento de chaves de API em implantação. Gerencie credenciais via Supabase Dashboard. ETA: Q3/2026." })}>
                   <Key className="h-4 w-4 mr-2" />
                   Gerar Nova API Key
                 </Button>

@@ -635,15 +635,15 @@ export const EnhancedFinanceCenter: React.FC = () => {
               />
             </div>
             <div className="flex gap-2">
-              <Button variant="outline" onClick={() => toast.success("Filtros de faturas aplicados")}>
+              <Button variant="outline" onClick={() => toast.info("Filtros de faturas em implantação. Utilize a busca acima para localizar faturas. ETA: Q3/2026.")}>
                 <Filter className="h-4 w-4 mr-2" />
                 Filtros
               </Button>
-              <Button variant="outline" onClick={() => toast.success("Exportação de faturas iniciada")}>
+              <Button variant="outline" onClick={() => toast.info("Exportação de faturas", { description: "Utilize o Export Center para exportar faturas em PDF/CSV." })}>
                 <Download className="h-4 w-4 mr-2" />
                 Exportar
               </Button>
-              <Button onClick={() => toast.success("Nova Fatura", { description: "Utilize a aba Faturas para criar e gerenciar faturas." })}>
+              <Button onClick={() => toast.info("Nova Fatura", { description: "Módulo de criação de faturas em implantação. ETA: Q3/2026." })}>
                 <Plus className="h-4 w-4 mr-2" />
                 Nova Fatura
               </Button>
