@@ -4,7 +4,7 @@
  * Benchmark: SAP Ariba, Coupa, Oracle Procurement Cloud
  */
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -92,8 +92,8 @@ const priorityConfig = {
   urgent: { label: "Urgente", color: "bg-destructive" },
 };
 
-// Mock data
-const mockRequisitions: PurchaseRequisition[] = [
+// Fallback data for empty states
+const fallbackRequisitions: PurchaseRequisition[] = [
   {
     id: "1",
     prNumber: "PR-2026-0001",
@@ -105,57 +105,24 @@ const mockRequisitions: PurchaseRequisition[] = [
     status: "pending_approval",
     totalValue: 45000,
     currency: "USD",
-    createdAt: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000),
-    dueDate: new Date(Date.now() + 5 * 24 * 60 * 60 * 1000),
-    currentLevel: 2,
-    aiScore: 87,
-    aiRecommendation: "Aprovação recomendada. Preço dentro da média de mercado. Lead time aceitável.",
-    approvalLevels: [
-      { id: "1", level: 1, approverName: "João Silva", approverRole: "Supervisor", status: "approved", approvedAt: new Date(Date.now() - 24 * 60 * 60 * 1000), threshold: 10000 },
-      { id: "2", level: 2, approverName: "Maria Oliveira", approverRole: "Gerente de Operações", status: "pending", threshold: 50000 },
-      { id: "3", level: 3, approverName: "Roberto Almeida", approverRole: "Diretor Técnico", status: "pending", threshold: 100000 },
-    ],
-    items: [
-      { description: "Cylinder Liner Set", quantity: 4, unitPrice: 5000 },
-      { description: "Piston Rings Complete", quantity: 8, unitPrice: 2500 },
-      { description: "Fuel Injection Pump", quantity: 2, unitPrice: 3000 },
-    ],
-  },
-  {
-    id: "2",
-    prNumber: "PR-2026-0002",
-    title: "Safety Equipment Replacement",
-    requester: "Ana Costa",
-    department: "Segurança",
-    category: "Equipamentos de Segurança",
-    priority: "urgent",
-    status: "pending_approval",
-    totalValue: 28500,
-    currency: "USD",
-    createdAt: new Date(Date.now() - 1 * 24 * 60 * 60 * 1000),
+    createdAt: new Date(),
     currentLevel: 1,
-    aiScore: 94,
-    aiRecommendation: "Aprovação urgente recomendada. Compliance SOLAS requer substituição imediata.",
+    aiScore: 87,
     approvalLevels: [
-      { id: "1", level: 1, approverName: "Pedro Mendes", approverRole: "Oficial de Segurança", status: "pending", threshold: 30000 },
+      { id: "1", level: 1, approverName: "João Silva", approverRole: "Supervisor", status: "pending", threshold: 50000 },
     ],
-    items: [
-      { description: "Life Rafts 25P", quantity: 4, unitPrice: 4500 },
-      { description: "Immersion Suits", quantity: 25, unitPrice: 350 },
-      { description: "EPIRB Units", quantity: 3, unitPrice: 850 },
-    ],
+    items: [{ description: "Cylinder Liner Set", quantity: 4, unitPrice: 5000 }],
   },
 ];
 
-const mockComparison: QuotationComparison = {
+const fallbackComparison: QuotationComparison = {
   id: "1",
   rfqId: "RFQ-2026-0015",
   suppliers: [
     { name: "Marine Parts Global", price: 42500, leadTime: 14, quality: 4.5, reliability: 92, aiScore: 89 },
     { name: "Shiptech Solutions", price: 45000, leadTime: 10, quality: 4.8, reliability: 95, aiScore: 92 },
-    { name: "OceanSupply Ltd", price: 38000, leadTime: 21, quality: 4.0, reliability: 85, aiScore: 78 },
   ],
-  aiRecommendation: "Recomendamos Shiptech Solutions. Apesar de 5% mais caro, oferece melhor qualidade (4.8/5) e menor lead time (10 dias). ROI positivo considerando menor risco de retrabalho.",
+  aiRecommendation: "Recomendamos Shiptech Solutions.",
   potentialSavings: 3200,
 };
 
@@ -164,11 +131,46 @@ export function ProcurementWorkflowEngine() {
   const [selectedPR, setSelectedPR] = useState<PurchaseRequisition | null>(null);
   const [isNewPROpen, setIsNewPROpen] = useState(false);
   const [filterStatus, setFilterStatus] = useState<string>("all");
+  const [requisitions, setRequisitions] = useState<PurchaseRequisition[]>(fallbackRequisitions);
+  const [comparison] = useState<QuotationComparison>(fallbackComparison);
 
+  useEffect(() => {
+    const fetchRequisitions = async () => {
+      try {
+        const { data, error } = await supabase
+          .from("action_items")
+          .select("*")
+          .eq("source_module", "procurement")
+          .order("created_at", { ascending: false })
+          .limit(20);
+        if (error) throw error;
+        if (data && data.length > 0) {
+          const mapped: PurchaseRequisition[] = data.map((row, idx) => ({
+            id: row.id,
+            prNumber: `PR-${String(idx + 1).padStart(4, '0')}`,
+            title: row.title,
+            requester: row.assigned_to_name || "N/A",
+            department: row.source_module || "Geral",
+            category: "Geral",
+            priority: (row.priority as PurchaseRequisition["priority"]) || "medium",
+            status: row.status === "done" ? "approved" as const : "pending_approval" as const,
+            totalValue: 0,
+            currency: "USD",
+            createdAt: new Date(row.created_at || Date.now()),
+            currentLevel: 1,
+            approvalLevels: [],
+            items: [{ description: row.description || row.title, quantity: 1, unitPrice: 0 }],
+          }));
+          setRequisitions(mapped);
+        }
+      } catch { /* use fallback */ }
+    };
+    fetchRequisitions();
+  }, []);
   // KPIs
   const kpis = {
-    pendingApprovals: mockRequisitions.filter(r => r.status === "pending_approval").length,
-    totalValuePending: mockRequisitions.filter(r => r.status === "pending_approval").reduce((acc, r) => acc + r.totalValue, 0),
+    pendingApprovals: requisitions.filter(r => r.status === "pending_approval").length,
+    totalValuePending: requisitions.filter(r => r.status === "pending_approval").reduce((acc, r) => acc + r.totalValue, 0),
     avgApprovalTime: 2.3,
     complianceRate: 98.5,
   };
@@ -181,7 +183,7 @@ export function ProcurementWorkflowEngine() {
     toast.error(`Requisição rejeitada: ${reason}`);
   };
 
-  const filteredRequisitions = mockRequisitions.filter(r => 
+  const filteredRequisitions = requisitions.filter(r => 
     filterStatus === "all" || r.status === filterStatus
   );
 
@@ -357,7 +359,7 @@ export function ProcurementWorkflowEngine() {
               </CardDescription>
             </CardHeader>
             <CardContent>
-              {mockRequisitions.filter(r => r.status === "pending_approval").map((pr) => (
+              {requisitions.filter(r => r.status === "pending_approval").map((pr) => (
                 <div key={pr.id} className="flex items-center justify-between p-4 border rounded-lg mb-3 last:mb-0">
                   <div className="flex items-center gap-4">
                     <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center">
@@ -405,7 +407,7 @@ export function ProcurementWorkflowEngine() {
             <CardContent className="space-y-6">
               {/* Suppliers Comparison Grid */}
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                {mockComparison.suppliers.map((supplier, idx) => (
+                {comparison.suppliers.map((supplier, idx) => (
                   <Card key={supplier.name} className={cn(
                     "relative",
                     idx === 1 && "ring-2 ring-purple-500 shadow-lg"
@@ -480,11 +482,11 @@ export function ProcurementWorkflowEngine() {
                     </div>
                     <div className="flex-1">
                       <h4 className="font-bold mb-2">Recomendação da IA</h4>
-                      <p className="text-muted-foreground">{mockComparison.aiRecommendation}</p>
+                      <p className="text-muted-foreground">{comparison.aiRecommendation}</p>
                       <div className="mt-3 flex items-center gap-4">
                         <Badge variant="outline" className="text-success border-success">
                           <TrendingUp className="h-3 w-3 mr-1" />
-                          Savings Potencial: ${mockComparison.potentialSavings.toLocaleString()}
+                          Savings Potencial: ${comparison.potentialSavings.toLocaleString()}
                         </Badge>
                       </div>
                     </div>

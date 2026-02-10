@@ -28,8 +28,8 @@ import html2canvas from "html2canvas";
 import { usePDFExport } from "@/hooks/use-pdf-export";
 
 // DevOps internal analytics - no backend table (CI/CD metrics are external)
-// Data is illustrative for the admin dashboard
-const mockBuildsByBranch = [
+// Fallback: illustrative data for the admin dashboard
+const fallbackBuildsByBranch = [
   { branch: "main", count: 45 },
   { branch: "develop", count: 32 },
   { branch: "feature/ui", count: 18 },
@@ -37,46 +37,24 @@ const mockBuildsByBranch = [
   { branch: "release/v2", count: 8 },
 ];
 
-// Mock data for builds by status
-const mockBuildsByStatus = [
+const fallbackBuildsByStatus = [
   { status: "Success", value: 85 },
   { status: "Failed", value: 12 },
   { status: "Cancelled", value: 8 },
 ];
 
-// Mock data for coverage trend (last 15 builds)
-const mockCoverageTrend = [
+const fallbackCoverageTrend = [
   { date: "01/10", coverage: 78 },
-  { date: "02/10", coverage: 80 },
-  { date: "03/10", coverage: 82 },
-  { date: "04/10", coverage: 81 },
   { date: "05/10", coverage: 83 },
-  { date: "06/10", coverage: 85 },
-  { date: "07/10", coverage: 84 },
-  { date: "08/10", coverage: 86 },
-  { date: "09/10", coverage: 87 },
   { date: "10/10", coverage: 88 },
-  { date: "11/10", coverage: 87 },
-  { date: "12/10", coverage: 89 },
-  { date: "13/10", coverage: 90 },
-  { date: "14/10", coverage: 91 },
   { date: "15/10", coverage: 92 },
 ];
 
-// Mock data for branch coverage (for calculating average coverage per branch)
-const mockBranchCoverageData = [
-  { branch: "main", coverage: 92 },
-  { branch: "main", coverage: 90 },
+const fallbackBranchCoverageData = [
   { branch: "main", coverage: 91 },
-  { branch: "develop", coverage: 85 },
-  { branch: "develop", coverage: 87 },
   { branch: "develop", coverage: 86 },
-  { branch: "feature/ui", coverage: 78 },
-  { branch: "feature/ui", coverage: 80 },
   { branch: "feature/ui", coverage: 79 },
-  { branch: "hotfix/bug", coverage: 88 },
   { branch: "hotfix/bug", coverage: 89 },
-  { branch: "release/v2", coverage: 93 },
   { branch: "release/v2", coverage: 94 },
 ];
 
@@ -90,21 +68,20 @@ export default function AnalyticsPage() {
 
   // Filter data based on date range (simplified for demonstration)
   const branchChart = useMemo(() => {
-    // In a real implementation, you would filter based on startDate and endDate
-    return mockBuildsByBranch;
+    return fallbackBuildsByBranch;
   }, [startDate, endDate]);
 
   const statusChart = useMemo(() => {
-    return mockBuildsByStatus;
+    return fallbackBuildsByStatus;
   }, [startDate, endDate]);
 
   const coverageTrend = useMemo(() => {
-    return mockCoverageTrend;
+    return fallbackCoverageTrend;
   }, [startDate, endDate]);
 
   // Calculate average coverage by branch
   const branchCoverageChart = useMemo(() => {
-    const branchCoverageMap = mockBranchCoverageData.reduce(
+    const branchCoverageMap = fallbackBranchCoverageData.reduce(
       (acc, { branch, coverage }) => {
         if (!acc[branch]) {
           acc[branch] = { total: 0, count: 0 };

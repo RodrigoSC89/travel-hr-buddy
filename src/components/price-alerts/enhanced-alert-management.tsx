@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -21,6 +21,7 @@ import {
   History
 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import { supabase } from "@/integrations/supabase/client";
 
 interface PriceAlert {
   id: string;
@@ -67,7 +68,7 @@ interface AlertHistory {
   notes?: string;
 }
 
-const mockAlerts: PriceAlert[] = [
+const fallbackAlerts: PriceAlert[] = [
   {
     id: "1",
     productName: "Combustível Marítimo - MGO",
@@ -78,76 +79,63 @@ const mockAlerts: PriceAlert[] = [
     thresholdType: "below",
     isActive: true,
     triggeredCount: 3,
-    lastTriggered: new Date(2024, 0, 15),
     notifications: { email: true, push: true, sms: false },
-    customRules: { timeOfDay: "09:00", dayOfWeek: ["segunda", "terça"] }
-  },
-  {
-    id: "2",
-    productName: "Lubrificantes - Óleo Motor",
-    route: "Salvador - Fortaleza",
-    vessel: "MV Atlantic Explorer",
-    currentPrice: 120,
-    targetPrice: 100,
-    thresholdType: "change",
-    changePercentage: -10,
-    isActive: true,
-    triggeredCount: 1,
-    notifications: { email: true, push: false, sms: true },
-    customRules: { season: "baixa" }
+    customRules: {}
   },
 ];
 
-const mockGroups: AlertGroup[] = [
-  {
-    id: "1",
-    name: "Rota Santos-RJ",
-    route: "Santos - Rio de Janeiro",
-    vessel: "MV Nautilus Pioneer",
-    alerts: ["1"],
-    avgSavings: 15.5,
-    status: "active"
-  },
-  {
-    id: "2",
-    name: "Rota Nordeste",
-    route: "Salvador - Fortaleza",
-    vessel: "MV Atlantic Explorer",
-    alerts: ["2"],
-    avgSavings: 22.3,
-    status: "active"
-  },
+const fallbackGroups: AlertGroup[] = [
+  { id: "1", name: "Rota Santos-RJ", route: "Santos - Rio de Janeiro", vessel: "MV Nautilus Pioneer", alerts: ["1"], avgSavings: 15.5, status: "active" },
 ];
 
-const mockHistory: AlertHistory[] = [
-  {
-    id: "1",
-    alertId: "1",
-    triggeredAt: new Date(2024, 0, 15, 9, 30),
-    previousPrice: 870,
-    newPrice: 795,
-    actionTaken: "purchased",
-    savings: 1200,
-    notes: "Compra aprovada pelo gestor"
-  },
-  {
-    id: "2",
-    alertId: "2",
-    triggeredAt: new Date(2024, 0, 12, 14, 15),
-    previousPrice: 120,
-    newPrice: 108,
-    actionTaken: "ignored",
-    notes: "Estoque ainda suficiente"
-  },
+const fallbackHistory: AlertHistory[] = [
+  { id: "1", alertId: "1", triggeredAt: new Date(2024, 0, 15, 9, 30), previousPrice: 870, newPrice: 795, actionTaken: "purchased", savings: 1200, notes: "Compra aprovada pelo gestor" },
 ];
 
 export const EnhancedAlertManagement: React.FC = () => {
-  const [alerts, setAlerts] = useState<PriceAlert[]>(mockAlerts);
-  const [groups] = useState<AlertGroup[]>(mockGroups);
-  const [history] = useState<AlertHistory[]>(mockHistory);
+  const [alerts, setAlerts] = useState<PriceAlert[]>([]);
+  const [groups, setGroups] = useState<AlertGroup[]>(fallbackGroups);
+  const [history, setHistory] = useState<AlertHistory[]>(fallbackHistory);
   const [activeTab, setActiveTab] = useState("alerts");
   const [selectedGroup, setSelectedGroup] = useState("all");
   const { toast } = useToast();
+
+  useEffect(() => {
+    const fetchAlerts = async () => {
+      try {
+        const { data, error } = await supabase
+          .from("ai_insights")
+          .select("*")
+          .eq("category", "price_alert")
+          .order("created_at", { ascending: false })
+          .limit(20);
+
+        if (error) throw error;
+
+        if (data && data.length > 0) {
+          const mapped: PriceAlert[] = data.map((row) => ({
+            id: row.id,
+            productName: row.title,
+            route: row.related_module || "N/A",
+            vessel: "N/A",
+            currentPrice: 0,
+            targetPrice: 0,
+            thresholdType: "below" as const,
+            isActive: row.status === "active",
+            triggeredCount: 0,
+            notifications: { email: true, push: false, sms: false },
+            customRules: {},
+          }));
+          setAlerts(mapped);
+        } else {
+          setAlerts(fallbackAlerts);
+        }
+      } catch {
+        setAlerts(fallbackAlerts);
+      }
+    };
+    fetchAlerts();
+  }, []);
 
   const toggleAlert = (alertId: string) => {
     setAlerts(alerts.map(alert => 

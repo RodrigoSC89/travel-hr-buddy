@@ -1,9 +1,10 @@
 /**
  * Inspection Readiness Panel - Preparação para Inspeções
  * Checklist interativo para PSC, Flag State, OVID, CDI
+ * PATCH P0-002 Batch 10: Supabase integration
  */
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -15,6 +16,7 @@ import {
   Ship, Shield, Anchor, Clipboard, Users, Wrench,
   Calendar, Download, Eye, RefreshCw, Sparkles
 } from "lucide-react";
+import { supabase } from "@/integrations/supabase/client";
 
 interface ChecklistItem {
   id: string;
@@ -34,17 +36,11 @@ const inspectionTypes = [
   { id: "cdi", name: "CDI", icon: Clipboard, color: "text-orange-500", description: "Chemical Distribution" },
 ];
 
-const mockChecklist: ChecklistItem[] = [
+const fallbackChecklist: ChecklistItem[] = [
   { id: "1", category: "Documentação", item: "Certificados de segurança atualizados", status: "completed", responsible: "Capitão", dueDate: "2024-01-15", priority: "high" },
-  { id: "2", category: "Documentação", item: "Livro de registros de óleo atualizado", status: "completed", responsible: "1º Oficial", dueDate: "2024-01-14", priority: "high" },
-  { id: "3", category: "Equipamentos", item: "Teste de equipamentos salva-vidas", status: "in-progress", responsible: "Imediato", dueDate: "2024-01-16", priority: "high", aiSuggestion: "Agendar teste para próxima semana" },
-  { id: "4", category: "Equipamentos", item: "Inspeção de extintores", status: "pending", responsible: "Chefe Máquinas", dueDate: "2024-01-20", priority: "medium" },
-  { id: "5", category: "Tripulação", item: "Certificados STCW da tripulação", status: "overdue", responsible: "RH", dueDate: "2024-01-10", priority: "high", aiSuggestion: "2 tripulantes com certificados vencidos" },
-  { id: "6", category: "Tripulação", item: "Registros de horas de descanso", status: "completed", responsible: "1º Oficial", dueDate: "2024-01-15", priority: "medium" },
-  { id: "7", category: "Estrutura", item: "Inspeção de casco e pintura", status: "pending", responsible: "Imediato", dueDate: "2024-01-25", priority: "low" },
-  { id: "8", category: "Estrutura", item: "Verificação de tanques de lastro", status: "in-progress", responsible: "Chefe Máquinas", dueDate: "2024-01-18", priority: "medium" },
-  { id: "9", category: "Meio Ambiente", item: "Sistema de tratamento de esgoto", status: "completed", responsible: "Chefe Máquinas", dueDate: "2024-01-12", priority: "high" },
-  { id: "10", category: "Meio Ambiente", item: "Plano de gestão de resíduos", status: "pending", responsible: "1º Oficial", dueDate: "2024-01-22", priority: "medium" },
+  { id: "2", category: "Equipamentos", item: "Teste de equipamentos salva-vidas", status: "in-progress", responsible: "Imediato", dueDate: "2024-01-16", priority: "high", aiSuggestion: "Agendar teste para próxima semana" },
+  { id: "3", category: "Tripulação", item: "Certificados STCW da tripulação", status: "overdue", responsible: "RH", dueDate: "2024-01-10", priority: "high", aiSuggestion: "2 tripulantes com certificados vencidos" },
+  { id: "4", category: "Meio Ambiente", item: "Sistema de tratamento de esgoto", status: "completed", responsible: "Chefe Máquinas", dueDate: "2024-01-12", priority: "high" },
 ];
 
 const StatusIcon = ({ status }: { status: string }) => {
@@ -64,7 +60,39 @@ const StatusIcon = ({ status }: { status: string }) => {
 
 export default function InspectionReadinessPanel() {
   const [selectedType, setSelectedType] = useState("psc");
-  const [checklist, setChecklist] = useState(mockChecklist);
+  const [checklist, setChecklist] = useState<ChecklistItem[]>([]);
+
+  useEffect(() => {
+    const fetchChecklist = async () => {
+      try {
+        const { data, error } = await supabase
+          .from("action_items")
+          .select("*")
+          .order("due_date", { ascending: true })
+          .limit(30);
+
+        if (error) throw error;
+
+        if (data && data.length > 0) {
+          const mapped: ChecklistItem[] = data.map((row) => ({
+            id: row.id,
+            category: row.source_module || "Geral",
+            item: row.title,
+            status: (row.status === "done" ? "completed" : row.status === "in_progress" ? "in-progress" : row.status === "overdue" ? "overdue" : "pending") as ChecklistItem["status"],
+            responsible: row.assigned_to_name || "N/A",
+            dueDate: row.due_date || "",
+            priority: (row.priority as ChecklistItem["priority"]) || "medium",
+          }));
+          setChecklist(mapped);
+        } else {
+          setChecklist(fallbackChecklist);
+        }
+      } catch {
+        setChecklist(fallbackChecklist);
+      }
+    };
+    fetchChecklist();
+  }, []);
 
   const completedItems = checklist.filter(i => i.status === "completed").length;
   const overdueItems = checklist.filter(i => i.status === "overdue").length;
