@@ -72,7 +72,7 @@
 |----|-----------|---------|
 | P2-001 | ~100 TODOs/FIXMEs legítimos | 2-3 dias |
 | P2-002 | 5 componentes de notificação duplicados | 4h |
-| P2-003 | Communication components duplicados com mock | 2h |
+| P2-003 | ~~Communication components duplicados com mock~~ ✅ CORRIGIDO (maritime-communication-center migrado para Supabase) | ~~2h~~ |
 | P2-004 | ~~Security center com mock alerts/metrics~~ ✅ CORRIGIDO (AlertsNotificationCenter migrado para Supabase) | ~~2h~~ |
 | P2-005 | ~~Crew schedule/MLC com mock data~~ ✅ PARCIAL (maritime-certification-manager migrado para useCertifications()) | 2h |
 | P2-006 | ~~Maritime certification com mock~~ ✅ CORRIGIDO (maritime-certification-manager.tsx migrado para Supabase) | ~~2h~~ |

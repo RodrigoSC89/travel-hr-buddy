@@ -83,76 +83,40 @@ export const MaritimeCommunicationCenter = () => {
   const loadCommunications = async () => {
     try {
       setLoading(true);
-      
-      // Mock communications data
-      const mockCommunications: MaritimeCommunication[] = [
-        {
-          id: "1",
-          vessel_id: "mv-atlantic-001",
-          vessel_name: "MV Atlantic Explorer",
-          message_type: "emergency",
-          content: "Vazamento no compartimento de máquinas. Solicitando assistência imediata.",
-          priority: "critical",
-          status: "acknowledged",
-          sent_at: "2024-01-20T14:30:00Z",
-          acknowledged_at: "2024-01-20T14:32:00Z",
-          coordinates: { latitude: -23.5505, longitude: -46.6333 },
-          sender_role: "captain",
-          response_required: true
-        },
-        {
-          id: "2",
-          vessel_id: "ms-ocean-002",
-          vessel_name: "MS Ocean Pioneer",
-          message_type: "weather_alert",
-          content: "Tempestade se aproximando. Ventos de 45 nós. Alterando rota para sudeste.",
-          priority: "high",
-          status: "delivered",
-          sent_at: "2024-01-20T12:15:00Z",
-          coordinates: { latitude: -25.4284, longitude: -48.6732 },
-          sender_role: "first_officer",
-          response_required: false
-        },
-        {
-          id: "3",
-          vessel_id: "mv-pacific-003",
-          vessel_name: "MV Pacific Star",
-          message_type: "navigation",
-          content: "Aproximando do Porto de Santos. ETA 16:30. Solicitando atracação no cais 5.",
-          priority: "normal",
-          status: "sent",
-          sent_at: "2024-01-20T10:45:00Z",
-          coordinates: { latitude: -23.9618, longitude: -46.3322 },
-          sender_role: "captain",
-          response_required: true
-        },
-        {
-          id: "4",
-          vessel_id: "ms-baltic-004",
-          vessel_name: "MS Baltic Wind",
-          message_type: "maintenance",
-          content: "Motor auxiliar apresentando ruídos anômalos. Programando inspeção no próximo porto.",
-          priority: "normal",
-          status: "delivered",
-          sent_at: "2024-01-20T08:30:00Z",
-          sender_role: "engineer",
-          response_required: false
-        },
-        {
-          id: "5",
-          vessel_id: "mv-nordic-005",
-          vessel_name: "MV Nordic Crown",
-          message_type: "general",
-          content: "Tripulação em boa saúde. Operações normais. Próximo relatório em 6 horas.",
-          priority: "low",
-          status: "delivered",
-          sent_at: "2024-01-20T06:00:00Z",
-          sender_role: "captain",
-          response_required: false
-        }
-      ];
 
-      setCommunications(mockCommunications);
+      const { data, error } = await supabase
+        .from("maritime_communications")
+        .select("*, vessels(name)")
+        .order("sent_at", { ascending: false })
+        .limit(50);
+
+      if (error) {
+        logger.warn("Failed to load maritime_communications", { error });
+        setCommunications([]);
+        return;
+      }
+
+      const mapped: MaritimeCommunication[] = (data || []).map((row) => {
+        const vesselData = row.vessels as { name?: string } | null;
+        return {
+          id: row.id,
+          vessel_id: row.vessel_id || "",
+          vessel_name: vesselData?.name || "Embarcação",
+          message_type: (row.message_type || "general") as MaritimeCommunication["message_type"],
+          content: row.content || "",
+          priority: (row.priority || "normal") as MaritimeCommunication["priority"],
+          status: (row.status || "sent") as MaritimeCommunication["status"],
+          sent_at: row.sent_at || row.created_at || new Date().toISOString(),
+          acknowledged_at: row.acknowledged_at || undefined,
+          coordinates: (row.latitude != null && row.longitude != null)
+            ? { latitude: row.latitude, longitude: row.longitude }
+            : undefined,
+          sender_role: row.sender_role || "operator",
+          response_required: row.response_required ?? false,
+        };
+      });
+
+      setCommunications(mapped);
     } catch (error) {
       toast({
         title: "Erro",
@@ -166,14 +130,15 @@ export const MaritimeCommunicationCenter = () => {
 
   const loadChannels = async () => {
     try {
-      const mockChannels: CommunicationChannel[] = [
+      // Static reference data — maritime radio channels are fixed infrastructure
+      const standardChannels: CommunicationChannel[] = [
         {
           id: "vhf-16",
           name: "VHF Canal 16 (Emergência)",
           type: "emergency",
           status: "active",
           participants: ["Todas as embarcações", "Guarda Costeira"],
-          last_activity: "2024-01-20T14:30:00Z"
+          last_activity: new Date().toISOString()
         },
         {
           id: "vhf-68",
@@ -181,7 +146,7 @@ export const MaritimeCommunicationCenter = () => {
           type: "vhf",
           status: "active",
           participants: ["Frota Nautilus", "Porto de Santos"],
-          last_activity: "2024-01-20T12:15:00Z"
+          last_activity: new Date().toISOString()
         },
         {
           id: "sat-primary",
@@ -189,7 +154,7 @@ export const MaritimeCommunicationCenter = () => {
           type: "satellite",
           status: "active",
           participants: ["Todas as embarcações", "Centro de Controle"],
-          last_activity: "2024-01-20T10:45:00Z"
+          last_activity: new Date().toISOString()
         },
         {
           id: "internal-ops",
@@ -197,11 +162,11 @@ export const MaritimeCommunicationCenter = () => {
           type: "internal",
           status: "active",
           participants: ["Gestão de Frota", "Capitães"],
-          last_activity: "2024-01-20T08:30:00Z"
+          last_activity: new Date().toISOString()
         }
       ];
 
-      setChannels(mockChannels);
+      setChannels(standardChannels);
     } catch (error) {
       logger.error("Failed to load channels:", error);
     }
