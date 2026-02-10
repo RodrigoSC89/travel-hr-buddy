@@ -485,10 +485,10 @@
                    </div>
                  </div>
  
-                 <Button className="w-full" disabled onClick={() => toast.info("Sessão VR — Em implantação. Requer integração com hardware VR compatível (Oculus/HTC Vive). ETA: Q3/2026", { duration: 5000 })}>
+                 <Button className="w-full" disabled>
                    <PlayCircle className="h-4 w-4 mr-2" />
                    Iniciar Sessão VR
-                   <Badge variant="outline" className="ml-2 text-[10px]">Q3/2026</Badge>
+                   <Badge variant="outline" className="ml-2 text-[10px]">Em breve</Badge>
                  </Button>
                </CardContent>
              </Card>

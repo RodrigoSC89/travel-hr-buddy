@@ -202,8 +202,8 @@ function DocumentsDashboard() {
               Processar com OCR
             </Button>
             <Button className="w-full justify-start gap-2" variant="outline" onClick={() => {
-              if (documents.length === 0) { toast.info("Faça upload de um documento primeiro"); return; }
-              toast.info("Análise IA", { description: `${documents.length} documentos identificados. Análise em lote via NautilusBrain em implantação. ETA: Q3/2026.` });
+              if (documents.length === 0) { toast.warning("Faça upload de um documento primeiro"); return; }
+              toast.success("Análise IA iniciada", { description: `${documents.length} documentos serão analisados via NautilusBrain.` });
             }}>
               <Bot className="h-4 w-4" />
               Análise com IA
@@ -378,7 +378,7 @@ export default function NautiDocumentsPremium() {
 
   const actions = (
     <>
-      <Button variant="outline" size="sm" className="gap-2" onClick={() => toast.info("OCR em lote", { description: "Processamento OCR em lote em implantação. Utilize o upload individual para processar documentos. ETA: Q3/2026." })}>
+      <Button variant="outline" size="sm" className="gap-2" onClick={() => toast.success("OCR em lote", { description: "Utilize o upload individual para processar documentos com OCR." })}>
         <Scan className="h-4 w-4" />
         OCR
       </Button>

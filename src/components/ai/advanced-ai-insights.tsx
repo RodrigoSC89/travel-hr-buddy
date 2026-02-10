@@ -234,7 +234,7 @@ const AdvancedAIInsights = () => {
         <div className="flex items-center gap-2">
           <Button 
             variant="outline"
-            onClick={() => toast({ title: "Relatório", description: "Exportação de insights em implantação. ETA: Q3/2026." })}
+            onClick={() => { const csv = aiInsights.map((i: any) => `${i.title},${i.category},${i.priority},${i.confidence}`).join('\n'); const blob = new Blob([`Título,Categoria,Prioridade,Confiança\n${csv}`], { type: 'text/csv' }); const url = URL.createObjectURL(blob); const a = document.createElement('a'); a.href = url; a.download = `ai-insights-${new Date().toISOString().slice(0,10)}.csv`; a.click(); URL.revokeObjectURL(url); toast({ title: "Insights exportados", description: `${aiInsights.length} insights exportados como CSV` }); }}
           >
             <Download className="w-4 h-4 mr-2" />
             Exportar

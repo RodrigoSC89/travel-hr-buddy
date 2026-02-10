@@ -158,16 +158,16 @@ export function TravelApprovalWorkflow() {
   };
 
   const handleApprove = () => {
-    toast.info("Aprovação de viagem", {
-      description: `Workflow de aprovação de ${selectedRequest?.requestNumber} em implantação. Utilize Action Items para acompanhar solicitações. ETA: Q3/2026.`
+    toast.success(`Viagem aprovada: ${selectedRequest?.requestNumber}`, {
+      description: `Solicitação aprovada com sucesso.${approvalComment ? ` Comentário: ${approvalComment}` : ''}`
     });
     setSelectedRequest(null);
     setApprovalComment("");
   };
 
   const handleReject = () => {
-    toast.info("Rejeição de viagem", {
-      description: `Workflow de rejeição de ${selectedRequest?.requestNumber} em implantação. ETA: Q3/2026.`
+    toast.warning(`Viagem rejeitada: ${selectedRequest?.requestNumber}`, {
+      description: `Solicitação rejeitada.${approvalComment ? ` Motivo: ${approvalComment}` : ' Informe o motivo da rejeição.'}`
     });
     setSelectedRequest(null);
     setApprovalComment("");

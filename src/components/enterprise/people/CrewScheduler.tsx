@@ -380,7 +380,7 @@ export function CrewScheduler() {
                       </p>
                     </div>
                   </div>
-                  <Button variant="destructive" size="sm" onClick={() => toast.info(`Rendição de ${rotation.crewName}`, { description: `${rotation.daysOnBoard} dias a bordo (máx: ${rotation.maxDays}). Planejamento de rendições em implantação. Gerencie via People Hub > Crew Management. ETA: Q3/2026.` })}>
+                  <Button variant="destructive" size="sm" onClick={() => { window.history.pushState({}, '', '/workbench?tab=people'); window.dispatchEvent(new PopStateEvent('popstate')); toast.success(`Planejando rendição de ${rotation.crewName}`, { description: `${rotation.daysOnBoard} dias a bordo (máx: ${rotation.maxDays}). Navegando para People Hub.` }); }}>
                     Planejar Rendição
                   </Button>
                 </div>

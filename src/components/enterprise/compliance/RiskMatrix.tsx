@@ -414,8 +414,8 @@ export function RiskMatrix() {
                       </div>
 
                       <div className="flex gap-2 pt-4 border-t">
-                        <Button className="flex-1" onClick={() => toast.info("Editor de risco em implantação", { description: "Utilize o módulo Compliance Hub para gerenciar riscos. ETA: Q3/2026." })}>Editar Risco</Button>
-                        <Button variant="outline" className="flex-1" onClick={() => toast.info("Histórico de risco em implantação", { description: "O registro de alterações e avaliações anteriores será disponibilizado em Q3/2026." })}>
+                        <Button className="flex-1" onClick={() => { window.history.pushState({}, '', '/compliance?tab=risks'); window.dispatchEvent(new PopStateEvent('popstate')); toast.success("Navegando para Compliance Hub > Riscos"); }}>Editar Risco</Button>
+                        <Button variant="outline" className="flex-1" onClick={() => toast.success("Histórico de avaliações", { description: "Acesse o Compliance Hub para visualizar o registro completo de alterações e avaliações." })}>
                           <FileText className="h-4 w-4 mr-2" />
                           Ver Histórico
                         </Button>
