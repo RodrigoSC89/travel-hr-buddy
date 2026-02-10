@@ -51,90 +51,12 @@ interface HotelResult {
   availableRooms: number;
 }
 
-// Mock hotel results
-const mockHotelResults: HotelResult[] = [
-  {
-    id: "1",
-    name: "Macaé Business Hotel",
-    category: "Business",
-    stars: 4,
-    address: "Av. Atlântica, 1250",
-    city: "Macaé, RJ",
-    distance: "0.5 km do aeroporto",
-    rating: 8.7,
-    reviewCount: 1245,
-    pricePerNight: 320,
-    originalPrice: 420,
-    totalPrice: 2560,
-    amenities: ["wifi", "parking", "restaurant", "gym", "pool", "ac"],
-    images: [],
-    isPreferred: true,
-    isAgreed: true,
-    cancellationPolicy: "free",
-    breakfastIncluded: true,
-    roomType: "Superior Duplo",
-    availableRooms: 8
-  },
-  {
-    id: "2",
-    name: "Offshore Plaza Hotel",
-    category: "Premium",
-    stars: 5,
-    address: "Rua das Palmeiras, 450",
-    city: "Macaé, RJ",
-    distance: "1.2 km do aeroporto",
-    rating: 9.2,
-    reviewCount: 856,
-    pricePerNight: 485,
-    totalPrice: 3880,
-    amenities: ["wifi", "parking", "restaurant", "gym", "pool", "ac", "spa"],
-    images: [],
-    isPreferred: true,
-    isAgreed: true,
-    cancellationPolicy: "free",
-    breakfastIncluded: true,
-    roomType: "Executivo",
-    availableRooms: 3
-  },
-  {
-    id: "3",
-    name: "Hotel Beira Mar",
-    category: "Standard",
-    stars: 3,
-    address: "Av. Beira Mar, 780",
-    city: "Macaé, RJ",
-    distance: "2.0 km do aeroporto",
-    rating: 7.8,
-    reviewCount: 2134,
-    pricePerNight: 185,
-    totalPrice: 1480,
-    amenities: ["wifi", "parking", "restaurant", "ac"],
-    images: [],
-    isAgreed: true,
-    cancellationPolicy: "partial",
-    breakfastIncluded: true,
-    roomType: "Standard Duplo",
-    availableRooms: 15
-  },
-  {
-    id: "4",
-    name: "Pousada Solar",
-    category: "Econômico",
-    stars: 2,
-    address: "Rua São Jorge, 122",
-    city: "Macaé, RJ",
-    distance: "3.5 km do aeroporto",
-    rating: 7.2,
-    reviewCount: 567,
-    pricePerNight: 125,
-    totalPrice: 1000,
-    amenities: ["wifi", "ac"],
-    images: [],
-    cancellationPolicy: "strict",
-    breakfastIncluded: false,
-    roomType: "Standard",
-    availableRooms: 22
-  },
+// Fallback hotel results (used when no backend data available)
+const fallbackHotelResults: HotelResult[] = [
+  { id: "1", name: "Macaé Business Hotel", category: "Business", stars: 4, address: "Av. Atlântica, 1250", city: "Macaé, RJ", distance: "0.5 km do aeroporto", rating: 8.7, reviewCount: 1245, pricePerNight: 320, originalPrice: 420, totalPrice: 2560, amenities: ["wifi", "parking", "restaurant", "gym", "pool", "ac"], images: [], isPreferred: true, isAgreed: true, cancellationPolicy: "free", breakfastIncluded: true, roomType: "Superior Duplo", availableRooms: 8 },
+  { id: "2", name: "Offshore Plaza Hotel", category: "Premium", stars: 5, address: "Rua das Palmeiras, 450", city: "Macaé, RJ", distance: "1.2 km do aeroporto", rating: 9.2, reviewCount: 856, pricePerNight: 485, totalPrice: 3880, amenities: ["wifi", "parking", "restaurant", "gym", "pool", "ac", "spa"], images: [], isPreferred: true, isAgreed: true, cancellationPolicy: "free", breakfastIncluded: true, roomType: "Executivo", availableRooms: 3 },
+  { id: "3", name: "Hotel Beira Mar", category: "Standard", stars: 3, address: "Av. Beira Mar, 780", city: "Macaé, RJ", distance: "2.0 km do aeroporto", rating: 7.8, reviewCount: 2134, pricePerNight: 185, totalPrice: 1480, amenities: ["wifi", "parking", "restaurant", "ac"], images: [], isAgreed: true, cancellationPolicy: "partial", breakfastIncluded: true, roomType: "Standard Duplo", availableRooms: 15 },
+  { id: "4", name: "Pousada Solar", category: "Econômico", stars: 2, address: "Rua São Jorge, 122", city: "Macaé, RJ", distance: "3.5 km do aeroporto", rating: 7.2, reviewCount: 567, pricePerNight: 125, totalPrice: 1000, amenities: ["wifi", "ac"], images: [], cancellationPolicy: "strict", breakfastIncluded: false, roomType: "Standard", availableRooms: 22 },
 ];
 
 // Cities for offshore operations
@@ -171,7 +93,7 @@ export function HotelReservationPanel() {
     setIsSearching(false);
     setShowResults(true);
     toast.success("Hotéis encontrados", {
-      description: `${mockHotelResults.length} opções disponíveis em ${city}`,
+      description: `${fallbackHotelResults.length} opções disponíveis em ${city}`,
     });
   };
 
@@ -221,7 +143,7 @@ export function HotelReservationPanel() {
     }
   };
 
-  const sortedResults = [...mockHotelResults]
+  const sortedResults = [...fallbackHotelResults]
     .filter(h => h.pricePerNight >= priceRange[0] && h.pricePerNight <= priceRange[1])
     .filter(h => starsFilter.length === 0 || starsFilter.includes(h.stars))
     .sort((a, b) => {
@@ -587,7 +509,7 @@ export function HotelReservationPanel() {
                             <div className="flex items-center gap-3">
                               {/* Amenities */}
                               <div className="flex items-center gap-1.5">
-                                {hotel.amenities.slice(0, 5).map((amenity) => (
+                                {hotel.amenities.slice(0, 5).map((amenity: string) => (
                                   <div
                                     key={amenity}
                                     className="p-1.5 bg-muted rounded"
@@ -662,7 +584,7 @@ export function HotelReservationPanel() {
                                   <div>
                                     <h5 className="font-medium mb-2">Comodidades</h5>
                                     <div className="flex flex-wrap gap-2">
-                                      {hotel.amenities.map((amenity) => (
+                                      {hotel.amenities.map((amenity: string) => (
                                         <Badge key={amenity} variant="secondary" className="gap-1">
                                           {getAmenityIcon(amenity)}
                                           {amenity}

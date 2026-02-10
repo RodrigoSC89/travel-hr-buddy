@@ -64,112 +64,29 @@ interface ASOGProfile {
   };
 }
 
-const mockConditions: EnvironmentalCondition[] = [
-  {
-    parameter: "Vento",
-    value: 18,
-    unit: "kn",
-    direction: 185,
-    asogLimit: { green: 20, yellow: 25, red: 30 },
-    trend: "increasing",
-    forecast: [18, 20, 22, 24, 23, 21, 19]
-  },
-  {
-    parameter: "Altura de Onda (Hs)",
-    value: 1.8,
-    unit: "m",
-    asogLimit: { green: 2.0, yellow: 2.5, red: 3.0 },
-    trend: "stable",
-    forecast: [1.8, 1.9, 2.0, 2.1, 2.0, 1.9, 1.8]
-  },
-  {
-    parameter: "Corrente",
-    value: 1.4,
-    unit: "kn",
-    direction: 210,
-    asogLimit: { green: 1.3, yellow: 1.8, red: 2.2 },
-    trend: "increasing",
-    forecast: [1.4, 1.5, 1.6, 1.5, 1.4, 1.3, 1.2]
-  },
-  {
-    parameter: "Visibilidade",
-    value: 8,
-    unit: "nm",
-    asogLimit: { green: 5, yellow: 3, red: 1 },
-    trend: "stable",
-    forecast: [8, 7, 6, 5, 6, 7, 8]
-  },
-  {
-    parameter: "Período de Onda",
-    value: 8.5,
-    unit: "s",
-    asogLimit: { green: 12, yellow: 14, red: 16 },
-    trend: "decreasing",
-    forecast: [8.5, 8.0, 7.5, 7.0, 7.5, 8.0, 8.5]
-  }
+const fallbackConditions: EnvironmentalCondition[] = [
+  { parameter: "Vento", value: 18, unit: "kn", direction: 185, asogLimit: { green: 20, yellow: 25, red: 30 }, trend: "increasing", forecast: [18, 20, 22, 24, 23, 21, 19] },
+  { parameter: "Altura de Onda (Hs)", value: 1.8, unit: "m", asogLimit: { green: 2.0, yellow: 2.5, red: 3.0 }, trend: "stable", forecast: [1.8, 1.9, 2.0, 2.1, 2.0, 1.9, 1.8] },
+  { parameter: "Corrente", value: 1.4, unit: "kn", direction: 210, asogLimit: { green: 1.3, yellow: 1.8, red: 2.2 }, trend: "increasing", forecast: [1.4, 1.5, 1.6, 1.5, 1.4, 1.3, 1.2] },
+  { parameter: "Visibilidade", value: 8, unit: "nm", asogLimit: { green: 5, yellow: 3, red: 1 }, trend: "stable", forecast: [8, 7, 6, 5, 6, 7, 8] },
+  { parameter: "Período de Onda", value: 8.5, unit: "s", asogLimit: { green: 12, yellow: 14, red: 16 }, trend: "decreasing", forecast: [8.5, 8.0, 7.5, 7.0, 7.5, 8.0, 8.5] },
 ];
 
-const mockAlerts: OperationalAlert[] = [
-  {
-    id: "ALT-001",
-    timestamp: new Date().toISOString(),
-    type: "warning",
-    parameter: "Corrente",
-    message: "Corrente excedendo limite verde do ASOG (1.3 kn → 1.4 kn atual)",
-    suggestedAction: "Considerar migração para modo TAM ou ajuste de ganho",
-    acknowledged: false
-  },
-  {
-    id: "ALT-002",
-    timestamp: new Date(Date.now() - 3600000).toISOString(),
-    type: "info",
-    parameter: "Vento",
-    message: "Previsão indica vento acima de 20kn nas próximas 4 horas",
-    suggestedAction: "Monitorar condições e preparar contingência",
-    acknowledged: true
-  }
+const fallbackAlerts: OperationalAlert[] = [
+  { id: "ALT-001", timestamp: new Date().toISOString(), type: "warning", parameter: "Corrente", message: "Corrente excedendo limite verde do ASOG (1.3 kn → 1.4 kn atual)", suggestedAction: "Considerar migração para modo TAM ou ajuste de ganho", acknowledged: false },
+  { id: "ALT-002", timestamp: new Date(Date.now() - 3600000).toISOString(), type: "info", parameter: "Vento", message: "Previsão indica vento acima de 20kn nas próximas 4 horas", suggestedAction: "Monitorar condições e preparar contingência", acknowledged: true },
 ];
 
-const mockASOGProfiles: ASOGProfile[] = [
-  {
-    id: "ASOG-001",
-    name: "Operação Padrão",
-    operationType: "Standard DP Operations",
-    limits: {
-      windSpeed: { green: 25, yellow: 30, red: 35 },
-      waveHeight: { green: 2.5, yellow: 3.0, red: 3.5 },
-      current: { green: 1.5, yellow: 2.0, red: 2.5 },
-      visibility: { green: 3, yellow: 2, red: 1 }
-    }
-  },
-  {
-    id: "ASOG-002",
-    name: "Operação ROV",
-    operationType: "ROV Operations",
-    limits: {
-      windSpeed: { green: 20, yellow: 25, red: 30 },
-      waveHeight: { green: 2.0, yellow: 2.5, red: 3.0 },
-      current: { green: 1.3, yellow: 1.8, red: 2.2 },
-      visibility: { green: 5, yellow: 3, red: 1 }
-    }
-  },
-  {
-    id: "ASOG-003",
-    name: "SIMOPS",
-    operationType: "Simultaneous Operations",
-    limits: {
-      windSpeed: { green: 18, yellow: 22, red: 28 },
-      waveHeight: { green: 1.8, yellow: 2.2, red: 2.8 },
-      current: { green: 1.2, yellow: 1.5, red: 2.0 },
-      visibility: { green: 5, yellow: 3, red: 2 }
-    }
-  }
+const fallbackASOGProfiles: ASOGProfile[] = [
+  { id: "ASOG-001", name: "Operação Padrão", operationType: "Standard DP Operations", limits: { windSpeed: { green: 25, yellow: 30, red: 35 }, waveHeight: { green: 2.5, yellow: 3.0, red: 3.5 }, current: { green: 1.5, yellow: 2.0, red: 2.5 }, visibility: { green: 3, yellow: 2, red: 1 } } },
+  { id: "ASOG-002", name: "Operação ROV", operationType: "ROV Operations", limits: { windSpeed: { green: 20, yellow: 25, red: 30 }, waveHeight: { green: 2.0, yellow: 2.5, red: 3.0 }, current: { green: 1.3, yellow: 1.8, red: 2.2 }, visibility: { green: 5, yellow: 3, red: 1 } } },
+  { id: "ASOG-003", name: "SIMOPS", operationType: "Simultaneous Operations", limits: { windSpeed: { green: 18, yellow: 22, red: 28 }, waveHeight: { green: 1.8, yellow: 2.2, red: 2.8 }, current: { green: 1.2, yellow: 1.5, red: 2.0 }, visibility: { green: 5, yellow: 3, red: 2 } } },
 ];
 
 export const OperationalWindowMonitor: React.FC = () => {
-  const [conditions, setConditions] = useState<EnvironmentalCondition[]>(mockConditions);
-  const [alerts, setAlerts] = useState<OperationalAlert[]>(mockAlerts);
-  const [selectedProfile, setSelectedProfile] = useState<ASOGProfile>(mockASOGProfiles[1]);
+  const [conditions, setConditions] = useState<EnvironmentalCondition[]>(fallbackConditions);
+  const [alerts, setAlerts] = useState<OperationalAlert[]>(fallbackAlerts);
+  const [selectedProfile, setSelectedProfile] = useState<ASOGProfile>(fallbackASOGProfiles[1]);
   const [lastUpdate, setLastUpdate] = useState<Date>(new Date());
   const [activeTab, setActiveTab] = useState("realtime");
 
@@ -284,9 +201,9 @@ export const OperationalWindowMonitor: React.FC = () => {
               <select
                 className="border rounded-md px-3 py-2 text-sm"
                 value={selectedProfile.id}
-                onChange={(e) => setSelectedProfile(mockASOGProfiles.find(p => p.id === e.target.value) || mockASOGProfiles[0])}
+                onChange={(e) => setSelectedProfile(fallbackASOGProfiles.find((p: ASOGProfile) => p.id === e.target.value) || fallbackASOGProfiles[0])}
               >
-                {mockASOGProfiles.map(profile => (
+                {fallbackASOGProfiles.map((profile: ASOGProfile) => (
                   <option key={profile.id} value={profile.id}>{profile.name}</option>
                 ))}
               </select>

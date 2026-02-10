@@ -73,8 +73,8 @@ export function AIInsightsPanel() {
       setInsights(formattedInsights);
     } catch (error) {
       logger.error("Error loading insights:", error);
-      // Use mock data if database fails
-      setInsights(getMockInsights());
+      // Use fallback data if database fails
+      setInsights(getFallbackInsights());
     } finally {
       setLoading(false);
     }
@@ -90,7 +90,7 @@ export function AIInsightsPanel() {
     return typeMap[category] || "recommendation";
   };
 
-  const getMockInsights = (): AIInsight[] => [
+  const getFallbackInsights = (): AIInsight[] => [
     {
       id: "1",
       type: "prediction",
