@@ -4,6 +4,7 @@
  */
 import React from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { toast } from "sonner";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
@@ -258,7 +259,7 @@ export function FinanceExecutiveDashboard() {
                 <p className="text-sm font-bold text-right mt-2">{formatFullCurrency(item.amount)}</p>
               </div>
             ))}
-            <Button variant="outline" className="w-full mt-2">Ver Todas</Button>
+            <Button variant="outline" className="w-full mt-2" onClick={() => toast.info("Ações Pendentes", { description: `${pendingItems.length} itens pendentes exibidos. Use o módulo Financeiro para gerenciar faturas e aprovações.` })}>Ver Todas</Button>
           </CardContent>
         </Card>
       </div>
@@ -275,7 +276,7 @@ export function FinanceExecutiveDashboard() {
           <CardContent>
             <div className="space-y-4">
               {vesselPerformance.map((vessel, idx) => (
-                <div key={idx} className="p-3 rounded-lg border">
+                <div key={idx} className="p-3 rounded-lg border cursor-pointer hover:bg-muted/50 transition-colors" onClick={() => toast.info(`${vessel.vessel}`, { description: `Receita: ${formatCurrency(vessel.revenue)} | Custos: ${formatCurrency(vessel.costs)} | Margem: ${vessel.margin}% | Viagens: ${vessel.voyages}` })}>
                   <div className="flex items-center justify-between mb-2">
                     <div className="flex items-center gap-2">
                       <Ship className="h-4 w-4 text-primary" />

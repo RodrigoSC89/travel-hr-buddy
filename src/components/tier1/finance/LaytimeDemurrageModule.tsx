@@ -5,6 +5,7 @@
 
 import React, { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
@@ -360,7 +361,7 @@ export default function LaytimeDemurrageModule() {
               <FileText className="h-12 w-12 mx-auto mb-3 opacity-50" />
               <p className="font-medium">Demurrage/Despatch Claims</p>
               <p className="text-sm">Manage claims with charterers and track settlements</p>
-              <Button className="mt-4">
+              <Button className="mt-4" onClick={() => toast.info("Novo Claim de Demurrage/Despatch", { description: "Registre os dados do claim na calculadora e exporte para documentação BIMCO." })}>
                 <FileText className="h-4 w-4 mr-2" />
                 New Claim
               </Button>
