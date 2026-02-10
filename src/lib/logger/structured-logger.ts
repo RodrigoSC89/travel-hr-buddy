@@ -102,8 +102,8 @@ class StructuredLogger {
     try {
       // Send to Sentry for errors
       if (entry.level === "error" && typeof window !== "undefined") {
-        const Sentry = (window as any).Sentry;
-        if (Sentry && entry.error) {
+        const Sentry = (window as unknown as Record<string, unknown>).Sentry as { captureMessage?: (msg: string, opts: Record<string, unknown>) => void } | undefined;
+        if (Sentry?.captureMessage && entry.error) {
           Sentry.captureMessage(entry.message, {
             level: "error",
             extra: {

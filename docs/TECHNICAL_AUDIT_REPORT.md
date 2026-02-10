@@ -76,10 +76,8 @@
 
 ## 🟠 FALHAS ALTAS (P1)
 
-### P1-001: `@ts-nocheck` em 3 Arquivos de Produção
-- **Arquivos**: `ai.tsx`, `ai-documents-analyzer.tsx`, `DocumentEditor.tsx`
-- **Impacto**: Zero type checking nesses componentes
-- **Correção estimada**: 3 dias
+### ~~P1-001: `@ts-nocheck` em Arquivos de Produção~~ ✅ VERIFICADO
+- **Resolução**: Auditoria Sprint 2 confirmou **zero** `@ts-nocheck` em código de produção. Os 63 restantes estão exclusivamente em `src/tests/` (aceitável para mocks de teste).
 
 ### ~~P1-002: localStorage para Dados Operacionais Sensíveis~~ ✅ CORRIGIDO
 - **Resolução**: Migrados 7 hotspots de localStorage → sessionStorage:
@@ -140,8 +138,8 @@
 ### P2-003: Dual Charting (recharts + chart.js)
 - **Correção estimada**: 2 dias
 
-### P2-004: 5 Implementações de Logger
-- **Correção estimada**: 2 dias
+### ~~P2-004: 5 Implementações de Logger~~ ✅ PARCIALMENTE CORRIGIDO
+- **Resolução Sprint 2**: `biometric-auth.ts` desduplicado (usava ambos loggers). `structuredLogger` mantido como versão mobile/performance (16 consumidores). `logger` é o logger principal (1300+ consumidores). `(window as any).Sentry` corrigido para tipagem segura em `structured-logger.ts`. Total: 2 loggers distintos com propósitos claros (simples vs estruturado).
 
 ### P2-005: Dual Session Replay Hooks
 - `useSessionReplayData.ts` + `useSessionsReplayData.ts`
@@ -185,7 +183,7 @@
 
 ## 🏗️ PROBLEMAS ESTRUTURAIS
 
-1. **Proliferação de Loggers**: 5 implementações → consolidar em 1
+1. **~~Proliferação de Loggers~~**: ~~5 implementações~~ → 2 (simple + structured), deduplicado ✅
 2. **Dual Charting Libraries**: recharts + chart.js → consolidar em recharts
 3. **Edge Function Sprawl**: 340+ funções, potenciais órfãs
 4. **Fallback Pattern**: `fallback*` deveria evoluir para queries reais + EmptyState
@@ -203,7 +201,7 @@
 | MOCK em produção (unguarded) | 0 | ✅ |
 | setTimeout fake | 0 | ✅ |
 | TODOs/FIXMEs (técnicos) | ~200 | ⚠️ |
-| `@ts-nocheck` em produção | 3 | ⚠️ |
+| `@ts-nocheck` em produção | ~~3~~ → 0 | ✅ |
 | `: any` / `as any` | ~9.895 | ❌ |
 | Empty catch blocks | ~~161~~ → 0 significativos | ✅ |
 | console.log em prod | ~14 arquivos | ⚠️ |
@@ -258,8 +256,8 @@
 | **Performance** | 82/100 | Custom fetch retry OK, bundle pesado |
 | **Segurança** | 93/100 | RLS zero issues, sanitizers OK, localStorage sensível corrigido |
 | **Testes** | 70/100 | 612 tests, coverage baixo, 15 @ts-nocheck em tests |
-| **Type Safety** | 68/100 | ~9.9k `any`, 3 @ts-nocheck prod, catches corrigidos |
-| **GERAL** | **86/100** | Sprint 1 concluído, dívida técnica em type safety |
+| **Type Safety** | 72/100 | ~9.9k `any`, @ts-nocheck prod eliminado, loggers consolidados |
+| **GERAL** | **87/100** | Sprint 1+2 parcial concluídos |
 
 ---
 
