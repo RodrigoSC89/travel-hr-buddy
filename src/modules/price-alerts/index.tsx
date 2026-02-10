@@ -2,6 +2,7 @@
  * PATCH 464 - Complete Price Alerts UI
  * Full-featured price alert system with history charts, configurable thresholds, and notifications
  * Uses price_alerts table with explicit field mapping
+ * Migrated to Recharts
  */
 
 import React, { useState, useEffect } from "react";
@@ -41,33 +42,10 @@ import {
   Mail,
   Eye,
   Trash2,
-  LineChart,
+  LineChart as LineChartIcon,
 } from "lucide-react";
-import { Line } from "react-chartjs-2";
+import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, Area, AreaChart, ReferenceLine } from "recharts";
 import { logger } from '@/lib/logger';
-import {
-  Chart as ChartJS,
-  CategoryScale,
-  LinearScale,
-  PointElement,
-  LineElement,
-  Title,
-  Tooltip,
-  Legend,
-  Filler,
-} from "chart.js";
-
-// Register ChartJS components
-ChartJS.register(
-  CategoryScale,
-  LinearScale,
-  PointElement,
-  LineElement,
-  Title,
-  Tooltip,
-  Legend,
-  Filler
-);
 
 interface PriceAlert {
   id: string;
@@ -101,7 +79,6 @@ export const CompletePriceAlertsUI: React.FC = () => {
   const [showConfigDialog, setShowConfigDialog] = useState(false);
   const { user } = useAuth();
 
-  // New alert form state
   const [newAlert, setNewAlert] = useState({
     origin: "",
     destination: "",
@@ -112,15 +89,11 @@ export const CompletePriceAlertsUI: React.FC = () => {
   });
 
   useEffect(() => {
-    if (user) {
-      loadAlerts();
-    }
+    if (user) loadAlerts();
   }, [user]);
 
   useEffect(() => {
-    if (selectedAlert) {
-      loadPriceHistory(selectedAlert.id);
-    }
+    if (selectedAlert) loadPriceHistory(selectedAlert.id);
   }, [selectedAlert]);
 
   const loadAlerts = async () => {
@@ -136,7 +109,6 @@ export const CompletePriceAlertsUI: React.FC = () => {
 
       if (error) throw error;
 
-      // Map data to expected interface
       setAlerts((data || []).map((a) => ({
         id: a.id,
         route: a.route || a.product_name || "",
@@ -169,7 +141,6 @@ export const CompletePriceAlertsUI: React.FC = () => {
         .order("checked_at", { ascending: true });
 
       if (error) throw error;
-
       setPriceHistory(data || []);
     } catch (error) {
       logger.error("Error loading price history:", error);
@@ -187,7 +158,7 @@ export const CompletePriceAlertsUI: React.FC = () => {
       
       const { error } = await supabase.from("price_alerts").insert({
         product_name: route,
-        product_url: "#", // placeholder URL for travel routes
+        product_url: "#",
         target_price: parseFloat(newAlert.target_price),
         threshold_type: newAlert.threshold_type,
         email_notifications: newAlert.email_notifications,
@@ -200,14 +171,7 @@ export const CompletePriceAlertsUI: React.FC = () => {
 
       toast.success("Price alert created successfully");
       setShowCreateDialog(false);
-      setNewAlert({
-        origin: "",
-        destination: "",
-        target_price: "",
-        threshold_type: "below",
-        email_notifications: true,
-        visual_notifications: true,
-      });
+      setNewAlert({ origin: "", destination: "", target_price: "", threshold_type: "below", email_notifications: true, visual_notifications: true });
       loadAlerts();
     } catch (error) {
       logger.error("Error creating alert:", error);
@@ -217,13 +181,8 @@ export const CompletePriceAlertsUI: React.FC = () => {
 
   const toggleAlert = async (alertId: string, currentState: boolean) => {
     try {
-      const { error } = await supabase
-        .from("price_alerts")
-        .update({ is_active: !currentState })
-        .eq("id", alertId);
-
+      const { error } = await supabase.from("price_alerts").update({ is_active: !currentState }).eq("id", alertId);
       if (error) throw error;
-
       toast.success(`Alert ${!currentState ? "activated" : "deactivated"}`);
       loadAlerts();
     } catch (error) {
@@ -234,18 +193,11 @@ export const CompletePriceAlertsUI: React.FC = () => {
 
   const deleteAlert = async (alertId: string) => {
     try {
-      const { error } = await supabase
-        .from("price_alerts")
-        .delete()
-        .eq("id", alertId);
-
+      const { error } = await supabase.from("price_alerts").delete().eq("id", alertId);
       if (error) throw error;
-
       toast.success("Alert deleted successfully");
       loadAlerts();
-      if (selectedAlert?.id === alertId) {
-        setSelectedAlert(null);
-      }
+      if (selectedAlert?.id === alertId) setSelectedAlert(null);
     } catch (error) {
       logger.error("Error deleting alert:", error);
       toast.error("Failed to delete alert");
@@ -254,7 +206,6 @@ export const CompletePriceAlertsUI: React.FC = () => {
 
   const checkPrices = async () => {
     toast.info("Checking prices... (simulated)");
-    // In production, this would trigger a backend service to check actual prices
     setTimeout(() => {
       toast.success("Prices checked and updated");
       loadAlerts();
@@ -263,74 +214,21 @@ export const CompletePriceAlertsUI: React.FC = () => {
 
   const sendTestEmail = async (alertId: string) => {
     toast.info("Sending test email notification...");
-    // In production, this would call a Supabase Edge Function or email service
     setTimeout(() => {
       toast.success("Test email sent successfully");
     }, 1500);
   };
 
-  // Prepare chart data
-  const getChartData = () => {
-    if (!priceHistory.length) {
-      return {
-        labels: [],
-        datasets: [],
-      };
-    }
-
-    return {
-      labels: priceHistory.map((h) =>
-        new Date(h.checked_at).toLocaleDateString()
-      ),
-      datasets: [
-        {
-          label: "Price",
-          data: priceHistory.map((h) => h.price),
-          borderColor: "rgb(59, 130, 246)",
-          backgroundColor: "rgba(59, 130, 246, 0.1)",
-          fill: true,
-          tension: 0.4,
-        },
-        {
-          label: "Target Price",
-          data: priceHistory.map(() => selectedAlert?.target_price),
-          borderColor: "rgb(239, 68, 68)",
-          backgroundColor: "rgba(239, 68, 68, 0.1)",
-          borderDash: [5, 5],
-          fill: false,
-        },
-      ],
-    };
-  };
-
-  const chartOptions = {
-    responsive: true,
-    maintainAspectRatio: false,
-    plugins: {
-      legend: {
-        position: "top" as const,
-      },
-      title: {
-        display: true,
-        text: "Price History",
-      },
-    },
-    scales: {
-      y: {
-        beginAtZero: false,
-        ticks: {
-          callback: (value: any) => `$${value}`,
-        },
-      },
-    },
-  };
+  // Recharts data
+  const chartData = priceHistory.map((h) => ({
+    date: new Date(h.checked_at).toLocaleDateString(),
+    price: h.price,
+    target: selectedAlert?.target_price ?? 0,
+  }));
 
   const activeAlerts = alerts.filter((a) => a.is_active).length;
   const totalAlerts = alerts.length;
-  const avgTargetPrice =
-    alerts.length > 0
-      ? alerts.reduce((sum, a) => sum + a.target_price, 0) / alerts.length
-      : 0;
+  const avgTargetPrice = alerts.length > 0 ? alerts.reduce((sum, a) => sum + a.target_price, 0) / alerts.length : 0;
 
   if (isLoading) {
     return (
@@ -373,32 +271,16 @@ export const CompletePriceAlertsUI: React.FC = () => {
       {/* Statistics */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
         <Card>
-          <CardHeader className="pb-2">
-            <CardTitle className="text-sm font-medium">Total Alerts</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">{totalAlerts}</div>
-          </CardContent>
+          <CardHeader className="pb-2"><CardTitle className="text-sm font-medium">Total Alerts</CardTitle></CardHeader>
+          <CardContent><div className="text-2xl font-bold">{totalAlerts}</div></CardContent>
         </Card>
-
         <Card>
-          <CardHeader className="pb-2">
-            <CardTitle className="text-sm font-medium">Active Alerts</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold text-primary">{activeAlerts}</div>
-          </CardContent>
+          <CardHeader className="pb-2"><CardTitle className="text-sm font-medium">Active Alerts</CardTitle></CardHeader>
+          <CardContent><div className="text-2xl font-bold text-primary">{activeAlerts}</div></CardContent>
         </Card>
-
         <Card>
-          <CardHeader className="pb-2">
-            <CardTitle className="text-sm font-medium">
-              Avg Target Price
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">${avgTargetPrice.toFixed(2)}</div>
-          </CardContent>
+          <CardHeader className="pb-2"><CardTitle className="text-sm font-medium">Avg Target Price</CardTitle></CardHeader>
+          <CardContent><div className="text-2xl font-bold">${avgTargetPrice.toFixed(2)}</div></CardContent>
         </Card>
       </div>
 
@@ -409,9 +291,7 @@ export const CompletePriceAlertsUI: React.FC = () => {
           <Card>
             <CardHeader>
               <CardTitle>My Alerts</CardTitle>
-              <CardDescription>
-                Monitor prices for your favorite routes
-              </CardDescription>
+              <CardDescription>Monitor prices for your favorite routes</CardDescription>
             </CardHeader>
             <CardContent className="space-y-3">
               {alerts.length === 0 ? (
@@ -422,9 +302,7 @@ export const CompletePriceAlertsUI: React.FC = () => {
                 alerts.map((alert) => (
                   <Card
                     key={alert.id}
-                    className={`cursor-pointer transition-colors ${
-                      selectedAlert?.id === alert.id ? "border-primary" : ""
-                    }`}
+                    className={`cursor-pointer transition-colors ${selectedAlert?.id === alert.id ? "border-primary" : ""}`}
                     onClick={() => setSelectedAlert(alert)}
                   >
                     <CardContent className="p-4">
@@ -436,47 +314,18 @@ export const CompletePriceAlertsUI: React.FC = () => {
                             {alert.threshold_type === "below" ? " or less" : " or more"}
                           </div>
                         </div>
-                        <Badge
-                          variant={alert.is_active ? "default" : "secondary"}
-                          className="ml-2"
-                        >
+                        <Badge variant={alert.is_active ? "default" : "secondary"} className="ml-2">
                           {alert.is_active ? "Active" : "Paused"}
                         </Badge>
                       </div>
                       <div className="flex items-center gap-2 mt-3">
-                        <Button
-                          size="sm"
-                          variant="outline"
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            toggleAlert(alert.id, alert.is_active);
-                          }}
-                        >
-                          {alert.is_active ? (
-                            <BellOff className="h-3 w-3" />
-                          ) : (
-                            <Bell className="h-3 w-3" />
-                          )}
+                        <Button size="sm" variant="outline" onClick={(e) => { e.stopPropagation(); toggleAlert(alert.id, alert.is_active); }}>
+                          {alert.is_active ? <BellOff className="h-3 w-3" /> : <Bell className="h-3 w-3" />}
                         </Button>
-                        <Button
-                          size="sm"
-                          variant="outline"
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            deleteAlert(alert.id);
-                          }}
-                        >
+                        <Button size="sm" variant="outline" onClick={(e) => { e.stopPropagation(); deleteAlert(alert.id); }}>
                           <Trash2 className="h-3 w-3 text-destructive" />
                         </Button>
-                        <Button
-                          size="sm"
-                          variant="outline"
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            sendTestEmail(alert.id);
-                          }}
-                          disabled={!alert.email_notifications}
-                        >
+                        <Button size="sm" variant="outline" onClick={(e) => { e.stopPropagation(); sendTestEmail(alert.id); }} disabled={!alert.email_notifications}>
                           <Mail className="h-3 w-3" />
                         </Button>
                       </div>
@@ -493,28 +342,36 @@ export const CompletePriceAlertsUI: React.FC = () => {
           <Card>
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
-                <LineChart className="h-5 w-5" />
+                <LineChartIcon className="h-5 w-5" />
                 Price History
               </CardTitle>
               <CardDescription>
-                {selectedAlert
-                  ? `Showing price history for ${selectedAlert.route}`
-                  : "Select an alert to view price history"}
+                {selectedAlert ? `Showing price history for ${selectedAlert.route}` : "Select an alert to view price history"}
               </CardDescription>
             </CardHeader>
             <CardContent>
               {selectedAlert ? (
                 <div className="h-[400px]">
                   {priceHistory.length > 0 ? (
-                    <Line data={getChartData()} options={chartOptions} />
+                    <ResponsiveContainer width="100%" height="100%">
+                      <AreaChart data={chartData}>
+                        <CartesianGrid strokeDasharray="3 3" />
+                        <XAxis dataKey="date" />
+                        <YAxis tickFormatter={(v) => `$${v}`} />
+                        <Tooltip formatter={(value: number) => [`$${value}`, undefined]} />
+                        <Legend />
+                        <Area type="monotone" dataKey="price" name="Price" stroke="hsl(var(--primary))" fill="hsl(var(--primary) / 0.1)" />
+                        {selectedAlert && (
+                          <ReferenceLine y={selectedAlert.target_price} stroke="hsl(var(--destructive))" strokeDasharray="5 5" label="Target" />
+                        )}
+                      </AreaChart>
+                    </ResponsiveContainer>
                   ) : (
                     <div className="flex items-center justify-center h-full">
                       <div className="text-center text-muted-foreground">
-                        <LineChart className="h-12 w-12 mx-auto mb-2 opacity-50" />
+                        <LineChartIcon className="h-12 w-12 mx-auto mb-2 opacity-50" />
                         <p>No price history available yet</p>
-                        <p className="text-sm">
-                          Check prices to start building history
-                        </p>
+                        <p className="text-sm">Check prices to start building history</p>
                       </div>
                     </div>
                   )}
@@ -541,85 +398,37 @@ export const CompletePriceAlertsUI: React.FC = () => {
           <div className="space-y-4 py-4">
             <div className="space-y-2">
               <Label htmlFor="origin">Origin</Label>
-              <Input
-                id="origin"
-                value={newAlert.origin}
-                onChange={(e) =>
-                  setNewAlert({ ...newAlert, origin: e.target.value })
-                }
-                placeholder="e.g., New York"
-              />
+              <Input id="origin" value={newAlert.origin} onChange={(e) => setNewAlert({ ...newAlert, origin: e.target.value })} placeholder="e.g., New York" />
             </div>
-
             <div className="space-y-2">
               <Label htmlFor="destination">Destination</Label>
-              <Input
-                id="destination"
-                value={newAlert.destination}
-                onChange={(e) =>
-                  setNewAlert({ ...newAlert, destination: e.target.value })
-                }
-                placeholder="e.g., London"
-              />
+              <Input id="destination" value={newAlert.destination} onChange={(e) => setNewAlert({ ...newAlert, destination: e.target.value })} placeholder="e.g., London" />
             </div>
-
             <div className="space-y-2">
               <Label htmlFor="target_price">Target Price ($)</Label>
-              <Input
-                id="target_price"
-                type="number"
-                value={newAlert.target_price}
-                onChange={(e) =>
-                  setNewAlert({ ...newAlert, target_price: e.target.value })
-                }
-                placeholder="e.g., 500"
-              />
+              <Input id="target_price" type="number" value={newAlert.target_price} onChange={(e) => setNewAlert({ ...newAlert, target_price: e.target.value })} placeholder="e.g., 500" />
             </div>
-
             <div className="space-y-2">
               <Label htmlFor="threshold_type">Alert Condition</Label>
-              <Select
-                value={newAlert.threshold_type}
-                onValueChange={(value: "below" | "above") =>
-                  setNewAlert({ ...newAlert, threshold_type: value })
-                }
-              >
-                <SelectTrigger>
-                  <SelectValue />
-                </SelectTrigger>
+              <Select value={newAlert.threshold_type} onValueChange={(value: "below" | "above") => setNewAlert({ ...newAlert, threshold_type: value })}>
+                <SelectTrigger><SelectValue /></SelectTrigger>
                 <SelectContent>
                   <SelectItem value="below">Below target price</SelectItem>
                   <SelectItem value="above">Above target price</SelectItem>
                 </SelectContent>
               </Select>
             </div>
-
             <div className="flex items-center justify-between">
               <Label htmlFor="email_notifications">Email Notifications</Label>
-              <Switch
-                id="email_notifications"
-                checked={newAlert.email_notifications}
-                onCheckedChange={(checked) =>
-                  setNewAlert({ ...newAlert, email_notifications: checked })
-                }
-              />
+              <Switch id="email_notifications" checked={newAlert.email_notifications} onCheckedChange={(checked) => setNewAlert({ ...newAlert, email_notifications: checked })} />
             </div>
-
             <div className="flex items-center justify-between">
               <Label htmlFor="visual_notifications">Visual Notifications</Label>
-              <Switch
-                id="visual_notifications"
-                checked={newAlert.visual_notifications}
-                onCheckedChange={(checked) =>
-                  setNewAlert({ ...newAlert, visual_notifications: checked })
-                }
-              />
+              <Switch id="visual_notifications" checked={newAlert.visual_notifications} onCheckedChange={(checked) => setNewAlert({ ...newAlert, visual_notifications: checked })} />
             </div>
           </div>
           <DialogFooter>
-            <Button variant="outline" onClick={() => setShowCreateDialog(false)}>
-              Cancel
-            </Button>
+            <Button variant="outline" onClick={() => setShowCreateDialog(false)}>Cancel</Button>
             <Button onClick={createAlert}>Create Alert</Button>
           </DialogFooter>
         </DialogContent>

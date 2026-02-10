@@ -1,6 +1,7 @@
 /**
  * PATCH 871.2 - Performance Monitor
  * Type-safe with performance_metrics table (uses access_logs as fallback)
+ * Migrated to Recharts
  */
 import React, { useEffect, useState, useCallback } from "react";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
@@ -9,14 +10,11 @@ import { Button } from "@/components/ui/button";
 import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
 import { Activity, Zap, Clock, Gauge, Download, FileText, TrendingUp, Bell, Settings } from "lucide-react";
-import { Line } from "react-chartjs-2";
-import { Chart as ChartJS, CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend } from "chart.js";
+import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from "recharts";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import { logger } from '@/lib/logger';
 import type { Database } from "@/integrations/supabase/types";
-
-ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend);
 
 // Use access_logs as fallback for storing performance data
 type AccessLog = Database["public"]["Tables"]["access_logs"]["Row"];
@@ -82,7 +80,7 @@ export const PerformanceMonitor: React.FC = () => {
     try {
       const navigation = performance.getEntriesByType("navigation")[0] as PerformanceNavigationTiming;
       const loadTime = navigation.loadEventEnd - navigation.fetchStart;
-      const memory = (performance as any).memory;
+      const memory = (performance as unknown as Record<string, unknown>).memory as { usedJSHeapSize: number; totalJSHeapSize: number } | undefined;
       const memoryUsage = memory ? (memory.usedJSHeapSize / memory.totalJSHeapSize) * 100 : 0;
       const renderTime = navigation.loadEventEnd - navigation.domContentLoadedEventStart;
       const networkLatency = navigation.responseEnd - navigation.requestStart;
@@ -97,11 +95,7 @@ export const PerformanceMonitor: React.FC = () => {
       };
 
       setMetrics(newMetrics);
-
-      // Persist to database
       await persistMetrics(newMetrics);
-
-      // Check thresholds and alert
       checkThresholds(newMetrics);
     } catch (error) {
       logger.error("Error measuring performance:", error);
@@ -110,7 +104,6 @@ export const PerformanceMonitor: React.FC = () => {
 
   const persistMetrics = async (newMetrics: PerformanceMetrics) => {
     try {
-      // Store metrics in access_logs as fallback (performance_metrics may have different schema)
       const { error } = await supabase
         .from("access_logs")
         .insert({
@@ -146,12 +139,12 @@ export const PerformanceMonitor: React.FC = () => {
       if (error) throw error;
 
       if (data) {
-        const formatted = data.reverse().map((d: any) => ({
-          timestamp: new Date(d.measured_at).toLocaleTimeString(),
-          loadTime: d.load_time,
-          memoryUsage: d.memory_usage,
-          networkLatency: d.network_latency,
-          score: d.score
+        const formatted = data.reverse().map((d: Record<string, unknown>) => ({
+          timestamp: new Date(d.measured_at as string).toLocaleTimeString(),
+          loadTime: d.load_time as number,
+          memoryUsage: d.memory_usage as number,
+          networkLatency: d.network_latency as number,
+          score: d.score as number
         }));
         setHistoricalData(formatted);
       }
@@ -229,15 +222,11 @@ export const PerformanceMonitor: React.FC = () => {
     const { default: jsPDF } = await import('jspdf');
     const doc = new jsPDF();
 
-    // Title
     doc.setFontSize(18);
     doc.text("Performance Monitoring Report", 14, 20);
-
-    // Date
     doc.setFontSize(10);
     doc.text(`Generated: ${new Date().toLocaleDateString()} ${new Date().toLocaleTimeString()}`, 14, 28);
 
-    // Current Metrics
     doc.setFontSize(14);
     doc.text("Current Performance Metrics", 14, 40);
     doc.setFontSize(10);
@@ -246,7 +235,6 @@ export const PerformanceMonitor: React.FC = () => {
     doc.text(`Memory Usage: ${metrics.memoryUsage}%`, 14, 60);
     doc.text(`Network Latency: ${metrics.networkLatency}ms`, 14, 66);
 
-    // Threshold Configuration
     doc.setFontSize(14);
     doc.text("Alert Thresholds", 14, 80);
     const thresholdData = thresholds.map(t => [
@@ -254,7 +242,7 @@ export const PerformanceMonitor: React.FC = () => {
       `${t.threshold}${t.unit}`,
       t.enabled ? "Enabled" : "Disabled"
     ]);
-    (doc as any).autoTable({
+    (doc as unknown as { autoTable: (options: Record<string, unknown>) => void }).autoTable({
       startY: 85,
       head: [["Metric", "Threshold", "Status"]],
       body: thresholdData,
@@ -262,9 +250,8 @@ export const PerformanceMonitor: React.FC = () => {
       headStyles: { fillColor: [59, 130, 246] }
     });
 
-    // Historical Data
     if (historicalData.length > 0) {
-      const finalY = (doc as any).lastAutoTable.finalY || 120;
+      const finalY = ((doc as unknown as { lastAutoTable: { finalY: number } }).lastAutoTable?.finalY) || 120;
       doc.setFontSize(14);
       doc.text("Recent Historical Data", 14, finalY + 15);
 
@@ -276,7 +263,7 @@ export const PerformanceMonitor: React.FC = () => {
         d.score.toString()
       ]);
 
-      (doc as any).autoTable({
+      (doc as unknown as { autoTable: (options: Record<string, unknown>) => void }).autoTable({
         startY: finalY + 20,
         head: [["Time", "Load Time", "Memory", "Latency", "Score"]],
         body: histData,
@@ -291,30 +278,6 @@ export const PerformanceMonitor: React.FC = () => {
       title: "PDF exported",
       description: "Performance report has been downloaded",
     });
-  };
-
-  const getChartData = () => {
-    return {
-      labels: historicalData.map(d => d.timestamp),
-      datasets: [
-        {
-          label: "Load Time (ms)",
-          data: historicalData.map(d => d.loadTime),
-          borderColor: "rgb(59, 130, 246)",
-          backgroundColor: "rgba(59, 130, 246, 0.1)",
-          tension: 0.3,
-          yAxisID: "y",
-        },
-        {
-          label: "Memory Usage (%)",
-          data: historicalData.map(d => d.memoryUsage),
-          borderColor: "rgb(239, 68, 68)",
-          backgroundColor: "rgba(239, 68, 68, 0.1)",
-          tension: 0.3,
-          yAxisID: "y1",
-        }
-      ]
-    };
   };
 
   const getScoreColor = (score: number) => {
@@ -458,45 +421,18 @@ export const PerformanceMonitor: React.FC = () => {
           </CardHeader>
           <CardContent>
             <div className="h-[300px]">
-              <Line
-                data={getChartData()}
-                options={{
-                  responsive: true,
-                  maintainAspectRatio: false,
-                  interaction: {
-                    mode: "index" as const,
-                    intersect: false,
-                  },
-                  plugins: {
-                    legend: {
-                      position: "top" as const,
-                    },
-                  },
-                  scales: {
-                    y: {
-                      type: "linear" as const,
-                      display: true,
-                      position: "left" as const,
-                      title: {
-                        display: true,
-                        text: "Load Time (ms)"
-                      }
-                    },
-                    y1: {
-                      type: "linear" as const,
-                      display: true,
-                      position: "right" as const,
-                      title: {
-                        display: true,
-                        text: "Memory Usage (%)"
-                      },
-                      grid: {
-                        drawOnChartArea: false,
-                      },
-                    },
-                  }
-                }}
-              />
+              <ResponsiveContainer width="100%" height="100%">
+                <LineChart data={historicalData}>
+                  <CartesianGrid strokeDasharray="3 3" />
+                  <XAxis dataKey="timestamp" tick={{ fontSize: 11 }} />
+                  <YAxis yAxisId="left" label={{ value: "Load Time (ms)", angle: -90, position: "insideLeft" }} />
+                  <YAxis yAxisId="right" orientation="right" label={{ value: "Memory (%)", angle: 90, position: "insideRight" }} />
+                  <Tooltip />
+                  <Legend />
+                  <Line yAxisId="left" type="monotone" dataKey="loadTime" name="Load Time (ms)" stroke="hsl(var(--primary))" strokeWidth={2} dot={false} />
+                  <Line yAxisId="right" type="monotone" dataKey="memoryUsage" name="Memory Usage (%)" stroke="hsl(var(--destructive))" strokeWidth={2} dot={false} />
+                </LineChart>
+              </ResponsiveContainer>
             </div>
           </CardContent>
         </Card>

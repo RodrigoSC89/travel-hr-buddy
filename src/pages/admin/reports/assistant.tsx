@@ -10,7 +10,7 @@ import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { ArrowLeft, Download, FileText, BarChart3 } from "lucide-react";
 import { toast } from "@/hooks/use-toast";
-import { Bar } from "react-chartjs-2";
+import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from "recharts";
 import { logger } from "@/lib/logger";
 
 // Lazy load jsPDF
@@ -21,26 +21,6 @@ const loadJsPDF = async () => {
   ]);
   return { jsPDF, autoTable: autoTableModule.default };
 };
-import {
-  Chart as ChartJS,
-  CategoryScale,
-  LinearScale,
-  BarElement,
-  Title,
-  Tooltip,
-  Legend,
-  ChartOptions,
-} from "chart.js";
-
-// Register Chart.js components
-ChartJS.register(
-  CategoryScale,
-  LinearScale,
-  BarElement,
-  Title,
-  Tooltip,
-  Legend
-);
 
 interface AssistantReportLog {
   id: string;
@@ -70,9 +50,8 @@ export default function AssistantReportLogsPage() {
 
   // Prepare chart data from logs
   const chartData = useMemo(() => {
-    if (logs.length === 0) return null;
+    if (logs.length === 0) return [];
 
-    // Group logs by date
     const dateGroups = logs.reduce((acc, log) => {
       const date = new Date(log.sent_at).toLocaleDateString("pt-BR", {
         day: "2-digit",
@@ -82,48 +61,17 @@ export default function AssistantReportLogsPage() {
       return acc;
     }, {} as Record<string, number>);
 
-    // Sort dates and prepare chart data
     const sortedDates = Object.keys(dateGroups).sort((a, b) => {
       const [dayA, monthA] = a.split("/");
       const [dayB, monthB] = b.split("/");
       return new Date(`2024-${monthA}-${dayA}`).getTime() - new Date(`2024-${monthB}-${dayB}`).getTime();
     });
 
-    return {
-      labels: sortedDates,
-      datasets: [
-        {
-          label: "Relatórios Enviados",
-          data: sortedDates.map((date) => dateGroups[date]),
-          backgroundColor: "rgba(99, 102, 241, 0.5)",
-          borderColor: "rgb(99, 102, 241)",
-          borderWidth: 1,
-        },
-      ],
-    };
+    return sortedDates.map((date) => ({
+      date,
+      relatorios: dateGroups[date],
+    }));
   }, [logs]);
-
-  const chartOptions: ChartOptions<"bar"> = {
-    responsive: true,
-    maintainAspectRatio: false,
-    plugins: {
-      legend: {
-        position: "top" as const,
-      },
-      title: {
-        display: true,
-        text: "Volume de Relatórios Enviados por Dia",
-      },
-    },
-    scales: {
-      y: {
-        beginAtZero: true,
-        ticks: {
-          stepSize: 1,
-        },
-      },
-    },
-  };
 
   async function fetchLogs() {
     setLoading(true);
@@ -133,7 +81,6 @@ export default function AssistantReportLogsPage() {
       if (endDate) params.append("end", endDate);
       if (email) params.append("email", email);
 
-      // Get session for authorization
       const { data: { session } } = await supabase.auth.getSession();
       
       if (!session) {
@@ -173,12 +120,9 @@ export default function AssistantReportLogsPage() {
 
   async function fetchCronStatus() {
     try {
-      // Get session for authorization
       const { data: { session } } = await supabase.auth.getSession();
       
-      if (!session) {
-        return;
-      }
+      if (!session) return;
 
       const response = await fetch(
         getEdgeFunctionUrl("cron-status"),
@@ -197,17 +141,12 @@ export default function AssistantReportLogsPage() {
       setCronMessage(data.message);
     } catch (error) {
       logger.error("Error fetching cron status:", error);
-      // Don't show toast for cron status errors - it's supplementary info
     }
   }
 
   async function exportPDF() {
     if (logs.length === 0) {
-      toast({
-        title: "Nenhum dado para exportar",
-        description: "Não há logs para exportar.",
-        variant: "destructive",
-      });
+      toast({ title: "Nenhum dado para exportar", description: "Não há logs para exportar.", variant: "destructive" });
       return;
     }
 
@@ -227,24 +166,15 @@ export default function AssistantReportLogsPage() {
       styles: { fontSize: 8 },
     });
     doc.save("logs-assistente.pdf");
-
-    toast({
-      title: "PDF exportado",
-      description: "O PDF foi baixado com sucesso.",
-    });
+    toast({ title: "PDF exportado", description: "O PDF foi baixado com sucesso." });
   }
 
   function exportCSV() {
     if (logs.length === 0) {
-      toast({
-        title: "Nenhum dado para exportar",
-        description: "Não há logs para exportar.",
-        variant: "destructive",
-      });
+      toast({ title: "Nenhum dado para exportar", description: "Não há logs para exportar.", variant: "destructive" });
       return;
     }
 
-    // Include logs_count in export
     const csv = [
       ["Data", "Usuário", "Status", "Mensagem", "Interações"],
       ...logs.map((log) => [
@@ -256,7 +186,6 @@ export default function AssistantReportLogsPage() {
       ])
     ].map((row) => row.map((cell) => `"${cell}"`).join(",")).join("\n");
 
-    // Add UTF-8 BOM for Excel compatibility
     const BOM = "\uFEFF";
     const blob = new Blob([BOM + csv], { type: "text/csv;charset=utf-8;" });
     const url = URL.createObjectURL(blob);
@@ -265,22 +194,14 @@ export default function AssistantReportLogsPage() {
     a.download = "logs-assistente.csv";
     a.click();
     URL.revokeObjectURL(url);
-
-    toast({
-      title: "CSV exportado",
-      description: "O CSV foi baixado com sucesso.",
-    });
+    toast({ title: "CSV exportado", description: "O CSV foi baixado com sucesso." });
   }
 
   return (
     <div className="p-6">
       <div className="mb-6">
         <div className="flex items-center gap-4 mb-4">
-          <Button
-            variant="ghost"
-            size="sm"
-            onClick={() => navigate("/admin")}
-          >
+          <Button variant="ghost" size="sm" onClick={() => navigate("/admin")}>
             <ArrowLeft className="w-4 h-4 mr-2" />
             Voltar
           </Button>
@@ -301,23 +222,9 @@ export default function AssistantReportLogsPage() {
       )}
 
       <div className="grid grid-cols-1 md:grid-cols-4 gap-2 mb-4">
-        <Input 
-          type="date" 
-          value={startDate} 
-          onChange={(e) => setStartDate(e.target.value)}
-          placeholder="Data inicial"
-        />
-        <Input 
-          type="date" 
-          value={endDate} 
-          onChange={(e) => setEndDate(e.target.value)}
-          placeholder="Data final"
-        />
-        <Input 
-          placeholder="E-mail do usuário" 
-          value={email} 
-          onChange={(e) => setEmail(e.target.value)} 
-        />
+        <Input type="date" value={startDate} onChange={(e) => setStartDate(e.target.value)} placeholder="Data inicial" />
+        <Input type="date" value={endDate} onChange={(e) => setEndDate(e.target.value)} placeholder="Data final" />
+        <Input placeholder="E-mail do usuário" value={email} onChange={(e) => setEmail(e.target.value)} />
         <Button onClick={fetchLogs}>🔍 Buscar</Button>
       </div>
 
@@ -333,7 +240,7 @@ export default function AssistantReportLogsPage() {
       </div>
 
       {/* Chart Section */}
-      {chartData && logs.length > 0 && (
+      {chartData.length > 0 && (
         <Card className="mb-4">
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
@@ -342,8 +249,17 @@ export default function AssistantReportLogsPage() {
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <div style={{ height: "300px" }}>
-              <Bar data={chartData} options={chartOptions} />
+            <div className="h-[300px]">
+              <ResponsiveContainer width="100%" height="100%">
+                <BarChart data={chartData}>
+                  <CartesianGrid strokeDasharray="3 3" />
+                  <XAxis dataKey="date" />
+                  <YAxis allowDecimals={false} />
+                  <Tooltip />
+                  <Legend />
+                  <Bar dataKey="relatorios" name="Relatórios Enviados" fill="hsl(var(--primary))" />
+                </BarChart>
+              </ResponsiveContainer>
             </div>
           </CardContent>
         </Card>

@@ -19,26 +19,8 @@ import {
   Lightbulb, Calculator, Clock, MapPin
 } from "lucide-react";
 import { format } from "date-fns";
-import { Bar, Line, Doughnut } from "react-chartjs-2";
+import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, PieChart, Pie, Cell } from "recharts";
 import { logger } from '@/lib/logger';
-import {
-  Chart as ChartJS,
-  CategoryScale,
-  LinearScale,
-  BarElement,
-  LineElement,
-  PointElement,
-  ArcElement,
-  Title,
-  Tooltip,
-  Legend,
-  Filler
-} from "chart.js";
-
-ChartJS.register(
-  CategoryScale, LinearScale, BarElement, LineElement, 
-  PointElement, ArcElement, Title, Tooltip, Legend, Filler
-);
 
 const { useState, useEffect, useCallback } = React;
 
