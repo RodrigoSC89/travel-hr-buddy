@@ -343,7 +343,7 @@ export default function PeopleIntelligenceHub() {
                      <Users className="h-5 w-5" />
                      Tripulação
                    </span>
-                   <Button size="sm" variant="outline">
+                   <Button size="sm" variant="outline" onClick={() => toast.info("Use o botão 'Add Crew Member' na barra de ações do People Hub")}>
                      <UserPlus className="h-4 w-4" />
                    </Button>
                  </CardTitle>
@@ -481,9 +481,11 @@ export default function PeopleIntelligenceHub() {
                    folgas regulamentares e preferências da tripulação.
                  </p>
                  <Button onClick={() => {
-                    const nav = document.querySelector('a[href*="escalas"], a[href*="scheduling"]');
-                    if (nav) (nav as HTMLAnchorElement).click();
-                    else toast.info("Navegue para Gestão de Tripulação > Escalas para usar o planejador.");
+                    const params = new URLSearchParams(window.location.search);
+                    params.set('section', 'crew-schedule');
+                    window.history.pushState({}, '', `/workbench?${params.toString()}`);
+                    window.dispatchEvent(new PopStateEvent('popstate'));
+                    toast.info("Navegando para o planejador de escalas");
                   }}>
                     <Zap className="h-4 w-4 mr-2" />
                     Abrir Planejador

@@ -5,7 +5,8 @@
   * PATCH Sprint 12: Replaced mockCrew with useCrewIntelligenceData hook
   */
  
- import { useState } from "react";
+ import { useState, useCallback } from "react";
+ import { useNavigate } from "react-router-dom";
  import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
  import { Badge } from "@/components/ui/badge";
  import { Button } from "@/components/ui/button";
@@ -19,10 +20,30 @@
    TrendingUp, Brain, Shield, Ship, CheckCircle2, Timer
  } from "lucide-react";
  import { useCrewIntelligenceData, type CrewMember } from "@/hooks/useCrewIntelligenceData";
+ import { toast } from "sonner";
  
  export default function CrewIntelligenceHub() {
    const { data: crew = [], isLoading } = useCrewIntelligenceData();
    const [selectedCrew, setSelectedCrew] = useState<CrewMember | null>(null);
+   const navigate = useNavigate();
+
+   const handleRevisarEscalas = useCallback(() => {
+     navigate('/workbench?section=crew-schedule');
+     toast.info("Navegando para escalas de tripulação");
+   }, [navigate]);
+
+   const handleTreinamentos = useCallback(() => {
+     navigate('/workbench?section=people&ptab=training');
+     toast.info("Navegando para módulo de treinamentos");
+   }, [navigate]);
+
+   const handleViewCertificates = useCallback(() => {
+     if (selectedCrew) {
+       toast.info(`Certificados de ${selectedCrew.name}`, {
+         description: `${selectedCrew.expiringCerts} certificado(s) expirando`,
+       });
+     }
+   }, [selectedCrew]);
 
    if (isLoading) {
      return (
@@ -130,7 +151,7 @@
                    </p>
                  </div>
                </div>
-               <Button size="sm" variant="destructive" className="gap-2">
+               <Button size="sm" variant="destructive" className="gap-2" onClick={handleRevisarEscalas}>
                  <Clock className="h-4 w-4" />
                  Revisar Escalas
                </Button>
@@ -323,11 +344,11 @@
                  </div>
  
                  <div className="flex gap-2">
-                   <Button className="flex-1" size="sm">
+                   <Button className="flex-1" size="sm" onClick={handleTreinamentos}>
                      <GraduationCap className="h-4 w-4 mr-2" />
                      Treinamentos
                    </Button>
-                   <Button variant="outline" size="sm">
+                   <Button variant="outline" size="sm" onClick={handleViewCertificates}>
                      <FileCheck className="h-4 w-4" />
                    </Button>
                  </div>
