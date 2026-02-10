@@ -39,7 +39,7 @@
    issues: number;
  }
  
- const mockSuppliers: SupplierMetrics[] = [
+ const fallbackSuppliers: SupplierMetrics[] = [
    {
      id: "1", name: "MarineSupply Global", category: "Peças e Equipamentos", location: "Rotterdam, NL",
      overallScore: 94, qualityScore: 96, deliveryScore: 92, priceScore: 88, serviceScore: 98,

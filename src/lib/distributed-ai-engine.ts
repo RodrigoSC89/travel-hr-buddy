@@ -250,10 +250,10 @@ Expected Behavior:
       return await runOpenAI(fallbackRequest);
     } catch (error) {
       logger.error("Central AI fallback failed:", error);
-      // Return mock response as last resort
+      // Return fallback response as last resort
       return {
         content: "AI services temporarily unavailable. Please use manual procedures or contact fleet operations.",
-        model: "fallback-mock",
+        model: "fallback-offline",
         timestamp: new Date()
       };
     }

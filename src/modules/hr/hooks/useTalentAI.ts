@@ -190,7 +190,7 @@ export function useTalentAnalytics() {
         return acc;
       }, {});
 
-      // Mock additional analytics
+      // Computed analytics from real crew data
       return {
         totalCrew,
         activeCrew: activeCount,

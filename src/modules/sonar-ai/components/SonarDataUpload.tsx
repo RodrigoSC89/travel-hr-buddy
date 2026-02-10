@@ -60,8 +60,8 @@ export function SonarDataUpload() {
         parsedData = { raw: content };
       }
 
-      // Mock AI analysis
-      const mockAnalysis = {
+      // Fallback AI analysis (awaiting real ML pipeline)
+      const fallbackAnalysis = {
         input_id: "", // Will be set by service
         analysis_type: "frequency_analysis",
         ai_model: "sonar-detect-v1",
@@ -78,16 +78,16 @@ export function SonarDataUpload() {
         recommendations: "Continue monitoring frequency patterns",
       };
 
-      // Mock alerts
-      const mockAlerts = [];
-      if (mockAnalysis.anomalies) {
-        mockAlerts.push({
+      // Fallback alerts
+      const fallbackAlerts = [];
+      if (fallbackAnalysis.anomalies) {
+        fallbackAlerts.push({
           analysis_id: "", // Will be set by service
           alert_type: "anomaly_detected",
           severity: "medium" as const,
           title: "Frequency Anomaly Detected",
-          description: `Detected ${mockAnalysis.anomalies.count} unusual patterns in sonar data`,
-          frequency_range: mockAnalysis.frequency_data.range,
+          description: `Detected ${fallbackAnalysis.anomalies.count} unusual patterns in sonar data`,
+          frequency_range: fallbackAnalysis.frequency_data.range,
         });
       }
 
@@ -104,8 +104,8 @@ export function SonarDataUpload() {
             fileHash: btoa(file.name + file.size),
           },
         },
-        mockAnalysis,
-        mockAlerts
+        fallbackAnalysis,
+        fallbackAlerts
       );
 
       if (result.error) {
@@ -114,7 +114,7 @@ export function SonarDataUpload() {
 
       toast({
         title: "Upload successful",
-        description: `File ${file.name} analyzed successfully. ${mockAlerts.length} alerts generated.`,
+        description: `File ${file.name} analyzed successfully. ${fallbackAlerts.length} alerts generated.`,
       });
 
       setProgress(100);

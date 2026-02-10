@@ -71,7 +71,7 @@ const MaritimeFleetManagement = () => {
         .limit(100);
       
       if (error) {
-        // Mock data fallback
+        // Fallback stats when DB query fails
         setFleetStats({
           totalVessels: 18,
           activeVessels: 15,

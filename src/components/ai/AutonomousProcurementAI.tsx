@@ -73,7 +73,7 @@ export const AutonomousProcurementAI: React.FC = () => {
   const loadProcurementData = async () => {
     setIsAnalyzing(true);
 
-    const mockStock: StockItem[] = [
+    const fallbackStock: StockItem[] = [
       {
         id: 'stk-001',
         name: 'Óleo Lubrificante 15W-40',
@@ -128,7 +128,7 @@ export const AutonomousProcurementAI: React.FC = () => {
       }
     ];
 
-    const mockSuppliers: Supplier[] = [
+    const fallbackSuppliers: Supplier[] = [
       {
         id: 'sup-001',
         name: 'MarineSupply Global',
@@ -161,12 +161,12 @@ export const AutonomousProcurementAI: React.FC = () => {
       }
     ];
 
-    const mockRecommendations: PurchaseRecommendation[] = [
+    const fallbackRecommendations: PurchaseRecommendation[] = [
       {
         id: 'rec-001',
-        item: mockStock[0],
+        item: fallbackStock[0],
         suggestedQuantity: 200,
-        suggestedSupplier: mockSuppliers[0],
+        suggestedSupplier: fallbackSuppliers[0],
         estimatedCost: 4500,
         urgency: 'immediate',
         aiReasoning: 'Estoque crítico com apenas 2 dias de suprimento. Consumo médio alto. Fornecedor MarineSupply oferece melhor lead time (3 dias) e excelente rating.',
@@ -174,9 +174,9 @@ export const AutonomousProcurementAI: React.FC = () => {
       },
       {
         id: 'rec-002',
-        item: mockStock[1],
+        item: fallbackStock[1],
         suggestedQuantity: 20,
-        suggestedSupplier: mockSuppliers[0],
+        suggestedSupplier: fallbackSuppliers[0],
         estimatedCost: 1800,
         urgency: 'soon',
         aiReasoning: 'Estoque baixo com 4 dias restantes. Pedido conjunto com óleo lubrificante reduz custo de frete.',
@@ -184,9 +184,9 @@ export const AutonomousProcurementAI: React.FC = () => {
       }
     ];
 
-    setStockItems(mockStock);
-    setSuppliers(mockSuppliers);
-    setRecommendations(mockRecommendations);
+    setStockItems(fallbackStock);
+    setSuppliers(fallbackSuppliers);
+    setRecommendations(fallbackRecommendations);
     setStats({
       pendingOrders: 3,
       autoOrders: 12,

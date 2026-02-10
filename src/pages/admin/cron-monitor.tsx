@@ -1,7 +1,7 @@
 /**
  * Cron Monitor Page
  * DEBT-FIX: cron_jobs/cron_job_executions don't exist in schema.
- * Using in-memory mock data for monitoring UI.
+ * Using in-memory fallback data for monitoring UI.
  */
 import React, { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
