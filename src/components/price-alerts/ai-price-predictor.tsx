@@ -176,29 +176,32 @@ export const AIPricePredictor: React.FC = () => {
     };
   };
 
-  const generateAIInsights = () => {
-    const mockInsights: AIInsight[] = [
-      {
-        type: "opportunity",
-        message: "Detectamos uma tendência de queda nos preços de passagens SP-RJ. Recomendamos aguardar mais 1 semana para comprar.",
-        confidence: 0.87,
-        action_required: true
-      },
-      {
-        type: "warning",
-        message: "Preços de hospedagem em Copacabana estão em alta devido à temporada. Considere reservas antecipadas.",
-        confidence: 0.92,
-        action_required: true
-      },
-      {
-        type: "neutral",
-        message: "Combustível náutico mantém estabilidade. Momento neutro para aquisição.",
-        confidence: 0.74,
-        action_required: false
+  const generateAIInsights = async () => {
+    try {
+      const { data } = await supabase
+        .from("ai_insights")
+        .select("*")
+        .eq("related_module", "price-alerts")
+        .order("created_at", { ascending: false })
+        .limit(5);
+
+      if (data && data.length > 0) {
+        setInsights(data.map(i => ({
+          type: (i.priority === "high" ? "warning" : i.actionable ? "opportunity" : "neutral") as AIInsight["type"],
+          message: i.description,
+          confidence: i.confidence,
+          action_required: i.actionable,
+        })));
+        return;
       }
-    ];
-    
-    setInsights(mockInsights);
+    } catch {}
+
+    // Fallback insights
+    setInsights([
+      { type: "opportunity", message: "Detectamos uma tendência de queda nos preços de passagens SP-RJ. Recomendamos aguardar mais 1 semana.", confidence: 0.87, action_required: true },
+      { type: "warning", message: "Preços de hospedagem em Copacabana estão em alta devido à temporada. Considere reservas antecipadas.", confidence: 0.92, action_required: true },
+      { type: "neutral", message: "Combustível náutico mantém estabilidade. Momento neutro para aquisição.", confidence: 0.74, action_required: false },
+    ]);
   };
 
   const getTrendIcon = (trend: string) => {

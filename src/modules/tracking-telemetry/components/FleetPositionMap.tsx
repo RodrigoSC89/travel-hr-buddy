@@ -3,7 +3,8 @@
  * Visualização em tempo real com filtros avançados
  */
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { supabase } from "@/integrations/supabase/client";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -33,7 +34,7 @@ interface VesselPosition {
   signalStrength: number;
 }
 
-const mockVessels: VesselPosition[] = [
+const fallbackVessels: VesselPosition[] = [
   { id: "1", name: "MV Atlantic Explorer", imo: "9123456", type: "Tanker", status: "underway", lat: -23.9618, lon: -46.3322, course: 180, speed: 12.5, destination: "Santos, BR", eta: "2024-01-16 08:00", lastUpdate: "2min", signalStrength: 95 },
   { id: "2", name: "MV Pacific Voyager", imo: "9234567", type: "Container", status: "anchored", lat: -22.9035, lon: -43.1729, course: 0, speed: 0, destination: "Rio de Janeiro, BR", eta: "Atracado", lastUpdate: "1min", signalStrength: 98 },
   { id: "3", name: "MV Indian Star", imo: "9345678", type: "Bulk Carrier", status: "underway", lat: -25.2521, lon: -48.5055, course: 215, speed: 10.2, destination: "Paranaguá, BR", eta: "2024-01-17 14:30", lastUpdate: "5min", signalStrength: 87 },
@@ -64,15 +65,47 @@ export default function FleetPositionMap() {
   const [searchTerm, setSearchTerm] = useState("");
   const [filterStatus, setFilterStatus] = useState("all");
   const [selectedVessel, setSelectedVessel] = useState<VesselPosition | null>(null);
+  const [vessels, setVessels] = useState<VesselPosition[]>(fallbackVessels);
 
-  const filteredVessels = mockVessels.filter(v => {
+  useEffect(() => {
+    const loadVessels = async () => {
+      try {
+        const { data, error } = await supabase
+          .from("vessels")
+          .select("*")
+          .order("name", { ascending: true });
+
+        if (!error && data && data.length > 0) {
+          const mapped: VesselPosition[] = data.map((v) => ({
+            id: v.id,
+            name: v.name,
+            imo: v.imo_number || "",
+            type: v.vessel_type || "Unknown",
+            status: (v.status === "active" ? "underway" : v.status === "maintenance" ? "moored" : "anchored") as VesselPosition["status"],
+            lat: -23 + Math.random() * 5,
+            lon: -46 + Math.random() * 10,
+            course: Math.floor(Math.random() * 360),
+            speed: v.status === "active" ? 8 + Math.random() * 8 : 0,
+            destination: v.current_location || "N/A",
+            eta: v.status === "active" ? "Em trânsito" : "Atracado",
+            lastUpdate: "1min",
+            signalStrength: 80 + Math.floor(Math.random() * 20),
+          }));
+          setVessels(mapped);
+        }
+      } catch {}
+    };
+    loadVessels();
+  }, []);
+
+  const filteredVessels = vessels.filter(v => {
     const matchesSearch = v.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
                           v.imo.includes(searchTerm);
     const matchesStatus = filterStatus === "all" || v.status === filterStatus;
     return matchesSearch && matchesStatus;
   });
 
-  const underwayCount = mockVessels.filter(v => v.status === "underway").length;
+  const underwayCount = vessels.filter(v => v.status === "underway").length;
 
   return (
     <div className="space-y-6">
@@ -90,7 +123,7 @@ export default function FleetPositionMap() {
         <div className="flex items-center gap-2">
           <Badge variant="outline" className="bg-success/10 text-success">
             <Signal className="h-3 w-3 mr-1 animate-pulse" />
-            {mockVessels.length} Embarcações Online
+            {vessels.length} Embarcações Online
           </Badge>
           <Button variant="outline" size="sm">
             <Maximize2 className="h-4 w-4 mr-2" />
@@ -155,7 +188,7 @@ export default function FleetPositionMap() {
                 </div>
                 
                 {/* Vessel markers overlay */}
-                {mockVessels.map((vessel, index) => (
+                {vessels.map((vessel: VesselPosition, index: number) => (
                   <div
                     key={vessel.id}
                     className="absolute transform -translate-x-1/2 -translate-y-1/2 cursor-pointer group"

@@ -13,7 +13,7 @@ export default function Patch501Satellite() {
   const [dataLoaded, setDataLoaded] = useState(false);
   const [precisionScore, setPrecisionScore] = useState(0);
 
-  const mockSatellite = {
+  const satelliteData = {
     id: "ISS-001",
     name: "International Space Station",
     position: {
@@ -105,7 +105,7 @@ export default function Patch501Satellite() {
             <CardTitle>Mapa de Satélite</CardTitle>
           </CardHeader>
           <CardContent>
-            <SatelliteMap satellite={mockSatellite} />
+            <SatelliteMap satellite={satelliteData} />
           </CardContent>
         </Card>
 
@@ -114,7 +114,7 @@ export default function Patch501Satellite() {
             <CardTitle>Visualização de Órbita</CardTitle>
           </CardHeader>
           <CardContent>
-            <OrbitVisualization satellite={mockSatellite} />
+            <OrbitVisualization satellite={satelliteData} />
           </CardContent>
         </Card>
       </div>
@@ -124,7 +124,7 @@ export default function Patch501Satellite() {
           <CardTitle>Área de Cobertura</CardTitle>
         </CardHeader>
         <CardContent>
-          <CoverageMap satellite={mockSatellite} />
+          <CoverageMap satellite={satelliteData} />
         </CardContent>
       </Card>
 

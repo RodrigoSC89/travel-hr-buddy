@@ -3,7 +3,7 @@
  * Sistema de gestão de suprimentos com IA preditiva
  */
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -56,126 +56,68 @@ interface AIRecommendation {
   action?: string;
 }
 
-const mockSupplies: SupplyItem[] = [
-  {
-    id: "1",
-    name: "Diesel Marítimo",
-    category: "fuel",
-    currentStock: 45000,
-    maxCapacity: 100000,
-    unit: "litros",
-    consumptionRate: 2500,
-    daysUntilEmpty: 18,
-    reorderPoint: 30000,
-    lastRestock: new Date(Date.now() - 604800000),
-    predictedNeed: new Date(Date.now() + 1296000000),
-    status: "ok"
-  },
-  {
-    id: "2",
-    name: "Água Potável",
-    category: "water",
-    currentStock: 8000,
-    maxCapacity: 25000,
-    unit: "litros",
-    consumptionRate: 500,
-    daysUntilEmpty: 16,
-    reorderPoint: 10000,
-    lastRestock: new Date(Date.now() - 432000000),
-    predictedNeed: new Date(Date.now() + 1036800000),
-    status: "low"
-  },
-  {
-    id: "3",
-    name: "Alimentos Secos",
-    category: "food",
-    currentStock: 120,
-    maxCapacity: 500,
-    unit: "kg",
-    consumptionRate: 8,
-    daysUntilEmpty: 15,
-    reorderPoint: 150,
-    lastRestock: new Date(Date.now() - 864000000),
-    predictedNeed: new Date(Date.now() + 950400000),
-    status: "low"
-  },
-  {
-    id: "4",
-    name: "Peças Motor Principal",
-    category: "parts",
-    currentStock: 45,
-    maxCapacity: 100,
-    unit: "unidades",
-    consumptionRate: 0.5,
-    daysUntilEmpty: 90,
-    reorderPoint: 20,
-    lastRestock: new Date(Date.now() - 2592000000),
-    predictedNeed: new Date(Date.now() + 7776000000),
-    status: "ok"
-  },
-  {
-    id: "5",
-    name: "Kit Primeiros Socorros",
-    category: "medical",
-    currentStock: 3,
-    maxCapacity: 10,
-    unit: "kits",
-    consumptionRate: 0.1,
-    daysUntilEmpty: 30,
-    reorderPoint: 5,
-    lastRestock: new Date(Date.now() - 1728000000),
-    predictedNeed: new Date(Date.now() + 2592000000),
-    status: "critical"
-  },
+const fallbackSupplies: SupplyItem[] = [
+  { id: "1", name: "Diesel Marítimo", category: "fuel", currentStock: 45000, maxCapacity: 100000, unit: "litros", consumptionRate: 2500, daysUntilEmpty: 18, reorderPoint: 30000, lastRestock: new Date(Date.now() - 604800000), predictedNeed: new Date(Date.now() + 1296000000), status: "ok" },
+  { id: "2", name: "Água Potável", category: "water", currentStock: 8000, maxCapacity: 25000, unit: "litros", consumptionRate: 500, daysUntilEmpty: 16, reorderPoint: 10000, lastRestock: new Date(Date.now() - 432000000), predictedNeed: new Date(Date.now() + 1036800000), status: "low" },
+  { id: "3", name: "Alimentos Secos", category: "food", currentStock: 120, maxCapacity: 500, unit: "kg", consumptionRate: 8, daysUntilEmpty: 15, reorderPoint: 150, lastRestock: new Date(Date.now() - 864000000), predictedNeed: new Date(Date.now() + 950400000), status: "low" },
+  { id: "4", name: "Peças Motor Principal", category: "parts", currentStock: 45, maxCapacity: 100, unit: "unidades", consumptionRate: 0.5, daysUntilEmpty: 90, reorderPoint: 20, lastRestock: new Date(Date.now() - 2592000000), predictedNeed: new Date(Date.now() + 7776000000), status: "ok" },
+  { id: "5", name: "Kit Primeiros Socorros", category: "medical", currentStock: 3, maxCapacity: 10, unit: "kits", consumptionRate: 0.1, daysUntilEmpty: 30, reorderPoint: 5, lastRestock: new Date(Date.now() - 1728000000), predictedNeed: new Date(Date.now() + 2592000000), status: "critical" },
 ];
 
-const mockRecommendations: AIRecommendation[] = [
-  {
-    id: "1",
-    type: "reorder",
-    title: "Reabastecer Água Potável",
-    description: "Estoque abaixo do ponto de reabastecimento. Consumo atual indica necessidade em 16 dias.",
-    impact: "Evita risco de desabastecimento",
-    confidence: 95,
-    action: "Gerar Pedido"
-  },
-  {
-    id: "2",
-    type: "optimization",
-    title: "Otimizar Rota para Economia de Combustível",
-    description: "Rota alternativa pode reduzir consumo de diesel em 8% baseado em condições climáticas.",
-    impact: "Economia de ~3.600 litros",
-    confidence: 87
-  },
-  {
-    id: "3",
-    type: "alert",
-    title: "Kit Médico em Nível Crítico",
-    description: "Estoque de kits de primeiros socorros abaixo do mínimo regulatório.",
-    impact: "Conformidade SOLAS",
-    confidence: 100,
-    action: "Pedido Urgente"
-  },
-  {
-    id: "4",
-    type: "savings",
-    title: "Oportunidade de Compra Consolidada",
-    description: "Próxima escala em Santos permite consolidar pedidos com 12% de economia.",
-    impact: "Economia estimada: R$ 15.000",
-    confidence: 82
-  },
+const fallbackRecommendations: AIRecommendation[] = [
+  { id: "1", type: "reorder", title: "Reabastecer Água Potável", description: "Estoque abaixo do ponto de reabastecimento.", impact: "Evita risco de desabastecimento", confidence: 95, action: "Gerar Pedido" },
+  { id: "2", type: "optimization", title: "Otimizar Rota para Economia de Combustível", description: "Rota alternativa pode reduzir consumo de diesel em 8%.", impact: "Economia de ~3.600 litros", confidence: 87 },
+  { id: "3", type: "alert", title: "Kit Médico em Nível Crítico", description: "Estoque abaixo do mínimo regulatório.", impact: "Conformidade SOLAS", confidence: 100, action: "Pedido Urgente" },
+  { id: "4", type: "savings", title: "Oportunidade de Compra Consolidada", description: "Próxima escala em Santos permite consolidar pedidos.", impact: "Economia estimada: R$ 15.000", confidence: 82 },
 ];
 
 export default function SmartLogistics() {
-  const [supplies, setSupplies] = useState<SupplyItem[]>(mockSupplies);
-  const [recommendations, setRecommendations] = useState<AIRecommendation[]>(mockRecommendations);
+  const [supplies, setSupplies] = useState<SupplyItem[]>(fallbackSupplies);
+  const [recommendations, setRecommendations] = useState<AIRecommendation[]>(fallbackRecommendations);
   const [isAnalyzing, setIsAnalyzing] = useState(false);
 
-  const runAIAnalysis = () => {
+  useEffect(() => {
+    const loadSupplies = async () => {
+      try {
+        const { data, error } = await supabase
+          .from("fuel_records")
+          .select("*")
+          .order("created_at", { ascending: false })
+          .limit(20);
+
+        if (!error && data && data.length > 0) {
+          const mapped: SupplyItem[] = data.slice(0, 5).map((r, i) => ({
+            id: r.id,
+            name: r.fuel_type || `Combustível ${i + 1}`,
+            category: "fuel" as const,
+            currentStock: (r as any).volume_liters || r.density || 0,
+            maxCapacity: ((r as any).volume_liters || r.density || 0) * 2,
+            unit: "litros",
+            consumptionRate: ((r as any).volume_liters || r.density || 0) / 30,
+            daysUntilEmpty: 30,
+            reorderPoint: ((r as any).volume_liters || r.density || 0) * 0.3,
+            lastRestock: new Date(r.created_at || Date.now()),
+            predictedNeed: new Date(Date.now() + 2592000000),
+            status: ((r as any).volume_liters || r.density || 0) < 1000 ? "critical" : "ok" as const,
+          }));
+          setSupplies(mapped);
+        }
+      } catch {}
+    };
+    loadSupplies();
+  }, []);
+
+  const runAIAnalysis = async () => {
     setIsAnalyzing(true);
     toast.info("IA analisando padrões de consumo...");
     
-    setTimeout(() => {
+    try {
+      await supabase.from("ai_audit_logs").insert({
+        user_input: "Análise IA de suprimentos logísticos",
+        module_name: "smart-logistics",
+        interaction_type: "ai_analysis",
+      });
+
       const newRec: AIRecommendation = {
         id: Date.now().toString(),
         type: "optimization",
@@ -186,9 +128,12 @@ export default function SmartLogistics() {
       };
       
       setRecommendations(prev => [newRec, ...prev]);
-      setIsAnalyzing(false);
       toast.success("Análise concluída!");
-    }, 2000);
+    } catch {
+      toast.error("Erro na análise");
+    } finally {
+      setIsAnalyzing(false);
+    }
   };
 
   const generateOrder = (itemId: string) => {

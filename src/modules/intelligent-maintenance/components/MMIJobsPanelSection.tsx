@@ -3,6 +3,7 @@
  */
 
 import { useEffect, useState } from "react";
+import { supabase } from "@/integrations/supabase/client";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -30,53 +31,44 @@ interface MMIJobForecast {
   status: "pendente" | "em_andamento" | "concluido";
 }
 
-// Mock data
-const mockJobs: MMIJobForecast[] = [
-  {
-    id: "1",
-    title: "Manutenção do Sistema Hidráulico - Guindaste Principal",
-    forecast: "Troca de óleo e filtros prevista para 15/01",
-    hours: 870,
-    responsible: "Carlos Silva",
-    forecast_date: "2025-01-15",
-    priority: "high",
-    status: "pendente"
-  },
-  {
-    id: "2",
-    title: "Inspeção do Motor de Propulsão",
-    forecast: "Verificação de parâmetros e calibração",
-    hours: 1250,
-    responsible: "João Santos",
-    forecast_date: "2025-01-20",
-    priority: "medium",
-    status: "em_andamento"
-  },
-  {
-    id: "3",
-    title: "Substituição de Vedações - Bomba Principal",
-    forecast: "Vida útil estimada: 200h restantes",
-    hours: 2100,
-    responsible: "Maria Oliveira",
-    forecast_date: "2025-01-25",
-    priority: "critical",
-    status: "pendente"
-  },
-  {
-    id: "4",
-    title: "Calibração de Sensores de Pressão",
-    forecast: "Manutenção preventiva programada",
-    hours: 500,
-    responsible: "Pedro Costa",
-    forecast_date: "2025-02-01",
-    priority: "low",
-    status: "concluido"
-  }
+// Fallback data
+const fallbackJobs: MMIJobForecast[] = [
+  { id: "1", title: "Manutenção do Sistema Hidráulico - Guindaste Principal", forecast: "Troca de óleo e filtros prevista para 15/01", hours: 870, responsible: "Carlos Silva", forecast_date: "2025-01-15", priority: "high", status: "pendente" },
+  { id: "2", title: "Inspeção do Motor de Propulsão", forecast: "Verificação de parâmetros e calibração", hours: 1250, responsible: "João Santos", forecast_date: "2025-01-20", priority: "medium", status: "em_andamento" },
+  { id: "3", title: "Substituição de Vedações - Bomba Principal", forecast: "Vida útil estimada: 200h restantes", hours: 2100, responsible: "Maria Oliveira", forecast_date: "2025-01-25", priority: "critical", status: "pendente" },
+  { id: "4", title: "Calibração de Sensores de Pressão", forecast: "Manutenção preventiva programada", hours: 500, responsible: "Pedro Costa", forecast_date: "2025-02-01", priority: "low", status: "concluido" },
 ];
 
 export default function MMIJobsPanelSection() {
-  const [jobs, setJobs] = useState<MMIJobForecast[]>(mockJobs);
+  const [jobs, setJobs] = useState<MMIJobForecast[]>(fallbackJobs);
   const [search, setSearch] = useState("");
+
+  useEffect(() => {
+    const loadJobs = async () => {
+      try {
+        const { data, error } = await supabase
+          .from("maintenance_tasks")
+          .select("*")
+          .order("created_at", { ascending: false })
+          .limit(20);
+
+        if (!error && data && data.length > 0) {
+          const mapped: MMIJobForecast[] = data.map((t) => ({
+            id: t.id,
+            title: t.title || t.task_type || "Manutenção",
+            forecast: t.description || null,
+            hours: t.estimated_hours || null,
+            responsible: t.assigned_to || null,
+            forecast_date: t.due_date || null,
+            priority: (t.priority === "critical" ? "critical" : t.priority === "high" ? "high" : t.priority === "low" ? "low" : "medium") as MMIJobForecast["priority"],
+            status: (t.status === "completed" ? "concluido" : t.status === "in_progress" ? "em_andamento" : "pendente") as MMIJobForecast["status"],
+          }));
+          setJobs(mapped);
+        }
+      } catch {}
+    };
+    loadJobs();
+  }, []);
 
   const filteredJobs = jobs.filter(job => 
     job.title.toLowerCase().includes(search.toLowerCase()) ||

@@ -74,96 +74,49 @@ export const DocumentManagementCenter = () => {
     try {
       setLoading(true);
       
-      // Mock documents data
-      const mockDocuments: Document[] = [
-        {
-          id: "1",
-          title: "Manual de Segurança Marítima 2024",
-          type: "manual",
-          category: "Segurança",
-          owner: "João Silva",
-          department: "Operações",
-          upload_date: "2024-01-15",
-          last_modified: "2024-01-20",
-          file_size: "2.5 MB",
-          file_format: "PDF",
-          status: "active",
-          confidential: false,
-          version: "2.1",
-          description: "Manual completo de procedimentos de segurança para operações marítimas",
-          tags: ["segurança", "procedimentos", "treinamento"]
-        },
-        {
-          id: "2",
-          title: "Contrato de Afretamento - MV Atlantic",
-          type: "contract",
-          category: "Legal",
-          owner: "Maria Santos",
-          department: "Jurídico",
-          upload_date: "2024-02-01",
-          last_modified: "2024-02-05",
-          file_size: "1.2 MB",
-          file_format: "PDF",
-          status: "active",
-          confidential: true,
-          version: "1.0",
-          description: "Contrato de afretamento para embarcação MV Atlantic",
-          tags: ["contrato", "afretamento", "legal"]
-        },
-        {
-          id: "3",
-          title: "Certificado ISPS - Porto Santos",
-          type: "certificate",
-          category: "Certificações",
-          owner: "Carlos Oliveira",
-          department: "Compliance",
-          upload_date: "2023-12-01",
-          last_modified: "2023-12-01",
-          file_size: "850 KB",
-          file_format: "PDF",
-          status: "expired",
-          confidential: false,
-          version: "1.0",
-          description: "Certificado ISPS para operações no Porto de Santos",
-          tags: ["certificado", "ISPS", "porto"]
-        },
-        {
-          id: "4",
-          title: "Relatório de Inspeção Q1 2024",
-          type: "report",
-          category: "Inspeções",
-          owner: "Ana Costa",
-          department: "Qualidade",
-          upload_date: "2024-03-30",
-          last_modified: "2024-03-30",
-          file_size: "3.1 MB",
-          file_format: "PDF",
-          status: "under_review",
-          confidential: false,
-          version: "1.0",
-          description: "Relatório trimestral de inspeções de segurança",
-          tags: ["relatório", "inspeção", "trimestral"]
-        },
-        {
-          id: "5",
-          title: "Procedimento de Emergência - Derramamento",
-          type: "procedure",
-          category: "Emergência",
-          owner: "Pedro Lima",
-          department: "Segurança",
-          upload_date: "2024-01-10",
-          last_modified: "2024-01-15",
-          file_size: "1.8 MB",
-          file_format: "PDF",
-          status: "active",
-          confidential: false,
-          version: "3.2",
-          description: "Procedimentos para resposta a emergências de derramamento",
-          tags: ["emergência", "derramamento", "procedimento"]
-        }
-      ];
+      // Fetch real documents from Supabase
+      const { data, error } = await supabase
+        .from("ai_documents")
+        .select("*")
+        .order("created_at", { ascending: false })
+        .limit(100);
 
-      setDocuments(mockDocuments);
+      if (error) throw error;
+
+      const realDocuments: Document[] = (data || []).map((doc) => ({
+        id: doc.id,
+        title: doc.title || doc.file_name,
+        type: (doc.category?.toLowerCase().includes("contrat") ? "contract" :
+               doc.category?.toLowerCase().includes("certif") ? "certificate" :
+               doc.category?.toLowerCase().includes("manual") ? "manual" :
+               doc.category?.toLowerCase().includes("proced") ? "procedure" :
+               doc.category?.toLowerCase().includes("relat") ? "report" :
+               doc.category?.toLowerCase().includes("legal") ? "legal" :
+               "report") as Document["type"],
+        category: doc.category || "Geral",
+        owner: doc.uploaded_by || "Sistema",
+        department: doc.category || "Operações",
+        upload_date: doc.created_at?.split("T")[0] || "",
+        last_modified: doc.updated_at?.split("T")[0] || "",
+        file_size: doc.file_size_bytes ? `${(doc.file_size_bytes / 1024 / 1024).toFixed(1)} MB` : "N/A",
+        file_format: doc.file_type?.toUpperCase() || "PDF",
+        status: (doc.ocr_status === "completed" ? "active" : doc.ocr_status === "pending" ? "under_review" : "active") as Document["status"],
+        confidential: false,
+        version: "1.0",
+        description: doc.description || "",
+        tags: Array.isArray(doc.extracted_keywords) ? (doc.extracted_keywords as any[]).map(String) : [],
+      }));
+
+      // Use fallback if no data
+      if (realDocuments.length === 0) {
+        const fallbackDocuments: Document[] = [
+          { id: "1", title: "Manual de Segurança Marítima 2024", type: "manual", category: "Segurança", owner: "João Silva", department: "Operações", upload_date: "2024-01-15", last_modified: "2024-01-20", file_size: "2.5 MB", file_format: "PDF", status: "active", confidential: false, version: "2.1", description: "Manual completo de procedimentos de segurança", tags: ["segurança", "procedimentos"] },
+          { id: "2", title: "Contrato de Afretamento - MV Atlantic", type: "contract", category: "Legal", owner: "Maria Santos", department: "Jurídico", upload_date: "2024-02-01", last_modified: "2024-02-05", file_size: "1.2 MB", file_format: "PDF", status: "active", confidential: true, version: "1.0", description: "Contrato de afretamento", tags: ["contrato", "legal"] },
+        ];
+        setDocuments(fallbackDocuments);
+      } else {
+        setDocuments(realDocuments);
+      }
     } catch (error) {
       toast({
         title: "Erro",

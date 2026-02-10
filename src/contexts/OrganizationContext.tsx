@@ -208,29 +208,33 @@ export const OrganizationProvider = ({ children }: { children: ReactNode }) => {
   };
 
   const getCurrentOrganizationUsers = async () => {
-    // Mock data para demo
-    const mockUsers = [
-      {
-        id: "1",
-        email: "admin@nautilus.com",
-        role: "admin",
-        status: "active",
-        full_name: "Administrador",
-        joined_at: new Date().toISOString(),
-        last_active_at: new Date().toISOString()
-      },
-      {
-        id: "2", 
-        email: "user@nautilus.com",
-        role: "member",
-        status: "active",
-        full_name: "Usuário Demo",
-        joined_at: new Date().toISOString(),
-        last_active_at: new Date().toISOString()
-      }
-    ];
+    if (!currentOrganization) return [];
     
-    return mockUsers;
+    try {
+      const { data, error } = await supabase
+        .from("organization_members")
+        .select("*")
+        .eq("organization_id", currentOrganization.id);
+
+      if (!error && data && data.length > 0) {
+        return data.map((m) => ({
+          id: m.user_id || m.id,
+          email: (m.metadata as any)?.email || "",
+          role: m.role || "member",
+          status: m.status || "active",
+          full_name: (m.metadata as any)?.full_name || "",
+          joined_at: m.joined_at || m.created_at || new Date().toISOString(),
+          last_active_at: m.last_active_at || new Date().toISOString(),
+        }));
+      }
+    } catch {
+      logger.warn("Error fetching org users, using fallback");
+    }
+    
+    // Fallback
+    return [
+      { id: "1", email: "admin@nautilus.com", role: "admin", status: "active", full_name: "Administrador", joined_at: new Date().toISOString(), last_active_at: new Date().toISOString() },
+    ];
   };
 
   const inviteUser = async (email: string, role: string) => {
