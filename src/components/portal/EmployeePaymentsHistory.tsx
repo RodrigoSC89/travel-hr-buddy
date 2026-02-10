@@ -37,7 +37,7 @@ export const EmployeePaymentsHistory: React.FC = () => {
     : payments.filter(p => p.date.startsWith(selectedPeriod));
 
   const handleDownloadPayslip = (period: string) => {
-    toast.success("Download iniciado", { description: `Demonstrativo de ${period}` });
+    toast.info("Download de demonstrativo", { description: `Download de holerites em implantação. Período: ${period}. ETA: Q3/2026.` });
   };
 
   const getTypeColor = (type: Payment['type']) => {

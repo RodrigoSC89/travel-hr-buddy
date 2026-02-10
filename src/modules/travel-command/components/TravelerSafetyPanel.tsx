@@ -539,7 +539,7 @@ export const TravelerSafetyPanel: React.FC = () => {
                                   else if (action.action === "sms") { toast.info("SMS", { description: `Envio de SMS em implantação. Contate diretamente: ${alert.affectedTravelers.join(", ")}. ETA: Q3/2026.` }); }
                                   else if (action.action === "contact") { toast.info("Contato iniciado", { description: `Entrando em contato com ${alert.affectedTravelers.join(", ")}` }); }
                                   else if (action.action === "view_forecast") { toast.info("Previsão meteorológica", { description: alert.message }); }
-                                  else if (action.action === "protocol") { toast.warning("Protocolo de emergência acionado", { description: `Protocolo ativado para ${alert.affectedTravelers.join(", ")}. Equipe de segurança notificada.` }); }
+                                  else if (action.action === "protocol") { toast.warning("Protocolo de emergência", { description: `Acionamento de protocolo em implantação. Afetados: ${alert.affectedTravelers.join(", ")}. Contate a equipe de segurança diretamente. ETA: Q3/2026.` }); }
                                   else { toast.info(action.label, { description: `Ação '${action.label}' executada para alerta: ${alert.title}` }); }
                                 }}>
                                   {action.label}
@@ -671,7 +671,7 @@ export const TravelerSafetyPanel: React.FC = () => {
         </CardHeader>
         <CardContent>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-            <Button variant="destructive" className="h-20 flex flex-col gap-2" onClick={() => toast.warning("⚠️ Protocolo SOS Acionado", { description: "Equipe de emergência notificada. Todos os viajantes em áreas de risco serão contatados imediatamente.", duration: 8000 })}>
+            <Button variant="destructive" className="h-20 flex flex-col gap-2" onClick={() => toast.warning("⚠️ Protocolo SOS", { description: "Acionamento de protocolo SOS em implantação. Para emergências reais, utilize canais de comunicação diretos (rádio/telefone). ETA: Q3/2026.", duration: 8000 })}>
               <AlertOctagon className="h-6 w-6" />
               <span>Acionar Protocolo SOS</span>
             </Button>
