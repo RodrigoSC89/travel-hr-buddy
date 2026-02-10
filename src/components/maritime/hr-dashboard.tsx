@@ -216,7 +216,7 @@ export const MaritimeHRDashboard: React.FC = () => {
               <CardContent>
                 <div className="space-y-3">
                   <Button onClick={handleWellnessAlert} variant="outline" className="w-full justify-start"><Heart className="h-4 w-4 mr-2" />Verificar Bem-estar</Button>
-                  <Button onClick={() => toast({ title: "Telemedicina", description: "Conectando com especialista em Medicina Marítima" })} variant="outline" className="w-full justify-start"><Stethoscope className="h-4 w-4 mr-2" />Telemedicina</Button>
+                  <Button onClick={() => toast({ title: "🏥 Telemedicina", description: "Módulo de telemedicina marítima em implantação. Para consultas, acesse o módulo Saúde & Bem-estar. ETA: Q3/2026." })} variant="outline" className="w-full justify-start"><Stethoscope className="h-4 w-4 mr-2" />Telemedicina</Button>
                   <Button onClick={handleComplianceCheck} variant="outline" className="w-full justify-start"><Shield className="h-4 w-4 mr-2" />Verificar Compliance</Button>
                   <Button onClick={handlePlanRotation} variant="outline" className="w-full justify-start"><Calendar className="h-4 w-4 mr-2" />Planejar Rotação</Button>
                 </div>

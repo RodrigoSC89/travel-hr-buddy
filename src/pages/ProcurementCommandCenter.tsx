@@ -980,7 +980,7 @@ export default function ProcurementCommandCenter() {
                           </div>
                         </div>
                         <div className="flex gap-2">
-                          <Button size="sm" variant="outline" onClick={() => toast({ title: "✏️ Editar Item", description: "Abrindo item para edição..." })}>
+                          <Button size="sm" variant="outline" onClick={() => toast({ title: "✏️ Editar Item", description: "Edição inline em implantação. Gerencie itens pela aba Inventário no módulo de Procurement. ETA: Q3/2026." })}>
                             <Edit className="h-4 w-4" />
                           </Button>
                         </div>
@@ -1004,7 +1004,7 @@ export default function ProcurementCommandCenter() {
                   onChange={(e) => setSearchQuery(e.target.value)}
                 />
               </div>
-              <Button variant="outline" className="gap-2" onClick={() => toast({ title: "🔍 Filtros", description: "Abrindo opções de filtro..." })}>
+              <Button variant="outline" className="gap-2" onClick={() => toast({ title: "🔍 Filtros", description: "Filtros avançados em implantação. Use a barra de busca para filtrar fornecedores. ETA: Q3/2026." })}>
                 <Filter className="h-4 w-4" />
                 Filtros
               </Button>
@@ -1017,7 +1017,7 @@ export default function ProcurementCommandCenter() {
                 <div className="col-span-full text-center py-12">
                   <Store className="h-16 w-16 text-muted-foreground/50 mx-auto mb-4" />
                   <p className="text-muted-foreground">Nenhum fornecedor encontrado</p>
-                  <Button variant="link" className="mt-2" onClick={() => toast({ title: "➕ Adicionar Fornecedor", description: "Abrindo formulário de cadastro..." })}>
+                  <Button variant="link" className="mt-2" onClick={() => toast({ title: "➕ Adicionar Fornecedor", description: "Cadastro de fornecedores em implantação. ETA: Q3/2026." })}>
                     <Plus className="h-4 w-4 mr-1" />
                     Adicionar Fornecedor
                   </Button>
