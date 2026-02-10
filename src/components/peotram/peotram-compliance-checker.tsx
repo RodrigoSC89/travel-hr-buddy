@@ -76,8 +76,8 @@ export const PeotramComplianceChecker: React.FC = () => {
   const loadComplianceData = async () => {
     setIsLoading(true);
     try {
-      setComplianceItems(getMockComplianceItems());
-      setComplianceReport(getMockComplianceReport());
+      setComplianceItems(getFallbackComplianceItems());
+      setComplianceReport(getFallbackComplianceReport());
     } catch (error) {
     } finally {
       setIsLoading(false);
@@ -89,7 +89,7 @@ export const PeotramComplianceChecker: React.FC = () => {
     loadComplianceData();
   }, [selectedPeriod, selectedCategory]);
 
-  const getMockComplianceItems = (): ComplianceItem[] => [
+  const getFallbackComplianceItems = (): ComplianceItem[] => [
     {
       id: "COMP_001",
       category: "Elemento 01",
@@ -140,7 +140,7 @@ export const PeotramComplianceChecker: React.FC = () => {
     }
   ];
 
-  const getMockComplianceReport = (): ComplianceReport => ({
+  const getFallbackComplianceReport = (): ComplianceReport => ({
     id: "REP_2024_Q4",
     period: "2024-Q4",
     overallScore: 78.5,

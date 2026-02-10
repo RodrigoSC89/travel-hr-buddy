@@ -105,7 +105,7 @@ export const SatelliteTrackerEnhanced = () => {
 
       // If no data, create mock satellites
       if (!data || data.length === 0) {
-        await createMockSatellites();
+        await createFallbackSatellites();
         return;
       }
 
@@ -163,8 +163,8 @@ export const SatelliteTrackerEnhanced = () => {
     }
   };
 
-  const createMockSatellites = async () => {
-    const mockSatellites = [
+  const createFallbackSatellites = async () => {
+    const fallbackSatellites = [
       {
         satellite_id: "NOAA-18",
         satellite_name: "NOAA-18",
@@ -210,7 +210,7 @@ export const SatelliteTrackerEnhanced = () => {
     ];
 
     try {
-      for (const sat of mockSatellites) {
+      for (const sat of fallbackSatellites) {
         await supabase.from("satellite_tracks").insert(sat);
       }
 

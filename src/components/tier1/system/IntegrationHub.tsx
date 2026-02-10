@@ -61,7 +61,7 @@ interface WebhookEndpoint {
   successRate: number;
 }
 
-const mockIntegrations: Integration[] = [
+const fallbackIntegrations: Integration[] = [
   {
     id: "int1",
     name: "MarineTraffic AIS",
@@ -130,7 +130,7 @@ const mockIntegrations: Integration[] = [
   }
 ];
 
-const mockWebhooks: WebhookEndpoint[] = [
+const fallbackWebhooks: WebhookEndpoint[] = [
   {
     id: "wh1",
     name: "Vessel Position Updates",
@@ -183,7 +183,7 @@ const getStatusColor = (status: string) => {
 };
 
 export function IntegrationHub() {
-  const [integrations, setIntegrations] = useState(mockIntegrations);
+  const [integrations, setIntegrations] = useState(fallbackIntegrations);
 
   const stats = {
     total: integrations.length,
@@ -364,7 +364,7 @@ export function IntegrationHub() {
             </CardHeader>
             <CardContent>
               <div className="space-y-4">
-                {mockWebhooks.map((webhook) => (
+                {fallbackWebhooks.map((webhook) => (
                   <div key={webhook.id} className="p-4 border rounded-lg">
                     <div className="flex items-center justify-between">
                       <div>

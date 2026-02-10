@@ -176,9 +176,9 @@ export const PriceAnalyticsDashboard: React.FC = () => {
 
       setAnalytics({
         categoryDistribution,
-        priceHistory: priceHistory.length > 0 ? priceHistory : generateMockPriceHistory(),
-        savingsOverTime: savingsOverTime.some(s => s.alerts > 0) ? savingsOverTime : generateMockSavings(),
-        topProducts: topProducts.length > 0 ? topProducts : generateMockTopProducts(),
+        priceHistory: priceHistory.length > 0 ? priceHistory : generateFallbackPriceHistory(),
+        savingsOverTime: savingsOverTime.some(s => s.alerts > 0) ? savingsOverTime : generateFallbackSavings(),
+        topProducts: topProducts.length > 0 ? topProducts : generateFallbackTopProducts(),
         trends: {
           totalAlerts: alerts.length || 12,
           activeSavings: totalSavings || 5450,
@@ -194,13 +194,13 @@ export const PriceAnalyticsDashboard: React.FC = () => {
     } catch (error) {
       logger.error("Error loading analytics:", error);
       // Use mock data on error
-      setAnalytics(generateMockAnalytics());
+      setAnalytics(generateFallbackAnalytics());
     } finally {
       setIsLoading(false);
     }
   };
 
-  const generateMockPriceHistory = () => {
+  const generateFallbackPriceHistory = () => {
     const data = [];
     for (let i = 30; i >= 0; i--) {
       const date = new Date();
@@ -214,7 +214,7 @@ export const PriceAnalyticsDashboard: React.FC = () => {
     return data;
   };
 
-  const generateMockSavings = () => {
+  const generateFallbackSavings = () => {
     const months = ["Jan", "Fev", "Mar", "Abr", "Mai", "Jun"];
     return months.map((month, i) => ({
       month,
@@ -223,22 +223,22 @@ export const PriceAnalyticsDashboard: React.FC = () => {
     }));
   };
 
-  const generateMockTopProducts = () => [
+  const generateFallbackTopProducts = () => [
     { name: "GRU-GIG", savings: 850, frequency: 12 },
     { name: "Copacabana Palace", savings: 650, frequency: 8 },
     { name: "GRU-SSA", savings: 420, frequency: 6 },
     { name: "Windsor Atlantica", savings: 380, frequency: 5 },
   ];
 
-  const generateMockAnalytics = (): AnalyticsData => ({
+  const generateFallbackAnalytics = (): AnalyticsData => ({
     categoryDistribution: [
       { name: "Voos", value: 45, color: COLORS[0] },
       { name: "Hotéis", value: 35, color: COLORS[2] },
       { name: "Pacotes", value: 20, color: COLORS[3] },
     ],
-    priceHistory: generateMockPriceHistory(),
-    savingsOverTime: generateMockSavings(),
-    topProducts: generateMockTopProducts(),
+    priceHistory: generateFallbackPriceHistory(),
+    savingsOverTime: generateFallbackSavings(),
+    topProducts: generateFallbackTopProducts(),
     trends: {
       totalAlerts: 47,
       activeSavings: 12450,

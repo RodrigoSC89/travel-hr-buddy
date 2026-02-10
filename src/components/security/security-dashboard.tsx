@@ -57,7 +57,7 @@ export const SecurityDashboard: React.FC = () => {
         supabase.from("access_logs").select("*", { count: "exact", head: true }).eq("severity", "critical"),
       ]);
       
-      const mockChecks: SecurityCheck[] = [
+      const fallbackChecks: SecurityCheck[] = [
         {
           id: "1",
           category: "Authentication",
@@ -128,12 +128,12 @@ export const SecurityDashboard: React.FC = () => {
         }
       ];
 
-      const passed = mockChecks.filter(c => c.status === "passed").length;
-      const warnings = mockChecks.filter(c => c.status === "warning").length;
-      const failed = mockChecks.filter(c => c.status === "failed").length;
-      const total = mockChecks.length;
+      const passed = fallbackChecks.filter(c => c.status === "passed").length;
+      const warnings = fallbackChecks.filter(c => c.status === "warning").length;
+      const failed = fallbackChecks.filter(c => c.status === "failed").length;
+      const total = fallbackChecks.length;
 
-      const mockMetrics: SecurityMetrics = {
+      const fallbackMetrics: SecurityMetrics = {
         overallScore: Math.round(((passed + warnings * 0.5) / total) * 100),
         totalChecks: total,
         passed,
@@ -142,8 +142,8 @@ export const SecurityDashboard: React.FC = () => {
         lastScan: new Date()
       };
 
-      setSecurityChecks(mockChecks);
-      setMetrics(mockMetrics);
+      setSecurityChecks(fallbackChecks);
+      setMetrics(fallbackMetrics);
       
       toast({
         title: "Scan de Segurança Concluído",

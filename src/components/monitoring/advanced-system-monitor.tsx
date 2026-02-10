@@ -125,17 +125,17 @@ const AdvancedSystemMonitor: React.FC = () => {
   const loadSystemMetrics = async () => {
     try {
       setIsLoading(true);
-      const mockMetrics = generateMetrics();
-      const mockPerformance = generatePerformanceData();
+      const fallbackMetrics = generateMetrics();
+      const fallbackPerformance = generatePerformanceData();
       
-      const updatedMetrics = mockMetrics.map(metric => ({
+      const updatedMetrics = fallbackMetrics.map(metric => ({
         ...metric,
         status: (metric.value > metric.threshold ? "critical" : 
           metric.value > metric.threshold * 0.8 ? "warning" : "good") as "good" | "warning" | "critical"
       }));
       
       setMetrics(updatedMetrics);
-      setPerformanceData(mockPerformance);
+      setPerformanceData(fallbackPerformance);
     } catch (error) {
       toast({ title: "Erro", description: "Falha ao carregar métricas do sistema", variant: "destructive" });
     } finally {

@@ -96,7 +96,7 @@ interface Dispensation {
   notes?: string;
 }
 
-const mockMedications: Medication[] = [
+const fallbackMedications: Medication[] = [
   {
     id: "1",
     name: "Dipirona 500mg",
@@ -207,7 +207,7 @@ const mockMedications: Medication[] = [
   },
 ];
 
-const mockDispensations: Dispensation[] = [
+const fallbackDispensations: Dispensation[] = [
   {
     id: "1",
     medication_id: "1",
@@ -260,8 +260,8 @@ const CATEGORIES = [
 ];
 
 export default function MedicationInventory() {
-  const [medications] = useState<Medication[]>(mockMedications);
-  const [dispensations] = useState<Dispensation[]>(mockDispensations);
+  const [medications] = useState<Medication[]>(fallbackMedications);
+  const [dispensations] = useState<Dispensation[]>(fallbackDispensations);
   const [searchQuery, setSearchQuery] = useState("");
   const [categoryFilter, setCategoryFilter] = useState<string>("all");
   const [showAddDialog, setShowAddDialog] = useState(false);

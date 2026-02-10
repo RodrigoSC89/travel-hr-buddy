@@ -86,15 +86,15 @@ export const SmartInsights: React.FC = () => {
         })));
       }
     } catch (error) {
-      // Fallback to mock data
-      generateMockInsights();
+      // Fallback data when API unavailable
+      generateFallbackInsights();
     } finally {
       setIsGenerating(false);
     }
   };
 
-  const generateMockInsights = () => {
-    const mockInsights: SmartInsight[] = [
+  const generateFallbackInsights = () => {
+    const fallbackInsights: SmartInsight[] = [
       {
         id: "efficiency_1",
         type: "recommendation",
@@ -161,7 +161,7 @@ export const SmartInsights: React.FC = () => {
       }
     ];
 
-    setInsights(mockInsights);
+    setInsights(fallbackInsights);
   };
 
   const generatePredictions = async () => {
@@ -192,11 +192,11 @@ export const SmartInsights: React.FC = () => {
         setPredictions(predictiveData);
       }
     } catch (error) {
-      generateMockPredictions();
+      generateFallbackPredictions();
     }
   };
 
-  const generateMockPredictions = () => {
+  const generateFallbackPredictions = () => {
     // Fallback: estado vazio quando API falha
     // UI deve mostrar mensagem apropriada
     setPredictions([]);
