@@ -63,7 +63,7 @@ export function TelemetrySensorGrid({ vesselId, className }: TelemetrySensorGrid
   const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
   const [isLoading, setIsLoading] = useState(false);
 
-  const generateMockSensors = useCallback(() => {
+  const generateFallbackSensors = useCallback(() => {
     const sensorTypes: Sensor["type"][] = [
       "temperature", "pressure", "vibration", "fuel", 
       "humidity", "wind", "depth", "radar"
@@ -75,7 +75,7 @@ export function TelemetrySensorGrid({ vesselId, className }: TelemetrySensorGrid
       "Tanque de Combustível", "Sistema de Refrigeração", "Gerador"
     ];
 
-    const mockSensors: Sensor[] = [];
+    const fallbackSensors: Sensor[] = [];
 
     sensorTypes.forEach((type, typeIdx) => {
       locations.slice(0, 3).forEach((location, locIdx) => {
@@ -88,7 +88,7 @@ export function TelemetrySensorGrid({ vesselId, className }: TelemetrySensorGrid
           Math.random() > 0.85 ? "warning" :
           Math.random() > 0.98 ? "offline" : "normal";
 
-        mockSensors.push({
+        fallbackSensors.push({
           id: `sensor-${typeIdx}-${locIdx}`,
           name: `${getTypeLabel(type)} - ${location}`,
           type,
@@ -105,14 +105,14 @@ export function TelemetrySensorGrid({ vesselId, className }: TelemetrySensorGrid
       });
     });
 
-    setSensors(mockSensors);
+    setSensors(fallbackSensors);
   }, []);
 
   useEffect(() => {
-    generateMockSensors();
-    const interval = setInterval(generateMockSensors, 5000);
+    generateFallbackSensors();
+    const interval = setInterval(generateFallbackSensors, 5000);
     return () => clearInterval(interval);
-  }, [generateMockSensors]);
+  }, [generateFallbackSensors]);
 
   const getBaseValueForType = (type: Sensor["type"]): number => {
     const values: Record<Sensor["type"], number> = {
@@ -280,7 +280,7 @@ export function TelemetrySensorGrid({ vesselId, className }: TelemetrySensorGrid
             <Button
               variant="outline"
               size="icon"
-              onClick={generateMockSensors}
+              onClick={generateFallbackSensors}
             >
               <RefreshCw className={cn("h-4 w-4", isLoading && "animate-spin")} />
             </Button>

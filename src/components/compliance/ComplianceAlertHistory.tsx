@@ -38,8 +38,8 @@ interface ComplianceAlertHistoryProps {
   onAlertClick?: (alert: ComplianceAlertRecord) => void;
 }
 
-// Generate mock historical data
-const generateMockAlerts = (): ComplianceAlertRecord[] => {
+// Generate fallback historical data
+const generateFallbackAlerts = (): ComplianceAlertRecord[] => {
   const alerts: ComplianceAlertRecord[] = [];
   const modules: ComplianceAlertRecord['module'][] = ['mlc', 'peotram', 'peo-dp', 'sgso', 'pre-ovid', 'geofence'];
   const types: ComplianceAlertRecord['type'][] = ['critical', 'warning', 'info'];
@@ -103,9 +103,9 @@ export function ComplianceAlertHistory({ onAlertClick }: ComplianceAlertHistoryP
   // Load alerts
   useEffect(() => {
     setIsLoading(true);
-    // Simulate API call
+    // Load fallback data (replace with real API when available)
     setTimeout(() => {
-      setAlerts(generateMockAlerts());
+      setAlerts(generateFallbackAlerts());
       setIsLoading(false);
     }, 500);
   }, []);
