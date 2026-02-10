@@ -92,8 +92,12 @@ export default defineConfig(({ mode }) => ({
           }
           // Maps
           if (id.includes('mapbox-gl')) return 'mapbox-vendor';
+          // Calendar - lazy loaded on schedule routes
+          if (id.includes('react-big-calendar')) return 'calendar-vendor';
           // Router
           if (id.includes('react-router')) return 'router-vendor';
+          // Tesseract OCR - lazy loaded on OCR actions (~500KB)
+          if (id.includes('tesseract.js')) return 'tesseract-vendor';
         },
         // Ensure consistent chunk naming for caching
         chunkFileNames: (chunkInfo) => {

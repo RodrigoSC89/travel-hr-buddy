@@ -3,7 +3,8 @@
  * Tesseract.js integration for OCR with entity extraction
  */
 
-import { createWorker, type Worker } from "tesseract.js";
+import { createLazyWorker } from "@/lib/ocr/lazy-tesseract";
+import type { Worker } from "tesseract.js";
 import { supabase } from "@/integrations/supabase/client";
 import { logger } from "@/lib/logger";
 
@@ -41,7 +42,7 @@ export class AiDocumentService {
 
   private async initializeWorker(): Promise<void> {
     try {
-      this.worker = await createWorker("por");
+      this.worker = await createLazyWorker("por");
       logger.info("Tesseract worker initialized");
     } catch (error) {
       logger.error("Error initializing Tesseract worker:", error as Error);

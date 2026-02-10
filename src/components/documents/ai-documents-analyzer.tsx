@@ -16,7 +16,7 @@ import {
 } from "lucide-react";
 import { toast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
-import Tesseract from "tesseract.js";
+import { recognizeLazy } from "@/lib/ocr/lazy-tesseract";
 import { logger } from "@/lib/logger";
 import type { Database, Json } from "@/integrations/supabase/types";
 
@@ -145,7 +145,7 @@ export function AIDocumentsAnalyzer() {
     try {
       setProgress(10);
       
-      const result = await Tesseract.recognize(file, "eng+por", {
+      const result = await recognizeLazy(file, "eng+por", {
         logger: (m: { status: string; progress: number }) => {
           if (m.status === "recognizing text") {
             setProgress(10 + (m.progress * 70));
