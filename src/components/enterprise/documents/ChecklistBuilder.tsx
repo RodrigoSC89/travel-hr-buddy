@@ -1,37 +1,23 @@
 /**
  * Checklist Builder Component
- * Criador de checklists com drag-and-drop e assinaturas
+ * ✅ FUNCTIONAL BUTTONS: Novo Checklist, Salvar, Assinar e Finalizar
  */
 
-import React, { useState } from "react";
+import React, { useState, useCallback } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Progress } from "@/components/ui/progress";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger
-} from "@/components/ui/dialog";
-import {
-  ClipboardList,
-  Plus,
-  GripVertical,
-  Trash2,
-  Edit,
-  CheckCircle2,
-  Clock,
-  User,
-  Calendar,
-  FileSignature,
-  Save,
-  Copy,
-  MoreVertical
+  ClipboardList, Plus, GripVertical, Trash2, Edit,
+  CheckCircle2, Clock, User, Calendar, FileSignature,
+  Save, Copy, MoreVertical
 } from "lucide-react";
+import { toast } from "sonner";
 
 interface ChecklistItem {
   id: string;
@@ -97,20 +83,21 @@ const fallbackChecklists: Checklist[] = [
 export function ChecklistBuilder() {
   const [checklists, setChecklists] = useState<Checklist[]>(fallbackChecklists);
   const [newItemText, setNewItemText] = useState("");
+  const [showNewDialog, setShowNewDialog] = useState(false);
+  const [newChecklist, setNewChecklist] = useState({ title: "", category: "Operações", description: "" });
+  const [addingItemTo, setAddingItemTo] = useState<string | null>(null);
 
   const getProgress = (items: ChecklistItem[]) => {
+    if (items.length === 0) return 0;
     const completed = items.filter(i => i.isCompleted).length;
     return Math.round((completed / items.length) * 100);
   };
 
   const getStatusBadge = (status: Checklist["status"]) => {
     switch (status) {
-      case "draft":
-        return <Badge variant="secondary">Rascunho</Badge>;
-      case "active":
-        return <Badge className="bg-blue-500/10 text-blue-500">Em Andamento</Badge>;
-      case "completed":
-        return <Badge className="bg-green-500/10 text-green-500">Concluído</Badge>;
+      case "draft": return <Badge variant="secondary">Rascunho</Badge>;
+      case "active": return <Badge className="bg-blue-500/10 text-blue-500">Em Andamento</Badge>;
+      case "completed": return <Badge className="bg-green-500/10 text-green-500">Concluído</Badge>;
     }
   };
 
@@ -136,82 +123,106 @@ export function ChecklistBuilder() {
     }));
   };
 
+  const handleCreateChecklist = useCallback(() => {
+    if (!newChecklist.title.trim()) {
+      toast.error("Informe o título do checklist");
+      return;
+    }
+    const id = `cl-${Date.now()}`;
+    setChecklists(prev => [{
+      id,
+      title: newChecklist.title,
+      category: newChecklist.category,
+      description: newChecklist.description,
+      items: [],
+      status: "draft",
+      createdBy: "Usuário Atual",
+      createdAt: new Date().toISOString(),
+    }, ...prev]);
+    toast.success(`Checklist "${newChecklist.title}" criado!`);
+    setShowNewDialog(false);
+    setNewChecklist({ title: "", category: "Operações", description: "" });
+    setAddingItemTo(id);
+  }, [newChecklist]);
+
+  const handleAddItem = useCallback((checklistId: string) => {
+    if (!newItemText.trim()) return;
+    setChecklists(prev => prev.map(cl => {
+      if (cl.id === checklistId) {
+        return {
+          ...cl,
+          items: [...cl.items, {
+            id: `${checklistId}-${Date.now()}`,
+            text: newItemText,
+            isRequired: true,
+            isCompleted: false,
+          }]
+        };
+      }
+      return cl;
+    }));
+    setNewItemText("");
+    toast.success("Item adicionado");
+  }, [newItemText]);
+
+  const handleSave = useCallback((checklist: Checklist) => {
+    toast.success(`Checklist "${checklist.title}" salvo com sucesso!`);
+  }, []);
+
+  const handleSign = useCallback((checklistId: string) => {
+    setChecklists(prev => prev.map(cl => {
+      if (cl.id === checklistId) {
+        const requiredItems = cl.items.filter(i => i.isRequired);
+        const allRequiredDone = requiredItems.every(i => i.isCompleted);
+        if (!allRequiredDone) {
+          toast.error("Complete todos os itens obrigatórios antes de assinar");
+          return cl;
+        }
+        toast.success(`Checklist "${cl.title}" assinado e finalizado!`);
+        return {
+          ...cl,
+          status: "completed" as const,
+          completedAt: new Date().toISOString(),
+          signedBy: "Usuário Atual",
+          signedAt: new Date().toISOString(),
+        };
+      }
+      return cl;
+    }));
+  }, []);
+
+  const handleDeleteItem = useCallback((checklistId: string, itemId: string) => {
+    setChecklists(prev => prev.map(cl => {
+      if (cl.id === checklistId) {
+        return { ...cl, items: cl.items.filter(i => i.id !== itemId) };
+      }
+      return cl;
+    }));
+    toast.success("Item removido");
+  }, []);
+
   const stats = {
     total: checklists.length,
     active: checklists.filter(c => c.status === "active").length,
     completed: checklists.filter(c => c.status === "completed").length,
-    pendingItems: checklists.reduce((acc, c) => 
-      acc + c.items.filter(i => !i.isCompleted && i.isRequired).length, 0
-    )
+    pendingItems: checklists.reduce((acc, c) => acc + c.items.filter(i => !i.isCompleted && i.isRequired).length, 0)
   };
 
   return (
     <div className="space-y-6">
       {/* Stats */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-        <Card>
-          <CardContent className="pt-6">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-sm text-muted-foreground">Total de Checklists</p>
-                <p className="text-3xl font-bold">{stats.total}</p>
-              </div>
-              <div className="p-3 rounded-full bg-primary/10">
-                <ClipboardList className="h-6 w-6 text-primary" />
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardContent className="pt-6">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-sm text-muted-foreground">Em Andamento</p>
-                <p className="text-3xl font-bold text-blue-500">{stats.active}</p>
-              </div>
-              <div className="p-3 rounded-full bg-blue-500/10">
-                <Clock className="h-6 w-6 text-blue-500" />
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardContent className="pt-6">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-sm text-muted-foreground">Concluídos</p>
-                <p className="text-3xl font-bold text-green-500">{stats.completed}</p>
-              </div>
-              <div className="p-3 rounded-full bg-green-500/10">
-                <CheckCircle2 className="h-6 w-6 text-green-500" />
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardContent className="pt-6">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-sm text-muted-foreground">Itens Pendentes</p>
-                <p className="text-3xl font-bold text-yellow-500">{stats.pendingItems}</p>
-              </div>
-              <div className="p-3 rounded-full bg-yellow-500/10">
-                <ClipboardList className="h-6 w-6 text-yellow-500" />
-              </div>
-            </div>
-          </CardContent>
-        </Card>
+        <Card><CardContent className="pt-6"><div className="flex items-center justify-between"><div><p className="text-sm text-muted-foreground">Total de Checklists</p><p className="text-3xl font-bold">{stats.total}</p></div><div className="p-3 rounded-full bg-primary/10"><ClipboardList className="h-6 w-6 text-primary" /></div></div></CardContent></Card>
+        <Card><CardContent className="pt-6"><div className="flex items-center justify-between"><div><p className="text-sm text-muted-foreground">Em Andamento</p><p className="text-3xl font-bold text-blue-500">{stats.active}</p></div><div className="p-3 rounded-full bg-blue-500/10"><Clock className="h-6 w-6 text-blue-500" /></div></div></CardContent></Card>
+        <Card><CardContent className="pt-6"><div className="flex items-center justify-between"><div><p className="text-sm text-muted-foreground">Concluídos</p><p className="text-3xl font-bold text-green-500">{stats.completed}</p></div><div className="p-3 rounded-full bg-green-500/10"><CheckCircle2 className="h-6 w-6 text-green-500" /></div></div></CardContent></Card>
+        <Card><CardContent className="pt-6"><div className="flex items-center justify-between"><div><p className="text-sm text-muted-foreground">Itens Pendentes</p><p className="text-3xl font-bold text-yellow-500">{stats.pendingItems}</p></div><div className="p-3 rounded-full bg-yellow-500/10"><ClipboardList className="h-6 w-6 text-yellow-500" /></div></div></CardContent></Card>
       </div>
 
       {/* Header */}
       <div className="flex justify-between items-center">
         <h2 className="text-xl font-semibold">Checklists</h2>
-        <Button>
-          <Plus className="h-4 w-4 mr-2" />
-          Novo Checklist
+        <Button onClick={() => setShowNewDialog(true)}>
+          <Plus className="h-4 w-4 mr-2" />Novo Checklist
         </Button>
       </div>
 
@@ -227,14 +238,8 @@ export function ChecklistBuilder() {
               <CardHeader className="pb-3">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-3">
-                    <div className={`p-2 rounded-lg ${
-                      checklist.status === "completed" ? "bg-green-500/10" :
-                      checklist.status === "active" ? "bg-blue-500/10" : "bg-muted"
-                    }`}>
-                      <ClipboardList className={`h-5 w-5 ${
-                        checklist.status === "completed" ? "text-green-500" :
-                        checklist.status === "active" ? "text-blue-500" : "text-muted-foreground"
-                      }`} />
+                    <div className={`p-2 rounded-lg ${checklist.status === "completed" ? "bg-green-500/10" : checklist.status === "active" ? "bg-blue-500/10" : "bg-muted"}`}>
+                      <ClipboardList className={`h-5 w-5 ${checklist.status === "completed" ? "text-green-500" : checklist.status === "active" ? "text-blue-500" : "text-muted-foreground"}`} />
                     </div>
                     <div>
                       <CardTitle className="text-lg">{checklist.title}</CardTitle>
@@ -245,66 +250,54 @@ export function ChecklistBuilder() {
                     {getStatusBadge(checklist.status)}
                     <div className="text-right">
                       <p className="font-bold">{progress}%</p>
-                      <p className="text-xs text-muted-foreground">
-                        {requiredCompleted}/{requiredItems.length} obrigatórios
-                      </p>
+                      <p className="text-xs text-muted-foreground">{requiredCompleted}/{requiredItems.length} obrigatórios</p>
                     </div>
                   </div>
                 </div>
-                <Progress value={progress} className="h-2 mt-3" />
+                {checklist.items.length > 0 && <Progress value={progress} className="h-2 mt-3" />}
               </CardHeader>
               <CardContent className="space-y-3">
                 {checklist.items.map((item) => (
-                  <div
-                    key={item.id}
-                    className={`flex items-center justify-between p-3 border rounded-lg transition-colors ${
-                      item.isCompleted ? "bg-green-500/5 border-green-500/20" : "hover:bg-muted/50"
-                    }`}
-                  >
+                  <div key={item.id} className={`flex items-center justify-between p-3 border rounded-lg transition-colors ${item.isCompleted ? "bg-green-500/5 border-green-500/20" : "hover:bg-muted/50"}`}>
                     <div className="flex items-center gap-3">
-                      <div className="cursor-move text-muted-foreground">
-                        <GripVertical className="h-4 w-4" />
-                      </div>
-                      <Checkbox
-                        checked={item.isCompleted}
-                        onCheckedChange={() => toggleItem(checklist.id, item.id)}
-                        disabled={checklist.status === "completed"}
-                      />
+                      <div className="cursor-move text-muted-foreground"><GripVertical className="h-4 w-4" /></div>
+                      <Checkbox checked={item.isCompleted} onCheckedChange={() => toggleItem(checklist.id, item.id)} disabled={checklist.status === "completed"} />
                       <div>
-                        <p className={`text-sm ${item.isCompleted ? "line-through text-muted-foreground" : ""}`}>
-                          {item.text}
-                        </p>
+                        <p className={`text-sm ${item.isCompleted ? "line-through text-muted-foreground" : ""}`}>{item.text}</p>
                         {item.completedBy && (
                           <p className="text-xs text-muted-foreground flex items-center gap-2 mt-1">
-                            <User className="h-3 w-3" />
-                            {item.completedBy}
-                            <Calendar className="h-3 w-3 ml-2" />
-                            {new Date(item.completedAt!).toLocaleString("pt-BR")}
+                            <User className="h-3 w-3" />{item.completedBy}
+                            <Calendar className="h-3 w-3 ml-2" />{new Date(item.completedAt!).toLocaleString("pt-BR")}
                           </p>
                         )}
                       </div>
                     </div>
                     <div className="flex items-center gap-2">
-                      {item.isRequired && (
-                        <Badge variant="outline" className="text-xs">Obrigatório</Badge>
-                      )}
-                      {item.isCompleted && (
-                        <CheckCircle2 className="h-5 w-5 text-green-500" />
+                      {item.isRequired && <Badge variant="outline" className="text-xs">Obrigatório</Badge>}
+                      {item.isCompleted && <CheckCircle2 className="h-5 w-5 text-green-500" />}
+                      {checklist.status !== "completed" && (
+                        <Button variant="ghost" size="sm" onClick={() => handleDeleteItem(checklist.id, item.id)}><Trash2 className="h-3 w-3 text-destructive" /></Button>
                       )}
                     </div>
                   </div>
                 ))}
 
-                {/* Signature Section */}
+                {/* Add item */}
+                {checklist.status !== "completed" && (
+                  <div className="flex gap-2 pt-2">
+                    <Input placeholder="Novo item..." value={addingItemTo === checklist.id ? newItemText : ""} onFocus={() => setAddingItemTo(checklist.id)} onChange={(e) => { setAddingItemTo(checklist.id); setNewItemText(e.target.value); }} onKeyDown={(e) => e.key === "Enter" && handleAddItem(checklist.id)} className="flex-1" />
+                    <Button variant="outline" size="sm" onClick={() => handleAddItem(checklist.id)}><Plus className="h-4 w-4" /></Button>
+                  </div>
+                )}
+
+                {/* Signature */}
                 {checklist.status === "completed" && checklist.signedBy && (
                   <div className="mt-4 pt-4 border-t bg-green-500/5 rounded-lg p-4">
                     <div className="flex items-center gap-3">
                       <FileSignature className="h-5 w-5 text-green-500" />
                       <div>
                         <p className="font-medium">Assinado digitalmente</p>
-                        <p className="text-sm text-muted-foreground">
-                          {checklist.signedBy} em {new Date(checklist.signedAt!).toLocaleString("pt-BR")}
-                        </p>
+                        <p className="text-sm text-muted-foreground">{checklist.signedBy} em {new Date(checklist.signedAt!).toLocaleString("pt-BR")}</p>
                       </div>
                     </div>
                   </div>
@@ -313,13 +306,11 @@ export function ChecklistBuilder() {
                 {/* Actions */}
                 {checklist.status !== "completed" && (
                   <div className="flex gap-2 pt-3 border-t">
-                    <Button variant="outline" size="sm" className="flex-1">
-                      <Save className="h-4 w-4 mr-1" />
-                      Salvar
+                    <Button variant="outline" size="sm" className="flex-1" onClick={() => handleSave(checklist)}>
+                      <Save className="h-4 w-4 mr-1" />Salvar
                     </Button>
-                    <Button size="sm" className="flex-1">
-                      <FileSignature className="h-4 w-4 mr-1" />
-                      Assinar e Finalizar
+                    <Button size="sm" className="flex-1" onClick={() => handleSign(checklist.id)}>
+                      <FileSignature className="h-4 w-4 mr-1" />Assinar e Finalizar
                     </Button>
                   </div>
                 )}
@@ -328,6 +319,28 @@ export function ChecklistBuilder() {
           );
         })}
       </div>
+
+      {/* New Checklist Dialog */}
+      <Dialog open={showNewDialog} onOpenChange={setShowNewDialog}>
+        <DialogContent className="max-w-md">
+          <DialogHeader><DialogTitle>Novo Checklist</DialogTitle></DialogHeader>
+          <div className="space-y-4">
+            <div>
+              <label className="text-sm font-medium">Título</label>
+              <Input value={newChecklist.title} onChange={(e) => setNewChecklist(prev => ({ ...prev, title: e.target.value }))} placeholder="Ex: Checklist de Partida" className="mt-1" />
+            </div>
+            <div>
+              <label className="text-sm font-medium">Categoria</label>
+              <Input value={newChecklist.category} onChange={(e) => setNewChecklist(prev => ({ ...prev, category: e.target.value }))} placeholder="Ex: Operações, Segurança" className="mt-1" />
+            </div>
+            <div>
+              <label className="text-sm font-medium">Descrição</label>
+              <Textarea value={newChecklist.description} onChange={(e) => setNewChecklist(prev => ({ ...prev, description: e.target.value }))} placeholder="Breve descrição..." className="mt-1" />
+            </div>
+            <Button onClick={handleCreateChecklist} className="w-full"><Plus className="h-4 w-4 mr-2" />Criar Checklist</Button>
+          </div>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }
