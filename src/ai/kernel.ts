@@ -802,12 +802,12 @@ async function logAIContext(request: AIContextRequest, response: AIContextRespon
       timestamp: new Date().toISOString()
     };
     
-    // Store in localStorage for quick access
-    const logs = JSON.parse(localStorage.getItem("ai_context_logs") || "[]");
+    // Store in sessionStorage (session-scoped for security)
+    const logs = JSON.parse(sessionStorage.getItem("ai_context_logs") || "[]");
     logs.push(log);
     // Keep only last 100 logs
     if (logs.length > 100) logs.shift();
-    localStorage.setItem("ai_context_logs", JSON.stringify(logs));
+    sessionStorage.setItem("ai_context_logs", JSON.stringify(logs));
     } catch (error) {
     logger.warn("Failed to log AI context", { error });
   }
@@ -850,7 +850,7 @@ export async function runAIContext(request: AIContextRequest): Promise<AIContext
  */
 export function getAIContextLogs(module?: string): any[] {
   try {
-    const logs = JSON.parse(localStorage.getItem("ai_context_logs") || "[]");
+    const logs = JSON.parse(sessionStorage.getItem("ai_context_logs") || "[]");
     
     if (module) {
       return logs.filter((log: any) => log.module === module);
