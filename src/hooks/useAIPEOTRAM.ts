@@ -89,7 +89,7 @@ export function useAIPEOTRAM(vesselId?: string) {
           vessel_id: request.vesselId,
           generated_by_ai: true,
         });
-      } catch {}
+      } catch (err) { /* non-critical: peotram_evidences may not exist yet */ }
 
       return data.evidence || { id: crypto.randomUUID(), ...request, content: 'Evidência gerada', status: 'conforme', score: 85, recommendations: [], normReference: '', generatedAt: new Date().toISOString() };
     },

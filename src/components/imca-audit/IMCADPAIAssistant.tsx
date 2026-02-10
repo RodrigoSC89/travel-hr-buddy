@@ -72,7 +72,7 @@ export function IMCADPAIAssistant({ selectedDPClass }: Props) {
                   return updated;
                 });
               }
-            } catch {}
+            } catch { /* expected: partial SSE JSON chunk */ }
           }
         }
       }

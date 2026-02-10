@@ -105,7 +105,7 @@ Responda APENAS com o JSON, sem texto adicional.`
               const json = JSON.parse(line.slice(6));
               const content = json.choices?.[0]?.delta?.content;
               if (content) fullContent += content;
-            } catch {}
+            } catch { /* expected: partial SSE JSON chunk */ }
           }
         }
       }

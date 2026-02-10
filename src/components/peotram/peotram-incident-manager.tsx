@@ -71,8 +71,8 @@ export const PeotramIncidentManager: React.FC = () => {
   const [filterStatus, setFilterStatus] = useState<string>("all");
 
   const handleAnalyzeWithAI = (incident: Incident) => {
-    // Store incident in localStorage for the modal to pick up
-    localStorage.setItem("incident_to_analyze", JSON.stringify({
+    // Store incident in sessionStorage for the modal to pick up
+    sessionStorage.setItem("incident_to_analyze", JSON.stringify({
       id: incident.id,
       title: incident.title,
       description: incident.description,

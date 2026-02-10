@@ -163,7 +163,7 @@ export function useNautilusBrain(context?: SystemContext): UseNautilusBrainRetur
             const parsed = JSON.parse(jsonStr);
             const content = parsed.choices?.[0]?.delta?.content;
             if (content) updateAssistant(content);
-          } catch {}
+          } catch { /* expected: partial SSE JSON chunk */ }
         }
       }
     } catch (error) {

@@ -291,7 +291,7 @@ AI Performance Alert:
    */
   private saveAudits() {
     try {
-      localStorage.setItem("evolution_audits", JSON.stringify(this.audits));
+      sessionStorage.setItem("evolution_audits", JSON.stringify(this.audits));
       logger.info(`[EvolutionTrigger] Saved ${this.audits.length} audits`);
     } catch (error) {
       logger.error("[EvolutionTrigger] Error saving audits:", error);
@@ -303,7 +303,7 @@ AI Performance Alert:
    */
   private loadAudits() {
     try {
-      const saved = localStorage.getItem("evolution_audits");
+      const saved = sessionStorage.getItem("evolution_audits");
       if (saved) {
         this.audits = JSON.parse(saved);
         logger.info(`[EvolutionTrigger] Loaded ${this.audits.length} audits`);

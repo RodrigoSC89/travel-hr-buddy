@@ -152,7 +152,7 @@ export const PreOVIDVoiceChat: React.FC<PreOVIDVoiceChatProps> = ({
               const json = JSON.parse(line.slice(6));
               const content = json.choices?.[0]?.delta?.content;
               if (content) assistantContent += content;
-            } catch {}
+            } catch { /* expected: partial SSE JSON chunk */ }
           }
         }
       }

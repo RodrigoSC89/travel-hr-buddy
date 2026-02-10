@@ -271,13 +271,13 @@ class MissionAICore {
   private loadOfflineData() {
     try {
       // Load incident history
-      const storedIncidents = localStorage.getItem("incident_history");
+      const storedIncidents = sessionStorage.getItem("incident_history");
       if (storedIncidents) {
         this.incidentHistory = JSON.parse(storedIncidents);
       }
 
       // Load weather patterns
-      const storedWeather = localStorage.getItem("weather_patterns");
+      const storedWeather = sessionStorage.getItem("weather_patterns");
       if (storedWeather) {
         this.weatherPatterns = JSON.parse(storedWeather);
       }
@@ -328,13 +328,13 @@ class MissionAICore {
     try {
       // Cache protocols
       const protocolsData = Array.from(this.protocols.values());
-      localStorage.setItem("emergency_protocols", JSON.stringify(protocolsData));
+      sessionStorage.setItem("emergency_protocols", JSON.stringify(protocolsData));
 
       // Cache incident history
-      localStorage.setItem("incident_history", JSON.stringify(this.incidentHistory));
+      sessionStorage.setItem("incident_history", JSON.stringify(this.incidentHistory));
 
       // Cache weather patterns
-      localStorage.setItem("weather_patterns", JSON.stringify(this.weatherPatterns));
+      sessionStorage.setItem("weather_patterns", JSON.stringify(this.weatherPatterns));
 
       logger.info("[MissionCore] Emergency data cached for offline access");
     } catch (error) {
@@ -596,7 +596,7 @@ class MissionAICore {
     }
 
     // Save to storage
-    localStorage.setItem("incident_history", JSON.stringify(this.incidentHistory));
+    sessionStorage.setItem("incident_history", JSON.stringify(this.incidentHistory));
 
     logger.info("[MissionCore] Incident recorded", {
       type: incident.incident_type,

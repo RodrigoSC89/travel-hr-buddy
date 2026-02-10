@@ -17,7 +17,7 @@ function loadAudits(): Array<{ id: string; user_id: string; report_data: IMCAAud
 }
 
 function saveAuditsToStorage(audits: Array<{ id: string; user_id: string; report_data: IMCAAuditReport; created_at: string; updated_at: string }>): void {
-  try { localStorage.setItem(STORAGE_KEY, JSON.stringify(audits)); } catch {}
+  try { localStorage.setItem(STORAGE_KEY, JSON.stringify(audits)); } catch (err) { logger.error("[IMCAAudit] Failed to save audits", err as Error); }
 }
 
 export async function generateIMCAAudit(input: IMCAAuditInput): Promise<IMCAAuditReport> {
