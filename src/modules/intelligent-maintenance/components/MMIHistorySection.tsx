@@ -9,10 +9,12 @@ import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { 
   Search, Filter, Calendar, Wrench, Ship, 
-  FileText, Download, Eye, CheckCircle, Clock
+  FileText, Download, Eye, CheckCircle, Clock, Loader2
 } from "lucide-react";
 import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
+import { supabase } from "@/integrations/supabase/client";
+import { logger } from "@/lib/logger";
 
 interface MaintenanceRecord {
   id: string;
@@ -27,72 +29,47 @@ interface MaintenanceRecord {
   cost: number;
 }
 
-// Mock data
-const mockHistory: MaintenanceRecord[] = [
-  {
-    id: "1",
-    title: "Troca de óleo do sistema hidráulico",
-    vesselName: "FPSO Alpha",
-    systemName: "Sistema Hidráulico",
-    completedAt: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000),
-    type: "preventiva",
-    status: "concluido",
-    technician: "Carlos Silva",
-    hours: 4,
-    cost: 2500
-  },
-  {
-    id: "2",
-    title: "Reparo no motor principal",
-    vesselName: "PSV Beta",
-    systemName: "Motor Principal",
-    completedAt: new Date(Date.now() - 5 * 24 * 60 * 60 * 1000),
-    type: "corretiva",
-    status: "concluido",
-    technician: "João Santos",
-    hours: 8,
-    cost: 8500
-  },
-  {
-    id: "3",
-    title: "Inspeção do sistema de propulsão",
-    vesselName: "AHTS Gamma",
-    systemName: "Propulsão",
-    completedAt: new Date(Date.now() - 10 * 24 * 60 * 60 * 1000),
-    type: "preditiva",
-    status: "concluido",
-    technician: "Maria Oliveira",
-    hours: 6,
-    cost: 1800
-  },
-  {
-    id: "4",
-    title: "Calibração de sensores",
-    vesselName: "FPSO Alpha",
-    systemName: "Instrumentação",
-    completedAt: new Date(Date.now() - 15 * 24 * 60 * 60 * 1000),
-    type: "preventiva",
-    status: "parcial",
-    technician: "Pedro Costa",
-    hours: 3,
-    cost: 950
-  },
-  {
-    id: "5",
-    title: "Substituição de filtros",
-    vesselName: "PSV Delta",
-    systemName: "Sistema de Combustível",
-    completedAt: new Date(Date.now() - 20 * 24 * 60 * 60 * 1000),
-    type: "preventiva",
-    status: "concluido",
-    technician: "Ana Rodrigues",
-    hours: 2,
-    cost: 650
-  }
-];
-
 export default function MMIHistorySection() {
-  const [history, setHistory] = useState<MaintenanceRecord[]>(mockHistory);
+  const [history, setHistory] = useState<MaintenanceRecord[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchHistory = async () => {
+      try {
+        const { data, error } = await supabase
+          .from("maintenance_records")
+          .select("*, vessels(name)")
+          .order("completed_date", { ascending: false })
+          .limit(50);
+
+        if (error) {
+          logger.warn("maintenance_records query error", error);
+          setLoading(false);
+          return;
+        }
+
+        const mapped: MaintenanceRecord[] = (data || []).map((r: any) => ({
+          id: r.id,
+          title: r.description || r.task_description || "Manutenção",
+          vesselName: r.vessels?.name || "N/A",
+          systemName: r.system_name || r.component || "Sistema",
+          completedAt: new Date(r.completed_date || r.created_at),
+          type: (r.maintenance_type || "preventiva") as any,
+          status: r.status === "completed" ? "concluido" : "parcial",
+          technician: r.performed_by || r.technician || "N/A",
+          hours: r.labor_hours || r.hours_spent || 0,
+          cost: r.total_cost || r.cost || 0,
+        }));
+
+        setHistory(mapped);
+      } catch (err) {
+        logger.error("Error fetching maintenance history", err);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchHistory();
+  }, []);
   const [search, setSearch] = useState("");
   const [filterType, setFilterType] = useState<string | null>(null);
 

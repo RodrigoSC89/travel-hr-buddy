@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -6,87 +6,12 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
 import { 
   Search, Filter, Plus, LayoutGrid, List, 
-  AlertTriangle, Clock, CheckCircle, Wrench 
+  AlertTriangle, Clock, CheckCircle, Wrench, Loader2
 } from "lucide-react";
 import { SmartJobCard, MaintenanceJob } from "./SmartJobCard";
 import { useToast } from "@/hooks/use-toast";
-
-const mockJobs: MaintenanceJob[] = [
-  {
-    id: "1",
-    nome: "Troca de filtro hidráulico",
-    equipamento_codigo: "603.0004.02",
-    equipamento_nome: "Bomba Hidráulica Popa",
-    criticidade: "alta",
-    status: "em_andamento",
-    prazo: "2025-01-05",
-    prazo_dias: 3,
-    progresso: 66,
-    tipo: "preventiva",
-    pecas: ["Filtro modelo X123"],
-    os_vinculada: "24819",
-    anexos: 2,
-    sugestao_ia: "Pode ser postergado 5 dias sem impacto operacional.",
-    responsavel: "João Silva",
-  },
-  {
-    id: "2",
-    nome: "Inspeção sistema de combate a incêndio",
-    equipamento_codigo: "605.0001.03",
-    equipamento_nome: "Sistema Sprinkler",
-    criticidade: "media",
-    status: "pendente",
-    prazo: "2025-01-10",
-    prazo_dias: 8,
-    progresso: 0,
-    tipo: "preventiva",
-    pecas: [],
-    responsavel: "Maria Santos",
-  },
-  {
-    id: "3",
-    nome: "Vazamento no selo da bomba BB",
-    equipamento_codigo: "603.0002.01",
-    equipamento_nome: "Bomba de Lastro BB",
-    criticidade: "alta",
-    status: "pendente",
-    prazo: "2025-01-02",
-    prazo_dias: -1,
-    progresso: 0,
-    tipo: "corretiva",
-    pecas: ["Selo mecânico P/N 4521", "Junta de vedação"],
-    sugestao_ia: "⚠️ Job vencido. Prioridade máxima recomendada.",
-  },
-  {
-    id: "4",
-    nome: "Calibração de sensores de temperatura",
-    equipamento_codigo: "604.0002.01",
-    equipamento_nome: "Gerador Diesel 1",
-    criticidade: "baixa",
-    status: "concluido",
-    prazo: "2024-12-28",
-    prazo_dias: 0,
-    progresso: 100,
-    tipo: "preditiva",
-    pecas: [],
-    os_vinculada: "24750",
-    responsavel: "Pedro Costa",
-  },
-  {
-    id: "5",
-    nome: "Troca de óleo do redutor",
-    equipamento_codigo: "601.0001.02",
-    equipamento_nome: "Motor Principal STBD",
-    criticidade: "media",
-    status: "postergado",
-    prazo: "2025-01-15",
-    prazo_dias: 13,
-    progresso: 0,
-    tipo: "preventiva",
-    pecas: ["Óleo SAE 90 - 20L"],
-    sugestao_ia: "Postergado por 7 dias. Novo prazo: 15/01/2025",
-  },
-];
+import { supabase } from "@/integrations/supabase/client";
+import { logger } from "@/lib/logger";
 
 interface JobsCenterProps {
   onCreateJob?: () => void;
@@ -96,9 +21,58 @@ export const JobsCenter: React.FC<JobsCenterProps> = ({ onCreateJob }) => {
   const [searchTerm, setSearchTerm] = useState("");
   const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
   const [activeFilter, setActiveFilter] = useState("all");
+  const [jobs, setJobs] = useState<MaintenanceJob[]>([]);
+  const [loading, setLoading] = useState(true);
   const { toast } = useToast();
 
-  const filteredJobs = mockJobs.filter(job => {
+  useEffect(() => {
+    const fetchJobs = async () => {
+      try {
+        const { data, error } = await supabase
+          .from("maintenance_tasks")
+          .select("*, vessels(name)")
+          .order("due_date", { ascending: true })
+          .limit(50);
+
+        if (error) {
+          logger.warn("maintenance_tasks query error", error);
+          setLoading(false);
+          return;
+        }
+
+        const now = new Date();
+        const mapped = (data || []).map((t: any) => {
+          const dueDate = t.due_date ? new Date(t.due_date) : null;
+          const prazoDias = dueDate ? Math.ceil((dueDate.getTime() - now.getTime()) / 86400000) : 999;
+          const statusMap: Record<string, string> = { completed: "concluido", in_progress: "em_andamento", pending: "pendente", deferred: "postergado" };
+          return {
+            id: t.id,
+            nome: t.title || t.description || "Tarefa de manutenção",
+            equipamento_codigo: t.equipment_id || "N/A",
+            equipamento_nome: t.equipment_name || t.component || "Equipamento",
+            criticidade: t.priority === "critical" ? "alta" : t.priority === "high" ? "alta" : t.priority === "medium" ? "media" : "baixa",
+            status: statusMap[t.status] || "pendente",
+            prazo: t.due_date?.split("T")[0] || "",
+            prazo_dias: prazoDias,
+            progresso: t.status === "completed" ? 100 : t.status === "in_progress" ? 50 : 0,
+            tipo: (t.maintenance_type || "preventiva") as any,
+            pecas: t.parts_needed ? (Array.isArray(t.parts_needed) ? t.parts_needed : []) : [],
+            os_vinculada: t.work_order_number || undefined,
+            responsavel: t.assigned_to || undefined,
+          };
+        });
+
+        setJobs(mapped as MaintenanceJob[]);
+      } catch (err) {
+        logger.error("Error fetching maintenance jobs", err);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchJobs();
+  }, []);
+
+  const filteredJobs = jobs.filter(job => {
     const matchesSearch = 
       job.nome.toLowerCase().includes(searchTerm.toLowerCase()) ||
       job.equipamento_nome.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -143,11 +117,11 @@ export const JobsCenter: React.FC<JobsCenterProps> = ({ onCreateJob }) => {
   };
 
   const counts = {
-    all: mockJobs.length,
-    criticos: mockJobs.filter(j => j.criticidade === "alta").length,
-    vencidos: mockJobs.filter(j => j.prazo_dias < 0).length,
-    pendentes: mockJobs.filter(j => j.status === "pendente").length,
-    andamento: mockJobs.filter(j => j.status === "em_andamento").length,
+    all: jobs.length,
+    criticos: jobs.filter(j => j.criticidade === "alta").length,
+    vencidos: jobs.filter(j => j.prazo_dias < 0).length,
+    pendentes: jobs.filter(j => j.status === "pendente").length,
+    andamento: jobs.filter(j => j.status === "em_andamento").length,
   };
 
   return (

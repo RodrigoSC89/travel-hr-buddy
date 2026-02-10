@@ -40,24 +40,53 @@ interface ForecastScenario {
   risks: string[];
 }
 
-const mockCategories: BudgetCategory[] = [
-  { id: '1', name: 'Combustível', allocated: 500000, spent: 380000, forecast: 520000, trend: 'up', variance: 4, aiConfidence: 92 },
-  { id: '2', name: 'Manutenção', allocated: 300000, spent: 210000, forecast: 285000, trend: 'down', variance: -5, aiConfidence: 88 },
-  { id: '3', name: 'Tripulação', allocated: 450000, spent: 340000, forecast: 445000, trend: 'stable', variance: -1, aiConfidence: 95 },
-  { id: '4', name: 'Porto & Taxas', allocated: 200000, spent: 150000, forecast: 210000, trend: 'up', variance: 5, aiConfidence: 85 },
-  { id: '5', name: 'Seguros', allocated: 180000, spent: 180000, forecast: 180000, trend: 'stable', variance: 0, aiConfidence: 99 },
-  { id: '6', name: 'Suprimentos', allocated: 120000, spent: 85000, forecast: 115000, trend: 'down', variance: -4, aiConfidence: 87 },
-];
-
-const mockScenarios: ForecastScenario[] = [
-  { id: '1', name: 'Otimista', probability: 25, totalBudget: 1650000, savings: 100000, risks: ['Depende de preços favoráveis de combustível'] },
-  { id: '2', name: 'Base', probability: 50, totalBudget: 1755000, savings: 0, risks: ['Cenário mais provável'] },
-  { id: '3', name: 'Conservador', probability: 25, totalBudget: 1850000, savings: -95000, risks: ['Alta do dólar', 'Aumento de taxas portuárias'] },
+const defaultScenarios: ForecastScenario[] = [
+  { id: '1', name: 'Otimista', probability: 25, totalBudget: 0, savings: 0, risks: ['Depende de condições favoráveis'] },
+  { id: '2', name: 'Base', probability: 50, totalBudget: 0, savings: 0, risks: ['Cenário mais provável'] },
+  { id: '3', name: 'Conservador', probability: 25, totalBudget: 0, savings: 0, risks: ['Custos acima do esperado'] },
 ];
 
 export function BudgetForecastingAI() {
-  const [categories, setCategories] = useState<BudgetCategory[]>(mockCategories);
-  const [scenarios, setScenarios] = useState<ForecastScenario[]>(mockScenarios);
+  const [categories, setCategories] = useState<BudgetCategory[]>([]);
+  const [scenarios, setScenarios] = useState<ForecastScenario[]>(defaultScenarios);
+
+  useEffect(() => {
+    const fetchBudget = async () => {
+      try {
+        // Use fuel_records for fuel spending, maintenance_tasks for maintenance costs, etc.
+        const [{ data: fuelData }, { data: maintData }, { data: crewData }] = await Promise.all([
+          (supabase.from as Function)("fuel_records").select("quantity, unit_cost").limit(100),
+          supabase.from("maintenance_records").select("total_cost").limit(100),
+          (supabase.from as Function)("payroll_records").select("net_salary").limit(100),
+        ]);
+
+        const fuelSpent = (fuelData || []).reduce((s: number, r: any) => s + ((r.quantity || 0) * (r.unit_cost || 0)), 0);
+        const maintSpent = (maintData || []).reduce((s: number, r: any) => s + (r.total_cost || 0), 0);
+        const crewSpent = (crewData || []).reduce((s: number, r: any) => s + (r.net_salary || 0), 0);
+
+        const cats: BudgetCategory[] = [
+          { id: '1', name: 'Combustível', allocated: Math.max(fuelSpent * 1.2, 500000), spent: fuelSpent, forecast: fuelSpent * 1.1, trend: 'up' as const, variance: 0, aiConfidence: 88 },
+          { id: '2', name: 'Manutenção', allocated: Math.max(maintSpent * 1.3, 300000), spent: maintSpent, forecast: maintSpent * 1.05, trend: 'stable' as const, variance: 0, aiConfidence: 85 },
+          { id: '3', name: 'Tripulação', allocated: Math.max(crewSpent * 1.1, 450000), spent: crewSpent, forecast: crewSpent * 1.02, trend: 'stable' as const, variance: 0, aiConfidence: 92 },
+          { id: '4', name: 'Porto & Taxas', allocated: 200000, spent: 0, forecast: 200000, trend: 'stable' as const, variance: 0, aiConfidence: 80 },
+          { id: '5', name: 'Seguros', allocated: 180000, spent: 180000, forecast: 180000, trend: 'stable' as const, variance: 0, aiConfidence: 99 },
+          { id: '6', name: 'Suprimentos', allocated: 120000, spent: 0, forecast: 115000, trend: 'stable' as const, variance: 0, aiConfidence: 82 },
+        ].map(c => ({ ...c, variance: c.allocated > 0 ? Math.round(((c.forecast - c.allocated) / c.allocated) * 100) : 0 }));
+
+        setCategories(cats);
+
+        const totalAlloc = cats.reduce((s, c) => s + c.allocated, 0);
+        setScenarios([
+          { id: '1', name: 'Otimista', probability: 25, totalBudget: Math.round(totalAlloc * 0.9), savings: Math.round(totalAlloc * 0.1), risks: ['Depende de preços favoráveis'] },
+          { id: '2', name: 'Base', probability: 50, totalBudget: totalAlloc, savings: 0, risks: ['Cenário mais provável'] },
+          { id: '3', name: 'Conservador', probability: 25, totalBudget: Math.round(totalAlloc * 1.1), savings: -Math.round(totalAlloc * 0.1), risks: ['Alta do dólar', 'Aumento de taxas'] },
+        ]);
+      } catch (err) {
+        // Keep empty state on error
+      }
+    };
+    fetchBudget();
+  }, []);
   const [isAnalyzing, setIsAnalyzing] = useState(false);
   const [selectedPeriod, setSelectedPeriod] = useState('q1-2025');
   const [newBudgetInput, setNewBudgetInput] = useState<{ category: string; amount: string }>({ category: '', amount: '' });

@@ -127,158 +127,104 @@ export default function UserActivityPanel() {
     staleTime: 10000,
   });
 
-  // Mock data for demonstration
-  const mockSessions: UserSession[] = [
-    {
-      id: "1",
-      userId: "u1",
-      userName: "Carlos Silva",
-      email: "carlos.silva@nautilus.com",
-      role: "Capitão",
-      status: "online",
-      lastActivity: new Date(),
-      device: "desktop",
-      browser: "Chrome 121",
-      location: "Santos, SP",
-      ipAddress: "192.168.1.45",
-      sessionDuration: 125,
-      actionsCount: 47,
-    },
-    {
-      id: "2",
-      userId: "u2",
-      userName: "Maria Santos",
-      email: "maria.santos@nautilus.com",
-      role: "Engenheira Chefe",
-      status: "online",
-      lastActivity: new Date(Date.now() - 120000),
-      device: "desktop",
-      browser: "Firefox 122",
-      location: "Rio de Janeiro, RJ",
-      ipAddress: "192.168.1.67",
-      sessionDuration: 89,
-      actionsCount: 32,
-    },
-    {
-      id: "3",
-      userId: "u3",
-      userName: "Pedro Oliveira",
-      email: "pedro.oliveira@nautilus.com",
-      role: "Oficial de Navegação",
-      status: "away",
-      lastActivity: new Date(Date.now() - 600000),
-      device: "mobile",
-      browser: "Safari Mobile",
-      location: "Paranaguá, PR",
-      ipAddress: "192.168.2.12",
-      sessionDuration: 45,
-      actionsCount: 15,
-    },
-    {
-      id: "4",
-      userId: "u4",
-      userName: "Ana Costa",
-      email: "ana.costa@nautilus.com",
-      role: "Gerente de Operações",
-      status: "online",
-      lastActivity: new Date(Date.now() - 30000),
-      device: "tablet",
-      browser: "Chrome iPad",
-      location: "São Paulo, SP",
-      ipAddress: "192.168.1.89",
-      sessionDuration: 210,
-      actionsCount: 78,
-    },
-    {
-      id: "5",
-      userId: "u5",
-      userName: "Roberto Lima",
-      email: "roberto.lima@nautilus.com",
-      role: "Técnico de Manutenção",
-      status: "offline",
-      lastActivity: new Date(Date.now() - 3600000),
-      device: "desktop",
-      browser: "Edge 121",
-      location: "Vitória, ES",
-      ipAddress: "192.168.3.22",
-      sessionDuration: 0,
+  // Map real sessions to UserSession format
+  const mappedSessions: UserSession[] = (sessions || []).map((s: any) => {
+    const profile = s.profiles || {};
+    const deviceInfo = (s.device_info as any) || {};
+    const lastAct = new Date(s.last_activity);
+    const now = new Date();
+    const diffMs = now.getTime() - lastAct.getTime();
+    const status: "online" | "away" | "offline" = diffMs < 300000 ? "online" : diffMs < 1800000 ? "away" : "offline";
+    
+    return {
+      id: s.id,
+      userId: s.user_id,
+      userName: profile.full_name || "Usuário",
+      email: profile.email || "",
+      avatar: profile.avatar_url,
+      role: profile.role || "Membro",
+      status,
+      lastActivity: lastAct,
+      device: (deviceInfo.device_type || "desktop") as any,
+      browser: s.user_agent?.split(" ").slice(-1)[0] || "Browser",
+      location: deviceInfo.location || "N/A",
+      ipAddress: typeof s.ip_address === "string" ? s.ip_address : "N/A",
+      sessionDuration: Math.round(diffMs / 60000),
       actionsCount: 0,
-    },
-  ];
+    };
+  });
 
-  const mockLogs: ActivityLog[] = [
-    { id: "1", userId: "u1", userName: "Carlos Silva", action: "Login realizado", module: "Auth", timestamp: new Date(), severity: "success", ipAddress: "192.168.1.45" },
-    { id: "2", userId: "u2", userName: "Maria Santos", action: "Documento criado", module: "Documents", timestamp: new Date(Date.now() - 180000), severity: "info", ipAddress: "192.168.1.67" },
-    { id: "3", userId: "u1", userName: "Carlos Silva", action: "Configuração alterada", module: "Settings", timestamp: new Date(Date.now() - 420000), severity: "warning", details: "Alterou permissões de usuário", ipAddress: "192.168.1.45" },
-    { id: "4", userId: "u3", userName: "Pedro Oliveira", action: "Acesso negado", module: "Finance", timestamp: new Date(Date.now() - 900000), severity: "error", details: "Tentativa de acesso sem permissão", ipAddress: "192.168.2.12" },
-    { id: "5", userId: "u4", userName: "Ana Costa", action: "Relatório exportado", module: "Analytics", timestamp: new Date(Date.now() - 1200000), severity: "info", ipAddress: "192.168.1.89" },
-    { id: "6", userId: "u2", userName: "Maria Santos", action: "Manutenção agendada", module: "Maintenance", timestamp: new Date(Date.now() - 1800000), severity: "success", ipAddress: "192.168.1.67" },
-  ];
+  // Map real logs to ActivityLog format
+  const mappedLogs: ActivityLog[] = (activityLogs || []).map((l: any) => ({
+    id: l.id,
+    userId: l.user_id || "",
+    userName: l.user_agent?.split("/")[0] || "Usuário",
+    action: l.action || l.event_message || "",
+    module: l.module_accessed || "",
+    timestamp: new Date(l.timestamp || l.created_at),
+    severity: (l.severity || "info") as any,
+    details: typeof l.details === "string" ? l.details : undefined,
+    ipAddress: typeof l.ip_address === "string" ? l.ip_address : "N/A",
+  }));
 
   const hourlyActivity = [
-    { hour: "00h", users: 12 },
-    { hour: "04h", users: 8 },
-    { hour: "08h", users: 45 },
-    { hour: "12h", users: 78 },
-    { hour: "16h", users: 92 },
-    { hour: "20h", users: 56 },
+    { hour: "00h", users: 0 },
+    { hour: "04h", users: 0 },
+    { hour: "08h", users: 0 },
+    { hour: "12h", users: 0 },
+    { hour: "16h", users: 0 },
+    { hour: "20h", users: 0 },
   ];
 
+  // Calculate hourly distribution from logs
+  mappedLogs.forEach(l => {
+    const h = l.timestamp.getHours();
+    const bucket = Math.floor(h / 4);
+    if (hourlyActivity[bucket]) hourlyActivity[bucket].users++;
+  });
+
   const deviceDistribution = [
-    { name: "Desktop", value: 65, color: "hsl(217, 91%, 60%)" },
-    { name: "Mobile", value: 25, color: "hsl(142, 71%, 45%)" },
-    { name: "Tablet", value: 10, color: "hsl(280, 87%, 65%)" },
+    { name: "Desktop", value: mappedSessions.filter(s => s.device === "desktop").length || 1, color: "hsl(217, 91%, 60%)" },
+    { name: "Mobile", value: mappedSessions.filter(s => s.device === "mobile").length || 0, color: "hsl(142, 71%, 45%)" },
+    { name: "Tablet", value: mappedSessions.filter(s => s.device === "tablet").length || 0, color: "hsl(280, 87%, 65%)" },
   ];
+
+  const onlineUsers = mappedSessions.filter(s => s.status === "online").length;
+  const awayUsers = mappedSessions.filter(s => s.status === "away").length;
+  const totalSessions = mappedSessions.length;
+
+  const filteredSessions = mappedSessions.filter(
+    s => s.userName.toLowerCase().includes(searchQuery.toLowerCase()) ||
+         s.email.toLowerCase().includes(searchQuery.toLowerCase())
+  );
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case "online":
-        return "bg-success";
-      case "away":
-        return "bg-warning";
-      case "offline":
-        return "bg-muted-foreground";
-      default:
-        return "bg-muted";
+      case "online": return "bg-success";
+      case "away": return "bg-warning";
+      case "offline": return "bg-muted-foreground";
+      default: return "bg-muted";
     }
   };
 
   const getSeverityColor = (severity: string) => {
     switch (severity) {
-      case "success":
-        return "text-success bg-success/10";
-      case "info":
-        return "text-blue-500 bg-blue-500/10";
-      case "warning":
-        return "text-warning bg-warning/10";
-      case "error":
-        return "text-destructive bg-destructive/10";
-      default:
-        return "text-muted-foreground bg-muted";
+      case "success": return "text-success bg-success/10";
+      case "info": return "text-blue-500 bg-blue-500/10";
+      case "warning": return "text-warning bg-warning/10";
+      case "error": return "text-destructive bg-destructive/10";
+      default: return "text-muted-foreground bg-muted";
     }
   };
 
   const getDeviceIcon = (device: string) => {
     switch (device) {
-      case "desktop":
-        return <Monitor className="h-4 w-4" />;
-      case "mobile":
-        return <Smartphone className="h-4 w-4" />;
-      case "tablet":
-        return <Monitor className="h-4 w-4" />;
-      default:
-        return <Globe className="h-4 w-4" />;
+      case "desktop": return <Monitor className="h-4 w-4" />;
+      case "mobile": return <Smartphone className="h-4 w-4" />;
+      case "tablet": return <Monitor className="h-4 w-4" />;
+      default: return <Globe className="h-4 w-4" />;
     }
   };
-
-  const onlineUsers = mockSessions.filter(s => s.status === "online").length;
-  const awayUsers = mockSessions.filter(s => s.status === "away").length;
-  const totalSessions = mockSessions.length;
-
-  const filteredSessions = mockSessions.filter(
-    s => s.userName.toLowerCase().includes(searchQuery.toLowerCase()) ||
-         s.email.toLowerCase().includes(searchQuery.toLowerCase())
-  );
 
   const handleTerminateSession = (sessionId: string) => {
     toast.success("Sessão encerrada com sucesso");
@@ -337,7 +283,7 @@ export default function UserActivityPanel() {
                 <Activity className="h-5 w-5 text-purple-500" />
               </div>
               <div>
-                <p className="text-2xl font-bold">{mockLogs.length}</p>
+                <p className="text-2xl font-bold">{mappedLogs.length}</p>
                 <p className="text-sm text-muted-foreground">Ações (1h)</p>
               </div>
             </div>
@@ -536,7 +482,7 @@ export default function UserActivityPanel() {
         <CardContent>
           <ScrollArea className="h-[300px]">
             <div className="space-y-2">
-              {mockLogs.map((log, idx) => (
+              {mappedLogs.map((log: any, idx: number) => (
                 <motion.div
                   key={log.id}
                   initial={{ opacity: 0, x: -10 }}
