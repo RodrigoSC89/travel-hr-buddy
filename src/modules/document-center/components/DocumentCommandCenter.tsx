@@ -3,7 +3,7 @@
  * Central de documentos com OCR, templates, workflow e IA
  */
 
-import React, { useState } from "react";
+import React, { useState, useRef, useCallback } from "react";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -11,7 +11,13 @@ import { Progress } from "@/components/ui/progress";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Input } from "@/components/ui/input";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from "@/components/ui/dialog";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
 import { motion } from "framer-motion";
+import { toast } from "sonner";
+import { useNavigate } from "react-router-dom";
+import { logger } from "@/lib/logger";
 import {
   FileText,
   Upload,
@@ -151,7 +157,7 @@ const TEMPLATES: Template[] = [
   { id: "tpl-5", name: "Relatório de Manutenção", category: "Manutenção", usageCount: 167, lastUsed: "Ontem" },
 ];
 
-const WORKFLOW_STEPS: WorkflowStep[] = [
+const WORKFLOW_STEPS_INITIAL: WorkflowStep[] = [
   { id: "step-1", name: "Upload do Documento", status: "completed", assignee: "Sistema", completedAt: "10:30" },
   { id: "step-2", name: "Análise OCR/IA", status: "completed", assignee: "IA", completedAt: "10:31" },
   { id: "step-3", name: "Revisão Técnica", status: "current", assignee: "Carlos Silva" },
@@ -160,8 +166,23 @@ const WORKFLOW_STEPS: WorkflowStep[] = [
 ];
 
 export function DocumentCommandCenter() {
+  const navigate = useNavigate();
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("all");
+  const [activeTab, setActiveTab] = useState("documents");
+  const [showFilterPanel, setShowFilterPanel] = useState(false);
+  const [workflowSteps, setWorkflowSteps] = useState(WORKFLOW_STEPS_INITIAL);
+
+  // Dialog states
+  const [previewDoc, setPreviewDoc] = useState<Document | null>(null);
+  const [showUploadDialog, setShowUploadDialog] = useState(false);
+  const [showTemplateDialog, setShowTemplateDialog] = useState(false);
+  const [showSignatureDialog, setShowSignatureDialog] = useState(false);
+  const [selectedTemplate, setSelectedTemplate] = useState<Template | null>(null);
+  
+  // OCR file input ref
+  const ocrFileInputRef = useRef<HTMLInputElement>(null);
+  const uploadFileInputRef = useRef<HTMLInputElement>(null);
 
   const getStatusBadge = (status: Document["status"]) => {
     switch (status) {
@@ -189,7 +210,6 @@ export function DocumentCommandCenter() {
     { id: "reports", label: "Relatórios", count: 423 },
   ];
 
-  // Métricas
   const metrics = {
     totalDocuments: 1247,
     pendingApproval: 23,
@@ -198,6 +218,114 @@ export function DocumentCommandCenter() {
     storageUsed: "45.6 GB",
     storageLimit: "100 GB",
   };
+
+  // === ACTION HANDLERS ===
+
+  const handleViewDocument = useCallback((doc: Document) => {
+    setPreviewDoc(doc);
+    logger.info(`[DocumentCommandCenter] Viewing document: ${doc.name}`);
+  }, []);
+
+  const handleDownloadDocument = useCallback((doc: Document) => {
+    toast.success(`Download iniciado: ${doc.name}`, { description: `Tipo: ${doc.type} • Tamanho: ${doc.size}` });
+    logger.info(`[DocumentCommandCenter] Download requested: ${doc.name}`);
+  }, []);
+
+  const handleShareDocument = useCallback((doc: Document) => {
+    if (navigator.share) {
+      navigator.share({ title: doc.name, text: `Documento: ${doc.name} (${doc.type})` });
+    } else {
+      navigator.clipboard.writeText(`${doc.name} - ${doc.type} - ${doc.vessel || 'Sem embarcação'}`);
+      toast.success("Link copiado para a área de transferência");
+    }
+  }, []);
+
+  const handleDocumentMore = useCallback((doc: Document) => {
+    toast.info(`Opções para: ${doc.name}`, {
+      description: "Editar • Arquivar • Imprimir • Histórico",
+      action: { label: "Histórico", onClick: () => toast.info(`Histórico de versões: ${doc.name}`) },
+    });
+  }, []);
+
+  const handleFilter = useCallback(() => {
+    setShowFilterPanel(prev => !prev);
+    toast.info(showFilterPanel ? "Filtros recolhidos" : "Filtros expandidos", { duration: 1500 });
+  }, [showFilterPanel]);
+
+  const handleDigitalizeOCR = useCallback(() => {
+    setActiveTab("ocr");
+    toast.info("Navegando para processamento OCR", { duration: 1500 });
+  }, []);
+
+  const handleUseTemplateBar = useCallback(() => {
+    setActiveTab("templates");
+    toast.info("Navegando para templates disponíveis", { duration: 1500 });
+  }, []);
+
+  const handleUpload = useCallback(() => {
+    setShowUploadDialog(true);
+  }, []);
+
+  const handleUploadFiles = useCallback((files: FileList | null) => {
+    if (!files || files.length === 0) return;
+    const fileNames = Array.from(files).map(f => f.name).join(", ");
+    toast.success(`Upload iniciado: ${fileNames}`, { description: `${files.length} arquivo(s) sendo processado(s)` });
+    setShowUploadDialog(false);
+    logger.info(`[DocumentCommandCenter] Upload started: ${fileNames}`);
+  }, []);
+
+  const handleUseTemplate = useCallback((template: Template) => {
+    setSelectedTemplate(template);
+    setShowTemplateDialog(true);
+    logger.info(`[DocumentCommandCenter] Using template: ${template.name}`);
+  }, []);
+
+  const handleCreateTemplate = useCallback(() => {
+    toast.info("Criando novo template...", { description: "Em breve: editor visual de templates" });
+  }, []);
+
+  const handleApproveStep = useCallback(() => {
+    setWorkflowSteps(prev => {
+      const updated = [...prev];
+      const currentIdx = updated.findIndex(s => s.status === "current");
+      if (currentIdx >= 0) {
+        updated[currentIdx] = { ...updated[currentIdx], status: "completed", completedAt: new Date().toLocaleTimeString("pt-BR", { hour: "2-digit", minute: "2-digit" }) };
+        if (currentIdx + 1 < updated.length) {
+          updated[currentIdx + 1] = { ...updated[currentIdx + 1], status: "current" };
+        }
+      }
+      return updated;
+    });
+    toast.success("Etapa aprovada com sucesso!", { description: "O workflow avançou para a próxima etapa" });
+  }, []);
+
+  const handleRejectStep = useCallback(() => {
+    const currentStep = workflowSteps.find(s => s.status === "current");
+    toast.error(`Etapa rejeitada: ${currentStep?.name}`, {
+      description: "O documento foi devolvido para revisão",
+      action: { label: "Desfazer", onClick: () => toast.info("Rejeição desfeita") },
+    });
+  }, [workflowSteps]);
+
+  const handleOCRSelectFiles = useCallback(() => {
+    ocrFileInputRef.current?.click();
+  }, []);
+
+  const handleOCRFiles = useCallback((files: FileList | null) => {
+    if (!files || files.length === 0) return;
+    const fileNames = Array.from(files).map(f => f.name).join(", ");
+    toast.success(`Processamento OCR iniciado`, { description: `Arquivos: ${fileNames}` });
+    logger.info(`[DocumentCommandCenter] OCR processing: ${fileNames}`);
+  }, []);
+
+  const handleSendForSignature = useCallback(() => {
+    setShowSignatureDialog(true);
+  }, []);
+
+  const handleConfirmSignature = useCallback(() => {
+    toast.success("Documento enviado para assinatura!", { description: "Os signatários receberão notificação por email" });
+    setShowSignatureDialog(false);
+  }, []);
 
   return (
     <div className="space-y-6">
@@ -271,21 +399,21 @@ export function DocumentCommandCenter() {
                   onChange={(e) => setSearchQuery(e.target.value)}
                 />
               </div>
-              <Button variant="outline" size="icon">
+              <Button variant="outline" size="icon" onClick={handleFilter}>
                 <Filter className="h-4 w-4" />
               </Button>
             </div>
             
             <div className="flex gap-2">
-              <Button variant="outline">
+              <Button variant="outline" onClick={handleDigitalizeOCR}>
                 <Scan className="h-4 w-4 mr-2" />
                 Digitalizar (OCR)
               </Button>
-              <Button variant="outline">
+              <Button variant="outline" onClick={handleUseTemplateBar}>
                 <LayoutTemplate className="h-4 w-4 mr-2" />
                 Usar Template
               </Button>
-              <Button className="bg-primary">
+              <Button className="bg-primary" onClick={handleUpload}>
                 <Upload className="h-4 w-4 mr-2" />
                 Upload
               </Button>
@@ -295,7 +423,7 @@ export function DocumentCommandCenter() {
       </Card>
 
       {/* Tabs principais */}
-      <Tabs defaultValue="documents" className="space-y-4">
+      <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-4">
         <TabsList className="grid w-full grid-cols-5 lg:w-auto lg:inline-grid">
           <TabsTrigger value="documents" className="gap-2">
             <FileText className="h-4 w-4" />
@@ -404,16 +532,16 @@ export function DocumentCommandCenter() {
                               </span>
                             )}
                             <div className="flex gap-1">
-                              <Button variant="ghost" size="icon" className="h-8 w-8">
+                              <Button variant="ghost" size="icon" className="h-8 w-8" onClick={() => handleViewDocument(doc)} title="Visualizar">
                                 <Eye className="h-4 w-4" />
                               </Button>
-                              <Button variant="ghost" size="icon" className="h-8 w-8">
+                              <Button variant="ghost" size="icon" className="h-8 w-8" onClick={() => handleDownloadDocument(doc)} title="Download">
                                 <Download className="h-4 w-4" />
                               </Button>
-                              <Button variant="ghost" size="icon" className="h-8 w-8">
+                              <Button variant="ghost" size="icon" className="h-8 w-8" onClick={() => handleShareDocument(doc)} title="Compartilhar">
                                 <Share2 className="h-4 w-4" />
                               </Button>
-                              <Button variant="ghost" size="icon" className="h-8 w-8">
+                              <Button variant="ghost" size="icon" className="h-8 w-8" onClick={() => handleDocumentMore(doc)} title="Mais opções">
                                 <MoreVertical className="h-4 w-4" />
                               </Button>
                             </div>
@@ -449,7 +577,7 @@ export function DocumentCommandCenter() {
                     <span>{template.usageCount} usos</span>
                     <span>Usado {template.lastUsed}</span>
                   </div>
-                  <Button className="w-full mt-4" variant="outline" size="sm">
+                  <Button className="w-full mt-4" variant="outline" size="sm" onClick={() => handleUseTemplate(template)}>
                     <FilePlus className="h-4 w-4 mr-2" />
                     Usar Template
                   </Button>
@@ -457,7 +585,7 @@ export function DocumentCommandCenter() {
               </Card>
             ))}
             
-            <Card className="border-dashed hover:border-primary/50 transition-colors cursor-pointer">
+            <Card className="border-dashed hover:border-primary/50 transition-colors cursor-pointer" onClick={handleCreateTemplate}>
               <CardContent className="p-4 flex flex-col items-center justify-center h-full min-h-[180px]">
                 <div className="p-3 rounded-full bg-muted mb-3">
                   <FilePlus className="h-6 w-6 text-muted-foreground" />
@@ -482,14 +610,12 @@ export function DocumentCommandCenter() {
             </CardHeader>
             <CardContent>
               <div className="relative">
-                {WORKFLOW_STEPS.map((step, index) => (
+                {workflowSteps.map((step, index) => (
                   <div key={step.id} className="flex items-start gap-4 pb-8 last:pb-0">
-                    {/* Linha conectora */}
-                    {index < WORKFLOW_STEPS.length - 1 && (
+                    {index < workflowSteps.length - 1 && (
                       <div className="absolute left-[15px] top-[40px] w-0.5 h-[calc(100%-40px)] bg-muted" />
                     )}
                     
-                    {/* Indicador de status */}
                     <div className={`relative z-10 w-8 h-8 rounded-full flex items-center justify-center shrink-0 ${
                       step.status === "completed" 
                         ? "bg-emerald-500 text-white" 
@@ -504,7 +630,6 @@ export function DocumentCommandCenter() {
                       )}
                     </div>
                     
-                    {/* Conteúdo */}
                     <div className="flex-1">
                       <div className="flex items-center justify-between">
                         <h4 className={`font-medium ${
@@ -525,11 +650,11 @@ export function DocumentCommandCenter() {
                       )}
                       {step.status === "current" && (
                         <div className="flex gap-2 mt-3">
-                          <Button size="sm" className="bg-emerald-600 hover:bg-emerald-700">
+                          <Button size="sm" className="bg-emerald-600 hover:bg-emerald-700" onClick={handleApproveStep}>
                             <CheckCircle2 className="h-4 w-4 mr-2" />
                             Aprovar
                           </Button>
-                          <Button size="sm" variant="outline" className="text-red-500">
+                          <Button size="sm" variant="outline" className="text-red-500" onClick={handleRejectStep}>
                             <XCircle className="h-4 w-4 mr-2" />
                             Rejeitar
                           </Button>
@@ -563,7 +688,15 @@ export function DocumentCommandCenter() {
                   <p className="text-sm text-muted-foreground mb-4">
                     Suportamos PDF, JPG, PNG até 25MB
                   </p>
-                  <Button>
+                  <input
+                    ref={ocrFileInputRef}
+                    type="file"
+                    accept=".pdf,.jpg,.jpeg,.png"
+                    multiple
+                    className="hidden"
+                    onChange={(e) => handleOCRFiles(e.target.files)}
+                  />
+                  <Button onClick={handleOCRSelectFiles}>
                     <Upload className="h-4 w-4 mr-2" />
                     Selecionar Arquivos
                   </Button>
@@ -661,7 +794,7 @@ export function DocumentCommandCenter() {
               </div>
 
               <div className="mt-6">
-                <Button className="w-full md:w-auto">
+                <Button className="w-full md:w-auto" onClick={handleSendForSignature}>
                   <FileSignature className="h-4 w-4 mr-2" />
                   Enviar para Assinatura
                 </Button>
@@ -670,6 +803,117 @@ export function DocumentCommandCenter() {
           </Card>
         </TabsContent>
       </Tabs>
+
+      {/* === DIALOGS === */}
+
+      {/* Preview Document Dialog */}
+      <Dialog open={!!previewDoc} onOpenChange={() => setPreviewDoc(null)}>
+        <DialogContent className="max-w-lg">
+          <DialogHeader>
+            <DialogTitle className="flex items-center gap-2">
+              <FileText className="h-5 w-5" />
+              {previewDoc?.name}
+            </DialogTitle>
+            <DialogDescription>Detalhes do documento</DialogDescription>
+          </DialogHeader>
+          {previewDoc && (
+            <div className="space-y-3">
+              <div className="grid grid-cols-2 gap-3 text-sm">
+                <div><span className="text-muted-foreground">Tipo:</span> {previewDoc.type}</div>
+                <div><span className="text-muted-foreground">Tamanho:</span> {previewDoc.size}</div>
+                <div><span className="text-muted-foreground">Categoria:</span> {previewDoc.category}</div>
+                <div><span className="text-muted-foreground">Enviado por:</span> {previewDoc.uploadedBy}</div>
+                {previewDoc.vessel && <div><span className="text-muted-foreground">Embarcação:</span> {previewDoc.vessel}</div>}
+                {previewDoc.expiryDate && <div><span className="text-muted-foreground">Expira:</span> {previewDoc.expiryDate}</div>}
+              </div>
+              <div className="flex flex-wrap gap-1">
+                {previewDoc.tags.map((tag, i) => <Badge key={i} variant="secondary">{tag}</Badge>)}
+              </div>
+            </div>
+          )}
+          <DialogFooter>
+            <Button variant="outline" onClick={() => { handleDownloadDocument(previewDoc!); setPreviewDoc(null); }}>
+              <Download className="h-4 w-4 mr-2" /> Download
+            </Button>
+            <Button onClick={() => setPreviewDoc(null)}>Fechar</Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      {/* Upload Dialog */}
+      <Dialog open={showUploadDialog} onOpenChange={setShowUploadDialog}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle className="flex items-center gap-2"><Upload className="h-5 w-5" /> Upload de Documentos</DialogTitle>
+            <DialogDescription>Selecione arquivos para enviar ao sistema</DialogDescription>
+          </DialogHeader>
+          <div className="border-2 border-dashed rounded-lg p-8 text-center">
+            <Upload className="h-10 w-10 mx-auto text-muted-foreground mb-3" />
+            <p className="text-sm text-muted-foreground mb-4">PDF, DOCX, JPG, PNG até 25MB</p>
+            <input
+              ref={uploadFileInputRef}
+              type="file"
+              multiple
+              accept=".pdf,.docx,.jpg,.jpeg,.png"
+              className="hidden"
+              onChange={(e) => handleUploadFiles(e.target.files)}
+            />
+            <Button onClick={() => uploadFileInputRef.current?.click()}>Selecionar Arquivos</Button>
+          </div>
+        </DialogContent>
+      </Dialog>
+
+      {/* Template Usage Dialog */}
+      <Dialog open={showTemplateDialog} onOpenChange={setShowTemplateDialog}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle className="flex items-center gap-2"><LayoutTemplate className="h-5 w-5" /> Usar Template</DialogTitle>
+            <DialogDescription>Criando documento a partir de: {selectedTemplate?.name}</DialogDescription>
+          </DialogHeader>
+          <div className="space-y-4">
+            <div>
+              <Label>Nome do documento</Label>
+              <Input defaultValue={`${selectedTemplate?.name || ''} - ${new Date().toLocaleDateString('pt-BR')}`} />
+            </div>
+            <div>
+              <Label>Observações</Label>
+              <Textarea placeholder="Notas adicionais..." rows={3} />
+            </div>
+          </div>
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setShowTemplateDialog(false)}>Cancelar</Button>
+            <Button onClick={() => { toast.success(`Documento criado a partir de "${selectedTemplate?.name}"`); setShowTemplateDialog(false); }}>
+              Criar Documento
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      {/* Signature Dialog */}
+      <Dialog open={showSignatureDialog} onOpenChange={setShowSignatureDialog}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle className="flex items-center gap-2"><FileSignature className="h-5 w-5" /> Enviar para Assinatura</DialogTitle>
+            <DialogDescription>Configure os signatários e envie o documento</DialogDescription>
+          </DialogHeader>
+          <div className="space-y-4">
+            <div>
+              <Label>Email do signatário</Label>
+              <Input type="email" placeholder="nome@empresa.com" />
+            </div>
+            <div>
+              <Label>Mensagem (opcional)</Label>
+              <Textarea placeholder="Mensagem para o signatário..." rows={2} />
+            </div>
+          </div>
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setShowSignatureDialog(false)}>Cancelar</Button>
+            <Button onClick={handleConfirmSignature}>
+              <Send className="h-4 w-4 mr-2" /> Enviar
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }
