@@ -71,7 +71,7 @@
 | ID | Descrição | Esforço |
 |----|-----------|---------|
 | P2-001 | ~100 TODOs/FIXMEs legítimos | 2-3 dias |
-| P2-002 | 5 componentes de notificação duplicados | 4h |
+| P2-002 | ~~5 componentes de notificação duplicados~~ ✅ ACEITO — 5 componentes servem contextos distintos (header popover, full-page, dashboard widget, system toasts, layout widget). Não são duplicados. | ~~4h~~ |
 | P2-003 | ~~Communication components duplicados com mock~~ ✅ CORRIGIDO (maritime-communication-center migrado para Supabase) | ~~2h~~ |
 | P2-004 | ~~Security center com mock alerts/metrics~~ ✅ CORRIGIDO (AlertsNotificationCenter migrado para Supabase) | ~~2h~~ |
 | P2-005 | ~~Crew schedule/MLC com mock data~~ ✅ PARCIAL (maritime-certification-manager migrado para useCertifications()) | 2h |
