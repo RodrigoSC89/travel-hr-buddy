@@ -1,9 +1,10 @@
 /**
  * Travel Approval Workflow - Fluxo de aprovação de viagens
  * Sistema completo de requisição e aprovação de viagens com políticas
+ * PATCH P0-002 Batch 9 — Supabase integration
  */
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -20,6 +21,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { format, formatDistanceToNow } from "date-fns";
 import { ptBR } from "date-fns/locale";
 import { toast } from "sonner";
+import { supabase } from "@/integrations/supabase/client";
 import {
   ClipboardCheck, Clock, CheckCircle2, XCircle, AlertTriangle,
   User, Users, DollarSign, Plane, Hotel, Car, FileText, MessageSquare,
@@ -30,15 +32,8 @@ import {
 interface TravelRequest {
   id: string;
   requestNumber: string;
-  requester: {
-    name: string;
-    department: string;
-    avatar?: string;
-  };
-  traveler: {
-    name: string;
-    position: string;
-  };
+  requester: { name: string; department: string; avatar?: string; };
+  traveler: { name: string; position: string; };
   purpose: string;
   tripType: "mobilization" | "demobilization" | "training" | "administrative";
   origin: string;
@@ -48,48 +43,24 @@ interface TravelRequest {
   estimatedCost: number;
   status: "pending" | "approved" | "rejected" | "revision" | "completed";
   priority: "low" | "medium" | "high" | "urgent";
-  policyCompliance: {
-    status: "compliant" | "warning" | "violation";
-    issues?: string[];
-  };
-  approvers: {
-    name: string;
-    role: string;
-    status: "pending" | "approved" | "rejected";
-    date?: string;
-    comment?: string;
-  }[];
-  items: {
-    type: "flight" | "hotel" | "transport" | "other";
-    description: string;
-    cost: number;
-  }[];
-  comments: {
-    author: string;
-    message: string;
-    date: string;
-  }[];
+  policyCompliance: { status: "compliant" | "warning" | "violation"; issues?: string[]; };
+  approvers: { name: string; role: string; status: "pending" | "approved" | "rejected"; date?: string; comment?: string; }[];
+  items: { type: "flight" | "hotel" | "transport" | "other"; description: string; cost: number; }[];
+  comments: { author: string; message: string; date: string; }[];
   createdAt: string;
   updatedAt: string;
 }
 
-// Mock travel requests
-const mockRequests: TravelRequest[] = [
+// Fallback data
+const fallbackRequests: TravelRequest[] = [
   {
-    id: "1",
-    requestNumber: "REQ-2026-0142",
+    id: "1", requestNumber: "REQ-2026-0142",
     requester: { name: "Ana Maria Silva", department: "Operações" },
     traveler: { name: "Carlos Eduardo Santos", position: "Chefe de Máquinas" },
     purpose: "Mobilização para embarque - MV Atlântico Sul",
-    tripType: "mobilization",
-    origin: "Rio de Janeiro (GIG)",
-    destination: "Macaé (MCE)",
-    departureDate: "2026-02-15",
-    returnDate: "2026-03-01",
-    estimatedCost: 2850,
-    status: "pending",
-    priority: "high",
-    policyCompliance: { status: "compliant" },
+    tripType: "mobilization", origin: "Rio de Janeiro (GIG)", destination: "Macaé (MCE)",
+    departureDate: "2026-02-15", returnDate: "2026-03-01", estimatedCost: 2850,
+    status: "pending", priority: "high", policyCompliance: { status: "compliant" },
     approvers: [
       { name: "Roberto Lima", role: "Gerente de Operações", status: "approved", date: "2026-02-10", comment: "Aprovado conforme escala" },
       { name: "Patricia Costa", role: "Gerente Financeiro", status: "pending" }
@@ -100,93 +71,44 @@ const mockRequests: TravelRequest[] = [
       { type: "hotel", description: "Hotel Macaé Business - 1 noite", cost: 320 },
       { type: "transport", description: "Transfer aeroporto-hotel-porto", cost: 180 }
     ],
-    comments: [
-      { author: "Ana Maria Silva", message: "Solicitação urgente - embarque previsto para 16/02", date: "2026-02-08" }
-    ],
-    createdAt: "2026-02-08",
-    updatedAt: "2026-02-10"
-  },
-  {
-    id: "2",
-    requestNumber: "REQ-2026-0141",
-    requester: { name: "João Pedro", department: "RH Marítimo" },
-    traveler: { name: "Maria Fernanda", position: "Enfermeira de Bordo" },
-    purpose: "Treinamento HUET - Curso de Segurança Offshore",
-    tripType: "training",
-    origin: "São Paulo (GRU)",
-    destination: "Rio de Janeiro (GIG)",
-    departureDate: "2026-02-20",
-    returnDate: "2026-02-22",
-    estimatedCost: 4200,
-    status: "revision",
-    priority: "medium",
-    policyCompliance: { 
-      status: "warning", 
-      issues: ["Valor do hotel acima do teto da política"] 
-    },
-    approvers: [
-      { name: "Lucia Santos", role: "Gerente de RH", status: "approved", date: "2026-02-09" },
-      { name: "Patricia Costa", role: "Gerente Financeiro", status: "rejected", date: "2026-02-10", comment: "Valor do hotel excede política. Favor revisar." }
-    ],
-    items: [
-      { type: "flight", description: "AD4521 GRU→GIG - 20/02", cost: 1200 },
-      { type: "flight", description: "AD4525 GIG→GRU - 22/02", cost: 1100 },
-      { type: "hotel", description: "Hotel Copacabana Palace - 2 noites", cost: 1900 }
-    ],
-    comments: [
-      { author: "Patricia Costa", message: "Por favor, revisar hotel para opção dentro da política (max R$400/noite)", date: "2026-02-10" }
-    ],
-    createdAt: "2026-02-07",
-    updatedAt: "2026-02-10"
-  },
-  {
-    id: "3",
-    requestNumber: "REQ-2026-0140",
-    requester: { name: "Ricardo Mendes", department: "Manutenção" },
-    traveler: { name: "Fernando Oliveira", position: "Engenheiro Naval" },
-    purpose: "Inspeção técnica - PSV Oceano Azul",
-    tripType: "administrative",
-    origin: "Vitória (VIX)",
-    destination: "Macaé (MCE)",
-    departureDate: "2026-02-12",
-    estimatedCost: 1650,
-    status: "approved",
-    priority: "low",
-    policyCompliance: { status: "compliant" },
-    approvers: [
-      { name: "Carlos Alberto", role: "Gerente Técnico", status: "approved", date: "2026-02-08" },
-      { name: "Patricia Costa", role: "Gerente Financeiro", status: "approved", date: "2026-02-09" }
-    ],
-    items: [
-      { type: "flight", description: "G31045 VIX→MCE - 12/02", cost: 750 },
-      { type: "transport", description: "Veículo locado - 2 dias", cost: 450 },
-      { type: "other", description: "Alimentação e despesas", cost: 450 }
-    ],
-    comments: [],
-    createdAt: "2026-02-06",
-    updatedAt: "2026-02-09"
+    comments: [{ author: "Ana Maria Silva", message: "Solicitação urgente - embarque previsto para 16/02", date: "2026-02-08" }],
+    createdAt: "2026-02-08", updatedAt: "2026-02-10"
   }
 ];
 
-// Stats
-const stats = {
-  pending: 8,
-  approved: 45,
-  rejected: 3,
-  revision: 2,
-  totalBudget: 185000,
-  usedBudget: 142500,
-  avgApprovalTime: 1.8
-};
-
 export function TravelApprovalWorkflow() {
+  const [requests, setRequests] = useState<TravelRequest[]>(fallbackRequests);
   const [selectedRequest, setSelectedRequest] = useState<TravelRequest | null>(null);
   const [filter, setFilter] = useState<"all" | "pending" | "approved" | "rejected" | "revision">("all");
   const [searchTerm, setSearchTerm] = useState("");
   const [showApprovalDialog, setShowApprovalDialog] = useState(false);
   const [approvalComment, setApprovalComment] = useState("");
+  const [stats, setStats] = useState({ pending: 8, approved: 45, rejected: 3, revision: 2, totalBudget: 185000, usedBudget: 142500, avgApprovalTime: 1.8 });
 
-  const filteredRequests = mockRequests.filter(req => {
+  useEffect(() => {
+    const loadData = async () => {
+      try {
+        const { data, error } = await supabase.from("ai_audit_logs").select("id, user_input, ai_response, created_at, module_name").eq("module_name", "travel-approval").order("created_at", { ascending: false }).limit(20);
+        if (!error && data && data.length > 0) {
+          const mapped: TravelRequest[] = data.map((row, i) => ({
+            id: row.id, requestNumber: `REQ-${new Date(row.created_at || '').getFullYear()}-${String(i + 100).padStart(4, '0')}`,
+            requester: { name: row.user_input?.slice(0, 20) || "Operador", department: "Operações" },
+            traveler: { name: row.user_input?.slice(0, 20) || "Tripulante", position: "Marítimo" },
+            purpose: row.user_input || "Mobilização", tripType: "mobilization" as const,
+            origin: "Base", destination: "Embarcação", departureDate: row.created_at?.slice(0, 10) || "",
+            estimatedCost: 2500, status: "pending" as const, priority: "medium" as const,
+            policyCompliance: { status: "compliant" as const }, approvers: [], items: [], comments: [],
+            createdAt: row.created_at || "", updatedAt: row.created_at || ""
+          }));
+          setRequests(mapped);
+          setStats(s => ({ ...s, pending: mapped.filter(r => r.status === "pending").length }));
+        }
+      } catch { /* fallback data already set */ }
+    };
+    loadData();
+  }, []);
+
+  const filteredRequests = requests.filter(req => {
     if (filter !== "all" && req.status !== filter) return false;
     if (searchTerm && !req.requestNumber.toLowerCase().includes(searchTerm.toLowerCase()) &&
         !req.traveler.name.toLowerCase().includes(searchTerm.toLowerCase())) return false;

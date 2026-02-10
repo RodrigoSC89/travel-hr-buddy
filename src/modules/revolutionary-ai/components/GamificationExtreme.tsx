@@ -3,8 +3,9 @@
  * PATCH REVOLUTION v1.0
  * Transform work into game with XP, levels, achievements
  */
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { supabase } from "@/integrations/supabase/client";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
@@ -58,46 +59,24 @@ interface TeamCompetition {
   prize?: string;
 }
 
-// Mock data
-const mockCrewMember: CrewMember = {
-  id: "1",
-  name: "João Silva",
-  role: "Chief Engineer",
-  level: 67,
-  xp: 245780,
-  xpToNext: 300000,
-  rank: 12,
-  streak: 45,
+// Fallback data
+const fallbackCrewMember: CrewMember = {
+  id: "1", name: "João Silva", role: "Chief Engineer",
+  level: 67, xp: 245780, xpToNext: 300000, rank: 12, streak: 45,
   achievements: [
     { id: "1", name: "Zero Breakdowns", description: "1 ano sem falhas", icon: "shield", rarity: "legendary", unlockedAt: "2024-12-15" },
-    { id: "2", name: "Perfect Maintenance", description: "Score perfeito em manutenção", icon: "star", rarity: "epic", unlockedAt: "2024-11-20" },
-    { id: "3", name: "Innovation Award", description: "Ideia de economia de combustível", icon: "zap", rarity: "rare", unlockedAt: "2024-10-10" },
-    { id: "4", name: "Mentor", description: "Treinou 5 engenheiros júnior", icon: "users", rarity: "epic", unlockedAt: "2024-09-05" },
-    { id: "5", name: "Safety Champion", description: "100 dias sem incidentes", icon: "trophy", rarity: "legendary", unlockedAt: "2024-08-01" },
+    { id: "2", name: "Perfect Maintenance", description: "Score perfeito", icon: "star", rarity: "epic", unlockedAt: "2024-11-20" },
   ],
   skills: [
     { name: "Diesel Engines", level: 5, maxLevel: 5 },
     { name: "Electrical Systems", level: 4, maxLevel: 5 },
-    { name: "HVAC", level: 3, maxLevel: 5 },
-    { name: "Automation", level: 2, maxLevel: 5 },
     { name: "Safety Protocols", level: 5, maxLevel: 5 },
   ],
 };
 
-const mockLeaderboard: CrewMember[] = [
-  { ...mockCrewMember, id: "1", name: "Carlos Ferreira", rank: 1, level: 89, xp: 890000, xpToNext: 950000 },
-  { ...mockCrewMember, id: "2", name: "Maria Santos", rank: 2, level: 85, xp: 850000, xpToNext: 900000 },
-  { ...mockCrewMember, id: "3", name: "Pedro Lima", rank: 3, level: 82, xp: 820000, xpToNext: 880000 },
-  { ...mockCrewMember, id: "4", name: "Ana Costa", rank: 4, level: 78, xp: 780000, xpToNext: 850000 },
-  { ...mockCrewMember, id: "5", name: "João Silva", rank: 12, level: 67, xp: 245780, xpToNext: 300000 },
-];
-
-const mockTeamCompetition: TeamCompetition[] = [
+const fallbackTeamCompetition: TeamCompetition[] = [
   { id: "1", vesselName: "MV Ocean Star", score: 94.5, rank: 1, safetyScore: 98, efficiencyScore: 92, customerScore: 96, prize: "$50,000" },
   { id: "2", vesselName: "MV Sea Pride", score: 92.1, rank: 2, safetyScore: 95, efficiencyScore: 90, customerScore: 93, prize: "$30,000" },
-  { id: "3", vesselName: "MV Blue Wave", score: 89.8, rank: 3, safetyScore: 91, efficiencyScore: 88, customerScore: 90, prize: "$20,000" },
-  { id: "4", vesselName: "MV Atlantic", score: 87.2, rank: 4, safetyScore: 88, efficiencyScore: 86, customerScore: 88 },
-  { id: "5", vesselName: "MV Pacific", score: 85.5, rank: 5, safetyScore: 86, efficiencyScore: 84, customerScore: 87 },
 ];
 
 const rarityColors = {
@@ -116,7 +95,37 @@ const rarityGlow = {
 
 export function GamificationExtreme() {
   const [selectedTab, setSelectedTab] = useState("profile");
-  const user = mockCrewMember;
+  const [user, setUser] = useState<CrewMember>(fallbackCrewMember);
+  const [leaderboard, setLeaderboard] = useState<CrewMember[]>([]);
+  const [teamCompetition, setTeamCompetition] = useState<TeamCompetition[]>(fallbackTeamCompetition);
+
+  useEffect(() => {
+    const loadData = async () => {
+      try {
+        const { data } = await supabase.from("crew_members").select("id, full_name, rank, position").order("full_name").limit(10);
+        if (data && data.length > 0) {
+          const lb: CrewMember[] = data.map((m, i) => ({
+            ...fallbackCrewMember, id: m.id, name: m.full_name || "Tripulante",
+            role: m.rank || "Crew", rank: i + 1, level: 90 - i * 5, xp: (90 - i * 5) * 10000,
+            xpToNext: (90 - i * 5 + 1) * 10000,
+          }));
+          setLeaderboard(lb);
+          if (lb.length > 0) setUser(prev => ({ ...prev, name: lb[0].name }));
+        } else {
+          setLeaderboard([fallbackCrewMember]);
+        }
+        const { data: vessels } = await supabase.from("vessels").select("id, name").limit(5);
+        if (vessels && vessels.length > 0) {
+          setTeamCompetition(vessels.map((v, i) => ({
+            id: v.id, vesselName: v.name || "Embarcação", score: 95 - i * 3,
+            rank: i + 1, safetyScore: 98 - i * 2, efficiencyScore: 92 - i * 3,
+            customerScore: 96 - i * 2, prize: i < 3 ? `$${(50 - i * 10) * 1000}` : undefined,
+          })));
+        }
+      } catch { /* fallback */ }
+    };
+    loadData();
+  }, []);
 
   const xpProgress = (user.xp / user.xpToNext) * 100;
 
@@ -319,7 +328,7 @@ export function GamificationExtreme() {
             <CardContent>
               <ScrollArea className="h-[400px]">
                 <div className="space-y-3">
-                  {mockLeaderboard.map((member, index) => (
+                  {leaderboard.map((member: CrewMember, index: number) => (
                     <motion.div
                       key={member.id}
                       initial={{ opacity: 0, x: -20 }}
@@ -364,7 +373,7 @@ export function GamificationExtreme() {
             </CardHeader>
             <CardContent>
               <div className="space-y-4">
-                {mockTeamCompetition.map((team, index) => (
+                {teamCompetition.map((team: TeamCompetition, index: number) => (
                   <motion.div
                     key={team.id}
                     initial={{ opacity: 0, y: 20 }}

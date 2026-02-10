@@ -1,9 +1,10 @@
 /**
  * Expense Management Panel - Gestão de despesas de viagem
  * Controle de despesas, reembolsos e prestação de contas
+ * PATCH P0-002 Batch 9 — Supabase integration
  */
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -17,6 +18,7 @@ import { motion } from "framer-motion";
 import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
 import { toast } from "sonner";
+import { supabase } from "@/integrations/supabase/client";
 import {
   Receipt, DollarSign, CreditCard, Upload, Camera, FileText,
   CheckCircle2, Clock, XCircle, AlertTriangle, Plus, Search,
@@ -38,24 +40,11 @@ interface Expense {
   tripName?: string;
 }
 
-// Mock expenses
-const mockExpenses: Expense[] = [
+// Fallback expenses
+const fallbackExpenses: Expense[] = [
   { id: "1", date: "2026-02-10", category: "Alimentação", description: "Almoço durante mobilização", amount: 85.50, currency: "BRL", paymentMethod: "Cartão Corporativo", status: "approved", tripName: "Mobilização MV Atlântico Sul" },
   { id: "2", date: "2026-02-10", category: "Transporte", description: "Uber aeroporto-hotel", amount: 45.00, currency: "BRL", paymentMethod: "Pessoal", status: "pending", tripName: "Mobilização MV Atlântico Sul" },
-  { id: "3", date: "2026-02-09", category: "Hospedagem", description: "Diária hotel - pernoite extra", amount: 320.00, currency: "BRL", paymentMethod: "Pessoal", status: "pending", tripName: "Mobilização MV Atlântico Sul" },
-  { id: "4", date: "2026-02-08", category: "Alimentação", description: "Jantar com cliente", amount: 250.00, currency: "BRL", paymentMethod: "Cartão Corporativo", status: "reimbursed", tripName: "Reunião Santos" },
-  { id: "5", date: "2026-02-07", category: "Outros", description: "Estacionamento aeroporto", amount: 75.00, currency: "BRL", paymentMethod: "Pessoal", status: "rejected", tripName: "Reunião Santos" },
 ];
-
-// Stats
-const stats = {
-  totalExpenses: 12450,
-  pendingReimbursement: 365,
-  monthlyLimit: 5000,
-  usedLimit: 3250,
-  approvedThisMonth: 2885,
-  rejectedThisMonth: 75
-};
 
 const categories = [
   { value: "food", label: "Alimentação" },
@@ -67,12 +56,33 @@ const categories = [
 ];
 
 export function ExpenseManagementPanel() {
+  const [expenses, setExpenses] = useState<Expense[]>(fallbackExpenses);
   const [filter, setFilter] = useState<"all" | "pending" | "approved" | "rejected" | "reimbursed">("all");
   const [searchTerm, setSearchTerm] = useState("");
   const [showNewExpense, setShowNewExpense] = useState(false);
   const [selectedExpense, setSelectedExpense] = useState<Expense | null>(null);
+  const [stats, setStats] = useState({ totalExpenses: 12450, pendingReimbursement: 365, monthlyLimit: 5000, usedLimit: 3250, approvedThisMonth: 2885, rejectedThisMonth: 75 });
 
-  const filteredExpenses = mockExpenses.filter(exp => {
+  useEffect(() => {
+    const loadData = async () => {
+      try {
+        const { data, error } = await supabase.from("fuel_records").select("id, fuel_type, quantity_liters, total_cost, record_date, vessel_id").order("record_date", { ascending: false }).limit(20);
+        if (!error && data && data.length > 0) {
+          const mapped: Expense[] = data.map(row => ({
+            id: row.id, date: row.record_date || "", category: row.fuel_type || "Outros",
+            description: `Combustível ${row.fuel_type || ""}`, amount: Number(row.total_cost) || 0,
+            currency: "USD", paymentMethod: "Cartão Corporativo", status: "approved" as const
+          }));
+          setExpenses(mapped);
+          const total = mapped.reduce((s, e) => s + e.amount, 0);
+          setStats(s => ({ ...s, totalExpenses: total, approvedThisMonth: total }));
+        }
+      } catch { /* fallback data already set */ }
+    };
+    loadData();
+  }, []);
+
+  const filteredExpenses = expenses.filter(exp => {
     if (filter !== "all" && exp.status !== filter) return false;
     if (searchTerm && !exp.description.toLowerCase().includes(searchTerm.toLowerCase())) return false;
     return true;

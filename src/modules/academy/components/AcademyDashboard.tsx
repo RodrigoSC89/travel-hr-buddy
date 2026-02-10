@@ -1,9 +1,10 @@
 /**
  * Maritime Academy Dashboard - Centro de Treinamento Premium
  * Plataforma de e-learning e gestão de capacitação marítima
+ * PATCH P0-002 Batch 9 — Supabase integration
  */
 
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -13,94 +14,49 @@ import { ScrollArea } from '@/components/ui/scroll-area';
 import { Input } from '@/components/ui/input';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { 
-  BookOpen, 
-  GraduationCap,
-  Trophy,
-  Clock,
-  Play,
-  CheckCircle2,
-  AlertTriangle,
-  TrendingUp,
-  Users,
-  Award,
-  Target,
-  Calendar,
-  Video,
-  FileText,
-  BarChart3,
-  Sparkles,
-  Star,
-  Bookmark,
-  Download
+  BookOpen, GraduationCap, Trophy, Clock, Play, CheckCircle2,
+  AlertTriangle, TrendingUp, Users, Award, Target, Calendar,
+  Video, FileText, BarChart3, Sparkles, Star, Bookmark, Download
 } from 'lucide-react';
 import { format, addDays, differenceInDays } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
 import { motion } from 'framer-motion';
+import { supabase } from '@/integrations/supabase/client';
 
 interface Course {
-  id: string;
-  title: string;
-  category: string;
+  id: string; title: string; category: string;
   type: 'mandatory' | 'optional' | 'certification';
-  duration: number; // hours
-  modules: number;
-  enrolled: number;
-  completionRate: number;
-  rating: number;
-  instructor: string;
-  thumbnail?: string;
-  isFeatured?: boolean;
+  duration: number; modules: number; enrolled: number;
+  completionRate: number; rating: number; instructor: string;
+  thumbnail?: string; isFeatured?: boolean;
 }
 
 interface Enrollment {
-  id: string;
-  courseId: string;
-  courseTitle: string;
-  crewMember: string;
-  crewMemberAvatar?: string;
-  rank: string;
-  vessel: string;
-  progress: number;
-  status: 'not-started' | 'in-progress' | 'completed' | 'expired';
-  startDate?: string;
-  completedDate?: string;
-  expiryDate?: string;
-  score?: number;
+  id: string; courseId: string; courseTitle: string;
+  crewMember: string; crewMemberAvatar?: string; rank: string; vessel: string;
+  progress: number; status: 'not-started' | 'in-progress' | 'completed' | 'expired';
+  startDate?: string; completedDate?: string; expiryDate?: string; score?: number;
 }
 
 interface Certificate {
-  id: string;
-  name: string;
-  crewMember: string;
-  course: string;
-  issueDate: string;
-  expiryDate: string;
-  status: 'valid' | 'expiring' | 'expired';
-  certificateNumber: string;
+  id: string; name: string; crewMember: string; course: string;
+  issueDate: string; expiryDate: string;
+  status: 'valid' | 'expiring' | 'expired'; certificateNumber: string;
 }
 
-// Mock data
-const mockCourses: Course[] = [
+// Fallback data
+const fallbackCourses: Course[] = [
   { id: '1', title: 'STCW Basic Safety Training', category: 'Safety', type: 'mandatory', duration: 40, modules: 8, enrolled: 45, completionRate: 78, rating: 4.8, instructor: 'Cap. João Silva', isFeatured: true },
   { id: '2', title: 'Fire Prevention & Fighting', category: 'Safety', type: 'mandatory', duration: 24, modules: 5, enrolled: 38, completionRate: 82, rating: 4.6, instructor: 'Of. Pedro Costa' },
   { id: '3', title: 'MLC 2006 Compliance', category: 'Compliance', type: 'certification', duration: 16, modules: 4, enrolled: 52, completionRate: 65, rating: 4.5, instructor: 'Adv. Maria Santos' },
-  { id: '4', title: 'Bridge Resource Management', category: 'Navigation', type: 'mandatory', duration: 32, modules: 6, enrolled: 28, completionRate: 70, rating: 4.9, instructor: 'Cap. Carlos Lima', isFeatured: true },
-  { id: '5', title: 'Environmental Awareness', category: 'Environment', type: 'optional', duration: 8, modules: 3, enrolled: 62, completionRate: 88, rating: 4.4, instructor: 'Eng. Ana Rocha' },
-  { id: '6', title: 'Leadership at Sea', category: 'Soft Skills', type: 'optional', duration: 12, modules: 4, enrolled: 35, completionRate: 72, rating: 4.7, instructor: 'Cap. Ricardo Mendes' }
 ];
 
-const mockEnrollments: Enrollment[] = [
-  { id: '1', courseId: '1', courseTitle: 'STCW Basic Safety Training', crewMember: 'João Silva', rank: '2nd Officer', vessel: 'MV Atlantic Pioneer', progress: 75, status: 'in-progress', startDate: '2024-05-01', expiryDate: '2024-07-01' },
-  { id: '2', courseId: '2', courseTitle: 'Fire Prevention & Fighting', crewMember: 'Maria Santos', rank: 'Chief Engineer', vessel: 'MV Pacific Star', progress: 100, status: 'completed', completedDate: '2024-06-10', score: 92 },
-  { id: '3', courseId: '3', courseTitle: 'MLC 2006 Compliance', crewMember: 'Pedro Costa', rank: 'Master', vessel: 'MV Ocean Voyager', progress: 30, status: 'in-progress', startDate: '2024-06-01' },
-  { id: '4', courseId: '4', courseTitle: 'Bridge Resource Management', crewMember: 'Ana Rocha', rank: '3rd Officer', vessel: 'MV Atlantic Pioneer', progress: 0, status: 'not-started', expiryDate: '2024-08-15' },
-  { id: '5', courseId: '1', courseTitle: 'STCW Basic Safety Training', crewMember: 'Carlos Lima', rank: 'AB Seaman', vessel: 'MV Pacific Star', progress: 45, status: 'expired', expiryDate: '2024-06-01' }
+const fallbackEnrollments: Enrollment[] = [
+  { id: '1', courseId: '1', courseTitle: 'STCW Basic Safety Training', crewMember: 'João Silva', rank: '2nd Officer', vessel: 'MV Atlantic Pioneer', progress: 75, status: 'in-progress', startDate: '2024-05-01' },
 ];
 
-const mockCertificates: Certificate[] = [
+const fallbackCertificates: Certificate[] = [
   { id: '1', name: 'STCW Certificate', crewMember: 'Maria Santos', course: 'STCW Basic Safety', issueDate: '2024-06-10', expiryDate: '2029-06-10', status: 'valid', certificateNumber: 'STCW-2024-0892' },
-  { id: '2', name: 'Fire Fighting Certificate', crewMember: 'João Silva', course: 'Fire Prevention', issueDate: '2023-08-15', expiryDate: '2024-08-15', status: 'expiring', certificateNumber: 'FFP-2023-1456' },
-  { id: '3', name: 'MLC Compliance', crewMember: 'Pedro Costa', course: 'MLC 2006', issueDate: '2023-01-20', expiryDate: '2024-01-20', status: 'expired', certificateNumber: 'MLC-2023-0234' }
 ];
 
 const statusConfig = {
@@ -119,30 +75,55 @@ const certStatusConfig = {
 export function AcademyDashboard() {
   const [activeTab, setActiveTab] = useState('overview');
   const [searchTerm, setSearchTerm] = useState('');
+  const [courses, setCourses] = useState<Course[]>(fallbackCourses);
+  const [enrollments, setEnrollments] = useState<Enrollment[]>(fallbackEnrollments);
+  const [certificates, setCertificates] = useState<Certificate[]>(fallbackCertificates);
 
-  // Calculate KPIs
-  const kpis = useMemo(() => {
-    const totalEnrollments = mockEnrollments.length;
-    const completed = mockEnrollments.filter(e => e.status === 'completed').length;
-    const inProgress = mockEnrollments.filter(e => e.status === 'in-progress').length;
-    const expired = mockEnrollments.filter(e => e.status === 'expired').length;
-    const avgProgress = mockEnrollments.reduce((acc, e) => acc + e.progress, 0) / totalEnrollments;
-    const avgScore = mockEnrollments.filter(e => e.score).reduce((acc, e) => acc + (e.score || 0), 0) / mockEnrollments.filter(e => e.score).length;
-
-    return {
-      totalCourses: mockCourses.length,
-      totalEnrollments,
-      completed,
-      inProgress,
-      expired,
-      avgProgress: Math.round(avgProgress),
-      avgScore: Math.round(avgScore),
-      validCertificates: mockCertificates.filter(c => c.status === 'valid').length,
-      expiringCertificates: mockCertificates.filter(c => c.status === 'expiring').length
+  useEffect(() => {
+    const loadData = async () => {
+      try {
+        const { data: coursesData } = await supabase.from("academy_courses").select("*").eq("is_published", true).limit(20);
+        if (coursesData && coursesData.length > 0) {
+          setCourses(coursesData.map(c => ({
+            id: c.id, title: c.course_name, category: 'Training', type: 'mandatory' as const,
+            duration: c.duration_hours || 0, modules: (c.modules as unknown[])?.length || 1,
+            enrolled: 0, completionRate: 0, rating: 4.5, instructor: c.instructor_id || 'Staff',
+            isFeatured: true
+          })));
+        }
+        const { data: progressData } = await supabase.from("academy_progress").select("*, academy_courses(course_name)").limit(20);
+        if (progressData && progressData.length > 0) {
+          setEnrollments(progressData.map(p => ({
+            id: p.id, courseId: p.course_id || '', courseTitle: (p.academy_courses as { course_name?: string })?.course_name || '',
+            crewMember: 'Tripulante', rank: '', vessel: '',
+            progress: p.progress_percent || 0,
+            status: p.status === 'completed' ? 'completed' : p.status === 'expired' ? 'expired' : p.progress_percent && p.progress_percent > 0 ? 'in-progress' : 'not-started' as const,
+            startDate: p.started_at?.slice(0, 10), completedDate: p.completed_at?.slice(0, 10),
+            score: (p.assessment_scores as { final?: number })?.final
+          })));
+        }
+      } catch { /* fallback data already set */ }
     };
+    loadData();
   }, []);
 
-  const filteredCourses = mockCourses.filter(c => 
+  const kpis = useMemo(() => {
+    const totalEnrollments = enrollments.length;
+    const completed = enrollments.filter(e => e.status === 'completed').length;
+    const inProgress = enrollments.filter(e => e.status === 'in-progress').length;
+    const expired = enrollments.filter(e => e.status === 'expired').length;
+    const avgProgress = totalEnrollments > 0 ? enrollments.reduce((acc, e) => acc + e.progress, 0) / totalEnrollments : 0;
+    const scored = enrollments.filter(e => e.score);
+    const avgScore = scored.length > 0 ? scored.reduce((acc, e) => acc + (e.score || 0), 0) / scored.length : 0;
+    return {
+      totalCourses: courses.length, totalEnrollments, completed, inProgress, expired,
+      avgProgress: Math.round(avgProgress), avgScore: Math.round(avgScore),
+      validCertificates: certificates.filter(c => c.status === 'valid').length,
+      expiringCertificates: certificates.filter(c => c.status === 'expiring').length
+    };
+  }, [courses, enrollments, certificates]);
+
+  const filteredCourses = courses.filter(c => 
     c.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
     c.category.toLowerCase().includes(searchTerm.toLowerCase())
   );
@@ -271,7 +252,7 @@ export function AcademyDashboard() {
               </CardHeader>
               <CardContent>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  {mockCourses.filter(c => c.isFeatured).map(course => (
+                  {courses.filter((c: Course) => c.isFeatured).map((course: Course) => (
                     <motion.div
                       key={course.id}
                       initial={{ opacity: 0, y: 20 }}
@@ -329,7 +310,7 @@ export function AcademyDashboard() {
                   </div>
 
                   <div className="space-y-3">
-                    {mockEnrollments.filter(e => e.status === 'in-progress').slice(0, 4).map(enrollment => (
+                    {enrollments.filter((e: Enrollment) => e.status === 'in-progress').slice(0, 4).map((enrollment: Enrollment) => (
                       <div key={enrollment.id} className="space-y-2">
                         <div className="flex items-center justify-between">
                           <span className="text-sm font-medium truncate max-w-[150px]">{enrollment.crewMember}</span>
@@ -429,7 +410,7 @@ export function AcademyDashboard() {
                     </tr>
                   </thead>
                   <tbody>
-                    {mockEnrollments.map(enrollment => (
+                    {enrollments.map((enrollment: Enrollment) => (
                       <motion.tr
                         key={enrollment.id}
                         initial={{ opacity: 0 }}
@@ -483,7 +464,7 @@ export function AcademyDashboard() {
         {/* Certificates Tab */}
         <TabsContent value="certificates" className="mt-6">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-            {mockCertificates.map(cert => {
+            {certificates.map((cert: Certificate) => {
               const config = certStatusConfig[cert.status];
               const daysUntil = differenceInDays(new Date(cert.expiryDate), new Date());
 

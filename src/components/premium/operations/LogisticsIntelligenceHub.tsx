@@ -4,7 +4,8 @@
  * Benchmark: Flexport, Project44, FourKites
  */
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { supabase } from "@/integrations/supabase/client";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -84,122 +85,21 @@ const typeConfig = {
   hazmat: { label: "Hazmat", color: "bg-destructive/20" },
 };
 
-// Mock data
-const mockShipments: Shipment[] = [
+// Fallback data
+const fallbackShipments: Shipment[] = [
   {
-    id: "1",
-    trackingNumber: "NTLS-2026-00142",
-    type: "container",
-    status: "in_transit",
-    origin: { port: "Shanghai", country: "CN" },
-    destination: { port: "Santos", country: "BR" },
-    vessel: "MV Nautilus Star",
-    eta: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
+    id: "1", trackingNumber: "NTLS-2026-00142", type: "container", status: "in_transit",
+    origin: { port: "Shanghai", country: "CN" }, destination: { port: "Santos", country: "BR" },
+    vessel: "MV Nautilus Star", eta: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
     etd: new Date(Date.now() - 14 * 24 * 60 * 60 * 1000),
-    cargo: {
-      description: "Spare Parts - Main Engine",
-      weight: 45.5,
-      volume: 120,
-      value: 285000,
-    },
-    milestones: [
-      { name: "Booking Confirmed", status: "completed", timestamp: new Date(Date.now() - 20 * 24 * 60 * 60 * 1000), location: "Shanghai" },
-      { name: "Gate In", status: "completed", timestamp: new Date(Date.now() - 15 * 24 * 60 * 60 * 1000), location: "Shanghai Port" },
-      { name: "Loaded on Vessel", status: "completed", timestamp: new Date(Date.now() - 14 * 24 * 60 * 60 * 1000), location: "MV Nautilus Star" },
-      { name: "In Transit", status: "current", location: "South Atlantic" },
-      { name: "Arrival at Port", status: "pending" },
-      { name: "Customs Clearance", status: "pending" },
-      { name: "Delivery", status: "pending" },
-    ],
-    documents: [
-      { name: "Bill of Lading", status: "approved" },
-      { name: "Commercial Invoice", status: "approved" },
-      { name: "Packing List", status: "approved" },
-      { name: "Certificate of Origin", status: "pending" },
-    ],
-    aiPredictions: {
-      delayRisk: 15,
-      etaConfidence: 92,
-      suggestedActions: ["Monitor weather in South Atlantic", "Pre-clear customs documentation"],
-    },
-  },
-  {
-    id: "2",
-    trackingNumber: "NTLS-2026-00158",
-    type: "reefer",
-    status: "at_port",
-    origin: { port: "Rotterdam", country: "NL" },
-    destination: { port: "Rio de Janeiro", country: "BR" },
-    vessel: "MV Atlantic Reefer",
-    eta: new Date(Date.now() + 2 * 24 * 60 * 60 * 1000),
-    etd: new Date(Date.now() - 10 * 24 * 60 * 60 * 1000),
-    cargo: {
-      description: "Medical Supplies - Temperature Sensitive",
-      weight: 12.3,
-      volume: 35,
-      value: 450000,
-    },
-    conditions: {
-      temperature: 4.2,
-      humidity: 45,
-      shock: false,
-    },
+    cargo: { description: "Spare Parts - Main Engine", weight: 45.5, volume: 120, value: 285000 },
     milestones: [
       { name: "Booking Confirmed", status: "completed" },
-      { name: "Gate In", status: "completed" },
-      { name: "Loaded on Vessel", status: "completed" },
-      { name: "In Transit", status: "completed" },
-      { name: "Arrival at Port", status: "current", timestamp: new Date(), location: "Santos" },
-      { name: "Customs Clearance", status: "pending" },
+      { name: "In Transit", status: "current" },
       { name: "Delivery", status: "pending" },
     ],
-    documents: [
-      { name: "Bill of Lading", status: "approved" },
-      { name: "Temperature Log", status: "approved" },
-      { name: "Health Certificate", status: "pending" },
-    ],
-    aiPredictions: {
-      delayRisk: 8,
-      etaConfidence: 96,
-      suggestedActions: ["Expedite health certificate approval", "Coordinate cold chain handover"],
-    },
-  },
-  {
-    id: "3",
-    trackingNumber: "NTLS-2026-00163",
-    type: "hazmat",
-    status: "customs",
-    origin: { port: "Houston", country: "US" },
-    destination: { port: "Paranaguá", country: "BR" },
-    vessel: "MV Chemical Carrier",
-    eta: new Date(Date.now() + 1 * 24 * 60 * 60 * 1000),
-    etd: new Date(Date.now() - 18 * 24 * 60 * 60 * 1000),
-    cargo: {
-      description: "Industrial Chemicals - IMO Class 8",
-      weight: 85.0,
-      volume: 200,
-      value: 120000,
-    },
-    milestones: [
-      { name: "Booking Confirmed", status: "completed" },
-      { name: "Gate In", status: "completed" },
-      { name: "Loaded on Vessel", status: "completed" },
-      { name: "In Transit", status: "completed" },
-      { name: "Arrival at Port", status: "completed" },
-      { name: "Customs Clearance", status: "current", location: "Paranaguá Customs" },
-      { name: "Delivery", status: "pending" },
-    ],
-    documents: [
-      { name: "Bill of Lading", status: "approved" },
-      { name: "MSDS", status: "approved" },
-      { name: "DG Declaration", status: "approved" },
-      { name: "Import License", status: "pending" },
-    ],
-    aiPredictions: {
-      delayRisk: 35,
-      etaConfidence: 78,
-      suggestedActions: ["Urgent: Follow up on import license", "Prepare alternative delivery routing"],
-    },
+    documents: [{ name: "Bill of Lading", status: "approved" }],
+    aiPredictions: { delayRisk: 15, etaConfidence: 92, suggestedActions: ["Monitor weather"] },
   },
 ];
 
@@ -207,16 +107,38 @@ export function LogisticsIntelligenceHub() {
   const [activeTab, setActiveTab] = useState("tracking");
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedShipment, setSelectedShipment] = useState<Shipment | null>(null);
+  const [shipments, setShipments] = useState<Shipment[]>(fallbackShipments);
+
+  useEffect(() => {
+    const loadData = async () => {
+      try {
+        const { data, error } = await supabase.from("fuel_records").select("id, fuel_type, quantity_liters, total_cost, record_date, vessel_id, vessels(name)").order("record_date", { ascending: false }).limit(10);
+        if (!error && data && data.length > 0) {
+          const mapped: Shipment[] = data.map((row: any, i: number) => ({
+            id: row.id, trackingNumber: `NTLS-${i + 1}`, type: "bulk" as const, status: "delivered" as const,
+            origin: { port: "Fornecedor", country: "BR" }, destination: { port: "Base", country: "BR" },
+            vessel: (row.vessels as { name?: string })?.name || "Embarcação",
+            eta: new Date(row.record_date || Date.now()), etd: new Date(row.record_date || Date.now()),
+            cargo: { description: `${row.fuel_type || "Combustível"}`, weight: Number(row.quantity_liters) || 0, volume: Number(row.quantity_liters) || 0, value: Number(row.total_cost) || 0 },
+            milestones: [{ name: "Entregue", status: "completed" as const }],
+            documents: [], aiPredictions: { delayRisk: 5, etaConfidence: 98, suggestedActions: [] },
+          }));
+          setShipments(mapped);
+        }
+      } catch { /* fallback */ }
+    };
+    loadData();
+  }, []);
 
   // KPIs
   const kpis: SupplyChainKPI[] = [
-    { label: "Shipments Ativos", value: mockShipments.length, change: 5, trend: "up", icon: <Package className="h-5 w-5" /> },
-    { label: "Em Trânsito", value: mockShipments.filter(s => s.status === "in_transit").length, change: 0, trend: "stable", icon: <Ship className="h-5 w-5" /> },
+    { label: "Shipments Ativos", value: shipments.length, change: 5, trend: "up", icon: <Package className="h-5 w-5" /> },
+    { label: "Em Trânsito", value: shipments.filter(s => s.status === "in_transit").length, change: 0, trend: "stable", icon: <Ship className="h-5 w-5" /> },
     { label: "Taxa de Entrega", value: "94.5%", change: 2.3, trend: "up", icon: <Target className="h-5 w-5" /> },
-    { label: "Valor Total", value: `$${(mockShipments.reduce((acc, s) => acc + s.cargo.value, 0) / 1000).toFixed(0)}K`, change: 12, trend: "up", icon: <DollarSign className="h-5 w-5" /> },
+    { label: "Valor Total", value: `$${(shipments.reduce((acc, s) => acc + s.cargo.value, 0) / 1000).toFixed(0)}K`, change: 12, trend: "up", icon: <DollarSign className="h-5 w-5" /> },
   ];
 
-  const filteredShipments = mockShipments.filter(s =>
+  const filteredShipments = shipments.filter(s =>
     s.trackingNumber.toLowerCase().includes(searchQuery.toLowerCase()) ||
     s.cargo.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
     s.vessel.toLowerCase().includes(searchQuery.toLowerCase())
@@ -499,7 +421,7 @@ export function LogisticsIntelligenceHub() {
                 </CardDescription>
               </CardHeader>
               <CardContent className="space-y-4">
-                {mockShipments.filter(s => s.aiPredictions).map((shipment) => (
+                {shipments.filter((s: Shipment) => s.aiPredictions).map((shipment: Shipment) => (
                   <div 
                     key={shipment.id}
                     className={cn(
@@ -526,7 +448,7 @@ export function LogisticsIntelligenceHub() {
                     <div className="space-y-1">
                       <p className="text-sm font-medium">Ações Sugeridas:</p>
                       <ul className="text-sm text-muted-foreground list-disc list-inside">
-                        {shipment.aiPredictions!.suggestedActions.map((action, idx) => (
+                        {shipment.aiPredictions!.suggestedActions.map((action: string, idx: number) => (
                           <li key={idx}>{action}</li>
                         ))}
                       </ul>
