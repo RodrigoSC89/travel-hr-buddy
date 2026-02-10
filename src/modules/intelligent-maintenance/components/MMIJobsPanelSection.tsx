@@ -77,7 +77,7 @@ export default function MMIJobsPanelSection() {
   );
 
   const handleExport = (job: MMIJobForecast) => {
-    toast.success(`Exportando PDF de: ${job.title}`);
+    toast.info(`Exportação de PDF para "${job.title}" em implantação. Use o módulo de Relatórios para exportações. ETA: Q3/2026.`);
   };
 
   const getPriorityBadge = (priority: string) => {

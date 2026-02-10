@@ -234,7 +234,7 @@ const AdvancedAIInsights = () => {
         <div className="flex items-center gap-2">
           <Button 
             variant="outline"
-            onClick={() => toast({ title: "Relatório", description: "Exportando insights..." })}
+            onClick={() => toast({ title: "Relatório", description: "Exportação de insights em implantação. ETA: Q3/2026." })}
           >
             <Download className="w-4 h-4 mr-2" />
             Exportar

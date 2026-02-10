@@ -582,7 +582,7 @@ export const EnhancedMobileSupport: React.FC = () => {
               <Button 
                 size="sm" 
                 variant="outline" 
-                onClick={() => toast({ title: "Teste", description: "Notificação de teste" })}
+                onClick={() => toast({ title: "🔔 Teste de Notificação", description: "Notificação push enviada com sucesso (simulação local)." })}
                 className="gap-2"
               >
                 <Bell className="h-3 w-3" />
