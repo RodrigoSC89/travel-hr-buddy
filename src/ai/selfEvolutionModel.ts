@@ -18,7 +18,7 @@ export interface Failure {
   error_type: string;
   frequency: number;
   severity: "low" | "medium" | "high" | "critical";
-  context: Record<string, any>;
+  context: Record<string, unknown>;
   first_seen: string;
   last_seen: string;
 }
@@ -38,8 +38,8 @@ export interface MutationResult {
   success: boolean;
   failure_id: string;
   alternative_applied: BehaviorAlternative;
-  before_state: any;
-  after_state: any;
+  before_state: Record<string, unknown>;
+  after_state: Record<string, unknown>;
   improvement: number;
   timestamp: string;
 }
@@ -236,7 +236,7 @@ class SelfEvolutionModel {
   /**
    * Get mutation history from ai_audit_logs
    */
-  async getMutationHistory(limit: number = 50): Promise<any[]> {
+  async getMutationHistory(limit: number = 50): Promise<Record<string, unknown>[]> {
     try {
       const { data, error } = await supabase
         .from("ai_audit_logs")

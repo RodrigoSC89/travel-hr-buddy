@@ -157,13 +157,13 @@ export function ConnectionIndicator({
   const getIcon = () => {
     switch (quality) {
       case 'excellent':
-        return <SignalHigh className={cn(iconClass, 'text-green-500')} />;
+        return <SignalHigh className={cn(iconClass, 'text-success')} />;
       case 'good':
-        return <SignalMedium className={cn(iconClass, 'text-green-400')} />;
+        return <SignalMedium className={cn(iconClass, 'text-success/80')} />;
       case 'fair':
-        return <SignalLow className={cn(iconClass, 'text-yellow-500')} />;
+        return <SignalLow className={cn(iconClass, 'text-warning')} />;
       case 'poor':
-        return <Signal className={cn(iconClass, 'text-orange-500')} />;
+        return <Signal className={cn(iconClass, 'text-warning')} />;
       default:
         return <Wifi className={cn(iconClass, 'text-muted-foreground')} />;
     }
