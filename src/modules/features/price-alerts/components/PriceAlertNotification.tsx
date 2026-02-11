@@ -62,9 +62,10 @@ export const PriceAlertNotification: React.FC<PriceAlertNotificationProps> = ({
       if (alertError) throw alertError;
 
       if (alertData) {
+        const freq = (alertData as Record<string, unknown>).frequency;
         setSettings(prev => ({
           ...prev,
-          frequency: (alertData as any).frequency || "once"
+          frequency: (typeof freq === "string" ? freq : "once") as NotificationSettings["frequency"]
         }));
       }
     } catch (error) {
@@ -204,8 +205,8 @@ export const PriceAlertNotification: React.FC<PriceAlertNotificationProps> = ({
           <Label>Alert Frequency</Label>
           <Select
             value={settings.frequency}
-            onValueChange={(value: any) =>
-              setSettings({ ...settings, frequency: value })
+            onValueChange={(value: string) =>
+              setSettings({ ...settings, frequency: value as NotificationSettings["frequency"] })
             }
           >
             <SelectTrigger>
@@ -255,8 +256,8 @@ export const PriceAlertNotification: React.FC<PriceAlertNotificationProps> = ({
         </div>
 
         {/* Info */}
-        <div className="p-3 bg-blue-500/10 border border-blue-500/20 rounded-lg">
-          <p className="text-sm text-blue-400">
+        <div className="p-3 bg-info/10 border border-info/20 rounded-lg">
+          <p className="text-sm text-info">
             <Bell className="w-4 h-4 inline mr-1" />
             Notifications are checked every 5 minutes. Real-time alerts may have a slight delay.
           </p>

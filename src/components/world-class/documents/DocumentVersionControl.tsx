@@ -37,13 +37,13 @@ interface DocRecord {
 }
 
 const TYPE_ICONS: Record<string, { icon: typeof FileText; color: string }> = {
-  pdf: { icon: FileText, color: 'text-red-500' },
-  doc: { icon: FileText, color: 'text-blue-500' },
-  docx: { icon: FileText, color: 'text-blue-500' },
-  xls: { icon: FileText, color: 'text-emerald-500' },
-  xlsx: { icon: FileText, color: 'text-emerald-500' },
-  png: { icon: File, color: 'text-purple-500' },
-  jpg: { icon: File, color: 'text-purple-500' },
+  pdf: { icon: FileText, color: 'text-destructive' },
+  doc: { icon: FileText, color: 'text-primary' },
+  docx: { icon: FileText, color: 'text-primary' },
+  xls: { icon: FileText, color: 'text-success' },
+  xlsx: { icon: FileText, color: 'text-success' },
+  png: { icon: File, color: 'text-accent-foreground' },
+  jpg: { icon: File, color: 'text-accent-foreground' },
 };
 
 function formatFileSize(bytes: number | null): string {

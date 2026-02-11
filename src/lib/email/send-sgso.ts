@@ -16,7 +16,7 @@ export interface SendSGSOReportOptions {
 export interface SendSGSOReportResult {
   success: boolean;
   data?: { id: string };
-  error?: any;
+  error?: unknown;
 }
 
 /**

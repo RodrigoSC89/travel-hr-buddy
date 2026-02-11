@@ -181,7 +181,7 @@ export const CollectiveDashboard: React.FC = () => {
       doc.text("Decisões Recentes:", 20, y);
       y += 8;
       doc.setFontSize(10);
-      decisions.slice(0, 10).forEach((decision: any) => {
+      decisions.slice(0, 10).forEach((decision) => {
         if (y > 270) { doc.addPage(); y = 20; }
         doc.text(`• ${decision.decisionType || decision.id}: ${decision.status}`, 25, y);
         y += 6;
@@ -197,15 +197,15 @@ export const CollectiveDashboard: React.FC = () => {
 
   const getStatusColor = (status: string): string => {
     switch (status) {
-    case "healthy": return "text-green-500";
-    case "degraded": return "text-yellow-500";
-    case "critical": return "text-red-500";
-    default: return "text-gray-500";
+    case "healthy": return "text-success";
+    case "degraded": return "text-warning";
+    case "critical": return "text-destructive";
+    default: return "text-muted-foreground";
     }
   };
 
   const getSeverityBadge = (severity: string) => {
-    const variants: Record<string, any> = {
+    const variants: Record<string, "default" | "secondary" | "destructive"> = {
       info: "default",
       warning: "secondary",
       error: "destructive",
@@ -216,13 +216,13 @@ export const CollectiveDashboard: React.FC = () => {
 
   const getDecisionLevelBadge = (level: string) => {
     const colors: Record<string, string> = {
-      local: "bg-blue-500",
-      escalated: "bg-orange-500",
-      delegated: "bg-purple-500",
-      collaborative: "bg-green-500"
+      local: "bg-primary",
+      escalated: "bg-warning",
+      delegated: "bg-accent",
+      collaborative: "bg-success"
     };
     return (
-      <Badge className={colors[level] || "bg-gray-500"}>
+      <Badge className={colors[level] || "bg-muted"}>
         {level}
       </Badge>
     );
@@ -234,7 +234,7 @@ export const CollectiveDashboard: React.FC = () => {
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-3xl font-bold flex items-center gap-2">
-            <Network className="h-8 w-8 text-blue-500" />
+            <Network className="h-8 w-8 text-primary" />
             Collective Intelligence Dashboard
           </h1>
           <p className="text-muted-foreground mt-1">
@@ -283,7 +283,7 @@ export const CollectiveDashboard: React.FC = () => {
               <CardTitle className="text-sm font-medium">Active Issues</CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold text-orange-500">
+              <div className="text-2xl font-bold text-warning">
                 {systemState.activeObservations}
               </div>
             </CardContent>
@@ -294,7 +294,7 @@ export const CollectiveDashboard: React.FC = () => {
               <CardTitle className="text-sm font-medium">Critical Alerts</CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold text-red-500">
+              <div className="text-2xl font-bold text-destructive">
                 {systemState.criticalIssues}
               </div>
             </CardContent>
@@ -359,12 +359,12 @@ export const CollectiveDashboard: React.FC = () => {
                         </div>
                       </div>
                       {decision.escalationReason && (
-                        <div className="bg-orange-50 border-l-4 border-orange-500 p-2 text-sm">
+                        <div className="bg-warning/10 border-l-4 border-warning p-2 text-sm">
                           <strong>Escalation:</strong> {decision.escalationReason}
                         </div>
                       )}
                       {decision.errorMessage && (
-                        <div className="bg-red-50 border-l-4 border-red-500 p-2 text-sm">
+                        <div className="bg-destructive/10 border-l-4 border-destructive p-2 text-sm">
                           <strong>Error:</strong> {decision.errorMessage}
                         </div>
                       )}
@@ -413,7 +413,7 @@ export const CollectiveDashboard: React.FC = () => {
                 ))}
                 {conflicts.length === 0 && (
                   <div className="text-center py-8 text-muted-foreground">
-                    <CheckCircle2 className="h-12 w-12 mx-auto mb-2 text-green-500" />
+                    <CheckCircle2 className="h-12 w-12 mx-auto mb-2 text-success" />
                     <p>No active conflicts</p>
                   </div>
                 )}
@@ -555,10 +555,10 @@ export const CollectiveDashboard: React.FC = () => {
             <CardContent>
               <div className="space-y-4">
                 {observations.slice(0, 5).map((obs) => (
-                  <div key={obs.id} className="border-l-4 border-blue-500 bg-blue-50 p-4 rounded">
+                  <div key={obs.id} className="border-l-4 border-primary bg-primary/5 p-4 rounded">
                     <div className="flex items-start justify-between mb-2">
                       <div className="flex items-center gap-2">
-                        <Zap className="h-4 w-4 text-blue-500" />
+                        <Zap className="h-4 w-4 text-primary" />
                         <span className="font-semibold capitalize">{obs.observationType}</span>
                         {getSeverityBadge(obs.severity)}
                       </div>

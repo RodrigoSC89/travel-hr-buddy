@@ -14,7 +14,7 @@ interface SyncQueueItem {
   id: string;
   action: 'create' | 'update' | 'delete';
   table: string;
-  data: any;
+  data: Record<string, unknown>;
   timestamp: number;
   retries: number;
   priority: 'high' | 'medium' | 'low';
@@ -22,7 +22,7 @@ interface SyncQueueItem {
 
 interface CachedData {
   key: string;
-  data: any;
+  data: unknown;
   timestamp: number;
   ttl: number;
   version: number;
@@ -83,7 +83,7 @@ class OfflineSyncManager {
     return syncItem.id;
   }
 
-  async cacheData(key: string, data: any, ttlMinutes = 60): Promise<void> {
+  async cacheData(key: string, data: unknown, ttlMinutes = 60): Promise<void> {
     if (!this.db) await this.init();
 
     const cached: CachedData = {
@@ -163,13 +163,13 @@ class OfflineSyncManager {
 
     switch (item.action) {
       case 'create':
-        await table.insert(item.data);
+        await table.insert(item.data as never);
         break;
       case 'update':
-        await table.update(item.data).eq('id', item.data.id);
+        await table.update(item.data as never).eq('id' as never, (item.data as Record<string, unknown>).id as never);
         break;
       case 'delete':
-        await table.delete().eq('id', item.data.id);
+        await table.delete().eq('id' as never, (item.data as Record<string, unknown>).id as never);
         break;
     }
   }
@@ -233,7 +233,7 @@ type SyncStatus =
   | { type: 'syncing' }
   | { type: 'queued'; item: SyncQueueItem }
   | { type: 'synced'; item: SyncQueueItem }
-  | { type: 'failed'; item: SyncQueueItem; error: any }
+  | { type: 'failed'; item: SyncQueueItem; error: unknown }
   | { type: 'complete' };
 
 export const offlineSync = new OfflineSyncManager();

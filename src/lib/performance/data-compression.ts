@@ -8,14 +8,14 @@ import { logger } from "@/lib/logger";
 /**
  * Compresses an object by removing null/undefined values
  */
-export function compressObject<T extends Record<string, any>>(obj: T): Partial<T> {
+export function compressObject<T extends Record<string, unknown>>(obj: T): Partial<T> {
   const compressed: Partial<T> = {};
   
   for (const key in obj) {
     const value = obj[key];
     if (value !== null && value !== undefined && value !== "") {
       if (typeof value === "object" && !Array.isArray(value)) {
-        const nested = compressObject(value);
+        const nested = compressObject(value as Record<string, unknown>);
         if (Object.keys(nested).length > 0) {
           compressed[key] = nested as T[typeof key];
         }
@@ -33,7 +33,7 @@ export function compressObject<T extends Record<string, any>>(obj: T): Partial<T
 /**
  * Selects only specified fields from an object
  */
-export function selectFields<T extends Record<string, any>>(
+export function selectFields<T extends Record<string, unknown>>(
   obj: T,
   fields: (keyof T)[]
 ): Partial<T> {
@@ -67,7 +67,7 @@ export function paginateData<T>(
 /**
  * Estimates the size of an object in bytes
  */
-export function estimateSize(obj: any): number {
+export function estimateSize(obj: unknown): number {
   const str = JSON.stringify(obj);
   return new Blob([str]).size;
 }
