@@ -129,9 +129,9 @@ export class HubMonitor {
   /**
    * Determine module status based on response data and performance
    */
-  private determineStatus(data: any, responseTime: number): ModuleStatus {
+  private determineStatus(data: Record<string, unknown>, responseTime: number): ModuleStatus {
     // Check if module reports its own status
-    if (data.status) {
+    if (typeof data.status === "string" && ["operational", "degraded", "offline", "error"].includes(data.status)) {
       return data.status as ModuleStatus;
     }
 

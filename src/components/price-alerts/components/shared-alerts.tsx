@@ -58,7 +58,7 @@ export const SharedAlerts = () => {
   const { user } = useAuth();
   const { toast } = useToast();
   const [sharedAlerts, setSharedAlerts] = useState<SharedAlert[]>([]);
-  const [userAlerts, setUserAlerts] = useState<any[]>([]);
+  const [userAlerts, setUserAlerts] = useState<{ id: string; product_name: string; current_price: number | null; target_price: number }[]>([]);
   const [loading, setLoading] = useState(true);
   const [shareForm, setShareForm] = useState<ShareAlertForm>({
     alert_id: "",
@@ -529,7 +529,7 @@ const SharedAlertCard: React.FC<SharedAlertCardProps> = ({
             <div className="flex items-center gap-2 mb-2">
               <h3 className="font-bold text-lg">{alert.title}</h3>
               {alert.is_featured && (
-                <Badge variant="secondary" className="bg-yellow-100 text-yellow-800">
+                <Badge variant="secondary" className="bg-warning/10 text-warning">
                   <Star className="h-3 w-3 mr-1" />
                   Destaque
                 </Badge>
@@ -584,7 +584,7 @@ const SharedAlertCard: React.FC<SharedAlertCardProps> = ({
             {alert.alert.discount_percentage > 0 && (
               <div>
                 <span className="text-muted-foreground">Economia:</span>
-                <p className="font-bold text-green-600">
+                <p className="font-bold text-success">
                   {alert.alert.discount_percentage.toFixed(1)}%
                 </p>
               </div>

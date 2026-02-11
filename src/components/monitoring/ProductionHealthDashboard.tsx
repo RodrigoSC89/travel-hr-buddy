@@ -85,7 +85,6 @@ export const ProductionHealthDashboard: React.FC = () => {
         throw new Error(`HTTP ${response.status}`);
       }
     } catch {
-      // Fallback to local checks if Edge Function fails
       newMetrics.push({
         name: 'Health Check API',
         status: 'warning',
@@ -95,7 +94,7 @@ export const ProductionHealthDashboard: React.FC = () => {
       });
     }
 
-    // 2. Auth Check (always local)
+    // 2. Auth Check
     try {
       const { data: { session } } = await supabase.auth.getSession();
       newMetrics.push({
@@ -128,7 +127,6 @@ export const ProductionHealthDashboard: React.FC = () => {
     setMetrics(newMetrics);
     setIsRefreshing(false);
 
-    // Check for critical issues and notify
     const criticalCount = newMetrics.filter(m => m.status === 'critical').length;
     if (criticalCount > 0) {
       toast({
@@ -141,24 +139,24 @@ export const ProductionHealthDashboard: React.FC = () => {
 
   useEffect(() => {
     checkHealth();
-    const interval = setInterval(checkHealth, 60000); // Check every minute
+    const interval = setInterval(checkHealth, 60000);
     return () => clearInterval(interval);
   }, []);
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case 'healthy': return 'bg-green-500';
-      case 'warning': return 'bg-yellow-500';
-      case 'critical': return 'bg-red-500';
-      default: return 'bg-gray-500';
+      case 'healthy': return 'bg-success';
+      case 'warning': return 'bg-warning';
+      case 'critical': return 'bg-destructive';
+      default: return 'bg-muted';
     }
   };
 
   const getStatusIcon = (status: string) => {
     switch (status) {
-      case 'healthy': return <CheckCircle2 className="h-4 w-4 text-green-500" />;
-      case 'warning': return <AlertTriangle className="h-4 w-4 text-yellow-500" />;
-      case 'critical': return <XCircle className="h-4 w-4 text-red-500" />;
+      case 'healthy': return <CheckCircle2 className="h-4 w-4 text-success" />;
+      case 'warning': return <AlertTriangle className="h-4 w-4 text-warning" />;
+      case 'critical': return <XCircle className="h-4 w-4 text-destructive" />;
       default: return null;
     }
   };
@@ -226,9 +224,9 @@ export const ProductionHealthDashboard: React.FC = () => {
               <div className="flex items-start justify-between">
                 <div className="flex items-center gap-3">
                   <div className={`p-2 rounded-lg ${
-                    metric.status === 'healthy' ? 'bg-green-100 text-green-600' :
-                    metric.status === 'warning' ? 'bg-yellow-100 text-yellow-600' :
-                    'bg-red-100 text-red-600'
+                    metric.status === 'healthy' ? 'bg-success/10 text-success' :
+                    metric.status === 'warning' ? 'bg-warning/10 text-warning' :
+                    'bg-destructive/10 text-destructive'
                   }`}>
                     {metric.icon}
                   </div>
@@ -255,15 +253,15 @@ export const ProductionHealthDashboard: React.FC = () => {
         <CardContent>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div className="flex items-center gap-3 p-3 border rounded-lg">
-              <Badge variant="outline" className="bg-green-50">Active</Badge>
+              <Badge variant="outline" className="bg-success/10">Active</Badge>
               <span>Slack Notifications</span>
             </div>
             <div className="flex items-center gap-3 p-3 border rounded-lg">
-              <Badge variant="outline" className="bg-green-50">Active</Badge>
+              <Badge variant="outline" className="bg-success/10">Active</Badge>
               <span>Discord Notifications</span>
             </div>
             <div className="flex items-center gap-3 p-3 border rounded-lg">
-              <Badge variant="outline" className="bg-green-50">Active</Badge>
+              <Badge variant="outline" className="bg-success/10">Active</Badge>
               <span>Sentry Error Tracking</span>
             </div>
           </div>

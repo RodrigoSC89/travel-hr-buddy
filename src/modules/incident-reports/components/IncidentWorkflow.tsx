@@ -20,26 +20,38 @@ const loadJsPDF = async () => {
   return jsPDF;
 };
 
+interface IncidentRecord {
+  id: string;
+  incident_number?: string;
+  title?: string;
+  severity?: string;
+  status?: string;
+  incident_date?: string;
+  description?: string;
+  [key: string]: unknown;
+}
+
 interface IncidentWorkflowProps {
-  incident: any;
+  incident: IncidentRecord;
   onUpdate: () => void;
 }
 
 export const IncidentWorkflow: React.FC<IncidentWorkflowProps> = ({ incident, onUpdate }) => {
-  const [status, setStatus] = useState(incident.status);
+  const [status, setStatus] = useState(incident.status || "pending");
   const [notes, setNotes] = useState("");
   const [uploading, setUploading] = useState(false);
   const { toast } = useToast();
 
   const statusFlow = [
-    { value: "pending", label: "Pending", color: "bg-yellow-500" },
-    { value: "under_analysis", label: "Under Analysis", color: "bg-blue-500" },
-    { value: "resolved", label: "Resolved", color: "bg-green-500" },
-    { value: "closed", label: "Closed", color: "bg-gray-500" },
+    { value: "pending", label: "Pending", color: "bg-warning" },
+    { value: "under_analysis", label: "Under Analysis", color: "bg-info" },
+    { value: "resolved", label: "Resolved", color: "bg-success" },
+    { value: "closed", label: "Closed", color: "bg-muted" },
   ];
 
   const updateIncidentStatus = async () => {
     try {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any -- incident_reports not in generated types
       const { error } = await supabase
         .from("incident_reports" as any)
         .update({
@@ -50,8 +62,8 @@ export const IncidentWorkflow: React.FC<IncidentWorkflowProps> = ({ incident, on
 
       if (error) throw error;
 
-      // Log workflow step (optional table)
       try {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any -- incident_workflow_logs not in generated types
         await supabase.from("incident_workflow_logs" as any).insert({
           incident_id: incident.id,
           action: `Status changed to ${status}`,
@@ -94,8 +106,8 @@ export const IncidentWorkflow: React.FC<IncidentWorkflowProps> = ({ incident, on
 
       if (uploadError) throw uploadError;
 
-      // Save file reference to database (optional table)
       try {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any -- incident_attachments not in generated types
         await supabase.from("incident_attachments" as any).insert({
           incident_id: incident.id,
           file_name: file.name,
@@ -132,18 +144,18 @@ export const IncidentWorkflow: React.FC<IncidentWorkflowProps> = ({ incident, on
       doc.text("Incident Report", 14, 22);
       
       doc.setFontSize(12);
-      doc.text(`Incident #: ${incident.incident_number}`, 14, 35);
-      doc.text(`Title: ${incident.title}`, 14, 45);
-      doc.text(`Severity: ${incident.severity}`, 14, 55);
-      doc.text(`Status: ${incident.status}`, 14, 65);
-      doc.text(`Date: ${new Date(incident.incident_date).toLocaleString()}`, 14, 75);
+      doc.text(`Incident #: ${incident.incident_number || "N/A"}`, 14, 35);
+      doc.text(`Title: ${incident.title || "N/A"}`, 14, 45);
+      doc.text(`Severity: ${incident.severity || "N/A"}`, 14, 55);
+      doc.text(`Status: ${incident.status || "N/A"}`, 14, 65);
+      doc.text(`Date: ${incident.incident_date ? new Date(incident.incident_date).toLocaleString() : "N/A"}`, 14, 75);
       
       doc.setFontSize(10);
       const description = doc.splitTextToSize(incident.description || "No description", 180);
       doc.text("Description:", 14, 90);
       doc.text(description, 14, 100);
       
-      doc.save(`incident-${incident.incident_number}.pdf`);
+      doc.save(`incident-${incident.incident_number || incident.id}.pdf`);
       
       toast({
         title: "PDF Exported",
@@ -180,7 +192,7 @@ export const IncidentWorkflow: React.FC<IncidentWorkflowProps> = ({ incident, on
                       status === s.value || statusFlow.findIndex((f) => f.value === status) > idx
                         ? s.color
                         : "bg-muted"
-                    } text-white`}
+                    } text-primary-foreground`}
                   >
                     {status === s.value ? (
                       <AlertOctagon className="h-5 w-5" />
