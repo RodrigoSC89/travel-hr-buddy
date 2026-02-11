@@ -10,14 +10,14 @@ import { logger } from '@/lib/logger';
 
 type WorkerStatus = "idle" | "processing" | "error";
 
-interface UseWorkerOptions {
+interface UseWorkerOptions<T = unknown> {
   timeout?: number;
-  onSuccess?: (result: any) => void;
+  onSuccess?: (result: T) => void;
   onError?: (error: string) => void;
 }
 
 interface UseWorkerResult<T> {
-  execute: (message: any) => Promise<T>;
+  execute: (message: unknown) => Promise<T>;
   status: WorkerStatus;
   result: T | null;
   error: string | null;
@@ -41,8 +41,8 @@ interface UseWorkerResult<T> {
  * };
  * ```
  */
-export function useWorker<T = any>(
-  options: UseWorkerOptions = {}
+export function useWorker<T = unknown>(
+  options: UseWorkerOptions<T> = {}
 ): UseWorkerResult<T> {
   const { timeout = 30000, onSuccess, onError } = options;
   
@@ -67,7 +67,7 @@ export function useWorker<T = any>(
 
   // Execute task in worker
   const execute = useCallback(
-    (message: any): Promise<T> => {
+    (message: unknown): Promise<T> => {
       return new Promise((resolve, reject) => {
         const worker = getWorker();
         
@@ -175,7 +175,7 @@ export function useWorkerFilter<T>() {
   const { execute, status, result } = useWorker<T[]>();
   
   const filter = useCallback(
-    async (data: T[], filters: Record<string, any>) => {
+    async (data: T[], filters: Record<string, unknown>) => {
       return execute({
         type: "FILTER_DATA",
         payload: { data, filters },

@@ -41,24 +41,25 @@ export const JobsCenter: React.FC<JobsCenterProps> = ({ onCreateJob }) => {
         }
 
         const now = new Date();
-        const mapped = (data || []).map((t: any) => {
-          const dueDate = t.due_date ? new Date(t.due_date) : null;
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Supabase joined query returns dynamic shape
+        const mapped = (data || []).map((t: Record<string, unknown>) => {
+          const dueDate = t.due_date ? new Date(String(t.due_date)) : null;
           const prazoDias = dueDate ? Math.ceil((dueDate.getTime() - now.getTime()) / 86400000) : 999;
           const statusMap: Record<string, string> = { completed: "concluido", in_progress: "em_andamento", pending: "pendente", deferred: "postergado" };
           return {
-            id: t.id,
-            nome: t.title || t.description || "Tarefa de manutenção",
-            equipamento_codigo: t.equipment_id || "N/A",
-            equipamento_nome: t.equipment_name || t.component || "Equipamento",
+            id: String(t.id),
+            nome: String(t.title || t.description || "Tarefa de manutenção"),
+            equipamento_codigo: String(t.equipment_id || "N/A"),
+            equipamento_nome: String(t.equipment_name || t.component || "Equipamento"),
             criticidade: t.priority === "critical" ? "alta" : t.priority === "high" ? "alta" : t.priority === "medium" ? "media" : "baixa",
-            status: statusMap[t.status] || "pendente",
-            prazo: t.due_date?.split("T")[0] || "",
+            status: statusMap[String(t.status)] || "pendente",
+            prazo: String(t.due_date || "").split("T")[0] || "",
             prazo_dias: prazoDias,
             progresso: t.status === "completed" ? 100 : t.status === "in_progress" ? 50 : 0,
-            tipo: (t.maintenance_type || "preventiva") as any,
+            tipo: (String(t.maintenance_type || "preventiva")) as MaintenanceJob["tipo"],
             pecas: t.parts_needed ? (Array.isArray(t.parts_needed) ? t.parts_needed : []) : [],
-            os_vinculada: t.work_order_number || undefined,
-            responsavel: t.assigned_to || undefined,
+            os_vinculada: t.work_order_number ? String(t.work_order_number) : undefined,
+            responsavel: t.assigned_to ? String(t.assigned_to) : undefined,
           };
         });
 
@@ -179,7 +180,7 @@ export const JobsCenter: React.FC<JobsCenterProps> = ({ onCreateJob }) => {
             variant={activeFilter === "criticos" ? "default" : "outline"}
             size="sm"
             onClick={() => setActiveFilter("criticos")}
-            className={activeFilter === "criticos" ? "" : "border-red-500/50 text-red-500 hover:bg-red-500/10"}
+            className={activeFilter === "criticos" ? "" : "border-destructive/50 text-destructive hover:bg-destructive/10"}
           >
             <AlertTriangle className="h-4 w-4 mr-1" />
             Críticos ({counts.criticos})

@@ -112,49 +112,53 @@ function useComplianceData() {
   const now = new Date();
   const regulations = ['ISM Code', 'ISPS Code', 'MLC 2006', 'MARPOL 73/78', 'STCW 95'];
 
-  const complianceItems: ComplianceItem[] = auditsRaw.map((a: any, i: number) => {
-    const score = a.score || (70 + (i * 7) % 30);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Supabase joined query returns dynamic shape
+  const complianceItems: ComplianceItem[] = auditsRaw.map((a: Record<string, unknown>, i: number) => {
+    const vessels = a.vessels as Record<string, unknown> | null;
+    const score = Number(a.score) || (70 + (i * 7) % 30);
     return {
-      id: a.id,
-      code: `${(a.audit_type || 'AUD').substring(0, 4).toUpperCase()}-${String(i + 1).padStart(2, '0')}`,
-      title: a.audit_type || a.title || 'Auditoria Interna',
+      id: String(a.id),
+      code: `${String(a.audit_type || 'AUD').substring(0, 4).toUpperCase()}-${String(i + 1).padStart(2, '0')}`,
+      title: String(a.audit_type || a.title || 'Auditoria Interna'),
       regulation: regulations[i % regulations.length],
-      vessel: a.vessels?.name || 'N/A',
+      vessel: String(vessels?.name || 'N/A'),
       status: score >= 90 ? 'compliant' : score >= 70 ? 'partial' : score >= 50 ? 'pending' : 'non-compliant',
       score,
-      lastAudit: a.audit_date || a.created_at?.split('T')[0] || '',
-      nextAudit: a.next_audit_date || '',
-      responsible: a.auditor || 'QSMS Team',
+      lastAudit: String(a.audit_date || '').split('T')[0] || String(a.created_at || '').split('T')[0] || '',
+      nextAudit: String(a.next_audit_date || ''),
+      responsible: String(a.auditor || 'QSMS Team'),
       priority: score < 60 ? 'high' : score < 80 ? 'medium' : 'low',
-      findings: ncsRaw.filter((nc: any) => nc.vessel_id === a.vessel_id).length,
+      findings: ncsRaw.filter((nc: Record<string, unknown>) => nc.vessel_id === a.vessel_id).length,
     };
   });
 
-  const certificates: Certificate[] = certsRaw.map((c: any) => {
-    const expiry = new Date(c.expiry_date);
+  const certificates: Certificate[] = certsRaw.map((c: Record<string, unknown>) => {
+    const expiry = new Date(String(c.expiry_date));
     const daysToExpiry = Math.ceil((expiry.getTime() - now.getTime()) / (1000 * 60 * 60 * 24));
     return {
-      id: c.id,
-      name: c.certificate_name || c.name || 'Certificate',
-      type: c.certificate_type || c.type || 'General',
-      vessel: c.vessel_name || 'N/A',
-      issueDate: c.issue_date || '',
-      expiryDate: c.expiry_date || '',
+      id: String(c.id),
+      name: String(c.certificate_name || c.name || 'Certificate'),
+      type: String(c.certificate_type || c.type || 'General'),
+      vessel: String(c.vessel_name || 'N/A'),
+      issueDate: String(c.issue_date || ''),
+      expiryDate: String(c.expiry_date || ''),
       status: daysToExpiry <= 0 ? 'expired' : daysToExpiry <= 90 ? 'expiring' : 'valid',
-      authority: c.issuing_authority || 'N/A',
+      authority: String(c.issuing_authority || 'N/A'),
     };
   });
 
-  const audits: Audit[] = auditsRaw.map((a: any) => ({
-    id: a.id,
-    type: a.audit_type || 'Internal Audit',
-    vessel: a.vessels?.name || 'N/A',
-    scheduledDate: a.audit_date || a.created_at?.split('T')[0] || '',
-    auditor: a.auditor || 'QSMS Team',
+  const audits: Audit[] = auditsRaw.map((a: Record<string, unknown>) => {
+    const vessels = a.vessels as Record<string, unknown> | null;
+    return {
+    id: String(a.id),
+    type: String(a.audit_type || 'Internal Audit'),
+    vessel: String(vessels?.name || 'N/A'),
+    scheduledDate: String(a.audit_date || '').split('T')[0] || String(a.created_at || '').split('T')[0] || '',
+    auditor: String(a.auditor || 'QSMS Team'),
     status: a.status === 'completed' ? 'completed' : a.status === 'in_progress' ? 'in-progress' : 'scheduled',
-    score: a.score,
-    findings: a.findings_count,
-  }));
+    score: Number(a.score) || undefined,
+    findings: Number(a.findings_count) || undefined,
+  }; });
 
   return { complianceItems, certificates, audits, isLoading: auditsLoading || certsLoading };
 }

@@ -66,7 +66,7 @@ export const PeotramAuditForm: React.FC<PeotramAuditFormProps> = ({
   const [auditResponses, setAuditResponses] = useState<Record<string, AuditResponse[]>>({});
   const [nonConformities, setNonConformities] = useState<NonConformity[]>([]);
   const [isAnalyzing, setIsAnalyzing] = useState(false);
-  const [aiInsights, setAiInsights] = useState<Record<string, any>>({});
+  const [aiInsights, setAiInsights] = useState<Record<string, Record<string, unknown>>>({});
   const [overallProgress, setOverallProgress] = useState(0);
 
   const elements = template.template_data.elements;
@@ -210,11 +210,11 @@ export const PeotramAuditForm: React.FC<PeotramAuditFormProps> = ({
   const getScoreColor = (score: string) => {
     switch (score) {
     case "compliant":
-      return "text-green-600";
+      return "text-success";
     case "partial":
-      return "text-yellow-600";
+      return "text-warning";
     case "non-compliant":
-      return "text-red-600";
+      return "text-destructive";
     default:
       return "text-muted-foreground";
     }
@@ -223,9 +223,9 @@ export const PeotramAuditForm: React.FC<PeotramAuditFormProps> = ({
   const getScoreIcon = (score: string) => {
     switch (score) {
     case "compliant":
-      return <CheckCircle className="h-4 w-4 text-green-600" />;
+      return <CheckCircle className="h-4 w-4 text-success" />;
     case "non-compliant":
-      return <AlertCircle className="h-4 w-4 text-red-600" />;
+      return <AlertCircle className="h-4 w-4 text-destructive" />;
     default:
       return <FileText className="h-4 w-4 text-muted-foreground" />;
     }
@@ -291,7 +291,7 @@ export const PeotramAuditForm: React.FC<PeotramAuditFormProps> = ({
                             {element.number}
                           </Badge>
                           {completionRate === 100 && (
-                            <CheckCircle className="h-4 w-4 text-green-600" />
+                            <CheckCircle className="h-4 w-4 text-success" />
                           )}
                         </div>
                         <p className="font-medium text-sm line-clamp-2">
@@ -377,31 +377,31 @@ export const PeotramAuditForm: React.FC<PeotramAuditFormProps> = ({
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                     <div className="text-center">
                       <p className="text-2xl font-bold text-primary">
-                        {aiInsights[currentElement.number].compliance_score}%
+                        {String(aiInsights[currentElement.number].compliance_score)}%
                       </p>
                       <p className="text-sm text-muted-foreground">Score de Conformidade</p>
                     </div>
                     <div className="text-center">
-                      <p className="text-2xl font-bold text-orange-600">
-                        {aiInsights[currentElement.number].risk_level}
+                      <p className="text-2xl font-bold text-warning">
+                        {String(aiInsights[currentElement.number].risk_level)}
                       </p>
                       <p className="text-sm text-muted-foreground">Nível de Risco</p>
                     </div>
                     <div className="text-center">
-                      <p className="text-2xl font-bold text-green-600">
-                        {aiInsights[currentElement.number].recommendations?.length || 0}
+                      <p className="text-2xl font-bold text-success">
+                        {(aiInsights[currentElement.number].recommendations as string[])?.length || 0}
                       </p>
                       <p className="text-sm text-muted-foreground">Recomendações</p>
                     </div>
                   </div>
                   
-                  {aiInsights[currentElement.number].recommendations && (
+                  {(aiInsights[currentElement.number].recommendations as string[] | undefined) && (
                     <div>
                       <h4 className="font-medium mb-2">Recomendações Prioritárias:</h4>
                       <ul className="space-y-1">
-                        {aiInsights[currentElement.number].recommendations.slice(0, 3).map((rec: string, index: number) => (
+                        {(aiInsights[currentElement.number].recommendations as string[]).slice(0, 3).map((rec: string, index: number) => (
                           <li key={index} className="text-sm flex items-start gap-2">
-                            <Star className="h-3 w-3 text-yellow-500 mt-0.5 flex-shrink-0" />
+                            <Star className="h-3 w-3 text-warning mt-0.5 flex-shrink-0" />
                             {rec}
                           </li>
                         ))}
@@ -505,15 +505,15 @@ const RequirementForm: React.FC<{
           >
             <div className="flex items-center space-x-2">
               <RadioGroupItem value="compliant" id="compliant" />
-              <Label htmlFor="compliant" className="text-green-600">Conforme</Label>
+              <Label htmlFor="compliant" className="text-success">Conforme</Label>
             </div>
             <div className="flex items-center space-x-2">
               <RadioGroupItem value="partial" id="partial" />
-              <Label htmlFor="partial" className="text-yellow-600">Parcialmente Conforme</Label>
+              <Label htmlFor="partial" className="text-warning">Parcialmente Conforme</Label>
             </div>
             <div className="flex items-center space-x-2">
               <RadioGroupItem value="non-compliant" id="non-compliant" />
-              <Label htmlFor="non-compliant" className="text-red-600">Não Conforme</Label>
+              <Label htmlFor="non-compliant" className="text-destructive">Não Conforme</Label>
             </div>
             <div className="flex items-center space-x-2">
               <RadioGroupItem value="not-applicable" id="not-applicable" />
