@@ -139,26 +139,26 @@ const AIProcessingHub: React.FC = () => {
   const getStatusBadge = (status: ProcessingJob["status"]) => {
     switch (status) {
       case "running":
-        return <Badge className="bg-blue-500/20 text-blue-400"><Activity className="h-3 w-3 mr-1 animate-pulse" />Executando</Badge>;
+        return <Badge className="bg-info/20 text-info"><Activity className="h-3 w-3 mr-1 animate-pulse" />Executando</Badge>;
       case "queued":
-        return <Badge className="bg-yellow-500/20 text-yellow-400"><Clock className="h-3 w-3 mr-1" />Na Fila</Badge>;
+        return <Badge className="bg-warning/20 text-warning"><Clock className="h-3 w-3 mr-1" />Na Fila</Badge>;
       case "completed":
-        return <Badge className="bg-green-500/20 text-green-400"><CheckCircle className="h-3 w-3 mr-1" />Concluído</Badge>;
+        return <Badge className="bg-success/20 text-success"><CheckCircle className="h-3 w-3 mr-1" />Concluído</Badge>;
       case "failed":
-        return <Badge className="bg-red-500/20 text-red-400"><AlertTriangle className="h-3 w-3 mr-1" />Falhou</Badge>;
+        return <Badge className="bg-destructive/20 text-destructive"><AlertTriangle className="h-3 w-3 mr-1" />Falhou</Badge>;
     }
   };
 
   const getTypeBadge = (type: ProcessingJob["type"]) => {
     switch (type) {
       case "inference":
-        return <Badge variant="outline" className="border-purple-500/30 text-purple-400">Inferência</Badge>;
+        return <Badge variant="outline" className="border-accent/30 text-accent-foreground">Inferência</Badge>;
       case "training":
-        return <Badge variant="outline" className="border-blue-500/30 text-blue-400">Geração</Badge>;
+        return <Badge variant="outline" className="border-info/30 text-info">Geração</Badge>;
       case "preprocessing":
-        return <Badge variant="outline" className="border-cyan-500/30 text-cyan-400">Processamento</Badge>;
+        return <Badge variant="outline" className="border-primary/30 text-primary">Processamento</Badge>;
       case "batch":
-        return <Badge variant="outline" className="border-orange-500/30 text-orange-400">Batch</Badge>;
+        return <Badge variant="outline" className="border-warning/30 text-warning">Batch</Badge>;
     }
   };
 
@@ -191,31 +191,31 @@ const AIProcessingHub: React.FC = () => {
                 <p className="text-sm text-muted-foreground">Jobs Processados</p>
                 <p className="text-2xl font-bold">{totalLogs}</p>
               </div>
-              <Cpu className="h-8 w-8 text-red-400" />
+              <Cpu className="h-8 w-8 text-destructive" />
             </div>
           </CardContent>
         </Card>
 
-        <Card className="bg-gradient-to-br from-blue-500/10 to-cyan-500/10 border-blue-500/20">
+        <Card className="bg-gradient-to-br from-info/10 to-primary/10 border-info/20">
           <CardContent className="pt-6">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-muted-foreground">Tokens Usados</p>
                 <p className="text-2xl font-bold">{totalTokens.toLocaleString()}</p>
               </div>
-              <HardDrive className="h-8 w-8 text-blue-400" />
+              <HardDrive className="h-8 w-8 text-info" />
             </div>
           </CardContent>
         </Card>
 
-        <Card className="bg-gradient-to-br from-green-500/10 to-emerald-500/10 border-green-500/20">
+        <Card className="bg-gradient-to-br from-success/10 to-success/5 border-success/20">
           <CardContent className="pt-6">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-muted-foreground">Taxa de Sucesso</p>
                 <p className="text-2xl font-bold">{successRate}%</p>
               </div>
-              <Gauge className="h-8 w-8 text-green-400" />
+              <Gauge className="h-8 w-8 text-success" />
             </div>
           </CardContent>
         </Card>
@@ -431,15 +431,15 @@ const AIProcessingHub: React.FC = () => {
                   <p className="text-sm text-muted-foreground">Requisições Processadas</p>
                 </div>
                 <div>
-                  <p className="text-3xl font-bold text-green-500">{successRate}%</p>
+                  <p className="text-3xl font-bold text-success">{successRate}%</p>
                   <p className="text-sm text-muted-foreground">Taxa de Sucesso</p>
                 </div>
                 <div>
-                  <p className="text-3xl font-bold text-blue-500">{totalTokens.toLocaleString()}</p>
+                  <p className="text-3xl font-bold text-info">{totalTokens.toLocaleString()}</p>
                   <p className="text-sm text-muted-foreground">Tokens Consumidos</p>
                 </div>
                 <div>
-                  <p className="text-3xl font-bold text-purple-500">{avgResponseTime}ms</p>
+                  <p className="text-3xl font-bold text-accent-foreground">{avgResponseTime}ms</p>
                   <p className="text-sm text-muted-foreground">Latência Média</p>
                 </div>
               </div>
