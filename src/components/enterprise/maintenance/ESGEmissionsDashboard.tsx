@@ -16,12 +16,41 @@ import { supabase } from "@/integrations/supabase/client";
 import { EmptyState } from "@/components/ui/UXStates";
 import { toast } from "sonner";
 
+interface EmissionRecord {
+  id: string;
+  vessel_id: string | null;
+  recorded_date: string | null;
+  co2_tonnes: number | null;
+  nox_kg: number | null;
+  sox_kg: number | null;
+  fuel_consumed_mt: number | null;
+  distance_nm: number | null;
+  carbon_intensity: number | null;
+}
+
+interface CIIRating {
+  id: string;
+  vessel_id: string | null;
+  year: number | null;
+  attained_cii: number | null;
+  required_cii: number | null;
+  rating: string | null;
+  annual_co2_tonnes: number | null;
+  annual_distance_nm: number | null;
+}
+
+interface VesselBasic {
+  id: string;
+  name: string;
+  imo_number: string | null;
+}
+
 const ciiColors: Record<string, { bg: string; text: string; label: string }> = {
-  A: { bg: "bg-green-500", text: "text-white", label: "Superior" },
-  B: { bg: "bg-lime-500", text: "text-white", label: "Menor" },
-  C: { bg: "bg-yellow-500", text: "text-black", label: "Moderado" },
-  D: { bg: "bg-orange-500", text: "text-white", label: "Inferior" },
-  E: { bg: "bg-red-500", text: "text-white", label: "Muito Inferior" },
+  A: { bg: "bg-success", text: "text-primary-foreground", label: "Superior" },
+  B: { bg: "bg-success/80", text: "text-primary-foreground", label: "Menor" },
+  C: { bg: "bg-warning", text: "text-warning-foreground", label: "Moderado" },
+  D: { bg: "bg-warning/80", text: "text-primary-foreground", label: "Inferior" },
+  E: { bg: "bg-destructive", text: "text-destructive-foreground", label: "Muito Inferior" },
 };
 
 export function ESGEmissionsDashboard() {
@@ -42,7 +71,11 @@ export function ESGEmissionsDashboard() {
       if (emResult.error) throw emResult.error;
       if (ciiResult.error) throw ciiResult.error;
       if (vesResult.error) throw vesResult.error;
-      return { emissions: emResult.data || [], ciiRatings: ciiResult.data || [], vessels: vesResult.data || [] };
+      return {
+        emissions: (emResult.data || []) as EmissionRecord[],
+        ciiRatings: (ciiResult.data || []) as CIIRating[],
+        vessels: (vesResult.data || []) as VesselBasic[],
+      };
     },
     staleTime: 30000,
   });
@@ -50,20 +83,20 @@ export function ESGEmissionsDashboard() {
   if (isLoading) return <div className="space-y-4"><div className="grid grid-cols-4 gap-4">{[...Array(4)].map((_, i) => <Skeleton key={i} className="h-24" />)}</div><Skeleton className="h-64" /></div>;
 
   const { emissions = [], ciiRatings = [], vessels = [] } = data || {};
-  const vesselMap = new Map(vessels.map((v: any) => [v.id, v.name]));
+  const vesselMap = new Map(vessels.map((v) => [v.id, v.name]));
 
   if (emissions.length === 0 && ciiRatings.length === 0) {
     return <EmptyState icon={Leaf} title="Sem dados de emissões" message="Registre emissões e ratings CII para monitorar o desempenho ESG da frota." />;
   }
 
-  const totalCO2 = emissions.reduce((sum: number, r: any) => sum + (Number(r.co2_tonnes) || 0), 0);
-  const totalSOx = emissions.reduce((sum: number, r: any) => sum + (Number(r.sox_kg) || 0), 0);
-  const totalNOx = emissions.reduce((sum: number, r: any) => sum + (Number(r.nox_kg) || 0), 0);
-  const compliantVessels = ciiRatings.filter((c: any) => ["A", "B", "C"].includes(c.rating)).length;
+  const totalCO2 = emissions.reduce((sum, r) => sum + (Number(r.co2_tonnes) || 0), 0);
+  const totalSOx = emissions.reduce((sum, r) => sum + (Number(r.sox_kg) || 0), 0);
+  const totalNOx = emissions.reduce((sum, r) => sum + (Number(r.nox_kg) || 0), 0);
+  const compliantVessels = ciiRatings.filter((c) => ["A", "B", "C"].includes(c.rating || "")).length;
 
   // Group emissions by month for chart
   const byMonth: Record<string, { co2: number; sox: number; nox: number }> = {};
-  emissions.forEach((r: any) => {
+  emissions.forEach((r) => {
     const month = r.recorded_date ? r.recorded_date.substring(0, 7) : "?";
     if (!byMonth[month]) byMonth[month] = { co2: 0, sox: 0, nox: 0 };
     byMonth[month].co2 += Number(r.co2_tonnes) || 0;
@@ -74,8 +107,8 @@ export function ESGEmissionsDashboard() {
 
   const exportCSV = () => {
     const headers = ["Data", "Embarcação", "CO2 (t)", "SOx (kg)", "NOx (kg)", "Combustível (MT)", "Distância (nm)"];
-    const rows = emissions.map((r: any) => [r.recorded_date, vesselMap.get(r.vessel_id) || "N/A", r.co2_tonnes, r.sox_kg, r.nox_kg, r.fuel_consumed_mt, r.distance_nm]);
-    const csv = [headers.join(","), ...rows.map((r: any[]) => r.join(","))].join("\n");
+    const rows = emissions.map((r) => [r.recorded_date, vesselMap.get(r.vessel_id || "") || "N/A", r.co2_tonnes, r.sox_kg, r.nox_kg, r.fuel_consumed_mt, r.distance_nm]);
+    const csv = [headers.join(","), ...rows.map((r) => r.join(","))].join("\n");
     const blob = new Blob([csv], { type: "text/csv" });
     const url = URL.createObjectURL(blob);
     const a = document.createElement("a"); a.href = url; a.download = "esg-emissions.csv"; a.click();
@@ -87,7 +120,7 @@ export function ESGEmissionsDashboard() {
     <div className="space-y-6">
       <div className="flex flex-wrap items-center justify-between gap-4">
         <div>
-          <h2 className="text-2xl font-bold flex items-center gap-2"><Leaf className="h-6 w-6 text-green-600" />ESG & Emissões</h2>
+          <h2 className="text-2xl font-bold flex items-center gap-2"><Leaf className="h-6 w-6 text-success" />ESG & Emissões</h2>
           <p className="text-muted-foreground">{emissions.length} registros • {ciiRatings.length} ratings CII</p>
         </div>
         <div className="flex items-center gap-2">
@@ -95,7 +128,7 @@ export function ESGEmissionsDashboard() {
             <SelectTrigger className="w-48"><SelectValue placeholder="Embarcação" /></SelectTrigger>
             <SelectContent>
               <SelectItem value="all">Toda a Frota</SelectItem>
-              {vessels.map((v: any) => <SelectItem key={v.id} value={v.id}>{v.name}</SelectItem>)}
+              {vessels.map((v) => <SelectItem key={v.id} value={v.id}>{v.name}</SelectItem>)}
             </SelectContent>
           </Select>
           <Button variant="outline" onClick={exportCSV}><Download className="h-4 w-4 mr-2" />Exportar</Button>
@@ -103,10 +136,10 @@ export function ESGEmissionsDashboard() {
       </div>
 
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-        <Card className="border-l-4 border-l-green-500"><CardContent className="pt-4"><div className="flex items-center justify-between"><div><p className="text-sm text-muted-foreground">CO2 Total</p><p className="text-2xl font-bold">{totalCO2.toFixed(1)} t</p></div><Globe className="h-6 w-6 text-green-600" /></div></CardContent></Card>
-        <Card className="border-l-4 border-l-amber-500"><CardContent className="pt-4"><div className="flex items-center justify-between"><div><p className="text-sm text-muted-foreground">SOx Total</p><p className="text-2xl font-bold">{totalSOx.toFixed(0)} kg</p></div><BarChart3 className="h-6 w-6 text-amber-600" /></div></CardContent></Card>
-        <Card className="border-l-4 border-l-red-500"><CardContent className="pt-4"><div className="flex items-center justify-between"><div><p className="text-sm text-muted-foreground">NOx Total</p><p className="text-2xl font-bold">{totalNOx.toFixed(0)} kg</p></div><AlertTriangle className="h-6 w-6 text-red-600" /></div></CardContent></Card>
-        <Card className="border-l-4 border-l-emerald-500"><CardContent className="pt-4"><div className="flex items-center justify-between"><div><p className="text-sm text-muted-foreground">CII Compliant</p><p className="text-2xl font-bold">{compliantVessels}/{ciiRatings.length}</p></div><Ship className="h-6 w-6 text-emerald-600" /></div></CardContent></Card>
+        <Card className="border-l-4 border-l-success"><CardContent className="pt-4"><div className="flex items-center justify-between"><div><p className="text-sm text-muted-foreground">CO2 Total</p><p className="text-2xl font-bold">{totalCO2.toFixed(1)} t</p></div><Globe className="h-6 w-6 text-success" /></div></CardContent></Card>
+        <Card className="border-l-4 border-l-warning"><CardContent className="pt-4"><div className="flex items-center justify-between"><div><p className="text-sm text-muted-foreground">SOx Total</p><p className="text-2xl font-bold">{totalSOx.toFixed(0)} kg</p></div><BarChart3 className="h-6 w-6 text-warning" /></div></CardContent></Card>
+        <Card className="border-l-4 border-l-destructive"><CardContent className="pt-4"><div className="flex items-center justify-between"><div><p className="text-sm text-muted-foreground">NOx Total</p><p className="text-2xl font-bold">{totalNOx.toFixed(0)} kg</p></div><AlertTriangle className="h-6 w-6 text-destructive" /></div></CardContent></Card>
+        <Card className="border-l-4 border-l-success"><CardContent className="pt-4"><div className="flex items-center justify-between"><div><p className="text-sm text-muted-foreground">CII Compliant</p><p className="text-2xl font-bold">{compliantVessels}/{ciiRatings.length}</p></div><Ship className="h-6 w-6 text-success" /></div></CardContent></Card>
       </div>
 
       {/* CII Ratings */}
@@ -115,14 +148,14 @@ export function ESGEmissionsDashboard() {
           <CardHeader><CardTitle className="flex items-center gap-2"><Ship className="h-5 w-5" />Rating CII por Embarcação</CardTitle><CardDescription>Carbon Intensity Indicator - Regulamento IMO</CardDescription></CardHeader>
           <CardContent>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-              {ciiRatings.map((cii: any) => {
-                const colors = ciiColors[cii.rating] || ciiColors.C;
+              {ciiRatings.map((cii) => {
+                const colors = ciiColors[cii.rating || "C"] || ciiColors.C;
                 return (
                   <Card key={cii.id} className="border-2">
                     <CardContent className="pt-4">
                       <div className="flex items-center justify-between mb-4">
                         <div>
-                          <h4 className="font-semibold">{vesselMap.get(cii.vessel_id) || "N/A"}</h4>
+                          <h4 className="font-semibold">{vesselMap.get(cii.vessel_id || "") || "N/A"}</h4>
                           <p className="text-xs text-muted-foreground">Ano {cii.year}</p>
                         </div>
                         <div className={`h-12 w-12 rounded-full ${colors.bg} flex items-center justify-center`}>
@@ -163,7 +196,7 @@ export function ESGEmissionsDashboard() {
                 <YAxis />
                 <Tooltip />
                 <Legend />
-                <Area type="monotone" dataKey="co2" stroke="#22c55e" fill="#22c55e" fillOpacity={0.3} name="CO2 (t)" />
+                <Area type="monotone" dataKey="co2" stroke="hsl(var(--success))" fill="hsl(var(--success))" fillOpacity={0.3} name="CO2 (t)" />
               </AreaChart>
             </ResponsiveContainer>
           </CardContent>

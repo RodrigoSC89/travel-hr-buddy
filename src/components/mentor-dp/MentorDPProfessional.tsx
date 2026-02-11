@@ -388,7 +388,7 @@ export default function MentorDPProfessional() {
     if (!activeQuiz) return;
     
     let correctCount = 0;
-    activeQuiz.questions.forEach((q: any, idx: number) => {
+    activeQuiz.questions.forEach((q: Record<string, unknown>, idx: number) => {
       if (quizAnswers[idx] === q.correctAnswer) {
         correctCount++;
       }
@@ -422,7 +422,7 @@ export default function MentorDPProfessional() {
       category: "custom",
       lessons: 5,
       duration: "3h",
-      difficulty: newModuleDifficulty as any,
+      difficulty: newModuleDifficulty as AcademyModule["difficulty"],
       icon: <BookOpen className="h-5 w-5" />,
       progress: 0,
     };
@@ -446,7 +446,7 @@ export default function MentorDPProfessional() {
       name: newScenarioName,
       description: newScenarioDescription || "Cenário personalizado",
       type: newScenarioType,
-      difficulty: newScenarioDifficulty as any,
+      difficulty: newScenarioDifficulty as SimulationScenario["difficulty"],
       duration: "20 min",
       isCustom: true,
     };
@@ -819,17 +819,17 @@ export default function MentorDPProfessional() {
                   <CardDescription>{activeQuiz.questions.length} questões • {activeQuiz.quiz?.passingScore || 70}% para aprovação</CardDescription>
                 </CardHeader>
                 <CardContent className="space-y-6">
-                  {activeQuiz.questions.map((q: any, idx: number) => (
-                    <div key={idx} className="space-y-3 p-4 bg-muted/50 rounded-lg">
-                      <p className="font-medium">{idx + 1}. {q.question}</p>
-                      <div className="space-y-2">
-                        {q.options.map((opt: any, optIdx: number) => (
-                          <label key={optIdx} className={`flex items-center gap-3 p-3 rounded-lg cursor-pointer transition-colors ${quizAnswers[idx] === (opt.key || String.fromCharCode(97 + optIdx)) ? "bg-primary/10 border border-primary" : "bg-background hover:bg-muted"}`}>
-                            <input type="radio" name={`q${idx}`} value={opt.key || String.fromCharCode(97 + optIdx)} checked={quizAnswers[idx] === (opt.key || String.fromCharCode(97 + optIdx))} onChange={(e) => setQuizAnswers(prev => ({ ...prev, [idx]: e.target.value }))} className="sr-only" />
-                            <div className={`w-4 h-4 rounded-full border-2 flex items-center justify-center ${quizAnswers[idx] === (opt.key || String.fromCharCode(97 + optIdx)) ? "border-primary bg-primary" : "border-muted-foreground"}`}>
-                              {quizAnswers[idx] === (opt.key || String.fromCharCode(97 + optIdx)) && <div className="w-2 h-2 rounded-full bg-primary-foreground" />}
-                            </div>
-                            <span className="text-sm">{typeof opt === "string" ? opt : opt.text}</span>
+                   {activeQuiz.questions.map((q: Record<string, unknown>, idx: number) => (
+                     <div key={idx} className="space-y-3 p-4 bg-muted/50 rounded-lg">
+                       <p className="font-medium">{idx + 1}. {String(q.question)}</p>
+                       <div className="space-y-2">
+                         {(q.options as Array<Record<string, unknown>>).map((opt, optIdx: number) => (
+                           <label key={optIdx} className={`flex items-center gap-3 p-3 rounded-lg cursor-pointer transition-colors ${quizAnswers[idx] === (String(opt.key || "") || String.fromCharCode(97 + optIdx)) ? "bg-primary/10 border border-primary" : "bg-background hover:bg-muted"}`}>
+                             <input type="radio" name={`q${idx}`} value={String(opt.key || "") || String.fromCharCode(97 + optIdx)} checked={quizAnswers[idx] === (String(opt.key || "") || String.fromCharCode(97 + optIdx))} onChange={(e) => setQuizAnswers(prev => ({ ...prev, [idx]: e.target.value }))} className="sr-only" />
+                             <div className={`w-4 h-4 rounded-full border-2 flex items-center justify-center ${quizAnswers[idx] === (String(opt.key || "") || String.fromCharCode(97 + optIdx)) ? "border-primary bg-primary" : "border-muted-foreground"}`}>
+                               {quizAnswers[idx] === (String(opt.key || "") || String.fromCharCode(97 + optIdx)) && <div className="w-2 h-2 rounded-full bg-primary-foreground" />}
+                             </div>
+                             <span className="text-sm">{typeof opt === "string" ? opt : String(opt.text || "")}</span>
                           </label>
                         ))}
                       </div>

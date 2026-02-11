@@ -445,9 +445,9 @@ const EnhancedUnifiedDashboard = () => {
                     <div className="text-sm text-muted-foreground">
                       Última atualização: <span className="font-medium text-foreground">{lastUpdated.toLocaleTimeString()}</span>
                     </div>
-                    <div className="flex items-center justify-end gap-2 px-3 py-1.5 rounded-full bg-emerald-50 border border-emerald-200">
-                      <div className="w-2 h-2 bg-emerald-500 rounded-full animate-pulse" />
-                      <span className="text-sm font-medium text-emerald-700">
+                     <div className="flex items-center justify-end gap-2 px-3 py-1.5 rounded-full bg-success/10 border border-success/20">
+                       <div className="w-2 h-2 bg-success rounded-full animate-pulse" />
+                       <span className="text-sm font-medium text-success">
                         Sistema operacional - {dashboardData.systemHealth.uptime}% uptime
                       </span>
                     </div>
@@ -490,9 +490,9 @@ const EnhancedUnifiedDashboard = () => {
                 <div className="space-y-3 p-4 rounded-xl bg-gradient-to-br from-emerald-50/50 to-transparent border border-emerald-100/50">
                   <div className="flex items-center justify-between">
                     <span className="text-sm font-semibold text-muted-foreground">Margem Bruta</span>
-                    <Badge className="bg-emerald-100 text-emerald-700 border-0">
-                      Alto
-                    </Badge>
+                     <Badge className="bg-success/10 text-success border-0">
+                       Alto
+                     </Badge>
                   </div>
                   <div className="text-3xl font-bold bg-gradient-to-r from-emerald-600 to-emerald-500 bg-clip-text text-transparent">
                     {dashboardData.financialMetrics.grossMargin}%
@@ -500,12 +500,12 @@ const EnhancedUnifiedDashboard = () => {
                   <Progress value={dashboardData.financialMetrics.grossMargin} className="h-2" />
                 </div>
 
-                <div className="space-y-3 p-4 rounded-xl bg-gradient-to-br from-blue-50/50 to-transparent border border-blue-100/50">
-                  <div className="flex items-center justify-between">
-                    <span className="text-sm font-semibold text-muted-foreground">Margem Operacional</span>
-                    <Badge className="bg-blue-100 text-blue-700 border-0">
-                      Crescendo
-                    </Badge>
+                 <div className="space-y-3 p-4 rounded-xl bg-gradient-to-br from-info/10 to-transparent border border-info/20">
+                   <div className="flex items-center justify-between">
+                     <span className="text-sm font-semibold text-muted-foreground">Margem Operacional</span>
+                     <Badge className="bg-info/10 text-info border-0">
+                       Crescendo
+                     </Badge>
                   </div>
                   <div className="text-3xl font-bold bg-gradient-to-r from-blue-600 to-blue-500 bg-clip-text text-transparent">
                     {dashboardData.financialMetrics.operatingMargin}%
@@ -828,7 +828,7 @@ const EnhancedUnifiedDashboard = () => {
                     />
                     <div className="flex-1 min-w-0">
                       <div className="text-xs font-medium text-foreground truncate">{item.name}</div>
-                      <div className="text-xs text-emerald-600 font-semibold">+{item.growth}%</div>
+                      <div className="text-xs text-success font-semibold">+{item.growth}%</div>
                     </div>
                   </div>
                 ))}
@@ -859,9 +859,9 @@ const EnhancedUnifiedDashboard = () => {
                     Notificações importantes e pendências
                   </CardDescription>
                 </div>
-                <Badge className="bg-amber-100 text-amber-700 border-amber-200">
-                  {dashboardData.alerts.length} novos
-                </Badge>
+                 <Badge className="bg-warning/10 text-warning border-warning/20">
+                   {dashboardData.alerts.length} novos
+                 </Badge>
               </div>
             </CardHeader>
             
@@ -887,10 +887,10 @@ const EnhancedUnifiedDashboard = () => {
                             variant="outline" 
                             className={`text-xs ${
                               alert.priority === "high" 
-                                ? "border-red-200 bg-red-50 text-red-700" :
-                                alert.priority === "medium" 
-                                  ? "border-amber-200 bg-amber-50 text-amber-700" :
-                                  "border-gray-200 bg-gray-50 text-gray-700"
+                                 ? "border-destructive/20 bg-destructive/5 text-destructive" :
+                                 alert.priority === "medium" 
+                                   ? "border-warning/20 bg-warning/5 text-warning" :
+                                   "border-border bg-muted text-muted-foreground"
                             }`}
                           >
                             {alert.priority === "high" ? "🔴 Alta" : 
@@ -898,7 +898,7 @@ const EnhancedUnifiedDashboard = () => {
                           </Badge>
                         </div>
                       </div>
-                      <ArrowRight className="w-4 h-4 text-muted-foreground group-hover/alert:text-amber-600 group-hover/alert:translate-x-1 transition-all" />
+                      <ArrowRight className="w-4 h-4 text-muted-foreground group-hover/alert:text-warning group-hover/alert:translate-x-1 transition-all" />
                     </div>
                   </div>
                 ))}
@@ -906,7 +906,7 @@ const EnhancedUnifiedDashboard = () => {
               
               <Button 
                 variant="outline" 
-                className="w-full mt-4 border-amber-200 hover:bg-amber-50 text-amber-700"
+                className="w-full mt-4 border-warning/20 hover:bg-warning/5 text-warning"
               >
                 Ver todos os alertas
                 <ArrowRight className="w-4 h-4 ml-2" />
@@ -934,9 +934,9 @@ const EnhancedUnifiedDashboard = () => {
                     Timeline de operações do sistema
                   </CardDescription>
                 </div>
-                <div className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-emerald-50 border border-emerald-200">
-                  <div className="w-2 h-2 bg-emerald-500 rounded-full animate-pulse" />
-                  <span className="text-xs font-medium text-emerald-700">Ao vivo</span>
+                 <div className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-success/10 border border-success/20">
+                   <div className="w-2 h-2 bg-success rounded-full animate-pulse" />
+                   <span className="text-xs font-medium text-success">Ao vivo</span>
                 </div>
               </div>
             </CardHeader>
@@ -972,7 +972,7 @@ const EnhancedUnifiedDashboard = () => {
               
               <Button 
                 variant="outline" 
-                className="w-full mt-4 border-emerald-200 hover:bg-emerald-50 text-emerald-700"
+                className="w-full mt-4 border-success/20 hover:bg-success/5 text-success"
               >
                 Ver histórico completo
                 <ArrowRight className="w-4 h-4 ml-2" />
