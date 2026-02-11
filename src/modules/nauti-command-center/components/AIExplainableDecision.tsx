@@ -213,7 +213,7 @@ export function AIExplainableDecision({
                   {/* Reasoning */}
                   <div>
                     <h4 className="text-sm font-medium mb-2 flex items-center gap-2">
-                      <Brain className="h-4 w-4 text-purple-400" />
+                      <Brain className="h-4 w-4 text-primary" />
                       Raciocínio
                     </h4>
                     <p className="text-sm text-muted-foreground bg-muted/30 p-3 rounded-lg">
@@ -224,13 +224,13 @@ export function AIExplainableDecision({
                   {/* Evidence */}
                   <div>
                     <h4 className="text-sm font-medium mb-2 flex items-center gap-2">
-                      <Target className="h-4 w-4 text-blue-400" />
+                      <Target className="h-4 w-4 text-info" />
                       Evidências Analisadas
                     </h4>
                     <ul className="space-y-1">
                       {decision.justification.evidence.map((evidence, index) => (
                         <li key={index} className="text-sm text-muted-foreground flex items-start gap-2">
-                          <CheckCircle className="h-3 w-3 text-green-400 mt-1 shrink-0" />
+                          <CheckCircle className="h-3 w-3 text-success mt-1 shrink-0" />
                           {evidence}
                         </li>
                       ))}
@@ -241,13 +241,13 @@ export function AIExplainableDecision({
                   {decision.justification.risks.length > 0 && (
                     <div>
                       <h4 className="text-sm font-medium mb-2 flex items-center gap-2">
-                        <AlertTriangle className="h-4 w-4 text-amber-400" />
+                        <AlertTriangle className="h-4 w-4 text-warning" />
                         Riscos Identificados
                       </h4>
                       <ul className="space-y-1">
                         {decision.justification.risks.map((risk, index) => (
                           <li key={index} className="text-sm text-muted-foreground flex items-start gap-2">
-                            <XCircle className="h-3 w-3 text-red-400 mt-1 shrink-0" />
+                            <XCircle className="h-3 w-3 text-destructive mt-1 shrink-0" />
                             {risk}
                           </li>
                         ))}
@@ -258,7 +258,7 @@ export function AIExplainableDecision({
                   {/* Expected Outcome */}
                   <div>
                     <h4 className="text-sm font-medium mb-2 flex items-center gap-2">
-                      <Lightbulb className="h-4 w-4 text-yellow-400" />
+                      <Lightbulb className="h-4 w-4 text-warning" />
                       Resultado Esperado
                     </h4>
                     <p className="text-sm text-muted-foreground bg-success/10 p-3 rounded-lg border border-success/20">

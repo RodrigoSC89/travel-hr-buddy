@@ -103,7 +103,7 @@ export function NewVoyageDialog({ open, onOpenChange }: { open: boolean; onOpenC
       onOpenChange(false);
       setForm({ vessel_id: "", origin_port: "", destination_port: "", departure_date: "", arrival_date: "", notes: "" });
     },
-    onError: (err: any) => toast.error(err.message),
+    onError: (err: Error) => toast.error(err.message),
   });
 
   return (
@@ -199,7 +199,7 @@ export function CrewScheduleDialog({ open, onOpenChange }: { open: boolean; onOp
       setSelectedCrew([]);
       setSelectedVessel("");
     },
-    onError: (err: any) => toast.error(err.message),
+    onError: (err: Error) => toast.error(err.message),
   });
 
   const availableCrew = crew.filter((c) => !c.vessel_id || c.status === "available");
@@ -324,7 +324,7 @@ export function MaintenanceOrderDialog({ open, onOpenChange }: { open: boolean; 
       onOpenChange(false);
       setForm({ vessel_id: "", title: "", description: "", priority: "medium", maintenance_type: "corrective", scheduled_date: "" });
     },
-    onError: (err: any) => toast.error(`Erro: ${err.message}`),
+    onError: (err: Error) => toast.error(`Erro: ${err.message}`),
   });
 
   return (
@@ -421,6 +421,7 @@ export function FuelReportDialog({ open, onOpenChange }: { open: boolean; onOpen
       return;
     }
     const headers = ["Embarcação", "Combustível Atual", "Capacidade", "Nível (%)", "Status"];
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any -- vessel fuel data from dynamic query
     const rows = vessels.map((v: any) => [
       v.name,
       v.current_fuel_level ?? "N/A",
@@ -463,8 +464,11 @@ export function FuelReportDialog({ open, onOpenChange }: { open: boolean; onOpen
           ) : (
             <ScrollArea className="h-[300px]">
               <div className="space-y-3">
+                {/* eslint-disable-next-line @typescript-eslint/no-explicit-any -- vessel fuel data */}
                 {vessels.map((v: any) => {
-                  const level = v.fuel_capacity ? Math.round(((v.current_fuel_level || 0) / v.fuel_capacity) * 100) : null;
+                  const fuelCap = Number(v.fuel_capacity) || 0;
+                  const fuelLevel = Number(v.current_fuel_level) || 0;
+                  const level = fuelCap ? Math.round((fuelLevel / fuelCap) * 100) : null;
                   return (
                     <div key={v.id} className="flex items-center justify-between p-3 border rounded-lg">
                       <div>
@@ -530,7 +534,7 @@ export function ChecklistDialog({ open, onOpenChange }: { open: boolean; onOpenC
       queryClient.invalidateQueries({ queryKey: ["ops-checklists"] });
       toast.success("Item resolvido!");
     },
-    onError: (err: any) => toast.error(err.message),
+    onError: (err: Error) => toast.error(err.message),
   });
 
   return (
@@ -550,13 +554,14 @@ export function ChecklistDialog({ open, onOpenChange }: { open: boolean; onOpenC
             </div>
           ) : checklists.length === 0 ? (
             <div className="text-center py-8 text-muted-foreground">
-              <CheckCircle2 className="h-8 w-8 mx-auto mb-2 text-green-500" />
+              <CheckCircle2 className="h-8 w-8 mx-auto mb-2 text-success" />
               <p className="font-medium">Tudo em dia!</p>
               <p className="text-sm">Nenhum item pendente</p>
             </div>
           ) : (
             <ScrollArea className="h-[300px]">
               <div className="space-y-2">
+                {/* eslint-disable-next-line @typescript-eslint/no-explicit-any -- non_conformities dynamic query */}
                 {checklists.map((item: any) => (
                   <div key={item.id} className="flex items-center justify-between p-3 border rounded-lg hover:bg-accent/30 transition-colors">
                     <div className="flex items-center gap-3 flex-1 min-w-0">

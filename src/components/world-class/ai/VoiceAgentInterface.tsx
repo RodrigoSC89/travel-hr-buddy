@@ -24,12 +24,12 @@ interface VoiceMessage {
 
 const AGENT_LABELS: Record<string, { name: string; color: string }> = {
   "nauti-brain": { name: "Nauti Brain", color: "bg-primary/20 text-primary" },
-  "captain-ai": { name: "Captain AI", color: "bg-blue-500/20 text-blue-400" },
-  "maintenance-ai": { name: "Engineer AI", color: "bg-orange-500/20 text-orange-400" },
-  "compliance-chief": { name: "Compliance", color: "bg-green-500/20 text-green-400" },
-  "crew-ai": { name: "People AI", color: "bg-violet-500/20 text-violet-400" },
-  "finance-ai": { name: "Finance AI", color: "bg-yellow-500/20 text-yellow-400" },
-  "esg-ai": { name: "ESG AI", color: "bg-emerald-500/20 text-emerald-400" },
+  "captain-ai": { name: "Captain AI", color: "bg-info/20 text-info" },
+  "maintenance-ai": { name: "Engineer AI", color: "bg-warning/20 text-warning" },
+  "compliance-chief": { name: "Compliance", color: "bg-success/20 text-success" },
+  "crew-ai": { name: "People AI", color: "bg-secondary/20 text-secondary-foreground" },
+  "finance-ai": { name: "Finance AI", color: "bg-warning/20 text-warning" },
+  "esg-ai": { name: "ESG AI", color: "bg-success/20 text-success" },
 };
 
 function classifyIntent(text: string): string {
@@ -50,7 +50,8 @@ export const VoiceAgentInterface: React.FC = () => {
   const [isProcessing, setIsProcessing] = useState(false);
   const [textInput, setTextInput] = useState("");
   const [ttsEnabled, setTtsEnabled] = useState(true);
-  const recognitionRef = useRef<any>(null);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- SpeechRecognition is non-standard browser API
+  const recognitionRef = useRef<ReturnType<typeof Object> | null>(null);
   const scrollRef = useRef<HTMLDivElement>(null);
 
   const speak = useCallback((text: string) => {

@@ -28,7 +28,7 @@ interface IntelligentNotification {
   message: string;
   actionText?: string;
   actionType?: "navigate" | "configure" | "dismiss" | "learn";
-  actionData?: any;
+  actionData?: Record<string, unknown>;
   isRead: boolean;
   createdAt: Date;
   category?: string;
@@ -84,18 +84,19 @@ export const IntelligentNotificationCenter: React.FC<IntelligentNotificationCent
 
       if (error) throw error;
 
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any -- intelligent_notifications not in generated types
       const mapped: IntelligentNotification[] = (data || []).map((n: any) => ({
-        id: n.id,
-        type: n.notification_type || "system_insight",
-        priority: n.priority || "medium",
-        title: n.title || "Notificação",
-        message: n.message || "",
-        actionText: n.action_text || undefined,
-        actionType: n.action_type || undefined,
-        actionData: n.action_data || undefined,
-        isRead: n.is_read || false,
+        id: String(n.id),
+        type: (n.notification_type || "system_insight") as IntelligentNotification["type"],
+        priority: (n.priority || "medium") as IntelligentNotification["priority"],
+        title: String(n.title || "Notificação"),
+        message: String(n.message || ""),
+        actionText: n.action_text ? String(n.action_text) : undefined,
+        actionType: n.action_type ? String(n.action_type) as IntelligentNotification["actionType"] : undefined,
+        actionData: n.action_data as Record<string, unknown> | undefined,
+        isRead: Boolean(n.is_read),
         createdAt: new Date(n.created_at),
-        category: n.category || undefined,
+        category: n.category ? String(n.category) : undefined,
         estimatedReadTime: undefined,
       }));
 
@@ -111,12 +112,13 @@ export const IntelligentNotificationCenter: React.FC<IntelligentNotificationCent
     }
   };
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Supabase realtime payload shape
   const handleNewNotification = (payload: any) => {
     loadNotifications(); // Reload notifications
     
     toast({
       title: "Nova Notificação",
-      description: payload.new.title,
+      description: String(payload.new?.title || ""),
     });
   };
 
@@ -182,7 +184,7 @@ export const IntelligentNotificationCenter: React.FC<IntelligentNotificationCent
 
   const handleNotificationAction = (notification: IntelligentNotification) => {
     if (notification.actionType === "navigate" && notification.actionData?.module) {
-      onNavigate?.(notification.actionData.module);
+      onNavigate?.(String(notification.actionData.module));
       markAsRead(notification.id);
       toast({
         title: "Navegando",
@@ -193,10 +195,10 @@ export const IntelligentNotificationCenter: React.FC<IntelligentNotificationCent
 
   const getPriorityIcon = (priority: string) => {
     switch (priority) {
-    case "critical": return <AlertTriangle className="w-4 h-4 text-red-500" />;
-    case "high": return <BellRing className="w-4 h-4 text-orange-500" />;
-    case "medium": return <Bell className="w-4 h-4 text-yellow-500" />;
-    default: return <Info className="w-4 h-4 text-blue-500" />;
+    case "critical": return <AlertTriangle className="w-4 h-4 text-destructive" />;
+    case "high": return <BellRing className="w-4 h-4 text-warning" />;
+    case "medium": return <Bell className="w-4 h-4 text-warning" />;
+    default: return <Info className="w-4 h-4 text-primary" />;
     }
   };
 
@@ -250,7 +252,7 @@ export const IntelligentNotificationCenter: React.FC<IntelligentNotificationCent
         </div>
       </CardHeader>
       <CardContent>
-        <Tabs value={filter} onValueChange={(value) => setFilter(value as any)} className="w-full">
+        <Tabs value={filter} onValueChange={(value) => setFilter(value as typeof filter)} className="w-full">
           <TabsList className="grid w-full grid-cols-3">
             <TabsTrigger value="all">
               Todas ({notifications.length})
