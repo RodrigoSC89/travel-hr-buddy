@@ -263,11 +263,11 @@ const useExecutiveKPIs = () => {
 // Status colors
 const getStatusConfig = (status: ModuleKPI['status']) => {
   switch (status) {
-    case 'excellent': return { color: 'text-green-600', bg: 'bg-green-500/10', border: 'border-green-500/30', label: 'Excelente' };
-    case 'good': return { color: 'text-blue-600', bg: 'bg-blue-500/10', border: 'border-blue-500/30', label: 'Bom' };
-    case 'acceptable': return { color: 'text-yellow-600', bg: 'bg-yellow-500/10', border: 'border-yellow-500/30', label: 'Aceitável' };
-    case 'inadequate': return { color: 'text-orange-600', bg: 'bg-orange-500/10', border: 'border-orange-500/30', label: 'Inadequado' };
-    case 'critical': return { color: 'text-red-600', bg: 'bg-red-500/10', border: 'border-red-500/30', label: 'Crítico' };
+    case 'excellent': return { color: 'text-success', bg: 'bg-success/10', border: 'border-success/30', label: 'Excelente' };
+    case 'good': return { color: 'text-primary', bg: 'bg-primary/10', border: 'border-primary/30', label: 'Bom' };
+    case 'acceptable': return { color: 'text-warning', bg: 'bg-warning/10', border: 'border-warning/30', label: 'Aceitável' };
+    case 'inadequate': return { color: 'text-warning', bg: 'bg-warning/10', border: 'border-warning/30', label: 'Inadequado' };
+    case 'critical': return { color: 'text-destructive', bg: 'bg-destructive/10', border: 'border-destructive/30', label: 'Crítico' };
   }
 };
 
@@ -392,10 +392,10 @@ export function ExecutiveComplianceDashboard() {
     <div className="space-y-6">
       {/* OAuth Status Warning */}
       {(!oauthStatus.googleConfigured || !oauthStatus.microsoftConfigured) && (
-        <Alert variant="default" className="border-yellow-500/50 bg-yellow-500/10">
-          <AlertCircle className="h-4 w-4 text-yellow-600" />
-          <AlertTitle className="text-yellow-700">Integração Incompleta</AlertTitle>
-          <AlertDescription className="text-yellow-600">
+        <Alert variant="default" className="border-warning/50 bg-warning/10">
+          <AlertCircle className="h-4 w-4 text-warning" />
+          <AlertTitle className="text-warning">Integração Incompleta</AlertTitle>
+          <AlertDescription className="text-warning">
             Chaves OAuth pendentes: 
             {!oauthStatus.googleConfigured && <Badge variant="outline" className="ml-2">VITE_GOOGLE_CLIENT_ID</Badge>}
             {!oauthStatus.microsoftConfigured && <Badge variant="outline" className="ml-2">VITE_MICROSOFT_CLIENT_ID</Badge>}
@@ -459,24 +459,24 @@ export function ExecutiveComplianceDashboard() {
             <div className="space-y-2">
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2">
-                  <CheckCircle className="h-4 w-4 text-green-500" />
+                  <CheckCircle className="h-4 w-4 text-success" />
                   <span className="text-sm">Conformes</span>
                 </div>
-                <span className="font-bold text-green-600">{metrics.modulesCompliant}</span>
+                <span className="font-bold text-success">{metrics.modulesCompliant}</span>
               </div>
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2">
-                  <AlertTriangle className="h-4 w-4 text-yellow-500" />
+                  <AlertTriangle className="h-4 w-4 text-warning" />
                   <span className="text-sm">Em Risco</span>
                 </div>
-                <span className="font-bold text-yellow-600">{metrics.modulesAtRisk}</span>
+                <span className="font-bold text-warning">{metrics.modulesAtRisk}</span>
               </div>
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2">
-                  <XCircle className="h-4 w-4 text-red-500" />
+                  <XCircle className="h-4 w-4 text-destructive" />
                   <span className="text-sm">Críticos</span>
                 </div>
-                <span className="font-bold text-red-600">{metrics.modulesCritical}</span>
+                <span className="font-bold text-destructive">{metrics.modulesCritical}</span>
               </div>
             </div>
           </CardContent>
@@ -492,11 +492,11 @@ export function ExecutiveComplianceDashboard() {
             </div>
             <div className="mt-2 flex items-center gap-4">
               <div className="flex items-center gap-1">
-                <div className="h-2 w-2 rounded-full bg-red-500" />
+                <div className="h-2 w-2 rounded-full bg-destructive" />
                 <span className="text-xs">{metrics.criticalNCs} críticas</span>
               </div>
               <div className="flex items-center gap-1">
-                <div className="h-2 w-2 rounded-full bg-yellow-500" />
+                <div className="h-2 w-2 rounded-full bg-warning" />
                 <span className="text-xs">{metrics.pendingActions} pendentes</span>
               </div>
             </div>
@@ -508,17 +508,17 @@ export function ExecutiveComplianceDashboard() {
         </Card>
 
         {/* ROI */}
-        <Card className="bg-gradient-to-br from-green-500/5 to-transparent">
+        <Card className="bg-gradient-to-br from-success/5 to-transparent">
           <CardContent className="pt-6">
             <p className="text-sm font-medium text-muted-foreground mb-2">ROI Compliance</p>
             <div className="flex items-baseline gap-2">
-              <span className="text-3xl font-bold text-green-600">{metrics.complianceROI}%</span>
-              <TrendingUp className="h-5 w-5 text-green-500" />
+              <span className="text-3xl font-bold text-success">{metrics.complianceROI}%</span>
+              <TrendingUp className="h-5 w-5 text-success" />
             </div>
             <p className="text-xs text-muted-foreground mt-2">
               Economia estimada vs custos de não-conformidade
             </p>
-            <Badge variant="outline" className="mt-2 text-green-600 border-green-500/30">
+            <Badge variant="outline" className="mt-2 text-success border-success/30">
               <Zap className="h-3 w-3 mr-1" />
               Alto Retorno
             </Badge>
@@ -631,8 +631,8 @@ export function ExecutiveComplianceDashboard() {
                       <span className="text-sm text-muted-foreground">Score</span>
                       <div className="flex items-center gap-2">
                         <span className="text-2xl font-bold">{module.score}%</span>
-                        {module.trend === 'up' && <TrendingUp className="h-4 w-4 text-green-500" />}
-                        {module.trend === 'down' && <TrendingDown className="h-4 w-4 text-red-500" />}
+                        {module.trend === 'up' && <TrendingUp className="h-4 w-4 text-success" />}
+                        {module.trend === 'down' && <TrendingDown className="h-4 w-4 text-destructive" />}
                       </div>
                     </div>
                     <Progress value={module.score} className="h-2" />
@@ -641,15 +641,15 @@ export function ExecutiveComplianceDashboard() {
                     <div className="grid grid-cols-3 gap-2 text-center">
                       <div className="p-2 rounded bg-background">
                         <p className="text-xs text-muted-foreground">Conformes</p>
-                        <p className="text-lg font-bold text-green-600">{module.conformeItems}</p>
+                        <p className="text-lg font-bold text-success">{module.conformeItems}</p>
                       </div>
                       <div className="p-2 rounded bg-background">
                         <p className="text-xs text-muted-foreground">NCs</p>
-                        <p className="text-lg font-bold text-yellow-600">{module.ncItems}</p>
+                        <p className="text-lg font-bold text-warning">{module.ncItems}</p>
                       </div>
                       <div className="p-2 rounded bg-background">
                         <p className="text-xs text-muted-foreground">Críticas</p>
-                        <p className="text-lg font-bold text-red-600">{module.criticalNCs}</p>
+                        <p className="text-lg font-bold text-destructive">{module.criticalNCs}</p>
                       </div>
                     </div>
                     
@@ -750,10 +750,10 @@ export function ExecutiveComplianceDashboard() {
               <CardContent className="space-y-4">
                 {modules.sort((a, b) => b.riskLevel - a.riskLevel).map(module => {
                   const Icon = module.icon;
-                  const riskColor = module.riskLevel >= 40 ? 'text-red-600' : 
-                                   module.riskLevel >= 20 ? 'text-yellow-600' : 'text-green-600';
-                  const riskBg = module.riskLevel >= 40 ? 'bg-red-500' : 
-                                module.riskLevel >= 20 ? 'bg-yellow-500' : 'bg-green-500';
+                  const riskColor = module.riskLevel >= 40 ? 'text-destructive' : 
+                                   module.riskLevel >= 20 ? 'text-warning' : 'text-success';
+                  const riskBg = module.riskLevel >= 40 ? 'bg-destructive' : 
+                                module.riskLevel >= 20 ? 'bg-warning' : 'bg-success';
                   
                   return (
                     <div key={module.id} className="flex items-center gap-4">

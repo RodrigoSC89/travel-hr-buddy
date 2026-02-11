@@ -49,7 +49,7 @@ export class HubBridge {
   /**
    * Send data to BridgeLink with retry logic
    */
-  async sendData(data: any, retryCount = 0): Promise<boolean> {
+  async sendData(data: Record<string, unknown>, retryCount = 0): Promise<boolean> {
     try {
       const { error } = await supabase.functions.invoke("health-check", {
         body: { action: "bridge-data", payload: data },

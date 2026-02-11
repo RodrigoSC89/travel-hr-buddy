@@ -264,13 +264,13 @@ const PEODP_REQUIREMENTS: RequirementItem[] = [
 const getStatusConfig = (status: string) => {
   switch (status) {
     case 'compliant':
-      return { icon: CheckCircle2, color: 'text-green-500', bg: 'bg-green-500/10', label: 'Conforme' };
+      return { icon: CheckCircle2, color: 'text-success', bg: 'bg-success/10', label: 'Conforme' };
     case 'non_compliant':
       return { icon: XCircle, color: 'text-destructive', bg: 'bg-destructive/10', label: 'Não Conforme' };
     case 'pending':
-      return { icon: Clock, color: 'text-yellow-500', bg: 'bg-yellow-500/10', label: 'Pendente' };
+      return { icon: Clock, color: 'text-warning', bg: 'bg-warning/10', label: 'Pendente' };
     case 'in_progress':
-      return { icon: AlertTriangle, color: 'text-blue-500', bg: 'bg-blue-500/10', label: 'Em Análise' };
+      return { icon: AlertTriangle, color: 'text-primary', bg: 'bg-primary/10', label: 'Em Análise' };
     case 'not_applicable':
       return { icon: FileText, color: 'text-muted-foreground', bg: 'bg-muted', label: 'N/A' };
     default:
@@ -283,11 +283,11 @@ const getCriticalityBadge = (criticality: string) => {
     case 'critical':
       return <Badge variant="destructive">Crítico</Badge>;
     case 'high':
-      return <Badge className="bg-orange-500">Alto</Badge>;
+      return <Badge className="bg-warning text-warning-foreground">Alto</Badge>;
     case 'medium':
-      return <Badge className="bg-yellow-500 text-black">Médio</Badge>;
+      return <Badge className="bg-warning/70 text-warning-foreground">Médio</Badge>;
     case 'low':
-      return <Badge className="bg-blue-500">Baixo</Badge>;
+      return <Badge className="bg-primary">Baixo</Badge>;
     default:
       return <Badge variant="outline">{criticality}</Badge>;
   }
@@ -460,7 +460,7 @@ export function TraceabilityMatrix() {
         <Card>
           <CardContent className="p-4">
             <div className="flex items-center gap-2">
-              <Target className="h-5 w-5 text-blue-500" />
+              <Target className="h-5 w-5 text-primary" />
               <div>
                 <p className="text-2xl font-bold">{metrics.totalRequirements}</p>
                 <p className="text-xs text-muted-foreground">Requisitos</p>
@@ -471,7 +471,7 @@ export function TraceabilityMatrix() {
         <Card>
           <CardContent className="p-4">
             <div className="flex items-center gap-2">
-              <CheckCircle2 className="h-5 w-5 text-green-500" />
+              <CheckCircle2 className="h-5 w-5 text-success" />
               <div>
                 <p className="text-2xl font-bold">{metrics.compliant}</p>
                 <p className="text-xs text-muted-foreground">Conformes</p>
@@ -493,7 +493,7 @@ export function TraceabilityMatrix() {
         <Card>
           <CardContent className="p-4">
             <div className="flex items-center gap-2">
-              <FileCheck className="h-5 w-5 text-purple-500" />
+              <FileCheck className="h-5 w-5 text-accent-foreground" />
               <div>
                 <p className="text-2xl font-bold">{metrics.totalLVs}</p>
                 <p className="text-xs text-muted-foreground">Total LVs</p>
@@ -504,7 +504,7 @@ export function TraceabilityMatrix() {
         <Card>
           <CardContent className="p-4">
             <div className="flex items-center gap-2">
-              <BarChart3 className="h-5 w-5 text-green-500" />
+              <BarChart3 className="h-5 w-5 text-success" />
               <div>
                 <p className="text-2xl font-bold">{metrics.compliantLVs}</p>
                 <p className="text-xs text-muted-foreground">LVs OK</p>
@@ -530,7 +530,7 @@ export function TraceabilityMatrix() {
               </div>
             </div>
 
-            <Select value={selectedModule} onValueChange={(v) => setSelectedModule(v as any)}>
+            <Select value={selectedModule} onValueChange={(v) => setSelectedModule(v as typeof selectedModule)}>
               <SelectTrigger className="w-[150px]">
                 <SelectValue placeholder="Módulo" />
               </SelectTrigger>

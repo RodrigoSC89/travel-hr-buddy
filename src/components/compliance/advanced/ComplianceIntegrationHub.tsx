@@ -45,7 +45,7 @@ const QUICK_ACTIONS: QuickAction[] = [
     title: 'Matriz de Rastreabilidade',
     description: 'Drill-down completo: Módulo → Requisito → Elemento → LV → Evidência',
     icon: Grid3X3,
-    color: 'bg-blue-500',
+    color: 'bg-primary',
     view: 'matrix'
   },
   {
@@ -53,7 +53,7 @@ const QUICK_ACTIONS: QuickAction[] = [
     title: 'Gerador de Evidências IA',
     description: 'Gere evidências automaticamente para PEOTRAM e PEO-DP',
     icon: Sparkles,
-    color: 'bg-purple-500',
+    color: 'bg-accent',
     view: 'evidence'
   },
   {
@@ -61,7 +61,7 @@ const QUICK_ACTIONS: QuickAction[] = [
     title: 'Relatórios Automáticos',
     description: 'Agende e gerencie relatórios de compliance',
     icon: Calendar,
-    color: 'bg-green-500',
+    color: 'bg-success',
     view: 'reports'
   },
   {
@@ -69,7 +69,7 @@ const QUICK_ACTIONS: QuickAction[] = [
     title: 'Fluxo de NCs',
     description: 'Workflow automático de não conformidades',
     icon: AlertTriangle,
-    color: 'bg-orange-500',
+    color: 'bg-warning',
     view: 'workflow'
   }
 ];
@@ -112,40 +112,40 @@ export function ComplianceIntegrationHub() {
     <div className="space-y-6">
       {/* Quick Stats */}
       <div className="grid grid-cols-4 gap-4">
-        <Card className="bg-gradient-to-br from-blue-500/10 to-blue-600/5 border-blue-500/20">
+        <Card className="bg-gradient-to-br from-primary/10 to-primary/5 border-primary/20">
           <CardContent className="pt-4">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-muted-foreground">Score PEOTRAM</p>
                 <p className="text-3xl font-bold">87%</p>
               </div>
-              <Shield className="h-8 w-8 text-blue-500" />
+              <Shield className="h-8 w-8 text-primary" />
             </div>
             <Progress value={87} className="mt-3 h-2" />
           </CardContent>
         </Card>
 
-        <Card className="bg-gradient-to-br from-purple-500/10 to-purple-600/5 border-purple-500/20">
+        <Card className="bg-gradient-to-br from-accent/10 to-accent/5 border-accent/20">
           <CardContent className="pt-4">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-muted-foreground">Score PEO-DP</p>
                 <p className="text-3xl font-bold">92%</p>
               </div>
-              <Target className="h-8 w-8 text-purple-500" />
+              <Target className="h-8 w-8 text-accent-foreground" />
             </div>
             <Progress value={92} className="mt-3 h-2" />
           </CardContent>
         </Card>
 
-        <Card className="bg-gradient-to-br from-orange-500/10 to-orange-600/5 border-orange-500/20">
+        <Card className="bg-gradient-to-br from-warning/10 to-warning/5 border-warning/20">
           <CardContent className="pt-4">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-muted-foreground">NCs Abertas</p>
                 <p className="text-3xl font-bold">12</p>
               </div>
-              <AlertTriangle className="h-8 w-8 text-orange-500" />
+              <AlertTriangle className="h-8 w-8 text-warning" />
             </div>
             <div className="mt-3 flex items-center gap-2 text-sm">
               <Badge variant="destructive">3 críticas</Badge>
@@ -154,16 +154,16 @@ export function ComplianceIntegrationHub() {
           </CardContent>
         </Card>
 
-        <Card className="bg-gradient-to-br from-green-500/10 to-green-600/5 border-green-500/20">
+        <Card className="bg-gradient-to-br from-success/10 to-success/5 border-success/20">
           <CardContent className="pt-4">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-muted-foreground">Evidências IA</p>
                 <p className="text-3xl font-bold">48</p>
               </div>
-              <Sparkles className="h-8 w-8 text-green-500" />
+              <Sparkles className="h-8 w-8 text-success" />
             </div>
-            <div className="mt-3 flex items-center gap-1 text-sm text-green-600">
+            <div className="mt-3 flex items-center gap-1 text-sm text-success">
               <TrendingUp className="h-4 w-4" />
               +15% este mês
             </div>
@@ -216,7 +216,7 @@ export function ComplianceIntegrationHub() {
                 integrations.map((int) => (
                   <div key={int.system} className="flex items-center justify-between p-2 rounded-lg hover:bg-muted/50">
                     <div className="flex items-center gap-3">
-                      <div className={`w-2 h-2 rounded-full ${int.status === 'CONNECTED' ? 'bg-green-500' : int.status === 'DEGRADED' ? 'bg-yellow-500' : 'bg-red-500'}`} />
+                      <div className={`w-2 h-2 rounded-full ${int.status === 'CONNECTED' ? 'bg-success' : int.status === 'DEGRADED' ? 'bg-warning' : 'bg-destructive'}`} />
                       <span className="font-medium">{int.system}</span>
                     </div>
                     <div className="flex items-center gap-3 text-sm text-muted-foreground">
@@ -254,14 +254,14 @@ export function ComplianceIntegrationHub() {
                     <div key={activity.id} className="flex items-center justify-between p-2 rounded-lg hover:bg-muted/50">
                       <div className="flex items-center gap-3">
                         <div className={`p-2 rounded-lg ${
-                          activity.type === 'nc' ? 'bg-orange-500/10' :
-                          activity.type === 'evidence' ? 'bg-purple-500/10' :
-                          activity.type === 'report' ? 'bg-green-500/10' : 'bg-blue-500/10'
+                          activity.type === 'nc' ? 'bg-warning/10' :
+                          activity.type === 'evidence' ? 'bg-accent/10' :
+                          activity.type === 'report' ? 'bg-success/10' : 'bg-primary/10'
                         }`}>
-                          {activity.type === 'nc' ? <AlertTriangle className="h-4 w-4 text-orange-500" /> :
-                           activity.type === 'evidence' ? <Sparkles className="h-4 w-4 text-purple-500" /> :
-                           activity.type === 'report' ? <FileText className="h-4 w-4 text-green-500" /> :
-                           <CheckCircle2 className="h-4 w-4 text-blue-500" />}
+                          {activity.type === 'nc' ? <AlertTriangle className="h-4 w-4 text-warning" /> :
+                           activity.type === 'evidence' ? <Sparkles className="h-4 w-4 text-accent-foreground" /> :
+                           activity.type === 'report' ? <FileText className="h-4 w-4 text-success" /> :
+                           <CheckCircle2 className="h-4 w-4 text-primary" />}
                         </div>
                         <div>
                           <p className="font-medium text-sm">{activity.action}</p>
