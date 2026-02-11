@@ -20,13 +20,13 @@ interface DailyForecastStripProps {
 
 const getWeatherIcon = (condition: string, className = "h-8 w-8") => {
   const c = condition.toLowerCase();
-  if (c.includes('thunder') || c.includes('storm')) return <CloudLightning className={cn(className, "text-yellow-400")} />;
-  if (c.includes('rain') || c.includes('chuv')) return <CloudRain className={cn(className, "text-blue-400")} />;
-  if (c.includes('drizzle') || c.includes('garo')) return <CloudDrizzle className={cn(className, "text-blue-300")} />;
-  if (c.includes('snow') || c.includes('neve')) return <CloudSnow className={cn(className, "text-blue-100")} />;
-  if (c.includes('cloud') || c.includes('nubl')) return <Cloud className={cn(className, "text-gray-300")} />;
-  if (c.includes('partly') || c.includes('parcial')) return <CloudSun className={cn(className, "text-yellow-300")} />;
-  return <Sun className={cn(className, "text-yellow-400")} />;
+  if (c.includes('thunder') || c.includes('storm')) return <CloudLightning className={cn(className, "text-warning")} />;
+  if (c.includes('rain') || c.includes('chuv')) return <CloudRain className={cn(className, "text-primary")} />;
+  if (c.includes('drizzle') || c.includes('garo')) return <CloudDrizzle className={cn(className, "text-info")} />;
+  if (c.includes('snow') || c.includes('neve')) return <CloudSnow className={cn(className, "text-info")} />;
+  if (c.includes('cloud') || c.includes('nubl')) return <Cloud className={cn(className, "text-muted-foreground")} />;
+  if (c.includes('partly') || c.includes('parcial')) return <CloudSun className={cn(className, "text-warning")} />;
+  return <Sun className={cn(className, "text-warning")} />;
 };
 
 const getDayName = (dateStr: string, index: number): string => {
@@ -50,7 +50,7 @@ export const DailyForecastStrip: React.FC<DailyForecastStripProps> = ({
         <Button
           variant="ghost"
           size="icon"
-          className="absolute -top-2 -right-2 z-10 h-6 w-6 rounded-full bg-red-500 hover:bg-red-600 text-white"
+          className="absolute -top-2 -right-2 z-10 h-6 w-6 rounded-full bg-destructive hover:bg-destructive/90 text-destructive-foreground"
           onClick={onClose}
         >
           <X className="h-4 w-4" />
@@ -97,7 +97,7 @@ export const DailyForecastStrip: React.FC<DailyForecastStripProps> = ({
       {/* Progress Bar */}
       <div className="h-2 flex">
         <div 
-          className="bg-red-500 transition-all duration-300"
+          className="bg-primary transition-all duration-300"
           style={{ width: `${((selectedDay + 1) / forecasts.length) * 100}%` }}
         />
         <div className="flex-1 bg-slate-700" />

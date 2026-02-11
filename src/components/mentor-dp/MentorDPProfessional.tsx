@@ -68,6 +68,7 @@ interface LogEntry {
   title: string;
   summary: string;
   timestamp: Date;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- log data can be any AI response shape
   data?: any;
 }
 
@@ -118,7 +119,7 @@ const StatCard = ({ icon, label, value, trend, color }: { icon: React.ReactNode;
         <div>
           <p className="text-xs text-muted-foreground uppercase tracking-wider">{label}</p>
           <p className="text-2xl font-bold mt-1">{value}</p>
-          {trend && <p className="text-xs text-green-500 flex items-center gap-1 mt-1"><TrendingUp className="h-3 w-3" />{trend}</p>}
+          {trend && <p className="text-xs text-success flex items-center gap-1 mt-1"><TrendingUp className="h-3 w-3" />{trend}</p>}
         </div>
         <div className={`p-3 rounded-full bg-opacity-10 ${color.replace("border-", "bg-")}`}>{icon}</div>
       </div>
@@ -156,6 +157,7 @@ export default function MentorDPProfessional() {
   const [quizTopic, setQuizTopic] = useState("");
   const [showQuizDialog, setShowQuizDialog] = useState(false);
   const [quizHistory, setQuizHistory] = useState<QuizItem[]>([]);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- AI-generated quiz has dynamic shape
   const [activeQuiz, setActiveQuiz] = useState<any>(null);
   const [quizAnswers, setQuizAnswers] = useState<Record<number, string>>({});
 
@@ -197,6 +199,7 @@ export default function MentorDPProfessional() {
   }, [logEntries]);
 
   // Add log entry helper
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- log data is heterogeneous AI responses
   const addLogEntry = useCallback((type: LogEntry["type"], title: string, summary: string, data?: any) => {
     const entry: LogEntry = {
       id: crypto.randomUUID(),
@@ -210,7 +213,8 @@ export default function MentorDPProfessional() {
   }, []);
 
   // Call AI Edge Function with enhanced error handling
-  const callMentorAI = async (action: string, params: any = {}): Promise<any> => {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- AI edge function returns dynamic response shape
+  const callMentorAI = async (action: string, params: Record<string, unknown> = {}): Promise<any> => {
     logger.debug("[MentorDP] Calling edge function", { action, params });
     
     try {
@@ -548,7 +552,7 @@ export default function MentorDPProfessional() {
         {/* Header */}
         <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
           <div className="flex items-center gap-3">
-            <div className="p-3 rounded-xl bg-gradient-to-br from-blue-500 to-cyan-500 text-white">
+            <div className="p-3 rounded-xl bg-gradient-to-br from-primary to-info text-primary-foreground">
               <Compass className="h-8 w-8" />
             </div>
             <div>
@@ -558,11 +562,11 @@ export default function MentorDPProfessional() {
           </div>
           <div className="flex items-center gap-2">
             <Badge variant="outline" className="px-3 py-1.5 gap-2">
-              <Brain className="h-4 w-4 text-purple-500" />
+              <Brain className="h-4 w-4 text-accent" />
               IA Generativa + Preditiva
             </Badge>
             <Badge variant="outline" className="px-3 py-1.5 gap-2">
-              <Award className="h-4 w-4 text-amber-500" />
+              <Award className="h-4 w-4 text-warning" />
               {stats.proficiencyLevel}
             </Badge>
           </div>
@@ -596,8 +600,8 @@ export default function MentorDPProfessional() {
                 <CardHeader className="pb-3">
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-3">
-                      <div className="p-2 rounded-full bg-gradient-to-br from-blue-500 to-cyan-500">
-                        <Compass className="h-5 w-5 text-white" />
+                      <div className="p-2 rounded-full bg-gradient-to-br from-primary to-info">
+                        <Compass className="h-5 w-5 text-primary-foreground" />
                       </div>
                       <div>
                         <CardTitle className="text-lg">Cmte. Ricardo "Mentor" Almeida</CardTitle>
@@ -605,7 +609,7 @@ export default function MentorDPProfessional() {
                       </div>
                     </div>
                     <Badge variant="outline" className="gap-1.5">
-                      <span className="h-2 w-2 rounded-full bg-green-500 animate-pulse" />
+                      <span className="h-2 w-2 rounded-full bg-success animate-pulse" />
                       Online
                     </Badge>
                   </div>
@@ -614,8 +618,8 @@ export default function MentorDPProfessional() {
                   <ScrollArea className="h-[400px] px-4">
                     {messages.length === 0 ? (
                       <div className="flex flex-col items-center justify-center h-full py-8 text-center">
-                        <div className="p-4 rounded-full bg-blue-500/10 mb-4">
-                          <Brain className="h-12 w-12 text-blue-500" />
+                        <div className="p-4 rounded-full bg-primary/10 mb-4">
+                          <Brain className="h-12 w-12 text-primary" />
                         </div>
                         <h3 className="text-lg font-semibold mb-2">Bem-vindo ao Mentor DP</h3>
                         <p className="text-muted-foreground max-w-md mb-4">
@@ -646,8 +650,8 @@ export default function MentorDPProfessional() {
                         ))}
                         {isLoading && (
                           <div className="flex gap-3">
-                            <div className="p-2 rounded-full h-8 w-8 flex items-center justify-center bg-gradient-to-br from-blue-500 to-cyan-500">
-                              <Compass className="h-4 w-4 text-white" />
+                            <div className="p-2 rounded-full h-8 w-8 flex items-center justify-center bg-gradient-to-br from-primary to-info">
+                              <Compass className="h-4 w-4 text-primary-foreground" />
                             </div>
                             <div className="bg-muted rounded-lg p-4">
                               <Loader2 className="h-5 w-5 animate-spin text-muted-foreground" />
@@ -914,10 +918,10 @@ export default function MentorDPProfessional() {
                     {logEntries.map((entry) => (
                       <div key={entry.id} className="flex items-start gap-4 p-4 bg-muted/50 rounded-lg">
                         <div className={`p-2 rounded-lg ${
-                          entry.type === "chat" ? "bg-blue-500/10 text-blue-500" :
-                          entry.type === "lesson" ? "bg-purple-500/10 text-purple-500" :
-                          entry.type === "simulation" ? "bg-green-500/10 text-green-500" :
-                          "bg-amber-500/10 text-amber-500"
+                          entry.type === "chat" ? "bg-primary/10 text-primary" :
+                          entry.type === "lesson" ? "bg-accent/10 text-accent" :
+                          entry.type === "simulation" ? "bg-success/10 text-success" :
+                          "bg-warning/10 text-warning"
                         }`}>
                           {entry.type === "chat" ? <MessageSquare className="h-4 w-4" /> :
                            entry.type === "lesson" ? <GraduationCap className="h-4 w-4" /> :

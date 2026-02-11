@@ -60,7 +60,7 @@ export function useDashboardData() {
         .from("vessels")
         .select("*", { count: "exact" });
       
-      const activeVessels = vessels?.filter((v: any) => v.status === "active" || v.status === "operational")?.length || 0;
+      const activeVessels = vessels?.filter((v) => v.status === "active" || v.status === "operational")?.length || 0;
 
       // Fetch crew members
       const { count: crewCount } = await supabase
@@ -103,7 +103,7 @@ export function useDashboardData() {
         : 95;
 
       // Map AI insights to notifications
-      const mappedNotifications: RealtimeNotification[] = (aiInsights || []).map((insight: any) => ({
+      const mappedNotifications: RealtimeNotification[] = (aiInsights || []).map((insight) => ({
         id: insight.id,
         title: insight.title || "Insight",
         message: insight.description || "",

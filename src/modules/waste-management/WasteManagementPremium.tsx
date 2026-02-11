@@ -136,17 +136,17 @@ function DashboardContent() {
           </CardContent>
         </Card>
 
-        <Card className="border-l-4 border-l-emerald-500">
+        <Card className="border-l-4 border-l-success">
           <CardContent className="p-4">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-xs text-muted-foreground">Verificados</p>
-                <p className="text-2xl font-bold text-emerald-600">
+                <p className="text-2xl font-bold text-success">
                   {totalDischarges > 0 ? `${Math.round((verifiedDischarges / totalDischarges) * 100)}%` : "—"}
                 </p>
                 <p className="text-xs">Certificados</p>
               </div>
-              <TrendingDown className="h-8 w-8 text-emerald-500 opacity-60" />
+              <TrendingDown className="h-8 w-8 text-success opacity-60" />
             </div>
           </CardContent>
         </Card>
@@ -306,6 +306,7 @@ export default function WasteManagementPremium() {
 
       const csvRows = [
         "Data;Tipo;Categoria;Volume;Unidade;Embarcação;Status",
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any -- waste_records shape doesn't match generated types exactly
         ...(wasteRecords || []).map((r: any) => 
           `${new Date(r.created_at).toLocaleDateString()};${r.waste_type || ''};${r.category || ''};${r.volume || ''};${r.unit || ''};${r.vessel_id || ''};${r.status || ''}`
         )
