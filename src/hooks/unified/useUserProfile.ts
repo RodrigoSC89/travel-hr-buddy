@@ -104,7 +104,7 @@ export function useUserProfile(options: UseUserProfileOptions = {}): UseUserProf
         // Map data to profile, adding role default
         setProfile({ 
           ...data, 
-          role: (data as any).role || "user" 
+          role: (data as Record<string, unknown>).role as string || "user" 
         } as UserProfile);
       }
     } catch (err) {
@@ -154,7 +154,7 @@ export function useUserProfile(options: UseUserProfileOptions = {}): UseUserProf
       if (data) {
         setProfile({ 
           ...data, 
-          role: (data as any).role || "user" 
+          role: (data as Record<string, unknown>).role as string || "user" 
         } as UserProfile);
       }
 

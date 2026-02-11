@@ -184,11 +184,11 @@ const decarbonizationMeasures: CIIDecarbonizationMeasure[] = [
 
 const getRatingColor = (rating: string) => {
   switch (rating) {
-    case 'A': return 'bg-green-500';
-    case 'B': return 'bg-lime-500';
-    case 'C': return 'bg-yellow-500';
-    case 'D': return 'bg-orange-500';
-    case 'E': return 'bg-red-500';
+    case 'A': return 'bg-success';
+    case 'B': return 'bg-success/80';
+    case 'C': return 'bg-warning';
+    case 'D': return 'bg-warning/80';
+    case 'E': return 'bg-destructive';
     default: return 'bg-muted';
   }
 };
@@ -222,7 +222,7 @@ export function CarbonIntensityIndicator() {
         <Card>
           <CardContent className="pt-4">
             <div className="flex items-center gap-2">
-              <Leaf className="h-5 w-5 text-green-500" />
+              <Leaf className="h-5 w-5 text-success" />
               <span className="text-sm text-muted-foreground">Fleet Avg CII</span>
             </div>
             <p className="text-2xl font-bold mt-2">{fleetStats.avgCII.toFixed(2)}</p>
@@ -233,7 +233,7 @@ export function CarbonIntensityIndicator() {
         <Card>
           <CardContent className="pt-4">
             <div className="flex items-center gap-2">
-              <Target className="h-5 w-5 text-blue-500" />
+              <Target className="h-5 w-5 text-info" />
               <span className="text-sm text-muted-foreground">Compliant Vessels</span>
             </div>
             <p className="text-2xl font-bold mt-2">
@@ -249,10 +249,10 @@ export function CarbonIntensityIndicator() {
         <Card>
           <CardContent className="pt-4">
             <div className="flex items-center gap-2">
-              <AlertTriangle className="h-5 w-5 text-orange-500" />
+              <AlertTriangle className="h-5 w-5 text-warning" />
               <span className="text-sm text-muted-foreground">At Risk (D/E)</span>
             </div>
-            <p className="text-2xl font-bold mt-2 text-orange-500">{fleetStats.atRiskVessels}</p>
+            <p className="text-2xl font-bold mt-2 text-warning">{fleetStats.atRiskVessels}</p>
             <p className="text-xs text-muted-foreground">Require immediate action</p>
           </CardContent>
         </Card>
@@ -260,7 +260,7 @@ export function CarbonIntensityIndicator() {
         <Card>
           <CardContent className="pt-4">
             <div className="flex items-center gap-2">
-              <Fuel className="h-5 w-5 text-purple-500" />
+              <Fuel className="h-5 w-5 text-accent-foreground" />
               <span className="text-sm text-muted-foreground">Total CO₂ YTD</span>
             </div>
             <p className="text-2xl font-bold mt-2">{(fleetStats.totalCO2YTD / 1000).toFixed(1)}k</p>
@@ -271,10 +271,10 @@ export function CarbonIntensityIndicator() {
         <Card>
           <CardContent className="pt-4">
             <div className="flex items-center gap-2">
-              <TrendingDown className="h-5 w-5 text-green-500" />
+              <TrendingDown className="h-5 w-5 text-success" />
               <span className="text-sm text-muted-foreground">YoY Reduction</span>
             </div>
-            <p className="text-2xl font-bold mt-2 text-green-500">-8.2%</p>
+            <p className="text-2xl font-bold mt-2 text-success">-8.2%</p>
             <p className="text-xs text-muted-foreground">vs. 2024</p>
           </CardContent>
         </Card>
@@ -345,10 +345,10 @@ export function CarbonIntensityIndicator() {
                             {vessel.projectedRating}
                           </Badge>
                           {vessel.trend === 'improving' && (
-                            <Badge variant="outline" className="text-green-500 border-green-500">↑ Improving</Badge>
+                            <Badge variant="outline" className="text-success border-success">↑ Improving</Badge>
                           )}
                           {vessel.trend === 'declining' && (
-                            <Badge variant="outline" className="text-red-500 border-red-500">↓ Declining</Badge>
+                            <Badge variant="outline" className="text-destructive border-destructive">↓ Declining</Badge>
                           )}
                         </div>
                       </div>
@@ -415,7 +415,7 @@ export function CarbonIntensityIndicator() {
                           </Badge>
                         </div>
                         <div className="flex items-center gap-4 mt-2 text-sm text-muted-foreground">
-                          <span>CII Reduction: <strong className="text-green-500">-{measure.estimatedReduction}%</strong></span>
+                          <span>CII Reduction: <strong className="text-success">-{measure.estimatedReduction}%</strong></span>
                           <span>Cost: <strong>${(measure.implementationCost / 1000000).toFixed(1)}M</strong></span>
                           <span>Payback: <strong>{measure.paybackPeriod} months</strong></span>
                         </div>

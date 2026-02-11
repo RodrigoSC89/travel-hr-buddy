@@ -43,9 +43,9 @@ export function useSlowConnectionMode() {
 
   // PATCH v26: Removido navigator.onLine check - não confiável no iOS PWA
   const detectConnection = useCallback(() => {
-    const connection = (navigator as any).connection || 
-                       (navigator as any).mozConnection || 
-                       (navigator as any).webkitConnection;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Network Information API not in standard TS lib
+    const nav = navigator as unknown as Record<string, unknown>;
+    const connection = nav.connection || nav.mozConnection || nav.webkitConnection;
 
     // PATCH v26: Não verificar navigator.onLine - causa falsos positivos no iOS
     // Se não há Network Information API, usar defaults normais
@@ -55,7 +55,10 @@ export function useSlowConnectionMode() {
       return;
     }
 
-    const { effectiveType, saveData, downlink } = connection;
+    const conn = connection as Record<string, unknown>;
+    const effectiveType = conn.effectiveType as string | undefined;
+    const saveData = conn.saveData as boolean | undefined;
+    const downlink = conn.downlink as number | undefined;
     const isSlowConnection = 
       effectiveType === "2g" || 
       effectiveType === "slow-2g" || 
@@ -80,7 +83,8 @@ export function useSlowConnectionMode() {
   useEffect(() => {
     detectConnection();
 
-    const connection = (navigator as any).connection;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Network Information API not in standard TS lib
+    const connection = (navigator as unknown as Record<string, unknown>).connection as EventTarget | undefined;
     if (connection) {
       connection.addEventListener("change", detectConnection);
     }
