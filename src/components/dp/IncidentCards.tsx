@@ -110,19 +110,19 @@ export default function IncidentCards() {
 
       if (data && data.length > 0) {
         // Map database incidents to the expected format
-        setIncidents(data.map((inc: any) => ({
+        setIncidents(data.map((inc) => ({
           id: inc.id,
           title: inc.title,
-          date: inc.incident_date,
-          vessel: inc.vessel_name || "N/A",
-          location: inc.incident_location || inc.location || "N/A",
-          class_dp: inc.dp_class || "DP2",
-          rootCause: inc.root_cause || "Em investigação",
-          tags: inc.tags || [inc.category || "Geral"],
+          date: inc.incident_date || '',
+          vessel: inc.assigned_to || "N/A",
+          location: inc.location || "N/A",
+          class_dp: "DP2",
+          rootCause: inc.description || "Em investigação",
+          tags: [inc.type || "Geral"],
           summary: inc.description || "",
           link: `/incident-reports?id=${inc.id}`,
-          sgso_category: inc.category,
-          sgso_root_cause: inc.root_cause,
+          sgso_category: inc.type,
+          sgso_root_cause: inc.description,
           sgso_risk_level: getSafeRiskLevel(inc.severity)
         })));
       } else {

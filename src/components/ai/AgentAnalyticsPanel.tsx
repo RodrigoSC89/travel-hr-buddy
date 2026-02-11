@@ -158,7 +158,7 @@ export default function AgentAnalyticsPanel() {
         <Card>
           <CardContent className="pt-6">
             <div className="flex items-center gap-3">
-              <MessageSquare className="h-8 w-8 text-blue-500" />
+              <MessageSquare className="h-8 w-8 text-primary" />
               <div>
                 <p className="text-2xl font-bold">{metrics.totalInteractions}</p>
                 <p className="text-xs text-muted-foreground">Total Interações</p>
@@ -173,13 +173,13 @@ export default function AgentAnalyticsPanel() {
         <Card>
           <CardContent className="pt-6">
             <div className="flex items-center gap-3">
-              <Clock className="h-8 w-8 text-orange-500" />
+              <Clock className="h-8 w-8 text-warning" />
               <div>
                 <p className="text-2xl font-bold">{metrics.avgResponseTime}ms</p>
                 <p className="text-xs text-muted-foreground">Tempo Médio</p>
               </div>
             </div>
-            <Badge variant="outline" className={`text-[10px] mt-2 ${metrics.avgResponseTime < 3000 ? "text-green-600" : "text-orange-600"}`}>
+            <Badge variant="outline" className={`text-[10px] mt-2 ${metrics.avgResponseTime < 3000 ? "text-success" : "text-warning"}`}>
               {metrics.avgResponseTime < 3000 ? "✅ Bom" : "⚠️ Lento"}
             </Badge>
           </CardContent>
@@ -188,13 +188,13 @@ export default function AgentAnalyticsPanel() {
         <Card>
           <CardContent className="pt-6">
             <div className="flex items-center gap-3">
-              <Brain className="h-8 w-8 text-purple-500" />
+              <Brain className="h-8 w-8 text-accent-foreground" />
               <div>
                 <p className="text-2xl font-bold">{metrics.avgConfidence}%</p>
                 <p className="text-xs text-muted-foreground">Confiança Média</p>
               </div>
             </div>
-            <Badge variant="outline" className={`text-[10px] mt-2 ${metrics.avgConfidence > 70 ? "text-green-600" : "text-yellow-600"}`}>
+            <Badge variant="outline" className={`text-[10px] mt-2 ${metrics.avgConfidence > 70 ? "text-success" : "text-warning"}`}>
               {metrics.avgConfidence > 70 ? "Alta" : "Moderada"}
             </Badge>
           </CardContent>
@@ -203,7 +203,7 @@ export default function AgentAnalyticsPanel() {
         <Card>
           <CardContent className="pt-6">
             <div className="flex items-center gap-3">
-              <Zap className="h-8 w-8 text-green-500" />
+              <Zap className="h-8 w-8 text-success" />
               <div>
                 <p className="text-2xl font-bold">{metrics.totalTokens.toLocaleString()}</p>
                 <p className="text-xs text-muted-foreground">Tokens Usados</p>
@@ -221,7 +221,7 @@ export default function AgentAnalyticsPanel() {
         <Card>
           <CardHeader className="pb-3">
             <CardTitle className="text-sm flex items-center gap-2">
-              <CheckCircle2 className="h-4 w-4 text-green-500" />
+              <CheckCircle2 className="h-4 w-4 text-success" />
               Decisões de IA
             </CardTitle>
           </CardHeader>
@@ -229,15 +229,15 @@ export default function AgentAnalyticsPanel() {
             <div className="space-y-3">
               <div className="flex justify-between items-center">
                 <span className="text-sm text-muted-foreground">Aprovadas</span>
-                <Badge variant="outline" className="bg-green-500/10 text-green-600">{metrics.approvedDecisions}</Badge>
+                <Badge variant="outline" className="bg-success/10 text-success">{metrics.approvedDecisions}</Badge>
               </div>
               <div className="flex justify-between items-center">
                 <span className="text-sm text-muted-foreground">Rejeitadas</span>
-                <Badge variant="outline" className="bg-red-500/10 text-red-600">{metrics.rejectedDecisions}</Badge>
+                <Badge variant="outline" className="bg-destructive/10 text-destructive">{metrics.rejectedDecisions}</Badge>
               </div>
               <div className="flex justify-between items-center">
                 <span className="text-sm text-muted-foreground">Pendentes</span>
-                <Badge variant="outline" className="bg-yellow-500/10 text-yellow-600">{metrics.pendingDecisions}</Badge>
+                <Badge variant="outline" className="bg-warning/10 text-warning">{metrics.pendingDecisions}</Badge>
               </div>
               <div className="border-t pt-2 flex justify-between items-center">
                 <span className="text-sm font-medium">Taxa de Sucesso</span>
@@ -250,7 +250,7 @@ export default function AgentAnalyticsPanel() {
         <Card>
           <CardHeader className="pb-3">
             <CardTitle className="text-sm flex items-center gap-2">
-              <TrendingUp className="h-4 w-4 text-blue-500" />
+              <TrendingUp className="h-4 w-4 text-primary" />
               Swarm Performance
             </CardTitle>
           </CardHeader>
@@ -262,7 +262,7 @@ export default function AgentAnalyticsPanel() {
               </div>
               <div className="flex justify-between items-center">
                 <span className="text-sm text-muted-foreground">Agentes Ativos</span>
-                <Badge variant="outline" className="bg-green-500/10 text-green-600">{metrics.activeAgents}</Badge>
+                <Badge variant="outline" className="bg-success/10 text-success">{metrics.activeAgents}</Badge>
               </div>
               <div className="border-t pt-2 flex justify-between items-center">
                 <span className="text-sm font-medium">Success Rate</span>

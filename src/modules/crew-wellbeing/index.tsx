@@ -43,17 +43,18 @@ export default function CrewWellbeing() {
       try {
         const { data: crewMembers, error } = await supabase
           .from('crew_members')
-          .select('id, full_name, position, current_vessel_id')
+          .select('id, full_name, position, vessel_id')
           .limit(20);
         
         if (error) throw error;
         
         // Transform to wellbeing format with calculated values
-        const wellbeingData: CrewWellbeing[] = (crewMembers || []).map((member: any) => ({
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Supabase query result mapped to UI model
+        const wellbeingData: CrewWellbeing[] = (crewMembers as any[] || []).map((member) => ({
           id: member.id,
           name: member.full_name || 'N/A',
           position: member.position || 'N/A',
-          vessel: member.current_vessel_id || 'N/A',
+          vessel: member.vessel_id || 'N/A',
           fatigueLevel: 'low' as const,
           hoursWorked: 40,
           restHours: 24,
@@ -101,10 +102,10 @@ export default function CrewWellbeing() {
 
   const getFatigueColor = (level: string) => {
     const colors: Record<string, string> = {
-      low: "bg-green-500/10 text-green-600",
-      moderate: "bg-amber-500/10 text-amber-600",
-      high: "bg-orange-500/10 text-orange-600",
-      critical: "bg-red-500/10 text-red-600"
+      low: "bg-success/10 text-success",
+      moderate: "bg-warning/10 text-warning",
+      high: "bg-warning/20 text-warning",
+      critical: "bg-destructive/10 text-destructive"
     };
     return colors[level] || colors.low;
   };
@@ -120,9 +121,9 @@ export default function CrewWellbeing() {
   };
 
   const getHealthColor = (score: number) => {
-    if (score >= 80) return "text-green-600";
-    if (score >= 60) return "text-amber-600";
-    return "text-red-600";
+    if (score >= 80) return "text-success";
+    if (score >= 60) return "text-warning";
+    return "text-destructive";
   };
 
   const criticalCount = crew.filter(c => c.fatigueLevel === "critical").length;
@@ -187,7 +188,7 @@ export default function CrewWellbeing() {
                 <p className="text-sm text-muted-foreground">Tripulantes Monitorados</p>
                 <p className="text-2xl font-bold">{crew.length}</p>
               </div>
-              <Users className="h-8 w-8 text-blue-500 opacity-80" />
+              <Users className="h-8 w-8 text-primary opacity-80" />
             </div>
           </CardContent>
         </Card>
@@ -196,11 +197,11 @@ export default function CrewWellbeing() {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-muted-foreground">Alertas Críticos</p>
-                <p className={`text-2xl font-bold ${criticalCount > 0 ? 'text-red-600' : ''}`}>
+                <p className={`text-2xl font-bold ${criticalCount > 0 ? 'text-destructive' : ''}`}>
                   {criticalCount}
                 </p>
               </div>
-              <AlertTriangle className={`h-8 w-8 ${criticalCount > 0 ? 'text-red-500' : 'text-gray-300'} opacity-80`} />
+              <AlertTriangle className={`h-8 w-8 ${criticalCount > 0 ? 'text-destructive' : 'text-muted-foreground'} opacity-80`} />
             </div>
           </CardContent>
         </Card>
@@ -209,9 +210,9 @@ export default function CrewWellbeing() {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-muted-foreground">Fadiga Alta</p>
-                <p className="text-2xl font-bold text-amber-600">{highCount}</p>
+                <p className="text-2xl font-bold text-warning">{highCount}</p>
               </div>
-              <Activity className="h-8 w-8 text-amber-500 opacity-80" />
+              <Activity className="h-8 w-8 text-warning opacity-80" />
             </div>
           </CardContent>
         </Card>
@@ -289,20 +290,20 @@ export default function CrewWellbeing() {
                 </div>
                 <Progress 
                   value={member.healthScore} 
-                  className={`h-2 ${member.healthScore >= 80 ? '[&>div]:bg-green-500' : member.healthScore >= 60 ? '[&>div]:bg-amber-500' : '[&>div]:bg-red-500'}`}
+                  className={`h-2 ${member.healthScore >= 80 ? '[&>div]:bg-success' : member.healthScore >= 60 ? '[&>div]:bg-warning' : '[&>div]:bg-destructive'}`}
                 />
               </div>
 
               {/* Alerts */}
               {member.alerts.length > 0 && (
-                <div className="bg-red-50 dark:bg-red-950/20 p-3 rounded-lg">
+                <div className="bg-destructive/10 p-3 rounded-lg">
                   <div className="flex items-center gap-2 mb-2">
-                    <AlertTriangle className="h-4 w-4 text-red-500" />
-                    <span className="font-medium text-sm text-red-700 dark:text-red-400">Alertas</span>
+                    <AlertTriangle className="h-4 w-4 text-destructive" />
+                    <span className="font-medium text-sm text-destructive">Alertas</span>
                   </div>
                   <ul className="space-y-1">
                     {member.alerts.map((alert, idx) => (
-                      <li key={idx} className="text-sm text-red-600 dark:text-red-400">
+                      <li key={idx} className="text-sm text-destructive">
                         • {alert}
                       </li>
                     ))}
@@ -318,8 +319,8 @@ export default function CrewWellbeing() {
                 </div>
                 <ul className="space-y-1">
                   {member.recommendations.map((rec, idx) => (
-                    <li key={idx} className={`text-sm ${rec.startsWith('⚠️') || rec.startsWith('🚨') ? 'text-amber-600 font-medium' : 'text-muted-foreground'}`}>
-                      {!rec.startsWith('⚠️') && !rec.startsWith('🚨') && <CheckCircle2 className="h-3 w-3 inline mr-1 text-green-500" />}
+                    <li key={idx} className={`text-sm ${rec.startsWith('⚠️') || rec.startsWith('🚨') ? 'text-warning font-medium' : 'text-muted-foreground'}`}>
+                      {!rec.startsWith('⚠️') && !rec.startsWith('🚨') && <CheckCircle2 className="h-3 w-3 inline mr-1 text-success" />}
                       {rec}
                     </li>
                   ))}

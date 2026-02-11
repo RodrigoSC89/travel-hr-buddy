@@ -79,19 +79,19 @@ const ModulesStatusDashboard: React.FC = () => {
       
       const data = await response.json();
       
-      const modulesData: Module[] = data.modules.map((m: any) => ({
-        id: m.id,
-        name: m.name,
-        category: m.category || "uncategorized",
-        status: m.status || "inactive",
-        path: m.path,
-        route: m.route,
-        hasDatabase: m.hasDatabase || false,
-        aiEnabled: m.aiEnabled !== undefined ? m.aiEnabled : false,
-        version: m.version || "1.0.0",
-        lastModified: m.lastModified || new Date().toISOString().split("T")[0],
-        description: m.description || "",
-        integrations: m.integrations || []
+      const modulesData: Module[] = data.modules.map((m: Record<string, unknown>) => ({
+        id: m.id as string,
+        name: m.name as string,
+        category: (m.category as string) || "uncategorized",
+        status: (m.status as Module["status"]) || "inactive",
+        path: m.path as string,
+        route: m.route as string,
+        hasDatabase: (m.hasDatabase as boolean) || false,
+        aiEnabled: m.aiEnabled !== undefined ? (m.aiEnabled as boolean) : false,
+        version: (m.version as string) || "1.0.0",
+        lastModified: (m.lastModified as string) || new Date().toISOString().split("T")[0],
+        description: (m.description as string) || "",
+        integrations: (m.integrations as string[]) || []
       }));
 
       setModules(modulesData);
@@ -154,10 +154,10 @@ const ModulesStatusDashboard: React.FC = () => {
 
   const getStatusBadge = (status: string) => {
     const styles = {
-      active: "bg-green-500/10 text-green-500 border-green-500/20",
-      beta: "bg-yellow-500/10 text-yellow-500 border-yellow-500/20",
-      inactive: "bg-gray-500/10 text-gray-500 border-gray-500/20",
-      deprecated: "bg-red-500/10 text-red-500 border-red-500/20"
+      active: "bg-success/10 text-success border-success/20",
+      beta: "bg-warning/10 text-warning border-warning/20",
+      inactive: "bg-muted text-muted-foreground border-muted",
+      deprecated: "bg-destructive/10 text-destructive border-destructive/20"
     };
 
     const icons = {
@@ -225,50 +225,50 @@ const ModulesStatusDashboard: React.FC = () => {
         </Card>
         <Card>
           <CardHeader className="pb-2">
-            <CardTitle className="text-sm font-medium text-green-500">Active</CardTitle>
+            <CardTitle className="text-sm font-medium text-success">Active</CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-green-500">{stats.active}</div>
+            <div className="text-2xl font-bold text-success">{stats.active}</div>
           </CardContent>
         </Card>
         <Card>
           <CardHeader className="pb-2">
-            <CardTitle className="text-sm font-medium text-yellow-500">Beta</CardTitle>
+            <CardTitle className="text-sm font-medium text-warning">Beta</CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-yellow-500">{stats.beta}</div>
+            <div className="text-2xl font-bold text-warning">{stats.beta}</div>
           </CardContent>
         </Card>
         <Card>
           <CardHeader className="pb-2">
-            <CardTitle className="text-sm font-medium text-gray-500">Inactive</CardTitle>
+            <CardTitle className="text-sm font-medium text-muted-foreground">Inactive</CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-gray-500">{stats.inactive}</div>
+            <div className="text-2xl font-bold text-muted-foreground">{stats.inactive}</div>
           </CardContent>
         </Card>
         <Card>
           <CardHeader className="pb-2">
-            <CardTitle className="text-sm font-medium text-red-500">Deprecated</CardTitle>
+            <CardTitle className="text-sm font-medium text-destructive">Deprecated</CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-red-500">{stats.deprecated}</div>
+            <div className="text-2xl font-bold text-destructive">{stats.deprecated}</div>
           </CardContent>
         </Card>
         <Card>
           <CardHeader className="pb-2">
-            <CardTitle className="text-sm font-medium text-blue-500">AI Enabled</CardTitle>
+            <CardTitle className="text-sm font-medium text-primary">AI Enabled</CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-blue-500">{stats.withAI}</div>
+            <div className="text-2xl font-bold text-primary">{stats.withAI}</div>
           </CardContent>
         </Card>
         <Card>
           <CardHeader className="pb-2">
-            <CardTitle className="text-sm font-medium text-purple-500">Database</CardTitle>
+            <CardTitle className="text-sm font-medium text-accent-foreground">Database</CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-purple-500">{stats.withDB}</div>
+            <div className="text-2xl font-bold text-accent-foreground">{stats.withDB}</div>
           </CardContent>
         </Card>
       </div>
@@ -354,13 +354,13 @@ const ModulesStatusDashboard: React.FC = () => {
                             {module.category}
                           </Badge>
                           {module.aiEnabled && (
-                            <Badge variant="outline" className="text-xs bg-blue-500/10 text-blue-500">
+                            <Badge variant="outline" className="text-xs bg-primary/10 text-primary">
                               <Zap className="h-3 w-3 mr-1" />
                               AI
                             </Badge>
                           )}
                           {module.hasDatabase && (
-                            <Badge variant="outline" className="text-xs bg-purple-500/10 text-purple-500">
+                            <Badge variant="outline" className="text-xs bg-accent/10 text-accent-foreground">
                               Database
                             </Badge>
                           )}

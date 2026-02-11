@@ -27,7 +27,8 @@ export function VoyageAICopilotPanel() {
   const { toast } = useToast();
   const [isLoading, setIsLoading] = useState(false);
   const [activeTab, setActiveTab] = useState<AnalysisTab>("route");
-  const [result, setResult] = useState<any>(null);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Dynamic AI response shape varies per analysis type
+  const [result, setResult] = useState<Record<string, any> | null>(null);
   const [voyage, setVoyage] = useState<VoyagePlan>({
     origin: "",
     destination: "",
@@ -84,7 +85,7 @@ export function VoyageAICopilotPanel() {
           <Card>
             <CardHeader className="pb-2"><CardTitle className="text-sm">Waypoints</CardTitle></CardHeader>
             <CardContent className="space-y-1">
-              {r.waypoints.map((wp: any, i: number) => (
+              {r.waypoints.map((wp: { name: string; reason: string }, i: number) => (
                 <div key={i} className="flex items-center gap-2 text-xs">
                   <MapPin className="h-3 w-3 text-primary" />
                   <span className="font-medium">{wp.name}</span>
@@ -95,9 +96,9 @@ export function VoyageAICopilotPanel() {
           </Card>
         )}
         {r.weather_advisory && (
-          <Card className="border-amber-500/20 bg-amber-500/5">
+          <Card className="border-warning/20 bg-warning/5">
             <CardContent className="p-3 flex items-start gap-2">
-              <Wind className="h-4 w-4 text-amber-500 mt-0.5" />
+              <Wind className="h-4 w-4 text-warning mt-0.5" />
               <p className="text-xs">{r.weather_advisory}</p>
             </CardContent>
           </Card>
@@ -113,11 +114,11 @@ export function VoyageAICopilotPanel() {
       <div className="space-y-3">
         <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
           <Card><CardContent className="p-3 text-center">
-            <p className="text-xl font-bold text-emerald-500">${p.estimated_revenue_usd?.toLocaleString()}</p>
+            <p className="text-xl font-bold text-success">${p.estimated_revenue_usd?.toLocaleString()}</p>
             <p className="text-xs text-muted-foreground">Receita</p>
           </CardContent></Card>
           <Card><CardContent className="p-3 text-center">
-            <p className="text-xl font-bold text-red-500">${p.total_costs_usd?.toLocaleString()}</p>
+            <p className="text-xl font-bold text-destructive">${p.total_costs_usd?.toLocaleString()}</p>
             <p className="text-xs text-muted-foreground">Custos Totais</p>
           </CardContent></Card>
           <Card><CardContent className="p-3 text-center">
@@ -164,14 +165,14 @@ export function VoyageAICopilotPanel() {
   const renderRisksResult = () => {
     if (!result?.risks) return null;
     const severityColors: Record<string, string> = {
-      low: "bg-emerald-500/10 text-emerald-600",
-      medium: "bg-amber-500/10 text-amber-600",
-      high: "bg-orange-500/10 text-orange-600",
-      critical: "bg-red-500/10 text-red-600",
+      low: "bg-success/10 text-success",
+      medium: "bg-warning/10 text-warning",
+      high: "bg-warning/20 text-warning",
+      critical: "bg-destructive/10 text-destructive",
     };
     return (
       <div className="space-y-2">
-        {result.risks.map((risk: any, i: number) => (
+        {result.risks.map((risk: { type: string; severity: string; description: string; mitigation: string }, i: number) => (
           <Card key={i}>
             <CardContent className="p-3">
               <div className="flex items-center justify-between mb-1">
