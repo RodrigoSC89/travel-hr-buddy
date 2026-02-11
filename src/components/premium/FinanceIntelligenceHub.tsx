@@ -37,7 +37,7 @@
  
 export default function FinanceIntelligenceHub() {
     const { voyages: voyagePnL, bunkers: bunkerInventory, isLoading } = useFinanceIntelligenceData();
-    const [selectedVoyage, setSelectedVoyage] = useState<any>(null);
+    const [selectedVoyage, setSelectedVoyage] = useState<typeof voyagePnL[number] | null>(null);
     const [bunkerMethod, setBunkerMethod] = useState<"FIFO" | "AVE" | "TBM">("FIFO");
 
     const activeVoyage = selectedVoyage || voyagePnL[0];
@@ -148,7 +148,7 @@ export default function FinanceIntelligenceHub() {
                  </CardTitle>
                </CardHeader>
                <CardContent className="space-y-2">
-                  {voyagePnL.map((voyage: any) => (
+                  {voyagePnL.map((voyage) => (
                     <div 
                       key={voyage.id}
                       onClick={() => setSelectedVoyage(voyage)}

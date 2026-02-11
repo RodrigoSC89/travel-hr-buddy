@@ -81,11 +81,13 @@ export default function RFQManagementPanel() {
     queryKey: ["rfq-management"],
     queryFn: async () => {
       const { data, error } = await supabase
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any -- rfq_requests not in generated types
         .from("rfq_requests" as any)
         .select("*")
         .order("created_at", { ascending: false });
       
       if (error) throw error;
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any -- dynamic table schema
       return (data || []).map((item: any) => ({
         id: item.id,
         rfq_number: item.rfq_number || `RFQ-${item.id.slice(0, 8)}`,

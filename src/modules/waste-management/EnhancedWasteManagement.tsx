@@ -89,9 +89,9 @@ function TankVisual({ tank }: { tank: WasteTank }) {
   const fillPercentage = (tank.currentLevel / tank.capacity) * 100;
   
   const getColor = () => {
-    if (tank.status === "critical") return "from-red-500 to-red-600";
-    if (tank.status === "warning") return "from-amber-500 to-amber-600";
-    return "from-green-500 to-green-600";
+    if (tank.status === "critical") return "from-destructive to-destructive/80";
+    if (tank.status === "warning") return "from-warning to-warning/80";
+    return "from-success to-success/80";
   };
 
   const getTypeIcon = () => {
@@ -188,7 +188,7 @@ function useWasteTanks() {
   // Derive tanks from waste records or use defaults based on vessel data
   if (wasteRecords.length > 0) {
     const typeMap = new Map<string, { total: number; count: number; lastDate: string }>();
-    wasteRecords.forEach((r: any) => {
+    wasteRecords.forEach((r) => {
       const type = r.waste_type || 'general';
       const current = typeMap.get(type) || { total: 0, count: 0, lastDate: '' };
       current.total += r.quantity || 0;

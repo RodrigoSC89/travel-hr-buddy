@@ -51,6 +51,7 @@ interface Integration {
   connection_status: string;
   access_token?: string;
   scopes?: string[];
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- dynamic integration metadata
   metadata?: any;
   last_sync_at?: string;
   created_at: string;
@@ -60,6 +61,7 @@ interface WebhookEvent {
   id: string;
   event_type: string;
   webhook_url: string;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- dynamic webhook payload
   payload: any;
   status: string;
   response_code?: number;
@@ -458,9 +460,9 @@ export const IntegrationsHubEnhanced = () => {
                             </div>
                           </div>
                           {connected ? (
-                            <CheckCircle2 className="h-5 w-5 text-green-600" />
+                            <CheckCircle2 className="h-5 w-5 text-success" />
                           ) : (
-                            <XCircle className="h-5 w-5 text-gray-400" />
+                            <XCircle className="h-5 w-5 text-muted-foreground" />
                           )}
                         </div>
                         <div className="flex flex-wrap gap-1 mb-4">

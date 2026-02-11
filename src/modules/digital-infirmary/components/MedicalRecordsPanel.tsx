@@ -197,12 +197,12 @@ export default function MedicalRecordsPanel() {
   };
 
   const getEventColor = (type: MedicalEvent["type"]) => {
-    const colors = { consultation: "bg-blue-500/10 text-blue-500 border-blue-500/30", procedure: "bg-purple-500/10 text-purple-500 border-purple-500/30", medication: "bg-green-500/10 text-green-500 border-green-500/30", test: "bg-cyan-500/10 text-cyan-500 border-cyan-500/30", vaccination: "bg-amber-500/10 text-amber-500 border-amber-500/30", incident: "bg-red-500/10 text-red-500 border-red-500/30" };
+    const colors = { consultation: "bg-primary/10 text-primary border-primary/30", procedure: "bg-accent/10 text-accent-foreground border-accent/30", medication: "bg-success/10 text-success border-success/30", test: "bg-info/10 text-info border-info/30", vaccination: "bg-warning/10 text-warning border-warning/30", incident: "bg-destructive/10 text-destructive border-destructive/30" };
     return colors[type] || '';
   };
 
   const getFitnessColor = (status: CrewMember["fitnessStatus"]) => {
-    const colors = { fit: "bg-green-500/10 text-green-500", restricted: "bg-amber-500/10 text-amber-500", unfit: "bg-red-500/10 text-red-500" };
+    const colors = { fit: "bg-success/10 text-success", restricted: "bg-warning/10 text-warning", unfit: "bg-destructive/10 text-destructive" };
     return colors[status] || '';
   };
 
@@ -215,7 +215,7 @@ export default function MedicalRecordsPanel() {
         {crewList.length > 0 && (
           <Select onValueChange={setSelectedCrewId}>
             <SelectTrigger className="w-64 mx-auto"><SelectValue placeholder="Selecionar tripulante" /></SelectTrigger>
-            <SelectContent>{crewList.map((c: any) => <SelectItem key={c.id} value={c.id}>{c.first_name} {c.last_name} - {c.rank}</SelectItem>)}</SelectContent>
+            <SelectContent>{crewList.map((c) => <SelectItem key={c.id} value={c.id}>{c.full_name} - {c.rank}</SelectItem>)}</SelectContent>
           </Select>
         )}
       </CardContent></Card>
@@ -227,7 +227,7 @@ export default function MedicalRecordsPanel() {
       {/* Search & Actions */}
       <Card><CardContent className="p-4"><div className="flex gap-4">
         <div className="relative flex-1"><Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" /><Input placeholder="Buscar no prontuário..." className="pl-9" value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)} /></div>
-        <Select value={selectedCrewId || crewList[0]?.id} onValueChange={setSelectedCrewId}><SelectTrigger className="w-48"><User className="h-4 w-4 mr-2" /><SelectValue placeholder="Paciente" /></SelectTrigger><SelectContent>{crewList.map((c: any) => <SelectItem key={c.id} value={c.id}>{c.first_name} {c.last_name}</SelectItem>)}</SelectContent></Select>
+        <Select value={selectedCrewId || crewList[0]?.id} onValueChange={setSelectedCrewId}><SelectTrigger className="w-48"><User className="h-4 w-4 mr-2" /><SelectValue placeholder="Paciente" /></SelectTrigger><SelectContent>{crewList.map((c) => <SelectItem key={c.id} value={c.id}>{c.full_name}</SelectItem>)}</SelectContent></Select>
         <Dialog open={showNewEntry} onOpenChange={setShowNewEntry}><DialogTrigger asChild><Button><Plus className="h-4 w-4 mr-2" />Nova Entrada</Button></DialogTrigger>
           <DialogContent className="max-w-2xl"><DialogHeader><DialogTitle>Adicionar ao Prontuário</DialogTitle></DialogHeader>
             <div className="space-y-4 pt-4">
@@ -255,7 +255,7 @@ export default function MedicalRecordsPanel() {
                 <div className="flex items-center gap-3 mt-2">
                   <Badge variant="outline">{selectedCrew.id.slice(0, 10)}</Badge>
                   <Badge className={getFitnessColor(selectedCrew.fitnessStatus)}>{selectedCrew.fitnessStatus === "fit" ? "Apto" : selectedCrew.fitnessStatus === "restricted" ? "Restrito" : "Inapto"}</Badge>
-                  <Badge variant="outline" className="bg-red-500/10 text-red-600">{selectedCrew.bloodType}</Badge>
+                  <Badge variant="outline" className="bg-destructive/10 text-destructive">{selectedCrew.bloodType}</Badge>
                 </div>
               </div>
               <div className="flex gap-2">
@@ -294,7 +294,7 @@ export default function MedicalRecordsPanel() {
                           <div>
                             <div className="flex items-center gap-2"><h4 className="font-medium">{event.title}</h4><Badge variant="outline" className="text-xs capitalize">{event.type}</Badge></div>
                             <p className="text-sm text-muted-foreground mt-1">{event.description}</p>
-                            {event.results && <div className="mt-2 p-2 bg-green-500/5 border border-green-500/20 rounded text-sm text-green-700 dark:text-green-400"><strong>Resultado:</strong> {event.results}</div>}
+                            {event.results && <div className="mt-2 p-2 bg-success/5 border border-success/20 rounded text-sm text-success"><strong>Resultado:</strong> {event.results}</div>}
                             <div className="flex items-center gap-3 mt-2 text-xs text-muted-foreground"><span className="flex items-center gap-1"><User className="h-3 w-3" />{event.provider}</span><span className="flex items-center gap-1"><Calendar className="h-3 w-3" />{format(event.date, "dd/MM/yyyy", { locale: ptBR })}</span></div>
                           </div>
                         </div>

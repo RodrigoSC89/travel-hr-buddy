@@ -38,7 +38,7 @@ interface ReplayEvent {
   type: "mode_change" | "alarm" | "sensor" | "position" | "thruster" | "environmental";
   description: string;
   severity: "info" | "warning" | "critical";
-  data?: Record<string, any>;
+  data?: Record<string, unknown>;
 }
 
 interface ReplaySession {
@@ -130,7 +130,7 @@ export const DPReplaySystem: React.FC = () => {
     const sessionEvents = selectedSession?.events || [];
     const csvRows = [
       "Timestamp;Tipo;Severidade;Descrição",
-      ...sessionEvents.map((e: any) => `${e.timestamp};${e.type};${e.severity};${e.description || ""}`)
+      ...sessionEvents.map((e: ReplayEvent) => `${e.timestamp};${e.type};${e.severity};${e.description || ""}`)
     ];
     const blob = new Blob(['\uFEFF' + csvRows.join('\n')], { type: 'text/csv;charset=utf-8;' });
     const url = URL.createObjectURL(blob);
@@ -144,9 +144,9 @@ export const DPReplaySystem: React.FC = () => {
 
   const getSeverityColor = (severity: string) => {
     switch (severity) {
-      case "critical": return "text-red-500 bg-red-500/10";
-      case "warning": return "text-yellow-500 bg-yellow-500/10";
-      default: return "text-blue-500 bg-blue-500/10";
+      case "critical": return "text-destructive bg-destructive/10";
+      case "warning": return "text-warning bg-warning/10";
+      default: return "text-primary bg-primary/10";
     }
   };
 
