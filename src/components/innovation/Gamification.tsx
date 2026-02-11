@@ -209,18 +209,18 @@ export const Gamification = () => {
 
   const getCategoryColor = (category: string) => {
     switch (category) {
-    case "productivity": return "bg-blue-100 text-blue-700 border-blue-200";
-    case "collaboration": return "bg-green-100 text-green-700 border-green-200";
-    case "innovation": return "bg-purple-100 text-purple-700 border-purple-200";
-    case "leadership": return "bg-orange-100 text-orange-700 border-orange-200";
+    case "productivity": return "bg-primary/10 text-primary border-primary/20";
+    case "collaboration": return "bg-success/10 text-success border-success/20";
+    case "innovation": return "bg-accent/10 text-accent-foreground border-accent/20";
+    case "leadership": return "bg-warning/10 text-warning border-warning/20";
     default: return "bg-secondary text-secondary-foreground border-border";
     }
   };
 
   const getTrendIcon = (trend: string) => {
     switch (trend) {
-    case "up": return <TrendingUp className="w-4 h-4 text-green-500" />;
-    case "down": return <TrendingUp className="w-4 h-4 text-red-500 rotate-180" />;
+    case "up": return <TrendingUp className="w-4 h-4 text-success" />;
+    case "down": return <TrendingUp className="w-4 h-4 text-destructive rotate-180" />;
     default: return <TrendingUp className="w-4 h-4 text-muted-foreground rotate-90" />;
     }
   };
@@ -244,46 +244,46 @@ export const Gamification = () => {
           </CardContent>
         </Card>
 
-        <Card className="bg-gradient-to-br from-green-500/10 to-green-500/5">
+        <Card className="bg-gradient-to-br from-success/10 to-success/5">
           <CardContent className="p-6">
             <div className="flex items-center gap-3">
-              <div className="p-3 bg-green-500/20 rounded-lg">
-                <Flame className="w-6 h-6 text-green-600" />
+              <div className="p-3 bg-success/20 rounded-lg">
+                <Flame className="w-6 h-6 text-success" />
               </div>
               <div>
                 <p className="text-sm text-muted-foreground">Sequência</p>
                 <p className="text-2xl font-bold">{userStats.streak}</p>
-                <p className="text-xs text-green-600">dias consecutivos</p>
+                <p className="text-xs text-success">dias consecutivos</p>
               </div>
             </div>
           </CardContent>
         </Card>
 
-        <Card className="bg-gradient-to-br from-purple-500/10 to-purple-500/5">
+        <Card className="bg-gradient-to-br from-accent/10 to-accent/5">
           <CardContent className="p-6">
             <div className="flex items-center gap-3">
-              <div className="p-3 bg-purple-500/20 rounded-lg">
-                <Award className="w-6 h-6 text-purple-600" />
+              <div className="p-3 bg-accent/20 rounded-lg">
+                <Award className="w-6 h-6 text-accent-foreground" />
               </div>
               <div>
                 <p className="text-sm text-muted-foreground">Conquistas</p>
                 <p className="text-2xl font-bold">{userStats.achievements}</p>
-                <p className="text-xs text-purple-600">desbloqueadas</p>
+                <p className="text-xs text-accent-foreground">desbloqueadas</p>
               </div>
             </div>
           </CardContent>
         </Card>
 
-        <Card className="bg-gradient-to-br from-orange-500/10 to-orange-500/5">
+        <Card className="bg-gradient-to-br from-warning/10 to-warning/5">
           <CardContent className="p-6">
             <div className="flex items-center gap-3">
-              <div className="p-3 bg-orange-500/20 rounded-lg">
-                <Crown className="w-6 h-6 text-orange-600" />
+              <div className="p-3 bg-warning/20 rounded-lg">
+                <Crown className="w-6 h-6 text-warning" />
               </div>
               <div>
                 <p className="text-sm text-muted-foreground">Ranking</p>
                 <p className="text-lg font-bold">{userStats.rank}</p>
-                <p className="text-xs text-orange-600">Posição #1</p>
+                <p className="text-xs text-warning">Posição #1</p>
               </div>
             </div>
           </CardContent>
@@ -371,12 +371,12 @@ export const Gamification = () => {
           <CardContent>
             <div className="space-y-3">
               {leaderboard.map((entry) => (
-                <div key={entry.rank} className={`p-4 rounded-lg border ${entry.rank === 1 ? "bg-gradient-to-r from-yellow-50 to-orange-50 border-yellow-200" : "bg-card"}`}>
+                <div key={entry.rank} className={`p-4 rounded-lg border ${entry.rank === 1 ? "bg-gradient-to-r from-warning/10 to-warning/5 border-warning/20" : "bg-card"}`}>
                   <div className="flex items-center gap-3">
                     <div className={`flex items-center justify-center w-8 h-8 rounded-full font-bold text-sm ${
-                      entry.rank === 1 ? "bg-yellow-500 text-azure-50" :
-                        entry.rank === 2 ? "bg-gray-400 text-azure-50" :
-                          entry.rank === 3 ? "bg-orange-600 text-azure-50" :
+                      entry.rank === 1 ? "bg-warning text-warning-foreground" :
+                        entry.rank === 2 ? "bg-muted-foreground text-background" :
+                          entry.rank === 3 ? "bg-warning/70 text-warning-foreground" :
                             "bg-muted text-muted-foreground"
                     }`}>
                       {entry.rank}
@@ -389,7 +389,7 @@ export const Gamification = () => {
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center gap-2">
                         <h4 className="font-medium truncate">{entry.name}</h4>
-                        {entry.rank === 1 && <Crown className="w-4 h-4 text-yellow-500" />}
+                        {entry.rank === 1 && <Crown className="w-4 h-4 text-warning" />}
                       </div>
                       <div className="flex items-center gap-2 text-sm text-muted-foreground">
                         <span>Nível {entry.level}</span>

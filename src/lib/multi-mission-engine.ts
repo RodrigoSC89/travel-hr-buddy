@@ -73,7 +73,7 @@ export interface RiskAssessment {
 export interface CoordinationUpdate {
   update_type: "status" | "position" | "resource" | "emergency";
   vessel_id: string;
-  data: Record<string, any>;
+  data: Record<string, unknown>;
   timestamp: string;
 }
 
@@ -153,10 +153,11 @@ export class MultiMissionEngine {
   /**
    * Create AI-driven coordination plan
    */
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- vessel objects from dynamic mission assignment
   private static async createCoordinationPlan(
     mission: Mission,
     vessels: any[],
-    missionData: any
+    missionData: Record<string, unknown>
   ): Promise<CoordinationPlan> {
     // Use AI to generate optimal coordination plan
     const aiPrompt = `Create a detailed coordination plan for a ${mission.mission_type} mission with the following details:
@@ -197,8 +198,8 @@ Format the response as structured data.`;
         vessel_name: vessel.name,
         role: index === 0 ? "primary" : "support",
         responsibilities: this.getVesselResponsibilities(missionType, index === 0 ? "primary" : "support"),
-        required_capabilities: missionData.required_capabilities || [],
-        status: "assigned"
+        required_capabilities: (missionData.required_capabilities as string[]) || [],
+        status: "assigned" as const
       })),
       timeline: this.generateTimeline(mission, vessels),
       communication_protocol: "MQTT + HTTP fallback on channel fleet-mission-" + mission.id,
@@ -253,6 +254,7 @@ Format the response as structured data.`;
   /**
    * Generate mission timeline
    */
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- vessel objects from dynamic mission query
   private static generateTimeline(mission: Mission, vessels: any[]): TimelineEvent[] {
     const timeline: TimelineEvent[] = [];
     const startTime = new Date(mission.start_time || new Date());
@@ -380,7 +382,8 @@ Format the response as structured data.`;
   /**
    * Assess mission risk
    */
-  private static assessRisk(mission: Mission, vessels: any[], missionData: any): RiskAssessment {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- vessel objects from dynamic mission query
+  private static assessRisk(mission: Mission, vessels: any[], missionData: Record<string, unknown>): RiskAssessment {
     // Simple risk scoring (can be enhanced with real data)
     const weatherRisk = 0.3; // Would come from weather API
     const distanceRisk = 0.2; // Based on vessel positions

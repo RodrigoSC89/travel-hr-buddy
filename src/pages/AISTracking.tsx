@@ -268,8 +268,8 @@ export default function AISTracking() {
 
           <Card>
             <CardContent className="p-4 flex items-center gap-4">
-              <div className="p-3 rounded-full bg-purple-500/10">
-                <Waves className="h-6 w-6 text-purple-500" />
+              <div className="p-3 rounded-full bg-accent/10">
+                <Waves className="h-6 w-6 text-accent-foreground" />
               </div>
               <div>
                 <p className="text-2xl font-bold">{summary.avgSpeed.toFixed(1)} kn</p>
@@ -509,15 +509,15 @@ export default function AISTracking() {
                           key={index}
                           className={`p-3 border rounded-lg ${
                             alert.severity === "critical" 
-                              ? "border-red-500 bg-red-500/10" 
+                              ? "border-destructive bg-destructive/10" 
                               : alert.severity === "warning"
-                              ? "border-yellow-500 bg-yellow-500/10"
-                              : "border-blue-500 bg-blue-500/10"
+                              ? "border-warning bg-warning/10"
+                              : "border-primary bg-primary/10"
                           }`}
                         >
                           <div className="flex items-center gap-2">
                             <AlertTriangle className={`h-4 w-4 ${
-                              alert.severity === "critical" ? "text-red-500" : "text-yellow-500"
+                              alert.severity === "critical" ? "text-destructive" : "text-warning"
                             }`} />
                             <span className="font-medium">{alert.vessel}</span>
                           </div>

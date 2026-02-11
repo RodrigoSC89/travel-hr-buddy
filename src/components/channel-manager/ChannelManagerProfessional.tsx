@@ -136,9 +136,9 @@ interface Message {
   message_content: string;
   message_type?: string;
   created_at?: string;
-  attachments?: any[];
+  attachments?: Record<string, unknown>[];
   is_ai_generated?: boolean;
-  reactions?: any[];
+  reactions?: Record<string, unknown>[];
 }
 
 interface ChannelMember {
@@ -171,7 +171,7 @@ const getChannelTypeIcon = (type?: string) => {
     case 'emergency': return <AlertCircle className="h-4 w-4 text-destructive" />;
     case 'operations': return <Radio className="h-4 w-4 text-primary" />;
     case 'maintenance': return <Settings className="h-4 w-4 text-warning" />;
-    case 'command': return <Shield className="h-4 w-4 text-purple-500" />;
+    case 'command': return <Shield className="h-4 w-4 text-accent-foreground" />;
     default: return <Hash className="h-4 w-4 text-muted-foreground" />;
   }
 };
@@ -180,16 +180,16 @@ const getChannelTypeBadge = (type?: string) => {
   switch (type) {
     case 'emergency': return <Badge variant="destructive" className="text-xs">Emergência</Badge>;
     case 'operations': return <Badge className="text-xs bg-primary/20 text-primary">Operações</Badge>;
-    case 'maintenance': return <Badge className="text-xs bg-yellow-500/20 text-yellow-600">Manutenção</Badge>;
-    case 'command': return <Badge className="text-xs bg-purple-500/20 text-purple-500">Comando</Badge>;
+    case 'maintenance': return <Badge className="text-xs bg-warning/20 text-warning">Manutenção</Badge>;
+    case 'command': return <Badge className="text-xs bg-accent/20 text-accent-foreground">Comando</Badge>;
     default: return <Badge variant="secondary" className="text-xs">Geral</Badge>;
   }
 };
 
 const getStatusColor = (status: string) => {
   switch (status) {
-    case 'online': return 'bg-green-500';
-    case 'away': return 'bg-yellow-500';
+    case 'online': return 'bg-success';
+    case 'away': return 'bg-warning';
     case 'offline': return 'bg-muted-foreground';
     default: return 'bg-muted-foreground';
   }
@@ -210,7 +210,7 @@ const StatCard: React.FC<{
           <p className="text-xs text-muted-foreground font-medium">{title}</p>
           <p className="text-2xl font-bold text-foreground">{value}</p>
           {trend && (
-            <p className={`text-xs ${trendUp ? 'text-green-500' : 'text-red-500'}`}>
+            <p className={`text-xs ${trendUp ? 'text-success' : 'text-destructive'}`}>
               {trendUp ? '↑' : '↓'} {trend}
             </p>
           )}
@@ -279,9 +279,11 @@ export default function ChannelManagerProfessional() {
     if (dbChannels && dbChannels.length > 0) {
       const mappedChannels: Channel[] = dbChannels.map((ch, i) => ({
         id: ch.id,
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any -- dynamic Supabase column names
         name: (ch as any).channel_name || (ch as any).name || '',
         description: ch.description || undefined,
         is_active: ch.is_active,
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any -- dynamic Supabase column names
         channel_type: (ch as any).channel_type,
         is_private: !(ch as any).is_public,
         created_at: ch.created_at,
@@ -384,10 +386,10 @@ export default function ChannelManagerProfessional() {
           channel_type: newChannelType,
           is_private: newChannelPrivate,
           created_by: user?.id,
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any -- dynamic insert fields
         } as any)
         .select()
         .single();
-
       if (error) throw error;
 
       const newChannel: Channel = {
@@ -993,7 +995,7 @@ export default function ChannelManagerProfessional() {
                                     <div className="flex gap-1 mt-2">
                                       {msg.reactions.map((reaction, idx) => (
                                         <Badge key={idx} variant="secondary" className="text-xs px-2 py-0.5">
-                                          {reaction.emoji} {reaction.count}
+                                          {(reaction as Record<string, unknown>).emoji as string} {(reaction as Record<string, unknown>).count as number}
                                         </Badge>
                                       ))}
                                     </div>

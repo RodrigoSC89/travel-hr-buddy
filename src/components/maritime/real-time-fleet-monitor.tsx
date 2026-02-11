@@ -32,7 +32,7 @@ interface VesselMetrics {
   lastMaintenance: Date;
   nextMaintenance: Date;
   crew: number;
-  weather?: any;
+  weather?: Record<string, unknown>;
 }
 
 export const RealTimeFleetMonitor = () => {
@@ -49,6 +49,7 @@ export const RealTimeFleetMonitor = () => {
     if (fleetData.length > 0) setVessels(fleetData);
   }, [fleetData]);
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Supabase realtime payload
   const handleFleetUpdate = (payload: any) => {
     // Update specific vessel data
     if (payload.eventType === "UPDATE") {
@@ -98,18 +99,18 @@ export const RealTimeFleetMonitor = () => {
 
   const getStatusColor = (status: string) => {
     switch (status.toLowerCase()) {
-    case "operational": return "bg-green-100 text-green-800";
-    case "maintenance": return "bg-yellow-100 text-yellow-800";
-    case "emergency": return "bg-red-100 text-red-800";
-    case "docked": return "bg-blue-100 text-blue-800";
+    case "operational": return "bg-success/10 text-success";
+    case "maintenance": return "bg-warning/10 text-warning";
+    case "emergency": return "bg-destructive/10 text-destructive";
+    case "docked": return "bg-primary/10 text-primary";
     default: return "bg-secondary text-secondary-foreground";
     }
   };
 
   const getFuelLevelColor = (level: number) => {
-    if (level > 50) return "text-green-600";
-    if (level > 25) return "text-yellow-600";
-    return "text-red-600";
+    if (level > 50) return "text-success";
+    if (level > 25) return "text-warning";
+    return "text-destructive";
   };
 
   const selectedVesselData = vessels.find(v => v.id === selectedVessel);
@@ -122,8 +123,8 @@ export const RealTimeFleetMonitor = () => {
             <Card key={i}>
               <CardContent className="p-6">
                 <div className="animate-pulse space-y-2">
-                  <div className="h-4 bg-gray-200 rounded w-3/4"></div>
-                  <div className="h-8 bg-gray-200 rounded w-1/2"></div>
+                  <div className="h-4 bg-muted rounded w-3/4"></div>
+                   <div className="h-8 bg-muted rounded w-1/2"></div>
                 </div>
               </CardContent>
             </Card>
@@ -170,11 +171,11 @@ export const RealTimeFleetMonitor = () => {
             <CardContent className="space-y-3">
               <div className="grid grid-cols-2 gap-3 text-sm">
                 <div className="flex items-center gap-1">
-                  <Gauge className="h-4 w-4 text-blue-500" />
+                  <Gauge className="h-4 w-4 text-primary" />
                   <span>{vessel.speed.toFixed(1)} kn</span>
                 </div>
                 <div className="flex items-center gap-1">
-                  <Navigation className="h-4 w-4 text-green-500" />
+                  <Navigation className="h-4 w-4 text-success" />
                   <span>{vessel.heading.toFixed(0)}°</span>
                 </div>
                 <div className="flex items-center gap-1">
@@ -182,7 +183,7 @@ export const RealTimeFleetMonitor = () => {
                   <span>{vessel.fuelLevel.toFixed(0)}%</span>
                 </div>
                 <div className="flex items-center gap-1">
-                  <Activity className="h-4 w-4 text-purple-500" />
+                  <Activity className="h-4 w-4 text-accent-foreground" />
                   <span>{vessel.crew} crew</span>
                 </div>
               </div>
@@ -230,12 +231,12 @@ export const RealTimeFleetMonitor = () => {
               <TabsContent value="overview" className="space-y-4">
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
                   <div className="text-center p-4 border rounded-lg">
-                    <Gauge className="h-8 w-8 mx-auto mb-2 text-blue-500" />
+                    <Gauge className="h-8 w-8 mx-auto mb-2 text-primary" />
                     <div className="text-2xl font-bold">{selectedVesselData.speed.toFixed(1)}</div>
                     <div className="text-sm text-muted-foreground">Velocidade (kn)</div>
                   </div>
                   <div className="text-center p-4 border rounded-lg">
-                    <Navigation className="h-8 w-8 mx-auto mb-2 text-green-500" />
+                    <Navigation className="h-8 w-8 mx-auto mb-2 text-success" />
                     <div className="text-2xl font-bold">{selectedVesselData.heading.toFixed(0)}°</div>
                     <div className="text-sm text-muted-foreground">Rumo</div>
                   </div>
@@ -245,7 +246,7 @@ export const RealTimeFleetMonitor = () => {
                     <div className="text-sm text-muted-foreground">Combustível</div>
                   </div>
                   <div className="text-center p-4 border rounded-lg">
-                    <Activity className="h-8 w-8 mx-auto mb-2 text-purple-500" />
+                    <Activity className="h-8 w-8 mx-auto mb-2 text-accent-foreground" />
                     <div className="text-2xl font-bold">{selectedVesselData.crew}</div>
                     <div className="text-sm text-muted-foreground">Tripulação</div>
                   </div>
@@ -268,7 +269,7 @@ export const RealTimeFleetMonitor = () => {
                       <CardTitle className="text-lg">Eficiência</CardTitle>
                     </CardHeader>
                     <CardContent>
-                      <div className="text-3xl font-bold text-green-600">92%</div>
+                      <div className="text-3xl font-bold text-success">92%</div>
                       <p className="text-sm text-muted-foreground">Eficiência operacional</p>
                     </CardContent>
                   </Card>

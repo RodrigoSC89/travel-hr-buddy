@@ -18,7 +18,7 @@ interface SyncItem {
   id: string;
   operation: 'insert' | 'update' | 'delete';
   table: string;
-  data: any;
+  data: unknown;
   timestamp: number;
   retryCount: number;
   priority: 'critical' | 'high' | 'normal' | 'low';
@@ -31,7 +31,7 @@ interface SyncItem {
 
 interface CacheItem {
   key: string;
-  data: any;
+  data: unknown;
   timestamp: number;
   ttl: number;
   compressed: boolean;
@@ -104,7 +104,7 @@ class IndexedDBSync {
   async queueOperation(
     operation: 'insert' | 'update' | 'delete',
     table: string,
-    data: any,
+    data: unknown,
     priority: 'critical' | 'high' | 'normal' | 'low' = 'normal'
   ): Promise<string> {
     const store = await this.getStore(STORES.SYNC_QUEUE, 'readwrite');
@@ -264,7 +264,7 @@ class IndexedDBSync {
 
   // ============ CACHE OPERATIONS ============
 
-  async cacheData(key: string, data: any, ttl = 3600000): Promise<void> {
+  async cacheData(key: string, data: unknown, ttl = 3600000): Promise<void> {
     const store = await this.getStore(STORES.CACHE, 'readwrite');
     
     let compressed = false;
@@ -316,7 +316,7 @@ class IndexedDBSync {
         // Decompress if needed
         let data = item.data;
         if (item.compressed) {
-          data = decompressPayload(item.data);
+          data = decompressPayload(item.data as Parameters<typeof decompressPayload>[0]);
         }
         
         resolve(data as T);
