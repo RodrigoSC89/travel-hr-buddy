@@ -75,7 +75,7 @@ export function AIPredictiveAnalytics() {
 
       const mapped: Prediction[] = [];
 
-      (maintRes.data || []).forEach((m: any) => {
+      (maintRes.data || []).forEach((m) => {
         mapped.push({
           id: m.id,
           category: "maintenance",
@@ -89,7 +89,7 @@ export function AIPredictiveAnalytics() {
         });
       });
 
-      (insightsRes.data || []).forEach((i: any) => {
+      (insightsRes.data || []).forEach((i) => {
         const cat = i.category === "crew" ? "crew" : i.category === "fuel" ? "fuel" : i.category === "route" ? "route" : "risk";
         mapped.push({
           id: i.id,
@@ -120,7 +120,7 @@ export function AIPredictiveAnalytics() {
 
       if (data && data.length > 0) {
         const grouped = new Map<string, { scores: number[]; confidences: number[] }>();
-        data.forEach((d: any) => {
+        data.forEach((d) => {
           const key = d.module_name || "Geral";
           if (!grouped.has(key)) grouped.set(key, { scores: [], confidences: [] });
           const g = grouped.get(key)!;
@@ -176,17 +176,17 @@ export function AIPredictiveAnalytics() {
   const getCategoryColor = (category: string) => {
     switch (category) {
       case "maintenance":
-        return "bg-orange-500/20 text-orange-400";
+        return "bg-warning/20 text-warning";
       case "crew":
-        return "bg-blue-500/20 text-blue-400";
+        return "bg-primary/20 text-primary";
       case "fuel":
-        return "bg-green-500/20 text-green-400";
+        return "bg-success/20 text-success";
       case "route":
-        return "bg-purple-500/20 text-purple-400";
+        return "bg-accent/20 text-accent-foreground";
       case "risk":
-        return "bg-red-500/20 text-red-400";
+        return "bg-destructive/20 text-destructive";
       default:
-        return "bg-gray-500/20 text-gray-400";
+        return "bg-muted/20 text-muted-foreground";
     }
   };
 
@@ -239,11 +239,11 @@ export function AIPredictiveAnalytics() {
                 <div className="flex items-center justify-between mb-2">
                   <span className="text-xs text-muted-foreground">{trend.label}</span>
                   {trend.change > 0 ? (
-                    <TrendingUp className="h-4 w-4 text-green-400" />
+                    <TrendingUp className="h-4 w-4 text-success" />
                   ) : trend.change < 0 ? (
-                    <TrendingDown className="h-4 w-4 text-red-400" />
+                    <TrendingDown className="h-4 w-4 text-destructive" />
                   ) : (
-                    <Gauge className="h-4 w-4 text-yellow-400" />
+                    <Gauge className="h-4 w-4 text-warning" />
                   )}
                 </div>
                 <div className="flex items-baseline gap-2">
@@ -253,7 +253,7 @@ export function AIPredictiveAnalytics() {
                 </div>
                 <div className={cn(
                   "text-xs mt-1",
-                  trend.change > 0 ? "text-green-400" : trend.change < 0 ? "text-red-400" : "text-yellow-400"
+                  trend.change > 0 ? "text-success" : trend.change < 0 ? "text-destructive" : "text-warning"
                 )}>
                   {trend.change > 0 ? "+" : ""}{trend.change}% previsto
                 </div>
@@ -298,10 +298,10 @@ export function AIPredictiveAnalytics() {
                         variant="outline"
                         className={cn(
                           prediction.impact === "positive"
-                            ? "border-green-500/30 text-green-400"
+                            ? "border-success/30 text-success"
                             : prediction.impact === "negative"
-                            ? "border-red-500/30 text-red-400"
-                            : "border-yellow-500/30 text-yellow-400"
+                            ? "border-destructive/30 text-destructive"
+                            : "border-warning/30 text-warning"
                         )}
                       >
                         {prediction.impact === "positive" ? "Positivo" : prediction.impact === "negative" ? "Atenção" : "Neutro"}

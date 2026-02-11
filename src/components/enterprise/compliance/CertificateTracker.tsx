@@ -68,6 +68,7 @@ export function CertificateTracker() {
         }
 
         const now = new Date();
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Supabase join returns dynamic shape
         const mapped: Certificate[] = (data || []).map((c: any) => {
           const expiry = c.expiry_date ? new Date(c.expiry_date) : new Date(Date.now() + 365 * 86400000);
           const issue = c.issue_date ? new Date(c.issue_date) : new Date(c.created_at || Date.now());
@@ -75,11 +76,11 @@ export function CertificateTracker() {
           const status: Certificate["status"] = daysRemaining < 0 ? "expired" : daysRemaining <= 90 ? "expiring" : "valid";
 
           return {
-            id: c.id,
-            name: c.certificate_name || c.name || c.type || "Certificate",
-            type: c.certificate_type || c.type || "N/A",
-            vesselName: c.vessels?.name || "N/A",
-            issuingAuthority: c.issuing_authority || c.issued_by || "N/A",
+            id: String(c.id),
+            name: String(c.certificate_name || c.name || c.type || "Certificate"),
+            type: String(c.certificate_type || c.type || "N/A"),
+            vesselName: String(c.vessels?.name || "N/A"),
+            issuingAuthority: String(c.issuing_authority || c.issued_by || "N/A"),
             issueDate: issue.toISOString().split("T")[0],
             expiryDate: expiry.toISOString().split("T")[0],
             status,
@@ -103,9 +104,9 @@ export function CertificateTracker() {
   const getStatusBadge = (status: Certificate["status"]) => {
     switch (status) {
       case "valid":
-        return <Badge className="bg-green-500/10 text-green-500 border-green-500/20">Válido</Badge>;
+        return <Badge className="bg-success/10 text-success border-success/20">Válido</Badge>;
       case "expiring":
-        return <Badge className="bg-yellow-500/10 text-yellow-500 border-yellow-500/20">Vencendo</Badge>;
+        return <Badge className="bg-warning/10 text-warning border-warning/20">Vencendo</Badge>;
       case "expired":
         return <Badge variant="destructive">Vencido</Badge>;
       case "pending":
@@ -114,9 +115,9 @@ export function CertificateTracker() {
   };
 
   const getProgressColor = (daysRemaining: number) => {
-    if (daysRemaining > 180) return "bg-green-500";
-    if (daysRemaining > 30) return "bg-yellow-500";
-    return "bg-red-500";
+    if (daysRemaining > 180) return "bg-success";
+    if (daysRemaining > 30) return "bg-warning";
+    return "bg-destructive";
   };
 
   const vessels = [...new Set(certificates.map(c => c.vesselName))];
@@ -159,10 +160,10 @@ export function CertificateTracker() {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-muted-foreground">Válidos</p>
-                <p className="text-3xl font-bold text-green-500">{stats.valid}</p>
+                <p className="text-3xl font-bold text-success">{stats.valid}</p>
               </div>
-              <div className="p-3 rounded-full bg-green-500/10">
-                <CheckCircle2 className="h-6 w-6 text-green-500" />
+              <div className="p-3 rounded-full bg-success/10">
+                <CheckCircle2 className="h-6 w-6 text-success" />
               </div>
             </div>
           </CardContent>
@@ -173,10 +174,10 @@ export function CertificateTracker() {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-muted-foreground">Vencendo (90 dias)</p>
-                <p className="text-3xl font-bold text-yellow-500">{stats.expiring}</p>
+                <p className="text-3xl font-bold text-warning">{stats.expiring}</p>
               </div>
-              <div className="p-3 rounded-full bg-yellow-500/10">
-                <Clock className="h-6 w-6 text-yellow-500" />
+              <div className="p-3 rounded-full bg-warning/10">
+                <Clock className="h-6 w-6 text-warning" />
               </div>
             </div>
           </CardContent>
@@ -187,10 +188,10 @@ export function CertificateTracker() {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-muted-foreground">Vencidos</p>
-                <p className="text-3xl font-bold text-red-500">{stats.expired}</p>
+                <p className="text-3xl font-bold text-destructive">{stats.expired}</p>
               </div>
-              <div className="p-3 rounded-full bg-red-500/10">
-                <AlertTriangle className="h-6 w-6 text-red-500" />
+              <div className="p-3 rounded-full bg-destructive/10">
+                <AlertTriangle className="h-6 w-6 text-destructive" />
               </div>
             </div>
           </CardContent>
@@ -251,17 +252,17 @@ export function CertificateTracker() {
       {/* Certificates List */}
       <div className="space-y-3">
         {filteredCertificates.map((cert) => (
-          <Card key={cert.id} className={`overflow-hidden ${cert.status === "expired" ? "border-red-500/50" : cert.status === "expiring" ? "border-yellow-500/50" : ""}`}>
+          <Card key={cert.id} className={`overflow-hidden ${cert.status === "expired" ? "border-destructive/50" : cert.status === "expiring" ? "border-warning/50" : ""}`}>
             <CardContent className="p-4">
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-4">
                   <div className={`p-3 rounded-lg ${
-                    cert.status === "valid" ? "bg-green-500/10" :
-                    cert.status === "expiring" ? "bg-yellow-500/10" : "bg-red-500/10"
+                    cert.status === "valid" ? "bg-success/10" :
+                    cert.status === "expiring" ? "bg-warning/10" : "bg-destructive/10"
                   }`}>
                     <Award className={`h-6 w-6 ${
-                      cert.status === "valid" ? "text-green-500" :
-                      cert.status === "expiring" ? "text-yellow-500" : "text-red-500"
+                      cert.status === "valid" ? "text-success" :
+                      cert.status === "expiring" ? "text-warning" : "text-destructive"
                     }`} />
                   </div>
                   <div>
@@ -293,8 +294,8 @@ export function CertificateTracker() {
                       {new Date(cert.expiryDate).toLocaleDateString("pt-BR")}
                     </p>
                     <p className={`text-sm ${
-                      cert.daysRemaining > 180 ? "text-green-500" :
-                      cert.daysRemaining > 0 ? "text-yellow-500" : "text-red-500"
+                      cert.daysRemaining > 180 ? "text-success" :
+                      cert.daysRemaining > 0 ? "text-warning" : "text-destructive"
                     }`}>
                       {cert.daysRemaining > 0 
                         ? `${cert.daysRemaining} dias restantes`

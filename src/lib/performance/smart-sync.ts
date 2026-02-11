@@ -8,7 +8,7 @@ import { logger } from "@/lib/logger";
 export interface SyncItem {
   id: string;
   module: string;
-  data: any;
+  data: unknown;
   priority: 'critical' | 'high' | 'normal' | 'low';
   size: number;
   retries: number;
@@ -72,6 +72,7 @@ class SmartSyncManager {
 
   private detectConnectionSpeed(): void {
     if ('connection' in navigator) {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Navigator.connection not in standard TS types
       const conn = (navigator as any).connection;
       const effectiveType = conn?.effectiveType || '4g';
       

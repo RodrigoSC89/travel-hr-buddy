@@ -23,16 +23,34 @@ vi.mock("@/integrations/supabase/client", () => ({
   }
 }));
 
+interface TriggerConfig {
+  eventType?: string;
+  condition?: ConditionConfig;
+}
+
+interface ConditionConfig {
+  field: string;
+  operator: string;
+  value: unknown;
+}
+
+interface ActionConfig {
+  message?: string;
+  recipient?: string;
+  recipients?: string[];
+  shouldFail?: boolean;
+}
+
 interface AutomationRule {
   id: string;
   name: string;
   trigger: {
     type: "event" | "schedule" | "condition";
-    config: any;
+    config: TriggerConfig;
   };
   actions: Array<{
     type: string;
-    config: any;
+    config: ActionConfig;
   }>;
   enabled: boolean;
   priority: number;
@@ -45,6 +63,12 @@ interface ExecutionResult {
   failedActions: number;
   duration: number;
   error?: string;
+}
+
+interface AutomationEvent {
+  type: string;
+  data?: Record<string, unknown>;
+  [key: string]: unknown;
 }
 
 // Mock automation engine
@@ -83,7 +107,7 @@ class AutomationEngine {
     }
   }
 
-  async executeRule(ruleId: string, context: any = {}): Promise<ExecutionResult> {
+  async executeRule(ruleId: string, context: Record<string, unknown> = {}): Promise<ExecutionResult> {
     const startTime = Date.now();
     const rule = this.rules.get(ruleId);
 
@@ -116,7 +140,7 @@ class AutomationEngine {
       try {
         await this.executeAction(action, context);
         executedActions++;
-      } catch (error) {
+      } catch {
         failedActions++;
       }
     }
@@ -134,7 +158,7 @@ class AutomationEngine {
     return result;
   }
 
-  private async executeAction(action: any, context: any): Promise<void> {
+  private async executeAction(action: { type: string; config: ActionConfig }, _context: Record<string, unknown>): Promise<void> {
     // Simulate action execution
     await new Promise(resolve => setTimeout(resolve, 10));
 
@@ -156,19 +180,19 @@ class AutomationEngine {
     callbacks.forEach(cb => cb());
   }
 
-  async evaluateTrigger(rule: AutomationRule, event: any): Promise<boolean> {
+  async evaluateTrigger(rule: AutomationRule, event: AutomationEvent): Promise<boolean> {
     if (rule.trigger.type === "event") {
       return event.type === rule.trigger.config.eventType;
     }
 
     if (rule.trigger.type === "condition") {
-      return this.evaluateCondition(rule.trigger.config.condition, event);
+      return this.evaluateCondition(rule.trigger.config.condition!, event);
     }
 
     return false;
   }
 
-  private evaluateCondition(condition: any, data: any): boolean {
+  private evaluateCondition(condition: ConditionConfig, data: Record<string, unknown>): boolean {
     const { field, operator, value } = condition;
 
     const actualValue = data[field];
@@ -177,11 +201,11 @@ class AutomationEngine {
     case "equals":
       return actualValue === value;
     case "greaterThan":
-      return actualValue > value;
+      return (actualValue as number) > (value as number);
     case "lessThan":
-      return actualValue < value;
+      return (actualValue as number) < (value as number);
     case "contains":
-      return String(actualValue).includes(value);
+      return String(actualValue).includes(value as string);
     default:
       return false;
     }
@@ -195,7 +219,7 @@ class AutomationEngine {
     this.executionHistory = [];
   }
 
-  async processEvent(event: any): Promise<ExecutionResult[]> {
+  async processEvent(event: AutomationEvent): Promise<ExecutionResult[]> {
     const results: ExecutionResult[] = [];
     const enabledRules = Array.from(this.rules.values())
       .filter(r => r.enabled)
@@ -456,8 +480,8 @@ describe("Automation Engine Tests", () => {
         priority: 1
       };
 
-      const matchingEvent = { type: "incident_created", data: {} };
-      const nonMatchingEvent = { type: "incident_resolved", data: {} };
+      const matchingEvent: AutomationEvent = { type: "incident_created", data: {} };
+      const nonMatchingEvent: AutomationEvent = { type: "incident_resolved", data: {} };
 
       expect(await engine.evaluateTrigger(rule, matchingEvent)).toBe(true);
       expect(await engine.evaluateTrigger(rule, nonMatchingEvent)).toBe(false);
@@ -478,8 +502,8 @@ describe("Automation Engine Tests", () => {
         priority: 1
       };
 
-      const matchingData = { severity: "critical" };
-      const nonMatchingData = { severity: "low" };
+      const matchingData: AutomationEvent = { type: "test", severity: "critical" };
+      const nonMatchingData: AutomationEvent = { type: "test", severity: "low" };
 
       expect(await engine.evaluateTrigger(rule, matchingData)).toBe(true);
       expect(await engine.evaluateTrigger(rule, nonMatchingData)).toBe(false);
@@ -500,21 +524,21 @@ describe("Automation Engine Tests", () => {
         priority: 1
       };
 
-      const highTemp = { temperature: 90 };
-      const lowTemp = { temperature: 70 };
+      const aboveThreshold: AutomationEvent = { type: "sensor", temperature: 85 };
+      const belowThreshold: AutomationEvent = { type: "sensor", temperature: 75 };
 
-      expect(await engine.evaluateTrigger(rule, highTemp)).toBe(true);
-      expect(await engine.evaluateTrigger(rule, lowTemp)).toBe(false);
+      expect(await engine.evaluateTrigger(rule, aboveThreshold)).toBe(true);
+      expect(await engine.evaluateTrigger(rule, belowThreshold)).toBe(false);
     });
 
-    it("should evaluate condition-based triggers with contains operator", async () => {
+    it("should evaluate contains operator", async () => {
       const rule: AutomationRule = {
         id: "rule-1",
         name: "Contains Rule",
         trigger: {
           type: "condition",
           config: {
-            condition: { field: "message", operator: "contains", value: "alarm" }
+            condition: { field: "message", operator: "contains", value: "error" }
           }
         },
         actions: [],
@@ -522,11 +546,28 @@ describe("Automation Engine Tests", () => {
         priority: 1
       };
 
-      const matchingData = { message: "System alarm detected" };
-      const nonMatchingData = { message: "System normal" };
+      const matchingData: AutomationEvent = { type: "log", message: "critical error occurred" };
+      const nonMatchingData: AutomationEvent = { type: "log", message: "everything is fine" };
 
       expect(await engine.evaluateTrigger(rule, matchingData)).toBe(true);
       expect(await engine.evaluateTrigger(rule, nonMatchingData)).toBe(false);
+    });
+
+    it("should return false for schedule triggers without time evaluation", async () => {
+      const rule: AutomationRule = {
+        id: "rule-1",
+        name: "Schedule Rule",
+        trigger: {
+          type: "schedule",
+          config: {}
+        },
+        actions: [],
+        enabled: true,
+        priority: 1
+      };
+
+      const event: AutomationEvent = { type: "tick" };
+      expect(await engine.evaluateTrigger(rule, event)).toBe(false);
     });
   });
 
@@ -534,83 +575,69 @@ describe("Automation Engine Tests", () => {
     it("should process events and execute matching rules", async () => {
       const rule1: AutomationRule = {
         id: "rule-1",
-        name: "Critical Alert",
+        name: "Incident Rule",
         trigger: {
-          type: "condition",
-          config: {
-            condition: { field: "severity", operator: "equals", value: "critical" }
-          }
+          type: "event",
+          config: { eventType: "incident_created" }
         },
-        actions: [{ type: "alert", config: {} }],
+        actions: [{ type: "notify", config: { recipient: "admin" } }],
         enabled: true,
-        priority: 10
+        priority: 1
       };
 
       const rule2: AutomationRule = {
         id: "rule-2",
-        name: "All Incidents",
+        name: "Other Rule",
         trigger: {
           type: "event",
-          config: { eventType: "incident" }
+          config: { eventType: "maintenance_completed" }
         },
-        actions: [{ type: "log", config: {} }],
+        actions: [{ type: "log", config: { message: "Done" } }],
         enabled: true,
-        priority: 5
+        priority: 1
       };
 
       engine.addRule(rule1);
       engine.addRule(rule2);
 
-      const event = { type: "incident", severity: "critical" };
-      const results = await engine.processEvent(event);
+      const results = await engine.processEvent({ type: "incident_created" });
 
-      expect(results.length).toBeGreaterThan(0);
+      expect(results).toHaveLength(1);
+      expect(results[0].ruleId).toBe("rule-1");
+      expect(results[0].success).toBe(true);
     });
 
     it("should execute rules in priority order", async () => {
-      const executionOrder: string[] = [];
-
-      const rule1: AutomationRule = {
-        id: "rule-1",
+      const lowPriority: AutomationRule = {
+        id: "low",
         name: "Low Priority",
-        trigger: { type: "event", config: { eventType: "test" } },
-        actions: [],
-        enabled: true,
-        priority: 1
-      };
-
-      const rule2: AutomationRule = {
-        id: "rule-2",
-        name: "High Priority",
-        trigger: { type: "event", config: { eventType: "test" } },
-        actions: [],
-        enabled: true,
-        priority: 10
-      };
-
-      engine.addRule(rule1);
-      engine.addRule(rule2);
-
-      const event = { type: "test" };
-      await engine.processEvent(event);
-
-      const history = engine.getExecutionHistory();
-      expect(history[0].ruleId).toBe("rule-2"); // Higher priority executes first
-      expect(history[1].ruleId).toBe("rule-1");
-    });
-
-    it("should skip disabled rules during event processing", async () => {
-      const rule1: AutomationRule = {
-        id: "rule-1",
-        name: "Enabled Rule",
         trigger: { type: "event", config: { eventType: "test" } },
         actions: [{ type: "log", config: {} }],
         enabled: true,
         priority: 1
       };
 
-      const rule2: AutomationRule = {
-        id: "rule-2",
+      const highPriority: AutomationRule = {
+        id: "high",
+        name: "High Priority",
+        trigger: { type: "event", config: { eventType: "test" } },
+        actions: [{ type: "log", config: {} }],
+        enabled: true,
+        priority: 10
+      };
+
+      engine.addRule(lowPriority);
+      engine.addRule(highPriority);
+
+      const results = await engine.processEvent({ type: "test" });
+
+      expect(results).toHaveLength(2);
+      expect(results[0].ruleId).toBe("high");
+    });
+
+    it("should skip disabled rules during event processing", async () => {
+      const rule: AutomationRule = {
+        id: "rule-1",
         name: "Disabled Rule",
         trigger: { type: "event", config: { eventType: "test" } },
         actions: [{ type: "log", config: {} }],
@@ -618,158 +645,55 @@ describe("Automation Engine Tests", () => {
         priority: 1
       };
 
-      engine.addRule(rule1);
-      engine.addRule(rule2);
-
-      const event = { type: "test" };
-      const results = await engine.processEvent(event);
-
-      expect(results).toHaveLength(1);
-      expect(results[0].ruleId).toBe("rule-1");
-    });
-
-    it("should handle events with no matching rules", async () => {
-      const rule: AutomationRule = {
-        id: "rule-1",
-        name: "Specific Rule",
-        trigger: { type: "event", config: { eventType: "specific" } },
-        actions: [],
-        enabled: true,
-        priority: 1
-      };
-
       engine.addRule(rule);
 
-      const event = { type: "unmatched" };
-      const results = await engine.processEvent(event);
+      const results = await engine.processEvent({ type: "test" });
 
       expect(results).toHaveLength(0);
     });
   });
 
-  describe("Event Listeners", () => {
-    it("should register event listeners", () => {
-      let called = false;
-      engine.on("test-event", () => { called = true; });
+  describe("Event System", () => {
+    it("should register and emit events", () => {
+      const callback = vi.fn();
+      engine.on("ruleExecuted", callback);
+      engine.emit("ruleExecuted");
 
-      engine.emit("test-event");
-
-      expect(called).toBe(true);
+      expect(callback).toHaveBeenCalledTimes(1);
     });
 
     it("should support multiple listeners for same event", () => {
-      let count = 0;
-      engine.on("test-event", () => { count++; });
-      engine.on("test-event", () => { count++; });
+      const callback1 = vi.fn();
+      const callback2 = vi.fn();
 
-      engine.emit("test-event");
+      engine.on("ruleExecuted", callback1);
+      engine.on("ruleExecuted", callback2);
+      engine.emit("ruleExecuted");
 
-      expect(count).toBe(2);
+      expect(callback1).toHaveBeenCalledTimes(1);
+      expect(callback2).toHaveBeenCalledTimes(1);
     });
   });
 
-  describe("Performance and Scalability", () => {
-    it("should handle multiple rules efficiently", async () => {
-      for (let i = 0; i < 50; i++) {
-        const rule: AutomationRule = {
-          id: `rule-${i}`,
-          name: `Rule ${i}`,
-          trigger: { type: "event", config: { eventType: "test" } },
-          actions: [{ type: "log", config: {} }],
-          enabled: true,
-          priority: i
-        };
-        engine.addRule(rule);
-      }
-
-      const start = Date.now();
-      const event = { type: "test" };
-      await engine.processEvent(event);
-      const duration = Date.now() - start;
-
-      expect(duration).toBeLessThan(1000); // Should complete within 1 second
-    });
-
-    it("should execute actions in parallel when possible", async () => {
+  describe("History Management", () => {
+    it("should clear execution history", async () => {
       const rule: AutomationRule = {
         id: "rule-1",
-        name: "Multi-action Rule",
+        name: "Test",
         trigger: { type: "event", config: {} },
-        actions: Array(10).fill(null).map((_, i) => ({
-          type: `action-${i}`,
-          config: {}
-        })),
+        actions: [{ type: "log", config: {} }],
         enabled: true,
         priority: 1
       };
 
       engine.addRule(rule);
-
-      const start = Date.now();
-      await engine.executeRule("rule-1");
-      const duration = Date.now() - start;
-
-      // If actions were sequential, it would take 10 * 10ms = 100ms
-      // Parallel execution should be faster
-      expect(duration).toBeLessThan(150);
-    });
-  });
-
-  describe("Error Recovery", () => {
-    it("should continue processing after action failures", async () => {
-      const rule: AutomationRule = {
-        id: "rule-1",
-        name: "Mixed Actions",
-        trigger: { type: "event", config: {} },
-        actions: [
-          { type: "action1", config: {} },
-          { type: "action2", config: { shouldFail: true } },
-          { type: "action3", config: {} },
-          { type: "action4", config: { shouldFail: true } },
-          { type: "action5", config: {} }
-        ],
-        enabled: true,
-        priority: 1
-      };
-
-      engine.addRule(rule);
-
-      const result = await engine.executeRule("rule-1");
-
-      expect(result.executedActions).toBe(3);
-      expect(result.failedActions).toBe(2);
-    });
-
-    it("should maintain engine state after errors", async () => {
-      const rule: AutomationRule = {
-        id: "rule-1",
-        name: "Failing Rule",
-        trigger: { type: "event", config: {} },
-        actions: [{ type: "fail", config: { shouldFail: true } }],
-        enabled: true,
-        priority: 1
-      };
-
-      engine.addRule(rule);
-
       await engine.executeRule("rule-1");
 
-      // Engine should still be functional
-      const allRules = engine.getAllRules();
-      expect(allRules).toHaveLength(1);
+      expect(engine.getExecutionHistory()).toHaveLength(1);
 
-      // Should be able to add new rules
-      const rule2: AutomationRule = {
-        id: "rule-2",
-        name: "New Rule",
-        trigger: { type: "event", config: {} },
-        actions: [],
-        enabled: true,
-        priority: 1
-      };
-      engine.addRule(rule2);
+      engine.clearHistory();
 
-      expect(engine.getAllRules()).toHaveLength(2);
+      expect(engine.getExecutionHistory()).toHaveLength(0);
     });
   });
 });

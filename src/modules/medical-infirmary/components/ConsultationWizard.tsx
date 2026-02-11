@@ -41,6 +41,7 @@ export function ConsultationWizard({ open, onOpenChange }: ConsultationWizardPro
   const { analyzeSymptoms, isLoading: aiLoading } = useMedicalAI();
 
   const [currentStep, setCurrentStep] = useState(1);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- AI analysis result has dynamic shape
   const [aiAnalysis, setAiAnalysis] = useState<any>(null);
 
   const [formData, setFormData] = useState({
@@ -234,7 +235,7 @@ export function ConsultationWizard({ open, onOpenChange }: ConsultationWizardPro
                   <Label>Tipo de Atendimento</Label>
                   <Select 
                     value={formData.consultationType} 
-                    onValueChange={(v: any) => setFormData(prev => ({ ...prev, consultationType: v }))}
+                    onValueChange={(v: string) => setFormData(prev => ({ ...prev, consultationType: v as typeof prev.consultationType }))}
                   >
                     <SelectTrigger>
                       <SelectValue />
@@ -511,7 +512,7 @@ export function ConsultationWizard({ open, onOpenChange }: ConsultationWizardPro
                     <Label>Severidade</Label>
                     <Select 
                       value={formData.severity} 
-                      onValueChange={(v: any) => setFormData(prev => ({ ...prev, severity: v }))}
+                      onValueChange={(v: string) => setFormData(prev => ({ ...prev, severity: v as typeof prev.severity }))}
                     >
                       <SelectTrigger>
                         <SelectValue />
