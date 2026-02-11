@@ -5,7 +5,7 @@
  * Handles PDF and JSON export of ISM audit reports
  */
 
-import { ISMAuditItem, ISMChecklistItem, ISMFinding, ISMReportExport, ISM_SECTIONS } from "./types";
+import { ISMAuditItem, ISMChecklistItem, ISMEvidence, ISMFinding, ISMReportExport, ISM_SECTIONS } from "./types";
 import { Logger } from "@/lib/utils/logger";
 
 // Lazy load jsPDF
@@ -71,7 +71,8 @@ export async function exportISMAuditPDF(
       `${score}%`
     ]);
 
-    (doc as any).autoTable({
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any -- jspdf-autotable plugin extends jsPDF prototype dynamically
+    (doc as unknown as Record<string, Function>).autoTable({
       startY: yPosition,
       head: [["Section", "IMO Reference", "Score"]],
       body: sectionTableData,
@@ -80,7 +81,7 @@ export async function exportISMAuditPDF(
       margin: { left: 20, right: 20 }
     });
 
-    yPosition = (doc as any).lastAutoTable.finalY + 15;
+    yPosition = (doc as unknown as Record<string, Record<string, number>>).lastAutoTable.finalY + 15;
 
     // Findings Summary
     if (findings.length > 0) {
@@ -101,7 +102,8 @@ export async function exportISMAuditPDF(
         finding.status
       ]);
 
-      (doc as any).autoTable({
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any -- jspdf-autotable plugin
+      (doc as unknown as Record<string, Function>).autoTable({
         startY: yPosition,
         head: [["Section", "Type", "Finding", "Status"]],
         body: findingsData,
@@ -110,7 +112,7 @@ export async function exportISMAuditPDF(
         margin: { left: 20, right: 20 }
       });
 
-      yPosition = (doc as any).lastAutoTable.finalY + 15;
+      yPosition = (doc as unknown as Record<string, Record<string, number>>).lastAutoTable.finalY + 15;
     }
 
     // Checklist Details (Summary)
@@ -141,7 +143,8 @@ export async function exportISMAuditPDF(
       ["Total Items", `${checklist.length}`]
     ];
 
-    (doc as any).autoTable({
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any -- jspdf-autotable plugin
+    (doc as unknown as Record<string, Function>).autoTable({
       startY: yPosition,
       head: [["Status", "Count"]],
       body: summaryData,
@@ -241,7 +244,8 @@ export async function exportISMAuditJSON(
   audit: ISMAuditItem,
   checklist: ISMChecklistItem[],
   findings: ISMFinding[],
-  evidence: any[] = []
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- ISMEvidence shape may vary
+  evidence: ISMEvidence[] = []
 ): Promise<{ success: boolean; json?: string; error?: string }> {
   try {
     Logger.info("Exporting ISM audit to JSON", { auditId: audit.id });

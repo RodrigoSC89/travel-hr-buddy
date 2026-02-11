@@ -79,7 +79,7 @@ export function useMaintenanceData() {
   const [selectedVessel, setSelectedVessel] = useState<string | null>(null);
   const [selectedEquipment, setSelectedEquipment] = useState<string | null>(null);
 
-  // Use dynamic db to avoid strict typing issues
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- dynamic table access for tables not in generated types
   const dynamicDb = supabase as any;
 
   // Fetch equipment
@@ -100,6 +100,7 @@ export function useMaintenanceData() {
       }
 
       // Generate equipment from vessels
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any -- vessel row shape from dynamic query
       return (data || []).flatMap((v: any): Equipment[] => {
         const equipmentList: Equipment[] = [
           {
@@ -156,6 +157,7 @@ export function useMaintenanceData() {
         return [];
       }
 
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any -- maintenance_orders join shape
       return (data || []).map((o: any): MaintenanceOrder => ({
         id: o.id,
         orderNumber: o.order_number || `WO-${o.id?.slice(0, 8)}`,
@@ -164,7 +166,7 @@ export function useMaintenanceData() {
         equipmentId: o.equipment_id || '',
         equipmentName: o.equipment_name || 'Equipamento',
         vesselId: o.vessel_id || '',
-        vesselName: (o.vessels as any)?.name || 'Embarcação',
+        vesselName: o.vessels?.name || 'Embarcação',
         type: mapOrderType(o.order_type || o.category),
         priority: mapPriority(o.priority),
         status: mapOrderStatus(o.status),
@@ -196,6 +198,7 @@ export function useMaintenanceData() {
         ];
       }
 
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any -- inventory_items dynamic shape
       return (data || []).map((p: any): SparePart => ({
         id: p.id,
         partNumber: p.part_number || p.sku || 'N/A',
@@ -239,6 +242,7 @@ export function useMaintenanceData() {
           }));
       }
 
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any -- AI predictions dynamic shape
       return (data || []).map((p: any): MaintenancePrediction => ({
         equipmentId: p.equipment_id,
         equipmentName: p.equipment_name,
@@ -382,6 +386,7 @@ function mapEquipmentStatus(status: string | null): Equipment['status'] {
   return 'operational';
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- dynamic equipment shape
 function calculateHealthScore(equipment: any): number {
   let score = 100;
   const hours = Number(equipment.running_hours) || 0;

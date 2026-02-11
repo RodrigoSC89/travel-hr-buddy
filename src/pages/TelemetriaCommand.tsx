@@ -72,7 +72,7 @@ export default function TelemetriaCommand() {
   const [loading, setLoading] = useState(true);
   const [sensors, setSensors] = useState<TelemetryLog[]>([]);
   const [alerts, setAlerts] = useState<TelemetryAlert[]>([]);
-  const [chartData, setChartData] = useState<any[]>([]);
+  const [chartData, setChartData] = useState<Record<string, unknown>[]>([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [filterType, setFilterType] = useState("all");
   const [filterStatus, setFilterStatus] = useState("all");
@@ -99,7 +99,7 @@ export default function TelemetriaCommand() {
         setSensors(sensorsRes.data as TelemetryLog[]);
         
         // Generate chart data
-        const grouped = (sensorsRes.data as TelemetryLog[]).reduce((acc: any, log: TelemetryLog) => {
+        const grouped = (sensorsRes.data as TelemetryLog[]).reduce((acc: Record<string, Record<string, unknown>>, log: TelemetryLog) => {
           const time = format(new Date(log.timestamp), "HH:mm");
           if (!acc[time]) acc[time] = { time };
           acc[time][log.sensor_type] = log.value;
@@ -253,7 +253,7 @@ export default function TelemetriaCommand() {
                 <p className="text-sm text-muted-foreground">Sensores Ativos</p>
                 <p className="text-2xl font-bold">{stats.totalSensors}</p>
               </div>
-              <Wifi className="h-8 w-8 text-green-500" />
+              <Wifi className="h-8 w-8 text-success" />
             </div>
           </CardContent>
         </Card>
@@ -264,18 +264,18 @@ export default function TelemetriaCommand() {
                 <p className="text-sm text-muted-foreground">Sinais Recentes</p>
                 <p className="text-2xl font-bold">{sensors.length}</p>
               </div>
-              <Activity className="h-8 w-8 text-blue-500" />
+              <Activity className="h-8 w-8 text-primary" />
             </div>
           </CardContent>
         </Card>
-        <Card className={stats.criticalAlerts > 0 ? "border-red-500" : ""}>
+        <Card className={stats.criticalAlerts > 0 ? "border-destructive" : ""}>
           <CardContent className="pt-4">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-muted-foreground">Alertas Críticos</p>
-                <p className="text-2xl font-bold text-red-500">{stats.criticalAlerts}</p>
+                <p className="text-2xl font-bold text-destructive">{stats.criticalAlerts}</p>
               </div>
-              <AlertTriangle className="h-8 w-8 text-red-500" />
+              <AlertTriangle className="h-8 w-8 text-destructive" />
             </div>
           </CardContent>
         </Card>
@@ -308,7 +308,7 @@ export default function TelemetriaCommand() {
             <AlertTriangle className="h-4 w-4" />
             <span className="hidden md:inline">Alertas</span>
             {alerts.length > 0 && (
-              <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full h-4 w-4 flex items-center justify-center">
+              <span className="absolute -top-1 -right-1 bg-destructive text-destructive-foreground text-xs rounded-full h-4 w-4 flex items-center justify-center">
                 {alerts.length}
               </span>
             )}
