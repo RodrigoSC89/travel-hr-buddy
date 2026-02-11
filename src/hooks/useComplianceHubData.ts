@@ -263,12 +263,12 @@ export function useComplianceHubData(vesselId?: string) {
     mutationFn: async (data: Partial<NonConformity>) => {
       const { data: userData } = await supabase.auth.getUser();
       
-      const insertData: Record<string, unknown> = {
-        title: data.title,
+      const insertData = {
+        title: data.title ?? '',
         description: data.description,
         vessel_id: data.vessel_id,
         severity: data.severity,
-        status: "open",
+        status: "open" as const,
         source: data.source,
         due_date: data.due_date,
         assigned_to: data.assigned_to,
@@ -277,7 +277,7 @@ export function useComplianceHubData(vesselId?: string) {
 
       const { data: result, error } = await supabase
         .from("non_conformities")
-        .insert(insertData as any)
+        .insert(insertData)
         .select()
         .single();
 

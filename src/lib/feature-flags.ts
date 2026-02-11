@@ -13,38 +13,41 @@ import { logger } from '@/lib/logger';
 // PRODUCTION SAFETY FLAGS
 // ============================================
 
+/** Helper to safely read Vite env vars */
+const env = (import.meta as unknown as { env: Record<string, string | undefined> }).env;
+
 /** Global strict mode - blocks mocks and fake data in production */
-export const STRICT_PROD = (import.meta as any).env?.VITE_STRICT_PROD !== 'false';
+export const STRICT_PROD = env?.VITE_STRICT_PROD !== 'false';
 
 /** BridgeLink WebSocket live stream (real WS not yet implemented, polling as fallback) */
-export const FF_BRIDGELINK_LIVE_WS = (import.meta as any).env?.VITE_FF_BRIDGELINK_LIVE_WS === 'true';
+export const FF_BRIDGELINK_LIVE_WS = env?.VITE_FF_BRIDGELINK_LIVE_WS === 'true';
 
 /** StarFix real API integration (requires STARFIX_API_KEY secret) */
-export const FF_STARFIX_REAL_API = (import.meta as any).env?.VITE_FF_STARFIX_REAL_API === 'true';
+export const FF_STARFIX_REAL_API = env?.VITE_FF_STARFIX_REAL_API === 'true';
 
 /** Terrastar real API integration (requires TERRASTAR_API_KEY secret) */
-export const FF_TERRASTAR_REAL_API = (import.meta as any).env?.VITE_FF_TERRASTAR_REAL_API === 'true';
+export const FF_TERRASTAR_REAL_API = env?.VITE_FF_TERRASTAR_REAL_API === 'true';
 
 /** NautilusBrain AI semantic analysis in BridgeLink */
-export const FF_NAUTILUS_BRAIN_AI = (import.meta as any).env?.VITE_FF_NAUTILUS_BRAIN_AI === 'true';
+export const FF_NAUTILUS_BRAIN_AI = env?.VITE_FF_NAUTILUS_BRAIN_AI === 'true';
 
 /** FMEA System full integration in BridgeLink */
-export const FF_FMEA_SYSTEM = (import.meta as any).env?.VITE_FF_FMEA_SYSTEM === 'true';
+export const FF_FMEA_SYSTEM = env?.VITE_FF_FMEA_SYSTEM === 'true';
 
 /** IoT Sensor Analytics - time-series charts */
-export const FF_IOT_ANALYTICS = (import.meta as any).env?.VITE_FF_IOT_ANALYTICS === 'true';
+export const FF_IOT_ANALYTICS = env?.VITE_FF_IOT_ANALYTICS === 'true';
 
 /** STCW AI Training recommendations engine */
-export const FF_STCW_AI_TRAINING = (import.meta as any).env?.VITE_FF_STCW_AI_TRAINING === 'true';
+export const FF_STCW_AI_TRAINING = env?.VITE_FF_STCW_AI_TRAINING === 'true';
 
 /** Audit calendar visualization */
-export const FF_AUDIT_CALENDAR = (import.meta as any).env?.VITE_FF_AUDIT_CALENDAR === 'true';
+export const FF_AUDIT_CALENDAR = env?.VITE_FF_AUDIT_CALENDAR === 'true';
 
 /** Advanced dashboard analytics */
-export const FF_DASHBOARD_ANALYTICS = (import.meta as any).env?.VITE_FF_DASHBOARD_ANALYTICS === 'true';
+export const FF_DASHBOARD_ANALYTICS = env?.VITE_FF_DASHBOARD_ANALYTICS === 'true';
 
 /** AI Checklist generation (requires AI Edge Function) */
-export const FF_AI_CHECKLIST_GEN = (import.meta as any).env?.VITE_FF_AI_CHECKLIST_GEN === 'true';
+export const FF_AI_CHECKLIST_GEN = env?.VITE_FF_AI_CHECKLIST_GEN === 'true';
 
 /**
  * Check if mock data should be blocked (production mode)

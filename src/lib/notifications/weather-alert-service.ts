@@ -285,7 +285,8 @@ export function processAndNotifyAlerts(alerts: WeatherAlert[]): void {
 
     // Track in analytics
     try {
-      const posthog = (window as any).posthog;
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any -- PostHog is loaded externally
+      const posthog = (window as unknown as Record<string, { capture?: (...args: unknown[]) => void }>).posthog;
       if (posthog?.capture) {
         posthog.capture("weather_alert_sent", {
           type: alert.type,

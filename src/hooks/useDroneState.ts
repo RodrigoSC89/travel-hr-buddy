@@ -52,8 +52,8 @@ export function useDroneState(options: UseDroneStateOptions = {}) {
 
     const loadDronesFromSupabase = async () => {
       try {
-        const { data, error } = await supabase
-          .from("drones" as any)
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any -- drones table is dynamic/not in generated types
+        const { data, error } = await (supabase.from as Function)("drones")
           .select("*")
           .order("created_at", { ascending: false });
 
@@ -63,13 +63,13 @@ export function useDroneState(options: UseDroneStateOptions = {}) {
         }
 
         if (data) {
-          // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Supabase dynamic table
-          (data as any[]).forEach((droneData) => {
+          interface DroneRow { id: string; name: string; status: string; position: unknown; battery: number; signal: number; temperature: number; last_update: string; mission_id: string; errors: string[] }
+          (data as DroneRow[]).forEach((droneData) => {
             droneCommandService.registerMockDrone({
               id: droneData.id,
               name: droneData.name,
-              status: droneData.status,
-              position: droneData.position,
+              status: droneData.status as DroneState["status"],
+              position: droneData.position as DroneState["position"],
               battery: droneData.battery || 0,
               signal: droneData.signal || 0,
               temperature: droneData.temperature,
@@ -136,7 +136,7 @@ export function useDroneState(options: UseDroneStateOptions = {}) {
   const sendCommand = useCallback(async (
     droneId: string,
     command: DroneCommand,
-    params?: Record<string, any>
+    params?: Record<string, unknown>
   ): Promise<CommandResponse> => {
     if (isSending) {
       return {
@@ -155,7 +155,8 @@ export function useDroneState(options: UseDroneStateOptions = {}) {
       // Log to Supabase if enabled
       if (enableSupabase) {
         try {
-          await supabase.from("drone_commands" as any).insert({
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any -- drone_commands table is dynamic
+          await (supabase.from as Function)("drone_commands").insert({
             drone_id: droneId,
             command,
             params,
