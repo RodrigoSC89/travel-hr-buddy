@@ -104,7 +104,7 @@ export const MyCertificates: React.FC = () => {
         <Card key={cert.id}>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <div className="flex items-center space-x-2">
-              <Award className="h-5 w-5 text-yellow-500" />
+              <Award className="h-5 w-5 text-warning" />
               <CardTitle className="text-lg">{cert.academy_courses?.title || "Course"}</CardTitle>
             </div>
             <Badge variant={cert.is_valid ? "default" : "secondary"}>

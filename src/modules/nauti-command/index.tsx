@@ -465,8 +465,8 @@ const NautilusCommandCenter = () => {
           {showBrain && (
             <NautilusBrainChat 
               onClose={() => setShowBrain(false)}
-              systemStatus={systemStatus}
-              alerts={alerts}
+              systemStatus={systemStatus as unknown as Parameters<typeof NautilusBrainChat>[0]['systemStatus']}
+              alerts={alerts as unknown as Parameters<typeof NautilusBrainChat>[0]['alerts']}
             />
           )}
         </AnimatePresence>

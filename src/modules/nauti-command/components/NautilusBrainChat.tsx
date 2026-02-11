@@ -28,10 +28,25 @@ interface Message {
   suggestions?: string[];
 }
 
+interface SystemStatusData {
+  fleet: Record<string, number>;
+  crew: Record<string, number>;
+  maintenance: Record<string, number>;
+  inventory: Record<string, number>;
+  compliance: Record<string, number>;
+  [key: string]: unknown;
+}
+
+interface AlertData {
+  type: string;
+  title: string;
+  [key: string]: unknown;
+}
+
 interface NautilusBrainChatProps {
   onClose: () => void;
-  systemStatus: any;
-  alerts: any[];
+  systemStatus: SystemStatusData;
+  alerts: AlertData[];
 }
 
 export const NautilusBrainChat: React.FC<NautilusBrainChatProps> = ({
@@ -143,7 +158,7 @@ ${alerts.map(a => `  - ${a.type}: ${a.title}`).join('\n')}
     }
   };
 
-  const generateFallbackResponse = (query: string, status: any, alerts: any[]): string => {
+  const generateFallbackResponse = (query: string, status: SystemStatusData, alertList: AlertData[]): string => {
     const q = query.toLowerCase();
     
     if (q.includes('manutenção') || q.includes('manutencao')) {
@@ -381,7 +396,7 @@ Qual área você gostaria de explorar em detalhes?`;
             <Button
               variant="outline"
               size="icon"
-              className={isListening ? "bg-red-100 text-red-600" : ""}
+              className={isListening ? "bg-destructive/10 text-destructive" : ""}
               onClick={() => setIsListening(!isListening)}
             >
               <Mic className={`h-4 w-4 ${isListening ? "animate-pulse" : ""}`} />

@@ -31,7 +31,7 @@ import {
 interface APITestResult {
   name: string;
   status: "idle" | "loading" | "success" | "error";
-  data?: any;
+  data?: Record<string, unknown>;
   error?: string;
   latency?: number;
   timestamp?: string;
@@ -269,11 +269,11 @@ export function WeatherAPITestPanel() {
   const getStatusIcon = (status: APITestResult["status"]) => {
     switch (status) {
       case "loading":
-        return <Loader2 className="h-4 w-4 animate-spin text-blue-500" />;
+        return <Loader2 className="h-4 w-4 animate-spin text-primary" />;
       case "success":
-        return <CheckCircle2 className="h-4 w-4 text-green-500" />;
+        return <CheckCircle2 className="h-4 w-4 text-success" />;
       case "error":
-        return <XCircle className="h-4 w-4 text-red-500" />;
+        return <XCircle className="h-4 w-4 text-destructive" />;
       default:
         return <div className="h-4 w-4 rounded-full border-2 border-muted-foreground/30" />;
     }
@@ -318,7 +318,7 @@ export function WeatherAPITestPanel() {
             {(successCount > 0 || errorCount > 0) && (
               <div className="flex items-center gap-2 mr-4">
                 {successCount > 0 && (
-                  <Badge variant="default" className="bg-green-500">
+                  <Badge variant="default" className="bg-success">
                     {successCount} OK
                   </Badge>
                 )}
@@ -404,7 +404,7 @@ export function WeatherAPITestPanel() {
                   </div>
 
                   {result.status === "success" && result.data && (
-                    <div className="bg-green-50 dark:bg-green-950/30 rounded-lg p-3">
+                    <div className="bg-success/10 rounded-lg p-3">
                       <pre className="text-xs overflow-auto max-h-32">
                         {JSON.stringify(result.data, null, 2)}
                       </pre>
@@ -412,8 +412,8 @@ export function WeatherAPITestPanel() {
                   )}
 
                   {result.status === "error" && result.error && (
-                    <div className="bg-red-50 dark:bg-red-950/30 rounded-lg p-3">
-                      <p className="text-xs text-red-600 dark:text-red-400">
+                    <div className="bg-destructive/10 rounded-lg p-3">
+                      <p className="text-xs text-destructive">
                         {result.error}
                       </p>
                     </div>

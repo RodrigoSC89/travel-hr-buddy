@@ -18,7 +18,7 @@ import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 import { logger } from "@/lib/logger";
 
-const weatherIcons: Record<string, any> = {
+const weatherIcons: Record<string, React.ElementType> = {
   clear: Sun,
   rain: CloudRain,
   snow: CloudSnow,
@@ -27,15 +27,16 @@ const weatherIcons: Record<string, any> = {
 };
 
 const riskColors: Record<string, string> = {
-  low: "bg-emerald-500/10 text-emerald-600 border-emerald-500/30",
-  moderate: "bg-amber-500/10 text-amber-600 border-amber-500/30",
-  high: "bg-orange-500/10 text-orange-600 border-orange-500/30",
-  severe: "bg-red-500/10 text-red-600 border-red-500/30",
+  low: "bg-success/10 text-success border-success/30",
+  moderate: "bg-warning/10 text-warning border-warning/30",
+  high: "bg-warning/10 text-warning border-warning/30",
+  severe: "bg-destructive/10 text-destructive border-destructive/30",
 };
 
 export function WeatherRoutingPanel() {
   const { toast } = useToast();
   const [isLoading, setIsLoading] = useState(false);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Edge function returns dynamic weather shape
   const [forecast, setForecast] = useState<any>(null);
   const [analysisType, setAnalysisType] = useState<string>("forecast");
   const [route, setRoute] = useState({

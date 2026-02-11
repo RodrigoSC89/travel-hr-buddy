@@ -392,7 +392,7 @@ ${s.name} (${s.probability}% probabilidade):
                     <p className="text-sm text-muted-foreground">
                       {scenario.savings >= 0 ? 'Economia Prevista' : 'Excesso Previsto'}
                     </p>
-                    <p className={`font-bold ${scenario.savings >= 0 ? 'text-green-600' : 'text-red-600'}`}>
+                    <p className={`font-bold ${scenario.savings >= 0 ? 'text-success' : 'text-destructive'}`}>
                       R$ {Math.abs(scenario.savings).toLocaleString('pt-BR')}
                     </p>
                   </div>

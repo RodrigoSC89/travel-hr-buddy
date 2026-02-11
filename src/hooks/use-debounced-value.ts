@@ -26,6 +26,7 @@ export function useDebouncedValue<T>(value: T, delay: number = 300): T {
 /**
  * Returns a debounced callback function
  */
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- generic callback constraint requires any
 export function useDebouncedCallback<T extends (...args: any[]) => any>(
   callback: T,
   delay: number = 300
@@ -66,6 +67,7 @@ export function useDebouncedCallback<T extends (...args: any[]) => any>(
 /**
  * Returns a throttled callback function
  */
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- generic callback constraint requires any
 export function useThrottledCallback<T extends (...args: any[]) => any>(
   callback: T,
   delay: number = 300

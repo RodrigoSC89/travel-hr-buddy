@@ -93,11 +93,11 @@ const IntelligentNotificationSystem = () => {
 
   const getTypeColor = (type: string) => {
     switch (type) {
-    case "warning": return "text-orange-600";
-    case "error": return "text-red-600";
-    case "success": return "text-green-600";
-    case "ai_insight": return "text-purple-600";
-    default: return "text-blue-600";
+    case "warning": return "text-warning";
+    case "error": return "text-destructive";
+    case "success": return "text-success";
+    case "ai_insight": return "text-accent-foreground";
+    default: return "text-primary";
     }
   };
 

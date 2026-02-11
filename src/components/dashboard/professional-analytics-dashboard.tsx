@@ -76,9 +76,17 @@ const scatterData = [
   { x: 110, y: 280, z: 200, category: "C" }
 ];
 
-const COLORS = ["#3b82f6", "#10b981", "#f59e0b", "#ef4444"];
+const COLORS = ["hsl(var(--primary))", "hsl(var(--success))", "hsl(var(--warning))", "hsl(var(--destructive))"];
 
-const MetricCard = ({ title, value, change, icon: Icon, trend }: any) => {
+interface MetricCardProps {
+  title: string;
+  value: string;
+  change: number;
+  icon: React.ElementType;
+  trend: string;
+}
+
+const MetricCard = ({ title, value, change, icon: Icon, trend }: MetricCardProps) => {
   const isPositive = change >= 0;
   
   return (
@@ -120,7 +128,7 @@ export function ProfessionalAnalyticsDashboard() {
       {/* Header */}
       <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
         <div>
-          <h1 className="text-4xl font-bold font-playfair bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">
+          <h1 className="text-4xl font-bold font-playfair bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
             Analytics Avançado
           </h1>
           <p className="text-muted-foreground mt-1">
@@ -209,8 +217,8 @@ export function ProfessionalAnalyticsDashboard() {
                   <YAxis yAxisId="right" orientation="right" />
                   <Tooltip />
                   <Legend />
-                  <Bar yAxisId="left" dataKey="revenue" fill="#3b82f6" name="Receita" radius={[8, 8, 0, 0]} />
-                  <Bar yAxisId="left" dataKey="costs" fill="#ef4444" name="Custos" radius={[8, 8, 0, 0]} />
+                  <Bar yAxisId="left" dataKey="revenue" fill="hsl(var(--primary))" name="Receita" radius={[8, 8, 0, 0]} />
+                  <Bar yAxisId="left" dataKey="costs" fill="hsl(var(--destructive))" name="Custos" radius={[8, 8, 0, 0]} />
                   <Area 
                     yAxisId="left"
                     type="monotone" 
@@ -296,7 +304,7 @@ export function ProfessionalAnalyticsDashboard() {
                     <YAxis type="number" dataKey="y" name="Retorno" />
                     <ZAxis type="number" dataKey="z" range={[100, 500]} />
                     <Tooltip cursor={{ strokeDasharray: "3 3" }} />
-                    <Scatter data={scatterData} fill="#3b82f6">
+                    <Scatter data={scatterData} fill="hsl(var(--primary))">
                       {scatterData.map((entry, index) => (
                         <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
                       ))}
@@ -324,8 +332,8 @@ export function ProfessionalAnalyticsDashboard() {
                   <YAxis />
                   <Tooltip />
                   <Legend />
-                  <Bar dataKey="revenue" stackId="a" fill="#3b82f6" name="Receita" />
-                  <Bar dataKey="costs" stackId="a" fill="#ef4444" name="Custos" />
+                  <Bar dataKey="revenue" stackId="a" fill="hsl(var(--primary))" name="Receita" />
+                  <Bar dataKey="costs" stackId="a" fill="hsl(var(--destructive))" name="Custos" />
                   <Line type="monotone" dataKey="profit" stroke="hsl(var(--success))" strokeWidth={3} name="Lucro Líquido" />
                 </ComposedChart>
               </ResponsiveContainer>
@@ -358,11 +366,11 @@ export function ProfessionalAnalyticsDashboard() {
                   <YAxis />
                   <Tooltip />
                   <Legend />
-                  <Area 
+                    <Area 
                     type="monotone" 
                     dataKey="active" 
                     fill="url(#colorActive)" 
-                    stroke="#3b82f6"
+                    stroke="hsl(var(--primary))"
                     name="Usuários Ativos"
                   />
                   <Bar dataKey="new" fill="hsl(var(--success))" name="Novos" radius={[8, 8, 0, 0]} />
