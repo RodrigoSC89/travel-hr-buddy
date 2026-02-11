@@ -202,9 +202,9 @@ export const DocumentProcessor: React.FC = () => {
 
   const getSentimentColor = (sentiment: string) => {
     switch (sentiment) {
-    case "positive": return "text-green-600";
-    case "negative": return "text-red-600";
-    default: return "text-yellow-600";
+    case "positive": return "text-success";
+    case "negative": return "text-destructive";
+    default: return "text-warning";
     }
   };
 

@@ -71,10 +71,10 @@ const PEOTRAM_ELEMENTS = [
 ];
 
 const NC_TYPES = [
-  { value: "critical", label: "Crítica", color: "bg-red-500" },
-  { value: "major", label: "Maior", color: "bg-orange-500" },
-  { value: "minor", label: "Menor", color: "bg-yellow-500" },
-  { value: "observation", label: "Observação", color: "bg-blue-500" },
+  { value: "critical", label: "Crítica", color: "bg-destructive" },
+  { value: "major", label: "Maior", color: "bg-warning" },
+  { value: "minor", label: "Menor", color: "bg-warning" },
+  { value: "observation", label: "Observação", color: "bg-primary" },
 ];
 
 export function PeotramEvidenceGenerator() {
@@ -89,7 +89,7 @@ export function PeotramEvidenceGenerator() {
   const [result, setResult] = useState<EvidenceResult | null>(null);
   const [isGenerating, setIsGenerating] = useState(false);
 
-  const handleInputChange = (field: keyof NonConformityInput, value: any) => {
+  const handleInputChange = (field: keyof NonConformityInput, value: string | number) => {
     setInput(prev => ({ ...prev, [field]: value }));
   };
 
@@ -191,8 +191,8 @@ ${result.corrective_action}
     <div className="space-y-4">
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-3">
-          <div className="p-2 bg-gradient-to-br from-green-500/20 to-emerald-500/20 rounded-lg">
-            <FileCheck className="h-6 w-6 text-green-500" />
+          <div className="p-2 bg-gradient-to-br from-success/20 to-success/10 rounded-lg">
+            <FileCheck className="h-6 w-6 text-success" />
           </div>
           <div>
             <h3 className="font-semibold flex items-center gap-2">
@@ -335,7 +335,7 @@ ${result.corrective_action}
           <CardHeader>
             <CardTitle className="text-lg flex items-center justify-between">
               <div className="flex items-center gap-2">
-                <FileText className="h-5 w-5 text-green-500" />
+                <FileText className="h-5 w-5 text-success" />
                 Evidência Gerada
               </div>
               {result && (
@@ -358,7 +358,7 @@ ${result.corrective_action}
                   <div className="space-y-2">
                     <div className="flex items-center justify-between">
                       <Label className="flex items-center gap-2">
-                        <Brain className="h-4 w-4 text-blue-500" />
+                        <Brain className="h-4 w-4 text-primary" />
                         Análise Técnica
                       </Label>
                       <Button 
@@ -404,7 +404,7 @@ ${result.corrective_action}
                   <div className="space-y-2">
                     <div className="flex items-center justify-between">
                       <Label className="flex items-center gap-2">
-                        <AlertTriangle className="h-4 w-4 text-red-500" />
+                        <AlertTriangle className="h-4 w-4 text-destructive" />
                         Riscos Identificados
                       </Label>
                       <Button 
@@ -416,7 +416,7 @@ ${result.corrective_action}
                         <Copy className="h-3 w-3" />
                       </Button>
                     </div>
-                    <div className="bg-red-500/10 border border-red-500/20 p-3 rounded-lg text-sm whitespace-pre-wrap">
+                    <div className="bg-destructive/10 border border-destructive/20 p-3 rounded-lg text-sm whitespace-pre-wrap">
                       {result.risk_identified}
                     </div>
                   </div>
@@ -427,7 +427,7 @@ ${result.corrective_action}
                   <div className="space-y-2">
                     <div className="flex items-center justify-between">
                       <Label className="flex items-center gap-2">
-                        <Target className="h-4 w-4 text-yellow-500" />
+                        <Target className="h-4 w-4 text-warning" />
                         Recomendações
                       </Label>
                       <Button 
@@ -450,7 +450,7 @@ ${result.corrective_action}
                   <div className="space-y-2">
                     <div className="flex items-center justify-between">
                       <Label className="flex items-center gap-2">
-                        <CheckCircle className="h-4 w-4 text-green-500" />
+                        <CheckCircle className="h-4 w-4 text-success" />
                         Ação Corretiva Proposta
                       </Label>
                       <Button 

@@ -45,6 +45,7 @@ interface ViewPlanDialogProps {
 }
 
 const getPlanDetails = (plan: EmergencyPlan) => {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- dynamic plan detail shapes
   const details: Record<string, any> = {
     fire: {
       objective: "Combater e extinguir incêndios a bordo, protegendo vidas e propriedade.",
@@ -230,7 +231,7 @@ export const ViewPlanDialog: React.FC<ViewPlanDialogProps> = ({
             <Card>
               <CardContent className="p-4">
                 <h4 className="font-semibold mb-2 flex items-center gap-2">
-                  <CheckCircle className="h-4 w-4 text-green-600" />
+                  <CheckCircle className="h-4 w-4 text-success" />
                   Objetivo
                 </h4>
                 <p className="text-muted-foreground">{details.objective}</p>
@@ -241,7 +242,7 @@ export const ViewPlanDialog: React.FC<ViewPlanDialogProps> = ({
             <Card>
               <CardContent className="p-4">
                 <h4 className="font-semibold mb-2 flex items-center gap-2">
-                  <MapPin className="h-4 w-4 text-blue-600" />
+                  <MapPin className="h-4 w-4 text-primary" />
                   Escopo de Aplicação
                 </h4>
                 <p className="text-muted-foreground">{details.scope}</p>
@@ -252,7 +253,7 @@ export const ViewPlanDialog: React.FC<ViewPlanDialogProps> = ({
             <Card>
               <CardContent className="p-4">
                 <h4 className="font-semibold mb-3 flex items-center gap-2">
-                  <Activity className="h-4 w-4 text-orange-600" />
+                  <Activity className="h-4 w-4 text-warning" />
                   Procedimentos
                 </h4>
                 <ol className="list-decimal list-inside space-y-2">
@@ -267,13 +268,13 @@ export const ViewPlanDialog: React.FC<ViewPlanDialogProps> = ({
             <Card>
               <CardContent className="p-4">
                 <h4 className="font-semibold mb-3 flex items-center gap-2">
-                  <AlertTriangle className="h-4 w-4 text-yellow-600" />
+                  <AlertTriangle className="h-4 w-4 text-warning" />
                   Equipamentos Necessários
                 </h4>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
                   {details.equipment.map((item: string, idx: number) => (
                     <div key={idx} className="flex items-center gap-2 text-muted-foreground">
-                      <CheckCircle className="h-3 w-3 text-green-500" />
+                      <CheckCircle className="h-3 w-3 text-success" />
                       {item}
                     </div>
                   ))}
@@ -285,11 +286,11 @@ export const ViewPlanDialog: React.FC<ViewPlanDialogProps> = ({
             <Card>
               <CardContent className="p-4">
                 <h4 className="font-semibold mb-3 flex items-center gap-2">
-                  <Phone className="h-4 w-4 text-purple-600" />
+                  <Phone className="h-4 w-4 text-primary" />
                   Contatos de Emergência
                 </h4>
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
-                  {details.contacts.map((contact: any, idx: number) => (
+                  {details.contacts.map((contact: { name: string; phone: string }, idx: number) => (
                     <div key={idx} className="p-3 bg-muted/50 rounded-lg">
                       <p className="font-medium text-sm">{contact.name}</p>
                       <p className="text-primary font-bold">{contact.phone}</p>
@@ -303,7 +304,7 @@ export const ViewPlanDialog: React.FC<ViewPlanDialogProps> = ({
             <Card>
               <CardContent className="p-4">
                 <h4 className="font-semibold mb-3 flex items-center gap-2">
-                  <Calendar className="h-4 w-4 text-cyan-600" />
+                  <Calendar className="h-4 w-4 text-primary" />
                   Cronograma
                 </h4>
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4">

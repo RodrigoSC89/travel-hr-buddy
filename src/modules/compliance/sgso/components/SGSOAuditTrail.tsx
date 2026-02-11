@@ -87,7 +87,7 @@ export const SGSOAuditTrail: React.FC = () => {
     setAuditItems(initialItems);
   };
 
-  const updateAuditItem = (practiceId: string, field: keyof AuditItem, value: any) => {
+  const updateAuditItem = (practiceId: string, field: keyof AuditItem, value: AuditItem[keyof AuditItem]) => {
     setAuditItems(prev => ({
       ...prev,
       [practiceId]: {
@@ -114,11 +114,11 @@ export const SGSOAuditTrail: React.FC = () => {
   const getStatusBadge = (status: AuditStatus) => {
     switch (status) {
     case "sim":
-      return <Badge className="bg-green-500 hover:bg-green-600">Sim</Badge>;
+      return <Badge className="bg-success hover:bg-success/90">Sim</Badge>;
     case "nao":
       return <Badge variant="destructive">Não</Badge>;
     case "parcial":
-      return <Badge className="bg-yellow-500 hover:bg-yellow-600">Parcial</Badge>;
+      return <Badge className="bg-warning hover:bg-warning/90">Parcial</Badge>;
     case "na":
       return <Badge variant="outline">N/A</Badge>;
     default:
@@ -129,11 +129,11 @@ export const SGSOAuditTrail: React.FC = () => {
   const getStatusIcon = (status: AuditStatus) => {
     switch (status) {
     case "sim":
-      return <CheckCircle className="h-5 w-5 text-green-500" />;
+      return <CheckCircle className="h-5 w-5 text-success" />;
     case "nao":
       return <XCircle className="h-5 w-5 text-destructive" />;
     case "parcial":
-      return <AlertCircle className="h-5 w-5 text-yellow-500" />;
+      return <AlertCircle className="h-5 w-5 text-warning" />;
     default:
       return null;
     }
@@ -204,7 +204,7 @@ export const SGSOAuditTrail: React.FC = () => {
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-green-600">{conformities}</div>
+            <div className="text-2xl font-bold text-success">{conformities}</div>
           </CardContent>
         </Card>
 
@@ -223,12 +223,12 @@ export const SGSOAuditTrail: React.FC = () => {
         <Card>
           <CardHeader className="pb-2">
             <CardTitle className="text-sm font-medium flex items-center gap-2">
-              <AlertCircle className="h-4 w-4 text-yellow-500" />
+              <AlertCircle className="h-4 w-4 text-warning" />
               Parciais
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-yellow-600">{partial}</div>
+            <div className="text-2xl font-bold text-warning">{partial}</div>
           </CardContent>
         </Card>
       </div>
@@ -258,9 +258,9 @@ export const SGSOAuditTrail: React.FC = () => {
                 
                 return (
                   <Card key={practice.id} className={`
-                    ${item?.status === "sim" ? "border-green-500/50 bg-green-500/5" : ""}
+                    ${item?.status === "sim" ? "border-success/50 bg-success/5" : ""}
                     ${item?.status === "nao" ? "border-destructive/50 bg-destructive/5" : ""}
-                    ${item?.status === "parcial" ? "border-yellow-500/50 bg-yellow-500/5" : ""}
+                    ${item?.status === "parcial" ? "border-warning/50 bg-warning/5" : ""}
                   `}>
                     <CardContent className="pt-4">
                       <div className="flex items-start gap-4">

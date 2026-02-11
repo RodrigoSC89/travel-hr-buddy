@@ -21,7 +21,7 @@ interface LogEntry {
   level: string;
   source: string;
   timestamp: string;
-  metadata?: any;
+  metadata?: Record<string, unknown>;
 }
 
 export function UnifiedLogsPanel() {
@@ -255,6 +255,7 @@ export function UnifiedLogsPanel() {
     });
 
     // Logs table
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any -- jsPDF plugin extends doc dynamically
     const finalY = (doc as any).lastAutoTable?.finalY || 100;
     doc.setFontSize(14);
     doc.text("Log Entries", 14, finalY + 10);
@@ -305,19 +306,19 @@ export function UnifiedLogsPanel() {
         </Card>
         <Card>
           <CardContent className="pt-6">
-            <div className="text-2xl font-bold text-blue-600">{statistics.bySource.access}</div>
+            <div className="text-2xl font-bold text-primary">{statistics.bySource.access}</div>
             <div className="text-xs text-muted-foreground">Access Logs</div>
           </CardContent>
         </Card>
         <Card>
           <CardContent className="pt-6">
-            <div className="text-2xl font-bold text-purple-600">{statistics.bySource.assistant}</div>
+            <div className="text-2xl font-bold text-accent-foreground">{statistics.bySource.assistant}</div>
             <div className="text-xs text-muted-foreground">Assistant Logs</div>
           </CardContent>
         </Card>
         <Card>
           <CardContent className="pt-6">
-            <div className="text-2xl font-bold text-green-600">{statistics.bySource.system}</div>
+            <div className="text-2xl font-bold text-success">{statistics.bySource.system}</div>
             <div className="text-xs text-muted-foreground">System Logs</div>
           </CardContent>
         </Card>
@@ -420,7 +421,7 @@ export function UnifiedLogsPanel() {
                       <div className="mt-1">{getSeverityIcon(log.level)}</div>
                       <div className="flex-1 min-w-0">
                         <div className="flex items-center gap-2 mb-1">
-                          <Badge variant={getSeverityColor(log.level) as any}>
+                          <Badge variant={getSeverityColor(log.level) as "destructive" | "warning" | "secondary"}>
                             {log.level}
                           </Badge>
                           <Badge variant="outline" className={`text-${getSourceColor(log.source)}-600`}>
