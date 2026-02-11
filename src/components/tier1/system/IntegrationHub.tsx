@@ -174,10 +174,10 @@ const getCategoryIcon = (category: string) => {
 
 const getStatusColor = (status: string) => {
   switch (status) {
-    case 'connected': return 'text-green-500';
+    case 'connected': return 'text-success';
     case 'disconnected': return 'text-muted-foreground';
-    case 'error': return 'text-red-500';
-    case 'pending': return 'text-yellow-500';
+    case 'error': return 'text-destructive';
+    case 'pending': return 'text-warning';
     default: return 'text-muted-foreground';
   }
 };
@@ -202,7 +202,7 @@ export function IntegrationHub() {
         <Card>
           <CardContent className="pt-4">
             <div className="flex items-center gap-2">
-              <Plug className="h-5 w-5 text-blue-500" />
+              <Plug className="h-5 w-5 text-primary" />
               <span className="text-sm text-muted-foreground">Total Integrations</span>
             </div>
             <p className="text-2xl font-bold mt-2">{stats.total}</p>
@@ -213,21 +213,21 @@ export function IntegrationHub() {
         <Card>
           <CardContent className="pt-4">
             <div className="flex items-center gap-2">
-              <CheckCircle className="h-5 w-5 text-green-500" />
+              <CheckCircle className="h-5 w-5 text-success" />
               <span className="text-sm text-muted-foreground">Connected</span>
             </div>
-            <p className="text-2xl font-bold mt-2 text-green-500">{stats.connected}</p>
+            <p className="text-2xl font-bold mt-2 text-success">{stats.connected}</p>
             <Progress value={(stats.connected / stats.total) * 100} className="mt-2" />
           </CardContent>
         </Card>
 
-        <Card className={stats.errors > 0 ? 'border-red-500' : ''}>
+        <Card className={stats.errors > 0 ? 'border-destructive' : ''}>
           <CardContent className="pt-4">
             <div className="flex items-center gap-2">
-              <AlertTriangle className={`h-5 w-5 ${stats.errors > 0 ? 'text-red-500' : 'text-muted-foreground'}`} />
+              <AlertTriangle className={`h-5 w-5 ${stats.errors > 0 ? 'text-destructive' : 'text-muted-foreground'}`} />
               <span className="text-sm text-muted-foreground">Errors</span>
             </div>
-            <p className={`text-2xl font-bold mt-2 ${stats.errors > 0 ? 'text-red-500' : ''}`}>
+            <p className={`text-2xl font-bold mt-2 ${stats.errors > 0 ? 'text-destructive' : ''}`}>
               {stats.errors}
             </p>
             <p className="text-xs text-muted-foreground">Need attention</p>
@@ -237,7 +237,7 @@ export function IntegrationHub() {
         <Card>
           <CardContent className="pt-4">
             <div className="flex items-center gap-2">
-              <BarChart3 className="h-5 w-5 text-purple-500" />
+              <BarChart3 className="h-5 w-5 text-accent-foreground" />
               <span className="text-sm text-muted-foreground">API Calls Today</span>
             </div>
             <p className="text-2xl font-bold mt-2">{stats.totalCalls.toLocaleString()}</p>
@@ -248,7 +248,7 @@ export function IntegrationHub() {
         <Card>
           <CardContent className="pt-4">
             <div className="flex items-center gap-2">
-              <Clock className="h-5 w-5 text-orange-500" />
+              <Clock className="h-5 w-5 text-warning" />
               <span className="text-sm text-muted-foreground">Avg Latency</span>
             </div>
             <p className="text-2xl font-bold mt-2">{Math.round(stats.avgLatency)} ms</p>
@@ -294,7 +294,7 @@ export function IntegrationHub() {
               <div className="space-y-4">
                 {integrations.map((integration) => (
                   <div key={integration.id} className={`p-4 border rounded-lg ${
-                    integration.status === 'error' ? 'border-red-500 bg-red-500/5' : ''
+                    integration.status === 'error' ? 'border-destructive bg-destructive/5' : ''
                   }`}>
                     <div className="flex items-center justify-between">
                       <div className="flex items-center gap-4">
@@ -390,8 +390,8 @@ export function IntegrationHub() {
                         <div className="text-right">
                           <p className="text-sm text-muted-foreground">Success Rate</p>
                           <p className={`font-semibold ${
-                            webhook.successRate >= 99 ? 'text-green-500' :
-                            webhook.successRate >= 95 ? 'text-yellow-500' : 'text-red-500'
+                            webhook.successRate >= 99 ? 'text-success' :
+                            webhook.successRate >= 95 ? 'text-warning' : 'text-destructive'
                           }`}>
                             {webhook.successRate}%
                           </p>
@@ -465,19 +465,19 @@ export function IntegrationHub() {
             <CardContent>
               <div className="space-y-2 font-mono text-sm">
                 <div className="p-2 bg-muted/50 rounded flex items-center justify-between">
-                  <span><span className="text-green-500">200</span> GET /api/vessels/position</span>
+                  <span><span className="text-success">200</span> GET /api/vessels/position</span>
                   <span className="text-muted-foreground">145ms • 2 min ago</span>
                 </div>
                 <div className="p-2 bg-muted/50 rounded flex items-center justify-between">
-                  <span><span className="text-green-500">200</span> POST /api/compliance/check</span>
+                  <span><span className="text-success">200</span> POST /api/compliance/check</span>
                   <span className="text-muted-foreground">320ms • 5 min ago</span>
                 </div>
                 <div className="p-2 bg-muted/50 rounded flex items-center justify-between">
-                  <span><span className="text-red-500">500</span> GET /api/dnv/certificates</span>
+                  <span><span className="text-destructive">500</span> GET /api/dnv/certificates</span>
                   <span className="text-muted-foreground">timeout • 1 hr ago</span>
                 </div>
                 <div className="p-2 bg-muted/50 rounded flex items-center justify-between">
-                  <span><span className="text-green-500">201</span> POST /api/webhooks/trigger</span>
+                  <span><span className="text-success">201</span> POST /api/webhooks/trigger</span>
                   <span className="text-muted-foreground">89ms • 2 hr ago</span>
                 </div>
               </div>

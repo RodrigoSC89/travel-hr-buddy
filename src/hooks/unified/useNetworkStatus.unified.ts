@@ -81,10 +81,8 @@ function getConnectionQuality(connection: NetworkConnection | null): ConnectionQ
 
 function getConnection(): NetworkConnection | null {
   if (typeof navigator !== "undefined") {
-    return (navigator as any).connection || 
-           (navigator as any).mozConnection || 
-           (navigator as any).webkitConnection || 
-           null;
+    const nav = navigator as unknown as Record<string, unknown>;
+    return (nav.connection || nav.mozConnection || nav.webkitConnection || null) as NetworkConnection | null;
   }
   return null;
 }
