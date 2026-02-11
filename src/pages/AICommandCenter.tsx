@@ -222,9 +222,9 @@ export default function AICommandCenter() {
 
   const getImpactColor = (impact: string) => {
     switch (impact) {
-      case "high": return "bg-red-500/10 text-red-500 border-red-500/20";
-      case "medium": return "bg-yellow-500/10 text-yellow-500 border-yellow-500/20";
-      default: return "bg-green-500/10 text-green-500 border-green-500/20";
+      case "high": return "bg-destructive/10 text-destructive border-destructive/20";
+      case "medium": return "bg-warning/10 text-warning border-warning/20";
+      default: return "bg-success/10 text-success border-success/20";
     }
   };
 
@@ -752,17 +752,17 @@ export default function AICommandCenter() {
                 </CardHeader>
                 <CardContent>
                   <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                    <div className="p-4 rounded-lg bg-green-500/10 text-center">
-                      <CheckCircle2 className="h-8 w-8 mx-auto text-green-500 mb-2" />
-                      <p className="text-2xl font-bold text-green-500">
+                    <div className="p-4 rounded-lg bg-success/10 text-center">
+                      <CheckCircle2 className="h-8 w-8 mx-auto text-success mb-2" />
+                      <p className="text-2xl font-bold text-success">
                         {Math.round(adoptionData.overview.totalSuggestions * adoptionData.overview.acceptanceRate / 100)}
                       </p>
                       <p className="text-xs text-muted-foreground">Aceitas</p>
                     </div>
 
-                    <div className="p-4 rounded-lg bg-red-500/10 text-center">
-                      <XCircle className="h-8 w-8 mx-auto text-red-500 mb-2" />
-                      <p className="text-2xl font-bold text-red-500">
+                    <div className="p-4 rounded-lg bg-destructive/10 text-center">
+                      <XCircle className="h-8 w-8 mx-auto text-destructive mb-2" />
+                      <p className="text-2xl font-bold text-destructive">
                         {Math.round(adoptionData.overview.totalSuggestions * (100 - adoptionData.overview.acceptanceRate) / 100)}
                       </p>
                       <p className="text-xs text-muted-foreground">Rejeitadas</p>

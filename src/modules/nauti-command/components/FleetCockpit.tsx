@@ -74,11 +74,11 @@ export const FleetCockpit: React.FC<FleetCockpitProps> = ({ vessels: propVessels
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case 'active': return 'bg-green-500';
-      case 'maintenance': return 'bg-yellow-500';
-      case 'docked': return 'bg-blue-500';
-      case 'alert': return 'bg-red-500';
-      default: return 'bg-gray-500';
+      case 'active': return 'bg-success';
+      case 'maintenance': return 'bg-warning';
+      case 'docked': return 'bg-primary';
+      case 'alert': return 'bg-destructive';
+      default: return 'bg-muted-foreground';
     }
   };
 

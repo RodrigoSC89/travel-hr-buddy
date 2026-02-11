@@ -223,7 +223,7 @@ export const AutomationWorkflowsManager = () => {
           const parsed = JSON.parse(data.result);
           if (parsed.suggestions && Array.isArray(parsed.suggestions)) {
             const formattedSuggestions = parsed.suggestions
-              .map((s: any) => `• ${s.title}: ${s.description} (${s.impact})`)
+              .map((s: Record<string, string>) => `• ${s.title}: ${s.description} (${s.impact})`)
               .join('\n\n');
             setAiSuggestion(formattedSuggestions);
           } else {
@@ -485,9 +485,9 @@ const WorkflowCard = ({
                   <div key={step.id} className="flex items-center">
                     <div className={`
                       px-2 py-1 rounded text-xs
-                      ${step.type === 'trigger' ? 'bg-blue-500/10 text-blue-600 dark:text-blue-400' : ''}
-                      ${step.type === 'condition' ? 'bg-yellow-500/10 text-yellow-600 dark:text-yellow-400' : ''}
-                      ${step.type === 'action' ? 'bg-green-500/10 text-green-600 dark:text-green-400' : ''}
+                      ${step.type === 'trigger' ? 'bg-primary/10 text-primary' : ''}
+                      ${step.type === 'condition' ? 'bg-warning/10 text-warning' : ''}
+                      ${step.type === 'action' ? 'bg-success/10 text-success' : ''}
                     `}>
                       {step.name}
                     </div>

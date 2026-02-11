@@ -109,13 +109,13 @@ const TimeAttendance: React.FC = () => {
   const getStatusBadge = (status: string) => {
     switch (status) {
       case 'normal':
-        return <Badge className="bg-green-500"><CheckCircle className="w-3 h-3 mr-1" />Normal</Badge>;
+        return <Badge className="bg-success"><CheckCircle className="w-3 h-3 mr-1" />Normal</Badge>;
       case 'atraso':
-        return <Badge className="bg-yellow-500"><AlertTriangle className="w-3 h-3 mr-1" />Atraso</Badge>;
+        return <Badge className="bg-warning text-warning-foreground"><AlertTriangle className="w-3 h-3 mr-1" />Atraso</Badge>;
       case 'falta':
-        return <Badge className="bg-red-500"><XCircle className="w-3 h-3 mr-1" />Falta</Badge>;
+        return <Badge className="bg-destructive"><XCircle className="w-3 h-3 mr-1" />Falta</Badge>;
       case 'ferias':
-        return <Badge className="bg-blue-500"><Sun className="w-3 h-3 mr-1" />Férias</Badge>;
+        return <Badge className="bg-primary"><Sun className="w-3 h-3 mr-1" />Férias</Badge>;
       case 'folga':
         return <Badge variant="secondary"><Coffee className="w-3 h-3 mr-1" />Folga</Badge>;
       default:
