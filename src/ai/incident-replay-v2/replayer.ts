@@ -593,8 +593,9 @@ Respond only with valid JSON.`,
    * Export to JSON
    */
   private exportToJSON(options: ExportOptions): string {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any -- spread replay for selective export
     const data: any = { ...this.replay };
-    
+
     if (!options.includeContext) {
       data.reconstruction = undefined;
     }

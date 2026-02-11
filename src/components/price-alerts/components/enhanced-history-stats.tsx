@@ -289,7 +289,7 @@ export function EnhancedHistoryStats() {
             </Card>
             <Card>
               <CardContent className="pt-6">
-                <div className="text-2xl font-bold text-blue-600">{statistics.flights.count}</div>
+                <div className="text-2xl font-bold text-info">{statistics.flights.count}</div>
                 <div className="text-xs text-muted-foreground">Voos Monitorados</div>
                 <div className="text-sm mt-2">
                   Média: <span className="font-semibold">R$ {statistics.flights.avg.toFixed(2)}</span>
@@ -298,7 +298,7 @@ export function EnhancedHistoryStats() {
             </Card>
             <Card>
               <CardContent className="pt-6">
-                <div className="text-2xl font-bold text-orange-600">{statistics.hotels.count}</div>
+                <div className="text-2xl font-bold text-warning">{statistics.hotels.count}</div>
                 <div className="text-xs text-muted-foreground">Hotéis Monitorados</div>
                 <div className="text-sm mt-2">
                   Média: <span className="font-semibold">R$ {statistics.hotels.avg.toFixed(2)}</span>

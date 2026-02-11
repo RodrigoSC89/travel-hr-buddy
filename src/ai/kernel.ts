@@ -559,7 +559,7 @@ const MODULE_AI_PATTERNS: Record<string, (context: AIContextRequest) => Promise<
     
     // Add insights about recent errors
     if (recentErrors.length > 0) {
-      const origins = new Set(recentErrors.map((e: any) => e.origin));
+      const origins = new Set(recentErrors.map((e: Record<string, unknown>) => String(e.origin)));
       if (origins.size === 1) {
         message += ` Erros concentrados em: ${Array.from(origins)[0]}.`;
       } else if (origins.size <= 3) {
@@ -848,12 +848,12 @@ export async function runAIContext(request: AIContextRequest): Promise<AIContext
 /**
  * Get AI context logs for a specific module
  */
-export function getAIContextLogs(module?: string): any[] {
+export function getAIContextLogs(module?: string): Record<string, unknown>[] {
   try {
-    const logs = JSON.parse(sessionStorage.getItem("ai_context_logs") || "[]");
+    const logs = JSON.parse(sessionStorage.getItem("ai_context_logs") || "[]") as Record<string, unknown>[];
     
     if (module) {
-      return logs.filter((log: any) => log.module === module);
+      return logs.filter((log) => log.module === module);
     }
     
     return logs;
@@ -885,18 +885,20 @@ export function getAIContextStats() {
     };
   }
   
-  const avgConfidence = logs.reduce((acc: number, log: any) => acc + (log.confidence || 0), 0) / logs.length;
+  const avgConfidence = logs.reduce((acc: number, log) => acc + (Number(log.confidence) || 0), 0) / logs.length;
   
-  const moduleUsage = logs.reduce((acc: any, log: any) => {
-    acc[log.module] = (acc[log.module] || 0) + 1;
+  const moduleUsage = logs.reduce((acc: Record<string, number>, log) => {
+    const mod = String(log.module);
+    acc[mod] = (acc[mod] || 0) + 1;
     return acc;
   }, {});
   
-  const typeDistribution = logs.reduce((acc: any, log: any) => {
-    acc[log.response_type] = (acc[log.response_type] || 0) + 1;
+  const typeDistribution = logs.reduce((acc: Record<string, number>, log) => {
+    const rt = String(log.response_type);
+    acc[rt] = (acc[rt] || 0) + 1;
     return acc;
   }, {});
-  
+
   return {
     totalCalls: logs.length,
     avgConfidence,

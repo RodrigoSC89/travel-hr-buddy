@@ -406,7 +406,7 @@ class DistributedDecisionCore {
     };
   }
 
-  private handleContextUpdate(contextData: Record<string, any>): void {
+  private handleContextUpdate(contextData: Record<string, unknown>): void {
     logger.debug("[DistributedDecisionCore] Received context update", contextData);
   }
 

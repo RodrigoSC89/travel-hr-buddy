@@ -349,6 +349,7 @@ Respond in JSON format with:
     this.contextHistory = [];
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- dynamic insert shape
   private async logPerformance(data: any) {
     try {
       // ia_performance_log exists in schema

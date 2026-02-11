@@ -260,7 +260,7 @@ export default function DocumentIntelligenceHub() {
            <Card>
              <CardHeader>
                <CardTitle className="flex items-center gap-2">
-                 <Sparkles className="h-5 w-5 text-purple-500" />
+                 <Sparkles className="h-5 w-5 text-primary" />
                  Inteligência Artificial & OCR
                </CardTitle>
                <CardDescription>
@@ -270,7 +270,7 @@ export default function DocumentIntelligenceHub() {
              <CardContent className="space-y-4">
                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                  <div className="text-center p-4 border rounded-lg">
-                   <Brain className="h-8 w-8 mx-auto text-purple-500 mb-2" />
+                   <Brain className="h-8 w-8 mx-auto text-primary mb-2" />
                    <p className="text-2xl font-bold">96.5%</p>
                    <p className="text-sm text-muted-foreground">Precisão OCR</p>
                  </div>

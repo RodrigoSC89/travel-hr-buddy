@@ -597,7 +597,7 @@ class MissionSimulationCore {
   /**
    * Get mock simulations for demonstration
    */
-  private getMockSimulations(): any[] {
+  private getMockSimulations(): Record<string, unknown>[] {
     return [
       {
         id: "mock-sim-1",

@@ -122,6 +122,7 @@ class EvolutionTrigger {
   /**
    * Calculate overall performance score
    */
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- AutoTuningConfig dynamic
   private calculatePerformanceScore(metrics: TuningMetrics, config: any): number {
     const accuracyScore = metrics.accuracy_rate;
     const confidenceScore = metrics.avg_confidence;
@@ -137,6 +138,7 @@ class EvolutionTrigger {
   /**
    * Detect performance anomalies
    */
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- AutoTuningConfig has dynamic thresholds shape
   private detectAnomalies(metrics: TuningMetrics, config: any): string[] {
     const anomalies: string[] = [];
 

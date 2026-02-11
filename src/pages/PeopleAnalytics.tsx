@@ -26,7 +26,7 @@ export default function PeopleAnalytics() {
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <span className="text-3xl font-bold text-green-500">94%</span>
+            <span className="text-3xl font-bold text-success">94%</span>
           </CardContent>
         </Card>
         <Card>
@@ -48,7 +48,7 @@ export default function PeopleAnalytics() {
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <span className="text-3xl font-bold text-green-500">+72</span>
+            <span className="text-3xl font-bold text-success">+72</span>
           </CardContent>
         </Card>
         <Card>

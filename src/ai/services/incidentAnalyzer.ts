@@ -132,9 +132,9 @@ const parseAnalysisResponse = (responseText: string): IncidentAnalysis => {
 /**
  * Validate risk level value
  */
-const validateRiskLevel = (level: any): SGSORiskLevel => {
+const validateRiskLevel = (level: string): SGSORiskLevel => {
   const validLevels: SGSORiskLevel[] = ["baixo", "moderado", "alto", "crítico"];
-  return validLevels.includes(level) ? level : "moderado";
+  return validLevels.includes(level as SGSORiskLevel) ? (level as SGSORiskLevel) : "moderado";
 };
 
 /**

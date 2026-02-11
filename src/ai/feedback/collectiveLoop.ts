@@ -17,12 +17,12 @@ export interface FeedbackEvent {
   feedbackCategory: FeedbackCategory;
   rating?: number; // 1-5
   content?: string;
-  metadata: Record<string, any>;
+  metadata: Record<string, unknown>;
   aiMetrics?: AIMetrics;
   impactScore?: number; // 0-1
   processed: boolean;
   learningApplied: boolean;
-  learningResults?: Record<string, any>;
+  learningResults?: Record<string, unknown>;
   timestamp: Date;
 }
 
@@ -528,7 +528,7 @@ class CollectiveLoopEngine {
     return totalWeight > 0 ? score / totalWeight : 0;
   }
 
-  private calculateSummary(data: any[]): FeedbackSummary {
+  private calculateSummary(data: Record<string, unknown>[]): FeedbackSummary {
     const byType: Record<FeedbackType, number> = {
       human: 0,
       ai: 0,
@@ -553,16 +553,18 @@ class CollectiveLoopEngine {
     let learningAppliedCount = 0;
 
     data.forEach(row => {
-      byType[row.feedback_type as FeedbackType]++;
-      byCategory[row.feedback_category as FeedbackCategory]++;
+      const fType = String(row.feedback_type) as FeedbackType;
+      const fCat = String(row.feedback_category) as FeedbackCategory;
+      if (fType in byType) byType[fType]++;
+      if (fCat in byCategory) byCategory[fCat]++;
 
       if (row.rating) {
-        totalRating += row.rating;
+        totalRating += Number(row.rating);
         ratingCount++;
       }
 
       if (row.impact_score !== null && row.impact_score !== undefined) {
-        totalImpact += row.impact_score;
+        totalImpact += Number(row.impact_score);
         impactCount++;
       }
 
@@ -593,26 +595,26 @@ class CollectiveLoopEngine {
     };
   }
 
-  private handleContextUpdate(contextData: Record<string, any>): void {
+  private handleContextUpdate(contextData: Record<string, unknown>): void {
     // Handle context updates that might trigger feedback processing
     logger.debug("[CollectiveLoop] Received context update", contextData);
   }
 
-  private mapRowToFeedback(row: any): FeedbackEvent {
+  private mapRowToFeedback(row: Record<string, unknown>): FeedbackEvent {
     return {
-      id: row.id,
-      feedbackType: row.feedback_type,
-      sourceModule: row.source_module,
-      feedbackCategory: row.feedback_category,
-      rating: row.rating,
-      content: row.content,
-      metadata: row.metadata,
-      aiMetrics: row.ai_metrics,
-      impactScore: row.impact_score,
-      processed: row.processed,
-      learningApplied: row.learning_applied,
-      learningResults: row.learning_results,
-      timestamp: new Date(row.timestamp)
+      id: String(row.id),
+      feedbackType: String(row.feedback_type) as FeedbackType,
+      sourceModule: String(row.source_module),
+      feedbackCategory: String(row.feedback_category) as FeedbackCategory,
+      rating: row.rating ? Number(row.rating) : undefined,
+      content: row.content ? String(row.content) : undefined,
+      metadata: (row.metadata as Record<string, unknown>) || {},
+      aiMetrics: row.ai_metrics as AIMetrics | undefined,
+      impactScore: row.impact_score ? Number(row.impact_score) : undefined,
+      processed: Boolean(row.processed),
+      learningApplied: Boolean(row.learning_applied),
+      learningResults: (row.learning_results as Record<string, unknown>) || undefined,
+      timestamp: new Date(String(row.timestamp))
     };
   }
 }
