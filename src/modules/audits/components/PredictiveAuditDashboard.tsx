@@ -45,8 +45,8 @@ export function PredictiveAuditDashboard() {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-3">
-          <div className="p-3 rounded-xl bg-gradient-to-br from-purple-500/20 to-indigo-500/20">
-            <Brain className="h-8 w-8 text-purple-400" />
+          <div className="p-3 rounded-xl bg-gradient-to-br from-accent/20 to-primary/20">
+            <Brain className="h-8 w-8 text-accent-foreground" />
           </div>
           <div>
             <h1 className="text-2xl font-bold flex items-center gap-2">
@@ -67,7 +67,7 @@ export function PredictiveAuditDashboard() {
       <Card className="border-purple-500/20">
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
-            <Target className="h-5 w-5 text-purple-400" />
+            <Target className="h-5 w-5 text-accent-foreground" />
             Iniciar Análise Preditiva
           </CardTitle>
           <CardDescription>
@@ -163,7 +163,7 @@ export function PredictiveAuditDashboard() {
             <Card>
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
-                  <AlertTriangle className="h-5 w-5 text-orange-400" />
+                  <AlertTriangle className="h-5 w-5 text-warning" />
                   Problemas Previstos
                 </CardTitle>
               </CardHeader>
@@ -174,7 +174,7 @@ export function PredictiveAuditDashboard() {
                   ))}
                   {prediction.predictedIssues.length === 0 && (
                     <div className="text-center py-8 text-muted-foreground">
-                      <CheckCircle2 className="h-12 w-12 mx-auto mb-2 text-green-400" />
+                      <CheckCircle2 className="h-12 w-12 mx-auto mb-2 text-success" />
                       <p>Nenhum problema significativo previsto</p>
                     </div>
                   )}
@@ -186,7 +186,7 @@ export function PredictiveAuditDashboard() {
             <Card>
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
-                  <Zap className="h-5 w-5 text-green-400" />
+                  <Zap className="h-5 w-5 text-success" />
                   Ações Recomendadas
                 </CardTitle>
               </CardHeader>
@@ -204,7 +204,7 @@ export function PredictiveAuditDashboard() {
               <Card>
                 <CardHeader>
                   <CardTitle className="flex items-center gap-2">
-                    <TrendingUp className="h-5 w-5 text-blue-400" />
+                    <TrendingUp className="h-5 w-5 text-primary" />
                     Padrões Históricos Identificados
                   </CardTitle>
                 </CardHeader>

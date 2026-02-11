@@ -19,7 +19,9 @@ export interface SonarEvent {
   amplitude_db: number;
   classification: string;
   ai_model_version: string;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- raw sonar signal data
   raw_data?: any;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- flexible metadata
   metadata?: any;
   detected_at?: string;
 }
@@ -35,6 +37,7 @@ export interface SonarRisk {
   recommended_action: string;
   urgency: "low" | "medium" | "high" | "immediate";
   status?: "active" | "acknowledged" | "mitigated" | "resolved" | "false_positive";
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- flexible metadata
   metadata?: any;
 }
 
@@ -45,6 +48,7 @@ export interface SpectrogramData {
 }
 
 // Helper to get the dynamic supabase client for untyped tables
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- sonar tables not in generated types
 const dynamicSupabase = () => supabase as any;
 
 class EnhancedSonarAIService {
@@ -312,6 +316,7 @@ class EnhancedSonarAIService {
     status: SonarRisk["status"],
     resolutionNotes?: string
   ): Promise<boolean> {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any -- dynamic update fields
     const update: any = { status };
     
     if (status === "acknowledged") {

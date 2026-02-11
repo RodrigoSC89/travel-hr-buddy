@@ -156,6 +156,7 @@ export default function CrewRotationModule() {
     };
   };
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- rotation form data shape
   const detectConflicts = (rotation: any): RotationConflict[] => {
     const conflicts: RotationConflict[] = [];
 
@@ -252,6 +253,7 @@ export default function CrewRotationModule() {
     }
   };
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- rotation form data
   const sendRotationNotification = async (type: string, rotation: any) => {
     try {
       await supabase.from("notifications").insert({

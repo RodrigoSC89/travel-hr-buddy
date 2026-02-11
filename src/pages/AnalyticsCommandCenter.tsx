@@ -309,8 +309,8 @@ const AnalyticsCommandCenter: React.FC = () => {
                         <p className="text-sm text-muted-foreground">Eficiência Geral</p>
                         <p className="text-3xl font-bold">{fleetMetrics.efficiency}%</p>
                         <div className="flex items-center gap-1 mt-1">
-                          <TrendingUp className="h-3 w-3 text-green-600" />
-                          <span className="text-xs text-green-600">+2.3%</span>
+                          <TrendingUp className="h-3 w-3 text-success" />
+                          <span className="text-xs text-success">+2.3%</span>
                         </div>
                       </div>
                       <Target className="h-8 w-8 text-primary" />
@@ -318,50 +318,50 @@ const AnalyticsCommandCenter: React.FC = () => {
                   </CardContent>
                 </Card>
 
-                <Card className="border-l-4 border-l-green-500">
+                <Card className="border-l-4 border-l-success">
                   <CardContent className="pt-6">
                     <div className="flex items-center justify-between">
                       <div>
                         <p className="text-sm text-muted-foreground">Margem de Lucro</p>
                         <p className="text-3xl font-bold">{fleetMetrics.profit_margin}%</p>
                         <div className="flex items-center gap-1 mt-1">
-                          <TrendingUp className="h-3 w-3 text-green-600" />
-                          <span className="text-xs text-green-600">+5.1%</span>
+                          <TrendingUp className="h-3 w-3 text-success" />
+                          <span className="text-xs text-success">+5.1%</span>
                         </div>
                       </div>
-                      <DollarSign className="h-8 w-8 text-green-500" />
+                      <DollarSign className="h-8 w-8 text-success" />
                     </div>
                   </CardContent>
                 </Card>
 
-                <Card className="border-l-4 border-l-blue-500">
+                <Card className="border-l-4 border-l-primary">
                   <CardContent className="pt-6">
                     <div className="flex items-center justify-between">
                       <div>
                         <p className="text-sm text-muted-foreground">Utilização da Frota</p>
                         <p className="text-3xl font-bold">{fleetMetrics.vessel_utilization}%</p>
                         <div className="flex items-center gap-1 mt-1">
-                          <TrendingDown className="h-3 w-3 text-red-600" />
-                          <span className="text-xs text-red-600">-1.2%</span>
+                          <TrendingDown className="h-3 w-3 text-destructive" />
+                          <span className="text-xs text-destructive">-1.2%</span>
                         </div>
                       </div>
-                      <Ship className="h-8 w-8 text-blue-500" />
+                      <Ship className="h-8 w-8 text-primary" />
                     </div>
                   </CardContent>
                 </Card>
 
-                <Card className="border-l-4 border-l-emerald-500">
+                <Card className="border-l-4 border-l-success">
                   <CardContent className="pt-6">
                     <div className="flex items-center justify-between">
                       <div>
                         <p className="text-sm text-muted-foreground">Score de Segurança</p>
                         <p className="text-3xl font-bold">{fleetMetrics.safety_score}%</p>
                         <div className="flex items-center gap-1 mt-1">
-                          <CheckCircle className="h-3 w-3 text-green-600" />
-                          <span className="text-xs text-green-600">Excelente</span>
+                          <CheckCircle className="h-3 w-3 text-success" />
+                          <span className="text-xs text-success">Excelente</span>
                         </div>
                       </div>
-                      <CheckCircle className="h-8 w-8 text-emerald-500" />
+                      <CheckCircle className="h-8 w-8 text-success" />
                     </div>
                   </CardContent>
                 </Card>
@@ -481,7 +481,7 @@ const AnalyticsCommandCenter: React.FC = () => {
                     <span className="text-2xl font-bold">{metric.value}</span>
                     <span className="text-sm text-muted-foreground">{metric.unit}</span>
                   </div>
-                  <div className={`text-xs mt-1 ${metric.change >= 0 ? 'text-green-600' : 'text-red-600'}`}>
+                  <div className={`text-xs mt-1 ${metric.change >= 0 ? 'text-success' : 'text-destructive'}`}>
                     {metric.change >= 0 ? '+' : ''}{metric.change}% vs período anterior
                   </div>
                   <Progress value={Math.min(metric.value, 100)} className="h-1 mt-2" />
@@ -599,7 +599,7 @@ const AnalyticsCommandCenter: React.FC = () => {
                     <span className="font-semibold">{fleetMetrics?.crew_efficiency}%</span>
                   </div>
                   <Progress value={fleetMetrics?.crew_efficiency} className="h-2" />
-                  <div className="text-xs text-green-600">+3.2% vs período anterior</div>
+                  <div className="text-xs text-success">+3.2% vs período anterior</div>
                 </div>
               </CardContent>
             </Card>
@@ -618,7 +618,7 @@ const AnalyticsCommandCenter: React.FC = () => {
                     <span className="font-semibold">{fleetMetrics?.fuel_consumption}</span>
                   </div>
                   <Progress value={75} className="h-2" />
-                  <div className="text-xs text-green-600">-5.8% vs período anterior</div>
+                  <div className="text-xs text-success">-5.8% vs período anterior</div>
                 </div>
               </CardContent>
             </Card>
@@ -637,7 +637,7 @@ const AnalyticsCommandCenter: React.FC = () => {
                     <span className="font-semibold">{fleetMetrics?.environmental_score}%</span>
                   </div>
                   <Progress value={fleetMetrics?.environmental_score} className="h-2" />
-                  <div className="text-xs text-green-600">+1.5% vs período anterior</div>
+                  <div className="text-xs text-success">+1.5% vs período anterior</div>
                 </div>
               </CardContent>
             </Card>
@@ -719,7 +719,7 @@ const AnalyticsCommandCenter: React.FC = () => {
 
                   <p className="text-sm text-muted-foreground">{prediction.description}</p>
 
-                  <div className="flex items-center gap-2 text-sm text-green-600">
+                  <div className="flex items-center gap-2 text-sm text-success">
                     <DollarSign className="h-4 w-4" />
                     <span>Economia potencial: R$ {prediction.potential_savings.toLocaleString()}</span>
                   </div>
@@ -807,7 +807,7 @@ const AnalyticsCommandCenter: React.FC = () => {
             {insights.map((insight) => (
               <Card key={insight.id} className={`border-l-4 ${
                 insight.priority === "high" ? "border-l-destructive" :
-                insight.priority === "medium" ? "border-l-yellow-500" : "border-l-blue-500"
+                insight.priority === "medium" ? "border-l-warning" : "border-l-primary"
               }`}>
                 <CardHeader>
                   <div className="flex items-center justify-between">
@@ -860,8 +860,8 @@ const AnalyticsCommandCenter: React.FC = () => {
                 <Button size="sm" variant="destructive">Ação Urgente</Button>
               </div>
               
-              <div className="flex items-center gap-3 p-3 bg-yellow-500/10 rounded-lg">
-                <AlertTriangle className="h-4 w-4 text-yellow-600" />
+              <div className="flex items-center gap-3 p-3 bg-warning/10 rounded-lg">
+                <AlertTriangle className="h-4 w-4 text-warning" />
                 <div className="flex-1">
                   <div className="font-medium text-sm">Médio Risco - Sistema Hidráulico</div>
                   <div className="text-xs text-muted-foreground">Pressão ligeiramente baixa</div>
@@ -869,13 +869,13 @@ const AnalyticsCommandCenter: React.FC = () => {
                 <Button size="sm" variant="outline">Monitorar</Button>
               </div>
 
-              <div className="flex items-center gap-3 p-3 bg-green-500/10 rounded-lg">
-                <CheckCircle className="h-4 w-4 text-green-600" />
+              <div className="flex items-center gap-3 p-3 bg-success/10 rounded-lg">
+                <CheckCircle className="h-4 w-4 text-success" />
                 <div className="flex-1">
                   <div className="font-medium text-sm">Baixo Risco - Todos os Sistemas</div>
                   <div className="text-xs text-muted-foreground">Operação normal</div>
                 </div>
-                <Badge variant="outline" className="text-green-600">OK</Badge>
+                <Badge variant="outline" className="text-success">OK</Badge>
               </div>
             </CardContent>
           </Card>

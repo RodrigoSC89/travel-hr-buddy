@@ -110,6 +110,7 @@ export const EnhancedFeedbackSystem: React.FC = () => {
       let feedbackList: Feedback[];
 
       if (realFeedback && realFeedback.length > 0) {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any -- ai_feedback_scores row shape
         feedbackList = realFeedback.map((f: any) => ({
           id: f.id,
           user_id: f.user_id || "unknown",

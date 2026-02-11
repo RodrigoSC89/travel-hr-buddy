@@ -34,12 +34,12 @@ export default function HealthCheckPage() {
     switch (status) {
       case "healthy":
       case "pass":
-        return <CheckCircle2 className="h-5 w-5 text-green-500" />;
+        return <CheckCircle2 className="h-5 w-5 text-success" />;
       case "degraded":
-        return <AlertTriangle className="h-5 w-5 text-yellow-500" />;
+        return <AlertTriangle className="h-5 w-5 text-warning" />;
       case "unhealthy":
       case "fail":
-        return <XCircle className="h-5 w-5 text-red-500" />;
+        return <XCircle className="h-5 w-5 text-destructive" />;
       default:
         return null;
     }
@@ -160,7 +160,7 @@ export default function HealthCheckPage() {
               </div>
               <div>
                 <p className="text-muted-foreground">Active</p>
-                <p className="text-2xl font-bold text-green-500">{health.checks.modules.active}</p>
+                <p className="text-2xl font-bold text-success">{health.checks.modules.active}</p>
               </div>
             </div>
             {health.checks.modules.issues.length > 0 && (
@@ -196,7 +196,7 @@ export default function HealthCheckPage() {
               </div>
               <div>
                 <p className="text-muted-foreground">Duplicates</p>
-                <p className={`text-2xl font-bold ${health.checks.routes.duplicates.length > 0 ? 'text-red-500' : 'text-green-500'}`}>
+                <p className={`text-2xl font-bold ${health.checks.routes.duplicates.length > 0 ? 'text-destructive' : 'text-success'}`}>
                   {health.checks.routes.duplicates.length}
                 </p>
               </div>
@@ -227,7 +227,7 @@ export default function HealthCheckPage() {
             <div className="grid grid-cols-2 gap-4 text-sm">
               <div>
                 <p className="text-muted-foreground">Missing</p>
-                <p className={`text-2xl font-bold ${health.checks.dependencies.missing.length > 0 ? 'text-yellow-500' : 'text-green-500'}`}>
+                <p className={`text-2xl font-bold ${health.checks.dependencies.missing.length > 0 ? 'text-warning' : 'text-success'}`}>
                   {health.checks.dependencies.missing.length}
                 </p>
               </div>

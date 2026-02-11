@@ -275,10 +275,10 @@ export const RealTimeNotificationCenter: React.FC = () => {
 
   const getNotificationIcon = (type: string) => {
     switch (type) {
-    case "success": return <CheckCircle className="h-4 w-4 text-green-500" />;
-    case "warning": return <AlertTriangle className="h-4 w-4 text-yellow-500" />;
-    case "error": return <AlertTriangle className="h-4 w-4 text-red-500" />;
-    default: return <Info className="h-4 w-4 text-blue-500" />;
+    case "success": return <CheckCircle className="h-4 w-4 text-success" />;
+    case "warning": return <AlertTriangle className="h-4 w-4 text-warning" />;
+    case "error": return <AlertTriangle className="h-4 w-4 text-destructive" />;
+    default: return <Info className="h-4 w-4 text-primary" />;
     }
   };
 
@@ -287,7 +287,7 @@ export const RealTimeNotificationCenter: React.FC = () => {
     case "urgent":
       return <Badge variant="destructive" className="text-xs">Urgente</Badge>;
     case "high":
-      return <Badge variant="secondary" className="bg-orange-500 text-azure-50 text-xs">Alto</Badge>;
+      return <Badge variant="secondary" className="bg-warning text-warning-foreground text-xs">Alto</Badge>;
     case "medium":
       return <Badge variant="outline" className="text-xs">Médio</Badge>;
     default:

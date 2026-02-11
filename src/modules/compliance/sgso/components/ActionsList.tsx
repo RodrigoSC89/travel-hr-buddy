@@ -12,6 +12,7 @@ interface ActionsListProps {
 }
 
 export const ActionsList: React.FC<ActionsListProps> = ({ selectedPlanId, onRefresh }) => {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- sgso_actions dynamic row shape
   const [actions, setActions] = useState<any[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const { toast } = useToast();
@@ -49,13 +50,13 @@ export const ActionsList: React.FC<ActionsListProps> = ({ selectedPlanId, onRefr
   const getStatusIcon = (status: string) => {
     switch (status) {
     case "completed":
-      return <CheckCircle className="h-4 w-4 text-green-500" />;
+      return <CheckCircle className="h-4 w-4 text-success" />;
     case "in_progress":
-      return <Clock className="h-4 w-4 text-yellow-500" />;
+      return <Clock className="h-4 w-4 text-warning" />;
     case "cancelled":
-      return <XCircle className="h-4 w-4 text-red-500" />;
+      return <XCircle className="h-4 w-4 text-destructive" />;
     default:
-      return <Clock className="h-4 w-4 text-gray-500" />;
+      return <Clock className="h-4 w-4 text-muted-foreground" />;
     }
   };
 
