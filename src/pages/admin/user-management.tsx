@@ -129,9 +129,9 @@ export default function UserManagement() {
 
   const getRoleBadge = (role: string) => {
     const colors = {
-      admin: "bg-red-500",
-      manager: "bg-blue-500",
-      user: "bg-gray-500",
+      admin: "bg-destructive",
+      manager: "bg-primary",
+      user: "bg-muted-foreground",
     };
     return (
       <Badge className={`${colors[role as keyof typeof colors]} text-white`}>
@@ -142,7 +142,7 @@ export default function UserManagement() {
 
   const getStatusBadge = (status: string) => {
     return status === "active" ? (
-      <Badge className="bg-green-500 text-white">Active</Badge>
+      <Badge className="bg-success text-success-foreground">Active</Badge>
     ) : (
       <Badge variant="outline" className="text-gray-500">
         Inactive

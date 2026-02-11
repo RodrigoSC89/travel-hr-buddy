@@ -41,6 +41,7 @@ export const PWAStatus: React.FC = () => {
 
   // Check if app is installable
   React.useEffect(() => {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any -- BeforeInstallPromptEvent not in standard lib
     const handler = (e: any) => {
       e.preventDefault();
       setDeferredPrompt(e);
@@ -133,9 +134,9 @@ export const PWAStatus: React.FC = () => {
         <CardHeader className="pb-3">
           <CardTitle className="flex items-center gap-2">
             {isOnline ? (
-              <Wifi className="h-5 w-5 text-green-500" />
+              <Wifi className="h-5 w-5 text-success" />
             ) : (
-              <WifiOff className="h-5 w-5 text-red-500" />
+              <WifiOff className="h-5 w-5 text-destructive" />
             )}
             Status de Conexão
           </CardTitle>
@@ -207,29 +208,29 @@ export const PWAStatus: React.FC = () => {
           <div className="grid grid-cols-2 gap-4 text-sm">
             <div className="space-y-2">
               <div className="flex items-center gap-2">
-                <CheckCircle className="h-4 w-4 text-green-500" />
+                <CheckCircle className="h-4 w-4 text-success" />
                 <span>Service Worker</span>
               </div>
               <div className="flex items-center gap-2">
-                <CheckCircle className="h-4 w-4 text-green-500" />
+                <CheckCircle className="h-4 w-4 text-success" />
                 <span>Cache Offline</span>
               </div>
               <div className="flex items-center gap-2">
-                <CheckCircle className="h-4 w-4 text-green-500" />
+                <CheckCircle className="h-4 w-4 text-success" />
                 <span>Notificações Push</span>
               </div>
             </div>
             <div className="space-y-2">
               <div className="flex items-center gap-2">
-                <CheckCircle className="h-4 w-4 text-green-500" />
+                <CheckCircle className="h-4 w-4 text-success" />
                 <span>Responsivo</span>
               </div>
               <div className="flex items-center gap-2">
-                <CheckCircle className="h-4 w-4 text-green-500" />
+                <CheckCircle className="h-4 w-4 text-success" />
                 <span>Sync Background</span>
               </div>
               <div className="flex items-center gap-2">
-                <CheckCircle className="h-4 w-4 text-green-500" />
+                <CheckCircle className="h-4 w-4 text-success" />
                 <span>Modo Offline</span>
               </div>
             </div>
@@ -255,8 +256,8 @@ export const PWAStatus: React.FC = () => {
           </div>
 
           {pendingCount > 0 && (
-            <div className="flex items-center gap-2 p-3 bg-yellow-50 dark:bg-yellow-900/20 rounded-lg">
-              <AlertCircle className="h-4 w-4 text-yellow-500" />
+            <div className="flex items-center gap-2 p-3 bg-warning/10 dark:bg-warning/20 rounded-lg">
+              <AlertCircle className="h-4 w-4 text-warning" />
               <span className="text-sm">
                 {pendingCount} alteração(ões) pendente(s) de sincronização
               </span>

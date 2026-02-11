@@ -181,14 +181,14 @@ export function WizardFlow({
                       isCurrent
                         ? "bg-primary text-primary-foreground"
                         : isCompleted
-                        ? "bg-green-500/10 text-green-600 hover:bg-green-500/20"
+                        ? "bg-success/10 text-success hover:bg-success/20"
                         : "bg-muted text-muted-foreground"
                     } ${isClickable ? "cursor-pointer" : "cursor-not-allowed opacity-50"}`}
                   >
                     <div
                       className={`w-6 h-6 rounded-full flex items-center justify-center text-xs font-medium ${
                         isCompleted
-                          ? "bg-green-500 text-white"
+                          ? "bg-success text-success-foreground"
                           : isCurrent
                           ? "bg-primary-foreground text-primary"
                           : "bg-muted-foreground/20 text-muted-foreground"
@@ -206,7 +206,7 @@ export function WizardFlow({
                   {index < steps.length - 1 && (
                     <div
                       className={`flex-1 h-0.5 mx-2 ${
-                        completedSteps.has(index) ? "bg-green-500" : "bg-border"
+                        completedSteps.has(index) ? "bg-success" : "bg-border"
                       }`}
                     />
                   )}
@@ -240,7 +240,7 @@ export function WizardFlow({
                 <motion.div
                   initial={{ opacity: 0, y: -10 }}
                   animate={{ opacity: 1, y: 0 }}
-                  className="flex items-center gap-2 mt-4 p-3 rounded-lg bg-red-500/10 text-red-600 text-sm"
+                  className="flex items-center gap-2 mt-4 p-3 rounded-lg bg-destructive/10 text-destructive text-sm"
                 >
                   <AlertCircle className="h-4 w-4" />
                   {validationError}
@@ -322,12 +322,12 @@ export function StepField({ label, required, hint, error, children }: StepFieldP
     <div className="space-y-2">
       <label className="text-sm font-medium flex items-center gap-1">
         {label}
-        {required && <span className="text-red-500">*</span>}
+        {required && <span className="text-destructive">*</span>}
       </label>
       {children}
       {hint && !error && <p className="text-xs text-muted-foreground">{hint}</p>}
       {error && (
-        <p className="text-xs text-red-500 flex items-center gap-1">
+        <p className="text-xs text-destructive flex items-center gap-1">
           <AlertCircle className="h-3 w-3" />
           {error}
         </p>

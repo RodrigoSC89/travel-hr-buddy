@@ -113,26 +113,26 @@ export function MissionManager() {
   const getPriorityColor = (priority: Mission["priority"]) => {
     switch (priority) {
     case "critical":
-      return "bg-red-500";
+      return "bg-destructive";
     case "high":
-      return "bg-orange-500";
+      return "bg-warning";
     case "medium":
-      return "bg-yellow-500";
+      return "bg-accent";
     case "low":
-      return "bg-green-500";
+      return "bg-success";
     }
   };
 
   const getStatusColor = (status: Mission["status"]) => {
     switch (status) {
     case "active":
-      return "bg-blue-500";
+      return "bg-primary";
     case "planned":
-      return "bg-purple-500";
+      return "bg-secondary";
     case "completed":
-      return "bg-green-500";
+      return "bg-success";
     case "cancelled":
-      return "bg-gray-500";
+      return "bg-muted-foreground";
     }
   };
 

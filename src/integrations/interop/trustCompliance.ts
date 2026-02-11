@@ -6,7 +6,7 @@ export interface TrustEvent {
   entity_id: string;
   event_type: string;
   trust_impact: number; // positive or negative change
-  details: any;
+  details: Record<string, unknown>;
   severity?: "info" | "warning" | "critical";
 }
 
@@ -114,9 +114,9 @@ export async function recordTrustEvent(event: TrustEvent): Promise<void> {
     event_type: event.event_type,
     trust_score_before: oldScore,
     trust_score_after: newScore,
-    details: event.details,
+    details: event.details as unknown as import("@/integrations/supabase/types").Json,
     severity: event.severity || "info"
-  });
+  } as never);
 
   if (insertError) {
     logger.error("Failed to log trust event", { error: insertError, entity_id: event.entity_id });
@@ -163,7 +163,7 @@ export async function getTrustScoreHistory(entityId: string) {
 }
 
 // Validate input data for trust rules
-export function validateTrustInput(input: any): { valid: boolean; errors: string[] } {
+export function validateTrustInput(input: Record<string, unknown>): { valid: boolean; errors: string[] } {
   const errors: string[] = [];
 
   if (!input.entity_id) {
@@ -178,7 +178,7 @@ export function validateTrustInput(input: any): { valid: boolean; errors: string
     errors.push("Missing or invalid trust_impact");
   }
 
-  if (input.trust_impact && Math.abs(input.trust_impact) > 50) {
+  if (typeof input.trust_impact === "number" && Math.abs(input.trust_impact as number) > 50) {
     errors.push("Trust impact too large (max ±50)");
   }
 

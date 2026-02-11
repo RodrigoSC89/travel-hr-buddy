@@ -21,8 +21,8 @@ export default function BIForecastsPage() {
       .then(({ data: forecasts, error }) => {
         if (error) throw error;
         const items = Array.isArray(forecasts) ? forecasts : (forecasts?.items || []);
-        const grouped = items.reduce((acc: any, item: any) => {
-          const key = item.system_name;
+        const grouped = items.reduce((acc: Record<string, number>, item: Record<string, unknown>) => {
+          const key = String(item.system_name || 'unknown');
           acc[key] = (acc[key] || 0) + 1;
           return acc;
         }, {});
@@ -68,7 +68,7 @@ export default function BIForecastsPage() {
                 <XAxis dataKey="name" />
                 <YAxis />
                 <Tooltip />
-                <Bar dataKey="total" fill="#0ea5e9" />
+                <Bar dataKey="total" fill="hsl(var(--primary))" />
               </BarChart>
             </ResponsiveContainer>
           )}

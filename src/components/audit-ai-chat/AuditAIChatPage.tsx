@@ -109,6 +109,7 @@ export function AuditAIChatPage({ defaultModule = 'peotram' }: AuditAIChatPagePr
 
   // Initialize speech recognition
   useEffect(() => {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any -- SpeechRecognition not in standard lib
     const SpeechRecognitionAPI = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
     if (SpeechRecognitionAPI) {
       recognitionRef.current = new SpeechRecognitionAPI();
@@ -116,6 +117,7 @@ export function AuditAIChatPage({ defaultModule = 'peotram' }: AuditAIChatPagePr
       recognitionRef.current.interimResults = false;
       recognitionRef.current.lang = 'pt-BR';
 
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any -- SpeechRecognition event not in standard lib
       recognitionRef.current.onresult = (event: any) => {
         const transcript = event.results[0][0].transcript;
         setInput(transcript);

@@ -46,22 +46,22 @@ export const usePerformanceData = (period: number = 7) => {
       // Try to load real data, fall back to empty states
       
       // Load fleet logs (if table exists)
-      const { data: fleetLogs, error: fleetError } = await supabase
-        .from("fleet_logs" as any)
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any -- dynamic tables not in typed schema
+      const { data: fleetLogs, error: fleetError } = await (supabase.from as any)("fleet_logs")
         .select("*")
         .gte("created_at", startDate.toISOString())
         .order("created_at", { ascending: false });
 
       // Load mission activities
-      const { data: missions, error: missionsError } = await supabase
-        .from("mission_activities" as any)
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any -- dynamic tables not in typed schema
+      const { data: missions, error: missionsError } = await (supabase.from as any)("mission_activities")
         .select("*")
         .gte("created_at", startDate.toISOString())
         .order("created_at", { ascending: false });
 
       // Load fuel usage
-      const { data: fuelUsage, error: fuelError } = await supabase
-        .from("fuel_usage" as any)
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any -- dynamic tables not in typed schema
+      const { data: fuelUsage, error: fuelError } = await (supabase.from as any)("fuel_usage")
         .select("*")
         .gte("recorded_at", startDate.toISOString())
         .order("recorded_at", { ascending: false });
@@ -102,20 +102,20 @@ export const usePerformanceData = (period: number = 7) => {
   };
 
   const calculateMetrics = (
-    fleetLogs: any[],
-    missions: any[],
-    fuelUsage: any[]
+    fleetLogs: Record<string, unknown>[],
+    missions: Record<string, unknown>[],
+    fuelUsage: Record<string, unknown>[]
   ) => {
     // Calculate actual metrics from real data
     const totalMissions = missions.length;
     const completedMissions = missions.filter(m => m.status === "completed").length;
     
-    const totalFuelUsed = fuelUsage.reduce((sum, f) => sum + (f.amount || 0), 0);
-    const totalDistance = missions.reduce((sum, m) => sum + (m.distance || 0), 0);
+    const totalFuelUsed = fuelUsage.reduce((sum, f) => sum + (Number(f.amount) || 0), 0);
+    const totalDistance = missions.reduce((sum, m) => sum + (Number(m.distance) || 0), 0);
     const fuelEfficiency = totalDistance > 0 ? (totalDistance / totalFuelUsed) * 100 : 0;
 
     const totalNavigationMinutes = missions.reduce(
-      (sum, m) => sum + (m.duration_minutes || 0), 
+      (sum, m) => sum + (Number(m.duration_minutes) || 0), 
       0
     );
     const navigationHours = totalNavigationMinutes / 60;
@@ -126,7 +126,7 @@ export const usePerformanceData = (period: number = 7) => {
 
     const totalDowntime = fleetLogs
       .filter(log => log.event_type === "downtime")
-      .reduce((sum, log) => sum + (log.duration_minutes || 0), 0);
+      .reduce((sum, log) => sum + (Number(log.duration_minutes) || 0), 0);
 
     setMetrics({
       fuelEfficiency: Math.round(fuelEfficiency * 10) / 10,
@@ -141,15 +141,15 @@ export const usePerformanceData = (period: number = 7) => {
   };
 
   const generateChartData = (
-    fuelUsage: any[],
-    missions: any[],
-    fleetLogs: any[]
+    fuelUsage: Record<string, unknown>[],
+    missions: Record<string, unknown>[],
+    fleetLogs: Record<string, unknown>[]
   ) => {
     // Fuel data by day
     const fuelByDay = new Map<string, number>();
     fuelUsage.forEach(fuel => {
-      const day = new Date(fuel.recorded_at).toLocaleDateString();
-      fuelByDay.set(day, (fuelByDay.get(day) || 0) + fuel.amount);
+      const day = new Date(String(fuel.recorded_at)).toLocaleDateString();
+      fuelByDay.set(day, (fuelByDay.get(day) || 0) + Number(fuel.amount));
     });
     
     setFuelData(
@@ -162,7 +162,7 @@ export const usePerformanceData = (period: number = 7) => {
     // Productivity by day
     const missionsByDay = new Map<string, { total: number; completed: number }>();
     missions.forEach(mission => {
-      const day = new Date(mission.created_at).toLocaleDateString();
+      const day = new Date(String(mission.created_at)).toLocaleDateString();
       const current = missionsByDay.get(day) || { total: 0, completed: 0 };
       current.total += 1;
       if (mission.status === "completed") current.completed += 1;
@@ -181,8 +181,8 @@ export const usePerformanceData = (period: number = 7) => {
     fleetLogs
       .filter(log => log.event_type === "downtime")
       .forEach(log => {
-        const type = log.downtime_reason || "Other";
-        downtimeByType.set(type, (downtimeByType.get(type) || 0) + (log.duration_minutes || 0));
+        const type = String(log.downtime_reason || "Other");
+        downtimeByType.set(type, (downtimeByType.get(type) || 0) + (Number(log.duration_minutes) || 0));
       });
 
     setDowntimeData(
