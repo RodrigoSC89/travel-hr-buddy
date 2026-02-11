@@ -15,11 +15,47 @@ interface AIResponse {
   confidence: number;
 }
 
+interface MissionContext {
+  name?: string;
+  status?: string;
+  progress: number;
+  checklistsCompleted: number;
+  checklistsTotal: number;
+  criticalItems: number;
+}
+
+interface LocationContext {
+  lat: number;
+  lng: number;
+  speed?: number;
+  heading?: number;
+}
+
+interface WeatherContext {
+  conditions: string;
+  temperature: number;
+  windSpeed: number;
+  windDirection: number;
+  visibility: number;
+  severity: string;
+}
+
+interface ChecklistItem {
+  checked: boolean;
+  [key: string]: unknown;
+}
+
+interface ChecklistContext {
+  title: string;
+  completed: boolean;
+  items: ChecklistItem[];
+}
+
 interface QueryContext {
-  mission?: any;
-  location?: any;
-  weather?: any;
-  checklists?: any[];
+  mission?: MissionContext;
+  location?: LocationContext;
+  weather?: WeatherContext;
+  checklists?: ChecklistContext[];
   isOnline: boolean;
 }
 
@@ -176,7 +212,7 @@ class MobileAICore {
         response = `Active Checklists (${context.checklists.length}):\n\n`;
           
         context.checklists.forEach((checklist, index) => {
-          const completed = checklist.items.filter((i: any) => i.checked).length;
+          const completed = checklist.items.filter((i) => i.checked).length;
           const total = checklist.items.length;
           const percent = Math.round((completed / total) * 100);
             
@@ -313,8 +349,8 @@ Provide helpful, professional responses. Keep answers concise and actionable. Fo
   /**
    * Update context
    */
-  async updateContext(context: any) {
-    return localMemory.updateContext(context);
+  async updateContext(context: Record<string, unknown>) {
+    return localMemory.updateContext(context as any);
   }
 }
 

@@ -141,14 +141,15 @@ export const MobileOptimizationCenter: React.FC = () => {
         .limit(7);
 
       if (healthData && healthData.length > 0) {
-        const perfFromHealth: PerformanceMetric[] = healthData.map((h: any) => ({
-          timestamp: new Date(h.created_at),
-          pageLoad: h.response_time_ms || 800,
-          firstContentfulPaint: (h.response_time_ms || 600) * 0.6,
-          largestContentfulPaint: (h.response_time_ms || 1200) * 1.2,
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any -- system_health dynamic shape
+        const perfFromHealth: PerformanceMetric[] = healthData.map((h: Record<string, unknown>) => ({
+          timestamp: new Date(String(h.created_at)),
+          pageLoad: Number(h.response_time_ms) || 800,
+          firstContentfulPaint: (Number(h.response_time_ms) || 600) * 0.6,
+          largestContentfulPaint: (Number(h.response_time_ms) || 1200) * 1.2,
           cumulativeLayoutShift: 0.05,
           firstInputDelay: 30,
-          timeToInteractive: (h.response_time_ms || 1500) * 1.5,
+          timeToInteractive: (Number(h.response_time_ms) || 1500) * 1.5,
         }));
         setPerformance(perfFromHealth);
       } else {
@@ -350,7 +351,7 @@ export const MobileOptimizationCenter: React.FC = () => {
             <Zap className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className={`text-2xl font-bold ${performanceScore >= 90 ? "text-green-600" : performanceScore >= 70 ? "text-yellow-600" : "text-red-600"}`}>
+            <div className={`text-2xl font-bold ${performanceScore >= 90 ? "text-success" : performanceScore >= 70 ? "text-warning" : "text-destructive"}`}>
               {performanceScore}
             </div>
             <p className="text-xs text-muted-foreground">
@@ -464,7 +465,7 @@ export const MobileOptimizationCenter: React.FC = () => {
                     <div className="flex items-center space-x-4 text-sm text-muted-foreground">
                       <span>{Math.floor(session.duration / 60)}min</span>
                       <span>{session.pages} páginas</span>
-                      <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse" />
+                      <div className="w-2 h-2 bg-success rounded-full animate-pulse" />
                     </div>
                   </div>
                 ))}
@@ -572,7 +573,7 @@ export const MobileOptimizationCenter: React.FC = () => {
                     <div className="flex items-center space-x-4">
                       <div className="text-right">
                         <p className="text-sm font-medium">Taxa de Rejeição</p>
-                        <p className={`text-lg font-bold ${page.bounceRate < 30 ? "text-green-600" : page.bounceRate < 50 ? "text-yellow-600" : "text-red-600"}`}>
+                        <p className={`text-lg font-bold ${page.bounceRate < 30 ? "text-success" : page.bounceRate < 50 ? "text-warning" : "text-destructive"}`}>
                           {page.bounceRate}%
                         </p>
                       </div>
@@ -599,34 +600,34 @@ export const MobileOptimizationCenter: React.FC = () => {
                 <div className="space-y-4">
                   <div className="flex items-center justify-between">
                     <div className="flex items-center space-x-2">
-                      <CheckCircle className="h-4 w-4 text-green-600" />
+                      <CheckCircle className="h-4 w-4 text-success" />
                       <span>Compressão de Imagens</span>
                     </div>
-                    <Badge className="bg-green-100 text-green-600">Ativo</Badge>
+                    <Badge className="bg-success/20 text-success">Ativo</Badge>
                   </div>
                   
                   <div className="flex items-center justify-between">
                     <div className="flex items-center space-x-2">
-                      <CheckCircle className="h-4 w-4 text-green-600" />
+                      <CheckCircle className="h-4 w-4 text-success" />
                       <span>Minificação CSS/JS</span>
                     </div>
-                    <Badge className="bg-green-100 text-green-600">Ativo</Badge>
+                    <Badge className="bg-success/20 text-success">Ativo</Badge>
                   </div>
                   
                   <div className="flex items-center justify-between">
                     <div className="flex items-center space-x-2">
-                      <AlertTriangle className="h-4 w-4 text-yellow-600" />
+                      <AlertTriangle className="h-4 w-4 text-warning" />
                       <span>Service Worker</span>
                     </div>
-                    <Badge className="bg-yellow-100 text-yellow-600">Pendente</Badge>
+                    <Badge className="bg-warning/20 text-warning">Pendente</Badge>
                   </div>
                   
                   <div className="flex items-center justify-between">
                     <div className="flex items-center space-x-2">
-                      <AlertTriangle className="h-4 w-4 text-yellow-600" />
+                      <AlertTriangle className="h-4 w-4 text-warning" />
                       <span>Lazy Loading</span>
                     </div>
-                    <Badge className="bg-yellow-100 text-yellow-600">Configurar</Badge>
+                    <Badge className="bg-warning/20 text-warning">Configurar</Badge>
                   </div>
                 </div>
               </CardContent>
@@ -683,19 +684,19 @@ export const MobileOptimizationCenter: React.FC = () => {
             <CardContent>
               <div className="grid gap-4 md:grid-cols-4">
                 <div className="text-center">
-                  <div className="text-2xl font-bold text-green-600">-34%</div>
+                  <div className="text-2xl font-bold text-success">-34%</div>
                   <p className="text-sm text-muted-foreground">Tempo de Carregamento</p>
                 </div>
                 <div className="text-center">
-                  <div className="text-2xl font-bold text-green-600">+28%</div>
+                  <div className="text-2xl font-bold text-success">+28%</div>
                   <p className="text-sm text-muted-foreground">Performance Score</p>
                 </div>
                 <div className="text-center">
-                  <div className="text-2xl font-bold text-green-600">-45%</div>
+                  <div className="text-2xl font-bold text-success">-45%</div>
                   <p className="text-sm text-muted-foreground">Tamanho dos Bundles</p>
                 </div>
                 <div className="text-center">
-                  <div className="text-2xl font-bold text-green-600">+12%</div>
+                  <div className="text-2xl font-bold text-success">+12%</div>
                   <p className="text-sm text-muted-foreground">Taxa de Conversão</p>
                 </div>
               </div>
@@ -715,7 +716,7 @@ export const MobileOptimizationCenter: React.FC = () => {
                   <div className="p-4 border border-border rounded-lg">
                     <div className="flex items-center justify-between mb-2">
                       <h4 className="font-medium">Layout do Dashboard</h4>
-                      <Badge className="bg-blue-100 text-blue-600">Ativo</Badge>
+                      <Badge className="bg-info/20 text-info">Ativo</Badge>
                     </div>
                     <div className="grid grid-cols-2 gap-4 text-sm">
                       <div>
@@ -733,7 +734,7 @@ export const MobileOptimizationCenter: React.FC = () => {
                   <div className="p-4 border border-border rounded-lg">
                     <div className="flex items-center justify-between mb-2">
                       <h4 className="font-medium">Botões de Ação</h4>
-                      <Badge className="bg-green-100 text-green-600">Vencedor</Badge>
+                      <Badge className="bg-success/20 text-success">Vencedor</Badge>
                     </div>
                     <div className="grid grid-cols-2 gap-4 text-sm">
                       <div>
@@ -742,7 +743,7 @@ export const MobileOptimizationCenter: React.FC = () => {
                       </div>
                       <div>
                         <p className="text-muted-foreground">Versão B</p>
-                        <p className="font-bold text-green-600">58% clicks</p>
+                        <p className="font-bold text-success">58% clicks</p>
                       </div>
                     </div>
                     <Progress value={58} className="mt-2" />

@@ -219,20 +219,20 @@ export default function ProcurementCommandCenter() {
     setIsAnalyzing(true);
     try {
       // Load real inventory data for stock analysis
-      const { data: invData, error: invError } = await supabase
-        .from("inventory_items" as any)
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any -- inventory_items not in generated types
+      const { data: invData, error: invError } = await (supabase.from as Function)("inventory_items")
         .select("*")
         .order("current_stock", { ascending: true });
 
       if (invError) throw invError;
 
-      const realItems = (invData || []) as any[];
+      const realItems = (invData || []) as Record<string, unknown>[];
       
       // Build stock items from real inventory
-      const realStock: StockItem[] = realItems.map((item: any) => {
-        const current = item.current_stock || 0;
-        const min = item.minimum_stock || 10;
-        const max = item.maximum_stock || 100;
+      const realStock: StockItem[] = realItems.map((item: Record<string, unknown>) => {
+        const current = Number(item.current_stock) || 0;
+        const min = Number(item.minimum_stock) || 10;
+        const max = Number(item.maximum_stock) || 100;
         const avgConsumption = Math.max(1, Math.round(min / 7));
         const daysUntilEmpty = avgConsumption > 0 ? Math.round(current / avgConsumption) : 999;
         let status: StockItem['status'] = 'normal';
@@ -241,9 +241,9 @@ export default function ProcurementCommandCenter() {
         else if (current > max * 0.9) status = 'excess';
 
         return {
-          id: item.id,
-          name: item.name || 'Item sem nome',
-          category: item.category || 'Geral',
+          id: String(item.id),
+          name: String(item.name || 'Item sem nome'),
+          category: String(item.category || 'Geral'),
           currentStock: current,
           minStock: min,
           maxStock: max,
@@ -278,8 +278,8 @@ export default function ProcurementCommandCenter() {
       setRecommendations(realRecommendations);
 
       // Calculate stats from real data
-      const pendingRfqs = rfqRequests.filter((r: any) => r.status === 'sent' || r.status === 'draft').length;
-      const awardedRfqs = rfqRequests.filter((r: any) => r.status === 'awarded').length;
+      const pendingRfqs = rfqRequests.filter((r) => r.status === 'sent' || r.status === 'draft').length;
+      const awardedRfqs = rfqRequests.filter((r) => r.status === 'awarded').length;
       const totalSavings = realRecommendations.reduce((sum, r) => sum + r.savingsOpportunity, 0);
       const avgRating = suppliers.length > 0 
         ? Math.round(suppliers.reduce((sum, s) => sum + (s.rating || 0), 0) / suppliers.length * 10) 
@@ -303,8 +303,8 @@ export default function ProcurementCommandCenter() {
   const loadInventoryItems = async () => {
     try {
       setInventoryLoading(true);
-      const { data, error } = await supabase
-        .from("inventory_items" as any)
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any -- inventory_items not in generated types
+      const { data, error } = await (supabase.from as Function)("inventory_items")
         .select("*")
         .order("name");
 
@@ -340,20 +340,20 @@ export default function ProcurementCommandCenter() {
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case 'critical': return 'bg-red-500 text-white';
-      case 'low': return 'bg-yellow-500 text-black';
-      case 'normal': return 'bg-green-500 text-white';
-      case 'excess': return 'bg-blue-500 text-white';
-      default: return 'bg-gray-500 text-white';
+      case 'critical': return 'bg-destructive text-destructive-foreground';
+      case 'low': return 'bg-warning text-warning-foreground';
+      case 'normal': return 'bg-success text-success-foreground';
+      case 'excess': return 'bg-info text-info-foreground';
+      default: return 'bg-muted text-muted-foreground';
     }
   };
 
   const getUrgencyColor = (urgency: string) => {
     switch (urgency) {
-      case 'immediate': return 'text-red-500 bg-red-500/10 border-red-500/30';
-      case 'soon': return 'text-yellow-500 bg-yellow-500/10 border-yellow-500/30';
-      case 'planned': return 'text-blue-500 bg-blue-500/10 border-blue-500/30';
-      default: return 'text-gray-500 bg-gray-500/10';
+      case 'immediate': return 'text-destructive bg-destructive/10 border-destructive/30';
+      case 'soon': return 'text-warning bg-warning/10 border-warning/30';
+      case 'planned': return 'text-info bg-info/10 border-info/30';
+      default: return 'text-muted-foreground bg-muted/10';
     }
   };
 
@@ -375,7 +375,7 @@ export default function ProcurementCommandCenter() {
   const executeAutoPurchase = async (rec: PurchaseRecommendation) => {
     try {
       // Create purchase order in database
-      const { error } = await supabase.from("rfq_requests" as any).insert({
+      const { error } = await (supabase.from as Function)("rfq_requests").insert({
         title: `Pedido Automático - ${rec.item.name}`,
         category: rec.item.category.toLowerCase().replace(/ /g, '_'),
         status: 'sent',
@@ -432,7 +432,7 @@ export default function ProcurementCommandCenter() {
 
   const handleCreateRFQ = async () => {
     try {
-      const { error } = await supabase.from("rfq_requests" as any).insert({
+      const { error } = await (supabase.from as Function)("rfq_requests").insert({
         ...newRFQ,
         rfq_number: `RFQ-${Date.now()}`,
         status: 'draft',
@@ -452,7 +452,7 @@ export default function ProcurementCommandCenter() {
 
   const handleCreateItem = async () => {
     try {
-      const { error } = await supabase.from("inventory_items" as any).insert({
+      const { error } = await (supabase.from as Function)("inventory_items").insert({
         ...newItem,
         status: 'active',
         total_value: newItem.current_stock * newItem.unit_cost
@@ -636,7 +636,7 @@ export default function ProcurementCommandCenter() {
               <Card>
                 <CardHeader>
                   <CardTitle className="flex items-center gap-2">
-                    <Brain className="h-5 w-5 text-purple-500" />
+                    <Brain className="h-5 w-5 text-primary" />
                     Recomendações IA
                   </CardTitle>
                 </CardHeader>
@@ -664,7 +664,7 @@ export default function ProcurementCommandCenter() {
               <Card>
                 <CardHeader>
                   <CardTitle className="flex items-center gap-2">
-                    <AlertTriangle className="h-5 w-5 text-orange-500" />
+                    <AlertTriangle className="h-5 w-5 text-warning" />
                     Estoque Crítico
                   </CardTitle>
                 </CardHeader>
@@ -718,7 +718,7 @@ export default function ProcurementCommandCenter() {
               <Card>
                 <CardHeader>
                   <CardTitle className="flex items-center gap-2">
-                    <FileText className="h-5 w-5 text-blue-500" />
+                    <FileText className="h-5 w-5 text-info" />
                     RFQs Recentes
                   </CardTitle>
                 </CardHeader>
@@ -752,8 +752,8 @@ export default function ProcurementCommandCenter() {
                 transition={{ delay: index * 0.1 }}
               >
                 <Card className={`border-l-4 ${
-                  rec.urgency === 'immediate' ? 'border-l-red-500' :
-                  rec.urgency === 'soon' ? 'border-l-yellow-500' : 'border-l-blue-500'
+                  rec.urgency === 'immediate' ? 'border-l-destructive' :
+                  rec.urgency === 'soon' ? 'border-l-warning' : 'border-l-info'
                 }`}>
                   <CardContent className="p-6">
                     <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
@@ -775,7 +775,7 @@ export default function ProcurementCommandCenter() {
                             <p className="text-muted-foreground">Fornecedor Sugerido</p>
                             <p className="font-medium flex items-center gap-1">
                               {rec.suggestedSupplier.name}
-                              <Star className="h-3 w-3 text-yellow-500 fill-yellow-500" />
+                              <Star className="h-3 w-3 text-warning fill-warning" />
                               {rec.suggestedSupplier.rating}
                             </p>
                           </div>
@@ -792,17 +792,17 @@ export default function ProcurementCommandCenter() {
                           </div>
                         </div>
 
-                        <div className="p-3 rounded-lg bg-purple-500/10 border border-purple-500/20">
+                        <div className="p-3 rounded-lg bg-primary/10 border border-primary/20">
                           <div className="flex items-center gap-2 mb-1">
-                            <Brain className="h-4 w-4 text-purple-500" />
-                            <span className="text-xs font-medium text-purple-600 dark:text-purple-400">Análise IA</span>
+                            <Brain className="h-4 w-4 text-primary" />
+                            <span className="text-xs font-medium text-primary">Análise IA</span>
                           </div>
                           <p className="text-sm">{rec.aiReasoning}</p>
                         </div>
 
                         {rec.savingsOpportunity > 0 && (
                           <div className="flex items-center gap-2 text-green-600">
-                            <TrendingUp className="h-4 w-4" />
+                            <TrendingUp className="h-4 w-4 text-success" />
                             <span className="text-sm font-medium">
                               Oportunidade de economia: R$ {rec.savingsOpportunity.toLocaleString()}
                             </span>
@@ -813,7 +813,7 @@ export default function ProcurementCommandCenter() {
                       <div className="flex flex-col gap-2">
                         <Button 
                           onClick={() => executeAutoPurchase(rec)}
-                          className={rec.urgency === 'immediate' ? 'bg-red-500 hover:bg-red-600' : ''}
+                          className={rec.urgency === 'immediate' ? 'bg-destructive hover:bg-destructive/90' : ''}
                         >
                           <ShoppingCart className="h-4 w-4 mr-2" />
                           {rec.urgency === 'immediate' ? 'Comprar Agora' : 'Aprovar Compra'}
@@ -865,20 +865,20 @@ export default function ProcurementCommandCenter() {
                             <Progress 
                               value={(item.currentStock / item.maxStock) * 100}
                               className={`h-2 ${
-                                item.status === 'critical' ? '[&>div]:bg-red-500' :
-                                item.status === 'low' ? '[&>div]:bg-yellow-500' : ''
+                              item.status === 'critical' ? '[&>div]:bg-destructive' :
+                              item.status === 'low' ? '[&>div]:bg-warning' : ''
                               }`}
                             />
                             <div className="flex justify-between text-xs text-muted-foreground">
                               <span>Mínimo: {item.minStock}</span>
-                              <span className={item.daysUntilEmpty <= 7 ? 'text-red-500 font-medium' : ''}>
+                              <span className={item.daysUntilEmpty <= 7 ? 'text-destructive font-medium' : ''}>
                                 {item.daysUntilEmpty} dias até esgotamento
                               </span>
                             </div>
                           </div>
 
                           {item.autoOrderEnabled && (
-                            <div className="mt-3 flex items-center gap-2 text-xs text-green-600">
+                          <div className="mt-3 flex items-center gap-2 text-xs text-success">
                               <Zap className="h-3 w-3" />
                               Compra automática ativa
                             </div>
@@ -951,9 +951,9 @@ export default function ProcurementCommandCenter() {
                       <div key={item.id} className="flex items-center gap-4 p-4 border rounded-lg hover:bg-accent">
                         <div className="flex-shrink-0">
                           {item.current_stock <= item.minimum_stock ? (
-                            <TrendingDown className="h-4 w-4 text-red-500" />
+                            <TrendingDown className="h-4 w-4 text-destructive" />
                           ) : (
-                            <TrendingUp className="h-4 w-4 text-green-500" />
+                            <TrendingUp className="h-4 w-4 text-success" />
                           )}
                         </div>
                         <div className="flex-1 min-w-0">

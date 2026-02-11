@@ -37,13 +37,13 @@ export function TrainingLXPDashboard() {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-3">
-          <div className="p-3 rounded-xl bg-gradient-to-br from-emerald-500/20 to-cyan-500/20">
-            <GraduationCap className="h-8 w-8 text-emerald-400" />
+          <div className="p-3 rounded-xl bg-gradient-to-br from-success/20 to-primary/20">
+            <GraduationCap className="h-8 w-8 text-success" />
           </div>
           <div>
             <h1 className="text-2xl font-bold flex items-center gap-2">
               Training LXP
-              <Badge className="bg-gradient-to-r from-emerald-500 to-cyan-500 text-white">
+              <Badge className="bg-gradient-to-r from-success to-primary text-primary-foreground">
                 <Sparkles className="h-3 w-3 mr-1" />
                 Adaptive AI
               </Badge>
@@ -131,6 +131,7 @@ function KPICard({ title, value, icon: Icon, color }: {
   );
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- analytics from useTrainingAnalytics hook
 function OverviewTab({ analytics }: { analytics: any }) {
   if (!analytics) return null;
 
@@ -150,9 +151,9 @@ function OverviewTab({ analytics }: { analytics: any }) {
               <div key={course.id} className="flex items-center gap-3">
                 <span className={cn(
                   "w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold",
-                  i === 0 ? "bg-yellow-500 text-black" :
-                  i === 1 ? "bg-gray-300 text-black" :
-                  i === 2 ? "bg-amber-700 text-white" :
+                  i === 0 ? "bg-warning text-warning-foreground" :
+                  i === 1 ? "bg-muted text-muted-foreground" :
+                  i === 2 ? "bg-accent text-accent-foreground" :
                   "bg-muted"
                 )}>
                   {i + 1}
@@ -478,8 +479,8 @@ function MicrolearningTab() {
                           variant={quizAnswers[qIndex] === optIndex ? "default" : "outline"}
                           className={cn(
                             "justify-start",
-                            showResults && optIndex === q.correctIndex && "bg-green-500",
-                            showResults && quizAnswers[qIndex] === optIndex && optIndex !== q.correctIndex && "bg-red-500"
+                            showResults && optIndex === q.correctIndex && "bg-success",
+                            showResults && quizAnswers[qIndex] === optIndex && optIndex !== q.correctIndex && "bg-destructive"
                           )}
                           onClick={() => !showResults && setQuizAnswers({ ...quizAnswers, [qIndex]: optIndex })}
                           disabled={showResults}

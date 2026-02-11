@@ -34,7 +34,8 @@ export function useMemoryPressure(threshold = 80): MemoryState {
 
   useEffect(() => {
     const checkMemory = () => {
-      const memory = (performance as any).memory;
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Chrome-only Performance.memory API
+      const memory = (performance as unknown as Record<string, unknown>).memory as { usedJSHeapSize: number; jsHeapSizeLimit: number } | undefined;
       if (memory) {
         const used = memory.usedJSHeapSize;
         const total = memory.jsHeapSizeLimit;
@@ -128,7 +129,7 @@ export function useVisibleRender(options?: { rootMargin?: string }) {
 /**
  * Batch multiple state updates
  */
-export function useBatchedUpdates<T extends Record<string, any>>(
+export function useBatchedUpdates<T extends Record<string, unknown>>(
   initialState: T
 ): [T, (updates: Partial<T>) => void] {
   const [state, setState] = useState(initialState);
@@ -179,7 +180,7 @@ export function useLayoutContainment() {
  * Prevent layout thrashing by batching DOM reads/writes
  */
 export function useLayoutBatch() {
-  const reads = useRef<(() => any)[]>([]);
+  const reads = useRef<(() => unknown)[]>([]);
   const writes = useRef<(() => void)[]>([]);
 
   const scheduleRead = useCallback(<T>(fn: () => T): Promise<T> => {
@@ -214,6 +215,7 @@ export function useLayoutBatch() {
 /**
  * Debounce expensive operations
  */
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- generic function signature requires any
 export function useDebounce<T extends (...args: any[]) => any>(
   fn: T,
   delay: number
@@ -238,6 +240,7 @@ export function useDebounce<T extends (...args: any[]) => any>(
 /**
  * Throttle frequent operations
  */
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- generic function signature requires any
 export function useThrottle<T extends (...args: any[]) => any>(
   fn: T,
   limit: number
