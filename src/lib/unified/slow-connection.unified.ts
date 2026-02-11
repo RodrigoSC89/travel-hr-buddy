@@ -430,7 +430,7 @@ import { useState, useEffect, useCallback, useRef } from "react";
 export function useSlowConnectionFetch<T>(
   fetchFn: () => Promise<T>,
   cacheKey?: string,
-  deps: any[] = []
+  deps: unknown[] = []
 ) {
   const [data, setData] = useState<T | null>(null);
   const [loading, setLoading] = useState(true);

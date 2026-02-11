@@ -117,11 +117,11 @@ export const MLCInspectionDashboard: React.FC = () => {
         <Card className="cursor-pointer hover:border-primary/50" onClick={() => setActiveTab('overview')}>
           <CardContent className="pt-4"><p className="text-sm text-muted-foreground">Score</p><p className="text-2xl font-bold">{complianceScore}%</p></CardContent>
         </Card>
-        <Card className="cursor-pointer hover:border-green-500/50"><CardContent className="pt-4"><p className="text-sm text-muted-foreground">Conforme</p><p className="text-2xl font-bold text-green-500">{compliantItems}</p></CardContent></Card>
-        <Card className="cursor-pointer hover:border-red-500/50"><CardContent className="pt-4"><p className="text-sm text-muted-foreground">Não Conforme</p><p className="text-2xl font-bold text-red-500">{nonCompliantItems}</p></CardContent></Card>
-        <Card><CardContent className="pt-4"><p className="text-sm text-muted-foreground">Críticos</p><p className="text-2xl font-bold text-orange-500">{criticalItems}</p></CardContent></Card>
+        <Card className="cursor-pointer hover:border-success/50"><CardContent className="pt-4"><p className="text-sm text-muted-foreground">Conforme</p><p className="text-2xl font-bold text-success">{compliantItems}</p></CardContent></Card>
+        <Card className="cursor-pointer hover:border-destructive/50"><CardContent className="pt-4"><p className="text-sm text-muted-foreground">Não Conforme</p><p className="text-2xl font-bold text-destructive">{nonCompliantItems}</p></CardContent></Card>
+        <Card><CardContent className="pt-4"><p className="text-sm text-muted-foreground">Críticos</p><p className="text-2xl font-bold text-warning">{criticalItems}</p></CardContent></Card>
         <Card><CardContent className="pt-4"><p className="text-sm text-muted-foreground">Total Itens</p><p className="text-2xl font-bold">{totalItems}</p></CardContent></Card>
-        <Card><CardContent className="pt-4"><p className="text-sm text-muted-foreground">Progresso</p><p className="text-2xl font-bold text-blue-500">{progressPercent}%</p></CardContent></Card>
+        <Card><CardContent className="pt-4"><p className="text-sm text-muted-foreground">Progresso</p><p className="text-2xl font-bold text-info">{progressPercent}%</p></CardContent></Card>
       </div>
 
       {inspectionStarted && <Card><CardContent className="pt-4"><div className="flex justify-between text-sm mb-2"><span>Progresso</span><span>{answeredItems}/{totalItems}</span></div><Progress value={progressPercent} /></CardContent></Card>}

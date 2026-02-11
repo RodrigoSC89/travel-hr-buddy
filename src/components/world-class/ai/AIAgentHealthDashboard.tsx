@@ -66,10 +66,10 @@ const DECISION_LOGS: DecisionLog[] = [
 ];
 
 const STATUS_CONFIG = {
-  online: { color: 'bg-green-500', label: 'Online' },
-  busy: { color: 'bg-yellow-500', label: 'Ocupado' },
-  offline: { color: 'bg-gray-400', label: 'Offline' },
-  error: { color: 'bg-red-500', label: 'Erro' },
+  online: { color: 'bg-success', label: 'Online' },
+  busy: { color: 'bg-warning', label: 'Ocupado' },
+  offline: { color: 'bg-muted-foreground', label: 'Offline' },
+  error: { color: 'bg-destructive', label: 'Erro' },
 };
 
 export function AIAgentHealthDashboard() {
@@ -168,11 +168,11 @@ export function AIAgentHealthDashboard() {
 
       {/* Health Overview */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-        <Card className="border-l-4 border-l-green-500">
+        <Card className="border-l-4 border-l-success">
           <CardContent className="p-4">
             <div className="flex items-center gap-3">
-              <div className="p-2 rounded-lg bg-green-500/20">
-                <Bot className="h-6 w-6 text-green-500" />
+              <div className="p-2 rounded-lg bg-success/20">
+                <Bot className="h-6 w-6 text-success" />
               </div>
               <div>
                 <p className="text-2xl font-bold">{onlineAgents}/{AI_AGENTS.length}</p>
@@ -182,11 +182,11 @@ export function AIAgentHealthDashboard() {
           </CardContent>
         </Card>
         
-        <Card className="border-l-4 border-l-blue-500">
+        <Card className="border-l-4 border-l-info">
           <CardContent className="p-4">
             <div className="flex items-center gap-3">
-              <div className="p-2 rounded-lg bg-blue-500/20">
-                <Activity className="h-6 w-6 text-blue-500" />
+              <div className="p-2 rounded-lg bg-info/20">
+                <Activity className="h-6 w-6 text-info" />
               </div>
               <div>
                 <p className="text-2xl font-bold">{avgHealth}%</p>
@@ -196,11 +196,11 @@ export function AIAgentHealthDashboard() {
           </CardContent>
         </Card>
         
-        <Card className="border-l-4 border-l-purple-500">
+        <Card className="border-l-4 border-l-accent-foreground">
           <CardContent className="p-4">
             <div className="flex items-center gap-3">
-              <div className="p-2 rounded-lg bg-purple-500/20">
-                <Zap className="h-6 w-6 text-purple-500" />
+              <div className="p-2 rounded-lg bg-accent">
+                <Zap className="h-6 w-6 text-accent-foreground" />
               </div>
               <div>
                 <p className="text-2xl font-bold">{totalRequests}</p>
@@ -210,11 +210,11 @@ export function AIAgentHealthDashboard() {
           </CardContent>
         </Card>
         
-        <Card className="border-l-4 border-l-amber-500">
+        <Card className="border-l-4 border-l-warning">
           <CardContent className="p-4">
             <div className="flex items-center gap-3">
-              <div className="p-2 rounded-lg bg-amber-500/20">
-                <TrendingUp className="h-6 w-6 text-amber-500" />
+              <div className="p-2 rounded-lg bg-warning/20">
+                <TrendingUp className="h-6 w-6 text-warning" />
               </div>
               <div>
                 <p className="text-2xl font-bold">{avgAccuracy}%</p>
@@ -252,7 +252,7 @@ export function AIAgentHealthDashboard() {
                 <Card 
                   key={agent.id}
                   className={`cursor-pointer transition-all hover:shadow-md ${
-                    agent.status === 'error' ? 'border-red-500/50' : ''
+                    agent.status === 'error' ? 'border-destructive/50' : ''
                   }`}
                   onClick={() => setSelectedAgent(agent)}
                 >
@@ -260,10 +260,10 @@ export function AIAgentHealthDashboard() {
                     <div className="flex items-start justify-between mb-3">
                       <div className="flex items-center gap-3">
                         <div className={`p-2 rounded-lg ${
-                          agent.status === 'error' ? 'bg-red-500/20' : 'bg-primary/20'
+                          agent.status === 'error' ? 'bg-destructive/20' : 'bg-primary/20'
                         }`}>
                           <Brain className={`h-5 w-5 ${
-                            agent.status === 'error' ? 'text-red-500' : 'text-primary'
+                            agent.status === 'error' ? 'text-destructive' : 'text-primary'
                           }`} />
                         </div>
                         <div>
@@ -293,11 +293,11 @@ export function AIAgentHealthDashboard() {
                       <div>
                         <div className="flex justify-between text-sm mb-1">
                           <span className="text-muted-foreground">Saúde</span>
-                          <span className={agent.health < 60 ? 'text-red-500' : ''}>{agent.health}%</span>
+                          <span className={agent.health < 60 ? 'text-destructive' : ''}>{agent.health}%</span>
                         </div>
                         <Progress 
                           value={agent.health} 
-                          className={`h-2 ${agent.health < 60 ? '[&>div]:bg-red-500' : ''}`}
+                          className={`h-2 ${agent.health < 60 ? '[&>div]:bg-destructive' : ''}`}
                         />
                       </div>
                       
@@ -328,7 +328,7 @@ export function AIAgentHealthDashboard() {
           <Card>
             <CardHeader>
               <CardTitle className="text-lg flex items-center gap-2">
-                <Lightbulb className="h-5 w-5 text-amber-500" />
+                <Lightbulb className="h-5 w-5 text-warning" />
                 Decisões IA com Explicabilidade
               </CardTitle>
               <CardDescription>
@@ -342,15 +342,15 @@ export function AIAgentHealthDashboard() {
                     <div key={log.id} className="p-4 hover:bg-muted/50">
                       <div className="flex items-start gap-4">
                         <div className={`p-2 rounded-lg ${
-                          log.outcome === 'success' ? 'bg-green-500/20' :
-                          log.outcome === 'pending' ? 'bg-yellow-500/20' : 'bg-red-500/20'
+                          log.outcome === 'success' ? 'bg-success/20' :
+                          log.outcome === 'pending' ? 'bg-warning/20' : 'bg-destructive/20'
                         }`}>
                           {log.outcome === 'success' ? (
-                            <CheckCircle className="h-5 w-5 text-green-500" />
+                            <CheckCircle className="h-5 w-5 text-success" />
                           ) : log.outcome === 'pending' ? (
-                            <Clock className="h-5 w-5 text-yellow-500" />
+                            <Clock className="h-5 w-5 text-warning" />
                           ) : (
-                            <XCircle className="h-5 w-5 text-red-500" />
+                            <XCircle className="h-5 w-5 text-destructive" />
                           )}
                         </div>
                         

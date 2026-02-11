@@ -18,7 +18,7 @@ interface Activity {
 }
 
 const typeIcons = { user: User, document: FileText, system: Settings, travel: Plane, fleet: Ship, notification: Bell };
-const statusColors = { success: 'text-green-500 bg-green-500/10', warning: 'text-yellow-500 bg-yellow-500/10', error: 'text-red-500 bg-red-500/10', info: 'text-blue-500 bg-blue-500/10' };
+const statusColors = { success: 'text-success bg-success/10', warning: 'text-warning bg-warning/10', error: 'text-destructive bg-destructive/10', info: 'text-info bg-info/10' };
 const statusIcons = { success: CheckCircle, warning: AlertCircle, error: AlertCircle, info: Info };
 
 interface ActivityFeedProps { activities?: Activity[]; maxItems?: number; className?: string; showTimestamp?: boolean; compact?: boolean; }
