@@ -38,8 +38,8 @@ export interface AIMetrics {
 export interface LearningAdjustment {
   moduleId: string;
   parameter: string;
-  oldValue: any;
-  newValue: any;
+  oldValue: unknown;
+  newValue: unknown;
   reason: string;
   expectedImprovement: number;
 }
@@ -125,7 +125,7 @@ class CollectiveLoopEngine {
     category: FeedbackCategory,
     rating: number,
     content: string,
-    metadata: Record<string, any> = {}
+    metadata: Record<string, unknown> = {}
   ): Promise<void> {
     const feedback: FeedbackEvent = {
       feedbackType: "human",
@@ -149,7 +149,7 @@ class CollectiveLoopEngine {
   async submitAIFeedback(
     sourceModule: string,
     metrics: AIMetrics,
-    metadata: Record<string, any> = {}
+    metadata: Record<string, unknown> = {}
   ): Promise<void> {
     // Calculate impact score based on metrics
     const impactScore = this.calculateImpactScore(metrics);
@@ -175,7 +175,7 @@ class CollectiveLoopEngine {
    */
   async submitOperationalFeedback(
     sourceModule: string,
-    telemetryData: Record<string, any>
+    telemetryData: Record<string, unknown>
   ): Promise<void> {
     const feedback: FeedbackEvent = {
       feedbackType: "operational",

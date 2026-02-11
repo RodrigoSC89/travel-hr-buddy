@@ -17,9 +17,9 @@ export function PerformancePanel({ mqttClient }: PerformancePanelProps) {
   const metrics = usePerformanceMonitor(mqttClient);
 
   const getStatusColor = (value: number, thresholds: { yellow: number; red: number }) => {
-    if (value >= thresholds.red) return "text-red-500";
-    if (value >= thresholds.yellow) return "text-yellow-500";
-    return "text-green-500";
+    if (value >= thresholds.red) return "text-destructive";
+    if (value >= thresholds.yellow) return "text-warning";
+    return "text-success";
   };
 
   const cpuColor = getStatusColor(metrics.cpu, { yellow: 60, red: 80 });
@@ -27,16 +27,16 @@ export function PerformancePanel({ mqttClient }: PerformancePanelProps) {
   const fpsColor = getStatusColor(60 - metrics.fps, { yellow: 15, red: 30 });
 
   const mqttStatus = mqttClient?.connected ? "Connected" : "Disconnected";
-  const mqttStatusColor = mqttClient?.connected ? "text-green-500" : "text-gray-400";
+  const mqttStatusColor = mqttClient?.connected ? "text-success" : "text-muted-foreground";
 
   return (
     <Card className="w-full">
-      <CardHeader className="bg-gradient-to-r from-blue-500 to-purple-600 text-white">
+      <CardHeader className="bg-gradient-to-r from-primary to-accent text-primary-foreground">
         <CardTitle className="flex items-center gap-2">
           <Activity className="h-5 w-5" />
           Performance Monitor
         </CardTitle>
-        <p className="text-sm text-white/80">
+        <p className="text-sm text-primary-foreground/80">
           MQTT: <span className={mqttStatusColor}>{mqttStatus}</span>
         </p>
       </CardHeader>

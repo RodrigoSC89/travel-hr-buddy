@@ -132,11 +132,11 @@ const AIDataLake: React.FC = () => {
   ];
 
   const storageDistribution = [
-    { name: "Operacional", value: 35, color: "#3b82f6" },
-    { name: "Manutenção", value: 25, color: "#22c55e" },
-    { name: "Documentos", value: 20, color: "#f59e0b" },
-    { name: "Navegação", value: 12, color: "#8b5cf6" },
-    { name: "Outros", value: 8, color: "#6b7280" },
+    { name: "Operacional", value: 35, color: "hsl(var(--primary))" },
+    { name: "Manutenção", value: 25, color: "hsl(var(--success))" },
+    { name: "Documentos", value: 20, color: "hsl(var(--warning))" },
+    { name: "Navegação", value: 12, color: "hsl(var(--accent))" },
+    { name: "Outros", value: 8, color: "hsl(var(--muted-foreground))" },
   ];
 
   const dataQualityTrend = [
@@ -152,24 +152,24 @@ const AIDataLake: React.FC = () => {
   const getStatusBadge = (status: DataSource["status"]) => {
     switch (status) {
       case "active":
-        return <Badge className="bg-green-500/20 text-green-400"><CheckCircle className="h-3 w-3 mr-1" />Ativo</Badge>;
+        return <Badge className="bg-success/20 text-success"><CheckCircle className="h-3 w-3 mr-1" />Ativo</Badge>;
       case "syncing":
-        return <Badge className="bg-blue-500/20 text-blue-400"><RefreshCw className="h-3 w-3 mr-1 animate-spin" />Sincronizando</Badge>;
+        return <Badge className="bg-info/20 text-info"><RefreshCw className="h-3 w-3 mr-1 animate-spin" />Sincronizando</Badge>;
       case "error":
-        return <Badge className="bg-red-500/20 text-red-400"><Activity className="h-3 w-3 mr-1" />Erro</Badge>;
+        return <Badge className="bg-destructive/20 text-destructive"><Activity className="h-3 w-3 mr-1" />Erro</Badge>;
     }
   };
 
   const getTypeBadge = (type: DataSource["type"]) => {
     switch (type) {
       case "structured":
-        return <Badge variant="outline" className="border-blue-500/30 text-blue-400">Estruturado</Badge>;
+        return <Badge variant="outline" className="border-info/30 text-info">Estruturado</Badge>;
       case "unstructured":
-        return <Badge variant="outline" className="border-orange-500/30 text-orange-400">Não-Estruturado</Badge>;
+        return <Badge variant="outline" className="border-warning/30 text-warning">Não-Estruturado</Badge>;
       case "semi-structured":
-        return <Badge variant="outline" className="border-purple-500/30 text-purple-400">Semi-Estruturado</Badge>;
+        return <Badge variant="outline" className="border-accent/30 text-accent-foreground">Semi-Estruturado</Badge>;
       case "streaming":
-        return <Badge variant="outline" className="border-green-500/30 text-green-400">Streaming</Badge>;
+        return <Badge variant="outline" className="border-success/30 text-success">Streaming</Badge>;
     }
   };
 
@@ -327,7 +327,7 @@ const AIDataLake: React.FC = () => {
                   <div className="space-y-2">
                     <div className="flex justify-between text-sm">
                       <span>Qualidade dos Dados</span>
-                      <span className={source.quality >= 95 ? "text-green-500" : source.quality >= 90 ? "text-yellow-500" : "text-red-500"}>
+                      <span className={source.quality >= 95 ? "text-success" : source.quality >= 90 ? "text-warning" : "text-destructive"}>
                         {source.quality}%
                       </span>
                     </div>
@@ -461,31 +461,31 @@ const AIDataLake: React.FC = () => {
               </CardHeader>
               <CardContent>
                 <div className="space-y-4">
-                  <div className="p-4 rounded-lg bg-green-500/10 border border-green-500/20">
+                  <div className="p-4 rounded-lg bg-success/10 border border-success/20">
                     <div className="flex items-center justify-between mb-2">
                       <span className="font-medium">Completude</span>
-                      <span className="text-green-500">97.8%</span>
+                      <span className="text-success">97.8%</span>
                     </div>
                     <Progress value={97.8} className="h-2" />
                   </div>
-                  <div className="p-4 rounded-lg bg-blue-500/10 border border-blue-500/20">
+                  <div className="p-4 rounded-lg bg-info/10 border border-info/20">
                     <div className="flex items-center justify-between mb-2">
                       <span className="font-medium">Consistência</span>
-                      <span className="text-blue-500">95.4%</span>
+                      <span className="text-info">95.4%</span>
                     </div>
                     <Progress value={95.4} className="h-2" />
                   </div>
-                  <div className="p-4 rounded-lg bg-purple-500/10 border border-purple-500/20">
+                  <div className="p-4 rounded-lg bg-accent/10 border border-accent/20">
                     <div className="flex items-center justify-between mb-2">
                       <span className="font-medium">Precisão</span>
-                      <span className="text-purple-500">94.1%</span>
+                      <span className="text-accent-foreground">94.1%</span>
                     </div>
                     <Progress value={94.1} className="h-2" />
                   </div>
-                  <div className="p-4 rounded-lg bg-orange-500/10 border border-orange-500/20">
+                  <div className="p-4 rounded-lg bg-warning/10 border border-warning/20">
                     <div className="flex items-center justify-between mb-2">
                       <span className="font-medium">Atualidade</span>
-                      <span className="text-orange-500">96.9%</span>
+                      <span className="text-warning">96.9%</span>
                     </div>
                     <Progress value={96.9} className="h-2" />
                   </div>
@@ -530,10 +530,10 @@ const AIDataLake: React.FC = () => {
                             <Badge variant="outline">{pipeline.rate}</Badge>
                           )}
                           <Badge className={
-                            pipeline.status === "running" ? "bg-green-500/20 text-green-400" :
-                            pipeline.status === "scheduled" ? "bg-blue-500/20 text-blue-400" :
-                            pipeline.status === "failed" ? "bg-red-500/20 text-red-400" :
-                            "bg-gray-500/20 text-gray-400"
+                            pipeline.status === "running" ? "bg-success/20 text-success" :
+                            pipeline.status === "scheduled" ? "bg-info/20 text-info" :
+                            pipeline.status === "failed" ? "bg-destructive/20 text-destructive" :
+                            "bg-muted text-muted-foreground"
                           }>
                             {pipeline.status}
                           </Badge>

@@ -183,53 +183,50 @@ export class TravelService {
     }
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- dynamic event data
-  private async logEvent(itineraryId: string, eventType: string, eventData: any): Promise<void> {
+  private async logEvent(itineraryId: string, eventType: string, eventData: Record<string, unknown>): Promise<void> {
     try {
       await supabase
         .from("travel_logs")
         .insert({
           itinerary_id: itineraryId,
           event_type: eventType,
-          event_data: eventData
+          event_data: eventData as unknown as import("@/integrations/supabase/types").Json
         });
     } catch (error) {
       logger.error("Error logging travel event:", error);
     }
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Supabase row result
-  private mapToItinerary(data: any): TravelItinerary {
+  private mapToItinerary(data: Record<string, unknown>): TravelItinerary {
     return {
-      id: data.id,
-      userId: data.user_id,
-      organizationId: data.organization_id,
-      tripName: data.trip_name,
-      origin: data.origin,
-      destination: data.destination,
-      departureDate: data.departure_date,
-      returnDate: data.return_date,
-      segments: data.segments || [],
-      totalCost: data.total_cost,
-      status: data.status,
-      bookingReference: data.booking_reference,
-      metadata: data.metadata || {},
-      createdAt: data.created_at,
-      updatedAt: data.updated_at
+      id: String(data.id || ""),
+      userId: data.user_id ? String(data.user_id) : undefined,
+      organizationId: data.organization_id ? String(data.organization_id) : undefined,
+      tripName: String(data.trip_name || ""),
+      origin: String(data.origin || ""),
+      destination: String(data.destination || ""),
+      departureDate: String(data.departure_date || ""),
+      returnDate: data.return_date ? String(data.return_date) : undefined,
+      segments: (data.segments as TravelSegment[]) || [],
+      totalCost: data.total_cost != null ? Number(data.total_cost) : undefined,
+      status: String(data.status || "draft") as TravelItinerary["status"],
+      bookingReference: data.booking_reference ? String(data.booking_reference) : undefined,
+      metadata: (data.metadata as Record<string, unknown>) || {},
+      createdAt: data.created_at ? String(data.created_at) : undefined,
+      updatedAt: data.updated_at ? String(data.updated_at) : undefined
     };
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Supabase row result
-  private mapToPriceAlert(data: any): PriceAlert {
+  private mapToPriceAlert(data: Record<string, unknown>): PriceAlert {
     return {
-      id: data.id,
-      userId: data.user_id,
-      route: data.route,
-      targetPrice: data.target_price,
-      currentPrice: data.current_price,
-      alertTriggered: data.alert_triggered,
-      lastCheckedAt: data.last_checked_at,
-      createdAt: data.created_at
+      id: String(data.id),
+      userId: data.user_id as string | undefined,
+      route: String(data.route),
+      targetPrice: Number(data.target_price),
+      currentPrice: data.current_price as number | undefined,
+      alertTriggered: data.alert_triggered as boolean | undefined,
+      lastCheckedAt: data.last_checked_at as string | undefined,
+      createdAt: data.created_at as string | undefined
     };
   }
 }

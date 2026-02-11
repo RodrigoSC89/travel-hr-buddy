@@ -191,13 +191,13 @@ export function FeedbackTab() {
   const getStatusBadge = (status: SelfAssessment['status']) => {
     switch (status) {
       case 'pending':
-        return <Badge variant="outline" className="border-yellow-500 text-yellow-500">Pendente</Badge>;
+        return <Badge variant="outline" className="border-warning text-warning">Pendente</Badge>;
       case 'in_progress':
-        return <Badge variant="outline" className="border-blue-500 text-blue-500">Em Andamento</Badge>;
+        return <Badge variant="outline" className="border-info text-info">Em Andamento</Badge>;
       case 'submitted':
-        return <Badge variant="outline" className="border-green-500 text-green-500">Enviada</Badge>;
+        return <Badge variant="outline" className="border-success text-success">Enviada</Badge>;
       case 'reviewed':
-        return <Badge className="bg-green-500">Revisada</Badge>;
+        return <Badge className="bg-success text-success-foreground">Revisada</Badge>;
     }
   };
 
