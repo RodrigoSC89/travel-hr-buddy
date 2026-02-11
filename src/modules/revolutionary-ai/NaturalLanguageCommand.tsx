@@ -65,7 +65,8 @@ export function NaturalLanguageCommand() {
     }
 
     try {
-      const SpeechRecognition = window.SpeechRecognition || (window as any).webkitSpeechRecognition;
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any -- webkitSpeechRecognition not in standard lib
+      const SpeechRecognition = window.SpeechRecognition || (window as unknown as Record<string, unknown>).webkitSpeechRecognition as typeof window.SpeechRecognition;
       if (!SpeechRecognition) {
         toast.error('Reconhecimento de voz não suportado neste navegador');
         return;
@@ -81,7 +82,7 @@ export function NaturalLanguageCommand() {
         toast.info('Ouvindo... Fale seu comando');
       };
 
-      recognition.onresult = (event: any) => {
+      recognition.onresult = (event: SpeechRecognitionEvent) => {
         const transcript = event.results[0][0].transcript;
         setCommand(transcript);
       };
@@ -183,7 +184,7 @@ export function NaturalLanguageCommand() {
                 variant="outline"
                 size="icon"
                 onClick={handleVoiceToggle}
-                className={isListening ? 'bg-red-500/20 border-red-500/50 text-red-400' : ''}
+                className={isListening ? 'bg-destructive/20 border-destructive/50 text-destructive' : ''}
               >
                 {isListening ? <MicOff className="h-4 w-4" /> : <Mic className="h-4 w-4" />}
               </Button>
@@ -295,9 +296,9 @@ export function NaturalLanguageCommand() {
               {commandHistory.slice(0, 5).map((item, i) => (
                 <div key={i} className="flex items-start gap-2 text-xs p-2 rounded bg-muted/30">
                   {item.success ? (
-                    <CheckCircle className="h-4 w-4 text-green-500 shrink-0 mt-0.5" />
+                    <CheckCircle className="h-4 w-4 text-success shrink-0 mt-0.5" />
                   ) : (
-                    <AlertCircle className="h-4 w-4 text-red-500 shrink-0 mt-0.5" />
+                    <AlertCircle className="h-4 w-4 text-destructive shrink-0 mt-0.5" />
                   )}
                   <div className="flex-1 min-w-0">
                     <p className="truncate text-foreground">{item.command}</p>

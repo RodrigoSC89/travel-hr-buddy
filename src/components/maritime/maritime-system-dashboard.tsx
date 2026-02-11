@@ -111,10 +111,10 @@ export function MaritimeSystemDashboard() {
 
   const getStatusColor = (status: string | null) => {
     const colors: Record<string, string> = {
-      normal: "text-green-500",
-      warning: "text-yellow-500",
-      critical: "text-red-500",
-      offline: "text-gray-500"
+      normal: "text-success",
+      warning: "text-warning",
+      critical: "text-destructive",
+      offline: "text-muted-foreground"
     };
 
     return colors[status || ""] || "text-gray-500";
@@ -253,9 +253,9 @@ export function MaritimeSystemDashboard() {
 
           {/* Active Alerts */}
           {alertSensors.length > 0 && (
-            <Card className="border-yellow-500">
+            <Card className="border-warning">
               <CardHeader>
-                <CardTitle className="flex items-center text-yellow-600">
+                <CardTitle className="flex items-center text-warning">
                   <AlertCircle className="mr-2 h-5 w-5" />
                   Active Sensor Alerts
                 </CardTitle>
@@ -265,7 +265,7 @@ export function MaritimeSystemDashboard() {
                   {alertSensors
                     .slice(0, 5)
                     .map((sensor) => (
-                      <div key={sensor.id} className="flex items-center justify-between p-2 bg-yellow-50 rounded">
+                      <div key={sensor.id} className="flex items-center justify-between p-2 bg-warning/10 rounded">
                         <div>
                           <p className="font-medium text-sm">{sensor.sensor_id}</p>
                           <p className="text-xs text-muted-foreground">
@@ -273,7 +273,7 @@ export function MaritimeSystemDashboard() {
                           </p>
                         </div>
                         <div className="text-right">
-                          <p className="font-bold text-yellow-600">
+                          <p className="font-bold text-warning">
                             {sensor.value} {sensor.unit || ""}
                           </p>
                         </div>

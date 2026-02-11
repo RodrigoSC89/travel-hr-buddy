@@ -25,7 +25,7 @@ export interface TimelineEvent {
   title: string;
   description?: string;
   user_id?: string;
-  metadata?: Record<string, any>;
+  metadata?: Record<string, unknown>;
   created_at: string;
 }
 
@@ -45,23 +45,23 @@ const eventIcons = {
 
 const severityConfig = {
   info: {
-    color: "text-blue-500",
-    bgColor: "bg-blue-50",
+    color: "text-primary",
+    bgColor: "bg-primary/10",
     badge: "default" as const,
   },
   success: {
-    color: "text-green-500",
-    bgColor: "bg-green-50",
+    color: "text-success",
+    bgColor: "bg-success/10",
     badge: "default" as const,
   },
   warning: {
-    color: "text-yellow-500",
-    bgColor: "bg-yellow-50",
+    color: "text-warning",
+    bgColor: "bg-warning/10",
     badge: "outline" as const,
   },
   error: {
-    color: "text-red-500",
-    bgColor: "bg-red-50",
+    color: "text-destructive",
+    bgColor: "bg-destructive/10",
     badge: "destructive" as const,
   },
 };

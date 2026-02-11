@@ -41,8 +41,8 @@ export function SyncStatusIndicator({
     if (isSyncing) {
       return {
         icon: RefreshCw,
-        color: 'text-blue-500',
-        bgColor: 'bg-blue-500/10',
+        color: 'text-primary',
+        bgColor: 'bg-primary/10',
         label: 'Sincronizando',
         description: 'Enviando dados...'
       };
@@ -51,8 +51,8 @@ export function SyncStatusIndicator({
     if (failedCount > 0) {
       return {
         icon: AlertCircle,
-        color: 'text-red-500',
-        bgColor: 'bg-red-500/10',
+        color: 'text-destructive',
+        bgColor: 'bg-destructive/10',
         label: 'Erro',
         description: `${failedCount} falha(s)`
       };
@@ -61,8 +61,8 @@ export function SyncStatusIndicator({
     if (pendingCount > 0) {
       return {
         icon: Cloud,
-        color: 'text-orange-500',
-        bgColor: 'bg-orange-500/10',
+        color: 'text-warning',
+        bgColor: 'bg-warning/10',
         label: 'Pendente',
         description: `${pendingCount} para sincronizar`
       };
@@ -70,8 +70,8 @@ export function SyncStatusIndicator({
     
     return {
       icon: Check,
-      color: 'text-green-500',
-      bgColor: 'bg-green-500/10',
+      color: 'text-success',
+      bgColor: 'bg-success/10',
       label: 'Sincronizado',
       description: 'Todos os dados atualizados'
     };

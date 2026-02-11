@@ -231,11 +231,11 @@ const generateAIInsights = (crew: CrewMemberAnalysis[]): AIInsight[] => {
 const FatigueIndicator = ({ score, risk }: { score: number; risk: string }) => {
   const getColor = () => {
     switch (risk) {
-      case "low": return "bg-green-500";
-      case "medium": return "bg-yellow-500";
-      case "high": return "bg-orange-500";
-      case "critical": return "bg-red-500";
-      default: return "bg-gray-500";
+      case "low": return "bg-success";
+      case "medium": return "bg-warning";
+      case "high": return "bg-accent";
+      case "critical": return "bg-destructive";
+      default: return "bg-muted-foreground";
     }
   };
 
@@ -275,10 +275,10 @@ const CrewCard = ({ crew }: { crew: CrewMemberAnalysis }) => {
 
   return (
     <Card className={`border-l-4 ${
-      crew.fatigueRisk === "critical" ? "border-l-red-500 bg-red-500/5" :
-      crew.fatigueRisk === "high" ? "border-l-orange-500 bg-orange-500/5" :
-      crew.fatigueRisk === "medium" ? "border-l-yellow-500" :
-      "border-l-green-500"
+      crew.fatigueRisk === "critical" ? "border-l-destructive bg-destructive/5" :
+      crew.fatigueRisk === "high" ? "border-l-accent bg-accent/5" :
+      crew.fatigueRisk === "medium" ? "border-l-warning" :
+      "border-l-success"
     }`}>
       <CardContent className="p-4">
         <div className="flex items-start justify-between mb-3">
@@ -288,7 +288,7 @@ const CrewCard = ({ crew }: { crew: CrewMemberAnalysis }) => {
           </div>
           <div className="flex items-center gap-2">
             {crew.readyForPromotion && (
-              <Badge variant="outline" className="text-green-600 border-green-600">
+              <Badge variant="outline" className="text-success border-success">
                 <ArrowUpRight className="h-3 w-3 mr-1" />
                 Promoção
               </Badge>
@@ -326,7 +326,7 @@ const CrewCard = ({ crew }: { crew: CrewMemberAnalysis }) => {
         {crew.alerts.length > 0 && (
           <div className="mt-3 space-y-1">
             {crew.alerts.map((alert, i) => (
-              <div key={i} className="flex items-center gap-2 text-xs text-red-600">
+              <div key={i} className="flex items-center gap-2 text-xs text-destructive">
                 <AlertTriangle className="h-3 w-3" />
                 <span>{alert}</span>
               </div>
@@ -372,9 +372,9 @@ export default function CrewAIAnalysis() {
         .limit(50);
       
       const crew: CrewMemberAnalysis[] = crewMembers && crewMembers.length > 0
-        ? crewMembers.map((m: any) => ({
+        ? crewMembers.map((m) => ({
             id: m.id,
-            name: m.full_name || m.name || 'N/A',
+            name: m.full_name || 'N/A',
             position: m.rank || m.position || 'N/A',
             fatigueScore: 45,
             fatigueRisk: 'low' as const,
@@ -446,16 +446,16 @@ export default function CrewAIAnalysis() {
                 <div
                   key={i}
                   className={`flex items-start justify-between p-3 rounded-lg ${
-                    insight.type === "warning" ? "bg-red-500/10 border border-red-500/20" :
-                    insight.type === "success" ? "bg-green-500/10 border border-green-500/20" :
-                    insight.type === "recommendation" ? "bg-blue-500/10 border border-blue-500/20" :
+                    insight.type === "warning" ? "bg-destructive/10 border border-destructive/20" :
+                    insight.type === "success" ? "bg-success/10 border border-success/20" :
+                    insight.type === "recommendation" ? "bg-primary/10 border border-primary/20" :
                     "bg-muted"
                   }`}
                 >
                   <div className="flex items-start gap-3">
-                    {insight.type === "warning" && <AlertTriangle className="h-4 w-4 text-red-500 mt-0.5" />}
-                    {insight.type === "success" && <TrendingUp className="h-4 w-4 text-green-500 mt-0.5" />}
-                    {insight.type === "recommendation" && <GraduationCap className="h-4 w-4 text-blue-500 mt-0.5" />}
+                    {insight.type === "warning" && <AlertTriangle className="h-4 w-4 text-destructive mt-0.5" />}
+                    {insight.type === "success" && <TrendingUp className="h-4 w-4 text-success mt-0.5" />}
+                    {insight.type === "recommendation" && <GraduationCap className="h-4 w-4 text-primary mt-0.5" />}
                     {insight.type === "info" && <Activity className="h-4 w-4 text-primary mt-0.5" />}
                     <div>
                       <p className="text-sm font-medium">{insight.title}</p>
@@ -491,9 +491,9 @@ export default function CrewAIAnalysis() {
         <Card className={criticalCount > 0 ? "border-red-500/50" : ""}>
           <CardContent className="pt-4">
             <div className="flex items-center gap-3">
-              <AlertTriangle className={`h-8 w-8 ${criticalCount > 0 ? "text-red-500" : "text-muted-foreground"} opacity-50`} />
+              <AlertTriangle className={`h-8 w-8 ${criticalCount > 0 ? "text-destructive" : "text-muted-foreground"} opacity-50`} />
               <div>
-                <p className={`text-2xl font-bold ${criticalCount > 0 ? "text-red-500" : ""}`}>
+                <p className={`text-2xl font-bold ${criticalCount > 0 ? "text-destructive" : ""}`}>
                   {criticalCount}
                 </p>
                 <p className="text-xs text-muted-foreground">Em Risco</p>
@@ -504,7 +504,7 @@ export default function CrewAIAnalysis() {
         <Card>
           <CardContent className="pt-4">
             <div className="flex items-center gap-3">
-              <Heart className="h-8 w-8 text-green-500 opacity-50" />
+              <Heart className="h-8 w-8 text-success opacity-50" />
               <div>
                 <p className="text-2xl font-bold">{(100 - getOverallFatigueRisk()).toFixed(0)}%</p>
                 <p className="text-xs text-muted-foreground">Bem-estar</p>
@@ -515,7 +515,7 @@ export default function CrewAIAnalysis() {
         <Card>
           <CardContent className="pt-4">
             <div className="flex items-center gap-3">
-              <Award className="h-8 w-8 text-yellow-500 opacity-50" />
+              <Award className="h-8 w-8 text-warning opacity-50" />
               <div>
                 <p className="text-2xl font-bold">
                   {crewData.filter(c => c.readyForPromotion).length}
@@ -624,9 +624,9 @@ export default function CrewAIAnalysis() {
                   .map((crew, i) => (
                     <div key={crew.id} className="flex items-center gap-4 p-3 border rounded-lg">
                       <div className={`w-8 h-8 rounded-full flex items-center justify-center font-bold ${
-                        i === 0 ? "bg-yellow-500 text-yellow-950" :
-                        i === 1 ? "bg-gray-300 text-gray-700" :
-                        i === 2 ? "bg-amber-600 text-amber-50" :
+                        i === 0 ? "bg-warning text-warning-foreground" :
+                        i === 1 ? "bg-muted text-muted-foreground" :
+                        i === 2 ? "bg-accent text-accent-foreground" :
                         "bg-muted"
                       }`}>
                         {i + 1}
@@ -640,7 +640,7 @@ export default function CrewAIAnalysis() {
                         <p className="text-xs text-muted-foreground">pontos</p>
                       </div>
                       {crew.readyForPromotion && (
-                        <Badge variant="outline" className="text-green-600">
+                        <Badge variant="outline" className="text-success">
                           <ArrowUpRight className="h-3 w-3 mr-1" />
                           Pronto
                         </Badge>

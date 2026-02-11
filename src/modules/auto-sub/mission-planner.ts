@@ -62,7 +62,7 @@ export interface MissionFeedback {
   waypoint?: string;
   progress: number; // 0-100
   message: string;
-  data?: any;
+  data?: unknown;
 }
 
 class MissionPlanner {

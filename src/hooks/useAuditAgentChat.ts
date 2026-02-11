@@ -143,14 +143,14 @@ export function useAuditAgentChat(agentId: string) {
           } catch { /* ignore */ }
         }
       }
-    } catch (err: any) {
-      if (err.name === "AbortError") return;
+    } catch (err: unknown) {
+      if (err instanceof Error && err.name === "AbortError") return;
       
       // Fallback response if AI fails
       const fallbackMsg: ChatMessage = {
         id: `agent-fallback-${Date.now()}`,
         role: "assistant",
-        content: `⚠️ ${err.message || "Erro ao conectar com a IA"}. Tente novamente em instantes.`,
+        content: `⚠️ ${err instanceof Error ? err.message : "Erro ao conectar com a IA"}. Tente novamente em instantes.`,
         timestamp: new Date(),
         agentId,
       };

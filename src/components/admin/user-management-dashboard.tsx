@@ -82,9 +82,9 @@ const UserManagementDashboard = () => {
 
   const getRoleBadge = (role: string) => {
     const roleColors = {
-      "Admin": "bg-red-100 text-red-800",
-      "HR Manager": "bg-blue-100 text-blue-800",
-      "Manager": "bg-green-100 text-green-800",
+      "Admin": "bg-destructive/10 text-destructive",
+      "HR Manager": "bg-primary/10 text-primary",
+      "Manager": "bg-success/10 text-success",
       "Employee": "bg-secondary text-secondary-foreground"
     };
     return (
@@ -96,7 +96,7 @@ const UserManagementDashboard = () => {
 
   const getStatusBadge = (status: string) => {
     return status === "Ativo" ? (
-      <Badge variant="default" className="bg-green-100 text-green-800">
+      <Badge variant="default" className="bg-success/10 text-success">
         <UserCheck className="w-3 h-3 mr-1" />
         Ativo
       </Badge>
@@ -185,7 +185,7 @@ const UserManagementDashboard = () => {
         <Card>
           <CardContent className="p-6">
             <div className="flex items-center space-x-2">
-              <Users className="w-8 h-8 text-blue-500" />
+              <Users className="w-8 h-8 text-primary" />
               <div>
                 <p className="text-2xl font-bold">{userStats.total}</p>
                 <p className="text-sm text-muted-foreground">Total de Usuários</p>
@@ -197,7 +197,7 @@ const UserManagementDashboard = () => {
         <Card>
           <CardContent className="p-6">
             <div className="flex items-center space-x-2">
-              <UserCheck className="w-8 h-8 text-green-500" />
+              <UserCheck className="w-8 h-8 text-success" />
               <div>
                 <p className="text-2xl font-bold">{userStats.active}</p>
                 <p className="text-sm text-muted-foreground">Usuários Ativos</p>
@@ -209,7 +209,7 @@ const UserManagementDashboard = () => {
         <Card>
           <CardContent className="p-6">
             <div className="flex items-center space-x-2">
-              <UserX className="w-8 h-8 text-orange-500" />
+              <UserX className="w-8 h-8 text-warning" />
               <div>
                 <p className="text-2xl font-bold">{userStats.inactive}</p>
                 <p className="text-sm text-muted-foreground">Usuários Inativos</p>
@@ -221,7 +221,7 @@ const UserManagementDashboard = () => {
         <Card>
           <CardContent className="p-6">
             <div className="flex items-center space-x-2">
-              <UserPlus className="w-8 h-8 text-purple-500" />
+              <UserPlus className="w-8 h-8 text-accent" />
               <div>
                 <p className="text-2xl font-bold">{userStats.newThisMonth}</p>
                 <p className="text-sm text-muted-foreground">Novos este Mês</p>
@@ -384,7 +384,7 @@ const UserManagementDashboard = () => {
                     <div className="space-y-2">
                       <div className="flex items-center justify-between">
                         <h3 className="font-semibold">Admin</h3>
-                        <Badge className="bg-red-100 text-red-800">Máximo</Badge>
+                        <Badge className="bg-destructive/10 text-destructive">Máximo</Badge>
                       </div>
                       <p className="text-sm text-muted-foreground">
                         Acesso total ao sistema
@@ -401,7 +401,7 @@ const UserManagementDashboard = () => {
                     <div className="space-y-2">
                       <div className="flex items-center justify-between">
                         <h3 className="font-semibold">HR Manager</h3>
-                        <Badge className="bg-blue-100 text-blue-800">Alto</Badge>
+                        <Badge className="bg-primary/10 text-primary">Alto</Badge>
                       </div>
                       <p className="text-sm text-muted-foreground">
                         Gestão de recursos humanos
@@ -418,7 +418,7 @@ const UserManagementDashboard = () => {
                     <div className="space-y-2">
                       <div className="flex items-center justify-between">
                         <h3 className="font-semibold">Manager</h3>
-                        <Badge className="bg-green-100 text-green-800">Médio</Badge>
+                        <Badge className="bg-success/10 text-success">Médio</Badge>
                       </div>
                       <p className="text-sm text-muted-foreground">
                         Supervisão de equipes

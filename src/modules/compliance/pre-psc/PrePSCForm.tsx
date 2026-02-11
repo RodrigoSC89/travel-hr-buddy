@@ -72,7 +72,7 @@ export default function PrePSCForm({ inspectionId, onComplete }: PrePSCFormProps
     }
   };
 
-  const handleItemChange = (index: number, field: keyof PrePSCChecklistItem, value: any) => {
+  const handleItemChange = (index: number, field: keyof PrePSCChecklistItem, value: string | boolean | number) => {
     const updated = [...checklistItems];
     updated[index] = { ...updated[index], [field]: value };
     
@@ -176,15 +176,15 @@ export default function PrePSCForm({ inspectionId, onComplete }: PrePSCFormProps
   const getStatusColor = (status: string) => {
     switch (status) {
     case "compliant":
-      return "bg-green-100 text-green-800 hover:bg-green-100";
+      return "bg-success/10 text-success hover:bg-success/10";
     case "non_compliant":
-      return "bg-red-100 text-red-800 hover:bg-red-100";
+      return "bg-destructive/10 text-destructive hover:bg-destructive/10";
     case "requires_action":
-      return "bg-yellow-100 text-yellow-800 hover:bg-yellow-100";
+      return "bg-warning/10 text-warning hover:bg-warning/10";
     case "not_applicable":
-      return "bg-gray-100 text-gray-800 hover:bg-gray-100";
+      return "bg-muted text-muted-foreground hover:bg-muted";
     default:
-      return "bg-blue-100 text-blue-800 hover:bg-blue-100";
+      return "bg-primary/10 text-primary hover:bg-primary/10";
     }
   };
 
