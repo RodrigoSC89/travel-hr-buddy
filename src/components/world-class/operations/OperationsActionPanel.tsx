@@ -48,18 +48,18 @@ interface Operation {
 
 const STATUS_CONFIG = {
   draft: { color: 'bg-muted text-muted-foreground', icon: Edit, label: 'Rascunho' },
-  pending: { color: 'bg-yellow-500/20 text-yellow-600', icon: Clock, label: 'Pendente' },
-  approved: { color: 'bg-green-500/20 text-green-600', icon: CheckCircle, label: 'Aprovado' },
-  rejected: { color: 'bg-red-500/20 text-red-600', icon: XCircle, label: 'Rejeitado' },
-  active: { color: 'bg-blue-500/20 text-blue-600', icon: TrendingUp, label: 'Ativo' },
-  completed: { color: 'bg-gray-500/20 text-gray-600', icon: CheckCircle, label: 'Concluído' },
+  pending: { color: 'bg-warning/20 text-warning', icon: Clock, label: 'Pendente' },
+  approved: { color: 'bg-success/20 text-success', icon: CheckCircle, label: 'Aprovado' },
+  rejected: { color: 'bg-destructive/20 text-destructive', icon: XCircle, label: 'Rejeitado' },
+  active: { color: 'bg-info/20 text-info', icon: TrendingUp, label: 'Ativo' },
+  completed: { color: 'bg-muted text-muted-foreground', icon: CheckCircle, label: 'Concluído' },
 };
 
 const PRIORITY_CONFIG = {
   low: { color: 'bg-muted text-muted-foreground', label: 'Baixa' },
-  medium: { color: 'bg-blue-500/20 text-blue-600', label: 'Média' },
-  high: { color: 'bg-orange-500/20 text-orange-600', label: 'Alta' },
-  critical: { color: 'bg-red-500/20 text-red-600', label: 'Crítica' },
+  medium: { color: 'bg-info/20 text-info', label: 'Média' },
+  high: { color: 'bg-warning/20 text-warning', label: 'Alta' },
+  critical: { color: 'bg-destructive/20 text-destructive', label: 'Crítica' },
 };
 
 // Map real vessel status to operation status
@@ -302,7 +302,7 @@ export function OperationsActionPanel() {
                   <Button 
                     variant="outline" 
                     size="sm"
-                    className="gap-1 text-green-600"
+                    className="gap-1 text-success"
                     onClick={() => bulkApproveMutation.mutate(selectedItems)}
                     disabled={bulkApproveMutation.isPending}
                   >
@@ -312,7 +312,7 @@ export function OperationsActionPanel() {
                   <Button 
                     variant="outline" 
                     size="sm"
-                    className="gap-1 text-red-600"
+                    className="gap-1 text-destructive"
                     onClick={() => bulkDeactivateMutation.mutate(selectedItems)}
                     disabled={bulkDeactivateMutation.isPending}
                   >

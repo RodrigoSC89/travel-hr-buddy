@@ -145,11 +145,13 @@ export class AdaptiveLearningAI {
     if (performanceData && performanceData.length > 0) {
       // Analyze recent performance to update skill estimates
       for (const record of performanceData) {
-        const data = (record as any).interaction_data;
-        if (data?.skill && data?.score) {
-          const currentScore = skillScores[data.skill] || 50;
+        const data = (record as Record<string, unknown>).interaction_data as Record<string, unknown> | undefined;
+        const skill = data?.skill as string | undefined;
+        const score = data?.score as number | undefined;
+        if (skill && typeof score === 'number') {
+          const currentScore = skillScores[skill] || 50;
           // Weighted average with recent performance
-          skillScores[data.skill] = currentScore * 0.7 + data.score * 0.3;
+          skillScores[skill] = currentScore * 0.7 + score * 0.3;
         }
       }
     }
@@ -268,7 +270,7 @@ export class AdaptiveLearningAI {
     const styles = { visual: 0, auditory: 0, kinesthetic: 0, reading: 0 };
 
     for (const record of data) {
-      const interaction = (record as any).interaction_data;
+      const interaction = (record as Record<string, unknown>).interaction_data as Record<string, unknown> | undefined;
       if (interaction?.preferredFormat === 'video') styles.visual++;
       if (interaction?.preferredFormat === 'audio') styles.auditory++;
       if (interaction?.preferredFormat === 'simulation') styles.kinesthetic++;
@@ -315,7 +317,7 @@ export class AdaptiveLearningAI {
    * Generate adaptive test for skill validation
    */
   async generateAdaptiveTest(skill: string, currentLevel: number): Promise<{
-    questions: any[];
+    questions: { id: string; type: string; difficulty: string; skill: string; points: number }[];
     difficulty: string;
     timeLimit: number;
   }> {
@@ -342,7 +344,7 @@ export class AdaptiveLearningAI {
   async validateCompetency(
     crewMember: CrewMember,
     skill: string,
-    answers: Record<string, any>
+    answers: Record<string, { correct: boolean }>
   ): Promise<TestResult> {
     const test = await this.generateAdaptiveTest(skill, crewMember.skillScores[skill] || 50);
     const passingScore = 70;

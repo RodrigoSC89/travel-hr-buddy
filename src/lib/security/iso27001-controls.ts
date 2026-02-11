@@ -104,13 +104,14 @@ export async function logSecurityEvent(event: Omit<SecurityEvent, 'timestamp'>):
   };
 
   try {
-    await supabase.from('access_logs').insert({
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any -- access_logs insert shape needs flexible details
+    await (supabase.from('access_logs').insert as Function)({
       action: event.type,
       module_accessed: event.resource || 'system',
       result: event.result,
       severity: event.severity,
       user_id: event.userId,
-      details: event.details as any,
+      details: event.details,
     });
 
     // Critical events trigger immediate notification
