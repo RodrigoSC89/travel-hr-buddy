@@ -65,17 +65,18 @@ export function MaintenanceHub() {
         .limit(20);
 
       if (!schedulesError && schedulesData && schedulesData.length > 0) {
-        const mappedTasks: MaintenanceTask[] = schedulesData.map((s: any) => ({
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Supabase join query returns dynamic shape
+        const mappedTasks: MaintenanceTask[] = schedulesData.map((s) => ({
           id: s.id,
           title: s.maintenance_type || "Manutenção Programada",
           description: s.description || "Manutenção preventiva",
           vessel: s.vessels?.name || "Embarcação",
-          vesselId: s.vessel_id,
+          vesselId: s.vessel_id || undefined,
           component: "Sistema Geral",
-          priority: mapSchedulePriority(s.status, s.scheduled_date),
-          status: mapScheduleStatus(s.status, s.scheduled_date),
+          priority: mapSchedulePriority(s.status || "", s.scheduled_date),
+          status: mapScheduleStatus(s.status || "", s.scheduled_date),
           dueDate: s.scheduled_date,
-          cost: s.cost ? parseFloat(s.cost) : undefined,
+          cost: s.cost ? s.cost : undefined,
           aiRecommendation: generateAIRecommendation(s),
         }));
         setTasks(mappedTasks);
@@ -91,13 +92,13 @@ export function MaintenanceHub() {
 
       if (vesselsData && vesselsData.length > 0) {
         const hashStr = (s: string) => s.split("").reduce((a, c) => a + c.charCodeAt(0), 0);
-        const healthData: ComponentHealth[] = vesselsData.flatMap((v: any, idx: number) => {
+        const healthData: ComponentHealth[] = vesselsData.flatMap((v, idx: number) => {
           const seed = hashStr(v.id || v.name || `v${idx}`);
           return [
             {
               id: `${v.id}-engine`,
               name: "Motor Principal",
-              vessel: v.name,
+              vessel: v.name || "Embarcação",
               health: 70 + ((seed * 7 + idx * 13) % 25),
               temperature: 60 + ((seed * 3 + idx * 11) % 30),
               vibration: 5 + ((seed * 5 + idx * 9) % 15),
@@ -107,7 +108,7 @@ export function MaintenanceHub() {
             {
               id: `${v.id}-generator`,
               name: "Gerador",
-              vessel: v.name,
+              vessel: v.name || "Embarcação",
               health: 75 + ((seed * 9 + idx * 5) % 20),
               temperature: 50 + ((seed * 4 + idx * 8) % 20),
               vibration: 3 + ((seed * 6 + idx * 3) % 10),
@@ -145,6 +146,7 @@ export function MaintenanceHub() {
     return "pending";
   };
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Supabase dynamic schedule shape
   const generateAIRecommendation = (schedule: any): string | undefined => {
     const daysUntil = Math.ceil((new Date(schedule.scheduled_date).getTime() - Date.now()) / 86400000);
     if (daysUntil < 7 && daysUntil > 0) {
@@ -189,10 +191,10 @@ export function MaintenanceHub() {
 
   const getPriorityColor = (priority: MaintenanceTask["priority"]) => {
     const colors = {
-      critical: "bg-red-500",
-      high: "bg-orange-500",
-      medium: "bg-amber-500",
-      low: "bg-blue-500",
+      critical: "bg-destructive",
+      high: "bg-warning",
+      medium: "bg-warning/70",
+      low: "bg-primary",
     };
     return colors[priority];
   };
@@ -208,9 +210,9 @@ export function MaintenanceHub() {
   };
 
   const getHealthColor = (health: number) => {
-    if (health >= 80) return "text-emerald-500";
-    if (health >= 60) return "text-amber-500";
-    return "text-red-500";
+    if (health >= 80) return "text-success";
+    if (health >= 60) return "text-warning";
+    return "text-destructive";
   };
 
   const stats = {
@@ -236,11 +238,11 @@ export function MaintenanceHub() {
           <Card>
             <CardContent className="p-4">
               <div className="flex items-center gap-3">
-                <div className="p-2 rounded-lg bg-amber-500/20">
-                  <Clock className="h-5 w-5 text-amber-500" />
+                <div className="p-2 rounded-lg bg-warning/20">
+                  <Clock className="h-5 w-5 text-warning" />
                 </div>
                 <div>
-                  <p className="text-2xl font-bold text-amber-500">{stats.pending}</p>
+                  <p className="text-2xl font-bold text-warning">{stats.pending}</p>
                   <p className="text-xs text-muted-foreground">Pendentes</p>
                 </div>
               </div>
@@ -252,11 +254,11 @@ export function MaintenanceHub() {
           <Card>
             <CardContent className="p-4">
               <div className="flex items-center gap-3">
-                <div className="p-2 rounded-lg bg-blue-500/20">
-                  <Wrench className="h-5 w-5 text-blue-500" />
+                <div className="p-2 rounded-lg bg-primary/20">
+                  <Wrench className="h-5 w-5 text-primary" />
                 </div>
                 <div>
-                  <p className="text-2xl font-bold text-blue-500">{stats.inProgress}</p>
+                  <p className="text-2xl font-bold text-primary">{stats.inProgress}</p>
                   <p className="text-xs text-muted-foreground">Em Progresso</p>
                 </div>
               </div>
@@ -265,14 +267,14 @@ export function MaintenanceHub() {
         </motion.div>
 
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }}>
-          <Card className="border-red-500/20">
+          <Card className="border-destructive/20">
             <CardContent className="p-4">
               <div className="flex items-center gap-3">
-                <div className="p-2 rounded-lg bg-red-500/20">
-                  <AlertTriangle className="h-5 w-5 text-red-500" />
+                <div className="p-2 rounded-lg bg-destructive/20">
+                  <AlertTriangle className="h-5 w-5 text-destructive" />
                 </div>
                 <div>
-                  <p className="text-2xl font-bold text-red-500">{stats.overdue}</p>
+                  <p className="text-2xl font-bold text-destructive">{stats.overdue}</p>
                   <p className="text-xs text-muted-foreground">Atrasados</p>
                 </div>
               </div>
@@ -284,11 +286,11 @@ export function MaintenanceHub() {
           <Card>
             <CardContent className="p-4">
               <div className="flex items-center gap-3">
-                <div className="p-2 rounded-lg bg-purple-500/20">
-                  <Brain className="h-5 w-5 text-purple-500" />
+                <div className="p-2 rounded-lg bg-accent/20">
+                  <Brain className="h-5 w-5 text-accent-foreground" />
                 </div>
                 <div>
-                  <p className="text-2xl font-bold text-purple-500">{stats.criticalComponents}</p>
+                  <p className="text-2xl font-bold text-accent-foreground">{stats.criticalComponents}</p>
                   <p className="text-xs text-muted-foreground">Componentes Críticos</p>
                 </div>
               </div>
@@ -348,8 +350,8 @@ export function MaintenanceHub() {
                           </div>
 
                           {task.aiRecommendation && (
-                            <div className="mt-3 p-2 rounded bg-purple-500/10 border border-purple-500/20">
-                              <div className="flex items-center gap-2 text-xs text-purple-500">
+                          <div className="mt-3 p-2 rounded bg-accent/10 border border-accent/20">
+                              <div className="flex items-center gap-2 text-xs text-accent-foreground">
                                 <Brain className="h-3 w-3" />
                                 <span className="font-medium">Recomendação IA:</span>
                               </div>
@@ -449,10 +451,10 @@ export function MaintenanceHub() {
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: index * 0.1 }}
-                    className="p-4 rounded-lg border bg-gradient-to-r from-purple-500/10 to-blue-500/10"
+                    className="p-4 rounded-lg border bg-gradient-to-r from-accent/10 to-primary/10"
                   >
                     <div className="flex items-center gap-3 mb-2">
-                      <Brain className="h-5 w-5 text-purple-500" />
+                      <Brain className="h-5 w-5 text-accent-foreground" />
                       <h4 className="font-semibold">{component.name} - {component.vessel}</h4>
                     </div>
                     <p className="text-sm text-muted-foreground">

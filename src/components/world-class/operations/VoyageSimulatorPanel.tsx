@@ -81,7 +81,7 @@ function PortInput({ value, onChange, label }: { value: string; onChange: (v: st
 
 function ScenarioSlider({ label, value, onChange, min, max, step, unit, icon: Icon }: {
   label: string; value: number; onChange: (v: number) => void;
-  min: number; max: number; step: number; unit: string; icon: any;
+  min: number; max: number; step: number; unit: string; icon: React.ElementType;
 }) {
   const isPositive = value > 0;
   const isNegative = value < 0;
@@ -92,7 +92,7 @@ function ScenarioSlider({ label, value, onChange, min, max, step, unit, icon: Ic
           <Icon className="h-3 w-3" />
           {label}
         </span>
-        <span className={`font-mono font-medium ${isPositive ? "text-destructive" : isNegative ? "text-emerald-500" : ""}`}>
+        <span className={`font-mono font-medium ${isPositive ? "text-destructive" : isNegative ? "text-success" : ""}`}>
           {value > 0 ? "+" : ""}{value}{unit}
         </span>
       </div>
@@ -101,6 +101,7 @@ function ScenarioSlider({ label, value, onChange, min, max, step, unit, icon: Ic
   );
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- simulation result has dynamic shape from Supabase
 function SimulationDetailView({ sim, onClose }: { sim: any; onClose: () => void }) {
   const scenarios = Array.isArray(sim.scenarios) ? sim.scenarios : [];
   const riskFactors = Array.isArray(sim.risk_factors) ? sim.risk_factors : [];
@@ -120,23 +121,23 @@ function SimulationDetailView({ sim, onClose }: { sim: any; onClose: () => void 
         <div className="space-y-5">
           {/* KPIs */}
           <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-            <Card className="border-l-4 border-l-emerald-500">
+            <Card className="border-l-4 border-l-success">
               <CardContent className="p-3">
                 <p className="text-[10px] text-muted-foreground uppercase">Lucro Estimado</p>
-                <p className="text-lg font-bold text-emerald-500">
+                <p className="text-lg font-bold text-success">
                   ${sim.estimated_profit?.toLocaleString() || "—"}
                 </p>
               </CardContent>
             </Card>
-            <Card className="border-l-4 border-l-orange-500">
+            <Card className="border-l-4 border-l-warning">
               <CardContent className="p-3">
                 <p className="text-[10px] text-muted-foreground uppercase">Custo Combustível</p>
-                <p className="text-lg font-bold text-orange-500">
+                <p className="text-lg font-bold text-warning">
                   ${sim.estimated_fuel_cost?.toLocaleString() || "—"}
                 </p>
               </CardContent>
             </Card>
-            <Card className="border-l-4 border-l-blue-500">
+            <Card className="border-l-4 border-l-primary">
               <CardContent className="p-3">
                 <p className="text-[10px] text-muted-foreground uppercase">Duração</p>
                 <p className="text-lg font-bold">
@@ -205,7 +206,7 @@ function SimulationDetailView({ sim, onClose }: { sim: any; onClose: () => void 
                       <div className="space-y-1 text-xs text-muted-foreground">
                         <div className="flex justify-between">
                           <span>Combustível</span>
-                          <span className={s.fuelPriceChange > 0 ? "text-destructive" : s.fuelPriceChange < 0 ? "text-emerald-500" : ""}>
+                          <span className={s.fuelPriceChange > 0 ? "text-destructive" : s.fuelPriceChange < 0 ? "text-success" : ""}>
                             {s.fuelPriceChange > 0 ? "+" : ""}{s.fuelPriceChange}%
                           </span>
                         </div>
@@ -240,6 +241,7 @@ function SimulationDetailView({ sim, onClose }: { sim: any; onClose: () => void 
               </CardHeader>
               <CardContent>
                 <div className="space-y-2">
+                  {/* eslint-disable-next-line @typescript-eslint/no-explicit-any -- risk factors from AI have dynamic shape */}
                   {riskFactors.map((rf: any, i: number) => (
                     <div key={i} className="flex items-start gap-3 p-2 rounded border">
                       <AlertTriangle className={`h-4 w-4 mt-0.5 flex-shrink-0 ${
@@ -268,6 +270,7 @@ function SimulationDetailView({ sim, onClose }: { sim: any; onClose: () => void 
 export function VoyageSimulatorPanel() {
   const { simulations, isLoading, createSimulation, deleteSimulation, refetch } = useVoyageSimulator();
   const [isOpen, setIsOpen] = useState(false);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- simulation result dynamic shape
   const [selectedSim, setSelectedSim] = useState<any>(null);
   const [simName, setSimName] = useState("");
   const [origin, setOrigin] = useState("");
@@ -350,6 +353,7 @@ export function VoyageSimulatorPanel() {
     await deleteSimulation.mutateAsync(id);
   };
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- simulation result dynamic shape
   const handleExport = (sim: any) => {
     const blob = new Blob([JSON.stringify(sim, null, 2)], { type: "application/json" });
     const url = URL.createObjectURL(blob);
@@ -427,6 +431,7 @@ export function VoyageSimulatorPanel() {
                             </SelectTrigger>
                             <SelectContent>
                               <SelectItem value="none">Nenhuma</SelectItem>
+                              {/* eslint-disable-next-line @typescript-eslint/no-explicit-any -- vessels from Supabase query */}
                               {vessels.map((v: any) => (
                                 <SelectItem key={v.id} value={v.id}>
                                   <span className="flex items-center gap-2">
@@ -547,8 +552,8 @@ export function VoyageSimulatorPanel() {
             </Card>
             <Card>
               <CardContent className="p-3 flex items-center gap-3">
-                <div className="p-2 rounded-lg bg-emerald-500/10">
-                  <TrendingUp className="h-4 w-4 text-emerald-500" />
+                <div className="p-2 rounded-lg bg-success/10">
+                  <TrendingUp className="h-4 w-4 text-success" />
                 </div>
                 <div>
                   <p className="text-xs text-muted-foreground">Concluídas</p>
@@ -620,7 +625,7 @@ export function VoyageSimulatorPanel() {
                               {sim.origin_port} <ChevronRight className="h-3 w-3" /> {sim.destination_port}
                             </span>
                             {sim.estimated_profit != null && (
-                              <span className="flex items-center gap-1 text-emerald-600 font-medium">
+                              <span className="flex items-center gap-1 text-success font-medium">
                                 <TrendingUp className="h-3 w-3" /> ${sim.estimated_profit?.toLocaleString()}
                               </span>
                             )}
