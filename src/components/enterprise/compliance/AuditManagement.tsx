@@ -117,11 +117,11 @@ export function AuditManagement() {
   const getStatusBadge = (status: AuditItem["status"]) => {
     switch (status) {
       case "ok":
-        return <Badge className="bg-green-500/10 text-green-500">Conforme</Badge>;
+        return <Badge className="bg-success/10 text-success">Conforme</Badge>;
       case "nc":
         return <Badge variant="destructive">Não Conforme</Badge>;
       case "observation":
-        return <Badge className="bg-yellow-500/10 text-yellow-500">Observação</Badge>;
+        return <Badge className="bg-warning/10 text-warning">Observação</Badge>;
       case "pending":
         return <Badge variant="secondary">Pendente</Badge>;
     }
@@ -205,19 +205,19 @@ export function AuditManagement() {
         </Card>
         <Card>
           <CardContent className="pt-4 text-center">
-            <p className="text-2xl font-bold text-green-500">{stats.ok}</p>
+            <p className="text-2xl font-bold text-success">{stats.ok}</p>
             <p className="text-xs text-muted-foreground">Conformes</p>
           </CardContent>
         </Card>
         <Card>
           <CardContent className="pt-4 text-center">
-            <p className="text-2xl font-bold text-red-500">{stats.nc}</p>
+            <p className="text-2xl font-bold text-destructive">{stats.nc}</p>
             <p className="text-xs text-muted-foreground">Não Conformes</p>
           </CardContent>
         </Card>
         <Card>
           <CardContent className="pt-4 text-center">
-            <p className="text-2xl font-bold text-yellow-500">{stats.observation}</p>
+            <p className="text-2xl font-bold text-warning">{stats.observation}</p>
             <p className="text-xs text-muted-foreground">Observações</p>
           </CardContent>
         </Card>

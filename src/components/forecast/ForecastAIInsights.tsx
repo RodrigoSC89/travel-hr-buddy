@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Brain, AlertTriangle } from "lucide-react";
 import { logger } from '@/lib/logger';
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- ONNX runtime has dynamic exports
 let ort: any = null;
 const loadORT = async () => {
   if (!ort) {

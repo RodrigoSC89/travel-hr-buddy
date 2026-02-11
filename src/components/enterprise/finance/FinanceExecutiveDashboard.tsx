@@ -79,43 +79,43 @@ export function FinanceExecutiveDashboard() {
     <div className="space-y-6">
       {/* Top KPIs */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-        <Card className="bg-gradient-to-br from-green-50 to-green-100 dark:from-green-950/30 dark:to-green-900/20 border-green-200 dark:border-green-800">
+        <Card className="bg-gradient-to-br from-success/10 to-success/20 dark:from-success/10 dark:to-success/5 border-success/30">
           <CardContent className="pt-6">
             <div className="flex items-start justify-between">
               <div>
-                <p className="text-sm font-medium text-green-700 dark:text-green-400">Receita YTD</p>
-                <p className="text-3xl font-bold text-green-800 dark:text-green-300 mt-1">
+                <p className="text-sm font-medium text-success">Receita YTD</p>
+                <p className="text-3xl font-bold text-success mt-1">
                   {formatCurrency(totalRevenue)}
                 </p>
                 <div className="flex items-center gap-1 mt-2">
-                  <ArrowUpRight className="h-4 w-4 text-green-600" />
-                  <span className="text-sm text-green-600 font-medium">+{revenueGrowth}%</span>
-                  <span className="text-xs text-green-600/70">vs mês anterior</span>
+                  <ArrowUpRight className="h-4 w-4 text-success" />
+                  <span className="text-sm text-success font-medium">+{revenueGrowth}%</span>
+                  <span className="text-xs text-success/70">vs mês anterior</span>
                 </div>
               </div>
-              <div className="p-3 rounded-full bg-green-500/20">
-                <TrendingUp className="h-6 w-6 text-green-600" />
+              <div className="p-3 rounded-full bg-success/20">
+                <TrendingUp className="h-6 w-6 text-success" />
               </div>
             </div>
           </CardContent>
         </Card>
 
-        <Card className="bg-gradient-to-br from-red-50 to-red-100 dark:from-red-950/30 dark:to-red-900/20 border-red-200 dark:border-red-800">
+        <Card className="bg-gradient-to-br from-destructive/10 to-destructive/20 dark:from-destructive/10 dark:to-destructive/5 border-destructive/30">
           <CardContent className="pt-6">
             <div className="flex items-start justify-between">
               <div>
-                <p className="text-sm font-medium text-red-700 dark:text-red-400">Custos YTD</p>
-                <p className="text-3xl font-bold text-red-800 dark:text-red-300 mt-1">
+                <p className="text-sm font-medium text-destructive">Custos YTD</p>
+                <p className="text-3xl font-bold text-destructive mt-1">
                   {formatCurrency(totalCosts)}
                 </p>
                 <div className="flex items-center gap-1 mt-2">
-                  <ArrowDownRight className="h-4 w-4 text-green-600" />
-                  <span className="text-sm text-green-600 font-medium">-3.2%</span>
+                  <ArrowDownRight className="h-4 w-4 text-success" />
+                  <span className="text-sm text-success font-medium">-3.2%</span>
                   <span className="text-xs text-muted-foreground">vs orçado</span>
                 </div>
               </div>
-              <div className="p-3 rounded-full bg-red-500/20">
-                <TrendingDown className="h-6 w-6 text-red-600" />
+              <div className="p-3 rounded-full bg-destructive/20">
+                <TrendingDown className="h-6 w-6 text-destructive" />
               </div>
             </div>
           </CardContent>
@@ -293,11 +293,11 @@ export function FinanceExecutiveDashboard() {
                   <div className="grid grid-cols-3 gap-4 text-sm">
                     <div>
                       <p className="text-muted-foreground">Receita</p>
-                      <p className="font-medium text-green-600">{formatCurrency(vessel.revenue)}</p>
+                      <p className="font-medium text-success">{formatCurrency(vessel.revenue)}</p>
                     </div>
                     <div>
                       <p className="text-muted-foreground">Custos</p>
-                      <p className="font-medium text-red-600">{formatCurrency(vessel.costs)}</p>
+                      <p className="font-medium text-destructive">{formatCurrency(vessel.costs)}</p>
                     </div>
                     <div>
                       <p className="text-muted-foreground">Viagens</p>
@@ -338,7 +338,7 @@ export function FinanceExecutiveDashboard() {
                   </div>
                   <Progress 
                     value={cat.percentage} 
-                    className={`h-2 ${cat.percentage >= 90 ? "[&>div]:bg-red-500" : cat.percentage >= 75 ? "[&>div]:bg-yellow-500" : ""}`}
+                    className={`h-2 ${cat.percentage >= 90 ? "[&>div]:bg-destructive" : cat.percentage >= 75 ? "[&>div]:bg-warning" : ""}`}
                   />
                 </div>
               ))}

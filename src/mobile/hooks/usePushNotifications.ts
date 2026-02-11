@@ -7,12 +7,31 @@ import { useState, useEffect, useCallback } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { logger } from "@/lib/logger";
 
-// Capacitor imports with web fallbacks
-const PushNotifications = typeof window !== "undefined" && 
-  (window as any).Capacitor?.Plugins?.PushNotifications;
+// Capacitor types
+interface CapacitorToken { value: string; }
+interface CapacitorError { error: string; }
+interface CapacitorNotification { title?: string; body?: string; data?: Record<string, unknown>; }
+interface CapacitorAction { notification: CapacitorNotification; actionId: string; }
+interface CapacitorListener { remove: () => void; }
 
-const LocalNotifications = typeof window !== "undefined" && 
-  (window as any).Capacitor?.Plugins?.LocalNotifications;
+interface CapacitorPlugins {
+  PushNotifications?: {
+    requestPermissions: () => Promise<{ receive: string }>;
+    register: () => Promise<void>;
+    unregister?: () => Promise<void>;
+    addListener: (event: string, handler: (...args: unknown[]) => void) => Promise<CapacitorListener>;
+  };
+  LocalNotifications?: {
+    schedule: (options: { notifications: { title: string; body: string; id: number; extra?: Record<string, unknown> }[] }) => Promise<void>;
+  };
+}
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Capacitor global not in standard types
+const capacitorGlobal = typeof window !== "undefined" ? (window as unknown as Record<string, unknown>).Capacitor as { Plugins?: CapacitorPlugins } | undefined : undefined;
+const capacitorPlugins = capacitorGlobal?.Plugins;
+
+const PushNotifications = capacitorPlugins?.PushNotifications;
+const LocalNotifications = capacitorPlugins?.LocalNotifications;
 
 export interface PushNotificationState {
   isSupported: boolean;
@@ -22,8 +41,8 @@ export interface PushNotificationState {
 }
 
 export interface PushNotificationOptions {
-  onReceived?: (notification: any) => void;
-  onAction?: (action: any) => void;
+  onReceived?: (notification: CapacitorNotification) => void;
+  onAction?: (action: CapacitorAction) => void;
   onRegistrationError?: (error: Error) => void;
 }
 
@@ -36,16 +55,14 @@ export function usePushNotifications(options: PushNotificationOptions = {}) {
   });
   const [loading, setLoading] = useState(true);
 
-  // Check if push notifications are supported
   const checkSupport = useCallback(async () => {
     if (!PushNotifications) {
-      // Fallback to Web Push API
       if ("Notification" in window && "serviceWorker" in navigator) {
-        const permission = Notification.permission;
+        const permission = Notification.permission as PushNotificationState["permission"];
         setState(prev => ({
           ...prev,
           isSupported: true,
-          permission: permission as any,
+          permission,
         }));
         return true;
       }
@@ -56,7 +73,6 @@ export function usePushNotifications(options: PushNotificationOptions = {}) {
     return true;
   }, []);
 
-  // Request permission
   const requestPermission = useCallback(async (): Promise<boolean> => {
     try {
       if (PushNotifications) {
@@ -71,7 +87,7 @@ export function usePushNotifications(options: PushNotificationOptions = {}) {
         const permission = await Notification.requestPermission();
         setState(prev => ({
           ...prev,
-          permission: permission as any,
+          permission: permission as PushNotificationState["permission"],
         }));
         return permission === "granted";
       }
@@ -82,12 +98,10 @@ export function usePushNotifications(options: PushNotificationOptions = {}) {
     }
   }, []);
 
-  // Register for push notifications
   const register = useCallback(async (): Promise<string | null> => {
     try {
       setLoading(true);
       
-      // Request permission first
       const hasPermission = await requestPermission();
       if (!hasPermission) {
         logger.warn("Push notification permission denied");
@@ -95,13 +109,9 @@ export function usePushNotifications(options: PushNotificationOptions = {}) {
       }
 
       if (PushNotifications) {
-        // Capacitor native push
         await PushNotifications.register();
-        
-        // Token will be received via event listener
         return null;
       } else if ("serviceWorker" in navigator) {
-        // Web Push - simplified without VAPID for now
         logger.info("Web push registration would happen here");
         return null;
       }
@@ -116,14 +126,12 @@ export function usePushNotifications(options: PushNotificationOptions = {}) {
     }
   }, [requestPermission, options]);
 
-  // Unregister from push notifications
   const unregister = useCallback(async () => {
     try {
       if (PushNotifications) {
         await PushNotifications.unregister?.();
       }
       
-      // Remove token from server
       await removeToken();
       
       setState(prev => ({
@@ -136,11 +144,10 @@ export function usePushNotifications(options: PushNotificationOptions = {}) {
     }
   }, []);
 
-  // Show local notification
   const showLocalNotification = useCallback(async (
     title: string,
     body: string,
-    data?: Record<string, any>
+    data?: Record<string, unknown>
   ) => {
     try {
       if (LocalNotifications) {
@@ -160,7 +167,6 @@ export function usePushNotifications(options: PushNotificationOptions = {}) {
     }
   }, []);
 
-  // Initialize push notifications
   useEffect(() => {
     const init = async () => {
       await checkSupport();
@@ -169,12 +175,11 @@ export function usePushNotifications(options: PushNotificationOptions = {}) {
     
     init();
 
-    // Set up Capacitor event listeners
     if (PushNotifications) {
-      const listeners: any[] = [];
+      const listeners: CapacitorListener[] = [];
       
-      // Registration success
-      PushNotifications.addListener("registration", async (token: any) => {
+      PushNotifications.addListener("registration", async (...args: unknown[]) => {
+        const token = args[0] as CapacitorToken;
         logger.info("Push registration success", { token: token.value });
         await saveToken(token.value);
         setState(prev => ({
@@ -182,25 +187,25 @@ export function usePushNotifications(options: PushNotificationOptions = {}) {
           isRegistered: true,
           token: token.value,
         }));
-      }).then((l: any) => listeners.push(l));
+      }).then((l: CapacitorListener) => listeners.push(l));
 
-      // Registration error
-      PushNotifications.addListener("registrationError", (error: any) => {
+      PushNotifications.addListener("registrationError", (...args: unknown[]) => {
+        const error = args[0] as CapacitorError;
         logger.error("Push registration error", error);
         options.onRegistrationError?.(new Error(error.error));
-      }).then((l: any) => listeners.push(l));
+      }).then((l: CapacitorListener) => listeners.push(l));
 
-      // Notification received
-      PushNotifications.addListener("pushNotificationReceived", (notification: any) => {
+      PushNotifications.addListener("pushNotificationReceived", (...args: unknown[]) => {
+        const notification = args[0] as CapacitorNotification;
         logger.info("Push notification received", notification);
         options.onReceived?.(notification);
-      }).then((l: any) => listeners.push(l));
+      }).then((l: CapacitorListener) => listeners.push(l));
 
-      // Notification action
-      PushNotifications.addListener("pushNotificationActionPerformed", (action: any) => {
+      PushNotifications.addListener("pushNotificationActionPerformed", (...args: unknown[]) => {
+        const action = args[0] as CapacitorAction;
         logger.info("Push notification action", action);
         options.onAction?.(action);
-      }).then((l: any) => listeners.push(l));
+      }).then((l: CapacitorListener) => listeners.push(l));
 
       return () => {
         listeners.forEach(l => l.remove?.());
@@ -218,26 +223,20 @@ export function usePushNotifications(options: PushNotificationOptions = {}) {
   };
 }
 
-// Helper: Save push token to server
 async function saveToken(token: string): Promise<void> {
   try {
     const { data: { user } } = await supabase.auth.getUser();
     if (!user) return;
-
-    // Save token to user profile or dedicated push_tokens table
     logger.info("Push token saved", { userId: user.id, token });
   } catch (error) {
     logger.error("Failed to save push token", error);
   }
 }
 
-// Helper: Remove push token from server
 async function removeToken(): Promise<void> {
   try {
     const { data: { user } } = await supabase.auth.getUser();
     if (!user) return;
-
-    // Remove token from server
     logger.info("Push token removed");
   } catch (error) {
     logger.error("Failed to remove push token", error);
