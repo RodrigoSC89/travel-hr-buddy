@@ -37,9 +37,9 @@ interface PurchaseOrder {
 
 const statusConfig = {
   draft: { label: "Rascunho", color: "bg-muted text-muted-foreground" },
-  submitted: { label: "Enviado", color: "bg-blue-500/20 text-blue-500" },
-  approved: { label: "Aprovado", color: "bg-green-500/20 text-green-500" },
-  shipped: { label: "Enviado", color: "bg-purple-500/20 text-purple-500" },
+  submitted: { label: "Enviado", color: "bg-primary/20 text-primary" },
+  approved: { label: "Aprovado", color: "bg-success/20 text-success" },
+  shipped: { label: "Enviado", color: "bg-accent/20 text-accent-foreground" },
   delivered: { label: "Entregue", color: "bg-success/20 text-success" },
   cancelled: { label: "Cancelado", color: "bg-destructive/20 text-destructive" },
 };
@@ -67,12 +67,13 @@ export default function OrdersListPanel() {
   const { data: orders = [], isLoading, refetch } = useQuery({
     queryKey: ["purchase-orders"],
     queryFn: async () => {
-      const { data, error } = await supabase
-        .from("rfq_requests" as any)
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any -- rfq_requests not in generated types
+      const { data, error } = await (supabase.from as Function)("rfq_requests")
         .select("*")
         .order("created_at", { ascending: false });
       
       if (error) throw error;
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any -- dynamic table mapping
       return (data || []).map((item: any) => ({
         id: item.id,
         order_number: item.rfq_number || `PO-${item.id.slice(0, 8)}`,
@@ -93,7 +94,8 @@ export default function OrdersListPanel() {
   // Create order mutation
   const createMutation = useMutation({
     mutationFn: async (data: typeof formData) => {
-      const { error } = await supabase.from("rfq_requests" as any).insert({
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any -- rfq_requests not in generated types
+      const { error } = await (supabase.from as Function)("rfq_requests").insert({
         rfq_number: `PO-${Date.now()}`,
         title: data.title,
         description: data.description,
@@ -119,7 +121,8 @@ export default function OrdersListPanel() {
   // Update order mutation
   const updateMutation = useMutation({
     mutationFn: async ({ id, ...data }: { id: string } & typeof formData) => {
-      const { error } = await supabase.from("rfq_requests" as any)
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any -- rfq_requests not in generated types
+      const { error } = await (supabase.from as Function)("rfq_requests")
         .update({
           title: data.title,
           description: data.description,
@@ -143,7 +146,8 @@ export default function OrdersListPanel() {
   // Delete order mutation
   const deleteMutation = useMutation({
     mutationFn: async (id: string) => {
-      const { error } = await supabase.from("rfq_requests" as any).delete().eq("id", id);
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any -- rfq_requests not in generated types
+      const { error } = await (supabase.from as Function)("rfq_requests").delete().eq("id", id);
       if (error) throw error;
     },
     onSuccess: () => {
@@ -158,7 +162,8 @@ export default function OrdersListPanel() {
   // Status update mutation
   const statusMutation = useMutation({
     mutationFn: async ({ id, status }: { id: string; status: string }) => {
-      const { error } = await supabase.from("rfq_requests" as any)
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any -- rfq_requests not in generated types
+      const { error } = await (supabase.from as Function)("rfq_requests")
         .update({ status })
         .eq("id", id);
       if (error) throw error;

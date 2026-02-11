@@ -30,17 +30,17 @@ import { toast } from 'sonner';
 import { logger } from '@/lib/logger';
 
 const severityColors: Record<string, string> = {
-  observation: 'bg-blue-500/20 text-blue-600',
-  deficiency: 'bg-yellow-500/20 text-yellow-600',
-  detainable: 'bg-red-500/20 text-red-600'
+  observation: 'bg-primary/20 text-primary',
+  deficiency: 'bg-warning/20 text-warning',
+  detainable: 'bg-destructive/20 text-destructive'
 };
 
 const statusColors: Record<string, string> = {
-  open: 'bg-red-500/20 text-red-600',
-  in_progress: 'bg-yellow-500/20 text-yellow-600',
-  corrected: 'bg-green-500/20 text-green-600',
-  verified: 'bg-blue-500/20 text-blue-600',
-  closed: 'bg-gray-500/20 text-gray-600'
+  open: 'bg-destructive/20 text-destructive',
+  in_progress: 'bg-warning/20 text-warning',
+  corrected: 'bg-success/20 text-success',
+  verified: 'bg-primary/20 text-primary',
+  closed: 'bg-muted text-muted-foreground'
 };
 
 export const PSCPackagePanel: React.FC = () => {
@@ -106,10 +106,10 @@ export const PSCPackagePanel: React.FC = () => {
   };
 
   const getRiskLevel = (score: number) => {
-    if (score <= 30) return { label: 'Baixo', color: 'text-green-500' };
-    if (score <= 60) return { label: 'Médio', color: 'text-yellow-500' };
-    if (score <= 80) return { label: 'Alto', color: 'text-orange-500' };
-    return { label: 'Crítico', color: 'text-red-500' };
+    if (score <= 30) return { label: 'Baixo', color: 'text-success' };
+    if (score <= 60) return { label: 'Médio', color: 'text-warning' };
+    if (score <= 80) return { label: 'Alto', color: 'text-warning' };
+    return { label: 'Crítico', color: 'text-destructive' };
   };
 
   const risk = getRiskLevel(riskScore);
@@ -179,8 +179,8 @@ export const PSCPackagePanel: React.FC = () => {
         <Card>
           <CardContent className="pt-6">
             <div className="flex items-center gap-3">
-              <div className="p-2 rounded-lg bg-blue-500/20">
-                <Shield className="h-5 w-5 text-blue-500" />
+              <div className="p-2 rounded-lg bg-primary/20">
+                <Shield className="h-5 w-5 text-primary" />
               </div>
               <div>
                 <p className="text-2xl font-bold">{inspections.length}</p>
@@ -192,8 +192,8 @@ export const PSCPackagePanel: React.FC = () => {
         <Card>
           <CardContent className="pt-6">
             <div className="flex items-center gap-3">
-              <div className="p-2 rounded-lg bg-red-500/20">
-                <XCircle className="h-5 w-5 text-red-500" />
+              <div className="p-2 rounded-lg bg-destructive/20">
+                <XCircle className="h-5 w-5 text-destructive" />
               </div>
               <div>
                 <p className="text-2xl font-bold">{openDeficiencies.length}</p>
@@ -205,8 +205,8 @@ export const PSCPackagePanel: React.FC = () => {
         <Card>
           <CardContent className="pt-6">
             <div className="flex items-center gap-3">
-              <div className="p-2 rounded-lg bg-green-500/20">
-                <CheckCircle className="h-5 w-5 text-green-500" />
+              <div className="p-2 rounded-lg bg-success/20">
+                <CheckCircle className="h-5 w-5 text-success" />
               </div>
               <div>
                 <p className="text-2xl font-bold">{resolvedDeficiencies.length}</p>
@@ -218,8 +218,8 @@ export const PSCPackagePanel: React.FC = () => {
         <Card>
           <CardContent className="pt-6">
             <div className="flex items-center gap-3">
-              <div className="p-2 rounded-lg bg-purple-500/20">
-                <TrendingUp className="h-5 w-5 text-purple-500" />
+              <div className="p-2 rounded-lg bg-accent/20">
+                <TrendingUp className="h-5 w-5 text-accent-foreground" />
               </div>
               <div>
                 <p className="text-2xl font-bold">
@@ -289,7 +289,7 @@ export const PSCPackagePanel: React.FC = () => {
                               Categoria: {def.category || 'N/A'} • Código: {def.action_code || 'N/A'}
                             </p>
                             {def.corrective_action && (
-                              <p className="text-sm text-green-600 mt-2">
+                              <p className="text-sm text-success mt-2">
                                 Ação Corretiva: {def.corrective_action}
                               </p>
                             )}
@@ -341,7 +341,7 @@ export const PSCPackagePanel: React.FC = () => {
                               <h4 className="font-medium">{insp.port_name}</h4>
                               <Badge variant="outline">{insp.inspection_type}</Badge>
                               <Badge className={
-                                !insp.detention ? 'bg-green-500/20 text-green-600' : 'bg-red-500/20 text-red-600'
+                                !insp.detention ? 'bg-success/20 text-success' : 'bg-destructive/20 text-destructive'
                               }>
                                 {insp.detention ? 'Detenção' : 'Aprovado'}
                               </Badge>
@@ -391,9 +391,9 @@ export const PSCPackagePanel: React.FC = () => {
                   <div key={idx} className="flex items-center justify-between p-3 border rounded-lg">
                     <span>{check.item}</span>
                     {check.status === 'ok' ? (
-                      <CheckCircle className="h-5 w-5 text-green-500" />
+                      <CheckCircle className="h-5 w-5 text-success" />
                     ) : (
-                      <AlertTriangle className="h-5 w-5 text-yellow-500" />
+                      <AlertTriangle className="h-5 w-5 text-warning" />
                     )}
                   </div>
                 ))}

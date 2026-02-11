@@ -33,6 +33,7 @@ export function ConversationalInput({
     transcript: '',
   });
   const inputRef = useRef<HTMLInputElement>(null);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- SpeechRecognition API not typed
   const recognitionRef = useRef<any>(null);
 
   // Parse intent as user types
@@ -47,6 +48,7 @@ export function ConversationalInput({
 
   // Initialize speech recognition
   useEffect(() => {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any -- SpeechRecognition not in standard types
     const SpeechRecognitionAPI = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
     if (SpeechRecognitionAPI) {
       recognitionRef.current = new SpeechRecognitionAPI();
@@ -54,8 +56,10 @@ export function ConversationalInput({
       recognitionRef.current.interimResults = true;
       recognitionRef.current.lang = 'pt-BR';
 
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any -- SpeechRecognition event types
       recognitionRef.current.onresult = (event: any) => {
         const transcript = Array.from(event.results)
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any -- SpeechRecognitionResult
           .map((result: any) => result[0].transcript)
           .join('');
         setVoiceState(s => ({ ...s, transcript }));
@@ -66,8 +70,8 @@ export function ConversationalInput({
         setVoiceState(s => ({ ...s, isListening: false }));
       };
 
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any -- SpeechRecognition error event
       recognitionRef.current.onerror = (event: any) => {
-        setVoiceState(s => ({ ...s, isListening: false, error: event.error }));
       };
     }
   }, []);
@@ -219,7 +223,7 @@ export function ConversationalInput({
             exit={{ opacity: 0, scale: 0.9 }}
             className="mt-2 flex items-center gap-2 text-sm text-primary"
           >
-            <span className="w-2 h-2 rounded-full bg-red-500 animate-pulse" />
+            <span className="w-2 h-2 rounded-full bg-destructive animate-pulse" />
             Ouvindo... {voiceState.transcript && `"${voiceState.transcript}"`}
           </motion.div>
         )}

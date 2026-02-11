@@ -23,12 +23,12 @@ interface SyncManagerActions {
   syncNow: () => Promise<void>;
   enqueueChange: (
     table: string,
-    data: any,
+    data: unknown,
     action: "create" | "update" | "delete",
     priority?: "high" | "medium" | "low"
   ) => Promise<void>;
   clearSynced: () => Promise<void>;
-  getQueueStats: () => Promise<any>;
+  getQueueStats: () => Promise<Record<string, unknown>>;
 }
 
 export const useSyncManager = (): SyncManagerState & SyncManagerActions => {
@@ -125,7 +125,7 @@ export const useSyncManager = (): SyncManagerState & SyncManagerActions => {
    */
   const enqueueChange = useCallback(async (
     table: string,
-    data: any,
+    data: unknown,
     action: "create" | "update" | "delete",
     priority?: "high" | "medium" | "low"
   ) => {

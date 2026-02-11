@@ -155,7 +155,7 @@ export const offlineDB = {
       id: item.id,
       type: item.operation as any,
       table: item.table,
-      data: item.data,
+      data: item.data as PendingAction['data'],
       timestamp: new Date(item.timestamp).toISOString(),
       synced: item.status === 'completed',
     }));

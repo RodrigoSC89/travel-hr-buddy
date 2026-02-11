@@ -22,7 +22,7 @@ class DataCompressionService {
   /**
    * Compress data using CompressionStream API (if available) or LZ-based fallback
    */
-  async compress(data: any, _options: CompressionOptions = {}): Promise<{
+  async compress(data: unknown, _options: CompressionOptions = {}): Promise<{
     compressed: Uint8Array;
     stats: CompressionStats;
   }> {
@@ -55,7 +55,7 @@ class DataCompressionService {
   /**
    * Decompress data
    */
-  async decompress(compressed: Uint8Array): Promise<any> {
+  async decompress(compressed: Uint8Array): Promise<unknown> {
     let decompressedBytes: Uint8Array;
 
     if (typeof DecompressionStream !== "undefined") {
@@ -227,7 +227,7 @@ class DataCompressionService {
   /**
    * Optimize payload for slow network
    */
-  optimizeForSlowNetwork<T extends Record<string, any>>(
+  optimizeForSlowNetwork<T extends Record<string, unknown>>(
     data: T,
     options: {
       excludeFields?: string[];
@@ -241,7 +241,7 @@ class DataCompressionService {
       truncateStrings = 500,
     } = options;
 
-    const optimize = (obj: any): any => {
+    const optimize = (obj: unknown): unknown => {
       if (obj === null || obj === undefined) return obj;
       
       if (Array.isArray(obj)) {
@@ -250,8 +250,8 @@ class DataCompressionService {
       }
       
       if (typeof obj === "object") {
-        const result: Record<string, any> = {};
-        for (const [key, value] of Object.entries(obj)) {
+        const result: Record<string, unknown> = {};
+        for (const [key, value] of Object.entries(obj as Record<string, unknown>)) {
           if (excludeFields.includes(key)) continue;
           result[key] = optimize(value);
         }
