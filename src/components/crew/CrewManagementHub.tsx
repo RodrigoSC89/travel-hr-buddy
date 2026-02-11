@@ -504,13 +504,13 @@ export function CrewManagementHub() {
         </Card>
         <Card>
           <CardContent className="pt-4">
-            <div className="text-2xl font-bold text-orange-600">{stats.offDuty}</div>
+            <div className="text-2xl font-bold text-warning">{stats.offDuty}</div>
             <p className="text-sm text-muted-foreground">Folga</p>
           </CardContent>
         </Card>
         <Card>
           <CardContent className="pt-4">
-            <div className="text-2xl font-bold text-purple-600">{stats.training}</div>
+            <div className="text-2xl font-bold text-accent-foreground">{stats.training}</div>
             <p className="text-sm text-muted-foreground">Treinamento</p>
           </CardContent>
         </Card>

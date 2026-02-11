@@ -83,7 +83,7 @@ const IntelligentAlerts: React.FC = () => {
       case "info": return "bg-info text-info-foreground";
       case "warning": return "bg-warning text-warning-foreground";
       case "critical": return "bg-destructive text-destructive-foreground";
-      case "emergency": return "bg-red-600 text-white animate-pulse";
+      case "emergency": return "bg-destructive text-destructive-foreground animate-pulse";
       default: return "bg-muted text-muted-foreground";
     }
   };

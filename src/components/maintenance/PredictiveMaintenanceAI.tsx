@@ -125,10 +125,10 @@ export function PredictiveMaintenanceAI() {
 
   const getSeverityColor = (severity: string) => {
     switch (severity) {
-      case "critical": return "bg-red-500";
-      case "high": return "bg-orange-500";
-      case "medium": return "bg-yellow-500";
-      default: return "bg-green-500";
+      case "critical": return "bg-destructive";
+      case "high": return "bg-warning";
+      case "medium": return "bg-warning/70";
+      default: return "bg-success";
     }
   };
 
@@ -137,8 +137,8 @@ export function PredictiveMaintenanceAI() {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-3">
-          <div className="p-3 bg-gradient-to-br from-orange-500/20 to-red-500/20 rounded-xl">
-            <Brain className="h-6 w-6 text-orange-500" />
+          <div className="p-3 bg-gradient-to-br from-warning/20 to-destructive/20 rounded-xl">
+            <Brain className="h-6 w-6 text-warning" />
           </div>
           <div>
             <h2 className="text-xl font-bold flex items-center gap-2">
@@ -179,7 +179,7 @@ export function PredictiveMaintenanceAI() {
         <Card>
           <CardContent className="pt-4">
             <div className="flex items-center gap-2">
-              <AlertTriangle className="h-5 w-5 text-orange-500" />
+              <AlertTriangle className="h-5 w-5 text-warning" />
               <div>
                 <p className="text-2xl font-bold">{predictions.length}</p>
                 <p className="text-xs text-muted-foreground">Falhas Previstas</p>
@@ -190,7 +190,7 @@ export function PredictiveMaintenanceAI() {
         <Card>
           <CardContent className="pt-4">
             <div className="flex items-center gap-2">
-              <TrendingUp className="h-5 w-5 text-green-500" />
+              <TrendingUp className="h-5 w-5 text-success" />
               <div>
                 <p className="text-2xl font-bold">87%</p>
                 <p className="text-xs text-muted-foreground">Precisão do Modelo</p>
@@ -312,9 +312,9 @@ export function PredictiveMaintenanceAI() {
                       <Progress
                         value={eq.healthScore}
                         className={`h-2 ${
-                          eq.healthScore >= 80 ? "[&>div]:bg-green-500" :
-                          eq.healthScore >= 60 ? "[&>div]:bg-yellow-500" :
-                          "[&>div]:bg-red-500"
+                          eq.healthScore >= 80 ? "[&>div]:bg-success" :
+                          eq.healthScore >= 60 ? "[&>div]:bg-warning" :
+                          "[&>div]:bg-destructive"
                         }`}
                       />
                       <div className="flex justify-between text-xs text-muted-foreground mt-1">

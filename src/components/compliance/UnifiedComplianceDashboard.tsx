@@ -317,19 +317,19 @@ export function UnifiedComplianceDashboard() {
 
   const getStatusColor = (status: ModuleStatus['status']) => {
     switch (status) {
-      case 'compliant': return 'text-green-500 bg-green-500/10 border-green-500/20';
-      case 'warning': return 'text-yellow-500 bg-yellow-500/10 border-yellow-500/20';
-      case 'critical': return 'text-red-500 bg-red-500/10 border-red-500/20';
-      default: return 'text-gray-500 bg-gray-500/10 border-gray-500/20';
+      case 'compliant': return 'text-success bg-success/10 border-success/20';
+      case 'warning': return 'text-warning bg-warning/10 border-warning/20';
+      case 'critical': return 'text-destructive bg-destructive/10 border-destructive/20';
+      default: return 'text-muted-foreground bg-muted/10 border-muted/20';
     }
   };
 
   const getStatusIcon = (status: ModuleStatus['status']) => {
     switch (status) {
-      case 'compliant': return <CheckCircle className="h-5 w-5 text-green-500" />;
-      case 'warning': return <AlertTriangle className="h-5 w-5 text-yellow-500" />;
-      case 'critical': return <XCircle className="h-5 w-5 text-red-500" />;
-      default: return <Clock className="h-5 w-5 text-gray-500" />;
+      case 'compliant': return <CheckCircle className="h-5 w-5 text-success" />;
+      case 'warning': return <AlertTriangle className="h-5 w-5 text-warning" />;
+      case 'critical': return <XCircle className="h-5 w-5 text-destructive" />;
+      default: return <Clock className="h-5 w-5 text-muted-foreground" />;
     }
   };
 
@@ -362,7 +362,7 @@ export function UnifiedComplianceDashboard() {
           <div className="flex items-center gap-2 text-sm text-muted-foreground">
             <span>Visão consolidada em tempo real • Última atualização: {lastRefresh.toLocaleTimeString('pt-BR')}</span>
             <div className="flex items-center gap-1">
-              <Wifi className={`h-3 w-3 ${isConnected ? 'text-green-500' : 'text-red-500'}`} />
+              <Wifi className={`h-3 w-3 ${isConnected ? 'text-success' : 'text-destructive'}`} />
               <span className="text-xs">{isConnected ? 'Conectado' : 'Desconectado'}</span>
               {onlineUsers > 0 && (
                 <Badge variant="outline" className="text-xs ml-1">
@@ -380,7 +380,7 @@ export function UnifiedComplianceDashboard() {
             onClick={() => setShowAlerts(!showAlerts)}
             className="relative"
           >
-            {alerts.length > 0 ? <BellRing className="h-4 w-4 mr-2 text-red-500" /> : <Bell className="h-4 w-4 mr-2" />}
+            {alerts.length > 0 ? <BellRing className="h-4 w-4 mr-2 text-destructive" /> : <Bell className="h-4 w-4 mr-2" />}
             Alertas
             {alerts.length > 0 && (
               <Badge variant="destructive" className="absolute -top-2 -right-2 h-5 w-5 p-0 flex items-center justify-center text-xs">
@@ -417,10 +417,10 @@ export function UnifiedComplianceDashboard() {
 
       {/* Alerts Panel */}
       {showAlerts && (
-        <Card className="border-red-500/30 bg-red-500/5">
+        <Card className="border-destructive/30 bg-destructive/5">
           <CardHeader className="pb-2">
             <div className="flex items-center justify-between">
-              <CardTitle className="flex items-center gap-2 text-red-500">
+              <CardTitle className="flex items-center gap-2 text-destructive">
                 <BellRing className="h-5 w-5" />
                 Alertas de Compliance ({alerts.length})
               </CardTitle>
@@ -435,7 +435,7 @@ export function UnifiedComplianceDashboard() {
                 {alerts.map(alert => (
                   <div key={alert.id} className="flex items-center justify-between p-2 rounded bg-background border">
                     <div className="flex items-center gap-2">
-                      <AlertTriangle className={`h-4 w-4 ${alert.type === 'critical' ? 'text-red-500' : 'text-yellow-500'}`} />
+                      <AlertTriangle className={`h-4 w-4 ${alert.type === 'critical' ? 'text-destructive' : 'text-warning'}`} />
                       <span className="text-sm">{alert.message}</span>
                     </div>
                     <span className="text-xs text-muted-foreground">
@@ -456,37 +456,37 @@ export function UnifiedComplianceDashboard() {
       {/* Quick Stats Bar - Inspired by MLC design */}
       <div className="grid grid-cols-2 md:grid-cols-5 gap-3">
         <Card className="p-3 flex items-center gap-3">
-          <FileText className="h-5 w-5 text-blue-500" />
+          <FileText className="h-5 w-5 text-primary" />
           <div>
             <div className="text-lg font-bold">{modules.reduce((sum, m) => sum + m.totalItems, 0)}</div>
             <p className="text-xs text-muted-foreground">Itens Totais</p>
           </div>
         </Card>
         <Card className="p-3 flex items-center gap-3">
-          <Ship className="h-5 w-5 text-cyan-500" />
+          <Ship className="h-5 w-5 text-primary" />
           <div>
             <div className="text-lg font-bold">{modules.length}</div>
             <p className="text-xs text-muted-foreground">Módulos Ativos</p>
           </div>
         </Card>
         <Card className="p-3 flex items-center gap-3">
-          <CheckCircle className="h-5 w-5 text-green-500" />
+          <CheckCircle className="h-5 w-5 text-success" />
           <div>
-            <div className="text-lg font-bold text-green-500">{compliantCount}</div>
+            <div className="text-lg font-bold text-success">{compliantCount}</div>
             <p className="text-xs text-muted-foreground">Conformes</p>
           </div>
         </Card>
         <Card className="p-3 flex items-center gap-3">
-          <AlertTriangle className="h-5 w-5 text-yellow-500" />
+          <AlertTriangle className="h-5 w-5 text-warning" />
           <div>
-            <div className="text-lg font-bold text-yellow-500">{modules.reduce((sum, m) => sum + m.openItems, 0)}</div>
+            <div className="text-lg font-bold text-warning">{modules.reduce((sum, m) => sum + m.openItems, 0)}</div>
             <p className="text-xs text-muted-foreground">Pendências</p>
           </div>
         </Card>
         <Card className="p-3 flex items-center gap-3">
-          <XCircle className="h-5 w-5 text-red-500" />
+          <XCircle className="h-5 w-5 text-destructive" />
           <div>
-            <div className="text-lg font-bold text-red-500">{modules.reduce((sum, m) => sum + m.criticalItems, 0)}</div>
+            <div className="text-lg font-bold text-destructive">{modules.reduce((sum, m) => sum + m.criticalItems, 0)}</div>
             <p className="text-xs text-muted-foreground">Críticos</p>
           </div>
         </Card>
@@ -499,8 +499,8 @@ export function UnifiedComplianceDashboard() {
             <div className="md:col-span-1">
               <p className="text-sm text-muted-foreground mb-1">Score Geral</p>
               <div className={`text-5xl font-bold ${
-                overallScore >= 85 ? 'text-green-500' :
-                overallScore >= 60 ? 'text-yellow-500' : 'text-red-500'
+                overallScore >= 85 ? 'text-success' :
+                overallScore >= 60 ? 'text-warning' : 'text-destructive'
               }`}>
                 {overallScore}%
               </div>
@@ -533,7 +533,7 @@ export function UnifiedComplianceDashboard() {
             </div>
             
             <div className="md:col-span-1 flex flex-col justify-center gap-2">
-              <div className="flex items-center justify-between p-2 rounded bg-green-500/10">
+              <div className="flex items-center justify-between p-2 rounded bg-success/10">
                 <span className="text-sm">Meta</span>
                 <Badge variant="outline">85%</Badge>
               </div>
@@ -625,7 +625,7 @@ export function UnifiedComplianceDashboard() {
             <Card>
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
-                  <AlertTriangle className="h-5 w-5 text-orange-500" />
+                  <AlertTriangle className="h-5 w-5 text-warning" />
                   Itens Abertos por Módulo
                 </CardTitle>
               </CardHeader>
@@ -646,16 +646,16 @@ export function UnifiedComplianceDashboard() {
                       <Area 
                         type="monotone" 
                         dataKey="openItems" 
-                        stroke="#f59e0b" 
-                        fill="#f59e0b" 
+                        stroke="hsl(var(--warning))" 
+                        fill="hsl(var(--warning))" 
                         fillOpacity={0.3}
                         name="Itens Abertos"
                       />
                       <Area 
                         type="monotone" 
                         dataKey="criticalItems" 
-                        stroke="#ef4444" 
-                        fill="#ef4444" 
+                        stroke="hsl(var(--destructive))" 
+                        fill="hsl(var(--destructive))" 
                         fillOpacity={0.5}
                         name="Itens Críticos"
                       />
@@ -690,8 +690,8 @@ export function UnifiedComplianceDashboard() {
                   <div className="flex items-center justify-between">
                     <div>
                       <div className={`text-3xl font-bold ${
-                        module.score >= 85 ? 'text-green-500' :
-                        module.score >= 60 ? 'text-yellow-500' : 'text-red-500'
+                        module.score >= 85 ? 'text-success' :
+                        module.score >= 60 ? 'text-warning' : 'text-destructive'
                       }`}>
                         {module.score}%
                       </div>

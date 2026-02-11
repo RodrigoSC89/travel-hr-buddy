@@ -377,7 +377,7 @@ export function IoTSensorHistory() {
               {stats.anomalyCount / stats.total > 0.1 ? (
                 <TrendingUp className="h-8 w-8 text-destructive" />
               ) : (
-                <TrendingDown className="h-8 w-8 text-emerald-500" />
+                <TrendingDown className="h-8 w-8 text-success" />
               )}
             </div>
           </CardContent>
@@ -507,7 +507,7 @@ export function IoTSensorHistory() {
 
                 {anomalies.length === 0 && (
                   <div className="text-center text-muted-foreground py-8">
-                    <CheckCircle className="h-12 w-12 mx-auto mb-4 text-emerald-500" />
+                    <CheckCircle className="h-12 w-12 mx-auto mb-4 text-success" />
                     <p>Nenhuma anomalia detectada</p>
                   </div>
                 )}

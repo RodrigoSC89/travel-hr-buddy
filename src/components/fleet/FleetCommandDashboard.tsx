@@ -301,11 +301,11 @@ export function FleetCommandDashboard() {
 
   const getStatusConfig = (status: FleetVessel["status"]) => {
     const config = {
-      operational: { label: "Operacional", color: "bg-green-500", textColor: "text-green-600" },
-      transit: { label: "Em Trânsito", color: "bg-blue-500", textColor: "text-blue-600" },
-      maintenance: { label: "Manutenção", color: "bg-yellow-500", textColor: "text-yellow-600" },
-      docked: { label: "Atracada", color: "bg-gray-500", textColor: "text-gray-600" },
-      alert: { label: "Alerta", color: "bg-red-500", textColor: "text-red-600" }
+      operational: { label: "Operacional", color: "bg-success", textColor: "text-success" },
+      transit: { label: "Em Trânsito", color: "bg-primary", textColor: "text-primary" },
+      maintenance: { label: "Manutenção", color: "bg-warning", textColor: "text-warning" },
+      docked: { label: "Atracada", color: "bg-muted-foreground", textColor: "text-muted-foreground" },
+      alert: { label: "Alerta", color: "bg-destructive", textColor: "text-destructive" }
     };
     return config[status];
   };
@@ -480,7 +480,7 @@ export function FleetCommandDashboard() {
                     <div>
                       <Progress 
                         value={vessel.fuel} 
-                        className={vessel.fuel < 50 ? "bg-red-100" : ""}
+                        className={vessel.fuel < 50 ? "bg-destructive/10" : ""}
                       />
                     </div>
 
@@ -498,8 +498,8 @@ export function FleetCommandDashboard() {
                     {/* Alerts Badge */}
                     {vessel.alerts > 0 && (
                       <div className="flex items-center gap-2">
-                        <AlertTriangle className="h-4 w-4 text-red-500" />
-                        <span className="text-sm text-red-600">
+                        <AlertTriangle className="h-4 w-4 text-destructive" />
+                        <span className="text-sm text-destructive">
                           {vessel.alerts} alerta{vessel.alerts > 1 ? "s" : ""} ativo{vessel.alerts > 1 ? "s" : ""}
                         </span>
                       </div>

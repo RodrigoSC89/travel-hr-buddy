@@ -168,10 +168,10 @@ const VesselTrackingMap = () => {
 
   const getStatusBadge = (status: string) => {
     const statusConfig = {
-      active: { label: "Ativa", variant: "default" as const, color: "bg-green-500" },
-      anchored: { label: "Ancorada", variant: "secondary" as const, color: "bg-yellow-500" },
-      maintenance: { label: "Manutenção", variant: "destructive" as const, color: "bg-red-500" },
-      emergency: { label: "Emergência", variant: "destructive" as const, color: "bg-red-600" }
+      active: { label: "Ativa", variant: "default" as const, color: "bg-success" },
+      anchored: { label: "Ancorada", variant: "secondary" as const, color: "bg-warning" },
+      maintenance: { label: "Manutenção", variant: "destructive" as const, color: "bg-destructive" },
+      emergency: { label: "Emergência", variant: "destructive" as const, color: "bg-destructive" }
     };
 
     const config = statusConfig[status as keyof typeof statusConfig] || statusConfig.active;
@@ -329,19 +329,19 @@ const VesselTrackingMap = () => {
           <div className="text-sm font-medium mb-2">Legenda</div>
           <div className="space-y-1 text-xs">
             <div className="flex items-center gap-2">
-              <div className="w-3 h-3 rounded-full bg-green-500"></div>
+              <div className="w-3 h-3 rounded-full bg-success"></div>
               <span>Ativa</span>
             </div>
             <div className="flex items-center gap-2">
-              <div className="w-3 h-3 rounded-full bg-yellow-500"></div>
+              <div className="w-3 h-3 rounded-full bg-warning"></div>
               <span>Ancorada</span>
             </div>
             <div className="flex items-center gap-2">
-              <div className="w-3 h-3 rounded-full bg-red-500"></div>
+              <div className="w-3 h-3 rounded-full bg-destructive"></div>
               <span>Manutenção</span>
             </div>
             <div className="flex items-center gap-2">
-              <div className="w-3 h-3 rounded-full bg-red-600"></div>
+              <div className="w-3 h-3 rounded-full bg-destructive"></div>
               <span>Emergência</span>
             </div>
           </div>

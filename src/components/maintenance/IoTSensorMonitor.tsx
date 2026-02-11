@@ -197,10 +197,10 @@ export function IoTSensorMonitor({ vesselId, onAnomalyDetected }: IoTSensorMonit
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case "critical": return "text-red-500 bg-red-500/10";
-      case "warning": return "text-yellow-500 bg-yellow-500/10";
-      case "offline": return "text-gray-500 bg-gray-500/10";
-      default: return "text-green-500 bg-green-500/10";
+      case "critical": return "text-destructive bg-destructive/10";
+      case "warning": return "text-warning bg-warning/10";
+      case "offline": return "text-muted-foreground bg-muted/10";
+      default: return "text-success bg-success/10";
     }
   };
 
@@ -216,9 +216,9 @@ export function IoTSensorMonitor({ vesselId, onAnomalyDetected }: IoTSensorMonit
 
   const getTrendIcon = (trend: string) => {
     switch (trend) {
-      case "up": return <TrendingUp className="h-3 w-3 text-orange-500" />;
-      case "down": return <TrendingDown className="h-3 w-3 text-blue-500" />;
-      default: return <Activity className="h-3 w-3 text-gray-500" />;
+      case "up": return <TrendingUp className="h-3 w-3 text-warning" />;
+      case "down": return <TrendingDown className="h-3 w-3 text-primary" />;
+      default: return <Activity className="h-3 w-3 text-muted-foreground" />;
     }
   };
 
@@ -317,9 +317,9 @@ export function IoTSensorMonitor({ vesselId, onAnomalyDetected }: IoTSensorMonit
                 <Progress
                   value={(sensor.value / sensor.maxThreshold) * 100}
                   className={`h-2 ${
-                    sensor.status === "critical" ? "[&>div]:bg-red-500" :
-                    sensor.status === "warning" ? "[&>div]:bg-yellow-500" :
-                    "[&>div]:bg-green-500"
+                    sensor.status === "critical" ? "[&>div]:bg-destructive" :
+                    sensor.status === "warning" ? "[&>div]:bg-warning" :
+                    "[&>div]:bg-success"
                   }`}
                 />
                 <div className="flex justify-between text-xs text-muted-foreground">
