@@ -43,7 +43,7 @@ export class TemplateVariablesService {
 
   async updateVariable(id: string, variable: Partial<TemplateVariable>): Promise<TemplateVariable> {
     try {
-      const updateData: any = {};
+      const updateData: Record<string, unknown> = {};
       if (variable.variableName) updateData.variable_name = variable.variableName;
       if (variable.variableType) updateData.variable_type = variable.variableType;
       if (variable.defaultValue !== undefined) updateData.default_value = variable.defaultValue;
@@ -123,7 +123,7 @@ export class TemplateVariablesService {
     return Array.from(variables);
   }
 
-  fillTemplate(content: string, values: Record<string, any>): string {
+  fillTemplate(content: string, values: Record<string, unknown>): string {
     let filledContent = content;
     
     for (const [key, value] of Object.entries(values)) {
@@ -134,7 +134,7 @@ export class TemplateVariablesService {
     return filledContent;
   }
 
-  validateTemplateVariables(content: string, variables: TemplateVariable[], values: Record<string, any>): { valid: boolean; errors: string[] } {
+  validateTemplateVariables(content: string, variables: TemplateVariable[], values: Record<string, unknown>): { valid: boolean; errors: string[] } {
     const errors: string[] = [];
     
     // Check for required variables
@@ -158,6 +158,7 @@ export class TemplateVariablesService {
     };
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Supabase row result
   private mapToVariable(data: any): TemplateVariable {
     return {
       id: data.id,

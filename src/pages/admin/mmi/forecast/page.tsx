@@ -20,7 +20,7 @@ type Forecast = {
   vessel_name: string
   system_name: string
   hourmeter: number
-  last_maintenance: string[] | any
+  last_maintenance: string[] | unknown[]
   forecast_text: string
   priority: "low" | "medium" | "high" | "critical"
   created_at: string
@@ -48,7 +48,7 @@ export default function ForecastPage() {
         });
         if (error) throw error;
         const items = Array.isArray(data) ? data : (data?.items || []);
-        const transformed = items.map((f: any) => ({
+        const transformed = items.map((f: Record<string, unknown>) => ({
           ...f,
           last_maintenance: Array.isArray(f.last_maintenance) ? f.last_maintenance : [],
           priority: f.priority || "medium"

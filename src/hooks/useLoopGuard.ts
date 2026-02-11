@@ -110,6 +110,7 @@ export const useLoopGuard = (
 /**
  * Higher-order function to wrap async functions with loop protection
  */
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- generic HOF requires flexible function signature
 export const withLoopGuard = <T extends (...args: any[]) => any>(
   fn: T,
   guardName: string,

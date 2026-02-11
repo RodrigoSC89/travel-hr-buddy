@@ -106,6 +106,7 @@ export default function CollaborationPage() {
 
       // Fetch author emails
       const commentsWithEmails = await Promise.all(
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any -- dynamic Supabase row
         (data || []).map(async (comment: any) => {
           const { data: profile } = await supabase
             .from("profiles")
@@ -207,6 +208,7 @@ export default function CollaborationPage() {
 
       // Fetch author emails for replies
       const repliesWithEmails = await Promise.all(
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any -- dynamic Supabase row
         (data || []).map(async (reply: any) => {
           const { data: profile } = await supabase
             .from("profiles")
@@ -411,9 +413,9 @@ export default function CollaborationPage() {
                           <div className="space-y-3 mt-4">
                             <h4 className="text-sm font-semibold">💬 Respostas:</h4>
                             {replies[comment.id] && replies[comment.id].length > 0 && (
-                              <div className="space-y-2 border-l-2 border-gray-200 pl-4">
+                              <div className="space-y-2 border-l-2 border-border pl-4">
                                 {replies[comment.id].map((reply) => (
-                                  <div key={reply.id} className="bg-gray-50 p-3 rounded">
+                                  <div key={reply.id} className="bg-muted/50 p-3 rounded">
                                     <div className="flex items-center justify-between text-xs text-muted-foreground mb-1">
                                       <span>👤 {reply.author_email}</span>
                                       <span>🕒 {format(new Date(reply.created_at), "dd/MM/yyyy, HH:mm", { locale: ptBR })}</span>

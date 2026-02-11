@@ -74,7 +74,7 @@ const formatTimeAgo = (timestamp: string) => {
 const getPriorityColor = (priority: Message["priority"]) => {
   switch (priority) {
     case "critical": return "bg-destructive text-destructive-foreground";
-    case "high": return "bg-orange-500 text-white";
+    case "high": return "bg-warning text-warning-foreground";
     case "normal": return "bg-primary text-primary-foreground";
     default: return "bg-muted text-muted-foreground";
   }
@@ -367,10 +367,10 @@ export const CommunicationCenterProfessional: React.FC = () => {
       {/* Stats */}
       <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
         <StatCard icon={Inbox} label="Total" value={stats.total} color="bg-primary/10 text-primary" />
-        <StatCard icon={Clock} label="Não Lidas" value={stats.unread} color="bg-blue-500/10 text-blue-500" />
+        <StatCard icon={Clock} label="Não Lidas" value={stats.unread} color="bg-primary/10 text-primary" />
         <StatCard icon={AlertTriangle} label="Urgentes" value={stats.urgent} color="bg-destructive/10 text-destructive" />
-        <StatCard icon={Hash} label="Canais" value={stats.channels} color="bg-green-500/10 text-green-500" />
-        <StatCard icon={CheckCircle2} label="Hoje" value={stats.today} color="bg-purple-500/10 text-purple-500" />
+        <StatCard icon={Hash} label="Canais" value={stats.channels} color="bg-success/10 text-success" />
+        <StatCard icon={CheckCircle2} label="Hoje" value={stats.today} color="bg-accent/10 text-accent-foreground" />
       </div>
 
       {/* Main Content */}

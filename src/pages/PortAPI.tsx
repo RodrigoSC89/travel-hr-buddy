@@ -12,6 +12,16 @@ import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { logger } from '@/lib/logger';
 
+interface PortTerminal {
+  name: string;
+  type: string;
+  berths: number;
+}
+
+interface PortContacts {
+  [key: string]: string;
+}
+
 interface PortInfo {
   code: string;
   name: string;
@@ -23,9 +33,14 @@ interface PortInfo {
   waitTime?: string;
   currentVessels?: number;
   maxDraft?: number;
-  terminals?: any[];
+  terminals?: PortTerminal[];
   services?: string[];
-  contacts?: any;
+  contacts?: PortContacts;
+}
+
+interface PortDetails extends PortInfo {
+  averageWaitTime?: string;
+  maxLOA?: number;
 }
 
 export default function PortAPI() {
@@ -33,7 +48,7 @@ export default function PortAPI() {
   const [isLoading, setIsLoading] = useState(true);
   const [ports, setPorts] = useState<PortInfo[]>([]);
   const [selectedPort, setSelectedPort] = useState<PortInfo | null>(null);
-  const [portDetails, setPortDetails] = useState<any>(null);
+  const [portDetails, setPortDetails] = useState<PortDetails | null>(null);
 
   const fetchPorts = async (query?: string) => {
     setIsLoading(true);
@@ -95,10 +110,10 @@ export default function PortAPI() {
 
   const getStatusColor = (status?: string) => {
     switch (status) {
-      case "Operational": return "bg-green-500";
-      case "Congested": return "bg-orange-500";
-      case "Weather Alert": return "bg-yellow-500";
-      default: return "bg-gray-500";
+      case "Operational": return "bg-success";
+      case "Congested": return "bg-warning";
+      case "Weather Alert": return "bg-warning";
+      default: return "bg-muted";
     }
   };
 
@@ -192,17 +207,17 @@ export default function PortAPI() {
                 <p className="text-sm text-muted-foreground">Navios no Porto</p>
               </div>
               <div className="p-4 rounded-lg bg-muted/50 text-center">
-                <Clock className="h-6 w-6 mx-auto mb-2 text-orange-500" />
+                <Clock className="h-6 w-6 mx-auto mb-2 text-warning" />
                 <p className="text-2xl font-bold">{portDetails.averageWaitTime || "N/A"}</p>
                 <p className="text-sm text-muted-foreground">Tempo Médio Espera</p>
               </div>
               <div className="p-4 rounded-lg bg-muted/50 text-center">
-                <Waves className="h-6 w-6 mx-auto mb-2 text-blue-500" />
+                <Waves className="h-6 w-6 mx-auto mb-2 text-primary" />
                 <p className="text-2xl font-bold">{portDetails.maxDraft}m</p>
                 <p className="text-sm text-muted-foreground">Calado Máximo</p>
               </div>
               <div className="p-4 rounded-lg bg-muted/50 text-center">
-                <Anchor className="h-6 w-6 mx-auto mb-2 text-purple-500" />
+                <Anchor className="h-6 w-6 mx-auto mb-2 text-accent-foreground" />
                 <p className="text-2xl font-bold">{portDetails.maxLOA}m</p>
                 <p className="text-sm text-muted-foreground">LOA Máximo</p>
               </div>
@@ -213,7 +228,7 @@ export default function PortAPI() {
               <div>
                 <h4 className="font-medium mb-3">Terminais</h4>
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
-                  {portDetails.terminals.map((terminal: any, idx: number) => (
+                  {portDetails.terminals.map((terminal: PortTerminal, idx: number) => (
                     <div key={idx} className="p-3 rounded-lg border bg-card">
                       <p className="font-medium">{terminal.name}</p>
                       <p className="text-sm text-muted-foreground">{terminal.type}</p>
@@ -246,7 +261,7 @@ export default function PortAPI() {
                       <Phone className="h-4 w-4 text-muted-foreground" />
                       <div>
                         <p className="text-sm text-muted-foreground capitalize">{key}</p>
-                        <p className="font-medium">{value as string}</p>
+                        <p className="font-medium">{value}</p>
                       </div>
                     </div>
                   ))}
@@ -279,7 +294,7 @@ export default function PortAPI() {
                     <Anchor className="h-4 w-4" />
                     {port.code}
                   </CardTitle>
-                  <Badge className={`${getStatusColor(port.status)} text-white text-xs`}>
+                  <Badge className={`${getStatusColor(port.status)} text-xs`}>
                     {port.status}
                   </Badge>
                 </div>
@@ -297,7 +312,7 @@ export default function PortAPI() {
                 {port.waitTime && (
                   <div className="flex justify-between text-sm">
                     <span className="text-muted-foreground">Espera:</span>
-                    <span className="font-medium text-orange-500">{port.waitTime}</span>
+                    <span className="font-medium text-warning">{port.waitTime}</span>
                   </div>
                 )}
               </CardContent>

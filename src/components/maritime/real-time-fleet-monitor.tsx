@@ -339,12 +339,12 @@ export const RealTimeFleetMonitor = () => {
                     {weatherData.alerts.length > 0 && (
                       <Card>
                         <CardHeader>
-                          <CardTitle className="text-lg text-red-600">Alertas Meteorológicos</CardTitle>
+                          <CardTitle className="text-lg text-destructive">Alertas Meteorológicos</CardTitle>
                         </CardHeader>
                         <CardContent>
-                          {weatherData.alerts.map((alert: any, index: number) => (
-                            <div key={index} className="p-2 bg-red-50 border border-red-200 rounded mb-2">
-                              <p className="text-sm text-red-800">{alert.message}</p>
+                          {weatherData.alerts.map((alert: { message: string }, index: number) => (
+                            <div key={index} className="p-2 bg-destructive/10 border border-destructive/20 rounded mb-2">
+                              <p className="text-sm text-destructive">{alert.message}</p>
                             </div>
                           ))}
                         </CardContent>

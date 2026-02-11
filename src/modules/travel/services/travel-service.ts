@@ -18,7 +18,7 @@ export interface TravelItinerary {
   totalCost?: number;
   status: "draft" | "confirmed" | "in-progress" | "completed" | "cancelled";
   bookingReference?: string;
-  metadata?: Record<string, any>;
+  metadata?: Record<string, unknown>;
   createdAt?: string;
   updatedAt?: string;
 }
@@ -31,7 +31,7 @@ export interface TravelSegment {
   location: string;
   cost?: number;
   bookingReference?: string;
-  details?: Record<string, any>;
+  details?: Record<string, unknown>;
 }
 
 export interface PriceAlert {
@@ -84,7 +84,7 @@ export class TravelService {
 
   async updateItinerary(id: string, itinerary: Partial<TravelItinerary>): Promise<TravelItinerary> {
     try {
-      const updateData: any = {};
+      const updateData: Record<string, unknown> = {};
       if (itinerary.tripName) updateData.trip_name = itinerary.tripName;
       if (itinerary.origin) updateData.origin = itinerary.origin;
       if (itinerary.destination) updateData.destination = itinerary.destination;
@@ -183,6 +183,7 @@ export class TravelService {
     }
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- dynamic event data
   private async logEvent(itineraryId: string, eventType: string, eventData: any): Promise<void> {
     try {
       await supabase
@@ -197,6 +198,7 @@ export class TravelService {
     }
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Supabase row result
   private mapToItinerary(data: any): TravelItinerary {
     return {
       id: data.id,
@@ -217,6 +219,7 @@ export class TravelService {
     };
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Supabase row result
   private mapToPriceAlert(data: any): PriceAlert {
     return {
       id: data.id,

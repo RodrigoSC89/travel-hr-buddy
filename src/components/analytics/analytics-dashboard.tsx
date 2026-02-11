@@ -51,7 +51,7 @@ const AnalyticsDashboard = () => {
                   <TrendingUp className="h-4 w-4 text-muted-foreground" />
                 </CardHeader>
                 <CardContent>
-                  <div className="text-2xl font-bold text-green-600">94.2%</div>
+                  <div className="text-2xl font-bold text-success">94.2%</div>
                   <p className="text-xs text-muted-foreground">+2.1% vs mês anterior</p>
                 </CardContent>
               </Card>
@@ -62,7 +62,7 @@ const AnalyticsDashboard = () => {
                   <BarChart3 className="h-4 w-4 text-muted-foreground" />
                 </CardHeader>
                 <CardContent>
-                  <div className="text-2xl font-bold text-blue-600">87.5%</div>
+                  <div className="text-2xl font-bold text-primary">87.5%</div>
                   <p className="text-xs text-muted-foreground">Meta: 85%</p>
                 </CardContent>
               </Card>
@@ -73,7 +73,7 @@ const AnalyticsDashboard = () => {
                   <Target className="h-4 w-4 text-muted-foreground" />
                 </CardHeader>
                 <CardContent>
-                  <div className="text-2xl font-bold text-purple-600">4.8/5</div>
+                  <div className="text-2xl font-bold text-accent-foreground">4.8/5</div>
                   <p className="text-xs text-muted-foreground">+0.3 este mês</p>
                 </CardContent>
               </Card>
@@ -84,7 +84,7 @@ const AnalyticsDashboard = () => {
                   <TrendingUp className="h-4 w-4 text-muted-foreground" />
                 </CardHeader>
                 <CardContent>
-                  <div className="text-2xl font-bold text-orange-600">312%</div>
+                  <div className="text-2xl font-bold text-warning">312%</div>
                   <p className="text-xs text-muted-foreground">+15% vs Q anterior</p>
                 </CardContent>
               </Card>
@@ -101,19 +101,19 @@ const AnalyticsDashboard = () => {
                     <div className="space-y-3">
                       <div className="flex items-center justify-between">
                         <span className="text-sm">Uptime do Sistema</span>
-                        <span className="text-sm font-medium text-green-600">99.9%</span>
+                        <span className="text-sm font-medium text-success">99.9%</span>
                       </div>
                       <div className="flex items-center justify-between">
                         <span className="text-sm">Tempo de Resposta</span>
-                        <span className="text-sm font-medium text-blue-600">145ms</span>
+                        <span className="text-sm font-medium text-primary">145ms</span>
                       </div>
                       <div className="flex items-center justify-between">
                         <span className="text-sm">Taxa de Erro</span>
-                        <span className="text-sm font-medium text-green-600">0.1%</span>
+                        <span className="text-sm font-medium text-success">0.1%</span>
                       </div>
                       <div className="flex items-center justify-between">
                         <span className="text-sm">Usuários Ativos</span>
-                        <span className="text-sm font-medium text-purple-600">1,247</span>
+                        <span className="text-sm font-medium text-accent-foreground">1,247</span>
                       </div>
                     </div>
                   </div>
@@ -121,19 +121,19 @@ const AnalyticsDashboard = () => {
                   <div className="space-y-4">
                     <h4 className="font-medium">Alertas e Notificações</h4>
                     <div className="space-y-2">
-                      <div className="p-3 border rounded-lg bg-green-50 dark:bg-green-950">
-                        <p className="text-sm font-medium text-green-800 dark:text-green-200">
+                      <div className="p-3 border rounded-lg bg-success/10">
+                        <p className="text-sm font-medium text-success">
                           Todos os sistemas operando normalmente
                         </p>
-                        <p className="text-xs text-green-600 dark:text-green-400">
+                        <p className="text-xs text-success/80">
                           Última verificação: há 2 minutos
                         </p>
                       </div>
-                      <div className="p-3 border rounded-lg bg-yellow-50 dark:bg-yellow-950">
-                        <p className="text-sm font-medium text-yellow-800 dark:text-yellow-200">
+                      <div className="p-3 border rounded-lg bg-warning/10">
+                        <p className="text-sm font-medium text-warning">
                           Pico de tráfego detectado
                         </p>
-                        <p className="text-xs text-yellow-600 dark:text-yellow-400">
+                        <p className="text-xs text-warning/80">
                           +35% acima da média
                         </p>
                       </div>
@@ -157,40 +157,40 @@ const AnalyticsDashboard = () => {
               <CardContent>
                 <div className="space-y-6">
                   <div className="grid gap-4 md:grid-cols-2">
-                    <div className="p-4 border rounded-lg bg-blue-50 dark:bg-blue-950">
-                      <h4 className="font-medium text-blue-800 dark:text-blue-200 mb-2">
+                    <div className="p-4 border rounded-lg bg-primary/10">
+                      <h4 className="font-medium text-primary mb-2">
                         Oportunidade de Crescimento
                       </h4>
-                      <p className="text-sm text-blue-700 dark:text-blue-300">
+                      <p className="text-sm text-primary/80">
                         Identificamos uma correlação de 87% entre treinamentos em IA e aumento de produtividade. 
                         Recomendamos expandir o programa de capacitação.
                       </p>
                     </div>
                     
-                    <div className="p-4 border rounded-lg bg-green-50 dark:bg-green-950">
-                      <h4 className="font-medium text-green-800 dark:text-green-200 mb-2">
+                    <div className="p-4 border rounded-lg bg-success/10">
+                      <h4 className="font-medium text-success mb-2">
                         Otimização de Custos
                       </h4>
-                      <p className="text-sm text-green-700 dark:text-green-300">
+                      <p className="text-sm text-success/80">
                         Automatizar 3 processos específicos pode reduzir custos operacionais em até 23% 
                         nos próximos 6 meses.
                       </p>
                     </div>
                     
-                    <div className="p-4 border rounded-lg bg-purple-50 dark:bg-purple-950">
-                      <h4 className="font-medium text-purple-800 dark:text-purple-200 mb-2">
+                    <div className="p-4 border rounded-lg bg-accent/10">
+                      <h4 className="font-medium text-accent-foreground mb-2">
                         Retenção de Talentos
                       </h4>
-                      <p className="text-sm text-purple-700 dark:text-purple-300">
+                      <p className="text-sm text-accent-foreground/80">
                         Funcionários com acesso a ferramentas de IA têm 34% menos probabilidade de deixar a empresa.
                       </p>
                     </div>
                     
-                    <div className="p-4 border rounded-lg bg-orange-50 dark:bg-orange-950">
-                      <h4 className="font-medium text-orange-800 dark:text-orange-200 mb-2">
+                    <div className="p-4 border rounded-lg bg-warning/10">
+                      <h4 className="font-medium text-warning mb-2">
                         Satisfação do Cliente
                       </h4>
-                      <p className="text-sm text-orange-700 dark:text-orange-300">
+                      <p className="text-sm text-warning/80">
                         Implementar chatbot inteligente pode melhorar tempo de resposta em 67% 
                         e satisfação geral em 15%.
                       </p>
