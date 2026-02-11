@@ -250,7 +250,7 @@ export default function FuelManagementPage() {
               <p className="text-2xl font-bold">{dailyAvg} MT</p>
               <p className="text-xs text-muted-foreground">últimos {consumptionDays} dias</p>
             </div>
-            <div className="p-3 rounded-full bg-green-500/10"><Gauge className="h-6 w-6 text-green-500" /></div>
+            <div className="p-3 rounded-full bg-success/10"><Gauge className="h-6 w-6 text-success" /></div>
           </div>
         </CardContent></Card>
 
@@ -261,7 +261,7 @@ export default function FuelManagementPage() {
               <p className="text-2xl font-bold">${(stats.totalCost / 1000).toFixed(0)}K</p>
               <p className="text-xs text-muted-foreground">Preço médio: ${stats.avgPrice.toFixed(0)}/MT</p>
             </div>
-            <div className="p-3 rounded-full bg-amber-500/10"><DollarSign className="h-6 w-6 text-amber-500" /></div>
+            <div className="p-3 rounded-full bg-warning/10"><DollarSign className="h-6 w-6 text-warning" /></div>
           </div>
         </CardContent></Card>
 
@@ -272,7 +272,7 @@ export default function FuelManagementPage() {
               <p className="text-2xl font-bold">{autonomyDays} dias</p>
               <p className="text-xs text-muted-foreground">@ consumo atual</p>
             </div>
-            <div className="p-3 rounded-full bg-blue-500/10"><Clock className="h-6 w-6 text-blue-500" /></div>
+            <div className="p-3 rounded-full bg-primary/10"><Clock className="h-6 w-6 text-primary" /></div>
           </div>
         </CardContent></Card>
       </div>
@@ -426,7 +426,7 @@ export default function FuelManagementPage() {
                     const isLow = fill < 30;
                     const isCritical = fill < 15;
                     return (
-                      <div key={i} className={cn("p-3 rounded-lg border", isCritical ? "border-destructive/50 bg-destructive/5" : isLow ? "border-yellow-500/30 bg-yellow-500/5" : "")}>
+                      <div key={i} className={cn("p-3 rounded-lg border", isCritical ? "border-destructive/50 bg-destructive/5" : isLow ? "border-warning/30 bg-warning/5" : "")}>
                         <div className="flex justify-between items-center mb-2">
                           <div className="flex items-center gap-2">
                             <Fuel className="h-4 w-4 text-primary" />
@@ -435,7 +435,7 @@ export default function FuelManagementPage() {
                           </div>
                           <div className="flex items-center gap-2">
                             {isCritical && <Badge variant="destructive" className="text-xs">Crítico</Badge>}
-                            {isLow && !isCritical && <Badge className="text-xs bg-yellow-500/20 text-yellow-500 border-yellow-500/30" variant="outline">Baixo</Badge>}
+                            {isLow && !isCritical && <Badge className="text-xs bg-warning/20 text-warning border-warning/30" variant="outline">Baixo</Badge>}
                             <span className="text-sm font-bold">{fill}%</span>
                           </div>
                         </div>
@@ -533,7 +533,7 @@ export default function FuelManagementPage() {
                     const isLow = fill < 30;
                     const isCritical = fill < 15;
                     return (
-                      <Card key={i} className={cn("bg-muted/30", isCritical && "border-destructive/50", isLow && !isCritical && "border-yellow-500/30")}>
+                      <Card key={i} className={cn("bg-muted/30", isCritical && "border-destructive/50", isLow && !isCritical && "border-warning/30")}>
                         <CardContent className="pt-4 space-y-4">
                           <div className="flex justify-between items-start">
                             <div>
@@ -541,7 +541,7 @@ export default function FuelManagementPage() {
                               <Badge variant="secondary">{tank.type}</Badge>
                             </div>
                             <div className="text-right">
-                              <p className={cn("text-3xl font-bold", isCritical ? "text-destructive" : isLow ? "text-yellow-500" : "text-primary")}>{fill}%</p>
+                              <p className={cn("text-3xl font-bold", isCritical ? "text-destructive" : isLow ? "text-warning" : "text-primary")}>{fill}%</p>
                             </div>
                           </div>
 
@@ -549,12 +549,12 @@ export default function FuelManagementPage() {
                           <div className="relative h-32 bg-muted rounded-lg overflow-hidden border">
                             <div
                               className={cn("absolute bottom-0 left-0 right-0 transition-all duration-500",
-                                isCritical ? "bg-destructive/30" : isLow ? "bg-yellow-500/20" : "bg-primary/20"
+                                isCritical ? "bg-destructive/30" : isLow ? "bg-warning/20" : "bg-primary/20"
                               )}
                               style={{ height: `${fill}%` }}
                             />
                             <div className="absolute inset-0 flex flex-col items-center justify-center">
-                              <Waves className={cn("h-8 w-8 mb-1", isCritical ? "text-destructive" : isLow ? "text-yellow-500" : "text-primary")} />
+                              <Waves className={cn("h-8 w-8 mb-1", isCritical ? "text-destructive" : isLow ? "text-warning" : "text-primary")} />
                               <span className="text-lg font-bold">{Math.round(tank.current).toLocaleString("pt-BR")} MT</span>
                             </div>
                           </div>
@@ -571,7 +571,7 @@ export default function FuelManagementPage() {
                           </div>
 
                           {isLow && (
-                            <div className={cn("flex items-center gap-2 p-2 rounded text-sm", isCritical ? "bg-destructive/10 text-destructive" : "bg-yellow-500/10 text-yellow-600")}>
+                            <div className={cn("flex items-center gap-2 p-2 rounded text-sm", isCritical ? "bg-destructive/10 text-destructive" : "bg-warning/10 text-warning")}>
                               <AlertTriangle className="h-4 w-4 shrink-0" />
                               {isCritical ? "Nível crítico — reabastecimento urgente" : "Nível baixo — programar reabastecimento"}
                             </div>
@@ -637,7 +637,7 @@ export default function FuelManagementPage() {
                             <td className="px-4 py-3 text-sm">{op.supplier || "—"}</td>
                             <td className="px-4 py-3 text-sm text-right font-medium">{Number(op.quantity_mt).toLocaleString("pt-BR")}</td>
                             <td className="px-4 py-3 text-sm text-right">${Number(op.price_per_mt || 0).toFixed(0)}</td>
-                            <td className="px-4 py-3 text-sm text-right font-medium text-green-400">${Number(op.total_cost || 0).toLocaleString("pt-BR")}</td>
+                            <td className="px-4 py-3 text-sm text-right font-medium text-success">${Number(op.total_cost || 0).toLocaleString("pt-BR")}</td>
                             <td className="px-4 py-3">
                               <Button variant="ghost" size="icon" className="h-7 w-7 opacity-0 group-hover:opacity-100 text-destructive" onClick={() => handleDeleteRecord(op.id)}>
                                 <Trash2 className="h-3 w-3" />
@@ -651,7 +651,7 @@ export default function FuelManagementPage() {
                           <td colSpan={4} className="px-4 py-3 text-sm font-semibold">Totais</td>
                           <td className="px-4 py-3 text-sm text-right font-bold">{filteredBunkerRecords.reduce((s, r) => s + Number(r.quantity_mt), 0).toLocaleString("pt-BR")} MT</td>
                           <td className="px-4 py-3 text-sm text-right font-medium">${(filteredBunkerRecords.reduce((s, r) => s + Number(r.price_per_mt || 0), 0) / (filteredBunkerRecords.length || 1)).toFixed(0)} avg</td>
-                          <td className="px-4 py-3 text-sm text-right font-bold text-green-400">${filteredBunkerRecords.reduce((s, r) => s + Number(r.total_cost || 0), 0).toLocaleString("pt-BR")}</td>
+                          <td className="px-4 py-3 text-sm text-right font-bold text-success">${filteredBunkerRecords.reduce((s, r) => s + Number(r.total_cost || 0), 0).toLocaleString("pt-BR")}</td>
                           <td></td>
                         </tr>
                       </tfoot>
@@ -747,16 +747,16 @@ export default function FuelManagementPage() {
                     <p className="text-3xl font-bold text-primary">{stats.totalBunkered.toLocaleString("pt-BR")}</p>
                     <p className="text-sm text-muted-foreground mt-1">MT Bunkered</p>
                   </div>
-                  <div className="p-4 bg-amber-500/5 rounded-lg text-center border border-amber-500/20">
-                    <p className="text-3xl font-bold text-amber-500">{stats.totalConsumed.toLocaleString("pt-BR")}</p>
+                  <div className="p-4 bg-warning/5 rounded-lg text-center border border-warning/20">
+                    <p className="text-3xl font-bold text-warning">{stats.totalConsumed.toLocaleString("pt-BR")}</p>
                     <p className="text-sm text-muted-foreground mt-1">MT Consumido</p>
                   </div>
-                  <div className="p-4 bg-green-500/5 rounded-lg text-center border border-green-500/20">
-                    <p className="text-3xl font-bold text-green-500">${stats.avgPrice.toFixed(0)}</p>
+                  <div className="p-4 bg-success/5 rounded-lg text-center border border-success/20">
+                    <p className="text-3xl font-bold text-success">${stats.avgPrice.toFixed(0)}</p>
                     <p className="text-sm text-muted-foreground mt-1">Preço Médio/MT</p>
                   </div>
-                  <div className="p-4 bg-blue-500/5 rounded-lg text-center border border-blue-500/20">
-                    <p className="text-3xl font-bold text-blue-500">{stats.suppliers}</p>
+                  <div className="p-4 bg-accent/5 rounded-lg text-center border border-accent/20">
+                    <p className="text-3xl font-bold text-accent-foreground">{stats.suppliers}</p>
                     <p className="text-sm text-muted-foreground mt-1">Fornecedores</p>
                   </div>
                 </div>
@@ -833,19 +833,19 @@ export default function FuelManagementPage() {
                         )}
                         {prediction.confidence_score && (
                           <div className="p-3 bg-background rounded-lg text-center">
-                            <p className="text-2xl font-bold text-emerald-500">{Math.round(prediction.confidence_score * 100)}%</p>
+                            <p className="text-2xl font-bold text-success">{Math.round(prediction.confidence_score * 100)}%</p>
                             <p className="text-xs text-muted-foreground">Confiança</p>
                           </div>
                         )}
                         {prediction.estimated_cost_usd && (
                           <div className="p-3 bg-background rounded-lg text-center">
-                            <p className="text-2xl font-bold text-amber-500">${prediction.estimated_cost_usd.toLocaleString()}</p>
+                            <p className="text-2xl font-bold text-warning">${prediction.estimated_cost_usd.toLocaleString()}</p>
                             <p className="text-xs text-muted-foreground">Custo Estimado</p>
                           </div>
                         )}
                         {prediction.potential_savings_usd && (
                           <div className="p-3 bg-background rounded-lg text-center">
-                            <p className="text-2xl font-bold text-green-500">${prediction.potential_savings_usd.toLocaleString()}</p>
+                            <p className="text-2xl font-bold text-success">${prediction.potential_savings_usd.toLocaleString()}</p>
                             <p className="text-xs text-muted-foreground">Economia Potencial</p>
                           </div>
                         )}
@@ -867,7 +867,7 @@ export default function FuelManagementPage() {
 
                   <Card>
                     <CardHeader className="pb-3">
-                      <CardTitle className="text-base flex items-center gap-2"><Lightbulb className="h-4 w-4 text-amber-500" />Dicas de Otimização</CardTitle>
+                      <CardTitle className="text-base flex items-center gap-2"><Lightbulb className="h-4 w-4 text-warning" />Dicas de Otimização</CardTitle>
                     </CardHeader>
                     <CardContent className="space-y-3">
                       {prediction.optimization_tips && prediction.optimization_tips.length > 0 ? (

@@ -199,22 +199,22 @@ export const OrganizationHealthCheck: React.FC = () => {
   const getStatusIcon = (status: string) => {
     switch (status) {
     case "completed":
-      return <CheckCircle className="w-4 h-4 text-green-500" />;
+      return <CheckCircle className="w-4 h-4 text-success" />;
     case "warning":
-      return <AlertTriangle className="w-4 h-4 text-yellow-500" />;
+      return <AlertTriangle className="w-4 h-4 text-warning" />;
     default:
-      return <AlertTriangle className="w-4 h-4 text-blue-500" />;
+      return <AlertTriangle className="w-4 h-4 text-primary" />;
     }
   };
 
   const getStatusColor = (status: string) => {
     switch (status) {
     case "completed":
-      return "text-green-600 bg-green-50 border-green-200";
+      return "text-success bg-success/10 border-success/20";
     case "warning":
-      return "text-yellow-600 bg-yellow-50 border-yellow-200";
+      return "text-warning bg-warning/10 border-warning/20";
     default:
-      return "text-blue-600 bg-blue-50 border-blue-200";
+      return "text-primary bg-primary/10 border-primary/20";
     }
   };
 
@@ -266,16 +266,16 @@ export const OrganizationHealthCheck: React.FC = () => {
             <Progress value={completionPercentage} className="w-full" />
             
             {completionPercentage === 100 ? (
-              <Alert className="border-green-200 bg-green-50">
-                <CheckCircle className="h-4 w-4 text-green-600" />
-                <AlertDescription className="text-green-700">
+              <Alert className="border-success/20 bg-success/10">
+                <CheckCircle className="h-4 w-4 text-success" />
+                <AlertDescription className="text-success">
                   Parabéns! Sua organização está completamente configurada e pronta para uso.
                 </AlertDescription>
               </Alert>
             ) : (
-              <Alert className="border-blue-200 bg-blue-50">
-                <AlertTriangle className="h-4 w-4 text-blue-600" />
-                <AlertDescription className="text-blue-700">
+              <Alert className="border-primary/20 bg-primary/10">
+                <AlertTriangle className="h-4 w-4 text-primary" />
+                <AlertDescription className="text-primary">
                   Complete os itens pendentes para aproveitar ao máximo a plataforma.
                 </AlertDescription>
               </Alert>
@@ -289,7 +289,7 @@ export const OrganizationHealthCheck: React.FC = () => {
         <Card>
           <CardContent className="p-4">
             <div className="flex items-center space-x-3">
-              <Users className="w-8 h-8 text-blue-500" />
+              <Users className="w-8 h-8 text-primary" />
               <div>
                 <p className="text-2xl font-bold">{stats.users}</p>
                 <p className="text-sm text-muted-foreground">Usuários</p>
@@ -301,7 +301,7 @@ export const OrganizationHealthCheck: React.FC = () => {
         <Card>
           <CardContent className="p-4">
             <div className="flex items-center space-x-3">
-              <Ship className="w-8 h-8 text-green-500" />
+              <Ship className="w-8 h-8 text-success" />
               <div>
                 <p className="text-2xl font-bold">{stats.vessels}</p>
                 <p className="text-sm text-muted-foreground">Embarcações</p>
@@ -313,7 +313,7 @@ export const OrganizationHealthCheck: React.FC = () => {
         <Card>
           <CardContent className="p-4">
             <div className="flex items-center space-x-3">
-              <BarChart3 className="w-8 h-8 text-purple-500" />
+              <BarChart3 className="w-8 h-8 text-accent-foreground" />
               <div>
                 <p className="text-2xl font-bold">{stats.modules}</p>
                 <p className="text-sm text-muted-foreground">Módulos</p>
@@ -325,7 +325,7 @@ export const OrganizationHealthCheck: React.FC = () => {
         <Card>
           <CardContent className="p-4">
             <div className="flex items-center space-x-3">
-              <CheckCircle className="w-8 h-8 text-green-500" />
+              <CheckCircle className="w-8 h-8 text-success" />
               <div>
                 <p className="text-2xl font-bold">{Math.round(completionPercentage)}%</p>
                 <p className="text-sm text-muted-foreground">Completo</p>

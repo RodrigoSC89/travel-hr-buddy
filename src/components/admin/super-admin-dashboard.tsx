@@ -195,10 +195,10 @@ export const SuperAdminDashboard: React.FC = () => {
 
   const getStatusIcon = (status: string) => {
     switch (status) {
-    case "active": return <CheckCircle className="w-4 h-4 text-green-500" />;
-    case "trial": return <Clock className="w-4 h-4 text-blue-500" />;
-    case "suspended": return <AlertTriangle className="w-4 h-4 text-yellow-500" />;
-    case "expired": return <Ban className="w-4 h-4 text-red-500" />;
+    case "active": return <CheckCircle className="w-4 h-4 text-success" />;
+    case "trial": return <Clock className="w-4 h-4 text-primary" />;
+    case "suspended": return <AlertTriangle className="w-4 h-4 text-warning" />;
+    case "expired": return <Ban className="w-4 h-4 text-destructive" />;
     default: return <Activity className="w-4 h-4 text-muted-foreground" />;
     }
   };
