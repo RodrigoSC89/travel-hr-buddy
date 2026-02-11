@@ -306,17 +306,17 @@ export const ReactionMapper: React.FC<ReactionMapperProps> = ({
   const getStatusColor = (status: NodeStatus): string => {
     switch (status) {
     case "active":
-      return "text-blue-500";
+      return "text-primary";
     case "completed":
-      return "text-green-500";
+      return "text-success";
     case "failed":
-      return "text-red-500";
+      return "text-destructive";
     case "pending":
-      return "text-gray-400";
+      return "text-muted-foreground";
     case "bypassed":
-      return "text-yellow-500";
+      return "text-warning";
     default:
-      return "text-gray-400";
+      return "text-muted-foreground";
     }
   };
 
@@ -355,8 +355,8 @@ export const ReactionMapper: React.FC<ReactionMapperProps> = ({
       <Card
         key={node.id}
         className={`mb-2 cursor-pointer transition-all ${
-          selectedNode?.id === node.id ? "ring-2 ring-blue-500" : ""
-        } ${isActive ? "border-blue-500 shadow-lg" : ""}`}
+          selectedNode?.id === node.id ? "ring-2 ring-primary" : ""
+        } ${isActive ? "border-primary shadow-lg" : ""}`}
         onClick={() => setSelectedNode(node)}
       >
         <CardHeader className="p-3">
@@ -464,7 +464,7 @@ export const ReactionMapper: React.FC<ReactionMapperProps> = ({
                   {renderLayer("ai")}
                 </>
               ) : (
-                <div className="text-center text-gray-500 py-8">
+                <div className="text-center text-muted-foreground py-8">
                   No scenario loaded. Please load or create a scenario.
                 </div>
               )}
@@ -482,7 +482,7 @@ export const ReactionMapper: React.FC<ReactionMapperProps> = ({
                           {getLayerIcon(log.layer)}
                           <div>
                             <p className="text-sm font-medium">{log.event}</p>
-                            <p className="text-xs text-gray-500">
+                          <p className="text-xs text-muted-foreground">
                               {log.actor} · {new Date(log.timestamp).toLocaleTimeString()}
                             </p>
                           </div>
@@ -494,7 +494,7 @@ export const ReactionMapper: React.FC<ReactionMapperProps> = ({
                     </Card>
                   ))
                 ) : (
-                  <div className="text-center text-gray-500 py-8">
+                  <div className="text-center text-muted-foreground py-8">
                     No logs available. Start a simulation to see reaction logs.
                   </div>
                 )}
@@ -509,18 +509,18 @@ export const ReactionMapper: React.FC<ReactionMapperProps> = ({
                   <div className="grid grid-cols-2 gap-4">
                     <Card className="p-4">
                       <div className="flex items-center gap-2">
-                        <TrendingUp className="h-5 w-5 text-blue-500" />
+                         <TrendingUp className="h-5 w-5 text-primary" />
                         <div>
-                          <p className="text-sm text-gray-500">Total Reactions</p>
+                          <p className="text-sm text-muted-foreground">Total Reactions</p>
                           <p className="text-2xl font-bold">{metrics.totalReactions}</p>
                         </div>
                       </div>
                     </Card>
                     <Card className="p-4">
                       <div className="flex items-center gap-2">
-                        <Clock className="h-5 w-5 text-green-500" />
+                        <Clock className="h-5 w-5 text-success" />
                         <div>
-                          <p className="text-sm text-gray-500">Avg Response Time</p>
+                          <p className="text-sm text-muted-foreground">Avg Response Time</p>
                           <p className="text-2xl font-bold">
                             {Math.round(metrics.averageReactionTime)}ms
                           </p>
@@ -543,7 +543,7 @@ export const ReactionMapper: React.FC<ReactionMapperProps> = ({
                               {stat.successfulDecisions}/{stat.totalDecisions} success
                             </Badge>
                           </div>
-                          <div className="text-sm text-gray-500 space-y-1">
+                          <div className="text-sm text-muted-foreground space-y-1">
                             <p>Avg Response: {Math.round(stat.averageResponseTime)}ms</p>
                             <p>Automation: {Math.round(stat.automationRate)}%</p>
                           </div>
@@ -553,7 +553,7 @@ export const ReactionMapper: React.FC<ReactionMapperProps> = ({
                   </Card>
                 </>
               ) : (
-                <div className="text-center text-gray-500 py-8">
+                <div className="text-center text-muted-foreground py-8">
                   No metrics available. Run a simulation to see metrics.
                 </div>
               )}
@@ -571,7 +571,7 @@ export const ReactionMapper: React.FC<ReactionMapperProps> = ({
                           <p className="text-sm font-medium">
                             {path.fromNodeId} → {path.toNodeId}
                           </p>
-                          <p className="text-xs text-gray-500">{path.type}</p>
+                          <p className="text-xs text-muted-foreground">{path.type}</p>
                         </div>
                         <Badge variant={path.executed ? "default" : "outline"}>
                           {path.executed ? "Executed" : "Not executed"}
@@ -581,7 +581,7 @@ export const ReactionMapper: React.FC<ReactionMapperProps> = ({
                   ))}
                 </div>
               ) : (
-                <div className="text-center text-gray-500 py-8">
+                <div className="text-center text-muted-foreground py-8">
                   No decision paths available.
                 </div>
               )}

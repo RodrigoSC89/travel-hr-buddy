@@ -21,20 +21,65 @@ import {
 import { cn } from '@/lib/utils';
 import nautiLogo from '@/assets/nauti-one-logo.png';
 
+interface DemoVessel {
+  id: string;
+  name: string;
+  vessel_type?: string;
+  imo_number?: string;
+  status?: string;
+}
+
+interface DemoCrew {
+  id: string;
+  full_name: string;
+  rank?: string;
+  nationality?: string;
+  status?: string;
+}
+
+interface DemoAudit {
+  id: string;
+  title: string;
+  audit_type?: string;
+  status?: string;
+}
+
+interface DemoAgent {
+  id: string;
+  name: string;
+  agent_id?: string;
+  status?: string;
+}
+
+interface DemoCertificate {
+  id: string;
+  certificate_name: string;
+  certificate_type?: string;
+  status?: string;
+}
+
+interface DemoVoyage {
+  id: string;
+  voyage_number: string;
+  origin_port?: string;
+  destination_port?: string;
+  status?: string;
+}
+
 interface DemoData {
-  vessels: any[];
+  vessels: DemoVessel[];
   vessels_count: number;
-  crew: any[];
+  crew: DemoCrew[];
   crew_count: number;
-  audits: any[];
+  audits: DemoAudit[];
   audits_count: number;
-  agents: any[];
+  agents: DemoAgent[];
   agents_count: number;
-  certificates: any[];
+  certificates: DemoCertificate[];
   certificates_count: number;
-  voyages: any[];
+  voyages: DemoVoyage[];
   voyages_count: number;
-  maintenance: any[];
+  maintenance: Record<string, unknown>[];
   documents_count: number;
   maintenance_count: number;
   ncs_count: number;
@@ -63,13 +108,13 @@ function useDemoData() {
 }
 
 const HUBS = [
-  { name: 'Central de Comando', desc: 'NOC, SOC, Alertas', icon: Compass, color: 'text-blue-600', bgColor: 'bg-blue-500/10', modules: 7 },
-  { name: 'Hub de Operações', desc: 'Frota, Viagens, Logística', icon: Ship, color: 'text-emerald-600', bgColor: 'bg-emerald-500/10', modules: 7 },
-  { name: 'Hub de Manutenção', desc: 'Preditiva, ESG, Digital Twin', icon: Wrench, color: 'text-orange-600', bgColor: 'bg-orange-500/10', modules: 8 },
-  { name: 'Hub de IA', desc: '10 Agentes, Chat, Workflows', icon: Brain, color: 'text-purple-600', bgColor: 'bg-purple-500/10', modules: 11 },
-  { name: 'Hub de Rastreamento', desc: 'AIS, SATCOM, IoT', icon: Satellite, color: 'text-cyan-600', bgColor: 'bg-cyan-500/10', modules: 8 },
-  { name: 'Hub de Compliance', desc: '12 Auditorias, 10 AI Agents', icon: Shield, color: 'text-red-600', bgColor: 'bg-red-500/10', modules: 22 },
-  { name: 'Área de Trabalho', desc: 'Docs, Pessoas, Finanças', icon: Briefcase, color: 'text-slate-600', bgColor: 'bg-slate-500/10', modules: 12 },
+  { name: 'Central de Comando', desc: 'NOC, SOC, Alertas', icon: Compass, color: 'text-primary', bgColor: 'bg-primary/10', modules: 7 },
+  { name: 'Hub de Operações', desc: 'Frota, Viagens, Logística', icon: Ship, color: 'text-success', bgColor: 'bg-success/10', modules: 7 },
+  { name: 'Hub de Manutenção', desc: 'Preditiva, ESG, Digital Twin', icon: Wrench, color: 'text-warning', bgColor: 'bg-warning/10', modules: 8 },
+  { name: 'Hub de IA', desc: '10 Agentes, Chat, Workflows', icon: Brain, color: 'text-accent-foreground', bgColor: 'bg-accent/10', modules: 11 },
+  { name: 'Hub de Rastreamento', desc: 'AIS, SATCOM, IoT', icon: Satellite, color: 'text-info', bgColor: 'bg-info/10', modules: 8 },
+  { name: 'Hub de Compliance', desc: '12 Auditorias, 10 AI Agents', icon: Shield, color: 'text-destructive', bgColor: 'bg-destructive/10', modules: 22 },
+  { name: 'Área de Trabalho', desc: 'Docs, Pessoas, Finanças', icon: Briefcase, color: 'text-muted-foreground', bgColor: 'bg-muted/10', modules: 12 },
 ];
 
 export default function DemoPage() {
@@ -77,32 +122,32 @@ export default function DemoPage() {
   const { data, isLoading } = useDemoData();
 
   const kpis = data ? [
-    { label: 'Embarcações', value: data.vessels_count, icon: Ship, color: 'text-blue-500' },
-    { label: 'Tripulantes', value: data.crew_count, icon: Users, color: 'text-green-500' },
-    { label: 'Auditorias', value: data.audits_count, icon: Shield, color: 'text-red-500' },
-    { label: 'Documentos IA', value: data.documents_count, icon: FileText, color: 'text-amber-500' },
-    { label: 'Manutenções', value: data.maintenance_count, icon: Wrench, color: 'text-orange-500' },
-    { label: 'Agentes IA', value: data.agents_count, icon: Brain, color: 'text-purple-500' },
-    { label: 'NCs', value: data.ncs_count, icon: AlertTriangle, color: 'text-yellow-500' },
-    { label: 'Certificados', value: data.certificates_count, icon: Award, color: 'text-teal-500' },
-    { label: 'Viagens', value: data.voyages_count, icon: Activity, color: 'text-indigo-500' },
-    { label: 'Conversas IA', value: data.ai_conversations_count, icon: Brain, color: 'text-pink-500' },
-    { label: 'Compliance', value: data.compliance_count, icon: CheckCircle, color: 'text-emerald-500' },
-    { label: 'Médico', value: data.medical_count, icon: Heart, color: 'text-rose-500' },
-    { label: 'Cursos', value: data.courses_count, icon: Award, color: 'text-violet-500' },
-    { label: 'Insights IA', value: data.insights_count, icon: TrendingUp, color: 'text-sky-500' },
-    { label: 'Contratos IA', value: data.contracts_count, icon: FileText, color: 'text-lime-500' },
+    { label: 'Embarcações', value: data.vessels_count, icon: Ship, color: 'text-primary' },
+    { label: 'Tripulantes', value: data.crew_count, icon: Users, color: 'text-success' },
+    { label: 'Auditorias', value: data.audits_count, icon: Shield, color: 'text-destructive' },
+    { label: 'Documentos IA', value: data.documents_count, icon: FileText, color: 'text-warning' },
+    { label: 'Manutenções', value: data.maintenance_count, icon: Wrench, color: 'text-warning' },
+    { label: 'Agentes IA', value: data.agents_count, icon: Brain, color: 'text-accent-foreground' },
+    { label: 'NCs', value: data.ncs_count, icon: AlertTriangle, color: 'text-warning' },
+    { label: 'Certificados', value: data.certificates_count, icon: Award, color: 'text-success' },
+    { label: 'Viagens', value: data.voyages_count, icon: Activity, color: 'text-primary' },
+    { label: 'Conversas IA', value: data.ai_conversations_count, icon: Brain, color: 'text-accent-foreground' },
+    { label: 'Compliance', value: data.compliance_count, icon: CheckCircle, color: 'text-success' },
+    { label: 'Médico', value: data.medical_count, icon: Heart, color: 'text-destructive' },
+    { label: 'Cursos', value: data.courses_count, icon: Award, color: 'text-primary' },
+    { label: 'Insights IA', value: data.insights_count, icon: TrendingUp, color: 'text-info' },
+    { label: 'Contratos IA', value: data.contracts_count, icon: FileText, color: 'text-success' },
   ] : [];
 
   const totalRecords = kpis.reduce((sum, k) => sum + k.value, 0);
 
   const dataCards = data ? [
-    { title: 'Embarcações', icon: Ship, iconColor: 'text-blue-500', count: data.vessels_count, items: data.vessels, nameKey: 'name', subtitleFn: (v: any) => `${v.vessel_type || 'N/A'} • IMO: ${v.imo_number || 'N/A'}`, emptyMsg: 'Nenhuma embarcação cadastrada' },
-    { title: 'Tripulação', icon: Users, iconColor: 'text-green-500', count: data.crew_count, items: data.crew, nameKey: 'full_name', subtitleFn: (c: any) => `${c.rank || 'N/A'} • ${c.nationality || 'N/A'}`, emptyMsg: 'Nenhum tripulante cadastrado' },
-    { title: 'Auditorias', icon: Shield, iconColor: 'text-red-500', count: data.audits_count, items: data.audits, nameKey: 'title', subtitleFn: (a: any) => a.audit_type || 'N/A', emptyMsg: 'Nenhuma auditoria registrada' },
-    { title: 'Agentes IA', icon: Brain, iconColor: 'text-purple-500', count: data.agents_count, items: data.agents, nameKey: 'name', subtitleFn: (ag: any) => `ID: ${ag.agent_id || 'N/A'}`, emptyMsg: 'Nenhum agente registrado' },
-    { title: 'Certificados', icon: Award, iconColor: 'text-teal-500', count: data.certificates_count, items: data.certificates, nameKey: 'certificate_name', subtitleFn: (c: any) => c.certificate_type || 'N/A', emptyMsg: 'Nenhum certificado registrado' },
-    { title: 'Viagens', icon: Activity, iconColor: 'text-indigo-500', count: data.voyages_count, items: data.voyages, nameKey: 'voyage_number', subtitleFn: (v: any) => `${v.origin_port || '?'} → ${v.destination_port || '?'}`, emptyMsg: 'Nenhuma viagem registrada' },
+    { title: 'Embarcações', icon: Ship, iconColor: 'text-primary', count: data.vessels_count, items: data.vessels, nameKey: 'name' as const, subtitleFn: (v: DemoVessel) => `${v.vessel_type || 'N/A'} • IMO: ${v.imo_number || 'N/A'}`, emptyMsg: 'Nenhuma embarcação cadastrada' },
+    { title: 'Tripulação', icon: Users, iconColor: 'text-success', count: data.crew_count, items: data.crew, nameKey: 'full_name' as const, subtitleFn: (c: DemoCrew) => `${c.rank || 'N/A'} • ${c.nationality || 'N/A'}`, emptyMsg: 'Nenhum tripulante cadastrado' },
+    { title: 'Auditorias', icon: Shield, iconColor: 'text-destructive', count: data.audits_count, items: data.audits, nameKey: 'title' as const, subtitleFn: (a: DemoAudit) => a.audit_type || 'N/A', emptyMsg: 'Nenhuma auditoria registrada' },
+    { title: 'Agentes IA', icon: Brain, iconColor: 'text-accent-foreground', count: data.agents_count, items: data.agents, nameKey: 'name' as const, subtitleFn: (ag: DemoAgent) => `ID: ${ag.agent_id || 'N/A'}`, emptyMsg: 'Nenhum agente registrado' },
+    { title: 'Certificados', icon: Award, iconColor: 'text-success', count: data.certificates_count, items: data.certificates, nameKey: 'certificate_name' as const, subtitleFn: (c: DemoCertificate) => c.certificate_type || 'N/A', emptyMsg: 'Nenhum certificado registrado' },
+    { title: 'Viagens', icon: Activity, iconColor: 'text-primary', count: data.voyages_count, items: data.voyages, nameKey: 'voyage_number' as const, subtitleFn: (v: DemoVoyage) => `${v.origin_port || '?'} → ${v.destination_port || '?'}`, emptyMsg: 'Nenhuma viagem registrada' },
   ] : [];
 
   return (
@@ -123,7 +168,7 @@ export default function DemoPage() {
             </div>
           </div>
           <div className="flex items-center gap-2">
-            <Badge variant="outline" className="bg-green-500/10 text-green-600 border-green-500/20">
+            <Badge variant="outline" className="bg-success/10 text-success border-success/20">
               <Database className="h-3 w-3 mr-1" /> Live Data
             </Badge>
             <Button onClick={() => navigate('/auth')} size="sm">
@@ -191,17 +236,20 @@ export default function DemoPage() {
                 <CardContent>
                   {card.items.length > 0 ? (
                     <div className="space-y-2">
-                      {card.items.slice(0, 6).map((item: any) => (
-                        <div key={item.id} className="flex items-center justify-between py-2 px-3 rounded-lg bg-muted/30 hover:bg-muted/50 transition-colors">
-                          <div>
-                            <p className="text-sm font-medium">{item[card.nameKey] || 'N/A'}</p>
-                            <p className="text-xs text-muted-foreground">{card.subtitleFn(item)}</p>
+                      {card.items.slice(0, 6).map((item) => {
+                        const rec = item as unknown as Record<string, unknown>;
+                        return (
+                          <div key={item.id} className="flex items-center justify-between py-2 px-3 rounded-lg bg-muted/30 hover:bg-muted/50 transition-colors">
+                            <div>
+                              <p className="text-sm font-medium">{String(rec[card.nameKey] || 'N/A')}</p>
+                              <p className="text-xs text-muted-foreground">{card.subtitleFn(item as never)}</p>
+                            </div>
+                            <Badge variant={rec.status === 'active' || rec.status === 'operational' ? 'default' : 'secondary'} className="text-xs">
+                              {String(rec.status || 'N/A')}
+                            </Badge>
                           </div>
-                          <Badge variant={item.status === 'active' || item.status === 'operational' ? 'default' : 'secondary'} className="text-xs">
-                            {item.status || 'N/A'}
-                          </Badge>
-                        </div>
-                      ))}
+                        );
+                      })}
                     </div>
                   ) : (
                     <p className="text-sm text-muted-foreground text-center py-6">{card.emptyMsg}</p>

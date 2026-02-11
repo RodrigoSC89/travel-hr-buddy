@@ -316,14 +316,16 @@ class AutonomousExecutor {
       metrics.incident_severity = Math.max(0, Math.floor(2 + timeSeed * 2)); // 0-4
       
       // Try to get real data from Supabase
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any -- telemetry_alerts is a dynamic/optional table
       const { data: alerts } = await supabase
-        .from("telemetry_alerts" as any)
+        .from("telemetry_alerts" as never)
         .select("severity")
         .eq("resolved", false)
         .limit(10);
 
-      if (alerts && alerts.length > 0) {
-        const avgSeverity = alerts.reduce((sum: number, a: any) => sum + (a.severity || 0), 0) / alerts.length;
+      if (alerts && (alerts as Record<string, unknown>[]).length > 0) {
+        const alertArr = alerts as Record<string, unknown>[];
+        const avgSeverity = alertArr.reduce((sum: number, a) => sum + (Number(a.severity) || 0), 0) / alertArr.length;
         metrics.incident_severity = avgSeverity;
       }
     } catch (error) {

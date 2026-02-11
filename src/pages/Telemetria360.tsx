@@ -24,9 +24,9 @@ interface SensorReading {
   max: number;
 }
 
-function deriveSensors(vessels: any[]): SensorReading[] {
+function deriveSensors(vessels: Record<string, unknown>[]): SensorReading[] {
   const count = vessels.length || 1;
-  const nameHash = (vessels[0]?.name || "vessel").split("").reduce((a: number, c: string) => a + c.charCodeAt(0), 0);
+  const nameHash = (String(vessels[0]?.name || "vessel")).split("").reduce((a: number, c: string) => a + c.charCodeAt(0), 0);
   
   return [
     { id: "engine-temp", label: "Temp. Motor Principal", value: 72 + (nameHash % 15), unit: "°C", status: "normal", icon: Thermometer, min: 0, max: 120 },
@@ -44,7 +44,7 @@ export default function Telemetria360() {
     queryFn: async () => {
       const { data, error } = await supabase
         .from("vessels")
-        .select("id, name, status, type, current_speed, current_fuel_level")
+        .select("id, name, status, vessel_type")
         .order("name")
         .limit(20);
       if (error) throw error;
@@ -53,12 +53,12 @@ export default function Telemetria360() {
   });
 
   const sensors = deriveSensors(vessels);
-  const activeVessels = vessels.filter((v: any) => v.status === "active" || v.status === "operational").length;
+  const activeVessels = vessels.filter((v) => v.status === "active" || v.status === "operational").length;
 
   const getStatusColor = (status: string) => {
     if (status === "critical") return "text-destructive";
-    if (status === "warning") return "text-yellow-500";
-    return "text-green-500";
+    if (status === "warning") return "text-warning";
+    return "text-success";
   };
 
   return (
@@ -90,7 +90,7 @@ export default function Telemetria360() {
         <Card>
           <CardContent className="pt-4">
             <p className="text-sm text-muted-foreground">Ativas</p>
-            <p className="text-2xl font-bold text-green-500">{activeVessels}</p>
+            <p className="text-2xl font-bold text-success">{activeVessels}</p>
           </CardContent>
         </Card>
         <Card>
@@ -162,7 +162,7 @@ export default function Telemetria360() {
             </Card>
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              {vessels.map((vessel: any) => (
+              {vessels.map((vessel) => (
                 <Card key={vessel.id}>
                   <CardContent className="pt-6">
                     <div className="flex items-center justify-between mb-3">
@@ -177,15 +177,15 @@ export default function Telemetria360() {
                     <div className="grid grid-cols-2 gap-3 text-sm">
                       <div>
                         <span className="text-muted-foreground">Tipo:</span>
-                        <span className="ml-2 font-medium">{vessel.type || "N/A"}</span>
+                        <span className="ml-2 font-medium">{vessel.vessel_type || "N/A"}</span>
                       </div>
                       <div>
                         <span className="text-muted-foreground">Velocidade:</span>
-                        <span className="ml-2 font-medium">{vessel.current_speed ?? "N/A"} kn</span>
+                        <span className="ml-2 font-medium">N/A kn</span>
                       </div>
                       <div>
                         <span className="text-muted-foreground">Combustível:</span>
-                        <span className="ml-2 font-medium">{vessel.current_fuel_level ?? "N/A"}%</span>
+                        <span className="ml-2 font-medium">N/A%</span>
                       </div>
                     </div>
                   </CardContent>

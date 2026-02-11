@@ -93,8 +93,8 @@ export interface UnifiedNotification {
   actionUrl?: string;
   actionLabel?: string;
   action_type?: string;
-  action_data?: any;
-  metadata?: Record<string, any>;
+  action_data?: Record<string, unknown>;
+  metadata?: Record<string, unknown>;
   auto_dismiss?: boolean;
 }
 
@@ -156,27 +156,27 @@ const typeIcons: Record<string, React.ReactNode> = {
 // HELPER FUNCTIONS
 // ============================================
 
-const normalizeNotification = (n: any): UnifiedNotification => ({
-  id: n.id,
-  title: n.title,
-  message: n.message || n.description || "",
-  type: n.type as NotificationType,
-  category: n.category as NotificationCategory,
-  priority: (n.priority || "normal") as NotificationPriority,
-  read: n.read ?? n.is_read ?? n.isRead ?? false,
-  isRead: n.read ?? n.is_read ?? n.isRead ?? false,
-  is_read: n.read ?? n.is_read ?? n.isRead ?? false,
-  createdAt: n.createdAt ? new Date(n.createdAt) : new Date(n.created_at || n.timestamp || Date.now()),
-  created_at: n.created_at,
-  timestamp: n.timestamp ? new Date(n.timestamp) : undefined,
-  actionUrl: nullToUndefined(n.actionUrl || n.action_url),
-  actionLabel: nullToUndefined(n.actionLabel || n.action_text),
-  action_type: nullToUndefined(n.action_type),
-  action_data: n.action_data || n.actionData,
+const normalizeNotification = (n: Record<string, unknown>): UnifiedNotification => ({
+  id: String(n.id ?? ""),
+  title: String(n.title ?? ""),
+  message: String(n.message || n.description || ""),
+  type: (n.type as NotificationType) ?? undefined,
+  category: (n.category as NotificationCategory) ?? undefined,
+  priority: (String(n.priority || "normal")) as NotificationPriority,
+  read: (n.read ?? n.is_read ?? n.isRead ?? false) as boolean,
+  isRead: (n.read ?? n.is_read ?? n.isRead ?? false) as boolean,
+  is_read: (n.read ?? n.is_read ?? n.isRead ?? false) as boolean,
+  createdAt: n.createdAt ? new Date(String(n.createdAt)) : new Date(String(n.created_at || n.timestamp || Date.now())),
+  created_at: n.created_at as string | undefined,
+  timestamp: n.timestamp ? new Date(String(n.timestamp)) : undefined,
+  actionUrl: nullToUndefined(n.actionUrl || n.action_url) as string | undefined,
+  actionLabel: nullToUndefined(n.actionLabel || n.action_text) as string | undefined,
+  action_type: nullToUndefined(n.action_type) as string | undefined,
+  action_data: (n.action_data || n.actionData) as Record<string, unknown> | undefined,
   metadata: typeof n.metadata === "object" && n.metadata !== null && !Array.isArray(n.metadata)
-    ? n.metadata as Record<string, any>
+    ? n.metadata as Record<string, unknown>
     : {},
-  auto_dismiss: n.auto_dismiss,
+  auto_dismiss: n.auto_dismiss as boolean | undefined,
 });
 
 const getPriorityIcon = (priority: NotificationPriority) => {

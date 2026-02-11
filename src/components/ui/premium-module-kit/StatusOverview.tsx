@@ -30,29 +30,29 @@ interface StatusOverviewProps {
 const statusConfig = {
   operational: {
     icon: CheckCircle,
-    color: "text-emerald-500",
-    bgColor: "bg-emerald-500/10",
+    color: "text-success",
+    bgColor: "bg-success/10",
     label: "Operacional",
     badge: "success" as const,
   },
   degraded: {
     icon: AlertTriangle,
-    color: "text-amber-500",
-    bgColor: "bg-amber-500/10",
+    color: "text-warning",
+    bgColor: "bg-warning/10",
     label: "Degradado",
     badge: "warning" as const,
   },
   down: {
     icon: XCircle,
-    color: "text-red-500",
-    bgColor: "bg-red-500/10",
+    color: "text-destructive",
+    bgColor: "bg-destructive/10",
     label: "Offline",
     badge: "destructive" as const,
   },
   maintenance: {
     icon: Clock,
-    color: "text-blue-500",
-    bgColor: "bg-blue-500/10",
+    color: "text-primary",
+    bgColor: "bg-primary/10",
     label: "Manutenção",
     badge: "secondary" as const,
   },
@@ -89,9 +89,9 @@ export function StatusOverview({
               <Progress 
                 value={overallHealth} 
                 className={`h-2 ${
-                  overallHealth === 100 ? "[&>div]:bg-emerald-500" :
-                  overallHealth >= 80 ? "[&>div]:bg-amber-500" :
-                  "[&>div]:bg-red-500"
+                  overallHealth === 100 ? "[&>div]:bg-success" :
+                  overallHealth >= 80 ? "[&>div]:bg-warning" :
+                  "[&>div]:bg-destructive"
                 }`}
               />
             </div>
