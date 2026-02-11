@@ -121,43 +121,43 @@ export function FinanceExecutiveDashboard() {
           </CardContent>
         </Card>
 
-        <Card className="bg-gradient-to-br from-blue-50 to-blue-100 dark:from-blue-950/30 dark:to-blue-900/20 border-blue-200 dark:border-blue-800">
+        <Card className="bg-gradient-to-br from-info/10 to-info/20 dark:from-info/10 dark:to-info/5 border-info/30">
           <CardContent className="pt-6">
             <div className="flex items-start justify-between">
               <div>
-                <p className="text-sm font-medium text-blue-700 dark:text-blue-400">Lucro Líquido</p>
-                <p className="text-3xl font-bold text-blue-800 dark:text-blue-300 mt-1">
+                <p className="text-sm font-medium text-info">Lucro Líquido</p>
+                <p className="text-3xl font-bold text-info mt-1">
                   {formatCurrency(totalProfit)}
                 </p>
                 <div className="flex items-center gap-1 mt-2">
-                  <Target className="h-4 w-4 text-blue-600" />
+                  <Target className="h-4 w-4 text-info" />
                   <span className="text-sm font-medium">{profitMargin}%</span>
                   <span className="text-xs text-muted-foreground">margem</span>
                 </div>
               </div>
-              <div className="p-3 rounded-full bg-blue-500/20">
-                <DollarSign className="h-6 w-6 text-blue-600" />
+              <div className="p-3 rounded-full bg-info/20">
+                <DollarSign className="h-6 w-6 text-info" />
               </div>
             </div>
           </CardContent>
         </Card>
 
-        <Card className="bg-gradient-to-br from-purple-50 to-purple-100 dark:from-purple-950/30 dark:to-purple-900/20 border-purple-200 dark:border-purple-800">
+        <Card className="bg-gradient-to-br from-accent/10 to-accent/20 dark:from-accent/10 dark:to-accent/5 border-accent/30">
           <CardContent className="pt-6">
             <div className="flex items-start justify-between">
               <div>
-                <p className="text-sm font-medium text-purple-700 dark:text-purple-400">Cash Flow</p>
-                <p className="text-3xl font-bold text-purple-800 dark:text-purple-300 mt-1">
+                <p className="text-sm font-medium text-accent-foreground">Cash Flow</p>
+                <p className="text-3xl font-bold text-accent-foreground mt-1">
                   {formatCurrency(2850000)}
                 </p>
                 <div className="flex items-center gap-1 mt-2">
-                  <Wallet className="h-4 w-4 text-purple-600" />
+                  <Wallet className="h-4 w-4 text-accent-foreground" />
                   <span className="text-sm font-medium">45 dias</span>
                   <span className="text-xs text-muted-foreground">runway</span>
                 </div>
               </div>
-              <div className="p-3 rounded-full bg-purple-500/20">
-                <Wallet className="h-6 w-6 text-purple-600" />
+              <div className="p-3 rounded-full bg-accent/20">
+                <Wallet className="h-6 w-6 text-accent-foreground" />
               </div>
             </div>
           </CardContent>
@@ -174,9 +174,9 @@ export function FinanceExecutiveDashboard() {
                 Evolução Financeira
               </CardTitle>
               <div className="flex gap-2">
-                <Badge variant="outline" className="bg-green-50">Receita</Badge>
-                <Badge variant="outline" className="bg-red-50">Custos</Badge>
-                <Badge variant="outline" className="bg-blue-50">Lucro</Badge>
+                <Badge variant="outline" className="bg-success/10">Receita</Badge>
+                <Badge variant="outline" className="bg-destructive/10">Custos</Badge>
+                <Badge variant="outline" className="bg-info/10">Lucro</Badge>
               </div>
             </div>
           </CardHeader>
@@ -202,23 +202,23 @@ export function FinanceExecutiveDashboard() {
                   <Area 
                     type="monotone" 
                     dataKey="revenue" 
-                    stroke="#22c55e" 
-                    fill="#22c55e" 
+                    stroke="hsl(var(--success))" 
+                    fill="hsl(var(--success))" 
                     fillOpacity={0.2}
                     name="Receita"
                   />
                   <Area 
                     type="monotone" 
                     dataKey="costs" 
-                    stroke="#ef4444" 
-                    fill="#ef4444" 
+                    stroke="hsl(var(--destructive))" 
+                    fill="hsl(var(--destructive))" 
                     fillOpacity={0.1}
                     name="Custos"
                   />
                   <Line 
                     type="monotone" 
                     dataKey="profit" 
-                    stroke="#3b82f6" 
+                    stroke="hsl(var(--info))" 
                     strokeWidth={2}
                     name="Lucro"
                   />
@@ -232,7 +232,7 @@ export function FinanceExecutiveDashboard() {
         <Card>
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
-              <AlertTriangle className="h-5 w-5 text-yellow-600" />
+              <AlertTriangle className="h-5 w-5 text-warning" />
               Ações Pendentes
             </CardTitle>
           </CardHeader>
@@ -241,9 +241,9 @@ export function FinanceExecutiveDashboard() {
               <div key={idx} className="p-3 rounded-lg border hover:bg-muted/50 transition-colors">
                 <div className="flex items-start justify-between">
                   <div className="flex items-start gap-2">
-                    {item.type === "invoice" ? <Receipt className="h-4 w-4 text-blue-600 mt-0.5" /> :
-                     item.type === "approval" ? <FileText className="h-4 w-4 text-purple-600 mt-0.5" /> :
-                     <CreditCard className="h-4 w-4 text-green-600 mt-0.5" />}
+                    {item.type === "invoice" ? <Receipt className="h-4 w-4 text-info mt-0.5" /> :
+                     item.type === "approval" ? <FileText className="h-4 w-4 text-accent-foreground mt-0.5" /> :
+                     <CreditCard className="h-4 w-4 text-success mt-0.5" />}
                     <div>
                       <p className="text-sm font-medium">{item.title}</p>
                       <p className="text-xs text-muted-foreground">

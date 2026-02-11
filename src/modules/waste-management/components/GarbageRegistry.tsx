@@ -280,7 +280,7 @@ export function GarbageRegistry() {
 
         <div className="flex gap-2">
           <Button variant="outline" className="gap-2" onClick={() => {
-            const rows = ["Data;Tipo;Método;Quantidade;Embarcação;Lote", ...(filteredRecords || []).map((r: any) => `${r.disposal_date?.split("T")[0] || ""};${r.waste_type || ""};${r.disposal_method || ""};${r.quantity || ""};${r.vessels?.name || ""};${r.certificate_number || ""}`)];
+            const rows = ["Data;Tipo;Método;Quantidade;Embarcação;Lote", ...(filteredRecords || []).map((r) => `${(r.disposal_date || "").split("T")[0]};${r.waste_type || ""};${r.disposal_method || ""};${r.quantity || ""};${r.vessels?.name || ""};${r.certificate_number || ""}`)];
             const blob = new Blob(['\uFEFF' + rows.join('\n')], { type: 'text/csv;charset=utf-8;' });
             const url = URL.createObjectURL(blob);
             const a = document.createElement('a'); a.href = url; a.download = `grb-${new Date().toISOString().slice(0,10)}.csv`; a.click(); URL.revokeObjectURL(url);

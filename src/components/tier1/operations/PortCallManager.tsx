@@ -137,11 +137,11 @@ export function PortCallManager() {
 
   const getStatusBadge = (status: string) => {
     const statusMap: Record<string, { variant: "default" | "secondary" | "destructive" | "outline"; label: string; className: string }> = {
-      scheduled: { variant: "outline", label: "Scheduled", className: "border-blue-500 text-blue-600" },
-      arrived: { variant: "secondary", label: "Arrived", className: "bg-amber-100 text-amber-700" },
-      berthed: { variant: "secondary", label: "Berthed", className: "bg-purple-100 text-purple-700" },
-      operations: { variant: "secondary", label: "Operations", className: "bg-cyan-100 text-cyan-700" },
-      departed: { variant: "secondary", label: "Departed", className: "bg-emerald-100 text-emerald-700" },
+      scheduled: { variant: "outline", label: "Scheduled", className: "border-info text-info" },
+      arrived: { variant: "secondary", label: "Arrived", className: "bg-warning/10 text-warning" },
+      berthed: { variant: "secondary", label: "Berthed", className: "bg-accent/10 text-accent-foreground" },
+      operations: { variant: "secondary", label: "Operations", className: "bg-info/10 text-info" },
+      departed: { variant: "secondary", label: "Departed", className: "bg-success/10 text-success" },
       cancelled: { variant: "destructive", label: "Cancelled", className: "" }
     };
     const config = statusMap[status] || statusMap.scheduled;
@@ -150,11 +150,11 @@ export function PortCallManager() {
 
   const getPurposeIcon = (purpose: string) => {
     switch (purpose) {
-      case "loading": return <Package className="h-4 w-4 text-blue-500" />;
-      case "discharge": return <Package className="h-4 w-4 text-orange-500" />;
-      case "bunkering": return <Fuel className="h-4 w-4 text-amber-500" />;
-      case "repairs": return <Ship className="h-4 w-4 text-red-500" />;
-      case "crew_change": return <Users className="h-4 w-4 text-purple-500" />;
+      case "loading": return <Package className="h-4 w-4 text-info" />;
+      case "discharge": return <Package className="h-4 w-4 text-warning" />;
+      case "bunkering": return <Fuel className="h-4 w-4 text-warning" />;
+      case "repairs": return <Ship className="h-4 w-4 text-destructive" />;
+      case "crew_change": return <Users className="h-4 w-4 text-accent-foreground" />;
       default: return <Anchor className="h-4 w-4 text-muted-foreground" />;
     }
   };
@@ -200,9 +200,9 @@ export function PortCallManager() {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-xs text-muted-foreground uppercase">Scheduled</p>
-                <p className="text-2xl font-bold text-blue-600">{portCallStats.scheduled}</p>
+                <p className="text-2xl font-bold text-info">{portCallStats.scheduled}</p>
               </div>
-              <Calendar className="h-8 w-8 text-blue-500 opacity-50" />
+              <Calendar className="h-8 w-8 text-info opacity-50" />
             </div>
           </CardContent>
         </Card>
@@ -211,9 +211,9 @@ export function PortCallManager() {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-xs text-muted-foreground uppercase">In Progress</p>
-                <p className="text-2xl font-bold text-amber-600">{portCallStats.inProgress}</p>
+                <p className="text-2xl font-bold text-warning">{portCallStats.inProgress}</p>
               </div>
-              <Ship className="h-8 w-8 text-amber-500 opacity-50" />
+              <Ship className="h-8 w-8 text-warning opacity-50" />
             </div>
           </CardContent>
         </Card>
@@ -222,9 +222,9 @@ export function PortCallManager() {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-xs text-muted-foreground uppercase">Completed</p>
-                <p className="text-2xl font-bold text-emerald-600">{portCallStats.completed}</p>
+                <p className="text-2xl font-bold text-success">{portCallStats.completed}</p>
               </div>
-              <CheckCircle2 className="h-8 w-8 text-emerald-500 opacity-50" />
+              <CheckCircle2 className="h-8 w-8 text-success opacity-50" />
             </div>
           </CardContent>
         </Card>
@@ -302,9 +302,9 @@ export function PortCallManager() {
                     >
                       {/* Timeline dot */}
                       <div className={`absolute -left-2.5 top-0 w-5 h-5 rounded-full flex items-center justify-center ${
-                        call.status === "departed" ? "bg-emerald-500" :
-                        call.status === "berthed" || call.status === "operations" ? "bg-amber-500" :
-                        "bg-blue-500"
+                        call.status === "departed" ? "bg-success" :
+                        call.status === "berthed" || call.status === "operations" ? "bg-warning" :
+                        "bg-info"
                       }`}>
                         {call.status === "departed" ? (
                           <CheckCircle2 className="h-3 w-3 text-white" />
@@ -368,19 +368,19 @@ export function PortCallManager() {
                               {(call.norTendered || call.norAccepted) && (
                                 <div className="mt-3 pt-3 border-t flex items-center gap-4 text-xs">
                                   {call.norTendered && (
-                                    <Badge variant="outline" className="bg-blue-50">
+                                    <Badge variant="outline" className="bg-info/10">
                                       <FileText className="h-3 w-3 mr-1" />
                                       NOR Tendered: {formatDate(call.norTendered)}
                                     </Badge>
                                   )}
                                   {call.norAccepted && (
-                                    <Badge variant="outline" className="bg-emerald-50">
+                                    <Badge variant="outline" className="bg-success/10">
                                       <CheckCircle2 className="h-3 w-3 mr-1" />
                                       NOR Accepted: {formatDate(call.norAccepted)}
                                     </Badge>
                                   )}
                                   {call.laytimeStart && (
-                                    <Badge variant="outline" className="bg-amber-50">
+                                    <Badge variant="outline" className="bg-warning/10">
                                       <Clock className="h-3 w-3 mr-1" />
                                       Laytime Start: {formatDate(call.laytimeStart)}
                                     </Badge>

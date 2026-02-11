@@ -135,10 +135,10 @@ const fallbackConsultations: Consultation[] = [
 ];
 
 const severityColors = {
-  low: "bg-green-500/10 text-green-500 border-green-500/30",
-  medium: "bg-amber-500/10 text-amber-500 border-amber-500/30",
-  high: "bg-orange-500/10 text-orange-500 border-orange-500/30",
-  critical: "bg-red-500/10 text-red-500 border-red-500/30",
+  low: "bg-success/10 text-success border-success/30",
+  medium: "bg-warning/10 text-warning border-warning/30",
+  high: "bg-accent/10 text-accent border-accent/30",
+  critical: "bg-destructive/10 text-destructive border-destructive/30",
 };
 
 const statusLabels = {
@@ -171,7 +171,7 @@ export default function MedicalConsultationsTab() {
     today: consultations.filter((c) => c.date === format(new Date(), "yyyy-MM-dd")).length,
   };
 
-  const handleNewConsultation = (data: any) => {
+  const handleNewConsultation = (data: Omit<Consultation, "id" | "date" | "time" | "status">) => {
     const newConsultation: Consultation = {
       id: Date.now().toString(),
       ...data,
@@ -204,8 +204,8 @@ export default function MedicalConsultationsTab() {
         <Card>
           <CardContent className="pt-4">
             <div className="flex items-center gap-3">
-              <div className="p-2 rounded-lg bg-amber-500/10">
-                <Clock className="h-5 w-5 text-amber-500" />
+              <div className="p-2 rounded-lg bg-warning/10">
+                <Clock className="h-5 w-5 text-warning" />
               </div>
               <div>
                 <p className="text-2xl font-bold">{stats.pending}</p>
@@ -217,8 +217,8 @@ export default function MedicalConsultationsTab() {
         <Card>
           <CardContent className="pt-4">
             <div className="flex items-center gap-3">
-              <div className="p-2 rounded-lg bg-blue-500/10">
-                <Calendar className="h-5 w-5 text-blue-500" />
+              <div className="p-2 rounded-lg bg-info/10">
+                <Calendar className="h-5 w-5 text-info" />
               </div>
               <div>
                 <p className="text-2xl font-bold">{stats.followUp}</p>
@@ -230,8 +230,8 @@ export default function MedicalConsultationsTab() {
         <Card>
           <CardContent className="pt-4">
             <div className="flex items-center gap-3">
-              <div className="p-2 rounded-lg bg-green-500/10">
-                <CheckCircle2 className="h-5 w-5 text-green-500" />
+              <div className="p-2 rounded-lg bg-success/10">
+                <CheckCircle2 className="h-5 w-5 text-success" />
               </div>
               <div>
                 <p className="text-2xl font-bold">{stats.today}</p>
@@ -334,7 +334,7 @@ export default function MedicalConsultationsTab() {
                           {consultation.severity === "critical" && <AlertTriangle className="h-3 w-3 mr-1" />}
                           {consultation.severity.toUpperCase()}
                         </Badge>
-                        <Badge variant={statusLabels[consultation.status].color as any}>
+                        <Badge variant={statusLabels[consultation.status].color as "default" | "secondary" | "outline" | "destructive"}>
                           {statusLabels[consultation.status].label}
                         </Badge>
                       </div>
@@ -365,7 +365,7 @@ export default function MedicalConsultationsTab() {
                     </div>
 
                     {consultation.follow_up_required && consultation.follow_up_date && (
-                      <div className="mt-2 pt-2 border-t text-xs text-blue-500 flex items-center gap-1">
+                      <div className="mt-2 pt-2 border-t text-xs text-info flex items-center gap-1">
                         <Calendar className="h-3 w-3" />
                         Retorno agendado: {format(new Date(consultation.follow_up_date), "dd/MM/yyyy")}
                       </div>
@@ -406,28 +406,28 @@ export default function MedicalConsultationsTab() {
                 <div className="grid grid-cols-4 gap-4">
                   {selectedConsultation.vital_signs.temperature && (
                     <div className="p-3 rounded-lg bg-muted/50 text-center">
-                      <Thermometer className="h-4 w-4 mx-auto mb-1 text-orange-500" />
+                      <Thermometer className="h-4 w-4 mx-auto mb-1 text-warning" />
                       <p className="text-lg font-bold">{selectedConsultation.vital_signs.temperature}°C</p>
                       <p className="text-xs text-muted-foreground">Temperatura</p>
                     </div>
                   )}
                   {selectedConsultation.vital_signs.blood_pressure && (
                     <div className="p-3 rounded-lg bg-muted/50 text-center">
-                      <Activity className="h-4 w-4 mx-auto mb-1 text-red-500" />
+                      <Activity className="h-4 w-4 mx-auto mb-1 text-destructive" />
                       <p className="text-lg font-bold">{selectedConsultation.vital_signs.blood_pressure}</p>
                       <p className="text-xs text-muted-foreground">Pressão</p>
                     </div>
                   )}
                   {selectedConsultation.vital_signs.heart_rate && (
                     <div className="p-3 rounded-lg bg-muted/50 text-center">
-                      <Heart className="h-4 w-4 mx-auto mb-1 text-pink-500" />
+                      <Heart className="h-4 w-4 mx-auto mb-1 text-destructive" />
                       <p className="text-lg font-bold">{selectedConsultation.vital_signs.heart_rate}</p>
                       <p className="text-xs text-muted-foreground">FC (bpm)</p>
                     </div>
                   )}
                   {selectedConsultation.vital_signs.oxygen_saturation && (
                     <div className="p-3 rounded-lg bg-muted/50 text-center">
-                      <Activity className="h-4 w-4 mx-auto mb-1 text-blue-500" />
+                      <Activity className="h-4 w-4 mx-auto mb-1 text-info" />
                       <p className="text-lg font-bold">{selectedConsultation.vital_signs.oxygen_saturation}%</p>
                       <p className="text-xs text-muted-foreground">SpO2</p>
                     </div>
