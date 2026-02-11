@@ -14,7 +14,7 @@ interface SyncRecord {
   id: string;
   table: string;
   action: "create" | "update" | "delete";
-  data: Record<string, any>;
+  data: Record<string, unknown>;
   timestamp: number;
   synced: boolean;
   priority: SyncPriority;
@@ -39,7 +39,7 @@ class SyncQueue {
    */
   async enqueue(
     table: string,
-    data: any,
+    data: Record<string, unknown>,
     action: "create" | "update" | "delete",
     priority: SyncPriority = "medium"
   ): Promise<string> {
@@ -119,13 +119,12 @@ class SyncQueue {
   private async syncRecord(record: SyncRecord): Promise<void> {
     const { table, action, data } = record;
     
-    // Type-safe access to dynamic tables
-    const supabaseAny = supabase as any;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any -- dynamic table name requires runtime assertion
+    const supabaseFrom = supabase.from as Function;
 
     switch (action) {
     case "create":
-      const { error: createError } = await supabaseAny
-        .from(table)
+      const { error: createError } = await supabaseFrom(table)
         .insert(data);
       if (createError) throw createError;
       break;
@@ -134,8 +133,7 @@ class SyncQueue {
       const { id, ...updateData } = data;
       if (!id) throw new Error("Update requires an ID");
         
-      const { error: updateError } = await supabaseAny
-        .from(table)
+      const { error: updateError } = await supabaseFrom(table)
         .update(updateData)
         .eq("id", id);
       if (updateError) throw updateError;
@@ -144,8 +142,7 @@ class SyncQueue {
     case "delete":
       if (!data.id) throw new Error("Delete requires an ID");
         
-      const { error: deleteError } = await supabaseAny
-        .from(table)
+      const { error: deleteError } = await supabaseFrom(table)
         .delete()
         .eq("id", data.id);
       if (deleteError) throw deleteError;

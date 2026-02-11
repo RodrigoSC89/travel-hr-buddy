@@ -172,7 +172,7 @@ export function WeatherAlertSettings() {
           <div className="flex items-center justify-between p-4 rounded-lg border">
             <div className="flex items-center gap-3">
               {permissionStatus === "granted" ? (
-                <CheckCircle className="h-5 w-5 text-emerald-500" />
+                <CheckCircle className="h-5 w-5 text-success" />
               ) : (
                 <BellOff className="h-5 w-5 text-muted-foreground" />
               )}
@@ -205,7 +205,7 @@ export function WeatherAlertSettings() {
               <RefreshCw
                 className={cn(
                   "h-5 w-5",
-                  monitoring ? "text-emerald-500 animate-spin" : "text-muted-foreground"
+                  monitoring ? "text-success animate-spin" : "text-muted-foreground"
                 )}
               />
               <div>
@@ -266,7 +266,7 @@ export function WeatherAlertSettings() {
       <Card>
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
-            <AlertTriangle className="h-5 w-5 text-amber-500" />
+            <AlertTriangle className="h-5 w-5 text-warning" />
             Limites de Alerta
           </CardTitle>
           <CardDescription>
@@ -278,10 +278,10 @@ export function WeatherAlertSettings() {
           <div className="space-y-3">
             <div className="flex items-center justify-between">
               <Label className="flex items-center gap-2">
-                <Wind className="h-4 w-4 text-blue-500" />
+                <Wind className="h-4 w-4 text-primary" />
                 Vento (Aviso)
               </Label>
-              <Badge variant="outline" className="bg-amber-500/10 text-amber-600">
+              <Badge variant="outline" className="bg-warning/10 text-warning">
                 {thresholds.windSpeedWarning} nós
               </Badge>
             </div>
@@ -300,10 +300,10 @@ export function WeatherAlertSettings() {
           <div className="space-y-3">
             <div className="flex items-center justify-between">
               <Label className="flex items-center gap-2">
-                <Wind className="h-4 w-4 text-red-500" />
+                <Wind className="h-4 w-4 text-destructive" />
                 Vento (Crítico)
               </Label>
-              <Badge variant="outline" className="bg-red-500/10 text-red-600">
+              <Badge variant="outline" className="bg-destructive/10 text-destructive">
                 {thresholds.windSpeedCritical} nós
               </Badge>
             </div>
@@ -322,10 +322,10 @@ export function WeatherAlertSettings() {
           <div className="space-y-3">
             <div className="flex items-center justify-between">
               <Label className="flex items-center gap-2">
-                <Waves className="h-4 w-4 text-blue-500" />
+                <Waves className="h-4 w-4 text-primary" />
                 Ondas (Aviso)
               </Label>
-              <Badge variant="outline" className="bg-amber-500/10 text-amber-600">
+              <Badge variant="outline" className="bg-warning/10 text-warning">
                 {thresholds.waveHeightWarning} m
               </Badge>
             </div>
@@ -344,10 +344,10 @@ export function WeatherAlertSettings() {
           <div className="space-y-3">
             <div className="flex items-center justify-between">
               <Label className="flex items-center gap-2">
-                <Waves className="h-4 w-4 text-red-500" />
+                <Waves className="h-4 w-4 text-destructive" />
                 Ondas (Crítico)
               </Label>
-              <Badge variant="outline" className="bg-red-500/10 text-red-600">
+              <Badge variant="outline" className="bg-destructive/10 text-destructive">
                 {thresholds.waveHeightCritical} m
               </Badge>
             </div>
@@ -366,10 +366,10 @@ export function WeatherAlertSettings() {
           <div className="space-y-3">
             <div className="flex items-center justify-between">
               <Label className="flex items-center gap-2">
-                <Gauge className="h-4 w-4 text-purple-500" />
+                <Gauge className="h-4 w-4 text-accent-foreground" />
                 Pressão Baixa (Tempestade)
               </Label>
-              <Badge variant="outline" className="bg-purple-500/10 text-purple-600">
+              <Badge variant="outline" className="bg-accent text-accent-foreground">
                 {thresholds.pressureLow} hPa
               </Badge>
             </div>
@@ -388,10 +388,10 @@ export function WeatherAlertSettings() {
           <div className="space-y-3">
             <div className="flex items-center justify-between">
               <Label className="flex items-center gap-2">
-                <Eye className="h-4 w-4 text-gray-500" />
+                <Eye className="h-4 w-4 text-muted-foreground" />
                 Visibilidade Mínima
               </Label>
-              <Badge variant="outline" className="bg-gray-500/10 text-gray-600">
+              <Badge variant="outline" className="bg-muted text-muted-foreground">
                 {thresholds.visibilityWarning} km
               </Badge>
             </div>

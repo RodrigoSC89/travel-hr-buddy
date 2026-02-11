@@ -23,7 +23,7 @@ interface SyncManagerActions {
   syncNow: () => Promise<void>;
   enqueueChange: (
     table: string,
-    data: unknown,
+    data: Record<string, unknown>,
     action: "create" | "update" | "delete",
     priority?: "high" | "medium" | "low"
   ) => Promise<void>;
@@ -125,7 +125,7 @@ export const useSyncManager = (): SyncManagerState & SyncManagerActions => {
    */
   const enqueueChange = useCallback(async (
     table: string,
-    data: unknown,
+    data: Record<string, unknown>,
     action: "create" | "update" | "delete",
     priority?: "high" | "medium" | "low"
   ) => {

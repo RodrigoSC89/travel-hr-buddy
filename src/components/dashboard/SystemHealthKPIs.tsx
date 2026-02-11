@@ -72,18 +72,18 @@ export function SystemHealthKPIs() {
   }
 
   const kpiItems: KPIItem[] = [
-    { label: 'Embarcações', value: kpis?.vessels ?? 0, icon: Ship, color: 'text-blue-500' },
-    { label: 'Tripulantes', value: kpis?.crew ?? 0, icon: Users, color: 'text-green-500' },
-    { label: 'Auditorias', value: kpis?.audits ?? 0, icon: Shield, color: 'text-red-500' },
-    { label: 'Documentos', value: kpis?.documents ?? 0, icon: FileText, color: 'text-amber-500' },
-    { label: 'Manutenções', value: kpis?.maintenance ?? 0, icon: Wrench, color: 'text-orange-500' },
-    { label: 'Agentes IA', value: kpis?.aiAgents ?? 0, icon: Brain, color: 'text-purple-500' },
-    { label: 'NCs', value: kpis?.nonConformities ?? 0, icon: AlertTriangle, color: 'text-yellow-500' },
-    { label: 'Certificados', value: kpis?.certificates ?? 0, icon: Award, color: 'text-teal-500' },
-    { label: 'Viagens', value: kpis?.voyages ?? 0, icon: Activity, color: 'text-indigo-500' },
-    { label: 'Conversas IA', value: kpis?.aiConversations ?? 0, icon: Brain, color: 'text-pink-500' },
-    { label: 'Compliance', value: kpis?.compliance ?? 0, icon: CheckCircle, color: 'text-emerald-500' },
-    { label: 'Médico', value: kpis?.medical ?? 0, icon: Heart, color: 'text-rose-500' },
+    { label: 'Embarcações', value: kpis?.vessels ?? 0, icon: Ship, color: 'text-primary' },
+    { label: 'Tripulantes', value: kpis?.crew ?? 0, icon: Users, color: 'text-success' },
+    { label: 'Auditorias', value: kpis?.audits ?? 0, icon: Shield, color: 'text-destructive' },
+    { label: 'Documentos', value: kpis?.documents ?? 0, icon: FileText, color: 'text-warning' },
+    { label: 'Manutenções', value: kpis?.maintenance ?? 0, icon: Wrench, color: 'text-accent-foreground' },
+    { label: 'Agentes IA', value: kpis?.aiAgents ?? 0, icon: Brain, color: 'text-primary' },
+    { label: 'NCs', value: kpis?.nonConformities ?? 0, icon: AlertTriangle, color: 'text-warning' },
+    { label: 'Certificados', value: kpis?.certificates ?? 0, icon: Award, color: 'text-success' },
+    { label: 'Viagens', value: kpis?.voyages ?? 0, icon: Activity, color: 'text-primary' },
+    { label: 'Conversas IA', value: kpis?.aiConversations ?? 0, icon: Brain, color: 'text-accent-foreground' },
+    { label: 'Compliance', value: kpis?.compliance ?? 0, icon: CheckCircle, color: 'text-success' },
+    { label: 'Médico', value: kpis?.medical ?? 0, icon: Heart, color: 'text-destructive' },
   ];
 
   const totalRecords = kpiItems.reduce((sum, item) => sum + item.value, 0);
