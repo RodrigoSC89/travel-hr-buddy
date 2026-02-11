@@ -27,22 +27,22 @@ export function AIAuditTrail() {
   const filteredLogs = useMemo(() => {
     if (!searchTerm) return auditLogs;
     const term = searchTerm.toLowerCase();
-    return auditLogs.filter((log: any) =>
-      (log.user_input || "").toLowerCase().includes(term) ||
-      (log.ai_response || "").toLowerCase().includes(term) ||
-      (log.model_version || "").toLowerCase().includes(term)
+    return auditLogs.filter((log: Record<string, unknown>) =>
+      (String(log.user_input || "")).toLowerCase().includes(term) ||
+      (String(log.ai_response || "")).toLowerCase().includes(term) ||
+      (String(log.model_version || "")).toLowerCase().includes(term)
     );
   }, [auditLogs, searchTerm]);
 
   const totalTokens = useMemo(() =>
-    auditLogs.reduce((sum: number, l: any) => sum + (l.tokens_input || 0) + (l.tokens_output || 0), 0),
+    auditLogs.reduce((sum: number, l: Record<string, unknown>) => sum + (Number(l.tokens_input) || 0) + (Number(l.tokens_output) || 0), 0),
     [auditLogs]
   );
 
   const handleExport = () => {
     const csv = [
       ["ID", "Input", "Resposta", "Modelo", "Confiança", "Tempo(ms)", "Data"].join(","),
-      ...auditLogs.map((log: any) => [
+      ...auditLogs.map((log: Record<string, unknown>) => [
         log.id,
         `"${(log.user_input || "").replace(/"/g, '""')}"`,
         `"${(log.ai_response || "").slice(0, 100).replace(/"/g, '""')}"`,
@@ -105,19 +105,19 @@ export function AIAuditTrail() {
         </Card>
         <Card>
           <CardContent className="pt-4 text-center">
-            <p className="text-2xl font-bold text-green-600">{metrics.approvedDecisions}</p>
+            <p className="text-2xl font-bold text-success">{metrics.approvedDecisions}</p>
             <p className="text-xs text-muted-foreground">Aprovadas</p>
           </CardContent>
         </Card>
         <Card>
           <CardContent className="pt-4 text-center">
-            <p className="text-2xl font-bold text-red-600">{metrics.rejectedDecisions}</p>
+            <p className="text-2xl font-bold text-destructive">{metrics.rejectedDecisions}</p>
             <p className="text-xs text-muted-foreground">Rejeitadas</p>
           </CardContent>
         </Card>
         <Card>
           <CardContent className="pt-4 text-center">
-            <p className="text-2xl font-bold text-purple-600">{totalTokens.toLocaleString()}</p>
+            <p className="text-2xl font-bold text-accent-foreground">{totalTokens.toLocaleString()}</p>
             <p className="text-xs text-muted-foreground">Tokens Usados</p>
           </CardContent>
         </Card>
@@ -150,6 +150,7 @@ export function AIAuditTrail() {
                   <p>Interações com a IA aparecerão aqui automaticamente</p>
                 </div>
               ) : (
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Supabase dynamic query
                 filteredLogs.map((log: any) => (
                   <motion.div
                     key={log.id}

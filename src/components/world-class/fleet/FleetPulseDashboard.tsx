@@ -17,10 +17,10 @@ import { useToast } from "@/hooks/use-toast";
 import { logger } from "@/lib/logger";
 
 const riskColors: Record<string, string> = {
-  low: "bg-emerald-500/10 text-emerald-500 border-emerald-500/30",
-  moderate: "bg-amber-500/10 text-amber-500 border-amber-500/30",
-  high: "bg-orange-500/10 text-orange-500 border-orange-500/30",
-  critical: "bg-red-500/10 text-red-500 border-red-500/30",
+  low: "bg-success/10 text-success border-success/30",
+  moderate: "bg-warning/10 text-warning border-warning/30",
+  high: "bg-warning/10 text-warning border-warning/30",
+  critical: "bg-destructive/10 text-destructive border-destructive/30",
 };
 
 const statusEmoji: Record<string, string> = {
@@ -31,8 +31,8 @@ const statusEmoji: Record<string, string> = {
   unknown: "❓",
 };
 
-function ScoreRing({ score, label, icon: Icon }: { score: number; label: string; icon: any }) {
-  const color = score >= 85 ? "text-emerald-500" : score >= 70 ? "text-amber-500" : "text-red-500";
+function ScoreRing({ score, label, icon: Icon }: { score: number; label: string; icon: React.ElementType }) {
+  const color = score >= 85 ? "text-success" : score >= 70 ? "text-warning" : "text-destructive";
   return (
     <div className="flex flex-col items-center gap-1">
       <div className="relative h-12 w-12">
@@ -189,19 +189,19 @@ Forneça:
         </Card>
         <Card>
           <CardContent className="p-4 flex items-center gap-3">
-            <div className="p-2 rounded-lg bg-emerald-500/10"><CheckCircle className="h-5 w-5 text-emerald-500" /></div>
+            <div className="p-2 rounded-lg bg-success/10"><CheckCircle className="h-5 w-5 text-success" /></div>
             <div><p className="text-2xl font-bold">{stats.active}</p><p className="text-xs text-muted-foreground">Ativos</p></div>
           </CardContent>
         </Card>
         <Card>
           <CardContent className="p-4 flex items-center gap-3">
-            <div className="p-2 rounded-lg bg-red-500/10"><AlertTriangle className="h-5 w-5 text-red-500" /></div>
+            <div className="p-2 rounded-lg bg-destructive/10"><AlertTriangle className="h-5 w-5 text-destructive" /></div>
             <div><p className="text-2xl font-bold">{stats.atRisk}</p><p className="text-xs text-muted-foreground">Em Risco</p></div>
           </CardContent>
         </Card>
         <Card>
           <CardContent className="p-4 flex items-center gap-3">
-            <div className="p-2 rounded-lg bg-blue-500/10"><Activity className="h-5 w-5 text-blue-500" /></div>
+            <div className="p-2 rounded-lg bg-primary/10"><Activity className="h-5 w-5 text-primary" /></div>
             <div><p className="text-2xl font-bold">{stats.avgHealth}%</p><p className="text-xs text-muted-foreground">Health Médio</p></div>
           </CardContent>
         </Card>

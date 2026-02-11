@@ -185,7 +185,7 @@ const PeopleDashboard: FC = () => {
             ) : aniversariantes.length === 0 ? (
               <p className="text-center text-muted-foreground py-4">Nenhum aniversariante próximo</p>
             ) : (
-              aniversariantes.map((pessoa: any, index: number) => (
+              aniversariantes.map((pessoa: Record<string, string>, index: number) => (
                 <div key={index} className="flex items-center justify-between p-2 rounded-lg bg-muted/50">
                   <div>
                     <p className="font-medium text-sm">{pessoa.nome}</p>

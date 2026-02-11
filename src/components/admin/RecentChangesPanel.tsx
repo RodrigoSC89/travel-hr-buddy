@@ -107,17 +107,17 @@ const RECENT_CHANGES: ChangeEntry[] = [
 ];
 
 const TYPE_CONFIG: Record<ChangeEntry['type'], { icon: typeof GitCommit; color: string; label: string }> = {
-  feature: { icon: Sparkles, color: 'bg-green-500/10 text-green-600', label: 'Feature' },
-  fix: { icon: Bug, color: 'bg-red-500/10 text-red-600', label: 'Fix' },
-  refactor: { icon: RefreshCw, color: 'bg-blue-500/10 text-blue-600', label: 'Refactor' },
-  update: { icon: ArrowUpCircle, color: 'bg-purple-500/10 text-purple-600', label: 'Update' },
-  security: { icon: AlertTriangle, color: 'bg-yellow-500/10 text-yellow-600', label: 'Security' }
+  feature: { icon: Sparkles, color: 'bg-success/10 text-success', label: 'Feature' },
+  fix: { icon: Bug, color: 'bg-destructive/10 text-destructive', label: 'Fix' },
+  refactor: { icon: RefreshCw, color: 'bg-primary/10 text-primary', label: 'Refactor' },
+  update: { icon: ArrowUpCircle, color: 'bg-accent/10 text-accent-foreground', label: 'Update' },
+  security: { icon: AlertTriangle, color: 'bg-warning/10 text-warning', label: 'Security' }
 };
 
 const STATUS_CONFIG: Record<ChangeEntry['status'], { icon: typeof Check; color: string; label: string }> = {
-  production: { icon: Check, color: 'bg-green-500/10 text-green-600', label: 'Produção' },
-  testing: { icon: Clock, color: 'bg-yellow-500/10 text-yellow-600', label: 'Em Teste' },
-  rollback: { icon: AlertTriangle, color: 'bg-red-500/10 text-red-600', label: 'Rollback' }
+  production: { icon: Check, color: 'bg-success/10 text-success', label: 'Produção' },
+  testing: { icon: Clock, color: 'bg-warning/10 text-warning', label: 'Em Teste' },
+  rollback: { icon: AlertTriangle, color: 'bg-destructive/10 text-destructive', label: 'Rollback' }
 };
 
 export function RecentChangesPanel() {
@@ -149,16 +149,16 @@ export function RecentChangesPanel() {
             <div className="text-2xl font-bold">{stats.total}</div>
             <div className="text-xs text-muted-foreground">Total</div>
           </div>
-          <div className="text-center p-2 rounded-lg bg-green-500/10">
-            <div className="text-2xl font-bold text-green-600">{stats.features}</div>
+          <div className="text-center p-2 rounded-lg bg-success/10">
+            <div className="text-2xl font-bold text-success">{stats.features}</div>
             <div className="text-xs text-muted-foreground">Features</div>
           </div>
-          <div className="text-center p-2 rounded-lg bg-red-500/10">
-            <div className="text-2xl font-bold text-red-600">{stats.fixes}</div>
+          <div className="text-center p-2 rounded-lg bg-destructive/10">
+            <div className="text-2xl font-bold text-destructive">{stats.fixes}</div>
             <div className="text-xs text-muted-foreground">Fixes</div>
           </div>
-          <div className="text-center p-2 rounded-lg bg-blue-500/10">
-            <div className="text-2xl font-bold text-blue-600">{stats.inProduction}</div>
+          <div className="text-center p-2 rounded-lg bg-primary/10">
+            <div className="text-2xl font-bold text-primary">{stats.inProduction}</div>
             <div className="text-xs text-muted-foreground">Em Prod</div>
           </div>
         </div>

@@ -35,17 +35,22 @@ interface MaintenanceItem {
   estimated_cost?: number;
 }
 
+interface VesselOption {
+  id: string;
+  name: string;
+}
+
 interface MaintenancePanelProps {
   maintenance: MaintenanceItem[];
-  vessels: any[];
+  vessels: VesselOption[];
   onRefresh: () => void;
 }
 
 const priorityConfig: Record<string, { color: string; label: string }> = {
-  critical: { color: "bg-red-500", label: "Crítica" },
-  high: { color: "bg-orange-500", label: "Alta" },
-  medium: { color: "bg-yellow-500", label: "Média" },
-  low: { color: "bg-green-500", label: "Baixa" },
+  critical: { color: "bg-destructive", label: "Crítica" },
+  high: { color: "bg-warning", label: "Alta" },
+  medium: { color: "bg-accent", label: "Média" },
+  low: { color: "bg-success", label: "Baixa" },
 };
 
 const statusConfig: Record<string, { variant: "default" | "secondary" | "destructive" | "outline"; label: string }> = {
@@ -91,6 +96,7 @@ export const MaintenancePanel: React.FC<MaintenancePanelProps> = ({
 
     try {
       const { error } = await supabase
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any -- untyped table
         .from("maintenance_schedules" as any)
         .insert([{
           vessel_id: newMaintenance.vessel_id,
@@ -134,10 +140,10 @@ export const MaintenancePanel: React.FC<MaintenancePanelProps> = ({
     <div className="space-y-6">
       {/* Stats Cards */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-        <Card className="bg-gradient-to-br from-red-500/10 to-transparent">
+        <Card className="bg-gradient-to-br from-destructive/10 to-transparent">
           <CardContent className="pt-6">
             <div className="flex items-center gap-4">
-              <AlertTriangle className="h-8 w-8 text-red-500" />
+              <AlertTriangle className="h-8 w-8 text-destructive" />
               <div>
                 <p className="text-2xl font-bold">{pendingCount}</p>
                 <p className="text-sm text-muted-foreground">Pendentes</p>
@@ -146,10 +152,10 @@ export const MaintenancePanel: React.FC<MaintenancePanelProps> = ({
           </CardContent>
         </Card>
 
-        <Card className="bg-gradient-to-br from-yellow-500/10 to-transparent">
+        <Card className="bg-gradient-to-br from-warning/10 to-transparent">
           <CardContent className="pt-6">
             <div className="flex items-center gap-4">
-              <Calendar className="h-8 w-8 text-yellow-500" />
+              <Calendar className="h-8 w-8 text-warning" />
               <div>
                 <p className="text-2xl font-bold">{scheduledCount}</p>
                 <p className="text-sm text-muted-foreground">Agendadas</p>
@@ -158,10 +164,10 @@ export const MaintenancePanel: React.FC<MaintenancePanelProps> = ({
           </CardContent>
         </Card>
 
-        <Card className="bg-gradient-to-br from-blue-500/10 to-transparent">
+        <Card className="bg-gradient-to-br from-primary/10 to-transparent">
           <CardContent className="pt-6">
             <div className="flex items-center gap-4">
-              <Clock className="h-8 w-8 text-blue-500" />
+              <Clock className="h-8 w-8 text-primary" />
               <div>
                 <p className="text-2xl font-bold">{inProgressCount}</p>
                 <p className="text-sm text-muted-foreground">Em Andamento</p>
@@ -170,10 +176,10 @@ export const MaintenancePanel: React.FC<MaintenancePanelProps> = ({
           </CardContent>
         </Card>
 
-        <Card className="bg-gradient-to-br from-green-500/10 to-transparent">
+        <Card className="bg-gradient-to-br from-success/10 to-transparent">
           <CardContent className="pt-6">
             <div className="flex items-center gap-4">
-              <CheckCircle className="h-8 w-8 text-green-500" />
+              <CheckCircle className="h-8 w-8 text-success" />
               <div>
                 <p className="text-2xl font-bold">{maintenance.filter(m => m.status === "completed").length}</p>
                 <p className="text-sm text-muted-foreground">Concluídas</p>

@@ -16,15 +16,15 @@ import { supabase } from "@/integrations/supabase/client";
 import { EmptyState } from "@/components/ui/UXStates";
 
 const typeColors: Record<string, string> = {
-  preventive: "bg-blue-500",
-  corrective: "bg-red-500",
-  predictive: "bg-purple-500",
-  emergency: "bg-amber-500",
+  preventive: "bg-primary",
+  corrective: "bg-destructive",
+  predictive: "bg-accent",
+  emergency: "bg-warning",
 };
 
 export function MaintenanceCalendarView() {
   const [currentDate, setCurrentDate] = useState(new Date());
-  const [selectedEvent, setSelectedEvent] = useState<any>(null);
+  const [selectedEvent, setSelectedEvent] = useState<Record<string, unknown> | null>(null);
 
   const { data, isLoading } = useQuery({
     queryKey: ["maintenance-calendar"],
@@ -37,8 +37,8 @@ export function MaintenanceCalendarView() {
       ]);
       if (recResult.error) throw recResult.error;
       if (vesResult.error) throw vesResult.error;
-      const vesselMap = new Map((vesResult.data || []).map((v: any) => [v.id, v.name]));
-      return (recResult.data || []).map((r: any) => ({
+      const vesselMap = new Map((vesResult.data || []).map((v) => [v.id, v.name]));
+      return (recResult.data || []).map((r) => ({
         ...r,
         vesselName: vesselMap.get(r.vessel_id) || "N/A",
         date: new Date(r.scheduled_date),
@@ -58,22 +58,22 @@ export function MaintenanceCalendarView() {
   const monthStart = startOfMonth(currentDate);
   const monthEnd = endOfMonth(currentDate);
   const days = eachDayOfInterval({ start: monthStart, end: monthEnd });
-  const getEventsForDay = (day: Date) => events.filter((e: any) => isSameDay(e.date, day));
+  const getEventsForDay = (day: Date) => events.filter((e) => isSameDay(e.date, day));
 
   const stats = {
     total: events.length,
-    scheduled: events.filter((e: any) => e.status === "pending").length,
-    inProgress: events.filter((e: any) => e.status === "in_progress").length,
-    overdue: events.filter((e: any) => e.status !== "completed" && isBefore(e.date, new Date())).length,
+    scheduled: events.filter((e) => e.status === "pending").length,
+    inProgress: events.filter((e) => e.status === "in_progress").length,
+    overdue: events.filter((e) => e.status !== "completed" && isBefore(e.date, new Date())).length,
   };
 
   return (
     <div className="space-y-6">
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
         <Card><CardContent className="pt-4"><div className="flex items-center justify-between"><div><p className="text-sm text-muted-foreground">Total</p><p className="text-2xl font-bold">{stats.total}</p></div><Wrench className="h-5 w-5 text-primary" /></div></CardContent></Card>
-        <Card><CardContent className="pt-4"><div className="flex items-center justify-between"><div><p className="text-sm text-muted-foreground">Pendentes</p><p className="text-2xl font-bold text-blue-600">{stats.scheduled}</p></div><Clock className="h-5 w-5 text-blue-600" /></div></CardContent></Card>
-        <Card><CardContent className="pt-4"><div className="flex items-center justify-between"><div><p className="text-sm text-muted-foreground">Em Andamento</p><p className="text-2xl font-bold text-amber-600">{stats.inProgress}</p></div><Wrench className="h-5 w-5 text-amber-600" /></div></CardContent></Card>
-        <Card><CardContent className="pt-4"><div className="flex items-center justify-between"><div><p className="text-sm text-muted-foreground">Atrasadas</p><p className="text-2xl font-bold text-red-600">{stats.overdue}</p></div><AlertTriangle className="h-5 w-5 text-red-600" /></div></CardContent></Card>
+        <Card><CardContent className="pt-4"><div className="flex items-center justify-between"><div><p className="text-sm text-muted-foreground">Pendentes</p><p className="text-2xl font-bold text-primary">{stats.scheduled}</p></div><Clock className="h-5 w-5 text-primary" /></div></CardContent></Card>
+        <Card><CardContent className="pt-4"><div className="flex items-center justify-between"><div><p className="text-sm text-muted-foreground">Em Andamento</p><p className="text-2xl font-bold text-warning">{stats.inProgress}</p></div><Wrench className="h-5 w-5 text-warning" /></div></CardContent></Card>
+        <Card><CardContent className="pt-4"><div className="flex items-center justify-between"><div><p className="text-sm text-muted-foreground">Atrasadas</p><p className="text-2xl font-bold text-destructive">{stats.overdue}</p></div><AlertTriangle className="h-5 w-5 text-destructive" /></div></CardContent></Card>
       </div>
 
       <Card>
@@ -105,7 +105,7 @@ export function MaintenanceCalendarView() {
                   onClick={() => dayEvents.length > 0 && setSelectedEvent(dayEvents[0])}
                 >
                   <div className={`text-sm font-medium mb-1 ${isToday(day) ? "text-primary" : ""}`}>{format(day, "d")}</div>
-                  {dayEvents.slice(0, 2).map((ev: any) => (
+                  {dayEvents.slice(0, 2).map((ev) => (
                     <div key={ev.id} className={`text-xs px-1 py-0.5 rounded truncate ${typeColors[ev.maintenance_type] || "bg-primary"} text-white`}>
                       {ev.title}
                     </div>
@@ -135,20 +135,20 @@ export function MaintenanceCalendarView() {
               <CardHeader>
                 <div className="flex items-center justify-between">
                   <div>
-                    <CardTitle>{selectedEvent.title}</CardTitle>
+                    <CardTitle>{String(selectedEvent.title ?? "")}</CardTitle>
                     <CardDescription className="flex items-center gap-2 mt-1">
-                      <Ship className="h-4 w-4" />{selectedEvent.vesselName}
+                      <Ship className="h-4 w-4" />{String(selectedEvent.vesselName ?? "")}
                     </CardDescription>
                   </div>
-                  <Badge variant={selectedEvent.status === "completed" ? "default" : "secondary"}>{selectedEvent.status}</Badge>
+                  <Badge variant={selectedEvent.status === "completed" ? "default" : "secondary"}>{String(selectedEvent.status ?? "")}</Badge>
                 </div>
               </CardHeader>
               <CardContent>
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
-                  <div><p className="text-muted-foreground">Data</p><p className="font-medium">{format(selectedEvent.date, "dd/MM/yyyy")}</p></div>
-                  <div><p className="text-muted-foreground">Duração Est.</p><p className="font-medium">{selectedEvent.estimated_duration || "?"}h</p></div>
-                  <div><p className="text-muted-foreground">Tipo</p><p className="font-medium capitalize">{selectedEvent.maintenance_type}</p></div>
-                  <div><p className="text-muted-foreground">Responsável</p><p className="font-medium">{selectedEvent.assigned_technician || "N/A"}</p></div>
+                  <div><p className="text-muted-foreground">Data</p><p className="font-medium">{format(selectedEvent.date as Date, "dd/MM/yyyy")}</p></div>
+                  <div><p className="text-muted-foreground">Duração Est.</p><p className="font-medium">{String(selectedEvent.estimated_duration ?? "?")}h</p></div>
+                  <div><p className="text-muted-foreground">Tipo</p><p className="font-medium capitalize">{String(selectedEvent.maintenance_type ?? "")}</p></div>
+                  <div><p className="text-muted-foreground">Responsável</p><p className="font-medium">{String(selectedEvent.assigned_technician ?? "N/A")}</p></div>
                 </div>
                 <Button variant="ghost" className="mt-4" onClick={() => setSelectedEvent(null)}>Fechar</Button>
               </CardContent>

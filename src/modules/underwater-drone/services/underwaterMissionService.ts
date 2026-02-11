@@ -7,7 +7,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { logger } from "@/lib/logger";
 import type { Mission, Waypoint } from "../missionUploadSub";
 
-// Helper to get dynamic supabase client for untyped tables
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Dynamic tables not in generated types
 const dynamicSupabase = () => supabase as any;
 
 export interface UnderwaterMissionRecord {
@@ -254,6 +254,7 @@ class UnderwaterMissionService {
         return [];
       }
 
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any -- untyped DB row
       return (data || []).map((row: any) => this.mapMissionFromDB(row));
     } catch (error) {
       logger.error("Error fetching missions:", error);
@@ -290,6 +291,7 @@ class UnderwaterMissionService {
         return null;
       }
 
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any -- untyped DB row
       const missions: UnderwaterMissionRecord[] = (data || []).map((row: any) => this.mapMissionFromDB(row));
 
       return {
@@ -314,6 +316,7 @@ class UnderwaterMissionService {
   /**
    * Map database record to UnderwaterMissionRecord
    */
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- untyped DB mapping
   private mapMissionFromDB(data: any): UnderwaterMissionRecord {
     return {
       id: data.id,
@@ -351,6 +354,7 @@ class UnderwaterMissionService {
   /**
    * Map database record to DroneTelemetryRecord
    */
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- untyped DB mapping
   private mapTelemetryFromDB(data: any): DroneTelemetryRecord {
     return {
       id: data.id,
@@ -380,6 +384,7 @@ class UnderwaterMissionService {
   /**
    * Map database record to MissionEventRecord
    */
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- untyped DB mapping
   private mapEventFromDB(data: any): MissionEventRecord {
     return {
       id: data.id,

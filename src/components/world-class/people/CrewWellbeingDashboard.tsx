@@ -16,10 +16,10 @@ import { toast } from "sonner";
 import { logger } from "@/lib/logger";
 
 const fatigueColors: Record<string, string> = {
-  low: "bg-emerald-500/10 text-emerald-600 border-emerald-500/30",
-  moderate: "bg-amber-500/10 text-amber-600 border-amber-500/30",
-  high: "bg-orange-500/10 text-orange-600 border-orange-500/30",
-  critical: "bg-red-500/10 text-red-600 border-red-500/30",
+  low: "bg-success/10 text-success border-success/30",
+  moderate: "bg-warning/10 text-warning border-warning/30",
+  high: "bg-warning/10 text-warning border-warning/30",
+  critical: "bg-destructive/10 text-destructive border-destructive/30",
 };
 
 const fatigueLabels: Record<string, string> = {
@@ -29,8 +29,8 @@ const fatigueLabels: Record<string, string> = {
   critical: "Crítico",
 };
 
-function MiniScore({ value, label, icon: Icon }: { value: number; label: string; icon: any }) {
-  const color = value >= 80 ? "text-emerald-500" : value >= 60 ? "text-amber-500" : "text-red-500";
+function MiniScore({ value, label, icon: Icon }: { value: number; label: string; icon: React.ElementType }) {
+  const color = value >= 80 ? "text-success" : value >= 60 ? "text-warning" : "text-destructive";
   return (
     <div className="text-center">
       <div className={`text-lg font-bold ${color}`}>{value}</div>
@@ -93,19 +93,19 @@ export function CrewWellbeingDashboard() {
         </Card>
         <Card>
           <CardContent className="p-4 flex items-center gap-3">
-            <div className="p-2 rounded-lg bg-emerald-500/10"><Activity className="h-5 w-5 text-emerald-500" /></div>
+            <div className="p-2 rounded-lg bg-success/10"><Activity className="h-5 w-5 text-success" /></div>
             <div><p className="text-2xl font-bold">{stats.total}</p><p className="text-xs text-muted-foreground">Tripulantes Ativos</p></div>
           </CardContent>
         </Card>
         <Card>
           <CardContent className="p-4 flex items-center gap-3">
-            <div className="p-2 rounded-lg bg-red-500/10"><AlertTriangle className="h-5 w-5 text-red-500" /></div>
+            <div className="p-2 rounded-lg bg-destructive/10"><AlertTriangle className="h-5 w-5 text-destructive" /></div>
             <div><p className="text-2xl font-bold">{stats.critical}</p><p className="text-xs text-muted-foreground">Risco Crítico</p></div>
           </CardContent>
         </Card>
         <Card>
           <CardContent className="p-4 flex items-center gap-3">
-            <div className="p-2 rounded-lg bg-orange-500/10"><TrendingDown className="h-5 w-5 text-orange-500" /></div>
+            <div className="p-2 rounded-lg bg-warning/10"><TrendingDown className="h-5 w-5 text-warning" /></div>
             <div><p className="text-2xl font-bold">{stats.high}</p><p className="text-xs text-muted-foreground">Risco Alto</p></div>
           </CardContent>
         </Card>
@@ -113,9 +113,9 @@ export function CrewWellbeingDashboard() {
 
       {/* At Risk Alert */}
       {atRiskCrew.length > 0 && (
-        <Card className="border-red-500/30 bg-red-500/5">
+        <Card className="border-destructive/30 bg-destructive/5">
           <CardHeader className="pb-2">
-            <CardTitle className="text-sm text-red-600 flex items-center gap-2">
+            <CardTitle className="text-sm text-destructive flex items-center gap-2">
               <AlertTriangle className="h-4 w-4" />
               {atRiskCrew.length} tripulante(s) com risco de burnout
             </CardTitle>
@@ -129,7 +129,7 @@ export function CrewWellbeingDashboard() {
                 </div>
                 <div className="flex items-center gap-2">
                   {crew.burnout_prediction_days && (
-                    <span className="text-xs text-red-600 font-medium">
+                    <span className="text-xs text-destructive font-medium">
                       ~{crew.burnout_prediction_days} dias p/ burnout
                     </span>
                   )}
@@ -206,7 +206,7 @@ export function CrewWellbeingDashboard() {
                       </TableCell>
                       <TableCell className="text-xs">{score.vessel_name || "—"}</TableCell>
                       <TableCell className="text-center">
-                        <span className={`font-bold ${score.overall_score >= 80 ? "text-emerald-600" : score.overall_score >= 60 ? "text-amber-600" : "text-red-600"}`}>
+                        <span className={`font-bold ${score.overall_score >= 80 ? "text-success" : score.overall_score >= 60 ? "text-warning" : "text-destructive"}`}>
                           {score.overall_score}
                         </span>
                       </TableCell>
@@ -223,7 +223,7 @@ export function CrewWellbeingDashboard() {
                         {score.recommendations.length > 0 ? (
                           <div className="text-xs text-muted-foreground truncate">{score.recommendations[0]}</div>
                         ) : (
-                          <span className="text-xs text-emerald-600">✓ OK</span>
+                          <span className="text-xs text-success">✓ OK</span>
                         )}
                       </TableCell>
                     </motion.tr>
