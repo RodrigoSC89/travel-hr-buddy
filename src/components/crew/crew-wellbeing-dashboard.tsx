@@ -90,14 +90,14 @@ export function CrewWellbeingDashboard() {
 
   const getHealthStatusColor = (status: string) => {
     const colors: Record<string, string> = {
-      excellent: "text-green-500",
-      good: "text-blue-500",
-      fair: "text-yellow-500",
+      excellent: "text-success",
+      good: "text-primary",
+      fair: "text-warning",
       poor: "text-orange-500",
-      critical: "text-red-500"
+      critical: "text-destructive"
     };
 
-    return colors[status] || "text-gray-500";
+    return colors[status] || "text-muted-foreground";
   };
 
   if (loading) {
@@ -139,14 +139,14 @@ export function CrewWellbeingDashboard() {
           {alerts.length === 0 ? (
             <Card>
               <CardContent className="flex flex-col items-center justify-center p-8">
-                <Heart className="h-12 w-12 text-green-500 mb-4" />
+                <Heart className="h-12 w-12 text-success mb-4" />
                 <p className="text-muted-foreground">No active wellbeing alerts</p>
                 <p className="text-xs text-muted-foreground mt-2">All crew members are in good health</p>
               </CardContent>
             </Card>
           ) : (
             alerts.map((alert) => (
-              <Card key={alert.id} className={alert.severity === "critical" ? "border-red-500" : ""}>
+              <Card key={alert.id} className={alert.severity === "critical" ? "border-destructive" : ""}>
                 <CardHeader>
                   <div className="flex items-center justify-between">
                     <CardTitle className="text-lg flex items-center">
@@ -188,7 +188,7 @@ export function CrewWellbeingDashboard() {
                       </p>
                       <div className="w-full h-1 bg-secondary rounded-full mt-1">
                         <div
-                          className="h-full bg-blue-500 rounded-full"
+                          className="h-full bg-primary rounded-full"
                           style={{ width: `${alert.ai_confidence_score * 100}%` }}
                         />
                       </div>
@@ -245,8 +245,8 @@ export function CrewWellbeingDashboard() {
                             <div className="w-20 h-2 bg-secondary rounded-full">
                               <div
                                 className={`h-full rounded-full ${
-                                  record.fatigue_level > 7 ? "bg-red-500" :
-                                    record.fatigue_level > 4 ? "bg-yellow-500" : "bg-green-500"
+                                  record.fatigue_level > 7 ? "bg-destructive" :
+                                    record.fatigue_level > 4 ? "bg-warning" : "bg-success"
                                 }`}
                                 style={{ width: `${(record.fatigue_level / 10) * 100}%` }}
                               />

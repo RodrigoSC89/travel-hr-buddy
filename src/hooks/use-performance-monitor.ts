@@ -58,8 +58,8 @@ export const usePerformanceMonitor = (options?: UsePerformanceMonitorOptions) =>
           // LCP - Largest Contentful Paint
           const lcpObserver = new PerformanceObserver((list) => {
             const entries = list.getEntries();
-            // eslint-disable-next-line @typescript-eslint/no-explicit-any -- LargestContentfulPaint entry not in standard lib
-            const lastEntry = entries[entries.length - 1] as any;
+            interface LCPEntry extends PerformanceEntry { renderTime: number; loadTime: number; }
+            const lastEntry = entries[entries.length - 1] as LCPEntry | undefined;
             metrics.lcp = lastEntry?.renderTime || lastEntry?.loadTime || null;
           });
           lcpObserver.observe({ entryTypes: ['largest-contentful-paint'], buffered: true });
@@ -72,9 +72,9 @@ export const usePerformanceMonitor = (options?: UsePerformanceMonitorOptions) =>
           // FID - First Input Delay
           const fidObserver = new PerformanceObserver((list) => {
             const entries = list.getEntries();
-            // eslint-disable-next-line @typescript-eslint/no-explicit-any -- PerformanceEventTiming not in standard lib
-            entries.forEach((entry: any) => {
-              metrics.fid = entry.processingStart - entry.startTime;
+            interface FIDEntry extends PerformanceEntry { processingStart: number; }
+            entries.forEach((entry) => {
+              metrics.fid = (entry as FIDEntry).processingStart - entry.startTime;
             });
           });
           fidObserver.observe({ entryTypes: ['first-input'], buffered: true });
@@ -87,10 +87,11 @@ export const usePerformanceMonitor = (options?: UsePerformanceMonitorOptions) =>
           // CLS - Cumulative Layout Shift
           let clsValue = 0;
           const clsObserver = new PerformanceObserver((list) => {
-            // eslint-disable-next-line @typescript-eslint/no-explicit-any -- LayoutShift entry not in standard lib
-            list.getEntries().forEach((entry: any) => {
-              if (!entry.hadRecentInput) {
-                clsValue += entry.value;
+            interface CLSEntry extends PerformanceEntry { hadRecentInput: boolean; value: number; }
+            list.getEntries().forEach((entry) => {
+              const cls = entry as CLSEntry;
+              if (!cls.hadRecentInput) {
+                clsValue += cls.value;
               }
             });
             metrics.cls = clsValue;
@@ -111,8 +112,8 @@ export const usePerformanceMonitor = (options?: UsePerformanceMonitorOptions) =>
 
       // Memory Usage (Chrome/Edge only)
       if ('memory' in performance) {
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Chrome-only performance.memory API
-        const memory = (performance as any).memory;
+        interface PerformanceMemory { usedJSHeapSize: number; totalJSHeapSize: number; }
+        const memory = (performance as unknown as { memory: PerformanceMemory }).memory;
         metrics.memory = {
           used: memory.usedJSHeapSize,
           total: memory.totalJSHeapSize,
@@ -122,8 +123,7 @@ export const usePerformanceMonitor = (options?: UsePerformanceMonitorOptions) =>
 
       // Store in window for debugging
       if (typeof window !== 'undefined') {
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any -- debug window property
-        (window as any).__NAUTILUS_PERFORMANCE__ = metrics;
+        (window as unknown as Record<string, unknown>).__NAUTILUS_PERFORMANCE__ = metrics;
       }
 
       // Call user callback
@@ -159,9 +159,9 @@ export const usePerformanceMonitor = (options?: UsePerformanceMonitorOptions) =>
  * Get current performance metrics snapshot
  */
 export const getPerformanceSnapshot = (): PerformanceMetrics | null => {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- debug window property
-  if (typeof window !== 'undefined' && (window as any).__NAUTILUS_PERFORMANCE__) {
-    return (window as any).__NAUTILUS_PERFORMANCE__;
+  const win = typeof window !== 'undefined' ? window as unknown as Record<string, unknown> : null;
+  if (win?.__NAUTILUS_PERFORMANCE__) {
+    return win.__NAUTILUS_PERFORMANCE__ as PerformanceMetrics;
   }
   return null;
 };
