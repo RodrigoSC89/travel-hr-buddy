@@ -130,7 +130,8 @@ class ProductionReadinessValidator {
     }
 
     // Verificar uso de memória
-    const memory = (performance as any).memory;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Chrome-only Performance.memory API
+    const memory = (performance as { memory?: { usedJSHeapSize: number } }).memory;
     if (memory) {
       const usedMB = memory.usedJSHeapSize / 1048576;
       this.addResult({
@@ -144,7 +145,7 @@ class ProductionReadinessValidator {
 
     // Verificar recursos carregados
     const resources = performance.getEntriesByType('resource');
-    const totalSize = resources.reduce((acc, r: any) => acc + (r.transferSize || 0), 0);
+    const totalSize = resources.reduce((acc, r) => acc + ((r as PerformanceResourceTiming).transferSize || 0), 0);
     const totalSizeMB = totalSize / 1048576;
     
     this.addResult({
@@ -289,7 +290,8 @@ class ProductionReadinessValidator {
 
   private async validateNetworkResilience(): Promise<void> {
     // Verificar API de conexão
-    const connection = (navigator as any).connection;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Network Information API not in standard TS types
+    const connection = (navigator as unknown as { connection?: { effectiveType?: string; downlink?: number } }).connection;
     
     if (connection) {
       this.addResult({

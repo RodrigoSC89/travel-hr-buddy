@@ -135,12 +135,13 @@ Como posso ajudar?`,
           }
         }
       }
-    } catch (err: any) {
-      if (err.name === "AbortError") return;
+    } catch (err: unknown) {
+      if (err instanceof Error && err.name === "AbortError") return;
+      const errorMessage = err instanceof Error ? err.message : "Erro de conexão";
       setMessages(prev => [...prev, {
         id: `error-${Date.now()}`,
         role: "assistant",
-        content: `⚠️ ${err.message || "Erro de conexão"}. Tente novamente.`,
+        content: `⚠️ ${errorMessage}. Tente novamente.`,
         timestamp: new Date(),
       }]);
     } finally {
@@ -161,7 +162,7 @@ Como posso ajudar?`,
         aria-label="Abrir assistente AI"
       >
         <Brain className="h-6 w-6" />
-        <span className="absolute -top-1 -right-1 h-3 w-3 bg-green-500 rounded-full border-2 border-background animate-pulse" />
+        <span className="absolute -top-1 -right-1 h-3 w-3 bg-success rounded-full border-2 border-background animate-pulse" />
       </motion.button>
     );
   }

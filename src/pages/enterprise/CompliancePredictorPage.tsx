@@ -160,17 +160,17 @@ export default function CompliancePredictorPage() {
 
   const getSeverityColor = (severity: Prediction['severity']) => {
     switch (severity) {
-      case 'high': return 'bg-red-500';
-      case 'medium': return 'bg-yellow-500';
-      case 'low': return 'bg-green-500';
+      case 'high': return 'bg-destructive';
+      case 'medium': return 'bg-warning';
+      case 'low': return 'bg-success';
     }
   };
 
   const getTrendIcon = (trend: Prediction['trend']) => {
     switch (trend) {
-      case 'up': return <TrendingUp className="h-4 w-4 text-red-500" />;
-      case 'down': return <TrendingUp className="h-4 w-4 text-green-500 rotate-180" />;
-      case 'stable': return <Activity className="h-4 w-4 text-yellow-500" />;
+      case 'up': return <TrendingUp className="h-4 w-4 text-destructive" />;
+      case 'down': return <TrendingUp className="h-4 w-4 text-success rotate-180" />;
+      case 'stable': return <Activity className="h-4 w-4 text-warning" />;
     }
   };
 
@@ -191,7 +191,7 @@ export default function CompliancePredictorPage() {
             <div>
               <h1 className="text-3xl font-bold flex items-center gap-2">
                 Compliance Predictor
-                <Badge className="bg-gradient-to-r from-purple-500 to-pink-500">
+                <Badge className="bg-gradient-to-r from-primary to-accent">
                   <Sparkles className="h-3 w-3 mr-1" />
                   Machine Learning
                 </Badge>
@@ -227,11 +227,11 @@ export default function CompliancePredictorPage() {
             <CardContent className="pt-4">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-3xl font-bold text-red-500">{highRiskCount}</p>
+                  <p className="text-3xl font-bold text-destructive">{highRiskCount}</p>
                   <p className="text-xs text-muted-foreground">Alto Risco (&gt;70%)</p>
                 </div>
-                <div className="p-2 rounded-lg bg-red-500/10">
-                  <AlertTriangle className="h-5 w-5 text-red-500" />
+                <div className="p-2 rounded-lg bg-destructive/10">
+                  <AlertTriangle className="h-5 w-5 text-destructive" />
                 </div>
               </div>
             </CardContent>
@@ -258,8 +258,8 @@ export default function CompliancePredictorPage() {
                   <p className="text-3xl font-bold">{avgProbability.toFixed(0)}%</p>
                   <p className="text-xs text-muted-foreground">Prob. Média NC</p>
                 </div>
-                <div className="p-2 rounded-lg bg-amber-500/10">
-                  <Target className="h-5 w-5 text-amber-500" />
+                <div className="p-2 rounded-lg bg-warning/10">
+                  <Target className="h-5 w-5 text-warning" />
                 </div>
               </div>
             </CardContent>
@@ -269,11 +269,11 @@ export default function CompliancePredictorPage() {
             <CardContent className="pt-4">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-3xl font-bold text-green-500">94%</p>
+                  <p className="text-3xl font-bold text-success">94%</p>
                   <p className="text-xs text-muted-foreground">Precisão Modelo</p>
                 </div>
-                <div className="p-2 rounded-lg bg-green-500/10">
-                  <CheckCircle2 className="h-5 w-5 text-green-500" />
+                <div className="p-2 rounded-lg bg-success/10">
+                  <CheckCircle2 className="h-5 w-5 text-success" />
                 </div>
               </div>
             </CardContent>
@@ -311,7 +311,7 @@ export default function CompliancePredictorPage() {
                       >
                         <Card className={cn(
                           "border-2",
-                          prediction.probability >= 70 && "border-red-500/30 bg-red-500/5"
+                          prediction.probability >= 70 && "border-destructive/30 bg-destructive/5"
                         )}>
                           <CardContent className="pt-4">
                             <div className="flex items-start justify-between mb-3">
@@ -328,8 +328,8 @@ export default function CompliancePredictorPage() {
                               <div className="text-right">
                                 <div className={cn(
                                   "text-3xl font-bold",
-                                  prediction.probability >= 70 ? 'text-red-500' :
-                                  prediction.probability >= 50 ? 'text-yellow-500' : 'text-green-500'
+                                  prediction.probability >= 70 ? 'text-destructive' :
+                                  prediction.probability >= 50 ? 'text-warning' : 'text-success'
                                 )}>
                                   {prediction.probability}%
                                 </div>
@@ -365,9 +365,9 @@ export default function CompliancePredictorPage() {
                               value={prediction.probability}
                               className={cn(
                                 "h-2 mb-3",
-                                prediction.probability >= 70 && "[&>div]:bg-red-500",
-                                prediction.probability >= 50 && prediction.probability < 70 && "[&>div]:bg-yellow-500",
-                                prediction.probability < 50 && "[&>div]:bg-green-500"
+                                prediction.probability >= 70 && "[&>div]:bg-destructive",
+                                prediction.probability >= 50 && prediction.probability < 70 && "[&>div]:bg-warning",
+                                prediction.probability < 50 && "[&>div]:bg-success"
                               )}
                             />
 
@@ -401,7 +401,7 @@ export default function CompliancePredictorPage() {
                   {vesselRisks.map((vessel) => (
                     <Card key={vessel.id} className={cn(
                       "border",
-                      vessel.overallRisk >= 60 && "border-red-500/30"
+                      vessel.overallRisk >= 60 && "border-destructive/30"
                     )}>
                       <CardContent className="pt-4">
                         <div className="flex items-center justify-between mb-3">
@@ -414,8 +414,8 @@ export default function CompliancePredictorPage() {
                           <div className="text-right">
                             <div className={cn(
                               "text-2xl font-bold",
-                              vessel.overallRisk >= 60 ? 'text-red-500' :
-                              vessel.overallRisk >= 40 ? 'text-yellow-500' : 'text-green-500'
+                              vessel.overallRisk >= 60 ? 'text-destructive' :
+                              vessel.overallRisk >= 40 ? 'text-warning' : 'text-success'
                             )}>
                               {vessel.overallRisk}%
                             </div>
@@ -426,9 +426,9 @@ export default function CompliancePredictorPage() {
                           value={vessel.overallRisk}
                           className={cn(
                             "h-2 mb-3",
-                            vessel.overallRisk >= 60 && "[&>div]:bg-red-500",
-                            vessel.overallRisk >= 40 && vessel.overallRisk < 60 && "[&>div]:bg-yellow-500",
-                            vessel.overallRisk < 40 && "[&>div]:bg-green-500"
+                            vessel.overallRisk >= 60 && "[&>div]:bg-destructive",
+                            vessel.overallRisk >= 40 && vessel.overallRisk < 60 && "[&>div]:bg-warning",
+                            vessel.overallRisk < 40 && "[&>div]:bg-success"
                           )}
                         />
                         <div className="flex items-center justify-between text-sm">
@@ -476,21 +476,21 @@ export default function CompliancePredictorPage() {
                   </div>
 
                   <div className="p-4 bg-muted/50 rounded-lg">
-                    <div className="p-3 rounded-full bg-green-500/10 w-fit mb-3">
-                      <Target className="h-6 w-6 text-green-500" />
+                    <div className="p-3 rounded-full bg-success/10 w-fit mb-3">
+                      <Target className="h-6 w-6 text-success" />
                     </div>
                     <h3 className="font-medium mb-2">Precisão do Modelo</h3>
                     <p className="text-sm text-muted-foreground mb-3">
                       Taxa de acerto de 94% na predição de não conformidades 
                       com antecedência média de 30 dias.
                     </p>
-                    <div className="text-2xl font-bold text-green-500">94%</div>
+                    <div className="text-2xl font-bold text-success">94%</div>
                     <p className="text-xs text-muted-foreground">precisão comprovada</p>
                   </div>
 
                   <div className="p-4 bg-muted/50 rounded-lg">
-                    <div className="p-3 rounded-full bg-purple-500/10 w-fit mb-3">
-                      <Activity className="h-6 w-6 text-purple-500" />
+                    <div className="p-3 rounded-full bg-accent/10 w-fit mb-3">
+                      <Activity className="h-6 w-6 text-accent" />
                     </div>
                     <h3 className="font-medium mb-2">Aprendizado Contínuo</h3>
                     <p className="text-sm text-muted-foreground mb-3">
