@@ -5,6 +5,33 @@
 
 import { BaseAIPlugin, AIPluginInput, AIPluginOutput, AIPluginMetadata } from "./types";
 
+interface ChecklistItem {
+  id: string;
+  name: string;
+  default_value?: unknown;
+  contextKey?: string;
+  items?: ChecklistItem[];
+}
+
+interface ChecklistTemplate {
+  id: string;
+  items?: ChecklistItem[];
+}
+
+interface HistoricalEntry {
+  itemId?: string;
+  name?: string;
+  value?: unknown;
+}
+
+interface FilledItem {
+  itemId: string;
+  name: string;
+  value: unknown;
+  autoFilled: boolean;
+  source: "context" | "historical" | "default";
+}
+
 export class ChecklistAutoFillPlugin extends BaseAIPlugin {
   metadata: AIPluginMetadata = {
     name: "checklist-auto-fill",
@@ -27,9 +54,9 @@ export class ChecklistAutoFillPlugin extends BaseAIPlugin {
       }
 
       const filledItems = await this.autoFillItems(
-        checklistTemplate,
-        historicalData || [],
-        context || {}
+        checklistTemplate as ChecklistTemplate,
+        (historicalData || []) as HistoricalEntry[],
+        (context || {}) as Record<string, unknown>
       );
 
       return {
@@ -54,11 +81,11 @@ export class ChecklistAutoFillPlugin extends BaseAIPlugin {
   }
 
   private async autoFillItems(
-    template: any,
-    historicalData: any[],
-    context: Record<string, any>
-  ): Promise<any[]> {
-    const filledItems: any[] = [];
+    template: ChecklistTemplate,
+    historicalData: HistoricalEntry[],
+    context: Record<string, unknown>
+  ): Promise<FilledItem[]> {
+    const filledItems: FilledItem[] = [];
 
     for (const item of template.items || []) {
       const historicalValue = this.findHistoricalValue(item, historicalData);
@@ -80,27 +107,24 @@ export class ChecklistAutoFillPlugin extends BaseAIPlugin {
     return filledItems;
   }
 
-  private findHistoricalValue(item: any, historicalData: any[]): any {
-    // Find most common value from historical data
+  private findHistoricalValue(item: ChecklistItem, historicalData: HistoricalEntry[]): unknown {
     const matchingEntries = historicalData.filter(
       entry => entry.itemId === item.id || entry.name === item.name
     );
     
     if (matchingEntries.length === 0) return null;
     
-    // Return most recent value
     return matchingEntries[matchingEntries.length - 1]?.value;
   }
 
-  private extractContextValue(item: any, context: Record<string, any>): any {
-    // Extract value from context based on item mapping
+  private extractContextValue(item: ChecklistItem, context: Record<string, unknown>): unknown {
     if (item.contextKey && context[item.contextKey]) {
       return context[item.contextKey];
     }
     return null;
   }
 
-  private calculateConfidence(filledItems: any[]): number {
+  private calculateConfidence(filledItems: FilledItem[]): number {
     if (filledItems.length === 0) return 0;
     
     const sourceCounts = filledItems.reduce((acc, item) => {
@@ -108,7 +132,6 @@ export class ChecklistAutoFillPlugin extends BaseAIPlugin {
       return acc;
     }, {} as Record<string, number>);
     
-    // Higher confidence for context-based fills
     const score = 
       (sourceCounts.context || 0) * 1.0 +
       (sourceCounts.historical || 0) * 0.7 +
@@ -117,7 +140,7 @@ export class ChecklistAutoFillPlugin extends BaseAIPlugin {
     return Math.min(score / filledItems.length, 1.0);
   }
 
-  private generateSuggestions(filledItems: any[]): string[] {
+  private generateSuggestions(filledItems: FilledItem[]): string[] {
     const suggestions: string[] = [];
     
     const defaultCount = filledItems.filter(i => i.source === "default").length;

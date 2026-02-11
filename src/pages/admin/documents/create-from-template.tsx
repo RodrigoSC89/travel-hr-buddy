@@ -15,6 +15,7 @@ interface Template {
 
 interface CreateFromTemplateProps {
   template: Template;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- document shape from createDocument API
   onSaved?: (doc: any) => void;
 }
 

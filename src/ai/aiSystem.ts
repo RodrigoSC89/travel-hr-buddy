@@ -138,6 +138,7 @@ class AISystem {
     if (!this.isInitialized) return;
 
     try {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any -- dynamic health stats from multiple engines
       const health: any = {
         timestamp: new Date().toISOString(),
       };

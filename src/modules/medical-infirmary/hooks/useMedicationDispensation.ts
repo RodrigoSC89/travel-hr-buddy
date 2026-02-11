@@ -134,7 +134,7 @@ export function useRestockMedication() {
 
       const newQuantity = (currentSupply?.quantity || 0) + quantity;
 
-      const updateData: any = { 
+      const updateData: Record<string, unknown> = { 
         quantity: newQuantity,
         last_restock: new Date().toISOString().split('T')[0]
       };
