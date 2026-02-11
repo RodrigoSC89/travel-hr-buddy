@@ -57,12 +57,25 @@ interface MaintenanceScheduleItem {
   failure_probability: number;
 }
 
+interface SensorReading {
+  sensor_type: string;
+  sensor_value: number;
+  unit: string;
+  recorded_at: string;
+}
+
+interface CrewMember {
+  id: string;
+  name: string;
+  role: string;
+}
+
 interface DigitalTwinState {
   vessel_id: string;
-  vessel_info: any;
+  vessel_info: Record<string, unknown>;
   state_timestamp: string;
   sensors: {
-    latest_readings: any[];
+    latest_readings: SensorReading[];
     health_metrics: {
       overall_score: number;
       sensor_count: number;
@@ -71,10 +84,10 @@ interface DigitalTwinState {
   };
   crew: {
     onboard_count: number;
-    crew_members: any[];
+    crew_members: CrewMember[];
   };
   operations: {
-    current_voyage: any;
+    current_voyage: Record<string, unknown> | null;
     status: string;
   };
   position: { lat: number; lng: number } | null;
@@ -169,25 +182,25 @@ export function DigitalTwinDashboard({ vesselId }: DigitalTwinDashboardProps) {
   });
 
   const getHealthColor = (score: number) => {
-    if (score >= 80) return "text-green-500";
-    if (score >= 60) return "text-yellow-500";
-    if (score >= 40) return "text-orange-500";
-    return "text-red-500";
+    if (score >= 80) return "text-success";
+    if (score >= 60) return "text-warning";
+    if (score >= 40) return "text-accent-foreground";
+    return "text-destructive";
   };
 
   const getHealthBg = (score: number) => {
-    if (score >= 80) return "bg-green-500/20";
-    if (score >= 60) return "bg-yellow-500/20";
-    if (score >= 40) return "bg-orange-500/20";
-    return "bg-red-500/20";
+    if (score >= 80) return "bg-success/20";
+    if (score >= 60) return "bg-warning/20";
+    if (score >= 40) return "bg-accent/20";
+    return "bg-destructive/20";
   };
 
   const getPriorityBadge = (priority: string) => {
     const variants: Record<string, string> = {
-      critical: "bg-red-500 text-white",
-      high: "bg-orange-500 text-white",
-      medium: "bg-yellow-500 text-black",
-      low: "bg-green-500 text-white",
+      critical: "bg-destructive text-destructive-foreground",
+      high: "bg-warning text-warning-foreground",
+      medium: "bg-accent text-accent-foreground",
+      low: "bg-success text-success-foreground",
     };
     return variants[priority] || "bg-muted";
   };
@@ -291,8 +304,8 @@ export function DigitalTwinDashboard({ vesselId }: DigitalTwinDashboardProps) {
                       {twinState?.sensors?.health_metrics?.sensor_count || 0}
                     </p>
                   </div>
-                  <div className="p-3 rounded-full bg-blue-500/20">
-                    <Gauge className="h-6 w-6 text-blue-500" />
+                  <div className="p-3 rounded-full bg-info/20">
+                    <Gauge className="h-6 w-6 text-info" />
                   </div>
                 </div>
                 <p className="text-sm text-muted-foreground mt-2">
@@ -308,8 +321,8 @@ export function DigitalTwinDashboard({ vesselId }: DigitalTwinDashboardProps) {
                     <p className="text-sm text-muted-foreground">Crew Onboard</p>
                     <p className="text-3xl font-bold">{twinState?.crew?.onboard_count || 0}</p>
                   </div>
-                  <div className="p-3 rounded-full bg-purple-500/20">
-                    <CheckCircle className="h-6 w-6 text-purple-500" />
+                  <div className="p-3 rounded-full bg-primary/20">
+                    <CheckCircle className="h-6 w-6 text-primary" />
                   </div>
                 </div>
                 <p className="text-sm text-muted-foreground mt-2">
@@ -327,8 +340,8 @@ export function DigitalTwinDashboard({ vesselId }: DigitalTwinDashboardProps) {
                       {maintenanceData?.maintenance_schedule?.length || 0}
                     </p>
                   </div>
-                  <div className="p-3 rounded-full bg-orange-500/20">
-                    <Wrench className="h-6 w-6 text-orange-500" />
+                  <div className="p-3 rounded-full bg-warning/20">
+                    <Wrench className="h-6 w-6 text-warning" />
                   </div>
                 </div>
                 <p className="text-sm text-muted-foreground mt-2">
@@ -368,9 +381,9 @@ export function DigitalTwinDashboard({ vesselId }: DigitalTwinDashboardProps) {
                         return (
                           <Card key={eq.equipment_id} className={cn(
                             "border-l-4",
-                            eq.health_score >= 80 ? "border-l-green-500" :
-                            eq.health_score >= 60 ? "border-l-yellow-500" :
-                            eq.health_score >= 40 ? "border-l-orange-500" : "border-l-red-500"
+                            eq.health_score >= 80 ? "border-l-success" :
+                            eq.health_score >= 60 ? "border-l-warning" :
+                            eq.health_score >= 40 ? "border-l-accent" : "border-l-destructive"
                           )}>
                             <CardContent className="p-4">
                               <div className="flex items-start justify-between mb-3">
@@ -397,7 +410,7 @@ export function DigitalTwinDashboard({ vesselId }: DigitalTwinDashboardProps) {
                                 
                                 <div className="flex items-center justify-between text-xs">
                                   <span className="text-muted-foreground">Failure Risk</span>
-                                  <span className={eq.failure_probability > 0.3 ? "text-red-500" : "text-muted-foreground"}>
+                                  <span className={eq.failure_probability > 0.3 ? "text-destructive" : "text-muted-foreground"}>
                                     {(eq.failure_probability * 100).toFixed(1)}%
                                   </span>
                                 </div>
@@ -501,13 +514,13 @@ export function DigitalTwinDashboard({ vesselId }: DigitalTwinDashboardProps) {
                       <div className="flex items-center gap-4 p-4 rounded-lg bg-muted/50">
                         <div className={cn(
                           "p-3 rounded-full",
-                          forecastData.overall_risk === "high" ? "bg-red-500/20" :
-                          forecastData.overall_risk === "medium" ? "bg-yellow-500/20" : "bg-green-500/20"
+                          forecastData.overall_risk === "high" ? "bg-destructive/20" :
+                          forecastData.overall_risk === "medium" ? "bg-warning/20" : "bg-success/20"
                         )}>
                           <AlertTriangle className={cn(
                             "h-6 w-6",
-                            forecastData.overall_risk === "high" ? "text-red-500" :
-                            forecastData.overall_risk === "medium" ? "text-yellow-500" : "text-green-500"
+                            forecastData.overall_risk === "high" ? "text-destructive" :
+                            forecastData.overall_risk === "medium" ? "text-warning" : "text-success"
                           )} />
                         </div>
                         <div>
@@ -520,16 +533,19 @@ export function DigitalTwinDashboard({ vesselId }: DigitalTwinDashboardProps) {
 
                       {/* Sensor Forecasts */}
                       <div className="grid gap-3 md:grid-cols-2">
-                        {Object.entries(forecastData.sensor_forecasts || {}).map(([sensor, data]: [string, any]) => {
-                          const TrendIcon = data.trend === "increasing" ? TrendingUp :
-                                           data.trend === "decreasing" ? TrendingDown : Minus;
+                      {Object.entries(forecastData.sensor_forecasts || {}).map(([sensor, rawData]) => {
+                        const data = rawData as Record<string, unknown>;
+                        const trend = String(data.trend || "");
+                        const riskLevel = String(data.risk_level || "low");
+                        const TrendIcon = trend === "increasing" ? TrendingUp :
+                                           trend === "decreasing" ? TrendingDown : Minus;
                           return (
                             <div
                               key={sensor}
                               className={cn(
                                 "p-4 rounded-lg border",
-                                data.risk_level === "critical" ? "border-red-500 bg-red-500/5" :
-                                data.risk_level === "warning" ? "border-yellow-500 bg-yellow-500/5" : ""
+                                riskLevel === "critical" ? "border-destructive bg-destructive/5" :
+                                riskLevel === "warning" ? "border-warning bg-warning/5" : ""
                               )}
                             >
                               <div className="flex items-center justify-between mb-2">
@@ -538,26 +554,26 @@ export function DigitalTwinDashboard({ vesselId }: DigitalTwinDashboardProps) {
                                 </span>
                                 <TrendIcon className={cn(
                                   "h-4 w-4",
-                                  data.trend === "increasing" ? "text-red-500" :
-                                  data.trend === "decreasing" ? "text-green-500" : "text-muted-foreground"
+                                  trend === "increasing" ? "text-destructive" :
+                                  trend === "decreasing" ? "text-success" : "text-muted-foreground"
                                 )} />
                               </div>
                               <div className="flex items-baseline gap-2">
-                                <span className="text-2xl font-bold">{data.current_value}</span>
+                                <span className="text-2xl font-bold">{String(data.current_value ?? "")}</span>
                                 <span className="text-muted-foreground">→</span>
                                 <span className={cn(
                                   "text-lg",
-                                  data.risk_level !== "low" ? "text-red-500" : "text-muted-foreground"
+                                  riskLevel !== "low" ? "text-destructive" : "text-muted-foreground"
                                 )}>
-                                  {data.forecasted_value}
+                                  {String(data.forecasted_value ?? "")}
                                 </span>
-                                {data.threshold?.unit && (
-                                  <span className="text-sm text-muted-foreground">{data.threshold.unit}</span>
+                                {String((data as Record<string, unknown>).threshold ?? "") !== "" && typeof (data as Record<string, unknown>).threshold === "object" && (
+                                  <span className="text-sm text-muted-foreground">{String(((data as Record<string, unknown>).threshold as Record<string, unknown>)?.unit ?? "")}</span>
                                 )}
                               </div>
-                              {data.risk_level !== "low" && (
+                              {riskLevel !== "low" && (
                                 <Badge variant="destructive" className="mt-2 text-xs">
-                                  {data.risk_level.toUpperCase()} RISK
+                                  {riskLevel.toUpperCase()} RISK
                                 </Badge>
                               )}
                             </div>
@@ -587,7 +603,7 @@ export function DigitalTwinDashboard({ vesselId }: DigitalTwinDashboardProps) {
                 <CardContent>
                   <ScrollArea className="h-[400px]">
                     <div className="space-y-2">
-                      {(twinState?.sensors?.latest_readings || []).map((reading: any, idx: number) => {
+                      {(twinState?.sensors?.latest_readings || []).map((reading: SensorReading, idx: number) => {
                         const Icon = getSensorIcon(reading.sensor_type);
                         return (
                           <div

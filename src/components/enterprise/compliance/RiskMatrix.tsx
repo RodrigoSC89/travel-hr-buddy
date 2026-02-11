@@ -307,19 +307,19 @@ export function RiskMatrix() {
             {/* Legend */}
             <div className="flex justify-center gap-4 mt-4 pt-4 border-t">
               <div className="flex items-center gap-2">
-                <div className="w-4 h-4 rounded bg-green-500/30" />
+                <div className="w-4 h-4 rounded bg-success/30" />
                 <span className="text-xs">Baixo (1-4)</span>
               </div>
               <div className="flex items-center gap-2">
-                <div className="w-4 h-4 rounded bg-yellow-500/30" />
+                <div className="w-4 h-4 rounded bg-accent/30" />
                 <span className="text-xs">Médio (5-9)</span>
               </div>
               <div className="flex items-center gap-2">
-                <div className="w-4 h-4 rounded bg-orange-500/30" />
+                <div className="w-4 h-4 rounded bg-warning/30" />
                 <span className="text-xs">Alto (10-14)</span>
               </div>
               <div className="flex items-center gap-2">
-                <div className="w-4 h-4 rounded bg-red-500/30" />
+                <div className="w-4 h-4 rounded bg-destructive/30" />
                 <span className="text-xs">Crítico (15-25)</span>
               </div>
             </div>

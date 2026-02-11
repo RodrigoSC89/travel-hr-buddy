@@ -45,7 +45,7 @@ export interface MissionEvent {
   type: "start" | "waypoint_reached" | "waypoint_completed" | "pause" | "resume" | "abort" | "complete";
   timestamp: string;
   message: string;
-  data?: any;
+  data?: Record<string, unknown>;
 }
 
 class MissionUploadSub {
@@ -96,6 +96,7 @@ class MissionUploadSub {
   /**
    * Validate mission structure
    */
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- dynamic mission JSON input
   private validateMission(mission: any): { valid: boolean; error?: string } {
     if (!mission.id || !mission.name) {
       return { valid: false, error: "Mission must have id and name" };

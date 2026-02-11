@@ -57,7 +57,7 @@ interface ComplianceNotification {
   is_read: boolean;
   created_at: string;
   action_url?: string;
-  metadata?: Record<string, any>;
+  metadata?: Record<string, unknown>;
 }
 
 // Check for missing OAuth keys
@@ -112,16 +112,17 @@ export const SmartNotifications = () => {
 
         if (error) throw error;
 
-        const mapped: ComplianceNotification[] = (data || []).map((n: any) => ({
-          id: n.id,
-          type: n.type,
-          priority: n.priority || "medium",
-          title: n.title,
-          message: n.message,
-          is_read: n.is_read,
-          created_at: n.created_at,
-          action_url: n.action_url,
-          metadata: n.metadata,
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any -- intelligent_notifications not in generated types
+        const mapped: ComplianceNotification[] = (data || []).map((n: Record<string, unknown>) => ({
+          id: String(n.id),
+          type: String(n.type),
+          priority: (String(n.priority || "medium")) as ComplianceNotification["priority"],
+          title: String(n.title),
+          message: String(n.message),
+          is_read: Boolean(n.is_read),
+          created_at: String(n.created_at),
+          action_url: n.action_url ? String(n.action_url) : undefined,
+          metadata: n.metadata as Record<string, unknown> | undefined,
         }));
 
         setNotifications(mapped);
@@ -194,7 +195,8 @@ export const SmartNotifications = () => {
     try {
       const { error } = await supabase.from('ai_configurations').upsert({
         config_key: 'notification_preferences',
-        config_value: preferences as any,
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Supabase upsert requires Json-compatible value
+      config_value: preferences as any,
         updated_at: new Date().toISOString()
       }, { onConflict: 'config_key' });
       if (error) throw error;
@@ -292,22 +294,22 @@ export const SmartNotifications = () => {
   const getPriorityIcon = (priority: string) => {
     switch (priority) {
       case "critical":
-        return <AlertCircle className="h-4 w-4 text-red-500" />;
+        return <AlertCircle className="h-4 w-4 text-destructive" />;
       case "high":
-        return <AlertTriangle className="h-4 w-4 text-orange-500" />;
+        return <AlertTriangle className="h-4 w-4 text-warning" />;
       case "medium":
-        return <Info className="h-4 w-4 text-yellow-500" />;
+        return <Info className="h-4 w-4 text-accent-foreground" />;
       default:
-        return <Bell className="h-4 w-4 text-blue-500" />;
+        return <Bell className="h-4 w-4 text-info" />;
     }
   };
 
   const getPriorityBadge = (priority: string) => {
     const colors: Record<string, string> = {
-      critical: "bg-red-500/10 text-red-500 border-red-500/30",
-      high: "bg-orange-500/10 text-orange-500 border-orange-500/30",
-      medium: "bg-yellow-500/10 text-yellow-500 border-yellow-500/30",
-      low: "bg-blue-500/10 text-blue-500 border-blue-500/30",
+      critical: "bg-destructive/10 text-destructive border-destructive/30",
+      high: "bg-warning/10 text-warning border-warning/30",
+      medium: "bg-accent/10 text-accent-foreground border-accent/30",
+      low: "bg-info/10 text-info border-info/30",
     };
     const labels: Record<string, string> = {
       critical: "Crítico",
@@ -337,20 +339,20 @@ export const SmartNotifications = () => {
     <div className="space-y-6">
       {/* Missing Keys Warning */}
       {hasMissingKeys && (
-        <Alert variant="destructive" className="bg-yellow-500/10 border-yellow-500/30">
-          <AlertTriangle className="h-4 w-4 text-yellow-500" />
-          <AlertTitle className="text-yellow-500">Chaves OAuth Pendentes</AlertTitle>
-          <AlertDescription className="text-yellow-500/80">
+      <Alert variant="destructive" className="bg-warning/10 border-warning/30">
+          <AlertTriangle className="h-4 w-4 text-warning" />
+          <AlertTitle className="text-warning">Chaves OAuth Pendentes</AlertTitle>
+          <AlertDescription className="text-warning/80">
             <p className="mb-2">
               Para ativar a integração completa com Google Calendar e Microsoft Outlook,
               configure as seguintes variáveis de ambiente:
             </p>
             <ul className="list-disc list-inside space-y-1 text-sm">
               {MISSING_KEYS.VITE_GOOGLE_CLIENT_ID && (
-                <li><code className="bg-yellow-500/20 px-1 rounded">VITE_GOOGLE_CLIENT_ID</code> - Google Cloud Console</li>
+                <li><code className="bg-warning/20 px-1 rounded">VITE_GOOGLE_CLIENT_ID</code> - Google Cloud Console</li>
               )}
               {MISSING_KEYS.VITE_MICROSOFT_CLIENT_ID && (
-                <li><code className="bg-yellow-500/20 px-1 rounded">VITE_MICROSOFT_CLIENT_ID</code> - Azure Portal</li>
+                <li><code className="bg-warning/20 px-1 rounded">VITE_MICROSOFT_CLIENT_ID</code> - Azure Portal</li>
               )}
             </ul>
           </AlertDescription>
@@ -390,43 +392,43 @@ export const SmartNotifications = () => {
 
       {/* Stats */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-        <Card className="bg-gradient-to-br from-blue-500/10 to-blue-600/5 border-blue-500/20">
+        <Card className="bg-gradient-to-br from-info/10 to-info/5 border-info/20">
           <CardContent className="pt-4">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-muted-foreground">Total</p>
                 <p className="text-2xl font-bold">{notifications.length}</p>
               </div>
-              <Bell className="h-8 w-8 text-blue-500" />
+              <Bell className="h-8 w-8 text-info" />
             </div>
           </CardContent>
         </Card>
 
-        <Card className="bg-gradient-to-br from-yellow-500/10 to-yellow-600/5 border-yellow-500/20">
+        <Card className="bg-gradient-to-br from-warning/10 to-warning/5 border-warning/20">
           <CardContent className="pt-4">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-muted-foreground">Não Lidas</p>
                 <p className="text-2xl font-bold">{unreadCount}</p>
               </div>
-              <BellRing className="h-8 w-8 text-yellow-500" />
+              <BellRing className="h-8 w-8 text-warning" />
             </div>
           </CardContent>
         </Card>
 
-        <Card className="bg-gradient-to-br from-red-500/10 to-red-600/5 border-red-500/20">
+        <Card className="bg-gradient-to-br from-destructive/10 to-destructive/5 border-destructive/20">
           <CardContent className="pt-4">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-muted-foreground">Críticas</p>
                 <p className="text-2xl font-bold">{criticalCount}</p>
               </div>
-              <AlertCircle className="h-8 w-8 text-red-500" />
+              <AlertCircle className="h-8 w-8 text-destructive" />
             </div>
           </CardContent>
         </Card>
 
-        <Card className="bg-gradient-to-br from-green-500/10 to-green-600/5 border-green-500/20">
+        <Card className="bg-gradient-to-br from-success/10 to-success/5 border-success/20">
           <CardContent className="pt-4">
             <div className="flex items-center justify-between">
               <div>
@@ -435,7 +437,7 @@ export const SmartNotifications = () => {
                   {pushPermission === "granted" ? "Ativo" : "Inativo"}
                 </p>
               </div>
-              <Smartphone className="h-8 w-8 text-green-500" />
+              <Smartphone className="h-8 w-8 text-success" />
             </div>
           </CardContent>
         </Card>
