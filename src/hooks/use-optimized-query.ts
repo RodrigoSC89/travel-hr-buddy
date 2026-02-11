@@ -59,46 +59,36 @@ export function useOptimizedQuery<T>({
   const { quality, online } = useNetworkStatus();
   const settings = useAdaptiveSettings();
   
-  // Calculate adaptive page size
   const adaptivePageSize = pageSize ?? getAdaptivePageSizeFromQuality(quality);
   
-  // Calculate adaptive stale time based on network
   const adaptiveStaleTime = staleTime ?? (
-    quality === 'slow' ? 10 * 60 * 1000 : // 10 min for slow
-    quality === 'medium' ? 5 * 60 * 1000 :  // 5 min for medium
-    2 * 60 * 1000                          // 2 min for fast
+    quality === 'slow' ? 10 * 60 * 1000 :
+    quality === 'medium' ? 5 * 60 * 1000 :
+    2 * 60 * 1000
   );
   
   const fetchData = useCallback(async (): Promise<T[]> => {
     const cacheKey = queryKey.join(':');
     
-    // PATCH v23: Removido check !online - sempre tenta buscar primeiro
-    // Se falhar, tenta cache como fallback
-    
-    // Deduplicated request
     return deduplicatedRequest(cacheKey, async () => {
-      let query = supabase.from(tableName as any).select(select);
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any -- generic table name requires dynamic typing
+      let query = (supabase.from as Function)(tableName).select(select);
       
-      // Apply filters
       Object.entries(filters).forEach(([key, value]) => {
         if (value !== undefined && value !== null) {
-          query = query.eq(key, value as any);
+          query = query.eq(key, value);
         }
       });
       
-      // Apply ordering
       if (orderBy) {
         query = query.order(orderBy.column, { ascending: orderBy.ascending ?? true });
       }
       
-      // Apply pagination
       query = query.limit(adaptivePageSize);
       
       const { data, error } = await query;
-      
       if (error) throw error;
       
-      // Compress and cache for offline
       const processedData = (data || []) as T[];
       
       if (offlineCache && processedData.length > 0) {
@@ -136,28 +126,26 @@ export function useOptimizedMutation<T extends Record<string, unknown>, V = T>({
   const queryClient = useQueryClient();
 
   const mutationFn = useCallback(async (variables: V): Promise<T | null> => {
-    // PATCH v23: Sempre tentar mutação primeiro, enfileirar apenas se falhar com erro de rede
-    // Removido check !online que causava falsos positivos no iOS PWA
-
-    // Online mutation
-    const table = supabase.from(tableName as any);
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any -- generic table name requires dynamic typing
+    const table = (supabase.from as Function)(tableName);
     
     try {
       switch (operation) {
         case 'insert': {
-          const { data, error } = await table.insert(variables as any).select().single();
+          const { data, error } = await table.insert(variables).select().single();
           if (error) throw error;
           return data as unknown as T;
         }
         case 'update': {
-          const { id, ...updateData } = variables as any;
+          const vars = variables as Record<string, unknown>;
+          const { id, ...updateData } = vars;
           const { data, error } = await table.update(updateData).eq('id', id).select().single();
           if (error) throw error;
           return data as unknown as T;
         }
         case 'delete': {
-          const deleteId = (variables as any).id;
-          const { error } = await table.delete().eq('id', deleteId);
+          const deleteVars = variables as Record<string, unknown>;
+          const { error } = await table.delete().eq('id', deleteVars.id);
           if (error) throw error;
           return null;
         }
@@ -172,7 +160,6 @@ export function useOptimizedMutation<T extends Record<string, unknown>, V = T>({
   return useMutation({
     mutationFn,
     onSuccess: (data) => {
-      // Invalidate related queries
       queryClient.invalidateQueries({ queryKey: [tableName] });
       onSuccess?.(data as T);
     },
@@ -196,14 +183,14 @@ export function useInfiniteOptimizedQuery<T>({
   const pageSize = getAdaptivePageSizeFromQuality(quality);
 
   const fetchPage = useCallback(async ({ pageParam = 0 }): Promise<{ data: T[]; nextPage: number | null }> => {
-    let query = supabase
-      .from(tableName as any)
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any -- generic table name requires dynamic typing
+    let query = (supabase.from as Function)(tableName)
       .select(select)
       .range(pageParam * pageSize, (pageParam + 1) * pageSize - 1);
 
     Object.entries(filters).forEach(([key, value]) => {
       if (value !== undefined && value !== null) {
-        query = query.eq(key, value as any);
+        query = query.eq(key, value);
       }
     });
 

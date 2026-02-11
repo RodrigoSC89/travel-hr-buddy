@@ -26,6 +26,18 @@ interface MemorySnapshot {
   growth: number;
 }
 
+/** Non-standard Chrome performance.memory */
+interface PerformanceMemory {
+  usedJSHeapSize: number;
+  totalJSHeapSize: number;
+  jsHeapSizeLimit: number;
+}
+
+function getPerformanceMemory(): PerformanceMemory | undefined {
+  const perf = performance as unknown as Record<string, unknown>;
+  return perf.memory as PerformanceMemory | undefined;
+}
+
 class MemoryLeakDetector {
   private snapshots: MemorySnapshot[] = [];
   private intervalId: number | null = null;
@@ -62,12 +74,12 @@ class MemoryLeakDetector {
    * Take a memory snapshot
    */
   private takeSnapshot(): void {
-    const perf = performance as any;
+    const memory = getPerformanceMemory();
     
     const snapshot: MemorySnapshot = {
       timestamp: Date.now(),
-      heapUsed: perf.memory?.usedJSHeapSize || 0,
-      heapTotal: perf.memory?.totalJSHeapSize || 0,
+      heapUsed: memory?.usedJSHeapSize || 0,
+      heapTotal: memory?.totalJSHeapSize || 0,
       external: 0,
       growth: 0
     };
@@ -181,8 +193,9 @@ class MemoryLeakDetector {
    * Force garbage collection (if available in dev tools)
    */
   requestGC(): void {
-    if ((window as any).gc) {
-      (window as any).gc();
+    const win = window as unknown as Record<string, unknown>;
+    if (typeof win.gc === 'function') {
+      (win.gc as () => void)();
       logger.info('[MemoryLeakDetector] GC requested');
     }
   }
@@ -200,6 +213,7 @@ class MemoryLeakDetector {
 /**
  * Throttle function with memory optimization
  */
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- generic function constraint requires any
 export function throttle<T extends (...args: any[]) => any>(
   fn: T,
   delay: number
@@ -226,6 +240,7 @@ export function throttle<T extends (...args: any[]) => any>(
 /**
  * Debounce function with cleanup
  */
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- generic function constraint requires any
 export function debounce<T extends (...args: any[]) => any>(
   fn: T,
   delay: number

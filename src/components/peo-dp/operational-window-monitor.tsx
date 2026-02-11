@@ -7,29 +7,9 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { toast } from "sonner";
 import {
-  Cloud,
-  Wind,
-  Waves,
-  Navigation,
-  AlertTriangle,
-  CheckCircle,
-  Clock,
-  TrendingUp,
-  TrendingDown,
-  Activity,
-  Thermometer,
-  Eye,
-  Ship,
-  Target,
-  Bell,
-  FileText,
-  RefreshCw,
-  Calendar,
-  MapPin,
-  Gauge,
-  ArrowUp,
-  ArrowDown,
-  Minus
+  Cloud, Wind, Waves, Navigation, AlertTriangle, CheckCircle, Clock,
+  TrendingUp, TrendingDown, Activity, Thermometer, Eye, Ship, Target,
+  Bell, FileText, RefreshCw, Calendar, MapPin, Gauge, ArrowUp, ArrowDown, Minus
 } from "lucide-react";
 
 interface EnvironmentalCondition {
@@ -83,6 +63,14 @@ const fallbackASOGProfiles: ASOGProfile[] = [
   { id: "ASOG-003", name: "SIMOPS", operationType: "Simultaneous Operations", limits: { windSpeed: { green: 18, yellow: 22, red: 28 }, waveHeight: { green: 1.8, yellow: 2.2, red: 2.8 }, current: { green: 1.2, yellow: 1.5, red: 2.0 }, visibility: { green: 5, yellow: 3, red: 2 } } },
 ];
 
+type StatusColor = "green" | "yellow" | "red";
+
+const STATUS_TOKEN_MAP: Record<StatusColor, { bg: string; bgLight: string; text: string; border: string }> = {
+  green: { bg: "bg-success", bgLight: "bg-success/20", text: "text-success", border: "border-l-success" },
+  yellow: { bg: "bg-warning", bgLight: "bg-warning/20", text: "text-warning", border: "border-l-warning" },
+  red: { bg: "bg-destructive", bgLight: "bg-destructive/20", text: "text-destructive", border: "border-l-destructive" },
+};
+
 export const OperationalWindowMonitor: React.FC = () => {
   const [conditions, setConditions] = useState<EnvironmentalCondition[]>(fallbackConditions);
   const [alerts, setAlerts] = useState<OperationalAlert[]>(fallbackAlerts);
@@ -102,7 +90,7 @@ export const OperationalWindowMonitor: React.FC = () => {
     return () => clearInterval(interval);
   }, []);
 
-  const getStatusColor = (value: number, limits: { green: number; yellow: number; red: number }, isInverse = false) => {
+  const getStatusColor = (value: number, limits: { green: number; yellow: number; red: number }, isInverse = false): StatusColor => {
     if (isInverse) {
       if (value >= limits.green) return "green";
       if (value >= limits.yellow) return "yellow";
@@ -113,7 +101,7 @@ export const OperationalWindowMonitor: React.FC = () => {
     return "red";
   };
 
-  const getConditionStatus = (condition: EnvironmentalCondition) => {
+  const getConditionStatus = (condition: EnvironmentalCondition): StatusColor => {
     const isInverse = condition.parameter === "Visibilidade";
     return getStatusColor(condition.value, condition.asogLimit, isInverse);
   };
@@ -137,8 +125,8 @@ export const OperationalWindowMonitor: React.FC = () => {
 
   const getTrendIcon = (trend: string) => {
     switch (trend) {
-      case "increasing": return <ArrowUp className="h-4 w-4 text-red-500" />;
-      case "decreasing": return <ArrowDown className="h-4 w-4 text-green-500" />;
+      case "increasing": return <ArrowUp className="h-4 w-4 text-destructive" />;
+      case "decreasing": return <ArrowDown className="h-4 w-4 text-success" />;
       default: return <Minus className="h-4 w-4 text-muted-foreground" />;
     }
   };
@@ -146,13 +134,15 @@ export const OperationalWindowMonitor: React.FC = () => {
   const overallStatus = getOverallStatus();
   const unacknowledgedAlerts = alerts.filter(a => !a.acknowledged);
 
+  const overallTokens = overallStatus === "critical" ? STATUS_TOKEN_MAP.red : overallStatus === "warning" ? STATUS_TOKEN_MAP.yellow : STATUS_TOKEN_MAP.green;
+
   return (
     <div className="space-y-6">
       {/* Header */}
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-3">
-          <div className={`p-3 rounded-xl ${overallStatus === "critical" ? "bg-red-500/20" : overallStatus === "warning" ? "bg-yellow-500/20" : "bg-green-500/20"}`}>
-            <Cloud className={`h-8 w-8 ${overallStatus === "critical" ? "text-red-500" : overallStatus === "warning" ? "text-yellow-500" : "text-green-500"}`} />
+          <div className={`p-3 rounded-xl ${overallTokens.bgLight}`}>
+            <Cloud className={`h-8 w-8 ${overallTokens.text}`} />
           </div>
           <div>
             <h2 className="text-2xl font-bold text-foreground">Janela Operacional Inteligente</h2>
@@ -177,14 +167,14 @@ export const OperationalWindowMonitor: React.FC = () => {
       </div>
 
       {/* Overall Status Card */}
-      <Card className={`border-2 ${overallStatus === "critical" ? "border-red-500 bg-red-500/5" : overallStatus === "warning" ? "border-yellow-500 bg-yellow-500/5" : "border-green-500 bg-green-500/5"}`}>
+      <Card className={`border-2 ${overallTokens.border.replace('border-l-', 'border-')} ${overallTokens.bgLight.replace('/20', '/5')}`}>
         <CardContent className="pt-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-4">
               {overallStatus === "normal" ? (
-                <CheckCircle className="h-12 w-12 text-green-500" />
+                <CheckCircle className="h-12 w-12 text-success" />
               ) : (
-                <AlertTriangle className={`h-12 w-12 ${overallStatus === "critical" ? "text-red-500" : "text-yellow-500"}`} />
+                <AlertTriangle className={`h-12 w-12 ${overallTokens.text}`} />
               )}
               <div>
                 <h3 className="text-xl font-bold">
@@ -224,19 +214,20 @@ export const OperationalWindowMonitor: React.FC = () => {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             {conditions.map((condition, index) => {
               const status = getConditionStatus(condition);
+              const tokens = STATUS_TOKEN_MAP[status];
               const isInverse = condition.parameter === "Visibilidade";
               const percentage = isInverse
                 ? Math.min(100, (condition.value / condition.asogLimit.green) * 100)
                 : Math.min(100, (condition.value / condition.asogLimit.red) * 100);
 
               return (
-                <Card key={index} className={`border-l-4 ${status === "green" ? "border-l-green-500" : status === "yellow" ? "border-l-yellow-500" : "border-l-red-500"}`}>
+                <Card key={index} className={`border-l-4 ${tokens.border}`}>
                   <CardHeader className="pb-2">
                     <div className="flex items-center justify-between">
                       <CardTitle className="text-sm font-medium">{condition.parameter}</CardTitle>
                       <div className="flex items-center gap-1">
                         {getTrendIcon(condition.trend)}
-                        <Badge variant={status === "green" ? "default" : status === "yellow" ? "secondary" : "destructive"} className={status === "green" ? "bg-green-500" : status === "yellow" ? "bg-yellow-500 text-black" : ""}>
+                        <Badge variant={status === "green" ? "default" : status === "yellow" ? "secondary" : "destructive"} className={status === "green" ? "bg-success" : status === "yellow" ? "bg-warning text-warning-foreground" : ""}>
                           {status === "green" ? "OK" : status === "yellow" ? "Atenção" : "Crítico"}
                         </Badge>
                       </div>
@@ -258,9 +249,9 @@ export const OperationalWindowMonitor: React.FC = () => {
                         </div>
                         <div className="relative h-2 bg-muted rounded-full overflow-hidden">
                           <div className="absolute inset-0 flex">
-                            <div className="bg-green-500 h-full" style={{ width: `${(condition.asogLimit.green / condition.asogLimit.red) * 100}%` }} />
-                            <div className="bg-yellow-500 h-full" style={{ width: `${((condition.asogLimit.yellow - condition.asogLimit.green) / condition.asogLimit.red) * 100}%` }} />
-                            <div className="bg-red-500 h-full flex-1" />
+                            <div className="bg-success h-full" style={{ width: `${(condition.asogLimit.green / condition.asogLimit.red) * 100}%` }} />
+                            <div className="bg-warning h-full" style={{ width: `${((condition.asogLimit.yellow - condition.asogLimit.green) / condition.asogLimit.red) * 100}%` }} />
+                            <div className="bg-destructive h-full flex-1" />
                           </div>
                           <div
                             className="absolute top-0 w-1 h-full bg-foreground"
@@ -296,10 +287,11 @@ export const OperationalWindowMonitor: React.FC = () => {
                     <div className="flex items-center gap-2">
                       {condition.forecast.map((value, i) => {
                         const isInverse = condition.parameter === "Visibilidade";
-                        const status = getStatusColor(value, condition.asogLimit, isInverse);
+                        const fStatus = getStatusColor(value, condition.asogLimit, isInverse);
+                        const fTokens = STATUS_TOKEN_MAP[fStatus];
                         return (
                           <div key={i} className="flex-1 text-center">
-                            <div className={`h-16 rounded flex items-end justify-center pb-1 ${status === "green" ? "bg-green-500/20" : status === "yellow" ? "bg-yellow-500/20" : "bg-red-500/20"}`}>
+                            <div className={`h-16 rounded flex items-end justify-center pb-1 ${fTokens.bgLight}`}>
                               <span className="text-xs font-medium">{value.toFixed(1)}</span>
                             </div>
                             <span className="text-xs text-muted-foreground">+{(i + 1) * 4}h</span>
@@ -313,12 +305,12 @@ export const OperationalWindowMonitor: React.FC = () => {
             </CardContent>
           </Card>
 
-          <Card className="border-yellow-500/50 bg-yellow-500/5">
+          <Card className="border-warning/50 bg-warning/5">
             <CardContent className="pt-4">
               <div className="flex items-start gap-3">
-                <AlertTriangle className="h-6 w-6 text-yellow-500 mt-1" />
+                <AlertTriangle className="h-6 w-6 text-warning mt-1" />
                 <div>
-                  <p className="font-medium text-yellow-600">Previsão de Janela Operacional Restrita</p>
+                  <p className="font-medium text-warning">Previsão de Janela Operacional Restrita</p>
                   <p className="text-sm text-muted-foreground mt-1">
                     Com base nas previsões, recomenda-se concluir operações críticas nas próximas 8 horas.
                     Vento previsto acima de 22kn a partir de T+16h pode impactar operações ROV.
@@ -332,43 +324,53 @@ export const OperationalWindowMonitor: React.FC = () => {
         <TabsContent value="alerts" className="space-y-4">
           <ScrollArea className="h-[400px]">
             <div className="space-y-3">
-              {alerts.map((alert) => (
-                <Card key={alert.id} className={`border-l-4 ${alert.type === "critical" ? "border-l-red-500 bg-red-500/5" : alert.type === "warning" ? "border-l-yellow-500 bg-yellow-500/5" : "border-l-blue-500 bg-blue-500/5"}`}>
-                  <CardContent className="pt-4">
-                    <div className="flex items-start justify-between">
-                      <div className="flex items-start gap-3">
-                        {alert.type === "critical" ? (
-                          <AlertTriangle className="h-5 w-5 text-red-500 mt-1" />
-                        ) : alert.type === "warning" ? (
-                          <AlertTriangle className="h-5 w-5 text-yellow-500 mt-1" />
-                        ) : (
-                          <Activity className="h-5 w-5 text-blue-500 mt-1" />
-                        )}
-                        <div className="space-y-1">
-                          <div className="flex items-center gap-2">
-                            <Badge variant={alert.type === "critical" ? "destructive" : alert.type === "warning" ? "secondary" : "default"}>
-                              {alert.parameter}
-                            </Badge>
-                            <span className="text-xs text-muted-foreground">
-                              {new Date(alert.timestamp).toLocaleString("pt-BR")}
-                            </span>
-                            {alert.acknowledged && <Badge variant="outline" className="text-green-500 border-green-500">Reconhecido</Badge>}
+              {alerts.map((alert) => {
+                const alertTokens = alert.type === "critical" ? STATUS_TOKEN_MAP.red : alert.type === "warning" ? STATUS_TOKEN_MAP.yellow : { bg: "bg-info", bgLight: "bg-info/5", text: "text-info", border: "border-l-info" };
+                return (
+                  <Card key={alert.id} className={`border-l-4 ${alertTokens.border} ${alertTokens.bgLight}`}>
+                    <CardContent className="pt-4">
+                      <div className="flex items-start justify-between">
+                        <div className="flex items-start gap-3">
+                          {alert.type === "critical" ? (
+                            <AlertTriangle className="h-5 w-5 text-destructive mt-1" />
+                          ) : alert.type === "warning" ? (
+                            <AlertTriangle className="h-5 w-5 text-warning mt-1" />
+                          ) : (
+                            <Activity className="h-5 w-5 text-info mt-1" />
+                          )}
+                          <div className="space-y-1">
+                            <div className="flex items-center gap-2">
+                              <Badge variant={alert.type === "critical" ? "destructive" : alert.type === "warning" ? "secondary" : "default"}>
+                                {alert.parameter}
+                              </Badge>
+                              <span className="text-xs text-muted-foreground">
+                                {new Date(alert.timestamp).toLocaleString("pt-BR")}
+                              </span>
+                            </div>
+                            <p className="text-sm">{alert.message}</p>
+                            <p className="text-xs text-muted-foreground">💡 {alert.suggestedAction}</p>
                           </div>
-                          <p className="font-medium">{alert.message}</p>
-                          <p className="text-sm text-muted-foreground">
-                            <strong>Ação sugerida:</strong> {alert.suggestedAction}
-                          </p>
                         </div>
+                        {!alert.acknowledged && (
+                          <Button 
+                            size="sm" 
+                            variant="outline"
+                            onClick={() => handleAcknowledgeAlert(alert.id)}
+                          >
+                            Reconhecer
+                          </Button>
+                        )}
+                        {alert.acknowledged && (
+                          <Badge variant="outline" className="text-success">
+                            <CheckCircle className="h-3 w-3 mr-1" />
+                            Reconhecido
+                          </Badge>
+                        )}
                       </div>
-                      {!alert.acknowledged && (
-                        <Button size="sm" onClick={() => handleAcknowledgeAlert(alert.id)}>
-                          <CheckCircle className="w-4 h-4 mr-1" />Reconhecer
-                        </Button>
-                      )}
-                    </div>
-                  </CardContent>
-                </Card>
-              ))}
+                    </CardContent>
+                  </Card>
+                );
+              })}
             </div>
           </ScrollArea>
         </TabsContent>
@@ -376,29 +378,36 @@ export const OperationalWindowMonitor: React.FC = () => {
         <TabsContent value="history" className="space-y-4">
           <Card>
             <CardHeader>
-              <CardTitle>Histórico de Violações ASOG</CardTitle>
-              <CardDescription>Últimos 30 dias</CardDescription>
+              <CardTitle>Histórico Operacional</CardTitle>
+              <CardDescription>Últimos 7 dias de operações e condições</CardDescription>
             </CardHeader>
             <CardContent>
-              <div className="space-y-3">
-                <div className="p-3 rounded-lg border">
-                  <div className="flex items-center justify-between">
-                    <div>
-                      <p className="font-medium">02/12/2024 - Corrente acima do limite</p>
-                      <p className="text-sm text-muted-foreground">1.6 kn (limite: 1.3 kn) - Duração: 45 min</p>
+              <div className="space-y-4">
+                {[
+                  { date: "Hoje", status: "warning" as StatusColor, ops: 3, alerts: 2, maxWind: 22, maxWave: 2.1 },
+                  { date: "Ontem", status: "green" as StatusColor, ops: 5, alerts: 0, maxWind: 15, maxWave: 1.2 },
+                  { date: "2 dias atrás", status: "green" as StatusColor, ops: 4, alerts: 1, maxWind: 18, maxWave: 1.5 },
+                  { date: "3 dias atrás", status: "red" as StatusColor, ops: 1, alerts: 5, maxWind: 35, maxWave: 3.2 },
+                  { date: "4 dias atrás", status: "green" as StatusColor, ops: 6, alerts: 0, maxWind: 12, maxWave: 0.8 },
+                ].map((day, i) => {
+                  const dayTokens = STATUS_TOKEN_MAP[day.status];
+                  return (
+                    <div key={i} className={`p-3 rounded-lg border-l-4 ${dayTokens.border} bg-muted/30`}>
+                      <div className="flex items-center justify-between">
+                        <div className="flex items-center gap-3">
+                          <div className={`w-3 h-3 rounded-full ${dayTokens.bg}`} />
+                          <span className="font-medium">{day.date}</span>
+                        </div>
+                        <div className="flex items-center gap-6 text-sm text-muted-foreground">
+                          <span>{day.ops} operações</span>
+                          <span>{day.alerts} alertas</span>
+                          <span>Vento máx: {day.maxWind}kn</span>
+                          <span>Onda máx: {day.maxWave}m</span>
+                        </div>
+                      </div>
                     </div>
-                    <Badge variant="outline">Resolvido</Badge>
-                  </div>
-                </div>
-                <div className="p-3 rounded-lg border">
-                  <div className="flex items-center justify-between">
-                    <div>
-                      <p className="font-medium">28/11/2024 - Vento acima do limite amarelo</p>
-                      <p className="text-sm text-muted-foreground">24 kn (limite: 20 kn) - Duração: 2h</p>
-                    </div>
-                    <Badge variant="outline">Resolvido</Badge>
-                  </div>
-                </div>
+                  );
+                })}
               </div>
             </CardContent>
           </Card>

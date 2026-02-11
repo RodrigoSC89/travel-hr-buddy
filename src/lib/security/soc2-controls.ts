@@ -272,7 +272,7 @@ export function runSOC2Assessment(): SOC2AssessmentResult {
     'privacy',
   ];
 
-  const byCategory: SOC2AssessmentResult['byCategory'] = {} as any;
+  const byCategory = {} as Record<TrustServiceCategory, { total: number; implemented: number; percentage: number }>;
 
   categories.forEach(category => {
     const controls = ALL_SOC2_CONTROLS.filter(c => c.category === category);

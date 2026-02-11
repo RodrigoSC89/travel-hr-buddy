@@ -31,15 +31,36 @@ interface SystemInfo {
   connection?: { effectiveType: string; downlink: number };
 }
 
+/** Non-standard Chrome performance.memory API */
+interface PerformanceMemory {
+  usedJSHeapSize: number;
+  totalJSHeapSize: number;
+  jsHeapSizeLimit: number;
+}
+
+/** Non-standard Navigator.connection API */
+interface NavigatorConnection {
+  effectiveType?: string;
+  downlink?: number;
+  rtt?: number;
+  saveData?: boolean;
+}
+
+function getPerformanceMemory(): PerformanceMemory | undefined {
+  const perf = performance as unknown as Record<string, unknown>;
+  return perf.memory as PerformanceMemory | undefined;
+}
+
+function getNavigatorConnection(): NavigatorConnection | undefined {
+  const nav = navigator as unknown as Record<string, unknown>;
+  return nav.connection as NavigatorConnection | undefined;
+}
+
 class SystemDiagnostics {
-  /**
-   * Run all diagnostic tests
-   */
   async runAllDiagnostics(): Promise<DiagnosticsReport> {
     const startTime = performance.now();
     const results: DiagnosticResult[] = [];
 
-    // Core diagnostics
     results.push(await this.testLocalStorage());
     results.push(await this.testIndexedDB());
     results.push(await this.testCacheAPI());
@@ -66,20 +87,9 @@ class SystemDiagnostics {
       localStorage.setItem(testKey, 'test');
       const value = localStorage.getItem(testKey);
       localStorage.removeItem(testKey);
-
-      return {
-        name: 'LocalStorage',
-        passed: value === 'test',
-        message: 'LocalStorage funcionando corretamente',
-        duration: performance.now() - start,
-      };
+      return { name: 'LocalStorage', passed: value === 'test', message: 'LocalStorage funcionando corretamente', duration: performance.now() - start };
     } catch (error) {
-      return {
-        name: 'LocalStorage',
-        passed: false,
-        message: `LocalStorage indisponível: ${error instanceof Error ? error.message : 'Erro'}`,
-        duration: performance.now() - start,
-      };
+      return { name: 'LocalStorage', passed: false, message: `LocalStorage indisponível: ${error instanceof Error ? error.message : 'Erro'}`, duration: performance.now() - start };
     }
   }
 
@@ -87,38 +97,16 @@ class SystemDiagnostics {
     const start = performance.now();
     try {
       if (!('indexedDB' in window)) {
-        return {
-          name: 'IndexedDB',
-          passed: false,
-          message: 'IndexedDB não suportado neste navegador',
-          duration: performance.now() - start,
-        };
+        return { name: 'IndexedDB', passed: false, message: 'IndexedDB não suportado neste navegador', duration: performance.now() - start };
       }
-
       const request = indexedDB.open('__diagnostic_test__', 1);
-      
       await new Promise<void>((resolve, reject) => {
-        request.onsuccess = () => {
-          request.result.close();
-          indexedDB.deleteDatabase('__diagnostic_test__');
-          resolve();
-        };
+        request.onsuccess = () => { request.result.close(); indexedDB.deleteDatabase('__diagnostic_test__'); resolve(); };
         request.onerror = () => reject(request.error);
       });
-
-      return {
-        name: 'IndexedDB',
-        passed: true,
-        message: 'IndexedDB funcionando corretamente',
-        duration: performance.now() - start,
-      };
+      return { name: 'IndexedDB', passed: true, message: 'IndexedDB funcionando corretamente', duration: performance.now() - start };
     } catch (error) {
-      return {
-        name: 'IndexedDB',
-        passed: false,
-        message: `IndexedDB falhou: ${error instanceof Error ? error.message : 'Erro'}`,
-        duration: performance.now() - start,
-      };
+      return { name: 'IndexedDB', passed: false, message: `IndexedDB falhou: ${error instanceof Error ? error.message : 'Erro'}`, duration: performance.now() - start };
     }
   }
 
@@ -126,33 +114,16 @@ class SystemDiagnostics {
     const start = performance.now();
     try {
       if (!('caches' in window)) {
-        return {
-          name: 'Cache API',
-          passed: false,
-          message: 'Cache API não suportada',
-          duration: performance.now() - start,
-        };
+        return { name: 'Cache API', passed: false, message: 'Cache API não suportada', duration: performance.now() - start };
       }
-
       const cacheName = '__diagnostic_test__';
       const cache = await caches.open(cacheName);
       await cache.put('test', new Response('test'));
       const response = await cache.match('test');
       await caches.delete(cacheName);
-
-      return {
-        name: 'Cache API',
-        passed: response !== undefined,
-        message: 'Cache API funcionando corretamente',
-        duration: performance.now() - start,
-      };
+      return { name: 'Cache API', passed: response !== undefined, message: 'Cache API funcionando corretamente', duration: performance.now() - start };
     } catch (error) {
-      return {
-        name: 'Cache API',
-        passed: false,
-        message: `Cache API falhou: ${error instanceof Error ? error.message : 'Erro'}`,
-        duration: performance.now() - start,
-      };
+      return { name: 'Cache API', passed: false, message: `Cache API falhou: ${error instanceof Error ? error.message : 'Erro'}`, duration: performance.now() - start };
     }
   }
 
@@ -160,43 +131,26 @@ class SystemDiagnostics {
     const start = performance.now();
     try {
       if (!('serviceWorker' in navigator)) {
-        return {
-          name: 'Service Worker',
-          passed: false,
-          message: 'Service Worker não suportado',
-          duration: performance.now() - start,
-        };
+        return { name: 'Service Worker', passed: false, message: 'Service Worker não suportado', duration: performance.now() - start };
       }
-
       const registrations = await navigator.serviceWorker.getRegistrations();
-      
       return {
         name: 'Service Worker',
         passed: registrations.length > 0,
-        message: registrations.length > 0 
-          ? `${registrations.length} Service Worker(s) registrado(s)`
-          : 'Nenhum Service Worker registrado',
+        message: registrations.length > 0 ? `${registrations.length} Service Worker(s) registrado(s)` : 'Nenhum Service Worker registrado',
         duration: performance.now() - start,
         details: { count: registrations.length },
       };
     } catch (error) {
-      return {
-        name: 'Service Worker',
-        passed: false,
-        message: `Falha ao verificar SW: ${error instanceof Error ? error.message : 'Erro'}`,
-        duration: performance.now() - start,
-      };
+      return { name: 'Service Worker', passed: false, message: `Falha ao verificar SW: ${error instanceof Error ? error.message : 'Erro'}`, duration: performance.now() - start };
     }
   }
 
   private async testNetworkConnectivity(): Promise<DiagnosticResult> {
     const start = performance.now();
     const isOnline = navigator.onLine;
-    
-    const connection = (navigator as any).connection;
-    const details: Record<string, unknown> = {
-      online: isOnline,
-    };
+    const connection = getNavigatorConnection();
+    const details: Record<string, unknown> = { online: isOnline };
 
     if (connection) {
       details.effectiveType = connection.effectiveType;
@@ -208,7 +162,7 @@ class SystemDiagnostics {
     return {
       name: 'Network',
       passed: true,
-      message: isOnline 
+      message: isOnline
         ? `Online - ${connection?.effectiveType || 'Conexão'} (${connection?.downlink || '?'}Mbps)`
         : 'Offline',
       duration: performance.now() - start,
@@ -220,34 +174,17 @@ class SystemDiagnostics {
     const start = performance.now();
     try {
       if (!('Worker' in window)) {
-        return {
-          name: 'Web Workers',
-          passed: false,
-          message: 'Web Workers não suportados',
-          duration: performance.now() - start,
-        };
+        return { name: 'Web Workers', passed: false, message: 'Web Workers não suportados', duration: performance.now() - start };
       }
-
-      return {
-        name: 'Web Workers',
-        passed: true,
-        message: 'Web Workers suportados',
-        duration: performance.now() - start,
-      };
+      return { name: 'Web Workers', passed: true, message: 'Web Workers suportados', duration: performance.now() - start };
     } catch (error) {
-      return {
-        name: 'Web Workers',
-        passed: false,
-        message: `Falha: ${error instanceof Error ? error.message : 'Erro'}`,
-        duration: performance.now() - start,
-      };
+      return { name: 'Web Workers', passed: false, message: `Falha: ${error instanceof Error ? error.message : 'Erro'}`, duration: performance.now() - start };
     }
   }
 
   private async testPerformanceAPI(): Promise<DiagnosticResult> {
     const start = performance.now();
-    
-    const memory = (performance as any).memory;
+    const memory = getPerformanceMemory();
     const details: Record<string, unknown> = {};
 
     if (memory) {
@@ -260,7 +197,7 @@ class SystemDiagnostics {
     return {
       name: 'Performance API',
       passed: true,
-      message: memory 
+      message: memory
         ? `Memória: ${details.usagePercent}% utilizada`
         : 'Performance API disponível (memória não acessível)',
       duration: performance.now() - start,
@@ -269,8 +206,8 @@ class SystemDiagnostics {
   }
 
   private getSystemInfo(): SystemInfo {
-    const connection = (navigator as any).connection;
-    const memory = (performance as any).memory;
+    const connection = getNavigatorConnection();
+    const memory = getPerformanceMemory();
 
     return {
       userAgent: navigator.userAgent,
@@ -278,14 +215,8 @@ class SystemDiagnostics {
       language: navigator.language,
       cookiesEnabled: navigator.cookieEnabled,
       onLine: navigator.onLine,
-      memory: memory ? {
-        used: memory.usedJSHeapSize,
-        total: memory.jsHeapSizeLimit,
-      } : undefined,
-      connection: connection ? {
-        effectiveType: connection.effectiveType,
-        downlink: connection.downlink,
-      } : undefined,
+      memory: memory ? { used: memory.usedJSHeapSize, total: memory.jsHeapSizeLimit } : undefined,
+      connection: connection ? { effectiveType: connection.effectiveType || 'unknown', downlink: connection.downlink || 0 } : undefined,
     };
   }
 }
