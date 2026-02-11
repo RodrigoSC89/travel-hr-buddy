@@ -42,7 +42,7 @@ export const useAIAssistant = (type: "crew" | "general") => {
     });
   }, []);
 
-  const cacheContext = useCallback(async (key: string, data: any) => {
+  const cacheContext = useCallback(async (key: string, data: unknown) => {
     try {
       const db = await openDB();
       const transaction = db.transaction([STORE_NAME], "readwrite");

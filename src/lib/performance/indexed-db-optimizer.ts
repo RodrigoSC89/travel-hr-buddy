@@ -8,6 +8,7 @@ import { logger } from '@/lib/logger';
 
 interface CacheEntry {
   key: string;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- IndexedDB stores arbitrary serializable data
   value: any;
   timestamp: number;
   accessCount: number;
@@ -51,6 +52,7 @@ interface OptimizedDBSchema extends DBSchema {
       id: string;
       module: string;
       action: 'create' | 'update' | 'delete';
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any -- IndexedDB stores arbitrary serializable data
       data: any;
       timestamp: number;
       retries: number;
@@ -116,6 +118,7 @@ class IndexedDBOptimizer {
    */
   async set(
     key: string,
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any -- accepts any serializable value
     value: any,
     options: {
       module?: string;
@@ -359,6 +362,7 @@ class IndexedDBOptimizer {
    */
   private async buildIndexes(
     key: string,
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any -- indexes built from arbitrary data structures
     value: any,
     module: string,
     fields: string[]
@@ -385,6 +389,7 @@ class IndexedDBOptimizer {
   /**
    * Get nested value from object
    */
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- traverses arbitrary nested objects
   private getNestedValue(obj: any, path: string): any {
     return path.split('.').reduce((o, k) => o?.[k], obj);
   }
@@ -392,7 +397,7 @@ class IndexedDBOptimizer {
   /**
    * Estimate size of a value in bytes
    */
-  private estimateSize(value: any): number {
+  private estimateSize(value: unknown): number {
     try {
       return new Blob([JSON.stringify(value)]).size;
     } catch {

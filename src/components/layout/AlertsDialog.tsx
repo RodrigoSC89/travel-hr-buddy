@@ -34,7 +34,7 @@ const AlertsDialog: React.FC<AlertsDialogProps> = ({ open, onOpenChange }) => {
         .order("created_at", { ascending: false })
         .limit(20);
 
-      const mapped: Alert[] = (data || []).map((d: any) => ({
+      const mapped: Alert[] = (data || []).map((d) => ({
         id: d.id,
         title: d.title,
         message: d.description,

@@ -147,7 +147,7 @@ export function OperationsActionPanel() {
       queryClient.invalidateQueries({ queryKey: ['operations-list'] });
       queryClient.invalidateQueries({ queryKey: ['operations-vessels'] });
     },
-    onError: (err: any) => toast.error(`Erro ao aprovar: ${err.message}`),
+    onError: (err: Error) => toast.error(`Erro ao aprovar: ${err.message}`),
   });
 
   // Bulk deactivate mutation
@@ -166,7 +166,7 @@ export function OperationsActionPanel() {
       queryClient.invalidateQueries({ queryKey: ['operations-list'] });
       queryClient.invalidateQueries({ queryKey: ['operations-vessels'] });
     },
-    onError: (err: any) => toast.error(`Erro: ${err.message}`),
+    onError: (err: Error) => toast.error(`Erro: ${err.message}`),
   });
 
   // Update single vessel status
@@ -183,7 +183,7 @@ export function OperationsActionPanel() {
       queryClient.invalidateQueries({ queryKey: ['operations-vessels'] });
       toast.success('Status atualizado');
     },
-    onError: (err: any) => toast.error(`Erro: ${err.message}`),
+    onError: (err: Error) => toast.error(`Erro: ${err.message}`),
   });
 
   // Create new voyage/operation
@@ -210,7 +210,7 @@ export function OperationsActionPanel() {
       setNewOpDialog(false);
       setNewOpForm({ vessel_id: '', notes: '', priority: 'medium' });
     },
-    onError: (err: any) => toast.error(err.message),
+    onError: (err: Error) => toast.error(err.message),
   });
 
   const toggleSelectItem = (id: string) => {
@@ -514,7 +514,7 @@ export function OperationsActionPanel() {
               <Select value={newOpForm.vessel_id} onValueChange={(v) => setNewOpForm(p => ({ ...p, vessel_id: v }))}>
                 <SelectTrigger><SelectValue placeholder="Selecione a embarcação" /></SelectTrigger>
                 <SelectContent>
-                  {vesselsList.map((v: any) => (
+                  {vesselsList.map((v) => (
                     <SelectItem key={v.id} value={v.id}>{v.name} {v.imo_number ? `(${v.imo_number})` : ''}</SelectItem>
                   ))}
                 </SelectContent>

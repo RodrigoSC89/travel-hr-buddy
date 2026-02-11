@@ -62,19 +62,19 @@ export default function MaintenanceKPIDashboard() {
     );
   }
 
-  const completed = records.filter((r: any) => r.status === "completed");
-  const pending = records.filter((r: any) => r.status === "pending");
-  const inProgress = records.filter((r: any) => r.status === "in_progress");
-  const critical = records.filter((r: any) => r.priority === "critical");
+  const completed = records.filter((r) => r.status === "completed");
+  const pending = records.filter((r) => r.status === "pending");
+  const inProgress = records.filter((r) => r.status === "in_progress");
+  const critical = records.filter((r) => r.priority === "critical");
 
   // Calculate MTBF (estimated from avg interval between completions)
   const avgDurationHours = completed.length > 0
-    ? Math.round(completed.reduce((acc: number, r: any) => acc + (r.actual_duration || r.estimated_duration || 4), 0) / completed.length)
+    ? Math.round(completed.reduce((acc: number, r) => acc + (r.actual_duration || r.estimated_duration || 4), 0) / completed.length)
     : 0;
 
   // MTTR = average actual duration of completed work
   const mttr = completed.length > 0
-    ? (completed.reduce((acc: number, r: any) => acc + (r.actual_duration || r.estimated_duration || 4), 0) / completed.length).toFixed(1)
+    ? (completed.reduce((acc: number, r) => acc + (r.actual_duration || r.estimated_duration || 4), 0) / completed.length).toFixed(1)
     : "N/A";
 
   // Availability = completed / total * 100
@@ -86,19 +86,19 @@ export default function MaintenanceKPIDashboard() {
 
   // Work orders by priority
   const workOrdersByPriority = [
-    { priority: "Crítica", count: records.filter((r: any) => r.priority === "critical").length },
-    { priority: "Alta", count: records.filter((r: any) => r.priority === "high").length },
-    { priority: "Média", count: records.filter((r: any) => r.priority === "medium").length },
-    { priority: "Baixa", count: records.filter((r: any) => r.priority === "low").length },
+    { priority: "Crítica", count: records.filter((r) => r.priority === "critical").length },
+    { priority: "Alta", count: records.filter((r) => r.priority === "high").length },
+    { priority: "Média", count: records.filter((r) => r.priority === "medium").length },
+    { priority: "Baixa", count: records.filter((r) => r.priority === "low").length },
   ].filter(w => w.count > 0);
 
   // Equipment health from vessels
-  const vesselHealth = vessels.slice(0, 5).map((v: any) => {
-    const vRecords = records.filter((r: any) => r.vessel_id === v.id);
-    const vCompleted = vRecords.filter((r: any) => r.status === "completed").length;
+  const vesselHealth = vessels.slice(0, 5).map((v) => {
+    const vRecords = records.filter((r) => r.vessel_id === v.id);
+    const vCompleted = vRecords.filter((r) => r.status === "completed").length;
     const vTotal = vRecords.length;
     const health = vTotal > 0 ? Math.round((vCompleted / vTotal) * 100) : 100;
-    const pendingCount = vRecords.filter((r: any) => r.status !== "completed").length;
+    const pendingCount = vRecords.filter((r) => r.status !== "completed").length;
     return {
       name: v.name,
       health,
@@ -211,7 +211,7 @@ export default function MaintenanceKPIDashboard() {
           </CardHeader>
           <CardContent>
             <div className="space-y-4">
-              {vesselHealth.map((v: any) => (
+              {vesselHealth.map((v) => (
                 <div key={v.name} className="space-y-2">
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-3">

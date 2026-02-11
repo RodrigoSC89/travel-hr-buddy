@@ -107,7 +107,7 @@ export const useSystemActions = () => {
   };
 
   // PATCH v21: handleOfflineAction sempre adiciona à fila - não verificar isOnline
-  const handleOfflineAction = (action: string, data: any) => {
+  const handleOfflineAction = (action: string, data: Record<string, unknown>) => {
     addPendingChange(action, data);
   };
 
