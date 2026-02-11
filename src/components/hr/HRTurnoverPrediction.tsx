@@ -126,14 +126,14 @@ export function HRTurnoverPrediction() {
 
   const getRiskColor = (level: string) => {
     switch (level) {
-      case 'critical': return 'text-red-500 bg-red-500/10 border-red-500/30';
-      case 'high': return 'text-orange-500 bg-orange-500/10 border-orange-500/30';
-      case 'medium': return 'text-amber-500 bg-amber-500/10 border-amber-500/30';
-      default: return 'text-green-500 bg-green-500/10 border-green-500/30';
+      case 'critical': return 'text-destructive bg-destructive/10 border-destructive/30';
+      case 'high': return 'text-warning bg-warning/10 border-warning/30';
+      case 'medium': return 'text-warning bg-warning/10 border-warning/30';
+      default: return 'text-success bg-success/10 border-success/30';
     }
   };
 
-  const factorLabels: Record<string, { label: string; icon: any }> = {
+  const factorLabels: Record<string, { label: string; icon: React.ElementType }> = {
     salary: { label: 'Salário vs Mercado', icon: DollarSign },
     tenure: { label: 'Tempo de Casa', icon: Clock },
     performance: { label: 'Desempenho', icon: Award },
@@ -175,10 +175,10 @@ export function HRTurnoverPrediction() {
       {/* Summary */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
         {[
-          { label: 'Crítico', count: predictions.filter(p => p.riskLevel === 'critical').length, color: 'text-red-500' },
-          { label: 'Alto', count: predictions.filter(p => p.riskLevel === 'high').length, color: 'text-orange-500' },
-          { label: 'Médio', count: predictions.filter(p => p.riskLevel === 'medium').length, color: 'text-amber-500' },
-          { label: 'Baixo', count: 330, color: 'text-green-500' },
+          { label: 'Crítico', count: predictions.filter(p => p.riskLevel === 'critical').length, color: 'text-destructive' },
+          { label: 'Alto', count: predictions.filter(p => p.riskLevel === 'high').length, color: 'text-warning' },
+          { label: 'Médio', count: predictions.filter(p => p.riskLevel === 'medium').length, color: 'text-warning' },
+          { label: 'Baixo', count: 330, color: 'text-success' },
         ].map((item) => (
           <Card key={item.label}>
             <CardContent className="p-4 text-center">
@@ -212,8 +212,8 @@ export function HRTurnoverPrediction() {
                 <div className="flex items-center gap-4 flex-1">
                   <div className="text-center">
                     <p className={`text-3xl font-bold ${
-                      prediction.riskLevel === 'critical' ? 'text-red-500' :
-                      prediction.riskLevel === 'high' ? 'text-orange-500' : 'text-amber-500'
+                      prediction.riskLevel === 'critical' ? 'text-destructive' :
+                      prediction.riskLevel === 'high' ? 'text-warning' : 'text-warning'
                     }`}>
                       {prediction.riskScore}%
                     </p>
@@ -269,8 +269,8 @@ export function HRTurnoverPrediction() {
                             <Progress 
                               value={value} 
                               className={`h-1.5 ${
-                                value >= 70 ? '[&>div]:bg-red-500' : 
-                                value >= 50 ? '[&>div]:bg-amber-500' : '[&>div]:bg-green-500'
+                                value >= 70 ? '[&>div]:bg-destructive' : 
+                                value >= 50 ? '[&>div]:bg-warning' : '[&>div]:bg-success'
                               }`}
                             />
                           </div>
@@ -281,30 +281,30 @@ export function HRTurnoverPrediction() {
 
                   {/* Top Risk Factors & Actions */}
                   <div className="grid md:grid-cols-2 gap-4">
-                    <div className="p-3 rounded-lg bg-red-500/5 border border-red-500/20">
-                      <h4 className="text-sm font-medium text-red-500 mb-2 flex items-center gap-2">
+                    <div className="p-3 rounded-lg bg-destructive/5 border border-destructive/20">
+                      <h4 className="text-sm font-medium text-destructive mb-2 flex items-center gap-2">
                         <AlertTriangle className="h-4 w-4" />
                         Principais Fatores de Risco
                       </h4>
                       <ul className="space-y-1">
                         {prediction.topRiskFactors.map((factor, i) => (
                           <li key={i} className="text-sm flex items-start gap-2">
-                            <span className="text-red-500 mt-1">•</span>
+                            <span className="text-destructive mt-1">•</span>
                             {factor}
                           </li>
                         ))}
                       </ul>
                     </div>
 
-                    <div className="p-3 rounded-lg bg-green-500/5 border border-green-500/20">
-                      <h4 className="text-sm font-medium text-green-500 mb-2 flex items-center gap-2">
+                    <div className="p-3 rounded-lg bg-success/5 border border-success/20">
+                      <h4 className="text-sm font-medium text-success mb-2 flex items-center gap-2">
                         <Target className="h-4 w-4" />
                         Ações Recomendadas
                       </h4>
                       <ul className="space-y-1">
                         {prediction.recommendedActions.map((action, i) => (
                           <li key={i} className="text-sm flex items-start gap-2">
-                            <span className="text-green-500 mt-1">{i + 1}.</span>
+                            <span className="text-success mt-1">{i + 1}.</span>
                             {action}
                           </li>
                         ))}

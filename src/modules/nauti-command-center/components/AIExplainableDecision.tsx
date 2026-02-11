@@ -106,36 +106,36 @@ export function AIExplainableDecision({
   const getStatusBadge = () => {
     switch (decision.status) {
       case "pending":
-        return <Badge variant="outline" className="bg-yellow-500/10 text-yellow-400">Pendente</Badge>;
+        return <Badge variant="outline" className="bg-warning/10 text-warning">Pendente</Badge>;
       case "approved":
-        return <Badge variant="outline" className="bg-green-500/10 text-green-400">Aprovada</Badge>;
+        return <Badge variant="outline" className="bg-success/10 text-success">Aprovada</Badge>;
       case "rejected":
-        return <Badge variant="outline" className="bg-red-500/10 text-red-400">Rejeitada</Badge>;
+        return <Badge variant="outline" className="bg-destructive/10 text-destructive">Rejeitada</Badge>;
       case "executed":
-        return <Badge variant="outline" className="bg-blue-500/10 text-blue-400">Executada</Badge>;
+        return <Badge variant="outline" className="bg-primary/10 text-primary">Executada</Badge>;
       case "rolled_back":
-        return <Badge variant="outline" className="bg-orange-500/10 text-orange-400">Revertida</Badge>;
+        return <Badge variant="outline" className="bg-warning/10 text-warning">Revertida</Badge>;
     }
   };
 
   const getImpactColor = () => {
     switch (decision.impact) {
       case "low":
-        return "text-gray-400";
+        return "text-muted-foreground";
       case "medium":
-        return "text-yellow-400";
+        return "text-warning";
       case "high":
-        return "text-orange-400";
+        return "text-warning";
       case "critical":
-        return "text-red-400";
+        return "text-destructive";
     }
   };
 
   const getConfidenceColor = () => {
-    if (decision.confidence >= 90) return "bg-green-500";
-    if (decision.confidence >= 75) return "bg-blue-500";
-    if (decision.confidence >= 60) return "bg-yellow-500";
-    return "bg-red-500";
+    if (decision.confidence >= 90) return "bg-success";
+    if (decision.confidence >= 75) return "bg-primary";
+    if (decision.confidence >= 60) return "bg-warning";
+    return "bg-destructive";
   };
 
   return (
@@ -261,7 +261,7 @@ export function AIExplainableDecision({
                       <Lightbulb className="h-4 w-4 text-yellow-400" />
                       Resultado Esperado
                     </h4>
-                    <p className="text-sm text-muted-foreground bg-green-500/10 p-3 rounded-lg border border-green-500/20">
+                    <p className="text-sm text-muted-foreground bg-success/10 p-3 rounded-lg border border-success/20">
                       {decision.justification.expectedOutcome}
                     </p>
                   </div>
@@ -338,12 +338,12 @@ export function AIExplainableDecision({
           {decision.feedback && (
             <div className="flex items-center gap-2 text-sm">
               {decision.feedback.wasCorrect ? (
-                <Badge variant="outline" className="bg-green-500/10 text-green-400">
+                <Badge variant="outline" className="bg-success/10 text-success">
                   <ThumbsUp className="h-3 w-3 mr-1" />
                   Decisão Correta
                 </Badge>
               ) : (
-                <Badge variant="outline" className="bg-red-500/10 text-red-400">
+                <Badge variant="outline" className="bg-destructive/10 text-destructive">
                   <ThumbsDown className="h-3 w-3 mr-1" />
                   Precisa Melhorar
                 </Badge>

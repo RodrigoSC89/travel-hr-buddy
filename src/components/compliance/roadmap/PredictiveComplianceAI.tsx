@@ -193,16 +193,16 @@ export function PredictiveComplianceAI() {
         .limit(20);
       
       if (ncData && ncData.length > 0) {
-        const mappedPredictions: Prediction[] = ncData.map((nc: any) => ({
-          id: nc.id,
+        const mappedPredictions: Prediction[] = ncData.map((nc: Record<string, unknown>) => ({
+          id: nc.id as string,
           type: 'audit' as const,
-          title: nc.area_name || 'Previsão de NC',
-          description: nc.recommendation || `Inspeção ${nc.inspection_type} - área ${nc.area_code}`,
-          probability: nc.probability,
+          title: (nc.area_name as string) || 'Previsão de NC',
+          description: (nc.recommendation as string) || `Inspeção ${nc.inspection_type} - área ${nc.area_code}`,
+          probability: nc.probability as number,
           confidence: 85,
-          riskLevel: (nc.severity === 'critical' ? 'critical' : nc.severity === 'high' ? 'high' : nc.probability > 70 ? 'high' : 'medium') as Prediction['riskLevel'],
-          daysUntil: nc.inspection_date ? Math.max(0, Math.floor((new Date(nc.inspection_date).getTime() - Date.now()) / 86400000)) : 30,
-          recommendation: nc.recommendation || 'Verificar conformidade',
+          riskLevel: (nc.severity === 'critical' ? 'critical' : nc.severity === 'high' ? 'high' : (nc.probability as number) > 70 ? 'high' : 'medium') as Prediction['riskLevel'],
+          daysUntil: nc.inspection_date ? Math.max(0, Math.floor((new Date(nc.inspection_date as string).getTime() - Date.now()) / 86400000)) : 30,
+          recommendation: (nc.recommendation as string) || 'Verificar conformidade',
           expectedImpact: `${nc.historical_occurrences || 0} ocorrências históricas`,
           historicalPattern: nc.historical_occurrences ? `${nc.historical_occurrences} ocorrências anteriores` : undefined,
         }));
@@ -228,16 +228,16 @@ export function PredictiveComplianceAI() {
   const getRiskIcon = (level: string) => {
     switch (level) {
       case 'critical': return <ShieldAlert className="h-4 w-4 text-destructive" />;
-      case 'high': return <AlertTriangle className="h-4 w-4 text-orange-500" />;
-      case 'medium': return <FileWarning className="h-4 w-4 text-yellow-500" />;
-      case 'low': return <CheckCircle2 className="h-4 w-4 text-blue-500" />;
+      case 'high': return <AlertTriangle className="h-4 w-4 text-warning" />;
+      case 'medium': return <FileWarning className="h-4 w-4 text-warning" />;
+      case 'low': return <CheckCircle2 className="h-4 w-4 text-primary" />;
     }
   };
 
   const getTrendIcon = (trend: string) => {
     switch (trend) {
       case 'up': return <ArrowUpRight className="h-4 w-4 text-destructive" />;
-      case 'down': return <ArrowDownRight className="h-4 w-4 text-green-500" />;
+      case 'down': return <ArrowDownRight className="h-4 w-4 text-success" />;
       default: return <Minus className="h-4 w-4 text-muted-foreground" />;
     }
   };
@@ -316,8 +316,8 @@ export function PredictiveComplianceAI() {
                         </>
                       ) : (
                         <>
-                          <ArrowDownRight className="h-4 w-4 text-green-500" />
-                          <span className="text-green-500">Descendo</span>
+                          <ArrowDownRight className="h-4 w-4 text-success" />
+                          <span className="text-success">Descendo</span>
                         </>
                       )}
                     </span>
@@ -353,7 +353,7 @@ export function PredictiveComplianceAI() {
               {Math.round(predictions.reduce((acc, p) => acc + p.confidence, 0) / predictions.length)}%
             </div>
             <p className="text-xs text-muted-foreground">Precisão do modelo</p>
-            <div className="flex items-center gap-1 mt-2 text-xs text-green-500">
+            <div className="flex items-center gap-1 mt-2 text-xs text-success">
               <TrendingUp className="h-3 w-3" />
               +5% vs mês anterior
             </div>

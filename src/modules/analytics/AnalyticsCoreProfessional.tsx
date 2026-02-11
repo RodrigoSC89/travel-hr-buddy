@@ -242,6 +242,7 @@ const AnalyticsCoreProfessional: React.FC = () => {
         .order("created_at", { ascending: false })
         .limit(10);
 
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Supabase dynamic row
       const insightNotifications: Notification[] = (aiInsightsData || []).map((insight: any) => ({
         id: insight.id as string,
         title: (insight.title || "Insight de IA") as string,
@@ -253,6 +254,7 @@ const AnalyticsCoreProfessional: React.FC = () => {
         metadata: insight.metadata as Record<string, unknown> | undefined
       }));
 
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Supabase dynamic row
       const alertNotifications: Notification[] = (alertsData || []).map((alert: any) => ({
         id: alert.id as string,
         title: `Alerta: ${alert.alert_name}` as string,
@@ -285,6 +287,7 @@ const AnalyticsCoreProfessional: React.FC = () => {
         .limit(10);
 
       if (analyticsMetrics && analyticsMetrics.length > 0) {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Supabase dynamic row
         setMetrics(analyticsMetrics.map((m: any) => ({
           id: m.id,
           name: m.metric_name,
@@ -323,11 +326,13 @@ const AnalyticsCoreProfessional: React.FC = () => {
         .limit(100);
 
       if (events && events.length > 0) {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any -- dynamic aggregation shape
         const monthlyData = events.reduce((acc: Record<string, any>, event: any) => {
           const month = new Date(event.created_at).toLocaleString('pt-BR', { month: 'short' });
           if (!acc[month]) {
             acc[month] = { month, receita: 0, custos: 0, lucro: 0 };
           }
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any -- dynamic event value
           const eventValue = Number((event as any).value) || 1;
           acc[month].receita += eventValue * 100;
           acc[month].custos += eventValue * 60;
@@ -337,6 +342,7 @@ const AnalyticsCoreProfessional: React.FC = () => {
         
         const chartData = Object.values(monthlyData).slice(0, 6);
         if (chartData.length > 0) {
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any -- chart data shape
           setRevenueData(chartData as any[]);
         }
       }
@@ -1031,7 +1037,7 @@ Este relatório apresenta uma análise abrangente dos principais indicadores de 
                       <Label className="text-sm font-medium">Período de Análise</Label>
                       <Select 
                         value={filters.dateRange} 
-                        onValueChange={(v: any) => setFilters(f => ({ ...f, dateRange: v }))}
+                        onValueChange={(v) => setFilters(f => ({ ...f, dateRange: v as FilterConfig["dateRange"] }))}
                       >
                         <SelectTrigger>
                           <SelectValue />
@@ -1127,7 +1133,7 @@ Este relatório apresenta uma análise abrangente dos principais indicadores de 
                         <Label>Ordenar por</Label>
                         <Select 
                           value={filters.sortBy}
-                          onValueChange={(v: any) => setFilters(f => ({ ...f, sortBy: v }))}
+                          onValueChange={(v) => setFilters(f => ({ ...f, sortBy: v as FilterConfig["sortBy"] }))}
                         >
                           <SelectTrigger>
                             <SelectValue />
@@ -1143,7 +1149,7 @@ Este relatório apresenta uma análise abrangente dos principais indicadores de 
                         <Label>Ordem</Label>
                         <Select 
                           value={filters.sortOrder}
-                          onValueChange={(v: any) => setFilters(f => ({ ...f, sortOrder: v }))}
+                          onValueChange={(v) => setFilters(f => ({ ...f, sortOrder: v as FilterConfig["sortOrder"] }))}
                         >
                           <SelectTrigger>
                             <SelectValue />
@@ -1900,7 +1906,7 @@ Este relatório apresenta uma análise abrangente dos principais indicadores de 
                     <Label>Tipo de Relatório</Label>
                     <Select 
                       value={reportConfig.type}
-                      onValueChange={(v: any) => setReportConfig(c => ({ ...c, type: v }))}
+                      onValueChange={(v) => setReportConfig(c => ({ ...c, type: v as ReportConfig["type"] }))}
                     >
                       <SelectTrigger>
                         <SelectValue />

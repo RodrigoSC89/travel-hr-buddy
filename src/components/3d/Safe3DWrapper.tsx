@@ -21,7 +21,7 @@ class ThreeErrorBoundary extends React.Component<
   { children: React.ReactNode; onError: () => void; fallback: React.ReactNode },
   { hasError: boolean }
 > {
-  constructor(props: any) {
+  constructor(props: { children: React.ReactNode; onError: () => void; fallback: React.ReactNode }) {
     super(props);
     this.state = { hasError: false };
   }

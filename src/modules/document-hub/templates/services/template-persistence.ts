@@ -16,7 +16,7 @@ export interface DocumentTemplate {
   isPublic?: boolean;
   category?: string;
   tags?: string[];
-  metadata?: Record<string, any>;
+  metadata?: Record<string, unknown>;
   createdAt?: string;
   updatedAt?: string;
 }
@@ -44,7 +44,7 @@ export class TemplatePersistence {
           category: template.category,
           tags: template.tags,
           metadata: template.metadata || {}
-        })
+        } as never)
         .select()
         .single();
 
@@ -59,6 +59,7 @@ export class TemplatePersistence {
 
   async updateTemplate(id: string, template: Partial<DocumentTemplate>): Promise<DocumentTemplate> {
     try {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any -- dynamic update fields for Supabase
       const updateData: any = {};
       
       if (template.name !== undefined) updateData.name = template.name;
@@ -133,6 +134,7 @@ export class TemplatePersistence {
     }
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Supabase row shape is dynamic
   private mapToTemplate(data: any): DocumentTemplate {
     return {
       id: data.id,

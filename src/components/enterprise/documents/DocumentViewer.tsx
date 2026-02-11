@@ -36,9 +36,9 @@ interface Document {
 
 const getFileIcon = (type: string) => {
   switch (type) {
-    case "pdf": return <FileText className="h-5 w-5 text-red-500" />;
-    case "xlsx": case "xls": return <FileSpreadsheet className="h-5 w-5 text-green-500" />;
-    case "jpg": case "png": return <FileImage className="h-5 w-5 text-blue-500" />;
+    case "pdf": return <FileText className="h-5 w-5 text-destructive" />;
+    case "xlsx": case "xls": return <FileSpreadsheet className="h-5 w-5 text-success" />;
+    case "jpg": case "png": return <FileImage className="h-5 w-5 text-primary" />;
     default: return <File className="h-5 w-5 text-muted-foreground" />;
   }
 };
@@ -60,19 +60,20 @@ export function DocumentViewer() {
       .order("created_at", { ascending: false })
       .limit(50);
 
-    const mapped: Document[] = (data || []).map((d: any) => ({
-      id: d.id,
-      title: d.title || d.file_name,
-      category: d.category || "Geral",
-      type: d.file_type?.replace("application/", "").replace("image/", "") || "file",
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Supabase row shape is dynamic
+    const mapped: Document[] = (data || []).map((d: Record<string, unknown>) => ({
+      id: d.id as string,
+      title: (d.title || d.file_name) as string,
+      category: (d.category || "Geral") as string,
+      type: ((d.file_type as string)?.replace("application/", "").replace("image/", "") || "file"),
       uploadedBy: "Sistema",
-      uploadedAt: d.created_at,
-      size: d.file_size_bytes ? `${(d.file_size_bytes / 1024 / 1024).toFixed(1)} MB` : "N/A",
+      uploadedAt: d.created_at as string,
+      size: d.file_size_bytes ? `${((d.file_size_bytes as number) / 1024 / 1024).toFixed(1)} MB` : "N/A",
       version: 1,
       status: d.ocr_status === "completed" ? "active" as const : "draft" as const,
-      tags: (d.extracted_keywords as any)?.slice?.(0, 3) || [],
+      tags: (d.extracted_keywords as string[] | null)?.slice?.(0, 3) || [],
       isFavorite: false,
-      storagePath: d.storage_path,
+      storagePath: d.storage_path as string | undefined,
     }));
     setDocuments(mapped);
     setLoading(false);
@@ -90,9 +91,9 @@ export function DocumentViewer() {
 
   const getStatusBadge = (status: Document["status"]) => {
     switch (status) {
-      case "active": return <Badge className="bg-green-500/10 text-green-500">Válido</Badge>;
+      case "active": return <Badge className="bg-success/10 text-success">Válido</Badge>;
       case "archived": return <Badge variant="secondary">Arquivado</Badge>;
-      case "draft": return <Badge className="bg-yellow-500/10 text-yellow-500">Rascunho</Badge>;
+      case "draft": return <Badge className="bg-warning/10 text-warning">Rascunho</Badge>;
     }
   };
 
@@ -176,8 +177,8 @@ export function DocumentViewer() {
     <div className="space-y-6">
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
         <Card><CardContent className="pt-6"><div className="flex items-center justify-between"><div><p className="text-sm text-muted-foreground">Total de Documentos</p><p className="text-3xl font-bold">{documents.length}</p></div><div className="p-3 rounded-full bg-primary/10"><FileText className="h-6 w-6 text-primary" /></div></div></CardContent></Card>
-        <Card><CardContent className="pt-6"><div className="flex items-center justify-between"><div><p className="text-sm text-muted-foreground">Categorias</p><p className="text-3xl font-bold">{categories.length}</p></div><div className="p-3 rounded-full bg-blue-500/10"><Folder className="h-6 w-6 text-blue-500" /></div></div></CardContent></Card>
-        <Card><CardContent className="pt-6"><div className="flex items-center justify-between"><div><p className="text-sm text-muted-foreground">Favoritos</p><p className="text-3xl font-bold text-yellow-500">{documents.filter(d => d.isFavorite).length}</p></div><div className="p-3 rounded-full bg-yellow-500/10"><Star className="h-6 w-6 text-yellow-500" /></div></div></CardContent></Card>
+        <Card><CardContent className="pt-6"><div className="flex items-center justify-between"><div><p className="text-sm text-muted-foreground">Categorias</p><p className="text-3xl font-bold">{categories.length}</p></div><div className="p-3 rounded-full bg-primary/10"><Folder className="h-6 w-6 text-primary" /></div></div></CardContent></Card>
+        <Card><CardContent className="pt-6"><div className="flex items-center justify-between"><div><p className="text-sm text-muted-foreground">Favoritos</p><p className="text-3xl font-bold text-warning">{documents.filter(d => d.isFavorite).length}</p></div><div className="p-3 rounded-full bg-warning/10"><Star className="h-6 w-6 text-warning" /></div></div></CardContent></Card>
         <Card><CardContent className="pt-6"><div className="flex items-center justify-between"><div><p className="text-sm text-muted-foreground">Rascunhos</p><p className="text-3xl font-bold">{documents.filter(d => d.status === "draft").length}</p></div><div className="p-3 rounded-full bg-muted"><Clock className="h-6 w-6 text-muted-foreground" /></div></div></CardContent></Card>
       </div>
 
