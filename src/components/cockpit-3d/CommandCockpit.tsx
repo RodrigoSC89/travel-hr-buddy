@@ -237,7 +237,7 @@ export function CommandCockpit() {
         <div className="flex items-center justify-between text-xs text-muted-foreground">
           <div className="flex items-center gap-4">
             <span className="flex items-center gap-1">
-              <span className="w-2 h-2 rounded-full bg-green-500 animate-pulse" />
+              <span className="w-2 h-2 rounded-full bg-success animate-pulse" />
               Sistema Operacional
             </span>
             <span>{markers.length} ativos rastreados</span>

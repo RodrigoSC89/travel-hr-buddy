@@ -10,8 +10,24 @@ import { toast } from "sonner";
 import { logger } from "@/lib/logger";
 
 export default function AIAuditDashboard() {
-  const [logs, setLogs] = useState<any[]>([]);
-  const [metrics, setMetrics] = useState<any>(null);
+  interface AILogEntry {
+    id: string;
+    created_at: string;
+    service: string;
+    status: string;
+    response_time_ms: number | null;
+    tokens_used: number | null;
+    model: string | null;
+    prompt_length: number;
+  }
+  interface AIMetrics {
+    totalCalls: number;
+    successRate: number;
+    avgResponseTime: number;
+    avgTokens: number;
+  }
+  const [logs, setLogs] = useState<AILogEntry[]>([]);
+  const [metrics, setMetrics] = useState<AIMetrics | null>(null);
   const [loading, setLoading] = useState(true);
   const [selectedService, setSelectedService] = useState<string>("");
   const [selectedStatus, setSelectedStatus] = useState<string>("");
@@ -46,11 +62,11 @@ export default function AIAuditDashboard() {
   function getStatusBadge(status: string) {
     switch (status) {
     case "success":
-      return <Badge className="bg-green-500">Success</Badge>;
+      return <Badge className="bg-success text-success-foreground">Success</Badge>;
     case "error":
-      return <Badge className="bg-red-500">Error</Badge>;
+      return <Badge className="bg-destructive text-destructive-foreground">Error</Badge>;
     case "timeout":
-      return <Badge className="bg-yellow-500">Timeout</Badge>;
+      return <Badge className="bg-warning text-warning-foreground">Timeout</Badge>;
     default:
       return <Badge>Unknown</Badge>;
     }
@@ -174,7 +190,7 @@ export default function AIAuditDashboard() {
                 <TableBody>
                   {logs.length === 0 ? (
                     <TableRow>
-                      <TableCell colSpan={7} className="text-center py-8 text-gray-500">
+                      <TableCell colSpan={7} className="text-center py-8 text-muted-foreground">
                         No AI logs found
                       </TableCell>
                     </TableRow>
@@ -210,31 +226,31 @@ export default function AIAuditDashboard() {
             <div className="flex items-center justify-between pb-4 border-b">
               <div>
                 <div className="font-medium">Copilot</div>
-                <div className="text-sm text-gray-600">Main AI assistant</div>
+                <div className="text-sm text-muted-foreground">Main AI assistant</div>
               </div>
               <div className="text-right">
                 <div className="font-medium">{metrics?.successRate || 0}%</div>
-                <div className="text-sm text-gray-600">success rate</div>
+                <div className="text-sm text-muted-foreground">success rate</div>
               </div>
             </div>
             <div className="flex items-center justify-between pb-4 border-b">
               <div>
                 <div className="font-medium">Forecast Engine</div>
-                <div className="text-sm text-gray-600">Predictive analytics</div>
+                <div className="text-sm text-muted-foreground">Predictive analytics</div>
               </div>
               <div className="text-right">
                 <div className="font-medium">{metrics?.avgResponseTime || 0}ms</div>
-                <div className="text-sm text-gray-600">avg response</div>
+                <div className="text-sm text-muted-foreground">avg response</div>
               </div>
             </div>
             <div className="flex items-center justify-between">
               <div>
                 <div className="font-medium">DP Intelligence</div>
-                <div className="text-sm text-gray-600">Dynamic positioning AI</div>
+                <div className="text-sm text-muted-foreground">Dynamic positioning AI</div>
               </div>
               <div className="text-right">
                 <div className="font-medium">{metrics?.avgTokens || 0}</div>
-                <div className="text-sm text-gray-600">avg tokens</div>
+                <div className="text-sm text-muted-foreground">avg tokens</div>
               </div>
             </div>
           </div>
