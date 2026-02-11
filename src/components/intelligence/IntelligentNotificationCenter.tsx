@@ -85,7 +85,7 @@ export const IntelligentNotificationCenter: React.FC<IntelligentNotificationCent
       if (error) throw error;
 
       // eslint-disable-next-line @typescript-eslint/no-explicit-any -- intelligent_notifications not in generated types
-      const mapped: IntelligentNotification[] = (data || []).map((n: any) => ({
+      const mapped: IntelligentNotification[] = (data || []).map((n: Record<string, unknown>) => ({
         id: String(n.id),
         type: (n.notification_type || "system_insight") as IntelligentNotification["type"],
         priority: (n.priority || "medium") as IntelligentNotification["priority"],
@@ -95,7 +95,7 @@ export const IntelligentNotificationCenter: React.FC<IntelligentNotificationCent
         actionType: n.action_type ? String(n.action_type) as IntelligentNotification["actionType"] : undefined,
         actionData: n.action_data as Record<string, unknown> | undefined,
         isRead: Boolean(n.is_read),
-        createdAt: new Date(n.created_at),
+        createdAt: new Date(String(n.created_at)),
         category: n.category ? String(n.category) : undefined,
         estimatedReadTime: undefined,
       }));
@@ -112,8 +112,7 @@ export const IntelligentNotificationCenter: React.FC<IntelligentNotificationCent
     }
   };
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Supabase realtime payload shape
-  const handleNewNotification = (payload: any) => {
+  const handleNewNotification = (payload: { new?: Record<string, unknown> }) => {
     loadNotifications(); // Reload notifications
     
     toast({

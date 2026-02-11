@@ -9,7 +9,7 @@ export interface PEODPRule {
   categoria: string;
   descricao: string;
   criticidade: "Crítica" | "Alta" | "Média" | "Baixa";
-  validacao: (data?: any) => boolean | Promise<boolean>;
+  validacao: (data?: Record<string, unknown>) => boolean | Promise<boolean>;
 }
 
 /**
@@ -165,7 +165,7 @@ export function getRulesByStandard(norma: "NORMAM-101" | "IMCA M117"): PEODPRule
 /**
  * Validate all rules
  */
-export async function validateAllRules(data?: any): Promise<{
+export async function validateAllRules(data?: Record<string, unknown>): Promise<{
   passed: number;
   failed: number;
   results: { ruleId: string; passed: boolean }[];

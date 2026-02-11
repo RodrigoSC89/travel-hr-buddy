@@ -258,7 +258,8 @@ export function useSubscription<T>(
 /**
  * Hook for debounced callbacks with cleanup
  */
-export function useDebouncedCallback<T extends (...args: any[]) => void>(
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- generic debounce wrapper
+export function useDebouncedCallback<T extends (...args: unknown[]) => void>(
   callback: T,
   delay: number
 ): T {

@@ -10,6 +10,7 @@
 import { logger } from "@/lib/utils/production-logger";
 
 // Type definitions
+/* eslint-disable @typescript-eslint/no-explicit-any -- mapbox-gl external library types require any for interop */
 type MapboxMapConstructor = new (options: any) => any;
 type MapboxMarkerConstructor = new (options?: any) => any;
 type MapboxPopupConstructor = new (options?: any) => any;

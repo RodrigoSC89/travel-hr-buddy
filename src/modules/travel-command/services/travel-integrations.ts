@@ -112,7 +112,7 @@ export class GDSIntegrationService {
     return offers.sort((a, b) => a.price.amount - b.price.amount);
   }
 
-  async bookFlight(offerId: string, passengers: any[]): Promise<{ confirmationNumber: string; status: string }> {
+  async bookFlight(offerId: string, passengers: Record<string, unknown>[]): Promise<{ confirmationNumber: string; status: string }> {
     // This would integrate with actual GDS booking APIs
     const confirmationNumber = `BK${Date.now().toString().slice(-8)}`;
     logger.info(`Flight booked: ${confirmationNumber}`);
@@ -198,7 +198,7 @@ export class HotelProviderService {
     }));
   }
 
-  async bookHotel(offerId: string, guestInfo: any): Promise<{ confirmationNumber: string; status: string }> {
+  async bookHotel(offerId: string, guestInfo: Record<string, unknown>): Promise<{ confirmationNumber: string; status: string }> {
     const confirmationNumber = `HT${Date.now().toString().slice(-8)}`;
     logger.info(`Hotel booked: ${confirmationNumber}`);
     return { confirmationNumber, status: "confirmed" };

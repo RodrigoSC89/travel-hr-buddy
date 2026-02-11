@@ -209,10 +209,10 @@ END:VCALENDAR`], { type: "text/calendar;charset=utf-8" });
 
   const getPriorityColor = (priority: string) => {
     switch (priority) {
-      case "critical": return "bg-red-500/10 text-red-500 border-red-500/30";
-      case "high": return "bg-orange-500/10 text-orange-500 border-orange-500/30";
-      case "medium": return "bg-yellow-500/10 text-yellow-500 border-yellow-500/30";
-      case "low": return "bg-green-500/10 text-green-500 border-green-500/30";
+      case "critical": return "bg-destructive/10 text-destructive border-destructive/30";
+      case "high": return "bg-warning/10 text-warning border-warning/30";
+      case "medium": return "bg-warning/10 text-warning border-warning/30";
+      case "low": return "bg-success/10 text-success border-success/30";
       default: return "bg-muted text-muted-foreground";
     }
   };
@@ -329,15 +329,15 @@ END:VCALENDAR`], { type: "text/calendar;charset=utf-8" });
         <TabsContent value="connections" className="space-y-4">
           <div className="grid md:grid-cols-2 gap-4">
             {/* Outlook Card */}
-            <Card className={connections[0].connected ? "border-green-500/30" : ""}>
+            <Card className={connections[0].connected ? "border-success/30" : ""}>
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
-                  <div className="w-8 h-8 bg-blue-500 rounded flex items-center justify-center text-white font-bold text-sm">
+                  <div className="w-8 h-8 bg-primary rounded flex items-center justify-center text-primary-foreground font-bold text-sm">
                     O
                   </div>
                   Microsoft Outlook
                   {connections[0].connected && (
-                    <Badge variant="outline" className="ml-auto bg-green-500/10 text-green-500">
+                    <Badge variant="outline" className="ml-auto bg-success/10 text-success">
                       <Check className="h-3 w-3 mr-1" /> Conectado
                     </Badge>
                   )}
@@ -389,15 +389,15 @@ END:VCALENDAR`], { type: "text/calendar;charset=utf-8" });
             </Card>
 
             {/* Google Calendar Card */}
-            <Card className={connections[1].connected ? "border-green-500/30" : ""}>
+            <Card className={connections[1].connected ? "border-success/30" : ""}>
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
-                  <div className="w-8 h-8 bg-red-500 rounded flex items-center justify-center text-white font-bold text-sm">
+                  <div className="w-8 h-8 bg-destructive rounded flex items-center justify-center text-destructive-foreground font-bold text-sm">
                     G
                   </div>
                   Google Calendar
                   {connections[1].connected && (
-                    <Badge variant="outline" className="ml-auto bg-green-500/10 text-green-500">
+                    <Badge variant="outline" className="ml-auto bg-success/10 text-success">
                       <Check className="h-3 w-3 mr-1" /> Conectado
                     </Badge>
                   )}

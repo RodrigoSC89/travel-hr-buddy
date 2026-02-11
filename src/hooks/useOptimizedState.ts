@@ -141,7 +141,8 @@ export function usePrevious<T>(value: T): T | undefined {
 /**
  * Hook para throttle de funções
  */
-export function useThrottle<T extends (...args: any[]) => any>(
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- generic utility function requires flexible typing
+export function useThrottle<T extends (...args: unknown[]) => unknown>(
   callback: T,
   delay: number = 200
 ): T {

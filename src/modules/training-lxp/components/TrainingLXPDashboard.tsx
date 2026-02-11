@@ -89,7 +89,7 @@ export function TrainingLXPDashboard() {
         </TabsList>
 
         <TabsContent value="overview">
-          <OverviewTab analytics={analytics} />
+          <OverviewTab analytics={analytics ?? null} />
         </TabsContent>
 
         <TabsContent value="adaptive">
@@ -108,18 +108,28 @@ export function TrainingLXPDashboard() {
   );
 }
 
+const kpiColorMap: Record<string, { bg: string; text: string }> = {
+  blue: { bg: "bg-primary/20", text: "text-primary" },
+  green: { bg: "bg-success/20", text: "text-success" },
+  purple: { bg: "bg-accent/20", text: "text-accent-foreground" },
+  emerald: { bg: "bg-success/20", text: "text-success" },
+  yellow: { bg: "bg-warning/20", text: "text-warning" },
+  pink: { bg: "bg-destructive/20", text: "text-destructive" },
+};
+
 function KPICard({ title, value, icon: Icon, color }: {
   title: string;
   value: string | number;
   icon: React.ElementType;
   color: string;
 }) {
+  const colors = kpiColorMap[color] || kpiColorMap.blue;
   return (
     <Card>
       <CardContent className="pt-4 pb-3">
         <div className="flex items-center gap-3">
-          <div className={cn("p-2 rounded-lg", `bg-${color}-500/20`)}>
-            <Icon className={cn("h-4 w-4", `text-${color}-400`)} />
+          <div className={cn("p-2 rounded-lg", colors.bg)}>
+            <Icon className={cn("h-4 w-4", colors.text)} />
           </div>
           <div>
             <p className="text-xs text-muted-foreground">{title}</p>
@@ -131,8 +141,8 @@ function KPICard({ title, value, icon: Icon, color }: {
   );
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- analytics from useTrainingAnalytics hook
-function OverviewTab({ analytics }: { analytics: any }) {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- analytics from useTrainingAnalytics hook has dynamic shape
+function OverviewTab({ analytics }: { analytics: Record<string, unknown> | null }) {
   if (!analytics) return null;
 
   return (
@@ -141,13 +151,13 @@ function OverviewTab({ analytics }: { analytics: any }) {
       <Card>
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
-            <Trophy className="h-5 w-5 text-yellow-400" />
+            <Trophy className="h-5 w-5 text-warning" />
             Top Cursos
           </CardTitle>
         </CardHeader>
         <CardContent>
           <div className="space-y-3">
-            {analytics.topCourses.map((course: any, i: number) => (
+            {(analytics.topCourses as Array<{ id: string; name: string; enrollments: number }>).map((course, i: number) => (
               <div key={course.id} className="flex items-center gap-3">
                 <span className={cn(
                   "w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold",
@@ -170,13 +180,13 @@ function OverviewTab({ analytics }: { analytics: any }) {
       <Card>
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
-            <Headset className="h-5 w-5 text-purple-400" />
+            <Headset className="h-5 w-5 text-accent-foreground" />
             Cenários VR
           </CardTitle>
         </CardHeader>
         <CardContent>
           <div className="space-y-3">
-            {analytics.vrScenarios.map((scenario: any) => (
+            {(analytics.vrScenarios as Array<{ id: string; name: string; completions: number }>).map((scenario) => (
               <div key={scenario.id} className="flex items-center justify-between">
                 <span className="text-sm">{scenario.name}</span>
                 <div className="flex items-center gap-2">
@@ -193,7 +203,7 @@ function OverviewTab({ analytics }: { analytics: any }) {
       <Card>
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
-            <Gamepad2 className="h-5 w-5 text-green-400" />
+            <Gamepad2 className="h-5 w-5 text-success" />
             Leaderboard
           </CardTitle>
         </CardHeader>
@@ -208,9 +218,9 @@ function OverviewTab({ analytics }: { analytics: any }) {
               <div key={i} className="flex items-center gap-3">
                 <span className={cn(
                   "w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold",
-                  i === 0 ? "bg-gradient-to-r from-yellow-400 to-orange-500 text-black" :
-                  i === 1 ? "bg-gradient-to-r from-gray-300 to-gray-400 text-black" :
-                  i === 2 ? "bg-gradient-to-r from-amber-600 to-amber-700 text-white" :
+                  i === 0 ? "bg-gradient-to-r from-warning to-warning text-warning-foreground" :
+                  i === 1 ? "bg-gradient-to-r from-muted to-muted text-muted-foreground" :
+                  i === 2 ? "bg-gradient-to-r from-warning to-warning text-warning-foreground" :
                   "bg-muted"
                 )}>
                   {i + 1}
@@ -221,7 +231,7 @@ function OverviewTab({ analytics }: { analytics: any }) {
                 </div>
                 <div className="text-right">
                   <p className="text-sm font-bold">{learner.xp} XP</p>
-                  <p className="text-xs text-orange-400 flex items-center gap-1">
+                  <p className="text-xs text-warning flex items-center gap-1">
                     <Flame className="h-3 w-3" /> {learner.streak}
                   </p>
                 </div>
@@ -241,10 +251,10 @@ function AdaptiveLearningTab() {
 
   return (
     <div className="space-y-6 mt-6">
-      <Card className="border-emerald-500/20">
+      <Card className="border-success/20">
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
-            <Brain className="h-5 w-5 text-emerald-400" />
+            <Brain className="h-5 w-5 text-success" />
             Adaptive Learning Engine
           </CardTitle>
           <CardDescription>
@@ -271,7 +281,7 @@ function AdaptiveLearningTab() {
             <Button
               onClick={() => generateCurriculum({ learnerId: "demo-learner", objective })}
               disabled={!objective || generating}
-              className="bg-gradient-to-r from-emerald-500 to-cyan-500"
+              className="bg-gradient-to-r from-success to-primary"
             >
               {generating ? "Gerando..." : "📚 Gerar Currículo"}
             </Button>
@@ -324,7 +334,7 @@ function CurriculumView({ curriculum }: { curriculum: PersonalizedCurriculum }) 
       <Card>
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
-            <BookOpen className="h-5 w-5 text-blue-400" />
+            <BookOpen className="h-5 w-5 text-primary" />
             {curriculum.title}
           </CardTitle>
           <CardDescription>
@@ -376,10 +386,10 @@ function MicrolearningTab() {
 
   return (
     <div className="space-y-6 mt-6">
-      <Card className="border-yellow-500/20">
+      <Card className="border-warning/20">
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
-            <Zap className="h-5 w-5 text-yellow-400" />
+            <Zap className="h-5 w-5 text-warning" />
             Microlearning Generator
           </CardTitle>
           <CardDescription>
@@ -401,7 +411,7 @@ function MicrolearningTab() {
                 setShowResults(false);
               }}
               disabled={!topic || isPending}
-              className="bg-gradient-to-r from-yellow-500 to-orange-500"
+              className="bg-gradient-to-r from-warning to-warning"
             >
               {isPending ? "Criando..." : "⚡ Criar Micro-aula"}
             </Button>
@@ -422,7 +432,7 @@ function MicrolearningTab() {
                 <div className="flex items-center justify-between">
                   <CardTitle>{lesson.title}</CardTitle>
                   <div className="flex items-center gap-2">
-                    <Badge className="bg-yellow-500">
+                    <Badge className="bg-warning text-warning-foreground">
                       <Star className="h-3 w-3 mr-1" />
                       {lesson.xpReward} XP
                     </Badge>
@@ -434,8 +444,8 @@ function MicrolearningTab() {
                 </div>
               </CardHeader>
               <CardContent className="space-y-4">
-                <div className="p-4 rounded-lg bg-yellow-500/10 border border-yellow-500/20">
-                  <p className="font-medium text-yellow-400">🎯 Hook</p>
+                <div className="p-4 rounded-lg bg-warning/10 border border-warning/20">
+                  <p className="font-medium text-warning">🎯 Hook</p>
                   <p className="text-sm">{lesson.hook}</p>
                 </div>
 
@@ -453,8 +463,8 @@ function MicrolearningTab() {
                   </ul>
                 </div>
 
-                <div className="p-4 rounded-lg bg-emerald-500/10 border border-emerald-500/20">
-                  <p className="font-medium text-emerald-400">🚀 Aplicação</p>
+                <div className="p-4 rounded-lg bg-success/10 border border-success/20">
+                  <p className="font-medium text-success">🚀 Aplicação</p>
                   <p className="text-sm">{lesson.application}</p>
                 </div>
               </CardContent>
@@ -464,7 +474,7 @@ function MicrolearningTab() {
             <Card>
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
-                  <Target className="h-5 w-5 text-blue-400" />
+                  <Target className="h-5 w-5 text-primary" />
                   Quiz Rápido
                 </CardTitle>
               </CardHeader>
@@ -501,7 +511,7 @@ function MicrolearningTab() {
                   <Button
                     onClick={handleSubmitQuiz}
                     disabled={Object.keys(quizAnswers).length !== lesson.quiz.length}
-                    className="w-full bg-gradient-to-r from-blue-500 to-purple-500"
+                    className="w-full bg-gradient-to-r from-primary to-accent"
                   >
                     Enviar Respostas
                   </Button>
@@ -526,10 +536,10 @@ function VRTrainingTab() {
 
   return (
     <div className="space-y-6 mt-6">
-      <Card className="border-purple-500/20">
+      <Card className="border-accent/20">
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
-            <Headset className="h-5 w-5 text-purple-400" />
+            <Headset className="h-5 w-5 text-accent-foreground" />
             VR/AR Training Scenarios
           </CardTitle>
           <CardDescription>
@@ -541,7 +551,7 @@ function VRTrainingTab() {
             {scenarios.map((s) => (
               <Card
                 key={s.id}
-                className="cursor-pointer hover:border-purple-500/50 transition-colors"
+                className="cursor-pointer hover:border-accent/50 transition-colors"
                 onClick={() => loadScenario({ scenarioType: s.id })}
               >
                 <CardContent className="pt-6 text-center">
@@ -572,12 +582,12 @@ function VRScenarioView({ scenario }: { scenario: VRScenario }) {
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
     >
-      <Card className="border-purple-500/30">
+      <Card className="border-accent/30">
         <CardHeader>
           <div className="flex items-center justify-between">
             <CardTitle>{scenario.title}</CardTitle>
             <div className="flex items-center gap-2">
-              <Badge className="bg-purple-500">
+              <Badge className="bg-accent text-accent-foreground">
                 <Star className="h-3 w-3 mr-1" />
                 {scenario.xpReward} XP
               </Badge>
@@ -591,7 +601,7 @@ function VRScenarioView({ scenario }: { scenario: VRScenario }) {
         </CardHeader>
         <CardContent className="space-y-4">
           {/* Environment */}
-          <div className="p-4 rounded-lg bg-purple-500/10">
+          <div className="p-4 rounded-lg bg-accent/10">
             <p className="font-medium mb-2">🌍 Environment</p>
             <div className="flex gap-2 flex-wrap">
               <Badge variant="outline">📍 {scenario.environment.location}</Badge>
@@ -628,7 +638,7 @@ function VRScenarioView({ scenario }: { scenario: VRScenario }) {
           </div>
 
           {/* Start Button */}
-          <Button className="w-full bg-gradient-to-r from-purple-500 to-pink-500" size="lg">
+          <Button className="w-full bg-gradient-to-r from-accent to-destructive" size="lg">
             <Headset className="h-5 w-5 mr-2" />
             Launch VR Experience
           </Button>
