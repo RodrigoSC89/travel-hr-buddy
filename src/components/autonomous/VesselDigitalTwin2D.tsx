@@ -50,10 +50,10 @@ export const VesselDigitalTwin2D: React.FC<VesselDigitalTwin2DProps> = ({
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case 'operational': return 'text-green-500';
-      case 'degraded': return 'text-yellow-500';
-      case 'critical': return 'text-orange-500';
-      case 'offline': return 'text-red-500';
+      case 'operational': return 'text-success';
+      case 'degraded': return 'text-warning';
+      case 'critical': return 'text-warning';
+      case 'offline': return 'text-destructive';
       default: return 'text-muted-foreground';
     }
   };
@@ -150,14 +150,14 @@ export const VesselDigitalTwin2D: React.FC<VesselDigitalTwin2DProps> = ({
           <div className="absolute top-4 right-4 flex flex-col gap-2">
             <div className={cn(
               "flex items-center gap-1 text-xs",
-              isEngineRunning ? "text-green-500" : "text-muted-foreground"
+              isEngineRunning ? "text-success" : "text-muted-foreground"
             )}>
               <CheckCircle className="h-3 w-3" />
               Engine
             </div>
             <div className={cn(
               "flex items-center gap-1 text-xs",
-              fuelPercent > 20 ? "text-green-500" : "text-yellow-500"
+              fuelPercent > 20 ? "text-success" : "text-warning"
             )}>
               <Fuel className="h-3 w-3" />
               Fuel OK

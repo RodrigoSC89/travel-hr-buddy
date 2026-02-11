@@ -403,7 +403,7 @@ export function VesselDigitalTwin3D({ vesselState, className }: VesselDigitalTwi
           <div className="absolute top-4 right-4 bg-background/80 backdrop-blur-sm rounded-lg p-2 text-xs space-y-1">
             <p className="font-medium">Legenda de Cores</p>
             <div className="flex items-center gap-2">
-              <div className="w-3 h-3 rounded-full bg-green-500" />
+              <div className="w-3 h-3 rounded-full bg-success" />
               <span>Normal</span>
             </div>
             <div className="flex items-center gap-2">
@@ -411,7 +411,7 @@ export function VesselDigitalTwin3D({ vesselState, className }: VesselDigitalTwi
               <span>Atenção</span>
             </div>
             <div className="flex items-center gap-2">
-              <div className="w-3 h-3 rounded-full bg-red-500" />
+              <div className="w-3 h-3 rounded-full bg-destructive" />
               <span>Crítico</span>
             </div>
           </div>
@@ -420,21 +420,21 @@ export function VesselDigitalTwin3D({ vesselState, className }: VesselDigitalTwi
         {/* Equipment Status */}
         <div className="grid grid-cols-3 gap-4 text-sm">
           <div className="flex items-center gap-2 p-2 rounded-lg bg-muted/50">
-            <Thermometer className="h-4 w-4 text-orange-500" />
+            <Thermometer className="h-4 w-4 text-warning" />
             <div>
               <p className="text-muted-foreground">Motor</p>
               <p className="font-medium">{(engineHealth * 100).toFixed(0)}%</p>
             </div>
           </div>
           <div className="flex items-center gap-2 p-2 rounded-lg bg-muted/50">
-            <Activity className="h-4 w-4 text-blue-500" />
+            <Activity className="h-4 w-4 text-primary" />
             <div>
               <p className="text-muted-foreground">Gerador</p>
               <p className="font-medium">{(generatorHealth * 100).toFixed(0)}%</p>
             </div>
           </div>
           <div className="flex items-center gap-2 p-2 rounded-lg bg-muted/50">
-            <Gauge className="h-4 w-4 text-green-500" />
+            <Gauge className="h-4 w-4 text-success" />
             <div>
               <p className="text-muted-foreground">Radar</p>
               <p className="font-medium">{(radarHealth * 100).toFixed(0)}%</p>

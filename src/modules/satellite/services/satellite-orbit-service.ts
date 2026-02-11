@@ -112,7 +112,8 @@ class SatelliteOrbitService {
       
       if (response.ok) {
         const data = await response.json();
-        return data.map((sat: any) => ({
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Celestrak JSON response shape
+        return data.map((sat: Record<string, any>) => ({
           noradId: sat.NORAD_CAT_ID.toString(),
           name: sat.OBJECT_NAME,
           line1: sat.TLE_LINE1,

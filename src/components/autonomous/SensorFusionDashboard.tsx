@@ -158,9 +158,9 @@ export function SensorFusionDashboard() {
   // Get status color
   const getStatusColor = (status: 'active' | 'degraded' | 'offline') => {
     switch (status) {
-      case 'active': return 'bg-green-500';
-      case 'degraded': return 'bg-yellow-500';
-      case 'offline': return 'bg-red-500';
+      case 'active': return 'bg-success';
+      case 'degraded': return 'bg-warning';
+      case 'offline': return 'bg-destructive';
     }
   };
 
@@ -322,7 +322,7 @@ export function SensorFusionDashboard() {
                     <p className="text-xl font-mono">{fusedData?.position?.longitude?.toFixed(6) || '-46.633300'}°</p>
                   </div>
                   <div className="flex items-center gap-2">
-                    <CheckCircle className="h-4 w-4 text-green-500" />
+                    <CheckCircle className="h-4 w-4 text-success" />
                     <span className="text-sm">Precisão: {fusedData?.position?.accuracy?.toFixed(0) || 10}m</span>
                   </div>
                 </div>
@@ -526,7 +526,7 @@ export function SensorFusionDashboard() {
               {sensors.filter(s => s.status !== 'active').length > 0 ? (
                 <div className="space-y-2">
                   {sensors.filter(s => s.status !== 'active').map((sensor, idx) => (
-                    <div key={idx} className="p-3 rounded-lg bg-yellow-500/10 border border-yellow-500/50">
+                    <div key={idx} className="p-3 rounded-lg bg-warning/10 border border-warning/50">
                       <div className="flex items-center gap-2">
                         {sensor.icon}
                         <span className="font-medium">{sensor.name}</span>
@@ -542,7 +542,7 @@ export function SensorFusionDashboard() {
                 </div>
               ) : (
                 <div className="text-center py-8 text-muted-foreground">
-                  <CheckCircle className="h-12 w-12 mx-auto mb-2 text-green-500" />
+                  <CheckCircle className="h-12 w-12 mx-auto mb-2 text-success" />
                   <p>Todos os sensores operando normalmente</p>
                 </div>
               )}

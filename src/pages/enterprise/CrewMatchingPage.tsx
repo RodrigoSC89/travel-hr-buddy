@@ -146,15 +146,15 @@ export default function CrewMatchingPage() {
   const [searchQuery, setSearchQuery] = useState('');
 
   const getMatchColor = (score: number) => {
-    if (score >= 90) return 'text-green-500';
-    if (score >= 70) return 'text-yellow-500';
-    return 'text-red-500';
+    if (score >= 90) return 'text-success';
+    if (score >= 70) return 'text-warning';
+    return 'text-destructive';
   };
 
   const getMatchBadge = (score: number) => {
-    if (score >= 90) return { label: 'Excelente', class: 'bg-green-500' };
-    if (score >= 70) return { label: 'Bom', class: 'bg-yellow-500' };
-    return { label: 'Parcial', class: 'bg-red-500' };
+    if (score >= 90) return { label: 'Excelente', class: 'bg-success' };
+    if (score >= 70) return { label: 'Bom', class: 'bg-warning' };
+    return { label: 'Parcial', class: 'bg-destructive' };
   };
 
   const filteredCandidates = candidates.filter(c =>
@@ -200,8 +200,8 @@ export default function CrewMatchingPage() {
                   <p className="text-3xl font-bold">{positions.filter(p => p.status === 'open').length}</p>
                   <p className="text-xs text-muted-foreground">Vagas Abertas</p>
                 </div>
-                <div className="p-2 rounded-lg bg-blue-500/10">
-                  <Ship className="h-5 w-5 text-blue-500" />
+                 <div className="p-2 rounded-lg bg-primary/10">
+                   <Ship className="h-5 w-5 text-primary" />
                 </div>
               </div>
             </CardContent>
@@ -214,8 +214,8 @@ export default function CrewMatchingPage() {
                   <p className="text-3xl font-bold">{candidates.length}</p>
                   <p className="text-xs text-muted-foreground">Candidatos Pool</p>
                 </div>
-                <div className="p-2 rounded-lg bg-purple-500/10">
-                  <Users className="h-5 w-5 text-purple-500" />
+                 <div className="p-2 rounded-lg bg-accent/10">
+                   <Users className="h-5 w-5 text-accent-foreground" />
                 </div>
               </div>
             </CardContent>
@@ -225,13 +225,13 @@ export default function CrewMatchingPage() {
             <CardContent className="pt-4">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-3xl font-bold text-green-500">
-                    {candidates.filter(c => c.matchScore >= 90).length}
-                  </p>
-                  <p className="text-xs text-muted-foreground">Match Excelente</p>
-                </div>
-                <div className="p-2 rounded-lg bg-green-500/10">
-                  <CheckCircle2 className="h-5 w-5 text-green-500" />
+                   <p className="text-3xl font-bold text-success">
+                     {candidates.filter(c => c.matchScore >= 90).length}
+                   </p>
+                   <p className="text-xs text-muted-foreground">Match Excelente</p>
+                 </div>
+                 <div className="p-2 rounded-lg bg-success/10">
+                   <CheckCircle2 className="h-5 w-5 text-success" />
                 </div>
               </div>
             </CardContent>
@@ -282,8 +282,8 @@ export default function CrewMatchingPage() {
                           variant="outline"
                           className={cn(
                             "text-xs",
-                            position.status === 'open' && "bg-green-500/10 text-green-600",
-                            position.status === 'interviewing' && "bg-blue-500/10 text-blue-600"
+                             position.status === 'open' && "bg-success/10 text-success",
+                             position.status === 'interviewing' && "bg-primary/10 text-primary"
                           )}
                         >
                           {position.status === 'open' ? 'Aberta' : 'Entrevistas'}
@@ -413,8 +413,8 @@ export default function CrewMatchingPage() {
                                 {/* Strengths & Risks */}
                                 <div className="grid grid-cols-2 gap-2">
                                   {candidate.strengths.length > 0 && (
-                                    <div className="p-2 bg-green-500/5 rounded text-xs">
-                                      <div className="flex items-center gap-1 text-green-600 font-medium mb-1">
+                                     <div className="p-2 bg-success/5 rounded text-xs">
+                                       <div className="flex items-center gap-1 text-success font-medium mb-1">
                                         <CheckCircle2 className="h-3 w-3" />
                                         Pontos Fortes
                                       </div>

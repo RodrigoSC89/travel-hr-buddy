@@ -25,7 +25,9 @@ export default function AIObservabilityPage() {
     );
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- hook returns dynamic shape
   const activeAgents = agents.filter((a: any) => a.status === "active" || a.status === "online").length;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- hook returns dynamic shape
   const errorAgents = agents.filter((a: any) => a.status === "error").length;
 
   const observabilityMetrics = [
@@ -73,9 +75,9 @@ export default function AIObservabilityPage() {
               <div className="flex items-center justify-between">
                 <span className="text-2xl font-bold">{metric.value}</span>
                 {metric.status === "good" ? (
-                  <CheckCircle2 className="h-5 w-5 text-green-500" />
+                  <CheckCircle2 className="h-5 w-5 text-success" />
                 ) : (
-                  <AlertCircle className="h-5 w-5 text-yellow-500" />
+                  <AlertCircle className="h-5 w-5 text-warning" />
                 )}
               </div>
             </CardContent>
@@ -99,6 +101,7 @@ export default function AIObservabilityPage() {
                   <p>Nenhuma atividade registrada ainda</p>
                 </div>
               ) : (
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any -- audit log shape from hook
                 auditLogs.slice(0, 30).map((log: any) => (
                   <div key={log.id} className="flex items-center justify-between border-b pb-2 last:border-0">
                     <div className="flex items-center gap-3">
