@@ -92,10 +92,10 @@ export function FleetCockpit360() {
 
   const getStatusColor = (status: string) => {
     const colors = {
-      operational: 'bg-green-500/20 text-green-400 border-green-500/30',
-      maintenance: 'bg-amber-500/20 text-amber-400 border-amber-500/30',
-      docked: 'bg-blue-500/20 text-blue-400 border-blue-500/30',
-      offline: 'bg-red-500/20 text-red-400 border-red-500/30'
+      operational: 'bg-success/20 text-success border-success/30',
+      maintenance: 'bg-warning/20 text-warning border-warning/30',
+      docked: 'bg-primary/20 text-primary border-primary/30',
+      offline: 'bg-destructive/20 text-destructive border-destructive/30'
     };
     return colors[status as keyof typeof colors] || 'bg-muted';
   };
@@ -175,7 +175,7 @@ export function FleetCockpit360() {
                     {vessel.metrics.fuelLevel}%
                   </div>
                   {vessel.alerts.critical > 0 && (
-                    <div className="flex items-center gap-1 text-red-400">
+                    <div className="flex items-center gap-1 text-destructive">
                       <AlertTriangle className="h-3 w-3" />
                       {vessel.alerts.critical} crítico
                     </div>
@@ -249,7 +249,7 @@ export function FleetCockpit360() {
                 <Card className="bg-muted/30">
                   <CardContent className="p-4">
                     <div className="flex items-center gap-2 mb-2">
-                      <Fuel className="h-4 w-4 text-blue-400" />
+                      <Fuel className="h-4 w-4 text-primary" />
                       <span className="text-xs text-muted-foreground">Combustível</span>
                     </div>
                     <Progress value={selectedVessel.metrics.fuelLevel} className="h-2 mb-1" />
@@ -260,7 +260,7 @@ export function FleetCockpit360() {
                 <Card className="bg-muted/30">
                   <CardContent className="p-4">
                     <div className="flex items-center gap-2 mb-2">
-                      <Users className="h-4 w-4 text-green-400" />
+                      <Users className="h-4 w-4 text-success" />
                       <span className="text-xs text-muted-foreground">Tripulação</span>
                     </div>
                     <p className="text-lg font-bold">{selectedVessel.crew.onboard}/{selectedVessel.crew.total}</p>
@@ -275,9 +275,9 @@ export function FleetCockpit360() {
                       <span className="text-xs text-muted-foreground">Alertas</span>
                     </div>
                     <p className="text-lg font-bold">
-                      <span className="text-red-400">{selectedVessel.alerts.critical}</span>
+                      <span className="text-destructive">{selectedVessel.alerts.critical}</span>
                       <span className="text-muted-foreground mx-1">/</span>
-                      <span className="text-amber-400">{selectedVessel.alerts.warning}</span>
+                      <span className="text-warning">{selectedVessel.alerts.warning}</span>
                     </p>
                     <p className="text-xs text-muted-foreground">crítico / aviso</p>
                   </CardContent>
@@ -292,7 +292,7 @@ export function FleetCockpit360() {
                     <p className="text-lg font-bold">{selectedVessel.certificates.total}</p>
                     <p className="text-xs">
                       {selectedVessel.certificates.expiring > 0 && (
-                        <span className="text-amber-400">{selectedVessel.certificates.expiring} vencendo</span>
+                        <span className="text-warning">{selectedVessel.certificates.expiring} vencendo</span>
                       )}
                     </p>
                   </CardContent>
@@ -316,7 +316,7 @@ export function FleetCockpit360() {
                 <Card className="bg-muted/30">
                   <CardContent className="p-4">
                     <div className="flex items-center gap-2 mb-2">
-                      <Activity className="h-4 w-4 text-green-400" />
+                      <Activity className="h-4 w-4 text-success" />
                       <span className="text-xs text-muted-foreground">Rumo</span>
                     </div>
                     <p className="text-2xl font-bold">{selectedVessel.metrics.heading}°</p>
@@ -338,7 +338,7 @@ export function FleetCockpit360() {
                 <Card className="bg-muted/30">
                   <CardContent className="p-4">
                     <div className="flex items-center gap-2 mb-2">
-                      <Battery className="h-4 w-4 text-blue-400" />
+                      <Battery className="h-4 w-4 text-primary" />
                       <span className="text-xs text-muted-foreground">Combustível</span>
                     </div>
                     <Progress value={selectedVessel.metrics.fuelLevel} className="h-3 mb-2" />
@@ -365,24 +365,24 @@ export function FleetCockpit360() {
 
             <TabsContent value="maintenance" className="pt-4">
               <div className="grid grid-cols-3 gap-4">
-                <Card className="bg-red-500/10 border-red-500/20">
+                <Card className="bg-destructive/10 border-destructive/20">
                   <CardContent className="p-4 text-center">
-                    <Wrench className="h-8 w-8 text-red-400 mx-auto mb-2" />
-                    <p className="text-2xl font-bold text-red-400">{selectedVessel.maintenance.overdue}</p>
+                    <Wrench className="h-8 w-8 text-destructive mx-auto mb-2" />
+                    <p className="text-2xl font-bold text-destructive">{selectedVessel.maintenance.overdue}</p>
                     <p className="text-xs text-muted-foreground">Atrasadas</p>
                   </CardContent>
                 </Card>
-                <Card className="bg-amber-500/10 border-amber-500/20">
+                <Card className="bg-warning/10 border-warning/20">
                   <CardContent className="p-4 text-center">
-                    <Wrench className="h-8 w-8 text-amber-400 mx-auto mb-2" />
-                    <p className="text-2xl font-bold text-amber-400">{selectedVessel.maintenance.pending}</p>
+                    <Wrench className="h-8 w-8 text-warning mx-auto mb-2" />
+                    <p className="text-2xl font-bold text-warning">{selectedVessel.maintenance.pending}</p>
                     <p className="text-xs text-muted-foreground">Pendentes</p>
                   </CardContent>
                 </Card>
-                <Card className="bg-blue-500/10 border-blue-500/20">
+                <Card className="bg-primary/10 border-primary/20">
                   <CardContent className="p-4 text-center">
-                    <Calendar className="h-8 w-8 text-blue-400 mx-auto mb-2" />
-                    <p className="text-2xl font-bold text-blue-400">{selectedVessel.maintenance.scheduled}</p>
+                    <Calendar className="h-8 w-8 text-primary mx-auto mb-2" />
+                    <p className="text-2xl font-bold text-primary">{selectedVessel.maintenance.scheduled}</p>
                     <p className="text-xs text-muted-foreground">Programadas</p>
                   </CardContent>
                 </Card>
@@ -391,24 +391,24 @@ export function FleetCockpit360() {
 
             <TabsContent value="compliance" className="pt-4">
               <div className="grid grid-cols-3 gap-4">
-                <Card className="bg-green-500/10 border-green-500/20">
+                <Card className="bg-success/10 border-success/20">
                   <CardContent className="p-4 text-center">
-                    <FileCheck className="h-8 w-8 text-green-400 mx-auto mb-2" />
-                    <p className="text-2xl font-bold text-green-400">{selectedVessel.certificates.total}</p>
+                    <FileCheck className="h-8 w-8 text-success mx-auto mb-2" />
+                    <p className="text-2xl font-bold text-success">{selectedVessel.certificates.total}</p>
                     <p className="text-xs text-muted-foreground">Total</p>
                   </CardContent>
                 </Card>
-                <Card className="bg-amber-500/10 border-amber-500/20">
+                <Card className="bg-warning/10 border-warning/20">
                   <CardContent className="p-4 text-center">
-                    <AlertTriangle className="h-8 w-8 text-amber-400 mx-auto mb-2" />
-                    <p className="text-2xl font-bold text-amber-400">{selectedVessel.certificates.expiring}</p>
+                    <AlertTriangle className="h-8 w-8 text-warning mx-auto mb-2" />
+                    <p className="text-2xl font-bold text-warning">{selectedVessel.certificates.expiring}</p>
                     <p className="text-xs text-muted-foreground">Vencendo</p>
                   </CardContent>
                 </Card>
-                <Card className="bg-red-500/10 border-red-500/20">
+                <Card className="bg-destructive/10 border-destructive/20">
                   <CardContent className="p-4 text-center">
-                    <AlertTriangle className="h-8 w-8 text-red-400 mx-auto mb-2" />
-                    <p className="text-2xl font-bold text-red-400">{selectedVessel.certificates.expired}</p>
+                    <AlertTriangle className="h-8 w-8 text-destructive mx-auto mb-2" />
+                    <p className="text-2xl font-bold text-destructive">{selectedVessel.certificates.expired}</p>
                     <p className="text-xs text-muted-foreground">Vencidos</p>
                   </CardContent>
                 </Card>

@@ -45,11 +45,11 @@ const ApiGateway = () => {
   const getStatusIcon = (status: string) => {
     switch (status) {
     case "active":
-      return <CheckCircle2 className="h-4 w-4 text-green-500" />;
+      return <CheckCircle2 className="h-4 w-4 text-success" />;
     case "error":
-      return <AlertCircle className="h-4 w-4 text-red-500" />;
+      return <AlertCircle className="h-4 w-4 text-destructive" />;
     default:
-      return <Activity className="h-4 w-4 text-gray-500" />;
+      return <Activity className="h-4 w-4 text-muted-foreground" />;
     }
   };
 
@@ -63,7 +63,7 @@ const ApiGateway = () => {
     return <Badge variant={variants[method] || "default"}>{method}</Badge>;
   };
 
-  const handleTestEndpoint = async (route: any) => {
+  const handleTestEndpoint = async (route: { service: string; path: string }) => {
     toast({
       title: "Testing Endpoint",
       description: `Testing ${route.service}...`
@@ -84,7 +84,7 @@ const ApiGateway = () => {
     }
   };
 
-  const handleCheckStatus = async (route: any) => {
+  const handleCheckStatus = async (route: { service: string; path: string }) => {
     const status = await apiProxyRouter.checkEndpointStatus(route.path);
     toast({
       title: "Endpoint Status",

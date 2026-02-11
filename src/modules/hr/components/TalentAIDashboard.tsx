@@ -130,7 +130,7 @@ export function TalentAIDashboard() {
         </TabsList>
 
         <TabsContent value="overview">
-          <OverviewTab analytics={analytics} />
+          {analytics && <OverviewTab analytics={analytics} />}
         </TabsContent>
 
         <TabsContent value="talent-match">
@@ -172,8 +172,7 @@ function KPICard({ title, value, icon: Icon, color }: {
   );
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- analytics shape is dynamic from AI service
-function OverviewTab({ analytics }: { analytics: any }) {
+function OverviewTab({ analytics }: { analytics: Record<string, unknown> & { positionDistribution: { position: string; count: number }[]; totalCrew: number; trends?: Record<string, unknown> } }) {
   if (!analytics) return null;
 
   return (
@@ -214,17 +213,17 @@ function OverviewTab({ analytics }: { analytics: any }) {
           <div className="space-y-4">
             <TrendLine 
               label="Retenção" 
-              data={analytics.trends.retention} 
+              data={(analytics.trends?.retention as number[]) || []} 
               color="emerald" 
             />
             <TrendLine 
               label="Wellness" 
-              data={analytics.trends.wellness} 
+              data={(analytics.trends?.wellness as number[]) || []} 
               color="pink" 
             />
             <TrendLine 
               label="Training" 
-              data={analytics.trends.training} 
+              data={(analytics.trends?.training as number[]) || []} 
               color="blue" 
             />
           </div>

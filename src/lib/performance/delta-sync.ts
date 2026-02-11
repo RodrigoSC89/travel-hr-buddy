@@ -12,7 +12,7 @@ interface SyncState {
   checksum: string;
 }
 
-interface DeltaChange<T = any> {
+interface DeltaChange<T = unknown> {
   id: string;
   operation: 'insert' | 'update' | 'delete';
   data: T;
@@ -118,7 +118,7 @@ class DeltaSyncManager {
   /**
    * Generate checksum for data integrity verification
    */
-  generateChecksum(data: any[]): string {
+  generateChecksum(data: { id: string }[]): string {
     const str = JSON.stringify(data.map(d => d.id).sort());
     let hash = 0;
     for (let i = 0; i < str.length; i++) {
