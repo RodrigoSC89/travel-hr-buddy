@@ -74,7 +74,7 @@ export const MiniChart = memo(function MiniChart({
     };
   }, [data, type, width, height]);
 
-  const trendColor = trend > 0 ? 'text-green-500' : trend < 0 ? 'text-red-500' : 'text-muted-foreground';
+  const trendColor = trend > 0 ? 'text-success' : trend < 0 ? 'text-destructive' : 'text-muted-foreground';
 
   return (
     <div className={cn("flex items-center gap-2", className)}>

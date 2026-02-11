@@ -210,7 +210,8 @@ export function getActiveTraces(): Trace[] {
 /**
  * Trace decorator for async functions
  */
-export function traced<T extends (...args: any[]) => Promise<any>>(
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- generic decorator requires flexible function signatures
+export function traced<T extends (...args: unknown[]) => Promise<unknown>>(
   name: string,
   fn: T,
   attributes?: Record<string, string | number | boolean>

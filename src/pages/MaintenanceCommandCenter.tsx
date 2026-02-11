@@ -106,7 +106,8 @@ const MaintenanceCommandCenter = () => {
       ? Math.round((summary.completedTasks / summary.totalTasks) * 100) 
       : 94,
     activeTasks: summary.inProgressTasks || 15,
-    pendingForecasts: predictions.filter((p: any) => p.failureProbability > 0.5).length || 5
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any -- dynamic prediction shape from hook
+    pendingForecasts: predictions.filter((p: Record<string, unknown>) => (p.failureProbability as number) > 0.5).length || 5
   };
 
   const handleExportWeeklySchedule = async () => {
@@ -132,25 +133,25 @@ const MaintenanceCommandCenter = () => {
       {/* Header */}
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6">
         <div className="flex items-center gap-3">
-          <div className="p-3 bg-gradient-to-br from-orange-500 to-amber-600 rounded-xl shadow-lg">
+          <div className="p-3 bg-gradient-to-br from-warning to-warning/80 rounded-xl shadow-lg">
             <Wrench className="h-8 w-8 text-white" />
           </div>
           <div>
-            <h1 className="text-3xl font-bold bg-gradient-to-r from-orange-600 to-amber-600 bg-clip-text text-transparent">
+            <h1 className="text-3xl font-bold bg-gradient-to-r from-warning to-warning/70 bg-clip-text text-transparent">
               Maintenance Command Center
             </h1>
             <p className="text-muted-foreground">Sistema Unificado de Gestão de Manutenção Naval com IA</p>
           </div>
           <div className="flex gap-2 ml-2 flex-wrap">
-            <Badge variant="secondary" className="bg-purple-100 text-purple-700 dark:bg-purple-900/30 dark:text-purple-300">
+            <Badge variant="secondary" className="bg-accent/10 text-accent-foreground">
               <Bot className="h-3 w-3 mr-1" />
               GPT-4 Integrado
             </Badge>
-            <Badge variant="secondary" className="bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-300">
+            <Badge variant="secondary" className="bg-primary/10 text-primary">
               <Zap className="h-3 w-3 mr-1" />
               Tempo Real
             </Badge>
-            <Badge variant="secondary" className="bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-300">
+            <Badge variant="secondary" className="bg-success/10 text-success">
               <Brain className="h-3 w-3 mr-1" />
               IA Preditiva
             </Badge>
@@ -170,7 +171,7 @@ const MaintenanceCommandCenter = () => {
             <Download className="mr-2 h-4 w-4" />
             Exportar
           </Button>
-          <Button onClick={() => setShowCreateDialog(true)} className="bg-gradient-to-r from-orange-500 to-amber-600 hover:from-orange-600 hover:to-amber-700">
+          <Button onClick={() => setShowCreateDialog(true)} className="bg-gradient-to-r from-warning to-warning/80 hover:from-warning/90 hover:to-warning/70">
             <Plus className="mr-2 h-4 w-4" />
             Novo Plano
           </Button>
@@ -179,64 +180,64 @@ const MaintenanceCommandCenter = () => {
 
       {/* Quick Stats */}
       <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
-        <Card className="border-l-4 border-l-blue-500 hover:shadow-md transition-shadow">
+        <Card className="border-l-4 border-l-primary hover:shadow-md transition-shadow">
           <CardContent className="pt-4">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-xs text-muted-foreground uppercase tracking-wide">Agendados</p>
                 <p className="text-2xl font-bold">{stats.scheduled}</p>
               </div>
-              <Calendar className="h-8 w-8 text-blue-500 opacity-50" />
+              <Calendar className="h-8 w-8 text-primary opacity-50" />
             </div>
           </CardContent>
         </Card>
         
-        <Card className="border-l-4 border-l-green-500 hover:shadow-md transition-shadow">
+        <Card className="border-l-4 border-l-success hover:shadow-md transition-shadow">
           <CardContent className="pt-4">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-xs text-muted-foreground uppercase tracking-wide">Concluídos</p>
-                <p className="text-2xl font-bold text-green-600">{stats.completed}</p>
+                <p className="text-2xl font-bold text-success">{stats.completed}</p>
               </div>
-              <CheckCircle className="h-8 w-8 text-green-500 opacity-50" />
+              <CheckCircle className="h-8 w-8 text-success opacity-50" />
             </div>
           </CardContent>
         </Card>
         
-        <Card className={`border-l-4 hover:shadow-md transition-shadow ${stats.overdue > 0 ? "border-l-red-500 bg-red-50 dark:bg-red-950/20" : "border-l-gray-300"}`}>
+        <Card className={`border-l-4 hover:shadow-md transition-shadow ${stats.overdue > 0 ? "border-l-destructive bg-destructive/5" : "border-l-muted"}`}>
           <CardContent className="pt-4">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-xs text-muted-foreground uppercase tracking-wide">Vencidos</p>
-                <p className={`text-2xl font-bold ${stats.overdue > 0 ? "text-red-600" : ""}`}>
+                <p className={`text-2xl font-bold ${stats.overdue > 0 ? "text-destructive" : ""}`}>
                   {stats.overdue}
                 </p>
               </div>
-              <AlertTriangle className={`h-8 w-8 opacity-50 ${stats.overdue > 0 ? "text-red-500" : "text-muted-foreground"}`} />
+              <AlertTriangle className={`h-8 w-8 opacity-50 ${stats.overdue > 0 ? "text-destructive" : "text-muted-foreground"}`} />
             </div>
           </CardContent>
         </Card>
         
-        <Card className="border-l-4 border-l-orange-500 hover:shadow-md transition-shadow">
+        <Card className="border-l-4 border-l-warning hover:shadow-md transition-shadow">
           <CardContent className="pt-4">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-xs text-muted-foreground uppercase tracking-wide">Tarefas Ativas</p>
-                <p className="text-2xl font-bold text-orange-600">{stats.activeTasks}</p>
+                <p className="text-2xl font-bold text-warning">{stats.activeTasks}</p>
               </div>
-              <Target className="h-8 w-8 text-orange-500 opacity-50" />
+              <Target className="h-8 w-8 text-warning opacity-50" />
             </div>
           </CardContent>
         </Card>
 
-        <Card className="border-l-4 border-l-purple-500 hover:shadow-md transition-shadow">
+        <Card className="border-l-4 border-l-accent hover:shadow-md transition-shadow">
           <CardContent className="pt-4">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-xs text-muted-foreground uppercase tracking-wide">Forecasts</p>
-                <p className="text-2xl font-bold text-purple-600">{stats.pendingForecasts}</p>
+                <p className="text-2xl font-bold text-accent-foreground">{stats.pendingForecasts}</p>
               </div>
-              <Sparkles className="h-8 w-8 text-purple-500 opacity-50" />
+              <Sparkles className="h-8 w-8 text-accent-foreground opacity-50" />
             </div>
           </CardContent>
         </Card>
@@ -328,10 +329,10 @@ const MaintenanceCommandCenter = () => {
         {/* Overview - Quick Access Cards */}
         <TabsContent value="overview" className="mt-6">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            <Card className="cursor-pointer hover:shadow-lg transition-all hover:border-blue-300" onClick={() => setActiveTab("saude")}>
+            <Card className="cursor-pointer hover:shadow-lg transition-all hover:border-primary/30" onClick={() => setActiveTab("saude")}>
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
-                  <Ship className="h-5 w-5 text-blue-500" />
+                  <Ship className="h-5 w-5 text-primary" />
                   Saúde da Frota
                 </CardTitle>
                 <CardDescription>
@@ -343,10 +344,10 @@ const MaintenanceCommandCenter = () => {
               </CardContent>
             </Card>
 
-            <Card className="cursor-pointer hover:shadow-lg transition-all hover:border-purple-300" onClick={() => setActiveTab("copilot")}>
+            <Card className="cursor-pointer hover:shadow-lg transition-all hover:border-accent/30" onClick={() => setActiveTab("copilot")}>
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
-                  <Bot className="h-5 w-5 text-purple-500" />
+                  <Bot className="h-5 w-5 text-accent-foreground" />
                   Copilot IA
                 </CardTitle>
                 <CardDescription>

@@ -119,27 +119,27 @@ export function InteractiveKPICard({
 
   const statusConfig = {
     success: {
-      bg: "from-green-500/10 to-green-600/10",
-      border: "border-green-500/20",
-      text: "text-green-600",
+      bg: "from-success/10 to-success/15",
+      border: "border-success/20",
+      text: "text-success",
       icon: <CheckCircle2 className="h-4 w-4" />,
     },
     warning: {
-      bg: "from-yellow-500/10 to-yellow-600/10",
-      border: "border-yellow-500/20",
-      text: "text-yellow-600",
+      bg: "from-warning/10 to-warning/15",
+      border: "border-warning/20",
+      text: "text-warning",
       icon: <AlertTriangle className="h-4 w-4" />,
     },
     danger: {
-      bg: "from-red-500/10 to-red-600/10",
-      border: "border-red-500/20",
-      text: "text-red-600",
+      bg: "from-destructive/10 to-destructive/15",
+      border: "border-destructive/20",
+      text: "text-destructive",
       icon: <AlertTriangle className="h-4 w-4" />,
     },
     info: {
-      bg: "from-blue-500/10 to-blue-600/10",
-      border: "border-blue-500/20",
-      text: "text-blue-600",
+      bg: "from-primary/10 to-primary/15",
+      border: "border-primary/20",
+      text: "text-primary",
       icon: <Info className="h-4 w-4" />,
     },
     neutral: {
@@ -189,7 +189,7 @@ export function InteractiveKPICard({
           </p>
         </div>
         {trend && (
-          <div className={cn("flex items-center text-xs", trend.isPositive ? "text-green-600" : "text-red-600")}>
+          <div className={cn("flex items-center text-xs", trend.isPositive ? "text-success" : "text-destructive")}>
             <TrendIcon className="h-3 w-3 mr-0.5" />
             {Math.abs(trend.change)}%
           </div>
@@ -222,7 +222,7 @@ export function InteractiveKPICard({
                 variant="secondary"
                 className={cn(
                   "text-xs",
-                  trend.isPositive ? "bg-green-500/10 text-green-600" : "bg-red-500/10 text-red-600"
+                  trend.isPositive ? "bg-success/10 text-success" : "bg-destructive/10 text-destructive"
                 )}
               >
                 {trend.isPositive ? <ArrowUpRight className="h-3 w-3 mr-0.5" /> : <ArrowDownRight className="h-3 w-3 mr-0.5" />}
@@ -314,8 +314,8 @@ export function InteractiveKPICard({
               variant="secondary"
               className={cn(
                 trend.isPositive 
-                  ? "bg-green-500/10 text-green-600 border-green-500/20" 
-                  : "bg-red-500/10 text-red-600 border-red-500/20"
+                  ? "bg-success/10 text-success border-success/20" 
+                  : "bg-destructive/10 text-destructive border-destructive/20"
               )}
             >
               <TrendIcon className="h-3 w-3 mr-1" />
@@ -404,8 +404,8 @@ export function InteractiveKPICard({
                 className={cn(
                   "text-xs",
                   comparison.difference > 0 
-                    ? "border-green-500/20 text-green-600" 
-                    : "border-red-500/20 text-red-600"
+                    ? "border-success/20 text-success" 
+                    : "border-destructive/20 text-destructive"
                 )}
               >
                 {comparison.difference > 0 ? "+" : ""}{comparison.difference}%
