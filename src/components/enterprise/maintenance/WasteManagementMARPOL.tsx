@@ -44,23 +44,23 @@ export function WasteManagementMARPOL() {
   if (isLoading) return <div className="space-y-4"><div className="grid grid-cols-4 gap-4">{[...Array(4)].map((_, i) => <Skeleton key={i} className="h-24" />)}</div><Skeleton className="h-64" /></div>;
 
   const { records = [], vessels = [] } = data || {};
-  const vesselMap = new Map(vessels.map((v: any) => [v.id, v.name]));
+  const vesselMap = new Map(vessels.map((v) => [v.id, v.name]));
 
   if (records.length === 0) {
     return <EmptyState icon={Recycle} title="Sem registros MARPOL" message="Registre descartes de resíduos para conformidade MARPOL Annex V e e-GRB." />;
   }
 
-  const totalWaste = records.reduce((sum: number, r: any) => sum + (Number(r.quantity) || 0), 0);
-  const shoreCount = records.filter((r: any) => r.disposal_method === "shore").length;
-  const seaCount = records.filter((r: any) => r.disposal_method === "sea").length;
-  const withCert = records.filter((r: any) => r.certificate_number).length;
+  const totalWaste = records.reduce((sum: number, r) => sum + (Number(r.quantity) || 0), 0);
+  const shoreCount = records.filter((r) => r.disposal_method === "shore").length;
+  const seaCount = records.filter((r) => r.disposal_method === "sea").length;
+  const withCert = records.filter((r) => r.certificate_number).length;
 
   const exportCSV = () => {
     const headers = ["Data", "Embarcação", "Tipo", "Quantidade", "Unidade", "Método", "Porto", "Certificado"];
-    const rows = records.map((r: any) => [
-      r.disposal_date, vesselMap.get(r.vessel_id) || "N/A", r.waste_type, r.quantity, r.unit, r.disposal_method, r.port_code || "", r.certificate_number || ""
+    const rows = records.map((r) => [
+      r.disposal_date || "", vesselMap.get(r.vessel_id || "") || "N/A", r.waste_type, r.quantity, r.unit, r.disposal_method, r.port_code || "", r.certificate_number || ""
     ]);
-    const csv = [headers.join(","), ...rows.map((r: any[]) => r.join(","))].join("\n");
+    const csv = [headers.join(","), ...rows.map((r) => r.join(","))].join("\n");
     const blob = new Blob([csv], { type: "text/csv" });
     const url = URL.createObjectURL(blob);
     const a = document.createElement("a"); a.href = url; a.download = "waste-marpol-report.csv"; a.click();
@@ -79,10 +79,10 @@ export function WasteManagementMARPOL() {
       </div>
 
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-        <Card><CardContent className="pt-4"><div className="flex items-center justify-between"><div><p className="text-sm text-muted-foreground">Total Descartado</p><p className="text-2xl font-bold">{totalWaste.toFixed(1)}</p></div><Scale className="h-5 w-5 text-blue-600" /></div></CardContent></Card>
-        <Card><CardContent className="pt-4"><div className="flex items-center justify-between"><div><p className="text-sm text-muted-foreground">Descarte em Porto</p><p className="text-2xl font-bold">{shoreCount}</p></div><MapPin className="h-5 w-5 text-green-600" /></div></CardContent></Card>
-        <Card><CardContent className="pt-4"><div className="flex items-center justify-between"><div><p className="text-sm text-muted-foreground">Descarte no Mar</p><p className="text-2xl font-bold">{seaCount}</p></div><Ship className="h-5 w-5 text-amber-600" /></div></CardContent></Card>
-        <Card><CardContent className="pt-4"><div className="flex items-center justify-between"><div><p className="text-sm text-muted-foreground">Com Certificado</p><p className="text-2xl font-bold text-green-600">{withCert}</p></div><CheckCircle2 className="h-5 w-5 text-green-600" /></div></CardContent></Card>
+         <Card><CardContent className="pt-4"><div className="flex items-center justify-between"><div><p className="text-sm text-muted-foreground">Total Descartado</p><p className="text-2xl font-bold">{totalWaste.toFixed(1)}</p></div><Scale className="h-5 w-5 text-info" /></div></CardContent></Card>
+        <Card><CardContent className="pt-4"><div className="flex items-center justify-between"><div><p className="text-sm text-muted-foreground">Descarte em Porto</p><p className="text-2xl font-bold">{shoreCount}</p></div><MapPin className="h-5 w-5 text-success" /></div></CardContent></Card>
+        <Card><CardContent className="pt-4"><div className="flex items-center justify-between"><div><p className="text-sm text-muted-foreground">Descarte no Mar</p><p className="text-2xl font-bold">{seaCount}</p></div><Ship className="h-5 w-5 text-warning" /></div></CardContent></Card>
+        <Card><CardContent className="pt-4"><div className="flex items-center justify-between"><div><p className="text-sm text-muted-foreground">Com Certificado</p><p className="text-2xl font-bold text-success">{withCert}</p></div><CheckCircle2 className="h-5 w-5 text-success" /></div></CardContent></Card>
       </div>
 
       <Tabs value={activeTab} onValueChange={setActiveTab}>
@@ -96,7 +96,7 @@ export function WasteManagementMARPOL() {
             <CardHeader><CardTitle className="text-sm">Registros Recentes</CardTitle></CardHeader>
             <CardContent>
               <div className="space-y-3">
-                {records.slice(0, 20).map((record: any) => (
+                {records.slice(0, 20).map((record) => (
                   <div key={record.id} className="flex items-center justify-between p-4 rounded-lg border hover:bg-muted/50">
                     <div className="flex items-center gap-4">
                       <div className="h-10 w-10 rounded-full bg-primary/10 flex items-center justify-center">
@@ -106,7 +106,7 @@ export function WasteManagementMARPOL() {
                         <p className="font-medium">{categoryLabels[record.waste_type] || record.waste_type}</p>
                         <div className="flex items-center gap-2 text-sm text-muted-foreground">
                           <Ship className="h-3 w-3" />
-                          <span>{vesselMap.get(record.vessel_id) || "N/A"}</span>
+                          <span>{vesselMap.get(record.vessel_id || "") || "N/A"}</span>
                           {record.disposal_date && <>
                             <span>•</span>
                             <Calendar className="h-3 w-3" />
@@ -123,7 +123,7 @@ export function WasteManagementMARPOL() {
                         </Badge>
                       </div>
                       {record.certificate_number && (
-                        <Badge variant="outline" className="text-green-600 border-green-600">
+                        <Badge variant="outline" className="text-success border-success">
                           <CheckCircle2 className="h-3 w-3 mr-1" />Cert
                         </Badge>
                       )}
@@ -139,13 +139,13 @@ export function WasteManagementMARPOL() {
           <Card>
             <CardHeader><CardTitle>Conformidade MARPOL Annex V</CardTitle></CardHeader>
             <CardContent className="space-y-4">
-              <div className="p-4 rounded-lg border border-green-200 bg-green-50">
-                <div className="flex items-center gap-2 mb-1"><CheckCircle2 className="h-5 w-5 text-green-600" /><span className="font-semibold text-green-700">e-GRB Ativo</span></div>
-                <p className="text-sm text-green-600">{records.length} registros no livro eletrônico</p>
+               <div className="p-4 rounded-lg border border-success/20 bg-success/5">
+                <div className="flex items-center gap-2 mb-1"><CheckCircle2 className="h-5 w-5 text-success" /><span className="font-semibold text-success">e-GRB Ativo</span></div>
+                <p className="text-sm text-success">{records.length} registros no livro eletrônico</p>
               </div>
-              <div className="p-4 rounded-lg border border-green-200 bg-green-50">
-                <div className="flex items-center gap-2 mb-1"><CheckCircle2 className="h-5 w-5 text-green-600" /><span className="font-semibold text-green-700">Certificados de Descarte</span></div>
-                <p className="text-sm text-green-600">{withCert} de {shoreCount} descartes em porto com certificado</p>
+              <div className="p-4 rounded-lg border border-success/20 bg-success/5">
+                <div className="flex items-center gap-2 mb-1"><CheckCircle2 className="h-5 w-5 text-success" /><span className="font-semibold text-success">Certificados de Descarte</span></div>
+                <p className="text-sm text-success">{withCert} de {shoreCount} descartes em porto com certificado</p>
               </div>
             </CardContent>
           </Card>
