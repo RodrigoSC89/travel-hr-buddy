@@ -99,7 +99,8 @@ export class SatelliteEventsService {
     }
   }
 
-  private mapToEvent(data: any): SatelliteEvent {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- dynamic Supabase row shape
+  private mapToEvent(data: Record<string, any>): SatelliteEvent {
     return {
       id: data.id,
       satelliteId: data.satellite_id,

@@ -77,8 +77,8 @@ export function SEVIDashboard() {
         <Card>
           <CardContent className="p-4">
             <div className="flex items-center gap-3">
-              <div className="p-2 rounded-lg bg-green-500/10">
-                <Target className="h-5 w-5 text-green-500" />
+               <div className="p-2 rounded-lg bg-success/10">
+                 <Target className="h-5 w-5 text-success" />
               </div>
               <div>
                 <p className="text-2xl font-bold">
@@ -92,8 +92,8 @@ export function SEVIDashboard() {
         <Card>
           <CardContent className="p-4">
             <div className="flex items-center gap-3">
-              <div className="p-2 rounded-lg bg-blue-500/10">
-                <Activity className="h-5 w-5 text-blue-500" />
+               <div className="p-2 rounded-lg bg-primary/10">
+                 <Activity className="h-5 w-5 text-primary" />
               </div>
               <div>
                 <p className="text-2xl font-bold">{metrics?.totalFeedback || 0}</p>
@@ -120,8 +120,8 @@ export function SEVIDashboard() {
         <Card>
           <CardContent className="p-4">
             <div className="flex items-center gap-3">
-              <div className={`p-2 rounded-lg ${metrics?.improvementTrend && metrics.improvementTrend > 0 ? 'bg-green-500/10' : 'bg-red-500/10'}`}>
-                <TrendingUp className={`h-5 w-5 ${metrics?.improvementTrend && metrics.improvementTrend > 0 ? 'text-green-500' : 'text-red-500'}`} />
+               <div className={`p-2 rounded-lg ${metrics?.improvementTrend && metrics.improvementTrend > 0 ? 'bg-success/10' : 'bg-destructive/10'}`}>
+                 <TrendingUp className={`h-5 w-5 ${metrics?.improvementTrend && metrics.improvementTrend > 0 ? 'text-success' : 'text-destructive'}`} />
               </div>
               <div>
                 <p className="text-2xl font-bold">

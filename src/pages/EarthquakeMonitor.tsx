@@ -23,10 +23,10 @@ interface Earthquake {
 }
 
 const getMagnitudeColor = (mag: number): string => {
-  if (mag >= 7) return "bg-red-600";
-  if (mag >= 5) return "bg-orange-500";
+  if (mag >= 7) return "bg-destructive";
+  if (mag >= 5) return "bg-warning";
   if (mag >= 3) return "bg-yellow-500";
-  return "bg-green-500";
+  return "bg-success";
 };
 
 const getMagnitudeLabel = (mag: number): string => {
@@ -57,7 +57,8 @@ export default function EarthquakeMonitor() {
       if (error) throw error;
 
       if (data?.features) {
-        const formatted: Earthquake[] = data.features.map((f: any) => ({
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any -- USGS GeoJSON feature shape is dynamic
+        const formatted: Earthquake[] = data.features.map((f: Record<string, any>) => ({
           id: f.id,
           magnitude: f.properties.mag,
           location: f.properties.place,
@@ -129,25 +130,25 @@ export default function EarthquakeMonitor() {
             </div>
           </CardContent>
         </Card>
-        <Card className={stats.major > 0 ? "border-orange-500/50" : ""}>
+         <Card className={stats.major > 0 ? "border-warning/50" : ""}>
           <CardContent className="pt-6">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-muted-foreground">Magnitude 5+</p>
-                <p className="text-3xl font-bold text-orange-500">{stats.major}</p>
+                <p className="text-3xl font-bold text-warning">{stats.major}</p>
               </div>
-              <AlertTriangle className="h-8 w-8 text-orange-500" />
+              <AlertTriangle className="h-8 w-8 text-warning" />
             </div>
           </CardContent>
         </Card>
-        <Card className={stats.tsunami > 0 ? "border-red-500/50" : ""}>
+         <Card className={stats.tsunami > 0 ? "border-destructive/50" : ""}>
           <CardContent className="pt-6">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-muted-foreground">Alerta Tsunami</p>
-                <p className="text-3xl font-bold text-red-500">{stats.tsunami}</p>
+                <p className="text-3xl font-bold text-destructive">{stats.tsunami}</p>
               </div>
-              <Activity className="h-8 w-8 text-red-500" />
+              <Activity className="h-8 w-8 text-destructive" />
             </div>
           </CardContent>
         </Card>
@@ -210,7 +211,7 @@ export default function EarthquakeMonitor() {
               <div
                 key={quake.id}
                 className={`p-4 rounded-lg border cursor-pointer hover:border-primary/50 transition-colors ${
-                  quake.tsunami ? "border-red-500/50 bg-red-500/5" : "bg-muted/30"
+                  quake.tsunami ? "border-destructive/50 bg-destructive/5" : "bg-muted/30"
                 } ${selectedQuake?.id === quake.id ? "ring-2 ring-primary" : ""}`}
                 onClick={() => setSelectedQuake(quake)}
               >

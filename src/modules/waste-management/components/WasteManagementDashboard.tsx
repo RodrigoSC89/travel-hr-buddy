@@ -91,8 +91,8 @@ const getTankIcon = (type: WasteTank["type"]) => {
 
 const getStatusColor = (status: WasteTank["status"]) => {
   const colors = {
-    "ok": "text-emerald-600",
-    "warning": "text-amber-600",
+    "ok": "text-success",
+    "warning": "text-warning",
     "critical": "text-destructive"
   };
   return colors[status];
@@ -125,7 +125,8 @@ export default function WasteManagementDashboard() {
       ]);
 
       // Map waste_tanks
-      const mappedTanks: WasteTank[] = (tanksRes.data || []).map((t: any) => {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any -- dynamic table not in generated types
+      const mappedTanks: WasteTank[] = (tanksRes.data || []).map((t: Record<string, any>) => {
         const capacity = t.capacity || 100;
         const currentLevel = t.current_level ?? t.currentLevel ?? 0;
         return {
@@ -142,7 +143,8 @@ export default function WasteManagementDashboard() {
       });
 
       // Map waste_records to discharges and record books
-      const mappedDischarges: DischargeRecord[] = (recordsRes.data || []).map((r: any) => ({
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any -- dynamic table not in generated types
+      const mappedDischarges: DischargeRecord[] = (recordsRes.data || []).map((r: Record<string, any>) => ({
         id: r.id,
         vessel: r.vessels?.name || r.vessel_name || "—",
         type: r.waste_type || r.type || "Waste",
@@ -156,7 +158,8 @@ export default function WasteManagementDashboard() {
         garbageRecordBook: r.book_type === "GRB" || r.waste_type?.includes("garbage") || r.waste_type?.includes("plastic") || r.waste_type?.includes("food"),
       }));
 
-      const mappedRecordBooks: RecordBookEntry[] = (recordsRes.data || []).map((r: any) => ({
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any -- dynamic table not in generated types
+      const mappedRecordBooks: RecordBookEntry[] = (recordsRes.data || []).map((r: Record<string, any>) => ({
         id: r.id,
         bookType: (r.book_type === "GRB" || r.waste_type?.includes("garbage")) ? "GRB" : "ORB",
         vessel: r.vessels?.name || r.vessel_name || "—",
@@ -188,18 +191,18 @@ export default function WasteManagementDashboard() {
     <div className="space-y-6">
       {/* KPIs */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-        <Card className="bg-gradient-to-br from-emerald-500/10 to-emerald-600/5 border-emerald-500/20">
+        <Card className="bg-gradient-to-br from-success/10 to-success/5 border-success/20">
           <CardContent className="p-6">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-muted-foreground">Conformidade MARPOL</p>
-                <p className="text-3xl font-bold text-emerald-600">98%</p>
-                <p className="text-xs text-emerald-600 mt-1">
+                 <p className="text-3xl font-bold text-success">98%</p>
+                <p className="text-xs text-success mt-1">
                   Todos os anexos
                 </p>
               </div>
-              <div className="p-3 bg-emerald-500/20 rounded-xl">
-                <Leaf className="h-6 w-6 text-emerald-600" />
+              <div className="p-3 bg-success/20 rounded-xl">
+                <Leaf className="h-6 w-6 text-success" />
               </div>
             </div>
           </CardContent>
@@ -234,8 +237,8 @@ export default function WasteManagementDashboard() {
                   Registrados
                 </p>
               </div>
-              <div className="p-3 bg-blue-500/20 rounded-xl">
-                <Recycle className="h-6 w-6 text-blue-600" />
+               <div className="p-3 bg-primary/20 rounded-xl">
+                <Recycle className="h-6 w-6 text-primary" />
               </div>
             </div>
           </CardContent>
@@ -394,7 +397,7 @@ export default function WasteManagementDashboard() {
                         <span>{item.name}</span>
                         <span className={cn(
                           "font-medium",
-                          item.compliance >= 98 ? "text-emerald-600" : "text-amber-600"
+                          item.compliance >= 98 ? "text-success" : "text-warning"
                         )}>
                           {item.compliance}%
                         </span>
@@ -499,9 +502,9 @@ export default function WasteManagementDashboard() {
                       <div className="flex items-center gap-4">
                         <div className={cn(
                           "p-2 rounded-full",
-                          discharge.method === "port" ? "bg-blue-500/20 text-blue-600" :
-                          discharge.method === "sea" ? "bg-emerald-500/20 text-emerald-600" :
-                          "bg-amber-500/20 text-amber-600"
+                           discharge.method === "port" ? "bg-primary/20 text-primary" :
+                           discharge.method === "sea" ? "bg-success/20 text-success" :
+                           "bg-warning/20 text-warning"
                         )}>
                           {discharge.method === "port" ? <Anchor className="h-4 w-4" /> :
                            discharge.method === "sea" ? <Waves className="h-4 w-4" /> :
@@ -543,7 +546,7 @@ export default function WasteManagementDashboard() {
             <CardHeader className="flex flex-row items-center justify-between">
               <div>
                 <CardTitle className="flex items-center gap-2">
-                  <FileText className="h-5 w-5 text-blue-600" />
+                  <FileText className="h-5 w-5 text-primary" />
                   Oil Record Book - Parte I
                 </CardTitle>
                 <CardDescription>Registro de operações com óleos (MARPOL Anexo I)</CardDescription>
@@ -611,7 +614,7 @@ export default function WasteManagementDashboard() {
             <CardHeader className="flex flex-row items-center justify-between">
               <div>
                 <CardTitle className="flex items-center gap-2">
-                  <ClipboardList className="h-5 w-5 text-emerald-600" />
+                  <ClipboardList className="h-5 w-5 text-success" />
                   Garbage Record Book
                 </CardTitle>
                 <CardDescription>Registro de lixo (MARPOL Anexo V)</CardDescription>

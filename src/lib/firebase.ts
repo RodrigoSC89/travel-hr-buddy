@@ -117,6 +117,7 @@ export const onForegroundMessage = (callback: (payload: unknown) => void): (() =
 export const saveFCMTokenToSupabase = async (
   token: string,
   userId: string,
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Supabase client passed dynamically
   supabaseClient: any
 ): Promise<boolean> => {
   try {

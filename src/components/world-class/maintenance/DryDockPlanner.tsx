@@ -19,26 +19,27 @@ import { maintenanceIntelligence, DryDockProject, DryDockWorkItem } from "@/serv
 import { toast } from "sonner";
 
 const categoryConfig: Record<DryDockWorkItem["category"], { icon: React.ElementType; color: string }> = {
-  hull: { icon: Ship, color: "text-blue-500" },
-  machinery: { icon: Wrench, color: "text-orange-500" },
-  piping: { icon: Anchor, color: "text-cyan-500" },
-  electrical: { icon: Target, color: "text-yellow-500" },
-  painting: { icon: Hammer, color: "text-purple-500" },
-  survey: { icon: CheckCircle, color: "text-emerald-500" },
-  safety: { icon: AlertTriangle, color: "text-red-500" },
+  hull: { icon: Ship, color: "text-primary" },
+  machinery: { icon: Wrench, color: "text-warning" },
+  piping: { icon: Anchor, color: "text-info" },
+  electrical: { icon: Target, color: "text-warning" },
+  painting: { icon: Hammer, color: "text-accent-foreground" },
+  survey: { icon: CheckCircle, color: "text-success" },
+  safety: { icon: AlertTriangle, color: "text-destructive" },
 };
 
 const priorityColors: Record<string, string> = {
-  critical: "bg-red-500/10 text-red-500 border-red-500/30",
-  high: "bg-orange-500/10 text-orange-500 border-orange-500/30",
+  critical: "bg-destructive/10 text-destructive border-destructive/30",
+  high: "bg-warning/10 text-warning border-warning/30",
   medium: "bg-amber-500/10 text-amber-500 border-amber-500/30",
-  low: "bg-emerald-500/10 text-emerald-500 border-emerald-500/30",
+  low: "bg-success/10 text-success border-success/30",
 };
 
 export function DryDockPlanner() {
   const [projects, setProjects] = useState<DryDockProject[]>([]);
   const [loading, setLoading] = useState(true);
-  const [aiPlan, setAiPlan] = useState<any>(null);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- AI plan shape is dynamic from optimization service
+  const [aiPlan, setAiPlan] = useState<Record<string, any> | null>(null);
   const [analyzing, setAnalyzing] = useState(false);
 
   useEffect(() => {

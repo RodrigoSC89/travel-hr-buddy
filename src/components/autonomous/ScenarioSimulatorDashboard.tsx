@@ -100,7 +100,7 @@ export function ScenarioSimulatorDashboard() {
             </div>
             <div className="space-y-2">
               <Label>Tipo de Análise</Label>
-              <Select value={scenarioType} onValueChange={(v: any) => setScenarioType(v)}>
+              <Select value={scenarioType} onValueChange={(v: string) => setScenarioType(v as typeof scenarioType)}>
                 <SelectTrigger><SelectValue /></SelectTrigger>
                 <SelectContent>
                   <SelectItem value="fuel_cost">Custo de Combustível</SelectItem>
@@ -153,7 +153,7 @@ export function ScenarioSimulatorDashboard() {
                   <div className="grid grid-cols-3 gap-4 mt-4">
                     <div className="text-center p-3 rounded-lg bg-muted/50">
                       <p className="text-xs text-muted-foreground">P10</p>
-                      <p className="text-lg font-bold text-red-500">${result.fuelCost.percentiles.p10.toLocaleString()}</p>
+                      <p className="text-lg font-bold text-destructive">${result.fuelCost.percentiles.p10.toLocaleString()}</p>
                     </div>
                     <div className="text-center p-3 rounded-lg bg-muted/50">
                       <p className="text-xs text-muted-foreground">P50 (Mediana)</p>
@@ -161,7 +161,7 @@ export function ScenarioSimulatorDashboard() {
                     </div>
                     <div className="text-center p-3 rounded-lg bg-muted/50">
                       <p className="text-xs text-muted-foreground">P90</p>
-                      <p className="text-lg font-bold text-green-500">${result.fuelCost.percentiles.p90.toLocaleString()}</p>
+                      <p className="text-lg font-bold text-success">${result.fuelCost.percentiles.p90.toLocaleString()}</p>
                     </div>
                   </div>
                 </TabsContent>

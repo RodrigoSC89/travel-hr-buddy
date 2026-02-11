@@ -44,7 +44,7 @@ export const UsageAnalytics: React.FC = () => {
                 <p className="text-sm font-medium text-muted-foreground">Usuários Ativos</p>
                 <p className="text-2xl font-bold">{summary.activeUsers}</p>
               </div>
-              <Users className="h-8 w-8 text-blue-500" />
+              <Users className="h-8 w-8 text-primary" />
             </div>
           </CardContent>
         </Card>
@@ -55,7 +55,7 @@ export const UsageAnalytics: React.FC = () => {
                 <p className="text-sm font-medium text-muted-foreground">Chamadas API</p>
                 <p className="text-2xl font-bold">{summary.apiCalls > 1000 ? `${(summary.apiCalls / 1000).toFixed(1)}k` : summary.apiCalls}</p>
               </div>
-              <Activity className="h-8 w-8 text-green-500" />
+              <Activity className="h-8 w-8 text-success" />
             </div>
           </CardContent>
         </Card>
@@ -66,7 +66,7 @@ export const UsageAnalytics: React.FC = () => {
                 <p className="text-sm font-medium text-muted-foreground">Armazenamento</p>
                 <p className="text-2xl font-bold">{summary.storageGB} GB</p>
               </div>
-              <Database className="h-8 w-8 text-yellow-500" />
+              <Database className="h-8 w-8 text-warning" />
             </div>
           </CardContent>
         </Card>
@@ -77,7 +77,7 @@ export const UsageAnalytics: React.FC = () => {
                 <p className="text-sm font-medium text-muted-foreground">Uptime</p>
                 <p className="text-2xl font-bold">{summary.uptime}%</p>
               </div>
-              <TrendingUp className="h-8 w-8 text-purple-500" />
+              <TrendingUp className="h-8 w-8 text-accent-foreground" />
             </div>
           </CardContent>
         </Card>

@@ -58,12 +58,17 @@ const CommunicationCommandCenter = () => {
   // Calculate stats from real data
   const stats: CommandStats = useMemo(() => ({
     totalMessages: messages.length,
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any -- hook returns dynamic message shape
     unreadMessages: messages.filter((m: any) => !m.read).length,
     totalChannels: channels.length,
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any -- hook returns dynamic channel shape
     activeChannels: channels.filter((c: any) => c.memberCount > 0 || c.lastMessageTime).length,
     totalNotifications: notifications.length,
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any -- hook returns dynamic notification shape
     criticalNotifications: notifications.filter((n: any) => n.priority === "urgent" || n.priority === "high").length,
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any -- hook returns dynamic message shape
     urgentMessages: messages.filter((m: any) => m.priority === "high").length,
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any -- hook returns dynamic message shape
     todayMessages: messages.filter((m: any) => {
       const msgDate = new Date(m.timestamp).toDateString();
       return msgDate === new Date().toDateString();
@@ -151,7 +156,7 @@ const CommunicationCommandCenter = () => {
                           <p className="text-2xl font-bold">{stats.activeChannels}</p>
                           <p className="text-sm text-muted-foreground">Canais Ativos</p>
                         </div>
-                        <Hash className="h-8 w-8 text-green-500 opacity-50" />
+                        <Hash className="h-8 w-8 text-success opacity-50" />
                       </div>
                       <p className="text-xs mt-2 text-muted-foreground">
                         de {stats.totalChannels} canais totais
@@ -166,7 +171,7 @@ const CommunicationCommandCenter = () => {
                           <p className="text-2xl font-bold">{stats.totalNotifications}</p>
                           <p className="text-sm text-muted-foreground">Notificações</p>
                         </div>
-                        <Bell className="h-8 w-8 text-orange-500 opacity-50" />
+                        <Bell className="h-8 w-8 text-warning opacity-50" />
                       </div>
                       <p className="text-xs mt-2 text-muted-foreground">
                         {stats.criticalNotifications} críticas
@@ -220,7 +225,7 @@ const CommunicationCommandCenter = () => {
                     className="h-auto py-4 flex flex-col items-center gap-2"
                     onClick={() => setActiveTab("channels")}
                   >
-                    <Hash className="h-6 w-6 text-green-500" />
+                    <Hash className="h-6 w-6 text-success" />
                     <span className="font-medium">Gerenciar Canais</span>
                     <span className="text-xs text-muted-foreground">Criar e editar canais</span>
                   </Button>
@@ -230,7 +235,7 @@ const CommunicationCommandCenter = () => {
                     className="h-auto py-4 flex flex-col items-center gap-2"
                     onClick={() => setActiveTab("notifications")}
                   >
-                    <Bell className="h-6 w-6 text-orange-500" />
+                    <Bell className="h-6 w-6 text-warning" />
                     <span className="font-medium">Ver Notificações</span>
                     <span className="text-xs text-muted-foreground">Alertas e avisos</span>
                   </Button>
@@ -240,7 +245,7 @@ const CommunicationCommandCenter = () => {
                     className="h-auto py-4 flex flex-col items-center gap-2"
                     onClick={() => setActiveTab("ai")}
                   >
-                    <Sparkles className="h-6 w-6 text-purple-500" />
+                    <Sparkles className="h-6 w-6 text-accent-foreground" />
                     <span className="font-medium">Assistente IA</span>
                     <span className="text-xs text-muted-foreground">Ajuda inteligente</span>
                   </Button>
@@ -274,8 +279,8 @@ const CommunicationCommandCenter = () => {
                     </div>
                     
                     <div className="flex items-center gap-3 p-3 bg-muted/50 rounded-lg">
-                      <div className="p-2 bg-orange-500/10 rounded">
-                        <Bell className="h-4 w-4 text-orange-500" />
+                       <div className="p-2 bg-warning/10 rounded">
+                         <Bell className="h-4 w-4 text-warning" />
                       </div>
                       <div className="flex-1">
                         <p className="font-medium text-sm">Alerta de certificação expirando</p>
@@ -284,8 +289,8 @@ const CommunicationCommandCenter = () => {
                     </div>
 
                     <div className="flex items-center gap-3 p-3 bg-muted/50 rounded-lg">
-                      <div className="p-2 bg-green-500/10 rounded">
-                        <Hash className="h-4 w-4 text-green-500" />
+                       <div className="p-2 bg-success/10 rounded">
+                         <Hash className="h-4 w-4 text-success" />
                       </div>
                       <div className="flex-1">
                         <p className="font-medium text-sm">Canal "Emergência" atualizado</p>
@@ -294,8 +299,8 @@ const CommunicationCommandCenter = () => {
                     </div>
 
                     <div className="flex items-center gap-3 p-3 bg-muted/50 rounded-lg">
-                      <div className="p-2 bg-purple-500/10 rounded">
-                        <Sparkles className="h-4 w-4 text-purple-500" />
+                       <div className="p-2 bg-accent/10 rounded">
+                         <Sparkles className="h-4 w-4 text-accent-foreground" />
                       </div>
                       <div className="flex-1">
                         <p className="font-medium text-sm">IA gerou resumo de comunicações</p>
@@ -319,25 +324,25 @@ const CommunicationCommandCenter = () => {
                 </CardHeader>
                 <CardContent>
                   <div className="space-y-4">
-                    <div className="flex items-center justify-between p-3 bg-green-500/10 rounded-lg">
-                      <div className="flex items-center gap-3">
-                        <CheckCircle className="h-5 w-5 text-green-500" />
+                     <div className="flex items-center justify-between p-3 bg-success/10 rounded-lg">
+                       <div className="flex items-center gap-3">
+                         <CheckCircle className="h-5 w-5 text-success" />
                         <span className="font-medium">Canais Online</span>
                       </div>
                       <Badge variant="secondary">{stats.activeChannels}/{stats.totalChannels}</Badge>
                     </div>
 
-                    <div className="flex items-center justify-between p-3 bg-blue-500/10 rounded-lg">
-                      <div className="flex items-center gap-3">
-                        <MessageSquare className="h-5 w-5 text-blue-500" />
+                     <div className="flex items-center justify-between p-3 bg-primary/10 rounded-lg">
+                       <div className="flex items-center gap-3">
+                         <MessageSquare className="h-5 w-5 text-primary" />
                         <span className="font-medium">Mensagens Hoje</span>
                       </div>
                       <Badge variant="secondary">{stats.todayMessages}</Badge>
                     </div>
 
-                    <div className="flex items-center justify-between p-3 bg-orange-500/10 rounded-lg">
-                      <div className="flex items-center gap-3">
-                        <Bell className="h-5 w-5 text-orange-500" />
+                     <div className="flex items-center justify-between p-3 bg-warning/10 rounded-lg">
+                       <div className="flex items-center gap-3">
+                         <Bell className="h-5 w-5 text-warning" />
                         <span className="font-medium">Notificações Pendentes</span>
                       </div>
                       <Badge variant="secondary">{stats.totalNotifications}</Badge>
@@ -373,18 +378,18 @@ const CommunicationCommandCenter = () => {
                     <p className="text-2xl font-bold">{stats.totalMessages}</p>
                     <p className="text-sm text-muted-foreground">Total Mensagens</p>
                   </div>
-                  <div className="text-center p-4 bg-green-500/10 rounded-lg">
-                    <Hash className="h-8 w-8 mx-auto mb-2 text-green-500" />
+                   <div className="text-center p-4 bg-success/10 rounded-lg">
+                     <Hash className="h-8 w-8 mx-auto mb-2 text-success" />
                     <p className="text-2xl font-bold">{stats.totalChannels}</p>
                     <p className="text-sm text-muted-foreground">Canais Ativos</p>
                   </div>
-                  <div className="text-center p-4 bg-orange-500/10 rounded-lg">
-                    <Bell className="h-8 w-8 mx-auto mb-2 text-orange-500" />
+                   <div className="text-center p-4 bg-warning/10 rounded-lg">
+                     <Bell className="h-8 w-8 mx-auto mb-2 text-warning" />
                     <p className="text-2xl font-bold">{stats.totalNotifications}</p>
                     <p className="text-sm text-muted-foreground">Notificações</p>
                   </div>
-                  <div className="text-center p-4 bg-purple-500/10 rounded-lg">
-                    <Users className="h-8 w-8 mx-auto mb-2 text-purple-500" />
+                   <div className="text-center p-4 bg-accent/10 rounded-lg">
+                     <Users className="h-8 w-8 mx-auto mb-2 text-accent-foreground" />
                     <p className="text-2xl font-bold">45</p>
                     <p className="text-sm text-muted-foreground">Usuários Online</p>
                   </div>
@@ -475,7 +480,7 @@ const CommunicationCommandCenter = () => {
                       <p className="font-medium">Assistente IA</p>
                       <p className="text-sm text-muted-foreground">Sugestões inteligentes</p>
                     </div>
-                    <Badge className="bg-purple-500/20 text-purple-500">IA Ativa</Badge>
+                    <Badge className="bg-accent/20 text-accent-foreground">IA Ativa</Badge>
                   </div>
                 </div>
               </div>

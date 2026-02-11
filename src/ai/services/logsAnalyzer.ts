@@ -96,7 +96,8 @@ export const analyzeSystemLogs = async (
 /**
  * Extract log analysis logic for reusability
  */
-const analyzeLogsData = async (allLogs: (SystemLogRow | any)[]): Promise<LogAnalysisResult> => {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- logs come from both DB (typed) and in-memory (untyped) sources
+const analyzeLogsData = async (allLogs: any[]): Promise<LogAnalysisResult> => {
   if (allLogs.length === 0) {
     return {
       anomalies: [],
@@ -126,7 +127,8 @@ const analyzeLogsData = async (allLogs: (SystemLogRow | any)[]): Promise<LogAnal
 /**
  * Detect anomalies in logs
  */
-const detectAnomalies = (logs: (SystemLogRow | any)[]): Anomaly[] => {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- mixed log sources with dynamic shapes
+const detectAnomalies = (logs: any[]): Anomaly[] => {
   const anomalies: Anomaly[] = [];
   
   // Group logs by type and message pattern
@@ -192,7 +194,8 @@ const detectAnomalies = (logs: (SystemLogRow | any)[]): Anomaly[] => {
  */
 const generateRecommendations = async (
   anomalies: Anomaly[],
-  logs: (SystemLogRow | any)[]
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- mixed log sources with dynamic shapes
+  logs: any[]
 ): Promise<Recommendation[]> => {
   if (anomalies.length === 0) {
     return [];
@@ -278,7 +281,8 @@ const parseRecommendationsResponse = (
 
     const parsed = JSON.parse(jsonMatch[0]);
     
-    return (parsed.recommendations || []).map((rec: any) => ({
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any -- dynamic AI JSON response shape
+    return (parsed.recommendations || []).map((rec: Record<string, any>) => ({
       id: `rec-${Date.now()}-${crypto.randomUUID().slice(0, 9)}`,
       anomalyId: rec.anomalyId,
       title: rec.title,
@@ -374,7 +378,8 @@ export const storeAutoFixHistory = async (
 
 // Helper functions
 
-const groupByPattern = (logs: (SystemLogRow | any)[]): Map<string, any[]> => {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- mixed log sources with dynamic shapes
+const groupByPattern = (logs: any[]): Map<string, any[]> => {
   const patterns = new Map<string, any[]>();
   
   logs.forEach(log => {
@@ -391,7 +396,8 @@ const groupByPattern = (logs: (SystemLogRow | any)[]): Map<string, any[]> => {
   return patterns;
 };
 
-const groupByModule = (logs: (SystemLogRow | any)[]): Map<string, any[]> => {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- mixed log sources with dynamic shapes
+const groupByModule = (logs: any[]): Map<string, any[]> => {
   const modules = new Map<string, any[]>();
   
   logs.forEach(log => {
@@ -406,6 +412,7 @@ const groupByModule = (logs: (SystemLogRow | any)[]): Map<string, any[]> => {
   return modules;
 };
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- mixed log sources
 const extractModule = (log: any): string => {
   return log.module || log.component || log.source || "unknown";
 };
