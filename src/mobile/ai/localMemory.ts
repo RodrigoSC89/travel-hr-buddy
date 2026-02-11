@@ -8,15 +8,15 @@ interface ConversationMessage {
   role: "user" | "assistant" | "system";
   content: string;
   timestamp: number;
-  context?: Record<string, any>;
+  context?: Record<string, unknown>;
 }
 
 interface MemoryContext {
   missionId?: string;
   missionStatus?: string;
   currentLocation?: { lat: number; lng: number };
-  weatherConditions?: any;
-  activeChecklists?: any[];
+  weatherConditions?: Record<string, unknown>;
+  activeChecklists?: Record<string, unknown>[];
   recentActivity?: string[];
 }
 
@@ -172,7 +172,8 @@ class LocalMemory {
   }
 
   // IndexedDB helper methods
-  private async saveToIndexedDB(storeName: string, data: any): Promise<void> {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- IndexedDB put accepts any serializable value
+  private async saveToIndexedDB(storeName: string, data: unknown): Promise<void> {
     return new Promise((resolve, reject) => {
       const request = indexedDB.open(this.dbName, 1);
 
@@ -202,7 +203,7 @@ class LocalMemory {
     });
   }
 
-  private async getFromIndexedDB(storeName: string, key: string): Promise<any> {
+  private async getFromIndexedDB(storeName: string, key: string): Promise<MemoryContext | null> {
     return new Promise((resolve, reject) => {
       const request = indexedDB.open(this.dbName, 1);
 
@@ -219,7 +220,7 @@ class LocalMemory {
     });
   }
 
-  private async getAllFromIndexedDB(storeName: string): Promise<any[]> {
+  private async getAllFromIndexedDB(storeName: string): Promise<ConversationMessage[]> {
     return new Promise((resolve, reject) => {
       const request = indexedDB.open(this.dbName, 1);
 

@@ -31,7 +31,20 @@ import {
 } from "lucide-react";
 
 // Initial conversation state (empty - populated from DB)
-const initialConversation: any[] = [];
+interface ConversationMessage {
+  id: number;
+  role: "user" | "assistant";
+  content: string;
+  timestamp: string;
+  sources?: { name: string; pages: string; similarity: number }[];
+}
+
+interface CategoryStat {
+  name: string;
+  count: number;
+}
+
+const initialConversation: ConversationMessage[] = [];
 
 const fallbackRecentSearches = [
   { query: "Procedimento reset sensor pressão hidráulica", time: "2h atrás" },
@@ -49,9 +62,9 @@ const fallbackTopDocuments = [
 
 export default function DocumentIntelligenceDashboard() {
   const [query, setQuery] = useState("");
-  const [conversation, setConversation] = useState<any[]>(initialConversation);
+  const [conversation, setConversation] = useState<ConversationMessage[]>(initialConversation);
   const [isSearching, setIsSearching] = useState(false);
-  const [documentStats, setDocumentStats] = useState({ total: 0, indexed: 0, pending: 0, categories: [] as any[] });
+  const [documentStats, setDocumentStats] = useState({ total: 0, indexed: 0, pending: 0, categories: [] as CategoryStat[] });
   const [recentSearches, setRecentSearches] = useState(fallbackRecentSearches);
   const [topDocuments, setTopDocuments] = useState(fallbackTopDocuments);
   const scrollRef = useRef<HTMLDivElement>(null);
@@ -138,7 +151,7 @@ export default function DocumentIntelligenceDashboard() {
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-3xl font-bold text-foreground flex items-center gap-3">
-            <BookOpen className="h-8 w-8 text-blue-500" />
+            <BookOpen className="h-8 w-8 text-primary" />
             CIDM - Central de Documentos
           </h1>
           <p className="text-muted-foreground mt-1">
@@ -153,54 +166,54 @@ export default function DocumentIntelligenceDashboard() {
 
       {/* KPIs */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-        <Card className="bg-gradient-to-br from-blue-500/10 to-blue-600/5 border-blue-500/20">
+        <Card className="bg-gradient-to-br from-info/10 to-info/5 border-info/20">
           <CardContent className="pt-6">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-muted-foreground">Documentos</p>
-                <p className="text-2xl font-bold text-blue-500">{documentStats.total.toLocaleString()}</p>
-                <p className="text-xs text-blue-400">{documentStats.pending} pendentes</p>
+                <p className="text-2xl font-bold text-info">{documentStats.total.toLocaleString()}</p>
+                <p className="text-xs text-info/80">{documentStats.pending} pendentes</p>
               </div>
-              <FileText className="h-10 w-10 text-blue-500/50" />
+              <FileText className="h-10 w-10 text-info/50" />
             </div>
           </CardContent>
         </Card>
 
-        <Card className="bg-gradient-to-br from-emerald-500/10 to-emerald-600/5 border-emerald-500/20">
+        <Card className="bg-gradient-to-br from-success/10 to-success/5 border-success/20">
           <CardContent className="pt-6">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-muted-foreground">Indexados</p>
-                <p className="text-2xl font-bold text-emerald-500">{documentStats.indexed.toLocaleString()}</p>
-                <p className="text-xs text-emerald-400">97% do total</p>
+                <p className="text-2xl font-bold text-success">{documentStats.indexed.toLocaleString()}</p>
+                <p className="text-xs text-success/80">97% do total</p>
               </div>
-              <Database className="h-10 w-10 text-emerald-500/50" />
+              <Database className="h-10 w-10 text-success/50" />
             </div>
           </CardContent>
         </Card>
 
-        <Card className="bg-gradient-to-br from-purple-500/10 to-purple-600/5 border-purple-500/20">
+        <Card className="bg-gradient-to-br from-primary/10 to-primary/5 border-primary/20">
           <CardContent className="pt-6">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-muted-foreground">Buscas Hoje</p>
-                <p className="text-2xl font-bold text-purple-500">247</p>
-                <p className="text-xs text-purple-400">+18% vs ontem</p>
+                <p className="text-2xl font-bold text-primary">247</p>
+                <p className="text-xs text-primary/80">+18% vs ontem</p>
               </div>
-              <Search className="h-10 w-10 text-purple-500/50" />
+              <Search className="h-10 w-10 text-primary/50" />
             </div>
           </CardContent>
         </Card>
 
-        <Card className="bg-gradient-to-br from-amber-500/10 to-amber-600/5 border-amber-500/20">
+        <Card className="bg-gradient-to-br from-warning/10 to-warning/5 border-warning/20">
           <CardContent className="pt-6">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-muted-foreground">Precisão RAG</p>
-                <p className="text-2xl font-bold text-amber-500">92%</p>
-                <p className="text-xs text-amber-400">Top performance</p>
+                <p className="text-2xl font-bold text-warning">92%</p>
+                <p className="text-xs text-warning/80">Top performance</p>
               </div>
-              <Sparkles className="h-10 w-10 text-amber-500/50" />
+              <Sparkles className="h-10 w-10 text-warning/50" />
             </div>
           </CardContent>
         </Card>
@@ -224,8 +237,8 @@ export default function DocumentIntelligenceDashboard() {
                     className={`flex gap-3 ${msg.role === "user" ? "justify-end" : "justify-start"}`}
                   >
                     {msg.role === "assistant" && (
-                      <div className="w-8 h-8 rounded-full bg-blue-500/20 flex items-center justify-center">
-                        <Bot className="h-4 w-4 text-blue-500" />
+                      <div className="w-8 h-8 rounded-full bg-info/20 flex items-center justify-center">
+                        <Bot className="h-4 w-4 text-info" />
                       </div>
                     )}
                     <div
@@ -244,7 +257,7 @@ export default function DocumentIntelligenceDashboard() {
                         <div className="mt-3 pt-3 border-t border-border/50">
                           <p className="text-xs text-muted-foreground mb-2">Fontes:</p>
                           <div className="flex flex-wrap gap-2">
-                            {msg.sources.map((source: any, idx: number) => (
+                            {msg.sources.map((source, idx) => (
                               <Badge key={idx} variant="outline" className="text-xs">
                                 <FileSearch className="h-3 w-3 mr-1" />
                                 {source.name} (p. {source.pages}) - {Math.round(source.similarity * 100)}%
@@ -264,8 +277,8 @@ export default function DocumentIntelligenceDashboard() {
                 ))}
                 {isSearching && (
                   <div className="flex gap-3">
-                    <div className="w-8 h-8 rounded-full bg-blue-500/20 flex items-center justify-center">
-                      <Bot className="h-4 w-4 text-blue-500" />
+                    <div className="w-8 h-8 rounded-full bg-info/20 flex items-center justify-center">
+                      <Bot className="h-4 w-4 text-info" />
                     </div>
                     <div className="bg-muted rounded-lg p-4 flex items-center gap-2">
                       <Loader2 className="h-4 w-4 animate-spin" />
@@ -337,7 +350,7 @@ export default function DocumentIntelligenceDashboard() {
                       <p className="text-sm font-medium truncate">{doc.name}</p>
                       <p className="text-xs text-muted-foreground">{doc.searches} buscas</p>
                     </div>
-                    <div className="flex items-center gap-1 text-amber-500">
+                    <div className="flex items-center gap-1 text-warning">
                       <Star className="h-3 w-3 fill-current" />
                       <span className="text-xs">{doc.rating}</span>
                     </div>

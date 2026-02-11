@@ -93,7 +93,7 @@ const IncidentInvestigationPage = () => {
         </div>
         <div className="flex items-center gap-3">
           <Badge variant="outline" className="gap-2 py-1.5">
-            <Brain className="h-4 w-4 text-green-500" />
+            <Brain className="h-4 w-4 text-success" />
             IA Ativa
           </Badge>
           <Button>
@@ -170,14 +170,14 @@ const IncidentInvestigationPage = () => {
             <CardContent>
               <div className="space-y-6">
                 {/* Fishbone Diagram Simplified */}
-                <div className="p-4 bg-red-500/10 rounded-lg">
-                  <h4 className="font-semibold text-red-600 mb-2">Resultado Imediato</h4>
+                <div className="p-4 bg-destructive/10 rounded-lg">
+                  <h4 className="font-semibold text-destructive mb-2">Resultado Imediato</h4>
                   <p>{rootCauseAnalysis.immediateResult}</p>
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                  <div className="p-4 bg-orange-500/10 rounded-lg">
-                    <h4 className="font-semibold text-orange-600 mb-2">Causas Diretas</h4>
+                  <div className="p-4 bg-warning/10 rounded-lg">
+                    <h4 className="font-semibold text-warning mb-2">Causas Diretas</h4>
                     <ul className="space-y-1 text-sm">
                       {rootCauseAnalysis.directCauses.map((cause, idx) => (
                         <li key={idx} className="flex items-start gap-2">
@@ -188,8 +188,8 @@ const IncidentInvestigationPage = () => {
                     </ul>
                   </div>
 
-                  <div className="p-4 bg-yellow-500/10 rounded-lg">
-                    <h4 className="font-semibold text-yellow-600 mb-2">Fatores Contribuintes</h4>
+                  <div className="p-4 bg-accent/10 rounded-lg">
+                    <h4 className="font-semibold text-accent-foreground mb-2">Fatores Contribuintes</h4>
                     <ul className="space-y-1 text-sm">
                       {rootCauseAnalysis.contributingFactors.map((factor, idx) => (
                         <li key={idx} className="flex items-start gap-2">
@@ -200,8 +200,8 @@ const IncidentInvestigationPage = () => {
                     </ul>
                   </div>
 
-                  <div className="p-4 bg-blue-500/10 rounded-lg">
-                    <h4 className="font-semibold text-blue-600 mb-2">Causas Raiz (IA)</h4>
+                  <div className="p-4 bg-info/10 rounded-lg">
+                    <h4 className="font-semibold text-info mb-2">Causas Raiz (IA)</h4>
                     <ul className="space-y-1 text-sm">
                       {rootCauseAnalysis.rootCauses.map((cause, idx) => (
                         <li key={idx} className="flex items-start gap-2">
@@ -213,8 +213,8 @@ const IncidentInvestigationPage = () => {
                   </div>
                 </div>
 
-                <div className="p-4 bg-green-500/10 rounded-lg">
-                  <h4 className="font-semibold text-green-600 mb-3">Recomendações da IA</h4>
+                <div className="p-4 bg-success/10 rounded-lg">
+                  <h4 className="font-semibold text-success mb-3">Recomendações da IA</h4>
                   <div className="space-y-2">
                     {rootCauseAnalysis.recommendations.map((rec, idx) => (
                       <div key={idx} className="flex items-center justify-between p-2 bg-background/50 rounded">
@@ -252,18 +252,18 @@ const IncidentInvestigationPage = () => {
                   {timeline.map((event, idx) => (
                     <div key={idx} className="relative pl-10">
                       <div className={`absolute left-2.5 w-3 h-3 rounded-full ${
-                        event.type === "critical" ? "bg-red-500" :
-                        event.type === "alert" ? "bg-orange-500" :
-                        event.type === "warning" ? "bg-yellow-500" :
-                        event.type === "action" ? "bg-blue-500" :
-                        event.type === "resolved" ? "bg-green-500" :
-                        "bg-gray-400"
+                        event.type === "critical" ? "bg-destructive" :
+                        event.type === "alert" ? "bg-warning" :
+                        event.type === "warning" ? "bg-accent" :
+                        event.type === "action" ? "bg-info" :
+                        event.type === "resolved" ? "bg-success" :
+                        "bg-muted-foreground"
                       }`} />
                       <div className={`p-3 rounded-lg border ${
-                        event.type === "critical" ? "border-red-500/50 bg-red-500/5" :
-                        event.type === "alert" ? "border-orange-500/50 bg-orange-500/5" :
-                        event.type === "warning" ? "border-yellow-500/50 bg-yellow-500/5" :
-                        event.type === "resolved" ? "border-green-500/50 bg-green-500/5" :
+                        event.type === "critical" ? "border-destructive/50 bg-destructive/5" :
+                        event.type === "alert" ? "border-warning/50 bg-warning/5" :
+                        event.type === "warning" ? "border-accent/50 bg-accent/5" :
+                        event.type === "resolved" ? "border-success/50 bg-success/5" :
                         "border-border"
                       }`}>
                         <div className="flex items-center justify-between">
@@ -296,14 +296,14 @@ const IncidentInvestigationPage = () => {
                   >
                     <div className="flex items-center gap-4">
                       <div className={`p-2 rounded-lg ${
-                        incident.severity === "high" ? "bg-red-500/10" :
-                        incident.severity === "medium" ? "bg-yellow-500/10" :
-                        "bg-green-500/10"
+                        incident.severity === "high" ? "bg-destructive/10" :
+                        incident.severity === "medium" ? "bg-warning/10" :
+                        "bg-success/10"
                       }`}>
                         <AlertTriangle className={`h-5 w-5 ${
-                          incident.severity === "high" ? "text-red-500" :
-                          incident.severity === "medium" ? "text-yellow-500" :
-                          "text-green-500"
+                          incident.severity === "high" ? "text-destructive" :
+                          incident.severity === "medium" ? "text-warning" :
+                          "text-success"
                         }`} />
                       </div>
                       <div>
@@ -318,9 +318,9 @@ const IncidentInvestigationPage = () => {
                       </div>
                     </div>
                     <Badge className={
-                      incident.status === "investigating" ? "bg-yellow-500" :
-                      incident.status === "closed" ? "bg-green-500" :
-                      "bg-blue-500"
+                      incident.status === "investigating" ? "bg-warning" :
+                      incident.status === "closed" ? "bg-success" :
+                      "bg-info"
                     }>
                       {incident.status === "investigating" ? "Em Investigação" :
                        incident.status === "closed" ? "Fechado" : "Em Revisão"}

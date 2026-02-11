@@ -30,9 +30,10 @@ export function PainelMetricasRisco() {
           return;
         }
 
-        const metrics: MetricData[] = (data || []).map((audit: any) => ({
-          auditoria_id: audit.id?.slice(0, 8) || "N/A",
-          falhas_criticas: audit.findings_count || 0,
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any -- sgso_audits not in generated types
+        const metrics: MetricData[] = (data || []).map((audit: Record<string, unknown>) => ({
+          auditoria_id: String(audit.id || "").slice(0, 8) || "N/A",
+          falhas_criticas: Number(audit.findings_count || 0),
         }));
         setDados(metrics);
       } catch (err) {
@@ -72,7 +73,7 @@ export function PainelMetricasRisco() {
                 />
                 <YAxis allowDecimals={false} />
                 <Tooltip />
-                <Bar dataKey="falhas_criticas" fill="#dc2626" name="Falhas Críticas" />
+                <Bar dataKey="falhas_criticas" fill="hsl(var(--destructive))" name="Falhas Críticas" />
               </BarChart>
             </ResponsiveContainer>
           )}
