@@ -131,11 +131,11 @@ export const EmployeePayroll: React.FC = () => {
   };
 
   const getStatusBadge = (status: string) => {
-    const config: Record<string, { label: string; className: string; icon: any }> = {
-      paid: { label: "Paid", className: "bg-green-500", icon: CheckCircle },
-      processed: { label: "Processed", className: "bg-blue-500", icon: CheckCircle },
-      pending: { label: "Pending", className: "bg-yellow-500", icon: Clock },
-      cancelled: { label: "Cancelled", className: "bg-red-500", icon: XCircle },
+    const config: Record<string, { label: string; className: string; icon: React.ComponentType<{ className?: string }> }> = {
+      paid: { label: "Paid", className: "bg-success", icon: CheckCircle },
+      processed: { label: "Processed", className: "bg-info", icon: CheckCircle },
+      pending: { label: "Pending", className: "bg-warning", icon: Clock },
+      cancelled: { label: "Cancelled", className: "bg-destructive", icon: XCircle },
     };
 
     const statusConfig = config[status] || { label: status, className: "bg-gray-500", icon: FileText };
@@ -260,7 +260,7 @@ export const EmployeePayroll: React.FC = () => {
                     <TableCell className="text-right font-medium">
                       {record.currency} ${record.gross_salary.toLocaleString()}
                     </TableCell>
-                    <TableCell className="text-right text-red-600">
+                    <TableCell className="text-right text-destructive">
                       -${record.deductions.toLocaleString()}
                     </TableCell>
                     <TableCell className="text-right font-semibold">
@@ -319,13 +319,13 @@ export const EmployeePayroll: React.FC = () => {
                   <span className="font-semibold">${selectedRecord.gross_salary.toLocaleString()}</span>
                 </div>
                 {selectedRecord.bonuses > 0 && (
-                  <div className="flex justify-between text-green-600">
+                  <div className="flex justify-between text-success">
                     <span>Bonuses</span>
                     <span className="font-semibold">+${selectedRecord.bonuses.toLocaleString()}</span>
                   </div>
                 )}
                 {selectedRecord.deductions > 0 && (
-                  <div className="flex justify-between text-red-600">
+                  <div className="flex justify-between text-destructive">
                     <span>Deductions</span>
                     <span className="font-semibold">-${selectedRecord.deductions.toLocaleString()}</span>
                   </div>

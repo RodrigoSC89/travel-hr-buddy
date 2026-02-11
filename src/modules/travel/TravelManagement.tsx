@@ -36,6 +36,7 @@ const loadJsPDF = async () => {
 };
 
 // Helper to get dynamic supabase client for untyped tables
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- dynamic table access for tables not in generated types
 const dynamicSupabase = () => supabase as any;
 
 interface TravelItinerary {
@@ -357,28 +358,28 @@ const TravelManagement = () => {
   const getStatusIcon = (status: string) => {
     switch (status) {
     case "confirmed":
-      return <CheckCircle2 className="h-4 w-4 text-green-500" />;
+      return <CheckCircle2 className="h-4 w-4 text-success" />;
     case "cancelled":
-      return <XCircle className="h-4 w-4 text-red-500" />;
+      return <XCircle className="h-4 w-4 text-destructive" />;
     case "in_progress":
-      return <Clock className="h-4 w-4 text-blue-500" />;
+      return <Clock className="h-4 w-4 text-info" />;
     case "completed":
-      return <CheckCircle2 className="h-4 w-4 text-green-500" />;
+      return <CheckCircle2 className="h-4 w-4 text-success" />;
     default:
-      return <Clock className="h-4 w-4 text-gray-500" />;
+      return <Clock className="h-4 w-4 text-muted-foreground" />;
     }
   };
 
   const getStatusBadge = (status: string) => {
     switch (status) {
     case "confirmed":
-      return <Badge className="bg-green-500">Confirmed</Badge>;
+      return <Badge className="bg-success">Confirmed</Badge>;
     case "cancelled":
       return <Badge variant="destructive">Cancelled</Badge>;
     case "pending":
       return <Badge variant="secondary">Pending</Badge>;
     case "in_progress":
-      return <Badge className="bg-blue-500">In Progress</Badge>;
+      return <Badge className="bg-info">In Progress</Badge>;
     case "completed":
       return <Badge>Completed</Badge>;
     default:
@@ -391,7 +392,7 @@ const TravelManagement = () => {
     case "critical":
       return <Badge variant="destructive">Critical</Badge>;
     case "high":
-      return <Badge className="bg-orange-500">High</Badge>;
+      return <Badge className="bg-warning">High</Badge>;
     case "medium":
       return <Badge variant="secondary">Medium</Badge>;
     case "low":

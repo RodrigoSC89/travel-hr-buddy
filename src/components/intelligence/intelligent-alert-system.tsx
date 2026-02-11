@@ -101,19 +101,19 @@ export const IntelligentAlertSystem = () => {
 
       if (incidents && incidents.length > 0) {
         // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Supabase dynamic incident data
-        const realAlerts: SmartAlert[] = incidents.map((inc: any) => ({
-          id: inc.id,
-          type: inc.severity === "critical" ? "critical" as const : inc.severity === "high" ? "warning" as const : "info" as const,
+        const realAlerts: SmartAlert[] = incidents.map((inc: Record<string, unknown>) => ({
+          id: String(inc.id),
+          type: String(inc.severity) === "critical" ? "critical" as const : String(inc.severity) === "high" ? "warning" as const : "info" as const,
           category: "safety" as const,
-          title: inc.title || "Incidente de Segurança",
-          description: inc.description || "",
-          vessel_id: inc.vessel_id,
-          priority: inc.severity === "critical" ? "high" as const : "medium" as const,
-          status: inc.status === "resolved" ? "resolved" as const : "new" as const,
-          created_at: inc.incident_date || new Date().toISOString(),
+          title: String(inc.title || "Incidente de Segurança"),
+          description: String(inc.description || ""),
+          vessel_id: inc.vessel_id ? String(inc.vessel_id) : undefined,
+          priority: String(inc.severity) === "critical" ? "high" as const : "medium" as const,
+          status: String(inc.status) === "resolved" ? "resolved" as const : "new" as const,
+          created_at: String(inc.incident_date || new Date().toISOString()),
           ai_confidence: 85,
           recommended_actions: ["Verificar detalhes do incidente", "Acionar equipe de resposta"],
-          impact_assessment: `Incidente ${inc.severity} registrado`
+          impact_assessment: `Incidente ${String(inc.severity)} registrado`
         }));
         setSmartAlerts(realAlerts);
       } else {
@@ -134,14 +134,14 @@ export const IntelligentAlertSystem = () => {
         .limit(5);
 
       if (insights && insights.length > 0) {
-        setAiInsights(insights.map((ins: any) => ({
-          id: ins.id,
+        setAiInsights(insights.map((ins: Record<string, unknown>) => ({
+          id: String(ins.id),
           insight_type: "predictive" as const,
-          title: ins.title,
-          description: ins.description,
-          confidence_score: Math.round((ins.confidence || 0.85) * 100),
-          business_impact: ins.priority === "high" ? "high" as const : "medium" as const,
-          data_sources: [ins.category || "Dados operacionais"],
+          title: String(ins.title),
+          description: String(ins.description),
+          confidence_score: Math.round((Number(ins.confidence) || 0.85) * 100),
+          business_impact: String(ins.priority) === "high" ? "high" as const : "medium" as const,
+          data_sources: [String(ins.category || "Dados operacionais")],
           recommendations: ["Analisar detalhes do insight"],
           timeline: "30 dias",
           cost_benefit: { potential_savings: 45000, implementation_cost: 8000, roi_percentage: 462 }
@@ -201,11 +201,11 @@ export const IntelligentAlertSystem = () => {
 
   const getAlertColor = (type: SmartAlert["type"]) => {
     switch (type) {
-    case "critical": return "border-red-500 bg-red-50";
-    case "warning": return "border-yellow-500 bg-yellow-50";
-    case "info": return "border-blue-500 bg-blue-50";
-    case "success": return "border-green-500 bg-green-50";
-    default: return "border-gray-500 bg-gray-50";
+    case "critical": return "border-destructive bg-destructive/5";
+    case "warning": return "border-warning bg-warning/5";
+    case "info": return "border-info bg-info/5";
+    case "success": return "border-success bg-success/5";
+    default: return "border-muted bg-muted/5";
     }
   };
 
@@ -222,9 +222,9 @@ export const IntelligentAlertSystem = () => {
   };
 
   const getHealthColor = (score: number) => {
-    if (score >= 90) return "text-green-600";
-    if (score >= 75) return "text-yellow-600";
-    return "text-red-600";
+    if (score >= 90) return "text-success";
+    if (score >= 75) return "text-warning";
+    return "text-destructive";
   };
 
   const filteredAlerts = smartAlerts.filter(alert => 
@@ -268,9 +268,9 @@ export const IntelligentAlertSystem = () => {
 
       {/* Critical Alerts Banner */}
       {(criticalAlerts > 0 || warningAlerts > 0) && (
-        <Alert className="border-red-200 bg-red-50">
-          <AlertTriangle className="h-4 w-4 text-red-600" />
-          <AlertDescription className="text-red-800">
+        <Alert className="border-destructive/20 bg-destructive/5">
+          <AlertTriangle className="h-4 w-4 text-destructive" />
+          <AlertDescription className="text-destructive">
             <strong>Atenção:</strong> {criticalAlerts} alerta(s) crítico(s) e {warningAlerts} aviso(s) requerem ação imediata.
           </AlertDescription>
         </Alert>

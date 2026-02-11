@@ -167,6 +167,7 @@ export class AIIncidentReplayerV2 {
   /**
    * Collect sensor data for a specific timestamp
    */
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- sensor data shape is dynamic/variable
   private async collectSensorData(timestamp: number): Promise<Record<string, any>> {
     // In production, query actual sensor logs
     return {
@@ -184,7 +185,11 @@ export class AIIncidentReplayerV2 {
   /**
    * Collect crew data for a specific timestamp
    */
-  private async collectCrewData(timestamp: number): Promise<any> {
+  private async collectCrewData(_timestamp: number): Promise<{
+    onDuty: string[];
+    actions: string[];
+    communications: string[];
+  }> {
     // In production, query actual crew logs
     return {
       onDuty: ["Officer A", "Engineer B", "Navigator C"],
@@ -196,7 +201,12 @@ export class AIIncidentReplayerV2 {
   /**
    * Collect AI data for a specific timestamp
    */
-  private async collectAIData(timestamp: number): Promise<any> {
+  private async collectAIData(_timestamp: number): Promise<{
+    analysis: string;
+    confidence: number;
+    recommendations: string[];
+    decisions: string[];
+  }> {
     // In production, query actual AI decision logs
     return {
       analysis: "Systems operating within normal parameters",
@@ -209,7 +219,12 @@ export class AIIncidentReplayerV2 {
   /**
    * Collect system data for a specific timestamp
    */
-  private async collectSystemData(timestamp: number): Promise<any> {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- system status shape is dynamic
+  private async collectSystemData(_timestamp: number): Promise<{
+    status: Record<string, any>;
+    alerts: string[];
+    errors: string[];
+  }> {
     // In production, query actual system logs
     return {
       status: {
@@ -396,6 +411,7 @@ Respond only with valid JSON.`,
     });
 
     // Parse AI response
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any -- AI response shape is unpredictable
     let explanation: any = {};
     try {
       explanation = JSON.parse(response.content);
@@ -417,22 +433,22 @@ Respond only with valid JSON.`,
       decision: {
         type: "automated",
         description: event.description,
-        reasoning: explanation.reasoning || "Decision made based on current context",
-        alternatives: explanation.alternatives || [],
+        reasoning: String(explanation.reasoning || "Decision made based on current context"),
+        alternatives: Array.isArray(explanation.alternatives) ? explanation.alternatives : [],
         selectedOption: event.description,
-        confidence: explanation.confidence || 0.7,
+        confidence: Number(explanation.confidence) || 0.7,
       },
       outcome: {
         success: true,
-        impact: explanation.impact || "Positive impact on incident resolution",
-        actualResult: explanation.actualResult || "As expected",
-        expectedResult: explanation.expectedResult || "System stabilization",
+        impact: String(explanation.impact || "Positive impact on incident resolution"),
+        actualResult: String(explanation.actualResult || "As expected"),
+        expectedResult: String(explanation.expectedResult || "System stabilization"),
       },
       explanation: {
-        summary: explanation.reasoning || "AI decision executed successfully",
-        detailedReasoning: explanation.reasoning || "Based on situational analysis",
-        contextualFactors: explanation.contextualFactors || ["System state", "Risk assessment"],
-        lessonsLearned: explanation.lessons || [],
+        summary: String(explanation.reasoning || "AI decision executed successfully"),
+        detailedReasoning: String(explanation.reasoning || "Based on situational analysis"),
+        contextualFactors: Array.isArray(explanation.contextualFactors) ? explanation.contextualFactors : ["System state", "Risk assessment"],
+        lessonsLearned: Array.isArray(explanation.lessons) ? explanation.lessons : [],
       },
     };
   }

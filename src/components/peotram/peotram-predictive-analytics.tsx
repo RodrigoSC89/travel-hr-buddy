@@ -124,34 +124,34 @@ export const PeotramPredictiveAnalytics: React.FC = () => {
 
   const getSeverityColor = (severity: "high" | "medium" | "low") => {
     const colors = {
-      high: "bg-red-100 text-red-800 border-red-200",
-      medium: "bg-yellow-100 text-yellow-800 border-yellow-200",
-      low: "bg-blue-100 text-blue-800 border-blue-200"
+      high: "bg-destructive/10 text-destructive border-destructive/20",
+      medium: "bg-warning/10 text-warning border-warning/20",
+      low: "bg-info/10 text-info border-info/20"
     };
     return colors[severity];
   };
 
   const getImpactBadge = (impact: "critical" | "significant" | "moderate") => {
     const variants = {
-      critical: "bg-red-100 text-red-800",
-      significant: "bg-orange-100 text-orange-800",
-      moderate: "bg-yellow-100 text-yellow-800"
+      critical: "bg-destructive/10 text-destructive",
+      significant: "bg-warning/10 text-warning",
+      moderate: "bg-accent/10 text-accent-foreground"
     };
     return variants[impact];
   };
 
   const getTrendIcon = (trend: "improving" | "declining" | "stable") => {
-    if (trend === "improving") return <TrendingUp className="h-4 w-4 text-green-600" />;
-    if (trend === "declining") return <Activity className="h-4 w-4 text-red-600" />;
+    if (trend === "improving") return <TrendingUp className="h-4 w-4 text-success" />;
+    if (trend === "declining") return <Activity className="h-4 w-4 text-destructive" />;
     return <Activity className="h-4 w-4 text-muted-foreground" />;
   };
 
   const getTypeIcon = (type: PredictiveInsight["type"]) => {
     const icons = {
-      failure: <AlertTriangle className="h-5 w-5 text-red-600" />,
-      trend: <TrendingUp className="h-5 w-5 text-blue-600" />,
-      recommendation: <Lightbulb className="h-5 w-5 text-yellow-600" />,
-      risk: <Target className="h-5 w-5 text-orange-600" />
+      failure: <AlertTriangle className="h-5 w-5 text-destructive" />,
+      trend: <TrendingUp className="h-5 w-5 text-info" />,
+      recommendation: <Lightbulb className="h-5 w-5 text-warning" />,
+      risk: <Target className="h-5 w-5 text-warning" />
     };
     return icons[type];
   };
@@ -159,12 +159,12 @@ export const PeotramPredictiveAnalytics: React.FC = () => {
   return (
     <div className="space-y-6">
       {/* Header */}
-      <Card className="border-2 border-purple-200 bg-gradient-to-r from-purple-50 to-blue-50">
+      <Card className="border-2 border-primary/20 bg-gradient-to-r from-primary/5 to-accent/5">
         <CardHeader>
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
-              <div className="p-3 rounded-lg bg-purple-600/10 backdrop-blur-sm">
-                <Brain className="h-6 w-6 text-purple-600" />
+              <div className="p-3 rounded-lg bg-primary/10 backdrop-blur-sm">
+                <Brain className="h-6 w-6 text-primary" />
               </div>
               <div>
                 <CardTitle className="text-2xl">Análise Preditiva com IA</CardTitle>
@@ -176,7 +176,7 @@ export const PeotramPredictiveAnalytics: React.FC = () => {
             <Button 
               onClick={runPredictiveAnalysis} 
               disabled={isAnalyzing}
-              className="bg-purple-600 hover:bg-purple-700"
+              className="bg-primary hover:bg-primary/90"
             >
               {isAnalyzing ? (
                 <>
@@ -198,7 +198,7 @@ export const PeotramPredictiveAnalytics: React.FC = () => {
       <Card>
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
-            <Lightbulb className="h-5 w-5 text-yellow-600" />
+            <Lightbulb className="h-5 w-5 text-warning" />
             Insights Preditivos
           </CardTitle>
           <CardDescription>
@@ -243,7 +243,7 @@ export const PeotramPredictiveAnalytics: React.FC = () => {
                     <ul className="space-y-1">
                       {insight.actionItems.map((action, idx) => (
                         <li key={idx} className="flex items-start gap-2 text-sm">
-                          <CheckCircle className="h-4 w-4 text-green-600 mt-0.5 flex-shrink-0" />
+                          <CheckCircle className="h-4 w-4 text-success mt-0.5 flex-shrink-0" />
                           <span>{action}</span>
                         </li>
                       ))}
@@ -267,7 +267,7 @@ export const PeotramPredictiveAnalytics: React.FC = () => {
       <Card>
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
-            <BarChart3 className="h-5 w-5 text-blue-600" />
+            <BarChart3 className="h-5 w-5 text-info" />
             Previsão de Compliance
           </CardTitle>
           <CardDescription>
@@ -291,8 +291,8 @@ export const PeotramPredictiveAnalytics: React.FC = () => {
                   <div className="text-right">
                     <p className="text-sm text-muted-foreground">Previsto</p>
                     <p className={`text-lg font-bold ${
-                      forecast.predictedScore > forecast.currentScore ? "text-green-600" :
-                        forecast.predictedScore < forecast.currentScore ? "text-red-600" :
+                      forecast.predictedScore > forecast.currentScore ? "text-success" :
+                        forecast.predictedScore < forecast.currentScore ? "text-destructive" :
                           "text-muted-foreground"
                     }`}>
                       {forecast.predictedScore}%
@@ -312,7 +312,7 @@ export const PeotramPredictiveAnalytics: React.FC = () => {
       </Card>
 
       {/* ML Model Info */}
-      <Card className="border-2 border-blue-200 bg-blue-50/50">
+      <Card className="border-2 border-info/20 bg-info/5">
         <CardHeader>
           <CardTitle className="text-lg">Informações do Modelo de ML</CardTitle>
         </CardHeader>
@@ -324,7 +324,7 @@ export const PeotramPredictiveAnalytics: React.FC = () => {
             </div>
             <div>
               <p className="text-sm text-muted-foreground">Acurácia Média</p>
-              <p className="font-medium text-green-600">87.3%</p>
+              <p className="font-medium text-success">87.3%</p>
             </div>
             <div>
               <p className="text-sm text-muted-foreground">Última Atualização</p>
