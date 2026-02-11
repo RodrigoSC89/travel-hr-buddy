@@ -453,13 +453,13 @@ export function ComplianceAuditManager() {
   const getStatusBadge = (status: string) => {
     switch (status) {
       case 'completed':
-        return <Badge className="bg-green-500">Concluída</Badge>;
+        return <Badge className="bg-success">Concluída</Badge>;
       case 'in_progress':
-        return <Badge className="bg-blue-500">Em Andamento</Badge>;
+        return <Badge className="bg-primary">Em Andamento</Badge>;
       case 'scheduled':
         return <Badge variant="secondary">Agendada</Badge>;
       case 'pending_review':
-        return <Badge className="bg-yellow-500">Revisão Pendente</Badge>;
+        return <Badge className="bg-warning">Revisão Pendente</Badge>;
       case 'cancelled':
         return <Badge variant="destructive">Cancelada</Badge>;
       default:
@@ -470,11 +470,11 @@ export function ComplianceAuditManager() {
   const getFindingStatusBadge = (status: string) => {
     switch (status) {
       case 'conforming':
-        return <Badge className="bg-green-500">Conforme</Badge>;
+        return <Badge className="bg-success">Conforme</Badge>;
       case 'non_conforming':
         return <Badge variant="destructive">Não Conforme</Badge>;
       case 'observation':
-        return <Badge className="bg-yellow-500">Observação</Badge>;
+        return <Badge className="bg-warning">Observação</Badge>;
       case 'not_applicable':
         return <Badge variant="outline">N/A</Badge>;
       default:
@@ -483,9 +483,9 @@ export function ComplianceAuditManager() {
   };
 
   const getScoreColor = (score: number) => {
-    if (score >= 90) return 'text-green-600';
-    if (score >= 70) return 'text-yellow-600';
-    return 'text-red-600';
+    if (score >= 90) return 'text-success';
+    if (score >= 70) return 'text-warning';
+    return 'text-destructive';
   };
 
   // Loading skeleton
@@ -655,7 +655,7 @@ export function ComplianceAuditManager() {
                         {audit.status === 'in_progress' && (
                           <Button 
                             size="sm"
-                            className="bg-green-600 hover:bg-green-700"
+                            className="bg-success hover:bg-success/90"
                             onClick={() => handleCompleteAudit(audit)}
                             disabled={actionLoading === audit.id}
                           >
@@ -728,7 +728,7 @@ export function ComplianceAuditManager() {
                         {AUDIT_STANDARDS.find(s => s.value === template.standard)?.label}
                       </Badge>
                       <Badge variant="outline">v{template.version}</Badge>
-                      <Badge className={template.status === 'published' ? 'bg-green-500' : 'bg-gray-500'}>
+                      <Badge className={template.status === 'published' ? 'bg-success' : 'bg-muted-foreground'}>
                         {template.status === 'published' ? 'Publicado' : 'Rascunho'}
                       </Badge>
                     </div>

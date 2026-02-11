@@ -117,19 +117,19 @@ export const PredictiveMaintenanceRevolution: React.FC = () => {
 
   const getPriorityColor = (priority: MaintenancePrediction["priority"]) => {
     switch (priority) {
-    case "critical": return "bg-red-100 text-red-800 dark:bg-red-900/20 dark:text-red-300";
+    case "critical": return "bg-destructive/10 text-destructive dark:bg-destructive/20 dark:text-destructive";
     case "high": return "bg-orange-100 text-orange-800 dark:bg-orange-900/20 dark:text-orange-300";
-    case "medium": return "bg-yellow-100 text-yellow-800 dark:bg-yellow-900/20 dark:text-yellow-300";
-    case "low": return "bg-green-100 text-green-800 dark:bg-green-900/20 dark:text-green-300";
+    case "medium": return "bg-warning/10 text-warning dark:bg-warning/20 dark:text-warning";
+    case "low": return "bg-success/10 text-success dark:bg-success/20 dark:text-success";
     }
   };
 
   const getAvailabilityColor = (availability: SparePart["availability"]) => {
     switch (availability) {
-    case "in-stock": return "text-green-600 dark:text-green-400";
-    case "low-stock": return "text-yellow-600 dark:text-yellow-400";
-    case "out-of-stock": return "text-red-600 dark:text-red-400";
-    case "on-order": return "text-blue-600 dark:text-blue-400";
+    case "in-stock": return "text-success dark:text-success";
+    case "low-stock": return "text-warning dark:text-warning";
+    case "out-of-stock": return "text-destructive dark:text-destructive";
+    case "on-order": return "text-primary dark:text-primary";
     }
   };
 
@@ -174,12 +174,12 @@ export const PredictiveMaintenanceRevolution: React.FC = () => {
         <Card className="bg-gradient-to-br from-green-50 to-green-100 dark:from-green-900/20 dark:to-green-800/20">
           <CardContent className="p-6">
             <div className="flex items-center justify-between mb-2">
-              <Target className="h-8 w-8 text-green-600" />
-              <TrendingUp className="h-5 w-5 text-green-600" />
+              <Target className="h-8 w-8 text-success" />
+              <TrendingUp className="h-5 w-5 text-success" />
             </div>
-            <div className="text-3xl font-bold text-green-700 dark:text-green-400">{systemAccuracy.toFixed(1)}%</div>
+            <div className="text-3xl font-bold text-success dark:text-success">{systemAccuracy.toFixed(1)}%</div>
             <div className="text-sm text-muted-foreground">Precisão do Sistema</div>
-            <div className="text-xs text-green-600 mt-1">Meta: 95%+ ✅</div>
+            <div className="text-xs text-success mt-1">Meta: 95%+ ✅</div>
           </CardContent>
         </Card>
 

@@ -39,10 +39,10 @@ export const ReservationCard: React.FC<ReservationCardProps> = ({
   const [showPDFGenerator, setShowPDFGenerator] = React.useState(false);
   const getStatusColor = (status: string) => {
     switch (status) {
-    case "confirmed": return "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200";
-    case "pending": return "bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200";
-    case "cancelled": return "bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200";
-    case "completed": return "bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200";
+    case "confirmed": return "bg-success/10 text-success dark:bg-success/20 dark:text-success";
+    case "pending": return "bg-warning/10 text-warning dark:bg-warning/20 dark:text-warning";
+    case "cancelled": return "bg-destructive/10 text-destructive dark:bg-destructive/20 dark:text-destructive";
+    case "completed": return "bg-primary/10 text-primary dark:bg-primary/20 dark:text-primary";
     default: return "bg-secondary text-secondary-foreground";
     }
   };
@@ -87,7 +87,7 @@ export const ReservationCard: React.FC<ReservationCardProps> = ({
 
   return (
     <Card className={`hover:shadow-lg transition-all duration-200 ${
-      reservation.conflict_detected ? "border-red-200 bg-red-50/50 dark:border-red-800 dark:bg-red-950/20" : ""
+      reservation.conflict_detected ? "border-destructive/30 bg-destructive/5 dark:border-destructive/40 dark:bg-destructive/10" : ""
     }`}>
       <CardHeader className="pb-3">
         <div className="flex items-start justify-between">
@@ -96,7 +96,7 @@ export const ReservationCard: React.FC<ReservationCardProps> = ({
               {getTypeIcon(reservation.reservation_type)}
               <span className="truncate">{reservation.title}</span>
               {reservation.conflict_detected && (
-                <AlertTriangle className="h-4 w-4 text-red-500 flex-shrink-0" />
+                <AlertTriangle className="h-4 w-4 text-destructive flex-shrink-0" />
               )}
             </CardTitle>
             <div className="flex flex-wrap items-center gap-2">
@@ -157,7 +157,7 @@ export const ReservationCard: React.FC<ReservationCardProps> = ({
         {reservation.total_amount && (
           <div className="flex items-center gap-2 text-sm">
             <DollarSign className="h-4 w-4 text-muted-foreground flex-shrink-0" />
-            <span className="font-medium text-green-600">
+            <span className="font-medium text-success">
               {formatCurrency(reservation.total_amount, reservation.currency)}
             </span>
           </div>
@@ -194,13 +194,13 @@ export const ReservationCard: React.FC<ReservationCardProps> = ({
 
         {/* Conflict Warning */}
         {reservation.conflict_detected && (
-          <div className="bg-red-100 dark:bg-red-900/30 border border-red-200 dark:border-red-800 rounded p-2">
-            <div className="flex items-center gap-2 text-red-800 dark:text-red-200">
+          <div className="bg-destructive/10 dark:bg-destructive/20 border border-destructive/30 dark:border-destructive/40 rounded p-2">
+            <div className="flex items-center gap-2 text-destructive dark:text-destructive">
               <AlertTriangle className="h-4 w-4" />
               <span className="text-sm font-medium">Conflito detectado</span>
             </div>
             {reservation.ai_suggestions && reservation.ai_suggestions.length > 0 && (
-              <div className="mt-1 text-xs text-red-600 dark:text-red-300">
+              <div className="mt-1 text-xs text-destructive/80 dark:text-destructive/70">
                 {reservation.ai_suggestions[0]}
               </div>
             )}
@@ -249,7 +249,7 @@ export const ReservationCard: React.FC<ReservationCardProps> = ({
             variant="outline"
             size="sm"
             onClick={() => onDelete(reservation.id)}
-            className="text-red-600 hover:text-red-700 hover:bg-red-50 dark:hover:bg-red-950"
+            className="text-destructive hover:text-destructive hover:bg-destructive/10 dark:hover:bg-destructive/20"
           >
             <Trash2 className="h-4 w-4" />
           </Button>

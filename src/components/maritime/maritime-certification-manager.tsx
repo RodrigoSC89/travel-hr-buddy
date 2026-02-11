@@ -97,11 +97,11 @@ export const MaritimeCertificationManager = () => {
 
   const getStatusColor = (status: MaritimeCertificate["status"]) => {
     switch (status) {
-    case "valid": return "bg-green-500";
-    case "expiring": return "bg-yellow-500";
-    case "expired": return "bg-red-500";
+    case "valid": return "bg-success";
+    case "expiring": return "bg-warning";
+    case "expired": return "bg-destructive";
     case "pending_renewal": return "bg-orange-500";
-    default: return "bg-gray-500";
+    default: return "bg-muted-foreground";
     }
   };
 
@@ -117,8 +117,8 @@ export const MaritimeCertificationManager = () => {
 
   const getAlertColor = (alertType: CertificationAlert["alert_type"]) => {
     switch (alertType) {
-    case "expiring_soon": return "bg-yellow-100 border-yellow-500 text-yellow-800";
-    case "expired": return "bg-red-100 border-red-500 text-red-800";
+    case "expiring_soon": return "bg-warning/10 border-warning text-warning";
+    case "expired": return "bg-destructive/10 border-destructive text-destructive";
     case "renewal_required": return "bg-orange-100 border-orange-500 text-orange-800";
     default: return "bg-secondary border-muted text-secondary-foreground";
     }
@@ -246,7 +246,7 @@ export const MaritimeCertificationManager = () => {
         
         <Card>
           <CardContent className="p-4 text-center">
-            <CheckCircle className="h-8 w-8 mx-auto mb-2 text-green-600" />
+            <CheckCircle className="h-8 w-8 mx-auto mb-2 text-success" />
             <div className="text-2xl font-bold">{stats.valid}</div>
             <div className="text-sm text-muted-foreground">Válidas</div>
           </CardContent>
@@ -262,7 +262,7 @@ export const MaritimeCertificationManager = () => {
         
         <Card>
           <CardContent className="p-4 text-center">
-            <XCircle className="h-8 w-8 mx-auto mb-2 text-red-600" />
+            <XCircle className="h-8 w-8 mx-auto mb-2 text-destructive" />
             <div className="text-2xl font-bold">{stats.expired}</div>
             <div className="text-sm text-muted-foreground">Vencidas</div>
           </CardContent>
@@ -455,17 +455,17 @@ export const MaritimeCertificationManager = () => {
         <TabsContent value="expired" className="space-y-6">
           <Card>
             <CardHeader>
-              <CardTitle className="text-red-600">Certificações Vencidas</CardTitle>
+              <CardTitle className="text-destructive">Certificações Vencidas</CardTitle>
             </CardHeader>
             <CardContent>
               <div className="space-y-4">
                 {certificates.filter(c => c.status === "expired").map((cert) => (
-                  <div key={cert.id} className="border-l-4 border-red-500 bg-red-50 p-4 rounded">
+                  <div key={cert.id} className="border-l-4 border-destructive bg-destructive/5 p-4 rounded">
                     <div className="flex items-center justify-between">
                       <div>
                         <h3 className="font-semibold">{cert.crew_member_name}</h3>
                         <p className="text-sm">{cert.certification_type}</p>
-                        <p className="text-xs text-red-700">
+                        <p className="text-xs text-destructive">
                           Vencida em: {new Date(cert.expiry_date).toLocaleDateString()}
                         </p>
                       </div>

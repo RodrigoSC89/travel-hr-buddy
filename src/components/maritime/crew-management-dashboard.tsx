@@ -126,11 +126,11 @@ export const CrewManagementDashboard = () => {
 
   const getStatusColor = (status: CrewMember["status"]) => {
     switch (status) {
-    case "available": return "bg-green-500";
-    case "assigned": return "bg-blue-500";
-    case "on_leave": return "bg-yellow-500";
-    case "training": return "bg-purple-500";
-    default: return "bg-gray-500";
+    case "available": return "bg-success";
+    case "assigned": return "bg-primary";
+    case "on_leave": return "bg-warning";
+    case "training": return "bg-accent";
+    default: return "bg-muted-foreground";
     }
   };
 
@@ -196,7 +196,7 @@ export const CrewManagementDashboard = () => {
         
         <Card>
           <CardContent className="p-4 text-center">
-            <UserCheck className="h-8 w-8 mx-auto mb-2 text-green-600" />
+            <UserCheck className="h-8 w-8 mx-auto mb-2 text-success" />
             <div className="text-2xl font-bold">{crewStats.available}</div>
             <div className="text-sm text-muted-foreground">Disponíveis</div>
           </CardContent>
@@ -204,7 +204,7 @@ export const CrewManagementDashboard = () => {
         
         <Card>
           <CardContent className="p-4 text-center">
-            <MapPin className="h-8 w-8 mx-auto mb-2 text-blue-600" />
+            <MapPin className="h-8 w-8 mx-auto mb-2 text-primary" />
             <div className="text-2xl font-bold">{crewStats.assigned}</div>
             <div className="text-sm text-muted-foreground">Designados</div>
           </CardContent>

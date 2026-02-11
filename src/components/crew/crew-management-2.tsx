@@ -194,11 +194,11 @@ export const CrewManagement2: React.FC = () => {
 
   const getStatusColor = (status: string) => {
     switch (status) {
-    case "active": return "bg-green-600";
-    case "onleave": return "bg-blue-600";
-    case "training": return "bg-purple-600";
-    case "standby": return "bg-yellow-600";
-    default: return "bg-gray-600";
+    case "active": return "bg-success";
+    case "onleave": return "bg-primary";
+    case "training": return "bg-accent";
+    case "standby": return "bg-warning";
+    default: return "bg-muted-foreground";
     }
   };
 
@@ -213,8 +213,8 @@ export const CrewManagement2: React.FC = () => {
 
   const getHealthStatusColor = (status: string) => {
     switch (status) {
-    case "fit": return "text-green-600";
-    case "restricted": return "text-yellow-600";
+    case "fit": return "text-success";
+    case "restricted": return "text-warning";
     case "pending": return "text-orange-600";
     default: return "text-muted-foreground";
     }
@@ -311,12 +311,12 @@ export const CrewManagement2: React.FC = () => {
 
             <TabsContent value="overview" className="space-y-4 mt-4">
               {crew.map((member) => (
-                <Card key={member.id} className="border-l-4 border-l-blue-500">
+                <Card key={member.id} className="border-l-4 border-l-primary">
                   <CardHeader>
                     <div className="flex items-start justify-between">
                       <div className="flex items-start gap-3">
-                        <div className="p-2 bg-blue-100 dark:bg-blue-900 rounded-full">
-                          <Users className="h-5 w-5 text-blue-600" />
+                        <div className="p-2 bg-primary/10 dark:bg-primary/20 rounded-full">
+                          <Users className="h-5 w-5 text-primary" />
                         </div>
                         <div>
                           <div className="flex items-center gap-2">
@@ -340,7 +340,7 @@ export const CrewManagement2: React.FC = () => {
                     {/* Quick Stats Grid */}
                     <div className="grid grid-cols-4 gap-3">
                       <div className="bg-muted/50 p-3 rounded-lg text-center">
-                        <Calendar className="h-4 w-4 mx-auto mb-1 text-blue-600" />
+                        <Calendar className="h-4 w-4 mx-auto mb-1 text-primary" />
                         <div className="text-sm font-bold">{member.schedule.daysOnboard}/{member.schedule.daysRemaining}</div>
                         <div className="text-xs text-muted-foreground">Dias</div>
                       </div>
@@ -377,8 +377,8 @@ export const CrewManagement2: React.FC = () => {
                             </div>
                           ))}
                         {member.training.pending > 0 && (
-                          <div className="flex items-center gap-2 p-2 bg-blue-50 dark:bg-blue-950 rounded-lg">
-                            <Bell className="h-4 w-4 text-blue-600" />
+                          <div className="flex items-center gap-2 p-2 bg-primary/5 dark:bg-primary/10 rounded-lg">
+                            <Bell className="h-4 w-4 text-primary" />
                             <span className="text-sm flex-1">
                               {member.training.pending} treinamento(s) pendente(s)
                             </span>
@@ -423,7 +423,7 @@ export const CrewManagement2: React.FC = () => {
                         {member.certifications.map((cert, idx) => (
                           <div key={idx} className="flex items-center justify-between p-3 bg-muted/50 rounded-lg">
                             <div className="flex items-center gap-3">
-                              <Shield className="h-5 w-5 text-blue-600" />
+                              <Shield className="h-5 w-5 text-primary" />
                               <div>
                                 <div className="font-medium text-sm">{cert.name}</div>
                                 <div className="text-xs text-muted-foreground">
@@ -495,9 +495,9 @@ export const CrewManagement2: React.FC = () => {
                       <CardTitle className="text-base flex items-center justify-between">
                         <span>{member.name} - {member.position}</span>
                         <Badge className={
-                          member.performance.score >= 90 ? "bg-green-600" :
-                            member.performance.score >= 75 ? "bg-blue-600" :
-                              "bg-yellow-600"
+                          member.performance.score >= 90 ? "bg-success" :
+                            member.performance.score >= 75 ? "bg-primary" :
+                              "bg-warning"
                         }>
                           {member.performance.score}%
                         </Badge>
@@ -505,8 +505,8 @@ export const CrewManagement2: React.FC = () => {
                     </CardHeader>
                     <CardContent>
                       <div className="grid grid-cols-3 gap-4">
-                        <div className="text-center p-4 bg-green-50 dark:bg-green-950 rounded-lg">
-                          <CheckCircle className="h-6 w-6 mx-auto mb-2 text-green-600" />
+                        <div className="text-center p-4 bg-success/5 dark:bg-success/10 rounded-lg">
+                          <CheckCircle className="h-6 w-6 mx-auto mb-2 text-success" />
                           <div className="text-2xl font-bold">{member.performance.commendations}</div>
                           <div className="text-xs text-muted-foreground">Elogios</div>
                         </div>
