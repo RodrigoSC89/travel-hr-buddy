@@ -38,7 +38,7 @@ export default function NautilusPeopleDashboard() {
             <CardContent>
               <div className="flex items-center justify-between">
                 <span className="text-3xl font-bold">{stat.value}</span>
-                <Badge variant="outline" className="text-green-600">
+                <Badge variant="outline" className="text-success">
                   <TrendingUp className="h-3 w-3 mr-1" />
                   {stat.trend}
                 </Badge>
