@@ -157,9 +157,9 @@ export const RealTimeRouteOptimizer: React.FC = () => {
 
   const getRiskColor = (risk: string) => {
     switch (risk) {
-    case "high": return "text-red-600";
-    case "medium": return "text-yellow-600";
-    case "low": return "text-green-600";
+    case "high": return "text-destructive";
+    case "medium": return "text-warning";
+    case "low": return "text-success";
     default: return "text-muted-foreground";
     }
   };
@@ -187,7 +187,7 @@ export const RealTimeRouteOptimizer: React.FC = () => {
             <CardTitle className="text-sm font-medium">Economia Combustível</CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-green-600">
+            <div className="text-2xl font-bold text-success">
               {totalFuelSavings.toFixed(1)}%
             </div>
             <p className="text-xs text-muted-foreground">Média ponderada</p>
@@ -211,7 +211,7 @@ export const RealTimeRouteOptimizer: React.FC = () => {
             <CardTitle className="text-sm font-medium">Redução CO₂</CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-green-600">
+            <div className="text-2xl font-bold text-success">
               {(totalCO2Reduction / 1000).toFixed(1)}t
             </div>
             <p className="text-xs text-muted-foreground">Emissões evitadas</p>
@@ -240,7 +240,7 @@ export const RealTimeRouteOptimizer: React.FC = () => {
         </CardHeader>
         <CardContent className="space-y-4">
           {optimizations.map((opt) => (
-            <Card key={opt.id} className="border-l-4 border-l-blue-500">
+            <Card key={opt.id} className="border-l-4 border-l-primary">
               <CardHeader>
                 <div className="flex items-start justify-between">
                   <div className="space-y-2">
@@ -286,9 +286,9 @@ export const RealTimeRouteOptimizer: React.FC = () => {
                     </div>
                   </div>
 
-                  <div className="space-y-3 p-3 bg-green-50 dark:bg-green-950 rounded-lg border-2 border-green-500">
+                  <div className="space-y-3 p-3 bg-success/10 rounded-lg border-2 border-success">
                     <div className="font-medium text-sm flex items-center gap-2">
-                      <CheckCircle className="h-4 w-4 text-green-600" />
+                      <CheckCircle className="h-4 w-4 text-success" />
                       Rota Otimizada
                     </div>
                     <div className="space-y-2 text-sm">

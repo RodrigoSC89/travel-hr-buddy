@@ -180,10 +180,10 @@ export function VesselManagement() {
 
   const getStatusColor = (status: string) => {
     switch (status) {
-    case "active": return "bg-green-100 text-green-800";
-    case "maintenance": return "bg-yellow-100 text-yellow-800";
+    case "active": return "bg-success/10 text-success";
+    case "maintenance": return "bg-warning/10 text-warning";
     case "inactive": return "bg-secondary text-secondary-foreground";
-    case "dry_dock": return "bg-blue-100 text-blue-800";
+    case "dry_dock": return "bg-primary/10 text-primary";
     default: return "bg-secondary text-secondary-foreground";
     }
   };
@@ -374,7 +374,7 @@ export function VesselManagement() {
             <Card key={vessel.id} className="hover:shadow-lg transition-shadow">
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                 <div className="flex items-center space-x-2">
-                  <Ship className="w-5 h-5 text-blue-600" />
+                  <Ship className="w-5 h-5 text-primary" />
                   <CardTitle className="text-lg">{vessel.name}</CardTitle>
                 </div>
                 <div className="flex space-x-1">

@@ -188,9 +188,9 @@ export const MaritimeLogisticsDashboard: React.FC = () => {
   const getStatusColor = (status: string) => {
     switch (status) {
     case "at_sea": return "text-primary bg-primary/10";
-    case "in_port": return "text-green-600 bg-green-100";
-    case "anchored": return "text-yellow-600 bg-yellow-100";
-    case "maintenance": return "text-orange-600 bg-orange-100";
+    case "in_port": return "text-success bg-success/10";
+    case "anchored": return "text-warning bg-warning/10";
+    case "maintenance": return "text-accent-foreground bg-accent/50";
     case "emergency": return "text-destructive bg-destructive/10";
     default: return "text-muted-foreground bg-muted";
     }
@@ -313,8 +313,8 @@ export const MaritimeLogisticsDashboard: React.FC = () => {
                   {vessels.map((vessel) => (
                     <div key={vessel.id} className="flex items-center justify-between p-4 border rounded-lg hover:bg-muted/50 transition-colors">
                       <div className="flex items-center gap-4">
-                        <div className="p-2 bg-blue-100 rounded-lg">
-                          <Ship className="h-5 w-5 text-blue-600" />
+                        <div className="p-2 bg-primary/10 rounded-lg">
+                          <Ship className="h-5 w-5 text-primary" />
                         </div>
                         <div>
                           <h3 className="font-semibold">{vessel.name}</h3>
@@ -391,8 +391,8 @@ export const MaritimeLogisticsDashboard: React.FC = () => {
                   return (
                     <div key={operation.id} className="flex items-center justify-between p-4 border rounded-lg">
                       <div className="flex items-center gap-4">
-                        <div className="p-2 bg-green-100 rounded-lg">
-                          <Container className="h-5 w-5 text-green-600" />
+                        <div className="p-2 bg-success/10 rounded-lg">
+                          <Container className="h-5 w-5 text-success" />
                         </div>
                         <div>
                           <h3 className="font-semibold">{vessel?.name}</h3>
@@ -519,9 +519,9 @@ export const MaritimeLogisticsDashboard: React.FC = () => {
                             <span>Carga Atual:</span>
                             <span className="font-medium">{selectedVessel.cargo.current_load.toLocaleString()} TEU</span>
                           </div>
-                          <div className="w-full bg-gray-200 rounded-full h-2">
+                          <div className="w-full bg-muted rounded-full h-2">
                             <div 
-                              className="bg-blue-600 h-2 rounded-full" 
+                              className="bg-primary h-2 rounded-full" 
                               style={{ width: `${(selectedVessel.cargo.current_load / selectedVessel.cargo.capacity) * 100}%` }}
                             ></div>
                           </div>
@@ -539,9 +539,9 @@ export const MaritimeLogisticsDashboard: React.FC = () => {
                             <span>Combustível:</span>
                             <span className="font-medium">{selectedVessel.fuel.current}/{selectedVessel.fuel.capacity} MT</span>
                           </div>
-                          <div className="w-full bg-gray-200 rounded-full h-2">
+                          <div className="w-full bg-muted rounded-full h-2">
                             <div 
-                              className="bg-green-600 h-2 rounded-full" 
+                              className="bg-success h-2 rounded-full" 
                               style={{ width: `${(selectedVessel.fuel.current / selectedVessel.fuel.capacity) * 100}%` }}
                             ></div>
                           </div>
@@ -581,21 +581,21 @@ export const MaritimeLogisticsDashboard: React.FC = () => {
               </CardHeader>
               <CardContent>
                 <div className="space-y-4">
-                  <div className="p-4 bg-blue-50 border border-blue-200 rounded-lg">
-                    <h4 className="font-semibold text-blue-800 mb-2">🌊 Previsão Meteorológica</h4>
-                    <p className="text-sm text-blue-600">
+                  <div className="p-4 bg-primary/10 border border-primary/20 rounded-lg">
+                    <h4 className="font-semibold text-primary mb-2">🌊 Previsão Meteorológica</h4>
+                    <p className="text-sm text-primary/80">
                       IA detecta tempestade em 48h. Recomenda atraso de 6h na partida para economia de combustível.
                     </p>
                   </div>
-                  <div className="p-4 bg-green-50 border border-green-200 rounded-lg">
-                    <h4 className="font-semibold text-green-800 mb-2">⚓ Otimização Portuária</h4>
-                    <p className="text-sm text-green-600">
+                  <div className="p-4 bg-success/10 border border-success/20 rounded-lg">
+                    <h4 className="font-semibold text-success mb-2">⚓ Otimização Portuária</h4>
+                    <p className="text-sm text-success/80">
                       Slot preferencial identificado no Porto de Santos. Economia estimada: R$ 15.000.
                     </p>
                   </div>
-                  <div className="p-4 bg-orange-50 border border-orange-200 rounded-lg">
-                    <h4 className="font-semibold text-orange-800 mb-2">🛠️ Manutenção Preditiva</h4>
-                    <p className="text-sm text-orange-600">
+                  <div className="p-4 bg-warning/10 border border-warning/20 rounded-lg">
+                    <h4 className="font-semibold text-warning mb-2">🛠️ Manutenção Preditiva</h4>
+                    <p className="text-sm text-warning/80">
                       Motor principal requer atenção em 850 horas. Agendar manutenção no próximo porto.
                     </p>
                   </div>
@@ -617,8 +617,8 @@ export const MaritimeLogisticsDashboard: React.FC = () => {
                       <span className="text-sm">Eficiência de Combustível</span>
                       <span className="text-sm font-medium">94.2%</span>
                     </div>
-                    <div className="w-full bg-gray-200 rounded-full h-2">
-                      <div className="bg-green-600 h-2 rounded-full" style={{ width: "94.2%" }}></div>
+                    <div className="w-full bg-muted rounded-full h-2">
+                      <div className="bg-success h-2 rounded-full" style={{ width: "94.2%" }}></div>
                     </div>
                   </div>
                   <div className="space-y-2">
@@ -626,8 +626,8 @@ export const MaritimeLogisticsDashboard: React.FC = () => {
                       <span className="text-sm">Pontualidade Portuária</span>
                       <span className="text-sm font-medium">87.8%</span>
                     </div>
-                    <div className="w-full bg-gray-200 rounded-full h-2">
-                      <div className="bg-blue-600 h-2 rounded-full" style={{ width: "87.8%" }}></div>
+                    <div className="w-full bg-muted rounded-full h-2">
+                      <div className="bg-primary h-2 rounded-full" style={{ width: "87.8%" }}></div>
                     </div>
                   </div>
                   <div className="space-y-2">
@@ -635,8 +635,8 @@ export const MaritimeLogisticsDashboard: React.FC = () => {
                       <span className="text-sm">Otimização de Rotas</span>
                       <span className="text-sm font-medium">91.5%</span>
                     </div>
-                    <div className="w-full bg-gray-200 rounded-full h-2">
-                      <div className="bg-purple-600 h-2 rounded-full" style={{ width: "91.5%" }}></div>
+                    <div className="w-full bg-muted rounded-full h-2">
+                      <div className="bg-accent-foreground h-2 rounded-full" style={{ width: "91.5%" }}></div>
                     </div>
                   </div>
                 </div>

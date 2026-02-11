@@ -144,53 +144,53 @@ export function ContractAnalyticsDashboard() {
 
       {/* Summary Cards */}
       <div className="grid grid-cols-4 gap-4">
-        <Card className="border-blue-500/20 bg-blue-500/5">
+        <Card className="border-primary/20 bg-primary/5">
           <CardContent className="p-4">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-muted-foreground">SLA Médio</p>
-                <p className="text-2xl font-bold text-blue-500">{avgSLA.toFixed(1)}%</p>
+                <p className="text-2xl font-bold text-primary">{avgSLA.toFixed(1)}%</p>
               </div>
-              <Target className="h-8 w-8 text-blue-500/50" />
+              <Target className="h-8 w-8 text-primary/50" />
             </div>
           </CardContent>
         </Card>
-        <Card className="border-green-500/20 bg-green-500/5">
+        <Card className="border-success/20 bg-success/5">
           <CardContent className="p-4">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-muted-foreground">Penalidades Evitadas</p>
-                <p className="text-2xl font-bold text-green-500">
+                <p className="text-2xl font-bold text-success">
                   ${(avoidedPenalties / 1000).toFixed(0)}k
                 </p>
               </div>
-              <TrendingUp className="h-8 w-8 text-green-500/50" />
+              <TrendingUp className="h-8 w-8 text-success/50" />
             </div>
           </CardContent>
         </Card>
-        <Card className="border-orange-500/20 bg-orange-500/5">
+        <Card className="border-warning/20 bg-warning/5">
           <CardContent className="p-4">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-muted-foreground">Custo Total</p>
-                <p className="text-2xl font-bold text-orange-500">
+                <p className="text-2xl font-bold text-warning">
                   ${(totalCosts / 1000).toFixed(0)}k
                 </p>
               </div>
-              <DollarSign className="h-8 w-8 text-orange-500/50" />
+              <DollarSign className="h-8 w-8 text-warning/50" />
             </div>
           </CardContent>
         </Card>
-        <Card className="border-red-500/20 bg-red-500/5">
+        <Card className="border-destructive/20 bg-destructive/5">
           <CardContent className="p-4">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-muted-foreground">Penalidades Pagas</p>
-                <p className="text-2xl font-bold text-red-500">
+                <p className="text-2xl font-bold text-destructive">
                   ${(totalPenalties / 1000).toFixed(0)}k
                 </p>
               </div>
-              <Clock className="h-8 w-8 text-red-500/50" />
+              <Clock className="h-8 w-8 text-destructive/50" />
             </div>
           </CardContent>
         </Card>
