@@ -136,7 +136,7 @@ Gere sugestões em formato JSON array.`
         const jsonMatch = responseText.match(/\[[\s\S]*\]/);
         if (jsonMatch) {
           const parsed = JSON.parse(jsonMatch[0]);
-          aiSuggestions = parsed.map((s: any, i: number) => ({
+          aiSuggestions = parsed.map((s: Record<string, unknown>, i: number) => ({
             id: `ai-${Date.now()}-${i}`,
             tipo_sugestao: s.tipo_sugestao || "Otimizar processo",
             conteudo: s.conteudo || s.content || s.description || "",

@@ -13,7 +13,7 @@ import { logger } from "@/lib/logger";
 export interface KnowledgeEntry {
   id: string;
   key: string;
-  value: any;
+  value: unknown;
   version: number;
   source: string;
   confidence: number;
@@ -36,6 +36,19 @@ export interface RollbackResult {
   timestamp: string;
 }
 
+interface KnowledgeRow {
+  id: string;
+  key: string;
+  value: unknown;
+  version: number;
+  source: string;
+  confidence: number;
+  tags: string[] | null;
+  created_at: string;
+  updated_at: string;
+  instance_id?: string;
+}
+
 class CollectiveMemoryHub {
   private instanceId: string;
   private knowledge: Map<string, KnowledgeEntry> = new Map();
@@ -45,25 +58,18 @@ class CollectiveMemoryHub {
     this.instanceId = `instance-${Date.now()}-${crypto.randomUUID().slice(0, 9)}`;
   }
 
-  /**
-   * Initialize the collective memory hub
-   */
   async initialize(): Promise<void> {
     logger.info("Initializing CollectiveMemory", { instanceId: this.instanceId });
     await this.loadKnowledgeFromDB();
     this.startSync();
   }
 
-  /**
-   * Store knowledge entry
-   */
   async store(
     key: string,
-    value: any,
+    value: unknown,
     source: string = "system",
     tags: string[] = []
   ): Promise<KnowledgeEntry> {
-    // Get current version
     const existing = this.knowledge.get(key);
     const version = existing ? existing.version + 1 : 1;
 
@@ -73,37 +79,27 @@ class CollectiveMemoryHub {
       value,
       version,
       source,
-      confidence: 0.8, // Default confidence
+      confidence: 0.8,
       tags,
       created_at: new Date().toISOString(),
       updated_at: new Date().toISOString()
     };
 
-    // Store locally
     this.knowledge.set(key, entry);
-
-    // Store in database
     await this.syncEntryToDB(entry);
 
     logger.debug("Knowledge entry stored", { key, version });
     return entry;
   }
 
-  /**
-   * Retrieve knowledge entry
-   */
   async retrieve(key: string): Promise<KnowledgeEntry | null> {
-    // Check local cache first
     if (this.knowledge.has(key)) {
       return this.knowledge.get(key) || null;
     }
 
-    // Fetch from database
     try {
-      // collective_knowledge table is optional
-      const supabaseQuery: any = supabase;
-      const { data, error } = await supabaseQuery
-        .from("collective_knowledge")
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any -- collective_knowledge is an optional dynamic table
+      const { data, error } = await (supabase.from as Function)("collective_knowledge")
         .select("*")
         .eq("key", key)
         .order("version", { ascending: false })
@@ -113,18 +109,8 @@ class CollectiveMemoryHub {
       if (error) throw error;
       
       if (data) {
-        const entry: KnowledgeEntry = {
-          id: data.id,
-          key: data.key,
-          value: data.value,
-          version: data.version,
-          source: data.source,
-          confidence: data.confidence,
-          tags: data.tags || [],
-          created_at: data.created_at,
-          updated_at: data.updated_at
-        };
-        
+        const row = data as KnowledgeRow;
+        const entry = this.mapRowToEntry(row);
         this.knowledge.set(key, entry);
         return entry;
       }
@@ -135,14 +121,10 @@ class CollectiveMemoryHub {
     return null;
   }
 
-  /**
-   * Sync entry to database
-   */
   private async syncEntryToDB(entry: KnowledgeEntry): Promise<void> {
     try {
-      // collective_knowledge table is optional
-      const supabaseQuery: any = supabase;
-      await supabaseQuery.from("collective_knowledge").insert({
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any -- collective_knowledge is an optional dynamic table
+      await (supabase.from as Function)("collective_knowledge").insert({
         id: entry.id,
         key: entry.key,
         value: entry.value,
@@ -157,42 +139,26 @@ class CollectiveMemoryHub {
     }
   }
 
-  /**
-   * Load all knowledge from database
-   */
   private async loadKnowledgeFromDB(): Promise<void> {
     try {
-      // collective_knowledge table is optional
-      const supabaseQuery: any = supabase;
-      const { data, error } = await supabaseQuery
-        .from("collective_knowledge")
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any -- collective_knowledge is an optional dynamic table
+      const { data, error } = await (supabase.from as Function)("collective_knowledge")
         .select("*")
         .order("updated_at", { ascending: false });
 
       if (error) throw error;
 
       if (data) {
-        // Keep only latest version of each key
-        const latestEntries = new Map<string, any>();
-        data.forEach((row: any) => {
-          if (!latestEntries.has(row.key) || row.version > latestEntries.get(row.key).version) {
+        const rows = data as KnowledgeRow[];
+        const latestEntries = new Map<string, KnowledgeRow>();
+        rows.forEach((row) => {
+          if (!latestEntries.has(row.key) || row.version > (latestEntries.get(row.key)?.version ?? 0)) {
             latestEntries.set(row.key, row);
           }
         });
 
-        // Store in memory
         latestEntries.forEach((row, key) => {
-          this.knowledge.set(key, {
-            id: row.id,
-            key: row.key,
-            value: row.value,
-            version: row.version,
-            source: row.source,
-            confidence: row.confidence,
-            tags: row.tags || [],
-            created_at: row.created_at,
-            updated_at: row.updated_at
-          });
+          this.knowledge.set(key, this.mapRowToEntry(row));
         });
 
         logger.info("Knowledge loaded from DB", { entriesCount: this.knowledge.size });
@@ -202,9 +168,6 @@ class CollectiveMemoryHub {
     }
   }
 
-  /**
-   * Start automatic synchronization
-   */
   private startSync(intervalMs: number = 30000): void {
     if (this.syncInterval) return;
 
@@ -215,18 +178,12 @@ class CollectiveMemoryHub {
     logger.info("CollectiveMemory sync started", { intervalMs });
   }
 
-  /**
-   * Synchronize with other instances
-   */
   private async syncWithInstances(): Promise<SyncStatus> {
-    const startTime = Date.now();
     let entriesSynced = 0;
 
     try {
-      // collective_knowledge table is optional
-      const supabaseQuery: any = supabase;
-      const { data, error } = await supabaseQuery
-        .from("collective_knowledge")
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any -- collective_knowledge is an optional dynamic table
+      const { data, error } = await (supabase.from as Function)("collective_knowledge")
         .select("*")
         .neq("instance_id", this.instanceId)
         .gte("updated_at", new Date(Date.now() - 60000).toISOString())
@@ -235,21 +192,11 @@ class CollectiveMemoryHub {
       if (error) throw error;
 
       if (data) {
-        data.forEach((row: any) => {
+        const rows = data as KnowledgeRow[];
+        rows.forEach((row) => {
           const existing = this.knowledge.get(row.key);
-          // Update if newer version
           if (!existing || row.version > existing.version) {
-            this.knowledge.set(row.key, {
-              id: row.id,
-              key: row.key,
-              value: row.value,
-              version: row.version,
-              source: row.source,
-              confidence: row.confidence,
-              tags: row.tags || [],
-              created_at: row.created_at,
-              updated_at: row.updated_at
-            });
+            this.knowledge.set(row.key, this.mapRowToEntry(row));
             entriesSynced++;
           }
         });
@@ -278,17 +225,12 @@ class CollectiveMemoryHub {
     }
   }
 
-  /**
-   * Rollback to a specific version
-   */
   async rollback(key: string, targetVersion: number): Promise<RollbackResult> {
     logger.info("Rolling back knowledge", { key, targetVersion });
 
     try {
-      // collective_knowledge table is optional
-      const supabaseQuery: any = supabase;
-      const { data, error } = await supabaseQuery
-        .from("collective_knowledge")
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any -- collective_knowledge is an optional dynamic table
+      const { data, error } = await (supabase.from as Function)("collective_knowledge")
         .select("*")
         .eq("key", key)
         .eq("version", targetVersion)
@@ -297,16 +239,16 @@ class CollectiveMemoryHub {
       if (error) throw error;
 
       if (data) {
-        // Create new entry with incremented version (rollback is a new version)
+        const row = data as KnowledgeRow;
         const currentVersion = this.knowledge.get(key)?.version || 0;
         const newEntry: KnowledgeEntry = {
           id: `knowledge-${Date.now()}-${crypto.randomUUID().slice(0, 9)}`,
-          key: data.key,
-          value: data.value,
+          key: row.key,
+          value: row.value,
           version: currentVersion + 1,
           source: `rollback-to-v${targetVersion}`,
-          confidence: data.confidence,
-          tags: [...(data.tags || []), "rollback"],
+          confidence: row.confidence,
+          tags: [...(row.tags || []), "rollback"],
           created_at: new Date().toISOString(),
           updated_at: new Date().toISOString()
         };
@@ -334,15 +276,10 @@ class CollectiveMemoryHub {
     }
   }
 
-  /**
-   * Get version history for a key
-   */
   async getHistory(key: string, limit: number = 20): Promise<KnowledgeEntry[]> {
     try {
-      // collective_knowledge table is optional
-      const supabaseQuery: any = supabase;
-      const { data, error } = await supabaseQuery
-        .from("collective_knowledge")
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any -- collective_knowledge is an optional dynamic table
+      const { data, error } = await (supabase.from as Function)("collective_knowledge")
         .select("*")
         .eq("key", key)
         .order("version", { ascending: false })
@@ -350,26 +287,13 @@ class CollectiveMemoryHub {
 
       if (error) throw error;
 
-      return (data || []).map((row: any) => ({
-        id: row.id,
-        key: row.key,
-        value: row.value,
-        version: row.version,
-        source: row.source,
-        confidence: row.confidence,
-        tags: row.tags || [],
-        created_at: row.created_at,
-        updated_at: row.updated_at
-      }));
+      return (data as KnowledgeRow[] || []).map((row) => this.mapRowToEntry(row));
     } catch (error) {
       logger.warn("Failed to fetch knowledge history", { key, error });
       return [];
     }
   }
 
-  /**
-   * Shutdown and stop sync
-   */
   shutdown(): void {
     if (this.syncInterval) {
       clearInterval(this.syncInterval);
@@ -378,18 +302,26 @@ class CollectiveMemoryHub {
     logger.info("CollectiveMemory shutdown complete");
   }
 
-  /**
-   * Get current instance ID
-   */
   getInstanceId(): string {
     return this.instanceId;
   }
 
-  /**
-   * Get all knowledge entries
-   */
   getAllEntries(): KnowledgeEntry[] {
     return Array.from(this.knowledge.values());
+  }
+
+  private mapRowToEntry(row: KnowledgeRow): KnowledgeEntry {
+    return {
+      id: row.id,
+      key: row.key,
+      value: row.value,
+      version: row.version,
+      source: row.source,
+      confidence: row.confidence,
+      tags: row.tags || [],
+      created_at: row.created_at,
+      updated_at: row.updated_at
+    };
   }
 }
 

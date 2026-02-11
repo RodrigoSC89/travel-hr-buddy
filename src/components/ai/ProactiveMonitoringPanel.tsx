@@ -38,7 +38,7 @@ export default function ProactiveMonitoringPanel() {
         .order("created_at", { ascending: false })
         .limit(20);
       if (error) return [];
-      return (data || []).map((pred: any): MonitoringAlert => ({
+      return (data || []).map((pred: typeof data[number]): MonitoringAlert => ({
         id: pred.id,
         type: "compliance",
         severity: pred.preparation_status === "not_started" ? "critical" : "warning",
@@ -117,9 +117,9 @@ export default function ProactiveMonitoringPanel() {
   const infoCount = allAlerts.filter((a) => a.severity === "info").length;
 
   const severityConfig = {
-    critical: { icon: XCircle, color: "text-red-500", bg: "bg-red-500/10", badge: "bg-red-500/15 text-red-700 dark:text-red-300" },
-    warning: { icon: AlertTriangle, color: "text-yellow-500", bg: "bg-yellow-500/10", badge: "bg-yellow-500/15 text-yellow-700 dark:text-yellow-300" },
-    info: { icon: Info, color: "text-blue-500", bg: "bg-blue-500/10", badge: "bg-blue-500/15 text-blue-700 dark:text-blue-300" },
+    critical: { icon: XCircle, color: "text-destructive", bg: "bg-destructive/10", badge: "bg-destructive/15 text-destructive" },
+    warning: { icon: AlertTriangle, color: "text-warning", bg: "bg-warning/10", badge: "bg-warning/15 text-warning" },
+    info: { icon: Info, color: "text-primary", bg: "bg-primary/10", badge: "bg-primary/15 text-primary" },
   };
 
   const typeConfig = {
@@ -159,18 +159,18 @@ export default function ProactiveMonitoringPanel() {
 
       {/* Summary Cards */}
       <div className="grid grid-cols-3 gap-4">
-        <Card className={cn(criticalCount > 0 && "border-red-500/30")}>
+        <Card className={cn(criticalCount > 0 && "border-destructive/30")}>
           <CardContent className="pt-6 flex items-center gap-3">
-            <XCircle className="h-8 w-8 text-red-500" />
+            <XCircle className="h-8 w-8 text-destructive" />
             <div>
               <p className="text-2xl font-bold">{criticalCount}</p>
               <p className="text-xs text-muted-foreground">Críticos</p>
             </div>
           </CardContent>
         </Card>
-        <Card className={cn(warningCount > 0 && "border-yellow-500/30")}>
+        <Card className={cn(warningCount > 0 && "border-warning/30")}>
           <CardContent className="pt-6 flex items-center gap-3">
-            <AlertTriangle className="h-8 w-8 text-yellow-500" />
+            <AlertTriangle className="h-8 w-8 text-warning" />
             <div>
               <p className="text-2xl font-bold">{warningCount}</p>
               <p className="text-xs text-muted-foreground">Avisos</p>
@@ -179,7 +179,7 @@ export default function ProactiveMonitoringPanel() {
         </Card>
         <Card>
           <CardContent className="pt-6 flex items-center gap-3">
-            <Info className="h-8 w-8 text-blue-500" />
+            <Info className="h-8 w-8 text-primary" />
             <div>
               <p className="text-2xl font-bold">{infoCount}</p>
               <p className="text-xs text-muted-foreground">Informativos</p>
@@ -200,7 +200,7 @@ export default function ProactiveMonitoringPanel() {
           <ScrollArea className="h-[500px]">
             {allAlerts.length === 0 ? (
               <div className="flex flex-col items-center justify-center py-12 text-muted-foreground gap-3">
-                <CheckCircle2 className="h-10 w-10 text-green-500" />
+                <CheckCircle2 className="h-10 w-10 text-success" />
                 <p className="text-sm font-medium">Nenhum alerta ativo</p>
                 <p className="text-xs">Todos os sistemas estão dentro dos parâmetros normais.</p>
               </div>
