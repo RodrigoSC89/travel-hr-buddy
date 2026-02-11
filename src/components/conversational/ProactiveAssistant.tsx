@@ -38,10 +38,10 @@ const typeIcons = {
 };
 
 const typeColors = {
-  insight: 'text-blue-400 bg-blue-500/10',
+  insight: 'text-info bg-info/10',
   action: 'text-primary bg-primary/10',
-  warning: 'text-orange-400 bg-orange-500/10',
-  trend: 'text-green-400 bg-green-500/10',
+  warning: 'text-warning bg-warning/10',
+  trend: 'text-success bg-success/10',
 };
 
 export function ProactiveAssistant({ 

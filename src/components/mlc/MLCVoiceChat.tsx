@@ -339,8 +339,8 @@ A Maritime Labour Convention 2006 estabelece direitos e condições mínimas de 
       <CardHeader className="pb-3">
         <CardTitle className="flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <div className="p-2 bg-gradient-to-br from-blue-500/20 to-cyan-500/20 rounded-lg">
-              <Brain className="h-5 w-5 text-blue-500" />
+            <div className="p-2 bg-gradient-to-br from-primary/20 to-info/20 rounded-lg">
+              <Brain className="h-5 w-5 text-primary" />
             </div>
             <div>
               <span className="text-lg">MLCGuard AI</span>
@@ -354,7 +354,7 @@ A Maritime Labour Convention 2006 estabelece direitos e condições mínimas de 
             {/* ElevenLabs HD Toggle */}
             {voiceEnabled && (
               <div className="flex items-center gap-1 mr-2">
-                <Headphones className={`h-3 w-3 ${useElevenLabs ? 'text-blue-500' : 'text-muted-foreground'}`} />
+                <Headphones className={`h-3 w-3 ${useElevenLabs ? 'text-primary' : 'text-muted-foreground'}`} />
                 <Switch
                   checked={useElevenLabs}
                   onCheckedChange={setUseElevenLabs}
@@ -446,7 +446,7 @@ A Maritime Labour Convention 2006 estabelece direitos e condições mínimas de 
                   >
                     {message.role === 'assistant' && (
                       <div className="flex items-center gap-2 mb-2">
-                        <Brain className="h-4 w-4 text-blue-500" />
+                        <Brain className="h-4 w-4 text-primary" />
                         <span className="text-xs font-medium">MLCGuard</span>
                       </div>
                     )}
@@ -462,7 +462,7 @@ A Maritime Labour Convention 2006 estabelece direitos e condições mínimas de 
                 <div className="flex justify-start">
                   <div className="bg-muted p-3 rounded-lg mr-8">
                     <div className="flex items-center gap-2">
-                      <Loader2 className="h-4 w-4 animate-spin text-blue-500" />
+                      <Loader2 className="h-4 w-4 animate-spin text-primary" />
                       <span className="text-sm text-muted-foreground">Analisando...</span>
                     </div>
                   </div>
@@ -499,7 +499,7 @@ A Maritime Labour Convention 2006 estabelece direitos e condições mínimas de 
           <Button
             onClick={() => sendMessage()}
             disabled={!input.trim() || isLoading}
-            className="flex-shrink-0 bg-gradient-to-r from-blue-500 to-cyan-500"
+            className="flex-shrink-0 bg-gradient-to-r from-primary to-info"
           >
             {isLoading ? (
               <Loader2 className="h-4 w-4 animate-spin" />

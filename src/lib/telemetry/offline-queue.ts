@@ -37,7 +37,7 @@ export class OfflineQueue {
   /**
    * Get all queued events
    */
-  static getQueue(): any[] {
+  static getQueue(): (TelemetryEvent & { queued_at?: string })[] {
     try {
       const queueJson = localStorage.getItem(QUEUE_KEY);
       return queueJson ? JSON.parse(queueJson) : [];

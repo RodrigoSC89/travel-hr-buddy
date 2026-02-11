@@ -367,7 +367,7 @@ export const aiResponseCache = new AIResponseCache();
 export function useAICache() {
   return {
     getResponse: (query: string) => aiResponseCache.get(query),
-    cacheResponse: (query: string, response: string, meta?: any) => 
+    cacheResponse: (query: string, response: string, meta?: { module?: string; context?: string; responseTime?: number }) => 
       aiResponseCache.set(query, response, meta),
     matchTemplate: (query: string, vars?: Record<string, string>) => 
       aiResponseCache.matchTemplate(query, vars),

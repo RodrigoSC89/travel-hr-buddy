@@ -59,7 +59,7 @@ export const IoTDashboard: React.FC<IoTDashboardProps> = ({
       value: telemetry.fuelLevel,
       unit: '%',
       icon: Fuel,
-      color: telemetry.fuelLevel > 30 ? 'text-green-500' : telemetry.fuelLevel > 15 ? 'text-yellow-500' : 'text-red-500',
+      color: telemetry.fuelLevel > 30 ? 'text-success' : telemetry.fuelLevel > 15 ? 'text-warning' : 'text-destructive',
       showProgress: true
     },
     {
@@ -68,7 +68,7 @@ export const IoTDashboard: React.FC<IoTDashboardProps> = ({
       value: telemetry.speed.toFixed(1),
       unit: 'nós',
       icon: Navigation,
-      color: 'text-blue-500'
+      color: 'text-info'
     },
     {
       id: 'heading',
@@ -84,7 +84,7 @@ export const IoTDashboard: React.FC<IoTDashboardProps> = ({
       value: telemetry.engineRPM,
       unit: 'RPM',
       icon: Gauge,
-      color: 'text-orange-500'
+      color: 'text-warning'
     },
     {
       id: 'temperature',
@@ -92,7 +92,7 @@ export const IoTDashboard: React.FC<IoTDashboardProps> = ({
       value: telemetry.temperature.toFixed(1),
       unit: '°C',
       icon: Thermometer,
-      color: telemetry.temperature < 90 ? 'text-green-500' : 'text-red-500'
+      color: telemetry.temperature < 90 ? 'text-success' : 'text-destructive'
     },
     {
       id: 'hours',
@@ -100,7 +100,7 @@ export const IoTDashboard: React.FC<IoTDashboardProps> = ({
       value: telemetry.engineHours.toLocaleString(),
       unit: 'h',
       icon: Activity,
-      color: 'text-purple-500'
+      color: 'text-accent-foreground'
     }
   ];
 
@@ -114,7 +114,7 @@ export const IoTDashboard: React.FC<IoTDashboardProps> = ({
               <span className="font-medium text-sm">{vesselName}</span>
             </div>
             <Badge variant="outline" className="gap-1">
-              <Radio className={`h-2 w-2 ${isConnected ? 'text-green-500 animate-pulse' : 'text-red-500'}`} />
+              <Radio className={`h-2 w-2 ${isConnected ? 'text-success animate-pulse' : 'text-destructive'}`} />
               {isConnected ? 'Live' : 'Offline'}
             </Badge>
           </div>
@@ -190,7 +190,7 @@ export const IoTDashboard: React.FC<IoTDashboardProps> = ({
             </span>
           </div>
           <div className="flex items-center gap-1 text-xs text-muted-foreground">
-            <CheckCircle className="h-3 w-3 text-green-500" />
+            <CheckCircle className="h-3 w-3 text-success" />
             Atualizado: {telemetry.lastUpdate.toLocaleTimeString()}
           </div>
         </div>

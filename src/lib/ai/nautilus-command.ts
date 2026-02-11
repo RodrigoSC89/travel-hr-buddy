@@ -17,9 +17,9 @@ export interface Message {
 
 export interface SystemContext {
   activeModules?: string[];
-  recentLogs?: any[];
+  recentLogs?: Record<string, unknown>[];
   systemHealth?: number;
-  alerts?: any[];
+  alerts?: Record<string, unknown>[];
 }
 
 export async function streamCommandChat({

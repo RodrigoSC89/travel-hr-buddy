@@ -93,8 +93,9 @@ export function measureCoreWebVitals(callback: (metric: {
   // FID Observer
   const fidObserver = new PerformanceObserver((list) => {
     const entries = list.getEntries();
-    entries.forEach((entry: any) => {
-      const value = entry.processingStart - entry.startTime;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any -- PerformanceEventTiming not in standard lib
+    entries.forEach((entry: PerformanceEntry & { processingStart?: number }) => {
+      const value = (entry.processingStart ?? entry.startTime) - entry.startTime;
       callback({
         name: 'FID',
         value,
@@ -114,9 +115,10 @@ export function measureCoreWebVitals(callback: (metric: {
   let clsValue = 0;
   const clsObserver = new PerformanceObserver((list) => {
     const entries = list.getEntries();
-    entries.forEach((entry: any) => {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any -- LayoutShift entry not in standard lib
+    entries.forEach((entry: PerformanceEntry & { hadRecentInput?: boolean; value?: number }) => {
       if (!entry.hadRecentInput) {
-        clsValue += entry.value;
+        clsValue += entry.value ?? 0;
       }
     });
     callback({
