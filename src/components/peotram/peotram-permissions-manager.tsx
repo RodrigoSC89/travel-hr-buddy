@@ -300,9 +300,9 @@ export const PeotramPermissionsManager: React.FC = () => {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm font-medium text-muted-foreground">Permissões Ativas</p>
-                <p className="text-2xl font-bold text-green-600">{stats.activePermissions}</p>
+                <p className="text-2xl font-bold text-success">{stats.activePermissions}</p>
               </div>
-              <UserCheck className="h-8 w-8 text-green-600" />
+              <UserCheck className="h-8 w-8 text-success" />
             </div>
           </CardContent>
         </Card>
@@ -312,9 +312,9 @@ export const PeotramPermissionsManager: React.FC = () => {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm font-medium text-muted-foreground">Administradores</p>
-                <p className="text-2xl font-bold text-red-600">{stats.adminUsers}</p>
+                <p className="text-2xl font-bold text-destructive">{stats.adminUsers}</p>
               </div>
-              <Shield className="h-8 w-8 text-red-600" />
+              <Shield className="h-8 w-8 text-destructive" />
             </div>
           </CardContent>
         </Card>
@@ -324,9 +324,9 @@ export const PeotramPermissionsManager: React.FC = () => {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm font-medium text-muted-foreground">Expirando</p>
-                <p className="text-2xl font-bold text-orange-600">{stats.expiringPermissions}</p>
+                <p className="text-2xl font-bold text-warning">{stats.expiringPermissions}</p>
               </div>
-              <Clock className="h-8 w-8 text-orange-600" />
+              <Clock className="h-8 w-8 text-warning" />
             </div>
           </CardContent>
         </Card>

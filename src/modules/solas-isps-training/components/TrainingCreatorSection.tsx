@@ -25,10 +25,10 @@ export default function TrainingCreatorSection() {
 
   return (
     <div className="space-y-6">
-      <Card className="bg-gradient-to-r from-purple-500/10 to-blue-500/10 border-purple-500/30">
+      <Card className="bg-gradient-to-r from-accent/10 to-primary/10 border-accent/30">
         <CardContent className="p-6 flex items-center gap-4">
-          <div className="p-4 rounded-xl bg-gradient-to-br from-purple-500 to-blue-500"><Brain className="h-10 w-10 text-white" /></div>
-          <div><h2 className="text-2xl font-bold flex items-center gap-2">Criador de Treinamentos com IA<Sparkles className="h-5 w-5 text-yellow-500" /></h2><p className="text-muted-foreground">Gere módulos de treinamento personalizados usando inteligência artificial</p></div>
+          <div className="p-4 rounded-xl bg-gradient-to-br from-accent to-primary"><Brain className="h-10 w-10 text-primary-foreground" /></div>
+          <div><h2 className="text-2xl font-bold flex items-center gap-2">Criador de Treinamentos com IA<Sparkles className="h-5 w-5 text-warning" /></h2><p className="text-muted-foreground">Gere módulos de treinamento personalizados usando inteligência artificial</p></div>
         </CardContent>
       </Card>
 
@@ -39,7 +39,7 @@ export default function TrainingCreatorSection() {
             <div className="space-y-2"><Label>Tópico do Treinamento *</Label><Input placeholder="Ex: Procedimentos de Abandono" value={formData.topic} onChange={e => setFormData(p => ({ ...p, topic: e.target.value }))} /></div>
             <div className="space-y-2"><Label>Norma de Referência</Label><Select value={formData.normReference} onValueChange={v => setFormData(p => ({ ...p, normReference: v }))}><SelectTrigger><SelectValue placeholder="Selecione" /></SelectTrigger><SelectContent><SelectItem value="SOLAS">SOLAS</SelectItem><SelectItem value="ISM Code">ISM Code</SelectItem><SelectItem value="ISPS Code">ISPS Code</SelectItem><SelectItem value="STCW">STCW</SelectItem></SelectContent></Select></div>
             <div className="space-y-2"><Label>Categoria</Label><Select value={formData.category} onValueChange={v => setFormData(p => ({ ...p, category: v }))}><SelectTrigger><SelectValue placeholder="Selecione" /></SelectTrigger><SelectContent><SelectItem value="safety">Segurança</SelectItem><SelectItem value="emergency">Emergência</SelectItem><SelectItem value="security">Security</SelectItem><SelectItem value="operations">Operações</SelectItem></SelectContent></Select></div>
-            <Button onClick={handleGenerate} disabled={isGenerating} className="w-full bg-gradient-to-r from-purple-500 to-blue-500">{isGenerating ? <><Loader2 className="h-4 w-4 mr-2 animate-spin" />Gerando...</> : <><Brain className="h-4 w-4 mr-2" />Gerar com IA</>}</Button>
+            <Button onClick={handleGenerate} disabled={isGenerating} className="w-full bg-gradient-to-r from-accent to-primary">{isGenerating ? <><Loader2 className="h-4 w-4 mr-2 animate-spin" />Gerando...</> : <><Brain className="h-4 w-4 mr-2" />Gerar com IA</>}</Button>
           </CardContent>
         </Card>
 
