@@ -117,13 +117,13 @@ const fallbackLogEntries: LogEntry[] = [
 ];
 
 const eventTypeConfig = {
-  mode_change: { label: "Mudança de Modo", icon: RefreshCw, color: "bg-blue-500" },
-  alarm: { label: "Alarme", icon: AlertTriangle, color: "bg-red-500" },
-  sensor: { label: "Sensor", icon: Activity, color: "bg-yellow-500" },
-  watch_handover: { label: "Troca de Turno", icon: User, color: "bg-green-500" },
-  operation: { label: "Operação", icon: Anchor, color: "bg-purple-500" },
-  maintenance: { label: "Manutenção", icon: Settings, color: "bg-orange-500" },
-  incident: { label: "Incidente", icon: Zap, color: "bg-red-600" }
+  mode_change: { label: "Mudança de Modo", icon: RefreshCw, color: "bg-primary" },
+  alarm: { label: "Alarme", icon: AlertTriangle, color: "bg-destructive" },
+  sensor: { label: "Sensor", icon: Activity, color: "bg-warning" },
+  watch_handover: { label: "Troca de Turno", icon: User, color: "bg-success" },
+  operation: { label: "Operação", icon: Anchor, color: "bg-accent" },
+  maintenance: { label: "Manutenção", icon: Settings, color: "bg-warning" },
+  incident: { label: "Incidente", icon: Zap, color: "bg-destructive" }
 };
 
 export const SmartDPLogbook: React.FC = () => {
@@ -297,47 +297,47 @@ export const SmartDPLogbook: React.FC = () => {
 
       {/* Stats Cards */}
       <div className="grid grid-cols-4 gap-4">
-        <Card className="bg-gradient-to-br from-blue-500/10 to-blue-600/5">
+        <Card className="bg-gradient-to-br from-primary/10 to-primary/5">
           <CardContent className="pt-4">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-muted-foreground">Total Entradas</p>
                 <p className="text-2xl font-bold">{entries.length}</p>
               </div>
-              <BookOpen className="h-8 w-8 text-blue-500" />
+              <BookOpen className="h-8 w-8 text-primary" />
             </div>
           </CardContent>
         </Card>
-        <Card className="bg-gradient-to-br from-yellow-500/10 to-yellow-600/5">
+        <Card className="bg-gradient-to-br from-warning/10 to-warning/5">
           <CardContent className="pt-4">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-muted-foreground">Mudanças de Modo</p>
                 <p className="text-2xl font-bold">{entries.filter(e => e.eventType === "mode_change").length}</p>
               </div>
-              <RefreshCw className="h-8 w-8 text-yellow-500" />
+              <RefreshCw className="h-8 w-8 text-warning" />
             </div>
           </CardContent>
         </Card>
-        <Card className="bg-gradient-to-br from-red-500/10 to-red-600/5">
+        <Card className="bg-gradient-to-br from-destructive/10 to-destructive/5">
           <CardContent className="pt-4">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-muted-foreground">Alarmes</p>
                 <p className="text-2xl font-bold">{entries.filter(e => e.eventType === "alarm").length}</p>
               </div>
-              <AlertTriangle className="h-8 w-8 text-red-500" />
+              <AlertTriangle className="h-8 w-8 text-destructive" />
             </div>
           </CardContent>
         </Card>
-        <Card className="bg-gradient-to-br from-green-500/10 to-green-600/5">
+        <Card className="bg-gradient-to-br from-success/10 to-success/5">
           <CardContent className="pt-4">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-muted-foreground">Reconhecidos</p>
                 <p className="text-2xl font-bold">{entries.filter(e => e.acknowledged).length}/{entries.length}</p>
               </div>
-              <CheckCircle className="h-8 w-8 text-green-500" />
+              <CheckCircle className="h-8 w-8 text-success" />
             </div>
           </CardContent>
         </Card>

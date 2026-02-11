@@ -58,10 +58,10 @@ export async function getContextSnapshot(contextId: string = "global"): Promise<
     return {
       contextId: data.context_id,
       summary: data.summary || "",
-      systemStatus: data.system_status as any,
+      systemStatus: data.system_status as SystemContextSnapshot["systemStatus"],
       activeModules: data.active_modules as string[],
-      recentEvents: data.recent_events as any[],
-      performanceMetrics: data.performance_metrics as any
+      recentEvents: data.recent_events as SystemContextSnapshot["recentEvents"],
+      performanceMetrics: data.performance_metrics as SystemContextSnapshot["performanceMetrics"]
     };
 
   } catch (error) {

@@ -27,8 +27,9 @@ export const querySimilarJobs = async (
     const embedding = await generateEmbedding(input);
 
     // Query similar jobs using the database function
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any -- embedding is a number[] but RPC expects vector type
     const { data, error } = await supabase.rpc("match_mmi_jobs", {
-      query_embedding: embedding as any,
+      query_embedding: embedding as unknown as string,
       match_threshold: matchThreshold,
       match_count: matchCount,
     });

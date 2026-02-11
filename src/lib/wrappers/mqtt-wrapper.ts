@@ -11,19 +11,33 @@ import type {
 } from "@/types/ai-core";
 import { logger } from "@/lib/logger";
 
+/** Internal MQTT client interface matching mqtt.js API */
+interface MqttClientInstance {
+  on(event: string, callback: (...args: unknown[]) => void): void;
+  end(force: boolean, callback: () => void): void;
+  subscribe(topic: string, opts: { qos: number }, callback: (error: Error | null) => void): void;
+  unsubscribe(topic: string, callback: (error: Error | null) => void): void;
+  publish(topic: string, payload: string | Buffer, opts: { qos: number }, callback: (error?: Error) => void): void;
+}
+
 class MQTTClientWrapper implements MQTTClient {
-  private client: unknown = null;
+  private client: MqttClientInstance | null = null;
   private connected = false;
   private subscriptions = new Map<string, MQTTSubscription>();
 
   constructor(private config: MQTTConfig) {}
 
+  private getClient(): MqttClientInstance {
+    if (!this.client) throw new Error("MQTT client not initialized");
+    return this.client;
+  }
+
   async connect(): Promise<void> {
     try {
-      // Dynamic import to handle MQTT client
       const mqtt = await import("mqtt");
       const url = `${this.config.protocol}://${this.config.host}:${this.config.port}`;
       
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any -- mqtt.connect returns MqttClient which matches our interface
       this.client = mqtt.connect(url, {
         clientId: this.config.clientId,
         username: this.config.username,
@@ -32,24 +46,24 @@ class MQTTClientWrapper implements MQTTClient {
         reconnectPeriod: this.config.reconnectPeriod ?? 1000,
         connectTimeout: this.config.connectTimeout ?? 30000,
         clean: this.config.clean ?? true,
-      });
+      }) as unknown as MqttClientInstance;
 
       return new Promise((resolve, reject) => {
         const timeout = setTimeout(() => {
           reject(new Error("MQTT connection timeout"));
         }, this.config.connectTimeout ?? 30000);
 
-        (this.client as any).on("connect", () => {
+        this.getClient().on("connect", () => {
           clearTimeout(timeout);
           this.connected = true;
           logger.info("[MQTT] Connected successfully");
           resolve();
         });
 
-        (this.client as any).on("error", (error: Error) => {
+        this.getClient().on("error", (error: unknown) => {
           clearTimeout(timeout);
           logger.error("[MQTT] Connection error:", error);
-          reject(error);
+          reject(error instanceof Error ? error : new Error(String(error)));
         });
       });
     } catch (error) {
@@ -62,7 +76,7 @@ class MQTTClientWrapper implements MQTTClient {
     if (!this.client) return;
 
     return new Promise((resolve) => {
-      (this.client as any).end(false, () => {
+      this.getClient().end(false, () => {
         this.connected = false;
         this.subscriptions.clear();
         logger.info("[MQTT] Disconnected");
@@ -77,7 +91,7 @@ class MQTTClientWrapper implements MQTTClient {
     }
 
     return new Promise((resolve, reject) => {
-      (this.client as any).subscribe(topic, { qos }, (error: Error | null) => {
+      this.getClient().subscribe(topic, { qos }, (error: Error | null) => {
         if (error) {
           logger.error(`[MQTT] Subscribe error for topic ${topic}:`, error);
           reject(error);
@@ -95,7 +109,7 @@ class MQTTClientWrapper implements MQTTClient {
     }
 
     return new Promise((resolve, reject) => {
-      (this.client as any).unsubscribe(topic, (error: Error | null) => {
+      this.getClient().unsubscribe(topic, (error: Error | null) => {
         if (error) {
           logger.error(`[MQTT] Unsubscribe error for topic ${topic}:`, error);
           reject(error);
@@ -114,12 +128,11 @@ class MQTTClientWrapper implements MQTTClient {
     }
 
     return new Promise((resolve, reject) => {
-      (this.client as any).publish(topic, payload, { qos }, (error?: Error) => {
+      this.getClient().publish(topic, payload, { qos }, (error?: Error) => {
         if (error) {
           logger.error(`[MQTT] Publish error for topic ${topic}:`, error);
           reject(error);
         } else {
-          logger.debug(`[MQTT] Published to topic: ${topic}`);
           resolve();
         }
       });
@@ -127,10 +140,7 @@ class MQTTClientWrapper implements MQTTClient {
   }
 
   on(event: string, callback: (...args: unknown[]) => void): void {
-    if (!this.client) {
-      throw new Error("MQTT client not initialized");
-    }
-    (this.client as any).on(event, callback);
+    this.getClient().on(event, callback);
   }
 
   isConnected(): boolean {

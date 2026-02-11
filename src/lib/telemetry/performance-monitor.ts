@@ -42,11 +42,12 @@ export function usePerformanceMonitor(mqttClient?: MqttClient | null): Performan
       frameCountRef.current = 0;
       lastTimeRef.current = now;
 
-      // Get memory usage (if available)
+      // Get memory usage (if available - Chrome only)
       let memory = 0;
-      if ((performance as any).memory) {
-        const memoryInfo = (performance as any).memory;
-        memory = memoryInfo.usedJSHeapSize / 1024 / 1024; // Convert to MB
+      interface PerformanceMemory { usedJSHeapSize: number; totalJSHeapSize: number; jsHeapSizeLimit: number; }
+      const perfWithMemory = performance as unknown as { memory?: PerformanceMemory };
+      if (perfWithMemory.memory) {
+        memory = perfWithMemory.memory.usedJSHeapSize / 1024 / 1024; // Convert to MB
       }
 
       // Estimate CPU usage (simplified metric based on frame consistency)

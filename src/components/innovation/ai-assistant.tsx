@@ -180,10 +180,10 @@ const AIAssistant: React.FC = () => {
 
   const getPriorityColor = (priority: string) => {
     switch (priority) {
-    case "high": return "text-red-600 bg-red-100";
-    case "medium": return "text-yellow-600 bg-yellow-100";
-    case "low": return "text-green-600 bg-green-100";
-    default: return "text-muted-foreground bg-gray-100";
+    case "high": return "text-destructive bg-destructive/10";
+    case "medium": return "text-warning bg-warning/10";
+    case "low": return "text-success bg-success/10";
+    default: return "text-muted-foreground bg-muted";
     }
   };
 
@@ -192,11 +192,11 @@ const AIAssistant: React.FC = () => {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-4">
-          <div className="p-3 rounded-lg bg-gradient-to-r from-blue-500/10 to-purple-500/20">
-            <Bot className="h-8 w-8 text-blue-500" />
+          <div className="p-3 rounded-lg bg-gradient-to-r from-primary/10 to-accent/20">
+            <Bot className="h-8 w-8 text-primary" />
           </div>
           <div>
-            <h1 className="text-3xl font-bold bg-gradient-to-r from-blue-500 to-purple-500 bg-clip-text text-transparent">
+            <h1 className="text-3xl font-bold bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
               Assistente IA Nautilus
             </h1>
             <p className="text-muted-foreground">
@@ -205,7 +205,7 @@ const AIAssistant: React.FC = () => {
           </div>
         </div>
         <div className="flex items-center gap-2">
-          <Badge className="bg-green-100 text-green-700">
+          <Badge className="bg-success/10 text-success">
             <CheckCircle className="h-3 w-3 mr-1" />
             Online
           </Badge>
@@ -234,12 +234,12 @@ const AIAssistant: React.FC = () => {
                       <div className={`flex gap-3 max-w-[80%] ${message.type === "user" ? "flex-row-reverse" : "flex-row"}`}>
                         <div className="flex-shrink-0">
                           {message.type === "user" ? (
-                            <div className="w-8 h-8 rounded-full bg-blue-500 flex items-center justify-center">
-                              <User className="h-4 w-4 text-white" />
+                            <div className="w-8 h-8 rounded-full bg-primary flex items-center justify-center">
+                              <User className="h-4 w-4 text-primary-foreground" />
                             </div>
                           ) : (
-                            <div className="w-8 h-8 rounded-full bg-gradient-to-r from-purple-500 to-pink-500 flex items-center justify-center">
-                              <Bot className="h-4 w-4 text-white" />
+                            <div className="w-8 h-8 rounded-full bg-gradient-to-r from-accent to-primary flex items-center justify-center">
+                              <Bot className="h-4 w-4 text-primary-foreground" />
                             </div>
                           )}
                         </div>
@@ -247,7 +247,7 @@ const AIAssistant: React.FC = () => {
                           <div
                             className={`p-3 rounded-lg ${
                               message.type === "user"
-                                ? "bg-blue-500 text-white"
+                                ? "bg-primary text-primary-foreground"
                                 : "bg-muted"
                             }`}
                           >
@@ -277,15 +277,15 @@ const AIAssistant: React.FC = () => {
                   ))}
                   {isProcessing && (
                     <div className="flex gap-3 justify-start">
-                      <div className="w-8 h-8 rounded-full bg-gradient-to-r from-purple-500 to-pink-500 flex items-center justify-center">
-                        <Bot className="h-4 w-4 text-white" />
+                      <div className="w-8 h-8 rounded-full bg-gradient-to-r from-accent to-primary flex items-center justify-center">
+                        <Bot className="h-4 w-4 text-primary-foreground" />
                       </div>
                       <div className="bg-muted p-3 rounded-lg">
                         <div className="flex items-center gap-2">
                           <div className="flex gap-1">
-                            <div className="w-2 h-2 bg-blue-500 rounded-full animate-bounce"></div>
-                            <div className="w-2 h-2 bg-blue-500 rounded-full animate-bounce" style={{animationDelay: "0.1s"}}></div>
-                            <div className="w-2 h-2 bg-blue-500 rounded-full animate-bounce" style={{animationDelay: "0.2s"}}></div>
+                            <div className="w-2 h-2 bg-primary rounded-full animate-bounce"></div>
+                            <div className="w-2 h-2 bg-primary rounded-full animate-bounce" style={{animationDelay: "0.1s"}}></div>
+                            <div className="w-2 h-2 bg-primary rounded-full animate-bounce" style={{animationDelay: "0.2s"}}></div>
                           </div>
                           <span className="text-sm text-muted-foreground">Processando...</span>
                         </div>
@@ -307,7 +307,7 @@ const AIAssistant: React.FC = () => {
                   variant="outline"
                   size="icon"
                   onClick={handleVoiceToggle}
-                  className={isListening ? "bg-red-100 text-red-600" : ""}
+                  className={isListening ? "bg-destructive/10 text-destructive" : ""}
                 >
                   {isListening ? <MicOff className="h-4 w-4" /> : <Mic className="h-4 w-4" />}
                 </Button>

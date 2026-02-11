@@ -169,8 +169,10 @@ class SystemConfigManager {
 
   // Adaptive settings based on device/connection
   getAdaptiveConfig(): Partial<SystemConfig> {
-    const connection = (navigator as any).connection;
-    const memory = (navigator as any).deviceMemory;
+    interface NavigatorNet { connection?: { effectiveType?: string }; deviceMemory?: number; }
+    const navExt = navigator as unknown as NavigatorNet;
+    const connection = navExt.connection;
+    const memory = navExt.deviceMemory;
     const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
     const adaptations: Partial<SystemConfig> = {};
