@@ -167,27 +167,27 @@ export const IoTSensorDashboard = () => {
 
   const getStatusColor = (status: string) => {
     switch (status) {
-    case "normal": return "bg-green-100 text-green-800";
-    case "warning": return "bg-yellow-100 text-yellow-800";
-    case "critical": return "bg-red-100 text-red-800";
+    case "normal": return "bg-success/20 text-success";
+    case "warning": return "bg-warning/20 text-warning";
+    case "critical": return "bg-destructive/20 text-destructive";
     default: return "bg-secondary text-secondary-foreground";
     }
   };
 
   const getConnectionColor = (status: string) => {
     switch (status) {
-    case "online": return "text-green-500";
-    case "unstable": return "text-yellow-500";
-    case "offline": return "text-red-500";
+    case "online": return "text-success";
+    case "unstable": return "text-warning";
+    case "offline": return "text-destructive";
     default: return "text-muted-foreground";
     }
   };
 
   const getSensorValueColor = (sensor: SensorReading) => {
     switch (sensor.status) {
-    case "critical": return "text-red-600";
-    case "warning": return "text-yellow-600";
-    case "normal": return "text-green-600";
+    case "critical": return "text-destructive";
+    case "warning": return "text-warning";
+    case "normal": return "text-success";
     default: return "text-muted-foreground";
     }
   };
@@ -202,8 +202,8 @@ export const IoTSensorDashboard = () => {
             <Card key={i}>
               <CardContent className="p-6">
                 <div className="animate-pulse space-y-2">
-                  <div className="h-4 bg-gray-200 rounded w-3/4"></div>
-                  <div className="h-8 bg-gray-200 rounded w-1/2"></div>
+                  <div className="h-4 bg-muted rounded w-3/4"></div>
+                  <div className="h-8 bg-muted rounded w-1/2"></div>
                 </div>
               </CardContent>
             </Card>
@@ -357,22 +357,22 @@ export const IoTSensorDashboard = () => {
                         <div className="flex justify-between items-center">
                           <span>Temperatura do Motor</span>
                           <div className="flex items-center gap-2">
-                            <TrendingUp className="h-4 w-4 text-green-500" />
-                            <span className="text-green-600">+2.3°C</span>
+                            <TrendingUp className="h-4 w-4 text-success" />
+                            <span className="text-success">+2.3°C</span>
                           </div>
                         </div>
                         <div className="flex justify-between items-center">
                           <span>Consumo de Combustível</span>
                           <div className="flex items-center gap-2">
-                            <TrendingUp className="h-4 w-4 text-red-500" />
-                            <span className="text-red-600">-5.2%</span>
+                            <TrendingUp className="h-4 w-4 text-destructive" />
+                            <span className="text-destructive">-5.2%</span>
                           </div>
                         </div>
                         <div className="flex justify-between items-center">
                           <span>Vibração</span>
                           <div className="flex items-center gap-2">
-                            <Activity className="h-4 w-4 text-yellow-500" />
-                            <span className="text-yellow-600">Estável</span>
+                            <Activity className="h-4 w-4 text-warning" />
+                            <span className="text-warning">Estável</span>
                           </div>
                         </div>
                       </div>
@@ -385,13 +385,13 @@ export const IoTSensorDashboard = () => {
                     </CardHeader>
                     <CardContent>
                       <div className="space-y-3">
-                        <div className="p-3 bg-blue-50 rounded-lg">
-                          <div className="text-sm font-medium text-blue-800">Manutenção Preventiva</div>
-                          <div className="text-xs text-blue-600">Recomendada em 15 dias</div>
+                        <div className="p-3 bg-info/10 rounded-lg">
+                          <div className="text-sm font-medium text-info">Manutenção Preventiva</div>
+                          <div className="text-xs text-info/80">Recomendada em 15 dias</div>
                         </div>
-                        <div className="p-3 bg-yellow-50 rounded-lg">
-                          <div className="text-sm font-medium text-yellow-800">Reabastecimento</div>
-                          <div className="text-xs text-yellow-600">Necessário em 8 horas</div>
+                        <div className="p-3 bg-warning/10 rounded-lg">
+                          <div className="text-sm font-medium text-warning">Reabastecimento</div>
+                          <div className="text-xs text-warning/80">Necessário em 8 horas</div>
                         </div>
                       </div>
                     </CardContent>
@@ -404,11 +404,11 @@ export const IoTSensorDashboard = () => {
                   {selectedVesselData.sensors
                     .filter(s => s.status !== "normal")
                     .map((sensor) => (
-                      <Card key={sensor.id} className="border-l-4 border-l-red-500">
+                       <Card key={sensor.id} className="border-l-4 border-l-destructive">
                         <CardContent className="p-4">
                           <div className="flex items-center justify-between">
                             <div className="flex items-center gap-3">
-                              <AlertTriangle className="h-5 w-5 text-red-500" />
+                              <AlertTriangle className="h-5 w-5 text-destructive" />
                               <div>
                                 <div className="font-medium">
                                   {sensor.sensorType.replace("_", " ").toUpperCase()}
@@ -451,7 +451,7 @@ export const IoTSensorDashboard = () => {
                         </div>
                         <div className="flex justify-between items-center">
                           <span>Sistema Elétrico</span>
-                          <Badge className="bg-green-100 text-green-800">OK</Badge>
+                          <Badge className="bg-success/20 text-success">OK</Badge>
                         </div>
                       </div>
                     </CardContent>

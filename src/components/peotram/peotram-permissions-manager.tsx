@@ -108,11 +108,12 @@ export const PeotramPermissionsManager: React.FC = () => {
 
       if (error) throw error;
       
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any -- user_feature_permissions join shape
       const mappedPermissions = (data || []).map((permission: any) => ({
         ...permission,
         permission_level: permission.permission_level as "none" | "read" | "write" | "admin",
         location_type: permission.location_type as "vessel" | "shore" | "both"
-      }));
+      })) as UserPermission[];
       
       setPermissions(mappedPermissions);
     } catch (error) {
@@ -175,7 +176,7 @@ export const PeotramPermissionsManager: React.FC = () => {
     }
   };
 
-  const updatePermission = async (id: string, updates: any) => {
+  const updatePermission = async (id: string, updates: Record<string, unknown>) => {
     try {
       const { error } = await supabase
         .from("user_feature_permissions")

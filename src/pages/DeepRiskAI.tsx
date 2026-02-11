@@ -45,7 +45,7 @@ export default function DeepRiskAI() {
   };
 
   const filtered = risks.filter(r => r.title.toLowerCase().includes(search.toLowerCase()));
-  const severityColors = { low: 'bg-green-500', medium: 'bg-yellow-500', high: 'bg-orange-500', critical: 'bg-red-500' };
+  const severityColors = { low: 'bg-success', medium: 'bg-warning', high: 'bg-warning', critical: 'bg-destructive' };
   const getScore = (p: number, i: number) => Math.round((p * i) / 100);
 
   return (
@@ -60,9 +60,9 @@ export default function DeepRiskAI() {
           <Button onClick={() => { setEditing(null); setForm({ title: '', severity: 'medium', probability: 50, impact: 50, description: '' }); setIsOpen(true); }}><Plus className="h-4 w-4 mr-2" />Nova Análise</Button>
         </div>
         <div className="grid grid-cols-4 gap-4">
-          <Card><CardContent className="p-4 flex items-center gap-3"><div className="p-2 bg-red-500/20 rounded-lg"><AlertTriangle className="h-5 w-5 text-red-500" /></div><div><p className="text-2xl font-bold">{risks.filter(r => r.severity === 'critical').length}</p><p className="text-sm text-muted-foreground">Críticos</p></div></CardContent></Card>
-          <Card><CardContent className="p-4 flex items-center gap-3"><div className="p-2 bg-orange-500/20 rounded-lg"><Target className="h-5 w-5 text-orange-500" /></div><div><p className="text-2xl font-bold">{risks.filter(r => r.severity === 'high').length}</p><p className="text-sm text-muted-foreground">Alto Risco</p></div></CardContent></Card>
-          <Card><CardContent className="p-4 flex items-center gap-3"><div className="p-2 bg-green-500/20 rounded-lg"><Shield className="h-5 w-5 text-green-500" /></div><div><p className="text-2xl font-bold">{risks.filter(r => r.status === 'mitigated').length}</p><p className="text-sm text-muted-foreground">Mitigados</p></div></CardContent></Card>
+          <Card><CardContent className="p-4 flex items-center gap-3"><div className="p-2 bg-destructive/20 rounded-lg"><AlertTriangle className="h-5 w-5 text-destructive" /></div><div><p className="text-2xl font-bold">{risks.filter(r => r.severity === 'critical').length}</p><p className="text-sm text-muted-foreground">Críticos</p></div></CardContent></Card>
+          <Card><CardContent className="p-4 flex items-center gap-3"><div className="p-2 bg-warning/20 rounded-lg"><Target className="h-5 w-5 text-warning" /></div><div><p className="text-2xl font-bold">{risks.filter(r => r.severity === 'high').length}</p><p className="text-sm text-muted-foreground">Alto Risco</p></div></CardContent></Card>
+          <Card><CardContent className="p-4 flex items-center gap-3"><div className="p-2 bg-success/20 rounded-lg"><Shield className="h-5 w-5 text-success" /></div><div><p className="text-2xl font-bold">{risks.filter(r => r.status === 'mitigated').length}</p><p className="text-sm text-muted-foreground">Mitigados</p></div></CardContent></Card>
           <Card><CardContent className="p-4 flex items-center gap-3"><div className="p-2 bg-primary/20 rounded-lg"><Brain className="h-5 w-5 text-primary" /></div><div><p className="text-2xl font-bold">{risks.length}</p><p className="text-sm text-muted-foreground">Total</p></div></CardContent></Card>
         </div>
         <Card><CardContent className="p-4"><div className="relative"><Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" /><Input placeholder="Buscar riscos..." value={search} onChange={e => setSearch(e.target.value)} className="pl-10" /></div></CardContent></Card>
