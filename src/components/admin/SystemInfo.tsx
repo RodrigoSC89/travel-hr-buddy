@@ -110,7 +110,7 @@ export const SystemInfo: React.FC = () => {
                 <span className="text-xs text-muted-foreground">CPU</span>
                 <Badge 
                   variant="outline" 
-                  className={systemHealth.cpu > 80 ? "bg-red-100 text-red-700" : "bg-green-100 text-green-700"}
+                  className={systemHealth.cpu > 80 ? "bg-destructive/10 text-destructive" : "bg-success/10 text-success"}
                 >
                   {systemHealth.cpu}%
                 </Badge>
@@ -122,7 +122,7 @@ export const SystemInfo: React.FC = () => {
                 <span className="text-xs text-muted-foreground">Memória</span>
                 <Badge 
                   variant="outline" 
-                  className={systemHealth.memory > 80 ? "bg-red-100 text-red-700" : "bg-green-100 text-green-700"}
+                  className={systemHealth.memory > 80 ? "bg-destructive/10 text-destructive" : "bg-success/10 text-success"}
                 >
                   {systemHealth.memory}%
                 </Badge>
@@ -132,7 +132,7 @@ export const SystemInfo: React.FC = () => {
             <div className="p-3 bg-card border rounded-lg">
               <div className="flex items-center justify-between mb-1">
                 <span className="text-xs text-muted-foreground">Usuários</span>
-                <Badge variant="outline" className="bg-blue-100 text-blue-700">
+                <Badge variant="outline" className="bg-primary/10 text-primary">
                   {systemHealth.activeUsers}
                 </Badge>
               </div>
@@ -141,7 +141,7 @@ export const SystemInfo: React.FC = () => {
             <div className="p-3 bg-card border rounded-lg">
               <div className="flex items-center justify-between mb-1">
                 <span className="text-xs text-muted-foreground">Req/min</span>
-                <Badge variant="outline" className="bg-purple-100 text-purple-700">
+                <Badge variant="outline" className="bg-accent/10 text-accent-foreground">
                   {systemHealth.requestsPerMin}
                 </Badge>
               </div>
