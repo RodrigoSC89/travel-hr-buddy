@@ -51,7 +51,8 @@ export function AdvancedDowntimeValidator({ downtimeId, downtimeEvent, onValidat
   const [validating, setValidating] = useState(false);
   const [result, setResult] = useState<{
     validation: ValidationResult;
-    broa_evidence: any;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any -- BROA evidence is dynamic JSON from edge function
+    broa_evidence: { document_type?: string; version?: string; generated_at?: string; downtime_event?: { id?: string }; validation?: { status?: string }; compliance?: { references?: string[] }; [key: string]: unknown };
     duration_hours: number;
     historical_events_analyzed: number;
   } | null>(null);
@@ -197,12 +198,12 @@ export function AdvancedDowntimeValidator({ downtimeId, downtimeEvent, onValidat
                   <p className="text-xs text-muted-foreground">Duração</p>
                 </div>
                 <div className="p-3 bg-muted/30 rounded-lg text-center">
-                  <BarChart3 className="h-5 w-5 mx-auto mb-1 text-orange-500" />
+                  <BarChart3 className="h-5 w-5 mx-auto mb-1 text-warning" />
                   <p className="text-xl font-bold">{result.historical_events_analyzed}</p>
                   <p className="text-xs text-muted-foreground">Histórico</p>
                 </div>
                 <div className="p-3 bg-muted/30 rounded-lg text-center">
-                  <AlertTriangle className="h-5 w-5 mx-auto mb-1 text-orange-500" />
+                  <AlertTriangle className="h-5 w-5 mx-auto mb-1 text-warning" />
                   <p className="text-xl font-bold">{result.validation.required_evidence.length}</p>
                   <p className="text-xs text-muted-foreground">Evidências</p>
                 </div>
@@ -310,7 +311,7 @@ export function AdvancedDowntimeValidator({ downtimeId, downtimeEvent, onValidat
                     </div>
                     <div className="flex justify-between text-sm">
                       <span className="text-muted-foreground">Gerado em:</span>
-                      <span>{new Date(result.broa_evidence.generated_at).toLocaleString('pt-BR')}</span>
+                      <span>{new Date(String(result.broa_evidence.generated_at || '')).toLocaleString('pt-BR')}</span>
                     </div>
                     <div className="flex justify-between text-sm">
                       <span className="text-muted-foreground">Status:</span>

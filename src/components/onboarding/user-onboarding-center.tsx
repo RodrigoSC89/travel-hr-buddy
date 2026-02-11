@@ -162,13 +162,13 @@ const UserOnboardingCenter: React.FC = () => {
   const getStatusColor = (status: string) => {
     switch (status) {
     case "active":
-      return "text-green-600 bg-green-50 border-green-200";
+      return "text-success bg-success/10 border-success/20";
     case "invited":
-      return "text-blue-600 bg-blue-50 border-blue-200";
+      return "text-info bg-info/10 border-info/20";
     case "pending":
-      return "text-yellow-600 bg-yellow-50 border-yellow-200";
+      return "text-warning bg-warning/10 border-warning/20";
     default:
-      return "text-muted-foreground bg-gray-50 border-gray-200";
+      return "text-muted-foreground bg-muted border-border";
     }
   };
 
@@ -220,7 +220,7 @@ const UserOnboardingCenter: React.FC = () => {
               <CheckCircle className="w-5 h-5 text-primary" />
               <div>
                 <p className="text-sm text-muted-foreground">Usuários Ativos</p>
-                <p className="text-2xl font-bold text-green-600">{activeUsers}</p>
+                <p className="text-2xl font-bold text-success">{activeUsers}</p>
               </div>
             </div>
           </CardContent>
@@ -244,7 +244,7 @@ const UserOnboardingCenter: React.FC = () => {
               <Star className="w-5 h-5 text-primary" />
               <div>
                 <p className="text-sm text-muted-foreground">Satisfação Média</p>
-                <p className="text-2xl font-bold text-yellow-600">{averageRating.toFixed(1)}/5</p>
+                <p className="text-2xl font-bold text-warning">{averageRating.toFixed(1)}/5</p>
               </div>
             </div>
           </CardContent>
@@ -392,7 +392,7 @@ const UserOnboardingCenter: React.FC = () => {
                         </span>
                       </div>
                       {material.completed && (
-                        <CheckCircle className="w-4 h-4 text-green-500" />
+                        <CheckCircle className="w-4 h-4 text-success" />
                       )}
                     </div>
                     
@@ -475,7 +475,7 @@ const UserOnboardingCenter: React.FC = () => {
                     ].map((item) => (
                       <div key={item.step} className="flex items-center gap-3">
                         <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-medium ${
-                          item.completed ? "bg-green-100 text-green-600" : "bg-gray-100 text-muted-foreground"
+                          item.completed ? "bg-success/20 text-success" : "bg-muted text-muted-foreground"
                         }`}>
                           {item.completed ? <CheckCircle className="w-4 h-4" /> : item.step}
                         </div>

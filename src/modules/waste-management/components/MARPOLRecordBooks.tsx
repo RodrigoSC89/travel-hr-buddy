@@ -95,17 +95,17 @@ const OPERATION_CODES = [
 ];
 
 const GARBAGE_CATEGORIES = [
-  { code: "A", name: "Plastics", color: "bg-red-500" },
-  { code: "B", name: "Food wastes", color: "bg-green-500" },
-  { code: "C", name: "Domestic wastes", color: "bg-blue-500" },
-  { code: "D", name: "Cooking oil", color: "bg-amber-500" },
-  { code: "E", name: "Incinerator ashes", color: "bg-gray-500" },
-  { code: "F", name: "Operational wastes", color: "bg-purple-500" },
-  { code: "G", name: "Animal carcasses", color: "bg-pink-500" },
-  { code: "H", name: "Fishing gear", color: "bg-cyan-500" },
-  { code: "I", name: "E-waste", color: "bg-orange-500" },
-  { code: "J", name: "Cargo residues (HME)", color: "bg-rose-500" },
-  { code: "K", name: "Cargo residues (non-HME)", color: "bg-teal-500" },
+  { code: "A", name: "Plastics", color: "bg-destructive" },
+  { code: "B", name: "Food wastes", color: "bg-success" },
+  { code: "C", name: "Domestic wastes", color: "bg-primary" },
+  { code: "D", name: "Cooking oil", color: "bg-warning" },
+  { code: "E", name: "Incinerator ashes", color: "bg-muted-foreground" },
+  { code: "F", name: "Operational wastes", color: "bg-accent" },
+  { code: "G", name: "Animal carcasses", color: "bg-destructive/70" },
+  { code: "H", name: "Fishing gear", color: "bg-info" },
+  { code: "I", name: "E-waste", color: "bg-warning/80" },
+  { code: "J", name: "Cargo residues (HME)", color: "bg-destructive/60" },
+  { code: "K", name: "Cargo residues (non-HME)", color: "bg-info/80" },
 ];
 
 const defaultORBEntries: ORBEntry[] = [
@@ -218,9 +218,9 @@ export default function MARPOLRecordBooks() {
       case "signed":
         return <Badge className="bg-success/20 text-success"><Lock className="h-3 w-3 mr-1" /> Assinado</Badge>;
       case "verified":
-        return <Badge className="bg-blue-500/20 text-blue-500"><FileCheck className="h-3 w-3 mr-1" /> Verificado</Badge>;
+        return <Badge className="bg-info/20 text-info"><FileCheck className="h-3 w-3 mr-1" /> Verificado</Badge>;
       case "pending":
-        return <Badge className="bg-amber-500/20 text-amber-500"><Clock className="h-3 w-3 mr-1" /> Pendente</Badge>;
+        return <Badge className="bg-warning/20 text-warning"><Clock className="h-3 w-3 mr-1" /> Pendente</Badge>;
       default:
         return <Badge className="bg-muted"><Edit className="h-3 w-3 mr-1" /> Rascunho</Badge>;
     }
@@ -241,14 +241,14 @@ export default function MARPOLRecordBooks() {
             </div>
           </CardContent>
         </Card>
-        <Card className="border-l-4 border-l-emerald-500">
+        <Card className="border-l-4 border-l-success">
           <CardContent className="pt-4">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-xs text-muted-foreground">Registros GRB</p>
                 <p className="text-2xl font-bold">{grbEntries.length}</p>
               </div>
-              <Trash2 className="h-8 w-8 text-emerald-500 opacity-60" />
+              <Trash2 className="h-8 w-8 text-success opacity-60" />
             </div>
           </CardContent>
         </Card>
@@ -340,22 +340,22 @@ export default function MARPOLRecordBooks() {
                       transition={{ delay: index * 0.05 }}
                       className={`p-4 rounded-lg border ${
                         entry.status === "signed" ? "bg-success/5 border-success/20" :
-                        entry.status === "pending" ? "bg-amber-500/5 border-amber-500/20" :
+                        entry.status === "pending" ? "bg-warning/5 border-warning/20" :
                         ""
                       }`}
                     >
                       <div className="flex items-start justify-between mb-3">
-                        <div className="flex items-center gap-3">
-                          <div className="h-10 w-10 rounded-lg bg-primary/10 flex items-center justify-center font-bold text-primary">
-                            {entry.operation_code}
+                          <div className="flex items-center gap-3">
+                            <div className="h-10 w-10 rounded-lg bg-primary/10 flex items-center justify-center font-bold text-primary">
+                              {entry.operation_code}
+                            </div>
+                            <div>
+                              <p className="font-medium">{entry.entry_number}</p>
+                              <p className="text-sm text-muted-foreground">{entry.operation_type}</p>
+                            </div>
                           </div>
-                          <div>
-                            <p className="font-medium">{entry.entry_number}</p>
-                            <p className="text-sm text-muted-foreground">{entry.operation_type}</p>
-                          </div>
+                          {getStatusBadge(entry.status)}
                         </div>
-                        {getStatusBadge(entry.status)}
-                      </div>
 
                       <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm mb-3">
                         <div>
@@ -428,7 +428,7 @@ export default function MARPOLRecordBooks() {
                       transition={{ delay: index * 0.05 }}
                       className={`p-4 rounded-lg border ${
                         entry.status === "signed" ? "bg-success/5 border-success/20" :
-                        entry.status === "pending" ? "bg-amber-500/5 border-amber-500/20" :
+                        entry.status === "pending" ? "bg-warning/5 border-warning/20" :
                         ""
                       }`}
                     >

@@ -34,14 +34,14 @@ interface Correlation {
 }
 
 const MODULES: ModuleNode[] = [
-  { id: 'operations', label: 'Operações', icon: Ship, color: 'bg-blue-500', score: 88 },
-  { id: 'crew', label: 'Tripulação', icon: Users, color: 'bg-emerald-500', score: 82 },
-  { id: 'maintenance', label: 'Manutenção', icon: Wrench, color: 'bg-orange-500', score: 75 },
-  { id: 'compliance', label: 'Compliance', icon: Shield, color: 'bg-purple-500', score: 91 },
-  { id: 'safety', label: 'Segurança', icon: AlertTriangle, color: 'bg-red-500', score: 85 },
-  { id: 'finance', label: 'Financeiro', icon: DollarSign, color: 'bg-amber-500', score: 78 },
-  { id: 'documents', label: 'Documentos', icon: FileText, color: 'bg-teal-500', score: 90 },
-  { id: 'tracking', label: 'Rastreamento', icon: Anchor, color: 'bg-indigo-500', score: 95 },
+  { id: 'operations', label: 'Operações', icon: Ship, color: 'bg-primary', score: 88 },
+  { id: 'crew', label: 'Tripulação', icon: Users, color: 'bg-success', score: 82 },
+  { id: 'maintenance', label: 'Manutenção', icon: Wrench, color: 'bg-warning', score: 75 },
+  { id: 'compliance', label: 'Compliance', icon: Shield, color: 'bg-accent', score: 91 },
+  { id: 'safety', label: 'Segurança', icon: AlertTriangle, color: 'bg-destructive', score: 85 },
+  { id: 'finance', label: 'Financeiro', icon: DollarSign, color: 'bg-warning', score: 78 },
+  { id: 'documents', label: 'Documentos', icon: FileText, color: 'bg-info', score: 90 },
+  { id: 'tracking', label: 'Rastreamento', icon: Anchor, color: 'bg-primary', score: 95 },
 ];
 
 const CORRELATIONS: Correlation[] = [
@@ -82,7 +82,7 @@ export function OperationsCorrelationMatrix() {
       <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
         {MODULES.map(mod => {
           const Icon = mod.icon;
-          const scoreColor = mod.score >= 85 ? 'text-emerald-500' : mod.score >= 70 ? 'text-amber-500' : 'text-red-500';
+          const scoreColor = mod.score >= 85 ? 'text-success' : mod.score >= 70 ? 'text-warning' : 'text-destructive';
           return (
             <Card key={mod.id} className="hover:shadow-md transition-shadow">
               <CardContent className="p-4 text-center">
@@ -140,8 +140,8 @@ export function OperationsCorrelationMatrix() {
               const targetModule = MODULES.find(m => m.id === corr.target)!;
               const SourceIcon = sourceModule.icon;
               const TargetIcon = targetModule.icon;
-              const strengthColor = corr.strength >= 85 ? 'text-emerald-600' : corr.strength >= 70 ? 'text-amber-600' : 'text-red-600';
-              const typeColor = corr.type === 'positive' ? 'bg-emerald-500/10 border-emerald-500/30' : corr.type === 'negative' ? 'bg-red-500/10 border-red-500/30' : 'bg-gray-500/10 border-gray-500/30';
+              const strengthColor = corr.strength >= 85 ? 'text-success' : corr.strength >= 70 ? 'text-warning' : 'text-destructive';
+              const typeColor = corr.type === 'positive' ? 'bg-success/10 border-success/30' : corr.type === 'negative' ? 'bg-destructive/10 border-destructive/30' : 'bg-muted border-muted-foreground/30';
 
               return (
                 <motion.div

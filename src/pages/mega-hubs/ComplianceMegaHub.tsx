@@ -98,7 +98,7 @@ const tabConfig: TabConfig[] = [
 // ═══════════════════════════════════════════════════════════
 // MAPEAMENTO COMPLETO DAS 12 AUDITORIAS MARÍTIMAS
 // ═══════════════════════════════════════════════════════════
-const auditStandards: Record<string, React.LazyExoticComponent<React.ComponentType<any>>> = {
+const auditStandards: Record<string, React.LazyExoticComponent<React.ComponentType<Record<string, never>>>> = {
   'peo-dp': PEODP,
   'peotram': PEOTRAM,
   'ism': SafetyIMCAV2,
@@ -155,10 +155,10 @@ export default function ComplianceMegaHub() {
   // Compliance metrics
   const complianceMetrics = useMemo(() => ({
     totalAudits: audits.length,
-    openAudits: audits.filter((a: any) => a.status === 'open' || a.status === 'in_progress').length,
-    completedAudits: audits.filter((a: any) => a.status === 'completed' || a.status === 'closed').length,
+    openAudits: audits.filter((a) => a.status === 'open' || a.status === 'in_progress').length,
+    completedAudits: audits.filter((a) => a.status === 'completed' || a.status === 'closed').length,
     totalNCs: nonConformities.length,
-    openNCs: nonConformities.filter((nc: any) => nc.status === 'open').length,
+    openNCs: nonConformities.filter((nc) => nc.status === 'open').length,
   }), [audits, nonConformities]);
 
   // Dynamic workflow
@@ -205,7 +205,7 @@ export default function ComplianceMegaHub() {
   }, [auditForm, queryClient]);
 
   const handleExportCompliance = useCallback(async () => {
-    const allData = [...audits.map((a: any) => ({ tipo: 'Auditoria', ...a })), ...nonConformities.map((nc: any) => ({ tipo: 'NC', ...nc }))];
+    const allData = [...audits.map((a) => ({ tipo: 'Auditoria', ...a })), ...nonConformities.map((nc) => ({ tipo: 'NC', ...nc }))];
     exportToCSV(allData, 'compliance-report');
   }, [audits, nonConformities, exportToCSV]);
 
@@ -245,7 +245,7 @@ export default function ComplianceMegaHub() {
                   {complianceMetrics.openNCs} NCs abertas
                 </Badge>
               )}
-              <Badge variant="outline" className="bg-green-500/10 text-green-500 border-green-500/20">
+              <Badge variant="outline" className="bg-success/10 text-success border-success/20">
                 12/12 standards
               </Badge>
             </div>
@@ -279,7 +279,7 @@ export default function ComplianceMegaHub() {
               {/* System Status */}
               <div className="flex items-center gap-3 text-xs text-muted-foreground px-1">
                 <div className="flex items-center gap-1.5">
-                  <Wifi className="h-3.5 w-3.5 text-green-500" />
+                  <Wifi className="h-3.5 w-3.5 text-success" />
                   <span>Conectado</span>
                 </div>
                 <span>•</span>
