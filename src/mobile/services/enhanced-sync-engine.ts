@@ -206,6 +206,7 @@ export class EnhancedSyncEngine {
     const lastSync = this.status.lastSync || new Date(0);
     
     const { data, error } = await supabase
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any -- dynamic table name from config
       .from(table as any)
       .select("*")
       .gte("updated_at", lastSync.toISOString())
@@ -220,7 +221,7 @@ export class EnhancedSyncEngine {
       structuredLogger.debug(`Polled ${data.length} changes from ${table}`);
       // Process changes
       for (const record of data) {
-        await this.handleRemoteChange(table, record);
+        await this.handleRemoteChange(table, record as unknown as Record<string, unknown>);
       }
       
       this.updateStatus({ lastSync: new Date() });
@@ -230,11 +231,16 @@ export class EnhancedSyncEngine {
   /**
    * Handle realtime change from WebSocket
    */
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Supabase realtime payload type is not fully typed
   private async handleRealtimeChange(
     table: string,
-    payload: any
+    payload: Record<string, unknown>
   ): Promise<void> {
-    const { eventType, new: newRecord, old: oldRecord } = payload;
+    const { eventType, new: newRecord, old: oldRecord } = payload as {
+      eventType: string;
+      new: Record<string, unknown>;
+      old: Record<string, unknown>;
+    };
 
     structuredLogger.debug("Realtime change received", {
       table,
@@ -261,8 +267,8 @@ export class EnhancedSyncEngine {
    */
   private async handleRemoteChange(
     table: string,
-    newRecord: any,
-    oldRecord?: any
+    newRecord: Record<string, unknown>,
+    oldRecord?: Record<string, unknown>
   ): Promise<void> {
     // Check for local pending changes
     const localChanges = await syncQueue.getQueueStats();
@@ -281,8 +287,8 @@ export class EnhancedSyncEngine {
         break;
       case "latest":
         // Use timestamp to determine winner
-        const localTimestamp = oldRecord?.updated_at;
-        const remoteTimestamp = newRecord.updated_at;
+        const localTimestamp = String(oldRecord?.updated_at || "");
+        const remoteTimestamp = String(newRecord.updated_at || "");
         if (remoteTimestamp > localTimestamp) {
           structuredLogger.debug("Conflict: remote is newer");
           await this.updateLocalStorage(table, newRecord);
@@ -298,20 +304,20 @@ export class EnhancedSyncEngine {
   /**
    * Handle remote delete
    */
-  private async handleRemoteDelete(table: string, record: any): Promise<void> {
-    await this.deleteFromLocalStorage(table, record.id);
+  private async handleRemoteDelete(table: string, record: Record<string, unknown>): Promise<void> {
+    await this.deleteFromLocalStorage(table, String(record.id));
     this.emitChange(table, "delete", record);
   }
 
   /**
    * Update local storage with remote data
    */
-  private async updateLocalStorage(table: string, record: any): Promise<void> {
+  private async updateLocalStorage(table: string, record: Record<string, unknown>): Promise<void> {
     try {
       const storageKey = `sync_${table}`;
       const existing = localStorage.getItem(storageKey);
-      const data: Record<string, any> = existing ? JSON.parse(existing) : {};
-      data[record.id] = { ...record, _synced: true, _syncedAt: new Date().toISOString() };
+      const data: Record<string, Record<string, unknown>> = existing ? JSON.parse(existing) : {};
+      data[String(record.id)] = { ...record, _synced: true, _syncedAt: new Date().toISOString() };
       localStorage.setItem(storageKey, JSON.stringify(data));
       structuredLogger.debug(`Updated local storage for ${table}:${record.id}`);
     } catch (error) {
@@ -327,7 +333,7 @@ export class EnhancedSyncEngine {
       const storageKey = `sync_${table}`;
       const existing = localStorage.getItem(storageKey);
       if (existing) {
-        const data: Record<string, any> = JSON.parse(existing);
+        const data: Record<string, unknown> = JSON.parse(existing);
         delete data[recordId];
         localStorage.setItem(storageKey, JSON.stringify(data));
         structuredLogger.debug(`Deleted from local storage: ${table}:${recordId}`);
@@ -382,12 +388,12 @@ export class EnhancedSyncEngine {
     }
   }
 
-  private changeListeners: Map<string, Set<(event: string, data: any) => void>> = new Map();
+  private changeListeners: Map<string, Set<(event: string, data: Record<string, unknown>) => void>> = new Map();
 
   /**
    * Emit change event for table
    */
-  private emitChange(table: string, event: string, data: any): void {
+  private emitChange(table: string, event: string, data: Record<string, unknown>): void {
     structuredLogger.debug("Change emitted", { table, event });
     
     // Notify table-specific listeners
@@ -411,7 +417,7 @@ export class EnhancedSyncEngine {
   /**
    * Subscribe to table changes
    */
-  public onTableChange(table: string, callback: (event: string, data: any) => void): () => void {
+  public onTableChange(table: string, callback: (event: string, data: Record<string, unknown>) => void): () => void {
     if (!this.changeListeners.has(table)) {
       this.changeListeners.set(table, new Set());
     }

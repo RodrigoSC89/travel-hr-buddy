@@ -203,7 +203,7 @@ export function Patch612Validation() {
               <li>Conexões: {graphData.edges.length}</li>
               <li>Cenários Validados: {graphData.scenarios.length}</li>
               <li>Logs de Decisão: {graphData.logs.length}</li>
-              <li>Confidence Média: {(graphData.scenarios.reduce((sum: number, s: any) => sum + s.confidence, 0) / graphData.scenarios.length * 100).toFixed(1)}%</li>
+              <li>Confidence Média: {(graphData.scenarios.reduce((sum: number, s: TestScenario) => sum + s.confidence, 0) / graphData.scenarios.length * 100).toFixed(1)}%</li>
             </ul>
           </div>
         )}
@@ -216,9 +216,9 @@ function ValidationItem({ label, passed }: { label: string; passed: boolean }) {
   return (
     <div className="flex items-center gap-2 text-sm">
       {passed ? (
-        <CheckCircle2 className="h-4 w-4 text-green-500" />
+        <CheckCircle2 className="h-4 w-4 text-success" />
       ) : (
-        <XCircle className="h-4 w-4 text-red-500" />
+        <XCircle className="h-4 w-4 text-destructive" />
       )}
       <span>{label}</span>
     </div>

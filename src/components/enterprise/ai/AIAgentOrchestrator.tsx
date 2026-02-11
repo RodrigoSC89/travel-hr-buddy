@@ -19,21 +19,21 @@ import { useAIControlTowerData } from "@/hooks/useAIControlTowerData";
 import { toast } from "sonner";
 
 const typeConfig: Record<string, { icon: React.ElementType; color: string; label: string }> = {
-  analysis: { icon: Brain, color: "bg-purple-500", label: "Análise" },
-  prediction: { icon: Zap, color: "bg-blue-500", label: "Predição" },
-  automation: { icon: RefreshCw, color: "bg-green-500", label: "Automação" },
-  monitoring: { icon: Activity, color: "bg-amber-500", label: "Monitoramento" },
-  assistant: { icon: Bot, color: "bg-pink-500", label: "Assistente" },
-  default: { icon: Bot, color: "bg-gray-500", label: "Agente" },
+  analysis: { icon: Brain, color: "bg-accent", label: "Análise" },
+  prediction: { icon: Zap, color: "bg-info", label: "Predição" },
+  automation: { icon: RefreshCw, color: "bg-success", label: "Automação" },
+  monitoring: { icon: Activity, color: "bg-warning", label: "Monitoramento" },
+  assistant: { icon: Bot, color: "bg-primary", label: "Assistente" },
+  default: { icon: Bot, color: "bg-muted", label: "Agente" },
 };
 
 const statusConfig: Record<string, { color: string; label: string; pulse: boolean }> = {
-  active: { color: "bg-green-500", label: "Ativo", pulse: true },
-  online: { color: "bg-green-500", label: "Online", pulse: true },
-  idle: { color: "bg-gray-400", label: "Ocioso", pulse: false },
-  processing: { color: "bg-blue-500", label: "Processando", pulse: true },
-  error: { color: "bg-red-500", label: "Erro", pulse: true },
-  disabled: { color: "bg-gray-300", label: "Desabilitado", pulse: false },
+  active: { color: "bg-success", label: "Ativo", pulse: true },
+  online: { color: "bg-success", label: "Online", pulse: true },
+  idle: { color: "bg-muted-foreground", label: "Ocioso", pulse: false },
+  processing: { color: "bg-info", label: "Processando", pulse: true },
+  error: { color: "bg-destructive", label: "Erro", pulse: true },
+  disabled: { color: "bg-muted", label: "Desabilitado", pulse: false },
 };
 
 export function AIAgentOrchestrator() {
@@ -41,12 +41,12 @@ export function AIAgentOrchestrator() {
   const [selectedAgentId, setSelectedAgentId] = useState<string | null>(null);
 
   const selectedAgent = useMemo(() =>
-    agents.find((a: any) => a.id === selectedAgentId) || null,
+    agents.find((a: Record<string, unknown>) => a.id === selectedAgentId) || null,
     [agents, selectedAgentId]
   );
 
-  const activeAgents = agents.filter((a: any) => a.status === "active" || a.status === "online").length;
-  const errorAgents = agents.filter((a: any) => a.status === "error").length;
+  const activeAgents = agents.filter((a: Record<string, unknown>) => a.status === "active" || a.status === "online").length;
+  const errorAgents = agents.filter((a: Record<string, unknown>) => a.status === "error").length;
 
   if (isLoading) {
     return (
@@ -85,8 +85,8 @@ export function AIAgentOrchestrator() {
                 <p className="text-sm text-muted-foreground">Agentes Ativos</p>
                 <p className="text-2xl font-bold">{activeAgents}/{agents.length}</p>
               </div>
-              <div className="h-10 w-10 rounded-full bg-green-100 dark:bg-green-900/30 flex items-center justify-center">
-                <Bot className="h-5 w-5 text-green-600" />
+              <div className="h-10 w-10 rounded-full bg-success/10 flex items-center justify-center">
+                <Bot className="h-5 w-5 text-success" />
               </div>
             </div>
           </CardContent>
@@ -98,8 +98,8 @@ export function AIAgentOrchestrator() {
                 <p className="text-sm text-muted-foreground">Decisões</p>
                 <p className="text-2xl font-bold">{metrics.approvedDecisions + metrics.rejectedDecisions + metrics.pendingDecisions}</p>
               </div>
-              <div className="h-10 w-10 rounded-full bg-blue-100 dark:bg-blue-900/30 flex items-center justify-center">
-                <CheckCircle2 className="h-5 w-5 text-blue-600" />
+              <div className="h-10 w-10 rounded-full bg-info/10 flex items-center justify-center">
+                <CheckCircle2 className="h-5 w-5 text-info" />
               </div>
             </div>
           </CardContent>
@@ -111,8 +111,8 @@ export function AIAgentOrchestrator() {
                 <p className="text-sm text-muted-foreground">Confiança Média</p>
                 <p className="text-2xl font-bold">{metrics.avgConfidence}%</p>
               </div>
-              <div className="h-10 w-10 rounded-full bg-purple-100 dark:bg-purple-900/30 flex items-center justify-center">
-                <BarChart3 className="h-5 w-5 text-purple-600" />
+              <div className="h-10 w-10 rounded-full bg-accent/10 flex items-center justify-center">
+                <BarChart3 className="h-5 w-5 text-accent-foreground" />
               </div>
             </div>
           </CardContent>
@@ -122,10 +122,10 @@ export function AIAgentOrchestrator() {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-muted-foreground">Com Erro</p>
-                <p className={`text-2xl font-bold ${errorAgents > 0 ? "text-red-600" : ""}`}>{errorAgents}</p>
+                <p className={`text-2xl font-bold ${errorAgents > 0 ? "text-destructive" : ""}`}>{errorAgents}</p>
               </div>
-              <div className="h-10 w-10 rounded-full bg-red-100 dark:bg-red-900/30 flex items-center justify-center">
-                <AlertTriangle className="h-5 w-5 text-red-600" />
+              <div className="h-10 w-10 rounded-full bg-destructive/10 flex items-center justify-center">
+                <AlertTriangle className="h-5 w-5 text-destructive" />
               </div>
             </div>
           </CardContent>
@@ -141,18 +141,18 @@ export function AIAgentOrchestrator() {
         </Card>
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-          {agents.map((agent: any) => {
-            const agentType = agent.metadata?.type || "default";
+          {agents.map((agent: Record<string, unknown>) => {
+            const agentType = String((agent.metadata as Record<string, unknown>)?.type || "default");
             const config = typeConfig[agentType] || typeConfig.default;
             const TypeIcon = config.icon;
-            const status = statusConfig[agent.status] || statusConfig.idle;
+            const status = statusConfig[String(agent.status)] || statusConfig.idle;
             const isSelected = selectedAgentId === agent.id;
 
             return (
-              <motion.div key={agent.id} whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
+              <motion.div key={String(agent.id)} whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
                 <Card
                   className={`cursor-pointer transition-all ${isSelected ? "ring-2 ring-primary" : ""}`}
-                  onClick={() => setSelectedAgentId(agent.id)}
+                  onClick={() => setSelectedAgentId(String(agent.id))}
                 >
                   <CardContent className="pt-4">
                     <div className="flex items-center justify-between mb-3">
@@ -161,8 +161,8 @@ export function AIAgentOrchestrator() {
                           <TypeIcon className="h-5 w-5 text-white" />
                         </div>
                         <div>
-                          <h4 className="font-semibold">{agent.name}</h4>
-                          <p className="text-xs text-muted-foreground">{agent.agent_id}</p>
+                          <h4 className="font-semibold">{String(agent.name)}</h4>
+                          <p className="text-xs text-muted-foreground">{String(agent.agent_id)}</p>
                         </div>
                       </div>
                       <div className="flex items-center gap-2">
@@ -176,7 +176,7 @@ export function AIAgentOrchestrator() {
                     </div>
 
                     <div className="flex flex-wrap gap-1 mb-3">
-                      {(Array.isArray(agent.capabilities) ? agent.capabilities : []).slice(0, 3).map((cap: any, i: number) => (
+                      {(Array.isArray(agent.capabilities) ? agent.capabilities : []).slice(0, 3).map((cap: unknown, i: number) => (
                         <Badge key={i} variant="secondary" className="text-xs">{String(cap)}</Badge>
                       ))}
                     </div>
@@ -192,9 +192,9 @@ export function AIAgentOrchestrator() {
                       </div>
                     </div>
 
-                    {agent.status === "error" && (
-                      <div className="mt-3 p-2 rounded bg-red-50 dark:bg-red-950/30 border border-red-200 dark:border-red-800">
-                        <p className="text-xs text-red-600 flex items-center gap-1">
+                    {String(agent.status) === "error" && (
+                      <div className="mt-3 p-2 rounded bg-destructive/10 border border-destructive/20">
+                        <p className="text-xs text-destructive flex items-center gap-1">
                           <AlertTriangle className="h-3 w-3" />
                           Agente com erro — verificar configuração
                         </p>
@@ -259,7 +259,7 @@ export function AIAgentOrchestrator() {
                   <div className="mt-4">
                     <p className="text-sm font-medium mb-2">Todas as Capacidades</p>
                     <div className="flex flex-wrap gap-2">
-                      {(Array.isArray(selectedAgent.capabilities) ? selectedAgent.capabilities : []).map((cap: any, i: number) => (
+                      {(Array.isArray(selectedAgent.capabilities) ? selectedAgent.capabilities : []).map((cap: unknown, i: number) => (
                         <Badge key={i} variant="outline">{String(cap)}</Badge>
                       ))}
                     </div>

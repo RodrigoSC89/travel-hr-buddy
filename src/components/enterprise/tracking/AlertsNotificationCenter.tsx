@@ -68,10 +68,10 @@ function mapCategoryFromType(type: string): Alert["category"] {
 }
 
 const typeConfig = {
-  critical: { icon: AlertCircle, color: "bg-red-500 text-white", bgLight: "bg-red-50 border-red-200" },
-  warning: { icon: AlertTriangle, color: "bg-amber-500 text-white", bgLight: "bg-amber-50 border-amber-200" },
-  info: { icon: Info, color: "bg-blue-500 text-white", bgLight: "bg-blue-50 border-blue-200" },
-  success: { icon: CheckCircle2, color: "bg-green-500 text-white", bgLight: "bg-green-50 border-green-200" },
+  critical: { icon: AlertCircle, color: "bg-destructive text-destructive-foreground", bgLight: "bg-destructive/10 border-destructive/20" },
+  warning: { icon: AlertTriangle, color: "bg-warning text-warning-foreground", bgLight: "bg-warning/10 border-warning/20" },
+  info: { icon: Info, color: "bg-info text-info-foreground", bgLight: "bg-info/10 border-info/20" },
+  success: { icon: CheckCircle2, color: "bg-success text-success-foreground", bgLight: "bg-success/10 border-success/20" },
 };
 
 const categoryIcons = {
@@ -155,7 +155,7 @@ export function AlertsNotificationCenter() {
             <Bell className="h-6 w-6" />
             Central de Alertas
             {stats.unread > 0 && (
-              <Badge className="bg-red-500 text-white">{stats.unread}</Badge>
+              <Badge className="bg-destructive text-destructive-foreground">{stats.unread}</Badge>
             )}
           </h2>
           <p className="text-muted-foreground">Notificações priorizadas por IA</p>
@@ -199,9 +199,9 @@ export function AlertsNotificationCenter() {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-muted-foreground">Não Lidos</p>
-                <p className="text-2xl font-bold text-blue-600">{stats.unread}</p>
+                <p className="text-2xl font-bold text-info">{stats.unread}</p>
               </div>
-              <Info className="h-8 w-8 text-blue-600" />
+              <Info className="h-8 w-8 text-info" />
             </div>
           </CardContent>
         </Card>
@@ -210,9 +210,9 @@ export function AlertsNotificationCenter() {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-muted-foreground">Críticos</p>
-                <p className="text-2xl font-bold text-red-600">{stats.critical}</p>
+                <p className="text-2xl font-bold text-destructive">{stats.critical}</p>
               </div>
-              <AlertCircle className="h-8 w-8 text-red-600" />
+              <AlertCircle className="h-8 w-8 text-destructive" />
             </div>
           </CardContent>
         </Card>
@@ -221,9 +221,9 @@ export function AlertsNotificationCenter() {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-muted-foreground">Ação Requerida</p>
-                <p className="text-2xl font-bold text-amber-600">{stats.actionRequired}</p>
+                <p className="text-2xl font-bold text-warning">{stats.actionRequired}</p>
               </div>
-              <AlertTriangle className="h-8 w-8 text-amber-600" />
+              <AlertTriangle className="h-8 w-8 text-warning" />
             </div>
           </CardContent>
         </Card>
@@ -233,10 +233,10 @@ export function AlertsNotificationCenter() {
       <Tabs value={filter} onValueChange={setFilter}>
         <TabsList>
           <TabsTrigger value="all">Todos</TabsTrigger>
-          <TabsTrigger value="critical" className="text-red-600">Críticos</TabsTrigger>
-          <TabsTrigger value="warning" className="text-amber-600">Avisos</TabsTrigger>
-          <TabsTrigger value="info" className="text-blue-600">Info</TabsTrigger>
-          <TabsTrigger value="success" className="text-green-600">Sucesso</TabsTrigger>
+          <TabsTrigger value="critical" className="text-destructive">Críticos</TabsTrigger>
+          <TabsTrigger value="warning" className="text-warning">Avisos</TabsTrigger>
+          <TabsTrigger value="info" className="text-info">Info</TabsTrigger>
+          <TabsTrigger value="success" className="text-success">Sucesso</TabsTrigger>
         </TabsList>
       </Tabs>
 
@@ -246,7 +246,7 @@ export function AlertsNotificationCenter() {
           <AnimatePresence>
             {filteredAlerts.length === 0 ? (
               <div className="text-center py-12">
-                <CheckCircle2 className="h-12 w-12 mx-auto text-green-500 mb-4" />
+                <CheckCircle2 className="h-12 w-12 mx-auto text-success mb-4" />
                 <p className="text-lg font-medium">Nenhum alerta</p>
                 <p className="text-muted-foreground">Você está em dia!</p>
               </div>
@@ -273,10 +273,10 @@ export function AlertsNotificationCenter() {
                           <div className="flex items-center gap-2 flex-wrap">
                             <h4 className="font-semibold">{alert.title}</h4>
                             {!alert.read && (
-                              <Badge className="bg-blue-500 text-white text-xs">Novo</Badge>
+                              <Badge className="bg-info text-info-foreground text-xs">Novo</Badge>
                             )}
                             {alert.actionRequired && (
-                              <Badge className="bg-amber-500 text-white text-xs">Ação Requerida</Badge>
+                              <Badge className="bg-warning text-warning-foreground text-xs">Ação Requerida</Badge>
                             )}
                             <Badge variant="outline" className="text-xs">
                               <CategoryIcon className="h-3 w-3 mr-1" />
@@ -301,8 +301,8 @@ export function AlertsNotificationCenter() {
                             <span className="flex items-center gap-1">
                               Prioridade IA: 
                               <span className={`font-medium ${
-                                alert.aiPriority >= 80 ? "text-red-600" :
-                                alert.aiPriority >= 50 ? "text-amber-600" : "text-green-600"
+                                alert.aiPriority >= 80 ? "text-destructive" :
+                                alert.aiPriority >= 50 ? "text-warning" : "text-success"
                               }`}>
                                 {alert.aiPriority}%
                               </span>

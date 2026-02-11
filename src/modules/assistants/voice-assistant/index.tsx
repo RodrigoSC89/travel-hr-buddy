@@ -59,6 +59,7 @@ const VoiceAssistant: React.FC = () => {
   const [volume, setVolume] = useState(1);
   const [useElevenLabs, setUseElevenLabs] = useState(true);
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- SpeechRecognition type not in standard lib
   const recognitionRef = useRef<any>(null);
   const synthRef = useRef<SpeechSynthesis | null>(null);
   const audioRef = useRef<HTMLAudioElement | null>(null);
@@ -343,15 +344,15 @@ const VoiceAssistant: React.FC = () => {
       <div className="mb-8">
         <div className="flex items-center gap-3 mb-2">
           <div className="relative">
-            <div className="h-12 w-12 rounded-full bg-gradient-to-br from-primary to-purple-600 flex items-center justify-center">
+            <div className="h-12 w-12 rounded-full bg-gradient-to-br from-primary to-accent flex items-center justify-center">
               <Bot className="h-6 w-6 text-white" />
             </div>
             {(isListening || isSpeaking) && (
-              <span className="absolute -bottom-1 -right-1 h-4 w-4 bg-green-500 rounded-full border-2 border-background animate-pulse" />
+              <span className="absolute -bottom-1 -right-1 h-4 w-4 bg-success rounded-full border-2 border-background animate-pulse" />
             )}
           </div>
           <div>
-            <h1 className="text-3xl font-bold bg-gradient-to-r from-primary to-purple-600 bg-clip-text text-transparent">
+            <h1 className="text-3xl font-bold bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
               ARIA - Assistente de Voz
             </h1>
             <p className="text-muted-foreground">
@@ -409,7 +410,7 @@ const VoiceAssistant: React.FC = () => {
                       className={`flex gap-3 ${msg.type === "user" ? "justify-end" : "justify-start"}`}
                     >
                       {msg.type === "assistant" && (
-                        <div className="h-8 w-8 rounded-full bg-gradient-to-br from-primary to-purple-600 flex items-center justify-center flex-shrink-0">
+                        <div className="h-8 w-8 rounded-full bg-gradient-to-br from-primary to-accent flex items-center justify-center flex-shrink-0">
                           <Bot className="h-4 w-4 text-white" />
                         </div>
                       )}
@@ -478,8 +479,8 @@ const VoiceAssistant: React.FC = () => {
                   className={`
                     h-16 w-16 rounded-full flex items-center justify-center transition-all
                     ${isListening 
-                      ? "bg-red-500 hover:bg-red-600 shadow-lg shadow-red-500/50" 
-                      : "bg-gradient-to-br from-primary to-purple-600 hover:opacity-90 shadow-lg shadow-primary/50"
+                      ? "bg-destructive hover:bg-destructive/90 shadow-lg shadow-destructive/50" 
+                      : "bg-gradient-to-br from-primary to-accent hover:opacity-90 shadow-lg shadow-primary/50"
                     }
                     ${(!isSupported || isProcessing) && "opacity-50 cursor-not-allowed"}
                   `}

@@ -80,7 +80,7 @@ export default function ForecastHistoryPage() {
       .then(({ data: forecasts, error }) => {
         if (error) throw error;
         const items = Array.isArray(forecasts) ? forecasts : (forecasts?.items || []);
-        const transformed = items.map((f: any) => ({
+        const transformed = items.map((f: Record<string, unknown>) => ({
           ...f,
           last_maintenance: Array.isArray(f.last_maintenance) ? f.last_maintenance : []
         }));
@@ -125,7 +125,7 @@ export default function ForecastHistoryPage() {
                 <div><b>⏱ Horímetro:</b> {f.hourmeter}h</div>
                 <div><b>📊 Prioridade:</b> {priority.badge} {priority.text}</div>
                 <div><b>📅 Manutenções:</b> {f.last_maintenance.join(", ") || "Nenhuma"}</div>
-                <div className="whitespace-pre-line border rounded-md p-3 text-sm bg-gray-100 dark:bg-gray-800">
+                <div className="whitespace-pre-line border rounded-md p-3 text-sm bg-muted">
                   {f.forecast_text}
                 </div>
                 <Button 
