@@ -90,6 +90,7 @@ export const SuperAdminDashboard: React.FC = () => {
       if (error) throw error;
 
       // Processar dados das organizações
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Supabase join returns dynamic shape with nested relations
       const processedOrgs = orgs?.map((org: any) => ({
         ...org,
         max_users: org.max_users ?? 0,

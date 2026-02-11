@@ -218,6 +218,6 @@ Forneça:
   );
 }
 
-function DollarSignIcon(props: any) {
+function DollarSignIcon(props: React.SVGProps<SVGSVGElement>) {
   return <TrendingUp {...props} />;
 }

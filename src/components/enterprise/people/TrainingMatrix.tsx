@@ -104,12 +104,13 @@ export function TrainingMatrix() {
           .limit(10);
 
         if (courses && courses.length > 0) {
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Supabase metadata JSONB has dynamic shape
           setTrainings(courses.map((c: any) => ({
             id: c.id,
             name: c.course_name,
-            code: (c.metadata as any)?.code || "N/A",
+            code: c.metadata?.code || "N/A",
             category: "STCW" as const,
-            duration: `${(c.metadata as any)?.duration_days || 5} days`,
+            duration: `${c.metadata?.duration_days || 5} days`,
             validity: 60,
             isMandatory: true
           })));
@@ -124,11 +125,11 @@ export function TrainingMatrix() {
   const getStatusIcon = (status: string) => {
     switch (status) {
       case "completed":
-        return <CheckCircle2 className="h-4 w-4 text-green-500" />;
+        return <CheckCircle2 className="h-4 w-4 text-success" />;
       case "in-progress":
-        return <Clock className="h-4 w-4 text-blue-500" />;
+        return <Clock className="h-4 w-4 text-primary" />;
       case "expired":
-        return <AlertTriangle className="h-4 w-4 text-red-500" />;
+        return <AlertTriangle className="h-4 w-4 text-destructive" />;
       case "not-started":
         return <XCircle className="h-4 w-4 text-muted-foreground" />;
     }
@@ -137,11 +138,11 @@ export function TrainingMatrix() {
   const getStatusBg = (status: string) => {
     switch (status) {
       case "completed":
-        return "bg-green-500/10";
+        return "bg-success/10";
       case "in-progress":
-        return "bg-blue-500/10";
+        return "bg-primary/10";
       case "expired":
-        return "bg-red-500/10";
+        return "bg-destructive/10";
       case "not-started":
         return "bg-muted";
     }
@@ -182,10 +183,10 @@ export function TrainingMatrix() {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-muted-foreground">Taxa de Conclusão</p>
-                <p className="text-3xl font-bold text-green-500">{stats.completedRate}%</p>
+                <p className="text-3xl font-bold text-success">{stats.completedRate}%</p>
               </div>
-              <div className="p-3 rounded-full bg-green-500/10">
-                <CheckCircle2 className="h-6 w-6 text-green-500" />
+              <div className="p-3 rounded-full bg-success/10">
+                <CheckCircle2 className="h-6 w-6 text-success" />
               </div>
             </div>
           </CardContent>
@@ -196,10 +197,10 @@ export function TrainingMatrix() {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-muted-foreground">Vencidos</p>
-                <p className="text-3xl font-bold text-red-500">{stats.expiredCount}</p>
+                <p className="text-3xl font-bold text-destructive">{stats.expiredCount}</p>
               </div>
-              <div className="p-3 rounded-full bg-red-500/10">
-                <AlertTriangle className="h-6 w-6 text-red-500" />
+              <div className="p-3 rounded-full bg-destructive/10">
+                <AlertTriangle className="h-6 w-6 text-destructive" />
               </div>
             </div>
           </CardContent>
@@ -210,10 +211,10 @@ export function TrainingMatrix() {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-muted-foreground">Em Andamento</p>
-                <p className="text-3xl font-bold text-blue-500">{stats.inProgressCount}</p>
+                <p className="text-3xl font-bold text-primary">{stats.inProgressCount}</p>
               </div>
-              <div className="p-3 rounded-full bg-blue-500/10">
-                <Clock className="h-6 w-6 text-blue-500" />
+              <div className="p-3 rounded-full bg-primary/10">
+                <Clock className="h-6 w-6 text-primary" />
               </div>
             </div>
           </CardContent>
@@ -337,15 +338,15 @@ export function TrainingMatrix() {
           {/* Legend */}
           <div className="flex justify-center gap-6 mt-6 pt-4 border-t">
             <div className="flex items-center gap-2 text-sm">
-              <CheckCircle2 className="h-4 w-4 text-green-500" />
+              <CheckCircle2 className="h-4 w-4 text-success" />
               <span>Concluído</span>
             </div>
             <div className="flex items-center gap-2 text-sm">
-              <Clock className="h-4 w-4 text-blue-500" />
+              <Clock className="h-4 w-4 text-primary" />
               <span>Em Andamento</span>
             </div>
             <div className="flex items-center gap-2 text-sm">
-              <AlertTriangle className="h-4 w-4 text-red-500" />
+              <AlertTriangle className="h-4 w-4 text-destructive" />
               <span>Vencido</span>
             </div>
             <div className="flex items-center gap-2 text-sm">

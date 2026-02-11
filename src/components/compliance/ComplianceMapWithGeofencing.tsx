@@ -201,6 +201,7 @@ export function ComplianceMapWithGeofencing({
     }
   }, []);
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Supabase JSONB metadata has dynamic position/coordinates shape
   function parseLocation(locationStr: string | null, metadata: any): { lat: number; lng: number } | null {
     if (metadata?.position?.lat && metadata?.position?.lng) {
       return { lat: metadata.position.lat, lng: metadata.position.lng };
@@ -286,7 +287,7 @@ export function ComplianceMapWithGeofencing({
           setIsLoading(false);
         });
 
-        mapInstance.on('error', (e: any) => {
+        mapInstance.on('error', (e: unknown) => {
           logger.warn('Map error:', e);
         });
 
@@ -322,6 +323,7 @@ export function ComplianceMapWithGeofencing({
   }, [mapboxToken, fetchVessels, fetchGeofences]);
 
   // Add geofences to map (called only once on map load)
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Mapbox GL instances have dynamic API
   function addGeofencesToMap(mapInstance: any, mapboxgl: any, zones: Geofence[]) {
     zones.filter(g => g.active).forEach(geofence => {
       const sourceId = `geofence-src-${geofence.id}`;
@@ -396,6 +398,7 @@ export function ComplianceMapWithGeofencing({
   }
 
   // Add vessel markers to map
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Mapbox GL instances have dynamic API
   function addVesselMarkersToMap(mapInstance: any, mapboxgl: any, vesselList: VesselInspection[]) {
     // Clear existing markers
     markersRef.current.forEach(marker => {
