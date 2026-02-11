@@ -103,9 +103,9 @@ const fallbackManning: ManningLevel[] = [
 
 const statusConfig = {
   onboard: { label: 'A Bordo', color: 'bg-success/20 text-success', icon: Ship },
-  onleave: { label: 'Licença', color: 'bg-blue-500/20 text-blue-600', icon: Plane },
+  onleave: { label: 'Licença', color: 'bg-info/20 text-info', icon: Plane },
   standby: { label: 'Standby', color: 'bg-warning/20 text-warning', icon: Clock },
-  training: { label: 'Treinamento', color: 'bg-purple-500/20 text-purple-600', icon: Briefcase }
+  training: { label: 'Treinamento', color: 'bg-accent/20 text-accent-foreground', icon: Briefcase }
 };
 
 const manningStatusConfig = {
@@ -127,16 +127,15 @@ export function CrewSchedulingDashboard() {
       try {
         const { data } = await supabase
           .from("crew_members")
-          .select("id, full_name, rank, department, status, nationality")
+          .select("id, full_name, rank, status, nationality")
           .limit(50);
 
         if (data && data.length > 0) {
-          // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Supabase row dynamic shape
-          setCrewData(data.map((c: any) => ({
+          setCrewData(data.map((c) => ({
             id: c.id,
             name: c.full_name || "N/A",
             rank: c.rank || "AB",
-            department: c.department || "Deck",
+            department: "Deck",
             vessel: "N/A",
             status: (c.status === "active" ? "onboard" : "onleave") as CrewMember["status"],
             embarkDate: "-",
@@ -323,12 +322,12 @@ export function CrewSchedulingDashboard() {
                         <div className="flex items-start gap-4">
                           <div className={`h-10 w-10 rounded-full flex items-center justify-center ${
                             rotation.type === 'embark' ? 'bg-success/20' : 
-                            rotation.type === 'disembark' ? 'bg-blue-500/20' : 'bg-warning/20'
+                            rotation.type === 'disembark' ? 'bg-info/20' : 'bg-warning/20'
                           }`}>
                             {rotation.type === 'embark' ? (
                               <UserCheck className="h-5 w-5 text-success" />
                             ) : rotation.type === 'disembark' ? (
-                              <UserX className="h-5 w-5 text-blue-500" />
+                              <UserX className="h-5 w-5 text-info" />
                             ) : (
                               <RefreshCw className="h-5 w-5 text-warning" />
                             )}

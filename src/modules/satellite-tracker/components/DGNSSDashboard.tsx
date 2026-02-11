@@ -113,18 +113,18 @@ export const DGNSSDashboard: React.FC = () => {
 
   const getStatusColor = (status: "online" | "offline" | "maintenance") => {
     switch (status) {
-      case "online": return "bg-green-500";
-      case "offline": return "bg-red-500";
-      case "maintenance": return "bg-yellow-500";
-      default: return "bg-gray-500";
+      case "online": return "bg-success";
+      case "offline": return "bg-destructive";
+      case "maintenance": return "bg-warning";
+      default: return "bg-muted";
     }
   };
 
   const getPDOPQuality = (pdop: number) => {
-    if (pdop <= 2) return { label: "Excelente", color: "text-green-500" };
-    if (pdop <= 4) return { label: "Bom", color: "text-blue-500" };
-    if (pdop <= 6) return { label: "Moderado", color: "text-yellow-500" };
-    return { label: "Ruim", color: "text-red-500" };
+    if (pdop <= 2) return { label: "Excelente", color: "text-success" };
+    if (pdop <= 4) return { label: "Bom", color: "text-info" };
+    if (pdop <= 6) return { label: "Moderado", color: "text-warning" };
+    return { label: "Ruim", color: "text-destructive" };
   };
 
   const getConstellationIcon = (constellation: string) => {
@@ -354,11 +354,11 @@ export const DGNSSDashboard: React.FC = () => {
         <CardContent>
           <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
             <div className="text-center p-3 bg-muted rounded-lg">
-              <div className="text-2xl font-bold text-green-500">{satellites.length}</div>
+              <div className="text-2xl font-bold text-success">{satellites.length}</div>
               <div className="text-xs text-muted-foreground">Satélites Visíveis</div>
             </div>
             <div className="text-center p-3 bg-muted rounded-lg">
-              <div className="text-2xl font-bold text-blue-500">
+              <div className="text-2xl font-bold text-info">
                 {stations.filter(s => s.status === "online").length}
               </div>
               <div className="text-xs text-muted-foreground">Estações Online</div>
@@ -376,7 +376,7 @@ export const DGNSSDashboard: React.FC = () => {
               <div className="text-xs text-muted-foreground">PDOP Médio</div>
             </div>
             <div className="text-center p-3 bg-muted rounded-lg">
-              <div className="text-2xl font-bold text-yellow-500">
+              <div className="text-2xl font-bold text-warning">
                 {stations.filter(s => s.status === "maintenance").length}
               </div>
               <div className="text-xs text-muted-foreground">Em Manutenção</div>

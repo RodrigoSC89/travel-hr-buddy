@@ -5,16 +5,28 @@
  * with encrypted token persistence
  */
 
-// Capacitor imports with fallbacks for web
-const Preferences = typeof window !== "undefined" && (window as any).Capacitor?.Plugins?.Preferences || {
-  set: async (opts: any) => localStorage.setItem(opts.key, opts.value),
-  get: async (opts: any) => ({ value: localStorage.getItem(opts.key) }),
-  remove: async (opts: any) => localStorage.removeItem(opts.key),
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Capacitor global not typed in web context
+const capacitorWindow = typeof window !== "undefined" ? (window as unknown as Record<string, unknown>) : undefined;
+const capacitorPlugins = (capacitorWindow?.Capacitor as Record<string, unknown>)?.Plugins as Record<string, unknown> | undefined;
+
+interface PreferencesOpts { key: string; value?: string }
+const Preferences = capacitorPlugins?.Preferences as {
+  set: (opts: PreferencesOpts) => Promise<void>;
+  get: (opts: PreferencesOpts) => Promise<{ value: string | null }>;
+  remove: (opts: PreferencesOpts) => Promise<void>;
+} || {
+  set: async (opts: PreferencesOpts) => localStorage.setItem(opts.key, opts.value || ""),
+  get: async (opts: PreferencesOpts) => ({ value: localStorage.getItem(opts.key) }),
+  remove: async (opts: PreferencesOpts) => localStorage.removeItem(opts.key),
 };
 
-const BiometricAuth = typeof window !== "undefined" && (window as any).Capacitor?.Plugins?.BiometricAuth || {
+interface BiometricAuthOpts { reason?: string; cancelTitle?: string; allowDeviceCredential?: boolean; iosFallbackTitle?: string }
+const BiometricAuth = capacitorPlugins?.BiometricAuth as {
+  checkBiometry: () => Promise<{ isAvailable: boolean; biometryType: BiometryType }>;
+  authenticate: (opts: BiometricAuthOpts) => Promise<unknown>;
+} || {
   checkBiometry: async () => ({ isAvailable: false, biometryType: "none" as BiometryType }),
-  authenticate: async (opts: any) => Promise.reject(new Error("Biometric auth not available")),
+  authenticate: async (_opts: BiometricAuthOpts) => Promise.reject(new Error("Biometric auth not available")),
 };
 
 type BiometryType = "none" | "touchId" | "faceId" | "fingerprintAuthentication" | "faceAuthentication" | "irisAuthentication";
