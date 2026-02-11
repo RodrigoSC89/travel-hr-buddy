@@ -24,6 +24,7 @@ import {
   Users,
   FileText
 } from "lucide-react";
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- XLSX dynamic import module
 let XLSX: any = null;
 const loadXLSX = async () => {
   if (!XLSX) {
@@ -620,7 +621,7 @@ export const ProjectTimeline: React.FC<ProjectTimelineProps> = () => {
             <div className="grid grid-cols-2 gap-4">
               <div>
                 <Label htmlFor="status">Status</Label>
-                <Select value={formData.status} onValueChange={(value: any) => setFormData({ ...formData, status: value })}>
+                <Select value={formData.status} onValueChange={(value) => setFormData({ ...formData, status: value as typeof formData.status })}>
                   <SelectTrigger>
                     <SelectValue />
                   </SelectTrigger>
@@ -635,7 +636,7 @@ export const ProjectTimeline: React.FC<ProjectTimelineProps> = () => {
               </div>
               <div>
                 <Label htmlFor="priority">Priority</Label>
-                <Select value={formData.priority} onValueChange={(value: any) => setFormData({ ...formData, priority: value })}>
+                <Select value={formData.priority} onValueChange={(value) => setFormData({ ...formData, priority: value as typeof formData.priority })}>
                   <SelectTrigger>
                     <SelectValue />
                   </SelectTrigger>

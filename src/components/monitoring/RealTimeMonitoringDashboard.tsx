@@ -15,7 +15,8 @@ import { userAnalytics } from "@/lib/monitoring/user-analytics";
 export default function RealTimeMonitoringDashboard() {
   const [perfSnapshot, setPerfSnapshot] = useState<PerformanceSnapshot | null>(null);
   const [recentErrors, setRecentErrors] = useState<TrackedError[]>([]);
-  const [analytics, setAnalytics] = useState<any>(null);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- userAnalytics.getSummary() returns dynamic shape
+  const [analytics, setAnalytics] = useState<Record<string, any> | null>(null);
   const [liveMetrics, setLiveMetrics] = useState<Record<string, WebVitalMetric>>({});
 
   useEffect(() => {
@@ -57,19 +58,19 @@ export default function RealTimeMonitoringDashboard() {
 
   const getRatingColor = (rating: string) => {
     switch (rating) {
-    case "good": return "bg-green-500/20 text-green-400 border-green-500/30";
-    case "needs-improvement": return "bg-yellow-500/20 text-yellow-400 border-yellow-500/30";
-    case "poor": return "bg-red-500/20 text-red-400 border-red-500/30";
+    case "good": return "bg-success/20 text-success border-success/30";
+    case "needs-improvement": return "bg-warning/20 text-warning border-warning/30";
+    case "poor": return "bg-destructive/20 text-destructive border-destructive/30";
     default: return "bg-muted text-muted-foreground";
     }
   };
 
   const getSeverityColor = (severity: string) => {
     switch (severity) {
-    case "critical": return "bg-red-500/20 text-red-400 border-red-500/30";
-    case "high": return "bg-orange-500/20 text-orange-400 border-orange-500/30";
-    case "medium": return "bg-yellow-500/20 text-yellow-400 border-yellow-500/30";
-    case "low": return "bg-blue-500/20 text-blue-400 border-blue-500/30";
+    case "critical": return "bg-destructive/20 text-destructive border-destructive/30";
+    case "high": return "bg-warning/20 text-warning border-warning/30";
+    case "medium": return "bg-warning/20 text-warning border-warning/30";
+    case "low": return "bg-primary/20 text-primary border-primary/30";
     default: return "bg-muted text-muted-foreground";
     }
   };
@@ -336,16 +337,16 @@ export default function RealTimeMonitoringDashboard() {
                 </CardHeader>
                 <CardContent>
                   <div className="space-y-2">
-                    {analytics.events.recent.map((event: any, idx: number) => (
+                    {analytics.events.recent.map((event: Record<string, unknown>, idx: number) => (
                       <div key={idx} className="flex justify-between items-center p-2 rounded bg-muted/50">
                         <div>
-                          <span className="text-sm font-medium">{event.name}</span>
+                          <span className="text-sm font-medium">{String(event.name)}</span>
                           <Badge variant="outline" className="ml-2 text-xs">
-                            {event.category}
+                            {String(event.category)}
                           </Badge>
                         </div>
                         <span className="text-xs text-muted-foreground">
-                          {new Date(event.timestamp).toLocaleTimeString()}
+                          {new Date(String(event.timestamp)).toLocaleTimeString()}
                         </span>
                       </div>
                     ))}

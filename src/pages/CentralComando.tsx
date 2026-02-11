@@ -291,7 +291,7 @@ function CentralComandoContent() {
                 <div className="flex items-center justify-center h-11 w-11 rounded-xl bg-gradient-to-br from-primary via-primary/80 to-purple-600 shadow-lg shadow-primary/25">
                   <Compass className="h-6 w-6 text-primary-foreground" />
                 </div>
-                <div className="absolute -bottom-1 -right-1 h-4 w-4 rounded-full bg-emerald-500 border-2 border-background flex items-center justify-center">
+                <div className="absolute -bottom-1 -right-1 h-4 w-4 rounded-full bg-success border-2 border-background flex items-center justify-center">
                   <Sparkles className="h-2 w-2 text-white" />
                 </div>
               </motion.div>
@@ -310,7 +310,7 @@ function CentralComandoContent() {
             <div className="hidden lg:flex items-center gap-6">
               <div className="flex items-center gap-3 px-4 py-2 rounded-full bg-muted/50 border">
                 <div className="flex items-center gap-2">
-                  <div className={`h-2 w-2 rounded-full ${isConnected ? 'bg-emerald-500 animate-pulse' : 'bg-muted'}`} />
+                  <div className={`h-2 w-2 rounded-full ${isConnected ? 'bg-success animate-pulse' : 'bg-muted'}`} />
                   <span className="text-xs font-medium">{isConnected ? 'Online' : 'Conectando...'}</span>
                 </div>
                 <div className="h-4 w-px bg-border" />
@@ -344,7 +344,7 @@ function CentralComandoContent() {
                   variant={isListening ? "default" : "ghost"} 
                   size="icon"
                   onClick={toggleVoice}
-                  className={isListening ? "bg-red-500 hover:bg-red-600 animate-pulse" : ""}
+                  className={isListening ? "bg-destructive hover:bg-destructive/90 animate-pulse" : ""}
                 >
                   {isListening ? <Mic className="h-4 w-4" /> : <MicOff className="h-4 w-4" />}
                 </Button>

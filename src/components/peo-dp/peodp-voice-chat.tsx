@@ -54,21 +54,24 @@ export function PeodpVoiceChat() {
   const [selectedSection, setSelectedSection] = useState<string>("all");
   const [transcript, setTranscript] = useState("");
   const [textInput, setTextInput] = useState("");
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Web Speech API lacks standard types
   const recognitionRef = useRef<any>(null);
   const scrollRef = useRef<HTMLDivElement>(null);
 
   // Initialize speech recognition
   useEffect(() => {
     if (typeof window !== 'undefined' && ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window)) {
-      const SpeechRecognition = (window as any).webkitSpeechRecognition || (window as any).SpeechRecognition;
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Web Speech API vendor-prefixed
+      const SpeechRecognition = (window as Record<string, any>).webkitSpeechRecognition || (window as Record<string, any>).SpeechRecognition;
       recognitionRef.current = new SpeechRecognition();
       recognitionRef.current.continuous = false;
       recognitionRef.current.interimResults = true;
       recognitionRef.current.lang = 'pt-BR';
 
-      recognitionRef.current.onresult = (event: any) => {
-        const transcript = Array.from(event.results)
-          .map((result: any) => result[0].transcript)
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any -- SpeechRecognition event types not standardized
+      recognitionRef.current.onresult = (event: Record<string, any>) => {
+        const transcript = Array.from(event.results as ArrayLike<Record<string, any>>)
+          .map((result) => (result as Record<string, any>)[0].transcript)
           .join('');
         setTranscript(transcript);
       };
@@ -80,7 +83,8 @@ export function PeodpVoiceChat() {
         }
       };
 
-      recognitionRef.current.onerror = (event: any) => {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any -- SpeechRecognition error event
+      recognitionRef.current.onerror = (event: Record<string, unknown>) => {
         logger.error('Speech recognition error:', event.error);
         setIsListening(false);
         toast.error("Erro no reconhecimento de voz");
@@ -223,7 +227,7 @@ export function PeodpVoiceChat() {
                 <div className="flex items-center gap-2">
                   {section.name}
                   {section.critical && (
-                    <AlertTriangle className="h-3 w-3 text-orange-500" />
+                    <AlertTriangle className="h-3 w-3 text-warning" />
                   )}
                 </div>
               </SelectItem>

@@ -178,9 +178,9 @@ export function ActionPlanWithNotifications({
   // Stats
   const stats = {
     total: actionPlans?.length || 0,
-    pending: actionPlans?.filter((p: any) => p.status === 'pending').length || 0,
-    overdue: actionPlans?.filter((p: any) => p.status === 'overdue' || (p.due_date && new Date(p.due_date) < new Date())).length || 0,
-    completed: actionPlans?.filter((p: any) => p.status === 'completed').length || 0,
+    pending: actionPlans?.filter((p: Record<string, unknown>) => p.status === 'pending').length || 0,
+    overdue: actionPlans?.filter((p: Record<string, unknown>) => p.status === 'overdue' || (p.due_date && new Date(String(p.due_date)) < new Date())).length || 0,
+    completed: actionPlans?.filter((p: Record<string, unknown>) => p.status === 'completed').length || 0,
   };
 
   const completionRate = stats.total > 0 ? (stats.completed / stats.total) * 100 : 0;
@@ -317,6 +317,7 @@ export function ActionPlanWithNotifications({
 
       {/* Action Plans List */}
       <div className="space-y-3">
+        {/* eslint-disable-next-line @typescript-eslint/no-explicit-any -- Supabase action_items dynamic row */}
         {actionPlans?.map((plan: any) => (
           <Card
             key={plan.id}

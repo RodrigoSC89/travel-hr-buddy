@@ -452,7 +452,7 @@ export const SmartNotifications = () => {
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
               <Filter className="h-4 w-4 text-muted-foreground" />
-              <Select value={filter} onValueChange={(v: any) => setFilter(v)}>
+              <Select value={filter} onValueChange={(v) => setFilter(v as typeof filter)}>
                 <SelectTrigger className="w-32">
                   <SelectValue />
                 </SelectTrigger>
@@ -611,8 +611,8 @@ export const SmartNotifications = () => {
                 <Label>Frequência do Digest</Label>
                 <Select
                   value={preferences.digestFrequency}
-                  onValueChange={(v: any) =>
-                    setPreferences(p => ({ ...p, digestFrequency: v }))
+                  onValueChange={(v) =>
+                    setPreferences(p => ({ ...p, digestFrequency: v as typeof p.digestFrequency }))
                   }
                 >
                   <SelectTrigger>

@@ -194,19 +194,19 @@ export default function TelemetriaCommand() {
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case "normal": return "bg-green-500";
-      case "warning": return "bg-yellow-500";
-      case "critical": return "bg-red-500";
-      case "offline": return "bg-gray-500";
-      default: return "bg-blue-500";
+      case "normal": return "bg-success";
+      case "warning": return "bg-warning";
+      case "critical": return "bg-destructive";
+      case "offline": return "bg-muted-foreground";
+      default: return "bg-primary";
     }
   };
 
   const getSeverityBadge = (severity: string) => {
     switch (severity) {
       case "critical": return <Badge variant="destructive">Crítico</Badge>;
-      case "high": return <Badge className="bg-orange-500">Alto</Badge>;
-      case "medium": return <Badge className="bg-yellow-500 text-black">Médio</Badge>;
+      case "high": return <Badge className="bg-warning text-warning-foreground">Alto</Badge>;
+      case "medium": return <Badge className="bg-warning/80 text-warning-foreground">Médio</Badge>;
       default: return <Badge variant="secondary">Baixo</Badge>;
     }
   };
@@ -434,7 +434,7 @@ export default function TelemetriaCommand() {
                     <div 
                       key={sensor.id} 
                       className={`flex items-center justify-between p-4 rounded-lg border transition-colors hover:bg-muted/50 ${
-                        sensor.status === "critical" ? "border-red-500 bg-red-500/5" : ""
+                        sensor.status === "critical" ? "border-destructive bg-destructive/5" : ""
                       }`}
                     >
                       <div className="flex items-center gap-4">
@@ -488,9 +488,9 @@ export default function TelemetriaCommand() {
                       <div 
                         key={alert.id}
                         className={`p-4 rounded-lg border ${
-                          alert.severity === "critical" ? "border-red-500 bg-red-500/5" :
-                          alert.severity === "high" ? "border-orange-500 bg-orange-500/5" :
-                          "border-yellow-500 bg-yellow-500/5"
+                          alert.severity === "critical" ? "border-destructive bg-destructive/5" :
+                          alert.severity === "high" ? "border-warning bg-warning/5" :
+                          "border-warning/50 bg-warning/5"
                         }`}
                       >
                         <div className="flex items-start justify-between gap-4">
@@ -575,15 +575,15 @@ export default function TelemetriaCommand() {
                   {/* Summary */}
                   <div className="grid grid-cols-3 gap-4">
                     <div className="text-center p-4 rounded-lg bg-muted">
-                      <p className="text-3xl font-bold text-red-500">{lastAnalysis.anomalies}</p>
+                      <p className="text-3xl font-bold text-destructive">{lastAnalysis.anomalies}</p>
                       <p className="text-sm text-muted-foreground">Anomalias</p>
                     </div>
                     <div className="text-center p-4 rounded-lg bg-muted">
-                      <p className="text-3xl font-bold text-yellow-500">{lastAnalysis.predictions}</p>
+                      <p className="text-3xl font-bold text-warning">{lastAnalysis.predictions}</p>
                       <p className="text-sm text-muted-foreground">Previsões</p>
                     </div>
                     <div className="text-center p-4 rounded-lg bg-muted">
-                      <p className="text-3xl font-bold text-green-500">{lastAnalysis.overallHealth}%</p>
+                      <p className="text-3xl font-bold text-success">{lastAnalysis.overallHealth}%</p>
                       <p className="text-sm text-muted-foreground">Saúde</p>
                     </div>
                   </div>
@@ -594,17 +594,17 @@ export default function TelemetriaCommand() {
                       <div 
                         key={insight.id}
                         className={`p-4 rounded-lg border ${
-                          insight.severity === "critical" ? "border-red-500 bg-red-500/5" :
-                          insight.severity === "high" ? "border-orange-500 bg-orange-500/5" :
+                          insight.severity === "critical" ? "border-destructive bg-destructive/5" :
+                          insight.severity === "high" ? "border-warning bg-warning/5" :
                           "bg-muted/50"
                         }`}
                       >
                         <div className="flex items-start gap-4">
                           <div className={`p-2 rounded-lg ${
-                            insight.type === "anomaly" ? "bg-red-500/20" :
-                            insight.type === "prediction" ? "bg-yellow-500/20" :
-                            insight.type === "maintenance" ? "bg-blue-500/20" :
-                            "bg-green-500/20"
+                            insight.type === "anomaly" ? "bg-destructive/20" :
+                            insight.type === "prediction" ? "bg-warning/20" :
+                            insight.type === "maintenance" ? "bg-primary/20" :
+                            "bg-success/20"
                           }`}>
                             {insight.type === "anomaly" ? <AlertTriangle className="h-5 w-5" /> :
                              insight.type === "prediction" ? <TrendingUp className="h-5 w-5" /> :

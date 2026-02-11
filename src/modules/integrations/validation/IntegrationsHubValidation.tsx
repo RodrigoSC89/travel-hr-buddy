@@ -52,11 +52,11 @@ export const IntegrationsHubValidation = () => {
         <CardContent>
           <div className="grid grid-cols-3 gap-4 text-center">
             <div>
-              <div className="text-3xl font-bold text-green-600">{passCount}</div>
+              <div className="text-3xl font-bold text-success">{passCount}</div>
               <div className="text-sm text-muted-foreground">Aprovados</div>
             </div>
             <div>
-              <div className="text-3xl font-bold text-red-600">
+              <div className="text-3xl font-bold text-destructive">
                 {totalCount - passCount}
               </div>
               <div className="text-sm text-muted-foreground">Reprovados</div>
@@ -79,8 +79,8 @@ export const IntegrationsHubValidation = () => {
                   <div
                     className={`p-2 rounded-lg ${
                       check.status === "pass"
-                        ? "bg-green-100 text-green-600"
-                        : "bg-red-100 text-red-600"
+                        ? "bg-success/10 text-success"
+                        : "bg-destructive/10 text-destructive"
                     }`}
                   >
                     {check.status === "pass" ? (

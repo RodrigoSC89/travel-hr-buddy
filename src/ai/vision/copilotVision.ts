@@ -199,7 +199,8 @@ export class CopilotVision {
   ): Promise<OCRResult[]> {
     try {
       const TesseractLib = await loadTesseract();
-      const result = await TesseractLib.recognize(imageSource as any, "eng", {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Tesseract accepts multiple image source types
+      const result = await TesseractLib.recognize(imageSource as never, "eng", {
         logger: (m) => {
           if (m.status === "recognizing text") {
             logger.debug(`OCR Progress: ${(m.progress * 100).toFixed(0)}%`);
@@ -207,15 +208,17 @@ export class CopilotVision {
         },
       });
 
-      const anyResult: any = result as any;
-      const words: any[] = (anyResult?.data?.words as any[]) || [];
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Tesseract result has dynamic structure
+      const ocrData = result as Record<string, any>;
+      const words: Array<{ text: string; confidence: number; bbox: OCRResult["bbox"] }> = 
+        (ocrData?.data?.words as Array<{ text: string; confidence: number; bbox: OCRResult["bbox"] }>) || [];
       if (words.length === 0) {
         return [];
       }
 
       return words
-        .filter((word: any) => word.confidence > 60)
-        .map((word: any) => ({
+        .filter((word) => word.confidence > 60)
+        .map((word) => ({
           text: word.text,
           confidence: word.confidence / 100,
           bbox: word.bbox,

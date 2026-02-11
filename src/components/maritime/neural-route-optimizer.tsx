@@ -165,27 +165,27 @@ export const NeuralRouteOptimizer: React.FC = () => {
 
   const getRecommendationColor = (rec: RouteOptimization["recommendation"]) => {
     switch (rec) {
-    case "optimal": return "bg-green-100 text-green-800 dark:bg-green-900/20 dark:text-green-300";
-    case "good": return "bg-blue-100 text-blue-800 dark:bg-blue-900/20 dark:text-blue-300";
-    case "acceptable": return "bg-yellow-100 text-yellow-800 dark:bg-yellow-900/20 dark:text-yellow-300";
-    case "avoid": return "bg-red-100 text-red-800 dark:bg-red-900/20 dark:text-red-300";
+    case "optimal": return "bg-success/10 text-success";
+    case "good": return "bg-primary/10 text-primary";
+    case "acceptable": return "bg-warning/10 text-warning";
+    case "avoid": return "bg-destructive/10 text-destructive";
     }
   };
 
   const getTrafficColor = (level: RouteOptimization["trafficLevel"]) => {
     switch (level) {
-    case "low": return "text-green-600 dark:text-green-400";
-    case "medium": return "text-yellow-600 dark:text-yellow-400";
-    case "high": return "text-red-600 dark:text-red-400";
+    case "low": return "text-success";
+    case "medium": return "text-warning";
+    case "high": return "text-destructive";
     }
   };
 
   const getSeverityColor = (severity: WeatherForecast["severity"]) => {
     switch (severity) {
-    case "calm": return "bg-green-100 text-green-800 dark:bg-green-900/20 dark:text-green-300";
-    case "moderate": return "bg-blue-100 text-blue-800 dark:bg-blue-900/20 dark:text-blue-300";
-    case "rough": return "bg-yellow-100 text-yellow-800 dark:bg-yellow-900/20 dark:text-yellow-300";
-    case "severe": return "bg-red-100 text-red-800 dark:bg-red-900/20 dark:text-red-300";
+    case "calm": return "bg-success/10 text-success";
+    case "moderate": return "bg-primary/10 text-primary";
+    case "rough": return "bg-warning/10 text-warning";
+    case "severe": return "bg-destructive/10 text-destructive";
     }
   };
 
@@ -238,19 +238,19 @@ export const NeuralRouteOptimizer: React.FC = () => {
             <Progress value={optimizationProgress} className="h-2" />
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
               <div className="flex items-center gap-2">
-                <Cloud className={optimizationProgress > 25 ? "text-green-500" : "text-muted-foreground"} />
+                <Cloud className={optimizationProgress > 25 ? "text-success" : "text-muted-foreground"} />
                 <span className="text-sm">Dados meteorológicos</span>
               </div>
               <div className="flex items-center gap-2">
-                <Waves className={optimizationProgress > 50 ? "text-green-500" : "text-muted-foreground"} />
+                <Waves className={optimizationProgress > 50 ? "text-success" : "text-muted-foreground"} />
                 <span className="text-sm">Análise de correntes</span>
               </div>
               <div className="flex items-center gap-2">
-                <Ship className={optimizationProgress > 75 ? "text-green-500" : "text-muted-foreground"} />
+                <Ship className={optimizationProgress > 75 ? "text-success" : "text-muted-foreground"} />
                 <span className="text-sm">Tráfego marítimo</span>
               </div>
               <div className="flex items-center gap-2">
-                <Fuel className={optimizationProgress === 100 ? "text-green-500" : "text-muted-foreground"} />
+                <Fuel className={optimizationProgress === 100 ? "text-success" : "text-muted-foreground"} />
                 <span className="text-sm">Otimização combustível</span>
               </div>
             </div>
@@ -317,20 +317,20 @@ export const NeuralRouteOptimizer: React.FC = () => {
 
                     {/* Savings */}
                     <div className="grid grid-cols-3 gap-3 mb-4">
-                      <div className="p-2 bg-green-50 dark:bg-green-900/10 rounded-lg">
-                        <div className="flex items-center gap-1 text-green-700 dark:text-green-400 text-xs font-medium">
+                      <div className="p-2 bg-success/10 rounded-lg">
+                        <div className="flex items-center gap-1 text-success text-xs font-medium">
                           <TrendingDown className="h-3 w-3" />
                           <span>{route.fuelSavings}% Combustível</span>
                         </div>
                       </div>
-                      <div className="p-2 bg-blue-50 dark:bg-blue-900/10 rounded-lg">
-                        <div className="flex items-center gap-1 text-blue-700 dark:text-blue-400 text-xs font-medium">
+                      <div className="p-2 bg-primary/10 rounded-lg">
+                        <div className="flex items-center gap-1 text-primary text-xs font-medium">
                           <Clock className="h-3 w-3" />
                           <span>{route.timeSavings}% Tempo</span>
                         </div>
                       </div>
-                      <div className="p-2 bg-purple-50 dark:bg-purple-900/10 rounded-lg">
-                        <div className="flex items-center gap-1 text-purple-700 dark:text-purple-400 text-xs font-medium">
+                      <div className="p-2 bg-accent/10 rounded-lg">
+                        <div className="flex items-center gap-1 text-accent-foreground text-xs font-medium">
                           <DollarSign className="h-3 w-3" />
                           <span>${(route.costSavings/1000).toFixed(0)}k</span>
                         </div>
@@ -440,41 +440,41 @@ export const NeuralRouteOptimizer: React.FC = () => {
         </CardHeader>
         <CardContent>
           <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-            <div className="p-4 bg-green-50 dark:bg-green-900/10 rounded-lg">
+            <div className="p-4 bg-success/10 rounded-lg">
               <div className="flex items-center justify-between mb-2">
-                <Fuel className="h-8 w-8 text-green-600" />
-                <TrendingDown className="h-5 w-5 text-green-600" />
+                <Fuel className="h-8 w-8 text-success" />
+                <TrendingDown className="h-5 w-5 text-success" />
               </div>
-              <div className="text-2xl font-bold text-green-700 dark:text-green-400">30%</div>
+              <div className="text-2xl font-bold text-success">30%</div>
               <div className="text-sm text-muted-foreground">Economia de Combustível</div>
-              <div className="text-xs text-green-600 mt-1">≈ 555t por viagem</div>
+              <div className="text-xs text-success mt-1">≈ 555t por viagem</div>
             </div>
-            <div className="p-4 bg-blue-50 dark:bg-blue-900/10 rounded-lg">
+            <div className="p-4 bg-primary/10 rounded-lg">
               <div className="flex items-center justify-between mb-2">
-                <Clock className="h-8 w-8 text-blue-600" />
-                <TrendingDown className="h-5 w-5 text-blue-600" />
+                <Clock className="h-8 w-8 text-primary" />
+                <TrendingDown className="h-5 w-5 text-primary" />
               </div>
-              <div className="text-2xl font-bold text-blue-700 dark:text-blue-400">25%</div>
+              <div className="text-2xl font-bold text-primary">25%</div>
               <div className="text-sm text-muted-foreground">Redução de Tempo</div>
-              <div className="text-xs text-blue-600 mt-1">≈ 4.1 dias economizados</div>
+              <div className="text-xs text-primary mt-1">≈ 4.1 dias economizados</div>
             </div>
-            <div className="p-4 bg-purple-50 dark:bg-purple-900/10 rounded-lg">
+            <div className="p-4 bg-accent/10 rounded-lg">
               <div className="flex items-center justify-between mb-2">
-                <DollarSign className="h-8 w-8 text-purple-600" />
-                <TrendingDown className="h-5 w-5 text-purple-600" />
+                <DollarSign className="h-8 w-8 text-accent-foreground" />
+                <TrendingDown className="h-5 w-5 text-accent-foreground" />
               </div>
-              <div className="text-2xl font-bold text-purple-700 dark:text-purple-400">$125k</div>
+              <div className="text-2xl font-bold text-accent-foreground">$125k</div>
               <div className="text-sm text-muted-foreground">Economia por Viagem</div>
-              <div className="text-xs text-purple-600 mt-1">ROI de 500% em 6 meses</div>
+              <div className="text-xs text-accent-foreground mt-1">ROI de 500% em 6 meses</div>
             </div>
-            <div className="p-4 bg-orange-50 dark:bg-orange-900/10 rounded-lg">
+            <div className="p-4 bg-warning/10 rounded-lg">
               <div className="flex items-center justify-between mb-2">
-                <Target className="h-8 w-8 text-orange-600" />
-                <CheckCircle className="h-5 w-5 text-orange-600" />
+                <Target className="h-8 w-8 text-warning" />
+                <CheckCircle className="h-5 w-5 text-warning" />
               </div>
-              <div className="text-2xl font-bold text-orange-700 dark:text-orange-400">98%</div>
+              <div className="text-2xl font-bold text-warning">98%</div>
               <div className="text-sm text-muted-foreground">Precisão do Sistema</div>
-              <div className="text-xs text-orange-600 mt-1">IA de última geração</div>
+              <div className="text-xs text-warning mt-1">IA de última geração</div>
             </div>
           </div>
         </CardContent>
