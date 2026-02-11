@@ -117,36 +117,36 @@ export const ContinuousTestingMonitoring: React.FC = () => {
   const [systemMetrics] = useState({
     availabilityTarget: 99.9,
     currentAvailability: 99.98,
-    mttr: 15, // Mean Time To Recovery in minutes
-    mtbf: 720, // Mean Time Between Failures in hours
-    rto: 30, // Recovery Time Objective in minutes
-    rpo: 60 // Recovery Point Objective in minutes
+    mttr: 15,
+    mtbf: 720,
+    rto: 30,
+    rpo: 60
   });
 
   const getStatusColor = (status: string) => {
     switch (status) {
-    case "passed": return "text-green-500";
-    case "warning": return "text-yellow-500";
-    case "failed": return "text-red-500";
+    case "passed": return "text-success";
+    case "warning": return "text-warning";
+    case "failed": return "text-destructive";
     default: return "text-muted-foreground";
     }
   };
 
   const getStatusBadge = (status: string) => {
     switch (status) {
-    case "passed": return "bg-green-100 text-green-800 dark:bg-green-900/20 dark:text-green-300";
-    case "warning": return "bg-yellow-100 text-yellow-800 dark:bg-yellow-900/20 dark:text-yellow-300";
-    case "failed": return "bg-red-100 text-red-800 dark:bg-red-900/20 dark:text-red-300";
-    default: return "bg-gray-100 text-gray-800 dark:bg-gray-900/20 dark:text-gray-300";
+    case "passed": return "bg-success/10 text-success border-success/20";
+    case "warning": return "bg-warning/10 text-warning border-warning/20";
+    case "failed": return "bg-destructive/10 text-destructive border-destructive/20";
+    default: return "bg-muted text-muted-foreground border-border";
     }
   };
 
   const getAlertColor = (type: string) => {
     switch (type) {
-    case "critical": return "border-red-200 bg-red-50 dark:bg-red-900/20";
-    case "warning": return "border-yellow-200 bg-yellow-50 dark:bg-yellow-900/20";
-    case "info": return "border-blue-200 bg-blue-50 dark:bg-blue-900/20";
-    default: return "border-gray-200 bg-gray-50 dark:bg-gray-900/20";
+    case "critical": return "border-destructive/30 bg-destructive/5";
+    case "warning": return "border-warning/30 bg-warning/5";
+    case "info": return "border-primary/30 bg-primary/5";
+    default: return "border-border bg-muted/50";
     }
   };
 
@@ -182,10 +182,10 @@ export const ContinuousTestingMonitoring: React.FC = () => {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm font-medium text-muted-foreground">Disponibilidade</p>
-                <p className="text-2xl font-bold text-green-600">{systemMetrics.currentAvailability}%</p>
+                <p className="text-2xl font-bold text-success">{systemMetrics.currentAvailability}%</p>
                 <p className="text-xs text-muted-foreground">Meta: {systemMetrics.availabilityTarget}%</p>
               </div>
-              <CheckCircle className="h-8 w-8 text-green-500" />
+              <CheckCircle className="h-8 w-8 text-success" />
             </div>
           </CardContent>
         </Card>
@@ -198,7 +198,7 @@ export const ContinuousTestingMonitoring: React.FC = () => {
                 <p className="text-2xl font-bold">{systemMetrics.mttr}min</p>
                 <p className="text-xs text-muted-foreground">Tempo Médio de Recuperação</p>
               </div>
-              <Clock className="h-8 w-8 text-blue-500" />
+              <Clock className="h-8 w-8 text-primary" />
             </div>
           </CardContent>
         </Card>
@@ -211,7 +211,7 @@ export const ContinuousTestingMonitoring: React.FC = () => {
                 <p className="text-2xl font-bold">{systemMetrics.rto}min</p>
                 <p className="text-xs text-muted-foreground">Recovery Time Objective</p>
               </div>
-              <Zap className="h-8 w-8 text-orange-500" />
+              <Zap className="h-8 w-8 text-warning" />
             </div>
           </CardContent>
         </Card>
@@ -224,7 +224,7 @@ export const ContinuousTestingMonitoring: React.FC = () => {
                 <p className="text-2xl font-bold">{systemMetrics.rpo}min</p>
                 <p className="text-xs text-muted-foreground">Recovery Point Objective</p>
               </div>
-              <Activity className="h-8 w-8 text-purple-500" />
+              <Activity className="h-8 w-8 text-accent-foreground" />
             </div>
           </CardContent>
         </Card>
@@ -302,28 +302,28 @@ export const ContinuousTestingMonitoring: React.FC = () => {
                       </div>
 
                       {test.status === "failed" && (
-                        <div className="p-3 bg-red-50 dark:bg-red-900/20 rounded-lg border border-red-200 dark:border-red-800">
+                        <div className="p-3 bg-destructive/5 rounded-lg border border-destructive/20">
                           <div className="flex items-center gap-2 mb-2">
-                            <XCircle className="w-4 h-4 text-red-600" />
-                            <span className="font-medium text-red-800 dark:text-red-200">
+                            <XCircle className="w-4 h-4 text-destructive" />
+                            <span className="font-medium text-destructive">
                               Ação Requerida
                             </span>
                           </div>
-                          <p className="text-sm text-red-700 dark:text-red-300">
+                          <p className="text-sm text-destructive/80">
                             Teste falhou na última execução. Revisar logs e implementar correções.
                           </p>
                         </div>
                       )}
 
                       {test.status === "warning" && (
-                        <div className="p-3 bg-yellow-50 dark:bg-yellow-900/20 rounded-lg border border-yellow-200 dark:border-yellow-800">
+                        <div className="p-3 bg-warning/5 rounded-lg border border-warning/20">
                           <div className="flex items-center gap-2 mb-2">
-                            <AlertTriangle className="w-4 h-4 text-yellow-600" />
-                            <span className="font-medium text-yellow-800 dark:text-yellow-200">
+                            <AlertTriangle className="w-4 h-4 text-warning" />
+                            <span className="font-medium text-warning">
                               Atenção
                             </span>
                           </div>
-                          <p className="text-sm text-yellow-700 dark:text-yellow-300">
+                          <p className="text-sm text-warning/80">
                             Teste passou com observações. Monitorar próximas execuções.
                           </p>
                         </div>
@@ -442,25 +442,38 @@ export const ContinuousTestingMonitoring: React.FC = () => {
                   </div>
 
                   <div className="space-y-3 mt-6">
-                    <h4 className="font-medium">Esta Semana</h4>
-                    <div className="space-y-2">
-                      <div className="flex justify-between items-center p-3 border rounded-lg">
+                    <div className="flex items-center justify-between p-3 border rounded-lg">
+                      <div className="flex items-center gap-3">
+                        <TestTube className="w-5 h-5 text-primary" />
                         <div>
-                          <span className="font-medium">Backup Completo</span>
+                          <p className="font-medium">Teste de Backup Semanal</p>
                           <p className="text-sm text-muted-foreground">Domingo, 03:00</p>
                         </div>
-                        <Badge className="bg-blue-100 text-blue-800 dark:bg-blue-900/20 dark:text-blue-300">
+                        <Badge className="bg-primary/10 text-primary border-primary/20">
                           Agendado
                         </Badge>
                       </div>
-                      <div className="flex justify-between items-center p-3 border rounded-lg">
+                    </div>
+                    <div className="flex items-center justify-between p-3 border rounded-lg">
+                      <div className="flex items-center gap-3">
+                        <Shield className="w-5 h-5 text-warning" />
                         <div>
-                          <span className="font-medium">Teste de Segurança</span>
+                          <p className="font-medium">Teste de Segurança</p>
                           <p className="text-sm text-muted-foreground">Quarta, 16:00</p>
                         </div>
-                        <Badge className="bg-orange-100 text-orange-800 dark:bg-orange-900/20 dark:text-orange-300">
-                          Reexecução
+                        <Badge className="bg-warning/10 text-warning border-warning/20">
+                          Prioritário
                         </Badge>
+                      </div>
+                    </div>
+                    <div className="flex items-center justify-between p-3 border rounded-lg">
+                      <div className="flex items-center gap-3">
+                        <RefreshCw className="w-5 h-5 text-accent-foreground" />
+                        <div>
+                          <p className="font-medium">Simulação de Failover</p>
+                          <p className="text-sm text-muted-foreground">20/01, 14:30</p>
+                        </div>
+                        <Badge variant="secondary">Quinzenal</Badge>
                       </div>
                     </div>
                   </div>
@@ -474,64 +487,57 @@ export const ContinuousTestingMonitoring: React.FC = () => {
           <div className="space-y-4">
             <h3 className="text-lg font-semibold">Relatórios de Continuidade</h3>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
               <Card>
                 <CardHeader>
-                  <CardTitle>Relatórios Automáticos</CardTitle>
+                  <CardTitle>Tendência de Disponibilidade</CardTitle>
                 </CardHeader>
-                <CardContent className="space-y-4">
-                  <div className="space-y-3">
-                    <div className="flex justify-between items-center p-3 border rounded-lg">
-                      <div>
-                        <span className="font-medium">Relatório Semanal de DRP</span>
-                        <p className="text-sm text-muted-foreground">Enviado toda segunda-feira</p>
+                <CardContent>
+                  <div className="space-y-4">
+                    {[
+                      { month: "Outubro", value: 99.95 },
+                      { month: "Novembro", value: 99.97 },
+                      { month: "Dezembro", value: 99.92 },
+                      { month: "Janeiro", value: 99.98 }
+                    ].map((item) => (
+                      <div key={item.month}>
+                        <div className="flex justify-between mb-1">
+                          <span className="text-sm">{item.month}</span>
+                          <span className="text-sm font-medium">{item.value}%</span>
+                        </div>
+                        <Progress value={item.value} className="h-2" />
                       </div>
-                      <Button size="sm" variant="outline">
-                        <Eye className="w-4 h-4 mr-2" />
-                        Visualizar
-                      </Button>
-                    </div>
-                    <div className="flex justify-between items-center p-3 border rounded-lg">
-                      <div>
-                        <span className="font-medium">Dashboard Executivo</span>
-                        <p className="text-sm text-muted-foreground">Métricas consolidadas mensais</p>
-                      </div>
-                      <Button size="sm" variant="outline">
-                        <Eye className="w-4 h-4 mr-2" />
-                        Visualizar
-                      </Button>
-                    </div>
-                    <div className="flex justify-between items-center p-3 border rounded-lg">
-                      <div>
-                        <span className="font-medium">Análise de Tendências</span>
-                        <p className="text-sm text-muted-foreground">Relatório trimestral</p>
-                      </div>
-                      <Button size="sm" variant="outline">
-                        <Eye className="w-4 h-4 mr-2" />
-                        Visualizar
-                      </Button>
-                    </div>
+                    ))}
                   </div>
                 </CardContent>
               </Card>
 
               <Card>
                 <CardHeader>
-                  <CardTitle>Métricas de Performance</CardTitle>
+                  <CardTitle>Resumo de Testes</CardTitle>
                 </CardHeader>
                 <CardContent>
                   <div className="space-y-4">
-                    <div className="text-center p-4 border rounded-lg">
-                      <div className="text-2xl font-bold text-green-600">99.98%</div>
-                      <div className="text-sm text-muted-foreground">Disponibilidade (30 dias)</div>
+                    <div className="flex items-center justify-between p-3 bg-success/5 rounded-lg">
+                      <div className="flex items-center gap-2">
+                        <CheckCircle className="w-5 h-5 text-success" />
+                        <span className="font-medium">Testes Aprovados</span>
+                      </div>
+                      <span className="text-2xl font-bold text-success">3</span>
                     </div>
-                    <div className="text-center p-4 border rounded-lg">
-                      <div className="text-2xl font-bold text-blue-600">96.2%</div>
-                      <div className="text-sm text-muted-foreground">Taxa de Sucesso dos Testes</div>
+                    <div className="flex items-center justify-between p-3 bg-warning/5 rounded-lg">
+                      <div className="flex items-center gap-2">
+                        <AlertTriangle className="w-5 h-5 text-warning" />
+                        <span className="font-medium">Com Observações</span>
+                      </div>
+                      <span className="text-2xl font-bold text-warning">1</span>
                     </div>
-                    <div className="text-center p-4 border rounded-lg">
-                      <div className="text-2xl font-bold text-purple-600">15min</div>
-                      <div className="text-sm text-muted-foreground">MTTR Médio</div>
+                    <div className="flex items-center justify-between p-3 bg-destructive/5 rounded-lg">
+                      <div className="flex items-center gap-2">
+                        <XCircle className="w-5 h-5 text-destructive" />
+                        <span className="font-medium">Testes Falhados</span>
+                      </div>
+                      <span className="text-2xl font-bold text-destructive">1</span>
                     </div>
                   </div>
                 </CardContent>

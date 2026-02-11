@@ -34,6 +34,13 @@ export interface DroneTelemetryPoint {
   timestamp?: string;
 }
 
+interface DroneAlert {
+  type: string;
+  message: string;
+  severity: string;
+  timestamp?: string;
+}
+
 export interface DroneTelemetryData extends DroneTelemetryPoint {
   missionId?: string;
   droneId: string;
@@ -43,13 +50,49 @@ export interface DroneTelemetryData extends DroneTelemetryPoint {
   cameraStatus?: string;
   sonarStatus?: string;
   systemHealth?: string;
-  alerts?: any[];
+  alerts?: DroneAlert[];
 }
 
+interface DroneMissionRow {
+  id: string;
+  mission_name: string;
+  drone_id: string;
+  mission_type: string;
+  planned_waypoints: unknown;
+  actual_trajectory: unknown;
+  start_time: string | null;
+  end_time: string | null;
+  max_depth_meters: number | null;
+  mission_objectives: string | null;
+  status: string;
+  completion_percentage: number;
+  user_id: string | null;
+}
+
+interface DroneTelemetryRow {
+  mission_id: string | null;
+  drone_id: string;
+  timestamp: string;
+  position_x: number | null;
+  position_y: number | null;
+  position_z: number | null;
+  depth_meters: number | null;
+  heading_degrees: number | null;
+  pitch_degrees: number | null;
+  roll_degrees: number | null;
+  battery_percentage: number | null;
+  water_temperature_celsius: number | null;
+  pressure_bar: number | null;
+  velocity_mps?: number | null;
+  camera_status?: string | null;
+  sonar_status?: string | null;
+  system_health?: string | null;
+  alerts?: unknown;
+  [key: string]: unknown;
+}
+
+
 class DroneMissionService {
-  /**
-   * Create a new drone mission
-   */
   async createMission(mission: DroneMission): Promise<DroneMission> {
     try {
       logger.info("Creating drone mission", { missionName: mission.missionName });
@@ -74,22 +117,19 @@ class DroneMissionService {
 
       if (error) throw error;
 
-      return this.mapMissionFromDB(data);
+      return this.mapMissionFromDB(data as DroneMissionRow);
     } catch (error) {
       logger.error("Failed to create mission", error);
       throw error;
     }
   }
 
-  /**
-   * Update mission status and progress
-   */
   async updateMission(
     missionId: string,
     updates: Partial<DroneMission>
   ): Promise<void> {
     try {
-      const dbUpdates: any = {};
+      const dbUpdates: Record<string, unknown> = {};
       
       if (updates.status) dbUpdates.status = updates.status;
       if (updates.completionPercentage !== undefined) {
@@ -112,9 +152,6 @@ class DroneMissionService {
     }
   }
 
-  /**
-   * Get active missions
-   */
   async getActiveMissions(userId?: string): Promise<DroneMission[]> {
     try {
       let query = supabase
@@ -131,16 +168,13 @@ class DroneMissionService {
 
       if (error) throw error;
 
-      return data.map(this.mapMissionFromDB);
+      return (data as DroneMissionRow[]).map((row) => this.mapMissionFromDB(row));
     } catch (error) {
       logger.error("Failed to get active missions", error);
       return [];
     }
   }
 
-  /**
-   * Get mission by ID
-   */
   async getMission(missionId: string): Promise<DroneMission | null> {
     try {
       const { data, error } = await supabase
@@ -151,16 +185,13 @@ class DroneMissionService {
 
       if (error) throw error;
 
-      return this.mapMissionFromDB(data);
+      return this.mapMissionFromDB(data as DroneMissionRow);
     } catch (error) {
       logger.error("Failed to get mission", error);
       return null;
     }
   }
 
-  /**
-   * Log drone telemetry data
-   */
   async logTelemetry(telemetry: DroneTelemetryData): Promise<void> {
     try {
       const { error } = await supabase.from("drone_telemetry").insert({
@@ -187,13 +218,9 @@ class DroneMissionService {
       if (error) throw error;
     } catch (error) {
       logger.error("Failed to log telemetry", error);
-      // Don't throw - telemetry logging shouldn't break the application
     }
   }
 
-  /**
-   * Get telemetry for a mission
-   */
   async getMissionTelemetry(
     missionId: string,
     limit = 1000
@@ -208,16 +235,13 @@ class DroneMissionService {
 
       if (error) throw error;
 
-      return data.map(this.mapTelemetryFromDB);
+      return (data as DroneTelemetryRow[]).map((row) => this.mapTelemetryFromDB(row));
     } catch (error) {
       logger.error("Failed to get mission telemetry", error);
       return [];
     }
   }
 
-  /**
-   * Get recent telemetry for a drone
-   */
   async getRecentTelemetry(
     droneId: string,
     limit = 100
@@ -232,16 +256,13 @@ class DroneMissionService {
 
       if (error) throw error;
 
-      return data.map(this.mapTelemetryFromDB);
+      return (data as DroneTelemetryRow[]).map((row) => this.mapTelemetryFromDB(row));
     } catch (error) {
       logger.error("Failed to get recent telemetry", error);
       return [];
     }
   }
 
-  /**
-   * Start mission (update status to in_progress and set start_time)
-   */
   async startMission(missionId: string): Promise<void> {
     try {
       const { error } = await supabase
@@ -261,9 +282,6 @@ class DroneMissionService {
     }
   }
 
-  /**
-   * Complete mission
-   */
   async completeMission(missionId: string): Promise<void> {
     try {
       const { error } = await supabase
@@ -284,50 +302,44 @@ class DroneMissionService {
     }
   }
 
-  /**
-   * Map database record to DroneMission
-   */
-  private mapMissionFromDB(data: any): DroneMission {
+  private mapMissionFromDB(data: DroneMissionRow): DroneMission {
     return {
       id: data.id,
       missionName: data.mission_name,
       droneId: data.drone_id,
-      missionType: data.mission_type,
-      plannedWaypoints: data.planned_waypoints,
-      actualTrajectory: data.actual_trajectory,
-      startTime: data.start_time,
-      endTime: data.end_time,
-      maxDepthMeters: data.max_depth_meters,
-      missionObjectives: data.mission_objectives,
-      status: data.status,
+      missionType: data.mission_type as DroneMission["missionType"],
+      plannedWaypoints: data.planned_waypoints as DroneTelemetryPoint[],
+      actualTrajectory: data.actual_trajectory as DroneTelemetryPoint[] | undefined,
+      startTime: data.start_time ?? undefined,
+      endTime: data.end_time ?? undefined,
+      maxDepthMeters: data.max_depth_meters ?? undefined,
+      missionObjectives: data.mission_objectives ?? undefined,
+      status: data.status as DroneMission["status"],
       completionPercentage: data.completion_percentage,
-      userId: data.user_id,
+      userId: data.user_id ?? undefined,
     };
   }
 
-  /**
-   * Map database record to DroneTelemetryData
-   */
-  private mapTelemetryFromDB(data: any): DroneTelemetryData {
+  private mapTelemetryFromDB(data: DroneTelemetryRow): DroneTelemetryData {
     return {
-      missionId: data.mission_id,
+      missionId: data.mission_id ?? undefined,
       droneId: data.drone_id,
       timestamp: data.timestamp,
-      x: data.position_x,
-      y: data.position_y,
-      z: data.position_z,
-      depth: data.depth_meters,
-      heading: data.heading_degrees,
-      pitch: data.pitch_degrees,
-      roll: data.roll_degrees,
-      battery: data.battery_percentage,
-      waterTemperature: data.water_temperature_celsius,
-      pressure: data.pressure_bar,
-      velocity: data.velocity_mps,
-      cameraStatus: data.camera_status,
-      sonarStatus: data.sonar_status,
-      systemHealth: data.system_health,
-      alerts: data.alerts,
+      x: data.position_x ?? undefined,
+      y: data.position_y ?? undefined,
+      z: data.position_z ?? undefined,
+      depth: data.depth_meters ?? undefined,
+      heading: data.heading_degrees ?? undefined,
+      pitch: data.pitch_degrees ?? undefined,
+      roll: data.roll_degrees ?? undefined,
+      battery: data.battery_percentage ?? undefined,
+      waterTemperature: data.water_temperature_celsius ?? undefined,
+      pressure: data.pressure_bar ?? undefined,
+      velocity: data.velocity_mps ?? undefined,
+      cameraStatus: data.camera_status ?? undefined,
+      sonarStatus: data.sonar_status ?? undefined,
+      systemHealth: data.system_health ?? undefined,
+      alerts: data.alerts as DroneAlert[] | undefined,
     };
   }
 }
