@@ -44,8 +44,8 @@ export function AIAuditTrail() {
       ["ID", "Input", "Resposta", "Modelo", "Confiança", "Tempo(ms)", "Data"].join(","),
       ...auditLogs.map((log: Record<string, unknown>) => [
         log.id,
-        `"${(log.user_input || "").replace(/"/g, '""')}"`,
-        `"${(log.ai_response || "").slice(0, 100).replace(/"/g, '""')}"`,
+        `"${(String(log.user_input ?? "")).replace(/"/g, '""')}"`,
+        `"${(String(log.ai_response ?? "")).slice(0, 100).replace(/"/g, '""')}"`,
         log.model_version || "",
         log.confidence_score || "",
         log.response_time_ms || "",
