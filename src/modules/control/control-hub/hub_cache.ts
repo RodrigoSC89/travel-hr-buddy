@@ -118,8 +118,7 @@ export class HubCache {
       if (!data) return [];
       
       const parsed = JSON.parse(data);
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any -- JSON.parse returns any
-      return parsed.map((entry: any) => ({
+      return parsed.map((entry: { timestamp: string; [key: string]: unknown }) => ({
         ...entry,
         timestamp: new Date(entry.timestamp),
       }));

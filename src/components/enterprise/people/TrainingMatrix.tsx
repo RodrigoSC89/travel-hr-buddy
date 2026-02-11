@@ -104,13 +104,12 @@ export function TrainingMatrix() {
           .limit(10);
 
         if (courses && courses.length > 0) {
-          // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Supabase metadata JSONB has dynamic shape
-          setTrainings(courses.map((c: any) => ({
+          setTrainings(courses.map((c) => ({
             id: c.id,
             name: c.course_name,
-            code: c.metadata?.code || "N/A",
+            code: String((c.metadata as Record<string, unknown> | null)?.code || "N/A"),
             category: "STCW" as const,
-            duration: `${c.metadata?.duration_days || 5} days`,
+            duration: `${Number((c.metadata as Record<string, unknown> | null)?.duration_days) || 5} days`,
             validity: 60,
             isMandatory: true
           })));

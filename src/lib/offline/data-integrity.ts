@@ -40,7 +40,7 @@ class DataIntegrity {
   /**
    * Generate checksum for data
    */
-  generateChecksum(data: any): string {
+  generateChecksum(data: unknown): string {
     const str = JSON.stringify(data);
     
     if (this.config.checksumAlgorithm === 'simple') {
@@ -76,7 +76,7 @@ class DataIntegrity {
   /**
    * Create integrity check for an operation
    */
-  createCheck(table: string, operation: string, data: any): IntegrityCheck {
+  createCheck(table: string, operation: string, data: unknown): IntegrityCheck {
     const check: IntegrityCheck = {
       id: `check-${Date.now()}-${crypto.randomUUID().slice(0, 9)}`,
       table,
@@ -96,7 +96,7 @@ class DataIntegrity {
   /**
    * Verify data against checksum
    */
-  verifyChecksum(checkId: string, data: any): boolean {
+  verifyChecksum(checkId: string, data: unknown): boolean {
     const check = this.checks.get(checkId);
     
     if (!check) {
@@ -217,7 +217,7 @@ export const dataIntegrity = new DataIntegrity();
 /**
  * Validate data structure
  */
-export function validateDataStructure(data: any, schema: Record<string, string>): string[] {
+export function validateDataStructure(data: Record<string, unknown>, schema: Record<string, string>): string[] {
   const errors: string[] = [];
 
   for (const [field, type] of Object.entries(schema)) {
@@ -237,7 +237,7 @@ export function validateDataStructure(data: any, schema: Record<string, string>)
 /**
  * Sanitize data for sync
  */
-export function sanitizeForSync(data: any): any {
+export function sanitizeForSync(data: unknown): unknown {
   if (data === null || data === undefined) return data;
   
   if (Array.isArray(data)) {
@@ -245,7 +245,7 @@ export function sanitizeForSync(data: any): any {
   }
   
   if (typeof data === 'object') {
-    const sanitized: Record<string, any> = {};
+    const sanitized: Record<string, unknown> = {};
     
     for (const [key, value] of Object.entries(data)) {
       // Remove internal fields

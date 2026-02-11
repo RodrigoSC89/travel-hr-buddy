@@ -137,20 +137,19 @@ export function useSafetyData() {
         .limit(50);
 
       if (!error && dpIncidents && dpIncidents.length > 0) {
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any -- DP incidents dynamic row
-        const mappedIncidents: SafetyIncident[] = dpIncidents.map((inc: any) => ({
+        const mappedIncidents: SafetyIncident[] = dpIncidents.map((inc) => ({
           id: inc.id,
-          type: inc.severity === 'critical' ? 'incident' : 'near_miss',
+          type: (inc.severity === 'critical' ? 'incident' : 'near_miss') as SafetyIncident['type'],
           title: inc.title,
-          description: inc.summary || inc.title,
-          vessel_name: inc.vessel || 'N/A',
-          location: inc.location || 'N/A',
+          description: String(inc.summary || inc.title),
+          vessel_name: String(inc.vessel || 'N/A'),
+          location: String(inc.location || 'N/A'),
           incident_date: inc.incident_date,
-          severity: inc.severity || 'medium',
+          severity: (inc.severity || 'medium') as SafetyIncident['severity'],
           status: 'investigating' as const,
-          root_cause: inc.root_cause,
-          created_at: inc.created_at,
-          updated_at: inc.updated_at || inc.created_at,
+          root_cause: inc.root_cause || undefined,
+          created_at: inc.created_at || new Date().toISOString(),
+          updated_at: String(inc.updated_at || inc.created_at || new Date().toISOString()),
         }));
         setIncidents(mappedIncidents);
       }

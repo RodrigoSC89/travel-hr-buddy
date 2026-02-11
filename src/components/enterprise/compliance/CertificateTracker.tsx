@@ -57,7 +57,7 @@ export function CertificateTracker() {
       try {
         const { data, error } = await supabase
           .from("certificates")
-          .select("*, vessels(name)")
+          .select("*")
           .order("expiry_date", { ascending: true })
           .limit(100);
 
@@ -68,8 +68,7 @@ export function CertificateTracker() {
         }
 
         const now = new Date();
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Supabase join returns dynamic shape
-        const mapped: Certificate[] = (data || []).map((c: any) => {
+        const mapped: Certificate[] = (data || []).map((c) => {
           const expiry = c.expiry_date ? new Date(c.expiry_date) : new Date(Date.now() + 365 * 86400000);
           const issue = c.issue_date ? new Date(c.issue_date) : new Date(c.created_at || Date.now());
           const daysRemaining = Math.ceil((expiry.getTime() - now.getTime()) / 86400000);
@@ -77,10 +76,10 @@ export function CertificateTracker() {
 
           return {
             id: String(c.id),
-            name: String(c.certificate_name || c.name || c.type || "Certificate"),
-            type: String(c.certificate_type || c.type || "N/A"),
-            vesselName: String(c.vessels?.name || "N/A"),
-            issuingAuthority: String(c.issuing_authority || c.issued_by || "N/A"),
+            name: String(c.certificate_number || c.certificate_type || "Certificate"),
+            type: String(c.certificate_type || "N/A"),
+            vesselName: "N/A",
+            issuingAuthority: String(c.issuing_authority || "N/A"),
             issueDate: issue.toISOString().split("T")[0],
             expiryDate: expiry.toISOString().split("T")[0],
             status,

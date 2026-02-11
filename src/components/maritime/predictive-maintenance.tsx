@@ -284,10 +284,10 @@ export const PredictiveMaintenanceSystem: React.FC = () => {
                   })
                   .map((item) => (
                     <Card key={item.id} className={`border-l-4 ${
-                      item.priority === "critical" || item.status === "overdue" ? "border-l-red-600" :
-                        item.priority === "high" ? "border-l-orange-600" :
-                          item.priority === "medium" ? "border-l-yellow-600" :
-                            "border-l-green-600"
+                      item.priority === "critical" || item.status === "overdue" ? "border-l-destructive" :
+                        item.priority === "high" ? "border-l-warning" :
+                          item.priority === "medium" ? "border-l-accent" :
+                            "border-l-success"
                     }`}>
                       <CardHeader>
                         <div className="flex items-start justify-between">
@@ -335,15 +335,15 @@ export const PredictiveMaintenanceSystem: React.FC = () => {
                         {/* Predictive Failure Alert */}
                         {item.predictedFailure && (
                           <div className={`p-3 rounded-lg ${
-                            item.predictedFailure.probability >= 90 ? "bg-red-50 dark:bg-red-950" :
-                              item.predictedFailure.probability >= 75 ? "bg-orange-50 dark:bg-orange-950" :
-                                "bg-yellow-50 dark:bg-yellow-950"
+                            item.predictedFailure.probability >= 90 ? "bg-destructive/10" :
+                              item.predictedFailure.probability >= 75 ? "bg-warning/10" :
+                                "bg-accent/10"
                           }`}>
                             <div className="flex items-start gap-2">
                               <AlertCircle className={`h-5 w-5 mt-0.5 ${
-                                item.predictedFailure.probability >= 90 ? "text-red-600" :
-                                  item.predictedFailure.probability >= 75 ? "text-orange-600" :
-                                    "text-yellow-600"
+                                item.predictedFailure.probability >= 90 ? "text-destructive" :
+                                  item.predictedFailure.probability >= 75 ? "text-warning" :
+                                    "text-accent"
                               }`} />
                               <div className="flex-1">
                                 <div className="font-medium text-sm">Previsão de Falha</div>

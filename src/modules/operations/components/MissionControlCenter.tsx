@@ -285,7 +285,7 @@ export default function MissionControlCenter() {
                     {/* Stats Grid */}
                     <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
                       <div className="p-3 rounded-lg border text-center">
-                        <Compass className="h-5 w-5 mx-auto mb-1 text-blue-500" />
+                        <Compass className="h-5 w-5 mx-auto mb-1 text-info" />
                         <p className="text-lg font-bold">{effectiveSelected.currentSpeed} kn</p>
                         <p className="text-xs text-muted-foreground">Velocidade</p>
                       </div>
@@ -300,7 +300,7 @@ export default function MissionControlCenter() {
                         <p className="text-xs text-muted-foreground">Tripulação</p>
                       </div>
                       <div className="p-3 rounded-lg border text-center">
-                        <Ship className="h-5 w-5 mx-auto mb-1 text-purple-500" />
+                        <Ship className="h-5 w-5 mx-auto mb-1 text-accent" />
                         <p className="text-lg font-bold">{effectiveSelected.cargoTonnage.toLocaleString()}</p>
                         <p className="text-xs text-muted-foreground">Toneladas</p>
                       </div>
@@ -351,7 +351,7 @@ export default function MissionControlCenter() {
                                     Planejado: {formatDateTime(milestone.plannedTime)}
                                   </p>
                                   {milestone.actualTime && (
-                                    <p className="text-sm text-green-500">
+                                    <p className="text-sm text-success">
                                       Real: {formatDateTime(milestone.actualTime)}
                                     </p>
                                   )}
@@ -386,9 +386,9 @@ export default function MissionControlCenter() {
                             key={alert.id}
                             className={cn(
                               "p-4 rounded-lg border-l-4",
-                              alert.severity === "critical" ? "border-l-red-500 bg-red-500/5" :
-                              alert.severity === "warning" ? "border-l-yellow-500 bg-yellow-500/5" :
-                              "border-l-blue-500 bg-blue-500/5"
+                              alert.severity === "critical" ? "border-l-destructive bg-destructive/5" :
+                              alert.severity === "warning" ? "border-l-warning bg-warning/5" :
+                              "border-l-info bg-info/5"
                             )}
                           >
                             <div className="flex items-start justify-between">
@@ -401,7 +401,7 @@ export default function MissionControlCenter() {
                                     {alert.type.toUpperCase()}
                                   </Badge>
                                   {alert.acknowledged && (
-                                    <Badge variant="outline" className="text-green-500">
+                                    <Badge variant="outline" className="text-success">
                                       <CheckCircle2 className="h-3 w-3 mr-1" />
                                       Reconhecido
                                     </Badge>
