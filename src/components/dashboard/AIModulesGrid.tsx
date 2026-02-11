@@ -126,9 +126,9 @@ const categories = [
 const ModuleCard = memo(({ module, onClick }: { module: AIModule; onClick: () => void }) => {
   const getStatusColor = (status: string) => {
     switch (status) {
-      case 'active': return 'bg-green-500/20 text-green-500 border-green-500/30';
-      case 'standby': return 'bg-yellow-500/20 text-yellow-500 border-yellow-500/30';
-      default: return 'bg-blue-500/20 text-blue-500 border-blue-500/30';
+      case 'active': return 'bg-success/20 text-success border-success/30';
+      case 'standby': return 'bg-warning/20 text-warning border-warning/30';
+      default: return 'bg-primary/20 text-primary border-primary/30';
     }
   };
 

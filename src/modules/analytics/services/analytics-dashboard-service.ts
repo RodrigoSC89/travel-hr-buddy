@@ -4,6 +4,10 @@
 
 import { supabase } from "@/integrations/supabase/client";
 import { logger } from '@/lib/logger';
+import type { Database, Json } from "@/integrations/supabase/types";
+
+type DashboardRow = Database['public']['Tables']['analytics_dashboards']['Row'];
+type EventRow = Database['public']['Tables']['analytics_events']['Row'];
 
 export interface AnalyticsDashboard {
   id?: string;
@@ -52,7 +56,7 @@ export class AnalyticsDashboardService {
         .from("analytics_dashboards")
         .insert({
           organization_id: dashboard.organizationId,
-          dashboard_name: dashboard.dashboardName,
+          name: dashboard.dashboardName,
           description: dashboard.description,
           layout: dashboard.layout,
           is_public: dashboard.isPublic || false
@@ -140,21 +144,19 @@ export class AnalyticsDashboardService {
     try {
       const { data: { user } } = await supabase.auth.getUser();
 
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any -- dynamic insert
-      await (supabase as any)
+      await supabase
         .from("analytics_events")
-        .insert({
+        .insert([{
           user_id: user?.id,
-          organization_id: event.organizationId,
           session_id: event.sessionId,
           event_name: event.eventName,
           event_category: event.eventCategory,
-          properties: event.properties,
+          properties: event.properties as unknown as Json,
           page_url: event.pageUrl,
           device_type: event.deviceType,
           browser: event.browser,
           os: event.os
-        });
+        }]);
     } catch (error) {
       logger.error("Error tracking event:", error);
     }
@@ -188,36 +190,33 @@ export class AnalyticsDashboardService {
     }
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Supabase dynamic query result
-  private mapToDashboard(data: any): AnalyticsDashboard {
+  private mapToDashboard(data: DashboardRow): AnalyticsDashboard {
     return {
       id: data.id,
-      userId: data.user_id,
-      organizationId: data.organization_id,
-      dashboardName: data.dashboard_name,
-      description: data.description,
-      layout: data.layout || [],
-      isPublic: data.is_public,
-      createdAt: data.created_at,
-      updatedAt: data.updated_at
+      userId: data.user_id ?? undefined,
+      organizationId: data.organization_id ?? undefined,
+      dashboardName: data.name,
+      description: data.description ?? undefined,
+      layout: (data.layout as unknown as DashboardWidget[]) || [],
+      isPublic: data.is_public ?? undefined,
+      createdAt: data.created_at ?? undefined,
+      updatedAt: data.updated_at ?? undefined
     };
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Supabase dynamic query result
-  private mapToEvent(data: any): AnalyticsEvent {
+  private mapToEvent(data: EventRow): AnalyticsEvent {
     return {
       id: data.id,
-      userId: data.user_id,
-      organizationId: data.organization_id,
-      sessionId: data.session_id,
+      userId: data.user_id ?? undefined,
+      sessionId: data.session_id ?? '',
       eventName: data.event_name,
-      eventCategory: data.event_category,
-      properties: data.properties || {},
-      pageUrl: data.page_url,
-      timestamp: data.timestamp,
-      deviceType: data.device_type,
-      browser: data.browser,
-      os: data.os
+      eventCategory: data.event_category ?? '',
+      properties: (data.properties as Record<string, unknown>) || {},
+      pageUrl: data.page_url ?? '',
+      timestamp: data.timestamp ?? undefined,
+      deviceType: data.device_type ?? undefined,
+      browser: data.browser ?? undefined,
+      os: data.os ?? undefined
     };
   }
 }

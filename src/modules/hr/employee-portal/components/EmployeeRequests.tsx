@@ -65,7 +65,7 @@ export function EmployeeRequests() {
         .from("employee_requests")
         .select("*")
         .eq("user_id", user.id)
-        .order("created_at", { ascending: false }) as any;
+        .order("created_at", { ascending: false });
 
       if (error) throw error;
       return (data || []) as EmployeeRequest[];
@@ -77,7 +77,7 @@ export function EmployeeRequests() {
       const { data: { user } } = await supabase.auth.getUser();
       if (!user) throw new Error("Not authenticated");
 
-      const metadata: any = {};
+      const metadata: Record<string, string> = {};
       if (requestType === "vacation") {
         metadata.start_date = startDate;
         metadata.end_date = endDate;
@@ -98,7 +98,7 @@ export function EmployeeRequests() {
           description,
           status: "pending",
           metadata,
-        } as any)
+        } as never)
         .select()
         .single();
 

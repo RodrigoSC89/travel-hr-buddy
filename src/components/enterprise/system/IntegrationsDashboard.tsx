@@ -151,11 +151,11 @@ const syncLogs = [
 
 const getStatusConfig = (status: string) => {
   switch (status) {
-    case "connected": return { color: "bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400", icon: CheckCircle2, label: "Conectado" };
-    case "disconnected": return { color: "bg-gray-100 text-gray-800 dark:bg-gray-800 dark:text-gray-400", icon: XCircle, label: "Desconectado" };
-    case "error": return { color: "bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400", icon: AlertTriangle, label: "Erro" };
-    case "syncing": return { color: "bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-400", icon: RefreshCw, label: "Sincronizando" };
-    default: return { color: "bg-gray-100 text-gray-800", icon: Plug, label: status };
+    case "connected": return { color: "bg-success/10 text-success", icon: CheckCircle2, label: "Conectado" };
+    case "disconnected": return { color: "bg-muted text-muted-foreground", icon: XCircle, label: "Desconectado" };
+    case "error": return { color: "bg-destructive/10 text-destructive", icon: AlertTriangle, label: "Erro" };
+    case "syncing": return { color: "bg-primary/10 text-primary", icon: RefreshCw, label: "Sincronizando" };
+    default: return { color: "bg-muted text-muted-foreground", icon: Plug, label: status };
   }
 };
 
@@ -205,7 +205,7 @@ export function IntegrationsDashboard() {
                 <p className="text-2xl font-bold">{avgHealth}%</p>
                 <Progress value={avgHealth} className="h-2 mt-2" />
               </div>
-              <Activity className="h-8 w-8 text-green-600" />
+              <Activity className="h-8 w-8 text-success" />
             </div>
           </CardContent>
         </Card>
@@ -215,10 +215,10 @@ export function IntegrationsDashboard() {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-muted-foreground">Erros</p>
-                <p className="text-2xl font-bold text-red-600">{stats.errors}</p>
+                <p className="text-2xl font-bold text-destructive">{stats.errors}</p>
                 <p className="text-xs text-muted-foreground">Requer atenção</p>
               </div>
-              <AlertTriangle className="h-8 w-8 text-red-600" />
+              <AlertTriangle className="h-8 w-8 text-destructive" />
             </div>
           </CardContent>
         </Card>
@@ -231,7 +231,7 @@ export function IntegrationsDashboard() {
                 <p className="text-2xl font-bold">{formatNumber(stats.dataPoints)}</p>
                 <p className="text-xs text-muted-foreground">Último mês</p>
               </div>
-              <Database className="h-8 w-8 text-blue-600" />
+              <Database className="h-8 w-8 text-primary" />
             </div>
           </CardContent>
         </Card>
@@ -309,8 +309,8 @@ export function IntegrationsDashboard() {
                           <span className="text-muted-foreground">Saúde:</span>
                           <Progress value={integration.healthScore} className="w-20 h-2" />
                           <span className={`font-medium ${
-                            integration.healthScore >= 90 ? "text-green-600" :
-                            integration.healthScore >= 70 ? "text-yellow-600" : "text-red-600"
+                            integration.healthScore >= 90 ? "text-success" :
+                            integration.healthScore >= 70 ? "text-warning" : "text-destructive"
                           }`}>
                             {integration.healthScore}%
                           </span>
@@ -338,11 +338,11 @@ export function IntegrationsDashboard() {
                 <div className="flex items-start justify-between">
                   <div className="flex items-start gap-2">
                     {log.status === "success" ? (
-                      <CheckCircle2 className="h-4 w-4 text-green-600 mt-0.5" />
+                      <CheckCircle2 className="h-4 w-4 text-success mt-0.5" />
                     ) : log.status === "error" ? (
-                      <XCircle className="h-4 w-4 text-red-600 mt-0.5" />
+                      <XCircle className="h-4 w-4 text-destructive mt-0.5" />
                     ) : (
-                      <RefreshCw className="h-4 w-4 text-blue-600 mt-0.5 animate-spin" />
+                      <RefreshCw className="h-4 w-4 text-primary mt-0.5 animate-spin" />
                     )}
                     <div>
                       <p className="text-sm font-medium">{log.integration}</p>

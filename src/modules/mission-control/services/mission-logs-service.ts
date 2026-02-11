@@ -5,6 +5,10 @@
 import { supabase } from "@/integrations/supabase/client";
 import { logger } from '@/lib/logger';
 
+import type { Database, Json } from "@/integrations/supabase/types";
+
+type MissionLogRow = Database['public']['Tables']['mission_logs']['Row'];
+
 export interface MissionLog {
   id?: string;
   missionId?: string;
@@ -14,7 +18,7 @@ export interface MissionLog {
   status: "planned" | "in-progress" | "completed" | "cancelled";
   description?: string;
   location?: string;
-  metadata?: Record<string, any>;
+  metadata?: Record<string, unknown>;
   createdBy?: string;
   createdAt?: string;
   updatedAt?: string;
@@ -29,7 +33,7 @@ export class MissionLogsService {
 
       const { data, error } = await supabase
         .from("mission_logs")
-        .insert({
+        .insert([{
           mission_id: log.missionId,
           mission_name: log.missionName,
           mission_date: log.missionDate,
@@ -37,9 +41,9 @@ export class MissionLogsService {
           status: log.status,
           description: log.description,
           location: log.location,
-          metadata: log.metadata || {},
+          metadata: (log.metadata || {}) as Json,
           created_by: user.id
-        })
+        }])
         .select()
         .single();
 
@@ -53,7 +57,7 @@ export class MissionLogsService {
 
   async updateLog(id: string, log: Partial<MissionLog>): Promise<MissionLog> {
     try {
-      const updateData: any = {};
+      const updateData: Record<string, unknown> = {};
       if (log.missionName) updateData.mission_name = log.missionName;
       if (log.missionDate) updateData.mission_date = log.missionDate;
       if (log.crewMembers) updateData.crew_members = log.crewMembers;
@@ -134,20 +138,20 @@ export class MissionLogsService {
     }
   }
 
-  private mapToLog(data: any): MissionLog {
+  private mapToLog(data: MissionLogRow): MissionLog {
     return {
       id: data.id,
-      missionId: data.mission_id,
+      missionId: data.mission_id ?? undefined,
       missionName: data.mission_name,
       missionDate: data.mission_date,
       crewMembers: data.crew_members || [],
-      status: data.status,
-      description: data.description,
-      location: data.location,
-      metadata: data.metadata || {},
-      createdBy: data.created_by,
-      createdAt: data.created_at,
-      updatedAt: data.updated_at
+      status: data.status as MissionLog['status'],
+      description: data.description ?? undefined,
+      location: data.location ?? undefined,
+      metadata: (data.metadata as Record<string, unknown>) || {},
+      createdBy: data.created_by ?? undefined,
+      createdAt: data.created_at ?? undefined,
+      updatedAt: data.updated_at ?? undefined
     };
   }
 }

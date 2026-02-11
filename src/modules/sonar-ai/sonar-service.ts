@@ -6,6 +6,7 @@
 
 import { supabase } from "@/integrations/supabase/client";
 import { logger } from "@/lib/logger";
+import type { Json } from "@/integrations/supabase/types";
 
 export interface SonarInput {
   id?: string;
@@ -15,8 +16,9 @@ export interface SonarInput {
   file_size: number;
   uploaded_by?: string;
   status?: string;
-  raw_data?: any;
-  metadata?: any;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- raw sonar data has dynamic shape from sensors
+  raw_data?: Json;
+  metadata?: Json;
 }
 
 export interface SonarAnalysis {
@@ -26,9 +28,9 @@ export interface SonarAnalysis {
   analysis_type: string;
   ai_model: string;
   confidence_score: number;
-  patterns_detected?: any;
-  frequency_data?: any;
-  anomalies?: any;
+  patterns_detected?: Json;
+  frequency_data?: Json;
+  anomalies?: Json;
   recommendations?: string;
 }
 
@@ -41,7 +43,7 @@ export interface SonarAlert {
   title: string;
   description?: string;
   frequency_range?: string;
-  location?: any;
+  location?: Json;
   is_acknowledged?: boolean;
   resolved?: boolean;
 }
