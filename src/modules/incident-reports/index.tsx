@@ -114,21 +114,21 @@ const IncidentReports = () => {
 
   const getSeverityColor = (severity: string) => {
     switch (severity) {
-    case "critical": return "bg-red-500";
-    case "high": return "bg-orange-500";
-    case "medium": return "bg-yellow-500";
-    case "low": return "bg-green-500";
-    default: return "bg-gray-500";
+    case "critical": return "bg-destructive";
+    case "high": return "bg-warning";
+    case "medium": return "bg-accent";
+    case "low": return "bg-success";
+    default: return "bg-muted";
     }
   };
 
   const getStatusColor = (status: string) => {
     switch (status) {
-    case "closed": return "text-gray-600";
-    case "resolved": return "text-green-600";
-    case "under_analysis": return "text-blue-600";
-    case "pending": return "text-yellow-600";
-    default: return "text-gray-600";
+    case "closed": return "text-muted-foreground";
+    case "resolved": return "text-success";
+    case "under_analysis": return "text-primary";
+    case "pending": return "text-warning";
+    default: return "text-muted-foreground";
     }
   };
 
@@ -142,8 +142,8 @@ const IncidentReports = () => {
     return (
       <div className="container mx-auto p-6">
         <div className="animate-pulse space-y-4">
-          <div className="h-8 bg-gray-200 rounded w-1/4"></div>
-          <div className="h-64 bg-gray-200 rounded"></div>
+          <div className="h-8 bg-muted rounded w-1/4"></div>
+          <div className="h-64 bg-muted rounded"></div>
         </div>
       </div>
     );
@@ -282,7 +282,7 @@ const IncidentReports = () => {
                       <div className="flex items-center justify-between">
                         <div className="flex-1">
                           <div className="flex items-center gap-2 mb-2">
-                            <AlertTriangle className="h-4 w-4 text-red-500" />
+                            <AlertTriangle className="h-4 w-4 text-destructive" />
                             <span className="font-semibold">{incident.title}</span>
                             <Badge variant="outline">{incident.incident_number}</Badge>
                           </div>
@@ -292,7 +292,7 @@ const IncidentReports = () => {
                           </div>
                         </div>
                         <div className="flex flex-col gap-2">
-                          <Badge className={incident.severity === "critical" ? "bg-red-500/20 text-red-500" : "bg-yellow-500/20 text-yellow-500"}>
+                          <Badge className={incident.severity === "critical" ? "bg-destructive/20 text-destructive" : "bg-warning/20 text-warning"}>
                             {incident.severity}
                           </Badge>
                           <Button size="sm" variant="outline"><Eye className="h-3 w-3" /></Button>
@@ -365,7 +365,7 @@ const IncidentReports = () => {
                       <div className="flex items-center justify-between">
                         <div className="flex-1">
                           <div className="flex items-center gap-2 mb-1">
-                            <CheckCircle className="h-4 w-4 text-green-500" />
+                            <CheckCircle className="h-4 w-4 text-success" />
                             <span className="font-semibold">{incident.title}</span>
                           </div>
                           <p className="text-xs text-muted-foreground">{incident.description}</p>
@@ -374,7 +374,7 @@ const IncidentReports = () => {
                             {incident.root_cause && ` • Root cause: ${incident.root_cause.substring(0, 50)}...`}
                           </div>
                         </div>
-                        <Badge variant="outline" className="text-green-600">
+                        <Badge variant="outline" className="text-success">
                           {incident.status}
                         </Badge>
                       </div>

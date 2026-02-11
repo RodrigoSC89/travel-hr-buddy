@@ -19,28 +19,28 @@ export const FinalSystemStats: React.FC = () => {
     {
       category: "Funcionalidades Implementadas",
       stats: [
-        { label: "Módulos Completos", value: "45+", icon: CheckCircle, color: "text-green-600" },
-        { label: "Páginas Funcionais", value: "120+", icon: Star, color: "text-blue-600" },
-        { label: "Componentes UI", value: "200+", icon: Zap, color: "text-purple-600" },
-        { label: "Hooks Customizados", value: "25+", icon: Target, color: "text-orange-600" }
+        { label: "Módulos Completos", value: "45+", icon: CheckCircle, color: "text-success" },
+        { label: "Páginas Funcionais", value: "120+", icon: Star, color: "text-primary" },
+        { label: "Componentes UI", value: "200+", icon: Zap, color: "text-accent-foreground" },
+        { label: "Hooks Customizados", value: "25+", icon: Target, color: "text-warning" }
       ]
     },
     {
       category: "Qualidade e Performance",
       stats: [
-        { label: "Contraste WCAG", value: "AA+", icon: Shield, color: "text-green-600" },
-        { label: "Performance Score", value: "95%", icon: TrendingUp, color: "text-blue-600" },
-        { label: "Acessibilidade", value: "100%", icon: Users, color: "text-purple-600" },
-        { label: "SEO Score", value: "98%", icon: Globe, color: "text-orange-600" }
+        { label: "Contraste WCAG", value: "AA+", icon: Shield, color: "text-success" },
+        { label: "Performance Score", value: "95%", icon: TrendingUp, color: "text-primary" },
+        { label: "Acessibilidade", value: "100%", icon: Users, color: "text-accent-foreground" },
+        { label: "SEO Score", value: "98%", icon: Globe, color: "text-warning" }
       ]
     },
     {
       category: "Recursos Avançados",
       stats: [
-        { label: "IA Integration", value: "✓", icon: Award, color: "text-green-600" },
-        { label: "PWA Ready", value: "✓", icon: Star, color: "text-blue-600" },
-        { label: "Offline Support", value: "✓", icon: Zap, color: "text-purple-600" },
-        { label: "Real-time Sync", value: "✓", icon: Clock, color: "text-orange-600" }
+        { label: "IA Integration", value: "✓", icon: Award, color: "text-success" },
+        { label: "PWA Ready", value: "✓", icon: Star, color: "text-primary" },
+        { label: "Offline Support", value: "✓", icon: Zap, color: "text-accent-foreground" },
+        { label: "Real-time Sync", value: "✓", icon: Clock, color: "text-warning" }
       ]
     }
   ];
@@ -59,13 +59,13 @@ export const FinalSystemStats: React.FC = () => {
             Sistema completo e pronto para produção
           </CardDescription>
           <div className="flex justify-center gap-2 mt-4">
-            <Badge className="bg-green-100 text-green-800 border-green-200">
+            <Badge className="bg-success/10 text-success border-success/20">
               ✅ PRODUÇÃO READY
             </Badge>
-            <Badge className="bg-blue-100 text-blue-800 border-blue-200">
+            <Badge className="bg-primary/10 text-primary border-primary/20">
               🏆 QUALIDADE AAA
             </Badge>
-            <Badge className="bg-purple-100 text-purple-800 border-purple-200">
+            <Badge className="bg-accent/10 text-accent-foreground border-accent/20">
               🚀 INOVAÇÃO
             </Badge>
           </div>
@@ -104,14 +104,14 @@ export const FinalSystemStats: React.FC = () => {
         ))}
       </div>
 
-      <Card className="bg-gradient-to-r from-green-50 to-emerald-50 dark:from-green-900/20 dark:to-emerald-900/20 border-green-200">
+      <Card className="bg-gradient-to-r from-success/5 to-success/10 border-success/20">
         <CardContent className="pt-6">
           <div className="text-center">
             <div className="text-4xl mb-4">🎉</div>
-            <h3 className="text-2xl font-bold text-green-800 dark:text-green-200 mb-2">
+            <h3 className="text-2xl font-bold text-success mb-2">
               Sistema 100% Completo!
             </h3>
-            <p className="text-green-700 dark:text-green-300 mb-4">
+            <p className="text-success/80 mb-4">
               Todas as funcionalidades foram implementadas, testadas e validadas.
               O sistema está pronto para uso em produção.
             </p>

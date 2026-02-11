@@ -47,7 +47,7 @@ export const AlertsSystem: React.FC = () => {
           table: "performance_alerts",
         },
         (payload) => {
-          const newAlert = payload.new as any;
+          const newAlert = payload.new as PerformanceAlert;
           setAlerts((prev) => [newAlert, ...prev]);
           
           if (newAlert.severity === "critical") {
@@ -73,7 +73,7 @@ export const AlertsSystem: React.FC = () => {
         },
         (payload) => {
           setAlerts((prev) =>
-            prev.map((a) => (a.id === payload.new.id ? (payload.new as any) : a))
+            prev.map((a) => (a.id === payload.new.id ? (payload.new as PerformanceAlert) : a))
           );
         }
       )
@@ -87,19 +87,18 @@ export const AlertsSystem: React.FC = () => {
 
   const fetchAlerts = async () => {
     try {
-      const { data, error } = await supabase
-        .from("performance_alerts" as any)
+      const db = supabase.from as Function;
+      const { data, error } = await db("performance_alerts")
         .select("*")
         .eq("is_resolved", false)
         .order("created_at", { ascending: false });
 
       if (error) {
-        // Mock data if table doesn't exist
         setAlerts([]);
         setLoading(false);
         return;
       }
-      setAlerts((data as any) || []);
+      setAlerts((data as unknown as PerformanceAlert[]) || []);
     } catch (error) {
       logger.error("Error fetching alerts:", error);
       setAlerts([]);
@@ -110,8 +109,8 @@ export const AlertsSystem: React.FC = () => {
 
   const resolveAlert = async (alertId: string) => {
     try {
-      const { error } = await supabase
-        .from("performance_alerts" as any)
+      const db = supabase.from as Function;
+      const { error } = await db("performance_alerts")
         .update({ is_resolved: true, resolved_at: new Date().toISOString() })
         .eq("id", alertId);
 
@@ -166,7 +165,7 @@ export const AlertsSystem: React.FC = () => {
       <CardContent>
         {alerts.length === 0 ? (
           <div className="text-center py-8 text-muted-foreground">
-            <CheckCircle className="h-12 w-12 mx-auto mb-3 text-green-500" />
+            <CheckCircle className="h-12 w-12 mx-auto mb-3 text-success" />
             <p className="font-medium">All systems normal</p>
             <p className="text-sm">No active alerts at this time</p>
           </div>

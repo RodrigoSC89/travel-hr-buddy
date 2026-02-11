@@ -141,21 +141,21 @@ export function ActionPlanTab({ auditId }: ActionPlanTabProps) {
 
   const getStatusColor = (status: string | null) => {
     const colors: Record<string, string> = {
-      pending: "text-yellow-600",
-      in_progress: "text-blue-600",
-      completed: "text-green-600",
+      pending: "text-warning",
+      in_progress: "text-primary",
+      completed: "text-success",
     };
-    return colors[status || "pending"] || "text-gray-600";
+    return colors[status || "pending"] || "text-muted-foreground";
   };
 
   const getPriorityColor = (priority: string | null) => {
     const colors: Record<string, string> = {
-      low: "text-gray-500",
-      medium: "text-yellow-500",
-      high: "text-orange-500",
-      critical: "text-red-500",
+      low: "text-muted-foreground",
+      medium: "text-warning",
+      high: "text-accent-foreground",
+      critical: "text-destructive",
     };
-    return colors[priority || "medium"] || "text-gray-500";
+    return colors[priority || "medium"] || "text-muted-foreground";
   };
 
   const isOverdue = (dueDate: string | null) => {
@@ -306,7 +306,7 @@ export function ActionPlanTab({ auditId }: ActionPlanTabProps) {
                       </span>
                     </p>
                     {action.due_date && (
-                      <p className={isOverdue(action.due_date) ? "text-red-600 font-semibold" : ""}>
+                      <p className={isOverdue(action.due_date) ? "text-destructive font-semibold" : ""}>
                         <span className="font-semibold">Due Date:</span>{" "}
                         {new Date(action.due_date).toLocaleDateString()}
                         {isOverdue(action.due_date) && " (Overdue)"}
