@@ -295,7 +295,7 @@ export const FleetCommandCenter: React.FC = () => {
                               <Ship className="h-5 w-5" />
                               <CardTitle className="text-base">{vessel.name}</CardTitle>
                             </div>
-                            <Badge className={`${statusInfo.color} text-white`}>
+                            <Badge className={`${statusInfo.color} text-primary-foreground`}>
                               <StatusIcon className="h-3 w-3 mr-1" />
                               {statusInfo.label}
                             </Badge>
@@ -457,14 +457,14 @@ export const FleetCommandCenter: React.FC = () => {
                     }}
                   >
                     <div className={`w-4 h-4 rounded-full ${vessel.status === 'active' ? 'bg-success' : 'bg-warning'} animate-pulse`}></div>
-                    <div className="absolute -top-8 left-1/2 -translate-x-1/2 bg-black/80 text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">
+                    <div className="absolute -top-8 left-1/2 -translate-x-1/2 bg-popover text-popover-foreground text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">
                       {vessel.name}
                     </div>
                   </div>
                 ))}
                 
                 {/* Legend */}
-                <div className="absolute bottom-4 left-4 bg-black/60 text-white p-3 rounded-lg text-sm">
+                <div className="absolute bottom-4 left-4 bg-popover/90 text-popover-foreground p-3 rounded-lg text-sm">
                   <div className="flex items-center gap-2 mb-1">
                     <div className="w-3 h-3 rounded-full bg-success"></div>
                     <span>Embarcação Ativa</span>

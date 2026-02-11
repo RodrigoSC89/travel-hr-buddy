@@ -154,7 +154,7 @@ class LocalCrypto {
   /**
    * Encrypt and store in localStorage
    */
-  async encryptAndStore(key: string, data: any, password: string): Promise<void> {
+  async encryptAndStore(key: string, data: unknown, password: string): Promise<void> {
     const jsonData = JSON.stringify(data);
     const encrypted = await this.encrypt(jsonData, password);
     localStorage.setItem(`encrypted_${key}`, JSON.stringify(encrypted));
@@ -290,7 +290,7 @@ export const localCrypto = new LocalCrypto();
 
 // Secure storage wrapper
 export const secureStorage = {
-  async set(key: string, value: any, password: string): Promise<void> {
+  async set(key: string, value: unknown, password: string): Promise<void> {
     await localCrypto.encryptAndStore(key, value, password);
   },
 
@@ -302,7 +302,7 @@ export const secureStorage = {
     localCrypto.removeEncrypted(key);
   },
 
-  async setWithPin(key: string, value: any, pin: string): Promise<void> {
+  async setWithPin(key: string, value: unknown, pin: string): Promise<void> {
     // PIN-based encryption (less secure, for convenience)
     const deviceId = localCrypto.getDeviceId() || '';
     const password = `${pin}:${deviceId}`;

@@ -138,7 +138,8 @@ export const RATE_LIMITS = {
 /**
  * Rate limit middleware function
  */
-export function withRateLimit<T extends (...args: any[]) => any>(
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- generic wrapper requires flexible typing
+export function withRateLimit<T extends (...args: unknown[]) => unknown>(
   fn: T,
   config: RateLimitConfig,
   keyGenerator: (...args: Parameters<T>) => string = () => 'default'
@@ -168,5 +169,5 @@ export function useRateLimit(key: string, config: RateLimitConfig) {
 
 // Export for debugging
 if (typeof window !== 'undefined') {
-  (window as any).__NAUTILUS_RATE_LIMITER__ = rateLimiter;
+  (window as unknown as Record<string, unknown>).__NAUTILUS_RATE_LIMITER__ = rateLimiter;
 }
