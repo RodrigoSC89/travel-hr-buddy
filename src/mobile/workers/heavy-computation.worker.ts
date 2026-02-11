@@ -5,18 +5,21 @@
  * Prevents UI blocking on mobile devices
  */
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Worker generic data types must remain flexible for cross-thread serialization
+type GenericData = Record<string, unknown>;
+
 // Worker message types
 type WorkerMessage = 
-  | { type: "SORT_DATA"; payload: { data: any[]; key: string; order: "asc" | "desc" } }
-  | { type: "FILTER_DATA"; payload: { data: any[]; filters: Record<string, any> } }
-  | { type: "SEARCH_DATA"; payload: { data: any[]; query: string; fields: string[] } }
-  | { type: "AGGREGATE_DATA"; payload: { data: any[]; groupBy: string; aggregate: string } }
-  | { type: "COMPRESS_DATA"; payload: { data: any } }
+  | { type: "SORT_DATA"; payload: { data: GenericData[]; key: string; order: "asc" | "desc" } }
+  | { type: "FILTER_DATA"; payload: { data: GenericData[]; filters: Record<string, unknown> } }
+  | { type: "SEARCH_DATA"; payload: { data: GenericData[]; query: string; fields: string[] } }
+  | { type: "AGGREGATE_DATA"; payload: { data: GenericData[]; groupBy: string; aggregate: string } }
+  | { type: "COMPRESS_DATA"; payload: { data: unknown } }
   | { type: "DECOMPRESS_DATA"; payload: { compressed: string } }
-  | { type: "DIFF_DATA"; payload: { oldData: any; newData: any } };
+  | { type: "DIFF_DATA"; payload: { oldData: unknown; newData: unknown } };
 
 type WorkerResponse = 
-  | { type: "SUCCESS"; result: any; duration: number }
+  | { type: "SUCCESS"; result: unknown; duration: number }
   | { type: "ERROR"; error: string };
 
 // Handle incoming messages
@@ -24,7 +27,7 @@ self.onmessage = async (event: MessageEvent<WorkerMessage>) => {
   const startTime = performance.now();
   
   try {
-    let result: any;
+    let result: unknown;
     
     switch (event.data.type) {
       case "SORT_DATA":
@@ -94,7 +97,7 @@ self.onmessage = async (event: MessageEvent<WorkerMessage>) => {
 };
 
 // Sort data by key
-function sortData(data: any[], key: string, order: "asc" | "desc"): any[] {
+function sortData(data: GenericData[], key: string, order: "asc" | "desc"): GenericData[] {
   return [...data].sort((a, b) => {
     const aVal = getNestedValue(a, key);
     const bVal = getNestedValue(b, key);
@@ -103,13 +106,13 @@ function sortData(data: any[], key: string, order: "asc" | "desc"): any[] {
     if (aVal === null || aVal === undefined) return 1;
     if (bVal === null || bVal === undefined) return -1;
     
-    const comparison = aVal < bVal ? -1 : 1;
+    const comparison = (aVal as string | number) < (bVal as string | number) ? -1 : 1;
     return order === "asc" ? comparison : -comparison;
   });
 }
 
 // Filter data by multiple criteria
-function filterData(data: any[], filters: Record<string, any>): any[] {
+function filterData(data: GenericData[], filters: Record<string, unknown>): GenericData[] {
   return data.filter((item) => {
     return Object.entries(filters).every(([key, value]) => {
       const itemValue = getNestedValue(item, key);
@@ -119,8 +122,9 @@ function filterData(data: any[], filters: Record<string, any>): any[] {
       }
       
       if (typeof value === "object" && value !== null) {
-        if ("min" in value && itemValue < value.min) return false;
-        if ("max" in value && itemValue > value.max) return false;
+        const range = value as Record<string, number>;
+        if ("min" in range && (itemValue as number) < range.min) return false;
+        if ("max" in range && (itemValue as number) > range.max) return false;
         return true;
       }
       
@@ -130,7 +134,7 @@ function filterData(data: any[], filters: Record<string, any>): any[] {
 }
 
 // Full-text search across multiple fields
-function searchData(data: any[], query: string, fields: string[]): any[] {
+function searchData(data: GenericData[], query: string, fields: string[]): GenericData[] {
   const normalizedQuery = query.toLowerCase().trim();
   if (!normalizedQuery) return data;
   
@@ -148,11 +152,11 @@ function searchData(data: any[], query: string, fields: string[]): any[] {
 
 // Aggregate data by group
 function aggregateData(
-  data: any[],
+  data: GenericData[],
   groupBy: string,
   aggregate: string
-): Record<string, any> {
-  const groups: Record<string, any[]> = {};
+): Record<string, unknown> {
+  const groups: Record<string, GenericData[]> = {};
   
   data.forEach((item) => {
     const key = String(getNestedValue(item, groupBy) || "unknown");
@@ -160,7 +164,7 @@ function aggregateData(
     groups[key].push(item);
   });
   
-  const result: Record<string, any> = {};
+  const result: Record<string, unknown> = {};
   
   Object.entries(groups).forEach(([key, items]) => {
     switch (aggregate) {
@@ -168,10 +172,10 @@ function aggregateData(
         result[key] = items.length;
         break;
       case "sum":
-        result[key] = items.reduce((sum, item) => sum + (item.value || 0), 0);
+        result[key] = items.reduce((sum, item) => sum + (Number(item.value) || 0), 0);
         break;
       case "avg":
-        result[key] = items.reduce((sum, item) => sum + (item.value || 0), 0) / items.length;
+        result[key] = items.reduce((sum, item) => sum + (Number(item.value) || 0), 0) / items.length;
         break;
       case "items":
         result[key] = items;
@@ -185,14 +189,14 @@ function aggregateData(
 }
 
 // Simple LZ-style compression
-function compressData(data: any): string {
+function compressData(data: unknown): string {
   const json = JSON.stringify(data);
   // Simple RLE-like compression for repeated characters
   return json.replace(/(.)\1{3,}/g, (match, char) => `${char}×${match.length}`);
 }
 
 // Decompress data
-function decompressData(compressed: string): any {
+function decompressData(compressed: string): unknown {
   const decompressed = compressed.replace(
     /(.)\×(\d+)/g,
     (_, char, count) => char.repeat(parseInt(count))
@@ -201,7 +205,7 @@ function decompressData(compressed: string): any {
 }
 
 // Calculate diff between old and new data
-function diffData(oldData: any, newData: any): any {
+function diffData(oldData: unknown, newData: unknown): Record<string, unknown> | null {
   if (typeof oldData !== typeof newData) {
     return { type: "replace", value: newData };
   }
@@ -213,12 +217,14 @@ function diffData(oldData: any, newData: any): any {
   }
   
   if (typeof oldData === "object" && oldData !== null) {
-    const changes: Record<string, any> = {};
-    const allKeys = new Set([...Object.keys(oldData), ...Object.keys(newData)]);
+    const changes: Record<string, unknown> = {};
+    const oldObj = oldData as Record<string, unknown>;
+    const newObj = newData as Record<string, unknown>;
+    const allKeys = new Set([...Object.keys(oldObj), ...Object.keys(newObj)]);
     
     allKeys.forEach((key) => {
-      if (!deepEqual(oldData[key], newData[key])) {
-        changes[key] = { old: oldData[key], new: newData[key] };
+      if (!deepEqual(oldObj[key], newObj[key])) {
+        changes[key] = { old: oldObj[key], new: newObj[key] };
       }
     });
     
@@ -229,22 +235,29 @@ function diffData(oldData: any, newData: any): any {
 }
 
 // Helper: get nested value by dot notation
-function getNestedValue(obj: any, path: string): any {
-  return path.split(".").reduce((current, key) => current?.[key], obj);
+function getNestedValue(obj: Record<string, unknown>, path: string): unknown {
+  return path.split(".").reduce<unknown>((current, key) => {
+    if (current && typeof current === "object" && key in (current as Record<string, unknown>)) {
+      return (current as Record<string, unknown>)[key];
+    }
+    return undefined;
+  }, obj);
 }
 
 // Helper: deep equality check
-function deepEqual(a: any, b: any): boolean {
+function deepEqual(a: unknown, b: unknown): boolean {
   if (a === b) return true;
   if (typeof a !== typeof b) return false;
   if (typeof a !== "object" || a === null) return false;
   
-  const keysA = Object.keys(a);
-  const keysB = Object.keys(b);
+  const objA = a as Record<string, unknown>;
+  const objB = b as Record<string, unknown>;
+  const keysA = Object.keys(objA);
+  const keysB = Object.keys(objB);
   
   if (keysA.length !== keysB.length) return false;
   
-  return keysA.every((key) => deepEqual(a[key], b[key]));
+  return keysA.every((key) => deepEqual(objA[key], objB[key]));
 }
 
 export {};

@@ -4,7 +4,7 @@
 
 import { useState, useCallback } from 'react';
 import { useNautilusEnhancementAI } from '@/hooks/useNautilusEnhancementAI';
-import { MedicalRecord, CrewMember, MedicalSupply, AIAnalysis } from '../types';
+import { MedicalRecord, CrewMember, MedicalSupply, AIAnalysis, PrescribedMedication } from '../types';
 
 interface TriageResult {
   urgency: 'low' | 'medium' | 'high' | 'critical';
@@ -98,7 +98,7 @@ export function useMedicalAI() {
     symptoms: string[],
     diagnosis: string,
     patientInfo: Partial<CrewMember>
-  ): Promise<{ treatment: string; medications: any[] } | null> => {
+  ): Promise<{ treatment: string; medications: PrescribedMedication[] } | null> => {
     const result = await invoke('wellbeing_analyze', `Sugestão de tratamento para: ${diagnosis}`, {
       symptoms,
       diagnosis,

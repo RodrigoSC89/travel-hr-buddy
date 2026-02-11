@@ -173,7 +173,7 @@ export default function Payroll() {
               </CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold text-green-600">{formatCurrency(summary.totalNet)}</div>
+              <div className="text-2xl font-bold text-success">{formatCurrency(summary.totalNet)}</div>
             </CardContent>
           </Card>
 
@@ -185,7 +185,7 @@ export default function Payroll() {
               </CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold text-orange-600">
+              <div className="text-2xl font-bold text-warning">
                 {formatCurrency(summary.totalINSS + summary.totalIRRF)}
               </div>
             </CardContent>
@@ -199,7 +199,7 @@ export default function Payroll() {
               </CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold text-blue-600">{formatCurrency(summary.totalFGTS)}</div>
+              <div className="text-2xl font-bold text-primary">{formatCurrency(summary.totalFGTS)}</div>
             </CardContent>
           </Card>
         </div>
@@ -313,10 +313,10 @@ export default function Payroll() {
                           <TableCell className="font-medium">{calc.employee_name}</TableCell>
                           <TableCell className="text-right">{formatCurrency(calc.base_salary)}</TableCell>
                           <TableCell className="text-right">{formatCurrency(calc.gross_salary)}</TableCell>
-                          <TableCell className="text-right text-orange-600">{formatCurrency(calc.inss_value)}</TableCell>
-                          <TableCell className="text-right text-orange-600">{formatCurrency(calc.irrf_value)}</TableCell>
-                          <TableCell className="text-right text-red-600">{formatCurrency(calc.total_deductions)}</TableCell>
-                          <TableCell className="text-right font-bold text-green-600">
+                          <TableCell className="text-right text-warning">{formatCurrency(calc.inss_value)}</TableCell>
+                          <TableCell className="text-right text-warning">{formatCurrency(calc.irrf_value)}</TableCell>
+                          <TableCell className="text-right text-destructive">{formatCurrency(calc.total_deductions)}</TableCell>
+                          <TableCell className="text-right font-bold text-success">
                             {formatCurrency(calc.net_salary)}
                           </TableCell>
                           <TableCell className="text-center">
@@ -360,7 +360,7 @@ export default function Payroll() {
                   {/* Proventos */}
                   <div className="space-y-4">
                     <h3 className="font-semibold text-lg flex items-center gap-2">
-                      <Badge variant="outline" className="bg-green-50 text-green-700">Proventos</Badge>
+                      <Badge variant="outline" className="bg-success/10 text-success">Proventos</Badge>
                     </h3>
                     <div className="space-y-2">
                       <div className="flex justify-between">
@@ -382,7 +382,7 @@ export default function Payroll() {
                       <Separator />
                       <div className="flex justify-between font-bold">
                         <span>Total Proventos</span>
-                        <span className="text-green-600">{formatCurrency(selectedEmployee.gross_salary)}</span>
+                        <span className="text-success">{formatCurrency(selectedEmployee.gross_salary)}</span>
                       </div>
                     </div>
                   </div>
@@ -390,7 +390,7 @@ export default function Payroll() {
                   {/* Descontos */}
                   <div className="space-y-4">
                     <h3 className="font-semibold text-lg flex items-center gap-2">
-                      <Badge variant="outline" className="bg-red-50 text-red-700">Descontos</Badge>
+                      <Badge variant="outline" className="bg-destructive/10 text-destructive">Descontos</Badge>
                     </h3>
                     <div className="space-y-2">
                       <div className="flex justify-between">
@@ -408,7 +408,7 @@ export default function Payroll() {
                       <Separator />
                       <div className="flex justify-between font-bold">
                         <span>Total Descontos</span>
-                        <span className="text-red-600">{formatCurrency(selectedEmployee.total_deductions)}</span>
+                        <span className="text-destructive">{formatCurrency(selectedEmployee.total_deductions)}</span>
                       </div>
                     </div>
                   </div>
@@ -417,10 +417,10 @@ export default function Payroll() {
                 <Separator />
 
                 {/* Salário Líquido */}
-                <div className="bg-green-50 dark:bg-green-950 p-4 rounded-lg">
+                <div className="bg-success/10 dark:bg-success/5 p-4 rounded-lg">
                   <div className="flex justify-between items-center">
                     <span className="text-lg font-semibold">Salário Líquido</span>
-                    <span className="text-2xl font-bold text-green-600">
+                    <span className="text-2xl font-bold text-success">
                       {formatCurrency(selectedEmployee.net_salary)}
                     </span>
                   </div>
@@ -463,7 +463,7 @@ export default function Payroll() {
             <Card className="cursor-pointer hover:border-primary transition-colors" onClick={handleExportExcel}>
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
-                  <FileSpreadsheet className="h-5 w-5 text-green-600" />
+                  <FileSpreadsheet className="h-5 w-5 text-success" />
                   Excel Completo
                 </CardTitle>
                 <CardDescription>
@@ -481,7 +481,7 @@ export default function Payroll() {
             <Card className="cursor-pointer hover:border-primary transition-colors" onClick={handleExportCSV}>
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
-                  <FileText className="h-5 w-5 text-blue-600" />
+                  <FileText className="h-5 w-5 text-primary" />
                   CSV Simplificado
                 </CardTitle>
                 <CardDescription>

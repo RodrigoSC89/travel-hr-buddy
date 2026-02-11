@@ -83,11 +83,11 @@ export default function HRDashboardPage() {
 
       {/* Quick Stats */}
       <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-4">
-        <Card className="bg-gradient-to-br from-blue-500/10 to-blue-600/5 border-blue-500/20">
+        <Card className="bg-gradient-to-br from-primary/10 to-primary/5 border-primary/20">
           <CardContent className="p-4">
             <div className="flex items-center gap-3">
-              <div className="p-2 bg-blue-500/20 rounded-lg">
-                <Users className="h-5 w-5 text-blue-500" />
+              <div className="p-2 bg-primary/20 rounded-lg">
+                <Users className="h-5 w-5 text-primary" />
               </div>
               <div>
                 {statsLoading ? (
@@ -101,11 +101,11 @@ export default function HRDashboardPage() {
           </CardContent>
         </Card>
 
-        <Card className="bg-gradient-to-br from-green-500/10 to-green-600/5 border-green-500/20">
+        <Card className="bg-gradient-to-br from-success/10 to-success/5 border-success/20">
           <CardContent className="p-4">
             <div className="flex items-center gap-3">
-              <div className="p-2 bg-green-500/20 rounded-lg">
-                <UserPlus className="h-5 w-5 text-green-500" />
+              <div className="p-2 bg-success/20 rounded-lg">
+                <UserPlus className="h-5 w-5 text-success" />
               </div>
               <div>
                 {statsLoading ? (
@@ -119,11 +119,11 @@ export default function HRDashboardPage() {
           </CardContent>
         </Card>
 
-        <Card className="bg-gradient-to-br from-amber-500/10 to-amber-600/5 border-amber-500/20">
+        <Card className="bg-gradient-to-br from-warning/10 to-warning/5 border-warning/20">
           <CardContent className="p-4">
             <div className="flex items-center gap-3">
-              <div className="p-2 bg-amber-500/20 rounded-lg">
-                <TrendingUp className="h-5 w-5 text-amber-500" />
+              <div className="p-2 bg-warning/20 rounded-lg">
+                <TrendingUp className="h-5 w-5 text-warning" />
               </div>
               <div>
                 {statsLoading ? (
@@ -137,11 +137,11 @@ export default function HRDashboardPage() {
           </CardContent>
         </Card>
 
-        <Card className="bg-gradient-to-br from-red-500/10 to-red-600/5 border-red-500/20">
+        <Card className="bg-gradient-to-br from-destructive/10 to-destructive/5 border-destructive/20">
           <CardContent className="p-4">
             <div className="flex items-center gap-3">
-              <div className="p-2 bg-red-500/20 rounded-lg">
-                <AlertTriangle className="h-5 w-5 text-red-500" />
+              <div className="p-2 bg-destructive/20 rounded-lg">
+                <AlertTriangle className="h-5 w-5 text-destructive" />
               </div>
               <div>
                 {statsLoading ? (
@@ -155,11 +155,11 @@ export default function HRDashboardPage() {
           </CardContent>
         </Card>
 
-        <Card className="bg-gradient-to-br from-purple-500/10 to-purple-600/5 border-purple-500/20">
+        <Card className="bg-gradient-to-br from-accent/10 to-accent/5 border-accent/20">
           <CardContent className="p-4">
             <div className="flex items-center gap-3">
-              <div className="p-2 bg-purple-500/20 rounded-lg">
-                <Calendar className="h-5 w-5 text-purple-500" />
+              <div className="p-2 bg-accent/20 rounded-lg">
+                <Calendar className="h-5 w-5 text-accent-foreground" />
               </div>
               <div>
                 {statsLoading ? (
@@ -176,19 +176,19 @@ export default function HRDashboardPage() {
 
       {/* AI Alerts - Only show if there are expiring certificates or issues */}
       {displayStats.expiringCertificates > 0 && (
-        <Card className="border-amber-500/30 bg-amber-500/5">
+        <Card className="border-warning/30 bg-warning/5">
           <CardContent className="p-4">
             <div className="flex items-center gap-3">
-              <Brain className="h-5 w-5 text-amber-500" />
+              <Brain className="h-5 w-5 text-warning" />
               <div className="flex-1">
-                <p className="font-medium text-amber-500">
+                <p className="font-medium text-warning">
                   {displayStats.expiringCertificates} certificados expirando nos próximos 30 dias
                 </p>
                 <p className="text-sm text-muted-foreground">
                   Ação recomendada: renovar certificações antes do vencimento
                 </p>
               </div>
-              <Button variant="outline" size="sm" className="border-amber-500/30 text-amber-500 hover:bg-amber-500/10">
+              <Button variant="outline" size="sm" className="border-warning/30 text-warning hover:bg-warning/10">
                 Ver Detalhes
               </Button>
             </div>
@@ -197,12 +197,12 @@ export default function HRDashboardPage() {
       )}
       
       {displayStats.totalEmployees === 0 && !statsLoading && (
-        <Card className="border-blue-500/30 bg-blue-500/5">
+        <Card className="border-primary/30 bg-primary/5">
           <CardContent className="p-4">
             <div className="flex items-center gap-3">
-              <Database className="h-5 w-5 text-blue-500" />
+              <Database className="h-5 w-5 text-primary" />
               <div className="flex-1">
-                <p className="font-medium text-blue-500">
+                <p className="font-medium text-primary">
                   Nenhum funcionário cadastrado no sistema
                 </p>
                 <p className="text-sm text-muted-foreground">
@@ -293,8 +293,8 @@ export default function HRDashboardPage() {
 
             <Card className="cursor-pointer hover:border-primary/50 transition-colors">
               <CardContent className="p-4 flex flex-col items-center text-center gap-2">
-                <div className="p-3 bg-green-500/10 rounded-full">
-                  <DollarSign className="h-6 w-6 text-green-500" />
+                <div className="p-3 bg-success/10 rounded-full">
+                  <DollarSign className="h-6 w-6 text-success" />
                 </div>
                 <h3 className="font-medium">Processar Folha</h3>
                 <p className="text-xs text-muted-foreground">Cálculo automático com IA</p>
@@ -303,8 +303,8 @@ export default function HRDashboardPage() {
 
             <Card className="cursor-pointer hover:border-primary/50 transition-colors">
               <CardContent className="p-4 flex flex-col items-center text-center gap-2">
-                <div className="p-3 bg-purple-500/10 rounded-full">
-                  <Target className="h-6 w-6 text-purple-500" />
+                <div className="p-3 bg-accent/10 rounded-full">
+                  <Target className="h-6 w-6 text-accent-foreground" />
                 </div>
                 <h3 className="font-medium">Avaliações</h3>
                 <p className="text-xs text-muted-foreground">Desempenho e OKRs</p>
@@ -313,8 +313,8 @@ export default function HRDashboardPage() {
 
             <Card className="cursor-pointer hover:border-primary/50 transition-colors">
               <CardContent className="p-4 flex flex-col items-center text-center gap-2">
-                <div className="p-3 bg-amber-500/10 rounded-full">
-                  <GraduationCap className="h-6 w-6 text-amber-500" />
+                <div className="p-3 bg-warning/10 rounded-full">
+                  <GraduationCap className="h-6 w-6 text-warning" />
                 </div>
                 <h3 className="font-medium">Treinamentos</h3>
                 <p className="text-xs text-muted-foreground">LMS e desenvolvimento</p>
@@ -337,8 +337,8 @@ export default function HRDashboardPage() {
                 ].map((item, i) => (
                   <div key={i} className="flex items-center gap-3 p-2 rounded-lg hover:bg-muted/50">
                     <div className={`w-2 h-2 rounded-full ${
-                      item.type === 'success' ? 'bg-green-500' : 
-                      item.type === 'warning' ? 'bg-amber-500' : 'bg-blue-500'
+                      item.type === 'success' ? 'bg-success' : 
+                      item.type === 'warning' ? 'bg-warning' : 'bg-primary'
                     }`} />
                     <div className="flex-1">
                       <p className="text-sm font-medium">{item.action}</p>

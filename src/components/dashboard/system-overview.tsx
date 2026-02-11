@@ -170,10 +170,10 @@ const SystemOverview = () => {
         </Card>
 
         {/* Security Status */}
-        <Card className="border-l-4 border-l-green-500">
+        <Card className="border-l-4 border-l-success">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">Segurança</CardTitle>
-            <Shield className="h-4 w-4 text-green-600" />
+            <Shield className="h-4 w-4 text-success" />
           </CardHeader>
           <CardContent>
             <div className="space-y-2">
@@ -184,7 +184,7 @@ const SystemOverview = () => {
               <div className="grid grid-cols-2 gap-2 text-xs">
                 <div>
                   <div className="text-muted-foreground">Ameaças</div>
-                  <div className="font-medium text-green-600">{systemMetrics.security.threats}</div>
+                  <div className="font-medium text-success">{systemMetrics.security.threats}</div>
                 </div>
                 <div>
                   <div className="text-muted-foreground">Última varredura</div>
@@ -196,10 +196,10 @@ const SystemOverview = () => {
         </Card>
 
         {/* Users Status */}
-        <Card className="border-l-4 border-l-blue-500">
+        <Card className="border-l-4 border-l-primary">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">Usuários</CardTitle>
-            <Users className="h-4 w-4 text-blue-600" />
+            <Users className="h-4 w-4 text-primary" />
           </CardHeader>
           <CardContent>
             <div className="space-y-2">
