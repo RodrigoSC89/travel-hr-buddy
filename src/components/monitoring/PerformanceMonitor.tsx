@@ -34,9 +34,9 @@ function getRating(value: number, good: number, needsImprovement: number): "good
 }
 
 const ratingColors = {
-  good: "bg-green-500/10 text-green-700 dark:text-green-400",
-  "needs-improvement": "bg-yellow-500/10 text-yellow-700 dark:text-yellow-400",
-  poor: "bg-red-500/10 text-red-700 dark:text-red-400",
+  good: "bg-success/10 text-success",
+  "needs-improvement": "bg-warning/10 text-warning",
+  poor: "bg-destructive/10 text-destructive",
 };
 
 const ratingLabels = {

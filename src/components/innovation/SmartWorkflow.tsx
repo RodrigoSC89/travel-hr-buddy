@@ -153,9 +153,9 @@ export const SmartWorkflow = () => {
 
   const getComplexityColor = (complexity: string) => {
     switch (complexity) {
-    case "simple": return "bg-green-100 text-green-700";
-    case "medium": return "bg-yellow-100 text-yellow-700";
-    case "complex": return "bg-red-100 text-red-700";
+    case "simple": return "bg-success/10 text-success";
+    case "medium": return "bg-warning/10 text-warning";
+    case "complex": return "bg-destructive/10 text-destructive";
     default: return "bg-secondary text-secondary-foreground";
     }
   };

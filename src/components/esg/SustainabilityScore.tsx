@@ -148,10 +148,10 @@ export function SustainabilityScore() {
 
   const getRankIcon = (rank: number) => {
     switch (rank) {
-      case 1: return <Crown className="h-5 w-5 text-yellow-500" />;
-      case 2: return <Medal className="h-5 w-5 text-gray-400" />;
-      case 3: return <Medal className="h-5 w-5 text-amber-600" />;
-      default: return <Star className="h-5 w-5 text-gray-300" />;
+      case 1: return <Crown className="h-5 w-5 text-warning" />;
+      case 2: return <Medal className="h-5 w-5 text-muted-foreground" />;
+      case 3: return <Medal className="h-5 w-5 text-warning/80" />;
+      default: return <Star className="h-5 w-5 text-muted-foreground/50" />;
     }
   };
 
@@ -179,13 +179,13 @@ export function SustainabilityScore() {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-3">
-          <div className="p-3 bg-gradient-to-br from-green-500/20 to-emerald-500/20 rounded-xl">
-            <Leaf className="h-6 w-6 text-green-500" />
+          <div className="p-3 bg-gradient-to-br from-success/20 to-success/10 rounded-xl">
+            <Leaf className="h-6 w-6 text-success" />
           </div>
           <div>
             <h2 className="text-xl font-bold flex items-center gap-2">
               Sustainability Score
-              <Badge className="bg-gradient-to-r from-green-500 to-emerald-500">
+              <Badge className="bg-gradient-to-r from-success to-success/80">
                 ESG Dashboard
               </Badge>
             </h2>
@@ -241,29 +241,29 @@ export function SustainabilityScore() {
             
             <div className="grid grid-cols-3 gap-6">
               <div className="text-center">
-                <div className="w-20 h-20 rounded-full border-4 border-green-500 flex items-center justify-center mx-auto">
+                <div className="w-20 h-20 rounded-full border-4 border-success flex items-center justify-center mx-auto">
                   <span className="text-xl font-bold">{Math.round((selectedVessel.environmental.emissions + selectedVessel.environmental.waste + selectedVessel.environmental.efficiency) / 3)}</span>
                 </div>
                 <p className="text-sm mt-2 flex items-center justify-center gap-1">
-                  <Leaf className="h-3 w-3 text-green-500" />
+                  <Leaf className="h-3 w-3 text-success" />
                   Environmental
                 </p>
               </div>
               <div className="text-center">
-                <div className="w-20 h-20 rounded-full border-4 border-blue-500 flex items-center justify-center mx-auto">
+                <div className="w-20 h-20 rounded-full border-4 border-primary flex items-center justify-center mx-auto">
                   <span className="text-xl font-bold">{Math.round((selectedVessel.social.safety + selectedVessel.social.training + selectedVessel.social.welfare) / 3)}</span>
                 </div>
                 <p className="text-sm mt-2 flex items-center justify-center gap-1">
-                  <Users className="h-3 w-3 text-blue-500" />
+                  <Users className="h-3 w-3 text-primary" />
                   Social
                 </p>
               </div>
               <div className="text-center">
-                <div className="w-20 h-20 rounded-full border-4 border-purple-500 flex items-center justify-center mx-auto">
+                <div className="w-20 h-20 rounded-full border-4 border-accent flex items-center justify-center mx-auto">
                   <span className="text-xl font-bold">{Math.round((selectedVessel.governance.compliance + selectedVessel.governance.reporting + selectedVessel.governance.audits) / 3)}</span>
                 </div>
                 <p className="text-sm mt-2 flex items-center justify-center gap-1">
-                  <Shield className="h-3 w-3 text-purple-500" />
+                  <Shield className="h-3 w-3 text-accent-foreground" />
                   Governance
                 </p>
               </div>
@@ -307,7 +307,7 @@ export function SustainabilityScore() {
                       <PolarGrid />
                       <PolarAngleAxis dataKey="metric" />
                       <PolarRadiusAxis domain={[0, 100]} />
-                      <Radar name="Score" dataKey="value" stroke="#22c55e" fill="#22c55e" fillOpacity={0.5} />
+                      <Radar name="Score" dataKey="value" stroke="hsl(var(--success))" fill="hsl(var(--success))" fillOpacity={0.5} />
                     </RadarChart>
                   </ResponsiveContainer>
                 </div>
@@ -327,9 +327,9 @@ export function SustainabilityScore() {
                       <YAxis domain={[70, 100]} />
                       <Tooltip />
                       <Legend />
-                      <Line type="monotone" dataKey="environmental" name="Environmental" stroke="#22c55e" strokeWidth={2} />
-                      <Line type="monotone" dataKey="social" name="Social" stroke="#3b82f6" strokeWidth={2} />
-                      <Line type="monotone" dataKey="governance" name="Governance" stroke="#8b5cf6" strokeWidth={2} />
+                      <Line type="monotone" dataKey="environmental" name="Environmental" stroke="hsl(var(--success))" strokeWidth={2} />
+                      <Line type="monotone" dataKey="social" name="Social" stroke="hsl(var(--primary))" strokeWidth={2} />
+                      <Line type="monotone" dataKey="governance" name="Governance" stroke="hsl(var(--accent))" strokeWidth={2} />
                     </LineChart>
                   </ResponsiveContainer>
                 </div>
@@ -371,19 +371,19 @@ export function SustainabilityScore() {
                       <div className="flex items-center gap-6">
                         <div className="text-center">
                           <p className="text-xs text-muted-foreground">Environmental</p>
-                          <p className="font-bold text-green-500">
+                          <p className="font-bold text-success">
                             {Math.round((vessel.environmental.emissions + vessel.environmental.waste + vessel.environmental.efficiency) / 3)}
                           </p>
                         </div>
                         <div className="text-center">
                           <p className="text-xs text-muted-foreground">Social</p>
-                          <p className="font-bold text-blue-500">
+                          <p className="font-bold text-primary">
                             {Math.round((vessel.social.safety + vessel.social.training + vessel.social.welfare) / 3)}
                           </p>
                         </div>
                         <div className="text-center">
                           <p className="text-xs text-muted-foreground">Governance</p>
-                          <p className="font-bold text-purple-500">
+                          <p className="font-bold text-accent-foreground">
                             {Math.round((vessel.governance.compliance + vessel.governance.reporting + vessel.governance.audits) / 3)}
                           </p>
                         </div>
@@ -408,9 +408,9 @@ export function SustainabilityScore() {
                       <YAxis domain={[0, 100]} />
                       <Tooltip />
                       <Legend />
-                      <Bar dataKey="Environmental" fill="#22c55e" />
-                      <Bar dataKey="Social" fill="#3b82f6" />
-                      <Bar dataKey="Governance" fill="#8b5cf6" />
+                      <Bar dataKey="Environmental" fill="hsl(var(--success))" />
+                      <Bar dataKey="Social" fill="hsl(var(--primary))" />
+                      <Bar dataKey="Governance" fill="hsl(var(--accent))" />
                     </BarChart>
                   </ResponsiveContainer>
                 </div>
@@ -426,9 +426,9 @@ export function SustainabilityScore() {
               <Card key={category}>
                 <CardHeader>
                   <CardTitle className="text-sm flex items-center gap-2">
-                    {category === "Environmental" && <Leaf className="h-4 w-4 text-green-500" />}
-                    {category === "Social" && <Users className="h-4 w-4 text-blue-500" />}
-                    {category === "Governance" && <Shield className="h-4 w-4 text-purple-500" />}
+                    {category === "Environmental" && <Leaf className="h-4 w-4 text-success" />}
+                    {category === "Social" && <Users className="h-4 w-4 text-primary" />}
+                    {category === "Governance" && <Shield className="h-4 w-4 text-accent-foreground" />}
                     {category}
                   </CardTitle>
                 </CardHeader>
@@ -490,7 +490,7 @@ export function SustainabilityScore() {
                     <p className="font-medium mt-2">{badge.name}</p>
                     <p className="text-xs text-muted-foreground">{badge.description}</p>
                     {badge.unlocked ? (
-                      <Badge className="mt-2 bg-green-500/20 text-green-500">Conquistado</Badge>
+                      <Badge className="mt-2 bg-success/20 text-success">Conquistado</Badge>
                     ) : (
                       <Badge className="mt-2" variant="secondary">Bloqueado</Badge>
                     )}

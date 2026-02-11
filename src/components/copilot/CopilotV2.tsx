@@ -35,6 +35,7 @@ export default function CopilotV2() {
   const [input, setInput] = useState("");
   const [commands, setCommands] = useState<CopilotCommand[]>([]);
   const [suggestions, setSuggestions] = useState<CopilotSuggestion[]>([]);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- CopilotCommand result has multiple dynamic return shapes
   const [response, setResponse] = useState<any>(null);
   const [isListening, setIsListening] = useState(false);
 
@@ -66,7 +67,7 @@ export default function CopilotV2() {
     }
   };
 
-  const handleCommand = async (commandId: string, context?: any) => {
+  const handleCommand = async (commandId: string, context?: Record<string, unknown>) => {
     try {
       const result = await executeCopilotCommand(commandId, context);
       setResponse(result);
@@ -105,7 +106,7 @@ export default function CopilotV2() {
   };
 
   const getCategoryIcon = (category: string) => {
-    const icons: Record<string, any> = {
+    const icons: Record<string, React.ElementType> = {
       compliance: Shield,
       documentation: FileText,
       operations: Lightbulb,
@@ -133,7 +134,7 @@ export default function CopilotV2() {
         <DialogContent className="max-w-3xl max-h-[80vh] overflow-y-auto">
           <DialogHeader>
             <DialogTitle className="flex items-center gap-2">
-              <Sparkles className="h-6 w-6 text-blue-600" />
+              <Sparkles className="h-6 w-6 text-primary" />
               Nautilus Copilot V2
               <Badge variant="secondary">AI Assistant</Badge>
             </DialogTitle>
@@ -172,7 +173,7 @@ export default function CopilotV2() {
 
             {/* Response Display */}
             {response && (
-              <Card className="bg-blue-50 border-blue-200">
+              <Card className="bg-primary/5 border-primary/20">
                 <CardContent className="p-4">
                   {response.title && <h4 className="font-semibold mb-2">{response.title}</h4>}
                   <p className="text-sm">
@@ -180,7 +181,7 @@ export default function CopilotV2() {
                   </p>
                   {response.actions && (
                     <div className="flex gap-2 mt-3">
-                      {response.actions.map((action: any, idx: number) => (
+                      {(response.actions as Array<{ label: string }>).map((action, idx: number) => (
                         <Button key={idx} size="sm" variant="outline">
                           {action.label}
                         </Button>
@@ -204,7 +205,7 @@ export default function CopilotV2() {
                     <CardHeader className="py-3">
                       <div className="flex items-center justify-between">
                         <div className="flex items-center gap-3">
-                          <Icon className="h-5 w-5 text-blue-600" />
+                          <Icon className="h-5 w-5 text-primary" />
                           <div>
                             <CardTitle className="text-sm">{cmd.command}</CardTitle>
                             <CardDescription className="text-xs">
@@ -278,7 +279,7 @@ export default function CopilotV2() {
 
               {response?.length > 0 && Array.isArray(response) && (
                 <div className="space-y-2">
-                  {response.map((module: any) => (
+                  {(response as Array<{ id: string; title: string; duration: number; role: string }>).map((module) => (
                     <Card key={module.id}>
                       <CardHeader className="py-3">
                         <CardTitle className="text-sm">{module.title}</CardTitle>
