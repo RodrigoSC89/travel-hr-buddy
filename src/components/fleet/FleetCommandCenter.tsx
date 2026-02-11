@@ -132,15 +132,15 @@ export const FleetCommandCenter: React.FC = () => {
   const getStatusInfo = (status: VesselStatus) => {
     switch (status) {
     case "active":
-      return { color: "bg-green-500", icon: CheckCircle, label: "OK" };
+      return { color: "bg-success", icon: CheckCircle, label: "OK" };
     case "maintenance":
-      return { color: "bg-yellow-500", icon: Activity, label: "Maintenance" };
+      return { color: "bg-warning", icon: Activity, label: "Maintenance" };
     case "critical":
-      return { color: "bg-red-500", icon: AlertTriangle, label: "Critical" };
+      return { color: "bg-destructive", icon: AlertTriangle, label: "Critical" };
     case "inactive":
-      return { color: "bg-gray-500", icon: XCircle, label: "Inactive" };
+      return { color: "bg-muted-foreground", icon: XCircle, label: "Inactive" };
     default:
-      return { color: "bg-gray-500", icon: Ship, label: "Unknown" };
+      return { color: "bg-muted-foreground", icon: Ship, label: "Unknown" };
     }
   };
 
@@ -198,37 +198,37 @@ export const FleetCommandCenter: React.FC = () => {
 
         <Card>
           <CardHeader className="pb-3">
-            <CardTitle className="text-sm font-medium text-green-600">Active</CardTitle>
+            <CardTitle className="text-sm font-medium text-success">Active</CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-green-600">{fleetStats.active}</div>
+            <div className="text-2xl font-bold text-success">{fleetStats.active}</div>
           </CardContent>
         </Card>
 
         <Card>
           <CardHeader className="pb-3">
-            <CardTitle className="text-sm font-medium text-yellow-600">Maintenance</CardTitle>
+            <CardTitle className="text-sm font-medium text-warning">Maintenance</CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-yellow-600">{fleetStats.maintenance}</div>
+            <div className="text-2xl font-bold text-warning">{fleetStats.maintenance}</div>
           </CardContent>
         </Card>
 
         <Card>
           <CardHeader className="pb-3">
-            <CardTitle className="text-sm font-medium text-red-600">Critical</CardTitle>
+            <CardTitle className="text-sm font-medium text-destructive">Critical</CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-red-600">{fleetStats.critical}</div>
+            <div className="text-2xl font-bold text-destructive">{fleetStats.critical}</div>
           </CardContent>
         </Card>
 
         <Card>
           <CardHeader className="pb-3">
-            <CardTitle className="text-sm font-medium text-blue-600">Active Missions</CardTitle>
+            <CardTitle className="text-sm font-medium text-primary">Active Missions</CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-blue-600">{fleetStats.missions}</div>
+            <div className="text-2xl font-bold text-primary">{fleetStats.missions}</div>
           </CardContent>
         </Card>
       </div>
@@ -456,7 +456,7 @@ export const FleetCommandCenter: React.FC = () => {
                       toast.success(vessel.name, { description: `Status: ${vessel.status === 'active' ? 'Operacional' : 'Em Manutenção'}` });
                     }}
                   >
-                    <div className={`w-4 h-4 rounded-full ${vessel.status === 'active' ? 'bg-green-500' : 'bg-yellow-500'} animate-pulse`}></div>
+                    <div className={`w-4 h-4 rounded-full ${vessel.status === 'active' ? 'bg-success' : 'bg-warning'} animate-pulse`}></div>
                     <div className="absolute -top-8 left-1/2 -translate-x-1/2 bg-black/80 text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">
                       {vessel.name}
                     </div>
@@ -466,11 +466,11 @@ export const FleetCommandCenter: React.FC = () => {
                 {/* Legend */}
                 <div className="absolute bottom-4 left-4 bg-black/60 text-white p-3 rounded-lg text-sm">
                   <div className="flex items-center gap-2 mb-1">
-                    <div className="w-3 h-3 rounded-full bg-green-500"></div>
+                    <div className="w-3 h-3 rounded-full bg-success"></div>
                     <span>Embarcação Ativa</span>
                   </div>
                   <div className="flex items-center gap-2">
-                    <div className="w-3 h-3 rounded-full bg-yellow-500"></div>
+                    <div className="w-3 h-3 rounded-full bg-warning"></div>
                     <span>Em Manutenção</span>
                   </div>
                 </div>

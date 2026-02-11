@@ -27,6 +27,7 @@ interface AuditsListProps {
 
 export function AuditsList({ onRefresh }: AuditsListProps) {
   const { toast } = useToast();
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- sgso_audits dynamic row
   const [audits, setAudits] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -58,7 +59,7 @@ export function AuditsList({ onRefresh }: AuditsListProps) {
   };
 
   const getStatusBadge = (status: string) => {
-    const statusConfig: Record<string, { variant: any; icon: any }> = {
+    const statusConfig: Record<string, { variant: "outline" | "default" | "secondary" | "destructive"; icon: React.ElementType }> = {
       "planned": { variant: "outline", icon: Clock },
       "in_progress": { variant: "default", icon: Clock },
       "completed": { variant: "default", icon: CheckCircle },

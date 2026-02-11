@@ -99,9 +99,9 @@ export const TenantUserManagement: React.FC = () => {
 
   const getRoleColor = (role: string) => {
     switch (role) {
-    case "owner": return "bg-purple-100 text-purple-800";
-    case "admin": return "bg-red-100 text-red-800";
-    case "manager": return "bg-blue-100 text-blue-800";
+    case "owner": return "bg-accent/10 text-accent-foreground";
+    case "admin": return "bg-destructive/10 text-destructive";
+    case "manager": return "bg-primary/10 text-primary";
     case "member": return "bg-secondary text-secondary-foreground";
     default: return "bg-secondary text-secondary-foreground";
     }
@@ -109,9 +109,9 @@ export const TenantUserManagement: React.FC = () => {
 
   const getStatusColor = (status: string) => {
     switch (status) {
-    case "active": return "bg-green-100 text-green-800";
-    case "pending": return "bg-yellow-100 text-yellow-800";
-    case "suspended": return "bg-red-100 text-red-800";
+    case "active": return "bg-success/10 text-success";
+    case "pending": return "bg-warning/10 text-warning";
+    case "suspended": return "bg-destructive/10 text-destructive";
     default: return "bg-secondary text-secondary-foreground";
     }
   };
@@ -169,7 +169,7 @@ export const TenantUserManagement: React.FC = () => {
       user_id: Date.now().toString(),
       email: newUserEmail,
       full_name: newUserEmail.split("@")[0],
-      role: newUserRole as any,
+      role: newUserRole as TenantUser["role"],
       status: "pending",
       joined_at: new Date().toISOString(),
       last_seen: undefined
@@ -190,7 +190,7 @@ export const TenantUserManagement: React.FC = () => {
     setUsers(prev => 
       prev.map(user => 
         user.id === userId 
-          ? { ...user, role: newRole as any }
+          ? { ...user, role: newRole as TenantUser["role"] }
           : user
       )
     );
@@ -205,7 +205,7 @@ export const TenantUserManagement: React.FC = () => {
     setUsers(prev => 
       prev.map(user => 
         user.id === userId 
-          ? { ...user, status: newStatus as any }
+          ? { ...user, status: newStatus as TenantUser["status"] }
           : user
       )
     );
@@ -312,7 +312,7 @@ export const TenantUserManagement: React.FC = () => {
                 <p className="text-sm font-medium text-muted-foreground">Total de Usuários</p>
                 <p className="text-2xl font-bold">{users.length}</p>
               </div>
-              <Users className="h-8 w-8 text-blue-500" />
+              <Users className="h-8 w-8 text-primary" />
             </div>
           </CardContent>
         </Card>
@@ -326,7 +326,7 @@ export const TenantUserManagement: React.FC = () => {
                   {users.filter(u => u.status === "active").length}
                 </p>
               </div>
-              <CheckCircle className="h-8 w-8 text-green-500" />
+              <CheckCircle className="h-8 w-8 text-success" />
             </div>
           </CardContent>
         </Card>
@@ -340,7 +340,7 @@ export const TenantUserManagement: React.FC = () => {
                   {users.filter(u => u.status === "pending").length}
                 </p>
               </div>
-              <Clock className="h-8 w-8 text-yellow-500" />
+              <Clock className="h-8 w-8 text-warning" />
             </div>
           </CardContent>
         </Card>
@@ -352,7 +352,7 @@ export const TenantUserManagement: React.FC = () => {
                 <p className="text-sm font-medium text-muted-foreground">Limite do Plano</p>
                 <p className="text-2xl font-bold">{currentTenant.max_users}</p>
               </div>
-              <Shield className="h-8 w-8 text-purple-500" />
+              <Shield className="h-8 w-8 text-accent-foreground" />
             </div>
           </CardContent>
         </Card>
@@ -492,7 +492,7 @@ export const TenantUserManagement: React.FC = () => {
                           {user.status === "active" && (
                             <DropdownMenuItem 
                               onClick={() => handleStatusChange(user.id, "suspended")}
-                              className="text-red-600"
+                              className="text-destructive"
                             >
                               Suspender
                             </DropdownMenuItem>
@@ -500,7 +500,7 @@ export const TenantUserManagement: React.FC = () => {
                           {user.status === "suspended" && (
                             <DropdownMenuItem 
                               onClick={() => handleStatusChange(user.id, "active")}
-                              className="text-green-600"
+                              className="text-success"
                             >
                               Reativar
                             </DropdownMenuItem>

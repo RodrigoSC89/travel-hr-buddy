@@ -23,6 +23,7 @@ import { useState, useEffect, useRef, useCallback, useMemo } from "react";
  * Creates a debounced function that delays invoking func until after wait milliseconds
  * have elapsed since the last time the debounced function was invoked.
  */
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- generic utility must accept any function
 export function debounce<T extends (...args: any[]) => any>(
   func: T,
   wait: number
@@ -52,6 +53,7 @@ export function debounce<T extends (...args: any[]) => any>(
 /**
  * Creates a throttled function that only invokes func at most once per every wait milliseconds.
  */
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- generic utility must accept any function
 export function throttle<T extends (...args: any[]) => any>(
   func: T,
   wait: number

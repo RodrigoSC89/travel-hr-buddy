@@ -43,10 +43,10 @@ export class KPIErrorBoundary extends Component<Props, State> {
   render() {
     if (this.state.hasError) {
       return (
-        <Card className="border-red-200">
+        <Card className="border-destructive/20">
           <CardContent className="pt-6">
             <div className="flex flex-col items-center justify-center space-y-3 text-center">
-              <AlertTriangle className="h-10 w-10 text-red-500" />
+              <AlertTriangle className="h-10 w-10 text-destructive" />
               <div>
                 <p className="text-sm font-medium">Erro no {this.props.kpiName}</p>
                 <p className="text-xs text-muted-foreground mt-1">

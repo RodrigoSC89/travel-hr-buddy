@@ -110,6 +110,7 @@ export function createTrackedHandler(
 /**
  * HOC to wrap button handlers with error tracking
  */
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- generic HOC wrapper must accept any function signature
 export function withButtonTracking<T extends (...args: any[]) => any>(
   handler: T,
   context: ButtonErrorContext

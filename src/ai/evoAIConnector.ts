@@ -183,9 +183,9 @@ class EvoAIConnector {
    * Generate insights from synced data
    */
   private async generateInsights(
-    feedbackData: any[],
-    predictiveData: any[],
-    adaptiveData: any[]
+    feedbackData: Record<string, unknown>[],
+    predictiveData: Record<string, unknown>[],
+    adaptiveData: Record<string, unknown>[]
   ): Promise<FeedbackInsight[]> {
     const insights: FeedbackInsight[] = [];
 
@@ -207,13 +207,13 @@ class EvoAIConnector {
   /**
    * Analyze feedback patterns
    */
-  private analyzeFeedbackPatterns(feedbackData: any[]): FeedbackInsight[] {
+  private analyzeFeedbackPatterns(feedbackData: Record<string, unknown>[]): FeedbackInsight[] {
     const insights: FeedbackInsight[] = [];
     const patterns = new Map<string, number>();
 
     // Count feedback by category
     feedbackData.forEach(feedback => {
-      const category = feedback.category || "general";
+      const category = String(feedback.category || "general");
       patterns.set(category, (patterns.get(category) || 0) + 1);
     });
 
@@ -236,19 +236,20 @@ class EvoAIConnector {
   /**
    * Analyze prediction accuracy
    */
-  private analyzePredictionAccuracy(predictiveData: any[]): FeedbackInsight[] {
+  private analyzePredictionAccuracy(predictiveData: Record<string, unknown>[]): FeedbackInsight[] {
     const insights: FeedbackInsight[] = [];
 
     if (predictiveData.length === 0) return insights;
 
     // Calculate average confidence
-    const avgConfidence = predictiveData.reduce((sum, p) => sum + (p.confidence || 0), 0) / predictiveData.length;
+    const avgConfidence = predictiveData.reduce((sum, p) => sum + (Number(p.confidence) || 0), 0) / predictiveData.length;
 
     // Analyze risk distribution
-    const riskLevels = predictiveData.reduce((acc, p) => {
-      acc[p.risk_level] = (acc[p.risk_level] || 0) + 1;
-      return acc;
-    }, {} as Record<string, number>);
+    const riskLevels: Record<string, number> = {};
+    predictiveData.forEach(p => {
+      const level = String(p.risk_level || "unknown");
+      riskLevels[level] = (riskLevels[level] || 0) + 1;
+    });
 
     if (avgConfidence < 0.6) {
       insights.push({
@@ -260,11 +261,11 @@ class EvoAIConnector {
       });
     }
 
-    if (riskLevels.critical > predictiveData.length * 0.2) {
+    if ((riskLevels.critical || 0) > predictiveData.length * 0.2) {
       insights.push({
         category: "prediction",
         pattern: "High critical risk rate",
-        frequency: riskLevels.critical,
+        frequency: riskLevels.critical || 0,
         impact: "high",
         recommendation: "Review critical risk thresholds and system stability",
       });
@@ -276,16 +277,17 @@ class EvoAIConnector {
   /**
    * Analyze adaptation effectiveness
    */
-  private analyzeAdaptationEffectiveness(adaptiveData: any[]): FeedbackInsight[] {
+  private analyzeAdaptationEffectiveness(adaptiveData: Record<string, unknown>[]): FeedbackInsight[] {
     const insights: FeedbackInsight[] = [];
 
     if (adaptiveData.length === 0) return insights;
 
     // Count adjustments by parameter
-    const paramAdjustments = adaptiveData.reduce((acc, adj) => {
-      acc[adj.parameter_name] = (acc[adj.parameter_name] || 0) + 1;
-      return acc;
-    }, {} as Record<string, number>);
+    const paramAdjustments: Record<string, number> = {};
+    adaptiveData.forEach(adj => {
+      const paramName = String(adj.parameter_name || "unknown");
+      paramAdjustments[paramName] = (paramAdjustments[paramName] || 0) + 1;
+    });
 
     // Identify frequently adjusted parameters
     (Object.entries(paramAdjustments) as Array<[string, number]>).forEach(([param, count]) => {
@@ -321,10 +323,10 @@ class EvoAIConnector {
       .lt("recorded_at", new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString());
 
     // Calculate scores (simplified)
-    const recentArray = (recentMetrics ?? []) as any[];
-    const oldArray = (oldMetrics ?? []) as any[];
-    const recentAvg = recentArray.reduce((sum, m: any) => sum + (m.value ?? 0.5), 0) / Math.max(recentArray.length || 1, 1);
-    const oldAvg = oldArray.reduce((sum, m: any) => sum + (m.value ?? 0.5), 0) / Math.max(oldArray.length || 1, 1);
+    const recentArray = (recentMetrics ?? []) as Array<Record<string, unknown>>;
+    const oldArray = (oldMetrics ?? []) as Array<Record<string, unknown>>;
+    const recentAvg = recentArray.reduce((sum, m) => sum + ((m.value as number) ?? 0.5), 0) / Math.max(recentArray.length || 1, 1);
+    const oldAvg = oldArray.reduce((sum, m) => sum + ((m.value as number) ?? 0.5), 0) / Math.max(oldArray.length || 1, 1);
 
     const trend = recentAvg > oldAvg * 1.05 ? "improving" : recentAvg < oldAvg * 0.95 ? "degrading" : "stable";
 
