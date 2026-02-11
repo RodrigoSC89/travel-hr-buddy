@@ -113,11 +113,11 @@ export const CommunicationHistory: React.FC<CommunicationHistoryProps> = ({
 
   const getStatusColor = (status: string) => {
     switch (status) {
-    case "success": return "bg-green-500/20 text-green-400 border-green-500/30";
-    case "degraded": return "bg-yellow-500/20 text-yellow-400 border-yellow-500/30";
-    case "failed": return "bg-red-500/20 text-red-400 border-red-500/30";
-    case "timeout": return "bg-orange-500/20 text-orange-400 border-orange-500/30";
-    default: return "bg-gray-500/20 text-gray-400 border-gray-500/30";
+    case "success": return "bg-success/20 text-success border-success/30";
+    case "degraded": return "bg-warning/20 text-warning border-warning/30";
+    case "failed": return "bg-destructive/20 text-destructive border-destructive/30";
+    case "timeout": return "bg-warning/20 text-warning border-warning/30";
+    default: return "bg-muted text-muted-foreground border-border";
     }
   };
 
@@ -206,16 +206,16 @@ export const CommunicationHistory: React.FC<CommunicationHistoryProps> = ({
                   className={`
                     p-3 rounded-lg border
                     ${log.type === "send" 
-                  ? "bg-blue-500/5 border-blue-500/20" 
-                  : "bg-green-500/5 border-green-500/20"}
+                  ? "bg-primary/5 border-primary/20" 
+                  : "bg-success/5 border-success/20"}
                   `}
                 >
                   <div className="flex items-start justify-between mb-2">
                     <div className="flex items-center gap-2">
                       {log.type === "send" ? (
-                        <ArrowUp className="w-4 h-4 text-blue-400" />
+                        <ArrowUp className="w-4 h-4 text-primary" />
                       ) : (
-                        <ArrowDown className="w-4 h-4 text-green-400" />
+                        <ArrowDown className="w-4 h-4 text-success" />
                       )}
                       <Badge variant="outline" className="text-xs">
                         {log.provider}
@@ -224,15 +224,15 @@ export const CommunicationHistory: React.FC<CommunicationHistoryProps> = ({
                         {log.status}
                       </Badge>
                     </div>
-                    <div className="flex items-center gap-2 text-xs text-zinc-400">
+                    <div className="flex items-center gap-2 text-xs text-muted-foreground">
                       <Clock className="w-3 h-3" />
                       {log.timestamp.toLocaleTimeString()}
                     </div>
                   </div>
-                  <div className="text-sm text-zinc-300 mb-2">
+                  <div className="text-sm text-foreground/80 mb-2">
                     {log.message || "(No message content)"}
                   </div>
-                  <div className="flex items-center gap-4 text-xs text-zinc-500">
+                  <div className="flex items-center gap-4 text-xs text-muted-foreground">
                     <span className="flex items-center gap-1">
                       <Signal className="w-3 h-3" />
                       {log.signalStrength}%

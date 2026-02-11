@@ -284,7 +284,7 @@ export default function AcademyDashboard() {
     }
   };
 
-  const handleSuggestionAction = (type: string, suggestion?: any) => {
+  const handleSuggestionAction = (type: string, _suggestion?: Record<string, unknown>) => {
     if (type === "gap") {
       setAiGenerationType("gap");
       setAiCoursePrompt("Renovação STCW para tripulantes com certificação vencendo nos próximos 90 dias. Incluir: atualização regulatória, procedimentos de segurança e avaliação prática.");
@@ -311,9 +311,9 @@ export default function AcademyDashboard() {
 
   const getLevelBadge = (level: string) => {
     const colors: Record<string, string> = {
-      beginner: "bg-green-500/10 text-green-600",
-      intermediate: "bg-blue-500/10 text-blue-600",
-      advanced: "bg-purple-500/10 text-purple-600"
+      beginner: "bg-success/10 text-success",
+      intermediate: "bg-primary/10 text-primary",
+      advanced: "bg-accent/10 text-accent-foreground"
     };
     return colors[level] || colors.intermediate;
   };

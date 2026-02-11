@@ -39,7 +39,7 @@ import BunkerForecastPanel from "@/components/bunker/BunkerForecastPanel";
 // Types
 interface FuelConsumption {
   id: string;
-  vessel_id: string;
+  vessel_id: string | null;
   vessel_name?: string;
   voyage_id?: string;
   consumption_date: string;
@@ -48,9 +48,9 @@ interface FuelConsumption {
   cost_usd: number;
   distance_nm: number;
   avg_speed_knots: number;
-  weather_conditions?: string;
-  notes?: string;
-  created_at: string;
+  weather_conditions?: string | null;
+  notes?: string | null;
+  created_at: string | null;
 }
 
 // Hook para dados de consumo de combustível
@@ -79,7 +79,7 @@ function useFuelConsumptionData() {
 
       if (error) throw error;
       
-      return (data || []).map((item: any) => ({
+      return (data || []).map((item) => ({
         id: item.id,
         vessel_id: item.vessel_id,
         vessel_name: item.vessels?.name || "N/A",
@@ -263,7 +263,7 @@ const ConsumptionTable = ({ consumptions, isLoading }: { consumptions: FuelConsu
   );
 };
 
-const ConsumptionForm = ({ onClose, vessels }: { onClose: () => void; vessels: any[] }) => {
+const ConsumptionForm = ({ onClose, vessels }: { onClose: () => void; vessels: { id: string; name: string }[] }) => {
   const { toast } = useToast();
   const [formData, setFormData] = useState({
     vessel_id: "",

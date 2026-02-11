@@ -115,7 +115,7 @@ export function CreateInspectionDialog({ open, onOpenChange, onInspectionCreated
               <Label htmlFor="inspection_type">Inspection Type</Label>
               <Select
                 value={formData.inspection_type}
-                onValueChange={(value: any) => setFormData({ ...formData, inspection_type: value })}
+                onValueChange={(value) => setFormData({ ...formData, inspection_type: value as typeof formData.inspection_type })}
               >
                 <SelectTrigger>
                   <SelectValue />

@@ -23,7 +23,7 @@ import { useWasteManagementData } from "@/hooks/useWasteManagementData";
 import { useESGWasteAI } from "@/hooks/useESGWasteAI";
 
 // Tank 3D Visualization Component
-function Tank3D({ tank }: { tank: any }) {
+function Tank3D({ tank }: { tank: { name: string; type: string; currentLevel: number; capacity: number; unit: string; lastDischarge?: string } }) {
   const fillPercent = (tank.currentLevel / tank.capacity) * 100;
   const isWarning = fillPercent >= 60 && fillPercent < 80;
   const isCritical = fillPercent >= 80;
@@ -110,7 +110,7 @@ function Tank3D({ tank }: { tank: any }) {
 }
 
 // Discharge Timeline Component
-function DischargeTimeline({ records }: { records: any[] }) {
+function DischargeTimeline({ records }: { records: { id: string; type: string; date: string; location: string; quantity: number; unit: string; certificate: string }[] }) {
   return (
     <div className="space-y-4">
       {records.map((record, index) => (

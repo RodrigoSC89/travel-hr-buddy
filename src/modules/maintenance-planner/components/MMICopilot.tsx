@@ -44,12 +44,12 @@ interface CopilotResponse {
 }
 
 interface MMICopilotProps {
-  onJobCreated?: (job: any) => void;
+  onJobCreated?: (job: Record<string, unknown>) => void;
   context?: {
-    jobs?: any[];
-    equipamentos?: any[];
-    historico?: any[];
-    estoque?: any[];
+    jobs?: Record<string, unknown>[];
+    equipamentos?: Record<string, unknown>[];
+    historico?: Record<string, unknown>[];
+    estoque?: Record<string, unknown>[];
   };
 }
 
@@ -156,19 +156,19 @@ export const MMICopilot: React.FC<MMICopilotProps> = ({ onJobCreated, context })
 
   const getCriticalityColor = (criticidade: string) => {
     switch (criticidade) {
-      case "alta": return "bg-red-500";
-      case "media": return "bg-yellow-500";
-      case "baixa": return "bg-green-500";
-      default: return "bg-gray-500";
+      case "alta": return "bg-destructive";
+      case "media": return "bg-warning";
+      case "baixa": return "bg-success";
+      default: return "bg-muted";
     }
   };
 
   const getRiskColor = (risco: string) => {
     switch (risco) {
-      case "alto": return "text-red-500";
-      case "medio": return "text-yellow-500";
-      case "baixo": return "text-green-500";
-      default: return "text-gray-500";
+      case "alto": return "text-destructive";
+      case "medio": return "text-warning";
+      case "baixo": return "text-success";
+      default: return "text-muted-foreground";
     }
   };
 
@@ -248,7 +248,7 @@ export const MMICopilot: React.FC<MMICopilotProps> = ({ onJobCreated, context })
                 {message.data?.alertas && message.data.alertas.length > 0 && (
                   <div className="mt-2 space-y-1">
                     {message.data.alertas.map((alert, i) => (
-                      <div key={i} className="flex items-center gap-2 text-xs text-yellow-600">
+                      <div key={i} className="flex items-center gap-2 text-xs text-warning">
                         <AlertTriangle className="h-3 w-3" />
                         {alert}
                       </div>

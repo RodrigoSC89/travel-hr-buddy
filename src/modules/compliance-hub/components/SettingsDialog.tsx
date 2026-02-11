@@ -116,28 +116,28 @@ export function SettingsDialog({
     }
   };
 
-  const updateNotifications = (key: keyof ComplianceSettings['notifications'], value: any) => {
+  const updateNotifications = (key: keyof ComplianceSettings['notifications'], value: boolean | number) => {
     setCurrentSettings({
       ...currentSettings,
       notifications: { ...currentSettings.notifications, [key]: value },
     });
   };
 
-  const updateAI = (key: keyof ComplianceSettings['ai'], value: any) => {
+  const updateAI = (key: keyof ComplianceSettings['ai'], value: boolean | string) => {
     setCurrentSettings({
       ...currentSettings,
       ai: { ...currentSettings.ai, [key]: value },
     });
   };
 
-  const updateAudit = (key: keyof ComplianceSettings['audit'], value: any) => {
+  const updateAudit = (key: keyof ComplianceSettings['audit'], value: boolean) => {
     setCurrentSettings({
       ...currentSettings,
       audit: { ...currentSettings.audit, [key]: value },
     });
   };
 
-  const updateReports = (key: keyof ComplianceSettings['reports'], value: any) => {
+  const updateReports = (key: keyof ComplianceSettings['reports'], value: boolean | string) => {
     setCurrentSettings({
       ...currentSettings,
       reports: { ...currentSettings.reports, [key]: value },

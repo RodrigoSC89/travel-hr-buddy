@@ -135,10 +135,10 @@ export function GarbageRegistry() {
   };
 
   // Filter records
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Supabase joined row
-  const filteredRecords = records.filter((record: any) => {
-    const wasteType = record.waste_type || "";
-    const vesselName = record.vessels?.name || "";
+  const filteredRecords = records.filter((record) => {
+    const rec = record as Record<string, unknown> & { vessels?: { name?: string } };
+    const wasteType = String(rec.waste_type || "");
+    const vesselName = rec.vessels?.name || "";
     if (filterCategory !== "all" && !wasteType.includes(`Cat.${filterCategory}`)) return false;
     if (filterStatus !== "all") {
       const isVerified = !!record.certificate_number;
@@ -151,15 +151,14 @@ export function GarbageRegistry() {
   });
 
   // Stats
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Supabase row dynamic fields
-  const totalWaste = records.reduce((sum: number, r: any) => sum + (Number(r.quantity) || 0), 0);
-  const recycledRecords = records.filter((r: any) => (r.disposal_method || "").toLowerCase().includes("recicl"));
-  const totalRecycled = recycledRecords.reduce((sum: number, r: any) => sum + (Number(r.quantity) || 0), 0);
-  const pendingCount = records.filter((r: any) => !r.certificate_number).length;
+  const totalWaste = records.reduce((sum: number, r) => sum + (Number(r.quantity) || 0), 0);
+  const recycledRecords = records.filter((r) => (String(r.disposal_method || "")).toLowerCase().includes("recicl"));
+  const totalRecycled = recycledRecords.reduce((sum: number, r) => sum + (Number(r.quantity) || 0), 0);
+  const pendingCount = records.filter((r) => !r.certificate_number).length;
 
   // Category totals
   const totalByCategory = Object.keys(wasteCategories).reduce((acc, cat) => {
-    acc[cat] = records.filter((r: any) => (r.waste_type || "").includes(`Cat.${cat}`)).reduce((sum: number, r: any) => sum + (Number(r.quantity) || 0), 0);
+    acc[cat] = records.filter((r) => (String(r.waste_type || "")).includes(`Cat.${cat}`)).reduce((sum: number, r) => sum + (Number(r.quantity) || 0), 0);
     return acc;
   }, {} as Record<string, number>);
 
@@ -177,20 +176,20 @@ export function GarbageRegistry() {
     <div className="space-y-6">
       {/* KPIs */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-        <Card className="border-l-4 border-l-green-500">
+        <Card className="border-l-4 border-l-success">
           <CardContent className="p-4">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-muted-foreground">Total Registrado</p>
                 <p className="text-2xl font-bold">{records.length}</p>
-                <p className="text-xs text-green-600">Registros</p>
+                <p className="text-xs text-success">Registros</p>
               </div>
-              <FileText className="h-8 w-8 text-green-500 opacity-80" />
+              <FileText className="h-8 w-8 text-success opacity-80" />
             </div>
           </CardContent>
         </Card>
 
-        <Card className="border-l-4 border-l-blue-500">
+        <Card className="border-l-4 border-l-primary">
           <CardContent className="p-4">
             <div className="flex items-center justify-between">
               <div>
@@ -203,15 +202,15 @@ export function GarbageRegistry() {
           </CardContent>
         </Card>
 
-        <Card className="border-l-4 border-l-cyan-500">
+        <Card className="border-l-4 border-l-accent">
           <CardContent className="p-4">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-muted-foreground">Taxa de Reciclagem</p>
                 <p className="text-2xl font-bold">{totalWaste > 0 ? Math.round((totalRecycled / totalWaste) * 100) : 0}%</p>
-                <p className="text-xs text-cyan-600">{totalRecycled.toLocaleString()} reciclados</p>
+                <p className="text-xs text-accent-foreground">{totalRecycled.toLocaleString()} reciclados</p>
               </div>
-              <Recycle className="h-8 w-8 text-cyan-500 opacity-80" />
+              <Recycle className="h-8 w-8 text-accent-foreground opacity-80" />
             </div>
           </CardContent>
         </Card>
@@ -311,7 +310,7 @@ export function GarbageRegistry() {
                     <Select value={newRecord.vessel_id} onValueChange={(v) => setNewRecord({ ...newRecord, vessel_id: v })}>
                       <SelectTrigger><SelectValue placeholder="Selecione" /></SelectTrigger>
                       <SelectContent>
-                        {vessels.map((v: any) => (<SelectItem key={v.id} value={v.id}>{v.name}</SelectItem>))}
+                        {vessels.map((v) => (<SelectItem key={v.id} value={v.id}>{v.name}</SelectItem>))}
                       </SelectContent>
                     </Select>
                   </div>
@@ -415,7 +414,7 @@ export function GarbageRegistry() {
               </TableRow>
             </TableHeader>
             <TableBody>
-              {filteredRecords.length > 0 ? filteredRecords.slice(0, 50).map((record: any) => (
+              {filteredRecords.length > 0 ? filteredRecords.slice(0, 50).map((record) => (
                 <TableRow key={record.id}>
                   <TableCell className="font-mono text-xs">{record.disposal_date?.split("T")[0] || "—"}</TableCell>
                   <TableCell>
@@ -426,7 +425,7 @@ export function GarbageRegistry() {
                   <TableCell className="text-xs">{record.disposal_method || "—"}</TableCell>
                   <TableCell>
                     {record.certificate_number ? (
-                      <Badge className="bg-green-600 text-xs"><CheckCircle className="h-3 w-3 mr-1" />Verificado</Badge>
+                      <Badge className="bg-success text-success-foreground text-xs"><CheckCircle className="h-3 w-3 mr-1" />Verificado</Badge>
                     ) : (
                       <Badge variant="outline" className="text-xs">Pendente</Badge>
                     )}
@@ -434,7 +433,7 @@ export function GarbageRegistry() {
                   <TableCell className="text-right">
                     {!record.certificate_number && (
                       <Button variant="ghost" size="sm" onClick={() => verifyMutation.mutate(record.id)}>
-                        <CheckCircle className="h-4 w-4 text-green-600" />
+                        <CheckCircle className="h-4 w-4 text-success" />
                       </Button>
                     )}
                   </TableCell>
