@@ -441,9 +441,10 @@ class ConsciousCore {
     };
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- ContextMessage shape varies by type
   private analyzeContextMessage(message: any): void {
-    const moduleName = message.moduleName;
-    
+    const moduleName = String(message.moduleName);
+
     // Track timing for loop detection
     if (!this.loopDetector.has(moduleName)) {
       this.loopDetector.set(moduleName, []);

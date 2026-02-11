@@ -263,7 +263,7 @@ export class TacticalResponseEngine {
     action: ResponseAction,
     event: TacticalEvent,
     rule: TacticalRule
-  ): Promise<any> {
+  ): Promise<Record<string, unknown>> {
     const timeout = action.timeout || this.defaultTimeout;
 
     return new Promise((resolve, reject) => {
@@ -272,7 +272,7 @@ export class TacticalResponseEngine {
       }, timeout);
 
       try {
-        let result: any;
+        let result: Record<string, unknown>;
 
         switch (action.type) {
         case "alert":
@@ -389,6 +389,7 @@ export class TacticalResponseEngine {
   /**
    * Get field value from nested object
    */
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- nested dynamic object traversal
   private getFieldValue(obj: Record<string, any>, field: string): any {
     const parts = field.split(".");
     let value: any = obj;
@@ -401,20 +402,20 @@ export class TacticalResponseEngine {
   /**
    * Evaluate a condition
    */
-  private evaluateCondition(fieldValue: any, operator: string, value: any): boolean {
+  private evaluateCondition(fieldValue: unknown, operator: string, value: unknown): boolean {
     switch (operator) {
     case "equals":
       return fieldValue === value;
     case "not_equals":
       return fieldValue !== value;
     case "greater_than":
-      return fieldValue > value;
+      return Number(fieldValue) > Number(value);
     case "less_than":
-      return fieldValue < value;
+      return Number(fieldValue) < Number(value);
     case "contains":
       return String(fieldValue).includes(String(value));
     case "regex":
-      return new RegExp(value).test(String(fieldValue));
+      return new RegExp(String(value)).test(String(fieldValue));
     default:
       return false;
     }
@@ -423,7 +424,7 @@ export class TacticalResponseEngine {
   /**
    * Action implementations
    */
-  private executeAlertAction(action: ResponseAction, event: TacticalEvent): any {
+  private executeAlertAction(action: ResponseAction, event: TacticalEvent): Record<string, unknown> {
     bridge.emit("tactical-response:alert", "TacticalResponse", {
       action: action.description,
       event: event as unknown as Record<string, unknown>,
@@ -432,7 +433,7 @@ export class TacticalResponseEngine {
     return { status: "alert_sent", parameters: action.parameters };
   }
 
-  private executeNotificationAction(action: ResponseAction, event: TacticalEvent): any {
+  private executeNotificationAction(action: ResponseAction, event: TacticalEvent): Record<string, unknown> {
     bridge.emit("tactical-response:notification", "TacticalResponse", {
       message: action.description,
       event: event as unknown as Record<string, unknown>,
@@ -441,7 +442,7 @@ export class TacticalResponseEngine {
     return { status: "notification_sent" };
   }
 
-  private executeAutomatedCorrectionAction(action: ResponseAction, event: TacticalEvent): any {
+  private executeAutomatedCorrectionAction(action: ResponseAction, event: TacticalEvent): Record<string, unknown> {
     bridge.emit("tactical-response:correction", "TacticalResponse", {
       action: action.description,
       event: event as unknown as Record<string, unknown>,
@@ -450,7 +451,7 @@ export class TacticalResponseEngine {
     return { status: "correction_initiated", parameters: action.parameters };
   }
 
-  private executeEscalationAction(action: ResponseAction, event: TacticalEvent): any {
+  private executeEscalationAction(action: ResponseAction, event: TacticalEvent): Record<string, unknown> {
     bridge.emit("tactical-response:escalation", "TacticalResponse", {
       level: (action.parameters.level as string) || "high",
       event: event as unknown as Record<string, unknown>,
@@ -458,7 +459,7 @@ export class TacticalResponseEngine {
     return { status: "escalated", level: action.parameters.level };
   }
 
-  private executeDataCollectionAction(action: ResponseAction, event: TacticalEvent): any {
+  private executeDataCollectionAction(action: ResponseAction, event: TacticalEvent): Record<string, unknown> {
     bridge.emit("tactical-response:data-collection", "TacticalResponse", {
       sources: action.parameters.sources as unknown as Record<string, unknown>,
       event: event as unknown as Record<string, unknown>,
@@ -466,7 +467,7 @@ export class TacticalResponseEngine {
     return { status: "data_collection_started", sources: action.parameters.sources };
   }
 
-  private executeSystemAdjustmentAction(action: ResponseAction, event: TacticalEvent): any {
+  private executeSystemAdjustmentAction(action: ResponseAction, event: TacticalEvent): Record<string, unknown> {
     bridge.emit("tactical-response:system-adjustment", "TacticalResponse", {
       adjustments: action.parameters as unknown as Record<string, unknown>,
       event: event as unknown as Record<string, unknown>,
@@ -474,7 +475,7 @@ export class TacticalResponseEngine {
     return { status: "system_adjusted", adjustments: action.parameters };
   }
 
-  private executeCrewNotificationAction(action: ResponseAction, event: TacticalEvent): any {
+  private executeCrewNotificationAction(action: ResponseAction, event: TacticalEvent): Record<string, unknown> {
     bridge.emit("tactical-response:crew-notification", "TacticalResponse", {
       crew: action.parameters.crew as unknown as Record<string, unknown>,
       message: action.description,
@@ -483,7 +484,7 @@ export class TacticalResponseEngine {
     return { status: "crew_notified", crew: action.parameters.crew };
   }
 
-  private executeReportGenerationAction(action: ResponseAction, event: TacticalEvent): any {
+  private executeReportGenerationAction(action: ResponseAction, event: TacticalEvent): Record<string, unknown> {
     bridge.emit("tactical-response:report-generation", "TacticalResponse", {
       reportType: action.parameters.reportType as string,
       event: event as unknown as Record<string, unknown>,
@@ -491,7 +492,7 @@ export class TacticalResponseEngine {
     return { status: "report_generated", reportType: action.parameters.reportType };
   }
 
-  private executeFailoverAction(action: ResponseAction, event: TacticalEvent): any {
+  private executeFailoverAction(action: ResponseAction, event: TacticalEvent): Record<string, unknown> {
     bridge.emit("tactical-response:failover", "TacticalResponse", {
       target: action.parameters.target as string,
       backup: action.parameters.backup as string,

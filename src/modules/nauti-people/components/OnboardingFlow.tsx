@@ -153,10 +153,10 @@ const OnboardingFlow: React.FC = () => {
   ];
 
   const getProgressColor = (progresso: number) => {
-    if (progresso >= 75) return 'text-green-500';
-    if (progresso >= 50) return 'text-blue-500';
-    if (progresso >= 25) return 'text-yellow-500';
-    return 'text-orange-500';
+    if (progresso >= 75) return 'text-success';
+    if (progresso >= 50) return 'text-info';
+    if (progresso >= 25) return 'text-warning';
+    return 'text-destructive';
   };
 
   return (

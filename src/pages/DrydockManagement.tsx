@@ -32,7 +32,7 @@ interface DrydockEvent {
   actual_cost: number | null;
   currency: string;
   status: string;
-  work_scope: any[];
+  work_scope: string[];
   notes: string;
 }
 
@@ -123,7 +123,7 @@ export default function DrydockManagement() {
             <Button variant="outline" className="gap-2" onClick={async () => {
               const { data } = await supabase.from('drydock_events').select('*');
               if (!data || data.length === 0) { toast.info('Sem dados de docagem para exportar'); return; }
-              const csvRows = ['Estaleiro;Local;Início Planejado;Fim Planejado;Status;Custo Estimado', ...data.map((d: any) => `${d.shipyard_name};${d.shipyard_location};${d.planned_start_date};${d.planned_end_date};${d.status};${d.estimated_cost}`)];
+              const csvRows = ['Estaleiro;Local;Início Planejado;Fim Planejado;Status;Custo Estimado', ...data.map((d: Record<string, unknown>) => `${String(d.shipyard_name)};${String(d.shipyard_location)};${String(d.planned_start_date)};${String(d.planned_end_date)};${String(d.status)};${String(d.estimated_cost)}`)];
               const blob = new Blob(['\uFEFF' + csvRows.join('\n')], { type: 'text/csv;charset=utf-8;' });
               const url = URL.createObjectURL(blob); const a = document.createElement('a'); a.href = url; a.download = `drydock-report-${new Date().toISOString().slice(0,10)}.csv`; a.click(); URL.revokeObjectURL(url);
               toast.success('Relatório de docagens exportado');

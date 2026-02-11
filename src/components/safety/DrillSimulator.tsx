@@ -299,11 +299,11 @@ export function DrillSimulator() {
 
       {/* Active Drill Banner */}
       {activeDrill && (
-        <Card className="border-orange-500/50 bg-orange-500/10">
+        <Card className="border-warning/50 bg-warning/10">
           <CardContent className="py-4">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-4">
-                <div className="w-16 h-16 rounded-full bg-orange-500 flex items-center justify-center">
+                <div className="w-16 h-16 rounded-full bg-warning flex items-center justify-center">
                   {getScenarioIcon(activeDrill.scenario.type)}
                 </div>
                 <div>
@@ -347,13 +347,13 @@ export function DrillSimulator() {
                   key={idx}
                   className={`p-2 rounded border text-sm ${
                     activeDrill.completedObjectives.includes(obj)
-                      ? "bg-green-500/20 border-green-500/50"
+                      ? "bg-success/20 border-success/50"
                       : "bg-muted/50"
                   }`}
                 >
                   <div className="flex items-center gap-2">
                     {activeDrill.completedObjectives.includes(obj) ? (
-                      <CheckCircle className="h-4 w-4 text-green-500" />
+                      <CheckCircle className="h-4 w-4 text-success" />
                     ) : (
                       <Clock className="h-4 w-4 text-muted-foreground" />
                     )}
@@ -449,7 +449,7 @@ export function DrillSimulator() {
                         <div>
                           <div className="flex items-center gap-2">
                             <span className="font-medium">{result.scenarioName}</span>
-                            <Badge className={result.passed ? "bg-green-500/20 text-green-500" : "bg-red-500/20 text-red-500"}>
+                            <Badge className={result.passed ? "bg-success/20 text-success" : "bg-destructive/20 text-destructive"}>
                               {result.passed ? "Aprovado" : "Reprovado"}
                             </Badge>
                           </div>
@@ -461,7 +461,7 @@ export function DrillSimulator() {
                         </div>
                         <div className="text-right">
                           <div className="flex items-center gap-2">
-                            <Award className="h-5 w-5 text-yellow-500" />
+                            <Award className="h-5 w-5 text-warning" />
                             <span className="text-2xl font-bold">{result.score}%</span>
                           </div>
                         </div>
@@ -520,7 +520,7 @@ export function DrillSimulator() {
                       <PolarGrid />
                       <PolarAngleAxis dataKey="metric" />
                       <PolarRadiusAxis domain={[0, 100]} />
-                      <Radar name="Performance" dataKey="value" stroke="#8b5cf6" fill="#8b5cf6" fillOpacity={0.5} />
+                      <Radar name="Performance" dataKey="value" stroke="hsl(var(--primary))" fill="hsl(var(--primary))" fillOpacity={0.5} />
                     </RadarChart>
                   </ResponsiveContainer>
                 </div>
@@ -532,7 +532,7 @@ export function DrillSimulator() {
           <Card>
             <CardHeader>
               <CardTitle className="text-sm flex items-center gap-2">
-                <Brain className="h-4 w-4 text-purple-500" />
+                <Brain className="h-4 w-4 text-primary" />
                 Recomendações IA
               </CardTitle>
             </CardHeader>
