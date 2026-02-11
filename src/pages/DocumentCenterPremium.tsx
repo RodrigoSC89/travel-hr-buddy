@@ -77,8 +77,8 @@ function DocumentReportsTab() {
     );
   }
 
-  const categories = [...new Set(docs.map((d: any) => d.category || 'Sem categoria'))];
-  const statuses = docs.reduce((acc: Record<string, number>, d: any) => {
+  const categories = [...new Set(docs.map((d) => d.document_type || 'Sem categoria'))];
+  const statuses = docs.reduce((acc: Record<string, number>, d) => {
     const s = d.status || 'draft';
     acc[s] = (acc[s] || 0) + 1;
     return acc;
@@ -92,8 +92,8 @@ function DocumentReportsTab() {
           Relatórios Documentais
         </h3>
         <Button variant="outline" size="sm" onClick={() => {
-          const csv = ["Título,Categoria,Status,Criado", ...docs.map((d: any) => 
-            `"${d.title}",${d.category || 'N/A'},${d.status || 'draft'},${new Date(d.created_at).toLocaleDateString('pt-BR')}`
+          const csv = ["Título,Tipo,Status,Criado", ...docs.map((d) => 
+            `"${d.title}",${d.document_type || 'N/A'},${d.status || 'draft'},${new Date(d.created_at || '').toLocaleDateString('pt-BR')}`
           )].join('\n');
           const blob = new Blob([csv], { type: 'text/csv' });
           const url = URL.createObjectURL(blob);
@@ -136,19 +136,19 @@ function DocumentReportsTab() {
         </CardHeader>
         <CardContent>
           <div className="space-y-2">
-            {docs.slice(0, 10).map((d: any) => (
+            {docs.slice(0, 10).map((d) => (
               <div key={d.id} className="flex items-center justify-between p-2 border rounded hover:bg-muted/50 transition-colors">
                 <div className="flex items-center gap-3">
                   <File className="h-4 w-4 text-muted-foreground" />
                   <div>
                     <p className="text-sm font-medium">{d.title}</p>
-                    <p className="text-xs text-muted-foreground">{d.category || 'Sem categoria'}</p>
+                    <p className="text-xs text-muted-foreground">{d.document_type || 'Sem categoria'}</p>
                   </div>
                 </div>
                 <div className="flex items-center gap-2">
                   <Badge variant="secondary" className="text-xs">{d.status || 'draft'}</Badge>
                   <span className="text-xs text-muted-foreground">
-                    {new Date(d.created_at).toLocaleDateString('pt-BR')}
+                    {new Date(d.created_at || '').toLocaleDateString('pt-BR')}
                   </span>
                 </div>
               </div>
@@ -238,7 +238,7 @@ function VersionHistoryTab() {
     queryFn: async () => {
       const { data, error } = await supabase
         .from("documents")
-        .select("id, title, version, status, updated_at, created_at")
+        .select("id, title, status, updated_at, created_at")
         .order("updated_at", { ascending: false })
         .limit(30);
       if (error) throw error;
@@ -268,19 +268,19 @@ function VersionHistoryTab() {
       <Card>
         <CardContent className="p-0">
           <div className="divide-y">
-            {docs.map((d: any) => (
+            {docs.map((d) => (
               <div key={d.id} className="flex items-center justify-between p-3 hover:bg-muted/50 transition-colors">
                 <div className="flex items-center gap-3">
                   <Clock className="h-4 w-4 text-muted-foreground" />
                   <div>
                     <p className="text-sm font-medium">{d.title}</p>
-                    <p className="text-xs text-muted-foreground">v{d.version || '1.0'}</p>
+                    <p className="text-xs text-muted-foreground">v1.0</p>
                   </div>
                 </div>
                 <div className="flex items-center gap-2">
                   <Badge variant="secondary" className="text-xs">{d.status || 'draft'}</Badge>
                   <span className="text-xs text-muted-foreground">
-                    {new Date(d.updated_at).toLocaleString('pt-BR')}
+                    {new Date(d.updated_at || '').toLocaleString('pt-BR')}
                   </span>
                 </div>
               </div>

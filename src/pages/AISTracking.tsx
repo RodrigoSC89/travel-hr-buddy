@@ -170,10 +170,10 @@ export default function AISTracking() {
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case "Under way using engine": return "bg-green-500";
-      case "At anchor": return "bg-yellow-500";
-      case "Moored": return "bg-blue-500";
-      default: return "bg-gray-500";
+      case "Under way using engine": return "bg-success";
+      case "At anchor": return "bg-warning";
+      case "Moored": return "bg-primary";
+      default: return "bg-muted-foreground";
     }
   };
 
@@ -232,8 +232,8 @@ export default function AISTracking() {
 
           <Card>
             <CardContent className="p-4 flex items-center gap-4">
-              <div className="p-3 rounded-full bg-green-500/10">
-                <Navigation className="h-6 w-6 text-green-500" />
+              <div className="p-3 rounded-full bg-success/10">
+                <Navigation className="h-6 w-6 text-success" />
               </div>
               <div>
                 <p className="text-2xl font-bold">{summary.atSea}</p>
@@ -244,8 +244,8 @@ export default function AISTracking() {
 
           <Card>
             <CardContent className="p-4 flex items-center gap-4">
-              <div className="p-3 rounded-full bg-yellow-500/10">
-                <Anchor className="h-6 w-6 text-yellow-500" />
+              <div className="p-3 rounded-full bg-warning/10">
+                <Anchor className="h-6 w-6 text-warning" />
               </div>
               <div>
                 <p className="text-2xl font-bold">{summary.atAnchor}</p>
@@ -256,8 +256,8 @@ export default function AISTracking() {
 
           <Card>
             <CardContent className="p-4 flex items-center gap-4">
-              <div className="p-3 rounded-full bg-blue-500/10">
-                <MapPin className="h-6 w-6 text-blue-500" />
+              <div className="p-3 rounded-full bg-primary/10">
+                <MapPin className="h-6 w-6 text-primary" />
               </div>
               <div>
                 <p className="text-2xl font-bold">{summary.moored}</p>
@@ -328,15 +328,15 @@ export default function AISTracking() {
               <div className="absolute bottom-4 left-4 bg-background/90 p-3 rounded-lg text-sm">
                 <div className="space-y-2">
                   <div className="flex items-center gap-2">
-                    <div className="w-3 h-3 rounded-full bg-green-500" />
+                    <div className="w-3 h-3 rounded-full bg-success" />
                     <span>Em navegação</span>
                   </div>
                   <div className="flex items-center gap-2">
-                    <div className="w-3 h-3 rounded-full bg-yellow-500" />
+                    <div className="w-3 h-3 rounded-full bg-warning" />
                     <span>Fundeado</span>
                   </div>
                   <div className="flex items-center gap-2">
-                    <div className="w-3 h-3 rounded-full bg-blue-500" />
+                    <div className="w-3 h-3 rounded-full bg-primary" />
                     <span>Atracado</span>
                   </div>
                 </div>

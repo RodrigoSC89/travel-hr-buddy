@@ -42,13 +42,19 @@ interface TrendData {
   wind: number;
 }
 
-const CustomTooltip = ({ active, payload, label }: any) => {
+interface TooltipEntry {
+  color: string;
+  name: string;
+  value: number | string;
+}
+
+const CustomTooltip = ({ active, payload, label }: { active?: boolean; payload?: TooltipEntry[]; label?: string }) => {
   if (!active || !payload?.length) return null;
   
   return (
     <div className="bg-slate-900/95 backdrop-blur-sm border border-white/10 rounded-lg p-3 shadow-xl">
       <p className="text-white font-medium mb-2">{label}</p>
-      {payload.map((entry: any, index: number) => (
+      {payload.map((entry, index: number) => (
         <div key={index} className="flex items-center gap-2 text-sm">
           <div 
             className="w-3 h-3 rounded-full" 
@@ -76,8 +82,8 @@ const getTrend = (data: number[]): 'up' | 'down' | 'stable' => {
 };
 
 const TrendIcon = ({ trend }: { trend: 'up' | 'down' | 'stable' }) => {
-  if (trend === 'up') return <TrendingUp className="h-4 w-4 text-red-400" />;
-  if (trend === 'down') return <TrendingDown className="h-4 w-4 text-blue-400" />;
+  if (trend === 'up') return <TrendingUp className="h-4 w-4 text-destructive" />;
+  if (trend === 'down') return <TrendingDown className="h-4 w-4 text-primary" />;
   return <Minus className="h-4 w-4 text-white/50" />;
 };
 
