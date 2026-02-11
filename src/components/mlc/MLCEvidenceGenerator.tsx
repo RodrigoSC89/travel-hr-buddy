@@ -221,8 +221,8 @@ ${result.deadline_suggestion}
     <div className="space-y-4">
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-3">
-          <div className="p-2 bg-gradient-to-br from-blue-500/20 to-cyan-500/20 rounded-lg">
-            <FileCheck className="h-6 w-6 text-blue-500" />
+          <div className="p-2 bg-gradient-to-br from-primary/20 to-accent/20 rounded-lg">
+            <FileCheck className="h-6 w-6 text-primary" />
           </div>
           <div>
             <h3 className="font-semibold flex items-center gap-2">
@@ -363,7 +363,7 @@ ${result.deadline_suggestion}
               <div className="p-3 bg-muted/50 rounded-lg">
                 <p className="text-sm font-medium">{selectedItem.title}</p>
                 <p className="text-xs text-muted-foreground mt-1">{selectedItem.description}</p>
-                <p className="text-xs text-blue-600 mt-1">{selectedItem.legalBasis}</p>
+                <p className="text-xs text-primary mt-1">{selectedItem.legalBasis}</p>
               </div>
             )}
 
@@ -405,7 +405,7 @@ ${result.deadline_suggestion}
             </div>
 
             <Button 
-              className="w-full bg-gradient-to-r from-blue-500 to-cyan-500 hover:from-blue-600 hover:to-cyan-600"
+              className="w-full bg-gradient-to-r from-primary to-accent hover:from-primary/90 hover:to-accent/90"
               onClick={generateEvidence}
               disabled={isGenerating}
             >
@@ -429,7 +429,7 @@ ${result.deadline_suggestion}
           <CardHeader>
             <CardTitle className="text-lg flex items-center justify-between">
               <div className="flex items-center gap-2">
-                <FileText className="h-5 w-5 text-blue-500" />
+                <FileText className="h-5 w-5 text-primary" />
                 Evidência Gerada
               </div>
               {result && (
@@ -452,7 +452,7 @@ ${result.deadline_suggestion}
                   <div className="space-y-2">
                     <div className="flex items-center justify-between">
                       <Label className="flex items-center gap-2">
-                        <Brain className="h-4 w-4 text-blue-500" />
+                        <Brain className="h-4 w-4 text-primary" />
                         Análise Técnica
                       </Label>
                       <Button 
@@ -475,7 +475,7 @@ ${result.deadline_suggestion}
                   <div className="space-y-2">
                     <div className="flex items-center justify-between">
                       <Label className="flex items-center gap-2">
-                        <Scale className="h-4 w-4 text-purple-500" />
+                        <Scale className="h-4 w-4 text-accent-foreground" />
                         Referência Legal
                       </Label>
                       <Button 
@@ -487,7 +487,7 @@ ${result.deadline_suggestion}
                         <Copy className="h-3 w-3" />
                       </Button>
                     </div>
-                    <div className="bg-purple-500/10 border border-purple-500/20 p-3 rounded-lg text-sm">
+                    <div className="bg-accent/10 border border-accent/20 p-3 rounded-lg text-sm">
                       {result.legal_reference}
                     </div>
                   </div>
@@ -510,10 +510,10 @@ ${result.deadline_suggestion}
                   {/* Risk Assessment */}
                   <div className="space-y-2">
                     <Label className="flex items-center gap-2">
-                      <AlertTriangle className="h-4 w-4 text-red-500" />
+                      <AlertTriangle className="h-4 w-4 text-destructive" />
                       Avaliação de Risco
                     </Label>
-                    <div className="bg-red-500/10 border border-red-500/20 p-3 rounded-lg text-sm">
+                    <div className="bg-destructive/10 border border-destructive/20 p-3 rounded-lg text-sm">
                       {result.risk_assessment}
                     </div>
                   </div>
@@ -523,7 +523,7 @@ ${result.deadline_suggestion}
                   {/* Recommendations */}
                   <div className="space-y-2">
                     <Label className="flex items-center gap-2">
-                      <Target className="h-4 w-4 text-yellow-500" />
+                      <Target className="h-4 w-4 text-warning" />
                       Recomendações
                     </Label>
                     <div className="bg-muted p-3 rounded-lg text-sm whitespace-pre-wrap">
@@ -536,10 +536,10 @@ ${result.deadline_suggestion}
                   {/* Corrective Action */}
                   <div className="space-y-2">
                     <Label className="flex items-center gap-2">
-                      <CheckCircle className="h-4 w-4 text-green-500" />
+                      <CheckCircle className="h-4 w-4 text-success" />
                       Ação Corretiva
                     </Label>
-                    <div className="bg-green-500/10 border border-green-500/20 p-3 rounded-lg text-sm">
+                    <div className="bg-success/10 border border-success/20 p-3 rounded-lg text-sm">
                       {result.corrective_action}
                     </div>
                   </div>

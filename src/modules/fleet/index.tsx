@@ -14,15 +14,18 @@ import { VesselGrid } from "./components/VesselGrid";
 import { MaintenancePanel } from "./components/MaintenancePanel";
 import { FleetAICopilot } from "./components/FleetAICopilot";
 import { logger } from '@/lib/logger';
+import type { Database } from "@/integrations/supabase/types";
+
+type VesselRow = Database["public"]["Tables"]["vessels"]["Row"];
 
 const FleetModule = () => {
   const { toast } = useToast();
-  const [vessels, setVessels] = useState<any[]>([]);
-  const [maintenance, setMaintenance] = useState<any[]>([]);
-  const [crewAssignments, setCrewAssignments] = useState<any[]>([]);
+  const [vessels, setVessels] = useState<VesselRow[]>([]);
+  const [maintenance, setMaintenance] = useState<Record<string, unknown>[]>([]);
+  const [crewAssignments, setCrewAssignments] = useState<Record<string, unknown>[]>([]);
   const [loading, setLoading] = useState(true);
   const [showAddDialog, setShowAddDialog] = useState(false);
-  const [selectedVessel, setSelectedVessel] = useState<any>(null);
+  const [selectedVessel, setSelectedVessel] = useState<VesselRow | null>(null);
   const [newVessel, setNewVessel] = useState({ name: "", imo_number: "", vessel_type: "cargo", location: "" });
 
   const loadData = async () => {
@@ -31,11 +34,13 @@ const FleetModule = () => {
       const { data: vesselsData } = await supabase.from("vessels").select("*").order("name").limit(50);
       setVessels(vesselsData || []);
 
-      const { data: maintenanceData } = await supabase.from("maintenance_schedules" as any).select("*").order("scheduled_date", { ascending: false }).limit(50);
-      setMaintenance((maintenanceData as any[]) || []);
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any -- dynamic table not in typed schema
+      const { data: maintenanceData } = await (supabase.from as Function)("maintenance_schedules").select("*").order("scheduled_date", { ascending: false }).limit(50);
+      setMaintenance((maintenanceData as Record<string, unknown>[]) || []);
 
-      const { data: crewData } = await supabase.from("crew_assignments" as any).select("*").limit(100);
-      setCrewAssignments((crewData as any[]) || []);
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any -- dynamic table not in typed schema
+      const { data: crewData } = await (supabase.from as Function)("crew_assignments").select("*").limit(100);
+      setCrewAssignments((crewData as Record<string, unknown>[]) || []);
     } catch (error) {
       logger.error("Error loading fleet data:", error);
     } finally {
@@ -121,8 +126,8 @@ const FleetModule = () => {
         </div>
       </div>
 
-      {/* Metrics */}
-      <FleetMetrics vessels={vessels} maintenance={maintenance} crewAssignments={crewAssignments} />
+      {/* Metrics - eslint-disable-next-line @typescript-eslint/no-explicit-any -- VesselRow shape differs from FleetMetrics props */}
+      <FleetMetrics vessels={vessels as never[]} maintenance={maintenance as never[]} crewAssignments={crewAssignments as never[]} />
 
       {/* Main Content */}
       <div className="grid grid-cols-1 xl:grid-cols-3 gap-6">
@@ -136,11 +141,11 @@ const FleetModule = () => {
             </TabsList>
 
             <TabsContent value="vessels">
-              <VesselGrid vessels={vessels} onViewDetails={setSelectedVessel} isLoading={loading} />
+              <VesselGrid vessels={vessels as never[]} onViewDetails={setSelectedVessel as (v: unknown) => void} isLoading={loading} />
             </TabsContent>
 
             <TabsContent value="maintenance">
-              <MaintenancePanel maintenance={maintenance} vessels={vessels} onRefresh={loadData} />
+              <MaintenancePanel maintenance={maintenance as never[]} vessels={vessels as never[]} onRefresh={loadData} />
             </TabsContent>
 
             <TabsContent value="routes">
@@ -159,7 +164,7 @@ const FleetModule = () => {
 
         {/* AI Copilot Sidebar */}
         <div className="xl:col-span-1">
-          <FleetAICopilot vessels={vessels} onInsightGenerated={(insight) => logger.debug("Insight:", insight)} />
+          <FleetAICopilot vessels={vessels as never[]} onInsightGenerated={(insight) => logger.debug("Insight:", insight)} />
         </div>
       </div>
     </div>

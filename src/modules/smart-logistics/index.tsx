@@ -91,15 +91,15 @@ export default function SmartLogistics() {
             id: r.id,
             name: r.fuel_type || `Combustível ${i + 1}`,
             category: "fuel" as const,
-            currentStock: (r as any).volume_liters || r.density || 0,
-            maxCapacity: ((r as any).volume_liters || r.density || 0) * 2,
+            currentStock: Number((r as Record<string, unknown>).volume_liters ?? r.density ?? 0),
+            maxCapacity: Number((r as Record<string, unknown>).volume_liters ?? r.density ?? 0) * 2,
             unit: "litros",
-            consumptionRate: ((r as any).volume_liters || r.density || 0) / 30,
+            consumptionRate: Number((r as Record<string, unknown>).volume_liters ?? r.density ?? 0) / 30,
             daysUntilEmpty: 30,
-            reorderPoint: ((r as any).volume_liters || r.density || 0) * 0.3,
+            reorderPoint: Number((r as Record<string, unknown>).volume_liters ?? r.density ?? 0) * 0.3,
             lastRestock: new Date(r.created_at || Date.now()),
             predictedNeed: new Date(Date.now() + 2592000000),
-            status: ((r as any).volume_liters || r.density || 0) < 1000 ? "critical" : "ok" as const,
+            status: Number((r as Record<string, unknown>).volume_liters ?? r.density ?? 0) < 1000 ? "critical" : "ok" as const,
           }));
           setSupplies(mapped);
         }

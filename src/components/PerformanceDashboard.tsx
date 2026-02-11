@@ -19,9 +19,9 @@ interface MetricCardProps {
 
 function MetricCard({ title, value, unit, status, icon, description }: MetricCardProps) {
   const statusColors = {
-    good: "bg-green-500/10 text-green-500 border-green-500/20",
-    warning: "bg-yellow-500/10 text-yellow-500 border-yellow-500/20",
-    poor: "bg-red-500/10 text-red-500 border-red-500/20"
+    good: "bg-success/10 text-success border-success/20",
+    warning: "bg-warning/10 text-warning border-warning/20",
+    poor: "bg-destructive/10 text-destructive border-destructive/20"
   };
 
   const statusLabels = {
@@ -33,7 +33,7 @@ function MetricCard({ title, value, unit, status, icon, description }: MetricCar
   return (
     <motion.div variants={staggerItem}>
       <Card className="relative overflow-hidden">
-        <div className={`absolute inset-0 opacity-5 ${status === 'good' ? 'bg-green-500' : status === 'warning' ? 'bg-yellow-500' : 'bg-red-500'}`} />
+        <div className={`absolute inset-0 opacity-5 ${status === 'good' ? 'bg-success' : status === 'warning' ? 'bg-warning' : 'bg-destructive'}`} />
         <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
           <CardTitle className="text-sm font-medium text-muted-foreground">
             {title}

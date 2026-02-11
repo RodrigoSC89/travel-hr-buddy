@@ -308,8 +308,8 @@ export const EnhancedFinanceCenter: React.FC = () => {
         className="flex flex-col md:flex-row md:items-center justify-between gap-4"
       >
         <div className="flex items-center gap-4">
-          <div className="p-3 rounded-2xl bg-gradient-to-br from-green-500/20 to-emerald-500/10 border border-green-500/20">
-            <DollarSign className="h-8 w-8 text-green-500" />
+          <div className="p-3 rounded-2xl bg-gradient-to-br from-success/20 to-success/10 border border-success/20">
+            <DollarSign className="h-8 w-8 text-success" />
           </div>
           <div>
             <h1 className="text-3xl font-bold">Centro Financeiro</h1>
@@ -323,7 +323,7 @@ export const EnhancedFinanceCenter: React.FC = () => {
                 key={period}
                 variant={selectedPeriod === period ? 'default' : 'ghost'}
                 size="sm"
-                onClick={() => setSelectedPeriod(period as any)}
+                onClick={() => setSelectedPeriod(period as typeof selectedPeriod)}
               >
                 {period === 'week' ? 'Semana' : period === 'month' ? 'Mês' : period === 'quarter' ? 'Trimestre' : 'Ano'}
               </Button>
