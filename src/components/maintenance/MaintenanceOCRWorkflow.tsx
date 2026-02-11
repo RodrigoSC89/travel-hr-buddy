@@ -505,7 +505,7 @@ Observações: Documento processado`;
                   />
                   
                   {selectedDoc.confidence < 90 && (
-                    <div className="flex items-center gap-2 p-3 bg-yellow-500/10 text-yellow-600 rounded-lg">
+                    <div className="flex items-center gap-2 p-3 bg-warning/10 text-warning rounded-lg">
                       <AlertTriangle className="h-4 w-4" />
                       <span className="text-sm">
                         Confiança baixa - revise o texto cuidadosamente

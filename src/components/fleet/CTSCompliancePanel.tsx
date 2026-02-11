@@ -327,7 +327,7 @@ export function CTSCompliancePanel({ vesselId, vesselName, onComplianceCheck }: 
   const getSeverityColor = (severity: string) => {
     switch (severity) {
       case 'critical': return 'bg-destructive text-destructive-foreground';
-      case 'high': return 'bg-orange-500 text-white';
+      case 'high': return 'bg-warning text-warning-foreground';
       case 'medium': return 'bg-warning text-warning-foreground';
       default: return 'bg-muted';
     }

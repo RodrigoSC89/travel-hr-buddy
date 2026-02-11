@@ -298,10 +298,10 @@ export const ProfessionalCrewDossier: React.FC = () => {
 
   const getPriorityColor = (priority: string) => {
     switch (priority) {
-    case "urgent": return "bg-red-100 text-red-800 border-red-200";
-    case "high": return "bg-orange-100 text-orange-800 border-orange-200";
-    case "medium": return "bg-yellow-100 text-yellow-800 border-yellow-200";
-    case "low": return "bg-green-100 text-green-800 border-green-200";
+    case "urgent": return "bg-destructive/10 text-destructive border-destructive/20";
+    case "high": return "bg-warning/10 text-warning border-warning/20";
+    case "medium": return "bg-warning/10 text-warning border-warning/20";
+    case "low": return "bg-success/10 text-success border-success/20";
     default: return "bg-secondary text-secondary-foreground border-border";
     }
   };
@@ -311,14 +311,14 @@ export const ProfessionalCrewDossier: React.FC = () => {
     case "valid":
     case "active":
     case "verified":
-      return "bg-green-100 text-green-800";
+      return "bg-success/10 text-success";
     case "expiring_soon":
     case "expiring":
     case "pending":
-      return "bg-yellow-100 text-yellow-800";
+      return "bg-warning/10 text-warning";
     case "expired":
     case "rejected":
-      return "bg-red-100 text-red-800";
+      return "bg-destructive/10 text-destructive";
     default:
       return "bg-secondary text-secondary-foreground";
     }
@@ -441,7 +441,7 @@ export const ProfessionalCrewDossier: React.FC = () => {
                 <p className="text-sm font-medium text-muted-foreground">Total Embarques</p>
                 <p className="text-2xl font-bold text-primary">{stats.totalEmbarkations}</p>
               </div>
-              <Ship className="h-8 w-8 text-blue-500" />
+              <Ship className="h-8 w-8 text-primary" />
             </div>
           </CardContent>
         </Card>
@@ -454,7 +454,7 @@ export const ProfessionalCrewDossier: React.FC = () => {
                 <p className="text-2xl font-bold text-primary">{stats.totalSeaDays}</p>
                 <p className="text-xs text-muted-foreground">{stats.totalSeaTime}h total</p>
               </div>
-              <Waves className="h-8 w-8 text-cyan-500" />
+              <Waves className="h-8 w-8 text-primary" />
             </div>
           </CardContent>
         </Card>
@@ -467,7 +467,7 @@ export const ProfessionalCrewDossier: React.FC = () => {
                 <p className="text-2xl font-bold text-primary">{stats.avgPerformance}/10</p>
                 <Progress value={stats.avgPerformance * 10} className="mt-1" />
               </div>
-              <Star className="h-8 w-8 text-yellow-500" />
+              <Star className="h-8 w-8 text-warning" />
             </div>
           </CardContent>
         </Card>
@@ -480,7 +480,7 @@ export const ProfessionalCrewDossier: React.FC = () => {
                 <p className="text-2xl font-bold text-primary">{stats.complianceRate}%</p>
                 <Progress value={stats.complianceRate} className="mt-1" />
               </div>
-              <Shield className="h-8 w-8 text-green-500" />
+              <Shield className="h-8 w-8 text-success" />
             </div>
           </CardContent>
         </Card>
@@ -597,7 +597,7 @@ export const ProfessionalCrewDossier: React.FC = () => {
                 <div className="space-y-4">
                   {embarkations.slice(0, 3).map((embark) => (
                     <div key={embark.id} className="flex items-center space-x-3">
-                      <Ship className="h-5 w-5 text-blue-500" />
+                      <Ship className="h-5 w-5 text-primary" />
                       <div className="flex-1">
                         <p className="text-sm font-medium">{embark.vessel_name}</p>
                         <p className="text-xs text-muted-foreground">
@@ -830,9 +830,9 @@ export const ProfessionalCrewDossier: React.FC = () => {
                         Avaliador: {review.reviewer_name}
                       </p>
                     </div>
-                    <Badge className={review.overall_score >= 8 ? "bg-green-100 text-green-800" : 
-                      review.overall_score >= 6 ? "bg-yellow-100 text-yellow-800" : 
-                        "bg-red-100 text-red-800"}>
+                    <Badge className={review.overall_score >= 8 ? "bg-success/10 text-success" : 
+                      review.overall_score >= 6 ? "bg-warning/10 text-warning" : 
+                        "bg-destructive/10 text-destructive"}>
                       {review.overall_score}/10
                     </Badge>
                   </div>
@@ -872,21 +872,21 @@ export const ProfessionalCrewDossier: React.FC = () => {
 
                   {review.positive_feedback && (
                     <div className="mb-4">
-                      <label className="text-sm font-medium text-green-700">Pontos Positivos</label>
+                      <label className="text-sm font-medium text-success">Pontos Positivos</label>
                       <p className="text-sm text-muted-foreground mt-1">{review.positive_feedback}</p>
                     </div>
                   )}
 
                   {review.improvement_areas && (
                     <div className="mb-4">
-                      <label className="text-sm font-medium text-orange-700">Áreas de Melhoria</label>
+                      <label className="text-sm font-medium text-warning">Áreas de Melhoria</label>
                       <p className="text-sm text-muted-foreground mt-1">{review.improvement_areas}</p>
                     </div>
                   )}
 
                   {review.recommendations && (
                     <div>
-                      <label className="text-sm font-medium text-blue-700">Recomendações</label>
+                      <label className="text-sm font-medium text-primary">Recomendações</label>
                       <p className="text-sm text-muted-foreground mt-1">{review.recommendations}</p>
                     </div>
                   )}
@@ -906,7 +906,7 @@ export const ProfessionalCrewDossier: React.FC = () => {
               </CardDescription>
             </CardHeader>
             <CardContent>
-              <div className="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center">
+              <div className="border-2 border-dashed border-border rounded-lg p-6 text-center">
                 <Upload className="h-12 w-12 mx-auto text-muted-foreground mb-4" />
                 <p className="text-sm text-muted-foreground mb-2">
                   Arraste arquivos aqui ou clique para selecionar
@@ -922,7 +922,7 @@ export const ProfessionalCrewDossier: React.FC = () => {
                 <CardContent className="p-4">
                   <div className="flex items-center justify-between">
                     <div className="flex items-center space-x-3">
-                      <FileText className="h-8 w-8 text-blue-500" />
+                      <FileText className="h-8 w-8 text-primary" />
                       <div>
                         <h4 className="font-medium">{doc.document_name}</h4>
                         <p className="text-sm text-muted-foreground">

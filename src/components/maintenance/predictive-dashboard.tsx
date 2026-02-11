@@ -177,7 +177,7 @@ export function PredictiveDashboard() {
   const getRiskColor = (level: string) => {
     switch (level) {
       case 'critical': return 'text-destructive';
-      case 'high': return 'text-orange-600';
+      case 'high': return 'text-warning';
       case 'medium': return 'text-warning';
       default: return 'text-success';
     }

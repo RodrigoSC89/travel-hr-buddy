@@ -188,7 +188,7 @@ export function Predictive30_60_90() {
           <Card>
             <CardContent className="pt-4">
               <div className="flex items-center gap-2">
-                <Calendar className="h-5 w-5 text-orange-500" />
+                <Calendar className="h-5 w-5 text-warning" />
                 <div>
                   <p className="text-2xl font-bold">{summary.total60Days}</p>
                   <p className="text-xs text-muted-foreground">Próximos 60 dias</p>
@@ -199,7 +199,7 @@ export function Predictive30_60_90() {
           <Card>
             <CardContent className="pt-4">
               <div className="flex items-center gap-2">
-                <Calendar className="h-5 w-5 text-yellow-500" />
+                <Calendar className="h-5 w-5 text-warning" />
                 <div>
                   <p className="text-2xl font-bold">{summary.total90Days}</p>
                   <p className="text-xs text-muted-foreground">Próximos 90 dias</p>

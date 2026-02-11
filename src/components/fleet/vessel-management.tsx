@@ -174,9 +174,9 @@ const VesselManagement: React.FC = () => {
 
   const getStatusColor = (status: string | null): string => {
     switch (status) {
-    case "active": return "bg-green-500 text-primary-foreground";
-    case "maintenance": return "bg-yellow-500 text-primary-foreground";
-    case "inactive": return "bg-red-500 text-primary-foreground";
+    case "active": return "bg-success text-primary-foreground";
+    case "maintenance": return "bg-warning text-primary-foreground";
+    case "inactive": return "bg-destructive text-primary-foreground";
     default: return "bg-muted text-muted-foreground";
     }
   };

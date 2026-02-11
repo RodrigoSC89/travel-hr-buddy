@@ -315,12 +315,12 @@ export const FleetTelemetryDashboard: React.FC = () => {
 
   const getStatusColor = (status: string | null) => {
     const colors: Record<string, string> = {
-      normal: "text-green-500",
-      warning: "text-yellow-500",
-      critical: "text-red-500",
-      offline: "text-gray-500",
+      normal: "text-success",
+      warning: "text-warning",
+      critical: "text-destructive",
+      offline: "text-muted-foreground",
     };
-    return colors[status || "normal"] || "text-gray-500";
+    return colors[status || "normal"] || "text-muted-foreground";
   };
 
   const exportTelemetryData = () => {
@@ -424,7 +424,7 @@ export const FleetTelemetryDashboard: React.FC = () => {
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">Active Alerts</CardTitle>
-            <AlertTriangle className="h-4 w-4 text-yellow-500" />
+            <AlertTriangle className="h-4 w-4 text-warning" />
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">{alerts.length}</div>
@@ -437,7 +437,7 @@ export const FleetTelemetryDashboard: React.FC = () => {
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">Fleet Health</CardTitle>
-            <CheckCircle className="h-4 w-4 text-green-500" />
+            <CheckCircle className="h-4 w-4 text-success" />
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">

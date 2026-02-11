@@ -24,8 +24,8 @@ export default function MaintenanceDashboard() {
     case "low":
       return {
         icon: CheckCircle,
-        color: "text-emerald-500",
-        bgColor: "bg-emerald-500/10",
+        color: "text-success",
+        bgColor: "bg-success/10",
         badgeVariant: "default" as const,
         label: "Normal",
       };
