@@ -208,7 +208,7 @@ export default function Patch518MissionEngine() {
           <div className="space-y-2">
             {validationChecklist.map((item) => (
               <div key={item.id} className="flex items-center gap-2">
-                <div className={`h-4 w-4 rounded-full ${item.completed ? "bg-green-500" : "bg-muted"}`} />
+                <div className={`h-4 w-4 rounded-full ${item.completed ? "bg-success" : "bg-muted"}`} />
                 <span className={item.completed ? "text-foreground" : "text-muted-foreground"}>
                   {item.label}
                 </span>

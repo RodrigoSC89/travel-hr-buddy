@@ -116,7 +116,7 @@ export function VesselTimelineAdvanced({
   const filteredEvents = useMemo(() => {
     if (!events) return [];
 
-    return events.filter((event: any) => {
+    return events.filter((event: HistoryEvent) => {
       const matchesSearch =
         !searchTerm ||
         (event.title || '').toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -133,9 +133,9 @@ export function VesselTimelineAdvanced({
   const stats = useMemo(() => {
     if (!filteredEvents.length) return null;
 
-    const totalCost = filteredEvents.reduce((sum: number, e: any) => sum + (e.cost || 0), 0);
-    const totalDowntime = filteredEvents.reduce((sum: number, e: any) => sum + (e.downtime_hours || 0), 0);
-    const incidents = filteredEvents.filter((e: any) => e.event_type === 'incident').length;
+    const totalCost = filteredEvents.reduce((sum: number, e: HistoryEvent) => sum + (e.cost || 0), 0);
+    const totalDowntime = filteredEvents.reduce((sum: number, e: HistoryEvent) => sum + (e.downtime_hours || 0), 0);
+    const incidents = filteredEvents.filter((e: HistoryEvent) => e.event_type === 'incident').length;
 
     return { totalCost, totalDowntime, incidents, total: filteredEvents.length };
   }, [filteredEvents]);
@@ -181,7 +181,7 @@ export function VesselTimelineAdvanced({
   const exportTimeline = () => {
     const csv = [
       ['Data', 'Tipo', 'Título', 'Descrição', 'Custo', 'Downtime (h)'].join(','),
-      ...filteredEvents.map((e: any) =>
+      ...filteredEvents.map((e: HistoryEvent) =>
         [
           new Date(e.event_date).toLocaleDateString('pt-BR'),
           e.event_type,
@@ -288,7 +288,7 @@ export function VesselTimelineAdvanced({
             </SelectContent>
           </Select>
 
-          <Select value={dateRange} onValueChange={(v: any) => setDateRange(v)}>
+          <Select value={dateRange} onValueChange={(v) => setDateRange(v as typeof dateRange)}>
             <SelectTrigger className="w-[150px]">
               <Calendar className="h-4 w-4 mr-2" />
               <SelectValue placeholder="Período" />
@@ -322,7 +322,7 @@ export function VesselTimelineAdvanced({
                 <p>Nenhum evento encontrado</p>
               </div>
             ) : (
-              filteredEvents.map((event: any) => (
+              filteredEvents.map((event: HistoryEvent) => (
                 <div
                   key={event.id}
                   className={`relative border-l-4 ${getEventColor(event.event_type)} bg-card rounded-lg p-4 cursor-pointer hover:shadow-md transition-shadow`}

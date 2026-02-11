@@ -95,39 +95,39 @@ const getTypeConfig = (type: string) => {
   const configs = {
     fire: {
       icon: AlertTriangle,
-      color: "bg-red-600 text-white",
+      color: "bg-destructive text-destructive-foreground",
       label: "Incêndio",
-      badgeColor: "bg-red-600"
+      badgeColor: "bg-destructive"
     },
     oil_spill: {
       icon: Activity,
-      color: "bg-green-600 text-white",
+      color: "bg-success text-success-foreground",
       label: "Derramamento",
-      badgeColor: "bg-green-600"
+      badgeColor: "bg-success"
     },
     man_overboard: {
       icon: Users,
-      color: "bg-blue-600 text-white",
+      color: "bg-primary text-primary-foreground",
       label: "Homem ao Mar",
-      badgeColor: "bg-blue-600"
+      badgeColor: "bg-primary"
     },
     collision: {
       icon: AlertTriangle,
-      color: "bg-orange-600 text-white",
+      color: "bg-warning text-warning-foreground",
       label: "Colisão",
-      badgeColor: "bg-orange-600"
+      badgeColor: "bg-warning"
     },
     medical: {
       icon: Shield,
-      color: "bg-purple-600 text-white",
+      color: "bg-secondary text-secondary-foreground",
       label: "Médica",
-      badgeColor: "bg-purple-600"
+      badgeColor: "bg-secondary"
     },
     abandon_ship: {
       icon: AlertTriangle,
-      color: "bg-red-700 text-white",
+      color: "bg-destructive text-destructive-foreground",
       label: "Abandono",
-      badgeColor: "bg-red-700"
+      badgeColor: "bg-destructive"
     }
   };
   return configs[type as keyof typeof configs] || configs.fire;
@@ -136,15 +136,15 @@ const getTypeConfig = (type: string) => {
 const getStatusConfig = (status: string) => {
   const configs = {
     active: {
-      color: "bg-green-600 text-white",
+      color: "bg-success text-success-foreground",
       label: "Ativo"
     },
     under_review: {
-      color: "bg-yellow-600 text-white",
+      color: "bg-warning text-warning-foreground",
       label: "Em Revisão"
     },
     expired: {
-      color: "bg-red-600 text-white",
+      color: "bg-destructive text-destructive-foreground",
       label: "Expirado"
     }
   };
@@ -191,53 +191,53 @@ export const EmergencyResponse: React.FC = () => {
     <div className="space-y-6">
       {/* Summary Cards */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-        <Card className="bg-gradient-to-br from-green-50 to-green-100 border-green-200">
+        <Card className="bg-success/10 border-success/30">
           <CardContent className="p-6">
             <div className="flex items-center justify-between mb-4">
-              <CheckCircle className="h-10 w-10 text-green-600" />
-              <Badge className="bg-green-600 text-white font-bold">ATIVOS</Badge>
+              <CheckCircle className="h-10 w-10 text-success" />
+              <Badge className="bg-success text-success-foreground font-bold">ATIVOS</Badge>
             </div>
-            <h3 className="text-sm font-medium text-green-700 mb-1">Planos Ativos</h3>
-            <p className="text-3xl font-bold text-green-900">{activeCount}</p>
-            <p className="text-xs text-green-600 mt-2">Prontos para ação</p>
+            <h3 className="text-sm font-medium text-success mb-1">Planos Ativos</h3>
+            <p className="text-3xl font-bold text-foreground">{activeCount}</p>
+            <p className="text-xs text-success mt-2">Prontos para ação</p>
           </CardContent>
         </Card>
 
-        <Card className="bg-gradient-to-br from-yellow-50 to-yellow-100 border-yellow-200">
+        <Card className="bg-warning/10 border-warning/30">
           <CardContent className="p-6">
             <div className="flex items-center justify-between mb-4">
-              <FileText className="h-10 w-10 text-yellow-600" />
-              <Badge className="bg-yellow-600 text-white font-bold">REVISÃO</Badge>
+              <FileText className="h-10 w-10 text-warning" />
+              <Badge className="bg-warning text-warning-foreground font-bold">REVISÃO</Badge>
             </div>
-            <h3 className="text-sm font-medium text-yellow-700 mb-1">Em Revisão</h3>
-            <p className="text-3xl font-bold text-yellow-900">{reviewCount}</p>
-            <p className="text-xs text-yellow-600 mt-2">Aguardando aprovação</p>
+            <h3 className="text-sm font-medium text-warning mb-1">Em Revisão</h3>
+            <p className="text-3xl font-bold text-foreground">{reviewCount}</p>
+            <p className="text-xs text-warning mt-2">Aguardando aprovação</p>
           </CardContent>
         </Card>
 
-        <Card className="bg-gradient-to-br from-blue-50 to-blue-100 border-blue-200">
+        <Card className="bg-primary/10 border-primary/30">
           <CardContent className="p-6">
             <div className="flex items-center justify-between mb-4">
-              <Activity className="h-10 w-10 text-blue-600" />
-              <Badge className="bg-blue-600 text-white font-bold">SIMULADOS</Badge>
+              <Activity className="h-10 w-10 text-primary" />
+              <Badge className="bg-primary text-primary-foreground font-bold">SIMULADOS</Badge>
             </div>
-            <h3 className="text-sm font-medium text-blue-700 mb-1">Simulados no Mês</h3>
-            <p className="text-3xl font-bold text-blue-900">{totalDrillsThisMonth}</p>
-            <p className="text-xs text-blue-600 mt-2">Realizados</p>
+            <h3 className="text-sm font-medium text-primary mb-1">Simulados no Mês</h3>
+            <p className="text-3xl font-bold text-foreground">{totalDrillsThisMonth}</p>
+            <p className="text-xs text-primary mt-2">Realizados</p>
           </CardContent>
         </Card>
 
-        <Card className="bg-gradient-to-br from-orange-50 to-orange-100 border-orange-200">
+        <Card className="bg-warning/10 border-warning/30">
           <CardContent className="p-6">
             <div className="flex items-center justify-between mb-4">
-              <Clock className="h-10 w-10 text-orange-600" />
-              <Badge className="bg-orange-600 text-white font-bold">PRÓXIMO</Badge>
+              <Clock className="h-10 w-10 text-warning" />
+              <Badge className="bg-warning text-warning-foreground font-bold">PRÓXIMO</Badge>
             </div>
-            <h3 className="text-sm font-medium text-orange-700 mb-1">Próximo Simulado</h3>
-            <p className="text-xl font-bold text-orange-900">
+            <h3 className="text-sm font-medium text-warning mb-1">Próximo Simulado</h3>
+            <p className="text-xl font-bold text-foreground">
               {new Date(nextDrill).toLocaleDateString("pt-BR")}
             </p>
-            <p className="text-xs text-orange-600 mt-2">Agendado</p>
+            <p className="text-xs text-warning mt-2">Agendado</p>
           </CardContent>
         </Card>
       </div>
@@ -320,7 +320,7 @@ export const EmergencyResponse: React.FC = () => {
                         </div>
                         <div className="flex-1">
                           <div className="flex items-center gap-2 mb-2">
-                            <h3 className="text-lg font-bold text-gray-900">{plan.title}</h3>
+                            <h3 className="text-lg font-bold text-foreground">{plan.title}</h3>
                             <Badge className={typeConfig.badgeColor + " text-white"}>
                               {typeConfig.label}
                             </Badge>
@@ -331,26 +331,26 @@ export const EmergencyResponse: React.FC = () => {
                           <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mt-3">
                             <div>
                               <p className="text-xs text-muted-foreground font-medium">Último Simulado</p>
-                              <p className="text-sm font-bold text-gray-900">
+                              <p className="text-sm font-bold text-foreground">
                                 {new Date(plan.last_drill).toLocaleDateString("pt-BR")}
                               </p>
                             </div>
                             <div>
                               <p className="text-xs text-muted-foreground font-medium">Próximo Simulado</p>
-                              <p className="text-sm font-bold text-gray-900">
+                              <p className="text-sm font-bold text-foreground">
                                 {new Date(plan.next_drill).toLocaleDateString("pt-BR")}
                               </p>
                             </div>
                             <div>
                               <p className="text-xs text-muted-foreground font-medium">Responsável</p>
-                              <p className="text-sm font-bold text-gray-900">
+                              <p className="text-sm font-bold text-foreground">
                                 <Users className="h-3 w-3 inline mr-1" />
                                 {plan.responsible}
                               </p>
                             </div>
                             <div>
                               <p className="text-xs text-muted-foreground font-medium">Contatos</p>
-                              <p className="text-sm font-bold text-gray-900">
+                              <p className="text-sm font-bold text-foreground">
                                 <Phone className="h-3 w-3 inline mr-1" />
                                 {plan.contacts} pessoas
                               </p>
@@ -370,7 +370,7 @@ export const EmergencyResponse: React.FC = () => {
                         </Button>
                         <Button
                           size="sm"
-                          className="min-h-[44px] px-6 bg-orange-600 hover:bg-orange-700 text-white"
+                          className="min-h-[44px] px-6 bg-warning text-warning-foreground hover:bg-warning/90"
                           onClick={() => handleStartDrill(plan)}
                         >
                           <Activity className="h-4 w-4 mr-2" />
@@ -402,35 +402,35 @@ export const EmergencyResponse: React.FC = () => {
         </CardHeader>
         <CardContent>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <Card className="border-2 border-red-300 bg-red-50">
+            <Card className="border-2 border-destructive/30 bg-destructive/5">
               <CardContent className="p-4">
                 <div className="flex items-center gap-3">
-                  <Phone className="h-8 w-8 text-red-600" />
+                  <Phone className="h-8 w-8 text-destructive" />
                   <div>
-                    <p className="font-bold text-gray-900">Capitania dos Portos</p>
-                    <p className="text-xl font-bold text-red-600">185</p>
+                    <p className="font-bold text-foreground">Capitania dos Portos</p>
+                    <p className="text-xl font-bold text-destructive">185</p>
                   </div>
                 </div>
               </CardContent>
             </Card>
-            <Card className="border-2 border-blue-300 bg-blue-50">
+            <Card className="border-2 border-primary/30 bg-primary/5">
               <CardContent className="p-4">
                 <div className="flex items-center gap-3">
-                  <Phone className="h-8 w-8 text-blue-600" />
+                  <Phone className="h-8 w-8 text-primary" />
                   <div>
-                    <p className="font-bold text-gray-900">Marinha MRCC</p>
-                    <p className="text-xl font-bold text-blue-600">0800-941-185</p>
+                    <p className="font-bold text-foreground">Marinha MRCC</p>
+                    <p className="text-xl font-bold text-primary">0800-941-185</p>
                   </div>
                 </div>
               </CardContent>
             </Card>
-            <Card className="border-2 border-green-300 bg-green-50">
+            <Card className="border-2 border-success/30 bg-success/5">
               <CardContent className="p-4">
                 <div className="flex items-center gap-3">
-                  <Phone className="h-8 w-8 text-green-600" />
+                  <Phone className="h-8 w-8 text-success" />
                   <div>
-                    <p className="font-bold text-gray-900">IBAMA - Emergências</p>
-                    <p className="text-xl font-bold text-green-600">0800-61-8080</p>
+                    <p className="font-bold text-foreground">IBAMA - Emergências</p>
+                    <p className="text-xl font-bold text-success">0800-61-8080</p>
                   </div>
                 </div>
               </CardContent>
@@ -447,28 +447,28 @@ export const EmergencyResponse: React.FC = () => {
         <CardContent>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
             <Button
-              className="bg-red-600 hover:bg-red-700 text-white min-h-[56px] flex-col gap-2"
+              className="bg-destructive hover:bg-destructive/90 text-destructive-foreground min-h-[56px] flex-col gap-2"
               onClick={() => setNewPlanOpen(true)}
             >
               <AlertTriangle className="h-6 w-6" />
               <span className="font-semibold">Novo Plano</span>
             </Button>
             <Button
-              className="bg-blue-600 hover:bg-blue-700 text-white min-h-[56px] flex-col gap-2"
+              className="bg-primary hover:bg-primary/90 text-primary-foreground min-h-[56px] flex-col gap-2"
               onClick={() => setScheduleDrillOpen(true)}
             >
               <Clock className="h-6 w-6" />
               <span className="font-semibold">Agendar</span>
             </Button>
             <Button
-              className="bg-green-600 hover:bg-green-700 text-white min-h-[56px] flex-col gap-2"
+              className="bg-success hover:bg-success/90 text-success-foreground min-h-[56px] flex-col gap-2"
               onClick={() => setReportOpen(true)}
             >
               <FileText className="h-6 w-6" />
               <span className="font-semibold">Relatório</span>
             </Button>
             <Button
-              className="bg-orange-600 hover:bg-orange-700 text-white min-h-[56px] flex-col gap-2"
+              className="bg-warning hover:bg-warning/90 text-warning-foreground min-h-[56px] flex-col gap-2"
               onClick={() => setLocationsOpen(true)}
             >
               <MapPin className="h-6 w-6" />
