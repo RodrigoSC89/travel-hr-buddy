@@ -164,7 +164,8 @@ export async function generateExecutivePDF(): Promise<Blob> {
   });
 
   // IoT Section
-  const finalY = (doc as any).lastAutoTable.finalY || 130;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- jspdf-autotable extends doc with lastAutoTable
+  const finalY = (doc as unknown as Record<string, { finalY: number }>).lastAutoTable?.finalY || 130;
   doc.setFontSize(14);
   doc.text("Monitoramento IoT", 14, finalY + 15);
 

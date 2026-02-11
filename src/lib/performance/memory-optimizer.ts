@@ -126,7 +126,8 @@ class MemoryOptimizer {
     
     // Force garbage collection hint
     if (typeof window !== 'undefined') {
-      (window as any).gc?.();
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any -- gc() is a V8-specific non-standard API
+      (window as unknown as Record<string, (() => void) | undefined>).gc?.();
     }
   }
 

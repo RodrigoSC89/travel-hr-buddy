@@ -114,8 +114,8 @@ export class BlockchainComplianceLedger {
     };
 
     // Store in Supabase as immutable record
-    const { error } = await supabase
-      .from('compliance_ledger' as any)
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any -- compliance_ledger not in generated types
+    const { error } = await (supabase.from as Function)('compliance_ledger')
       .insert({
         evidence_id: evidence.id,
         audit_id: evidence.auditId,

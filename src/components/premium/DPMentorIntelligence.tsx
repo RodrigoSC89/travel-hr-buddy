@@ -127,9 +127,9 @@
 
     const getStatusColor = (status: string) => {
       switch (status) {
-        case "active": return "bg-green-500/10 text-green-500 border-green-500/20";
-        case "renewal_due": return "bg-amber-500/10 text-amber-500 border-amber-500/20";
-        case "in_training": return "bg-blue-500/10 text-blue-500 border-blue-500/20";
+        case "active": return "bg-success/10 text-success border-success/20";
+        case "renewal_due": return "bg-warning/10 text-warning border-warning/20";
+        case "in_training": return "bg-info/10 text-info border-info/20";
         default: return "bg-muted text-muted-foreground";
       }
     };
@@ -143,60 +143,60 @@
      <div className="space-y-6">
        {/* Header Stats */}
        <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-         <Card className="border-l-4 border-l-blue-500">
-           <CardContent className="p-4">
-             <div className="flex items-center justify-between">
-               <div>
-                 <p className="text-xs text-muted-foreground">DPOs Certificados</p>
-                 <p className="text-2xl font-bold">{ACTIVE_PERSONNEL.length}</p>
-                 <p className="text-xs text-green-500 flex items-center gap-1">
-                   <CheckCircle className="h-3 w-3" /> NI Standards
-                 </p>
-               </div>
-               <Anchor className="h-8 w-8 text-blue-500" />
+          <Card className="border-l-4 border-l-info">
+            <CardContent className="p-4">
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-xs text-muted-foreground">DPOs Certificados</p>
+                  <p className="text-2xl font-bold">{ACTIVE_PERSONNEL.length}</p>
+                  <p className="text-xs text-success flex items-center gap-1">
+                    <CheckCircle className="h-3 w-3" /> NI Standards
+                  </p>
+                </div>
+                <Anchor className="h-8 w-8 text-info" />
              </div>
            </CardContent>
          </Card>
  
-         <Card className="border-l-4 border-l-amber-500">
-           <CardContent className="p-4">
-             <div className="flex items-center justify-between">
-               <div>
-                 <p className="text-xs text-muted-foreground">Renovações Pendentes</p>
-                 <p className="text-2xl font-bold">{renewalsDue}</p>
-                 <p className="text-xs text-amber-500 flex items-center gap-1">
-                   <AlertTriangle className="h-3 w-3" /> Próximos 90 dias
-                 </p>
-               </div>
-               <Calendar className="h-8 w-8 text-amber-500" />
+          <Card className="border-l-4 border-l-warning">
+            <CardContent className="p-4">
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-xs text-muted-foreground">Renovações Pendentes</p>
+                  <p className="text-2xl font-bold">{renewalsDue}</p>
+                  <p className="text-xs text-warning flex items-center gap-1">
+                    <AlertTriangle className="h-3 w-3" /> Próximos 90 dias
+                  </p>
+                </div>
+                <Calendar className="h-8 w-8 text-warning" />
              </div>
            </CardContent>
          </Card>
  
-         <Card className="border-l-4 border-l-green-500">
-           <CardContent className="p-4">
-             <div className="flex items-center justify-between">
-               <div>
-                 <p className="text-xs text-muted-foreground">Progresso CPD Médio</p>
-                 <p className="text-2xl font-bold">{avgCPDProgress}%</p>
-                 <Progress value={avgCPDProgress} className="h-1 mt-1" />
-               </div>
-               <GraduationCap className="h-8 w-8 text-green-500" />
+          <Card className="border-l-4 border-l-success">
+            <CardContent className="p-4">
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-xs text-muted-foreground">Progresso CPD Médio</p>
+                  <p className="text-2xl font-bold">{avgCPDProgress}%</p>
+                  <Progress value={avgCPDProgress} className="h-1 mt-1" />
+                </div>
+                <GraduationCap className="h-8 w-8 text-success" />
              </div>
            </CardContent>
          </Card>
  
-         <Card className="border-l-4 border-l-purple-500">
-           <CardContent className="p-4">
-             <div className="flex items-center justify-between">
-               <div>
-                 <p className="text-xs text-muted-foreground">Horas Simulador</p>
-                 <p className="text-2xl font-bold">{totalSimulatorHours}h</p>
-                 <p className="text-xs text-purple-500 flex items-center gap-1">
-                   <PlayCircle className="h-3 w-3" /> Total equipe
-                 </p>
-               </div>
-               <Radio className="h-8 w-8 text-purple-500" />
+          <Card className="border-l-4 border-l-accent">
+            <CardContent className="p-4">
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-xs text-muted-foreground">Horas Simulador</p>
+                  <p className="text-2xl font-bold">{totalSimulatorHours}h</p>
+                  <p className="text-xs text-accent-foreground flex items-center gap-1">
+                    <PlayCircle className="h-3 w-3" /> Total equipe
+                  </p>
+                </div>
+                <Radio className="h-8 w-8 text-accent-foreground" />
              </div>
            </CardContent>
          </Card>
@@ -233,7 +233,7 @@
            <Card>
              <CardHeader>
                <CardTitle className="flex items-center gap-2">
-                 <Award className="h-5 w-5 text-blue-500" />
+                 <Award className="h-5 w-5 text-primary" />
                  NI CPD Requirements (2024-2028)
                </CardTitle>
                <CardDescription>
@@ -246,8 +246,8 @@
                  <div className="space-y-6">
                    {CPD_REQUIREMENTS.map((req, index) => (
                      <div key={req.year} className="relative pl-10">
-                       <div className={`absolute left-2 w-5 h-5 rounded-full flex items-center justify-center ${
-                         req.year === 2024 ? "bg-blue-500 text-white" : "bg-muted"
+                        <div className={`absolute left-2 w-5 h-5 rounded-full flex items-center justify-center ${
+                          req.year === 2024 ? "bg-primary text-primary-foreground" : "bg-muted"
                        }`}>
                          {req.year === 2024 ? <CheckCircle className="h-3 w-3" /> : index + 1}
                        </div>
@@ -330,7 +330,7 @@
            <Card>
              <CardHeader>
                <CardTitle className="flex items-center gap-2">
-                 <Target className="h-5 w-5 text-green-500" />
+                 <Target className="h-5 w-5 text-success" />
                  IMCA M117 Competency Matrix
                </CardTitle>
                <CardDescription>

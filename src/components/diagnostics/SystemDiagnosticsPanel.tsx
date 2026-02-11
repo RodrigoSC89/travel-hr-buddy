@@ -266,22 +266,22 @@ export function SystemDiagnosticsPanel() {
   const getStatusIcon = (status: ServiceStatus["status"]) => {
     switch (status) {
       case "healthy":
-        return <CheckCircle2 className="h-4 w-4 text-green-500" />;
+        return <CheckCircle2 className="h-4 w-4 text-success" />;
       case "degraded":
-        return <AlertTriangle className="h-4 w-4 text-yellow-500" />;
+        return <AlertTriangle className="h-4 w-4 text-warning" />;
       case "down":
-        return <XCircle className="h-4 w-4 text-red-500" />;
+        return <XCircle className="h-4 w-4 text-destructive" />;
     }
   };
 
   const getLogIcon = (level: LogEntry["level"]) => {
     switch (level) {
       case "info":
-        return <Activity className="h-3 w-3 text-blue-500" />;
+        return <Activity className="h-3 w-3 text-info" />;
       case "warn":
-        return <AlertTriangle className="h-3 w-3 text-yellow-500" />;
+        return <AlertTriangle className="h-3 w-3 text-warning" />;
       case "error":
-        return <XCircle className="h-3 w-3 text-red-500" />;
+        return <XCircle className="h-3 w-3 text-destructive" />;
     }
   };
 
@@ -367,7 +367,7 @@ export function SystemDiagnosticsPanel() {
                       {service.latency}ms
                     </p>
                     {service.errorCount > 0 && (
-                      <p className="text-xs text-red-500">
+                      <p className="text-xs text-destructive">
                         {service.errorCount} error(s)
                       </p>
                     )}
@@ -421,9 +421,9 @@ export function SystemDiagnosticsPanel() {
                     key={log.id}
                     className={cn(
                       "p-2 rounded text-xs font-mono border",
-                      log.level === "error" && "bg-red-500/10 border-red-500/20",
-                      log.level === "warn" && "bg-yellow-500/10 border-yellow-500/20",
-                      log.level === "info" && "bg-blue-500/10 border-blue-500/20"
+                      log.level === "error" && "bg-destructive/10 border-destructive/20",
+                      log.level === "warn" && "bg-warning/10 border-warning/20",
+                      log.level === "info" && "bg-info/10 border-info/20"
                     )}
                   >
                     <div className="flex items-center gap-2 mb-1">

@@ -450,10 +450,10 @@ export const ReservationPDFGenerator: React.FC<ReservationPDFGeneratorProps> = (
               <div className="flex items-center gap-2">
                 <Badge 
                   className={
-                    reservation.status === "confirmed" ? "bg-green-100 text-green-800" :
-                      reservation.status === "pending" ? "bg-yellow-100 text-yellow-800" :
-                        reservation.status === "cancelled" ? "bg-red-100 text-red-800" :
-                          "bg-blue-100 text-blue-800"
+                    reservation.status === "confirmed" ? "bg-success/10 text-success" :
+                      reservation.status === "pending" ? "bg-warning/10 text-warning" :
+                        reservation.status === "cancelled" ? "bg-destructive/10 text-destructive" :
+                          "bg-info/10 text-info"
                   }
                 >
                   {getStatusLabel(reservation.status)}
@@ -481,7 +481,7 @@ export const ReservationPDFGenerator: React.FC<ReservationPDFGeneratorProps> = (
                   {reservation.total_amount && (
                     <div className="flex items-center gap-2 text-sm">
                       <DollarSign className="h-4 w-4 text-muted-foreground" />
-                      <span className="font-medium text-green-600">
+                      <span className="font-medium text-success">
                         {new Intl.NumberFormat("pt-BR", {
                           style: "currency",
                           currency: reservation.currency || "BRL"
