@@ -212,8 +212,8 @@ class IncidentManager {
     incident: Omit<Incident, 'id' | 'organization_id' | 'incident_number' | 'created_at' | 'updated_at'>
   ): Promise<Incident | null> {
     try {
-      const { data, error } = await (supabase
-        .from('incidents') as any)
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any -- incidents table not in generated types
+      const { data, error } = await (supabase.from as Function)('incidents')
         .insert({
           ...incident,
           organization_id: organizationId,
@@ -258,8 +258,7 @@ class IncidentManager {
     const now = new Date().toISOString();
     
     // Get incident to calculate TTA
-    const { data: incident } = await (supabase
-      .from('incidents') as any)
+    const { data: incident } = await (supabase.from as Function)('incidents')
       .select('detected_at')
       .eq('id', incidentId)
       .single();
@@ -268,8 +267,7 @@ class IncidentManager {
       ? Math.round((new Date(now).getTime() - new Date(incident.detected_at).getTime()) / 1000)
       : null;
 
-    const { error } = await (supabase
-      .from('incidents') as any)
+    const { error } = await (supabase.from as Function)('incidents')
       .update({
         status: 'acknowledged',
         acknowledged_at: now,
@@ -306,8 +304,7 @@ class IncidentManager {
       updates.resolved_by = userId;
       
       // Calculate TTR
-      const { data: incident } = await (supabase
-        .from('incidents') as any)
+      const { data: incident } = await (supabase.from as Function)('incidents')
         .select('detected_at')
         .eq('id', incidentId)
         .single();
@@ -321,8 +318,7 @@ class IncidentManager {
       updates.closed_at = now;
     }
 
-    const { error } = await (supabase
-      .from('incidents') as any)
+    const { error } = await (supabase.from as Function)('incidents')
       .update(updates)
       .eq('id', incidentId);
 
@@ -349,8 +345,7 @@ class IncidentManager {
     userId: string,
     result?: string
   ): Promise<boolean> {
-    const { data: incident } = await (supabase
-      .from('incidents') as any)
+    const { data: incident } = await (supabase.from as Function)('incidents')
       .select('runbook_progress')
       .eq('id', incidentId)
       .single();
@@ -370,8 +365,7 @@ class IncidentManager {
       result
     };
 
-    const { error } = await (supabase
-      .from('incidents') as any)
+    const { error } = await (supabase.from as Function)('incidents')
       .update({
         runbook_progress: progress,
         updated_at: new Date().toISOString()
@@ -402,8 +396,7 @@ class IncidentManager {
     lessonsLearned: string,
     actionItems: ActionItem[]
   ): Promise<boolean> {
-    const { error } = await (supabase
-      .from('incidents') as any)
+    const { error } = await (supabase.from as Function)('incidents')
       .update({
         root_cause: rootCause,
         resolution_summary: resolutionSummary,
@@ -582,7 +575,7 @@ class IncidentManager {
     userName: string | null,
     metadata?: Record<string, unknown>
   ): Promise<void> {
-    await (supabase.from('incident_timeline') as any).insert({
+    await (supabase.from as Function)('incident_timeline').insert({
       incident_id: incidentId,
       event_type: eventType,
       description,

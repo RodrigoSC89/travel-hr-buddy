@@ -371,7 +371,7 @@ export function useVirtualDashboard<T>(
   const [page, setPage] = useState(0);
   const [sortField, setSortField] = useState<string | null>(null);
   const [sortDesc, setSortDesc] = useState(false);
-  const [filters, setFilters] = useState<Record<string, any>>({});
+  const [filters, setFilters] = useState<Record<string, unknown>>({});
   
   const processedItems = useMemo(() => {
     let result = [...items];
@@ -381,7 +381,7 @@ export function useVirtualDashboard<T>(
       result = result.filter(item =>
         Object.entries(filters).every(([key, value]) => {
           if (value === null || value === undefined || value === '') return true;
-          const itemValue = (item as any)[key];
+          const itemValue = (item as Record<string, unknown>)[key];
           return String(itemValue).toLowerCase().includes(String(value).toLowerCase());
         })
       );
@@ -390,8 +390,8 @@ export function useVirtualDashboard<T>(
     // Apply sort
     if (sortField) {
       result.sort((a, b) => {
-        const valA = (a as any)[sortField];
-        const valB = (b as any)[sortField];
+        const valA = (a as Record<string, unknown>)[sortField] as string | number;
+        const valB = (b as Record<string, unknown>)[sortField] as string | number;
         const comparison = valA < valB ? -1 : valA > valB ? 1 : 0;
         return sortDesc ? -comparison : comparison;
       });
