@@ -92,7 +92,7 @@ export const CrewScheduleVisualizer: React.FC = () => {
   }, [data?.crew, data?.vessels]);
 
   const getRotationColor = (type: string) => {
-    return type === "on" ? "bg-blue-500" : "bg-green-500";
+    return type === "on" ? "bg-primary" : "bg-success";
   };
 
   const optimizeRotations = () => {
@@ -320,11 +320,11 @@ export const CrewScheduleVisualizer: React.FC = () => {
         <CardContent>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
             <div className="flex items-center gap-2">
-              <div className="w-4 h-4 bg-blue-500 rounded" />
+              <div className="w-4 h-4 bg-primary rounded" />
               <span className="text-sm">A Bordo</span>
             </div>
             <div className="flex items-center gap-2">
-              <div className="w-4 h-4 bg-green-500 rounded" />
+              <div className="w-4 h-4 bg-success rounded" />
               <span className="text-sm">De Folga</span>
             </div>
             <div className="flex items-center gap-2">

@@ -198,7 +198,7 @@ export const MaritimeHRDashboard: React.FC = () => {
                     {crewMembers.slice(0, 10).map(crew => (
                       <div key={crew.id} className="flex items-center justify-between p-4 border rounded-lg hover:bg-muted/50 transition-colors">
                         <div className="flex items-center gap-4">
-                          <div className="p-2 bg-blue-100 dark:bg-blue-900/30 rounded-lg"><Users className="h-5 w-5 text-blue-600" /></div>
+                          <div className="p-2 bg-primary/10 rounded-lg"><Users className="h-5 w-5 text-primary" /></div>
                           <div><h3 className="font-semibold">{crew.name}</h3><p className="text-sm text-muted-foreground">{crew.rank}</p><p className="text-xs text-muted-foreground">{crew.vessel || "Sem embarcação"}</p></div>
                         </div>
                         <div className="text-right">
@@ -222,9 +222,9 @@ export const MaritimeHRDashboard: React.FC = () => {
                 </div>
                 <div className="mt-6 pt-4 border-t"><h4 className="font-semibold mb-3">Alertas</h4>
                   <div className="space-y-2">
-                    <div className="p-2 bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800 rounded text-xs"><span className="font-medium">Certificação:</span> {stats.expiringCerts} vencendo</div>
-                    <div className="p-2 bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded text-xs"><span className="font-medium">Tripulação:</span> {stats.total} membros ativos</div>
-                    <div className="p-2 bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded text-xs"><span className="font-medium">Treinamento:</span> {trainingPrograms.length} cursos disponíveis</div>
+                    <div className="p-2 bg-warning/10 border border-warning/20 rounded text-xs"><span className="font-medium">Certificação:</span> {stats.expiringCerts} vencendo</div>
+                    <div className="p-2 bg-primary/10 border border-primary/20 rounded text-xs"><span className="font-medium">Tripulação:</span> {stats.total} membros ativos</div>
+                    <div className="p-2 bg-success/10 border border-success/20 rounded text-xs"><span className="font-medium">Treinamento:</span> {trainingPrograms.length} cursos disponíveis</div>
                   </div>
                 </div>
               </CardContent>

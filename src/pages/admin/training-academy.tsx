@@ -139,7 +139,7 @@ export default function TrainingAcademyAdmin() {
       setIsCreateDialogOpen(false);
       resetForm();
     },
-    onError: (error: any) => {
+    onError: (error: Error) => {
       toast({ title: "Erro ao criar curso", description: error.message, variant: "destructive" });
     }
   });
@@ -161,7 +161,7 @@ export default function TrainingAcademyAdmin() {
       toast({ title: "Curso atualizado", description: "O curso foi atualizado com sucesso." });
       setEditingCourse(null);
     },
-    onError: (error: any) => {
+    onError: (error: Error) => {
       toast({ title: "Erro ao atualizar curso", description: error.message, variant: "destructive" });
     }
   });
@@ -179,7 +179,7 @@ export default function TrainingAcademyAdmin() {
       queryClient.invalidateQueries({ queryKey: ["admin-courses"] });
       toast({ title: "Curso deletado", description: "O curso foi removido com sucesso." });
     },
-    onError: (error: any) => {
+    onError: (error: Error) => {
       toast({ title: "Erro ao deletar curso", description: error.message, variant: "destructive" });
     }
   });

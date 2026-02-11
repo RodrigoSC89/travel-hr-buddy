@@ -119,14 +119,14 @@ export const CrewReportsPanel: React.FC<CrewReportsPanelProps> = ({ crewMembers,
         </Card>
         <Card>
           <CardContent className="p-4 text-center">
-            <CheckCircle2 className="h-8 w-8 mx-auto mb-2 text-green-600" />
+            <CheckCircle2 className="h-8 w-8 mx-auto mb-2 text-success" />
             <div className="text-2xl font-bold">{stats.available}</div>
             <div className="text-sm text-muted-foreground">Disponíveis</div>
           </CardContent>
         </Card>
         <Card>
           <CardContent className="p-4 text-center">
-            <Calendar className="h-8 w-8 mx-auto mb-2 text-blue-600" />
+            <Calendar className="h-8 w-8 mx-auto mb-2 text-primary" />
             <div className="text-2xl font-bold">{stats.activeAssignments}</div>
             <div className="text-sm text-muted-foreground">Escalas Ativas</div>
           </CardContent>

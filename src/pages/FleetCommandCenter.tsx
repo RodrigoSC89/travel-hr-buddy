@@ -32,7 +32,18 @@ import {
 // ============ COMPONENTES INTEGRADOS ============
 
 // KPI Card Component
-const KPICard = ({ title, value, suffix = "", icon: Icon, color, change, trend, delay = 0 }: any) => (
+interface KPICardProps {
+  title: string;
+  value: string | number;
+  suffix?: string;
+  icon: React.ElementType;
+  color: string;
+  change?: number;
+  trend?: string;
+  delay?: number;
+}
+
+const KPICard = ({ title, value, suffix = "", icon: Icon, color, change, trend, delay = 0 }: KPICardProps) => (
   <motion.div
     initial={{ opacity: 0, y: 20 }}
     animate={{ opacity: 1, y: 0 }}
@@ -53,8 +64,8 @@ const KPICard = ({ title, value, suffix = "", icon: Icon, color, change, trend, 
         </div>
         {change !== undefined && (
           <div className="flex items-center gap-1 mt-2">
-            <TrendingUp className={`h-3 w-3 ${change >= 0 ? "text-green-500" : "text-red-500 rotate-180"}`} />
-            <span className={`text-xs ${change >= 0 ? "text-green-500" : "text-red-500"}`}>
+            <TrendingUp className={`h-3 w-3 ${change >= 0 ? "text-success" : "text-destructive rotate-180"}`} />
+            <span className={`text-xs ${change >= 0 ? "text-success" : "text-destructive"}`}>
               {change >= 0 ? "+" : ""}{change}%
             </span>
             {trend && <span className="text-xs text-muted-foreground ml-1">{trend}</span>}
@@ -65,15 +76,15 @@ const KPICard = ({ title, value, suffix = "", icon: Icon, color, change, trend, 
   </motion.div>
 );
 
-// Vessel Card Component (do Fleet Dashboard)
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- vessel shape from enriched dynamic Supabase query with computed fields
 const VesselCard = ({ vessel, onClick }: { vessel: any; onClick: () => void }) => {
   const statusConfig: Record<string, { color: string; label: string; variant: "default" | "secondary" | "outline" | "destructive" }> = {
-    operational: { color: "bg-green-500", label: "Operacional", variant: "default" },
-    active: { color: "bg-green-500", label: "Ativa", variant: "default" },
-    "in-port": { color: "bg-blue-500", label: "Em Porto", variant: "secondary" },
-    anchored: { color: "bg-yellow-500", label: "Ancorada", variant: "secondary" },
-    maintenance: { color: "bg-orange-500", label: "Manutenção", variant: "outline" },
-    emergency: { color: "bg-red-500", label: "Emergência", variant: "destructive" }
+    operational: { color: "bg-success", label: "Operacional", variant: "default" },
+    active: { color: "bg-success", label: "Ativa", variant: "default" },
+    "in-port": { color: "bg-primary", label: "Em Porto", variant: "secondary" },
+    anchored: { color: "bg-warning", label: "Ancorada", variant: "secondary" },
+    maintenance: { color: "bg-accent-foreground", label: "Manutenção", variant: "outline" },
+    emergency: { color: "bg-destructive", label: "Emergência", variant: "destructive" }
   };
 
   const config = statusConfig[vessel.status] || statusConfig.operational;
@@ -153,6 +164,7 @@ const VesselCard = ({ vessel, onClick }: { vessel: any; onClick: () => void }) =
 import { FleetMapBox } from "@/components/fleet/FleetMapBox";
 
 // Tracking Map Panel - Uses the real Mapbox component
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- FleetMapBox props are dynamic
 const TrackingMapPanel = ({ vessels, onSelectVessel, selectedVessel }: any) => {
   return (
     <FleetMapBox 
@@ -166,6 +178,7 @@ const TrackingMapPanel = ({ vessels, onSelectVessel, selectedVessel }: any) => {
 };
 
 // AI Copilot Component
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- vessel shape from enriched dynamic query
 const FleetAICopilot = ({ vessels, onToast }: { vessels: any[]; onToast: (opts: { title: string; description?: string }) => void }) => {
   const [query, setQuery] = useState("");
   const [thinking, setThinking] = useState(false);
@@ -300,6 +313,7 @@ export default function FleetCommandCenter() {
         .limit(50);
       
       // Enriquecer dados com campos de telemetria (fallback para simulados se não houver)
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any -- dynamic enrichment of Supabase vessel rows
       const enrichedVessels = (vesselsData || []).map((v: any, idx: number) => {
         const nameHash = (v.name || "v").split("").reduce((a: number, c: string) => a + c.charCodeAt(0), 0);
         return {
@@ -564,6 +578,7 @@ export default function FleetCommandCenter() {
             <CardContent>
               {maintenance.length > 0 ? (
                 <div className="space-y-3">
+                  {/* eslint-disable-next-line @typescript-eslint/no-explicit-any -- dynamic maintenance row */}
                   {maintenance.slice(0, 10).map((m: any) => (
                     <div key={m.id} className="flex items-center justify-between p-3 border rounded-lg">
                       <div>
@@ -580,7 +595,7 @@ export default function FleetCommandCenter() {
                 </div>
               ) : (
                 <div className="text-center py-8 text-muted-foreground">
-                  <CheckCircle className="h-12 w-12 mx-auto mb-4 text-green-500" />
+                  <CheckCircle className="h-12 w-12 mx-auto mb-4 text-success" />
                   <p>Sem manutenções pendentes</p>
                 </div>
               )}
@@ -649,22 +664,22 @@ export default function FleetCommandCenter() {
                 <CardTitle>Insights de IA</CardTitle>
               </CardHeader>
               <CardContent className="space-y-3">
-                <div className="flex items-start gap-3 p-3 bg-green-50 dark:bg-green-950/20 rounded-lg border border-green-200 dark:border-green-800">
-                  <CheckCircle className="h-5 w-5 text-green-600 mt-0.5" />
+                <div className="flex items-start gap-3 p-3 bg-success/10 rounded-lg border border-success/30">
+                  <CheckCircle className="h-5 w-5 text-success mt-0.5" />
                   <div>
                     <p className="font-semibold text-sm">Otimização Detectada</p>
                     <p className="text-xs text-muted-foreground">Eficiência 8% acima da média do setor</p>
                   </div>
                 </div>
-                <div className="flex items-start gap-3 p-3 bg-yellow-50 dark:bg-yellow-950/20 rounded-lg border border-yellow-200 dark:border-yellow-800">
-                  <AlertTriangle className="h-5 w-5 text-yellow-600 mt-0.5" />
+                <div className="flex items-start gap-3 p-3 bg-warning/10 rounded-lg border border-warning/30">
+                  <AlertTriangle className="h-5 w-5 text-warning mt-0.5" />
                   <div>
                     <p className="font-semibold text-sm">Manutenção Prevista</p>
                     <p className="text-xs text-muted-foreground">1 embarcação requer manutenção em 5 dias</p>
                   </div>
                 </div>
-                <div className="flex items-start gap-3 p-3 bg-blue-50 dark:bg-blue-950/20 rounded-lg border border-blue-200 dark:border-blue-800">
-                  <TrendingUp className="h-5 w-5 text-blue-600 mt-0.5" />
+                <div className="flex items-start gap-3 p-3 bg-primary/10 rounded-lg border border-primary/30">
+                  <TrendingUp className="h-5 w-5 text-primary mt-0.5" />
                   <div>
                     <p className="font-semibold text-sm">Tendência Positiva</p>
                     <p className="text-xs text-muted-foreground">Consumo de combustível reduziu 12% este mês</p>
