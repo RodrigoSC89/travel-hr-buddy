@@ -353,9 +353,9 @@ export function TelemetryMap3D({ onVesselSelect, onAlertClick, className }: Tele
         el.className = "alert-marker-3d cursor-pointer";
         
         const severityColors: Record<TelemetryAlert["type"], string> = {
-          critical: "bg-red-500",
-          warning: "bg-amber-500",
-          info: "bg-blue-500",
+          critical: "bg-destructive",
+          warning: "bg-warning",
+          info: "bg-primary",
         };
 
         el.innerHTML = `

@@ -114,7 +114,7 @@ export function TelemetryTideChart({
         <div className="flex items-center justify-between">
           <div>
             <CardTitle className="flex items-center gap-2 text-lg">
-              <Waves className="h-5 w-5 text-blue-500" />
+              <Waves className="h-5 w-5 text-primary" />
               Previsão de Marés
             </CardTitle>
             <CardDescription className="flex items-center gap-1 mt-1">
@@ -135,7 +135,7 @@ export function TelemetryTideChart({
       
       <CardContent className="space-y-4">
         {error && (
-          <div className="flex items-center gap-2 text-sm text-amber-600 bg-amber-50 dark:bg-amber-900/20 p-2 rounded-md">
+          <div className="flex items-center gap-2 text-sm text-warning bg-warning/10 p-2 rounded-md">
             <AlertTriangle className="h-4 w-4" />
             <span>Dados simulados - API indisponível</span>
           </div>

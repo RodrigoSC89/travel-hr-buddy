@@ -32,7 +32,8 @@ interface SupplyOrder {
 
 export const SupplyOrdersManagement = () => {
   const [orders, setOrders] = useState<SupplyOrder[]>([]);
-  const [inventoryItems, setInventoryItems] = useState<any[]>([]);
+  interface InventoryItem { id: string; item_name: string; item_code: string; }
+  const [inventoryItems, setInventoryItems] = useState<InventoryItem[]>([]);
   const [isCreating, setIsCreating] = useState(false);
   const [newOrder, setNewOrder] = useState({
     item_id: "",
@@ -151,21 +152,21 @@ export const SupplyOrdersManagement = () => {
 
   const getStatusColor = (status: string) => {
     const colors: Record<string, string> = {
-      pending: "bg-yellow-500",
-      approved: "bg-blue-500",
-      in_transit: "bg-purple-500",
-      delivered: "bg-green-500",
-      failed: "bg-red-500",
-      cancelled: "bg-gray-500"
+      pending: "bg-warning",
+      approved: "bg-primary",
+      in_transit: "bg-accent",
+      delivered: "bg-success",
+      failed: "bg-destructive",
+      cancelled: "bg-muted"
     };
-    return colors[status] || "bg-gray-500";
+    return colors[status] || "bg-muted";
   };
 
   const getPriorityIcon = (priority: string) => {
     if (priority === "urgent" || priority === "high") {
-      return <AlertTriangle className="h-4 w-4 text-red-500" />;
+      return <AlertTriangle className="h-4 w-4 text-destructive" />;
     }
-    return <Package className="h-4 w-4 text-blue-500" />;
+    return <Package className="h-4 w-4 text-primary" />;
   };
 
   return (

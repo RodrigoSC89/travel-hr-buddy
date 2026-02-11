@@ -182,12 +182,13 @@ export default function CrewTrainingMatrix() {
         .select("id, first_name, last_name, rank, department, vessel_id, vessels(name)")
         .limit(50);
       if (members && members.length > 0) {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any -- crew_members select with joined vessels
         setCrewData(members.map((m: any) => ({
-          id: m.id,
-          name: `${m.first_name || ""} ${m.last_name || ""}`.trim(),
-          rank: m.rank || "Crew",
-          vessel: (m.vessels as any)?.name || "Unassigned",
-          department: m.department || "Deck",
+          id: String(m.id),
+          name: `${String(m.first_name || "")} ${String(m.last_name || "")}`.trim(),
+          rank: String(m.rank || "Crew"),
+          vessel: m.vessels?.name ? String(m.vessels.name) : "Unassigned",
+          department: String(m.department || "Deck"),
         })));
       }
       const { data: certs } = await supabase
@@ -195,6 +196,7 @@ export default function CrewTrainingMatrix() {
         .select("id, crew_member_id, certificate_name, issue_date, expiry_date, status")
         .limit(200);
       if (certs && certs.length > 0) {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any -- crew_certifications dynamic schema
         const records: TrainingRecord[] = certs.map((c: any) => {
           const now = new Date();
           const expiry = c.expiry_date ? new Date(c.expiry_date) : null;
@@ -202,11 +204,11 @@ export default function CrewTrainingMatrix() {
           if (expiry && expiry < now) status = "expired";
           else if (expiry && expiry.getTime() - now.getTime() < 90 * 86400000) status = "expiring";
           return {
-            crewId: c.crew_member_id,
-            trainingId: c.certificate_name || c.id,
+            crewId: String(c.crew_member_id),
+            trainingId: String(c.certificate_name || c.id),
             status,
-            completedDate: c.issue_date?.slice(0, 10),
-            expiryDate: c.expiry_date?.slice(0, 10),
+            completedDate: c.issue_date ? String(c.issue_date).slice(0, 10) : undefined,
+            expiryDate: c.expiry_date ? String(c.expiry_date).slice(0, 10) : undefined,
           };
         });
         setRecordsData(records);

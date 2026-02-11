@@ -249,8 +249,8 @@ export const PeotramChecklistVersionManager: React.FC = () => {
     }
     case "excel": {
       const headers = "ID,Título,Status,Evidência";
-      const rows = selectedTemplate?.elements?.map((item: any) => 
-        `${item.id},"${item.title}",${item.status || 'pending'},"${item.evidence || ''}"`
+      const rows = selectedTemplate?.elements?.map((item) => 
+        `${item.id},"${item.name}",${item.number || 'pending'},""`
       ).join('\n') || '';
       const csvContent = `${headers}\n${rows}`;
       const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
@@ -278,9 +278,9 @@ export const PeotramChecklistVersionManager: React.FC = () => {
         
         let y = 60;
         doc.setFontSize(11);
-        selectedTemplate?.elements?.slice(0, 30).forEach((item: any, idx: number) => {
+        selectedTemplate?.elements?.slice(0, 30).forEach((item, idx: number) => {
           if (y > 270) { doc.addPage(); y = 20; }
-          doc.text(`${idx + 1}. ${item.title || item.id || 'Item'}`, 20, y);
+          doc.text(`${idx + 1}. ${item.name || item.id || 'Item'}`, 20, y);
           y += 7;
         });
         
@@ -372,7 +372,7 @@ export const PeotramChecklistVersionManager: React.FC = () => {
                     <span className="font-medium">{template.version}</span>
                   </div>
                   {template.isActive && (
-                    <Badge className="bg-green-100 text-green-800">Ativo</Badge>
+                    <Badge className="bg-success/10 text-success">Ativo</Badge>
                   )}
                 </div>
                 <div className="flex items-center justify-between text-sm">

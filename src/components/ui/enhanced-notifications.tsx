@@ -78,17 +78,18 @@ const EnhancedNotifications: React.FC<EnhancedNotificationsProps> = ({ isOpen, o
           .limit(20);
 
         if (data && data.length > 0) {
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Supabase intelligent_notifications schema mapping
           const mapped: Notification[] = data.map((n: any) => ({
-            id: n.id,
-            title: n.title || "Notificação",
-            description: n.message || n.description || "",
-            type: n.priority === "critical" ? "error" : n.priority === "high" ? "warning" : n.type === "success" ? "success" : "info",
-            priority: n.priority || "medium",
-            category: n.category || "Sistema",
-            timestamp: new Date(n.created_at),
-            read: n.is_read || false,
-            actionable: !!n.action_type,
-            metadata: { module: n.source_module, vessel: n.vessel_name },
+            id: String(n.id),
+            title: String(n.title || "Notificação"),
+            description: String(n.message || n.description || ""),
+            type: (n.priority === "critical" ? "error" : n.priority === "high" ? "warning" : n.type === "success" ? "success" : "info") as Notification["type"],
+            priority: String(n.priority || "medium") as Notification["priority"],
+            category: String(n.category || "Sistema"),
+            timestamp: new Date(String(n.created_at)),
+            read: Boolean(n.is_read),
+            actionable: Boolean(n.action_type),
+            metadata: { module: n.source_module ? String(n.source_module) : undefined, vessel: n.vessel_name ? String(n.vessel_name) : undefined },
           }));
           setNotifications(mapped);
         }
@@ -126,11 +127,11 @@ const EnhancedNotifications: React.FC<EnhancedNotificationsProps> = ({ isOpen, o
 
   const getPriorityColor = (priority: string) => {
     switch (priority) {
-    case "urgent": return "bg-red-500 text-white";
-    case "high": return "bg-orange-500 text-white";
-    case "medium": return "bg-blue-500 text-white";
-    case "low": return "bg-gray-500 text-white";
-    default: return "bg-gray-500 text-white";
+    case "urgent": return "bg-destructive text-destructive-foreground";
+    case "high": return "bg-warning text-warning-foreground";
+    case "medium": return "bg-primary text-primary-foreground";
+    case "low": return "bg-muted text-muted-foreground";
+    default: return "bg-muted text-muted-foreground";
     }
   };
 
@@ -181,7 +182,7 @@ const EnhancedNotifications: React.FC<EnhancedNotificationsProps> = ({ isOpen, o
               <div className="relative">
                 <Bell className="w-6 h-6 text-primary" />
                 {unreadCount > 0 && (
-                  <span className="absolute -top-2 -right-2 w-5 h-5 bg-red-500 text-white text-xs rounded-full flex items-center justify-center">
+                  <span className="absolute -top-2 -right-2 w-5 h-5 bg-destructive text-destructive-foreground text-xs rounded-full flex items-center justify-center">
                     {unreadCount}
                   </span>
                 )}
