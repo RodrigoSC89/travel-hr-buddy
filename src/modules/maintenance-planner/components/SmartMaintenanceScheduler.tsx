@@ -99,10 +99,10 @@ export default function SmartMaintenanceScheduler() {
 
   const getTypeBadge = (type: string) => {
     const config: Record<string, { label: string; color: string }> = {
-      preventive: { label: "Preventiva", color: "bg-blue-500/10 text-blue-500" },
+      preventive: { label: "Preventiva", color: "bg-primary/10 text-primary" },
       corrective: { label: "Corretiva", color: "bg-destructive/10 text-destructive" },
-      predictive: { label: "Preditiva", color: "bg-purple-500/10 text-purple-500" },
-      condition_based: { label: "Condicional", color: "bg-cyan-500/10 text-cyan-500" },
+      predictive: { label: "Preditiva", color: "bg-accent/10 text-accent-foreground" },
+      condition_based: { label: "Condicional", color: "bg-secondary/10 text-secondary-foreground" },
     };
     const c = config[type] || { label: type || "N/A", color: "bg-muted text-muted-foreground" };
     return <Badge className={c.color}>{type === "predictive" && <Brain className="h-3 w-3 mr-1" />}{c.label}</Badge>;
@@ -110,9 +110,9 @@ export default function SmartMaintenanceScheduler() {
 
   const getPriorityBadge = (priority: string) => {
     const config: Record<string, { label: string; color: string }> = {
-      critical: { label: "Crítico", color: "bg-red-500 text-white" },
-      high: { label: "Alta", color: "bg-amber-500/10 text-amber-500" },
-      medium: { label: "Média", color: "bg-blue-500/10 text-blue-500" },
+      critical: { label: "Crítico", color: "bg-destructive text-destructive-foreground" },
+      high: { label: "Alta", color: "bg-warning/10 text-warning" },
+      medium: { label: "Média", color: "bg-primary/10 text-primary" },
       low: { label: "Baixa", color: "bg-muted text-muted-foreground" },
     };
     const c = config[priority] || { label: priority || "N/A", color: "bg-muted text-muted-foreground" };
@@ -121,10 +121,10 @@ export default function SmartMaintenanceScheduler() {
 
   const getStatusBadge = (status: string) => {
     const config: Record<string, { label: string; color: string }> = {
-      scheduled: { label: "Agendada", color: "bg-blue-500/10 text-blue-500" },
-      in_progress: { label: "Em Andamento", color: "bg-green-500/10 text-green-500" },
+      scheduled: { label: "Agendada", color: "bg-primary/10 text-primary" },
+      in_progress: { label: "Em Andamento", color: "bg-success/10 text-success" },
       completed: { label: "Concluída", color: "bg-muted text-muted-foreground" },
-      overdue: { label: "Atrasada", color: "bg-red-500/10 text-red-500" },
+      overdue: { label: "Atrasada", color: "bg-destructive/10 text-destructive" },
     };
     const c = config[status] || { label: status || "N/A", color: "bg-muted text-muted-foreground" };
     return <Badge className={c.color}>{c.label}</Badge>;
@@ -134,35 +134,35 @@ export default function SmartMaintenanceScheduler() {
     <div className="space-y-6">
       {/* Stats */}
       <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
-        <Card className="bg-gradient-to-br from-red-500/10 to-red-600/5">
+        <Card className="bg-gradient-to-br from-destructive/10 to-destructive/5">
           <CardContent className="p-4">
             <div className="flex items-center justify-between">
               <div><p className="text-sm text-muted-foreground">Críticas</p><p className="text-2xl font-bold">{criticalTasks}</p></div>
-              <AlertTriangle className="h-8 w-8 text-red-500" />
+              <AlertTriangle className="h-8 w-8 text-destructive" />
             </div>
           </CardContent>
         </Card>
-        <Card className="bg-gradient-to-br from-green-500/10 to-green-600/5">
+        <Card className="bg-gradient-to-br from-success/10 to-success/5">
           <CardContent className="p-4">
             <div className="flex items-center justify-between">
               <div><p className="text-sm text-muted-foreground">Em Andamento</p><p className="text-2xl font-bold">{inProgressTasks}</p></div>
-              <Play className="h-8 w-8 text-green-500" />
+              <Play className="h-8 w-8 text-success" />
             </div>
           </CardContent>
         </Card>
-        <Card className="bg-gradient-to-br from-blue-500/10 to-blue-600/5">
+        <Card className="bg-gradient-to-br from-primary/10 to-primary/5">
           <CardContent className="p-4">
             <div className="flex items-center justify-between">
               <div><p className="text-sm text-muted-foreground">Agendadas</p><p className="text-2xl font-bold">{scheduledTasks}</p></div>
-              <Calendar className="h-8 w-8 text-blue-500" />
+              <Calendar className="h-8 w-8 text-primary" />
             </div>
           </CardContent>
         </Card>
-        <Card className="bg-gradient-to-br from-purple-500/10 to-purple-600/5">
+        <Card className="bg-gradient-to-br from-accent/10 to-accent/5">
           <CardContent className="p-4">
             <div className="flex items-center justify-between">
               <div><p className="text-sm text-muted-foreground">Saúde Média</p><p className="text-2xl font-bold">{avgHealth}%</p></div>
-              <Activity className="h-8 w-8 text-purple-500" />
+              <Activity className="h-8 w-8 text-accent-foreground" />
             </div>
           </CardContent>
         </Card>
@@ -297,7 +297,7 @@ export default function SmartMaintenanceScheduler() {
                           <p className="font-medium">{pred.equipment_name}</p>
                           <p className="text-sm text-muted-foreground">{pred.recommended_action}</p>
                         </div>
-                        <Badge className={`${pred.failure_probability > 0.7 ? "bg-red-500 text-white" : pred.failure_probability > 0.4 ? "bg-amber-500/10 text-amber-500" : "bg-green-500/10 text-green-500"}`}>
+                        <Badge className={`${pred.failure_probability > 0.7 ? "bg-destructive text-destructive-foreground" : pred.failure_probability > 0.4 ? "bg-warning/10 text-warning" : "bg-success/10 text-success"}`}>
                           {Math.round((pred.failure_probability || 0) * 100)}%
                         </Badge>
                       </div>

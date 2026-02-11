@@ -110,8 +110,9 @@ function useFleetData() {
     maintenance: 'maintenance', drydock: 'drydock', inactive: 'layup', laid_up: 'layup',
   };
 
-  const vessels: Vessel[] = rawVessels.map((v: any) => {
-    const crewCount = rawCrew.filter((c: any) => c.vessel_id === v.id).length;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Supabase join returns dynamic shape
+  const vessels: Vessel[] = rawVessels.map((v: Record<string, any>) => {
+    const crewCount = rawCrew.filter((c) => c.vessel_id === v.id).length;
     let hash = 0;
     for (let i = 0; i < v.id.length; i++) { hash = ((hash << 5) - hash) + v.id.charCodeAt(i); hash |= 0; }
     return {
@@ -132,7 +133,8 @@ function useFleetData() {
   });
 
   const now = new Date();
-  const voyages: VoyageData[] = rawVoyages.map((vp: any) => {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Supabase join returns dynamic shape
+  const voyages: VoyageData[] = rawVoyages.map((vp: Record<string, any>) => {
     const dep = new Date(vp.departure_date || vp.created_at);
     const arr = new Date(vp.arrival_date || Date.now() + 7 * 86400000);
     const progress = Math.min(100, Math.max(0, Math.round(((now.getTime() - dep.getTime()) / (arr.getTime() - dep.getTime())) * 100)));
@@ -153,7 +155,7 @@ function useFleetData() {
 const statusConfig = {
   operational: { label: 'Operacional', color: 'bg-success/20 text-success', icon: CheckCircle2 },
   maintenance: { label: 'Manutenção', color: 'bg-warning/20 text-warning', icon: Wrench },
-  drydock: { label: 'Docagem', color: 'bg-orange-500/20 text-orange-600', icon: Anchor },
+  drydock: { label: 'Docagem', color: 'bg-warning/20 text-warning', icon: Anchor },
   layup: { label: 'Inativo', color: 'bg-muted text-muted-foreground', icon: Clock }
 };
 
