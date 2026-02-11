@@ -178,7 +178,7 @@ export function useCTSRecords(vesselId?: string) {
     }
   };
 
-  const checkCompliance = async (ctsId: string, crewMembers: any[]) => {
+  const checkCompliance = async (ctsId: string, crewMembers: Array<{ full_name: string; maritime_certificates?: Array<{ certificate_name?: string; certificate_number?: string; expiry_date?: string }> }>) => {
     try {
       const { data, error } = await supabase.functions.invoke('cts-conformity', {
         body: {

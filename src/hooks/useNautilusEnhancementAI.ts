@@ -84,7 +84,7 @@ export function useNautilusEnhancementAI() {
   }, [toast]);
 
   // Specific methods for each enhancement type
-  const analyzeWorkflow = useCallback((nodes: any[], edges: any[], prompt?: string) => 
+  const analyzeWorkflow = useCallback((nodes: Record<string, unknown>[], edges: Record<string, unknown>[], prompt?: string) => 
     invoke('workflow_analyze', prompt, { nodes, edges }), [invoke]);
 
   const optimizeWorkflow = useCallback((nodes: Record<string, unknown>[], edges: Record<string, unknown>[]) => 

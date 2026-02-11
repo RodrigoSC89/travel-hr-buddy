@@ -123,7 +123,7 @@ export function usePreviewSafeMode({
   /**
    * Safe error logging que pode ser silenciado
    */
-  const safeLogError = (...args: any[]) => {
+  const safeLogError = (...args: unknown[]) => {
     if (!silenceErrors) {
       // Errors are tracked internally without console output
     }

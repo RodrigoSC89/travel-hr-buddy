@@ -21,20 +21,20 @@ export interface Agent {
   status: AgentStatus;
   maxConcurrentTasks?: number;
   currentTasks?: number;
-  metadata?: Record<string, any>;
+  metadata?: Record<string, unknown>;
 }
 
 // Task Interface
 export interface SwarmTask {
   id: string;
   type: string;
-  payload: any;
+  payload: Record<string, unknown>;
   requiredCapabilities: string[];
   priority: number;
   timeout?: number;
   assignedAgentId?: string;
   status: TaskStatus;
-  result?: any;
+  result?: Record<string, unknown>;
   error?: string;
   startTime?: Date;
   endTime?: Date;
@@ -52,11 +52,11 @@ export interface DistributionResult {
 // Consolidated Result
 export interface ConsolidatedResult {
   taskIds: string[];
-  results: any[];
+  results: Record<string, unknown>[];
   successful: number;
   failed: number;
   totalProcessingTimeMs: number;
-  consolidatedData: any;
+  consolidatedData: Record<string, unknown>;
   errors: string[];
 }
 
@@ -337,7 +337,7 @@ export async function consolidateResults(tasks: SwarmTask[]): Promise<Consolidat
 
   const successful = tasks.filter(t => t.status === "completed").length;
   const failed = tasks.filter(t => t.status === "failed").length;
-  const results = tasks.filter(t => t.result).map(t => t.result);
+  const results = tasks.filter(t => t.result).map(t => t.result!)
   const errors = tasks.filter(t => t.error).map(t => t.error!);
 
   const totalProcessingTimeMs = tasks.reduce((sum, task) => {
@@ -393,7 +393,7 @@ export function getActiveAgents(): Agent[] {
 /**
  * Simulate agent processing (placeholder for real implementation)
  */
-async function simulateAgentProcessing(task: SwarmTask, agentId: string): Promise<any> {
+async function simulateAgentProcessing(task: SwarmTask, agentId: string): Promise<Record<string, unknown>> {
   // Real agent processing: log to database and return result
   return {
     taskId: task.id,
@@ -417,11 +417,11 @@ async function logAgentMetrics(metrics: {
   status: AgentStatus;
   capabilities: string[];
   task_id?: string;
-  task_payload?: any;
+  task_payload?: Record<string, unknown>;
   task_status?: TaskStatus;
-  result_data?: any;
+  result_data?: Record<string, unknown>;
   processing_time_ms?: number;
-  metadata: Record<string, any>;
+  metadata: Record<string, unknown>;
 }): Promise<void> {
   try {
     const { error } = await supabase.from("agent_swarm_metrics").insert({

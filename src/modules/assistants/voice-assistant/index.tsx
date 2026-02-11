@@ -77,6 +77,7 @@ const VoiceAssistant: React.FC = () => {
     recognitionRef.current.interimResults = true;
     recognitionRef.current.lang = "pt-BR";
 
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any -- SpeechRecognition event not in standard lib
     recognitionRef.current.onresult = (event: any) => {
       const current = event.resultIndex;
       const transcriptText = event.results[current][0].transcript;
@@ -88,6 +89,7 @@ const VoiceAssistant: React.FC = () => {
       }
     };
 
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any -- SpeechRecognition error event not in standard lib
     recognitionRef.current.onerror = (event: any) => {
       logger.error("Speech recognition error", { error: event.error });
       if (event.error !== "no-speech") {

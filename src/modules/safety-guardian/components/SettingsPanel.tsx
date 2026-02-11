@@ -51,11 +51,12 @@ export const SettingsPanel: React.FC<SettingsPanelProps> = ({
     }
   };
 
-  const updateSettings = (path: string, value: any) => {
+  const updateSettings = (path: string, value: string | number | boolean) => {
     setSettings(prev => {
       const parts = path.split('.');
       const newSettings = { ...prev };
-      let current: any = newSettings;
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any -- dynamic nested path update requires runtime traversal
+      let current: Record<string, any> = newSettings;
       
       for (let i = 0; i < parts.length - 1; i++) {
         current[parts[i]] = { ...current[parts[i]] };
@@ -311,7 +312,7 @@ export const SettingsPanel: React.FC<SettingsPanelProps> = ({
           <Card>
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
-                <Brain className="h-5 w-5 text-purple-400" />
+                <Brain className="h-5 w-5 text-accent" />
                 Configurações de IA
               </CardTitle>
               <CardDescription>
@@ -321,8 +322,8 @@ export const SettingsPanel: React.FC<SettingsPanelProps> = ({
             <CardContent className="space-y-6">
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-3">
-                  <div className="p-2 bg-purple-500/10 rounded-lg">
-                    <Brain className="h-5 w-5 text-purple-400" />
+                  <div className="p-2 bg-accent/10 rounded-lg">
+                    <Brain className="h-5 w-5 text-accent" />
                   </div>
                   <div>
                     <Label>Análise Preditiva</Label>
@@ -341,8 +342,8 @@ export const SettingsPanel: React.FC<SettingsPanelProps> = ({
 
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-3">
-                  <div className="p-2 bg-purple-500/10 rounded-lg">
-                    <Shield className="h-5 w-5 text-purple-400" />
+                  <div className="p-2 bg-accent/10 rounded-lg">
+                    <Shield className="h-5 w-5 text-accent" />
                   </div>
                   <div>
                     <Label>Recomendações Automáticas</Label>
@@ -361,8 +362,8 @@ export const SettingsPanel: React.FC<SettingsPanelProps> = ({
 
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-3">
-                  <div className="p-2 bg-purple-500/10 rounded-lg">
-                    <Target className="h-5 w-5 text-purple-400" />
+                  <div className="p-2 bg-accent/10 rounded-lg">
+                    <Target className="h-5 w-5 text-accent" />
                   </div>
                   <div>
                     <Label>Avaliação de Risco por IA</Label>
@@ -379,8 +380,8 @@ export const SettingsPanel: React.FC<SettingsPanelProps> = ({
 
               <Separator />
 
-              <div className="p-4 rounded-lg bg-purple-500/10 border border-purple-500/20">
-                <h4 className="font-medium text-purple-400 mb-2">Sobre a IA do Safety Guardian</h4>
+              <div className="p-4 rounded-lg bg-accent/10 border border-accent/20">
+                <h4 className="font-medium text-accent mb-2">Sobre a IA do Safety Guardian</h4>
                 <p className="text-sm text-muted-foreground">
                   A IA utiliza modelos avançados de machine learning para analisar padrões de incidentes,
                   prever riscos e sugerir ações preventivas. Os modelos são treinados continuamente com

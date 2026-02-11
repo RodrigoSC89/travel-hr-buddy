@@ -172,6 +172,7 @@ function KPICard({ title, value, icon: Icon, color }: {
   );
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- analytics shape is dynamic from AI service
 function OverviewTab({ analytics }: { analytics: any }) {
   if (!analytics) return null;
 
@@ -180,7 +181,7 @@ function OverviewTab({ analytics }: { analytics: any }) {
       <Card>
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
-            <Users className="h-5 w-5 text-blue-400" />
+            <Users className="h-5 w-5 text-primary" />
             Distribuição por Cargo
           </CardTitle>
         </CardHeader>

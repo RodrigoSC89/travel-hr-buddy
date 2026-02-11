@@ -99,7 +99,7 @@ export default function SupplierPerformanceDashboard() {
 
          // Aggregate by supplier name
          const supplierMap = new Map<string, { categories: Set<string>; count: number }>();
-         (data || []).forEach((r: any) => {
+         (data || []).forEach((r) => {
            if (!r.supplier) return;
            const existing = supplierMap.get(r.supplier) || { categories: new Set(), count: 0 };
            existing.categories.add(r.category || "Geral");
@@ -171,7 +171,7 @@ export default function SupplierPerformanceDashboard() {
            <div><p className="text-2xl font-bold">{preferredCount}</p><p className="text-xs text-muted-foreground">Preferenciais</p></div>
          </CardContent></Card>
          <Card><CardContent className="p-4 flex items-center gap-3">
-           <div className="p-2 rounded-lg bg-blue-500/10"><BarChart3 className="h-5 w-5 text-blue-500" /></div>
+           <div className="p-2 rounded-lg bg-primary/10"><BarChart3 className="h-5 w-5 text-primary" /></div>
            <div><p className="text-2xl font-bold">{avgScore.toFixed(1)}</p><p className="text-xs text-muted-foreground">Score Médio</p></div>
          </CardContent></Card>
          <Card><CardContent className="p-4 flex items-center gap-3">

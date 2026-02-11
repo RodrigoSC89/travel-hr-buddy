@@ -162,23 +162,23 @@ const formatCurrency = (value: number, currency: string = "USD") => {
 
 const getPriorityColor = (priority: string) => {
   switch (priority) {
-    case "urgent": return "bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400";
-    case "high": return "bg-orange-100 text-orange-800 dark:bg-orange-900/30 dark:text-orange-400";
-    case "medium": return "bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-400";
-    case "low": return "bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400";
-    default: return "bg-gray-100 text-gray-800";
+    case "urgent": return "bg-destructive/10 text-destructive dark:bg-destructive/20 dark:text-destructive";
+    case "high": return "bg-warning/10 text-warning dark:bg-warning/20 dark:text-warning";
+    case "medium": return "bg-accent/10 text-accent-foreground dark:bg-accent/20 dark:text-accent-foreground";
+    case "low": return "bg-success/10 text-success dark:bg-success/20 dark:text-success";
+    default: return "bg-muted text-muted-foreground";
   }
 };
 
 const getStatusConfig = (status: string) => {
   switch (status) {
-    case "draft": return { color: "bg-gray-100 text-gray-800", icon: FileText, label: "Rascunho" };
-    case "pending": return { color: "bg-yellow-100 text-yellow-800", icon: Clock, label: "Pendente" };
-    case "approved": return { color: "bg-green-100 text-green-800", icon: CheckCircle2, label: "Aprovado" };
-    case "rejected": return { color: "bg-red-100 text-red-800", icon: XCircle, label: "Rejeitado" };
-    case "ordered": return { color: "bg-blue-100 text-blue-800", icon: ShoppingCart, label: "Pedido" };
-    case "delivered": return { color: "bg-purple-100 text-purple-800", icon: Package, label: "Entregue" };
-    default: return { color: "bg-gray-100 text-gray-800", icon: AlertCircle, label: status };
+    case "draft": return { color: "bg-muted text-muted-foreground", icon: FileText, label: "Rascunho" };
+    case "pending": return { color: "bg-warning/10 text-warning", icon: Clock, label: "Pendente" };
+    case "approved": return { color: "bg-success/10 text-success", icon: CheckCircle2, label: "Aprovado" };
+    case "rejected": return { color: "bg-destructive/10 text-destructive", icon: XCircle, label: "Rejeitado" };
+    case "ordered": return { color: "bg-primary/10 text-primary", icon: ShoppingCart, label: "Pedido" };
+    case "delivered": return { color: "bg-accent/10 text-accent-foreground", icon: Package, label: "Entregue" };
+    default: return { color: "bg-muted text-muted-foreground", icon: AlertCircle, label: status };
   }
 };
 
@@ -223,10 +223,10 @@ export function ProcurementHub() {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-muted-foreground">Aguardando Aprovação</p>
-                <p className="text-2xl font-bold text-yellow-600">{stats.pending}</p>
+                <p className="text-2xl font-bold text-warning">{stats.pending}</p>
                 <p className="text-xs text-muted-foreground">Requer ação</p>
               </div>
-              <Clock className="h-8 w-8 text-yellow-600" />
+              <Clock className="h-8 w-8 text-warning" />
             </div>
           </CardContent>
         </Card>
@@ -236,10 +236,10 @@ export function ProcurementHub() {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-muted-foreground">Aprovadas</p>
-                <p className="text-2xl font-bold text-green-600">{stats.approved}</p>
+                <p className="text-2xl font-bold text-success">{stats.approved}</p>
                 <p className="text-xs text-muted-foreground">Pronto para pedido</p>
               </div>
-              <CheckCircle2 className="h-8 w-8 text-green-600" />
+              <CheckCircle2 className="h-8 w-8 text-success" />
             </div>
           </CardContent>
         </Card>
@@ -444,9 +444,9 @@ export function ProcurementHub() {
                     <React.Fragment key={idx}>
                       <div className="flex flex-col items-center">
                         <div className={`w-10 h-10 rounded-full flex items-center justify-center ${
-                          approver.status === "approved" ? "bg-green-100 text-green-600" :
-                          approver.status === "rejected" ? "bg-red-100 text-red-600" :
-                          "bg-gray-100 text-gray-400"
+                          approver.status === "approved" ? "bg-success/10 text-success" :
+                          approver.status === "rejected" ? "bg-destructive/10 text-destructive" :
+                          "bg-muted text-muted-foreground"
                         }`}>
                           {approver.status === "approved" ? <CheckCircle2 className="h-5 w-5" /> :
                            approver.status === "rejected" ? <XCircle className="h-5 w-5" /> :
@@ -462,7 +462,7 @@ export function ProcurementHub() {
                       </div>
                       {idx < selectedPR.approvers.length - 1 && (
                         <div className={`flex-1 h-0.5 mx-2 ${
-                          approver.status === "approved" ? "bg-green-500" : "bg-gray-200"
+                          approver.status === "approved" ? "bg-success" : "bg-muted"
                         }`} />
                       )}
                     </React.Fragment>

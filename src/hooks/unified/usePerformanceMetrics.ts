@@ -219,9 +219,9 @@ export function usePerformanceMetrics(options: UsePerformanceMetricsOptions = {}
     // FID - First Input Delay
     try {
       const fidObserver = new PerformanceObserver((list) => {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any -- PerformanceEventTiming not in standard lib
         list.getEntries().forEach((entry: any) => {
           const fid = entry.processingStart - entry.startTime;
-          setMetrics(prev => ({ ...prev, vitals: { ...prev.vitals, fid } }));
         });
       });
       fidObserver.observe({ entryTypes: ['first-input'], buffered: true });
@@ -234,6 +234,7 @@ export function usePerformanceMetrics(options: UsePerformanceMetricsOptions = {}
     try {
       let clsValue = 0;
       const clsObserver = new PerformanceObserver((list) => {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any -- LayoutShift entry not in standard lib
         list.getEntries().forEach((entry: any) => {
           if (!entry.hadRecentInput) {
             clsValue += entry.value;

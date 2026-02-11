@@ -96,14 +96,14 @@ export default function WorkbenchMegaHub() {
 
   const workbenchMetrics = useMemo(() => ({
     totalCrew: crewMembers.length,
-    activeCrew: crewMembers.filter((c: any) => c.status === 'active' || c.status === 'onboard').length,
+    activeCrew: crewMembers.filter((c) => c.status === 'active' || c.status === 'onboard').length,
     totalVessels: vessels.length,
   }), [crewMembers, vessels]);
 
   // Crew rotation workflow - dynamic
   const crewWorkflowSteps = useMemo(() => {
     const hasCrew = crewMembers.length > 0;
-    const hasAssigned = crewMembers.some((c: any) => c.vessel_id);
+    const hasAssigned = crewMembers.some((c) => c.vessel_id);
     return [
       { id: 'planning', label: 'Planning', status: hasCrew ? 'completed' as const : 'current' as const },
       { id: 'assignment', label: 'Assignment', status: hasAssigned ? 'completed' as const : hasCrew ? 'current' as const : 'pending' as const },
@@ -146,7 +146,7 @@ export default function WorkbenchMegaHub() {
       toast.error('Nenhum tripulante para exportar');
       return;
     }
-    exportToCSV(crewMembers.map((c: any) => ({
+    exportToCSV(crewMembers.map((c) => ({
       nome: c.full_name,
       cargo: c.rank,
       status: c.status,
@@ -165,7 +165,7 @@ export default function WorkbenchMegaHub() {
       toast.error('Nenhum dado financeiro disponível');
       return;
     }
-    exportToCSV(vessels.map((v: any) => ({
+    exportToCSV(vessels.map((v) => ({
       embarcacao: v.name,
       status: v.status,
     })), 'finance-report');
@@ -194,15 +194,15 @@ export default function WorkbenchMegaHub() {
     switch (section) {
       case 'docs': 
       case 'docs-control':
-        return 'bg-blue-500 text-white';
+        return 'bg-primary text-primary-foreground';
       case 'people':
       case 'crew-schedule': 
-        return 'bg-green-500 text-white';
+        return 'bg-success text-success-foreground';
       case 'finance':
       case 'approvals': 
-        return 'bg-yellow-500 text-white';
-      case 'travel': return 'bg-purple-500 text-white';
-      case 'system': return 'bg-gray-500 text-white';
+        return 'bg-warning text-warning-foreground';
+      case 'travel': return 'bg-accent text-accent-foreground';
+      case 'system': return 'bg-muted text-muted-foreground';
       default: return 'bg-primary text-primary-foreground';
     }
   };
@@ -320,7 +320,7 @@ export default function WorkbenchMegaHub() {
               {/* System Status */}
               <div className="flex items-center gap-3 text-xs text-muted-foreground px-1">
                 <div className="flex items-center gap-1.5">
-                  <Wifi className="h-3.5 w-3.5 text-green-500" />
+                  <Wifi className="h-3.5 w-3.5 text-success" />
                   <span>Online</span>
                 </div>
                 <span>•</span>

@@ -27,21 +27,21 @@ export default function AIAgentsDashboard() {
   const [showPendingOnly, setShowPendingOnly] = useState(false);
 
   const selectedAgent = useMemo(() =>
-    agents.find((a: any) => a.id === selectedAgentId) || null,
+    agents.find((a) => a.id === selectedAgentId) || null,
     [agents, selectedAgentId]
   );
 
-  const activeAgents = agents.filter((a: any) => a.status === "active" || a.status === "online").length;
-  const pendingDecisions = decisions.filter((d: any) => d.status === "pending");
+  const activeAgents = agents.filter((a) => a.status === "active" || a.status === "online").length;
+  const pendingDecisions = decisions.filter((d) => d.status === "pending");
   const filteredDecisions = showPendingOnly ? pendingDecisions : decisions;
 
   const statusConfig: Record<string, { label: string; color: string; icon: React.ElementType }> = {
-    active: { label: "Ativo", color: "bg-green-500", icon: Play },
-    online: { label: "Online", color: "bg-green-500", icon: Play },
-    idle: { label: "Ocioso", color: "bg-blue-500", icon: Clock },
-    paused: { label: "Pausado", color: "bg-yellow-500", icon: Pause },
-    error: { label: "Erro", color: "bg-red-500", icon: AlertTriangle },
-    disabled: { label: "Desativado", color: "bg-gray-400", icon: Pause },
+    active: { label: "Ativo", color: "bg-success", icon: Play },
+    online: { label: "Online", color: "bg-success", icon: Play },
+    idle: { label: "Ocioso", color: "bg-primary", icon: Clock },
+    paused: { label: "Pausado", color: "bg-warning", icon: Pause },
+    error: { label: "Erro", color: "bg-destructive", icon: AlertTriangle },
+    disabled: { label: "Desativado", color: "bg-muted", icon: Pause },
   };
 
   if (isLoading) {
@@ -134,7 +134,7 @@ export default function AIAgentsDashboard() {
                     <p>Nenhum agente registrado</p>
                   </div>
                 ) : (
-                  agents.map((agent: any) => {
+                  agents.map((agent) => {
                     const config = statusConfig[agent.status] || statusConfig.idle;
                     const StatusIcon = config.icon;
                     return (
@@ -172,7 +172,7 @@ export default function AIAgentsDashboard() {
                           </Badge>
                         </div>
                         <div className="flex flex-wrap gap-1 mt-2">
-                          {(Array.isArray(agent.capabilities) ? agent.capabilities : []).slice(0, 2).map((cap: any, i: number) => (
+                          {(Array.isArray(agent.capabilities) ? agent.capabilities : []).slice(0, 2).map((cap, i: number) => (
                             <Badge key={i} variant="secondary" className="text-xs">{String(cap)}</Badge>
                           ))}
                           {(Array.isArray(agent.capabilities) ? agent.capabilities : []).length > 2 && (
@@ -241,7 +241,7 @@ export default function AIAgentsDashboard() {
                     <div>
                       <p className="text-sm font-medium mb-2">Capacidades</p>
                       <div className="flex flex-wrap gap-2">
-                      {(Array.isArray(selectedAgent.capabilities) ? selectedAgent.capabilities : []).map((cap: any, i: number) => (
+                      {(Array.isArray(selectedAgent.capabilities) ? selectedAgent.capabilities : []).map((cap, i: number) => (
                           <Badge key={i} variant="outline">{String(cap)}</Badge>
                         ))}
                         {(Array.isArray(selectedAgent.capabilities) ? selectedAgent.capabilities : []).length === 0 && (
@@ -284,7 +284,7 @@ export default function AIAgentsDashboard() {
                         <p>Nenhuma decisão {showPendingOnly ? "pendente" : "registrada"}</p>
                       </div>
                     ) : (
-                      filteredDecisions.map((d: any) => (
+                      filteredDecisions.map((d) => (
                         <div key={d.id} className="p-4 rounded-lg border">
                           <div className="flex items-start justify-between">
                             <div className="flex-1">
