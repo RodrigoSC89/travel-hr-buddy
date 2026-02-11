@@ -111,20 +111,23 @@ export const EnhancedFeedbackSystem: React.FC = () => {
 
       if (realFeedback && realFeedback.length > 0) {
         // eslint-disable-next-line @typescript-eslint/no-explicit-any -- ai_feedback_scores row shape
-        feedbackList = realFeedback.map((f: any) => ({
-          id: f.id,
-          user_id: f.user_id || "unknown",
-          module: f.command_type || "general",
-          type: "feature" as const,
-          title: `Feedback: ${f.command_type}`,
-          description: (f.feedback_data as any)?.comment || "Feedback registrado",
-          rating: f.self_score || 3,
-          status: "pending" as const,
-          priority: f.self_score >= 4 ? "low" as const : "medium" as const,
-          created_at: f.created_at,
-          updated_at: f.created_at,
-          user_name: (f.feedback_data as any)?.user_name || "Usuário"
-        }));
+        feedbackList = realFeedback.map((f) => {
+          const feedbackData = f.feedback_data as Record<string, unknown> | null;
+          return {
+            id: f.id,
+            user_id: f.user_id || "unknown",
+            module: f.command_type || "general",
+            type: "feature" as const,
+            title: `Feedback: ${f.command_type}`,
+            description: String(feedbackData?.comment || "Feedback registrado"),
+            rating: f.self_score || 3,
+            status: "pending" as const,
+            priority: f.self_score >= 4 ? "low" as const : "medium" as const,
+            created_at: f.created_at,
+            updated_at: f.created_at,
+            user_name: String(feedbackData?.user_name || "Usuário"),
+          };
+        });
       } else {
         feedbackList = [
           {

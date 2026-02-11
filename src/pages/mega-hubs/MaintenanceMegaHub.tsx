@@ -97,10 +97,10 @@ export default function MaintenanceMegaHub() {
   // Dynamic metrics
   const maintMetrics = useMemo(() => ({
     total: maintenanceRecords.length,
-    pending: maintenanceRecords.filter((r: any) => r.status === 'pending').length,
-    inProgress: maintenanceRecords.filter((r: any) => r.status === 'in_progress').length,
-    completed: maintenanceRecords.filter((r: any) => r.status === 'completed').length,
-    vesselsInMaint: vessels.filter((v: any) => v.status === 'maintenance').length,
+    pending: maintenanceRecords.filter((r: Record<string, unknown>) => r.status === 'pending').length,
+    inProgress: maintenanceRecords.filter((r: Record<string, unknown>) => r.status === 'in_progress').length,
+    completed: maintenanceRecords.filter((r: Record<string, unknown>) => r.status === 'completed').length,
+    vesselsInMaint: vessels.filter((v: Record<string, unknown>) => v.status === 'maintenance').length,
   }), [maintenanceRecords, vessels]);
 
   // Dynamic workflow
@@ -209,7 +209,7 @@ export default function MaintenanceMegaHub() {
               {/* System Status */}
               <div className="flex items-center gap-3 text-xs text-muted-foreground px-1">
                 <div className="flex items-center gap-1.5">
-                  <Wifi className="h-3.5 w-3.5 text-green-500" />
+                  <Wifi className="h-3.5 w-3.5 text-success" />
                   <span>Conectado</span>
                 </div>
                 <span>•</span>

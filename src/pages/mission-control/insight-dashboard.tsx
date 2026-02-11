@@ -19,12 +19,43 @@ import {
 import { useToast } from "@/hooks/use-toast";
 
 export default function InsightDashboard() {
-  const [metrics, setMetrics] = useState<any>(null);
-  const [systemStatus, setSystemStatus] = useState<any>(null);
-  const [logs, setLogs] = useState<any[]>([]);
+  interface DashboardMetrics {
+    cpu_usage: number;
+    memory_usage: number;
+    fps: number;
+    error_rate: number;
+    active_modules: number;
+  }
+  interface SystemStatusData {
+    totalModules: number;
+    active: number;
+    degraded: number;
+    offline: number;
+    health: string;
+    total?: number;
+    modules?: { id: string; name: string; status: string; responseTime: number; lastCheck: string; errors: string[] }[];
+  }
+  interface LogEntry {
+    level: string;
+    timestamp: string;
+    category: string;
+    message: string;
+    module?: string;
+  }
+  interface TimeSeriesPoint {
+    time: string;
+    cpu: number;
+    memory: number;
+    fps: number;
+    errors: number;
+  }
+
+  const [metrics, setMetrics] = useState<DashboardMetrics | null>(null);
+  const [systemStatus, setSystemStatus] = useState<SystemStatusData | null>(null);
+  const [logs, setLogs] = useState<LogEntry[]>([]);
   const [aiReport, setAiReport] = useState<string>("");
   const [isGenerating, setIsGenerating] = useState(false);
-  const [timeSeriesData, setTimeSeriesData] = useState<any[]>([]);
+  const [timeSeriesData, setTimeSeriesData] = useState<TimeSeriesPoint[]>([]);
   const { toast } = useToast();
 
   useEffect(() => {
@@ -50,7 +81,7 @@ export default function InsightDashboard() {
     updateTimeSeriesData(currentMetrics);
   };
 
-  const updateTimeSeriesData = (newMetrics: any) => {
+  const updateTimeSeriesData = (newMetrics: DashboardMetrics) => {
     setTimeSeriesData(prev => {
       const updated = [...prev, {
         time: new Date().toLocaleTimeString("pt-BR"),
@@ -165,13 +196,13 @@ Offline: ${systemStatus?.offline || 0}
   };
 
   // Chart colors
-  const COLORS = ["#3b82f6", "#10b981", "#f59e0b", "#ef4444", "#8b5cf6"];
+  const COLORS = ["hsl(var(--primary))", "hsl(var(--success))", "hsl(var(--warning))", "hsl(var(--destructive))", "hsl(var(--accent))"];
 
   // Module status distribution
   const moduleStatusData = systemStatus ? [
-    { name: "Ativos", value: systemStatus.active, color: "#10b981" },
-    { name: "Degradados", value: systemStatus.degraded, color: "#f59e0b" },
-    { name: "Offline", value: systemStatus.offline, color: "#ef4444" }
+    { name: "Ativos", value: systemStatus.active, color: "hsl(var(--success))" },
+    { name: "Degradados", value: systemStatus.degraded, color: "hsl(var(--warning))" },
+    { name: "Offline", value: systemStatus.offline, color: "hsl(var(--destructive))" }
   ] : [];
 
   // Error distribution by category
@@ -220,7 +251,7 @@ Offline: ${systemStatus?.offline || 0}
         <Card>
           <CardHeader className="pb-3">
             <CardTitle className="text-sm font-medium flex items-center gap-2">
-              <Cpu className="w-4 h-4 text-blue-500" />
+              <Cpu className="w-4 h-4 text-primary" />
               CPU
             </CardTitle>
           </CardHeader>
@@ -235,7 +266,7 @@ Offline: ${systemStatus?.offline || 0}
         <Card>
           <CardHeader className="pb-3">
             <CardTitle className="text-sm font-medium flex items-center gap-2">
-              <Database className="w-4 h-4 text-green-500" />
+              <Database className="w-4 h-4 text-success" />
               Memória
             </CardTitle>
           </CardHeader>
@@ -250,7 +281,7 @@ Offline: ${systemStatus?.offline || 0}
         <Card>
           <CardHeader className="pb-3">
             <CardTitle className="text-sm font-medium flex items-center gap-2">
-              <Activity className="w-4 h-4 text-purple-500" />
+              <Activity className="w-4 h-4 text-accent-foreground" />
               FPS
             </CardTitle>
           </CardHeader>
@@ -265,7 +296,7 @@ Offline: ${systemStatus?.offline || 0}
         <Card>
           <CardHeader className="pb-3">
             <CardTitle className="text-sm font-medium flex items-center gap-2">
-              <AlertTriangle className="w-4 h-4 text-orange-500" />
+              <AlertTriangle className="w-4 h-4 text-warning" />
               Taxa de Erro
             </CardTitle>
           </CardHeader>
@@ -301,10 +332,10 @@ Offline: ${systemStatus?.offline || 0}
                   <YAxis />
                   <Tooltip />
                   <Legend />
-                  <Line type="monotone" dataKey="cpu" stroke="#3b82f6" name="CPU %" />
-                  <Line type="monotone" dataKey="memory" stroke="#10b981" name="Memória MB" />
-                  <Line type="monotone" dataKey="fps" stroke="#f59e0b" name="FPS" />
-                  <Line type="monotone" dataKey="errors" stroke="#ef4444" name="Erros %" />
+                  <Line type="monotone" dataKey="cpu" stroke="hsl(var(--primary))" name="CPU %" />
+                  <Line type="monotone" dataKey="memory" stroke="hsl(var(--success))" name="Memória MB" />
+                  <Line type="monotone" dataKey="fps" stroke="hsl(var(--warning))" name="FPS" />
+                  <Line type="monotone" dataKey="errors" stroke="hsl(var(--destructive))" name="Erros %" />
                 </LineChart>
               </ResponsiveContainer>
             </CardContent>
@@ -353,7 +384,7 @@ Offline: ${systemStatus?.offline || 0}
                     <XAxis dataKey="name" />
                     <YAxis />
                     <Tooltip />
-                    <Bar dataKey="value" fill="#ef4444" />
+                    <Bar dataKey="value" fill="hsl(var(--destructive))" />
                   </BarChart>
                 </ResponsiveContainer>
               </CardContent>
@@ -372,7 +403,7 @@ Offline: ${systemStatus?.offline || 0}
             <CardContent>
               <ScrollArea className="h-[500px]">
                 <div className="space-y-3">
-                  {systemStatus?.modules?.map((module: any) => (
+                  {systemStatus?.modules?.map((module) => (
                     <Card key={module.id}>
                       <CardContent className="p-4">
                         <div className="flex items-center justify-between">
@@ -394,14 +425,14 @@ Offline: ${systemStatus?.offline || 0}
                               <span>{new Date(module.lastCheck).toLocaleString("pt-BR")}</span>
                             </div>
                             {module.errors.length > 0 && (
-                              <div className="mt-2 text-xs text-red-500">
+                              <div className="mt-2 text-xs text-destructive">
                                 {module.errors.join(", ")}
                               </div>
                             )}
                           </div>
                           <Activity className={`w-5 h-5 ${
-                            module.status === "active" ? "text-green-500" :
-                              module.status === "degraded" ? "text-yellow-500" : "text-red-500"
+                            module.status === "active" ? "text-success" :
+                              module.status === "degraded" ? "text-warning" : "text-destructive"
                           }`} />
                         </div>
                       </CardContent>
