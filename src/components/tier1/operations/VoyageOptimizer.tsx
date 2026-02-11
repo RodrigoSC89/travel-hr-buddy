@@ -141,11 +141,11 @@ export function VoyageOptimizer() {
   const getWeatherRiskBadge = (risk: string) => {
     switch (risk) {
       case "low":
-        return <Badge className="bg-emerald-100 text-emerald-700">Low Risk</Badge>;
+        return <Badge className="bg-success/10 text-success">Low Risk</Badge>;
       case "moderate":
-        return <Badge className="bg-amber-100 text-amber-700">Moderate Risk</Badge>;
+        return <Badge className="bg-warning/10 text-warning">Moderate Risk</Badge>;
       case "high":
-        return <Badge className="bg-red-100 text-red-700">High Risk</Badge>;
+        return <Badge className="bg-destructive/10 text-destructive">High Risk</Badge>;
       default:
         return <Badge variant="outline">Unknown</Badge>;
     }
@@ -208,7 +208,7 @@ export function VoyageOptimizer() {
                 <p className="text-xs text-muted-foreground">Days</p>
               </div>
               <div className="text-center">
-                <p className="text-2xl font-bold text-emerald-600">$32K</p>
+                <p className="text-2xl font-bold text-success">$32K</p>
                 <p className="text-xs text-muted-foreground">Potential Savings</p>
               </div>
             </div>
@@ -361,29 +361,29 @@ export function VoyageOptimizer() {
 
                     {/* Savings */}
                     {route.savings && (
-                      <div className="text-right bg-emerald-50 dark:bg-emerald-950/30 p-3 rounded-lg">
+                      <div className="text-right bg-success/5 dark:bg-success/10 p-3 rounded-lg">
                         <p className="text-xs text-muted-foreground mb-1">Savings vs. Standard</p>
                         <div className="space-y-1">
                           <div className="flex items-center justify-end gap-1 text-sm">
-                            <TrendingDown className="h-3 w-3 text-emerald-600" />
-                            <span className="font-medium text-emerald-600">{route.savings.fuel} MT fuel</span>
+                            <TrendingDown className="h-3 w-3 text-success" />
+                            <span className="font-medium text-success">{route.savings.fuel} MT fuel</span>
                           </div>
                           <div className="flex items-center justify-end gap-1 text-sm">
                             {route.savings.time > 0 ? (
                               <>
-                                <TrendingDown className="h-3 w-3 text-emerald-600" />
-                                <span className="font-medium text-emerald-600">{route.savings.time}h faster</span>
+                                <TrendingDown className="h-3 w-3 text-success" />
+                                <span className="font-medium text-success">{route.savings.time}h faster</span>
                               </>
                             ) : (
                               <>
-                                <TrendingUp className="h-3 w-3 text-amber-600" />
-                                <span className="font-medium text-amber-600">{Math.abs(route.savings.time)}h longer</span>
+                                <TrendingUp className="h-3 w-3 text-warning" />
+                                <span className="font-medium text-warning">{Math.abs(route.savings.time)}h longer</span>
                               </>
                             )}
                           </div>
                           <div className="flex items-center justify-end gap-1 text-sm">
-                            <DollarSign className="h-3 w-3 text-emerald-600" />
-                            <span className="font-medium text-emerald-600">${route.savings.cost.toLocaleString()}</span>
+                            <DollarSign className="h-3 w-3 text-success" />
+                            <span className="font-medium text-success">${route.savings.cost.toLocaleString()}</span>
                           </div>
                         </div>
                       </div>
@@ -411,21 +411,21 @@ export function VoyageOptimizer() {
                     key={idx}
                     className={`p-4 rounded-lg border ${
                       window.conditions === "Favorable" 
-                        ? "bg-emerald-50 border-emerald-200 dark:bg-emerald-950/30" 
-                        : "bg-amber-50 border-amber-200 dark:bg-amber-950/30"
+                        ? "bg-success/5 border-success/20 dark:bg-success/10" 
+                        : "bg-warning/5 border-warning/20 dark:bg-warning/10"
                     }`}
                   >
                     <div className="flex items-start justify-between">
                       <div className="flex items-center gap-3">
                         <div className={`p-2 rounded-lg ${
                           window.conditions === "Favorable" 
-                            ? "bg-emerald-100" 
-                            : "bg-amber-100"
+                            ? "bg-success/10" 
+                            : "bg-warning/10"
                         }`}>
                           {window.conditions === "Favorable" ? (
-                            <CheckCircle2 className="h-5 w-5 text-emerald-600" />
+                            <CheckCircle2 className="h-5 w-5 text-success" />
                           ) : (
-                            <AlertTriangle className="h-5 w-5 text-amber-600" />
+                            <AlertTriangle className="h-5 w-5 text-warning" />
                           )}
                         </div>
                         <div>
@@ -539,14 +539,14 @@ export function VoyageOptimizer() {
                 </div>
                 <div>
                   <h4 className="font-semibold mb-4">CII Impact</h4>
-                  <div className="p-4 rounded-lg bg-emerald-50 dark:bg-emerald-950/30 border border-emerald-200">
+                  <div className="p-4 rounded-lg bg-success/5 dark:bg-success/10 border border-success/20">
                     <div className="flex items-center justify-between mb-3">
                       <span className="text-sm font-medium">Current CII Rating</span>
-                      <Badge className="bg-emerald-500 text-white text-lg px-3">B</Badge>
+                      <Badge className="bg-success text-primary-foreground text-lg px-3">B</Badge>
                     </div>
                     <div className="flex items-center justify-between">
                       <span className="text-sm font-medium">Projected After Voyage</span>
-                      <Badge className="bg-emerald-500 text-white text-lg px-3">B</Badge>
+                      <Badge className="bg-success text-primary-foreground text-lg px-3">B</Badge>
                     </div>
                     <p className="text-xs text-muted-foreground mt-3">
                       Weather-optimized route maintains current CII rating

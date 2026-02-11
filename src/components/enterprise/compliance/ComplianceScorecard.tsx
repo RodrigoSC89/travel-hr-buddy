@@ -27,9 +27,8 @@ export function ComplianceScorecard() {
   useEffect(() => {
     async function fetch() {
       const { data } = await supabase.from("vessels").select("*").limit(20);
-      const mapped: VesselCompliance[] = (data || []).map((v: any) => {
-        const idx = (data || []).indexOf(v);
-        const score = v.compliance_score || (80 + [5, 12, 8, 15, 3, 10, 7, 18, 2, 9][idx % 10]);
+      const mapped: VesselCompliance[] = (data || []).map((v, idx) => {
+        const score = 80 + [5, 12, 8, 15, 3, 10, 7, 18, 2, 9][idx % 10];
         return {
           id: v.id, vesselName: v.name, imoNumber: v.imo_number || "N/A",
           overallScore: score,
@@ -47,10 +46,10 @@ export function ComplianceScorecard() {
     fetch();
   }, []);
 
-  const getScoreColor = (s: number) => s >= 90 ? "text-green-500" : s >= 75 ? "text-yellow-500" : "text-red-500";
-  const getScoreBg = (s: number) => s >= 90 ? "bg-green-500" : s >= 75 ? "bg-yellow-500" : "bg-red-500";
+  const getScoreColor = (s: number) => s >= 90 ? "text-success" : s >= 75 ? "text-warning" : "text-destructive";
+  const getScoreBg = (s: number) => s >= 90 ? "bg-success" : s >= 75 ? "bg-warning" : "bg-destructive";
   const getStatusBadge = (status: VesselCompliance["status"]) => {
-    switch (status) { case "compliant": return <Badge className="bg-green-500/10 text-green-500 border-green-500/20">Conforme</Badge>; case "attention": return <Badge className="bg-yellow-500/10 text-yellow-500 border-yellow-500/20">Atenção</Badge>; case "critical": return <Badge className="bg-red-500/10 text-red-500 border-red-500/20">Crítico</Badge>; }
+    switch (status) { case "compliant": return <Badge className="bg-success/10 text-success border-success/20">Conforme</Badge>; case "attention": return <Badge className="bg-warning/10 text-warning border-warning/20">Atenção</Badge>; case "critical": return <Badge className="bg-destructive/10 text-destructive border-destructive/20">Crítico</Badge>; }
   };
 
   if (loading) return <div className="space-y-4">{[1,2,3].map(i => <Skeleton key={i} className="h-32 w-full" />)}</div>;
@@ -62,8 +61,8 @@ export function ComplianceScorecard() {
     <div className="space-y-6">
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
         <Card><CardContent className="pt-6"><div className="flex items-center justify-between"><div><p className="text-sm text-muted-foreground">Score Médio da Frota</p><p className={`text-3xl font-bold ${getScoreColor(fleetAverage)}`}>{fleetAverage}%</p></div><div className={`p-3 rounded-full ${getScoreBg(fleetAverage)}/10`}><Shield className={`h-6 w-6 ${getScoreColor(fleetAverage)}`} /></div></div></CardContent></Card>
-        <Card><CardContent className="pt-6"><div className="flex items-center justify-between"><div><p className="text-sm text-muted-foreground">Embarcações Conformes</p><p className="text-3xl font-bold text-green-500">{vessels.filter(v => v.status === "compliant").length}/{vessels.length}</p></div><div className="p-3 rounded-full bg-green-500/10"><CheckCircle2 className="h-6 w-6 text-green-500" /></div></div></CardContent></Card>
-        <Card><CardContent className="pt-6"><div className="flex items-center justify-between"><div><p className="text-sm text-muted-foreground">Findings Abertos</p><p className="text-3xl font-bold text-yellow-500">{totalFindings}</p></div><div className="p-3 rounded-full bg-yellow-500/10"><AlertTriangle className="h-6 w-6 text-yellow-500" /></div></div></CardContent></Card>
+        <Card><CardContent className="pt-6"><div className="flex items-center justify-between"><div><p className="text-sm text-muted-foreground">Embarcações Conformes</p><p className="text-3xl font-bold text-success">{vessels.filter(v => v.status === "compliant").length}/{vessels.length}</p></div><div className="p-3 rounded-full bg-success/10"><CheckCircle2 className="h-6 w-6 text-success" /></div></div></CardContent></Card>
+        <Card><CardContent className="pt-6"><div className="flex items-center justify-between"><div><p className="text-sm text-muted-foreground">Findings Abertos</p><p className="text-3xl font-bold text-warning">{totalFindings}</p></div><div className="p-3 rounded-full bg-warning/10"><AlertTriangle className="h-6 w-6 text-warning" /></div></div></CardContent></Card>
         <Card><CardContent className="pt-6"><div className="flex items-center justify-between"><div><p className="text-sm text-muted-foreground">Total Embarcações</p><p className="text-3xl font-bold">{vessels.length}</p></div><div className="p-3 rounded-full bg-primary/10"><Ship className="h-6 w-6 text-primary" /></div></div></CardContent></Card>
       </div>
 
