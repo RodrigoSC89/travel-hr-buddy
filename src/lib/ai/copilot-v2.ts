@@ -23,7 +23,7 @@ export interface CopilotSuggestion {
   title: string;
   description: string;
   action?: string;
-  context?: Record<string, any>;
+  context?: Record<string, unknown>;
 }
 
 export interface CopilotExplanation {
@@ -49,7 +49,7 @@ export interface CopilotCard {
   type: "info" | "warning" | "action" | "insight";
   title: string;
   content: string;
-  data?: Record<string, any>;
+  data?: Record<string, unknown>;
   actions?: Array<{ label: string; action: string }>;
 }
 
@@ -130,8 +130,8 @@ export function getAvailableCommands(category?: string): CopilotCommand[] {
  */
 export async function executeCopilotCommand(
   commandId: string,
-  context?: Record<string, any>
-): Promise<any> {
+  context?: Record<string, unknown>
+): Promise<CopilotCard | CopilotExplanation | CopilotSuggestion[] | TrainingModule[] | { success: boolean; message: string }> {
   const command = COMMANDS.find(c => c.id === commandId);
   
   if (!command) {
@@ -163,7 +163,7 @@ export async function executeCopilotCommand(
 /**
  * Explain non-conformance with AI
  */
-async function explainNonConformance(context?: Record<string, any>): Promise<CopilotExplanation> {
+async function explainNonConformance(context?: Record<string, unknown>): Promise<CopilotExplanation> {
   const ncCode = context?.nonConformanceCode || "ISM-12.1";
   const severity = context?.severity || "major";
 
@@ -191,7 +191,7 @@ async function explainNonConformance(context?: Record<string, any>): Promise<Cop
 /**
  * Check compliance status
  */
-async function checkComplianceStatus(context?: Record<string, any>): Promise<CopilotCard> {
+async function checkComplianceStatus(_context?: Record<string, unknown>): Promise<CopilotCard> {
   return {
     id: "compliance-check",
     type: "info",
@@ -214,7 +214,7 @@ async function checkComplianceStatus(context?: Record<string, any>): Promise<Cop
 /**
  * Predict compliance risks
  */
-async function predictRisks(context?: Record<string, any>): Promise<CopilotCard> {
+async function predictRisks(_context?: Record<string, unknown>): Promise<CopilotCard> {
   return {
     id: "risk-prediction",
     type: "warning",
@@ -235,7 +235,7 @@ async function predictRisks(context?: Record<string, any>): Promise<CopilotCard>
 /**
  * Verify evidence chain integrity
  */
-async function verifyEvidenceChain(context?: Record<string, any>): Promise<CopilotCard> {
+async function verifyEvidenceChain(_context?: Record<string, unknown>): Promise<CopilotCard> {
   return {
     id: "evidence-verification",
     type: "info",
@@ -256,8 +256,8 @@ async function verifyEvidenceChain(context?: Record<string, any>): Promise<Copil
 /**
  * Explain report with AI
  */
-async function explainReport(context?: Record<string, any>): Promise<CopilotExplanation> {
-  const reportType = context?.reportType || "audit";
+async function explainReport(context?: Record<string, unknown>): Promise<CopilotExplanation> {
+  const reportType = String(context?.reportType || "audit");
 
   return {
     topic: `${reportType.charAt(0).toUpperCase() + reportType.slice(1)} Report Explanation`,
@@ -278,7 +278,7 @@ async function explainReport(context?: Record<string, any>): Promise<CopilotExpl
 /**
  * Suggest corrective actions
  */
-async function suggestCorrectiveActions(context?: Record<string, any>): Promise<CopilotSuggestion[]> {
+async function suggestCorrectiveActions(_context?: Record<string, unknown>): Promise<CopilotSuggestion[]> {
   return [
     {
       id: "action-1",
@@ -313,7 +313,7 @@ async function suggestCorrectiveActions(context?: Record<string, any>): Promise<
 /**
  * Start training mode
  */
-async function startTrainingMode(context?: Record<string, any>): Promise<TrainingModule[]> {
+async function startTrainingMode(_context?: Record<string, unknown>): Promise<TrainingModule[]> {
   return [
     {
       id: "train-ism",
@@ -426,7 +426,7 @@ export async function processVoiceCommand(transcript: string): Promise<{
  */
 export function generateInteractiveCard(
   type: "insight" | "warning" | "action" | "info",
-  data: any
+  data: Record<string, unknown>
 ): CopilotCard {
   const cards: Record<string, CopilotCard> = {
     insight: {

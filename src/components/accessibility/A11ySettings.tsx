@@ -206,7 +206,7 @@ export function A11ySettings({ compact = false }: A11ySettingsProps) {
         <div className="pl-6">
           <Select
             value={settings.colorBlindMode}
-            onValueChange={(value: any) => updateSetting('colorBlindMode', value)}
+            onValueChange={(value: 'none' | 'protanopia' | 'deuteranopia' | 'tritanopia') => updateSetting('colorBlindMode', value)}
           >
             <SelectTrigger className="w-full">
               <SelectValue />
