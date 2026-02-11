@@ -63,17 +63,17 @@ export default function ComplianceStatusPage() {
   }, []);
 
   const getScoreColor = (score: number) => {
-    if (score >= 90) return "text-green-600";
-    if (score >= 75) return "text-yellow-600";
-    return "text-red-600";
+    if (score >= 90) return "text-success";
+    if (score >= 75) return "text-warning";
+    return "text-destructive";
   };
 
   const getStatusBadge = (status: string) => {
-    const variants: Record<string, { variant: any; className: string }> = {
-      pass: { variant: "default", className: "bg-green-100 text-green-800" },
-      fail: { variant: "destructive", className: "bg-red-100 text-red-800" },
-      warning: { variant: "default", className: "bg-yellow-100 text-yellow-800" },
-      not_applicable: { variant: "secondary", className: "bg-gray-100 text-gray-800" }
+    const variants: Record<string, { variant: "default" | "destructive" | "secondary"; className: string }> = {
+      pass: { variant: "default", className: "bg-success/10 text-success" },
+      fail: { variant: "destructive", className: "bg-destructive/10 text-destructive" },
+      warning: { variant: "default", className: "bg-warning/10 text-warning" },
+      not_applicable: { variant: "secondary", className: "bg-muted text-muted-foreground" }
     };
     return variants[status] || variants.not_applicable;
   };
@@ -82,7 +82,7 @@ export default function ComplianceStatusPage() {
     return (
       <div className="flex items-center justify-center h-screen">
         <div className="text-center">
-          <RefreshCw className="h-12 w-12 animate-spin mx-auto mb-4 text-blue-600" />
+          <RefreshCw className="h-12 w-12 animate-spin mx-auto mb-4 text-primary" />
           <p className="text-lg">Running compliance audit...</p>
         </div>
       </div>
@@ -95,7 +95,7 @@ export default function ComplianceStatusPage() {
       <div className="flex justify-between items-center">
         <div>
           <h1 className="text-3xl font-bold flex items-center gap-2">
-            <Shield className="h-8 w-8 text-blue-600" />
+            <Shield className="h-8 w-8 text-primary" />
             Continuous Compliance Engine
           </h1>
           <p className="text-muted-foreground mt-1">
@@ -145,17 +145,17 @@ export default function ComplianceStatusPage() {
             <Progress value={report.score} className="h-4 mb-4" />
             <div className="grid grid-cols-3 gap-4 text-center">
               <div>
-                <CheckCircle2 className="h-6 w-6 text-green-600 mx-auto mb-1" />
+                <CheckCircle2 className="h-6 w-6 text-success mx-auto mb-1" />
                 <div className="text-2xl font-bold">{report.passed}</div>
                 <div className="text-xs text-muted-foreground">Passed</div>
               </div>
               <div>
-                <AlertCircle className="h-6 w-6 text-yellow-600 mx-auto mb-1" />
+                <AlertCircle className="h-6 w-6 text-warning mx-auto mb-1" />
                 <div className="text-2xl font-bold">{report.warnings}</div>
                 <div className="text-xs text-muted-foreground">Warnings</div>
               </div>
               <div>
-                <AlertTriangle className="h-6 w-6 text-red-600 mx-auto mb-1" />
+                <AlertTriangle className="h-6 w-6 text-destructive mx-auto mb-1" />
                 <div className="text-2xl font-bold">{report.failed}</div>
                 <div className="text-xs text-muted-foreground">Failed</div>
               </div>
@@ -194,7 +194,7 @@ export default function ComplianceStatusPage() {
             <ul className="space-y-2">
               {report.recommendations.map((rec, idx) => (
                 <li key={idx} className="flex items-start gap-2">
-                  <span className="text-blue-600 mt-1">•</span>
+                  <span className="text-primary mt-1">•</span>
                   <span>{rec}</span>
                 </li>
               ))}
@@ -252,8 +252,8 @@ function ChecksList({
   checks, 
   getStatusBadge 
 }: { 
-  checks: any[];
-  getStatusBadge: (status: string) => { variant: any; className: string };
+  checks: Array<{ id: string; status: string; standard: string; section: string; severity: string; requirement: string; message: string; timestamp: string; automated?: boolean }>;
+  getStatusBadge: (status: string) => { variant: "default" | "destructive" | "secondary"; className: string };
 }) {
   return (
     <Card>

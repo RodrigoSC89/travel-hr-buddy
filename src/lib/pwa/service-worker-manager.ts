@@ -90,7 +90,7 @@ class ServiceWorkerManager {
   }
 
   // Send message to SW
-  postMessage(message: any): void {
+  postMessage(message: Record<string, unknown>): void {
     if (navigator.serviceWorker.controller) {
       navigator.serviceWorker.controller.postMessage(message);
     }

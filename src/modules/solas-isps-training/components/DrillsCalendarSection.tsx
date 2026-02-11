@@ -257,7 +257,7 @@ export default function DrillsCalendarSection() {
                             {drill.status === "scheduled" && (
                               <Button 
                                 onClick={() => handleStartDrill(drill)}
-                                className="bg-green-600 hover:bg-green-700"
+                                className="bg-success hover:bg-success/90"
                               >
                                 <Play className="h-4 w-4 mr-2" />
                                 Iniciar

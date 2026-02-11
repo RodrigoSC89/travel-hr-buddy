@@ -28,7 +28,7 @@ export const IncidentDetection: React.FC<Props> = ({ incidents }) => {
                 <div className="flex items-center justify-between">
                   <div className="flex-1">
                     <div className="flex items-center gap-2 mb-2">
-                      <AlertTriangle className="h-4 w-4 text-red-500" />
+                      <AlertTriangle className="h-4 w-4 text-destructive" />
                       <span className="font-semibold">{incident.title}</span>
                       <Badge variant="outline">{incident.code}</Badge>
                     </div>
@@ -38,7 +38,7 @@ export const IncidentDetection: React.FC<Props> = ({ incidents }) => {
                     </div>
                   </div>
                   <div className="flex flex-col gap-2">
-                    <Badge className={incident.severity === "critical" ? "bg-red-500/20 text-red-500" : "bg-yellow-500/20 text-yellow-500"}>
+                    <Badge className={incident.severity === "critical" ? "bg-destructive/20 text-destructive" : "bg-warning/20 text-warning"}>
                       {incident.severity}
                     </Badge>
                     <Button size="sm" variant="outline"><Eye className="h-3 w-3" /></Button>

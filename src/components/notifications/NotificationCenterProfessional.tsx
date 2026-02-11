@@ -110,7 +110,7 @@ interface Notification {
     label: string;
     url: string;
   };
-  metadata?: any;
+  metadata?: Record<string, unknown>;
 }
 
 // Mock data removed — real notifications loaded from Supabase
@@ -124,6 +124,7 @@ const loadNotificationsFromSupabase = async (): Promise<Notification[]> => {
 
     if (error || !data || data.length === 0) return [];
 
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Supabase row shape is dynamic
     return data.map((n: any) => ({
       id: n.id,
       title: n.title || "Notificação",
@@ -147,7 +148,7 @@ const getTypeIcon = (type: string) => {
   switch (type) {
     case 'critical': return <AlertTriangle className="h-4 w-4 text-destructive" />;
     case 'warning': return <AlertTriangle className="h-4 w-4 text-warning" />;
-    case 'success': return <CheckCircle className="h-4 w-4 text-green-500" />;
+    case 'success': return <CheckCircle className="h-4 w-4 text-success" />;
     case 'system': return <Settings className="h-4 w-4 text-muted-foreground" />;
     default: return <Info className="h-4 w-4 text-primary" />;
   }
@@ -157,7 +158,7 @@ const getTypeBadge = (type: string) => {
   const variants: Record<string, string> = {
     critical: "bg-destructive/10 text-destructive",
     warning: "bg-warning/10 text-warning",
-    success: "bg-green-500/10 text-green-600",
+    success: "bg-success/10 text-success",
     info: "bg-primary/10 text-primary",
     system: "bg-muted text-muted-foreground",
   };

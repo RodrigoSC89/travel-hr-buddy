@@ -117,7 +117,7 @@ export function AddTransactionDialog({ open, onOpenChange, onSuccess }: AddTrans
             <Button
               type="button"
               variant={formData.type === "income" ? "default" : "outline"}
-              className={`flex-1 ${formData.type === "income" ? "bg-green-600 hover:bg-green-700" : ""}`}
+              className={`flex-1 ${formData.type === "income" ? "bg-success hover:bg-success/90" : ""}`}
               onClick={() => setFormData({ ...formData, type: "income" })}
             >
               <TrendingUp className="h-4 w-4 mr-2" />
@@ -126,7 +126,7 @@ export function AddTransactionDialog({ open, onOpenChange, onSuccess }: AddTrans
             <Button
               type="button"
               variant={formData.type === "expense" ? "default" : "outline"}
-              className={`flex-1 ${formData.type === "expense" ? "bg-red-600 hover:bg-red-700" : ""}`}
+              className={`flex-1 ${formData.type === "expense" ? "bg-destructive hover:bg-destructive/90" : ""}`}
               onClick={() => setFormData({ ...formData, type: "expense" })}
             >
               <TrendingDown className="h-4 w-4 mr-2" />

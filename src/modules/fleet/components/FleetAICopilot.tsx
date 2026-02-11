@@ -30,9 +30,21 @@ interface Message {
   timestamp: Date;
 }
 
+interface VesselData {
+  id: string;
+  name: string;
+  status: string;
+  vessel_type?: string;
+  type?: string;
+  current_location?: string;
+  location?: string;
+  fuel_consumption?: number;
+  last_maintenance?: string;
+}
+
 interface FleetAICopilotProps {
-  vessels: any[];
-  onInsightGenerated?: (insight: any) => void;
+  vessels: VesselData[];
+  onInsightGenerated?: (insight: { action: string; data: Record<string, unknown> }) => void;
   className?: string;
 }
 
@@ -146,57 +158,66 @@ export const FleetAICopilot: React.FC<FleetAICopilotProps> = ({
     return labels[action] || action;
   };
 
-  const formatActionResponse = (action: string, data: any): string => {
+  const formatActionResponse = (action: string, data: Record<string, unknown> | null): string => {
     if (!data) return "Análise não disponível.";
+
+    const predictions = data.predictions as Array<Record<string, unknown>> | undefined;
+    const optimizations = data.optimizations as Array<Record<string, unknown>> | undefined;
+    const totalSavings = data.total_savings as Record<string, unknown> | undefined;
+    const analysis = data.analysis as Array<Record<string, unknown>> | undefined;
+    const fleetSummary = data.fleet_summary as Record<string, unknown> | undefined;
+    const insights = data.insights as Array<Record<string, unknown>> | undefined;
+    const kpis = data.kpis as Record<string, unknown> | undefined;
+    const recommendations = data.recommendations as string[] | undefined;
 
     switch (action) {
       case "maintenance_prediction":
-        if (data.predictions?.length > 0) {
-          const critical = data.predictions.filter((p: any) => p.priority === "critical" || p.priority === "high").length;
+        if (predictions && predictions.length > 0) {
+          const critical = predictions.filter((p) => p.priority === "critical" || p.priority === "high").length;
           return `📊 **Análise de Manutenção Preditiva**\n\n${data.summary || ""}\n\n` +
             `🔴 ${critical} embarcações requerem atenção prioritária\n` +
-            `📋 ${data.predictions.length} previsões geradas\n\n` +
-            data.predictions.slice(0, 3).map((p: any) => 
-              `• **${p.vessel_name}**: ${p.priority.toUpperCase()} - ${p.reasoning || "Verificar componentes"}`
+            `📋 ${predictions.length} previsões geradas\n\n` +
+            predictions.slice(0, 3).map((p) => 
+              `• **${p.vessel_name}**: ${String(p.priority).toUpperCase()} - ${p.reasoning || "Verificar componentes"}`
             ).join("\n") +
-            (data.alerts?.length > 0 ? `\n\n⚠️ Alertas: ${data.alerts.join(", ")}` : "");
+            ((data.alerts as string[] | undefined)?.length ? `\n\n⚠️ Alertas: ${(data.alerts as string[]).join(", ")}` : "");
         }
         return "Análise de manutenção concluída. Nenhuma ação urgente necessária.";
 
       case "route_optimization":
-        if (data.optimizations?.length > 0 || data.total_savings) {
+        if ((optimizations && optimizations.length > 0) || totalSavings) {
           return `🗺️ **Otimização de Rotas**\n\n` +
-            `💰 Economia potencial: R$ ${data.total_savings?.cost?.toLocaleString() || "N/A"}\n` +
-            `⛽ Redução de combustível: ${data.total_savings?.fuel_percent || 0}%\n` +
-            `⏱️ Tempo economizado: ${data.total_savings?.time_hours || 0}h\n\n` +
-            (data.optimizations?.slice(0, 3).map((o: any) => 
+            `💰 Economia potencial: R$ ${(totalSavings?.cost as number)?.toLocaleString() || "N/A"}\n` +
+            `⛽ Redução de combustível: ${totalSavings?.fuel_percent || 0}%\n` +
+            `⏱️ Tempo economizado: ${totalSavings?.time_hours || 0}h\n\n` +
+            (optimizations?.slice(0, 3).map((o) => 
               `• **${o.vessel_name}**: ${o.current_route} → ${o.optimized_route}`
             ).join("\n") || "Rotas já otimizadas.");
         }
         return "Rotas analisadas. Sugestões de otimização disponíveis.";
 
       case "fuel_analysis":
-        if (data.analysis?.length > 0 || data.fleet_summary) {
+        if ((analysis && analysis.length > 0) || fleetSummary) {
           return `⛽ **Análise de Combustível**\n\n` +
-            `📊 Eficiência média: ${data.fleet_summary?.average_efficiency || 85}%\n` +
-            `🔋 Consumo diário total: ${data.fleet_summary?.total_daily_consumption || "N/A"} L\n` +
-            `⚠️ Embarcações necessitando reabastecimento: ${data.fleet_summary?.vessels_needing_refuel || 0}\n\n` +
-            (data.analysis?.slice(0, 3).map((a: any) => 
-              `• **${a.vessel_name}**: ${a.current_level_percent || 0}% - ${a.recommendations?.[0] || "Nível adequado"}`
+            `📊 Eficiência média: ${fleetSummary?.average_efficiency || 85}%\n` +
+            `🔋 Consumo diário total: ${fleetSummary?.total_daily_consumption || "N/A"} L\n` +
+            `⚠️ Embarcações necessitando reabastecimento: ${fleetSummary?.vessels_needing_refuel || 0}\n\n` +
+            (analysis?.slice(0, 3).map((a) => 
+              `• **${a.vessel_name}**: ${a.current_level_percent || 0}% - ${(a.recommendations as string[] | undefined)?.[0] || "Nível adequado"}`
             ).join("\n") || "");
         }
         return "Análise de combustível concluída.";
 
       case "fleet_insights":
-        if (data.insights?.length > 0 || data.kpis) {
+        if ((insights && insights.length > 0) || kpis) {
           return `📈 **Insights Estratégicos da Frota**\n\n` +
-            `🎯 Score de Saúde: ${data.kpis?.fleet_health_score || 85}/100\n` +
-            `⚡ Eficiência Operacional: ${data.kpis?.operational_efficiency || 90}%\n` +
-            `🔧 Compliance de Manutenção: ${data.kpis?.maintenance_compliance || 95}%\n\n` +
+            `🎯 Score de Saúde: ${kpis?.fleet_health_score || 85}/100\n` +
+            `⚡ Eficiência Operacional: ${kpis?.operational_efficiency || 90}%\n` +
+            `🔧 Compliance de Manutenção: ${kpis?.maintenance_compliance || 95}%\n\n` +
             `**Top Insights:**\n` +
-            (data.insights?.slice(0, 3).map((i: any) => 
-              `• [${i.type?.toUpperCase()}] ${i.title}: ${i.description}`
-            ).join("\n") || data.recommendations?.join("\n• ") || "");
+            (insights?.slice(0, 3).map((i) => 
+              `• [${String(i.type || '').toUpperCase()}] ${i.title}: ${i.description}`
+            ).join("\n") || recommendations?.join("\n• ") || "");
         }
         return "Insights gerados com sucesso.";
 
