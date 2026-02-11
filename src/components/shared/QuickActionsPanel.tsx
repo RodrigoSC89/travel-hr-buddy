@@ -38,28 +38,28 @@ export function QuickActionsPanel() {
       label: "Novo Documento",
       icon: FileText,
       action: () => navigate("/documents"),
-      color: "text-blue-500"
+      color: "text-primary"
     },
     {
       id: "add-crew",
       label: "Adicionar Tripulante",
       icon: Users,
       action: () => navigate("/maritime-command"),
-      color: "text-green-500"
+      color: "text-success"
     },
     {
       id: "new-maintenance",
       label: "Nova Manutenção",
       icon: Wrench,
       action: () => navigate("/maintenance-command"),
-      color: "text-orange-500"
+      color: "text-warning"
     },
     {
       id: "fleet-status",
       label: "Status da Frota",
       icon: Ship,
       action: () => navigate("/fleet-command"),
-      color: "text-purple-500"
+      color: "text-accent"
     },
     {
       id: "schedule-event",
@@ -83,7 +83,7 @@ export function QuickActionsPanel() {
         toast.info("Selecione um módulo para fazer upload");
         navigate("/documents");
       },
-      color: "text-yellow-500"
+      color: "text-warning"
     },
     {
       id: "search",
@@ -92,7 +92,7 @@ export function QuickActionsPanel() {
       action: () => {
         toast.info("Use Ctrl+K para buscar");
       },
-      color: "text-gray-500"
+      color: "text-muted-foreground"
     }
   ];
 

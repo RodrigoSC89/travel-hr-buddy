@@ -254,17 +254,17 @@ export const SmartRoutesMap: React.FC<SmartRoutesMapProps> = ({ mapboxToken }) =
 
   const getStatusColor = (status: RouteData['status']) => {
     switch (status) {
-      case 'active': return 'bg-green-500';
-      case 'planned': return 'bg-blue-500';
-      case 'completed': return 'bg-gray-500';
+      case 'active': return 'bg-success';
+      case 'planned': return 'bg-primary';
+      case 'completed': return 'bg-muted-foreground';
     }
   };
 
   const getWeatherRiskColor = (risk: RouteData['weatherRisk']) => {
     switch (risk) {
-      case 'low': return 'text-green-500';
-      case 'medium': return 'text-yellow-500';
-      case 'high': return 'text-red-500';
+      case 'low': return 'text-success';
+      case 'medium': return 'text-warning';
+      case 'high': return 'text-destructive';
     }
   };
 

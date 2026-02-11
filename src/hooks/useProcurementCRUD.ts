@@ -281,7 +281,7 @@ export function useProcurementCRUD() {
   // ==================== EXPORT UTILITY ====================
 
   const exportData = async (type: 'suppliers' | 'inventory' | 'rfq') => {
-    let data: any[] = [];
+    let data: Record<string, unknown>[] = [];
     let filename = '';
 
     switch (type) {

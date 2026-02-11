@@ -76,13 +76,13 @@ export async function getLLMExplanation(
 export async function generateAuditAnalysis(
   auditId: string,
   checklist: ISMChecklistItem[],
-  vesselContext?: any
+  vesselContext?: Record<string, unknown>
 ): Promise<{ success: boolean; data?: ISMLLMAnalysis; error?: string }> {
   try {
     Logger.ai("Generating comprehensive ISM audit analysis", { auditId });
 
     // Group items by section
-    const sectionData: Record<ISMSection, ISMChecklistItem[]> = {} as any;
+    const sectionData: Record<ISMSection, ISMChecklistItem[]> = {} as Record<ISMSection, ISMChecklistItem[]>;
     checklist.forEach(item => {
       if (!sectionData[item.section]) {
         sectionData[item.section] = [];

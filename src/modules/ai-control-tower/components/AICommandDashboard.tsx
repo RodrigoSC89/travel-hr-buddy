@@ -35,22 +35,22 @@ export function AICommandDashboard() {
   });
 
   const selectedAgent = useMemo(() => 
-    agents.find((a: any) => a.id === selectedAgentId) || null,
+    agents.find((a) => a.id === selectedAgentId) || null,
     [agents, selectedAgentId]
   );
 
   const pendingDecisions = useMemo(() => 
-    decisions.filter((d: any) => d.status === "pending"),
+    decisions.filter((d) => d.status === "pending"),
     [decisions]
   );
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case "active": case "online": return "bg-emerald-500";
-      case "idle": return "bg-amber-500";
-      case "error": return "bg-red-500";
-      case "learning": return "bg-blue-500";
-      default: return "bg-gray-500";
+      case "active": case "online": return "bg-success";
+      case "idle": return "bg-warning";
+      case "error": return "bg-destructive";
+      case "learning": return "bg-primary";
+      default: return "bg-muted-foreground";
     }
   };
 
@@ -66,9 +66,9 @@ export function AICommandDashboard() {
 
   const getImpactBadge = (impact: string) => {
     switch (impact) {
-      case "high": case "critical": return <Badge className="bg-red-500/20 text-red-400">Alto Impacto</Badge>;
-      case "medium": return <Badge className="bg-amber-500/20 text-amber-400">Médio Impacto</Badge>;
-      default: return <Badge className="bg-emerald-500/20 text-emerald-400">Baixo Impacto</Badge>;
+      case "high": case "critical": return <Badge className="bg-destructive/20 text-destructive">Alto Impacto</Badge>;
+      case "medium": return <Badge className="bg-warning/20 text-warning">Médio Impacto</Badge>;
+      default: return <Badge className="bg-success/20 text-success">Baixo Impacto</Badge>;
     }
   };
 
@@ -180,7 +180,7 @@ export function AICommandDashboard() {
         {/* Agentes */}
         <TabsContent value="agents" className="space-y-4">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-            {agents.map((agent: any) => (
+            {agents.map((agent) => (
               <motion.div key={agent.id} whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
                 <Card
                   className={`cursor-pointer transition-all hover:border-primary/50 ${
@@ -207,7 +207,7 @@ export function AICommandDashboard() {
                   </CardHeader>
                   <CardContent className="space-y-3">
                     <div className="flex flex-wrap gap-1">
-                      {(Array.isArray(agent.capabilities) ? agent.capabilities : []).slice(0, 3).map((cap: any, i: number) => (
+                      {(Array.isArray(agent.capabilities) ? agent.capabilities : []).slice(0, 3).map((cap: unknown, i: number) => (
                         <Badge key={i} variant="secondary" className="text-xs">{String(cap)}</Badge>
                       ))}
                     </div>
@@ -284,7 +284,7 @@ export function AICommandDashboard() {
                       <div className="mt-4">
                         <p className="text-sm font-medium mb-2">Capacidades</p>
                         <div className="flex flex-wrap gap-2">
-                          {(Array.isArray(selectedAgent.capabilities) ? selectedAgent.capabilities : []).map((cap: any, i: number) => (
+                          {(Array.isArray(selectedAgent.capabilities) ? selectedAgent.capabilities : []).map((cap: unknown, i: number) => (
                             <Badge key={i} variant="outline">{String(cap)}</Badge>
                           ))}
                         </div>
@@ -314,7 +314,7 @@ export function AICommandDashboard() {
                   <p className="text-muted-foreground">Decisões de IA aparecerão aqui quando geradas</p>
                 </Card>
               ) : (
-                decisions.map((decision: any) => (
+                decisions.map((decision) => (
                   <Card key={decision.id} className={decision.status === "pending" ? "border-amber-500/50" : ""}>
                     <CardContent className="p-4">
                       <div className="flex items-start justify-between">
@@ -388,7 +388,7 @@ export function AICommandDashboard() {
             <Card>
               <CardContent className="pt-6 text-center">
                 <p className="text-3xl font-bold">
-                  {auditLogs.reduce((sum: number, l: any) => sum + (l.tokens_input || 0) + (l.tokens_output || 0), 0).toLocaleString()}
+                  {auditLogs.reduce((sum: number, l) => sum + (l.tokens_input || 0) + (l.tokens_output || 0), 0).toLocaleString()}
                 </p>
                 <p className="text-sm text-muted-foreground">Tokens Utilizados</p>
               </CardContent>
@@ -407,7 +407,7 @@ export function AICommandDashboard() {
                       <p>Nenhuma interação registrada ainda</p>
                     </div>
                   ) : (
-                    auditLogs.slice(0, 20).map((log: any) => (
+                    auditLogs.slice(0, 20).map((log) => (
                       <div key={log.id} className="p-3 rounded-lg border">
                         <p className="text-sm font-medium truncate">{log.user_input}</p>
                         {log.ai_response && (
@@ -416,7 +416,7 @@ export function AICommandDashboard() {
                         <div className="flex items-center gap-3 mt-2 text-xs text-muted-foreground">
                           <span>{log.model_version || "N/A"}</span>
                           <span>{log.response_time_ms || 0}ms</span>
-                          <span>{new Date(log.created_at).toLocaleString("pt-BR")}</span>
+                          <span>{new Date(log.created_at || "").toLocaleString("pt-BR")}</span>
                         </div>
                       </div>
                     ))
@@ -472,7 +472,7 @@ export function AICommandDashboard() {
                   const { supabase } = await import("@/integrations/supabase/client");
                   const { error } = await supabase.from("ai_configurations").upsert({
                     config_key: "agent_settings",
-                    config_value: agentSettings as any,
+                    config_value: agentSettings as unknown as import("@/integrations/supabase/types").Json,
                     description: "AI Agent global settings"
                   }, { onConflict: "config_key" });
                   if (error) throw error;

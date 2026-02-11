@@ -15,8 +15,15 @@ import {
   ClipboardList, AlertTriangle, TrendingUp
 } from "lucide-react";
 
+interface QuickActionsContext {
+  maintenance?: { overdue?: number };
+  crew?: { expiringCerts?: number };
+  compliance?: { pendingAudits?: number };
+  inventory?: { lowStock?: number };
+}
+
 interface QuickActionsGridProps {
-  context?: any;
+  context?: QuickActionsContext;
   onContactClick?: () => void;
   onReorderClick?: () => void;
   onCreateOrderClick?: () => void;
@@ -68,15 +75,15 @@ export function QuickActionsGrid({
       icon: <Plus className="h-4 w-4" />,
       label: "Nova Requisição",
       onClick: () => navigate("/procurement-command"),
-      color: "bg-green-500 hover:bg-green-600",
+      color: "bg-success hover:bg-success/90",
       badge: null
     },
     {
       icon: <Wrench className="h-4 w-4" />,
       label: "Agendar Manutenção",
       onClick: () => navigate("/maintenance-command"),
-      color: "bg-orange-500 hover:bg-orange-600",
-      badge: context?.maintenance?.overdue > 0 ? context.maintenance.overdue : null
+      color: "bg-warning hover:bg-warning/90",
+      badge: (context?.maintenance?.overdue ?? 0) > 0 ? context?.maintenance?.overdue ?? null : null
     },
     {
       icon: <FileText className="h-4 w-4" />,
@@ -87,7 +94,7 @@ export function QuickActionsGrid({
         });
         navigate("/analytics-command");
       },
-      color: "bg-blue-500 hover:bg-blue-600",
+      color: "bg-primary hover:bg-primary/90",
       badge: null
     },
     {
@@ -102,14 +109,14 @@ export function QuickActionsGrid({
       label: "Gestão Tripulação",
       onClick: () => navigate("/maritime-command"),
       color: "bg-info hover:bg-info/90",
-      badge: context?.crew?.expiringCerts > 0 ? context.crew.expiringCerts : null
+      badge: (context?.crew?.expiringCerts ?? 0) > 0 ? context?.crew?.expiringCerts ?? null : null
     },
     {
       icon: <Shield className="h-4 w-4" />,
       label: "Auditorias",
       onClick: () => navigate("/compliance-hub"),
       color: "bg-info hover:bg-info/90",
-      badge: context?.compliance?.pendingAudits > 0 ? context.compliance.pendingAudits : null
+      badge: (context?.compliance?.pendingAudits ?? 0) > 0 ? context?.compliance?.pendingAudits ?? null : null
     },
     {
       icon: <Phone className="h-4 w-4" />,
@@ -123,7 +130,7 @@ export function QuickActionsGrid({
       label: "Solicitar Reposição",
       onClick: handleReorder,
       color: "bg-warning hover:bg-warning/90",
-      badge: context?.inventory?.lowStock > 0 ? context.inventory.lowStock : null
+      badge: (context?.inventory?.lowStock ?? 0) > 0 ? context?.inventory?.lowStock ?? null : null
     },
     {
       icon: <ShoppingCart className="h-4 w-4" />,

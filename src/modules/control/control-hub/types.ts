@@ -19,6 +19,7 @@ export interface ModuleState {
 export interface CacheEntry {
   id: string;
   timestamp: Date;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- cache entries hold arbitrary module data
   data: any;
   module: string;
   synchronized: boolean;

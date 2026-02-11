@@ -29,6 +29,7 @@ import { supabase } from "@/integrations/supabase/client";
 function ComplianceDashboard() {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Supabase dynamic row type
   const [certificates, setCertificates] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [showCertDialog, setShowCertDialog] = useState(false);
@@ -89,8 +90,8 @@ function ComplianceDashboard() {
       setShowCertDialog(false);
       setCertForm({ type: "", number: "", expiry: "", issuer: "" });
       loadCertificates();
-    } catch (error: any) {
-      toast.error("Erro ao adicionar certificado", { description: error.message });
+    } catch (error: unknown) {
+      toast.error("Erro ao adicionar certificado", { description: error instanceof Error ? error.message : "Erro desconhecido" });
     } finally {
       setIsSaving(false);
     }
@@ -110,8 +111,8 @@ function ComplianceDashboard() {
         description: data?.response?.substring(0, 120) || "Análise gerada com sucesso",
         duration: 8000,
       });
-    } catch (error: any) {
-      toast.error("Erro na análise IA", { description: error.message });
+    } catch (error: unknown) {
+      toast.error("Erro na análise IA", { description: error instanceof Error ? error.message : "Erro desconhecido" });
     } finally {
       setIsAnalyzing(false);
     }
@@ -136,8 +137,8 @@ function ComplianceDashboard() {
       a.click();
       URL.revokeObjectURL(url);
       toast.success("Relatório DMLC exportado");
-    } catch (error: any) {
-      toast.error("Erro ao exportar", { description: error.message });
+    } catch (error: unknown) {
+      toast.error("Erro ao exportar", { description: error instanceof Error ? error.message : "Erro desconhecido" });
     } finally {
       setIsExportingDMLC(false);
     }
