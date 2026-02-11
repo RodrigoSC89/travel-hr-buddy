@@ -4,6 +4,9 @@
 
 import { supabase } from "@/integrations/supabase/client";
 import { logger } from '@/lib/logger';
+import type { Database } from "@/integrations/supabase/types";
+
+type TemplateRow = Database['public']['Tables']['document_templates']['Row'];
 
 export interface DocumentTemplate {
   id?: string;
@@ -59,8 +62,7 @@ export class TemplatePersistence {
 
   async updateTemplate(id: string, template: Partial<DocumentTemplate>): Promise<DocumentTemplate> {
     try {
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any -- dynamic update fields for Supabase
-      const updateData: any = {};
+      const updateData: Record<string, unknown> = {};
       
       if (template.name !== undefined) updateData.name = template.name;
       if (template.description !== undefined) updateData.description = template.description;
@@ -134,22 +136,21 @@ export class TemplatePersistence {
     }
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Supabase row shape is dynamic
-  private mapToTemplate(data: any): DocumentTemplate {
+  private mapToTemplate(data: TemplateRow): DocumentTemplate {
     return {
       id: data.id,
-      userId: data.user_id,
+      userId: data.user_id ?? undefined,
       organizationId: data.organization_id,
       name: data.name,
-      description: data.description,
+      description: data.description ?? undefined,
       content: data.content,
-      variables: data.variables || [],
-      isPublic: data.is_public,
-      category: data.category,
-      tags: data.tags || [],
-      metadata: data.metadata || {},
-      createdAt: data.created_at,
-      updatedAt: data.updated_at
+      variables: (data.variables as string[]) || [],
+      isPublic: data.is_public ?? undefined,
+      category: data.category ?? undefined,
+      tags: (data.tags as string[]) || [],
+      metadata: (data.metadata as Record<string, unknown>) || {},
+      createdAt: data.created_at ?? undefined,
+      updatedAt: data.updated_at ?? undefined
     };
   }
 }

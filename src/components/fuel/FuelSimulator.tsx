@@ -157,19 +157,19 @@ export const FuelSimulator: React.FC = () => {
                   </div>
                   <div className="space-y-1">
                     <p className="text-sm text-muted-foreground">Consumo Otimizado</p>
-                    <p className="text-2xl font-bold text-green-600">{simulation.optimizedConsumption.toLocaleString()} L</p>
+                    <p className="text-2xl font-bold text-success">{simulation.optimizedConsumption.toLocaleString()} L</p>
                   </div>
                 </div>
               </CardContent>
             </Card>
 
-            <Card className="bg-green-50 dark:bg-green-950 border-green-200 dark:border-green-800">
+            <Card className="bg-success/5 border-success/20">
               <CardContent className="pt-6">
                 <div className="flex items-center gap-3 mb-4">
-                  <TrendingDown className="h-8 w-8 text-green-600" />
+                  <TrendingDown className="h-8 w-8 text-success" />
                   <div>
                     <p className="text-sm text-muted-foreground">Economia Potencial</p>
-                    <p className="text-2xl font-bold text-green-600">
+                    <p className="text-2xl font-bold text-success">
                       {simulation.savingsLiters.toLocaleString()} L ({simulation.savingsPercentage}%)
                     </p>
                   </div>
@@ -181,7 +181,7 @@ export const FuelSimulator: React.FC = () => {
                   </div>
                   <div>
                     <p className="text-sm text-muted-foreground">Economia em R$</p>
-                    <p className="font-semibold text-green-600">R$ {simulation.estimatedSavings.toLocaleString()}</p>
+                    <p className="font-semibold text-success">R$ {simulation.estimatedSavings.toLocaleString()}</p>
                   </div>
                 </div>
               </CardContent>
@@ -212,10 +212,10 @@ export const FuelSimulator: React.FC = () => {
               </Card>
             </div>
 
-            <div className="bg-blue-50 dark:bg-blue-950 p-4 rounded-lg border border-blue-200 dark:border-blue-800">
+            <div className="bg-primary/5 p-4 rounded-lg border border-primary/20">
               <p className="text-sm">
                 <strong>Recomendação:</strong> Reduza a velocidade de {currentSpeed} para {simulation.optimalSpeed} nós 
-                para economizar <strong className="text-green-600">R$ {simulation.estimatedSavings.toLocaleString()}</strong> nesta viagem.
+                para economizar <strong className="text-success">R$ {simulation.estimatedSavings.toLocaleString()}</strong> nesta viagem.
               </p>
             </div>
           </div>
