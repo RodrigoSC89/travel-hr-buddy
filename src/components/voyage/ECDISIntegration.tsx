@@ -23,7 +23,7 @@ interface ECDISData {
   enc_cells_installed: number;
   last_update_date: string;
   next_update_due: string;
-  routes: any[];
+  routes: Array<Record<string, unknown>>;
   chart_folios: string[];
   backup_arrangements: string;
   type_approval_number: string;
@@ -117,12 +117,12 @@ export function ECDISIntegration() {
         <Card className="border-border/50 bg-card/50">
           <CardContent className="p-4">
             <div className="flex items-center gap-3">
-              <div className="p-2 bg-emerald-500/10 rounded-lg">
-                <CheckCircle2 className="h-5 w-5 text-emerald-400" />
+              <div className="p-2 bg-success/10 rounded-lg">
+                <CheckCircle2 className="h-5 w-5 text-success" />
               </div>
               <div>
                 <p className="text-sm text-muted-foreground">Válidos</p>
-                <p className="text-xl font-bold text-emerald-400">{stats.valid}</p>
+                <p className="text-xl font-bold text-success">{stats.valid}</p>
               </div>
             </div>
           </CardContent>
@@ -131,12 +131,12 @@ export function ECDISIntegration() {
         <Card className="border-border/50 bg-card/50">
           <CardContent className="p-4">
             <div className="flex items-center gap-3">
-              <div className="p-2 bg-amber-500/10 rounded-lg">
-                <AlertTriangle className="h-5 w-5 text-amber-400" />
+              <div className="p-2 bg-warning/10 rounded-lg">
+                <AlertTriangle className="h-5 w-5 text-warning" />
               </div>
               <div>
                 <p className="text-sm text-muted-foreground">Expirando</p>
-                <p className="text-xl font-bold text-amber-400">{stats.expiring}</p>
+                <p className="text-xl font-bold text-warning">{stats.expiring}</p>
               </div>
             </div>
           </CardContent>
@@ -159,12 +159,12 @@ export function ECDISIntegration() {
         <Card className="border-border/50 bg-card/50">
           <CardContent className="p-4">
             <div className="flex items-center gap-3">
-              <div className="p-2 bg-blue-500/10 rounded-lg">
-                <Database className="h-5 w-5 text-blue-400" />
+              <div className="p-2 bg-primary/10 rounded-lg">
+                <Database className="h-5 w-5 text-primary" />
               </div>
               <div>
                 <p className="text-sm text-muted-foreground">Células ENC</p>
-                <p className="text-xl font-bold text-blue-400">{stats.totalCells}</p>
+                <p className="text-xl font-bold text-primary">{stats.totalCells}</p>
               </div>
             </div>
           </CardContent>
@@ -180,8 +180,8 @@ export function ECDISIntegration() {
               <div className="flex items-end gap-2">
                 <span className={cn(
                   "text-5xl font-bold",
-                  Number(complianceRate) >= 90 ? "text-emerald-400" :
-                  Number(complianceRate) >= 70 ? "text-amber-400" : "text-destructive"
+                  Number(complianceRate) >= 90 ? "text-success" :
+                  Number(complianceRate) >= 70 ? "text-warning" : "text-destructive"
                 )}>
                   {complianceRate}%
                 </span>
@@ -196,14 +196,14 @@ export function ECDISIntegration() {
                 <p className="text-xs text-muted-foreground">Embarcações</p>
               </div>
               <div className="text-center">
-                <Navigation className="h-5 w-5 text-blue-400 mx-auto mb-1" />
+                <Navigation className="h-5 w-5 text-primary mx-auto mb-1" />
                 <p className="text-2xl font-bold text-foreground">
                   {ecdisData.reduce((sum, e) => sum + (e.routes?.length || 0), 0)}
                 </p>
                 <p className="text-xs text-muted-foreground">Rotas Ativas</p>
               </div>
               <div className="text-center">
-                <Database className="h-5 w-5 text-amber-400 mx-auto mb-1" />
+                <Database className="h-5 w-5 text-warning mx-auto mb-1" />
                 <p className="text-2xl font-bold text-foreground">{stats.totalCells}</p>
                 <p className="text-xs text-muted-foreground">Células ENC</p>
               </div>
@@ -276,10 +276,10 @@ export function ECDISIntegration() {
                       <div className="flex items-center gap-3">
                         <div className={cn(
                           "p-2 rounded-lg",
-                          isOnline ? "bg-emerald-500/10" : "bg-muted"
+                          isOnline ? "bg-success/10" : "bg-muted"
                         )}>
                           {isOnline ? (
-                            <Wifi className="h-5 w-5 text-emerald-400" />
+                            <Wifi className="h-5 w-5 text-success" />
                           ) : (
                             <WifiOff className="h-5 w-5 text-muted-foreground" />
                           )}
@@ -316,7 +316,7 @@ export function ECDISIntegration() {
                         <p className={cn(
                           "font-medium",
                           daysUntilUpdate && daysUntilUpdate <= 7 ? "text-destructive" :
-                          daysUntilUpdate && daysUntilUpdate <= 30 ? "text-amber-400" : "text-foreground"
+                          daysUntilUpdate && daysUntilUpdate <= 30 ? "text-warning" : "text-foreground"
                         )}>
                           {ecdis.next_update_due 
                             ? format(new Date(ecdis.next_update_due), "dd/MM/yyyy")

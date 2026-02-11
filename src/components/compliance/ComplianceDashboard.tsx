@@ -15,14 +15,14 @@ export default function ComplianceDashboard() {
   }, []);
 
   const icon =
-    status.complianceLevel === "Conforme" ? <CheckCircle className="text-green-400" /> :
-      status.complianceLevel === "Risco" ? <AlertTriangle className="text-yellow-400" /> :
-        <XCircle className="text-red-400" />;
+    status.complianceLevel === "Conforme" ? <CheckCircle className="text-success" /> :
+      status.complianceLevel === "Risco" ? <AlertTriangle className="text-warning" /> :
+        <XCircle className="text-destructive" />;
 
   return (
     <Card>
       <CardHeader>
-        <CardTitle className="flex items-center gap-2 text-blue-300 text-lg">
+        <CardTitle className="flex items-center gap-2 text-primary text-lg">
           <Gauge /> Auditoria de Conformidade – Nautilus AI
         </CardTitle>
       </CardHeader>
@@ -31,7 +31,7 @@ export default function ComplianceDashboard() {
           <div className="flex items-center gap-2">{icon}<span className="text-xl font-semibold">{status.complianceLevel}</span></div>
           <span className="text-xl font-mono">{(status.score * 100).toFixed(1)}%</span>
         </div>
-        <p className="text-sm text-gray-500 mt-3">
+        <p className="text-sm text-muted-foreground mt-3">
           Auditoria baseada em: IMCA, IMO, MTS, ISM, ISPS e NORMAM 101.
         </p>
       </CardContent>

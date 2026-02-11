@@ -197,7 +197,7 @@ class ServiceWorkerManager {
     this.dispatchEvent('update-available');
   }
 
-  private dispatchEvent(name: string, detail?: any): void {
+  private dispatchEvent(name: string, detail?: unknown): void {
     window.dispatchEvent(new CustomEvent(`sw:${name}`, { detail }));
   }
 

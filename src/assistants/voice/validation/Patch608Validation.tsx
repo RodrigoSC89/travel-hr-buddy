@@ -170,7 +170,7 @@ export function Patch608Validation() {
               <li>Comandos Executados: {commandData.commands.length}</li>
               <li>Módulos Acionados: {commandData.modules.length}</li>
               <li>Logs Auditáveis: {commandData.logs.length}</li>
-              <li>Latência Média: {(commandData.commands.reduce((sum: number, c: any) => sum + c.latency, 0) / commandData.commands.length).toFixed(0)}ms</li>
+              <li>Latência Média: {(commandData.commands.reduce((sum: number, c: VoiceCommand) => sum + c.latency, 0) / commandData.commands.length).toFixed(0)}ms</li>
               <li>Taxa de Sucesso: 100%</li>
             </ul>
           </div>
@@ -184,9 +184,9 @@ function ValidationItem({ label, passed }: { label: string; passed: boolean }) {
   return (
     <div className="flex items-center gap-2 text-sm">
       {passed ? (
-        <CheckCircle2 className="h-4 w-4 text-green-500" />
+        <CheckCircle2 className="h-4 w-4 text-success" />
       ) : (
-        <XCircle className="h-4 w-4 text-red-500" />
+        <XCircle className="h-4 w-4 text-destructive" />
       )}
       <span>{label}</span>
     </div>

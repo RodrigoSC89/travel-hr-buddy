@@ -119,7 +119,7 @@ export function usePerformanceMetrics(): PerformanceMetrics {
 /**
  * Hook for debounced callbacks
  */
-export function useDebounce<T extends (...args: any[]) => any>(
+export function useDebounce<T extends (...args: unknown[]) => unknown>(
   callback: T,
   delay: number
 ): (...args: Parameters<T>) => void {
@@ -130,7 +130,7 @@ export function useDebounce<T extends (...args: any[]) => any>(
 /**
  * Hook for throttled callbacks
  */
-export function useThrottle<T extends (...args: any[]) => any>(
+export function useThrottle<T extends (...args: unknown[]) => unknown>(
   callback: T,
   delay: number
 ): (...args: Parameters<T>) => void {
