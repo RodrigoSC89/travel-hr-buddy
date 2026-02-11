@@ -43,7 +43,7 @@ export interface CheckResult {
   passed: boolean;
   score: number;
   message: string;
-  details?: Record<string, any>;
+  details?: Record<string, unknown>;
 }
 
 // Alert
@@ -61,7 +61,7 @@ export interface SourceConfig {
   blacklisted: boolean;
   trustLevel: number; // 0-100
   allowedProtocols: ProtocolType[];
-  metadata?: Record<string, any>;
+  metadata?: Record<string, unknown>;
 }
 
 // Whitelist and Blacklist (in-memory for this implementation)
@@ -91,6 +91,7 @@ const trustedProtocols: Set<ProtocolType> = new Set([
 export async function evaluateTrust(
   sourceSystem: string,
   protocol: ProtocolType,
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- dynamic protocol payloads have varying shapes
   payload: any,
   sourceIp?: string
 ): Promise<TrustEvaluation> {
@@ -286,6 +287,7 @@ function checkProtocolSecurity(protocol: ProtocolType): CheckResult {
 /**
  * Check payload schema compliance
  */
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- dynamic protocol payloads have varying shapes
 function checkPayloadSchema(protocol: ProtocolType, payload: any): CheckResult {
   const errors: string[] = [];
 
@@ -442,7 +444,7 @@ async function logTrustEvent(event: {
   checks: CheckResult[];
   failedChecks: string[];
   alerts: Alert[];
-  payload?: any;
+  payload?: unknown;
 }): Promise<void> {
   try {
     const highestAlert = event.alerts.reduce(
@@ -501,7 +503,7 @@ async function logTrustEvent(event: {
 /**
  * Simple payload hash for tracking (not cryptographic)
  */
-function hashPayload(payload: any): string {
+function hashPayload(payload: unknown): string {
   const str = JSON.stringify(payload);
   let hash = 0;
   for (let i = 0; i < str.length; i++) {

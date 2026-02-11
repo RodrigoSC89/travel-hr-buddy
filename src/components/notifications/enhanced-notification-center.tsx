@@ -28,7 +28,9 @@ interface SystemNotification {
   is_read: boolean;
   created_at: string;
   action_type?: string;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Supabase Json type
   action_data?: any;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Supabase Json type
   metadata?: any;
 }
 
@@ -276,7 +278,7 @@ export const EnhancedNotificationCenter: React.FC = () => {
               key={filterType}
               variant={filter === filterType ? "default" : "outline"}
               size="sm"
-              onClick={() => setFilter(filterType as any)}
+              onClick={() => setFilter(filterType as typeof filter)}
             >
               {filterType === "all" && "Todas"}
               {filterType === "unread" && "Não lidas"}

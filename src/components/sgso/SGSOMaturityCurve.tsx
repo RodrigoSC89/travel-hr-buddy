@@ -128,10 +128,10 @@ export const SGSOMaturityCurve: React.FC = () => {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-muted-foreground">Evolução</p>
-                <p className="text-3xl font-bold text-green-600">+{improvement}%</p>
+                <p className="text-3xl font-bold text-success">+{improvement}%</p>
                 <p className="text-xs text-muted-foreground">vs. período anterior</p>
               </div>
-              <TrendingUp className="h-10 w-10 text-green-600" />
+              <TrendingUp className="h-10 w-10 text-success" />
             </div>
           </CardContent>
         </Card>
@@ -141,10 +141,10 @@ export const SGSOMaturityCurve: React.FC = () => {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-muted-foreground">Meta ANP</p>
-                <p className="text-3xl font-bold text-blue-600">{targetScore}%</p>
+                <p className="text-3xl font-bold text-primary">{targetScore}%</p>
                 <p className="text-xs text-muted-foreground">Gap: {targetScore - overallScore}%</p>
               </div>
-              <Award className="h-10 w-10 text-blue-600" />
+              <Award className="h-10 w-10 text-primary" />
             </div>
           </CardContent>
         </Card>
@@ -154,10 +154,10 @@ export const SGSOMaturityCurve: React.FC = () => {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-muted-foreground">Práticas Críticas</p>
-                <p className="text-3xl font-bold text-red-600">{criticalPractices.length}</p>
+                <p className="text-3xl font-bold text-destructive">{criticalPractices.length}</p>
                 <p className="text-xs text-muted-foreground">Abaixo de 70%</p>
               </div>
-              <AlertTriangle className="h-10 w-10 text-red-600" />
+              <AlertTriangle className="h-10 w-10 text-destructive" />
             </div>
           </CardContent>
         </Card>
@@ -182,7 +182,7 @@ export const SGSOMaturityCurve: React.FC = () => {
                 <Line 
                   type="monotone" 
                   dataKey="score" 
-                  stroke="#2563eb" 
+                  stroke="hsl(var(--primary))" 
                   strokeWidth={2}
                   name="Score SGSO"
                 />
@@ -206,8 +206,8 @@ export const SGSOMaturityCurve: React.FC = () => {
                 <Radar
                   name="Maturidade"
                   dataKey="A"
-                  stroke="#2563eb"
-                  fill="#2563eb"
+                  stroke="hsl(var(--primary))"
+                  fill="hsl(var(--primary))"
                   fillOpacity={0.5}
                 />
               </RadarChart>
@@ -230,9 +230,9 @@ export const SGSOMaturityCurve: React.FC = () => {
               <YAxis />
               <Tooltip />
               <Legend />
-              <Bar dataKey="ncCritical" name="Críticas" fill="#ef4444" />
-              <Bar dataKey="ncGrave" name="Graves" fill="#f97316" />
-              <Bar dataKey="ncModerate" name="Moderadas" fill="#eab308" />
+              <Bar dataKey="ncCritical" name="Críticas" fill="hsl(var(--destructive))" />
+              <Bar dataKey="ncGrave" name="Graves" fill="hsl(var(--warning))" />
+              <Bar dataKey="ncModerate" name="Moderadas" fill="hsl(var(--warning))" />
             </BarChart>
           </ResponsiveContainer>
         </CardContent>
@@ -255,13 +255,13 @@ export const SGSOMaturityCurve: React.FC = () => {
                     <div className="flex items-center gap-2">
                       <span className="text-sm font-medium w-40 truncate">{practice.practice}</span>
                       {practice.current < 70 && (
-                        <AlertTriangle className="h-4 w-4 text-red-500" />
+                        <AlertTriangle className="h-4 w-4 text-destructive" />
                       )}
                     </div>
                     <div className="flex items-center gap-4 text-sm">
                       <span className="text-muted-foreground">Anterior: {practice.previous}%</span>
                       <span className={level.color + ' font-bold'}>Atual: {practice.current}%</span>
-                      <span className="text-blue-600">Meta: {practice.target}%</span>
+                      <span className="text-primary">Meta: {practice.target}%</span>
                       <Badge variant={gap <= 10 ? 'default' : 'destructive'}>
                         Gap: {gap}%
                       </Badge>
@@ -270,7 +270,7 @@ export const SGSOMaturityCurve: React.FC = () => {
                   <div className="relative">
                     <Progress value={practice.current} className="h-2" />
                     <div 
-                      className="absolute top-0 h-2 w-1 bg-blue-600" 
+                      className="absolute top-0 h-2 w-1 bg-primary" 
                       style={{ left: `${practice.target}%` }}
                     />
                   </div>
@@ -283,9 +283,9 @@ export const SGSOMaturityCurve: React.FC = () => {
 
       {/* Critical Practices Alert */}
       {criticalPractices.length > 0 && (
-        <Card className="border-red-200 bg-red-50 dark:bg-red-950/20">
+        <Card className="border-destructive/30 bg-destructive/5">
           <CardHeader>
-            <CardTitle className="text-red-600 flex items-center gap-2">
+            <CardTitle className="text-destructive flex items-center gap-2">
               <AlertTriangle className="h-5 w-5" />
               Práticas Críticas - Ação Imediata Requerida
             </CardTitle>
@@ -293,7 +293,7 @@ export const SGSOMaturityCurve: React.FC = () => {
           <CardContent>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               {criticalPractices.map((practice) => (
-                <div key={practice.practice} className="p-4 bg-white dark:bg-background rounded-lg border border-red-200">
+                <div key={practice.practice} className="p-4 bg-card rounded-lg border border-destructive/20">
                   <div className="flex items-center justify-between">
                     <h4 className="font-medium">{practice.practice}</h4>
                     <Badge variant="destructive">{practice.current}%</Badge>

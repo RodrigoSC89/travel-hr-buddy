@@ -47,7 +47,7 @@ export interface AIInsight {
 }
 
 interface TelemetryAIInsightsProps {
-  vesselData?: any[];
+  vesselData?: Record<string, unknown>[];
   className?: string;
   onInsightClick?: (insight: AIInsight) => void;
 }
@@ -116,7 +116,7 @@ Responda em JSON:
       if (jsonMatch) {
         const parsed = JSON.parse(jsonMatch[0]);
         
-        const newInsights: AIInsight[] = (parsed.insights || []).map((i: any, idx: number) => ({
+        const newInsights: AIInsight[] = (parsed.insights || []).map((i: Record<string, unknown>, idx: number) => ({
           id: `ai-insight-${Date.now()}-${idx}`,
           type: i.type || "prediction",
           title: i.title || "Insight Detectado",

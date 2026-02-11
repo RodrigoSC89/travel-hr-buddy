@@ -571,7 +571,7 @@ export const NotificationCenter = () => {
                                   size="sm"
                                   onClick={() => toggleImportant(notification.id)}
                                 >
-                                  <Star className={`h-4 w-4 ${notification.is_important ? "fill-current text-yellow-500" : ""}`} />
+                                  <Star className={`h-4 w-4 ${notification.is_important ? "fill-current text-warning" : ""}`} />
                                 </Button>
                                 <Button
                                   variant="ghost"
