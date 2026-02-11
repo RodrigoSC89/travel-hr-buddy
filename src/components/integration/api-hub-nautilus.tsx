@@ -208,12 +208,12 @@ export const APIHubNautilus: React.FC = () => {
 
   const getMethodColor = (method: string) => {
     switch (method) {
-    case "GET": return "bg-green-600";
-    case "POST": return "bg-blue-600";
-    case "PUT": return "bg-yellow-600";
-    case "DELETE": return "bg-red-600";
-    case "PATCH": return "bg-purple-600";
-    default: return "bg-gray-600";
+    case "GET": return "bg-success";
+    case "POST": return "bg-primary";
+    case "PUT": return "bg-warning";
+    case "DELETE": return "bg-destructive";
+    case "PATCH": return "bg-accent";
+    default: return "bg-muted";
     }
   };
 
@@ -228,9 +228,9 @@ export const APIHubNautilus: React.FC = () => {
 
   const getIntegrationStatusColor = (status: string) => {
     switch (status) {
-    case "active": return "text-green-600";
+    case "active": return "text-success";
     case "inactive": return "text-muted-foreground";
-    case "error": return "text-red-600";
+    case "error": return "text-destructive";
     default: return "text-muted-foreground";
     }
   };
@@ -405,7 +405,7 @@ export const APIHubNautilus: React.FC = () => {
             <CardTitle className="text-sm font-medium">Integrações</CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-green-600">
+            <div className="text-2xl font-bold text-success">
               {activeIntegrations}/{integrations.length}
             </div>
             <p className="text-xs text-muted-foreground">Ativas</p>
@@ -544,28 +544,28 @@ export const APIHubNautilus: React.FC = () => {
                     <div className="grid grid-cols-4 gap-4">
                       <div className="bg-muted/50 p-3 rounded-lg">
                         <div className="flex items-center gap-2 mb-1">
-                          <Activity className="h-4 w-4 text-blue-600" />
+                          <Activity className="h-4 w-4 text-primary" />
                           <span className="text-xs text-muted-foreground">Uso Hoje</span>
                         </div>
                         <div className="text-lg font-bold">{endpoint.usageToday.toLocaleString()}</div>
                       </div>
                       <div className="bg-muted/50 p-3 rounded-lg">
                         <div className="flex items-center gap-2 mb-1">
-                          <Clock className="h-4 w-4 text-green-600" />
+                          <Clock className="h-4 w-4 text-success" />
                           <span className="text-xs text-muted-foreground">Resp. Média</span>
                         </div>
                         <div className="text-lg font-bold">{endpoint.avgResponseTime}ms</div>
                       </div>
                       <div className="bg-muted/50 p-3 rounded-lg">
                         <div className="flex items-center gap-2 mb-1">
-                          <Shield className="h-4 w-4 text-purple-600" />
+                          <Shield className="h-4 w-4 text-accent-foreground" />
                           <span className="text-xs text-muted-foreground">Auth</span>
                         </div>
                         <div className="text-sm font-medium">{endpoint.authentication.toUpperCase()}</div>
                       </div>
                       <div className="bg-muted/50 p-3 rounded-lg">
                         <div className="flex items-center gap-2 mb-1">
-                          <Zap className="h-4 w-4 text-yellow-600" />
+                          <Zap className="h-4 w-4 text-warning" />
                           <span className="text-xs text-muted-foreground">Rate Limit</span>
                         </div>
                         <div className="text-sm font-medium">{endpoint.rateLimit}</div>
@@ -628,7 +628,7 @@ export const APIHubNautilus: React.FC = () => {
                     <div className="grid grid-cols-3 gap-4">
                       <div className="bg-muted/50 p-3 rounded-lg">
                         <div className="text-xs text-muted-foreground mb-1">Uptime</div>
-                        <div className="text-xl font-bold text-green-600">{integration.uptime}%</div>
+                        <div className="text-xl font-bold text-success">{integration.uptime}%</div>
                       </div>
                       <div className="bg-muted/50 p-3 rounded-lg">
                         <div className="text-xs text-muted-foreground mb-1">API Calls</div>
@@ -645,11 +645,11 @@ export const APIHubNautilus: React.FC = () => {
                     {/* Credentials */}
                     <div className="flex items-center justify-between p-3 bg-muted/50 rounded-lg">
                       <div className="flex items-center gap-2">
-                        <Key className="h-4 w-4 text-blue-600" />
+                        <Key className="h-4 w-4 text-primary" />
                         <span className="text-sm">{integration.credentials.type}</span>
                       </div>
                       {integration.credentials.configured ? (
-                        <Badge variant="default" className="bg-green-600">
+                        <Badge variant="default" className="bg-success">
                           <CheckCircle className="h-3 w-3 mr-1" />
                           Configurado
                         </Badge>
