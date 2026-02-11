@@ -95,11 +95,11 @@ const classSocietyLogos: Record<string, string> = {
 };
 
 const statusConfig = {
-  planning: { label: "Planejamento", color: "bg-blue-100 text-blue-700" },
-  approved: { label: "Aprovado", color: "bg-green-100 text-green-700" },
-  in_progress: { label: "Em Execução", color: "bg-amber-100 text-amber-700" },
-  completed: { label: "Concluído", color: "bg-green-100 text-green-700" },
-  delayed: { label: "Atrasado", color: "bg-red-100 text-red-700" },
+  planning: { label: "Planejamento", color: "bg-primary/10 text-primary" },
+  approved: { label: "Aprovado", color: "bg-success/10 text-success" },
+  in_progress: { label: "Em Execução", color: "bg-warning/10 text-warning" },
+  completed: { label: "Concluído", color: "bg-success/10 text-success" },
+  delayed: { label: "Atrasado", color: "bg-destructive/10 text-destructive" },
 };
 
 const typeLabels = {
@@ -238,7 +238,7 @@ export function DrydockPlanningTimeline() {
                     </div>
                     <div className="p-4 rounded-lg bg-muted/50">
                       <p className="text-sm text-muted-foreground">Dias Restantes</p>
-                      <p className={`font-semibold ${daysRemaining < 5 ? "text-red-600" : ""}`}>{daysRemaining} dias</p>
+                      <p className={`font-semibold ${daysRemaining < 5 ? "text-destructive" : ""}`}>{daysRemaining} dias</p>
                     </div>
                     <div className="p-4 rounded-lg bg-muted/50">
                       <p className="text-sm text-muted-foreground">Progresso</p>
@@ -261,10 +261,10 @@ export function DrydockPlanningTimeline() {
                         <div className="flex items-center gap-4">
                           <span className="text-sm text-muted-foreground">{item.daysRequired} dias</span>
                           <Badge className={
-                            item.status === "completed" ? "bg-green-100 text-green-700" :
-                            item.status === "in_progress" ? "bg-amber-100 text-amber-700" :
-                            item.status === "issue" ? "bg-red-100 text-red-700" :
-                            "bg-gray-100 text-gray-700"
+                            item.status === "completed" ? "bg-success/10 text-success" :
+                            item.status === "in_progress" ? "bg-warning/10 text-warning" :
+                            item.status === "issue" ? "bg-destructive/10 text-destructive" :
+                            "bg-muted text-muted-foreground"
                           }>
                             {item.status === "completed" ? "Concluído" :
                              item.status === "in_progress" ? "Em Andamento" :
@@ -303,9 +303,9 @@ export function DrydockPlanningTimeline() {
                             <div className="flex-1 h-6 bg-muted/50 rounded relative">
                               <div 
                                 className={`absolute h-full rounded transition-all ${
-                                  item.status === "completed" ? "bg-green-500" :
-                                  item.status === "in_progress" ? "bg-amber-500" :
-                                  "bg-gray-300"
+                                   item.status === "completed" ? "bg-success" :
+                                   item.status === "in_progress" ? "bg-warning" :
+                                   "bg-muted"
                                 }`}
                                 style={{ 
                                   left: `${startOffset}%`, 
@@ -339,7 +339,7 @@ export function DrydockPlanningTimeline() {
                           <p className="text-3xl font-bold">
                             ${(selectedProject.budgetActual / 1000000).toFixed(2)}M
                           </p>
-                          <Badge className={budgetVariance > 0 ? "bg-red-100 text-red-700" : "bg-green-100 text-green-700"}>
+                          <Badge className={budgetVariance > 0 ? "bg-destructive/10 text-destructive" : "bg-success/10 text-success"}>
                             {budgetVariance > 0 ? "+" : ""}{budgetVariance.toFixed(1)}% vs orçamento
                           </Badge>
                         </div>
@@ -357,8 +357,8 @@ export function DrydockPlanningTimeline() {
                             ${(item.estimatedCost / 1000).toFixed(0)}K est.
                           </span>
                           {item.actualCost && (
-                            <span className={`text-sm font-medium ${
-                              item.actualCost > item.estimatedCost ? "text-red-600" : "text-green-600"
+                          <span className={`text-sm font-medium ${
+                              item.actualCost > item.estimatedCost ? "text-destructive" : "text-success"
                             }`}>
                               ${(item.actualCost / 1000).toFixed(0)}K real
                             </span>

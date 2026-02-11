@@ -130,7 +130,8 @@ class ServiceWorkerManager {
     if (!this.registration) return null;
 
     try {
-      const subscription = await this.registration.pushManager.subscribe({
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Push API not in default TS lib
+      const subscription = await (this.registration as any).pushManager.subscribe({
         userVisibleOnly: true,
         applicationServerKey: vapidPublicKey,
       });

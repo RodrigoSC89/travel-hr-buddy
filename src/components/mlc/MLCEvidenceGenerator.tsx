@@ -60,9 +60,9 @@ interface NCInput {
 }
 
 const NC_TYPES = [
-  { value: "ground_for_detention", label: "Ground for Detention", color: "bg-red-500", description: "Condição séria que justifica detenção" },
-  { value: "deficiency", label: "Deficiency", color: "bg-orange-500", description: "Não conformidade identificada" },
-  { value: "observation", label: "Observation", color: "bg-yellow-500", description: "Observação para melhoria" },
+  { value: "ground_for_detention", label: "Ground for Detention", color: "bg-destructive", description: "Condição séria que justifica detenção" },
+  { value: "deficiency", label: "Deficiency", color: "bg-warning", description: "Não conformidade identificada" },
+  { value: "observation", label: "Observation", color: "bg-warning/60", description: "Observação para melhoria" },
 ];
 
 export function MLCEvidenceGenerator() {
@@ -79,7 +79,7 @@ export function MLCEvidenceGenerator() {
   const [result, setResult] = useState<EvidenceResult | null>(null);
   const [isGenerating, setIsGenerating] = useState(false);
 
-  const handleInputChange = (field: keyof NCInput, value: any) => {
+  const handleInputChange = (field: keyof NCInput, value: NCInput[keyof NCInput]) => {
     setInput(prev => ({ ...prev, [field]: value }));
   };
 

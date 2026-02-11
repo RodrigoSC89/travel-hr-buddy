@@ -20,6 +20,7 @@ import { supabase } from "@/integrations/supabase/client";
 
 // Tracking Dashboard
 function TrackingDashboard() {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Supabase vessel rows
   const [vessels, setVessels] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -90,14 +91,14 @@ function TrackingDashboard() {
           </CardContent>
         </Card>
 
-        <Card className="border-l-4 border-l-violet-500">
+        <Card className="border-l-4 border-l-accent-foreground">
           <CardContent className="p-4">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-xs text-muted-foreground">Sensores</p>
                 <p className="text-2xl font-bold">156</p>
               </div>
-              <Activity className="h-8 w-8 text-violet-500 opacity-60" />
+              <Activity className="h-8 w-8 text-accent-foreground opacity-60" />
             </div>
           </CardContent>
         </Card>
@@ -195,7 +196,7 @@ function TrackingDashboard() {
         <Card>
           <CardHeader className="pb-2">
             <CardTitle className="text-sm flex items-center gap-2">
-              <Thermometer className="h-4 w-4 text-orange-500" />
+              <Thermometer className="h-4 w-4 text-warning" />
               Temperatura
             </CardTitle>
           </CardHeader>
@@ -209,7 +210,7 @@ function TrackingDashboard() {
         <Card>
           <CardHeader className="pb-2">
             <CardTitle className="text-sm flex items-center gap-2">
-              <Gauge className="h-4 w-4 text-blue-500" />
+              <Gauge className="h-4 w-4 text-primary" />
               RPM
             </CardTitle>
           </CardHeader>
@@ -223,7 +224,7 @@ function TrackingDashboard() {
         <Card>
           <CardHeader className="pb-2">
             <CardTitle className="text-sm flex items-center gap-2">
-              <Navigation className="h-4 w-4 text-green-500" />
+              <Navigation className="h-4 w-4 text-success" />
               Velocidade
             </CardTitle>
           </CardHeader>
@@ -240,6 +241,7 @@ function TrackingDashboard() {
 
 // Real-time Telemetry Tab - Uses telemetry_alerts from Supabase
 function TelemetryTab() {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Supabase telemetry_alerts rows
   const [alerts, setAlerts] = useState<any[]>([]);
   const [loadingAlerts, setLoadingAlerts] = useState(true);
 
@@ -391,6 +393,7 @@ function SatcomTab() {
 
 // Map placeholder with real vessel data
 function MapTab() {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Supabase vessel rows
   const [vessels, setVessels] = useState<any[]>([]);
   
   useEffect(() => {

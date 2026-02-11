@@ -82,11 +82,12 @@ class CompliancePushService {
       }
 
       // Check existing subscription
-      let subscription = await this.swRegistration.pushManager.getSubscription();
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Push API not in default TS lib
+      let subscription = await (this.swRegistration as any).pushManager.getSubscription();
       
       if (!subscription) {
-        // Create new subscription
-        subscription = await this.swRegistration.pushManager.subscribe({
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Push API not in default TS lib
+        subscription = await (this.swRegistration as any).pushManager.subscribe({
           userVisibleOnly: true,
           applicationServerKey: this.urlBase64ToUint8Array(this.vapidPublicKey) as BufferSource
         });

@@ -307,30 +307,30 @@ Gere sugestões em formato JSON array.`
   const getCriticidadeColor = (criticidade: string) => {
     switch (criticidade) {
       case "crítica":
-        return "bg-red-500/10 text-red-500 border-red-500/20";
+        return "bg-destructive/10 text-destructive border-destructive/20";
       case "alta":
-        return "bg-orange-500/10 text-orange-500 border-orange-500/20";
+        return "bg-warning/10 text-warning border-warning/20";
       case "média":
-        return "bg-yellow-500/10 text-yellow-500 border-yellow-500/20";
+        return "bg-warning/10 text-warning/80 border-warning/20";
       default:
-        return "bg-green-500/10 text-green-500 border-green-500/20";
+        return "bg-success/10 text-success border-success/20";
     }
   };
 
   const getTipoIcon = (tipo: string) => {
     switch (tipo) {
       case "Criar tarefa":
-        return <CheckCircle2 className="h-4 w-4 text-blue-500" />;
+        return <CheckCircle2 className="h-4 w-4 text-primary" />;
       case "Ajustar prazo":
-        return <Clock className="h-4 w-4 text-yellow-500" />;
+        return <Clock className="h-4 w-4 text-warning" />;
       case "Trocar responsável":
-        return <User className="h-4 w-4 text-purple-500" />;
+        return <User className="h-4 w-4 text-accent-foreground" />;
       case "Escalar problema":
-        return <AlertTriangle className="h-4 w-4 text-red-500" />;
+        return <AlertTriangle className="h-4 w-4 text-destructive" />;
       case "Otimizar processo":
-        return <Zap className="h-4 w-4 text-green-500" />;
+        return <Zap className="h-4 w-4 text-success" />;
       default:
-        return <Lightbulb className="h-4 w-4 text-yellow-500" />;
+        return <Lightbulb className="h-4 w-4 text-warning" />;
     }
   };
 
@@ -362,7 +362,7 @@ Gere sugestões em formato JSON array.`
       <CardHeader className="pb-3">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <Lightbulb className="h-5 w-5 text-yellow-500" />
+            <Lightbulb className="h-5 w-5 text-warning" />
             <CardTitle className="text-lg">Sugestões IA</CardTitle>
           </div>
           <Button 
@@ -387,12 +387,12 @@ Gere sugestões em formato JSON array.`
             <p className="text-lg font-bold">{stats.total}</p>
             <p className="text-xs text-muted-foreground">Total</p>
           </div>
-          <div className="text-center p-2 rounded-lg bg-yellow-500/10">
-            <p className="text-lg font-bold text-yellow-500">{stats.pending}</p>
+          <div className="text-center p-2 rounded-lg bg-warning/10">
+            <p className="text-lg font-bold text-warning">{stats.pending}</p>
             <p className="text-xs text-muted-foreground">Pendentes</p>
           </div>
-          <div className="text-center p-2 rounded-lg bg-green-500/10">
-            <p className="text-lg font-bold text-green-500">{stats.applied}</p>
+          <div className="text-center p-2 rounded-lg bg-success/10">
+            <p className="text-lg font-bold text-success">{stats.applied}</p>
             <p className="text-xs text-muted-foreground">Aplicadas</p>
           </div>
           <div className="text-center p-2 rounded-lg bg-muted/50">
@@ -434,7 +434,7 @@ Gere sugestões em formato JSON array.`
                       key={suggestion.id}
                       className={`p-4 rounded-lg border transition-colors ${
                         suggestion.status === "applied" 
-                          ? "bg-green-500/5 border-green-500/20" 
+                          ? "bg-success/5 border-success/20" 
                           : suggestion.status === "dismissed"
                           ? "bg-muted/30 opacity-60"
                           : "bg-card hover:bg-accent/50"
@@ -457,7 +457,7 @@ Gere sugestões em formato JSON array.`
                                 {suggestion.criticidade}
                               </Badge>
                               {suggestion.status === "applied" && (
-                                <Badge className="text-xs bg-green-500/20 text-green-500">
+                                <Badge className="text-xs bg-success/20 text-success">
                                   <Check className="h-3 w-3 mr-1" />
                                   Aplicada
                                 </Badge>
@@ -495,7 +495,7 @@ Gere sugestões em formato JSON array.`
                             <Button
                               variant="ghost"
                               size="icon"
-                              className="h-8 w-8 text-green-500 hover:text-green-600 hover:bg-green-500/10"
+                              className="h-8 w-8 text-success hover:text-success hover:bg-success/10"
                               onClick={() => handleApply(suggestion)}
                               title="Aplicar sugestão"
                             >

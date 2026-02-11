@@ -108,7 +108,8 @@ export async function subscribeToPushNotifications(
       };
     }
 
-    const subscription = await swRegistration.pushManager.subscribe({
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Push API not in default TS lib
+    const subscription = await (swRegistration as any).pushManager.subscribe({
       userVisibleOnly: true,
       applicationServerKey: urlBase64ToUint8Array(vapidPublicKey) as BufferSource
     });
@@ -145,7 +146,8 @@ function urlBase64ToUint8Array(base64String: string): Uint8Array {
 export async function getCurrentSubscription(): Promise<PushSubscription | null> {
   try {
     const registration = await navigator.serviceWorker.ready;
-    return await registration.pushManager.getSubscription();
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Push API not in default TS lib
+    return await (registration as any).pushManager.getSubscription();
   } catch (error) {
     logger.error("Failed to get push subscription", error);
     return null;

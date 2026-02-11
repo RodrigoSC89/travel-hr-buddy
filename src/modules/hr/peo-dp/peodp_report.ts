@@ -107,6 +107,7 @@ export class PEOReport {
         1: { cellWidth: 120 },
         2: { cellWidth: 30 },
       },
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any -- jspdf-autotable callback signature
       didParseCell: (data: any) => {
         if (data.column.index === 2 && data.section === "body") {
           const status = data.cell.raw as string;

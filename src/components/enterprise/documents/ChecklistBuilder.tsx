@@ -96,8 +96,8 @@ export function ChecklistBuilder() {
   const getStatusBadge = (status: Checklist["status"]) => {
     switch (status) {
       case "draft": return <Badge variant="secondary">Rascunho</Badge>;
-      case "active": return <Badge className="bg-blue-500/10 text-blue-500">Em Andamento</Badge>;
-      case "completed": return <Badge className="bg-green-500/10 text-green-500">Concluído</Badge>;
+      case "active": return <Badge className="bg-primary/10 text-primary">Em Andamento</Badge>;
+      case "completed": return <Badge className="bg-success/10 text-success">Concluído</Badge>;
     }
   };
 
@@ -213,9 +213,9 @@ export function ChecklistBuilder() {
       {/* Stats */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
         <Card><CardContent className="pt-6"><div className="flex items-center justify-between"><div><p className="text-sm text-muted-foreground">Total de Checklists</p><p className="text-3xl font-bold">{stats.total}</p></div><div className="p-3 rounded-full bg-primary/10"><ClipboardList className="h-6 w-6 text-primary" /></div></div></CardContent></Card>
-        <Card><CardContent className="pt-6"><div className="flex items-center justify-between"><div><p className="text-sm text-muted-foreground">Em Andamento</p><p className="text-3xl font-bold text-blue-500">{stats.active}</p></div><div className="p-3 rounded-full bg-blue-500/10"><Clock className="h-6 w-6 text-blue-500" /></div></div></CardContent></Card>
-        <Card><CardContent className="pt-6"><div className="flex items-center justify-between"><div><p className="text-sm text-muted-foreground">Concluídos</p><p className="text-3xl font-bold text-green-500">{stats.completed}</p></div><div className="p-3 rounded-full bg-green-500/10"><CheckCircle2 className="h-6 w-6 text-green-500" /></div></div></CardContent></Card>
-        <Card><CardContent className="pt-6"><div className="flex items-center justify-between"><div><p className="text-sm text-muted-foreground">Itens Pendentes</p><p className="text-3xl font-bold text-yellow-500">{stats.pendingItems}</p></div><div className="p-3 rounded-full bg-yellow-500/10"><ClipboardList className="h-6 w-6 text-yellow-500" /></div></div></CardContent></Card>
+        <Card><CardContent className="pt-6"><div className="flex items-center justify-between"><div><p className="text-sm text-muted-foreground">Em Andamento</p><p className="text-3xl font-bold text-primary">{stats.active}</p></div><div className="p-3 rounded-full bg-primary/10"><Clock className="h-6 w-6 text-primary" /></div></div></CardContent></Card>
+        <Card><CardContent className="pt-6"><div className="flex items-center justify-between"><div><p className="text-sm text-muted-foreground">Concluídos</p><p className="text-3xl font-bold text-success">{stats.completed}</p></div><div className="p-3 rounded-full bg-success/10"><CheckCircle2 className="h-6 w-6 text-success" /></div></div></CardContent></Card>
+        <Card><CardContent className="pt-6"><div className="flex items-center justify-between"><div><p className="text-sm text-muted-foreground">Itens Pendentes</p><p className="text-3xl font-bold text-warning">{stats.pendingItems}</p></div><div className="p-3 rounded-full bg-warning/10"><ClipboardList className="h-6 w-6 text-warning" /></div></div></CardContent></Card>
       </div>
 
       {/* Header */}
@@ -238,8 +238,8 @@ export function ChecklistBuilder() {
               <CardHeader className="pb-3">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-3">
-                    <div className={`p-2 rounded-lg ${checklist.status === "completed" ? "bg-green-500/10" : checklist.status === "active" ? "bg-blue-500/10" : "bg-muted"}`}>
-                      <ClipboardList className={`h-5 w-5 ${checklist.status === "completed" ? "text-green-500" : checklist.status === "active" ? "text-blue-500" : "text-muted-foreground"}`} />
+                    <div className={`p-2 rounded-lg ${checklist.status === "completed" ? "bg-success/10" : checklist.status === "active" ? "bg-primary/10" : "bg-muted"}`}>
+                      <ClipboardList className={`h-5 w-5 ${checklist.status === "completed" ? "text-success" : checklist.status === "active" ? "text-primary" : "text-muted-foreground"}`} />
                     </div>
                     <div>
                       <CardTitle className="text-lg">{checklist.title}</CardTitle>
@@ -258,7 +258,7 @@ export function ChecklistBuilder() {
               </CardHeader>
               <CardContent className="space-y-3">
                 {checklist.items.map((item) => (
-                  <div key={item.id} className={`flex items-center justify-between p-3 border rounded-lg transition-colors ${item.isCompleted ? "bg-green-500/5 border-green-500/20" : "hover:bg-muted/50"}`}>
+                  <div key={item.id} className={`flex items-center justify-between p-3 border rounded-lg transition-colors ${item.isCompleted ? "bg-success/5 border-success/20" : "hover:bg-muted/50"}`}>
                     <div className="flex items-center gap-3">
                       <div className="cursor-move text-muted-foreground"><GripVertical className="h-4 w-4" /></div>
                       <Checkbox checked={item.isCompleted} onCheckedChange={() => toggleItem(checklist.id, item.id)} disabled={checklist.status === "completed"} />
@@ -274,7 +274,7 @@ export function ChecklistBuilder() {
                     </div>
                     <div className="flex items-center gap-2">
                       {item.isRequired && <Badge variant="outline" className="text-xs">Obrigatório</Badge>}
-                      {item.isCompleted && <CheckCircle2 className="h-5 w-5 text-green-500" />}
+                      {item.isCompleted && <CheckCircle2 className="h-5 w-5 text-success" />}
                       {checklist.status !== "completed" && (
                         <Button variant="ghost" size="sm" onClick={() => handleDeleteItem(checklist.id, item.id)}><Trash2 className="h-3 w-3 text-destructive" /></Button>
                       )}
@@ -292,9 +292,9 @@ export function ChecklistBuilder() {
 
                 {/* Signature */}
                 {checklist.status === "completed" && checklist.signedBy && (
-                  <div className="mt-4 pt-4 border-t bg-green-500/5 rounded-lg p-4">
+                  <div className="mt-4 pt-4 border-t bg-success/5 rounded-lg p-4">
                     <div className="flex items-center gap-3">
-                      <FileSignature className="h-5 w-5 text-green-500" />
+                      <FileSignature className="h-5 w-5 text-success" />
                       <div>
                         <p className="font-medium">Assinado digitalmente</p>
                         <p className="text-sm text-muted-foreground">{checklist.signedBy} em {new Date(checklist.signedAt!).toLocaleString("pt-BR")}</p>
