@@ -160,7 +160,7 @@ const AICommandCenter = () => {
           </CardHeader>
           <CardContent>
             <div className="flex items-center gap-2">
-              <div className="h-2 w-2 rounded-full bg-green-500 animate-pulse" />
+              <div className="h-2 w-2 rounded-full bg-success animate-pulse" />
               <span className="text-sm font-medium">Online</span>
             </div>
             <p className="text-xs text-muted-foreground mt-1">

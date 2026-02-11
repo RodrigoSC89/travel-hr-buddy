@@ -136,7 +136,8 @@ class LovableValidatorClass {
   /**
    * Aplica modo preview-safe ao componente
    */
-  applyPreviewSafeMode(component: any) {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- generic component shape
+  applyPreviewSafeMode(component: Record<string, unknown>) {
     return {
       ...component,
       __previewSafe: true,
@@ -149,7 +150,7 @@ class LovableValidatorClass {
   /**
    * Valida dados mockados
    */
-  validateMockedData(data: any, maxSize = 3072): { valid: boolean; size: number; issues: string[] } {
+  validateMockedData(data: unknown, maxSize = 3072): { valid: boolean; size: number; issues: string[] } {
     const dataString = JSON.stringify(data);
     const size = new Blob([dataString]).size;
     const issues: string[] = [];
@@ -272,7 +273,7 @@ class LovableValidatorClass {
     return undefined;
   }
 
-  private getObjectDepth(obj: any, depth = 0): number {
+  private getObjectDepth(obj: unknown, depth = 0): number {
     if (obj === null || typeof obj !== "object") return depth;
     
     const depths = Object.values(obj).map(value => 

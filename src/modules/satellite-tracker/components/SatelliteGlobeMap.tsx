@@ -95,6 +95,7 @@ export const SatelliteGlobeMap: React.FC<SatelliteGlobeMapProps> = ({
     };
   }, [mapboxToken]);
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- mapboxgl dynamic import
   const updateMarkers = async (mapboxgl: any) => {
     if (!map.current) return;
 

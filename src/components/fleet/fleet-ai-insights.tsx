@@ -53,10 +53,10 @@ export const FleetAIInsights = ({ vessels }: FleetAIInsightsProps) => {
   }, [vessels.length]);
 
   const priorityColors = {
-    low: "bg-blue-500",
-    medium: "bg-yellow-500",
-    high: "bg-orange-500",
-    critical: "bg-red-500",
+    low: "bg-primary",
+    medium: "bg-warning",
+    high: "bg-warning",
+    critical: "bg-destructive",
   };
 
   return (
@@ -238,11 +238,11 @@ export const FleetAIInsights = ({ vessels }: FleetAIInsightsProps) => {
                 <CardContent className="space-y-4">
                   <div className="grid grid-cols-3 gap-4 text-sm">
                     <div className="text-center p-3 bg-accent/50 rounded-lg">
-                      <p className="text-2xl font-bold text-green-500">-{opt.fuelSavings}%</p>
+                      <p className="text-2xl font-bold text-success">-{opt.fuelSavings}%</p>
                       <p className="text-muted-foreground">Combustível</p>
                     </div>
                     <div className="text-center p-3 bg-accent/50 rounded-lg">
-                      <p className="text-2xl font-bold text-blue-500">-{opt.timeSavings}h</p>
+                      <p className="text-2xl font-bold text-primary">-{opt.timeSavings}h</p>
                       <p className="text-muted-foreground">Tempo</p>
                     </div>
                     <div className="text-center p-3 bg-accent/50 rounded-lg">

@@ -131,6 +131,7 @@ export function CrewSchedulingDashboard() {
           .limit(50);
 
         if (data && data.length > 0) {
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Supabase row dynamic shape
           setCrewData(data.map((c: any) => ({
             id: c.id,
             name: c.full_name || "N/A",

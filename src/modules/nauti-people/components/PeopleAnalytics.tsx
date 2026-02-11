@@ -109,12 +109,13 @@ const PeopleAnalytics: React.FC = () => {
     }
   ];
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Recharts tooltip props are dynamic
   const CustomTooltip = ({ active, payload, label }: any) => {
     if (active && payload && payload.length) {
       return (
         <div className="bg-card p-3 rounded-lg border shadow-lg">
           <p className="font-medium">{label}</p>
-          {payload.map((entry: any, index: number) => (
+          {payload.map((entry: { color?: string; name?: string; value?: number }, index: number) => (
             <p key={index} className="text-sm" style={{ color: entry.color }}>
               {entry.name}: {entry.value}%
             </p>

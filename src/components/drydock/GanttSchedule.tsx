@@ -100,16 +100,17 @@ export function GanttSchedule() {
           .limit(20);
 
         if (!error && data && data.length > 0) {
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Supabase row with dynamic fields
           setEvents(data.map((t: any) => ({
-            id: t.id,
-            vesselName: t.title || "Embarcação",
-            shipyard: t.description || "Estaleiro TBD",
+            id: String(t.id),
+            vesselName: String(t.title || "Embarcação"),
+            shipyard: String(t.description || "Estaleiro TBD"),
             eventType: "drydock" as const,
             startDate: new Date(t.scheduled_date || Date.now()),
             endDate: new Date(t.due_date || Date.now()),
             status: (t.status === "completed" ? "completed" : t.status === "in_progress" ? "in_progress" : "planned") as DrydockEvent["status"],
-            progress: t.progress_percent || 0,
-            cost: t.estimated_cost || 0
+            progress: Number(t.progress_percent || 0),
+            cost: Number(t.estimated_cost || 0)
           })));
         }
       } catch {
