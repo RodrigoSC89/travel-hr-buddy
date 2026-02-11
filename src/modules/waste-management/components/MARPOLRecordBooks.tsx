@@ -139,37 +139,37 @@ export default function MARPOLRecordBooks() {
 
       if (wasteRecords && wasteRecords.length > 0) {
         const orb: ORBEntry[] = wasteRecords
-          .filter((r: any) => r.waste_type === "oil" || r.category?.includes("oil"))
-          .map((r: any, i: number) => ({
+          .filter((r) => r.waste_type === "oil" || r.marpol_annex?.includes("I"))
+          .map((r, i: number) => ({
             id: r.id,
-            entry_number: `ORB-${new Date(r.created_at).getFullYear()}-${String(i + 1).padStart(3, "0")}`,
+            entry_number: `ORB-${new Date(r.created_at || "").getFullYear()}-${String(i + 1).padStart(3, "0")}`,
             date: r.created_at?.slice(0, 10) || "",
             time: r.created_at?.slice(11, 16) || "00:00",
             operation_code: "C",
-            operation_type: r.description || "Oil waste operation",
+            operation_type: r.disposal_method || "Oil waste operation",
             quantity_m3: r.quantity || 0,
             tank_id: `T${i + 1}`,
-            tank_name: r.storage_location || "Tank",
-            remarks: r.notes || "",
-            signed_by: r.responsible_officer || "",
+            tank_name: r.port_code || "Tank",
+            remarks: r.certificate_number || "",
+            signed_by: "",
             signature_date: r.created_at?.slice(0, 10),
-            status: r.status === "completed" ? "signed" as const : "draft" as const,
+            status: r.disposal_date ? "signed" as const : "draft" as const,
           }));
         const grb: GRBEntry[] = wasteRecords
-          .filter((r: any) => r.waste_type !== "oil" && !r.category?.includes("oil"))
-          .map((r: any, i: number) => ({
+          .filter((r) => r.waste_type !== "oil" && !r.marpol_annex?.includes("I"))
+          .map((r, i: number) => ({
             id: r.id,
-            entry_number: `GRB-${new Date(r.created_at).getFullYear()}-${String(i + 1).padStart(3, "0")}`,
+            entry_number: `GRB-${new Date(r.created_at || "").getFullYear()}-${String(i + 1).padStart(3, "0")}`,
             date: r.created_at?.slice(0, 10) || "",
             time: r.created_at?.slice(11, 16) || "00:00",
-            garbage_category: r.category || "B - Food wastes",
+            garbage_category: r.waste_type || "B - Food wastes",
             estimated_amount_m3: r.quantity || 0,
-            discharge_location: r.discharge_port || "",
+            discharge_location: r.port_code || "",
             discharge_method: r.disposal_method || "",
-            remarks: r.notes || "",
-            signed_by: r.responsible_officer || "",
+            remarks: r.certificate_number || "",
+            signed_by: "",
             signature_date: r.created_at?.slice(0, 10),
-            status: r.status === "completed" ? "signed" as const : "draft" as const,
+            status: r.disposal_date ? "signed" as const : "draft" as const,
           }));
         if (orb.length > 0) setOrbEntries(orb);
         else setOrbEntries(defaultORBEntries);

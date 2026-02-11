@@ -93,8 +93,8 @@ export const NativeAppManager: React.FC = () => {
           )}
 
           {appStatus === "installed" && (
-            <div className="p-4 bg-green-50 dark:bg-green-900/20 rounded-lg border border-green-200 dark:border-green-800">
-              <p className="text-green-800 dark:text-green-200">
+            <div className="p-4 bg-success/10 rounded-lg border border-success/20">
+              <p className="text-success">
                 ✅ App instalado com sucesso! Agora você pode usar recursos offline e nativos.
               </p>
             </div>
@@ -149,22 +149,22 @@ export const NativeAppManager: React.FC = () => {
             <CardContent className="space-y-4">
               <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                 <div className="text-center">
-                  <Battery className="w-8 h-8 text-green-500 mx-auto mb-2" />
+                  <Battery className="w-8 h-8 text-success mx-auto mb-2" />
                   <div className="text-2xl font-bold">85%</div>
                   <div className="text-sm text-muted-foreground">Bateria</div>
                 </div>
                 <div className="text-center">
-                  <Wifi className="w-8 h-8 text-blue-500 mx-auto mb-2" />
+                  <Wifi className="w-8 h-8 text-primary mx-auto mb-2" />
                   <div className="text-2xl font-bold">4G</div>
                   <div className="text-sm text-muted-foreground">Conexão</div>
                 </div>
                 <div className="text-center">
-                  <RotateCcw className="w-8 h-8 text-purple-500 mx-auto mb-2" />
+                  <RotateCcw className="w-8 h-8 text-accent-foreground mx-auto mb-2" />
                   <div className="text-2xl font-bold">98%</div>
                   <div className="text-sm text-muted-foreground">Sync</div>
                 </div>
                 <div className="text-center">
-                  <Settings className="w-8 h-8 text-orange-500 mx-auto mb-2" />
+                  <Settings className="w-8 h-8 text-warning mx-auto mb-2" />
                   <div className="text-2xl font-bold">2.1s</div>
                   <div className="text-sm text-muted-foreground">Load Time</div>
                 </div>

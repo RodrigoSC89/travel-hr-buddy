@@ -973,8 +973,8 @@ export function VRARScenarioManager() {
                 <Label>Categoria</Label>
                 <Select
                   value={formData.category}
-                  onValueChange={(value: any) =>
-                    setFormData((prev) => ({ ...prev, category: value }))
+                  onValueChange={(value) =>
+                    setFormData((prev) => ({ ...prev, category: value as typeof prev.category }))
                   }
                 >
                   <SelectTrigger>
@@ -995,8 +995,8 @@ export function VRARScenarioManager() {
                 <Label>Dificuldade</Label>
                 <Select
                   value={formData.difficulty}
-                  onValueChange={(value: any) =>
-                    setFormData((prev) => ({ ...prev, difficulty: value }))
+                  onValueChange={(value) =>
+                    setFormData((prev) => ({ ...prev, difficulty: value as typeof prev.difficulty }))
                   }
                 >
                   <SelectTrigger>
@@ -1108,8 +1108,8 @@ export function VRARScenarioManager() {
                 <Label>Categoria</Label>
                 <Select
                   value={formData.category}
-                  onValueChange={(value: any) =>
-                    setFormData((prev) => ({ ...prev, category: value }))
+                  onValueChange={(value) =>
+                    setFormData((prev) => ({ ...prev, category: value as typeof prev.category }))
                   }
                 >
                   <SelectTrigger>

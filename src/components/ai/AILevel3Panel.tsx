@@ -51,8 +51,8 @@ export function AILevel3Panel({ module, className }: AILevel3PanelProps) {
   const getPriorityColor = (priority: string) => {
     switch (priority) {
       case 'critical': return 'bg-destructive text-destructive-foreground';
-      case 'high': return 'bg-orange-500 text-white';
-      case 'medium': return 'bg-yellow-500 text-black';
+      case 'high': return 'bg-warning text-warning-foreground';
+      case 'medium': return 'bg-accent text-accent-foreground';
       default: return 'bg-muted text-muted-foreground';
     }
   };
@@ -79,8 +79,8 @@ export function AILevel3Panel({ module, className }: AILevel3PanelProps) {
               <CardTitle className="text-lg">IA Autônoma Level 3</CardTitle>
               <CardDescription className="flex items-center gap-2">
                 <span className="relative flex h-2 w-2">
-                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75" />
-                  <span className="relative inline-flex rounded-full h-2 w-2 bg-green-500" />
+                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-success opacity-75" />
+                  <span className="relative inline-flex rounded-full h-2 w-2 bg-success" />
                 </span>
                 Proativa • Autocorretiva • Explicável
               </CardDescription>
@@ -125,7 +125,7 @@ export function AILevel3Panel({ module, className }: AILevel3PanelProps) {
               <AnimatePresence>
                 {suggestions.length === 0 ? (
                   <div className="flex flex-col items-center justify-center h-[200px] text-muted-foreground">
-                    <CheckCircle className="h-10 w-10 mb-2 text-green-500" />
+                    <CheckCircle className="h-10 w-10 mb-2 text-success" />
                     <p>Nenhuma sugestão pendente</p>
                     <p className="text-sm">A IA está monitorando continuamente</p>
                   </div>
@@ -154,7 +154,7 @@ export function AILevel3Panel({ module, className }: AILevel3PanelProps) {
             <ScrollArea className="h-[300px]">
               {corrections.length === 0 ? (
                 <div className="flex flex-col items-center justify-center h-[200px] text-muted-foreground">
-                  <Shield className="h-10 w-10 mb-2 text-blue-500" />
+                  <Shield className="h-10 w-10 mb-2 text-primary" />
                   <p>Nenhuma correção recente</p>
                   <p className="text-sm">Sistema funcionando normalmente</p>
                 </div>
@@ -280,14 +280,14 @@ function SuggestionCard({
     >
       <div className="flex items-start gap-3">
         <div className={cn("p-2 rounded-lg", 
-          suggestion.type === 'warning' ? 'bg-orange-500/10' :
-          suggestion.type === 'compliance' ? 'bg-red-500/10' :
-          'bg-blue-500/10'
+          suggestion.type === 'warning' ? 'bg-warning/10' :
+          suggestion.type === 'compliance' ? 'bg-destructive/10' :
+          'bg-primary/10'
         )}>
           <Icon className={cn("h-4 w-4",
-            suggestion.type === 'warning' ? 'text-orange-500' :
-            suggestion.type === 'compliance' ? 'text-red-500' :
-            'text-blue-500'
+            suggestion.type === 'warning' ? 'text-warning' :
+            suggestion.type === 'compliance' ? 'text-destructive' :
+            'text-primary'
           )} />
         </div>
         <div className="flex-1 min-w-0">
@@ -337,10 +337,10 @@ interface CorrectionCardProps {
 
 function CorrectionCard({ correction, onRollback }: CorrectionCardProps) {
   return (
-    <div className="p-3 rounded-lg border bg-green-500/5 border-green-500/20">
+    <div className="p-3 rounded-lg border bg-success/5 border-success/20">
       <div className="flex items-start gap-3">
-        <div className="p-2 rounded-lg bg-green-500/10">
-          <CheckCircle className="h-4 w-4 text-green-500" />
+        <div className="p-2 rounded-lg bg-success/10">
+          <CheckCircle className="h-4 w-4 text-success" />
         </div>
         <div className="flex-1">
           <div className="flex items-center gap-2 mb-1">

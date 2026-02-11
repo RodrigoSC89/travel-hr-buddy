@@ -269,8 +269,8 @@ export async function registerPushNotifications(): Promise<PushNotificationToken
 }
 
 export function setupPushNotificationListeners(
-  onNotificationReceived: (notification: any) => void,
-  onNotificationTapped: (notification: any) => void
+  onNotificationReceived: (notification: unknown) => void,
+  onNotificationTapped: (notification: unknown) => void
 ): void {
   if (!platformInfo.isNative) return;
 

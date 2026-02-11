@@ -1,6 +1,11 @@
 // TypeScript types for complete module tables
 
 // ============================================
+// Shared utility types
+// ============================================
+export type JsonRecord = Record<string, unknown>;
+
+// ============================================
 // CREW MANAGEMENT TYPES
 // ============================================
 
@@ -15,8 +20,8 @@ export interface CrewRotation {
   departure_port?: string;
   arrival_port?: string;
   transportation_method?: string;
-  flight_details?: Record<string, any>;
-  accommodation_details?: Record<string, any>;
+  flight_details?: JsonRecord;
+  accommodation_details?: JsonRecord;
   documentation_status: "pending" | "verified" | "incomplete" | "expired";
   medical_clearance: boolean;
   visa_status?: string;
@@ -37,10 +42,10 @@ export interface CrewAssignment {
   assigned_date: string;
   end_date?: string;
   rotation_schedule?: string;
-  certifications?: any[];
-  emergency_contact?: Record<string, any>;
+  certifications?: JsonRecord[];
+  emergency_contact?: JsonRecord;
   notes?: string;
-  metadata?: Record<string, any>;
+  metadata?: JsonRecord;
   created_at: string;
   updated_at: string;
   created_by?: string;
@@ -63,7 +68,7 @@ export interface IoTSensorData {
   threshold_max?: number;
   is_alert: boolean;
   reading_timestamp: string;
-  metadata?: Record<string, any>;
+  metadata?: JsonRecord;
   created_at: string;
 }
 
@@ -75,8 +80,17 @@ export interface CrewRotationLog {
   previous_status?: string;
   new_status?: string;
   performed_by?: string;
-  metadata?: Record<string, any>;
+  metadata?: JsonRecord;
   created_at: string;
+}
+
+export interface ChecklistItem {
+  id: string;
+  title: string;
+  description?: string;
+  completed: boolean;
+  completed_by?: string;
+  completed_at?: string;
 }
 
 export interface ChecklistRecord {
@@ -84,7 +98,7 @@ export interface ChecklistRecord {
   vessel_id?: string;
   checklist_type: "pre_departure" | "arrival" | "safety" | "maintenance" | "inspection" | "emergency" | "custom";
   checklist_name: string;
-  items: any[];
+  items: ChecklistItem[];
   status: "pending" | "in_progress" | "completed" | "failed" | "expired";
   assigned_to?: string;
   completed_by?: string;
@@ -93,8 +107,8 @@ export interface ChecklistRecord {
   due_date?: string;
   completion_percentage: number;
   notes?: string;
-  attachments?: any[];
-  metadata?: Record<string, any>;
+  attachments?: JsonRecord[];
+  metadata?: JsonRecord;
   created_at: string;
   updated_at: string;
   created_by?: string;
@@ -117,7 +131,7 @@ export interface VesselStatus {
   last_port?: string;
   next_port?: string;
   eta_next_port?: string;
-  metadata?: Record<string, any>;
+  metadata?: JsonRecord;
   timestamp: string;
   created_at: string;
 }
@@ -136,7 +150,7 @@ export interface MaintenanceAlert {
   acknowledged_by?: string;
   resolved_at?: string;
   resolved_by?: string;
-  metadata?: Record<string, any>;
+  metadata?: JsonRecord;
   created_at: string;
 }
 
@@ -153,7 +167,7 @@ export interface FuelUsage {
   odometer_reading?: number;
   efficiency_rating?: number;
   notes?: string;
-  metadata?: Record<string, any>;
+  metadata?: JsonRecord;
   created_at: string;
 }
 
@@ -175,7 +189,7 @@ export interface CrewMessage {
   is_read: boolean;
   read_at?: string;
   reply_to_id?: string;
-  metadata?: Record<string, any>;
+  metadata?: JsonRecord;
   created_at: string;
   updated_at: string;
 }
@@ -191,7 +205,7 @@ export interface MessageAttachment {
   mime_type?: string;
   thumbnail_path?: string;
   is_public: boolean;
-  metadata?: Record<string, any>;
+  metadata?: JsonRecord;
   created_at: string;
 }
 
@@ -206,7 +220,7 @@ export interface CrewVoiceMessage {
   sample_rate?: number;
   storage_bucket: string;
   is_transcribed: boolean;
-  metadata?: Record<string, any>;
+  metadata?: JsonRecord;
   created_at: string;
 }
 
@@ -214,13 +228,21 @@ export interface CrewVoiceMessage {
 // VOYAGE PLANNER TYPES
 // ============================================
 
+export interface Waypoint {
+  lat: number;
+  lng: number;
+  name?: string;
+  eta?: string;
+  speed_knots?: number;
+}
+
 export interface VoyagePlan {
   id: string;
   vessel_id: string;
   plan_name: string;
   departure_port: string;
   arrival_port: string;
-  waypoints?: any[];
+  waypoints?: Waypoint[];
   planned_departure: string;
   planned_arrival: string;
   estimated_duration_hours?: number;
@@ -237,7 +259,7 @@ export interface VoyagePlan {
   approval_status: "pending" | "approved" | "rejected";
   approved_by?: string;
   approved_at?: string;
-  metadata?: Record<string, any>;
+  metadata?: JsonRecord;
   created_at: string;
   updated_at: string;
   created_by?: string;
@@ -261,8 +283,14 @@ export interface RouteForecast {
   recommended_action?: string;
   data_source?: string;
   confidence_level?: number;
-  metadata?: Record<string, any>;
+  metadata?: JsonRecord;
   created_at: string;
+}
+
+export interface FuelFactor {
+  name: string;
+  impact: string;
+  weight: number;
 }
 
 export interface FuelSuggestion {
@@ -274,14 +302,14 @@ export interface FuelSuggestion {
   potential_savings_percentage?: number;
   potential_savings_cost?: number;
   recommendation_text: string;
-  alternative_route?: Record<string, any>;
-  optimized_speed_profile?: Record<string, any>;
+  alternative_route?: JsonRecord;
+  optimized_speed_profile?: JsonRecord;
   confidence_score?: number;
-  factors_considered?: any[];
+  factors_considered?: FuelFactor[];
   status: "pending" | "accepted" | "rejected" | "implemented";
   implemented_at?: string;
   actual_savings?: number;
-  metadata?: Record<string, any>;
+  metadata?: JsonRecord;
   created_at: string;
 }
 
@@ -310,8 +338,18 @@ export interface NotificationHistory {
   source_module?: string;
   related_entity_type?: string;
   related_entity_id?: string;
-  metadata?: Record<string, any>;
+  metadata?: JsonRecord;
   created_at: string;
+}
+
+export interface CategoryPreference {
+  enabled: boolean;
+  channels: string[];
+}
+
+export interface FrequencyLimit {
+  max_per_hour?: number;
+  max_per_day?: number;
 }
 
 export interface UserNotificationSettings {
@@ -325,9 +363,9 @@ export interface UserNotificationSettings {
   quiet_hours_start?: string;
   quiet_hours_end?: string;
   timezone: string;
-  category_preferences: Record<string, any>;
-  frequency_limits: Record<string, any>;
-  metadata?: Record<string, any>;
+  category_preferences: Record<string, CategoryPreference>;
+  frequency_limits: Record<string, FrequencyLimit>;
+  metadata?: JsonRecord;
   created_at: string;
   updated_at: string;
 }
@@ -359,7 +397,7 @@ export interface CrewHealthRecord {
   follow_up_date?: string;
   is_fit_for_duty: boolean;
   restrictions?: string;
-  metadata?: Record<string, any>;
+  metadata?: JsonRecord;
   created_at: string;
   updated_at: string;
 }
@@ -383,7 +421,7 @@ export interface WellbeingAlert {
   ai_generated: boolean;
   ai_confidence_score?: number;
   related_health_record_id?: string;
-  metadata?: Record<string, any>;
+  metadata?: JsonRecord;
   created_at: string;
 }
 
@@ -391,11 +429,16 @@ export interface WellbeingAlert {
 // USER MANAGEMENT TYPES
 // ============================================
 
+export interface Permission {
+  resource: string;
+  actions: string[];
+}
+
 export interface UserRole {
   id: string;
   role_name: string;
   role_description?: string;
-  permissions: any[];
+  permissions: Permission[];
   is_system_role: boolean;
   hierarchy_level: number;
   created_at: string;
@@ -415,13 +458,19 @@ export interface UserAccessLog {
   session_id?: string;
   status?: "success" | "failure" | "blocked";
   error_message?: string;
-  metadata?: Record<string, any>;
+  metadata?: JsonRecord;
   created_at: string;
 }
 
 // ============================================
 // CLONE & PRIORITY TYPES (for new tables)
 // ============================================
+
+export interface CloneCapability {
+  name: string;
+  version: string;
+  enabled: boolean;
+}
 
 export interface CloneRegistryEntry {
   id: string;
@@ -430,13 +479,13 @@ export interface CloneRegistryEntry {
   clone_type: string;
   parent_id?: string;
   status: "active" | "inactive" | "archived";
-  memory_snapshot?: Record<string, any>;
-  capabilities?: any[];
+  memory_snapshot?: JsonRecord;
+  capabilities?: CloneCapability[];
   context_limit: number;
   last_sync_at?: string;
   created_at: string;
   updated_at: string;
-  metadata?: Record<string, any>;
+  metadata?: JsonRecord;
 }
 
 export interface PriorityShiftEntry {
@@ -448,10 +497,17 @@ export interface PriorityShiftEntry {
   reason?: string;
   triggered_by: string;
   shift_type: string;
-  context?: Record<string, any>;
+  context?: JsonRecord;
   created_at: string;
   reverted_at?: string;
   is_active: boolean;
+}
+
+export interface RiskIndicator {
+  type: string;
+  severity: string;
+  description: string;
+  score: number;
 }
 
 export interface TrustComplianceLog {
@@ -463,10 +519,10 @@ export interface TrustComplianceLog {
   entity_id?: string;
   compliance_score: number;
   trust_level: string;
-  details?: Record<string, any>;
-  risk_indicators?: any[];
+  details?: JsonRecord;
+  risk_indicators?: RiskIndicator[];
   created_at: string;
-  metadata?: Record<string, any>;
+  metadata?: JsonRecord;
 }
 
 export interface PerformanceAlertEntry {
@@ -484,5 +540,5 @@ export interface PerformanceAlertEntry {
   acknowledged_at?: string;
   resolved_at?: string;
   created_at: string;
-  metadata?: Record<string, any>;
+  metadata?: JsonRecord;
 }

@@ -8,14 +8,14 @@ export interface ExternalEntity {
   entity_type: string;
   trust_score?: number;
   status?: "active" | "inactive" | "suspended";
-  metadata?: Record<string, any>;
+  metadata?: Record<string, unknown>;
 }
 
 export interface JointMissionTask {
   mission_id: string;
   task_name: string;
   assigned_entity: string;
-  payload: any;
+  payload: Record<string, unknown>;
   status?: "pending" | "assigned" | "in_progress" | "completed" | "failed";
 }
 
@@ -29,8 +29,8 @@ export async function registerExternalEntity(entity: ExternalEntity) {
       entity_type: entity.entity_type,
       trust_score: entity.trust_score || 50.0,
       status: entity.status || "active",
-      metadata: entity.metadata || {}
-    })
+      metadata: (entity.metadata || {}) as unknown as never
+    } as never)
     .select()
     .single();
 
@@ -69,9 +69,9 @@ export async function assignMissionTask(task: JointMissionTask) {
       mission_id: task.mission_id,
       task_name: task.task_name,
       assigned_entity: task.assigned_entity,
-      payload: task.payload,
+      payload: task.payload as unknown as never,
       status: "assigned"
-    })
+    } as never)
     .select()
     .single();
 
@@ -97,9 +97,9 @@ export async function assignMissionTask(task: JointMissionTask) {
 export async function updateTaskStatus(
   taskId: string,
   status: "in_progress" | "completed" | "failed",
-  result?: any
+  result?: Record<string, unknown>
 ) {
-  const updates: any = {
+  const updates: Record<string, unknown> = {
     status: status,
     updated_at: new Date().toISOString()
   };
@@ -183,15 +183,15 @@ export async function getExternalEntities(status?: string) {
 async function logMissionEvent(
   missionId: string,
   eventType: string,
-  details: any,
+  details: Record<string, unknown>,
   severity: "info" | "warning" | "error" | "critical" = "info"
 ) {
   await supabase.from("joint_mission_log").insert({
     mission_id: missionId,
     event_type: eventType,
-    details: details,
+    details: details as unknown as never,
     severity: severity
-  });
+  } as never);
 }
 
 // Get mission logs
