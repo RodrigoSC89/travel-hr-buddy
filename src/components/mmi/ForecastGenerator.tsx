@@ -106,15 +106,15 @@ export default function ForecastGenerator({
   const getPriorityColor = (priority: string) => {
     switch (priority) {
     case "critical":
-      return "bg-red-500/10 text-red-500 border-red-500/20";
+      return "bg-destructive/10 text-destructive border-destructive/20";
     case "high":
-      return "bg-orange-500/10 text-orange-500 border-orange-500/20";
+      return "bg-warning/10 text-warning border-warning/20";
     case "medium":
-      return "bg-yellow-500/10 text-yellow-500 border-yellow-500/20";
+      return "bg-warning/10 text-warning border-warning/20";
     case "low":
-      return "bg-green-500/10 text-green-500 border-green-500/20";
+      return "bg-success/10 text-success border-success/20";
     default:
-      return "bg-gray-500/10 text-gray-500 border-gray-500/20";
+      return "bg-muted/10 text-muted-foreground border-muted/20";
     }
   };
 
@@ -146,14 +146,14 @@ export default function ForecastGenerator({
               <span className="text-muted-foreground">Progresso</span>
               <span className="font-semibold">{progressPercentage.toFixed(1)}%</span>
             </div>
-            <div className="w-full bg-gray-200 rounded-full h-3">
+            <div className="w-full bg-muted rounded-full h-3">
               <div
                 className={`h-3 rounded-full transition-all ${
                   progressPercentage >= 95
-                    ? "bg-red-500"
+                    ? "bg-destructive"
                     : progressPercentage >= 80
-                      ? "bg-yellow-500"
-                      : "bg-green-500"
+                      ? "bg-warning"
+                      : "bg-success"
                 }`}
                 style={{ width: `${Math.min(progressPercentage, 100)}%` }}
               />

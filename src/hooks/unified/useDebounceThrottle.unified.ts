@@ -436,7 +436,7 @@ export function useAdaptiveDebounce<T extends (...args: any[]) => any>(
 ): T {
   const getAdaptiveDelay = useCallback(() => {
     if (typeof navigator !== "undefined" && "connection" in navigator) {
-      const connection = (navigator as any).connection;
+      const connection = (navigator as unknown as { connection?: { effectiveType: string } }).connection;
       if (connection) {
         const effectiveType = connection.effectiveType;
         switch (effectiveType) {

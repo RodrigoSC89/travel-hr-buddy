@@ -84,12 +84,12 @@ const NetworkQualityBadge: React.FC<NetworkQualityBadgeProps> = ({ quality }) =>
     switch (quality) {
       case 'excellent':
       case 'good':
-        return 'bg-green-500/10 text-green-600 border-green-500/20';
+        return 'bg-success/10 text-success border-success/20';
       case 'fair':
-        return 'bg-yellow-500/10 text-yellow-600 border-yellow-500/20';
+        return 'bg-warning/10 text-warning border-warning/20';
       case 'poor':
       case 'offline':
-        return 'bg-orange-500/10 text-orange-600 border-orange-500/20';
+        return 'bg-warning/10 text-warning border-warning/20';
     }
   };
 

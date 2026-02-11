@@ -28,7 +28,8 @@ export interface SystemHealth {
  * Get current memory usage (if available)
  */
 function getMemoryUsage(): SystemHealth['memory'] {
-  const memory = (performance as any).memory;
+  interface PerformanceMemory { usedJSHeapSize: number; jsHeapSizeLimit: number; }
+  const memory = (performance as unknown as { memory?: PerformanceMemory }).memory;
   
   if (!memory) {
     return { used: 0, total: 0, percentage: 0 };
@@ -171,9 +172,9 @@ export function useSystemHealth(interval: number = 10000): SystemHealth {
       // CLS Observer
       let clsValue = 0;
       const clsObserver = new PerformanceObserver((entryList) => {
-        for (const entry of entryList.getEntries() as any[]) {
+        for (const entry of entryList.getEntries() as (PerformanceEntry & { hadRecentInput?: boolean; value?: number })[]) {
           if (!entry.hadRecentInput) {
-            clsValue += entry.value;
+            clsValue += entry.value || 0;
           }
         }
         setHealth(prev => ({

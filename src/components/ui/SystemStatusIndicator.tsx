@@ -42,7 +42,7 @@ export const SystemStatusIndicator = memo(function SystemStatusIndicator({
                 getHealthColor(health.isHealthy, health.issues)
               )} />
               {!health.isHealthy && (
-                <span className="absolute -top-1 -right-1 h-2 w-2 rounded-full bg-red-500 animate-pulse" />
+                <span className="absolute -top-1 -right-1 h-2 w-2 rounded-full bg-destructive animate-pulse" />
               )}
             </div>
             
@@ -62,7 +62,7 @@ export const SystemStatusIndicator = memo(function SystemStatusIndicator({
               <span className="font-semibold">Status do Sistema</span>
               <StatusIcon className={cn(
                 'h-5 w-5',
-                health.isHealthy ? 'text-green-500' : 'text-yellow-500'
+                health.isHealthy ? 'text-success' : 'text-warning'
               )} />
             </div>
 
@@ -90,8 +90,8 @@ export const SystemStatusIndicator = memo(function SystemStatusIndicator({
                 <div 
                   className={cn(
                     'h-full transition-all rounded-full',
-                    health.memory.percentage > 80 ? 'bg-red-500' :
-                    health.memory.percentage > 60 ? 'bg-yellow-500' : 'bg-green-500'
+                    health.memory.percentage > 80 ? 'bg-destructive' :
+                    health.memory.percentage > 60 ? 'bg-warning' : 'bg-success'
                   )}
                   style={{ width: `${health.memory.percentage}%` }}
                 />
@@ -121,11 +121,11 @@ export const SystemStatusIndicator = memo(function SystemStatusIndicator({
             {/* Issues */}
             {health.issues.length > 0 && (
               <div className="pt-2 border-t border-border">
-                <span className="text-xs font-medium text-yellow-600">Alertas:</span>
+                <span className="text-xs font-medium text-warning">Alertas:</span>
                 <ul className="mt-1 space-y-1">
                   {health.issues.map((issue, i) => (
                     <li key={i} className="text-xs text-muted-foreground flex items-start gap-1">
-                      <span className="text-yellow-500">•</span>
+                      <span className="text-warning">•</span>
                       {issue}
                     </li>
                   ))}

@@ -90,7 +90,7 @@ export const OfflineSyncIndicator: React.FC<OfflineSyncIndicatorProps> = ({
                 <span className="text-xs font-medium">{pendingCount}</span>
               </Button>
             ) : lastSyncResult === 'success' ? (
-              <div className="flex items-center gap-1.5 text-green-500">
+              <div className="flex items-center gap-1.5 text-success">
                 <Check className="h-4 w-4" />
                 {showLabel && <span className="text-xs">Sincronizado</span>}
               </div>
