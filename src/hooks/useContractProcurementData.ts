@@ -66,10 +66,10 @@ export function useContractProcurementData() {
       if (error) throw error;
       if (!data || data.length === 0) return [];
 
-      return data.map((s: any) => ({
+      return data.map((s): SupplierData => ({
         id: s.id,
         name: s.company_name || s.trading_name || "Sem nome",
-        category: s.category || "Geral",
+        category: Array.isArray(s.category) ? s.category[0] || "Geral" : s.category || "Geral",
         country: s.country || "N/A",
         rating: s.rating || 0,
         totalSpend: s.total_value || 0,
@@ -92,14 +92,14 @@ export function useContractProcurementData() {
       if (error) throw error;
       if (!data || data.length === 0) return [];
 
-      return data.map((r: any) => ({
+      return data.map((r): RFQData => ({
         id: r.id,
         title: r.title || "RFQ",
         category: r.category || "Geral",
-        vessel: r.vessel_name || "Fleet-wide",
+        vessel: "Fleet-wide",
         deadline: r.deadline || r.created_at,
-        budget: r.budget || 0,
-        responses: r.responses_count || 0,
+        budget: r.budget_estimate || 0,
+        responses: (r as Record<string, unknown>).responses_count as number || 0,
         status: r.status || "open",
       }));
     },

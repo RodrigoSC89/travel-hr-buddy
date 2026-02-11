@@ -66,15 +66,16 @@ const aiRecommendations = [
 ];
 
 function VoyageStatusBadge({ status }: { status: string }) {
-  const variants: Record<string, { label: string; className: string; icon: any }> = {
+  const variants: Record<string, { label: string; className: string; icon: React.ElementType }> = {
     on_time: { label: "No Prazo", className: "bg-success/10 text-success border-success/20", icon: CheckCircle2 },
     delayed: { label: "Atrasado", className: "bg-warning/10 text-warning border-warning/20", icon: Clock },
     ahead: { label: "Adiantado", className: "bg-primary/10 text-primary border-primary/20", icon: TrendingUp },
   };
   const variant = variants[status] || variants.on_time;
+  const StatusIcon = variant.icon;
   return (
     <Badge variant="outline" className={`${variant.className} gap-1`}>
-      <variant.icon className="h-3 w-3" />
+      <StatusIcon className="h-3 w-3" />
       {variant.label}
     </Badge>
   );
@@ -131,45 +132,45 @@ export default function OperationsCommandDashboard() {
         </motion.div>
 
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3 }}>
-          <Card className="border-l-4 border-l-cyan-500 hover:shadow-lg transition-shadow cursor-pointer">
+          <Card className="border-l-4 border-l-info hover:shadow-lg transition-shadow cursor-pointer">
             <CardContent className="p-4">
               <div className="flex items-center justify-between">
                 <div>
                   <p className="text-xs text-muted-foreground">Vel. Média</p>
-                  <p className="text-2xl font-bold text-cyan-600">{fleetStatus.avgSpeed} kn</p>
+                  <p className="text-2xl font-bold text-info">{fleetStatus.avgSpeed} kn</p>
                   <p className="text-xs">frota ativa</p>
                 </div>
-                <Gauge className="h-8 w-8 text-cyan-500 opacity-60" />
+                <Gauge className="h-8 w-8 text-info opacity-60" />
               </div>
             </CardContent>
           </Card>
         </motion.div>
 
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.4 }}>
-          <Card className="border-l-4 border-l-purple-500 hover:shadow-lg transition-shadow cursor-pointer">
+          <Card className="border-l-4 border-l-accent hover:shadow-lg transition-shadow cursor-pointer">
             <CardContent className="p-4">
               <div className="flex items-center justify-between">
                 <div>
                   <p className="text-xs text-muted-foreground">Carga Total</p>
-                  <p className="text-2xl font-bold text-purple-600">{(fleetStatus.totalCargo / 1000).toFixed(0)}k</p>
+                  <p className="text-2xl font-bold text-accent-foreground">{(fleetStatus.totalCargo / 1000).toFixed(0)}k</p>
                   <p className="text-xs">toneladas</p>
                 </div>
-                <Activity className="h-8 w-8 text-purple-500 opacity-60" />
+                <Activity className="h-8 w-8 text-accent-foreground opacity-60" />
               </div>
             </CardContent>
           </Card>
         </motion.div>
 
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.5 }}>
-          <Card className="border-l-4 border-l-emerald-500 hover:shadow-lg transition-shadow cursor-pointer">
+          <Card className="border-l-4 border-l-success hover:shadow-lg transition-shadow cursor-pointer">
             <CardContent className="p-4">
               <div className="flex items-center justify-between">
                 <div>
                   <p className="text-xs text-muted-foreground">Viagens Ativas</p>
-                  <p className="text-2xl font-bold text-emerald-600">{activeVoyages.length}</p>
+                  <p className="text-2xl font-bold text-success">{activeVoyages.length}</p>
                   <p className="text-xs">em andamento</p>
                 </div>
-                <Globe className="h-8 w-8 text-emerald-500 opacity-60" />
+                <Globe className="h-8 w-8 text-success opacity-60" />
               </div>
             </CardContent>
           </Card>
@@ -246,10 +247,10 @@ export default function OperationsCommandDashboard() {
         </div>
 
         {/* AI Recommendations */}
-        <Card className="border-purple-500/20 bg-gradient-to-br from-purple-500/5 to-transparent">
+        <Card className="border-accent/20 bg-gradient-to-br from-accent/5 to-transparent">
           <CardHeader className="pb-3">
             <CardTitle className="flex items-center gap-2">
-              <Sparkles className="h-5 w-5 text-purple-500" />
+              <Sparkles className="h-5 w-5 text-accent-foreground" />
               Insights IA Operacional
             </CardTitle>
           </CardHeader>
@@ -264,7 +265,7 @@ export default function OperationsCommandDashboard() {
                     className="p-3 rounded-lg border bg-card"
                   >
                     <div className="flex items-start gap-2">
-                      <Brain className="h-4 w-4 mt-0.5 text-purple-500" />
+                      <Brain className="h-4 w-4 mt-0.5 text-accent-foreground" />
                       <div className="flex-1">
                         <p className="text-sm">{rec.message}</p>
                         {rec.savings && (

@@ -43,7 +43,7 @@ interface SmartAlert {
   confidence_score: number | null;
   impact_estimate: string | null;
   cause_analysis: string | null;
-  recommended_actions: any[];
+  recommended_actions: Array<{ action?: string; priority?: string }>;
   affected_systems: string[];
   acknowledged: boolean;
   resolved: boolean;
@@ -75,7 +75,7 @@ const SmartAlerts = () => {
       setLoading(true);
       
       let query = supabase
-        .from("active_alerts_dashboard" as any)
+        .from("active_alerts_dashboard" as never)
         .select("*");
       
       if (!showResolved) {
@@ -88,22 +88,23 @@ const SmartAlerts = () => {
 
       // Fetch full details for alerts with actions
       const alertsWithDetails = await Promise.all(
-        (data || []).map(async (alert: any) => {
+        (data || []).map(async (alert: Record<string, unknown>) => {
           const { data: fullAlert } = await supabase
-            .from("smart_alerts" as any)
+            .from("smart_alerts" as never)
             .select("recommended_actions, affected_systems")
-            .eq("id", alert.id)
+            .eq("id", alert.id as string)
             .single();
           
+          const typed = fullAlert as Record<string, unknown> | null;
           return {
             ...alert,
-            recommended_actions: (fullAlert as any)?.recommended_actions || [],
-            affected_systems: (fullAlert as any)?.affected_systems || []
+            recommended_actions: (typed?.recommended_actions as SmartAlert["recommended_actions"]) || [],
+            affected_systems: (typed?.affected_systems as string[]) || []
           };
         })
       );
 
-      setAlerts(alertsWithDetails as any);
+      setAlerts(alertsWithDetails as SmartAlert[]);
     } catch (error) {
       logger.error("Error loading smart alerts:", error);
       toast({
@@ -144,8 +145,8 @@ const SmartAlerts = () => {
   const handleAcknowledge = async (alertId: string) => {
     try {
       const { error } = await supabase
-        .from("smart_alerts" as any)
-        .update({ acknowledged: true } as any)
+        .from("smart_alerts" as never)
+        .update({ acknowledged: true } as never)
         .eq("id", alertId);
 
       if (error) throw error;
@@ -169,8 +170,8 @@ const SmartAlerts = () => {
   const handleResolve = async (alertId: string) => {
     try {
       const { error } = await supabase
-        .from("smart_alerts" as any)
-        .update({ resolved: true, acknowledged: true } as any)
+        .from("smart_alerts" as never)
+        .update({ resolved: true, acknowledged: true } as never)
         .eq("id", alertId);
 
       if (error) throw error;
@@ -193,7 +194,7 @@ const SmartAlerts = () => {
 
   const getLevelBadge = (level: string, predicted: boolean) => {
     if (predicted) {
-      return <Badge variant="outline" className="flex items-center gap-1 text-purple-600 border-purple-600">
+      return <Badge variant="outline" className="flex items-center gap-1 text-accent-foreground border-accent">
         <Zap className="h-3 w-3" /> Predictive
       </Badge>;
     }
@@ -204,7 +205,7 @@ const SmartAlerts = () => {
         <AlertTriangle className="h-3 w-3" /> Critical
       </Badge>;
     case "warning":
-      return <Badge variant="outline" className="flex items-center gap-1 text-orange-600 border-orange-600">
+      return <Badge variant="outline" className="flex items-center gap-1 text-warning border-warning">
         <AlertTriangle className="h-3 w-3" /> Warning
       </Badge>;
     case "info":
@@ -284,10 +285,10 @@ const SmartAlerts = () => {
         <Card>
           <CardHeader className="flex flex-row items-center justify-between pb-2">
             <CardTitle className="text-sm font-medium">Warnings</CardTitle>
-            <Info className="h-4 w-4 text-orange-600" />
+            <Info className="h-4 w-4 text-warning" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-orange-600">{warningCount}</div>
+            <div className="text-2xl font-bold text-warning">{warningCount}</div>
             <p className="text-xs text-muted-foreground">Need attention</p>
           </CardContent>
         </Card>
@@ -295,10 +296,10 @@ const SmartAlerts = () => {
         <Card>
           <CardHeader className="flex flex-row items-center justify-between pb-2">
             <CardTitle className="text-sm font-medium">Predictive</CardTitle>
-            <Zap className="h-4 w-4 text-purple-600" />
+            <Zap className="h-4 w-4 text-accent-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-purple-600">{predictiveCount}</div>
+            <div className="text-2xl font-bold text-accent-foreground">{predictiveCount}</div>
             <p className="text-xs text-muted-foreground">AI predicted</p>
           </CardContent>
         </Card>
@@ -399,7 +400,7 @@ const SmartAlerts = () => {
                             </Badge>
                           )}
                           {alert.resolved && (
-                            <Badge variant="secondary" className="text-xs flex items-center gap-1 text-green-600">
+                            <Badge variant="secondary" className="text-xs flex items-center gap-1 text-success">
                               <CheckCircle className="h-3 w-3" /> Resolved
                             </Badge>
                           )}
@@ -439,7 +440,7 @@ const SmartAlerts = () => {
                           <div className="mt-3">
                             <h4 className="text-sm font-semibold mb-2">Recommended Actions:</h4>
                             <div className="space-y-1">
-                              {alert.recommended_actions.slice(0, 3).map((action: any, idx: number) => (
+                              {alert.recommended_actions.slice(0, 3).map((action, idx: number) => (
                                 <div key={idx} className="text-sm pl-4 text-muted-foreground flex items-start gap-2">
                                   <span className="text-primary">•</span>
                                   <span className="flex-1">

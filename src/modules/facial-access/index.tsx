@@ -80,6 +80,7 @@ export default function FacialAccess() {
         return;
       }
 
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Supabase access_logs mapping
       const mapped: AccessLog[] = (data || []).map((r: any) => ({
         id: r.id,
         userId: r.user_id || "—",
@@ -159,19 +160,19 @@ export default function FacialAccess() {
 
   const getLevelColor = (level: string) => {
     switch (level) {
-      case "critical": return "bg-red-500/20 text-red-400 border-red-500/50";
-      case "high": return "bg-orange-500/20 text-orange-400 border-orange-500/50";
-      case "medium": return "bg-yellow-500/20 text-yellow-400 border-yellow-500/50";
-      case "low": return "bg-green-500/20 text-green-400 border-green-500/50";
+      case "critical": return "bg-destructive/20 text-destructive border-destructive/50";
+      case "high": return "bg-warning/20 text-warning border-warning/50";
+      case "medium": return "bg-accent/20 text-accent-foreground border-accent/50";
+      case "low": return "bg-success/20 text-success border-success/50";
       default: return "bg-muted text-muted-foreground";
     }
   };
 
   const getStatusIcon = (status: string) => {
     switch (status) {
-      case "granted": return <CheckCircle2 className="h-4 w-4 text-green-400" />;
-      case "denied": return <XCircle className="h-4 w-4 text-red-400" />;
-      default: return <Clock className="h-4 w-4 text-yellow-400" />;
+      case "granted": return <CheckCircle2 className="h-4 w-4 text-success" />;
+      case "denied": return <XCircle className="h-4 w-4 text-destructive" />;
+      default: return <Clock className="h-4 w-4 text-warning" />;
     }
   };
 
@@ -189,11 +190,11 @@ export default function FacialAccess() {
         </div>
         <div className="flex items-center gap-4">
           <div className="text-center">
-            <div className="text-2xl font-bold text-green-400">{accessLogs.filter(l => l.status === "granted").length}</div>
+            <div className="text-2xl font-bold text-success">{accessLogs.filter(l => l.status === "granted").length}</div>
             <div className="text-xs text-muted-foreground">Acessos Hoje</div>
           </div>
           <div className="text-center">
-            <div className="text-2xl font-bold text-red-400">{accessLogs.filter(l => l.status === "denied").length}</div>
+            <div className="text-2xl font-bold text-destructive">{accessLogs.filter(l => l.status === "denied").length}</div>
             <div className="text-xs text-muted-foreground">Negados</div>
           </div>
         </div>
@@ -233,14 +234,14 @@ export default function FacialAccess() {
             </div>
 
             {scanResult && (
-              <div className={`p-4 rounded-lg ${scanResult.success ? 'bg-green-500/10 border border-green-500/50' : 'bg-red-500/10 border border-red-500/50'}`}>
+              <div className={`p-4 rounded-lg ${scanResult.success ? 'bg-success/10 border border-success/50' : 'bg-destructive/10 border border-destructive/50'}`}>
                 <div className="flex items-center gap-2">
                   {scanResult.success ? (
-                    <Unlock className="h-5 w-5 text-green-400" />
+                    <Unlock className="h-5 w-5 text-success" />
                   ) : (
-                    <Lock className="h-5 w-5 text-red-400" />
+                    <Lock className="h-5 w-5 text-destructive" />
                   )}
-                  <span className={scanResult.success ? 'text-green-400' : 'text-red-400'}>
+                  <span className={scanResult.success ? 'text-success' : 'text-destructive'}>
                     {scanResult.message}
                   </span>
                 </div>
@@ -315,8 +316,8 @@ export default function FacialAccess() {
                         <div className="w-full h-2 bg-muted rounded-full overflow-hidden">
                           <div 
                             className={`h-full transition-all ${
-                              area.activeUsers / area.maxCapacity > 0.8 ? 'bg-red-500' :
-                              area.activeUsers / area.maxCapacity > 0.5 ? 'bg-yellow-500' : 'bg-green-500'
+                              area.activeUsers / area.maxCapacity > 0.8 ? 'bg-destructive' :
+                              area.activeUsers / area.maxCapacity > 0.5 ? 'bg-warning' : 'bg-success'
                             }`}
                             style={{ width: `${(area.activeUsers / area.maxCapacity) * 100}%` }}
                           />

@@ -139,22 +139,22 @@ const fallbackTrainings: SafetyTraining[] = [
 const severityConfig = {
   low: { label: 'Baixa', color: 'bg-muted text-muted-foreground' },
   medium: { label: 'Média', color: 'bg-warning/20 text-warning' },
-  high: { label: 'Alta', color: 'bg-orange-500/20 text-orange-600' },
+  high: { label: 'Alta', color: 'bg-warning/20 text-warning' },
   critical: { label: 'Crítica', color: 'bg-destructive/20 text-destructive' }
 };
 
 const statusConfig = {
-  open: { label: 'Aberto', color: 'bg-blue-500/20 text-blue-600' },
+  open: { label: 'Aberto', color: 'bg-primary/20 text-primary' },
   investigating: { label: 'Investigando', color: 'bg-warning/20 text-warning' },
-  action_pending: { label: 'Ação Pendente', color: 'bg-orange-500/20 text-orange-600' },
+  action_pending: { label: 'Ação Pendente', color: 'bg-warning/20 text-warning' },
   resolved: { label: 'Resolvido', color: 'bg-success/20 text-success' }
 };
 
 const typeConfig = {
   incident: { label: 'Incidente', icon: AlertTriangle, color: 'text-destructive' },
   near_miss: { label: 'Quase Acidente', icon: Zap, color: 'text-warning' },
-  unsafe_condition: { label: 'Condição Insegura', icon: ThermometerSun, color: 'text-orange-500' },
-  unsafe_act: { label: 'Ato Inseguro', icon: Users, color: 'text-blue-500' }
+  unsafe_condition: { label: 'Condição Insegura', icon: ThermometerSun, color: 'text-warning' },
+  unsafe_act: { label: 'Ato Inseguro', icon: Users, color: 'text-primary' }
 };
 
 export function SafetyCommandCenter() {
@@ -637,9 +637,9 @@ export function SafetyCommandCenter() {
                     <Button size="sm" className="mt-3">Implementar Medidas</Button>
                   </div>
 
-                  <div className="p-4 bg-orange-500/10 border border-orange-500/30 rounded-lg">
+                  <div className="p-4 bg-warning/10 border border-warning/30 rounded-lg">
                     <div className="flex items-center gap-2 mb-2">
-                      <ThermometerSun className="h-5 w-5 text-orange-500" />
+                      <ThermometerSun className="h-5 w-5 text-warning" />
                       <span className="font-medium">Condição de Risco</span>
                     </div>
                     <p className="text-sm">

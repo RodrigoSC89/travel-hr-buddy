@@ -127,7 +127,7 @@ Seja específico e cite normas/referências quando aplicável.`;
     }
   }, [config]);
 
-  const generateEvidence = useCallback(async (eventData: any): Promise<string> => {
+  const generateEvidence = useCallback(async (eventData: Record<string, unknown>): Promise<string> => {
     setLoading(true);
     try {
       const { data, error: fnError } = await supabase.functions.invoke("ai-advisor", {
@@ -147,7 +147,7 @@ Seja específico e cite normas/referências quando aplicável.`;
     }
   }, [config.profile]);
 
-  const generateJustification = useCallback(async (decision: any): Promise<string> => {
+  const generateJustification = useCallback(async (decision: Record<string, unknown>): Promise<string> => {
     setLoading(true);
     try {
       const { data, error: fnError } = await supabase.functions.invoke("ai-advisor", {
@@ -189,7 +189,7 @@ function getFallbackResponse(profile: UserProfile, question: string): string {
   return fallbacks[profile];
 }
 
-function generateFallbackEvidence(eventData: any): string {
+function generateFallbackEvidence(eventData: Record<string, unknown>): string {
   return `## Resumo de Evidência
 
 **Evento:** ${eventData.type || "Não especificado"}
@@ -206,7 +206,7 @@ ${eventData.description || "Detalhes do evento não disponíveis."}
 *Evidência gerada automaticamente pelo Nautilus One*`;
 }
 
-function generateFallbackJustification(decision: any): string {
+function generateFallbackJustification(decision: Record<string, unknown>): string {
   return `## Justificativa Técnica
 
 **Decisão:** ${decision.title || "Não especificada"}
