@@ -243,11 +243,11 @@ const MarineAROverlay = () => {
   const getStatusIcon = (status: string) => {
     switch (status) {
     case "critical":
-      return <AlertTriangle className="h-4 w-4 text-red-500" />;
+      return <AlertTriangle className="h-4 w-4 text-destructive" />;
     case "warning":
-      return <AlertTriangle className="h-4 w-4 text-yellow-500" />;
+      return <AlertTriangle className="h-4 w-4 text-warning" />;
     default:
-      return <Info className="h-4 w-4 text-green-500" />;
+      return <Info className="h-4 w-4 text-success" />;
     }
   };
 
@@ -376,13 +376,13 @@ const MarineAROverlay = () => {
                     </div>
 
                     {selectedMarker.alerts && selectedMarker.alerts.length > 0 && (
-                      <div className="mt-4 p-3 bg-red-50 dark:bg-red-950 rounded border border-red-200 dark:border-red-800">
-                        <p className="font-semibold text-red-800 dark:text-red-200 text-xs mb-2">
+                      <div className="mt-4 p-3 bg-destructive/10 rounded border border-destructive/20">
+                        <p className="font-semibold text-destructive text-xs mb-2">
                           ⚠️ Alertas Ativos
                         </p>
                         <ul className="space-y-1">
                           {selectedMarker.alerts.map((alert, idx) => (
-                            <li key={idx} className="text-xs text-red-700 dark:text-red-300">
+                            <li key={idx} className="text-xs text-destructive/80">
                               • {alert}
                             </li>
                           ))}

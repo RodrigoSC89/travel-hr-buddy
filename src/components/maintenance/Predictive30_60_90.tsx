@@ -111,10 +111,10 @@ export function Predictive30_60_90() {
 
   const getSeverityColor = (severity: string) => {
     switch (severity) {
-      case "critical": return "bg-red-500 text-white";
-      case "high": return "bg-orange-500 text-white";
-      case "medium": return "bg-yellow-500 text-black";
-      default: return "bg-green-500 text-white";
+      case "critical": return "bg-destructive text-destructive-foreground";
+      case "high": return "bg-warning text-warning-foreground";
+      case "medium": return "bg-warning/80 text-foreground";
+      default: return "bg-success text-success-foreground";
     }
   };
 
@@ -177,7 +177,7 @@ export function Predictive30_60_90() {
           <Card>
             <CardContent className="pt-4">
               <div className="flex items-center gap-2">
-                <Calendar className="h-5 w-5 text-red-500" />
+                <Calendar className="h-5 w-5 text-destructive" />
                 <div>
                   <p className="text-2xl font-bold">{summary.total30Days}</p>
                   <p className="text-xs text-muted-foreground">Próximos 30 dias</p>
@@ -210,7 +210,7 @@ export function Predictive30_60_90() {
           <Card>
             <CardContent className="pt-4">
               <div className="flex items-center gap-2">
-                <AlertTriangle className="h-5 w-5 text-red-500" />
+                <AlertTriangle className="h-5 w-5 text-destructive" />
                 <div>
                   <p className="text-2xl font-bold">{summary.criticalCount}</p>
                   <p className="text-xs text-muted-foreground">Alta prioridade</p>
@@ -221,7 +221,7 @@ export function Predictive30_60_90() {
           <Card>
             <CardContent className="pt-4">
               <div className="flex items-center gap-2">
-                <Target className="h-5 w-5 text-green-500" />
+                <Target className="h-5 w-5 text-success" />
                 <div>
                   <p className="text-2xl font-bold">R$ {(summary.estimatedTotalCost / 1000).toFixed(0)}k</p>
                   <p className="text-xs text-muted-foreground">Custo estimado</p>
@@ -386,7 +386,7 @@ export function Predictive30_60_90() {
 
               {filteredPredictions.length === 0 && (
                 <div className="text-center py-8 text-muted-foreground">
-                  <CheckCircle className="h-12 w-12 mx-auto mb-4 text-green-500" />
+                  <CheckCircle className="h-12 w-12 mx-auto mb-4 text-success" />
                   <p>Nenhuma previsão de falha para este período</p>
                 </div>
               )}

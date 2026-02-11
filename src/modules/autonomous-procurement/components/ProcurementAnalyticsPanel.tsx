@@ -217,7 +217,7 @@ export default function ProcurementAnalyticsPanel() {
               <div className="p-2 rounded-lg bg-primary/20">
                 <DollarSign className="h-5 w-5 text-primary" />
               </div>
-              <Badge className="bg-green-500/20 text-green-500">
+              <Badge className="bg-success/20 text-success">
                 <TrendingDown className="h-3 w-3 mr-1" />
                 -3.2%
               </Badge>
@@ -230,12 +230,12 @@ export default function ProcurementAnalyticsPanel() {
         <Card>
           <CardContent className="p-4">
             <div className="flex items-center justify-between">
-              <div className="p-2 rounded-lg bg-green-500/20">
-                <Target className="h-5 w-5 text-green-500" />
+              <div className="p-2 rounded-lg bg-success/20">
+                <Target className="h-5 w-5 text-success" />
               </div>
               <Badge className="bg-primary/20 text-primary">Potencial</Badge>
             </div>
-            <p className="text-2xl font-bold mt-2 text-green-600">R$ {(potentialSavings / 1000).toFixed(0)}K</p>
+            <p className="text-2xl font-bold mt-2 text-success">R$ {(potentialSavings / 1000).toFixed(0)}K</p>
             <p className="text-sm text-muted-foreground">Economia Identificada</p>
           </CardContent>
         </Card>
@@ -243,10 +243,10 @@ export default function ProcurementAnalyticsPanel() {
         <Card>
           <CardContent className="p-4">
             <div className="flex items-center justify-between">
-              <div className="p-2 rounded-lg bg-blue-500/20">
-                <Clock className="h-5 w-5 text-blue-500" />
+              <div className="p-2 rounded-lg bg-primary/20">
+                <Clock className="h-5 w-5 text-primary" />
               </div>
-              <Badge className={avgLeadTime <= 7 ? "bg-green-500/20 text-green-500" : "bg-yellow-500/20 text-yellow-500"}>
+              <Badge className={avgLeadTime <= 7 ? "bg-success/20 text-success" : "bg-warning/20 text-warning"}>
                 {avgLeadTime <= 7 ? "Bom" : "Atenção"}
               </Badge>
             </div>
@@ -261,7 +261,7 @@ export default function ProcurementAnalyticsPanel() {
               <div className="p-2 rounded-lg bg-purple-500/20">
                 <CheckCircle className="h-5 w-5 text-purple-500" />
               </div>
-              <Badge className={avgOnTimeRate >= 90 ? "bg-green-500/20 text-green-500" : "bg-yellow-500/20 text-yellow-500"}>
+              <Badge className={avgOnTimeRate >= 90 ? "bg-success/20 text-success" : "bg-warning/20 text-warning"}>
                 {avgOnTimeRate >= 90 ? "Excelente" : "Regular"}
               </Badge>
             </div>
@@ -315,8 +315,8 @@ export default function ProcurementAnalyticsPanel() {
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-2">
                       <span className="text-sm font-medium">{category.name}</span>
-                      {category.trend === "up" && <TrendingUp className="h-3 w-3 text-red-500" />}
-                      {category.trend === "down" && <TrendingDown className="h-3 w-3 text-green-500" />}
+                      {category.trend === "up" && <TrendingUp className="h-3 w-3 text-destructive" />}
+                      {category.trend === "down" && <TrendingDown className="h-3 w-3 text-success" />}
                     </div>
                     <span className="text-sm font-bold">R$ {(category.value / 1000).toFixed(0)}K</span>
                   </div>
@@ -350,9 +350,9 @@ export default function ProcurementAnalyticsPanel() {
                     <p className="font-bold">{metric.avgDays} dias</p>
                     <p className="text-xs text-muted-foreground">
                       {metric.avgDays < metric.lastMonth ? (
-                        <span className="text-green-500">↓ {metric.lastMonth - metric.avgDays}d</span>
+                        <span className="text-success">↓ {metric.lastMonth - metric.avgDays}d</span>
                       ) : metric.avgDays > metric.lastMonth ? (
-                        <span className="text-red-500">↑ {metric.avgDays - metric.lastMonth}d</span>
+                        <span className="text-destructive">↑ {metric.avgDays - metric.lastMonth}d</span>
                       ) : (
                         <span>Estável</span>
                       )}
@@ -360,7 +360,7 @@ export default function ProcurementAnalyticsPanel() {
                   </div>
                   <div>
                     <p className="text-muted-foreground">On-Time</p>
-                    <p className={`font-bold ${metric.onTimeRate >= 90 ? "text-green-600" : "text-yellow-600"}`}>
+                    <p className={`font-bold ${metric.onTimeRate >= 90 ? "text-success" : "text-warning"}`}>
                       {metric.onTimeRate}%
                     </p>
                   </div>
@@ -388,16 +388,16 @@ export default function ProcurementAnalyticsPanel() {
               <div 
                 key={insight.id}
                 className={`p-4 rounded-lg border ${
-                  insight.type === "savings" ? "border-green-500/30 bg-green-500/5" :
-                  insight.type === "risk" ? "border-red-500/30 bg-red-500/5" :
-                  "border-blue-500/30 bg-blue-500/5"
+                  insight.type === "savings" ? "border-success/30 bg-success/5" :
+                  insight.type === "risk" ? "border-destructive/30 bg-destructive/5" :
+                  "border-primary/30 bg-primary/5"
                 }`}
               >
                 <div className="flex items-center justify-between mb-2">
                   <div className="flex items-center gap-2">
-                    {insight.type === "savings" && <DollarSign className="h-4 w-4 text-green-500" />}
-                    {insight.type === "risk" && <AlertTriangle className="h-4 w-4 text-red-500" />}
-                    {insight.type === "opportunity" && <ArrowUpRight className="h-4 w-4 text-blue-500" />}
+                    {insight.type === "savings" && <DollarSign className="h-4 w-4 text-success" />}
+                    {insight.type === "risk" && <AlertTriangle className="h-4 w-4 text-destructive" />}
+                    {insight.type === "opportunity" && <ArrowUpRight className="h-4 w-4 text-primary" />}
                     <span className="font-medium">{insight.title}</span>
                   </div>
                   <Badge variant="outline" className="text-xs">

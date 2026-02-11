@@ -135,6 +135,7 @@ export function GarbageRegistry() {
   };
 
   // Filter records
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Supabase joined row
   const filteredRecords = records.filter((record: any) => {
     const wasteType = record.waste_type || "";
     const vesselName = record.vessels?.name || "";
@@ -150,6 +151,7 @@ export function GarbageRegistry() {
   });
 
   // Stats
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Supabase row dynamic fields
   const totalWaste = records.reduce((sum: number, r: any) => sum + (Number(r.quantity) || 0), 0);
   const recycledRecords = records.filter((r: any) => (r.disposal_method || "").toLowerCase().includes("recicl"));
   const totalRecycled = recycledRecords.reduce((sum: number, r: any) => sum + (Number(r.quantity) || 0), 0);

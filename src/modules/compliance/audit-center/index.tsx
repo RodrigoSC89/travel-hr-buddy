@@ -54,6 +54,7 @@ const AuditCenter = () => {
 
       // Map PEOTRAM audits
       if (peotramAudits && peotramAudits.length > 0) {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Supabase row dynamic shape
         const mappedPeotram: AuditItem[] = peotramAudits.map((a: any) => ({
           id: a.id,
           title: `PEOTRAM ${a.audit_type === 'vessel' ? 'Vessel' : 'Shore'} Audit - ${a.audit_period}`,
@@ -70,6 +71,7 @@ const AuditCenter = () => {
 
       // Map SGSO audits
       if (sgsoAudits && sgsoAudits.length > 0) {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Supabase row dynamic shape
         const mappedSgso: AuditItem[] = sgsoAudits.map((a: any) => ({
           id: a.id,
           title: `SGSO Audit - ${a.audit_type || 'Internal'}`,

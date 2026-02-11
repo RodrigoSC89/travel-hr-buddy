@@ -42,20 +42,20 @@ import { Loader2 } from "lucide-react";
 type Voyage = MissionVoyage;
 
 const statusConfig = {
-  planning: { label: "Planejamento", color: "bg-slate-500", icon: FileText },
-  loading: { label: "Carregando", color: "bg-blue-500", icon: Anchor },
-  underway: { label: "Em Viagem", color: "bg-green-500", icon: Navigation },
-  anchored: { label: "Ancorado", color: "bg-yellow-500", icon: Anchor },
-  discharging: { label: "Descarregando", color: "bg-orange-500", icon: Anchor },
-  completed: { label: "Concluída", color: "bg-emerald-500", icon: CheckCircle2 }
+  planning: { label: "Planejamento", color: "bg-muted", icon: FileText },
+  loading: { label: "Carregando", color: "bg-primary", icon: Anchor },
+  underway: { label: "Em Viagem", color: "bg-success", icon: Navigation },
+  anchored: { label: "Ancorado", color: "bg-warning", icon: Anchor },
+  discharging: { label: "Descarregando", color: "bg-warning", icon: Anchor },
+  completed: { label: "Concluída", color: "bg-success", icon: CheckCircle2 }
 };
 
 const milestoneConfig = {
-  departure: { icon: Ship, color: "text-blue-500" },
-  waypoint: { icon: Navigation, color: "text-purple-500" },
-  arrival: { icon: Anchor, color: "text-green-500" },
-  inspection: { icon: Eye, color: "text-orange-500" },
-  bunkering: { icon: Fuel, color: "text-yellow-500" }
+  departure: { icon: Ship, color: "text-primary" },
+  waypoint: { icon: Navigation, color: "text-accent-foreground" },
+  arrival: { icon: Anchor, color: "text-success" },
+  inspection: { icon: Eye, color: "text-warning" },
+  bunkering: { icon: Fuel, color: "text-warning" }
 };
 
 export default function MissionControlCenter() {
@@ -290,12 +290,12 @@ export default function MissionControlCenter() {
                         <p className="text-xs text-muted-foreground">Velocidade</p>
                       </div>
                       <div className="p-3 rounded-lg border text-center">
-                        <Fuel className="h-5 w-5 mx-auto mb-1 text-yellow-500" />
+                        <Fuel className="h-5 w-5 mx-auto mb-1 text-warning" />
                         <p className="text-lg font-bold">{effectiveSelected.fuelRemaining}%</p>
                         <p className="text-xs text-muted-foreground">Combustível</p>
                       </div>
                       <div className="p-3 rounded-lg border text-center">
-                        <Users className="h-5 w-5 mx-auto mb-1 text-green-500" />
+                        <Users className="h-5 w-5 mx-auto mb-1 text-success" />
                         <p className="text-lg font-bold">{effectiveSelected.crewOnboard}</p>
                         <p className="text-xs text-muted-foreground">Tripulação</p>
                       </div>
@@ -332,9 +332,9 @@ export default function MissionControlCenter() {
                             <div className="relative">
                               <div className={cn(
                                 "w-10 h-10 rounded-full flex items-center justify-center border-2",
-                                milestone.status === "completed" ? "bg-green-500/20 border-green-500" :
-                                milestone.status === "in-progress" ? "bg-blue-500/20 border-blue-500 animate-pulse" :
-                                milestone.status === "delayed" ? "bg-red-500/20 border-red-500" :
+                                milestone.status === "completed" ? "bg-success/20 border-success" :
+                                milestone.status === "in-progress" ? "bg-primary/20 border-primary animate-pulse" :
+                                milestone.status === "delayed" ? "bg-destructive/20 border-destructive" :
                                 "bg-muted border-border"
                               )}>
                                 <MilestoneIcon className={cn("h-5 w-5", config.color)} />

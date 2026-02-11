@@ -105,6 +105,7 @@ export class MissionLoggingService {
     }
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Supabase row mapping
   private mapToLog(data: any): MissionLog {
     return {
       id: data.id,

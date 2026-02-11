@@ -77,19 +77,19 @@ const procurementItems: ProcurementItem[] = [
 ];
 
 const expenseBreakdown = [
-  { category: "Combustível", amount: 3500000, percentage: 40, icon: Fuel, color: "bg-amber-500" },
-  { category: "Tripulação", amount: 2100000, percentage: 24, icon: Ship, color: "bg-blue-500" },
-  { category: "Manutenção", amount: 1400000, percentage: 16, icon: Wrench, color: "bg-purple-500" },
-  { category: "Porto & Taxas", amount: 875000, percentage: 10, icon: Building2, color: "bg-green-500" },
-  { category: "Seguros", amount: 525000, percentage: 6, icon: FileText, color: "bg-red-500" },
-  { category: "Outros", amount: 350000, percentage: 4, icon: Package, color: "bg-gray-500" }
+  { category: "Combustível", amount: 3500000, percentage: 40, icon: Fuel, color: "bg-warning" },
+  { category: "Tripulação", amount: 2100000, percentage: 24, icon: Ship, color: "bg-primary" },
+  { category: "Manutenção", amount: 1400000, percentage: 16, icon: Wrench, color: "bg-accent" },
+  { category: "Porto & Taxas", amount: 875000, percentage: 10, icon: Building2, color: "bg-success" },
+  { category: "Seguros", amount: 525000, percentage: 6, icon: FileText, color: "bg-destructive" },
+  { category: "Outros", amount: 350000, percentage: 4, icon: Package, color: "bg-muted" }
 ];
 
 const statusColors: Record<ProcurementItem["status"], string> = {
-  pending: "bg-amber-500/10 text-amber-500",
-  approved: "bg-blue-500/10 text-blue-500",
-  ordered: "bg-purple-500/10 text-purple-500",
-  delivered: "bg-green-500/10 text-green-500"
+  pending: "bg-warning/10 text-warning",
+  approved: "bg-primary/10 text-primary",
+  ordered: "bg-accent/10 text-accent-foreground",
+  delivered: "bg-success/10 text-success"
 };
 
 const statusLabels: Record<ProcurementItem["status"], string> = {
@@ -139,60 +139,60 @@ export function CompanyFinancialDashboard() {
       {/* Financial KPIs */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
         <motion.div whileHover={{ scale: 1.02 }}>
-          <Card className="bg-gradient-to-br from-green-500/10 to-green-500/5 border-green-500/20">
+          <Card className="bg-gradient-to-br from-success/10 to-success/5 border-success/20">
             <CardContent className="pt-6">
               <div className="flex items-center justify-between">
                 <div>
                   <p className="text-sm text-muted-foreground">Receita Total</p>
-                  <p className="text-2xl font-bold text-green-500">
+                  <p className="text-2xl font-bold text-success">
                     {formatCurrency(financialSummary.revenue)}
                   </p>
-                  <div className="flex items-center gap-1 mt-1 text-xs text-green-500">
+                  <div className="flex items-center gap-1 mt-1 text-xs text-success">
                     <ArrowUpRight className="h-3 w-3" />
                     +12.5% vs ano anterior
                   </div>
                 </div>
-                <TrendingUp className="h-8 w-8 text-green-500 opacity-80" />
+                <TrendingUp className="h-8 w-8 text-success opacity-80" />
               </div>
             </CardContent>
           </Card>
         </motion.div>
 
         <motion.div whileHover={{ scale: 1.02 }}>
-          <Card className="bg-gradient-to-br from-red-500/10 to-red-500/5 border-red-500/20">
+          <Card className="bg-gradient-to-br from-destructive/10 to-destructive/5 border-destructive/20">
             <CardContent className="pt-6">
               <div className="flex items-center justify-between">
                 <div>
                   <p className="text-sm text-muted-foreground">Despesas</p>
-                  <p className="text-2xl font-bold text-red-500">
+                  <p className="text-2xl font-bold text-destructive">
                     {formatCurrency(financialSummary.expenses)}
                   </p>
-                  <div className="flex items-center gap-1 mt-1 text-xs text-red-500">
+                  <div className="flex items-center gap-1 mt-1 text-xs text-destructive">
                     <ArrowDownRight className="h-3 w-3" />
                     -3.2% otimizado
                   </div>
                 </div>
-                <TrendingDown className="h-8 w-8 text-red-500 opacity-80" />
+                <TrendingDown className="h-8 w-8 text-destructive opacity-80" />
               </div>
             </CardContent>
           </Card>
         </motion.div>
 
         <motion.div whileHover={{ scale: 1.02 }}>
-          <Card className="bg-gradient-to-br from-blue-500/10 to-blue-500/5 border-blue-500/20">
+          <Card className="bg-gradient-to-br from-primary/10 to-primary/5 border-primary/20">
             <CardContent className="pt-6">
               <div className="flex items-center justify-between">
                 <div>
                   <p className="text-sm text-muted-foreground">Lucro Líquido</p>
-                  <p className="text-2xl font-bold text-blue-500">
+                  <p className="text-2xl font-bold text-primary">
                     {formatCurrency(financialSummary.profit)}
                   </p>
-                  <div className="flex items-center gap-1 mt-1 text-xs text-blue-500">
+                  <div className="flex items-center gap-1 mt-1 text-xs text-primary">
                     <ArrowUpRight className="h-3 w-3" />
                     Margem: {financialSummary.profitMargin}%
                   </div>
                 </div>
-                <DollarSign className="h-8 w-8 text-blue-500 opacity-80" />
+                <DollarSign className="h-8 w-8 text-primary opacity-80" />
               </div>
             </CardContent>
           </Card>
@@ -288,11 +288,11 @@ export function CompanyFinancialDashboard() {
                       <div className="grid grid-cols-3 gap-2 text-sm">
                         <div>
                           <p className="text-muted-foreground">Receita</p>
-                          <p className="font-medium text-green-500">{formatCurrency(vessel.revenue)}</p>
+                          <p className="font-medium text-success">{formatCurrency(vessel.revenue)}</p>
                         </div>
                         <div>
                           <p className="text-muted-foreground">OPEX</p>
-                          <p className="font-medium text-red-500">{formatCurrency(vessel.opex)}</p>
+                          <p className="font-medium text-destructive">{formatCurrency(vessel.opex)}</p>
                         </div>
                         <div>
                           <p className="text-muted-foreground">Utilização</p>

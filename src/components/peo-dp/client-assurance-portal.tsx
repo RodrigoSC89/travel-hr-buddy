@@ -98,17 +98,17 @@ export const ClientAssurancePortal: React.FC = () => {
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case "green": case "compliant": case "within_limits": return "text-green-500";
-      case "yellow": case "pending": case "approaching_limits": return "text-yellow-500";
-      case "red": case "non_compliant": case "exceeded": return "text-red-500";
+      case "green": case "compliant": case "within_limits": return "text-success";
+      case "yellow": case "pending": case "approaching_limits": return "text-warning";
+      case "red": case "non_compliant": case "exceeded": return "text-destructive";
       default: return "text-muted-foreground";
     }
   };
 
   const getStatusBadge = (status: string) => {
     switch (status) {
-      case "compliant": return <Badge className="bg-green-500">Conforme</Badge>;
-      case "pending": return <Badge className="bg-yellow-500 text-black">Pendente</Badge>;
+      case "compliant": return <Badge className="bg-success">Conforme</Badge>;
+      case "pending": return <Badge className="bg-warning text-warning-foreground">Pendente</Badge>;
       case "non_compliant": return <Badge variant="destructive">Não Conforme</Badge>;
       default: return <Badge variant="secondary">{status}</Badge>;
     }
@@ -122,8 +122,8 @@ export const ClientAssurancePortal: React.FC = () => {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-3">
-          <div className="p-3 bg-blue-500/10 rounded-xl">
-            <Globe className="h-8 w-8 text-blue-500" />
+          <div className="p-3 bg-primary/10 rounded-xl">
+            <Globe className="h-8 w-8 text-primary" />
           </div>
           <div>
             <h2 className="text-2xl font-bold text-foreground">Client Assurance Portal</h2>
@@ -142,11 +142,11 @@ export const ClientAssurancePortal: React.FC = () => {
       </div>
 
       {/* Vessel Overview Card */}
-      <Card className={`border-2 ${vessel.operationalStatus === "green" ? "border-green-500 bg-green-500/5" : vessel.operationalStatus === "yellow" ? "border-yellow-500 bg-yellow-500/5" : "border-red-500 bg-red-500/5"}`}>
+      <Card className={`border-2 ${vessel.operationalStatus === "green" ? "border-success bg-success/5" : vessel.operationalStatus === "yellow" ? "border-warning bg-warning/5" : "border-destructive bg-destructive/5"}`}>
         <CardContent className="pt-6">
           <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
             <div className="flex items-center gap-4">
-              <div className={`p-3 rounded-full ${vessel.operationalStatus === "green" ? "bg-green-500/20" : vessel.operationalStatus === "yellow" ? "bg-yellow-500/20" : "bg-red-500/20"}`}>
+              <div className={`p-3 rounded-full ${vessel.operationalStatus === "green" ? "bg-success/20" : vessel.operationalStatus === "yellow" ? "bg-warning/20" : "bg-destructive/20"}`}>
                 <Ship className={`h-8 w-8 ${getStatusColor(vessel.operationalStatus)}`} />
               </div>
               <div>

@@ -187,7 +187,7 @@ function OverviewTab({ analytics }: { analytics: any }) {
         </CardHeader>
         <CardContent>
           <div className="space-y-3">
-            {analytics.positionDistribution.slice(0, 6).map((item: any) => (
+            {analytics.positionDistribution.slice(0, 6).map((item: { position: string; count: number }) => (
               <div key={item.position} className="flex items-center justify-between">
                 <span className="text-sm">{item.position}</span>
                 <div className="flex items-center gap-2">

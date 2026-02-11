@@ -39,6 +39,7 @@ export const WorkflowAutomationHub: React.FC = () => {
   const [showNewWorkflow, setShowNewWorkflow] = useState(false);
   const [showDetails, setShowDetails] = useState(false);
   const [showSettings, setShowSettings] = useState(false);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- workflow shape from dynamic hook
   const [selectedWorkflow, setSelectedWorkflow] = useState<any>(null);
   const [newWorkflowData, setNewWorkflowData] = useState({ name: "", description: "", category: "custom", priority: "medium" });
 
@@ -325,7 +326,7 @@ export const WorkflowAutomationHub: React.FC = () => {
               <Progress value={selectedWorkflow.progress} className="h-3" />
               <p className="text-sm text-muted-foreground">Progresso: {selectedWorkflow.progress}%</p>
               <div className="border rounded-lg p-4 max-h-60 overflow-auto space-y-2">
-                {selectedWorkflow.steps?.map((step: any, i: number) => (
+                {(selectedWorkflow.steps as Array<{ name: string; status: string }>)?.map((step, i: number) => (
                   <div key={i} className="flex items-center justify-between p-2 bg-muted/50 rounded">
                     <span>{step.name}</span>
                     <Badge variant="outline">{step.status}</Badge>
