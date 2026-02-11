@@ -23,10 +23,10 @@ const connectionIcons = {
 };
 
 const connectionColors = {
-  '4g': 'text-green-500 bg-green-500/10 border-green-500/20',
-  '3g': 'text-yellow-500 bg-yellow-500/10 border-yellow-500/20',
-  '2g': 'text-orange-500 bg-orange-500/10 border-orange-500/20',
-  'slow-2g': 'text-red-500 bg-red-500/10 border-red-500/20',
+  '4g': 'text-success bg-success/10 border-success/20',
+  '3g': 'text-warning bg-warning/10 border-warning/20',
+  '2g': 'text-accent-foreground bg-accent/10 border-accent/20',
+  'slow-2g': 'text-destructive bg-destructive/10 border-destructive/20',
   'offline': 'text-muted-foreground bg-muted border-border',
 };
 
@@ -35,8 +35,6 @@ const connectionLabels = {
   '3g': 'Conexão moderada',
   '2g': 'Conexão lenta - modo economia ativo',
   'slow-2g': 'Conexão muito lenta - modo ultra economia',
-  // PATCH v15 iOS PWA: Removido 'offline' - nunca mostrar status offline
-  // 'offline': 'Sem conexão - modo offline', // REMOVIDO
 };
 
 export const BandwidthIndicator = memo(function BandwidthIndicator({

@@ -10,8 +10,6 @@ import {
   AlertCircle,
   Clock,
   FileText,
-  Calendar,
-  Users,
   TrendingUp,
   Shield
 } from "lucide-react";
@@ -50,11 +48,11 @@ const ANP_PRACTICES: AnpPractice[] = [
 const getStatusIcon = (status: string) => {
   switch (status) {
   case "compliant":
-    return <CheckCircle className="h-5 w-5 text-green-600" />;
+    return <CheckCircle className="h-5 w-5 text-success" />;
   case "non_compliant":
-    return <XCircle className="h-5 w-5 text-red-600" />;
+    return <XCircle className="h-5 w-5 text-destructive" />;
   case "in_progress":
-    return <Clock className="h-5 w-5 text-yellow-600" />;
+    return <Clock className="h-5 w-5 text-warning" />;
   case "pending":
     return <AlertCircle className="h-5 w-5 text-muted-foreground" />;
   default:
@@ -63,14 +61,14 @@ const getStatusIcon = (status: string) => {
 };
 
 const getStatusBadge = (status: string) => {
-  const styles = {
-    compliant: "bg-green-100 text-green-800 border-green-200",
-    non_compliant: "bg-red-100 text-red-800 border-red-200",
-    in_progress: "bg-yellow-100 text-yellow-800 border-yellow-200",
+  const styles: Record<string, string> = {
+    compliant: "bg-success/10 text-success border-success/20",
+    non_compliant: "bg-destructive/10 text-destructive border-destructive/20",
+    in_progress: "bg-warning/10 text-warning border-warning/20",
     pending: "bg-secondary text-secondary-foreground border-border"
   };
 
-  const labels = {
+  const labels: Record<string, string> = {
     compliant: "Conforme",
     non_compliant: "Não Conforme",
     in_progress: "Em Andamento",
@@ -78,8 +76,8 @@ const getStatusBadge = (status: string) => {
   };
 
   return (
-    <Badge className={`${styles[status as keyof typeof styles]} border font-semibold`}>
-      {labels[status as keyof typeof labels]}
+    <Badge className={`${styles[status] || styles.pending} border font-semibold`}>
+      {labels[status] || status}
     </Badge>
   );
 };
@@ -92,54 +90,57 @@ export const AnpPracticesManager: React.FC = () => {
   const inProgressCount = ANP_PRACTICES.filter(p => p.status === "in_progress").length;
   const overallCompliance = Math.round(ANP_PRACTICES.reduce((acc, p) => acc + p.compliance_level, 0) / 17);
 
+  // Suppress unused variable warning
+  void selectedPractice;
+
   return (
     <div className="space-y-6">
       {/* Header Stats */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-        <Card className="bg-gradient-to-br from-green-50 to-green-100 border-green-200">
+        <Card className="bg-gradient-to-br from-success/5 to-success/10 border-success/20">
           <CardContent className="p-6">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium text-green-700">Conformes</p>
-                <p className="text-3xl font-bold text-green-900">{compliantCount}</p>
+                <p className="text-sm font-medium text-success">Conformes</p>
+                <p className="text-3xl font-bold text-foreground">{compliantCount}</p>
               </div>
-              <CheckCircle className="h-12 w-12 text-green-600 opacity-70" />
+              <CheckCircle className="h-12 w-12 text-success opacity-70" />
             </div>
           </CardContent>
         </Card>
 
-        <Card className="bg-gradient-to-br from-red-50 to-red-100 border-red-200">
+        <Card className="bg-gradient-to-br from-destructive/5 to-destructive/10 border-destructive/20">
           <CardContent className="p-6">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium text-red-700">Não Conformes</p>
-                <p className="text-3xl font-bold text-red-900">{nonCompliantCount}</p>
+                <p className="text-sm font-medium text-destructive">Não Conformes</p>
+                <p className="text-3xl font-bold text-foreground">{nonCompliantCount}</p>
               </div>
-              <XCircle className="h-12 w-12 text-red-600 opacity-70" />
+              <XCircle className="h-12 w-12 text-destructive opacity-70" />
             </div>
           </CardContent>
         </Card>
 
-        <Card className="bg-gradient-to-br from-yellow-50 to-yellow-100 border-yellow-200">
+        <Card className="bg-gradient-to-br from-warning/5 to-warning/10 border-warning/20">
           <CardContent className="p-6">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium text-yellow-700">Em Andamento</p>
-                <p className="text-3xl font-bold text-yellow-900">{inProgressCount}</p>
+                <p className="text-sm font-medium text-warning">Em Andamento</p>
+                <p className="text-3xl font-bold text-foreground">{inProgressCount}</p>
               </div>
-              <Clock className="h-12 w-12 text-yellow-600 opacity-70" />
+              <Clock className="h-12 w-12 text-warning opacity-70" />
             </div>
           </CardContent>
         </Card>
 
-        <Card className="bg-gradient-to-br from-blue-50 to-blue-100 border-blue-200">
+        <Card className="bg-gradient-to-br from-primary/5 to-primary/10 border-primary/20">
           <CardContent className="p-6">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium text-blue-700">Compliance Geral</p>
-                <p className="text-3xl font-bold text-blue-900">{overallCompliance}%</p>
+                <p className="text-sm font-medium text-primary">Compliance Geral</p>
+                <p className="text-3xl font-bold text-foreground">{overallCompliance}%</p>
               </div>
-              <TrendingUp className="h-12 w-12 text-blue-600 opacity-70" />
+              <TrendingUp className="h-12 w-12 text-primary opacity-70" />
             </div>
           </CardContent>
         </Card>
@@ -149,7 +150,7 @@ export const AnpPracticesManager: React.FC = () => {
       <Card>
         <CardHeader>
           <CardTitle className="flex items-center gap-2 text-2xl">
-            <Shield className="h-6 w-6 text-red-600" />
+            <Shield className="h-6 w-6 text-destructive" />
             17 Práticas ANP Obrigatórias - Resolução 43/2007
           </CardTitle>
           <CardDescription>
@@ -180,10 +181,10 @@ export const AnpPracticesManager: React.FC = () => {
                           {getStatusIcon(practice.status)}
                           <div className="flex-1">
                             <div className="flex items-center gap-2 mb-1">
-                              <Badge variant="outline" className="bg-blue-50 text-blue-700 border-blue-300 font-bold">
+                              <Badge variant="outline" className="bg-primary/5 text-primary border-primary/30 font-bold">
                                 Prática {practice.id}
                               </Badge>
-                              <h3 className="font-bold text-lg text-gray-900">{practice.name}</h3>
+                              <h3 className="font-bold text-lg text-foreground">{practice.name}</h3>
                             </div>
                             <p className="text-sm text-muted-foreground">{practice.description}</p>
                           </div>
@@ -191,8 +192,8 @@ export const AnpPracticesManager: React.FC = () => {
                         
                         <div className="space-y-1">
                           <div className="flex items-center justify-between text-sm">
-                            <span className="font-medium text-gray-700">Nível de Conformidade</span>
-                            <span className="font-bold text-gray-900">{practice.compliance_level}%</span>
+                            <span className="font-medium text-muted-foreground">Nível de Conformidade</span>
+                            <span className="font-bold text-foreground">{practice.compliance_level}%</span>
                           </div>
                           <Progress 
                             value={practice.compliance_level} 
@@ -203,7 +204,7 @@ export const AnpPracticesManager: React.FC = () => {
                       
                       <div className="flex flex-col items-end gap-2">
                         {getStatusBadge(practice.status)}
-                        <Button variant="outline" size="sm" className="bg-white hover:bg-gray-50">
+                        <Button variant="outline" size="sm">
                           <FileText className="h-4 w-4 mr-2" />
                           Detalhes
                         </Button>
@@ -229,10 +230,10 @@ export const AnpPracticesManager: React.FC = () => {
                             {getStatusIcon(practice.status)}
                             <div className="flex-1">
                               <div className="flex items-center gap-2 mb-1">
-                                <Badge variant="outline" className="bg-blue-50 text-blue-700 border-blue-300 font-bold">
+                                <Badge variant="outline" className="bg-primary/5 text-primary border-primary/30 font-bold">
                                   Prática {practice.id}
                                 </Badge>
-                                <h3 className="font-bold text-lg text-gray-900">{practice.name}</h3>
+                                <h3 className="font-bold text-lg text-foreground">{practice.name}</h3>
                               </div>
                               <p className="text-sm text-muted-foreground">{practice.description}</p>
                             </div>
@@ -240,8 +241,8 @@ export const AnpPracticesManager: React.FC = () => {
                           
                           <div className="space-y-1">
                             <div className="flex items-center justify-between text-sm">
-                              <span className="font-medium text-gray-700">Nível de Conformidade</span>
-                              <span className="font-bold text-gray-900">{practice.compliance_level}%</span>
+                              <span className="font-medium text-muted-foreground">Nível de Conformidade</span>
+                              <span className="font-bold text-foreground">{practice.compliance_level}%</span>
                             </div>
                             <Progress 
                               value={practice.compliance_level} 
@@ -252,7 +253,7 @@ export const AnpPracticesManager: React.FC = () => {
                         
                         <div className="flex flex-col items-end gap-2">
                           {getStatusBadge(practice.status)}
-                          <Button variant="outline" size="sm" className="bg-white hover:bg-gray-50">
+                          <Button variant="outline" size="sm">
                             <FileText className="h-4 w-4 mr-2" />
                             Detalhes
                           </Button>

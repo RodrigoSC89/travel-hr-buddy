@@ -53,11 +53,10 @@ export const HealthStatusDashboard: React.FC = () => {
         uptime: `${days}d ${hours}h ${minutes}m`
       }));
     },
-    interval: 60000, // Update every minute
+    interval: 60000,
   });
 
   useEffect(() => {
-    // Calculate metrics from health status
     if (healthStatus.size > 0) {
       let totalRequests = 0;
       let totalResponseTime = 0;
@@ -75,7 +74,7 @@ export const HealthStatusDashboard: React.FC = () => {
         ...prev,
         requestCount: totalRequests,
         avgResponseTime: responseTimeCount > 0 ? Math.round(totalResponseTime / responseTimeCount) : 0,
-        memoryUsage: Math.min(95, 45 + (totalRequests % 15)) // Derived from request count
+        memoryUsage: Math.min(95, 45 + (totalRequests % 15))
       }));
       
       setLastUpdate(new Date());
@@ -85,11 +84,11 @@ export const HealthStatusDashboard: React.FC = () => {
   const getStatusIcon = (status: "healthy" | "degraded" | "down") => {
     switch (status) {
     case "healthy":
-      return <CheckCircle2 className="h-5 w-5 text-green-500" />;
+      return <CheckCircle2 className="h-5 w-5 text-success" />;
     case "degraded":
-      return <AlertTriangle className="h-5 w-5 text-yellow-500" />;
+      return <AlertTriangle className="h-5 w-5 text-warning" />;
     case "down":
-      return <AlertCircle className="h-5 w-5 text-red-500" />;
+      return <AlertCircle className="h-5 w-5 text-destructive" />;
     }
   };
 
@@ -114,7 +113,6 @@ export const HealthStatusDashboard: React.FC = () => {
 
   return (
     <div className="space-y-6">
-      {/* Overall Status Alert */}
       {hasCritical && (
         <Alert variant="destructive">
           <AlertCircle className="h-4 w-4" />
@@ -135,7 +133,6 @@ export const HealthStatusDashboard: React.FC = () => {
         </Alert>
       )}
 
-      {/* System Overview Cards */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
@@ -145,11 +142,11 @@ export const HealthStatusDashboard: React.FC = () => {
           <CardContent>
             <div className="flex items-center gap-2">
               {overallHealthy ? (
-                <CheckCircle2 className="h-6 w-6 text-green-500" />
+                <CheckCircle2 className="h-6 w-6 text-success" />
               ) : hasCritical ? (
-                <AlertCircle className="h-6 w-6 text-red-500" />
+                <AlertCircle className="h-6 w-6 text-destructive" />
               ) : (
-                <AlertTriangle className="h-6 w-6 text-yellow-500" />
+                <AlertTriangle className="h-6 w-6 text-warning" />
               )}
               <div className="text-2xl font-bold">
                 {overallHealthy ? "OK" : hasCritical ? "Crítico" : "Atenção"}
@@ -168,9 +165,7 @@ export const HealthStatusDashboard: React.FC = () => {
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">{systemMetrics.uptime}</div>
-            <p className="text-xs text-muted-foreground">
-              Desde o último carregamento
-            </p>
+            <p className="text-xs text-muted-foreground">Desde o último carregamento</p>
           </CardContent>
         </Card>
 
@@ -181,9 +176,7 @@ export const HealthStatusDashboard: React.FC = () => {
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">{systemMetrics.requestCount}</div>
-            <p className="text-xs text-muted-foreground">
-              Total processadas
-            </p>
+            <p className="text-xs text-muted-foreground">Total processadas</p>
           </CardContent>
         </Card>
 
@@ -194,28 +187,19 @@ export const HealthStatusDashboard: React.FC = () => {
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">{systemMetrics.avgResponseTime}ms</div>
-            <p className="text-xs text-muted-foreground">
-              Média atual
-            </p>
+            <p className="text-xs text-muted-foreground">Média atual</p>
           </CardContent>
         </Card>
       </div>
 
-      {/* API Services Health */}
       <Card>
         <CardHeader>
           <div className="flex items-center justify-between">
             <div>
               <CardTitle>Saúde dos Serviços</CardTitle>
-              <CardDescription>
-                Status em tempo real das APIs e integrações externas
-              </CardDescription>
+              <CardDescription>Status em tempo real das APIs e integrações externas</CardDescription>
             </div>
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={() => window.location.reload()}
-            >
+            <Button variant="outline" size="sm" onClick={() => window.location.reload()}>
               <RefreshCw className="h-4 w-4 mr-2" />
               Atualizar
             </Button>
@@ -269,11 +253,11 @@ export const HealthStatusDashboard: React.FC = () => {
                     </div>
                     <div>
                       <p className="text-muted-foreground">Sucessos</p>
-                      <p className="font-medium text-green-600">{status.successCount}</p>
+                      <p className="font-medium text-success">{status.successCount}</p>
                     </div>
                     <div>
                       <p className="text-muted-foreground">Erros</p>
-                      <p className="font-medium text-red-600">{status.errorCount}</p>
+                      <p className="font-medium text-destructive">{status.errorCount}</p>
                     </div>
                     <div>
                       <p className="text-muted-foreground">Tempo de Resposta</p>
@@ -290,11 +274,7 @@ export const HealthStatusDashboard: React.FC = () => {
                           ? "Circuit breaker pode estar ativo. Tentativas automáticas em andamento."
                           : "Performance degradada detectada. Monitore atentamente."}
                       </p>
-                      <Button
-                        variant="outline"
-                        size="sm"
-                        onClick={() => resetCircuitBreaker(name)}
-                      >
+                      <Button variant="outline" size="sm" onClick={() => resetCircuitBreaker(name)}>
                         Resetar Circuit Breaker
                       </Button>
                     </div>
@@ -316,22 +296,17 @@ export const HealthStatusDashboard: React.FC = () => {
         </CardContent>
       </Card>
 
-      {/* System Resources */}
       <Card>
         <CardHeader>
           <CardTitle>Recursos do Sistema</CardTitle>
-          <CardDescription>
-            Monitoramento de uso de recursos do navegador
-          </CardDescription>
+          <CardDescription>Monitoramento de uso de recursos do navegador</CardDescription>
         </CardHeader>
         <CardContent>
           <div className="space-y-4">
             <div>
               <div className="flex items-center justify-between mb-2">
                 <span className="text-sm font-medium">Uso de Memória (Estimado)</span>
-                <span className="text-sm text-muted-foreground">
-                  {systemMetrics.memoryUsage.toFixed(1)}%
-                </span>
+                <span className="text-sm text-muted-foreground">{systemMetrics.memoryUsage.toFixed(1)}%</span>
               </div>
               <Progress value={systemMetrics.memoryUsage} />
             </div>
@@ -340,22 +315,20 @@ export const HealthStatusDashboard: React.FC = () => {
               <div className="border rounded-lg p-3">
                 <p className="text-sm text-muted-foreground mb-1">Cache Status</p>
                 <div className="flex items-center gap-2">
-                  <CheckCircle2 className="h-4 w-4 text-green-500" />
+                  <CheckCircle2 className="h-4 w-4 text-success" />
                   <span className="font-medium">Ativo</span>
                 </div>
               </div>
               
               <div className="border rounded-lg p-3">
                 <p className="text-sm text-muted-foreground mb-1">Última Atualização</p>
-                <span className="font-medium">
-                  {lastUpdate.toLocaleTimeString("pt-BR")}
-                </span>
+                <span className="font-medium">{lastUpdate.toLocaleTimeString("pt-BR")}</span>
               </div>
               
               <div className="border rounded-lg p-3">
                 <p className="text-sm text-muted-foreground mb-1">Connection</p>
                 <div className="flex items-center gap-2">
-                  <div className={`h-2 w-2 rounded-full ${overallHealthy ? "bg-green-500" : "bg-red-500"} animate-pulse`}></div>
+                  <div className={`h-2 w-2 rounded-full ${overallHealthy ? "bg-success" : "bg-destructive"} animate-pulse`}></div>
                   <span className="font-medium">Online</span>
                 </div>
               </div>
@@ -364,7 +337,6 @@ export const HealthStatusDashboard: React.FC = () => {
         </CardContent>
       </Card>
 
-      {/* Additional Info */}
       <Card>
         <CardHeader>
           <CardTitle>Informações de Monitoramento</CardTitle>
@@ -372,19 +344,19 @@ export const HealthStatusDashboard: React.FC = () => {
         <CardContent>
           <div className="space-y-2 text-sm">
             <p className="flex items-center gap-2">
-              <CheckCircle2 className="h-4 w-4 text-green-500" />
+              <CheckCircle2 className="h-4 w-4 text-success" />
               Circuit breaker ativo: protege contra falhas em cascata
             </p>
             <p className="flex items-center gap-2">
-              <CheckCircle2 className="h-4 w-4 text-green-500" />
+              <CheckCircle2 className="h-4 w-4 text-success" />
               Retry logic: máximo 3 tentativas com backoff exponencial
             </p>
             <p className="flex items-center gap-2">
-              <CheckCircle2 className="h-4 w-4 text-green-500" />
+              <CheckCircle2 className="h-4 w-4 text-success" />
               Health checks: executados a cada 30 segundos
             </p>
             <p className="flex items-center gap-2">
-              <CheckCircle2 className="h-4 w-4 text-green-500" />
+              <CheckCircle2 className="h-4 w-4 text-success" />
               Timeout threshold: 60 segundos para reset automático
             </p>
           </div>

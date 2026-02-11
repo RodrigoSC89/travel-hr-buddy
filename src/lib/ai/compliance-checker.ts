@@ -1,7 +1,21 @@
 /**
- * Compliance Checker - PATCH 950
+ * Compliance Checker - PATCH 960
  * Verifies compliance with ANTAQ, MARPOL, ESG regulations
+ * Typed data parameter with ComplianceData interface
  */
+
+export interface ComplianceData {
+  vessel?: {
+    registrationExpiry?: string;
+    sewageTreatmentSystem?: { certified?: boolean; certificateNumber?: string };
+    smcCertificate?: { valid?: boolean; expiry?: string; number?: string };
+  };
+  oilRecordBook?: { lastEntry?: string };
+  emissions?: { monthlyRecords?: Array<{ date: string; value?: number }> };
+  wasteManagement?: { planApproved?: boolean };
+  company?: { docCertificate?: { valid?: boolean; number?: string } };
+  maintenance?: { overdueTasks?: number };
+}
 
 export interface ComplianceRule {
   id: string;
@@ -10,7 +24,7 @@ export interface ComplianceRule {
   category: string;
   description: string;
   requirement: string;
-  checkFunction: (data: any) => ComplianceCheckResult;
+  checkFunction: (data: ComplianceData) => ComplianceCheckResult;
   severity: 'info' | 'warning' | 'critical';
   penalty?: string;
 }
@@ -52,51 +66,19 @@ const COMPLIANCE_RULES: ComplianceRule[] = [
     checkFunction: (data) => {
       const vessel = data.vessel;
       if (!vessel?.registrationExpiry) {
-        return {
-          ruleId: 'antaq-001',
-          passed: false,
-          status: 'non_compliant',
-          message: 'Registro de embarcação não encontrado',
-          recommendation: 'Atualize o registro da embarcação imediatamente',
-          checkedAt: new Date()
-        };
+        return { ruleId: 'antaq-001', passed: false, status: 'non_compliant', message: 'Registro de embarcação não encontrado', recommendation: 'Atualize o registro da embarcação imediatamente', checkedAt: new Date() };
       }
       const expiry = new Date(vessel.registrationExpiry);
       const daysUntilExpiry = (expiry.getTime() - Date.now()) / (1000 * 60 * 60 * 24);
-      
       if (daysUntilExpiry < 0) {
-        return {
-          ruleId: 'antaq-001',
-          passed: false,
-          status: 'non_compliant',
-          message: 'Registro da embarcação expirado',
-          details: `Expirou em ${expiry.toLocaleDateString()}`,
-          recommendation: 'Renove o registro urgentemente para evitar penalidades',
-          checkedAt: new Date()
-        };
+        return { ruleId: 'antaq-001', passed: false, status: 'non_compliant', message: 'Registro da embarcação expirado', details: `Expirou em ${expiry.toLocaleDateString()}`, recommendation: 'Renove o registro urgentemente para evitar penalidades', checkedAt: new Date() };
       }
       if (daysUntilExpiry < 30) {
-        return {
-          ruleId: 'antaq-001',
-          passed: true,
-          status: 'warning',
-          message: 'Registro próximo do vencimento',
-          details: `Expira em ${Math.floor(daysUntilExpiry)} dias`,
-          recommendation: 'Inicie o processo de renovação',
-          checkedAt: new Date()
-        };
+        return { ruleId: 'antaq-001', passed: true, status: 'warning', message: 'Registro próximo do vencimento', details: `Expira em ${Math.floor(daysUntilExpiry)} dias`, recommendation: 'Inicie o processo de renovação', checkedAt: new Date() };
       }
-      return {
-        ruleId: 'antaq-001',
-        passed: true,
-        status: 'compliant',
-        message: 'Registro de embarcação válido',
-        evidence: `Válido até ${expiry.toLocaleDateString()}`,
-        checkedAt: new Date()
-      };
+      return { ruleId: 'antaq-001', passed: true, status: 'compliant', message: 'Registro de embarcação válido', evidence: `Válido até ${expiry.toLocaleDateString()}`, checkedAt: new Date() };
     }
   },
-  
   // MARPOL Rules
   {
     id: 'marpol-001',
@@ -110,34 +92,13 @@ const COMPLIANCE_RULES: ComplianceRule[] = [
     checkFunction: (data) => {
       const lastOilRecord = data.oilRecordBook?.lastEntry;
       if (!lastOilRecord) {
-        return {
-          ruleId: 'marpol-001',
-          passed: false,
-          status: 'non_compliant',
-          message: 'Livro de Registro de Óleo não encontrado',
-          recommendation: 'Implemente o registro de operações de óleo imediatamente',
-          checkedAt: new Date()
-        };
+        return { ruleId: 'marpol-001', passed: false, status: 'non_compliant', message: 'Livro de Registro de Óleo não encontrado', recommendation: 'Implemente o registro de operações de óleo imediatamente', checkedAt: new Date() };
       }
       const daysSinceLastEntry = (Date.now() - new Date(lastOilRecord).getTime()) / (1000 * 60 * 60 * 24);
       if (daysSinceLastEntry > 7) {
-        return {
-          ruleId: 'marpol-001',
-          passed: false,
-          status: 'warning',
-          message: 'Registro de óleo desatualizado',
-          details: `Última entrada há ${Math.floor(daysSinceLastEntry)} dias`,
-          recommendation: 'Atualize o registro de operações de óleo',
-          checkedAt: new Date()
-        };
+        return { ruleId: 'marpol-001', passed: false, status: 'warning', message: 'Registro de óleo desatualizado', details: `Última entrada há ${Math.floor(daysSinceLastEntry)} dias`, recommendation: 'Atualize o registro de operações de óleo', checkedAt: new Date() };
       }
-      return {
-        ruleId: 'marpol-001',
-        passed: true,
-        status: 'compliant',
-        message: 'Registro de óleo em dia',
-        checkedAt: new Date()
-      };
+      return { ruleId: 'marpol-001', passed: true, status: 'compliant', message: 'Registro de óleo em dia', checkedAt: new Date() };
     }
   },
   {
@@ -151,26 +112,11 @@ const COMPLIANCE_RULES: ComplianceRule[] = [
     checkFunction: (data) => {
       const sewageSystem = data.vessel?.sewageTreatmentSystem;
       if (!sewageSystem?.certified) {
-        return {
-          ruleId: 'marpol-002',
-          passed: false,
-          status: 'non_compliant',
-          message: 'Sistema de tratamento de esgoto não certificado',
-          recommendation: 'Obtenha certificação do sistema de tratamento',
-          checkedAt: new Date()
-        };
+        return { ruleId: 'marpol-002', passed: false, status: 'non_compliant', message: 'Sistema de tratamento de esgoto não certificado', recommendation: 'Obtenha certificação do sistema de tratamento', checkedAt: new Date() };
       }
-      return {
-        ruleId: 'marpol-002',
-        passed: true,
-        status: 'compliant',
-        message: 'Sistema de esgoto certificado',
-        evidence: `Certificado: ${sewageSystem.certificateNumber}`,
-        checkedAt: new Date()
-      };
+      return { ruleId: 'marpol-002', passed: true, status: 'compliant', message: 'Sistema de esgoto certificado', evidence: `Certificado: ${sewageSystem.certificateNumber}`, checkedAt: new Date() };
     }
   },
-
   // ESG Rules
   {
     id: 'esg-001',
@@ -183,36 +129,14 @@ const COMPLIANCE_RULES: ComplianceRule[] = [
     checkFunction: (data) => {
       const emissions = data.emissions?.monthlyRecords;
       if (!emissions || emissions.length === 0) {
-        return {
-          ruleId: 'esg-001',
-          passed: false,
-          status: 'non_compliant',
-          message: 'Sem registro de emissões',
-          recommendation: 'Implemente monitoramento de emissões de CO2',
-          checkedAt: new Date()
-        };
+        return { ruleId: 'esg-001', passed: false, status: 'non_compliant', message: 'Sem registro de emissões', recommendation: 'Implemente monitoramento de emissões de CO2', checkedAt: new Date() };
       }
       const lastRecord = emissions[emissions.length - 1];
       const daysSinceLastRecord = (Date.now() - new Date(lastRecord.date).getTime()) / (1000 * 60 * 60 * 24);
-      
       if (daysSinceLastRecord > 35) {
-        return {
-          ruleId: 'esg-001',
-          passed: false,
-          status: 'warning',
-          message: 'Registro de emissões desatualizado',
-          recommendation: 'Atualize o registro mensal de emissões',
-          checkedAt: new Date()
-        };
+        return { ruleId: 'esg-001', passed: false, status: 'warning', message: 'Registro de emissões desatualizado', recommendation: 'Atualize o registro mensal de emissões', checkedAt: new Date() };
       }
-      return {
-        ruleId: 'esg-001',
-        passed: true,
-        status: 'compliant',
-        message: 'Monitoramento de emissões em dia',
-        evidence: `Último registro: ${new Date(lastRecord.date).toLocaleDateString()}`,
-        checkedAt: new Date()
-      };
+      return { ruleId: 'esg-001', passed: true, status: 'compliant', message: 'Monitoramento de emissões em dia', evidence: `Último registro: ${new Date(lastRecord.date).toLocaleDateString()}`, checkedAt: new Date() };
     }
   },
   {
@@ -226,25 +150,11 @@ const COMPLIANCE_RULES: ComplianceRule[] = [
     checkFunction: (data) => {
       const wasteManagement = data.wasteManagement;
       if (!wasteManagement?.planApproved) {
-        return {
-          ruleId: 'esg-002',
-          passed: false,
-          status: 'non_compliant',
-          message: 'Plano de gestão de resíduos não aprovado',
-          recommendation: 'Desenvolva e aprove um plano de gestão de resíduos',
-          checkedAt: new Date()
-        };
+        return { ruleId: 'esg-002', passed: false, status: 'non_compliant', message: 'Plano de gestão de resíduos não aprovado', recommendation: 'Desenvolva e aprove um plano de gestão de resíduos', checkedAt: new Date() };
       }
-      return {
-        ruleId: 'esg-002',
-        passed: true,
-        status: 'compliant',
-        message: 'Plano de resíduos aprovado',
-        checkedAt: new Date()
-      };
+      return { ruleId: 'esg-002', passed: true, status: 'compliant', message: 'Plano de resíduos aprovado', checkedAt: new Date() };
     }
   },
-
   // ISM Rules
   {
     id: 'ism-001',
@@ -257,23 +167,9 @@ const COMPLIANCE_RULES: ComplianceRule[] = [
     checkFunction: (data) => {
       const doc = data.company?.docCertificate;
       if (!doc?.valid) {
-        return {
-          ruleId: 'ism-001',
-          passed: false,
-          status: 'non_compliant',
-          message: 'Documento de Conformidade inválido ou ausente',
-          recommendation: 'Obtenha ou renove o DOC junto à autoridade marítima',
-          checkedAt: new Date()
-        };
+        return { ruleId: 'ism-001', passed: false, status: 'non_compliant', message: 'Documento de Conformidade inválido ou ausente', recommendation: 'Obtenha ou renove o DOC junto à autoridade marítima', checkedAt: new Date() };
       }
-      return {
-        ruleId: 'ism-001',
-        passed: true,
-        status: 'compliant',
-        message: 'DOC válido',
-        evidence: `Número: ${doc.number}`,
-        checkedAt: new Date()
-      };
+      return { ruleId: 'ism-001', passed: true, status: 'compliant', message: 'DOC válido', evidence: `Número: ${doc.number}`, checkedAt: new Date() };
     }
   },
   {
@@ -287,40 +183,16 @@ const COMPLIANCE_RULES: ComplianceRule[] = [
     checkFunction: (data) => {
       const smc = data.vessel?.smcCertificate;
       if (!smc?.valid) {
-        return {
-          ruleId: 'ism-002',
-          passed: false,
-          status: 'non_compliant',
-          message: 'SMC inválido ou ausente',
-          recommendation: 'Obtenha ou renove o SMC da embarcação',
-          checkedAt: new Date()
-        };
+        return { ruleId: 'ism-002', passed: false, status: 'non_compliant', message: 'SMC inválido ou ausente', recommendation: 'Obtenha ou renove o SMC da embarcação', checkedAt: new Date() };
       }
-      const expiry = new Date(smc.expiry);
+      const expiry = new Date(smc.expiry || '');
       const daysUntilExpiry = (expiry.getTime() - Date.now()) / (1000 * 60 * 60 * 24);
-      
       if (daysUntilExpiry < 60) {
-        return {
-          ruleId: 'ism-002',
-          passed: true,
-          status: 'warning',
-          message: 'SMC próximo do vencimento',
-          details: `Expira em ${Math.floor(daysUntilExpiry)} dias`,
-          recommendation: 'Inicie o processo de renovação',
-          checkedAt: new Date()
-        };
+        return { ruleId: 'ism-002', passed: true, status: 'warning', message: 'SMC próximo do vencimento', details: `Expira em ${Math.floor(daysUntilExpiry)} dias`, recommendation: 'Inicie o processo de renovação', checkedAt: new Date() };
       }
-      return {
-        ruleId: 'ism-002',
-        passed: true,
-        status: 'compliant',
-        message: 'SMC válido',
-        evidence: `Válido até ${expiry.toLocaleDateString()}`,
-        checkedAt: new Date()
-      };
+      return { ruleId: 'ism-002', passed: true, status: 'compliant', message: 'SMC válido', evidence: `Válido até ${expiry.toLocaleDateString()}`, checkedAt: new Date() };
     }
   },
-
   // Internal Rules
   {
     id: 'int-001',
@@ -333,42 +205,16 @@ const COMPLIANCE_RULES: ComplianceRule[] = [
     checkFunction: (data) => {
       const maintenance = data.maintenance;
       if (!maintenance) {
-        return {
-          ruleId: 'int-001',
-          passed: false,
-          status: 'not_applicable',
-          message: 'Dados de manutenção não disponíveis',
-          checkedAt: new Date()
-        };
+        return { ruleId: 'int-001', passed: false, status: 'not_applicable', message: 'Dados de manutenção não disponíveis', checkedAt: new Date() };
       }
       const overdueCount = maintenance.overdueTasks || 0;
       if (overdueCount > 5) {
-        return {
-          ruleId: 'int-001',
-          passed: false,
-          status: 'non_compliant',
-          message: `${overdueCount} tarefas de manutenção atrasadas`,
-          recommendation: 'Priorize a execução das manutenções pendentes',
-          checkedAt: new Date()
-        };
+        return { ruleId: 'int-001', passed: false, status: 'non_compliant', message: `${overdueCount} tarefas de manutenção atrasadas`, recommendation: 'Priorize a execução das manutenções pendentes', checkedAt: new Date() };
       }
       if (overdueCount > 0) {
-        return {
-          ruleId: 'int-001',
-          passed: true,
-          status: 'warning',
-          message: `${overdueCount} tarefa(s) de manutenção atrasada(s)`,
-          recommendation: 'Execute as manutenções pendentes',
-          checkedAt: new Date()
-        };
+        return { ruleId: 'int-001', passed: true, status: 'warning', message: `${overdueCount} tarefa(s) de manutenção atrasada(s)`, recommendation: 'Execute as manutenções pendentes', checkedAt: new Date() };
       }
-      return {
-        ruleId: 'int-001',
-        passed: true,
-        status: 'compliant',
-        message: 'Manutenção preventiva em dia',
-        checkedAt: new Date()
-      };
+      return { ruleId: 'int-001', passed: true, status: 'compliant', message: 'Manutenção preventiva em dia', checkedAt: new Date() };
     }
   }
 ];
@@ -379,22 +225,19 @@ class ComplianceChecker {
   /**
    * Run all compliance checks
    */
-  runFullCheck(data: any): ComplianceReport {
+  runFullCheck(data: ComplianceData): ComplianceReport {
     const results: ComplianceCheckResult[] = [];
     const byRegulation: Record<string, { total: number; passed: number; score: number }> = {};
 
-    // Initialize regulation counters
     const regulations = [...new Set(this.rules.map(r => r.regulation))];
     regulations.forEach(reg => {
       byRegulation[reg] = { total: 0, passed: 0, score: 0 };
     });
 
-    // Run each rule
     this.rules.forEach(rule => {
       try {
         const result = rule.checkFunction(data);
         results.push(result);
-        
         byRegulation[rule.regulation].total++;
         if (result.passed) {
           byRegulation[rule.regulation].passed++;
@@ -410,7 +253,6 @@ class ComplianceChecker {
       }
     });
 
-    // Calculate scores
     let totalScore = 0;
     let totalWeight = 0;
     
@@ -424,26 +266,19 @@ class ComplianceChecker {
     });
 
     const overallScore = totalWeight > 0 ? Math.round(totalScore / totalWeight) : 0;
-
-    // Get critical issues
     const criticalIssues = results.filter(r => 
-      !r.passed && 
-      this.rules.find(rule => rule.id === r.ruleId)?.severity === 'critical'
+      !r.passed && this.rules.find(rule => rule.id === r.ruleId)?.severity === 'critical'
     );
 
-    // Generate recommendations
     const recommendations: string[] = [];
-    
     if (criticalIssues.length > 0) {
       recommendations.push(`⚠️ ${criticalIssues.length} problema(s) crítico(s) requerem atenção imediata`);
     }
-    
     Object.entries(byRegulation).forEach(([reg, stats]) => {
       if (stats.score < 80) {
         recommendations.push(`Melhore a conformidade com ${reg}: atual ${stats.score}%`);
       }
     });
-
     if (overallScore >= 90) {
       recommendations.push('✅ Excelente nível de conformidade. Mantenha o monitoramento regular.');
     }
@@ -463,7 +298,7 @@ class ComplianceChecker {
   /**
    * Check specific regulation
    */
-  checkRegulation(regulation: ComplianceRule['regulation'], data: any): ComplianceCheckResult[] {
+  checkRegulation(regulation: ComplianceRule['regulation'], data: ComplianceData): ComplianceCheckResult[] {
     return this.rules
       .filter(r => r.regulation === regulation)
       .map(rule => {
@@ -481,63 +316,24 @@ class ComplianceChecker {
       });
   }
 
-  /**
-   * Get all rules
-   */
   getRules(): ComplianceRule[] {
     return [...this.rules];
   }
 
-  /**
-   * Get rules by regulation
-   */
   getRulesByRegulation(regulation: ComplianceRule['regulation']): ComplianceRule[] {
     return this.rules.filter(r => r.regulation === regulation);
   }
 
-  /**
-   * Get rules by category
-   */
   getRulesByCategory(category: string): ComplianceRule[] {
     return this.rules.filter(r => r.category === category);
   }
 
-  /**
-   * Add custom rule
-   */
-  addRule(rule: ComplianceRule): void {
+  addCustomRule(rule: ComplianceRule): void {
     this.rules.push(rule);
   }
 
-  /**
-   * Get compliance summary for display
-   */
-  getSummary(report: ComplianceReport): string {
-    let summary = `## Relatório de Conformidade\n\n`;
-    summary += `**Score Geral: ${report.overallScore}%**\n\n`;
-    
-    summary += `### Por Regulação:\n`;
-    Object.entries(report.byRegulation).forEach(([reg, stats]) => {
-      const icon = stats.score >= 80 ? '✅' : stats.score >= 50 ? '⚠️' : '❌';
-      summary += `- ${icon} ${reg}: ${stats.score}% (${stats.passed}/${stats.total})\n`;
-    });
-
-    if (report.criticalIssues.length > 0) {
-      summary += `\n### ⚠️ Problemas Críticos:\n`;
-      report.criticalIssues.forEach(issue => {
-        summary += `- ${issue.message}\n`;
-        if (issue.recommendation) {
-          summary += `  → ${issue.recommendation}\n`;
-        }
-      });
-    }
-
-    summary += `\n### Recomendações:\n`;
-    report.recommendations.forEach(rec => {
-      summary += `- ${rec}\n`;
-    });
-
-    return summary;
+  removeRule(ruleId: string): void {
+    this.rules = this.rules.filter(r => r.id !== ruleId);
   }
 }
 
