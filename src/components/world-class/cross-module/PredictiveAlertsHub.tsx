@@ -32,10 +32,10 @@ interface PredictiveAlert {
 }
 
 const SEVERITY_CONFIG = {
-  critical: { color: 'bg-red-500/10 text-red-600 border-red-500/30', icon: XCircle, label: 'Crítico' },
-  high: { color: 'bg-orange-500/10 text-orange-600 border-orange-500/30', icon: AlertTriangle, label: 'Alto' },
-  medium: { color: 'bg-amber-500/10 text-amber-600 border-amber-500/30', icon: Clock, label: 'Médio' },
-  low: { color: 'bg-blue-500/10 text-blue-600 border-blue-500/30', icon: Bell, label: 'Baixo' },
+  critical: { color: 'bg-destructive/10 text-destructive border-destructive/30', icon: XCircle, label: 'Crítico' },
+  high: { color: 'bg-warning/10 text-warning border-warning/30', icon: AlertTriangle, label: 'Alto' },
+  medium: { color: 'bg-accent/50 text-accent-foreground border-accent/30', icon: Clock, label: 'Médio' },
+  low: { color: 'bg-primary/10 text-primary border-primary/30', icon: Bell, label: 'Baixo' },
 };
 
 const MODULE_ICONS: Record<string, typeof Ship> = {
@@ -61,7 +61,7 @@ export function PredictiveAlertsHub() {
 
       if (error || !data || data.length === 0) return [];
 
-      return data.map((d: any): PredictiveAlert => {
+      return data.map((d: typeof data[number]): PredictiveAlert => {
         const severityMap: Record<string, PredictiveAlert['severity']> = {
           critical: 'critical', high: 'high', medium: 'medium', low: 'low', info: 'low'
         };
@@ -74,9 +74,9 @@ export function PredictiveAlertsHub() {
           type: d.category || 'general',
           severity: severityMap[d.priority] || 'medium',
           modules: d.related_module ? [d.related_module] : ['operations'],
-          vessel: (d.metadata as any)?.vessel_name,
+          vessel: (d.metadata as Record<string, unknown>)?.vessel_name as string | undefined,
           description: d.description || d.title,
-          action: (d.metadata as any)?.recommended_action || 'Revisar e tomar ação apropriada',
+          action: ((d.metadata as Record<string, unknown>)?.recommended_action as string) || 'Revisar e tomar ação apropriada',
           probability: Math.round((d.confidence || 0.5) * 100),
           status: statusMap[d.status] || 'active',
         };
@@ -133,9 +133,9 @@ export function PredictiveAlertsHub() {
     <div className="space-y-6">
       {/* Summary */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-        <Card className="border-l-4 border-l-red-500"><CardContent className="p-4"><p className="text-2xl font-bold">{criticalCount}</p><p className="text-xs text-muted-foreground">Alertas Críticos</p></CardContent></Card>
-        <Card className="border-l-4 border-l-orange-500"><CardContent className="p-4"><p className="text-2xl font-bold">{activeCount}</p><p className="text-xs text-muted-foreground">Alertas Ativos</p></CardContent></Card>
-        <Card className="border-l-4 border-l-emerald-500"><CardContent className="p-4"><p className="text-2xl font-bold">{alerts.filter(a => a.status === 'resolved').length}</p><p className="text-xs text-muted-foreground">Resolvidos</p></CardContent></Card>
+        <Card className="border-l-4 border-l-destructive"><CardContent className="p-4"><p className="text-2xl font-bold">{criticalCount}</p><p className="text-xs text-muted-foreground">Alertas Críticos</p></CardContent></Card>
+        <Card className="border-l-4 border-l-warning"><CardContent className="p-4"><p className="text-2xl font-bold">{activeCount}</p><p className="text-xs text-muted-foreground">Alertas Ativos</p></CardContent></Card>
+        <Card className="border-l-4 border-l-success"><CardContent className="p-4"><p className="text-2xl font-bold">{alerts.filter(a => a.status === 'resolved').length}</p><p className="text-xs text-muted-foreground">Resolvidos</p></CardContent></Card>
         <Card className="border-l-4 border-l-primary"><CardContent className="p-4"><p className="text-2xl font-bold">{alerts.length > 0 ? Math.round(alerts.reduce((a, b) => a + b.probability, 0) / alerts.length) : 0}%</p><p className="text-xs text-muted-foreground">Confiança Média</p></CardContent></Card>
       </div>
 

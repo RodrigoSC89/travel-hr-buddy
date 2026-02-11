@@ -663,10 +663,10 @@ export function calculateSectionScores(
 
 export function getStatusColor(status: ComplianceStatus): string {
   switch (status) {
-    case "conforme": return "text-green-600";
-    case "parcial": return "text-yellow-600";
-    case "nao_conforme": return "text-red-600";
-    case "nao_aplicavel": return "text-gray-400";
+    case "conforme": return "text-success";
+    case "parcial": return "text-warning";
+    case "nao_conforme": return "text-destructive";
+    case "nao_aplicavel": return "text-muted-foreground/60";
     case "pendente": return "text-muted-foreground";
     default: return "text-muted-foreground";
   }
@@ -674,10 +674,10 @@ export function getStatusColor(status: ComplianceStatus): string {
 
 export function getStatusBgColor(status: ComplianceStatus): string {
   switch (status) {
-    case "conforme": return "bg-green-50 border-green-200";
-    case "parcial": return "bg-yellow-50 border-yellow-200";
-    case "nao_conforme": return "bg-red-50 border-red-200";
-    case "nao_aplicavel": return "bg-gray-50 border-gray-200";
+    case "conforme": return "bg-success/10 border-success/30";
+    case "parcial": return "bg-warning/10 border-warning/30";
+    case "nao_conforme": return "bg-destructive/10 border-destructive/30";
+    case "nao_aplicavel": return "bg-muted border-border";
     case "pendente": return "bg-muted border-border";
     default: return "bg-muted border-border";
   }
@@ -703,9 +703,9 @@ export function getScoreLevel(score: number): string {
 }
 
 export function getScoreColor(score: number): string {
-  if (score >= 90) return "text-green-600";
-  if (score >= 75) return "text-blue-600";
-  if (score >= 60) return "text-yellow-600";
-  if (score >= 40) return "text-orange-600";
-  return "text-red-600";
+  if (score >= 90) return "text-success";
+  if (score >= 75) return "text-primary";
+  if (score >= 60) return "text-warning";
+  if (score >= 40) return "text-accent-foreground";
+  return "text-destructive";
 }

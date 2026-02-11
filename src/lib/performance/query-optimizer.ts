@@ -21,7 +21,7 @@ interface QueryOptions {
 }
 
 interface CachedQuery {
-  data: any;
+  data: unknown;
   timestamp: number;
   expiresAt: number;
 }
@@ -32,7 +32,7 @@ const queryCache = new Map<string, CachedQuery>();
 /**
  * Generate cache key from query parameters
  */
-function generateCacheKey(table: string, options: QueryOptions, filters?: Record<string, any>): string {
+function generateCacheKey(table: string, options: QueryOptions, filters?: Record<string, unknown>): string {
   return JSON.stringify({ table, options, filters });
 }
 
@@ -46,10 +46,11 @@ function isCacheValid(cached: CachedQuery): boolean {
 /**
  * Optimized query with caching and pagination
  */
-export async function optimizedQuery<T = any>(
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- dynamic table query requires generic default
+export async function optimizedQuery<T = Record<string, unknown>>(
   table: string,
   options: QueryOptions = {},
-  filters?: Record<string, any>
+  filters?: Record<string, unknown>
 ): Promise<{ data: T[]; count: number; fromCache: boolean }> {
   const {
     select = "*",
@@ -65,7 +66,7 @@ export async function optimizedQuery<T = any>(
   // Check cache first
   const cached = queryCache.get(cacheKey);
   if (cached && isCacheValid(cached)) {
-    return { ...cached.data, fromCache: true };
+    return { ...(cached.data as Record<string, unknown>), fromCache: true } as { data: T[]; count: number; fromCache: boolean };
   }
 
   // Calculate pagination
@@ -73,7 +74,8 @@ export async function optimizedQuery<T = any>(
   const to = from + pageSize - 1;
 
   // Build query - using type assertion since table names are dynamic
-  let query = (supabase.from(table as any) as any)
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- dynamic table name requires runtime assertion
+  let query = (supabase.from as Function)(table)
     .select(select, { count: "exact" })
     .range(from, to)
     .order(orderBy, { ascending: orderDirection === "asc" });
@@ -84,20 +86,20 @@ export async function optimizedQuery<T = any>(
       if (value !== undefined && value !== null) {
         if (Array.isArray(value)) {
           query = query.in(key, value);
-        } else if (typeof value === "object" && value.operator) {
-          // Support for complex filters like { operator: 'gte', value: 10 }
-          switch (value.operator) {
+        } else if (typeof value === "object" && value !== null && 'operator' in value) {
+          const filterVal = value as { operator: string; value: unknown };
+          switch (filterVal.operator) {
             case "gte":
-              query = query.gte(key, value.value);
+              query = query.gte(key, filterVal.value);
               break;
             case "lte":
-              query = query.lte(key, value.value);
+              query = query.lte(key, filterVal.value);
               break;
             case "like":
-              query = query.ilike(key, `%${value.value}%`);
+              query = query.ilike(key, `%${filterVal.value}%`);
               break;
             case "is":
-              query = query.is(key, value.value);
+              query = query.is(key, filterVal.value);
               break;
           }
         } else {
@@ -128,12 +130,12 @@ export async function optimizedQuery<T = any>(
 /**
  * Batch multiple queries for efficiency
  */
-export async function batchQueries<T extends Record<string, any>>(
+export async function batchQueries<T extends Record<string, unknown>>(
   queries: Array<{
     key: string;
     table: string;
     options?: QueryOptions;
-    filters?: Record<string, any>;
+    filters?: Record<string, unknown>;
   }>
 ): Promise<T> {
   const results = await Promise.all(
@@ -144,7 +146,7 @@ export async function batchQueries<T extends Record<string, any>>(
   );
 
   return results.reduce((acc, { key, result }) => {
-    (acc as any)[key] = result;
+    (acc as Record<string, unknown>)[key] = result;
     return acc;
   }, {} as T);
 }
@@ -172,10 +174,11 @@ export function invalidateCache(table?: string): void {
 export function prefetchQuery(
   table: string,
   options?: QueryOptions,
-  filters?: Record<string, any>
+  filters?: Record<string, unknown>
 ): void {
   // Only prefetch on fast connections
-  const connection = (navigator as any).connection;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Navigator Network Information API not in standard types
+  const connection = (navigator as unknown as Record<string, unknown>).connection as { effectiveType?: string; saveData?: boolean } | undefined;
   if (connection?.effectiveType === "4g" && !connection?.saveData) {
     optimizedQuery(table, options, filters).catch(() => {
       // Silently fail prefetch
@@ -199,7 +202,8 @@ export const minimalFields = {
  * Adaptive page size based on connection
  */
 export function getAdaptivePageSize(): number {
-  const connection = (navigator as any).connection;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Navigator Network Information API not in standard types
+  const connection = (navigator as unknown as Record<string, unknown>).connection as { effectiveType?: string; saveData?: boolean } | undefined;
   
   if (!connection) return 20;
   
