@@ -130,21 +130,21 @@ export const CompleteSecurity: React.FC = () => {
 
   const getSeverityColor = (severity: string) => {
     switch (severity) {
-    case "critical": return "bg-red-100 text-red-800 dark:bg-red-900/20 dark:text-red-300";
-    case "high": return "bg-orange-100 text-orange-800 dark:bg-orange-900/20 dark:text-orange-300";
-    case "medium": return "bg-yellow-100 text-yellow-800 dark:bg-yellow-900/20 dark:text-yellow-300";
-    case "low": return "bg-green-100 text-green-800 dark:bg-green-900/20 dark:text-green-300";
-    default: return "bg-gray-100 text-gray-800 dark:bg-gray-900/20 dark:text-gray-300";
+    case "critical": return "bg-destructive/10 text-destructive";
+    case "high": return "bg-warning/10 text-warning";
+    case "medium": return "bg-warning/10 text-warning";
+    case "low": return "bg-success/10 text-success";
+    default: return "bg-muted text-muted-foreground";
     }
   };
 
   const getStatusColor = (status: string) => {
     switch (status) {
-    case "resolved": return "bg-green-100 text-green-800 dark:bg-green-900/20 dark:text-green-300";
-    case "investigating": return "bg-yellow-100 text-yellow-800 dark:bg-yellow-900/20 dark:text-yellow-300";
-    case "blocked": return "bg-red-100 text-red-800 dark:bg-red-900/20 dark:text-red-300";
-    case "patched": return "bg-blue-100 text-blue-800 dark:bg-blue-900/20 dark:text-blue-300";
-    default: return "bg-gray-100 text-gray-800 dark:bg-gray-900/20 dark:text-gray-300";
+    case "resolved": return "bg-success/10 text-success";
+    case "investigating": return "bg-warning/10 text-warning";
+    case "blocked": return "bg-destructive/10 text-destructive";
+    case "patched": return "bg-info/10 text-info";
+    default: return "bg-muted text-muted-foreground";
     }
   };
 
@@ -171,31 +171,31 @@ export const CompleteSecurity: React.FC = () => {
               <p className="text-muted-foreground">Avaliação geral da segurança do sistema</p>
             </div>
             <div className="text-center">
-              <div className="text-4xl font-bold text-green-500">{securityScore}%</div>
+              <div className="text-4xl font-bold text-success">{securityScore}%</div>
               <p className="text-sm text-muted-foreground">Excelente</p>
             </div>
           </div>
           <Progress value={securityScore} className="mb-4" />
           <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
             <div className="text-center">
-              <Lock className="w-8 h-8 text-green-500 mx-auto mb-2" />
+              <Lock className="w-8 h-8 text-success mx-auto mb-2" />
               <p className="font-medium">Autenticação</p>
-              <p className="text-sm text-green-600">Segura</p>
+              <p className="text-sm text-success">Segura</p>
             </div>
             <div className="text-center">
-              <Database className="w-8 h-8 text-green-500 mx-auto mb-2" />
+              <Database className="w-8 h-8 text-success mx-auto mb-2" />
               <p className="font-medium">Dados</p>
-              <p className="text-sm text-green-600">Protegidos</p>
+              <p className="text-sm text-success">Protegidos</p>
             </div>
             <div className="text-center">
-              <Globe className="w-8 h-8 text-yellow-500 mx-auto mb-2" />
+              <Globe className="w-8 h-8 text-warning mx-auto mb-2" />
               <p className="font-medium">Rede</p>
-              <p className="text-sm text-yellow-600">Monitorada</p>
+              <p className="text-sm text-warning">Monitorada</p>
             </div>
             <div className="text-center">
-              <Eye className="w-8 h-8 text-green-500 mx-auto mb-2" />
+              <Eye className="w-8 h-8 text-success mx-auto mb-2" />
               <p className="font-medium">Logs</p>
-              <p className="text-sm text-green-600">Ativos</p>
+              <p className="text-sm text-success">Ativos</p>
             </div>
           </div>
         </CardContent>
@@ -233,9 +233,9 @@ export const CompleteSecurity: React.FC = () => {
                     <div className="flex items-center justify-between mb-2">
                       <div className="flex items-center gap-3">
                         <AlertTriangle className={`w-5 h-5 ${
-                          threat.severity === "critical" ? "text-red-500" :
-                            threat.severity === "high" ? "text-orange-500" :
-                              "text-yellow-500"
+                          threat.severity === "critical" ? "text-destructive" :
+                            threat.severity === "high" ? "text-warning" :
+                              "text-warning"
                         }`} />
                         <div>
                           <h4 className="font-medium">{threat.type}</h4>
@@ -359,9 +359,9 @@ export const CompleteSecurity: React.FC = () => {
                     <div className="flex items-center justify-between">
                       <div className="flex items-center gap-3">
                         {log.result === "success" ? (
-                          <CheckCircle className="w-5 h-5 text-green-500" />
+                          <CheckCircle className="w-5 h-5 text-success" />
                         ) : (
-                          <AlertTriangle className="w-5 h-5 text-red-500" />
+                          <AlertTriangle className="w-5 h-5 text-destructive" />
                         )}
                         <div>
                           <p className="font-medium">{log.user}</p>
@@ -398,19 +398,19 @@ export const CompleteSecurity: React.FC = () => {
                   <div className="space-y-3">
                     <div className="flex justify-between">
                       <span>Consentimentos</span>
-                      <CheckCircle className="w-5 h-5 text-green-500" />
+                      <CheckCircle className="w-5 h-5 text-success" />
                     </div>
                     <div className="flex justify-between">
                       <span>Políticas de Privacidade</span>
-                      <CheckCircle className="w-5 h-5 text-green-500" />
+                      <CheckCircle className="w-5 h-5 text-success" />
                     </div>
                     <div className="flex justify-between">
                       <span>Direito ao Esquecimento</span>
-                      <CheckCircle className="w-5 h-5 text-green-500" />
+                      <CheckCircle className="w-5 h-5 text-success" />
                     </div>
                     <div className="flex justify-between">
                       <span>Relatórios DPO</span>
-                      <AlertTriangle className="w-5 h-5 text-yellow-500" />
+                      <AlertTriangle className="w-5 h-5 text-warning" />
                     </div>
                   </div>
                 </CardContent>
@@ -424,19 +424,19 @@ export const CompleteSecurity: React.FC = () => {
                   <div className="space-y-3">
                     <div className="flex justify-between">
                       <span>Gestão de Riscos</span>
-                      <CheckCircle className="w-5 h-5 text-green-500" />
+                      <CheckCircle className="w-5 h-5 text-success" />
                     </div>
                     <div className="flex justify-between">
                       <span>Controles de Segurança</span>
-                      <CheckCircle className="w-5 h-5 text-green-500" />
+                      <CheckCircle className="w-5 h-5 text-success" />
                     </div>
                     <div className="flex justify-between">
                       <span>Auditoria Interna</span>
-                      <AlertTriangle className="w-5 h-5 text-yellow-500" />
+                      <AlertTriangle className="w-5 h-5 text-warning" />
                     </div>
                     <div className="flex justify-between">
                       <span>Melhoria Contínua</span>
-                      <CheckCircle className="w-5 h-5 text-green-500" />
+                      <CheckCircle className="w-5 h-5 text-success" />
                     </div>
                   </div>
                 </CardContent>

@@ -128,19 +128,19 @@ const recentRequests: APIRequest[] = [
 
 const getMethodColor = (method: string) => {
   switch (method) {
-    case "GET": return "bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400";
-    case "POST": return "bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-400";
-    case "PUT": return "bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-400";
-    case "PATCH": return "bg-orange-100 text-orange-800 dark:bg-orange-900/30 dark:text-orange-400";
-    case "DELETE": return "bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400";
-    default: return "bg-gray-100 text-gray-800";
+    case "GET": return "bg-success/10 text-success";
+    case "POST": return "bg-info/10 text-info";
+    case "PUT": return "bg-warning/10 text-warning";
+    case "PATCH": return "bg-warning/10 text-warning";
+    case "DELETE": return "bg-destructive/10 text-destructive";
+    default: return "bg-muted text-muted-foreground";
   }
 };
 
 const getStatusColor = (status: number) => {
-  if (status >= 200 && status < 300) return "text-green-600";
-  if (status >= 400 && status < 500) return "text-yellow-600";
-  if (status >= 500) return "text-red-600";
+  if (status >= 200 && status < 300) return "text-success";
+  if (status >= 400 && status < 500) return "text-warning";
+  if (status >= 500) return "text-destructive";
   return "text-muted-foreground";
 };
 
@@ -168,7 +168,7 @@ export function APIGatewayMonitor() {
               <div>
                 <p className="text-sm text-muted-foreground">Requisições/hora</p>
                 <p className="text-2xl font-bold">{totalRequests.toLocaleString()}</p>
-                <p className="text-xs text-green-600">+12% vs média</p>
+                <p className="text-xs text-success">+12% vs média</p>
               </div>
               <Globe className="h-8 w-8 text-primary" />
             </div>
@@ -183,7 +183,7 @@ export function APIGatewayMonitor() {
                 <p className="text-2xl font-bold">{avgResponseTime}ms</p>
                 <p className="text-xs text-muted-foreground">Média geral</p>
               </div>
-              <Clock className="h-8 w-8 text-blue-600" />
+              <Clock className="h-8 w-8 text-info" />
             </div>
           </CardContent>
         </Card>
@@ -193,10 +193,10 @@ export function APIGatewayMonitor() {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-muted-foreground">Taxa de Sucesso</p>
-                <p className="text-2xl font-bold text-green-600">{overallSuccessRate}%</p>
+                <p className="text-2xl font-bold text-success">{overallSuccessRate}%</p>
                 <Progress value={parseFloat(overallSuccessRate)} className="h-2 mt-2" />
               </div>
-              <CheckCircle2 className="h-8 w-8 text-green-600" />
+              <CheckCircle2 className="h-8 w-8 text-success" />
             </div>
           </CardContent>
         </Card>
@@ -206,10 +206,10 @@ export function APIGatewayMonitor() {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-muted-foreground">Rate Limit Alerts</p>
-                <p className="text-2xl font-bold text-yellow-600">{rateLimitWarnings}</p>
+                <p className="text-2xl font-bold text-warning">{rateLimitWarnings}</p>
                 <p className="text-xs text-muted-foreground">Endpoints &gt;80%</p>
               </div>
-              <AlertTriangle className="h-8 w-8 text-yellow-600" />
+              <AlertTriangle className="h-8 w-8 text-warning" />
             </div>
           </CardContent>
         </Card>
@@ -286,7 +286,7 @@ export function APIGatewayMonitor() {
                             <p className="text-xs text-muted-foreground">avg response</p>
                           </div>
                           <div className="text-right">
-                            <p className={`text-sm font-medium ${endpoint.successRate >= 99 ? "text-green-600" : "text-yellow-600"}`}>
+                            <p className={`text-sm font-medium ${endpoint.successRate >= 99 ? "text-success" : "text-warning"}`}>
                               {endpoint.successRate}%
                             </p>
                             <p className="text-xs text-muted-foreground">success rate</p>
@@ -298,7 +298,7 @@ export function APIGatewayMonitor() {
                             </div>
                             <Progress 
                               value={usagePercent} 
-                              className={`h-2 ${usagePercent >= 80 ? "[&>div]:bg-yellow-500" : usagePercent >= 90 ? "[&>div]:bg-red-500" : ""}`}
+                              className={`h-2 ${usagePercent >= 80 ? "[&>div]:bg-warning" : usagePercent >= 90 ? "[&>div]:bg-destructive" : ""}`}
                             />
                           </div>
                         </div>
@@ -353,7 +353,7 @@ export function APIGatewayMonitor() {
                             {req.status}
                           </span>
                         </td>
-                        <td className={`p-3 text-sm text-right ${req.responseTime > 1000 ? "text-red-600" : ""}`}>
+                        <td className={`p-3 text-sm text-right ${req.responseTime > 1000 ? "text-destructive" : ""}`}>
                           {req.responseTime}ms
                         </td>
                         <td className="p-3 text-sm text-muted-foreground">{req.ip}</td>

@@ -137,8 +137,8 @@ export class AIChecklistService {
    */
   static async validateItemValue(
     itemId: string,
-    value: any,
-    historicalData?: any[]
+    value: unknown,
+    historicalData?: Record<string, unknown>[]
   ): Promise<{
     valid: boolean;
     confidence: number;
@@ -181,7 +181,7 @@ export class AIChecklistService {
   static async getPredictiveInsights(
     vesselId: string,
     checklistType: string,
-    historicalChecklists: any[]
+    historicalChecklists: Record<string, unknown>[]
   ): Promise<string[]> {
     try {
       const { data, error } = await supabase.functions.invoke(
