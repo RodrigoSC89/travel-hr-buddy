@@ -319,19 +319,19 @@ const ExperimentalModules = () => {
         </Card>
         <Card>
           <CardContent className="pt-6">
-            <div className="text-3xl font-bold text-blue-600">{statistics.testing}</div>
+            <div className="text-3xl font-bold text-primary">{statistics.testing}</div>
             <div className="text-xs text-muted-foreground">Testing</div>
           </CardContent>
         </Card>
         <Card>
           <CardContent className="pt-6">
-            <div className="text-3xl font-bold text-purple-600">{statistics.prototype}</div>
+            <div className="text-3xl font-bold text-accent-foreground">{statistics.prototype}</div>
             <div className="text-xs text-muted-foreground">Prototype</div>
           </CardContent>
         </Card>
         <Card>
           <CardContent className="pt-6">
-            <div className="text-3xl font-bold text-emerald-600">{statistics.stable}</div>
+            <div className="text-3xl font-bold text-success">{statistics.stable}</div>
             <div className="text-xs text-muted-foreground">Stable</div>
           </CardContent>
         </Card>

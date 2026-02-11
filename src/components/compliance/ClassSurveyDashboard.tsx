@@ -27,8 +27,10 @@ interface ClassSurvey {
   surveyor_name: string | null;
   survey_location: string | null;
   status: string;
-  findings: any[];
-  conditions_of_class: any[];
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- dynamic survey findings from Supabase JSONB
+  findings: Record<string, unknown>[];
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- dynamic conditions from Supabase JSONB
+  conditions_of_class: Record<string, unknown>[];
   cost: number | null;
 }
 
@@ -154,13 +156,13 @@ export function ClassSurveyDashboard() {
         <Card className="border-border/50 bg-card/50">
           <CardContent className="p-4">
             <p className="text-sm text-muted-foreground">Conformidade</p>
-            <p className="text-2xl font-bold text-emerald-400">{complianceRate}%</p>
+            <p className="text-2xl font-bold text-success">{complianceRate}%</p>
           </CardContent>
         </Card>
         <Card className="border-border/50 bg-card/50">
           <CardContent className="p-4">
             <p className="text-sm text-muted-foreground">Pendentes</p>
-            <p className="text-2xl font-bold text-amber-400">{stats.pending}</p>
+            <p className="text-2xl font-bold text-warning">{stats.pending}</p>
           </CardContent>
         </Card>
         <Card className="border-border/50 bg-card/50">
@@ -172,7 +174,7 @@ export function ClassSurveyDashboard() {
         <Card className="border-border/50 bg-card/50">
           <CardContent className="p-4">
             <p className="text-sm text-muted-foreground">Condições de Classe</p>
-            <p className="text-2xl font-bold text-orange-400">{stats.conditionsOfClass}</p>
+            <p className="text-2xl font-bold text-warning">{stats.conditionsOfClass}</p>
           </CardContent>
         </Card>
       </div>
@@ -210,7 +212,7 @@ export function ClassSurveyDashboard() {
                   <div className="flex items-center justify-between text-sm">
                     <span className="text-muted-foreground">{societySurveys.length} surveys</span>
                     {pendingSurveys.length > 0 && (
-                      <span className="text-amber-400">{pendingSurveys.length} pendentes</span>
+                      <span className="text-warning">{pendingSurveys.length} pendentes</span>
                     )}
                   </div>
                 </div>
@@ -304,7 +306,7 @@ export function ClassSurveyDashboard() {
                       {daysUntil > 0 && survey.status !== "completed" && (
                         <span className={cn(
                           "font-medium",
-                          daysUntil <= 30 ? "text-amber-400" : 
+                          daysUntil <= 30 ? "text-warning" : 
                           daysUntil <= 7 ? "text-destructive" : "text-muted-foreground"
                         )}>
                           {daysUntil} dias restantes
@@ -325,7 +327,7 @@ export function ClassSurveyDashboard() {
                           </Badge>
                         )}
                         {survey.conditions_of_class?.length > 0 && (
-                          <Badge className="text-xs bg-orange-500/20 text-orange-400 border-orange-500/30">
+                          <Badge className="text-xs bg-warning/20 text-warning border-warning/30">
                             {survey.conditions_of_class.length} condições de classe
                           </Badge>
                         )}

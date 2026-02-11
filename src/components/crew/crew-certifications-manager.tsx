@@ -111,7 +111,8 @@ const demoCertifications: Certification[] = [
 ];
 
 interface CrewCertificationsManagerProps {
-  crewMembers?: any[];
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- crew members from parent with dynamic shape
+  crewMembers?: unknown[];
 }
 
 export function CrewCertificationsManager({ crewMembers = [] }: CrewCertificationsManagerProps) {

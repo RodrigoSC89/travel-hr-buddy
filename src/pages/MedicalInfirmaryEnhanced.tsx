@@ -82,7 +82,7 @@ export default function MedicalInfirmaryEnhanced() {
               <div>
                 <div className="flex items-center gap-3">
                   <h1 className="text-2xl font-bold">Enfermaria Digital</h1>
-                  <Badge className="bg-emerald-500/10 text-emerald-600 gap-1">
+                  <Badge className="bg-success/10 text-success gap-1">
                     <Brain className="h-3 w-3" />
                     IA Integrada
                   </Badge>
@@ -116,8 +116,8 @@ export default function MedicalInfirmaryEnhanced() {
                     <p className="text-2xl font-bold mt-1">{stat.value}</p>
                     {stat.percentage && (
                       <div className="flex items-center gap-1 mt-1">
-                        <TrendingUp className="h-3 w-3 text-emerald-500" />
-                        <span className="text-xs text-emerald-600">{stat.percentage}%</span>
+                        <TrendingUp className="h-3 w-3 text-success" />
+                        <span className="text-xs text-success">{stat.percentage}%</span>
                       </div>
                     )}
                   </div>
@@ -211,7 +211,7 @@ export default function MedicalInfirmaryEnhanced() {
                   {recentConsultations.map((consultation) => (
                     <div key={consultation.id} className="p-4 rounded-lg border flex items-center justify-between hover:bg-muted/30 transition-colors">
                       <div className="flex items-center gap-3">
-                        <div className={`w-2 h-2 rounded-full ${consultation.status === "completed" ? "bg-emerald-500" : "bg-amber-500 animate-pulse"}`} />
+                        <div className={`w-2 h-2 rounded-full ${consultation.status === "completed" ? "bg-success" : "bg-warning animate-pulse"}`} />
                         <div>
                           <p className="font-medium">{consultation.patient}</p>
                           <p className="text-sm text-muted-foreground">{consultation.reason}</p>
@@ -270,7 +270,7 @@ export default function MedicalInfirmaryEnhanced() {
                             </div>
                             <Progress 
                               value={stockPercentage} 
-                              className={`h-2 ${med.status === "critical" ? "[&>div]:bg-destructive" : med.status === "low" ? "[&>div]:bg-amber-500" : ""}`}
+                              className={`h-2 ${med.status === "critical" ? "[&>div]:bg-destructive" : med.status === "low" ? "[&>div]:bg-warning" : ""}`}
                             />
                           </div>
                           <Button variant="outline" size="sm" onClick={async () => {

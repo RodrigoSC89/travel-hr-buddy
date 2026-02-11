@@ -80,8 +80,8 @@ export const OfflineStatusBar: React.FC<OfflineStatusBarProps> = ({ className })
       return {
         icon: CheckCircle2,
         text: 'Tudo sincronizado',
-        bgColor: 'bg-green-600',
-        textColor: 'text-white',
+        bgColor: 'bg-success',
+        textColor: 'text-success-foreground',
         show: true,
       };
     }
