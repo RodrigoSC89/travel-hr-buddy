@@ -68,9 +68,10 @@ export const CommunicationSettings: React.FC = () => {
     setIsSaving(true);
     try {
       const { supabase } = await import('@/integrations/supabase/client');
-      const { error } = await supabase.from('ai_configurations').upsert({
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any -- upsert requires single object, not array
+      const { error } = await (supabase.from('ai_configurations').upsert as Function)({
         config_key: 'communication_settings',
-        config_value: { preferences, globalSettings } as any,
+        config_value: { preferences, globalSettings },
         description: 'Communication notification preferences',
       }, { onConflict: 'config_key' });
       if (error) throw error;

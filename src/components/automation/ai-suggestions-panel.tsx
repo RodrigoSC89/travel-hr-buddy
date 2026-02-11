@@ -130,7 +130,7 @@ export const AISuggestionsPanel: React.FC = () => {
         try {
           const parsed = JSON.parse(data.result);
           if (parsed.suggestions && Array.isArray(parsed.suggestions)) {
-            const newSuggestions = parsed.suggestions.map((s: any, idx: number) => ({
+            const newSuggestions = parsed.suggestions.map((s: Record<string, unknown>, idx: number) => ({
               ...s,
               id: s.id || `ai-${Date.now()}-${idx}`,
               is_read: false,

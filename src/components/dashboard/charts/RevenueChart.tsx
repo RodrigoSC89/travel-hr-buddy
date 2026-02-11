@@ -7,11 +7,11 @@ interface RevenueChartProps {
 export default function RevenueChart({ data }: RevenueChartProps) {
   return (
     <ResponsiveContainer width="100%" height={300}>
-      <AreaChart data={data as any}>
+      <AreaChart data={[...data]}>
         <defs>
           <linearGradient id="colorRevenue" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="5%" stopColor="#3b82f6" stopOpacity={0.8}/>
-            <stop offset="95%" stopColor="#3b82f6" stopOpacity={0}/>
+            <stop offset="5%" stopColor="hsl(var(--primary))" stopOpacity={0.8}/>
+            <stop offset="95%" stopColor="hsl(var(--primary))" stopOpacity={0}/>
           </linearGradient>
         </defs>
         <CartesianGrid strokeDasharray="3 3" className="stroke-muted" />
@@ -22,7 +22,7 @@ export default function RevenueChart({ data }: RevenueChartProps) {
         <Area 
           type="monotone" 
           dataKey="revenue" 
-          stroke="#3b82f6" 
+          stroke="hsl(var(--primary))" 
           fillOpacity={1} 
           fill="url(#colorRevenue)"
           name="Receita (R$)"
@@ -30,7 +30,7 @@ export default function RevenueChart({ data }: RevenueChartProps) {
         <Line 
           type="monotone" 
           dataKey="target" 
-          stroke="#10b981" 
+          stroke="hsl(var(--success))" 
           strokeWidth={2}
           name="Meta (R$)"
         />

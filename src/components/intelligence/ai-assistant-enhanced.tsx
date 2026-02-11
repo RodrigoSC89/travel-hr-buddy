@@ -133,7 +133,7 @@ const AIAssistantEnhanced: React.FC = () => {
       type: "user",
       content: inputMessage,
       timestamp: new Date(),
-      category: selectedCapability as any
+      category: selectedCapability as Message["category"]
     };
 
     setMessages(prev => [...prev, userMessage]);
@@ -148,7 +148,7 @@ const AIAssistantEnhanced: React.FC = () => {
         type: "ai",
         content: aiResponse,
         timestamp: new Date(),
-        category: selectedCapability as any
+        category: selectedCapability as Message["category"]
       };
 
       setMessages(prev => [...prev, aiMessage]);

@@ -106,9 +106,10 @@ export default function EnergyOptimizerDashboard() {
     setSelectedScenario(scenarioId);
     try {
       const { supabase } = await import('@/integrations/supabase/client');
-      await supabase.from('ai_configurations').upsert({
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any -- upsert requires single object
+      await (supabase.from('ai_configurations').upsert as Function)({
         config_key: `energy_scenario_${scenarioId}`,
-        config_value: { active: true, appliedAt: new Date().toISOString() } as any,
+        config_value: { active: true, appliedAt: new Date().toISOString() },
         description: `Energy optimization scenario ${scenarioId}`,
       }, { onConflict: 'config_key' });
     } catch { /* scenario apply error */ }
@@ -121,14 +122,14 @@ export default function EnergyOptimizerDashboard() {
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-3xl font-bold text-foreground flex items-center gap-3">
-            <Fuel className="h-8 w-8 text-emerald-500" />
+          <Fuel className="h-8 w-8 text-success" />
             OPEC - Otimizador Energético
           </h1>
           <p className="text-muted-foreground mt-1">
             Otimização contínua de performance energética em tempo real
           </p>
         </div>
-        <Badge variant="outline" className="text-emerald-500 border-emerald-500">
+        <Badge variant="outline" className="text-success border-success">
           <Zap className="h-3 w-3 mr-1" />
           Sistema Ativo
         </Badge>
@@ -136,54 +137,54 @@ export default function EnergyOptimizerDashboard() {
 
       {/* KPIs Principais */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-        <Card className="bg-gradient-to-br from-emerald-500/10 to-emerald-600/5 border-emerald-500/20">
+        <Card className="bg-gradient-to-br from-success/10 to-success/5 border-success/20">
           <CardContent className="pt-6">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-muted-foreground">Economia Hoje</p>
-                <p className="text-2xl font-bold text-emerald-500">$1,890</p>
-                <p className="text-xs text-emerald-400">+12% vs ontem</p>
+                <p className="text-2xl font-bold text-success">$1,890</p>
+                <p className="text-xs text-success/80">+12% vs ontem</p>
               </div>
-              <TrendingDown className="h-10 w-10 text-emerald-500/50" />
+              <TrendingDown className="h-10 w-10 text-success/50" />
             </div>
           </CardContent>
         </Card>
 
-        <Card className="bg-gradient-to-br from-blue-500/10 to-blue-600/5 border-blue-500/20">
+        <Card className="bg-gradient-to-br from-primary/10 to-primary/5 border-primary/20">
           <CardContent className="pt-6">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-muted-foreground">Consumo Atual</p>
-                <p className="text-2xl font-bold text-blue-500">46.1 t/dia</p>
-                <p className="text-xs text-blue-400">-4% vs baseline</p>
+                <p className="text-2xl font-bold text-primary">46.1 t/dia</p>
+                <p className="text-xs text-primary/80">-4% vs baseline</p>
               </div>
-              <Fuel className="h-10 w-10 text-blue-500/50" />
+              <Fuel className="h-10 w-10 text-primary/50" />
             </div>
           </CardContent>
         </Card>
 
-        <Card className="bg-gradient-to-br from-amber-500/10 to-amber-600/5 border-amber-500/20">
+        <Card className="bg-gradient-to-br from-warning/10 to-warning/5 border-warning/20">
           <CardContent className="pt-6">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-muted-foreground">Eficiência</p>
-                <p className="text-2xl font-bold text-amber-500">88.5%</p>
-                <p className="text-xs text-amber-400">+3.5% este mês</p>
+                <p className="text-2xl font-bold text-warning">88.5%</p>
+                <p className="text-xs text-warning/80">+3.5% este mês</p>
               </div>
-              <Gauge className="h-10 w-10 text-amber-500/50" />
+              <Gauge className="h-10 w-10 text-warning/50" />
             </div>
           </CardContent>
         </Card>
 
-        <Card className="bg-gradient-to-br from-purple-500/10 to-purple-600/5 border-purple-500/20">
+        <Card className="bg-gradient-to-br from-accent/10 to-accent/5 border-accent/20">
           <CardContent className="pt-6">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-muted-foreground">Economia Anual</p>
-                <p className="text-2xl font-bold text-purple-500">$324k</p>
-                <p className="text-xs text-purple-400">Meta: $280k</p>
+                <p className="text-2xl font-bold text-accent-foreground">$324k</p>
+                <p className="text-xs text-accent-foreground/80">Meta: $280k</p>
               </div>
-              <BarChart3 className="h-10 w-10 text-purple-500/50" />
+              <BarChart3 className="h-10 w-10 text-accent-foreground/50" />
             </div>
           </CardContent>
         </Card>
@@ -203,7 +204,7 @@ export default function EnergyOptimizerDashboard() {
                 key={scenario.id}
                 className={`cursor-pointer transition-all ${
                   scenario.recommended 
-                    ? "border-emerald-500/50 bg-emerald-500/5" 
+                    ? "border-success/50 bg-success/5" 
                     : "hover:border-primary/50"
                 } ${selectedScenario === scenario.id ? "ring-2 ring-primary" : ""}`}
                 onClick={() => setSelectedScenario(scenario.id)}
@@ -212,7 +213,7 @@ export default function EnergyOptimizerDashboard() {
                   <div className="flex items-center justify-between">
                     <CardTitle className="text-lg">{scenario.name}</CardTitle>
                     {scenario.recommended && (
-                      <Badge className="bg-emerald-500">Recomendado</Badge>
+                      <Badge className="bg-success text-success-foreground">Recomendado</Badge>
                     )}
                   </div>
                 </CardHeader>
@@ -224,7 +225,7 @@ export default function EnergyOptimizerDashboard() {
                     </div>
                     <div>
                       <p className="text-muted-foreground">Economia Diária</p>
-                      <p className="font-medium text-emerald-500">${scenario.dailySaving}</p>
+                      <p className="font-medium text-success">${scenario.dailySaving}</p>
                     </div>
                     <div>
                       <p className="text-muted-foreground">Economia Combustível</p>
@@ -232,7 +233,7 @@ export default function EnergyOptimizerDashboard() {
                     </div>
                     <div>
                       <p className="text-muted-foreground">Impacto ETA</p>
-                      <p className="font-medium text-amber-500">{scenario.etaImpact}</p>
+                      <p className="font-medium text-warning">{scenario.etaImpact}</p>
                     </div>
                   </div>
 
@@ -246,12 +247,12 @@ export default function EnergyOptimizerDashboard() {
 
                   <div className="flex items-center gap-2">
                     {scenario.emissionsOk ? (
-                      <Badge variant="outline" className="text-emerald-500 border-emerald-500">
+                      <Badge variant="outline" className="text-success border-success">
                         <CheckCircle className="h-3 w-3 mr-1" />
                         Emissões OK
                       </Badge>
                     ) : (
-                      <Badge variant="outline" className="text-amber-500 border-amber-500">
+                      <Badge variant="outline" className="text-warning border-warning">
                         <AlertTriangle className="h-3 w-3 mr-1" />
                         Verificar
                       </Badge>

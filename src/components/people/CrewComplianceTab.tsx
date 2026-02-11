@@ -1,24 +1,12 @@
 /**
  * CrewComplianceTab - Tab de Compliance do PeopleHub
  * UX SYSTEM v1.0 - Real Data Integration
- * 
- * Substitui placeholder HRDashboard por componente funcional
- * com dados reais do Supabase (crew_certifications, compliance_records)
  */
 
 import React, { useState } from "react";
 import { 
-  Shield, 
-  AlertTriangle, 
-  CheckCircle, 
-  Clock, 
-  FileCheck,
-  Users,
-  Calendar,
-  TrendingUp,
-  RefreshCw,
-  Filter,
-  Download
+  Shield, AlertTriangle, CheckCircle, Clock, FileCheck,
+  Users, Calendar, TrendingUp, RefreshCw, Filter, Download
 } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -45,15 +33,15 @@ const ComplianceScoreCard: React.FC<{
   icon: React.ElementType;
 }> = ({ score, label, details, icon: Icon }) => {
   const getScoreColor = () => {
-    if (score >= 90) return "text-green-500";
-    if (score >= 70) return "text-yellow-500";
-    return "text-red-500";
+    if (score >= 90) return "text-success";
+    if (score >= 70) return "text-warning";
+    return "text-destructive";
   };
 
   const getProgressColor = () => {
-    if (score >= 90) return "bg-green-500";
-    if (score >= 70) return "bg-yellow-500";
-    return "bg-red-500";
+    if (score >= 90) return "bg-success";
+    if (score >= 70) return "bg-warning";
+    return "bg-destructive";
   };
 
   return (
@@ -91,10 +79,10 @@ const CertificationRow: React.FC<{
   const getStatusBadge = () => {
     switch (certification.status) {
       case "valid":
-        return <Badge variant="default" className="bg-green-500">Válido</Badge>;
+        return <Badge variant="default" className="bg-success">Válido</Badge>;
       case "expiring_soon":
         return (
-          <Badge variant="secondary" className="bg-yellow-500 text-white">
+          <Badge variant="secondary" className="bg-warning text-warning-foreground">
             <Clock className="h-3 w-3 mr-1" />
             {daysUntilExpiry}d restantes
           </Badge>
@@ -111,17 +99,17 @@ const CertificationRow: React.FC<{
 
   return (
     <div className={`flex items-center justify-between p-4 border rounded-lg hover:bg-muted/50 transition-colors ${
-      certification.status === 'expired' ? 'border-red-200 bg-red-50/50' :
-      certification.status === 'expiring_soon' ? 'border-yellow-200 bg-yellow-50/50' : ''
+      certification.status === 'expired' ? 'border-destructive/30 bg-destructive/5' :
+      certification.status === 'expiring_soon' ? 'border-warning/30 bg-warning/5' : ''
     }`}>
       <div className="flex items-center gap-4">
         <div className={`p-2 rounded-lg ${
-          certification.status === 'expired' ? 'bg-red-100' :
-          certification.status === 'expiring_soon' ? 'bg-yellow-100' : 'bg-muted'
+          certification.status === 'expired' ? 'bg-destructive/10' :
+          certification.status === 'expiring_soon' ? 'bg-warning/10' : 'bg-muted'
         }`}>
           <FileCheck className={`h-5 w-5 ${
-            certification.status === 'expired' ? 'text-red-500' :
-            certification.status === 'expiring_soon' ? 'text-yellow-500' : ''
+            certification.status === 'expired' ? 'text-destructive' :
+            certification.status === 'expiring_soon' ? 'text-warning' : ''
           }`} />
         </div>
         <div>
@@ -175,9 +163,9 @@ const AlertCard: React.FC<{
   description: string;
 }> = ({ title, count, severity, description }) => {
   const colors = {
-    critical: "border-red-200 bg-red-50",
-    warning: "border-yellow-200 bg-yellow-50",
-    info: "border-blue-200 bg-blue-50"
+    critical: "border-destructive/30 bg-destructive/5",
+    warning: "border-warning/30 bg-warning/5",
+    info: "border-primary/30 bg-primary/5"
   };
 
   const icons = {
@@ -186,15 +174,18 @@ const AlertCard: React.FC<{
     info: CheckCircle
   };
 
+  const iconColors = {
+    critical: "text-destructive",
+    warning: "text-warning",
+    info: "text-primary"
+  };
+
   const Icon = icons[severity];
 
   return (
     <div className={`p-4 border-2 rounded-xl ${colors[severity]}`}>
       <div className="flex items-start gap-3">
-        <Icon className={`h-5 w-5 mt-0.5 ${
-          severity === 'critical' ? 'text-red-500' :
-          severity === 'warning' ? 'text-yellow-500' : 'text-blue-500'
-        }`} />
+        <Icon className={`h-5 w-5 mt-0.5 ${iconColors[severity]}`} />
         <div className="flex-1">
           <div className="flex items-center justify-between">
             <p className="font-semibold">{title}</p>
@@ -216,14 +207,12 @@ export default function CrewComplianceTab() {
   const [activeSubTab, setActiveSubTab] = useState("overview");
   const [statusFilter, setStatusFilter] = useState<string | null>(null);
 
-  // Calculate compliance scores
   const validCount = certifications.filter((c: Certification) => c.status === 'valid').length;
   const complianceScore = total > 0 ? Math.round((validCount / total) * 100) : 100;
   const crewComplianceScore = crewMembers.length > 0 
     ? Math.round((crewMembers.filter((c: CrewMember) => c.status === 'active').length / crewMembers.length) * 100)
     : 100;
 
-  // Filter certifications
   const filteredCertifications = statusFilter
     ? certifications.filter(c => c.status === statusFilter)
     : certifications;
@@ -236,10 +225,7 @@ export default function CrewComplianceTab() {
       badge={`${complianceScore}% compliance`}
       isLoading={isLoading}
       refreshable
-      onRefresh={() => {
-        refetch();
-        toast.success("Dados atualizados");
-      }}
+      onRefresh={() => { refetch(); toast.success("Dados atualizados"); }}
       exportable
       onExport={() => {
         const rows = ["Nome;Tipo;Status;Validade", ...certifications.map((c) => `${(c as unknown as Record<string, unknown>).crew_member_name || ""};${c.type};${c.status};${c.expiry_date || ""}`)];
@@ -252,151 +238,74 @@ export default function CrewComplianceTab() {
       emptyTitle="Nenhuma certificação cadastrada"
       emptyDescription="Adicione certificações para monitorar a compliance da tripulação."
     >
-      {/* Alerts */}
       {(expired.length > 0 || expiring.length > 0) && (
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
           {expired.length > 0 && (
-            <AlertCard
-              title="Certificações Expiradas"
-              count={expired.length}
-              severity="critical"
-              description="Ação imediata necessária para regularização"
-            />
+            <AlertCard title="Certificações Expiradas" count={expired.length} severity="critical" description="Ação imediata necessária para regularização" />
           )}
           {expiring.length > 0 && (
-            <AlertCard
-              title="Expirando em 30 dias"
-              count={expiring.length}
-              severity="warning"
-              description="Inicie o processo de renovação"
-            />
+            <AlertCard title="Expirando em 30 dias" count={expiring.length} severity="warning" description="Inicie o processo de renovação" />
           )}
         </div>
       )}
 
-      {/* Score Cards */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
-        <ComplianceScoreCard
-          score={complianceScore}
-          label="Certificações Válidas"
-          details={`${validCount} de ${total} certificações`}
-          icon={FileCheck}
-        />
-        <ComplianceScoreCard
-          score={crewComplianceScore}
-          label="Tripulação Ativa"
-          details={`${crewMembers.filter(c => c.status === 'active').length} tripulantes`}
-          icon={Users}
-        />
-        <ComplianceScoreCard
-          score={expired.length === 0 ? 100 : Math.max(0, 100 - (expired.length * 10))}
-          label="STCW Compliance"
-          details="Certificações obrigatórias"
-          icon={Shield}
-        />
-        <ComplianceScoreCard
-          score={95}
-          label="MLC 2006"
-          details="Maritime Labour Convention"
-          icon={CheckCircle}
-        />
+        <ComplianceScoreCard score={complianceScore} label="Certificações Válidas" details={`${validCount} de ${total} certificações`} icon={FileCheck} />
+        <ComplianceScoreCard score={crewComplianceScore} label="Tripulação Ativa" details={`${crewMembers.filter(c => c.status === 'active').length} tripulantes`} icon={Users} />
+        <ComplianceScoreCard score={expired.length === 0 ? 100 : Math.max(0, 100 - (expired.length * 10))} label="STCW Compliance" details="Certificações obrigatórias" icon={Shield} />
+        <ComplianceScoreCard score={95} label="MLC 2006" details="Maritime Labour Convention" icon={CheckCircle} />
       </div>
 
-      {/* Tabs */}
       <Tabs value={activeSubTab} onValueChange={setActiveSubTab}>
         <div className="flex items-center justify-between mb-4">
           <TabsList>
-            <TabsTrigger value="overview" className="flex items-center gap-2">
-              <Shield className="h-4 w-4" />
-              Visão Geral
-            </TabsTrigger>
-            <TabsTrigger value="certifications" className="flex items-center gap-2">
-              <FileCheck className="h-4 w-4" />
-              Certificações
-              <Badge variant="secondary" className="ml-1">{total}</Badge>
-            </TabsTrigger>
+            <TabsTrigger value="overview" className="flex items-center gap-2"><Shield className="h-4 w-4" />Visão Geral</TabsTrigger>
+            <TabsTrigger value="certifications" className="flex items-center gap-2"><FileCheck className="h-4 w-4" />Certificações<Badge variant="secondary" className="ml-1">{total}</Badge></TabsTrigger>
             <TabsTrigger value="expiring" className="flex items-center gap-2">
-              <AlertTriangle className="h-4 w-4" />
-              Atenção
-              {(expired.length + expiring.length) > 0 && (
-                <Badge variant="destructive" className="ml-1">
-                  {expired.length + expiring.length}
-                </Badge>
-              )}
+              <AlertTriangle className="h-4 w-4" />Atenção
+              {(expired.length + expiring.length) > 0 && <Badge variant="destructive" className="ml-1">{expired.length + expiring.length}</Badge>}
             </TabsTrigger>
           </TabsList>
-
           <div className="flex items-center gap-2">
-            <Button 
-              variant="outline" 
-              size="sm"
-              onClick={() => setStatusFilter(statusFilter ? null : 'expiring_soon')}
-            >
-              <Filter className="h-4 w-4 mr-2" />
-              {statusFilter ? 'Limpar Filtro' : 'Filtrar'}
+            <Button variant="outline" size="sm" onClick={() => setStatusFilter(statusFilter ? null : 'expiring_soon')}>
+              <Filter className="h-4 w-4 mr-2" />{statusFilter ? 'Limpar Filtro' : 'Filtrar'}
             </Button>
           </div>
         </div>
 
         <TabsContent value="overview">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-            {/* Compliance Timeline */}
             <Card>
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <Calendar className="h-5 w-5" />
-                  Próximos Vencimentos
-                </CardTitle>
-              </CardHeader>
+              <CardHeader><CardTitle className="flex items-center gap-2"><Calendar className="h-5 w-5" />Próximos Vencimentos</CardTitle></CardHeader>
               <CardContent>
                 {expiring.length === 0 ? (
                   <div className="text-center py-8 text-muted-foreground">
-                    <CheckCircle className="h-12 w-12 mx-auto mb-2 text-green-500" />
+                    <CheckCircle className="h-12 w-12 mx-auto mb-2 text-success" />
                     <p>Nenhuma certificação próxima ao vencimento</p>
                   </div>
                 ) : (
                   <div className="space-y-3">
                     {expiring.slice(0, 5).map(cert => (
                       <div key={cert.id} className="flex items-center justify-between p-3 border rounded-lg">
-                        <div>
-                          <p className="font-medium text-sm">{cert.name}</p>
-                          <p className="text-xs text-muted-foreground">{cert.type}</p>
-                        </div>
-                        <Badge variant="secondary">
-                          {differenceInDays(new Date(cert.expiry_date), new Date())}d
-                        </Badge>
+                        <div><p className="font-medium text-sm">{cert.name}</p><p className="text-xs text-muted-foreground">{cert.type}</p></div>
+                        <Badge variant="secondary">{differenceInDays(new Date(cert.expiry_date), new Date())}d</Badge>
                       </div>
                     ))}
                   </div>
                 )}
               </CardContent>
             </Card>
-
-            {/* Compliance by Type */}
             <Card>
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <TrendingUp className="h-5 w-5" />
-                  Compliance por Tipo
-                </CardTitle>
-              </CardHeader>
+              <CardHeader><CardTitle className="flex items-center gap-2"><TrendingUp className="h-5 w-5" />Compliance por Tipo</CardTitle></CardHeader>
               <CardContent>
                 <div className="space-y-4">
                   {["STCW", "COC", "Medical", "Safety", "Other"].map(type => {
-                    const typeCount = certifications.filter(c => 
-                      c.type.toLowerCase().includes(type.toLowerCase())
-                    ).length;
-                    const validTypeCount = certifications.filter(c => 
-                      c.type.toLowerCase().includes(type.toLowerCase()) && c.status === 'valid'
-                    ).length;
+                    const typeCount = certifications.filter(c => c.type.toLowerCase().includes(type.toLowerCase())).length;
+                    const validTypeCount = certifications.filter(c => c.type.toLowerCase().includes(type.toLowerCase()) && c.status === 'valid').length;
                     const typeScore = typeCount > 0 ? Math.round((validTypeCount / typeCount) * 100) : 0;
-
                     return (
                       <div key={type} className="space-y-1">
-                        <div className="flex items-center justify-between text-sm">
-                          <span>{type}</span>
-                          <span className="font-medium">{typeScore}%</span>
-                        </div>
+                        <div className="flex items-center justify-between text-sm"><span>{type}</span><span className="font-medium">{typeScore}%</span></div>
                         <Progress value={typeScore} className="h-2" />
                       </div>
                     );
@@ -409,53 +318,27 @@ export default function CrewComplianceTab() {
 
         <TabsContent value="certifications">
           {filteredCertifications.length === 0 ? (
-            <EmptyState
-              icon={FileCheck}
-              title="Nenhuma certificação encontrada"
-              description="Ajuste os filtros ou adicione novas certificações."
-            />
+            <EmptyState icon={FileCheck} title="Nenhuma certificação encontrada" description="Ajuste os filtros ou adicione novas certificações." />
           ) : (
-            <div className="space-y-3">
-              {filteredCertifications.map(cert => (
-                <CertificationRow key={cert.id} certification={cert} />
-              ))}
-            </div>
+            <div className="space-y-3">{filteredCertifications.map(cert => <CertificationRow key={cert.id} certification={cert} />)}</div>
           )}
         </TabsContent>
 
         <TabsContent value="expiring">
           {expired.length === 0 && expiring.length === 0 ? (
-            <EmptyState
-              icon={CheckCircle}
-              title="Tudo em dia!"
-              description="Não há certificações expiradas ou próximas ao vencimento."
-            />
+            <EmptyState icon={CheckCircle} title="Tudo em dia!" description="Não há certificações expiradas ou próximas ao vencimento." />
           ) : (
             <div className="space-y-4">
               {expired.length > 0 && (
                 <div>
-                  <h3 className="font-semibold text-red-500 mb-3 flex items-center gap-2">
-                    <AlertTriangle className="h-4 w-4" />
-                    Expiradas ({expired.length})
-                  </h3>
-                  <div className="space-y-2">
-                    {expired.map(cert => (
-                      <CertificationRow key={cert.id} certification={cert} />
-                    ))}
-                  </div>
+                  <h3 className="font-semibold text-destructive mb-3 flex items-center gap-2"><AlertTriangle className="h-4 w-4" />Expiradas ({expired.length})</h3>
+                  <div className="space-y-2">{expired.map(cert => <CertificationRow key={cert.id} certification={cert} />)}</div>
                 </div>
               )}
               {expiring.length > 0 && (
                 <div>
-                  <h3 className="font-semibold text-yellow-500 mb-3 flex items-center gap-2">
-                    <Clock className="h-4 w-4" />
-                    Expirando em 30 dias ({expiring.length})
-                  </h3>
-                  <div className="space-y-2">
-                    {expiring.map(cert => (
-                      <CertificationRow key={cert.id} certification={cert} />
-                    ))}
-                  </div>
+                  <h3 className="font-semibold text-warning mb-3 flex items-center gap-2"><Clock className="h-4 w-4" />Expirando em 30 dias ({expiring.length})</h3>
+                  <div className="space-y-2">{expiring.map(cert => <CertificationRow key={cert.id} certification={cert} />)}</div>
                 </div>
               )}
             </div>

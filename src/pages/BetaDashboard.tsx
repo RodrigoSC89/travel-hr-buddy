@@ -87,14 +87,15 @@ export default function BetaDashboard() {
     setIsLoading(true);
     try {
       // Fetch feedback data - using raw query since table might not be in types yet
-      const { data: feedbackData, error } = await supabase
-        .from("beta_feedback" as any)
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any -- beta_feedback not in generated types
+      const { data: feedbackData, error } = await (supabase as any)
+        .from("beta_feedback")
         .select("*");
 
       if (error) throw error;
 
-      // Calculate stats
-      const feedbacks = feedbackData as any[] || [];
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any -- beta_feedback dynamic shape
+      const feedbacks = (feedbackData as any[]) || [];
       if (feedbacks.length > 0) {
         const total = feedbacks.length;
         const avgOverallRating = feedbacks.reduce((acc, f) => acc + (f.overall_rating || 0), 0) / total;
@@ -170,8 +171,9 @@ export default function BetaDashboard() {
       }
 
       // Fetch email logs
-      const { data: logsData } = await supabase
-        .from("beta_email_logs" as any)
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any -- beta_email_logs not in generated types
+      const { data: logsData } = await (supabase as any)
+        .from("beta_email_logs")
         .select("*")
         .order("created_at", { ascending: false })
         .limit(50);
@@ -272,8 +274,8 @@ export default function BetaDashboard() {
           <Card>
             <CardContent className="pt-6">
               <div className="flex items-center gap-4">
-                <div className="p-3 rounded-full bg-blue-100">
-                  <Users className="w-6 h-6 text-blue-600" />
+                <div className="p-3 rounded-full bg-primary/10">
+                  <Users className="w-6 h-6 text-primary" />
                 </div>
                 <div>
                   <p className="text-sm text-muted-foreground">Total Respostas</p>
@@ -286,8 +288,8 @@ export default function BetaDashboard() {
           <Card>
             <CardContent className="pt-6">
               <div className="flex items-center gap-4">
-                <div className="p-3 rounded-full bg-yellow-100">
-                  <Star className="w-6 h-6 text-yellow-600" />
+                <div className="p-3 rounded-full bg-warning/10">
+                  <Star className="w-6 h-6 text-warning" />
                 </div>
                 <div>
                   <p className="text-sm text-muted-foreground">Avaliação Média</p>
@@ -300,8 +302,8 @@ export default function BetaDashboard() {
           <Card>
             <CardContent className="pt-6">
               <div className="flex items-center gap-4">
-                <div className="p-3 rounded-full bg-green-100">
-                  <TrendingUp className="w-6 h-6 text-green-600" />
+                <div className="p-3 rounded-full bg-success/10">
+                  <TrendingUp className="w-6 h-6 text-success" />
                 </div>
                 <div>
                   <p className="text-sm text-muted-foreground">Onboarding</p>
@@ -314,8 +316,8 @@ export default function BetaDashboard() {
           <Card>
             <CardContent className="pt-6">
               <div className="flex items-center gap-4">
-                <div className="p-3 rounded-full bg-purple-100">
-                  <MessageSquare className="w-6 h-6 text-purple-600" />
+                <div className="p-3 rounded-full bg-accent/10">
+                  <MessageSquare className="w-6 h-6 text-accent-foreground" />
                 </div>
                 <div>
                   <p className="text-sm text-muted-foreground">Depoimentos</p>

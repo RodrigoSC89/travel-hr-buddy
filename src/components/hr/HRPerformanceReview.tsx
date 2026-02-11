@@ -125,17 +125,17 @@ export function HRPerformanceReview() {
   };
 
   const getScoreColor = (score: number) => {
-    if (score >= 4.5) return "text-green-500";
-    if (score >= 3.5) return "text-blue-500";
-    if (score >= 2.5) return "text-yellow-500";
-    return "text-red-500";
+    if (score >= 4.5) return "text-success";
+    if (score >= 3.5) return "text-primary";
+    if (score >= 2.5) return "text-warning";
+    return "text-destructive";
   };
 
   const getNineBoxPosition = (perf: number, pot: number) => {
-    if (perf >= 4 && pot >= 4) return { label: "High Performer", color: "bg-green-500" };
-    if (perf >= 4 && pot < 4) return { label: "Core Player", color: "bg-blue-500" };
-    if (perf < 4 && pot >= 4) return { label: "Rising Star", color: "bg-purple-500" };
-    return { label: "Development Needed", color: "bg-yellow-500" };
+    if (perf >= 4 && pot >= 4) return { label: "High Performer", color: "bg-success" };
+    if (perf >= 4 && pot < 4) return { label: "Core Player", color: "bg-primary" };
+    if (perf < 4 && pot >= 4) return { label: "Rising Star", color: "bg-accent" };
+    return { label: "Development Needed", color: "bg-warning" };
   };
 
   return (
@@ -178,7 +178,7 @@ export function HRPerformanceReview() {
             <Star className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-green-500">4.1 / 5.0</div>
+            <div className="text-2xl font-bold text-success">4.1 / 5.0</div>
             <p className="text-xs text-muted-foreground">+0.3 vs ciclo anterior</p>
           </CardContent>
         </Card>
@@ -200,7 +200,7 @@ export function HRPerformanceReview() {
             <Award className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-purple-500">28</div>
+            <div className="text-2xl font-bold text-accent-foreground">28</div>
             <p className="text-xs text-muted-foreground">18.7% do total</p>
           </CardContent>
         </Card>
@@ -304,22 +304,22 @@ export function HRPerformanceReview() {
               <CardContent>
                 <TabsContent value="overview" className="space-y-4">
                   {/* AI Insights */}
-                  <div className="p-4 bg-gradient-to-r from-purple-500/10 to-blue-500/10 rounded-lg border">
+                  <div className="p-4 bg-gradient-to-r from-accent/10 to-primary/10 rounded-lg border">
                     <div className="flex items-center gap-2 mb-3">
-                      <Sparkles className="h-5 w-5 text-purple-500" />
+                      <Sparkles className="h-5 w-5 text-accent-foreground" />
                       <span className="font-medium">Insights da IA</span>
                     </div>
                     <ul className="space-y-2 text-sm">
                       <li className="flex items-start gap-2">
-                        <ChevronRight className="h-4 w-4 text-green-500 mt-0.5" />
+                        <ChevronRight className="h-4 w-4 text-success mt-0.5" />
                         <span>Forte candidata para promoção a Tech Lead nos próximos 6 meses</span>
                       </li>
                       <li className="flex items-start gap-2">
-                        <ChevronRight className="h-4 w-4 text-blue-500 mt-0.5" />
+                        <ChevronRight className="h-4 w-4 text-primary mt-0.5" />
                         <span>Recomendado curso de gestão de conflitos para desenvolver soft skills</span>
                       </li>
                       <li className="flex items-start gap-2">
-                        <ChevronRight className="h-4 w-4 text-yellow-500 mt-0.5" />
+                        <ChevronRight className="h-4 w-4 text-warning mt-0.5" />
                         <span>Salário 12% abaixo do mercado - revisar na próxima janela</span>
                       </li>
                     </ul>
