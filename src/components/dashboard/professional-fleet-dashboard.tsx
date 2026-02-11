@@ -99,11 +99,24 @@ const performanceMetrics = [
   { metric: "Compliance", value: 97 }
 ];
 
-const VesselCard = ({ vessel }: any) => {
+interface VesselData {
+  id: number;
+  name: string;
+  status: string;
+  location: string;
+  speed: number;
+  fuel: number;
+  crew: number;
+  lastMaintenance: string;
+  efficiency: number;
+  coordinates: { lat: number; lng: number };
+}
+
+const VesselCard = ({ vessel }: { vessel: VesselData }) => {
   const statusConfig = {
-    operational: { color: "bg-green-500", label: "Operacional", variant: "default" as const },
-    "in-port": { color: "bg-blue-500", label: "Em Porto", variant: "secondary" as const },
-    maintenance: { color: "bg-yellow-500", label: "Manutenção", variant: "outline" as const }
+    operational: { color: "bg-success", label: "Operacional", variant: "default" as const },
+    "in-port": { color: "bg-primary", label: "Em Porto", variant: "secondary" as const },
+    maintenance: { color: "bg-warning", label: "Manutenção", variant: "outline" as const }
   };
 
   const config = statusConfig[vessel.status as keyof typeof statusConfig];
@@ -170,14 +183,14 @@ const VesselCard = ({ vessel }: any) => {
           {/* Quick Stats */}
           <div className="grid grid-cols-2 gap-2 pt-2 border-t">
             <div className="flex items-center gap-2">
-              <Activity className="h-4 w-4 text-blue-600" />
+              <Activity className="h-4 w-4 text-primary" />
               <div>
                 <p className="text-xs text-muted-foreground">Tripulação</p>
                 <p className="text-sm font-semibold">{vessel.crew}</p>
               </div>
             </div>
             <div className="flex items-center gap-2">
-              <Clock className="h-4 w-4 text-green-600" />
+              <Clock className="h-4 w-4 text-success" />
               <div>
                 <p className="text-xs text-muted-foreground">Última Manutenção</p>
                 <p className="text-sm font-semibold">{vessel.lastMaintenance}</p>
@@ -381,8 +394,8 @@ export function ProfessionalFleetDashboard() {
                 <CardTitle className="text-lg">Insights de IA</CardTitle>
               </CardHeader>
               <CardContent className="space-y-4">
-                <div className="flex items-start gap-3 p-3 bg-green-50 dark:bg-green-950/20 rounded-lg border border-green-200 dark:border-green-800">
-                  <CheckCircle className="h-5 w-5 text-green-600 mt-0.5" />
+                <div className="flex items-start gap-3 p-3 bg-success/10 rounded-lg border border-success/20">
+                  <CheckCircle className="h-5 w-5 text-success mt-0.5" />
                   <div>
                     <p className="font-semibold text-sm">Otimização Detectada</p>
                     <p className="text-xs text-muted-foreground">
@@ -391,8 +404,8 @@ export function ProfessionalFleetDashboard() {
                   </div>
                 </div>
 
-                <div className="flex items-start gap-3 p-3 bg-yellow-50 dark:bg-yellow-950/20 rounded-lg border border-yellow-200 dark:border-yellow-800">
-                  <AlertTriangle className="h-5 w-5 text-yellow-600 mt-0.5" />
+                <div className="flex items-start gap-3 p-3 bg-warning/10 rounded-lg border border-warning/20">
+                  <AlertTriangle className="h-5 w-5 text-warning mt-0.5" />
                   <div>
                     <p className="font-semibold text-sm">Manutenção Prevista</p>
                     <p className="text-xs text-muted-foreground">
@@ -401,8 +414,8 @@ export function ProfessionalFleetDashboard() {
                   </div>
                 </div>
 
-                <div className="flex items-start gap-3 p-3 bg-blue-50 dark:bg-blue-950/20 rounded-lg border border-blue-200 dark:border-blue-800">
-                  <TrendingUp className="h-5 w-5 text-blue-600 mt-0.5" />
+                <div className="flex items-start gap-3 p-3 bg-primary/10 rounded-lg border border-primary/20">
+                  <TrendingUp className="h-5 w-5 text-primary mt-0.5" />
                   <div>
                     <p className="font-semibold text-sm">Tendência Positiva</p>
                     <p className="text-xs text-muted-foreground">
@@ -420,7 +433,7 @@ export function ProfessionalFleetDashboard() {
               <CardContent className="space-y-3">
                 <div className="flex items-center justify-between p-3 border rounded-lg hover:bg-muted/50 transition-colors cursor-pointer">
                   <div className="flex items-center gap-3">
-                    <div className="h-2 w-2 rounded-full bg-red-500" />
+                    <div className="h-2 w-2 rounded-full bg-destructive" />
                     <div>
                       <p className="text-sm font-medium">Manutenção Emergencial</p>
                       <p className="text-xs text-muted-foreground">Ártico IV - Motor</p>
@@ -431,7 +444,7 @@ export function ProfessionalFleetDashboard() {
 
                 <div className="flex items-center justify-between p-3 border rounded-lg hover:bg-muted/50 transition-colors cursor-pointer">
                   <div className="flex items-center gap-3">
-                    <div className="h-2 w-2 rounded-full bg-yellow-500" />
+                    <div className="h-2 w-2 rounded-full bg-warning" />
                     <div>
                       <p className="text-sm font-medium">Inspeção Programada</p>
                       <p className="text-xs text-muted-foreground">Pacífico II - Casco</p>
@@ -442,7 +455,7 @@ export function ProfessionalFleetDashboard() {
 
                 <div className="flex items-center justify-between p-3 border rounded-lg hover:bg-muted/50 transition-colors cursor-pointer">
                   <div className="flex items-center gap-3">
-                    <div className="h-2 w-2 rounded-full bg-green-500" />
+                    <div className="h-2 w-2 rounded-full bg-success" />
                     <div>
                       <p className="text-sm font-medium">Abastecimento</p>
                       <p className="text-xs text-muted-foreground">Índico III - Combustível</p>

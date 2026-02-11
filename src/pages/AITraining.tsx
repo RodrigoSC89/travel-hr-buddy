@@ -44,8 +44,8 @@ interface TrainingSession {
   completed_at: string | null;
   created_at: string | null;
   crew_member_id: string | null;
-  content: any;
-  ai_feedback: any;
+  content: Record<string, unknown> | null;
+  ai_feedback: Record<string, unknown> | null;
   crew_member?: { full_name: string; rank: string } | null;
 }
 
@@ -254,10 +254,10 @@ const AITraining: React.FC = () => {
   };
 
   const getScoreColor = (score: number) => {
-    if (score >= 90) return 'text-green-500';
-    if (score >= 70) return 'text-blue-500';
-    if (score >= 50) return 'text-yellow-500';
-    return 'text-red-500';
+    if (score >= 90) return 'text-success';
+    if (score >= 70) return 'text-primary';
+    if (score >= 50) return 'text-warning';
+    return 'text-destructive';
   };
 
   const getStatusBadge = (session: TrainingSession) => {

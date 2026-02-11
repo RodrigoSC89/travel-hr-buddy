@@ -31,7 +31,7 @@ export interface AlertResponse {
   message?: string;
   messageId?: string;
   error?: string;
-  details?: any;
+  details?: Record<string, unknown>;
 }
 
 /**

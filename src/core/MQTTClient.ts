@@ -167,7 +167,7 @@ class MQTTClientManager {
    * @param topic - Tópico MQTT
    * @param payload - Dados a enviar
    */
-  send(topic: string, payload: any): void {
+  send(topic: string, payload: unknown): void {
     if (!this.client?.connected) {
       Logger.warn("MQTT não conectado. Mensagem não enviada.", undefined, "MQTTClient");
       return;

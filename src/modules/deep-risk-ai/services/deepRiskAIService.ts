@@ -180,18 +180,19 @@ class DeepRiskAIService {
 
       if (error) throw error;
 
-      return (data || []).map((d) => {
-        const meta = d.metadata as Record<string, any> | null;
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any -- system_observations metadata is dynamic JSON
+      return (data || []).map((d: any) => {
+        const meta = d.metadata as Record<string, unknown> | null;
         return {
           id: d.id,
           timestamp: d.created_at || new Date().toISOString(),
-          eventType: meta?.event_type || "risk_assessment",
-          riskScore: meta?.risk_score || 0,
-          riskLevel: meta?.risk_level || "low",
-          factors: meta?.factors || {},
-          recommendations: meta?.recommendations || [],
-          resolved: meta?.resolved || false,
-          notes: meta?.notes,
+          eventType: (meta?.event_type as RiskEvent["eventType"]) || "risk_assessment",
+          riskScore: (meta?.risk_score as number) || 0,
+          riskLevel: (meta?.risk_level as string) || "low",
+          factors: (meta?.factors as RiskFactors) || {} as RiskFactors,
+          recommendations: (meta?.recommendations as RiskRecommendation[]) || [],
+          resolved: (meta?.resolved as boolean) || false,
+          notes: meta?.notes as string | undefined,
         };
       });
     } catch (error) {
@@ -238,7 +239,7 @@ class DeepRiskAIService {
     }
   }
 
-  private calculateEnvironmentalRisk(factors: RiskFactors, _forecastData: any): number {
+  private calculateEnvironmentalRisk(factors: RiskFactors, _forecastData: Record<string, unknown>): number {
     let risk = 0;
     if (factors.depth > 200) risk += 30;
     else if (factors.depth > 100) risk += 15;
@@ -284,14 +285,15 @@ class DeepRiskAIService {
         .order("timestamp", { ascending: false })
         .limit(50);
 
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any -- incidents table fields accessed dynamically
       return (data || []).map((d: any) => ({
-        id: d.id,
-        type: d.type,
-        severity: d.severity,
-        timestamp: d.timestamp,
-        description: d.description,
-        location: d.location,
-        resolved: d.resolved || false,
+        id: d.id as string,
+        type: d.type as string,
+        severity: d.severity as string,
+        timestamp: d.timestamp as string,
+        description: d.description as string,
+        location: d.location as string | undefined,
+        resolved: (d.resolved as boolean) || false,
       }));
     } catch (error) {
       logger.error("Failed to fetch incidents", error);
@@ -299,7 +301,7 @@ class DeepRiskAIService {
     }
   }
 
-  private async getForecastData(): Promise<any> {
+  private async getForecastData(): Promise<Record<string, unknown>> {
     // weather_forecasts table doesn't exist in schema - return empty gracefully
     logger.debug("Weather forecasts table not available, using empty forecast data");
     return {};

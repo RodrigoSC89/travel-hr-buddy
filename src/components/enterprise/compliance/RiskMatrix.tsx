@@ -127,10 +127,11 @@ export function RiskMatrix() {
   useEffect(() => {
     supabase.from("non_conformities").select("*").limit(20).then(({ data }) => {
       if (data && data.length > 0) {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any -- non_conformities schema fields accessed dynamically
         setRisks(data.map((nc: any, i: number) => ({
           id: nc.id, title: nc.description || nc.title || `Risk ${i+1}`,
-          category: nc.category || "Operacional", likelihood: Math.min(5, Math.max(1, nc.severity || 3)) as any,
-          impact: Math.min(5, Math.max(1, nc.impact_level || 3)) as any,
+          category: nc.category || "Operacional", likelihood: Math.min(5, Math.max(1, nc.severity || 3)) as Risk["likelihood"],
+          impact: Math.min(5, Math.max(1, nc.impact_level || 3)) as Risk["impact"],
           riskScore: (nc.severity || 3) * (nc.impact_level || 3),
           status: nc.status === "closed" ? "mitigated" as const : "open" as const,
           owner: nc.responsible_person || "N/A", dueDate: nc.due_date || "",
@@ -141,25 +142,25 @@ export function RiskMatrix() {
   }, []);
 
   const getRiskLevel = (score: number) => {
-    if (score >= 15) return { label: "Crítico", color: "bg-red-500", textColor: "text-red-500" };
-    if (score >= 10) return { label: "Alto", color: "bg-orange-500", textColor: "text-orange-500" };
-    if (score >= 5) return { label: "Médio", color: "bg-yellow-500", textColor: "text-yellow-500" };
-    return { label: "Baixo", color: "bg-green-500", textColor: "text-green-500" };
+    if (score >= 15) return { label: "Crítico", color: "bg-destructive", textColor: "text-destructive" };
+    if (score >= 10) return { label: "Alto", color: "bg-warning", textColor: "text-warning" };
+    if (score >= 5) return { label: "Médio", color: "bg-accent", textColor: "text-accent-foreground" };
+    return { label: "Baixo", color: "bg-success", textColor: "text-success" };
   };
 
   const getStatusBadge = (status: Risk["status"]) => {
     switch (status) {
       case "open": return <Badge variant="destructive">Aberto</Badge>;
-      case "mitigating": return <Badge className="bg-yellow-500/10 text-yellow-500">Em Mitigação</Badge>;
-      case "mitigated": return <Badge className="bg-green-500/10 text-green-500">Mitigado</Badge>;
+      case "mitigating": return <Badge className="bg-warning/10 text-warning">Em Mitigação</Badge>;
+      case "mitigated": return <Badge className="bg-success/10 text-success">Mitigado</Badge>;
       case "accepted": return <Badge variant="secondary">Aceito</Badge>;
     }
   };
 
   const getTrendIcon = (trend: Risk["trend"]) => {
     switch (trend) {
-      case "up": return <TrendingUp className="h-4 w-4 text-red-500" />;
-      case "down": return <TrendingDown className="h-4 w-4 text-green-500" />;
+      case "up": return <TrendingUp className="h-4 w-4 text-destructive" />;
+      case "down": return <TrendingDown className="h-4 w-4 text-success" />;
       default: return <div className="h-4 w-4 border-t-2 border-muted-foreground" />;
     }
   };
@@ -169,10 +170,10 @@ export function RiskMatrix() {
 
   const getCellColor = (likelihood: number, impact: number) => {
     const score = likelihood * impact;
-    if (score >= 15) return "bg-red-500/20 hover:bg-red-500/30";
-    if (score >= 10) return "bg-orange-500/20 hover:bg-orange-500/30";
-    if (score >= 5) return "bg-yellow-500/20 hover:bg-yellow-500/30";
-    return "bg-green-500/20 hover:bg-green-500/30";
+    if (score >= 15) return "bg-destructive/20 hover:bg-destructive/30";
+    if (score >= 10) return "bg-warning/20 hover:bg-warning/30";
+    if (score >= 5) return "bg-accent/20 hover:bg-accent/30";
+    return "bg-success/20 hover:bg-success/30";
   };
 
   const stats = {
@@ -205,10 +206,10 @@ export function RiskMatrix() {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-muted-foreground">Críticos</p>
-                <p className="text-3xl font-bold text-red-500">{stats.critical}</p>
+                <p className="text-3xl font-bold text-destructive">{stats.critical}</p>
               </div>
-              <div className="p-3 rounded-full bg-red-500/10">
-                <AlertTriangle className="h-6 w-6 text-red-500" />
+              <div className="p-3 rounded-full bg-destructive/10">
+                <AlertTriangle className="h-6 w-6 text-destructive" />
               </div>
             </div>
           </CardContent>
@@ -219,10 +220,10 @@ export function RiskMatrix() {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-muted-foreground">Altos</p>
-                <p className="text-3xl font-bold text-orange-500">{stats.high}</p>
+                <p className="text-3xl font-bold text-warning">{stats.high}</p>
               </div>
-              <div className="p-3 rounded-full bg-orange-500/10">
-                <Target className="h-6 w-6 text-orange-500" />
+              <div className="p-3 rounded-full bg-warning/10">
+                <Target className="h-6 w-6 text-warning" />
               </div>
             </div>
           </CardContent>
@@ -233,10 +234,10 @@ export function RiskMatrix() {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-muted-foreground">Mitigados</p>
-                <p className="text-3xl font-bold text-green-500">{stats.mitigated}</p>
+                <p className="text-3xl font-bold text-success">{stats.mitigated}</p>
               </div>
-              <div className="p-3 rounded-full bg-green-500/10">
-                <CheckCircle2 className="h-6 w-6 text-green-500" />
+              <div className="p-3 rounded-full bg-success/10">
+                <CheckCircle2 className="h-6 w-6 text-success" />
               </div>
             </div>
           </CardContent>

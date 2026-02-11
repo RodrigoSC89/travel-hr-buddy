@@ -63,6 +63,7 @@ export function CommandBrainPanel({ context, onSettingsClick }: CommandBrainPane
       return;
     }
 
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Web Speech API types not available in TS
     const SpeechRecognition = (window as any).webkitSpeechRecognition || (window as any).SpeechRecognition;
     const recognition = new SpeechRecognition();
     recognition.lang = "pt-BR";
@@ -74,9 +75,10 @@ export function CommandBrainPanel({ context, onSettingsClick }: CommandBrainPane
       setIsListening(false);
       toast.error("Erro no reconhecimento de voz");
     };
-    recognition.onresult = (event: any) => {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any -- SpeechRecognitionEvent not in TS lib
+    recognition.onresult = (event: { results: ArrayLike<{ 0: { transcript: string } }> }) => {
       const transcript = Array.from(event.results)
-        .map((result: any) => result[0].transcript)
+        .map((result) => result[0].transcript)
         .join("");
       setInput(transcript);
     };
@@ -239,7 +241,7 @@ export function CommandBrainPanel({ context, onSettingsClick }: CommandBrainPane
                           <Button 
                             variant="ghost" 
                             size="sm" 
-                            className={`h-6 px-2 ${message.feedback === "positive" ? "text-green-500 bg-green-50" : ""}`}
+                            className={`h-6 px-2 ${message.feedback === "positive" ? "text-success bg-success/10" : ""}`}
                             onClick={() => handleFeedback(message.id, "positive")}
                           >
                             <ThumbsUp className="h-3 w-3" />
@@ -247,7 +249,7 @@ export function CommandBrainPanel({ context, onSettingsClick }: CommandBrainPane
                           <Button 
                             variant="ghost" 
                             size="sm" 
-                            className={`h-6 px-2 ${message.feedback === "negative" ? "text-red-500 bg-red-50" : ""}`}
+                            className={`h-6 px-2 ${message.feedback === "negative" ? "text-destructive bg-destructive/10" : ""}`}
                             onClick={() => handleFeedback(message.id, "negative")}
                           >
                             <ThumbsDown className="h-3 w-3" />
@@ -267,7 +269,7 @@ export function CommandBrainPanel({ context, onSettingsClick }: CommandBrainPane
           <Button
             variant="outline"
             size="icon"
-            className={`shrink-0 ${isListening ? "bg-red-100 text-red-600 border-red-300" : ""}`}
+            className={`shrink-0 ${isListening ? "bg-destructive/10 text-destructive border-destructive/30" : ""}`}
             onClick={handleVoiceInput}
           >
             {isListening ? <MicOff className="h-4 w-4 animate-pulse" /> : <Mic className="h-4 w-4" />}
