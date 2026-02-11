@@ -25,10 +25,10 @@ export function IMCADPChecklist({ selectedDPClass, auditData, setAuditData }: Pr
 
   const getStatusIcon = (status?: string) => {
     switch(status) {
-      case "C": return <CheckCircle2 className="h-5 w-5 text-green-600" />;
-      case "NC": return <XCircle className="h-5 w-5 text-red-600" />;
-      case "NA": return <MinusCircle className="h-5 w-5 text-gray-400" />;
-      default: return <Clock className="h-5 w-5 text-amber-500" />;
+      case "C": return <CheckCircle2 className="h-5 w-5 text-success" />;
+      case "NC": return <XCircle className="h-5 w-5 text-destructive" />;
+      case "NA": return <MinusCircle className="h-5 w-5 text-muted-foreground" />;
+      default: return <Clock className="h-5 w-5 text-warning" />;
     }
   };
 

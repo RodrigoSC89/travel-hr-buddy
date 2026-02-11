@@ -71,7 +71,7 @@ interface SupplyChainKPI {
 const statusConfig = {
   preparing: { label: "Preparando", color: "bg-muted", icon: Box },
   in_transit: { label: "Em Trânsito", color: "bg-primary", icon: Ship },
-  at_port: { label: "No Porto", color: "bg-blue-500", icon: Anchor },
+  at_port: { label: "No Porto", color: "bg-info", icon: Anchor },
   customs: { label: "Alfândega", color: "bg-warning", icon: Clock },
   delivered: { label: "Entregue", color: "bg-success", icon: CheckCircle2 },
   delayed: { label: "Atrasado", color: "bg-destructive", icon: AlertTriangle },
@@ -79,9 +79,9 @@ const statusConfig = {
 
 const typeConfig = {
   container: { label: "Container", color: "bg-primary/20" },
-  bulk: { label: "Bulk", color: "bg-blue-500/20" },
-  breakbulk: { label: "Breakbulk", color: "bg-purple-500/20" },
-  reefer: { label: "Reefer", color: "bg-cyan-500/20" },
+  bulk: { label: "Bulk", color: "bg-info/20" },
+  breakbulk: { label: "Breakbulk", color: "bg-accent/20" },
+  reefer: { label: "Reefer", color: "bg-info/20" },
   hazmat: { label: "Hazmat", color: "bg-destructive/20" },
 };
 
@@ -114,6 +114,7 @@ export function LogisticsIntelligenceHub() {
       try {
         const { data, error } = await supabase.from("fuel_records").select("id, fuel_type, quantity_liters, total_cost, record_date, vessel_id, vessels(name)").order("record_date", { ascending: false }).limit(10);
         if (!error && data && data.length > 0) {
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Supabase join returns dynamic shape with vessel relation
           const mapped: Shipment[] = data.map((row: any, i: number) => ({
             id: row.id, trackingNumber: `NTLS-${i + 1}`, type: "bulk" as const, status: "delivered" as const,
             origin: { port: "Fornecedor", country: "BR" }, destination: { port: "Base", country: "BR" },
@@ -152,7 +153,7 @@ export function LogisticsIntelligenceHub() {
           <h2 className="text-2xl font-bold flex items-center gap-2">
             <Package className="h-6 w-6 text-primary" />
             Logistics Intelligence Hub
-            <Badge className="bg-gradient-to-r from-purple-500 to-pink-500 text-white">
+            <Badge className="bg-gradient-to-r from-accent to-primary text-accent-foreground">
               <Sparkles className="h-3 w-3 mr-1" />
               AI Powered
             </Badge>

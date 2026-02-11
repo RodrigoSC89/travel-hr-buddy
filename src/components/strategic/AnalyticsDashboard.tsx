@@ -21,7 +21,7 @@ import { useToast } from "@/hooks/use-toast";
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, AreaChart, Area } from 'recharts';
 
 // Time Series Chart Component
-function TimeSeriesChart({ metrics, period }: { metrics: any[]; period: string }) {
+function TimeSeriesChart({ metrics, period }: { metrics: KPIMetric[]; period: string }) {
   // Generate time series data based on period
   const generateData = () => {
     const points = period === 'week' ? 7 : period === 'month' ? 30 : 12;

@@ -51,6 +51,7 @@ export default function OpenSkyFlights() {
       if (error) throw error;
 
       if (data?.states) {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any -- OpenSky API returns array-of-arrays state vectors
         const formattedAircraft: Aircraft[] = data.states.slice(0, 50).map((state: any[]) => ({
           icao24: state[0] || "",
           callsign: state[1]?.trim() || "N/A",
@@ -97,7 +98,7 @@ export default function OpenSkyFlights() {
           <p className="text-muted-foreground">Rastreamento de voos em tempo real via OpenSky Network</p>
         </div>
         <div className="flex gap-2">
-          <Badge variant="outline" className="text-green-500 border-green-500">
+          <Badge variant="outline" className="text-success border-success">
             <Radio className="w-4 h-4 mr-1 animate-pulse" />
             AO VIVO
           </Badge>
@@ -110,10 +111,10 @@ export default function OpenSkyFlights() {
 
       {/* Stats Cards */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-        <Card className="bg-gradient-to-br from-blue-500/10 to-blue-600/5">
+        <Card className="bg-gradient-to-br from-primary/10 to-primary/5">
           <CardContent className="pt-6">
             <div className="flex items-center gap-4">
-              <Plane className="w-8 h-8 text-blue-500" />
+              <Plane className="w-8 h-8 text-primary" />
               <div>
                 <p className="text-2xl font-bold">{stats.total}</p>
                 <p className="text-sm text-muted-foreground">Total de Aeronaves</p>
@@ -122,10 +123,10 @@ export default function OpenSkyFlights() {
           </CardContent>
         </Card>
 
-        <Card className="bg-gradient-to-br from-green-500/10 to-green-600/5">
+        <Card className="bg-gradient-to-br from-success/10 to-success/5">
           <CardContent className="pt-6">
             <div className="flex items-center gap-4">
-              <ArrowUpRight className="w-8 h-8 text-green-500" />
+              <ArrowUpRight className="w-8 h-8 text-success" />
               <div>
                 <p className="text-2xl font-bold">{stats.inFlight}</p>
                 <p className="text-sm text-muted-foreground">Em Voo</p>
@@ -134,10 +135,10 @@ export default function OpenSkyFlights() {
           </CardContent>
         </Card>
 
-        <Card className="bg-gradient-to-br from-orange-500/10 to-orange-600/5">
+        <Card className="bg-gradient-to-br from-warning/10 to-warning/5">
           <CardContent className="pt-6">
             <div className="flex items-center gap-4">
-              <MapPin className="w-8 h-8 text-orange-500" />
+              <MapPin className="w-8 h-8 text-warning" />
               <div>
                 <p className="text-2xl font-bold">{stats.onGround}</p>
                 <p className="text-sm text-muted-foreground">No Solo</p>
@@ -146,10 +147,10 @@ export default function OpenSkyFlights() {
           </CardContent>
         </Card>
 
-        <Card className="bg-gradient-to-br from-purple-500/10 to-purple-600/5">
+        <Card className="bg-gradient-to-br from-accent/10 to-accent/5">
           <CardContent className="pt-6">
             <div className="flex items-center gap-4">
-              <Gauge className="w-8 h-8 text-purple-500" />
+              <Gauge className="w-8 h-8 text-accent" />
               <div>
                 <p className="text-2xl font-bold">{stats.avgAltitude.toLocaleString()}m</p>
                 <p className="text-sm text-muted-foreground">Altitude Média</p>

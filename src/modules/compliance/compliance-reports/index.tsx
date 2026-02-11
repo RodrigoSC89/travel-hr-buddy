@@ -19,6 +19,7 @@ const loadJsPDF = async () => {
   return { jsPDF, autoTable: autoTableModule.default };
 };
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- XLSX dynamic import has no typed module
 let XLSX: any = null;
 const loadXLSX = async () => {
   if (!XLSX) {
@@ -34,6 +35,7 @@ const ComplianceReports = () => {
   const { toast } = useToast();
   const [showForm, setShowForm] = useState(false);
   const [showFilters, setShowFilters] = useState(false);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- compliance data from dynamic table
   const [complianceData, setComplianceData] = useState<any[]>([]);
   const [loading, setLoading] = useState(false);
   
@@ -103,7 +105,8 @@ const ComplianceReports = () => {
   const fetchComplianceData = async () => {
     try {
       setLoading(true);
-      let query = supabase.from("compliance_items" as any).select("*");
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any -- compliance_items not in generated schema
+      let query = supabase.from("compliance_items" as never).select("*");
       
       // Apply filters if any
       if (reportConfig.categories?.length > 0) {
@@ -144,6 +147,7 @@ const ComplianceReports = () => {
   };
 
   // PDF Export using jsPDF
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- dynamic compliance data shape
   const exportToPDF = async (data: any[]) => {
     try {
       const { jsPDF, autoTable } = await loadJsPDF();
@@ -409,9 +413,9 @@ const ComplianceReports = () => {
 
   const getStatusColor = (status: string) => {
     const colors: Record<string, string> = {
-      completed: "bg-green-500",
-      generating: "bg-blue-500",
-      scheduled: "bg-amber-500",
+      completed: "bg-success",
+      generating: "bg-primary",
+      scheduled: "bg-warning",
       pending: "bg-muted",
       error: "bg-destructive"
     };

@@ -7,6 +7,7 @@ import { useState, useCallback } from "react";
 import { useToast } from "@/hooks/use-toast";
 import { logger } from '@/lib/logger';
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- jsPDF autoTable has dynamic cell/row shapes
 type AutoTableUserInput = {
   head?: any[][];
   body?: any[][];
