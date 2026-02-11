@@ -87,19 +87,19 @@ const fallbackRules: AlertRule[] = [
 
 const SEVERITY_CONFIG = {
   critical: { label: "Crítico", color: "bg-destructive text-destructive-foreground", icon: AlertTriangle },
-  high: { label: "Alto", color: "bg-orange-500 text-white", icon: AlertTriangle },
-  medium: { label: "Médio", color: "bg-amber-500 text-white", icon: Bell },
-  low: { label: "Baixo", color: "bg-blue-500 text-white", icon: Bell },
+  high: { label: "Alto", color: "bg-warning text-warning-foreground", icon: AlertTriangle },
+  medium: { label: "Médio", color: "bg-accent text-accent-foreground", icon: Bell },
+  low: { label: "Baixo", color: "bg-primary text-primary-foreground", icon: Bell },
   info: { label: "Info", color: "bg-muted text-muted-foreground", icon: Bell },
 };
 
 const TYPE_CONFIG = {
-  geofence: { label: "Geofence", icon: MapPin, color: "text-purple-500" },
-  threshold: { label: "Threshold", icon: Gauge, color: "text-orange-500" },
-  system: { label: "Sistema", icon: Settings, color: "text-blue-500" },
+  geofence: { label: "Geofence", icon: MapPin, color: "text-secondary-foreground" },
+  threshold: { label: "Threshold", icon: Gauge, color: "text-warning" },
+  system: { label: "Sistema", icon: Settings, color: "text-primary" },
   emergency: { label: "Emergência", icon: Radio, color: "text-destructive" },
-  maintenance: { label: "Manutenção", icon: Settings, color: "text-amber-500" },
-  weather: { label: "Clima", icon: Navigation, color: "text-cyan-500" },
+  maintenance: { label: "Manutenção", icon: Settings, color: "text-accent-foreground" },
+  weather: { label: "Clima", icon: Navigation, color: "text-info" },
 };
 
 const STATUS_CONFIG = {
@@ -253,25 +253,25 @@ export default function VesselAlertsCenter() {
             </div>
           </CardContent>
         </Card>
-        <Card className="border-l-4 border-l-orange-500">
+        <Card className="border-l-4 border-l-warning">
           <CardContent className="pt-4">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-xs text-muted-foreground">Ativos</p>
-                <p className="text-2xl font-bold text-orange-500">{stats.active}</p>
+                <p className="text-2xl font-bold text-warning">{stats.active}</p>
               </div>
-              <Zap className="h-8 w-8 text-orange-500 opacity-60" />
+              <Zap className="h-8 w-8 text-warning opacity-60" />
             </div>
           </CardContent>
         </Card>
-        <Card className="border-l-4 border-l-amber-500">
+        <Card className="border-l-4 border-l-accent">
           <CardContent className="pt-4">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-xs text-muted-foreground">Reconhecidos</p>
-                <p className="text-2xl font-bold text-amber-500">{stats.acknowledged}</p>
+                <p className="text-2xl font-bold text-accent-foreground">{stats.acknowledged}</p>
               </div>
-              <Eye className="h-8 w-8 text-amber-500 opacity-60" />
+              <Eye className="h-8 w-8 text-accent-foreground opacity-60" />
             </div>
           </CardContent>
         </Card>

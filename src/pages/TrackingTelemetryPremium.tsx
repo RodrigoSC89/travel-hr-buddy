@@ -112,7 +112,8 @@ function FuelConsumptionTab() {
           <CardContent className="p-4">
             <p className="text-xs text-muted-foreground">Capacidade Total</p>
             <p className="text-2xl font-bold">
-              {vessels.reduce((sum: number, v: any) => sum + (v.fuel_capacity || 0), 0).toLocaleString()} t
+              {/* eslint-disable-next-line @typescript-eslint/no-explicit-any -- Supabase dynamic query result */}
+              {(vessels as any[]).reduce((sum: number, v) => sum + (Number(v.fuel_capacity) || 0), 0).toLocaleString()} t
             </p>
           </CardContent>
         </Card>
@@ -134,7 +135,8 @@ function FuelConsumptionTab() {
             <p className="text-sm text-muted-foreground text-center py-4">Nenhum registro de combustível encontrado</p>
           ) : (
             <div className="space-y-2">
-              {fuelRecords.slice(0, 10).map((r: any) => (
+              {/* eslint-disable-next-line @typescript-eslint/no-explicit-any -- Supabase dynamic query */}
+              {(fuelRecords as any[]).slice(0, 10).map((r) => (
                 <div key={r.id} className="flex items-center justify-between p-2 border rounded hover:bg-muted/50">
                   <span className="text-sm font-medium">{r.fuel_type || 'Fuel'}</span>
                   <div className="flex items-center gap-3">
@@ -189,7 +191,8 @@ function NavigationHistoryTab() {
           Histórico de Navegação
         </h3>
         <Button variant="outline" size="sm" onClick={() => {
-          const csv = ["Data,Latitude,Longitude,Velocidade,Curso", ...navHistory.map((n: any) => 
+          {/* eslint-disable-next-line @typescript-eslint/no-explicit-any -- Supabase dynamic query */}
+          const csv = ["Data,Latitude,Longitude,Velocidade,Curso", ...(navHistory as any[]).map((n) => 
             `${n.recorded_at},${n.latitude},${n.longitude},${n.speed_knots || 0},${n.course || 0}`
           )].join('\n');
           const blob = new Blob([csv], { type: 'text/csv' });
@@ -206,7 +209,8 @@ function NavigationHistoryTab() {
       <Card>
         <CardContent className="p-0">
           <div className="divide-y">
-            {navHistory.slice(0, 20).map((entry: any) => (
+            {/* eslint-disable-next-line @typescript-eslint/no-explicit-any -- Supabase dynamic query */}
+            {(navHistory as any[]).slice(0, 20).map((entry) => (
               <div key={entry.id} className="flex items-center justify-between p-3 hover:bg-muted/50">
                 <div className="flex items-center gap-3">
                   <MapPin className="h-4 w-4 text-muted-foreground" />
@@ -249,7 +253,8 @@ export default function TrackingTelemetryPremium() {
         .select("id, status");
       if (error) throw error;
       const total = data?.length || 0;
-      const online = data?.filter((v: any) => v.status === 'active' || v.status === 'operational').length || 0;
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Supabase dynamic query
+      const online = (data as any[])?.filter((v) => v.status === 'active' || v.status === 'operational').length || 0;
       return { total, online };
     },
     staleTime: 30000,

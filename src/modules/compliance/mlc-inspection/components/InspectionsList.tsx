@@ -40,20 +40,20 @@ export function InspectionsList({ onSelectInspection, onStatsUpdate }: Inspectio
 
   const getStatusColor = (status: string) => {
     const colors: Record<string, string> = {
-      draft: "bg-gray-500",
-      in_progress: "bg-blue-500",
-      submitted: "bg-yellow-500",
-      reviewed: "bg-purple-500",
-      approved: "bg-green-500",
+      draft: "bg-muted-foreground",
+      in_progress: "bg-primary",
+      submitted: "bg-warning",
+      reviewed: "bg-secondary",
+      approved: "bg-success",
     };
-    return colors[status] || "bg-gray-500";
+    return colors[status] || "bg-muted-foreground";
   };
 
   const getComplianceColor = (score?: number) => {
-    if (!score) return "text-gray-500";
-    if (score >= 90) return "text-green-500";
-    if (score >= 75) return "text-yellow-500";
-    return "text-red-500";
+    if (!score) return "text-muted-foreground";
+    if (score >= 90) return "text-success";
+    if (score >= 75) return "text-warning";
+    return "text-destructive";
   };
 
   if (loading) {

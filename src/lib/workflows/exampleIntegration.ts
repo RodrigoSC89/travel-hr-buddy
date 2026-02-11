@@ -17,7 +17,7 @@ export interface SmartWorkflow {
   trigger: string;
   category: string;
   tags: string[];
-  steps: any[];
+  steps: Record<string, unknown>[];
   executions: number;
   successRate: number;
   createdAt: Date;

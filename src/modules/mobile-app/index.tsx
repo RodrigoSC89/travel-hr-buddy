@@ -46,7 +46,7 @@ const crewRoles: CrewRole[] = [
     id: "captain",
     title: "Comandante",
     icon: Anchor,
-    color: "text-blue-400",
+    color: "text-primary",
     features: [
       "Dashboard de navegação completo",
       "Aprovações e autorizações",
@@ -65,7 +65,7 @@ const crewRoles: CrewRole[] = [
     id: "engineer",
     title: "Chefe de Máquinas",
     icon: Wrench,
-    color: "text-orange-400",
+    color: "text-warning",
     features: [
       "Monitoramento de equipamentos",
       "Ordens de serviço",
@@ -84,7 +84,7 @@ const crewRoles: CrewRole[] = [
     id: "officer",
     title: "Oficial de Náutica",
     icon: Navigation,
-    color: "text-cyan-400",
+    color: "text-accent-foreground",
     features: [
       "Carta náutica digital",
       "Previsão meteorológica",
@@ -103,7 +103,7 @@ const crewRoles: CrewRole[] = [
     id: "bosun",
     title: "Contramestre",
     icon: Users,
-    color: "text-green-400",
+    color: "text-success",
     features: [
       "Gestão de convés",
       "Plano de trabalho",
@@ -122,7 +122,7 @@ const crewRoles: CrewRole[] = [
     id: "medical",
     title: "Oficial Médico",
     icon: Stethoscope,
-    color: "text-red-400",
+    color: "text-destructive",
     features: [
       "Prontuários eletrônicos",
       "Estoque de medicamentos",
@@ -141,7 +141,7 @@ const crewRoles: CrewRole[] = [
     id: "cook",
     title: "Cozinheiro",
     icon: ChefHat,
-    color: "text-yellow-400",
+    color: "text-warning",
     features: [
       "Cardápio semanal",
       "Controle de estoque",
@@ -299,7 +299,7 @@ export default function MobileApp() {
                       <div className="relative">
                         <Bell className="h-5 w-5" />
                         {unreadCount > 0 && (
-                          <span className="absolute -top-1 -right-1 w-4 h-4 bg-red-500 rounded-full text-[10px] flex items-center justify-center text-white">
+                          <span className="absolute -top-1 -right-1 w-4 h-4 bg-destructive rounded-full text-[10px] flex items-center justify-center text-destructive-foreground">
                             {unreadCount}
                           </span>
                         )}
@@ -338,7 +338,7 @@ export default function MobileApp() {
                           key={idx}
                           className="flex items-center gap-2 p-2 rounded-lg bg-muted/30 text-xs"
                         >
-                          <CheckCircle2 className="h-3 w-3 text-green-400" />
+                          <CheckCircle2 className="h-3 w-3 text-success" />
                           <span>{feature}</span>
                         </div>
                       ))}
@@ -366,11 +366,11 @@ export default function MobileApp() {
                         >
                           <div className="flex items-start gap-2">
                             {notif.type === "critical" ? (
-                              <AlertTriangle className="h-3 w-3 text-red-400 mt-0.5" />
+                              <AlertTriangle className="h-3 w-3 text-destructive mt-0.5" />
                             ) : notif.type === "warning" ? (
-                              <AlertTriangle className="h-3 w-3 text-yellow-400 mt-0.5" />
+                              <AlertTriangle className="h-3 w-3 text-warning mt-0.5" />
                             ) : (
-                              <Bell className="h-3 w-3 text-blue-400 mt-0.5" />
+                              <Bell className="h-3 w-3 text-primary mt-0.5" />
                             )}
                             <div className="flex-1">
                               <p className="font-medium">{notif.title}</p>

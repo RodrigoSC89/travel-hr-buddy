@@ -91,22 +91,22 @@ export const SocialSustainabilityPanel: React.FC = () => {
     <div className="space-y-6">
       {/* KPI Cards */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
-        <Card className="bg-gradient-to-br from-green-500/10 to-green-600/10 border-green-500/20">
+        <Card className="bg-gradient-to-br from-success/10 to-success/10 border-success/20">
           <CardContent className="p-4">
             <div className="flex items-center justify-between mb-2">
-              <Shield className="h-5 w-5 text-green-600" />
-              <Badge className="bg-green-500">Excelente</Badge>
+              <Shield className="h-5 w-5 text-success" />
+              <Badge className="bg-success">Excelente</Badge>
             </div>
             <p className="text-2xl font-bold">245</p>
             <p className="text-sm text-muted-foreground">Dias sem LTI</p>
           </CardContent>
         </Card>
 
-        <Card className="bg-gradient-to-br from-blue-500/10 to-blue-600/10 border-blue-500/20">
+        <Card className="bg-gradient-to-br from-primary/10 to-primary/10 border-primary/20">
           <CardContent className="p-4">
             <div className="flex items-center justify-between mb-2">
-              <Activity className="h-5 w-5 text-blue-600" />
-              <div className="flex items-center text-sm text-green-600">
+              <Activity className="h-5 w-5 text-primary" />
+              <div className="flex items-center text-sm text-success">
                 <TrendingDown className="h-4 w-4 mr-1" />
                 -18%
               </div>
@@ -116,30 +116,30 @@ export const SocialSustainabilityPanel: React.FC = () => {
           </CardContent>
         </Card>
 
-        <Card className="bg-gradient-to-br from-purple-500/10 to-purple-600/10 border-purple-500/20">
+        <Card className="bg-gradient-to-br from-secondary/10 to-secondary/10 border-secondary/20">
           <CardContent className="p-4">
             <div className="flex items-center justify-between mb-2">
-              <Users className="h-5 w-5 text-purple-600" />
+              <Users className="h-5 w-5 text-secondary-foreground" />
             </div>
             <p className="text-2xl font-bold">487</p>
             <p className="text-sm text-muted-foreground">Total Tripulantes</p>
           </CardContent>
         </Card>
 
-        <Card className="bg-gradient-to-br from-amber-500/10 to-amber-600/10 border-amber-500/20">
+        <Card className="bg-gradient-to-br from-warning/10 to-warning/10 border-warning/20">
           <CardContent className="p-4">
             <div className="flex items-center justify-between mb-2">
-              <GraduationCap className="h-5 w-5 text-amber-600" />
+              <GraduationCap className="h-5 w-5 text-warning" />
             </div>
             <p className="text-2xl font-bold">96%</p>
             <p className="text-sm text-muted-foreground">Treinamento Compliance</p>
           </CardContent>
         </Card>
 
-        <Card className="bg-gradient-to-br from-pink-500/10 to-pink-600/10 border-pink-500/20">
+        <Card className="bg-gradient-to-br from-accent/10 to-accent/10 border-accent/20">
           <CardContent className="p-4">
             <div className="flex items-center justify-between mb-2">
-              <Smile className="h-5 w-5 text-pink-600" />
+              <Smile className="h-5 w-5 text-accent-foreground" />
             </div>
             <p className="text-2xl font-bold">8.2/10</p>
             <p className="text-sm text-muted-foreground">Satisfação da Tripulação</p>
@@ -163,7 +163,7 @@ export const SocialSustainabilityPanel: React.FC = () => {
                 <PolarGrid />
                 <PolarAngleAxis dataKey="subject" tick={{ fontSize: 12 }} />
                 <PolarRadiusAxis angle={30} domain={[0, 100]} />
-                <Radar name="Score" dataKey="score" stroke="#22c55e" fill="#22c55e" fillOpacity={0.5} />
+                <Radar name="Score" dataKey="score" stroke="hsl(var(--success))" fill="hsl(var(--success))" fillOpacity={0.5} />
               </RadarChart>
             </ResponsiveContainer>
           </CardContent>
@@ -186,9 +186,9 @@ export const SocialSustainabilityPanel: React.FC = () => {
                 <YAxis />
                 <Tooltip />
                 <Legend />
-                <Bar dataKey="lti" fill="#ef4444" name="LTI" />
-                <Bar dataKey="nearMiss" fill="#f59e0b" name="Near Miss" />
-                <Bar dataKey="drills" fill="#22c55e" name="Simulados" />
+                <Bar dataKey="lti" fill="hsl(var(--destructive))" name="LTI" />
+                <Bar dataKey="nearMiss" fill="hsl(var(--warning))" name="Near Miss" />
+                <Bar dataKey="drills" fill="hsl(var(--success))" name="Simulados" />
               </BarChart>
             </ResponsiveContainer>
           </CardContent>
@@ -212,9 +212,9 @@ export const SocialSustainabilityPanel: React.FC = () => {
                   <div key={item.area} className="flex items-center justify-between p-3 border rounded-lg">
                     <div className="flex items-center gap-3">
                       {item.status === "compliant" ? (
-                        <CheckCircle2 className="h-5 w-5 text-green-500" />
+                        <CheckCircle2 className="h-5 w-5 text-success" />
                       ) : (
-                        <AlertTriangle className="h-5 w-5 text-yellow-500" />
+                        <AlertTriangle className="h-5 w-5 text-warning" />
                       )}
                       <span className="font-medium">{item.area}</span>
                     </div>
