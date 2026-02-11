@@ -356,7 +356,7 @@ export default function WorkflowCommandCenter() {
                     >
                       <div className="flex items-center justify-between mb-3">
                         <h4 className="font-medium">{workflow.name}</h4>
-                        <Badge className="bg-blue-500/10 text-blue-500">Em execução</Badge>
+                        <Badge className="bg-primary/10 text-primary">Em execução</Badge>
                       </div>
                       <div className="flex items-center gap-2 overflow-x-auto pb-2">
                         {workflow.nodes.map((node, i: number) => (

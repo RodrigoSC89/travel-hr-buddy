@@ -39,7 +39,7 @@ export default function WellnessProgram() {
       
       if (error) throw error;
       
-      return (data || []).map((crew: any, idx: number) => {
+      return (data || []).map((crew: { id: string; full_name: string | null; rank: string | null; status: string | null }, idx: number) => {
         const seed = crew.id ? crew.id.split("").reduce((a: number, c: string) => a + c.charCodeAt(0), 0) : idx * 37;
         return {
           ...crew,
@@ -82,7 +82,7 @@ export default function WellnessProgram() {
       <div className="flex items-center justify-between">
         <div>
           <h2 className="text-2xl font-bold flex items-center gap-3">
-            <Heart className="h-7 w-7 text-pink-500" />
+            <Heart className="h-7 w-7 text-destructive" />
             Crew Wellness Program
           </h2>
           <p className="text-muted-foreground">Mental health, fitness & fatigue management</p>
@@ -191,7 +191,7 @@ export default function WellnessProgram() {
               </CardHeader>
               <CardContent>
                 <div className="space-y-3 max-h-[400px] overflow-y-auto">
-                  {crewWellness.map((crew: any) => (
+                  {crewWellness.map((crew: { id: string; full_name: string | null; rank: string | null; mood: string; wellnessScore: number; fatigueLevel: number; lastSurvey: string }) => (
                     <div
                       key={crew.id}
                       className="p-3 rounded-lg border hover:border-primary/50 transition-colors cursor-pointer"

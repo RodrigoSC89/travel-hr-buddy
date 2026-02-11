@@ -69,6 +69,7 @@ export function HotwordDetector({
   const analyserRef = useRef<AnalyserNode | null>(null);
   const mediaStreamRef = useRef<MediaStream | null>(null);
   const animationFrameRef = useRef<number | null>(null);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- SpeechRecognition API lacks standard types
   const recognitionRef = useRef<any>(null);
 
   // PATCH v20: Monitoramento online/offline REMOVIDO - sempre assume online
@@ -136,6 +137,7 @@ export function HotwordDetector({
 
   const initializeSpeechRecognition = (): boolean => {
     try {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Web Speech API not in standard TypeScript lib
       const SpeechRecognitionAPI = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
       
       if (!SpeechRecognitionAPI) {
@@ -151,7 +153,7 @@ export function HotwordDetector({
         recognition.maxAlternatives = 3;
       }
 
-      recognition.onresult = (event: any) => {
+      recognition.onresult = (event: { results: SpeechRecognitionResultList; resultIndex: number }) => {
         const results = event.results;
         for (let i = event.resultIndex; i < results.length; i++) {
           const transcript = results[i][0].transcript.toLowerCase().trim();
@@ -174,7 +176,7 @@ export function HotwordDetector({
         }
       };
 
-      recognition.onerror = (event: any) => {
+      recognition.onerror = (event: { error: string }) => {
         if (event.error === 'no-speech') {
           // Ignore no-speech errors, just restart
           return;
@@ -387,12 +389,12 @@ export function HotwordDetector({
             <Badge variant="outline" className="gap-1">
               {state.isOnline ? (
                 <>
-                  <Wifi className="h-3 w-3 text-green-500" />
+                  <Wifi className="h-3 w-3 text-success" />
                   Online
                 </>
               ) : (
                 <>
-                  <WifiOff className="h-3 w-3 text-amber-500" />
+                  <WifiOff className="h-3 w-3 text-warning" />
                   Offline
                 </>
               )}
@@ -453,7 +455,7 @@ export function HotwordDetector({
         {/* Last Detection Info */}
         {state.lastDetection && (
           <div className="mt-3 pt-3 border-t border-border/50 text-xs text-muted-foreground flex items-center gap-2">
-            <AlertCircle className="h-3 w-3 text-green-500" />
+            <AlertCircle className="h-3 w-3 text-success" />
             Última detecção: {state.lastDetection.toLocaleTimeString('pt-BR')}
           </div>
         )}

@@ -195,6 +195,7 @@ export default function VoyagePnLCalculator() {
           return;
         }
 
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any -- voyage_plans schema has dynamic fields
         const mapped: VoyagePnL[] = data.map((v: any, i: number) => {
           const revenue = { freight: v.estimated_revenue || 0, demurrage: 0, other: 0, total: v.estimated_revenue || 0 };
           const fuelCost = v.estimated_fuel_cost || 0;

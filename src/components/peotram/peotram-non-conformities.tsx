@@ -34,7 +34,7 @@ interface NonConformitiesProps {
 // Updated to match the PEOTRAM classification system
 const TYPE_COLORS = {
   critical: "bg-destructive/20 text-destructive border-destructive/30",
-  grave: "bg-orange-500/20 text-orange-600 border-orange-500/30",
+  grave: "bg-orange-500/20 text-orange-500 border-orange-500/30",
   moderate: "bg-warning/20 text-warning border-warning/30",
   light: "bg-info/20 text-info border-info/30"
 };
@@ -151,7 +151,7 @@ export const PeotramNonConformities: React.FC<NonConformitiesProps> = ({
         
         <Card>
           <CardContent className="p-4 text-center">
-            <div className="text-2xl font-bold text-orange-600">{stats.critical}</div>
+            <div className="text-2xl font-bold text-destructive">{stats.critical}</div>
             <p className="text-sm text-muted-foreground">Críticas</p>
           </CardContent>
         </Card>

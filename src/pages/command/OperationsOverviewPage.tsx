@@ -28,11 +28,11 @@ export default function OperationsOverviewPage() {
 
   const getStatusColor = (status: VesselOperation['status']) => {
     switch (status) {
-      case 'Navigating': return 'bg-green-500/10 text-green-500 border-green-500/20';
-      case 'Port': return 'bg-blue-500/10 text-blue-500 border-blue-500/20';
-      case 'Anchored': return 'bg-yellow-500/10 text-yellow-500 border-yellow-500/20';
+      case 'Navigating': return 'bg-success/10 text-success border-success/20';
+      case 'Port': return 'bg-primary/10 text-primary border-primary/20';
+      case 'Anchored': return 'bg-warning/10 text-warning border-warning/20';
       case 'Drydock': return 'bg-orange-500/10 text-orange-500 border-orange-500/20';
-      case 'Emergency': return 'bg-red-500/10 text-red-500 border-red-500/20';
+      case 'Emergency': return 'bg-destructive/10 text-destructive border-destructive/20';
       default: return 'bg-muted';
     }
   };
@@ -120,11 +120,11 @@ export default function OperationsOverviewPage() {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-muted-foreground">Navegando</p>
-                <p className="text-2xl font-bold text-green-500">{kpis?.navigating || 0}</p>
+                <p className="text-2xl font-bold text-success">{kpis?.navigating || 0}</p>
               </div>
-              <Navigation className="h-8 w-8 text-green-500" />
+              <Navigation className="h-8 w-8 text-success" />
             </div>
-            <div className="flex items-center gap-1 mt-2 text-xs text-green-500">
+            <div className="flex items-center gap-1 mt-2 text-xs text-success">
               <ArrowUp className="h-3 w-3" />
               <span>Tempo real</span>
             </div>
@@ -136,9 +136,9 @@ export default function OperationsOverviewPage() {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-muted-foreground">Em Porto</p>
-                <p className="text-2xl font-bold text-blue-500">{kpis?.inPort || 0}</p>
+                <p className="text-2xl font-bold text-primary">{kpis?.inPort || 0}</p>
               </div>
-              <Anchor className="h-8 w-8 text-blue-500" />
+              <Anchor className="h-8 w-8 text-primary" />
             </div>
             <div className="flex items-center gap-1 mt-2 text-xs text-muted-foreground">
               <Minus className="h-3 w-3" />
@@ -152,27 +152,27 @@ export default function OperationsOverviewPage() {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-muted-foreground">Fundeados</p>
-                <p className="text-2xl font-bold text-yellow-500">{kpis?.anchored || 0}</p>
+                <p className="text-2xl font-bold text-warning">{kpis?.anchored || 0}</p>
               </div>
-              <Clock className="h-8 w-8 text-yellow-500" />
+              <Clock className="h-8 w-8 text-warning" />
             </div>
-            <div className="flex items-center gap-1 mt-2 text-xs text-yellow-500">
+            <div className="flex items-center gap-1 mt-2 text-xs text-warning">
               <ArrowDown className="h-3 w-3" />
               <span>Aguardando</span>
             </div>
           </CardContent>
         </Card>
 
-        <Card className={(kpis?.criticalAlerts || 0) > 0 ? 'border-red-500/50' : ''}>
+        <Card className={(kpis?.criticalAlerts || 0) > 0 ? 'border-destructive/50' : ''}>
           <CardContent className="pt-4">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-muted-foreground">Alertas Ativos</p>
-                <p className="text-2xl font-bold text-red-500">{kpis?.totalAlerts || 0}</p>
+                <p className="text-2xl font-bold text-destructive">{kpis?.totalAlerts || 0}</p>
               </div>
-              <AlertTriangle className="h-8 w-8 text-red-500" />
+              <AlertTriangle className="h-8 w-8 text-destructive" />
             </div>
-            <div className="text-xs text-red-500 mt-2">
+            <div className="text-xs text-destructive mt-2">
               {kpis?.criticalAlerts || 0} críticos
             </div>
           </CardContent>
@@ -326,16 +326,16 @@ export default function OperationsOverviewPage() {
           </CardHeader>
           <CardContent>
             <div className="grid grid-cols-2 gap-4">
-              <div className="text-center p-4 bg-green-500/10 rounded-lg">
-                <p className="text-3xl font-bold text-green-500">{kpis?.navigating || 0}</p>
+              <div className="text-center p-4 bg-success/10 rounded-lg">
+                <p className="text-3xl font-bold text-success">{kpis?.navigating || 0}</p>
                 <p className="text-sm text-muted-foreground">Navegando</p>
               </div>
-              <div className="text-center p-4 bg-blue-500/10 rounded-lg">
-                <p className="text-3xl font-bold text-blue-500">{kpis?.inPort || 0}</p>
+              <div className="text-center p-4 bg-primary/10 rounded-lg">
+                <p className="text-3xl font-bold text-primary">{kpis?.inPort || 0}</p>
                 <p className="text-sm text-muted-foreground">Em Porto</p>
               </div>
-              <div className="text-center p-4 bg-yellow-500/10 rounded-lg">
-                <p className="text-3xl font-bold text-yellow-500">{kpis?.anchored || 0}</p>
+              <div className="text-center p-4 bg-warning/10 rounded-lg">
+                <p className="text-3xl font-bold text-warning">{kpis?.anchored || 0}</p>
                 <p className="text-sm text-muted-foreground">Fundeados</p>
               </div>
               <div className="text-center p-4 bg-orange-500/10 rounded-lg">

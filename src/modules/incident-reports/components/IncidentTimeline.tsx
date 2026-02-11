@@ -47,11 +47,11 @@ interface IncidentTimelineProps {
   dateTo?: string;
 }
 
-const severityColors = {
-  low: "bg-blue-500",
-  medium: "bg-yellow-500",
+const severityColors: Record<string, string> = {
+  low: "bg-info",
+  medium: "bg-warning",
   high: "bg-orange-500",
-  critical: "bg-red-500",
+  critical: "bg-destructive",
 };
 
 const severityOrder = {
@@ -100,15 +100,15 @@ export const IncidentTimeline: React.FC<IncidentTimelineProps> = ({
         return;
       }
 
-      const formattedIncidents: Incident[] = (data || []).map((item: any) => ({
-        id: item.id,
-        title: item.title || item.incident_type || "Untitled Incident",
-        description: item.description || "",
-        severity: item.severity || "medium",
-        status: item.status || "open",
-        module: item.module || item.location || "Unknown",
-        created_at: item.created_at,
-        resolved_at: item.resolved_at,
+      const formattedIncidents: Incident[] = (data || []).map((item: Record<string, unknown>) => ({
+        id: item.id as string,
+        title: (item.title as string) || (item.incident_type as string) || "Untitled Incident",
+        description: (item.description as string) || "",
+        severity: (item.severity as Incident["severity"]) || "medium",
+        status: (item.status as string) || "open",
+        module: (item.module as string) || (item.location as string) || "Unknown",
+        created_at: item.created_at as string,
+        resolved_at: item.resolved_at as string | undefined,
       }));
 
       setIncidents(formattedIncidents);

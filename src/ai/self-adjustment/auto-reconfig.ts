@@ -30,7 +30,7 @@ export type ConfigurationType =
 export interface SystemConfiguration {
   configId: string;
   modelName: string;
-  parameters: Record<string, any>;
+  parameters: Record<string, number | string>;
   strategy: string;
   resourceAllocation: {
     cpu: number;
@@ -64,8 +64,8 @@ export interface ReconfigurationAction {
   afterState: SystemConfiguration;
   changes: Array<{
     field: string;
-    oldValue: any;
-    newValue: any;
+    oldValue: unknown;
+    newValue: unknown;
     reason: string;
   }>;
   timestamp: string;
@@ -296,7 +296,7 @@ export class AutoReconfigurationEngine {
         currentConfig.resourceAllocation.memory * 0.75
       );
       newConfig.parameters.maxTokens = Math.floor(
-        currentConfig.parameters.maxTokens * 0.8
+        (currentConfig.parameters.maxTokens as number) * 0.8
       );
       newConfig.priorities.cost = 9;
       break;
@@ -314,7 +314,7 @@ export class AutoReconfigurationEngine {
       // Keep current config with minor optimizations
       newConfig.parameters.temperature = Math.min(
         1.0,
-        currentConfig.parameters.temperature + 0.1
+        (currentConfig.parameters.temperature as number) + 0.1
       );
       break;
     }
@@ -349,14 +349,14 @@ export class AutoReconfigurationEngine {
     after: SystemConfiguration
   ): Array<{
     field: string;
-    oldValue: any;
-    newValue: any;
+    oldValue: unknown;
+    newValue: unknown;
     reason: string;
   }> {
     const changes: Array<{
       field: string;
-      oldValue: any;
-      newValue: any;
+      oldValue: unknown;
+      newValue: unknown;
       reason: string;
     }> = [];
 
@@ -533,7 +533,7 @@ export class AutoReconfigurationEngine {
   private async storeConfiguration(config: SystemConfiguration): Promise<void> {
     try {
       // ai_configurations table exists but schema differs - use config_key/config_value format
-      await supabase.from("ai_configurations").insert({
+      await supabase.from("ai_configurations").insert([{
         config_key: `reconfig_${config.configId}`,
         config_value: {
           model_name: config.modelName,
@@ -544,7 +544,7 @@ export class AutoReconfigurationEngine {
           timestamp: config.timestamp,
         },
         description: `Auto-reconfig: ${config.modelName}`,
-      });
+      }] as never);
     } catch (error) {
       logger.error("Failed to store configuration", { error });
     }

@@ -36,16 +36,16 @@ export function OperationalTimeline() {
       ]);
 
       const evts: TimelineEvent[] = [
-        ...(maint || []).map((m: any) => ({
+        ...(maint || []).map((m) => ({
           id: m.id, type: 'maintenance' as const, title: m.description || "Manutenção",
-          description: m.notes || m.description || "", timestamp: new Date(m.completed_at || m.created_at),
+          description: m.description || "", timestamp: new Date(m.completed_date || m.created_at),
           vessel: m.vessels?.name || "N/A", severity: 'info' as const,
-          details: m.cost ? { Custo: `R$ ${m.cost}` } : undefined,
+          details: m.actual_cost ? { Custo: `R$ ${m.actual_cost}` } : undefined,
         })),
-        ...(logs || []).map((l: any) => ({
+        ...(logs || []).map((l) => ({
           id: l.id, type: 'crew' as const, title: l.action || "Atividade",
-          description: (l.details as any)?.description || l.action || "",
-          timestamp: new Date(l.timestamp), vessel: l.module_accessed || "Sistema",
+          description: String((l.details as Record<string, unknown>)?.description || l.action || ""),
+          timestamp: new Date(l.timestamp), vessel: String(l.module_accessed || "Sistema"),
           severity: l.severity === "high" ? 'critical' as const : 'info' as const,
         })),
       ].sort((a, b) => b.timestamp.getTime() - a.timestamp.getTime());
