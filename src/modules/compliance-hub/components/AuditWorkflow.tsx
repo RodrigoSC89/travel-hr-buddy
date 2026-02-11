@@ -65,12 +65,12 @@ const findings: Finding[] = [
 
 function AuditTypeBadge({ type }: { type: Audit["type"] }) {
   const config: Record<string, { label: string; className: string }> = {
-    ISM: { label: "ISM", className: "bg-blue-500/10 text-blue-600" },
-    ISPS: { label: "ISPS", className: "bg-red-500/10 text-red-600" },
-    MLC: { label: "MLC", className: "bg-green-500/10 text-green-600" },
+    ISM: { label: "ISM", className: "bg-primary/10 text-primary" },
+    ISPS: { label: "ISPS", className: "bg-destructive/10 text-destructive" },
+    MLC: { label: "MLC", className: "bg-success/10 text-success" },
     PSC: { label: "PSC", className: "bg-warning/10 text-warning" },
-    FLAG: { label: "FLAG", className: "bg-purple-500/10 text-purple-600" },
-    CLASS: { label: "CLASS", className: "bg-cyan-500/10 text-cyan-600" },
+    FLAG: { label: "FLAG", className: "bg-accent text-accent-foreground" },
+    CLASS: { label: "CLASS", className: "bg-secondary text-secondary-foreground" },
     INTERNAL: { label: "Interna", className: "bg-muted text-muted-foreground" },
   };
   const c = config[type];
@@ -291,37 +291,37 @@ export default function AuditWorkflow() {
           </CardContent>
         </Card>
 
-        <Card className="border-l-4 border-l-orange-500">
+        <Card className="border-l-4 border-l-warning">
           <CardContent className="p-4">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-xs text-muted-foreground">NC Abertas</p>
-                <p className="text-2xl font-bold text-orange-600">{stats.openFindings}</p>
+                <p className="text-2xl font-bold text-warning">{stats.openFindings}</p>
               </div>
-              <FileText className="h-8 w-8 text-orange-500 opacity-60" />
+              <FileText className="h-8 w-8 text-warning opacity-60" />
             </div>
           </CardContent>
         </Card>
 
-        <Card className="border-l-4 border-l-red-600">
+        <Card className="border-l-4 border-l-destructive">
           <CardContent className="p-4">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-xs text-muted-foreground">NC Maiores</p>
-                <p className="text-2xl font-bold text-red-600">{stats.criticalFindings}</p>
+                <p className="text-2xl font-bold text-destructive">{stats.criticalFindings}</p>
               </div>
-              <ShieldCheck className="h-8 w-8 text-red-600 opacity-60" />
+              <ShieldCheck className="h-8 w-8 text-destructive opacity-60" />
             </div>
           </CardContent>
         </Card>
       </div>
 
       {/* AI Recommendation */}
-      <Card className="border-purple-500/20 bg-gradient-to-r from-purple-500/5 to-transparent">
+      <Card className="border-accent/20 bg-gradient-to-r from-accent/5 to-transparent">
         <CardContent className="p-4">
           <div className="flex items-center gap-4">
-            <div className="p-3 rounded-lg bg-purple-500/10">
-              <Brain className="h-6 w-6 text-purple-500" />
+            <div className="p-3 rounded-lg bg-accent/10">
+              <Brain className="h-6 w-6 text-accent-foreground" />
             </div>
             <div className="flex-1">
               <h4 className="font-medium">Análise IA de Conformidade</h4>

@@ -45,33 +45,33 @@ export function AlertasSection({ alerts, setAlerts }: AlertasSectionProps) {
 
   const getSeverityColor = (severity: Alert["severity"]) => {
     switch (severity) {
-      case "critical": return "bg-red-500";
-      case "high": return "bg-orange-500";
-      case "medium": return "bg-amber-500";
-      case "low": return "bg-blue-500";
+      case "critical": return "bg-destructive";
+      case "high": return "bg-warning";
+      case "medium": return "bg-accent";
+      case "low": return "bg-primary";
     }
   };
 
+  const summaryItems = [
+    { label: "Críticos", count: counts.critical, textColor: "text-destructive", bgColor: "bg-destructive/10" },
+    { label: "Altos", count: counts.high, textColor: "text-warning", bgColor: "bg-warning/10" },
+    { label: "Médios", count: counts.medium, textColor: "text-accent-foreground", bgColor: "bg-accent/10" },
+    { label: "Baixos", count: counts.low, textColor: "text-primary", bgColor: "bg-primary/10" }
+  ];
+
   return (
     <div className="space-y-6">
-      {/* Resumo */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-        {[
-          { label: "Críticos", count: counts.critical, color: "text-red-600 bg-red-50" },
-          { label: "Altos", count: counts.high, color: "text-orange-600 bg-orange-50" },
-          { label: "Médios", count: counts.medium, color: "text-amber-600 bg-amber-50" },
-          { label: "Baixos", count: counts.low, color: "text-blue-600 bg-blue-50" }
-        ].map((item) => (
+        {summaryItems.map((item) => (
           <Card key={item.label}>
             <CardContent className="p-4 text-center">
-              <p className={`text-3xl font-bold ${item.color.split(" ")[0]}`}>{item.count}</p>
+              <p className={`text-3xl font-bold ${item.textColor}`}>{item.count}</p>
               <p className="text-sm text-muted-foreground">{item.label}</p>
             </CardContent>
           </Card>
         ))}
       </div>
 
-      {/* Lista de Alertas */}
       <Card>
         <CardHeader className="pb-2">
           <CardTitle className="text-lg flex items-center gap-2">
