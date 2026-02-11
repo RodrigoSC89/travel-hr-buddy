@@ -38,11 +38,11 @@ export const CertificationManager: React.FC = () => {
 
   const getStatusColor = (status: string) => {
     switch (status) {
-    case "valid": return "text-green-600 bg-green-50 border-green-200";
-    case "expiring": return "text-yellow-600 bg-yellow-50 border-yellow-200";
-    case "expired": return "text-red-600 bg-red-50 border-red-200";
-    case "pending": return "text-blue-600 bg-blue-50 border-blue-200";
-    default: return "text-muted-foreground bg-gray-50 border-gray-200";
+    case "valid": return "text-success bg-success/10 border-success/30";
+    case "expiring": return "text-warning bg-warning/10 border-warning/30";
+    case "expired": return "text-destructive bg-destructive/10 border-destructive/30";
+    case "pending": return "text-info bg-info/10 border-info/30";
+    default: return "text-muted-foreground bg-muted border-border";
     }
   };
 
@@ -58,12 +58,12 @@ export const CertificationManager: React.FC = () => {
 
   const getTypeColor = (type: string) => {
     switch (type) {
-    case "STCW": return "bg-blue-500";
-    case "Medical": return "bg-green-500";
-    case "Security": return "bg-red-500";
-    case "Safety": return "bg-yellow-500";
-    case "Technical": return "bg-purple-500";
-    default: return "bg-gray-500";
+    case "STCW": return "bg-info";
+    case "Medical": return "bg-success";
+    case "Security": return "bg-destructive";
+    case "Safety": return "bg-warning";
+    case "Technical": return "bg-accent";
+    default: return "bg-muted";
     }
   };
 
@@ -124,15 +124,15 @@ export const CertificationManager: React.FC = () => {
       {(expiringCertifications.length > 0 || expiredCertifications.length > 0) && (
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           {expiredCertifications.length > 0 && (
-            <Card className="border-red-200 bg-red-50">
+            <Card className="border-destructive/30 bg-destructive/10">
               <CardHeader className="pb-3">
-                <CardTitle className="text-red-800 flex items-center gap-2">
+                <CardTitle className="text-destructive flex items-center gap-2">
                   <AlertTriangle className="h-5 w-5" />
                   Certificações Vencidas
                 </CardTitle>
               </CardHeader>
               <CardContent>
-                <p className="text-red-700 mb-2">
+                <p className="text-destructive mb-2">
                   {expiredCertifications.length} certificação(ões) vencida(s) - Ação imediata necessária!
                 </p>
                 <Button variant="destructive" size="sm">
@@ -144,18 +144,18 @@ export const CertificationManager: React.FC = () => {
           )}
 
           {expiringCertifications.length > 0 && (
-            <Card className="border-yellow-200 bg-yellow-50">
+            <Card className="border-warning/30 bg-warning/10">
               <CardHeader className="pb-3">
-                <CardTitle className="text-yellow-800 flex items-center gap-2">
+                <CardTitle className="text-warning flex items-center gap-2">
                   <Clock className="h-5 w-5" />
                   Certificações Vencendo
                 </CardTitle>
               </CardHeader>
               <CardContent>
-                <p className="text-yellow-700 mb-2">
+                <p className="text-warning mb-2">
                   {expiringCertifications.length} certificação(ões) vencendo em 90 dias
                 </p>
-                <Button variant="outline" size="sm" className="border-yellow-500 text-yellow-700">
+                <Button variant="outline" size="sm" className="border-warning text-warning">
                   <Calendar className="h-4 w-4 mr-2" />
                   Agendar Renovações
                 </Button>
@@ -182,7 +182,7 @@ export const CertificationManager: React.FC = () => {
                 <div className="text-2xl font-bold">{metric.compliance}%</div>
                 <Progress value={metric.compliance} className="h-2" />
                 {metric.critical > 0 && (
-                  <p className="text-xs text-red-600 flex items-center gap-1">
+                  <p className="text-xs text-destructive flex items-center gap-1">
                     <AlertTriangle className="h-3 w-3" />
                     {metric.critical} crítico(s)
                   </p>
@@ -260,19 +260,19 @@ export const CertificationManager: React.FC = () => {
                   </CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-4">
-                  <div className="text-center p-4 bg-gradient-to-r from-green-50 to-green-100 rounded-lg">
-                    <h3 className="text-2xl font-bold text-green-600">89.5%</h3>
-                    <p className="text-sm text-green-600">Compliance Geral</p>
+                  <div className="text-center p-4 bg-success/10 rounded-lg">
+                    <h3 className="text-2xl font-bold text-success">89.5%</h3>
+                    <p className="text-sm text-success">Compliance Geral</p>
                   </div>
-                  <div className="text-center p-4 bg-gradient-to-r from-blue-50 to-blue-100 rounded-lg">
-                    <h3 className="text-2xl font-bold text-blue-600">{certifications.length}</h3>
-                    <p className="text-sm text-blue-600">Total de Certificações</p>
+                  <div className="text-center p-4 bg-info/10 rounded-lg">
+                    <h3 className="text-2xl font-bold text-info">{certifications.length}</h3>
+                    <p className="text-sm text-info">Total de Certificações</p>
                   </div>
-                  <div className="text-center p-4 bg-gradient-to-r from-orange-50 to-orange-100 rounded-lg">
-                    <h3 className="text-2xl font-bold text-orange-600">
+                  <div className="text-center p-4 bg-warning/10 rounded-lg">
+                    <h3 className="text-2xl font-bold text-warning">
                       R$ {certifications.reduce((sum, cert) => sum + cert.renewalCost, 0).toLocaleString()}
                     </h3>
-                    <p className="text-sm text-orange-600">Custo de Renovação</p>
+                    <p className="text-sm text-warning">Custo de Renovação</p>
                   </div>
                 </CardContent>
               </Card>
@@ -287,10 +287,10 @@ export const CertificationManager: React.FC = () => {
                 <CardContent>
                   <div className="space-y-3">
                     {expiringCertifications.slice(0, 3).map((cert) => (
-                      <div key={cert.id} className="p-3 bg-yellow-50 rounded-lg border border-yellow-200">
-                        <p className="text-sm font-medium text-yellow-800">{cert.name}</p>
-                        <p className="text-xs text-yellow-600">{cert.crewMember.name}</p>
-                        <p className="text-xs text-yellow-600">
+                      <div key={cert.id} className="p-3 bg-warning/10 rounded-lg border border-warning/30">
+                        <p className="text-sm font-medium text-warning">{cert.name}</p>
+                        <p className="text-xs text-warning/80">{cert.crewMember.name}</p>
+                        <p className="text-xs text-warning/80">
                           Vence em {getDaysUntilExpiry(cert.expiryDate)} dias
                         </p>
                       </div>

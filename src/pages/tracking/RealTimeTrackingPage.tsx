@@ -25,10 +25,10 @@ export default function RealTimeTrackingPage() {
 
   const getStatusColor = (status: VesselPosition['status']) => {
     switch (status) {
-      case 'underway': return 'bg-green-500';
-      case 'moored': return 'bg-blue-500';
-      case 'anchored': return 'bg-yellow-500';
-      default: return 'bg-gray-500';
+      case 'underway': return 'bg-success';
+      case 'moored': return 'bg-info';
+      case 'anchored': return 'bg-warning';
+      default: return 'bg-muted';
     }
   };
 
@@ -43,10 +43,10 @@ export default function RealTimeTrackingPage() {
 
   const getSignalIcon = (quality: VesselPosition['signalQuality']) => {
     switch (quality) {
-      case 'excellent': return <Radio className="h-4 w-4 text-green-500" />;
-      case 'good': return <Radio className="h-4 w-4 text-blue-500" />;
-      case 'poor': return <Radio className="h-4 w-4 text-yellow-500" />;
-      case 'lost': return <AlertTriangle className="h-4 w-4 text-red-500" />;
+      case 'excellent': return <Radio className="h-4 w-4 text-success" />;
+      case 'good': return <Radio className="h-4 w-4 text-info" />;
+      case 'poor': return <Radio className="h-4 w-4 text-warning" />;
+      case 'lost': return <AlertTriangle className="h-4 w-4 text-destructive" />;
     }
   };
 
@@ -56,7 +56,6 @@ export default function RealTimeTrackingPage() {
     v.imo.includes(searchTerm)
   );
 
-  // Loading state
   if (isLoading) {
     return (
       <div className="space-y-6">
@@ -89,7 +88,6 @@ export default function RealTimeTrackingPage() {
     );
   }
 
-  // Error state
   if (error) {
     return (
       <Card className="border-destructive">
@@ -108,7 +106,6 @@ export default function RealTimeTrackingPage() {
     );
   }
 
-  // Empty state
   if (vessels.length === 0) {
     return (
       <Card>
@@ -125,7 +122,6 @@ export default function RealTimeTrackingPage() {
 
   return (
     <div className="space-y-6">
-      {/* Stats Bar */}
       <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
         <Card>
           <CardContent className="pt-4">
@@ -144,9 +140,9 @@ export default function RealTimeTrackingPage() {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-muted-foreground">Navegando</p>
-                <p className="text-2xl font-bold text-green-500">{stats.underway}</p>
+                <p className="text-2xl font-bold text-success">{stats.underway}</p>
               </div>
-              <Navigation className="h-8 w-8 text-green-500" />
+              <Navigation className="h-8 w-8 text-success" />
             </div>
           </CardContent>
         </Card>
@@ -156,9 +152,9 @@ export default function RealTimeTrackingPage() {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-muted-foreground">Atracados</p>
-                <p className="text-2xl font-bold text-blue-500">{stats.moored}</p>
+                <p className="text-2xl font-bold text-info">{stats.moored}</p>
               </div>
-              <Anchor className="h-8 w-8 text-blue-500" />
+              <Anchor className="h-8 w-8 text-info" />
             </div>
           </CardContent>
         </Card>
@@ -168,28 +164,27 @@ export default function RealTimeTrackingPage() {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-muted-foreground">Fundeados</p>
-                <p className="text-2xl font-bold text-yellow-500">{stats.anchored}</p>
+                <p className="text-2xl font-bold text-warning">{stats.anchored}</p>
               </div>
-              <Anchor className="h-8 w-8 text-yellow-500" />
+              <Anchor className="h-8 w-8 text-warning" />
             </div>
           </CardContent>
         </Card>
         
-        <Card className={stats.signalLost > 0 ? 'border-red-500/50' : ''}>
+        <Card className={stats.signalLost > 0 ? 'border-destructive/50' : ''}>
           <CardContent className="pt-4">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-muted-foreground">Sinal Perdido</p>
-                <p className="text-2xl font-bold text-red-500">{stats.signalLost}</p>
+                <p className="text-2xl font-bold text-destructive">{stats.signalLost}</p>
               </div>
-              <AlertTriangle className="h-8 w-8 text-red-500" />
+              <AlertTriangle className="h-8 w-8 text-destructive" />
             </div>
           </CardContent>
         </Card>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        {/* Map Placeholder */}
         <Card className="lg:col-span-2">
           <CardHeader className="pb-3">
             <div className="flex items-center justify-between">
@@ -215,14 +210,12 @@ export default function RealTimeTrackingPage() {
           </CardHeader>
           <CardContent>
             <div className="aspect-video bg-muted rounded-lg flex items-center justify-center relative overflow-hidden">
-              {/* Map background simulation */}
               <div className="absolute inset-0 bg-gradient-to-br from-blue-900/20 to-blue-800/10" />
               <div className="absolute inset-0" style={{
                 backgroundImage: 'radial-gradient(circle at 2px 2px, rgba(255,255,255,0.1) 1px, transparent 0)',
                 backgroundSize: '40px 40px'
               }} />
               
-              {/* Vessel markers */}
               {vessels.slice(0, 6).map((vessel, idx) => (
                 <div 
                   key={vessel.id}
@@ -253,7 +246,6 @@ export default function RealTimeTrackingPage() {
           </CardContent>
         </Card>
 
-        {/* Vessel List */}
         <Card>
           <CardHeader className="pb-3">
             <CardTitle>Embarcações</CardTitle>
@@ -330,28 +322,27 @@ export default function RealTimeTrackingPage() {
         </Card>
       </div>
 
-      {/* Legend */}
       <Card>
         <CardContent className="pt-4">
           <div className="flex flex-wrap gap-6 justify-center">
             <div className="flex items-center gap-2">
-              <div className="w-3 h-3 rounded-full bg-green-500" />
+              <div className="w-3 h-3 rounded-full bg-success" />
               <span className="text-sm">Navegando</span>
             </div>
             <div className="flex items-center gap-2">
-              <div className="w-3 h-3 rounded-full bg-blue-500" />
+              <div className="w-3 h-3 rounded-full bg-info" />
               <span className="text-sm">Atracado</span>
             </div>
             <div className="flex items-center gap-2">
-              <div className="w-3 h-3 rounded-full bg-yellow-500" />
+              <div className="w-3 h-3 rounded-full bg-warning" />
               <span className="text-sm">Fundeado</span>
             </div>
             <div className="flex items-center gap-2">
-              <Radio className="h-4 w-4 text-green-500" />
+              <Radio className="h-4 w-4 text-success" />
               <span className="text-sm">Sinal Excelente</span>
             </div>
             <div className="flex items-center gap-2">
-              <AlertTriangle className="h-4 w-4 text-red-500" />
+              <AlertTriangle className="h-4 w-4 text-destructive" />
               <span className="text-sm">Sinal Perdido</span>
             </div>
           </div>

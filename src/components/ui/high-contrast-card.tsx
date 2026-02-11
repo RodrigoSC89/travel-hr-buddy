@@ -21,8 +21,8 @@ const colorClasses = {
     text: "text-card-green-fg dark:text-card-green-fg",
     icon: "text-card-green-fg/80 dark:text-card-green-fg/80",
     trend: {
-      up: "text-emerald-200",
-      down: "text-red-200",
+      up: "text-success",
+      down: "text-destructive",
       stable: "text-card-green-fg/60"
     }
   },
@@ -31,8 +31,8 @@ const colorClasses = {
     text: "text-card-blue-fg dark:text-card-blue-fg",
     icon: "text-card-blue-fg/80 dark:text-card-blue-fg/80",
     trend: {
-      up: "text-blue-200",
-      down: "text-red-200",
+      up: "text-info",
+      down: "text-destructive",
       stable: "text-card-blue-fg/60"
     }
   },
@@ -41,8 +41,8 @@ const colorClasses = {
     text: "text-card-purple-fg dark:text-card-purple-fg",
     icon: "text-card-purple-fg/80 dark:text-card-purple-fg/80",
     trend: {
-      up: "text-purple-200",
-      down: "text-red-200",
+      up: "text-accent",
+      down: "text-destructive",
       stable: "text-card-purple-fg/60"
     }
   },
@@ -51,8 +51,8 @@ const colorClasses = {
     text: "text-card-orange-fg dark:text-card-orange-fg",
     icon: "text-card-orange-fg/80 dark:text-card-orange-fg/80",
     trend: {
-      up: "text-orange-200",
-      down: "text-red-200",
+      up: "text-warning",
+      down: "text-destructive",
       stable: "text-card-orange-fg/60"
     }
   }

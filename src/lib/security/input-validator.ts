@@ -128,7 +128,7 @@ export const validateNumber = {
   /**
    * Check if value is a valid number
    */
-  isNumber(value: any, fieldName = 'Field'): number {
+  isNumber(value: unknown, fieldName = 'Field'): number {
     const num = Number(value);
     if (isNaN(num)) {
       throw new ValidationError(`${fieldName} must be a valid number`, fieldName);
@@ -223,7 +223,7 @@ export const validateObject = {
   /**
    * Check required fields
    */
-  requiredFields<T extends Record<string, any>>(
+  requiredFields<T extends Record<string, unknown>>(
     obj: T,
     fields: (keyof T)[],
     objectName = 'Object'
@@ -241,7 +241,7 @@ export const validateObject = {
   /**
    * Validate shape
    */
-  shape<T extends Record<string, any>>(
+  shape<T extends Record<string, unknown>>(
     obj: T,
     validators: { [K in keyof T]?: (value: T[K]) => void },
     objectName = 'Object'
@@ -265,7 +265,7 @@ export const validateObject = {
 /**
  * Composite validator for complex forms
  */
-export function createValidator<T extends Record<string, any>>(
+export function createValidator<T extends Record<string, unknown>>(
   schema: { [K in keyof T]: (value: T[K]) => T[K] }
 ) {
   return (data: T): T => {

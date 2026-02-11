@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo } from "react";
+import React, { useState, useMemo } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -7,7 +7,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { 
   Users, 
   Calendar as CalendarIcon, 
@@ -69,7 +69,6 @@ export const CrewRotationPlanner: React.FC = () => {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const { toast } = useToast();
 
-  // Map real crew data to rotation format
   const rotations = useMemo<CrewRotation[]>(() => {
     if (!data?.crew) return [];
     return data.crew
@@ -96,17 +95,11 @@ export const CrewRotationPlanner: React.FC = () => {
           scheduledDate: c.embarkedDate ? new Date(c.embarkedDate) : new Date(),
           port: "—",
           status,
-          costs: {
-            travel: 0,
-            accommodation: 0,
-            visa: 0,
-            total: 0,
-          },
+          costs: { travel: 0, accommodation: 0, visa: 0, total: 0 },
         };
       });
   }, [data?.crew]);
 
-  // AI-generated optimization suggestions based on real data
   const optimizations = useMemo<OptimizationSuggestion[]>(() => {
     if (!data?.crew) return [];
     const suggestions: OptimizationSuggestion[] = [];
@@ -151,10 +144,10 @@ export const CrewRotationPlanner: React.FC = () => {
     
     try {
       const { supabase } = await import('@/integrations/supabase/client');
-      const { data, error } = await supabase.functions.invoke('ai-chat', {
+      const { data } = await supabase.functions.invoke('ai-chat', {
         body: { prompt: 'Optimize crew rotation schedule for cost savings and fatigue reduction', module: 'crew-rotation' }
       });
-      const savings = data?.savings || 15500;
+      const savings = (data as Record<string, unknown>)?.savings as number || 15500;
       toast({
         title: "✅ Otimização Concluída",
         description: `Economia potencial de R$ ${savings.toLocaleString()} identificada!`,
@@ -168,21 +161,17 @@ export const CrewRotationPlanner: React.FC = () => {
     }
   };
 
-  const handleCreateRotation = () => {
-    setIsDialogOpen(true);
-  };
-
   const totalCosts = rotations.reduce((sum, rotation) => sum + rotation.costs.total, 0);
   const potentialSavings = optimizations.reduce((sum, opt) => sum + opt.potential_savings, 0);
 
   const getStatusColor = (status: string) => {
     switch (status) {
-    case "planned": return "bg-blue-500";
-    case "confirmed": return "bg-green-500";
-    case "in_progress": return "bg-yellow-500";
-    case "completed": return "bg-green-600";
-    case "delayed": return "bg-red-500";
-    default: return "bg-gray-500";
+    case "planned": return "bg-info";
+    case "confirmed": return "bg-success";
+    case "in_progress": return "bg-warning";
+    case "completed": return "bg-success";
+    case "delayed": return "bg-destructive";
+    default: return "bg-muted";
     }
   };
 
@@ -199,9 +188,9 @@ export const CrewRotationPlanner: React.FC = () => {
 
   const getRotationTypeIcon = (type: string) => {
     switch (type) {
-    case "sign_on": return <UserCheck className="h-4 w-4 text-green-500" />;
-    case "sign_off": return <UserX className="h-4 w-4 text-red-500" />;
-    case "transfer": return <Users className="h-4 w-4 text-blue-500" />;
+    case "sign_on": return <UserCheck className="h-4 w-4 text-success" />;
+    case "sign_off": return <UserX className="h-4 w-4 text-destructive" />;
+    case "transfer": return <Users className="h-4 w-4 text-info" />;
     default: return <Users className="h-4 w-4" />;
     }
   };
@@ -241,7 +230,7 @@ export const CrewRotationPlanner: React.FC = () => {
             <Brain className="h-4 w-4 mr-2" />
             Otimizar com IA
           </Button>
-          <Button onClick={handleCreateRotation}>
+          <Button onClick={() => setIsDialogOpen(true)}>
             <CalendarIcon className="h-4 w-4 mr-2" />
             Nova Rotação
           </Button>
@@ -280,7 +269,7 @@ export const CrewRotationPlanner: React.FC = () => {
             <TrendingUp className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-green-600">R$ {potentialSavings.toLocaleString()}</div>
+            <div className="text-2xl font-bold text-success">R$ {potentialSavings.toLocaleString()}</div>
             <p className="text-xs text-muted-foreground">Com otimização IA</p>
           </CardContent>
         </Card>
@@ -291,7 +280,7 @@ export const CrewRotationPlanner: React.FC = () => {
             <CheckCircle className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-green-600">
+            <div className="text-2xl font-bold text-success">
               {data?.crew && data.crew.length > 0
                 ? `${Math.round((data.crew.filter(c => c.daysOnboard <= c.maxDays).length / data.crew.length) * 100)}%`
                 : "—"}
@@ -404,24 +393,24 @@ export const CrewRotationPlanner: React.FC = () => {
                         <div className="flex items-start justify-between mb-2">
                           <div className="flex items-center gap-2">
                             <Badge variant="outline" className={
-                              opt.type === "cost_reduction" ? "border-green-500 text-green-700" :
-                                opt.type === "efficiency" ? "border-blue-500 text-blue-700" :
-                                  "border-yellow-500 text-yellow-700"
+                              opt.type === "cost_reduction" ? "border-success text-success" :
+                                opt.type === "efficiency" ? "border-info text-info" :
+                                  "border-warning text-warning"
                             }>
                               {opt.type === "cost_reduction" ? "Economia" :
                                 opt.type === "efficiency" ? "Eficiência" : "Compliance"}
                             </Badge>
                             <Badge variant="secondary" className={
-                              opt.impact === "high" ? "bg-red-100 text-red-700" :
-                                opt.impact === "medium" ? "bg-yellow-100 text-yellow-700" :
-                                  "bg-green-100 text-green-700"
+                              opt.impact === "high" ? "bg-destructive/10 text-destructive" :
+                                opt.impact === "medium" ? "bg-warning/10 text-warning" :
+                                  "bg-success/10 text-success"
                             }>
                               {opt.impact === "high" ? "Alto Impacto" :
                                 opt.impact === "medium" ? "Médio Impacto" : "Baixo Impacto"}
                             </Badge>
                           </div>
                           {opt.potential_savings > 0 && (
-                            <span className="text-green-600 font-semibold">
+                            <span className="text-success font-semibold">
                               R$ {opt.potential_savings.toLocaleString()}
                             </span>
                           )}
@@ -479,7 +468,7 @@ export const CrewRotationPlanner: React.FC = () => {
                   </div>
                   <div className="flex items-center justify-between p-2 border rounded">
                     <span className="text-sm">Expirando em breve</span>
-                    <Badge variant="outline" className="text-yellow-600">{data?.certAlerts.filter(a => a.priority === "warning").length || 0}</Badge>
+                    <Badge variant="outline" className="text-warning">{data?.certAlerts.filter(a => a.priority === "warning").length || 0}</Badge>
                   </div>
                   <div className="flex items-center justify-between p-2 border rounded">
                     <span className="text-sm">Críticos</span>
@@ -504,7 +493,7 @@ export const CrewRotationPlanner: React.FC = () => {
                     <p className="text-sm text-muted-foreground">Total de Tripulantes</p>
                   </div>
                   <div className="text-center p-4 bg-muted/50 rounded-lg">
-                    <h3 className="text-2xl font-bold text-green-600">{data?.stats.onboard || 0}</h3>
+                    <h3 className="text-2xl font-bold text-success">{data?.stats.onboard || 0}</h3>
                     <p className="text-sm text-muted-foreground">A Bordo</p>
                   </div>
                 </div>
@@ -540,7 +529,6 @@ export const CrewRotationPlanner: React.FC = () => {
         </TabsContent>
       </Tabs>
 
-      {/* Dialog para Nova Rotação */}
       <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
         <DialogContent className="sm:max-w-[600px]">
           <DialogHeader>

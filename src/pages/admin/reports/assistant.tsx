@@ -13,7 +13,6 @@ import { toast } from "@/hooks/use-toast";
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from "recharts";
 import { logger } from "@/lib/logger";
 
-// Lazy load jsPDF
 const loadJsPDF = async () => {
   const [{ default: jsPDF }, autoTableModule] = await Promise.all([
     import("jspdf"),
@@ -48,7 +47,6 @@ export default function AssistantReportLogsPage() {
     fetchCronStatus();
   }, []);
 
-  // Prepare chart data from logs
   const chartData = useMemo(() => {
     if (logs.length === 0) return [];
 
@@ -95,14 +93,10 @@ export default function AssistantReportLogsPage() {
 
       const response = await fetch(
         `${getEdgeFunctionUrl("assistant-report-logs")}?${params.toString()}`,
-        {
-          headers: getEdgeFunctionHeaders(session.access_token),
-        }
+        { headers: getEdgeFunctionHeaders(session.access_token) }
       );
 
-      if (!response.ok) {
-        throw new Error("Failed to fetch logs");
-      }
+      if (!response.ok) throw new Error("Failed to fetch logs");
 
       const data = await response.json();
       setLogs(data);
@@ -121,14 +115,11 @@ export default function AssistantReportLogsPage() {
   async function fetchCronStatus() {
     try {
       const { data: { session } } = await supabase.auth.getSession();
-      
       if (!session) return;
 
       const response = await fetch(
         getEdgeFunctionUrl("cron-status"),
-        {
-          headers: getEdgeFunctionHeaders(session.access_token),
-        }
+        { headers: getEdgeFunctionHeaders(session.access_token) }
       );
 
       if (!response.ok) {
@@ -213,8 +204,8 @@ export default function AssistantReportLogsPage() {
         <div 
           className={`mb-4 p-3 rounded-md text-sm font-medium ${
             cronStatus === "ok" 
-              ? "bg-green-100 text-green-800" 
-              : "bg-yellow-100 text-yellow-800"
+              ? "bg-success/10 text-success" 
+              : "bg-warning/10 text-warning"
           }`}
         >
           {cronStatus === "ok" ? "✅ " : "⚠️ "}{cronMessage}
@@ -239,7 +230,6 @@ export default function AssistantReportLogsPage() {
         </Button>
       </div>
 
-      {/* Chart Section */}
       {chartData.length > 0 && (
         <Card className="mb-4">
           <CardHeader>
@@ -265,7 +255,7 @@ export default function AssistantReportLogsPage() {
         </Card>
       )}
 
-      <ScrollArea className="max-h-[70vh] border rounded-md p-4 bg-white">
+      <ScrollArea className="max-h-[70vh] border rounded-md p-4 bg-card">
         {loading ? (
           <div className="flex items-center justify-center p-8">
             <p>Carregando...</p>
@@ -287,10 +277,10 @@ export default function AssistantReportLogsPage() {
                   <span 
                     className={`px-2 py-0.5 rounded text-xs ${
                       log.status === "success" 
-                        ? "bg-green-100 text-green-800" 
+                        ? "bg-success/10 text-success" 
                         : log.status === "error"
-                          ? "bg-red-100 text-red-800"
-                          : "bg-yellow-100 text-yellow-800"
+                          ? "bg-destructive/10 text-destructive"
+                          : "bg-warning/10 text-warning"
                     }`}
                   >
                     {log.status}

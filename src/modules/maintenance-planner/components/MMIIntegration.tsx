@@ -10,6 +10,7 @@ import { Button } from "@/components/ui/button";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Brain, TrendingUp, AlertTriangle, Calendar } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
+
 import { useToast } from "@/hooks/use-toast";
 import { logger } from '@/lib/logger';
 
@@ -36,8 +37,9 @@ export const MMIIntegration: React.FC = () => {
   const fetchMMIPredictions = async () => {
     try {
       // Fetch from MMI system (mocked for now, would integrate with real MMI API)
-      const { data, error } = await supabase
-        .from("mmi_maintenance_jobs" as any)
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any -- dynamic table not in generated types
+      const { data, error } = await (supabase as any)
+        .from("mmi_maintenance_jobs")
         .select("*")
         .order("created_at", { ascending: false })
         .limit(10);
@@ -68,16 +70,18 @@ export const MMIIntegration: React.FC = () => {
         ]);
       } else {
         // Transform MMI data to predictions with deterministic values
-        const transformed = (data || []).slice(0, 5).map((job: any, idx: number) => {
-          const idHash = (job.id || '').split('').reduce((a: number, c: string) => a + c.charCodeAt(0), 0);
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any -- dynamic table row shape
+        const transformed = ((data || []) as Record<string, unknown>[]).slice(0, 5).map((job, idx: number) => {
+          const jobId = String(job.id || '');
+          const idHash = jobId.split('').reduce((a: number, c: string) => a + c.charCodeAt(0), 0);
           return {
-            id: job.id,
-            equipment_id: job.component_id || "N/A",
-            equipment_name: job.title || "Unknown Equipment",
-            failure_type: job.status || "General Maintenance",
+            id: jobId,
+            equipment_id: String(job.component_id || "N/A"),
+            equipment_name: String(job.title || "Unknown Equipment"),
+            failure_type: String(job.status || "General Maintenance"),
             probability: 0.5 + ((idHash % 40) / 100),
             predicted_date: new Date(Date.now() + (15 + idx * 10) * 24 * 60 * 60 * 1000).toISOString(),
-            recommended_action: job.description || "Schedule maintenance",
+            recommended_action: String(job.description || "Schedule maintenance"),
             confidence: 0.6 + ((idHash % 30) / 100),
           };
         });
@@ -93,7 +97,8 @@ export const MMIIntegration: React.FC = () => {
 
   const scheduleMaintenanceFromPrediction = async (prediction: MMIPrediction) => {
     try {
-      const { error } = await supabase.from("maintenance_tasks" as any).insert({
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any -- dynamic table
+      const { error } = await (supabase as any).from("maintenance_tasks").insert({
         task_name: `Preventive: ${prediction.equipment_name}`,
         equipment_id: prediction.equipment_id,
         scheduled_date: prediction.predicted_date.split("T")[0],
@@ -124,9 +129,9 @@ export const MMIIntegration: React.FC = () => {
   };
 
   const getProbabilityColor = (probability: number) => {
-    if (probability >= 0.7) return "text-red-600";
-    if (probability >= 0.5) return "text-orange-600";
-    return "text-yellow-600";
+    if (probability >= 0.7) return "text-destructive";
+    if (probability >= 0.5) return "text-warning";
+    return "text-warning";
   };
 
   const getProbabilityBadge = (probability: number) => {
