@@ -209,18 +209,18 @@ export const RealTimeCollaboration = () => {
 
   const getStatusColor = (status: string) => {
     switch (status) {
-    case "online": return "bg-green-500";
-    case "away": return "bg-yellow-500";
-    case "busy": return "bg-red-500";
-    default: return "bg-gray-500";
+    case "online": return "bg-success";
+    case "away": return "bg-warning";
+    case "busy": return "bg-destructive";
+    default: return "bg-muted-foreground";
     }
   };
 
   const getMessageIcon = (type: string) => {
     switch (type) {
-    case "update": return <Activity className="w-4 h-4 text-blue-500" />;
-    case "alert": return <Bell className="w-4 h-4 text-orange-500" />;
-    case "achievement": return <Zap className="w-4 h-4 text-green-500" />;
+    case "update": return <Activity className="w-4 h-4 text-primary" />;
+    case "alert": return <Bell className="w-4 h-4 text-warning" />;
+    case "achievement": return <Zap className="w-4 h-4 text-success" />;
     default: return <MessageCircle className="w-4 h-4 text-muted-foreground" />;
     }
   };
