@@ -118,7 +118,7 @@ export function ModularizedExecutiveDashboard() {
           </div>
         </div>
         <Badge variant="outline" className="gap-2 py-2 px-3">
-          <div className="h-2 w-2 rounded-full bg-green-500 animate-pulse" />
+          <div className="h-2 w-2 rounded-full bg-success animate-pulse" />
           Sistema Operacional
         </Badge>
       </div>
@@ -182,9 +182,9 @@ export function ModularizedExecutiveDashboard() {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-muted-foreground">Operacionais</p>
-                <p className="text-3xl font-bold text-green-600">{operationalModules}</p>
+                <p className="text-3xl font-bold text-success">{operationalModules}</p>
               </div>
-              <CheckCircle className="h-8 w-8 text-green-600" />
+              <CheckCircle className="h-8 w-8 text-success" />
             </div>
           </CardContent>
         </Card>
@@ -194,9 +194,9 @@ export function ModularizedExecutiveDashboard() {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-muted-foreground">Uptime Médio</p>
-                <p className="text-3xl font-bold text-blue-600">{avgUptime}%</p>
+                <p className="text-3xl font-bold text-info">{avgUptime}%</p>
               </div>
-              <TrendingUp className="h-8 w-8 text-blue-600" />
+              <TrendingUp className="h-8 w-8 text-info" />
             </div>
           </CardContent>
         </Card>
@@ -212,19 +212,19 @@ export function ModularizedExecutiveDashboard() {
         </CardHeader>
         <CardContent>
           <div className="flex items-center gap-2 text-sm">
-            <CheckCircle className="h-4 w-4 text-green-600" />
+            <CheckCircle className="h-4 w-4 text-success" />
             <span>Dashboard modularizado e otimizado</span>
           </div>
           <div className="flex items-center gap-2 text-sm mt-2">
-            <CheckCircle className="h-4 w-4 text-green-600" />
+            <CheckCircle className="h-4 w-4 text-success" />
             <span>Monitoramento de performance ativo</span>
           </div>
           <div className="flex items-center gap-2 text-sm mt-2">
-            <CheckCircle className="h-4 w-4 text-green-600" />
+            <CheckCircle className="h-4 w-4 text-success" />
             <span>Fallback offline configurado</span>
           </div>
           <div className="flex items-center gap-2 text-sm mt-2">
-            <CheckCircle className="h-4 w-4 text-green-600" />
+            <CheckCircle className="h-4 w-4 text-success" />
             <span>Watchdog auto-healing ativo</span>
           </div>
         </CardContent>

@@ -575,8 +575,8 @@ export default function TravelCommandCenter() {
                           <div className="flex items-center gap-3">
                             <div className={`p-2 rounded-lg ${
                               trip.type === "mobilization" 
-                                ? "bg-green-500/10 text-green-600" 
-                                : "bg-blue-500/10 text-blue-600"
+                             ? "bg-success/10 text-success" 
+                                : "bg-info/10 text-info"
                             }`}>
                               <Plane className={cn("h-5 w-5", trip.type === "demobilization" && "rotate-180")} />
                             </div>

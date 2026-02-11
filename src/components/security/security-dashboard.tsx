@@ -166,28 +166,28 @@ export const SecurityDashboard: React.FC = () => {
 
   const getStatusIcon = (status: string) => {
     switch (status) {
-    case "passed": return <CheckCircle className="w-4 h-4 text-green-600" />;
-    case "warning": return <AlertTriangle className="w-4 h-4 text-yellow-600" />;
-    case "failed": return <AlertTriangle className="w-4 h-4 text-red-600" />;
-    default: return <Info className="w-4 h-4 text-blue-600" />;
+    case "passed": return <CheckCircle className="w-4 h-4 text-success" />;
+    case "warning": return <AlertTriangle className="w-4 h-4 text-warning" />;
+    case "failed": return <AlertTriangle className="w-4 h-4 text-destructive" />;
+    default: return <Info className="w-4 h-4 text-info" />;
     }
   };
 
   const getStatusColor = (status: string) => {
     switch (status) {
-    case "passed": return "text-green-600 bg-green-50 border-green-200";
-    case "warning": return "text-yellow-600 bg-yellow-50 border-yellow-200";
-    case "failed": return "text-red-600 bg-red-50 border-red-200";
-    default: return "text-blue-600 bg-blue-50 border-blue-200";
+    case "passed": return "text-success bg-success/10 border-success/20";
+    case "warning": return "text-warning bg-warning/10 border-warning/20";
+    case "failed": return "text-destructive bg-destructive/10 border-destructive/20";
+    default: return "text-info bg-info/10 border-info/20";
     }
   };
 
   const getSeverityBadge = (severity: string) => {
     const variants = {
-      low: "bg-green-100 text-green-800",
-      medium: "bg-yellow-100 text-yellow-800",
-      high: "bg-orange-100 text-orange-800",
-      critical: "bg-red-100 text-red-800"
+      low: "bg-success/20 text-success",
+      medium: "bg-warning/20 text-warning",
+      high: "bg-warning/20 text-warning",
+      critical: "bg-destructive/20 text-destructive"
     };
     return variants[severity as keyof typeof variants] || variants.low;
   };
@@ -252,8 +252,8 @@ export const SecurityDashboard: React.FC = () => {
           </CardHeader>
           <CardContent>
             <div className={`text-2xl font-bold ${
-              metrics.overallScore >= 80 ? "text-green-600" : 
-                metrics.overallScore >= 60 ? "text-yellow-600" : "text-red-600"
+              metrics.overallScore >= 80 ? "text-success" : 
+                metrics.overallScore >= 60 ? "text-warning" : "text-destructive"
             }`}>
               {metrics.overallScore}%
             </div>
@@ -266,12 +266,12 @@ export const SecurityDashboard: React.FC = () => {
         <Card>
           <CardHeader className="pb-3">
             <CardTitle className="flex items-center gap-2 text-sm font-medium">
-              <CheckCircle className="w-4 h-4 text-green-600" />
+              <CheckCircle className="w-4 h-4 text-success" />
               Aprovados
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-green-600">
+            <div className="text-2xl font-bold text-success">
               {metrics.passed}
             </div>
             <p className="text-xs text-muted-foreground mt-1">
@@ -283,12 +283,12 @@ export const SecurityDashboard: React.FC = () => {
         <Card>
           <CardHeader className="pb-3">
             <CardTitle className="flex items-center gap-2 text-sm font-medium">
-              <AlertTriangle className="w-4 h-4 text-yellow-600" />
+              <AlertTriangle className="w-4 h-4 text-warning" />
               Avisos
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-yellow-600">
+            <div className="text-2xl font-bold text-warning">
               {metrics.warnings}
             </div>
             <p className="text-xs text-muted-foreground mt-1">
@@ -300,12 +300,12 @@ export const SecurityDashboard: React.FC = () => {
         <Card>
           <CardHeader className="pb-3">
             <CardTitle className="flex items-center gap-2 text-sm font-medium">
-              <AlertTriangle className="w-4 h-4 text-red-600" />
+              <AlertTriangle className="w-4 h-4 text-destructive" />
               Críticos
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-red-600">
+            <div className="text-2xl font-bold text-destructive">
               {metrics.failed}
             </div>
             <p className="text-xs text-muted-foreground mt-1">
@@ -317,9 +317,9 @@ export const SecurityDashboard: React.FC = () => {
 
       {/* Critical Issues Alert */}
       {metrics.failed > 0 && (
-        <Alert className="border-red-200 bg-red-50">
-          <AlertTriangle className="h-4 w-4 text-red-600" />
-          <AlertDescription className="text-red-800">
+        <Alert className="border-destructive/20 bg-destructive/10">
+          <AlertTriangle className="h-4 w-4 text-destructive" />
+          <AlertDescription className="text-destructive">
             <strong>Atenção:</strong> {metrics.failed} problema(s) crítico(s) de segurança encontrado(s). 
             Ação imediata necessária.
           </AlertDescription>

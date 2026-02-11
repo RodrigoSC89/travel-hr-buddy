@@ -58,6 +58,7 @@ export interface GeneratedDocument {
   id?: string;
   templateId: string;
   templateName: string;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- dynamic form values from template fields
   fieldValues: Record<string, any>;
   generatedHtml: string;
   generatedPdf?: Blob;
@@ -201,6 +202,7 @@ class TemplateSystemService {
    */
   async generateDocument(
     templateId: string,
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any -- dynamic form values
     fieldValues: Record<string, any>,
     userId: string
   ): Promise<GeneratedDocument> {
@@ -367,6 +369,7 @@ class TemplateSystemService {
    */
   private validateFieldValues(
     fields: TemplateField[],
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any -- dynamic form values
     values: Record<string, any>
   ): void {
     fields.forEach((field) => {
@@ -427,6 +430,7 @@ class TemplateSystemService {
   /**
    * Helper: Map database record to Template
    */
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Supabase row shape is dynamic
   private mapDatabaseTemplate(data: any): Template {
     return {
       id: data.id,

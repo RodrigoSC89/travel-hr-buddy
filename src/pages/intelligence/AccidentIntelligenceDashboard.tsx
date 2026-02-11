@@ -146,9 +146,9 @@ export default function AccidentIntelligenceDashboard() {
 
   const getSeverityColor = (severity: string) => {
     switch (severity) {
-      case "high": return "text-red-500 bg-red-500/10 border-red-500/20";
-      case "medium": return "text-amber-500 bg-amber-500/10 border-amber-500/20";
-      case "low": return "text-emerald-500 bg-emerald-500/10 border-emerald-500/20";
+      case "high": return "text-destructive bg-destructive/10 border-destructive/20";
+      case "medium": return "text-warning bg-warning/10 border-warning/20";
+      case "low": return "text-success bg-success/10 border-success/20";
       default: return "";
     }
   };
@@ -159,14 +159,14 @@ export default function AccidentIntelligenceDashboard() {
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-3xl font-bold text-foreground flex items-center gap-3">
-            <Shield className="h-8 w-8 text-orange-500" />
+            <Shield className="h-8 w-8 text-warning" />
             CIAI - Inteligência de Acidentes
           </h1>
           <p className="text-muted-foreground mt-1">
             Análise de padrões e previsão de incidentes com IA
           </p>
         </div>
-        <Badge variant="outline" className="text-orange-500 border-orange-500">
+        <Badge variant="outline" className="text-warning border-warning">
           <Brain className="h-3 w-3 mr-1" />
           Análise Ativa
         </Badge>
@@ -174,56 +174,56 @@ export default function AccidentIntelligenceDashboard() {
 
       {/* KPIs */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-        <Card className="bg-gradient-to-br from-red-500/10 to-red-600/5 border-red-500/20">
+        <Card className="bg-gradient-to-br from-destructive/10 to-destructive/5 border-destructive/20">
           <CardContent className="pt-6">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-muted-foreground">Incidentes (12m)</p>
-                <p className="text-2xl font-bold text-red-500">4</p>
-                <p className="text-xs text-red-400 flex items-center gap-1">
+                <p className="text-2xl font-bold text-destructive">4</p>
+                <p className="text-xs text-destructive/80 flex items-center gap-1">
                   <TrendingUp className="h-3 w-3" /> +33% vs ano anterior
                 </p>
               </div>
-              <AlertTriangle className="h-10 w-10 text-red-500/50" />
+              <AlertTriangle className="h-10 w-10 text-destructive/50" />
             </div>
           </CardContent>
         </Card>
 
-        <Card className="bg-gradient-to-br from-amber-500/10 to-amber-600/5 border-amber-500/20">
+        <Card className="bg-gradient-to-br from-warning/10 to-warning/5 border-warning/20">
           <CardContent className="pt-6">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-muted-foreground">Padrões Detectados</p>
-                <p className="text-2xl font-bold text-amber-500">3</p>
-                <p className="text-xs text-amber-400">100% correlação água</p>
+                <p className="text-2xl font-bold text-warning">3</p>
+                <p className="text-xs text-warning/80">100% correlação água</p>
               </div>
-              <Target className="h-10 w-10 text-amber-500/50" />
+              <Target className="h-10 w-10 text-warning/50" />
             </div>
           </CardContent>
         </Card>
 
-        <Card className="bg-gradient-to-br from-blue-500/10 to-blue-600/5 border-blue-500/20">
+        <Card className="bg-gradient-to-br from-info/10 to-info/5 border-info/20">
           <CardContent className="pt-6">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-muted-foreground">Precisão Previsão</p>
-                <p className="text-2xl font-bold text-blue-500">91%</p>
-                <p className="text-xs text-blue-400">Modelo XGBoost</p>
+                <p className="text-2xl font-bold text-info">91%</p>
+                <p className="text-xs text-info/80">Modelo XGBoost</p>
               </div>
-              <Brain className="h-10 w-10 text-blue-500/50" />
+              <Brain className="h-10 w-10 text-info/50" />
             </div>
           </CardContent>
         </Card>
 
-        <Card className="bg-gradient-to-br from-emerald-500/10 to-emerald-600/5 border-emerald-500/20">
+        <Card className="bg-gradient-to-br from-success/10 to-success/5 border-success/20">
           <CardContent className="pt-6">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-muted-foreground">Redução Esperada</p>
-                <p className="text-2xl font-bold text-emerald-500">-40%</p>
-                <p className="text-xs text-emerald-400">Após intervenções</p>
+                <p className="text-2xl font-bold text-success">-40%</p>
+                <p className="text-xs text-success/80">Após intervenções</p>
               </div>
-              <TrendingDown className="h-10 w-10 text-emerald-500/50" />
+              <TrendingDown className="h-10 w-10 text-success/50" />
             </div>
           </CardContent>
         </Card>
@@ -248,8 +248,8 @@ export default function AccidentIntelligenceDashboard() {
                 </CardTitle>
               </CardHeader>
               <CardContent className="space-y-4">
-                <div className="p-4 rounded-lg bg-amber-500/10 border border-amber-500/20">
-                  <h4 className="font-bold text-lg text-amber-500">{patternAnalysis.mainPattern}</h4>
+                 <div className="p-4 rounded-lg bg-warning/10 border border-warning/20">
+                   <h4 className="font-bold text-lg text-warning">{patternAnalysis.mainPattern}</h4>
                   <p className="text-sm text-muted-foreground mt-1">
                     {patternAnalysis.incidents} incidentes com {patternAnalysis.correlation}% de correlação
                   </p>
@@ -419,8 +419,8 @@ export default function AccidentIntelligenceDashboard() {
                   <p className="font-medium">{selectedIncident.cause}</p>
                 </div>
 
-                <div className="p-4 rounded-lg bg-amber-500/10 border border-amber-500/20">
-                  <p className="text-sm text-amber-500 font-medium flex items-center gap-2">
+                 <div className="p-4 rounded-lg bg-warning/10 border border-warning/20">
+                   <p className="text-sm text-warning font-medium flex items-center gap-2">
                     <Brain className="h-4 w-4" />
                     Análise IA
                   </p>
@@ -453,21 +453,21 @@ export default function AccidentIntelligenceDashboard() {
               </CardHeader>
               <CardContent className="space-y-4">
                 <div className="grid grid-cols-2 gap-4">
-                  <div className="p-4 rounded-lg bg-red-500/10 border border-red-500/20 text-center">
+                   <div className="p-4 rounded-lg bg-destructive/10 border border-destructive/20 text-center">
                     <p className="text-xs text-muted-foreground">Incidentes Esperados</p>
-                    <p className="text-3xl font-bold text-red-500">{patternAnalysis.prediction.expectedIncidents}</p>
-                    <p className="text-xs text-red-400">sem intervenção</p>
+                    <p className="text-3xl font-bold text-destructive">{patternAnalysis.prediction.expectedIncidents}</p>
+                    <p className="text-xs text-destructive/80">sem intervenção</p>
                   </div>
-                  <div className="p-4 rounded-lg bg-amber-500/10 border border-amber-500/20 text-center">
+                  <div className="p-4 rounded-lg bg-warning/10 border border-warning/20 text-center">
                     <p className="text-xs text-muted-foreground">Prob. Lesão Séria</p>
-                    <p className="text-3xl font-bold text-amber-500">{patternAnalysis.prediction.seriousInjuryProbability}%</p>
-                    <p className="text-xs text-amber-400">se padrão continuar</p>
+                    <p className="text-3xl font-bold text-warning">{patternAnalysis.prediction.seriousInjuryProbability}%</p>
+                    <p className="text-xs text-warning/80">se padrão continuar</p>
                   </div>
                 </div>
 
                 <div className="p-4 rounded-lg bg-muted/50">
                   <p className="text-sm text-muted-foreground">Custo Estimado (sem intervenção):</p>
-                  <p className="text-2xl font-bold text-red-500">
+                  <p className="text-2xl font-bold text-destructive">
                     ${patternAnalysis.prediction.estimatedCost.toLocaleString()}
                   </p>
                   <p className="text-xs text-muted-foreground mt-1">
@@ -496,7 +496,8 @@ export default function AccidentIntelligenceDashboard() {
                         backgroundColor: "hsl(var(--card))", 
                         border: "1px solid hsl(var(--border))" 
                       }}
-                      formatter={(value: number, name: string, props: any) => [
+                      // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Recharts Tooltip formatter signature
+                      formatter={(value: number, name: string, props: Record<string, any>) => [
                         `${props.payload.incidents} incidentes`,
                         props.payload.location
                       ]}
@@ -516,15 +517,15 @@ export default function AccidentIntelligenceDashboard() {
                 </ResponsiveContainer>
                 <div className="flex justify-center gap-4 mt-4">
                   <div className="flex items-center gap-2">
-                    <div className="w-3 h-3 rounded-full bg-red-500" />
+                    <div className="w-3 h-3 rounded-full bg-destructive" />
                     <span className="text-xs">Alto risco (&gt;5)</span>
                   </div>
                   <div className="flex items-center gap-2">
-                    <div className="w-3 h-3 rounded-full bg-amber-500" />
+                    <div className="w-3 h-3 rounded-full bg-warning" />
                     <span className="text-xs">Médio (3-5)</span>
                   </div>
                   <div className="flex items-center gap-2">
-                    <div className="w-3 h-3 rounded-full bg-emerald-500" />
+                    <div className="w-3 h-3 rounded-full bg-success" />
                     <span className="text-xs">Baixo (&lt;3)</span>
                   </div>
                 </div>
@@ -547,8 +548,8 @@ export default function AccidentIntelligenceDashboard() {
                   <div 
                     key={idx}
                     className={`p-4 rounded-lg border ${
-                      rec.priority === 1 
-                        ? "bg-emerald-500/10 border-emerald-500/20" 
+                       rec.priority === 1 
+                        ? "bg-success/10 border-success/20" 
                         : "bg-muted/50"
                     }`}
                   >
@@ -556,7 +557,7 @@ export default function AccidentIntelligenceDashboard() {
                       <div className="flex items-center gap-3">
                         <Badge 
                           variant={rec.priority === 1 ? "default" : "outline"}
-                          className={rec.priority === 1 ? "bg-emerald-500" : ""}
+                          className={rec.priority === 1 ? "bg-success" : ""}
                         >
                           Prioridade {rec.priority}
                         </Badge>
@@ -571,16 +572,16 @@ export default function AccidentIntelligenceDashboard() {
                 ))}
               </div>
 
-              <div className="mt-6 p-4 rounded-lg bg-blue-500/10 border border-blue-500/20">
-                <h4 className="font-medium text-blue-500 flex items-center gap-2">
+              <div className="mt-6 p-4 rounded-lg bg-info/10 border border-info/20">
+                <h4 className="font-medium text-info flex items-center gap-2">
                   <Brain className="h-4 w-4" />
                   Resultado Esperado
                 </h4>
                 <p className="text-sm mt-2">
                   Implementando as 3 ações recomendadas (custo total: $40k), espera-se uma 
-                  <strong className="text-emerald-500"> redução de 85% nos incidentes de escorregão</strong>.
+                  <strong className="text-success"> redução de 85% nos incidentes de escorregão</strong>.
                   Comparado ao custo potencial de $200k por lesão grave, o ROI é de 
-                  <strong className="text-emerald-500"> 400%</strong>.
+                  <strong className="text-success"> 400%</strong>.
                 </p>
               </div>
 

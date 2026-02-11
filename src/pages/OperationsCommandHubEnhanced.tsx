@@ -167,6 +167,7 @@ export default function OperationsCommandHubEnhanced() {
       details: [
         { label: "Ativas", value: String(metrics.activeMissions) },
         { label: "Total", value: String(missions.length) },
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Supabase dynamic row
         { label: "Planejadas", value: String(missions.filter((m: any) => m.status === "planning").length) }
       ]
     },
@@ -179,7 +180,9 @@ export default function OperationsCommandHubEnhanced() {
       icon: <MapPin className="h-5 w-5" />,
       details: [
         { label: "Total", value: String(ports.length) },
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Supabase dynamic row
         { label: "Ativos", value: String(ports.filter((p: any) => p.status === "active").length) },
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Supabase dynamic row
         { label: "Países", value: String(new Set(ports.map((p: any) => p.country)).size) }
       ]
     }
@@ -235,6 +238,7 @@ export default function OperationsCommandHubEnhanced() {
     const alerts: Array<{id: string; title: string; description: string; severity: "high" | "medium" | "info"; timestamp: Date; module: string; actions: Array<{label: string; onClick: () => void}>}> = [];
     
     // Generate alerts from real vessel data
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Supabase dynamic row shape
     vessels.forEach((v: any, idx: number) => {
       if (v.status === 'maintenance') {
         alerts.push({
@@ -284,7 +288,7 @@ export default function OperationsCommandHubEnhanced() {
     return alerts;
   }, [vessels, metrics, handleTabChange]);
 
-  const activeAlerts = operationalAlerts.filter((a: any) => !dismissedAlerts.includes(a.id));
+  const activeAlerts = operationalAlerts.filter((a) => !dismissedAlerts.includes(a.id));
 
   return (
     <div className="min-h-screen bg-background">
@@ -483,8 +487,10 @@ export default function OperationsCommandHubEnhanced() {
                     <div className="space-y-2">
                       <div className="flex justify-between text-sm">
                         <span className="text-muted-foreground">Manutenção</span>
+                        {/* eslint-disable-next-line @typescript-eslint/no-explicit-any -- Supabase dynamic row */}
                         <span className="font-medium text-muted-foreground">{vessels.filter((v: any) => v.status === 'maintenance').length}</span>
                       </div>
+                      {/* eslint-disable-next-line @typescript-eslint/no-explicit-any -- Supabase dynamic row */}
                       <Progress value={metrics.totalVessels > 0 ? (vessels.filter((v: any) => v.status === 'maintenance').length / metrics.totalVessels) * 100 : 0} className="h-2 [&>div]:bg-warning" />
                     </div>
                     <div className="space-y-2">
@@ -510,7 +516,7 @@ export default function OperationsCommandHubEnhanced() {
                   </CardHeader>
                    <CardContent className="space-y-3">
                      {voyages.length > 0 ? (
-                       voyages.slice(0, 3).map((voy: any, idx: number) => (
+                        voyages.slice(0, 3).map((voy: any, idx: number) => (
                          <div key={voy.id || idx} className="flex items-center gap-3 text-sm">
                            <Badge variant="outline" className="min-w-[60px] justify-center text-xs">
                              {voy.status === 'in_progress' ? '🟢' : voy.status === 'planned' ? '🟡' : '✅'} {voy.status || 'N/A'}
