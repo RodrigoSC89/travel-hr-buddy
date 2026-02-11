@@ -55,7 +55,7 @@ const operationalMetrics = [
   { name: "Crítico", value: 2, color: "#ef4444" },
 ];
 
-const KPICard = ({ title, value, change, icon: Icon, trend, prefix = "", suffix = "" }: any) => {
+const KPICard = ({ title, value, change, icon: Icon, trend, prefix = "", suffix = "" }: { title: string; value: string | number; change: number; icon: React.ElementType; trend: string; prefix?: string; suffix?: string }) => {
   const isPositive = change >= 0;
   const TrendIcon = isPositive ? ArrowUpRight : ArrowDownRight;
 
@@ -85,8 +85,8 @@ const KPICard = ({ title, value, change, icon: Icon, trend, prefix = "", suffix 
                 <span className="text-xs text-muted-foreground">{trend}</span>
               </div>
             </div>
-            <div className={`p-3 rounded-lg ${isPositive ? "bg-green-100 dark:bg-green-900/20" : "bg-blue-100 dark:bg-blue-900/20"}`}>
-              <Icon className={`h-6 w-6 ${isPositive ? "text-green-600 dark:text-green-400" : "text-blue-600 dark:text-blue-400"}`} />
+            <div className={`p-3 rounded-lg ${isPositive ? "bg-success/10" : "bg-info/10"}`}>
+              <Icon className={`h-6 w-6 ${isPositive ? "text-success" : "text-info"}`} />
             </div>
           </div>
         </CardContent>
@@ -95,7 +95,7 @@ const KPICard = ({ title, value, change, icon: Icon, trend, prefix = "", suffix 
   );
 };
 
-const MetricIndicator = ({ label, value, target, color = "blue" }: any) => {
+const MetricIndicator = ({ label, value, target }: { label: string; value: number; target: number; color?: string }) => {
   const percentage = (value / target) * 100;
   const isExceeding = percentage >= 100;
 
@@ -123,7 +123,7 @@ const MetricIndicator = ({ label, value, target, color = "blue" }: any) => {
   );
 };
 
-const VesselPerformanceCard = ({ vessel }: any) => (
+const VesselPerformanceCard = ({ vessel }: { vessel: { vessel: string; efficiency: number; uptime: number; compliance: number } }) => (
   <Card>
     <CardContent className="pt-6">
       <div className="space-y-4">
@@ -180,7 +180,7 @@ export function ExecutiveDashboard() {
         </div>
         <div className="flex items-center gap-2">
           <Badge variant="outline" className="gap-2">
-            <div className="h-2 w-2 rounded-full bg-green-500 animate-pulse" />
+            <div className="h-2 w-2 rounded-full bg-success animate-pulse" />
             Tempo Real
           </Badge>
           <Button variant="outline" size="sm">
@@ -252,13 +252,13 @@ export function ExecutiveDashboard() {
                 <ResponsiveContainer width="100%" height={300}>
                   <AreaChart data={revenueData}>
                     <defs>
-                      <linearGradient id="colorRevenue" x1="0" y1="0" x2="0" y2="1">
-                        <stop offset="5%" stopColor="#3b82f6" stopOpacity={0.8}/>
-                        <stop offset="95%" stopColor="#3b82f6" stopOpacity={0}/>
+                       <linearGradient id="colorRevenue" x1="0" y1="0" x2="0" y2="1">
+                        <stop offset="5%" stopColor="hsl(var(--primary))" stopOpacity={0.8}/>
+                        <stop offset="95%" stopColor="hsl(var(--primary))" stopOpacity={0}/>
                       </linearGradient>
                       <linearGradient id="colorTarget" x1="0" y1="0" x2="0" y2="1">
-                        <stop offset="5%" stopColor="#10b981" stopOpacity={0.8}/>
-                        <stop offset="95%" stopColor="#10b981" stopOpacity={0}/>
+                        <stop offset="5%" stopColor="hsl(var(--success))" stopOpacity={0.8}/>
+                        <stop offset="95%" stopColor="hsl(var(--success))" stopOpacity={0}/>
                       </linearGradient>
                     </defs>
                     <CartesianGrid strokeDasharray="3 3" />
@@ -266,26 +266,26 @@ export function ExecutiveDashboard() {
                     <YAxis />
                     <Tooltip />
                     <Legend />
-                    <Area 
+                     <Area 
                       type="monotone" 
                       dataKey="revenue" 
-                      stroke="#3b82f6" 
+                      stroke="hsl(var(--primary))" 
                       fillOpacity={1} 
                       fill="url(#colorRevenue)"
                       name="Receita"
                     />
-                    <Area 
+                     <Area 
                       type="monotone" 
                       dataKey="target" 
-                      stroke="#10b981" 
+                      stroke="hsl(var(--success))"
                       fillOpacity={1} 
                       fill="url(#colorTarget)"
                       name="Meta"
                     />
-                    <Line 
+                     <Line 
                       type="monotone" 
                       dataKey="costs" 
-                      stroke="#f59e0b" 
+                      stroke="hsl(var(--warning))"
                       strokeWidth={2}
                       name="Custos"
                     />
@@ -408,8 +408,8 @@ export function ExecutiveDashboard() {
                   <YAxis />
                   <Tooltip />
                   <Legend />
-                  <Bar dataKey="revenue" fill="#3b82f6" name="Receita" radius={[8, 8, 0, 0]} />
-                  <Bar dataKey="costs" fill="#ef4444" name="Custos" radius={[8, 8, 0, 0]} />
+                   <Bar dataKey="revenue" fill="hsl(var(--primary))" name="Receita" radius={[8, 8, 0, 0]} />
+                  <Bar dataKey="costs" fill="hsl(var(--destructive))" name="Custos" radius={[8, 8, 0, 0]} />
                 </RechartsBar>
               </ResponsiveContainer>
             </CardContent>
@@ -424,7 +424,7 @@ export function ExecutiveDashboard() {
               </CardHeader>
               <CardContent>
                 <div className="text-center">
-                  <p className="text-5xl font-bold font-playfair text-green-600">
+                   <p className="text-5xl font-bold font-playfair text-success">
                     96.8%
                   </p>
                   <p className="text-sm text-muted-foreground mt-2">
@@ -440,7 +440,7 @@ export function ExecutiveDashboard() {
               </CardHeader>
               <CardContent>
                 <div className="text-center">
-                  <p className="text-5xl font-bold font-playfair text-yellow-600">
+                   <p className="text-5xl font-bold font-playfair text-warning">
                     3
                   </p>
                   <p className="text-sm text-muted-foreground mt-2">
@@ -456,7 +456,7 @@ export function ExecutiveDashboard() {
               </CardHeader>
               <CardContent>
                 <div className="text-center">
-                  <p className="text-5xl font-bold font-playfair text-blue-600">
+                   <p className="text-5xl font-bold font-playfair text-info">
                     12
                   </p>
                   <p className="text-sm text-muted-foreground mt-2">

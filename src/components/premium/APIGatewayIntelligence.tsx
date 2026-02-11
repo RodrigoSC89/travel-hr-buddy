@@ -182,70 +182,70 @@
      <div className="space-y-6">
        {/* Header KPIs */}
        <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
-         <Card className="bg-gradient-to-br from-blue-500/10 to-blue-600/5 border-blue-500/20">
+         <Card className="bg-gradient-to-br from-primary/10 to-primary/5 border-primary/20">
            <CardContent className="pt-6">
              <div className="flex items-center justify-between">
                <div>
                  <p className="text-xs text-muted-foreground">Requests (24h)</p>
-                 <p className="text-2xl font-bold text-blue-600">{(totalRequests / 1000).toFixed(1)}K</p>
+                 <p className="text-2xl font-bold text-primary">{(totalRequests / 1000).toFixed(1)}K</p>
                  <div className="flex items-center gap-1 mt-1">
-                   <TrendingUp className="h-3 w-3 text-emerald-500" />
-                   <span className="text-xs text-emerald-500">+12.5%</span>
+                   <TrendingUp className="h-3 w-3 text-success" />
+                   <span className="text-xs text-success">+12.5%</span>
                  </div>
                </div>
-               <Activity className="h-10 w-10 text-blue-500/40" />
+               <Activity className="h-10 w-10 text-primary/40" />
              </div>
            </CardContent>
          </Card>
  
-         <Card className="bg-gradient-to-br from-emerald-500/10 to-emerald-600/5 border-emerald-500/20">
+         <Card className="bg-gradient-to-br from-success/10 to-success/5 border-success/20">
            <CardContent className="pt-6">
              <div className="flex items-center justify-between">
                <div>
                  <p className="text-xs text-muted-foreground">Avg Latency</p>
-                 <p className="text-2xl font-bold text-emerald-600">85ms</p>
+                 <p className="text-2xl font-bold text-success">85ms</p>
                  <p className="text-xs text-muted-foreground">p99: 420ms</p>
                </div>
-               <Gauge className="h-10 w-10 text-emerald-500/40" />
+               <Gauge className="h-10 w-10 text-success/40" />
              </div>
            </CardContent>
          </Card>
  
-         <Card className="bg-gradient-to-br from-amber-500/10 to-amber-600/5 border-amber-500/20">
+         <Card className="bg-gradient-to-br from-warning/10 to-warning/5 border-warning/20">
            <CardContent className="pt-6">
              <div className="flex items-center justify-between">
                <div>
                  <p className="text-xs text-muted-foreground">Error Rate</p>
-                 <p className="text-2xl font-bold text-amber-600">{avgErrorRate.toFixed(2)}%</p>
+                 <p className="text-2xl font-bold text-warning">{avgErrorRate.toFixed(2)}%</p>
                  <p className="text-xs text-muted-foreground">429s: 0.8%</p>
                </div>
-               <AlertTriangle className="h-10 w-10 text-amber-500/40" />
+               <AlertTriangle className="h-10 w-10 text-warning/40" />
              </div>
            </CardContent>
          </Card>
  
-         <Card className="bg-gradient-to-br from-purple-500/10 to-purple-600/5 border-purple-500/20">
+         <Card className="bg-gradient-to-br from-accent/10 to-accent/5 border-accent/20">
            <CardContent className="pt-6">
              <div className="flex items-center justify-between">
                <div>
                  <p className="text-xs text-muted-foreground">API Keys Ativos</p>
-                 <p className="text-2xl font-bold text-purple-600">{apiKeys.length}</p>
+                 <p className="text-2xl font-bold text-accent-foreground">{apiKeys.length}</p>
                  <p className="text-xs text-muted-foreground">3 consumers</p>
                </div>
-               <Key className="h-10 w-10 text-purple-500/40" />
+               <Key className="h-10 w-10 text-accent/40" />
              </div>
            </CardContent>
          </Card>
  
-         <Card className="bg-gradient-to-br from-cyan-500/10 to-cyan-600/5 border-cyan-500/20">
+         <Card className="bg-gradient-to-br from-info/10 to-info/5 border-info/20">
            <CardContent className="pt-6">
              <div className="flex items-center justify-between">
                <div>
                  <p className="text-xs text-muted-foreground">Webhooks</p>
-                 <p className="text-2xl font-bold text-cyan-600">{webhooks.length}</p>
+                 <p className="text-2xl font-bold text-info">{webhooks.length}</p>
                  <p className="text-xs text-muted-foreground">99.2% delivery</p>
                </div>
-               <Webhook className="h-10 w-10 text-cyan-500/40" />
+               <Webhook className="h-10 w-10 text-info/40" />
              </div>
            </CardContent>
          </Card>
@@ -294,9 +294,9 @@
                        </div>
                        <div className="flex items-center gap-2">
                          {endpoint.status === "healthy" ? (
-                           <CheckCircle className="h-4 w-4 text-emerald-500" />
+                           <CheckCircle className="h-4 w-4 text-success" />
                          ) : (
-                           <AlertTriangle className="h-4 w-4 text-amber-500" />
+                           <AlertTriangle className="h-4 w-4 text-warning" />
                          )}
                          <Badge variant={endpoint.status === "healthy" ? "default" : "secondary"}>
                            {endpoint.status === "healthy" ? "Saudável" : "Atenção"}
@@ -346,8 +346,8 @@
                      <div key={code} className="flex-1">
                        <div className="flex items-center justify-between mb-1">
                          <span className={`text-sm font-medium ${
-                           code === "2xx" ? "text-emerald-600" :
-                           code === "4xx" ? "text-amber-600" :
+                           code === "2xx" ? "text-success" :
+                           code === "4xx" ? "text-warning" :
                            code === "5xx" ? "text-destructive" : ""
                          }`}>{code}</span>
                          <span className="text-sm">{percent}%</span>
@@ -355,9 +355,9 @@
                        <Progress 
                          value={percent} 
                          className={`h-3 ${
-                           code === "2xx" ? "bg-emerald-100" :
-                           code === "4xx" ? "bg-amber-100" :
-                           code === "5xx" ? "bg-red-100" : ""
+                           code === "2xx" ? "bg-success/10" :
+                           code === "4xx" ? "bg-warning/10" :
+                           code === "5xx" ? "bg-destructive/10" : ""
                          }`}
                        />
                      </div>
