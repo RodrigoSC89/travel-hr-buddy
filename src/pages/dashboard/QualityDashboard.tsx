@@ -250,20 +250,20 @@ export default function QualityDashboard() {
 
   const getHealthColor = (status: string) => {
     switch (status) {
-    case "excellent": return "text-green-600";
-    case "good": return "text-blue-600";
-    case "warning": return "text-yellow-600";
-    case "critical": return "text-red-600";
-    default: return "text-gray-600";
+    case "excellent": return "text-success";
+    case "good": return "text-info";
+    case "warning": return "text-warning";
+    case "critical": return "text-destructive";
+    default: return "text-muted-foreground";
     }
   };
 
   const getRiskColor = (level: string) => {
     switch (level) {
-    case "low": return "text-green-600";
-    case "medium": return "text-yellow-600";
-    case "high": return "text-red-600";
-    default: return "text-gray-600";
+    case "low": return "text-success";
+    case "medium": return "text-warning";
+    case "high": return "text-destructive";
+    default: return "text-muted-foreground";
     }
   };
 
@@ -337,7 +337,7 @@ export default function QualityDashboard() {
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">Nível de Confiança</CardTitle>
-            <TrendingUp className="h-4 w-4 text-green-600" />
+            <TrendingUp className="h-4 w-4 text-success" />
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">{metrics.confidence.level}%</div>
@@ -377,17 +377,17 @@ export default function QualityDashboard() {
                 </div>
                 <div className="flex items-center justify-between">
                   <span className="text-sm font-medium flex items-center gap-2">
-                    <CheckCircle2 className="h-4 w-4 text-green-600" />
+                    <CheckCircle2 className="h-4 w-4 text-success" />
                     Aprovados
                   </span>
-                  <span className="text-xl font-bold text-green-600">{metrics.tests.passed}</span>
+                  <span className="text-xl font-bold text-success">{metrics.tests.passed}</span>
                 </div>
                 <div className="flex items-center justify-between">
                   <span className="text-sm font-medium flex items-center gap-2">
-                    <XCircle className="h-4 w-4 text-red-600" />
+                    <XCircle className="h-4 w-4 text-destructive" />
                     Falhados
                   </span>
-                  <span className="text-xl font-bold text-red-600">{metrics.tests.failed}</span>
+                  <span className="text-xl font-bold text-destructive">{metrics.tests.failed}</span>
                 </div>
                 <div className="pt-4 border-t">
                   <div className="flex items-center justify-between mb-2">
@@ -490,23 +490,23 @@ export default function QualityDashboard() {
         <CardContent>
           <div className="space-y-2">
             <div className="flex items-center gap-2">
-              <CheckCircle2 className="h-5 w-5 text-green-600" />
+              <CheckCircle2 className="h-5 w-5 text-success" />
               <span>Painel publicado em /dashboard/quality</span>
             </div>
             <div className="flex items-center gap-2">
-              <CheckCircle2 className="h-5 w-5 text-green-600" />
+              <CheckCircle2 className="h-5 w-5 text-success" />
               <span>Visão executiva acessível</span>
             </div>
             <div className="flex items-center gap-2">
-              <CheckCircle2 className="h-5 w-5 text-green-600" />
+              <CheckCircle2 className="h-5 w-5 text-success" />
               <span>Dados em tempo real (WebSocket ativado)</span>
             </div>
             <div className="flex items-center gap-2">
-              <CheckCircle2 className="h-5 w-5 text-green-600" />
+              <CheckCircle2 className="h-5 w-5 text-success" />
               <span>Métricas de saúde, risco e confiança</span>
             </div>
             <div className="flex items-center gap-2">
-              <CheckCircle2 className="h-5 w-5 text-green-600" />
+              <CheckCircle2 className="h-5 w-5 text-success" />
               <span>Resultados de testes automatizados</span>
             </div>
           </div>

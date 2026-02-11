@@ -242,27 +242,25 @@ const AnalyticsCoreProfessional: React.FC = () => {
         .order("created_at", { ascending: false })
         .limit(10);
 
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Supabase dynamic row
-      const insightNotifications: Notification[] = (aiInsightsData || []).map((insight: any) => ({
-        id: insight.id as string,
-        title: (insight.title || "Insight de IA") as string,
-        message: (insight.description || "") as string,
+      const insightNotifications: Notification[] = (aiInsightsData || []).map((insight: Record<string, unknown>) => ({
+        id: String(insight.id),
+        title: String(insight.title || "Insight de IA"),
+        message: String(insight.description || ""),
         type: (insight.priority === "high" ? "warning" : "info") as "info" | "warning" | "success" | "error",
-        category: (insight.category || "general") as string,
+        category: String(insight.category || "general"),
         isRead: insight.status === "read",
-        createdAt: new Date(insight.created_at),
+        createdAt: new Date(String(insight.created_at)),
         metadata: insight.metadata as Record<string, unknown> | undefined
       }));
 
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Supabase dynamic row
-      const alertNotifications: Notification[] = (alertsData || []).map((alert: any) => ({
-        id: alert.id as string,
-        title: `Alerta: ${alert.alert_name}` as string,
-        message: `Preço alvo: ${alert.target_price} (${alert.condition})` as string,
+      const alertNotifications: Notification[] = (alertsData || []).map((alert: Record<string, unknown>) => ({
+        id: String(alert.id),
+        title: `Alerta: ${String(alert.alert_name)}`,
+        message: `Preço alvo: ${String(alert.target_price)} (${String(alert.condition)})`,
         type: (alert.is_active ? "warning" : "info") as "info" | "warning" | "success" | "error",
-        category: "price_alerts" as string,
+        category: "price_alerts",
         isRead: !alert.is_active,
-        createdAt: new Date(alert.created_at),
+        createdAt: new Date(String(alert.created_at)),
         metadata: { triggeredCount: alert.triggered_count } as Record<string, unknown>
       }));
 
@@ -287,15 +285,14 @@ const AnalyticsCoreProfessional: React.FC = () => {
         .limit(10);
 
       if (analyticsMetrics && analyticsMetrics.length > 0) {
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Supabase dynamic row
-        setMetrics(analyticsMetrics.map((m: any) => ({
-          id: m.id,
-          name: m.metric_name,
-          value: m.metric_value,
-          unit: m.metric_unit || "%",
-          trend: m.metric_value > 0 ? "up" : "down",
-          change: m.metric_value > 50 ? 2.5 : -1.8,
-          category: m.aggregation_type || "general",
+        setMetrics(analyticsMetrics.map((m: Record<string, unknown>) => ({
+          id: String(m.id),
+          name: String(m.metric_name),
+          value: Number(m.metric_value),
+          unit: String(m.metric_unit || "%"),
+          trend: Number(m.metric_value) > 0 ? "up" : "down",
+          change: Number(m.metric_value) > 50 ? 2.5 : -1.8,
+          category: String(m.aggregation_type || "general"),
           isVisible: true
         })));
       } else {

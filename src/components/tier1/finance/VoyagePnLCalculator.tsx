@@ -195,20 +195,19 @@ export default function VoyagePnLCalculator() {
           return;
         }
 
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any -- voyage_plans schema has dynamic fields
-        const mapped: VoyagePnL[] = data.map((v: any, i: number) => {
-          const revenue = { freight: v.estimated_revenue || 0, demurrage: 0, other: 0, total: v.estimated_revenue || 0 };
-          const fuelCost = v.estimated_fuel_cost || 0;
+        const mapped: VoyagePnL[] = data.map((v: Record<string, unknown>, i: number) => {
+          const revenue = { freight: Number(v.estimated_revenue) || 0, demurrage: 0, other: 0, total: Number(v.estimated_revenue) || 0 };
+          const fuelCost = Number(v.estimated_fuel_cost) || 0;
           const totalCost = fuelCost * 2;
           const costs = { bunker: fuelCost, portCharges: fuelCost * 0.2, canalDues: 0, agency: fuelCost * 0.05, stevedoring: fuelCost * 0.15, insurance: fuelCost * 0.08, crewing: fuelCost * 0.3, provisions: fuelCost * 0.05, other: fuelCost * 0.07, total: totalCost };
           const grossProfit = revenue.total - costs.total;
-          const voyageDays = v.estimated_duration_days || 21;
+          const voyageDays = Number(v.estimated_duration_days) || 21;
           return {
-            voyageNumber: v.voyage_number || `V-${i + 1}`,
-            vessel: v.vessels?.name || "N/A",
-            route: `${v.departure_port || "TBD"} → ${v.arrival_port || "TBD"}`,
-            startDate: v.departure_date || "",
-            endDate: v.arrival_date || "",
+            voyageNumber: String(v.voyage_number || `V-${i + 1}`),
+            vessel: String((v.vessels as Record<string, unknown>)?.name || "N/A"),
+            route: `${String(v.departure_port || "TBD")} → ${String(v.arrival_port || "TBD")}`,
+            startDate: String(v.departure_date || ""),
+            endDate: String(v.arrival_date || ""),
             status: v.status === "completed" ? "completed" as const : "in_progress" as const,
             revenue, costs, grossProfit,
             margin: revenue.total > 0 ? (grossProfit / revenue.total) * 100 : 0,

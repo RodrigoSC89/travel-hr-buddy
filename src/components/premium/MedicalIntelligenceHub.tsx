@@ -23,7 +23,7 @@
 export default function MedicalIntelligenceHub() {
     const { crewHealth: mockCrewHealth, isLoading } = useMedicalIntelligenceData();
     const [activeTab, setActiveTab] = useState("monitoring");
-    const [supplies, setSupplies] = useState<any[]>([]);
+    const [supplies, setSupplies] = useState<Array<{ id: string; name: string; category: string; quantity: number; minStock: number; expiryDate: string; batchNumber: string; status: string }>>([]);
 
     // Fetch real medical supplies from Supabase
     useEffect(() => {
@@ -40,23 +40,22 @@ export default function MedicalIntelligenceHub() {
             return;
           }
 
-          // eslint-disable-next-line @typescript-eslint/no-explicit-any -- medical_supplies dynamic row
-          const mapped = (data || []).map((s: any) => {
-            const qty = s.quantity || 0;
-            const minStock = s.min_stock || 10;
+          const mapped = (data || []).map((s: Record<string, unknown>) => {
+            const qty = Number(s.quantity) || 0;
+            const minStock = Number(s.min_stock) || 10;
             const now = new Date();
-            const expiry = s.expiry_date ? new Date(s.expiry_date) : null;
+            const expiry = typeof s.expiry_date === "string" ? new Date(s.expiry_date) : null;
             const isExpired = expiry && expiry < now;
             const status = isExpired ? 'expired' : qty === 0 ? 'critical' : qty < minStock ? 'low' : 'ok';
 
             return {
-              id: s.id,
-              name: s.name,
-              category: s.category || 'Geral',
+              id: String(s.id),
+              name: String(s.name || ""),
+              category: String(s.category || 'Geral'),
               quantity: qty,
               minStock,
-              expiryDate: s.expiry_date?.split('T')[0] || 'N/A',
-              batchNumber: s.batch_number || 'N/A',
+              expiryDate: typeof s.expiry_date === "string" ? s.expiry_date.split('T')[0] : 'N/A',
+              batchNumber: String(s.batch_number || 'N/A'),
               status,
             };
           });
@@ -129,27 +128,27 @@ export default function MedicalIntelligenceHub() {
            </CardContent>
          </Card>
  
-         <Card className="bg-gradient-to-br from-cyan-500/10 to-cyan-500/5">
-           <CardContent className="pt-4">
-             <div className="flex items-center justify-between">
-               <div>
-                 <p className="text-xs text-muted-foreground">Suprimentos</p>
-                 <p className="text-2xl font-bold">87%</p>
-               </div>
-               <Pill className="h-8 w-8 text-cyan-500/50" />
+          <Card className="bg-gradient-to-br from-info/10 to-info/5">
+            <CardContent className="pt-4">
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-xs text-muted-foreground">Suprimentos</p>
+                  <p className="text-2xl font-bold">87%</p>
+                </div>
+                <Pill className="h-8 w-8 text-info/50" />
              </div>
              <p className="text-xs text-warning mt-2">4 itens baixos</p>
            </CardContent>
          </Card>
  
-         <Card className="bg-gradient-to-br from-purple-500/10 to-purple-500/5">
-           <CardContent className="pt-4">
-             <div className="flex items-center justify-between">
-               <div>
-                 <p className="text-xs text-muted-foreground">IA Diagnóstico</p>
-                 <p className="text-2xl font-bold">98.5%</p>
-               </div>
-               <Brain className="h-8 w-8 text-purple-500/50" />
+          <Card className="bg-gradient-to-br from-accent/10 to-accent/5">
+            <CardContent className="pt-4">
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-xs text-muted-foreground">IA Diagnóstico</p>
+                  <p className="text-2xl font-bold">98.5%</p>
+                </div>
+                <Brain className="h-8 w-8 text-accent/50" />
              </div>
              <p className="text-xs text-muted-foreground mt-2">precisão HDHE</p>
            </CardContent>
@@ -216,17 +215,17 @@ export default function MedicalIntelligenceHub() {
                          <p className="text-xs text-muted-foreground">BPM</p>
                        </div>
                        <div className="text-center p-2 bg-muted/50 rounded">
-                         <Activity className="h-4 w-4 mx-auto text-cyan-500 mb-1" />
+                         <Activity className="h-4 w-4 mx-auto text-info mb-1" />
                          <p className="text-lg font-bold">{crew.vitals.oxygenLevel}%</p>
                          <p className="text-xs text-muted-foreground">SpO2</p>
                        </div>
                        <div className="text-center p-2 bg-muted/50 rounded">
-                         <Thermometer className="h-4 w-4 mx-auto text-orange-500 mb-1" />
+                         <Thermometer className="h-4 w-4 mx-auto text-warning mb-1" />
                          <p className="text-lg font-bold">{crew.vitals.temperature}°</p>
                          <p className="text-xs text-muted-foreground">Temp</p>
                        </div>
                        <div className="text-center p-2 bg-muted/50 rounded">
-                         <TrendingUp className="h-4 w-4 mx-auto text-purple-500 mb-1" />
+                         <TrendingUp className="h-4 w-4 mx-auto text-accent mb-1" />
                          <p className="text-lg font-bold">{crew.vitals.bloodPressure}</p>
                          <p className="text-xs text-muted-foreground">PA</p>
                        </div>

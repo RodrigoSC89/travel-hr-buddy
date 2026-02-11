@@ -50,18 +50,18 @@ export default function OverviewDashboard() {
       
       if (error) throw error;
       
-      return (data || []).map((vessel: any) => ({
-        id: vessel.id,
-        name: vessel.name,
-        imo_number: vessel.imo_number || "N/A",
-        status: vessel.status === "active" ? "at_sea" : vessel.status || "in_port",
-        currentVoyage: vessel.current_port || "Em trânsito",
+      return (data || []).map((vessel: Record<string, unknown>) => ({
+        id: String(vessel.id || ""),
+        name: String(vessel.name || ""),
+        imo_number: String(vessel.imo_number || "N/A"),
+        status: vessel.status === "active" ? "at_sea" : (String(vessel.status || "in_port") as FleetVessel["status"]),
+        currentVoyage: String(vessel.current_port || "Em trânsito"),
         eta: "2h 45m",
         speed: 12.5,
         heading: 275,
         position: { lat: -23.5505, lng: -46.6333 },
         fuelROB: 850,
-        alerts: (vessel.name?.charCodeAt(0) || 65) % 3
+        alerts: (String(vessel.name || "A").charCodeAt(0) || 65) % 3
       }));
     }
   });
@@ -136,25 +136,25 @@ export default function OverviewDashboard() {
           </CardContent>
         </Card>
 
-        <Card className="bg-gradient-to-br from-emerald-500/10 to-emerald-500/5 border-emerald-500/20">
+        <Card className="bg-gradient-to-br from-success/10 to-success/5 border-success/20">
           <CardContent className="p-4 text-center">
-            <Fuel className="h-5 w-5 text-emerald-500 mx-auto mb-2" />
+            <Fuel className="h-5 w-5 text-success mx-auto mb-2" />
             <p className="text-2xl font-bold">{kpis.fuelEfficiency}%</p>
             <p className="text-xs text-muted-foreground">Fuel Efficiency</p>
           </CardContent>
         </Card>
 
-        <Card className="bg-gradient-to-br from-violet-500/10 to-violet-500/5 border-violet-500/20">
+        <Card className="bg-gradient-to-br from-accent/10 to-accent/5 border-accent/20">
           <CardContent className="p-4 text-center">
-            <Navigation className="h-5 w-5 text-violet-500 mx-auto mb-2" />
+            <Navigation className="h-5 w-5 text-accent mx-auto mb-2" />
             <p className="text-2xl font-bold">{kpis.activeVoyages}</p>
             <p className="text-xs text-muted-foreground">Active Voyages</p>
           </CardContent>
         </Card>
 
-        <Card className="bg-gradient-to-br from-cyan-500/10 to-cyan-500/5 border-cyan-500/20">
+        <Card className="bg-gradient-to-br from-info/10 to-info/5 border-info/20">
           <CardContent className="p-4 text-center">
-            <Anchor className="h-5 w-5 text-cyan-500 mx-auto mb-2" />
+            <Anchor className="h-5 w-5 text-info mx-auto mb-2" />
             <p className="text-2xl font-bold">{kpis.inPort}</p>
             <p className="text-xs text-muted-foreground">In Port</p>
           </CardContent>
