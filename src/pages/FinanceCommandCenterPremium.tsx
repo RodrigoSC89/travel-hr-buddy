@@ -68,7 +68,7 @@ function BudgetManagement() {
   });
 
   const budgetMetrics = useMemo(() => {
-    const totalDailyRate = vessels.reduce((sum: number, v: any) => sum + (v.daily_rate || 0), 0);
+    const totalDailyRate = vessels.reduce((sum: number, v: Record<string, unknown>) => sum + (Number(v.daily_rate) || 0), 0);
     const annualBudget = totalDailyRate * 365;
     const monthsElapsed = new Date().getMonth() + 1;
     const utilized = (totalDailyRate * 30 * monthsElapsed);
@@ -117,7 +117,7 @@ function BudgetManagement() {
             Atualizar
           </Button>
           <Button variant="outline" size="sm" onClick={() => {
-            const csv = ["Embarcação,Status,Daily Rate,Tipo", ...vessels.map((v: any) => `${v.name},${v.status},${v.daily_rate || 0},${v.type || 'N/A'}`)].join('\n');
+            const csv = ["Embarcação,Status,Daily Rate,Tipo", ...vessels.map((v) => `${v.name},${v.status},${(v as Record<string, unknown>).daily_rate || 0},${v.vessel_type || 'N/A'}`)].join('\n');
             const blob = new Blob([csv], { type: 'text/csv' });
             const url = URL.createObjectURL(blob);
             const a = document.createElement('a');
@@ -167,18 +167,18 @@ function BudgetManagement() {
         </CardHeader>
         <CardContent>
           <div className="space-y-3">
-            {vessels.slice(0, 10).map((v: any) => (
+            {vessels.slice(0, 10).map((v) => (
               <div key={v.id} className="flex items-center justify-between p-3 border rounded-lg hover:bg-muted/50 transition-colors">
                 <div className="flex items-center gap-3">
                   <Ship className="h-4 w-4 text-muted-foreground" />
                   <div>
                     <p className="font-medium text-sm">{v.name}</p>
-                    <p className="text-xs text-muted-foreground">{v.type || 'Embarcação'}</p>
+                    <p className="text-xs text-muted-foreground">{v.vessel_type || 'Embarcação'}</p>
                   </div>
                 </div>
                 <div className="text-right">
-                  <p className="font-medium text-sm">{formatCurrency((v.daily_rate || 0) * 365)}/ano</p>
-                  <p className="text-xs text-muted-foreground">{formatCurrency(v.daily_rate || 0)}/dia</p>
+                   <p className="font-medium text-sm">{formatCurrency((Number((v as Record<string, unknown>).daily_rate) || 0) * 365)}/ano</p>
+                  <p className="text-xs text-muted-foreground">{formatCurrency(Number((v as Record<string, unknown>).daily_rate) || 0)}/dia</p>
                 </div>
               </div>
             ))}
@@ -207,9 +207,9 @@ function AccountsManagement() {
   const { data: rfqs = [] } = useQuery({
     queryKey: ["finance-accounts-rfqs"],
     queryFn: async () => {
-      const { data, error } = await supabase
+       const { data, error } = await supabase
         .from("rfq_requests")
-        .select("id, status, total_value, created_at")
+        .select("id, status, awarded_amount, created_at")
         .order("created_at", { ascending: false })
         .limit(50);
       if (error) throw error;
@@ -219,9 +219,9 @@ function AccountsManagement() {
   });
 
   const metrics = useMemo(() => {
-    const pendingRfqs = rfqs.filter((r: any) => r.status === 'pending' || r.status === 'open');
-    const totalReceivable = rfqs.filter((r: any) => r.status === 'completed' || r.status === 'approved').reduce((sum: number, r: any) => sum + (r.total_value || 0), 0);
-    const totalPayable = rfqs.filter((r: any) => r.status === 'pending').reduce((sum: number, r: any) => sum + (r.total_value || 0), 0);
+    const pendingRfqs = rfqs.filter((r) => r.status === 'pending' || r.status === 'open');
+    const totalReceivable = rfqs.filter((r) => r.status === 'completed' || r.status === 'approved').reduce((sum: number, r) => sum + (r.awarded_amount || 0), 0);
+    const totalPayable = rfqs.filter((r) => r.status === 'pending').reduce((sum: number, r) => sum + (r.awarded_amount || 0), 0);
     return { pendingRfqs: pendingRfqs.length, totalReceivable, totalPayable, supplierCount: suppliers.length };
   }, [suppliers, rfqs]);
 
@@ -244,7 +244,7 @@ function AccountsManagement() {
             </div>
             <p className="text-3xl font-bold text-primary">{formatCurrency(metrics.totalReceivable)}</p>
             <p className="text-sm text-muted-foreground mt-2">
-              {rfqs.filter((r: any) => r.status === 'completed').length} RFQs concluídas
+              {rfqs.filter((r) => r.status === 'completed').length} RFQs concluídas
             </p>
           </CardContent>
         </Card>
@@ -278,9 +278,9 @@ function AccountsManagement() {
             />
           ) : (
             <div className="space-y-2">
-              {suppliers.slice(0, 8).map((s: any) => (
+              {suppliers.slice(0, 8).map((s) => (
                 <div key={s.id} className="flex items-center justify-between p-2 border rounded hover:bg-muted/50 transition-colors">
-                  <span className="font-medium text-sm">{s.company_name || s.trading_name || "Fornecedor"}</span>
+                  <span className="font-medium text-sm">{s.company_name || "Fornecedor"}</span>
                   <div className="flex items-center gap-2">
                     <Badge variant={s.is_active ? 'default' : 'secondary'} className="text-xs">
                       {s.is_active ? 'Ativo' : 'Inativo'}
@@ -309,7 +309,7 @@ function FinanceReports() {
       action: async () => {
         const { data } = await supabase.from("expenses").select("description, amount, date, category, status").order("date", { ascending: false }).limit(200);
         if (!data || data.length === 0) { toast.warning("Sem dados de despesas para gerar DRE"); return; }
-        const csv = ["Descrição;Valor;Data;Categoria;Status", ...data.map((d: any) => `${d.description};${d.amount};${d.date};${d.category || 'N/A'};${d.status}`)].join('\n');
+        const csv = ["Descrição;Valor;Data;Categoria;Status", ...data.map((d) => `${d.description};${d.amount};${d.date};${d.category || 'N/A'};${d.status}`)].join('\n');
         const blob = new Blob(['\uFEFF' + csv], { type: 'text/csv;charset=utf-8;' });
         const url = URL.createObjectURL(blob); const a = document.createElement('a'); a.href = url; a.download = `dre-mensal-${new Date().toISOString().slice(0,7)}.csv`; a.click(); URL.revokeObjectURL(url);
         toast.success("DRE exportado com sucesso");
@@ -322,7 +322,7 @@ function FinanceReports() {
       action: async () => {
         const { data } = await supabase.from("expenses").select("amount, date, category, status").order("date", { ascending: false }).limit(200);
         if (!data || data.length === 0) { toast.warning("Sem dados para gerar fluxo de caixa"); return; }
-        const csv = ["Data;Valor;Categoria;Status", ...data.map((d: any) => `${d.date};${d.amount};${d.category || 'N/A'};${d.status}`)].join('\n');
+        const csv = ["Data;Valor;Categoria;Status", ...data.map((d) => `${d.date};${d.amount};${d.category || 'N/A'};${d.status}`)].join('\n');
         const blob = new Blob(['\uFEFF' + csv], { type: 'text/csv;charset=utf-8;' });
         const url = URL.createObjectURL(blob); const a = document.createElement('a'); a.href = url; a.download = `cash-flow-${new Date().toISOString().slice(0,7)}.csv`; a.click(); URL.revokeObjectURL(url);
         toast.success("Fluxo de caixa exportado");

@@ -207,11 +207,11 @@ export function EnhancedVoiceAI() {
   };
 
   const getNoiseIndicator = () => {
-    const colors = {
-      quiet: 'bg-green-500',
-      moderate: 'bg-yellow-500',
-      noisy: 'bg-orange-500',
-      'very-noisy': 'bg-red-500',
+     const colors = {
+      quiet: 'bg-success',
+      moderate: 'bg-warning',
+      noisy: 'bg-warning',
+      'very-noisy': 'bg-destructive',
     };
     const labels = {
       quiet: 'Silencioso',

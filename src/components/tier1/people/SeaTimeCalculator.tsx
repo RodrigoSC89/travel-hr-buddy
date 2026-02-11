@@ -170,9 +170,9 @@ export function SeaTimeCalculator() {
 
   const getStatusBadge = (status: string) => {
     const statusMap: Record<string, { variant: "default" | "secondary" | "destructive" | "outline"; label: string; className: string }> = {
-      eligible: { variant: "secondary", label: "Eligible", className: "bg-emerald-100 text-emerald-700" },
-      in_progress: { variant: "secondary", label: "In Progress", className: "bg-blue-100 text-blue-700" },
-      pending: { variant: "secondary", label: "Pending", className: "bg-amber-100 text-amber-700" }
+      eligible: { variant: "secondary", label: "Eligible", className: "bg-success/10 text-success" },
+      in_progress: { variant: "secondary", label: "In Progress", className: "bg-info/10 text-info" },
+      pending: { variant: "secondary", label: "Pending", className: "bg-warning/10 text-warning" }
     };
     const config = statusMap[status] || statusMap.pending;
     return <Badge variant={config.variant} className={config.className}>{config.label}</Badge>;
@@ -234,7 +234,7 @@ export function SeaTimeCalculator() {
         <Card>
           <CardContent className="pt-4">
             <div className="text-center">
-              <p className="text-2xl font-bold text-blue-600">{seaTimeStats.activeContracts}</p>
+              <p className="text-2xl font-bold text-info">{seaTimeStats.activeContracts}</p>
               <p className="text-xs text-muted-foreground">Active Contracts</p>
             </div>
           </CardContent>
@@ -247,10 +247,10 @@ export function SeaTimeCalculator() {
             </div>
           </CardContent>
         </Card>
-        <Card className="border-emerald-200 bg-emerald-50/50 dark:bg-emerald-950/20">
+         <Card className="border-success/20 bg-success/5">
           <CardContent className="pt-4">
             <div className="text-center">
-              <p className="text-2xl font-bold text-emerald-600">{seaTimeStats.eligibleForPromotion}</p>
+              <p className="text-2xl font-bold text-success">{seaTimeStats.eligibleForPromotion}</p>
               <p className="text-xs text-muted-foreground">Promotion Ready</p>
             </div>
           </CardContent>
@@ -258,7 +258,7 @@ export function SeaTimeCalculator() {
         <Card>
           <CardContent className="pt-4">
             <div className="text-center">
-              <p className="text-2xl font-bold text-amber-600">{seaTimeStats.pendingCertificates}</p>
+              <p className="text-2xl font-bold text-warning">{seaTimeStats.pendingCertificates}</p>
               <p className="text-xs text-muted-foreground">Pending Certs</p>
             </div>
           </CardContent>
@@ -314,7 +314,7 @@ export function SeaTimeCalculator() {
                     <Card 
                       key={crew.crewMemberId}
                       className={`hover:shadow-md transition-shadow ${
-                        crew.status === "eligible" ? "border-emerald-300 bg-emerald-50/50 dark:bg-emerald-950/20" : ""
+                        crew.status === "eligible" ? "border-success/30 bg-success/5" : ""
                       }`}
                     >
                       <CardContent className="pt-4">
@@ -344,7 +344,7 @@ export function SeaTimeCalculator() {
                               <Progress 
                                 value={crew.progress} 
                                 className={`h-3 ${
-                                  crew.progress >= 100 ? "[&>div]:bg-emerald-500" : ""
+                                  crew.progress >= 100 ? "[&>div]:bg-success" : ""
                                 }`}
                               />
                               <p className="text-xs text-muted-foreground mt-1">
@@ -362,7 +362,7 @@ export function SeaTimeCalculator() {
                                   <span className="font-medium">{crew.records[0].vesselName}</span>
                                   <Badge variant="outline" className="text-xs">{crew.records[0].vesselType}</Badge>
                                   {crew.records[0].status === "active" && (
-                                    <Badge className="bg-emerald-100 text-emerald-700 text-xs">Active</Badge>
+                                    <Badge className="bg-success/10 text-success text-xs">Active</Badge>
                                   )}
                                 </div>
                                 <p className="text-xs text-muted-foreground">
@@ -380,10 +380,10 @@ export function SeaTimeCalculator() {
                                   key={idx} 
                                   variant="outline" 
                                   className={`text-xs ${
-                                    cert.eligible 
-                                      ? "border-emerald-500 text-emerald-600" 
-                                      : "border-amber-500 text-amber-600"
-                                  }`}
+                                     cert.eligible 
+                                      ? "border-success text-success" 
+                                      : "border-warning text-warning"
+                                   }`}
                                 >
                                   {cert.eligible ? (
                                     <CheckCircle2 className="h-3 w-3 mr-1" />
@@ -428,8 +428,8 @@ export function SeaTimeCalculator() {
                   crew.records.map((record) => (
                     <div key={record.id} className="flex items-center justify-between p-4 rounded-lg border">
                       <div className="flex items-center gap-4">
-                        <div className="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center">
-                          <Anchor className="h-5 w-5 text-blue-600" />
+                         <div className="w-10 h-10 rounded-full bg-info/10 flex items-center justify-center">
+                          <Anchor className="h-5 w-5 text-info" />
                         </div>
                         <div>
                           <h4 className="font-semibold">{record.vesselName}</h4>
@@ -441,7 +441,7 @@ export function SeaTimeCalculator() {
                       <div className="text-right">
                         <div className="flex items-center gap-2">
                           <Badge variant={record.status === "active" ? "secondary" : "outline"} 
-                            className={record.status === "active" ? "bg-emerald-100 text-emerald-700" : ""}>
+                            className={record.status === "active" ? "bg-success/10 text-success" : ""}>
                             {record.status === "active" ? "Active" : "Completed"}
                           </Badge>
                         </div>
@@ -489,7 +489,7 @@ export function SeaTimeCalculator() {
           <Card>
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
-                <CheckCircle2 className="h-5 w-5 text-emerald-500" />
+                <CheckCircle2 className="h-5 w-5 text-success" />
                 MLC 2006 Compliance
               </CardTitle>
               <CardDescription>Maritime Labour Convention work/rest hour compliance</CardDescription>
@@ -507,15 +507,15 @@ export function SeaTimeCalculator() {
                     ].map((item, idx) => (
                       <div key={idx} className="flex items-center justify-between p-3 rounded-lg border">
                         <div className="flex items-center gap-2">
-                          {item.status === "compliant" ? (
-                            <CheckCircle2 className="h-4 w-4 text-emerald-500" />
+                           {item.status === "compliant" ? (
+                            <CheckCircle2 className="h-4 w-4 text-success" />
                           ) : (
-                            <AlertTriangle className="h-4 w-4 text-amber-500" />
+                            <AlertTriangle className="h-4 w-4 text-warning" />
                           )}
                           <span className="text-sm">{item.rule}</span>
                         </div>
                         <Badge variant={item.status === "compliant" ? "secondary" : "outline"}
-                          className={item.status === "compliant" ? "bg-emerald-100 text-emerald-700" : "bg-amber-100 text-amber-700"}>
+                          className={item.status === "compliant" ? "bg-success/10 text-success" : "bg-warning/10 text-warning"}>
                           {item.value}
                         </Badge>
                       </div>
@@ -534,7 +534,7 @@ export function SeaTimeCalculator() {
                       <div key={item.rank}>
                         <div className="flex justify-between text-sm mb-1">
                           <span>{item.rank}</span>
-                          <span className="font-medium text-emerald-600">{item.compliance}%</span>
+                          <span className="font-medium text-success">{item.compliance}%</span>
                         </div>
                         <Progress value={item.compliance} className="h-2" />
                       </div>
