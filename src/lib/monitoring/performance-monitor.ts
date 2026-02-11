@@ -164,7 +164,7 @@ class PerformanceMonitor {
   /**
    * Generic metric observer
    */
-  private observeMetric(type: string, callback: (entry: any) => void): void {
+  private observeMetric(type: string, callback: (entry: PerformanceEntry) => void): void {
     try {
       const observer = new PerformanceObserver((list) => {
         for (const entry of list.getEntries()) {
@@ -197,12 +197,13 @@ class PerformanceMonitor {
   getSnapshot(): PerformanceSnapshot {
     const resources: ResourceTiming[] = [];
     
-    performance.getEntriesByType("resource").forEach((entry: any) => {
+    performance.getEntriesByType("resource").forEach((entry) => {
+      const resEntry = entry as PerformanceResourceTiming;
       resources.push({
-        name: entry.name,
-        duration: entry.duration,
-        size: entry.transferSize || 0,
-        type: entry.initiatorType,
+        name: resEntry.name,
+        duration: resEntry.duration,
+        size: resEntry.transferSize || 0,
+        type: resEntry.initiatorType,
       });
     });
 
@@ -217,11 +218,13 @@ class PerformanceMonitor {
     };
 
     // Add memory info if available
-    if ((performance as any).memory) {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Chrome-only Performance.memory API not in standard typings
+    const perfWithMemory = performance as Performance & { memory?: { usedJSHeapSize: number; totalJSHeapSize: number; jsHeapSizeLimit: number } };
+    if (perfWithMemory.memory) {
       snapshot.memory = {
-        usedJSHeapSize: (performance as any).memory.usedJSHeapSize,
-        totalJSHeapSize: (performance as any).memory.totalJSHeapSize,
-        limit: (performance as any).memory.jsHeapSizeLimit,
+        usedJSHeapSize: perfWithMemory.memory.usedJSHeapSize,
+        totalJSHeapSize: perfWithMemory.memory.totalJSHeapSize,
+        limit: perfWithMemory.memory.jsHeapSizeLimit,
       };
     }
 

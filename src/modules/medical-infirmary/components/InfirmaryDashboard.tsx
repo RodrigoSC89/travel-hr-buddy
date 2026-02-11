@@ -82,15 +82,15 @@ export default function InfirmaryDashboard() {
           </CardContent>
         </Card>
 
-        <Card className="border-l-4 border-l-green-500">
+        <Card className="border-l-4 border-l-success">
           <CardContent className="p-4">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-muted-foreground">Tripulação Saudável</p>
                 <p className="text-2xl font-bold">{stats.healthyPercentage}%</p>
-                <p className="text-xs text-green-600">{stats.healthyCrew}/{stats.totalCrew} aptos</p>
+                <p className="text-xs text-success">{stats.healthyCrew}/{stats.totalCrew} aptos</p>
               </div>
-              <Heart className="h-8 w-8 text-green-500 opacity-80" />
+              <Heart className="h-8 w-8 text-success opacity-80" />
             </div>
           </CardContent>
         </Card>
@@ -108,28 +108,28 @@ export default function InfirmaryDashboard() {
           </CardContent>
         </Card>
 
-        <Card className="border-l-4 border-l-red-500">
+        <Card className="border-l-4 border-l-destructive">
           <CardContent className="p-4">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-muted-foreground">Estoque Baixo</p>
                 <p className="text-2xl font-bold">{stats.lowStockItems}</p>
-                <p className="text-xs text-red-600">Reposição urgente</p>
+                <p className="text-xs text-destructive">Reposição urgente</p>
               </div>
-              <Package className="h-8 w-8 text-red-500 opacity-80" />
+              <Package className="h-8 w-8 text-destructive opacity-80" />
             </div>
           </CardContent>
         </Card>
 
-        <Card className="border-l-4 border-l-blue-500">
+        <Card className="border-l-4 border-l-primary">
           <CardContent className="p-4">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-muted-foreground">Conformidade MLC</p>
                 <p className="text-2xl font-bold">{stats.mlcCompliance}%</p>
-                <p className="text-xs text-blue-600">Certificado válido</p>
+                <p className="text-xs text-primary">Certificado válido</p>
               </div>
-              <ShieldCheck className="h-8 w-8 text-blue-500 opacity-80" />
+              <ShieldCheck className="h-8 w-8 text-primary opacity-80" />
             </div>
           </CardContent>
         </Card>
@@ -204,7 +204,7 @@ export default function InfirmaryDashboard() {
                 <div key={record.id} className="p-4 rounded-lg bg-muted/30 hover:bg-muted/50 transition-colors">
                   <div className="flex items-start justify-between mb-2">
                     <div className="flex items-center gap-3">
-                      <div className={`p-2 rounded-lg ${record.type === "Emergência" ? "bg-red-500/10 text-red-600" : "bg-blue-500/10 text-blue-600"}`}>
+                      <div className={`p-2 rounded-lg ${record.type === "Emergência" ? "bg-destructive/10 text-destructive" : "bg-primary/10 text-primary"}`}>
                         {record.type === "Emergência" ? <AlertTriangle className="h-5 w-5" /> : <Stethoscope className="h-5 w-5" />}
                       </div>
                       <div>
@@ -245,16 +245,16 @@ export default function InfirmaryDashboard() {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
             {supplies.map((supply) => (
               <div key={supply.id} className={`p-4 rounded-lg border ${
-                supply.status === "critical" ? "bg-red-500/10 border-red-500/30" :
-                supply.status === "expiring" ? "bg-amber-500/10 border-amber-500/30" :
-                supply.status === "low" ? "bg-yellow-500/10 border-yellow-500/30" :
+                supply.status === "critical" ? "bg-destructive/10 border-destructive/30" :
+                supply.status === "expiring" ? "bg-warning/10 border-warning/30" :
+                supply.status === "low" ? "bg-warning/10 border-warning/30" :
                 "bg-muted/30 border-border"
               }`}>
                 <div className="flex items-center justify-between mb-2">
                   <Badge variant={supply.status === "ok" ? "outline" : supply.status === "critical" ? "destructive" : "secondary"}>
                     {supply.category}
                   </Badge>
-                  {supply.status !== "ok" && <AlertTriangle className={`h-4 w-4 ${supply.status === "critical" ? "text-red-500" : "text-amber-500"}`} />}
+                  {supply.status !== "ok" && <AlertTriangle className={`h-4 w-4 ${supply.status === "critical" ? "text-destructive" : "text-warning"}`} />}
                 </div>
                 <p className="font-medium text-sm">{supply.name}</p>
                 <div className="mt-2 space-y-1">

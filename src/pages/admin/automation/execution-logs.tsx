@@ -106,10 +106,10 @@ export default function ExecutionLogsPage() {
         }
 
         // Transform data to include workflow name
-        const transformedData = (executionData || []).map((execution: any) => ({
-          ...execution,
-          workflow_name: execution.automation_workflows?.name || "Workflow Desconhecido"
-        }));
+        const transformedData = (executionData || []).map((execution: Record<string, unknown>) => ({
+          ...(execution as object),
+          workflow_name: (execution.automation_workflows as Record<string, unknown>)?.name as string || "Workflow Desconhecido"
+        })) as AutomationExecution[];
 
         setExecutions(transformedData);
       } catch (error) {
@@ -411,11 +411,11 @@ export default function ExecutionLogsPage() {
   const getStatusBadge = (status: string) => {
     switch (status) {
     case "completed":
-      return <Badge className="bg-green-500"><CheckCircle className="h-3 w-3 mr-1" />Sucesso</Badge>;
+      return <Badge className="bg-success text-success-foreground"><CheckCircle className="h-3 w-3 mr-1" />Sucesso</Badge>;
     case "failed":
       return <Badge variant="destructive"><XCircle className="h-3 w-3 mr-1" />Falha</Badge>;
     case "running":
-      return <Badge className="bg-blue-500"><Loader2 className="h-3 w-3 mr-1 animate-spin" />Em Execução</Badge>;
+      return <Badge className="bg-primary text-primary-foreground"><Loader2 className="h-3 w-3 mr-1 animate-spin" />Em Execução</Badge>;
     case "pending":
       return <Badge variant="secondary"><Clock className="h-3 w-3 mr-1" />Pendente</Badge>;
     default:
@@ -426,7 +426,7 @@ export default function ExecutionLogsPage() {
   return (
     <div className="p-8 space-y-6">
       <div className="flex items-center gap-3">
-        <Activity className="h-8 w-8 text-purple-500" />
+        <Activity className="h-8 w-8 text-accent-foreground" />
         <h1 className="text-2xl font-bold">Auditoria de Execuções de Automação</h1>
       </div>
 
@@ -492,8 +492,8 @@ export default function ExecutionLogsPage() {
                 <XAxis dataKey="date" />
                 <YAxis />
                 <Tooltip />
-                <Line type="monotone" dataKey="success" stroke="#10b981" strokeWidth={2} name="Sucesso" />
-                <Line type="monotone" dataKey="failed" stroke="#ef4444" strokeWidth={2} name="Falha" />
+                <Line type="monotone" dataKey="success" stroke="hsl(var(--success))" strokeWidth={2} name="Sucesso" />
+                <Line type="monotone" dataKey="failed" stroke="hsl(var(--destructive))" strokeWidth={2} name="Falha" />
               </LineChart>
             </ResponsiveContainer>
           </CardContent>
