@@ -220,15 +220,15 @@ export const EmployeePersonalDocuments: React.FC = () => {
   };
 
   const getStatusBadge = (status: string, expiryDate?: string) => {
-    const config: Record<string, { label: string; className: string; icon: any }> = {
-      valid: { label: "Valid", className: "bg-green-500", icon: CheckCircle },
-      expiring_soon: { label: "Expiring Soon", className: "bg-yellow-500", icon: AlertTriangle },
-      expired: { label: "Expired", className: "bg-red-500", icon: XCircle },
-      pending_verification: { label: "Pending", className: "bg-blue-500", icon: Clock },
-      rejected: { label: "Rejected", className: "bg-red-500", icon: XCircle },
+    const config: Record<string, { label: string; className: string; icon: React.FC<{ className?: string }> }> = {
+      valid: { label: "Valid", className: "bg-success text-success-foreground", icon: CheckCircle },
+      expiring_soon: { label: "Expiring Soon", className: "bg-warning text-warning-foreground", icon: AlertTriangle },
+      expired: { label: "Expired", className: "bg-destructive text-destructive-foreground", icon: XCircle },
+      pending_verification: { label: "Pending", className: "bg-info text-info-foreground", icon: Clock },
+      rejected: { label: "Rejected", className: "bg-destructive text-destructive-foreground", icon: XCircle },
     };
 
-    const statusConfig = config[status] || { label: status, className: "bg-gray-500", icon: FileText };
+    const statusConfig = config[status] || { label: status, className: "bg-muted text-muted-foreground", icon: FileText };
     const Icon = statusConfig.icon;
 
     return (

@@ -48,17 +48,17 @@ export default function MMIHistorySection() {
           return;
         }
 
-        const mapped: MaintenanceRecord[] = (data || []).map((r: any) => ({
-          id: r.id,
-          title: r.description || r.task_description || "Manutenção",
-          vesselName: r.vessels?.name || "N/A",
-          systemName: r.system_name || r.component || "Sistema",
-          completedAt: new Date(r.completed_date || r.created_at),
-          type: (r.maintenance_type || "preventiva") as any,
-          status: r.status === "completed" ? "concluido" : "parcial",
-          technician: r.performed_by || r.technician || "N/A",
-          hours: r.labor_hours || r.hours_spent || 0,
-          cost: r.total_cost || r.cost || 0,
+        const mapped: MaintenanceRecord[] = (data || []).map((r: Record<string, unknown>) => ({
+          id: String(r.id),
+          title: String(r.description || (r as Record<string, unknown>).task_description || "Manutenção"),
+          vesselName: ((r.vessels as Record<string, unknown>)?.name as string) || "N/A",
+          systemName: String(r.system_name || r.component || "Sistema"),
+          completedAt: new Date(String(r.completed_date || r.created_at)),
+          type: (String(r.maintenance_type || "preventiva")) as MaintenanceRecord["type"],
+          status: r.status === "completed" ? "concluido" as const : "parcial" as const,
+          technician: String(r.performed_by || r.technician || "N/A"),
+          hours: Number(r.labor_hours || r.hours_spent || 0),
+          cost: Number(r.total_cost || r.cost || 0),
         }));
 
         setHistory(mapped);
@@ -142,11 +142,11 @@ export default function MMIHistorySection() {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-xs text-muted-foreground uppercase">Concluídos</p>
-                <p className="text-2xl font-bold text-green-600">
+                <p className="text-2xl font-bold text-success">
                   {filteredHistory.filter(r => r.status === "concluido").length}
                 </p>
               </div>
-              <CheckCircle className="h-8 w-8 text-green-500/50" />
+              <CheckCircle className="h-8 w-8 text-success/50" />
             </div>
           </CardContent>
         </Card>
@@ -218,7 +218,7 @@ export default function MMIHistorySection() {
                       <h3 className="font-semibold">{record.title}</h3>
                       {getTypeBadge(record.type)}
                       {record.status === "concluido" ? (
-                        <Badge className="bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-300">
+                        <Badge className="bg-success/10 text-success">
                           <CheckCircle className="h-3 w-3 mr-1" />
                           Concluído
                         </Badge>

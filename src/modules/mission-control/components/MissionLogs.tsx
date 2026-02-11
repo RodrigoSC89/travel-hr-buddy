@@ -21,20 +21,20 @@ export const MissionLogs: React.FC<MissionLogsProps> = ({ logs, onRefresh }) => 
     switch (severity) {
     case "critical":
     case "error":
-      return <AlertTriangle className="h-4 w-4 text-red-500" />;
+      return <AlertTriangle className="h-4 w-4 text-destructive" />;
     case "warning":
-      return <AlertCircle className="h-4 w-4 text-yellow-500" />;
+      return <AlertCircle className="h-4 w-4 text-warning" />;
     default:
-      return <Info className="h-4 w-4 text-blue-500" />;
+      return <Info className="h-4 w-4 text-info" />;
     }
   };
 
   const getSeverityColor = (severity: string) => {
     switch (severity) {
-    case "critical": return "bg-red-500/20 text-red-500";
-    case "error": return "bg-red-400/20 text-red-400";
-    case "warning": return "bg-yellow-500/20 text-yellow-500";
-    default: return "bg-blue-500/20 text-blue-500";
+    case "critical": return "bg-destructive/20 text-destructive";
+    case "error": return "bg-destructive/15 text-destructive";
+    case "warning": return "bg-warning/20 text-warning";
+    default: return "bg-info/20 text-info";
     }
   };
 

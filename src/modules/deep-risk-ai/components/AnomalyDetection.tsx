@@ -14,9 +14,9 @@ interface Props {
 
 export const AnomalyDetection: React.FC<Props> = ({ anomalies }) => {
   const getRiskColor = (score: number) => {
-    if (score > 0.8) return "bg-red-500/20 text-red-500";
-    if (score > 0.6) return "bg-orange-500/20 text-orange-500";
-    return "bg-yellow-500/20 text-yellow-500";
+    if (score > 0.8) return "bg-destructive/20 text-destructive";
+    if (score > 0.6) return "bg-warning/20 text-warning";
+    return "bg-warning/15 text-warning";
   };
 
   return (
@@ -30,7 +30,7 @@ export const AnomalyDetection: React.FC<Props> = ({ anomalies }) => {
             anomalies.map(anomaly => (
               <Card key={anomaly.id} className="p-4">
                 <div className="flex items-start gap-3">
-                  <AlertCircle className="h-5 w-5 text-orange-500 mt-0.5" />
+                  <AlertCircle className="h-5 w-5 text-warning mt-0.5" />
                   <div className="flex-1">
                     <div className="flex items-center gap-2 mb-2">
                       <span className="font-semibold">{anomaly.anomalyType}</span>
@@ -49,7 +49,7 @@ export const AnomalyDetection: React.FC<Props> = ({ anomalies }) => {
                       </div>
                       <div>
                         <div className="text-xs text-muted-foreground">Deviation</div>
-                        <div className="text-orange-500">{(anomaly.deviation * 100).toFixed(1)}%</div>
+                        <div className="text-warning">{(anomaly.deviation * 100).toFixed(1)}%</div>
                       </div>
                     </div>
                     <p className="text-xs text-muted-foreground mt-2">

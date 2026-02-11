@@ -90,9 +90,9 @@ export const OperationsDashboardRealTime: React.FC = () => {
   const [wsConnected, setWsConnected] = useState(false);
   const [autoRefresh, setAutoRefresh] = useState(true);
 
-  const mqttClientRef = useRef<any>(null);
+  const mqttClientRef = useRef<Record<string, unknown> | null>(null);
   const wsRef = useRef<WebSocket | null>(null);
-  const realtimeChannelRef = useRef<any>(null);
+  const realtimeChannelRef = useRef<ReturnType<typeof supabase.channel> | null>(null);
   const mqttSimulationRef = useRef<NodeJS.Timeout | null>(null);
   const wsSimulationRef = useRef<NodeJS.Timeout | null>(null);
 
@@ -234,7 +234,7 @@ export const OperationsDashboardRealTime: React.FC = () => {
     }, 15000);
   };
 
-  const handleSupabaseUpdate = (payload: any, type: string) => {
+  const handleSupabaseUpdate = (payload: RealtimePostgresChangesPayload<Record<string, unknown>>, type: string) => {
     const newAlert: RealTimeAlert = {
       id: `alert-${Date.now()}`,
       type,
@@ -249,28 +249,28 @@ export const OperationsDashboardRealTime: React.FC = () => {
     loadRealTimeData();
   };
 
-  const handleMQTTMessage = (data: any) => {
+  const handleMQTTMessage = (data: { payload: Record<string, unknown>; topic?: string }) => {
     const newAlert: RealTimeAlert = {
       id: `mqtt-${Date.now()}`,
       type: "telemetry",
       severity: "low",
-      message: `MQTT telemetry update from ${data.payload.vessel_id}`,
+      message: `MQTT telemetry update from ${String(data.payload.vessel_id || "unknown")}`,
       source: "mqtt",
-      timestamp: data.payload.timestamp,
+      timestamp: String(data.payload.timestamp || new Date().toISOString()),
       metadata: data.payload,
     };
     
     setAlerts((prev) => [newAlert, ...prev].slice(0, 100));
   };
 
-  const handleWebSocketMessage = (data: any) => {
+  const handleWebSocketMessage = (data: Record<string, unknown>) => {
     const newAlert: RealTimeAlert = {
       id: `ws-${Date.now()}`,
       type: "system",
-      severity: data.severity,
-      message: data.message,
-      source: "websocket",
-      timestamp: data.timestamp,
+      severity: String(data.severity || "low") as RealTimeAlert["severity"],
+      message: String(data.message || ""),
+      source: "websocket" as const,
+      timestamp: String(data.timestamp || new Date().toISOString()),
       metadata: data,
     };
     
@@ -387,8 +387,8 @@ export const OperationsDashboardRealTime: React.FC = () => {
   };
 
   const cleanupConnections = () => {
-    if (mqttClientRef.current) {
-      mqttClientRef.current.end();
+    if (mqttClientRef.current && typeof (mqttClientRef.current as Record<string, unknown>).end === 'function') {
+      (mqttClientRef.current as { end: () => void }).end();
     }
     if (wsRef.current) {
       wsRef.current.close();
@@ -423,10 +423,10 @@ export const OperationsDashboardRealTime: React.FC = () => {
 
   const getSeverityColor = (severity: string): string => {
     const colors: Record<string, string> = {
-      low: "text-blue-500",
-      medium: "text-yellow-500",
-      high: "text-orange-500",
-      critical: "text-red-500",
+      low: "text-info",
+      medium: "text-warning",
+      high: "text-warning",
+      critical: "text-destructive",
     };
     return colors[severity] || "text-muted-foreground";
   };
@@ -463,15 +463,15 @@ export const OperationsDashboardRealTime: React.FC = () => {
           </p>
           <div className="flex items-center gap-4 mt-2 text-sm">
             <div className="flex items-center gap-1">
-              <div className={`h-2 w-2 rounded-full ${true ? "bg-green-500" : "bg-red-500"}`} />
+              <div className={`h-2 w-2 rounded-full ${true ? "bg-success" : "bg-destructive"}`} />
               <span>Supabase</span>
             </div>
             <div className="flex items-center gap-1">
-              <div className={`h-2 w-2 rounded-full ${mqttConnected ? "bg-green-500" : "bg-gray-500"}`} />
+              <div className={`h-2 w-2 rounded-full ${mqttConnected ? "bg-success" : "bg-muted-foreground"}`} />
               <span>MQTT {!mqttConnected && "(Simulated)"}</span>
             </div>
             <div className="flex items-center gap-1">
-              <div className={`h-2 w-2 rounded-full ${wsConnected ? "bg-green-500" : "bg-gray-500"}`} />
+              <div className={`h-2 w-2 rounded-full ${wsConnected ? "bg-success" : "bg-muted-foreground"}`} />
               <span>WebSocket {!wsConnected && "(Simulated)"}</span>
             </div>
           </div>
@@ -599,7 +599,7 @@ export const OperationsDashboardRealTime: React.FC = () => {
           <CardContent>
             <div className="text-2xl font-bold">{metrics.active_operations}</div>
             <p className="text-xs text-muted-foreground">
-              {Object.values(metrics.mission_status).reduce((a: any, b: any) => a + b, 0)} total
+              {Object.values(metrics.mission_status).reduce((a: number, b: number) => a + b, 0)} total
             </p>
           </CardContent>
         </Card>
@@ -607,11 +607,11 @@ export const OperationsDashboardRealTime: React.FC = () => {
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">Active Alerts</CardTitle>
-            <AlertTriangle className="h-4 w-4 text-yellow-500" />
+            <AlertTriangle className="h-4 w-4 text-warning" />
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">
-              {Object.values(metrics.alerts_by_severity).reduce((a: any, b: any) => a + b, 0)}
+              {Object.values(metrics.alerts_by_severity).reduce((a: number, b: number) => a + b, 0)}
             </div>
             <p className="text-xs text-muted-foreground">
               {metrics.alerts_by_severity.critical || 0} critical
@@ -674,7 +674,7 @@ export const OperationsDashboardRealTime: React.FC = () => {
                           value={
                             (count /
                               Object.values(metrics.vessel_health).reduce(
-                                (a: any, b: any) => a + b,
+                                (a: number, b: number) => a + b,
                                 0
                               )) *
                             100
@@ -788,7 +788,7 @@ export const OperationsDashboardRealTime: React.FC = () => {
                   <div className="space-y-2">
                     {Object.entries(metrics.alerts_by_severity).map(([severity, count]) => {
                       const total = Object.values(metrics.alerts_by_severity).reduce(
-                        (a: any, b: any) => a + b,
+                        (a: number, b: number) => a + b,
                         0
                       );
                       const percentage = total > 0 ? (count / total) * 100 : 0;
@@ -823,7 +823,7 @@ export const OperationsDashboardRealTime: React.FC = () => {
                             ? Math.round(
                               (metrics.active_operations /
                                   Object.values(metrics.mission_status).reduce(
-                                    (a: any, b: any) => a + b,
+                                    (a: number, b: number) => a + b,
                                     1
                                   )) *
                                   100
@@ -837,7 +837,7 @@ export const OperationsDashboardRealTime: React.FC = () => {
                           metrics.active_operations > 0
                             ? (metrics.active_operations /
                                 Object.values(metrics.mission_status).reduce(
-                                  (a: any, b: any) => a + b,
+                                  (a: number, b: number) => a + b,
                                   1
                                 )) *
                               100
