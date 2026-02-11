@@ -37,18 +37,18 @@ interface SmartKPIGridProps {
 
 const colorMap = {
   primary: "border-l-primary",
-  success: "border-l-emerald-500",
-  warning: "border-l-amber-500",
-  destructive: "border-l-red-500",
-  info: "border-l-blue-500",
+  success: "border-l-success",
+  warning: "border-l-warning",
+  destructive: "border-l-destructive",
+  info: "border-l-info",
 };
 
 const iconColorMap = {
   primary: "text-primary",
-  success: "text-emerald-500",
-  warning: "text-amber-500",
-  destructive: "text-red-500",
-  info: "text-blue-500",
+  success: "text-success",
+  warning: "text-warning",
+  destructive: "text-destructive",
+  info: "text-info",
 };
 
 export function SmartKPIGrid({ kpis, columns = 4 }: SmartKPIGridProps) {
@@ -97,15 +97,15 @@ export function SmartKPIGrid({ kpis, columns = 4 }: SmartKPIGridProps) {
                     {kpi.trend !== undefined && (
                       <div className="flex items-center gap-1 mt-2">
                         {kpi.trend > 0 ? (
-                          <TrendingUp className="h-3 w-3 text-emerald-500" />
+                          <TrendingUp className="h-3 w-3 text-success" />
                         ) : kpi.trend < 0 ? (
-                          <TrendingDown className="h-3 w-3 text-red-500" />
+                          <TrendingDown className="h-3 w-3 text-destructive" />
                         ) : (
                           <Minus className="h-3 w-3 text-muted-foreground" />
                         )}
                         <span className={`text-xs font-medium ${
-                          kpi.trend > 0 ? "text-emerald-500" : 
-                          kpi.trend < 0 ? "text-red-500" : 
+                          kpi.trend > 0 ? "text-success" : 
+                          kpi.trend < 0 ? "text-destructive" : 
                           "text-muted-foreground"
                         }`}>
                           {kpi.trend > 0 ? "+" : ""}{kpi.trend}%

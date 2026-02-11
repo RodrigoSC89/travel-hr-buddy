@@ -82,8 +82,8 @@ export const InteractiveKPICard: React.FC<InteractiveKPICardProps> = ({
 
   const getTrendIcon = () => {
     if (!change) return <Minus className="h-4 w-4 text-muted-foreground" />;
-    if (change > 0) return <TrendingUp className="h-4 w-4 text-green-500" />;
-    return <TrendingDown className="h-4 w-4 text-red-500" />;
+    if (change > 0) return <TrendingUp className="h-4 w-4 text-success" />;
+    return <TrendingDown className="h-4 w-4 text-destructive" />;
   };
 
   return (
@@ -125,7 +125,7 @@ export const InteractiveKPICard: React.FC<InteractiveKPICardProps> = ({
                   {getTrendIcon()}
                   <span className={cn(
                     "text-sm font-medium",
-                    change > 0 ? "text-green-500" : change < 0 ? "text-red-500" : "text-muted-foreground"
+                    change > 0 ? "text-success" : change < 0 ? "text-destructive" : "text-muted-foreground"
                   )}>
                     {change > 0 ? '+' : ''}{change.toFixed(1)}%
                   </span>

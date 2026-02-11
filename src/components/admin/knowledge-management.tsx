@@ -460,7 +460,7 @@ export const KnowledgeManagement: React.FC = () => {
                           variant="ghost" 
                           size="sm"
                           onClick={() => handleDelete(item.id)}
-                          className="text-red-500 hover:text-red-700"
+                          className="text-destructive hover:text-destructive/80"
                         >
                           <Trash2 className="w-4 h-4" />
                         </Button>
@@ -494,7 +494,7 @@ export const KnowledgeManagement: React.FC = () => {
                       <p className="text-sm text-muted-foreground">Publicados</p>
                       <p className="text-2xl font-bold">{analytics.publishedItems}</p>
                     </div>
-                    <Eye className="w-8 h-8 text-green-500" />
+                    <Eye className="w-8 h-8 text-success" />
                   </div>
                 </CardContent>
               </Card>
@@ -506,7 +506,7 @@ export const KnowledgeManagement: React.FC = () => {
                       <p className="text-sm text-muted-foreground">Total de Visualizações</p>
                       <p className="text-2xl font-bold">{analytics.totalViews}</p>
                     </div>
-                    <BarChart3 className="w-8 h-8 text-blue-500" />
+                    <BarChart3 className="w-8 h-8 text-info" />
                   </div>
                 </CardContent>
               </Card>
@@ -518,7 +518,7 @@ export const KnowledgeManagement: React.FC = () => {
                       <p className="text-sm text-muted-foreground">Taxa de Aprovação</p>
                       <p className="text-2xl font-bold">94%</p>
                     </div>
-                    <Users className="w-8 h-8 text-purple-500" />
+                    <Users className="w-8 h-8 text-accent-foreground" />
                   </div>
                 </CardContent>
               </Card>

@@ -194,7 +194,7 @@ export function useOpenMeteoWeather(options: UseOpenMeteoWeatherOptions): UseOpe
     
     const quality: AirQuality = {
       aqi,
-      level: aqiInfo.level as any,
+      level: aqiInfo.level as AirQuality['level'],
       pm25: data.hourly.pm2_5[idx] || 0,
       pm10: data.hourly.pm10[idx] || 0,
       o3: data.hourly.ozone[idx] || 0,

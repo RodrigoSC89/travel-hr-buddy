@@ -113,7 +113,7 @@ const SystemBackupAudit = () => {
   const getStatusBadge = (status: string) => {
     switch (status) {
     case "Sucesso":
-      return <Badge variant="default" className="bg-green-100 text-green-800">Sucesso</Badge>;
+      return <Badge variant="default" className="bg-success/10 text-success">Sucesso</Badge>;
     case "Falha":
       return <Badge variant="destructive">Falha</Badge>;
     default:
@@ -164,7 +164,7 @@ const SystemBackupAudit = () => {
         <Card>
           <CardContent className="p-4">
             <div className="flex items-center space-x-2">
-              <HardDrive className="w-5 h-5 text-blue-500" />
+              <HardDrive className="w-5 h-5 text-info" />
               <div className="flex-1">
                 <p className="text-sm font-medium">Uso do Disco</p>
                 <div className="flex items-center space-x-2">
@@ -179,7 +179,7 @@ const SystemBackupAudit = () => {
         <Card>
           <CardContent className="p-4">
             <div className="flex items-center space-x-2">
-              <Server className="w-5 h-5 text-green-500" />
+              <Server className="w-5 h-5 text-success" />
               <div className="flex-1">
                 <p className="text-sm font-medium">Memória</p>
                 <div className="flex items-center space-x-2">
@@ -194,7 +194,7 @@ const SystemBackupAudit = () => {
         <Card>
           <CardContent className="p-4">
             <div className="flex items-center space-x-2">
-              <Activity className="w-5 h-5 text-orange-500" />
+              <Activity className="w-5 h-5 text-warning" />
               <div className="flex-1">
                 <p className="text-sm font-medium">CPU</p>
                 <div className="flex items-center space-x-2">
@@ -332,35 +332,35 @@ const SystemBackupAudit = () => {
             <Card>
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
-                  <Shield className="w-5 h-5 text-green-500" />
+                  <Shield className="w-5 h-5 text-success" />
                   Status de Segurança
                 </CardTitle>
               </CardHeader>
               <CardContent className="space-y-4">
                 <div className="flex items-center justify-between">
                   <span>Firewall</span>
-                  <Badge variant="default" className="bg-green-100 text-green-800">
+                  <Badge variant="default" className="bg-success/10 text-success">
                     <CheckCircle className="w-3 h-3 mr-1" />
                     Ativo
                   </Badge>
                 </div>
                 <div className="flex items-center justify-between">
                   <span>SSL/TLS</span>
-                  <Badge variant="default" className="bg-green-100 text-green-800">
+                  <Badge variant="default" className="bg-success/10 text-success">
                     <CheckCircle className="w-3 h-3 mr-1" />
                     Válido
                   </Badge>
                 </div>
                 <div className="flex items-center justify-between">
                   <span>Antivírus</span>
-                  <Badge variant="default" className="bg-green-100 text-green-800">
+                  <Badge variant="default" className="bg-success/10 text-success">
                     <CheckCircle className="w-3 h-3 mr-1" />
                     Atualizado
                   </Badge>
                 </div>
                 <div className="flex items-center justify-between">
                   <span>Backup Automático</span>
-                  <Badge variant="default" className="bg-green-100 text-green-800">
+                  <Badge variant="default" className="bg-success/10 text-success">
                     <CheckCircle className="w-3 h-3 mr-1" />
                     Ativo
                   </Badge>
@@ -371,20 +371,20 @@ const SystemBackupAudit = () => {
             <Card>
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
-                  <AlertTriangle className="w-5 h-5 text-yellow-500" />
+                  <AlertTriangle className="w-5 h-5 text-warning" />
                   Alertas de Segurança
                 </CardTitle>
               </CardHeader>
               <CardContent className="space-y-4">
-                <div className="flex items-center gap-2 p-3 bg-yellow-50 rounded-lg">
-                  <AlertTriangle className="w-4 h-4 text-yellow-600" />
+                <div className="flex items-center gap-2 p-3 bg-warning/10 rounded-lg">
+                  <AlertTriangle className="w-4 h-4 text-warning" />
                   <div>
                     <p className="text-sm font-medium">Tentativas de login suspeitas</p>
                     <p className="text-xs text-muted-foreground">3 tentativas falharam nas últimas 24h</p>
                   </div>
                 </div>
-                <div className="flex items-center gap-2 p-3 bg-blue-50 rounded-lg">
-                  <Calendar className="w-4 h-4 text-blue-600" />
+                <div className="flex items-center gap-2 p-3 bg-info/10 rounded-lg">
+                  <Calendar className="w-4 h-4 text-info" />
                   <div>
                     <p className="text-sm font-medium">Certificado SSL</p>
                     <p className="text-xs text-muted-foreground">Expira em 45 dias</p>

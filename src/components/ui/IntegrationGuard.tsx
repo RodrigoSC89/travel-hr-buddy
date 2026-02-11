@@ -74,7 +74,7 @@ export function IntegrationStatusBadge({
   status?: 'connected' | 'demo' | 'error' 
 }) {
   const config = {
-    connected: { label: 'Conectado', className: 'bg-green-500/10 text-green-500 border-green-500/30' },
+    connected: { label: 'Conectado', className: 'bg-success/10 text-success border-success/30' },
     demo: { label: 'Demo', className: 'bg-warning/10 text-warning border-warning/30' },
     error: { label: 'Erro', className: 'bg-destructive/10 text-destructive border-destructive/30' },
   };

@@ -89,9 +89,9 @@ const PEODP_SECTIONS = [
 
 const NC_CLASSIFICATIONS: Record<NCClassification, { label: string; color: string; description: string }> = {
   'A': { label: 'Crítica', color: 'bg-destructive', description: 'Risco imediato à segurança ou ambiente' },
-  'B': { label: 'Maior', color: 'bg-orange-500', description: 'Desvio significativo de requisito' },
-  'C': { label: 'Menor', color: 'bg-yellow-500', description: 'Desvio menor sem impacto imediato' },
-  'D': { label: 'Observação', color: 'bg-blue-500', description: 'Oportunidade de melhoria' }
+  'B': { label: 'Maior', color: 'bg-warning', description: 'Desvio significativo de requisito' },
+  'C': { label: 'Menor', color: 'bg-warning/70', description: 'Desvio menor sem impacto imediato' },
+  'D': { label: 'Observação', color: 'bg-info', description: 'Oportunidade de melhoria' }
 };
 
 const EVIDENCE_TEMPLATES = [
@@ -120,7 +120,7 @@ export function UnifiedEvidenceGenerator() {
     company_name: ''
   });
 
-  const handleInputChange = (field: keyof EvidenceInput, value: any) => {
+  const handleInputChange = (field: keyof EvidenceInput, value: string | number) => {
     setInput(prev => ({ ...prev, [field]: value }));
   };
 
@@ -213,9 +213,9 @@ export function UnifiedEvidenceGenerator() {
   const getRiskBadge = (level: string) => {
     const config: Record<string, string> = {
       critical: 'bg-destructive text-destructive-foreground',
-      high: 'bg-orange-500 text-white',
-      medium: 'bg-yellow-500 text-black',
-      low: 'bg-green-500 text-white'
+      high: 'bg-warning text-warning-foreground',
+      medium: 'bg-warning/70 text-foreground',
+      low: 'bg-success text-success-foreground'
     };
     return config[level] || 'bg-muted';
   };
@@ -542,7 +542,7 @@ export function UnifiedEvidenceGenerator() {
             <div className="flex items-center justify-between">
               <div>
                 <CardTitle className="flex items-center gap-2">
-                  <CheckCircle2 className="h-5 w-5 text-green-500" />
+                  <CheckCircle2 className="h-5 w-5 text-success" />
                   Evidência Gerada
                 </CardTitle>
                 <CardDescription>
@@ -584,7 +584,7 @@ export function UnifiedEvidenceGenerator() {
                 <ul className="space-y-1">
                   {generatedEvidence.corrective_actions.map((action, idx) => (
                     <li key={idx} className="flex items-start gap-2 text-sm">
-                      <CheckCircle2 className="h-4 w-4 text-green-500 mt-0.5" />
+                      <CheckCircle2 className="h-4 w-4 text-success mt-0.5" />
                       {action}
                     </li>
                   ))}

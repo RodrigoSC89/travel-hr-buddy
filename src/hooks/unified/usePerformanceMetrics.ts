@@ -156,7 +156,8 @@ export function usePerformanceMetrics(options: UsePerformanceMetricsOptions = {}
 
     // Memory Usage (Chrome/Edge only)
     if (monitorMemory && 'memory' in performance) {
-      const memory = (performance as any).memory;
+      interface PerformanceMemory { usedJSHeapSize: number; totalJSHeapSize: number; }
+      const memory = (performance as unknown as { memory: PerformanceMemory }).memory;
       newMetrics.memory = {
         used: memory.usedJSHeapSize,
         total: memory.totalJSHeapSize,
@@ -169,7 +170,7 @@ export function usePerformanceMetrics(options: UsePerformanceMetricsOptions = {}
 
     // Store in window for debugging
     if (typeof window !== 'undefined') {
-      (window as any).__NAUTILUS_PERFORMANCE__ = newMetrics;
+      (window as unknown as Record<string, unknown>).__NAUTILUS_PERFORMANCE__ = newMetrics;
     }
 
     return newMetrics;
@@ -204,7 +205,7 @@ export function usePerformanceMetrics(options: UsePerformanceMetricsOptions = {}
     try {
       const lcpObserver = new PerformanceObserver((list) => {
         const entries = list.getEntries();
-        const lastEntry = entries[entries.length - 1] as any;
+        const lastEntry = entries[entries.length - 1] as PerformanceEntry & { renderTime?: number; loadTime?: number };
         const lcp = lastEntry?.renderTime || lastEntry?.loadTime;
         if (lcp) {
           setMetrics(prev => ({ ...prev, vitals: { ...prev.vitals, lcp } }));
@@ -380,8 +381,8 @@ export function useRenderPerformance(componentName: string, enabled: boolean = t
  * Get current performance metrics snapshot
  */
 export function getPerformanceSnapshot(): PerformanceMetrics | null {
-  if (typeof window !== 'undefined' && (window as any).__NAUTILUS_PERFORMANCE__) {
-    return (window as any).__NAUTILUS_PERFORMANCE__;
+  if (typeof window !== 'undefined' && (window as unknown as Record<string, unknown>).__NAUTILUS_PERFORMANCE__) {
+    return (window as unknown as Record<string, unknown>).__NAUTILUS_PERFORMANCE__ as PerformanceMetrics;
   }
   return null;
 }

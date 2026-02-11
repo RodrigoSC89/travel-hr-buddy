@@ -62,7 +62,7 @@ function checkIsMobile(): boolean {
   
   // Check if PWA standalone mode
   const isStandalone = window.matchMedia('(display-mode: standalone)').matches ||
-    (window.navigator as any).standalone === true;
+    (window.navigator as unknown as { standalone?: boolean }).standalone === true;
   
   // Consider mobile if:
   // 1. Width is below breakpoint, OR
