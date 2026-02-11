@@ -80,6 +80,7 @@ export const CAPAManager: React.FC = () => {
 
       if (error || !data) return [];
 
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Supabase dynamic row mapping
       return data.map((d: any): CAPA => {
         const prazo = d.due_date || d.target_date || new Date().toISOString();
         const diasRestantes = Math.ceil((new Date(prazo).getTime() - Date.now()) / (1000 * 60 * 60 * 24));

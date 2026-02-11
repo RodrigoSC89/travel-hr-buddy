@@ -38,6 +38,7 @@ interface GamificationProfile {
   id: string;
   total_experience_points: number;
   current_level: number;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- gamification data is dynamic JSON
   badges_earned: any[];
   achievements: any[];
   skill_progression: any;

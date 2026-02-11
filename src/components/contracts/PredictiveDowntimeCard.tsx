@@ -55,6 +55,7 @@ export function PredictiveDowntimeCard({ contractId, vesselId }: PredictiveDownt
         .limit(5);
 
       if (data && data.length > 0) {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any -- prediction_data is dynamic JSON
         const parsed = data.map((d: any) => d.prediction_data).filter(Boolean);
         if (parsed.length > 0) {
           setPredictions(parsed.flat().slice(0, 5));

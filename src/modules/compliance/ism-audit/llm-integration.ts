@@ -119,7 +119,7 @@ export async function generateAuditAnalysis(
  */
 function buildExplanationPrompt(
   item: ISMChecklistItem,
-  vessel_context?: any
+  vessel_context?: Record<string, unknown>
 ): string {
   const sectionInfo = ISM_SECTIONS[item.section];
   
@@ -157,7 +157,7 @@ Format your response as JSON with keys: explanation, practical_examples, common_
  */
 function buildAnalysisPrompt(
   sectionData: Record<ISMSection, ISMChecklistItem[]>,
-  vesselContext?: any
+  vesselContext?: Record<string, unknown>
 ): string {
   let prompt = `You are an expert ISM Code auditor analyzing a complete ISM audit.
 

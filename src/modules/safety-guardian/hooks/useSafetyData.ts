@@ -137,6 +137,7 @@ export function useSafetyData() {
         .limit(50);
 
       if (!error && dpIncidents && dpIncidents.length > 0) {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any -- DP incidents dynamic row
         const mappedIncidents: SafetyIncident[] = dpIncidents.map((inc: any) => ({
           id: inc.id,
           type: inc.severity === 'critical' ? 'incident' : 'near_miss',

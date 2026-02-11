@@ -118,6 +118,7 @@ export const IoTSensorDashboard: React.FC = () => {
       // Map vessel data to sensor readings format
       const mappedSensors = vesselData.flatMap(vessel => 
         vessel.sensors.length > 0 
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any -- vessel sensor data is dynamic
           ? vessel.sensors.map((s: any) => ({
               id: s.id,
               sensorId: s.id,
@@ -156,6 +157,7 @@ export const IoTSensorDashboard: React.FC = () => {
 
   const alerts: AlertData[] = useMemo(() => {
     if (alertsData && alertsData.length > 0) {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any -- alert data shape varies
       return alertsData.map((alert: any) => ({
         id: alert.id,
         sensorName: alert.source || 'Sensor',

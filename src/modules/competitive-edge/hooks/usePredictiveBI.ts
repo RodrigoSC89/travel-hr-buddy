@@ -82,7 +82,7 @@ export interface DashboardConfig {
     title: string;
     dataSource: string;
     position: { x: number; y: number; w: number; h: number };
-    config: any;
+    config: Record<string, unknown>;
     refreshInterval: number;
   }>;
   alerts: Array<{ condition: string; threshold: string; action: string }>;
@@ -162,7 +162,7 @@ export function useDetectAnomalies() {
 
 export function useRecommendActions() {
   return useMutation({
-    mutationFn: async ({ insights, context }: { insights?: any; context?: string }) => {
+    mutationFn: async ({ insights, context }: { insights?: Record<string, unknown>; context?: string }) => {
       const { data, error } = await supabase.functions.invoke("predictive-bi", {
         body: { action: "recommend-actions", insights, context },
       });

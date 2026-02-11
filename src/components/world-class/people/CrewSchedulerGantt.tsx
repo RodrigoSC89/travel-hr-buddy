@@ -70,6 +70,7 @@ export function CrewSchedulerGantt() {
         .limit(30);
 
       const now = new Date();
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any -- crew_members dynamic row mapping
       return (members || []).map((m: any, idx: number) => {
         const contractStart = m.contract_start ? new Date(m.contract_start) : new Date(now.getTime() - (idx * 5 + 10) * 86400000);
         const contractEnd = m.contract_end ? new Date(m.contract_end) : new Date(contractStart.getTime() + 90 * 86400000);

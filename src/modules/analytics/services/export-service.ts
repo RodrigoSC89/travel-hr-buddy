@@ -16,7 +16,7 @@ class ExportService {
   async exportToPDF(
     title: string,
     charts: { name: string; data: ChartData }[],
-    metrics: any[]
+    metrics: Array<{ name: string; value: string | number; unit: string; change: number; trend: string }>
   ): Promise<void> {
     const jsPDF = await loadJsPDF();
     const doc = new jsPDF();
@@ -42,6 +42,7 @@ class ExportService {
         m.trend
       ]);
 
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any -- jspdf-autotable augments jsPDF
       (doc as any).autoTable({
         startY: yPosition,
         head: [["Metric", "Value", "Change", "Trend"]],
@@ -51,6 +52,7 @@ class ExportService {
         headStyles: { fillColor: [41, 128, 185] }
       });
 
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any -- jspdf-autotable augments jsPDF
       yPosition = (doc as any).lastAutoTable.finalY + 15;
     }
 
@@ -59,6 +61,7 @@ class ExportService {
 
   async exportToCSV(
     title: string,
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any -- CSV export accepts dynamic row data
     data: any[],
     headers: string[]
   ): Promise<void> {
