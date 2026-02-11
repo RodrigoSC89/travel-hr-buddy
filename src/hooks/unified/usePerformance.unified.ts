@@ -138,7 +138,8 @@ export function getPerformanceMetrics(): PerformanceMetrics {
 
     // Memory Usage (Chrome/Edge only)
     if ('memory' in performance) {
-      const memory = (performance as any).memory;
+      interface PerformanceMemoryInfo { usedJSHeapSize: number; totalJSHeapSize: number; }
+      const memory = (performance as unknown as { memory: PerformanceMemoryInfo }).memory;
       metrics.memory = {
         used: memory.usedJSHeapSize,
         total: memory.totalJSHeapSize,
@@ -271,7 +272,7 @@ export function useWebVitals(): WebVitals {
       // LCP
       const lcpObserver = new PerformanceObserver((list) => {
         const entries = list.getEntries();
-        const lastEntry = entries[entries.length - 1] as any;
+        const lastEntry = entries[entries.length - 1] as PerformanceEntry & { renderTime?: number; loadTime?: number };
         setVitals(prev => ({ ...prev, lcp: lastEntry?.renderTime || lastEntry?.loadTime }));
       });
       lcpObserver.observe({ entryTypes: ['largest-contentful-paint'], buffered: true });
@@ -324,7 +325,8 @@ export function useMemoryMonitor(interval: number = 5000): MemoryMetrics | null 
     if (!('memory' in performance)) return;
 
     const update = () => {
-      const mem = (performance as any).memory;
+      interface PerfMem { usedJSHeapSize: number; totalJSHeapSize: number; }
+      const mem = (performance as unknown as { memory: PerfMem }).memory;
       setMemory({
         used: mem.usedJSHeapSize,
         total: mem.totalJSHeapSize,
@@ -492,7 +494,7 @@ export function useFirstInputDelay(): number | null {
 
     const observer = new PerformanceObserver((list) => {
       for (const entry of list.getEntries()) {
-        const fidEntry = entry as any;
+        const fidEntry = entry as PerformanceEntry & { processingStart: number };
         setFid(fidEntry.processingStart - fidEntry.startTime);
       }
     });

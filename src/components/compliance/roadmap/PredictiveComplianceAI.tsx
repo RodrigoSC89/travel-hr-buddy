@@ -304,7 +304,7 @@ export function PredictiveComplianceAI() {
                   </div>
                   <div className="flex items-center justify-between">
                     <span className="text-sm text-muted-foreground">Altos</span>
-                    <Badge className="bg-orange-500">{highCount}</Badge>
+                    <Badge className="bg-warning text-warning-foreground">{highCount}</Badge>
                   </div>
                   <div className="flex items-center justify-between">
                     <span className="text-sm text-muted-foreground">Tendência</span>
@@ -386,8 +386,8 @@ export function PredictiveComplianceAI() {
                   <div className="flex items-start gap-4">
                     <div className={`p-2 rounded-lg ${
                       prediction.riskLevel === 'critical' ? 'bg-destructive/10' :
-                      prediction.riskLevel === 'high' ? 'bg-orange-500/10' :
-                      prediction.riskLevel === 'medium' ? 'bg-yellow-500/10' : 'bg-blue-500/10'
+                      prediction.riskLevel === 'high' ? 'bg-warning/10' :
+                      prediction.riskLevel === 'medium' ? 'bg-accent/10' : 'bg-info/10'
                     }`}>
                       {getRiskIcon(prediction.riskLevel)}
                     </div>
@@ -413,14 +413,14 @@ export function PredictiveComplianceAI() {
                           <div>
                             <span className="text-xs font-medium text-muted-foreground">RECOMENDAÇÃO</span>
                             <p className="text-sm flex items-start gap-2">
-                              <Lightbulb className="h-4 w-4 text-yellow-500 mt-0.5" />
+                              <Lightbulb className="h-4 w-4 text-warning mt-0.5" />
                               {prediction.recommendation}
                             </p>
                           </div>
                           <div>
                             <span className="text-xs font-medium text-muted-foreground">IMPACTO ESPERADO</span>
                             <p className="text-sm flex items-start gap-2">
-                              <Zap className="h-4 w-4 text-green-500 mt-0.5" />
+                              <Zap className="h-4 w-4 text-success mt-0.5" />
                               {prediction.expectedImpact}
                             </p>
                           </div>
@@ -588,7 +588,7 @@ export function PredictiveComplianceAI() {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div className="p-4 bg-background/50 rounded-lg">
               <div className="flex items-center gap-2 mb-2">
-                <AlertTriangle className="h-4 w-4 text-orange-500" />
+                <AlertTriangle className="h-4 w-4 text-warning" />
                 <span className="font-semibold">Ação Prioritária</span>
               </div>
               <p className="text-sm text-muted-foreground">
@@ -598,7 +598,7 @@ export function PredictiveComplianceAI() {
             </div>
             <div className="p-4 bg-background/50 rounded-lg">
               <div className="flex items-center gap-2 mb-2">
-                <TrendingUp className="h-4 w-4 text-green-500" />
+                <TrendingUp className="h-4 w-4 text-success" />
                 <span className="font-semibold">Tendência Positiva</span>
               </div>
               <p className="text-sm text-muted-foreground">
@@ -608,7 +608,7 @@ export function PredictiveComplianceAI() {
             </div>
             <div className="p-4 bg-background/50 rounded-lg">
               <div className="flex items-center gap-2 mb-2">
-                <Lightbulb className="h-4 w-4 text-yellow-500" />
+                <Lightbulb className="h-4 w-4 text-warning" />
                 <span className="font-semibold">Oportunidade</span>
               </div>
               <p className="text-sm text-muted-foreground">

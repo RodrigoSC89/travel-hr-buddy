@@ -111,17 +111,17 @@ export function useNautiPeopleData() {
       if (!crewCandidates?.length) return [];
 
       return crewCandidates.map(c => {
-        const emergencyData = c.emergency_contact as any || {};
+        const emergencyData = (c.emergency_contact ?? {}) as Record<string, unknown>;
         return {
           id: c.id,
           nome: c.full_name || "N/A",
           email: c.email || "",
           telefone: c.phone || undefined,
-          vagaId: emergencyData.vaga_id || "",
-          vagaTitulo: emergencyData.vaga_titulo || "Posição Geral",
-          etapa: emergencyData.etapa || "triagem",
-          score: emergencyData.score || 0,
-          skills: emergencyData.skills || [],
+          vagaId: String(emergencyData.vaga_id ?? ""),
+          vagaTitulo: String(emergencyData.vaga_titulo ?? "Posição Geral"),
+          etapa: String(emergencyData.etapa ?? "triagem"),
+          score: Number(emergencyData.score ?? 0),
+          skills: (emergencyData.skills as string[]) || [],
           experiencia: c.experience_years || 0,
           dataCandidatura: c.created_at || "",
           ultimaAtualizacao: c.updated_at || c.created_at || ""
@@ -149,19 +149,20 @@ export function useNautiPeopleData() {
       }
 
       return crewMembers.map(member => {
-        const emergencyData = member.emergency_contact as any || {};
+        const emergencyData = (member.emergency_contact ?? {}) as Record<string, unknown>;
+        const vesselData = (member.vessels ?? {}) as Record<string, unknown>;
         return {
           id: member.id,
           nome: member.full_name || "N/A",
           email: member.email || "",
           cargo: member.position || member.rank || "Crew",
-          departamento: emergencyData.departamento || "Operações",
-          unidade: (member.vessels as any)?.name || "Base",
+          departamento: String(emergencyData.departamento ?? "Operações"),
+          unidade: String(vesselData.name ?? "Base"),
           dataAdmissao: member.join_date || member.created_at?.split("T")[0] || "",
           status: member.status === "active" ? "ativo" : 
                   member.status === "on_leave" ? "ferias" : 
                   member.status === "inactive" ? "desligado" : "afastado",
-          tipoContrato: emergencyData.tipo_contrato || "CLT"
+          tipoContrato: String(emergencyData.tipo_contrato ?? "CLT")
         };
       });
     },
@@ -178,7 +179,7 @@ export function useNautiPeopleData() {
         .eq("id", candidatoId)
         .single();
       
-      const currentData = (current?.emergency_contact as any) || {};
+      const currentData = (current?.emergency_contact ?? {}) as Record<string, unknown>;
       
       const { error } = await supabase
         .from("crew_members")

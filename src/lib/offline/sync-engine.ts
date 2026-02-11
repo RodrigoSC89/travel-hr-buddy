@@ -204,21 +204,23 @@ async function executeOperation(op: PendingOperation): Promise<{
   try {
     const { supabase } = await import("@/integrations/supabase/client");
     
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Dynamic table from offline queue
+    const fromTable = (supabase.from as Function)(op.table);
+    const opData = op.data as Record<string, unknown>;
+
     if (op.type === "insert") {
-      const { error } = await supabase.from(op.table as any).insert(op.data as any);
+      const { error } = await fromTable.insert(opData);
       if (error) {
         if (error.code === "23505") return { success: false, conflict: true, serverData: null };
         return { success: false, error: error.message };
       }
       return { success: true };
     } else if (op.type === "update") {
-      const data = op.data as any;
-      const { error } = await supabase.from(op.table as any).update(data).eq("id", data.id);
+      const { error } = await fromTable.update(opData).eq("id", opData.id);
       if (error) return { success: false, error: error.message };
       return { success: true };
     } else if (op.type === "delete") {
-      const data = op.data as any;
-      const { error } = await supabase.from(op.table as any).delete().eq("id", data.id);
+      const { error } = await fromTable.delete().eq("id", opData.id);
       if (error) return { success: false, error: error.message };
       return { success: true };
     }

@@ -114,10 +114,10 @@ export const DocumentManagement: React.FC = () => {
 
   const getOcrStatusColor = (status: string | null) => {
     switch (status) {
-      case "completed": return "bg-green-500 text-white";
-      case "pending": return "bg-yellow-500 text-black";
-      case "processing": return "bg-blue-500 text-white";
-      case "error": return "bg-red-500 text-white";
+      case "completed": return "bg-success text-success-foreground";
+      case "pending": return "bg-warning text-warning-foreground";
+      case "processing": return "bg-info text-info-foreground";
+      case "error": return "bg-destructive text-destructive-foreground";
       default: return "bg-muted text-muted-foreground";
     }
   };
