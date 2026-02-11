@@ -170,9 +170,9 @@ export const PulseDot = ({
 }) => {
   const colorClasses = {
     primary: "bg-primary",
-    success: "bg-green-500",
-    warning: "bg-amber-500",
-    destructive: "bg-red-500",
+    success: "bg-success",
+    warning: "bg-warning",
+    destructive: "bg-destructive",
   };
 
   const sizeClasses = {

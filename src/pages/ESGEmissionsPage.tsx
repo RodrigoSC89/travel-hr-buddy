@@ -41,12 +41,12 @@ export default function ESGEmissionsPage() {
 
   const getCIIColor = (rating: string) => {
     switch (rating) {
-      case "A": return "bg-green-500";
-      case "B": return "bg-lime-500";
-      case "C": return "bg-yellow-500";
-      case "D": return "bg-orange-500";
-      case "E": return "bg-red-500";
-      default: return "bg-gray-500";
+      case "A": return "bg-success";
+      case "B": return "bg-success/70";
+      case "C": return "bg-warning";
+      case "D": return "bg-warning/70";
+      case "E": return "bg-destructive";
+      default: return "bg-muted";
     }
   };
 
@@ -55,13 +55,13 @@ export default function ESGEmissionsPage() {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-4">
-          <div className="p-3 bg-green-500/20 rounded-xl">
-            <Leaf className="h-8 w-8 text-green-500" />
+          <div className="p-3 bg-success/20 rounded-xl">
+            <Leaf className="h-8 w-8 text-success" />
           </div>
           <div>
             <h1 className="text-2xl font-bold flex items-center gap-2">
               ESG & Emissões
-              <Badge variant="secondary" className="bg-green-500/20 text-green-400">
+              <Badge variant="secondary" className="bg-success/20 text-success">
                 IMO 2020
               </Badge>
             </h1>
@@ -84,7 +84,7 @@ export default function ESGEmissionsPage() {
               <div>
                 <p className="text-sm text-muted-foreground">CO₂ Total (ton)</p>
                 <p className="text-3xl font-bold">{emissionsData.totalCO2.toLocaleString()}</p>
-                <p className="text-xs text-green-500 flex items-center gap-1">
+                <p className="text-xs text-success flex items-center gap-1">
                   <TrendingDown className="h-3 w-3" />
                   -{emissionsData.reduction}% vs meta
                 </p>
@@ -170,13 +170,13 @@ export default function ESGEmissionsPage() {
                     <span>SOx (Óxidos de Enxofre)</span>
                     <span className="font-bold">173 ton</span>
                   </div>
-                  <Progress value={65} className="bg-yellow-200 [&>div]:bg-yellow-500" />
+                  <Progress value={65} className="bg-warning/20 [&>div]:bg-warning" />
                   
                   <div className="flex justify-between items-center">
                     <span>NOx (Óxidos de Nitrogênio)</span>
                     <span className="font-bold">463 ton</span>
                   </div>
-                  <Progress value={72} className="bg-orange-200 [&>div]:bg-orange-500" />
+                  <Progress value={72} className="bg-warning/20 [&>div]:bg-warning/80" />
                 </div>
               </CardContent>
             </Card>
@@ -193,7 +193,7 @@ export default function ESGEmissionsPage() {
                   <div className="p-4 bg-muted rounded-lg">
                     <div className="flex justify-between items-center mb-2">
                       <span className="text-sm">EEXI Compliance</span>
-                      <Badge className="bg-green-500">Conforme</Badge>
+                      <Badge className="bg-success">Conforme</Badge>
                     </div>
                     <p className="text-xs text-muted-foreground">
                       Todas as embarcações atendem aos requisitos EEXI
@@ -203,7 +203,7 @@ export default function ESGEmissionsPage() {
                   <div className="p-4 bg-muted rounded-lg">
                     <div className="flex justify-between items-center mb-2">
                       <span className="text-sm">SEEMP Implementado</span>
-                      <Badge className="bg-green-500">100%</Badge>
+                      <Badge className="bg-success">100%</Badge>
                     </div>
                     <p className="text-xs text-muted-foreground">
                       Ship Energy Efficiency Management Plan ativo em toda frota
@@ -268,11 +268,11 @@ export default function ESGEmissionsPage() {
                   <div key={index} className="flex items-center justify-between p-4 border rounded-lg">
                     <div className="flex items-center gap-3">
                       {item.status === "compliant" ? (
-                        <div className="w-3 h-3 bg-green-500 rounded-full" />
+                        <div className="w-3 h-3 bg-success rounded-full" />
                       ) : item.status === "pending" ? (
-                        <div className="w-3 h-3 bg-yellow-500 rounded-full" />
+                        <div className="w-3 h-3 bg-warning rounded-full" />
                       ) : (
-                        <div className="w-3 h-3 bg-blue-500 rounded-full" />
+                        <div className="w-3 h-3 bg-primary rounded-full" />
                       )}
                       <span className="font-medium">{item.regulation}</span>
                     </div>

@@ -19,7 +19,9 @@ import { supabase } from "@/integrations/supabase/client";
 
 export default function CentralComandoPremium() {
   const navigate = useNavigate();
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Supabase dynamic row shape used in JSX
   const [vessels, setVessels] = useState<any[]>([]);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Supabase dynamic row shape
   const [crew, setCrew] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -130,7 +132,7 @@ export default function CentralComandoPremium() {
             </CardContent>
           </Card>
 
-          <Card className="border-l-4 border-l-emerald-500">
+          <Card className="border-l-4 border-l-success">
             <CardContent className="p-4">
               <div className="flex items-center justify-between">
                 <div>
@@ -138,12 +140,12 @@ export default function CentralComandoPremium() {
                   <p className="text-2xl font-bold">R$ 2.4M</p>
                   <p className="text-xs">este mês</p>
                 </div>
-                <DollarSign className="h-8 w-8 text-emerald-500 opacity-60" />
+                <DollarSign className="h-8 w-8 text-success opacity-60" />
               </div>
             </CardContent>
           </Card>
 
-          <Card className="border-l-4 border-l-violet-500">
+          <Card className="border-l-4 border-l-accent">
             <CardContent className="p-4">
               <div className="flex items-center justify-between">
                 <div>
@@ -151,7 +153,7 @@ export default function CentralComandoPremium() {
                   <p className="text-2xl font-bold">94.5%</p>
                   <p className="text-xs">operacional</p>
                 </div>
-                <TrendingUp className="h-8 w-8 text-violet-500 opacity-60" />
+                <TrendingUp className="h-8 w-8 text-accent-foreground opacity-60" />
               </div>
             </CardContent>
           </Card>

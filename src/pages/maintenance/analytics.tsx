@@ -28,7 +28,7 @@ export default function MaintenanceAnalytics() {
               <CardDescription>Mean Time Between Failures</CardDescription>
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold text-blue-600">45 dias</div>
+              <div className="text-2xl font-bold text-primary">45 dias</div>
               <p className="text-xs text-muted-foreground">+8% vs mês anterior</p>
             </CardContent>
           </Card>
@@ -39,7 +39,7 @@ export default function MaintenanceAnalytics() {
               <CardDescription>Mean Time To Repair</CardDescription>
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold text-green-600">2.3 horas</div>
+              <div className="text-2xl font-bold text-success">2.3 horas</div>
               <p className="text-xs text-muted-foreground">-12% vs mês anterior</p>
             </CardContent>
           </Card>
@@ -50,7 +50,7 @@ export default function MaintenanceAnalytics() {
               <CardDescription>Manutenções no Prazo</CardDescription>
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold text-purple-600">95%</div>
+              <div className="text-2xl font-bold text-accent-foreground">95%</div>
               <p className="text-xs text-muted-foreground">Meta: 90%</p>
             </CardContent>
           </Card>
@@ -61,7 +61,7 @@ export default function MaintenanceAnalytics() {
               <CardDescription>Por Manutenção</CardDescription>
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold text-orange-600">R$ 1,850</div>
+              <div className="text-2xl font-bold text-warning">R$ 1,850</div>
               <p className="text-xs text-muted-foreground">-5% vs mês anterior</p>
             </CardContent>
           </Card>
@@ -79,8 +79,8 @@ export default function MaintenanceAnalytics() {
                 <div className="flex items-center justify-between">
                   <span className="text-sm">Preventiva</span>
                   <div className="flex items-center gap-2">
-                    <div className="w-32 h-2 bg-gray-200 rounded-full overflow-hidden">
-                      <div className="h-full bg-blue-500" style={{ width: '65%' }}></div>
+                    <div className="w-32 h-2 bg-muted rounded-full overflow-hidden">
+                      <div className="h-full bg-primary" style={{ width: '65%' }}></div>
                     </div>
                     <span className="text-sm font-medium">65%</span>
                   </div>
@@ -88,8 +88,8 @@ export default function MaintenanceAnalytics() {
                 <div className="flex items-center justify-between">
                   <span className="text-sm">Corretiva</span>
                   <div className="flex items-center gap-2">
-                    <div className="w-32 h-2 bg-gray-200 rounded-full overflow-hidden">
-                      <div className="h-full bg-orange-500" style={{ width: '25%' }}></div>
+                    <div className="w-32 h-2 bg-muted rounded-full overflow-hidden">
+                      <div className="h-full bg-warning" style={{ width: '25%' }}></div>
                     </div>
                     <span className="text-sm font-medium">25%</span>
                   </div>
@@ -97,8 +97,8 @@ export default function MaintenanceAnalytics() {
                 <div className="flex items-center justify-between">
                   <span className="text-sm">Preditiva</span>
                   <div className="flex items-center gap-2">
-                    <div className="w-32 h-2 bg-gray-200 rounded-full overflow-hidden">
-                      <div className="h-full bg-green-500" style={{ width: '10%' }}></div>
+                    <div className="w-32 h-2 bg-muted rounded-full overflow-hidden">
+                      <div className="h-full bg-success" style={{ width: '10%' }}></div>
                     </div>
                     <span className="text-sm font-medium">10%</span>
                   </div>
@@ -142,7 +142,7 @@ export default function MaintenanceAnalytics() {
               {[38, 42, 35, 45, 48, 44].map((value, index) => (
                 <div key={index} className="flex-1 flex flex-col items-center">
                   <div 
-                    className="w-full bg-blue-500 rounded-t hover:bg-blue-600 transition-colors cursor-pointer"
+                    className="w-full bg-primary rounded-t hover:bg-primary/80 transition-colors cursor-pointer"
                     style={{ height: `${(value / 50) * 100}%` }}
                   ></div>
                   <span className="text-xs mt-2 text-muted-foreground">

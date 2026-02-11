@@ -48,7 +48,7 @@ export const MLCOfflineIndicator: React.FC = () => {
               variant={isOnline ? "default" : "destructive"}
               className={cn(
                 "flex items-center gap-1 px-2 py-1",
-                isOnline ? "bg-green-600 hover:bg-green-700" : "bg-red-600"
+                isOnline ? "bg-success hover:bg-success/90" : "bg-destructive"
               )}
             >
               {isOnline ? (
@@ -77,7 +77,7 @@ export const MLCOfflineIndicator: React.FC = () => {
                 variant="outline" 
                 className={cn(
                   "flex items-center gap-1 px-2 py-1",
-                  isSyncing ? "border-blue-500 text-blue-600" : "border-yellow-500 text-yellow-600"
+                  isSyncing ? "border-primary text-primary" : "border-warning text-warning"
                 )}
               >
                 {isSyncing ? (
@@ -91,7 +91,7 @@ export const MLCOfflineIndicator: React.FC = () => {
             <TooltipContent>
               <div className="space-y-1">
                 <p>{pendingSyncCount} inspeção(ões) aguardando sincronização</p>
-                {isSyncing && <p className="text-blue-400">Sincronizando...</p>}
+                {isSyncing && <p className="text-primary">Sincronizando...</p>}
               </div>
             </TooltipContent>
           </Tooltip>
@@ -103,7 +103,7 @@ export const MLCOfflineIndicator: React.FC = () => {
             <TooltipTrigger asChild>
               <Badge 
                 variant="outline" 
-                className="flex items-center gap-1 px-2 py-1 border-green-500 text-green-600"
+                className="flex items-center gap-1 px-2 py-1 border-success text-success"
               >
                 <CheckCircle2 className="h-3 w-3" />
                 <span className="text-xs">Sincronizado</span>
@@ -146,9 +146,9 @@ export const MLCOfflineIndicatorCompact: React.FC = () => {
   return (
     <div className="flex items-center gap-1">
       {isOnline ? (
-        <Wifi className="h-4 w-4 text-green-500" />
+        <Wifi className="h-4 w-4 text-success" />
       ) : (
-        <WifiOff className="h-4 w-4 text-red-500" />
+        <WifiOff className="h-4 w-4 text-destructive" />
       )}
       {pendingSyncCount > 0 && (
         <Badge variant="secondary" className="h-5 px-1.5 text-xs">
@@ -193,7 +193,7 @@ export const MLCOfflineStatusPanel: React.FC = () => {
         </div>
         <div className="space-y-1">
           <p className="text-muted-foreground">Sincronizadas</p>
-          <p className="text-2xl font-bold text-green-600">{syncedInspections}</p>
+          <p className="text-2xl font-bold text-success">{syncedInspections}</p>
         </div>
       </div>
 
