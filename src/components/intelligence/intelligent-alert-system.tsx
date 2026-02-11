@@ -100,6 +100,7 @@ export const IntelligentAlertSystem = () => {
         .limit(10);
 
       if (incidents && incidents.length > 0) {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Supabase dynamic incident data
         const realAlerts: SmartAlert[] = incidents.map((inc: any) => ({
           id: inc.id,
           type: inc.severity === "critical" ? "critical" as const : inc.severity === "high" ? "warning" as const : "info" as const,

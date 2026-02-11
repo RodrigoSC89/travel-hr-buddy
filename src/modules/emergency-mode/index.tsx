@@ -444,8 +444,8 @@ const EmergencyMode = () => {
       <div className="min-h-screen bg-background">
         <div className="container mx-auto p-6 space-y-6">
           <div className="text-center py-12">
-            <div className="inline-flex p-6 rounded-full bg-red-100 dark:bg-red-900/30 mb-6">
-              <AlertOctagon className="h-16 w-16 text-red-600" />
+            <div className="inline-flex p-6 rounded-full bg-destructive/10 mb-6">
+              <AlertOctagon className="h-16 w-16 text-destructive" />
             </div>
             <h1 className="text-4xl font-bold mb-4">Modo Emergência</h1>
             <p className="text-muted-foreground text-lg mb-8 max-w-2xl mx-auto">
@@ -466,10 +466,10 @@ const EmergencyMode = () => {
 
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4 max-w-4xl mx-auto">
             {Object.entries(emergencyProtocols).slice(0, 8).map(([key, proto]) => (
-              <Card key={key} className="text-center p-4 hover:border-red-300 transition-colors cursor-pointer"
+              <Card key={key} className="text-center p-4 hover:border-destructive/30 transition-colors cursor-pointer"
                 onClick={() => activateEmergency(key as EmergencyType)}>
                 <div className="flex flex-col items-center gap-2">
-                  <div className="p-3 rounded-full bg-red-100 dark:bg-red-900/30 text-red-600">
+                  <div className="p-3 rounded-full bg-destructive/10 text-destructive">
                     {getEmergencyIcon(key as EmergencyType)}
                   </div>
                   <span className="text-sm font-medium">{proto.title}</span>
@@ -482,7 +482,7 @@ const EmergencyMode = () => {
         <Dialog open={showActivationDialog} onOpenChange={setShowActivationDialog}>
           <DialogContent>
             <DialogHeader>
-              <DialogTitle className="flex items-center gap-2 text-red-600">
+              <DialogTitle className="flex items-center gap-2 text-destructive">
                 <AlertOctagon className="h-5 w-5" />
                 Confirmar Ativação de Emergência
               </DialogTitle>
@@ -509,9 +509,9 @@ const EmergencyMode = () => {
   }
 
   return (
-    <div className="min-h-screen bg-red-950">
+    <div className="min-h-screen bg-destructive/5">
       {/* Emergency Header */}
-      <div className="bg-red-600 text-white py-4 px-6">
+      <div className="bg-destructive text-destructive-foreground py-4 px-6">
         <div className="container mx-auto flex items-center justify-between">
           <div className="flex items-center gap-4">
             <motion.div
@@ -522,19 +522,19 @@ const EmergencyMode = () => {
             </motion.div>
             <div>
               <h1 className="text-2xl font-bold">{protocol?.title}</h1>
-              <p className="text-red-100">{vesselInfo.name} • {vesselInfo.position}</p>
+              <p className="text-destructive-foreground/80">{vesselInfo.name} • {vesselInfo.position}</p>
             </div>
           </div>
           
           <div className="flex items-center gap-6">
             <div className="text-center">
               <div className="text-3xl font-mono font-bold">{formatTime(elapsedTime)}</div>
-              <div className="text-xs text-red-200">TEMPO DECORRIDO</div>
+              <div className="text-xs text-destructive-foreground/70">TEMPO DECORRIDO</div>
             </div>
             
             <div className="text-center">
               <div className="text-xl font-bold">{steps.filter(s => s.completed).length}/{steps.length}</div>
-              <div className="text-xs text-red-200">ETAPAS</div>
+              <div className="text-xs text-destructive-foreground/70">ETAPAS</div>
             </div>
 
             <Button variant="secondary" onClick={deactivateEmergency}>
@@ -543,16 +543,16 @@ const EmergencyMode = () => {
             </Button>
           </div>
         </div>
-        <Progress value={getProgressPercentage()} className="mt-4 h-2 bg-red-800" />
+        <Progress value={getProgressPercentage()} className="mt-4 h-2 bg-destructive/30" />
       </div>
 
       <div className="container mx-auto p-6">
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           {/* Protocol Steps */}
           <div className="lg:col-span-2 space-y-4">
-            <Card className="bg-red-900/50 border-red-800">
+            <Card className="bg-destructive/10 border-destructive/30">
               <CardHeader>
-                <CardTitle className="text-white">Protocolo de Ação</CardTitle>
+                <CardTitle className="text-foreground">Protocolo de Ação</CardTitle>
               </CardHeader>
               <CardContent>
                 <div className="space-y-3">
@@ -563,17 +563,17 @@ const EmergencyMode = () => {
                       animate={{ opacity: 1, x: 0 }}
                       className={`p-4 rounded-lg border ${
                         step.completed 
-                          ? "bg-green-900/50 border-green-700" 
+                          ? "bg-success/10 border-success/30" 
                           : step.critical 
-                            ? "bg-red-800/50 border-red-600" 
-                            : "bg-red-900/30 border-red-800"
+                            ? "bg-destructive/20 border-destructive/40" 
+                            : "bg-destructive/5 border-destructive/20"
                       }`}
                     >
                       <div className="flex items-start gap-4">
                         <Button
                           size="sm"
                           variant={step.completed ? "default" : "outline"}
-                          className={step.completed ? "bg-green-600" : ""}
+                          className={step.completed ? "bg-success" : ""}
                           onClick={() => !step.completed && completeStep(step.id)}
                           disabled={step.completed}
                         >
@@ -585,7 +585,7 @@ const EmergencyMode = () => {
                         </Button>
                         <div className="flex-1">
                           <div className="flex items-center gap-2">
-                            <span className={`font-semibold ${step.completed ? "text-green-400" : "text-white"}`}>
+                            <span className={`font-semibold ${step.completed ? "text-success" : "text-foreground"}`}>
                               {step.order}. {step.title}
                             </span>
                             {step.critical && !step.completed && (
@@ -598,8 +598,8 @@ const EmergencyMode = () => {
                               </Badge>
                             )}
                           </div>
-                          <p className="text-red-200 text-sm mt-1">{step.description}</p>
-                          <p className="text-red-300 text-xs mt-1">Responsável: {step.responsible}</p>
+                          <p className="text-muted-foreground text-sm mt-1">{step.description}</p>
+                          <p className="text-muted-foreground text-xs mt-1">Responsável: {step.responsible}</p>
                         </div>
                       </div>
                     </motion.div>
@@ -609,9 +609,9 @@ const EmergencyMode = () => {
             </Card>
 
             {/* Emergency Contacts */}
-            <Card className="bg-red-900/50 border-red-800">
+            <Card className="bg-destructive/10 border-destructive/30">
               <CardHeader>
-                <CardTitle className="text-white flex items-center gap-2">
+                <CardTitle className="text-foreground flex items-center gap-2">
                   <Phone className="h-5 w-5" />
                   Contatos de Emergência
                 </CardTitle>
@@ -619,10 +619,10 @@ const EmergencyMode = () => {
               <CardContent>
                 <div className="grid gap-3">
                   {protocol?.contacts.map((contact, i) => (
-                    <div key={i} className="flex items-center justify-between p-3 bg-red-800/50 rounded-lg">
+                    <div key={i} className="flex items-center justify-between p-3 bg-destructive/10 rounded-lg">
                       <div>
-                        <p className="font-medium text-white">{contact.name}</p>
-                        <p className="text-sm text-red-300">{contact.role}</p>
+                        <p className="font-medium text-foreground">{contact.name}</p>
+                        <p className="text-sm text-muted-foreground">{contact.role}</p>
                       </div>
                       <Button variant="secondary" size="sm">
                         <Phone className="h-4 w-4 mr-2" />
@@ -637,10 +637,10 @@ const EmergencyMode = () => {
 
           {/* AI Assistant */}
           <div>
-            <Card className="bg-red-900/50 border-red-800 h-full flex flex-col">
+            <Card className="bg-destructive/10 border-destructive/30 h-full flex flex-col">
               <CardHeader>
-                <CardTitle className="text-white flex items-center gap-2">
-                  <Brain className="h-5 w-5 text-purple-400" />
+                <CardTitle className="text-foreground flex items-center gap-2">
+                  <Brain className="h-5 w-5 text-accent" />
                   Assistente de Crise IA
                 </CardTitle>
               </CardHeader>
@@ -652,18 +652,18 @@ const EmergencyMode = () => {
                         key={i}
                         className={`p-3 rounded-lg ${
                           msg.role === "assistant"
-                            ? "bg-purple-900/50 border border-purple-700"
-                            : "bg-red-800/50 border border-red-700"
+                            ? "bg-accent/10 border border-accent/30"
+                            : "bg-destructive/10 border border-destructive/30"
                         }`}
                       >
-                        <p className="text-sm text-white whitespace-pre-wrap">{msg.content}</p>
-                        <p className="text-xs text-red-300 mt-2">
+                        <p className="text-sm text-foreground whitespace-pre-wrap">{msg.content}</p>
+                        <p className="text-xs text-muted-foreground mt-2">
                           {msg.timestamp.toLocaleTimeString()}
                         </p>
                       </div>
                     ))}
                     {isAiProcessing && (
-                      <div className="flex items-center gap-2 text-purple-400">
+                      <div className="flex items-center gap-2 text-accent">
                         <Loader2 className="h-4 w-4 animate-spin" />
                         <span className="text-sm">Processando...</span>
                       </div>
@@ -676,7 +676,7 @@ const EmergencyMode = () => {
                     value={aiInput}
                     onChange={(e) => setAiInput(e.target.value)}
                     placeholder="Pergunte à IA..."
-                    className="bg-red-800/50 border-red-700 text-white placeholder:text-red-400"
+                    className="bg-destructive/10 border-destructive/30 text-foreground placeholder:text-muted-foreground"
                     onKeyDown={(e) => e.key === "Enter" && askAI()}
                   />
                   <Button onClick={askAI} disabled={isAiProcessing}>

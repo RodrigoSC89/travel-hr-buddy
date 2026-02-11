@@ -145,7 +145,7 @@ export function VoiceCommandsAdvanced() {
 
   const getStatusIcon = (status: string) => {
     switch (status) {
-      case 'success': return <CheckCircle className="h-4 w-4 text-green-500" />;
+      case 'success': return <CheckCircle className="h-4 w-4 text-success" />;
       case 'error': return <XCircle className="h-4 w-4 text-destructive" />;
       case 'processing': return <Loader2 className="h-4 w-4 text-primary animate-spin" />;
       default: return null;

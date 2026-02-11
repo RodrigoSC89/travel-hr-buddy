@@ -44,7 +44,8 @@ export function SyncStatus() {
   /**
    * Sync a single document to Supabase
    */
-  const syncDocument = async (doc: any): Promise<boolean> => {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- offline cache returns dynamic shapes
+  const syncDocument = async (doc: Record<string, any>): Promise<boolean> => {
     try {
       const { error } = await supabase
         .from('ai_documents')
@@ -71,7 +72,7 @@ export function SyncStatus() {
   /**
    * Sync a log entry to Supabase
    */
-  const syncLog = async (log: any): Promise<boolean> => {
+  const syncLog = async (log: Record<string, any>): Promise<boolean> => {
     try {
       const { error } = await supabase
         .from('access_logs')
@@ -98,7 +99,7 @@ export function SyncStatus() {
   /**
    * Process a pending action (crew update, checklist item, etc.)
    */
-  const processAction = async (action: any): Promise<boolean> => {
+  const processAction = async (action: Record<string, any>): Promise<boolean> => {
     try {
       const { actionType, payload, table } = action;
 
@@ -228,7 +229,7 @@ export function SyncStatus() {
             {/* PATCH iOS PWA: Sempre mostrar Online */}
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">
-                <Wifi className="h-4 w-4 text-green-500" />
+                <Wifi className="h-4 w-4 text-success" />
                 <span className="text-sm font-medium">Online</span>
               </div>
               <Badge variant="default">

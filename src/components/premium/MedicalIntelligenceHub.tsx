@@ -40,6 +40,7 @@ export default function MedicalIntelligenceHub() {
             return;
           }
 
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any -- medical_supplies dynamic row
           const mapped = (data || []).map((s: any) => {
             const qty = s.quantity || 0;
             const minStock = s.min_stock || 10;
@@ -349,7 +350,7 @@ export default function MedicalIntelligenceHub() {
              </CardHeader>
              <CardContent>
                <div className="space-y-3">
-                 {supplies.map((supply: any) => (
+                 {supplies.map((supply) => (
                    <div key={supply.id} className="flex items-center justify-between p-3 border rounded-lg">
                      <div className="flex items-center gap-3">
                        <Syringe className="h-5 w-5 text-muted-foreground" />

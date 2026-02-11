@@ -167,7 +167,7 @@ export const getNextFallback = (
 /**
  * Retrieves operational logs
  */
-export const getOperationalLogs = (): any[] => {
+export const getOperationalLogs = (): Record<string, unknown>[] => {
   try {
     const logs = localStorage.getItem("satcom_operational_logs");
     return logs ? JSON.parse(logs) : [];

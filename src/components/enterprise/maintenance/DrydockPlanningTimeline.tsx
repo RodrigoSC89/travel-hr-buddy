@@ -124,6 +124,7 @@ export function DrydockPlanningTimeline() {
           .limit(10);
 
         if (data && data.length > 0) {
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Supabase row mapping
           const mapped = data.map((t: any) => ({
             id: t.id,
             vessel: t.title || "Embarcação",

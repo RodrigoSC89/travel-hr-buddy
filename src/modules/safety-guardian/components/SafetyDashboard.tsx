@@ -62,11 +62,11 @@ const demoMonthlyIncidents = [
 ];
 
 const incidentTypes = [
-  { name: "Quedas", value: 25, color: "#ef4444" },
-  { name: "Cortes/Lesões", value: 20, color: "#f59e0b" },
-  { name: "Exposição Química", value: 15, color: "#8b5cf6" },
-  { name: "Prensamento", value: 12, color: "#3b82f6" },
-  { name: "Outros", value: 28, color: "#6b7280" },
+  { name: "Quedas", value: 25, color: "hsl(var(--destructive))" },
+  { name: "Cortes/Lesões", value: 20, color: "hsl(var(--warning))" },
+  { name: "Exposição Química", value: 15, color: "hsl(var(--accent))" },
+  { name: "Prensamento", value: 12, color: "hsl(var(--primary))" },
+  { name: "Outros", value: 28, color: "hsl(var(--muted-foreground))" },
 ];
 
 const aiAlerts = [

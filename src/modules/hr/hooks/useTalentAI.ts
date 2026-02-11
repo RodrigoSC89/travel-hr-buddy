@@ -65,7 +65,7 @@ export function useTalentMatch() {
     mutationFn: async ({ vesselId, positionId, requirements }: { 
       vesselId: string; 
       positionId?: string;
-      requirements?: any;
+      requirements?: Record<string, unknown>;
     }) => {
       const { data, error } = await supabase.functions.invoke("hr-talent-ai", {
         body: { action: "talent-match", vesselId, positionId, requirements },

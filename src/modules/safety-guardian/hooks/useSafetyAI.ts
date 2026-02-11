@@ -123,7 +123,7 @@ export function useSafetyAI() {
     }
   }, []);
 
-  const generateTrainingRecommendations = useCallback(async (crewData?: any[]) => {
+  const generateTrainingRecommendations = useCallback(async (crewData?: Record<string, unknown>[]) => {
     setLoadingRecommendations(true);
     
     try {
@@ -136,6 +136,7 @@ export function useSafetyAI() {
 
       if (error) throw error;
 
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any -- edge function response shape
       const recs: TrainingRecommendation[] = (data.recommendations || []).map((r: any, idx: number) => ({
         id: r.id || `rec-${idx}`,
         crewMemberId: r.crewMemberId || `crew-${idx}`,
@@ -169,7 +170,7 @@ export function useSafetyAI() {
     }
   }, []);
 
-  const generatePredictiveInsights = useCallback(async (safetyData?: any) => {
+  const generatePredictiveInsights = useCallback(async (safetyData?: Record<string, unknown>) => {
     setLoadingInsights(true);
     
     try {
@@ -182,6 +183,7 @@ export function useSafetyAI() {
 
       if (error) throw error;
 
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any -- edge function response shape
       const predictedInsights: PredictiveInsight[] = (data.insights || []).map((i: any, idx: number) => ({
         id: i.id || `insight-${idx}`,
         type: i.type || 'safety_trend',
@@ -270,7 +272,7 @@ export function useSafetyAI() {
     }
   }, []);
 
-  const askAI = useCallback(async (question: string, context?: any): Promise<string> => {
+  const askAI = useCallback(async (question: string, context?: Record<string, unknown>): Promise<string> => {
     setChatLoading(true);
     
     const userMessage: ChatMessage = { role: 'user', content: question };
