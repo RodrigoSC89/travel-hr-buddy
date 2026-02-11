@@ -25,6 +25,7 @@ import { logger } from '@/lib/logger';
 
 interface AnalyticsData {
   categoryDistribution: { name: string; value: number; color: string }[];
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- dynamic price data keys
   priceHistory: { date: string; [key: string]: any }[];
   savingsOverTime: { month: string; savings: number; alerts: number }[];
   topProducts: { name: string; savings: number; frequency: number }[];
@@ -45,7 +46,9 @@ export const PriceAnalyticsDashboard: React.FC = () => {
   const [isExporting, setIsExporting] = useState(false);
   const [timeRange, setTimeRange] = useState("30d");
   const [selectedCategory, setSelectedCategory] = useState("all");
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- flight_price_history dynamic rows
   const [flightHistory, setFlightHistory] = useState<any[]>([]);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- hotel_price_history dynamic rows
   const [hotelHistory, setHotelHistory] = useState<any[]>([]);
 
   useEffect(() => {

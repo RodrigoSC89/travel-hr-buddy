@@ -133,6 +133,7 @@ export function useComplianceAI() {
     }
   }, []);
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- context varies by caller
   const askComplianceAI = useCallback(async (question: string, context?: any): Promise<string> => {
     setChatLoading(true);
     
@@ -180,6 +181,7 @@ export function useComplianceAI() {
     }
   }, []);
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- compliance data shape varies
   const predictRisks = useCallback(async (complianceData: any): Promise<AIComplianceAnalysis['predictedIssues']> => {
     try {
       const { data, error } = await supabase.functions.invoke('compliance-ai', {
@@ -210,6 +212,7 @@ export function useComplianceAI() {
     }
   }, []);
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- finding shape varies
   const suggestCorrectiveAction = useCallback(async (finding: any): Promise<string> => {
     try {
       const { data, error } = await supabase.functions.invoke('compliance-ai', {

@@ -16,30 +16,30 @@ export function RiskAlertPanel({ alerts }: RiskAlertPanelProps) {
   const getAlertIcon = (level: string) => {
     switch (level) {
     case "critical":
-      return <XCircle className="h-5 w-5 text-red-500" />;
+      return <XCircle className="h-5 w-5 text-destructive" />;
     case "high":
-      return <AlertTriangle className="h-5 w-5 text-orange-500" />;
+      return <AlertTriangle className="h-5 w-5 text-warning" />;
     case "medium":
-      return <AlertCircle className="h-5 w-5 text-yellow-500" />;
+      return <AlertCircle className="h-5 w-5 text-warning" />;
     case "low":
-      return <Info className="h-5 w-5 text-blue-500" />;
+      return <Info className="h-5 w-5 text-primary" />;
     default:
-      return <Info className="h-5 w-5 text-gray-500" />;
+      return <Info className="h-5 w-5 text-muted-foreground" />;
     }
   };
 
   const getAlertBadge = (level: string) => {
     switch (level) {
     case "critical":
-      return <Badge className="bg-red-500">Crítico</Badge>;
+      return <Badge className="bg-destructive">Crítico</Badge>;
     case "high":
-      return <Badge className="bg-orange-500">Alto</Badge>;
+      return <Badge className="bg-warning text-warning-foreground">Alto</Badge>;
     case "medium":
-      return <Badge className="bg-yellow-500">Médio</Badge>;
+      return <Badge className="bg-warning/70 text-warning-foreground">Médio</Badge>;
     case "low":
-      return <Badge className="bg-blue-500">Baixo</Badge>;
+      return <Badge className="bg-primary">Baixo</Badge>;
     default:
-      return <Badge className="bg-gray-500">Desconhecido</Badge>;
+      return <Badge className="bg-muted text-muted-foreground">Desconhecido</Badge>;
     }
   };
 
@@ -52,7 +52,7 @@ export function RiskAlertPanel({ alerts }: RiskAlertPanelProps) {
     <Card className="border-2 hover:shadow-lg transition-shadow">
       <CardHeader className="pb-3">
         <CardTitle className="flex items-center gap-2 text-lg">
-          <AlertTriangle className="h-6 w-6 text-orange-500" />
+          <AlertTriangle className="h-6 w-6 text-warning" />
           Alertas de Risco
           {alerts.length > 0 && (
             <Badge variant="secondary" className="ml-auto">
@@ -64,7 +64,7 @@ export function RiskAlertPanel({ alerts }: RiskAlertPanelProps) {
       <CardContent>
         {alerts.length === 0 ? (
           <div className="text-center py-8 text-muted-foreground">
-            <Info className="h-12 w-12 mx-auto mb-2 text-green-500" />
+            <Info className="h-12 w-12 mx-auto mb-2 text-success" />
             <p className="text-sm">Nenhum alerta ativo</p>
             <p className="text-xs mt-1">Sistema operando normalmente</p>
           </div>
@@ -102,7 +102,7 @@ export function RiskAlertPanel({ alerts }: RiskAlertPanelProps) {
                           <ul className="text-xs text-muted-foreground space-y-1">
                             {alert.recommendations.map((rec, idx) => (
                               <li key={idx} className="flex items-start gap-1">
-                                <span className="text-green-500">•</span>
+                                <span className="text-success">•</span>
                                 <span>{rec}</span>
                               </li>
                             ))}

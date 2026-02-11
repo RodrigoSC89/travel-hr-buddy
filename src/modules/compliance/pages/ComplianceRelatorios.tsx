@@ -98,17 +98,17 @@ const complianceMetrics = [
 ];
 
 const typeConfig = {
-  audit: { label: 'Auditoria', color: 'bg-blue-500/20 text-blue-400' },
-  compliance: { label: 'Conformidade', color: 'bg-emerald-500/20 text-emerald-400' },
-  incident: { label: 'Incidente', color: 'bg-orange-500/20 text-orange-400' },
-  training: { label: 'Treinamento', color: 'bg-purple-500/20 text-purple-400' },
-  certification: { label: 'Certificação', color: 'bg-amber-500/20 text-amber-400' }
+  audit: { label: 'Auditoria', color: 'bg-primary/20 text-primary' },
+  compliance: { label: 'Conformidade', color: 'bg-success/20 text-success' },
+  incident: { label: 'Incidente', color: 'bg-warning/20 text-warning' },
+  training: { label: 'Treinamento', color: 'bg-accent/20 text-accent-foreground' },
+  certification: { label: 'Certificação', color: 'bg-warning/20 text-warning' }
 };
 
 const statusConfig = {
-  ready: { label: 'Pronto', color: 'bg-emerald-500/20 text-emerald-400' },
-  generating: { label: 'Gerando...', color: 'bg-blue-500/20 text-blue-400' },
-  scheduled: { label: 'Agendado', color: 'bg-amber-500/20 text-amber-400' },
+  ready: { label: 'Pronto', color: 'bg-success/20 text-success' },
+  generating: { label: 'Gerando...', color: 'bg-primary/20 text-primary' },
+  scheduled: { label: 'Agendado', color: 'bg-warning/20 text-warning' },
   failed: { label: 'Falhou', color: 'bg-destructive/20 text-destructive' }
 };
 
@@ -168,7 +168,7 @@ export default function ComplianceRelatorios() {
           <CardContent className="p-6 text-center">
             <h3 className="text-sm text-muted-foreground mb-2">Score Geral de Compliance</h3>
             <div className="text-6xl font-bold text-primary mb-2">{overallScore}%</div>
-            <Badge className="bg-emerald-500/20 text-emerald-400">
+            <Badge className="bg-success/20 text-success">
               <TrendingUp className="h-3 w-3 mr-1" />
               +1.5% vs mês anterior
             </Badge>
@@ -197,7 +197,7 @@ export default function ComplianceRelatorios() {
                     <span className="text-sm font-medium">{metric.label}</span>
                     <span className={cn(
                       "text-xs flex items-center gap-0.5",
-                      metric.trend === 'up' ? 'text-emerald-400' : 
+                      metric.trend === 'up' ? 'text-success' : 
                       metric.trend === 'down' ? 'text-destructive' : 'text-muted-foreground'
                     )}>
                       {metric.trend === 'up' && <TrendingUp className="h-3 w-3" />}
@@ -285,8 +285,8 @@ export default function ComplianceRelatorios() {
                       <div className="text-center px-4">
                         <div className={cn(
                           "text-2xl font-bold",
-                          report.score >= 90 ? 'text-emerald-400' :
-                          report.score >= 80 ? 'text-amber-400' : 'text-destructive'
+                          report.score >= 90 ? 'text-success' :
+                          report.score >= 80 ? 'text-warning' : 'text-destructive'
                         )}>
                           {report.score}%
                         </div>
