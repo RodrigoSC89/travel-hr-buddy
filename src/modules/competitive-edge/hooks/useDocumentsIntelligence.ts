@@ -139,12 +139,12 @@ export function useValidateCompliance() {
 
 export function useSearchDocuments() {
   return useMutation({
-    mutationFn: async ({ query, filters }: { query: string; filters?: any }) => {
+    mutationFn: async ({ query, filters }: { query: string; filters?: Record<string, unknown> }) => {
       const { data, error } = await supabase.functions.invoke("documents-intelligence", {
         body: { action: "search", query, filters },
       });
       if (error) throw error;
-      return data as { results: any[]; total: number; query: string };
+      return data as { results: Record<string, unknown>[]; total: number; query: string };
     },
   });
 }
@@ -156,7 +156,7 @@ export function useFindRelatedDocuments() {
         body: { action: "find-related", documentId },
       });
       if (error) throw error;
-      return data as { related: any[]; basedOn: string };
+      return data as { related: Record<string, unknown>[]; basedOn: string };
     },
   });
 }

@@ -14,7 +14,7 @@ export interface CriticalAlertEmailParams {
 export interface CriticalAlertEmailResult {
   success: boolean;
   data?: { id: string };
-  error?: any;
+  error?: unknown;
 }
 
 /**

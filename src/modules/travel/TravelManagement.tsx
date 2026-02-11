@@ -149,6 +149,7 @@ const TravelManagement = () => {
       if (error) throw error;
       
       // Map database results to TravelItinerary interface
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any -- DB columns may not match interface exactly
       const mappedData: TravelItinerary[] = (data || []).map((row: any) => ({
         id: row.id,
         itinerary_number: row.itinerary_number || `ITN-${row.id?.slice(0, 8)}`,
@@ -193,6 +194,7 @@ const TravelManagement = () => {
       if (error) throw error;
       
       // Map database results to TravelConflict interface
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any -- DB columns may not match interface exactly
       const mappedData: TravelConflict[] = (data || []).map((row: any) => ({
         id: row.id,
         conflict_type: row.conflict_type || "unknown",

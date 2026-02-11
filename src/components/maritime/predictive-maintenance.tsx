@@ -162,26 +162,26 @@ export const PredictiveMaintenanceSystem: React.FC = () => {
 
   const getStatusColor = (status: string) => {
     switch (status) {
-    case "completed": return "text-green-600";
-    case "inprogress": return "text-blue-600";
-    case "scheduled": return "text-yellow-600";
-    case "overdue": return "text-red-600";
+    case "completed": return "text-success";
+    case "inprogress": return "text-primary";
+    case "scheduled": return "text-warning";
+    case "overdue": return "text-destructive";
     default: return "text-muted-foreground";
     }
   };
 
   const getHealthColor = (score: number) => {
-    if (score >= 85) return "text-green-600";
-    if (score >= 70) return "text-yellow-600";
-    return "text-red-600";
+    if (score >= 85) return "text-success";
+    if (score >= 70) return "text-warning";
+    return "text-destructive";
   };
 
   const getTypeIcon = (type: string) => {
     switch (type) {
-    case "predictive": return <Zap className="h-5 w-5 text-purple-600" />;
-    case "preventive": return <CheckCircle className="h-5 w-5 text-blue-600" />;
-    case "corrective": return <Settings className="h-5 w-5 text-orange-600" />;
-    case "emergency": return <AlertTriangle className="h-5 w-5 text-red-600" />;
+    case "predictive": return <Zap className="h-5 w-5 text-accent" />;
+    case "preventive": return <CheckCircle className="h-5 w-5 text-primary" />;
+    case "corrective": return <Settings className="h-5 w-5 text-warning" />;
+    case "emergency": return <AlertTriangle className="h-5 w-5 text-destructive" />;
     default: return <Wrench className="h-5 w-5" />;
     }
   };
@@ -212,7 +212,7 @@ export const PredictiveMaintenanceSystem: React.FC = () => {
             <CardTitle className="text-sm font-medium">Itens Críticos</CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-red-600">{criticalItems + overdueItems}</div>
+            <div className="text-2xl font-bold text-destructive">{criticalItems + overdueItems}</div>
             <p className="text-xs text-muted-foreground">Ação urgente</p>
           </CardContent>
         </Card>
@@ -388,14 +388,14 @@ export const PredictiveMaintenanceSystem: React.FC = () => {
                         </div>
 
                         {/* AI Recommendation */}
-                        <div className="bg-blue-50 dark:bg-blue-950 p-3 rounded-lg">
+                        <div className="bg-primary/5 dark:bg-primary/10 p-3 rounded-lg">
                           <div className="flex items-start gap-2">
-                            <Zap className="h-4 w-4 mt-0.5 text-blue-600" />
+                            <Zap className="h-4 w-4 mt-0.5 text-primary" />
                             <div>
-                              <div className="text-sm font-medium text-blue-900 dark:text-blue-100 mb-1">
+                              <div className="text-sm font-medium text-primary mb-1">
                                 Recomendação da IA
                               </div>
-                              <div className="text-sm text-blue-700 dark:text-blue-300">
+                              <div className="text-sm text-primary/80">
                                 {item.aiRecommendation}
                               </div>
                             </div>

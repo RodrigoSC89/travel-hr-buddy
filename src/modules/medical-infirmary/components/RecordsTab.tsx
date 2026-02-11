@@ -114,7 +114,7 @@ export default function RecordsTab() {
               </div>
               <div className="space-y-2">
                 <Label>Tipo</Label>
-                <Select value={newRecord.type} onValueChange={(v: any) => setNewRecord(prev => ({ ...prev, type: v }))}>
+                <Select value={newRecord.type} onValueChange={(v) => setNewRecord(prev => ({ ...prev, type: v as typeof prev.type }))}>
                   <SelectTrigger><SelectValue /></SelectTrigger>
                   <SelectContent>
                     <SelectItem value="consultation">Consulta</SelectItem>
@@ -151,8 +151,8 @@ export default function RecordsTab() {
                 <div key={record.id} className="p-4 rounded-lg border bg-card hover:bg-muted/50 transition-colors">
                   <div className="flex items-start justify-between mb-2">
                     <div className="flex items-center gap-3">
-                      <div className={`p-2 rounded-lg ${record.type === 'emergency' ? 'bg-red-500/10' : 'bg-blue-500/10'}`}>
-                        {record.type === 'emergency' ? <AlertTriangle className="h-5 w-5 text-red-500" /> : <Stethoscope className="h-5 w-5 text-blue-500" />}
+                      <div className={`p-2 rounded-lg ${record.type === 'emergency' ? 'bg-destructive/10' : 'bg-primary/10'}`}>
+                        {record.type === 'emergency' ? <AlertTriangle className="h-5 w-5 text-destructive" /> : <Stethoscope className="h-5 w-5 text-primary" />}
                       </div>
                       <div>
                         <p className="font-medium">{record.crewMemberName}</p>

@@ -20,7 +20,7 @@ export interface CoordinationAgent {
   priority_level: number;
   max_concurrent_tasks: number;
   current_task_count: number;
-  metadata: Record<string, any>;
+  metadata: Record<string, unknown>;
   last_heartbeat: string;
   created_at: string;
   updated_at: string;
@@ -34,8 +34,8 @@ export interface CoordinationTask {
   required_capabilities: string[];
   status: TaskStatus;
   assigned_agent_id?: string;
-  payload: Record<string, any>;
-  result?: Record<string, any>;
+  payload: Record<string, unknown>;
+  result?: Record<string, unknown>;
   error_message?: string;
   timeout_seconds: number;
   started_at?: string;
@@ -50,7 +50,7 @@ export interface CoordinationDecision {
   task_id?: string;
   agent_id?: string;
   decision_type: string;
-  decision_data: Record<string, any>;
+  decision_data: Record<string, unknown>;
   reasoning?: string;
   confidence_score?: number;
   timestamp: string;
@@ -61,7 +61,7 @@ export interface CoordinationMissionLink {
   mission_id?: string;
   coordination_task_id?: string;
   integration_status: "linked" | "synced" | "completed" | "failed";
-  sync_data: Record<string, any>;
+  sync_data: Record<string, unknown>;
   created_at: string;
   updated_at: string;
 }
@@ -83,7 +83,7 @@ export interface RiskForecast {
     value: number;
     description?: string;
   }>;
-  input_data: Record<string, any>;
+  input_data: Record<string, unknown>;
   model_version?: string;
   model_confidence?: number;
   inference_time_ms?: number;
@@ -92,7 +92,7 @@ export interface RiskForecast {
     action: string;
     description: string;
   }>;
-  metadata: Record<string, any>;
+  metadata: Record<string, unknown>;
   created_by?: string;
   created_at: string;
 }
@@ -103,8 +103,8 @@ export interface ONNXModel {
   model_version: string;
   model_type: string;
   model_url?: string;
-  input_shape?: Record<string, any>;
-  output_shape?: Record<string, any>;
+  input_shape?: Record<string, unknown>;
+  output_shape?: Record<string, unknown>;
   status: "active" | "deprecated" | "testing";
   performance_metrics: {
     avg_inference_time_ms?: number;
@@ -137,7 +137,7 @@ export interface SensorLog {
     altitude?: number;
   };
   status: SensorStatus;
-  metadata: Record<string, any>;
+  metadata: Record<string, unknown>;
   timestamp: string;
   created_at: string;
 }
@@ -156,7 +156,7 @@ export interface SensorConfiguration {
     min?: number;
     max?: number;
   };
-  calibration_data: Record<string, any>;
+  calibration_data: Record<string, unknown>;
   enabled: boolean;
   created_at: string;
   updated_at: string;
@@ -272,7 +272,7 @@ export interface AutonomousRoute {
   obstacles_detected: Array<{
     id: string;
     type: string;
-    location: any;
+    location: { lat: number; lon: number };
     severity: string;
     detected_at: string;
   }>;
@@ -313,9 +313,9 @@ export interface RouteReplanHistory {
   id: string;
   route_id?: string;
   replan_reason: string;
-  original_route: Record<string, any>;
-  new_route: Record<string, any>;
-  trigger_data: Record<string, any>;
+  original_route: Record<string, unknown>;
+  new_route: Record<string, unknown>;
+  trigger_data: Record<string, unknown>;
   autonomous: boolean;
   approved_by?: string;
   approved_at?: string;

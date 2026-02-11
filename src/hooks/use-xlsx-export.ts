@@ -14,9 +14,9 @@ interface XLSXExportOptions {
 
 interface UseXLSXExportReturn {
   isLoading: boolean;
-  exportToXLSX: (data: any[], options?: XLSXExportOptions) => Promise<void>;
+  exportToXLSX: (data: Record<string, unknown>[], options?: XLSXExportOptions) => Promise<void>;
   exportMultipleSheets: (
-    sheets: Array<{ name: string; data: any[] }>,
+    sheets: Array<{ name: string; data: Record<string, unknown>[] }>,
     filename?: string
   ) => Promise<void>;
   getXLSX: () => Promise<typeof import("xlsx")>;
@@ -37,7 +37,7 @@ export const useXLSXExport = (): UseXLSXExportReturn => {
   }, []);
 
   const exportToXLSX = useCallback(async (
-    data: any[],
+    data: Record<string, unknown>[],
     options: XLSXExportOptions = {}
   ) => {
     setIsLoading(true);
@@ -86,7 +86,7 @@ export const useXLSXExport = (): UseXLSXExportReturn => {
   }, [getXLSX, toast]);
 
   const exportMultipleSheets = useCallback(async (
-    sheets: Array<{ name: string; data: any[] }>,
+    sheets: Array<{ name: string; data: Record<string, unknown>[] }>,
     filename: string = "data.xlsx"
   ) => {
     setIsLoading(true);
@@ -129,7 +129,7 @@ export const useXLSXExport = (): UseXLSXExportReturn => {
  * Standalone function for non-React contexts
  */
 export const lazyExportXLSX = async (
-  data: any[],
+  data: Record<string, unknown>[],
   filename: string = "data.xlsx"
 ): Promise<void> => {
   const XLSX = await import("xlsx");
