@@ -108,16 +108,16 @@ export const AIAnalyticsDashboard: React.FC = () => {
   };
 
   const getAccuracyColor = (accuracy: number) => {
-    if (accuracy >= 95) return "text-green-600";
-    if (accuracy >= 90) return "text-yellow-600";
-    return "text-red-600";
+    if (accuracy >= 95) return "text-success";
+    if (accuracy >= 90) return "text-warning";
+    return "text-destructive";
   };
 
   const getStatusIcon = (value: number, threshold: number) => {
     return value >= threshold ? (
-      <CheckCircle className="w-4 h-4 text-green-600" />
+      <CheckCircle className="w-4 h-4 text-success" />
     ) : (
-      <AlertCircle className="w-4 h-4 text-yellow-600" />
+      <AlertCircle className="w-4 h-4 text-warning" />
     );
   };
 

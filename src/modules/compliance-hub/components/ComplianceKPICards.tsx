@@ -26,11 +26,11 @@ export function ComplianceKPICards({ kpis }: ComplianceKPICardsProps) {
   const TrendIcon = kpis.trendDirection === 'up' ? TrendingUp : 
                     kpis.trendDirection === 'down' ? TrendingDown : TrendingUp;
   
-  const trendColor = kpis.trendDirection === 'up' ? 'text-green-500' : 
-                     kpis.trendDirection === 'down' ? 'text-red-500' : 'text-muted-foreground';
+  const trendColor = kpis.trendDirection === 'up' ? 'text-success' : 
+                     kpis.trendDirection === 'down' ? 'text-destructive' : 'text-muted-foreground';
 
-  const scoreColor = kpis.overallScore >= 90 ? 'text-green-500' : 
-                     kpis.overallScore >= 75 ? 'text-yellow-500' : 'text-red-500';
+  const scoreColor = kpis.overallScore >= 90 ? 'text-success' : 
+                     kpis.overallScore >= 75 ? 'text-warning' : 'text-destructive';
 
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
@@ -57,10 +57,10 @@ export function ComplianceKPICards({ kpis }: ComplianceKPICardsProps) {
 
       {/* Certificates Status */}
       <Card className="relative overflow-hidden">
-        <div className="absolute top-0 right-0 w-20 h-20 bg-green-500/10 rounded-full -mr-10 -mt-10" />
+        <div className="absolute top-0 right-0 w-20 h-20 bg-success/10 rounded-full -mr-10 -mt-10" />
         <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
           <CardTitle className="text-sm font-medium">Certificados</CardTitle>
-          <Award className="h-4 w-4 text-green-500" />
+          <Award className="h-4 w-4 text-success" />
         </CardHeader>
         <CardContent>
           <div className="text-3xl font-bold">
@@ -69,7 +69,7 @@ export function ComplianceKPICards({ kpis }: ComplianceKPICardsProps) {
           <div className="flex items-center gap-2 mt-1">
             <span className="text-xs text-muted-foreground">Válidos</span>
             {kpis.certificatesValid === kpis.certificatesTotal && (
-              <Badge variant="secondary" className="text-xs bg-green-500/10 text-green-500">
+              <Badge variant="secondary" className="text-xs bg-success/10 text-success">
                 <CheckCircle2 className="h-3 w-3 mr-1" />
                 100%
               </Badge>
@@ -80,10 +80,10 @@ export function ComplianceKPICards({ kpis }: ComplianceKPICardsProps) {
 
       {/* Open Findings */}
       <Card className="relative overflow-hidden">
-        <div className="absolute top-0 right-0 w-20 h-20 bg-yellow-500/10 rounded-full -mr-10 -mt-10" />
+        <div className="absolute top-0 right-0 w-20 h-20 bg-warning/10 rounded-full -mr-10 -mt-10" />
         <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
           <CardTitle className="text-sm font-medium">Findings Abertos</CardTitle>
-          <FileCheck className="h-4 w-4 text-yellow-500" />
+          <FileCheck className="h-4 w-4 text-warning" />
         </CardHeader>
         <CardContent>
           <div className="text-3xl font-bold">{kpis.openFindings}</div>
@@ -92,7 +92,7 @@ export function ComplianceKPICards({ kpis }: ComplianceKPICardsProps) {
               {kpis.closedFindings} fechados
             </span>
             {kpis.openFindings === 0 && (
-              <Badge variant="secondary" className="text-xs bg-green-500/10 text-green-500">
+              <Badge variant="secondary" className="text-xs bg-success/10 text-success">
                 Nenhum pendente
               </Badge>
             )}
@@ -102,17 +102,17 @@ export function ComplianceKPICards({ kpis }: ComplianceKPICardsProps) {
 
       {/* Overdue Items */}
       <Card className="relative overflow-hidden">
-        <div className={`absolute top-0 right-0 w-20 h-20 ${kpis.overdueItems > 0 ? 'bg-red-500/10' : 'bg-blue-500/10'} rounded-full -mr-10 -mt-10`} />
+        <div className={`absolute top-0 right-0 w-20 h-20 ${kpis.overdueItems > 0 ? 'bg-destructive/10' : 'bg-info/10'} rounded-full -mr-10 -mt-10`} />
         <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
           <CardTitle className="text-sm font-medium">Itens Vencidos</CardTitle>
           {kpis.overdueItems > 0 ? (
-            <AlertTriangle className="h-4 w-4 text-red-500" />
+            <AlertTriangle className="h-4 w-4 text-destructive" />
           ) : (
-            <Clock className="h-4 w-4 text-blue-500" />
+            <Clock className="h-4 w-4 text-info" />
           )}
         </CardHeader>
         <CardContent>
-          <div className={`text-3xl font-bold ${kpis.overdueItems > 0 ? 'text-red-500' : ''}`}>
+          <div className={`text-3xl font-bold ${kpis.overdueItems > 0 ? 'text-destructive' : ''}`}>
             {kpis.overdueItems}
           </div>
           <div className="flex items-center gap-2 mt-1">

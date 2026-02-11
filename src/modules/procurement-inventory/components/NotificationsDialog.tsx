@@ -44,15 +44,15 @@ export default function NotificationsDialog({
   const getIcon = (type: Notification["type"]) => {
     switch (type) {
       case "warning":
-        return <AlertTriangle className="h-4 w-4 text-amber-500" />;
+        return <AlertTriangle className="h-4 w-4 text-warning" />;
       case "alert":
         return <AlertTriangle className="h-4 w-4 text-destructive" />;
       case "success":
-        return <CheckCircle2 className="h-4 w-4 text-green-500" />;
+        return <CheckCircle2 className="h-4 w-4 text-success" />;
       case "ai":
-        return <Brain className="h-4 w-4 text-purple-500" />;
+        return <Brain className="h-4 w-4 text-primary" />;
       default:
-        return <Info className="h-4 w-4 text-blue-500" />;
+        return <Info className="h-4 w-4 text-info" />;
     }
   };
 

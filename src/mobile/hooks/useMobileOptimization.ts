@@ -82,7 +82,7 @@ export const useMobileOptimization = (config: OptimizationConfig = {}) => {
       let isLowPowerMode = false;
       if ("getBattery" in navigator) {
         try {
-          const battery = await (navigator as any).getBattery();
+          const battery = await (navigator as Navigator & { getBattery: () => Promise<{ level: number; charging: boolean }> }).getBattery();
           isLowPowerMode = battery.level < 0.2 && !battery.charging;
         } catch { /* Battery API not supported */ }
       }
@@ -90,9 +90,9 @@ export const useMobileOptimization = (config: OptimizationConfig = {}) => {
       // Check memory (if available)
       let memoryPressure: "normal" | "moderate" | "critical" = "normal";
       if ("deviceMemory" in navigator) {
-        const memory = (navigator as any).deviceMemory;
-        if (memory < 2) memoryPressure = "critical";
-        else if (memory < 4) memoryPressure = "moderate";
+        const memory = (navigator as Navigator & { deviceMemory?: number }).deviceMemory;
+        if (memory !== undefined && memory < 2) memoryPressure = "critical";
+        else if (memory !== undefined && memory < 4) memoryPressure = "moderate";
       }
 
       setState({
@@ -125,6 +125,7 @@ export const useMobileOptimization = (config: OptimizationConfig = {}) => {
    * Throttle a callback for mobile performance
    */
   const throttledCallback = useCallback(
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any -- generic throttle wrapper requires flexible function signature
     <T extends (...args: any[]) => any>(fn: T, delay: number = 100): T => {
       let lastCall = 0;
       let timeoutId: NodeJS.Timeout | null = null;
@@ -158,6 +159,7 @@ export const useMobileOptimization = (config: OptimizationConfig = {}) => {
    * Debounce a callback for mobile performance
    */
   const debouncedCallback = useCallback(
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any -- generic debounce wrapper requires flexible function signature
     <T extends (...args: any[]) => any>(fn: T, delay: number = 300): T => {
       let timeoutId: NodeJS.Timeout | null = null;
 

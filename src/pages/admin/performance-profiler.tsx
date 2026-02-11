@@ -244,9 +244,9 @@ export default function PerformanceProfiler() {
   };
 
   const getStatusColor = (value: number, thresholds: { warning: number; critical: number }) => {
-    if (value >= thresholds.critical) return "text-red-500";
-    if (value >= thresholds.warning) return "text-yellow-500";
-    return "text-green-500";
+    if (value >= thresholds.critical) return "text-destructive";
+    if (value >= thresholds.warning) return "text-warning";
+    return "text-success";
   };
 
   return (
@@ -358,9 +358,9 @@ export default function PerformanceProfiler() {
                   <Tooltip 
                     labelFormatter={(ts) => new Date(ts as number).toLocaleTimeString()}
                   />
-                  <Line type="monotone" dataKey="cpu" stroke="#8884d8" name="CPU %" />
-                  <Line type="monotone" dataKey="memory" stroke="#82ca9d" name="Memory %" />
-                  <Line type="monotone" dataKey="fps" stroke="#ffc658" name="FPS" />
+                  <Line type="monotone" dataKey="cpu" stroke="hsl(var(--primary))" name="CPU %" />
+                  <Line type="monotone" dataKey="memory" stroke="hsl(var(--success))" name="Memory %" />
+                  <Line type="monotone" dataKey="fps" stroke="hsl(var(--warning))" name="FPS" />
                 </LineChart>
               </ResponsiveContainer>
             </CardContent>
@@ -406,14 +406,14 @@ export default function PerformanceProfiler() {
             <CardContent>
               {bottlenecks.length === 0 ? (
                 <div className="text-center py-8">
-                  <Activity className="h-12 w-12 mx-auto text-green-500 mb-2" />
+                  <Activity className="h-12 w-12 mx-auto text-success mb-2" />
                   <p className="text-muted-foreground">No performance issues detected</p>
                 </div>
               ) : (
                 <div className="space-y-2">
                   {bottlenecks.map((issue, index) => (
-                    <div key={index} className="flex items-center gap-2 p-3 border rounded bg-yellow-50 dark:bg-yellow-950">
-                      <AlertTriangle className="h-4 w-4 text-yellow-500" />
+                    <div key={index} className="flex items-center gap-2 p-3 border rounded bg-warning/10">
+                      <AlertTriangle className="h-4 w-4 text-warning" />
                       <p className="font-medium">{issue}</p>
                     </div>
                   ))}

@@ -30,27 +30,25 @@ export async function getBridgeLinkData(): Promise<BridgeLinkData> {
     }
 
     // Determine system status based on data
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any -- dynamic table not in generated types
-    const dpEvents = (eventsData || []).map((e: any) => ({
-      id: e.id,
-      timestamp: e.created_at || e.timestamp,
-      type: e.event_type || e.type || "unknown",
-      severity: e.severity || "normal",
-      system: e.system || "DP",
-      description: e.description || "",
-      vessel: e.vessel_name || e.vessel,
-      location: e.location,
+    const dpEvents = (eventsData || []).map((e: Record<string, unknown>) => ({
+      id: String(e.id),
+      timestamp: String(e.created_at || e.timestamp),
+      type: String(e.event_type || e.type || "unknown"),
+      severity: String(e.severity || "normal"),
+      system: String(e.system || "DP"),
+      description: String(e.description || ""),
+      vessel: String(e.vessel_name || e.vessel),
+      location: e.location as string | undefined,
     }));
 
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any -- dynamic table not in generated types
-    const riskAlerts = (alertsData || []).map((a: any) => ({
-      id: a.id,
-      level: a.level || a.severity || "low",
-      title: a.title || a.alert_type || "Alert",
-      description: a.description || "",
-      timestamp: a.created_at || a.timestamp,
-      source: a.source || "system",
-      recommendations: a.recommendations,
+    const riskAlerts = (alertsData || []).map((a: Record<string, unknown>) => ({
+      id: String(a.id),
+      level: String(a.level || a.severity || "low"),
+      title: String(a.title || a.alert_type || "Alert"),
+      description: String(a.description || ""),
+      timestamp: String(a.created_at || a.timestamp),
+      source: String(a.source || "system"),
+      recommendations: a.recommendations as string[] | undefined,
     }));
 
     const hasCritical = dpEvents.some((e: { severity: string }) => e.severity === "critical");
@@ -102,13 +100,12 @@ export function connectToLiveStream(
 
       if (data && data.length > 0) {
         lastEventTime = data[data.length - 1].created_at;
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any -- dynamic table not in generated types
-        data.forEach((event: any) => {
+        data.forEach((event: Record<string, unknown>) => {
           onMessage({
-            type: event.event_type || event.type,
-            description: event.description,
-            severity: event.severity,
-            timestamp: event.created_at,
+            type: String(event.event_type || event.type),
+            description: String(event.description || ""),
+            severity: String(event.severity || "normal"),
+            timestamp: String(event.created_at || ""),
           });
         });
       }

@@ -182,10 +182,10 @@ export function useTalentAnalytics() {
       
       // Calculate analytics
       const totalCrew = crew.length;
-      const activeCount = crew.filter((c: any) => c.status === 'active' || c.onboard_status).length;
+      const activeCount = crew.filter((c) => c.status === 'active').length;
       
-      const positionDistribution = crew.reduce((acc: Record<string, number>, c: any) => {
-        const pos = c.position || 'Other';
+      const positionDistribution = crew.reduce((acc: Record<string, number>, c) => {
+        const pos = String(c.position || 'Other');
         acc[pos] = (acc[pos] || 0) + 1;
         return acc;
       }, {});

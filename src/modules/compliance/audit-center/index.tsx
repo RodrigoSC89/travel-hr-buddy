@@ -54,32 +54,30 @@ const AuditCenter = () => {
 
       // Map PEOTRAM audits
       if (peotramAudits && peotramAudits.length > 0) {
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Supabase row dynamic shape
-        const mappedPeotram: AuditItem[] = peotramAudits.map((a: any) => ({
+        const mappedPeotram: AuditItem[] = peotramAudits.map((a) => ({
           id: a.id,
           title: `PEOTRAM ${a.audit_type === 'vessel' ? 'Vessel' : 'Shore'} Audit - ${a.audit_period}`,
           type: "PEOTRAM",
           status: mapStatus(a.status),
-          score: a.compliance_score,
+          score: a.compliance_score ?? undefined,
           scheduled_date: a.audit_date,
           completion_date: a.status === 'concluido' || a.status === 'aprovado' ? a.audit_date : undefined,
-          findings_count: a.non_conformities_count || 0,
-          checklist_data: a.metadata?.checklist_data
+          findings_count: Number(a.non_conformities_count || 0),
+          checklist_data: (a.metadata as Record<string, unknown>)?.checklist_data as Record<string, ChecklistStatus> | undefined
         }));
         allAudits = [...allAudits, ...mappedPeotram];
       }
 
       // Map SGSO audits
       if (sgsoAudits && sgsoAudits.length > 0) {
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Supabase row dynamic shape
-        const mappedSgso: AuditItem[] = sgsoAudits.map((a: any) => ({
+        const mappedSgso: AuditItem[] = sgsoAudits.map((a) => ({
           id: a.id,
           title: `SGSO Audit - ${a.audit_type || 'Internal'}`,
           type: "SGSO",
-          status: mapStatus(a.status),
-          score: a.score,
+          status: mapStatus(a.status || 'scheduled'),
+          score: a.compliance_score ?? undefined,
           scheduled_date: a.audit_date,
-          findings_count: a.findings_count || 0
+          findings_count: Number(a.non_conformities_count || 0)
         }));
         allAudits = [...allAudits, ...mappedSgso];
       }
