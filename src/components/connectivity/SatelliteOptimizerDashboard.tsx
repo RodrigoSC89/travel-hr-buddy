@@ -387,7 +387,7 @@ export function SatelliteOptimizerDashboard() {
       <Card>
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
-            <DollarSign className="h-5 w-5 text-emerald-500" />
+            <DollarSign className="h-5 w-5 text-success" />
             Comparativo de Custos por Provedor
           </CardTitle>
         </CardHeader>
@@ -412,13 +412,13 @@ export function SatelliteOptimizerDashboard() {
             ))}
           </div>
 
-          <div className="mt-4 p-4 bg-emerald-500/10 rounded-lg border border-emerald-500/30">
+          <div className="mt-4 p-4 bg-success/10 rounded-lg border border-success/30">
             <div className="flex items-center gap-2 mb-2">
-              <TrendingDown className="h-5 w-5 text-emerald-500" />
+              <TrendingDown className="h-5 w-5 text-success" />
               <span className="font-medium">Economia com Otimização</span>
             </div>
             <p className="text-sm text-muted-foreground">
-              Com compressão GZIP e delta sync, o sistema reduz o consumo de dados em até <strong className="text-emerald-600">60-70%</strong>, 
+              Com compressão GZIP e delta sync, o sistema reduz o consumo de dados em até <strong className="text-success">60-70%</strong>, 
               gerando economia significativa especialmente em provedores premium como Iridium e Inmarsat.
             </p>
           </div>

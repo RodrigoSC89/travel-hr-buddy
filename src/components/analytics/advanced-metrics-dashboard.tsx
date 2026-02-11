@@ -159,14 +159,14 @@ export const AdvancedMetricsDashboard: React.FC = () => {
   const getMetricColor = (value: number, target?: number) => {
     if (!target) return "text-foreground";
     const percentage = (value / target) * 100;
-    if (percentage >= 95) return "text-green-600";
-    if (percentage >= 80) return "text-yellow-600";
-    return "text-red-600";
+    if (percentage >= 95) return "text-success";
+    if (percentage >= 80) return "text-warning";
+    return "text-destructive";
   };
 
   const getTrendIcon = (trend: number) => {
-    if (trend > 0) return <TrendingUp className="w-4 h-4 text-green-600" />;
-    if (trend < 0) return <TrendingDown className="w-4 h-4 text-red-600" />;
+    if (trend > 0) return <TrendingUp className="w-4 h-4 text-success" />;
+    if (trend < 0) return <TrendingDown className="w-4 h-4 text-destructive" />;
     return <Activity className="w-4 h-4 text-muted-foreground" />;
   };
 
@@ -185,10 +185,10 @@ export const AdvancedMetricsDashboard: React.FC = () => {
   const pieChartData = filteredMetrics.map(metric => ({
     name: metric.name,
     value: metric.value,
-    color: metric.value >= (metric.target || 80) ? "#10b981" : "#ef4444"
+    color: metric.value >= (metric.target || 80) ? "hsl(var(--success))" : "hsl(var(--destructive))"
   }));
 
-  const COLORS = ["#0088FE", "#00C49F", "#FFBB28", "#FF8042", "#8884d8", "#82ca9d"];
+  const COLORS = ["hsl(var(--primary))", "hsl(var(--success))", "hsl(var(--warning))", "hsl(var(--destructive))", "hsl(var(--accent))", "hsl(var(--info))"];
 
   if (isLoading) {
     return (
@@ -290,7 +290,7 @@ export const AdvancedMetricsDashboard: React.FC = () => {
                     </div>
                   )}
                   <p className={`text-xs mt-2 flex items-center ${
-                    metric.trend > 0 ? "text-green-600" : "text-red-600"
+                    metric.trend > 0 ? "text-success" : "text-destructive"
                   }`}>
                     {metric.trend > 0 ? "+" : ""}{metric.trend}% vs período anterior
                   </p>
@@ -312,8 +312,8 @@ export const AdvancedMetricsDashboard: React.FC = () => {
                     <XAxis dataKey="name" />
                     <YAxis />
                     <Tooltip />
-                    <Line type="monotone" dataKey="value" stroke="#8884d8" strokeWidth={2} />
-                    <Line type="monotone" dataKey="target" stroke="#82ca9d" strokeDasharray="5 5" />
+                    <Line type="monotone" dataKey="value" stroke="hsl(var(--primary))" strokeWidth={2} />
+                    <Line type="monotone" dataKey="target" stroke="hsl(var(--success))" strokeDasharray="5 5" />
                   </LineChart>
                 </ResponsiveContainer>
               </CardContent>
@@ -360,7 +360,7 @@ export const AdvancedMetricsDashboard: React.FC = () => {
                   <XAxis dataKey="name" />
                   <YAxis />
                   <Tooltip />
-                  <Area type="monotone" dataKey="value" stackId="1" stroke="#8884d8" fill="#8884d8" fillOpacity={0.6} />
+                  <Area type="monotone" dataKey="value" stackId="1" stroke="hsl(var(--primary))" fill="hsl(var(--primary))" fillOpacity={0.6} />
                 </AreaChart>
               </ResponsiveContainer>
             </CardContent>
@@ -407,8 +407,8 @@ export const AdvancedMetricsDashboard: React.FC = () => {
                   <XAxis dataKey="name" />
                   <YAxis />
                   <Tooltip />
-                  <Bar dataKey="value" fill="#8884d8" />
-                  <Bar dataKey="target" fill="#82ca9d" />
+                  <Bar dataKey="value" fill="hsl(var(--primary))" />
+                  <Bar dataKey="target" fill="hsl(var(--success))" />
                 </BarChart>
               </ResponsiveContainer>
             </CardContent>
