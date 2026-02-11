@@ -8,22 +8,31 @@ export interface Agent {
   capabilities: string[];
   status: "idle" | "active" | "offline" | "error";
   last_heartbeat?: string;
-  metadata?: Record<string, any>;
+  metadata?: Record<string, unknown>;
 }
 
 export interface SwarmTask {
   task_id: string;
   task_name: string;
-  payload: any;
+  payload: Record<string, unknown>;
   assigned_agents: string[];
 }
 
 export interface TaskResult {
   agent_id: string;
   task_id: string;
-  result: any;
+  result: Record<string, unknown>;
   duration_ms: number;
   success: boolean;
+}
+
+export interface ConsolidatedResult {
+  total: number;
+  successful: number;
+  failed: number;
+  avg_duration_ms: number;
+  results: Record<string, unknown>[];
+  errors: Record<string, unknown>[];
 }
 
 // Register a new agent
@@ -36,8 +45,8 @@ export async function registerAgent(agent: Omit<Agent, "id" | "created_at" | "up
       capabilities: agent.capabilities,
       status: agent.status || "idle",
       last_heartbeat: new Date().toISOString(),
-      metadata: agent.metadata || {}
-    })
+      metadata: (agent.metadata || {}) as Record<string, unknown>
+    } as never)
     .select("agent_id")
     .single();
 
@@ -185,7 +194,7 @@ export async function getAgentMetrics(agentId?: string) {
 }
 
 // Consolidate results from multiple agents
-export function consolidateResults(results: TaskResult[]): any {
+export function consolidateResults(results: TaskResult[]): ConsolidatedResult {
   const successful = results.filter(r => r.success);
   const failed = results.filter(r => !r.success);
   

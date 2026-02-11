@@ -149,24 +149,24 @@ export const CrewIntelligenceSystem: React.FC = () => {
   };
 
   const getFatigueLevelColor = (level: number) => {
-    if (level < 30) return "bg-green-500";
-    if (level < 60) return "bg-yellow-500";
-    return "bg-red-500";
+    if (level < 30) return "bg-success";
+    if (level < 60) return "bg-warning";
+    return "bg-destructive";
   };
 
   const getAlertBadgeColor = (alert: CrewMember["alertLevel"]) => {
     switch (alert) {
-    case "green": return "bg-green-100 text-green-800 dark:bg-green-900/20 dark:text-green-300";
-    case "yellow": return "bg-yellow-100 text-yellow-800 dark:bg-yellow-900/20 dark:text-yellow-300";
-    case "red": return "bg-red-100 text-red-800 dark:bg-red-900/20 dark:text-red-300";
+    case "green": return "bg-success/10 text-success dark:bg-success/20 dark:text-success";
+    case "yellow": return "bg-warning/10 text-warning dark:bg-warning/20 dark:text-warning";
+    case "red": return "bg-destructive/10 text-destructive dark:bg-destructive/20 dark:text-destructive";
     }
   };
 
   const getPriorityColor = (priority: TrainingModule["priority"]) => {
     switch (priority) {
     case "low": return "text-muted-foreground";
-    case "medium": return "text-yellow-600";
-    case "high": return "text-red-600";
+    case "medium": return "text-warning";
+    case "high": return "text-destructive";
     }
   };
 
@@ -183,7 +183,7 @@ export const CrewIntelligenceSystem: React.FC = () => {
               <div>
                 <CardTitle className="text-2xl flex items-center gap-2">
                   Crew Intelligence System
-                  <Badge className="bg-green-400 text-green-900 hover:bg-green-300">
+                  <Badge className="bg-success text-success-foreground hover:bg-success/90">
                     <Eye className="h-3 w-3 mr-1" />
                     AI VISUAL
                   </Badge>
@@ -273,7 +273,7 @@ export const CrewIntelligenceSystem: React.FC = () => {
                 {/* Competency */}
                 <div className="flex items-center justify-between">
                   <span className="text-xs flex items-center gap-1">
-                    <Star className="h-3 w-3 text-yellow-500" />
+                    <Star className="h-3 w-3 text-warning" />
                     Competência
                   </span>
                   <span className="text-xs font-medium">{crew.competencyLevel}%</span>
@@ -325,7 +325,7 @@ export const CrewIntelligenceSystem: React.FC = () => {
           <Card>
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
-                <Trophy className="h-5 w-5 text-yellow-500" />
+                <Trophy className="h-5 w-5 text-warning" />
                 Conquistas e Gamificação
               </CardTitle>
               <CardDescription>
@@ -333,12 +333,12 @@ export const CrewIntelligenceSystem: React.FC = () => {
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
-              <div className="p-4 bg-gradient-to-r from-yellow-100 to-orange-100 dark:from-yellow-900/20 dark:to-orange-900/20 rounded-lg">
+              <div className="p-4 bg-gradient-to-r from-warning/10 to-warning/5 dark:from-warning/20 dark:to-warning/10 rounded-lg">
                 <div className="flex items-center justify-between mb-2">
                   <span className="text-sm font-medium">Total de Pontos</span>
                   <div className="flex items-center gap-2">
-                    <Star className="h-5 w-5 text-yellow-600" />
-                    <span className="text-2xl font-bold text-yellow-700 dark:text-yellow-400">
+                    <Star className="h-5 w-5 text-warning" />
+                    <span className="text-2xl font-bold text-warning">
                       {selectedCrew.achievements.reduce((sum, a) => sum + a.points, 0)}
                     </span>
                   </div>
@@ -360,7 +360,7 @@ export const CrewIntelligenceSystem: React.FC = () => {
                     <p className="text-xs text-muted-foreground">{achievement.description}</p>
                     <div className="flex items-center gap-2 mt-2">
                       <Badge variant="outline" className="text-xs">
-                        <Star className="h-3 w-3 mr-1 text-yellow-500" />
+                        <Star className="h-3 w-3 mr-1 text-warning" />
                         {achievement.points} pontos
                       </Badge>
                       <span className="text-xs text-muted-foreground">
@@ -397,7 +397,7 @@ export const CrewIntelligenceSystem: React.FC = () => {
                       <h4 className="font-semibold">{crew?.name}</h4>
                       <p className="text-sm text-muted-foreground">{crew?.position}</p>
                     </div>
-                    <Badge className="bg-green-100 text-green-800 dark:bg-green-900/20 dark:text-green-300">
+                    <Badge className="bg-success/10 text-success dark:bg-success/20 dark:text-success">
                       ✅ Recomendado
                     </Badge>
                   </div>
@@ -405,20 +405,20 @@ export const CrewIntelligenceSystem: React.FC = () => {
                     <div>
                       <span className="text-xs font-medium text-muted-foreground">Escala Atual</span>
                       <div className="flex items-center gap-2 mt-1">
-                        <Clock className="h-4 w-4 text-red-500" />
+                        <Clock className="h-4 w-4 text-destructive" />
                         <span className="font-medium">{opt.currentShift}</span>
                       </div>
                     </div>
                     <div>
                       <span className="text-xs font-medium text-muted-foreground">Escala Recomendada</span>
                       <div className="flex items-center gap-2 mt-1">
-                        <CheckCircle className="h-4 w-4 text-green-500" />
+                        <CheckCircle className="h-4 w-4 text-success" />
                         <span className="font-medium">{opt.recommendedShift}</span>
                       </div>
                     </div>
                   </div>
-                  <div className="p-3 bg-blue-50 dark:bg-blue-900/10 rounded-lg">
-                    <p className="text-sm text-blue-900 dark:text-blue-300">
+                  <div className="p-3 bg-primary/5 dark:bg-primary/10 rounded-lg">
+                    <p className="text-sm text-primary dark:text-primary">
                       <strong>Justificativa:</strong> {opt.reason}
                     </p>
                   </div>
@@ -446,7 +446,7 @@ export const CrewIntelligenceSystem: React.FC = () => {
             <div className="p-4 border rounded-lg">
               <div className="flex items-center justify-between mb-2">
                 <span className="text-sm font-medium">STCW Rest Hours</span>
-                <CheckCircle className="h-5 w-5 text-green-500" />
+                <CheckCircle className="h-5 w-5 text-success" />
               </div>
               <Progress value={92} className="h-2 mb-2" />
               <p className="text-xs text-muted-foreground">

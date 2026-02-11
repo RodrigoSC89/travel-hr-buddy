@@ -38,7 +38,7 @@ export class IncidentService {
         location: d.location || "",
         evidence: [],
         metadata: (d.metadata as Record<string, unknown>) || {},
-        aiAnalysis: d.ai_analysis,
+        aiAnalysis: (d.ai_analysis as Record<string, unknown>) ?? null,
         replayStatus: d.replay_status as Incident["replayStatus"]
       }));
     } catch (error) {
@@ -60,9 +60,9 @@ export class IncidentService {
           status: incident.status,
           reported_by: incident.reportedBy,
           location: incident.location,
-          metadata: incident.metadata,
+          metadata: incident.metadata as Record<string, unknown>,
           replay_status: "pending"
-        })
+        } as never)
         .select()
         .single();
       

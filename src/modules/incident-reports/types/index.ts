@@ -16,9 +16,8 @@ export interface Incident {
   closedAt?: string;
   location: string;
   evidence: IncidentEvidence[];
-  metadata: Record<string, any>;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- AI analysis result is dynamic JSON
-  aiAnalysis?: any; // AI-generated analysis
+  metadata: Record<string, unknown>;
+  aiAnalysis?: Record<string, unknown> | null; // AI-generated analysis
   replayStatus?: "pending" | "in_progress" | "completed" | "failed"; // AI replay status
 }
 
