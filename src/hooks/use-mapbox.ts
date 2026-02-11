@@ -17,7 +17,9 @@ interface UseMapboxOptions {
 }
 
 interface UseMapboxReturn {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Mapbox GL types are dynamically loaded
   mapboxgl: any;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Mapbox Map instance loaded at runtime
   map: any;
   mapContainer: React.RefObject<HTMLDivElement>;
   isLoading: boolean;
@@ -98,7 +100,7 @@ export function useMapbox(options: UseMapboxOptions = {}): UseMapboxReturn {
           }
         });
 
-        mapInstance.on("error", (e: any) => {
+        mapInstance.on("error", (e: unknown) => {
           logger.error("Mapbox error:", e);
           if (mounted) {
             setError("Erro ao carregar o mapa");

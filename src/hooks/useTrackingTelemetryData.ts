@@ -116,14 +116,16 @@ export function useTrackingTelemetryData() {
       if (linkIds.length > 0) {
         const { data: links } = await supabase
           .from("satcom_links")
-          .select("id, provider, link_name")
+          .select("id, provider")
           .in("id", linkIds);
 
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any -- satcom_links columns may vary
         (links || []).forEach((l: any) => {
-          linkMap[l.id] = l.link_name || l.provider || "SATCOM";
+          linkMap[l.id] = l.provider || "SATCOM";
         });
       }
 
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any -- satellite_connections mapping
       return data.map((s: any) => ({
         id: s.id,
         name: linkMap[s.link_id] || "SATCOM Link",
@@ -191,20 +193,21 @@ export function useTrackingTelemetryData() {
   // Calculate telemetry metrics
   const telemetryMetrics = {
     trackedVessels: vessels.length,
-    activeConnections: satellites.filter((s: any) => s.status === "connected" || s.status === "active").length,
+    activeConnections: satellites.filter((s) => s.status === "connected" || s.status === "active").length,
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any -- sensor_readings schema may vary
     totalSensors: new Set(sensorReadings.map((s: any) => s.sensor_type)).size,
-    unacknowledgedAlerts: alerts.filter((a: any) => !a.acknowledged).length,
-    criticalAlerts: alerts.filter((a: any) => a.severity === "critical" && !a.acknowledged).length,
+    unacknowledgedAlerts: alerts.filter((a) => !a.acknowledged).length,
+    criticalAlerts: alerts.filter((a) => a.severity === "critical" && !a.acknowledged).length,
     avgLatency: satellites.length > 0 
-      ? Math.round(satellites.reduce((sum: number, s: any) => sum + (s.latency_ms || 0), 0) / satellites.length) 
+      ? Math.round(satellites.reduce((sum: number, s) => sum + (s.latency_ms || 0), 0) / satellites.length) 
       : 0,
     systemUptime: 99.9, // Would be calculated from actual data
     lastUpdate: new Date().toISOString(),
   };
 
   // Get latest position for each vessel
-  const latestPositions = vessels.map((vessel: any) => {
-    const vesselPositions = positions.filter((p: any) => p.vessel_id === vessel.id);
+  const latestPositions = vessels.map((vessel) => {
+    const vesselPositions = positions.filter((p) => p.vessel_id === vessel.id);
     const latest = vesselPositions[0];
     return {
       ...vessel,

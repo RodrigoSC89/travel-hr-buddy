@@ -30,6 +30,7 @@ export async function getBridgeLinkData(): Promise<BridgeLinkData> {
     }
 
     // Determine system status based on data
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any -- dynamic table not in generated types
     const dpEvents = (eventsData || []).map((e: any) => ({
       id: e.id,
       timestamp: e.created_at || e.timestamp,
@@ -41,6 +42,7 @@ export async function getBridgeLinkData(): Promise<BridgeLinkData> {
       location: e.location,
     }));
 
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any -- dynamic table not in generated types
     const riskAlerts = (alertsData || []).map((a: any) => ({
       id: a.id,
       level: a.level || a.severity || "low",
@@ -51,8 +53,8 @@ export async function getBridgeLinkData(): Promise<BridgeLinkData> {
       recommendations: a.recommendations,
     }));
 
-    const hasCritical = dpEvents.some((e: any) => e.severity === "critical");
-    const hasDegraded = dpEvents.some((e: any) => e.severity === "degradation");
+    const hasCritical = dpEvents.some((e: { severity: string }) => e.severity === "critical");
+    const hasDegraded = dpEvents.some((e: { severity: string }) => e.severity === "degradation");
     const status = hasCritical ? "Critical" : hasDegraded ? "Degradation" : dpEvents.length > 0 ? "Normal" : "Sem dados";
 
     return {
@@ -78,7 +80,7 @@ export async function getBridgeLinkData(): Promise<BridgeLinkData> {
  * @returns Cleanup function
  */
 export function connectToLiveStream(
-  onMessage: (event: any) => void
+  onMessage: (event: Record<string, unknown>) => void
 ): () => void {
   if (FF_BRIDGELINK_LIVE_WS) {
     // Future: Real WebSocket implementation
@@ -100,6 +102,7 @@ export function connectToLiveStream(
 
       if (data && data.length > 0) {
         lastEventTime = data[data.length - 1].created_at;
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any -- dynamic table not in generated types
         data.forEach((event: any) => {
           onMessage({
             type: event.event_type || event.type,

@@ -118,7 +118,7 @@ const PerformanceMetrics = memo(() => {
 });
 
 const MetricCard = ({ icon: Icon, label, value, color, progress }: {
-  icon: any;
+  icon: React.ElementType;
   label: string;
   value: string;
   color: string;

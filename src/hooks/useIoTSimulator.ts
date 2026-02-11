@@ -15,7 +15,7 @@ interface SimulatorConfig {
 
 interface UseIoTSimulatorReturn {
   isRunning: boolean;
-  lastResult: any;
+  lastResult: Record<string, unknown> | null;
   error: string | null;
   totalSent: number;
   anomaliesGenerated: number;

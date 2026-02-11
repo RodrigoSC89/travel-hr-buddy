@@ -56,19 +56,20 @@ export function useWorkOrdersData() {
     emergency: 'critical',
   };
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- maintenance_records shape may have extra fields
   const workOrders: WorkOrder[] = records.map((r: any, i: number) => ({
     id: r.id,
     number: `OS-${String(24800 + i).padStart(5, '0')}`,
     title: r.description || r.title || 'Ordem de Serviço',
-    description: r.notes || r.description || '',
+    description: r.description || '',
     status: statusMap[r.status] || 'pending',
     priority: priorityMap[r.priority] || 'medium',
-    equipment: r.equipment_name || r.location || 'Equipamento',
-    equipmentCode: r.equipment_code || `EQ-${String(i + 1).padStart(4, '0')}`,
+    equipment: r.component || r.location || 'Equipamento',
+    equipmentCode: `EQ-${String(i + 1).padStart(4, '0')}`,
     requestedParts: [],
-    assignedTo: r.assigned_to || undefined,
+    assignedTo: r.assigned_technician || undefined,
     createdAt: r.created_at?.split('T')[0] || '',
-    dueDate: r.scheduled_date?.split('T')[0] || r.due_date?.split('T')[0] || undefined,
+    dueDate: r.scheduled_date?.split('T')[0] || undefined,
     linkedJobTitle: r.vessels?.name ? `${r.vessels.name}` : undefined,
   }));
 

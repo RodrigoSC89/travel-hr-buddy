@@ -9,7 +9,7 @@ import { SUPABASE_URL, SUPABASE_ANON_KEY } from "@/lib/supabase/edge-function-he
 interface RequestConfig {
   method?: 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE';
   headers?: Record<string, string>;
-  body?: any;
+  body?: unknown;
   cache?: boolean;
   cacheTTL?: number;
   retry?: number;
@@ -19,7 +19,7 @@ interface RequestConfig {
   offline?: boolean;
 }
 
-interface APIResponse<T = any> {
+interface APIResponse<T = unknown> {
   data: T | null;
   error: Error | null;
   status: number;
@@ -35,10 +35,12 @@ interface PendingRequest {
 }
 
 class UnifiedAPIClient {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- cache stores heterogeneous API responses
   private cache = new Map<string, { data: any; expiry: number }>();
   private pendingRequests: PendingRequest[] = [];
   // PATCH v17 iOS PWA: Sempre assumir online
   private isOnline = true;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- request dedup stores heterogeneous promises
   private requestQueue: Map<string, Promise<any>> = new Map();
 
   constructor() {
@@ -201,7 +203,7 @@ class UnifiedAPIClient {
     config: {
       method: string;
       headers: Record<string, string>;
-      body?: any;
+      body?: unknown;
       retry: number;
       retryDelay: number;
       timeout: number;
@@ -322,11 +324,11 @@ class UnifiedAPIClient {
     }
   }
 
-  async supabaseMutation<T = any>(
+  async supabaseMutation<T = unknown>(
     table: string,
     operation: 'insert' | 'update' | 'upsert' | 'delete',
-    mutationData: any,
-    filter?: Record<string, any>
+    mutationData: unknown,
+    filter?: Record<string, unknown>
   ): Promise<APIResponse<T>> {
     try {
       const { data: sessionData } = await supabase.auth.getSession();

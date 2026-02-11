@@ -29,8 +29,8 @@ export default function BridgeLinkDashboard() {
 
     const cleanup = connectToLiveStream((event) => {
       setLiveEventCount((prev) => prev + 1);
-      toast.info(`Novo evento DP: ${event.type || "Desconhecido"}`, {
-        description: event.description || "Evento do DP Intelligence Center",
+      toast.info(`Novo evento DP: ${String(event.type || "Desconhecido")}`, {
+        description: String(event.description || "Evento do DP Intelligence Center"),
         duration: 3000,
       });
     });
