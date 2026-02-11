@@ -231,6 +231,7 @@ class MultilingualSystem {
    */
   t(key: string, fallback?: string): string {
     const parts = key.split('.');
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any -- deeply nested translation object traversal
     let current: any = { ...TRANSLATIONS, ...this.customTranslations };
 
     for (const part of parts) {

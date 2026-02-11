@@ -17,6 +17,7 @@ interface StorageRecord {
   id: string;
   table: string;
   action: "create" | "update" | "delete";
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- IndexedDB stores arbitrary serializable data
   data: any;
   timestamp: number;
   synced: boolean;
@@ -27,6 +28,7 @@ interface StorageRecord {
 interface CacheRecord {
   id: string;
   table: string;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- IndexedDB stores arbitrary serializable data
   data: any;
   cachedAt: number;
   expiresAt: number;
@@ -116,6 +118,7 @@ class SQLiteStorage {
    */
   async save(
     table: string,
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any -- accepts any serializable data for IndexedDB
     data: any,
     action: "create" | "update" | "delete" = "create",
     priority: "high" | "medium" | "low" = "medium"
@@ -253,6 +256,7 @@ class SQLiteStorage {
   /**
    * Upsert local record (for sync engine)
    */
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- accepts any serializable data for IndexedDB
   async upsertLocal(table: string, data: any): Promise<void> {
     const db = await this.ensureDB();
     
@@ -352,6 +356,7 @@ class SQLiteStorage {
   /**
    * Cache multiple records
    */
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- accepts any serializable data for IndexedDB
   async cacheBulk(table: string, records: any[]): Promise<void> {
     const db = await this.ensureDB();
     
@@ -385,6 +390,7 @@ class SQLiteStorage {
   /**
    * Set metadata value
    */
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- accepts any serializable value for metadata store
   async setMetadata(key: string, value: any): Promise<void> {
     const db = await this.ensureDB();
 

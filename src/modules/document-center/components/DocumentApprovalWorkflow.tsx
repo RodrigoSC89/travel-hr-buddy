@@ -86,12 +86,12 @@ export default function DocumentApprovalWorkflow() {
 
   const getStatusBadge = (status: string) => {
     const config: Record<string, { label: string; color: string }> = {
-      draft: { label: "Rascunho", color: "bg-gray-500/10 text-gray-500" },
-      pending: { label: "Aguardando Aprovação", color: "bg-amber-500/10 text-amber-500" },
-      approved: { label: "Aprovado", color: "bg-green-500/10 text-green-500" },
+      draft: { label: "Rascunho", color: "bg-muted text-muted-foreground" },
+      pending: { label: "Aguardando Aprovação", color: "bg-warning/10 text-warning" },
+      approved: { label: "Aprovado", color: "bg-success/10 text-success" },
       rejected: { label: "Rejeitado", color: "bg-destructive/10 text-destructive" },
     };
-    const { label, color } = config[status] || { label: status, color: "bg-gray-500/10 text-gray-500" };
+    const { label, color } = config[status] || { label: status, color: "bg-muted text-muted-foreground" };
     return <Badge className={color}>{label}</Badge>;
   };
 
@@ -147,36 +147,36 @@ export default function DocumentApprovalWorkflow() {
             </div>
           </CardContent>
         </Card>
-        <Card className="bg-gradient-to-br from-green-500/10 to-green-600/5">
+        <Card className="bg-gradient-to-br from-success/10 to-success/5">
           <CardContent className="p-4">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-muted-foreground">Aprovados</p>
                 <p className="text-2xl font-bold">{approvedDocs.length}</p>
               </div>
-              <CheckCircle2 className="h-8 w-8 text-green-500" />
+              <CheckCircle2 className="h-8 w-8 text-success" />
             </div>
           </CardContent>
         </Card>
-        <Card className="bg-gradient-to-br from-blue-500/10 to-blue-600/5">
+        <Card className="bg-gradient-to-br from-primary/10 to-primary/5">
           <CardContent className="p-4">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-muted-foreground">Total Documentos</p>
                 <p className="text-2xl font-bold">{documents.length}</p>
               </div>
-              <FileText className="h-8 w-8 text-blue-500" />
+              <FileText className="h-8 w-8 text-primary" />
             </div>
           </CardContent>
         </Card>
-        <Card className="bg-gradient-to-br from-purple-500/10 to-purple-600/5">
+        <Card className="bg-gradient-to-br from-accent/10 to-accent/5">
           <CardContent className="p-4">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-muted-foreground">Rejeitados</p>
                 <p className="text-2xl font-bold">{documents.filter((d) => d.status === "rejected").length}</p>
               </div>
-              <AlertTriangle className="h-8 w-8 text-purple-500" />
+              <AlertTriangle className="h-8 w-8 text-accent-foreground" />
             </div>
           </CardContent>
         </Card>
@@ -266,7 +266,7 @@ export default function DocumentApprovalWorkflow() {
                         >
                           <div className="flex items-center justify-between">
                             <div className="flex items-center gap-2">
-                              <FileCheck className="h-4 w-4 text-green-500" />
+                              <FileCheck className="h-4 w-4 text-success" />
                               <p className="font-medium">{doc.title}</p>
                             </div>
                             {getStatusBadge(doc.status)}
