@@ -48,6 +48,7 @@ function LoadingFallback() {
 function SystemDashboard() {
   const { integrations, users, sessions, metrics, isLoading } = useSystemHubData();
   // Map integrations to services format
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Supabase integration rows
   const services = integrations.slice(0, 4).map((int: any) => ({
     name: int.name || "Serviço",
     status: int.status === "active" || int.status === "connected" ? "connected" : "offline",
@@ -99,14 +100,14 @@ function SystemDashboard() {
           </CardContent>
         </Card>
 
-        <Card className="border-l-4 border-l-cyan-500">
+        <Card className="border-l-4 border-l-info">
           <CardContent className="p-4">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-xs text-muted-foreground">Integrações</p>
                 <p className="text-2xl font-bold">{metrics.totalIntegrations}</p>
               </div>
-              <Plug className="h-8 w-8 text-cyan-500 opacity-60" />
+              <Plug className="h-8 w-8 text-info opacity-60" />
             </div>
           </CardContent>
         </Card>
@@ -123,14 +124,14 @@ function SystemDashboard() {
           </CardContent>
         </Card>
 
-        <Card className="border-l-4 border-l-purple-500">
+        <Card className="border-l-4 border-l-accent-foreground">
           <CardContent className="p-4">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-xs text-muted-foreground">Sessões Ativas</p>
                 <p className="text-2xl font-bold">{metrics.activeSessions}</p>
               </div>
-              <Database className="h-8 w-8 text-purple-500 opacity-60" />
+              <Database className="h-8 w-8 text-accent-foreground opacity-60" />
             </div>
           </CardContent>
         </Card>
@@ -147,6 +148,7 @@ function SystemDashboard() {
         </CardHeader>
         <CardContent>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            {/* eslint-disable-next-line @typescript-eslint/no-explicit-any -- dynamic service list */}
             {displayServices.map((service: any) => (
               <div key={service.name} className="flex items-center justify-between p-4 border rounded-lg">
                 <div className="flex items-center gap-3">

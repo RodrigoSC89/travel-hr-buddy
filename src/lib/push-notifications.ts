@@ -191,7 +191,8 @@ export async function registerPushServiceWorker(): Promise<ServiceWorkerRegistra
 export async function subscribeToPush(registration: ServiceWorkerRegistration): Promise<PushSubscription | null> {
   try {
     // Check if already subscribed
-    const existingSubscription = await registration.pushManager.getSubscription();
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Push API not in default TS lib
+    const existingSubscription = await (registration as any).pushManager.getSubscription();
     if (existingSubscription) {
       return existingSubscription;
     }

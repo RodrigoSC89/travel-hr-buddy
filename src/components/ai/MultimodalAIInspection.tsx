@@ -230,10 +230,10 @@ export const MultimodalAIInspection: React.FC = () => {
 
   const getSeverityIcon = (severity: Finding['severity']) => {
     switch (severity) {
-      case 'critical': return <XCircle className="h-4 w-4 text-red-500" />;
-      case 'warning': return <AlertTriangle className="h-4 w-4 text-yellow-500" />;
-      case 'info': return <Eye className="h-4 w-4 text-blue-500" />;
-      case 'ok': return <CheckCircle className="h-4 w-4 text-green-500" />;
+      case 'critical': return <XCircle className="h-4 w-4 text-destructive" />;
+      case 'warning': return <AlertTriangle className="h-4 w-4 text-warning" />;
+      case 'info': return <Eye className="h-4 w-4 text-primary" />;
+      case 'ok': return <CheckCircle className="h-4 w-4 text-success" />;
     }
   };
 
@@ -331,9 +331,9 @@ export const MultimodalAIInspection: React.FC = () => {
                       key={finding.id}
                       className={cn(
                         "absolute border-2 rounded",
-                        finding.severity === 'critical' && "border-red-500 bg-red-500/20",
-                        finding.severity === 'warning' && "border-yellow-500 bg-yellow-500/20",
-                        finding.severity === 'info' && "border-blue-500 bg-blue-500/20"
+                        finding.severity === 'critical' && "border-destructive bg-destructive/20",
+                        finding.severity === 'warning' && "border-warning bg-warning/20",
+                        finding.severity === 'info' && "border-primary bg-primary/20"
                       )}
                       style={{
                         left: finding.location.x,

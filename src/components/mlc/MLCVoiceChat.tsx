@@ -60,12 +60,14 @@ export function MLCVoiceChat({ onQuestionAsked }: MLCVoiceChatProps) {
   const [useElevenLabs, setUseElevenLabs] = useState(true);
   const [isPlayingAudio, setIsPlayingAudio] = useState(false);
   
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Web Speech API not in standard TS types
   const recognitionRef = useRef<any>(null);
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const scrollRef = useRef<HTMLDivElement>(null);
 
   // Initialize speech recognition
   useEffect(() => {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Web Speech API
     const SpeechRecognitionAPI = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
     if (SpeechRecognitionAPI) {
       recognitionRef.current = new SpeechRecognitionAPI();
@@ -73,6 +75,7 @@ export function MLCVoiceChat({ onQuestionAsked }: MLCVoiceChatProps) {
       recognitionRef.current.interimResults = false;
       recognitionRef.current.lang = 'pt-BR';
 
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any -- SpeechRecognitionEvent not in standard types
       recognitionRef.current.onresult = (event: any) => {
         const transcript = event.results[0][0].transcript;
         setInput(transcript);

@@ -23,39 +23,39 @@ export const AIModulesDashboard = () => {
   const getStatusIcon = (status: string) => {
     switch (status) {
     case "healthy":
-      return <CheckCircle2 className="h-5 w-5 text-green-500" />;
+      return <CheckCircle2 className="h-5 w-5 text-success" />;
     case "degraded":
-      return <AlertCircle className="h-5 w-5 text-yellow-500" />;
+      return <AlertCircle className="h-5 w-5 text-warning" />;
     case "offline":
-      return <AlertCircle className="h-5 w-5 text-red-500" />;
+      return <AlertCircle className="h-5 w-5 text-destructive" />;
     default:
-      return <Activity className="h-5 w-5 text-gray-500" />;
+      return <Activity className="h-5 w-5 text-muted-foreground" />;
     }
   };
 
   const getStatusColor = (status: string) => {
     switch (status) {
     case "healthy":
-      return "bg-green-500/10 text-green-500 border-green-500/20";
+      return "bg-success/10 text-success border-success/20";
     case "degraded":
-      return "bg-yellow-500/10 text-yellow-500 border-yellow-500/20";
+      return "bg-warning/10 text-warning border-warning/20";
     case "offline":
-      return "bg-red-500/10 text-red-500 border-red-500/20";
+      return "bg-destructive/10 text-destructive border-destructive/20";
     default:
-      return "bg-gray-500/10 text-gray-500 border-gray-500/20";
+      return "bg-muted text-muted-foreground border-border";
     }
   };
 
   const getOverallHealthColor = () => {
     switch (overallHealth) {
     case "healthy":
-      return "text-green-500";
+      return "text-success";
     case "degraded":
-      return "text-yellow-500";
+      return "text-warning";
     case "critical":
-      return "text-red-500";
+      return "text-destructive";
     default:
-      return "text-gray-500";
+      return "text-muted-foreground";
     }
   };
 
@@ -141,14 +141,14 @@ export const AIModulesDashboard = () => {
                   </div>
                   <div className="space-y-1 text-center p-2 bg-muted/50 rounded">
                     <div className="flex items-center justify-center gap-1">
-                      <TrendingUp className="h-3 w-3 text-green-500" />
+                      <TrendingUp className="h-3 w-3 text-success" />
                       <span className="text-xs text-muted-foreground">Taxa</span>
                     </div>
                     <p className="text-lg font-bold">{module.metrics.successRate.toFixed(1)}%</p>
                   </div>
                   <div className="space-y-1 text-center p-2 bg-muted/50 rounded">
                     <div className="flex items-center justify-center gap-1">
-                      <Clock className="h-3 w-3 text-blue-500" />
+                      <Clock className="h-3 w-3 text-primary" />
                       <span className="text-xs text-muted-foreground">Tempo</span>
                     </div>
                     <p className="text-lg font-bold">{module.metrics.avgResponseTime.toFixed(0)}ms</p>
@@ -176,20 +176,20 @@ export const AIModulesDashboard = () => {
               <p className="text-3xl font-bold text-primary">{modules.length}</p>
               <p className="text-sm text-muted-foreground">Módulos Integrados</p>
             </div>
-            <div className="text-center p-4 bg-green-500/5 rounded-lg">
-              <p className="text-3xl font-bold text-green-500">
+            <div className="text-center p-4 bg-success/5 rounded-lg">
+              <p className="text-3xl font-bold text-success">
                 {modules.filter(m => m.status === "healthy").length}
               </p>
               <p className="text-sm text-muted-foreground">Módulos Saudáveis</p>
             </div>
-            <div className="text-center p-4 bg-blue-500/5 rounded-lg">
-              <p className="text-3xl font-bold text-blue-500">
+            <div className="text-center p-4 bg-primary/5 rounded-lg">
+              <p className="text-3xl font-bold text-primary">
                 {modules.reduce((sum, m) => sum + m.features.length, 0)}
               </p>
               <p className="text-sm text-muted-foreground">Recursos IA</p>
             </div>
-            <div className="text-center p-4 bg-purple-500/5 rounded-lg">
-              <p className="text-3xl font-bold text-purple-500">
+            <div className="text-center p-4 bg-accent/50 rounded-lg">
+              <p className="text-3xl font-bold text-accent-foreground">
                 {modules.reduce((sum, m) => sum + (m.metrics?.totalRequests || 0), 0)}
               </p>
               <p className="text-sm text-muted-foreground">Total de Requests</p>

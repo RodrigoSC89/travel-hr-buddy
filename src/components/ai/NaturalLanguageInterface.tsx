@@ -253,7 +253,7 @@ export function NaturalLanguageInterface() {
                       <>
                         <div className="flex items-center gap-2 mb-1">
                           {result.status === "success" ? (
-                            <CheckCircle2 className="h-3 w-3 text-green-500" />
+                            <CheckCircle2 className="h-3 w-3 text-success" />
                           ) : (
                             <AlertCircle className="h-3 w-3 text-destructive" />
                           )}

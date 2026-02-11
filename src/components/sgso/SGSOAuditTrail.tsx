@@ -295,10 +295,10 @@ const SGSO_PRACTICES: SGSOPractice[] = [
 ];
 
 const classificationColors: Record<string, string> = {
-  critica: 'bg-red-500/20 text-red-600 border-red-500',
-  grave: 'bg-orange-500/20 text-orange-600 border-orange-500',
-  moderada: 'bg-yellow-500/20 text-yellow-600 border-yellow-500',
-  leve: 'bg-blue-500/20 text-blue-600 border-blue-500',
+  critica: 'bg-destructive/20 text-destructive border-destructive',
+  grave: 'bg-warning/20 text-warning border-warning',
+  moderada: 'bg-warning/10 text-warning border-warning/50',
+  leve: 'bg-primary/20 text-primary border-primary',
 };
 
 const classificationDeadlines: Record<string, string> = {
@@ -339,8 +339,8 @@ export const SGSOAuditTrail: React.FC = () => {
       toast.success('Trilha de auditoria salva com sucesso', {
         description: `${auditData.items_answered} itens respondidos — Score: ${auditData.overall_score}%`
       });
-    } catch (error: any) {
-      toast.error('Erro ao salvar auditoria', { description: error.message });
+    } catch (error: unknown) {
+      toast.error('Erro ao salvar auditoria', { description: error instanceof Error ? error.message : 'Erro desconhecido' });
     } finally {
       setIsSaving(false);
     }
@@ -374,8 +374,8 @@ export const SGSOAuditTrail: React.FC = () => {
       toast.success('Relatório SGSO exportado', {
         description: `${rows.length} itens exportados — Score: ${calculateOverallScore()}%`
       });
-    } catch (error: any) {
-      toast.error('Erro ao gerar relatório', { description: error.message });
+    } catch (error: unknown) {
+      toast.error('Erro ao gerar relatório', { description: error instanceof Error ? error.message : 'Erro desconhecido' });
     } finally {
       setIsExporting(false);
     }
