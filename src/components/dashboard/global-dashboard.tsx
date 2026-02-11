@@ -193,7 +193,7 @@ export const GlobalDashboard: React.FC<GlobalDashboardProps> = ({ onNavigate }) 
                 <div className="grid gap-6">
                   <div className="flex items-center gap-3 mb-4">
                     <div className="p-3 rounded-xl bg-gradient-to-br from-warning/20 to-destructive/20">
-                      <BarChart3 className="w-6 h-6 text-orange-600" />
+                      <BarChart3 className="w-6 h-6 text-warning" />
                     </div>
                     <div>
                       <h2 className="text-2xl font-bold">Business Intelligence</h2>
@@ -207,7 +207,7 @@ export const GlobalDashboard: React.FC<GlobalDashboardProps> = ({ onNavigate }) 
               <TabsContent value="gamification" className="mt-0 space-y-6">
                 <div className="grid gap-6">
                   <div className="flex items-center gap-3 mb-4">
-                    <div className="p-3 rounded-xl bg-gradient-to-br from-yellow-500/20 to-orange-500/20">
+                    <div className="p-3 rounded-xl bg-gradient-to-br from-warning/20 to-warning/10">
                       <Brain className="w-6 h-6 text-warning" />
                     </div>
                     <div>
@@ -351,11 +351,11 @@ export const GlobalDashboard: React.FC<GlobalDashboardProps> = ({ onNavigate }) 
                                   Expandir uso de IA para 80% dos processos
                                 </li>
                                 <li className="flex items-start gap-2">
-                                  <div className="w-2 h-2 bg-purple-500 rounded-full mt-2"></div>
+                                  <div className="w-2 h-2 bg-secondary rounded-full mt-2"></div>
                                   Implementar dashboard executivo personalizado
                                 </li>
                                 <li className="flex items-start gap-2">
-                                  <div className="w-2 h-2 bg-purple-500 rounded-full mt-2"></div>
+                                  <div className="w-2 h-2 bg-secondary rounded-full mt-2"></div>
                                   Criar fluxos de aprovação automatizados
                                 </li>
                               </ul>
@@ -363,24 +363,24 @@ export const GlobalDashboard: React.FC<GlobalDashboardProps> = ({ onNavigate }) 
                           </CardContent>
                         </Card>
 
-                        <Card className="bg-gradient-to-br from-orange-50 to-red-50 border-orange-200/50">
+                        <Card className="bg-gradient-to-br from-warning/10 to-destructive/10 border-warning/30">
                           <CardContent className="p-6">
                             <div className="space-y-4">
-                              <h3 className="font-semibold text-orange-700 flex items-center gap-2">
+                              <h3 className="font-semibold text-warning flex items-center gap-2">
                                 <Bell className="w-5 h-5" />
                                 ⚡ Ações Prioritárias
                               </h3>
                               <ul className="space-y-3 text-sm">
                                 <li className="flex items-start gap-2">
-                                  <div className="w-2 h-2 bg-orange-500 rounded-full mt-2"></div>
+                                  <div className="w-2 h-2 bg-warning rounded-full mt-2"></div>
                                   Revisar certificados expiram em 15 dias
                                 </li>
                                 <li className="flex items-start gap-2">
-                                  <div className="w-2 h-2 bg-orange-500 rounded-full mt-2"></div>
+                                  <div className="w-2 h-2 bg-warning rounded-full mt-2"></div>
                                   Otimizar alertas de preço ativos
                                 </li>
                                 <li className="flex items-start gap-2">
-                                  <div className="w-2 h-2 bg-orange-500 rounded-full mt-2"></div>
+                                  <div className="w-2 h-2 bg-warning rounded-full mt-2"></div>
                                   Configurar backup automático semanal
                                 </li>
                               </ul>

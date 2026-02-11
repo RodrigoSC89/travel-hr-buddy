@@ -167,17 +167,17 @@ export function CrewIntelligenceAI() {
   };
 
   const getFatigueColor = (level: number) => {
-    if (level < 40) return "text-green-500";
-    if (level < 60) return "text-yellow-500";
-    if (level < 80) return "text-orange-500";
-    return "text-red-500";
+    if (level < 40) return "text-success";
+    if (level < 60) return "text-warning";
+    if (level < 80) return "text-warning";
+    return "text-destructive";
   };
 
   const getTurnoverColor = (risk: string) => {
     switch (risk) {
-      case "low": return "bg-green-500/10 text-green-500";
-      case "medium": return "bg-yellow-500/10 text-yellow-500";
-      case "high": return "bg-red-500/10 text-red-500";
+      case "low": return "bg-success/10 text-success";
+      case "medium": return "bg-warning/10 text-warning";
+      case "high": return "bg-destructive/10 text-destructive";
       default: return "";
     }
   };
@@ -187,13 +187,13 @@ export function CrewIntelligenceAI() {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-3">
-          <div className="p-3 bg-gradient-to-br from-blue-500/20 to-cyan-500/20 rounded-xl">
-            <Users className="h-6 w-6 text-blue-500" />
+          <div className="p-3 bg-gradient-to-br from-primary/20 to-primary/10 rounded-xl">
+            <Users className="h-6 w-6 text-primary" />
           </div>
           <div>
             <h2 className="text-xl font-bold flex items-center gap-2">
               Crew Intelligence
-              <Badge className="bg-gradient-to-r from-blue-500 to-cyan-500">
+              <Badge className="bg-gradient-to-r from-primary to-primary/70">
                 <Sparkles className="h-3 w-3 mr-1" />
                 IA Avançada
               </Badge>
@@ -220,7 +220,7 @@ export function CrewIntelligenceAI() {
         <Card>
           <CardContent className="pt-4">
             <div className="flex items-center gap-2">
-              <Users className="h-5 w-5 text-blue-500" />
+              <Users className="h-5 w-5 text-primary" />
               <div>
                 <p className="text-2xl font-bold">{crewData.length}</p>
                 <p className="text-xs text-muted-foreground">Tripulantes Ativos</p>
@@ -231,7 +231,7 @@ export function CrewIntelligenceAI() {
         <Card>
           <CardContent className="pt-4">
             <div className="flex items-center gap-2">
-              <AlertTriangle className="h-5 w-5 text-orange-500" />
+              <AlertTriangle className="h-5 w-5 text-warning" />
               <div>
                 <p className="text-2xl font-bold">{fatigueAlerts.length}</p>
                 <p className="text-xs text-muted-foreground">Alertas de Fadiga</p>
@@ -242,7 +242,7 @@ export function CrewIntelligenceAI() {
         <Card>
           <CardContent className="pt-4">
             <div className="flex items-center gap-2">
-              <Ship className="h-5 w-5 text-green-500" />
+              <Ship className="h-5 w-5 text-success" />
               <div>
                 <p className="text-2xl font-bold">{openPositions.length}</p>
                 <p className="text-xs text-muted-foreground">Vagas Abertas</p>
@@ -253,7 +253,7 @@ export function CrewIntelligenceAI() {
         <Card>
           <CardContent className="pt-4">
             <div className="flex items-center gap-2">
-              <TrendingUp className="h-5 w-5 text-purple-500" />
+              <TrendingUp className="h-5 w-5 text-accent-foreground" />
               <div>
                 <p className="text-2xl font-bold">
                   {Math.round(crewData.reduce((acc, c) => acc + c.performance, 0) / crewData.length)}%
@@ -372,13 +372,13 @@ export function CrewIntelligenceAI() {
                       <div
                         key={alert.crewId}
                         className={`p-4 rounded-lg border ${
-                          alert.level === "critical" ? "border-red-500 bg-red-500/5" : "border-yellow-500 bg-yellow-500/5"
+                          alert.level === "critical" ? "border-destructive bg-destructive/5" : "border-warning bg-warning/5"
                         }`}
                       >
                         <div className="flex items-start justify-between">
                           <div>
                             <div className="flex items-center gap-2">
-                              <AlertTriangle className={`h-4 w-4 ${alert.level === "critical" ? "text-red-500" : "text-yellow-500"}`} />
+                              <AlertTriangle className={`h-4 w-4 ${alert.level === "critical" ? "text-destructive" : "text-warning"}`} />
                               <span className="font-medium">{alert.crewName}</span>
                               <Badge variant={alert.level === "critical" ? "destructive" : "secondary"}>
                                 {alert.level === "critical" ? "Crítico" : "Atenção"}
@@ -436,7 +436,7 @@ export function CrewIntelligenceAI() {
               <CardHeader>
                 <CardTitle className="text-sm flex items-center gap-2">
                   Resultados do Matching
-                  <Badge className="bg-purple-500">
+                  <Badge className="bg-accent text-accent-foreground">
                     <Brain className="h-3 w-3 mr-1" />
                     IA
                   </Badge>
@@ -457,7 +457,7 @@ export function CrewIntelligenceAI() {
                             <p className="font-medium">{match.crewName}</p>
                             <p className="text-sm text-muted-foreground">{match.position}</p>
                           </div>
-                          <Badge className="bg-green-500">
+                          <Badge className="bg-success text-success-foreground">
                             <UserCheck className="h-3 w-3 mr-1" />
                             {match.matchScore}% match
                           </Badge>
@@ -465,12 +465,12 @@ export function CrewIntelligenceAI() {
                         <div className="mt-2 space-y-1">
                           {match.reasons.map((reason, i) => (
                             <p key={i} className="text-xs text-muted-foreground flex items-center gap-1">
-                              <span className="w-1 h-1 bg-green-500 rounded-full" />
+                              <span className="w-1 h-1 bg-success rounded-full" />
                               {reason}
                             </p>
                           ))}
                         </div>
-                        <p className="text-xs text-blue-500 mt-2">{match.availability}</p>
+                        <p className="text-xs text-primary mt-2">{match.availability}</p>
                       </div>
                     ))}
                   </div>

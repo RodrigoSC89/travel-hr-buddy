@@ -70,8 +70,10 @@ export default function CommandMegaHub() {
 
   // Build real timeline events from vessel/voyage data
   const commandTimelineEvents = useMemo(() => {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any -- PremiumTimeline event shape
     const events: any[] = [];
     
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any -- dynamic vessel row from useOperationsCommandData
     vessels.slice(0, 3).forEach((v: any) => {
       events.push({
         id: `vessel-${v.id}`,
@@ -83,6 +85,7 @@ export default function CommandMegaHub() {
       });
     });
 
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any -- dynamic voyage row from useOperationsCommandData
     voyages.slice(0, 3).forEach((voy: any) => {
       events.push({
         id: `voyage-${voy.id}`,
@@ -153,7 +156,7 @@ export default function CommandMegaHub() {
               <Badge variant="outline" className="bg-primary/10 text-primary border-primary/20">
                 {metrics.totalVessels} embarcações
               </Badge>
-              <Badge variant="outline" className="bg-green-500/10 text-green-500 border-green-500/20">
+              <Badge variant="outline" className="bg-success/10 text-success border-success/20">
                 Operacional
               </Badge>
             </div>
@@ -187,7 +190,7 @@ export default function CommandMegaHub() {
               {/* System Status Bar */}
               <div className="flex items-center gap-3 text-xs text-muted-foreground px-1">
                 <div className="flex items-center gap-1.5">
-                  <Wifi className="h-3.5 w-3.5 text-green-500" />
+                  <Wifi className="h-3.5 w-3.5 text-success" />
                   <span>Online</span>
                 </div>
                 <span>•</span>
