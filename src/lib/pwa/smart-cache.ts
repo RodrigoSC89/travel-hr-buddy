@@ -3,10 +3,17 @@
  * Intelligent caching with prediction and prioritization
  */
 
+// Navigator connection type definition
+interface NavigatorConnection {
+  saveData?: boolean;
+  effectiveType?: string;
+}
+
 // Get connection type from navigator API
 function getConnectionType(): 'slow' | 'medium' | 'fast' {
   if (typeof navigator !== 'undefined' && 'connection' in navigator) {
-    const conn = (navigator as any).connection;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Navigator.connection not in standard lib
+    const conn = (navigator as unknown as { connection: NavigatorConnection }).connection;
     if (conn?.saveData || conn?.effectiveType === '2g' || conn?.effectiveType === 'slow-2g') {
       return 'slow';
     }
@@ -17,8 +24,8 @@ function getConnectionType(): 'slow' | 'medium' | 'fast' {
   return 'fast';
 }
 
-interface CacheEntry {
-  data: any;
+interface CacheEntry<T = unknown> {
+  data: T;
   timestamp: number;
   accessCount: number;
   lastAccess: number;
@@ -58,8 +65,8 @@ class SmartCacheManager {
     
     switch (connectionType) {
       case 'slow':
-        this.config.maxSize = 100 * 1024 * 1024; // More cache for slow connections
-        this.config.defaultTTL = 30 * 60 * 1000; // Longer TTL
+        this.config.maxSize = 100 * 1024 * 1024;
+        this.config.defaultTTL = 30 * 60 * 1000;
         break;
       case 'medium':
         this.config.maxSize = 75 * 1024 * 1024;
@@ -73,7 +80,7 @@ class SmartCacheManager {
   }
 
   // Set cache with smart prioritization
-  set(key: string, data: any, options: { ttl?: number; priority?: number } = {}): void {
+  set<T>(key: string, data: T, options: { ttl?: number; priority?: number } = {}): void {
     const size = this.estimateSize(data);
     
     // Ensure space
@@ -81,7 +88,7 @@ class SmartCacheManager {
       this.evictLRU();
     }
 
-    const entry: CacheEntry = {
+    const entry: CacheEntry<T> = {
       data,
       timestamp: Date.now(),
       accessCount: 0,
@@ -90,7 +97,7 @@ class SmartCacheManager {
       priority: options.priority ?? this.calculatePriority(key),
     };
 
-    this.cache.set(key, entry);
+    this.cache.set(key, entry as CacheEntry);
     this.totalSize += size;
     this.recordAccess(key);
   }
@@ -147,7 +154,7 @@ class SmartCacheManager {
   }
 
   // Prefetch predicted data
-  async prefetch(keys: string[], fetchers: Map<string, () => Promise<any>>): Promise<void> {
+  async prefetch<T>(keys: string[], fetchers: Map<string, () => Promise<T>>): Promise<void> {
     const predictions = this.predictNextAccess();
     const toPrefetch = keys.filter(k => predictions.includes(k) && !this.cache.has(k));
 
@@ -157,7 +164,7 @@ class SmartCacheManager {
         if (fetcher) {
           try {
             const data = await fetcher();
-            this.set(key, data, { priority: 5 }); // Low priority for prefetched
+            this.set(key, data, { priority: 5 });
           } catch {
             // Ignore prefetch errors
           }
@@ -188,7 +195,6 @@ class SmartCacheManager {
     this.accessPatterns.forEach((timestamps, key) => {
       if (timestamps.length < 2) return;
 
-      // Calculate access frequency
       const frequency = timestamps.length;
       const recency = Date.now() - timestamps[timestamps.length - 1];
       const score = frequency * 1000 / (recency + 1);
@@ -207,7 +213,6 @@ class SmartCacheManager {
     const pattern = this.accessPatterns.get(key) || [];
     pattern.push(Date.now());
     
-    // Keep only last 100 accesses
     if (pattern.length > 100) {
       pattern.shift();
     }
@@ -234,7 +239,6 @@ class SmartCacheManager {
     let lruScore = Infinity;
 
     this.cache.forEach((entry, key) => {
-      // Score = (priority * 10) + (accessCount * 2) - (age in minutes)
       const age = (Date.now() - entry.lastAccess) / 60000;
       const score = (entry.priority * 10) + (entry.accessCount * 2) - age;
       
@@ -264,7 +268,7 @@ class SmartCacheManager {
   }
 
   // Estimate data size
-  private estimateSize(data: any): number {
+  private estimateSize(data: unknown): number {
     return new Blob([JSON.stringify(data)]).size;
   }
 
@@ -283,7 +287,7 @@ export const smartCache = new SmartCacheManager();
 // React hook
 import { useState, useEffect } from 'react';
 
-export function useSmartCache<T>(key: string, fetcher: () => Promise<T>, deps: any[] = []) {
+export function useSmartCache<T>(key: string, fetcher: () => Promise<T>, deps: unknown[] = []) {
   const [data, setData] = useState<T | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<Error | null>(null);

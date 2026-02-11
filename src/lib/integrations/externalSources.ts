@@ -108,14 +108,14 @@ export interface NewsItem {
 export class TravelAPIClient {
   private static readonly API_TIMEOUT = 10000; // 10 seconds
   private static readonly CACHE_DURATION = 300000; // 5 minutes
-  private static cache: Map<string, { data: any; timestamp: number }> = new Map();
+  private static cache: Map<string, { data: unknown; timestamp: number }> = new Map();
 
   /**
    * Busca voos em múltiplas APIs
    */
   static async searchFlights(params: FlightSearchParams): Promise<FlightResult[]> {
     const cacheKey = `flights_${JSON.stringify(params)}`;
-    const cached = this.getFromCache(cacheKey);
+    const cached = this.getFromCache<FlightResult[]>(cacheKey);
     if (cached) return cached;
 
     const results: FlightResult[] = [];
@@ -156,7 +156,7 @@ export class TravelAPIClient {
    */
   static async searchHotels(params: HotelSearchParams): Promise<HotelResult[]> {
     const cacheKey = `hotels_${JSON.stringify(params)}`;
-    const cached = this.getFromCache(cacheKey);
+    const cached = this.getFromCache<HotelResult[]>(cacheKey);
     if (cached) return cached;
 
     const results: HotelResult[] = [];
@@ -361,15 +361,15 @@ export class TravelAPIClient {
     ];
   }
 
-  private static getFromCache(key: string): any | null {
+  private static getFromCache<T = unknown>(key: string): T | null {
     const cached = this.cache.get(key);
     if (cached && Date.now() - cached.timestamp < this.CACHE_DURATION) {
-      return cached.data;
+      return cached.data as T;
     }
     return null;
   }
 
-  private static saveToCache(key: string, data: any): void {
+  private static saveToCache(key: string, data: unknown): void {
     this.cache.set(key, { data, timestamp: Date.now() });
   }
 }
