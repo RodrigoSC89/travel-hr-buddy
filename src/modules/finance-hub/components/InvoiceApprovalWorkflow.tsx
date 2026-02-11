@@ -90,15 +90,15 @@ export default function InvoiceApprovalWorkflow() {
   const getStatusBadge = (status: Invoice["status"]) => {
     switch (status) {
       case "pending":
-        return <Badge className="bg-amber-500/10 text-amber-500">Pendente</Badge>;
+        return <Badge className="bg-warning/10 text-warning">Pendente</Badge>;
       case "approved":
-        return <Badge className="bg-green-500/10 text-green-500">Aprovada</Badge>;
+        return <Badge className="bg-success/10 text-success">Aprovada</Badge>;
       case "rejected":
-        return <Badge className="bg-red-500/10 text-red-500">Rejeitada</Badge>;
+        return <Badge className="bg-destructive/10 text-destructive">Rejeitada</Badge>;
       case "on_hold":
-        return <Badge className="bg-blue-500/10 text-blue-500">Em Espera</Badge>;
+        return <Badge className="bg-info/10 text-info">Em Espera</Badge>;
       case "paid":
-        return <Badge className="bg-purple-500/10 text-purple-500">Paga</Badge>;
+        return <Badge className="bg-accent/10 text-accent-foreground">Paga</Badge>;
     }
   };
 
@@ -107,7 +107,7 @@ export default function InvoiceApprovalWorkflow() {
       case "critical":
         return <Badge variant="destructive">Urgente</Badge>;
       case "high":
-        return <Badge className="bg-amber-500/10 text-amber-500">Alta</Badge>;
+        return <Badge className="bg-warning/10 text-warning">Alta</Badge>;
       default:
         return null;
     }
@@ -117,51 +117,47 @@ export default function InvoiceApprovalWorkflow() {
     <div className="space-y-6">
       {/* Stats */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-        <Card className="bg-gradient-to-br from-amber-500/10 to-amber-600/5">
+        <Card className="bg-gradient-to-br from-warning/10 to-warning/5">
           <CardContent className="p-4">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-muted-foreground">Aguardando Aprovação</p>
                 <p className="text-2xl font-bold">{pendingInvoices.length}</p>
               </div>
-              <Clock className="h-8 w-8 text-amber-500" />
+              <Clock className="h-8 w-8 text-warning" />
             </div>
           </CardContent>
         </Card>
-        <Card className="bg-gradient-to-br from-green-500/10 to-green-600/5">
+        <Card className="bg-gradient-to-br from-success/10 to-success/5">
           <CardContent className="p-4">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-muted-foreground">Aprovadas (mês)</p>
                 <p className="text-2xl font-bold">{approvedThisMonth}</p>
               </div>
-              <div>
-                <p className="text-sm text-muted-foreground">Aprovadas (mês)</p>
-                <p className="text-2xl font-bold">47</p>
-              </div>
-              <CheckCircle2 className="h-8 w-8 text-green-500" />
+              <CheckCircle2 className="h-8 w-8 text-success" />
             </div>
           </CardContent>
         </Card>
-        <Card className="bg-gradient-to-br from-purple-500/10 to-purple-600/5">
+        <Card className="bg-gradient-to-br from-accent/10 to-accent/5">
           <CardContent className="p-4">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-muted-foreground">Valor Pendente</p>
                 <p className="text-2xl font-bold">${(totalPendingAmount / 1000).toFixed(0)}K</p>
               </div>
-              <Wallet className="h-8 w-8 text-purple-500" />
+              <Wallet className="h-8 w-8 text-accent-foreground" />
             </div>
           </CardContent>
         </Card>
-        <Card className="bg-gradient-to-br from-blue-500/10 to-blue-600/5">
+        <Card className="bg-gradient-to-br from-primary/10 to-primary/5">
           <CardContent className="p-4">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-muted-foreground">Tempo Médio Aprovação</p>
                 <p className="text-2xl font-bold">2.3d</p>
               </div>
-              <TrendingUp className="h-8 w-8 text-blue-500" />
+              <TrendingUp className="h-8 w-8 text-primary" />
             </div>
           </CardContent>
         </Card>
@@ -332,10 +328,10 @@ export default function InvoiceApprovalWorkflow() {
                     {selectedInvoice.approvers.map((approver, index) => (
                       <div key={approver.id} className="flex items-center gap-3">
                         <div className={`p-1 rounded-full ${
-                          approver.status === "approved" ? "bg-green-500" :
-                          approver.status === "rejected" ? "bg-red-500" :
-                          approver.status === "pending" ? "bg-amber-500" :
-                          "bg-gray-400"
+                          approver.status === "approved" ? "bg-success" :
+                          approver.status === "rejected" ? "bg-destructive" :
+                          approver.status === "pending" ? "bg-warning" :
+                          "bg-muted-foreground"
                         }`}>
                           {approver.status === "approved" ? (
                             <CheckCircle2 className="h-4 w-4 text-white" />

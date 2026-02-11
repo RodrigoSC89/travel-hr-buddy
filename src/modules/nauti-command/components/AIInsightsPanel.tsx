@@ -66,8 +66,8 @@ export function AIInsightsPanel({ context }: AIInsightsPanelProps) {
       id: "briefing",
       label: "Briefing Diário",
       icon: FileText,
-      color: "text-blue-500",
-      bgColor: "bg-blue-500/10",
+      color: "text-primary",
+      bgColor: "bg-primary/10",
       description: "Resumo executivo do dia",
       action: () => handleAction("Briefing Diário", () => generateBriefing(context))
     },
@@ -75,8 +75,8 @@ export function AIInsightsPanel({ context }: AIInsightsPanelProps) {
       id: "alerts",
       label: "Alertas Críticos",
       icon: AlertTriangle,
-      color: "text-red-500",
-      bgColor: "bg-red-500/10",
+      color: "text-destructive",
+      bgColor: "bg-destructive/10",
       description: "Análise de alertas ativos",
       action: () => handleAction("Alertas Críticos", () => analyzeAlerts(context))
     },
@@ -84,8 +84,8 @@ export function AIInsightsPanel({ context }: AIInsightsPanelProps) {
       id: "actions",
       label: "Ações Prioritárias",
       icon: Target,
-      color: "text-orange-500",
-      bgColor: "bg-orange-500/10",
+      color: "text-warning",
+      bgColor: "bg-warning/10",
       description: "Sugestões de ações",
       action: () => handleAction("Ações Prioritárias", () => suggestActions(context))
     },
@@ -93,8 +93,8 @@ export function AIInsightsPanel({ context }: AIInsightsPanelProps) {
       id: "360",
       label: "Visão 360°",
       icon: Eye,
-      color: "text-purple-500",
-      bgColor: "bg-purple-500/10",
+      color: "text-accent-foreground",
+      bgColor: "bg-accent/10",
       description: "Visão completa da operação",
       action: () => handleAction("Visão 360°", () => get360View(context))
     }
@@ -104,8 +104,8 @@ export function AIInsightsPanel({ context }: AIInsightsPanelProps) {
     <Card className="h-full flex flex-col">
       <CardHeader className="pb-3 flex-shrink-0">
         <CardTitle className="flex items-center gap-2">
-          <div className="p-2 rounded-lg bg-gradient-to-br from-amber-500/20 to-orange-500/20">
-            <Sparkles className="h-5 w-5 text-amber-500" />
+          <div className="p-2 rounded-lg bg-gradient-to-br from-warning/20 to-warning/10">
+            <Sparkles className="h-5 w-5 text-warning" />
           </div>
           <div>
             <span className="text-base">Insights IA</span>
@@ -158,7 +158,7 @@ export function AIInsightsPanel({ context }: AIInsightsPanelProps) {
                 <Brain className="h-4 w-4 text-primary" />
                 <span className="text-sm font-medium">{activeInsight}</span>
                 <Badge variant="outline" className="text-[10px]">
-                  <CheckCircle className="h-3 w-3 mr-1 text-green-500" />
+                  <CheckCircle className="h-3 w-3 mr-1 text-success" />
                   Gerado
                 </Badge>
               </div>

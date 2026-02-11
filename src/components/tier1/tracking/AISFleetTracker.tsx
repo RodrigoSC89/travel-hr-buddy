@@ -44,10 +44,10 @@ const staticGeofences: Geofence[] = [
 
 const getStatusColor = (status: string) => {
   switch (status) {
-    case 'underway': return 'text-green-500';
-    case 'anchored': return 'text-yellow-500';
-    case 'moored': return 'text-blue-500';
-    case 'not_under_command': return 'text-red-500';
+    case 'underway': return 'text-success';
+    case 'anchored': return 'text-warning';
+    case 'moored': return 'text-primary';
+    case 'not_under_command': return 'text-destructive';
     default: return 'text-muted-foreground';
   }
 };
@@ -97,7 +97,7 @@ export function AISFleetTracker() {
         <Card>
           <CardContent className="pt-4">
             <div className="flex items-center gap-2">
-              <Ship className="h-5 w-5 text-blue-500" />
+              <Ship className="h-5 w-5 text-primary" />
               <span className="text-sm text-muted-foreground">Total Fleet</span>
             </div>
             <p className="text-2xl font-bold mt-2">{fleetStats.total}</p>
@@ -108,10 +108,10 @@ export function AISFleetTracker() {
         <Card>
           <CardContent className="pt-4">
             <div className="flex items-center gap-2">
-              <Navigation className="h-5 w-5 text-green-500" />
+              <Navigation className="h-5 w-5 text-success" />
               <span className="text-sm text-muted-foreground">Underway</span>
             </div>
-            <p className="text-2xl font-bold mt-2 text-green-500">{fleetStats.underway}</p>
+            <p className="text-2xl font-bold mt-2 text-success">{fleetStats.underway}</p>
             <p className="text-xs text-muted-foreground">In transit</p>
           </CardContent>
         </Card>
@@ -119,10 +119,10 @@ export function AISFleetTracker() {
         <Card>
           <CardContent className="pt-4">
             <div className="flex items-center gap-2">
-              <Anchor className="h-5 w-5 text-yellow-500" />
+              <Anchor className="h-5 w-5 text-warning" />
               <span className="text-sm text-muted-foreground">Anchored</span>
             </div>
-            <p className="text-2xl font-bold mt-2 text-yellow-500">{fleetStats.anchored}</p>
+            <p className="text-2xl font-bold mt-2 text-warning">{fleetStats.anchored}</p>
             <p className="text-xs text-muted-foreground">Waiting</p>
           </CardContent>
         </Card>
@@ -130,21 +130,21 @@ export function AISFleetTracker() {
         <Card>
           <CardContent className="pt-4">
             <div className="flex items-center gap-2">
-              <MapPin className="h-5 w-5 text-blue-500" />
+              <MapPin className="h-5 w-5 text-primary" />
               <span className="text-sm text-muted-foreground">In Port</span>
             </div>
-            <p className="text-2xl font-bold mt-2 text-blue-500">{fleetStats.moored}</p>
+            <p className="text-2xl font-bold mt-2 text-primary">{fleetStats.moored}</p>
             <p className="text-xs text-muted-foreground">Moored</p>
           </CardContent>
         </Card>
 
-        <Card className={fleetStats.alerts > 0 ? 'border-orange-500' : ''}>
+        <Card className={fleetStats.alerts > 0 ? 'border-warning' : ''}>
           <CardContent className="pt-4">
             <div className="flex items-center gap-2">
-              <Bell className={`h-5 w-5 ${fleetStats.alerts > 0 ? 'text-orange-500' : 'text-muted-foreground'}`} />
+              <Bell className={`h-5 w-5 ${fleetStats.alerts > 0 ? 'text-warning' : 'text-muted-foreground'}`} />
               <span className="text-sm text-muted-foreground">Active Alerts</span>
             </div>
-            <p className={`text-2xl font-bold mt-2 ${fleetStats.alerts > 0 ? 'text-orange-500' : ''}`}>
+            <p className={`text-2xl font-bold mt-2 ${fleetStats.alerts > 0 ? 'text-warning' : ''}`}>
               {fleetStats.alerts}
             </p>
             <p className="text-xs text-muted-foreground">Requires attention</p>
@@ -224,7 +224,7 @@ export function AISFleetTracker() {
                           </div>
                         </div>
                         <div className="text-right">
-                          <Badge variant={getStatusBadge(vessel.status) as any}>
+                          <Badge variant={getStatusBadge(vessel.status) as "default" | "secondary" | "destructive" | "outline"}>
                             {vessel.status.replace('_', ' ')}
                           </Badge>
                           {vessel.alerts.length > 0 && (
@@ -243,7 +243,7 @@ export function AISFleetTracker() {
                   <div className="w-1/2 p-4 border rounded-lg bg-muted/20">
                     <div className="flex items-center justify-between mb-4">
                       <h3 className="font-bold text-lg">{selectedVessel.vesselName}</h3>
-                      <Badge variant={getStatusBadge(selectedVessel.status) as any}>
+                      <Badge variant={getStatusBadge(selectedVessel.status) as "default" | "secondary" | "destructive" | "outline"}>
                         {selectedVessel.navigation.navStatus}
                       </Badge>
                     </div>
@@ -305,14 +305,14 @@ export function AISFleetTracker() {
                     {selectedVessel.alerts.length > 0 && (
                       <div className="mt-4 pt-4 border-t">
                         <p className="text-sm font-semibold mb-2 flex items-center gap-1">
-                          <AlertTriangle className="h-4 w-4 text-orange-500" />
+                          <AlertTriangle className="h-4 w-4 text-warning" />
                           Active Alerts
                         </p>
                         {selectedVessel.alerts.map((alert, idx) => (
                           <div key={idx} className={`p-2 rounded text-sm ${
-                            alert.severity === 'critical' ? 'bg-red-500/10 text-red-500' :
-                            alert.severity === 'warning' ? 'bg-orange-500/10 text-orange-500' :
-                            'bg-blue-500/10 text-blue-500'
+                            alert.severity === 'critical' ? 'bg-destructive/10 text-destructive' :
+                            alert.severity === 'warning' ? 'bg-warning/10 text-warning' :
+                            'bg-info/10 text-info'
                           }`}>
                             {alert.message}
                           </div>
@@ -367,9 +367,9 @@ export function AISFleetTracker() {
                     <div className="flex items-center justify-between">
                       <div className="flex items-center gap-3">
                         <MapPin className={`h-5 w-5 ${
-                          geofence.type === 'port' ? 'text-blue-500' :
-                          geofence.type === 'eca' ? 'text-green-500' :
-                          geofence.type === 'exclusion_zone' ? 'text-red-500' : 'text-purple-500'
+                          geofence.type === 'port' ? 'text-primary' :
+                          geofence.type === 'eca' ? 'text-success' :
+                          geofence.type === 'exclusion_zone' ? 'text-destructive' : 'text-accent-foreground'
                         }`} />
                         <div>
                           <p className="font-semibold">{geofence.name}</p>
@@ -416,9 +416,9 @@ export function AISFleetTracker() {
                   vessels.flatMap(v => 
                     v.alerts.map((a: VesselPosition["alerts"][0], idx: number) => (
                       <div key={`${v.vesselId}-${idx}`} className={`p-4 border rounded-lg ${
-                        a.severity === 'critical' ? 'border-red-500 bg-red-500/5' :
-                        a.severity === 'warning' ? 'border-orange-500 bg-orange-500/5' :
-                        'border-blue-500 bg-blue-500/5'
+                        a.severity === 'critical' ? 'border-destructive bg-destructive/5' :
+                        a.severity === 'warning' ? 'border-warning bg-warning/5' :
+                        'border-info bg-info/5'
                       }`}>
                         <div className="flex items-center justify-between">
                           <div>

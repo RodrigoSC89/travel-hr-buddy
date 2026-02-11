@@ -39,11 +39,11 @@ interface AIAlertsPanelProps {
 }
 
 const alertTypeConfig = {
-  prediction: { icon: TrendingUp, color: 'text-purple-500', bg: 'bg-purple-100 dark:bg-purple-900/30' },
-  pattern: { icon: Zap, color: 'text-blue-500', bg: 'bg-blue-100 dark:bg-blue-900/30' },
-  recommendation: { icon: Lightbulb, color: 'text-green-500', bg: 'bg-green-100 dark:bg-green-900/30' },
-  warning: { icon: AlertTriangle, color: 'text-yellow-500', bg: 'bg-yellow-100 dark:bg-yellow-900/30' },
-  critical: { icon: AlertTriangle, color: 'text-red-500', bg: 'bg-red-100 dark:bg-red-900/30' },
+  prediction: { icon: TrendingUp, color: 'text-accent-foreground', bg: 'bg-accent/20' },
+  pattern: { icon: Zap, color: 'text-primary', bg: 'bg-primary/10' },
+  recommendation: { icon: Lightbulb, color: 'text-success', bg: 'bg-success/10' },
+  warning: { icon: AlertTriangle, color: 'text-warning', bg: 'bg-warning/10' },
+  critical: { icon: AlertTriangle, color: 'text-destructive', bg: 'bg-destructive/10' },
 };
 
 const severityConfig = {

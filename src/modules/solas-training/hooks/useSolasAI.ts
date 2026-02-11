@@ -4,17 +4,17 @@ import { useToast } from '@/hooks/use-toast';
 import { logger } from '@/lib/logger';
 
 interface AIContext {
-  drills?: any[];
-  certifications?: any[];
-  crewMembers?: any[];
+  drills?: unknown[];
+  certifications?: unknown[];
+  crewMembers?: unknown[];
   drillType?: string;
-  drillData?: any;
+  drillData?: unknown;
 }
 
 interface UseSOLASAIReturn {
   isLoading: boolean;
   sendMessage: (message: string) => Promise<string | null>;
-  analyzeDrill: (drillData: any) => Promise<string | null>;
+  analyzeDrill: (drillData: unknown) => Promise<string | null>;
   generateReport: (context: AIContext) => Promise<string | null>;
   predictTraining: (context: AIContext) => Promise<string | null>;
   suggestSchedule: (context: AIContext) => Promise<string | null>;
@@ -73,7 +73,7 @@ export function useSOLASAI(): UseSOLASAIReturn {
   const sendMessage = useCallback((message: string) => 
     callAI('chat', message), [callAI]);
 
-  const analyzeDrill = useCallback((drillData: any) => 
+  const analyzeDrill = useCallback((drillData: unknown) => 
     callAI('analyze_drill', undefined, { drillData }), [callAI]);
 
   const generateReport = useCallback((context: AIContext) => 

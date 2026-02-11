@@ -146,8 +146,7 @@ export function MaintenanceHub() {
     return "pending";
   };
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Supabase dynamic schedule shape
-  const generateAIRecommendation = (schedule: any): string | undefined => {
+  const generateAIRecommendation = (schedule: { scheduled_date: string; status?: string | null }): string | undefined => {
     const daysUntil = Math.ceil((new Date(schedule.scheduled_date).getTime() - Date.now()) / 86400000);
     if (daysUntil < 7 && daysUntil > 0) {
       return `Manutenção programada para os próximos ${daysUntil} dias. Recomendamos preparar peças de reposição.`;
