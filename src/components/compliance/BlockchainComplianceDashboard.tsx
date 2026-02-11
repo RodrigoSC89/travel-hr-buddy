@@ -40,7 +40,7 @@ export function BlockchainComplianceDashboard() {
         .order("block_number", { ascending: false })
         .limit(50);
 
-      const mapped: BlockRecord[] = (data || []).map((b: any) => ({
+      const mapped: BlockRecord[] = (data || []).map((b) => ({
         id: b.id,
         block_hash: b.hash?.substring(0, 16) || "N/A",
         previous_hash: b.previous_hash?.substring(0, 16) || "N/A",
@@ -97,10 +97,10 @@ export function BlockchainComplianceDashboard() {
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-        <Card><CardContent className="pt-6"><div className="flex items-center justify-between"><div><p className="text-sm text-muted-foreground">Total de Blocos</p><p className="text-2xl font-bold">{stats.totalBlocks}</p></div><Hash className="h-8 w-8 text-blue-500 opacity-80" /></div></CardContent></Card>
-        <Card><CardContent className="pt-6"><div className="flex items-center justify-between"><div><p className="text-sm text-muted-foreground">Blocos Verificados</p><p className="text-2xl font-bold text-green-500">{stats.verifiedBlocks}</p></div><CheckCircle2 className="h-8 w-8 text-green-500 opacity-80" /></div></CardContent></Card>
-        <Card><CardContent className="pt-6"><div className="flex items-center justify-between"><div><p className="text-sm text-muted-foreground">Integridade</p><p className="text-2xl font-bold">{stats.totalBlocks > 0 ? Math.round(stats.verifiedBlocks / stats.totalBlocks * 100) : 0}%</p></div><Shield className="h-8 w-8 text-purple-500 opacity-80" /></div></CardContent></Card>
-        <Card><CardContent className="pt-6"><div className="flex items-center justify-between"><div><p className="text-sm text-muted-foreground">Último Bloco</p><p className="text-lg font-bold">{stats.lastBlock ? new Date(stats.lastBlock).toLocaleTimeString("pt-BR", { hour: "2-digit", minute: "2-digit" }) : "N/A"}</p></div><Clock className="h-8 w-8 text-amber-500 opacity-80" /></div></CardContent></Card>
+        <Card><CardContent className="pt-6"><div className="flex items-center justify-between"><div><p className="text-sm text-muted-foreground">Total de Blocos</p><p className="text-2xl font-bold">{stats.totalBlocks}</p></div><Hash className="h-8 w-8 text-primary opacity-80" /></div></CardContent></Card>
+        <Card><CardContent className="pt-6"><div className="flex items-center justify-between"><div><p className="text-sm text-muted-foreground">Blocos Verificados</p><p className="text-2xl font-bold text-success">{stats.verifiedBlocks}</p></div><CheckCircle2 className="h-8 w-8 text-success opacity-80" /></div></CardContent></Card>
+        <Card><CardContent className="pt-6"><div className="flex items-center justify-between"><div><p className="text-sm text-muted-foreground">Integridade</p><p className="text-2xl font-bold">{stats.totalBlocks > 0 ? Math.round(stats.verifiedBlocks / stats.totalBlocks * 100) : 0}%</p></div><Shield className="h-8 w-8 text-accent-foreground opacity-80" /></div></CardContent></Card>
+        <Card><CardContent className="pt-6"><div className="flex items-center justify-between"><div><p className="text-sm text-muted-foreground">Último Bloco</p><p className="text-lg font-bold">{stats.lastBlock ? new Date(stats.lastBlock).toLocaleTimeString("pt-BR", { hour: "2-digit", minute: "2-digit" }) : "N/A"}</p></div><Clock className="h-8 w-8 text-warning opacity-80" /></div></CardContent></Card>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
@@ -117,7 +117,7 @@ export function BlockchainComplianceDashboard() {
                       <motion.div key={block.id} initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: index * 0.05 }} className="relative">
                         {index < filteredBlocks.length - 1 && <div className="absolute left-6 top-full h-4 w-0.5 bg-border" />}
                         <div className="flex gap-4">
-                          <div className={`h-12 w-12 rounded-lg flex items-center justify-center shrink-0 ${block.verified ? "bg-green-500/10" : "bg-amber-500/10"}`}>{block.verified ? <Lock className="h-6 w-6 text-green-500" /> : <AlertTriangle className="h-6 w-6 text-amber-500" />}</div>
+                          <div className={`h-12 w-12 rounded-lg flex items-center justify-center shrink-0 ${block.verified ? "bg-success/10" : "bg-warning/10"}`}>{block.verified ? <Lock className="h-6 w-6 text-success" /> : <AlertTriangle className="h-6 w-6 text-warning" />}</div>
                           <div className="flex-1 p-4 border rounded-lg hover:bg-muted/50 transition-colors">
                             <div className="flex items-start justify-between mb-2"><div><Badge className={eventTypeColors[block.event_type] || "bg-gray-500/10"}>{block.event_type.replace(/_/g, " ")}</Badge><p className="text-xs text-muted-foreground mt-1 font-mono">{block.block_hash}</p></div><div className="text-right"><p className="text-sm font-medium">{new Date(block.timestamp).toLocaleDateString("pt-BR")}</p><p className="text-xs text-muted-foreground">{new Date(block.timestamp).toLocaleTimeString("pt-BR")}</p></div></div>
                             <div className="bg-muted/50 rounded p-2 text-sm"><pre className="text-xs overflow-x-auto">{JSON.stringify(block.details, null, 2)}</pre></div>
@@ -136,7 +136,7 @@ export function BlockchainComplianceDashboard() {
         <div className="space-y-6">
           <Card><CardHeader><CardTitle className="flex items-center gap-2"><Activity className="h-5 w-5" />Tipos de Eventos</CardTitle></CardHeader><CardContent><div className="space-y-3">{Object.entries(stats.eventTypes).map(([type, count]) => <div key={type} className="flex items-center justify-between"><Badge variant="outline" className={eventTypeColors[type]}>{type.replace(/_/g, " ")}</Badge><span className="font-medium">{count}</span></div>)}</div></CardContent></Card>
           <Card><CardHeader><CardTitle className="flex items-center gap-2"><FileCheck className="h-5 w-5" />Ações Rápidas</CardTitle></CardHeader><CardContent className="space-y-3"><Button className="w-full justify-start" variant="outline"><Shield className="h-4 w-4 mr-2" />Verificar Integridade Total</Button><Button className="w-full justify-start" variant="outline"><Download className="h-4 w-4 mr-2" />Exportar para Auditoria</Button></CardContent></Card>
-          <Card className="bg-green-500/5 border-green-500/20"><CardContent className="pt-6"><div className="flex items-center gap-3 mb-3"><CheckCircle2 className="h-8 w-8 text-green-500" /><div><p className="font-semibold text-green-500">PSC Ready</p><p className="text-xs text-muted-foreground">Pronto para inspeção Port State Control</p></div></div><p className="text-sm text-muted-foreground">Todos os registros verificados e assinados digitalmente.</p></CardContent></Card>
+          <Card className="bg-success/5 border-success/20"><CardContent className="pt-6"><div className="flex items-center gap-3 mb-3"><CheckCircle2 className="h-8 w-8 text-success" /><div><p className="font-semibold text-success">PSC Ready</p><p className="text-xs text-muted-foreground">Pronto para inspeção Port State Control</p></div></div><p className="text-sm text-muted-foreground">Todos os registros verificados e assinados digitalmente.</p></CardContent></Card>
         </div>
       </div>
     </div>

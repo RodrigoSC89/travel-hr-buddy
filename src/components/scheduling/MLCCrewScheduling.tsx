@@ -58,7 +58,8 @@ export const MLCCrewScheduling: React.FC = () => {
       }
 
       const now = new Date();
-      const mapped: CrewSchedule[] = (assignments || []).map((a: any) => {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any -- crew_assignments join types not inferred
+    const mapped: CrewSchedule[] = (assignments || []).map((a: any) => {
         const startDate = new Date(a.start_date);
         const endDate = a.end_date ? new Date(a.end_date) : new Date(startDate.getTime() + 90 * 86400000);
         const contractDays = Math.ceil((endDate.getTime() - startDate.getTime()) / 86400000);
@@ -116,9 +117,9 @@ export const MLCCrewScheduling: React.FC = () => {
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case 'compliant': return 'bg-green-500/20 text-green-400 border-green-500/30';
-      case 'warning': return 'bg-yellow-500/20 text-yellow-400 border-yellow-500/30';
-      case 'violation': return 'bg-red-500/20 text-red-400 border-red-500/30';
+      case 'compliant': return 'bg-success/20 text-success border-success/30';
+      case 'warning': return 'bg-warning/20 text-warning border-warning/30';
+      case 'violation': return 'bg-destructive/20 text-destructive border-destructive/30';
       default: return 'bg-muted text-muted-foreground';
     }
   };
@@ -160,12 +161,12 @@ export const MLCCrewScheduling: React.FC = () => {
         <Card className="bg-card/50 border-border/50">
           <CardContent className="p-4">
             <div className="flex items-center gap-3">
-              <div className="p-2 rounded-lg bg-green-500/20">
-                <CheckCircle className="h-5 w-5 text-green-400" />
+              <div className="p-2 rounded-lg bg-success/20">
+                <CheckCircle className="h-5 w-5 text-success" />
               </div>
               <div>
                 <p className="text-sm text-muted-foreground">MLC Compliant</p>
-                <p className="text-2xl font-bold text-green-400">{complianceStats.compliant}</p>
+                <p className="text-2xl font-bold text-success">{complianceStats.compliant}</p>
               </div>
             </div>
           </CardContent>
@@ -174,12 +175,12 @@ export const MLCCrewScheduling: React.FC = () => {
         <Card className="bg-card/50 border-border/50">
           <CardContent className="p-4">
             <div className="flex items-center gap-3">
-              <div className="p-2 rounded-lg bg-yellow-500/20">
-                <AlertTriangle className="h-5 w-5 text-yellow-400" />
+              <div className="p-2 rounded-lg bg-warning/20">
+                <AlertTriangle className="h-5 w-5 text-warning" />
               </div>
               <div>
                 <p className="text-sm text-muted-foreground">Warnings</p>
-                <p className="text-2xl font-bold text-yellow-400">{complianceStats.warnings}</p>
+                <p className="text-2xl font-bold text-warning">{complianceStats.warnings}</p>
               </div>
             </div>
           </CardContent>
@@ -188,12 +189,12 @@ export const MLCCrewScheduling: React.FC = () => {
         <Card className="bg-card/50 border-border/50">
           <CardContent className="p-4">
             <div className="flex items-center gap-3">
-              <div className="p-2 rounded-lg bg-red-500/20">
-                <AlertTriangle className="h-5 w-5 text-red-400" />
+              <div className="p-2 rounded-lg bg-destructive/20">
+                <AlertTriangle className="h-5 w-5 text-destructive" />
               </div>
               <div>
                 <p className="text-sm text-muted-foreground">Violations</p>
-                <p className="text-2xl font-bold text-red-400">{complianceStats.violations}</p>
+                <p className="text-2xl font-bold text-destructive">{complianceStats.violations}</p>
               </div>
             </div>
           </CardContent>
@@ -260,7 +261,7 @@ export const MLCCrewScheduling: React.FC = () => {
                         </div>
                         <div>
                           <p className="text-muted-foreground">Next Leave</p>
-                          <p className={`font-medium ${schedule.nextLeaveDate === 'OVERDUE' ? 'text-red-400' : ''}`}>
+                          <p className={`font-medium ${schedule.nextLeaveDate === 'OVERDUE' ? 'text-destructive' : ''}`}>
                             {schedule.nextLeaveDate}
                           </p>
                         </div>
@@ -303,15 +304,15 @@ export const MLCCrewScheduling: React.FC = () => {
                         <span>Rest: <strong>{record.restHours}h</strong></span>
                       </div>
                     </div>
-                    <Badge className={record.compliant ? 'bg-green-500/20 text-green-400' : 'bg-red-500/20 text-red-400'}>
+                    <Badge className={record.compliant ? 'bg-success/20 text-success' : 'bg-destructive/20 text-destructive'}>
                       {record.compliant ? 'Compliant' : 'Non-Compliant'}
                     </Badge>
                   </div>
                 ))}
               </div>
 
-              <div className="mt-6 p-4 rounded-lg bg-blue-500/10 border border-blue-500/30">
-                <h4 className="font-medium text-blue-400 mb-2 flex items-center gap-2">
+              <div className="mt-6 p-4 rounded-lg bg-primary/10 border border-primary/30">
+                <h4 className="font-medium text-primary mb-2 flex items-center gap-2">
                   <Shield className="h-4 w-4" />
                   MLC 2006 Requirements
                 </h4>

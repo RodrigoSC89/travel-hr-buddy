@@ -83,8 +83,8 @@ const EnhancedMetricsDashboard = () => {
       change: 2.8,
       trend: "up",
       icon: Activity,
-      color: "text-green-600",
-      bgColor: "bg-green-50 border-green-200"
+      color: "text-success",
+      bgColor: "bg-success/10 border-success/20"
     },
     {
       title: "Eficiência de Processos",
@@ -93,8 +93,8 @@ const EnhancedMetricsDashboard = () => {
       change: 5.1,
       trend: "up",
       icon: Zap,
-      color: "text-blue-600",
-      bgColor: "bg-blue-50 border-blue-200"
+      color: "text-primary",
+      bgColor: "bg-primary/10 border-primary/20"
     },
     {
       title: "Qualidade de Serviço",
@@ -103,8 +103,8 @@ const EnhancedMetricsDashboard = () => {
       change: 1.2,
       trend: "up",
       icon: Award,
-      color: "text-purple-600",
-      bgColor: "bg-purple-50 border-purple-200"
+      color: "text-accent-foreground",
+      bgColor: "bg-accent/10 border-accent/20"
     },
     {
       title: "Tempo de Resposta",
@@ -113,8 +113,8 @@ const EnhancedMetricsDashboard = () => {
       change: -8.5,
       trend: "down",
       icon: Clock,
-      color: "text-orange-600",
-      bgColor: "bg-orange-50 border-orange-200"
+      color: "text-warning",
+      bgColor: "bg-warning/10 border-warning/20"
     }
   ];
 
@@ -146,7 +146,7 @@ const EnhancedMetricsDashboard = () => {
   };
 
   const getTrendColor = (trend: string) => {
-    return trend === "up" ? "text-green-600" : "text-red-600";
+    return trend === "up" ? "text-success" : "text-destructive";
   };
 
   return (
@@ -391,46 +391,47 @@ const EnhancedMetricsDashboard = () => {
 
         <TabsContent value="insights" className="space-y-6">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-            <Card className="border-l-4 border-l-green-500">
+            <Card className="border-l-4 border-l-success">
               <CardHeader>
-                <CardTitle className="flex items-center gap-2 text-green-700">
+                <CardTitle className="flex items-center gap-2 text-success">
                   <CheckCircle className="w-5 h-5" />
                   Pontos Fortes
                 </CardTitle>
               </CardHeader>
               <CardContent className="space-y-3">
-                <div className="p-3 bg-green-50 rounded-lg">
-                  <p className="font-medium text-green-800">Eficiência Operacional</p>
-                  <p className="text-sm text-green-600">
+                <div className="p-3 bg-success/10 rounded-lg">
+                  <p className="font-medium text-success">Eficiência Operacional</p>
+                  <p className="text-sm text-success/80">
                     94.2% de eficiência, 2.8% acima do mês anterior
                   </p>
                 </div>
-                <div className="p-3 bg-green-50 rounded-lg">
-                  <p className="font-medium text-green-800">Crescimento de Usuários</p>
-                  <p className="text-sm text-green-600">
+                <div className="p-3 bg-success/10 rounded-lg">
+                  <p className="font-medium text-success">Crescimento de Usuários</p>
+                  <p className="text-sm text-success/80">
                     8.3% de crescimento consistente
                   </p>
                 </div>
               </CardContent>
             </Card>
 
-            <Card className="border-l-4 border-l-orange-500">
+            <Card className="border-l-4 border-l-warning">
               <CardHeader>
-                <CardTitle className="flex items-center gap-2 text-orange-700">
+                <CardTitle className="flex items-center gap-2 text-warning">
+                  <AlertTriangle className="w-5 h-5" />
                   <AlertTriangle className="w-5 h-5" />
                   Oportunidades
                 </CardTitle>
               </CardHeader>
               <CardContent className="space-y-3">
-                <div className="p-3 bg-orange-50 rounded-lg">
-                  <p className="font-medium text-orange-800">Taxa de Conversão</p>
-                  <p className="text-sm text-orange-600">
+                <div className="p-3 bg-warning/10 rounded-lg">
+                  <p className="font-medium text-warning">Taxa de Conversão</p>
+                  <p className="text-sm text-warning/80">
                     Queda de 1.1% - revisar funil de vendas
                   </p>
                 </div>
-                <div className="p-3 bg-orange-50 rounded-lg">
-                  <p className="font-medium text-orange-800">Tempo de Resposta</p>
-                  <p className="text-sm text-orange-600">
+                <div className="p-3 bg-warning/10 rounded-lg">
+                  <p className="font-medium text-warning">Tempo de Resposta</p>
+                  <p className="text-sm text-warning/80">
                     Melhorar performance para atingir meta de 2.0s
                   </p>
                 </div>

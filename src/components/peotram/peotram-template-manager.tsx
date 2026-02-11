@@ -40,6 +40,7 @@ export const PeotramTemplateManager: React.FC<TemplateManagerProps> = ({
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
   const [editingTemplate, setEditingTemplate] = useState<Partial<PeotramTemplate>>({});
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- template data shape varies
   const createNewTemplate = async (templateData: any) => {
     try {
       const { data, error } = await supabase
@@ -66,6 +67,7 @@ export const PeotramTemplateManager: React.FC<TemplateManagerProps> = ({
     }
   };
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- partial template updates
   const updateTemplate = async (id: string, updates: any) => {
     try {
       const { error } = await supabase
@@ -122,7 +124,7 @@ export const PeotramTemplateManager: React.FC<TemplateManagerProps> = ({
                       {template.year} v{template.version}
                     </Badge>
                     {template.is_active && (
-                      <Badge variant="outline" className="text-green-600">
+                      <Badge variant="outline" className="text-success">
                         <CheckCircle className="h-3 w-3 mr-1" />
                         Ativo
                       </Badge>
@@ -176,7 +178,7 @@ export const PeotramTemplateManager: React.FC<TemplateManagerProps> = ({
                       {template.year} v{template.version}
                     </Badge>
                     {template.is_active && (
-                      <Badge variant="outline" className="text-green-600">
+                      <Badge variant="outline" className="text-success">
                         <CheckCircle className="h-3 w-3 mr-1" />
                         Ativo
                       </Badge>

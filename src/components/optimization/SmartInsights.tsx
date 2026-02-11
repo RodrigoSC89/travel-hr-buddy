@@ -71,6 +71,7 @@ export const SmartInsights: React.FC = () => {
       if (error) throw error;
 
       if (data.success && data.insights) {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any -- edge function response shape
         setInsights(data.insights.map((insight: any) => ({
           id: insight.id || `insight-${Date.now()}-${insight.title?.slice(0,5) || 'x'}`,
           type: insight.priority === "high" ? "warning" : "recommendation",
@@ -178,6 +179,7 @@ export const SmartInsights: React.FC = () => {
 
       if (data.success) {
         // Convert performance data to predictions format
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any -- edge function response
         const predictiveData = data.metrics?.slice(0, 4).map((metric: any, index: number) => ({
           id: `prediction_${index}`,
           name: `Previsão ${metric.name}`,

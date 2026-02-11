@@ -226,19 +226,19 @@ export function useTrainingAnalytics() {
       const totalCourses = courses?.length || 0;
       const totalEnrollments = progress?.length || 0;
       const avgCompletion = progress?.length 
-        ? Math.round(progress.reduce((acc: number, p: any) => acc + (p.progress_percent || 0), 0) / progress.length)
+        ? Math.round(progress.reduce((acc: number, p) => acc + (p.progress_percent || 0), 0) / progress.length)
         : 0;
 
       return {
         totalCourses,
         totalEnrollments,
         avgCompletion,
-        activeLearners: new Set(progress?.map((p: any) => p.user_id)).size,
-        certificatesIssued: progress?.filter((p: any) => p.certificate_issued).length || 0,
-        topCourses: courses?.slice(0, 5).map((c: any) => ({
+        activeLearners: new Set(progress?.map((p) => p.user_id)).size,
+        certificatesIssued: progress?.filter((p) => p.certificate_issued).length || 0,
+        topCourses: courses?.slice(0, 5).map((c) => ({
           id: c.id,
           name: c.course_name,
-          enrollments: progress?.filter((p: any) => p.course_id === c.id).length || 0,
+          enrollments: progress?.filter((p) => p.course_id === c.id).length || 0,
         })) || [],
         vrScenarios: [
           { id: "fire-fighting", name: "Fire Fighting", completions: 45 },

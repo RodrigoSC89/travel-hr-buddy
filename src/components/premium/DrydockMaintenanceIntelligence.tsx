@@ -42,24 +42,24 @@ export default function DrydockMaintenanceIntelligence() {
   if (isLoading) return <div className="space-y-4"><div className="grid grid-cols-4 gap-4">{[...Array(4)].map((_, i) => <Skeleton key={i} className="h-24" />)}</div><Skeleton className="h-64" /></div>;
 
   const { surveys = [], vessels = [], maintenance = [] } = data || {};
-  const vesselMap = new Map(vessels.map((v: any) => [v.id, v.name]));
+  const vesselMap = new Map(vessels.map((v) => [v.id, v.name || "N/A"] as [string, string]));
 
   if (surveys.length === 0 && maintenance.length === 0) {
     return <EmptyState icon={Shield} title="Sem surveys de classe" message="Cadastre surveys DNV/LR/BV para acompanhar certificações e inspeções." />;
   }
 
-  const validSurveys = surveys.filter((s: any) => s.status === "completed" || s.status === "valid").length;
-  const totalCost = surveys.reduce((sum: number, s: any) => sum + (Number(s.cost) || 0), 0);
+  const validSurveys = surveys.filter((s) => s.status === "completed" || s.status === "valid").length;
+  const totalCost = surveys.reduce((sum: number, s) => sum + (Number(s.cost) || 0), 0);
   const avgHealth = maintenance.length > 0
-    ? Math.round(maintenance.filter((m: any) => m.status === "completed").length / maintenance.length * 100)
+    ? Math.round(maintenance.filter((m) => m.status === "completed").length / maintenance.length * 100)
     : 100;
 
   const exportCSV = () => {
     const headers = ["Tipo", "Embarcação", "Data Vencimento", "Data Conclusão", "Status", "Custo", "Surveyor"];
-    const rows = surveys.map((s: any) => [
-      s.survey_type, vesselMap.get(s.vessel_id) || "N/A", s.due_date, s.completed_date || "", s.status, s.cost || "", s.surveyor_name || ""
+    const rows = surveys.map((s) => [
+      s.survey_type || "", vesselMap.get(s.vessel_id || "") || "N/A", String(s.due_date || ""), s.completed_date || "", s.status || "", String(s.cost ?? ""), String(s.surveyor_name || "")
     ]);
-    const csv = [headers.join(","), ...rows.map((r: any[]) => r.join(","))].join("\n");
+    const csv = [headers.join(","), ...rows.map((r) => r.join(","))].join("\n");
     const blob = new Blob([csv], { type: "text/csv" });
     const url = URL.createObjectURL(blob);
     const a = document.createElement("a"); a.href = url; a.download = "class-surveys.csv"; a.click();
@@ -70,10 +70,10 @@ export default function DrydockMaintenanceIntelligence() {
   return (
     <div className="space-y-6">
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-        <Card className="border-l-4 border-l-blue-500"><CardContent className="p-4"><div className="flex items-center justify-between"><div><p className="text-xs text-muted-foreground">Total Surveys</p><p className="text-2xl font-bold">{surveys.length}</p></div><Ship className="h-8 w-8 text-blue-500" /></div></CardContent></Card>
-        <Card className="border-l-4 border-l-amber-500"><CardContent className="p-4"><div className="flex items-center justify-between"><div><p className="text-xs text-muted-foreground">Custo Total</p><p className="text-2xl font-bold">${(totalCost / 1000).toFixed(0)}K</p></div><DollarSign className="h-8 w-8 text-amber-500" /></div></CardContent></Card>
-        <Card className="border-l-4 border-l-green-500"><CardContent className="p-4"><div className="flex items-center justify-between"><div><p className="text-xs text-muted-foreground">Health Equipamentos</p><p className="text-2xl font-bold">{avgHealth}%</p><Progress value={avgHealth} className="h-1 mt-1" /></div><Gauge className="h-8 w-8 text-green-500" /></div></CardContent></Card>
-        <Card className="border-l-4 border-l-purple-500"><CardContent className="p-4"><div className="flex items-center justify-between"><div><p className="text-xs text-muted-foreground">Surveys Válidos</p><p className="text-2xl font-bold">{validSurveys}/{surveys.length}</p></div><Shield className="h-8 w-8 text-purple-500" /></div></CardContent></Card>
+        <Card className="border-l-4 border-l-primary"><CardContent className="p-4"><div className="flex items-center justify-between"><div><p className="text-xs text-muted-foreground">Total Surveys</p><p className="text-2xl font-bold">{surveys.length}</p></div><Ship className="h-8 w-8 text-primary" /></div></CardContent></Card>
+        <Card className="border-l-4 border-l-warning"><CardContent className="p-4"><div className="flex items-center justify-between"><div><p className="text-xs text-muted-foreground">Custo Total</p><p className="text-2xl font-bold">${(totalCost / 1000).toFixed(0)}K</p></div><DollarSign className="h-8 w-8 text-warning" /></div></CardContent></Card>
+        <Card className="border-l-4 border-l-success"><CardContent className="p-4"><div className="flex items-center justify-between"><div><p className="text-xs text-muted-foreground">Health Equipamentos</p><p className="text-2xl font-bold">{avgHealth}%</p><Progress value={avgHealth} className="h-1 mt-1" /></div><Gauge className="h-8 w-8 text-success" /></div></CardContent></Card>
+        <Card className="border-l-4 border-l-accent"><CardContent className="p-4"><div className="flex items-center justify-between"><div><p className="text-xs text-muted-foreground">Surveys Válidos</p><p className="text-2xl font-bold">{validSurveys}/{surveys.length}</p></div><Shield className="h-8 w-8 text-accent-foreground" /></div></CardContent></Card>
       </div>
 
       <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-4">
@@ -91,22 +91,22 @@ export default function DrydockMaintenanceIntelligence() {
             <CardContent>
               <ScrollArea className="h-[400px]">
                 <div className="space-y-4">
-                  {surveys.map((survey: any) => (
+                  {surveys.map((survey) => (
                     <div key={survey.id} className="flex items-center justify-between p-4 border rounded-lg">
                       <div className="flex items-center gap-4">
-                        <div className={`w-12 h-12 rounded-full flex items-center justify-center ${survey.status === "completed" ? "bg-green-500/10" : "bg-amber-500/10"}`}>
+                        <div className={`w-12 h-12 rounded-full flex items-center justify-center ${survey.status === "completed" ? "bg-success/10" : "bg-warning/10"}`}>
                           <span className="font-bold text-sm">{(survey.survey_type || "?").substring(0, 2).toUpperCase()}</span>
                         </div>
                         <div>
                           <p className="font-medium">{survey.survey_name || survey.survey_type}</p>
-                          <p className="text-sm text-muted-foreground">{vesselMap.get(survey.vessel_id) || "N/A"} • {survey.surveyor_name || "N/A"}</p>
+                          <p className="text-sm text-muted-foreground">{vesselMap.get(survey.vessel_id || "") || "N/A"} • {survey.surveyor_name || "N/A"}</p>
                         </div>
                       </div>
                       <div className="text-right">
                         <p className="text-sm">Vencimento: {survey.due_date || "N/A"}</p>
-                        {survey.completed_date && <p className="text-sm text-green-600">Concluído: {survey.completed_date}</p>}
+                        {survey.completed_date && <p className="text-sm text-success">Concluído: {survey.completed_date}</p>}
                       </div>
-                      <Badge className={survey.status === "completed" ? "bg-green-500/10 text-green-500" : "bg-amber-500/10 text-amber-500"}>
+                      <Badge className={survey.status === "completed" ? "bg-success/10 text-success" : "bg-warning/10 text-warning"}>
                         {survey.status === "completed" ? "Concluído" : survey.status === "pending" ? "Pendente" : survey.status || "N/A"}
                       </Badge>
                     </div>
@@ -123,7 +123,7 @@ export default function DrydockMaintenanceIntelligence() {
             <CardContent>
               <ScrollArea className="h-[400px]">
                 <div className="space-y-3">
-                  {maintenance.slice(0, 20).map((m: any) => (
+                  {maintenance.slice(0, 20).map((m) => (
                     <div key={m.id} className="p-4 border rounded-lg">
                       <div className="flex items-center justify-between">
                         <div>

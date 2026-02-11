@@ -72,6 +72,7 @@ export function ContractAlertsCard() {
         .order('created_at', { ascending: false });
 
       if (rulesData) {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any -- alert_rules not in generated types
         setRules(rulesData.map((r: any) => ({
           id: r.id,
           name: r.name,
@@ -93,6 +94,7 @@ export function ContractAlertsCard() {
         .limit(50);
 
       if (logsData) {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any -- contract_alert_logs not in generated types
         setLogs(logsData.map((l: any) => ({
           id: l.id,
           rule_name: l.rule_id || 'Sistema',
