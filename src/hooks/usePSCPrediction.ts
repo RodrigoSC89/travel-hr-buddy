@@ -51,23 +51,22 @@ export function usePSCPrediction() {
           }, {});
         }
 
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        return (data || []).map((i: any) => ({
-          id: i.id,
+        return (data || []).map((i: Record<string, unknown>) => ({
+          id: String(i.id),
           vessel_id: i.vessel_id,
-          vessel_name: vesselMap[i.vessel_id] || null,
-          port_name: i.port_name || "",
-          country: i.country || "",
-          inspection_date: i.inspection_date,
-          detention_risk_score: i.detention_risk_score || 0,
-          predicted_deficiencies: i.predicted_deficiencies || [],
-          actual_deficiencies: i.actual_deficiencies || [],
-          was_detained: i.was_detained || false,
-          status: i.status || "scheduled",
-          ai_briefing: i.ai_briefing,
-          preparation_checklist: i.preparation_checklist || [],
-          notes: i.notes,
-          created_at: i.created_at,
+          vessel_name: vesselMap[String(i.vessel_id)] || null,
+          port_name: String(i.port_name || ""),
+          country: String(i.country || ""),
+          inspection_date: i.inspection_date as string | undefined,
+          detention_risk_score: Number(i.detention_risk_score) || 0,
+          predicted_deficiencies: (i.predicted_deficiencies as string[]) || [],
+          actual_deficiencies: (i.actual_deficiencies as string[]) || [],
+          was_detained: Boolean(i.was_detained),
+          status: String(i.status || "scheduled"),
+          ai_briefing: i.ai_briefing as string | undefined,
+          preparation_checklist: (i.preparation_checklist as string[]) || [],
+          notes: i.notes as string | undefined,
+          created_at: String(i.created_at),
         })) as PSCInspection[];
       } catch (err) {
         logger.error("[PSC] Error loading inspections:", err);

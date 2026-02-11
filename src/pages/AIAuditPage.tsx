@@ -49,7 +49,7 @@ export default function AIAuditPage() {
             <CardTitle className="text-sm">Decisões Aprovadas</CardTitle>
           </CardHeader>
           <CardContent>
-            <span className="text-3xl font-bold text-green-500">{metrics.approvedDecisions}</span>
+            <span className="text-3xl font-bold text-success">{metrics.approvedDecisions}</span>
           </CardContent>
         </Card>
         <Card>
@@ -57,7 +57,7 @@ export default function AIAuditPage() {
             <CardTitle className="text-sm">Pendentes</CardTitle>
           </CardHeader>
           <CardContent>
-            <span className="text-3xl font-bold text-yellow-500">{metrics.pendingDecisions}</span>
+            <span className="text-3xl font-bold text-warning">{metrics.pendingDecisions}</span>
           </CardContent>
         </Card>
       </div>
@@ -77,17 +77,17 @@ export default function AIAuditPage() {
                   <p>Interações com a IA serão registradas automaticamente</p>
                 </div>
               ) : (
-                auditLogs.slice(0, 20).map((log: any) => (
-                  <div key={log.id} className="flex items-center justify-between border-b pb-3 last:border-0">
+                auditLogs.slice(0, 20).map((log: Record<string, unknown>) => (
+                  <div key={String(log.id)} className="flex items-center justify-between border-b pb-3 last:border-0">
                     <div className="flex items-center gap-4">
                       <Brain className="h-5 w-5 text-muted-foreground flex-shrink-0" />
                       <div>
-                        <p className="font-medium text-sm">{(log.user_input || "Interação IA").slice(0, 80)}</p>
+                        <p className="font-medium text-sm">{String(log.user_input || "Interação IA").slice(0, 80)}</p>
                         <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                          {log.model_version && <Badge variant="outline" className="text-xs">{log.model_version}</Badge>}
+                          {typeof log.model_version === "string" && <Badge variant="outline" className="text-xs">{log.model_version}</Badge>}
                           <Clock className="h-3 w-3 ml-2" />
-                          <span>{format(new Date(log.created_at), "dd/MM HH:mm", { locale: ptBR })}</span>
-                          {log.response_time_ms && <span className="text-xs">({log.response_time_ms}ms)</span>}
+                          <span>{format(new Date(String(log.created_at)), "dd/MM HH:mm", { locale: ptBR })}</span>
+                          {typeof log.response_time_ms === "number" && <span className="text-xs">({log.response_time_ms}ms)</span>}
                         </div>
                       </div>
                     </div>

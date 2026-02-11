@@ -155,14 +155,14 @@ export function WeatherRoutingPanel() {
             {/* Daily Forecast */}
             {forecast.forecast_days?.length > 0 && (
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3">
-                {forecast.forecast_days.map((day: any, i: number) => (
+                {forecast.forecast_days.map((day: Record<string, unknown>, i: number) => (
                   <motion.div key={i} initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.05 }}>
                     <Card>
                       <CardHeader className="pb-2">
                         <div className="flex items-center justify-between">
-                          <CardTitle className="text-xs">{day.date || `Dia ${i + 1}`}</CardTitle>
-                          <Badge variant="outline" className={riskColors[day.risk_level] || ""}>
-                            {day.risk_level || "N/A"}
+                          <CardTitle className="text-xs">{String(day.date || `Dia ${i + 1}`)}</CardTitle>
+                          <Badge variant="outline" className={riskColors[String(day.risk_level || "")] || ""}>
+                            {String(day.risk_level || "N/A")}
                           </Badge>
                         </div>
                       </CardHeader>
@@ -170,29 +170,29 @@ export function WeatherRoutingPanel() {
                         <div className="grid grid-cols-2 gap-2 text-xs">
                           <div className="flex items-center gap-1">
                             <Wind className="h-3 w-3 text-muted-foreground" />
-                            <span>{day.wind?.speed_kts || "?"} kts {day.wind?.direction || ""}</span>
+                            <span>{String((day.wind as Record<string, unknown>)?.speed_kts ?? "?")} kts {String((day.wind as Record<string, unknown>)?.direction ?? "")}</span>
                           </div>
                           <div className="flex items-center gap-1">
                             <Waves className="h-3 w-3 text-muted-foreground" />
-                            <span>{day.waves?.height_m || "?"}m</span>
+                            <span>{String((day.waves as Record<string, unknown>)?.height_m ?? "?")}m</span>
                           </div>
                           <div className="flex items-center gap-1">
                             <Thermometer className="h-3 w-3 text-muted-foreground" />
-                            <span>{day.temp_air_c || "?"}°C</span>
+                            <span>{String(day.temp_air_c ?? "?")}°C</span>
                           </div>
                           <div className="flex items-center gap-1">
                             <Eye className="h-3 w-3 text-muted-foreground" />
-                            <span>{day.visibility_nm || "?"}NM</span>
+                            <span>{String(day.visibility_nm ?? "?")}NM</span>
                           </div>
                           <div className="flex items-center gap-1">
                             <Compass className="h-3 w-3 text-muted-foreground" />
-                            <span>Bf {day.beaufort_scale || "?"}</span>
+                            <span>Bf {String(day.beaufort_scale ?? "?")}</span>
                           </div>
                           <div className="flex items-center gap-1">
-                            <span className="text-muted-foreground">{day.pressure_hpa || "?"}hPa</span>
+                            <span className="text-muted-foreground">{String(day.pressure_hpa ?? "?")}hPa</span>
                           </div>
                         </div>
-                        {day.sea_state && (
+                        {typeof day.sea_state === "string" && day.sea_state && (
                           <p className="text-xs text-muted-foreground">Mar: {day.sea_state}</p>
                         )}
                       </CardContent>
@@ -204,21 +204,21 @@ export function WeatherRoutingPanel() {
 
             {/* Alerts */}
             {forecast.alerts?.length > 0 && (
-              <Card className="border-amber-500/20">
+              <Card className="border-warning/20">
                 <CardHeader className="pb-2">
                   <CardTitle className="text-sm flex items-center gap-2">
-                    <AlertTriangle className="h-4 w-4 text-amber-500" />
+                    <AlertTriangle className="h-4 w-4 text-warning" />
                     Alertas Meteorológicos ({forecast.alerts.length})
                   </CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-2">
-                  {forecast.alerts.map((alert: any, i: number) => (
-                    <div key={i} className="p-2 rounded bg-amber-500/5 border border-amber-500/20 text-xs">
+                  {forecast.alerts.map((alert: Record<string, unknown>, i: number) => (
+                    <div key={i} className="p-2 rounded bg-warning/5 border border-warning/20 text-xs">
                       <div className="flex items-center gap-2 mb-1">
-                        <Badge variant="outline" className="text-amber-600">{alert.severity}</Badge>
-                        <span className="font-medium">{alert.type}</span>
+                        <Badge variant="outline" className="text-warning">{String(alert.severity)}</Badge>
+                        <span className="font-medium">{String(alert.type)}</span>
                       </div>
-                      <p className="text-muted-foreground">{alert.description}</p>
+                      <p className="text-muted-foreground">{String(alert.description)}</p>
                     </div>
                   ))}
                 </CardContent>

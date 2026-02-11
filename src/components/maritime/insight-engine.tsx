@@ -163,7 +163,7 @@ export const InsightEngine: React.FC = () => {
             <CardTitle className="text-sm font-medium">Alertas Críticos</CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-red-600">
+            <div className="text-2xl font-bold text-destructive">
               {insights.filter(i => i.impact === "critical").length}
             </div>
             <p className="text-xs text-muted-foreground">Ação imediata</p>
@@ -217,7 +217,7 @@ export const InsightEngine: React.FC = () => {
                           </CardDescription>
                         </div>
                       </div>
-                      <Badge variant={getImpactColor(insight.impact) as any}>
+                      <Badge variant={getImpactColor(insight.impact) as "destructive" | "default" | "secondary" | "outline"}>
                         {insight.impact.toUpperCase()}
                       </Badge>
                     </div>
@@ -237,7 +237,7 @@ export const InsightEngine: React.FC = () => {
                       {insight.estimatedSavings && (
                         <div>
                           <span className="text-muted-foreground">Economia:</span>
-                          <span className="ml-2 font-medium text-green-600">
+                          <span className="ml-2 font-medium text-success">
                             R$ {insight.estimatedSavings.toLocaleString()}
                           </span>
                         </div>
@@ -258,14 +258,14 @@ export const InsightEngine: React.FC = () => {
                       </div>
                     )}
 
-                    <div className="bg-blue-50 dark:bg-blue-950 p-3 rounded-lg">
+                    <div className="bg-info/10 p-3 rounded-lg">
                       <div className="flex items-start gap-2">
-                        <Lightbulb className="h-4 w-4 mt-0.5 text-blue-600" />
+                        <Lightbulb className="h-4 w-4 mt-0.5 text-info" />
                         <div>
-                          <div className="text-sm font-medium text-blue-900 dark:text-blue-100">
+                          <div className="text-sm font-medium text-foreground">
                             Recomendação
                           </div>
-                          <div className="text-sm text-blue-700 dark:text-blue-300 mt-1">
+                          <div className="text-sm text-muted-foreground mt-1">
                             {insight.recommendation}
                           </div>
                         </div>

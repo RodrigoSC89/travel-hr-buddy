@@ -64,7 +64,7 @@ export function TCECalculatorPanel() {
           </CardHeader>
           <CardContent className="space-y-3">
             <div>
-              <Label className="text-xs font-medium text-emerald-600">Receitas</Label>
+              <Label className="text-xs font-medium text-success">Receitas</Label>
               <div className="grid grid-cols-3 gap-2 mt-1">
                 <div><Label className="text-[10px]">Frete (USD)</Label><Input type="number" value={params.freight_revenue} onChange={e => updateParam("freight_revenue", e.target.value)} className="h-8 text-sm" /></div>
                 <div><Label className="text-[10px]">Demurrage</Label><Input type="number" value={params.demurrage} onChange={e => updateParam("demurrage", e.target.value)} className="h-8 text-sm" /></div>
@@ -75,7 +75,7 @@ export function TCECalculatorPanel() {
             <Separator />
 
             <div>
-              <Label className="text-xs font-medium text-red-600">Custos de Viagem</Label>
+              <Label className="text-xs font-medium text-destructive">Custos de Viagem</Label>
               <div className="grid grid-cols-2 gap-2 mt-1">
                 <div><Label className="text-[10px]">Combustível</Label><Input type="number" value={params.fuel_cost} onChange={e => updateParam("fuel_cost", e.target.value)} className="h-8 text-sm" /></div>
                 <div><Label className="text-[10px]">Portuários</Label><Input type="number" value={params.port_costs} onChange={e => updateParam("port_costs", e.target.value)} className="h-8 text-sm" /></div>
@@ -110,8 +110,8 @@ export function TCECalculatorPanel() {
                   <p className="text-xs text-muted-foreground">USD / dia</p>
                 </div>
                 <div className="grid grid-cols-2 gap-2 text-xs">
-                  <div className="flex justify-between"><span>Receita Bruta</span><span className="font-mono text-emerald-600">${result.base.gross_revenue.toLocaleString()}</span></div>
-                  <div className="flex justify-between"><span>Custos Viagem</span><span className="font-mono text-red-600">${result.base.voyage_costs.toLocaleString()}</span></div>
+                  <div className="flex justify-between"><span>Receita Bruta</span><span className="font-mono text-success">${result.base.gross_revenue.toLocaleString()}</span></div>
+                  <div className="flex justify-between"><span>Custos Viagem</span><span className="font-mono text-destructive">${result.base.voyage_costs.toLocaleString()}</span></div>
                   <div className="flex justify-between"><span>Lucro</span><span className="font-mono font-bold">${(result.base.gross_revenue - result.base.voyage_costs).toLocaleString()}</span></div>
                   <div className="flex justify-between"><span>Dias</span><span className="font-mono">{result.base.voyage_days}</span></div>
                 </div>
@@ -129,7 +129,7 @@ export function TCECalculatorPanel() {
                     <span className="flex-1">{s.label}</span>
                     <div className="flex items-center gap-2">
                       <span className="font-mono font-bold">${s.tce_per_day.toLocaleString()}/d</span>
-                      <Badge variant="outline" className={s.delta_vs_base >= 0 ? "text-emerald-600" : "text-red-600"}>
+                      <Badge variant="outline" className={s.delta_vs_base >= 0 ? "text-success" : "text-destructive"}>
                         {s.delta_vs_base >= 0 ? <TrendingUp className="h-3 w-3 mr-1" /> : <TrendingDown className="h-3 w-3 mr-1" />}
                         {s.delta_vs_base >= 0 ? "+" : ""}{s.delta_vs_base.toLocaleString()}
                       </Badge>

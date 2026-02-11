@@ -54,8 +54,8 @@ export const SystemReadinessIndicator = memo(function SystemReadinessIndicator()
   }, [systems]);
 
   const statusColor = {
-    operational: 'text-green-500 bg-green-500/10',
-    degraded: 'text-yellow-500 bg-yellow-500/10',
+    operational: 'text-success bg-success/10',
+    degraded: 'text-warning bg-warning/10',
   };
 
   const statusLabel = {

@@ -253,12 +253,12 @@ export const BusinessKPIDashboard: React.FC = () => {
         <Card>
           <CardHeader className="pb-3">
             <CardTitle className="flex items-center gap-2 text-sm font-medium">
-              <DollarSign className="w-4 h-4 text-green-600" />
+              <DollarSign className="w-4 h-4 text-success" />
               Receita Atual
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-green-600">
+            <div className="text-2xl font-bold text-success">
               R$ {(metrics.revenue.current / 1000000).toFixed(2)}M
             </div>
             <div className="flex items-center gap-1 text-sm">
@@ -275,12 +275,12 @@ export const BusinessKPIDashboard: React.FC = () => {
         <Card>
           <CardHeader className="pb-3">
             <CardTitle className="flex items-center gap-2 text-sm font-medium">
-              <Users className="w-4 h-4 text-blue-600" />
+              <Users className="w-4 h-4 text-info" />
               Usuários Ativos
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-blue-600">
+            <div className="text-2xl font-bold text-info">
               {metrics.users.active.toLocaleString()}
             </div>
             <div className="flex items-center gap-1 text-sm text-muted-foreground">
@@ -307,12 +307,12 @@ export const BusinessKPIDashboard: React.FC = () => {
         <Card>
           <CardHeader className="pb-3">
             <CardTitle className="flex items-center gap-2 text-sm font-medium">
-              <TrendingUp className="w-4 h-4 text-orange-600" />
+              <TrendingUp className="w-4 h-4 text-warning" />
               Satisfação
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-orange-600">
+            <div className="text-2xl font-bold text-warning">
               {metrics.performance.satisfaction}/5.0
             </div>
             <Progress value={metrics.performance.satisfaction * 20} className="mt-2" />
