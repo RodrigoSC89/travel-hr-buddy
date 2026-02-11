@@ -34,10 +34,10 @@ interface MetricCardProps {
 function MetricCard({ title, value, change, icon: Icon, color = 'primary', subtext }: MetricCardProps) {
   const colorClasses: Record<string, string> = {
     primary: 'text-primary bg-primary/10',
-    green: 'text-green-500 bg-green-500/10',
-    yellow: 'text-yellow-500 bg-yellow-500/10',
-    red: 'text-red-500 bg-red-500/10',
-    blue: 'text-blue-500 bg-blue-500/10',
+    green: 'text-success bg-success/10',
+    yellow: 'text-warning bg-warning/10',
+    red: 'text-destructive bg-destructive/10',
+    blue: 'text-info bg-info/10',
   };
   
   return (
@@ -58,13 +58,13 @@ function MetricCard({ title, value, change, icon: Icon, color = 'primary', subte
         {change !== undefined && (
           <div className="flex items-center gap-1 mt-2">
             {change >= 0 ? (
-              <TrendingUp className="h-3.5 w-3.5 text-green-500" />
+              <TrendingUp className="h-3.5 w-3.5 text-success" />
             ) : (
-              <TrendingDown className="h-3.5 w-3.5 text-red-500" />
+              <TrendingDown className="h-3.5 w-3.5 text-destructive" />
             )}
             <span className={cn(
               'text-xs font-medium',
-              change >= 0 ? 'text-green-500' : 'text-red-500'
+              change >= 0 ? 'text-success' : 'text-destructive'
             )}>
               {change >= 0 ? '+' : ''}{change}%
             </span>
@@ -87,10 +87,10 @@ interface PerformanceGaugeProps {
 function PerformanceGauge({ label, value, max, unit = 'ms', thresholds }: PerformanceGaugeProps) {
   const percent = Math.min((value / max) * 100, 100);
   
-  let color = 'bg-green-500';
+  let color = 'bg-success';
   if (thresholds) {
-    if (value > thresholds.warning) color = 'bg-red-500';
-    else if (value > thresholds.good) color = 'bg-yellow-500';
+    if (value > thresholds.warning) color = 'bg-destructive';
+    else if (value > thresholds.good) color = 'bg-warning';
   }
   
   return (
@@ -256,7 +256,7 @@ export function RealTimeMetrics() {
               <div className="flex items-center gap-2">
                 <span className={cn(
                   'h-2.5 w-2.5 rounded-full',
-                  networkStatus.online ? 'bg-green-500' : 'bg-red-500'
+                  networkStatus.online ? 'bg-success' : 'bg-destructive'
                 )} />
                 <p className="text-lg font-semibold">
                   {networkStatus.online ? 'Online' : 'Offline'}

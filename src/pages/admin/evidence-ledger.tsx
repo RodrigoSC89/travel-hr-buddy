@@ -56,7 +56,7 @@ export default function EvidenceLedgerPage() {
   const [loading, setLoading] = useState(true);
   const [selectedEntry, setSelectedEntry] = useState<EvidenceEntry | null>(null);
   const [verifying, setVerifying] = useState(false);
-  const [integrityResult, setIntegrityResult] = useState<any>(null);
+  const [integrityResult, setIntegrityResult] = useState<{ isValid: boolean; message: string } | null>(null);
 
   // Filter state
   const [filterEventType, setFilterEventType] = useState<string>("");
@@ -109,10 +109,9 @@ export default function EvidenceLedgerPage() {
   };
 
   const applyFilters = async () => {
-    const filters: any = {};
-    if (filterEventType) filters.eventType = filterEventType;
+    const filters: { eventType?: "audit" | "checklist" | "correction" | "incident" | "inspection" | "training"; moduleId?: string; limit: number } = { limit: 100 };
+    if (filterEventType) filters.eventType = filterEventType as typeof filters.eventType;
     if (filterModule) filters.moduleId = filterModule;
-    filters.limit = 100;
 
     const filtered = await queryLedger(filters);
     setEntries(filtered);
@@ -145,7 +144,7 @@ export default function EvidenceLedgerPage() {
     return (
       <div className="flex items-center justify-center h-screen">
         <div className="text-center">
-          <Lock className="h-12 w-12 animate-pulse mx-auto mb-4 text-blue-600" />
+          <Lock className="h-12 w-12 animate-pulse mx-auto mb-4 text-primary" />
           <p className="text-lg">Loading Evidence Ledger...</p>
         </div>
       </div>
@@ -158,7 +157,7 @@ export default function EvidenceLedgerPage() {
       <div className="flex justify-between items-center">
         <div>
           <h1 className="text-3xl font-bold flex items-center gap-2">
-            <Shield className="h-8 w-8 text-blue-600" />
+            <Shield className="h-8 w-8 text-primary" />
             Evidence Ledger
           </h1>
           <p className="text-muted-foreground mt-1">

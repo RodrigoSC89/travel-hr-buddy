@@ -283,9 +283,9 @@ export const AdvancedSearch: React.FC<AdvancedSearchProps> = ({ open, onOpenChan
                           <Star 
                             className={`h-4 w-4 ${
                               favorites.some(f => f.id === result.id) 
-                                ? "fill-yellow-400 text-yellow-400" 
+                                ? "fill-warning text-warning" 
                                 : ""
-                            }`} 
+                            }`}
                           />
                         </Button>
                       </div>
@@ -345,7 +345,7 @@ export const AdvancedSearch: React.FC<AdvancedSearchProps> = ({ open, onOpenChan
                           {favorite.description}
                         </p>
                       </div>
-                      <Star className="h-4 w-4 fill-yellow-400 text-yellow-400" />
+                      <Star className="h-4 w-4 fill-warning text-warning" />
                     </div>
                   ))}
                 </div>
