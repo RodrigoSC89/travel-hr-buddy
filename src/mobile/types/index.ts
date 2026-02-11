@@ -36,7 +36,7 @@ export interface SyncQueueItem {
   id: string;
   table: string;
   action: "create" | "update" | "delete";
-  data: any;
+  data: unknown;
   priority: "high" | "medium" | "low";
   timestamp: number;
   retryCount: number;

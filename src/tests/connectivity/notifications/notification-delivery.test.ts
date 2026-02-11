@@ -4,14 +4,25 @@
 
 import { describe, it, expect, beforeEach, vi } from "vitest";
 
+interface Notification {
+  recipient: string | null;
+  message: string;
+  priority?: string;
+  channel?: string;
+  id?: string;
+  sentAt?: Date;
+  queuedAt?: Date;
+  status?: string;
+}
+
 // Mock notification service
 class NotificationService {
-  private queue: any[] = [];
-  private sent: any[] = [];
-  private failed: any[] = [];
+  private queue: Notification[] = [];
+  private sent: Notification[] = [];
+  private failed: Notification[] = [];
 
-  async sendNotification(notification: any) {
-    const { recipient, message, priority, channel } = notification;
+  async sendNotification(notification: Notification) {
+    const { recipient, message, priority } = notification;
 
     // Simulate delivery
     const deliveryTime = priority === "high" ? 100 : 500;
@@ -34,7 +45,7 @@ class NotificationService {
     });
   }
 
-  queueNotification(notification: any) {
+  queueNotification(notification: Notification) {
     this.queue.push({
       ...notification,
       queuedAt: new Date(),
@@ -79,7 +90,7 @@ describe("Notification Delivery System", () => {
 
   describe("Direct Sending", () => {
     it("should send notification successfully", async () => {
-      const notification = {
+      const notification: Notification = {
         recipient: "user@example.com",
         message: "Test notification",
         priority: "normal",
@@ -93,14 +104,14 @@ describe("Notification Delivery System", () => {
     });
 
     it("should prioritize high priority notifications", async () => {
-      const highPriority = {
+      const highPriority: Notification = {
         recipient: "user@example.com",
         message: "Urgent alert",
         priority: "high",
         channel: "sms",
       };
 
-      const normalPriority = {
+      const normalPriority: Notification = {
         recipient: "user@example.com",
         message: "Regular update",
         priority: "normal",
@@ -119,7 +130,7 @@ describe("Notification Delivery System", () => {
     });
 
     it("should handle invalid notifications", async () => {
-      const invalid = {
+      const invalid: Notification = {
         recipient: null,
         message: "",
         priority: "normal",
@@ -200,7 +211,7 @@ describe("Notification Delivery System", () => {
           recipient: null,
           message: "",
         });
-      } catch {}
+      } catch { /* expected failure */ }
 
       const stats = service.getStats();
       expect(stats.successRate).toBeCloseTo(0.67, 1);

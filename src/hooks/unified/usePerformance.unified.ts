@@ -85,6 +85,7 @@ class FPSMonitor {
 // UTILITY FUNCTIONS
 // ============================================
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- generic function constraint requires any
 export function debounce<T extends (...args: any[]) => any>(
   fn: T,
   delay: number
@@ -96,6 +97,7 @@ export function debounce<T extends (...args: any[]) => any>(
   };
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- generic function constraint requires any
 export function throttle<T extends (...args: any[]) => any>(
   fn: T,
   delay: number
@@ -360,6 +362,7 @@ export function usePerformanceMetrics(): PerformanceMetrics {
 /**
  * Debounced callback
  */
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- generic function constraint requires any
 export function useDebounce<T extends (...args: any[]) => any>(
   callback: T,
   delay: number
@@ -370,6 +373,7 @@ export function useDebounce<T extends (...args: any[]) => any>(
 /**
  * Throttled callback
  */
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- generic function constraint requires any
 export function useThrottle<T extends (...args: any[]) => any>(
   callback: T,
   delay: number

@@ -687,7 +687,7 @@ export function CargoFullCRUD() {
                 <Label>Status</Label>
                 <Select 
                   value={formData.status} 
-                  onValueChange={(v: any) => setFormData({...formData, status: v})}
+                  onValueChange={(v) => setFormData({...formData, status: v as typeof formData.status})}
                 >
                   <SelectTrigger>
                     <SelectValue />
