@@ -277,10 +277,10 @@ export const RainRadarMap: React.FC<RainRadarMapProps> = ({
       {/* Header */}
       <div className="p-3 bg-slate-800/50 flex items-center justify-between">
         <div className="flex items-center gap-2">
-          <CloudRain className="h-5 w-5 text-blue-400" />
+          <CloudRain className="h-5 w-5 text-info" />
           <span className="text-white font-medium">Radar de Chuva</span>
           {maxPrecip > 0 && (
-            <Badge variant="outline" className="bg-blue-500/20 text-blue-300 border-blue-500/50">
+            <Badge variant="outline" className="bg-info/20 text-info border-info/50">
               {maxPrecip.toFixed(1)} mm/h
             </Badge>
           )}
@@ -324,7 +324,7 @@ export const RainRadarMap: React.FC<RainRadarMapProps> = ({
         
         {error && (
           <div className="absolute inset-0 bg-slate-900/80 flex items-center justify-center z-10">
-            <p className="text-red-400">{error}</p>
+            <p className="text-destructive">{error}</p>
           </div>
         )}
         

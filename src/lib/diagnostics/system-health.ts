@@ -95,7 +95,7 @@ async function checkAuth(): Promise<HealthCheck> {
  */
 async function checkNetwork(): Promise<HealthCheck> {
   // PATCH iOS PWA: Sempre assumir online - navigator.onLine não é confiável
-  const connection = (navigator as any).connection;
+  const connection = (navigator as unknown as Record<string, unknown>).connection as Record<string, unknown> | undefined;
   
   let message = "Online";
   let status: HealthCheck["status"] = "healthy";
@@ -226,7 +226,8 @@ async function checkServiceWorker(): Promise<HealthCheck> {
  * Check memory usage
  */
 function checkMemory(): HealthCheck {
-  const memory = (performance as any).memory;
+  interface PerfMemory { usedJSHeapSize: number; totalJSHeapSize: number; jsHeapSizeLimit: number; }
+  const memory = (performance as unknown as { memory?: PerfMemory }).memory;
   
   if (!memory) {
     return {

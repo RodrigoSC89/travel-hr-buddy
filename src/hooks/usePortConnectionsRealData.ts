@@ -95,15 +95,18 @@ export function usePortConnectionsRealData() {
 
       if (error) throw error;
 
-      return (data || []).map(log => ({
-        id: log.id,
-        timestamp: new Date(log.created_at),
-        port: (log.metadata as any)?.port || "Sistema",
-        action: log.message || "API_CALL",
-        status: log.level === "error" ? "error" : log.level === "warning" ? "pending" : "success",
-        responseTime: (log.metadata as any)?.response_time || 0,
-        details: (log.metadata as any)?.details || log.message || "",
-      }));
+      return (data || []).map(log => {
+        const meta = (log.metadata ?? {}) as Record<string, unknown>;
+        return {
+          id: log.id,
+          timestamp: new Date(log.created_at),
+          port: String(meta.port ?? "Sistema"),
+          action: log.message || "API_CALL",
+          status: log.level === "error" ? "error" as const : log.level === "warning" ? "pending" as const : "success" as const,
+          responseTime: Number(meta.response_time ?? 0),
+          details: String(meta.details ?? log.message ?? ""),
+        };
+      });
     },
     staleTime: 10000,
   });
@@ -116,15 +119,17 @@ export function usePortConnectionsRealData() {
         "postgres_changes",
         { event: "INSERT", schema: "public", table: "logs" },
         (payload) => {
-          if ((payload.new as any).module === "port-api") {
+          const row = payload.new as Record<string, unknown>;
+          if (row.module === "port-api") {
+            const details = (row.details ?? {}) as Record<string, unknown>;
             const newLog: APILog = {
-              id: payload.new.id,
-              timestamp: new Date(payload.new.created_at),
-              port: (payload.new.details as any)?.port || "Sistema",
-              action: payload.new.message || "API_CALL",
-              status: payload.new.level === "error" ? "error" : "success",
-              responseTime: (payload.new.details as any)?.response_time || 0,
-              details: (payload.new.details as any)?.details || "",
+              id: String(row.id),
+              timestamp: new Date(String(row.created_at)),
+              port: String(details.port ?? "Sistema"),
+              action: String(row.message ?? "API_CALL"),
+              status: row.level === "error" ? "error" : "success",
+              responseTime: Number(details.response_time ?? 0),
+              details: String(details.details ?? ""),
             };
             setRealtimeLogs(prev => [newLog, ...prev].slice(0, 20));
           }
