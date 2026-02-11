@@ -57,7 +57,7 @@ function useAuditLogs() {
         .limit(20);
 
       if (error) throw error;
-      return (data || []).map((log: any) => ({
+      return (data || []).map((log) => ({
         id: log.id,
         eventType: log.module_accessed || "system",
         action: log.action,
@@ -65,8 +65,8 @@ function useAuditLogs() {
         user: log.user_id || "system",
         resource: log.module_accessed,
         timestamp: log.timestamp,
-        details: typeof log.details === 'object' ? JSON.stringify(log.details) : log.details,
-        ipAddress: log.details?.ip || undefined
+        details: typeof log.details === 'object' && log.details !== null ? JSON.stringify(log.details) : String(log.details ?? ''),
+        ipAddress: typeof log.details === 'object' && log.details !== null ? (log.details as Record<string, unknown>).ip as string | undefined : undefined
       }));
     },
     staleTime: 1000 * 30,
@@ -171,8 +171,8 @@ export function SecurityAuditCenter() {
   const exportReport = () => {
     const rows = [
       "Timestamp;Severidade;Evento;Detalhes",
-      ...(auditLogs || []).map((l: any) =>
-        `${l.created_at};${l.severity || "info"};${l.action};${JSON.stringify(l.details || {}).replace(/;/g, ",")}`
+      ...(auditLogs || []).map((l: { timestamp?: string; severity?: string; action?: string; details?: unknown }) =>
+        `${l.timestamp};${l.severity || "info"};${l.action};${JSON.stringify(l.details || {}).replace(/;/g, ",")}`
       )
     ];
     const blob = new Blob(['\uFEFF' + rows.join('\n')], { type: 'text/csv;charset=utf-8;' });
@@ -371,7 +371,7 @@ export function SecurityAuditCenter() {
                   </div>
                 ) : (
                   <div className="space-y-3">
-                    {auditLogs.map((log: any) => (
+                    {auditLogs.map((log) => (
                       <div
                         key={log.id}
                         className={cn("p-4 rounded-lg border-l-4", getSeverityColor(log.severity))}

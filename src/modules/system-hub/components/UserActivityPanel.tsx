@@ -128,44 +128,70 @@ export default function UserActivityPanel() {
   });
 
   // Map real sessions to UserSession format
-  const mappedSessions: UserSession[] = (sessions || []).map((s: any) => {
-    const profile = s.profiles || {};
-    const deviceInfo = (s.device_info as any) || {};
-    const lastAct = new Date(s.last_activity);
+  interface SessionRow {
+    id: string;
+    user_id: string;
+    last_activity: string;
+    ip_address: unknown;
+    user_agent?: string | null;
+    device_info?: Record<string, unknown> | null;
+    profiles?: { full_name?: string; email?: string; avatar_url?: string; role?: string } | null;
+  }
+  const mappedSessions: UserSession[] = (sessions || []).map((s: unknown) => {
+    const row = s as SessionRow;
+    const profile = row.profiles || {};
+    const deviceInfo = (row.device_info as Record<string, string>) || {};
+    const lastAct = new Date(row.last_activity);
     const now = new Date();
     const diffMs = now.getTime() - lastAct.getTime();
     const status: "online" | "away" | "offline" = diffMs < 300000 ? "online" : diffMs < 1800000 ? "away" : "offline";
     
     return {
-      id: s.id,
-      userId: s.user_id,
+      id: row.id,
+      userId: row.user_id,
       userName: profile.full_name || "Usuário",
       email: profile.email || "",
       avatar: profile.avatar_url,
       role: profile.role || "Membro",
       status,
       lastActivity: lastAct,
-      device: (deviceInfo.device_type || "desktop") as any,
-      browser: s.user_agent?.split(" ").slice(-1)[0] || "Browser",
+      device: (deviceInfo.device_type || "desktop") as UserSession["device"],
+      browser: row.user_agent?.split(" ").slice(-1)[0] || "Browser",
       location: deviceInfo.location || "N/A",
-      ipAddress: typeof s.ip_address === "string" ? s.ip_address : "N/A",
+      ipAddress: typeof row.ip_address === "string" ? row.ip_address : "N/A",
       sessionDuration: Math.round(diffMs / 60000),
       actionsCount: 0,
     };
   });
 
   // Map real logs to ActivityLog format
-  const mappedLogs: ActivityLog[] = (activityLogs || []).map((l: any) => ({
-    id: l.id,
-    userId: l.user_id || "",
-    userName: l.user_agent?.split("/")[0] || "Usuário",
-    action: l.action || l.event_message || "",
-    module: l.module_accessed || "",
-    timestamp: new Date(l.timestamp || l.created_at),
-    severity: (l.severity || "info") as any,
-    details: typeof l.details === "string" ? l.details : undefined,
-    ipAddress: typeof l.ip_address === "string" ? l.ip_address : "N/A",
-  }));
+  interface LogRow {
+    id: string;
+    user_id?: string;
+    user_agent?: string;
+    action?: string;
+    event_message?: string;
+    module_accessed?: string;
+    timestamp?: string;
+    created_at?: string;
+    severity?: string;
+    details?: unknown;
+    ip_address?: unknown;
+  }
+  const mappedLogs: ActivityLog[] = (activityLogs || []).map((l: unknown) => {
+    const row = l as Record<string, unknown>;
+    return {
+      id: String(row.id),
+      userId: String(row.user_id || ""),
+      userName: String(row.user_agent || "").split("/")[0] || "Usuário",
+      action: String(row.action || row.event_message || ""),
+      module: String(row.module_accessed || ""),
+      timestamp: new Date(String(row.timestamp || row.created_at || Date.now())),
+      severity: (String(row.severity || "info")) as ActivityLog["severity"],
+      details: typeof row.details === "string" ? row.details : undefined,
+      ipAddress: typeof row.ip_address === "string" ? row.ip_address : "N/A",
+    };
+  });
 
   const hourlyActivity = [
     { hour: "00h", users: 0 },
@@ -210,7 +236,7 @@ export default function UserActivityPanel() {
   const getSeverityColor = (severity: string) => {
     switch (severity) {
       case "success": return "text-success bg-success/10";
-      case "info": return "text-blue-500 bg-blue-500/10";
+      case "info": return "text-primary bg-primary/10";
       case "warning": return "text-warning bg-warning/10";
       case "error": return "text-destructive bg-destructive/10";
       default: return "text-muted-foreground bg-muted";
@@ -279,8 +305,8 @@ export default function UserActivityPanel() {
         <Card className="hover:shadow-md transition-shadow">
           <CardContent className="p-4">
             <div className="flex items-center gap-3">
-              <div className="p-2 rounded-lg bg-purple-500/10">
-                <Activity className="h-5 w-5 text-purple-500" />
+              <div className="p-2 rounded-lg bg-accent/10">
+                <Activity className="h-5 w-5 text-accent-foreground" />
               </div>
               <div>
                 <p className="text-2xl font-bold">{mappedLogs.length}</p>
@@ -482,7 +508,7 @@ export default function UserActivityPanel() {
         <CardContent>
           <ScrollArea className="h-[300px]">
             <div className="space-y-2">
-              {mappedLogs.map((log: any, idx: number) => (
+              {mappedLogs.map((log, idx) => (
                 <motion.div
                   key={log.id}
                   initial={{ opacity: 0, x: -10 }}

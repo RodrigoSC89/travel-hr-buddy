@@ -13,7 +13,7 @@ interface QueuedRequest {
   timestamp: number;
   retries: number;
   resolve: (value: Response) => void;
-  reject: (reason: any) => void;
+  reject: (reason: unknown) => void;
 }
 
 class RequestQueueManager {
@@ -29,14 +29,16 @@ class RequestQueueManager {
     this.updateConcurrency();
     
     if ('connection' in navigator) {
-      (navigator as any).connection?.addEventListener('change', () => {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any -- non-standard Navigator.connection API
+      ((navigator as Record<string, any>).connection)?.addEventListener('change', () => {
         this.updateConcurrency();
       });
     }
   }
 
   private updateConcurrency() {
-    const connection = (navigator as any).connection;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any -- non-standard Navigator.connection API
+    const connection = (navigator as Record<string, any>).connection;
     if (!connection) return;
 
     const effectiveType = connection.effectiveType;

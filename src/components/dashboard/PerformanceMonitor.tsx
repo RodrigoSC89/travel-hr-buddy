@@ -47,14 +47,17 @@ function PerformanceMonitorComponent() {
   // Coletar métricas apenas uma vez no mount e sob demanda
   const collectMetrics = useCallback(() => {
     const perfEntries = performance.getEntriesByType('navigation')[0] as PerformanceNavigationTiming;
-    const resources = performance.getEntriesByType('resource');
+    const resources = performance.getEntriesByType('resource') as PerformanceResourceTiming[];
     
-    const totalTransfer = resources.reduce((acc, r: any) => acc + (r.transferSize || 0), 0);
+    const totalTransfer = resources.reduce((acc, r) => acc + (r.transferSize || 0), 0);
     
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any -- non-standard browser APIs (performance.memory, navigator.connection)
+    const perfMemory = (performance as Record<string, any>).memory;
+    const navConnection = (navigator as Record<string, any>).connection;
     setMetrics({
       fps: 60,
-      memory: (performance as any).memory?.usedJSHeapSize / 1048576 || 0,
-      latency: Math.round((navigator as any).connection?.rtt || 50),
+      memory: perfMemory?.usedJSHeapSize / 1048576 || 0,
+      latency: Math.round(navConnection?.rtt || 50),
       ttfb: perfEntries?.responseStart - perfEntries?.requestStart || 0,
       domLoad: perfEntries?.domContentLoadedEventEnd - perfEntries?.startTime || 0,
       resourceCount: resources.length,
@@ -68,7 +71,7 @@ function PerformanceMonitorComponent() {
 
     // Detectar tipo de conexão
     if ('connection' in navigator) {
-      const conn = (navigator as any).connection;
+      const conn = (navigator as Record<string, any>).connection; // eslint-disable-line @typescript-eslint/no-explicit-any -- non-standard API
       setConnectionType(conn?.effectiveType || 'unknown');
     }
 
@@ -82,9 +85,9 @@ function PerformanceMonitorComponent() {
   };
 
   const getLatencyColor = (latency: number) => {
-    if (latency < 100) return "text-emerald-400";
-    if (latency < 300) return "text-amber-400";
-    return "text-red-400";
+    if (latency < 100) return "text-success";
+    if (latency < 300) return "text-warning";
+    return "text-destructive";
   };
 
   return (

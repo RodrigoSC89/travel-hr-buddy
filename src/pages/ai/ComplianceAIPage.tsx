@@ -79,9 +79,9 @@ export default function ComplianceAIPage() {
               <div className="flex items-center justify-between">
                 <div>
                   <p className="text-sm text-muted-foreground">Score Geral</p>
-                  <p className="text-3xl font-bold text-emerald-500">93%</p>
+                  <p className="text-3xl font-bold text-success">93%</p>
                 </div>
-                <CheckCircle className="h-8 w-8 text-emerald-500" />
+                <CheckCircle className="h-8 w-8 text-success" />
               </div>
             </CardContent>
           </Card>
@@ -90,9 +90,9 @@ export default function ComplianceAIPage() {
               <div className="flex items-center justify-between">
                 <div>
                   <p className="text-sm text-muted-foreground">Auditorias Pendentes</p>
-                  <p className="text-3xl font-bold text-amber-500">3</p>
+                  <p className="text-3xl font-bold text-warning">3</p>
                 </div>
-                <Clock className="h-8 w-8 text-amber-500" />
+                <Clock className="h-8 w-8 text-warning" />
               </div>
             </CardContent>
           </Card>
@@ -101,9 +101,9 @@ export default function ComplianceAIPage() {
               <div className="flex items-center justify-between">
                 <div>
                   <p className="text-sm text-muted-foreground">NCs Abertas</p>
-                  <p className="text-3xl font-bold text-red-500">2</p>
+                  <p className="text-3xl font-bold text-destructive">2</p>
                 </div>
-                <AlertTriangle className="h-8 w-8 text-red-500" />
+                <AlertTriangle className="h-8 w-8 text-destructive" />
               </div>
             </CardContent>
           </Card>
@@ -135,10 +135,10 @@ export default function ComplianceAIPage() {
                 >
                   <div className="flex items-center gap-4">
                     <div className={`p-2 rounded-lg ${
-                      module.status === 'compliant' ? 'bg-emerald-500/10' : 'bg-amber-500/10'
+                      module.status === 'compliant' ? 'bg-success/10' : 'bg-warning/10'
                     }`}>
                       {module.status === 'compliant' ? (
-                        <CheckCircle className="h-5 w-5 text-emerald-500" />
+                        <CheckCircle className="h-5 w-5 text-success" />
                       ) : (
                         <AlertTriangle className="h-5 w-5 text-amber-500" />
                       )}
@@ -176,9 +176,9 @@ export default function ComplianceAIPage() {
           </CardHeader>
           <CardContent>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div className="p-4 rounded-lg border border-amber-500/30 bg-amber-500/5">
+              <div className="p-4 rounded-lg border border-warning/30 bg-warning/5">
                 <div className="flex items-center gap-2 mb-2">
-                  <AlertTriangle className="h-4 w-4 text-amber-500" />
+                  <AlertTriangle className="h-4 w-4 text-warning" />
                   <span className="font-medium">Alerta Preditivo</span>
                 </div>
                 <p className="text-sm text-muted-foreground">
@@ -186,9 +186,9 @@ export default function ComplianceAIPage() {
                   Renovação recomendada até 15/03/2026.
                 </p>
               </div>
-              <div className="p-4 rounded-lg border border-emerald-500/30 bg-emerald-500/5">
+              <div className="p-4 rounded-lg border border-success/30 bg-success/5">
                 <div className="flex items-center gap-2 mb-2">
-                  <TrendingUp className="h-4 w-4 text-emerald-500" />
+                  <TrendingUp className="h-4 w-4 text-success" />
                   <span className="font-medium">Tendência Positiva</span>
                 </div>
                 <p className="text-sm text-muted-foreground">

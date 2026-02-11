@@ -10,6 +10,7 @@ import ReactFlow, {
   Edge,
   Controls,
   Background,
+  BackgroundVariant,
   MiniMap,
   useNodesState,
   useEdgesState,
@@ -72,7 +73,15 @@ import { motion, AnimatePresence } from "framer-motion";
 import { logger } from '@/lib/logger';
 
 // Custom Node Types
-const WorkflowNode = ({ data }: { data: any }) => {
+interface WorkflowNodeData {
+  label: string;
+  type?: string;
+  status?: string;
+  description?: string;
+  eta?: string;
+  aiSuggestion?: string;
+}
+const WorkflowNode = ({ data }: { data: WorkflowNodeData }) => {
   const getStatusColor = () => {
     switch (data.status) {
       case "completed": return "border-success bg-success/10 dark:bg-success/20";
@@ -111,12 +120,12 @@ const WorkflowNode = ({ data }: { data: any }) => {
         </div>
       )}
       {data.aiSuggestion && (
-        <div className="mt-2 p-2 bg-purple-100 dark:bg-purple-900/30 rounded text-xs">
-          <div className="flex items-center gap-1 text-purple-700 dark:text-purple-300">
+        <div className="mt-2 p-2 bg-accent/20 dark:bg-accent/10 rounded text-xs">
+          <div className="flex items-center gap-1 text-accent-foreground">
             <Sparkles className="h-3 w-3" />
             <span className="font-medium">IA:</span>
           </div>
-          <p className="text-purple-600 dark:text-purple-400 mt-1">{data.aiSuggestion}</p>
+          <p className="text-accent-foreground/80 mt-1">{data.aiSuggestion}</p>
         </div>
       )}
     </div>
@@ -199,7 +208,7 @@ const WorkflowVisual = () => {
   const [aiPrompt, setAiPrompt] = useState("");
   const [aiResponse, setAiResponse] = useState("");
   const [showNewNodeDialog, setShowNewNodeDialog] = useState(false);
-  const [executionHistory, setExecutionHistory] = useState<any[]>([]);
+  const [executionHistory, setExecutionHistory] = useState<Array<{ id: number; action: string; nodeId: string; timestamp: Date }>>([]);
   const [newNodeData, setNewNodeData] = useState({
     label: '',
     type: 'other',
@@ -221,7 +230,8 @@ const WorkflowVisual = () => {
         const suggestions = Array.isArray(result.response) ? result.response : [
           { nodeId: "3", suggestion: result.response.toString().slice(0, 100), priority: "high" as const, action: "Aplicar sugestão" }
         ];
-        setAiSuggestions(suggestions.map((s: any, i: number) => ({
+        interface RawSuggestion { nodeId?: string; suggestion?: string; message?: string; priority?: AISuggestion["priority"]; action?: string; toString(): string }
+        setAiSuggestions(suggestions.map((s: RawSuggestion, i: number) => ({
           nodeId: s.nodeId || nodes[i % nodes.length]?.id || "1",
           suggestion: s.suggestion || s.message || s.toString(),
           priority: s.priority || "medium" as const,
@@ -378,11 +388,11 @@ const WorkflowVisual = () => {
               {stats.completed} Concluídas
             </Badge>
             <Badge variant="outline" className="gap-1">
-              <Clock className="h-3 w-3 text-blue-500" />
+              <Clock className="h-3 w-3 text-primary" />
               {stats.inProgress} Em Progresso
             </Badge>
             <Badge variant="outline" className="gap-1">
-              <AlertTriangle className="h-3 w-3 text-yellow-500" />
+              <AlertTriangle className="h-3 w-3 text-warning" />
               {stats.pending} Pendentes
             </Badge>
 
@@ -415,7 +425,7 @@ const WorkflowVisual = () => {
                 >
                   <Controls />
                   <MiniMap />
-                  <Background variant={"dots" as any} gap={12} size={1} />
+                  <Background variant={BackgroundVariant.Dots} gap={12} size={1} />
                   
                   <Panel position="top-left" className="bg-background/80 backdrop-blur p-2 rounded-lg">
                     <div className="flex gap-2">
@@ -444,7 +454,7 @@ const WorkflowVisual = () => {
             <Card>
               <CardHeader className="pb-3">
                 <CardTitle className="flex items-center gap-2 text-lg">
-                  <Sparkles className="h-5 w-5 text-purple-500" />
+                  <Sparkles className="h-5 w-5 text-accent-foreground" />
                   Sugestões IA
                 </CardTitle>
               </CardHeader>
@@ -458,9 +468,9 @@ const WorkflowVisual = () => {
                           initial={{ opacity: 0, x: 20 }}
                           animate={{ opacity: 1, x: 0 }}
                           className={`p-3 rounded-lg border ${
-                            s.priority === "high" ? "border-red-200 bg-red-50 dark:bg-red-900/20" :
-                            s.priority === "medium" ? "border-yellow-200 bg-yellow-50 dark:bg-yellow-900/20" :
-                            "border-blue-200 bg-blue-50 dark:bg-blue-900/20"
+                            s.priority === "high" ? "border-destructive/30 bg-destructive/5" :
+                            s.priority === "medium" ? "border-warning/30 bg-warning/5" :
+                            "border-primary/30 bg-primary/5"
                           }`}
                         >
                           <p className="text-sm">{s.suggestion}</p>

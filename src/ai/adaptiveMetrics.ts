@@ -153,12 +153,12 @@ class AdaptiveMetricsEngine {
         .order("updated_at", { ascending: false });
 
       if (data) {
-        data.forEach((param: any) => {
+        data.forEach((param) => {
           const existing = this.parameters.get(param.parameter_name);
           if (existing) {
             existing.currentValue = param.current_value;
-            existing.adjustmentCount = param.adjustment_count || 0;
-            existing.lastAdjusted = new Date(param.updated_at);
+            existing.adjustmentCount = 0;
+            existing.lastAdjusted = new Date(param.updated_at || Date.now());
           }
         });
         logger.info("[AdaptiveMetrics] Loaded parameters from database");
@@ -235,10 +235,10 @@ class AdaptiveMetricsEngine {
         .order("timestamp", { ascending: false })
         .limit(this.historySize);
 
-      return (data || []).map((d: any) => ({
-        timestamp: d.timestamp ? new Date(d.timestamp) : new Date(),
-        value: d.value as number,
-        performance: (d.performance_score ?? 0) as number,
+      return (data || []).map((d: Record<string, unknown>) => ({
+        timestamp: d.timestamp ? new Date(d.timestamp as string) : new Date(),
+        value: (d.value ?? 0) as number,
+        performance: ((d.performance_score as number) ?? 0),
       }));
     } catch (error) {
       logger.error(`[AdaptiveMetrics] Failed to fetch history for ${paramName}:`, error);
@@ -424,7 +424,7 @@ class AdaptiveMetricsEngine {
   /**
    * Get adjustment history
    */
-  async getAdjustmentHistory(limit = 50): Promise<any[]> {
+  async getAdjustmentHistory(limit = 50): Promise<Record<string, unknown>[]> {
     try {
       const { data, error } = await supabase
         .from("parameter_adjustments")
@@ -433,7 +433,7 @@ class AdaptiveMetricsEngine {
         .limit(limit);
 
       if (error) throw error;
-      return data || [];
+      return (data || []) as Record<string, unknown>[];
     } catch (error) {
       logger.error("[AdaptiveMetrics] Failed to fetch adjustment history:", error);
       return [];
