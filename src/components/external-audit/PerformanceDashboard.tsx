@@ -132,7 +132,7 @@ export function PerformanceDashboard() {
                 <p className="text-sm text-muted-foreground">Score Geral</p>
                 <div className="flex items-baseline gap-2">
                   <p className="text-3xl font-bold">{overallScore}%</p>
-                  <span className={`flex items-center text-sm ${scoreDiff >= 0 ? 'text-green-600' : 'text-red-600'}`}>
+                  <span className={`flex items-center text-sm ${scoreDiff >= 0 ? 'text-success' : 'text-destructive'}`}>
                     {scoreDiff >= 0 ? <ArrowUpRight className="h-4 w-4" /> : <ArrowDownRight className="h-4 w-4" />}
                     {Math.abs(scoreDiff)}%
                   </span>
@@ -161,10 +161,10 @@ export function PerformanceDashboard() {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-muted-foreground">Não Conformidades</p>
-                <p className="text-3xl font-bold text-red-600">8</p>
+                <p className="text-3xl font-bold text-destructive">8</p>
                 <p className="text-xs text-muted-foreground">5 fechadas, 3 abertas</p>
               </div>
-              <AlertTriangle className="h-10 w-10 text-red-500" />
+              <AlertTriangle className="h-10 w-10 text-destructive" />
             </div>
           </CardContent>
         </Card>
@@ -266,7 +266,7 @@ export function PerformanceDashboard() {
                     </div>
                     <Progress 
                       value={cat.score} 
-                      className={`h-2 ${cat.score >= 95 ? '[&>div]:bg-green-500' : cat.score >= 85 ? '[&>div]:bg-yellow-500' : '[&>div]:bg-red-500'}`}
+                      className={`h-2 ${cat.score >= 95 ? '[&>div]:bg-success' : cat.score >= 85 ? '[&>div]:bg-warning' : '[&>div]:bg-destructive'}`}
                     />
                   </div>
                 ))}
@@ -290,9 +290,9 @@ export function PerformanceDashboard() {
                     <YAxis domain={[80, 100]} />
                     <Tooltip />
                     <Legend />
-                    <Line type="monotone" dataKey="ism" name="ISM" stroke="#3b82f6" strokeWidth={2} />
-                    <Line type="monotone" dataKey="isps" name="ISPS" stroke="#10b981" strokeWidth={2} />
-                    <Line type="monotone" dataKey="mlc" name="MLC" stroke="#f59e0b" strokeWidth={2} />
+                    <Line type="monotone" dataKey="ism" name="ISM" stroke="hsl(var(--primary))" strokeWidth={2} />
+                    <Line type="monotone" dataKey="isps" name="ISPS" stroke="hsl(var(--success))" strokeWidth={2} />
+                    <Line type="monotone" dataKey="mlc" name="MLC" stroke="hsl(var(--warning))" strokeWidth={2} />
                   </LineChart>
                 </ResponsiveContainer>
               </div>
@@ -325,8 +325,8 @@ export function PerformanceDashboard() {
                           </div>
                         </div>
                         <div className="text-right">
-                          <p className="text-lg font-bold text-green-600">{audit.score}%</p>
-                          <Badge className="bg-green-100 text-green-700">
+                          <p className="text-lg font-bold text-success">{audit.score}%</p>
+                          <Badge className="bg-success/10 text-success">
                             <CheckCircle className="h-3 w-3 mr-1" />
                             Aprovado
                           </Badge>

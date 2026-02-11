@@ -347,37 +347,37 @@ const ApiGatewayEnhanced = () => {
   const getStatusIcon = (status: string) => {
     switch (status) {
     case "active":
-      return <CheckCircle2 className="h-4 w-4 text-green-500" />;
+      return <CheckCircle2 className="h-4 w-4 text-success" />;
     case "revoked":
     case "disabled":
-      return <AlertCircle className="h-4 w-4 text-red-500" />;
+      return <AlertCircle className="h-4 w-4 text-destructive" />;
     case "suspended":
-      return <Clock className="h-4 w-4 text-yellow-500" />;
+      return <Clock className="h-4 w-4 text-warning" />;
     default:
-      return <Activity className="h-4 w-4 text-gray-500" />;
+      return <Activity className="h-4 w-4 text-muted-foreground" />;
     }
   };
 
   const getMethodBadge = (method: string) => {
     const colors: Record<string, string> = {
-      GET: "bg-blue-500",
-      POST: "bg-green-500",
-      PUT: "bg-yellow-500",
-      PATCH: "bg-orange-500",
-      DELETE: "bg-red-500",
-      OPTIONS: "bg-gray-500"
+      GET: "bg-primary",
+      POST: "bg-success",
+      PUT: "bg-warning",
+      PATCH: "bg-accent",
+      DELETE: "bg-destructive",
+      OPTIONS: "bg-muted"
     };
-    return <Badge className={colors[method] || "bg-gray-500"}>{method}</Badge>;
+    return <Badge className={colors[method] || "bg-muted"}>{method}</Badge>;
   };
 
   const getTierBadge = (tier: string) => {
     const colors: Record<string, string> = {
-      basic: "bg-gray-500",
-      standard: "bg-blue-500",
-      premium: "bg-purple-500",
-      unlimited: "bg-green-500"
+      basic: "bg-muted",
+      standard: "bg-primary",
+      premium: "bg-accent",
+      unlimited: "bg-success"
     };
-    return <Badge className={colors[tier] || "bg-gray-500"}>{tier}</Badge>;
+    return <Badge className={colors[tier] || "bg-muted"}>{tier}</Badge>;
   };
 
   return (
@@ -522,7 +522,7 @@ const ApiGatewayEnhanced = () => {
                                 <span className="font-mono text-sm">{route.route_path}</span>
                                 <Badge variant="outline">{route.version}</Badge>
                                 {route.requires_auth && <Badge variant="secondary">🔒 Auth</Badge>}
-                                {route.is_public && <Badge className="bg-green-500">Public</Badge>}
+                                {route.is_public && <Badge className="bg-success">Public</Badge>}
                               </div>
                               <p className="text-sm font-semibold">{route.route_name}</p>
                               <p className="text-sm text-muted-foreground mt-1">
@@ -682,11 +682,11 @@ const ApiGatewayEnhanced = () => {
             <CardContent>
               <div className="space-y-3">
                 {rateLimits.map((limit) => (
-                  <Card key={limit.id} className="border-l-4 border-l-purple-500">
+                  <Card key={limit.id} className="border-l-4 border-l-accent">
                     <CardContent className="pt-6">
                       <div className="flex items-start justify-between">
                         <div className="flex items-start gap-3 flex-1">
-                          <Shield className="h-5 w-5 text-purple-500" />
+                          <Shield className="h-5 w-5 text-accent-foreground" />
                           <div className="flex-1">
                             <div className="flex items-center gap-2 mb-3">
                               {getTierBadge(limit.tier)}

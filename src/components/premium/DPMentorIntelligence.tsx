@@ -379,7 +379,7 @@
            <Card>
              <CardHeader>
                <CardTitle className="flex items-center gap-2">
-                 <Users className="h-5 w-5 text-blue-500" />
+                 <Users className="h-5 w-5 text-primary" />
                  Key DP Personnel (IMCA M117)
                </CardTitle>
                <CardDescription>
@@ -399,7 +399,7 @@
                          <p className="text-xs text-muted-foreground uppercase">Requisitos:</p>
                          {personnel.requirements.map((req, i) => (
                            <div key={i} className="flex items-center gap-2 text-sm">
-                             <CheckCircle className="h-3 w-3 text-green-500" />
+                             <CheckCircle className="h-3 w-3 text-success" />
                              {req}
                            </div>
                          ))}
@@ -429,10 +429,10 @@
                        <div key={session.id} className="p-3 border rounded-lg space-y-2">
                          <div className="flex items-center justify-between">
                            <Badge variant="outline">{session.type}</Badge>
-                           <Badge className={
-                             session.status === "completed" ? "bg-green-500/10 text-green-500" :
-                             "bg-blue-500/10 text-blue-500"
-                           }>
+                            <Badge className={
+                              session.status === "completed" ? "bg-success/10 text-success" :
+                              "bg-primary/10 text-primary"
+                            }>
                              {session.status === "completed" ? "Concluído" : "Agendado"}
                            </Badge>
                          </div>
@@ -457,29 +457,29 @@
              <Card>
                <CardHeader>
                  <CardTitle className="flex items-center gap-2">
-                   <Sparkles className="h-5 w-5 text-blue-500" />
+                   <Sparkles className="h-5 w-5 text-primary" />
                    Recursos do Simulador
                  </CardTitle>
                </CardHeader>
                <CardContent className="space-y-4">
                  <div className="grid grid-cols-2 gap-3">
                    <div className="p-3 bg-muted/50 rounded-lg text-center">
-                     <Navigation className="h-6 w-6 mx-auto text-blue-500" />
-                     <p className="text-sm font-medium mt-2">Full Mission Bridge</p>
-                     <p className="text-xs text-muted-foreground">360° visualization</p>
-                   </div>
-                   <div className="p-3 bg-muted/50 rounded-lg text-center">
-                     <Activity className="h-6 w-6 mx-auto text-green-500" />
-                     <p className="text-sm font-medium mt-2">Engine Room Link</p>
-                     <p className="text-xs text-muted-foreground">Total ship training</p>
-                   </div>
-                   <div className="p-3 bg-muted/50 rounded-lg text-center">
-                     <Waves className="h-6 w-6 mx-auto text-purple-500" />
-                     <p className="text-sm font-medium mt-2">Azipod Simulation</p>
+                      <Navigation className="h-6 w-6 mx-auto text-primary" />
+                      <p className="text-sm font-medium mt-2">Full Mission Bridge</p>
+                      <p className="text-xs text-muted-foreground">360° visualization</p>
+                    </div>
+                    <div className="p-3 bg-muted/50 rounded-lg text-center">
+                      <Activity className="h-6 w-6 mx-auto text-success" />
+                      <p className="text-sm font-medium mt-2">Engine Room Link</p>
+                      <p className="text-xs text-muted-foreground">Total ship training</p>
+                    </div>
+                    <div className="p-3 bg-muted/50 rounded-lg text-center">
+                      <Waves className="h-6 w-6 mx-auto text-accent-foreground" />
+                      <p className="text-sm font-medium mt-2">Azipod Simulation</p>
                      <p className="text-xs text-muted-foreground">Conventional & electric</p>
                    </div>
                    <div className="p-3 bg-muted/50 rounded-lg text-center">
-                     <Target className="h-6 w-6 mx-auto text-amber-500" />
+                     <Target className="h-6 w-6 mx-auto text-warning" />
                      <p className="text-sm font-medium mt-2">Capability Plots</p>
                      <p className="text-xs text-muted-foreground">Real-time analysis</p>
                    </div>
@@ -500,7 +500,7 @@
            <Card>
              <CardHeader>
                <CardTitle className="flex items-center gap-2">
-                 <Shield className="h-5 w-5 text-red-500" />
+                 <Shield className="h-5 w-5 text-destructive" />
                  IMCA M273 - DP Drills & Preparedness
                </CardTitle>
                <CardDescription>

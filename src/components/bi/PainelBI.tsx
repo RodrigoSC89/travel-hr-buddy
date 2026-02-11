@@ -48,6 +48,7 @@ export function PainelBI() {
 
         // Transform to compliance data format
         const grouped: Record<string, ComplianceData> = {};
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any -- psc_inspections dynamic schema
         (inspections || []).forEach((ins: any) => {
           const key = `${ins.vessel_name}-${ins.inspection_date?.slice(0, 7) || "N/A"}`;
           if (!grouped[key]) {
@@ -189,7 +190,7 @@ export function PainelBI() {
                   📊 Painel de Conformidade DP - Auditoria Técnica
                 </h2>
                 {error && (
-                  <p className="text-sm text-yellow-600 mt-1">
+                  <p className="text-sm text-warning mt-1">
                     {error} (exibindo dados de exemplo)
                   </p>
                 )}
@@ -217,9 +218,9 @@ export function PainelBI() {
                 <YAxis />
                 <Tooltip />
                 <Legend />
-                <Bar dataKey="conforme" fill="#10b981" name="Concluído" />
-                <Bar dataKey="observacao" fill="#facc15" name="Em Andamento" />
-                <Bar dataKey="nao_conforme" fill="#ef4444" name="Pendente" />
+                <Bar dataKey="conforme" fill="hsl(var(--success))" name="Concluído" />
+                <Bar dataKey="observacao" fill="hsl(var(--warning))" name="Em Andamento" />
+                <Bar dataKey="nao_conforme" fill="hsl(var(--destructive))" name="Pendente" />
               </BarChart>
             </ResponsiveContainer>
           </CardContent>
@@ -244,9 +245,9 @@ export function PainelBI() {
                     <tr key={row.vessel} className="hover:bg-muted/50">
                       <td className="border p-2">{row.vessel}</td>
                       <td className="border p-2 text-center font-semibold">{row.total}</td>
-                      <td className="border p-2 text-center text-green-600">{row.concluido}</td>
-                      <td className="border p-2 text-center text-yellow-600">{row.andamento}</td>
-                      <td className="border p-2 text-center text-red-600">{row.pendente}</td>
+                      <td className="border p-2 text-center text-success">{row.concluido}</td>
+                      <td className="border p-2 text-center text-warning">{row.andamento}</td>
+                      <td className="border p-2 text-center text-destructive">{row.pendente}</td>
                     </tr>
                   ))}
                 </tbody>
@@ -268,13 +269,13 @@ export function PainelBI() {
       <div className="flex gap-2 mt-4">
         <Button 
           onClick={exportToCSV}
-          className="bg-blue-600 text-white hover:bg-blue-700"
+          className="bg-primary text-primary-foreground hover:bg-primary/90"
         >
           📥 Exportar CSV
         </Button>
         <Button
           onClick={exportToPDF}
-          className="bg-red-600 text-white hover:bg-red-700"
+          className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
         >
           🧾 Exportar PDF
         </Button>

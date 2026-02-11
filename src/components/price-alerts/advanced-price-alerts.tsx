@@ -135,6 +135,7 @@ export const AdvancedPriceAlerts: React.FC = () => {
       
       // Enhance with AI predictions
       const enhancedAlerts = await Promise.all(
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any -- price_alerts dynamic schema with AI predictions
         (data || []).map(async (alert: any) => ({
           ...alert,
           threshold_type: alert.threshold_type || "below",
@@ -200,6 +201,7 @@ export const AdvancedPriceAlerts: React.FC = () => {
     setInsights(mockInsights);
   };
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- price alert row for AI prediction
   const generateAIPredictions = async (alert: any) => {
     // Simulated AI predictions - in production, this would use real ML models
     // Deterministic prediction based on price data

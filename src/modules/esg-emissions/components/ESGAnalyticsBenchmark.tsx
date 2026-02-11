@@ -217,7 +217,7 @@ export const ESGAnalyticsBenchmark: React.FC = () => {
               <Award className="h-5 w-5 text-primary" />
             </div>
             <p className="text-4xl font-bold">86</p>
-            <div className="flex items-center text-sm text-green-600 mt-1">
+            <div className="flex items-center text-sm text-success mt-1">
               <TrendingUp className="h-4 w-4 mr-1" />
               <span>+8 pontos YTD</span>
             </div>
@@ -225,39 +225,39 @@ export const ESGAnalyticsBenchmark: React.FC = () => {
           </CardContent>
         </Card>
 
-        <Card className="bg-gradient-to-br from-green-500/10 to-green-600/10 border-green-500/20">
+        <Card className="bg-gradient-to-br from-success/10 to-success/5 border-success/20">
           <CardContent className="p-4">
             <div className="flex items-center justify-between mb-2">
               <p className="text-sm font-medium">Environmental</p>
-              <Gauge className="h-5 w-5 text-green-600" />
+              <Gauge className="h-5 w-5 text-success" />
             </div>
-            <p className="text-4xl font-bold text-green-600">85</p>
+            <p className="text-4xl font-bold text-success">85</p>
             <p className="text-xs text-muted-foreground mt-1">Emissões, Energia, Resíduos</p>
-            <Progress value={85} className="mt-2 h-2 [&>div]:bg-green-500" />
+            <Progress value={85} className="mt-2 h-2 [&>div]:bg-success" />
           </CardContent>
         </Card>
 
-        <Card className="bg-gradient-to-br from-blue-500/10 to-blue-600/10 border-blue-500/20">
+        <Card className="bg-gradient-to-br from-primary/10 to-primary/5 border-primary/20">
           <CardContent className="p-4">
             <div className="flex items-center justify-between mb-2">
               <p className="text-sm font-medium">Social</p>
-              <Activity className="h-5 w-5 text-blue-600" />
+              <Activity className="h-5 w-5 text-primary" />
             </div>
-            <p className="text-4xl font-bold text-blue-600">85</p>
+            <p className="text-4xl font-bold text-primary">85</p>
             <p className="text-xs text-muted-foreground mt-1">Segurança, Bem-estar, Diversidade</p>
-            <Progress value={85} className="mt-2 h-2 [&>div]:bg-blue-500" />
+            <Progress value={85} className="mt-2 h-2 [&>div]:bg-primary" />
           </CardContent>
         </Card>
 
-        <Card className="bg-gradient-to-br from-purple-500/10 to-purple-600/10 border-purple-500/20">
+        <Card className="bg-gradient-to-br from-accent/10 to-accent/5 border-accent/20">
           <CardContent className="p-4">
             <div className="flex items-center justify-between mb-2">
               <p className="text-sm font-medium">Governance</p>
-              <Globe className="h-5 w-5 text-purple-600" />
+              <Globe className="h-5 w-5 text-accent-foreground" />
             </div>
-            <p className="text-4xl font-bold text-purple-600">88</p>
+            <p className="text-4xl font-bold text-accent-foreground">88</p>
             <p className="text-xs text-muted-foreground mt-1">Compliance, Ética, Risco</p>
-            <Progress value={88} className="mt-2 h-2 [&>div]:bg-purple-500" />
+            <Progress value={88} className="mt-2 h-2 [&>div]:bg-accent" />
           </CardContent>
         </Card>
       </div>
@@ -302,10 +302,10 @@ export const ESGAnalyticsBenchmark: React.FC = () => {
                     <YAxis domain={[60, 100]} />
                     <Tooltip />
                     <Legend />
-                    <Area type="monotone" dataKey="overall" stroke="#8884d8" fill="#8884d8" fillOpacity={0.3} name="Geral" />
-                    <Area type="monotone" dataKey="environmental" stroke="#22c55e" fill="#22c55e" fillOpacity={0.3} name="Environmental" />
-                    <Area type="monotone" dataKey="social" stroke="#3b82f6" fill="#3b82f6" fillOpacity={0.3} name="Social" />
-                    <Area type="monotone" dataKey="governance" stroke="#a855f7" fill="#a855f7" fillOpacity={0.3} name="Governance" />
+                    <Area type="monotone" dataKey="overall" stroke="hsl(var(--primary))" fill="hsl(var(--primary))" fillOpacity={0.3} name="Geral" />
+                    <Area type="monotone" dataKey="environmental" stroke="hsl(var(--success))" fill="hsl(var(--success))" fillOpacity={0.3} name="Environmental" />
+                    <Area type="monotone" dataKey="social" stroke="hsl(var(--info))" fill="hsl(var(--info))" fillOpacity={0.3} name="Social" />
+                    <Area type="monotone" dataKey="governance" stroke="hsl(var(--accent))" fill="hsl(var(--accent))" fillOpacity={0.3} name="Governance" />
                   </AreaChart>
                 </ResponsiveContainer>
               </CardContent>
@@ -327,16 +327,16 @@ export const ESGAnalyticsBenchmark: React.FC = () => {
                       <div className="flex items-center justify-between mb-1">
                         <span className="font-medium">{rating.agency}</span>
                         <Badge className={
-                          rating.trend === "improving" ? "bg-green-500" :
-                          rating.trend === "stable" ? "bg-blue-500" : "bg-yellow-500"
+                          rating.trend === "improving" ? "bg-success" :
+                          rating.trend === "stable" ? "bg-primary" : "bg-warning"
                         }>
                           {rating.rating}
                         </Badge>
                       </div>
                       <div className="flex items-center justify-between text-xs text-muted-foreground">
                         <div className="flex items-center gap-1">
-                          {rating.trend === "improving" && <TrendingUp className="h-3 w-3 text-green-500" />}
-                          {rating.trend === "stable" && <ArrowUpRight className="h-3 w-3 text-blue-500" />}
+                          {rating.trend === "improving" && <TrendingUp className="h-3 w-3 text-success" />}
+                          {rating.trend === "stable" && <ArrowUpRight className="h-3 w-3 text-primary" />}
                           <span className="capitalize">{rating.trend}</span>
                         </div>
                         <span>Atualizado: {new Date(rating.lastUpdate).toLocaleDateString("pt-BR")}</span>
@@ -365,7 +365,7 @@ export const ESGAnalyticsBenchmark: React.FC = () => {
                       <div className="flex items-center justify-between mb-2">
                         <span className="font-medium">{item.metric}</span>
                         {typeof item.company === "string" ? (
-                          <Badge className="bg-lime-500">{item.company}</Badge>
+                          <Badge className="bg-success">{item.company}</Badge>
                         ) : (
                           <span className="font-bold">{item.company}</span>
                         )}
@@ -377,7 +377,7 @@ export const ESGAnalyticsBenchmark: React.FC = () => {
                         </div>
                         <div className="flex items-center gap-1">
                           <span className="text-muted-foreground">Top:</span>
-                          <span className="text-green-600 font-medium">{item.topPerformer}</span>
+                          <span className="text-success font-medium">{item.topPerformer}</span>
                         </div>
                       </div>
                     </div>
