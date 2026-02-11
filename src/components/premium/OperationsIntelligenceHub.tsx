@@ -26,8 +26,8 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/com
  
 export default function OperationsIntelligenceHub() {
     const { voyageEstimates, fleetPositions, charterTerms, isLoading } = useOperationsIntelligenceData();
-    const [selectedVoyage, setSelectedVoyage] = useState<any>(null);
-    const [selectedVessel, setSelectedVessel] = useState<any>(null);
+    const [selectedVoyage, setSelectedVoyage] = useState<typeof voyageEstimates[number] | null>(null);
+    const [selectedVessel, setSelectedVessel] = useState<typeof fleetPositions[number] | null>(null);
     const activeVoyage = selectedVoyage || voyageEstimates[0];
     const activeVessel = selectedVessel || fleetPositions[0];
  
@@ -95,10 +95,10 @@ export default function OperationsIntelligenceHub() {
            </CardContent>
          </Card>
  
-         <Card className="border-l-4 border-l-purple-500">
-           <CardContent className="p-4">
-             <div className="flex items-center gap-2 mb-1">
-               <Target className="h-4 w-4 text-purple-500" />
+          <Card className="border-l-4 border-l-accent">
+            <CardContent className="p-4">
+              <div className="flex items-center gap-2 mb-1">
+                <Target className="h-4 w-4 text-accent-foreground" />
                <span className="text-xs text-muted-foreground">Charters Ativos</span>
              </div>
              <p className="text-2xl font-bold">{activeCharters}</p>
@@ -106,10 +106,10 @@ export default function OperationsIntelligenceHub() {
            </CardContent>
          </Card>
  
-         <Card className="border-l-4 border-l-cyan-500">
-           <CardContent className="p-4">
-             <div className="flex items-center gap-2 mb-1">
-               <Fuel className="h-4 w-4 text-cyan-500" />
+          <Card className="border-l-4 border-l-info">
+            <CardContent className="p-4">
+              <div className="flex items-center gap-2 mb-1">
+                <Fuel className="h-4 w-4 text-info" />
                <span className="text-xs text-muted-foreground">Consumo Médio</span>
              </div>
              <p className="text-2xl font-bold">28.5 MT</p>
@@ -389,17 +389,17 @@ export default function OperationsIntelligenceHub() {
                    </div>
  
                    {/* Weather */}
-                   <div className="flex items-center justify-between p-3 bg-gradient-to-r from-blue-500/10 to-cyan-500/10 rounded-lg">
-                     <div className="flex items-center gap-2">
-                       <Wind className="h-4 w-4 text-blue-500" />
+                    <div className="flex items-center justify-between p-3 bg-gradient-to-r from-info/10 to-primary/10 rounded-lg">
+                      <div className="flex items-center gap-2">
+                        <Wind className="h-4 w-4 text-info" />
                        <span>{vessel.weather.wind} kts</span>
                      </div>
                      <div className="flex items-center gap-2">
-                       <Waves className="h-4 w-4 text-cyan-500" />
+                       <Waves className="h-4 w-4 text-info" />
                        <span>{vessel.weather.waves}m</span>
                      </div>
                      <div className="flex items-center gap-2">
-                       <Thermometer className="h-4 w-4 text-orange-500" />
+                       <Thermometer className="h-4 w-4 text-warning" />
                        <span>{vessel.weather.temp}°C</span>
                      </div>
                    </div>
@@ -448,7 +448,7 @@ export default function OperationsIntelligenceHub() {
                    </div>
  
                    {/* Laytime Calculator */}
-                   <div className="p-4 bg-gradient-to-r from-warning/10 to-orange-500/10 rounded-lg">
+                   <div className="p-4 bg-gradient-to-r from-warning/10 to-warning/5 rounded-lg">
                      <h4 className="font-semibold mb-3 flex items-center gap-2">
                        <Timer className="h-4 w-4" />
                        Laytime Calculator
