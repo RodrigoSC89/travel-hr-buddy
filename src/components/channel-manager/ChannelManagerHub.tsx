@@ -111,11 +111,11 @@ export default function ChannelManagerHub() {
 
       const { data, error} = await supabase
         .from("channel_messages")
-        .insert({
+        .insert([{
           channel_id: selectedChannel!,
           sender_id: user.id,
           message_content: messageContent,
-        } as any)
+        }])
         .select()
         .single();
 
@@ -210,7 +210,7 @@ export default function ChannelManagerHub() {
                     onClick={() => setSelectedChannel(channel.id)}
                   >
                     <MessageSquare className="mr-2 h-4 w-4" />
-                    {(channel as any).channel_name || (channel as any).name}
+                    {(channel as Record<string, unknown>).channel_name as string || (channel as Record<string, unknown>).name as string}
                     {channel.is_active ? (
                       <Badge variant="default" className="ml-auto">Online</Badge>
                     ) : (

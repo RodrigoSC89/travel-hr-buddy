@@ -36,9 +36,9 @@ const Innovation = () => {
 
       {/* Innovation Overview Cards */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
-        <Card className="bg-gradient-to-br from-blue-500/10 to-purple-500/10 border-blue-200">
+        <Card className="bg-gradient-to-br from-primary/10 to-accent/10 border-primary/20">
           <CardHeader className="pb-3">
-            <CardTitle className="flex items-center gap-2 text-blue-700">
+            <CardTitle className="flex items-center gap-2 text-primary">
               <Bot className="h-5 w-5" />
               IA & Automação
             </CardTitle>
@@ -72,9 +72,9 @@ const Innovation = () => {
           </CardContent>
         </Card>
 
-        <Card className="bg-gradient-to-br from-orange-500/10 to-red-500/10 border-orange-200">
+        <Card className="bg-gradient-to-br from-warning/10 to-destructive/10 border-warning/20">
           <CardHeader className="pb-3">
-            <CardTitle className="flex items-center gap-2 text-orange-700">
+            <CardTitle className="flex items-center gap-2 text-warning">
               <Rocket className="h-5 w-5" />
               Implementações
             </CardTitle>
@@ -84,8 +84,8 @@ const Innovation = () => {
               Soluções em produção
             </p>
             <div className="flex items-center justify-between">
-              <span className="text-2xl font-bold text-orange-600">24</span>
-              <Badge className="bg-orange-100 text-orange-700">Produção</Badge>
+              <span className="text-2xl font-bold text-warning">24</span>
+              <Badge className="bg-warning/10 text-warning">Produção</Badge>
             </div>
           </CardContent>
         </Card>
@@ -102,8 +102,8 @@ const Innovation = () => {
               Performance dos modelos
             </p>
             <div className="flex items-center justify-between">
-              <span className="text-2xl font-bold text-purple-600">94.8%</span>
-              <Badge className="bg-purple-100 text-purple-700">Excelente</Badge>
+              <span className="text-2xl font-bold text-accent-foreground">94.8%</span>
+              <Badge className="bg-accent/10 text-accent-foreground">Excelente</Badge>
             </div>
           </CardContent>
         </Card>
@@ -142,7 +142,7 @@ const Innovation = () => {
               onClick={() => handleModuleAccess("/ai-assistant")}>
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
-                  <MessageSquare className="h-5 w-5 text-blue-500" />
+                  <MessageSquare className="h-5 w-5 text-primary" />
                   Assistente IA
                   <ChevronRight className="h-4 w-4 ml-auto opacity-0 group-hover:opacity-100 transition-opacity" />
                 </CardTitle>
@@ -152,7 +152,7 @@ const Innovation = () => {
                   Assistente inteligente conversacional com IA avançada
                 </p>
                 <div className="flex items-center justify-between mb-4">
-                  <Badge className="bg-green-100 text-green-700">Online</Badge>
+                  <Badge className="bg-success/10 text-success">Online</Badge>
                   <span className="text-xs text-muted-foreground">98.7% precisão</span>
                 </div>
                 <Button className="w-full" onClick={() => handleModuleAccess("/ai-assistant")}>Acessar Assistente</Button>
@@ -163,7 +163,7 @@ const Innovation = () => {
               onClick={() => handleModuleAccess("/predictive-analytics")}>
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
-                  <Brain className="h-5 w-5 text-purple-500" />
+                  <Brain className="h-5 w-5 text-accent-foreground" />
                   Análise Preditiva
                   <ChevronRight className="h-4 w-4 ml-auto opacity-0 group-hover:opacity-100 transition-opacity" />
                 </CardTitle>
@@ -173,7 +173,7 @@ const Innovation = () => {
                   Previsões avançadas e insights estratégicos com machine learning
                 </p>
                 <div className="flex items-center justify-between mb-4">
-                  <Badge className="bg-blue-100 text-blue-700">Ativo</Badge>
+                  <Badge className="bg-primary/10 text-primary">Ativo</Badge>
                   <span className="text-xs text-muted-foreground">247 predições</span>
                 </div>
                 <Button className="w-full" onClick={() => handleModuleAccess("/predictive-analytics")}>Ver Predições</Button>
@@ -184,7 +184,7 @@ const Innovation = () => {
               onClick={() => handleModuleAccess("/smart-automation")}>
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
-                  <Workflow className="h-5 w-5 text-green-500" />
+                  <Workflow className="h-5 w-5 text-success" />
                   Automação Inteligente
                   <ChevronRight className="h-4 w-4 ml-auto opacity-0 group-hover:opacity-100 transition-opacity" />
                 </CardTitle>
@@ -194,7 +194,7 @@ const Innovation = () => {
                   Workflows automatizados com decisões baseadas em IA
                 </p>
                 <div className="flex items-center justify-between mb-4">
-                  <Badge className="bg-green-100 text-green-700">24 workflows</Badge>
+                  <Badge className="bg-success/10 text-success">24 workflows</Badge>
                   <span className="text-xs text-muted-foreground">89% eficiência</span>
                 </div>
                 <Button className="w-full" onClick={() => handleModuleAccess("/smart-automation")}>Gerenciar Automações</Button>
@@ -205,7 +205,7 @@ const Innovation = () => {
               onClick={() => handleModuleAccess("/models-lab")}>
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
-                  <TestTube className="h-5 w-5 text-orange-500" />
+                  <TestTube className="h-5 w-5 text-warning" />
                   Laboratório de Modelos
                   <ChevronRight className="h-4 w-4 ml-auto opacity-0 group-hover:opacity-100 transition-opacity" />
                 </CardTitle>
@@ -215,7 +215,7 @@ const Innovation = () => {
                   Treinamento e teste de modelos de machine learning
                 </p>
                 <div className="flex items-center justify-between mb-4">
-                  <Badge className="bg-orange-100 text-orange-700">12 modelos</Badge>
+                  <Badge className="bg-warning/10 text-warning">12 modelos</Badge>
                   <span className="text-xs text-muted-foreground">6 em treinamento</span>
                 </div>
                 <Button className="w-full" onClick={() => handleModuleAccess("/models-lab")}>Acessar Lab</Button>
@@ -226,7 +226,7 @@ const Innovation = () => {
               onClick={() => handleModuleAccess("/ai-processing")}>
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
-                  <Cpu className="h-5 w-5 text-red-500" />
+                  <Cpu className="h-5 w-5 text-destructive" />
                   Processamento IA
                   <ChevronRight className="h-4 w-4 ml-auto opacity-0 group-hover:opacity-100 transition-opacity" />
                 </CardTitle>
@@ -236,7 +236,7 @@ const Innovation = () => {
                   Análise de dados em tempo real com processamento distribuído
                 </p>
                 <div className="flex items-center justify-between mb-4">
-                  <Badge className="bg-red-100 text-red-700">GPU Acelerado</Badge>
+                  <Badge className="bg-destructive/10 text-destructive">GPU Acelerado</Badge>
                   <span className="text-xs text-muted-foreground">1.2TB processados</span>
                 </div>
                 <Button className="w-full" onClick={() => handleModuleAccess("/ai-processing")}>Ver Status</Button>
@@ -314,7 +314,7 @@ const Innovation = () => {
               onClick={() => handleModuleAccess("/iot")}>
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
-                  <Smartphone className="h-5 w-5 text-blue-500" />
+                  <Smartphone className="h-5 w-5 text-primary" />
                   IoT Dashboard
                   <ChevronRight className="h-4 w-4 ml-auto opacity-0 group-hover:opacity-100 transition-opacity" />
                 </CardTitle>
@@ -324,7 +324,7 @@ const Innovation = () => {
                   Internet das Coisas e monitoramento de dispositivos em tempo real
                 </p>
                 <div className="flex items-center justify-between mb-4">
-                  <Badge className="bg-blue-100 text-blue-700">342 dispositivos</Badge>
+                  <Badge className="bg-primary/10 text-primary">342 dispositivos</Badge>
                   <span className="text-xs text-muted-foreground">99.2% online</span>
                 </div>
                 <Button className="w-full" onClick={() => handleModuleAccess("/iot")}>Ver Dashboard</Button>
@@ -335,7 +335,7 @@ const Innovation = () => {
               onClick={() => handleModuleAccess("/edge-computing")}>
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
-                  <Network className="h-5 w-5 text-purple-500" />
+                  <Network className="h-5 w-5 text-accent-foreground" />
                   Edge Computing
                   <ChevronRight className="h-4 w-4 ml-auto opacity-0 group-hover:opacity-100 transition-opacity" />
                 </CardTitle>
@@ -345,7 +345,7 @@ const Innovation = () => {
                   Processamento distribuído na borda da rede
                 </p>
                 <div className="flex items-center justify-between mb-4">
-                  <Badge className="bg-purple-100 text-purple-700">15 nós</Badge>
+                  <Badge className="bg-accent/10 text-accent-foreground">15 nós</Badge>
                   <span className="text-xs text-muted-foreground">4ms latência</span>
                 </div>
                 <Button className="w-full" onClick={() => handleModuleAccess("/edge-computing")}>Gerenciar Nós</Button>
