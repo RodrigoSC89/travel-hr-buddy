@@ -186,7 +186,7 @@ class OfflineValidator {
       return {
         name: 'Service Worker',
         description: 'Verifica suporte a Service Worker',
-        status: registration ? 'pass' : 'partial' as any,
+        status: registration ? 'pass' : 'skip',
         duration: performance.now() - start,
         details: registration ? 'Service Worker registrado' : 'Service Worker suportado mas não registrado'
       };
@@ -253,7 +253,8 @@ class OfflineValidator {
       const { queueAction, getPendingActions, removeAction } = queueModule;
       
       // Test queue functionality
-      const testAction = await queueAction('test_module', 'test_action', { test: true } as any);
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any -- test data for offline queue validation
+      const testAction = await queueAction('test_module', 'test_action', { test: true } as unknown as number);
       const pending = await getPendingActions();
       const hasAction = pending.some(a => a.id === testAction);
       
@@ -318,7 +319,8 @@ class OfflineValidator {
   private async testSyncCapability(): Promise<OfflineValidationResult['tests'][0]> {
     const start = performance.now();
     
-    const hasBackgroundSync = 'sync' in (navigator as any).serviceWorker || 
+    const sw = (navigator as unknown as Record<string, unknown>).serviceWorker;
+    const hasBackgroundSync = (typeof sw === 'object' && sw !== null && 'sync' in (sw as object)) || 
                                'SyncManager' in window;
     
     return {

@@ -124,15 +124,15 @@ const ProductionDeployCenter: React.FC = () => {
     switch (status) {
     case "healthy":
     case "online":
-      return "text-green-600 bg-green-50 border-green-200";
+      return "text-success bg-success/10 border-success/30";
     case "warning":
     case "degraded":
-      return "text-yellow-600 bg-yellow-50 border-yellow-200";
+      return "text-warning bg-warning/10 border-warning/30";
     case "critical":
     case "offline":
-      return "text-red-600 bg-red-50 border-red-200";
+      return "text-destructive bg-destructive/10 border-destructive/30";
     default:
-      return "text-muted-foreground bg-gray-50 border-gray-200";
+      return "text-muted-foreground bg-muted border-border";
     }
   };
 
@@ -140,10 +140,10 @@ const ProductionDeployCenter: React.FC = () => {
     switch (status) {
     case "healthy":
     case "online":
-      return <CheckCircle className="w-4 h-4 text-green-500" />;
+      return <CheckCircle className="w-4 h-4 text-success" />;
     case "warning":
     case "degraded":
-      return <AlertTriangle className="w-4 h-4 text-yellow-500" />;
+      return <AlertTriangle className="w-4 h-4 text-warning" />;
     default:
       return <Activity className="w-4 h-4 text-muted-foreground" />;
     }
@@ -159,7 +159,7 @@ const ProductionDeployCenter: React.FC = () => {
               <Monitor className="w-5 h-5 text-primary" />
               <div>
                 <p className="text-sm text-muted-foreground">Uptime</p>
-                <p className="text-2xl font-bold text-green-600">{metrics.uptime}%</p>
+                <p className="text-2xl font-bold text-success">{metrics.uptime}%</p>
               </div>
             </div>
           </CardContent>
@@ -197,9 +197,9 @@ const ProductionDeployCenter: React.FC = () => {
                 <p className="text-sm text-muted-foreground">Status Deploy</p>
                 <p className="text-lg font-bold">
                   {isLive ? (
-                    <span className="text-green-600">🟢 LIVE</span>
+                    <span className="text-success">🟢 LIVE</span>
                   ) : (
-                    <span className="text-yellow-600">🟡 STAGING</span>
+                    <span className="text-warning">🟡 STAGING</span>
                   )}
                 </p>
               </div>
@@ -262,8 +262,8 @@ const ProductionDeployCenter: React.FC = () => {
                         <span className="text-sm">CDN Global</span>
                       </div>
                       <div className="flex items-center gap-2">
-                        <CheckCircle className="w-4 h-4 text-green-500" />
-                        <Badge className="text-green-600 bg-green-50 border-green-200">
+                        <CheckCircle className="w-4 h-4 text-success" />
+                        <Badge className="text-success bg-success/10 border-success/30">
                           ONLINE
                         </Badge>
                       </div>
@@ -306,13 +306,13 @@ const ProductionDeployCenter: React.FC = () => {
               <div className="mt-6">
                 <h4 className="font-medium mb-3">Alertas Recentes</h4>
                 <div className="space-y-2">
-                  <div className="flex items-center gap-3 p-3 bg-green-50 border border-green-200 rounded-lg">
-                    <CheckCircle className="w-4 h-4 text-green-500" />
+                  <div className="flex items-center gap-3 p-3 bg-success/10 border border-success/30 rounded-lg">
+                    <CheckCircle className="w-4 h-4 text-success" />
                     <div>
-                      <p className="text-sm font-medium text-green-800">Sistema operando normalmente</p>
-                      <p className="text-xs text-green-600">Todos os serviços estão funcionando perfeitamente</p>
+                      <p className="text-sm font-medium text-success">Sistema operando normalmente</p>
+                      <p className="text-xs text-success/80">Todos os serviços estão funcionando perfeitamente</p>
                     </div>
-                    <span className="text-xs text-green-500 ml-auto">2 min atrás</span>
+                    <span className="text-xs text-success/70 ml-auto">2 min atrás</span>
                   </div>
                 </div>
               </div>
@@ -354,14 +354,14 @@ const ProductionDeployCenter: React.FC = () => {
                   <div className="space-y-3">
                     <div className="flex items-center justify-between">
                       <span className="text-sm font-medium">SSL/HTTPS</span>
-                      <Badge className="text-green-600 bg-green-50 border-green-200">
+                      <Badge className="text-success bg-success/10 border-success/30">
                         Ativo
                       </Badge>
                     </div>
 
                     <div className="flex items-center justify-between">
                       <span className="text-sm font-medium">CDN Global</span>
-                      <Badge className="text-blue-600 bg-blue-50 border-blue-200">
+                      <Badge className="text-info bg-info/10 border-info/30">
                         Configurado
                       </Badge>
                     </div>
@@ -442,7 +442,7 @@ const ProductionDeployCenter: React.FC = () => {
                           "Monitoramento configurado"
                         ].map((item, index) => (
                           <div key={index} className="flex items-center gap-2">
-                            <CheckCircle className="w-4 h-4 text-green-500" />
+                            <CheckCircle className="w-4 h-4 text-success" />
                             <span className="text-sm">{item}</span>
                           </div>
                         ))}
@@ -491,33 +491,33 @@ const ProductionDeployCenter: React.FC = () => {
                 </div>
               ) : (
                 <div className="text-center space-y-6">
-                  <div className="inline-flex items-center justify-center w-20 h-20 bg-green-100 rounded-full">
-                    <Rocket className="w-10 h-10 text-green-600" />
+                  <div className="inline-flex items-center justify-center w-20 h-20 bg-success/10 rounded-full">
+                    <Rocket className="w-10 h-10 text-success" />
                   </div>
                   
                   <div>
-                    <h3 className="text-2xl font-bold text-green-800 mb-2">
+                    <h3 className="text-2xl font-bold text-success mb-2">
                       🚀 Deploy Concluído com Sucesso!
                     </h3>
-                    <p className="text-green-600">
+                    <p className="text-success/80">
                       O sistema Nautilus One está agora rodando em produção
                     </p>
                   </div>
 
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                    <div className="p-4 border border-green-200 rounded-lg bg-green-50">
-                      <h4 className="font-medium text-green-800">URL de Produção</h4>
-                      <p className="text-sm text-green-600 font-mono">
+                    <div className="p-4 border border-success/30 rounded-lg bg-success/10">
+                      <h4 className="font-medium text-success">URL de Produção</h4>
+                      <p className="text-sm text-success/80 font-mono">
                         https://nautilus.exemplo.com.br
                       </p>
                     </div>
-                    <div className="p-4 border border-green-200 rounded-lg bg-green-50">
-                      <h4 className="font-medium text-green-800">Status</h4>
-                      <p className="text-sm text-green-600">🟢 Online e Operacional</p>
+                    <div className="p-4 border border-success/30 rounded-lg bg-success/10">
+                      <h4 className="font-medium text-success">Status</h4>
+                      <p className="text-sm text-success/80">🟢 Online e Operacional</p>
                     </div>
-                    <div className="p-4 border border-green-200 rounded-lg bg-green-50">
-                      <h4 className="font-medium text-green-800">Uptime</h4>
-                      <p className="text-sm text-green-600">99.9% SLA Garantido</p>
+                    <div className="p-4 border border-success/30 rounded-lg bg-success/10">
+                      <h4 className="font-medium text-success">Uptime</h4>
+                      <p className="text-sm text-success/80">99.9% SLA Garantido</p>
                     </div>
                   </div>
                 </div>
@@ -597,12 +597,12 @@ const ProductionDeployCenter: React.FC = () => {
                 </div>
               </div>
 
-              <div className="mt-6 p-4 bg-blue-50 border border-blue-200 rounded-lg">
+              <div className="mt-6 p-4 bg-info/10 border border-info/30 rounded-lg">
                 <div className="flex items-center gap-2 mb-2">
-                  <Play className="w-5 h-5 text-blue-600" />
-                  <h4 className="font-medium text-blue-800">Próximos Passos</h4>
+                  <Play className="w-5 h-5 text-info" />
+                  <h4 className="font-medium text-info">Próximos Passos</h4>
                 </div>
-                <ul className="text-sm text-blue-700 space-y-1">
+                <ul className="text-sm text-info/80 space-y-1">
                   <li>• Coletar feedback dos usuários piloto</li>
                   <li>• Refinar funcionalidades baseado no uso real</li>
                   <li>• Expandir para mais departamentos</li>

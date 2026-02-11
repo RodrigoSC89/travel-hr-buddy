@@ -125,8 +125,8 @@ class StartupOptimizer {
     const metrics = {
       totalLoadTime: this.getLoadTime(),
       milestones: this.getMilestones(),
-      connection: (navigator as any).connection?.effectiveType || 'unknown',
-      memory: (performance as any).memory?.usedJSHeapSize || 0,
+      connection: (navigator as unknown as Record<string, { effectiveType?: string } | undefined>).connection?.effectiveType || 'unknown',
+      memory: (performance as unknown as Record<string, { usedJSHeapSize?: number } | undefined>).memory?.usedJSHeapSize || 0,
     };
 
     Logger.info("Startup metrics", metrics, "StartupOptimizer");
@@ -143,7 +143,8 @@ if (typeof window !== 'undefined') {
 
 // Polyfill for requestIdleCallback
 if (typeof window !== 'undefined' && !('requestIdleCallback' in window)) {
-  (window as any).requestIdleCallback = (cb: IdleRequestCallback, options?: IdleRequestOptions) => {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- polyfill requires window extension
+  (window as unknown as Record<string, unknown>).requestIdleCallback = (cb: IdleRequestCallback, options?: IdleRequestOptions) => {
     const start = Date.now();
     return setTimeout(() => {
       cb({

@@ -67,12 +67,14 @@ export function useInboxMessagesData() {
         preview: (notif.message || "").substring(0, 100),
         content: notif.message || "",
         is_read: notif.is_read || false,
-        is_starred: (notif.metadata as any)?.starred || false,
-        is_archived: (notif.metadata as any)?.archived || false,
+        is_starred: (notif.metadata as Record<string, unknown>)?.starred === true,
+        is_archived: (notif.metadata as Record<string, unknown>)?.archived === true,
         category: mapCategory(notif.type),
         priority: mapPriority(notif.priority),
         created_at: notif.created_at,
-        attachments: (notif.metadata as any)?.attachments || [],
+        attachments: (Array.isArray((notif.metadata as Record<string, unknown>)?.attachments) 
+          ? (notif.metadata as Record<string, unknown>).attachments 
+          : []) as { name: string; url: string; size: number }[],
       }));
     },
     staleTime: 30000,
