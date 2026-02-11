@@ -26,9 +26,9 @@ interface CrewPayroll {
   days_onboard: number;
   overtime_hours: number;
   overtime_amount: number;
-  bonuses: any[];
-  deductions: any[];
-  allowances: any[];
+  bonuses: Record<string, unknown>[];
+  deductions: Record<string, unknown>[];
+  allowances: Record<string, unknown>[];
   gross_pay: number;
   net_pay: number;
   tax_amount: number;
@@ -162,12 +162,12 @@ export function CrewPayrollManager() {
         <Card className="border-border/50 bg-card/50">
           <CardContent className="p-4">
             <div className="flex items-center gap-3">
-              <div className="p-2 bg-amber-500/10 rounded-lg">
-                <Clock className="h-5 w-5 text-amber-400" />
+              <div className="p-2 bg-warning/10 rounded-lg">
+                <Clock className="h-5 w-5 text-warning" />
               </div>
               <div>
                 <p className="text-sm text-muted-foreground">Pendentes</p>
-                <p className="text-xl font-bold text-amber-400">{stats.pending}</p>
+                <p className="text-xl font-bold text-warning">{stats.pending}</p>
               </div>
             </div>
           </CardContent>
@@ -176,12 +176,12 @@ export function CrewPayrollManager() {
         <Card className="border-border/50 bg-card/50">
           <CardContent className="p-4">
             <div className="flex items-center gap-3">
-              <div className="p-2 bg-emerald-500/10 rounded-lg">
-                <CheckCircle2 className="h-5 w-5 text-emerald-400" />
+              <div className="p-2 bg-success/10 rounded-lg">
+                <CheckCircle2 className="h-5 w-5 text-success" />
               </div>
               <div>
                 <p className="text-sm text-muted-foreground">Pagos</p>
-                <p className="text-xl font-bold text-emerald-400">{stats.paid}</p>
+                <p className="text-xl font-bold text-success">{stats.paid}</p>
               </div>
             </div>
           </CardContent>
@@ -190,8 +190,8 @@ export function CrewPayrollManager() {
         <Card className="border-border/50 bg-card/50">
           <CardContent className="p-4">
             <div className="flex items-center gap-3">
-              <div className="p-2 bg-blue-500/10 rounded-lg">
-                <TrendingUp className="h-5 w-5 text-blue-400" />
+              <div className="p-2 bg-primary/10 rounded-lg">
+                <TrendingUp className="h-5 w-5 text-primary" />
               </div>
               <div>
                 <p className="text-sm text-muted-foreground">Média Salário</p>
@@ -206,12 +206,12 @@ export function CrewPayrollManager() {
         <Card className="border-border/50 bg-card/50">
           <CardContent className="p-4">
             <div className="flex items-center gap-3">
-              <div className="p-2 bg-orange-500/10 rounded-lg">
-                <Banknote className="h-5 w-5 text-orange-400" />
+              <div className="p-2 bg-warning/10 rounded-lg">
+                <Banknote className="h-5 w-5 text-warning" />
               </div>
               <div>
                 <p className="text-sm text-muted-foreground">Horas Extras</p>
-                <p className="text-xl font-bold text-orange-400">
+                <p className="text-xl font-bold text-warning">
                   {formatCurrency(stats.totalOvertime)}
                 </p>
               </div>
@@ -315,7 +315,7 @@ export function CrewPayrollManager() {
                         <td className="p-3 text-right text-foreground">
                           {formatCurrency(payroll.base_salary, payroll.currency)}
                         </td>
-                        <td className="p-3 text-right text-amber-400">
+                        <td className="p-3 text-right text-warning">
                           {payroll.overtime_hours > 0 && (
                             <>
                               {payroll.overtime_hours}h

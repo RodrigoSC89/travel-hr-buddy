@@ -33,9 +33,9 @@ interface WorkspaceTeamPanelProps {
 
 const getStatusColor = (status: TeamMember["status"]) => {
   switch (status) {
-    case "online": return "bg-green-500";
-    case "away": return "bg-yellow-500";
-    case "busy": return "bg-red-500";
+    case "online": return "bg-success";
+    case "away": return "bg-warning";
+    case "busy": return "bg-destructive";
     default: return "bg-muted-foreground/50";
   }
 };

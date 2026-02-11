@@ -21,6 +21,7 @@ import { supabase } from "@/integrations/supabase/client";
 
 // Documents Dashboard
 function DocumentsDashboard() {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Supabase row shape is dynamic
   const [documents, setDocuments] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState("");
@@ -231,14 +232,14 @@ function DocumentsDashboard() {
           <CardContent>
             <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
               {[
-                { name: "Certificados", count: 45, color: "bg-blue-500" },
-                { name: "Contratos", count: 23, color: "bg-green-500" },
-                { name: "Manuais", count: 18, color: "bg-amber-500" },
-                { name: "Relatórios", count: 67, color: "bg-violet-500" },
-                { name: "Inspeções", count: 34, color: "bg-rose-500" },
-                { name: "Treinamentos", count: 29, color: "bg-cyan-500" },
-                { name: "Regulatórios", count: 41, color: "bg-orange-500" },
-                { name: "Outros", count: 12, color: "bg-gray-500" },
+                { name: "Certificados", count: 45, color: "bg-primary" },
+                { name: "Contratos", count: 23, color: "bg-success" },
+                { name: "Manuais", count: 18, color: "bg-warning" },
+                { name: "Relatórios", count: 67, color: "bg-accent" },
+                { name: "Inspeções", count: 34, color: "bg-destructive" },
+                { name: "Treinamentos", count: 29, color: "bg-info" },
+                { name: "Regulatórios", count: 41, color: "bg-secondary" },
+                { name: "Outros", count: 12, color: "bg-muted-foreground" },
               ].map((cat) => (
                 <div key={cat.name} className="p-3 border rounded-lg hover:bg-muted/50 cursor-pointer">
                   <div className="flex items-center gap-2 mb-1">

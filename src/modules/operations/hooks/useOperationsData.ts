@@ -3,7 +3,7 @@
  * Hook para dados operacionais da frota com backend real
  */
 
-import { useState, useEffect, useCallback } from 'react';
+import { useState } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
@@ -62,15 +62,53 @@ export interface PortCall {
   agent?: string;
 }
 
+interface VesselRow {
+  id: string;
+  name: string | null;
+  vessel_type: string | null;
+  status: string | null;
+  current_latitude?: number | null;
+  current_longitude?: number | null;
+  current_location: string | null;
+  current_fuel_level: number | null;
+  crew_capacity?: number | null;
+  updated_at: string | null;
+  [key: string]: unknown;
+}
+
+interface AlertRow {
+  id: string;
+  alert_type: string | null;
+  severity: string | null;
+  vessel_name?: string | null;
+  vessel_id: string | null;
+  message: string | null;
+  title?: string | null;
+  created_at: string;
+  acknowledged_at?: string | null;
+  [key: string]: unknown;
+}
+
+interface PortCallRow {
+  id: string;
+  vessel_id: string | null;
+  vessels?: { name: string | null } | null;
+  vessel_name?: string | null;
+  port_name?: string | null;
+  port?: string | null;
+  country?: string | null;
+  eta: string;
+  etd?: string | null;
+  status?: string | null;
+  purpose?: string | null;
+  agent_name?: string | null;
+}
+
 export function useOperationsData() {
   const queryClient = useQueryClient();
   const [selectedVessel, setSelectedVessel] = useState<string | null>(null);
-  const [refreshInterval, setRefreshInterval] = useState(30000); // 30 seconds
+  const [refreshInterval, setRefreshInterval] = useState(30000);
 
-  // Use dynamic db to avoid strict typing issues
-  const dynamicDb = supabase as any;
-
-  // Fetch vessels from Supabase
   const { data: vessels = [], isLoading: vesselsLoading, refetch: refetchVessels } = useQuery({
     queryKey: ['operations-vessels'],
     queryFn: async () => {
@@ -84,7 +122,7 @@ export function useOperationsData() {
         return [];
       }
 
-      return (data || []).map((v: any): VesselStatus => ({
+      return (data || []).map((v: VesselRow): VesselStatus => ({
         id: v.id,
         name: v.name || 'Embarcação',
         type: v.vessel_type || 'Cargo',
@@ -106,11 +144,9 @@ export function useOperationsData() {
     refetchInterval: refreshInterval,
   });
 
-  // Fetch telemetry data (simplified)
   const { data: telemetry = [], isLoading: telemetryLoading } = useQuery({
     queryKey: ['operations-telemetry', selectedVessel],
     queryFn: async () => {
-      // Generate telemetry from vessels
       return vessels.map((v: VesselStatus): TelemetryData => ({
         vesselId: v.id,
         engineRpm: v.status === 'underway' ? 135 : 0,
@@ -128,7 +164,6 @@ export function useOperationsData() {
     enabled: vessels.length > 0,
   });
 
-  // Fetch alerts
   const { data: alerts = [], isLoading: alertsLoading } = useQuery({
     queryKey: ['operations-alerts'],
     queryFn: async () => {
@@ -144,12 +179,12 @@ export function useOperationsData() {
         return [];
       }
 
-      return (data || []).map((a: any): OperationalAlert => ({
+      return (data || []).map((a: AlertRow): OperationalAlert => ({
         id: a.id,
         type: mapAlertType(a.alert_type),
         severity: mapSeverity(a.severity),
         vessel: a.vessel_name || 'Sistema',
-        vesselId: a.vessel_id,
+        vesselId: a.vessel_id || undefined,
         message: a.message || a.title || 'Alerta',
         timestamp: new Date(a.created_at),
         acknowledged: Boolean(a.acknowledged_at),
@@ -158,31 +193,31 @@ export function useOperationsData() {
     refetchInterval: refreshInterval,
   });
 
-  // Fetch port calls
   const { data: portCalls = [], isLoading: portCallsLoading } = useQuery({
     queryKey: ['operations-port-calls'],
     queryFn: async () => {
-      const { data, error } = await dynamicDb
-        .from('port_calls')
-        .select('*, vessels(name)')
+      // port_calls may not be in generated types — use 'as never' cast
+      const result = await supabase
+        .from('port_calls' as never)
+        .select('*')
         .order('eta', { ascending: true })
         .limit(20);
 
-      if (error) {
+      if (result.error) {
         return [];
       }
 
-      return (data || []).map((pc: any): PortCall => ({
+      return (result.data || []).map((pc: PortCallRow): PortCall => ({
         id: pc.id,
-        vesselId: pc.vessel_id,
-        vesselName: pc.vessels?.name || pc.vessel_name || 'Embarcação',
+        vesselId: pc.vessel_id || '',
+        vesselName: pc.vessel_name || 'Embarcação',
         portName: pc.port_name || pc.port || 'Porto',
         country: pc.country || 'Brasil',
         eta: new Date(pc.eta),
         etd: new Date(pc.etd || pc.eta),
-        status: pc.status || 'scheduled',
+        status: (pc.status as PortCall['status']) || 'scheduled',
         purpose: pc.purpose || 'Carga/Descarga',
-        agent: pc.agent_name,
+        agent: pc.agent_name || undefined,
       }));
     },
   });
@@ -190,9 +225,9 @@ export function useOperationsData() {
   // Mutations
   const acknowledgeAlert = useMutation({
     mutationFn: async (alertId: string) => {
-      const { error } = await dynamicDb
+      const { error } = await supabase
         .from('soc_alerts')
-        .update({ acknowledged_at: new Date().toISOString() })
+        .update({ acknowledged_at: new Date().toISOString() } as never)
         .eq('id', alertId);
 
       if (error) throw error;
@@ -205,13 +240,13 @@ export function useOperationsData() {
 
   const resolveAlert = useMutation({
     mutationFn: async ({ alertId, notes }: { alertId: string; notes?: string }) => {
-      const { error } = await dynamicDb
+      const { error } = await supabase
         .from('soc_alerts')
         .update({ 
           is_resolved: true, 
           resolved_at: new Date().toISOString(),
           resolution_notes: notes,
-        })
+        } as never)
         .eq('id', alertId);
 
       if (error) throw error;
@@ -224,9 +259,9 @@ export function useOperationsData() {
 
   const updateVesselStatus = useMutation({
     mutationFn: async ({ vesselId, status }: { vesselId: string; status: string }) => {
-      const { error } = await dynamicDb
+      const { error } = await supabase
         .from('vessels')
-        .update({ status, updated_at: new Date().toISOString() })
+        .update({ status, updated_at: new Date().toISOString() } as never)
         .eq('id', vesselId);
 
       if (error) throw error;
@@ -257,7 +292,6 @@ export function useOperationsData() {
   const loading = vesselsLoading || telemetryLoading || alertsLoading || portCallsLoading;
 
   return {
-    // Data
     vessels,
     telemetry,
     alerts,
@@ -266,8 +300,6 @@ export function useOperationsData() {
     loading,
     selectedVessel,
     refreshInterval,
-
-    // Actions
     setSelectedVessel,
     setRefreshInterval,
     refetchVessels,

@@ -122,19 +122,19 @@ export const ComputerVisionInspector: React.FC = () => {
 
   const getSeverityColor = (severity: string) => {
     switch (severity) {
-      case "critical": return "text-red-600 bg-red-100";
-      case "high": return "text-orange-600 bg-orange-100";
-      case "medium": return "text-yellow-600 bg-yellow-100";
-      default: return "text-green-600 bg-green-100";
+      case "critical": return "text-destructive bg-destructive/10";
+      case "high": return "text-warning bg-warning/10";
+      case "medium": return "text-warning bg-warning/10";
+      default: return "text-success bg-success/10";
     }
   };
 
   const getStatusIcon = (status: string) => {
     switch (status) {
-      case "passed": return <CheckCircle className="h-5 w-5 text-green-500" />;
-      case "warning": return <AlertTriangle className="h-5 w-5 text-yellow-500" />;
-      case "failed": return <XCircle className="h-5 w-5 text-red-500" />;
-      default: return <RefreshCw className="h-5 w-5 text-blue-500 animate-spin" />;
+      case "passed": return <CheckCircle className="h-5 w-5 text-success" />;
+      case "warning": return <AlertTriangle className="h-5 w-5 text-warning" />;
+      case "failed": return <XCircle className="h-5 w-5 text-destructive" />;
+      default: return <RefreshCw className="h-5 w-5 text-primary animate-spin" />;
     }
   };
 
@@ -174,8 +174,8 @@ export const ComputerVisionInspector: React.FC = () => {
               // Stream obtained — in a full implementation, attach to a <video> element
               stream.getTracks().forEach(t => t.stop()); // release immediately for now
               toast.success("Câmera acessada com sucesso. Integração de vídeo em desenvolvimento (Q2/2026).");
-            } catch (err: any) {
-              toast.error(`Câmera indisponível: ${err.message || 'Permissão negada'}`);
+            } catch (err: unknown) {
+              toast.error(`Câmera indisponível: ${err instanceof Error ? err.message : 'Permissão negada'}`);
             }
           }}>
             <Camera className="w-4 h-4 mr-2" />
@@ -217,36 +217,36 @@ export const ComputerVisionInspector: React.FC = () => {
             </div>
           </CardContent>
         </Card>
-        <Card className="bg-green-500/5">
+        <Card className="bg-success/5">
           <CardContent className="pt-4">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-muted-foreground">Aprovadas</p>
-                <p className="text-2xl font-bold text-green-600">{stats.passed}</p>
+                <p className="text-2xl font-bold text-success">{stats.passed}</p>
               </div>
-              <CheckCircle className="h-8 w-8 text-green-500" />
+              <CheckCircle className="h-8 w-8 text-success" />
             </div>
           </CardContent>
         </Card>
-        <Card className="bg-yellow-500/5">
+        <Card className="bg-warning/5">
           <CardContent className="pt-4">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-muted-foreground">Alertas</p>
-                <p className="text-2xl font-bold text-yellow-600">{stats.warning}</p>
+                <p className="text-2xl font-bold text-warning">{stats.warning}</p>
               </div>
-              <AlertTriangle className="h-8 w-8 text-yellow-500" />
+              <AlertTriangle className="h-8 w-8 text-warning" />
             </div>
           </CardContent>
         </Card>
-        <Card className="bg-red-500/5">
+        <Card className="bg-destructive/5">
           <CardContent className="pt-4">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-muted-foreground">Reprovadas</p>
-                <p className="text-2xl font-bold text-red-600">{stats.failed}</p>
+                <p className="text-2xl font-bold text-destructive">{stats.failed}</p>
               </div>
-              <XCircle className="h-8 w-8 text-red-500" />
+              <XCircle className="h-8 w-8 text-destructive" />
             </div>
           </CardContent>
         </Card>
@@ -325,9 +325,9 @@ export const ComputerVisionInspector: React.FC = () => {
                     <div
                       key={finding.id}
                       className={`absolute border-2 border-dashed ${
-                        finding.severity === "critical" ? "border-red-500" :
-                        finding.severity === "high" ? "border-orange-500" :
-                        finding.severity === "medium" ? "border-yellow-500" : "border-green-500"
+                        finding.severity === "critical" ? "border-destructive" :
+                        finding.severity === "high" ? "border-warning" :
+                        finding.severity === "medium" ? "border-warning" : "border-success"
                       }`}
                       style={{
                         left: `${finding.location.x}px`,
