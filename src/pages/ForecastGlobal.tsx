@@ -11,7 +11,7 @@ export default function ForecastGlobal() {
     <div className="min-h-screen bg-gray-950 p-6">
       <Suspense fallback={
         <div className="flex items-center justify-center min-h-screen">
-          <Loader className="animate-spin h-12 w-12 text-blue-500" />
+          <Loader className="animate-spin h-12 w-12 text-primary" />
         </div>
       }>
         <div className="max-w-7xl mx-auto space-y-6">

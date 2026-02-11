@@ -122,10 +122,10 @@ export default function SOLASISPSTrainingPage() {
 
   const getCategoryColor = (category: string) => {
     switch (category) {
-      case "SOLAS": return "bg-red-500/20 text-red-400";
-      case "ISPS": return "bg-blue-500/20 text-blue-400";
-      case "ISM": return "bg-purple-500/20 text-purple-400";
-      default: return "bg-gray-500/20 text-gray-400";
+      case "SOLAS": return "bg-destructive/20 text-destructive";
+      case "ISPS": return "bg-info/20 text-info";
+      case "ISM": return "bg-accent/20 text-accent-foreground";
+      default: return "bg-muted text-muted-foreground";
     }
   };
 
@@ -134,13 +134,13 @@ export default function SOLASISPSTrainingPage() {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-4">
-          <div className="p-3 bg-red-500/20 rounded-xl">
-            <Shield className="h-8 w-8 text-red-500" />
+          <div className="p-3 bg-destructive/20 rounded-xl">
+            <Shield className="h-8 w-8 text-destructive" />
           </div>
           <div>
             <h1 className="text-2xl font-bold flex items-center gap-2">
               SOLAS, ISPS & ISM Training
-              <Badge variant="secondary" className="bg-red-500/20 text-red-400">
+              <Badge variant="secondary" className="bg-destructive/20 text-destructive">
                 IMO Compliance
               </Badge>
             </h1>
@@ -180,9 +180,9 @@ export default function SOLASISPSTrainingPage() {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-muted-foreground">Concluídos</p>
-                <p className="text-3xl font-bold text-green-500">{trainingStats.completed}</p>
+                <p className="text-3xl font-bold text-success">{trainingStats.completed}</p>
               </div>
-              <CheckCircle2 className="h-10 w-10 text-green-500/30" />
+              <CheckCircle2 className="h-10 w-10 text-success/30" />
             </div>
           </CardContent>
         </Card>
@@ -192,9 +192,9 @@ export default function SOLASISPSTrainingPage() {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-muted-foreground">Em Andamento</p>
-                <p className="text-3xl font-bold text-blue-500">{trainingStats.inProgress}</p>
+                <p className="text-3xl font-bold text-info">{trainingStats.inProgress}</p>
               </div>
-              <Clock className="h-10 w-10 text-blue-500/30" />
+              <Clock className="h-10 w-10 text-info/30" />
             </div>
           </CardContent>
         </Card>
