@@ -50,12 +50,14 @@ const useSystemMetrics = () => {
   });
 
   const updateMetrics = useCallback(() => {
-    const memory = (performance as any).memory;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Chrome-only performance.memory API
+    const memory = (performance as unknown as { memory?: { usedJSHeapSize: number; totalJSHeapSize: number } }).memory;
     setMetrics({
       cpu: 10 + Math.abs(Math.sin(Date.now() / 5000)) * 30,
       memory: memory ? (memory.usedJSHeapSize / memory.totalJSHeapSize) * 100 : 45,
       network: navigator.onLine ? 'online' : 'offline',
-      latency: Math.round((navigator as any).connection?.rtt || 50),
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any -- experimental Network Information API
+      latency: Math.round((navigator as unknown as { connection?: { rtt?: number } }).connection?.rtt || 50),
       fps: 60,
       cacheHit: 92,
       loadTime: performance.now() / 1000

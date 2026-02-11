@@ -291,7 +291,7 @@ export function Predictive30_60_90() {
         <CardHeader>
           <div className="flex items-center justify-between">
             <CardTitle>Previsões Detalhadas</CardTitle>
-            <Tabs value={activeView} onValueChange={(v) => setActiveView(v as any)}>
+            <Tabs value={activeView} onValueChange={(v) => setActiveView(v as typeof activeView)}>
               <TabsList>
                 <TabsTrigger value="30days" className="flex items-center gap-1">
                   <Clock className="h-3 w-3" />

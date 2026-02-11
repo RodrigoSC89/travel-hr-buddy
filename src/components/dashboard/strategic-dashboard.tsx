@@ -368,7 +368,7 @@ const StrategicDashboard: React.FC = () => {
             
             <div className="flex items-center gap-4">
               {/* Profile Selector */}
-              <Tabs value={selectedProfile} onValueChange={(value) => setSelectedProfile(value as any)}>
+              <Tabs value={selectedProfile} onValueChange={(value) => setSelectedProfile(value as typeof selectedProfile)}>
                 <TabsList className="grid w-full grid-cols-4">
                   <TabsTrigger value="admin" className="flex items-center gap-2">
                     <Crown className="h-4 w-4" />

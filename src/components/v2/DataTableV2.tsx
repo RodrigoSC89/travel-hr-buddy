@@ -102,15 +102,15 @@ export function DataTableV2<T extends { id: string | number }>({
     // Apply filters
     Object.entries(filterValues).forEach(([key, value]) => {
       if (value && value !== "all") {
-        result = result.filter(item => String((item as any)[key]) === value);
+        result = result.filter(item => String((item as Record<string, unknown>)[key]) === value);
       }
     });
 
     // Apply sorting
     if (sortConfig) {
       result.sort((a, b) => {
-        const aVal = String((a as any)[sortConfig.key]);
-        const bVal = String((b as any)[sortConfig.key]);
+        const aVal = String((a as Record<string, unknown>)[sortConfig.key]);
+        const bVal = String((b as Record<string, unknown>)[sortConfig.key]);
         return sortConfig.direction === "asc" 
           ? aVal.localeCompare(bVal) 
           : bVal.localeCompare(aVal);
@@ -255,7 +255,7 @@ export function DataTableV2<T extends { id: string | number }>({
                       <TableCell key={String(col.key)} className={col.className}>
                         {col.render 
                           ? col.render(item) 
-                          : String((item as any)[col.key] ?? "-")
+                          : String((item as Record<string, unknown>)[col.key as string] ?? "-")
                         }
                       </TableCell>
                     ))}

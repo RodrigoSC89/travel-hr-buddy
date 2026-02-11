@@ -152,32 +152,32 @@ export function PredictiveMaintenanceScheduler() {
 
   const getPriorityColor = (priority: string) => {
     const colors = {
-      critical: 'bg-red-500/20 text-red-400 border-red-500/30',
-      high: 'bg-orange-500/20 text-orange-400 border-orange-500/30',
-      medium: 'bg-amber-500/20 text-amber-400 border-amber-500/30',
-      low: 'bg-green-500/20 text-green-400 border-green-500/30'
+      critical: 'bg-destructive/20 text-destructive border-destructive/30',
+      high: 'bg-warning/20 text-warning border-warning/30',
+      medium: 'bg-warning/20 text-warning border-warning/30',
+      low: 'bg-success/20 text-success border-success/30'
     };
     return colors[priority as keyof typeof colors] || 'bg-muted';
   };
 
   const getHealthColor = (score: number) => {
-    if (score >= 80) return 'text-green-400';
-    if (score >= 60) return 'text-amber-400';
-    if (score >= 40) return 'text-orange-400';
-    return 'text-red-400';
+    if (score >= 80) return 'text-success';
+    if (score >= 60) return 'text-warning';
+    if (score >= 40) return 'text-warning';
+    return 'text-destructive';
   };
 
   return (
     <div className="space-y-6">
       {/* Header Stats */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-        <Card className="bg-gradient-to-br from-red-500/10 to-red-500/5 border-red-500/20">
+        <Card className="bg-gradient-to-br from-destructive/10 to-destructive/5 border-destructive/20">
           <CardContent className="p-4">
             <div className="flex items-center gap-2">
-              <AlertTriangle className="h-5 w-5 text-red-400" />
+              <AlertTriangle className="h-5 w-5 text-destructive" />
               <span className="text-sm text-muted-foreground">Críticas</span>
             </div>
-            <p className="text-3xl font-bold text-red-400 mt-2">{stats.critical}</p>
+            <p className="text-3xl font-bold text-destructive mt-2">{stats.critical}</p>
           </CardContent>
         </Card>
 
@@ -191,23 +191,23 @@ export function PredictiveMaintenanceScheduler() {
           </CardContent>
         </Card>
 
-        <Card className="bg-gradient-to-br from-blue-500/10 to-blue-500/5 border-blue-500/20">
+        <Card className="bg-gradient-to-br from-primary/10 to-primary/5 border-primary/20">
           <CardContent className="p-4">
             <div className="flex items-center gap-2">
-              <Package className="h-5 w-5 text-blue-400" />
+              <Package className="h-5 w-5 text-primary" />
               <span className="text-sm text-muted-foreground">Peças Faltando</span>
             </div>
-            <p className="text-3xl font-bold text-blue-400 mt-2">{stats.partsNeeded}</p>
+            <p className="text-3xl font-bold text-primary mt-2">{stats.partsNeeded}</p>
           </CardContent>
         </Card>
 
-        <Card className="bg-gradient-to-br from-green-500/10 to-green-500/5 border-green-500/20">
+        <Card className="bg-gradient-to-br from-success/10 to-success/5 border-success/20">
           <CardContent className="p-4">
             <div className="flex items-center gap-2">
-              <Activity className="h-5 w-5 text-green-400" />
+              <Activity className="h-5 w-5 text-success" />
               <span className="text-sm text-muted-foreground">Custo Estimado</span>
             </div>
-            <p className="text-2xl font-bold text-green-400 mt-2">
+            <p className="text-2xl font-bold text-success mt-2">
               R$ {stats.totalCost.toLocaleString()}
             </p>
           </CardContent>
