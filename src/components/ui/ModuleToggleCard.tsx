@@ -33,10 +33,10 @@ export interface ModuleToggleCardProps {
 }
 
 const STATUS_COLORS: Record<ModuleStatus, string> = {
-  production: 'bg-green-500',
-  development: 'bg-yellow-500',
-  experimental: 'bg-purple-500',
-  deprecated: 'bg-red-500',
+  production: 'bg-success',
+  development: 'bg-warning',
+  experimental: 'bg-accent',
+  deprecated: 'bg-destructive',
 };
 
 const STATUS_LABELS: Record<ModuleStatus, string> = {

@@ -29,10 +29,10 @@ interface GeofenceZone {
 
 const ZONE_TYPES = {
   restricted: { color: 'bg-destructive/10 text-destructive border-destructive/30', icon: Shield, label: 'Restrita' },
-  anchorage: { color: 'bg-amber-500/10 text-amber-600 border-amber-500/30', icon: Anchor, label: 'Fundeio' },
-  port: { color: 'bg-blue-500/10 text-blue-600 border-blue-500/30', icon: Navigation, label: 'Porto' },
-  eca: { color: 'bg-emerald-500/10 text-emerald-600 border-emerald-500/30', icon: Shield, label: 'ECA' },
-  custom: { color: 'bg-violet-500/10 text-violet-600 border-violet-500/30', icon: Target, label: 'Custom' },
+  anchorage: { color: 'bg-warning/10 text-warning border-warning/30', icon: Anchor, label: 'Fundeio' },
+  port: { color: 'bg-info/10 text-info border-info/30', icon: Navigation, label: 'Porto' },
+  eca: { color: 'bg-success/10 text-success border-success/30', icon: Shield, label: 'ECA' },
+  custom: { color: 'bg-accent/10 text-accent-foreground border-accent/30', icon: Target, label: 'Custom' },
 };
 
 export function GeofencingMonitor() {
@@ -91,8 +91,8 @@ export function GeofencingMonitor() {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-3">
-          <div className="p-2.5 bg-rose-500/10 rounded-xl">
-            <Radar className="h-6 w-6 text-rose-500" />
+          <div className="p-2.5 bg-destructive/10 rounded-xl">
+            <Radar className="h-6 w-6 text-destructive" />
           </div>
           <div>
             <h2 className="text-xl font-bold text-foreground">Geofencing Monitor</h2>
@@ -108,28 +108,28 @@ export function GeofencingMonitor() {
       <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
         <Card>
           <CardContent className="p-4 text-center">
-            <Radar className="h-5 w-5 text-rose-500 mx-auto mb-1" />
+            <Radar className="h-5 w-5 text-destructive mx-auto mb-1" />
             <p className="text-2xl font-bold">{zones.length}</p>
             <p className="text-xs text-muted-foreground">Zonas Ativas</p>
           </CardContent>
         </Card>
         <Card>
           <CardContent className="p-4 text-center">
-            <Navigation className="h-5 w-5 text-blue-500 mx-auto mb-1" />
+            <Navigation className="h-5 w-5 text-info mx-auto mb-1" />
             <p className="text-2xl font-bold">{positions.length}</p>
             <p className="text-xs text-muted-foreground">Embarcações Rastreadas</p>
           </CardContent>
         </Card>
         <Card>
           <CardContent className="p-4 text-center">
-            <MapPin className="h-5 w-5 text-amber-500 mx-auto mb-1" />
+            <MapPin className="h-5 w-5 text-warning mx-auto mb-1" />
             <p className="text-2xl font-bold">{totalInZones}</p>
             <p className="text-xs text-muted-foreground">Em Zonas</p>
           </CardContent>
         </Card>
         <Card className={restrictedViolations.length > 0 ? 'border-destructive/30' : ''}>
           <CardContent className="p-4 text-center">
-            <Shield className={`h-5 w-5 mx-auto mb-1 ${restrictedViolations.length > 0 ? 'text-destructive' : 'text-emerald-500'}`} />
+            <Shield className={`h-5 w-5 mx-auto mb-1 ${restrictedViolations.length > 0 ? 'text-destructive' : 'text-success'}`} />
             <p className="text-2xl font-bold">{restrictedViolations.length}</p>
             <p className="text-xs text-muted-foreground">Violações</p>
           </CardContent>
@@ -191,7 +191,7 @@ export function GeofencingMonitor() {
                   </div>
                   <div className="p-2 rounded bg-muted/30">
                     <span className="text-muted-foreground">Status:</span>
-                    <span className={`block font-bold ${zone.active ? 'text-emerald-500' : 'text-muted-foreground'}`}>
+                    <span className={`block font-bold ${zone.active ? 'text-success' : 'text-muted-foreground'}`}>
                       {zone.active ? 'Ativo' : 'Inativo'}
                     </span>
                   </div>

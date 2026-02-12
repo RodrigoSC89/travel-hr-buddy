@@ -217,10 +217,10 @@ export const ApiDocumentation: React.FC = () => {
 
   const getMethodColor = (method: string) => {
     switch (method) {
-      case "GET": return "bg-green-500/10 text-green-600 border-green-500/30";
-      case "POST": return "bg-blue-500/10 text-blue-600 border-blue-500/30";
-      case "PUT": return "bg-amber-500/10 text-amber-600 border-amber-500/30";
-      case "DELETE": return "bg-red-500/10 text-red-600 border-red-500/30";
+      case "GET": return "bg-success/10 text-success border-success/30";
+      case "POST": return "bg-info/10 text-info border-info/30";
+      case "PUT": return "bg-warning/10 text-warning border-warning/30";
+      case "DELETE": return "bg-destructive/10 text-destructive border-destructive/30";
       default: return "bg-muted text-muted-foreground";
     }
   };

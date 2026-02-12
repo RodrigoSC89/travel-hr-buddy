@@ -177,10 +177,10 @@ export function PEODPAuditForm({
 
   const getStatusIcon = (status: ComplianceStatus) => {
     switch (status) {
-      case "conforme": return <CheckCircle2 className="h-4 w-4 text-green-600" />;
-      case "parcial": return <MinusCircle className="h-4 w-4 text-yellow-600" />;
-      case "nao_conforme": return <AlertCircle className="h-4 w-4 text-red-600" />;
-      case "nao_aplicavel": return <HelpCircle className="h-4 w-4 text-gray-400" />;
+      case "conforme": return <CheckCircle2 className="h-4 w-4 text-success" />;
+      case "parcial": return <MinusCircle className="h-4 w-4 text-warning" />;
+      case "nao_conforme": return <AlertCircle className="h-4 w-4 text-destructive" />;
+      case "nao_aplicavel": return <HelpCircle className="h-4 w-4 text-muted-foreground" />;
       default: return <HelpCircle className="h-4 w-4 text-muted-foreground" />;
     }
   };
@@ -325,28 +325,28 @@ export function PEODPAuditForm({
                                   <div className="flex items-center space-x-2">
                                     <RadioGroupItem value="conforme" id={`${req.id}-conforme`} />
                                     <Label htmlFor={`${req.id}-conforme`} className="flex items-center gap-1 cursor-pointer">
-                                      <CheckCircle2 className="h-4 w-4 text-green-600" />
+                                      <CheckCircle2 className="h-4 w-4 text-success" />
                                       Conforme
                                     </Label>
                                   </div>
                                   <div className="flex items-center space-x-2">
                                     <RadioGroupItem value="parcial" id={`${req.id}-parcial`} />
                                     <Label htmlFor={`${req.id}-parcial`} className="flex items-center gap-1 cursor-pointer">
-                                      <MinusCircle className="h-4 w-4 text-yellow-600" />
+                                      <MinusCircle className="h-4 w-4 text-warning" />
                                       Parcial
                                     </Label>
                                   </div>
                                   <div className="flex items-center space-x-2">
                                     <RadioGroupItem value="nao_conforme" id={`${req.id}-nao_conforme`} />
                                     <Label htmlFor={`${req.id}-nao_conforme`} className="flex items-center gap-1 cursor-pointer">
-                                      <AlertCircle className="h-4 w-4 text-red-600" />
+                                      <AlertCircle className="h-4 w-4 text-destructive" />
                                       Não Conforme
                                     </Label>
                                   </div>
                                   <div className="flex items-center space-x-2">
                                     <RadioGroupItem value="nao_aplicavel" id={`${req.id}-na`} />
                                     <Label htmlFor={`${req.id}-na`} className="flex items-center gap-1 cursor-pointer">
-                                      <HelpCircle className="h-4 w-4 text-gray-400" />
+                                      <HelpCircle className="h-4 w-4 text-muted-foreground" />
                                       N/A
                                     </Label>
                                   </div>
