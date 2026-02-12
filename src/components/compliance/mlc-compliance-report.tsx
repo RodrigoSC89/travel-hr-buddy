@@ -321,8 +321,8 @@ export function MLCComplianceReport({ crewId }: MLCComplianceReportProps) {
                 </CardTitle>
               </CardHeader>
               <CardContent className="space-y-4">
-                {report.violations.map((violation, index) => (
-                  <div key={index} className="p-4 rounded-lg border bg-muted/50">
+                {report.violations.map((violation) => (
+                  <div key={violation.rule} className="p-4 rounded-lg border bg-muted/50">
                     <div className="flex items-center gap-2 mb-2">
                       <span className="font-medium">{violation.rule}</span>
                       <Badge variant={violation.status === 'non-compliant' ? 'destructive' : 'secondary'}>

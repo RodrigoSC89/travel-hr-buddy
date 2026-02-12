@@ -230,12 +230,12 @@ export const EmergencyReportDialog: React.FC<EmergencyReportDialogProps> = ({
                 Simulados por Tipo
               </h4>
               <div className="space-y-2">
-                {REPORT_DATA.byType.map((item, index) => (
-                  <div key={index} className="flex items-center justify-between py-2 border-b last:border-0">
+                {REPORT_DATA.byType.map((item) => (
+                  <div key={item.type} className="flex items-center justify-between py-2 border-b last:border-0">
                     <div className="flex items-center gap-3">
                       <span className="font-medium">{item.type}</span>
                       {item.status === "warning" && (
-                        <AlertTriangle className="h-4 w-4 text-yellow-500" />
+                        <AlertTriangle className="h-4 w-4 text-warning" />
                       )}
                     </div>
                     <div className="flex items-center gap-4 text-sm text-muted-foreground">
@@ -256,8 +256,8 @@ export const EmergencyReportDialog: React.FC<EmergencyReportDialogProps> = ({
                 Últimos Simulados Realizados
               </h4>
               <div className="space-y-2">
-                {REPORT_DATA.recentDrills.map((drill, index) => (
-                  <div key={index} className="flex items-center justify-between py-2 border-b last:border-0">
+                {REPORT_DATA.recentDrills.map((drill) => (
+                  <div key={`${drill.date}-${drill.type}`} className="flex items-center justify-between py-2 border-b last:border-0">
                     <div className="flex items-center gap-3">
                       <span className="text-sm text-muted-foreground">
                         {new Date(drill.date).toLocaleDateString("pt-BR")}

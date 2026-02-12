@@ -470,21 +470,21 @@ export const SgsoDashboard: React.FC = () => {
                         { type: "audit", title: "Auditoria ANP concluída", time: "5 horas atrás", severity: "info", tab: "audits" },
                         { type: "practice", title: "Prática 4 atualizada", time: "1 dia atrás", severity: "warning", tab: "practices" },
                         { type: "risk", title: "Novo risco identificado", time: "2 dias atrás", severity: "medium", tab: "risks" }
-                      ].map((activity, index) => (
+                      ].map((activity) => (
                         <div 
-                          key={index} 
+                          key={activity.title} 
                           className="flex items-start gap-3 p-3 bg-muted/50 rounded-lg border cursor-pointer hover:bg-muted transition-colors"
                           onClick={() => navigateToTab(activity.tab)}
                         >
                           <div className={`p-2 rounded-full ${
-                            activity.severity === "high" ? "bg-red-100 dark:bg-red-900/30" :
-                              activity.severity === "warning" ? "bg-yellow-100 dark:bg-yellow-900/30" :
-                                activity.severity === "info" ? "bg-blue-100 dark:bg-blue-900/30" : "bg-muted"
+                            activity.severity === "high" ? "bg-destructive/10" :
+                              activity.severity === "warning" ? "bg-warning/10" :
+                                activity.severity === "info" ? "bg-info/10" : "bg-muted"
                           }`}>
                             <Activity className={`h-4 w-4 ${
-                              activity.severity === "high" ? "text-red-600" :
-                                activity.severity === "warning" ? "text-yellow-600" :
-                                  activity.severity === "info" ? "text-blue-600" : "text-muted-foreground"
+                              activity.severity === "high" ? "text-destructive" :
+                                activity.severity === "warning" ? "text-warning" :
+                                  activity.severity === "info" ? "text-info" : "text-muted-foreground"
                             }`} />
                           </div>
                           <div className="flex-1">
@@ -509,16 +509,16 @@ export const SgsoDashboard: React.FC = () => {
                         { task: "Revisão matriz de riscos", due: "3 dias", priority: "medium", tab: "risks" },
                         { task: "Treinamento SGSO tripulação", due: "1 semana", priority: "medium", tab: "training" },
                         { task: "Relatório ANP mensal", due: "2 semanas", priority: "low", tab: "dossie" }
-                      ].map((task, index) => (
+                      ].map((task) => (
                         <div 
-                          key={index} 
+                          key={task.task} 
                           className="flex items-center justify-between p-3 bg-muted/50 rounded-lg border cursor-pointer hover:bg-muted transition-colors"
                           onClick={() => navigateToTab(task.tab)}
                         >
                           <div className="flex items-center gap-3">
                             <Clock className={`h-4 w-4 ${
-                              task.priority === "high" ? "text-red-600" :
-                                task.priority === "medium" ? "text-yellow-600" : "text-blue-600"
+                              task.priority === "high" ? "text-destructive" :
+                                task.priority === "medium" ? "text-warning" : "text-info"
                             }`} />
                             <span className="font-semibold text-sm">{task.task}</span>
                           </div>

@@ -308,8 +308,8 @@ export const PredictiveMaintenanceSystem = () => {
                     <div>
                       <h4 className="font-medium mb-2">Fatores de Risco</h4>
                       <div className="space-y-1">
-                        {prediction.riskFactors.map((factor, index) => (
-                          <Badge key={index} variant="outline" className="text-xs">
+                        {prediction.riskFactors.map((factor) => (
+                          <Badge key={factor} variant="outline" className="text-xs">
                             {factor}
                           </Badge>
                         ))}
@@ -334,8 +334,8 @@ export const PredictiveMaintenanceSystem = () => {
 
         <TabsContent value="performance" className="space-y-4">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-            {metrics.map((metric, index) => (
-              <Card key={index}>
+            {metrics.map((metric) => (
+              <Card key={metric.metric}>
                 <CardHeader className="pb-3">
                   <CardTitle className="text-base flex items-center justify-between">
                     {metric.metric}
