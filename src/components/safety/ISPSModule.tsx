@@ -61,9 +61,9 @@ interface CyberThreat {
 }
 
 const SECURITY_LEVELS = [
-  { level: 1, name: "Normal", description: "Operações normais, medidas mínimas de segurança", color: "bg-green-500" },
-  { level: 2, name: "Elevado", description: "Medidas de segurança adicionais por período prolongado", color: "bg-yellow-500" },
-  { level: 3, name: "Excepcional", description: "Medidas de segurança intensificadas por ameaça provável", color: "bg-red-500" }
+  { level: 1, name: "Normal", description: "Operações normais, medidas mínimas de segurança", color: "bg-success" },
+  { level: 2, name: "Elevado", description: "Medidas de segurança adicionais por período prolongado", color: "bg-warning" },
+  { level: 3, name: "Excepcional", description: "Medidas de segurança intensificadas por ameaça provável", color: "bg-destructive" }
 ];
 
 const COLORS = ["#22c55e", "#eab308", "#f97316", "#ef4444"];
@@ -104,9 +104,9 @@ export function ISPSModule() {
 
   const getStatusBadge = (status: string) => {
     switch (status) {
-      case "compliant": return <Badge className="bg-green-500/20 text-green-500">Conforme</Badge>;
-      case "minor": return <Badge className="bg-yellow-500/20 text-yellow-500">Menor</Badge>;
-      case "major": return <Badge className="bg-orange-500/20 text-orange-500">Maior</Badge>;
+      case "compliant": return <Badge className="bg-success/20 text-success">Conforme</Badge>;
+      case "minor": return <Badge className="bg-warning/20 text-warning">Menor</Badge>;
+      case "major": return <Badge className="bg-warning/20 text-warning">Maior</Badge>;
       case "critical": return <Badge variant="destructive">Crítico</Badge>;
       default: return <Badge variant="secondary">{status}</Badge>;
     }
@@ -114,8 +114,8 @@ export function ISPSModule() {
 
   const getDrillResultBadge = (result: string) => {
     switch (result) {
-      case "satisfactory": return <Badge className="bg-green-500/20 text-green-500">Satisfatório</Badge>;
-      case "needs_improvement": return <Badge className="bg-yellow-500/20 text-yellow-500">Precisa Melhorar</Badge>;
+      case "satisfactory": return <Badge className="bg-success/20 text-success">Satisfatório</Badge>;
+      case "needs_improvement": return <Badge className="bg-warning/20 text-warning">Precisa Melhorar</Badge>;
       case "failed": return <Badge variant="destructive">Reprovado</Badge>;
       default: return <Badge variant="secondary">{result}</Badge>;
     }
@@ -124,9 +124,9 @@ export function ISPSModule() {
   const getSeverityBadge = (severity: string) => {
     switch (severity) {
       case "critical": return <Badge variant="destructive">Crítico</Badge>;
-      case "high": return <Badge className="bg-orange-500/20 text-orange-500">Alto</Badge>;
-      case "medium": return <Badge className="bg-yellow-500/20 text-yellow-500">Médio</Badge>;
-      case "low": return <Badge className="bg-green-500/20 text-green-500">Baixo</Badge>;
+      case "high": return <Badge className="bg-warning/20 text-warning">Alto</Badge>;
+      case "medium": return <Badge className="bg-warning/20 text-warning">Médio</Badge>;
+      case "low": return <Badge className="bg-success/20 text-success">Baixo</Badge>;
       default: return <Badge variant="secondary">{severity}</Badge>;
     }
   };
@@ -138,8 +138,8 @@ export function ISPSModule() {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-3">
-          <div className="p-3 bg-gradient-to-br from-red-500/20 to-orange-500/20 rounded-xl">
-            <Shield className="h-6 w-6 text-red-500" />
+          <div className="p-3 bg-gradient-to-br from-destructive/20 to-warning/20 rounded-xl">
+            <Shield className="h-6 w-6 text-destructive" />
           </div>
           <div>
             <h2 className="text-xl font-bold flex items-center gap-2">
@@ -220,7 +220,7 @@ export function ISPSModule() {
         <Card>
           <CardContent className="pt-4">
             <div className="flex items-center gap-2">
-              <Target className="h-5 w-5 text-green-500" />
+              <Target className="h-5 w-5 text-success" />
               <div>
                 <p className="text-2xl font-bold">{overallScore}%</p>
                 <p className="text-xs text-muted-foreground">Overall Score</p>
@@ -242,7 +242,7 @@ export function ISPSModule() {
         <Card>
           <CardContent className="pt-4">
             <div className="flex items-center gap-2">
-              <Calendar className="h-5 w-5 text-orange-500" />
+              <Calendar className="h-5 w-5 text-warning" />
               <div>
                 <p className="text-2xl font-bold">{drills.length}</p>
                 <p className="text-xs text-muted-foreground">Drills (90 dias)</p>
@@ -253,7 +253,7 @@ export function ISPSModule() {
         <Card>
           <CardContent className="pt-4">
             <div className="flex items-center gap-2">
-              <AlertTriangle className="h-5 w-5 text-red-500" />
+              <AlertTriangle className="h-5 w-5 text-destructive" />
               <div>
                 <p className="text-2xl font-bold">{cyberThreats.filter(t => t.status !== "resolved").length}</p>
                 <p className="text-xs text-muted-foreground">Ameaças Ativas</p>
@@ -373,7 +373,7 @@ export function ISPSModule() {
                         <p className="font-medium">{section.section}</p>
                         <p className="text-xs text-muted-foreground">Última revisão: {section.lastReview}</p>
                       </div>
-                      <Badge className={section.status === "approved" ? "bg-green-500/20 text-green-500" : "bg-yellow-500/20 text-yellow-500"}>
+                      <Badge className={section.status === "approved" ? "bg-success/20 text-success" : "bg-warning/20 text-warning"}>
                         {section.status === "approved" ? "Aprovado" : "Em Revisão"}
                       </Badge>
                     </div>
@@ -497,7 +497,7 @@ export function ISPSModule() {
                   <Lock className="h-5 w-5" />
                   Maritime Cybersecurity
                 </CardTitle>
-                <Badge className="bg-green-500/20 text-green-500">
+                <Badge className="bg-success/20 text-success">
                   <Wifi className="h-3 w-3 mr-1" />
                   Systems Online
                 </Badge>
@@ -512,11 +512,11 @@ export function ISPSModule() {
                         <div>
                           <div className="flex items-center gap-2">
                             {threat.status === "resolved" ? (
-                              <CheckCircle className="h-4 w-4 text-green-500" />
+                              <CheckCircle className="h-4 w-4 text-success" />
                             ) : threat.status === "investigating" ? (
-                              <Eye className="h-4 w-4 text-yellow-500" />
+                              <Eye className="h-4 w-4 text-warning" />
                             ) : (
-                              <AlertTriangle className="h-4 w-4 text-orange-500" />
+                              <AlertTriangle className="h-4 w-4 text-warning" />
                             )}
                             <span className="font-medium">{threat.type}</span>
                             {getSeverityBadge(threat.severity)}
