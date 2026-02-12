@@ -232,9 +232,9 @@ Dados atuais do sistema:
         {/* Quick Actions */}
         <div className="p-3 border-b bg-muted/30">
           <div className="flex flex-wrap gap-2">
-            {quickActions.map((action, index) => (
+            {quickActions.map((action) => (
               <Button
-                key={index}
+                key={action.label}
                 variant="outline"
                 size="sm"
                 className="text-xs"

@@ -169,8 +169,8 @@ export function PredictiveAuditDashboard() {
               </CardHeader>
               <CardContent>
                 <div className="space-y-4">
-                  {prediction.predictedIssues.map((issue, index) => (
-                    <IssueCard key={index} issue={issue} />
+                  {prediction.predictedIssues.map((issue) => (
+                    <IssueCard key={issue.area} issue={issue} />
                   ))}
                   {prediction.predictedIssues.length === 0 && (
                     <div className="text-center py-8 text-muted-foreground">
@@ -192,8 +192,8 @@ export function PredictiveAuditDashboard() {
               </CardHeader>
               <CardContent>
                 <div className="space-y-4">
-                  {prediction.recommendedActions.map((action, index) => (
-                    <ActionCard key={index} action={action} />
+                  {prediction.recommendedActions.map((action) => (
+                    <ActionCard key={action.action} action={action} />
                   ))}
                 </div>
               </CardContent>
@@ -210,8 +210,8 @@ export function PredictiveAuditDashboard() {
                 </CardHeader>
                 <CardContent>
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                    {prediction.historicalPatterns.map((pattern, index) => (
-                      <PatternCard key={index} pattern={pattern} />
+                    {prediction.historicalPatterns.map((pattern) => (
+                      <PatternCard key={pattern.description} pattern={pattern} />
                     ))}
                   </div>
                 </CardContent>

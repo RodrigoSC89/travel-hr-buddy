@@ -303,8 +303,8 @@ export const IntegrationTemplates: React.FC = () => {
               <div>
                 <h4 className="text-sm font-medium text-foreground mb-2">Principais recursos:</h4>
                 <div className="space-y-1">
-                  {template.features.slice(0, 3).map((feature, index) => (
-                    <div key={index} className="flex items-center gap-2 text-xs text-muted-foreground">
+                  {template.features.slice(0, 3).map((feature) => (
+                    <div key={feature} className="flex items-center gap-2 text-xs text-muted-foreground">
                       <CheckCircle className="w-3 h-3 text-success" />
                       {feature}
                     </div>
@@ -320,8 +320,8 @@ export const IntegrationTemplates: React.FC = () => {
               <div>
                 <h4 className="text-sm font-medium text-foreground mb-2">Requisitos:</h4>
                 <div className="flex flex-wrap gap-1">
-                  {template.requirements.slice(0, 2).map((req, index) => (
-                    <Badge key={index} variant="outline" className="text-xs">
+                  {template.requirements.slice(0, 2).map((req) => (
+                    <Badge key={req} variant="outline" className="text-xs">
                       {req}
                     </Badge>
                   ))}

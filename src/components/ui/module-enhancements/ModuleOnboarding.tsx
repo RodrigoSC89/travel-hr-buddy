@@ -111,13 +111,13 @@ export const ModuleOnboarding: React.FC<ModuleOnboardingProps> = ({
 
           {/* Progress dots */}
           <div className="flex items-center justify-center gap-2 my-4">
-            {steps.map((_, index) => (
+            {steps.map((_, stepIdx) => (
               <div
-                key={index}
+                key={`step-dot-${stepIdx}`}
                 className={`h-2 rounded-full transition-all duration-300 ${
-                  index === currentStep 
+                  stepIdx === currentStep 
                     ? 'w-8 bg-primary' 
-                    : completedSteps.includes(index)
+                    : completedSteps.includes(stepIdx)
                     ? 'w-2 bg-primary/50'
                     : 'w-2 bg-muted-foreground/30'
                 }`}

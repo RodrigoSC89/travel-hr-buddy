@@ -299,8 +299,8 @@ export const IntegrationMonitoring: React.FC = () => {
         </CardHeader>
         <CardContent>
           <div className="space-y-4">
-            {performanceData.map((integration, index) => (
-              <div key={index} className="p-4 border border-border/50 rounded-lg">
+            {performanceData.map((integration) => (
+              <div key={integration.integration} className="p-4 border border-border/50 rounded-lg">
                 <div className="flex items-center justify-between mb-3">
                   <div className="flex items-center gap-3">
                     <h4 className="font-medium text-foreground">{integration.integration}</h4>

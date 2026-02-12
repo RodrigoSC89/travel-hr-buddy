@@ -155,8 +155,8 @@ export const InteractiveDashboard: React.FC = () => {
 
       {/* Metrics Grid */}
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-        {metrics.map((metric, index) => (
-          <MetricCard key={index} {...metric} />
+        {metrics.map((metric) => (
+          <MetricCard key={metric.title} {...metric} />
         ))}
       </div>
 
@@ -220,8 +220,8 @@ export const InteractiveDashboard: React.FC = () => {
                     { time: "15 min", action: "Dashboard atualizado", type: "info" },
                     { time: "1h", action: "Novo usuário registrado", type: "info" },
                     { time: "2h", action: "Backup realizado", type: "success" }
-                  ].map((activity, index) => (
-                    <div key={index} className="flex items-center space-x-3">
+                  ].map((activity) => (
+                    <div key={activity.action} className="flex items-center space-x-3">
                       <div className={`w-2 h-2 rounded-full ${
                         activity.type === "success" ? "bg-success" : "bg-info"
                       }`} />

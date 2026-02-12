@@ -328,8 +328,8 @@ export const BaseChecklistManager: React.FC<BaseChecklistManagerProps> = ({
                   <div className="text-sm">
                     <span className="text-muted-foreground">Tipos de Navio:</span>
                     <div className="flex flex-wrap gap-1 mt-1">
-                      {template.applicableVesselTypes.map((type, index) => (
-                        <Badge key={index} variant="secondary" className="text-xs">
+                      {template.applicableVesselTypes.map((type) => (
+                        <Badge key={type} variant="secondary" className="text-xs">
                           {type}
                         </Badge>
                       ))}
