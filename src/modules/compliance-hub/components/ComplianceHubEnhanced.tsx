@@ -344,7 +344,7 @@ const ComplianceHubEnhanced: React.FC = () => {
                       { title: 'Verificação MLC', date: addDays(new Date(), 21), type: 'audit', priority: 'low' },
                     ].map((item, i) => (
                       <motion.div
-                        key={i}
+                        key={item.title}
                         initial={{ opacity: 0, x: -10 }}
                         animate={{ opacity: 1, x: 0 }}
                         transition={{ delay: i * 0.1 }}
@@ -390,7 +390,7 @@ const ComplianceHubEnhanced: React.FC = () => {
                       { action: 'Checklist diário preenchido', user: 'João Oliveira', vessel: 'MV Caribbean Queen', status: 'success' },
                     ].map((item, i) => (
                       <motion.div
-                        key={i}
+                        key={item.action}
                         initial={{ opacity: 0, x: -10 }}
                         animate={{ opacity: 1, x: 0 }}
                         transition={{ delay: i * 0.1 }}
@@ -507,9 +507,9 @@ const ComplianceHubEnhanced: React.FC = () => {
                   { name: 'SMC - Safety Management Certificate', type: 'vessel', entity: 'MV Atlantic Star', expiry: addDays(new Date(), 180), status: 'valid' },
                   { name: 'ISSC - International Ship Security', type: 'vessel', entity: 'MV Pacific Explorer', expiry: addDays(new Date(), -15), status: 'expired' },
                   { name: 'COC - Certificate of Competency', type: 'crew', entity: 'Cap. Roberto Mendes', expiry: addDays(new Date(), 365), status: 'valid' },
-                ].map((cert, i) => (
+                ].map((cert) => (
                   <motion.div
-                    key={i}
+                    key={cert.name}
                     initial={{ opacity: 0, y: 10 }}
                     animate={{ opacity: 1, y: 0 }}
                     className={`flex items-center justify-between p-4 border rounded-lg ${
@@ -572,9 +572,9 @@ const ComplianceHubEnhanced: React.FC = () => {
                   { title: 'Documentação de segurança incompleta', category: 'ISPS', severity: 'minor', vessel: 'MV Pacific Explorer', status: 'open' },
                   { title: 'Registro de horas de trabalho não atualizado', category: 'MLC', severity: 'major', vessel: 'MV Ocean Titan', status: 'overdue' },
                   { title: 'Calibração de equipamentos GMDSS', category: 'SOLAS', severity: 'critical', vessel: 'MV Caribbean Queen', status: 'in_progress' },
-                ].map((nc, i) => (
+                ].map((nc) => (
                   <motion.div
-                    key={i}
+                    key={nc.title}
                     initial={{ opacity: 0, y: 10 }}
                     animate={{ opacity: 1, y: 0 }}
                     className="flex items-center justify-between p-4 border rounded-lg hover:bg-muted/30"

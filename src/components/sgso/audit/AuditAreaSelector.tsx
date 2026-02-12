@@ -41,17 +41,17 @@ export const AuditAreaSelector = React.memo(function AuditAreaSelector({
             <CardTitle className="text-base">{area.name}</CardTitle>
           </CardHeader>
           <CardContent className="space-y-2 pt-0">
-            {area.criteria.map((criterion, i) => (
-              <div key={i} className="flex items-center gap-2">
+            {area.criteria.map((criterion) => (
+              <div key={criterion} className="flex items-center gap-2">
                 <Checkbox
-                  id={`${area.id}-${i}`}
+                  id={`${area.id}-${criterion}`}
                   checked={isSelected(criterion)}
                   onCheckedChange={(checked) =>
                     handleToggle(area, criterion, !!checked)
                   }
                 />
                 <Label
-                  htmlFor={`${area.id}-${i}`}
+                  htmlFor={`${area.id}-${criterion}`}
                   className="cursor-pointer text-sm font-normal"
                 >
                   {criterion}

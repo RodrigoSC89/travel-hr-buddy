@@ -232,8 +232,8 @@ export default function AIAgentOrchestrator() {
         </CardHeader>
         <CardContent>
           <div className="space-y-3">
-            {recentTasks.map((task, i) => (
-              <div key={i} className="flex items-center justify-between p-3 border rounded-lg">
+            {recentTasks.map((task) => (
+              <div key={task.task} className="flex items-center justify-between p-3 border rounded-lg">
                 <div className="flex items-center gap-3">
                   <div className={`p-2 rounded-full ${task.status === 'completed' ? 'bg-success/10' : 'bg-primary/10'}`}>
                     {task.status === 'completed' ? (

@@ -692,8 +692,8 @@ export const APIHubNautilus: React.FC = () => {
                     { name: "Python SDK", version: "v1.8.3", downloads: "32.1k" },
                     { name: "Java SDK", version: "v1.5.0", downloads: "18.7k" },
                     { name: "C# .NET SDK", version: "v1.3.2", downloads: "12.4k" }
-                  ].map((sdk, idx) => (
-                    <div key={idx} className="flex items-center justify-between p-4 bg-muted/50 rounded-lg">
+                  ].map((sdk) => (
+                    <div key={sdk.name} className="flex items-center justify-between p-4 bg-muted/50 rounded-lg">
                       <div>
                         <div className="font-medium">{sdk.name}</div>
                         <div className="text-sm text-muted-foreground">v{sdk.version} • {sdk.downloads} downloads</div>
@@ -719,8 +719,8 @@ export const APIHubNautilus: React.FC = () => {
                     "Webhooks e Callbacks",
                     "Autenticação e Segurança",
                     "Limites e Quotas"
-                  ].map((doc, idx) => (
-                    <Button key={idx} variant="ghost" className="w-full justify-start">
+                  ].map((doc) => (
+                    <Button key={doc} variant="ghost" className="w-full justify-start">
                       <Book className="h-4 w-4 mr-2" />
                       {doc}
                     </Button>
@@ -780,8 +780,8 @@ export const APIHubNautilus: React.FC = () => {
                         { category: "Weather", percentage: 13, color: "bg-green-500" },
                         { category: "Analytics", percentage: 9, color: "bg-yellow-500" },
                         { category: "Crew", percentage: 5, color: "bg-red-500" }
-                      ].map((item, idx) => (
-                        <div key={idx}>
+                      ].map((item) => (
+                        <div key={item.category}>
                           <div className="flex justify-between text-sm mb-1">
                             <span className="text-muted-foreground">{item.category}</span>
                             <span className="font-medium">{item.percentage}%</span>
