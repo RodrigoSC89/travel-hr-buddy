@@ -410,6 +410,7 @@ class DistributedDecisionCore {
     logger.debug("[DistributedDecisionCore] Received context update", contextData);
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Supabase ai_decisions row mapping
   private mapRowToDecision(row: any): Decision {
     return {
       id: row.id,

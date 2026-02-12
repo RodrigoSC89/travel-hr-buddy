@@ -37,7 +37,7 @@ export type PendingActionType = "create" | "update" | "delete";
 
 export interface PendingActionData {
   id?: string;
-  [key: string]: any;
+  [key: string]: unknown;
 }
 
 export interface PendingAction {

@@ -150,8 +150,7 @@ export function AIAuditTrail() {
                   <p>Interações com a IA aparecerão aqui automaticamente</p>
                 </div>
               ) : (
-                // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Supabase dynamic query
-                filteredLogs.map((log: any) => (
+                filteredLogs.map((log) => (
                   <motion.div
                     key={log.id}
                     className="p-4 rounded-lg border hover:bg-muted/50 transition-colors"
@@ -170,7 +169,7 @@ export function AIAuditTrail() {
                           <div className="flex items-center gap-4 mt-2 text-xs text-muted-foreground flex-wrap">
                             <span className="flex items-center gap-1">
                               <Clock className="h-3 w-3" />
-                              {format(new Date(log.created_at), "dd/MM HH:mm", { locale: ptBR })}
+                              {format(new Date(log.created_at || Date.now()), "dd/MM HH:mm", { locale: ptBR })}
                             </span>
                             {log.model_version && <Badge variant="outline" className="text-xs">{log.model_version}</Badge>}
                             {log.response_time_ms && <span>{log.response_time_ms}ms</span>}

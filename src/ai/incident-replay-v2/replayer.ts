@@ -411,8 +411,7 @@ Respond only with valid JSON.`,
     });
 
     // Parse AI response
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any -- AI response shape is unpredictable
-    let explanation: any = {};
+    let explanation: Record<string, unknown> = {};
     try {
       explanation = JSON.parse(response.content);
     } catch {
