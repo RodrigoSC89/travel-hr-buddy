@@ -375,9 +375,9 @@ export function CrewTrackingPanel() {
                               {/* Alerts */}
                               {traveler.alerts.length > 0 && (
                                 <div className="mt-3 space-y-1">
-                                  {traveler.alerts.map((alert, i) => (
+                                  {traveler.alerts.map((alert) => (
                                     <div
-                                      key={i}
+                                      key={`${alert.type}-${alert.message}`}
                                       className={`flex items-center gap-2 text-xs p-2 rounded ${
                                         alert.type === "delay" ? "bg-orange-500/10 text-orange-600" :
                                         alert.type === "emergency" ? "bg-red-500/10 text-red-600" :

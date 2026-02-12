@@ -342,8 +342,8 @@ const EnhancedLogisticsDashboard: React.FC = () => {
                 </CardHeader>
                 <CardContent>
                   <div className="space-y-4">
-                    {transportModes.map((mode, index) => (
-                      <div key={index} className="space-y-2">
+                    {transportModes.map((mode) => (
+                      <div key={mode.name} className="space-y-2">
                         <div className="flex items-center justify-between">
                           <div className="flex items-center gap-3">
                             <div className={`p-2 rounded-lg bg-${mode.color}/20`}>

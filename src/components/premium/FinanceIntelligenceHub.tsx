@@ -350,8 +350,8 @@ export default function FinanceIntelligenceHub() {
                      <div className="mt-4">
                        <p className="text-xs font-medium text-muted-foreground mb-2">Lotes de Combustível:</p>
                        <div className="grid grid-cols-4 gap-2">
-                         {inv.lots.map((lot, idx) => (
-                           <div key={idx} className="p-2 bg-primary/5 rounded text-xs">
+                         {inv.lots.map((lot) => (
+                           <div key={`${lot.supplier}-${lot.qty}-${lot.price}`} className="p-2 bg-primary/5 rounded text-xs">
                              <p className="font-medium">{lot.qty} MT @ ${lot.price}</p>
                              <p className="text-muted-foreground">{lot.supplier}</p>
                            </div>

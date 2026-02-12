@@ -208,9 +208,9 @@ export function InteractiveOnboardingWizard({
           {/* Step Indicator */}
           <div className="flex items-center justify-between mb-6">
             <div className="flex items-center gap-2">
-              {onboardingSteps.map((_, idx) => (
+              {onboardingSteps.map((s, idx) => (
                 <motion.div
-                  key={idx}
+                  key={`step-dot-${s.title}`}
                   className={`w-2 h-2 rounded-full transition-colors ${
                     idx === currentStep 
                       ? "bg-primary" 
@@ -257,12 +257,12 @@ export function InteractiveOnboardingWizard({
 
               {/* Features */}
               <div className="space-y-3">
-                {step.features.map((feature, idx) => (
+                {step.features.map((feature, fIdx) => (
                   <motion.div
-                    key={idx}
+                    key={feature}
                     initial={{ opacity: 0, x: -20 }}
                     animate={{ opacity: 1, x: 0 }}
-                    transition={{ delay: idx * 0.1 }}
+                    transition={{ delay: fIdx * 0.1 }}
                     className="flex items-start gap-3 p-3 rounded-lg bg-muted/50"
                   >
                     <CheckCircle2 className="h-5 w-5 text-primary shrink-0 mt-0.5" />

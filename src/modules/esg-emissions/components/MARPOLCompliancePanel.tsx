@@ -359,8 +359,8 @@ export function MARPOLCompliancePanel() {
                         <div>
                           <h4 className="text-sm font-medium mb-3">Requisitos</h4>
                           <div className="space-y-2">
-                            {selectedAnnex.requirements.map((req, i) => (
-                              <div key={i} className="flex items-center justify-between p-2 rounded-lg bg-muted/50">
+                            {selectedAnnex.requirements.map((req) => (
+                              <div key={req.name} className="flex items-center justify-between p-2 rounded-lg bg-muted/50">
                                 <span className="text-sm">{req.name}</span>
                                 <Badge className={
                                   req.status === "met" ? "bg-green-500/10 text-green-600" :

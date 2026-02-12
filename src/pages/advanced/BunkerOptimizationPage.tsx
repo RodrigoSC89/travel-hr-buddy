@@ -166,9 +166,9 @@ const BunkerOptimizationPage = () => {
             </CardHeader>
             <CardContent>
               <div className="space-y-4">
-                {optimizations.map((opt, idx) => (
+                {optimizations.map((opt) => (
                   <div 
-                    key={idx}
+                    key={opt.title}
                     className="p-4 border rounded-lg hover:shadow-md transition-all"
                   >
                     <div className="flex items-start justify-between">
@@ -233,9 +233,9 @@ const BunkerOptimizationPage = () => {
             </CardHeader>
             <CardContent>
               <div className="space-y-4">
-                {bunkeringOpportunities.map((port, idx) => (
+                {bunkeringOpportunities.map((port) => (
                   <div 
-                    key={idx}
+                    key={port.port}
                     className={`p-4 rounded-lg border-2 ${
                       port.recommended 
                         ? "border-green-500 bg-green-500/5" 
@@ -281,8 +281,8 @@ const BunkerOptimizationPage = () => {
             </CardHeader>
             <CardContent>
               <div className="space-y-4">
-                {historicalData.map((data, idx) => (
-                  <div key={idx} className="flex items-center gap-4">
+                {historicalData.map((data) => (
+                  <div key={data.month} className="flex items-center gap-4">
                     <span className="w-12 font-medium">{data.month}</span>
                     <div className="flex-1 space-y-1">
                       <div className="flex items-center gap-2">

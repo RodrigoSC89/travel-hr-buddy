@@ -351,9 +351,9 @@
                            <span className="text-sm">{item.skill}</span>
                            <div className="flex items-center gap-2">
                              <div className="flex gap-1">
-                               {[...Array(item.maxLevel)].map((_, i) => (
+                                {[...Array(item.maxLevel)].map((_, i) => (
                                  <div
-                                   key={i}
+                                   key={`level-${i}`}
                                    className={`w-2 h-6 rounded ${
                                      i < item.level ? "bg-primary" : "bg-muted"
                                    }`}
@@ -397,8 +397,8 @@
                        </div>
                        <div className="space-y-2">
                          <p className="text-xs text-muted-foreground uppercase">Requisitos:</p>
-                         {personnel.requirements.map((req, i) => (
-                           <div key={i} className="flex items-center gap-2 text-sm">
+                         {personnel.requirements.map((req) => (
+                           <div key={req} className="flex items-center gap-2 text-sm">
                              <CheckCircle className="h-3 w-3 text-success" />
                              {req}
                            </div>

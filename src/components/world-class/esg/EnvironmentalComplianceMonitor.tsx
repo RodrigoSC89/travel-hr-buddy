@@ -200,8 +200,8 @@ export function EnvironmentalComplianceMonitor() {
                   <div>
                     <p className="text-xs font-semibold text-muted-foreground mb-2">REQUISITOS</p>
                     <div className="space-y-1">
-                      {reg.requirements.map((req, i) => (
-                        <div key={i} className="flex items-center gap-2 text-xs">
+                      {reg.requirements.map((req) => (
+                        <div key={req} className="flex items-center gap-2 text-xs">
                           <CheckCircle2 className="h-3 w-3 text-emerald-500" />
                           <span>{req}</span>
                         </div>
@@ -211,8 +211,8 @@ export function EnvironmentalComplianceMonitor() {
                   {reg.gaps.length > 0 && (
                     <div>
                       <p className="text-xs font-semibold text-amber-500 mb-2">GAPS IDENTIFICADOS</p>
-                      {reg.gaps.map((gap, i) => (
-                        <div key={i} className="flex items-center gap-2 text-xs text-amber-600">
+                      {reg.gaps.map((gap) => (
+                        <div key={gap} className="flex items-center gap-2 text-xs text-amber-600">
                           <AlertTriangle className="h-3 w-3" />
                           <span>{gap}</span>
                         </div>

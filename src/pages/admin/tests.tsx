@@ -139,7 +139,7 @@ export default function TestDashboard() {
             <CardContent className="p-4">
               <ScrollArea className="h-48">
                 {logs.map((log, i) => (
-                  <p key={i} className="text-sm text-muted-foreground">
+                  <p key={`log-${i}-${log.slice(0, 20)}`} className="text-sm text-muted-foreground">
                     {log}
                   </p>
                 ))}

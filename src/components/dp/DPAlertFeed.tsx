@@ -33,7 +33,7 @@ export default function DPAlertFeed() {
         {alerts.length === 0
           ? "Sem alertas recentes."
           : alerts.map((a, i) => (
-            <div key={i} className="border-b border-border pb-2">
+            <div key={`alert-${i}-${a.timestamp ?? 'na'}`} className="border-b border-border pb-2">
               <p>{a.type || "Alerta"}</p>
               <p className="text-xs text-muted-foreground">
                 {a.timestamp ? new Date(a.timestamp).toLocaleTimeString() : "N/A"} — Risco: {a.risk ? (a.risk * 100).toFixed(1) : "0"}%

@@ -298,8 +298,8 @@ export default function VoiceAssistantNLU() {
                     </div>
                     <p className="text-sm">{intent.description}</p>
                     <div className="flex flex-wrap gap-1 mt-2">
-                      {intent.examples.map((ex, idx) => (
-                        <Badge key={idx} variant="secondary" className="text-xs">
+                      {intent.examples.map((ex) => (
+                        <Badge key={ex} variant="secondary" className="text-xs">
                           {ex}
                         </Badge>
                       ))}
