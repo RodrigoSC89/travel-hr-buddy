@@ -387,20 +387,20 @@ export function RuleEnginePanel() {
                     Add Condition
                   </Button>
                 </div>
-                {newRule.conditions?.map((condition, index) => (
-                  <div key={index} className="flex items-center gap-2">
+                {newRule.conditions?.map((condition, condIdx) => (
+                  <div key={`cond-${condIdx}-${condition.field}`} className="flex items-center gap-2">
                     <Input
                       placeholder="Field"
                       value={condition.field}
                       onChange={(e) =>
-                        updateCondition(index, { field: e.target.value })
+                        updateCondition(condIdx, { field: e.target.value })
                       }
                       className="flex-1"
                     />
                     <Select
                       value={condition.operator}
                       onValueChange={(value) =>
-                        updateCondition(index, {
+                        updateCondition(condIdx, {
                           operator: value as RuleCondition["operator"],
                         })
                       }
@@ -420,14 +420,14 @@ export function RuleEnginePanel() {
                       placeholder="Value"
                       value={condition.value?.toString()}
                       onChange={(e) =>
-                        updateCondition(index, { value: e.target.value })
+                        updateCondition(condIdx, { value: e.target.value })
                       }
                       className="flex-1"
                     />
                     <Button
                       variant="ghost"
                       size="icon"
-                      onClick={() => removeCondition(index)}
+                      onClick={() => removeCondition(condIdx)}
                     >
                       <Trash2 className="h-4 w-4 text-destructive" />
                     </Button>
@@ -446,12 +446,12 @@ export function RuleEnginePanel() {
                     Add Action
                   </Button>
                 </div>
-                {newRule.actions?.map((action, index) => (
-                  <div key={index} className="flex items-center gap-2">
+                {newRule.actions?.map((action, actIdx) => (
+                  <div key={`act-${actIdx}-${action.type}`} className="flex items-center gap-2">
                     <Select
                       value={action.type}
                       onValueChange={(value) =>
-                        updateAction(index, {
+                        updateAction(actIdx, {
                           type: value as RuleAction["type"],
                         })
                       }
@@ -476,7 +476,7 @@ export function RuleEnginePanel() {
                       onChange={(e) => {
                         try {
                           const config = JSON.parse(e.target.value);
-                          updateAction(index, { config });
+                          updateAction(actIdx, { config });
                         } catch {
                           // Allow partial editing
                         }
@@ -486,7 +486,7 @@ export function RuleEnginePanel() {
                     <Button
                       variant="ghost"
                       size="icon"
-                      onClick={() => removeAction(index)}
+                      onClick={() => removeAction(actIdx)}
                     >
                       <Trash2 className="h-4 w-4 text-destructive" />
                     </Button>

@@ -188,8 +188,8 @@ export const AccessibilityAuditor: React.FC = () => {
               <>
                 {/* Scores por Categoria */}
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-                  {accessibilityCategories.map((category, index) => (
-                    <Card key={index} className="border border-border/50">
+                  {accessibilityCategories.map((category) => (
+                    <Card key={category.category} className="border border-border/50">
                       <CardContent className="p-4">
                         <div className="flex items-center gap-3 mb-3">
                           {category.icon}
@@ -230,8 +230,8 @@ export const AccessibilityAuditor: React.FC = () => {
                 {/* Lista de Verificações */}
                 <div className="space-y-3">
                   <h3 className="font-semibold">Resultados Detalhados</h3>
-                  {issues.map((issue, index) => (
-                    <div key={index} className={`p-4 rounded-lg border ${getIssueColor(issue.type)}`}>
+                  {issues.map((issue) => (
+                    <div key={issue.element} className={`p-4 rounded-lg border ${getIssueColor(issue.type)}`}>
                       <div className="flex items-start gap-3">
                         {getIssueIcon(issue.type)}
                         <div className="flex-1">

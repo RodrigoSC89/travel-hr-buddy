@@ -212,7 +212,7 @@ export const OperationalWindowMonitor: React.FC = () => {
 
         <TabsContent value="realtime" className="space-y-4">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-            {conditions.map((condition, index) => {
+            {conditions.map((condition) => {
               const status = getConditionStatus(condition);
               const tokens = STATUS_TOKEN_MAP[status];
               const isInverse = condition.parameter === "Visibilidade";
@@ -221,7 +221,7 @@ export const OperationalWindowMonitor: React.FC = () => {
                 : Math.min(100, (condition.value / condition.asogLimit.red) * 100);
 
               return (
-                <Card key={index} className={`border-l-4 ${tokens.border}`}>
+                <Card key={condition.parameter} className={`border-l-4 ${tokens.border}`}>
                   <CardHeader className="pb-2">
                     <div className="flex items-center justify-between">
                       <CardTitle className="text-sm font-medium">{condition.parameter}</CardTitle>
@@ -275,8 +275,8 @@ export const OperationalWindowMonitor: React.FC = () => {
             </CardHeader>
             <CardContent>
               <div className="space-y-6">
-                {conditions.map((condition, index) => (
-                  <div key={index} className="space-y-2">
+                {conditions.map((condition) => (
+                  <div key={`forecast-${condition.parameter}`} className="space-y-2">
                     <div className="flex items-center justify-between">
                       <span className="font-medium">{condition.parameter}</span>
                       <span className="text-sm text-muted-foreground">
