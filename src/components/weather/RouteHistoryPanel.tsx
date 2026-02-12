@@ -278,12 +278,12 @@ export function RouteHistoryPanel({
 
                     <div className="flex items-center gap-4 text-xs mb-3">
                       <div className="flex items-center gap-1">
-                        <MapPin className="h-3 w-3 text-emerald-500" />
+                        <MapPin className="h-3 w-3 text-success" />
                         <span>{route.origin.name || "Origem"}</span>
                       </div>
                       <span>→</span>
                       <div className="flex items-center gap-1">
-                        <Anchor className="h-3 w-3 text-blue-500" />
+                        <Anchor className="h-3 w-3 text-primary" />
                         <span>{route.destination.name || "Destino"}</span>
                       </div>
                     </div>
@@ -303,13 +303,13 @@ export function RouteHistoryPanel({
                         </p>
                       </div>
                       <div className="text-center p-2 bg-muted/50 rounded">
-                        <Fuel className="h-3 w-3 mx-auto mb-1 text-amber-500" />
+                        <Fuel className="h-3 w-3 mx-auto mb-1 text-warning" />
                         <p className="font-medium">
                           {route.route_data.recommendedRoute.fuelEstimate.toFixed(1)} ton
                         </p>
                       </div>
                       <div className="text-center p-2 bg-muted/50 rounded">
-                        <AlertTriangle className="h-3 w-3 mx-auto mb-1 text-orange-500" />
+                        <AlertTriangle className="h-3 w-3 mx-auto mb-1 text-warning" />
                         <p className="font-medium">{route.hazards_count} riscos</p>
                       </div>
                     </div>
@@ -397,13 +397,13 @@ export function RouteHistoryPanel({
   );
 }
 
-// Distinct colors for comparison (matching RouteComparisonMap)
+// Distinct colors for comparison (matching RouteComparisonMap) - using CSS vars where possible
 const COMPARISON_COLORS = [
-  '#3b82f6', // Blue
-  '#ef4444', // Red  
-  '#10b981', // Green
-  '#f59e0b', // Amber
-  '#8b5cf6', // Purple
+  'hsl(var(--primary))',
+  'hsl(var(--destructive))',
+  'hsl(var(--success))',
+  'hsl(var(--warning))',
+  'hsl(var(--accent))',
 ];
 
 interface ComparisonColumnProps {
@@ -449,13 +449,13 @@ function ComparisonColumn({ name, route, createdAt, highlight, colorIndex = 0, v
           icon={DollarSign}
           label="Custo Est."
           value={`$${(route.fuelEstimate * vlsfoPrice).toLocaleString("en-US", { maximumFractionDigits: 0 })}`}
-          valueClass="text-amber-500"
+          valueClass="text-warning"
         />
         <MetricRow
           icon={AlertTriangle}
           label="Risco"
           value={`${route.riskScore.toFixed(0)}%`}
-          valueClass={route.riskScore > 40 ? "text-destructive" : "text-emerald-500"}
+          valueClass={route.riskScore > 40 ? "text-destructive" : "text-success"}
         />
       </CardContent>
     </Card>
@@ -644,8 +644,8 @@ function ComparisonSummary({ routes, vlsfoPrice, priceSource, pricesLastUpdated 
       </div>
 
       {/* Savings Analysis */}
-      <div className="p-4 bg-emerald-500/10 border border-emerald-500/30 rounded-lg">
-        <h4 className="font-medium mb-3 text-emerald-600 flex items-center gap-2">
+      <div className="p-4 bg-success/10 border border-success/30 rounded-lg">
+        <h4 className="font-medium mb-3 text-success flex items-center gap-2">
           <CheckCircle className="h-4 w-4" />
           Economia Potencial (melhor vs pior rota)
         </h4>
@@ -685,7 +685,7 @@ function ComparisonSummary({ routes, vlsfoPrice, priceSource, pricesLastUpdated 
         </div>
         
         {/* Bunker Price Reference */}
-        <div className="mt-3 pt-3 border-t border-emerald-500/20 text-xs text-muted-foreground flex items-center justify-between">
+        <div className="mt-3 pt-3 border-t border-success/20 text-xs text-muted-foreground flex items-center justify-between">
           <div className="flex items-center gap-2">
             <span>Preço VLSFO: ${vlsfoPrice}/ton</span>
             {priceSource && priceSource !== "fallback" && (
@@ -694,7 +694,7 @@ function ComparisonSummary({ routes, vlsfoPrice, priceSource, pricesLastUpdated 
               </Badge>
             )}
           </div>
-          <span className="text-emerald-500">
+          <span className="text-success">
             {savings.costSaving > 0 && `💰 Economia de $${savings.costSaving.toLocaleString("en-US", { maximumFractionDigits: 0 })} USD`}
           </span>
         </div>
@@ -762,9 +762,9 @@ interface SavingCardProps {
 }
 
 function SavingCard({ icon: Icon, label, value, percent, isRisk, isCost }: SavingCardProps) {
-  const iconColor = isCost ? "text-amber-500" : "text-emerald-600";
-  const valueColor = isCost ? "text-amber-500" : "text-emerald-600";
-  const percentColor = isCost ? "text-amber-400" : "text-emerald-500";
+  const iconColor = isCost ? "text-warning" : "text-success";
+  const valueColor = isCost ? "text-warning" : "text-success";
+  const percentColor = isCost ? "text-warning/80" : "text-success/80";
   
   return (
     <div className="text-center p-3 bg-background/60 rounded-lg">
@@ -799,7 +799,7 @@ function ComparisonRow({ label, value1, value2, unit, format, lowerIsBetter = tr
       <div className="flex-1 flex items-center gap-2">
         <span className={cn(
           "flex-1 text-center px-2 py-1 rounded",
-          route1Better ? "bg-emerald-500/20 text-emerald-600 font-medium" : "bg-muted"
+          route1Better ? "bg-success/20 text-success font-medium" : "bg-muted"
         )}>
           <span 
             className="inline-block w-2 h-2 rounded-full mr-1"
@@ -817,7 +817,7 @@ function ComparisonRow({ label, value1, value2, unit, format, lowerIsBetter = tr
         </span>
         <span className={cn(
           "flex-1 text-center px-2 py-1 rounded",
-          route2Better ? "bg-emerald-500/20 text-emerald-600 font-medium" : "bg-muted"
+          route2Better ? "bg-success/20 text-success font-medium" : "bg-muted"
         )}>
           <span 
             className="inline-block w-2 h-2 rounded-full mr-1"

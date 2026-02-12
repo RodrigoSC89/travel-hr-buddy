@@ -44,9 +44,9 @@ const costByVessel = [
 ];
 
 const maintenanceByType = [
-  { name: "Preventiva", value: 65, color: "#3b82f6" },
-  { name: "Corretiva", value: 20, color: "#f97316" },
-  { name: "Preditiva", value: 15, color: "#8b5cf6" },
+  { name: "Preventiva", value: 65, color: "hsl(var(--primary))" },
+  { name: "Corretiva", value: 20, color: "hsl(var(--warning))" },
+  { name: "Preditiva", value: 15, color: "hsl(var(--accent))" },
 ];
 
 const efficiencyData = [
@@ -63,66 +63,66 @@ export default function MMIDashboardSection() {
     <div className="space-y-6">
       {/* KPIs */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-        <Card className="bg-gradient-to-br from-blue-50 to-blue-100 dark:from-blue-950/50 dark:to-blue-900/30 border-blue-200 dark:border-blue-800">
+        <Card className="bg-gradient-to-br from-primary/10 to-primary/5 border-primary/20">
           <CardContent className="pt-4">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-xs text-blue-600 dark:text-blue-400 uppercase tracking-wide">MTBF Médio</p>
-                <p className="text-2xl font-bold text-blue-700 dark:text-blue-300">842h</p>
-                <div className="flex items-center gap-1 text-xs text-green-600 mt-1">
+                <p className="text-xs text-primary uppercase tracking-wide">MTBF Médio</p>
+                <p className="text-2xl font-bold text-primary">842h</p>
+                <div className="flex items-center gap-1 text-xs text-success mt-1">
                   <TrendingUp className="h-3 w-3" />
                   +12% vs mês anterior
                 </div>
               </div>
-              <Clock className="h-10 w-10 text-blue-500/50" />
+              <Clock className="h-10 w-10 text-primary/50" />
             </div>
           </CardContent>
         </Card>
 
-        <Card className="bg-gradient-to-br from-green-50 to-green-100 dark:from-green-950/50 dark:to-green-900/30 border-green-200 dark:border-green-800">
+        <Card className="bg-gradient-to-br from-success/10 to-success/5 border-success/20">
           <CardContent className="pt-4">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-xs text-green-600 dark:text-green-400 uppercase tracking-wide">Disponibilidade</p>
-                <p className="text-2xl font-bold text-green-700 dark:text-green-300">97.2%</p>
-                <div className="flex items-center gap-1 text-xs text-green-600 mt-1">
+                <p className="text-xs text-success uppercase tracking-wide">Disponibilidade</p>
+                <p className="text-2xl font-bold text-success">97.2%</p>
+                <div className="flex items-center gap-1 text-xs text-success mt-1">
                   <TrendingUp className="h-3 w-3" />
                   +2.1% vs meta
                 </div>
               </div>
-              <Activity className="h-10 w-10 text-green-500/50" />
+              <Activity className="h-10 w-10 text-success/50" />
             </div>
           </CardContent>
         </Card>
 
-        <Card className="bg-gradient-to-br from-orange-50 to-orange-100 dark:from-orange-950/50 dark:to-orange-900/30 border-orange-200 dark:border-orange-800">
+        <Card className="bg-gradient-to-br from-warning/10 to-warning/5 border-warning/20">
           <CardContent className="pt-4">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-xs text-orange-600 dark:text-orange-400 uppercase tracking-wide">Custo Mensal</p>
-                <p className="text-2xl font-bold text-orange-700 dark:text-orange-300">R$ 182K</p>
-                <div className="flex items-center gap-1 text-xs text-red-600 mt-1">
+                <p className="text-xs text-warning uppercase tracking-wide">Custo Mensal</p>
+                <p className="text-2xl font-bold text-warning">R$ 182K</p>
+                <div className="flex items-center gap-1 text-xs text-destructive mt-1">
                   <TrendingDown className="h-3 w-3" />
                   -8% vs orçado
                 </div>
               </div>
-              <DollarSign className="h-10 w-10 text-orange-500/50" />
+              <DollarSign className="h-10 w-10 text-warning/50" />
             </div>
           </CardContent>
         </Card>
 
-        <Card className="bg-gradient-to-br from-purple-50 to-purple-100 dark:from-purple-950/50 dark:to-purple-900/30 border-purple-200 dark:border-purple-800">
+        <Card className="bg-gradient-to-br from-accent/10 to-accent/5 border-accent/20">
           <CardContent className="pt-4">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-xs text-purple-600 dark:text-purple-400 uppercase tracking-wide">Backlog</p>
-                <p className="text-2xl font-bold text-purple-700 dark:text-purple-300">23</p>
-                <div className="flex items-center gap-1 text-xs text-amber-600 mt-1">
+                <p className="text-xs text-accent-foreground uppercase tracking-wide">Backlog</p>
+                <p className="text-2xl font-bold text-accent-foreground">23</p>
+                <div className="flex items-center gap-1 text-xs text-warning mt-1">
                   <AlertTriangle className="h-3 w-3" />
                   5 críticos
                 </div>
               </div>
-              <Target className="h-10 w-10 text-purple-500/50" />
+              <Target className="h-10 w-10 text-accent-foreground/50" />
             </div>
           </CardContent>
         </Card>
@@ -151,9 +151,9 @@ export default function MMIDashboardSection() {
                     borderRadius: '8px'
                   }} 
                 />
-                <Area type="monotone" dataKey="preventiva" stackId="1" stroke="#3b82f6" fill="#3b82f6" fillOpacity={0.6} name="Preventiva" />
-                <Area type="monotone" dataKey="corretiva" stackId="1" stroke="#f97316" fill="#f97316" fillOpacity={0.6} name="Corretiva" />
-                <Area type="monotone" dataKey="preditiva" stackId="1" stroke="#8b5cf6" fill="#8b5cf6" fillOpacity={0.6} name="Preditiva" />
+                <Area type="monotone" dataKey="preventiva" stackId="1" stroke="hsl(var(--primary))" fill="hsl(var(--primary))" fillOpacity={0.6} name="Preventiva" />
+                <Area type="monotone" dataKey="corretiva" stackId="1" stroke="hsl(var(--warning))" fill="hsl(var(--warning))" fillOpacity={0.6} name="Corretiva" />
+                <Area type="monotone" dataKey="preditiva" stackId="1" stroke="hsl(var(--accent))" fill="hsl(var(--accent))" fillOpacity={0.6} name="Preditiva" />
                 <Legend />
               </AreaChart>
             </ResponsiveContainer>
@@ -182,7 +182,7 @@ export default function MMIDashboardSection() {
                   }}
                   formatter={(value) => [`R$ ${Number(value).toLocaleString('pt-BR')}`, 'Custo']}
                 />
-                <Bar dataKey="cost" fill="#f97316" radius={[0, 4, 4, 0]} />
+                <Bar dataKey="cost" fill="hsl(var(--warning))" radius={[0, 4, 4, 0]} />
               </BarChart>
             </ResponsiveContainer>
           </CardContent>
@@ -250,7 +250,7 @@ export default function MMIDashboardSection() {
                   }}
                   formatter={(value) => [`${value}%`, 'Eficiência']}
                 />
-                <Area type="monotone" dataKey="efficiency" stroke="#10b981" fill="#10b981" fillOpacity={0.3} />
+                <Area type="monotone" dataKey="efficiency" stroke="hsl(var(--success))" fill="hsl(var(--success))" fillOpacity={0.3} />
               </AreaChart>
             </ResponsiveContainer>
           </CardContent>
@@ -258,46 +258,46 @@ export default function MMIDashboardSection() {
       </div>
 
       {/* Alerts */}
-      <Card className="border-amber-200 dark:border-amber-800 bg-amber-50/50 dark:bg-amber-950/20">
+      <Card className="border-warning/30 bg-warning/5">
         <CardHeader>
-          <CardTitle className="flex items-center gap-2 text-amber-700 dark:text-amber-300">
+          <CardTitle className="flex items-center gap-2 text-warning">
             <AlertTriangle className="h-5 w-5" />
             Alertas de Manutenção
           </CardTitle>
         </CardHeader>
         <CardContent>
           <div className="space-y-3">
-            <div className="flex items-center justify-between p-3 bg-red-100 dark:bg-red-950/30 rounded-lg">
+            <div className="flex items-center justify-between p-3 bg-destructive/10 rounded-lg">
               <div className="flex items-center gap-3">
-                <AlertTriangle className="h-5 w-5 text-red-500" />
+                <AlertTriangle className="h-5 w-5 text-destructive" />
                 <div>
-                  <p className="font-medium text-red-700 dark:text-red-300">Motor Principal - FPSO Alpha</p>
-                  <p className="text-sm text-red-600 dark:text-red-400">Manutenção vencida há 3 dias</p>
+                  <p className="font-medium text-destructive">Motor Principal - FPSO Alpha</p>
+                  <p className="text-sm text-destructive/80">Manutenção vencida há 3 dias</p>
                 </div>
               </div>
-              <Badge className="bg-red-500 text-white">Crítico</Badge>
+              <Badge variant="destructive">Crítico</Badge>
             </div>
             
-            <div className="flex items-center justify-between p-3 bg-orange-100 dark:bg-orange-950/30 rounded-lg">
+            <div className="flex items-center justify-between p-3 bg-warning/10 rounded-lg">
               <div className="flex items-center gap-3">
-                <Clock className="h-5 w-5 text-orange-500" />
+                <Clock className="h-5 w-5 text-warning" />
                 <div>
-                  <p className="font-medium text-orange-700 dark:text-orange-300">Sistema Hidráulico - PSV Beta</p>
-                  <p className="text-sm text-orange-600 dark:text-orange-400">Vence em 2 dias</p>
+                  <p className="font-medium text-warning">Sistema Hidráulico - PSV Beta</p>
+                  <p className="text-sm text-warning/80">Vence em 2 dias</p>
                 </div>
               </div>
-              <Badge className="bg-orange-500 text-white">Alto</Badge>
+              <Badge className="bg-warning text-warning-foreground">Alto</Badge>
             </div>
 
-            <div className="flex items-center justify-between p-3 bg-yellow-100 dark:bg-yellow-950/30 rounded-lg">
+            <div className="flex items-center justify-between p-3 bg-warning/5 rounded-lg">
               <div className="flex items-center gap-3">
-                <Calendar className="h-5 w-5 text-yellow-600" />
+                <Calendar className="h-5 w-5 text-warning" />
                 <div>
-                  <p className="font-medium text-yellow-700 dark:text-yellow-300">Calibração de Sensores - AHTS Gamma</p>
-                  <p className="text-sm text-yellow-600 dark:text-yellow-400">Vence em 7 dias</p>
+                  <p className="font-medium text-warning">Calibração de Sensores - AHTS Gamma</p>
+                  <p className="text-sm text-warning/80">Vence em 7 dias</p>
                 </div>
               </div>
-              <Badge className="bg-yellow-500 text-white">Médio</Badge>
+              <Badge className="bg-warning/80 text-warning-foreground">Médio</Badge>
             </div>
           </div>
         </CardContent>
