@@ -331,7 +331,7 @@ const UnderwaterDrone: React.FC = () => {
                   <Activity className="w-4 h-4 mr-2" />
                   Hover
                 </Button>
-                <Button onClick={handleSurface} className="bg-purple-600 hover:bg-purple-700">
+                <Button onClick={handleSurface} className="bg-accent hover:bg-accent/90">
                   <Anchor className="w-4 h-4 mr-2" />
                   Surface
                 </Button>
@@ -339,7 +339,7 @@ const UnderwaterDrone: React.FC = () => {
 
               <Button 
                 onClick={handleEmergencyStop} 
-                className="w-full bg-red-600 hover:bg-red-700"
+                className="w-full"
                 variant="destructive"
               >
                 <StopCircle className="w-4 h-4 mr-2" />
@@ -441,12 +441,12 @@ const UnderwaterDrone: React.FC = () => {
                   />
                 </div>
                 {uploadError && (
-                  <div className="text-sm text-red-400 bg-red-500/10 p-2 rounded border border-red-500/30">
+                  <div className="text-sm text-destructive bg-destructive/10 p-2 rounded border border-destructive/30">
                     {uploadError}
                   </div>
                 )}
                 <div className="flex gap-2">
-                  <Button onClick={handleUploadMission} className="bg-purple-600 hover:bg-purple-700">
+                  <Button onClick={handleUploadMission} className="bg-accent hover:bg-accent/90">
                     <Upload className="w-4 h-4 mr-2" />
                     Upload Mission
                   </Button>
@@ -463,11 +463,11 @@ const UnderwaterDrone: React.FC = () => {
                     <div className="text-sm text-zinc-400">{currentMission.description}</div>
                   </div>
                   <Badge className={
-                    currentMission.status === "active" ? "bg-green-500" :
-                      currentMission.status === "paused" ? "bg-yellow-500" :
-                        currentMission.status === "completed" ? "bg-blue-500" :
-                          currentMission.status === "aborted" ? "bg-red-500" :
-                            "bg-gray-500"
+                    currentMission.status === "active" ? "bg-success" :
+                      currentMission.status === "paused" ? "bg-warning" :
+                        currentMission.status === "completed" ? "bg-primary" :
+                          currentMission.status === "aborted" ? "bg-destructive" :
+                            "bg-muted"
                   }>
                     {currentMission.status.toUpperCase()}
                   </Badge>
@@ -513,13 +513,13 @@ const UnderwaterDrone: React.FC = () => {
                     </Button>
                   )}
                   {currentMission.status === "active" && (
-                    <Button onClick={handlePauseMission} className="bg-yellow-600 hover:bg-yellow-700">
+                    <Button onClick={handlePauseMission} className="bg-warning hover:bg-warning/90">
                       <PauseCircle className="w-4 h-4 mr-2" />
                       Pause Mission
                     </Button>
                   )}
                   {currentMission.status === "paused" && (
-                    <Button onClick={handleStartMission} className="bg-green-600 hover:bg-green-700">
+                    <Button onClick={handleStartMission} className="bg-success hover:bg-success/90">
                       <PlayCircle className="w-4 h-4 mr-2" />
                       Resume Mission
                     </Button>

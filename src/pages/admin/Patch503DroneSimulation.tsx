@@ -45,16 +45,17 @@ export default function Patch503DroneSimulation() {
   const runValidation = async () => {
     setValidationStatus("running");
     
-    await new Promise(resolve => setTimeout(resolve, 1000));
+    // Immediate progressive validation
+    await new Promise<void>(resolve => requestAnimationFrame(() => resolve()));
     setControlPanel(true);
     
-    await new Promise(resolve => setTimeout(resolve, 1000));
+    await new Promise<void>(resolve => requestAnimationFrame(() => resolve()));
     setCommandExecution(true);
     
-    await new Promise(resolve => setTimeout(resolve, 1200));
+    await new Promise<void>(resolve => requestAnimationFrame(() => resolve()));
     setSimulation(true);
     
-    await new Promise(resolve => setTimeout(resolve, 800));
+    await new Promise<void>(resolve => requestAnimationFrame(() => resolve()));
     setPersistence(true);
     
     setValidationStatus("complete");

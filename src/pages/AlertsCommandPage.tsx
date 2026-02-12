@@ -117,7 +117,7 @@ export default function AlertsCommandPage() {
                 </div>
                 <div className="flex items-center gap-2">
                   {alert.status === "resolved" ? (
-                    <Badge className="bg-green-100 text-green-800">Resolvido</Badge>
+                    <Badge className="bg-success/10 text-success">Resolvido</Badge>
                   ) : (
                     <>
                       <Button size="sm" variant="outline">

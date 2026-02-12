@@ -117,15 +117,15 @@ export default function ContractLegalAIPage() {
                 >
                   <div className="flex items-center gap-4">
                     <div className={`p-2 rounded-lg ${
-                      contract.status === 'active' ? 'bg-emerald-500/10' : 
-                      contract.status === 'expiring' ? 'bg-red-500/10' : 'bg-amber-500/10'
+                      contract.status === 'active' ? 'bg-success/10' : 
+                      contract.status === 'expiring' ? 'bg-destructive/10' : 'bg-warning/10'
                     }`}>
                       {contract.status === 'active' ? (
-                        <CheckCircle className="h-5 w-5 text-emerald-500" />
+                        <CheckCircle className="h-5 w-5 text-success" />
                       ) : contract.status === 'expiring' ? (
-                        <AlertTriangle className="h-5 w-5 text-red-500" />
+                        <AlertTriangle className="h-5 w-5 text-destructive" />
                       ) : (
-                        <Clock className="h-5 w-5 text-amber-500" />
+                        <Clock className="h-5 w-5 text-warning" />
                       )}
                     </div>
                     <div>
@@ -168,18 +168,18 @@ export default function ContractLegalAIPage() {
           </CardHeader>
           <CardContent>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div className="p-4 rounded-lg border bg-red-500/5 border-red-500/30">
+              <div className="p-4 rounded-lg border bg-destructive/5 border-destructive/30">
                 <div className="flex items-center gap-2 mb-2">
-                  <AlertTriangle className="h-4 w-4 text-red-500" />
+                  <AlertTriangle className="h-4 w-4 text-destructive" />
                   <span className="font-medium">Alerta de Renovação</span>
                 </div>
                 <p className="text-sm text-muted-foreground">
                   Contrato de P&I Insurance expira em 28 dias. Iniciar processo de renovação imediatamente.
                 </p>
               </div>
-              <div className="p-4 rounded-lg border bg-blue-500/5 border-blue-500/30">
+              <div className="p-4 rounded-lg border bg-info/5 border-info/30">
                 <div className="flex items-center gap-2 mb-2">
-                  <Brain className="h-4 w-4 text-blue-500" />
+                  <Brain className="h-4 w-4 text-info" />
                   <span className="font-medium">Análise de Cláusulas</span>
                 </div>
                 <p className="text-sm text-muted-foreground">

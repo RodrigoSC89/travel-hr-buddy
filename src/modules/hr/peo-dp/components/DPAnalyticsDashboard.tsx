@@ -182,7 +182,7 @@ export default function DPAnalyticsDashboard() {
 
   const loadData = async () => {
     setIsLoading(true);
-    await new Promise(resolve => setTimeout(resolve, 800));
+    // Generate data immediately without fake delay
     setSystemHealth(generateSystemHealth());
     setCompliance(generateComplianceMetrics());
     setInsights(generateAIInsights());

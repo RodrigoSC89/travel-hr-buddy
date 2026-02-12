@@ -62,10 +62,10 @@ export default function SimulationsPage() {
 
   const getStatusBadge = (status: string | null) => {
     const variants: Record<string, string> = {
-      completed: "bg-green-100 text-green-800",
-      overdue: "bg-red-100 text-red-800",
-      scheduled: "bg-blue-100 text-blue-800",
-      cancelled: "bg-gray-100 text-gray-800",
+      completed: "bg-success/10 text-success",
+      overdue: "bg-destructive/10 text-destructive",
+      scheduled: "bg-primary/10 text-primary",
+      cancelled: "bg-muted text-muted-foreground",
     };
     return variants[status || "scheduled"] || variants.scheduled;
   };

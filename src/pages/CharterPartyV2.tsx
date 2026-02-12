@@ -520,10 +520,10 @@ export default function CharterPartyV2() {
                     <span className="font-bold text-lg">${calculation.grossHire.toLocaleString()}</span>
                   </div>
                 </div>
-                <div className="p-4 bg-red-500/10 rounded-lg">
+                <div className="p-4 bg-destructive/10 rounded-lg">
                   <div className="flex justify-between items-center">
-                    <span className="text-red-500">Off-Hire Dedução</span>
-                    <span className="font-bold text-lg text-red-500">- ${calculation.offHireDeduction.toLocaleString()}</span>
+                    <span className="text-destructive">Off-Hire Dedução</span>
+                    <span className="font-bold text-lg text-destructive">- ${calculation.offHireDeduction.toLocaleString()}</span>
                   </div>
                 </div>
                 <div className="p-4 bg-muted/50 rounded-lg">
@@ -532,16 +532,16 @@ export default function CharterPartyV2() {
                     <span className="font-bold text-lg">${calculation.netHire.toLocaleString()}</span>
                   </div>
                 </div>
-                <div className="p-4 bg-orange-500/10 rounded-lg">
+                <div className="p-4 bg-warning/10 rounded-lg">
                   <div className="flex justify-between items-center">
-                    <span className="text-orange-500">Demurrage</span>
-                    <span className="font-bold text-lg text-orange-500">+ ${calculation.demurrage.toLocaleString()}</span>
+                    <span className="text-warning">Demurrage</span>
+                    <span className="font-bold text-lg text-warning">+ ${calculation.demurrage.toLocaleString()}</span>
                   </div>
                 </div>
-                <div className="p-4 bg-green-500/10 rounded-lg">
+                <div className="p-4 bg-success/10 rounded-lg">
                   <div className="flex justify-between items-center">
-                    <span className="text-green-500">Despatch</span>
-                    <span className="font-bold text-lg text-green-500">- ${calculation.despatch.toLocaleString()}</span>
+                    <span className="text-success">Despatch</span>
+                    <span className="font-bold text-lg text-success">- ${calculation.despatch.toLocaleString()}</span>
                   </div>
                 </div>
                 <div className="p-4 bg-primary/10 rounded-lg border-2 border-primary">
@@ -602,20 +602,20 @@ export default function CharterPartyV2() {
               gradient="purple"
             >
               <div className="space-y-4">
-                <div className="p-4 bg-blue-500/10 rounded-lg border border-blue-500/20">
+                <div className="p-4 bg-info/10 rounded-lg border border-info/20">
                   <div className="flex items-center gap-2 mb-2">
-                    <TrendingUp className="h-4 w-4 text-blue-500" />
-                    <span className="font-medium text-blue-500">Portfolio Saudável</span>
+                    <TrendingUp className="h-4 w-4 text-info" />
+                    <span className="font-medium text-info">Portfolio Saudável</span>
                   </div>
                   <p className="text-sm text-muted-foreground">
                     {activeCharters} charters ativos totalizando ${(totalValue / 1000000).toFixed(1)}M
                   </p>
                 </div>
                 
-                <div className="p-4 bg-green-500/10 rounded-lg border border-green-500/20">
+                <div className="p-4 bg-success/10 rounded-lg border border-success/20">
                   <div className="flex items-center gap-2 mb-2">
-                    <CheckCircle className="h-4 w-4 text-green-500" />
-                    <span className="font-medium text-green-500">Recomendação</span>
+                    <CheckCircle className="h-4 w-4 text-success" />
+                    <span className="font-medium text-success">Recomendação</span>
                   </div>
                   <p className="text-sm text-muted-foreground">
                     Revisar cláusulas de off-hire nos próximos contratos

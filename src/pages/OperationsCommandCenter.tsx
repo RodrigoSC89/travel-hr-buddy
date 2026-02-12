@@ -250,10 +250,10 @@ export default function OperationsCommandCenter() {
 
   // Business insights KPIs
   const businessKpis = [
-    { title: "ROI Total", value: "247%", change: "+18%", trend: "up", icon: DollarSign, color: "text-emerald-500" },
-    { title: "Insights Gerados", value: "342", change: "+45", trend: "up", icon: Lightbulb, color: "text-amber-500" },
-    { title: "Ações Executadas", value: "89%", change: "+12%", trend: "up", icon: CheckCircle2, color: "text-blue-500" },
-    { title: "Economia Gerada", value: "R$ 1.2M", change: "+R$ 180K", trend: "up", icon: TrendingUp, color: "text-purple-500" },
+    { title: "ROI Total", value: "247%", change: "+18%", trend: "up", icon: DollarSign, color: "text-success" },
+    { title: "Insights Gerados", value: "342", change: "+45", trend: "up", icon: Lightbulb, color: "text-warning" },
+    { title: "Ações Executadas", value: "89%", change: "+12%", trend: "up", icon: CheckCircle2, color: "text-primary" },
+    { title: "Economia Gerada", value: "R$ 1.2M", change: "+R$ 180K", trend: "up", icon: TrendingUp, color: "text-accent-foreground" },
   ];
 
   // Fetch operational data
@@ -365,18 +365,18 @@ export default function OperationsCommandCenter() {
   // Get insight type icon
   const getTypeIcon = (type: string) => {
     switch (type) {
-      case "opportunity": return <Lightbulb className="h-5 w-5 text-amber-500" />;
-      case "warning": return <AlertTriangle className="h-5 w-5 text-orange-500" />;
-      case "success": return <CheckCircle2 className="h-5 w-5 text-emerald-500" />;
-      default: return <Activity className="h-5 w-5 text-blue-500" />;
+      case "opportunity": return <Lightbulb className="h-5 w-5 text-warning" />;
+      case "warning": return <AlertTriangle className="h-5 w-5 text-accent-foreground" />;
+      case "success": return <CheckCircle2 className="h-5 w-5 text-success" />;
+      default: return <Activity className="h-5 w-5 text-primary" />;
     }
   };
 
   const getStatusBadge = (status: string) => {
     switch (status) {
-      case "completed": return <Badge className="bg-emerald-100 text-emerald-700 dark:bg-emerald-900 dark:text-emerald-300">Concluído</Badge>;
-      case "in_progress": return <Badge className="bg-blue-100 text-blue-700 dark:bg-blue-900 dark:text-blue-300">Em Progresso</Badge>;
-      default: return <Badge className="bg-amber-100 text-amber-700 dark:bg-amber-900 dark:text-amber-300">Pendente</Badge>;
+      case "completed": return <Badge className="bg-success/10 text-success">Concluído</Badge>;
+      case "in_progress": return <Badge className="bg-primary/10 text-primary">Em Progresso</Badge>;
+      default: return <Badge className="bg-warning/10 text-warning">Pendente</Badge>;
     }
   };
 
@@ -648,37 +648,37 @@ export default function OperationsCommandCenter() {
                   <p className="text-2xl font-bold">{data.activeVessels}/{data.totalVessels}</p>
                   <p className="text-xs text-muted-foreground">{data.fleetEfficiency}% eficiência</p>
                 </div>
-                <Ship className="h-8 w-8 text-blue-500/60" />
+                <Ship className="h-8 w-8 text-primary/60" />
               </div>
             </CardContent>
           </Card>
         </motion.div>
 
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }}>
-          <Card className="border-l-4 border-l-green-500">
+          <Card className="border-l-4 border-l-success">
             <CardContent className="p-4">
               <div className="flex items-center justify-between">
                 <div>
                   <p className="text-sm text-muted-foreground">Tripulação</p>
                   <p className="text-2xl font-bold">{data.activeCrew}/{data.crewMembers}</p>
-                  <p className="text-xs text-green-600">Ativos</p>
+                  <p className="text-xs text-success">Ativos</p>
                 </div>
-                <Users className="h-8 w-8 text-green-500/60" />
+                <Users className="h-8 w-8 text-success/60" />
               </div>
             </CardContent>
           </Card>
         </motion.div>
 
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3 }}>
-          <Card className="border-l-4 border-l-amber-500">
+          <Card className="border-l-4 border-l-warning">
             <CardContent className="p-4">
               <div className="flex items-center justify-between">
                 <div>
                   <p className="text-sm text-muted-foreground">Insights Ativos</p>
                   <p className="text-2xl font-bold">{insights.length}</p>
-                  <p className="text-xs text-amber-600">{insights.filter(i => i.status === "pending").length} pendentes</p>
+                  <p className="text-xs text-warning">{insights.filter(i => i.status === "pending").length} pendentes</p>
                 </div>
-                <Lightbulb className="h-8 w-8 text-amber-500/60" />
+                <Lightbulb className="h-8 w-8 text-warning/60" />
               </div>
             </CardContent>
           </Card>

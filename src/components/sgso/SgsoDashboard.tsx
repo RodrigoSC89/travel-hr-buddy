@@ -199,11 +199,11 @@ export const SgsoDashboard: React.FC = () => {
   return (
     <div className="space-y-6">
       {/* Executive Summary */}
-      <Card className="bg-gradient-to-br from-red-50 to-orange-50 dark:from-red-950/30 dark:to-orange-950/30 border-red-200 dark:border-red-800">
+      <Card className="bg-gradient-to-br from-destructive/5 to-accent/5 dark:from-destructive/10 dark:to-accent/10 border-destructive/20 dark:border-destructive/30">
         <CardContent className="p-8">
           <div className="flex items-center gap-6 flex-wrap">
             <div className="p-6 bg-white dark:bg-background rounded-2xl shadow-lg">
-              <Shield className="h-16 w-16 text-red-600" />
+              <Shield className="h-16 w-16 text-destructive" />
             </div>
             <div className="flex-1 min-w-[300px]">
               <h2 className="text-3xl font-bold text-foreground mb-2">
@@ -234,64 +234,64 @@ export const SgsoDashboard: React.FC = () => {
       {/* KPI Cards Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
         <Card 
-          className="bg-gradient-to-br from-red-50 to-red-100 dark:from-red-950/30 dark:to-red-900/20 border-red-200 dark:border-red-800 hover:shadow-lg transition-shadow cursor-pointer"
+          className="bg-gradient-to-br from-destructive/5 to-destructive/10 dark:from-destructive/10 dark:to-destructive/20 border-destructive/20 dark:border-destructive/30 hover:shadow-lg transition-shadow cursor-pointer"
           onClick={() => navigateToTab("incidents")}
         >
           <CardContent className="p-6">
             <div className="flex items-center justify-between mb-4">
-              <AlertTriangle className="h-10 w-10 text-red-600" />
-              <Badge className="bg-red-600 text-white font-bold">CRÍTICO</Badge>
+              <AlertTriangle className="h-10 w-10 text-destructive" />
+              <Badge className="bg-destructive text-destructive-foreground font-bold">CRÍTICO</Badge>
             </div>
-            <h3 className="text-sm font-medium text-red-700 dark:text-red-400 mb-1">Incidentes Abertos</h3>
-            <p className="text-3xl font-bold text-red-900 dark:text-red-300">{kpis.incidents.openIncidents}</p>
-            <p className="text-xs text-red-600 dark:text-red-400 mt-2">
+            <h3 className="text-sm font-medium text-destructive mb-1">Incidentes Abertos</h3>
+            <p className="text-3xl font-bold">{kpis.incidents.openIncidents}</p>
+            <p className="text-xs text-destructive/80 mt-2">
               {kpis.incidents.critical} críticos, {kpis.incidents.high} altos
             </p>
           </CardContent>
         </Card>
 
         <Card 
-          className="bg-gradient-to-br from-orange-50 to-orange-100 dark:from-orange-950/30 dark:to-orange-900/20 border-orange-200 dark:border-orange-800 hover:shadow-lg transition-shadow cursor-pointer"
+          className="bg-gradient-to-br from-warning/5 to-warning/10 dark:from-warning/10 dark:to-warning/20 border-warning/20 dark:border-warning/30 hover:shadow-lg transition-shadow cursor-pointer"
           onClick={() => navigateToTab("risks")}
         >
           <CardContent className="p-6">
             <div className="flex items-center justify-between mb-4">
-              <Activity className="h-10 w-10 text-orange-600" />
-              <Badge className="bg-orange-600 text-white font-bold">RISCOS</Badge>
+              <Activity className="h-10 w-10 text-warning" />
+              <Badge className="bg-warning text-warning-foreground font-bold">RISCOS</Badge>
             </div>
-            <h3 className="text-sm font-medium text-orange-700 dark:text-orange-400 mb-1">Riscos Ativos</h3>
-            <p className="text-3xl font-bold text-orange-900 dark:text-orange-300">{kpis.risks.totalRisks}</p>
-            <p className="text-xs text-orange-600 dark:text-orange-400 mt-2">
+            <h3 className="text-sm font-medium text-warning mb-1">Riscos Ativos</h3>
+            <p className="text-3xl font-bold">{kpis.risks.totalRisks}</p>
+            <p className="text-xs text-warning/80 mt-2">
               {kpis.risks.critical} críticos, {kpis.risks.high} altos
             </p>
           </CardContent>
         </Card>
 
         <Card 
-          className="bg-gradient-to-br from-blue-50 to-blue-100 dark:from-blue-950/30 dark:to-blue-900/20 border-blue-200 dark:border-blue-800 hover:shadow-lg transition-shadow cursor-pointer"
+          className="bg-gradient-to-br from-primary/5 to-primary/10 dark:from-primary/10 dark:to-primary/20 border-primary/20 dark:border-primary/30 hover:shadow-lg transition-shadow cursor-pointer"
           onClick={() => navigateToTab("audits")}
         >
           <CardContent className="p-6">
             <div className="flex items-center justify-between mb-4">
-              <Calendar className="h-10 w-10 text-blue-600" />
-              <Badge className="bg-blue-600 text-white font-bold">AUDITORIAS</Badge>
+              <Calendar className="h-10 w-10 text-primary" />
+              <Badge className="bg-primary text-primary-foreground font-bold">AUDITORIAS</Badge>
             </div>
-            <h3 className="text-sm font-medium text-blue-700 dark:text-blue-400 mb-1">Auditorias</h3>
-            <p className="text-3xl font-bold text-blue-900 dark:text-blue-300">{kpis.audits.completed}</p>
-            <p className="text-xs text-blue-600 dark:text-blue-400 mt-2">
+            <h3 className="text-sm font-medium text-primary mb-1">Auditorias</h3>
+            <p className="text-3xl font-bold">{kpis.audits.completed}</p>
+            <p className="text-xs text-primary/80 mt-2">
               {kpis.audits.planned} planejadas, {kpis.audits.overdue} atrasadas
             </p>
           </CardContent>
         </Card>
 
         <Card 
-          className="bg-gradient-to-br from-green-50 to-green-100 dark:from-green-950/30 dark:to-green-900/20 border-green-200 dark:border-green-800 hover:shadow-lg transition-shadow cursor-pointer"
+          className="bg-gradient-to-br from-success/5 to-success/10 dark:from-success/10 dark:to-success/20 border-success/20 dark:border-success/30 hover:shadow-lg transition-shadow cursor-pointer"
           onClick={() => navigateToTab("training")}
         >
           <CardContent className="p-6">
             <div className="flex items-center justify-between mb-4">
-              <Users className="h-10 w-10 text-green-600" />
-              <Badge className="bg-green-600 text-white font-bold">TREINAMENTO</Badge>
+              <Users className="h-10 w-10 text-success" />
+              <Badge className="bg-success text-success-foreground font-bold">TREINAMENTO</Badge>
             </div>
             <h3 className="text-sm font-medium text-green-700 dark:text-green-400 mb-1">Compliance Treinamento</h3>
             <p className="text-3xl font-bold text-green-900 dark:text-green-300">{kpis.training.upToDate}%</p>
