@@ -342,7 +342,7 @@ export function QuickStartGuide() {
                   {/* Tips */}
                   {currentStepData.tips.length > 0 && (
                     <div className="space-y-2 pt-2 border-t">
-                      <div className="flex items-center gap-2 text-sm font-medium text-amber-600 dark:text-amber-400">
+                      <div className="flex items-center gap-2 text-sm font-medium text-warning">
                         <Lightbulb className="w-4 h-4" />
                         Dicas
                       </div>

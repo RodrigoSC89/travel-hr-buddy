@@ -473,9 +473,9 @@ export function WeatherRoutingPanel({
               </CardHeader>
               <CardContent>
                 <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-3">
-                  {result.weatherForecast.slice(0, 6).map((wp, i) => (
+                  {result.weatherForecast.slice(0, 6).map((wp) => (
                     <div
-                      key={i}
+                      key={wp.eta.toISOString()}
                       className={cn(
                         "p-3 rounded-lg border text-center",
                         getRiskColor(wp.riskScore)

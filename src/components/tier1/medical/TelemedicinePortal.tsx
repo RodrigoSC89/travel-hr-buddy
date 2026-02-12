@@ -613,30 +613,30 @@ function VideoCallInterface({
               <p className="text-[10px] text-muted-foreground">Temp</p>
             </CardContent>
           </Card>
-          <Card className="bg-gradient-to-br from-red-500/10 to-transparent border-red-500/20">
+          <Card className="bg-gradient-to-br from-destructive/10 to-transparent border-destructive/20">
             <CardContent className="p-3 text-center">
-              <HeartPulse className="h-4 w-4 mx-auto text-red-500 mb-1" />
+              <HeartPulse className="h-4 w-4 mx-auto text-destructive mb-1" />
               <p className="text-lg font-bold">{vitalSigns.bloodPressure.systolic}/{vitalSigns.bloodPressure.diastolic}</p>
               <p className="text-[10px] text-muted-foreground">BP</p>
             </CardContent>
           </Card>
-          <Card className="bg-gradient-to-br from-pink-500/10 to-transparent border-pink-500/20">
+          <Card className="bg-gradient-to-br from-accent/10 to-transparent border-accent/20">
             <CardContent className="p-3 text-center">
-              <Heart className="h-4 w-4 mx-auto text-pink-500 mb-1" />
+              <Heart className="h-4 w-4 mx-auto text-accent-foreground mb-1" />
               <p className="text-lg font-bold">{vitalSigns.heartRate}</p>
               <p className="text-[10px] text-muted-foreground">HR bpm</p>
             </CardContent>
           </Card>
-          <Card className="bg-gradient-to-br from-cyan-500/10 to-transparent border-cyan-500/20">
+          <Card className="bg-gradient-to-br from-info/10 to-transparent border-info/20">
             <CardContent className="p-3 text-center">
-              <Activity className="h-4 w-4 mx-auto text-cyan-500 mb-1" />
+              <Activity className="h-4 w-4 mx-auto text-info mb-1" />
               <p className="text-lg font-bold">{vitalSigns.oxygenSaturation}%</p>
               <p className="text-[10px] text-muted-foreground">SpO2</p>
             </CardContent>
           </Card>
-          <Card className="bg-gradient-to-br from-blue-500/10 to-transparent border-blue-500/20">
+          <Card className="bg-gradient-to-br from-primary/10 to-transparent border-primary/20">
             <CardContent className="p-3 text-center">
-              <Activity className="h-4 w-4 mx-auto text-blue-500 mb-1" />
+              <Activity className="h-4 w-4 mx-auto text-primary mb-1" />
               <p className="text-lg font-bold">{vitalSigns.respiratoryRate}</p>
               <p className="text-[10px] text-muted-foreground">RR/min</p>
             </CardContent>

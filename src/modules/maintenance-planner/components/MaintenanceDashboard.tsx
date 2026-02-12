@@ -22,24 +22,24 @@ import { cn } from "@/lib/utils";
 
 const getStatusColor = (status: WorkOrder["status"]) => {
   const colors: Record<string, string> = {
-    "open": "bg-blue-500", "in-progress": "bg-amber-500", "waiting-parts": "bg-purple-500",
-    "completed": "bg-emerald-500", "cancelled": "bg-gray-500"
+    "open": "bg-info", "in-progress": "bg-warning", "waiting-parts": "bg-accent",
+    "completed": "bg-success", "cancelled": "bg-muted"
   };
   return colors[status] || "bg-muted";
 };
 
 const getPriorityColor = (priority: WorkOrder["priority"]) => {
   const colors: Record<string, string> = {
-    "low": "text-blue-600 bg-blue-100", "medium": "text-amber-600 bg-amber-100",
-    "high": "text-orange-600 bg-orange-100", "critical": "text-red-600 bg-red-100"
+    "low": "text-info bg-info/10", "medium": "text-warning bg-warning/10",
+    "high": "text-warning bg-warning/10", "critical": "text-destructive bg-destructive/10"
   };
   return colors[priority] || "text-muted-foreground bg-muted";
 };
 
 const getHealthColor = (score: number) => {
-  if (score >= 80) return "text-emerald-600";
-  if (score >= 60) return "text-amber-600";
-  return "text-red-600";
+  if (score >= 80) return "text-success";
+  if (score >= 60) return "text-warning";
+  return "text-destructive";
 };
 
 export default function MaintenanceDashboard() {
@@ -86,8 +86,8 @@ export default function MaintenanceDashboard() {
                   {workOrders.filter(wo => wo.status === "in-progress").length} em andamento
                 </p>
               </div>
-              <div className="p-3 bg-blue-500/20 rounded-xl">
-                <Wrench className="h-6 w-6 text-blue-600" />
+              <div className="p-3 bg-info/20 rounded-xl">
+                <Wrench className="h-6 w-6 text-info" />
               </div>
             </div>
           </CardContent>
@@ -118,8 +118,8 @@ export default function MaintenanceDashboard() {
                   {equipment.filter(eq => eq.status === "operational").length} equipamentos OK
                 </p>
               </div>
-              <div className="p-3 bg-emerald-500/20 rounded-xl">
-                <Activity className="h-6 w-6 text-emerald-600" />
+              <div className="p-3 bg-success/20 rounded-xl">
+                <Activity className="h-6 w-6 text-success" />
               </div>
             </div>
           </CardContent>
@@ -130,11 +130,11 @@ export default function MaintenanceDashboard() {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-muted-foreground">Vencidas</p>
-                <p className={cn("text-3xl font-bold", stats.overdueOrders > 0 ? "text-amber-600" : "")}>{stats.overdueOrders}</p>
+                <p className={cn("text-3xl font-bold", stats.overdueOrders > 0 ? "text-warning" : "")}>{stats.overdueOrders}</p>
                 <p className="text-xs text-muted-foreground mt-1">Manutenções atrasadas</p>
               </div>
-              <div className="p-3 bg-amber-500/20 rounded-xl">
-                <Clock className="h-6 w-6 text-amber-600" />
+              <div className="p-3 bg-warning/20 rounded-xl">
+                <Clock className="h-6 w-6 text-warning" />
               </div>
             </div>
           </CardContent>
@@ -232,10 +232,10 @@ export default function MaintenanceDashboard() {
               <CardContent>
                 <div className="space-y-4">
                   {[
-                    { type: "Preventiva", key: "preventive", icon: Calendar, color: "text-blue-600 bg-blue-100" },
-                    { type: "Corretiva", key: "corrective", icon: Wrench, color: "text-amber-600 bg-amber-100" },
-                    { type: "Preditiva", key: "predictive", icon: Brain, color: "text-purple-600 bg-purple-100" },
-                    { type: "Emergência", key: "emergency", icon: AlertTriangle, color: "text-red-600 bg-red-100" },
+                    { type: "Preventiva", key: "preventive", icon: Calendar, color: "text-info bg-info/10" },
+                    { type: "Corretiva", key: "corrective", icon: Wrench, color: "text-warning bg-warning/10" },
+                    { type: "Preditiva", key: "predictive", icon: Brain, color: "text-accent-foreground bg-accent" },
+                    { type: "Emergência", key: "emergency", icon: AlertTriangle, color: "text-destructive bg-destructive/10" },
                   ].map((item) => (
                     <div key={item.type} className="flex items-center justify-between p-3 rounded-lg border">
                       <div className="flex items-center gap-3">

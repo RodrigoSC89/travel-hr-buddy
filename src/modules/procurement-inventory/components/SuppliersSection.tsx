@@ -95,39 +95,39 @@ export default function SuppliersSection({ searchQuery }: SuppliersSectionProps)
             </div>
           </CardContent>
         </Card>
-        <Card className="border-amber-500/50">
+        <Card className="border-warning/50">
           <CardContent className="p-4">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-muted-foreground">Preferenciais</p>
-                <p className="text-2xl font-bold text-amber-600">{preferredCount}</p>
+                <p className="text-2xl font-bold text-warning">{preferredCount}</p>
               </div>
-              <Award className="h-8 w-8 text-amber-500 opacity-60" />
+              <Award className="h-8 w-8 text-warning opacity-60" />
             </div>
           </CardContent>
         </Card>
-        <Card className="border-green-500/50">
+        <Card className="border-success/50">
           <CardContent className="p-4">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-muted-foreground">Ativos</p>
-                <p className="text-2xl font-bold text-green-600">{activeCount}</p>
+                <p className="text-2xl font-bold text-success">{activeCount}</p>
               </div>
-              <CheckCircle2 className="h-8 w-8 text-green-500 opacity-60" />
+              <CheckCircle2 className="h-8 w-8 text-success opacity-60" />
             </div>
           </CardContent>
         </Card>
-        <Card className="border-blue-500/50">
+        <Card className="border-info/50">
           <CardContent className="p-4">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-muted-foreground">Rating Médio</p>
-                <p className="text-2xl font-bold text-blue-600 flex items-center gap-1">
-                  <Star className="h-5 w-5 fill-amber-400 text-amber-400" />
+                <p className="text-2xl font-bold text-info flex items-center gap-1">
+                  <Star className="h-5 w-5 fill-warning text-warning" />
                   {avgRating}
                 </p>
               </div>
-              <Target className="h-8 w-8 text-blue-500 opacity-60" />
+              <Target className="h-8 w-8 text-info opacity-60" />
             </div>
           </CardContent>
         </Card>
@@ -185,13 +185,13 @@ export default function SuppliersSection({ searchQuery }: SuppliersSectionProps)
               <div className="flex items-start justify-between">
                 <div className="flex items-center gap-3">
                   <div className={`p-2 rounded-lg ${
-                    supplier.status === "preferred" ? "bg-amber-500/10" :
-                    supplier.status === "active" ? "bg-green-500/10" :
+                    supplier.status === "preferred" ? "bg-warning/10" :
+                    supplier.status === "active" ? "bg-success/10" :
                     supplier.status === "suspended" ? "bg-destructive/10" : "bg-muted"
                   }`}>
                     <Building2 className={`h-5 w-5 ${
-                      supplier.status === "preferred" ? "text-amber-600" :
-                      supplier.status === "active" ? "text-green-600" :
+                      supplier.status === "preferred" ? "text-warning" :
+                      supplier.status === "active" ? "text-success" :
                       supplier.status === "suspended" ? "text-destructive" : "text-muted-foreground"
                     }`} />
                   </div>
@@ -215,14 +215,14 @@ export default function SuppliersSection({ searchQuery }: SuppliersSectionProps)
             <CardContent>
               <div className="space-y-3">
                 <div className="flex flex-wrap gap-1">
-                  {supplier.category.map((cat, idx) => (
-                    <Badge key={idx} variant="outline" className="text-xs">{cat}</Badge>
+                  {supplier.category.map((cat) => (
+                    <Badge key={cat} variant="outline" className="text-xs">{cat}</Badge>
                   ))}
                 </div>
 
                 <div className="grid grid-cols-2 gap-2 text-sm">
                   <div className="flex items-center gap-2">
-                    <Star className="h-4 w-4 fill-amber-400 text-amber-400" />
+                    <Star className="h-4 w-4 fill-warning text-warning" />
                     <span className="font-semibold">{supplier.rating}</span>
                   </div>
                   <div className="flex items-center gap-2">
@@ -234,8 +234,8 @@ export default function SuppliersSection({ searchQuery }: SuppliersSectionProps)
                     <span>{supplier.totalOrders} pedidos</span>
                   </div>
                   <div className={`flex items-center gap-2 ${
-                    supplier.deliveryRate >= 95 ? "text-green-600" :
-                    supplier.deliveryRate >= 90 ? "text-amber-600" : "text-red-600"
+                    supplier.deliveryRate >= 95 ? "text-success" :
+                    supplier.deliveryRate >= 90 ? "text-warning" : "text-destructive"
                   }`}>
                     <TrendingUp className="h-4 w-4" />
                     <span>{supplier.deliveryRate}% on-time</span>
@@ -291,7 +291,7 @@ export default function SuppliersSection({ searchQuery }: SuppliersSectionProps)
                   <Card>
                     <CardContent className="p-4 text-center">
                       <div className="flex items-center justify-center gap-2 mb-2">
-                        <Star className="h-5 w-5 fill-amber-400 text-amber-400" />
+                        <Star className="h-5 w-5 fill-warning text-warning" />
                         <span className="text-2xl font-bold">{selectedSupplier.rating}</span>
                       </div>
                       <p className="text-sm text-muted-foreground">Rating Geral</p>
@@ -299,13 +299,13 @@ export default function SuppliersSection({ searchQuery }: SuppliersSectionProps)
                   </Card>
                   <Card>
                     <CardContent className="p-4 text-center">
-                      <p className="text-2xl font-bold text-green-600">{selectedSupplier.deliveryRate}%</p>
+                      <p className="text-2xl font-bold text-success">{selectedSupplier.deliveryRate}%</p>
                       <p className="text-sm text-muted-foreground">Taxa de Entrega</p>
                     </CardContent>
                   </Card>
                   <Card>
                     <CardContent className="p-4 text-center">
-                      <p className="text-2xl font-bold text-blue-600">{selectedSupplier.avgLeadTime}d</p>
+                      <p className="text-2xl font-bold text-info">{selectedSupplier.avgLeadTime}d</p>
                       <p className="text-sm text-muted-foreground">Lead Time Médio</p>
                     </CardContent>
                   </Card>
