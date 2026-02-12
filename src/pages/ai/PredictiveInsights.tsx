@@ -195,11 +195,11 @@ Formate a resposta em markdown estruturado.`,
   const getTrendIcon = (trend: string) => {
     switch (trend) {
       case "up":
-        return <TrendingUp className="h-4 w-4 text-green-500" />;
+        return <TrendingUp className="h-4 w-4 text-success" />;
       case "down":
-        return <TrendingDown className="h-4 w-4 text-red-500" />;
+        return <TrendingDown className="h-4 w-4 text-destructive" />;
       default:
-        return <Clock className="h-4 w-4 text-yellow-500" />;
+        return <Clock className="h-4 w-4 text-warning" />;
     }
   };
 
@@ -337,21 +337,21 @@ Formate a resposta em markdown estruturado.`,
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
         <Card>
           <CardContent className="p-4 text-center">
-            <CheckCircle className="h-8 w-8 text-green-500 mx-auto mb-2" />
+            <CheckCircle className="h-8 w-8 text-success mx-auto mb-2" />
             <p className="text-2xl font-bold">94%</p>
             <p className="text-xs text-muted-foreground">Precisão Geral</p>
           </CardContent>
         </Card>
         <Card>
           <CardContent className="p-4 text-center">
-            <AlertTriangle className="h-8 w-8 text-yellow-500 mx-auto mb-2" />
+            <AlertTriangle className="h-8 w-8 text-warning mx-auto mb-2" />
             <p className="text-2xl font-bold">3</p>
             <p className="text-xs text-muted-foreground">Alertas Ativos</p>
           </CardContent>
         </Card>
         <Card>
           <CardContent className="p-4 text-center">
-            <TrendingUp className="h-8 w-8 text-blue-500 mx-auto mb-2" />
+            <TrendingUp className="h-8 w-8 text-info mx-auto mb-2" />
             <p className="text-2xl font-bold">12</p>
             <p className="text-xs text-muted-foreground">Insights Hoje</p>
           </CardContent>
