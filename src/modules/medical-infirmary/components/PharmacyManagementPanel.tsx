@@ -76,47 +76,47 @@ export default function PharmacyManagementPanel() {
 
       if (error || !data || data.length === 0) {
         // Try pharmacy_inventory as fallback
-        const { data: altData } = await supabase
-          .from('inventory_items' as any)
+        const { data: altData } = await (supabase.from as Function)('inventory_items')
           .select('*')
           .order('name', { ascending: true })
           .limit(50);
 
         if (!altData || altData.length === 0) return [];
-        return (altData as any[]).map(mapToMedication);
+        return (altData as Record<string, unknown>[]).map(mapToMedication);
       }
       return data.map(mapToMedication);
     },
   });
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Supabase returns dynamic shape from multiple tables
-  function mapToMedication(d: any): Medication {
+  function mapToMedication(d: Record<string, unknown>): Medication {
     return {
-      id: d.id,
-      name: d.name || d.item_name || 'Item',
-      genericName: d.generic_name || d.description || '',
-      category: d.subcategory || d.category || 'Geral',
-      form: d.form || d.unit_type || 'Unidade',
-      strength: d.strength || d.specifications || '',
-      currentStock: d.current_stock ?? d.quantity ?? 0,
-      minStock: d.min_stock ?? d.minimum_quantity ?? 10,
-      maxStock: d.max_stock ?? d.maximum_quantity ?? 100,
-      unit: d.unit || d.unit_type || 'un',
-      batchNumber: d.batch_number || d.lot_number || `LOT-${d.id?.slice(0, 6)}`,
-      expiryDate: d.expiry_date || d.expiration_date || new Date(Date.now() + 180 * 86400000).toISOString(),
-      manufacturer: d.manufacturer || d.supplier || '',
-      storageCondition: d.storage_condition || 'Temperatura ambiente',
-      controlledSubstance: d.controlled_substance ?? d.is_controlled ?? false,
-      location: d.location || d.storage_location || '',
-      lastRestock: d.last_restock || d.updated_at || d.created_at || new Date().toISOString(),
-      pricePerUnit: d.price_per_unit ?? d.unit_price ?? 0,
+      id: String(d.id),
+      name: String(d.name || d.item_name || 'Item'),
+      genericName: String(d.generic_name || d.description || ''),
+      category: String(d.subcategory || d.category || 'Geral'),
+      form: String(d.form || d.unit_type || 'Unidade'),
+      strength: String(d.strength || d.specifications || ''),
+      currentStock: Number(d.current_stock ?? d.quantity ?? 0),
+      minStock: Number(d.min_stock ?? d.minimum_quantity ?? 10),
+      maxStock: Number(d.max_stock ?? d.maximum_quantity ?? 100),
+      unit: String(d.unit || d.unit_type || 'un'),
+      batchNumber: String(d.batch_number || d.lot_number || `LOT-${String(d.id || '').slice(0, 6)}`),
+      expiryDate: String(d.expiry_date || d.expiration_date || new Date(Date.now() + 180 * 86400000).toISOString()),
+      manufacturer: String(d.manufacturer || d.supplier || ''),
+      storageCondition: String(d.storage_condition || 'Temperatura ambiente'),
+      controlledSubstance: Boolean(d.controlled_substance ?? d.is_controlled ?? false),
+      location: String(d.location || d.storage_location || ''),
+      lastRestock: String(d.last_restock || d.updated_at || d.created_at || new Date().toISOString()),
+      pricePerUnit: Number(d.price_per_unit ?? d.unit_price ?? 0),
     };
   }
 
   // Add medication mutation
   const addMutation = useMutation({
     mutationFn: async () => {
-      const { error } = await supabase.from('inventory_items').insert({
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any -- inventory_items schema differs from generated types for medication data
+      const { error } = await (supabase.from as Function)('inventory_items').insert({
         name: newMed.name,
         description: newMed.genericName,
         category: 'medication',
@@ -125,7 +125,7 @@ export default function PharmacyManagementPanel() {
         minimum_quantity: newMed.minStock,
         unit_type: newMed.unit,
         status: 'active',
-      } as any);
+      });
       if (error) throw error;
     },
     onSuccess: () => {
@@ -141,9 +141,10 @@ export default function PharmacyManagementPanel() {
     mutationFn: async ({ medId, qty }: { medId: string; qty: number }) => {
       const med = medications.find(m => m.id === medId);
       if (!med) throw new Error('Medicamento não encontrado');
-      const { error } = await supabase.from('inventory_items').update({
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any -- dynamic column mapping
+      const { error } = await (supabase.from as Function)('inventory_items').update({
         quantity: Math.max(0, med.currentStock - qty),
-      } as any).eq('id', medId);
+      }).eq('id', medId);
       if (error) throw error;
     },
     onSuccess: () => {

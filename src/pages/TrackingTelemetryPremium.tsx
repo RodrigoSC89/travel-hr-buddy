@@ -50,7 +50,7 @@ function FuelConsumptionTab() {
     queryFn: async () => {
       const { data, error } = await supabase
         .from("vessels")
-        .select("id, name, status, type, fuel_capacity")
+        .select("id, name, status, vessel_type, fuel_capacity")
         .order("name");
       if (error) throw error;
       return data || [];
@@ -112,8 +112,7 @@ function FuelConsumptionTab() {
           <CardContent className="p-4">
             <p className="text-xs text-muted-foreground">Capacidade Total</p>
             <p className="text-2xl font-bold">
-              {/* eslint-disable-next-line @typescript-eslint/no-explicit-any -- Supabase dynamic query result */}
-              {(vessels as any[]).reduce((sum: number, v) => sum + (Number(v.fuel_capacity) || 0), 0).toLocaleString()} t
+              {vessels.reduce((sum: number, v: Record<string, unknown>) => sum + (Number(v.fuel_capacity) || 0), 0).toLocaleString()} t
             </p>
           </CardContent>
         </Card>
@@ -135,14 +134,13 @@ function FuelConsumptionTab() {
             <p className="text-sm text-muted-foreground text-center py-4">Nenhum registro de combustível encontrado</p>
           ) : (
             <div className="space-y-2">
-              {/* eslint-disable-next-line @typescript-eslint/no-explicit-any -- Supabase dynamic query */}
-              {(fuelRecords as any[]).slice(0, 10).map((r) => (
-                <div key={r.id} className="flex items-center justify-between p-2 border rounded hover:bg-muted/50">
-                  <span className="text-sm font-medium">{r.fuel_type || 'Fuel'}</span>
+              {fuelRecords.slice(0, 10).map((r: Record<string, unknown>) => (
+                <div key={String(r.id)} className="flex items-center justify-between p-2 border rounded hover:bg-muted/50">
+                  <span className="text-sm font-medium">{String(r.fuel_type || 'Fuel')}</span>
                   <div className="flex items-center gap-3">
-                    <span className="text-sm">{r.quantity_mt?.toFixed(1) || '0'} MT</span>
+                    <span className="text-sm">{Number(r.quantity_mt || 0).toFixed(1)} MT</span>
                     <span className="text-xs text-muted-foreground">
-                      {new Date(r.recorded_at).toLocaleDateString('pt-BR')}
+                      {new Date(String(r.recorded_at)).toLocaleDateString('pt-BR')}
                     </span>
                   </div>
                 </div>
@@ -157,16 +155,24 @@ function FuelConsumptionTab() {
 
 // Navigation History Tab
 function NavigationHistoryTab() {
+  interface NavHistoryEntry {
+    id: string;
+    latitude: number | null;
+    longitude: number | null;
+    speed_knots: number | null;
+    course: number | null;
+    recorded_at: string;
+  }
+
   const { data: navHistory = [], isLoading } = useQuery({
     queryKey: ["tracking-nav-history"],
-    queryFn: async () => {
-      const { data, error } = await supabase
-        .from("navigation_history")
+    queryFn: async (): Promise<NavHistoryEntry[]> => {
+      const { data, error } = await (supabase.from as Function)("navigation_history")
         .select("*")
         .order("recorded_at", { ascending: false })
         .limit(50);
       if (error) throw error;
-      return data || [];
+      return (data || []) as NavHistoryEntry[];
     },
     staleTime: 30000,
   });
@@ -191,8 +197,7 @@ function NavigationHistoryTab() {
           Histórico de Navegação
         </h3>
         <Button variant="outline" size="sm" onClick={() => {
-          {/* eslint-disable-next-line @typescript-eslint/no-explicit-any -- Supabase dynamic query */}
-          const csv = ["Data,Latitude,Longitude,Velocidade,Curso", ...(navHistory as any[]).map((n) => 
+          const csv = ["Data,Latitude,Longitude,Velocidade,Curso", ...navHistory.map((n) => 
             `${n.recorded_at},${n.latitude},${n.longitude},${n.speed_knots || 0},${n.course || 0}`
           )].join('\n');
           const blob = new Blob([csv], { type: 'text/csv' });
@@ -209,22 +214,21 @@ function NavigationHistoryTab() {
       <Card>
         <CardContent className="p-0">
           <div className="divide-y">
-            {/* eslint-disable-next-line @typescript-eslint/no-explicit-any -- Supabase dynamic query */}
-            {(navHistory as any[]).slice(0, 20).map((entry) => (
+            {navHistory.slice(0, 20).map((entry) => (
               <div key={entry.id} className="flex items-center justify-between p-3 hover:bg-muted/50">
                 <div className="flex items-center gap-3">
                   <MapPin className="h-4 w-4 text-muted-foreground" />
                   <div>
                     <p className="text-sm font-medium">
-                      {entry.latitude?.toFixed(4)}°, {entry.longitude?.toFixed(4)}°
+                      {Number(entry.latitude || 0).toFixed(4)}°, {Number(entry.longitude || 0).toFixed(4)}°
                     </p>
                     <p className="text-xs text-muted-foreground">
-                      {entry.speed_knots?.toFixed(1) || 0} kn | Curso: {entry.course || 0}°
+                      {Number(entry.speed_knots || 0).toFixed(1)} kn | Curso: {entry.course || 0}°
                     </p>
                   </div>
                 </div>
                 <span className="text-xs text-muted-foreground">
-                  {new Date(entry.recorded_at).toLocaleString('pt-BR')}
+                  {new Date(String(entry.recorded_at)).toLocaleString('pt-BR')}
                 </span>
               </div>
             ))}

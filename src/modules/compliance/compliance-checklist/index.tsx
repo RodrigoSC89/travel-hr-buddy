@@ -50,8 +50,8 @@ interface ComplianceRecord {
   days_since_completion?: number;
   findings_count?: number;
   recommendations_count?: number;
-  findings?: any[];
-  recommendations?: any[];
+  findings?: Record<string, unknown>[];
+  recommendations?: Record<string, unknown>[];
 }
 
 const ComplianceChecklist = () => {
@@ -67,33 +67,33 @@ const ComplianceChecklist = () => {
   const loadComplianceRecords = async () => {
     try {
       setLoading(true);
-      const { data, error } = await supabase
-        .from("compliance_dashboard" as any)
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any -- compliance_dashboard not in generated types
+      const { data, error } = await (supabase.from as Function)("compliance_dashboard")
         .select("*");
 
       if (error) throw error;
 
       // Also fetch full details for records with findings/recommendations
       const recordsWithDetails = await Promise.all(
-        (data || []).map(async (record: any) => {
-          const { data: fullRecord } = await supabase
-            .from("compliance_records" as any)
+        (data || []).map(async (record: Record<string, unknown>) => {
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any -- compliance_records not in generated types
+          const { data: fullRecord } = await (supabase.from as Function)("compliance_records")
             .select("findings, recommendations")
             .eq("id", record.id)
             .single();
           
           return {
             ...record,
-            findings: (fullRecord as any)?.findings || [],
-            recommendations: (fullRecord as any)?.recommendations || []
+            findings: (fullRecord as Record<string, unknown> | null)?.findings || [],
+            recommendations: (fullRecord as Record<string, unknown> | null)?.recommendations || []
           };
         })
       );
 
-      setRecords(recordsWithDetails as any);
+      setRecords(recordsWithDetails as ComplianceRecord[]);
       
       // PATCH 549: Call loadAIInsights after records are loaded
-      await loadAIInsightsInternal(recordsWithDetails as any);
+      await loadAIInsightsInternal(recordsWithDetails as ComplianceRecord[]);
     } catch (error) {
       logger.error("Error loading compliance records:", error);
       toast({

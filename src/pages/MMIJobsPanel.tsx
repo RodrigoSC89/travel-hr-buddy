@@ -31,9 +31,8 @@ export default function MMIJobsPanel() {
 
   async function fetchJobs() {
     try {
-      // Use raw query since mmi_jobs might not be in types yet
-      const { data, error } = await supabase
-        .from("mmi_jobs" as any)
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any -- mmi_jobs not in generated types
+      const { data, error } = await (supabase.from as Function)("mmi_jobs")
         .select("*")
         .order("forecast_date", { ascending: false });
       
