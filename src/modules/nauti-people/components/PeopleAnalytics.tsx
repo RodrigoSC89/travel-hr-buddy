@@ -109,8 +109,7 @@ const PeopleAnalytics: React.FC = () => {
     }
   ];
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Recharts tooltip props are dynamic
-  const CustomTooltip = ({ active, payload, label }: any) => {
+  const CustomTooltip = ({ active, payload, label }: { active?: boolean; payload?: Array<{ color?: string; name?: string; value?: number }>; label?: string }) => {
     if (active && payload && payload.length) {
       return (
         <div className="bg-card p-3 rounded-lg border shadow-lg">

@@ -100,18 +100,20 @@ export function useMaintenanceData() {
       }
 
       // Generate equipment from vessels
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any -- vessel row shape from dynamic query
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any -- vessel query returns dynamic join shape
       return (data || []).flatMap((v: any): Equipment[] => {
+        const vId = String(v.id || '');
+        const vName = String(v.name || 'Embarcação');
         const equipmentList: Equipment[] = [
           {
-            id: `${v.id}-engine`,
-            name: `Motor Principal - ${v.name}`,
+            id: `${vId}-engine`,
+            name: `Motor Principal - ${vName}`,
             type: 'Propulsão',
             manufacturer: 'MAN B&W',
             model: '6S50ME-C',
-            serialNumber: `ENG-${v.id?.slice(0, 6)}`,
-            vesselId: v.id,
-            vesselName: v.name || 'Embarcação',
+            serialNumber: `ENG-${vId.slice(0, 6)}`,
+            vesselId: vId,
+            vesselName: vName,
             location: 'Casa de Máquinas',
             status: 'operational' as const,
             healthScore: 85,
@@ -121,14 +123,14 @@ export function useMaintenanceData() {
             criticalityLevel: 'high' as const,
           },
           {
-            id: `${v.id}-generator`,
-            name: `Gerador - ${v.name}`,
+            id: `${vId}-generator`,
+            name: `Gerador - ${vName}`,
             type: 'Elétrica',
             manufacturer: 'Caterpillar',
             model: 'C32',
-            serialNumber: `GEN-${v.id?.slice(0, 6)}`,
-            vesselId: v.id,
-            vesselName: v.name || 'Embarcação',
+            serialNumber: `GEN-${vId.slice(0, 6)}`,
+            vesselId: vId,
+            vesselName: vName,
             location: 'Casa de Máquinas',
             status: 'operational' as const,
             healthScore: 88,
@@ -159,24 +161,24 @@ export function useMaintenanceData() {
 
       // eslint-disable-next-line @typescript-eslint/no-explicit-any -- maintenance_orders join shape
       return (data || []).map((o: any): MaintenanceOrder => ({
-        id: o.id,
-        orderNumber: o.order_number || `WO-${o.id?.slice(0, 8)}`,
-        title: o.title || o.description?.slice(0, 50) || 'Ordem de Serviço',
-        description: o.description || '',
-        equipmentId: o.equipment_id || '',
-        equipmentName: o.equipment_name || 'Equipamento',
-        vesselId: o.vessel_id || '',
-        vesselName: o.vessels?.name || 'Embarcação',
-        type: mapOrderType(o.order_type || o.category),
-        priority: mapPriority(o.priority),
-        status: mapOrderStatus(o.status),
-        assignedTo: o.assigned_to_name || o.assigned_to,
+        id: String(o.id),
+        orderNumber: String(o.order_number || `WO-${String(o.id).slice(0, 8)}`),
+        title: String(o.title || String(o.description || '').slice(0, 50) || 'Ordem de Serviço'),
+        description: String(o.description || ''),
+        equipmentId: String(o.equipment_id || ''),
+        equipmentName: String(o.equipment_name || 'Equipamento'),
+        vesselId: String(o.vessel_id || ''),
+        vesselName: String(o.vessels?.name || 'Embarcação'),
+        type: mapOrderType(String(o.order_type || o.category || '')),
+        priority: mapPriority(String(o.priority || '')),
+        status: mapOrderStatus(String(o.status || '')),
+        assignedTo: String(o.assigned_to_name || o.assigned_to || ''),
         scheduledDate: new Date(o.due_date || o.created_at || Date.now()),
         completedDate: o.completed_at ? new Date(o.completed_at) : undefined,
         estimatedHours: Number(o.estimated_hours) || 4,
         actualHours: o.actual_hours ? Number(o.actual_hours) : undefined,
         partsRequired: [],
-        notes: o.notes,
+        notes: o.notes as string | undefined,
       }));
     },
   });
@@ -200,16 +202,16 @@ export function useMaintenanceData() {
 
       // eslint-disable-next-line @typescript-eslint/no-explicit-any -- inventory_items dynamic shape
       return (data || []).map((p: any): SparePart => ({
-        id: p.id,
-        partNumber: p.part_number || p.sku || 'N/A',
-        name: p.name || p.description || 'Peça',
-        category: p.category || 'Geral',
+        id: String(p.id),
+        partNumber: String(p.part_number || p.sku || 'N/A'),
+        name: String(p.name || p.description || 'Peça'),
+        category: String(p.category || 'Geral'),
         quantity: Number(p.quantity) || 0,
         minStock: Number(p.min_stock) || Number(p.minimum_quantity) || 5,
-        location: p.location || 'Estoque',
+        location: String(p.location || 'Estoque'),
         unitCost: Number(p.unit_cost) || Number(p.price) || 0,
         lastRestocked: new Date(p.updated_at || Date.now()),
-        supplier: p.supplier,
+        supplier: p.supplier as string | undefined,
         leadTimeDays: Number(p.lead_time_days) || 7,
         status: getPartStatus(Number(p.quantity), Number(p.min_stock) || 5),
       }));
@@ -386,12 +388,11 @@ function mapEquipmentStatus(status: string | null): Equipment['status'] {
   return 'operational';
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- dynamic equipment shape
-function calculateHealthScore(equipment: any): number {
+function calculateHealthScore(equipment: { running_hours?: unknown; last_maintenance_date?: unknown }): number {
   let score = 100;
   const hours = Number(equipment.running_hours) || 0;
   const lastMaint = equipment.last_maintenance_date 
-    ? differenceInDays(new Date(), new Date(equipment.last_maintenance_date))
+    ? differenceInDays(new Date(), new Date(String(equipment.last_maintenance_date)))
     : 30;
 
   if (hours > 10000) score -= 20;

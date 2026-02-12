@@ -306,7 +306,7 @@ export default function WasteManagementPremium() {
 
       const csvRows = [
         "Data;Tipo;Categoria;Volume;Unidade;Embarcação;Status",
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any -- waste_records shape doesn't match generated types exactly
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any -- waste_records shape from dynamic query
         ...(wasteRecords || []).map((r: any) => 
           `${new Date(r.created_at).toLocaleDateString()};${r.waste_type || ''};${r.category || ''};${r.volume || ''};${r.unit || ''};${r.vessel_id || ''};${r.status || ''}`
         )
