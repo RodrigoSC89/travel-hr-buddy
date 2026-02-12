@@ -1,25 +1,33 @@
 /**
  * OpenAI Client for Server-Side API Routes
- * Exports an authenticated OpenAI client instance
+ * Routes through secure edge function proxy - NO direct API keys
+ * @deprecated Import from @/services/unified/openai-client.service instead
  */
 
-import OpenAI from "openai";
 import { logger } from "@/lib/logger";
-
-// Get API key from environment
-const apiKey = process.env.VITE_OPENAI_API_KEY;
-
-if (!apiKey || apiKey === "your_openai_api_key_here") {
-  logger.warn("OpenAI API key not configured. Set VITE_OPENAI_API_KEY in your environment.");
-}
+import { chatCompletion } from "@/services/unified/openai-client.service";
 
 /**
- * Authenticated OpenAI client instance
- * Can be used in API routes and server-side operations
- * Note: dangerouslyAllowBrowser is enabled for client-side usage
- * Ensure API key is properly secured and not exposed in client code
+ * @deprecated - Use chatCompletion() from unified service. Direct client is no longer supported.
  */
-export const openai = new OpenAI({
-  apiKey: apiKey || "",
-  dangerouslyAllowBrowser: true,
-});
+export const openai = {
+  chat: {
+    completions: {
+      create: async (params: Record<string, unknown>) => {
+        logger.warn("[OpenAI] Direct client deprecated. Routing through edge function proxy.");
+        const messages = (params.messages || []) as Array<{ role: string; content: string }>;
+        const content = await chatCompletion(
+          messages.map(m => ({ role: m.role as "system" | "user" | "assistant", content: String(m.content) })),
+          {
+            temperature: params.temperature as number | undefined,
+            maxTokens: params.max_tokens as number | undefined,
+          }
+        );
+        return {
+          choices: [{ message: { content } }],
+          usage: { prompt_tokens: 0, completion_tokens: 0 },
+        };
+      },
+    },
+  },
+};

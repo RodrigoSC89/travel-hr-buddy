@@ -3,7 +3,7 @@
  * Contextual AI assistant with offline support and GPT-4o-mini fallback
  */
 
-import OpenAI from "openai";
+import type { ChatMessage } from "@/services/unified/openai-client.service";
 import { localMemory } from "./localMemory";
 import { intentParser, Intent } from "./intentParser";
 import { logger } from "@/lib/logger";
@@ -60,28 +60,15 @@ interface QueryContext {
 }
 
 class MobileAICore {
-  private openai: OpenAI | null = null;
   private isInitialized = false;
 
   constructor() {
     this.initialize();
   }
 
-  /**
-   * Initialize OpenAI client
-   */
   private initialize(): void {
-    const apiKey = import.meta.env.VITE_OPENAI_API_KEY;
-    
-    if (apiKey) {
-      this.openai = new OpenAI({
-        apiKey,
-        dangerouslyAllowBrowser: true
-      });
-      this.isInitialized = true;
-    } else {
-      logger.warn("OpenAI API key not configured. Using offline mode only.");
-    }
+    // AI is always available via edge function proxy
+    this.isInitialized = true;
   }
 
   /**
@@ -117,7 +104,7 @@ class MobileAICore {
     }
 
     // Fallback to GPT-4o-mini if online
-    if (context.isOnline && this.openai) {
+    if (context.isOnline) {
       try {
         const gptResponse = await this.queryGPT4(userInput, context);
         
@@ -258,36 +245,24 @@ class MobileAICore {
     userInput: string,
     context: QueryContext
   ): Promise<AIResponse> {
-    if (!this.openai) {
-      throw new Error("OpenAI not initialized");
-    }
+    const { chatCompletion } = await import("@/services/unified/openai-client.service");
 
-    // Build context for GPT
     const systemPrompt = this.buildSystemPrompt(context);
-    
-    // Get conversation history
     const history = await localMemory.getHistory(10);
 
-    const messages: OpenAI.Chat.ChatCompletionMessageParam[] = [
-      { role: "system", content: systemPrompt },
+    const messages = [
+      { role: "system" as const, content: systemPrompt },
       ...history.map(msg => ({
         role: msg.role as "user" | "assistant" | "system",
         content: msg.content
       })),
-      { role: "user", content: userInput }
+      { role: "user" as const, content: userInput }
     ];
 
-    const completion = await this.openai.chat.completions.create({
-      model: "gpt-4o-mini",
-      messages,
-      temperature: 0.7,
-      max_tokens: 500
-    });
-
-    const content = completion.choices[0]?.message?.content || "No response generated.";
+    const content = await chatCompletion(messages, { temperature: 0.7, maxTokens: 500 });
 
     return {
-      content,
+      content: content || "No response generated.",
       source: "gpt4",
       confidence: 0.95
     };

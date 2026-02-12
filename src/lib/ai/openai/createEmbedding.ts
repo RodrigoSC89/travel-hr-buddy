@@ -1,44 +1,42 @@
 /**
  * OpenAI Embedding Creation
- * Generates vector embeddings using OpenAI API
+ * Routes through secure edge function proxy - NO browser-side API keys
  */
 
-import OpenAI from "openai";
 import { logger } from "@/lib/logger";
+import { supabase } from "@/integrations/supabase/client";
 
-const EMBEDDING_MODEL = "text-embedding-3-small";
 const EMBEDDING_DIMENSIONS = 1536;
 
 /**
- * Create embedding vector for text using OpenAI
- * @param text - Text to convert to embedding
- * @returns Vector embedding as number array
+ * Create embedding vector for text via secure edge function
  */
 export async function createEmbedding(text: string): Promise<number[]> {
-  const apiKey = import.meta.env.VITE_OPENAI_API_KEY;
-  
-  if (!apiKey || apiKey === "your_openai_api_key_here") {
-    throw new Error("OpenAI API key not configured");
-  }
-
   try {
-    const openai = new OpenAI({
-      apiKey,
-      dangerouslyAllowBrowser: true,
+    const { data, error } = await supabase.functions.invoke("ai-proxy", {
+      body: { action: "embedding", text },
     });
 
-    const response = await openai.embeddings.create({
-      model: EMBEDDING_MODEL,
-      input: text,
-      dimensions: EMBEDDING_DIMENSIONS,
-    });
+    if (error) {
+      throw new Error(`Edge function error: ${String(error)}`);
+    }
 
-    return response.data[0].embedding;
+    if (data?.fallback || !data?.embedding) {
+      throw new Error("AI API key not configured on server");
+    }
+
+    return data.embedding;
   } catch (error) {
-    logger.error("Error creating embedding", error as Error, { 
+    logger.error("Error creating embedding", error as Error, {
       textLength: text.length,
-      model: EMBEDDING_MODEL 
     });
     throw error;
   }
+}
+
+/**
+ * Generate deterministic fallback embedding
+ */
+export function createFallbackEmbedding(): number[] {
+  return Array.from({ length: EMBEDDING_DIMENSIONS }, (_, i) => Math.sin(i * 0.1) * 0.5);
 }

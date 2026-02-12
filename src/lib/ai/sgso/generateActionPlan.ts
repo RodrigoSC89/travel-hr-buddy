@@ -4,7 +4,7 @@
  * for classified incidents based on IMCA standards and offshore best practices
  */
 
-import { openai } from "@/lib/openai";
+import { chatCompletionJSON } from "@/services/unified/openai-client.service";
 
 import { logger } from "@/lib/logger";
 export interface SGSOIncident {
@@ -30,15 +30,7 @@ export interface SGSOActionPlan {
 export async function generateSGSOActionPlan(
   incident: SGSOIncident
 ): Promise<SGSOActionPlan | null> {
-  // Check if API key is available
-  const apiKey = import.meta.env.VITE_OPENAI_API_KEY;
-  const hasValidKey = apiKey && apiKey !== "your_openai_api_key_here" && apiKey !== "";
-
-  // Mock mode when API key is not available
-  if (!hasValidKey) {
-    logger.info("🔄 Using mock mode for SGSO Action Plan (API key not configured)");
-    return generateMockActionPlan(incident);
-  }
+  // AI is always available via edge function proxy
 
   const system = `
 Você é um especialista em segurança marítima (SGSO), atuando com base em normas IMCA e boas práticas offshore.
@@ -63,32 +55,26 @@ Causa raiz: ${incident.sgso_root_cause}
 Nível de risco: ${incident.sgso_risk_level}`;
 
   try {
-    const response = await openai.chat.completions.create({
-      model: "gpt-4",
-      messages: [
+    const result = await chatCompletionJSON<SGSOActionPlan>(
+      [
         { role: "system", content: system },
         { role: "user", content: user },
       ],
-      temperature: 0.2,
-    });
+      { temperature: 0.2, responseFormat: "json" }
+    );
 
-    const content = response.choices[0].message.content;
-
-    if (!content) {
-      return null;
+    if (!result) {
+      // Fallback to mock when AI is unavailable
+      return generateMockActionPlan(incident);
     }
 
-    try {
-      return JSON.parse(content) as SGSOActionPlan;
-    } catch {
-      return null;
-    }
+    return result;
   } catch (error) {
     logger.error("Error generating SGSO action plan", error as Error, { 
       category: incident.sgso_category,
       riskLevel: incident.sgso_risk_level 
     });
-    return null;
+    return generateMockActionPlan(incident);
   }
 }
 

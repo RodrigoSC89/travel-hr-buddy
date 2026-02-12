@@ -107,11 +107,7 @@ export async function classifyRiskWithAI(
   }
 ): Promise<AIClassification> {
   try {
-    const apiKey = import.meta.env.VITE_OPENAI_API_KEY as string;
-    
-    if (!apiKey) {
-      throw new Error("OpenAI API key not configured");
-    }
+    const { chatCompletionJSON } = await import("@/services/unified/openai-client.service");
 
     const prompt = `
 Analyze this compliance finding and classify the associated risks:
@@ -121,16 +117,7 @@ Description: ${finding.description}
 Severity: ${finding.severity}
 Details: ${JSON.stringify(finding.details || {})}
 
-Provide risk classification:
-1. Risk type (compliance, human, technical, operational, environmental)
-2. Risk level (critical, high, medium, low)
-3. Risk score (0-100)
-4. Confidence level (0-100)
-5. Key risk factors
-6. Predicted impact
-7. Recommendations
-
-Format as JSON:
+Provide risk classification as JSON:
 {
   "riskType": "compliance",
   "riskLevel": "high",
@@ -142,35 +129,31 @@ Format as JSON:
 }
 `;
 
-    const response = await fetch("https://api.openai.com/v1/chat/completions", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "Authorization": `Bearer ${apiKey}`,
-      },
-      body: JSON.stringify({
-        model: "gpt-4",
-        messages: [
-          {
-            role: "system",
-            content: "You are a maritime risk analysis expert who classifies compliance findings into risk categories and provides actionable insights."
-          },
-          {
-            role: "user",
-            content: prompt
-          }
-        ],
-        temperature: 0.5,
-        max_tokens: 1000,
-      }),
-    });
+    const classification = await chatCompletionJSON<{
+      riskType: string;
+      riskLevel: string;
+      riskScore: number;
+      confidence: number;
+      factors: string[];
+      predictedImpact: string;
+      recommendations: string[];
+    }>(
+      [
+        {
+          role: "system",
+          content: "You are a maritime risk analysis expert who classifies compliance findings into risk categories and provides actionable insights."
+        },
+        {
+          role: "user",
+          content: prompt
+        }
+      ],
+      { temperature: 0.5, maxTokens: 1000, responseFormat: "json" }
+    );
 
-    if (!response.ok) {
-      throw new Error(`OpenAI API error: ${response.status}`);
+    if (!classification) {
+      throw new Error("AI classification unavailable");
     }
-
-    const data = await response.json();
-    const classification = JSON.parse(data.choices[0].message.content);
 
     return {
       confidence: classification.confidence,
