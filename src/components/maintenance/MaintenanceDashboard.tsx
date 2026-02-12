@@ -32,8 +32,8 @@ export default function MaintenanceDashboard() {
     case "medium":
       return {
         icon: AlertTriangle,
-        color: "text-amber-500",
-        bgColor: "bg-amber-500/10",
+        color: "text-warning",
+        bgColor: "bg-warning/10",
         badgeVariant: "secondary" as const,
         label: "Atenção",
       };

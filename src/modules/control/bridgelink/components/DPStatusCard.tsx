@@ -15,16 +15,16 @@ export function DPStatusCard({ status }: DPStatusCardProps) {
     switch (status.toLowerCase()) {
     case "normal":
     case "operational":
-      return "bg-green-500";
+      return "bg-success";
     case "degradation":
     case "degraded":
-      return "bg-yellow-500";
+      return "bg-warning";
     case "critical":
-      return "bg-red-500";
+      return "bg-destructive";
     case "offline":
-      return "bg-gray-500";
+      return "bg-muted-foreground";
     default:
-      return "bg-gray-400";
+      return "bg-muted-foreground";
     }
   };
 
@@ -32,16 +32,16 @@ export function DPStatusCard({ status }: DPStatusCardProps) {
     switch (status.toLowerCase()) {
     case "normal":
     case "operational":
-      return <CheckCircle className="h-6 w-6 text-green-500" />;
+      return <CheckCircle className="h-6 w-6 text-success" />;
     case "degradation":
     case "degraded":
-      return <AlertCircle className="h-6 w-6 text-yellow-500" />;
+      return <AlertCircle className="h-6 w-6 text-warning" />;
     case "critical":
-      return <XCircle className="h-6 w-6 text-red-500" />;
+      return <XCircle className="h-6 w-6 text-destructive" />;
     case "offline":
-      return <XCircle className="h-6 w-6 text-gray-500" />;
+      return <XCircle className="h-6 w-6 text-muted-foreground" />;
     default:
-      return <Activity className="h-6 w-6 text-gray-400" />;
+      return <Activity className="h-6 w-6 text-muted-foreground" />;
     }
   };
 
@@ -49,16 +49,16 @@ export function DPStatusCard({ status }: DPStatusCardProps) {
     switch (status.toLowerCase()) {
     case "normal":
     case "operational":
-      return <Badge className="bg-green-500">🟢 Normal</Badge>;
+      return <Badge className="bg-success">🟢 Normal</Badge>;
     case "degradation":
     case "degraded":
-      return <Badge className="bg-yellow-500">🟡 Degradação</Badge>;
+      return <Badge className="bg-warning">🟡 Degradação</Badge>;
     case "critical":
-      return <Badge className="bg-red-500">🔴 Crítico</Badge>;
+      return <Badge className="bg-destructive">🔴 Crítico</Badge>;
     case "offline":
-      return <Badge className="bg-gray-500">⚫ Offline</Badge>;
+      return <Badge className="bg-muted-foreground">⚫ Offline</Badge>;
     default:
-      return <Badge className="bg-gray-400">❔ Desconhecido</Badge>;
+      return <Badge className="bg-muted-foreground">❔ Desconhecido</Badge>;
     }
   };
 
@@ -78,7 +78,7 @@ export function DPStatusCard({ status }: DPStatusCardProps) {
           </div>
           
           <div className="relative pt-4">
-            <div className="h-2 bg-gray-200 rounded-full overflow-hidden">
+            <div className="h-2 bg-muted rounded-full overflow-hidden">
               <div 
                 className={`h-full ${getStatusColor(status)} transition-all duration-500`}
                 style={{ 

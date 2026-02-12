@@ -35,11 +35,11 @@ const MetricCard: React.FC<MetricCardProps> = ({ title, value, change, icon, tre
           <p className="text-3xl font-bold">{value}</p>
           <div className="flex items-center space-x-1">
             {trend === "up" ? (
-              <TrendingUp className="h-4 w-4 text-green-500" />
+              <TrendingUp className="h-4 w-4 text-success" />
             ) : (
-              <TrendingDown className="h-4 w-4 text-red-500" />
+              <TrendingDown className="h-4 w-4 text-destructive" />
             )}
-            <span className={`text-sm font-medium ${trend === "up" ? "text-green-500" : "text-red-500"}`}>
+            <span className={`text-sm font-medium ${trend === "up" ? "text-success" : "text-destructive"}`}>
               {change}%
             </span>
           </div>
@@ -62,15 +62,15 @@ interface TaskProgress {
 
 const TaskProgressCard: React.FC<{ task: TaskProgress }> = ({ task }) => {
   const statusColors = {
-    pending: "bg-yellow-500",
-    "in-progress": "bg-blue-500",
-    completed: "bg-green-500"
+    pending: "bg-warning",
+    "in-progress": "bg-info",
+    completed: "bg-success"
   };
 
   const priorityColors = {
-    low: "border-l-green-500",
-    medium: "border-l-yellow-500",
-    high: "border-l-red-500"
+    low: "border-l-success",
+    medium: "border-l-warning",
+    high: "border-l-destructive"
   };
 
   return (
@@ -187,17 +187,17 @@ export const InteractiveDashboard: React.FC = () => {
                 </div>
                 <div className="grid grid-cols-3 gap-4 text-center">
                   <div className="space-y-2">
-                    <p className="text-2xl font-bold text-green-500">{completedTasks}</p>
+                    <p className="text-2xl font-bold text-success">{completedTasks}</p>
                     <p className="text-xs text-muted-foreground">Concluídas</p>
                   </div>
                   <div className="space-y-2">
-                    <p className="text-2xl font-bold text-blue-500">
+                    <p className="text-2xl font-bold text-info">
                       {tasks.filter(t => t.status === "in-progress").length}
                     </p>
                     <p className="text-xs text-muted-foreground">Em Progresso</p>
                   </div>
                   <div className="space-y-2">
-                    <p className="text-2xl font-bold text-yellow-500">
+                    <p className="text-2xl font-bold text-warning">
                       {tasks.filter(t => t.status === "pending").length}
                     </p>
                     <p className="text-xs text-muted-foreground">Pendentes</p>
@@ -223,7 +223,7 @@ export const InteractiveDashboard: React.FC = () => {
                   ].map((activity, index) => (
                     <div key={index} className="flex items-center space-x-3">
                       <div className={`w-2 h-2 rounded-full ${
-                        activity.type === "success" ? "bg-green-500" : "bg-blue-500"
+                        activity.type === "success" ? "bg-success" : "bg-info"
                       }`} />
                       <div className="flex-1 space-y-1">
                         <p className="text-sm font-medium">{activity.action}</p>
