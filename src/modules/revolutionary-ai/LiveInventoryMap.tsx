@@ -74,10 +74,10 @@ export function LiveInventoryMap() {
 
   const getStatusColor = (status: string) => {
     const colors = {
-      critical: 'bg-red-500/20 text-red-400 border-red-500/30',
-      low: 'bg-amber-500/20 text-amber-400 border-amber-500/30',
-      ok: 'bg-green-500/20 text-green-400 border-green-500/30',
-      excess: 'bg-blue-500/20 text-blue-400 border-blue-500/30'
+      critical: 'bg-destructive/20 text-destructive border-destructive/30',
+      low: 'bg-warning/20 text-warning border-warning/30',
+      ok: 'bg-success/20 text-success border-success/30',
+      excess: 'bg-info/20 text-info border-info/30'
     };
     return colors[status as keyof typeof colors] || 'bg-muted';
   };
@@ -115,33 +115,33 @@ export function LiveInventoryMap() {
           </CardContent>
         </Card>
 
-        <Card className="bg-red-500/10 border-red-500/20">
+        <Card className="bg-destructive/10 border-destructive/20">
           <CardContent className="p-4">
-            <div className="flex items-center gap-2 text-red-400 mb-1">
+            <div className="flex items-center gap-2 text-destructive mb-1">
               <AlertTriangle className="h-4 w-4" />
               <span className="text-xs">Críticos</span>
             </div>
-            <p className="text-2xl font-bold text-red-400">{stats.criticalItems}</p>
+            <p className="text-2xl font-bold text-destructive">{stats.criticalItems}</p>
           </CardContent>
         </Card>
 
-        <Card className="bg-amber-500/10 border-amber-500/20">
+        <Card className="bg-warning/10 border-warning/20">
           <CardContent className="p-4">
-            <div className="flex items-center gap-2 text-amber-400 mb-1">
+            <div className="flex items-center gap-2 text-warning mb-1">
               <TrendingDown className="h-4 w-4" />
               <span className="text-xs">Estoque Baixo</span>
             </div>
-            <p className="text-2xl font-bold text-amber-400">{stats.lowStockItems}</p>
+            <p className="text-2xl font-bold text-warning">{stats.lowStockItems}</p>
           </CardContent>
         </Card>
 
-        <Card className="bg-purple-500/10 border-purple-500/20">
+        <Card className="bg-accent/10 border-accent/20">
           <CardContent className="p-4">
-            <div className="flex items-center gap-2 text-purple-400 mb-1">
+            <div className="flex items-center gap-2 text-accent-foreground mb-1">
               <Clock className="h-4 w-4" />
               <span className="text-xs">Vencendo</span>
             </div>
-            <p className="text-2xl font-bold text-purple-400">{stats.expiringItems}</p>
+            <p className="text-2xl font-bold text-accent-foreground">{stats.expiringItems}</p>
           </CardContent>
         </Card>
       </div>
@@ -176,9 +176,9 @@ export function LiveInventoryMap() {
                     <CardContent className="p-3">
                       <div className="flex items-center gap-3">
                         <div className={`p-2 rounded-lg ${
-                          location.type === 'vessel' ? 'bg-blue-500/20 text-blue-400' :
-                          location.type === 'warehouse' ? 'bg-amber-500/20 text-amber-400' :
-                          'bg-green-500/20 text-green-400'
+                          location.type === 'vessel' ? 'bg-info/20 text-info' :
+                          location.type === 'warehouse' ? 'bg-warning/20 text-warning' :
+                          'bg-success/20 text-success'
                         }`}>
                           {getLocationIcon(location.type)}
                         </div>
@@ -199,7 +199,7 @@ export function LiveInventoryMap() {
                         </div>
                         <div>
                           <span className="text-muted-foreground">Baixo:</span>
-                          <span className="ml-1 font-medium text-amber-400">{location.lowStockItems}</span>
+                          <span className="ml-1 font-medium text-warning">{location.lowStockItems}</span>
                         </div>
                         <div>
                           <span className="text-muted-foreground">Valor:</span>
@@ -288,9 +288,9 @@ export function LiveInventoryMap() {
                           <Progress 
                             value={(item.quantity / item.maxStock) * 100} 
                             className={`h-2 ${
-                              item.status === 'critical' ? '[&>div]:bg-red-500' :
-                              item.status === 'low' ? '[&>div]:bg-amber-500' :
-                              '[&>div]:bg-green-500'
+                              item.status === 'critical' ? '[&>div]:bg-destructive' :
+                              item.status === 'low' ? '[&>div]:bg-warning' :
+                              '[&>div]:bg-success'
                             }`}
                           />
                         </div>
@@ -307,7 +307,7 @@ export function LiveInventoryMap() {
                             </span>
                           </div>
                           {item.predictedRunout && (
-                            <span className="flex items-center gap-1 text-red-400">
+                            <span className="flex items-center gap-1 text-destructive">
                               <Brain className="h-3 w-3" />
                               Esgota: {item.predictedRunout.toLocaleDateString('pt-BR')}
                             </span>

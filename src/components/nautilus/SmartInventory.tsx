@@ -169,14 +169,14 @@ export function SmartInventory() {
         </motion.div>
 
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }}>
-          <Card className="border-red-500/20">
+          <Card className="border-destructive/20">
             <CardContent className="p-4">
               <div className="flex items-center gap-3">
-                <div className="p-2 rounded-lg bg-red-500/20">
-                  <AlertTriangle className="h-5 w-5 text-red-500" />
+                <div className="p-2 rounded-lg bg-destructive/20">
+                  <AlertTriangle className="h-5 w-5 text-destructive" />
                 </div>
                 <div>
-                  <p className="text-2xl font-bold text-red-500">{stats.lowStock}</p>
+                  <p className="text-2xl font-bold text-destructive">{stats.lowStock}</p>
                   <p className="text-xs text-muted-foreground">Estoque Baixo</p>
                 </div>
               </div>
@@ -185,14 +185,14 @@ export function SmartInventory() {
         </motion.div>
 
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }}>
-          <Card className="border-emerald-500/20">
+          <Card className="border-success/20">
             <CardContent className="p-4">
               <div className="flex items-center gap-3">
-                <div className="p-2 rounded-lg bg-emerald-500/20">
-                  <BarChart3 className="h-5 w-5 text-emerald-500" />
+                <div className="p-2 rounded-lg bg-success/20">
+                  <BarChart3 className="h-5 w-5 text-success" />
                 </div>
                 <div>
-                  <p className="text-2xl font-bold text-emerald-500">{stats.optimal}</p>
+                  <p className="text-2xl font-bold text-success">{stats.optimal}</p>
                   <p className="text-xs text-muted-foreground">Nível Ótimo</p>
                 </div>
               </div>
@@ -204,11 +204,11 @@ export function SmartInventory() {
           <Card>
             <CardContent className="p-4">
               <div className="flex items-center gap-3">
-                <div className="p-2 rounded-lg bg-amber-500/20">
-                  <Truck className="h-5 w-5 text-amber-500" />
+                <div className="p-2 rounded-lg bg-warning/20">
+                  <Truck className="h-5 w-5 text-warning" />
                 </div>
                 <div>
-                  <p className="text-2xl font-bold text-amber-500">{stats.overstocked}</p>
+                  <p className="text-2xl font-bold text-warning">{stats.overstocked}</p>
                   <p className="text-xs text-muted-foreground">Excesso</p>
                 </div>
               </div>
@@ -295,9 +295,9 @@ export function SmartInventory() {
                     <div className="mt-3 flex items-center justify-between text-xs text-muted-foreground">
                       <div className="flex items-center gap-1">
                         {item.trend === "down" ? (
-                          <TrendingDown className="h-3 w-3 text-red-500" />
+                          <TrendingDown className="h-3 w-3 text-destructive" />
                         ) : item.trend === "up" ? (
-                          <TrendingUp className="h-3 w-3 text-emerald-500" />
+                          <TrendingUp className="h-3 w-3 text-success" />
                         ) : null}
                         <span>~{item.predictedDaysLeft} dias restantes</span>
                       </div>

@@ -162,56 +162,56 @@ export function EmissionsRegistry() {
     <div className="space-y-6">
       {/* KPIs */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-        <Card className="border-l-4 border-l-green-500">
+        <Card className="border-l-4 border-l-success">
           <CardContent className="p-4">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-muted-foreground">CO₂ Total (ton)</p>
                 <p className="text-2xl font-bold">{totalCO2.toFixed(1)}</p>
-                <p className="text-xs text-green-600 flex items-center gap-1">
+                <p className="text-xs text-success flex items-center gap-1">
                   <TrendingDown className="h-3 w-3" /> -8.2% vs mês anterior
                 </p>
               </div>
-              <Factory className="h-8 w-8 text-green-500 opacity-80" />
+              <Factory className="h-8 w-8 text-success opacity-80" />
             </div>
           </CardContent>
         </Card>
 
-        <Card className="border-l-4 border-l-blue-500">
+        <Card className="border-l-4 border-l-info">
           <CardContent className="p-4">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-muted-foreground">SOx Total (ton)</p>
                 <p className="text-2xl font-bold">{totalSOx.toFixed(2)}</p>
-                <p className="text-xs text-blue-600">Limite IMO: 0.5% S</p>
+                <p className="text-xs text-info">Limite IMO: 0.5% S</p>
               </div>
-              <Fuel className="h-8 w-8 text-blue-500 opacity-80" />
+              <Fuel className="h-8 w-8 text-info opacity-80" />
             </div>
           </CardContent>
         </Card>
 
-        <Card className="border-l-4 border-l-purple-500">
+        <Card className="border-l-4 border-l-accent">
           <CardContent className="p-4">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-muted-foreground">NOx Total (ton)</p>
                 <p className="text-2xl font-bold">{totalNOx.toFixed(2)}</p>
-                <p className="text-xs text-purple-600">Tier II Compliant</p>
+                <p className="text-xs text-accent-foreground">Tier II Compliant</p>
               </div>
-              <Factory className="h-8 w-8 text-purple-500 opacity-80" />
+              <Factory className="h-8 w-8 text-accent-foreground opacity-80" />
             </div>
           </CardContent>
         </Card>
 
-        <Card className="border-l-4 border-l-amber-500">
+        <Card className="border-l-4 border-l-warning">
           <CardContent className="p-4">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-muted-foreground">Registros</p>
                 <p className="text-2xl font-bold">{records.length}</p>
-                <p className="text-xs text-amber-600">{records.filter(r => !r.verified).length} pendentes</p>
+                <p className="text-xs text-warning">{records.filter(r => !r.verified).length} pendentes</p>
               </div>
-              <Calendar className="h-8 w-8 text-amber-500 opacity-80" />
+              <Calendar className="h-8 w-8 text-warning opacity-80" />
             </div>
           </CardContent>
         </Card>
@@ -387,19 +387,19 @@ export function EmissionsRegistry() {
                       <p className="text-sm font-medium mb-2">Emissões Calculadas (preview):</p>
                       <div className="grid grid-cols-4 gap-2 text-center">
                         <div>
-                          <p className="text-lg font-bold text-green-600">{previewEmissions.co2.toFixed(2)}</p>
+                          <p className="text-lg font-bold text-success">{previewEmissions.co2.toFixed(2)}</p>
                           <p className="text-xs text-muted-foreground">ton CO₂</p>
                         </div>
                         <div>
-                          <p className="text-lg font-bold text-blue-600">{previewEmissions.sox.toFixed(3)}</p>
+                          <p className="text-lg font-bold text-info">{previewEmissions.sox.toFixed(3)}</p>
                           <p className="text-xs text-muted-foreground">ton SOx</p>
                         </div>
                         <div>
-                          <p className="text-lg font-bold text-purple-600">{previewEmissions.nox.toFixed(3)}</p>
+                          <p className="text-lg font-bold text-accent-foreground">{previewEmissions.nox.toFixed(3)}</p>
                           <p className="text-xs text-muted-foreground">ton NOx</p>
                         </div>
                         <div>
-                          <p className="text-lg font-bold text-amber-600">{previewEmissions.pm.toFixed(4)}</p>
+                          <p className="text-lg font-bold text-warning">{previewEmissions.pm.toFixed(4)}</p>
                           <p className="text-xs text-muted-foreground">ton PM</p>
                         </div>
                       </div>
@@ -452,7 +452,7 @@ export function EmissionsRegistry() {
                     </Badge>
                   </TableCell>
                   <TableCell>{record.fuelConsumed} ton</TableCell>
-                  <TableCell className="font-medium text-green-600">{record.co2Emissions}</TableCell>
+                  <TableCell className="font-medium text-success">{record.co2Emissions}</TableCell>
                   <TableCell>{record.soxEmissions}</TableCell>
                   <TableCell>{record.noxEmissions}</TableCell>
                   <TableCell>
@@ -460,7 +460,7 @@ export function EmissionsRegistry() {
                   </TableCell>
                   <TableCell>
                     {record.verified ? (
-                      <Badge className="bg-green-600">
+                      <Badge className="bg-success">
                         <CheckCircle className="h-3 w-3 mr-1" />
                         Verificado
                       </Badge>
@@ -474,7 +474,7 @@ export function EmissionsRegistry() {
                   <TableCell className="text-right">
                     {!record.verified && (
                       <Button variant="ghost" size="sm" onClick={() => handleVerify(record.id)}>
-                        <CheckCircle className="h-4 w-4 text-green-600" />
+                        <CheckCircle className="h-4 w-4 text-success" />
                       </Button>
                     )}
                   </TableCell>
