@@ -105,17 +105,17 @@ const fallbackPositions: VesselPosition[] = [
 ];
 
 const statusConfig = {
-  underway: { label: "Em Navegação", color: "bg-green-500", icon: Navigation },
-  at_anchor: { label: "Fundeado", color: "bg-amber-500", icon: Anchor },
-  moored: { label: "Atracado", color: "bg-blue-500", icon: MapPin },
-  not_under_command: { label: "Sem Comando", color: "bg-red-500", icon: AlertTriangle },
+  underway: { label: "Em Navegação", color: "bg-success", icon: Navigation },
+  at_anchor: { label: "Fundeado", color: "bg-warning", icon: Anchor },
+  moored: { label: "Atracado", color: "bg-info", icon: MapPin },
+  not_under_command: { label: "Sem Comando", color: "bg-destructive", icon: AlertTriangle },
 };
 
 const signalColors = {
-  excellent: "text-green-500",
-  good: "text-lime-500",
-  fair: "text-amber-500",
-  poor: "text-red-500",
+  excellent: "text-success",
+  good: "text-success/80",
+  fair: "text-warning",
+  poor: "text-destructive",
 };
 
 export function TrackingCommandCenter() {

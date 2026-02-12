@@ -225,10 +225,10 @@ export const ComplianceHubInteractive: React.FC = () => {
 
   const getStatusBadge = (status: Audit["status"]) => {
     const config = {
-      scheduled: { color: "bg-blue-500/20 text-blue-400", icon: Calendar },
-      in_progress: { color: "bg-yellow-500/20 text-yellow-400", icon: Clock },
-      completed: { color: "bg-green-500/20 text-green-400", icon: CheckCircle2 },
-      failed: { color: "bg-red-500/20 text-red-400", icon: XCircle }
+      scheduled: { color: "bg-info/20 text-info", icon: Calendar },
+      in_progress: { color: "bg-warning/20 text-warning", icon: Clock },
+      completed: { color: "bg-success/20 text-success", icon: CheckCircle2 },
+      failed: { color: "bg-destructive/20 text-destructive", icon: XCircle }
     };
     const { color, icon: Icon } = config[status];
     return (
@@ -241,10 +241,10 @@ export const ComplianceHubInteractive: React.FC = () => {
 
   const getCertStatusBadge = (status: Certificate["status"]) => {
     const config = {
-      valid: { color: "bg-green-500/20 text-green-400", label: "Válido" },
-      expiring: { color: "bg-yellow-500/20 text-yellow-400", label: "Expirando" },
-      expired: { color: "bg-red-500/20 text-red-400", label: "Expirado" },
-      pending_renewal: { color: "bg-orange-500/20 text-orange-400", label: "Renovação Pendente" }
+      valid: { color: "bg-success/20 text-success", label: "Válido" },
+      expiring: { color: "bg-warning/20 text-warning", label: "Expirando" },
+      expired: { color: "bg-destructive/20 text-destructive", label: "Expirado" },
+      pending_renewal: { color: "bg-warning/20 text-warning", label: "Renovação Pendente" }
     };
     const { color, label } = config[status];
     return <Badge className={color}>{label}</Badge>;
@@ -280,50 +280,50 @@ export const ComplianceHubInteractive: React.FC = () => {
 
       {/* Stats Cards */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-        <Card className="bg-gradient-to-br from-blue-500/10 to-blue-600/5 border-blue-500/20">
+        <Card className="bg-gradient-to-br from-info/10 to-info/5 border-info/20">
           <CardContent className="p-4">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-muted-foreground">Total Auditorias</p>
                 <p className="text-2xl font-bold">{totalAudits}</p>
               </div>
-              <ClipboardList className="h-8 w-8 text-blue-400" />
+              <ClipboardList className="h-8 w-8 text-info" />
             </div>
           </CardContent>
         </Card>
 
-        <Card className="bg-gradient-to-br from-green-500/10 to-green-600/5 border-green-500/20">
+        <Card className="bg-gradient-to-br from-success/10 to-success/5 border-success/20">
           <CardContent className="p-4">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-muted-foreground">Score Médio</p>
                 <p className="text-2xl font-bold">{avgScore.toFixed(1)}%</p>
               </div>
-              <TrendingUp className="h-8 w-8 text-green-400" />
+              <TrendingUp className="h-8 w-8 text-success" />
             </div>
           </CardContent>
         </Card>
 
-        <Card className="bg-gradient-to-br from-purple-500/10 to-purple-600/5 border-purple-500/20">
+        <Card className="bg-gradient-to-br from-accent/10 to-accent/5 border-accent/20">
           <CardContent className="p-4">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-muted-foreground">Certificados</p>
                 <p className="text-2xl font-bold">{certificates.length}</p>
               </div>
-              <Award className="h-8 w-8 text-purple-400" />
+              <Award className="h-8 w-8 text-accent-foreground" />
             </div>
           </CardContent>
         </Card>
 
-        <Card className="bg-gradient-to-br from-orange-500/10 to-orange-600/5 border-orange-500/20">
+        <Card className="bg-gradient-to-br from-warning/10 to-warning/5 border-warning/20">
           <CardContent className="p-4">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-muted-foreground">Expirando</p>
                 <p className="text-2xl font-bold">{expiringCerts}</p>
               </div>
-              <AlertTriangle className="h-8 w-8 text-orange-400" />
+              <AlertTriangle className="h-8 w-8 text-warning" />
             </div>
           </CardContent>
         </Card>

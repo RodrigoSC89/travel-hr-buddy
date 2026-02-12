@@ -680,12 +680,12 @@ export function TraceabilityMatrix() {
 
                                         <div className="flex items-center gap-2">
                                           {lv.evidenceUploaded ? (
-                                            <Badge variant="outline" className="text-green-600 border-green-600">
+                                            <Badge variant="outline" className="text-success border-success">
                                               <FileCheck className="h-3 w-3 mr-1" />
                                               Evidência OK
                                             </Badge>
                                           ) : (
-                                            <Badge variant="outline" className="text-yellow-600 border-yellow-600">
+                                            <Badge variant="outline" className="text-warning border-warning">
                                               <Clock className="h-3 w-3 mr-1" />
                                               Pendente
                                             </Badge>
@@ -697,7 +697,7 @@ export function TraceabilityMatrix() {
                                         </div>
 
                                         {lv.notes && (
-                                          <span className="text-xs text-orange-500 italic">
+                                          <span className="text-xs text-warning italic">
                                             {lv.notes}
                                           </span>
                                         )}

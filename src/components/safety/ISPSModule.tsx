@@ -231,7 +231,7 @@ export function ISPSModule() {
         <Card>
           <CardContent className="pt-4">
             <div className="flex items-center gap-2">
-              <CheckCircle className="h-5 w-5 text-blue-500" />
+              <CheckCircle className="h-5 w-5 text-info" />
               <div>
                 <p className="text-2xl font-bold">{assessments.filter(a => a.status === "compliant").length}/{assessments.length}</p>
                 <p className="text-xs text-muted-foreground">Áreas Conformes</p>
