@@ -142,10 +142,10 @@ export const NautilusAcademy: React.FC = () => {
 
   const getLevelColor = (level: string) => {
     switch (level) {
-    case "beginner": return "bg-green-100 text-green-800 dark:bg-green-900/20 dark:text-green-300";
-    case "intermediate": return "bg-yellow-100 text-yellow-800 dark:bg-yellow-900/20 dark:text-yellow-300";
-    case "advanced": return "bg-red-100 text-red-800 dark:bg-red-900/20 dark:text-red-300";
-    default: return "bg-gray-100 text-gray-800 dark:bg-gray-900/20 dark:text-gray-300";
+    case "beginner": return "bg-success/10 text-success";
+    case "intermediate": return "bg-warning/10 text-warning";
+    case "advanced": return "bg-destructive/10 text-destructive";
+    default: return "bg-muted text-muted-foreground";
     }
   };
 
@@ -191,7 +191,7 @@ export const NautilusAcademy: React.FC = () => {
                 <p className="text-sm font-medium text-muted-foreground">Cursos Disponíveis</p>
                 <p className="text-2xl font-bold">127</p>
               </div>
-              <BookOpen className="h-8 w-8 text-blue-500" />
+              <BookOpen className="h-8 w-8 text-info" />
             </div>
           </CardContent>
         </Card>
@@ -203,7 +203,7 @@ export const NautilusAcademy: React.FC = () => {
                 <p className="text-sm font-medium text-muted-foreground">Estudantes Ativos</p>
                 <p className="text-2xl font-bold">12,547</p>
               </div>
-              <Users className="h-8 w-8 text-green-500" />
+              <Users className="h-8 w-8 text-success" />
             </div>
           </CardContent>
         </Card>
@@ -215,7 +215,7 @@ export const NautilusAcademy: React.FC = () => {
                 <p className="text-sm font-medium text-muted-foreground">Certificações</p>
                 <p className="text-2xl font-bold">8,923</p>
               </div>
-              <Trophy className="h-8 w-8 text-yellow-500" />
+              <Trophy className="h-8 w-8 text-warning" />
             </div>
           </CardContent>
         </Card>
@@ -227,7 +227,7 @@ export const NautilusAcademy: React.FC = () => {
                 <p className="text-sm font-medium text-muted-foreground">Horas de Conteúdo</p>
                 <p className="text-2xl font-bold">856h</p>
               </div>
-              <Clock className="h-8 w-8 text-purple-500" />
+              <Clock className="h-8 w-8 text-accent-foreground" />
             </div>
           </CardContent>
         </Card>
@@ -320,7 +320,7 @@ export const NautilusAcademy: React.FC = () => {
                     <CardContent className="space-y-4">
                       <div className="flex items-center justify-between text-sm">
                         <div className="flex items-center gap-1">
-                          <Star className="w-4 h-4 fill-yellow-400 text-yellow-400" />
+                          <Star className="w-4 h-4 fill-warning text-warning" />
                           <span>{course.rating}</span>
                         </div>
                         <div className="flex items-center gap-1">
@@ -336,7 +336,7 @@ export const NautilusAcademy: React.FC = () => {
 
                       {course.certificate && (
                         <div className="flex items-center gap-2 text-sm">
-                          <Award className="w-4 h-4 text-yellow-500" />
+                          <Award className="w-4 h-4 text-warning" />
                           <span>Certificado incluso</span>
                         </div>
                       )}
@@ -383,10 +383,10 @@ export const NautilusAcademy: React.FC = () => {
             <h3 className="text-lg font-semibold">Seus Certificados</h3>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               {courses.filter(course => course.progress === 100 || course.id === "1").map((course) => (
-                <Card key={course.id} className="border-green-200 bg-green-50/50 dark:bg-green-900/10">
+                <Card key={course.id} className="border-success/20 bg-success/5">
                   <CardHeader>
                     <div className="flex items-center gap-3">
-                      <Award className="w-8 h-8 text-green-500" />
+                      <Award className="w-8 h-8 text-success" />
                       <div>
                         <CardTitle className="text-base">{course.title}</CardTitle>
                         <p className="text-sm text-muted-foreground">Certificado de Conclusão</p>
