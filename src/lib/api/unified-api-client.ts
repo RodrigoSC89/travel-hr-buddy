@@ -92,7 +92,7 @@ class UnifiedAPIClient {
     this.savePendingRequests();
   }
 
-  async request<T = any>(url: string, config: RequestConfig = {}): Promise<APIResponse<T>> {
+  async request<T = unknown>(url: string, config: RequestConfig = {}): Promise<APIResponse<T>> {
     const {
       method = 'GET',
       headers = {},
@@ -262,11 +262,11 @@ class UnifiedAPIClient {
   }
 
   // Generic Supabase query - uses raw fetch for flexibility
-  async supabaseQuery<T = any>(
+  async supabaseQuery<T = unknown>(
     table: string,
     query: {
       select?: string;
-      filter?: Record<string, any>;
+      filter?: Record<string, unknown>;
       order?: { column: string; ascending?: boolean };
       limit?: number;
       offset?: number;
@@ -416,7 +416,7 @@ export const apiClient = new UnifiedAPIClient();
 import { useState, useCallback } from 'react';
 import { logger } from '@/lib/logger';
 
-export function useAPI<T = any>(url: string, config?: RequestConfig) {
+export function useAPI<T = unknown>(url: string, config?: RequestConfig) {
   const [data, setData] = useState<T | null>(null);
   const [error, setError] = useState<Error | null>(null);
   const [loading, setLoading] = useState(false);
@@ -443,7 +443,7 @@ export function useAPI<T = any>(url: string, config?: RequestConfig) {
   return { data, error, loading, cached, execute, refresh };
 }
 
-export function useSupabaseQuery<T = any>(
+export function useSupabaseQuery<T = unknown>(
   table: string,
   query?: Parameters<typeof apiClient.supabaseQuery>[1]
 ) {

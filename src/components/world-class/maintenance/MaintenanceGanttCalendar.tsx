@@ -33,10 +33,10 @@ interface MaintenanceTask {
 }
 
 const STATUS_COLORS = {
-  scheduled: 'bg-blue-500',
-  in_progress: 'bg-yellow-500',
-  completed: 'bg-green-500',
-  overdue: 'bg-red-500',
+  scheduled: 'bg-info',
+  in_progress: 'bg-warning',
+  completed: 'bg-success',
+  overdue: 'bg-destructive',
 };
 
 const TYPE_LABELS = {
@@ -63,7 +63,6 @@ export function MaintenanceGanttCalendar() {
       
       if (error) throw error;
       
-      // Generate realistic maintenance tasks
       return (vessels || []).flatMap((vessel, idx) => {
         const baseDate = new Date();
         return [
@@ -102,17 +101,8 @@ export function MaintenanceGanttCalendar() {
     const firstDay = new Date(year, month, 1);
     const lastDay = new Date(year, month + 1, 0);
     const days: (Date | null)[] = [];
-    
-    // Add empty cells for days before first of month
-    for (let i = 0; i < firstDay.getDay(); i++) {
-      days.push(null);
-    }
-    
-    // Add all days of month
-    for (let d = 1; d <= lastDay.getDate(); d++) {
-      days.push(new Date(year, month, d));
-    }
-    
+    for (let i = 0; i < firstDay.getDay(); i++) days.push(null);
+    for (let d = 1; d <= lastDay.getDate(); d++) days.push(new Date(year, month, d));
     return days;
   };
 
@@ -155,23 +145,14 @@ export function MaintenanceGanttCalendar() {
     
     return (
       <div className="overflow-x-auto">
-        {/* Timeline Header */}
         <div className="flex border-b sticky top-0 bg-background z-10">
-          <div className="w-64 p-3 border-r font-medium flex-shrink-0">
-            Tarefa
-          </div>
+          <div className="w-64 p-3 border-r font-medium flex-shrink-0">Tarefa</div>
           <div className="flex">
             {Array.from({ length: totalDays }, (_, i) => {
               const date = new Date(today.getTime() + i * 24 * 60 * 60 * 1000);
               const isWeekend = date.getDay() === 0 || date.getDay() === 6;
               return (
-                <div 
-                  key={i}
-                  className={`flex-shrink-0 text-center text-xs p-2 border-r ${
-                    isWeekend ? 'bg-muted/50' : ''
-                  }`}
-                  style={{ width: dayWidth }}
-                >
+                <div key={i} className={`flex-shrink-0 text-center text-xs p-2 border-r ${isWeekend ? 'bg-muted/50' : ''}`} style={{ width: dayWidth }}>
                   <div className="font-medium">{date.getDate()}</div>
                   <div className="text-muted-foreground">{weekDays[date.getDay()]}</div>
                 </div>
@@ -179,13 +160,10 @@ export function MaintenanceGanttCalendar() {
             })}
           </div>
         </div>
-        
-        {/* Tasks */}
         <div className="divide-y">
           {tasks.map(task => {
             const startOffset = Math.max(0, Math.floor((task.startDate.getTime() - today.getTime()) / (24 * 60 * 60 * 1000)));
             const duration = Math.ceil((task.endDate.getTime() - task.startDate.getTime()) / (24 * 60 * 60 * 1000)) + 1;
-            
             return (
               <div key={task.id} className="flex hover:bg-muted/30">
                 <div className="w-64 p-3 border-r flex-shrink-0">
@@ -198,17 +176,12 @@ export function MaintenanceGanttCalendar() {
                   </div>
                 </div>
                 <div className="relative flex-1 py-2" style={{ minWidth: totalDays * dayWidth }}>
-                  <div 
+                  <div
                     className={`absolute h-8 rounded flex items-center px-2 text-white text-xs ${STATUS_COLORS[task.status]}`}
-                    style={{ 
-                      left: startOffset * dayWidth + 4, 
-                      width: Math.max(duration * dayWidth - 8, 60)
-                    }}
+                    style={{ left: startOffset * dayWidth + 4, width: Math.max(duration * dayWidth - 8, 60) }}
                   >
                     <span className="truncate">{TYPE_LABELS[task.type]}</span>
-                    {task.status === 'in_progress' && (
-                      <span className="ml-auto">{task.progress}%</span>
-                    )}
+                    {task.status === 'in_progress' && <span className="ml-auto">{task.progress}%</span>}
                   </div>
                 </div>
               </div>
@@ -221,50 +194,29 @@ export function MaintenanceGanttCalendar() {
 
   const CalendarView = () => {
     const days = getMonthDays();
-    
     return (
       <div>
-        {/* Calendar Header */}
         <div className="grid grid-cols-7 mb-2">
           {weekDays.map(day => (
-            <div key={day} className="p-2 text-center text-sm font-medium text-muted-foreground">
-              {day}
-            </div>
+            <div key={day} className="p-2 text-center text-sm font-medium text-muted-foreground">{day}</div>
           ))}
         </div>
-        
-        {/* Calendar Grid */}
         <div className="grid grid-cols-7 gap-1">
           {days.map((date, idx) => {
             const dayTasks = date ? getTasksForDate(date) : [];
             const isToday = date?.toDateString() === new Date().toDateString();
-            
             return (
-              <div 
-                key={idx}
-                className={`min-h-24 p-1 border rounded-lg ${
-                  date ? 'hover:border-primary/50' : 'bg-muted/30'
-                } ${isToday ? 'border-primary bg-primary/5' : ''}`}
-              >
+              <div key={idx} className={`min-h-24 p-1 border rounded-lg ${date ? 'hover:border-primary/50' : 'bg-muted/30'} ${isToday ? 'border-primary bg-primary/5' : ''}`}>
                 {date && (
                   <>
-                    <div className={`text-sm font-medium mb-1 ${isToday ? 'text-primary' : ''}`}>
-                      {date.getDate()}
-                    </div>
+                    <div className={`text-sm font-medium mb-1 ${isToday ? 'text-primary' : ''}`}>{date.getDate()}</div>
                     <div className="space-y-1">
                       {dayTasks.slice(0, 3).map(task => (
-                        <div 
-                          key={task.id}
-                          className={`text-xs p-1 rounded truncate text-white ${STATUS_COLORS[task.status]}`}
-                        >
+                        <div key={task.id} className={`text-xs p-1 rounded truncate text-white ${STATUS_COLORS[task.status]}`}>
                           {task.name.substring(0, 15)}...
                         </div>
                       ))}
-                      {dayTasks.length > 3 && (
-                        <div className="text-xs text-muted-foreground">
-                          +{dayTasks.length - 3} mais
-                        </div>
-                      )}
+                      {dayTasks.length > 3 && <div className="text-xs text-muted-foreground">+{dayTasks.length - 3} mais</div>}
                     </div>
                   </>
                 )}
@@ -280,10 +232,10 @@ export function MaintenanceGanttCalendar() {
     <div className="space-y-6">
       {/* KPI Cards */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-        <Card className="border-l-4 border-l-blue-500">
+        <Card className="border-l-4 border-l-info">
           <CardContent className="p-4">
             <div className="flex items-center gap-3">
-              <Clock className="h-8 w-8 text-blue-500" />
+              <Clock className="h-8 w-8 text-info" />
               <div>
                 <p className="text-2xl font-bold">{tasks.filter(t => t.status === 'scheduled').length}</p>
                 <p className="text-xs text-muted-foreground">Agendadas</p>
@@ -291,11 +243,10 @@ export function MaintenanceGanttCalendar() {
             </div>
           </CardContent>
         </Card>
-        
-        <Card className="border-l-4 border-l-yellow-500">
+        <Card className="border-l-4 border-l-warning">
           <CardContent className="p-4">
             <div className="flex items-center gap-3">
-              <Wrench className="h-8 w-8 text-yellow-500" />
+              <Wrench className="h-8 w-8 text-warning" />
               <div>
                 <p className="text-2xl font-bold">{tasks.filter(t => t.status === 'in_progress').length}</p>
                 <p className="text-xs text-muted-foreground">Em Andamento</p>
@@ -303,11 +254,10 @@ export function MaintenanceGanttCalendar() {
             </div>
           </CardContent>
         </Card>
-        
-        <Card className="border-l-4 border-l-green-500">
+        <Card className="border-l-4 border-l-success">
           <CardContent className="p-4">
             <div className="flex items-center gap-3">
-              <CheckCircle className="h-8 w-8 text-green-500" />
+              <CheckCircle className="h-8 w-8 text-success" />
               <div>
                 <p className="text-2xl font-bold">{tasks.filter(t => t.status === 'completed').length}</p>
                 <p className="text-xs text-muted-foreground">Concluídas</p>
@@ -315,11 +265,10 @@ export function MaintenanceGanttCalendar() {
             </div>
           </CardContent>
         </Card>
-        
-        <Card className="border-l-4 border-l-red-500">
+        <Card className="border-l-4 border-l-destructive">
           <CardContent className="p-4">
             <div className="flex items-center gap-3">
-              <AlertTriangle className="h-8 w-8 text-red-500" />
+              <AlertTriangle className="h-8 w-8 text-destructive" />
               <div>
                 <p className="text-2xl font-bold">{tasks.filter(t => t.status === 'overdue').length}</p>
                 <p className="text-xs text-muted-foreground">Atrasadas</p>
@@ -338,11 +287,8 @@ export function MaintenanceGanttCalendar() {
                 <Calendar className="h-5 w-5 text-primary" />
                 Planejamento de Manutenção
               </CardTitle>
-              <CardDescription>
-                Visualize e gerencie todas as manutenções programadas
-              </CardDescription>
+              <CardDescription>Visualize e gerencie todas as manutenções programadas</CardDescription>
             </div>
-            
             <div className="flex items-center gap-2">
               <Tabs value={view} onValueChange={(v) => setView(v as 'gantt' | 'calendar')}>
                 <TabsList className="h-9">
@@ -350,39 +296,19 @@ export function MaintenanceGanttCalendar() {
                   <TabsTrigger value="calendar" className="px-3">Calendário</TabsTrigger>
                 </TabsList>
               </Tabs>
-              
               {view === 'calendar' && (
                 <div className="flex items-center gap-1">
-                  <Button 
-                    variant="outline" 
-                    size="icon"
-                    onClick={() => setCurrentMonth(new Date(currentMonth.setMonth(currentMonth.getMonth() - 1)))}
-                  >
+                  <Button variant="outline" size="icon" onClick={() => setCurrentMonth(new Date(currentMonth.setMonth(currentMonth.getMonth() - 1)))}>
                     <ChevronLeft className="h-4 w-4" />
                   </Button>
-                  <span className="w-32 text-center font-medium">
-                    {currentMonth.toLocaleDateString('pt-BR', { month: 'long', year: 'numeric' })}
-                  </span>
-                  <Button 
-                    variant="outline" 
-                    size="icon"
-                    onClick={() => setCurrentMonth(new Date(currentMonth.setMonth(currentMonth.getMonth() + 1)))}
-                  >
+                  <span className="w-32 text-center font-medium">{currentMonth.toLocaleDateString('pt-BR', { month: 'long', year: 'numeric' })}</span>
+                  <Button variant="outline" size="icon" onClick={() => setCurrentMonth(new Date(currentMonth.setMonth(currentMonth.getMonth() + 1)))}>
                     <ChevronRight className="h-4 w-4" />
                   </Button>
                 </div>
               )}
-              
-              <Button className="gap-2">
-                <Plus className="h-4 w-4" />
-                Nova Manutenção
-              </Button>
-              <Button 
-                variant="outline" 
-                className="gap-2 border-primary/50 text-primary"
-                onClick={runAIAnalysis}
-                disabled={isAnalyzing || tasks.length === 0}
-              >
+              <Button className="gap-2"><Plus className="h-4 w-4" />Nova Manutenção</Button>
+              <Button variant="outline" className="gap-2 border-primary/50 text-primary" onClick={runAIAnalysis} disabled={isAnalyzing || tasks.length === 0}>
                 {isAnalyzing ? <Loader2 className="h-4 w-4 animate-spin" /> : <Brain className="h-4 w-4" />}
                 IA Preditiva
               </Button>
@@ -394,15 +320,10 @@ export function MaintenanceGanttCalendar() {
             <div className="flex items-center justify-center py-12">
               <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary" />
             </div>
-          ) : view === 'gantt' ? (
-            <GanttView />
-          ) : (
-            <CalendarView />
-          )}
+          ) : view === 'gantt' ? <GanttView /> : <CalendarView />}
         </CardContent>
       </Card>
 
-      {/* AI Analysis Result */}
       {aiAnalysis && (
         <Card className="border-primary/30 bg-primary/5">
           <CardHeader className="pb-2">
@@ -413,15 +334,12 @@ export function MaintenanceGanttCalendar() {
           </CardHeader>
           <CardContent>
             <ScrollArea className="max-h-[300px]">
-              <div className="prose prose-sm dark:prose-invert max-w-none whitespace-pre-wrap text-sm">
-                {aiAnalysis}
-              </div>
+              <div className="prose prose-sm dark:prose-invert max-w-none whitespace-pre-wrap text-sm">{aiAnalysis}</div>
             </ScrollArea>
           </CardContent>
         </Card>
       )}
 
-      {/* Legend */}
       <Card>
         <CardContent className="p-4">
           <div className="flex items-center gap-6 flex-wrap">
@@ -430,9 +348,7 @@ export function MaintenanceGanttCalendar() {
               <div key={status} className="flex items-center gap-2">
                 <div className={`w-4 h-4 rounded ${color}`} />
                 <span className="text-sm capitalize">
-                  {status === 'scheduled' ? 'Agendada' :
-                   status === 'in_progress' ? 'Em Andamento' :
-                   status === 'completed' ? 'Concluída' : 'Atrasada'}
+                  {status === 'scheduled' ? 'Agendada' : status === 'in_progress' ? 'Em Andamento' : status === 'completed' ? 'Concluída' : 'Atrasada'}
                 </span>
               </div>
             ))}
