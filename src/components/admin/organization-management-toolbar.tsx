@@ -48,7 +48,7 @@ export const OrganizationManagementToolbar: React.FC = () => {
       title: "Analytics",
       description: "Relatórios da organização",
       icon: BarChart3,
-      action: () => navigate("/analytics"),
+      action: () => navigate("/analytics-command"),
       available: canViewAnalytics(),
       variant: "outline" as const
     },

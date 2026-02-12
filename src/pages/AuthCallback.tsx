@@ -23,7 +23,7 @@ export default function AuthCallback() {
 
         if (result.success) {
           toast.success('Login realizado com sucesso!');
-          navigate('/dashboard', { replace: true });
+          navigate('/central-comando', { replace: true });
         } else {
           setError(result.error || 'Falha na autenticação');
           logger.error('OAuth callback failed', undefined, { error: result.error });

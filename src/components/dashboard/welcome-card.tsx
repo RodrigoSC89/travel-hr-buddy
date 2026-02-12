@@ -41,7 +41,7 @@ export const WelcomeCard: React.FC = () => {
       actions.push({
         icon: FileText,
         label: "Relatórios de RH",
-        action: () => navigate("/hr"),
+        action: () => navigate("/hr-dashboard"),
         variant: "secondary" as const
       });
     }
@@ -49,7 +49,7 @@ export const WelcomeCard: React.FC = () => {
     actions.push({
       icon: BarChart3,
       label: "Ver Analytics",
-      action: () => navigate("/analytics"),
+      action: () => navigate("/analytics-command"),
       variant: "default" as const
     });
     

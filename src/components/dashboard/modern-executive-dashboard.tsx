@@ -167,7 +167,7 @@ export const ModernExecutiveDashboard: React.FC<ExecutiveDashboardProps> = ({ cl
       trend: "+1.8% vs período anterior",
       icon: <TrendingUp className="w-6 h-6 text-primary-foreground" />,
       color: "purple" as const,
-      onClick: () => navigate("/analytics"),
+      onClick: () => navigate("/analytics-command"),
       actionLabel: "Analytics"
     },
     {

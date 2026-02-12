@@ -65,7 +65,7 @@ export function QuickActionsPanel() {
       id: "schedule-event",
       label: "Agendar Evento",
       icon: Calendar,
-      action: () => navigate("/calendar"),
+      action: () => navigate("/operational-calendar"),
       color: "text-accent"
     },
     {

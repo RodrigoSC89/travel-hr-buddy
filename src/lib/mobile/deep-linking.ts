@@ -258,7 +258,7 @@ class DeepLinkingService {
         spaNavigate(`/alerts-command?id=${id}`);
         break;
       case "view-task":
-        spaNavigate(`/tasks?id=${id}`);
+        spaNavigate(`/task-management?id=${id}`);
         break;
       default:
         logger.warn("[DeepLink] Unknown notification action:", action);

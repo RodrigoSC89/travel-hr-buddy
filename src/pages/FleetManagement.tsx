@@ -393,7 +393,7 @@ const MaritimeFleetManagement = () => {
                 <CardDescription>Centro de documentos da frota</CardDescription>
               </CardHeader>
               <CardContent>
-                <Button variant="outline" onClick={() => navigate("/dashboard/document-hub")}>
+                <Button variant="outline" onClick={() => navigate("/documents")}>
                   Ir para Document Hub
                 </Button>
               </CardContent>

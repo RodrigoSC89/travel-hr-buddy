@@ -1138,6 +1138,21 @@ const AppRoutes = () => (
       <Route path="/alerts" element={<Navigate to="/alerts-command" replace />} />
       <Route path="/admin/integrations" element={<Navigate to="/integrations" replace />} />
       <Route path="/admin/reports" element={<Navigate to="/reports-command" replace />} />
+      <Route path="/dashboard" element={<Navigate to="/central-comando" replace />} />
+      <Route path="/dashboard/*" element={<Navigate to="/central-comando" replace />} />
+      <Route path="/tasks" element={<Navigate to="/task-management" replace />} />
+      <Route path="/reports" element={<Navigate to="/reports-command" replace />} />
+      <Route path="/analytics" element={<Navigate to="/analytics-command" replace />} />
+      <Route path="/crew-management" element={<Navigate to="/maritime-command" replace />} />
+      <Route path="/schedule" element={<Navigate to="/operational-calendar" replace />} />
+      <Route path="/schedules" element={<Navigate to="/operational-calendar" replace />} />
+      <Route path="/system-hub" element={<Navigate to="/command?tab=monitoring" replace />} />
+      <Route path="/missions" element={<Navigate to="/mission-logs" replace />} />
+      <Route path="/missions/new" element={<Navigate to="/mission-logs" replace />} />
+      <Route path="/payroll" element={<Navigate to="/hr-dashboard" replace />} />
+      <Route path="/task-automation" element={<Navigate to="/automation" replace />} />
+      <Route path="/smart-mobility" element={<Navigate to="/travel-command" replace />} />
+      <Route path="/monitoring" element={<Navigate to="/central-comando" replace />} />
       
       {/* DEV ONLY - Route Dashboard */}
       <Route path="/dev-routes" element={<DevRoutesDashboard />} />

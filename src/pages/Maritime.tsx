@@ -87,7 +87,7 @@ export default function Maritime() {
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-4">
         <StatCard title="Embarcações" value={stats.totalVessels} icon={Ship} trend="+2 este mês" onClick={() => navigate("/fleet-command")} />
-        <StatCard title="Tripulação Ativa" value={stats.activeCrew} icon={Users} variant="success" trend="100% operacional" onClick={() => navigate("/crew-management")} />
+        <StatCard title="Tripulação Ativa" value={stats.activeCrew} icon={Users} variant="success" trend="100% operacional" onClick={() => navigate("/maritime-command")} />
         <StatCard title="Certificações Pendentes" value={stats.pendingCertifications} icon={AlertTriangle} variant="warning" trend="3 vencem em 30 dias" onClick={() => navigate("/maritime-command")} />
         <StatCard title="Auditorias Completas" value={stats.completedAudits} icon={CheckCircle} variant="success" trend="+4 este mês" onClick={() => navigate("/peotram")} />
         <StatCard title="Alertas Ativos" value={stats.activeAlerts} icon={AlertTriangle} variant="danger" trend="2 críticos" onClick={() => navigate("/alerts-command")} />
@@ -137,7 +137,7 @@ export default function Maritime() {
               </CardHeader>
               <CardContent className="space-y-3">
                 <Button className="w-full justify-start" variant="outline" onClick={() => navigate("/peotram")}><FileText className="h-4 w-4 mr-2" />Nova Auditoria PEOTRAM</Button>
-                <Button className="w-full justify-start" variant="outline" onClick={() => navigate("/crew-management")}><Users className="h-4 w-4 mr-2" />Gerenciar Tripulação</Button>
+                <Button className="w-full justify-start" variant="outline" onClick={() => navigate("/maritime-command")}><Users className="h-4 w-4 mr-2" />Gerenciar Tripulação</Button>
                 <Button className="w-full justify-start" variant="outline" onClick={() => navigate("/maritime-command")}><Shield className="h-4 w-4 mr-2" />Verificar Certificações</Button>
                 <Button className="w-full justify-start" variant="outline" onClick={() => navigate("/admin/checklists")}><BarChart3 className="h-4 w-4 mr-2" />Dashboard de Checklists</Button>
                 <Button className="w-full justify-start" variant="outline" onClick={() => navigate("/maintenance?tab=predictive")}><Wrench className="h-4 w-4 mr-2" />Manutenção Preditiva</Button>
@@ -214,7 +214,7 @@ export default function Maritime() {
                   <h4 className="font-semibold">Manutenção</h4>
                   <p className="text-sm text-muted-foreground">Preventiva e corretiva</p>
                 </div>
-                <div className="p-4 border rounded-lg text-center cursor-pointer hover:bg-muted/50" onClick={() => navigate("/analytics")}>
+                <div className="p-4 border rounded-lg text-center cursor-pointer hover:bg-muted/50" onClick={() => navigate("/analytics-command")}>
                   <BarChart3 className="h-8 w-8 mx-auto mb-2 text-accent-foreground" />
                   <h4 className="font-semibold">Analytics</h4>
                   <p className="text-sm text-muted-foreground">KPIs operacionais</p>

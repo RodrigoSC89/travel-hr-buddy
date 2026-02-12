@@ -316,7 +316,7 @@ export const EnhancedDashboard = () => {
       icon: BarChart3, 
       label: "Relatórios IA", 
       action: () => {
-        navigate("/reports");
+        navigate("/reports-command");
         toast({ title: "📊 Relatórios IA", description: "Abrindo sistema de relatórios inteligentes" });
       }
     },
@@ -324,7 +324,7 @@ export const EnhancedDashboard = () => {
       icon: Brain, 
       label: "Analytics", 
       action: () => {
-        navigate("/analytics");
+        navigate("/analytics-command");
         toast({ title: "🧠 Analytics", description: "Abrindo painel de análises" });
       }
     },

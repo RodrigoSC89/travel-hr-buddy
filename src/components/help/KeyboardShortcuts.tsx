@@ -45,8 +45,8 @@ export const useKeyboardShortcuts = () => {
     { keys: ["G", "H"], label: "Dashboard", description: "Ir para o dashboard principal", category: "navigation", action: () => navigate("/") },
     { keys: ["G", "S"], label: "Configurações", description: "Acessar configurações", category: "navigation", action: () => navigate("/settings") },
     { keys: ["G", "N"], label: "Notificações", description: "Abrir central de notificações", category: "navigation", action: () => navigate("/alerts-command") },
-    { keys: ["G", "A"], label: "Analytics", description: "Ir para analytics", category: "navigation", action: () => navigate("/analytics") },
-    { keys: ["G", "M"], label: "Manutenção", description: "Módulo de manutenção", category: "navigation", action: () => navigate("/maintenance") },
+    { keys: ["G", "A"], label: "Analytics", description: "Ir para analytics", category: "navigation", action: () => navigate("/analytics-command") },
+    { keys: ["G", "M"], label: "Manutenção", description: "Módulo de manutenção", category: "navigation", action: () => navigate("/maintenance-command") },
     
     // Actions
     { keys: ["?"], label: "Ajuda", description: "Mostrar atalhos de teclado", category: "actions", action: () => setHelpOpen(true) },

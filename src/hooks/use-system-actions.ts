@@ -26,7 +26,7 @@ export const useSystemActions = () => {
   };
 
   const handleNavigateToReports = () => {
-    navigate("/reports");
+    navigate("/reports-command");
     toast({
       title: "Navegando",
       description: "Redirecionando para relatórios",
