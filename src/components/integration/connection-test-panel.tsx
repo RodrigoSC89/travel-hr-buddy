@@ -191,9 +191,9 @@ export const ConnectionTestPanel: React.FC = () => {
             <CardTitle>Resultados dos Testes</CardTitle>
           </CardHeader>
           <CardContent className="space-y-2">
-            {results.map((result, index) => (
+            {results.map((result) => (
               <Alert
-                key={index}
+                key={result.name}
                 variant={result.success ? "default" : "destructive"}
                 className="flex items-start gap-3"
               >

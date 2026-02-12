@@ -336,9 +336,9 @@ export function BehavioralEvolutionDashboard() {
         </CardHeader>
         <CardContent>
           <div className="space-y-3">
-            {recentEvolutions.map((evolution, index) => (
+            {recentEvolutions.map((evolution) => (
               <div 
-                key={index} 
+                key={`${evolution.module_name}-${evolution.behavior_type}`} 
                 className="flex items-center justify-between p-3 border rounded-lg hover:bg-accent transition-colors"
               >
                 <div className="flex items-center gap-3">
