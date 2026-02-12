@@ -341,8 +341,8 @@ export const RealTimeFleetMonitor = () => {
                           <CardTitle className="text-lg text-destructive">Alertas Meteorológicos</CardTitle>
                         </CardHeader>
                         <CardContent>
-                          {weatherData.alerts.map((alert: { message: string }, index: number) => (
-                            <div key={index} className="p-2 bg-destructive/10 border border-destructive/20 rounded mb-2">
+                          {weatherData.alerts.map((alert: { message: string }, alertIdx: number) => (
+                            <div key={`weather-alert-${alertIdx}`} className="p-2 bg-destructive/10 border border-destructive/20 rounded mb-2">
                               <p className="text-sm text-destructive">{alert.message}</p>
                             </div>
                           ))}

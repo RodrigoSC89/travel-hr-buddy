@@ -376,8 +376,8 @@ export const DocumentProcessor: React.FC = () => {
                     <div>
                       <h4 className="font-medium mb-2">Pontos Principais</h4>
                       <ul className="space-y-1">
-                        {selectedDoc.keyPoints.map((point, index) => (
-                          <li key={index} className="text-sm text-muted-foreground flex items-start gap-2">
+                        {selectedDoc.keyPoints.map((point) => (
+                          <li key={point} className="text-sm text-muted-foreground flex items-start gap-2">
                             <span className="w-1 h-1 bg-primary rounded-full mt-2 flex-shrink-0" />
                             {point}
                           </li>
@@ -390,9 +390,9 @@ export const DocumentProcessor: React.FC = () => {
                     <div>
                       <h4 className="font-medium mb-2">Entidades Identificadas</h4>
                       <div className="flex flex-wrap gap-2">
-                        {selectedDoc.entities.map((entity, index) => (
+                        {selectedDoc.entities.map((entity) => (
                           <span 
-                            key={index}
+                            key={entity}
                             className="px-2 py-1 bg-primary/10 text-primary text-xs rounded"
                           >
                             {entity}
