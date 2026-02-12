@@ -73,16 +73,16 @@ export function ContractAlertsCard() {
 
       if (rulesData) {
         // eslint-disable-next-line @typescript-eslint/no-explicit-any -- alert_rules not in generated types
-        setRules(rulesData.map((r: any) => ({
-          id: r.id,
-          name: r.name,
-          type: r.rule_type,
-          condition: r.condition_text || getConditionText(r.rule_type, r.threshold, r.advance_days),
-          channels: r.channels || [],
-          recipients: r.recipients || [],
-          enabled: r.is_enabled,
-          threshold: r.threshold,
-          advance_days: r.advance_days
+        setRules((rulesData as any[]).map((r) => ({
+          id: String(r.id),
+          name: String(r.name),
+          type: String(r.rule_type) as AlertRule["type"],
+          condition: String(r.condition_text || getConditionText(r.rule_type, r.threshold, r.advance_days)),
+          channels: (r.channels || []) as AlertRule["channels"],
+          recipients: (r.recipients || []) as string[],
+          enabled: Boolean(r.is_enabled),
+          threshold: Number(r.threshold),
+          advance_days: Number(r.advance_days)
         })));
       }
 
@@ -95,14 +95,14 @@ export function ContractAlertsCard() {
 
       if (logsData) {
         // eslint-disable-next-line @typescript-eslint/no-explicit-any -- contract_alert_logs not in generated types
-        setLogs(logsData.map((l: any) => ({
-          id: l.id,
-          rule_name: l.rule_id || 'Sistema',
-          channel: l.channels?.[0] || 'email',
-          recipient: l.recipients?.[0] || '',
-          message: l.message,
-          sent_at: l.sent_at,
-          status: l.results?.success ? 'sent' : 'failed'
+        setLogs((logsData as any[]).map((l) => ({
+          id: String(l.id),
+          rule_name: String(l.rule_id || 'Sistema'),
+          channel: String((l.channels as string[])?.[0] || 'email'),
+          recipient: String((l.recipients as string[])?.[0] || ''),
+          message: String(l.message),
+          sent_at: String(l.sent_at),
+          status: (l.results as Record<string, unknown>)?.success ? 'sent' as const : 'failed' as const
         })));
       }
     } catch (err) {

@@ -49,8 +49,7 @@ export const RealTimeFleetMonitor = () => {
     if (fleetData.length > 0) setVessels(fleetData);
   }, [fleetData]);
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Supabase realtime payload
-  const handleFleetUpdate = (payload: any) => {
+  const handleFleetUpdate = (payload: { eventType: string; new: Record<string, unknown> }) => {
     // Update specific vessel data
     if (payload.eventType === "UPDATE") {
       setVessels(prev => prev.map(vessel => 

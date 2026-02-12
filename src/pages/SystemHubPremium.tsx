@@ -48,10 +48,9 @@ function LoadingFallback() {
 function SystemDashboard() {
   const { integrations, users, sessions, metrics, isLoading } = useSystemHubData();
   // Map integrations to services format
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Supabase integration rows
-  const services = integrations.slice(0, 4).map((int: any) => ({
-    name: int.name || "Serviço",
-    status: int.status === "active" || int.status === "connected" ? "connected" : "offline",
+  const services = integrations.slice(0, 4).map((int: Record<string, unknown>) => ({
+    name: String(int.name || "Serviço"),
+    status: int.status === "active" || int.status === "connected" ? "connected" as const : "offline" as const,
     uptime: 99.95,
   }));
 
@@ -148,8 +147,7 @@ function SystemDashboard() {
         </CardHeader>
         <CardContent>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            {/* eslint-disable-next-line @typescript-eslint/no-explicit-any -- dynamic service list */}
-            {displayServices.map((service: any) => (
+            {displayServices.map((service) => (
               <div key={service.name} className="flex items-center justify-between p-4 border rounded-lg">
                 <div className="flex items-center gap-3">
                   <div className={`h-3 w-3 rounded-full ${

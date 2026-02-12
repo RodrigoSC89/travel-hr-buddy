@@ -144,8 +144,7 @@ export default function AIControlTowerHubEnhanced() {
       details: [
         { label: "Ativos", value: String(metrics.activeAgents) },
         { label: "Total", value: String(metrics.totalAgents) },
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any -- agent_registry rows are dynamic
-        { label: "Online", value: String(agents.filter((a: any) => a.status === "online").length) }
+        { label: "Online", value: String(agents.filter((a) => a.status === "online").length) }
       ]
     },
     {
@@ -190,8 +189,7 @@ export default function AIControlTowerHubEnhanced() {
   ], [metrics, agents, auditLogs, decisions, insights]);
 
   // Build alerts from real insights
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Supabase ai_insights rows
-  const aiInsights = useMemo(() => insights.slice(0, 5).map((insight: any) => ({
+  const aiInsights = useMemo(() => insights.slice(0, 5).map((insight) => ({
     id: insight.id,
     title: insight.title || "Insight IA",
     description: insight.description || "",
@@ -358,8 +356,7 @@ export default function AIControlTowerHubEnhanced() {
                     </CardTitle>
                   </CardHeader>
                   <CardContent className="space-y-3">
-                    {/* eslint-disable-next-line @typescript-eslint/no-explicit-any -- agent_registry dynamic rows */}
-                    {agents.slice(0, 5).map((agent: any, idx: number) => (
+                    {agents.slice(0, 5).map((agent, idx: number) => (
                       <div key={agent.id || idx} className="flex items-center gap-3">
                         <div className={`w-2 h-2 rounded-full ${
                           agent.status === "active" || agent.status === "online" 
@@ -369,7 +366,7 @@ export default function AIControlTowerHubEnhanced() {
                         <div className="flex-1 min-w-0">
                           <p className="text-sm font-medium truncate">{agent.name}</p>
                           <p className="text-xs text-muted-foreground">
-                            {agent.capabilities?.length || 0} capacidades
+                            {Array.isArray(agent.capabilities) ? agent.capabilities.length : 0} capacidades
                           </p>
                         </div>
                         <Badge variant="secondary" className="text-xs">

@@ -106,7 +106,7 @@ export default function CollaborationPage() {
 
       // Fetch author emails
       const commentsWithEmails = await Promise.all(
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any -- dynamic Supabase row
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any -- dynamic Supabase row with join
         (data || []).map(async (comment: any) => {
           const { data: profile } = await supabase
             .from("profiles")

@@ -306,9 +306,8 @@ export default function WasteManagementPremium() {
 
       const csvRows = [
         "Data;Tipo;Categoria;Volume;Unidade;Embarcação;Status",
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any -- waste_records shape from dynamic query
-        ...(wasteRecords || []).map((r: any) => 
-          `${new Date(r.created_at).toLocaleDateString()};${r.waste_type || ''};${r.category || ''};${r.volume || ''};${r.unit || ''};${r.vessel_id || ''};${r.status || ''}`
+        ...(wasteRecords || []).map((r: Record<string, unknown>) => 
+          `${new Date(String(r.created_at)).toLocaleDateString()};${r.waste_type || ''};${r.category || ''};${r.volume || ''};${r.unit || ''};${r.vessel_id || ''};${r.status || ''}`
         )
       ];
       const blob = new Blob(['\uFEFF' + csvRows.join('\n')], { type: 'text/csv;charset=utf-8;' });

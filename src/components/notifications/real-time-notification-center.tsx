@@ -28,6 +28,7 @@ interface Notification {
   priority: "low" | "medium" | "high" | "urgent";
   read: boolean;
   created_at: string;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Supabase Json type
   action_data?: any;
   expires_at?: string;
 }
@@ -40,8 +41,10 @@ interface IntelligentNotification {
   priority: string;
   is_read: boolean;
   created_at: string;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Supabase Json type
   metadata?: any;
   action_type?: string;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Supabase Json type
   action_data?: any;
   action_text?: string;
 }
@@ -252,6 +255,7 @@ export const RealTimeNotificationCenter: React.FC = () => {
   }, [user]);
 
   // Filtrar notificações
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- accepts both Notification and IntelligentNotification
   const getFilteredNotifications = (notifs: any[], isIntelligent = false) => {
     const filtered = notifs.filter(n => {
       const isRead = isIntelligent ? n.is_read : n.read;

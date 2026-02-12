@@ -49,6 +49,7 @@ export class ChecklistService {
           certifications: ["Maritime Inspector"]
         },
         status: (item.status || "draft") as Checklist["status"],
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any -- checklist_items join shape
         items: item.checklist_items?.map((checklistItem: any) => ({
           id: checklistItem.id,
           title: checklistItem.title,

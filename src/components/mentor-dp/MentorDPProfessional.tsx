@@ -68,8 +68,7 @@ interface LogEntry {
   title: string;
   summary: string;
   timestamp: Date;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- log data can be any AI response shape
-  data?: any;
+  data?: Record<string, unknown>;
 }
 
 interface RepositoryQuestion {
@@ -199,8 +198,7 @@ export default function MentorDPProfessional() {
   }, [logEntries]);
 
   // Add log entry helper
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- log data is heterogeneous AI responses
-  const addLogEntry = useCallback((type: LogEntry["type"], title: string, summary: string, data?: any) => {
+  const addLogEntry = useCallback((type: LogEntry["type"], title: string, summary: string, data?: Record<string, unknown>) => {
     const entry: LogEntry = {
       id: crypto.randomUUID(),
       type,

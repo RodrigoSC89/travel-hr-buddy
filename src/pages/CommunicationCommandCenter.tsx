@@ -58,19 +58,14 @@ const CommunicationCommandCenter = () => {
   // Calculate stats from real data
   const stats: CommandStats = useMemo(() => ({
     totalMessages: messages.length,
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any -- hook returns dynamic message shape
-    unreadMessages: messages.filter((m: any) => !m.read).length,
+    unreadMessages: messages.filter((m) => !m.read).length,
     totalChannels: channels.length,
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any -- hook returns dynamic channel shape
-    activeChannels: channels.filter((c: any) => c.memberCount > 0 || c.lastMessageTime).length,
+    activeChannels: channels.filter((c) => c.memberCount > 0 || c.lastMessageTime).length,
     totalNotifications: notifications.length,
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any -- hook returns dynamic notification shape
-    criticalNotifications: notifications.filter((n: any) => n.priority === "urgent" || n.priority === "high").length,
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any -- hook returns dynamic message shape
-    urgentMessages: messages.filter((m: any) => m.priority === "high").length,
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any -- hook returns dynamic message shape
-    todayMessages: messages.filter((m: any) => {
-      const msgDate = new Date(m.timestamp).toDateString();
+    criticalNotifications: notifications.filter((n) => n.priority === "urgent" || n.priority === "high").length,
+    urgentMessages: messages.filter((m) => m.priority === "high").length,
+    todayMessages: messages.filter((m) => {
+      const msgDate = new Date(String(m.timestamp)).toDateString();
       return msgDate === new Date().toDateString();
     }).length,
   }), [messages, channels, notifications]);

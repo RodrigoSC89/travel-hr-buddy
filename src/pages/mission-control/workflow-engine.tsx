@@ -150,7 +150,7 @@ const WorkflowEngine = () => {
     });
   };
 
-  const updateStep = (index: number, field: string, value: any) => {
+  const updateStep = (index: number, field: string, value: string | number | boolean) => {
     const updatedSteps = [...newWorkflow.steps];
     updatedSteps[index] = { ...updatedSteps[index], [field]: value };
     setNewWorkflow({ ...newWorkflow, steps: updatedSteps });
