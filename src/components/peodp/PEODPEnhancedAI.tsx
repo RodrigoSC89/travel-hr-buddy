@@ -145,8 +145,8 @@ export function PEODPEnhancedAI() {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-3">
-          <div className="p-3 bg-gradient-to-br from-amber-500/20 to-orange-500/20 rounded-xl">
-            <Shield className="h-6 w-6 text-amber-500" />
+          <div className="p-3 bg-gradient-to-br from-warning/20 to-accent/20 rounded-xl">
+            <Shield className="h-6 w-6 text-warning" />
           </div>
           <div>
             <h2 className="text-xl font-bold flex items-center gap-2">
@@ -264,8 +264,8 @@ export function PEODPEnhancedAI() {
             <Card className="mt-4">
               <CardContent className="pt-4">
                 <div className="flex items-center gap-2 mb-2">
-                  <Brain className="h-4 w-4 text-purple-500" />
-                  <span className="text-sm font-medium text-purple-600">Análise IA dos Pilares</span>
+                  <Brain className="h-4 w-4 text-accent-foreground" />
+                  <span className="text-sm font-medium text-accent-foreground">Análise IA dos Pilares</span>
                 </div>
                 <div className="prose prose-sm dark:prose-invert max-w-none whitespace-pre-wrap">
                   {aiAnalysis}

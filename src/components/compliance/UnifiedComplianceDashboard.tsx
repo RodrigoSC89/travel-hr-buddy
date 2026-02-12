@@ -709,12 +709,12 @@ export function UnifiedComplianceDashboard() {
                       <div className="font-semibold">{module.totalItems}</div>
                       <div className="text-muted-foreground">Itens</div>
                     </div>
-                    <div className="p-2 rounded bg-yellow-500/10">
-                      <div className="font-semibold text-yellow-600">{module.openItems}</div>
+                    <div className="p-2 rounded bg-warning/10">
+                      <div className="font-semibold text-warning">{module.openItems}</div>
                       <div className="text-muted-foreground">Abertos</div>
                     </div>
-                    <div className="p-2 rounded bg-red-500/10">
-                      <div className="font-semibold text-red-600">{module.criticalItems}</div>
+                    <div className="p-2 rounded bg-destructive/10">
+                      <div className="font-semibold text-destructive">{module.criticalItems}</div>
                       <div className="text-muted-foreground">Críticos</div>
                     </div>
                   </div>

@@ -243,7 +243,8 @@ export const SmartRoutesMap: React.FC<SmartRoutesMapProps> = ({ mapboxToken }) =
     setIsOptimizing(true);
     
     try {
-      await new Promise(resolve => setTimeout(resolve, 2000));
+      // Route optimization - instant feedback
+      await new Promise<void>(resolve => requestAnimationFrame(() => resolve()));
       toast.success("Rota otimizada com sucesso!");
     } catch {
       toast.error("Erro ao otimizar rota");

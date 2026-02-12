@@ -428,14 +428,14 @@ export default function MaritimeCommandCenter() {
               </CardHeader>
               <CardContent className="space-y-4">
                 <div className="grid grid-cols-2 gap-4">
-                  <div className="p-4 bg-green-500/10 rounded-lg border border-green-500/20">
-                    <div className="text-2xl font-bold text-green-600">
+                  <div className="p-4 bg-success/10 rounded-lg border border-success/20">
+                    <div className="text-2xl font-bold text-success">
                       {crewMembers.filter(m => m.status === "active").length}
                     </div>
                     <div className="text-sm text-muted-foreground">Ativos a Bordo</div>
                   </div>
-                  <div className="p-4 bg-yellow-500/10 rounded-lg border border-yellow-500/20">
-                    <div className="text-2xl font-bold text-yellow-600">
+                  <div className="p-4 bg-warning/10 rounded-lg border border-warning/20">
+                    <div className="text-2xl font-bold text-warning">
                       {crewMembers.filter(m => m.status === "shore_leave").length}
                     </div>
                     <div className="text-sm text-muted-foreground">Em Licença</div>
@@ -459,25 +459,25 @@ export default function MaritimeCommandCenter() {
             <Card>
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
-                  <Award className="h-5 w-5 text-purple-500" />
+                  <Award className="h-5 w-5 text-accent-foreground" />
                   Status de Certificações
                 </CardTitle>
                 <CardDescription>Controle de certificações e validades</CardDescription>
               </CardHeader>
               <CardContent className="space-y-4">
                 <div className="grid grid-cols-3 gap-3">
-                  <div className="p-3 bg-green-500/10 rounded-lg border border-green-500/20 text-center">
-                    <CheckCircle className="h-5 w-5 mx-auto mb-1 text-green-500" />
+                  <div className="p-3 bg-success/10 rounded-lg border border-success/20 text-center">
+                    <CheckCircle className="h-5 w-5 mx-auto mb-1 text-success" />
                     <div className="text-xl font-bold">{stats.certValid}</div>
                     <div className="text-xs text-muted-foreground">Válidas</div>
                   </div>
-                  <div className="p-3 bg-yellow-500/10 rounded-lg border border-yellow-500/20 text-center">
-                    <Clock className="h-5 w-5 mx-auto mb-1 text-yellow-500" />
+                  <div className="p-3 bg-warning/10 rounded-lg border border-warning/20 text-center">
+                    <Clock className="h-5 w-5 mx-auto mb-1 text-warning" />
                     <div className="text-xl font-bold">{stats.certExpiring}</div>
                     <div className="text-xs text-muted-foreground">Vencendo</div>
                   </div>
-                  <div className="p-3 bg-red-500/10 rounded-lg border border-red-500/20 text-center">
-                    <XCircle className="h-5 w-5 mx-auto mb-1 text-red-500" />
+                  <div className="p-3 bg-destructive/10 rounded-lg border border-destructive/20 text-center">
+                    <XCircle className="h-5 w-5 mx-auto mb-1 text-destructive" />
                     <div className="text-xl font-bold">1</div>
                     <div className="text-xs text-muted-foreground">Vencidas</div>
                   </div>

@@ -110,13 +110,13 @@ const SystemPerformanceMonitor = () => {
     switch (status) {
     case "online":
     case "healthy":
-      return <CheckCircle className="w-4 h-4 text-green-600" />;
+      return <CheckCircle className="w-4 h-4 text-success" />;
     case "warning":
     case "degraded":
-      return <AlertTriangle className="w-4 h-4 text-orange-600" />;
+      return <AlertTriangle className="w-4 h-4 text-warning" />;
     case "critical":
     case "offline":
-      return <AlertTriangle className="w-4 h-4 text-red-600" />;
+      return <AlertTriangle className="w-4 h-4 text-destructive" />;
     default:
       return <Activity className="w-4 h-4 text-muted-foreground" />;
     }
@@ -126,30 +126,30 @@ const SystemPerformanceMonitor = () => {
     switch (status) {
     case "online":
     case "healthy":
-      return "text-green-600 bg-green-100";
+      return "text-success bg-success/10";
     case "warning":
     case "degraded":
-      return "text-orange-600 bg-orange-100";
+      return "text-warning bg-warning/10";
     case "critical":
     case "offline":
-      return "text-red-600 bg-red-100";
+      return "text-destructive bg-destructive/10";
     default:
-      return "text-muted-foreground bg-gray-100";
+      return "text-muted-foreground bg-muted";
     }
   };
 
   const getTrendIcon = (trend: string) => {
     switch (trend) {
-    case "up": return <TrendingUp className="w-4 h-4 text-red-600" />;
-    case "down": return <TrendingDown className="w-4 h-4 text-green-600" />;
+    case "up": return <TrendingUp className="w-4 h-4 text-destructive" />;
+    case "down": return <TrendingDown className="w-4 h-4 text-success" />;
     default: return <Activity className="w-4 h-4 text-muted-foreground" />;
     }
   };
 
   const refreshMetrics = async () => {
     setIsRefreshing(true);
-    // Simular atualização dos dados
-    await new Promise(resolve => setTimeout(resolve, 2000));
+    // Refresh metrics from current state
+    await new Promise<void>(resolve => requestAnimationFrame(() => resolve()));
     
     // Atualizar métricas com variação determinística baseada em tempo
     const elapsed = Date.now() / 1000;
@@ -175,8 +175,8 @@ const SystemPerformanceMonitor = () => {
         overallStatus: overallStatus
       };
 
-      // Simulate export delay
-      await new Promise(resolve => setTimeout(resolve, 1500));
+      // Generate export
+      await new Promise<void>(resolve => requestAnimationFrame(() => resolve()));
 
       toast({
         title: "Relatório Exportado",

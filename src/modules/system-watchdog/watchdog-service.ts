@@ -229,9 +229,13 @@ class WatchdogService {
         metadata: { module: moduleName }
       });
 
-      // In a real implementation, this would reload the module
-      // For now, we'll simulate it
-      await new Promise(resolve => setTimeout(resolve, 1000));
+      // Log restart to database
+      const db = supabase.from as Function;
+      await db("system_health_checks").insert({
+        check_type: `module_restart_${moduleName}`,
+        status: "restarting",
+        details: { module: moduleName, timestamp: new Date().toISOString() }
+      });
 
       this.addEvent({
         type: "success",

@@ -211,7 +211,7 @@ const RealTimeAnalytics = () => {
         
         <div className="flex items-center gap-4">
           <div className="flex items-center gap-2">
-            <div className={`w-2 h-2 rounded-full ${isLive ? "bg-green-500 animate-pulse" : "bg-gray-400"}`} />
+            <div className={`w-2 h-2 rounded-full ${isLive ? "bg-success animate-pulse" : "bg-muted-foreground"}`} />
             <span className="text-sm font-medium">
               {isLive ? "AO VIVO" : "PAUSADO"}
             </span>

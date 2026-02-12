@@ -16,10 +16,10 @@ interface VoyagesListProps {
 const VoyagesList: React.FC<VoyagesListProps> = ({ voyages, onViewDetails, onDelete }) => {
   const getStatusBadge = (status: VoyageRoute["status"]) => {
     const styles = {
-      planned: "bg-blue-500/10 text-blue-500 border-blue-500/20",
-      active: "bg-green-500/10 text-green-500 border-green-500/20",
-      completed: "bg-gray-500/10 text-gray-500 border-gray-500/20",
-      cancelled: "bg-red-500/10 text-red-500 border-red-500/20",
+      planned: "bg-primary/10 text-primary border-primary/20",
+      active: "bg-success/10 text-success border-success/20",
+      completed: "bg-muted text-muted-foreground border-border",
+      cancelled: "bg-destructive/10 text-destructive border-destructive/20",
     };
     const labels = {
       planned: "Planejada",
@@ -32,9 +32,9 @@ const VoyagesList: React.FC<VoyagesListProps> = ({ voyages, onViewDetails, onDel
 
   const getRiskBadge = (risk: VoyageRoute["weatherRisk"]) => {
     const styles = {
-      low: "bg-green-500/10 text-green-500",
-      medium: "bg-yellow-500/10 text-yellow-500",
-      high: "bg-red-500/10 text-red-500",
+      low: "bg-success/10 text-success",
+      medium: "bg-warning/10 text-warning",
+      high: "bg-destructive/10 text-destructive",
     };
     const labels = { low: "Baixo", medium: "Médio", high: "Alto" };
     return (

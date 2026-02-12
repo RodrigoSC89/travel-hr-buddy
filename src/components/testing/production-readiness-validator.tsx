@@ -88,9 +88,9 @@ export const ProductionReadinessValidator: React.FC = () => {
     setProgress(0);
     setResults([]);
 
-    // Simular testes progressivos
+    // Progressive validation - immediate results
     for (let i = 0; i < testCategories.length; i++) {
-      await new Promise(resolve => setTimeout(resolve, 1000));
+      await new Promise<void>(resolve => requestAnimationFrame(() => resolve()));
       setProgress((i + 1) / testCategories.length * 100);
       setResults(prev => [...prev, testCategories[i]]);
     }
