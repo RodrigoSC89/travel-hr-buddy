@@ -290,7 +290,7 @@ export const OperationalWindowMonitor: React.FC = () => {
                         const fStatus = getStatusColor(value, condition.asogLimit, isInverse);
                         const fTokens = STATUS_TOKEN_MAP[fStatus];
                         return (
-                          <div key={i} className="flex-1 text-center">
+                          <div key={`forecast-${i}`} className="flex-1 text-center">
                             <div className={`h-16 rounded flex items-end justify-center pb-1 ${fTokens.bgLight}`}>
                               <span className="text-xs font-medium">{value.toFixed(1)}</span>
                             </div>
@@ -389,10 +389,10 @@ export const OperationalWindowMonitor: React.FC = () => {
                   { date: "2 dias atrás", status: "green" as StatusColor, ops: 4, alerts: 1, maxWind: 18, maxWave: 1.5 },
                   { date: "3 dias atrás", status: "red" as StatusColor, ops: 1, alerts: 5, maxWind: 35, maxWave: 3.2 },
                   { date: "4 dias atrás", status: "green" as StatusColor, ops: 6, alerts: 0, maxWind: 12, maxWave: 0.8 },
-                ].map((day, i) => {
+                ].map((day) => {
                   const dayTokens = STATUS_TOKEN_MAP[day.status];
                   return (
-                    <div key={i} className={`p-3 rounded-lg border-l-4 ${dayTokens.border} bg-muted/30`}>
+                    <div key={day.date} className={`p-3 rounded-lg border-l-4 ${dayTokens.border} bg-muted/30`}>
                       <div className="flex items-center justify-between">
                         <div className="flex items-center gap-3">
                           <div className={`w-3 h-3 rounded-full ${dayTokens.bg}`} />

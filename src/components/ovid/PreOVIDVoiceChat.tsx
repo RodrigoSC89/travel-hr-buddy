@@ -241,7 +241,7 @@ export const PreOVIDVoiceChat: React.FC<PreOVIDVoiceChatProps> = ({
           ) : (
             <div className="space-y-3">
               {messages.map((msg, i) => (
-                <div key={i} className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}>
+                <div key={`voice-msg-${i}-${msg.role}`} className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}>
                   <div className={`max-w-[85%] p-2 rounded-lg ${
                     msg.role === 'user' 
                       ? 'bg-primary text-primary-foreground' 

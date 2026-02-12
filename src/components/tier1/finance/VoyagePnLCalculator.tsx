@@ -229,7 +229,7 @@ export default function VoyagePnLCalculator() {
     fetchVoyages();
   }, []);
 
-  if (loading) return <div className="space-y-4">{[1,2,3,4].map(i => <Skeleton key={i} className="h-24 w-full" />)}</div>;
+  if (loading) return <div className="space-y-4">{[1,2,3,4].map(i => <Skeleton key={`pnl-skel-${i}`} className="h-24 w-full" />)}</div>;
 
   const totalRevenue = voyages.reduce((acc, v) => acc + v.revenue.total, 0);
   const totalCosts = voyages.reduce((acc, v) => acc + v.costs.total, 0);

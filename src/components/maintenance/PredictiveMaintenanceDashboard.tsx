@@ -323,8 +323,8 @@ export function PredictiveMaintenanceDashboard() {
                 <div>
                   <h5 className="font-medium mb-2">Razões:</h5>
                   <ul className="text-sm space-y-1">
-                    {selectedEquipment.reasoning.map((reason, i) => (
-                      <li key={i} className="flex items-start gap-2">
+                    {selectedEquipment.reasoning.map((reason) => (
+                      <li key={reason} className="flex items-start gap-2">
                         <span className="text-primary">•</span>
                         <span className="text-muted-foreground">{reason}</span>
                       </li>

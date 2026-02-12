@@ -328,8 +328,8 @@ const MaritimeFleetManagement = () => {
                     { title: "Otimização de Rota", desc: "Economia de 12% em combustível sugerida para MV Atlantic", priority: "high" },
                     { title: "Manutenção Preditiva", desc: "Motor principal do MV Pacific requer atenção em 15 dias", priority: "medium" },
                     { title: "Análise de Performance", desc: "Frota operando a 94% de eficiência média", priority: "low" },
-                  ].map((insight, i) => (
-                    <div key={i} className="border rounded-lg p-4 flex justify-between items-start">
+                  ].map((insight) => (
+                    <div key={insight.title} className="border rounded-lg p-4 flex justify-between items-start">
                       <div>
                         <h4 className="font-medium">{insight.title}</h4>
                         <p className="text-sm text-muted-foreground">{insight.desc}</p>
@@ -356,8 +356,8 @@ const MaritimeFleetManagement = () => {
                     { name: "MV Atlantic Star", status: "active", location: "Santos, BR" },
                     { name: "MV Pacific Dream", status: "maintenance", location: "Rio de Janeiro, BR" },
                     { name: "MV Ocean Pride", status: "active", location: "Em trânsito" },
-                  ].map((vessel, i) => (
-                    <div key={i} className="flex justify-between items-center p-3 border rounded-lg">
+                  ].map((vessel) => (
+                    <div key={vessel.name} className="flex justify-between items-center p-3 border rounded-lg">
                       <div>
                         <p className="font-medium">{vessel.name}</p>
                         <p className="text-sm text-muted-foreground">{vessel.location}</p>

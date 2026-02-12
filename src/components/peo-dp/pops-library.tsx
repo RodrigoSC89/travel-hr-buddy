@@ -407,8 +407,8 @@ export const POPsLibrary: React.FC = () => {
                 <div className="p-3 bg-muted/50 rounded-lg">
                   <p className="text-sm font-medium mb-2">Referências Normativas</p>
                   <div className="flex flex-wrap gap-2">
-                    {selectedPOP.compliance.map((c, i) => (
-                      <Badge key={i} variant="outline">{c}</Badge>
+                    {selectedPOP.compliance.map((c) => (
+                      <Badge key={c} variant="outline">{c}</Badge>
                     ))}
                   </div>
                 </div>

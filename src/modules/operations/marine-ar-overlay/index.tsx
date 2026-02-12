@@ -381,8 +381,8 @@ const MarineAROverlay = () => {
                           ⚠️ Alertas Ativos
                         </p>
                         <ul className="space-y-1">
-                          {selectedMarker.alerts.map((alert, idx) => (
-                            <li key={idx} className="text-xs text-destructive/80">
+                          {selectedMarker.alerts.map((alert) => (
+                            <li key={alert} className="text-xs text-destructive/80">
                               • {alert}
                             </li>
                           ))}

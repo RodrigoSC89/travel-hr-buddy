@@ -205,7 +205,7 @@ export const ComplianceCheckSkeleton: FC = () => (
       <Skeleton className="h-6 w-20 rounded-full" />
     </div>
     {Array.from({ length: 5 }).map((_, i) => (
-      <div key={i} className="flex items-center justify-between p-3 border rounded-lg">
+      <div key={`skel-checklist-${i}`} className="flex items-center justify-between p-3 border rounded-lg">
         <div className="flex items-center gap-3">
           <Skeleton className="h-5 w-5 rounded" />
           <Skeleton className="h-4 w-48" />

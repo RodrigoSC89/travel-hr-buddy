@@ -310,8 +310,8 @@ export function RouteOptimizerDashboard() {
                   <span className="text-xs font-medium text-muted-foreground flex items-center gap-1 mb-2">
                     <Shield className="h-3 w-3" /> Alertas de Zona
                   </span>
-                  {hazards.map((h, i) => (
-                    <Badge key={i} variant="destructive" className="mr-1 mb-1">
+                  {hazards.map((h) => (
+                    <Badge key={h.name} variant="destructive" className="mr-1 mb-1">
                       <AlertTriangle className="h-3 w-3 mr-1" />
                       {h.name} ({h.risk})
                     </Badge>

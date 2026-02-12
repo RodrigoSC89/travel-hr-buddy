@@ -65,7 +65,7 @@ export function SystemHealthKPIs() {
     return (
       <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-3">
         {Array.from({ length: 12 }).map((_, i) => (
-          <Skeleton key={i} className="h-24 rounded-xl" />
+          <Skeleton key={`health-kpi-skel-${i}`} className="h-24 rounded-xl" />
         ))}
       </div>
     );

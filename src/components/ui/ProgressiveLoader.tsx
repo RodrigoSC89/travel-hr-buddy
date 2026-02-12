@@ -131,12 +131,12 @@ export function TableSkeleton({ rows = 5 }: { rows?: number }) {
       {/* Header */}
       <div className="flex gap-4 p-4 bg-muted/50 border-b">
         {[1, 2, 3, 4].map((i) => (
-          <ShimmerSkeleton key={i} className="h-4 flex-1" />
+          <ShimmerSkeleton key={`tbl-hdr-${i}`} className="h-4 flex-1" />
         ))}
       </div>
       {/* Rows */}
       {Array.from({ length: rows }).map((_, i) => (
-        <div key={i} className="flex gap-4 p-4 border-b last:border-0">
+        <div key={`prog-row-${i}`} className="flex gap-4 p-4 border-b last:border-0">
           {[1, 2, 3, 4].map((j) => (
             <ShimmerSkeleton key={j} className="h-4 flex-1" />
           ))}

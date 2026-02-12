@@ -96,7 +96,7 @@ export const FleetOperationsCenter: React.FC = () => {
           <Skeleton className="h-10 w-32" />
         </div>
         <div className="grid grid-cols-5 gap-4">
-          {[1, 2, 3, 4, 5].map(i => <Skeleton key={i} className="h-24" />)}
+          {[1, 2, 3, 4, 5].map(i => <Skeleton key={`fleet-ops-skel-${i}`} className="h-24" />)}
         </div>
         <Skeleton className="h-96" />
       </div>

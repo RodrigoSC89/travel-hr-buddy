@@ -585,8 +585,8 @@ export const TravelAnalyticsPanel: React.FC = () => {
         {/* AI Predictions Tab */}
         <TabsContent value="ai" className="space-y-6">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {aiPredictions.map((prediction, idx) => (
-              <Card key={idx} className="border-primary/20">
+            {aiPredictions.map((prediction) => (
+              <Card key={prediction.title} className="border-primary/20">
                 <CardHeader>
                   <div className="flex items-center gap-2">
                     <div className="p-2 bg-primary/10 rounded-full">

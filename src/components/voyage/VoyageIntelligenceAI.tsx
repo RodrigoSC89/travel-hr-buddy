@@ -336,8 +336,8 @@ export function VoyageIntelligenceAI() {
                                 <Users className="h-3 w-3" />
                                 Crew:
                               </p>
-                              {opt.crewConsiderations.map((c, i) => (
-                                <p key={i} className="text-muted-foreground">• {c}</p>
+                              {opt.crewConsiderations.map((c) => (
+                                <p key={c} className="text-muted-foreground">• {c}</p>
                               ))}
                             </div>
                             <div>
@@ -345,8 +345,8 @@ export function VoyageIntelligenceAI() {
                                 <Wrench className="h-3 w-3" />
                                 Manutenção:
                               </p>
-                              {opt.maintenanceConsiderations.map((m, i) => (
-                                <p key={i} className="text-muted-foreground">• {m}</p>
+                              {opt.maintenanceConsiderations.map((m) => (
+                                <p key={m} className="text-muted-foreground">• {m}</p>
                               ))}
                             </div>
                           </div>

@@ -537,8 +537,8 @@ export function AcademyDashboard() {
                     { course: 'Advanced Fire Fighting', reason: 'Certificado expirando em 60 dias', priority: 'high', match: 95 },
                     { course: 'Bridge Team Management', reason: 'Próxima promoção a Chief Officer', priority: 'medium', match: 88 },
                     { course: 'Crisis Management', reason: 'Complemento ao perfil de liderança', priority: 'low', match: 75 }
-                  ].map((rec, idx) => (
-                    <div key={idx} className="p-4 border rounded-lg hover:bg-accent/30 transition-colors">
+                  ].map((rec) => (
+                    <div key={rec.course} className="p-4 border rounded-lg hover:bg-accent/30 transition-colors">
                       <div className="flex items-start justify-between mb-2">
                         <div>
                           <h4 className="font-medium">{rec.course}</h4>
@@ -569,8 +569,8 @@ export function AcademyDashboard() {
                     { skill: 'Primeiros Socorros', current: 78, required: 85 },
                     { skill: 'Navegação Eletrônica', current: 90, required: 85 },
                     { skill: 'Gestão de Crise', current: 45, required: 70 }
-                  ].map((skill, idx) => (
-                    <div key={idx} className="space-y-2">
+                  ].map((skill) => (
+                    <div key={skill.skill} className="space-y-2">
                       <div className="flex items-center justify-between">
                         <span className="font-medium">{skill.skill}</span>
                         <span className={`text-sm font-medium ${skill.current >= skill.required ? 'text-success' : 'text-warning'}`}>

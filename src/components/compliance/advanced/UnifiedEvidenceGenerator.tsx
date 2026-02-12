@@ -582,8 +582,8 @@ export function UnifiedEvidenceGenerator() {
               <div>
                 <h4 className="font-medium mb-2">Ações Corretivas</h4>
                 <ul className="space-y-1">
-                  {generatedEvidence.corrective_actions.map((action, idx) => (
-                    <li key={idx} className="flex items-start gap-2 text-sm">
+                  {generatedEvidence.corrective_actions.map((action) => (
+                    <li key={action} className="flex items-start gap-2 text-sm">
                       <CheckCircle2 className="h-4 w-4 text-success mt-0.5" />
                       {action}
                     </li>
@@ -593,8 +593,8 @@ export function UnifiedEvidenceGenerator() {
               <div>
                 <h4 className="font-medium mb-2">Referências Normativas</h4>
                 <div className="flex flex-wrap gap-1">
-                  {generatedEvidence.normative_references.map((ref, idx) => (
-                    <Badge key={idx} variant="secondary" className="text-xs">
+                  {generatedEvidence.normative_references.map((ref) => (
+                    <Badge key={ref} variant="secondary" className="text-xs">
                       {ref}
                     </Badge>
                   ))}

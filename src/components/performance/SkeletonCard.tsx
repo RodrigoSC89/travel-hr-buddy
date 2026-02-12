@@ -46,7 +46,7 @@ export function SkeletonTable({ rows = 5 }: { rows?: number }) {
       </div>
       {/* Rows */}
       {Array.from({ length: rows }).map((_, i) => (
-        <div key={i} className="flex gap-4 p-4">
+        <div key={`perf-tbl-row-${i}`} className="flex gap-4 p-4">
           <Skeleton className="h-4 w-32" />
           <Skeleton className="h-4 w-48" />
           <Skeleton className="h-4 w-24" />
@@ -61,7 +61,7 @@ export function SkeletonList({ items = 5 }: { items?: number }) {
   return (
     <div className="space-y-3">
       {Array.from({ length: items }).map((_, i) => (
-        <div key={i} className="flex items-center gap-4 p-4 border rounded-lg">
+        <div key={`perf-list-${i}`} className="flex items-center gap-4 p-4 border rounded-lg">
           <Skeleton className="h-10 w-10 rounded-full" />
           <div className="flex-1 space-y-2">
             <Skeleton className="h-4 w-3/4" />
@@ -80,7 +80,7 @@ export function SkeletonChart({ className }: SkeletonProps) {
       <div className="flex items-end gap-2 h-48">
         {Array.from({ length: 7 }).map((_, i) => (
           <Skeleton 
-            key={i} 
+            key={`perf-chart-bar-${i}`} 
             className="flex-1" 
             style={{ height: `${[60, 80, 45, 90, 35, 70, 55][i]}%` }}
           />

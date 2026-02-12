@@ -258,7 +258,7 @@ export function ActionPlanWithNotifications({
     return (
       <div className="space-y-4">
         {[1, 2, 3].map((i) => (
-          <Skeleton key={i} className="h-32 w-full" />
+          <Skeleton key={`action-skel-${i}`} className="h-32 w-full" />
         ))}
       </div>
     );
