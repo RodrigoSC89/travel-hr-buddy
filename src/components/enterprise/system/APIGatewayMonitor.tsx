@@ -380,8 +380,8 @@ export function APIGatewayMonitor() {
                   { name: "Production Key", created: "2024-01-15", lastUsed: "2024-02-05", status: "active" },
                   { name: "Development Key", created: "2024-01-20", lastUsed: "2024-02-04", status: "active" },
                   { name: "Legacy Integration", created: "2023-06-10", lastUsed: "2024-01-15", status: "deprecated" }
-                ].map((key, idx) => (
-                  <div key={idx} className="flex items-center justify-between p-3 rounded-lg border">
+                ].map((key) => (
+                  <div key={key.name} className="flex items-center justify-between p-3 rounded-lg border">
                     <div className="flex items-center gap-3">
                       <Key className="h-4 w-4 text-muted-foreground" />
                       <div>

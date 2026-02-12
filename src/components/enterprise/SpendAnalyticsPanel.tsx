@@ -251,8 +251,8 @@
                  />
                  <div className="pt-4 border-t space-y-2">
                    <p className="text-xs font-medium text-muted-foreground">Subcategorias</p>
-                   {selectedCat.subcategories.map((sub, idx) => (
-                     <div key={idx} className="flex items-center justify-between text-sm">
+                   {selectedCat.subcategories.map((sub) => (
+                     <div key={sub.name} className="flex items-center justify-between text-sm">
                        <span>{sub.name}</span>
                        <span className="font-mono">R$ {(sub.value / 1000).toFixed(0)}K</span>
                      </div>
@@ -328,7 +328,7 @@
  
                return (
                  <div 
-                   key={idx}
+                   key={cat.name}
                    className={cn(
                      "flex items-center justify-between p-3 rounded-lg border cursor-pointer hover:bg-muted/50 transition-colors",
                      selectedCategory === cat.name && "ring-2 ring-primary"

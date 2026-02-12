@@ -142,7 +142,7 @@ export function BunkerPriceIntegration({ onPriceSelect, selectedPort, className 
       <CardContent className="space-y-2">
         {isLoading ? (
           Array(4).fill(0).map((_, i) => (
-            <Skeleton key={i} className="h-16 w-full" />
+            <Skeleton key={`bunker-skeleton-${i}`} className="h-16 w-full" />
           ))
         ) : (
           <>

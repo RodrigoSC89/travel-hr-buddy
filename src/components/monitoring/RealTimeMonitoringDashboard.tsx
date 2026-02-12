@@ -150,8 +150,8 @@ export default function RealTimeMonitoringDashboard() {
                   {perfSnapshot.resources
                     .filter(r => r.duration > 500)
                     .slice(0, 5)
-                    .map((resource, idx) => (
-                      <div key={idx} className="flex justify-between items-center p-2 rounded bg-muted/50">
+                    .map((resource) => (
+                      <div key={resource.name} className="flex justify-between items-center p-2 rounded bg-muted/50">
                         <div className="flex-1 truncate">
                           <span className="text-xs font-mono">{resource.name.split("/").pop()}</span>
                           <span className="text-xs text-muted-foreground ml-2">({resource.type})</span>
@@ -338,7 +338,7 @@ export default function RealTimeMonitoringDashboard() {
                 <CardContent>
                   <div className="space-y-2">
                     {analytics.events.recent.map((event: Record<string, unknown>, idx: number) => (
-                      <div key={idx} className="flex justify-between items-center p-2 rounded bg-muted/50">
+                      <div key={`event-${idx}-${String(event.name)}`} className="flex justify-between items-center p-2 rounded bg-muted/50">
                         <div>
                           <span className="text-sm font-medium">{String(event.name)}</span>
                           <Badge variant="outline" className="ml-2 text-xs">

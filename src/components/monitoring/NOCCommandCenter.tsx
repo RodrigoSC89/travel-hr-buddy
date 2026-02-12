@@ -132,7 +132,7 @@ export function NOCCommandCenter() {
       <div className="space-y-6">
         <Skeleton className="h-12 w-full" />
         <div className="grid grid-cols-7 gap-4">
-          {[...Array(7)].map((_, i) => <Skeleton key={i} className="h-20" />)}
+          {[...Array(7)].map((_, i) => <Skeleton key={`noc-skeleton-${i}`} className="h-20" />)}
         </div>
         <Skeleton className="h-[400px]" />
       </div>

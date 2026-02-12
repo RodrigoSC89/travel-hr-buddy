@@ -539,7 +539,7 @@ export function VoiceAssistantWithHotword({
               <div className="flex items-center gap-0.5 px-2">
                 {[...Array(5)].map((_, i) => (
                   <motion.div
-                    key={i}
+                    key={`wave-${i}`}
                     className="w-1 bg-primary rounded-full"
                     animate={{
                       height: audioLevel > i / 5 ? [4, 16, 4] : 4,
@@ -680,7 +680,7 @@ export function VoiceAssistantWithHotword({
                   <div className="mt-3 flex items-center justify-center gap-1">
                     {[...Array(12)].map((_, i) => (
                       <motion.div
-                        key={i}
+                        key={`eq-${i}`}
                         className="w-1 bg-primary rounded-full"
                         animate={{
                           height: audioLevel > i / 12 ? [4, 20, 4] : 4,
