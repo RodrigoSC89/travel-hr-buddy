@@ -1,48 +1,38 @@
 /**
  * MMI Embedding Service
- * Generates vector embeddings for similarity search using OpenAI
+ * Routes through secure edge function proxy - NO browser-side API keys
  */
 
-import OpenAI from "openai";
 import { logger } from "@/lib/logger";
+import { supabase } from "@/integrations/supabase/client";
 
-const EMBEDDING_MODEL = "text-embedding-3-small";
 const EMBEDDING_DIMENSIONS = 1536;
 
-// Mock embedding for fallback when API is not available
-const generateMockEmbedding = (): number[] => {
+/**
+ * Deterministic fallback embedding (no randomness)
+ */
+const generateFallbackEmbedding = (): number[] => {
   return Array.from({ length: EMBEDDING_DIMENSIONS }, (_, i) => Math.sin(i * 0.1) * 0.05);
 };
 
 /**
- * Generate embedding vector for text using OpenAI
- * Falls back to mock data if API key is not configured
+ * Generate embedding vector for text via secure edge function
  */
 export const generateEmbedding = async (text: string): Promise<number[]> => {
-  const apiKey = import.meta.env.VITE_OPENAI_API_KEY;
-  
-  if (!apiKey || apiKey === "your_openai_api_key_here") {
-    logger.warn("OpenAI API key not configured, using mock embedding");
-    return generateMockEmbedding();
-  }
-
   try {
-    const openai = new OpenAI({
-      apiKey,
-      dangerouslyAllowBrowser: true,
+    const { data, error } = await supabase.functions.invoke("ai-proxy", {
+      body: { action: "embedding", text },
     });
 
-    const response = await openai.embeddings.create({
-      model: EMBEDDING_MODEL,
-      input: text,
-      dimensions: EMBEDDING_DIMENSIONS,
-    });
+    if (error || data?.fallback || !data?.embedding) {
+      logger.warn("[EmbeddingService] AI not available, using deterministic fallback");
+      return generateFallbackEmbedding();
+    }
 
-    return response.data[0].embedding;
+    return data.embedding;
   } catch (error) {
     logger.error("Error generating embedding", error as Error, { textLength: text.length });
-    logger.warn("Falling back to mock embedding");
-    return generateMockEmbedding();
+    return generateFallbackEmbedding();
   }
 };
 

@@ -1,23 +1,15 @@
 /**
  * PATCH 539 - Ocean Sonar AI Service
- * AI-assisted sonar pattern interpretation with LLM
+ * Routes through secure edge function proxy - NO browser-side API keys
  */
 
 import { supabase } from "@/integrations/supabase/client";
 import { logger } from "@/lib/logger";
 import type { SonarData, SonarAIAnalysis } from "@/types/patches-536-540";
 import type { Json } from "@/integrations/supabase/types";
+import { chatCompletionJSON } from "@/services/unified/openai-client.service";
 
 export class OceanSonarAIService {
-  private apiKey: string;
-
-  constructor() {
-    this.apiKey = import.meta.env.VITE_OPENAI_API_KEY || "";
-    if (!this.apiKey) {
-      logger.warn("Missing OpenAI API key. Sonar AI analysis will use fallback mode.");
-    }
-  }
-
   public async analyzeSonarData(sonarData: SonarData): Promise<SonarAIAnalysis> {
     try {
       if (!sonarData || !sonarData.raw_data) {
@@ -37,40 +29,31 @@ export class OceanSonarAIService {
     }
   }
 
-  private async callAIModel(data: string, scanType: string): Promise<string> {
-    if (!this.apiKey) {
-      return JSON.stringify({ object_type: "Unknown - AI unavailable", confidence: 0.5 });
-    }
-
+  private async callAIModel(data: string, scanType: string): Promise<Record<string, unknown>> {
     try {
-      const OpenAI = (await import("openai")).default;
-      const client = new OpenAI({ apiKey: this.apiKey, dangerouslyAllowBrowser: true });
+      const result = await chatCompletionJSON<{ object_type: string; confidence: number }>(
+        [{ role: "system", content: `Analyze sonar data (${scanType}): ${data}. Return JSON with object_type and confidence.` }],
+        { maxTokens: 500 }
+      );
 
-      const completion = await client.chat.completions.create({
-        messages: [{ role: "system", content: `Analyze sonar data (${scanType}): ${data}. Return JSON with object_type and confidence.` }],
-        model: "gpt-3.5-turbo",
-      });
-      return completion.choices[0]?.message?.content || "{}";
+      return result || { object_type: "Unknown - AI unavailable", confidence: 0.5 };
     } catch (error) {
       logger.error("Error calling AI model", error as Error);
-      return JSON.stringify({ object_type: "Error", confidence: 0 });
+      return { object_type: "Error", confidence: 0 };
     }
   }
 
-  private postprocessAIResult(scanId: string, result: string): SonarAIAnalysis {
-    let parsed: Record<string, unknown> = {};
-    try { parsed = JSON.parse(result); } catch { parsed = { object_type: result }; }
-
+  private postprocessAIResult(scanId: string, result: Record<string, unknown>): SonarAIAnalysis {
     return {
       id: crypto.randomUUID(),
       scan_id: scanId,
       patterns_detected: null,
       anomalies: null,
       zones_of_interest: null,
-      confidence_score: (parsed.confidence as number) ?? 0.8,
-      interpretation: (parsed.object_type as string) ?? "Unknown",
+      confidence_score: (result.confidence as number) ?? 0.8,
+      interpretation: (result.object_type as string) ?? "Unknown",
       recommendations: null,
-      model_version: "gpt-3.5-turbo",
+      model_version: "ai-proxy",
       processing_time_ms: null,
       created_at: new Date().toISOString(),
     };

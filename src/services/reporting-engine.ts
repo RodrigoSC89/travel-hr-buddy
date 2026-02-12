@@ -518,48 +518,33 @@ async function generateAISummary(
 	reportData: ReportData
 ): Promise<AISummaryContent> {
 	try {
-		const apiKey = import.meta.env.VITE_OPENAI_API_KEY as string | undefined;
+		const { chatCompletionJSON } = await import("@/services/unified/openai-client.service");
 
-		if (!apiKey) {
-			throw new Error("OpenAI API key not configured");
+		const result = await chatCompletionJSON<AISummaryContent>(
+			[
+				{
+					role: "system",
+					content: "You are a maritime operations analyst. Analyze the supplied data and produce structured, executive-ready insights.",
+				},
+				{
+					role: "user",
+					content: buildReportSummaryPrompt(reportType, reportData),
+				},
+			],
+			{ temperature: 0.7, maxTokens: 2000, responseFormat: "json" }
+		);
+
+		if (!result) {
+			throw new Error("AI response unavailable");
 		}
 
-		const response = await fetch("https://api.openai.com/v1/chat/completions", {
-			method: "POST",
-			headers: {
-				"Content-Type": "application/json",
-				Authorization: `Bearer ${apiKey}`,
-			},
-			body: JSON.stringify({
-				model: OPENAI_MODEL,
-				messages: [
-					{
-						role: "system",
-						content:
-							"You are a maritime operations analyst. Analyze the supplied data and produce structured, executive-ready insights.",
-					},
-					{
-						role: "user",
-						content: buildReportSummaryPrompt(reportType, reportData),
-					},
-				],
-				temperature: 0.7,
-				max_tokens: OPENAI_MAX_TOKENS,
-			}),
-		});
-
-		if (!response.ok) {
-			throw new Error(`OpenAI API error: ${response.status}`);
-		}
-
-		const data = (await response.json()) as OpenAIChatCompletion;
-		const rawContent = data.choices?.[0]?.message?.content;
-
-		if (!rawContent) {
-			throw new Error("OpenAI response did not include content");
-		}
-
-		return parseAiContent(rawContent);
+		return {
+			summary: result.summary ?? "",
+			insights: result.insights ?? [],
+			executiveSummary: result.executiveSummary ?? "",
+			conclusions: result.conclusions ?? [],
+			recommendations: result.recommendations ?? [],
+		};
 	} catch (error) {
 		logger.error("Error generating AI summary", error);
 		return {

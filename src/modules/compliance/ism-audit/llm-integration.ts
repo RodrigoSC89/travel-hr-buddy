@@ -196,44 +196,21 @@ Format your response as JSON with keys: overall_assessment, section_insights (ob
  */
 async function callLLMAPI(prompt: string): Promise<string | null> {
   try {
-    // Check if OpenAI API is available
-    const apiKey = import.meta.env.VITE_OPENAI_API_KEY;
-    
-    if (!apiKey) {
-      Logger.warn("OpenAI API key not configured, using fallback");
-      return null;
-    }
+    const { chatCompletion } = await import("@/services/unified/openai-client.service");
 
-    const response = await fetch("https://api.openai.com/v1/chat/completions", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "Authorization": `Bearer ${apiKey}`
-      },
-      body: JSON.stringify({
-        model: "gpt-4",
-        messages: [
-          {
-            role: "system",
-            content: "You are an expert maritime auditor specializing in ISM Code (International Safety Management Code) compliance. Provide detailed, practical, and actionable guidance."
-          },
-          {
-            role: "user",
-            content: prompt
-          }
-        ],
-        temperature: 0.7,
-        max_tokens: 2000
-      })
-    });
-
-    if (!response.ok) {
-      Logger.error("LLM API request failed", { status: response.status }, "ism-audit-llm");
-      return null;
-    }
-
-    const data = await response.json();
-    return data.choices[0]?.message?.content || null;
+    return await chatCompletion(
+      [
+        {
+          role: "system",
+          content: "You are an expert maritime auditor specializing in ISM Code (International Safety Management Code) compliance. Provide detailed, practical, and actionable guidance."
+        },
+        {
+          role: "user",
+          content: prompt
+        }
+      ],
+      { temperature: 0.7, maxTokens: 2000 }
+    );
   } catch (error) {
     Logger.error("LLM API call failed", error, "ism-audit-llm");
     return null;

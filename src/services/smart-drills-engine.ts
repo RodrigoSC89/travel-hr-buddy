@@ -310,18 +310,6 @@ const DEFAULT_SCENARIO_DETAILS: DrillScenario["scenarioDetails"] = {
   challenges: [],
   expectedDuration: 30,
 };
-const OPENAI_ENDPOINT = "https://api.openai.com/v1/chat/completions";
-
-const getOpenAiApiKey = (): string => {
-  const apiKey = (import.meta as { env?: Record<string, string | undefined> }).env?.VITE_OPENAI_API_KEY;
-
-  if (!apiKey) {
-    throw new Error("OpenAI API key not configured");
-  }
-
-  return apiKey;
-};
-
 const requestOpenAiJson = async <T>(
   messages: ChatMessage[],
   {
@@ -332,36 +320,21 @@ const requestOpenAiJson = async <T>(
     maxTokens: number;
   }
 ): Promise<T> => {
-  const response = await fetch(OPENAI_ENDPOINT, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${getOpenAiApiKey()}`,
-    },
-    body: JSON.stringify({
-      model: "gpt-4",
-      messages,
-      temperature,
-      max_tokens: maxTokens,
-    }),
-  });
+  const { chatCompletionJSON } = await import("@/services/unified/openai-client.service");
 
-  if (!response.ok) {
-    throw new Error(`OpenAI API error: ${response.status}`);
+  const result = await chatCompletionJSON<T>(
+    messages.map(m => ({
+      role: m.role as "system" | "user" | "assistant",
+      content: m.content,
+    })),
+    { temperature, maxTokens, responseFormat: "json" }
+  );
+
+  if (!result) {
+    throw new Error("AI API returned empty content or is not configured");
   }
 
-  const data = (await response.json()) as OpenAiResponse;
-  const content = data.choices?.[0]?.message?.content;
-
-  if (!content) {
-    throw new Error("OpenAI API returned empty content");
-  }
-
-  try {
-    return JSON.parse(content) as T;
-  } catch (error) {
-    throw new Error("Failed to parse OpenAI response as JSON");
-  }
+  return result;
 };
 
 const toJson = (value: unknown): Json => value as Json;
