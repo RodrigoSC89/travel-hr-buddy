@@ -185,19 +185,19 @@ export const DocumentValidator: React.FC<DocumentValidatorProps> = ({
   };
 
   const getScoreColor = (score: number) => {
-    if (score >= 80) return "text-green-600";
-    if (score >= 60) return "text-yellow-600";
-    return "text-red-600";
+    if (score >= 80) return "text-success";
+    if (score >= 60) return "text-warning";
+    return "text-destructive";
   };
 
   const getIssueIcon = (type: ValidationIssue["type"]) => {
     switch (type) {
     case "error":
-      return <FileX className="h-4 w-4 text-red-500" />;
+      return <FileX className="h-4 w-4 text-destructive" />;
     case "warning":
-      return <AlertTriangle className="h-4 w-4 text-yellow-500" />;
+      return <AlertTriangle className="h-4 w-4 text-warning" />;
     case "info":
-      return <CheckCircle className="h-4 w-4 text-blue-500" />;
+      return <CheckCircle className="h-4 w-4 text-info" />;
     }
   };
 
@@ -316,8 +316,8 @@ export const DocumentValidator: React.FC<DocumentValidatorProps> = ({
               <div>
                 <h4 className="font-medium mb-2">Problemas encontrados:</h4>
                 <div className="space-y-2">
-                  {validationResult.issues.map((issue, index) => (
-                    <div key={index} className="flex items-start gap-2 p-2 rounded border">
+                    {validationResult.issues.map((issue) => (
+                    <div key={`${issue.field}-${issue.type}`} className="flex items-start gap-2 p-2 rounded border">
                       {getIssueIcon(issue.type)}
                       <div className="flex-1">
                         <p className="text-sm font-medium">{issue.field}</p>
@@ -326,9 +326,9 @@ export const DocumentValidator: React.FC<DocumentValidatorProps> = ({
                       <Badge 
                         variant="outline" 
                         className={`text-xs ${
-                          issue.severity === "high" ? "border-red-200" :
-                            issue.severity === "medium" ? "border-yellow-200" :
-                              "border-blue-200"
+                          issue.severity === "high" ? "border-destructive/30" :
+                            issue.severity === "medium" ? "border-warning/30" :
+                              "border-info/30"
                         }`}
                       >
                         {issue.severity}
@@ -344,8 +344,8 @@ export const DocumentValidator: React.FC<DocumentValidatorProps> = ({
               <div>
                 <h4 className="font-medium mb-2">Sugestões:</h4>
                 <ul className="text-sm text-muted-foreground space-y-1">
-                  {validationResult.suggestions.map((suggestion, index) => (
-                    <li key={index} className="flex items-start gap-2">
+                  {validationResult.suggestions.map((suggestion) => (
+                    <li key={suggestion} className="flex items-start gap-2">
                       <span>•</span>
                       <span>{suggestion}</span>
                     </li>

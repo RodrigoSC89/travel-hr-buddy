@@ -211,7 +211,7 @@ export function FileUploadDialog({
           <div className="space-y-2 max-h-48 overflow-y-auto">
             {files.map((f, index) => (
               <div 
-                key={index} 
+                key={f.file.name} 
                 className="flex items-center justify-between p-2 bg-muted/50 rounded-lg"
               >
                 <div className="flex items-center gap-2 flex-1 min-w-0">
@@ -271,7 +271,7 @@ export function FileUploadDialog({
       )}
 
       {successCount > 0 && pendingCount === 0 && (
-        <div className="text-center text-sm text-green-600">
+        <div className="text-center text-sm text-success">
           ✓ {successCount} arquivo(s) enviado(s) com sucesso
         </div>
       )}
