@@ -227,8 +227,8 @@ export const SystemHealthDashboard = () => {
 
         <TabsContent value="metrics" className="space-y-4">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-            {metrics.map((metric, index) => (
-              <Card key={index}>
+            {metrics.map((metric) => (
+              <Card key={metric.name}>
                 <CardHeader className="pb-3">
                   <CardTitle className="flex items-center justify-between text-sm">
                     <div className="flex items-center gap-2">

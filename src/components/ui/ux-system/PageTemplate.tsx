@@ -237,9 +237,9 @@ export const PageTemplate: React.FC<PageTemplateProps> = ({
           )}
           
           {/* Secondary Actions */}
-          {secondaryActions.map((action, idx) => (
+          {secondaryActions.map((action) => (
             <Button
-              key={idx}
+              key={action.label}
               variant={action.variant || "outline"}
               size="sm"
               onClick={action.onClick}

@@ -395,8 +395,8 @@ export function AuditWorkflowManager() {
                   <p className="text-sm text-muted-foreground mb-2">Evidências</p>
                   {selectedItem.evidence.length > 0 ? (
                     <div className="space-y-2">
-                      {selectedItem.evidence.map((file, idx) => (
-                        <div key={idx} className="flex items-center gap-2 p-2 bg-muted rounded">
+                      {selectedItem.evidence.map((file) => (
+                        <div key={file} className="flex items-center gap-2 p-2 bg-muted rounded">
                           <FileText className="h-4 w-4 text-primary" />
                           <span className="text-sm flex-1 truncate">{file}</span>
                           <Button variant="ghost" size="sm"><Eye className="h-4 w-4" /></Button>

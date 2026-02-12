@@ -419,9 +419,9 @@ export default function CrewMatchingPage() {
                                         Pontos Fortes
                                       </div>
                                       <ul className="space-y-0.5 text-muted-foreground">
-                                        {candidate.strengths.slice(0, 2).map((s, i) => (
-                                          <li key={i}>• {s}</li>
-                                        ))}
+                                         {candidate.strengths.slice(0, 2).map((s) => (
+                                           <li key={s}>• {s}</li>
+                                         ))}
                                       </ul>
                                     </div>
                                   )}
@@ -432,9 +432,9 @@ export default function CrewMatchingPage() {
                                         Atenção
                                       </div>
                                       <ul className="space-y-0.5 text-muted-foreground">
-                                        {candidate.risks.map((r, i) => (
-                                          <li key={i}>• {r}</li>
-                                        ))}
+                                         {candidate.risks.map((r) => (
+                                           <li key={r}>• {r}</li>
+                                         ))}
                                       </ul>
                                     </div>
                                   )}

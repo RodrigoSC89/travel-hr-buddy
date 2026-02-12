@@ -993,8 +993,8 @@ export default function ChannelManagerProfessional() {
                                   <p className="text-sm mt-1">{msg.message_content}</p>
                                   {msg.reactions && msg.reactions.length > 0 && (
                                     <div className="flex gap-1 mt-2">
-                                      {msg.reactions.map((reaction, idx) => (
-                                        <Badge key={idx} variant="secondary" className="text-xs px-2 py-0.5">
+                                      {msg.reactions.map((reaction) => (
+                                        <Badge key={`${(reaction as Record<string, unknown>).emoji}`} variant="secondary" className="text-xs px-2 py-0.5">
                                           {(reaction as Record<string, unknown>).emoji as string} {(reaction as Record<string, unknown>).count as number}
                                         </Badge>
                                       ))}

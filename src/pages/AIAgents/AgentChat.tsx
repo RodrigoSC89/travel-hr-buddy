@@ -144,8 +144,8 @@ function AgentChat() {
             </div>
           </div>
           <div className="flex flex-wrap gap-1.5 mt-2">
-            {agentCtx.expertise.map((skill, idx) => (
-              <Badge key={idx} variant="secondary" className={cn("text-xs", colors.badge)}>
+            {agentCtx.expertise.map((skill) => (
+              <Badge key={skill} variant="secondary" className={cn("text-xs", colors.badge)}>
                 {skill}
               </Badge>
             ))}
@@ -177,9 +177,9 @@ function AgentChat() {
                     Sugestões:
                   </p>
                   <ul className="space-y-1.5">
-                    {agentCtx.responsibilities.slice(0, 3).map((resp, idx) => (
+                    {agentCtx.responsibilities.slice(0, 3).map((resp) => (
                       <li
-                        key={idx}
+                        key={resp}
                         className="text-sm text-muted-foreground flex items-start gap-2 cursor-pointer hover:text-foreground transition-colors"
                         onClick={() => setInput(resp)}
                       >
@@ -195,7 +195,7 @@ function AgentChat() {
               <div className="space-y-4">
                 {displayMessages.map((msg, idx) => (
                   <div
-                    key={idx}
+                    key={`msg-${idx}-${msg.role}`}
                     className={cn(
                       "flex gap-3",
                       msg.role === "user" ? "justify-end" : "justify-start"
