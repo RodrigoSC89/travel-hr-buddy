@@ -361,8 +361,8 @@ const IntelligentAlerts: React.FC = () => {
                         <div className="mt-3 p-3 bg-muted/50 rounded-md">
                           <p className="text-xs font-medium mb-1">Recomendações IA:</p>
                           <ul className="text-xs text-muted-foreground space-y-1">
-                            {alert.recommendations.slice(0, 3).map((rec, i) => (
-                              <li key={i}>• {rec}</li>
+                            {alert.recommendations.slice(0, 3).map((rec) => (
+                              <li key={rec}>• {rec}</li>
                             ))}
                           </ul>
                         </div>

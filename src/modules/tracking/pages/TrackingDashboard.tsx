@@ -100,7 +100,7 @@ export default function TrackingDashboard() {
       <div className="container mx-auto p-6 space-y-6">
         <Skeleton className="h-24 w-full" />
         <div className="grid grid-cols-5 gap-4">
-          {[...Array(5)].map((_, i) => <Skeleton key={i} className="h-24" />)}
+          {[...Array(5)].map((_, i) => <Skeleton key={`track-skel-${i}`} className="h-24" />)}
         </div>
       </div>
     );

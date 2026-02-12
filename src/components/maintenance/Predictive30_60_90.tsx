@@ -356,8 +356,8 @@ export function Predictive30_60_90() {
                       </div>
 
                       <div className="flex flex-wrap gap-1 mt-2">
-                        {prediction.riskFactors.map((factor, idx) => (
-                          <Badge key={idx} variant="secondary" className="text-xs">
+                        {prediction.riskFactors.map((factor) => (
+                          <Badge key={factor} variant="secondary" className="text-xs">
                             {factor}
                           </Badge>
                         ))}

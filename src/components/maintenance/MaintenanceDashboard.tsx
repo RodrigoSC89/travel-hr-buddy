@@ -111,8 +111,8 @@ export default function MaintenanceDashboard() {
             {/* Top predictions */}
             {result.predictions && result.predictions.length > 0 && (
               <div className="space-y-2">
-                {result.predictions.slice(0, 3).map((pred, idx) => (
-                  <div key={idx} className="flex items-center justify-between p-2 rounded border text-sm">
+                {result.predictions.slice(0, 3).map((pred) => (
+                  <div key={pred.equipment_name} className="flex items-center justify-between p-2 rounded border text-sm">
                     <span className="font-medium truncate flex-1">{pred.equipment_name}</span>
                     <Badge variant="outline" className="ml-2 text-xs">
                       {(pred.failure_probability * 100).toFixed(0)}%

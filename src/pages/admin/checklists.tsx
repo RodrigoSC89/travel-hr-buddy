@@ -722,7 +722,7 @@ export default function SmartChecklistsPage() {
                   const hasChecklist = [5, 12, 18, 25].includes(day);
                   return (
                     <div 
-                      key={i} 
+                      key={`cal-${i}`} 
                       className={`text-center py-3 rounded cursor-pointer hover:bg-accent ${day > 0 && day <= 31 ? '' : 'opacity-30'} ${hasChecklist ? 'bg-primary/10 border border-primary/30' : ''}`}
                       onClick={() => day > 0 && day <= 31 && toast.info(`Visualizando checklists do dia ${day}. Selecione na lista abaixo.`, { duration: 3000 })}
                     >

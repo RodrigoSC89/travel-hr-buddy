@@ -106,9 +106,9 @@ export function ESGAIChat({ module, context, className }: ESGAIChatProps) {
               <div className="space-y-2">
                 <p className="text-xs text-muted-foreground">Perguntas sugeridas:</p>
                 <div className="grid grid-cols-1 gap-2">
-                  {suggestedQuestions[module].map((question, i) => (
+                  {suggestedQuestions[module].map((question) => (
                     <Button
-                      key={i}
+                      key={question}
                       variant="outline"
                       size="sm"
                       className="justify-start text-left h-auto py-2 px-3"

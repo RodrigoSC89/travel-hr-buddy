@@ -316,8 +316,8 @@ export function DocumentSignatureCard() {
                     </div>
 
                     <div className="space-y-2 mb-3">
-                      {req.signers.map((signer, idx) => (
-                        <div key={idx} className="flex items-center gap-2">
+                      {req.signers.map((signer) => (
+                        <div key={signer.name} className="flex items-center gap-2">
                           <Avatar className="h-6 w-6">
                             <AvatarFallback className="text-xs">{signer.name[0]}</AvatarFallback>
                           </Avatar>

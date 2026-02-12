@@ -358,8 +358,8 @@ export function VesselTimelineAdvanced({
                       {/* Tags */}
                       {(event.tags as string[] || []).length > 0 && (
                         <div className="flex gap-1 mt-2 flex-wrap">
-                          {(event.tags as string[]).map((tag: string, idx: number) => (
-                            <Badge key={idx} variant="secondary" className="text-xs">
+                          {(event.tags as string[]).map((tag: string) => (
+                            <Badge key={tag} variant="secondary" className="text-xs">
                               {tag}
                             </Badge>
                           ))}
@@ -382,9 +382,9 @@ export function VesselTimelineAdvanced({
                         if (!docs || !Array.isArray(docs) || docs.length === 0) return null;
                         return (
                           <div className="flex gap-2 mt-2 flex-wrap">
-                            {docs.map((doc: {name: string; url: string}, idx: number) => (
+                            {docs.map((doc: {name: string; url: string}) => (
                               <Badge
-                                key={idx}
+                                key={doc.name}
                                 variant="outline"
                                 className="text-xs cursor-pointer hover:bg-accent"
                                 onClick={(e) => {
