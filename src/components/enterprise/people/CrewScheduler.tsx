@@ -253,7 +253,7 @@ export function CrewScheduler() {
               </Button>
             </div>
 
-            <Button onClick={() => toast("Selecione um tripulante no cronograma abaixo para planejar a rotação", { description: `Exibindo ${filteredRotations.length} tripulantes no período atual.`, duration: 4000 })}>
+            <Button onClick={() => { window.history.pushState({}, '', '/people?tab=scheduling'); window.dispatchEvent(new PopStateEvent('popstate')); }}>
               <Plus className="h-4 w-4 mr-2" />
               Nova Rotação
             </Button>

@@ -215,7 +215,12 @@ const TimeAttendance: React.FC = () => {
                 </SelectContent>
               </Select>
             </div>
-            <Button onClick={() => { toast.success("Exportando registros de ponto..."); }}>
+            <Button onClick={() => {
+              const csv = ['Colaborador;Data;Entrada;Saída Almoço;Retorno;Saída;Horas;Extras;Status', ...timeRecords.map(r => `${r.colaborador};${r.data};${r.entrada};${r.saidaAlmoco};${r.retornoAlmoco};${r.saida};${r.horasTrabalhadas};${r.extras};${r.status}`)].join('\n');
+              const blob = new Blob(['\uFEFF' + csv], { type: 'text/csv;charset=utf-8;' });
+              const url = URL.createObjectURL(blob); const a = document.createElement('a'); a.href = url; a.download = `registros-ponto-${new Date().toISOString().slice(0,10)}.csv`; a.click(); URL.revokeObjectURL(url);
+              toast.success("Registros de ponto exportados");
+            }}>
               <Download className="w-4 h-4 mr-2" />
               Exportar
             </Button>

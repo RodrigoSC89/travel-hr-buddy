@@ -639,7 +639,7 @@ export function UnifiedEvidenceGenerator() {
                 key={template.id} 
                 variant="outline" 
                 className="h-auto py-4 flex-col gap-2"
-                onClick={() => { toast.success(`Template "${template.name}" carregado`); }}
+                onClick={() => { toast.success(`Template "${template.name}" selecionado`); }}
               >
                 <template.icon className="h-6 w-6" />
                 <span className="text-xs text-center">{template.name}</span>

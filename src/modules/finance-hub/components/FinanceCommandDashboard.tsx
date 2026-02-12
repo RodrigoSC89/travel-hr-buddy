@@ -336,7 +336,7 @@ export default function FinanceCommandDashboard() {
                       >
                         Rejeitar
                       </Button>
-                      <Button size="sm" variant="ghost" onClick={() => toast(`Detalhes: ${item.description}`, { description: `Solicitante: ${item.requester} | Categoria: ${item.category} | Data: ${item.date}`, duration: 5000 })}>
+                      <Button size="sm" variant="ghost" onClick={() => { navigator.clipboard.writeText(`${item.description} | Solicitante: ${item.requester} | Categoria: ${item.category} | Data: ${item.date}`); toast.success("Detalhes copiados"); }}>
                         <Eye className="h-4 w-4" />
                       </Button>
                     </div>

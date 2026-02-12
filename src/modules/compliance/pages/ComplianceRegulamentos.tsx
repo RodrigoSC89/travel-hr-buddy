@@ -378,7 +378,7 @@ export default function ComplianceRegulamentos() {
                     </div>
                     <div className="text-xs text-muted-foreground">Requisitos</div>
                   </div>
-                  <Button variant="outline" size="sm" onClick={() => toast(`${reg.name}`, { description: `${reg.completedRequirements}/${reg.requirements} requisitos atendidos. Jurisdição: ${reg.jurisdiction}. Código: ${reg.code}`, duration: 5000 })}>
+                  <Button variant="outline" size="sm" onClick={() => { navigator.clipboard.writeText(`${reg.name} | ${reg.code} | ${reg.completedRequirements}/${reg.requirements} requisitos | Jurisdição: ${reg.jurisdiction}`); toast.success("Dados do regulamento copiados"); }}>
                     <FileText className="h-4 w-4 mr-1" />
                     Detalhes
                   </Button>
