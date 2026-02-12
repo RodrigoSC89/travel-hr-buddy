@@ -204,8 +204,8 @@ export const DocumentWorkflowPanel: React.FC = () => {
         <Card>
           <CardContent className="pt-6">
             <div className="flex items-center gap-3">
-              <div className="p-2 rounded-lg bg-blue-500/20">
-                <FileText className="h-5 w-5 text-blue-500" />
+              <div className="p-2 rounded-lg bg-info/20">
+                <FileText className="h-5 w-5 text-info" />
               </div>
               <div>
                 <p className="text-2xl font-bold">{documents.length}</p>
@@ -217,8 +217,8 @@ export const DocumentWorkflowPanel: React.FC = () => {
         <Card>
           <CardContent className="pt-6">
             <div className="flex items-center gap-3">
-              <div className="p-2 rounded-lg bg-yellow-500/20">
-                <Clock className="h-5 w-5 text-yellow-500" />
+              <div className="p-2 rounded-lg bg-warning/20">
+                <Clock className="h-5 w-5 text-warning" />
               </div>
               <div>
                 <p className="text-2xl font-bold">{pendingApprovals.length}</p>
@@ -230,8 +230,8 @@ export const DocumentWorkflowPanel: React.FC = () => {
         <Card>
           <CardContent className="pt-6">
             <div className="flex items-center gap-3">
-              <div className="p-2 rounded-lg bg-green-500/20">
-                <CheckCircle className="h-5 w-5 text-green-500" />
+              <div className="p-2 rounded-lg bg-success/20">
+                <CheckCircle className="h-5 w-5 text-success" />
               </div>
               <div>
                 <p className="text-2xl font-bold">
@@ -245,8 +245,8 @@ export const DocumentWorkflowPanel: React.FC = () => {
         <Card>
           <CardContent className="pt-6">
             <div className="flex items-center gap-3">
-              <div className="p-2 rounded-lg bg-orange-500/20">
-                <AlertTriangle className="h-5 w-5 text-orange-500" />
+              <div className="p-2 rounded-lg bg-warning/20">
+                <AlertTriangle className="h-5 w-5 text-warning" />
               </div>
               <div>
                 <p className="text-2xl font-bold">

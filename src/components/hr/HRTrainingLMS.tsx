@@ -386,9 +386,9 @@ export function HRTrainingLMS() {
               <div className="space-y-4">
                 {leaderboard.map((user, index) => (
                   <div 
-                    key={index} 
+                    key={user.name} 
                     className={`flex items-center gap-4 p-3 rounded-lg ${
-                      index < 3 ? "bg-gradient-to-r from-yellow-500/10 to-transparent" : "bg-muted/50"
+                      index < 3 ? "bg-gradient-to-r from-warning/10 to-transparent" : "bg-muted/50"
                     }`}
                   >
                     <div className="w-8 text-center font-bold text-lg">
@@ -403,7 +403,7 @@ export function HRTrainingLMS() {
                       <p className="text-sm text-muted-foreground">{user.points} pontos</p>
                     </div>
                     {index === 0 && (
-                      <Badge className="bg-yellow-500 text-yellow-950">Líder</Badge>
+                      <Badge className="bg-warning text-warning-foreground">Líder</Badge>
                     )}
                   </div>
                 ))}

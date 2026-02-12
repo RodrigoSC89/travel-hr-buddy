@@ -355,9 +355,9 @@ export function AdvancedSearch() {
                 {recentSearches.length === 0 ? (
                   <p className="text-sm text-muted-foreground">Nenhuma busca recente</p>
                 ) : (
-                  recentSearches.map((search, idx) => (
+                  recentSearches.map((search) => (
                     <Button
-                      key={idx}
+                      key={search}
                       variant="ghost"
                       className="w-full justify-start text-sm"
                       onClick={() => handleSearch(search)}
@@ -375,20 +375,20 @@ export function AdvancedSearch() {
           <Card>
             <CardHeader>
               <CardTitle className="text-sm flex items-center gap-2">
-                <Sparkles className="h-4 w-4 text-purple-500" />
+                <Sparkles className="h-4 w-4 text-accent-foreground" />
                 Sugestões IA
               </CardTitle>
             </CardHeader>
             <CardContent>
               <div className="space-y-2">
-                {AI_SUGGESTIONS.map((suggestion, idx) => (
+                {AI_SUGGESTIONS.map((suggestion) => (
                   <Button
-                    key={idx}
+                    key={suggestion}
                     variant="ghost"
                     className="w-full justify-start text-sm"
                     onClick={() => handleSearch(suggestion)}
                   >
-                    <Brain className="h-3 w-3 mr-2 text-purple-500" />
+                    <Brain className="h-3 w-3 mr-2 text-accent-foreground" />
                     {suggestion}
                   </Button>
                 ))}
@@ -447,8 +447,8 @@ export function AdvancedSearch() {
                         </div>
                         <p className="text-sm text-muted-foreground mt-1">{result.description}</p>
                         <div className="flex items-center gap-2 mt-2">
-                          {result.highlights.map((hl, idx) => (
-                            <Badge key={idx} variant="secondary" className="text-xs bg-warning/20 text-warning-foreground">
+                          {result.highlights.map((hl) => (
+                            <Badge key={hl} variant="secondary" className="text-xs bg-warning/20 text-warning-foreground">
                               {hl}
                             </Badge>
                           ))}

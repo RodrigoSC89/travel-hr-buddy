@@ -42,10 +42,10 @@ const insightIcons = {
 };
 
 const insightColors = {
-  recommendation: "text-blue-500 bg-blue-500/10",
-  warning: "text-amber-500 bg-amber-500/10",
-  opportunity: "text-emerald-500 bg-emerald-500/10",
-  success: "text-green-500 bg-green-500/10",
+  recommendation: "text-info bg-info/10",
+  warning: "text-warning bg-warning/10",
+  opportunity: "text-success bg-success/10",
+  success: "text-success bg-success/10",
 };
 
 export function AIInsightWidget({
