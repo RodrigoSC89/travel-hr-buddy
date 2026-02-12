@@ -980,7 +980,7 @@ export default function ProcurementCommandCenter() {
                           </div>
                         </div>
                         <div className="flex gap-2">
-                          <Button size="sm" variant="outline" onClick={() => toast({ title: "✏️ Editar Item", description: "Gerencie itens pela aba Inventário no módulo de Procurement." })}>
+                          <Button size="sm" variant="outline" onClick={() => { navigator.clipboard.writeText(`Item: ${item.name} | Estoque: ${item.current_stock}/${item.minimum_stock} | Valor: R$ ${item.total_value?.toFixed(2) || '0.00'}`); toast({ title: "✏️ Dados copiados", description: "Dados do item copiados para clipboard." }); }}>
                             <Edit className="h-4 w-4" />
                           </Button>
                         </div>
@@ -1004,7 +1004,7 @@ export default function ProcurementCommandCenter() {
                   onChange={(e) => setSearchQuery(e.target.value)}
                 />
               </div>
-              <Button variant="outline" className="gap-2" onClick={() => toast({ title: "🔍 Filtros", description: "Utilize a barra de busca para filtrar fornecedores por nome, cidade ou país." })}>
+              <Button variant="outline" className="gap-2" onClick={() => { setSearchQuery(''); toast({ title: "🔍 Filtros limpos" }); }}>
                 <Filter className="h-4 w-4" />
                 Filtros
               </Button>
@@ -1017,7 +1017,7 @@ export default function ProcurementCommandCenter() {
                 <div className="col-span-full text-center py-12">
                   <Store className="h-16 w-16 text-muted-foreground/50 mx-auto mb-4" />
                   <p className="text-muted-foreground">Nenhum fornecedor encontrado</p>
-                  <Button variant="link" className="mt-2" onClick={() => toast({ title: "➕ Adicionar Fornecedor", description: "Use a aba 'Suppliers' acima para cadastrar novos fornecedores." })}>
+                  <Button variant="link" className="mt-2" onClick={() => { setActiveTab('suppliers'); toast({ title: "➕ Adicionar Fornecedor", description: "Use o formulário de cadastro na aba Suppliers." }); }}>
                     <Plus className="h-4 w-4 mr-1" />
                     Adicionar Fornecedor
                   </Button>

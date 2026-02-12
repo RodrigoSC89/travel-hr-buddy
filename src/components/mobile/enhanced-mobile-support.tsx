@@ -582,7 +582,7 @@ export const EnhancedMobileSupport: React.FC = () => {
               <Button 
                 size="sm" 
                 variant="outline" 
-                onClick={() => toast({ title: "🔔 Teste de Notificação", description: "Notificação push enviada com sucesso (simulação local)." })}
+                onClick={() => { if ('Notification' in window) { Notification.requestPermission().then(p => { if (p === 'granted') { new Notification('🔔 Teste Nautilus', { body: 'Notificação push funcionando!' }); } toast({ title: "🔔 Notificação", description: `Permissão: ${p}` }); }); } else { toast({ title: "🔔 Não suportado", description: "Notificações push não disponíveis neste navegador." }); } }}
                 className="gap-2"
               >
                 <Bell className="h-3 w-3" />

@@ -740,7 +740,7 @@ export default function AcademyDashboard() {
                   <h4 className="font-medium">{insight.title}</h4>
                   <p className="text-sm text-muted-foreground mt-1">{insight.description}</p>
                   {insight.actionRequired && insight.suggestedAction && (
-                    <Button size="sm" variant="outline" className="mt-2 w-full" onClick={() => toast({ title: "✅ Ação registrada", description: `${insight.suggestedAction} — Ação marcada para acompanhamento.` })}>
+                    <Button size="sm" variant="outline" className="mt-2 w-full" onClick={() => { navigator.clipboard.writeText(`Ação: ${insight.suggestedAction} | ${insight.title} | ${insight.description}`); toast({ title: "✅ Ação copiada", description: "Dados copiados para clipboard." }); }}>
                       <CheckCircle2 className="h-4 w-4 mr-1" />{insight.suggestedAction}
                     </Button>
                   )}

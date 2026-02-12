@@ -310,7 +310,7 @@ export default function ComplianceRelatorios() {
                             <Download className="h-4 w-4 mr-1" />
                             {report.format}
                           </Button>
-                          <Button variant="ghost" size="icon" onClick={() => toast(`${report.name}`, { description: `Score: ${report.score}% | Findings: ${report.findings} | Período: ${report.period}`, duration: 5000 })}>
+                          <Button variant="ghost" size="icon" onClick={() => { navigator.clipboard.writeText(`${report.name} | Score: ${report.score}% | Findings: ${report.findings} | Período: ${report.period}`); toast.success("Dados do relatório copiados"); }}>
                             <Eye className="h-4 w-4" />
                           </Button>
                           <Button variant="ghost" size="icon" onClick={() => { navigator.clipboard.writeText(`${window.location.origin}/compliance/reports/${report.id}`); toast.success("Link copiado para compartilhamento"); }}>

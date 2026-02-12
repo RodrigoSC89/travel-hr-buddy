@@ -410,7 +410,7 @@ const TravelCommandDashboard: React.FC = () => {
                           </p>
                           <p className="text-xs text-muted-foreground mt-1">{alert.time}</p>
                         </div>
-                        <Button variant="ghost" size="icon" className="h-8 w-8" onClick={() => toast(`Alerta: ${alert.flight}`, { description: alert.message, duration: 5000 })}>
+                        <Button variant="ghost" size="icon" className="h-8 w-8" onClick={() => { navigator.clipboard.writeText(`Alerta: ${alert.flight} | ${alert.message} | ${alert.crewMember} | ${alert.time}`); toast.success("Dados do alerta copiados"); }}>
                           <Eye className="h-4 w-4" />
                         </Button>
                       </div>

@@ -279,7 +279,7 @@ export default function ContractManagement() {
                 Economia potencial de $120K com renegociação antecipada.
               </p>
             </div>
-            <Button className="gap-2" onClick={() => toast(`Análise IA — ${stats.expiring} contratos vencendo`, { description: `Economia potencial: $120K com renegociação antecipada. Recomendação: iniciar negociação com ${contracts.filter(c => c.status === 'expiring').map(c => c.counterparty).join(', ')}.`, duration: 8000 })}>
+            <Button className="gap-2" onClick={() => { navigator.clipboard.writeText(`Análise IA — ${stats.expiring} contratos vencendo. Economia potencial: $120K com renegociação antecipada. Contrapartes: ${contracts.filter(c => c.status === 'expiring').map(c => c.counterparty).join(', ')}`); toast.success("Análise IA copiada para clipboard"); }}>
               Ver Análise
               <ArrowRight className="h-4 w-4" />
             </Button>
@@ -308,7 +308,7 @@ export default function ContractManagement() {
                   onChange={(e) => setSearchTerm(e.target.value)}
                 />
               </div>
-              <Button variant="outline" size="icon" onClick={() => toast("Filtros: Tipo, Status, Valor, Vencimento", { description: "Use a busca ao lado para filtrar por nome ou número do contrato.", duration: 4000 })}>
+              <Button variant="outline" size="icon" onClick={() => { setSearchTerm(''); toast.success("Filtros limpos"); }}>
                 <Filter className="h-4 w-4" />
               </Button>
               <Button className="gap-2" onClick={() => { setActiveTab("expiring"); toast.success("Filtrando contratos que precisam de ação"); }}>

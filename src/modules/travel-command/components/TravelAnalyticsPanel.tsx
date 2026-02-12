@@ -167,7 +167,7 @@ export const TravelAnalyticsPanel: React.FC = () => {
               <SelectItem value="12m">Últimos 12 Meses</SelectItem>
             </SelectContent>
           </Select>
-          <Button variant="outline" onClick={() => toast("Filtros aplicados para: " + period, { description: "Selecione o período acima para ajustar a visualização dos dados." })}>
+          <Button variant="outline" onClick={() => { setPeriod("12m"); toast.success("Período resetado para 12 meses"); }}>
             <Filter className="h-4 w-4 mr-2" />
             Filtros
           </Button>
