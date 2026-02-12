@@ -141,21 +141,22 @@ export default function ComplianceTerceiros() {
   const { data: thirdParties, isLoading } = useComplianceThirdParties();
   const { user } = useAuth();
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- hook returns dynamic Supabase shape
   const displayData = (thirdParties && thirdParties.length > 0) 
-    ? thirdParties.map((tp: any) => ({
-        id: tp.id,
-        name: tp.name || tp.title || "Unknown",
-        type: tp.type || "supplier" as const,
-        country: tp.country || "Brasil",
-        riskLevel: tp.risk_level || "low" as const,
-        status: tp.status || "pending" as const,
-        dueDiligenceScore: tp.due_diligence_score || 0,
-        lastReview: tp.last_review || "",
-        nextReview: tp.next_review || "",
-        documentsComplete: tp.documents_complete || 0,
-        documentsRequired: tp.documents_required || 10,
-        aiRiskFlags: tp.ai_risk_flags || [],
-        isBlocked: tp.is_blocked || false,
+    ? (thirdParties as any[]).map((tp) => ({
+        id: String(tp.id),
+        name: String(tp.name || tp.title || "Unknown"),
+        type: (String(tp.type || "supplier")) as ThirdParty["type"],
+        country: String(tp.country || "Brasil"),
+        riskLevel: (String(tp.risk_level || "low")) as ThirdParty["riskLevel"],
+        status: (String(tp.status || "pending")) as ThirdParty["status"],
+        dueDiligenceScore: Number(tp.due_diligence_score) || 0,
+        lastReview: String(tp.last_review || ""),
+        nextReview: String(tp.next_review || ""),
+        documentsComplete: Number(tp.documents_complete) || 0,
+        documentsRequired: Number(tp.documents_required) || 10,
+        aiRiskFlags: (tp.ai_risk_flags as string[]) || [],
+        isBlocked: Boolean(tp.is_blocked),
       }))
     : fallbackThirdParties;
 
@@ -198,10 +199,10 @@ export default function ComplianceTerceiros() {
 
   const getRiskBadge = (level: string) => {
     switch (level) {
-      case "low": return <Badge className="bg-emerald-500/20 text-emerald-400 border-emerald-500/30">Baixo</Badge>;
-      case "medium": return <Badge className="bg-amber-500/20 text-amber-400 border-amber-500/30">Médio</Badge>;
-      case "high": return <Badge className="bg-orange-500/20 text-orange-400 border-orange-500/30">Alto</Badge>;
-      case "critical": return <Badge className="bg-red-500/20 text-red-400 border-red-500/30">Crítico</Badge>;
+      case "low": return <Badge className="bg-success/20 text-success border-success/30">Baixo</Badge>;
+      case "medium": return <Badge className="bg-warning/20 text-warning border-warning/30">Médio</Badge>;
+      case "high": return <Badge className="bg-warning/20 text-warning border-warning/30">Alto</Badge>;
+      case "critical": return <Badge className="bg-destructive/20 text-destructive border-destructive/30">Crítico</Badge>;
       default: return <Badge variant="outline">{level}</Badge>;
     }
   };
@@ -209,9 +210,9 @@ export default function ComplianceTerceiros() {
   const getStatusBadge = (status: string, isBlocked: boolean) => {
     if (isBlocked) return <Badge variant="destructive"><Ban className="h-3 w-3 mr-1" />Bloqueado</Badge>;
     switch (status) {
-      case "approved": return <Badge className="bg-emerald-500/20 text-emerald-400"><CheckCircle2 className="h-3 w-3 mr-1" />Aprovado</Badge>;
-      case "pending": return <Badge className="bg-blue-500/20 text-blue-400"><Clock className="h-3 w-3 mr-1" />Pendente</Badge>;
-      case "under_review": return <Badge className="bg-amber-500/20 text-amber-400"><Eye className="h-3 w-3 mr-1" />Em Análise</Badge>;
+      case "approved": return <Badge className="bg-success/20 text-success"><CheckCircle2 className="h-3 w-3 mr-1" />Aprovado</Badge>;
+      case "pending": return <Badge className="bg-info/20 text-info"><Clock className="h-3 w-3 mr-1" />Pendente</Badge>;
+      case "under_review": return <Badge className="bg-warning/20 text-warning"><Eye className="h-3 w-3 mr-1" />Em Análise</Badge>;
       default: return <Badge variant="outline">{status}</Badge>;
     }
   };
@@ -228,9 +229,9 @@ export default function ComplianceTerceiros() {
   };
 
   const getScoreColor = (score: number) => {
-    if (score >= 80) return "text-emerald-400";
-    if (score >= 50) return "text-amber-400";
-    if (score > 0) return "text-red-400";
+    if (score >= 80) return "text-success";
+    if (score >= 50) return "text-warning";
+    if (score > 0) return "text-destructive";
     return "text-muted-foreground";
   };
 
@@ -293,8 +294,8 @@ export default function ComplianceTerceiros() {
                 <Label>Descrição do Serviço</Label>
                 <Textarea placeholder="Descreva os serviços prestados..." rows={2} value={formData.description} onChange={(e) => setFormData(p => ({ ...p, description: e.target.value }))} />
               </div>
-              <div className="flex items-center gap-2 p-3 bg-purple-500/10 border border-purple-500/30 rounded-lg">
-                <Brain className="h-5 w-5 text-purple-400" />
+              <div className="flex items-center gap-2 p-3 bg-accent/10 border border-accent/30 rounded-lg">
+                <Brain className="h-5 w-5 text-accent-foreground" />
                 <span className="text-sm">IA irá analisar riscos automaticamente após cadastro</span>
               </div>
               <Button className="w-full" onClick={handleSaveThirdParty} disabled={isSaving}>
@@ -373,7 +374,7 @@ export default function ComplianceTerceiros() {
       {/* Third Parties List */}
       <div className="space-y-4">
         {filteredData.map(tp => (
-          <Card key={tp.id} className={`hover:border-primary/30 transition-colors ${tp.isBlocked ? "border-red-500/30 bg-red-500/5" : ""}`}>
+          <Card key={tp.id} className={`hover:border-primary/30 transition-colors ${tp.isBlocked ? "border-destructive/30 bg-destructive/5" : ""}`}>
             <CardContent className="p-5">
               <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
                 <div className="space-y-2 flex-1">
@@ -397,9 +398,9 @@ export default function ComplianceTerceiros() {
                   </div>
                   {tp.aiRiskFlags.length > 0 && (
                     <div className="flex items-center gap-2 flex-wrap mt-2">
-                      <Brain className="h-4 w-4 text-purple-400" />
+                    <Brain className="h-4 w-4 text-accent-foreground" />
                       {tp.aiRiskFlags.map((flag: string, i: number) => (
-                        <Badge key={i} variant="outline" className="text-xs bg-purple-500/10 text-purple-400 border-purple-500/30">
+                        <Badge key={i} variant="outline" className="text-xs bg-accent/10 text-accent-foreground border-accent/30">
                           {flag}
                         </Badge>
                       ))}

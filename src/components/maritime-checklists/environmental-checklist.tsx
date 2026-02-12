@@ -300,7 +300,7 @@ export const EnvironmentalChecklist: React.FC<EnvironmentalChecklistProps> = ({
               </div>
             </div>
             <div className="flex items-center gap-3">
-              <Badge variant="outline" className="bg-green-50 text-green-700">
+              <Badge variant="outline" className="bg-success/10 text-success">
                 <Leaf className="w-4 h-4 mr-2" />
                 Ambiental
               </Badge>
@@ -362,7 +362,7 @@ export const EnvironmentalChecklist: React.FC<EnvironmentalChecklistProps> = ({
                 <div className="space-y-4">
                   {filteredItems.map((item) => (
                     <Card key={item.id} className={`transition-colors ${
-                      item.status === "completed" ? "bg-green-50 border-green-200" : ""
+                      item.status === "completed" ? "bg-success/5 border-success/30" : ""
                     }`}>
                       <CardHeader className="pb-3">
                         <div className="flex items-start justify-between">
@@ -384,7 +384,7 @@ export const EnvironmentalChecklist: React.FC<EnvironmentalChecklistProps> = ({
                           </div>
                           <div className="flex items-center gap-2">
                             {item.status === "completed" && (
-                              <CheckCircle className="w-5 h-5 text-green-500" />
+                              <CheckCircle className="w-5 h-5 text-success" />
                             )}
                             <Badge variant="outline" className={`flex items-center gap-1 ${getCategoryColor(item.category)}`}>
                               {getCategoryIcon(item.category)}
@@ -453,12 +453,12 @@ export const EnvironmentalChecklist: React.FC<EnvironmentalChecklistProps> = ({
                   </CardHeader>
                   <CardContent className="space-y-4">
                     <div className="grid grid-cols-2 gap-4">
-                      <div className="text-center p-4 bg-green-50 rounded-lg">
-                        <div className="text-2xl font-bold text-green-600">{completedItems}</div>
+                      <div className="text-center p-4 bg-success/10 rounded-lg">
+                        <div className="text-2xl font-bold text-success">{completedItems}</div>
                         <div className="text-sm text-muted-foreground">Itens Avaliados</div>
                       </div>
-                      <div className="text-center p-4 bg-orange-50 rounded-lg">
-                        <div className="text-2xl font-bold text-orange-600">{totalItems - completedItems}</div>
+                      <div className="text-center p-4 bg-warning/10 rounded-lg">
+                        <div className="text-2xl font-bold text-warning">{totalItems - completedItems}</div>
                         <div className="text-sm text-muted-foreground">Itens Pendentes</div>
                       </div>
                     </div>

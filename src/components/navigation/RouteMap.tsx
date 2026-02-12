@@ -64,8 +64,9 @@ export function RouteMap({
   height = '450px'
 }: RouteMapProps) {
   const mapContainer = useRef<HTMLDivElement>(null);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Mapbox GL Map instance has complex internal type
   const mapRef = useRef<any>(null);
-  const markersRef = useRef<any[]>([]);
+  const markersRef = useRef<Array<{ remove: () => void }>>([]);
   
   const [mapboxToken, setMapboxToken] = useState<string>('');
   const [mapboxgl, setMapboxgl] = useState<MapboxGLInterface | null>(null);
@@ -404,7 +405,7 @@ export function RouteMap({
         setMapReady(true);
       });
 
-      map.on('error', (e: any) => {
+      map.on('error', (e: Record<string, unknown>) => {
         logger.error('Map error:', e);
       });
 
@@ -489,10 +490,10 @@ export function RouteMap({
             Mapa da Rota
           </CardTitle>
           <div className="flex items-center gap-2">
-            <Badge variant="outline" className="text-xs bg-emerald-500/10 text-emerald-500 border-emerald-500/30">
+            <Badge variant="outline" className="text-xs bg-success/10 text-success border-success/30">
               Partida
             </Badge>
-            <Badge variant="outline" className="text-xs bg-red-500/10 text-red-500 border-red-500/30">
+            <Badge variant="outline" className="text-xs bg-destructive/10 text-destructive border-destructive/30">
               Chegada
             </Badge>
             {hazards.filter(h => h.active).length > 0 && (

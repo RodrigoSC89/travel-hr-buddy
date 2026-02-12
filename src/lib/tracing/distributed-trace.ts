@@ -294,7 +294,8 @@ export const tracer = DistributedTracer.getInstance();
 /**
  * Higher-order function to wrap Supabase calls with tracing
  */
-export function withTracing<T extends (...args: any[]) => Promise<any>>(
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- generic wrapper must accept any async function signature
+export function withTracing<T extends (...args: unknown[]) => Promise<unknown>>(
   fn: T,
   options?: { module?: string }
 ): T {
