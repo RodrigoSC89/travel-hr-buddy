@@ -167,19 +167,19 @@ const MLC_VIOLATIONS: MLCViolation[] = [
 
 const getRiskColor = (level: CrewMember['riskLevel']) => {
   switch (level) {
-    case 'low': return 'bg-green-500';
-    case 'medium': return 'bg-yellow-500';
-    case 'high': return 'bg-orange-500';
-    case 'critical': return 'bg-red-500';
+    case 'low': return 'bg-success';
+    case 'medium': return 'bg-warning';
+    case 'high': return 'bg-warning';
+    case 'critical': return 'bg-destructive';
   }
 };
 
 const getRiskBadgeColor = (level: CrewMember['riskLevel']) => {
   switch (level) {
-    case 'low': return 'bg-green-500/10 text-green-600 border-green-500/20';
-    case 'medium': return 'bg-yellow-500/10 text-yellow-600 border-yellow-500/20';
-    case 'high': return 'bg-orange-500/10 text-orange-600 border-orange-500/20';
-    case 'critical': return 'bg-red-500/10 text-red-600 border-red-500/20';
+    case 'low': return 'bg-success/10 text-success border-success/20';
+    case 'medium': return 'bg-warning/10 text-warning border-warning/20';
+    case 'high': return 'bg-warning/10 text-warning border-warning/20';
+    case 'critical': return 'bg-destructive/10 text-destructive border-destructive/20';
   }
 };
 

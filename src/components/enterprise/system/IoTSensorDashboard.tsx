@@ -173,11 +173,11 @@ const alerts = [
 
 const getStatusColor = (status: string) => {
   switch (status) {
-    case "normal": return "bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400";
-    case "warning": return "bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-400";
-    case "critical": return "bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400";
-    case "offline": return "bg-gray-100 text-gray-800 dark:bg-gray-800 dark:text-gray-400";
-    default: return "bg-gray-100 text-gray-800";
+    case "normal": return "bg-success/10 text-success dark:bg-success/20 dark:text-success";
+    case "warning": return "bg-warning/10 text-warning dark:bg-warning/20 dark:text-warning";
+    case "critical": return "bg-destructive/10 text-destructive dark:bg-destructive/20 dark:text-destructive";
+    case "offline": return "bg-muted text-muted-foreground dark:bg-muted dark:text-muted-foreground";
+    default: return "bg-muted text-muted-foreground";
   }
 };
 

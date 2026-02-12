@@ -70,9 +70,9 @@ const WORKFLOW_STAGES = [
 
 const SEVERITY_CONFIG: Record<NCSeverity, { color: string; weight: number; maxDays: number }> = {
   critical: { color: 'bg-destructive text-destructive-foreground', weight: 10, maxDays: 7 },
-  high: { color: 'bg-orange-500 text-white', weight: 5, maxDays: 15 },
-  medium: { color: 'bg-yellow-500 text-black', weight: 3, maxDays: 30 },
-  low: { color: 'bg-blue-500 text-white', weight: 1, maxDays: 45 }
+  high: { color: 'bg-warning text-warning-foreground', weight: 5, maxDays: 15 },
+  medium: { color: 'bg-warning text-warning-foreground', weight: 3, maxDays: 30 },
+  low: { color: 'bg-info text-info-foreground', weight: 1, maxDays: 45 }
 };
 
 // Empty fallback - components use useNonConformities hook for real data
@@ -556,7 +556,7 @@ export function NCAutomaticWorkflow() {
               <div className="space-y-2">
                 {selectedNC.workflow_history.map((step, i) => (
                   <div key={i} className="flex items-start gap-3">
-                    <div className={`w-2 h-2 mt-2 rounded-full ${step.status === 'completed' ? 'bg-green-500' : step.status === 'current' ? 'bg-primary' : 'bg-muted'}`} />
+                    <div className={`w-2 h-2 mt-2 rounded-full ${step.status === 'completed' ? 'bg-success' : step.status === 'current' ? 'bg-primary' : 'bg-muted'}`} />
                     <div className="flex-1">
                       <div className="flex items-center justify-between">
                         <span className="font-medium">{step.step}</span>
@@ -671,9 +671,9 @@ export function NCAutomaticWorkflow() {
               )}
 
               {selectedNC.status === 'closed' && (
-                <div className="bg-green-500/10 border border-green-500/30 rounded-lg p-4 text-center">
-                  <CheckCheck className="h-8 w-8 text-green-500 mx-auto mb-2" />
-                  <p className="font-semibold text-green-700">NC Fechada com Sucesso</p>
+                <div className="bg-success/10 border border-success/30 rounded-lg p-4 text-center">
+                  <CheckCheck className="h-8 w-8 text-success mx-auto mb-2" />
+                  <p className="font-semibold text-success">NC Fechada com Sucesso</p>
                   <p className="text-sm text-muted-foreground">Histórico completo registrado para auditoria</p>
                 </div>
               )}

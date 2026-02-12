@@ -310,15 +310,15 @@ export const NotificationCenter: React.FC<NotificationCenterProps> = ({
   const getPriorityBadgeColor = (priority: string) => {
     switch (priority) {
     case "critical":
-      return "bg-red-500 text-white";
+      return "bg-destructive text-destructive-foreground";
     case "high":
-      return "bg-orange-500 text-white";
+      return "bg-warning text-warning-foreground";
     case "medium":
-      return "bg-yellow-500 text-black";
+      return "bg-warning text-warning-foreground";
     case "low":
-      return "bg-blue-500 text-white";
+      return "bg-info text-info-foreground";
     default:
-      return "bg-gray-500 text-white";
+      return "bg-muted text-muted-foreground";
     }
   };
 

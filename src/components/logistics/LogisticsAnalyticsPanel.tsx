@@ -126,11 +126,11 @@ export function LogisticsAnalyticsPanel() {
           </CardContent>
         </Card>
 
-        <Card className="border-l-4 border-l-green-500">
+        <Card className="border-l-4 border-l-success">
           <CardContent className="p-4">
             <div className="flex items-center justify-between">
-              <CheckCircle className="h-8 w-8 text-green-500/50" />
-              <Badge variant="secondary" className="text-xs bg-green-500/10 text-green-500">
+              <CheckCircle className="h-8 w-8 text-success/50" />
+              <Badge variant="secondary" className="text-xs bg-success/10 text-success">
                 <TrendingUp className="h-3 w-3 mr-1" />
                 +5%
               </Badge>
@@ -140,11 +140,11 @@ export function LogisticsAnalyticsPanel() {
           </CardContent>
         </Card>
 
-        <Card className="border-l-4 border-l-blue-500">
+        <Card className="border-l-4 border-l-info">
           <CardContent className="p-4">
             <div className="flex items-center justify-between">
-              <Clock className="h-8 w-8 text-blue-500/50" />
-              <Badge variant="secondary" className="text-xs bg-blue-500/10 text-blue-500">
+              <Clock className="h-8 w-8 text-info/50" />
+              <Badge variant="secondary" className="text-xs bg-info/10 text-info">
                 <TrendingDown className="h-3 w-3 mr-1" />
                 -0.5d
               </Badge>
@@ -154,11 +154,11 @@ export function LogisticsAnalyticsPanel() {
           </CardContent>
         </Card>
 
-        <Card className="border-l-4 border-l-yellow-500">
+        <Card className="border-l-4 border-l-warning">
           <CardContent className="p-4">
             <div className="flex items-center justify-between">
-              <DollarSign className="h-8 w-8 text-yellow-500/50" />
-              <Badge variant="secondary" className="text-xs bg-yellow-500/10 text-yellow-500">
+              <DollarSign className="h-8 w-8 text-warning/50" />
+              <Badge variant="secondary" className="text-xs bg-warning/10 text-warning">
                 <TrendingUp className="h-3 w-3 mr-1" />
                 +8%
               </Badge>
@@ -308,7 +308,7 @@ export function LogisticsAnalyticsPanel() {
                         </div>
                         <div className="w-full bg-muted rounded-full h-2">
                           <div 
-                            className={`h-2 rounded-full ${needsReorder ? "bg-destructive" : percentage < 70 ? "bg-yellow-500" : "bg-green-500"}`}
+                            className={`h-2 rounded-full ${needsReorder ? "bg-destructive" : percentage < 70 ? "bg-warning" : "bg-success"}`}
                             style={{ width: `${Math.min(percentage, 100)}%` }}
                           />
                         </div>

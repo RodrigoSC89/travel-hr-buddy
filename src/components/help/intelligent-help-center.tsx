@@ -393,13 +393,13 @@ Exportado em: ${new Date().toLocaleString('pt-BR')}
                   </CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-3">
-                  <div className="p-3 bg-blue-50 rounded-lg border-l-4 border-blue-400">
+                  <div className="p-3 bg-info/10 rounded-lg border-l-4 border-info">
                     <p className="text-sm">💡 Use atalhos de teclado Ctrl+K para busca rápida</p>
                   </div>
-                  <div className="p-3 bg-green-50 rounded-lg border-l-4 border-green-400">
+                  <div className="p-3 bg-success/10 rounded-lg border-l-4 border-success">
                     <p className="text-sm">⚡ Clique duas vezes em qualquer card para ação rápida</p>
                   </div>
-                  <div className="p-3 bg-purple-50 rounded-lg border-l-4 border-purple-400">
+                  <div className="p-3 bg-primary/10 rounded-lg border-l-4 border-primary">
                     <p className="text-sm">🎯 Use filtros para encontrar conteúdo específico</p>
                   </div>
                 </CardContent>

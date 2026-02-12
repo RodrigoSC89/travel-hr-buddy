@@ -89,11 +89,11 @@ export default function AutonomousCommandCenter() {
 
   const getAgentStatusColor = (agentStatus: string) => {
     switch (agentStatus) {
-      case 'active': return 'bg-green-500';
-      case 'processing': return 'bg-blue-500 animate-pulse';
-      case 'idle': return 'bg-yellow-500';
-      case 'error': return 'bg-red-500';
-      default: return 'bg-gray-500';
+      case 'active': return 'bg-success';
+      case 'processing': return 'bg-info animate-pulse';
+      case 'idle': return 'bg-warning';
+      case 'error': return 'bg-destructive';
+      default: return 'bg-muted-foreground';
     }
   };
 

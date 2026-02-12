@@ -75,13 +75,13 @@ export const SatelliteAlerts: React.FC<SatelliteAlertsProps> = ({ satelliteId })
   const getSeverityColor = (severity: string) => {
     switch (severity) {
     case "critical":
-      return "bg-red-500";
+      return "bg-destructive";
     case "warning":
-      return "bg-yellow-500";
+      return "bg-warning";
     case "info":
-      return "bg-blue-500";
+      return "bg-info";
     default:
-      return "bg-gray-500";
+      return "bg-muted-foreground";
     }
   };
 
