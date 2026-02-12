@@ -109,9 +109,9 @@ export default function InsuranceClaimsAIPage() {
           </CardHeader>
           <CardContent>
             <div className="space-y-4">
-              {policies.map((policy, idx) => (
+              {policies.map((policy) => (
                 <div 
-                  key={idx}
+                  key={`${policy.type}-${policy.provider}`}
                   className="flex items-center justify-between p-4 rounded-lg border"
                 >
                   <div className="flex items-center gap-4">

@@ -477,8 +477,8 @@ const CONTRACT_TYPES = [
                   <div>
                     <p className="text-sm font-medium mb-2">Cláusulas Principais</p>
                     <div className="flex flex-wrap gap-2">
-                      {selectedContract.key_clauses.map((clause, i) => (
-                        <Badge key={i} variant="outline">{clause}</Badge>
+                      {selectedContract.key_clauses.map((clause) => (
+                        <Badge key={clause} variant="outline">{clause}</Badge>
                       ))}
                     </div>
                   </div>

@@ -381,7 +381,7 @@ export const CreateIncidentDialog: React.FC<CreateIncidentDialogProps> = ({
               {photoPreviews.length > 0 && (
                 <div className="grid grid-cols-5 gap-2">
                   {photoPreviews.map((preview, index) => (
-                    <div key={index} className="relative group">
+                    <div key={`preview-${index}-${preview.slice(-20)}`} className="relative group">
                       <img
                         src={preview}
                         alt={`Preview ${index + 1}`}

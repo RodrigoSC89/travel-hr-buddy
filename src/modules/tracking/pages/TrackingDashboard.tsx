@@ -181,8 +181,8 @@ export default function TrackingDashboard() {
         <Card className="border-purple-500/30">
           <CardHeader><CardTitle className="flex items-center gap-2"><Brain className="h-5 w-5" />Recomendações IA</CardTitle></CardHeader>
           <CardContent>
-            {recommendations.map((r, i) => (
-              <div key={i} className="flex items-start gap-3 p-3 rounded-lg bg-muted/30">
+            {recommendations.map((r) => (
+              <div key={r.title} className="flex items-start gap-3 p-3 rounded-lg bg-muted/30">
                 <Zap className="h-4 w-4 text-purple-500 mt-0.5" />
                 <div><p className="text-sm font-medium">{r.title}</p><p className="text-xs text-muted-foreground">{r.description}</p></div>
               </div>

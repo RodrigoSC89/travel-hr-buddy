@@ -247,8 +247,8 @@ export function HRPayrollDashboard() {
             <CardDescription>Validação automática identificou inconsistências</CardDescription>
           </CardHeader>
           <CardContent className="space-y-3">
-            {anomalies.map((anomaly, i) => (
-              <div key={i} className="flex items-center justify-between p-3 rounded-lg border border-amber-500/20 bg-amber-500/5">
+            {anomalies.map((anomaly) => (
+              <div key={`${anomaly.employee}-${anomaly.issue}`} className="flex items-center justify-between p-3 rounded-lg border border-amber-500/20 bg-amber-500/5">
                 <div>
                   <p className="font-medium">{anomaly.employee}</p>
                   <p className="text-sm text-muted-foreground">{anomaly.issue}</p>

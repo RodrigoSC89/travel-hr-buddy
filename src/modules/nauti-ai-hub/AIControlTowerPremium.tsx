@@ -259,8 +259,8 @@ function AIDashboard() {
         </CardHeader>
         <CardContent>
           <div className="space-y-2 font-mono text-sm">
-            {aiLogs.length > 0 ? aiLogs.map((log, i: number) => (
-              <div key={i} className="flex items-center gap-4 p-2 rounded hover:bg-muted/50">
+            {aiLogs.length > 0 ? aiLogs.map((log, idx) => (
+              <div key={`log-${idx}-${log.created_at}`} className="flex items-center gap-4 p-2 rounded hover:bg-muted/50">
                 <span className="text-muted-foreground">{new Date(log.created_at || "").toLocaleTimeString("pt-BR")}</span>
                 <Badge variant="outline" className="text-xs">{log.module_name || "System"}</Badge>
                 <span className="flex-1">{log.interaction_type || "query"} — {log.response_time_ms || 0}ms</span>

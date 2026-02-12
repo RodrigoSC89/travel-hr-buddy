@@ -419,8 +419,8 @@ export default function TrackingAlerts() {
           </CardHeader>
           <CardContent>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-              {recommendations.map((rec, i) => (
-                <div key={i} className="p-3 rounded-lg bg-background/50 border">
+              {recommendations.map((rec) => (
+                <div key={rec.title} className="p-3 rounded-lg bg-background/50 border">
                   <div className="flex items-start gap-2">
                     <Zap className="h-4 w-4 text-purple-500 mt-0.5" />
                     <div>
