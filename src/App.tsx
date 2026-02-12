@@ -450,6 +450,8 @@ const AdminReportsLogs = lazy(() => import("@/pages/admin/reports/logs"));
 const AdminReportsRestoreAnalytics = lazy(() => import("@/pages/admin/reports/restore-analytics"));
 const AdminCollaboration = lazy(() => import("@/pages/admin/collaboration"));
 const AdminDashboard = lazy(() => import("@/pages/admin/dashboard"));
+const AdminChecklistsDashboard = lazy(() => import("@/pages/admin/checklists-dashboard"));
+const AdminApiTester = lazy(() => import("@/pages/admin/api-tester"));
 
 // Query client - optimized for performance
 const queryClient = new QueryClient({
@@ -1059,6 +1061,9 @@ const AppRoutes = () => (
       {/* ADMIN COLLABORATION & CHECKLISTS (RBAC protected) */}
       <Route path="/admin/collaboration" element={<Suspense fallback={<Loader />}><AdminRoute><AdminCollaboration /></AdminRoute></Suspense>} />
       <Route path="/admin/checklists" element={<Suspense fallback={<Loader />}><AdminRoute><MaritimeCommandCenter /></AdminRoute></Suspense>} />
+      <Route path="/admin/checklists/dashboard" element={<Suspense fallback={<Loader />}><AdminRoute><AdminChecklistsDashboard /></AdminRoute></Suspense>} />
+      <Route path="/admin/api-tester" element={<Suspense fallback={<Loader />}><AdminRoute><AdminApiTester /></AdminRoute></Suspense>} />
+      <Route path="/tasks" element={<Navigate to="/task-management" replace />} />
       
       <Route path="/dashboard" element={<CentralComando />} />
       <Route path="/executive-dashboard" element={<CentralComando />} />
@@ -1125,6 +1130,14 @@ const AppRoutes = () => (
       <Route path="/privacy" element={<Navigate to="/landing" replace />} />
       <Route path="/privacy-policy" element={<Navigate to="/landing" replace />} />
       <Route path="/notifications" element={<Navigate to="/alerts-command" replace />} />
+      <Route path="/profile" element={<Navigate to="/settings" replace />} />
+      <Route path="/help" element={<Navigate to="/roadmap" replace />} />
+      <Route path="/fleet" element={<Navigate to="/fleet-command" replace />} />
+      <Route path="/calendar" element={<Navigate to="/operational-calendar" replace />} />
+      <Route path="/approvals" element={<Navigate to="/task-management" replace />} />
+      <Route path="/alerts" element={<Navigate to="/alerts-command" replace />} />
+      <Route path="/admin/integrations" element={<Navigate to="/integrations" replace />} />
+      <Route path="/admin/reports" element={<Navigate to="/reports-command" replace />} />
       
       {/* DEV ONLY - Route Dashboard */}
       <Route path="/dev-routes" element={<DevRoutesDashboard />} />

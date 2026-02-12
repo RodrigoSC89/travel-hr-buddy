@@ -317,7 +317,7 @@ export const APIHubNautilus: React.FC = () => {
       title: "⚙️ Configurar Integração",
       description: `Redirecionando para configurações de ${integrationName}`
     });
-    navigate(`/admin/integrations?config=${encodeURIComponent(integrationName)}`);
+    navigate(`/integrations?config=${encodeURIComponent(integrationName)}`);
   };
 
   const handleViewLogs = (integrationName: string) => {

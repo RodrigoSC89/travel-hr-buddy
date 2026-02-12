@@ -62,7 +62,7 @@ export const UserMenu: React.FC = () => {
         <DropdownMenuSeparator />
         <DropdownMenuItem 
           className="cursor-pointer"
-          onClick={() => handleNavigate("/profile")}
+          onClick={() => handleNavigate("/settings")}
         >
           <User className="mr-2 h-4 w-4 text-foreground/70" />
           <span className="text-foreground">Perfil</span>
@@ -83,7 +83,7 @@ export const UserMenu: React.FC = () => {
         </DropdownMenuItem>
         <DropdownMenuItem 
           className="cursor-pointer"
-          onClick={() => handleNavigate("/help")}
+          onClick={() => handleNavigate("/roadmap")}
         >
           <HelpCircle className="mr-2 h-4 w-4 text-foreground/70" />
           <span className="text-foreground">Ajuda</span>

@@ -306,7 +306,7 @@ export default function AgentsDashboard() {
             <RefreshCw className={`h-4 w-4 mr-2 ${statsLoading ? "animate-spin" : ""}`} />
             Atualizar
           </Button>
-          <Button variant="outline" size="sm" onClick={() => navigate("/audit-agents/settings")}>
+          <Button variant="outline" size="sm" onClick={() => navigate("/settings")}>
             <Settings className="h-4 w-4 mr-2" />
             Config
           </Button>

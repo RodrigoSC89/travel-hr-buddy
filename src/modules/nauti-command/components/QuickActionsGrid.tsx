@@ -100,7 +100,7 @@ export function QuickActionsGrid({
     {
       icon: <Calendar className="h-4 w-4" />,
       label: "Ver Calendário",
-      onClick: () => navigate("/calendar"),
+      onClick: () => navigate("/operational-calendar"),
       color: "bg-secondary hover:bg-secondary/90",
       badge: null
     },
