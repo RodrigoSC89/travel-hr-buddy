@@ -158,9 +158,9 @@ export const ReservationCalendarView: React.FC<ReservationCalendarViewProps> = (
 
               {/* Calendar Days */}
               <div className="grid grid-cols-7 gap-1">
-                {days.map((day, index) => (
+                {days.map((day) => (
                   <div
-                    key={index}
+                    key={day.date.toISOString()}
                     className={`
                       min-h-[100px] p-1 border rounded-sm transition-colors hover:bg-muted/50
                       ${!day.isCurrentMonth ? "text-muted-foreground bg-muted/20" : ""}

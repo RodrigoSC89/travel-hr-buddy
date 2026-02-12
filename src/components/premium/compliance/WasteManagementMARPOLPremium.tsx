@@ -236,8 +236,8 @@ export default function WasteManagementMARPOLPremium() {
                       outerRadius={100}
                       label={({ name, percent }) => `${name.split(' - ')[0]} (${(percent * 100).toFixed(0)}%)`}
                     >
-                      {wasteCategories.map((entry, index) => (
-                        <Cell key={index} fill={entry.color} />
+                      {wasteCategories.map((entry) => (
+                        <Cell key={entry.name} fill={entry.color} />
                       ))}
                     </Pie>
                     <Tooltip />

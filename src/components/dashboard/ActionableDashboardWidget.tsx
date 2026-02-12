@@ -171,8 +171,8 @@ export function ActionableDashboardWidget({
         <CardContent className="space-y-4">
           {/* Metrics Grid */}
           <div className="grid grid-cols-2 gap-4">
-            {metrics.map((metric, idx) => (
-              <div key={idx} className="space-y-1">
+            {metrics.map((metric) => (
+              <div key={metric.label} className="space-y-1">
                 <p className="text-xs text-muted-foreground">{metric.label}</p>
                 <div className="flex items-center gap-2">
                   <span className="text-xl font-bold">{metric.value}</span>

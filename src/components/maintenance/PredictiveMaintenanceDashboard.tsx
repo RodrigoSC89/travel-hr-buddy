@@ -463,8 +463,8 @@ export function PredictiveMaintenanceDashboard() {
               {/* AI Predictions */}
               {aiResult.predictions && aiResult.predictions.length > 0 && (
                 <div className="space-y-2">
-                  {aiResult.predictions.map((pred, idx) => (
-                    <div key={idx} className="p-3 border rounded-lg bg-background">
+                  {aiResult.predictions.map((pred) => (
+                    <div key={pred.equipment_name} className="p-3 border rounded-lg bg-background">
                       <div className="flex items-center justify-between mb-1">
                         <span className="font-medium text-sm">{pred.equipment_name}</span>
                         <div className="flex items-center gap-2">

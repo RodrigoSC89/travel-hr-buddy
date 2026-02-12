@@ -279,13 +279,13 @@ const SmartTooltipSystem: React.FC = () => {
               <p className="text-sm text-muted-foreground mb-4">{assistant.message}</p>
               {assistant.actions && (
                 <div className="flex gap-2 flex-wrap">
-                  {assistant.actions.map((action, index) => (
+                  {assistant.actions.map((action, actionIdx) => (
                     <Button
-                      key={index}
+                      key={action.label}
                       size="sm"
-                      variant={index === 0 ? "default" : "outline"}
+                      variant={actionIdx === 0 ? "default" : "outline"}
                       onClick={action.action}
-                      className={index === 0 ? "btn-maritime" : "btn-harbor"}
+                      className={actionIdx === 0 ? "btn-maritime" : "btn-harbor"}
                     >
                       {action.label}
                     </Button>

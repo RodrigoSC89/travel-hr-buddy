@@ -133,9 +133,9 @@ export function PreviewValidator({
                 <h4 className="text-sm font-medium">Issues Detectados ({result.issues.length})</h4>
                 <ScrollArea className="h-[200px] rounded-md border">
                   <div className="p-4 space-y-2">
-                    {result.issues.map((issue, index) => (
+                    {result.issues.map((issue) => (
                       <div
-                        key={index}
+                        key={`${issue.component}-${issue.type}`}
                         className="flex items-start gap-2 p-2 rounded-md bg-muted/50"
                       >
                         <span className={getSeverityColor(issue.severity)}>
@@ -172,9 +172,9 @@ export function PreviewValidator({
               <div className="space-y-2">
                 <h4 className="text-sm font-medium">Avisos ({result.warnings.length})</h4>
                 <div className="space-y-1">
-                  {result.warnings.map((warning, index) => (
+                  {result.warnings.map((warning) => (
                     <div
-                      key={index}
+                      key={warning}
                       className="flex items-center gap-2 text-sm text-muted-foreground"
                     >
                       <AlertTriangle className="h-3 w-3" />

@@ -176,8 +176,8 @@ export function MaintenanceCopilotDialog({
 
         {/* Insights Cards */}
         <div className="grid grid-cols-3 gap-2 pb-2 border-b">
-          {maintenanceInsights.map((insight, idx) => (
-            <Card key={idx} className="p-2">
+          {maintenanceInsights.map((insight) => (
+            <Card key={insight.title} className="p-2">
               <CardContent className="p-0">
                 <div className={`text-xs font-medium ${getStatusColor(insight.status)}`}>
                   {insight.title}
