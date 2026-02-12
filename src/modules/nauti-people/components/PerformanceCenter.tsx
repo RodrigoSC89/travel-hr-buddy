@@ -586,8 +586,8 @@ const PerformanceCenter: React.FC = () => {
                 { de: 'Carlos Silva', para: 'Ana Martins', tipo: 'reconhecimento', texto: 'Excelente trabalho na apresentação do projeto!' },
                 { de: 'Maria Lima', para: 'João Pedro', tipo: 'construtivo', texto: 'Sugestão para melhorar a comunicação nas reuniões.' },
                 { de: 'Roberto Santos', para: 'Carlos Silva', tipo: 'reconhecimento', texto: 'Liderança exemplar no projeto de segurança.' }
-              ].map((feedback, idx) => (
-                <div key={idx} className="p-4 bg-muted/50 rounded-lg border">
+              ].map((feedback) => (
+                <div key={`${feedback.de}-${feedback.para}`} className="p-4 bg-muted/50 rounded-lg border">
                   <div className="flex items-center gap-3 mb-2">
                     <Avatar className="w-8 h-8">
                       <AvatarFallback className="bg-primary/10 text-primary text-xs">

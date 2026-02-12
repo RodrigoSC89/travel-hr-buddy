@@ -333,9 +333,9 @@ export default function MobileApp() {
                   <div className="px-4 pb-4">
                     <p className="text-xs text-muted-foreground mb-2">Funcionalidades</p>
                     <div className="space-y-2">
-                      {selectedRole.features.slice(0, 4).map((feature, idx) => (
+                      {selectedRole.features.slice(0, 4).map((feature) => (
                         <div 
-                          key={idx}
+                          key={feature}
                           className="flex items-center gap-2 p-2 rounded-lg bg-muted/30 text-xs"
                         >
                           <CheckCircle2 className="h-3 w-3 text-success" />

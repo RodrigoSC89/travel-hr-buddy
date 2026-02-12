@@ -214,9 +214,9 @@ export default function AIAssistantPanel({ onClose }: AIAssistantPanelProps) {
               
               {msg.suggestions && msg.suggestions.length > 0 && (
                 <div className="flex flex-wrap gap-2 mt-2 ml-11">
-                  {msg.suggestions.map((suggestion, idx) => (
+                  {msg.suggestions.map((suggestion) => (
                     <Button
-                      key={idx}
+                      key={suggestion}
                       variant="outline"
                       size="sm"
                       className="text-xs h-7"
@@ -251,9 +251,9 @@ export default function AIAssistantPanel({ onClose }: AIAssistantPanelProps) {
       {/* Quick Actions */}
       <div className="p-2 border-t border-b bg-muted/30">
         <div className="flex gap-1">
-          {quickActions.map((action, idx) => (
+          {quickActions.map((action) => (
             <Button
-              key={idx}
+              key={action.label}
               variant="ghost"
               size="sm"
               className="flex-1 h-8 text-xs"

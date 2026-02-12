@@ -25,11 +25,11 @@ export const RiskTimeline: React.FC<Props> = ({ anomalies, predictions }) => {
       <CardHeader><CardTitle>Risk Timeline</CardTitle></CardHeader>
       <CardContent>
         <div className="space-y-4">
-          {events.map((event, idx) => (
-            <div key={idx} className="flex gap-4">
+          {events.map((event, eventIdx) => (
+            <div key={`${event.type}-${event.time}`} className="flex gap-4">
               <div className="flex flex-col items-center">
                 <div className={`h-3 w-3 rounded-full ${event.type === "anomaly" ? "bg-orange-500" : "bg-blue-500"}`} />
-                {idx < events.length - 1 && <div className="h-full w-0.5 bg-border mt-1" />}
+                {eventIdx < events.length - 1 && <div className="h-full w-0.5 bg-border mt-1" />}
               </div>
               <div className="flex-1 pb-4">
                 <Badge variant={event.type === "anomaly" ? "secondary" : "default"}>

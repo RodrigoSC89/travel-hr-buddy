@@ -329,9 +329,9 @@ export default function IoTDashboard() {
                   { time: "2 hours ago", sensor: "Fuel Level Tank 2", message: "Level dropped below 50%", level: "warning" },
                   { time: "1 day ago", sensor: "Main Engine Vibration", message: "Vibration spike detected (3.1 mm/s)", level: "warning" },
                   { time: "2 days ago", sensor: "Lube Oil Pressure", message: "Pressure normalized after adjustment", level: "info" },
-                ].map((alert, idx) => (
+                ].map((alert) => (
                   <div
-                    key={idx}
+                    key={alert.sensor}
                     className={`p-3 rounded-lg border ${
                       alert.level === "warning" ? "bg-warning/5 border-warning/20" :
                       alert.level === "critical" ? "bg-destructive/5 border-destructive/20" :

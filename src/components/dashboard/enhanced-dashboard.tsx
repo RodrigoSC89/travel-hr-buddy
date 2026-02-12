@@ -440,24 +440,24 @@ export const EnhancedDashboard = () => {
 
         {/* Interactive Stats Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-          {quickStats.map((stat, index) => (
+          {quickStats.map((stat, statIdx) => (
             <InteractiveStatsCard 
-              key={index} 
+              key={stat.title ?? `stat-${statIdx}`} 
               {...stat} 
-              delay={300 + (index * 100)} 
+              delay={300 + (statIdx * 100)} 
             />
           ))}
         </div>
 
         {/* Floating Action Buttons */}
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-          {quickActions.map((action, index) => (
+          {quickActions.map((action, actionIdx) => (
             <FloatingActionButton
-              key={index}
+              key={action.label}
               icon={action.icon}
               label={action.label}
               onClick={action.action}
-              delay={700 + (index * 100)}
+              delay={700 + (actionIdx * 100)}
             />
           ))}
         </div>
@@ -516,8 +516,8 @@ export const EnhancedDashboard = () => {
                       { icon: Users, label: "Satisfação Cliente", value: 98, color: "blue", detail: "Excelente feedback • 4.9/5 avaliação média" },
                       { icon: Activity, label: "Eficiência Operacional", value: 87, color: "purple", detail: "Automação ativa • 23% melhoria este mês" },
                       { icon: Brain, label: "Adoção de IA", value: 92, color: "orange", detail: "IA integrada • 15 modelos ativos" }
-                    ].map((kpi, index) => (
-                      <div key={index} className="group space-y-4 p-6 rounded-xl bg-gradient-to-br from-background/50 to-primary/5 
+                    ].map((kpi) => (
+                      <div key={kpi.label} className="group space-y-4 p-6 rounded-xl bg-gradient-to-br from-background/50 to-primary/5
                         hover:from-primary/10 hover:to-primary/5 transition-all duration-500 hover:scale-105 hover:shadow-lg">
                         <div className="flex justify-between items-center">
                           <span className="text-sm font-semibold flex items-center gap-2">
@@ -555,9 +555,9 @@ export const EnhancedDashboard = () => {
                         { icon: Zap, label: "Otimizar IA", url: "/analytics" },
                         { icon: Brain, label: "Análise IA", url: "/analytics" },
                         { icon: Rocket, label: "Inovação", url: "/intelligence" }
-                      ].map((action, index) => (
+                      ].map((action) => (
                         <Button 
-                          key={index}
+                          key={action.label}
                           variant="outline" 
                           size="sm" 
                           className="justify-start h-14 hover:scale-105 transition-all duration-300 group relative overflow-hidden
@@ -589,8 +589,8 @@ export const EnhancedDashboard = () => {
               </CardHeader>
               <CardContent>
                 <div className="space-y-4">
-                  {recentActivities.map((activity, index) => (
-                    <PulsingNotificationCard key={index} {...activity} />
+                  {recentActivities.map((activity) => (
+                    <PulsingNotificationCard key={activity.title} {...activity} />
                   ))}
                 </div>
               </CardContent>
@@ -619,9 +619,9 @@ export const EnhancedDashboard = () => {
                 { icon: "⚡", title: "Performance Extrema", desc: "Velocidade de processamento 1000x superior aos concorrentes", color: "yellow" },
                 { icon: "🛡️", title: "Segurança Quântica", desc: "Criptografia quântica inviolável com certificação militar", color: "green" },
                 { icon: "🌍", title: "Escala Global", desc: "Infraestrutura planetária com replicação em tempo real", color: "indigo" }
-              ].map((feature, index) => (
+              ].map((feature) => (
                 <div 
-                  key={index}
+                  key={feature.title}
                   className="group p-6 rounded-2xl bg-gradient-to-br from-background/50 to-primary/5 border border-border/50
                     hover:scale-105 hover:shadow-lg transition-all duration-500 cursor-pointer
                     hover:border-primary/50 hover:bg-gradient-to-br hover:from-primary/10 hover:to-primary/5"

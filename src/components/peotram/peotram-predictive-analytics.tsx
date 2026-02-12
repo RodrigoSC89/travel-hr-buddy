@@ -241,8 +241,8 @@ export const PeotramPredictiveAnalytics: React.FC = () => {
                   <div className="space-y-1">
                     <p className="text-sm font-medium">Ações Recomendadas:</p>
                     <ul className="space-y-1">
-                      {insight.actionItems.map((action, idx) => (
-                        <li key={idx} className="flex items-start gap-2 text-sm">
+                      {insight.actionItems.map((action) => (
+                        <li key={action} className="flex items-start gap-2 text-sm">
                           <CheckCircle className="h-4 w-4 text-success mt-0.5 flex-shrink-0" />
                           <span>{action}</span>
                         </li>
@@ -275,8 +275,8 @@ export const PeotramPredictiveAnalytics: React.FC = () => {
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
-          {forecasts.map((forecast, idx) => (
-            <div key={idx} className="space-y-2">
+          {forecasts.map((forecast) => (
+            <div key={forecast.element} className="space-y-2">
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-3">
                   {getTrendIcon(forecast.trend)}

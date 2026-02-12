@@ -192,8 +192,8 @@ function DocumentCard({ document }: { document: Document }) {
       {document.approvers.length > 0 && (
         <div className="mt-3">
           <div className="flex items-center gap-2 mb-2">
-            {document.approvers.map((approver, idx) => (
-              <div key={idx} className="flex items-center">
+            {document.approvers.map((approver, approverIdx) => (
+              <div key={approver.name} className="flex items-center">
                 <Avatar className="h-6 w-6">
                   <AvatarFallback className={`text-xs ${
                     approver.status === "approved" ? "bg-success/20 text-success" :
@@ -203,7 +203,7 @@ function DocumentCard({ document }: { document: Document }) {
                     {approver.name.split(' ').map(n => n[0]).join('')}
                   </AvatarFallback>
                 </Avatar>
-                {idx < document.approvers.length - 1 && (
+                {approverIdx < document.approvers.length - 1 && (
                   <ArrowRight className="h-3 w-3 mx-1 text-muted-foreground" />
                 )}
               </div>

@@ -279,9 +279,9 @@ export function StatusTimeline({
               </div>
               {event.actions && event.actions.length > 0 && (
                 <div className="flex gap-1">
-                  {event.actions.slice(0, 2).map((action, idx) => (
+                  {event.actions.slice(0, 2).map((action) => (
                     <Button
-                      key={idx}
+                      key={action.label}
                       variant={action.variant || "ghost"}
                       size="sm"
                       className="h-7 text-xs"

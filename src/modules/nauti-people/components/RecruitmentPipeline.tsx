@@ -648,8 +648,8 @@ const RecruitmentPipeline: React.FC = () => {
               <div className="p-3 bg-muted/50 rounded-lg">
                 <p className="text-sm text-muted-foreground mb-2">Competências</p>
                 <div className="flex flex-wrap gap-2">
-                  {selectedCandidato.skills.map((skill, i) => (
-                    <Badge key={i} variant="secondary">{skill}</Badge>
+                  {selectedCandidato.skills.map((skill) => (
+                    <Badge key={skill} variant="secondary">{skill}</Badge>
                   ))}
                 </div>
               </div>
@@ -664,8 +664,8 @@ const RecruitmentPipeline: React.FC = () => {
                     <div className="mt-2">
                       <p className="text-xs text-muted-foreground">Pontos fortes:</p>
                       <ul className="text-xs list-disc list-inside">
-                        {selectedCandidato.aiInsights.strengths.map((s, i) => (
-                          <li key={i}>{s}</li>
+                        {selectedCandidato.aiInsights.strengths.map((s) => (
+                          <li key={s}>{s}</li>
                         ))}
                       </ul>
                     </div>

@@ -342,9 +342,9 @@ export function DrillSimulator() {
             
             {/* Objectives */}
             <div className="mt-4 grid grid-cols-2 md:grid-cols-4 gap-2">
-              {activeDrill.scenario.objectives.map((obj, idx) => (
+              {activeDrill.scenario.objectives.map((obj) => (
                 <div
-                  key={idx}
+                  key={obj}
                   className={`p-2 rounded border text-sm ${
                     activeDrill.completedObjectives.includes(obj)
                       ? "bg-success/20 border-success/50"
@@ -542,8 +542,8 @@ export function DrillSimulator() {
                   { priority: "high", text: "Aumentar frequência de drills de abandono - último há 60 dias", action: "Agendar para próxima semana" },
                   { priority: "medium", text: "Comunicação por rádio precisa de treinamento adicional", action: "Incluir em próximo drill" },
                   { priority: "low", text: "Considerar drill de vazamento de óleo - nunca executado", action: "Planejar para Q1" }
-                ].map((rec, idx) => (
-                  <div key={idx} className="p-3 border rounded-lg flex items-center justify-between">
+                ].map((rec) => (
+                  <div key={rec.text} className="p-3 border rounded-lg flex items-center justify-between">
                     <div className="flex items-center gap-3">
                       <Badge className={
                         rec.priority === "high" ? "bg-destructive/20 text-destructive" :

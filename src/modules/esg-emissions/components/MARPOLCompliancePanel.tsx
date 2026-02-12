@@ -472,8 +472,8 @@ export function MARPOLCompliancePanel() {
                 {marpolAnnexes
                   .filter(a => a.actions > 0)
                   .flatMap(a => a.requirements.filter(r => r.status !== "met").map(r => ({ ...r, annex: a.number, annexTitle: a.title })))
-                  .map((action, idx) => (
-                    <Card key={idx} className="border-orange-500/30">
+                  .map((action) => (
+                    <Card key={action.name} className="border-orange-500/30">
                       <CardContent className="p-4">
                         <div className="flex items-center justify-between">
                           <div className="flex items-center gap-3">

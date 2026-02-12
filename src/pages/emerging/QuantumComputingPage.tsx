@@ -405,8 +405,8 @@ const QuantumComputingPage: React.FC = () => {
                   { title: "Correção de Erros Quânticos", status: "Pesquisa", completion: 35 },
                   { title: "Simulação de Moléculas para Combustíveis", status: "Planejado", completion: 10 },
                   { title: "Machine Learning Quântico Híbrido", status: "Em progresso", completion: 48 },
-                ].map((project, idx) => (
-                  <div key={idx} className="p-4 rounded-lg border bg-card">
+                ].map((project) => (
+                  <div key={project.title} className="p-4 rounded-lg border bg-card">
                     <div className="flex items-center justify-between mb-2">
                       <span className="font-medium">{project.title}</span>
                       <Badge variant="outline">{project.status}</Badge>

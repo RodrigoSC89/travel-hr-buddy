@@ -259,29 +259,21 @@ export function PredictiveCostDashboard() {
                 </CardHeader>
                 <CardContent>
                   <div className="space-y-4">
-                    {predictions.map((pred, idx) => (
-                      <div key={idx} className="flex items-center justify-between p-4 border rounded-lg">
-                        <div>
-                          <p className="font-medium">{pred.month}</p>
-                          <div className="flex items-center gap-2 mt-1">
-                            <Badge variant="outline" className="text-xs">
-                              <Sparkles className="h-3 w-3 mr-1" />
-                              {(pred.confidence * 100).toFixed(0)}% confiança
-                            </Badge>
-                          </div>
-                        </div>
+                    {predictions.map((pred, predIdx) => (
+                      <div key={pred.month} className="flex items-center justify-between p-4 border rounded-lg">
+...
                         <div className="text-right">
                           <p className="text-xl font-bold">${(pred.total / 1000).toFixed(0)}k</p>
-                          {idx > 0 && (
+                          {predIdx > 0 && (
                             <div className={`flex items-center text-xs ${
-                              pred.total > predictions[idx - 1].total ? 'text-destructive' : 'text-success'
+                              pred.total > predictions[predIdx - 1].total ? 'text-destructive' : 'text-success'
                             }`}>
-                              {pred.total > predictions[idx - 1].total ? (
+                              {pred.total > predictions[predIdx - 1].total ? (
                                 <TrendingUp className="h-3 w-3 mr-1" />
                               ) : (
                                 <TrendingDown className="h-3 w-3 mr-1" />
                               )}
-                              {Math.abs(((pred.total - predictions[idx - 1].total) / predictions[idx - 1].total) * 100).toFixed(1)}%
+                              {Math.abs(((pred.total - predictions[predIdx - 1].total) / predictions[predIdx - 1].total) * 100).toFixed(1)}%
                             </div>
                           )}
                         </div>

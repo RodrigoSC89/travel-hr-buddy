@@ -138,8 +138,8 @@ export default function Billing() {
                   <Separator className="mb-6" />
 
                   <ul className="space-y-3 text-left">
-                    {tier.features.slice(0, 7).map((feature, idx) => (
-                      <li key={idx} className="flex items-start gap-2">
+                    {tier.features.slice(0, 7).map((feature) => (
+                      <li key={feature} className="flex items-start gap-2">
                         <Check className="h-5 w-5 text-primary shrink-0 mt-0.5" />
                         <span className="text-sm">{feature}</span>
                       </li>

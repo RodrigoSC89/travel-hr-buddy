@@ -198,8 +198,8 @@ const CargoPlanningPage = () => {
             </CardHeader>
             <CardContent>
               <div className="space-y-4">
-                {optimizations.map((opt, idx) => (
-                  <div key={idx} className="p-4 border rounded-lg">
+                {optimizations.map((opt) => (
+                  <div key={opt.type} className="p-4 border rounded-lg">
                     <div className="flex items-start justify-between">
                       <div className="space-y-2">
                         <h3 className="font-semibold">{opt.type}</h3>
@@ -279,8 +279,8 @@ const CargoPlanningPage = () => {
             </CardHeader>
             <CardContent>
               <div className="space-y-4">
-                {stressPoints.map((point, idx) => (
-                  <div key={idx} className="space-y-2">
+                {stressPoints.map((point) => (
+                  <div key={point.location} className="space-y-2">
                     <div className="flex items-center justify-between">
                       <span className="font-medium">{point.location}</span>
                       <div className="flex items-center gap-2">

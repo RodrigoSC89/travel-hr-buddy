@@ -677,8 +677,8 @@ export function SafetyCommandCenter() {
                     { priority: 'high', title: 'Inspeção de EPI', desc: 'Verificar condição dos equipamentos de proteção', action: 'Iniciar' },
                     { priority: 'medium', title: 'Atualizar JSA', desc: 'Revisar análise de segurança do trabalho', action: 'Revisar' },
                     { priority: 'low', title: 'Campanha de Conscientização', desc: 'Promover cultura de segurança', action: 'Planejar' }
-                  ].map((rec, idx) => (
-                    <div key={idx} className="flex items-center justify-between p-3 border rounded-lg hover:bg-accent/30 transition-colors">
+                  ].map((rec) => (
+                    <div key={rec.title} className="flex items-center justify-between p-3 border rounded-lg hover:bg-accent/30 transition-colors">
                       <div className="flex items-center gap-3">
                         <div className={`w-2 h-2 rounded-full ${
                           rec.priority === 'high' ? 'bg-destructive' : 

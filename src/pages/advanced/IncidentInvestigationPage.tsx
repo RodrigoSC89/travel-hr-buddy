@@ -179,8 +179,8 @@ const IncidentInvestigationPage = () => {
                   <div className="p-4 bg-warning/10 rounded-lg">
                     <h4 className="font-semibold text-warning mb-2">Causas Diretas</h4>
                     <ul className="space-y-1 text-sm">
-                      {rootCauseAnalysis.directCauses.map((cause, idx) => (
-                        <li key={idx} className="flex items-start gap-2">
+                      {rootCauseAnalysis.directCauses.map((cause) => (
+                        <li key={cause} className="flex items-start gap-2">
                           <ChevronRight className="h-4 w-4 mt-0.5 flex-shrink-0" />
                           {cause}
                         </li>
@@ -191,8 +191,8 @@ const IncidentInvestigationPage = () => {
                   <div className="p-4 bg-accent/10 rounded-lg">
                     <h4 className="font-semibold text-accent-foreground mb-2">Fatores Contribuintes</h4>
                     <ul className="space-y-1 text-sm">
-                      {rootCauseAnalysis.contributingFactors.map((factor, idx) => (
-                        <li key={idx} className="flex items-start gap-2">
+                      {rootCauseAnalysis.contributingFactors.map((factor) => (
+                        <li key={factor} className="flex items-start gap-2">
                           <ChevronRight className="h-4 w-4 mt-0.5 flex-shrink-0" />
                           {factor}
                         </li>
@@ -203,8 +203,8 @@ const IncidentInvestigationPage = () => {
                   <div className="p-4 bg-info/10 rounded-lg">
                     <h4 className="font-semibold text-info mb-2">Causas Raiz (IA)</h4>
                     <ul className="space-y-1 text-sm">
-                      {rootCauseAnalysis.rootCauses.map((cause, idx) => (
-                        <li key={idx} className="flex items-start gap-2">
+                      {rootCauseAnalysis.rootCauses.map((cause) => (
+                        <li key={cause} className="flex items-start gap-2">
                           <Brain className="h-4 w-4 mt-0.5 flex-shrink-0" />
                           {cause}
                         </li>
@@ -216,8 +216,8 @@ const IncidentInvestigationPage = () => {
                 <div className="p-4 bg-success/10 rounded-lg">
                   <h4 className="font-semibold text-success mb-3">Recomendações da IA</h4>
                   <div className="space-y-2">
-                    {rootCauseAnalysis.recommendations.map((rec, idx) => (
-                      <div key={idx} className="flex items-center justify-between p-2 bg-background/50 rounded">
+                    {rootCauseAnalysis.recommendations.map((rec) => (
+                      <div key={rec.action} className="flex items-center justify-between p-2 bg-background/50 rounded">
                         <div className="flex items-center gap-2">
                           <Target className="h-4 w-4" />
                           <span className="text-sm">{rec.action}</span>
@@ -249,8 +249,8 @@ const IncidentInvestigationPage = () => {
               <div className="relative">
                 <div className="absolute left-4 top-0 bottom-0 w-0.5 bg-border" />
                 <div className="space-y-4">
-                  {timeline.map((event, idx) => (
-                    <div key={idx} className="relative pl-10">
+                  {timeline.map((event) => (
+                    <div key={event.time} className="relative pl-10">
                       <div className={`absolute left-2.5 w-3 h-3 rounded-full ${
                         event.type === "critical" ? "bg-destructive" :
                         event.type === "alert" ? "bg-warning" :
@@ -339,8 +339,8 @@ const IncidentInvestigationPage = () => {
             </CardHeader>
             <CardContent>
               <div className="space-y-3">
-                {rootCauseAnalysis.recommendations.map((rec, idx) => (
-                  <div key={idx} className="flex items-center justify-between p-4 border rounded-lg">
+                {rootCauseAnalysis.recommendations.map((rec) => (
+                  <div key={`action-${rec.action}`} className="flex items-center justify-between p-4 border rounded-lg">
                     <div className="flex items-center gap-3">
                       <Target className="h-5 w-5 text-primary" />
                       <div>

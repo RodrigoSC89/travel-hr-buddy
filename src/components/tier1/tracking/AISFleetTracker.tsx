@@ -308,8 +308,8 @@ export function AISFleetTracker() {
                           <AlertTriangle className="h-4 w-4 text-warning" />
                           Active Alerts
                         </p>
-                        {selectedVessel.alerts.map((alert, idx) => (
-                          <div key={idx} className={`p-2 rounded text-sm ${
+                        {selectedVessel.alerts.map((alert) => (
+                          <div key={alert.message} className={`p-2 rounded text-sm ${
                             alert.severity === 'critical' ? 'bg-destructive/10 text-destructive' :
                             alert.severity === 'warning' ? 'bg-warning/10 text-warning' :
                             'bg-info/10 text-info'

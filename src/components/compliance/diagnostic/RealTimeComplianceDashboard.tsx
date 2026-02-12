@@ -254,8 +254,8 @@ export function RealTimeComplianceDashboard() {
           { label: 'Pendências', value: metrics?.total || 32, target: 20, unit: '', status: 'warning' as const },
           { label: 'Certificados OK', value: 94, target: 100, unit: '%', status: 'good' as const },
           { label: 'Auditorias em Dia', value: 12, target: 12, unit: '', status: 'good' as const }
-        ] as ComplianceMetric[]).map((metric, idx) => (
-          <Card key={idx} className={`
+        ] as ComplianceMetric[]).map((metric) => (
+          <Card key={metric.label} className={`
             ${metric.status === 'critical' ? 'border-red-300 bg-red-50/50 dark:bg-red-950/20' : ''}
             ${metric.status === 'warning' ? 'border-amber-300 bg-amber-50/50 dark:bg-amber-950/20' : ''}
             ${metric.status === 'good' ? 'border-green-300 bg-green-50/50 dark:bg-green-950/20' : ''}
@@ -470,8 +470,8 @@ export function RealTimeComplianceDashboard() {
           </CardHeader>
           <CardContent>
             <div className="space-y-3">
-              {VESSELS_STATUS.map((vessel, idx) => (
-                <div key={idx} className={`p-3 rounded-lg flex items-center justify-between ${
+              {VESSELS_STATUS.map((vessel) => (
+                <div key={vessel.name} className={`p-3 rounded-lg flex items-center justify-between ${
                   vessel.status === 'critical' ? 'bg-red-50 dark:bg-red-950/20 border border-red-200' :
                   vessel.status === 'attention' ? 'bg-amber-50 dark:bg-amber-950/20 border border-amber-200' :
                   'bg-green-50 dark:bg-green-950/20 border border-green-200'
