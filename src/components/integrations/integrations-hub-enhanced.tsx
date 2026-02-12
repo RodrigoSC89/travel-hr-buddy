@@ -51,7 +51,7 @@ interface Integration {
   connection_status: string;
   access_token?: string;
   scopes?: string[];
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- dynamic integration metadata
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Supabase Json type
   metadata?: any;
   last_sync_at?: string;
   created_at: string;
@@ -61,7 +61,7 @@ interface WebhookEvent {
   id: string;
   event_type: string;
   webhook_url: string;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- dynamic webhook payload
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Supabase Json type
   payload: any;
   status: string;
   response_code?: number;
