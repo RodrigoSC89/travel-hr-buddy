@@ -113,7 +113,7 @@ const ComplianceCenter: React.FC = () => {
     case "valid": return "bg-success text-success-foreground";
     case "expiring": return "bg-warning text-warning-foreground";
     case "expired": return "bg-destructive text-destructive-foreground";
-    case "suspended": return "bg-orange-500 text-white";
+    case "suspended": return "bg-warning text-warning-foreground";
     case "pending": return "bg-info text-info-foreground";
     default: return "bg-muted text-muted-foreground";
     }
@@ -134,7 +134,7 @@ const ComplianceCenter: React.FC = () => {
     switch (risk) {
     case "low": return "text-success";
     case "medium": return "text-warning";
-    case "high": return "text-orange-500";
+    case "high": return "text-warning";
     case "critical": return "text-destructive";
     default: return "text-muted-foreground";
     }

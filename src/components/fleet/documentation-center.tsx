@@ -334,14 +334,14 @@ const DocumentationCenter: React.FC = () => {
                   >
                     <div className="flex items-center gap-4">
                       <div className={`p-2 rounded-lg ${
-                        cert.status === "valid" ? "bg-green-500/10" :
-                        cert.status === "expiring" ? "bg-amber-500/10" :
-                        "bg-red-500/10"
+                        cert.status === "valid" ? "bg-success/10" :
+                        cert.status === "expiring" ? "bg-warning/10" :
+                        "bg-destructive/10"
                       }`}>
                         <FileText className={`h-5 w-5 ${
-                          cert.status === "valid" ? "text-green-500" :
-                          cert.status === "expiring" ? "text-amber-500" :
-                          "text-red-500"
+                          cert.status === "valid" ? "text-success" :
+                          cert.status === "expiring" ? "text-warning" :
+                          "text-destructive"
                         }`} />
                       </div>
                       <div>

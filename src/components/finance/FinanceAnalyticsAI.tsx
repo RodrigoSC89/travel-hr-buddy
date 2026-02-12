@@ -185,7 +185,7 @@ export function FinanceAnalyticsAI() {
         <Card>
           <CardContent className="pt-4">
             <div className="flex items-center gap-2">
-              <Target className="h-5 w-5 text-blue-500" />
+              <Target className="h-5 w-5 text-info" />
               <div>
                 <p className="text-2xl font-bold">${(totalBudget / 1000).toFixed(0)}k</p>
                 <p className="text-xs text-muted-foreground">Budget Total</p>
@@ -338,7 +338,7 @@ export function FinanceAnalyticsAI() {
                           </p>
                         </div>
                         <div className="text-right">
-                          <p className="text-xl font-bold text-green-500">
+                          <p className="text-xl font-bold text-success">
                             ${opt.potentialSavings.toLocaleString()}
                           </p>
                           <p className="text-xs text-muted-foreground">economia/ano</p>

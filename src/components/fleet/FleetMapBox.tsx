@@ -451,15 +451,15 @@ export function FleetMapBox({
               <div className="text-sm font-medium mb-2">Legenda</div>
               <div className="space-y-1.5 text-xs">
                 <div className="flex items-center gap-2">
-                  <div className="w-3 h-3 rounded-full bg-blue-500" />
+                  <div className="w-3 h-3 rounded-full bg-info" />
                   <span>Em navegação</span>
                 </div>
                 <div className="flex items-center gap-2">
-                  <div className="w-3 h-3 rounded-full bg-green-500" />
+                  <div className="w-3 h-3 rounded-full bg-success" />
                   <span>Parado/Ancorado</span>
                 </div>
                 <div className="flex items-center gap-2">
-                  <div className="w-3 h-3 rounded-full bg-orange-500" />
+                  <div className="w-3 h-3 rounded-full bg-warning" />
                   <span>Selecionado</span>
                 </div>
               </div>

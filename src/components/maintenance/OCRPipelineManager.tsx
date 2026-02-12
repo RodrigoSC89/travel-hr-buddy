@@ -436,8 +436,8 @@ export function OCRPipelineManager() {
         <Card>
           <CardContent className="pt-4">
             <div className="flex items-center gap-3">
-              <div className="p-2 rounded-lg bg-blue-500/10">
-                <CheckCircle className="h-5 w-5 text-blue-500" />
+              <div className="p-2 rounded-lg bg-info/10">
+                <CheckCircle className="h-5 w-5 text-info" />
               </div>
               <div>
                 <p className="text-2xl font-bold">{stats.avgConfidence.toFixed(0)}%</p>
@@ -560,7 +560,7 @@ export function OCRPipelineManager() {
                               {doc.confidence && (
                                 <>
                                   <span>•</span>
-                                  <span className="text-green-500">{doc.confidence}% confiança</span>
+                                  <span className="text-success">{doc.confidence}% confiança</span>
                                 </>
                               )}
                             </div>
@@ -650,7 +650,7 @@ export function OCRPipelineManager() {
           </div>
           {selectedDoc?.confidence && (
             <div className="flex items-center gap-2 text-sm">
-              <Badge variant="outline" className="bg-green-500/10 text-green-500">
+              <Badge variant="outline" className="bg-success/10 text-success">
                 Confiança OCR: {selectedDoc.confidence}%
               </Badge>
               <Badge variant="outline">

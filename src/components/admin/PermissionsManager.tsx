@@ -38,9 +38,9 @@ interface RolePermission {
 
 const roles: Role[] = [
   { id: 'admin', name: 'admin', displayName: 'Administrador', description: 'Acesso total ao sistema', userCount: 3, color: 'bg-destructive/20 text-destructive' },
-  { id: 'hr_manager', name: 'hr_manager', displayName: 'Gerente de RH', description: 'Gestão de pessoas e tripulação', userCount: 5, color: 'bg-purple-500/20 text-purple-400' },
-  { id: 'operations', name: 'operations', displayName: 'Operações', description: 'Gestão operacional de embarcações', userCount: 12, color: 'bg-blue-500/20 text-blue-400' },
-  { id: 'compliance', name: 'compliance', displayName: 'Compliance', description: 'Auditorias e conformidade', userCount: 4, color: 'bg-amber-500/20 text-amber-400' },
+  { id: 'hr_manager', name: 'hr_manager', displayName: 'Gerente de RH', description: 'Gestão de pessoas e tripulação', userCount: 5, color: 'bg-accent/20 text-accent-foreground' },
+  { id: 'operations', name: 'operations', displayName: 'Operações', description: 'Gestão operacional de embarcações', userCount: 12, color: 'bg-info/20 text-info' },
+  { id: 'compliance', name: 'compliance', displayName: 'Compliance', description: 'Auditorias e conformidade', userCount: 4, color: 'bg-warning/20 text-warning' },
   { id: 'employee', name: 'employee', displayName: 'Funcionário', description: 'Acesso básico', userCount: 45, color: 'bg-muted text-muted-foreground' },
 ];
 

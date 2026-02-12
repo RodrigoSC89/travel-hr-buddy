@@ -50,19 +50,19 @@ export const EmployeeTrainingPortal: React.FC = () => {
 
   const getStatusColor = (status: Course['status']) => {
     switch (status) {
-      case 'completed': return 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400';
-      case 'in_progress': return 'bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400';
-      case 'not_started': return 'bg-gray-100 text-gray-700 dark:bg-gray-800 dark:text-gray-400';
-      case 'locked': return 'bg-yellow-100 text-yellow-700 dark:bg-yellow-900/30 dark:text-yellow-400';
+      case 'completed': return 'bg-success/20 text-success';
+      case 'in_progress': return 'bg-info/20 text-info';
+      case 'not_started': return 'bg-muted text-muted-foreground';
+      case 'locked': return 'bg-warning/20 text-warning';
       default: return '';
     }
   };
 
   const getCertStatusColor = (status: Certificate['status']) => {
     switch (status) {
-      case 'valid': return 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400';
-      case 'expiring': return 'bg-yellow-100 text-yellow-700 dark:bg-yellow-900/30 dark:text-yellow-400';
-      case 'expired': return 'bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400';
+      case 'valid': return 'bg-success/20 text-success';
+      case 'expiring': return 'bg-warning/20 text-warning';
+      case 'expired': return 'bg-destructive/20 text-destructive';
       default: return '';
     }
   };
@@ -109,8 +109,8 @@ export const EmployeeTrainingPortal: React.FC = () => {
         <Card>
           <CardContent className="p-4">
             <div className="flex items-center gap-3">
-              <div className="p-2 rounded-lg bg-green-100 dark:bg-green-900/30">
-                <CheckCircle2 className="h-5 w-5 text-green-600" />
+              <div className="p-2 rounded-lg bg-success/10">
+                <CheckCircle2 className="h-5 w-5 text-success" />
               </div>
               <div>
                 <p className="text-2xl font-bold">{completedCourses}</p>
@@ -122,8 +122,8 @@ export const EmployeeTrainingPortal: React.FC = () => {
         <Card>
           <CardContent className="p-4">
             <div className="flex items-center gap-3">
-              <div className="p-2 rounded-lg bg-blue-100 dark:bg-blue-900/30">
-                <Play className="h-5 w-5 text-blue-600" />
+              <div className="p-2 rounded-lg bg-info/10">
+                <Play className="h-5 w-5 text-info" />
               </div>
               <div>
                 <p className="text-2xl font-bold">{inProgressCourses}</p>
@@ -135,8 +135,8 @@ export const EmployeeTrainingPortal: React.FC = () => {
         <Card>
           <CardContent className="p-4">
             <div className="flex items-center gap-3">
-              <div className="p-2 rounded-lg bg-yellow-100 dark:bg-yellow-900/30">
-                <Award className="h-5 w-5 text-yellow-600" />
+              <div className="p-2 rounded-lg bg-warning/10">
+                <Award className="h-5 w-5 text-warning" />
               </div>
               <div>
                 <p className="text-2xl font-bold">{certificates.length}</p>

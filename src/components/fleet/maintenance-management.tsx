@@ -235,7 +235,7 @@ const MaintenanceManagement: React.FC = () => {
     switch (priority) {
     case "low": return "text-success";
     case "medium": return "text-warning";
-    case "high": return "text-orange-500";
+    case "high": return "text-warning";
     case "critical": return "text-destructive";
     default: return "text-muted-foreground";
     }

@@ -45,22 +45,22 @@ interface Vessel {
 }
 
 const EVENT_TYPES = [
-  { value: 'voyage', label: 'Viagem', icon: Navigation, color: 'bg-blue-500' },
-  { value: 'maintenance', label: 'Manutenção', icon: Wrench, color: 'bg-orange-500' },
-  { value: 'incident', label: 'Incidente', icon: AlertTriangle, color: 'bg-red-500' },
-  { value: 'inspection', label: 'Inspeção', icon: FileText, color: 'bg-purple-500' },
-  { value: 'port_call', label: 'Escala', icon: Anchor, color: 'bg-green-500' },
-  { value: 'certification', label: 'Certificação', icon: CheckCircle, color: 'bg-teal-500' },
-  { value: 'crew_change', label: 'Troca de Tripulação', icon: Users, color: 'bg-indigo-500' },
-  { value: 'cargo', label: 'Carga', icon: Package, color: 'bg-yellow-500' },
-  { value: 'fuel', label: 'Abastecimento', icon: Fuel, color: 'bg-gray-500' },
+  { value: 'voyage', label: 'Viagem', icon: Navigation, color: 'bg-info' },
+  { value: 'maintenance', label: 'Manutenção', icon: Wrench, color: 'bg-warning' },
+  { value: 'incident', label: 'Incidente', icon: AlertTriangle, color: 'bg-destructive' },
+  { value: 'inspection', label: 'Inspeção', icon: FileText, color: 'bg-accent' },
+  { value: 'port_call', label: 'Escala', icon: Anchor, color: 'bg-success' },
+  { value: 'certification', label: 'Certificação', icon: CheckCircle, color: 'bg-success' },
+  { value: 'crew_change', label: 'Troca de Tripulação', icon: Users, color: 'bg-info' },
+  { value: 'cargo', label: 'Carga', icon: Package, color: 'bg-warning' },
+  { value: 'fuel', label: 'Abastecimento', icon: Fuel, color: 'bg-muted-foreground' },
 ];
 
 const PRIORITIES = [
-  { value: 'low', label: 'Baixa', color: 'bg-gray-400' },
-  { value: 'medium', label: 'Média', color: 'bg-yellow-400' },
-  { value: 'high', label: 'Alta', color: 'bg-orange-400' },
-  { value: 'critical', label: 'Crítica', color: 'bg-red-400' },
+  { value: 'low', label: 'Baixa', color: 'bg-muted-foreground' },
+  { value: 'medium', label: 'Média', color: 'bg-warning' },
+  { value: 'high', label: 'Alta', color: 'bg-warning' },
+  { value: 'critical', label: 'Crítica', color: 'bg-destructive' },
 ];
 
 export function VesselHistoryTimeline() {
@@ -357,9 +357,9 @@ export function VesselHistoryTimeline() {
   const getStatusBadge = (status: string) => {
     switch (status) {
       case 'completed':
-        return <Badge className="bg-green-500">Concluído</Badge>;
+        return <Badge className="bg-success">Concluído</Badge>;
       case 'in_progress':
-        return <Badge className="bg-blue-500">Em Andamento</Badge>;
+        return <Badge className="bg-info">Em Andamento</Badge>;
       case 'planned':
         return <Badge variant="secondary">Planejado</Badge>;
       case 'cancelled':
