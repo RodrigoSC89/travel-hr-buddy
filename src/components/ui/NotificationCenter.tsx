@@ -37,6 +37,7 @@ export interface Notification {
   is_read?: boolean;
   createdAt: Date;
   timestamp?: string;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Supabase Json type
   actionData?: any;
   action_url?: string;
   auto_dismiss?: boolean;
@@ -85,8 +86,8 @@ export const NotificationCenter: React.FC<NotificationCenterProps> = ({
       .subscribe();
 
     // Setup maritime-specific subscriptions if variant is maritime or fleet
-    let alertsChannel: any;
-    let maintenanceChannel: any;
+    let alertsChannel: ReturnType<typeof supabase.channel> | undefined;
+    let maintenanceChannel: ReturnType<typeof supabase.channel> | undefined;
 
     if (variant === "maritime" || variant === "fleet") {
       alertsChannel = supabase

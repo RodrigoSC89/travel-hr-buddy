@@ -474,7 +474,7 @@ export default function WorkflowCommandCenter() {
                       </CardHeader>
                       <CardContent>
                         <div className="flex items-center gap-1 mb-3 overflow-x-auto pb-2">
-                          {workflow.nodes.slice(0, 5).map((node: any, i: number) => (
+                          {workflow.nodes.slice(0, 5).map((node: WorkflowNode, i: number) => (
                             <React.Fragment key={node.id}>
                               <div className={`flex items-center justify-center w-6 h-6 rounded-full ${getNodeStatusColor(node.status)} text-white`}>
                                 {getNodeIcon(node.type)}
@@ -783,7 +783,7 @@ export default function WorkflowCommandCenter() {
                 <Progress value={selectedWorkflow.progress} className="h-3" />
                 <p className="text-sm text-muted-foreground">Progresso: {selectedWorkflow.progress}%</p>
                 <div className="border rounded-lg p-4 max-h-60 overflow-auto space-y-2">
-                  {selectedWorkflow.steps?.map((step: any, i: number) => (
+                  {selectedWorkflow.steps?.map((step: { name: string; status: string }, i: number) => (
                     <div key={i} className="flex items-center justify-between p-2 bg-muted/50 rounded">
                       <span>{step.name}</span>
                       <Badge variant="outline">{step.status}</Badge>
@@ -821,7 +821,7 @@ export default function WorkflowCommandCenter() {
 
                 <div className="border rounded-lg p-6 bg-muted/30">
                   <div className="flex flex-wrap items-center gap-4 justify-center">
-                    {selectedVisualWorkflow.nodes.map((node: any, i: number) => (
+                    {selectedVisualWorkflow.nodes.map((node: WorkflowNode, i: number) => (
                       <React.Fragment key={node.id}>
                         <div className="flex flex-col items-center gap-2">
                           <div className={`flex items-center justify-center w-12 h-12 rounded-full ${getNodeStatusColor(node.status)} text-white`}>
