@@ -50,9 +50,9 @@ interface Quote {
 
 const statusConfig = {
   draft: { label: "Rascunho", color: "bg-muted text-muted-foreground" },
-  sent: { label: "Enviado", color: "bg-blue-500/20 text-blue-500" },
-  quoted: { label: "Cotado", color: "bg-purple-500/20 text-purple-500" },
-  awarded: { label: "Adjudicado", color: "bg-green-500/20 text-green-500" },
+  sent: { label: "Enviado", color: "bg-info/20 text-info" },
+  quoted: { label: "Cotado", color: "bg-accent text-accent-foreground" },
+  awarded: { label: "Adjudicado", color: "bg-success/20 text-success" },
   cancelled: { label: "Cancelado", color: "bg-destructive/20 text-destructive" },
 };
 
@@ -472,7 +472,7 @@ export default function RFQManagementPanel() {
                     <Building2 className="h-4 w-4 text-muted-foreground" />
                     <span className="font-medium">{quote.supplier_name}</span>
                   </div>
-                  <Badge className={quote.status === "accepted" ? "bg-green-500/20 text-green-500" : "bg-muted"}>
+                  <Badge className={quote.status === "accepted" ? "bg-success/20 text-success" : "bg-muted"}>
                     {quote.status === "accepted" ? "Aceito" : "Pendente"}
                   </Badge>
                 </div>
@@ -486,7 +486,7 @@ export default function RFQManagementPanel() {
                   <Button 
                     size="sm" 
                     variant="outline"
-                    className="text-green-600"
+                    className="text-success"
                     onClick={() => handleAwardQuote(quote.id, quote.supplier_name)}
                   >
                     <CheckCircle className="h-4 w-4 mr-1" />

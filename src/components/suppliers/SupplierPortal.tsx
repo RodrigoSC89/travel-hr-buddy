@@ -109,13 +109,13 @@ export const SupplierPortal: React.FC = () => {
   const getStatusColor = (status: string) => {
     switch (status) {
       case 'active':
-      case 'delivered': return 'bg-green-500/20 text-green-400 border-green-500/30';
+      case 'delivered': return 'bg-success/20 text-success border-success/30';
       case 'pending':
       case 'confirmed':
-      case 'shipped': return 'bg-blue-500/20 text-blue-400 border-blue-500/30';
-      case 'suspended': return 'bg-red-500/20 text-red-400 border-red-500/30';
+      case 'shipped': return 'bg-info/20 text-info border-info/30';
+      case 'suspended': return 'bg-destructive/20 text-destructive border-destructive/30';
       case 'draft':
-      case 'submitted': return 'bg-yellow-500/20 text-yellow-400 border-yellow-500/30';
+      case 'submitted': return 'bg-warning/20 text-warning border-warning/30';
       default: return 'bg-muted text-muted-foreground';
     }
   };
@@ -174,8 +174,8 @@ export const SupplierPortal: React.FC = () => {
             <Card className="bg-card/50 border-border/50">
               <CardContent className="p-4">
                 <div className="flex items-center gap-3">
-                  <div className="p-2 rounded-lg bg-blue-500/20">
-                    <Package className="h-5 w-5 text-blue-400" />
+                  <div className="p-2 rounded-lg bg-info/20">
+                    <Package className="h-5 w-5 text-info" />
                   </div>
                   <div>
                     <p className="text-sm text-muted-foreground">Open Orders</p>
@@ -188,8 +188,8 @@ export const SupplierPortal: React.FC = () => {
             <Card className="bg-card/50 border-border/50">
               <CardContent className="p-4">
                 <div className="flex items-center gap-3">
-                  <div className="p-2 rounded-lg bg-green-500/20">
-                    <TrendingUp className="h-5 w-5 text-green-400" />
+                  <div className="p-2 rounded-lg bg-success/20">
+                    <TrendingUp className="h-5 w-5 text-success" />
                   </div>
                   <div>
                     <p className="text-sm text-muted-foreground">Avg. Rating</p>
@@ -202,8 +202,8 @@ export const SupplierPortal: React.FC = () => {
             <Card className="bg-card/50 border-border/50">
               <CardContent className="p-4">
                 <div className="flex items-center gap-3">
-                  <div className="p-2 rounded-lg bg-yellow-500/20">
-                    <Clock className="h-5 w-5 text-yellow-400" />
+                  <div className="p-2 rounded-lg bg-warning/20">
+                    <Clock className="h-5 w-5 text-warning" />
                   </div>
                   <div>
                     <p className="text-sm text-muted-foreground">On-Time Delivery</p>
@@ -278,7 +278,7 @@ export const SupplierPortal: React.FC = () => {
                         </div>
                         <div className="flex items-center gap-2">
                           <div className="flex items-center gap-1">
-                            <Star className="h-4 w-4 text-yellow-400 fill-yellow-400" />
+                            <Star className="h-4 w-4 text-warning fill-warning" />
                             <span className="font-medium">{supplier.rating.toFixed(1)}</span>
                           </div>
                           <Badge className={getStatusColor(supplier.status)}>

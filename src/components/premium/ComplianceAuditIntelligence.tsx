@@ -36,11 +36,11 @@ export default function ComplianceAuditIntelligence() {
   const getStatusColor = (status: string) => {
     switch (status) {
       case "valid": case "active": case "closed": case "completed": case "ready":
-        return "bg-green-500/10 text-green-500 border-green-500/20";
+        return "bg-success/10 text-success border-success/20";
       case "renewal_due": case "in_progress": case "standby": case "attention":
-        return "bg-amber-500/10 text-amber-500 border-amber-500/20";
+        return "bg-warning/10 text-warning border-warning/20";
       case "expired": case "open": case "critical":
-        return "bg-red-500/10 text-red-500 border-red-500/20";
+        return "bg-destructive/10 text-destructive border-destructive/20";
       default: return "bg-muted text-muted-foreground";
     }
   };
