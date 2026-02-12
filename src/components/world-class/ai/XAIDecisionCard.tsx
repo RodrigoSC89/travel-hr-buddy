@@ -167,15 +167,15 @@ export function XAIDecisionCard({ decision }: { decision: XAIDecision }) {
                   </div>
                   <div className="grid grid-cols-2 gap-2 text-xs">
                     <div>
-                      {alt.pros.map((p, i) => (
-                        <div key={i} className="flex items-center gap-1 text-success">
+                      {alt.pros.map((p) => (
+                        <div key={p} className="flex items-center gap-1 text-success">
                           <CheckCircle className="h-3 w-3" /> {p}
                         </div>
                       ))}
                     </div>
                     <div>
-                      {alt.cons.map((c, i) => (
-                        <div key={i} className="flex items-center gap-1 text-destructive">
+                      {alt.cons.map((c) => (
+                        <div key={c} className="flex items-center gap-1 text-destructive">
                           <XCircle className="h-3 w-3" /> {c}
                         </div>
                       ))}

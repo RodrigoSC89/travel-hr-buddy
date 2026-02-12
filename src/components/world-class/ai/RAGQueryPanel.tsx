@@ -126,9 +126,9 @@ export const RAGQueryPanel: React.FC = () => {
               <Sparkles className="h-3 w-3" /> Perguntas rápidas:
             </p>
             <div className="flex flex-wrap gap-1">
-              {QUICK_QUESTIONS.map((q, i) => (
+              {QUICK_QUESTIONS.map((q) => (
                 <button
-                  key={i}
+                  key={q}
                   onClick={() => { setQuestion(q); handleQuery(q); }}
                   className="text-xs px-2 py-1 rounded-md border hover:bg-accent/50 transition-colors text-left"
                   disabled={isQuerying}
@@ -145,7 +145,7 @@ export const RAGQueryPanel: React.FC = () => {
           <ScrollArea className="h-[280px]">
             <div className="space-y-2">
               {results.map((result, i) => (
-                <div key={i} className="rounded-lg border p-3 space-y-2">
+                <div key={`result-${result.question}-${i}`} className="rounded-lg border p-3 space-y-2">
                   <button
                     onClick={() => setExpandedResult(expandedResult === i ? null : i)}
                     className="flex items-center justify-between w-full text-left"

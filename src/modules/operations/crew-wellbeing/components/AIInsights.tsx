@@ -115,8 +115,8 @@ export const AIInsights = () => {
                 <AlertDescription>
                   <strong>Alertas:</strong>
                   <ul className="mt-2 space-y-1">
-                    {analysis.alerts.map((alert, idx) => (
-                      <li key={idx}>• {alert}</li>
+                    {analysis.alerts.map((alert) => (
+                      <li key={alert}>• {alert}</li>
                     ))}
                   </ul>
                 </AlertDescription>
@@ -140,8 +140,8 @@ export const AIInsights = () => {
                   Recomendações
                 </h4>
                 <ul className="space-y-1 text-sm">
-                  {analysis.recommendations.map((rec, idx) => (
-                    <li key={idx}>• {rec}</li>
+                  {analysis.recommendations.map((rec) => (
+                    <li key={rec}>• {rec}</li>
                   ))}
                 </ul>
               </div>
@@ -151,8 +151,8 @@ export const AIInsights = () => {
               <div className="p-4 bg-muted rounded-lg">
                 <h4 className="font-semibold mb-2">Ações Preventivas</h4>
                 <ul className="space-y-1 text-sm">
-                  {analysis.preventive_actions.map((action, idx) => (
-                    <li key={idx}>• {action}</li>
+                  {analysis.preventive_actions.map((action) => (
+                    <li key={action}>• {action}</li>
                   ))}
                 </ul>
               </div>

@@ -337,8 +337,8 @@ export function PEODP7PillarsOverview() {
                       <Target className="h-4 w-4" /> Objetivos
                     </h4>
                     <ul className="space-y-1">
-                      {selectedPillar.objectives.map((obj, i) => (
-                        <li key={i} className="text-sm text-muted-foreground flex items-start gap-2">
+                      {selectedPillar.objectives.map((obj) => (
+                        <li key={obj} className="text-sm text-muted-foreground flex items-start gap-2">
                           <CheckCircle className="h-4 w-4 text-green-500 shrink-0 mt-0.5" />
                           {obj}
                         </li>
@@ -352,8 +352,8 @@ export function PEODP7PillarsOverview() {
                       <ClipboardCheck className="h-4 w-4" /> Requisitos Principais
                     </h4>
                     <div className="space-y-2">
-                      {selectedPillar.keyRequirements.map((req, i) => (
-                        <div key={i} className="p-3 border rounded-lg bg-muted/50">
+                      {selectedPillar.keyRequirements.map((req) => (
+                        <div key={req.code} className="p-3 border rounded-lg bg-muted/50">
                           <div className="flex items-center justify-between mb-1">
                             <div className="flex items-center gap-2">
                               <Badge variant="outline" className="text-xs">{req.code}</Badge>
@@ -377,8 +377,8 @@ export function PEODP7PillarsOverview() {
                       <BookOpen className="h-4 w-4" /> Referências Normativas
                     </h4>
                     <div className="flex flex-wrap gap-2">
-                      {selectedPillar.references.map((ref, i) => (
-                        <Badge key={i} variant="secondary">{ref}</Badge>
+                      {selectedPillar.references.map((ref) => (
+                        <Badge key={ref} variant="secondary">{ref}</Badge>
                       ))}
                     </div>
                   </div>

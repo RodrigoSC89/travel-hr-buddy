@@ -290,7 +290,7 @@ Sou seu assistente especializado em **Sistema de Gestão de Segurança Operacion
                       
                       <div className="prose prose-sm dark:prose-invert max-w-none">
                         {message.content.split("\n").map((line, i) => (
-                          <p key={i} className="mb-2 last:mb-0 whitespace-pre-wrap">{line}</p>
+                          <p key={`line-${i}-${line.slice(0,20)}`} className="mb-2 last:mb-0 whitespace-pre-wrap">{line}</p>
                         ))}
                       </div>
                       
@@ -314,9 +314,9 @@ Sou seu assistente especializado em **Sistema de Gestão de Segurança Operacion
                             Referências Normativas:
                           </p>
                           <div className="flex flex-wrap gap-1">
-                            {message.citations.map((citation, idx) => (
+                            {message.citations.map((citation) => (
                               <Badge
-                                key={idx}
+                                key={`${citation.norma}-${citation.artigo}`}
                                 variant="outline"
                                 className="text-xs cursor-pointer hover:bg-primary/10 transition-colors"
                                 onClick={() => citation.link && window.open(citation.link, "_blank")}
@@ -403,9 +403,9 @@ Sou seu assistente especializado em **Sistema de Gestão de Segurança Operacion
               
               {Object.entries(QUICK_ACTIONS).map(([key, actions]) => (
                 <TabsContent key={key} value={key} className="mt-3 space-y-2">
-                  {actions.map((action, idx) => (
+                  {actions.map((action) => (
                     <Button
-                      key={idx}
+                      key={action.label}
                       variant="outline"
                       className="w-full justify-start text-left h-auto py-2.5 px-3 text-xs hover:bg-primary/5"
                       onClick={() => handleSendMessage(action.query)}

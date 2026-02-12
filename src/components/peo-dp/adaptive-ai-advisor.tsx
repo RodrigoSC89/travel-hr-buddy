@@ -268,9 +268,9 @@ export const AdaptiveAIAdvisor: React.FC = () => {
             </CardHeader>
             <CardContent>
               <div className="space-y-2">
-                {suggestedQuestions[selectedProfile].map((q, i) => (
+                {suggestedQuestions[selectedProfile].map((q) => (
                   <Button
-                    key={i}
+                    key={q}
                     variant="outline"
                     size="sm"
                     className="w-full justify-start text-left h-auto py-2"
@@ -351,8 +351,8 @@ export const AdaptiveAIAdvisor: React.FC = () => {
                     <div>
                       <p className="text-xs text-muted-foreground mb-1">Fontes:</p>
                       <div className="flex flex-wrap gap-1">
-                        {lastResponse.sources.map((s, i) => (
-                          <Badge key={i} variant="secondary" className="text-xs">{s}</Badge>
+                        {lastResponse.sources.map((s) => (
+                          <Badge key={s} variant="secondary" className="text-xs">{s}</Badge>
                         ))}
                       </div>
                     </div>

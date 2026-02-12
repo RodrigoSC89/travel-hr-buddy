@@ -435,8 +435,8 @@ export default function PeopleIntelligenceHub() {
                      <div>
                        <h4 className="font-semibold mb-3">Certificados</h4>
                        <div className="space-y-2">
-                         {selectedCrew.certificates.map((cert: { name: string; expiry: string; status: string }, idx: number) => (
-                           <div key={idx} className="flex items-center justify-between p-3 border rounded-lg">
+                         {selectedCrew.certificates.map((cert: { name: string; expiry: string; status: string }) => (
+                           <div key={cert.name} className="flex items-center justify-between p-3 border rounded-lg">
                              <div className="flex items-center gap-2">
                                <FileText className="h-4 w-4" />
                                <span className="font-medium">{cert.name}</span>

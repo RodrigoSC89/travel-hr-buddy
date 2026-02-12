@@ -62,7 +62,7 @@ export function CarbonFootprintTracker() {
     return (
       <div className="space-y-4">
         {[1, 2, 3].map(i => (
-          <Card key={i} className="animate-pulse">
+          <Card key={`carbon-skeleton-${i}`} className="animate-pulse">
             <CardContent className="p-6"><div className="h-24 bg-muted rounded" /></CardContent>
           </Card>
         ))}
@@ -180,7 +180,7 @@ export function CarbonFootprintTracker() {
               {emissions.slice(0, 8).map((e, i) => {
                 const maxCO2 = Math.max(...emissions.map(x => x.co2Tons), 1);
                 return (
-                  <div key={i} className="flex items-center gap-3 p-2 rounded-lg hover:bg-muted/30">
+                  <div key={e.vesselName} className="flex items-center gap-3 p-2 rounded-lg hover:bg-muted/30">
                     <span className="text-xs font-bold text-muted-foreground w-5">#{i + 1}</span>
                     <Ship className="h-4 w-4 text-muted-foreground" />
                     <div className="flex-1">

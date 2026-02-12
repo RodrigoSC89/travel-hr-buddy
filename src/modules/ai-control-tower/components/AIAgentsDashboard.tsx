@@ -48,7 +48,7 @@ export default function AIAgentsDashboard() {
     return (
       <div className="space-y-6">
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-          {[...Array(4)].map((_, i) => <Skeleton key={i} className="h-24" />)}
+          {[...Array(4)].map((_, i) => <Skeleton key={`agent-skeleton-${i}`} className="h-24" />)}
         </div>
         <div className="grid lg:grid-cols-3 gap-6">
           <Skeleton className="h-[500px]" />
@@ -172,8 +172,8 @@ export default function AIAgentsDashboard() {
                           </Badge>
                         </div>
                         <div className="flex flex-wrap gap-1 mt-2">
-                          {(Array.isArray(agent.capabilities) ? agent.capabilities : []).slice(0, 2).map((cap, i: number) => (
-                            <Badge key={i} variant="secondary" className="text-xs">{String(cap)}</Badge>
+                          {(Array.isArray(agent.capabilities) ? agent.capabilities : []).slice(0, 2).map((cap) => (
+                            <Badge key={String(cap)} variant="secondary" className="text-xs">{String(cap)}</Badge>
                           ))}
                           {(Array.isArray(agent.capabilities) ? agent.capabilities : []).length > 2 && (
                             <Badge variant="outline" className="text-xs">+{(agent.capabilities as any[]).length - 2}</Badge>
@@ -241,8 +241,8 @@ export default function AIAgentsDashboard() {
                     <div>
                       <p className="text-sm font-medium mb-2">Capacidades</p>
                       <div className="flex flex-wrap gap-2">
-                      {(Array.isArray(selectedAgent.capabilities) ? selectedAgent.capabilities : []).map((cap, i: number) => (
-                          <Badge key={i} variant="outline">{String(cap)}</Badge>
+                      {(Array.isArray(selectedAgent.capabilities) ? selectedAgent.capabilities : []).map((cap) => (
+                          <Badge key={String(cap)} variant="outline">{String(cap)}</Badge>
                         ))}
                         {(Array.isArray(selectedAgent.capabilities) ? selectedAgent.capabilities : []).length === 0 && (
                           <p className="text-sm text-muted-foreground">Nenhuma capacidade definida</p>

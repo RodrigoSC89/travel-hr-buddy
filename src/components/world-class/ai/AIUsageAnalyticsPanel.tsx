@@ -50,7 +50,7 @@ export function AIUsageAnalyticsPanel() {
     return (
       <div className="space-y-4">
         {[1, 2].map(i => (
-          <Card key={i} className="animate-pulse">
+          <Card key={`usage-skeleton-${i}`} className="animate-pulse">
             <CardContent className="p-6"><div className="h-24 bg-muted rounded" /></CardContent>
           </Card>
         ))}
@@ -125,8 +125,8 @@ export function AIUsageAnalyticsPanel() {
             {byService.length > 0 ? byService
               .sort((a, b) => b.requests - a.requests)
               .slice(0, 10)
-              .map((s, i) => (
-                <div key={i} className="space-y-1">
+              .map((s) => (
+                <div key={s.service} className="space-y-1">
                   <div className="flex justify-between items-center text-xs">
                     <span className="font-medium truncate max-w-[150px]">{s.service}</span>
                     <div className="flex items-center gap-2">
@@ -160,7 +160,7 @@ export function AIUsageAnalyticsPanel() {
               .map((m, i) => {
                 const pct = totalRequests > 0 ? ((m.count / totalRequests) * 100).toFixed(1) : '0';
                 return (
-                  <div key={i} className="space-y-1">
+                  <div key={m.model} className="space-y-1">
                     <div className="flex justify-between items-center text-xs">
                       <span className="font-medium truncate max-w-[180px]">{m.model}</span>
                       <div className="flex items-center gap-2">
