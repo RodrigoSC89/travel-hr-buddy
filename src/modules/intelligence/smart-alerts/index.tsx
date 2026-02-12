@@ -307,7 +307,7 @@ const SmartAlerts = () => {
 
       {/* AI Insights */}
       {aiInsight && (
-        <Card className="border-blue-200 bg-blue-50 dark:bg-blue-950 dark:border-blue-800">
+        <Card className="border-info/30 bg-info/5">
           <CardHeader>
             <CardTitle className="text-sm flex items-center gap-2">
               <TrendingUp className="h-4 w-4" />
@@ -425,12 +425,12 @@ const SmartAlerts = () => {
                         
                         {/* Impact & Cause Analysis */}
                         {alert.impact_estimate && (
-                          <div className="mb-2 p-2 bg-orange-50 dark:bg-orange-950 rounded border border-orange-200 dark:border-orange-800">
+                          <div className="mb-2 p-2 bg-warning/10 rounded border border-warning/20">
                             <p className="text-sm"><span className="font-semibold">Impact:</span> {alert.impact_estimate}</p>
                           </div>
                         )}
                         {alert.cause_analysis && (
-                          <div className="mb-2 p-2 bg-blue-50 dark:bg-blue-950 rounded border border-blue-200 dark:border-blue-800">
+                          <div className="mb-2 p-2 bg-info/10 rounded border border-info/20">
                             <p className="text-sm"><span className="font-semibold">Cause:</span> {alert.cause_analysis}</p>
                           </div>
                         )}

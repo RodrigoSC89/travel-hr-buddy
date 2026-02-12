@@ -51,7 +51,7 @@ export default function DPIntelligenceDashboard() {
   if (loading) {
     return (
       <div className="flex items-center justify-center py-12">
-        <Loader2 className="h-8 w-8 animate-spin text-blue-600" />
+        <Loader2 className="h-8 w-8 animate-spin text-primary" />
         <span className="ml-2 text-muted-foreground">Carregando...</span>
       </div>
     );
@@ -60,7 +60,7 @@ export default function DPIntelligenceDashboard() {
   if (error) {
     return (
       <div className="text-center py-12">
-        <p className="text-red-600">Erro ao carregar dados: {error}</p>
+        <p className="text-destructive">Erro ao carregar dados: {error}</p>
       </div>
     );
   }
@@ -181,7 +181,7 @@ export default function DPIntelligenceDashboard() {
         </CardHeader>
         <CardContent>
           <div className="space-y-4">
-            <div className="p-4 bg-blue-50 dark:bg-blue-950 rounded-lg">
+            <div className="p-4 bg-info/10 rounded-lg">
               <h3 className="font-semibold mb-2">🔍 Análise de Tendências</h3>
               <ul className="list-disc list-inside space-y-1 text-sm">
                 <li>
@@ -211,7 +211,7 @@ export default function DPIntelligenceDashboard() {
               </ul>
             </div>
 
-            <div className="p-4 bg-yellow-50 dark:bg-yellow-950 rounded-lg">
+            <div className="p-4 bg-warning/10 rounded-lg">
               <h3 className="font-semibold mb-2">⚠️ Recomendações</h3>
               <ul className="list-disc list-inside space-y-1 text-sm">
                 <li>Revisar protocolos de manutenção preventiva para navios com alta incidência</li>
@@ -221,7 +221,7 @@ export default function DPIntelligenceDashboard() {
               </ul>
             </div>
 
-            <div className="p-4 bg-green-50 dark:bg-green-950 rounded-lg">
+            <div className="p-4 bg-success/10 rounded-lg">
               <h3 className="font-semibold mb-2">✅ Próximos Passos</h3>
               <ul className="list-disc list-inside space-y-1 text-sm">
                 <li>Agendar reuniões com equipes dos navios mais afetados</li>

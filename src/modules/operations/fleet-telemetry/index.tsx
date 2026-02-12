@@ -304,27 +304,27 @@ export default function FleetTelemetryModule() {
                   <div key={sensor.id} className="flex items-center justify-between p-4 border rounded-lg">
                     <div className="flex items-center gap-4 flex-1">
                       <div className={`p-2 rounded-full ${
-                        sensor.status === "normal" ? "bg-green-100" :
-                          sensor.status === "warning" ? "bg-yellow-100" :
-                            "bg-red-100"
+                        sensor.status === "normal" ? "bg-success/10" :
+                          sensor.status === "warning" ? "bg-warning/10" :
+                            "bg-destructive/10"
                       }`}>
                         {sensor.sensor_type.includes("temperature") ? (
                           <Thermometer className={`h-5 w-5 ${
-                            sensor.status === "normal" ? "text-green-600" :
-                              sensor.status === "warning" ? "text-yellow-600" :
-                                "text-red-600"
+                            sensor.status === "normal" ? "text-success" :
+                              sensor.status === "warning" ? "text-warning" :
+                                "text-destructive"
                           }`} />
                         ) : sensor.sensor_type.includes("fuel") ? (
                           <Droplets className={`h-5 w-5 ${
-                            sensor.status === "normal" ? "text-green-600" :
-                              sensor.status === "warning" ? "text-yellow-600" :
-                                "text-red-600"
+                            sensor.status === "normal" ? "text-success" :
+                              sensor.status === "warning" ? "text-warning" :
+                                "text-destructive"
                           }`} />
                         ) : (
                           <Zap className={`h-5 w-5 ${
-                            sensor.status === "normal" ? "text-green-600" :
-                              sensor.status === "warning" ? "text-yellow-600" :
-                                "text-red-600"
+                            sensor.status === "normal" ? "text-success" :
+                              sensor.status === "warning" ? "text-warning" :
+                                "text-destructive"
                           }`} />
                         )}
                       </div>
@@ -374,7 +374,7 @@ export default function FleetTelemetryModule() {
             <CardContent>
               {alerts.length === 0 ? (
                 <div className="text-center py-12">
-                  <CheckCircle className="h-12 w-12 text-green-500 mx-auto mb-4" />
+                  <CheckCircle className="h-12 w-12 text-success mx-auto mb-4" />
                   <p className="text-lg font-semibold">Nenhum alerta ativo</p>
                   <p className="text-sm text-muted-foreground">Todos os sistemas operando normalmente</p>
                 </div>

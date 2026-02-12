@@ -102,13 +102,13 @@ const historyData: HistoryItem[] = [
 const getStatusBadge = (status: string) => {
   switch (status) {
     case "success":
-      return <Badge className="bg-emerald-100 text-emerald-700">Sucesso</Badge>;
+      return <Badge className="bg-success/10 text-success">Sucesso</Badge>;
     case "warning":
-      return <Badge className="bg-amber-100 text-amber-700">Alerta</Badge>;
+      return <Badge className="bg-warning/10 text-warning">Alerta</Badge>;
     case "error":
-      return <Badge className="bg-red-100 text-red-700">Erro</Badge>;
+      return <Badge className="bg-destructive/10 text-destructive">Erro</Badge>;
     case "info":
-      return <Badge className="bg-blue-100 text-blue-700">Info</Badge>;
+      return <Badge className="bg-info/10 text-info">Info</Badge>;
     default:
       return <Badge>{status}</Badge>;
   }
