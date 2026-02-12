@@ -228,9 +228,9 @@
                  Embarcação
                </div>
                <div className="flex flex-1">
-                 {days.map((day, idx) => (
+                {days.map((day) => (
                    <div 
-                     key={idx}
+                     key={`header-${day.getTime()}`}
                      className={cn(
                        "text-center text-xs p-1 border-l",
                        day.getDay() === 0 || day.getDay() === 6 ? "bg-muted/30" : ""
@@ -261,9 +261,9 @@
                    <div className="flex-1 relative h-16">
                      {/* Grid lines */}
                      <div className="absolute inset-0 flex">
-                       {days.map((day, idx) => (
+                       {days.map((day) => (
                          <div 
-                           key={idx}
+                           key={`grid-${day.getTime()}`}
                            className={cn(
                              "border-l h-full",
                              day.getDay() === 0 || day.getDay() === 6 ? "bg-muted/20" : ""

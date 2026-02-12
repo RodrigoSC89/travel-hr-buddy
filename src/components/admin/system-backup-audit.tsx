@@ -209,7 +209,7 @@ const SystemBackupAudit = () => {
         <Card>
           <CardContent className="p-4">
             <div className="flex items-center space-x-2">
-              <Shield className="w-5 h-5 text-purple-500" />
+              <Shield className="w-5 h-5 text-accent" />
               <div>
                 <p className="text-sm font-medium">Usuários Ativos</p>
                 <p className="text-2xl font-bold">{systemMetrics.activeUsers}</p>

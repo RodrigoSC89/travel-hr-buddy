@@ -66,10 +66,10 @@ export default function ComplianceRiscos() {
 
   const getRiskColor = (level: string) => {
     switch (level) {
-      case "critical": return "bg-red-500 text-white";
-      case "high": return "bg-orange-500 text-white";
-      case "medium": return "bg-yellow-500";
-      default: return "bg-green-500 text-white";
+      case "critical": return "bg-destructive text-destructive-foreground";
+      case "high": return "bg-warning text-warning-foreground";
+      case "medium": return "bg-accent text-accent-foreground";
+      default: return "bg-success text-success-foreground";
     }
   };
 
@@ -84,10 +84,10 @@ export default function ComplianceRiscos() {
 
   const getMatrixCellColor = (p: number, i: number) => {
     const score = p * i;
-    if (score >= 20) return "bg-red-500/80";
-    if (score >= 12) return "bg-orange-500/80";
-    if (score >= 6) return "bg-yellow-500/80";
-    return "bg-green-500/80";
+    if (score >= 20) return "bg-destructive/80";
+    if (score >= 12) return "bg-warning/80";
+    if (score >= 6) return "bg-accent/80";
+    return "bg-success/80";
   };
 
   return (
@@ -96,7 +96,7 @@ export default function ComplianceRiscos() {
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-2xl font-bold flex items-center gap-2">
-            <AlertTriangle className="h-6 w-6 text-orange-500" />
+            <AlertTriangle className="h-6 w-6 text-warning" />
             Matriz de Riscos
           </h1>
           <p className="text-muted-foreground">
@@ -285,19 +285,19 @@ export default function ComplianceRiscos() {
           </div>
           <div className="flex gap-4 mt-4 text-xs">
             <div className="flex items-center gap-1">
-              <div className="w-4 h-4 bg-green-500 rounded" />
+              <div className="w-4 h-4 bg-success rounded" />
               <span>Baixo (1-5)</span>
             </div>
             <div className="flex items-center gap-1">
-              <div className="w-4 h-4 bg-yellow-500 rounded" />
+              <div className="w-4 h-4 bg-accent rounded" />
               <span>Médio (6-11)</span>
             </div>
             <div className="flex items-center gap-1">
-              <div className="w-4 h-4 bg-orange-500 rounded" />
+              <div className="w-4 h-4 bg-warning rounded" />
               <span>Alto (12-19)</span>
             </div>
             <div className="flex items-center gap-1">
-              <div className="w-4 h-4 bg-red-500 rounded" />
+              <div className="w-4 h-4 bg-destructive rounded" />
               <span>Crítico (20-25)</span>
             </div>
           </div>

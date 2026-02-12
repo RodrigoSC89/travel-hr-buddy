@@ -129,11 +129,11 @@ export default function DeploymentStatus() {
   const getStatusIcon = (status: string) => {
     switch (status) {
     case "pass":
-      return <CheckCircle2 className="h-5 w-5 text-green-600" />;
+      return <CheckCircle2 className="h-5 w-5 text-success" />;
     case "fail":
-      return <XCircle className="h-5 w-5 text-red-600" />;
+      return <XCircle className="h-5 w-5 text-destructive" />;
     case "warning":
-      return <AlertTriangle className="h-5 w-5 text-yellow-600" />;
+      return <AlertTriangle className="h-5 w-5 text-warning" />;
     default:
       return null;
     }
@@ -185,10 +185,10 @@ export default function DeploymentStatus() {
 
       {/* Overall Status */}
       {isReady ? (
-        <Alert className="border-green-600 bg-green-50 dark:bg-green-950">
-          <CheckCircle2 className="h-4 w-4 text-green-600" />
-          <AlertTitle className="text-green-600">Ready for Production</AlertTitle>
-          <AlertDescription className="text-green-600">
+        <Alert className="border-success bg-success/5">
+          <CheckCircle2 className="h-4 w-4 text-success" />
+          <AlertTitle className="text-success">Ready for Production</AlertTitle>
+          <AlertDescription className="text-success">
             All validation checks passed. System is ready for deployment.
           </AlertDescription>
         </Alert>
@@ -218,7 +218,7 @@ export default function DeploymentStatus() {
             <CardTitle className="text-sm">Passed</CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="text-3xl font-bold text-green-600">{stats.passed}</div>
+            <div className="text-3xl font-bold text-success">{stats.passed}</div>
           </CardContent>
         </Card>
 
@@ -227,7 +227,7 @@ export default function DeploymentStatus() {
             <CardTitle className="text-sm">Failed</CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="text-3xl font-bold text-red-600">{stats.failed}</div>
+            <div className="text-3xl font-bold text-destructive">{stats.failed}</div>
           </CardContent>
         </Card>
 
@@ -236,7 +236,7 @@ export default function DeploymentStatus() {
             <CardTitle className="text-sm">Warnings</CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="text-3xl font-bold text-yellow-600">{stats.warnings}</div>
+            <div className="text-3xl font-bold text-warning">{stats.warnings}</div>
           </CardContent>
         </Card>
       </div>
@@ -256,9 +256,9 @@ export default function DeploymentStatus() {
             </CardHeader>
             <CardContent>
               <div className="space-y-3">
-                {categoryChecks.map((check, idx) => (
+                {categoryChecks.map((check) => (
                   <div
-                    key={idx}
+                    key={check.name}
                     className="flex items-center justify-between p-3 border rounded-lg"
                   >
                     <div className="flex items-center gap-3 flex-1">
@@ -313,7 +313,7 @@ export default function DeploymentStatus() {
           </div>
 
           {isReady && (
-            <Alert className="border-green-600">
+            <Alert className="border-success">
               <Shield className="h-4 w-4" />
               <AlertTitle>Production Ready</AlertTitle>
               <AlertDescription>

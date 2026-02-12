@@ -169,9 +169,9 @@ export function RouteOptimizerDashboard() {
 
   const getConditionColor = (condition: string) => {
     switch (condition) {
-      case 'safe': return 'text-emerald-500 bg-emerald-500/10';
-      case 'caution': return 'text-amber-500 bg-amber-500/10';
-      case 'warning': return 'text-orange-500 bg-orange-500/10';
+      case 'safe': return 'text-success bg-success/10';
+      case 'caution': return 'text-warning bg-warning/10';
+      case 'warning': return 'text-warning bg-warning/10';
       case 'danger': return 'text-destructive bg-destructive/10';
       default: return 'text-muted-foreground bg-muted';
     }
@@ -333,15 +333,15 @@ export function RouteOptimizerDashboard() {
           <CardContent>
             <div className="space-y-3">
               {fuelPrices.length > 0 ? fuelPrices.slice(0, 5).map((fuel, i) => (
-                <div key={i} className={cn(
+              <div key={`fuel-${fuel.port}`} className={cn(
                   "flex items-center justify-between p-2 rounded-lg border",
-                  bestBunkerPort?.port === fuel.port && "border-emerald-500/50 bg-emerald-500/5"
+                  bestBunkerPort?.port === fuel.port && "border-success/50 bg-success/5"
                 )}>
                   <div className="flex items-center gap-2">
                     <Anchor className="h-4 w-4 text-muted-foreground" />
                     <span className="font-medium">{fuel.port}</span>
                     {bestBunkerPort?.port === fuel.port && (
-                      <Badge variant="outline" className="text-emerald-600 border-emerald-500">
+                      <Badge variant="outline" className="text-success border-success">
                         Melhor
                       </Badge>
                     )}
@@ -399,14 +399,14 @@ export function RouteOptimizerDashboard() {
                     selectedRoute?.id === route.id
                       ? "border-primary bg-primary/5"
                       : "hover:border-primary/50",
-                    index === 0 && "border-emerald-500/50"
+                    index === 0 && "border-success/50"
                   )}
                   onClick={() => setSelectedRoute(route)}
                 >
                   <div className="flex items-center justify-between mb-3">
                     <div className="flex items-center gap-2">
                       {index === 0 && (
-                        <Badge className="bg-emerald-500">
+                        <Badge className="bg-success">
                           <CheckCircle className="h-3 w-3 mr-1" />
                           Recomendada
                         </Badge>
@@ -428,15 +428,15 @@ export function RouteOptimizerDashboard() {
                       <p className="text-xs text-muted-foreground">Duração</p>
                     </div>
                     <div className="text-center">
-                      <DollarSign className="h-4 w-4 mx-auto mb-1 text-emerald-500" />
+                      <DollarSign className="h-4 w-4 mx-auto mb-1 text-success" />
                       <p className="font-medium">${(route.fuelCost / 1000).toFixed(0)}k</p>
                       <p className="text-xs text-muted-foreground">Combustível</p>
                     </div>
                     <div className="text-center">
                       <AlertTriangle className={cn(
                         "h-4 w-4 mx-auto mb-1",
-                        route.riskScore < 20 ? "text-emerald-500" :
-                        route.riskScore < 30 ? "text-amber-500" :
+                        route.riskScore < 20 ? "text-success" :
+                        route.riskScore < 30 ? "text-warning" :
                         "text-destructive"
                       )} />
                       <p className="font-medium">{route.riskScore}%</p>
@@ -457,7 +457,7 @@ export function RouteOptimizerDashboard() {
         <Card>
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
-              <TrendingDown className="h-5 w-5 text-emerald-500" />
+              <TrendingDown className="h-5 w-5 text-success" />
               Detalhes
             </CardTitle>
           </CardHeader>
@@ -471,12 +471,12 @@ export function RouteOptimizerDashboard() {
 
                 <div className="grid grid-cols-2 gap-3 text-sm">
                   <div className="p-3 bg-muted rounded-lg">
-                    <Fuel className="h-4 w-4 mb-1 text-amber-500" />
+                    <Fuel className="h-4 w-4 mb-1 text-warning" />
                     <p className="font-bold">{selectedRoute.fuelConsumption} ton</p>
                     <p className="text-xs text-muted-foreground">Consumo</p>
                   </div>
                   <div className="p-3 bg-muted rounded-lg">
-                    <Leaf className="h-4 w-4 mb-1 text-emerald-500" />
+                    <Leaf className="h-4 w-4 mb-1 text-success" />
                     <p className="font-bold">{selectedRoute.emissions} ton</p>
                     <p className="text-xs text-muted-foreground">CO₂</p>
                   </div>
@@ -491,8 +491,8 @@ export function RouteOptimizerDashboard() {
                     value={selectedRoute.riskScore} 
                     className={cn(
                       "h-2",
-                      selectedRoute.riskScore < 20 ? "[&>div]:bg-emerald-500" :
-                      selectedRoute.riskScore < 30 ? "[&>div]:bg-amber-500" :
+                      selectedRoute.riskScore < 20 ? "[&>div]:bg-success" :
+                      selectedRoute.riskScore < 30 ? "[&>div]:bg-warning" :
                       "[&>div]:bg-destructive"
                     )}
                   />
@@ -509,7 +509,7 @@ export function RouteOptimizerDashboard() {
                 <div className="pt-4 border-t">
                   <div className="flex items-center justify-between mb-2">
                     <span className="text-sm text-muted-foreground">Custo Total</span>
-                    <span className="text-xl font-bold text-emerald-600">
+                    <span className="text-xl font-bold text-success">
                       ${selectedRoute.fuelCost.toLocaleString()}
                     </span>
                   </div>
@@ -600,19 +600,19 @@ export function RouteOptimizerDashboard() {
                       )}
                       {aiOptimization.estimated_fuel_consumption_tons && (
                         <div className="p-3 bg-background rounded-lg text-center">
-                          <p className="text-2xl font-bold text-amber-500">{aiOptimization.estimated_fuel_consumption_tons}</p>
+                          <p className="text-2xl font-bold text-warning">{aiOptimization.estimated_fuel_consumption_tons}</p>
                           <p className="text-xs text-muted-foreground">Consumo Est. (ton)</p>
                         </div>
                       )}
                       {aiOptimization.fuel_savings_percent && (
                         <div className="p-3 bg-background rounded-lg text-center">
-                          <p className="text-2xl font-bold text-emerald-500">{aiOptimization.fuel_savings_percent}%</p>
+                          <p className="text-2xl font-bold text-success">{aiOptimization.fuel_savings_percent}%</p>
                           <p className="text-xs text-muted-foreground">Economia Combustível</p>
                         </div>
                       )}
                       {aiOptimization.co2_reduction_tons && (
                         <div className="p-3 bg-background rounded-lg text-center">
-                          <p className="text-2xl font-bold text-green-500">{aiOptimization.co2_reduction_tons}</p>
+                          <p className="text-2xl font-bold text-success">{aiOptimization.co2_reduction_tons}</p>
                           <p className="text-xs text-muted-foreground">Redução CO₂ (ton)</p>
                         </div>
                       )}
@@ -620,7 +620,7 @@ export function RouteOptimizerDashboard() {
                     {aiOptimization.voyage_cost_usd && (
                       <div className="p-3 bg-background rounded-lg flex items-center justify-between">
                         <span className="text-sm text-muted-foreground">Custo Total Estimado</span>
-                        <span className="text-lg font-bold text-emerald-600">
+                        <span className="text-lg font-bold text-success">
                           ${aiOptimization.voyage_cost_usd.toLocaleString()}
                         </span>
                       </div>
@@ -632,7 +632,7 @@ export function RouteOptimizerDashboard() {
                 <Card>
                   <CardHeader className="pb-3">
                     <CardTitle className="text-base flex items-center gap-2">
-                      <CheckCircle className="h-4 w-4 text-emerald-500" />
+                      <CheckCircle className="h-4 w-4 text-success" />
                       Recomendações AI
                     </CardTitle>
                   </CardHeader>
@@ -641,7 +641,7 @@ export function RouteOptimizerDashboard() {
                       <ul className="space-y-2">
                         {aiOptimization.recommendations.map((rec: string, i: number) => (
                           <li key={i} className="flex items-start gap-2 text-sm">
-                            <Leaf className="h-4 w-4 text-emerald-500 mt-0.5 flex-shrink-0" />
+                            <Leaf className="h-4 w-4 text-success mt-0.5 flex-shrink-0" />
                             <span>{rec}</span>
                           </li>
                         ))}

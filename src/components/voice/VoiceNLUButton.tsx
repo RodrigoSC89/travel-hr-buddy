@@ -124,8 +124,8 @@ export function VoiceNLUButton({
               </SheetHeader>
               <ScrollArea className="h-[calc(100vh-200px)] mt-4">
                 <div className="space-y-4">
-                  {helpCommands.map((cmd, i) => (
-                    <div key={i} className="border-b pb-3">
+                  {helpCommands.map((cmd) => (
+                    <div key={cmd.command} className="border-b pb-3">
                       <p className="font-medium text-sm">"{cmd.command}"</p>
                       <p className="text-xs text-muted-foreground mt-1">
                         {cmd.description}
@@ -144,8 +144,8 @@ export function VoiceNLUButton({
             disabled={isProcessing}
             className={cn(
               'h-14 w-14 rounded-full shadow-lg transition-all duration-300',
-              isListening && 'bg-red-500 hover:bg-red-600 animate-pulse ring-4 ring-red-500/30',
-              isProcessing && 'bg-blue-500'
+              isListening && 'bg-destructive hover:bg-destructive/90 animate-pulse ring-4 ring-destructive/30',
+              isProcessing && 'bg-info'
             )}
           >
             {isProcessing ? (
