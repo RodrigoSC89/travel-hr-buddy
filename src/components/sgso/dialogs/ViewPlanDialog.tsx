@@ -308,21 +308,21 @@ export const ViewPlanDialog: React.FC<ViewPlanDialogProps> = ({
                   Cronograma
                 </h4>
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                  <div className="p-3 bg-green-50 dark:bg-green-950/30 rounded-lg border border-green-200">
+                  <div className="p-3 bg-success/10 rounded-lg border border-success/30">
                     <p className="text-xs text-muted-foreground">Último Simulado</p>
-                    <p className="font-bold text-green-700 dark:text-green-400">
+                    <p className="font-bold text-success">
                       {new Date(plan.last_drill).toLocaleDateString("pt-BR")}
                     </p>
                   </div>
-                  <div className="p-3 bg-blue-50 dark:bg-blue-950/30 rounded-lg border border-blue-200">
+                  <div className="p-3 bg-info/10 rounded-lg border border-info/30">
                     <p className="text-xs text-muted-foreground">Próximo Simulado</p>
-                    <p className="font-bold text-blue-700 dark:text-blue-400">
+                    <p className="font-bold text-info">
                       {new Date(plan.next_drill).toLocaleDateString("pt-BR")}
                     </p>
                   </div>
-                  <div className="p-3 bg-orange-50 dark:bg-orange-950/30 rounded-lg border border-orange-200">
+                  <div className="p-3 bg-warning/10 rounded-lg border border-warning/30">
                     <p className="text-xs text-muted-foreground">Responsável</p>
-                    <p className="font-bold text-orange-700 dark:text-orange-400">
+                    <p className="font-bold text-warning">
                       {plan.responsible}
                     </p>
                   </div>

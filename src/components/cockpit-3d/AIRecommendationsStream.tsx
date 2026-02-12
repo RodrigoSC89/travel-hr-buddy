@@ -24,17 +24,17 @@ const typeIcons: Record<string, React.ElementType> = {
 };
 
 const priorityColors: Record<string, string> = {
-  critical: 'border-l-red-500 bg-red-500/5',
-  high: 'border-l-orange-500 bg-orange-500/5',
-  medium: 'border-l-yellow-500 bg-yellow-500/5',
-  low: 'border-l-green-500 bg-green-500/5',
+  critical: 'border-l-destructive bg-destructive/5',
+  high: 'border-l-warning bg-warning/5',
+  medium: 'border-l-accent bg-accent/5',
+  low: 'border-l-success bg-success/5',
 };
 
 const priorityBadgeColors: Record<string, string> = {
-  critical: 'bg-red-500/20 text-red-400',
-  high: 'bg-orange-500/20 text-orange-400',
-  medium: 'bg-yellow-500/20 text-yellow-400',
-  low: 'bg-green-500/20 text-green-400',
+  critical: 'bg-destructive/20 text-destructive',
+  high: 'bg-warning/20 text-warning',
+  medium: 'bg-accent/20 text-accent-foreground',
+  low: 'bg-success/20 text-success',
 };
 
 export function AIRecommendationsStream({ 

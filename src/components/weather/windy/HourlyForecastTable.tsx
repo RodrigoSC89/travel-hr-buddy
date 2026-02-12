@@ -21,18 +21,18 @@ const getWeatherIcon = (condition: string, hour: number, className = "h-5 w-5") 
   const isNight = hour >= 18 || hour < 6;
   const c = condition.toLowerCase();
   
-  if (c.includes('thunder') || c.includes('storm')) return <CloudLightning className={cn(className, "text-yellow-400")} />;
-  if (c.includes('rain') || c.includes('chuv')) return <CloudRain className={cn(className, "text-blue-400")} />;
-  if (c.includes('drizzle')) return <CloudDrizzle className={cn(className, "text-blue-300")} />;
-  if (c.includes('cloud') || c.includes('nubl')) return <Cloud className={cn(className, "text-gray-300")} />;
+  if (c.includes('thunder') || c.includes('storm')) return <CloudLightning className={cn(className, "text-warning")} />;
+  if (c.includes('rain') || c.includes('chuv')) return <CloudRain className={cn(className, "text-info")} />;
+  if (c.includes('drizzle')) return <CloudDrizzle className={cn(className, "text-info/70")} />;
+  if (c.includes('cloud') || c.includes('nubl')) return <Cloud className={cn(className, "text-muted-foreground")} />;
   if (c.includes('partly') || c.includes('parcial')) {
     return isNight 
-      ? <CloudMoon className={cn(className, "text-blue-200")} /> 
-      : <CloudSun className={cn(className, "text-yellow-300")} />;
+      ? <CloudMoon className={cn(className, "text-muted-foreground")} /> 
+      : <CloudSun className={cn(className, "text-warning")} />;
   }
   return isNight 
-    ? <Moon className={cn(className, "text-blue-200")} /> 
-    : <Sun className={cn(className, "text-yellow-400")} />;
+    ? <Moon className={cn(className, "text-muted-foreground")} /> 
+    : <Sun className={cn(className, "text-warning")} />;
 };
 
 const getWindArrow = (direction: number): string => {

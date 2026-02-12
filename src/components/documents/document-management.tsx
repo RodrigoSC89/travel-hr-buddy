@@ -361,7 +361,7 @@ export const DocumentManagement: React.FC = () => {
                 <p className="text-sm font-medium text-muted-foreground">Categorias</p>
                 <p className="text-3xl font-bold">{categories.length}</p>
               </div>
-              <Folder className="h-8 w-8 text-blue-600" />
+              <Folder className="h-8 w-8 text-info" />
             </div>
           </CardContent>
         </Card>
@@ -371,11 +371,11 @@ export const DocumentManagement: React.FC = () => {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm font-medium text-muted-foreground">OCR Pendente</p>
-                <p className="text-3xl font-bold text-yellow-600">
+                <p className="text-3xl font-bold text-warning">
                   {documents.filter(d => d.ocr_status === "pending").length}
                 </p>
               </div>
-              <Calendar className="h-8 w-8 text-yellow-600" />
+              <Calendar className="h-8 w-8 text-warning" />
             </div>
           </CardContent>
         </Card>
@@ -389,7 +389,7 @@ export const DocumentManagement: React.FC = () => {
                   {formatFileSize(documents.reduce((sum, doc) => sum + (doc.file_size_bytes || doc.file_size || 0), 0))}
                 </p>
               </div>
-              <Upload className="h-8 w-8 text-green-600" />
+              <Upload className="h-8 w-8 text-success" />
             </div>
           </CardContent>
         </Card>
