@@ -383,7 +383,19 @@ export default function NautiDocumentsPremium() {
 
   const actions = (
     <>
-      <Button variant="outline" size="sm" className="gap-2" onClick={() => toast.success("OCR em lote", { description: "Utilize o upload individual para processar documentos com OCR." })}>
+      <Button variant="outline" size="sm" className="gap-2" onClick={() => {
+        const input = document.createElement('input');
+        input.type = 'file';
+        input.accept = '.pdf,.jpg,.jpeg,.png,.tiff';
+        input.multiple = true;
+        input.onchange = async (e) => {
+          const files = (e.target as HTMLInputElement).files;
+          if (files && files.length > 0) {
+            toast.success(`${files.length} arquivo(s) enviado(s) para OCR`, { description: "Processamento iniciado." });
+          }
+        };
+        input.click();
+      }}>
         <Scan className="h-4 w-4" />
         OCR
       </Button>

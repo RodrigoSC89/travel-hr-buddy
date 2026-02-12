@@ -399,7 +399,7 @@ export function RecordBooks() {
                       </TableCell>
                       <TableCell className="text-right">
                         <div className="flex justify-end gap-1">
-                          <Button variant="ghost" size="sm" onClick={() => toast.info(`Registro: ${record.date}`, { description: `Operação: ${record.operationType} | Tanque: ${record.tankInvolved} | Qtd: ${record.quantity} ${record.unit} | Oficial: ${record.officerName}` })}>
+                          <Button variant="ghost" size="sm" onClick={() => { navigator.clipboard.writeText(`Registro: ${record.date} | Operação: ${record.operationType} | Tanque: ${record.tankInvolved} | Qtd: ${record.quantity} ${record.unit} | Oficial: ${record.officerName}`); toast.success("Dados do registro copiados"); }}>
                             <Eye className="h-4 w-4" />
                           </Button>
                           {!record.verified && (
@@ -483,7 +483,7 @@ export function RecordBooks() {
                       </TableCell>
                       <TableCell className="text-right">
                         <div className="flex justify-end gap-1">
-                          <Button variant="ghost" size="sm" onClick={() => toast.info(`Registro: ${record.date}`, { description: `Categoria: ${record.category} | Qtd: ${record.estimatedQuantity} ${record.unit} | Método: ${record.disposalMethod} | Oficial: ${record.officerName}` })}>
+                          <Button variant="ghost" size="sm" onClick={() => { navigator.clipboard.writeText(`Registro: ${record.date} | Categoria: ${record.category} | Qtd: ${record.estimatedQuantity} ${record.unit} | Método: ${record.disposalMethod} | Oficial: ${record.officerName}`); toast.success("Dados do registro copiados"); }}>
                             <Eye className="h-4 w-4" />
                           </Button>
                           {!record.verified && (

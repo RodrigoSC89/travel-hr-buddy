@@ -257,7 +257,7 @@ export default function VoyagePnLCalculator() {
         <div className="lg:col-span-2 space-y-4">
           <div className="flex items-center justify-between">
             <h3 className="font-medium">Voyage P&L Analysis</h3>
-            <Button size="sm" onClick={() => toast.success("Novo Voyage Estimate", { description: "Crie um plano de viagem na aba Operações > Viagens para gerar estimativas P&L." })}><FileText className="h-4 w-4 mr-2" />New Voyage Estimate</Button>
+            <Button size="sm" onClick={() => { window.history.pushState({}, '', '/operations'); window.dispatchEvent(new PopStateEvent('popstate')); }}><FileText className="h-4 w-4 mr-2" />New Voyage Estimate</Button>
           </div>
           {voyages.length === 0 ? (
             <Card><CardContent className="p-8 text-center text-muted-foreground"><Ship className="h-12 w-12 mx-auto mb-3 opacity-50" /><p>Nenhuma viagem registrada</p></CardContent></Card>
