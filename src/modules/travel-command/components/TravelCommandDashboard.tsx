@@ -184,8 +184,8 @@ const TravelCommandDashboard: React.FC = () => {
   const getAlertColor = (severity: string) => {
     switch (severity) {
       case "critical": return "bg-destructive text-destructive-foreground";
-      case "high": return "bg-orange-500 text-white";
-      case "medium": return "bg-yellow-500 text-white";
+      case "high": return "bg-warning text-warning-foreground";
+      case "medium": return "bg-warning/80 text-warning-foreground";
       default: return "bg-muted text-muted-foreground";
     }
   };
@@ -255,10 +255,10 @@ const TravelCommandDashboard: React.FC = () => {
               <div className="flex items-center justify-between">
                 <div>
                   <p className="text-xs text-muted-foreground uppercase tracking-wide">Viagens Ativas</p>
-                  <p className="text-2xl font-bold text-blue-600">{metrics.activeTrips}</p>
+                  <p className="text-2xl font-bold text-info">{metrics.activeTrips}</p>
                   <p className="text-xs text-muted-foreground">de {metrics.totalTrips} total</p>
                 </div>
-                <Plane className="h-8 w-8 text-blue-500 opacity-50" />
+                <Plane className="h-8 w-8 text-info opacity-50" />
               </div>
             </CardContent>
           </Card>
@@ -269,17 +269,17 @@ const TravelCommandDashboard: React.FC = () => {
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.15 }}
         >
-          <Card className={`border-l-4 hover:shadow-lg transition-all ${metrics.delayedFlights > 0 ? "border-l-orange-500 bg-orange-50 dark:bg-orange-950/20" : "border-l-green-500"}`}>
+          <Card className={`border-l-4 hover:shadow-lg transition-all ${metrics.delayedFlights > 0 ? "border-l-warning bg-warning/5" : "border-l-success"}`}>
             <CardContent className="pt-4">
               <div className="flex items-center justify-between">
                 <div>
                   <p className="text-xs text-muted-foreground uppercase tracking-wide">Voos Atrasados</p>
-                  <p className={`text-2xl font-bold ${metrics.delayedFlights > 0 ? "text-orange-600" : "text-green-600"}`}>
+                  <p className={`text-2xl font-bold ${metrics.delayedFlights > 0 ? "text-warning" : "text-success"}`}>
                     {metrics.delayedFlights}
                   </p>
                   <p className="text-xs text-muted-foreground">{metrics.onTimeRate}% pontualidade</p>
                 </div>
-                <AlertTriangle className={`h-8 w-8 opacity-50 ${metrics.delayedFlights > 0 ? "text-orange-500" : "text-green-500"}`} />
+                <AlertTriangle className={`h-8 w-8 opacity-50 ${metrics.delayedFlights > 0 ? "text-warning" : "text-success"}`} />
               </div>
             </CardContent>
           </Card>
@@ -290,18 +290,18 @@ const TravelCommandDashboard: React.FC = () => {
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.2 }}
         >
-          <Card className="border-l-4 border-l-green-500 hover:shadow-lg transition-all">
+          <Card className="border-l-4 border-l-success hover:shadow-lg transition-all">
             <CardContent className="pt-4">
               <div className="flex items-center justify-between">
                 <div>
                   <p className="text-xs text-muted-foreground uppercase tracking-wide">Custo Total</p>
                   <p className="text-2xl font-bold">R$ {(metrics.totalCost / 1000).toFixed(0)}k</p>
-                  <div className="flex items-center text-xs text-green-600">
+                  <div className="flex items-center text-xs text-success">
                     <ArrowDownRight className="h-3 w-3 mr-1" />
                     {formatCurrency(metrics.costSavings)} economia
                   </div>
                 </div>
-                <DollarSign className="h-8 w-8 text-green-500 opacity-50" />
+                <DollarSign className="h-8 w-8 text-success opacity-50" />
               </div>
             </CardContent>
           </Card>
@@ -452,7 +452,7 @@ const TravelCommandDashboard: React.FC = () => {
                           {rec.description}
                         </p>
                         <div className="flex items-center justify-between">
-                          <Badge className="bg-green-500/10 text-green-600 border-green-500/20">
+                          <Badge className="bg-success/10 text-success border-success/20">
                             {rec.impact}
                           </Badge>
                           <Button size="sm" variant="outline" className="h-7 text-xs" onClick={() => { navigator.clipboard?.writeText(`${rec.title}: ${rec.action}`); toast.success(`${rec.action} aplicada`); }}>
@@ -592,12 +592,12 @@ const TravelCommandDashboard: React.FC = () => {
           </Card>
 
           {/* AI Assistant */}
-          <Card className="bg-gradient-to-br from-blue-500/5 to-cyan-500/5 border-blue-500/20">
+          <Card className="bg-gradient-to-br from-info/5 to-primary/5 border-info/20">
             <CardHeader className="pb-3">
               <CardTitle className="flex items-center gap-2 text-lg">
-                <Bot className="h-5 w-5 text-blue-500" />
+                <Bot className="h-5 w-5 text-info" />
                 Assistente de Viagem IA
-                <Badge className="bg-blue-500/10 text-blue-600 border-blue-500/20 ml-auto">
+                <Badge className="bg-info/10 text-info border-info/20 ml-auto">
                   Online
                 </Badge>
               </CardTitle>
@@ -605,9 +605,9 @@ const TravelCommandDashboard: React.FC = () => {
             <CardContent>
               <ScrollArea className="h-[150px] mb-4 p-3 bg-background/50 rounded-lg">
                 <div className="space-y-3">
-                  {chatHistory.map((msg, i) => (
+                  {chatHistory.map((msg, msgIdx) => (
                     <div
-                      key={i}
+                      key={`chat-${msgIdx}-${msg.role}`}
                       className={`flex ${msg.role === "user" ? "justify-end" : "justify-start"}`}
                     >
                       <div
@@ -631,7 +631,7 @@ const TravelCommandDashboard: React.FC = () => {
                   onKeyPress={(e) => e.key === "Enter" && handleSendMessage()}
                   className="flex-1"
                 />
-                <Button size="icon" onClick={handleSendMessage} className="bg-blue-500 hover:bg-blue-600">
+                <Button size="icon" onClick={handleSendMessage} className="bg-primary hover:bg-primary/90">
                   <Send className="h-4 w-4" />
                 </Button>
               </div>
