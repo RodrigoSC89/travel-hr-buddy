@@ -131,20 +131,20 @@ export function AIExplainabilityPanel() {
   const getStatusConfig = (status: AIDecision['status']) => {
     switch (status) {
       case 'executed':
-        return { icon: CheckCircle, color: 'text-green-500', bg: 'bg-green-500/10', label: 'Executado' };
+        return { icon: CheckCircle, color: 'text-success', bg: 'bg-success/10', label: 'Executado' };
       case 'approved':
-        return { icon: ThumbsUp, color: 'text-blue-500', bg: 'bg-blue-500/10', label: 'Aprovado' };
+        return { icon: ThumbsUp, color: 'text-info', bg: 'bg-info/10', label: 'Aprovado' };
       case 'rejected':
-        return { icon: ThumbsDown, color: 'text-red-500', bg: 'bg-red-500/10', label: 'Rejeitado' };
+        return { icon: ThumbsDown, color: 'text-destructive', bg: 'bg-destructive/10', label: 'Rejeitado' };
       default:
-        return { icon: Clock, color: 'text-yellow-500', bg: 'bg-yellow-500/10', label: 'Pendente' };
+        return { icon: Clock, color: 'text-warning', bg: 'bg-warning/10', label: 'Pendente' };
     }
   };
 
   const getConfidenceColor = (confidence: number) => {
-    if (confidence >= 80) return 'text-green-500';
-    if (confidence >= 60) return 'text-yellow-500';
-    return 'text-red-500';
+    if (confidence >= 80) return 'text-success';
+    if (confidence >= 60) return 'text-warning';
+    return 'text-destructive';
   };
 
   return (

@@ -442,7 +442,6 @@ function MapTab() {
 
 export default function TrackingTelemetryPremium() {
   const handleRefresh = async () => {
-    await new Promise(resolve => setTimeout(resolve, 500));
     toast.success("Dados atualizados");
   };
 

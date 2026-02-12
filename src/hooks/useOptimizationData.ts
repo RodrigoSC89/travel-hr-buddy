@@ -198,8 +198,11 @@ export function useOptimizationData() {
   // Apply optimization
   const applyOptimizationMutation = useMutation({
     mutationFn: async (optimizationId: string) => {
-      // Simulate optimization process
-      await new Promise(resolve => setTimeout(resolve, 2000));
+      const { error } = await supabase
+        .from("ai_decisions")
+        .update({ status: "executed", executed_at: new Date().toISOString() })
+        .eq("id", optimizationId);
+      if (error) throw new Error(error.message);
       return { success: true, optimizationId };
     },
     onSuccess: (data) => {

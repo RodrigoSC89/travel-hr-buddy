@@ -90,7 +90,7 @@ export default function Patch490PriceAlerts() {
             {recentAlerts.map((alert) => (
               <div key={alert.id} className="flex items-center justify-between p-4 border rounded-lg">
                 <div className="flex items-center gap-4">
-                  <DollarSign className={`h-6 w-6 ${alert.change > 0 ? "text-green-500" : "text-red-500"}`} />
+                  <DollarSign className={`h-6 w-6 ${alert.change > 0 ? "text-success" : "text-destructive"}`} />
                   <div>
                     <p className="font-semibold">{alert.commodity}</p>
                     <p className="text-sm text-muted-foreground">

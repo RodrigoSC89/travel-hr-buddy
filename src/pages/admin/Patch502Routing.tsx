@@ -41,21 +41,11 @@ export default function Patch502Routing() {
     },
   ];
 
-  const runValidation = async () => {
+  const runValidation = () => {
     setValidationStatus("running");
-    
-    // Simulate map rendering
-    await new Promise(resolve => setTimeout(resolve, 1200));
     setMapRendered(true);
-    
-    // Simulate AI suggestion
-    await new Promise(resolve => setTimeout(resolve, 1000));
     setAiSuggestion(true);
-    
-    // Simulate responsive check
-    await new Promise(resolve => setTimeout(resolve, 800));
     setResponsive(true);
-    
     setValidationStatus("complete");
   };
 
@@ -94,7 +84,7 @@ export default function Patch502Routing() {
             <CardTitle>Visualização de Rota</CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="aspect-video bg-gradient-to-br from-blue-500/10 to-green-500/10 rounded-lg flex items-center justify-center">
+            <div className="aspect-video bg-gradient-to-br from-primary/10 to-success/10 rounded-lg flex items-center justify-center">
               <div className="text-center space-y-2">
                 <Map className="w-16 h-16 mx-auto text-primary" />
                 <p className="text-sm text-muted-foreground">Mapa 3D Interativo com Rota</p>
@@ -146,10 +136,10 @@ export default function Patch502Routing() {
               return (
                 <div key={check.id} className="flex items-start gap-4 p-4 border rounded-lg">
                   <div
-                    className={`p-2 rounded-lg ${
+                  className={`p-2 rounded-lg ${
                       check.status === "pass"
-                        ? "bg-green-100 text-green-600"
-                        : "bg-gray-100 text-gray-600"
+                        ? "bg-success/10 text-success"
+                        : "bg-muted text-muted-foreground"
                     }`}
                   >
                     {check.status === "pass" ? (
@@ -178,18 +168,18 @@ export default function Patch502Routing() {
       </Card>
 
       {validationStatus === "complete" && passRate === "100" && (
-        <Card className="border-green-200 bg-green-50">
+        <Card className="border-success/20 bg-success/5">
           <CardHeader>
-            <CardTitle className="text-green-800 flex items-center gap-2">
+            <CardTitle className="text-success flex items-center gap-2">
               <CheckCircle2 className="w-6 h-6" />
               Patch 502 - APROVADO
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <p className="text-green-800 font-semibold">
+            <p className="text-success font-semibold">
               ✅ Sistema de otimização de rotas com AI operacional
             </p>
-            <ul className="mt-4 space-y-2 text-sm text-green-700">
+            <ul className="mt-4 space-y-2 text-sm text-success/80">
               <li>• Mapbox renderizando rotas em 3D</li>
               <li>• IA analisando condições climáticas</li>
               <li>• Sugestões inteligentes de rota ativas</li>

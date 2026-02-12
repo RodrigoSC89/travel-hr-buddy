@@ -36,10 +36,10 @@ const STATUS_ICONS = {
 };
 
 const STATUS_COLORS = {
-  operational: "text-green-500",
-  degraded: "text-yellow-500",
-  down: "text-red-500",
-  checking: "text-blue-500 animate-spin",
+  operational: "text-success",
+  degraded: "text-warning",
+  down: "text-destructive",
+  checking: "text-info animate-spin",
 };
 
 export function WeatherAPIStatus() {
@@ -207,7 +207,7 @@ export function WeatherAPIStatus() {
         <div className="mb-4">
           <Badge
             variant={allOperational ? "default" : "destructive"}
-            className={allOperational ? "bg-green-500" : ""}
+            className={allOperational ? "bg-success" : ""}
           >
             {allOperational ? "Todos Operacionais" : "Verificar Status"}
           </Badge>

@@ -155,23 +155,23 @@ export default function TrackingDashboard() {
 
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
         <Card><CardContent className="pt-4">
-          <Radio className="h-5 w-5 text-blue-500" />
+          <Radio className="h-5 w-5 text-info" />
           <p className="text-2xl font-bold mt-2">{stats.totalDevices}</p>
           <p className="text-xs text-muted-foreground">Embarcações</p>
         </CardContent></Card>
         <Card><CardContent className="pt-4">
-          <Navigation className="h-5 w-5 text-green-500" />
+          <Navigation className="h-5 w-5 text-success" />
           <p className="text-2xl font-bold mt-2">{stats.onlineDevices}</p>
           <p className="text-xs text-muted-foreground">Ativas</p>
         </CardContent></Card>
         <Card><CardContent className="pt-4">
-          <AlertTriangle className="h-5 w-5 text-orange-500" />
+          <AlertTriangle className="h-5 w-5 text-warning" />
           <p className="text-2xl font-bold mt-2">{stats.totalAlerts}</p>
           <p className="text-xs text-muted-foreground">Alertas</p>
         </CardContent></Card>
         <Card><CardContent className="pt-4">
-          <Activity className="h-5 w-5 text-green-500" />
-          <Badge className={devicesStatus?.isConfigured ? "bg-green-500 text-white" : "bg-muted"}>
+          <Activity className="h-5 w-5 text-success" />
+          <Badge className={devicesStatus?.isConfigured ? "bg-success text-success-foreground" : "bg-muted"}>
             {devicesStatus?.isConfigured ? "Operacional" : "Não Configurado"}
           </Badge>
         </CardContent></Card>
@@ -200,7 +200,7 @@ export default function TrackingDashboard() {
               <CardContent className="space-y-3">
                 {vessels && vessels.length > 0 ? vessels.slice(0, 5).map(v => (
                   <div key={v.id} className="flex items-center gap-4 p-3 rounded-lg border">
-                    <div className={`h-3 w-3 rounded-full ${v.status === 'active' ? 'bg-green-500' : 'bg-gray-400'}`} />
+                    <div className={`h-3 w-3 rounded-full ${v.status === 'active' ? 'bg-success' : 'bg-muted'}`} />
                     <span className="flex-1">{v.name}</span>
                     <Badge variant="outline">{v.status}</Badge>
                   </div>
@@ -215,7 +215,7 @@ export default function TrackingDashboard() {
                     <Badge variant={a.severity === 'critical' ? 'destructive' : 'default'}>{a.severity}</Badge>
                     <div><p className="text-sm font-medium">{a.title}</p><p className="text-xs text-muted-foreground">{a.message}</p></div>
                   </div>
-                )) : <div className="text-center py-8"><Shield className="h-12 w-12 mx-auto text-green-500" /><p className="mt-2">Nenhum alerta</p></div>}
+                )) : <div className="text-center py-8"><Shield className="h-12 w-12 mx-auto text-success" /><p className="mt-2">Nenhum alerta</p></div>}
               </CardContent>
             </Card>
           </div>
@@ -229,7 +229,7 @@ export default function TrackingDashboard() {
                   {vessels.map(v => (
                     <div key={v.id} className="flex items-center justify-between p-4 border rounded-lg">
                       <div className="flex items-center gap-4">
-                        <div className={`h-4 w-4 rounded-full ${v.status === 'active' ? 'bg-green-500' : 'bg-gray-300'}`} />
+                        <div className={`h-4 w-4 rounded-full ${v.status === 'active' ? 'bg-success' : 'bg-muted'}`} />
                         <span className="font-semibold">{v.name}</span>
                       </div>
                       <Badge>{v.status}</Badge>
@@ -258,7 +258,7 @@ export default function TrackingDashboard() {
                     </div>
                   ))}
                 </div>
-              ) : <div className="text-center py-12"><Shield className="h-16 w-16 mx-auto text-green-500" /><p className="mt-2">Nenhum alerta ativo</p></div>}
+              ) : <div className="text-center py-12"><Shield className="h-16 w-16 mx-auto text-success" /><p className="mt-2">Nenhum alerta ativo</p></div>}
             </CardContent>
           </Card>
         </TabsContent>
