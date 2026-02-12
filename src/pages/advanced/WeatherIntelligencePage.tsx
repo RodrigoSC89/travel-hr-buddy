@@ -331,12 +331,12 @@ const WeatherIntelligencePage = () => {
                 <p className="text-muted-foreground text-center py-8">Sem dados de previsão disponíveis</p>
               ) : (
                 <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
-                  {dailyForecast.map((day, idx) => {
+                  {dailyForecast.map((day) => {
                     const risk = getRiskLevel(day.maxWave, day.maxWind);
                     const Icon = getWeatherIcon(day.avgTemp, day.maxWind, day.maxPrecip);
                     return (
                       <div
-                        key={idx}
+                        key={day.day}
                         className={`p-4 rounded-lg border text-center ${
                           risk === "high" ? "border-red-500/50 bg-red-500/5" :
                           risk === "medium" ? "border-yellow-500/50 bg-yellow-500/5" :
@@ -424,7 +424,7 @@ const WeatherIntelligencePage = () => {
               ) : (
                 <div className="space-y-3">
                   {alerts.map((alert, idx) => (
-                    <div key={idx} className={`p-4 border rounded-lg ${
+                    <div key={`alert-${idx}-${alert.severity}`} className={`p-4 border rounded-lg ${
                       alert.severity === "high" || alert.severity === "critical" ? "bg-red-500/10 border-red-500/50" :
                       alert.severity === "medium" ? "bg-yellow-500/10 border-yellow-500/50" :
                       "bg-blue-500/10 border-blue-500/50"

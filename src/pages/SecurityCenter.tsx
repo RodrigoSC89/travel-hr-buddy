@@ -306,8 +306,8 @@ export default function SecurityCenter() {
             </Card>
 
             {/* Quick Metrics */}
-            {metrics.slice(0, 3).map((metric, i) => (
-              <Card key={i} className={`${
+            {metrics.slice(0, 3).map((metric) => (
+              <Card key={metric.name} className={`${
                 metric.status === "good" ? "border-success/20" :
                 metric.status === "warning" ? "border-warning/20" : "border-destructive/20"
               }`}>

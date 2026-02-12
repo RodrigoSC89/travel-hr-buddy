@@ -207,7 +207,7 @@ export const VesselGrid: React.FC<VesselGridProps> = ({ vessels, onViewDetails, 
     return (
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
         {[...Array(4)].map((_, i) => (
-          <Card key={i} className="animate-pulse">
+          <Card key={`vessel-skeleton-${i}`} className="animate-pulse">
             <CardHeader>
               <div className="h-6 bg-muted rounded w-3/4" />
               <div className="h-4 bg-muted rounded w-1/2 mt-2" />

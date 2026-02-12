@@ -347,8 +347,8 @@ export default function InteractiveOnboarding() {
                           Principais Funcionalidades
                         </h3>
                         <ul className="space-y-2">
-                          {MODULES[currentStep].features.map((feature, i) => (
-                            <li key={i} className="flex items-center gap-2 text-muted-foreground">
+                          {MODULES[currentStep].features.map((feature) => (
+                            <li key={feature} className="flex items-center gap-2 text-muted-foreground">
                               <CheckCircle2 className="h-4 w-4 text-green-500" />
                               {feature}
                             </li>

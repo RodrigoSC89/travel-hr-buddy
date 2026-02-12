@@ -49,7 +49,7 @@ export default function EmployeePortalPage() {
       <div className="min-h-screen pb-20 space-y-6">
         <Skeleton className="h-48 w-full rounded-xl" />
         <div className="grid grid-cols-4 gap-3">
-          {[1, 2, 3, 4].map(i => <Skeleton key={i} className="h-20" />)}
+          {[1, 2, 3, 4].map(i => <Skeleton key={`portal-skeleton-${i}`} className="h-20" />)}
         </div>
         <Skeleton className="h-64 w-full" />
       </div>

@@ -326,7 +326,7 @@ const CrewCard = ({ crew }: { crew: CrewMemberAnalysis }) => {
         {crew.alerts.length > 0 && (
           <div className="mt-3 space-y-1">
             {crew.alerts.map((alert, i) => (
-              <div key={i} className="flex items-center gap-2 text-xs text-destructive">
+              <div key={`crew-alert-${i}-${alert.slice(0, 15)}`} className="flex items-center gap-2 text-xs text-destructive">
                 <AlertTriangle className="h-3 w-3" />
                 <span>{alert}</span>
               </div>
@@ -566,8 +566,8 @@ export default function CrewAIAnalysis() {
             </CardHeader>
             <CardContent>
               <div className="space-y-4">
-                {competencyGaps.map((gap, i) => (
-                  <div key={i} className="p-4 border rounded-lg">
+                {competencyGaps.map((gap) => (
+                  <div key={gap.skill} className="p-4 border rounded-lg">
                     <div className="flex items-start justify-between mb-3">
                       <div>
                         <h4 className="font-medium">{gap.skill}</h4>

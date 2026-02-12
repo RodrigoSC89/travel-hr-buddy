@@ -186,7 +186,7 @@ export default function ForecastPage() {
           {loading && forecasts.length === 0 ? (
             <div className="space-y-3">
               {Array.from({ length: 6 }).map((_, i) => (
-                <Skeleton key={i} className="h-16 w-full" />
+                <Skeleton key={`forecast-skeleton-${i}`} className="h-16 w-full" />
               ))}
             </div>
           ) : (

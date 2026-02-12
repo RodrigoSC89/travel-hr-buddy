@@ -197,7 +197,7 @@ export default function DemoPage() {
         {isLoading ? (
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3">
             {Array.from({ length: 15 }).map((_, i) => (
-              <Skeleton key={i} className="h-24 rounded-xl" />
+              <Skeleton key={`demo-skeleton-${i}`} className="h-24 rounded-xl" />
             ))}
           </div>
         ) : (

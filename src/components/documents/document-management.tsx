@@ -144,7 +144,7 @@ export const DocumentManagement: React.FC = () => {
       <div className="space-y-6">
         <Skeleton className="h-12 w-full" />
         <div className="grid grid-cols-4 gap-4">
-          {[1, 2, 3, 4].map(i => <Skeleton key={i} className="h-24" />)}
+          {[1, 2, 3, 4].map(i => <Skeleton key={`doc-mgmt-skeleton-${i}`} className="h-24" />)}
         </div>
         <Skeleton className="h-96" />
       </div>
@@ -635,8 +635,8 @@ export const DocumentManagement: React.FC = () => {
                   { name: "Contrato de Trabalho - Maria Santos", expiry: "2025-01-20", days: 18, status: "critical" },
                   { name: "Habilitação Marítima - Pedro Costa", expiry: "2024-12-28", days: -5, status: "expired" },
                   { name: "Certificado de Saúde - Ana Lima", expiry: "2025-03-10", days: 67, status: "ok" },
-                ].map((doc, i) => (
-                  <div key={i} className="flex justify-between items-center p-4 border rounded-lg">
+                ].map((doc) => (
+                  <div key={doc.name} className="flex justify-between items-center p-4 border rounded-lg">
                     <div className="flex-1">
                       <p className="font-medium">{doc.name}</p>
                       <p className="text-sm text-muted-foreground">Vence em: {doc.expiry}</p>

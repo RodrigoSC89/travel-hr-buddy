@@ -290,8 +290,8 @@ function FinanceDashboard() {
               { type: "Charter Party", vessel: "MV Atlantic Star", value: "R$ 2.5M/mês", status: "active" },
               { type: "Afretamento", vessel: "MV Pacific Explorer", value: "R$ 1.8M/mês", status: "active" },
               { type: "Serviço", vessel: "Frota OSV", value: "R$ 850K/mês", status: "renewal" },
-            ].map((contract, i) => (
-              <div key={i} className="p-4 border rounded-lg">
+            ].map((contract) => (
+              <div key={`${contract.type}-${contract.vessel}`} className="p-4 border rounded-lg">
                 <div className="flex justify-between items-start mb-2">
                   <Badge variant={contract.status === "active" ? "default" : "secondary"}>
                     {contract.status === "active" ? "Ativo" : "Renovação"}

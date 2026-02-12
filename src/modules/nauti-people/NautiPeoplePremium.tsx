@@ -151,8 +151,8 @@ function PeopleDashboard() {
                 { type: "Certificado Expirando", crew: "João Silva", days: 15, severity: "warning" },
                 { type: "Contrato Vencendo", crew: "Maria Santos", days: 30, severity: "info" },
                 { type: "Exame Médico", crew: "Pedro Costa", days: 7, severity: "warning" },
-              ].map((alert, i) => (
-                <div key={i} className="flex items-center justify-between p-3 border rounded-lg">
+              ].map((alert) => (
+                <div key={`${alert.type}-${alert.crew}`} className="flex items-center justify-between p-3 border rounded-lg">
                   <div>
                     <p className="font-medium">{alert.type}</p>
                     <p className="text-sm text-muted-foreground">{alert.crew}</p>

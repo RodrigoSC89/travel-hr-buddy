@@ -322,8 +322,8 @@ export function PredictiveCostDashboard() {
                               Custo atual: ${(opportunity.currentCost / 1000).toFixed(0)}k
                             </p>
                             <div className="flex flex-wrap gap-2 mt-2">
-                              {opportunity.actions.map((action, i) => (
-                                <Badge key={i} variant="secondary" className="text-xs">
+                              {opportunity.actions.map((action) => (
+                                <Badge key={action} variant="secondary" className="text-xs">
                                   {action}
                                 </Badge>
                               ))}

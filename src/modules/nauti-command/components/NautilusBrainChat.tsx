@@ -325,7 +325,7 @@ Qual área você gostaria de explorar em detalhes?`;
                   )}
                   <div className="prose prose-sm dark:prose-invert max-w-none">
                     {message.content.split('\n').map((line, i) => (
-                      <p key={i} className="mb-1 last:mb-0">
+                      <p key={`line-${i}-${line.slice(0, 10)}`} className="mb-1 last:mb-0">
                         {line.startsWith('**') && line.endsWith('**') 
                           ? <strong>{line.slice(2, -2)}</strong>
                           : line.startsWith('- ') 
@@ -355,9 +355,9 @@ Qual área você gostaria de explorar em detalhes?`;
                   {/* Suggestions */}
                   {message.suggestions && message.suggestions.length > 0 && (
                     <div className="flex flex-wrap gap-2 mt-3 pt-2 border-t border-border/50">
-                      {message.suggestions.map((suggestion, i) => (
+                      {message.suggestions.map((suggestion) => (
                         <Button
-                          key={i}
+                          key={suggestion}
                           variant="outline"
                           size="sm"
                           className="text-xs"

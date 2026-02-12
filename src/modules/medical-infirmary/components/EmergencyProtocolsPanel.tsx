@@ -361,8 +361,8 @@ export default function EmergencyProtocolsPanel() {
                   </CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-2">
-                  {selectedProtocol.medications.map((med, i) => (
-                    <div key={i} className="p-3 rounded-lg bg-muted/50">
+                  {selectedProtocol.medications.map((med) => (
+                    <div key={med.name} className="p-3 rounded-lg bg-muted/50">
                       <p className="font-medium">{med.name}</p>
                       <p className="text-sm text-muted-foreground">
                         {med.dose} - {med.route}

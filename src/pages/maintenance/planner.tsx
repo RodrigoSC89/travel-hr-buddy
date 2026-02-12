@@ -216,7 +216,7 @@ export default function MaintenancePlanner() {
           {isLoading ? (
             <div className="space-y-4">
               {[1, 2, 3].map(i => (
-                <div key={i} className="border rounded-lg p-4">
+                <div key={`planner-skeleton-${i}`} className="border rounded-lg p-4">
                   <Skeleton className="h-5 w-48 mb-2" />
                   <Skeleton className="h-4 w-96 mb-2" />
                   <Skeleton className="h-3 w-32" />

@@ -137,7 +137,7 @@ export default function MaintenanceHistory() {
             {isLoading ? (
               <div className="space-y-4">
                 {[1, 2, 3].map(i => (
-                  <div key={i} className="border-l-4 border-muted pl-4 py-2">
+                  <div key={`history-skeleton-${i}`} className="border-l-4 border-muted pl-4 py-2">
                     <Skeleton className="h-5 w-48 mb-2" />
                     <Skeleton className="h-4 w-96 mb-2" />
                     <Skeleton className="h-3 w-64" />

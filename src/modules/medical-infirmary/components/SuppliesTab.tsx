@@ -387,7 +387,7 @@ export default function SuppliesTab() {
                 <ul className="text-sm space-y-1">
                   {aiAnalysis.predictedIssues?.length > 0 ? 
                     aiAnalysis.predictedIssues.map((issue: string, i: number) => (
-                      <li key={i} className="flex items-center gap-2">
+                      <li key={`pred-issue-${i}-${issue.slice(0, 15)}`} className="flex items-center gap-2">
                         <AlertTriangle className="h-3 w-3 text-warning" />
                         {issue}
                       </li>

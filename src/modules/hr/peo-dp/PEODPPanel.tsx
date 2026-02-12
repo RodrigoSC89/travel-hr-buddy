@@ -476,7 +476,7 @@ export default function PEODPPanel() {
                   <h4 className="font-semibold mb-2">Principais Achados</h4>
                   <ul className="space-y-1">
                     {summary.keyFindings.map((finding, i) => (
-                      <li key={i} className="text-sm text-muted-foreground flex items-center gap-2">
+                      <li key={`finding-${i}-${finding.slice(0, 15)}`} className="text-sm text-muted-foreground flex items-center gap-2">
                         <CheckCircle2 className="h-3 w-3 text-primary" />
                         {finding}
                       </li>
@@ -488,7 +488,7 @@ export default function PEODPPanel() {
                   <h4 className="font-semibold mb-2">Recomendações</h4>
                   <ul className="space-y-1">
                     {summary.recommendations.map((rec, i) => (
-                      <li key={i} className="text-sm text-muted-foreground">{rec}</li>
+                      <li key={`peo-rec-${i}-${rec.slice(0, 15)}`} className="text-sm text-muted-foreground">{rec}</li>
                     ))}
                   </ul>
                 </div>

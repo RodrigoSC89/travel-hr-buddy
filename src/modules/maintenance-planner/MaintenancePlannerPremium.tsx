@@ -152,8 +152,8 @@ function MaintenanceDashboard() {
                 { equipment: "Motor Principal #1", prediction: "Troca de óleo em 15 dias", risk: "medium" },
                 { equipment: "Gerador #2", prediction: "Manutenção em 30 dias", risk: "low" },
                 { equipment: "Sistema Hidráulico", prediction: "Verificação urgente", risk: "high" },
-              ].map((pred, i) => (
-                <div key={i} className="p-3 border rounded-lg">
+              ].map((pred) => (
+                <div key={pred.equipment} className="p-3 border rounded-lg">
                   <div className="flex justify-between items-start">
                     <div>
                       <p className="font-medium">{pred.equipment}</p>
@@ -248,8 +248,8 @@ function MaintenanceDashboard() {
               { name: "Sistema de Navegação", health: 98, trend: "stable" },
               { name: "Geradores", health: 85, trend: "down" },
               { name: "Sistema Hidráulico", health: 78, trend: "down" },
-            ].map((equip, i) => (
-              <div key={i} className="space-y-2">
+            ].map((equip) => (
+              <div key={equip.name} className="space-y-2">
                 <div className="flex justify-between text-sm">
                   <span className="font-medium flex items-center gap-2">
                     {equip.name}
