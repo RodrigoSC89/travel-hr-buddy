@@ -220,7 +220,7 @@ const AICommandCenter = () => {
               <div className="space-y-4">
                 {messages.map((msg, idx) => (
                   <div
-                    key={idx}
+                    key={`msg-${msg.role}-${idx}`}
                     className={`flex ${msg.role === "user" ? "justify-end" : "justify-start"}`}
                   >
                     <div

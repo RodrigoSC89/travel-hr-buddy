@@ -132,10 +132,10 @@ export function AutonomousAgent() {
 
   const getStatusColor = (status: string) => {
     const colors = {
-      pending: 'bg-amber-500/20 text-amber-400 border-amber-500/30',
-      executing: 'bg-blue-500/20 text-blue-400 border-blue-500/30',
-      completed: 'bg-green-500/20 text-green-400 border-green-500/30',
-      failed: 'bg-red-500/20 text-red-400 border-red-500/30',
+      pending: 'bg-warning/20 text-warning border-warning/30',
+      executing: 'bg-info/20 text-info border-info/30',
+      completed: 'bg-success/20 text-success border-success/30',
+      failed: 'bg-destructive/20 text-destructive border-destructive/30',
       cancelled: 'bg-muted text-muted-foreground border-muted'
     };
     return colors[status as keyof typeof colors] || 'bg-muted';
@@ -143,9 +143,9 @@ export function AutonomousAgent() {
 
   const getImpactColor = (impact: string) => {
     const colors = {
-      high: 'text-red-400',
-      medium: 'text-amber-400',
-      low: 'text-green-400'
+      high: 'text-destructive',
+      medium: 'text-warning',
+      low: 'text-success'
     };
     return colors[impact as keyof typeof colors] || 'text-muted-foreground';
   };
@@ -168,7 +168,7 @@ export function AutonomousAgent() {
                       animate={{ scale: [1, 1.2, 1] }}
                       transition={{ repeat: Infinity, duration: 2 }}
                     >
-                      <div className="w-3 h-3 rounded-full bg-green-500" />
+                      <div className="w-3 h-3 rounded-full bg-success" />
                     </motion.div>
                   )}
                 </h2>
@@ -213,28 +213,28 @@ export function AutonomousAgent() {
         </Card>
         <Card className="bg-muted/30">
           <CardContent className="p-4 text-center">
-            <CheckCircle className="h-6 w-6 text-green-400 mx-auto mb-2" />
+            <CheckCircle className="h-6 w-6 text-success mx-auto mb-2" />
             <p className="text-2xl font-bold">{metrics.successRate}%</p>
             <p className="text-xs text-muted-foreground">Taxa de Sucesso</p>
           </CardContent>
         </Card>
         <Card className="bg-muted/30">
           <CardContent className="p-4 text-center">
-            <Clock className="h-6 w-6 text-blue-400 mx-auto mb-2" />
+            <Clock className="h-6 w-6 text-info mx-auto mb-2" />
             <p className="text-2xl font-bold">{metrics.timeSaved}h</p>
             <p className="text-xs text-muted-foreground">Tempo Economizado</p>
           </CardContent>
         </Card>
         <Card className="bg-muted/30">
           <CardContent className="p-4 text-center">
-            <Activity className="h-6 w-6 text-amber-400 mx-auto mb-2" />
+            <Activity className="h-6 w-6 text-warning mx-auto mb-2" />
             <p className="text-2xl font-bold">R${(metrics.costSaved/1000).toFixed(1)}k</p>
             <p className="text-xs text-muted-foreground">Custo Economizado</p>
           </CardContent>
         </Card>
         <Card className="bg-muted/30">
           <CardContent className="p-4 text-center">
-            <Settings className="h-6 w-6 text-purple-400 mx-auto mb-2" />
+            <Settings className="h-6 w-6 text-accent-foreground mx-auto mb-2" />
             <p className="text-2xl font-bold">{metrics.activeRules}</p>
             <p className="text-xs text-muted-foreground">Regras Ativas</p>
           </CardContent>
@@ -280,9 +280,9 @@ export function AutonomousAgent() {
                           <CardContent className="p-4">
                             <div className="flex items-start gap-3">
                               <div className={`p-2 rounded-lg ${
-                                action.status === 'executing' ? 'bg-blue-500/20 text-blue-400' :
-                                action.status === 'completed' ? 'bg-green-500/20 text-green-400' :
-                                action.status === 'pending' ? 'bg-amber-500/20 text-amber-400' :
+                                action.status === 'executing' ? 'bg-info/20 text-info' :
+                                action.status === 'completed' ? 'bg-success/20 text-success' :
+                                action.status === 'pending' ? 'bg-warning/20 text-warning' :
                                 'bg-muted text-muted-foreground'
                               }`}>
                                 {getActionIcon(action.type)}
@@ -316,7 +316,7 @@ export function AutonomousAgent() {
                                   <Button 
                                     size="icon" 
                                     variant="ghost" 
-                                    className="h-8 w-8 text-green-400 hover:bg-green-500/20"
+                                    className="h-8 w-8 text-success hover:bg-success/20"
                                     onClick={(e) => { e.stopPropagation(); handleApprove(action.id); }}
                                   >
                                     <ThumbsUp className="h-4 w-4" />
@@ -324,7 +324,7 @@ export function AutonomousAgent() {
                                   <Button 
                                     size="icon" 
                                     variant="ghost" 
-                                    className="h-8 w-8 text-red-400 hover:bg-red-500/20"
+                                    className="h-8 w-8 text-destructive hover:bg-destructive/20"
                                     onClick={(e) => { e.stopPropagation(); handleReject(action.id); }}
                                   >
                                     <ThumbsDown className="h-4 w-4" />
@@ -333,7 +333,7 @@ export function AutonomousAgent() {
                               )}
                             </div>
                             {action.result && (
-                              <div className="mt-3 p-2 rounded bg-green-500/10 text-xs text-green-400">
+                              <div className="mt-3 p-2 rounded bg-success/10 text-xs text-success">
                                 ✓ {action.result}
                               </div>
                             )}
@@ -362,9 +362,9 @@ export function AutonomousAgent() {
                 <div className="space-y-4">
                   <div className="flex items-center gap-3">
                     <div className={`p-3 rounded-lg ${
-                      selectedAction.status === 'completed' ? 'bg-green-500/20 text-green-400' :
-                      selectedAction.status === 'executing' ? 'bg-blue-500/20 text-blue-400' :
-                      'bg-amber-500/20 text-amber-400'
+                      selectedAction.status === 'completed' ? 'bg-success/20 text-success' :
+                      selectedAction.status === 'executing' ? 'bg-info/20 text-info' :
+                      'bg-warning/20 text-warning'
                     }`}>
                       {getActionIcon(selectedAction.type)}
                     </div>
@@ -401,8 +401,8 @@ export function AutonomousAgent() {
                   </div>
 
                   {selectedAction.result && (
-                    <div className="p-3 rounded-lg bg-green-500/10 border border-green-500/20">
-                      <p className="text-xs text-green-400 font-medium mb-1">Resultado</p>
+                    <div className="p-3 rounded-lg bg-success/10 border border-success/20">
+                      <p className="text-xs text-success font-medium mb-1">Resultado</p>
                       <p className="text-sm">{selectedAction.result}</p>
                     </div>
                   )}
@@ -410,7 +410,7 @@ export function AutonomousAgent() {
                   {selectedAction.status === 'pending' && selectedAction.requiresApproval && (
                     <div className="flex gap-2 pt-2">
                       <Button 
-                        className="flex-1 bg-green-600 hover:bg-green-700"
+                        className="flex-1 bg-success hover:bg-success/90"
                         onClick={() => handleApprove(selectedAction.id)}
                       >
                         <ThumbsUp className="h-4 w-4 mr-2" />

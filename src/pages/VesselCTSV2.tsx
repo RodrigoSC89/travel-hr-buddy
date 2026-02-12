@@ -158,7 +158,7 @@ export default function VesselCTSV2() {
             <CardV2 icon={Shield} title="Taxa de Conformidade" gradient="green">
               <div className="space-y-4">
                 <div className="text-center">
-                  <p className="text-5xl font-bold text-green-500">{complianceRate}%</p>
+                  <p className="text-5xl font-bold text-success">{complianceRate}%</p>
                   <p className="text-muted-foreground">Conformidade STCW</p>
                 </div>
                 <Progress value={Number(complianceRate)} className="h-3" />

@@ -650,9 +650,9 @@ const FuelOptimizerPage = () => {
                         "Reduza velocidade para economia ideal",
                         "Monitore condições meteorológicas",
                         "Mantenha trim otimizado"
-                      ]).map((rec, idx) => (
-                        <li key={idx} className="flex items-start gap-2">
-                          <CheckCircle className="h-4 w-4 text-green-500 mt-0.5" />
+                      ]).map((rec) => (
+                        <li key={rec} className="flex items-start gap-2">
+                          <CheckCircle className="h-4 w-4 text-success mt-0.5" />
                           <span>{rec}</span>
                         </li>
                       ))}
@@ -664,16 +664,16 @@ const FuelOptimizerPage = () => {
                 {selectedOptimization.ai_analysis?.risk_factors && selectedOptimization.ai_analysis.risk_factors.length > 0 && (
                   <Card className="border-amber-200 dark:border-amber-800">
                     <CardHeader>
-                      <CardTitle className="flex items-center gap-2 text-amber-600">
+                      <CardTitle className="flex items-center gap-2 text-warning">
                         <AlertTriangle className="h-5 w-5" />
                         Fatores de Risco
                       </CardTitle>
                     </CardHeader>
                     <CardContent>
                       <ul className="space-y-2">
-                        {selectedOptimization.ai_analysis.risk_factors.map((risk, idx) => (
-                          <li key={idx} className="flex items-start gap-2">
-                            <AlertTriangle className="h-4 w-4 text-amber-500 mt-0.5" />
+                        {selectedOptimization.ai_analysis.risk_factors.map((risk) => (
+                          <li key={risk} className="flex items-start gap-2">
+                            <AlertTriangle className="h-4 w-4 text-warning mt-0.5" />
                             <span>{risk}</span>
                           </li>
                         ))}
