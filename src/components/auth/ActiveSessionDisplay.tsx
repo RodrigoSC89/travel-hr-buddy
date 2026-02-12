@@ -229,7 +229,7 @@ export function ActiveSessionDisplay() {
               <span>Session expiry monitoring</span>
             </li>
             <li className="flex items-center gap-2">
-              <CheckCircle className="w-4 h-4 text-green-600" />
+              <CheckCircle className="w-4 h-4 text-success" />
               <span>Row-level security (RLS) enabled</span>
             </li>
           </ul>

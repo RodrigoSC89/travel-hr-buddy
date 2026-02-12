@@ -141,8 +141,8 @@ export function FeedbackWidget() {
 
   const getNPSLabel = (score: number) => {
     if (score <= 6) return { label: 'Detrator', color: 'text-destructive', icon: ThumbsDown };
-    if (score <= 8) return { label: 'Neutro', color: 'text-yellow-500', icon: Meh };
-    return { label: 'Promotor', color: 'text-green-500', icon: ThumbsUp };
+    if (score <= 8) return { label: 'Neutro', color: 'text-warning', icon: Meh };
+    return { label: 'Promotor', color: 'text-success', icon: ThumbsUp };
   };
 
   return (
@@ -196,7 +196,7 @@ export function FeedbackWidget() {
                         key={score}
                         variant={isSelected ? 'default' : 'outline'}
                         size="sm"
-                        className={`w-9 h-9 ${isSelected ? '' : score <= 6 ? 'hover:border-destructive' : score <= 8 ? 'hover:border-yellow-500' : 'hover:border-green-500'}`}
+                        className={`w-9 h-9 ${isSelected ? '' : score <= 6 ? 'hover:border-destructive' : score <= 8 ? 'hover:border-warning' : 'hover:border-success'}`}
                         onClick={() => setNpsScore(score)}
                       >
                         {score}
