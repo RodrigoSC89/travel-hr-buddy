@@ -306,8 +306,8 @@ export default function EmployeePortalPage() {
                 { name: 'Informe de Rendimentos 2025', date: '28/02/2026', type: 'PDF' },
                 { name: 'Contrato de Trabalho', date: employee.hireDate ? new Date(employee.hireDate).toLocaleDateString('pt-BR') : 'N/A', type: 'PDF' },
                 { name: 'Política de Férias', date: '01/01/2026', type: 'PDF' },
-              ].map((doc, i) => (
-                <div key={i} className="flex items-center gap-3 p-3 rounded-lg border hover:bg-muted/50 cursor-pointer">
+              ].map((doc) => (
+                <div key={doc.name} className="flex items-center gap-3 p-3 rounded-lg border hover:bg-muted/50 cursor-pointer">
                   <FileText className="h-5 w-5 text-blue-500" />
                   <div className="flex-1">
                     <p className="text-sm font-medium">{doc.name}</p>
@@ -342,8 +342,8 @@ export default function EmployeePortalPage() {
                 { type: 'Férias', period: '15-25/02/2026', status: 'approved', date: '10/01/2026' },
                 { type: 'Atestado Médico', period: '2 dias', status: 'approved', date: '05/01/2026' },
                 { type: 'Home Office', period: 'Sexta-feira', status: 'pending', date: '08/01/2026' },
-              ].map((req, i) => (
-                <div key={i} className="flex items-center gap-3 p-3 rounded-lg border">
+              ].map((req) => (
+                <div key={`${req.type}-${req.date}`} className="flex items-center gap-3 p-3 rounded-lg border">
                   <div className="flex-1">
                     <p className="text-sm font-medium">{req.type}</p>
                     <p className="text-xs text-muted-foreground">{req.period}</p>
@@ -382,8 +382,8 @@ export default function EmployeePortalPage() {
                 { objective: 'Entregar projeto Alpha', progress: 80 },
                 { objective: 'Melhorar performance do app', progress: 60 },
                 { objective: 'Mentorar 2 juniores', progress: 50 },
-              ].map((okr, i) => (
-                <div key={i}>
+              ].map((okr) => (
+                <div key={okr.objective}>
                   <div className="flex justify-between mb-1">
                     <span className="text-sm">{okr.objective}</span>
                     <span className="text-xs text-muted-foreground">{okr.progress}%</span>
@@ -407,8 +407,8 @@ export default function EmployeePortalPage() {
                 { name: 'React Avançado', duration: '8h', match: 95 },
                 { name: 'Liderança Técnica', duration: '4h', match: 88 },
                 { name: 'AWS Solutions Architect', duration: '20h', match: 75 },
-              ].map((course, i) => (
-                <div key={i} className="flex items-center gap-3 p-3 rounded-lg border hover:bg-muted/50 cursor-pointer">
+              ].map((course) => (
+                <div key={course.name} className="flex items-center gap-3 p-3 rounded-lg border hover:bg-muted/50 cursor-pointer">
                   <div className="p-2 bg-purple-500/10 rounded-lg">
                     <GraduationCap className="h-4 w-4 text-purple-500" />
                   </div>

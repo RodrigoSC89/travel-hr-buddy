@@ -191,8 +191,8 @@ const DigitalTwin3DPage = () => {
                     
                     {selectedSystem === system.id && (
                       <div className="mt-4 pt-4 border-t space-y-2">
-                        {system.sensors.map((sensor, idx) => (
-                          <div key={idx} className="flex items-center justify-between text-sm">
+                        {system.sensors.map((sensor) => (
+                          <div key={sensor.name} className="flex items-center justify-between text-sm">
                             <span className="text-muted-foreground">{sensor.name}</span>
                             <span className={`font-medium ${getSensorStatusColor(sensor.status)}`}>
                               {sensor.value}

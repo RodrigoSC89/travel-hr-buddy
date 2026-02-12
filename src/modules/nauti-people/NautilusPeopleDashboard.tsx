@@ -25,8 +25,8 @@ export default function NautilusPeopleDashboard() {
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-        {stats.map((stat, i) => (
-          <Card key={i}>
+        {stats.map((stat) => (
+          <Card key={stat.label}>
             <CardHeader className="pb-2">
               <div className="flex items-center justify-between">
                 <CardTitle className="text-sm font-medium text-muted-foreground">
@@ -61,8 +61,8 @@ export default function NautilusPeopleDashboard() {
               { role: "Marinheiros", count: 72, percentage: 29 },
               { role: "Praticantes", count: 28, percentage: 11 },
               { role: "Outros", count: 62, percentage: 25 },
-            ].map((item, i) => (
-              <div key={i} className="flex items-center justify-between">
+            ].map((item) => (
+              <div key={item.role} className="flex items-center justify-between">
                 <div className="flex items-center gap-2">
                   <span className="font-medium">{item.role}</span>
                   <Badge variant="outline">{item.count}</Badge>

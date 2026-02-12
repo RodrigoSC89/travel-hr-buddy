@@ -196,8 +196,8 @@ export function EmotionalAISystem() {
                       </div>
                       {crew.stressFactors.length > 0 && (
                         <div className="mt-2 flex flex-wrap gap-1">
-                          {crew.stressFactors.map((factor: string, i: number) => (
-                            <Badge key={i} variant="outline" className="text-xs bg-warning/10 text-warning">
+                          {crew.stressFactors.map((factor: string) => (
+                            <Badge key={factor} variant="outline" className="text-xs bg-warning/10 text-warning">
                               {factor}
                             </Badge>
                           ))}

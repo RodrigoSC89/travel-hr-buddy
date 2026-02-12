@@ -291,9 +291,9 @@ export const DiagnosticPanel: React.FC<DiagnosticPanelProps> = ({
           <div className="space-y-2">
             <div className="text-sm font-medium">Recent Tests</div>
             <div className="space-y-2">
-              {testResults.map((result, index) => (
+              {testResults.map((result, idx) => (
                 <div
-                  key={index}
+                  key={`test-${idx}-${result.timestamp}`}
                   className={`p-3 rounded-lg border ${
                     result.success
                       ? "bg-green-500/10 border-green-500/30"

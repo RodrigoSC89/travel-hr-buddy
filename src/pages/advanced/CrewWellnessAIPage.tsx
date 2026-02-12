@@ -265,9 +265,9 @@ const CrewWellnessAIPage = () => {
               </CardHeader>
               <CardContent>
                 <div className="space-y-3">
-                  {surveyResponses.topConcerns.map((concern, idx) => (
-                    <div key={idx} className="flex items-center gap-3 p-2 bg-muted/50 rounded">
-                      <span className="text-lg">{idx + 1}.</span>
+                  {surveyResponses.topConcerns.map((concern, cIdx) => (
+                    <div key={concern} className="flex items-center gap-3 p-2 bg-muted/50 rounded">
+                      <span className="text-lg">{cIdx + 1}.</span>
                       <span>{concern}</span>
                     </div>
                   ))}

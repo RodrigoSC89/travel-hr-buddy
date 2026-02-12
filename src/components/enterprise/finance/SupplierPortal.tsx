@@ -143,7 +143,7 @@ const getStatusColor = (status: string) => {
 const getRatingStars = (rating: number) => {
   return Array.from({ length: 5 }, (_, i) => (
     <Star
-      key={i}
+      key={`star-${i}`}
       className={`h-4 w-4 ${i < Math.floor(rating) ? "text-yellow-500 fill-yellow-500" : "text-gray-300"}`}
     />
   ));
@@ -352,8 +352,8 @@ export function SupplierPortal() {
                     <div className="space-y-3">
                       <h4 className="text-sm font-medium">Certificações</h4>
                       <div className="flex flex-wrap gap-2">
-                        {selectedSupplier.certifications.map((cert, idx) => (
-                          <Badge key={idx} variant="outline" className="flex items-center gap-1">
+                        {selectedSupplier.certifications.map((cert) => (
+                          <Badge key={cert} variant="outline" className="flex items-center gap-1">
                             <Award className="h-3 w-3" />
                             {cert}
                           </Badge>
@@ -463,8 +463,8 @@ export function SupplierPortal() {
 
                 <TabsContent value="documents" className="space-y-4">
                   <div className="space-y-2">
-                    {["Contrato Comercial 2024.pdf", "Certificado ISO 9001.pdf", "Seguro de Carga.pdf"].map((doc, idx) => (
-                      <div key={idx} className="flex items-center justify-between p-3 rounded-lg border hover:bg-muted/50">
+                    {["Contrato Comercial 2024.pdf", "Certificado ISO 9001.pdf", "Seguro de Carga.pdf"].map((doc) => (
+                      <div key={doc} className="flex items-center justify-between p-3 rounded-lg border hover:bg-muted/50">
                         <div className="flex items-center gap-3">
                           <FileText className="h-5 w-5 text-muted-foreground" />
                           <span className="text-sm">{doc}</span>

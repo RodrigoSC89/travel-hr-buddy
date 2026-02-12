@@ -239,8 +239,8 @@ export default function TodoTracker() {
         <CardContent>
           <ScrollArea className="h-[600px]">
             <div className="space-y-4">
-              {filteredModules.map((module, idx) => (
-                <Card key={idx} className="border-2">
+              {filteredModules.map((module) => (
+                <Card key={module.module} className="border-2">
                   <CardHeader className="pb-3">
                     <div className="flex items-center justify-between">
                       <div className="flex items-center gap-2">

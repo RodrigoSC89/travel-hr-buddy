@@ -441,8 +441,8 @@ export function AIDecisionHistory() {
                         <div>
                           <h4 className="text-sm font-medium mb-2">Evidências</h4>
                           <ul className="text-sm text-muted-foreground list-disc list-inside">
-                            {(decision.justification_evidence as string[]).map((e, i) => (
-                              <li key={i}>{e}</li>
+                            {(decision.justification_evidence as string[]).map((e) => (
+                              <li key={e}>{e}</li>
                             ))}
                           </ul>
                         </div>
@@ -456,8 +456,8 @@ export function AIDecisionHistory() {
                             Riscos Identificados
                           </h4>
                           <ul className="text-sm text-muted-foreground list-disc list-inside">
-                            {(decision.justification_risks as string[]).map((r, i) => (
-                              <li key={i}>{r}</li>
+                            {(decision.justification_risks as string[]).map((r) => (
+                              <li key={r}>{r}</li>
                             ))}
                           </ul>
                         </div>
