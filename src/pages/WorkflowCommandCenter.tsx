@@ -458,7 +458,7 @@ export default function WorkflowCommandCenter() {
               </CardHeader>
               <CardContent>
                 <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-                  {visualWorkflows.map((workflow: any) => (
+                  {visualWorkflows.map((workflow) => (
                     <Card 
                       key={workflow.id} 
                       className="hover:shadow-md transition-shadow cursor-pointer"
@@ -848,13 +848,13 @@ export default function WorkflowCommandCenter() {
                   </div>
                   <div className="p-3 bg-muted/50 rounded-lg">
                     <p className="text-2xl font-bold">
-                      {selectedVisualWorkflow.nodes.filter((n: any) => n.status === "completed").length}
+                      {selectedVisualWorkflow.nodes.filter((n: Record<string, unknown>) => n.status === "completed").length}
                     </p>
                     <p className="text-xs text-muted-foreground">Concluídas</p>
                   </div>
                   <div className="p-3 bg-muted/50 rounded-lg">
                     <p className="text-2xl font-bold">
-                      {Math.round((selectedVisualWorkflow.nodes.filter((n: any) => n.status === "completed").length / selectedVisualWorkflow.nodes.length) * 100)}%
+                      {Math.round((selectedVisualWorkflow.nodes.filter((n: Record<string, unknown>) => n.status === "completed").length / selectedVisualWorkflow.nodes.length) * 100)}%
                     </p>
                     <p className="text-xs text-muted-foreground">Progresso</p>
                   </div>

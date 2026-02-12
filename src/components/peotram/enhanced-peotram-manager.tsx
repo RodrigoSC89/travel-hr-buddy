@@ -757,7 +757,7 @@ export const EnhancedPeotramManager: React.FC = () => {
           <Suspense fallback={<div className="flex items-center justify-center p-8">Carregando...</div>}>
             <PeotramNonConformities 
               nonConformities={nonConformities}
-              onUpdate={(id: string, updates: any) => handleUpdateNonConformity(id, updates)}
+              onUpdate={(id: string, updates: Partial<NonConformity>) => handleUpdateNonConformity(id, updates)}
             />
           </Suspense>
         </TabsContent>
@@ -800,7 +800,7 @@ export const EnhancedPeotramManager: React.FC = () => {
             {managementSubView === "non-conformities" && (
               <PeotramNonConformities 
                 nonConformities={nonConformities}
-                onUpdate={(id: string, updates: any) => handleUpdateNonConformity(id, updates)}
+                onUpdate={(id: string, updates: Partial<NonConformity>) => handleUpdateNonConformity(id, updates)}
               />
             )}
             {managementSubView === "reports" && <PeotramReportsGenerator />}
@@ -832,7 +832,7 @@ export const EnhancedPeotramManager: React.FC = () => {
         <TabsContent value="non-conformities">
           <PeotramNonConformities 
             nonConformities={nonConformities}
-            onUpdate={(id: string, updates: any) => handleUpdateNonConformity(id, updates)}
+            onUpdate={(id: string, updates: Partial<NonConformity>) => handleUpdateNonConformity(id, updates)}
           />
         </TabsContent>
 

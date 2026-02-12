@@ -165,10 +165,11 @@ class AITranslator {
   }
 
   private getTranslationFromJSON(
-    translations: Record<string, any>,
+    translations: Record<string, unknown>,
     key: string
   ): string | null {
     const parts = key.split(".");
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any -- deeply nested translation object traversal
     let current: any = translations;
 
     for (const part of parts) {
