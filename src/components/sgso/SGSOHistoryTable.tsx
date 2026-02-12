@@ -69,14 +69,14 @@ export const SGSOHistoryTable: React.FC<SGSOHistoryTableProps> = ({
       );
     case "em_andamento":
       return (
-        <Badge variant="default" className="flex items-center gap-1 bg-yellow-500 hover:bg-yellow-600">
+        <Badge variant="default" className="flex items-center gap-1 bg-warning hover:bg-warning/90 text-warning-foreground">
           <Clock className="h-3 w-3" />
             Em Andamento
         </Badge>
       );
     case "resolvido":
       return (
-        <Badge variant="default" className="flex items-center gap-1 bg-green-600 hover:bg-green-700">
+        <Badge variant="default" className="flex items-center gap-1 bg-success hover:bg-success/90 text-success-foreground">
           <CheckCircle2 className="h-3 w-3" />
             Resolvido
         </Badge>
@@ -93,11 +93,11 @@ export const SGSOHistoryTable: React.FC<SGSOHistoryTableProps> = ({
     case "crítico":
       return <Badge variant="destructive">🔴 Crítico</Badge>;
     case "alto":
-      return <Badge variant="destructive" className="bg-orange-500 hover:bg-orange-600">🟠 Alto</Badge>;
+      return <Badge variant="destructive" className="bg-warning hover:bg-warning/90 text-warning-foreground">🟠 Alto</Badge>;
     case "médio":
-      return <Badge variant="default" className="bg-yellow-500 hover:bg-yellow-600">🟡 Médio</Badge>;
+      return <Badge variant="default" className="bg-warning hover:bg-warning/90 text-warning-foreground">🟡 Médio</Badge>;
     case "baixo":
-      return <Badge variant="default" className="bg-green-600 hover:bg-green-700">🟢 Baixo</Badge>;
+      return <Badge variant="default" className="bg-success hover:bg-success/90 text-success-foreground">🟢 Baixo</Badge>;
     default:
       return <Badge variant="outline">{riskLevel}</Badge>;
     }

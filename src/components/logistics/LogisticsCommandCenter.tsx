@@ -529,8 +529,8 @@ export function LogisticsCommandCenter() {
                       </div>
                       <div className="bg-muted p-2 rounded text-sm mb-2">
                         <p className="font-medium mb-1">Itens ({pr.items.length}):</p>
-                        {pr.items.map((item, idx) => (
-                          <p key={idx}>• {item.name}: {item.quantity} {item.unit}</p>
+                        {pr.items.map((item) => (
+                          <p key={item.name}>• {item.name}: {item.quantity} {item.unit}</p>
                         ))}
                       </div>
                       <p className="text-sm text-muted-foreground italic">
