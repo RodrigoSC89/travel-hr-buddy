@@ -99,20 +99,20 @@ export const OVIDReports: React.FC<OVIDReportsProps> = ({
               <p className="text-3xl font-bold text-primary">{complianceScore}%</p>
               <p className="text-xs text-muted-foreground">Score</p>
             </div>
-            <div className="text-center p-4 rounded-lg bg-green-500/10">
-              <p className="text-3xl font-bold text-green-500">{status.compliant}</p>
+            <div className="text-center p-4 rounded-lg bg-success/10">
+              <p className="text-3xl font-bold text-success">{status.compliant}</p>
               <p className="text-xs text-muted-foreground">Conforme</p>
             </div>
-            <div className="text-center p-4 rounded-lg bg-red-500/10">
-              <p className="text-3xl font-bold text-red-500">{status.nonCompliant}</p>
+            <div className="text-center p-4 rounded-lg bg-destructive/10">
+              <p className="text-3xl font-bold text-destructive">{status.nonCompliant}</p>
               <p className="text-xs text-muted-foreground">Não Conforme</p>
             </div>
             <div className="text-center p-4 rounded-lg bg-muted">
               <p className="text-3xl font-bold">{status.notApplicable}</p>
               <p className="text-xs text-muted-foreground">N/A</p>
             </div>
-            <div className="text-center p-4 rounded-lg bg-yellow-500/10">
-              <p className="text-3xl font-bold text-yellow-500">{status.pending}</p>
+            <div className="text-center p-4 rounded-lg bg-warning/10">
+              <p className="text-3xl font-bold text-warning">{status.pending}</p>
               <p className="text-xs text-muted-foreground">Pendente</p>
             </div>
           </div>

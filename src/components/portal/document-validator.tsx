@@ -161,9 +161,9 @@ export const DocumentValidator: React.FC<DocumentValidatorProps> = ({
 
   // Get validation status color
   const getStatusColor = (isValid: boolean, confidence: number) => {
-    if (isValid && confidence >= 80) return "text-green-600 bg-green-50";
-    if (isValid && confidence >= 60) return "text-yellow-600 bg-yellow-50";
-    return "text-red-600 bg-red-50";
+    if (isValid && confidence >= 80) return "text-success bg-success/10";
+    if (isValid && confidence >= 60) return "text-warning bg-warning/10";
+    return "text-destructive bg-destructive/10";
   };
 
   // Clear results
@@ -265,9 +265,9 @@ export const DocumentValidator: React.FC<DocumentValidatorProps> = ({
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-3">
                     {result.isValid ? (
-                      <CheckCircle className="h-6 w-6 text-green-600" />
+                      <CheckCircle className="h-6 w-6 text-success" />
                     ) : (
-                      <AlertTriangle className="h-6 w-6 text-red-600" />
+                      <AlertTriangle className="h-6 w-6 text-destructive" />
                     )}
                     <div>
                       <p className="font-medium">
@@ -300,11 +300,11 @@ export const DocumentValidator: React.FC<DocumentValidatorProps> = ({
 
                 {/* Suggestions */}
                 {result.suggestions.length > 0 && (
-                  <div className="bg-blue-50 p-3 rounded-lg">
-                    <p className="font-medium text-blue-900 mb-2">Sugestões de melhoria:</p>
+                  <div className="bg-info/10 p-3 rounded-lg">
+                    <p className="font-medium text-info mb-2">Sugestões de melhoria:</p>
                     <ul className="list-disc list-inside space-y-1">
                       {result.suggestions.map((suggestion, i) => (
-                        <li key={i} className="text-sm text-blue-800">{suggestion}</li>
+                        <li key={i} className="text-sm text-foreground">{suggestion}</li>
                       ))}
                     </ul>
                   </div>

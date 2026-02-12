@@ -32,7 +32,7 @@ export const AutomationHub: React.FC = () => {
                 <p className="text-sm font-medium text-muted-foreground">Automações Ativas</p>
                 <p className="text-2xl font-bold">3</p>
               </div>
-              <Settings className="h-8 w-8 text-blue-500" />
+              <Settings className="h-8 w-8 text-info" />
             </div>
           </CardContent>
         </Card>
@@ -44,7 +44,7 @@ export const AutomationHub: React.FC = () => {
                 <p className="text-sm font-medium text-muted-foreground">Sugestões IA</p>
                 <p className="text-2xl font-bold">7</p>
               </div>
-              <Lightbulb className="h-8 w-8 text-yellow-500" />
+              <Lightbulb className="h-8 w-8 text-warning" />
             </div>
           </CardContent>
         </Card>

@@ -178,7 +178,7 @@ export const EmployeePortal: React.FC = () => {
         <Card>
           <CardContent className="p-4">
             <div className="flex items-center space-x-4">
-              <Clock className="h-8 w-8 text-blue-500" />
+              <Clock className="h-8 w-8 text-info" />
               <div>
                 <div className="text-2xl font-bold">{weeklyHours}h</div>
                 <div className="text-sm text-muted-foreground">Esta semana</div>
@@ -190,7 +190,7 @@ export const EmployeePortal: React.FC = () => {
         <Card>
           <CardContent className="p-4">
             <div className="flex items-center space-x-4">
-              <Award className="h-8 w-8 text-yellow-500" />
+              <Award className="h-8 w-8 text-warning" />
               <div>
                 <div className="text-2xl font-bold">{achievements.filter(a => a.earned).length}</div>
                 <div className="text-sm text-muted-foreground">Conquistas</div>
@@ -202,7 +202,7 @@ export const EmployeePortal: React.FC = () => {
         <Card>
           <CardContent className="p-4">
             <div className="flex items-center space-x-4">
-              <Target className="h-8 w-8 text-green-500" />
+              <Target className="h-8 w-8 text-success" />
               <div>
                 <div className="text-2xl font-bold">85%</div>
                 <div className="text-sm text-muted-foreground">Performance</div>
@@ -214,7 +214,7 @@ export const EmployeePortal: React.FC = () => {
         <Card>
           <CardContent className="p-4">
             <div className="flex items-center space-x-4">
-              <TrendingUp className="h-8 w-8 text-purple-500" />
+              <TrendingUp className="h-8 w-8 text-accent-foreground" />
               <div>
                 <div className="text-2xl font-bold">Nível 3</div>
                 <div className="text-sm text-muted-foreground">Ranking</div>
@@ -454,21 +454,21 @@ export const EmployeePortal: React.FC = () => {
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                 <Card>
                   <CardContent className="p-4 text-center">
-                    <div className="text-3xl font-bold text-green-600">8.5</div>
+                    <div className="text-3xl font-bold text-success">8.5</div>
                     <div className="text-sm text-muted-foreground">Performance Geral</div>
                     <Progress value={85} className="mt-2" />
                   </CardContent>
                 </Card>
                 <Card>
                   <CardContent className="p-4 text-center">
-                    <div className="text-3xl font-bold text-blue-600">9.2</div>
+                    <div className="text-3xl font-bold text-info">9.2</div>
                     <div className="text-sm text-muted-foreground">Trabalho em Equipe</div>
                     <Progress value={92} className="mt-2" />
                   </CardContent>
                 </Card>
                 <Card>
                   <CardContent className="p-4 text-center">
-                    <div className="text-3xl font-bold text-purple-600">7.8</div>
+                    <div className="text-3xl font-bold text-accent-foreground">7.8</div>
                     <div className="text-sm text-muted-foreground">Inovação</div>
                     <Progress value={78} className="mt-2" />
                   </CardContent>

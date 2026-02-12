@@ -58,24 +58,24 @@ const getStatusIcon = (status: string) => {
 
 const getStatusColor = (status: string) => {
   switch (status) {
-    case "completed": return "bg-green-500/10 text-green-600 border-green-500/20";
-    case "in_progress": return "bg-blue-500/10 text-blue-600 border-blue-500/20";
-    case "pending": return "bg-yellow-500/10 text-yellow-600 border-yellow-500/20";
-    case "failed": return "bg-red-500/10 text-red-600 border-red-500/20";
-    case "active": return "bg-green-500/10 text-green-600 border-green-500/20";
-    case "paused": return "bg-orange-500/10 text-orange-600 border-orange-500/20";
-    case "draft": return "bg-gray-500/10 text-gray-600 border-gray-500/20";
-    default: return "bg-gray-500/10 text-gray-600 border-gray-500/20";
+    case "completed": return "bg-success/10 text-success border-success/20";
+    case "in_progress": return "bg-info/10 text-info border-info/20";
+    case "pending": return "bg-warning/10 text-warning border-warning/20";
+    case "failed": return "bg-destructive/10 text-destructive border-destructive/20";
+    case "active": return "bg-success/10 text-success border-success/20";
+    case "paused": return "bg-warning/10 text-warning border-warning/20";
+    case "draft": return "bg-muted text-muted-foreground border-muted";
+    default: return "bg-muted text-muted-foreground border-muted";
   }
 };
 
 const getPriorityColor = (priority: string) => {
   switch (priority) {
-    case "urgent": return "bg-red-500/10 text-red-600 border-red-500/20";
-    case "high": return "bg-orange-500/10 text-orange-600 border-orange-500/20";
-    case "medium": return "bg-yellow-500/10 text-yellow-600 border-yellow-500/20";
-    case "low": return "bg-green-500/10 text-green-600 border-green-500/20";
-    default: return "bg-gray-500/10 text-gray-600 border-gray-500/20";
+    case "urgent": return "bg-destructive/10 text-destructive border-destructive/20";
+    case "high": return "bg-warning/10 text-warning border-warning/20";
+    case "medium": return "bg-warning/10 text-warning border-warning/20";
+    case "low": return "bg-success/10 text-success border-success/20";
+    default: return "bg-muted text-muted-foreground border-muted";
   }
 };
 
@@ -254,7 +254,7 @@ export const WorkflowCard: React.FC<WorkflowCardProps> = ({
               <Button
                 size="sm"
                 onClick={() => onStart(workflow.id)}
-                className="bg-green-600 hover:bg-green-700"
+                className="bg-success hover:bg-success/90"
               >
                 <Play className="h-3 w-3 mr-1" />
                 Iniciar
@@ -264,7 +264,7 @@ export const WorkflowCard: React.FC<WorkflowCardProps> = ({
                 size="sm"
                 variant="outline"
                 onClick={() => onPause(workflow.id)}
-                className="border-orange-500/50 text-orange-600 hover:bg-orange-500/10"
+                className="border-warning/50 text-warning hover:bg-warning/10"
               >
                 <Pause className="h-3 w-3 mr-1" />
                 Pausar

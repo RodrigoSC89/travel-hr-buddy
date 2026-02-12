@@ -237,28 +237,28 @@ const SmartWorkflowAutomation = () => {
   const getStatusIcon = (status: string) => {
     switch (status) {
     case "active":
-      return <CheckCircle className="w-4 h-4 text-green-500" />;
+      return <CheckCircle className="w-4 h-4 text-success" />;
     case "inactive":
       return <Pause className="w-4 h-4 text-muted-foreground" />;
     case "draft":
-      return <Edit className="w-4 h-4 text-blue-500" />;
+      return <Edit className="w-4 h-4 text-info" />;
     default:
-      return <AlertCircle className="w-4 h-4 text-yellow-500" />;
+      return <AlertCircle className="w-4 h-4 text-warning" />;
     }
   };
 
   const getExecutionStatusIcon = (status: string) => {
     switch (status) {
     case "completed":
-      return <CheckCircle className="w-4 h-4 text-green-500" />;
+      return <CheckCircle className="w-4 h-4 text-success" />;
     case "running":
-      return <Activity className="w-4 h-4 text-blue-500 animate-pulse" />;
+      return <Activity className="w-4 h-4 text-info animate-pulse" />;
     case "failed":
-      return <XCircle className="w-4 h-4 text-red-500" />;
+      return <XCircle className="w-4 h-4 text-destructive" />;
     case "cancelled":
       return <Pause className="w-4 h-4 text-muted-foreground" />;
     default:
-      return <Clock className="w-4 h-4 text-yellow-500" />;
+      return <Clock className="w-4 h-4 text-warning" />;
     }
   };
 
@@ -463,7 +463,7 @@ const SmartWorkflowAutomation = () => {
         <Card>
           <CardContent className="p-4">
             <div className="flex items-center gap-2">
-              <CheckCircle className="w-4 h-4 text-green-500" />
+              <CheckCircle className="w-4 h-4 text-success" />
               <span className="text-sm font-medium">Workflows Ativos</span>
             </div>
             <div className="text-2xl font-bold">{activeWorkflows}</div>
@@ -476,7 +476,7 @@ const SmartWorkflowAutomation = () => {
         <Card>
           <CardContent className="p-4">
             <div className="flex items-center gap-2">
-              <Activity className="w-4 h-4 text-blue-500" />
+              <Activity className="w-4 h-4 text-info" />
               <span className="text-sm font-medium">Execuções</span>
             </div>
             <div className="text-2xl font-bold">{totalExecutions.toLocaleString()}</div>
@@ -489,7 +489,7 @@ const SmartWorkflowAutomation = () => {
         <Card>
           <CardContent className="p-4">
             <div className="flex items-center gap-2">
-              <Target className="w-4 h-4 text-purple-500" />
+              <Target className="w-4 h-4 text-accent-foreground" />
               <span className="text-sm font-medium">Taxa de Sucesso</span>
             </div>
             <div className="text-2xl font-bold">{avgSuccessRate.toFixed(1)}%</div>
@@ -502,7 +502,7 @@ const SmartWorkflowAutomation = () => {
         <Card>
           <CardContent className="p-4">
             <div className="flex items-center gap-2">
-              <Clock className="w-4 h-4 text-orange-500" />
+              <Clock className="w-4 h-4 text-warning" />
               <span className="text-sm font-medium">Tempo Economizado</span>
             </div>
             <div className="text-2xl font-bold">847h</div>

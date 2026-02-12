@@ -68,7 +68,7 @@ export const RuleConfigCard: React.FC<RuleConfigCardProps> = ({
             {getTriggerIcon(rule.trigger_type)}
             <h4 className="font-medium">{rule.rule_name}</h4>
             <Badge variant="outline">{rule.trigger_type}</Badge>
-            <Badge className={rule.is_active ? "bg-green-500/10 text-green-600" : "bg-muted text-muted-foreground"}>
+            <Badge className={rule.is_active ? "bg-success/10 text-success" : "bg-muted text-muted-foreground"}>
               {rule.is_active ? "Ativa" : "Inativa"}
             </Badge>
           </div>

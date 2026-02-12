@@ -262,33 +262,33 @@ export const OVIDInspectionDashboard: React.FC = () => {
                 <p className="text-sm text-muted-foreground">Score</p>
                 <p className="text-2xl font-bold">{complianceScore}%</p>
               </div>
-              <Target className={`w-8 h-8 ${complianceScore >= 85 ? 'text-green-500' : complianceScore >= 70 ? 'text-yellow-500' : 'text-red-500'}`} />
+              <Target className={`w-8 h-8 ${complianceScore >= 85 ? 'text-success' : complianceScore >= 70 ? 'text-warning' : 'text-destructive'}`} />
             </div>
           </CardContent>
         </Card>
 
-        <Card className="cursor-pointer hover:border-green-500/50 transition-colors"
+        <Card className="cursor-pointer hover:border-success/50 transition-colors"
               onClick={() => setActiveTab('checklist')}>
           <CardContent className="pt-4">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-muted-foreground">Conforme</p>
-                <p className="text-2xl font-bold text-green-500">{status.compliant}</p>
+                <p className="text-2xl font-bold text-success">{status.compliant}</p>
               </div>
-              <CheckCircle className="w-8 h-8 text-green-500" />
+              <CheckCircle className="w-8 h-8 text-success" />
             </div>
           </CardContent>
         </Card>
 
-        <Card className="cursor-pointer hover:border-red-500/50 transition-colors"
+        <Card className="cursor-pointer hover:border-destructive/50 transition-colors"
               onClick={() => setActiveTab('ncs')}>
           <CardContent className="pt-4">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-muted-foreground">Não Conforme</p>
-                <p className="text-2xl font-bold text-red-500">{status.nonCompliant}</p>
+                <p className="text-2xl font-bold text-destructive">{status.nonCompliant}</p>
               </div>
-              <XCircle className="w-8 h-8 text-red-500" />
+              <XCircle className="w-8 h-8 text-destructive" />
             </div>
           </CardContent>
         </Card>
@@ -306,28 +306,28 @@ export const OVIDInspectionDashboard: React.FC = () => {
           </CardContent>
         </Card>
 
-        <Card className="cursor-pointer hover:border-yellow-500/50 transition-colors"
+        <Card className="cursor-pointer hover:border-warning/50 transition-colors"
               onClick={() => setActiveTab('checklist')}>
           <CardContent className="pt-4">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-muted-foreground">Pendente</p>
-                <p className="text-2xl font-bold text-yellow-500">{status.pending}</p>
+                <p className="text-2xl font-bold text-warning">{status.pending}</p>
               </div>
-              <Clock className="w-8 h-8 text-yellow-500" />
+              <Clock className="w-8 h-8 text-warning" />
             </div>
           </CardContent>
         </Card>
 
-        <Card className="cursor-pointer hover:border-blue-500/50 transition-colors"
+        <Card className="cursor-pointer hover:border-info/50 transition-colors"
               onClick={() => setActiveTab('checklist')}>
           <CardContent className="pt-4">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-muted-foreground">Progresso</p>
-                <p className="text-2xl font-bold text-blue-500">{progressPercent}%</p>
+                <p className="text-2xl font-bold text-info">{progressPercent}%</p>
               </div>
-              <BarChart3 className="w-8 h-8 text-blue-500" />
+              <BarChart3 className="w-8 h-8 text-info" />
             </div>
           </CardContent>
         </Card>
