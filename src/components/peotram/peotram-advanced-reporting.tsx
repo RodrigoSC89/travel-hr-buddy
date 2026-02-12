@@ -325,8 +325,8 @@ export const PeotramAdvancedReporting: React.FC = () => {
                       fill="#8884d8"
                       dataKey="value"
                     >
-                      {performanceData.map((entry, index) => (
-                        <Cell key={`cell-${index}`} fill={entry.color} />
+                      {performanceData.map((entry) => (
+                        <Cell key={entry.name} fill={entry.color} />
                       ))}
                     </Pie>
                     <Tooltip />

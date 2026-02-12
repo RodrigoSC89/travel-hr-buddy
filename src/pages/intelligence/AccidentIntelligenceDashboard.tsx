@@ -290,8 +290,8 @@ export default function AccidentIntelligenceDashboard() {
                       paddingAngle={5}
                       dataKey="value"
                     >
-                      {categoryDistribution.map((entry, index) => (
-                        <Cell key={`cell-${index}`} fill={entry.color} />
+                      {categoryDistribution.map((entry) => (
+                        <Cell key={entry.name} fill={entry.color} />
                       ))}
                     </Pie>
                     <Tooltip 
@@ -506,10 +506,10 @@ export default function AccidentIntelligenceDashboard() {
                       data={locationHeatmap} 
                       fill="#ef4444"
                     >
-                      {locationHeatmap.map((entry, index) => (
+                      {locationHeatmap.map((entry) => (
                         <Cell 
-                          key={`cell-${index}`} 
-                          fill={entry.incidents > 5 ? "#ef4444" : entry.incidents > 3 ? "#f59e0b" : "#10b981"}
+                          key={entry.location} 
+                          fill={entry.incidents > 5 ? "hsl(var(--destructive))" : entry.incidents > 3 ? "hsl(var(--warning))" : "hsl(var(--success))"}
                         />
                       ))}
                     </Scatter>

@@ -763,8 +763,8 @@ export default function OperationsCommandCenter() {
                         outerRadius={80}
                         label={({ name, percent }) => `${name}: ${(percent * 100).toFixed(0)}%`}
                       >
-                        {vesselDistribution.map((entry, index) => (
-                          <Cell key={`cell-${index}`} fill={CHART_COLORS[index % CHART_COLORS.length]} />
+                        {vesselDistribution.map((entry) => (
+                          <Cell key={entry.name} fill={CHART_COLORS[vesselDistribution.indexOf(entry) % CHART_COLORS.length]} />
                         ))}
                       </Pie>
                       <Tooltip />

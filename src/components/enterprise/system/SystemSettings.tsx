@@ -289,10 +289,10 @@ export function SystemSettings() {
               <div className="space-y-4">
                 <Label>Cor de Destaque</Label>
                 <div className="flex gap-3">
-                  {["bg-blue-500", "bg-green-500", "bg-purple-500", "bg-orange-500", "bg-pink-500"].map((color) => (
+                  {["bg-primary", "bg-success", "bg-accent", "bg-warning", "bg-destructive"].map((color) => (
                     <button
                       key={color}
-                      className={`w-8 h-8 rounded-full ${color} ring-2 ring-offset-2 ${color === "bg-blue-500" ? "ring-primary" : "ring-transparent"}`}
+                      className={`w-8 h-8 rounded-full ${color} ring-2 ring-offset-2 ${color === "bg-primary" ? "ring-primary" : "ring-transparent"}`}
                     />
                   ))}
                 </div>
