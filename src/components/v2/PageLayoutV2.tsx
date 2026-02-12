@@ -103,11 +103,11 @@ export function PageLayoutV2({
             
             {badges.length > 0 && (
               <div className="flex flex-wrap gap-3 mt-6">
-                {badges.map((badge, index) => {
+                {badges.map((badge) => {
                   const BadgeIcon = badge.icon;
                   return (
                     <div
-                      key={index}
+                      key={badge.label}
                       className="flex items-center gap-2 bg-white/20 backdrop-blur-sm px-4 py-2 rounded-lg hover:bg-white/30 transition-colors"
                     >
                       <BadgeIcon className="h-4 w-4" />

@@ -185,9 +185,9 @@ export const ReservationsDashboard: React.FC = () => {
 
   const getStatusColor = (status: string) => {
     switch (status) {
-    case "confirmed": return "bg-green-100 text-green-800";
-    case "pending": return "bg-yellow-100 text-yellow-800";
-    case "cancelled": return "bg-red-100 text-red-800";
+    case "confirmed": return "bg-success/10 text-success";
+    case "pending": return "bg-warning/10 text-warning";
+    case "cancelled": return "bg-destructive/10 text-destructive";
     default: return "bg-secondary text-secondary-foreground";
     }
   };
@@ -219,7 +219,7 @@ export const ReservationsDashboard: React.FC = () => {
           <h2 className="text-3xl font-bold flex items-center gap-2">
             <CalendarIcon className="h-8 w-8 text-primary" />
             Reservas
-            <Smartphone className="h-5 w-5 text-green-500" />
+            <Smartphone className="h-5 w-5 text-success" />
           </h2>
           <p className="text-muted-foreground">
             Gerencie todas as suas reservas e agendamentos - Compatível com mobile
@@ -357,7 +357,7 @@ export const ReservationsDashboard: React.FC = () => {
         <Card>
           <CardContent className="p-4">
             <div className="flex items-center gap-2">
-              <Clock className="h-5 w-5 text-green-600" />
+              <Clock className="h-5 w-5 text-success" />
               <div>
                 <p className="text-sm text-muted-foreground">Confirmadas</p>
                 <p className="text-2xl font-bold">
@@ -370,7 +370,7 @@ export const ReservationsDashboard: React.FC = () => {
         <Card>
           <CardContent className="p-4">
             <div className="flex items-center gap-2">
-              <Clock className="h-5 w-5 text-yellow-600" />
+              <Clock className="h-5 w-5 text-warning" />
               <div>
                 <p className="text-sm text-muted-foreground">Pendentes</p>
                 <p className="text-2xl font-bold">
@@ -383,7 +383,7 @@ export const ReservationsDashboard: React.FC = () => {
         <Card>
           <CardContent className="p-4">
             <div className="flex items-center gap-2">
-              <Users className="h-5 w-5 text-red-600" />
+              <Users className="h-5 w-5 text-destructive" />
               <div>
                 <p className="text-sm text-muted-foreground">Canceladas</p>
                 <p className="text-2xl font-bold">
@@ -445,7 +445,7 @@ export const ReservationsDashboard: React.FC = () => {
                   variant="outline"
                   size="sm"
                   onClick={() => handleDelete(reservation.id)}
-                  className="text-red-600 hover:text-red-700"
+                  className="text-destructive hover:text-destructive/80"
                 >
                   <Trash2 className="h-4 w-4" />
                 </Button>

@@ -23,17 +23,17 @@ export function QuickActions({ actions, onAction, disabled, moduleColor = "blue"
   return (
     <ScrollArea className="h-[500px]">
       <div className="space-y-2">
-        {actions.map((action, index) => (
+        {actions.map((action) => (
           <Button
-            key={index}
+            key={action.label}
             variant="outline"
             size="sm"
-            className={`w-full justify-start text-left h-auto py-3 px-3 hover:bg-${moduleColor}-50 hover:border-${moduleColor}-200 dark:hover:bg-${moduleColor}-950/20`}
+            className="w-full justify-start text-left h-auto py-3 px-3 hover:bg-accent hover:border-accent"
             onClick={() => onAction(action.prompt)}
             disabled={disabled}
           >
             <div className="flex items-start gap-2 w-full">
-              <Sparkles className={`h-4 w-4 mt-0.5 flex-shrink-0 text-${moduleColor}-500`} />
+              <Sparkles className="h-4 w-4 mt-0.5 flex-shrink-0 text-primary" />
               <span className="text-xs leading-relaxed line-clamp-2">{action.label}</span>
             </div>
           </Button>

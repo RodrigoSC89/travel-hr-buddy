@@ -54,8 +54,8 @@ const CustomTooltip = ({ active, payload, label }: { active?: boolean; payload?:
   return (
     <div className="bg-slate-900/95 backdrop-blur-sm border border-white/10 rounded-lg p-3 shadow-xl">
       <p className="text-white font-medium mb-2">{label}</p>
-      {payload.map((entry, index: number) => (
-        <div key={index} className="flex items-center gap-2 text-sm">
+      {payload.map((entry) => (
+        <div key={entry.name} className="flex items-center gap-2 text-sm">
           <div 
             className="w-3 h-3 rounded-full" 
             style={{ backgroundColor: entry.color }}

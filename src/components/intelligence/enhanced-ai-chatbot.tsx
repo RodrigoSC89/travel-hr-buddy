@@ -653,8 +653,8 @@ const EnhancedAIChatbot: React.FC = () => {
                 </CardHeader>
                 <CardContent className="space-y-2">
                   <ScrollArea className="h-64">
-                    {quickCommands.map((command, index) => (
-                      <Tooltip key={index}>
+                    {quickCommands.map((command) => (
+                      <Tooltip key={command.text}>
                         <TooltipTrigger asChild>
                           <Button
                             variant="ghost"

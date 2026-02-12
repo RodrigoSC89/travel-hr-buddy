@@ -287,20 +287,20 @@ export const MissionReplayPanel: React.FC<MissionReplayProps> = ({ recording, on
         <Card>
           <CardHeader>
             <CardTitle className="text-sm flex items-center gap-2">
-              <AlertTriangle className="h-4 w-4 text-orange-500" />
+              <AlertTriangle className="h-4 w-4 text-warning" />
               Attention Points Nearby
             </CardTitle>
           </CardHeader>
           <CardContent className="space-y-2">
-            {nearbyAlerts.map((point, index) => (
+            {nearbyAlerts.map((point, ptIdx) => (
               <div 
-                key={index}
-                className="flex items-start gap-2 p-2 rounded bg-orange-50 dark:bg-orange-950"
+                key={`alert-${ptIdx}-${point.severity}`}
+                className="flex items-start gap-2 p-2 rounded bg-warning/5 dark:bg-warning/10"
               >
                 <AlertTriangle className={`h-4 w-4 mt-0.5 ${
-                  point.severity === "high" ? "text-red-500" :
-                    point.severity === "medium" ? "text-orange-500" :
-                      "text-yellow-500"
+                  point.severity === "high" ? "text-destructive" :
+                    point.severity === "medium" ? "text-warning" :
+                      "text-warning/70"
                 }`} />
                 <div className="flex-1 text-sm">
                   <p className="font-medium">{point.type.replace("_", " ")}</p>

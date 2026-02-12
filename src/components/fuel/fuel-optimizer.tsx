@@ -492,8 +492,8 @@ export const FuelOptimizer = () => {
             </CardHeader>
             <CardContent>
               <div className="space-y-4">
-                {optimizationResults.map((result, index) => (
-                  <Card key={index} className="border-l-4 border-l-blue-500">
+                {optimizationResults.map((result) => (
+                  <Card key={result.route_name} className="border-l-4 border-l-primary">
                     <CardContent className="pt-6">
                       <div className="space-y-3">
                         <div className="flex items-center justify-between">
@@ -510,7 +510,7 @@ export const FuelOptimizer = () => {
                           </div>
                           <div>
                             <p className="text-muted-foreground">Otimizado</p>
-                            <p className="font-semibold text-green-600">{result.optimized_consumption.toFixed(0)}L</p>
+                            <p className="font-semibold text-success">{result.optimized_consumption.toFixed(0)}L</p>
                           </div>
                           <div>
                             <p className="text-muted-foreground">Velocidade Ideal</p>

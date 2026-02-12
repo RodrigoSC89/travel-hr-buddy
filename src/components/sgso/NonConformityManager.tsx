@@ -68,21 +68,21 @@ const getTypeConfig = (type: string) => {
   const configs = {
     major: {
       icon: XCircle,
-      color: "bg-red-600 text-white",
+      color: "bg-destructive text-destructive-foreground",
       label: "NC Maior",
-      badgeColor: "bg-red-600"
+      badgeColor: "bg-destructive"
     },
     minor: {
       icon: AlertTriangle,
-      color: "bg-yellow-600 text-white",
+      color: "bg-warning text-warning-foreground",
       label: "NC Menor",
-      badgeColor: "bg-yellow-600"
+      badgeColor: "bg-warning"
     },
     observation: {
       icon: Eye,
-      color: "bg-blue-600 text-white",
+      color: "bg-primary text-primary-foreground",
       label: "Observação",
-      badgeColor: "bg-blue-600"
+      badgeColor: "bg-primary"
     }
   };
   return configs[type as keyof typeof configs] || configs.observation;

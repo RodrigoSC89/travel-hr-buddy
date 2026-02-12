@@ -140,8 +140,8 @@ export const SystemMonitoringTab: React.FC<SystemMonitoringTabProps> = ({
                     <Progress 
                       value={metric.value} 
                       className={`h-2 ${
-                        metric.color === "red" ? "[&>div]:bg-red-500" : 
-                          metric.color === "yellow" ? "[&>div]:bg-yellow-500" : "[&>div]:bg-green-500"
+                        metric.color === "red" ? "[&>div]:bg-destructive" : 
+                          metric.color === "yellow" ? "[&>div]:bg-warning" : "[&>div]:bg-success"
                       }`}
                     />
                     <div className="text-xs text-muted-foreground">
@@ -165,22 +165,22 @@ export const SystemMonitoringTab: React.FC<SystemMonitoringTabProps> = ({
               </div>
             </div>
 
-            <div className="p-4 bg-blue-50 dark:bg-blue-900/20 border border-blue-200 rounded-lg">
+            <div className="p-4 bg-primary/5 dark:bg-primary/10 border border-primary/20 rounded-lg">
               <div className="flex items-center gap-2 mb-2">
-                <Clock className="w-5 h-5 text-blue-600" />
-                <span className="font-medium text-blue-800 dark:text-blue-200">Tempo de Resposta</span>
+                <Clock className="w-5 h-5 text-primary" />
+                <span className="font-medium text-primary">Tempo de Resposta</span>
               </div>
-              <div className="text-sm text-blue-700 dark:text-blue-300">
+              <div className="text-sm text-primary/80">
                 Médio: {realTimeData.responseTime}ms • Último check: agora
               </div>
             </div>
 
-            <div className="p-4 bg-orange-50 dark:bg-orange-900/20 border border-orange-200 rounded-lg">
+            <div className="p-4 bg-warning/5 dark:bg-warning/10 border border-warning/20 rounded-lg">
               <div className="flex items-center gap-2 mb-2">
-                <AlertTriangle className="w-5 h-5 text-orange-600" />
-                <span className="font-medium text-orange-800 dark:text-orange-200">Alertas</span>
+                <AlertTriangle className="w-5 h-5 text-warning" />
+                <span className="font-medium text-warning">Alertas</span>
               </div>
-              <div className="text-sm text-orange-700 dark:text-orange-300">
+              <div className="text-sm text-warning/80">
                 {realTimeData.errors} erros nas últimas 24h
               </div>
             </div>
@@ -298,7 +298,7 @@ export const SystemMonitoringTab: React.FC<SystemMonitoringTabProps> = ({
                   />
                 </div>
                 
-                <div className="text-sm text-muted-foreground p-3 bg-blue-50 dark:bg-blue-900/20 rounded">
+                <div className="text-sm text-muted-foreground p-3 bg-primary/5 dark:bg-primary/10 rounded">
                   <p>Dados mais antigos que {settings.retentionDays} dias serão automaticamente removidos.</p>
                   <p className="mt-1">Espaço estimado: ~{Math.round(settings.retentionDays * 0.1)}GB</p>
                 </div>
