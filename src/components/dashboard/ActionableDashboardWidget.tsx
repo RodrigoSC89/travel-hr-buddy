@@ -339,7 +339,7 @@ export function OperationalCommandPanel({ onNavigate }: OperationalCommandPanelP
       <ActionableDashboardWidget
         title="Cargas em Trânsito"
         description="Monitoramento de cargas"
-        icon={<Zap className="h-5 w-5 text-purple-500" />}
+        icon={<Zap className="h-5 w-5 text-accent-foreground" />}
         status="warning"
         alertCount={1}
         metrics={[
@@ -368,7 +368,7 @@ export function OperationalCommandPanel({ onNavigate }: OperationalCommandPanelP
       <ActionableDashboardWidget
         title="Manutenção Preditiva"
         description="Alertas de manutenção"
-        icon={<Settings className="h-5 w-5 text-orange-500" />}
+        icon={<Settings className="h-5 w-5 text-warning" />}
         status="warning"
         alertCount={5}
         metrics={[

@@ -55,7 +55,7 @@ export const CrewAIInsights = ({ crew }: CrewAIInsightsProps) => {
   const priorityColors = {
     low: "bg-primary",
     medium: "bg-warning",
-    high: "bg-orange-500/80",
+    high: "bg-warning",
     critical: "bg-destructive",
   };
 
@@ -153,7 +153,7 @@ export const CrewAIInsights = ({ crew }: CrewAIInsightsProps) => {
               <CardContent className="space-y-6">
                 <div>
                   <h4 className="font-medium flex items-center gap-2 mb-3">
-                    <CheckCircle className="h-4 w-4 text-green-500" />
+                    <CheckCircle className="h-4 w-4 text-success" />
                     Pontos Fortes
                   </h4>
                   <div className="space-y-2">

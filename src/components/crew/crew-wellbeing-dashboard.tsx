@@ -93,7 +93,7 @@ export function CrewWellbeingDashboard() {
       excellent: "text-success",
       good: "text-primary",
       fair: "text-warning",
-      poor: "text-orange-500",
+      poor: "text-warning",
       critical: "text-destructive"
     };
 

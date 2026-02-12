@@ -121,9 +121,9 @@ export function ProfessionalWeatherDashboard() {
         {alerts.map((alert, index) => {
           const Icon = alert.icon;
           const colorMap = {
-            orange: "border-orange-500/30 bg-orange-500/5",
-            blue: "border-blue-500/30 bg-blue-500/5",
-            red: "border-red-500/30 bg-red-500/5",
+            orange: "border-warning/30 bg-warning/5",
+            blue: "border-info/30 bg-info/5",
+            red: "border-destructive/30 bg-destructive/5",
           };
           
           return (
@@ -131,9 +131,9 @@ export function ProfessionalWeatherDashboard() {
               <CardContent className="pt-6">
                 <div className="flex items-start gap-3">
                   <div className={`p-2 rounded-lg ${
-                    alert.color === "orange" ? "bg-orange-500/10 text-orange-600" :
-                      alert.color === "blue" ? "bg-blue-500/10 text-blue-600" :
-                        "bg-red-500/10 text-red-600"
+                    alert.color === "orange" ? "bg-warning/10 text-warning" :
+                      alert.color === "blue" ? "bg-info/10 text-info" :
+                        "bg-destructive/10 text-destructive"
                   }`}>
                     <Icon className="h-5 w-5" />
                   </div>
@@ -165,7 +165,7 @@ export function ProfessionalWeatherDashboard() {
               <Card className="border-primary/10">
                 <CardHeader>
                   <CardTitle className="flex items-center gap-2">
-                    <Sun className="h-5 w-5 text-orange-500" />
+                    <Sun className="h-5 w-5 text-warning" />
                     Temperatura & Umidade
                   </CardTitle>
                   <CardDescription>Próximas 24 horas</CardDescription>
@@ -219,7 +219,7 @@ export function ProfessionalWeatherDashboard() {
               <Card className="border-primary/10">
                 <CardHeader>
                   <CardTitle className="flex items-center gap-2">
-                    <Wind className="h-5 w-5 text-blue-500" />
+                    <Wind className="h-5 w-5 text-info" />
                     Vento & Pressão
                   </CardTitle>
                   <CardDescription>Tendências atmosféricas</CardDescription>
@@ -276,10 +276,10 @@ export function ProfessionalWeatherDashboard() {
                 <Card key={index} className="border-primary/10">
                   <CardContent className="pt-6 text-center">
                     <div className={`inline-flex p-3 rounded-xl mb-3 ${
-                      item.color === "purple" ? "bg-purple-500/10 text-purple-600" :
-                        item.color === "blue" ? "bg-blue-500/10 text-blue-600" :
-                          item.color === "green" ? "bg-green-500/10 text-green-600" :
-                            "bg-orange-500/10 text-orange-600"
+                      item.color === "purple" ? "bg-accent/10 text-accent-foreground" :
+                        item.color === "blue" ? "bg-info/10 text-info" :
+                          item.color === "green" ? "bg-success/10 text-success" :
+                            "bg-warning/10 text-warning"
                     }`}>
                       <Icon className="h-6 w-6" />
                     </div>
@@ -296,7 +296,7 @@ export function ProfessionalWeatherDashboard() {
           <Card className="border-primary/10">
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
-                <Waves className="h-5 w-5 text-blue-500" />
+                <Waves className="h-5 w-5 text-info" />
                 Análise de Ondas
               </CardTitle>
               <CardDescription>Altura, período e direção das ondas</CardDescription>
