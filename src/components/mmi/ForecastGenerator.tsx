@@ -235,8 +235,8 @@ export default function ForecastGenerator({
               <div>
                 <h4 className="font-semibold mb-2">Histórico Considerado:</h4>
                 <ul className="text-sm space-y-1">
-                  {forecast.maintenance_history.map((h, index) => (
-                    <li key={index} className="flex items-start gap-2">
+                  {forecast.maintenance_history.map((h) => (
+                    <li key={`${h.date}-${h.action}`} className="flex items-start gap-2">
                       <span className="text-muted-foreground">•</span>
                       <span>
                         {h.date}: {h.action}

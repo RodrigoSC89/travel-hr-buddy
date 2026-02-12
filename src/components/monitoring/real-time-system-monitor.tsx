@@ -216,8 +216,8 @@ export const RealTimeSystemMonitor: React.FC = () => {
 
       {/* Real-time Metrics */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-        {metrics.map((metric, index) => (
-          <Card key={index}>
+        {metrics.map((metric) => (
+          <Card key={metric.label}>
             <CardContent className="p-6">
               <div className="flex items-center justify-between mb-4">
                 <div className="flex items-center gap-2">

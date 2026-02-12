@@ -59,16 +59,16 @@ export function SystemDiagnosticsPanel() {
 
             {/* Test Results */}
             <div className="space-y-2">
-              {report.results.map((result, index) => (
+              {report.results.map((result) => (
                 <div 
-                  key={index}
+                  key={result.name}
                   className="flex items-center justify-between p-2 rounded-lg bg-muted/50"
                 >
                   <div className="flex items-center gap-2">
                     {result.passed ? (
-                      <CheckCircle className="h-4 w-4 text-green-500" />
+                      <CheckCircle className="h-4 w-4 text-success" />
                     ) : (
-                      <XCircle className="h-4 w-4 text-red-500" />
+                      <XCircle className="h-4 w-4 text-destructive" />
                     )}
                     <span className="text-sm font-medium">{result.name}</span>
                   </div>

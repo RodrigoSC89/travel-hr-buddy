@@ -361,9 +361,9 @@ export const AdvancedAIAssistant = () => {
               <div>
                 <p className="text-xs font-medium text-muted-foreground mb-2">Ações Recentes</p>
                 <div className="space-y-1">
-                  {aiContext.recentActions.slice(0, 3).map((action, index) => (
-                    <p key={index} className="text-xs text-muted-foreground flex items-center gap-2">
-                      <CheckCircle className="w-3 h-3 text-green-500" />
+                  {aiContext.recentActions.slice(0, 3).map((action) => (
+                    <p key={action} className="text-xs text-muted-foreground flex items-center gap-2">
+                      <CheckCircle className="w-3 h-3 text-success" />
                       {action}
                     </p>
                   ))}

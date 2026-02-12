@@ -429,13 +429,13 @@ export const ContinuousTestingMonitoring: React.FC = () => {
               <CardContent>
                 <div className="space-y-4">
                   <div className="grid grid-cols-1 md:grid-cols-7 gap-2">
-                    {["Dom", "Seg", "Ter", "Qua", "Qui", "Sex", "Sáb"].map((day, index) => (
-                      <div key={index} className="text-center p-2 border rounded-lg">
+                    {["Dom", "Seg", "Ter", "Qua", "Qui", "Sex", "Sáb"].map((day, dayIdx) => (
+                      <div key={day} className="text-center p-2 border rounded-lg">
                         <div className="font-medium text-sm">{day}</div>
                         <div className="text-xs text-muted-foreground mt-1">
-                          {index === 0 && "Backup"}
-                          {index === 3 && "Segurança"}
-                          {index === 6 && "Performance"}
+                          {dayIdx === 0 && "Backup"}
+                          {dayIdx === 3 && "Segurança"}
+                          {dayIdx === 6 && "Performance"}
                         </div>
                       </div>
                     ))}

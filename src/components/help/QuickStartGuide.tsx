@@ -346,9 +346,9 @@ export function QuickStartGuide() {
                         <Lightbulb className="w-4 h-4" />
                         Dicas
                       </div>
-                      {currentStepData.tips.map((tip, index) => (
+                      {currentStepData.tips.map((tip) => (
                         <div
-                          key={index}
+                          key={tip}
                           className="text-xs text-muted-foreground pl-6"
                         >
                           • {tip}

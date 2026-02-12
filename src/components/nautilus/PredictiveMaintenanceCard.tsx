@@ -133,12 +133,12 @@ export const PredictiveMaintenanceCard: React.FC<PredictiveMaintenanceCardProps>
 
             {/* Predictions List */}
             <div className="space-y-3">
-              {predictions.slice(0, 5).map((prediction, index) => (
+              {predictions.slice(0, 5).map((prediction, predIdx) => (
                 <motion.div
-                  key={index}
+                  key={prediction.title}
                   initial={{ opacity: 0, x: -10 }}
                   animate={{ opacity: 1, x: 0 }}
-                  transition={{ delay: index * 0.1 }}
+                  transition={{ delay: predIdx * 0.1 }}
                   className="p-3 rounded-lg border hover:shadow-sm transition-all cursor-pointer"
                 >
                   <div className="flex items-start gap-3">
