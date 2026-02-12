@@ -181,8 +181,8 @@ export default function CopilotV2() {
                   </p>
                   {response.actions && (
                     <div className="flex gap-2 mt-3">
-                      {(response.actions as Array<{ label: string }>).map((action, idx: number) => (
-                        <Button key={idx} size="sm" variant="outline">
+                      {(response.actions as Array<{ label: string }>).map((action) => (
+                        <Button key={action.label} size="sm" variant="outline">
                           {action.label}
                         </Button>
                       ))}

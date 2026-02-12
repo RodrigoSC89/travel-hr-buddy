@@ -156,7 +156,7 @@ export function WeatherRoutingPanel() {
             {forecast.forecast_days?.length > 0 && (
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3">
                 {forecast.forecast_days.map((day: Record<string, unknown>, i: number) => (
-                  <motion.div key={i} initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.05 }}>
+                  <motion.div key={`forecast-day-${i}-${String(day.date || i)}`} initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.05 }}>
                     <Card>
                       <CardHeader className="pb-2">
                         <div className="flex items-center justify-between">
@@ -213,7 +213,7 @@ export function WeatherRoutingPanel() {
                 </CardHeader>
                 <CardContent className="space-y-2">
                   {forecast.alerts.map((alert: Record<string, unknown>, i: number) => (
-                    <div key={i} className="p-2 rounded bg-warning/5 border border-warning/20 text-xs">
+                    <div key={`alert-${i}-${String(alert.type)}`} className="p-2 rounded bg-warning/5 border border-warning/20 text-xs">
                       <div className="flex items-center gap-2 mb-1">
                         <Badge variant="outline" className="text-warning">{String(alert.severity)}</Badge>
                         <span className="font-medium">{String(alert.type)}</span>

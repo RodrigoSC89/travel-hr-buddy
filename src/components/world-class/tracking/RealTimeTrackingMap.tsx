@@ -255,7 +255,7 @@ export function RealTimeTrackingMap() {
             <div className="relative h-[500px] bg-gradient-to-br from-blue-900 to-blue-700 rounded-lg overflow-hidden">
               <div className="absolute inset-0 opacity-20">
                 {[...Array(10)].map((_, i) => (
-                  <React.Fragment key={i}>
+                  <React.Fragment key={`grid-line-${i}`}>
                     <div className="absolute w-full h-px bg-white" style={{ top: `${i * 10}%` }} />
                     <div className="absolute h-full w-px bg-white" style={{ left: `${i * 10}%` }} />
                   </React.Fragment>

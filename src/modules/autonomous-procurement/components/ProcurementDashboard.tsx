@@ -186,7 +186,7 @@ export default function ProcurementDashboard() {
             <div className="h-64 overflow-y-auto space-y-3 mb-4 p-3 bg-background/50 rounded-lg">
               {chatHistory.map((msg, i) => (
                 <div
-                  key={i}
+                  key={`chat-${i}-${msg.role}`}
                   className={`flex ${msg.role === "user" ? "justify-end" : "justify-start"}`}
                 >
                   <div

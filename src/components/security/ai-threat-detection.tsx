@@ -321,8 +321,8 @@ export const AIThreatDetection: React.FC = () => {
                       { name: "Audit Trail Imutável", status: "active" },
                       { name: "Rate Limiting", status: "active" },
                       { name: "Input Sanitization", status: "active" }
-                    ].map((layer, idx) => (
-                      <div key={idx} className="flex items-center justify-between p-3 bg-muted/50 rounded-lg">
+                    ].map((layer) => (
+                      <div key={layer.name} className="flex items-center justify-between p-3 bg-muted/50 rounded-lg">
                         <div className="flex items-center gap-2">
                           <Shield className="h-4 w-4 text-green-600" />
                           <span className="text-sm font-medium">{layer.name}</span>
@@ -348,8 +348,8 @@ export const AIThreatDetection: React.FC = () => {
                       "Isolamento de dados multi-tenant via RLS",
                       "Validação JWT em todas as edge functions",
                       "Log detalhado de todas atividades"
-                    ].map((action, idx) => (
-                      <div key={idx} className="flex items-start gap-2 p-2 bg-blue-50 dark:bg-blue-950 rounded-lg">
+                    ].map((action) => (
+                      <div key={action} className="flex items-start gap-2 p-2 bg-blue-50 dark:bg-blue-950 rounded-lg">
                         <CheckCircle className="h-4 w-4 mt-0.5 text-blue-600" />
                         <span className="text-sm">{action}</span>
                       </div>

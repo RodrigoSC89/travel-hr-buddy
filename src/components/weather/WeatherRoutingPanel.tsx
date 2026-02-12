@@ -300,7 +300,7 @@ export function WeatherRoutingPanel({
           <CardContent className="py-6">
             <div className="space-y-4">
               {[1, 2, 3].map((i) => (
-                <Skeleton key={i} className="h-24 w-full" />
+                <Skeleton key={`weather-routing-skeleton-${i}`} className="h-24 w-full" />
               ))}
             </div>
           </CardContent>

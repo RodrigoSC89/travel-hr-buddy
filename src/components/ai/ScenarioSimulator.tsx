@@ -336,8 +336,8 @@ export const ScenarioSimulator: React.FC = () => {
                 <div>
                   <p className="text-sm font-medium mb-2">Áreas Afetadas:</p>
                   <div className="flex flex-wrap gap-2">
-                    {result.operationalImpact.affectedAreas.map((area, i) => (
-                      <Badge key={i} variant="outline">
+                    {result.operationalImpact.affectedAreas.map((area) => (
+                      <Badge key={area} variant="outline">
                         {area}
                       </Badge>
                     ))}
@@ -395,7 +395,7 @@ export const ScenarioSimulator: React.FC = () => {
                 <div className="space-y-4">
                   {result.risks.map((risk, i) => (
                     <motion.div
-                      key={i}
+                      key={risk.description}
                       initial={{ opacity: 0, x: -10 }}
                       animate={{ opacity: 1, x: 0 }}
                       transition={{ delay: i * 0.1 }}
@@ -429,7 +429,7 @@ export const ScenarioSimulator: React.FC = () => {
               <ul className="space-y-2">
                 {result.recommendations.map((rec, i) => (
                   <motion.li
-                    key={i}
+                    key={rec}
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                     transition={{ delay: i * 0.1 }}

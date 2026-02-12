@@ -479,8 +479,8 @@ export const WindyWeatherPage: React.FC = () => {
             <div className="bg-red-900/50 border-b border-red-500/30 px-4 py-2">
               <div className="flex items-center gap-2 overflow-x-auto">
                 <AlertTriangle className="h-4 w-4 text-red-400 flex-shrink-0" />
-                {activeAlerts.map((alert, idx) => (
-                  <Badge key={idx} variant="destructive" className="flex-shrink-0">
+                {activeAlerts.map((alert) => (
+                  <Badge key={alert.title} variant="destructive" className="flex-shrink-0">
                     {alert.title}
                   </Badge>
                 ))}

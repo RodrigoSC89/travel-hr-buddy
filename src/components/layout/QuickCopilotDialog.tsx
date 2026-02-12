@@ -306,7 +306,7 @@ export function QuickCopilotDialog({ open, onOpenChange }: QuickCopilotDialogPro
           <div className="space-y-4 py-4">
             {messages.map((message, index) => (
               <div
-                key={index}
+                key={`msg-${index}-${message.role}`}
                 className={`flex ${message.role === "user" ? "justify-end" : "justify-start"}`}
               >
                 <div

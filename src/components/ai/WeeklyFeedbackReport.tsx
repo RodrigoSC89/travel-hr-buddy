@@ -216,8 +216,8 @@ export const WeeklyFeedbackReportComponent: React.FC<WeeklyFeedbackReportProps> 
                 </Alert>
               ) : (
                 <div className="space-y-3">
-                  {insights.map((insight, idx) => (
-                    <Alert key={idx} className="relative">
+                  {insights.map((insight) => (
+                    <Alert key={`${insight.category}-${insight.insight.slice(0, 25)}`} className="relative">
                       <div className="flex items-start gap-3">
                         {insight.category === "success_pattern" ? (
                           <TrendingUp className="h-4 w-4 text-success mt-0.5" />

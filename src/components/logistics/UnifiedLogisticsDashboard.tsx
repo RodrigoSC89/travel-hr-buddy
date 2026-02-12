@@ -452,7 +452,7 @@ export function UnifiedLogisticsDashboard() {
             <CardContent>
               {cargoLoading ? (
                 <div className="space-y-3">
-                  {[1,2,3].map(i => <div key={i} className="h-20 rounded-lg bg-muted animate-pulse" />)}
+                  {[1,2,3].map(i => <div key={`cargo-skeleton-${i}`} className="h-20 rounded-lg bg-muted animate-pulse" />)}
                 </div>
               ) : filteredCargo.length === 0 ? (
                 <EmptyState icon={Package} title="Nenhuma carga registrada" description="Adicione sua primeira carga para começar o rastreamento de shipments." actionLabel="Adicionar Carga" onAction={() => setIsAddCargoOpen(true)} />
@@ -532,7 +532,7 @@ export function UnifiedLogisticsDashboard() {
             <CardContent>
               {suppliersLoading ? (
                 <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-                  {[1,2,3].map(i => <div key={i} className="h-48 rounded-lg bg-muted animate-pulse" />)}
+                  {[1,2,3].map(i => <div key={`supplier-skeleton-${i}`} className="h-48 rounded-lg bg-muted animate-pulse" />)}
                 </div>
               ) : filteredSuppliers.length === 0 ? (
                 <EmptyState icon={Building} title="Nenhum fornecedor cadastrado" description="Adicione fornecedores para gerenciar a cadeia de suprimentos." actionLabel="Adicionar Fornecedor" onAction={() => setIsAddSupplierOpen(true)} />

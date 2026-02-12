@@ -78,7 +78,7 @@ export function GeofencingMonitor() {
     return (
       <div className="space-y-4">
         {[1, 2].map(i => (
-          <Card key={i} className="animate-pulse">
+          <Card key={`geofence-skeleton-${i}`} className="animate-pulse">
             <CardContent className="p-6"><div className="h-20 bg-muted rounded" /></CardContent>
           </Card>
         ))}

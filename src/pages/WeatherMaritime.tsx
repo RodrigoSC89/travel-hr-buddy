@@ -306,8 +306,8 @@ export default function WeatherMaritime() {
             </CardTitle>
           </CardHeader>
           <CardContent className="space-y-3">
-            {data.alerts.map((alert, i) => (
-              <div key={i} className={cn(
+            {data.alerts.map((alert) => (
+              <div key={alert.title} className={cn(
                 "p-3 rounded-lg border",
                 alert.severity === "high" ? "border-destructive/50 bg-destructive/5" : "border-warning/50 bg-warning/5"
               )}>
@@ -330,8 +330,8 @@ export default function WeatherMaritime() {
           </CardHeader>
           <CardContent>
             <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-3">
-              {data.forecast.slice(0, 12).map((hour, i) => (
-                <div key={i} className="p-3 rounded-lg border bg-card text-center">
+              {data.forecast.slice(0, 12).map((hour) => (
+                <div key={hour.time} className="p-3 rounded-lg border bg-card text-center">
                   <p className="text-xs text-muted-foreground">
                     {new Date(hour.time).toLocaleTimeString("pt-BR", { hour: "2-digit", minute: "2-digit" })}
                   </p>

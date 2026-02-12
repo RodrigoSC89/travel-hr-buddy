@@ -121,8 +121,8 @@ export const AIModulesDashboard = () => {
                   Recursos IA:
                 </span>
                 <div className="flex flex-wrap gap-2">
-                  {module.features.map((feature, idx) => (
-                    <Badge key={idx} variant="outline" className="text-xs">
+                  {module.features.map((feature) => (
+                    <Badge key={feature} variant="outline" className="text-xs">
                       {feature}
                     </Badge>
                   ))}

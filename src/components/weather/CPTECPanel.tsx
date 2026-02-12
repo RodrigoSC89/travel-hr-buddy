@@ -158,8 +158,8 @@ export function CPTECPanel({ lat, lon, cidade, compact = false }: CPTECPanelProp
         <CardContent>
           {previsaoData?.previsoes && previsaoData.previsoes.length > 0 ? (
             <div className="grid grid-cols-3 gap-2">
-              {previsaoData.previsoes.slice(0, 3).map((prev, i) => (
-                <div key={i} className="text-center p-2 bg-muted/50 rounded-lg">
+              {previsaoData.previsoes.slice(0, 3).map((prev) => (
+                <div key={prev.dia} className="text-center p-2 bg-muted/50 rounded-lg">
                   <p className="text-xs font-medium">
                     {new Date(prev.dia).toLocaleDateString("pt-BR", { weekday: "short" })}
                   </p>

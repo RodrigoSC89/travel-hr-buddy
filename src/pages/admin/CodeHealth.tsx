@@ -171,8 +171,8 @@ export default function CodeHealth() {
               </CardHeader>
               <CardContent>
                 <ul className="space-y-2">
-                  {report.recommendations.map((rec, idx) => (
-                    <li key={`rec-${idx}`} className="flex items-start gap-2">
+                  {report.recommendations.map((rec) => (
+                    <li key={rec} className="flex items-start gap-2">
                       <CheckCircle className="h-4 w-4 text-primary mt-0.5" />
                       <span>{rec}</span>
                     </li>
@@ -209,8 +209,8 @@ export default function CodeHealth() {
                         ✓ Strengths
                       </p>
                       <ul className="text-xs space-y-1 text-muted-foreground">
-                        {category.strengths.slice(0, 2).map((strength, idx) => (
-                          <li key={`strength-${idx}`}>• {strength}</li>
+                        {category.strengths.slice(0, 2).map((strength) => (
+                          <li key={strength}>• {strength}</li>
                         ))}
                       </ul>
                     </div>
@@ -222,8 +222,8 @@ export default function CodeHealth() {
                         ⚠ Issues
                       </p>
                       <ul className="text-xs space-y-1 text-muted-foreground">
-                        {category.issues.slice(0, 2).map((issue, idx) => (
-                          <li key={`issue-${idx}`}>• {issue}</li>
+                        {category.issues.slice(0, 2).map((issue) => (
+                          <li key={issue}>• {issue}</li>
                         ))}
                       </ul>
                     </div>

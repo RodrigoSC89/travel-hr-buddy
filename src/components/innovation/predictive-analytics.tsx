@@ -343,8 +343,8 @@ const PredictiveAnalytics: React.FC = () => {
                       paddingAngle={5}
                       dataKey="value"
                     >
-                      {riskData.map((entry, index) => (
-                        <Cell key={`cell-${index}`} fill={entry.color} />
+                      {riskData.map((entry) => (
+                        <Cell key={`cell-${entry.name}`} fill={entry.color} />
                       ))}
                     </Pie>
                     <Tooltip />

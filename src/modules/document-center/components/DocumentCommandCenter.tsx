@@ -513,8 +513,8 @@ export function DocumentCommandCenter() {
                                 )}
                               </div>
                               <div className="flex flex-wrap gap-1 mt-2">
-                                {doc.tags.map((tag, i) => (
-                                  <Badge key={i} variant="secondary" className="text-xs">
+                                {doc.tags.map((tag) => (
+                                  <Badge key={tag} variant="secondary" className="text-xs">
                                     {tag}
                                   </Badge>
                                 ))}
@@ -721,8 +721,8 @@ export function DocumentCommandCenter() {
                     { label: "Detecção de Datas", accuracy: 97, status: "active" },
                     { label: "Extração de Entidades", accuracy: 92, status: "active" },
                     { label: "Validação de Conformidade", accuracy: 89, status: "active" },
-                  ].map((feature, i) => (
-                    <div key={i} className="flex items-center justify-between p-3 rounded-lg bg-muted/50">
+                  ].map((feature) => (
+                    <div key={feature.label} className="flex items-center justify-between p-3 rounded-lg bg-muted/50">
                       <div className="flex items-center gap-3">
                         <Sparkles className="h-4 w-4 text-primary" />
                         <span className="text-sm">{feature.label}</span>
@@ -826,7 +826,7 @@ export function DocumentCommandCenter() {
                 {previewDoc.expiryDate && <div><span className="text-muted-foreground">Expira:</span> {previewDoc.expiryDate}</div>}
               </div>
               <div className="flex flex-wrap gap-1">
-                {previewDoc.tags.map((tag, i) => <Badge key={i} variant="secondary">{tag}</Badge>)}
+                {previewDoc.tags.map((tag) => <Badge key={tag} variant="secondary">{tag}</Badge>)}
               </div>
             </div>
           )}

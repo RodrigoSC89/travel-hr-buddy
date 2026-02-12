@@ -209,7 +209,7 @@ const ConsumptionTable = ({ consumptions, isLoading }: { consumptions: FuelConsu
         {isLoading ? (
           <div className="space-y-2">
             {[...Array(5)].map((_, i) => (
-              <Skeleton key={i} className="h-12 w-full" />
+              <Skeleton key={`fuel-skeleton-${i}`} className="h-12 w-full" />
             ))}
           </div>
         ) : consumptions.length === 0 ? (

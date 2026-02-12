@@ -264,22 +264,22 @@ Dados meteorológicos atuais:
   const renderContent = (content: string) => {
     return content.split('\n').map((line, i) => {
       if (line.startsWith('## ')) {
-        return <h2 key={i} className="text-lg font-bold mt-4 mb-2">{line.replace('## ', '')}</h2>;
+        return <h2 key={`line-${i}`} className="text-lg font-bold mt-4 mb-2">{line.replace('## ', '')}</h2>;
       }
       if (line.startsWith('### ')) {
-        return <h3 key={i} className="text-md font-semibold mt-3 mb-1">{line.replace('### ', '')}</h3>;
+        return <h3 key={`line-${i}`} className="text-md font-semibold mt-3 mb-1">{line.replace('### ', '')}</h3>;
       }
       if (line.startsWith('- ')) {
-        return <li key={i} className="ml-4">{line.replace('- ', '')}</li>;
+        return <li key={`line-${i}`} className="ml-4">{line.replace('- ', '')}</li>;
       }
       if (line.startsWith('**') && line.endsWith('**')) {
-        return <p key={i} className="font-bold">{line.replace(/\*\*/g, '')}</p>;
+        return <p key={`line-${i}`} className="font-bold">{line.replace(/\*\*/g, '')}</p>;
       }
       if (line.includes('|')) {
-        return <p key={i} className="font-mono text-xs">{line}</p>;
+        return <p key={`line-${i}`} className="font-mono text-xs">{line}</p>;
       }
-      if (line.trim() === '') return <br key={i} />;
-      return <p key={i}>{line}</p>;
+      if (line.trim() === '') return <br key={`line-${i}`} />;
+      return <p key={`line-${i}`}>{line}</p>;
     });
   };
 

@@ -672,8 +672,8 @@ export default function RequisitionsSection({ searchQuery }: RequisitionsSection
               <div className="space-y-2">
                 <p className="font-medium">Itens:</p>
                 <div className="space-y-2">
-                  {selectedRequisition.items.map((item, idx) => (
-                    <div key={idx} className="flex items-center justify-between p-3 rounded-lg bg-muted/30">
+                  {selectedRequisition.items.map((item) => (
+                    <div key={item.name} className="flex items-center justify-between p-3 rounded-lg bg-muted/30">
                       <div>
                         <p className="font-medium">{item.name}</p>
                         {item.suggestedSupplier && (

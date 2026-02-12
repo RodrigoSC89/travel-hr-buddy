@@ -278,8 +278,8 @@ export function MarinhaBrasilPanel({ lat, lon, region, compact = false }: Marinh
             <ScrollArea className="h-[300px]">
               {data.previsao && data.previsao.length > 0 ? (
                 <div className="space-y-2">
-                  {data.previsao.slice(0, 8).map((prev, i) => (
-                    <div key={i} className="p-3 bg-muted/30 rounded-lg">
+                  {data.previsao.slice(0, 8).map((prev) => (
+                    <div key={prev.periodo} className="p-3 bg-muted/30 rounded-lg">
                       <div className="flex items-center justify-between mb-2">
                         <span className="font-medium text-sm">{prev.periodo}</span>
                         <Badge variant="outline">{prev.mar}</Badge>

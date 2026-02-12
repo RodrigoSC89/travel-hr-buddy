@@ -454,7 +454,7 @@ Offline: ${systemStatus?.offline || 0}
               <ScrollArea className="h-[500px]">
                 <div className="space-y-2">
                   {logs.map((log, idx) => (
-                    <div key={idx} className="p-3 border rounded-lg text-sm">
+                    <div key={`log-${idx}-${log.timestamp}`} className="p-3 border rounded-lg text-sm">
                       <div className="flex items-center justify-between mb-1">
                         <Badge variant={
                           log.level === "critical" ? "destructive" :

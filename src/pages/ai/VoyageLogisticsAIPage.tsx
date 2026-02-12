@@ -264,8 +264,8 @@ export default function VoyageLogisticsAIPage() {
                   </Button>
 
                   <div className="space-y-2">
-                    {portCalls.map((call, idx) => (
-                      <div key={idx} className="flex items-center justify-between p-4 border rounded-lg">
+                    {portCalls.map((call) => (
+                      <div key={`${call.port}-${call.vessel}-${call.arrival}`} className="flex items-center justify-between p-4 border rounded-lg">
                         <div className="flex items-center gap-4">
                           <Anchor className="h-8 w-8 text-blue-500" />
                           <div>
@@ -277,8 +277,8 @@ export default function VoyageLogisticsAIPage() {
                           <div className="text-right">
                             <p className="text-sm">{call.arrival}</p>
                             <div className="flex gap-1">
-                              {call.operations.map((op, i) => (
-                                <Badge key={i} variant="outline" className="text-xs">{op}</Badge>
+                              {call.operations.map((op) => (
+                                <Badge key={op} variant="outline" className="text-xs">{op}</Badge>
                               ))}
                             </div>
                           </div>

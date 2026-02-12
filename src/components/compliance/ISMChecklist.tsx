@@ -35,8 +35,8 @@ const CollapsibleSection: React.FC<CollapsibleSectionProps> = ({ title, requirem
       </CollapsibleTrigger>
       <CollapsibleContent className="pb-4">
         <div className="space-y-3">
-          {requirements.map((req, idx) => (
-            <div key={idx} className="flex gap-3 p-3 bg-muted/50 rounded-lg">
+          {requirements.map((req) => (
+            <div key={req.code} className="flex gap-3 p-3 bg-muted/50 rounded-lg">
               <CheckCircle className="h-5 w-5 text-success flex-shrink-0 mt-0.5" />
               <div>
                 <div className="font-semibold text-foreground">{req.code}</div>

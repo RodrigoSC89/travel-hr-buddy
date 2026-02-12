@@ -61,7 +61,7 @@ export default function RealTimeTrackingPage() {
       <div className="space-y-6">
         <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
           {[...Array(5)].map((_, i) => (
-            <Card key={i}>
+            <Card key={`tracking-stat-skeleton-${i}`}>
               <CardContent className="pt-4">
                 <Skeleton className="h-16 w-full" />
               </CardContent>
@@ -78,7 +78,7 @@ export default function RealTimeTrackingPage() {
             <CardContent className="pt-6">
               <div className="space-y-2">
                 {[...Array(5)].map((_, i) => (
-                  <Skeleton key={i} className="h-24 w-full" />
+                  <Skeleton key={`tracking-list-skeleton-${i}`} className="h-24 w-full" />
                 ))}
               </div>
             </CardContent>

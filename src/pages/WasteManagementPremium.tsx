@@ -38,7 +38,7 @@ function LoadingSkeleton() {
     <div className="space-y-4">
       <div className="grid grid-cols-5 gap-4">
         {[...Array(5)].map((_, i) => (
-          <Skeleton key={i} className="h-24" />
+          <Skeleton key={`waste-skeleton-${i}`} className="h-24" />
         ))}
       </div>
       <Skeleton className="h-[500px]" />
@@ -235,8 +235,8 @@ function MARPOLCategoriesPanel() {
                   </Badge>
                 </div>
                 <ul className="text-xs text-muted-foreground space-y-1">
-                  {cat.restrictions.map((r, i) => (
-                    <li key={i}>• {r}</li>
+                  {cat.restrictions.map((r) => (
+                    <li key={r}>• {r}</li>
                   ))}
                 </ul>
               </CardContent>
@@ -301,8 +301,8 @@ function IncineratorPanel() {
         </CardHeader>
         <CardContent>
           <div className="space-y-3">
-            {logs.map((log, i) => (
-              <div key={i} className="flex items-center justify-between p-3 border rounded-lg">
+            {logs.map((log) => (
+              <div key={`${log.wasteType}-${log.date}`} className="flex items-center justify-between p-3 border rounded-lg">
                 <div className="flex items-center gap-4">
                   <Flame className="h-5 w-5 text-orange-500" />
                   <div>
@@ -455,8 +455,8 @@ function TrainingPanel() {
         </CardHeader>
         <CardContent>
           <div className="space-y-3">
-            {courses.map((course, i) => (
-              <div key={i} className="flex items-center justify-between p-3 border rounded-lg">
+            {courses.map((course) => (
+              <div key={course.title} className="flex items-center justify-between p-3 border rounded-lg">
                 <div className="flex items-center gap-3">
                   <GraduationCap className="h-5 w-5 text-primary" />
                   <div>
@@ -529,8 +529,8 @@ function GarbageManagementPlanPanel() {
           </CardHeader>
           <CardContent>
             <div className="space-y-3">
-              {sections.map((section, i) => (
-                <div key={i} className="flex items-center justify-between p-2 rounded-lg hover:bg-accent/50">
+              {sections.map((section) => (
+                <div key={section.title} className="flex items-center justify-between p-2 rounded-lg hover:bg-accent/50">
                   <div>
                     <p className="font-medium text-sm">{section.title}</p>
                     <p className="text-xs text-muted-foreground">{section.responsible}</p>
@@ -556,8 +556,8 @@ function GarbageManagementPlanPanel() {
                 { location: "Officer Mess", language: "English", checked: "2026-02-01" },
                 { location: "Main Deck Garbage", language: "English", checked: "2026-02-01" },
                 { location: "Engine Room", language: "English", checked: "2026-02-01" },
-              ].map((placard, i) => (
-                <div key={i} className="flex items-center justify-between p-2 rounded-lg hover:bg-accent/50">
+              ].map((placard) => (
+                <div key={placard.location} className="flex items-center justify-between p-2 rounded-lg hover:bg-accent/50">
                   <div>
                     <p className="font-medium text-sm">{placard.location}</p>
                     <p className="text-xs text-muted-foreground">{placard.language}</p>

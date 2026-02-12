@@ -147,7 +147,7 @@ export function RouteHistoryPanel({
         <CardContent>
           <div className="space-y-3">
             {[1, 2, 3].map((i) => (
-              <Skeleton key={i} className="h-24 w-full" />
+              <Skeleton key={`route-hist-skeleton-${i}`} className="h-24 w-full" />
             ))}
           </div>
         </CardContent>

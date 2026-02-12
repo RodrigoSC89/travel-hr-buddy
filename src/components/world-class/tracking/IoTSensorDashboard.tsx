@@ -88,7 +88,7 @@ export function IoTSensorDashboard() {
     return (
       <div className="space-y-4">
         {[1, 2, 3].map(i => (
-          <Card key={i} className="animate-pulse">
+          <Card key={`iot-wc-skeleton-${i}`} className="animate-pulse">
             <CardContent className="p-6"><div className="h-20 bg-muted rounded" /></CardContent>
           </Card>
         ))}

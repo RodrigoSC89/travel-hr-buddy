@@ -624,8 +624,8 @@ export default function MentorDPProfessional() {
                           Sou seu mentor virtual em Posicionamento Dinâmico. Pergunte sobre sensores, operações, emergências, normas ou qualquer aspecto do DP.
                         </p>
                         <div className="flex flex-wrap gap-2 justify-center max-w-lg">
-                          {quickTopics.map((topic, i) => (
-                            <Button key={i} variant="outline" size="sm" onClick={() => sendMessage(topic)} className="text-xs">
+                          {quickTopics.map((topic) => (
+                            <Button key={topic} variant="outline" size="sm" onClick={() => sendMessage(topic)} className="text-xs">
                               {topic}
                             </Button>
                           ))}
@@ -818,7 +818,7 @@ export default function MentorDPProfessional() {
                 </CardHeader>
                 <CardContent className="space-y-6">
                    {activeQuiz.questions.map((q: Record<string, unknown>, idx: number) => (
-                     <div key={idx} className="space-y-3 p-4 bg-muted/50 rounded-lg">
+                     <div key={`quiz-q-${idx}-${String(q.question).slice(0, 20)}`} className="space-y-3 p-4 bg-muted/50 rounded-lg">
                        <p className="font-medium">{idx + 1}. {String(q.question)}</p>
                        <div className="space-y-2">
                          {(q.options as Array<Record<string, unknown>>).map((opt, optIdx: number) => (
@@ -845,8 +845,8 @@ export default function MentorDPProfessional() {
             ) : (
               <>
                 <div className="grid md:grid-cols-3 gap-4">
-                  {["Sensores e Referências", "Procedimentos de Emergência", "Redundância DP", "Fundamentos de DP", "Operações DP", "Manutenção de Sistemas"].map((topic, i) => (
-                    <Card key={i}>
+                  {["Sensores e Referências", "Procedimentos de Emergência", "Redundância DP", "Fundamentos de DP", "Operações DP", "Manutenção de Sistemas"].map((topic) => (
+                    <Card key={topic}>
                       <CardHeader><CardTitle className="text-base">{topic}</CardTitle></CardHeader>
                       <CardContent>
                         <div className="flex items-center justify-between text-sm mb-3">

@@ -100,7 +100,7 @@ export default function VoyagePnLPage() {
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
         {isLoading ? (
           Array.from({ length: 5 }).map((_, i) => (
-            <Card key={i}>
+            <Card key={`pnl-skeleton-${i}`}>
               <CardContent className="p-4">
                 <Skeleton className="h-4 w-24 mb-2" />
                 <Skeleton className="h-8 w-32" />
@@ -185,7 +185,7 @@ export default function VoyagePnLPage() {
           {isLoading ? (
             <div className="space-y-2">
               {Array.from({ length: 5 }).map((_, i) => (
-                <Skeleton key={i} className="h-12 w-full" />
+                <Skeleton key={`pnl-row-skeleton-${i}`} className="h-12 w-full" />
               ))}
             </div>
           ) : filteredVoyages.length === 0 ? (

@@ -284,7 +284,7 @@ export default function PrePSCForm({ inspectionId, onComplete }: PrePSCFormProps
           </CardHeader>
           <CardContent className="space-y-4">
             {items.map(({ item, index }) => (
-              <div key={index} className="border rounded-lg p-4 space-y-3">
+              <div key={item.id || `psc-item-${index}`} className="border rounded-lg p-4 space-y-3">
                 <div className="flex items-start justify-between gap-3">
                   <div className="flex-1">
                     <p className="font-medium text-sm">{item.question}</p>

@@ -281,8 +281,8 @@ export const ANPDossierExport: React.FC = () => {
                       { label: "CAPAs em tratamento", done: totalCAPAs > 0 },
                       { label: "Assinaturas coletadas", done: true },
                       { label: "Revisão final realizada", done: false }
-                    ].map((item, idx) => (
-                      <div key={idx} className="flex items-center gap-3 p-2 rounded-lg bg-muted/50">
+                    ].map((item) => (
+                      <div key={item.label} className="flex items-center gap-3 p-2 rounded-lg bg-muted/50">
                         {item.done ? (
                           <CheckCircle className="h-5 w-5 text-success" />
                         ) : (
@@ -406,8 +406,8 @@ export const ANPDossierExport: React.FC = () => {
                       { icon: Folder, label: "6. Anexos de Evidências", desc: "Documentos, fotos, registros" },
                       { icon: Users, label: "7. Assinaturas", desc: "Auditor, responsável SGSO" },
                       { icon: Calendar, label: "8. Trilha de Auditoria", desc: "Logs e histórico de alterações" }
-                    ].map((item, idx) => (
-                      <div key={idx} className="flex items-center gap-4 p-3 bg-muted/50 rounded-lg">
+                    ].map((item) => (
+                      <div key={item.label} className="flex items-center gap-4 p-3 bg-muted/50 rounded-lg">
                         <item.icon className="h-5 w-5 text-primary" />
                         <div>
                           <p className="font-semibold">{item.label}</p>
