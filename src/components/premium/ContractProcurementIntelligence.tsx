@@ -76,11 +76,11 @@ export default function ContractProcurementIntelligence() {
   const getStatusColor = (status: string) => {
     switch (status) {
       case "active": case "approved": case "awarded":
-        return "bg-green-500/10 text-green-500 border-green-500/20";
+        return "bg-success/10 text-success border-success/20";
       case "in_evaluation": case "pending":
-        return "bg-amber-500/10 text-amber-500 border-amber-500/20";
+        return "bg-warning/10 text-warning border-warning/20";
       case "open":
-        return "bg-blue-500/10 text-blue-500 border-blue-500/20";
+        return "bg-info/10 text-info border-info/20";
       default: return "bg-muted text-muted-foreground";
     }
   };
@@ -107,22 +107,22 @@ export default function ContractProcurementIntelligence() {
     <div className="space-y-6">
       {/* Header Stats */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-        <Card className="border-l-4 border-l-blue-500">
+        <Card className="border-l-4 border-l-info">
           <CardContent className="p-4">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-xs text-muted-foreground">Fornecedores Ativos</p>
                 <p className="text-2xl font-bold">{suppliers.length}</p>
-                <p className="text-xs text-green-500 flex items-center gap-1">
+                <p className="text-xs text-success flex items-center gap-1">
                   <CheckCircle className="h-3 w-3" /> Supabase Real
                 </p>
               </div>
-              <Store className="h-8 w-8 text-blue-500" />
+              <Store className="h-8 w-8 text-info" />
             </div>
           </CardContent>
         </Card>
 
-        <Card className="border-l-4 border-l-green-500">
+        <Card className="border-l-4 border-l-success">
           <CardContent className="p-4">
             <div className="flex items-center justify-between">
               <div>
@@ -130,25 +130,25 @@ export default function ContractProcurementIntelligence() {
                 <p className="text-2xl font-bold">${(totalSpend / 1000).toFixed(0)}K</p>
                 <p className="text-xs text-muted-foreground">Acumulado</p>
               </div>
-              <DollarSign className="h-8 w-8 text-green-500" />
+              <DollarSign className="h-8 w-8 text-success" />
             </div>
           </CardContent>
         </Card>
 
-        <Card className="border-l-4 border-l-amber-500">
+        <Card className="border-l-4 border-l-warning">
           <CardContent className="p-4">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-xs text-muted-foreground">RFQs Abertas</p>
                 <p className="text-2xl font-bold">{openRFQs}</p>
-                <p className="text-xs text-amber-500">Em avaliação</p>
+                <p className="text-xs text-warning">Em avaliação</p>
               </div>
-              <Send className="h-8 w-8 text-amber-500" />
+              <Send className="h-8 w-8 text-warning" />
             </div>
           </CardContent>
         </Card>
 
-        <Card className="border-l-4 border-l-purple-500">
+        <Card className="border-l-4 border-l-accent">
           <CardContent className="p-4">
             <div className="flex items-center justify-between">
               <div>
@@ -156,11 +156,11 @@ export default function ContractProcurementIntelligence() {
                 <p className="text-2xl font-bold">{avgSupplierRating}/5.0</p>
                 <div className="flex gap-0.5 mt-1">
                   {[...Array(5)].map((_, i) => (
-                    <Star key={i} className={`h-3 w-3 ${i < Math.round(Number(avgSupplierRating)) ? "text-amber-500 fill-amber-500" : "text-muted"}`} />
+                    <Star key={`star-${i}`} className={`h-3 w-3 ${i < Math.round(Number(avgSupplierRating)) ? "text-warning fill-warning" : "text-muted"}`} />
                   ))}
                 </div>
               </div>
-              <Star className="h-8 w-8 text-purple-500" />
+              <Star className="h-8 w-8 text-accent" />
             </div>
           </CardContent>
         </Card>
@@ -192,7 +192,7 @@ export default function ContractProcurementIntelligence() {
           <Card>
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
-                <Store className="h-5 w-5 text-green-500" />
+                <Store className="h-5 w-5 text-success" />
                 Supplier Scorecard
               </CardTitle>
               <CardDescription>
@@ -210,7 +210,7 @@ export default function ContractProcurementIntelligence() {
                 <ScrollArea className="h-[400px]">
                   <div className="space-y-4">
                     {suppliers.map(supplier => (
-                      <Card key={supplier.id} className="border-l-4 border-l-green-500">
+                      <Card key={supplier.id} className="border-l-4 border-l-success">
                         <CardContent className="p-4 space-y-4">
                           <div className="flex items-center justify-between">
                             <div>
@@ -222,7 +222,7 @@ export default function ContractProcurementIntelligence() {
                             </div>
                             <div className="flex items-center gap-2">
                               <div className="flex items-center gap-1">
-                                <Star className="h-4 w-4 text-amber-500 fill-amber-500" />
+                                <Star className="h-4 w-4 text-warning fill-warning" />
                                 <span className="font-bold">{supplier.rating}</span>
                               </div>
                               <Badge className={getStatusColor(supplier.status)}>
@@ -238,11 +238,11 @@ export default function ContractProcurementIntelligence() {
                             </div>
                             <div className="p-2 bg-muted/50 rounded">
                               <p className="text-xs text-muted-foreground">On-Time</p>
-                              <p className="font-bold text-green-500">{supplier.onTimeDelivery}%</p>
+                              <p className="font-bold text-success">{supplier.onTimeDelivery}%</p>
                             </div>
                             <div className="p-2 bg-muted/50 rounded">
                               <p className="text-xs text-muted-foreground">Quality</p>
-                              <p className="font-bold text-blue-500">{supplier.qualityScore}%</p>
+                              <p className="font-bold text-info">{supplier.qualityScore}%</p>
                             </div>
                           </div>
                         </CardContent>
@@ -261,7 +261,7 @@ export default function ContractProcurementIntelligence() {
             <CardHeader>
               <div className="flex items-center justify-between">
                 <CardTitle className="flex items-center gap-2">
-                  <Send className="h-5 w-5 text-blue-500" />
+                  <Send className="h-5 w-5 text-info" />
                   Request for Quotation
                 </CardTitle>
                 <Button onClick={() => setShowNewRFQDialog(true)}>
@@ -321,7 +321,7 @@ export default function ContractProcurementIntelligence() {
           <Card>
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
-                <PieChart className="h-5 w-5 text-purple-500" />
+                <PieChart className="h-5 w-5 text-accent" />
                 Spend Analytics by Category
               </CardTitle>
             </CardHeader>
@@ -367,7 +367,7 @@ export default function ContractProcurementIntelligence() {
           <Card>
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
-                <Scale className="h-5 w-5 text-blue-500" />
+                <Scale className="h-5 w-5 text-info" />
                 BIMCO Standard Forms Usage
               </CardTitle>
             </CardHeader>

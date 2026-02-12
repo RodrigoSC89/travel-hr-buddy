@@ -112,17 +112,17 @@ export function SemanticDocumentSearch() {
   const getDocumentTypeColor = (docType?: string) => {
     switch (docType) {
       case "report":
-        return "bg-blue-100 text-blue-800";
+        return "bg-info/10 text-info";
       case "policy":
-        return "bg-red-100 text-red-800";
+        return "bg-destructive/10 text-destructive";
       case "procedure":
-        return "bg-yellow-100 text-yellow-800";
+        return "bg-warning/10 text-warning";
       case "form":
-        return "bg-purple-100 text-purple-800";
+        return "bg-accent/10 text-accent-foreground";
       case "training":
-        return "bg-green-100 text-green-800";
+        return "bg-success/10 text-success";
       default:
-        return "bg-gray-100 text-gray-800";
+        return "bg-muted text-muted-foreground";
     }
   };
 
@@ -137,7 +137,7 @@ export function SemanticDocumentSearch() {
     <Card>
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
-          <Sparkles className="h-5 w-5 text-purple-500" />
+          <Sparkles className="h-5 w-5 text-accent" />
           Semantic Document Search
         </CardTitle>
         <CardDescription>
@@ -190,12 +190,12 @@ export function SemanticDocumentSearch() {
                     {/* Title and similarity */}
                     <div className="flex items-start justify-between gap-2">
                       <div className="flex items-center gap-2 flex-1">
-                        <FileText className="h-4 w-4 text-blue-500 flex-shrink-0" />
+                        <FileText className="h-4 w-4 text-info flex-shrink-0" />
                         <h3 className="font-semibold">{result.title}</h3>
                       </div>
                       <div className="flex items-center gap-2">
-                        <TrendingUp className="h-3 w-3 text-green-500" />
-                        <span className="text-sm font-medium text-green-600">
+                        <TrendingUp className="h-3 w-3 text-success" />
+                        <span className="text-sm font-medium text-success">
                           {result.similarity.toFixed(0)}% match
                         </span>
                       </div>
@@ -216,8 +216,8 @@ export function SemanticDocumentSearch() {
                           {result.document_type.replace("_", " ")}
                         </Badge>
                       )}
-                      {tags.slice(0, 3).map((tag, idx) => (
-                        <Badge key={idx} variant="secondary" className="text-xs">
+                      {tags.slice(0, 3).map((tag) => (
+                        <Badge key={tag} variant="secondary" className="text-xs">
                           {tag}
                         </Badge>
                       ))}

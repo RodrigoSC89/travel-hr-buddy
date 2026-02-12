@@ -28,10 +28,10 @@ const VoyageDetailsDialog: React.FC<VoyageDetailsDialogProps> = ({
 
   const getStatusBadge = (status: VoyageRoute["status"]) => {
     const styles = {
-      planned: "bg-blue-500/10 text-blue-500",
-      active: "bg-green-500/10 text-green-500",
-      completed: "bg-gray-500/10 text-gray-500",
-      cancelled: "bg-red-500/10 text-red-500",
+      planned: "bg-info/10 text-info",
+      active: "bg-success/10 text-success",
+      completed: "bg-muted text-muted-foreground",
+      cancelled: "bg-destructive/10 text-destructive",
     };
     const labels = {
       planned: "Planejada",
@@ -44,9 +44,9 @@ const VoyageDetailsDialog: React.FC<VoyageDetailsDialogProps> = ({
 
   const getRiskBadge = (risk: VoyageRoute["weatherRisk"]) => {
     const styles = {
-      low: "bg-green-500/10 text-green-500",
-      medium: "bg-yellow-500/10 text-yellow-500",
-      high: "bg-red-500/10 text-red-500",
+      low: "bg-success/10 text-success",
+      medium: "bg-warning/10 text-warning",
+      high: "bg-destructive/10 text-destructive",
     };
     const labels = { low: "Baixo Risco", medium: "Médio Risco", high: "Alto Risco" };
     return (
