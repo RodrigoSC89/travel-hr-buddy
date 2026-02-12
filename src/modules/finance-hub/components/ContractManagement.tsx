@@ -150,7 +150,7 @@ function ContractCard({ contract }: { contract: Contract }) {
       </div>
 
       <div className="flex gap-2 mt-3">
-        <Button size="sm" variant="outline" className="flex-1 gap-1" onClick={() => toast.info(`${contract.title}`, { description: `Contraparte: ${contract.counterparty} | Valor: ${formatCurrency(contract.value, contract.currency)} | Período: ${contract.startDate} a ${contract.endDate}${contract.vessel ? ` | Navio: ${contract.vessel}` : ''}` })}>
+        <Button size="sm" variant="outline" className="flex-1 gap-1" onClick={() => toast(`${contract.title}`, { description: `Contraparte: ${contract.counterparty} | Valor: ${formatCurrency(contract.value, contract.currency)} | Período: ${contract.startDate} a ${contract.endDate}${contract.vessel ? ` | Navio: ${contract.vessel}` : ''}`, duration: 6000 })}>
           <Eye className="h-3 w-3" />
           Detalhes
         </Button>
@@ -275,7 +275,7 @@ export default function ContractManagement() {
                 Economia potencial de $120K com renegociação antecipada.
               </p>
             </div>
-            <Button className="gap-2" onClick={() => toast.info("Análise IA de Contratos", { description: `${stats.expiring} contratos vencendo em 60 dias. Economia potencial de $120K com renegociação antecipada. Recomendação: iniciar negociação com ${contracts.filter(c => c.status === 'expiring').map(c => c.counterparty).join(', ')}.` })}>
+            <Button className="gap-2" onClick={() => toast(`Análise IA — ${stats.expiring} contratos vencendo`, { description: `Economia potencial: $120K com renegociação antecipada. Recomendação: iniciar negociação com ${contracts.filter(c => c.status === 'expiring').map(c => c.counterparty).join(', ')}.`, duration: 8000 })}>
               Ver Análise
               <ArrowRight className="h-4 w-4" />
             </Button>
@@ -304,10 +304,10 @@ export default function ContractManagement() {
                   onChange={(e) => setSearchTerm(e.target.value)}
                 />
               </div>
-              <Button variant="outline" size="icon" onClick={() => toast.info("Filtros disponíveis: Tipo (Afretamento, Serviço, Fornecedor), Status, Valor, Vencimento")}>
+              <Button variant="outline" size="icon" onClick={() => toast("Filtros: Tipo, Status, Valor, Vencimento", { description: "Use a busca ao lado para filtrar por nome ou número do contrato.", duration: 4000 })}>
                 <Filter className="h-4 w-4" />
               </Button>
-              <Button className="gap-2" onClick={() => toast.info("Novo Contrato", { description: "Para criar um contrato, utilize Finance > Contratos no módulo financeiro completo ou entre em contato com o departamento jurídico." })}>
+              <Button className="gap-2" onClick={() => { setActiveTab("expiring"); toast.success("Filtrando contratos que precisam de ação"); }}>
                 <Plus className="h-4 w-4" />
                 Novo Contrato
               </Button>

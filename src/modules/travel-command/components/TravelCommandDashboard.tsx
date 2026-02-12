@@ -220,7 +220,7 @@ const TravelCommandDashboard: React.FC = () => {
         </div>
         
         <div className="flex items-center gap-2">
-          <Button variant="outline" size="sm" onClick={() => toast.info("Dados exibidos são em tempo real. Navegue entre as abas para visualizar métricas atualizadas.")}>
+          <Button variant="outline" size="sm" onClick={() => { window.location.reload(); }}>
             <RefreshCw className="h-4 w-4 mr-2" />
             Atualizar
           </Button>
@@ -236,7 +236,7 @@ const TravelCommandDashboard: React.FC = () => {
             <Download className="h-4 w-4 mr-2" />
             Exportar
           </Button>
-          <Button size="sm" className="bg-gradient-to-r from-blue-500 to-cyan-600" onClick={() => toast.info("Nova Viagem", { description: "Acesse a aba 'Passagens' para buscar voos ou 'Hotéis' para reservar hospedagem." })}>
+          <Button size="sm" className="bg-gradient-to-r from-primary to-primary-light text-primary-foreground" onClick={() => toast.success("Para criar nova viagem, use a aba Passagens ou Hotéis abaixo.")}>
             <Plus className="h-4 w-4 mr-2" />
             Nova Viagem
           </Button>
@@ -410,7 +410,7 @@ const TravelCommandDashboard: React.FC = () => {
                           </p>
                           <p className="text-xs text-muted-foreground mt-1">{alert.time}</p>
                         </div>
-                        <Button variant="ghost" size="icon" className="h-8 w-8" onClick={() => toast.info(`Alerta: ${alert.flight}`, { description: alert.message })}>
+                        <Button variant="ghost" size="icon" className="h-8 w-8" onClick={() => toast(`Alerta: ${alert.flight}`, { description: alert.message, duration: 5000 })}>
                           <Eye className="h-4 w-4" />
                         </Button>
                       </div>

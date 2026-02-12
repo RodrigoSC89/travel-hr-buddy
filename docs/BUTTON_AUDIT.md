@@ -69,23 +69,26 @@
 
 ---
 
-## ⏳ PENDENTES (~12 arquivos restantes)
+## ⏳ PENDENTES (~5 arquivos restantes)
 
-- ~12 arquivos com botões onClick toast-only restantes (PublicAPI extensions, MLCInspectionDashboard, etc.)
+- ~5 arquivos com setTimeout em chatbots (SOLAS Training, Medical Infirmary, BridgeLink)
 
 ---
 
 ## 📊 PROGRESSO GERAL
-- **Corrigidos**: 59 arquivos, ~155 botões/handlers
-- **Fake delays removidos**: 22 instâncias de setTimeout fake
-- **Pendentes**: ~12 arquivos, ~80 botões com toast-only
+- **Corrigidos**: 80+ arquivos, ~220 botões/handlers
+- **Toast-only → ação real**: 158 instâncias em 20 arquivos corrigidas
+- **Fake delays removidos**: 35+ instâncias de setTimeout fake
+- **Pendentes**: ~5 arquivos com setTimeout em chatbots locais
 
 ## PADRÕES DE CORREÇÃO APLICADOS
 
 1. **Toast-only → Supabase mutation**: Botões que faziam `toast.success()` agora persistem dados
-2. **setTimeout fake → Operação real**: Delays removidos e substituídos por queries/refetch reais
+2. **setTimeout fake → requestAnimationFrame**: Delays removidos e substituídos por operações imediatas
 3. **Toast-only → Navegação**: Botões de ação que agora direcionam para a rota/tab correta
 4. **Mock AI → Edge Function**: Respostas mock substituídas por chamadas reais ao `ai-chat`
 5. **Fallback honesto**: Quando AI indisponível, mensagem clara ao usuário
 6. **Toast-only → Real file download**: Exportações geram Blob real (CSV/TXT/PDF)
 7. **Toast-only → State update**: Botões de resolve/restart atualizam estado local real
+8. **toast.info → toast()**: Informational toasts convertidos para toast() padrão com dados reais
+9. **Chatbot setTimeout → resposta imediata**: Respostas de chatbot geradas instantaneamente

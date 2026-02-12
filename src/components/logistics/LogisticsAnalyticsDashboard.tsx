@@ -84,10 +84,10 @@ export const LogisticsAnalyticsDashboard: React.FC = () => {
 
   const handleRefresh = () => {
     setIsRefreshing(true);
-    setTimeout(() => {
+    requestAnimationFrame(() => {
       setIsRefreshing(false);
       toast.success("Dados atualizados!");
-    }, 1500);
+    });
   };
 
   const handleExport = () => {

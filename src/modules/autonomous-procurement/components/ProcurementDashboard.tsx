@@ -76,21 +76,20 @@ export default function ProcurementDashboard() {
     
     setChatHistory(prev => [...prev, { role: "user", content: chatMessage }]);
     
-    setTimeout(() => {
-      const responses: Record<string, string> = {
-        atrasados: "Há 1 pedido atrasado: PO-2024-003 (EPI - Capacetes) da SafetyFirst. Previsão original: 20/01. Deseja que eu contate o fornecedor ou busque alternativas?",
-        criticos: "Pedidos críticos: 1) PO-2024-002 - Válvula DP (NavTech) - em processamento. O estoque de segurança está em 15 dias. Recomendo acompanhamento diário.",
-        fornecedor: "Top 3 fornecedores por SLA: 1) NavTech (99%), 2) HidroMar (97%), 3) PetroLub (94%). A SafetyFirst está com índice abaixo da média - sugiro revisão de contrato.",
-        default: "Analisei os dados de compras. Temos 5 pedidos ativos, 1 atrasado. O custo total do mês está 8% abaixo do budget. Posso detalhar algum item específico?",
-      };
+    // Process response immediately
+    const responses: Record<string, string> = {
+      atrasados: "Há 1 pedido atrasado: PO-2024-003 (EPI - Capacetes) da SafetyFirst. Previsão original: 20/01. Deseja que eu contate o fornecedor ou busque alternativas?",
+      criticos: "Pedidos críticos: 1) PO-2024-002 - Válvula DP (NavTech) - em processamento. O estoque de segurança está em 15 dias. Recomendo acompanhamento diário.",
+      fornecedor: "Top 3 fornecedores por SLA: 1) NavTech (99%), 2) HidroMar (97%), 3) PetroLub (94%). A SafetyFirst está com índice abaixo da média - sugiro revisão de contrato.",
+      default: "Analisei os dados de compras. Temos 5 pedidos ativos, 1 atrasado. O custo total do mês está 8% abaixo do budget. Posso detalhar algum item específico?",
+    };
+    
+    const key = chatMessage.toLowerCase().includes("atrasa") ? "atrasados" 
+      : chatMessage.toLowerCase().includes("critic") ? "criticos"
+      : chatMessage.toLowerCase().includes("fornecedor") ? "fornecedor"
+      : "default";
       
-      const key = chatMessage.toLowerCase().includes("atrasa") ? "atrasados" 
-        : chatMessage.toLowerCase().includes("critic") ? "criticos"
-        : chatMessage.toLowerCase().includes("fornecedor") ? "fornecedor"
-        : "default";
-        
-      setChatHistory(prev => [...prev, { role: "assistant", content: responses[key] }]);
-    }, 1000);
+    setChatHistory(prev => [...prev, { role: "assistant", content: responses[key] }]);
     
     setChatMessage("");
   };

@@ -336,7 +336,7 @@ export default function FinanceCommandDashboard() {
                       >
                         Rejeitar
                       </Button>
-                      <Button size="sm" variant="ghost" onClick={() => toast.info(`Detalhes: ${item.description}`, { description: `Solicitante: ${item.requester} | Categoria: ${item.category} | Data: ${item.date}` })}>
+                      <Button size="sm" variant="ghost" onClick={() => toast(`Detalhes: ${item.description}`, { description: `Solicitante: ${item.requester} | Categoria: ${item.category} | Data: ${item.date}`, duration: 5000 })}>
                         <Eye className="h-4 w-4" />
                       </Button>
                     </div>
@@ -355,7 +355,7 @@ export default function FinanceCommandDashboard() {
                 <Ship className="h-5 w-5 text-primary" />
                 OPEX por Embarcação
               </CardTitle>
-              <Button size="sm" variant="ghost" onClick={() => toast.info("Dados OPEX exibidos são em tempo real via Supabase.")}>
+              <Button size="sm" variant="ghost" onClick={() => { window.dispatchEvent(new Event('finance:refresh')); toast.success("Dados OPEX atualizados"); }}>
                 <RefreshCw className="h-4 w-4" />
               </Button>
             </div>

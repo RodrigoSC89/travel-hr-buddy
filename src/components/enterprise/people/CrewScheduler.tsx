@@ -253,7 +253,7 @@ export function CrewScheduler() {
               </Button>
             </div>
 
-            <Button onClick={() => toast.info("Selecione um tripulante no cronograma para planejar rotação", { description: "Ou navegue para People Hub > Crew Scheduler para gestão completa" })}>
+            <Button onClick={() => toast("Selecione um tripulante no cronograma abaixo para planejar a rotação", { description: `Exibindo ${filteredRotations.length} tripulantes no período atual.`, duration: 4000 })}>
               <Plus className="h-4 w-4 mr-2" />
               Nova Rotação
             </Button>

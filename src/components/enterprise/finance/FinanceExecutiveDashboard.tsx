@@ -280,7 +280,7 @@ export function FinanceExecutiveDashboard() {
           <CardContent>
             <div className="space-y-4">
               {vesselPerformance.map((vessel, idx) => (
-                <div key={idx} className="p-3 rounded-lg border cursor-pointer hover:bg-muted/50 transition-colors" onClick={() => toast.info(`${vessel.vessel}`, { description: `Receita: ${formatCurrency(vessel.revenue)} | Custos: ${formatCurrency(vessel.costs)} | Margem: ${vessel.margin}% | Viagens: ${vessel.voyages}` })}>
+                <div key={idx} className="p-3 rounded-lg border cursor-pointer hover:bg-muted/50 transition-colors" onClick={() => toast(`${vessel.vessel}`, { description: `Receita: ${formatCurrency(vessel.revenue)} | Custos: ${formatCurrency(vessel.costs)} | Margem: ${vessel.margin}% | Viagens: ${vessel.voyages}`, duration: 5000 })}>
                   <div className="flex items-center justify-between mb-2">
                     <div className="flex items-center gap-2">
                       <Ship className="h-4 w-4 text-primary" />

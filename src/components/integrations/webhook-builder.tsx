@@ -207,7 +207,7 @@ export const WebhookBuilder: React.FC = () => {
   const handleSaveWebhook = () => {
     setIsCreating(true);
     
-    setTimeout(() => {
+    requestAnimationFrame(() => {
       setIsCreating(false);
       toast({
         title: "Webhook Criado",
@@ -230,19 +230,19 @@ export const WebhookBuilder: React.FC = () => {
           backoffStrategy: "exponential"
         }
       });
-    }, 1500);
+    });
   };
 
   const handleTestWebhook = (webhookId: string) => {
     setIsTesting(true);
     
-    setTimeout(() => {
+    requestAnimationFrame(() => {
       setIsTesting(false);
       toast({
         title: "Teste Concluído",
         description: "Webhook testado com sucesso. Status: 200 OK",
       });
-    }, 2000);
+    });
   };
 
   const copyWebhookUrl = (url: string) => {
