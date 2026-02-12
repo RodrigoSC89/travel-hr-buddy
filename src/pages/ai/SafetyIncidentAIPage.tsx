@@ -111,8 +111,8 @@ export default function SafetyIncidentAIPage() {
               Predição de incidentes, análise de causa raiz e KPIs de segurança
             </p>
           </div>
-          <Badge variant="outline" className="text-lg px-4 py-2 bg-green-50">
-            <TrendingDown className="h-4 w-4 mr-2 text-green-600" />
+          <Badge variant="outline" className="text-lg px-4 py-2 bg-success/10">
+            <TrendingDown className="h-4 w-4 mr-2 text-success" />
             LTIFR: {metrics.ltifr}
           </Badge>
         </div>
@@ -124,8 +124,8 @@ export default function SafetyIncidentAIPage() {
               <CardTitle className="text-sm font-medium">LTIFR</CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold text-green-600">{metrics.ltifr}</div>
-              <div className="flex items-center text-xs text-green-600">
+              <div className="text-2xl font-bold text-success">{metrics.ltifr}</div>
+              <div className="flex items-center text-xs text-success">
                 <TrendingDown className="h-3 w-3 mr-1" />
                 -15% vs último ano
               </div>
@@ -244,13 +244,13 @@ export default function SafetyIncidentAIPage() {
                     Analisar Riscos com IA
                   </Button>
                   <div className="space-y-2">
-                    <div className="flex items-center justify-between p-2 bg-yellow-50 dark:bg-yellow-950 rounded">
+                    <div className="flex items-center justify-between p-2 bg-warning/10 rounded">
                       <span className="text-sm">Fadiga de tripulação</span>
-                      <Badge variant="outline" className="text-yellow-600">25% prob.</Badge>
+                      <Badge variant="outline" className="text-warning">25% prob.</Badge>
                     </div>
-                    <div className="flex items-center justify-between p-2 bg-green-50 dark:bg-green-950 rounded">
+                    <div className="flex items-center justify-between p-2 bg-success/10 rounded">
                       <span className="text-sm">Falha de equipamento</span>
-                      <Badge variant="outline" className="text-green-600">8% prob.</Badge>
+                      <Badge variant="outline" className="text-success">8% prob.</Badge>
                     </div>
                   </div>
                 </CardContent>
