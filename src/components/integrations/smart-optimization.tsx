@@ -353,9 +353,9 @@ export const SmartOptimization: React.FC = () => {
                       💡 {suggestion.estimatedImprovement}
                     </p>
                     <div className="space-y-1">
-                      {suggestion.implementationSteps.slice(0, 2).map((step, index) => (
-                        <p key={index} className="text-xs text-muted-foreground">
-                          {index + 1}. {step}
+                      {suggestion.implementationSteps.slice(0, 2).map((step, stepIdx) => (
+                        <p key={step} className="text-xs text-muted-foreground">
+                          {stepIdx + 1}. {step}
                         </p>
                       ))}
                       {suggestion.implementationSteps.length > 2 && (

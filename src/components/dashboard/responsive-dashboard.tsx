@@ -216,8 +216,8 @@ export const ResponsiveDashboard: React.FC = () => {
 
       {/* Quick Stats - Mobile optimized */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
-        {quickStats.map((stat, index) => (
-          <Card key={index} className="hover-scale transition-all">
+        {quickStats.map((stat) => (
+          <Card key={stat.label} className="hover-scale transition-all">
             <CardContent className="p-3 sm:p-4">
               <div className="flex items-center space-x-2 sm:space-x-3">
                 <stat.icon className={`h-5 w-5 sm:h-6 sm:w-6 ${stat.color}`} />
@@ -233,8 +233,8 @@ export const ResponsiveDashboard: React.FC = () => {
 
       {/* Metrics Grid */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
-        {metrics.map((metric, index) => (
-          <MetricCard key={index} {...metric} />
+        {metrics.map((metric) => (
+          <MetricCard key={metric.title} {...metric} />
         ))}
       </div>
 
@@ -298,8 +298,8 @@ export const ResponsiveDashboard: React.FC = () => {
                     { time: "15 min", action: "Dashboard atualizado", type: "info" },
                     { time: "1h", action: "Novo usuário registrado", type: "info" },
                     { time: "2h", action: "Backup realizado", type: "success" }
-                  ].map((activity, index) => (
-                    <div key={index} className="flex items-center space-x-3">
+                  ].map((activity) => (
+                    <div key={activity.action} className="flex items-center space-x-3">
                       <div className={`w-2 h-2 rounded-full ${
                         activity.type === "success" ? "bg-success" : "bg-primary"
                       }`} />

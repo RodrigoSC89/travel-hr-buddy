@@ -166,8 +166,8 @@ export function DowntimeValidationCard({ downtimeId, onValidationComplete }: Pro
                   <AlertTriangle className="h-4 w-4 text-amber-500" /> Evidências Necessárias
                 </h4>
                 <ul className="text-sm space-y-1">
-                  {result.required_evidence.map((ev, i) => (
-                    <li key={i} className="flex items-start gap-2 text-muted-foreground">
+                  {result.required_evidence.map((ev) => (
+                    <li key={ev} className="flex items-start gap-2 text-muted-foreground">
                       <span className="text-amber-500">•</span> {ev}
                     </li>
                   ))}
@@ -180,8 +180,8 @@ export function DowntimeValidationCard({ downtimeId, onValidationComplete }: Pro
               <div className="space-y-2">
                 <h4 className="text-sm font-medium">Recomendações</h4>
                 <ul className="text-sm space-y-1">
-                  {result.recommendations.map((rec, i) => (
-                    <li key={i} className="flex items-start gap-2 text-muted-foreground">
+                  {result.recommendations.map((rec) => (
+                    <li key={rec} className="flex items-start gap-2 text-muted-foreground">
                       <CheckCircle className="h-3 w-3 text-primary mt-0.5 flex-shrink-0" /> {rec}
                     </li>
                   ))}

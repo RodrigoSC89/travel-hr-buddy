@@ -228,7 +228,7 @@ export function OperationsDashboard() {
           <div className="space-y-3">
             {aiSuggestions.map((suggestion, index) => (
               <div
-                key={index}
+                key={suggestion}
                 className="flex items-start gap-3 p-3 bg-info/5 dark:bg-info/10 rounded-lg border border-info/20 dark:border-info/30"
               >
                 <div className="flex-shrink-0 mt-0.5">

@@ -69,7 +69,7 @@ export function PerformanceReviews() {
     fetch();
   }, []);
 
-  if (loading) return <div className="space-y-4">{[1,2,3].map(i => <Skeleton key={i} className="h-32 w-full" />)}</div>;
+  if (loading) return <div className="space-y-4">{[1,2,3].map(i => <Skeleton key={`perf-skeleton-${i}`} className="h-32 w-full" />)}</div>;
   if (!member) return <Card><CardContent className="p-8 text-center text-muted-foreground"><User className="h-12 w-12 mx-auto mb-3 opacity-50" /><p>Nenhum tripulante ativo encontrado</p></CardContent></Card>;
 
   const getRelationshipBadge = (r: string) => {
@@ -96,8 +96,8 @@ export function PerformanceReviews() {
             })}
           </div>
           <Card><CardHeader><CardTitle className="text-base">Feedback Detalhado</CardTitle></CardHeader><CardContent className="space-y-4">
-            {member.reviews.filter(r => r.feedback).map((review, i) => (
-              <div key={i} className="p-4 border rounded-lg">
+            {member.reviews.filter(r => r.feedback).map((review) => (
+              <div key={`${review.reviewer}-${review.relationship}`} className="p-4 border rounded-lg">
                 <div className="flex items-center justify-between mb-2"><div className="flex items-center gap-2"><User className="h-4 w-4 text-muted-foreground" /><span className="font-medium">{review.reviewer}</span>{getRelationshipBadge(review.relationship)}</div><div className="flex items-center gap-2"><Star className="h-4 w-4 text-warning fill-warning" /><span className="font-bold">{review.score.toFixed(1)}</span></div></div>
                 <p className="text-sm text-muted-foreground">{review.feedback}</p>
                 {review.date && <p className="text-xs text-muted-foreground mt-2 flex items-center gap-1"><Calendar className="h-3 w-3" />{new Date(review.date).toLocaleDateString("pt-BR")}</p>}
@@ -109,8 +109,8 @@ export function PerformanceReviews() {
 
         <TabsContent value="competencies">
           <Card><CardHeader><CardTitle className="text-base">Radar de Competências</CardTitle></CardHeader><CardContent className="space-y-4">
-            {member.competencies.map((comp, i) => (
-              <div key={i} className="flex items-center gap-4"><div className="w-32 text-sm font-medium">{comp.name}</div><div className="flex-1"><Progress value={comp.score * 20} className="h-3" /></div><div className="flex items-center gap-2 w-20"><span className="font-bold">{comp.score.toFixed(1)}</span>{getTrendIcon(comp.trend)}</div></div>
+            {member.competencies.map((comp) => (
+              <div key={comp.name} className="flex items-center gap-4"><div className="w-32 text-sm font-medium">{comp.name}</div><div className="flex-1"><Progress value={comp.score * 20} className="h-3" /></div><div className="flex items-center gap-2 w-20"><span className="font-bold">{comp.score.toFixed(1)}</span>{getTrendIcon(comp.trend)}</div></div>
             ))}
           </CardContent></Card>
         </TabsContent>
