@@ -221,9 +221,9 @@ export default function OCIMFAssessmentPage() {
   const completionRate = (completedQuestions / totalQuestions) * 100;
 
   const getScoreColor = (score: number) => {
-    if (score >= 80) return 'text-green-500';
-    if (score >= 60) return 'text-yellow-500';
-    return 'text-red-500';
+    if (score >= 80) return 'text-success';
+    if (score >= 60) return 'text-warning';
+    return 'text-destructive';
   };
 
   const gaps = sections.flatMap(s =>
@@ -249,7 +249,7 @@ export default function OCIMFAssessmentPage() {
             <div>
               <h1 className="text-3xl font-bold flex items-center gap-2">
                 OCIMF Self-Assessment
-                <Badge className="bg-gradient-to-r from-blue-500 to-cyan-500">
+                <Badge className="bg-gradient-to-r from-primary to-info">
                   OVMSA
                 </Badge>
               </h1>
@@ -296,8 +296,8 @@ export default function OCIMFAssessmentPage() {
                   <p className="text-3xl font-bold">{completionRate.toFixed(0)}%</p>
                   <p className="text-xs text-muted-foreground">Progresso</p>
                 </div>
-                <div className="p-2 rounded-lg bg-blue-500/10">
-                  <BarChart3 className="h-5 w-5 text-blue-500" />
+                <div className="p-2 rounded-lg bg-primary/10">
+                  <BarChart3 className="h-5 w-5 text-primary" />
                 </div>
               </div>
             </CardContent>
@@ -310,8 +310,8 @@ export default function OCIMFAssessmentPage() {
                   <p className="text-3xl font-bold">{gaps.length}</p>
                   <p className="text-xs text-muted-foreground">Gaps Identificados</p>
                 </div>
-                <div className="p-2 rounded-lg bg-amber-500/10">
-                  <AlertTriangle className="h-5 w-5 text-amber-500" />
+                <div className="p-2 rounded-lg bg-warning/10">
+                  <AlertTriangle className="h-5 w-5 text-warning" />
                 </div>
               </div>
             </CardContent>
@@ -324,8 +324,8 @@ export default function OCIMFAssessmentPage() {
                   <p className="text-3xl font-bold">{completedQuestions}/{totalQuestions}</p>
                   <p className="text-xs text-muted-foreground">Questões Respondidas</p>
                 </div>
-                <div className="p-2 rounded-lg bg-green-500/10">
-                  <CheckCircle2 className="h-5 w-5 text-green-500" />
+                <div className="p-2 rounded-lg bg-success/10">
+                  <CheckCircle2 className="h-5 w-5 text-success" />
                 </div>
               </div>
             </CardContent>
@@ -370,9 +370,9 @@ export default function OCIMFAssessmentPage() {
                               variant="outline"
                               className={cn(
                                 "text-xs",
-                                score >= 80 && "bg-green-500/10 text-green-600",
-                                score >= 60 && score < 80 && "bg-yellow-500/10 text-yellow-600",
-                                score < 60 && answered > 0 && "bg-red-500/10 text-red-600"
+                                score >= 80 && "bg-success/10 text-success",
+                                score >= 60 && score < 80 && "bg-warning/10 text-warning",
+                                score < 60 && answered > 0 && "bg-destructive/10 text-destructive"
                               )}
                             >
                               {score.toFixed(0)}%
@@ -411,9 +411,9 @@ export default function OCIMFAssessmentPage() {
                               <div className="flex items-center gap-3 text-left">
                                 <div className={cn(
                                   "h-8 w-8 rounded-full flex items-center justify-center text-sm font-medium",
-                                  question.answer === 'yes' && "bg-green-500/20 text-green-600",
-                                  question.answer === 'partial' && "bg-yellow-500/20 text-yellow-600",
-                                  question.answer === 'no' && "bg-red-500/20 text-red-600",
+                                  question.answer === 'yes' && "bg-success/20 text-success",
+                                  question.answer === 'partial' && "bg-warning/20 text-warning",
+                                  question.answer === 'no' && "bg-destructive/20 text-destructive",
                                   !question.answer && "bg-muted text-muted-foreground"
                                 )}>
                                   {question.answer === 'yes' && <CheckCircle2 className="h-4 w-4" />}
@@ -434,11 +434,11 @@ export default function OCIMFAssessmentPage() {
                               <p className="text-sm">{question.text}</p>
                               
                               {/* Guidance */}
-                              <div className="p-3 bg-blue-500/5 border border-blue-500/20 rounded-lg">
+                              <div className="p-3 bg-info/5 border border-info/20 rounded-lg">
                                 <div className="flex items-start gap-2">
-                                  <Lightbulb className="h-4 w-4 text-blue-500 mt-0.5" />
+                                  <Lightbulb className="h-4 w-4 text-info mt-0.5" />
                                   <div>
-                                    <p className="text-xs font-medium text-blue-600 mb-1">Orientação OCIMF</p>
+                                    <p className="text-xs font-medium text-info mb-1">Orientação OCIMF</p>
                                     <p className="text-xs text-muted-foreground">{question.guidance}</p>
                                   </div>
                                 </div>
@@ -503,7 +503,7 @@ export default function OCIMFAssessmentPage() {
             <Card>
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
-                  <AlertTriangle className="h-5 w-5 text-amber-500" />
+                  <AlertTriangle className="h-5 w-5 text-warning" />
                   Gap Analysis
                 </CardTitle>
                 <CardDescription>
@@ -513,7 +513,7 @@ export default function OCIMFAssessmentPage() {
               <CardContent>
                 {gaps.length === 0 ? (
                   <div className="text-center py-12">
-                    <CheckCircle2 className="h-12 w-12 mx-auto text-green-500 mb-4" />
+                    <CheckCircle2 className="h-12 w-12 mx-auto text-success mb-4" />
                     <h3 className="text-lg font-medium">Nenhum gap identificado</h3>
                     <p className="text-muted-foreground">Continue respondendo as questões para análise de gaps</p>
                   </div>
@@ -526,7 +526,7 @@ export default function OCIMFAssessmentPage() {
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ delay: idx * 0.05 }}
                       >
-                        <Card className="border-amber-500/20">
+                        <Card className="border-warning/20">
                           <CardContent className="pt-4">
                             <div className="flex items-start justify-between mb-2">
                               <div>
@@ -535,15 +535,15 @@ export default function OCIMFAssessmentPage() {
                               </div>
                               <Badge
                                 className={cn(
-                                  gap.question.answer === 'no' ? 'bg-red-500' : 'bg-yellow-500'
+                                  gap.question.answer === 'no' ? 'bg-destructive' : 'bg-warning'
                                 )}
                               >
                                 {gap.question.answer === 'no' ? 'Não Conforme' : 'Parcial'}
                               </Badge>
                             </div>
                             <p className="text-sm text-muted-foreground mb-3">{gap.question.text}</p>
-                            <div className="p-3 bg-amber-500/10 rounded-lg">
-                              <p className="text-xs font-medium text-amber-600 mb-1">Ação Requerida:</p>
+                            <div className="p-3 bg-warning/10 rounded-lg">
+                              <p className="text-xs font-medium text-warning mb-1">Ação Requerida:</p>
                               <p className="text-xs text-muted-foreground">
                                 Desenvolver e implementar procedimentos para atender ao requisito. 
                                 Prazo sugerido: 30 dias.
@@ -598,7 +598,7 @@ export default function OCIMFAssessmentPage() {
                     </div>
                   ) : (
                     <div className="text-center py-12">
-                      <CheckCircle2 className="h-12 w-12 mx-auto text-green-500 mb-4" />
+                      <CheckCircle2 className="h-12 w-12 mx-auto text-success mb-4" />
                       <p className="text-muted-foreground">
                         Complete a avaliação para receber recomendações personalizadas
                       </p>
