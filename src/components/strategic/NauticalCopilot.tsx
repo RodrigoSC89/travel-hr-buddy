@@ -419,7 +419,7 @@ const NauticalCopilot: React.FC = () => {
                 const Icon = action.icon;
                 return (
                   <Button
-                    key={index}
+                    key={action.label}
                     variant="outline"
                     onClick={() => handleQuickAction(action.action)}
                     className="h-auto flex-col gap-2 p-4 hover:scale-105 transition-transform"

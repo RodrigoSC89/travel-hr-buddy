@@ -333,7 +333,7 @@ const MaritimeIdentitySystem: React.FC = () => {
                 <Eye className="w-4 h-4 mr-2" />
                 {previewMode ? "Preview Ativo" : "Ativar Preview"}
               </Button>
-              <Button onClick={saveConfiguration} className="bg-green-600 hover:bg-green-700">
+              <Button onClick={saveConfiguration} className="bg-primary hover:bg-primary/90">
                 <Shield className="w-4 h-4 mr-2" />
                 Salvar
               </Button>
@@ -579,8 +579,8 @@ const MaritimeIdentitySystem: React.FC = () => {
                               <h4 className="font-medium">{option.name}</h4>
                               <p className="text-sm text-muted-foreground mb-3">{option.description}</p>
                               <div className="flex gap-2 flex-wrap">
-                                {option.examples.map((example, index) => (
-                                  <Badge key={index} variant="outline" className="text-xs">
+                                {option.examples.map((example) => (
+                                  <Badge key={example} variant="outline" className="text-xs">
                                     {example}
                                   </Badge>
                                 ))}
@@ -617,7 +617,7 @@ const MaritimeIdentitySystem: React.FC = () => {
                 Importar Config
               </Button>
               
-              <Button onClick={saveConfiguration} className="w-full bg-green-600 hover:bg-green-700">
+              <Button onClick={saveConfiguration} className="w-full bg-primary hover:bg-primary/90">
                 <Shield className="w-4 h-4 mr-2" />
                 Aplicar Mudanças
               </Button>

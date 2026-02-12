@@ -238,8 +238,8 @@ export const IntegrationMarketplace: React.FC = () => {
                     <div className="space-y-2">
                       <p className="text-sm font-medium">Recursos:</p>
                       <div className="flex flex-wrap gap-1">
-                        {integration.features.slice(0, 3).map((feature, index) => (
-                          <Badge key={index} variant="outline" className="text-xs">
+                        {integration.features.slice(0, 3).map((feature) => (
+                          <Badge key={feature} variant="outline" className="text-xs">
                             {feature}
                           </Badge>
                         ))}

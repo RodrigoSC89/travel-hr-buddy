@@ -599,8 +599,8 @@ export const ClientCustomization = () => {
                     description: "Configuração para turismo e embarcações de recreio",
                     modules: ["Dashboard", "Reservas", "Clientes", "Rotas"]
                   }
-                ].map((template, index) => (
-                  <div key={index} className="border rounded-lg p-4 hover-lift">
+                ].map((template) => (
+                  <div key={template.name} className="border rounded-lg p-4 hover-lift">
                     <h4 className="font-semibold mb-2">{template.name}</h4>
                     <p className="text-sm text-muted-foreground mb-3">
                       {template.description}

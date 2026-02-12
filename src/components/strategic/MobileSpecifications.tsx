@@ -298,8 +298,8 @@ export const MobileSpecifications = () => {
               <div key={spec.category} className="border rounded-lg p-4">
                 <h4 className="font-semibold mb-3">{spec.category}</h4>
                 <ul className="space-y-2">
-                  {spec.requirements.map((req, index) => (
-                    <li key={index} className="text-sm text-muted-foreground flex items-start gap-2">
+                  {spec.requirements.map((req) => (
+                    <li key={req} className="text-sm text-muted-foreground flex items-start gap-2">
                       <div className="w-1.5 h-1.5 bg-primary rounded-full mt-2 flex-shrink-0" />
                       {req}
                     </li>
