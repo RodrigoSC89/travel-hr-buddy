@@ -295,9 +295,9 @@ export function MLCComplianceReport({ crewId }: MLCComplianceReportProps) {
                     <div
                       key={rule.id}
                       className={`p-3 rounded-lg border ${
-                        status === 'compliant' ? 'bg-green-50 dark:bg-green-950 border-green-200' :
-                        status === 'non-compliant' ? 'bg-red-50 dark:bg-red-950 border-red-200' :
-                        'bg-yellow-50 dark:bg-yellow-950 border-yellow-200'
+                        status === 'compliant' ? 'bg-success/5 border-success/20' :
+                        status === 'non-compliant' ? 'bg-destructive/5 border-destructive/20' :
+                        'bg-warning/5 border-warning/20'
                       }`}
                     >
                       <div className="flex items-center gap-2 mb-1">
