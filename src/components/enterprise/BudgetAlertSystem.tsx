@@ -96,9 +96,9 @@
          label: "Atenção"
        },
        critical: {
-         bg: "bg-orange-500/10 border-orange-500/30",
-         icon: "text-orange-500",
-         badge: "bg-orange-500/20 text-orange-500",
+         bg: "bg-destructive/10 border-destructive/30",
+         icon: "text-destructive",
+         badge: "bg-destructive/20 text-destructive",
          label: "Crítico"
        },
        exceeded: {
@@ -217,7 +217,7 @@
                            className={cn(
                              "h-2",
                              percentage >= 100 && "[&>div]:bg-destructive",
-                             percentage >= 95 && percentage < 100 && "[&>div]:bg-orange-500",
+                             percentage >= 95 && percentage < 100 && "[&>div]:bg-warning",
                              percentage >= 85 && percentage < 95 && "[&>div]:bg-warning"
                            )}
                          />

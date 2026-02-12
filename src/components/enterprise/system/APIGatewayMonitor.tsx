@@ -425,12 +425,12 @@ export function APIGatewayMonitor() {
                 </CardTitle>
               </CardHeader>
               <CardContent className="space-y-4">
-                <div className="p-4 rounded-lg bg-green-50 dark:bg-green-950/20 border border-green-200 dark:border-green-800">
+                <div className="p-4 rounded-lg bg-success/5 border border-success/20">
                   <div className="flex items-center gap-2 mb-2">
-                    <CheckCircle2 className="h-5 w-5 text-green-600" />
-                    <span className="font-medium text-green-800 dark:text-green-400">SSL/TLS Ativo</span>
+                    <CheckCircle2 className="h-5 w-5 text-success" />
+                    <span className="font-medium text-success">SSL/TLS Ativo</span>
                   </div>
-                  <p className="text-sm text-green-700 dark:text-green-500">
+                  <p className="text-sm text-muted-foreground">
                     Todas as conexões são criptografadas com TLS 1.3
                   </p>
                 </div>
@@ -457,11 +457,11 @@ export function APIGatewayMonitor() {
                   <h4 className="font-medium mb-3">Últimos Eventos de Segurança</h4>
                   <div className="space-y-2 text-sm">
                     <div className="flex items-center gap-2">
-                      <AlertTriangle className="h-4 w-4 text-yellow-600" />
+                      <AlertTriangle className="h-4 w-4 text-warning" />
                       <span>3 tentativas de acesso inválidas (hoje)</span>
                     </div>
                     <div className="flex items-center gap-2">
-                      <CheckCircle2 className="h-4 w-4 text-green-600" />
+                      <CheckCircle2 className="h-4 w-4 text-success" />
                       <span>Nenhum ataque detectado</span>
                     </div>
                   </div>

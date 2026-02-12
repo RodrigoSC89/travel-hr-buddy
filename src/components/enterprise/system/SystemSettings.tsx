@@ -353,7 +353,7 @@ export function SystemSettings() {
                   )}
                 </div>
               ))}
-              <Button variant="outline" className="w-full text-red-600 hover:text-red-700">
+              <Button variant="outline" className="w-full text-destructive hover:text-destructive">
                 <LogOut className="h-4 w-4 mr-2" />
                 Encerrar Todas as Outras Sessões
               </Button>
@@ -383,9 +383,9 @@ export function SystemSettings() {
             </CardContent>
           </Card>
 
-          <Card className="border-red-200 dark:border-red-800">
+          <Card className="border-destructive/20">
             <CardHeader>
-              <CardTitle className="flex items-center gap-2 text-red-600">
+              <CardTitle className="flex items-center gap-2 text-destructive">
                 <Trash2 className="h-5 w-5" />
                 Zona de Perigo
               </CardTitle>

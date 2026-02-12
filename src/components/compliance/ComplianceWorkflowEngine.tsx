@@ -587,7 +587,7 @@ export function ComplianceWorkflowEngine() {
                 <p className="text-sm text-muted-foreground">Agendadas</p>
                 <p className="text-2xl font-bold">{stats.scheduled}</p>
               </div>
-              <Calendar className="h-8 w-8 text-blue-500" />
+              <Calendar className="h-8 w-8 text-info" />
             </div>
           </CardContent>
         </Card>

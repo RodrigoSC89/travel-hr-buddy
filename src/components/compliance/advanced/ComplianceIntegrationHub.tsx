@@ -283,10 +283,10 @@ export function ComplianceIntegrationHub() {
 
       {/* Modules Overview */}
       <div className="grid grid-cols-2 gap-6">
-        <Card className="border-blue-500/20">
+        <Card className="border-info/20">
           <CardHeader>
             <CardTitle className="text-lg flex items-center gap-2">
-              <Ship className="h-5 w-5 text-blue-500" />
+              <Ship className="h-5 w-5 text-info" />
               PEOTRAM
             </CardTitle>
             <CardDescription>195 requisitos | 13 elementos</CardDescription>
@@ -299,16 +299,16 @@ export function ComplianceIntegrationHub() {
               </div>
               <Progress value={87} className="h-2" />
               <div className="grid grid-cols-3 gap-2 mt-4">
-                <div className="text-center p-2 rounded-lg bg-green-500/10">
-                  <p className="text-lg font-bold text-green-600">156</p>
+                <div className="text-center p-2 rounded-lg bg-success/10">
+                  <p className="text-lg font-bold text-success">156</p>
                   <p className="text-xs text-muted-foreground">Conformes</p>
                 </div>
-                <div className="text-center p-2 rounded-lg bg-orange-500/10">
-                  <p className="text-lg font-bold text-orange-600">27</p>
+                <div className="text-center p-2 rounded-lg bg-warning/10">
+                  <p className="text-lg font-bold text-warning">27</p>
                   <p className="text-xs text-muted-foreground">Pendentes</p>
                 </div>
-                <div className="text-center p-2 rounded-lg bg-red-500/10">
-                  <p className="text-lg font-bold text-red-600">12</p>
+                <div className="text-center p-2 rounded-lg bg-destructive/10">
+                  <p className="text-lg font-bold text-destructive">12</p>
                   <p className="text-xs text-muted-foreground">NCs</p>
                 </div>
               </div>

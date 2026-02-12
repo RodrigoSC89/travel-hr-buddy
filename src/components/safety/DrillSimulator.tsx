@@ -546,9 +546,9 @@ export function DrillSimulator() {
                   <div key={idx} className="p-3 border rounded-lg flex items-center justify-between">
                     <div className="flex items-center gap-3">
                       <Badge className={
-                        rec.priority === "high" ? "bg-red-500/20 text-red-500" :
-                        rec.priority === "medium" ? "bg-yellow-500/20 text-yellow-500" :
-                        "bg-green-500/20 text-green-500"
+                        rec.priority === "high" ? "bg-destructive/20 text-destructive" :
+                        rec.priority === "medium" ? "bg-warning/20 text-warning" :
+                        "bg-success/20 text-success"
                       }>
                         {rec.priority}
                       </Badge>

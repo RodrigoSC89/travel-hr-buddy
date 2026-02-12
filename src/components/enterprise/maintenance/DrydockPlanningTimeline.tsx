@@ -423,7 +423,7 @@ export function DrydockPlanningTimeline() {
               <Progress value={(selectedProject.budgetActual / selectedProject.budgetEstimated) * 100} />
               <div className="flex items-center justify-between">
                 <span className="text-sm text-muted-foreground">Disponível</span>
-                <span className="font-bold text-green-600">
+                <span className="font-bold text-success">
                   ${((selectedProject.budgetEstimated - selectedProject.budgetActual) / 1000000).toFixed(2)}M
                 </span>
               </div>

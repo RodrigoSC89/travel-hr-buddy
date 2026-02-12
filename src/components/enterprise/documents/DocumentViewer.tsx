@@ -218,7 +218,7 @@ export function DocumentViewer() {
                   <div className="flex items-center gap-4">
                     <div className="p-2 rounded-lg bg-muted">{getFileIcon(doc.type)}</div>
                     <div>
-                      <div className="flex items-center gap-2"><h3 className="font-medium">{doc.title}</h3>{doc.isFavorite && <Star className="h-4 w-4 text-yellow-500 fill-yellow-500" />}{getStatusBadge(doc.status)}</div>
+                      <div className="flex items-center gap-2"><h3 className="font-medium">{doc.title}</h3>{doc.isFavorite && <Star className="h-4 w-4 text-warning fill-warning" />}{getStatusBadge(doc.status)}</div>
                       <div className="flex items-center gap-4 text-sm text-muted-foreground mt-1">
                         <span className="flex items-center gap-1"><Folder className="h-3 w-3" />{doc.category}</span>
                         <span className="flex items-center gap-1"><User className="h-3 w-3" />{doc.uploadedBy}</span>
