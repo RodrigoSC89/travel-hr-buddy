@@ -66,7 +66,7 @@ export const AIEvolutionDashboard: React.FC = () => {
   const accuracyTrend = latestSnapshot && previousSnapshot ? latestSnapshot.metrics.accuracy_rate - previousSnapshot.metrics.accuracy_rate : 0;
 
   if (loading) {
-    return (<div className="flex items-center justify-center h-64"><div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500" /></div>);
+    return (<div className="flex items-center justify-center h-64"><div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary" /></div>);
   }
 
   return (

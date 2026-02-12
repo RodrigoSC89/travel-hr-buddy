@@ -642,7 +642,7 @@ Como posso ajudá-lo especificamente hoje?`,
                   onClick={toggleListening}
                 >
                   {isListening ? 
-                    <MicOff className="w-4 h-4 text-red-500" /> : 
+                    <MicOff className="w-4 h-4 text-destructive" /> : 
                     <Mic className="w-4 h-4" />
                   }
                 </Button>
