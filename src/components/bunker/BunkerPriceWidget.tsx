@@ -35,7 +35,7 @@ interface BunkerPriceWidgetProps {
 
 const TrendIcon = ({ trend, className = "h-4 w-4" }: { trend?: "up" | "down" | "stable"; className?: string }) => {
   if (trend === "up") return <TrendingUp className={`${className} text-destructive`} />;
-  if (trend === "down") return <TrendingDown className={`${className} text-green-500`} />;
+  if (trend === "down") return <TrendingDown className={`${className} text-success`} />;
   return <Minus className={`${className} text-muted-foreground`} />;
 };
 
@@ -137,15 +137,15 @@ export function BunkerPriceWidget({ compact = false, showForecast = true }: Bunk
     return (
       <Card 
         className={`cursor-pointer transition-all hover:shadow-md ${
-          hasOpportunity ? "border-green-500/50 bg-green-500/5" : ""
+          hasOpportunity ? "border-success/50 bg-success/5" : ""
         }`}
         onClick={() => navigate("/fuel-manager")}
       >
         <CardContent className="pt-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
-              <div className={`p-2 rounded-lg ${hasOpportunity ? "bg-green-500/20" : "bg-primary/10"}`}>
-                <Fuel className={`h-4 w-4 ${hasOpportunity ? "text-green-600" : "text-primary"}`} />
+              <div className={`p-2 rounded-lg ${hasOpportunity ? "bg-success/20" : "bg-primary/10"}`}>
+                <Fuel className={`h-4 w-4 ${hasOpportunity ? "text-success" : "text-primary"}`} />
               </div>
               <div>
                 <p className="text-sm font-medium">VLSFO</p>
@@ -155,7 +155,7 @@ export function BunkerPriceWidget({ compact = false, showForecast = true }: Bunk
             <div className="text-right">
               <p className="text-lg font-bold">${globalAverage.vlsfo}/MT</p>
               {hasOpportunity && (
-                <Badge variant="default" className="bg-green-500 text-xs">
+                <Badge variant="default" className="bg-success text-xs">
                   <Sparkles className="h-3 w-3 mr-1" />
                   Economia
                 </Badge>
@@ -168,7 +168,7 @@ export function BunkerPriceWidget({ compact = false, showForecast = true }: Bunk
   }
 
   return (
-    <Card className={hasOpportunity ? "border-green-500/30" : ""}>
+    <Card className={hasOpportunity ? "border-success/30" : ""}>
       <CardHeader className="pb-2">
         <div className="flex items-center justify-between">
           <CardTitle className="text-base flex items-center gap-2">
@@ -180,7 +180,7 @@ export function BunkerPriceWidget({ compact = false, showForecast = true }: Bunk
             <Button
               variant="ghost"
               size="icon"
-              className={`h-7 w-7 ${notificationsEnabled ? "text-green-600" : "text-muted-foreground"}`}
+              className={`h-7 w-7 ${notificationsEnabled ? "text-success" : "text-muted-foreground"}`}
               onClick={handleEnableNotifications}
               title={notificationsEnabled ? "Alertas ativos (>$10k)" : "Ativar alertas de economia"}
             >
@@ -225,14 +225,14 @@ export function BunkerPriceWidget({ compact = false, showForecast = true }: Bunk
 
         {/* Cheapest Port Alert */}
         {cheapestPort && savingsPerTon > 5 && (
-          <div className="p-2 bg-green-500/10 rounded-lg border border-green-500/20">
+          <div className="p-2 bg-success/10 rounded-lg border border-success/20">
             <div className="flex items-start gap-2">
-              <CheckCircle2 className="h-4 w-4 text-green-600 mt-0.5" />
+              <CheckCircle2 className="h-4 w-4 text-success mt-0.5" />
               <div className="flex-1 min-w-0">
-                <p className="text-xs font-medium text-green-700 dark:text-green-400">
+                <p className="text-xs font-medium text-success">
                   Melhor Preço: {cheapestPort.port}
                 </p>
-                <p className="text-[11px] text-green-600">
+                <p className="text-[11px] text-success/80">
                   VLSFO ${cheapestPort.vlsfo}/MT • Economia de ${savingsPerTon}/MT
                 </p>
               </div>
@@ -249,16 +249,16 @@ export function BunkerPriceWidget({ compact = false, showForecast = true }: Bunk
               exit={{ opacity: 0, height: 0 }}
               className={`p-2 rounded-lg border ${
                 bestOpportunity.trend === "down"
-                  ? "bg-blue-500/10 border-blue-500/20"
+                  ? "bg-info/10 border-info/20"
                   : bestOpportunity.trend === "up"
-                    ? "bg-amber-500/10 border-amber-500/20"
+                    ? "bg-warning/10 border-warning/20"
                     : "bg-muted/50 border-muted"
               }`}
             >
               <div className="flex items-start gap-2">
                 <Sparkles className={`h-4 w-4 mt-0.5 ${
-                  bestOpportunity.trend === "down" ? "text-blue-600" : 
-                  bestOpportunity.trend === "up" ? "text-amber-600" : "text-muted-foreground"
+                  bestOpportunity.trend === "down" ? "text-info" : 
+                  bestOpportunity.trend === "up" ? "text-warning" : "text-muted-foreground"
                 }`} />
                 <div className="flex-1 min-w-0">
                   <p className="text-xs font-medium flex items-center gap-1">

@@ -30,7 +30,7 @@ import { ptBR } from "date-fns/locale";
 
 const TrendIcon = ({ trend }: { trend: "up" | "down" | "stable" }) => {
   if (trend === "up") return <TrendingUp className="h-4 w-4 text-destructive" />;
-  if (trend === "down") return <TrendingDown className="h-4 w-4 text-green-500" />;
+  if (trend === "down") return <TrendingDown className="h-4 w-4 text-success" />;
   return <Minus className="h-4 w-4 text-muted-foreground" />;
 };
 
@@ -84,7 +84,7 @@ const ForecastCard = ({ forecast, isSelected, onSelect }: {
 
         <div className={`text-sm p-2 rounded flex items-center gap-2 ${
           forecast.trend === "down" 
-            ? "bg-green-500/10 text-green-700 dark:text-green-400"
+            ? "bg-success/10 text-success"
             : forecast.trend === "up"
               ? "bg-destructive/10 text-destructive"
               : "bg-muted text-muted-foreground"
@@ -223,13 +223,13 @@ export function BunkerForecastPanel() {
         
         {bestOpportunity && (
           <CardContent className="pt-0">
-            <div className="flex items-start gap-3 p-3 bg-green-500/10 rounded-lg border border-green-500/20">
-              <CheckCircle2 className="h-5 w-5 text-green-600 mt-0.5" />
+            <div className="flex items-start gap-3 p-3 bg-success/10 rounded-lg border border-success/20">
+              <CheckCircle2 className="h-5 w-5 text-success mt-0.5" />
               <div className="flex-1">
-                <p className="font-medium text-green-700 dark:text-green-400">
+                <p className="font-medium text-success">
                   Melhor Oportunidade: {bestOpportunity.port}
                 </p>
-                <p className="text-sm text-green-600 dark:text-green-500">
+                <p className="text-sm text-success/80">
                   VLSFO a ${bestOpportunity.currentPrices.vlsfo}/MT • {bestOpportunity.recommendation}
                 </p>
               </div>
@@ -299,7 +299,7 @@ export function BunkerForecastPanel() {
               
               <div className={`p-4 rounded-lg ${
                 selectedForecast.trend === "down" 
-                  ? "bg-green-500/10 border border-green-500/20" 
+                  ? "bg-success/10 border border-success/20" 
                   : selectedForecast.trend === "up"
                     ? "bg-amber-500/10 border border-amber-500/20"
                     : "bg-muted/50"

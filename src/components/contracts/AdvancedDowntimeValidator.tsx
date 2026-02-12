@@ -103,7 +103,7 @@ export function AdvancedDowntimeValidator({ downtimeId, downtimeEvent, onValidat
     switch (level) {
       case 'low': return 'bg-success text-success-foreground';
       case 'medium': return 'bg-warning text-warning-foreground';
-      case 'high': return 'bg-orange-500 text-white';
+      case 'high': return 'bg-warning text-warning-foreground';
       case 'critical': return 'bg-destructive text-destructive-foreground';
       default: return 'bg-muted text-muted-foreground';
     }

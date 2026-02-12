@@ -52,15 +52,16 @@ export function BunkerPriceChart({
 
   const formatTooltipValue = (value: number) => `$${value.toFixed(0)}/MT`;
 
-  const CustomTooltip = ({ active, payload, label }: any) => {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Recharts tooltip props are untyped
+  const CustomTooltip = ({ active, payload, label }: { active?: boolean; payload?: Array<{ dataKey: string; value: number; color: string }>; label?: string }) => {
     if (!active || !payload?.length) return null;
 
     return (
       <div className="bg-background border rounded-lg shadow-lg p-3 min-w-[180px]">
         <p className="text-sm font-medium text-muted-foreground mb-2">
-          {format(new Date(label), "dd MMM yyyy", { locale: ptBR })}
+          {format(new Date(label ?? ''), "dd MMM yyyy", { locale: ptBR })}
         </p>
-        {payload.map((entry: any) => (
+        {payload.map((entry) => (
           <div key={entry.dataKey} className="flex items-center justify-between gap-4">
             <span className="flex items-center gap-2">
               <div 
@@ -123,7 +124,7 @@ export function BunkerPriceChart({
               </Select>
             )}
 
-            <Select value={selectedFuel} onValueChange={(v) => setSelectedFuel(v as any)}>
+            <Select value={selectedFuel} onValueChange={(v) => setSelectedFuel(v as "vlsfo" | "mgo" | "hfo")}>
               <SelectTrigger className="w-[120px]">
                 <SelectValue placeholder="Combustível" />
               </SelectTrigger>
@@ -151,9 +152,9 @@ export function BunkerPriceChart({
             <p className="text-xs text-muted-foreground">Variação 30d</p>
             <p className={`text-lg font-bold flex items-center gap-1 ${
               (currentStats?.change30d ?? 0) > 0 
-                ? "text-destructive" 
+                 ? "text-destructive" 
                 : (currentStats?.change30d ?? 0) < 0 
-                  ? "text-green-500" 
+                  ? "text-success" 
                   : ""
             }`}>
               <TrendIcon className="h-4 w-4" />
@@ -164,7 +165,7 @@ export function BunkerPriceChart({
 
           <div className="bg-muted/50 rounded-lg p-3">
             <p className="text-xs text-muted-foreground">Mínimo 30d</p>
-            <p className="text-lg font-bold text-green-500">
+            <p className="text-lg font-bold text-success">
               ${currentStats?.min ?? 0}
             </p>
           </div>

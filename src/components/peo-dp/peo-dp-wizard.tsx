@@ -83,13 +83,13 @@ const WIZARD_STEPS: WizardStep[] = [
 ];
 
 interface PeoDpWizardProps {
-  onComplete: (data: any) => void;
+  onComplete: (data: Record<string, string>) => void;
   onCancel: () => void;
 }
 
 export const PeoDpWizard: React.FC<PeoDpWizardProps> = ({ onComplete, onCancel }) => {
   const [currentStep, setCurrentStep] = useState(0);
-  const [formData, setFormData] = useState<Record<string, any>>({});
+  const [formData, setFormData] = useState<Record<string, string>>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const currentWizardStep = WIZARD_STEPS[currentStep];
@@ -120,7 +120,7 @@ export const PeoDpWizard: React.FC<PeoDpWizardProps> = ({ onComplete, onCancel }
     }
   };
 
-  const updateFormData = (field: string, value: unknown) => {
+  const updateFormData = (field: string, value: string) => {
     setFormData({ ...formData, [field]: value });
   };
 
@@ -405,7 +405,7 @@ export const PeoDpWizard: React.FC<PeoDpWizardProps> = ({ onComplete, onCancel }
   return (
     <div className="space-y-6">
       {/* Header */}
-      <Card className="border-2 border-blue-200 bg-gradient-to-r from-blue-50 to-indigo-50">
+      <Card className="border-2 border-primary/20 bg-gradient-to-r from-primary/5 to-accent/5">
         <CardHeader>
           <CardTitle className="text-2xl">Assistente de Criação PEO-DP</CardTitle>
           <CardDescription>
