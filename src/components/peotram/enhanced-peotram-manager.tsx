@@ -110,7 +110,7 @@ interface PeotramTemplate {
   id: string;
   year: number;
   version: string;
-  template_data: any;
+  template_data: { elements: { number: string; name: string; requirements: string[] }[] };
   is_active: boolean;
   checklist_type: "vessel" | "shore";
   created_at: string;
@@ -236,20 +236,21 @@ export const EnhancedPeotramManager: React.FC = () => {
     }
   ];
 
-  const handleSaveAudit = async (auditData: any) => {
-    const { error } = await supabase.from('peotram_audits').insert(auditData);
+  const handleSaveAudit = async (auditData: Record<string, unknown>) => {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Supabase insert expects dynamic audit row shape
+    const { error } = await supabase.from('peotram_audits').insert(auditData as any);
     if (error) { toast.error('Erro ao salvar auditoria'); return; }
     await loadData();
   };
 
-  const handleCompleteAudit = async (auditData: any) => {
+  const handleCompleteAudit = async (auditData: Record<string, unknown>) => {
     setIsNewAuditOpen(false);
     setSelectedAudit(null);
     // Implementar finalização na API
     await loadData();
   };
 
-  const handleUpdateNonConformity = async (id: string, updates: any) => {
+  const handleUpdateNonConformity = async (id: string, updates: Partial<NonConformity>) => {
     // Implementar atualização na API
     await loadData();
   };

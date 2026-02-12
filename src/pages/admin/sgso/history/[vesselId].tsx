@@ -42,6 +42,7 @@ const SGSOHistoryPage: React.FC = () => {
 
       if (dbError) throw dbError;
 
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Supabase action_items row mapped to SGSOActionPlan
       const mapped: SGSOActionPlan[] = (data || []).map((item: any) => ({
         id: item.id,
         incident_id: item.source_reference_id || item.id,
@@ -137,17 +138,17 @@ const SGSOHistoryPage: React.FC = () => {
       </div>
 
       {/* Information Card */}
-      <Card className="border-blue-200 bg-blue-50/50 dark:border-blue-900 dark:bg-blue-950/20">
+      <Card className="border-info/30 bg-info/5 dark:border-info/20 dark:bg-info/10">
         <CardHeader>
-          <CardTitle className="flex items-center gap-2 text-blue-900 dark:text-blue-100">
+          <CardTitle className="flex items-center gap-2 text-info-foreground">
             <Info className="h-5 w-5" />
             Rastreabilidade SGSO
           </CardTitle>
-          <CardDescription className="text-blue-800 dark:text-blue-200">
+          <CardDescription className="text-info-foreground/80">
             Sistema de rastreamento completo de planos de ação para compliance QSMS e auditorias externas
           </CardDescription>
         </CardHeader>
-        <CardContent className="space-y-2 text-sm text-blue-900 dark:text-blue-100">
+        <CardContent className="space-y-2 text-sm text-info-foreground">
           <div className="flex items-start gap-2">
             <Shield className="h-4 w-4 mt-0.5 flex-shrink-0" />
             <p>
@@ -187,7 +188,7 @@ const SGSOHistoryPage: React.FC = () => {
           <CardContent>
             <div className="flex items-center gap-2">
               <span className="text-3xl font-bold">{inProgressCount}</span>
-              <Badge className="ml-auto bg-yellow-500 hover:bg-yellow-600">Ativo</Badge>
+              <Badge className="ml-auto bg-warning hover:bg-warning/90 text-warning-foreground">Ativo</Badge>
             </div>
           </CardContent>
         </Card>
@@ -200,7 +201,7 @@ const SGSOHistoryPage: React.FC = () => {
           <CardContent>
             <div className="flex items-center gap-2">
               <span className="text-3xl font-bold">{resolvedCount}</span>
-              <Badge className="ml-auto bg-green-600 hover:bg-green-700">Concluído</Badge>
+              <Badge className="ml-auto bg-success hover:bg-success/90 text-success-foreground">Concluído</Badge>
             </div>
           </CardContent>
         </Card>

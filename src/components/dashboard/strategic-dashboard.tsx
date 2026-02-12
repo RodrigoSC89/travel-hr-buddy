@@ -235,7 +235,7 @@ const StrategicDashboard: React.FC = () => {
   };
 
   // Export dashboard data
-  const handleExport = async (format: string, options?: any) => {
+  const handleExport = async (format: string, options?: Record<string, unknown>) => {
     setIsExporting(true);
     
     try {
