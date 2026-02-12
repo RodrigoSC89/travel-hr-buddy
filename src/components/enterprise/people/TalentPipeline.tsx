@@ -39,19 +39,19 @@ export function TalentPipeline() {
         .order("created_at", { ascending: false })
         .limit(20);
 
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any -- ai_crew_matches join with vessels
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any -- ai_crew_matches join with vessels needs flexible access
       const mapped: Candidate[] = (data || []).map((m: any) => ({
-        id: m.id,
-        name: m.candidate_id || "Candidato",
-        rank: m.position_id || "N/A",
+        id: String(m.id),
+        name: String(m.candidate_id || "Candidato"),
+        rank: String(m.position_id || "N/A"),
         nationality: "Brasil",
         experience: 0,
         certifications: [],
         availability: "A definir",
-        matchScore: m.match_score || 0,
+        matchScore: Number(m.match_score) || 0,
         status: (m.status === "accepted" ? "hired" : m.status === "pending" ? "new" : m.status || "new") as Candidate["status"],
-        appliedFor: m.vessels?.name ? `Vaga - ${m.vessels.name}` : m.position_id || "N/A",
-        appliedDate: m.created_at?.split("T")[0] || "",
+        appliedFor: m.vessels?.name ? `Vaga - ${m.vessels.name}` : String(m.position_id || "N/A"),
+        appliedDate: String(m.created_at || "").split("T")[0] || "",
       }));
       setCandidates(mapped);
       setLoading(false);

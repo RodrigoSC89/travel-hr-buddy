@@ -124,20 +124,20 @@ export function DrydockPlanningTimeline() {
           .limit(10);
 
         if (data && data.length > 0) {
-          // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Supabase row mapping
-          const mapped = data.map((t: any) => ({
-            id: t.id,
-            vessel: t.title || "Embarcação",
-            vesselId: t.vessel_id || "v1",
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any -- maintenance_tasks row mapping with estimated_cost not in generated types
+          const mapped: DrydockProject[] = (data as any[]).map((t) => ({
+            id: String(t.id),
+            vessel: String(t.title || "Embarcação"),
+            vesselId: String(t.vessel_id || "v1"),
             classSociety: "DNV" as const,
             type: "special_survey" as const,
             status: (t.status === "completed" ? "completed" : t.status === "in_progress" ? "in_progress" : "planning") as DrydockProject["status"],
-            shipyard: t.description || "TBD",
+            shipyard: String(t.description || "TBD"),
             startDate: new Date(t.scheduled_date || Date.now()),
             endDate: new Date(t.due_date || Date.now()),
-            budgetEstimated: t.estimated_cost || 0,
+            budgetEstimated: Number(t.estimated_cost) || 0,
             budgetActual: 0,
-            completionPercent: t.progress_percent || 0,
+            completionPercent: Number(t.progress_percent) || 0,
             workItems: []
           }));
           setProjects(mapped);

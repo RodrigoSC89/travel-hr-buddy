@@ -78,8 +78,7 @@ const EnhancedNotifications: React.FC<EnhancedNotificationsProps> = ({ isOpen, o
           .limit(20);
 
         if (data && data.length > 0) {
-          // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Supabase intelligent_notifications schema mapping
-          const mapped: Notification[] = data.map((n: any) => ({
+          const mapped: Notification[] = data.map((n: Record<string, unknown>) => ({
             id: String(n.id),
             title: String(n.title || "Notificação"),
             description: String(n.message || n.description || ""),

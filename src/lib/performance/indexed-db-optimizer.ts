@@ -8,8 +8,7 @@ import { logger } from '@/lib/logger';
 
 interface CacheEntry {
   key: string;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- IndexedDB stores arbitrary serializable data
-  value: any;
+  value: unknown;
   timestamp: number;
   accessCount: number;
   size: number;
@@ -52,8 +51,7 @@ interface OptimizedDBSchema extends DBSchema {
       id: string;
       module: string;
       action: 'create' | 'update' | 'delete';
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any -- IndexedDB stores arbitrary serializable data
-      data: any;
+      data: unknown;
       timestamp: number;
       retries: number;
       priority: number;
@@ -118,8 +116,7 @@ class IndexedDBOptimizer {
    */
   async set(
     key: string,
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any -- accepts any serializable value
-    value: any,
+    value: unknown,
     options: {
       module?: string;
       ttlMs?: number;
@@ -152,7 +149,7 @@ class IndexedDBOptimizer {
   /**
    * Get data with access tracking
    */
-  async get<T = any>(key: string): Promise<T | null> {
+  async get<T = unknown>(key: string): Promise<T | null> {
     await this.init();
     if (!this.db) return null;
     
@@ -180,7 +177,7 @@ class IndexedDBOptimizer {
     field: string,
     query: string,
     options: { limit?: number; exact?: boolean } = {}
-  ): Promise<any[]> {
+  ): Promise<unknown[]> {
     await this.init();
     if (!this.db) return [];
     
@@ -195,7 +192,7 @@ class IndexedDBOptimizer {
     const tx = this.db.transaction('search_index', 'readonly');
     const index = tx.store.index('by-module-field');
     
-    const results: any[] = [];
+    const results: unknown[] = [];
     const seenKeys = new Set<string>();
     
     let cursor = await index.openCursor([module, field]);

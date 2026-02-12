@@ -142,10 +142,8 @@ export default function AIMegaHub() {
 
   const agentMetrics = useMemo(() => ({
     totalAgents: agentData.length,
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any -- agent_registry rows are dynamic
-    activeAgents: agentData.filter((a: any) => a.status === 'active').length,
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any -- agent_registry rows are dynamic
-    pausedAgents: agentData.filter((a: any) => a.status === 'paused' || a.status === 'inactive').length,
+    activeAgents: agentData.filter((a) => a.status === 'active').length,
+    pausedAgents: agentData.filter((a) => a.status === 'paused' || a.status === 'inactive').length,
   }), [agentData]);
 
   const handleTabChange = (value: string) => {
