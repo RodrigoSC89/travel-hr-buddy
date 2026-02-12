@@ -308,7 +308,7 @@ export const SGSOKnowledgeBase: React.FC = () => {
                     <AccordionContent>
                       <ul className="space-y-2 ml-4">
                         {data.requirements.map((req, idx) => (
-                          <li key={idx} className="flex items-start gap-2">
+                          <li key={`req-${idx}-${req.slice(0, 15)}`} className="flex items-start gap-2">
                             <div className="w-1.5 h-1.5 rounded-full bg-primary mt-2" />
                             <span className="text-sm">{req}</span>
                           </li>
@@ -339,8 +339,8 @@ export const SGSOKnowledgeBase: React.FC = () => {
                   { name: "Matriz de Riscos SGSO", type: "Excel", size: "156 KB" },
                   { name: "Formulário de Investigação", type: "Word", size: "48 KB" },
                   { name: "Template de Política SGSO", type: "Word", size: "24 KB" },
-                ].map((template, idx) => (
-                  <Card key={idx} className="hover:shadow-sm transition-shadow">
+                ].map((template) => (
+                  <Card key={template.name} className="hover:shadow-sm transition-shadow">
                     <CardContent className="flex items-center justify-between p-4">
                       <div className="flex items-center gap-3">
                         <FileText className="h-8 w-8 text-primary" />

@@ -165,8 +165,8 @@ export function CrewPlanningCopilotDialog({
 
         {/* Crew Stats */}
         <div className="grid grid-cols-3 gap-2 pb-2 border-b">
-          {crewStats.map((stat, idx) => (
-            <Card key={idx} className="p-2">
+          {crewStats.map((stat) => (
+            <Card key={stat.label} className="p-2">
               <CardContent className="p-0 flex items-center gap-2">
                 <stat.icon className={`h-4 w-4 ${stat.color}`} />
                 <div>

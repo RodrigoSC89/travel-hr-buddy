@@ -260,7 +260,7 @@ export const DocumentValidator: React.FC<DocumentValidatorProps> = ({
           </CardHeader>
           <CardContent className="space-y-4">
             {validationResults.map((result, index) => (
-              <div key={index} className="border rounded-lg p-4 space-y-4">
+              <div key={`validation-${index}-${result.isValid}`} className="border rounded-lg p-4 space-y-4">
                 {/* Status Header */}
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-3">

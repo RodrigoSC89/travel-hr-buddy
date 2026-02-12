@@ -57,7 +57,7 @@ function OptimizedListInner<T>({
       <div className={cn("space-y-2", className)}>
         {Array.from({ length: 5 }).map((_, i) => (
           <div 
-            key={i} 
+            key={`opt-list-skeleton-${i}`} 
             className="h-16 bg-muted/50 rounded-lg animate-pulse"
           />
         ))}

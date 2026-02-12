@@ -198,9 +198,9 @@ export function QuickActionsHub({ open, onOpenChange, customActions = [] }: Quic
                           </div>
                           {action.shortcut && (
                             <div className="flex items-center gap-1">
-                              {action.shortcut.split(" ").map((key, i) => (
+                              {action.shortcut.split(" ").map((key) => (
                                 <kbd
-                                  key={i}
+                                  key={key}
                                   className="px-1.5 py-0.5 text-xs font-mono bg-muted rounded border"
                                 >
                                   {key}

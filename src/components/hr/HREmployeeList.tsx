@@ -120,7 +120,7 @@ export function HREmployeeList({ searchQuery = '' }: HREmployeeListProps) {
         </CardHeader>
         <CardContent className="space-y-4">
           {[1, 2, 3, 4, 5].map((i) => (
-            <div key={i} className="flex items-center gap-4">
+            <div key={`emp-skeleton-${i}`} className="flex items-center gap-4">
               <Skeleton className="h-10 w-10 rounded-full" />
               <div className="flex-1 space-y-2">
                 <Skeleton className="h-4 w-1/3" />

@@ -536,7 +536,7 @@ export function CargoFullCRUD() {
           {loading ? (
             <div className="space-y-4">
               {[1, 2, 3].map(i => (
-                <Skeleton key={i} className="h-24 w-full" />
+                <Skeleton key={`cargo-skeleton-${i}`} className="h-24 w-full" />
               ))}
             </div>
           ) : filteredCargos.length === 0 ? (

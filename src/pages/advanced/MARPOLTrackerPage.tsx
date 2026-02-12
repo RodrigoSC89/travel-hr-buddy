@@ -268,7 +268,7 @@ const MARPOLTrackerPage = () => {
             <CardContent>
               <div className="space-y-3">
                 {wasteLogs.map((log, idx) => (
-                  <div key={idx} className="flex items-center justify-between p-3 border rounded-lg">
+                  <div key={`waste-${idx}-${log.type}`} className="flex items-center justify-between p-3 border rounded-lg">
                     <div className="flex items-center gap-4">
                       <div className="p-2 bg-muted rounded-lg">
                         <Trash2 className="h-4 w-4" />

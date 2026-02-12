@@ -318,8 +318,8 @@ export function LogisticsIntelligenceHub() {
 
                     {/* Progress milestones */}
                     <div className="mt-4 flex items-center gap-1">
-                      {shipment.milestones.map((milestone, idx) => (
-                        <React.Fragment key={idx}>
+                      {shipment.milestones.map((milestone) => (
+                        <React.Fragment key={milestone.name}>
                           <div className={cn(
                             "h-2 rounded-full flex-1 transition-all",
                             milestone.status === "completed" && "bg-success",
@@ -356,8 +356,8 @@ export function LogisticsIntelligenceHub() {
                     { route: "Asia → South America", onTime: 94, volume: 125 },
                     { route: "Europe → South America", onTime: 89, volume: 87 },
                     { route: "North America → South America", onTime: 96, volume: 64 },
-                  ].map((route, idx) => (
-                    <div key={idx} className="space-y-1">
+                  ].map((route) => (
+                    <div key={route.route} className="space-y-1">
                       <div className="flex justify-between text-sm">
                         <span>{route.route}</span>
                         <span className="text-muted-foreground">{route.volume} shipments</span>
@@ -386,8 +386,8 @@ export function LogisticsIntelligenceHub() {
                     { type: "Bulk", avgDays: 35, trend: 1 },
                     { type: "Reefer", avgDays: 22, trend: -3 },
                     { type: "Hazmat", avgDays: 42, trend: 5 },
-                  ].map((item, idx) => (
-                    <div key={idx} className="flex items-center justify-between p-3 rounded-lg bg-muted/50">
+                  ].map((item) => (
+                    <div key={item.type} className="flex items-center justify-between p-3 rounded-lg bg-muted/50">
                       <div className="flex items-center gap-3">
                         <Package className="h-5 w-5 text-muted-foreground" />
                         <span className="font-medium">{item.type}</span>
@@ -450,7 +450,7 @@ export function LogisticsIntelligenceHub() {
                       <p className="text-sm font-medium">Ações Sugeridas:</p>
                       <ul className="text-sm text-muted-foreground list-disc list-inside">
                         {shipment.aiPredictions!.suggestedActions.map((action: string, idx: number) => (
-                          <li key={idx}>{action}</li>
+                          <li key={`action-${idx}-${action.slice(0, 15)}`}>{action}</li>
                         ))}
                       </ul>
                     </div>
@@ -539,8 +539,8 @@ export function LogisticsIntelligenceHub() {
             <div>
               <p className="font-medium mb-2">Milestones</p>
               <div className="space-y-2">
-                {selectedShipment.milestones.map((m, idx) => (
-                  <div key={idx} className="flex items-center gap-2">
+                {selectedShipment.milestones.map((m) => (
+                  <div key={m.name} className="flex items-center gap-2">
                     <div className={cn(
                       "w-3 h-3 rounded-full",
                       m.status === "completed" && "bg-success",
@@ -561,8 +561,8 @@ export function LogisticsIntelligenceHub() {
             <div>
               <p className="font-medium mb-2">Documentos</p>
               <div className="space-y-1">
-                {selectedShipment.documents.map((doc, idx) => (
-                  <div key={idx} className="flex items-center justify-between text-sm">
+                {selectedShipment.documents.map((doc) => (
+                  <div key={doc.name} className="flex items-center justify-between text-sm">
                     <span>{doc.name}</span>
                     <Badge variant="outline" className={cn(
                       doc.status === "approved" && "text-success border-success",

@@ -347,9 +347,9 @@ export default function APIGatewayDashboard() {
                   { time: "12:45:29", method: "GET", path: "/api/ais-tracking", status: 200, latency: 95 },
                   { time: "12:45:28", method: "POST", path: "/api/documents", status: 500, latency: 320 },
                   { time: "12:45:27", method: "GET", path: "/api/crew", status: 200, latency: 52 },
-                ].map((log, idx) => (
+                ].map((log) => (
                   <div
-                    key={idx}
+                    key={`${log.time}-${log.path}`}
                     className={`p-2 rounded flex items-center gap-4 ${
                       log.status >= 400 ? "bg-destructive/10" : "bg-muted/30"
                     }`}

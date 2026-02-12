@@ -438,7 +438,7 @@ export function ProcurementWorkflowEngine() {
                           <span className="text-muted-foreground">Qualidade</span>
                           <div className="flex items-center gap-1">
                             {Array.from({ length: 5 }).map((_, i) => (
-                              <div key={i} className={cn(
+                              <div key={`quality-dot-${i}`} className={cn(
                                 "w-3 h-3 rounded-full",
                                 i < Math.floor(supplier.quality) ? "bg-yellow-500" : "bg-muted"
                               )} />
@@ -529,8 +529,8 @@ export function ProcurementWorkflowEngine() {
               <div>
                 <h4 className="font-medium mb-2">Itens da Requisição</h4>
                 <div className="border rounded-lg divide-y">
-                  {selectedPR.items.map((item, idx) => (
-                    <div key={idx} className="flex justify-between items-center p-3">
+                  {selectedPR.items.map((item) => (
+                    <div key={item.description} className="flex justify-between items-center p-3">
                       <span>{item.description}</span>
                       <div className="text-right">
                         <p className="font-medium">${(item.quantity * item.unitPrice).toLocaleString()}</p>

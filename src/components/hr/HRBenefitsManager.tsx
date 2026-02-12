@@ -71,7 +71,7 @@ export function HRBenefitsManager() {
         </div>
         <div className="grid gap-4 md:grid-cols-4">
           {[1, 2, 3, 4].map(i => (
-            <Skeleton key={i} className="h-24" />
+            <Skeleton key={`benefit-skeleton-${i}`} className="h-24" />
           ))}
         </div>
       </div>
@@ -401,8 +401,8 @@ export function HRBenefitsManager() {
               { name: "Coursera", desc: "Cursos universitários", discount: "25%", category: "Educação" },
               { name: "99", desc: "Corridas", discount: "15%", category: "Mobilidade" },
               { name: "Netflix", desc: "Streaming", discount: "20%", category: "Lazer" },
-            ].map((partner, i) => (
-              <Card key={i}>
+            ].map((partner) => (
+              <Card key={partner.name}>
                 <CardHeader>
                   <div className="flex items-center justify-between">
                     <CardTitle className="text-base">{partner.name}</CardTitle>

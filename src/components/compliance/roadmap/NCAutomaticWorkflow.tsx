@@ -554,8 +554,8 @@ export function NCAutomaticWorkflow() {
             <div>
               <h4 className="font-semibold mb-3">Histórico do Workflow</h4>
               <div className="space-y-2">
-                {selectedNC.workflow_history.map((step, i) => (
-                  <div key={i} className="flex items-start gap-3">
+                {selectedNC.workflow_history.map((step) => (
+                  <div key={step.step} className="flex items-start gap-3">
                     <div className={`w-2 h-2 mt-2 rounded-full ${step.status === 'completed' ? 'bg-success' : step.status === 'current' ? 'bg-primary' : 'bg-muted'}`} />
                     <div className="flex-1">
                       <div className="flex items-center justify-between">

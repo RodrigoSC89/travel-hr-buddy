@@ -397,8 +397,8 @@ export const Gamification = () => {
                         <span>{entry.points.toLocaleString()} pts</span>
                       </div>
                       <div className="flex gap-1 mt-1">
-                        {entry.badges.map((badge, index) => (
-                          <span key={index} className="text-sm">{badge}</span>
+                        {entry.badges.map((badge) => (
+                          <span key={badge} className="text-sm">{badge}</span>
                         ))}
                       </div>
                     </div>

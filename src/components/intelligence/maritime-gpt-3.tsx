@@ -492,8 +492,8 @@ Por favor, seja mais específico sobre o que precisa para que eu possa fornecer 
                 </div>
                 <p className="text-xs text-muted-foreground">{kb.description}</p>
                 <div className="flex flex-wrap gap-1">
-                  {kb.regulations.map((reg, idx) => (
-                    <Badge key={idx} variant="secondary" className="text-xs">
+                  {kb.regulations.map((reg) => (
+                    <Badge key={reg} variant="secondary" className="text-xs">
                       {reg}
                     </Badge>
                   ))}

@@ -208,8 +208,8 @@ export const FleetAIInsights = ({ vessels }: FleetAIInsightsProps) => {
                   <div>
                     <span className="text-sm text-muted-foreground">Componentes Críticos:</span>
                     <div className="flex flex-wrap gap-2 mt-2">
-                      {pred.criticalComponents.map((comp: string, idx: number) => (
-                        <Badge key={idx} variant="secondary">{comp}</Badge>
+                      {pred.criticalComponents.map((comp: string) => (
+                        <Badge key={comp} variant="secondary">{comp}</Badge>
                       ))}
                     </div>
                   </div>

@@ -87,7 +87,7 @@ export function BlockchainComplianceDashboard() {
     toast.success("Relatório de auditoria exportado!");
   };
 
-  if (loading) return <div className="space-y-4">{[1,2,3,4].map(i => <Skeleton key={i} className="h-24 w-full" />)}</div>;
+  if (loading) return <div className="space-y-4">{[1,2,3,4].map(i => <Skeleton key={`blockchain-skeleton-${i}`} className="h-24 w-full" />)}</div>;
 
   return (
     <div className="p-6 space-y-6">

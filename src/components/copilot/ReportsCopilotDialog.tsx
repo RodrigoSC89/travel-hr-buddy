@@ -163,8 +163,8 @@ export function ReportsCopilotDialog({
             <span className="text-xs font-medium text-muted-foreground">Relatórios Recentes</span>
           </div>
           <div className="flex gap-2 overflow-x-auto pb-1">
-            {recentReports.map((report, idx) => (
-              <Card key={idx} className="p-2 min-w-[150px] cursor-pointer hover:bg-muted/50">
+            {recentReports.map((report) => (
+              <Card key={report.name} className="p-2 min-w-[150px] cursor-pointer hover:bg-muted/50">
                 <CardContent className="p-0 flex items-center justify-between">
                   <div>
                     <div className="text-xs font-medium truncate">{report.name}</div>

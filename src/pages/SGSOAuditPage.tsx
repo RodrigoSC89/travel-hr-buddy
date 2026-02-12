@@ -203,8 +203,8 @@ export default function SGSOAuditPage() {
             Embarcação: {vessels.find(v => v.id === selectedVessel)?.name || "---"}
           </p>
 
-          {auditData.map((item, idx) => (
-            <div key={idx} className="mb-6 border-b pb-4">
+          {auditData.map((item) => (
+            <div key={item.num} className="mb-6 border-b pb-4">
               <p className="font-medium">{item.num}. {item.titulo}</p>
               <p><strong>Status:</strong> {item.compliance}</p>
               <p><strong>Evidência:</strong> {item.evidence}</p>

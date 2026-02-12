@@ -478,7 +478,7 @@ export const ModernEmployeePortal: React.FC = () => {
                     ) : (
                       chatMessages.map((msg, index) => (
                         <div
-                          key={index}
+                          key={`chat-${index}-${msg.role}`}
                           className={`flex ${msg.role === "user" ? "justify-end" : "justify-start"}`}
                         >
                           <div

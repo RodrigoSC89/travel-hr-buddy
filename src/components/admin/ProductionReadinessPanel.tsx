@@ -111,7 +111,7 @@ function TestCaseItem({ test }: { test: TestCase }) {
             <p className="text-xs font-semibold text-foreground mb-1">Procedimento:</p>
             <ul className="text-xs text-muted-foreground space-y-1">
               {test.procedure.map((step, i) => (
-                <li key={i}>{step}</li>
+                <li key={`step-${i}-${step.slice(0, 15)}`}>{step}</li>
               ))}
             </ul>
           </div>
@@ -265,7 +265,7 @@ export function ProductionReadinessPanel() {
               </CardHeader>
               <CardContent className="space-y-2">
                 {filteredResults.map((result, i) => (
-                  <ValidationResultItem key={i} result={result} />
+                  <ValidationResultItem key={`val-${i}-${result.category}`} result={result} />
                 ))}
               </CardContent>
             </Card>
@@ -296,7 +296,7 @@ export function ProductionReadinessPanel() {
             <CardContent>
               <div className="space-y-2">
                 {testPlan.checklist.map((item, i) => (
-                  <div key={i} className="flex items-center gap-3 p-2 rounded hover:bg-muted/50">
+                  <div key={`checklist-${i}-${item.slice(0, 15)}`} className="flex items-center gap-3 p-2 rounded hover:bg-muted/50">
                     <input type="checkbox" className="h-4 w-4" />
                     <span className="text-sm text-foreground">{item.replace('[ ] ', '')}</span>
                   </div>
@@ -319,7 +319,7 @@ export function ProductionReadinessPanel() {
           <CardContent>
             <ul className="space-y-2">
               {readiness.recommendations.map((rec, i) => (
-                <li key={i} className="text-sm text-foreground p-2 bg-muted/30 rounded">
+                <li key={`rec-${i}-${rec.slice(0, 15)}`} className="text-sm text-foreground p-2 bg-muted/30 rounded">
                   {rec}
                 </li>
               ))}

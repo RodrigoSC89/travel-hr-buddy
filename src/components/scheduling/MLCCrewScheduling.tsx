@@ -295,8 +295,8 @@ export const MLCCrewScheduling: React.FC = () => {
             </CardHeader>
             <CardContent>
               <div className="space-y-3">
-                {restHours.map((record, idx) => (
-                  <div key={idx} className="flex items-center justify-between p-3 rounded-lg border border-border/50 bg-background/50">
+                {restHours.map((record) => (
+                  <div key={record.date} className="flex items-center justify-between p-3 rounded-lg border border-border/50 bg-background/50">
                     <div className="flex items-center gap-4">
                       <span className="text-sm font-medium">{record.date}</span>
                       <div className="flex gap-4 text-sm">

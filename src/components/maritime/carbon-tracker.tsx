@@ -390,8 +390,8 @@ export const CarbonFootprintTracker: React.FC = () => {
                     </div>
                   </CardHeader>
                   <CardContent className="space-y-3">
-                    {emission.offsetPrograms.map((program, idx) => (
-                      <div key={idx} className="flex items-center justify-between p-3 bg-green-50 dark:bg-green-950 rounded-lg">
+                    {emission.offsetPrograms.map((program) => (
+                      <div key={program.name} className="flex items-center justify-between p-3 bg-green-50 dark:bg-green-950 rounded-lg">
                         <div className="flex items-center gap-3">
                           <div className="p-2 bg-green-100 dark:bg-green-900 rounded-lg">
                             <Leaf className="h-4 w-4 text-green-600" />

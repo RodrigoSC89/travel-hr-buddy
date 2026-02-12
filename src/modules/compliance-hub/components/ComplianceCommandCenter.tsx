@@ -702,8 +702,8 @@ export function ComplianceCommandCenter() {
                       description: 'Revisão semestral pendente',
                       action: 'Revisar'
                     }
-                  ].map((rec, idx) => (
-                    <div key={idx} className="flex items-center justify-between p-3 border rounded-lg hover:bg-accent/30 transition-colors">
+                  ].map((rec) => (
+                    <div key={rec.title} className="flex items-center justify-between p-3 border rounded-lg hover:bg-accent/30 transition-colors">
                       <div className="flex items-center gap-3">
                         <div className={`w-2 h-2 rounded-full ${
                           rec.priority === 'high' ? 'bg-destructive' : 

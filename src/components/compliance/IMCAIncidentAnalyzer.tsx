@@ -336,7 +336,7 @@ export function IMCAIncidentAnalyzer() {
                               <p className="font-medium text-xs mb-1">Lições Chave:</p>
                               <ul className="space-y-1">
                                 {incident.key_lessons.slice(0, 3).map((lesson, i) => (
-                                  <li key={i} className="text-muted-foreground">• {lesson}</li>
+                                  <li key={`lesson-${i}-${lesson.slice(0, 15)}`} className="text-muted-foreground">• {lesson}</li>
                                 ))}
                               </ul>
                             </div>

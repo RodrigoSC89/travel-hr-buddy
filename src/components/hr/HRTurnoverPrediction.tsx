@@ -287,8 +287,8 @@ export function HRTurnoverPrediction() {
                         Principais Fatores de Risco
                       </h4>
                       <ul className="space-y-1">
-                        {prediction.topRiskFactors.map((factor, i) => (
-                          <li key={i} className="text-sm flex items-start gap-2">
+                        {prediction.topRiskFactors.map((factor) => (
+                          <li key={factor} className="text-sm flex items-start gap-2">
                             <span className="text-destructive mt-1">•</span>
                             {factor}
                           </li>
@@ -303,7 +303,7 @@ export function HRTurnoverPrediction() {
                       </h4>
                       <ul className="space-y-1">
                         {prediction.recommendedActions.map((action, i) => (
-                          <li key={i} className="text-sm flex items-start gap-2">
+                          <li key={`action-${i}-${action.slice(0, 15)}`} className="text-sm flex items-start gap-2">
                             <span className="text-success mt-1">{i + 1}.</span>
                             {action}
                           </li>

@@ -174,7 +174,7 @@ export const PerformanceDashboard: React.FC = () => {
                     <p className="text-sm font-medium">Recomendações:</p>
                     <ul className="text-sm text-muted-foreground space-y-1">
                       {evaluation.recommendations.map((rec, i) => (
-                        <li key={i} className="flex items-start gap-2">
+                        <li key={`perf-rec-${i}-${rec.slice(0, 15)}`} className="flex items-start gap-2">
                           <AlertTriangle className="w-4 h-4 text-warning flex-shrink-0 mt-0.5" />
                           <span>{rec}</span>
                         </li>

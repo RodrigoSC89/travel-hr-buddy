@@ -182,9 +182,9 @@ export const WellbeingHistory: React.FC = () => {
         </CardHeader>
         <CardContent>
           <div className="space-y-3">
-            {historyData.slice(-10).reverse().map((entry, index) => (
+            {historyData.slice(-10).reverse().map((entry) => (
               <div
-                key={index}
+                key={entry.date}
                 className="flex items-center justify-between p-3 border rounded-lg"
               >
                 <div className="flex-1">

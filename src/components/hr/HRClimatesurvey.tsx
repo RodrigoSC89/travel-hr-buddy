@@ -251,8 +251,8 @@ export function HRClimateSurvey() {
                 <CardDescription>Respostas agregadas do time</CardDescription>
               </CardHeader>
               <CardContent className="space-y-4">
-                {pulseData.map((pulse, i) => (
-                  <div key={i} className="p-4 border rounded-lg space-y-3">
+                {pulseData.map((pulse) => (
+                  <div key={pulse.question} className="p-4 border rounded-lg space-y-3">
                     <div className="flex items-start justify-between">
                       <p className="text-sm font-medium">{pulse.question}</p>
                       <div className="flex items-center gap-1">
@@ -316,8 +316,8 @@ export function HRClimateSurvey() {
             </CardHeader>
             <CardContent>
               <div className="space-y-4">
-                {departmentScores.map((dept, i) => (
-                  <div key={i} className="flex items-center gap-4">
+                {departmentScores.map((dept) => (
+                  <div key={dept.name} className="flex items-center gap-4">
                     <div className="w-24 text-sm font-medium">{dept.name}</div>
                     <div className="flex-1">
                       <Progress value={dept.score} className="h-3" />
@@ -483,7 +483,7 @@ export function HRClimateSurvey() {
             <CardContent>
               <div className="flex items-end gap-2 h-48">
                 {[58, 62, 65, 60, 68, 72, 70, 75, 72].map((score, i) => (
-                  <div key={i} className="flex-1 flex flex-col items-center gap-1">
+                  <div key={`enps-${i}-${score}`} className="flex-1 flex flex-col items-center gap-1">
                     <span className="text-xs font-medium">{score}</span>
                     <div 
                       className={`w-full rounded-t transition-all ${

@@ -353,7 +353,7 @@ export function MLCComplianceReport({ crewId }: MLCComplianceReportProps) {
                 <p className="text-sm">{report.aiAnalysis.impact}</p>
                 <ul className="list-disc list-inside space-y-1">
                   {report.aiAnalysis.actionPlan.map((step, idx) => (
-                    <li key={idx} className="text-sm">{step}</li>
+                    <li key={`action-${idx}-${step.slice(0, 20)}`} className="text-sm">{step}</li>
                   ))}
                 </ul>
                 <div className="flex items-center gap-2 text-sm">

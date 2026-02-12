@@ -243,7 +243,7 @@ Faça sua pergunta e vou analisar com base nas suas viagens atuais.`;
                 >
                   <div className="text-sm whitespace-pre-wrap prose prose-sm dark:prose-invert max-w-none">
                     {message.content.split("**").map((part, i) =>
-                      i % 2 === 1 ? <strong key={i}>{part}</strong> : part
+                      i % 2 === 1 ? <strong key={`bold-${i}-${part.slice(0, 10)}`}>{part}</strong> : part
                     )}
                   </div>
                 </div>

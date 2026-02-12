@@ -334,8 +334,8 @@ export default function ControlCenter() {
       </div>
 
       {/* Tool Categories */}
-      {toolCategories.map((category, idx) => (
-        <Card key={idx}>
+      {toolCategories.map((category) => (
+        <Card key={category.title}>
           <CardHeader>
             <div className="flex items-center gap-2">
               {category.icon}
@@ -347,8 +347,8 @@ export default function ControlCenter() {
           </CardHeader>
           <CardContent>
             <div className="grid gap-3 md:grid-cols-2 lg:grid-cols-3">
-              {category.tools.map((tool, toolIdx) => (
-                <Link key={toolIdx} to={tool.path}>
+              {category.tools.map((tool) => (
+                <Link key={tool.name} to={tool.path}>
                   <Card className="transition-colors hover:bg-accent cursor-pointer h-full">
                     <CardHeader className="pb-3">
                       <div className="flex items-center justify-between">

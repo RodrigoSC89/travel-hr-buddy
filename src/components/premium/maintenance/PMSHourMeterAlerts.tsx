@@ -80,7 +80,7 @@ export default function PMSHourMeterAlerts() {
     return (
       <div className="space-y-4">
         <div className="grid grid-cols-4 gap-4">
-          {[...Array(4)].map((_, i) => <Skeleton key={i} className="h-24" />)}
+          {[...Array(4)].map((_, i) => <Skeleton key={`pms-skeleton-${i}`} className="h-24" />)}
         </div>
         <Skeleton className="h-96" />
       </div>

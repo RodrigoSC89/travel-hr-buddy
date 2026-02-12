@@ -42,7 +42,7 @@ export const AudioWaveform: React.FC<AudioWaveformProps> = ({
     >
       {bars.map((_, index) => (
         <div
-          key={index}
+          key={`wave-bar-${index}`}
           className={cn(
             "w-1 rounded-full transition-all duration-150",
             type === 'input' 
@@ -83,7 +83,7 @@ export const AnimatedAudioWaveform: React.FC<AudioWaveformProps> = ({
         
         return (
           <div
-            key={index}
+            key={`anim-bar-${index}`}
             className={cn(
               "w-1 rounded-full transition-opacity",
               type === 'input' 

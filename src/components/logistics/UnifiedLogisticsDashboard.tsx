@@ -546,8 +546,8 @@ export function UnifiedLogisticsDashboard() {
                             <CardTitle className="text-base truncate">{supplier.company_name}</CardTitle>
                             {supplier.trading_name && <p className="text-xs text-muted-foreground truncate">{supplier.trading_name}</p>}
                             <div className="flex flex-wrap gap-1 mt-1">
-                              {supplier.category.map((cat, i) => (
-                                <Badge key={i} variant="secondary" className="text-xs">{cat}</Badge>
+                              {supplier.category.map((cat) => (
+                                <Badge key={cat} variant="secondary" className="text-xs">{cat}</Badge>
                               ))}
                             </div>
                           </div>
@@ -624,7 +624,7 @@ export function UnifiedLogisticsDashboard() {
             <CardContent>
               {portCallsLoading ? (
                 <div className="space-y-3">
-                  {[1,2,3].map(i => <div key={i} className="h-24 rounded-lg bg-muted animate-pulse" />)}
+                  {[1,2,3].map(i => <div key={`portcall-skeleton-${i}`} className="h-24 rounded-lg bg-muted animate-pulse" />)}
                 </div>
               ) : portCalls.length === 0 ? (
                 <EmptyState icon={Anchor} title="Nenhum port call agendado" description="Agende operações portuárias para suas embarcações." actionLabel="Agendar Port Call" onAction={() => setIsAddPortCallOpen(true)} />

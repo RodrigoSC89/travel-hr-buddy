@@ -462,8 +462,8 @@ const SonarAI: React.FC = () => {
                           📍 Heading {zone.center.angle.toFixed(0)}° @ {zone.center.distance.toFixed(0)}m
                         </div>
                         <div className="text-xs space-y-1">
-                          {zone.characteristics.map((char, idx) => (
-                            <div key={idx} className="text-green-300/80">
+                          {zone.characteristics.map((char) => (
+                            <div key={char} className="text-green-300/80">
                               ✓ {char}
                             </div>
                           ))}

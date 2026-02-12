@@ -303,7 +303,7 @@ export default function CrewWellbeing() {
                   </div>
                   <ul className="space-y-1">
                     {member.alerts.map((alert, idx) => (
-                      <li key={idx} className="text-sm text-destructive">
+                      <li key={`alert-${idx}-${alert.slice(0, 15)}`} className="text-sm text-destructive">
                         • {alert}
                       </li>
                     ))}
@@ -319,7 +319,7 @@ export default function CrewWellbeing() {
                 </div>
                 <ul className="space-y-1">
                   {member.recommendations.map((rec, idx) => (
-                    <li key={idx} className={`text-sm ${rec.startsWith('⚠️') || rec.startsWith('🚨') ? 'text-warning font-medium' : 'text-muted-foreground'}`}>
+                    <li key={`rec-${idx}-${rec.slice(0, 15)}`} className={`text-sm ${rec.startsWith('⚠️') || rec.startsWith('🚨') ? 'text-warning font-medium' : 'text-muted-foreground'}`}>
                       {!rec.startsWith('⚠️') && !rec.startsWith('🚨') && <CheckCircle2 className="h-3 w-3 inline mr-1 text-success" />}
                       {rec}
                     </li>

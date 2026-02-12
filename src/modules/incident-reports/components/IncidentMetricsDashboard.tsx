@@ -126,7 +126,7 @@ export const IncidentMetricsDashboard: React.FC = () => {
     return (
       <div className="space-y-4">
         {[1, 2, 3].map((i) => (
-          <div key={i} className="h-64 bg-muted rounded animate-pulse"></div>
+          <div key={`incident-skeleton-${i}`} className="h-64 bg-muted rounded animate-pulse"></div>
         ))}
       </div>
     );

@@ -542,8 +542,8 @@ export function VesselContractsIntelligence() {
                   </div>
                   <ScrollArea className="h-48">
                     <div className="divide-y">
-                      {laytime.statementOfFacts.map((sof, idx) => (
-                        <div key={idx} className="flex items-center justify-between px-4 py-2 text-sm">
+                      {laytime.statementOfFacts.map((sof) => (
+                        <div key={sof.event} className="flex items-center justify-between px-4 py-2 text-sm">
                           <div className="flex items-center gap-3">
                             <div className={cn(
                               "w-2 h-2 rounded-full",
