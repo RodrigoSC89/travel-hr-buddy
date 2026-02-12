@@ -236,14 +236,14 @@ const NautilusAIHub: React.FC = () => {
         <TabsContent value="dashboard" className="space-y-6 mt-6">
           {/* Métricas Principais */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-            {metrics.map((metric, index) => (
-              <Card key={index} className="bg-card/50 backdrop-blur border-border/50">
+            {metrics.map((metric) => (
+              <Card key={metric.name} className="bg-card/50 backdrop-blur border-border/50">
                 <CardContent className="p-4">
                   <div className="flex items-center justify-between mb-2">
                     <span className="text-sm text-muted-foreground">{metric.name}</span>
                     <Badge 
                       variant="outline" 
-                      className={metric.trend === "up" ? "text-green-400" : metric.trend === "down" ? "text-red-400" : "text-muted-foreground"}
+                      className={metric.trend === "up" ? "text-success" : metric.trend === "down" ? "text-destructive" : "text-muted-foreground"}
                     >
                       {metric.trend === "up" ? <ArrowUp className="h-3 w-3 mr-1" /> : <ArrowDown className="h-3 w-3 mr-1" />}
                       {Math.abs(metric.change)}{metric.unit}

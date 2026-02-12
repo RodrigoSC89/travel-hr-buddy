@@ -219,8 +219,8 @@ export const AIIntegrationAssistant: React.FC = () => {
                   <div className="space-y-2">
                     <p className="text-xs font-medium text-muted-foreground">Ações Recomendadas:</p>
                     <div className="flex flex-wrap gap-1">
-                      {suggestion.actions.map((action, index) => (
-                        <Badge key={index} variant="outline" className="text-xs">
+                      {suggestion.actions.map((action) => (
+                        <Badge key={action} variant="outline" className="text-xs">
                           {action}
                         </Badge>
                       ))}
@@ -254,8 +254,8 @@ export const AIIntegrationAssistant: React.FC = () => {
           </CardHeader>
           <CardContent>
             <div className="space-y-4">
-              {diagnostics.map((diagnostic, index) => (
-                <div key={index} className="p-4 border border-border/50 rounded-lg">
+              {diagnostics.map((diagnostic) => (
+                <div key={diagnostic.integration} className="p-4 border border-border/50 rounded-lg">
                   <div className="flex items-center justify-between mb-3">
                     <h4 className="font-medium text-foreground">{diagnostic.integration}</h4>
                     <div className="flex items-center gap-2">

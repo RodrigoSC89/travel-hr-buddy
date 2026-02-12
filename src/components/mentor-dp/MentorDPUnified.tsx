@@ -72,8 +72,8 @@
  
    return (
      <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
-       {kpis.map((kpi, index) => (
-         <Card key={index} className={`${kpi.bgColor} border-none`}>
+       {kpis.map((kpi) => (
+         <Card key={kpi.title} className={`${kpi.bgColor} border-none`}>
            <CardContent className="p-4">
              <div className="flex items-center justify-between">
                <div>
@@ -82,7 +82,7 @@
                  {kpi.showProgress ? (
                    <div className="w-full bg-muted rounded-full h-1.5 mt-1">
                      <div 
-                       className={`h-1.5 rounded-full bg-cyan-500`} 
+                       className="h-1.5 rounded-full bg-accent" 
                        style={{ width: `${kpi.progress}%` }}
                      />
                    </div>

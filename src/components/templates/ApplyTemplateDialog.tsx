@@ -232,8 +232,8 @@ export function ApplyTemplateDialog({
           <TabsContent value="preview" className="space-y-4">
             <ScrollArea className="h-[400px]">
               <div className="prose prose-sm max-w-none p-4 border rounded-lg bg-muted/30">
-                {appliedResult.content.split("\n").map((line, index) => (
-                  <p key={index} className="my-2">{line || "\u00A0"}</p>
+                {appliedResult.content.split("\n").map((line, lineIdx) => (
+                  <p key={`line-${lineIdx}`} className="my-2">{line || "\u00A0"}</p>
                 ))}
               </div>
             </ScrollArea>

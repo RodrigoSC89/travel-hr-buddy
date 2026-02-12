@@ -227,16 +227,16 @@ export function InsightsPanel() {
         </CardHeader>
         <CardContent className="space-y-3">
           <AnimatePresence mode="popLayout">
-            {insights.map((insight, index) => {
+            {insights.map((insight, insightIdx) => {
               const styles = getInsightStyles(insight.type);
               const IconComponent = styles.icon;
               
               return (
                 <motion.div
-                  key={index}
+                  key={insight.title}
                   initial={{ opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: index * 0.1 }}
+                  transition={{ delay: insightIdx * 0.1 }}
                   className={`flex items-start justify-between p-4 rounded-lg border ${styles.bg}`}
                 >
                   <div className="flex items-start gap-3">

@@ -388,8 +388,8 @@ export const CrewRotationPlanner: React.FC = () => {
                   </div>
                 ) : (
                   <div className="space-y-4">
-                    {optimizations.map((opt, index) => (
-                      <div key={index} className="p-4 border rounded-lg">
+                    {optimizations.map((opt) => (
+                      <div key={opt.description} className="p-4 border rounded-lg">
                         <div className="flex items-start justify-between mb-2">
                           <div className="flex items-center gap-2">
                             <Badge variant="outline" className={

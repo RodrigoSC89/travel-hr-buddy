@@ -116,8 +116,8 @@ export const CrewScheduleVisualizer: React.FC = () => {
         <div className="flex">
           <div className="w-64 p-2 font-medium text-sm">Tripulante / Embarcação</div>
           <div className="flex-1 grid grid-cols-12 gap-1">
-            {months.map((month, index) => (
-              <div key={index} className="text-center text-xs font-medium p-1">
+            {months.map((month) => (
+              <div key={month.toISOString()} className="text-center text-xs font-medium p-1">
                 {month.toLocaleDateString("pt-BR", { month: "short", year: "2-digit" })}
               </div>
             ))}
@@ -285,8 +285,8 @@ export const CrewScheduleVisualizer: React.FC = () => {
           </CardHeader>
           <CardContent>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-              {vesselCapacity.map((vessel, index) => (
-                <Card key={index} className="p-4">
+              {vesselCapacity.map((vessel) => (
+                <Card key={vessel.vessel} className="p-4">
                   <div className="space-y-3">
                     <div className="flex items-center justify-between">
                       <h4 className="font-medium">{vessel.vessel}</h4>

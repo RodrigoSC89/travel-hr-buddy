@@ -273,8 +273,8 @@ export const FinalHomologationReport: React.FC = () => {
 
               <TabsContent value="modules" className="space-y-4">
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                  {testedModules.map((module, index) => (
-                    <Card key={index} className="border border-border/50">
+                  {testedModules.map((module) => (
+                    <Card key={module.name} className="border border-border/50">
                       <CardContent className="p-4">
                         <div className="flex items-center gap-2 mb-3">
                           {getStatusIcon(module.status)}
@@ -307,8 +307,8 @@ export const FinalHomologationReport: React.FC = () => {
               </TabsContent>
 
               <TabsContent value="validation" className="space-y-4">
-                {reportSections.map((section, index) => (
-                  <Card key={index} className="border border-border/50">
+                {reportSections.map((section) => (
+                  <Card key={section.title} className="border border-border/50">
                     <CardContent className="p-6">
                       <div className="flex items-start gap-4">
                         <div className="p-2 bg-success/10 rounded-lg">
@@ -321,8 +321,8 @@ export const FinalHomologationReport: React.FC = () => {
                           </div>
                           <p className="text-muted-foreground mb-3">{section.content}</p>
                           <ul className="space-y-1">
-                            {section.details.map((detail, detailIndex) => (
-                              <li key={detailIndex} className="text-sm text-muted-foreground flex items-center gap-2">
+                            {section.details.map((detail) => (
+                              <li key={detail} className="text-sm text-muted-foreground flex items-center gap-2">
                                 <CheckCircle className="w-3 h-3 text-success" />
                                 {detail}
                               </li>
