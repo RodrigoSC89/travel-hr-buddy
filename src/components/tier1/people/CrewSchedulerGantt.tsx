@@ -397,7 +397,8 @@ export default function CrewSchedulerGantt() {
                       {crew.mlcStatus === 'warning' ? 'Atenção' : 'Excedido'}
                     </Badge>
                     <Button size="sm" variant="outline" onClick={() => {
-                      toast.success(`Troca agendada para ${crew.name}`, { description: `Rotação de ${crew.vessel} será planejada. Dias a bordo: ${crew.daysOnboard}/${crew.maxDays}` });
+                      navigator.clipboard.writeText(`Troca de tripulante: ${crew.name} | Posto: ${crew.rank} | Embarcação: ${crew.vessel} | Dias a bordo: ${crew.daysOnboard}/${crew.maxDays} | Status MLC: ${crew.mlcStatus}`);
+                      toast.success(`Dados de troca copiados para ${crew.name}`, { description: `${crew.daysOnboard}/${crew.maxDays} dias — cole no sistema de gestão de tripulação.` });
                     }}>
                       Agendar Troca
                     </Button>
