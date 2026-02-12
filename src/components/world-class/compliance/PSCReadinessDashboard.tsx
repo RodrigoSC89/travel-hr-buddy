@@ -264,8 +264,8 @@ export function PSCReadinessDashboard() {
                           </h4>
                           <ul className="space-y-1">
                             {insp.predicted_deficiencies.map((d, idx: number) => (
-                              <li key={idx} className="text-xs flex items-start gap-1">
-                                <span className="text-amber-500 mt-0.5">•</span>
+                              <li key={`def-${idx}-${typeof d === "string" ? d.slice(0, 10) : idx}`} className="text-xs flex items-start gap-1">
+                                <span className="text-warning mt-0.5">•</span>
                                 {typeof d === "string" ? d : (d as Record<string, string>)?.description || JSON.stringify(d)}
                               </li>
                             ))}
@@ -274,14 +274,14 @@ export function PSCReadinessDashboard() {
                       )}
 
                       {insp.preparation_checklist?.length > 0 && (
-                        <div className="p-3 rounded-lg bg-green-500/5 border border-green-500/10">
-                          <h4 className="font-medium text-sm text-green-500 mb-2 flex items-center gap-1">
+                        <div className="p-3 rounded-lg bg-success/5 border border-success/10">
+                          <h4 className="font-medium text-sm text-success mb-2 flex items-center gap-1">
                             <CheckCircle className="h-4 w-4" /> Checklist de Preparação ({insp.preparation_checklist.length})
                           </h4>
                           <ul className="space-y-1">
                             {insp.preparation_checklist.map((item, idx: number) => (
-                              <li key={idx} className="text-xs flex items-start gap-1">
-                                <span className="text-green-500 mt-0.5">☐</span>
+                              <li key={`chk-${idx}-${typeof item === "string" ? item.slice(0, 10) : idx}`} className="text-xs flex items-start gap-1">
+                                <span className="text-success mt-0.5">☐</span>
                                 {typeof item === "string" ? item : (item as Record<string, string>)?.description || JSON.stringify(item)}
                               </li>
                             ))}

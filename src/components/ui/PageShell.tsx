@@ -207,11 +207,11 @@ export function PageShell({
         {breadcrumbs && breadcrumbs.length > 0 && (
           <Breadcrumb>
             <BreadcrumbList>
-              {breadcrumbs.map((crumb, idx) => (
-                <React.Fragment key={idx}>
-                  {idx > 0 && <BreadcrumbSeparator />}
+              {breadcrumbs.map((crumb, crumbIdx) => (
+                <React.Fragment key={crumb.label}>
+                  {crumbIdx > 0 && <BreadcrumbSeparator />}
                   <BreadcrumbItem>
-                    {idx === breadcrumbs.length - 1 ? (
+                    {crumbIdx === breadcrumbs.length - 1 ? (
                       <BreadcrumbPage>{crumb.label}</BreadcrumbPage>
                     ) : (
                       <BreadcrumbLink href={crumb.href || "#"}>

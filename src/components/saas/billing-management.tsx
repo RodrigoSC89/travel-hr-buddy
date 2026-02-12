@@ -135,9 +135,9 @@ export const BillingManagement: React.FC = () => {
   };
 
   const getUsageColor = (percentage: number) => {
-    if (percentage >= 90) return "bg-red-500";
-    if (percentage >= 75) return "bg-yellow-500";
-    return "bg-green-500";
+    if (percentage >= 90) return "bg-destructive";
+    if (percentage >= 75) return "bg-warning";
+    return "bg-success";
   };
 
   return (
@@ -159,7 +159,7 @@ export const BillingManagement: React.FC = () => {
               </div>
               <p className="text-muted-foreground">{currentPlan?.description}</p>
               <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                <CheckCircle className="h-4 w-4 text-green-500" />
+                <CheckCircle className="h-4 w-4 text-success" />
                 <span>Próxima cobrança: 15 de Março, 2024</span>
               </div>
             </div>
@@ -198,7 +198,7 @@ export const BillingManagement: React.FC = () => {
                       <span className="font-medium">{metric.name}</span>
                     </div>
                     {percentage >= 80 && (
-                      <AlertTriangle className="h-4 w-4 text-yellow-500" />
+                      <AlertTriangle className="h-4 w-4 text-warning" />
                     )}
                   </div>
                   
@@ -219,7 +219,7 @@ export const BillingManagement: React.FC = () => {
                   </div>
                   
                   {percentage >= 90 && (
-                    <div className="text-xs text-red-600 bg-red-50 p-2 rounded">
+                    <div className="text-xs text-destructive bg-destructive/10 p-2 rounded">
                       Limite quase atingido. Considere fazer upgrade.
                     </div>
                   )}
@@ -317,7 +317,7 @@ export const BillingManagement: React.FC = () => {
             <CardContent>
               <div className="space-y-4">
                 <div className="flex items-center gap-3 p-3 border rounded-lg">
-                  <Calendar className="h-5 w-5 text-green-500" />
+                  <Calendar className="h-5 w-5 text-success" />
                   <div className="flex-1">
                     <p className="font-medium">Upgrade para Professional</p>
                     <p className="text-sm text-muted-foreground">15 de Janeiro, 2024</p>
@@ -326,7 +326,7 @@ export const BillingManagement: React.FC = () => {
                 </div>
                 
                 <div className="flex items-center gap-3 p-3 border rounded-lg">
-                  <CheckCircle className="h-5 w-5 text-green-500" />
+                  <CheckCircle className="h-5 w-5 text-success" />
                   <div className="flex-1">
                     <p className="font-medium">Pagamento processado</p>
                     <p className="text-sm text-muted-foreground">1 de Janeiro, 2024</p>
@@ -335,7 +335,7 @@ export const BillingManagement: React.FC = () => {
                 </div>
                 
                 <div className="flex items-center gap-3 p-3 border rounded-lg">
-                  <Clock className="h-5 w-5 text-blue-500" />
+                  <Clock className="h-5 w-5 text-info" />
                   <div className="flex-1">
                     <p className="font-medium">Conta criada</p>
                     <p className="text-sm text-muted-foreground">15 de Dezembro, 2023</p>

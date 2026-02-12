@@ -462,7 +462,7 @@ ${result.corrective_action}
                         <Copy className="h-3 w-3" />
                       </Button>
                     </div>
-                    <div className="bg-green-500/10 border border-green-500/20 p-3 rounded-lg text-sm whitespace-pre-wrap">
+                    <div className="bg-success/10 border border-success/20 p-3 rounded-lg text-sm whitespace-pre-wrap">
                       {result.corrective_action}
                     </div>
                   </div>

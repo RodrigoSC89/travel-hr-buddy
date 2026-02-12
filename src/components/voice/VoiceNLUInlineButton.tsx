@@ -91,8 +91,8 @@ export function VoiceNLUInlineButton({ className }: VoiceNLUInlineButtonProps) {
             </SheetHeader>
             <ScrollArea className="h-[calc(100vh-200px)] mt-4">
               <div className="space-y-4">
-                {helpCommands.map((cmd, i) => (
-                  <div key={i} className="border-b pb-3">
+                {helpCommands.map((cmd) => (
+                  <div key={cmd.command} className="border-b pb-3">
                     <p className="font-medium text-sm">"{cmd.command}"</p>
                     <p className="text-xs text-muted-foreground mt-1">{cmd.description}</p>
                   </div>

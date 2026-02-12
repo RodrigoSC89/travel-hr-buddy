@@ -71,12 +71,12 @@ const cargoTypes = [
 ];
 
 const statusOptions = [
-  { value: "loading", label: "Carregando", color: "bg-blue-500" },
-  { value: "in_transit", label: "Em Trânsito", color: "bg-purple-500" },
-  { value: "at_port", label: "No Porto", color: "bg-yellow-500" },
-  { value: "delivered", label: "Entregue", color: "bg-green-500" },
-  { value: "delayed", label: "Atrasado", color: "bg-red-500" },
-  { value: "cancelled", label: "Cancelado", color: "bg-gray-500" }
+  { value: "loading", label: "Carregando", color: "bg-info" },
+  { value: "in_transit", label: "Em Trânsito", color: "bg-accent" },
+  { value: "at_port", label: "No Porto", color: "bg-warning" },
+  { value: "delivered", label: "Entregue", color: "bg-success" },
+  { value: "delayed", label: "Atrasado", color: "bg-destructive" },
+  { value: "cancelled", label: "Cancelado", color: "bg-muted" }
 ];
 
 export function CargoFullCRUD() {

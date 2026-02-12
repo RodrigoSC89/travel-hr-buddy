@@ -97,7 +97,7 @@ export default function SmartDocumentHub() {
       <div className="flex items-center justify-between">
         <div>
           <h2 className="text-2xl font-bold flex items-center gap-2">
-            <FileText className="h-6 w-6 text-blue-500" />
+            <FileText className="h-6 w-6 text-info" />
             Central de Documentos
           </h2>
           <p className="text-muted-foreground">
@@ -198,14 +198,14 @@ export default function SmartDocumentHub() {
                 >
                   <div className="flex items-center gap-4">
                     <div className={`p-2 rounded-lg ${
-                      doc.type === "PDF" ? "bg-red-100 dark:bg-red-900" :
-                      doc.type === "DOCX" ? "bg-blue-100 dark:bg-blue-900" :
-                      "bg-green-100 dark:bg-green-900"
+                      doc.type === "PDF" ? "bg-destructive/10" :
+                      doc.type === "DOCX" ? "bg-info/10" :
+                      "bg-success/10"
                     }`}>
                       <FileText className={`h-5 w-5 ${
-                        doc.type === "PDF" ? "text-red-500" :
-                        doc.type === "DOCX" ? "text-blue-500" :
-                        "text-green-500"
+                        doc.type === "PDF" ? "text-destructive" :
+                        doc.type === "DOCX" ? "text-info" :
+                        "text-success"
                       }`} />
                     </div>
                     <div>

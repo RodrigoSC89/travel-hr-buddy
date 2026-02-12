@@ -111,7 +111,7 @@ export default function ComplianceIARecommendations() {
                 <p className="text-sm text-muted-foreground">Pendentes</p>
                 <p className="text-2xl font-bold">{pendingRecs.length}</p>
               </div>
-              <Clock className="h-8 w-8 text-yellow-500" />
+              <Clock className="h-8 w-8 text-warning" />
             </div>
           </CardContent>
         </Card>
@@ -122,7 +122,7 @@ export default function ComplianceIARecommendations() {
                 <p className="text-sm text-muted-foreground">Aplicadas</p>
                 <p className="text-2xl font-bold">{appliedRecs.length}</p>
               </div>
-              <CheckCircle className="h-8 w-8 text-green-500" />
+              <CheckCircle className="h-8 w-8 text-success" />
             </div>
           </CardContent>
         </Card>
@@ -188,7 +188,7 @@ export default function ComplianceIARecommendations() {
                           <p className="text-xs font-medium mb-1">Ações Sugeridas:</p>
                           <ul className="text-xs text-muted-foreground space-y-1">
                             {rec.suggested_actions.map((action, idx) => (
-                              <li key={idx}>• {action.action}</li>
+                              <li key={action.action}>• {action.action}</li>
                             ))}
                           </ul>
                         </div>
@@ -249,7 +249,7 @@ export default function ComplianceIARecommendations() {
         <Card>
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
-              <CheckCircle className="h-5 w-5 text-green-500" />
+              <CheckCircle className="h-5 w-5 text-success" />
               Recomendações Aplicadas ({appliedRecs.length})
             </CardTitle>
           </CardHeader>
@@ -258,7 +258,7 @@ export default function ComplianceIARecommendations() {
               {appliedRecs.slice(0, 5).map((rec) => (
                 <div
                   key={rec.id}
-                  className="p-3 border rounded-lg bg-green-500/10 border-green-500/20"
+                  className="p-3 border rounded-lg bg-success/10 border-success/20"
                 >
                   <div className="flex items-center justify-between">
                     <div>
@@ -267,7 +267,7 @@ export default function ComplianceIARecommendations() {
                         Aplicada em {new Date(rec.applied_at || "").toLocaleDateString("pt-BR")}
                       </p>
                     </div>
-                    <CheckCircle className="h-5 w-5 text-green-500" />
+                    <CheckCircle className="h-5 w-5 text-success" />
                   </div>
                 </div>
               ))}

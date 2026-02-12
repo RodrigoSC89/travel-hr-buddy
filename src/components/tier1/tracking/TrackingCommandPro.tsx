@@ -300,8 +300,8 @@ export default function TrackingCommandPro() {
           </CardHeader>
           <CardContent>
             <div className="space-y-2">
-              {activeAlerts.map((alert, i) => (
-                <div key={i} className="flex items-center justify-between p-3 bg-background rounded-lg border">
+              {activeAlerts.map((alert) => (
+                <div key={alert.message} className="flex items-center justify-between p-3 bg-background rounded-lg border">
                   <div className="flex items-center gap-3">
                     {alert.severity === 'warning' ? (
                       <AlertTriangle className="h-5 w-5 text-warning" />

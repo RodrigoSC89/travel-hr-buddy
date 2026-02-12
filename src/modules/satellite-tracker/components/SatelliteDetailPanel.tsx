@@ -28,19 +28,19 @@ interface SatelliteDetailPanelProps {
 export const SatelliteDetailPanel: React.FC<SatelliteDetailPanelProps> = ({ satellite }) => {
   const getOrbitColor = (orbit: string) => {
     switch (orbit) {
-      case "LEO": return "bg-blue-500";
-      case "MEO": return "bg-green-500";
-      case "GEO": return "bg-purple-500";
-      case "HEO": return "bg-orange-500";
-      default: return "bg-gray-500";
+      case "LEO": return "bg-info";
+      case "MEO": return "bg-success";
+      case "GEO": return "bg-accent";
+      case "HEO": return "bg-warning";
+      default: return "bg-muted";
     }
   };
 
   const getVisibilityStatus = (visibility: string) => {
     switch (visibility) {
-      case "visible": return { label: "Visível", color: "text-green-500" };
-      case "eclipsed": return { label: "Eclipsado", color: "text-gray-500" };
-      case "daylight": return { label: "Luz do dia", color: "text-yellow-500" };
+      case "visible": return { label: "Visível", color: "text-success" };
+      case "eclipsed": return { label: "Eclipsado", color: "text-muted-foreground" };
+      case "daylight": return { label: "Luz do dia", color: "text-warning" };
       default: return { label: visibility, color: "text-muted-foreground" };
     }
   };

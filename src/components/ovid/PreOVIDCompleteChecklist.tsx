@@ -272,8 +272,8 @@ export const PreOVIDCompleteChecklist: React.FC<PreOVIDCompleteChecklistProps> =
                           <p className="text-sm">{question.guidance}</p>
                           {question.references && question.references.length > 0 && (
                             <div className="flex flex-wrap gap-1 mt-2">
-                              {question.references.map((ref, i) => (
-                                <Badge key={i} variant="secondary" className="text-xs">{ref}</Badge>
+                              {question.references.map((ref) => (
+                                <Badge key={ref} variant="secondary" className="text-xs">{ref}</Badge>
                               ))}
                             </div>
                           )}
