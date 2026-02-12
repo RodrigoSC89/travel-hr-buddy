@@ -98,9 +98,9 @@ const getVarianceColor = (estimated: number, actual: number, isRevenue: boolean)
   if (actual === 0) return "text-muted-foreground";
   const variance = ((actual - estimated) / estimated) * 100;
   if (isRevenue) {
-    return variance >= 0 ? "text-green-600" : "text-red-600";
+    return variance >= 0 ? "text-success" : "text-destructive";
   }
-  return variance <= 0 ? "text-green-600" : "text-red-600";
+  return variance <= 0 ? "text-success" : "text-destructive";
 };
 
 const getVarianceIcon = (estimated: number, actual: number, isRevenue: boolean) => {
@@ -121,70 +121,70 @@ export function VoyageAccounting() {
   const avgMargin = (totalProfit / totalRevenue) * 100;
 
   const costCategories = [
-    { key: "fuel", label: "Combustível", icon: Fuel, color: "bg-orange-500" },
-    { key: "crew", label: "Tripulação", icon: Users, color: "bg-blue-500" },
-    { key: "port", label: "Portos", icon: Anchor, color: "bg-purple-500" },
-    { key: "cargo", label: "Carga", icon: Package, color: "bg-green-500" },
-    { key: "maintenance", label: "Manutenção", icon: Wrench, color: "bg-yellow-500" },
-    { key: "other", label: "Outros", icon: PieChart, color: "bg-gray-500" }
+    { key: "fuel", label: "Combustível", icon: Fuel, color: "bg-warning" },
+    { key: "crew", label: "Tripulação", icon: Users, color: "bg-primary" },
+    { key: "port", label: "Portos", icon: Anchor, color: "bg-accent" },
+    { key: "cargo", label: "Carga", icon: Package, color: "bg-success" },
+    { key: "maintenance", label: "Manutenção", icon: Wrench, color: "bg-warning" },
+    { key: "other", label: "Outros", icon: PieChart, color: "bg-muted" }
   ];
 
   return (
     <div className="space-y-6">
       {/* KPI Summary */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-        <Card className="bg-gradient-to-br from-green-50 to-green-100 dark:from-green-950/20 dark:to-green-900/10">
+        <Card className="bg-gradient-to-br from-success/10 to-success/5">
           <CardContent className="pt-6">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-muted-foreground">Receita Total</p>
-                <p className="text-2xl font-bold text-green-700 dark:text-green-400">
+                <p className="text-2xl font-bold text-success">
                   {formatCurrency(totalRevenue)}
                 </p>
               </div>
-              <TrendingUp className="h-8 w-8 text-green-600" />
+              <TrendingUp className="h-8 w-8 text-success" />
             </div>
           </CardContent>
         </Card>
 
-        <Card className="bg-gradient-to-br from-red-50 to-red-100 dark:from-red-950/20 dark:to-red-900/10">
+        <Card className="bg-gradient-to-br from-destructive/10 to-destructive/5">
           <CardContent className="pt-6">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-muted-foreground">Custos Totais</p>
-                <p className="text-2xl font-bold text-red-700 dark:text-red-400">
+                <p className="text-2xl font-bold text-destructive">
                   {formatCurrency(totalCosts)}
                 </p>
               </div>
-              <TrendingDown className="h-8 w-8 text-red-600" />
+              <TrendingDown className="h-8 w-8 text-destructive" />
             </div>
           </CardContent>
         </Card>
 
-        <Card className="bg-gradient-to-br from-blue-50 to-blue-100 dark:from-blue-950/20 dark:to-blue-900/10">
+        <Card className="bg-gradient-to-br from-info/10 to-info/5">
           <CardContent className="pt-6">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-muted-foreground">Lucro Líquido</p>
-                <p className="text-2xl font-bold text-blue-700 dark:text-blue-400">
+                <p className="text-2xl font-bold text-info">
                   {formatCurrency(totalProfit)}
                 </p>
               </div>
-              <DollarSign className="h-8 w-8 text-blue-600" />
+              <DollarSign className="h-8 w-8 text-info" />
             </div>
           </CardContent>
         </Card>
 
-        <Card className="bg-gradient-to-br from-purple-50 to-purple-100 dark:from-purple-950/20 dark:to-purple-900/10">
+        <Card className="bg-gradient-to-br from-accent/10 to-accent/5">
           <CardContent className="pt-6">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-muted-foreground">Margem Média</p>
-                <p className="text-2xl font-bold text-purple-700 dark:text-purple-400">
+                <p className="text-2xl font-bold text-accent-foreground">
                   {avgMargin.toFixed(1)}%
                 </p>
               </div>
-              <BarChart3 className="h-8 w-8 text-purple-600" />
+              <BarChart3 className="h-8 w-8 text-accent-foreground" />
             </div>
           </CardContent>
         </Card>
@@ -226,7 +226,7 @@ export function VoyageAccounting() {
                 <p className="text-sm mb-2">{voyage.route}</p>
                 <div className="flex items-center justify-between text-sm">
                   <span className="text-muted-foreground">Margem</span>
-                  <span className={voyage.profitMargin >= 25 ? "text-green-600 font-medium" : "text-yellow-600 font-medium"}>
+                  <span className={voyage.profitMargin >= 25 ? "text-success font-medium" : "text-warning font-medium"}>
                     {voyage.profitMargin.toFixed(1)}%
                   </span>
                 </div>
@@ -261,9 +261,9 @@ export function VoyageAccounting() {
                 <TabsContent value="summary" className="space-y-6">
                   {/* Revenue vs Costs */}
                   <div className="grid grid-cols-2 gap-4">
-                    <div className="p-4 rounded-lg bg-green-50 dark:bg-green-950/20">
+                    <div className="p-4 rounded-lg bg-success/10">
                       <div className="flex items-center gap-2 mb-2">
-                        <TrendingUp className="h-4 w-4 text-green-600" />
+                        <TrendingUp className="h-4 w-4 text-success" />
                         <span className="text-sm font-medium">Receita</span>
                       </div>
                       <div className="space-y-2">
@@ -281,9 +281,9 @@ export function VoyageAccounting() {
                       </div>
                     </div>
 
-                    <div className="p-4 rounded-lg bg-red-50 dark:bg-red-950/20">
+                    <div className="p-4 rounded-lg bg-destructive/10">
                       <div className="flex items-center gap-2 mb-2">
-                        <TrendingDown className="h-4 w-4 text-red-600" />
+                        <TrendingDown className="h-4 w-4 text-destructive" />
                         <span className="text-sm font-medium">Custos</span>
                       </div>
                       <div className="space-y-2">

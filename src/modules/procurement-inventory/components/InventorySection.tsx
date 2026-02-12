@@ -211,7 +211,7 @@ export default function InventorySection({ searchQuery }: InventorySectionProps)
                 <p className="text-sm text-muted-foreground">Valor em Estoque</p>
                 <p className="text-2xl font-bold">R$ {(totalValue / 1000).toFixed(1)}k</p>
               </div>
-              <BarChart3 className="h-8 w-8 text-green-500 opacity-60" />
+              <BarChart3 className="h-8 w-8 text-success opacity-60" />
             </div>
           </CardContent>
         </Card>
@@ -345,8 +345,8 @@ export default function InventorySection({ searchQuery }: InventorySectionProps)
                             value={(item.quantity / item.maxStock) * 100} 
                             className={`h-2 ${
                               item.status === "critical" ? "[&>div]:bg-destructive" : 
-                              item.status === "low" ? "[&>div]:bg-amber-500" :
-                              item.status === "excess" ? "[&>div]:bg-purple-500" : "[&>div]:bg-green-500"
+                              item.status === "low" ? "[&>div]:bg-warning" :
+                              item.status === "excess" ? "[&>div]:bg-accent" : "[&>div]:bg-success"
                             }`}
                           />
                           <p className="text-xs text-muted-foreground mt-1">
@@ -383,7 +383,7 @@ export default function InventorySection({ searchQuery }: InventorySectionProps)
                               setShowMovement(true);
                             }}
                           >
-                            <ArrowDown className="h-4 w-4 text-green-500" />
+                            <ArrowDown className="h-4 w-4 text-success" />
                           </Button>
                           <Button 
                             variant="ghost" 
@@ -394,7 +394,7 @@ export default function InventorySection({ searchQuery }: InventorySectionProps)
                               setShowMovement(true);
                             }}
                           >
-                            <ArrowUp className="h-4 w-4 text-red-500" />
+                            <ArrowUp className="h-4 w-4 text-destructive" />
                           </Button>
                           <Button variant="ghost" size="icon">
                             <Eye className="h-4 w-4" />
@@ -443,7 +443,7 @@ export default function InventorySection({ searchQuery }: InventorySectionProps)
                       </TableCell>
                       <TableCell className="font-medium">{mov.itemName}</TableCell>
                       <TableCell className="text-center">
-                        <span className={mov.quantity > 0 ? "text-green-600" : "text-red-600"}>
+                        <span className={mov.quantity > 0 ? "text-success" : "text-destructive"}>
                           {mov.quantity > 0 ? "+" : ""}{mov.quantity}
                         </span>
                       </TableCell>

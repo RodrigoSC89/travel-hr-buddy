@@ -100,21 +100,21 @@ export const SystemHealthGrid: React.FC<SystemHealthGridProps> = ({ status, expa
   ];
 
   const getHealthColor = (health: number) => {
-    if (health >= 90) return 'text-green-500';
-    if (health >= 70) return 'text-yellow-500';
-    return 'text-red-500';
+    if (health >= 90) return 'text-success';
+    if (health >= 70) return 'text-warning';
+    return 'text-destructive';
   };
 
   const getHealthBg = (health: number) => {
-    if (health >= 90) return 'bg-green-500';
-    if (health >= 70) return 'bg-yellow-500';
-    return 'bg-red-500';
+    if (health >= 90) return 'bg-success';
+    if (health >= 70) return 'bg-warning';
+    return 'bg-destructive';
   };
 
   const getTrendIcon = (trend: string) => {
     switch (trend) {
-      case 'up': return <TrendingUp className="h-4 w-4 text-green-500" />;
-      case 'down': return <TrendingDown className="h-4 w-4 text-red-500" />;
+      case 'up': return <TrendingUp className="h-4 w-4 text-success" />;
+      case 'down': return <TrendingDown className="h-4 w-4 text-destructive" />;
       default: return <Minus className="h-4 w-4 text-muted-foreground" />;
     }
   };
@@ -125,7 +125,7 @@ export const SystemHealthGrid: React.FC<SystemHealthGridProps> = ({ status, expa
         <div className="flex items-center justify-between">
           <div>
             <CardTitle className="flex items-center gap-2">
-              <Activity className="h-5 w-5 text-green-500" />
+              <Activity className="h-5 w-5 text-success" />
               Saúde do Sistema
             </CardTitle>
             <CardDescription>
@@ -133,7 +133,7 @@ export const SystemHealthGrid: React.FC<SystemHealthGridProps> = ({ status, expa
             </CardDescription>
           </div>
           <Badge variant="outline" className="gap-1">
-            <CheckCircle className="h-3 w-3 text-green-500" />
+            <CheckCircle className="h-3 w-3 text-success" />
             {modules.filter(m => m.health >= 90).length}/{modules.length} Saudáveis
           </Badge>
         </div>

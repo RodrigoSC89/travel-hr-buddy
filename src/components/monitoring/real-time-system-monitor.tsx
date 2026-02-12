@@ -125,26 +125,26 @@ export const RealTimeSystemMonitor: React.FC = () => {
 
   const getStatusColor = (status: string) => {
     switch (status) {
-    case "good": return "text-green-500";
-    case "warning": return "text-yellow-500";
-    case "critical": return "text-red-500";
+    case "good": return "text-success";
+    case "warning": return "text-warning";
+    case "critical": return "text-destructive";
     default: return "text-muted-foreground";
     }
   };
 
   const getAlertColor = (type: string) => {
     switch (type) {
-    case "critical": return "border-red-200 bg-red-50 dark:bg-red-900/20";
-    case "warning": return "border-yellow-200 bg-yellow-50 dark:bg-yellow-900/20";
-    case "info": return "border-blue-200 bg-blue-50 dark:bg-blue-900/20";
-    default: return "border-gray-200 bg-gray-50 dark:bg-gray-900/20";
+    case "critical": return "border-destructive/20 bg-destructive/5";
+    case "warning": return "border-warning/20 bg-warning/5";
+    case "info": return "border-info/20 bg-info/5";
+    default: return "border-border bg-muted/50";
     }
   };
 
   const getHealthColor = (health: number) => {
-    if (health >= 90) return "text-green-500";
-    if (health >= 70) return "text-yellow-500";
-    return "text-red-500";
+    if (health >= 90) return "text-success";
+    if (health >= 70) return "text-warning";
+    return "text-destructive";
   };
 
   return (
@@ -155,7 +155,7 @@ export const RealTimeSystemMonitor: React.FC = () => {
           <Activity className="w-6 h-6 text-primary" />
           <h1 className="text-3xl font-bold">Monitoramento em Tempo Real</h1>
           <Badge variant="secondary" className="animate-pulse">
-            <div className="w-2 h-2 bg-green-500 rounded-full mr-2"></div>
+            <div className="w-2 h-2 bg-success rounded-full mr-2"></div>
             LIVE
           </Badge>
         </div>
@@ -168,7 +168,7 @@ export const RealTimeSystemMonitor: React.FC = () => {
       <Card>
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
-            <CheckCircle className="w-5 h-5 text-green-500" />
+            <CheckCircle className="w-5 h-5 text-success" />
             Saúde Geral do Sistema
           </CardTitle>
         </CardHeader>
@@ -254,8 +254,8 @@ export const RealTimeSystemMonitor: React.FC = () => {
                 {metric.label.includes("Usage") && (
                   <Progress 
                     value={metric.value} 
-                    className={`h-2 ${metric.status === "critical" ? "bg-red-100" : 
-                      metric.status === "warning" ? "bg-yellow-100" : "bg-green-100"}`}
+                    className={`h-2 ${metric.status === "critical" ? "bg-destructive/10" : 
+                      metric.status === "warning" ? "bg-warning/10" : "bg-success/10"}`}
                   />
                 )}
               </div>
@@ -269,7 +269,7 @@ export const RealTimeSystemMonitor: React.FC = () => {
         <Card>
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
-              <AlertTriangle className="w-5 h-5 text-yellow-500" />
+              <AlertTriangle className="w-5 h-5 text-warning" />
               Alertas Recentes
             </CardTitle>
           </CardHeader>
@@ -294,12 +294,12 @@ export const RealTimeSystemMonitor: React.FC = () => {
         <Card>
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
-              <TrendingUp className="w-5 h-5 text-blue-500" />
+              <TrendingUp className="w-5 h-5 text-info" />
               Performance Timeline
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="h-64 flex items-center justify-center border-2 border-dashed border-gray-200 rounded-lg">
+            <div className="h-64 flex items-center justify-center border-2 border-dashed border-border rounded-lg">
               <div className="text-center">
                 <Activity className="w-12 h-12 text-muted-foreground mx-auto mb-2" />
                 <p className="text-muted-foreground">Gráfico de performance em tempo real</p>

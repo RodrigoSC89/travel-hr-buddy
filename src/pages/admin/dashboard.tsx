@@ -304,7 +304,7 @@ export default function AdminDashboard() {
 
       {/* Public Mode Indicator */}
       {isPublic && (
-        <Badge variant="secondary" className="px-4 py-2 text-sm bg-blue-100 text-blue-800">
+        <Badge variant="secondary" className="px-4 py-2 text-sm bg-info/10 text-info">
           <Eye className="w-4 h-4 mr-2" />
           🔒 Modo público somente leitura
         </Badge>
@@ -316,8 +316,8 @@ export default function AdminDashboard() {
           variant={cronStatus === "ok" ? "default" : "secondary"}
           className={`px-4 py-2 text-sm ${
             cronStatus === "ok"
-              ? "bg-green-100 text-green-800 hover:bg-green-200"
-              : "bg-yellow-100 text-yellow-800 hover:bg-yellow-200"
+              ? "bg-success/10 text-success hover:bg-success/20"
+              : "bg-warning/10 text-warning hover:bg-warning/20"
           }`}
         >
           <Clock className="w-4 h-4 mr-2" />

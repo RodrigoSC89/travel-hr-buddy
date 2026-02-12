@@ -45,7 +45,7 @@ export default function InstallPage() {
         {/* Header */}
         <div className="flex justify-between items-center mb-8">
           <div className="flex items-center gap-3">
-            <div className="w-12 h-12 bg-blue-500 rounded-xl flex items-center justify-center">
+            <div className="w-12 h-12 bg-primary rounded-xl flex items-center justify-center">
               <span className="text-2xl">⚓</span>
             </div>
             <div>
@@ -72,38 +72,38 @@ export default function InstallPage() {
             <div className="flex items-center gap-3 p-3 rounded-lg bg-white/5">
               {isOnline ? (
                 <>
-                  <Wifi className="h-5 w-5 text-green-400" />
-                  <span className="text-green-300">{t('common.online')}</span>
+                  <Wifi className="h-5 w-5 text-success" />
+                  <span className="text-success">{t('common.online')}</span>
                 </>
               ) : (
                 <>
-                  <WifiOff className="h-5 w-5 text-yellow-400" />
-                  <span className="text-yellow-300">{t('common.offline')}</span>
+                  <WifiOff className="h-5 w-5 text-warning" />
+                  <span className="text-warning">{t('common.offline')}</span>
                 </>
               )}
             </div>
 
             {/* Install Status */}
             {isInstalled ? (
-              <div className="flex items-center gap-3 p-4 rounded-lg bg-green-500/20 border border-green-500/30">
-                <Check className="h-6 w-6 text-green-400" />
+              <div className="flex items-center gap-3 p-4 rounded-lg bg-success/20 border border-success/30">
+                <Check className="h-6 w-6 text-success" />
                 <div>
-                  <p className="font-medium text-green-300">{t('pwa.installed')}</p>
-                  <p className="text-sm text-green-200/70">{t('pwa.offlineReady')}</p>
+                  <p className="font-medium text-success">{t('pwa.installed')}</p>
+                  <p className="text-sm text-success/70">{t('pwa.offlineReady')}</p>
                 </div>
               </div>
             ) : canInstall ? (
               <Button 
                 onClick={handleInstall}
-                className="w-full bg-blue-500 hover:bg-blue-600 gap-2"
+                className="w-full bg-primary hover:bg-primary/90 gap-2"
                 size="lg"
               >
                 <Download className="h-5 w-5" />
                 {t('pwa.installButton')}
               </Button>
             ) : (
-              <div className="p-4 rounded-lg bg-blue-500/20 border border-blue-500/30">
-                <p className="text-sm text-blue-200">
+              <div className="p-4 rounded-lg bg-primary/20 border border-primary/30">
+                <p className="text-sm text-primary-foreground/70">
                   {getInstallInstructions(platform)}
                 </p>
               </div>
