@@ -155,7 +155,7 @@ export default function ClassSurveysPage() {
       <div className="space-y-6">
         <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
           {[...Array(5)].map((_, i) => (
-            <Card key={i}>
+            <Card key={`survey-skel-${i}`}>
               <CardContent className="pt-4">
                 <Skeleton className="h-16 w-full" />
               </CardContent>
@@ -170,7 +170,7 @@ export default function ClassSurveysPage() {
         <Card>
           <CardContent className="pt-4 space-y-4">
             {[...Array(3)].map((_, i) => (
-              <Skeleton key={i} className="h-24 w-full" />
+              <Skeleton key={`survey-row-skel-${i}`} className="h-24 w-full" />
             ))}
           </CardContent>
         </Card>
@@ -365,8 +365,8 @@ export default function ClassSurveysPage() {
                                   {survey.survey_type} Survey • {survey.classification_society}
                                 </p>
                                 <div className="flex items-center gap-2 mt-1">
-                                  {survey.certificates.slice(0, 3).map((cert: string, i: number) => (
-                                    <Badge key={i} variant="secondary" className="text-xs">
+                                  {survey.certificates.slice(0, 3).map((cert: string) => (
+                                    <Badge key={cert} variant="secondary" className="text-xs">
                                       {cert}
                                     </Badge>
                                   ))}

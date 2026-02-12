@@ -196,8 +196,8 @@ export function SensorFusionDashboard() {
 
       {/* Sensor Status Grid */}
       <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-8 gap-3">
-        {sensors.map((sensor, idx) => (
-          <Card key={idx} className="relative overflow-hidden">
+        {sensors.map((sensor) => (
+          <Card key={sensor.name} className="relative overflow-hidden">
             <CardContent className="p-3">
               <div className="flex items-center justify-between mb-2">
                 <div className={cn('h-2 w-2 rounded-full animate-pulse', getStatusColor(sensor.status))} />
@@ -490,8 +490,8 @@ export function SensorFusionDashboard() {
             </CardHeader>
             <CardContent>
               <div className="space-y-4">
-                {sensors.map((sensor, idx) => (
-                  <div key={idx} className="flex items-center gap-4">
+                {sensors.map((sensor) => (
+                  <div key={`confidence-${sensor.name}`} className="flex items-center gap-4">
                     <div className="w-32 flex items-center gap-2">
                       {sensor.icon}
                       <span className="text-sm font-medium truncate">{sensor.name}</span>
@@ -525,8 +525,8 @@ export function SensorFusionDashboard() {
             <CardContent>
               {sensors.filter(s => s.status !== 'active').length > 0 ? (
                 <div className="space-y-2">
-                  {sensors.filter(s => s.status !== 'active').map((sensor, idx) => (
-                    <div key={idx} className="p-3 rounded-lg bg-warning/10 border border-warning/50">
+                  {sensors.filter(s => s.status !== 'active').map((sensor) => (
+                    <div key={`alert-${sensor.name}`} className="p-3 rounded-lg bg-warning/10 border border-warning/50">
                       <div className="flex items-center gap-2">
                         {sensor.icon}
                         <span className="font-medium">{sensor.name}</span>

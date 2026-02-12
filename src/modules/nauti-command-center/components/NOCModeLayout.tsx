@@ -292,7 +292,7 @@ export function NOCModeLayout() {
                   <ScrollArea className="h-[320px] pr-4">
                     <div className="space-y-2 font-mono text-xs">
                       {[...Array(15)].map((_, i) => (
-                        <div key={i} className="flex items-start gap-2 p-2 rounded bg-[#1a1a24]">
+                        <div key={`noc-log-${i}`} className="flex items-start gap-2 p-2 rounded bg-[#1a1a24]">
                           <span className="text-muted-foreground whitespace-nowrap">
                             {new Date(Date.now() - i * 30000).toLocaleTimeString('pt-BR')}
                           </span>

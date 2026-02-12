@@ -161,7 +161,7 @@ export function PulseDots({ count = 3, size = "md", className }: PulseDotsProps)
     >
       {Array.from({ length: count }).map((_, i) => (
         <div
-          key={i}
+          key={`dot-${i}`}
           className={cn(
             "bg-primary rounded-full animate-pulse",
             dotSizes[size]

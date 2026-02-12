@@ -332,8 +332,8 @@ export function SupplierComparator() {
                 <div>
                   <h4 className="text-sm font-medium mb-3">Melhores por Categoria</h4>
                   <div className="space-y-2">
-                    {bestByCategory.map((item, i) => (
-                      <div key={i} className="p-2 rounded bg-muted/30">
+                    {bestByCategory.map((item) => (
+                      <div key={item.label} className="p-2 rounded bg-muted/30">
                         <div className="flex items-center justify-between">
                           <span className="text-xs text-muted-foreground">{item.label}</span>
                           <Badge variant="outline" className="text-xs">

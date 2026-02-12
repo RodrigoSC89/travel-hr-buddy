@@ -56,7 +56,7 @@ export const SystemLogs: React.FC = () => {
         <CardContent>
           <div className="space-y-3">
             {[...Array(5)].map((_, i) => (
-              <Skeleton key={i} className="h-16" />
+              <Skeleton key={`syslog-skel-${i}`} className="h-16" />
             ))}
           </div>
         </CardContent>

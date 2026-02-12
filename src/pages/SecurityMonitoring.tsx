@@ -353,8 +353,8 @@ Forneça análises detalhadas e recomendações de segurança.`;
                 { name: "SOLAS", progress: 98, status: "compliant" },
                 { name: "MARPOL", progress: 92, status: "partial" },
                 { name: "Cybersecurity Guidelines", progress: 88, status: "partial" }
-              ].map((item, i) => (
-                <div key={i} className="space-y-2">
+              ].map((item) => (
+                <div key={item.name} className="space-y-2">
                   <div className="flex items-center justify-between">
                     <span className="font-medium">{item.name}</span>
                     <Badge

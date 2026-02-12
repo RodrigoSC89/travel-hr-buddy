@@ -252,8 +252,8 @@ export const AIAdvisorPanel: React.FC = () => {
                         <p className="text-sm whitespace-pre-wrap">{message.content}</p>
                         {message.sources && message.sources.length > 0 && (
                           <div className="mt-2 flex flex-wrap gap-1">
-                            {message.sources.map((source, i) => (
-                              <Badge key={i} variant="outline" className="text-xs">
+                            {message.sources.map((source) => (
+                              <Badge key={source} variant="outline" className="text-xs">
                                 {source}
                               </Badge>
                             ))}
@@ -263,8 +263,8 @@ export const AIAdvisorPanel: React.FC = () => {
                           <div className="mt-2 pt-2 border-t border-border/50">
                             <p className="text-xs text-muted-foreground mb-1">Recomendações:</p>
                             <ul className="text-xs space-y-1">
-                              {message.recommendations.map((rec, i) => (
-                                <li key={i}>• {rec}</li>
+                              {message.recommendations.map((rec) => (
+                                <li key={rec}>• {rec}</li>
                               ))}
                             </ul>
                           </div>
@@ -328,9 +328,9 @@ export const AIAdvisorPanel: React.FC = () => {
             </CardHeader>
             <CardContent>
               <div className="grid grid-cols-2 gap-3">
-                {quickActions[profile].map((action, i) => (
+                {quickActions[profile].map((action) => (
                   <Button
-                    key={i}
+                    key={action}
                     variant="outline"
                     className="h-auto py-4 px-4 text-left justify-start"
                     onClick={() => {

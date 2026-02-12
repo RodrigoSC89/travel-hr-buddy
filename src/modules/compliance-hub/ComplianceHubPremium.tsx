@@ -280,8 +280,8 @@ function ComplianceDashboard() {
                 { type: "PSC", date: "15/02/2024", port: "Santos", status: "scheduled" },
                 { type: "Flag State", date: "20/03/2024", port: "Rio de Janeiro", status: "scheduled" },
                 { type: "Class Survey", date: "10/04/2024", port: "Vitória", status: "pending" },
-              ].map((audit, i) => (
-                <div key={i} className="flex items-center justify-between p-3 border rounded-lg">
+              ].map((audit) => (
+                <div key={`${audit.type}-${audit.date}`} className="flex items-center justify-between p-3 border rounded-lg">
                   <div>
                     <p className="font-medium">{audit.type}</p>
                     <p className="text-sm text-muted-foreground">{audit.port} - {audit.date}</p>

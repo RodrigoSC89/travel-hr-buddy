@@ -391,8 +391,8 @@ export const ClientAssurancePortal: React.FC = () => {
                   { name: "CAMO - Critical Activity Mode of Operation", date: "2024-10-01", type: "PDF" },
                   { name: "Último Relatório de Auditoria PEO-DP", date: "2024-11-15", type: "PDF" },
                   { name: "Certificados da Equipe DP", date: "2024-12-01", type: "ZIP" }
-                ].map((doc, i) => (
-                  <div key={i} className="p-3 rounded-lg border flex items-center justify-between hover:bg-accent cursor-pointer">
+                ].map((doc) => (
+                  <div key={doc.name} className="p-3 rounded-lg border flex items-center justify-between hover:bg-accent cursor-pointer">
                     <div className="flex items-center gap-3">
                       <FileText className="h-5 w-5 text-blue-500" />
                       <div>

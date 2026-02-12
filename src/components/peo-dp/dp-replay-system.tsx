@@ -279,7 +279,7 @@ export const DPReplaySystem: React.FC = () => {
                       <p className="text-xs text-muted-foreground mb-2">Carga dos Thrusters</p>
                       <div className="grid grid-cols-4 gap-2">
                         {vesselState.thrusterLoad.map((load, i) => (
-                          <div key={i} className="space-y-1">
+                          <div key={`thruster-${i}`} className="space-y-1">
                             <div className="flex justify-between text-xs">
                               <span>T{i + 1}</span>
                               <span>{load.toFixed(0)}%</span>

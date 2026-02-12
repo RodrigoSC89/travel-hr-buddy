@@ -281,8 +281,8 @@ export function RouteOptimizerDashboard() {
           </CardHeader>
           <CardContent>
             <div className="space-y-3">
-              {weather.length > 0 ? weather.map((w, i) => (
-                <div key={i} className="flex items-center justify-between p-2 rounded-lg border">
+              {weather.length > 0 ? weather.map((w) => (
+                <div key={w.location} className="flex items-center justify-between p-2 rounded-lg border">
                   <div className="flex items-center gap-2">
                     <Waves className={cn("h-4 w-4", getConditionColor(w.maritimeCondition))} />
                     <span className="font-medium">{w.location}</span>
@@ -639,8 +639,8 @@ export function RouteOptimizerDashboard() {
                   <CardContent className="space-y-3">
                     {aiOptimization.recommendations && aiOptimization.recommendations.length > 0 ? (
                       <ul className="space-y-2">
-                        {aiOptimization.recommendations.map((rec: string, i: number) => (
-                          <li key={i} className="flex items-start gap-2 text-sm">
+                        {aiOptimization.recommendations.map((rec: string) => (
+                          <li key={rec} className="flex items-start gap-2 text-sm">
                             <Leaf className="h-4 w-4 text-success mt-0.5 flex-shrink-0" />
                             <span>{rec}</span>
                           </li>
@@ -655,8 +655,8 @@ export function RouteOptimizerDashboard() {
                         <h4 className="text-sm font-semibold mb-2 flex items-center gap-1">
                           <Anchor className="h-3 w-3" /> Paradas Recomendadas
                         </h4>
-                        {aiOptimization.recommended_stops.map((stop: { port: string; purpose: string; eta: string }, i: number) => (
-                          <div key={i} className="flex items-center justify-between p-2 bg-muted rounded-lg mb-1">
+                        {aiOptimization.recommended_stops.map((stop: { port: string; purpose: string; eta: string }) => (
+                          <div key={stop.port} className="flex items-center justify-between p-2 bg-muted rounded-lg mb-1">
                             <div>
                               <span className="font-medium text-sm">{stop.port}</span>
                               <p className="text-xs text-muted-foreground">{stop.purpose}</p>

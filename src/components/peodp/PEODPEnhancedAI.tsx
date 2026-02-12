@@ -205,8 +205,8 @@ export function PEODPEnhancedAI() {
           {asogStatus.recommendations.length > 0 && (
             <div className="mt-4 p-3 bg-muted rounded-lg">
               <p className="text-sm font-medium mb-2">Recomendações IA:</p>
-              {asogStatus.recommendations.map((rec, i) => (
-                <p key={i} className="text-xs text-muted-foreground flex items-center gap-1">
+              {asogStatus.recommendations.map((rec) => (
+                <p key={rec} className="text-xs text-muted-foreground flex items-center gap-1">
                   <AlertCircle className="h-3 w-3 text-warning" />
                   {rec}
                 </p>

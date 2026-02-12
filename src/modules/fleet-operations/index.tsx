@@ -288,8 +288,8 @@ const FleetOperationsCenter: React.FC = () => {
                     { vessel: "MV Atlantic Star", alert: "Manutenção programada", severity: "info" },
                     { vessel: "MV Ocean Pioneer", alert: "Nível de combustível baixo", severity: "warning" },
                     { vessel: "MV Deep Mariner", alert: "Certificado expira em 15 dias", severity: "warning" }
-                  ].map((alert, i) => (
-                    <div key={i} className="flex items-start gap-3 p-2 rounded-lg bg-muted/30">
+                  ].map((alert) => (
+                    <div key={alert.vessel} className="flex items-start gap-3 p-2 rounded-lg bg-muted/30">
                       {alert.severity === "warning" ? (
                         <AlertTriangle className="h-4 w-4 text-yellow-400 mt-0.5" />
                       ) : (
@@ -464,8 +464,8 @@ const FleetOperationsCenter: React.FC = () => {
                     { vessel: "MV Nautilus Explorer", operation: "Ressuprimento P-52", progress: 75, eta: "4h" },
                     { vessel: "MV Ocean Pioneer", operation: "Transporte de carga para FPSO", progress: 45, eta: "12h" },
                     { vessel: "MV Deep Mariner", operation: "Standby operacional", progress: 100, eta: "Aguardando" }
-                  ].map((op, i) => (
-                    <div key={i} className="p-3 rounded-lg bg-muted/30">
+                  ].map((op) => (
+                    <div key={op.vessel} className="p-3 rounded-lg bg-muted/30">
                       <div className="flex items-center justify-between mb-2">
                         <span className="font-medium text-foreground">{op.vessel}</span>
                         <Badge variant="outline">{op.eta}</Badge>
@@ -490,10 +490,10 @@ const FleetOperationsCenter: React.FC = () => {
                   {vessels
                     .sort((a, b) => a.lastMaintenance.getTime() - b.lastMaintenance.getTime())
                     .slice(0, 3)
-                    .map((vessel, i) => {
+                    .map((vessel) => {
                       const daysSince = Math.floor((Date.now() - vessel.lastMaintenance.getTime()) / 86400000);
                       return (
-                        <div key={i} className="flex items-center justify-between p-3 rounded-lg bg-muted/30">
+                        <div key={vessel.name} className="flex items-center justify-between p-3 rounded-lg bg-muted/30">
                           <div>
                             <p className="font-medium text-foreground">{vessel.name}</p>
                             <p className="text-sm text-muted-foreground">

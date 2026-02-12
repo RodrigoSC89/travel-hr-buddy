@@ -438,8 +438,8 @@ const DeepRiskAIPage: React.FC = () => {
                           {currentAnalysis.factors
                             .sort((a, b) => (b.weight * b.value) - (a.weight * a.value))
                             .slice(0, 5)
-                            .map((factor, idx) => (
-                              <div key={idx} className="space-y-1">
+                            .map((factor) => (
+                              <div key={factor.factor} className="space-y-1">
                                 <div className="flex justify-between text-sm">
                                   <span>{factor.factor}</span>
                                   <span className="font-medium">

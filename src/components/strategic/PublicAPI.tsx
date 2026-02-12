@@ -458,8 +458,8 @@ export const PublicAPI = () => {
                     { name: "Analytics Pro", author: "Nautilus Labs", downloads: "2.4k", rating: 4.8 },
                     { name: "Crew Sync", author: "Maritime Tech", downloads: "1.8k", rating: 4.6 },
                     { name: "Fleet Monitor", author: "Ocean Data", downloads: "3.1k", rating: 4.9 },
-                  ].map((ext, i) => (
-                    <div key={i} className="border rounded-lg p-4 hover:bg-muted/50 transition-colors">
+                  ].map((ext) => (
+                    <div key={ext.name} className="border rounded-lg p-4 hover:bg-muted/50 transition-colors">
                       <h4 className="font-medium">{ext.name}</h4>
                       <p className="text-sm text-muted-foreground">{ext.author}</p>
                       <div className="flex justify-between items-center mt-2 text-sm">

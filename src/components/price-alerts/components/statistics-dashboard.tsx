@@ -129,7 +129,7 @@ export const StatisticsDashboard = () => {
     return (
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         {[...Array(6)].map((_, i) => (
-          <Card key={i} className="animate-pulse">
+          <Card key={`stat-skel-${i}`} className="animate-pulse">
             <CardHeader className="space-y-2">
               <div className="h-4 bg-muted rounded w-3/4"></div>
               <div className="h-8 bg-muted rounded w-1/2"></div>

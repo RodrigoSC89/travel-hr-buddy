@@ -262,9 +262,9 @@ export const PreOVIDAIChat: React.FC<PreOVIDAIChatProps> = ({
       </CardHeader>
       <CardContent className="flex-1 flex flex-col">
         <div className="flex flex-wrap gap-2 mb-3">
-          {quickActions.map((action, i) => (
+          {quickActions.map((action) => (
             <Button 
-              key={i} 
+              key={action.label} 
               variant="outline" 
               size="sm" 
               onClick={() => sendMessage(action.prompt)} 
@@ -300,7 +300,7 @@ export const PreOVIDAIChat: React.FC<PreOVIDAIChatProps> = ({
           ) : (
             <div className="space-y-4">
               {messages.map((msg, i) => (
-                <div key={i} className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}>
+                <div key={`ovid-msg-${i}-${msg.role}`} className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}>
                   <div className={`max-w-[85%] p-3 rounded-lg ${
                     msg.role === 'user' 
                       ? 'bg-primary text-primary-foreground' 

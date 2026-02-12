@@ -416,9 +416,9 @@ A Maritime Labour Convention 2006 estabelece direitos e condições mínimas de 
               
               {/* Quick Questions */}
               <div className="grid grid-cols-2 gap-2 w-full max-w-lg">
-                {QUICK_QUESTIONS.map((q, i) => (
+                {QUICK_QUESTIONS.map((q) => (
                   <Button
-                    key={i}
+                    key={q}
                     variant="outline"
                     size="sm"
                     className="text-xs h-auto py-2 justify-start text-left"

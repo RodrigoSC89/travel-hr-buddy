@@ -183,9 +183,9 @@ const HRChatbot: React.FC = () => {
                   </div>
                   {message.suggestions && (
                     <div className="mt-2 flex flex-wrap gap-1">
-                      {message.suggestions.map((suggestion, idx) => (
+                      {message.suggestions.map((suggestion) => (
                         <Badge
-                          key={idx}
+                          key={suggestion}
                           variant="secondary"
                           className="cursor-pointer hover:bg-primary/10"
                           onClick={() => handleSend(suggestion)}

@@ -236,7 +236,7 @@ export function CPTECPanel({ lat, lon, cidade, compact = false }: CPTECPanelProp
                 {previsaoData.previsoes.map((prev, i) => {
                   const uvInfo = getUVDescription(prev.iuv);
                   return (
-                    <Card key={i} className="text-center hover:shadow-md transition-shadow">
+                    <Card key={prev.dia} className="text-center hover:shadow-md transition-shadow">
                       <CardContent className="p-3">
                         <p className="text-xs font-medium mb-1">
                           {new Date(prev.dia).toLocaleDateString("pt-BR", { weekday: "short", day: "numeric" })}
@@ -285,8 +285,8 @@ export function CPTECPanel({ lat, lon, cidade, compact = false }: CPTECPanelProp
             <ScrollArea className="h-[300px]">
               {ondasData?.ondas && ondasData.ondas.length > 0 ? (
                 <div className="space-y-4">
-                  {ondasData.ondas.map((onda, i) => (
-                    <Card key={i} className="bg-muted/30">
+                  {ondasData.ondas.map((onda) => (
+                    <Card key={onda.dia} className="bg-muted/30">
                       <CardHeader className="pb-2">
                         <CardTitle className="text-sm flex items-center gap-2">
                           <Calendar className="h-4 w-4" />

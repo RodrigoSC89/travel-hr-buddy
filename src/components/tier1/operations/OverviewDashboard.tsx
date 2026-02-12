@@ -191,7 +191,7 @@ export default function OverviewDashboard() {
             {isLoading ? (
               <div className="space-y-4">
                 {[1, 2, 3].map(i => (
-                  <div key={i} className="h-20 bg-muted/30 rounded-lg animate-pulse" />
+                  <div key={`overview-skel-${i}`} className="h-20 bg-muted/30 rounded-lg animate-pulse" />
                 ))}
               </div>
             ) : (

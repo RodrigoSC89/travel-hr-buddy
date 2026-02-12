@@ -211,8 +211,8 @@ export default function DrydockPlanningPro() {
             </CardHeader>
             <CardContent>
               <div className="space-y-3">
-                {upcomingSurveys.map((survey, i) => (
-                  <div key={i} className="flex items-center justify-between p-3 border rounded-lg">
+                {upcomingSurveys.map((survey) => (
+                  <div key={survey.vessel} className="flex items-center justify-between p-3 border rounded-lg">
                     <div className="flex items-center gap-3">
                       <Ship className="h-5 w-5 text-muted-foreground" />
                       <div>
@@ -302,7 +302,7 @@ export default function DrydockPlanningPro() {
                   const isWarning = thicknessValue >= minValue && thicknessValue < minValue * 1.1;
                   
                   return (
-                    <div key={i} className="p-4 border rounded-lg">
+                    <div key={area.area} className="p-4 border rounded-lg">
                       <div className="flex items-center justify-between mb-3">
                         <div>
                           <p className="font-medium">{area.area}</p>
@@ -349,8 +349,8 @@ export default function DrydockPlanningPro() {
             </CardHeader>
             <CardContent>
               <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                {selectedProject.classSurveys.map((survey, i) => (
-                  <Card key={i} className="text-center">
+                {selectedProject.classSurveys.map((survey) => (
+                  <Card key={survey} className="text-center">
                     <CardContent className="p-4">
                       <div className="w-12 h-12 mx-auto mb-2 rounded-full bg-primary/10 flex items-center justify-center">
                         <CheckCircle className="h-6 w-6 text-primary" />
