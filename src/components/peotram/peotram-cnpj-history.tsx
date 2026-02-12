@@ -149,24 +149,24 @@ export const PeotramCNPJHistory: React.FC = () => {
   };
 
   const getTrendIcon = (trend: string) => {
-    if (trend === "improving") return <TrendingUp className="h-4 w-4 text-green-600" />;
-    if (trend === "declining") return <TrendingDown className="h-4 w-4 text-red-600" />;
-    return <Target className="h-4 w-4 text-gray-500" />;
+    if (trend === "improving") return <TrendingUp className="h-4 w-4 text-success" />;
+    if (trend === "declining") return <TrendingDown className="h-4 w-4 text-destructive" />;
+    return <Target className="h-4 w-4 text-muted-foreground" />;
   };
 
   const getRiskBadge = (risk: string) => {
     const colors = {
-      low: "bg-green-100 text-green-800",
-      medium: "bg-yellow-100 text-yellow-800",
-      high: "bg-red-100 text-red-800"
+      low: "bg-success/10 text-success",
+      medium: "bg-warning/10 text-warning",
+      high: "bg-destructive/10 text-destructive"
     };
     return colors[risk as keyof typeof colors];
   };
 
   const getScoreColor = (score: number) => {
-    if (score >= 85) return "text-green-600";
-    if (score >= 70) return "text-yellow-600";
-    return "text-red-600";
+    if (score >= 85) return "text-success";
+    if (score >= 70) return "text-warning";
+    return "text-destructive";
   };
 
   const filteredAudits = selectedCompany?.audits.filter(a => 
@@ -178,12 +178,12 @@ export const PeotramCNPJHistory: React.FC = () => {
   return (
     <div className="space-y-6">
       {/* Header */}
-      <Card className="border-2 border-green-200 bg-gradient-to-r from-green-50 to-emerald-50">
+      <Card className="border-2 border-success/20 bg-gradient-to-r from-success/5 to-success/10">
         <CardHeader>
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
-              <div className="p-3 rounded-lg bg-green-600/10">
-                <Building2 className="h-6 w-6 text-green-600" />
+              <div className="p-3 rounded-lg bg-success/10">
+                <Building2 className="h-6 w-6 text-success" />
               </div>
               <div>
                 <CardTitle className="text-2xl">Histórico PEOTRAM por CNPJ</CardTitle>
@@ -287,7 +287,7 @@ export const PeotramCNPJHistory: React.FC = () => {
                     <AlertTriangle className="h-4 w-4" />
                     <span className="text-sm">NCs Abertas</span>
                   </div>
-                  <div className="text-2xl font-bold text-yellow-600">
+                  <div className="text-2xl font-bold text-warning">
                     {selectedCompany.audits.reduce((sum, a) => 
                       sum + a.findings.filter(f => f.status === "open").length, 0
                     )}
@@ -343,7 +343,7 @@ export const PeotramCNPJHistory: React.FC = () => {
                           <span className="text-muted-foreground">Última Auditoria</span>
                           <span>{new Date(vessel.lastAudit).toLocaleDateString("pt-BR")}</span>
                         </div>
-                        <Badge className={vessel.status === "active" ? "bg-green-100 text-green-800" : "bg-gray-100 text-gray-800"}>
+                        <Badge className={vessel.status === "active" ? "bg-success/10 text-success" : "bg-muted text-muted-foreground"}>
                           {vessel.status === "active" ? "Ativa" : "Inativa"}
                         </Badge>
                       </div>
@@ -410,21 +410,21 @@ export const PeotramCNPJHistory: React.FC = () => {
                             <p className="text-xs text-muted-foreground">Score</p>
                           </div>
                           <div className="text-center">
-                            <div className="text-lg font-semibold text-yellow-600">
+                            <div className="text-lg font-semibold text-warning">
                               {audit.nonConformities}
                             </div>
                             <p className="text-xs text-muted-foreground">NCs</p>
                           </div>
                           <div className="text-center">
-                            <div className="text-lg font-semibold text-red-600">
+                            <div className="text-lg font-semibold text-destructive">
                               {audit.criticalItems}
                             </div>
                             <p className="text-xs text-muted-foreground">Críticos</p>
                           </div>
                           <Badge className={
-                            audit.status === "completed" ? "bg-green-100 text-green-800" :
-                            audit.status === "in_progress" ? "bg-yellow-100 text-yellow-800" :
-                            "bg-gray-100 text-gray-800"
+                            audit.status === "completed" ? "bg-success/10 text-success" :
+                            audit.status === "in_progress" ? "bg-warning/10 text-warning" :
+                            "bg-muted text-muted-foreground"
                           }>
                             {audit.status === "completed" ? "Concluída" :
                              audit.status === "in_progress" ? "Em Andamento" : "Pendente"}
@@ -443,10 +443,10 @@ export const PeotramCNPJHistory: React.FC = () => {
                             {audit.findings.filter(f => f.status !== "closed").slice(0, 2).map((finding) => (
                               <div 
                                 key={finding.id}
-                                className={`text-sm p-2 rounded ${
-                                  finding.severity === "critical" ? "bg-red-50 text-red-700" :
-                                  finding.severity === "major" ? "bg-yellow-50 text-yellow-700" :
-                                  "bg-blue-50 text-blue-700"
+                              className={`text-sm p-2 rounded ${
+                                  finding.severity === "critical" ? "bg-destructive/10 text-destructive" :
+                                  finding.severity === "major" ? "bg-warning/10 text-warning" :
+                                  "bg-info/10 text-info"
                                 }`}
                               >
                                 <span className="font-medium">{finding.element}:</span> {finding.description}
@@ -467,7 +467,7 @@ export const PeotramCNPJHistory: React.FC = () => {
                 <Card>
                   <CardHeader>
                     <CardTitle className="flex items-center gap-2">
-                      <BarChart3 className="h-5 w-5 text-blue-600" />
+                      <BarChart3 className="h-5 w-5 text-primary" />
                       Evolução de Score
                     </CardTitle>
                   </CardHeader>
@@ -493,7 +493,7 @@ export const PeotramCNPJHistory: React.FC = () => {
                 <Card>
                   <CardHeader>
                     <CardTitle className="flex items-center gap-2">
-                      <AlertTriangle className="h-5 w-5 text-yellow-600" />
+                      <AlertTriangle className="h-5 w-5 text-warning" />
                       Padrão de Não Conformidades
                     </CardTitle>
                   </CardHeader>
@@ -507,9 +507,9 @@ export const PeotramCNPJHistory: React.FC = () => {
                           <div key={elem} className="flex items-center justify-between">
                             <span className="text-sm">{elem}</span>
                             <div className="flex items-center gap-2">
-                              <div className="w-32 h-2 bg-gray-200 rounded">
+                              <div className="w-32 h-2 bg-muted rounded">
                                 <div 
-                                  className="h-2 bg-yellow-500 rounded"
+                                  className="h-2 bg-warning rounded"
                                   style={{ width: `${Math.min(count * 20, 100)}%` }}
                                 />
                               </div>
@@ -524,16 +524,16 @@ export const PeotramCNPJHistory: React.FC = () => {
               </div>
 
               {/* Trend Analysis */}
-              <Card className="border-2 border-blue-200 bg-blue-50/50">
+              <Card className="border-2 border-primary/20 bg-primary/5">
                 <CardHeader>
                   <CardTitle className="flex items-center gap-2">
-                    <TrendingUp className="h-5 w-5 text-blue-600" />
+                    <TrendingUp className="h-5 w-5 text-primary" />
                     Análise de Tendência
                   </CardTitle>
                 </CardHeader>
                 <CardContent>
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                    <div className="p-4 bg-white rounded-lg">
+                    <div className="p-4 bg-card rounded-lg">
                       <p className="text-sm text-muted-foreground">Tendência Geral</p>
                       <div className="flex items-center gap-2 mt-1">
                         {getTrendIcon(selectedCompany.trend)}
@@ -543,17 +543,17 @@ export const PeotramCNPJHistory: React.FC = () => {
                         </span>
                       </div>
                     </div>
-                    <div className="p-4 bg-white rounded-lg">
+                    <div className="p-4 bg-card rounded-lg">
                       <p className="text-sm text-muted-foreground">Previsão Próximo Ciclo</p>
-                      <div className="text-xl font-bold text-blue-600">
+                      <div className="text-xl font-bold text-primary">
                         {Math.round(selectedCompany.overallScore * (selectedCompany.trend === "improving" ? 1.05 : selectedCompany.trend === "declining" ? 0.95 : 1))}%
                       </div>
                     </div>
-                    <div className="p-4 bg-white rounded-lg">
+                    <div className="p-4 bg-card rounded-lg">
                       <p className="text-sm text-muted-foreground">Risco de NC Crítica</p>
                       <div className={`text-xl font-bold ${
-                        selectedCompany.riskLevel === "low" ? "text-green-600" :
-                        selectedCompany.riskLevel === "medium" ? "text-yellow-600" : "text-red-600"
+                        selectedCompany.riskLevel === "low" ? "text-success" :
+                        selectedCompany.riskLevel === "medium" ? "text-warning" : "text-destructive"
                       }`}>
                         {selectedCompany.riskLevel === "low" ? "15%" :
                          selectedCompany.riskLevel === "medium" ? "35%" : "60%"}

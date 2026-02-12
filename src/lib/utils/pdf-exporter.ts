@@ -127,7 +127,8 @@ class PDFExporter {
     });
 
     // Update Y position after table
-    const finalY = (this.doc as any).lastAutoTable.finalY;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any -- jsPDF autoTable plugin extends doc
+    const finalY = (this.doc as Record<string, { finalY: number }>).lastAutoTable.finalY;
     this.yPosition = finalY + 10;
   }
 
@@ -200,7 +201,7 @@ export async function exportJobToPDF(job: {
   priority?: string;
   assignee?: string;
   dueDate?: Date;
-  metrics?: Record<string, any>;
+  metrics?: Record<string, unknown>;
 }): Promise<void> {
   const pdf = await PDFExporter.create({
     title: "Ordem de Serviço",

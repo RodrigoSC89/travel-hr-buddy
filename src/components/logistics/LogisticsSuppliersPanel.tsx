@@ -249,10 +249,10 @@ export function LogisticsSuppliersPanel() {
 
   const getStatusBadge = (status: Supplier["status"]) => {
     const config = {
-      active: { variant: "default" as const, label: "Ativo", className: "bg-green-500/10 text-green-500 border-green-500/30" },
-      pending: { variant: "secondary" as const, label: "Pendente", className: "bg-yellow-500/10 text-yellow-500 border-yellow-500/30" },
-      suspended: { variant: "destructive" as const, label: "Suspenso", className: "bg-red-500/10 text-red-500 border-red-500/30" },
-      inactive: { variant: "outline" as const, label: "Inativo", className: "bg-gray-500/10 text-gray-500 border-gray-500/30" }
+      active: { variant: "default" as const, label: "Ativo", className: "bg-success/10 text-success border-success/30" },
+      pending: { variant: "secondary" as const, label: "Pendente", className: "bg-warning/10 text-warning border-warning/30" },
+      suspended: { variant: "destructive" as const, label: "Suspenso", className: "bg-destructive/10 text-destructive border-destructive/30" },
+      inactive: { variant: "outline" as const, label: "Inativo", className: "bg-muted text-muted-foreground border-muted" }
     };
     return config[status] || config.inactive;
   };
@@ -260,7 +260,7 @@ export function LogisticsSuppliersPanel() {
   const renderRating = (rating: number) => {
     return (
       <div className="flex items-center gap-1">
-        <Star className="h-4 w-4 fill-yellow-500 text-yellow-500" />
+        <Star className="h-4 w-4 fill-warning text-warning" />
         <span className="font-medium">{rating.toFixed(1)}</span>
       </div>
     );
@@ -340,11 +340,11 @@ export function LogisticsSuppliersPanel() {
           </Card>
           <Card className="p-3">
             <p className="text-sm text-muted-foreground">Ativos</p>
-            <p className="text-2xl font-bold text-green-500">{suppliers.filter(s => s.status === "active").length}</p>
+            <p className="text-2xl font-bold text-success">{suppliers.filter(s => s.status === "active").length}</p>
           </Card>
           <Card className="p-3">
             <p className="text-sm text-muted-foreground">Pendentes</p>
-            <p className="text-2xl font-bold text-yellow-500">{suppliers.filter(s => s.status === "pending").length}</p>
+            <p className="text-2xl font-bold text-warning">{suppliers.filter(s => s.status === "pending").length}</p>
           </Card>
           <Card className="p-3">
             <p className="text-sm text-muted-foreground">Rating Médio</p>
@@ -406,19 +406,19 @@ export function LogisticsSuppliersPanel() {
                         <div className="flex justify-end gap-1">
                           {supplier.status === "pending" && (
                             <Button variant="ghost" size="icon" onClick={() => handleApprove(supplier)} title="Aprovar">
-                              <CheckCircle className="h-4 w-4 text-green-500" />
+                              <CheckCircle className="h-4 w-4 text-success" />
                             </Button>
                           )}
                           {supplier.status === "active" && (
                             <Button variant="ghost" size="icon" onClick={() => handleSuspend(supplier)} title="Suspender">
-                              <XCircle className="h-4 w-4 text-yellow-500" />
+                              <XCircle className="h-4 w-4 text-warning" />
                             </Button>
                           )}
                           <Button variant="ghost" size="icon" onClick={() => openEditDialog(supplier)}>
                             <Edit className="h-4 w-4" />
                           </Button>
                           <Button variant="ghost" size="icon" onClick={() => openDeleteDialog(supplier)}>
-                            <Trash2 className="h-4 w-4 text-red-500" />
+                            <Trash2 className="h-4 w-4 text-destructive" />
                           </Button>
                         </div>
                       </TableCell>

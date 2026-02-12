@@ -389,12 +389,11 @@ export class TacticalResponseEngine {
   /**
    * Get field value from nested object
    */
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- nested dynamic object traversal
-  private getFieldValue(obj: Record<string, any>, field: string): any {
+  private getFieldValue(obj: Record<string, unknown>, field: string): unknown {
     const parts = field.split(".");
-    let value: any = obj;
+    let value: unknown = obj;
     for (const part of parts) {
-      value = value?.[part];
+      value = (value as Record<string, unknown>)?.[part];
     }
     return value;
   }
@@ -501,7 +500,7 @@ export class TacticalResponseEngine {
     return { status: "failover_initiated", target: action.parameters.target };
   }
 
-  private executeDiagnosticRunAction(action: ResponseAction, event: TacticalEvent): any {
+  private executeDiagnosticRunAction(action: ResponseAction, event: TacticalEvent): Record<string, unknown> {
     bridge.emit("tactical-response:diagnostic", "TacticalResponse", {
       diagnosticType: action.parameters.diagnosticType as string,
       event: event as unknown as Record<string, unknown>,

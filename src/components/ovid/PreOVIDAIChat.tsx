@@ -36,7 +36,8 @@ export const PreOVIDAIChat: React.FC<PreOVIDAIChatProps> = ({
   const [isListening, setIsListening] = useState(false);
   const [isSpeaking, setIsSpeaking] = useState(false);
   const scrollRef = useRef<HTMLDivElement>(null);
-  const recognitionRef = useRef<any>(null);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- SpeechRecognition is non-standard browser API
+  const recognitionRef = useRef<ReturnType<typeof Object> | null>(null);
 
   useEffect(() => {
     if (scrollRef.current) {
@@ -47,13 +48,16 @@ export const PreOVIDAIChat: React.FC<PreOVIDAIChatProps> = ({
   // Initialize speech recognition
   useEffect(() => {
     if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any -- SpeechRecognition not in standard types
       const SpeechRecognitionClass = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
+      if (!SpeechRecognitionClass) return;
       recognitionRef.current = new SpeechRecognitionClass();
       recognitionRef.current!.continuous = false;
       recognitionRef.current!.interimResults = false;
       recognitionRef.current!.lang = 'pt-BR';
 
-      recognitionRef.current!.onresult = (event: any) => {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any -- SpeechRecognition event
+      recognitionRef.current!.onresult = (event: { results: { 0: { 0: { transcript: string } } } }) => {
         const transcript = event.results[0][0].transcript;
         setInput(transcript);
         setIsListening(false);

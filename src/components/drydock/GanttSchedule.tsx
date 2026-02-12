@@ -73,14 +73,14 @@ const fallbackEvents: DrydockEvent[] = [
 ];
 
 const eventTypeConfig = {
-  drydock: { label: 'Docagem Seca', color: 'bg-blue-500' },
-  intermediate: { label: 'Intermediária', color: 'bg-amber-500' },
-  special: { label: 'Especial', color: 'bg-purple-500' }
+  drydock: { label: 'Docagem Seca', color: 'bg-primary' },
+  intermediate: { label: 'Intermediária', color: 'bg-warning' },
+  special: { label: 'Especial', color: 'bg-accent' }
 };
 
 const statusConfig = {
-  planned: { label: 'Planejada', color: 'border-l-blue-400' },
-  in_progress: { label: 'Em Andamento', color: 'border-l-emerald-400' },
+  planned: { label: 'Planejada', color: 'border-l-primary' },
+  in_progress: { label: 'Em Andamento', color: 'border-l-success' },
   completed: { label: 'Concluída', color: 'border-l-muted' },
   delayed: { label: 'Atrasada', color: 'border-l-destructive' }
 };
@@ -93,21 +93,19 @@ export function GanttSchedule() {
   useEffect(() => {
     const loadEvents = async () => {
       try {
-        const { data, error } = await supabase
-          .from("maintenance_tasks")
+        const { data, error } = await (supabase.from as Function)("maintenance_tasks")
           .select("id, title, description, status, scheduled_date, due_date, vessel_id, estimated_cost, progress_percent")
           .eq("task_type", "drydock")
           .limit(20);
 
         if (!error && data && data.length > 0) {
-          // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Supabase row with dynamic fields
-          setEvents(data.map((t: any) => ({
+          setEvents(data.map((t: Record<string, unknown>) => ({
             id: String(t.id),
             vesselName: String(t.title || "Embarcação"),
             shipyard: String(t.description || "Estaleiro TBD"),
             eventType: "drydock" as const,
-            startDate: new Date(t.scheduled_date || Date.now()),
-            endDate: new Date(t.due_date || Date.now()),
+            startDate: new Date(String(t.scheduled_date || new Date().toISOString())),
+            endDate: new Date(String(t.due_date || new Date().toISOString())),
             status: (t.status === "completed" ? "completed" : t.status === "in_progress" ? "in_progress" : "planned") as DrydockEvent["status"],
             progress: Number(t.progress_percent || 0),
             cost: Number(t.estimated_cost || 0)

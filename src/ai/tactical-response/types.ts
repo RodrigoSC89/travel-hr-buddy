@@ -51,7 +51,7 @@ export interface TacticalEvent {
   timestamp: number;
   severity: "critical" | "high" | "medium" | "low";
   source: string;
-  data: Record<string, any>;
+  data: Record<string, unknown>;
   metadata?: {
     confidence?: number;
     priority?: number;
@@ -65,7 +65,7 @@ export interface ResponseAction {
   id: string;
   type: ResponseActionType;
   description: string;
-  parameters: Record<string, any>;
+  parameters: Record<string, unknown>;
   timeout?: number; // Max execution time in ms
   retries?: number;
   priority: number; // 1-10
@@ -85,7 +85,7 @@ export interface TacticalRule {
   conditions: {
     field: string;
     operator: "equals" | "not_equals" | "greater_than" | "less_than" | "contains" | "regex";
-    value: any;
+    value: unknown;
   }[];
   actions: ResponseAction[];
   cooldown?: number; // Min time between executions in ms
@@ -107,7 +107,7 @@ export interface ResponseExecution {
   actions: {
     actionId: string;
     status: "pending" | "running" | "success" | "failed";
-    result?: any;
+    result?: Record<string, unknown>;
     error?: string;
     duration?: number;
   }[];
