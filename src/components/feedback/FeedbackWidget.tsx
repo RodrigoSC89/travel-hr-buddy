@@ -42,7 +42,7 @@ export function FeedbackWidget() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [activeTab, setActiveTab] = useState<'nps' | 'bug' | 'feature'>('nps');
   const [npsScore, setNpsScore] = useState<number | null>(null);
-  const [bugData, setBugData] = useState({ title: '', description: '', priority: 'medium' as const });
+  const [bugData, setBugData] = useState<{ title: string; description: string; priority: "low" | "medium" | "high" | "critical" }>({ title: '', description: '', priority: 'medium' });
   const [featureData, setFeatureData] = useState({ title: '', description: '' });
   const [npsComment, setNpsComment] = useState('');
 
@@ -104,19 +104,19 @@ export function FeedbackWidget() {
       const { data: { user } } = await supabase.auth.getUser();
 
       // Store feedback in database
-      const { error } = await supabase
-        .from('ai_feedback_scores' as any)
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Supabase insert overload mismatch with single object vs array
+      const { error } = await (supabase.from('ai_feedback_scores') as any)
         .insert({
           command_type: feedbackPayload.type,
           self_score: feedbackPayload.score || 0,
-          command_data: feedbackPayload,
+          command_data: feedbackPayload as unknown as Record<string, unknown>,
           feedback_data: {
             title: feedbackPayload.title,
             description: feedbackPayload.description,
             priority: feedbackPayload.priority,
             module: feedbackPayload.module,
             submitted_at: new Date().toISOString(),
-          },
+          } as unknown as Record<string, unknown>,
           user_id: user?.id,
         });
 
@@ -250,7 +250,7 @@ export function FeedbackWidget() {
                 <Label>Prioridade</Label>
                 <RadioGroup
                   value={bugData.priority}
-                  onValueChange={(v) => setBugData(prev => ({ ...prev, priority: v as any }))}
+                  onValueChange={(v: string) => setBugData(prev => ({ ...prev, priority: v as "low" | "medium" | "high" | "critical" }))}
                   className="flex gap-4 mt-2"
                 >
                   <div className="flex items-center space-x-2">

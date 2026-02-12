@@ -2,9 +2,10 @@
  * Crew Scheduler Gantt - Tier-1 Component
  * Based on Helm CONNECT and Danaos best practices
  * Visual Gantt chart for crew rotations with MLC compliance
+ * Migrated to real Supabase data via useCrewRealData (P1-008)
  */
 
-import React, { useState } from "react";
+import React, { useState, useMemo } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -16,90 +17,65 @@ import {
   Users, Calendar, AlertTriangle, Clock, Ship, 
   ChevronLeft, ChevronRight, Plus, Filter, Download
 } from "lucide-react";
-import { format, addMonths, startOfMonth, endOfMonth, eachDayOfInterval, isSameMonth, isToday, addDays } from "date-fns";
+import { format, addMonths, startOfMonth, endOfMonth, eachDayOfInterval } from "date-fns";
 import { toast } from "sonner";
 import { ptBR } from "date-fns/locale";
+import { useCrewRealData, type CrewMemberData } from "@/hooks/useCrewRealData";
+import { Skeleton } from "@/components/ui/skeleton";
 
-// Sample crew data
-const crewSchedule = [
-  {
-    id: "1",
-    name: "Capt. João Santos",
-    rank: "Master",
-    vessel: "MV Nautilus Star",
-    rotations: [
-      { start: "2025-12-01", end: "2026-02-28", type: "onboard", vessel: "MV Nautilus Star" },
-      { start: "2026-03-01", end: "2026-04-30", type: "leave", vessel: null },
-      { start: "2026-05-01", end: "2026-07-31", type: "onboard", vessel: "MV Nautilus Star" },
-    ],
-    mlcStatus: "ok", // ok, warning, critical
-    daysOnboard: 67,
-    maxDays: 90,
-  },
-  {
-    id: "2",
-    name: "C/E Luis Ferreira",
-    rank: "Chief Engineer",
-    vessel: "MV Nautilus Star",
-    rotations: [
-      { start: "2025-11-15", end: "2026-02-15", type: "onboard", vessel: "MV Nautilus Star" },
-      { start: "2026-02-16", end: "2026-04-15", type: "leave", vessel: null },
-      { start: "2026-04-16", end: "2026-07-15", type: "onboard", vessel: "MV Ocean Explorer" },
-    ],
-    mlcStatus: "warning",
-    daysOnboard: 83,
-    maxDays: 90,
-  },
-  {
-    id: "3",
-    name: "C/O Maria Silva",
-    rank: "Chief Officer",
-    vessel: "MV Ocean Explorer",
-    rotations: [
-      { start: "2026-01-01", end: "2026-03-31", type: "onboard", vessel: "MV Ocean Explorer" },
-      { start: "2026-04-01", end: "2026-05-31", type: "leave", vessel: null },
-      { start: "2026-06-01", end: "2026-08-31", type: "onboard", vessel: "MV Pacific Trader" },
-    ],
-    mlcStatus: "ok",
-    daysOnboard: 36,
-    maxDays: 90,
-  },
-  {
-    id: "4",
-    name: "2/E Pedro Costa",
-    rank: "Second Engineer",
-    vessel: "MV Pacific Trader",
-    rotations: [
-      { start: "2025-10-01", end: "2026-01-31", type: "onboard", vessel: "MV Pacific Trader" },
-      { start: "2026-02-01", end: "2026-03-31", type: "leave", vessel: null },
-      { start: "2026-04-01", end: "2026-06-30", type: "onboard", vessel: "MV Nautilus Star" },
-    ],
-    mlcStatus: "critical",
-    daysOnboard: 127,
-    maxDays: 90,
-  },
-  {
-    id: "5",
-    name: "Bosun Carlos Lima",
-    rank: "Bosun",
-    vessel: "MV Atlantic Carrier",
-    rotations: [
-      { start: "2026-01-15", end: "2026-04-15", type: "onboard", vessel: "MV Atlantic Carrier" },
-      { start: "2026-04-16", end: "2026-06-15", type: "leave", vessel: null },
-    ],
-    mlcStatus: "ok",
-    daysOnboard: 22,
-    maxDays: 120,
-  },
-];
+interface GanttCrewEntry {
+  id: string;
+  name: string;
+  rank: string;
+  vessel: string;
+  rotations: Array<{ start: string; end: string; type: "onboard" | "leave"; vessel: string | null }>;
+  mlcStatus: "ok" | "warning" | "critical";
+  daysOnboard: number;
+  maxDays: number;
+}
+
+function mapCrewToGantt(crew: CrewMemberData[]): GanttCrewEntry[] {
+  return crew.map(c => {
+    const mlcStatus: GanttCrewEntry["mlcStatus"] = 
+      c.daysOnboard > c.maxDays ? "critical" :
+      c.daysOnboard > c.maxDays * 0.9 ? "warning" : "ok";
+
+    const rotations: GanttCrewEntry["rotations"] = [];
+    if (c.embarkedDate && c.status === "onboard") {
+      rotations.push({
+        start: c.embarkedDate,
+        end: c.plannedDisembark || format(addMonths(new Date(c.embarkedDate), 3), "yyyy-MM-dd"),
+        type: "onboard",
+        vessel: c.vessel,
+      });
+    }
+
+    return {
+      id: c.id,
+      name: c.name,
+      rank: c.rank,
+      vessel: c.vessel,
+      rotations,
+      mlcStatus,
+      daysOnboard: c.daysOnboard,
+      maxDays: c.maxDays,
+    };
+  });
+}
 
 export default function CrewSchedulerGantt() {
+  const { data: realData, isLoading } = useCrewRealData();
   const [currentDate, setCurrentDate] = useState(new Date());
   const [viewMonths] = useState(3);
   const [showNewRotation, setShowNewRotation] = useState(false);
   const [showFilter, setShowFilter] = useState(false);
   const [filterVessel, setFilterVessel] = useState("all");
   
+  const crewSchedule = useMemo(() => {
+    if (!realData?.crew?.length) return [];
+    return mapCrewToGantt(realData.crew);
+  }, [realData]);
+
   const startMonth = startOfMonth(currentDate);
   const endMonth = endOfMonth(addMonths(currentDate, viewMonths - 1));
   const days = eachDayOfInterval({ start: startMonth, end: endMonth });
@@ -140,10 +116,7 @@ export default function CrewSchedulerGantt() {
     const left = Math.max(0, (startOffset / totalDays) * 100);
     const width = Math.min(100 - left, (duration / totalDays) * 100);
     
-    return {
-      left: `${left}%`,
-      width: `${width}%`,
-    };
+    return { left: `${left}%`, width: `${width}%` };
   };
 
   const mlcStats = {
@@ -152,6 +125,30 @@ export default function CrewSchedulerGantt() {
     warning: crewSchedule.filter(c => c.mlcStatus === 'warning').length,
     critical: crewSchedule.filter(c => c.mlcStatus === 'critical').length,
   };
+
+  if (isLoading) {
+    return (
+      <div className="space-y-6">
+        <Skeleton className="h-10 w-64" />
+        <div className="grid grid-cols-4 gap-4">
+          {[1,2,3,4].map(i => <Skeleton key={i} className="h-24" />)}
+        </div>
+        <Skeleton className="h-96" />
+      </div>
+    );
+  }
+
+  if (crewSchedule.length === 0) {
+    return (
+      <Card>
+        <CardContent className="flex flex-col items-center justify-center py-16 text-center">
+          <Users className="h-12 w-12 text-muted-foreground/50 mb-4" />
+          <h3 className="text-lg font-semibold">Nenhum tripulante cadastrado</h3>
+          <p className="text-muted-foreground mt-1">Adicione tripulantes para visualizar o cronograma de rotações.</p>
+        </CardContent>
+      </Card>
+    );
+  }
 
   return (
     <div className="space-y-6">
@@ -230,7 +227,7 @@ export default function CrewSchedulerGantt() {
                 <p className="text-xs text-muted-foreground">MLC Conforme</p>
                 <p className="text-2xl font-bold text-success">{mlcStats.ok}</p>
               </div>
-              <Badge className="bg-success">{((mlcStats.ok / mlcStats.total) * 100).toFixed(0)}%</Badge>
+              <Badge className="bg-success">{mlcStats.total > 0 ? ((mlcStats.ok / mlcStats.total) * 100).toFixed(0) : 0}%</Badge>
             </div>
           </CardContent>
         </Card>
@@ -392,17 +389,9 @@ export default function CrewSchedulerGantt() {
                       </p>
                     </div>
                   </div>
-                  <div className="flex items-center gap-2">
-                    <Badge variant={crew.mlcStatus === 'warning' ? 'secondary' : 'destructive'}>
-                      {crew.mlcStatus === 'warning' ? 'Atenção' : 'Excedido'}
-                    </Badge>
-                    <Button size="sm" variant="outline" onClick={() => {
-                      navigator.clipboard.writeText(`Troca de tripulante: ${crew.name} | Posto: ${crew.rank} | Embarcação: ${crew.vessel} | Dias a bordo: ${crew.daysOnboard}/${crew.maxDays} | Status MLC: ${crew.mlcStatus}`);
-                      toast.success(`Dados de troca copiados para ${crew.name}`, { description: `${crew.daysOnboard}/${crew.maxDays} dias — cole no sistema de gestão de tripulação.` });
-                    }}>
-                      Agendar Troca
-                    </Button>
-                  </div>
+                  <Badge variant={crew.mlcStatus === 'warning' ? 'secondary' : 'destructive'}>
+                    {crew.mlcStatus === 'warning' ? 'Atenção' : 'Excedido'}
+                  </Badge>
                 </div>
               ))}
             </div>

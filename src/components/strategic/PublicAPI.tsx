@@ -447,7 +447,9 @@ export const PublicAPI = () => {
               <CardTitle className="flex items-center gap-2">
                 <Users className="h-5 w-5 text-primary" />
                 Marketplace de Extensões
+                <Badge variant="outline" className="ml-2 text-xs">Showcase</Badge>
               </CardTitle>
+              <p className="text-xs text-muted-foreground">Extensões disponíveis para integração com parceiros certificados.</p>
             </CardHeader>
             <CardContent>
               <div className="space-y-4">
