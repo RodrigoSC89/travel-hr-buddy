@@ -29,25 +29,25 @@ const getStatusConfig = (status: string) => {
   const configs = {
     planned: {
       icon: Calendar,
-      color: "bg-blue-600 text-white",
+      color: "bg-primary text-primary-foreground",
       label: "Planejada",
       badgeVariant: "default" as const
     },
     in_progress: {
       icon: Clock,
-      color: "bg-yellow-600 text-white",
+      color: "bg-warning text-warning-foreground",
       label: "Em Andamento",
       badgeVariant: "default" as const
     },
     completed: {
       icon: CheckCircle,
-      color: "bg-green-600 text-white",
+      color: "bg-success text-success-foreground",
       label: "Concluída",
       badgeVariant: "default" as const
     },
     overdue: {
       icon: AlertTriangle,
-      color: "bg-red-600 text-white",
+      color: "bg-destructive text-destructive-foreground",
       label: "Atrasada",
       badgeVariant: "destructive" as const
     }
@@ -127,51 +127,51 @@ export const AuditPlanner: React.FC = () => {
     <div className="space-y-6">
       {/* Summary Cards */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-        <Card className="bg-gradient-to-br from-blue-50 to-blue-100 border-blue-200">
+        <Card className="bg-gradient-to-br from-primary/10 to-primary/5 border-primary/20">
           <CardContent className="p-6">
             <div className="flex items-center justify-between mb-4">
-              <Calendar className="h-10 w-10 text-blue-600" />
-              <Badge className="bg-blue-600 text-white font-bold">PLANEJADAS</Badge>
+              <Calendar className="h-10 w-10 text-primary" />
+              <Badge className="bg-primary text-primary-foreground font-bold">PLANEJADAS</Badge>
             </div>
-            <h3 className="text-sm font-medium text-blue-700 mb-1">Auditorias Planejadas</h3>
-            <p className="text-3xl font-bold text-blue-900">{plannedCount}</p>
-            <p className="text-xs text-blue-600 mt-2">Aguardando execução</p>
+            <h3 className="text-sm font-medium text-primary mb-1">Auditorias Planejadas</h3>
+            <p className="text-3xl font-bold text-foreground">{plannedCount}</p>
+            <p className="text-xs text-primary mt-2">Aguardando execução</p>
           </CardContent>
         </Card>
 
-        <Card className="bg-gradient-to-br from-yellow-50 to-yellow-100 border-yellow-200">
+        <Card className="bg-gradient-to-br from-warning/10 to-warning/5 border-warning/20">
           <CardContent className="p-6">
             <div className="flex items-center justify-between mb-4">
-              <Clock className="h-10 w-10 text-yellow-600" />
-              <Badge className="bg-yellow-600 text-white font-bold">ATIVAS</Badge>
+              <Clock className="h-10 w-10 text-warning" />
+              <Badge className="bg-warning text-warning-foreground font-bold">ATIVAS</Badge>
             </div>
-            <h3 className="text-sm font-medium text-yellow-700 mb-1">Em Andamento</h3>
-            <p className="text-3xl font-bold text-yellow-900">{inProgressCount}</p>
-            <p className="text-xs text-yellow-600 mt-2">Em execução</p>
+            <h3 className="text-sm font-medium text-warning mb-1">Em Andamento</h3>
+            <p className="text-3xl font-bold text-foreground">{inProgressCount}</p>
+            <p className="text-xs text-warning mt-2">Em execução</p>
           </CardContent>
         </Card>
 
-        <Card className="bg-gradient-to-br from-green-50 to-green-100 border-green-200">
+        <Card className="bg-gradient-to-br from-success/10 to-success/5 border-success/20">
           <CardContent className="p-6">
             <div className="flex items-center justify-between mb-4">
-              <CheckCircle className="h-10 w-10 text-green-600" />
-              <Badge className="bg-green-600 text-white font-bold">CONCLUÍDAS</Badge>
+              <CheckCircle className="h-10 w-10 text-success" />
+              <Badge className="bg-success text-success-foreground font-bold">CONCLUÍDAS</Badge>
             </div>
-            <h3 className="text-sm font-medium text-green-700 mb-1">Auditorias Concluídas</h3>
-            <p className="text-3xl font-bold text-green-900">{completedCount}</p>
-            <p className="text-xs text-green-600 mt-2">Taxa: {completionRate}%</p>
+            <h3 className="text-sm font-medium text-success mb-1">Auditorias Concluídas</h3>
+            <p className="text-3xl font-bold text-foreground">{completedCount}</p>
+            <p className="text-xs text-success mt-2">Taxa: {completionRate}%</p>
           </CardContent>
         </Card>
 
-        <Card className="bg-gradient-to-br from-red-50 to-red-100 border-red-200">
+        <Card className="bg-gradient-to-br from-destructive/10 to-destructive/5 border-destructive/20">
           <CardContent className="p-6">
             <div className="flex items-center justify-between mb-4">
-              <AlertTriangle className="h-10 w-10 text-red-600" />
-              <Badge className="bg-red-600 text-white font-bold">ATRASADAS</Badge>
+              <AlertTriangle className="h-10 w-10 text-destructive" />
+              <Badge className="bg-destructive text-destructive-foreground font-bold">ATRASADAS</Badge>
             </div>
-            <h3 className="text-sm font-medium text-red-700 mb-1">Auditorias Atrasadas</h3>
-            <p className="text-3xl font-bold text-red-900">{overdueCount}</p>
-            <p className="text-xs text-red-600 mt-2">Requer ação</p>
+            <h3 className="text-sm font-medium text-destructive mb-1">Auditorias Atrasadas</h3>
+            <p className="text-3xl font-bold text-foreground">{overdueCount}</p>
+            <p className="text-xs text-destructive mt-2">Requer ação</p>
           </CardContent>
         </Card>
       </div>
@@ -246,7 +246,7 @@ export const AuditPlanner: React.FC = () => {
                         </div>
                         <div className="flex-1">
                           <div className="flex items-center gap-2 mb-2">
-                            <h3 className="text-lg font-bold text-gray-900">{audit.title}</h3>
+                            <h3 className="text-lg font-bold text-foreground">{audit.title}</h3>
                             <Badge className={statusConfig.color}>
                               {statusConfig.label}
                             </Badge>
@@ -261,28 +261,28 @@ export const AuditPlanner: React.FC = () => {
                           <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
                             <div>
                               <p className="text-xs text-muted-foreground font-medium">Data Agendada</p>
-                              <p className="text-sm font-bold text-gray-900">
+                               <p className="text-sm font-bold text-foreground">
                                 <Calendar className="h-3 w-3 inline mr-1" />
                                 {new Date(audit.scheduled_date).toLocaleDateString("pt-BR")}
                               </p>
                             </div>
                             <div>
                               <p className="text-xs text-muted-foreground font-medium">Auditor</p>
-                              <p className="text-sm font-bold text-gray-900">
+                              <p className="text-sm font-bold text-foreground">
                                 <Users className="h-3 w-3 inline mr-1" />
                                 {audit.auditor}
                               </p>
                             </div>
                             <div>
                               <p className="text-xs text-muted-foreground font-medium">Práticas Cobertas</p>
-                              <p className="text-sm font-bold text-gray-900">
+                              <p className="text-sm font-bold text-foreground">
                                 {audit.practices_covered.length} de 17
                               </p>
                             </div>
                             {audit.findings_count !== undefined && (
                               <div>
                                 <p className="text-xs text-muted-foreground font-medium">Achados</p>
-                                <p className="text-sm font-bold text-gray-900">
+                                <p className="text-sm font-bold text-foreground">
                                   <FileText className="h-3 w-3 inline mr-1" />
                                   {audit.findings_count} ({audit.non_conformities || 0} NC)
                                 </p>
@@ -304,7 +304,7 @@ export const AuditPlanner: React.FC = () => {
                         {audit.status !== "completed" && (
                           <Button
                             size="sm"
-                            className="min-h-[44px] px-6 bg-blue-600 hover:bg-blue-700 text-white"
+                            className="min-h-[44px] px-6 bg-primary hover:bg-primary/90 text-primary-foreground"
                             onClick={() => showInfo("Iniciando Auditoria", "Preparando auditoria")} disabled={isLoading}
                           >
                             <CheckCircle className="h-4 w-4 mr-2" />
@@ -337,28 +337,28 @@ export const AuditPlanner: React.FC = () => {
         <CardContent>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
             <Button
-              className="bg-green-600 hover:bg-green-700 text-white min-h-[56px] flex-col gap-2"
+              className="bg-success hover:bg-success/90 text-success-foreground min-h-[56px] flex-col gap-2"
               onClick={() => handleCreate("Auditoria")} disabled={isLoading}
             >
               <Plus className="h-6 w-6" />
               <span className="font-semibold">Nova Auditoria</span>
             </Button>
             <Button
-              className="bg-blue-600 hover:bg-blue-700 text-white min-h-[56px] flex-col gap-2"
+              className="bg-primary hover:bg-primary/90 text-primary-foreground min-h-[56px] flex-col gap-2"
               onClick={() => showInfo("Calendário", "Abrindo calendário de auditorias")} disabled={isLoading}
             >
               <Calendar className="h-6 w-6" />
               <span className="font-semibold">Calendário</span>
             </Button>
             <Button
-              className="bg-orange-600 hover:bg-orange-700 text-white min-h-[56px] flex-col gap-2"
+              className="bg-warning hover:bg-warning/90 text-warning-foreground min-h-[56px] flex-col gap-2"
               onClick={() => handleGenerateReport("Relatório de Auditorias")} disabled={isLoading}
             >
               <FileText className="h-6 w-6" />
               <span className="font-semibold">Relatório</span>
             </Button>
             <Button
-              className="bg-purple-600 hover:bg-purple-700 text-white min-h-[56px] flex-col gap-2"
+              className="bg-accent hover:bg-accent/90 text-accent-foreground min-h-[56px] flex-col gap-2"
               onClick={() => showInfo("Tendências", "Abrindo análise de tendências")} disabled={isLoading}
             >
               <TrendingUp className="h-6 w-6" />

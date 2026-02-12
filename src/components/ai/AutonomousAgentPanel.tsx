@@ -50,10 +50,10 @@ interface AgentAction {
 }
 
 const PRIORITY_COLORS = {
-  critical: "bg-red-500/20 text-red-500 border-red-500/50",
-  high: "bg-orange-500/20 text-orange-500 border-orange-500/50",
-  medium: "bg-yellow-500/20 text-yellow-500 border-yellow-500/50",
-  low: "bg-blue-500/20 text-blue-500 border-blue-500/50",
+  critical: "bg-destructive/20 text-destructive border-destructive/50",
+  high: "bg-warning/20 text-warning border-warning/50",
+  medium: "bg-warning/20 text-warning border-warning/50",
+  low: "bg-primary/20 text-primary border-primary/50",
 };
 
 const MODULE_ICONS: Record<string, React.ReactNode> = {
@@ -159,7 +159,7 @@ export function AutonomousAgentPanel() {
             <p className="text-[10px] text-muted-foreground">Ações Hoje</p>
           </div>
           <div className="bg-muted/50 rounded-lg p-2 text-center">
-            <p className="text-lg font-bold text-green-500">{agentStats.successRate}%</p>
+            <p className="text-lg font-bold text-success">{agentStats.successRate}%</p>
             <p className="text-[10px] text-muted-foreground">Taxa Sucesso</p>
           </div>
           <div className="bg-muted/50 rounded-lg p-2 text-center">
@@ -167,7 +167,7 @@ export function AutonomousAgentPanel() {
             <p className="text-[10px] text-muted-foreground">Economia</p>
           </div>
           <div className="bg-muted/50 rounded-lg p-2 text-center">
-            <p className="text-lg font-bold text-orange-500">{agentStats.issuesPrevented}</p>
+            <p className="text-lg font-bold text-warning">{agentStats.issuesPrevented}</p>
             <p className="text-[10px] text-muted-foreground">Prevenidos</p>
           </div>
         </div>
@@ -211,8 +211,8 @@ export function AutonomousAgentPanel() {
                       <p className="text-xs text-muted-foreground mb-2">{action.description}</p>
                       {action.impact && (
                         <div className="flex items-center gap-1 mb-2">
-                          <TrendingUp className="h-3 w-3 text-green-500" />
-                          <span className="text-xs text-green-500">{action.impact}</span>
+                          <TrendingUp className="h-3 w-3 text-success" />
+                          <span className="text-xs text-success">{action.impact}</span>
                         </div>
                       )}
                       <div className="flex items-center justify-between">
@@ -251,7 +251,7 @@ export function AutonomousAgentPanel() {
         {executedActions.length > 0 && (
           <div className="space-y-2">
             <div className="flex items-center gap-2">
-              <CheckCircle2 className="h-4 w-4 text-green-500" />
+              <CheckCircle2 className="h-4 w-4 text-success" />
               <span className="text-sm font-medium">Executadas Recentemente</span>
             </div>
             <div className="space-y-1">

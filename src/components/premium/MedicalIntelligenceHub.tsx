@@ -233,8 +233,8 @@ export default function MedicalIntelligenceHub() {
  
                      {crew.alerts.length > 0 && (
                        <div className="flex flex-wrap gap-2">
-                         {crew.alerts.map((alert, idx) => (
-                           <Badge key={idx} variant="outline" className="text-destructive border-destructive/50">
+                          {crew.alerts.map((alert) => (
+                            <Badge key={alert} variant="outline" className="text-destructive border-destructive/50">
                              <AlertTriangle className="h-3 w-3 mr-1" />
                              {alert}
                            </Badge>
@@ -280,8 +280,8 @@ export default function MedicalIntelligenceHub() {
                    { time: "14:00", patient: "Pedro Costa", doctor: "Dr. Ana Médica", type: "Urgente" },
                    { time: "15:30", patient: "Maria Santos", doctor: "Dr. Carlos Cardio", type: "Rotina" },
                    { time: "16:00", patient: "José Ferreira", doctor: "Dr. Ana Médica", type: "Retorno" }
-                 ].map((apt, idx) => (
-                   <div key={idx} className="flex items-center justify-between p-3 border rounded-lg">
+                  ].map((apt) => (
+                    <div key={`${apt.time}-${apt.patient}`} className="flex items-center justify-between p-3 border rounded-lg">
                      <div className="flex items-center gap-3">
                        <Badge variant={apt.type === "Urgente" ? "destructive" : "outline"}>
                          {apt.time}
@@ -313,8 +313,8 @@ export default function MedicalIntelligenceHub() {
                    { name: "Dr. Carlos Cardio", specialty: "Cardiologista", status: "online" },
                    { name: "Dr. Paulo Ortopedia", specialty: "Ortopedista", status: "busy" },
                    { name: "Dr. Marina Psico", specialty: "Psicóloga", status: "offline" }
-                 ].map((doc, idx) => (
-                   <div key={idx} className="flex items-center justify-between p-3 border rounded-lg">
+                  ].map((doc) => (
+                    <div key={doc.name} className="flex items-center justify-between p-3 border rounded-lg">
                      <div className="flex items-center gap-3">
                        <div className={`w-3 h-3 rounded-full ${
                          doc.status === "online" ? "bg-success" : 

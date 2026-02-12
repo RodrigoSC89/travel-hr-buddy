@@ -72,9 +72,9 @@ export function ConnectionRecovery({ className, showAlways = false }: Connection
           <div className="flex items-center gap-2">
             <Wifi className={cn(
               'h-5 w-5',
-              quality === 'fast' && 'text-green-500',
-              quality === 'medium' && 'text-yellow-500',
-              quality === 'slow' && 'text-orange-500'
+              quality === 'fast' && 'text-success',
+              quality === 'medium' && 'text-warning',
+              quality === 'slow' && 'text-warning'
             )} />
             <span className="font-medium">Online</span>
           </div>
@@ -120,7 +120,7 @@ export function ConnectionRecovery({ className, showAlways = false }: Connection
 
         {/* Success State */}
         {pendingCount === 0 && !isSyncing && showAlways && (
-          <div className="flex items-center gap-2 text-green-600">
+          <div className="flex items-center gap-2 text-success">
             <CheckCircle className="h-4 w-4" />
             <span className="text-sm">Tudo sincronizado</span>
           </div>

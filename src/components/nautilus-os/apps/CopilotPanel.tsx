@@ -15,9 +15,9 @@ export function CopilotPanel() {
         <span className="text-sm font-medium">Sugestões Inteligentes</span>
       </div>
 
-      {suggestions.map((suggestion, idx) => (
+      {suggestions.map((suggestion) => (
         <div
-          key={idx}
+          key={suggestion.text}
           className={`flex items-start gap-2 p-3 rounded-lg border ${
             suggestion.type === "success"
               ? "bg-success/10 border-success/30"
