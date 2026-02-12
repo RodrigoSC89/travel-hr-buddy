@@ -30,15 +30,15 @@ export const AISMarker: React.FC<AISMarkerProps> = ({ vessels, onVesselClick }) 
   const getStatusColor = (status: VesselPosition["status"]) => {
     switch (status) {
     case "underway":
-      return "text-green-500";
+      return "text-success";
     case "at_anchor":
     case "moored":
-      return "text-blue-500";
+      return "text-info";
     case "not_under_command":
     case "restricted_maneuverability":
-      return "text-orange-500";
+      return "text-warning";
     default:
-      return "text-gray-500";
+      return "text-muted-foreground";
     }
   };
 

@@ -100,7 +100,7 @@ export const MaritimeCertificationManager = () => {
     case "valid": return "bg-success";
     case "expiring": return "bg-warning";
     case "expired": return "bg-destructive";
-    case "pending_renewal": return "bg-orange-500";
+    case "pending_renewal": return "bg-warning";
     default: return "bg-muted-foreground";
     }
   };
@@ -119,7 +119,7 @@ export const MaritimeCertificationManager = () => {
     switch (alertType) {
     case "expiring_soon": return "bg-warning/10 border-warning text-warning";
     case "expired": return "bg-destructive/10 border-destructive text-destructive";
-    case "renewal_required": return "bg-orange-100 border-orange-500 text-orange-800";
+    case "renewal_required": return "bg-warning/10 border-warning text-warning";
     default: return "bg-secondary border-muted text-secondary-foreground";
     }
   };
@@ -254,7 +254,7 @@ export const MaritimeCertificationManager = () => {
         
         <Card>
           <CardContent className="p-4 text-center">
-            <Clock className="h-8 w-8 mx-auto mb-2 text-yellow-600" />
+            <Clock className="h-8 w-8 mx-auto mb-2 text-warning" />
             <div className="text-2xl font-bold">{stats.expiring}</div>
             <div className="text-sm text-muted-foreground">Vencendo</div>
           </CardContent>
@@ -270,7 +270,7 @@ export const MaritimeCertificationManager = () => {
         
         <Card>
           <CardContent className="p-4 text-center">
-            <AlertTriangle className="h-8 w-8 mx-auto mb-2 text-orange-600" />
+            <AlertTriangle className="h-8 w-8 mx-auto mb-2 text-warning" />
             <div className="text-2xl font-bold">{stats.pending}</div>
             <div className="text-sm text-muted-foreground">Pendentes</div>
           </CardContent>
@@ -282,7 +282,7 @@ export const MaritimeCertificationManager = () => {
         <Card>
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
-              <Bell className="h-5 w-5 text-orange-500" />
+              <Bell className="h-5 w-5 text-warning" />
               Alertas Críticos ({alerts.length})
             </CardTitle>
           </CardHeader>
@@ -427,21 +427,21 @@ export const MaritimeCertificationManager = () => {
         <TabsContent value="expiring" className="space-y-6">
           <Card>
             <CardHeader>
-              <CardTitle className="text-yellow-600">Certificações Vencendo</CardTitle>
+              <CardTitle className="text-warning">Certificações Vencendo</CardTitle>
             </CardHeader>
             <CardContent>
               <div className="space-y-4">
                 {certificates.filter(c => c.status === "expiring").map((cert) => (
-                  <div key={cert.id} className="border-l-4 border-yellow-500 bg-yellow-50 p-4 rounded">
+                  <div key={cert.id} className="border-l-4 border-warning bg-warning/5 p-4 rounded">
                     <div className="flex items-center justify-between">
                       <div>
                         <h3 className="font-semibold">{cert.crew_member_name}</h3>
                         <p className="text-sm">{cert.certification_type}</p>
-                        <p className="text-xs text-yellow-700">
+                        <p className="text-xs text-warning">
                           Vencimento: {new Date(cert.expiry_date).toLocaleDateString()}
                         </p>
                       </div>
-                      <Button variant="outline" className="border-yellow-500 text-yellow-700">
+                      <Button variant="outline" className="border-warning text-warning">
                         Renovar Agora
                       </Button>
                     </div>

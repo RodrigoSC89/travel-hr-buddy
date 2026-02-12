@@ -67,10 +67,10 @@ const SOURCE_LABELS = {
 
 export function XAIDecisionCard({ decision }: { decision: XAIDecision }) {
   const confidenceColor = decision.confidence >= 0.9 
-    ? 'text-green-500' 
+    ? 'text-success' 
     : decision.confidence >= 0.7 
-      ? 'text-yellow-500' 
-      : 'text-red-500';
+      ? 'text-warning' 
+      : 'text-destructive';
 
   return (
     <Card className="border-primary/20 hover:shadow-lg transition-shadow">
@@ -103,7 +103,7 @@ export function XAIDecisionCard({ decision }: { decision: XAIDecision }) {
         {/* Chain of Thought */}
         <div>
           <h4 className="text-sm font-semibold flex items-center gap-2 mb-3">
-            <Lightbulb className="h-4 w-4 text-amber-500" />
+            <Lightbulb className="h-4 w-4 text-warning" />
             Cadeia de Raciocínio
           </h4>
           <div className="space-y-2 pl-2 border-l-2 border-primary/30">
@@ -131,7 +131,7 @@ export function XAIDecisionCard({ decision }: { decision: XAIDecision }) {
         {decision.sources.length > 0 && (
           <div>
             <h4 className="text-sm font-semibold flex items-center gap-2 mb-2">
-              <FileText className="h-4 w-4 text-blue-500" />
+              <FileText className="h-4 w-4 text-info" />
               Fontes ({decision.sources.length})
             </h4>
             <div className="flex flex-wrap gap-2">
@@ -153,7 +153,7 @@ export function XAIDecisionCard({ decision }: { decision: XAIDecision }) {
         {decision.alternatives.length > 0 && (
           <div>
             <h4 className="text-sm font-semibold flex items-center gap-2 mb-2">
-              <ArrowRight className="h-4 w-4 text-purple-500" />
+              <ArrowRight className="h-4 w-4 text-accent-foreground" />
               Alternativas Avaliadas
             </h4>
             <div className="space-y-2">
@@ -168,14 +168,14 @@ export function XAIDecisionCard({ decision }: { decision: XAIDecision }) {
                   <div className="grid grid-cols-2 gap-2 text-xs">
                     <div>
                       {alt.pros.map((p, i) => (
-                        <div key={i} className="flex items-center gap-1 text-green-600">
+                        <div key={i} className="flex items-center gap-1 text-success">
                           <CheckCircle className="h-3 w-3" /> {p}
                         </div>
                       ))}
                     </div>
                     <div>
                       {alt.cons.map((c, i) => (
-                        <div key={i} className="flex items-center gap-1 text-red-500">
+                        <div key={i} className="flex items-center gap-1 text-destructive">
                           <XCircle className="h-3 w-3" /> {c}
                         </div>
                       ))}
