@@ -50,18 +50,18 @@ export default function SystemHealth() {
 
   const getStatusColor = (status: string) => {
     switch (status) {
-    case "pass": return "text-green-600";
-    case "warning": return "text-yellow-600";
-    case "fail": return "text-red-600";
+    case "pass": return "text-success";
+    case "warning": return "text-warning";
+    case "fail": return "text-destructive";
     default: return "text-muted-foreground";
     }
   };
 
   const getStatusIcon = (status: string) => {
     switch (status) {
-    case "pass": return <CheckCircle className="h-5 w-5 text-green-600" />;
-    case "warning": return <AlertTriangle className="h-5 w-5 text-yellow-600" />;
-    case "fail": return <AlertTriangle className="h-5 w-5 text-red-600" />;
+    case "pass": return <CheckCircle className="h-5 w-5 text-success" />;
+    case "warning": return <AlertTriangle className="h-5 w-5 text-warning" />;
+    case "fail": return <AlertTriangle className="h-5 w-5 text-destructive" />;
     default: return <Activity className="h-5 w-5" />;
     }
   };
@@ -203,9 +203,9 @@ export default function SystemHealth() {
                           </p>
                         </div>
                         {check.passed ? (
-                          <CheckCircle className="h-4 w-4 text-green-600 mt-0.5" />
+                          <CheckCircle className="h-4 w-4 text-success mt-0.5" />
                         ) : (
-                          <AlertTriangle className="h-4 w-4 text-red-600 mt-0.5" />
+                          <AlertTriangle className="h-4 w-4 text-destructive mt-0.5" />
                         )}
                       </div>
                     ))}

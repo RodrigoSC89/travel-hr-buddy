@@ -112,8 +112,8 @@ export function VoiceNLUInlineButton({ className }: VoiceNLUInlineButtonProps) {
                 disabled={isProcessing}
                 className={cn(
                   'h-14 w-14 rounded-full shadow-lg transition-all duration-300',
-                  isListening && 'bg-red-500 hover:bg-red-600 animate-pulse ring-4 ring-red-500/30',
-                  isProcessing && 'bg-blue-500'
+                  isListening && 'bg-destructive hover:bg-destructive/90 animate-pulse ring-4 ring-destructive/30',
+                  isProcessing && 'bg-info'
                 )}
               >
                 {isProcessing ? (

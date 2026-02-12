@@ -299,7 +299,7 @@ export default function CrewSchedulerPage() {
                 <p className="text-sm text-muted-foreground flex items-center gap-1">
                   <Ship className="h-4 w-4" /> A Bordo
                 </p>
-                <p className="text-2xl font-bold text-green-600">{stats.onboard}</p>
+                <p className="text-2xl font-bold text-success">{stats.onboard}</p>
               </CardContent>
             </Card>
             <Card>
@@ -307,7 +307,7 @@ export default function CrewSchedulerPage() {
                 <p className="text-sm text-muted-foreground flex items-center gap-1">
                   <Users className="h-4 w-4" /> Disponível
                 </p>
-                <p className="text-2xl font-bold text-blue-600">{stats.available}</p>
+                <p className="text-2xl font-bold text-info">{stats.available}</p>
               </CardContent>
             </Card>
             <Card>
@@ -315,7 +315,7 @@ export default function CrewSchedulerPage() {
                 <p className="text-sm text-muted-foreground flex items-center gap-1">
                   <Clock className="h-4 w-4" /> De Folga
                 </p>
-                <p className="text-2xl font-bold text-orange-600">{stats.onleave}</p>
+                <p className="text-2xl font-bold text-warning">{stats.onleave}</p>
               </CardContent>
             </Card>
             <Card>
@@ -323,10 +323,10 @@ export default function CrewSchedulerPage() {
                 <p className="text-sm text-muted-foreground flex items-center gap-1">
                   <Calendar className="h-4 w-4" /> Treinamento
                 </p>
-                <p className="text-2xl font-bold text-purple-600">{stats.training}</p>
+                <p className="text-2xl font-bold text-accent">{stats.training}</p>
               </CardContent>
             </Card>
-            <Card className={stats.expiringSoon > 0 ? 'border-amber-500' : ''}>
+            <Card className={stats.expiringSoon > 0 ? 'border-warning' : ''}>
               <CardContent className="p-4">
                 <p className="text-sm text-muted-foreground flex items-center gap-1">
                   <AlertTriangle className="h-4 w-4" /> Expirando

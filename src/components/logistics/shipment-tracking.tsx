@@ -59,14 +59,14 @@ export const ShipmentTracking = () => {
   const getStatusIcon = (status: string | null) => {
     switch (status) {
     case "delivered":
-      return <CheckCircle2 className="h-5 w-5 text-green-500" />;
+      return <CheckCircle2 className="h-5 w-5 text-success" />;
     case "delayed":
     case "lost":
-      return <AlertCircle className="h-5 w-5 text-red-500" />;
+      return <AlertCircle className="h-5 w-5 text-destructive" />;
     case "in_transit":
-      return <Truck className="h-5 w-5 text-blue-500" />;
+      return <Truck className="h-5 w-5 text-info" />;
     default:
-      return <Clock className="h-5 w-5 text-yellow-500" />;
+      return <Clock className="h-5 w-5 text-warning" />;
     }
   };
 
@@ -137,7 +137,7 @@ export const ShipmentTracking = () => {
             <CardTitle className="text-sm font-medium">Delayed</CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-orange-600">
+            <div className="text-2xl font-bold text-warning">
               {getDelayedShipments().length}
             </div>
             <p className="text-xs text-muted-foreground">Requiring attention</p>
@@ -159,7 +159,7 @@ export const ShipmentTracking = () => {
             <CardTitle className="text-sm font-medium">Delivered</CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-green-600">
+            <div className="text-2xl font-bold text-success">
               {shipments.filter(s => s.status === "delivered").length}
             </div>
             <p className="text-xs text-muted-foreground">Successfully delivered</p>
@@ -250,7 +250,7 @@ export const ShipmentTracking = () => {
                       <div>
                         <div className="text-xs text-muted-foreground mb-1">Current Location</div>
                         <div className="flex items-center gap-2">
-                          <MapPin className="h-4 w-4 text-blue-500" />
+                          <MapPin className="h-4 w-4 text-info" />
                           <span className="text-sm font-medium">
                             {shipment.current_location || "Updating..."}
                           </span>
@@ -283,7 +283,7 @@ export const ShipmentTracking = () => {
                       {shipment.actual_delivery && (
                         <div>
                           <div className="text-xs text-muted-foreground mb-1">Delivered</div>
-                          <div className="flex items-center gap-2 text-sm text-green-600">
+                          <div className="flex items-center gap-2 text-sm text-success">
                             <CheckCircle2 className="h-4 w-4" />
                             {format(new Date(shipment.actual_delivery), "MMM dd, yyyy")}
                           </div>

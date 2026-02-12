@@ -81,7 +81,7 @@ export function AutonomousAIPanel() {
   };
 
   const getConfidenceBadge = (confidence: number) => {
-    const color = confidence >= 0.85 ? "text-green-500" : confidence >= 0.6 ? "text-yellow-500" : "text-red-500";
+    const color = confidence >= 0.85 ? "text-success" : confidence >= 0.6 ? "text-warning" : "text-destructive";
     return (
       <span className={`font-mono font-bold ${color}`}>
         {(confidence * 100).toFixed(0)}%
@@ -156,7 +156,7 @@ export function AutonomousAIPanel() {
                       <span className="text-muted-foreground">{dp.metric}:</span>{' '}
                       <span className="font-mono font-medium">{dp.value}</span>
                       {dp.trend && (
-                        <span className={`ml-1 ${dp.trend === 'up' ? 'text-red-500' : dp.trend === 'down' ? 'text-green-500' : 'text-muted-foreground'}`}>
+                        <span className={`ml-1 ${dp.trend === 'up' ? 'text-destructive' : dp.trend === 'down' ? 'text-success' : 'text-muted-foreground'}`}>
                           {dp.trend === 'up' ? '↑' : dp.trend === 'down' ? '↓' : '→'}
                         </span>
                       )}
@@ -169,7 +169,7 @@ export function AutonomousAIPanel() {
             {/* Risk Assessment */}
             <div className="space-y-2">
               <h4 className="text-sm font-semibold flex items-center gap-2">
-                <Shield className="h-4 w-4 text-yellow-500" />
+                <Shield className="h-4 w-4 text-warning" />
                 Avaliação de Risco
               </h4>
               <div className="text-sm space-y-1">
@@ -249,7 +249,7 @@ export function AutonomousAIPanel() {
                     onClick={() => handleFeedback(decision.id, true)}
                     className="flex-1"
                   >
-                    <ThumbsUp className="h-4 w-4 mr-1 text-green-500" />
+                    <ThumbsUp className="h-4 w-4 mr-1 text-success" />
                     Decisão Correta
                   </Button>
                   <Button 
@@ -258,7 +258,7 @@ export function AutonomousAIPanel() {
                     onClick={() => handleFeedback(decision.id, false)}
                     className="flex-1"
                   >
-                    <ThumbsDown className="h-4 w-4 mr-1 text-red-500" />
+                    <ThumbsDown className="h-4 w-4 mr-1 text-destructive" />
                     Decisão Incorreta
                   </Button>
                 </div>
@@ -268,7 +268,7 @@ export function AutonomousAIPanel() {
             {/* Show feedback if exists */}
             {decision.feedback && (
               <div className="text-sm bg-muted/30 rounded-md p-2">
-                <span className={decision.feedback.wasCorrect ? 'text-green-500' : 'text-red-500'}>
+                <span className={decision.feedback.wasCorrect ? 'text-success' : 'text-destructive'}>
                   {decision.feedback.wasCorrect ? '✓ Marcado como correto' : '✗ Marcado como incorreto'}
                 </span>
                 {decision.feedback.notes && (
