@@ -226,8 +226,8 @@ export default function AnalyticsPage() {
                       outerRadius={80}
                       label
                     >
-                      {statusChart.map((entry, index) => (
-                        <Cell key={`cell-${index}`} fill={colors[index % colors.length]} />
+                      {statusChart.map((entry) => (
+                        <Cell key={entry.status} fill={colors[statusChart.indexOf(entry) % colors.length]} />
                       ))}
                     </Pie>
                     <Legend />

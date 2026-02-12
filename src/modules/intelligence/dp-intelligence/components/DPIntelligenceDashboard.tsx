@@ -139,8 +139,8 @@ export default function DPIntelligenceDashboard() {
                   dataKey="value"
                   label={(entry) => `${entry.name}: ${entry.value}`}
                 >
-                  {severityData.map((entry, index) => (
-                    <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                  {severityData.map((entry) => (
+                    <Cell key={entry.name} fill={COLORS[severityData.indexOf(entry) % COLORS.length]} />
                   ))}
                 </Pie>
                 <Tooltip />

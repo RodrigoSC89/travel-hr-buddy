@@ -114,8 +114,8 @@ const PeopleAnalytics: React.FC = () => {
       return (
         <div className="bg-card p-3 rounded-lg border shadow-lg">
           <p className="font-medium">{label}</p>
-          {payload.map((entry: { color?: string; name?: string; value?: number }, index: number) => (
-            <p key={index} className="text-sm" style={{ color: entry.color }}>
+          {payload.map((entry: { color?: string; name?: string; value?: number }) => (
+            <p key={entry.name} className="text-sm" style={{ color: entry.color }}>
               {entry.name}: {entry.value}%
             </p>
           ))}
@@ -324,8 +324,8 @@ const PeopleAnalytics: React.FC = () => {
                     paddingAngle={2}
                     dataKey="value"
                   >
-                    {departmentDistribution.map((entry, index) => (
-                      <Cell key={`cell-${index}`} fill={entry.color} />
+                    {departmentDistribution.map((entry) => (
+                      <Cell key={entry.name} fill={entry.color} />
                     ))}
                   </Pie>
                   <Tooltip />

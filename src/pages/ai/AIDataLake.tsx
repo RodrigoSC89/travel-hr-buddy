@@ -382,8 +382,8 @@ const AIDataLake: React.FC = () => {
                       dataKey="value"
                       label={({ name, value }) => `${name}: ${value}%`}
                     >
-                      {storageDistribution.map((entry, index) => (
-                        <Cell key={`cell-${index}`} fill={entry.color} />
+                      {storageDistribution.map((entry) => (
+                        <Cell key={entry.name} fill={entry.color} />
                       ))}
                     </Pie>
                     <Tooltip />

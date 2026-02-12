@@ -20,10 +20,10 @@ interface CalendarSyncPanelProps {
 }
 
 const CATEGORY_OPTIONS = [
-  { id: "watch", label: "Watch Schedules", icon: Clock, color: "bg-blue-500" },
-  { id: "training", label: "Training Sessions", icon: GraduationCap, color: "bg-green-500" },
-  { id: "maintenance", label: "Maintenance Windows", icon: Wrench, color: "bg-orange-500" },
-  { id: "audit", label: "Audits & Inspections", icon: ClipboardCheck, color: "bg-purple-500" },
+  { id: "watch", label: "Watch Schedules", icon: Clock, color: "bg-info" },
+  { id: "training", label: "Training Sessions", icon: GraduationCap, color: "bg-success" },
+  { id: "maintenance", label: "Maintenance Windows", icon: Wrench, color: "bg-warning" },
+  { id: "audit", label: "Audits & Inspections", icon: ClipboardCheck, color: "bg-accent" },
 ];
 
 export function CalendarSyncPanel({

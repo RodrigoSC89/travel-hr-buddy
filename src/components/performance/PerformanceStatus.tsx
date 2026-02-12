@@ -37,12 +37,12 @@ function getStatusColor(effectiveType: string, isOnline: boolean): string {
   // PATCH v19: Removida verificação !isOnline - sempre assumir online
   switch (effectiveType) {
     case "4g":
-      return "bg-green-500/20 text-green-500 border-green-500/30";
+      return "bg-success/20 text-success border-success/30";
     case "3g":
-      return "bg-yellow-500/20 text-yellow-500 border-yellow-500/30";
+      return "bg-warning/20 text-warning border-warning/30";
     case "2g":
     case "slow-2g":
-      return "bg-orange-500/20 text-orange-500 border-orange-500/30";
+      return "bg-destructive/20 text-destructive border-destructive/30";
     default:
       return "bg-muted text-muted-foreground";
   }
@@ -137,7 +137,7 @@ export const PerformanceStatus = memo(function PerformanceStatus({
               <p><strong>Latência:</strong> {metrics.rtt}ms</p>
               <p><strong>Tipo:</strong> {metrics.effectiveType.toUpperCase()}</p>
               {metrics.saveData && (
-                <p className="text-yellow-500">Modo economia ativo</p>
+                <p className="text-warning">Modo economia ativo</p>
               )}
             </div>
           </TooltipContent>

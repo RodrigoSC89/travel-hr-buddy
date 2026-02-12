@@ -83,19 +83,19 @@ export function ExportCenter() {
 
   const getFileIcon = (type: string) => {
     switch (type) {
-      case "pdf": return <FileText className="h-5 w-5 text-red-500" />;
-      case "excel": return <FileSpreadsheet className="h-5 w-5 text-green-500" />;
-      case "word": return <File className="h-5 w-5 text-blue-500" />;
-      case "csv": return <FileSpreadsheet className="h-5 w-5 text-orange-500" />;
-      case "json": return <FileJson className="h-5 w-5 text-purple-500" />;
+      case "pdf": return <FileText className="h-5 w-5 text-destructive" />;
+      case "excel": return <FileSpreadsheet className="h-5 w-5 text-success" />;
+      case "word": return <File className="h-5 w-5 text-info" />;
+      case "csv": return <FileSpreadsheet className="h-5 w-5 text-warning" />;
+      case "json": return <FileJson className="h-5 w-5 text-accent-foreground" />;
       default: return <File className="h-5 w-5" />;
     }
   };
 
   const getStatusBadge = (status: string) => {
     switch (status) {
-      case "completed": return <Badge className="bg-green-500/20 text-green-500"><CheckCircle className="h-3 w-3 mr-1" />Concluído</Badge>;
-      case "processing": return <Badge className="bg-blue-500/20 text-blue-500"><RefreshCw className="h-3 w-3 mr-1 animate-spin" />Processando</Badge>;
+      case "completed": return <Badge className="bg-success/20 text-success"><CheckCircle className="h-3 w-3 mr-1" />Concluído</Badge>;
+      case "processing": return <Badge className="bg-info/20 text-info"><RefreshCw className="h-3 w-3 mr-1 animate-spin" />Processando</Badge>;
       case "failed": return <Badge variant="destructive">Falhou</Badge>;
       default: return <Badge variant="secondary">Pendente</Badge>;
     }

@@ -363,8 +363,8 @@ export default function BetaDashboard() {
                         outerRadius={100}
                         label={({ name, percent }) => `${(percent * 100).toFixed(0)}%`}
                       >
-                        {recommendData.map((_, index) => (
-                          <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                        {recommendData.map((item) => (
+                          <Cell key={`rec-${item.name}`} fill={COLORS[recommendData.indexOf(item) % COLORS.length]} />
                         ))}
                       </Pie>
                       <Tooltip />
@@ -397,8 +397,8 @@ export default function BetaDashboard() {
                         outerRadius={100}
                         label={({ name, percent }) => `${(percent * 100).toFixed(0)}%`}
                       >
-                        {payData.map((_, index) => (
-                          <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                        {payData.map((item) => (
+                          <Cell key={`pay-${item.name}`} fill={COLORS[payData.indexOf(item) % COLORS.length]} />
                         ))}
                       </Pie>
                       <Tooltip />

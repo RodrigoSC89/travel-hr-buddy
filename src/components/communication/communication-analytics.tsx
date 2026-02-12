@@ -300,8 +300,8 @@ export const CommunicationAnalytics: React.FC<CommunicationAnalyticsProps> = ({ 
                       dataKey="count"
                       label={({ type, percentage }: { type: string; percentage: number }) => `${type}: ${percentage}%`}
                     >
-                      {chartData.messageTypes.map((entry, index) => (
-                        <Cell key={`cell-${index}`} fill={entry.color} />
+                      {chartData.messageTypes.map((entry) => (
+                        <Cell key={entry.type} fill={entry.color} />
                       ))}
                     </Pie>
                     <Tooltip />

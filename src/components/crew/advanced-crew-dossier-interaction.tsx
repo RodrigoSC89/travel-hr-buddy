@@ -334,7 +334,7 @@ export const AdvancedCrewDossierInteraction: React.FC<VoiceInteractionPanelProps
               {/* Level and XP */}
               <div className="text-center space-y-2">
                 <div className="flex items-center justify-center gap-2">
-                  <Star className="h-6 w-6 text-yellow-500" />
+                  <Star className="h-6 w-6 text-warning" />
                   <span className="text-2xl font-bold">Nível {gamificationProfile.current_level}</span>
                 </div>
                 <p className="text-sm text-muted-foreground">
@@ -405,7 +405,7 @@ export const AdvancedCrewDossierInteraction: React.FC<VoiceInteractionPanelProps
             </div>
           ) : (
             goals.map((goal) => (
-              <Card key={goal.id} className="border-l-4 border-l-blue-500">
+              <Card key={goal.id} className="border-l-4 border-l-info">
                 <CardContent className="pt-4">
                   <div className="flex items-center justify-between mb-2">
                     <h4 className="font-semibold">{goal.title}</h4>

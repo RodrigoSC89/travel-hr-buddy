@@ -480,12 +480,12 @@ function MicrolearningTab() {
               </CardHeader>
               <CardContent className="space-y-4">
                 {lesson.quiz.map((q, qIndex) => (
-                  <div key={qIndex} className="space-y-2">
+                  <div key={q.question} className="space-y-2">
                     <p className="font-medium">{qIndex + 1}. {q.question}</p>
                     <div className="grid grid-cols-2 gap-2">
                       {q.options.map((opt, optIndex) => (
                         <Button
-                          key={optIndex}
+                          key={opt}
                           variant={quizAnswers[qIndex] === optIndex ? "default" : "outline"}
                           className={cn(
                             "justify-start",

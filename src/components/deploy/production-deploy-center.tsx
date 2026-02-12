@@ -440,8 +440,8 @@ const ProductionDeployCenter: React.FC = () => {
                           "Domínio configurado",
                           "SSL ativo",
                           "Monitoramento configurado"
-                        ].map((item, index) => (
-                          <div key={index} className="flex items-center gap-2">
+                        ].map((item) => (
+                          <div key={item} className="flex items-center gap-2">
                             <CheckCircle className="w-4 h-4 text-success" />
                             <span className="text-sm">{item}</span>
                           </div>
@@ -546,16 +546,16 @@ const ProductionDeployCenter: React.FC = () => {
                       { name: "Equipe Técnica Petrobras", status: "Ativo", users: 5 },
                       { name: "Gestores Marítimos", status: "Convite Enviado", users: 8 },
                       { name: "Operadores de Campo", status: "Aguardando", users: 12 }
-                    ].map((group, index) => (
-                      <div key={index} className="flex items-center justify-between p-3 border rounded-lg">
+                    ].map((group) => (
+                      <div key={group.name} className="flex items-center justify-between p-3 border rounded-lg">
                         <div>
                           <p className="text-sm font-medium">{group.name}</p>
                           <p className="text-xs text-muted-foreground">{group.users} usuários</p>
                         </div>
                         <Badge className={
-                          group.status === "Ativo" ? "text-green-600 bg-green-50 border-green-200" :
-                            group.status === "Convite Enviado" ? "text-blue-600 bg-blue-50 border-blue-200" :
-                              "text-yellow-600 bg-yellow-50 border-yellow-200"
+                          group.status === "Ativo" ? "text-success bg-success/10 border-success/30" :
+                            group.status === "Convite Enviado" ? "text-info bg-info/10 border-info/30" :
+                              "text-warning bg-warning/10 border-warning/30"
                         }>
                           {group.status}
                         </Badge>

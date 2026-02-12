@@ -107,11 +107,11 @@ export const BackupRecoverySystem: React.FC = () => {
     case "healthy": 
     case "success": 
     case "active":
-    case "synced": return "text-green-500";
+    case "synced": return "text-success";
     case "syncing": 
-    case "warning": return "text-yellow-500";
+    case "warning": return "text-warning";
     case "error": 
-    case "failed": return "text-red-500";
+    case "failed": return "text-destructive";
     default: return "text-muted-foreground";
     }
   };
@@ -121,12 +121,12 @@ export const BackupRecoverySystem: React.FC = () => {
     case "healthy": 
     case "success": 
     case "active":
-    case "synced": return "bg-green-100 text-green-800 dark:bg-green-900/20 dark:text-green-300";
+    case "synced": return "bg-success/10 text-success";
     case "syncing": 
-    case "warning": return "bg-yellow-100 text-yellow-800 dark:bg-yellow-900/20 dark:text-yellow-300";
+    case "warning": return "bg-warning/10 text-warning";
     case "error": 
-    case "failed": return "bg-red-100 text-red-800 dark:bg-red-900/20 dark:text-red-300";
-    default: return "bg-gray-100 text-gray-800 dark:bg-gray-900/20 dark:text-gray-300";
+    case "failed": return "bg-destructive/10 text-destructive";
+    default: return "bg-muted text-muted-foreground";
     }
   };
 
@@ -154,7 +154,7 @@ export const BackupRecoverySystem: React.FC = () => {
                 <p className="text-lg font-bold">15:30</p>
                 <p className="text-xs text-muted-foreground">Hoje</p>
               </div>
-              <Clock className="h-8 w-8 text-blue-500" />
+              <Clock className="h-8 w-8 text-info" />
             </div>
           </CardContent>
         </Card>
@@ -167,7 +167,7 @@ export const BackupRecoverySystem: React.FC = () => {
                 <p className="text-lg font-bold">2.4TB</p>
                 <p className="text-xs text-muted-foreground">Crescendo</p>
               </div>
-              <HardDrive className="h-8 w-8 text-purple-500" />
+              <HardDrive className="h-8 w-8 text-accent-foreground" />
             </div>
           </CardContent>
         </Card>
@@ -180,7 +180,7 @@ export const BackupRecoverySystem: React.FC = () => {
                 <p className="text-lg font-bold">3</p>
                 <p className="text-xs text-muted-foreground">Ativas</p>
               </div>
-              <MapPin className="h-8 w-8 text-green-500" />
+              <MapPin className="h-8 w-8 text-success" />
             </div>
           </CardContent>
         </Card>
@@ -193,7 +193,7 @@ export const BackupRecoverySystem: React.FC = () => {
                 <p className="text-lg font-bold">99.98%</p>
                 <p className="text-xs text-muted-foreground">Este mês</p>
               </div>
-              <CheckCircle className="h-8 w-8 text-green-500" />
+              <CheckCircle className="h-8 w-8 text-success" />
             </div>
           </CardContent>
         </Card>
@@ -206,7 +206,7 @@ export const BackupRecoverySystem: React.FC = () => {
                 <p className="text-lg font-bold">&lt; 30s</p>
                 <p className="text-xs text-muted-foreground">Automático</p>
               </div>
-              <Zap className="h-8 w-8 text-orange-500" />
+              <Zap className="h-8 w-8 text-warning" />
             </div>
           </CardContent>
         </Card>
@@ -219,7 +219,7 @@ export const BackupRecoverySystem: React.FC = () => {
                 <p className="text-lg font-bold">AES-256</p>
                 <p className="text-xs text-muted-foreground">Ativo</p>
               </div>
-              <Shield className="h-8 w-8 text-red-500" />
+              <Shield className="h-8 w-8 text-destructive" />
             </div>
           </CardContent>
         </Card>
@@ -264,7 +264,7 @@ export const BackupRecoverySystem: React.FC = () => {
                     </div>
                     <div className="flex justify-between">
                       <span className="text-sm">Criptografia:</span>
-                      <Badge className="bg-green-100 text-green-800 dark:bg-green-900/20 dark:text-green-300">
+                      <Badge className="bg-success/10 text-success">
                         {backupStatus.encryptionStatus}
                       </Badge>
                     </div>

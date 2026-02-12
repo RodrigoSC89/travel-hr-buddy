@@ -429,8 +429,8 @@ const AnalyticsCommandCenter: React.FC = () => {
                       paddingAngle={5}
                       dataKey="value"
                     >
-                      {categoryData.map((entry, index) => (
-                        <Cell key={`cell-${index}`} fill={CHART_COLORS[index % CHART_COLORS.length]} />
+                      {categoryData.map((entry) => (
+                        <Cell key={entry.name} fill={CHART_COLORS[categoryData.indexOf(entry) % CHART_COLORS.length]} />
                       ))}
                     </Pie>
                     <Tooltip />
@@ -529,8 +529,8 @@ const AnalyticsCommandCenter: React.FC = () => {
                       dataKey="value"
                       label
                     >
-                      {categoryData.map((entry, index) => (
-                        <Cell key={`cell-${index}`} fill={CHART_COLORS[index % CHART_COLORS.length]} />
+                      {categoryData.map((entry) => (
+                        <Cell key={`pie2-${entry.name}`} fill={CHART_COLORS[categoryData.indexOf(entry) % CHART_COLORS.length]} />
                       ))}
                     </Pie>
                     <Tooltip />
@@ -788,8 +788,8 @@ const AnalyticsCommandCenter: React.FC = () => {
                       dataKey="value"
                       label
                     >
-                      {riskData.map((entry, index) => (
-                        <Cell key={`cell-${index}`} fill={entry.color} />
+                      {riskData.map((entry) => (
+                        <Cell key={entry.name} fill={entry.color} />
                       ))}
                     </Pie>
                     <Tooltip />
