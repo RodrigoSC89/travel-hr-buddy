@@ -168,20 +168,20 @@ export function NCAutomaticWorkflowAdvanced() {
           </CardContent>
         </Card>
         
-        <Card className="border-blue-200 bg-blue-50 dark:bg-blue-950/20">
+        <Card className="border-info/30 bg-info/5 dark:bg-info/10">
           <CardContent className="pt-4">
             <div className="text-center">
               <p className="text-sm text-muted-foreground">Abertas</p>
-              <p className="text-3xl font-bold text-blue-600">{metrics.open}</p>
+              <p className="text-3xl font-bold text-info">{metrics.open}</p>
             </div>
           </CardContent>
         </Card>
         
-        <Card className="border-amber-200 bg-amber-50 dark:bg-amber-950/20">
+        <Card className="border-warning/30 bg-warning/5 dark:bg-warning/10">
           <CardContent className="pt-4">
             <div className="text-center">
               <p className="text-sm text-muted-foreground">Em Progresso</p>
-              <p className="text-3xl font-bold text-amber-600">{metrics.inProgress}</p>
+              <p className="text-3xl font-bold text-warning">{metrics.inProgress}</p>
             </div>
           </CardContent>
         </Card>
@@ -204,7 +204,7 @@ export function NCAutomaticWorkflowAdvanced() {
           </CardContent>
         </Card>
         
-        <Card className="border-green-300 bg-gradient-to-br from-green-50 to-emerald-50 dark:from-green-950/30 dark:to-emerald-950/30">
+        <Card className="border-success/30 bg-gradient-to-br from-success/5 to-success/10 dark:from-success/10 dark:to-success/20">
           <CardContent className="pt-4">
             <div className="text-center">
               <p className="text-sm text-muted-foreground">Taxa Fechamento</p>
@@ -272,7 +272,7 @@ export function NCAutomaticWorkflowAdvanced() {
           <ScrollArea className="h-[400px]">
             <div className="space-y-3">
               {filteredNCs.map(nc => (
-                <Card key={nc.id} className={`cursor-pointer hover:shadow-md transition-shadow ${nc.status === 'overdue' ? 'border-red-300' : ''}`}>
+                <Card key={nc.id} className={`cursor-pointer hover:shadow-md transition-shadow ${nc.status === 'overdue' ? 'border-destructive/50' : ''}`}>
                   <CardContent className="pt-4">
                     <div className="flex items-start justify-between">
                       <div className="flex-1">
@@ -294,7 +294,7 @@ export function NCAutomaticWorkflowAdvanced() {
                             <Calendar className="h-4 w-4" />
                             {new Date(nc.due_date).toLocaleDateString('pt-BR')}
                           </span>
-                          <span className={`flex items-center gap-1 ${nc.days_remaining < 0 ? 'text-red-600' : nc.days_remaining <= 3 ? 'text-amber-600' : ''}`}>
+                          <span className={`flex items-center gap-1 ${nc.days_remaining < 0 ? 'text-destructive' : nc.days_remaining <= 3 ? 'text-warning' : ''}`}>
                             <Timer className="h-4 w-4" />
                             {nc.days_remaining < 0 ? `${Math.abs(nc.days_remaining)}d atrasada` : `${nc.days_remaining}d restantes`}
                           </span>

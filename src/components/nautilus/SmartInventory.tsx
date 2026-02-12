@@ -51,18 +51,18 @@ export function SmartInventory() {
         .limit(30);
 
       if (!error && data && data.length > 0) {
-        const mappedItems: InventoryItem[] = data.map((item: any) => ({
-          id: item.id,
-          name: item.item_name || item.name || "Item",
-          category: item.category || "Geral",
-          currentStock: item.quantity || item.current_stock || 0,
-          minStock: item.min_quantity || item.min_stock || 10,
-          maxStock: item.max_quantity || item.max_stock || 100,
-          unit: item.unit || "un",
-          lastRestocked: item.last_restocked || item.updated_at || new Date().toISOString(),
+        const mappedItems: InventoryItem[] = data.map((item: Record<string, unknown>) => ({
+          id: String(item.id),
+          name: String(item.item_name || item.name || "Item"),
+          category: String(item.category || "Geral"),
+          currentStock: Number(item.quantity || item.current_stock || 0),
+          minStock: Number(item.min_quantity || item.min_stock || 10),
+          maxStock: Number(item.max_quantity || item.max_stock || 100),
+          unit: String(item.unit || "un"),
+          lastRestocked: String(item.last_restocked || item.updated_at || new Date().toISOString()),
           predictedDaysLeft: calculatePredictedDays(item),
           trend: calculateTrend(item),
-          vessel: item.vessel_name,
+          vessel: item.vessel_name ? String(item.vessel_name) : undefined,
         }));
         setItems(mappedItems);
       } else {
@@ -77,15 +77,15 @@ export function SmartInventory() {
     }
   };
 
-  const calculatePredictedDays = (item: any): number => {
-    const stock = item.quantity || item.current_stock || 50;
+  const calculatePredictedDays = (item: Record<string, unknown>): number => {
+    const stock = Number(item.quantity || item.current_stock || 50);
     const dailyUsage = 2; // Estimated
     return Math.floor(stock / dailyUsage);
   };
 
-  const calculateTrend = (item: any): "up" | "down" | "stable" => {
-    const stock = item.quantity || item.current_stock || 50;
-    const min = item.min_quantity || item.min_stock || 10;
+  const calculateTrend = (item: Record<string, unknown>): "up" | "down" | "stable" => {
+    const stock = Number(item.quantity || item.current_stock || 50);
+    const min = Number(item.min_quantity || item.min_stock || 10);
     if (stock < min) return "down";
     if (stock > min * 3) return "up";
     return "stable";
