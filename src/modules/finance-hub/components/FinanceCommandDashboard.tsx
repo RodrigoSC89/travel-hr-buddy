@@ -427,7 +427,7 @@ export default function FinanceCommandDashboard() {
                 <Download className="h-4 w-4 mr-2" />
                 Exportar
               </Button>
-              <Button size="sm" className="gap-2" onClick={() => toast.success("Nova transação", { description: "Utilize as Aprovações Pendentes acima ou o módulo Finance para criar transações." })}>
+              <Button size="sm" className="gap-2" onClick={() => { window.history.pushState({}, '', '/finance-hub?tab=transactions'); window.dispatchEvent(new PopStateEvent('popstate')); }}>
                 <Plus className="h-4 w-4" />
                 Nova
               </Button>

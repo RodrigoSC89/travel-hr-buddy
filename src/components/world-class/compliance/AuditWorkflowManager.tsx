@@ -407,7 +407,20 @@ export function AuditWorkflowManager() {
                   ) : (
                     <p className="text-sm text-muted-foreground">Nenhuma evidência anexada</p>
                   )}
-                  <Button variant="outline" size="sm" className="mt-2 gap-2" onClick={() => toast.success('Navegue até Documentos para anexar evidências a esta auditoria', { description: 'Upload disponível via Document Center > Upload', duration: 5000 })}>
+                  <Button variant="outline" size="sm" className="mt-2 gap-2" onClick={() => {
+                    const input = document.createElement('input');
+                    input.type = 'file';
+                    input.accept = '.pdf,.doc,.docx,.jpg,.png';
+                    input.onchange = async (e) => {
+                      const file = (e.target as HTMLInputElement).files?.[0];
+                      if (!file) return;
+                      const path = `audit-evidence/${Date.now()}-${file.name}`;
+                      const { error } = await supabase.storage.from('documents').upload(path, file);
+                      if (error) { toast.error(`Erro: ${error.message}`); return; }
+                      toast.success(`Evidência "${file.name}" anexada com sucesso`);
+                    };
+                    input.click();
+                  }}>
                     <Upload className="h-4 w-4" />
                     Anexar Evidência
                   </Button>

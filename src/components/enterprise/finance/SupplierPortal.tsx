@@ -229,7 +229,7 @@ export function SupplierPortal() {
                 <Building2 className="h-5 w-5" />
                 Fornecedores
               </CardTitle>
-              <Button size="sm" onClick={() => toast.success("Utilize o módulo Procurement para cadastro completo de fornecedores")}>
+              <Button size="sm" onClick={() => { window.history.pushState({}, '', '/procurement-command'); window.dispatchEvent(new PopStateEvent('popstate')); }}>
                 <Plus className="h-4 w-4 mr-1" />
                 Novo
               </Button>
@@ -244,7 +244,7 @@ export function SupplierPortal() {
                   className="pl-9"
                 />
               </div>
-              <Button variant="outline" size="icon" onClick={() => toast.success("Utilize a busca acima para filtrar por nome")}>
+              <Button variant="outline" size="icon" onClick={() => setSearchTerm("")}>
                 <Filter className="h-4 w-4" />
               </Button>
             </div>
@@ -309,7 +309,7 @@ export function SupplierPortal() {
                     <MessageSquare className="h-4 w-4 mr-1" />
                     Mensagem
                   </Button>
-                  <Button variant="outline" size="icon" onClick={() => toast.success(`Detalhes: ${selectedSupplier.name}`, { description: `Categoria: ${selectedSupplier.category} | Rating: ${selectedSupplier.rating}` })}>
+                  <Button variant="outline" size="icon" onClick={() => { window.history.pushState({}, '', `/procurement-command?supplier=${selectedSupplier.id}`); window.dispatchEvent(new PopStateEvent('popstate')); }}>
                     <MoreVertical className="h-4 w-4" />
                   </Button>
                 </div>

@@ -199,7 +199,7 @@ export default function AIControlTowerHubEnhanced() {
     timestamp: new Date(insight.created_at),
     module: insight.related_module || "AI",
     actions: [
-      { label: "Ver Detalhes", onClick: () => toast.info(insight.title || "Insight IA", { description: insight.description || "Sem detalhes adicionais", duration: 6000 }) },
+      { label: "Ver Detalhes", onClick: () => { window.history.pushState({}, '', `/ai-control-tower?insight=${insight.id}`); window.dispatchEvent(new PopStateEvent('popstate')); } },
     ]
   })), [insights]);
 

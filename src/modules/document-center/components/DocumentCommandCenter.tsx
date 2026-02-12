@@ -241,10 +241,8 @@ export function DocumentCommandCenter() {
   }, []);
 
   const handleDocumentMore = useCallback((doc: Document) => {
-    toast.info(`Opções para: ${doc.name}`, {
-      description: "Editar • Arquivar • Imprimir • Histórico",
-      action: { label: "Histórico", onClick: () => toast.info(`Histórico de versões: ${doc.name}`) },
-    });
+    setActiveTab("versions");
+    toast.info(`Visualizando opções para: ${doc.name}`, { duration: 1500 });
   }, []);
 
   const handleFilter = useCallback(() => {
@@ -281,7 +279,8 @@ export function DocumentCommandCenter() {
   }, []);
 
   const handleCreateTemplate = useCallback(() => {
-    toast.info("Criando novo template...", { description: "Em breve: editor visual de templates" });
+    setActiveTab("templates");
+    setShowTemplateDialog(true);
   }, []);
 
   const handleApproveStep = useCallback(() => {
@@ -303,7 +302,7 @@ export function DocumentCommandCenter() {
     const currentStep = workflowSteps.find(s => s.status === "current");
     toast.error(`Etapa rejeitada: ${currentStep?.name}`, {
       description: "O documento foi devolvido para revisão",
-      action: { label: "Desfazer", onClick: () => toast.info("Rejeição desfeita") },
+      action: { label: "Desfazer", onClick: () => { setWorkflowSteps(prev => { const updated = [...prev]; const lastIdx = updated.map((s, i) => s.status === "completed" ? i : -1).filter(i => i >= 0).pop(); if (lastIdx !== undefined && lastIdx >= 0) { updated[lastIdx] = { ...updated[lastIdx], status: "current" as const }; } return updated; }); toast.success("Rejeição desfeita"); } },
     });
   }, [workflowSteps]);
 

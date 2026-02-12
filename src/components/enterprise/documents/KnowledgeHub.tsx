@@ -208,7 +208,7 @@ export function KnowledgeHub() {
         <TabsContent value="tutorials">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             {fallbackTutorials.map((tutorial: Tutorial) => (
-              <Card key={tutorial.id} className="hover:shadow-md transition-shadow cursor-pointer overflow-hidden" onClick={() => toast.success(`Tutorial "${tutorial.title}"`, { description: 'Conteúdo disponível em breve', duration: 3000 })}>
+              <Card key={tutorial.id} className="hover:shadow-md transition-shadow cursor-pointer overflow-hidden" onClick={() => { window.history.pushState({}, '', '/academy'); window.dispatchEvent(new PopStateEvent('popstate')); }}>
                 <div className="relative aspect-video bg-muted">
                   <div className="absolute inset-0 flex items-center justify-center">
                     <div className="p-4 rounded-full bg-primary/90 hover:bg-primary transition-colors">

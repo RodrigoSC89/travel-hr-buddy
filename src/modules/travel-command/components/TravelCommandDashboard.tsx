@@ -236,7 +236,7 @@ const TravelCommandDashboard: React.FC = () => {
             <Download className="h-4 w-4 mr-2" />
             Exportar
           </Button>
-          <Button size="sm" className="bg-gradient-to-r from-primary to-primary-light text-primary-foreground" onClick={() => toast.success("Para criar nova viagem, use a aba Passagens ou Hotéis abaixo.")}>
+          <Button size="sm" className="bg-gradient-to-r from-primary to-primary-light text-primary-foreground" onClick={() => { const tabEl = document.querySelector('[value="flights"]') as HTMLElement; tabEl?.click(); }}>
             <Plus className="h-4 w-4 mr-2" />
             Nova Viagem
           </Button>
@@ -455,7 +455,7 @@ const TravelCommandDashboard: React.FC = () => {
                           <Badge className="bg-green-500/10 text-green-600 border-green-500/20">
                             {rec.impact}
                           </Badge>
-                          <Button size="sm" variant="outline" className="h-7 text-xs" onClick={() => toast.success(`${rec.action}`, { description: `${rec.title}: economia estimada de ${rec.impact}. Recomendação aplicada com sucesso.` })}>
+                          <Button size="sm" variant="outline" className="h-7 text-xs" onClick={() => { navigator.clipboard?.writeText(`${rec.title}: ${rec.action}`); toast.success(`${rec.action} aplicada`); }}>
                              {rec.action}
                           </Button>
                         </div>

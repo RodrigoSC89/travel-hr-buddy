@@ -121,8 +121,8 @@ export default function SafetyIMCAV2() {
             onRefresh={() => toast.success("Dados atualizados")}
             loading={loading}
             actions={[
-              { label: "Analisar com IA", icon: Brain, onClick: (item) => toast.success(`Analisando incidente ${item.id}`, { description: `Categoria: ${item.category} | Severidade: ${item.severity}` }) },
-              { label: "Ver Lições", icon: BookOpen, onClick: (item) => toast.info(`Lições Aprendidas: ${item.id}`, { description: item.lessons_learned || 'Nenhuma lição registrada', duration: 8000 }) },
+              { label: "Analisar com IA", icon: Brain, onClick: (item) => { navigator.clipboard?.writeText(`IMCA ${item.id}: Cat=${item.category} Sev=${item.severity}`); toast.success(`Análise copiada: ${item.id}`); } },
+              { label: "Ver Lições", icon: BookOpen, onClick: (item) => { const content = item.lessons_learned || 'Nenhuma lição registrada'; navigator.clipboard?.writeText(content); toast.success(`Lições copiadas: ${item.id}`, { description: content.slice(0, 100) }); } },
             ]}
             filters={[
               { key: "category", label: "Categoria", options: [
