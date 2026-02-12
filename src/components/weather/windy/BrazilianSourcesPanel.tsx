@@ -287,7 +287,7 @@ export const BrazilianSourcesPanel: React.FC<BrazilianSourcesPanelProps> = ({
                     <div className="space-y-2">
                       {marinhaData.avisos.map((aviso, i) => (
                         <div 
-                          key={i}
+                          key={`aviso-${i}-${aviso.tipo}`}
                           className={cn(
                             "p-3 rounded-lg border",
                             getSeverityColor(aviso.severidade)

@@ -770,7 +770,7 @@ const PopoverVariant: React.FC<PopoverVariantProps> = ({
             {loading ? (
               <div className="space-y-2">
                 {[1, 2, 3].map((i) => (
-                  <div key={i} className="p-2 border rounded">
+                  <div key={`notif-skeleton-${i}`} className="p-2 border rounded">
                     <div className="animate-pulse space-y-1">
                       <div className="h-3 bg-muted rounded w-3/4"></div>
                       <div className="h-2 bg-muted rounded w-1/2"></div>
