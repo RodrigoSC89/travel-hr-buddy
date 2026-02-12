@@ -470,9 +470,9 @@ export function ComprehensiveExecutiveDashboard() {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-muted-foreground">Performance</p>
-                <p className="text-3xl font-bold text-purple-600">A+</p>
+                <p className="text-3xl font-bold text-accent-foreground">A+</p>
               </div>
-              <Zap className="h-8 w-8 text-purple-600" />
+              <Zap className="h-8 w-8 text-accent-foreground" />
             </div>
           </CardContent>
         </Card>

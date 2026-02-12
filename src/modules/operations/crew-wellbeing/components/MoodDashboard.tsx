@@ -13,8 +13,8 @@ export const MoodDashboard = () => {
   const { entries, stats, trends, isLoading, error } = useMoodDashboardData();
 
   const getTrendIcon = (trend: number) => {
-    if (trend > 5) return <TrendingUp className="h-4 w-4 text-green-500" />;
-    if (trend < -5) return <TrendingDown className="h-4 w-4 text-red-500" />;
+    if (trend > 5) return <TrendingUp className="h-4 w-4 text-success" />;
+    if (trend < -5) return <TrendingDown className="h-4 w-4 text-destructive" />;
     return <span className="text-xs text-muted-foreground">Estável</span>;
   };
 
@@ -36,7 +36,7 @@ export const MoodDashboard = () => {
 
   if (error) {
     return (
-      <div className="text-center py-8 text-red-500">
+      <div className="text-center py-8 text-destructive">
         <Heart className="h-8 w-8 mx-auto mb-2" />
         <p>Erro ao carregar dados</p>
       </div>
@@ -52,7 +52,7 @@ export const MoodDashboard = () => {
         <Card>
           <CardHeader className="pb-2">
             <CardTitle className="text-sm font-medium flex items-center gap-2">
-              <Heart className="h-4 w-4 text-red-500" />
+              <Heart className="h-4 w-4 text-destructive" />
               Humor Médio
             </CardTitle>
           </CardHeader>
@@ -67,7 +67,7 @@ export const MoodDashboard = () => {
         <Card>
           <CardHeader className="pb-2">
             <CardTitle className="text-sm font-medium flex items-center gap-2">
-              <Brain className="h-4 w-4 text-blue-500" />
+              <Brain className="h-4 w-4 text-info" />
               Energia
             </CardTitle>
           </CardHeader>

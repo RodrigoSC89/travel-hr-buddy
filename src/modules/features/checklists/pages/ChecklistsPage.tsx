@@ -94,8 +94,8 @@ export function ChecklistsPage() {
         <Card>
           <CardContent className="p-4">
             <div className="flex items-center gap-3">
-              <div className="p-2 bg-blue-50 rounded-lg">
-                <FileText className="h-5 w-5 text-blue-600" />
+              <div className="p-2 bg-info/10 rounded-lg">
+                <FileText className="h-5 w-5 text-info" />
               </div>
               <div>
                 <p className="text-sm text-muted-foreground">Total</p>
@@ -108,8 +108,8 @@ export function ChecklistsPage() {
         <Card>
           <CardContent className="p-4">
             <div className="flex items-center gap-3">
-              <div className="p-2 bg-green-50 rounded-lg">
-                <CheckCircle className="h-5 w-5 text-green-600" />
+              <div className="p-2 bg-success/10 rounded-lg">
+                <CheckCircle className="h-5 w-5 text-success" />
               </div>
               <div>
                 <p className="text-sm text-muted-foreground">Concluídos</p>
@@ -122,8 +122,8 @@ export function ChecklistsPage() {
         <Card>
           <CardContent className="p-4">
             <div className="flex items-center gap-3">
-              <div className="p-2 bg-orange-50 rounded-lg">
-                <AlertTriangle className="h-5 w-5 text-orange-600" />
+              <div className="p-2 bg-warning/10 rounded-lg">
+                <AlertTriangle className="h-5 w-5 text-warning" />
               </div>
               <div>
                 <p className="text-sm text-muted-foreground">Em Andamento</p>
@@ -136,8 +136,8 @@ export function ChecklistsPage() {
         <Card>
           <CardContent className="p-4">
             <div className="flex items-center gap-3">
-              <div className="p-2 bg-purple-50 rounded-lg">
-                <Brain className="h-5 w-5 text-purple-600" />
+              <div className="p-2 bg-accent/50 rounded-lg">
+                <Brain className="h-5 w-5 text-accent-foreground" />
               </div>
               <div>
                 <p className="text-sm text-muted-foreground">Score Médio</p>

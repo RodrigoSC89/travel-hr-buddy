@@ -513,12 +513,12 @@ const EnhancedUnifiedDashboard = () => {
                   <Progress value={dashboardData.financialMetrics.operatingMargin * 5} className="h-2" />
                 </div>
 
-                <div className="space-y-3 p-4 rounded-xl bg-gradient-to-br from-purple-50/50 to-transparent border border-purple-100/50">
+                <div className="space-y-3 p-4 rounded-xl bg-gradient-to-br from-accent/10 to-transparent border border-accent/20">
                   <div className="flex items-center gap-2">
-                    <TrendingUp className="w-4 h-4 text-purple-600" />
+                    <TrendingUp className="w-4 h-4 text-accent-foreground" />
                     <span className="text-sm font-semibold text-muted-foreground">EBITDA</span>
                   </div>
-                  <div className="text-3xl font-bold bg-gradient-to-r from-purple-600 to-purple-500 bg-clip-text text-transparent">
+                  <div className="text-3xl font-bold text-accent-foreground">
                     R$ {(dashboardData.financialMetrics.ebitda / 1000000).toFixed(1)}M
                   </div>
                   <span className="text-xs text-muted-foreground">+12.5% vs mês anterior</span>

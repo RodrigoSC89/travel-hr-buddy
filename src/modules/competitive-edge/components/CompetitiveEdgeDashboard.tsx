@@ -62,13 +62,13 @@ export function CompetitiveEdgeDashboard() {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-3">
-          <div className="p-3 rounded-xl bg-gradient-to-br from-yellow-500/20 to-orange-500/20">
-            <Trophy className="h-8 w-8 text-yellow-400" />
+          <div className="p-3 rounded-xl bg-gradient-to-br from-warning/20 to-warning/10">
+            <Trophy className="h-8 w-8 text-warning" />
           </div>
           <div>
             <h1 className="text-2xl font-bold flex items-center gap-2">
               Competitive Edge
-              <Badge className="bg-gradient-to-r from-yellow-500 to-orange-500 text-white">
+              <Badge className="bg-gradient-to-r from-warning to-warning/80 text-warning-foreground">
                 <Sparkles className="h-3 w-3 mr-1" />
                 Superior
               </Badge>
@@ -81,10 +81,10 @@ export function CompetitiveEdgeDashboard() {
       </div>
 
       {/* Comparison Score */}
-      <Card className="border-yellow-500/20">
+      <Card className="border-warning/20">
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
-            <BarChart3 className="h-5 w-5 text-yellow-400" />
+            <BarChart3 className="h-5 w-5 text-warning" />
             Nauti One vs Competidores
           </CardTitle>
         </CardHeader>
@@ -147,15 +147,27 @@ function OverviewTab() {
         <Card key={item.title}>
           <CardContent className="pt-6">
             <div className="flex items-center gap-3 mb-3">
-              <div className={cn("p-2 rounded-lg", `bg-${item.color}-500/20`)}>
-                <item.icon className={cn("h-5 w-5", `text-${item.color}-400`)} />
+              <div className={cn("p-2 rounded-lg", 
+                item.color === "blue" ? "bg-info/20" :
+                item.color === "green" ? "bg-success/20" :
+                item.color === "purple" ? "bg-accent/20" : "bg-warning/20"
+              )}>
+                <item.icon className={cn("h-5 w-5", 
+                  item.color === "blue" ? "text-info" :
+                  item.color === "green" ? "text-success" :
+                  item.color === "purple" ? "text-accent-foreground" : "text-warning"
+                )} />
               </div>
               <div>
                 <p className="font-medium">{item.title}</p>
                 <p className="text-xs text-muted-foreground">{item.desc}</p>
               </div>
             </div>
-            <Badge className={`bg-${item.color}-500/20 text-${item.color}-400`}>
+            <Badge className={cn(
+              item.color === "blue" ? "bg-info/20 text-info" :
+              item.color === "green" ? "bg-success/20 text-success" :
+              item.color === "purple" ? "bg-accent/20 text-accent-foreground" : "bg-warning/20 text-warning"
+            )}>
               {item.value}
             </Badge>
           </CardContent>
@@ -193,10 +205,10 @@ function DocumentsAITab() {
 
   return (
     <div className="space-y-6 mt-6">
-      <Card className="border-blue-500/20">
+      <Card className="border-info/20">
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
-            <FileSearch className="h-5 w-5 text-blue-400" />
+            <FileSearch className="h-5 w-5 text-info" />
             Document Intelligence Engine
           </CardTitle>
           <CardDescription>
@@ -213,7 +225,7 @@ function DocumentsAITab() {
           <Button
             onClick={handleProcess}
             disabled={!sampleText || processing || validating}
-            className="bg-gradient-to-r from-blue-500 to-cyan-500"
+            className="bg-gradient-to-r from-info to-primary"
           >
             {processing || validating ? "Processando..." : "🔍 Analisar com IA"}
           </Button>
@@ -228,14 +240,14 @@ function DocumentsAITab() {
           >
             <Card className={cn(
               "border-2",
-              complianceResult.compliant ? "border-green-500/30" : "border-red-500/30"
+              complianceResult.compliant ? "border-success/30" : "border-destructive/30"
             )}>
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
                   {complianceResult.compliant ? (
-                    <CheckCircle className="h-5 w-5 text-green-400" />
+                    <CheckCircle className="h-5 w-5 text-success" />
                   ) : (
-                    <XCircle className="h-5 w-5 text-red-400" />
+                    <XCircle className="h-5 w-5 text-destructive" />
                   )}
                   Resultado da Validação
                 </CardTitle>
@@ -285,7 +297,7 @@ function DocumentsAITab() {
         ].map((f) => (
           <Card key={f.title}>
             <CardContent className="pt-4 flex items-center gap-3">
-              <f.icon className="h-8 w-8 text-blue-400" />
+              <f.icon className="h-8 w-8 text-info" />
               <div>
                 <p className="font-medium">{f.title}</p>
                 <p className="text-xs text-muted-foreground">{f.desc}</p>
@@ -305,10 +317,10 @@ function PredictiveBITab() {
 
   return (
     <div className="space-y-6 mt-6">
-      <Card className="border-green-500/20">
+      <Card className="border-success/20">
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
-            <TrendingUp className="h-5 w-5 text-green-400" />
+            <TrendingUp className="h-5 w-5 text-success" />
             Predictive Analytics Engine
           </CardTitle>
           <CardDescription>
@@ -320,7 +332,7 @@ function PredictiveBITab() {
             <Button
               onClick={() => generateInsights({ context: "Fleet operations", period: "Last 30 days" })}
               disabled={generating}
-              className="bg-gradient-to-r from-green-500 to-emerald-500"
+              className="bg-gradient-to-r from-success to-success/80"
             >
               {generating ? "Gerando..." : "🔮 Gerar Insights Preditivos"}
             </Button>
@@ -364,7 +376,7 @@ function PredictiveBITab() {
             <Card>
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
-                  <Target className="h-5 w-5 text-purple-400" />
+                  <Target className="h-5 w-5 text-accent-foreground" />
                   Predições
                 </CardTitle>
               </CardHeader>
@@ -419,7 +431,7 @@ function PredictiveBITab() {
             <Card>
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
-                  <AlertTriangle className="h-5 w-5 text-orange-400" />
+                  <AlertTriangle className="h-5 w-5 text-warning" />
                   Anomaly Detection Report
                 </CardTitle>
               </CardHeader>
@@ -526,17 +538,17 @@ function AdvantagesTab({ advantages: advList }: { advantages: Advantage[] }) {
                   <div className="text-center">
                     <p className="text-xs text-muted-foreground">Nauti One</p>
                     {adv.us ? (
-                      <CheckCircle className="h-6 w-6 text-green-400 mx-auto" />
+                      <CheckCircle className="h-6 w-6 text-success mx-auto" />
                     ) : (
-                      <XCircle className="h-6 w-6 text-red-400 mx-auto" />
+                      <XCircle className="h-6 w-6 text-destructive mx-auto" />
                     )}
                   </div>
                   <div className="text-center">
                     <p className="text-xs text-muted-foreground">Competidores</p>
                     {adv.competitors ? (
-                      <CheckCircle className="h-6 w-6 text-green-400 mx-auto" />
+                      <CheckCircle className="h-6 w-6 text-success mx-auto" />
                     ) : (
-                      <XCircle className="h-6 w-6 text-red-400 mx-auto" />
+                      <XCircle className="h-6 w-6 text-destructive mx-auto" />
                     )}
                   </div>
                 </div>

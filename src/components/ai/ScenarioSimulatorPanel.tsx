@@ -197,7 +197,7 @@ export function ScenarioSimulatorPanel() {
               <div className="space-y-2">
                 <div className="flex items-center justify-between">
                   <label className="text-sm flex items-center gap-2">
-                    <Fuel className="h-4 w-4 text-orange-500" />
+                    <Fuel className="h-4 w-4 text-warning" />
                     Variação Preço Combustível
                   </label>
                   <span className="text-sm font-mono">{parameters.fuelPrice > 0 ? "+" : ""}{parameters.fuelPrice}%</span>
@@ -214,7 +214,7 @@ export function ScenarioSimulatorPanel() {
               <div className="space-y-2">
                 <div className="flex items-center justify-between">
                   <label className="text-sm flex items-center gap-2">
-                    <Users className="h-4 w-4 text-blue-500" />
+                    <Users className="h-4 w-4 text-info" />
                     Custo Tripulação
                   </label>
                   <span className="text-sm font-mono">{parameters.crewCost > 0 ? "+" : ""}{parameters.crewCost}%</span>
@@ -231,7 +231,7 @@ export function ScenarioSimulatorPanel() {
               <div className="space-y-2">
                 <div className="flex items-center justify-between">
                   <label className="text-sm flex items-center gap-2">
-                    <Wrench className="h-4 w-4 text-purple-500" />
+                    <Wrench className="h-4 w-4 text-accent-foreground" />
                     Orçamento Manutenção
                   </label>
                   <span className="text-sm font-mono">{parameters.maintenanceBudget > 0 ? "+" : ""}{parameters.maintenanceBudget}%</span>
@@ -309,7 +309,7 @@ export function ScenarioSimulatorPanel() {
             </h4>
             <div className="grid grid-cols-2 gap-2">
               {results.map((result, i) => (
-                <div key={i} className="bg-muted/30 rounded-lg p-2">
+                <div key={`result-${result.metric}`} className="bg-muted/30 rounded-lg p-2">
                   <div className="flex items-center justify-between mb-1">
                     <span className="text-xs text-muted-foreground">{result.metric}</span>
                     {getImpactIcon(result.impact)}

@@ -328,9 +328,9 @@ const FuelOptimizerPage = () => {
   };
 
   const getConfidenceColor = (score: number) => {
-    if (score >= 80) return "text-green-500";
-    if (score >= 60) return "text-yellow-500";
-    return "text-red-500";
+    if (score >= 80) return "text-success";
+    if (score >= 60) return "text-warning";
+    return "text-destructive";
   };
 
   return (
@@ -363,7 +363,7 @@ const FuelOptimizerPage = () => {
         <Card className="bg-gradient-to-br from-green-500/10 to-emerald-500/10 border-green-200 dark:border-green-800">
           <CardHeader className="pb-2">
             <CardTitle className="text-sm font-medium flex items-center gap-2">
-              <TrendingDown className="h-4 w-4 text-green-500" />
+              <TrendingDown className="h-4 w-4 text-success" />
               Economia Média
             </CardTitle>
           </CardHeader>
@@ -465,7 +465,7 @@ const FuelOptimizerPage = () => {
             <Card>
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
-                  <Target className="h-5 w-5 text-green-500" />
+                  <Target className="h-5 w-5 text-success" />
                   Distribuição de Economia
                 </CardTitle>
                 <CardDescription>Total de combustível economizado</CardDescription>
@@ -475,7 +475,7 @@ const FuelOptimizerPage = () => {
                   <PieChart>
                     <Pie data={savingsChartData} cx="50%" cy="50%" innerRadius={60} outerRadius={100} dataKey="value" paddingAngle={5}>
                       {savingsChartData.map((entry, i) => (
-                        <Cell key={i} fill={entry.color} />
+                        <Cell key={`cell-${entry.name}`} fill={entry.color} />
                       ))}
                     </Pie>
                     <Tooltip />
@@ -507,7 +507,7 @@ const FuelOptimizerPage = () => {
                         <div className="flex items-start justify-between mb-3">
                           <div>
                             <h4 className="font-semibold flex items-center gap-2">
-                              <Navigation className="h-4 w-4 text-blue-500" />
+                              <Navigation className="h-4 w-4 text-info" />
                               {opt.route_name}
                             </h4>
                             <p className="text-sm text-muted-foreground">
@@ -515,7 +515,7 @@ const FuelOptimizerPage = () => {
                             </p>
                           </div>
                           <div className="text-right">
-                            <Badge className={opt.savings_percentage && opt.savings_percentage > 10 ? "bg-green-500" : "bg-blue-500"}>
+                            <Badge className={opt.savings_percentage && opt.savings_percentage > 10 ? "bg-success" : "bg-info"}>
                               {opt.savings_percentage ? `${opt.savings_percentage.toFixed(1)}% economia` : "Pendente"}
                             </Badge>
                             {opt.ai_analysis && (

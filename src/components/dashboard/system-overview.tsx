@@ -220,10 +220,10 @@ const SystemOverview = () => {
         </Card>
 
         {/* Performance */}
-        <Card className="border-l-4 border-l-purple-500">
+        <Card className="border-l-4 border-l-accent">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">Performance</CardTitle>
-            <Zap className="h-4 w-4 text-purple-600" />
+            <Zap className="h-4 w-4 text-accent-foreground" />
           </CardHeader>
           <CardContent>
             <div className="space-y-2">

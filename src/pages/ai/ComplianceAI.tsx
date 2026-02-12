@@ -198,26 +198,26 @@ Formate a resposta em markdown estruturado.`,
   const getStatusIcon = (status: string) => {
     switch (status) {
       case "compliant":
-        return <CheckCircle className="h-5 w-5 text-green-500" />;
+        return <CheckCircle className="h-5 w-5 text-success" />;
       case "warning":
-        return <AlertTriangle className="h-5 w-5 text-yellow-500" />;
+        return <AlertTriangle className="h-5 w-5 text-warning" />;
       case "non-compliant":
-        return <XCircle className="h-5 w-5 text-red-500" />;
+        return <XCircle className="h-5 w-5 text-destructive" />;
       default:
-        return <Clock className="h-5 w-5 text-blue-500" />;
+        return <Clock className="h-5 w-5 text-info" />;
     }
   };
 
   const getStatusBadge = (status: string) => {
     switch (status) {
       case "compliant":
-        return <Badge className="bg-green-500/10 text-green-500 border-green-500/30">Conforme</Badge>;
+        return <Badge className="bg-success/10 text-success border-success/30">Conforme</Badge>;
       case "warning":
-        return <Badge className="bg-yellow-500/10 text-yellow-500 border-yellow-500/30">Atenção</Badge>;
+        return <Badge className="bg-warning/10 text-warning border-warning/30">Atenção</Badge>;
       case "non-compliant":
-        return <Badge className="bg-red-500/10 text-red-500 border-red-500/30">Não Conforme</Badge>;
+        return <Badge className="bg-destructive/10 text-destructive border-destructive/30">Não Conforme</Badge>;
       default:
-        return <Badge className="bg-blue-500/10 text-blue-500 border-blue-500/30">Pendente</Badge>;
+        return <Badge className="bg-info/10 text-info border-info/30">Pendente</Badge>;
     }
   };
 
@@ -272,21 +272,21 @@ Formate a resposta em markdown estruturado.`,
         </Card>
         <Card>
           <CardContent className="p-4 text-center">
-            <CheckCircle className="h-8 w-8 text-green-500 mx-auto mb-2" />
+            <CheckCircle className="h-8 w-8 text-success mx-auto mb-2" />
             <p className="text-2xl font-bold">{stats.compliant}</p>
             <p className="text-xs text-muted-foreground">Conformes</p>
           </CardContent>
         </Card>
         <Card>
           <CardContent className="p-4 text-center">
-            <AlertTriangle className="h-8 w-8 text-yellow-500 mx-auto mb-2" />
+            <AlertTriangle className="h-8 w-8 text-warning mx-auto mb-2" />
             <p className="text-2xl font-bold">{stats.warning}</p>
             <p className="text-xs text-muted-foreground">Atenção</p>
           </CardContent>
         </Card>
         <Card>
           <CardContent className="p-4 text-center">
-            <XCircle className="h-8 w-8 text-red-500 mx-auto mb-2" />
+            <XCircle className="h-8 w-8 text-destructive mx-auto mb-2" />
             <p className="text-2xl font-bold">{stats.nonCompliant}</p>
             <p className="text-xs text-muted-foreground">Não Conformes</p>
           </CardContent>

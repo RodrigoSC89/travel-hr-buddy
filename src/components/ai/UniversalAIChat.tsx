@@ -300,7 +300,7 @@ export function UniversalAIChat({
                       {message.role === 'assistant' && (
                         <div className="flex items-center gap-1 mt-2 pt-2 border-t border-border/50">
                           <Button variant="ghost" size="icon" className="h-6 w-6" onClick={() => copyMessage(message.id, message.content)}>
-                            {copiedId === message.id ? <Check className="h-3 w-3 text-green-500" /> : <Copy className="h-3 w-3" />}
+                            {copiedId === message.id ? <Check className="h-3 w-3 text-success" /> : <Copy className="h-3 w-3" />}
                           </Button>
                           {showVoice && (
                             <Button variant="ghost" size="icon" className="h-6 w-6" onClick={() => isSpeaking ? stopSpeaking() : speak(message.content)}>

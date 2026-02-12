@@ -270,8 +270,8 @@ export default function SafetyIncidentAIPage() {
                     <div key={incident.id} className="flex items-center justify-between p-4 border rounded-lg">
                       <div className="flex items-center gap-4">
                         <AlertTriangle className={`h-6 w-6 ${
-                          incident.severity === 'high' ? 'text-red-500' :
-                          incident.severity === 'medium' ? 'text-yellow-500' : 'text-blue-500'
+                          incident.severity === 'high' ? 'text-destructive' :
+                          incident.severity === 'medium' ? 'text-warning' : 'text-info'
                         }`} />
                         <div>
                           <p className="font-medium">{incident.title}</p>

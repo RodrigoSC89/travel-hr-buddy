@@ -25,10 +25,10 @@ import {
 } from "@/lib/ai/predictive-engine";
 
 const priorityColors = {
-  critical: "bg-red-500/20 text-red-500 border-red-500/30",
-  high: "bg-orange-500/20 text-orange-500 border-orange-500/30",
-  medium: "bg-yellow-500/20 text-yellow-500 border-yellow-500/30",
-  low: "bg-green-500/20 text-green-500 border-green-500/30"
+  critical: "bg-destructive/20 text-destructive border-destructive/30",
+  high: "bg-warning/20 text-warning border-warning/30",
+  medium: "bg-warning/20 text-warning-foreground border-warning/30",
+  low: "bg-success/20 text-success border-success/30"
 };
 
 const priorityLabels = {
@@ -125,8 +125,8 @@ const RecommendationCard: React.FC<RecommendationCardProps> = ({ recommendation,
                       </h5>
                       <ul className="space-y-1">
                         {recommendation.actionItems.map((item, i) => (
-                          <li key={i} className="flex items-start gap-2 text-sm">
-                            <CheckCircle2 className="h-4 w-4 text-green-500 mt-0.5 flex-shrink-0" />
+                          <li key={`action-${i}`} className="flex items-start gap-2 text-sm">
+                            <CheckCircle2 className="h-4 w-4 text-success mt-0.5 flex-shrink-0" />
                             {item}
                           </li>
                         ))}
@@ -134,8 +134,8 @@ const RecommendationCard: React.FC<RecommendationCardProps> = ({ recommendation,
                     </div>
 
                     {recommendation.estimatedSavings && (
-                      <div className="p-3 bg-green-500/10 rounded-lg border border-green-500/20">
-                        <span className="text-sm font-medium text-green-600 dark:text-green-400">
+                      <div className="p-3 bg-success/10 rounded-lg border border-success/20">
+                        <span className="text-sm font-medium text-success">
                           💰 Economia estimada: {recommendation.estimatedSavings}
                         </span>
                       </div>
@@ -168,9 +168,9 @@ interface InsightGaugeProps {
 
 const InsightGauge: React.FC<InsightGaugeProps> = ({ label, value, icon, trend }) => {
   const trendColors = {
-    improving: 'text-green-500',
-    stable: 'text-yellow-500',
-    declining: 'text-red-500'
+    improving: 'text-success',
+    stable: 'text-warning',
+    declining: 'text-destructive'
   };
   
   const trendIcons = {
@@ -309,7 +309,7 @@ export const PredictiveRecommendationsPanel: React.FC = () => {
                   <p className="text-sm text-muted-foreground">Total Recomendações</p>
                   <p className="text-3xl font-bold">{analysis.recommendations.length}</p>
                 </div>
-                <Brain className="h-8 w-8 text-purple-500" />
+                <Brain className="h-8 w-8 text-accent-foreground" />
               </div>
             </CardContent>
           </Card>
@@ -330,25 +330,25 @@ export const PredictiveRecommendationsPanel: React.FC = () => {
               <InsightGauge 
                 label="Manutenção" 
                 value={analysis.insights.maintenanceRisk}
-                icon={<Wrench className="h-4 w-4 text-blue-500" />}
+                icon={<Wrench className="h-4 w-4 text-info" />}
                 trend={analysis.trends.maintenance}
               />
               <InsightGauge 
                 label="Tripulação" 
                 value={analysis.insights.crewReadiness}
-                icon={<GraduationCap className="h-4 w-4 text-green-500" />}
+                icon={<GraduationCap className="h-4 w-4 text-success" />}
                 trend={analysis.trends.crew}
               />
               <InsightGauge 
                 label="Compliance" 
                 value={analysis.insights.complianceScore}
-                icon={<Shield className="h-4 w-4 text-purple-500" />}
+                icon={<Shield className="h-4 w-4 text-accent-foreground" />}
                 trend={analysis.trends.compliance}
               />
               <InsightGauge 
                 label="Eficiência de Combustível" 
                 value={analysis.insights.fuelEfficiency}
-                icon={<Fuel className="h-4 w-4 text-orange-500" />}
+                icon={<Fuel className="h-4 w-4 text-warning" />}
                 trend={analysis.trends.costs}
               />
             </div>
@@ -381,7 +381,7 @@ export const PredictiveRecommendationsPanel: React.FC = () => {
             {loading ? (
               <div className="flex items-center justify-center py-12">
                 <div className="text-center space-y-3">
-                  <Loader2 className="h-8 w-8 animate-spin mx-auto text-purple-500" />
+                  <Loader2 className="h-8 w-8 animate-spin mx-auto text-primary" />
                   <p className="text-muted-foreground">Analisando dados operacionais...</p>
                 </div>
               </div>
@@ -394,7 +394,7 @@ export const PredictiveRecommendationsPanel: React.FC = () => {
                     ))
                   ) : (
                     <div className="text-center py-12">
-                      <CheckCircle2 className="h-12 w-12 mx-auto text-green-500 mb-3" />
+                      <CheckCircle2 className="h-12 w-12 mx-auto text-success mb-3" />
                       <h3 className="font-semibold text-lg">Tudo em ordem!</h3>
                       <p className="text-muted-foreground">
                         Nenhuma recomendação pendente nesta categoria
