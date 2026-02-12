@@ -44,8 +44,8 @@ export function CoverageMap({ coverageData }: CoverageMapProps) {
       </CardHeader>
       <CardContent>
         <div className="space-y-4">
-          {coverageData.map((coverage, index) => (
-            <div key={index} className="space-y-2">
+          {coverageData.map((coverage) => (
+            <div key={coverage.region} className="space-y-2">
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2">
                   <Map className="h-4 w-4 text-muted-foreground" />

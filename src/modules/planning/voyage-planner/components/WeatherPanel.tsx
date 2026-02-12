@@ -33,9 +33,9 @@ const WeatherPanel: React.FC<WeatherPanelProps> = ({ conditions }) => {
       </CardHeader>
       <CardContent>
         <div className="space-y-4">
-          {conditions.map((condition, index) => (
+          {conditions.map((condition) => (
             <div
-              key={index}
+              key={condition.location}
               className="flex items-center justify-between p-3 rounded-lg bg-muted/50 hover:bg-muted transition-colors"
             >
               <div className="space-y-1">

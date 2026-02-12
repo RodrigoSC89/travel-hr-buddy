@@ -380,8 +380,8 @@ export default function PerformanceProfiler() {
                 <p className="text-muted-foreground">No slow components detected</p>
               ) : (
                 <div className="space-y-2">
-                  {slowComponents.map((component, index) => (
-                    <div key={index} className="flex items-center justify-between p-3 border rounded">
+                  {slowComponents.map((component) => (
+                    <div key={component.name} className="flex items-center justify-between p-3 border rounded">
                       <div>
                         <p className="font-medium">{component.name}</p>
                         <p className="text-sm text-muted-foreground">
@@ -411,8 +411,8 @@ export default function PerformanceProfiler() {
                 </div>
               ) : (
                 <div className="space-y-2">
-                  {bottlenecks.map((issue, index) => (
-                    <div key={index} className="flex items-center gap-2 p-3 border rounded bg-warning/10">
+                  {bottlenecks.map((issue) => (
+                    <div key={issue} className="flex items-center gap-2 p-3 border rounded bg-warning/10">
                       <AlertTriangle className="h-4 w-4 text-warning" />
                       <p className="font-medium">{issue}</p>
                     </div>

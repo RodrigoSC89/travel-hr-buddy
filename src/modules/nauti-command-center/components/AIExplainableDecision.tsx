@@ -228,8 +228,8 @@ export function AIExplainableDecision({
                       Evidências Analisadas
                     </h4>
                     <ul className="space-y-1">
-                      {decision.justification.evidence.map((evidence, index) => (
-                        <li key={index} className="text-sm text-muted-foreground flex items-start gap-2">
+                      {decision.justification.evidence.map((evidence) => (
+                        <li key={evidence} className="text-sm text-muted-foreground flex items-start gap-2">
                           <CheckCircle className="h-3 w-3 text-success mt-1 shrink-0" />
                           {evidence}
                         </li>
@@ -245,8 +245,8 @@ export function AIExplainableDecision({
                         Riscos Identificados
                       </h4>
                       <ul className="space-y-1">
-                        {decision.justification.risks.map((risk, index) => (
-                          <li key={index} className="text-sm text-muted-foreground flex items-start gap-2">
+                        {decision.justification.risks.map((risk) => (
+                          <li key={risk} className="text-sm text-muted-foreground flex items-start gap-2">
                             <XCircle className="h-3 w-3 text-destructive mt-1 shrink-0" />
                             {risk}
                           </li>
@@ -271,8 +271,8 @@ export function AIExplainableDecision({
                     <div>
                       <h4 className="text-sm font-medium mb-2">Alternativas Consideradas</h4>
                       <div className="space-y-2">
-                        {decision.alternatives.map((alt, index) => (
-                          <div key={index} className="flex items-center justify-between p-2 bg-muted/30 rounded">
+                        {decision.alternatives.map((alt) => (
+                          <div key={alt.description} className="flex items-center justify-between p-2 bg-muted/30 rounded">
                             <span className="text-sm text-muted-foreground">{alt.description}</span>
                             <Badge variant="outline">{alt.confidence}%</Badge>
                           </div>

@@ -250,8 +250,8 @@ export default function MLCWorkHoursPage() {
               </CardHeader>
               <CardContent>
                 <div className="space-y-4">
-                  {crewHours.slice(0, 4).map((crew, index) => (
-                    <div key={index} className="p-4 border rounded-lg">
+                  {crewHours.slice(0, 4).map((crew) => (
+                    <div key={crew.name} className="p-4 border rounded-lg">
                       <div className="flex items-center justify-between mb-2">
                         <div>
                           <p className="font-medium">{crew.name}</p>

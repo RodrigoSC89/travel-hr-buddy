@@ -287,14 +287,14 @@ export default function SystemHealthPage() {
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
-            {validationReport.results.map((result, index) => (
-              <div key={index}>
+            {validationReport.results.map((result, resultIdx) => (
+              <div key={result.name}>
                 <div className="flex items-start justify-between py-2">
                   <div className="space-y-1 flex-1">
                     <div className="flex items-center gap-2">
-                      {result.status === "success" && <CheckCircle2 className="h-4 w-4 text-green-500" />}
-                      {result.status === "warning" && <AlertTriangle className="h-4 w-4 text-yellow-500" />}
-                      {result.status === "error" && <XCircle className="h-4 w-4 text-red-500" />}
+                      {result.status === "success" && <CheckCircle2 className="h-4 w-4 text-success" />}
+                      {result.status === "warning" && <AlertTriangle className="h-4 w-4 text-warning" />}
+                      {result.status === "error" && <XCircle className="h-4 w-4 text-destructive" />}
                       <span className="font-medium">{result.category}: {result.name}</span>
                       <Badge variant={
                         result.status === "success" ? "default" :
@@ -314,7 +314,7 @@ export default function SystemHealthPage() {
                     )}
                   </div>
                 </div>
-                {index < validationReport.results.length - 1 && <Separator />}
+                {resultIdx < validationReport.results.length - 1 && <Separator />}
               </div>
             ))}
           </CardContent>

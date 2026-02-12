@@ -55,8 +55,8 @@ export const KPIDashboard: React.FC<KPIDashboardProps> = ({ modules }) => {
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-      {kpis.map((kpi, index) => (
-        <Card key={index} className="bg-card/50 border-border">
+      {kpis.map((kpi) => (
+        <Card key={kpi.label} className="bg-card/50 border-border">
           <CardContent className="p-6">
             <div className="flex items-center justify-between">
               <div>

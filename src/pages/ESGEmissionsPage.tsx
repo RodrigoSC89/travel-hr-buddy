@@ -264,8 +264,8 @@ export default function ESGEmissionsPage() {
             </CardHeader>
             <CardContent>
               <div className="space-y-4">
-                {complianceItems.map((item, index) => (
-                  <div key={index} className="flex items-center justify-between p-4 border rounded-lg">
+                {complianceItems.map((item) => (
+                  <div key={item.regulation} className="flex items-center justify-between p-4 border rounded-lg">
                     <div className="flex items-center gap-3">
                       {item.status === "compliant" ? (
                         <div className="w-3 h-3 bg-success rounded-full" />
