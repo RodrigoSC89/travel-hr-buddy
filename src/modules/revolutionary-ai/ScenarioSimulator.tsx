@@ -129,13 +129,13 @@ export function ScenarioSimulator() {
 
   const getScoreColor = (score: number, inverse: boolean = false) => {
     if (inverse) {
-      if (score < 20) return 'text-green-400';
-      if (score < 40) return 'text-amber-400';
-      return 'text-red-400';
+      if (score < 20) return 'text-success';
+      if (score < 40) return 'text-warning';
+      return 'text-destructive';
     }
-    if (score >= 80) return 'text-green-400';
-    if (score >= 60) return 'text-amber-400';
-    return 'text-red-400';
+    if (score >= 80) return 'text-success';
+    if (score >= 60) return 'text-warning';
+    return 'text-destructive';
   };
 
   return (
@@ -162,7 +162,7 @@ export function ScenarioSimulator() {
         <Card className="border-border/50">
           <CardHeader className="pb-3">
             <CardTitle className="flex items-center gap-2">
-              <Lightbulb className="h-5 w-5 text-amber-400" />
+              <Lightbulb className="h-5 w-5 text-warning" />
               Parâmetros do Cenário
             </CardTitle>
           </CardHeader>
@@ -304,25 +304,25 @@ export function ScenarioSimulator() {
               className="space-y-4"
             >
               {/* Cost Card */}
-              <Card className="bg-gradient-to-br from-blue-500/10 to-blue-500/5 border-blue-500/20">
+              <Card className="bg-gradient-to-br from-info/10 to-info/5 border-info/20">
                 <CardContent className="p-4">
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-3">
-                      <DollarSign className="h-8 w-8 text-blue-400" />
+                      <DollarSign className="h-8 w-8 text-info" />
                       <div>
                         <p className="text-sm text-muted-foreground">Custo Estimado</p>
-                        <p className="text-3xl font-bold text-blue-400">
+                        <p className="text-3xl font-bold text-info">
                           R$ {simulationResult.cost.toLocaleString()}
                         </p>
                       </div>
                     </div>
                     {simulationResult.cost < 100000 ? (
-                      <Badge className="bg-green-500/20 text-green-400 border-green-500/30">
+                      <Badge className="bg-success/20 text-success border-success/30">
                         <TrendingDown className="h-3 w-3 mr-1" />
                         Economia
                       </Badge>
                     ) : (
-                      <Badge className="bg-red-500/20 text-red-400 border-red-500/30">
+                      <Badge className="bg-destructive/20 text-destructive border-destructive/30">
                         <TrendingUp className="h-3 w-3 mr-1" />
                         Acima
                       </Badge>
@@ -345,8 +345,8 @@ export function ScenarioSimulator() {
                     <div className="mt-2 h-2 rounded-full bg-muted overflow-hidden">
                       <div 
                         className={`h-full ${
-                          simulationResult.risk < 20 ? 'bg-green-500' :
-                          simulationResult.risk < 40 ? 'bg-amber-500' : 'bg-red-500'
+                          simulationResult.risk < 20 ? 'bg-success' :
+                          simulationResult.risk < 40 ? 'bg-warning' : 'bg-destructive'
                         }`}
                         style={{ width: `${simulationResult.risk}%` }}
                       />
@@ -366,8 +366,8 @@ export function ScenarioSimulator() {
                     <div className="mt-2 h-2 rounded-full bg-muted overflow-hidden">
                       <div 
                         className={`h-full ${
-                          simulationResult.compliance >= 80 ? 'bg-green-500' :
-                          simulationResult.compliance >= 60 ? 'bg-amber-500' : 'bg-red-500'
+                          simulationResult.compliance >= 80 ? 'bg-success' :
+                          simulationResult.compliance >= 60 ? 'bg-warning' : 'bg-destructive'
                         }`}
                         style={{ width: `${simulationResult.compliance}%` }}
                       />
@@ -387,8 +387,8 @@ export function ScenarioSimulator() {
                     <div className="mt-2 h-2 rounded-full bg-muted overflow-hidden">
                       <div 
                         className={`h-full ${
-                          simulationResult.operationalImpact >= 80 ? 'bg-green-500' :
-                          simulationResult.operationalImpact >= 60 ? 'bg-amber-500' : 'bg-red-500'
+                          simulationResult.operationalImpact >= 80 ? 'bg-success' :
+                          simulationResult.operationalImpact >= 60 ? 'bg-warning' : 'bg-destructive'
                         }`}
                         style={{ width: `${simulationResult.operationalImpact}%` }}
                       />
@@ -414,16 +414,16 @@ export function ScenarioSimulator() {
 
               {/* Recommendation */}
               <Card className={`${
-                simulationResult.risk > 50 ? 'bg-red-500/10 border-red-500/20' :
-                simulationResult.risk > 30 ? 'bg-amber-500/10 border-amber-500/20' :
-                'bg-green-500/10 border-green-500/20'
+                simulationResult.risk > 50 ? 'bg-destructive/10 border-destructive/20' :
+                simulationResult.risk > 30 ? 'bg-warning/10 border-warning/20' :
+                'bg-success/10 border-success/20'
               }`}>
                 <CardContent className="p-4">
                   <div className="flex items-start gap-3">
                     <Zap className={`h-6 w-6 ${
-                      simulationResult.risk > 50 ? 'text-red-400' :
-                      simulationResult.risk > 30 ? 'text-amber-400' :
-                      'text-green-400'
+                      simulationResult.risk > 50 ? 'text-destructive' :
+                      simulationResult.risk > 30 ? 'text-warning' :
+                      'text-success'
                     }`} />
                     <div>
                       <p className="font-semibold mb-1">Recomendação da IA</p>

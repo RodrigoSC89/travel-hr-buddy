@@ -125,14 +125,14 @@ export function SystemCommandCenter() {
       case "online":
       case "connected":
       case "success":
-        return "text-emerald-500";
+        return "text-success";
       case "degraded":
       case "warning":
-        return "text-amber-500";
+        return "text-warning";
       case "offline":
       case "error":
       case "disconnected":
-        return "text-red-500";
+        return "text-destructive";
       default:
         return "text-muted-foreground";
     }
@@ -168,10 +168,10 @@ export function SystemCommandCenter() {
     <div className="space-y-6">
       {/* Header com status do sistema */}
       <div className="grid grid-cols-2 md:grid-cols-6 gap-4">
-        <Card className="bg-gradient-to-br from-blue-500/10 to-cyan-500/10 border-blue-500/30">
+        <Card className="bg-gradient-to-br from-info/10 to-info/5 border-info/30">
           <CardContent className="p-4">
             <div className="flex items-center gap-2">
-              <Cpu className="h-5 w-5 text-blue-400" />
+              <Cpu className="h-5 w-5 text-info" />
               <span className="text-sm text-muted-foreground">CPU</span>
             </div>
             <p className="text-2xl font-bold mt-1">{systemMetrics.cpu}%</p>
@@ -179,10 +179,10 @@ export function SystemCommandCenter() {
           </CardContent>
         </Card>
 
-        <Card className="bg-gradient-to-br from-purple-500/10 to-pink-500/10 border-purple-500/30">
+        <Card className="bg-gradient-to-br from-accent/10 to-accent/5 border-accent/30">
           <CardContent className="p-4">
             <div className="flex items-center gap-2">
-              <HardDrive className="h-5 w-5 text-purple-400" />
+              <HardDrive className="h-5 w-5 text-accent-foreground" />
               <span className="text-sm text-muted-foreground">Memória</span>
             </div>
             <p className="text-2xl font-bold mt-1">{systemMetrics.memory}%</p>
@@ -190,10 +190,10 @@ export function SystemCommandCenter() {
           </CardContent>
         </Card>
 
-        <Card className="bg-gradient-to-br from-amber-500/10 to-orange-500/10 border-amber-500/30">
+        <Card className="bg-gradient-to-br from-warning/10 to-warning/5 border-warning/30">
           <CardContent className="p-4">
             <div className="flex items-center gap-2">
-              <Database className="h-5 w-5 text-amber-400" />
+              <Database className="h-5 w-5 text-warning" />
               <span className="text-sm text-muted-foreground">Disco</span>
             </div>
             <p className="text-2xl font-bold mt-1">{systemMetrics.disk}%</p>
@@ -201,10 +201,10 @@ export function SystemCommandCenter() {
           </CardContent>
         </Card>
 
-        <Card className="bg-gradient-to-br from-emerald-500/10 to-green-500/10 border-emerald-500/30">
+        <Card className="bg-gradient-to-br from-success/10 to-success/5 border-success/30">
           <CardContent className="p-4">
             <div className="flex items-center gap-2">
-              <Network className="h-5 w-5 text-emerald-400" />
+              <Network className="h-5 w-5 text-success" />
               <span className="text-sm text-muted-foreground">Rede</span>
             </div>
             <p className="text-2xl font-bold mt-1">{systemMetrics.network} MB/s</p>
@@ -299,11 +299,11 @@ export function SystemCommandCenter() {
           </div>
 
           {/* Status geral */}
-          <Card className="bg-gradient-to-r from-emerald-500/10 to-green-500/10 border-emerald-500/30">
+          <Card className="bg-gradient-to-r from-success/10 to-success/5 border-success/30">
             <CardContent className="p-6">
               <div className="flex items-center gap-4">
-                <div className="p-3 rounded-full bg-emerald-500/20">
-                  <CheckCircle2 className="h-8 w-8 text-emerald-500" />
+                <div className="p-3 rounded-full bg-success/20">
+                  <CheckCircle2 className="h-8 w-8 text-success" />
                 </div>
                 <div>
                   <h3 className="text-xl font-bold">Sistema Operacional</h3>
@@ -322,23 +322,23 @@ export function SystemCommandCenter() {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             {INTEGRATIONS.map((integration) => (
               <Card key={integration.id} className={`hover:border-primary/50 transition-colors ${
-                integration.status === "error" ? "border-red-500/50" : ""
+                integration.status === "error" ? "border-destructive/50" : ""
               }`}>
                 <CardContent className="p-4">
                   <div className="flex items-start justify-between mb-4">
                     <div className="flex items-center gap-3">
                       <div className={`p-2 rounded-lg ${
                         integration.status === "connected" 
-                          ? "bg-emerald-500/10" 
+                          ? "bg-success/10" 
                           : integration.status === "error" 
-                          ? "bg-red-500/10" 
+                          ? "bg-destructive/10" 
                           : "bg-muted"
                       }`}>
                         <integration.icon className={`h-5 w-5 ${
                           integration.status === "connected" 
-                            ? "text-emerald-500" 
+                            ? "text-success" 
                             : integration.status === "error" 
-                            ? "text-red-500" 
+                            ? "text-destructive" 
                             : "text-muted-foreground"
                         }`} />
                       </div>
@@ -349,10 +349,10 @@ export function SystemCommandCenter() {
                     </div>
                     <Badge className={
                       integration.status === "connected" 
-                        ? "bg-emerald-500/20 text-emerald-400" 
+                        ? "bg-success/20 text-success" 
                         : integration.status === "error" 
-                        ? "bg-red-500/20 text-red-400" 
-                        : "bg-gray-500/20 text-gray-400"
+                        ? "bg-destructive/20 text-destructive" 
+                        : "bg-muted text-muted-foreground"
                     }>
                       {integration.status === "connected" ? "Conectado" : integration.status === "error" ? "Erro" : "Desconectado"}
                     </Badge>
@@ -498,9 +498,9 @@ export function SystemCommandCenter() {
                       animate={{ opacity: 1, x: 0 }}
                       className={`p-3 rounded-lg border ${
                         log.status === "error" 
-                          ? "bg-red-500/5 border-red-500/30" 
+                          ? "bg-destructive/5 border-destructive/30" 
                           : log.status === "warning"
-                          ? "bg-amber-500/5 border-amber-500/30"
+                          ? "bg-warning/5 border-warning/30"
                           : "bg-muted/50"
                       }`}
                     >
@@ -508,17 +508,17 @@ export function SystemCommandCenter() {
                         <div className="flex items-center gap-3">
                           <div className={`p-1.5 rounded ${
                             log.status === "success" 
-                              ? "bg-emerald-500/20" 
+                              ? "bg-success/20" 
                               : log.status === "warning"
-                              ? "bg-amber-500/20"
-                              : "bg-red-500/20"
+                              ? "bg-warning/20"
+                              : "bg-destructive/20"
                           }`}>
                             {log.status === "success" ? (
-                              <CheckCircle2 className="h-4 w-4 text-emerald-500" />
+                              <CheckCircle2 className="h-4 w-4 text-success" />
                             ) : log.status === "warning" ? (
-                              <AlertTriangle className="h-4 w-4 text-amber-500" />
+                              <AlertTriangle className="h-4 w-4 text-warning" />
                             ) : (
-                              <XCircle className="h-4 w-4 text-red-500" />
+                              <XCircle className="h-4 w-4 text-destructive" />
                             )}
                           </div>
                           <div>

@@ -181,13 +181,13 @@ export function PredictiveMaintenanceScheduler() {
           </CardContent>
         </Card>
 
-        <Card className="bg-gradient-to-br from-amber-500/10 to-amber-500/5 border-amber-500/20">
+        <Card className="bg-gradient-to-br from-warning/10 to-warning/5 border-warning/20">
           <CardContent className="p-4">
             <div className="flex items-center gap-2">
-              <TrendingUp className="h-5 w-5 text-amber-400" />
+              <TrendingUp className="h-5 w-5 text-warning" />
               <span className="text-sm text-muted-foreground">Confiança IA</span>
             </div>
-            <p className="text-3xl font-bold text-amber-400 mt-2">{stats.avgConfidence}%</p>
+            <p className="text-3xl font-bold text-warning mt-2">{stats.avgConfidence}%</p>
           </CardContent>
         </Card>
 

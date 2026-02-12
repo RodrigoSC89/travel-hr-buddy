@@ -240,7 +240,7 @@ export default function SystemPerformancePanel() {
         <Card>
           <CardHeader className="pb-3">
             <CardTitle className="text-base flex items-center gap-2">
-              <Shield className="h-5 w-5 text-green-500" />
+              <Shield className="h-5 w-5 text-success" />
               Segurança
             </CardTitle>
           </CardHeader>
@@ -267,7 +267,7 @@ export default function SystemPerformancePanel() {
         <Card>
           <CardHeader className="pb-3">
             <CardTitle className="text-base flex items-center gap-2">
-              <Database className="h-5 w-5 text-blue-500" />
+              <Database className="h-5 w-5 text-info" />
               Banco de Dados
             </CardTitle>
           </CardHeader>
