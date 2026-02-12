@@ -52,10 +52,10 @@ export function AIAgentOrchestrator() {
     return (
       <div className="space-y-6">
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-          {[...Array(4)].map((_, i) => <Skeleton key={i} className="h-24" />)}
+          {[...Array(4)].map((_, i) => <Skeleton key={`agent-skeleton-${i}`} className="h-24" />)}
         </div>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          {[...Array(6)].map((_, i) => <Skeleton key={i} className="h-48" />)}
+          {[...Array(6)].map((_, i) => <Skeleton key={`agent-card-skeleton-${i}`} className="h-48" />)}
         </div>
       </div>
     );
@@ -176,8 +176,8 @@ export function AIAgentOrchestrator() {
                     </div>
 
                     <div className="flex flex-wrap gap-1 mb-3">
-                      {(Array.isArray(agent.capabilities) ? agent.capabilities : []).slice(0, 3).map((cap: unknown, i: number) => (
-                        <Badge key={i} variant="secondary" className="text-xs">{String(cap)}</Badge>
+                      {(Array.isArray(agent.capabilities) ? agent.capabilities : []).slice(0, 3).map((cap: unknown) => (
+                        <Badge key={String(cap)} variant="secondary" className="text-xs">{String(cap)}</Badge>
                       ))}
                     </div>
 
@@ -259,8 +259,8 @@ export function AIAgentOrchestrator() {
                   <div className="mt-4">
                     <p className="text-sm font-medium mb-2">Todas as Capacidades</p>
                     <div className="flex flex-wrap gap-2">
-                      {(Array.isArray(selectedAgent.capabilities) ? selectedAgent.capabilities : []).map((cap: unknown, i: number) => (
-                        <Badge key={i} variant="outline">{String(cap)}</Badge>
+                      {(Array.isArray(selectedAgent.capabilities) ? selectedAgent.capabilities : []).map((cap: unknown) => (
+                        <Badge key={String(cap)} variant="outline">{String(cap)}</Badge>
                       ))}
                     </div>
                   </div>

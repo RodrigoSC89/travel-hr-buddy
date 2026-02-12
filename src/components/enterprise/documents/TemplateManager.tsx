@@ -123,7 +123,7 @@ export function TemplateManager() {
 
   const categories = [...new Set(templates.map(t => t.category))];
 
-  if (loading) return <div className="space-y-4">{[1,2,3].map(i => <Skeleton key={i} className="h-32 w-full" />)}</div>;
+  if (loading) return <div className="space-y-4">{[1,2,3].map(i => <Skeleton key={`tmpl-skeleton-${i}`} className="h-32 w-full" />)}</div>;
 
   return (
     <div className="space-y-6">
@@ -163,7 +163,7 @@ export function TemplateManager() {
               <CardContent className="space-y-4">
                 <p className="text-sm text-muted-foreground">{template.description}</p>
                 {template.variables.length > 0 && (
-                  <div><p className="text-xs font-medium text-muted-foreground mb-2">Variáveis:</p><div className="flex flex-wrap gap-1">{template.variables.map((variable, i) => <Badge key={i} variant="secondary" className="text-xs font-mono"><Variable className="h-3 w-3 mr-1" />{variable}</Badge>)}</div></div>
+                  <div><p className="text-xs font-medium text-muted-foreground mb-2">Variáveis:</p><div className="flex flex-wrap gap-1">{template.variables.map((variable) => <Badge key={variable} variant="secondary" className="text-xs font-mono"><Variable className="h-3 w-3 mr-1" />{variable}</Badge>)}</div></div>
                 )}
                 <div className="flex items-center gap-4 text-xs text-muted-foreground pt-2 border-t">
                   <span className="flex items-center gap-1"><User className="h-3 w-3" />{template.createdBy}</span>

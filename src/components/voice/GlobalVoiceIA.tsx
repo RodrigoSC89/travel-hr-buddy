@@ -383,9 +383,9 @@ export function GlobalVoiceIA({ className, onCommand }: GlobalVoiceIAProps) {
                 <div className="relative z-10">
                   <p className="text-sm text-muted-foreground mb-2">Comandos rápidos:</p>
                   <div className="flex flex-wrap gap-2">
-                    {quickCommands.map((cmd, i) => (
+                    {quickCommands.map((cmd) => (
                       <Button
-                        key={i}
+                        key={cmd.command}
                         variant="outline"
                         size="sm"
                         onClick={() => {

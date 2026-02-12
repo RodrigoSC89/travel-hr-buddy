@@ -495,13 +495,13 @@ export default function BetaDashboard() {
               </CardHeader>
               <CardContent>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  {stats?.testimonials.map((t, i) => (
-                    <Card key={i} className="bg-muted/50">
+                  {stats?.testimonials.map((t) => (
+                    <Card key={`${t.name}-${t.text.slice(0,20)}`} className="bg-muted/50">
                       <CardContent className="pt-6">
                         <div className="flex items-center gap-2 mb-3">
                           {Array.from({ length: 5 }).map((_, j) => (
                             <Star
-                              key={j}
+                              key={`star-${j}`}
                               className={`w-4 h-4 ${
                                 j < Math.round(t.rating / 2) ? "text-yellow-500 fill-yellow-500" : "text-gray-300"
                               }`}

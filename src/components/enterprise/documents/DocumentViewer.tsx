@@ -171,7 +171,7 @@ export function DocumentViewer() {
     toast.info(`Histórico de versões de "${doc.title}" — v${doc.version} (versão atual)`);
   }, []);
 
-  if (loading) return <div className="space-y-4">{[1,2,3].map(i => <Skeleton key={i} className="h-20 w-full" />)}</div>;
+  if (loading) return <div className="space-y-4">{[1,2,3].map(i => <Skeleton key={`doc-skeleton-${i}`} className="h-20 w-full" />)}</div>;
 
   return (
     <div className="space-y-6">
@@ -224,7 +224,7 @@ export function DocumentViewer() {
                         <span className="flex items-center gap-1"><User className="h-3 w-3" />{doc.uploadedBy}</span>
                         <span className="flex items-center gap-1"><Calendar className="h-3 w-3" />{new Date(doc.uploadedAt).toLocaleDateString("pt-BR")}</span>
                       </div>
-                      <div className="flex gap-1 mt-2">{doc.tags.map((tag, i) => <Badge key={i} variant="outline" className="text-xs"><Tag className="h-2 w-2 mr-1" />{tag}</Badge>)}</div>
+                      <div className="flex gap-1 mt-2">{doc.tags.map((tag) => <Badge key={tag} variant="outline" className="text-xs"><Tag className="h-2 w-2 mr-1" />{tag}</Badge>)}</div>
                     </div>
                   </div>
                   <div className="flex items-center gap-4" onClick={(e) => e.stopPropagation()}>
@@ -266,7 +266,7 @@ export function DocumentViewer() {
                 <div><span className="text-muted-foreground">Data:</span> {new Date(previewDoc.uploadedAt).toLocaleDateString("pt-BR")}</div>
               </div>
               {previewDoc.tags.length > 0 && (
-                <div className="flex gap-1 flex-wrap">{previewDoc.tags.map((tag, i) => <Badge key={i} variant="outline" className="text-xs">{tag}</Badge>)}</div>
+                <div className="flex gap-1 flex-wrap">{previewDoc.tags.map((tag) => <Badge key={tag} variant="outline" className="text-xs">{tag}</Badge>)}</div>
               )}
               <div className="flex gap-2">
                 <Button className="flex-1" onClick={() => handleDownload(previewDoc)}><Download className="h-4 w-4 mr-2" />Baixar</Button>

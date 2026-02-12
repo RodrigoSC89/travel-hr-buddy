@@ -381,7 +381,7 @@ export function TelemetrySensorGrid({ vesselId, className }: TelemetrySensorGrid
                       const height = ((val - sensor.min) / (sensor.max - sensor.min)) * 100;
                       return (
                         <div
-                          key={i}
+                          key={`spark-${i}`}
                           className={cn(
                             "flex-1 rounded-t-sm transition-all",
                             sensor.status === "critical" && "bg-destructive/60",

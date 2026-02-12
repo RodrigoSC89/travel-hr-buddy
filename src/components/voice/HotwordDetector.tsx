@@ -412,7 +412,7 @@ export function HotwordDetector({
             <div className="flex items-center gap-1 h-6">
               {[...Array(8)].map((_, i) => (
                 <div
-                  key={i}
+                  key={`bar-${i}`}
                   className={cn(
                     'w-1 bg-primary rounded-full transition-all duration-75',
                     state.audioLevel > i / 8 ? 'opacity-100' : 'opacity-30'

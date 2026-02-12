@@ -270,7 +270,7 @@ export function RiskMatrix() {
                   {/* Header row */}
                   <div className="h-8" />
                   {[1, 2, 3, 4, 5].map(i => (
-                    <div key={i} className="h-8 flex items-center justify-center text-xs text-muted-foreground">
+                    <div key={`prob-${i}`} className="h-8 flex items-center justify-center text-xs text-muted-foreground">
                       {i}
                     </div>
                   ))}
@@ -409,8 +409,8 @@ export function RiskMatrix() {
                       <div>
                         <p className="text-sm font-medium mb-2">Controles Implementados</p>
                         <div className="flex flex-wrap gap-2">
-                          {risk.controls.map((control, i) => (
-                            <Badge key={i} variant="secondary" className="flex items-center gap-1">
+                          {risk.controls.map((control) => (
+                            <Badge key={control} variant="secondary" className="flex items-center gap-1">
                               <CheckCircle2 className="h-3 w-3" />
                               {control}
                             </Badge>
