@@ -211,7 +211,7 @@ export default function MissionControlCenter() {
                       )}
 
                       {voyage.alerts.filter(a => !a.acknowledged).length > 0 && (
-                        <div className="flex items-center gap-1 mt-2 text-yellow-500">
+                        <div className="flex items-center gap-1 mt-2 text-warning">
                           <AlertTriangle className="h-3 w-3" />
                           <span className="text-xs">{voyage.alerts.filter(a => !a.acknowledged).length} alertas</span>
                         </div>
@@ -427,7 +427,7 @@ export default function MissionControlCenter() {
                   <TabsContent value="weather">
                     <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                       <div className="p-4 rounded-lg border text-center">
-                        <Wind className="h-8 w-8 mx-auto mb-2 text-blue-500" />
+                        <Wind className="h-8 w-8 mx-auto mb-2 text-info" />
                         <p className="text-2xl font-bold">{effectiveSelected.weatherConditions.windSpeed}</p>
                         <p className="text-sm text-muted-foreground">Vento (kn)</p>
                       </div>

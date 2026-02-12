@@ -182,9 +182,9 @@ const NautilusAIHub: React.FC = () => {
 
   const getPriorityColor = (priority: string) => {
     switch (priority) {
-      case "high": return "bg-red-500/20 text-red-400 border-red-500/30";
-      case "medium": return "bg-yellow-500/20 text-yellow-400 border-yellow-500/30";
-      case "low": return "bg-green-500/20 text-green-400 border-green-500/30";
+      case "high": return "bg-destructive/20 text-destructive border-destructive/30";
+      case "medium": return "bg-warning/20 text-warning border-warning/30";
+      case "low": return "bg-success/20 text-success border-success/30";
       default: return "bg-muted text-muted-foreground";
     }
   };
@@ -194,7 +194,7 @@ const NautilusAIHub: React.FC = () => {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-3">
-          <div className="p-3 rounded-xl bg-gradient-to-br from-primary/20 to-purple-500/20 border border-primary/30">
+          <div className="p-3 rounded-xl bg-gradient-to-br from-primary/20 to-accent/20 border border-primary/30">
             <Brain className="h-8 w-8 text-primary" />
           </div>
           <div>
@@ -202,8 +202,8 @@ const NautilusAIHub: React.FC = () => {
             <p className="text-muted-foreground">Centro de Inteligência Artificial Integrada</p>
           </div>
         </div>
-        <Badge variant="outline" className="gap-1 bg-green-500/10 text-green-400 border-green-500/30">
-          <div className="h-2 w-2 rounded-full bg-green-400 animate-pulse" />
+        <Badge variant="outline" className="gap-1 bg-success/10 text-success border-success/30">
+          <div className="h-2 w-2 rounded-full bg-success animate-pulse" />
           IA Online
         </Badge>
       </div>
@@ -497,7 +497,7 @@ const NautilusAIHub: React.FC = () => {
                   ) : (
                     chatMessages.map((msg, i) => (
                       <div 
-                        key={i} 
+                        key={`chat-${msg.role}-${i}`} 
                         className={`flex ${msg.role === "user" ? "justify-end" : "justify-start"}`}
                       >
                         <div 

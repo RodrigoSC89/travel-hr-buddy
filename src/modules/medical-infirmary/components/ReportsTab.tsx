@@ -53,7 +53,7 @@ export default function ReportsTab() {
             {isGenerating ? (
               <Loader2 className="h-12 w-12 mx-auto mb-4 animate-spin text-primary" />
             ) : (
-              <Shield className="h-12 w-12 mx-auto mb-4 text-blue-500" />
+              <Shield className="h-12 w-12 mx-auto mb-4 text-info" />
             )}
             <h3 className="font-medium">Relatório MLC 2006</h3>
             <p className="text-sm text-muted-foreground">Conformidade Maritime Labour Convention</p>
@@ -67,7 +67,7 @@ export default function ReportsTab() {
             {isGenerating ? (
               <Loader2 className="h-12 w-12 mx-auto mb-4 animate-spin text-primary" />
             ) : (
-              <FileText className="h-12 w-12 mx-auto mb-4 text-green-500" />
+              <FileText className="h-12 w-12 mx-auto mb-4 text-success" />
             )}
             <h3 className="font-medium">Relatório Port State</h3>
             <p className="text-sm text-muted-foreground">Inspeção de Estado do Porto</p>
@@ -81,7 +81,7 @@ export default function ReportsTab() {
             {isGenerating ? (
               <Loader2 className="h-12 w-12 mx-auto mb-4 animate-spin text-primary" />
             ) : (
-              <BarChart3 className="h-12 w-12 mx-auto mb-4 text-purple-500" />
+              <BarChart3 className="h-12 w-12 mx-auto mb-4 text-accent-foreground" />
             )}
             <h3 className="font-medium">Relatório Mensal</h3>
             <p className="text-sm text-muted-foreground">Resumo de atendimentos</p>

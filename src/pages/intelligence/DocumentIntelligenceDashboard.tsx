@@ -257,8 +257,8 @@ export default function DocumentIntelligenceDashboard() {
                         <div className="mt-3 pt-3 border-t border-border/50">
                           <p className="text-xs text-muted-foreground mb-2">Fontes:</p>
                           <div className="flex flex-wrap gap-2">
-                            {msg.sources.map((source, idx) => (
-                              <Badge key={idx} variant="outline" className="text-xs">
+                            {msg.sources.map((source) => (
+                              <Badge key={`${source.name}-${source.pages}`} variant="outline" className="text-xs">
                                 <FileSearch className="h-3 w-3 mr-1" />
                                 {source.name} (p. {source.pages}) - {Math.round(source.similarity * 100)}%
                               </Badge>
@@ -320,9 +320,9 @@ export default function DocumentIntelligenceDashboard() {
             </CardHeader>
             <CardContent>
               <div className="space-y-2">
-                {recentSearches.map((search, idx) => (
+                {recentSearches.map((search) => (
                   <div
-                    key={idx}
+                    key={search.query}
                     className="p-2 rounded-lg hover:bg-muted/50 cursor-pointer transition-colors"
                     onClick={() => setQuery(search.query)}
                   >
@@ -344,8 +344,8 @@ export default function DocumentIntelligenceDashboard() {
             </CardHeader>
             <CardContent>
               <div className="space-y-3">
-                {topDocuments.map((doc, idx) => (
-                  <div key={idx} className="flex items-center justify-between p-2 rounded-lg hover:bg-muted/50">
+                {topDocuments.map((doc) => (
+                  <div key={doc.name} className="flex items-center justify-between p-2 rounded-lg hover:bg-muted/50">
                     <div className="flex-1 min-w-0">
                       <p className="text-sm font-medium truncate">{doc.name}</p>
                       <p className="text-xs text-muted-foreground">{doc.searches} buscas</p>
@@ -370,8 +370,8 @@ export default function DocumentIntelligenceDashboard() {
             </CardHeader>
             <CardContent>
               <div className="space-y-2">
-                {documentStats.categories.map((cat, idx) => (
-                  <div key={idx} className="flex items-center justify-between">
+                {documentStats.categories.map((cat) => (
+                  <div key={cat.name} className="flex items-center justify-between">
                     <span className="text-sm">{cat.name}</span>
                     <Badge variant="secondary">{cat.count.toLocaleString()}</Badge>
                   </div>

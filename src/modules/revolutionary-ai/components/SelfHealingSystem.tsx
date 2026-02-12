@@ -35,7 +35,7 @@ interface HealingEvent {
   issue: string;
   action: string;
   status: "completed" | "in_progress" | "failed";
-  duration: number; // seconds
+  duration: number;
   timestamp: string;
   automated: boolean;
 }
@@ -162,10 +162,10 @@ const fallbackHealingEvents: HealingEvent[] = [
 ];
 
 const statusColors = {
-  healthy: "bg-green-500/10 text-green-500 border-green-500/30",
-  warning: "bg-yellow-500/10 text-yellow-500 border-yellow-500/30",
-  critical: "bg-red-500/10 text-red-500 border-red-500/30",
-  healing: "bg-blue-500/10 text-blue-500 border-blue-500/30",
+  healthy: "bg-success/10 text-success border-success/30",
+  warning: "bg-warning/10 text-warning border-warning/30",
+  critical: "bg-destructive/10 text-destructive border-destructive/30",
+  healing: "bg-info/10 text-info border-info/30",
 };
 
 const categoryIcons = {
@@ -196,14 +196,14 @@ export function SelfHealingSystem() {
       <div className="flex items-center justify-between">
         <div>
           <h2 className="text-2xl font-bold flex items-center gap-2">
-            <RefreshCw className="h-6 w-6 text-green-500" />
+            <RefreshCw className="h-6 w-6 text-success" />
             Self-Healing Infrastructure
           </h2>
           <p className="text-muted-foreground">
             Auto-diagnóstico e reparo autônomo
           </p>
         </div>
-        <Badge className="bg-gradient-to-r from-green-500 to-emerald-500 text-white border-0">
+        <Badge className="bg-gradient-to-r from-success to-success/80 text-success-foreground border-0">
           <Activity className="h-3 w-3 mr-1 animate-pulse" />
           {overallHealth}% Health
         </Badge>
@@ -214,7 +214,7 @@ export function SelfHealingSystem() {
         <Card>
           <CardContent className="pt-4">
             <div className="flex items-center gap-3">
-              <CheckCircle className="h-8 w-8 text-green-500" />
+              <CheckCircle className="h-8 w-8 text-success" />
               <div>
                 <p className="text-2xl font-bold">{healthyCount}</p>
                 <p className="text-xs text-muted-foreground">Saudáveis</p>
@@ -225,7 +225,7 @@ export function SelfHealingSystem() {
         <Card>
           <CardContent className="pt-4">
             <div className="flex items-center gap-3">
-              <RefreshCw className="h-8 w-8 text-blue-500 animate-spin" />
+              <RefreshCw className="h-8 w-8 text-info animate-spin" />
               <div>
                 <p className="text-2xl font-bold">{healingCount}</p>
                 <p className="text-xs text-muted-foreground">Em Reparo</p>
@@ -236,7 +236,7 @@ export function SelfHealingSystem() {
         <Card>
           <CardContent className="pt-4">
             <div className="flex items-center gap-3">
-              <AlertTriangle className="h-8 w-8 text-yellow-500" />
+              <AlertTriangle className="h-8 w-8 text-warning" />
               <div>
                 <p className="text-2xl font-bold">{warningCount}</p>
                 <p className="text-xs text-muted-foreground">Atenção</p>
@@ -247,7 +247,7 @@ export function SelfHealingSystem() {
         <Card>
           <CardContent className="pt-4">
             <div className="flex items-center gap-3">
-              <AlertTriangle className="h-8 w-8 text-red-500" />
+              <AlertTriangle className="h-8 w-8 text-destructive" />
               <div>
                 <p className="text-2xl font-bold">{criticalCount}</p>
                 <p className="text-xs text-muted-foreground">Críticos</p>
@@ -255,10 +255,10 @@ export function SelfHealingSystem() {
             </div>
           </CardContent>
         </Card>
-        <Card className="bg-gradient-to-br from-green-500/10 to-emerald-500/5">
+        <Card className="bg-gradient-to-br from-success/10 to-success/5">
           <CardContent className="pt-4">
             <div className="flex items-center gap-3">
-              <Gauge className="h-8 w-8 text-green-500" />
+              <Gauge className="h-8 w-8 text-success" />
               <div>
                 <p className="text-2xl font-bold">{avgUptime}%</p>
                 <p className="text-xs text-muted-foreground">Uptime Médio</p>
@@ -289,8 +289,8 @@ export function SelfHealingSystem() {
                       animate={{ opacity: 1, x: 0 }}
                       transition={{ delay: index * 0.05 }}
                       className={`p-3 rounded-lg border ${
-                        component.status === "critical" ? "bg-red-500/5 border-red-500/30" :
-                        component.status === "healing" ? "bg-blue-500/5 border-blue-500/30" :
+                        component.status === "critical" ? "bg-destructive/5 border-destructive/30" :
+                        component.status === "healing" ? "bg-info/5 border-info/30" :
                         "bg-card"
                       }`}
                     >
@@ -320,7 +320,7 @@ export function SelfHealingSystem() {
                           </div>
                         )}
                         {component.predictedFailure && (
-                          <div className="flex items-center gap-1 text-xs text-yellow-500">
+                          <div className="flex items-center gap-1 text-xs text-warning">
                             <Clock className="h-3 w-3" />
                             Predicted failure in {component.predictedFailure}
                           </div>
@@ -338,7 +338,7 @@ export function SelfHealingSystem() {
         <Card>
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
-              <Wrench className="h-5 w-5 text-blue-500" />
+              <Wrench className="h-5 w-5 text-info" />
               Healing Events Log
             </CardTitle>
           </CardHeader>
@@ -357,16 +357,16 @@ export function SelfHealingSystem() {
                       <div>
                         <span className="font-medium text-sm">{event.component}</span>
                         {event.automated && (
-                          <Badge variant="outline" className="ml-2 text-xs bg-purple-500/10 text-purple-500">
+                          <Badge variant="outline" className="ml-2 text-xs bg-accent/10 text-accent-foreground">
                             <Zap className="h-3 w-3 mr-1" />
                             Auto
                           </Badge>
                         )}
                       </div>
                       <Badge variant="outline" className={
-                        event.status === "completed" ? "bg-green-500/10 text-green-500" :
-                        event.status === "in_progress" ? "bg-blue-500/10 text-blue-500" :
-                        "bg-red-500/10 text-red-500"
+                        event.status === "completed" ? "bg-success/10 text-success" :
+                        event.status === "in_progress" ? "bg-info/10 text-info" :
+                        "bg-destructive/10 text-destructive"
                       }>
                         {event.status === "in_progress" && (
                           <RefreshCw className="h-3 w-3 mr-1 animate-spin" />
@@ -378,11 +378,11 @@ export function SelfHealingSystem() {
                       </Badge>
                     </div>
                     <div className="text-sm space-y-1">
-                      <p className="text-red-400">
+                      <p className="text-destructive">
                         <AlertTriangle className="h-3 w-3 inline mr-1" />
                         {event.issue}
                       </p>
-                      <p className="text-green-400">
+                      <p className="text-success">
                         <Wrench className="h-3 w-3 inline mr-1" />
                         {event.action}
                       </p>
@@ -403,27 +403,27 @@ export function SelfHealingSystem() {
       </div>
 
       {/* Benefits */}
-      <Card className="bg-gradient-to-br from-green-500/10 to-blue-500/5">
+      <Card className="bg-gradient-to-br from-success/10 to-info/5">
         <CardContent className="pt-6">
           <h3 className="font-bold text-lg mb-4 flex items-center gap-2">
-            <TrendingUp className="h-5 w-5 text-green-500" />
+            <TrendingUp className="h-5 w-5 text-success" />
             ROI do Self-Healing
           </h3>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
             <div className="text-center">
-              <div className="text-3xl font-bold text-green-500">-95%</div>
+              <div className="text-3xl font-bold text-success">-95%</div>
               <div className="text-sm text-muted-foreground">Downtime</div>
             </div>
             <div className="text-center">
-              <div className="text-3xl font-bold text-blue-500">&lt;1s</div>
+              <div className="text-3xl font-bold text-info">&lt;1s</div>
               <div className="text-sm text-muted-foreground">Tempo de Resposta</div>
             </div>
             <div className="text-center">
-              <div className="text-3xl font-bold text-purple-500">-60%</div>
+              <div className="text-3xl font-bold text-accent-foreground">-60%</div>
               <div className="text-sm text-muted-foreground">Custos Manutenção</div>
             </div>
             <div className="text-center">
-              <div className="text-3xl font-bold text-amber-500">99.999%</div>
+              <div className="text-3xl font-bold text-warning">99.999%</div>
               <div className="text-sm text-muted-foreground">Uptime Target</div>
             </div>
           </div>

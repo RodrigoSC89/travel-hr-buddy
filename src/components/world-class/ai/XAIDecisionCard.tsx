@@ -107,8 +107,8 @@ export function XAIDecisionCard({ decision }: { decision: XAIDecision }) {
             Cadeia de Raciocínio
           </h4>
           <div className="space-y-2 pl-2 border-l-2 border-primary/30">
-            {decision.reasoning.map((step, idx) => (
-              <div key={idx} className="relative pl-4">
+            {decision.reasoning.map((step) => (
+              <div key={`step-${step.step}`} className="relative pl-4">
                 <div className="absolute -left-[9px] top-1.5 w-4 h-4 rounded-full bg-primary/20 flex items-center justify-center">
                   <span className="text-[10px] font-bold text-primary">{step.step}</span>
                 </div>
@@ -138,7 +138,7 @@ export function XAIDecisionCard({ decision }: { decision: XAIDecision }) {
               {decision.sources.map((source, idx) => {
                 const Icon = SOURCE_ICONS[source.type];
                 return (
-                  <Badge key={idx} variant="outline" className="gap-1 text-xs">
+                  <Badge key={`src-${source.type}-${source.reference}`} variant="outline" className="gap-1 text-xs">
                     <Icon className="h-3 w-3" />
                     {SOURCE_LABELS[source.type]}: {source.reference}
                     <span className="text-muted-foreground">({source.relevance}%)</span>
@@ -157,8 +157,8 @@ export function XAIDecisionCard({ decision }: { decision: XAIDecision }) {
               Alternativas Avaliadas
             </h4>
             <div className="space-y-2">
-              {decision.alternatives.map((alt, idx) => (
-                <div key={idx} className="p-2 bg-muted/50 rounded-lg">
+              {decision.alternatives.map((alt) => (
+                <div key={alt.option} className="p-2 bg-muted/50 rounded-lg">
                   <div className="flex items-center justify-between mb-1">
                     <span className="text-sm font-medium">{alt.option}</span>
                     <Badge variant={alt.score >= 70 ? 'default' : 'secondary'} className="text-xs">
