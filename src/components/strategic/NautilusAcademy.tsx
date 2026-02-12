@@ -357,12 +357,12 @@ export const NautilusAcademy: React.FC = () => {
           <div className="space-y-4">
             <h3 className="text-lg font-semibold">Suas Conquistas</h3>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              {achievements.map((achievement, index) => (
-                <Card key={index} className={achievement.earned ? "border-green-200 bg-green-50/50 dark:bg-green-900/10" : ""}>
+              {achievements.map((achievement) => (
+                <Card key={achievement.title} className={achievement.earned ? "border-success/30 bg-success/5 dark:bg-success/10" : ""}>
                   <CardContent className="p-4">
                     <div className="flex items-center gap-3">
                       {achievement.earned ? (
-                        <CheckCircle className="w-8 h-8 text-green-500" />
+                        <CheckCircle className="w-8 h-8 text-success" />
                       ) : (
                         <Trophy className="w-8 h-8 text-muted-foreground" />
                       )}
