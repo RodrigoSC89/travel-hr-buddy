@@ -206,7 +206,7 @@ export function MaintenanceGanttCalendar() {
             const dayTasks = date ? getTasksForDate(date) : [];
             const isToday = date?.toDateString() === new Date().toDateString();
             return (
-              <div key={idx} className={`min-h-24 p-1 border rounded-lg ${date ? 'hover:border-primary/50' : 'bg-muted/30'} ${isToday ? 'border-primary bg-primary/5' : ''}`}>
+              <div key={date ? date.toISOString() : `empty-${idx}`} className={`min-h-24 p-1 border rounded-lg ${date ? 'hover:border-primary/50' : 'bg-muted/30'} ${isToday ? 'border-primary bg-primary/5' : ''}`}>
                 {date && (
                   <>
                     <div className={`text-sm font-medium mb-1 ${isToday ? 'text-primary' : ''}`}>{date.getDate()}</div>

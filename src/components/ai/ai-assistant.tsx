@@ -297,9 +297,9 @@ export const AIAssistant: React.FC<AIAssistantProps> = ({
           {/* Render suggestions */}
           {message.metadata?.suggestions && message.metadata.suggestions.length > 0 && (
             <div className="flex flex-wrap gap-2 mt-2">
-              {message.metadata.suggestions.map((suggestion, index) => (
+              {message.metadata.suggestions.map((suggestion) => (
                 <Badge
-                  key={index}
+                  key={suggestion}
                   variant="outline"
                   className="cursor-pointer hover:bg-accent"
                   onClick={() => handleSuggestionClick(suggestion)}
@@ -314,9 +314,9 @@ export const AIAssistant: React.FC<AIAssistantProps> = ({
           {/* Render actions */}
           {message.metadata?.actions && message.metadata.actions.length > 0 && (
             <div className="flex flex-wrap gap-2 mt-2">
-              {message.metadata.actions.map((action, index) => (
+              {message.metadata.actions.map((action) => (
                 <Button
-                  key={index}
+                  key={action.label}
                   variant="outline"
                   size="sm"
                   onClick={() => handleActionClick(action.action, action.data)}

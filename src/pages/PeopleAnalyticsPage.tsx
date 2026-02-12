@@ -299,8 +299,8 @@ export default function PeopleAnalyticsPage() {
                 </CardTitle>
               </CardHeader>
               <CardContent className="space-y-4">
-                {riskEmployees.map((emp, i) => (
-                  <div key={i} className="flex items-center gap-4 p-3 rounded-lg border border-red-500/20 bg-red-500/5">
+                {riskEmployees.map((emp) => (
+                  <div key={emp.name} className="flex items-center gap-4 p-3 rounded-lg border border-destructive/20 bg-destructive/5">
                     <div className="flex-1">
                       <div className="flex items-center gap-2">
                         <p className="font-medium">{emp.name}</p>
@@ -308,8 +308,8 @@ export default function PeopleAnalyticsPage() {
                       </div>
                       <p className="text-sm text-muted-foreground">{emp.position} • {emp.department}</p>
                       <div className="flex flex-wrap gap-1 mt-2">
-                        {emp.factors.map((f, j) => (
-                          <Badge key={j} variant="outline" className="text-xs">{f}</Badge>
+                        {emp.factors.map((f) => (
+                          <Badge key={f} variant="outline" className="text-xs">{f}</Badge>
                         ))}
                       </div>
                     </div>

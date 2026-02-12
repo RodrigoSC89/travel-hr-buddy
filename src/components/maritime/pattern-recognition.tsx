@@ -264,8 +264,8 @@ export const PatternRecognition: React.FC = () => {
 
                         {/* Metrics Grid */}
                         <div className="grid grid-cols-3 gap-3">
-                          {pattern.metrics.map((metric, idx) => (
-                            <div key={idx} className="bg-muted/50 p-3 rounded-lg">
+                          {pattern.metrics.map((metric) => (
+                            <div key={metric.name} className="bg-muted/50 p-3 rounded-lg">
                               <div className="text-xs text-muted-foreground mb-1">
                                 {metric.name}
                               </div>

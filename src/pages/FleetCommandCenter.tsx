@@ -219,8 +219,8 @@ const FleetAICopilot = ({ vessels, onToast }: { vessels: EnrichedVessel[]; onToa
       <CardContent className="space-y-4">
         {/* Insights */}
         <div className="space-y-2">
-          {insights.map((insight, i) => (
-            <div key={i} className={`flex items-start gap-2 p-2 rounded-lg ${
+          {insights.map((insight) => (
+            <div key={insight.text} className={`flex items-start gap-2 p-2 rounded-lg ${
               insight.type === "success" ? "bg-success/10" :
               insight.type === "warning" ? "bg-warning/10" :
               "bg-info/10"

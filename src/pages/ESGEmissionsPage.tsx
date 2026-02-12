@@ -222,8 +222,8 @@ export default function ESGEmissionsPage() {
             </CardHeader>
             <CardContent>
               <div className="space-y-4">
-                {vesselEmissions.map((vessel, index) => (
-                  <div key={index} className="p-4 border rounded-lg">
+                {vesselEmissions.map((vessel) => (
+                  <div key={vessel.name} className="p-4 border rounded-lg">
                     <div className="flex items-center justify-between mb-2">
                       <div className="flex items-center gap-3">
                         <Ship className="h-5 w-5 text-primary" />

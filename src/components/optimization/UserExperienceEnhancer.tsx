@@ -397,8 +397,8 @@ export const UserExperienceEnhancer: React.FC = () => {
                   <div>
                     <div className="text-sm font-medium mb-2">Sugestões de Melhoria:</div>
                     <div className="flex flex-wrap gap-2">
-                      {step.suggestions.map((suggestion, index) => (
-                        <Badge key={index} variant="outline" className="text-xs">
+                      {step.suggestions.map((suggestion) => (
+                        <Badge key={suggestion} variant="outline" className="text-xs">
                           {suggestion}
                         </Badge>
                       ))}

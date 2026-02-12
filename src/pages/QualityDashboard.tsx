@@ -222,9 +222,9 @@ export default function QualityDashboard() {
 
             <TabsContent value="all">
               <div className="space-y-2">
-                {report?.checks.map((check, index) => (
+                {report?.checks.map((check) => (
                   <div
-                    key={index}
+                    key={check.name}
                     className="flex items-center justify-between p-3 bg-muted/50 rounded-lg"
                   >
                     <div className="flex items-center gap-3">
@@ -250,9 +250,9 @@ export default function QualityDashboard() {
             {Object.entries(groupedChecks || {}).map(([category, checks]) => (
               <TabsContent key={category} value={category}>
                 <div className="space-y-2">
-                  {checks.map((check, index) => (
+                  {checks.map((check) => (
                     <div
-                      key={index}
+                      key={check.name}
                       className="flex items-center justify-between p-3 bg-muted/50 rounded-lg"
                     >
                       <div className="flex items-center gap-3">
@@ -279,15 +279,15 @@ export default function QualityDashboard() {
         <Card>
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
-              <AlertTriangle className="w-5 h-5 text-yellow-500" />
+              <AlertTriangle className="w-5 h-5 text-warning" />
               Recomendações
             </CardTitle>
           </CardHeader>
           <CardContent>
             <div className="space-y-2">
-              {report.recommendations.map((rec, index) => (
+              {report.recommendations.map((rec) => (
                 <div
-                  key={index}
+                  key={rec}
                   className="p-3 bg-muted/50 rounded-lg text-sm"
                 >
                   {rec}
