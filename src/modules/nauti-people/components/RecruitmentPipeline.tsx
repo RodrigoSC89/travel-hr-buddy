@@ -569,8 +569,8 @@ const RecruitmentPipeline: React.FC = () => {
                           <Progress value={candidato.matchScore} className="h-1" />
                         </div>
                         <div className="flex flex-wrap gap-1 mt-2">
-                          {candidato.skills.slice(0, 2).map((skill, idx) => (
-                            <Badge key={idx} variant="secondary" className="text-[10px] px-1 py-0">
+                          {candidato.skills.slice(0, 2).map((skill) => (
+                            <Badge key={skill} variant="secondary" className="text-[10px] px-1 py-0">
                               {skill}
                             </Badge>
                           ))}

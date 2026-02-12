@@ -1061,8 +1061,8 @@ export default function TravelCommandCenter() {
                   <p>Todas as sugestões foram aplicadas!</p>
                 </div>
               ) : (
-                aiSuggestions.map((suggestion, index) => (
-                  <Card key={index} className="border-l-4 border-l-primary">
+                aiSuggestions.map((suggestion) => (
+                  <Card key={suggestion.title} className="border-l-4 border-l-primary">
                     <CardContent className="pt-4">
                       <div className="flex items-start justify-between gap-4">
                         <div className="flex-1">

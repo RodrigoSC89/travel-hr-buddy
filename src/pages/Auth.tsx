@@ -497,8 +497,8 @@ const Auth: React.FC = () => {
               "12 Auditorias marítimas (ISM, MLC, SIRE, PSC...)",
               "10 Agentes IA especializados",
               "Compliance STCW, MLC 2006 & MARPOL"
-            ].map((feature, index) => (
-              <div key={index} className="flex items-center space-x-2.5">
+            ].map((feature) => (
+              <div key={feature} className="flex items-center space-x-2.5">
                 <CheckCircle className="h-4 w-4 text-success shrink-0" />
                 <span className="text-sm text-foreground/80">{feature}</span>
               </div>

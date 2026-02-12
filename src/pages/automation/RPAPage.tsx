@@ -141,8 +141,8 @@ export default function RPAPage() {
       <div className="space-y-6">
         {/* KPIs */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-          {kpis.map((kpi, index) => (
-            <Card key={index}>
+          {kpis.map((kpi) => (
+            <Card key={kpi.title}>
               <CardContent className="pt-6">
                 <div className="flex items-center justify-between">
                   <div>

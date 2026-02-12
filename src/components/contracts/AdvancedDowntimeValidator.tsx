@@ -222,8 +222,8 @@ export function AdvancedDowntimeValidator({ downtimeId, downtimeEvent, onValidat
                     Evidências Necessárias
                   </p>
                   <ul className="space-y-1">
-                    {result.validation.required_evidence.map((ev, idx) => (
-                      <li key={idx} className="text-sm flex items-start gap-2">
+                    {result.validation.required_evidence.map((ev) => (
+                      <li key={ev} className="text-sm flex items-start gap-2">
                         <span className="text-warning">•</span>
                         {ev}
                       </li>
@@ -273,9 +273,9 @@ export function AdvancedDowntimeValidator({ downtimeId, downtimeEvent, onValidat
                         Recomendações:
                       </p>
                       <ul className="space-y-2">
-                        {result.validation.recommendations.map((rec, idx) => (
-                          <li key={idx} className="text-sm p-2 bg-muted/30 rounded flex items-start gap-2">
-                            <span className="text-success font-medium">{idx + 1}.</span>
+                        {result.validation.recommendations.map((rec, recIdx) => (
+                          <li key={rec} className="text-sm p-2 bg-muted/30 rounded flex items-start gap-2">
+                            <span className="text-success font-medium">{recIdx + 1}.</span>
                             {rec}
                           </li>
                         ))}
