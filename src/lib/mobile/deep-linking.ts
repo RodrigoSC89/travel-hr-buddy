@@ -252,10 +252,10 @@ class DeepLinkingService {
         spaNavigate(`/documents?id=${id}`);
         break;
       case "approve-request":
-        spaNavigate(`/approvals?id=${id}&action=approve`);
+        spaNavigate(`/task-management?id=${id}&action=approve`);
         break;
       case "view-alert":
-        spaNavigate(`/alerts?id=${id}`);
+        spaNavigate(`/alerts-command?id=${id}`);
         break;
       case "view-task":
         spaNavigate(`/tasks?id=${id}`);

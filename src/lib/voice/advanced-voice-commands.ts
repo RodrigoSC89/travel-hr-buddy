@@ -119,7 +119,7 @@ class AdvancedVoiceEngine {
     this.registerCommand({
       id: 'nav-dashboard',
       patterns: ['ir para dashboard', 'abrir dashboard', 'mostrar dashboard', 'início'],
-      action: () => spaNavigate('/dashboard'),
+      action: () => spaNavigate('/command'),
       description: 'Navegar para o Dashboard',
       category: 'navigation',
     });
@@ -135,7 +135,7 @@ class AdvancedVoiceEngine {
     this.registerCommand({
       id: 'nav-hr',
       patterns: ['ir para rh', 'recursos humanos', 'abrir rh', 'gestão de pessoas'],
-      action: () => spaNavigate('/hr'),
+      action: () => spaNavigate('/hr-dashboard'),
       description: 'Navegar para RH',
       category: 'navigation',
     });
@@ -143,7 +143,7 @@ class AdvancedVoiceEngine {
     this.registerCommand({
       id: 'nav-fleet',
       patterns: ['ir para frota', 'abrir frota', 'embarcações', 'navios'],
-      action: () => spaNavigate('/fleet'),
+      action: () => spaNavigate('/fleet-command'),
       description: 'Navegar para Frota',
       category: 'navigation',
     });
