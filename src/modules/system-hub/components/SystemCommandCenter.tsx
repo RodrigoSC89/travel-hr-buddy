@@ -403,8 +403,8 @@ export function SystemCommandCenter() {
                     { name: "Production Key", created: "2024-01-15", lastUsed: "Agora" },
                     { name: "Development Key", created: "2024-02-01", lastUsed: "Há 2h" },
                     { name: "Testing Key", created: "2024-02-10", lastUsed: "Ontem" },
-                  ].map((key, i) => (
-                    <div key={i} className="flex items-center justify-between p-3 rounded-lg bg-muted/50">
+                  ].map((key) => (
+                    <div key={key.name} className="flex items-center justify-between p-3 rounded-lg bg-muted/50">
                       <div className="flex items-center gap-3">
                         <Key className="h-4 w-4 text-muted-foreground" />
                         <div>
@@ -448,8 +448,8 @@ export function SystemCommandCenter() {
                     { label: "Sessão expira em 24h", enabled: true },
                     { label: "Log de todas as ações", enabled: true },
                     { label: "Notificar logins suspeitos", enabled: false },
-                  ].map((policy, i) => (
-                    <div key={i} className="flex items-center justify-between">
+                  ].map((policy) => (
+                    <div key={policy.label} className="flex items-center justify-between">
                       <span className="text-sm">{policy.label}</span>
                       <Switch checked={policy.enabled} />
                     </div>

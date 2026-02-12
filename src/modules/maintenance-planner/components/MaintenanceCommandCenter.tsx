@@ -636,17 +636,17 @@ export function MaintenanceCommandCenter() {
                   { equipment: "Compressor de Ar #3", vessel: "MV Pacific Queen", probability: 78, days: 15, action: "Substituir válvula de alívio" },
                   { equipment: "Bomba de Combustível", vessel: "MV Atlantic Star", probability: 45, days: 45, action: "Verificar vedações" },
                   { equipment: "Turbocharger", vessel: "MV Ocean Voyager", probability: 32, days: 60, action: "Inspeção visual" },
-                ].map((prediction, i) => (
-                  <div key={i} className="p-4 rounded-lg border bg-card">
+                ].map((prediction) => (
+                  <div key={prediction.equipment} className="p-4 rounded-lg border bg-card">
                     <div className="flex items-start justify-between">
                       <div>
                         <h4 className="font-medium">{prediction.equipment}</h4>
                         <p className="text-sm text-muted-foreground">{prediction.vessel}</p>
                       </div>
                       <Badge className={
-                        prediction.probability >= 70 ? "bg-red-500" :
-                        prediction.probability >= 40 ? "bg-amber-500" :
-                        "bg-emerald-500"
+                        prediction.probability >= 70 ? "bg-destructive" :
+                        prediction.probability >= 40 ? "bg-warning" :
+                        "bg-success"
                       }>
                         {prediction.probability}% risco
                       </Badge>

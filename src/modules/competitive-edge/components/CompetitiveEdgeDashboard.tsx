@@ -250,22 +250,22 @@ function DocumentsAITab() {
                 </div>
 
                 {complianceResult.warnings.length > 0 && (
-                  <div className="p-3 rounded-lg bg-yellow-500/10 border border-yellow-500/20">
-                    <p className="font-medium text-yellow-400 mb-2">⚠️ Alertas</p>
+                  <div className="p-3 rounded-lg bg-warning/10 border border-warning/20">
+                    <p className="font-medium text-warning mb-2">⚠️ Alertas</p>
                     <ul className="text-sm space-y-1">
                       {complianceResult.warnings.map((w, i) => (
-                        <li key={i}>• {w}</li>
+                        <li key={`warn-${i}-${w.slice(0,15)}`}>• {w}</li>
                       ))}
                     </ul>
                   </div>
                 )}
 
                 {complianceResult.recommendations.length > 0 && (
-                  <div className="p-3 rounded-lg bg-blue-500/10 border border-blue-500/20">
-                    <p className="font-medium text-blue-400 mb-2">💡 Recomendações</p>
+                  <div className="p-3 rounded-lg bg-info/10 border border-info/20">
+                    <p className="font-medium text-info mb-2">💡 Recomendações</p>
                     <ul className="text-sm space-y-1">
                       {complianceResult.recommendations.map((r, i) => (
-                        <li key={i}>• {r}</li>
+                        <li key={`rec-${i}-${r.slice(0,15)}`}>• {r}</li>
                       ))}
                     </ul>
                   </div>
@@ -370,8 +370,8 @@ function PredictiveBITab() {
               </CardHeader>
               <CardContent>
                 <div className="space-y-3">
-                  {insights.predictions.slice(0, 5).map((pred, i) => (
-                    <div key={i} className="p-3 rounded-lg bg-muted/50">
+                  {insights.predictions.slice(0, 5).map((pred) => (
+                    <div key={pred.category} className="p-3 rounded-lg bg-muted/50">
                       <div className="flex items-center justify-between mb-1">
                         <Badge variant="outline">{pred.category}</Badge>
                         <span className="text-sm">{pred.probability}%</span>
@@ -388,17 +388,17 @@ function PredictiveBITab() {
             <Card>
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
-                  <Lightbulb className="h-5 w-5 text-yellow-400" />
+                  <Lightbulb className="h-5 w-5 text-warning" />
                   Recomendações
                 </CardTitle>
               </CardHeader>
               <CardContent>
                 <div className="space-y-3">
                   {insights.recommendations.slice(0, 5).map((rec, i) => (
-                    <div key={i} className="flex items-start gap-3">
+                    <div key={`rec-${rec.action.slice(0,20)}-${i}`} className="flex items-start gap-3">
                       <Badge className={cn(
-                        rec.priority === "high" ? "bg-red-500" :
-                        rec.priority === "medium" ? "bg-yellow-500" : "bg-green-500"
+                        rec.priority === "high" ? "bg-destructive" :
+                        rec.priority === "medium" ? "bg-warning" : "bg-success"
                       )}>
                         {rec.priority}
                       </Badge>
@@ -470,14 +470,14 @@ function PredictiveBITab() {
                 <p>{summary.summary}</p>
                 
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-                  {summary.keyMetrics.map((m, i) => (
-                    <div key={i} className="text-center p-3 rounded-lg bg-muted/50">
+                  {summary.keyMetrics.map((m) => (
+                    <div key={m.name} className="text-center p-3 rounded-lg bg-muted/50">
                       <p className="text-lg font-bold">{m.value}</p>
                       <p className="text-xs text-muted-foreground">{m.name}</p>
                       <Badge className={cn(
                         "mt-1",
-                        m.status === "positive" ? "bg-green-500" :
-                        m.status === "negative" ? "bg-red-500" : "bg-gray-500"
+                        m.status === "positive" ? "bg-success" :
+                        m.status === "negative" ? "bg-destructive" : "bg-muted"
                       )}>
                         {m.change}
                       </Badge>
@@ -485,8 +485,8 @@ function PredictiveBITab() {
                   ))}
                 </div>
 
-                <div className="p-3 rounded-lg bg-blue-500/10">
-                  <p className="font-medium text-blue-400">Outlook: {summary.outlook}</p>
+                <div className="p-3 rounded-lg bg-info/10">
+                  <p className="font-medium text-info">Outlook: {summary.outlook}</p>
                 </div>
               </CardContent>
             </Card>
@@ -516,8 +516,8 @@ function AdvantagesTab({ advantages: advList }: { advantages: Advantage[] }) {
         </CardHeader>
         <CardContent>
           <div className="space-y-3">
-            {advList.map((adv: Advantage, i: number) => (
-              <div key={i} className="flex items-center gap-4 p-3 rounded-lg bg-muted/50">
+            {advList.map((adv: Advantage) => (
+              <div key={adv.feature} className="flex items-center gap-4 p-3 rounded-lg bg-muted/50">
                 <div className="flex-1">
                   <p className="font-medium">{adv.feature}</p>
                   <p className="text-xs text-muted-foreground">{adv.description}</p>
