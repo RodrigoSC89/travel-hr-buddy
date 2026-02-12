@@ -384,8 +384,8 @@ export function ComplianceManagement() {
                   { date: "2024-09-01", title: "BWM - Instalação OSV Caribbean Wind", status: "warning" },
                   { date: "2024-12-31", title: "CII - Avaliação Anual", status: "pending" },
                   { date: "2025-01-01", title: "EEXI - Verificação Obrigatória", status: "pending" },
-                ].map((item, idx) => (
-                  <div key={idx} className="flex items-center gap-4 p-4 border rounded-lg">
+                ].map((item) => (
+                  <div key={item.title} className="flex items-center gap-4 p-4 border rounded-lg">
                     <div className="text-center min-w-[80px]">
                       <p className="text-lg font-bold">{item.date.split("-")[2]}</p>
                       <p className="text-xs text-muted-foreground">{item.date.split("-").slice(0, 2).join("/")}</p>

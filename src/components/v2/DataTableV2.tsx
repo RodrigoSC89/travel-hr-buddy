@@ -268,9 +268,9 @@ export function DataTableV2<T extends { id: string | number }>({
                             </Button>
                           </DropdownMenuTrigger>
                           <DropdownMenuContent align="end">
-                            {actions.map((action, idx) => (
+                            {actions.map((action) => (
                               <DropdownMenuItem
-                                key={idx}
+                                key={action.label}
                                 onClick={() => action.onClick(item)}
                                 className={action.variant === "destructive" ? "text-destructive" : ""}
                               >

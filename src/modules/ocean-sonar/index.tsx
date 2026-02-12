@@ -466,8 +466,8 @@ const OceanSonar: React.FC = () => {
                 <div className="space-y-2">
                   <div className="text-sm font-semibold text-zinc-400">Depth Legend:</div>
                   <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
-                    {sonarEngine.getColorLegend().map((item, idx) => (
-                      <div key={idx} className="flex items-center gap-2 text-xs">
+                    {sonarEngine.getColorLegend().map((item) => (
+                      <div key={item.depth} className="flex items-center gap-2 text-xs">
                         <div
                           className="w-4 h-4 rounded"
                           style={{ backgroundColor: item.color }}

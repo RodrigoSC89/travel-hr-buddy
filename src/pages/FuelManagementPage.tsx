@@ -728,7 +728,7 @@ export default function FuelManagementPage() {
                   <ResponsiveContainer width="100%" height={280}>
                     <PieChart>
                       <Pie data={pieData} cx="50%" cy="50%" outerRadius={100} innerRadius={50} dataKey="value" label={({ name, percent }) => `${name} ${(percent * 100).toFixed(0)}%`}>
-                        {pieData.map((_, i) => <Cell key={i} fill={CHART_COLORS[i % CHART_COLORS.length]} />)}
+                        {pieData.map((entry, i) => <Cell key={`pie-cell-${entry.name}`} fill={CHART_COLORS[i % CHART_COLORS.length]} />)}
                       </Pie>
                       <Tooltip contentStyle={{ backgroundColor: "hsl(var(--card))", border: "1px solid hsl(var(--border))", borderRadius: 8, color: "hsl(var(--foreground))" }} />
                       <Legend />
@@ -885,8 +885,8 @@ export default function FuelManagementPage() {
                         <div className="pt-3 border-t">
                           <h4 className="text-sm font-semibold mb-2">Fatores de Impacto</h4>
                           <div className="flex flex-wrap gap-2">
-                            {prediction.factors.map((f, i) => (
-                              <Badge key={i} variant={f.impact === "high" ? "destructive" : f.impact === "medium" ? "default" : "secondary"}>
+                            {prediction.factors.map((f) => (
+                              <Badge key={f.factor} variant={f.impact === "high" ? "destructive" : f.impact === "medium" ? "default" : "secondary"}>
                                 {f.factor}: {f.impact}
                               </Badge>
                             ))}

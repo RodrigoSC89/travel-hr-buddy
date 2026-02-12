@@ -444,8 +444,8 @@ const ProductRoadmap: React.FC = () => {
                           <div>
                             <p className="text-xs font-medium mb-1">Objetivos:</p>
                             <ul className="text-xs text-muted-foreground space-y-1">
-                              {sprint.objectives.map((objective, idx) => (
-                                <li key={idx}>• {objective}</li>
+                              {sprint.objectives.map((objective) => (
+                                <li key={objective}>• {objective}</li>
                               ))}
                             </ul>
                           </div>
@@ -453,8 +453,8 @@ const ProductRoadmap: React.FC = () => {
                           <div>
                             <p className="text-xs font-medium mb-1">Entregas:</p>
                             <ul className="text-xs text-muted-foreground space-y-1">
-                              {sprint.deliverables.map((deliverable, idx) => (
-                                <li key={idx}>✓ {deliverable}</li>
+                              {sprint.deliverables.map((deliverable) => (
+                                <li key={deliverable}>✓ {deliverable}</li>
                               ))}
                             </ul>
                           </div>

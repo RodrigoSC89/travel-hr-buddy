@@ -451,8 +451,8 @@ export default function AgentsDashboard() {
 
                       {/* Compliance Tags */}
                       <div className="flex flex-wrap gap-1">
-                        {agent.compliance.slice(0, 3).map((c, idx) => (
-                          <Badge key={idx} variant="outline" className="text-[10px] px-1.5">
+                        {agent.compliance.slice(0, 3).map((c) => (
+                          <Badge key={c} variant="outline" className="text-[10px] px-1.5">
                             {c}
                           </Badge>
                         ))}
@@ -538,8 +538,8 @@ export default function AgentsDashboard() {
                               {agent.successRate}% sucesso
                             </div>
                             <div className="flex gap-1">
-                              {agent.compliance.slice(0, 2).map((c, idx) => (
-                                <Badge key={idx} variant="outline" className="text-[10px]">
+                              {agent.compliance.slice(0, 2).map((c) => (
+                                <Badge key={c} variant="outline" className="text-[10px]">
                                   {c}
                                 </Badge>
                               ))}

@@ -125,8 +125,8 @@ export function HubEmptyState({ hub, onPrimaryAction, className }: HubEmptyState
             <span className="text-sm font-semibold">Como começar:</span>
           </div>
           <ul className="space-y-2">
-            {config.tips.map((tip, i) => (
-              <li key={i} className="text-sm text-muted-foreground flex items-start gap-2.5">
+            {config.tips.map((tip) => (
+              <li key={tip} className="text-sm text-muted-foreground flex items-start gap-2.5">
                 <div className="rounded-full bg-primary/10 p-1 mt-0.5 flex-shrink-0">
                   <ArrowRight className="h-3 w-3 text-primary" />
                 </div>

@@ -224,7 +224,7 @@ export const EnhancedNotificationCenter: React.FC = () => {
         <CardContent>
           <div className="space-y-4">
             {[1, 2, 3].map(i => (
-              <div key={i} className="h-20 bg-muted rounded animate-pulse" />
+              <div key={`enh-notif-skel-${i}`} className="h-20 bg-muted rounded animate-pulse" />
             ))}
           </div>
         </CardContent>

@@ -407,8 +407,8 @@ export default function Roadmap() {
                                 </div>
                                 
                                 <ul className="text-xs text-muted-foreground space-y-1">
-                                  {item.features.map((feature, idx) => (
-                                    <li key={idx} className="flex items-center gap-2">
+                                  {item.features.map((feature) => (
+                                    <li key={feature} className="flex items-center gap-2">
                                       <CheckCircle2 className="h-3 w-3 text-primary/60" />
                                       {feature}
                                     </li>

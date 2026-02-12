@@ -198,8 +198,8 @@ export default function SidebarCheck() {
                     <td className="p-3">
                       {v.issues.length > 0 ? (
                         <ul className="text-yellow-600 text-xs space-y-1">
-                          {v.issues.map((issue, idx) => (
-                            <li key={idx}>⚠️ {issue}</li>
+                          {v.issues.map((issue) => (
+                            <li key={issue}>⚠️ {issue}</li>
                           ))}
                         </ul>
                       ) : (
@@ -221,12 +221,12 @@ export default function SidebarCheck() {
         </CardHeader>
         <CardContent>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-            {SIDEBAR_ROUTES.map((group: { title: string; items?: { label: string; path: string }[] }, idx: number) => (
-              <div key={idx} className="border rounded-lg p-3 bg-muted/30">
+            {SIDEBAR_ROUTES.map((group: { title: string; items?: { label: string; path: string }[] }) => (
+              <div key={group.title} className="border rounded-lg p-3 bg-muted/30">
                 <div className="font-medium mb-2">{group.title}</div>
                 <ul className="text-xs text-muted-foreground space-y-1">
-                  {group.items?.slice(0, 5).map((item, itemIdx) => (
-                    <li key={itemIdx} className="truncate">
+                  {group.items?.slice(0, 5).map((item) => (
+                    <li key={item.path} className="truncate">
                       → {item.label} ({item.path})
                     </li>
                   ))}

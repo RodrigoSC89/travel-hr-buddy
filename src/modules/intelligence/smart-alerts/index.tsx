@@ -440,8 +440,8 @@ const SmartAlerts = () => {
                           <div className="mt-3">
                             <h4 className="text-sm font-semibold mb-2">Recommended Actions:</h4>
                             <div className="space-y-1">
-                              {alert.recommended_actions.slice(0, 3).map((action, idx: number) => (
-                                <div key={idx} className="text-sm pl-4 text-muted-foreground flex items-start gap-2">
+                              {alert.recommended_actions.slice(0, 3).map((action) => (
+                                <div key={action.action} className="text-sm pl-4 text-muted-foreground flex items-start gap-2">
                                   <span className="text-primary">•</span>
                                   <span className="flex-1">
                                     {action.action}

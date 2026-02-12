@@ -196,7 +196,7 @@ export function VoiceCommandsAdvanced() {
                     <div className="flex gap-1">
                       {[...Array(5)].map((_, i) => (
                         <motion.div
-                          key={i}
+                          key={`voice-bar-${i}`}
                           className="w-1 bg-primary rounded-full"
                           animate={{ height: [8, 24, 8] }}
                           transition={{ 

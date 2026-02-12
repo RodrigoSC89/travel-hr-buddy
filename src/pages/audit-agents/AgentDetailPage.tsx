@@ -352,7 +352,7 @@ Faça sua pergunta sobre compliance, auditoria ou regulamentações!`);
             <CardContent>
               <div className="space-y-4">
                 {[1, 2, 3, 4, 5].map((i) => (
-                  <div key={i} className="flex items-center justify-between p-4 border rounded-lg hover:bg-muted/50 cursor-pointer">
+                  <div key={`agent-audit-${i}`} className="flex items-center justify-between p-4 border rounded-lg hover:bg-muted/50 cursor-pointer">
                     <div className="flex items-center gap-3">
                       <div className={`p-2 rounded-lg bg-gradient-to-br ${agent.bgColor}`}>
                         <FileCheck className={`h-4 w-4 ${agent.color}`} />

@@ -205,7 +205,7 @@ const ReportsCommandCenter = () => {
               {isLoadingAnalytics ? (
                 <>
                   {[1, 2, 3, 4, 5].map((i) => (
-                    <Card key={i}>
+                    <Card key={`rpt-kpi-skel-${i}`}>
                       <CardContent className="pt-6">
                         <Skeleton className="h-8 w-16 mb-2" />
                         <Skeleton className="h-4 w-24" />
@@ -541,7 +541,7 @@ const ReportsCommandCenter = () => {
               {isLoadingAnalytics ? (
                 <>
                   {[1, 2, 3, 4].map((i) => (
-                    <Card key={i}>
+                    <Card key={`rpt-kpi2-skel-${i}`}>
                       <CardContent className="pt-6">
                         <Skeleton className="h-8 w-16 mb-2" />
                         <Skeleton className="h-4 w-24" />
