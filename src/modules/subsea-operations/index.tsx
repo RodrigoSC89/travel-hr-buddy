@@ -69,20 +69,20 @@ const SubseaOperations: React.FC = () => {
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case "active": return "bg-green-500/20 text-green-400 border-green-500/30";
-      case "standby": return "bg-yellow-500/20 text-yellow-400 border-yellow-500/30";
-      case "maintenance": return "bg-orange-500/20 text-orange-400 border-orange-500/30";
-      case "offline": return "bg-red-500/20 text-red-400 border-red-500/30";
+      case "active": return "bg-success/20 text-success border-success/30";
+      case "standby": return "bg-warning/20 text-warning border-warning/30";
+      case "maintenance": return "bg-warning/20 text-warning border-warning/30";
+      case "offline": return "bg-destructive/20 text-destructive border-destructive/30";
       default: return "bg-muted text-muted-foreground";
     }
   };
 
   const getThreatColor = (threat: string) => {
     switch (threat) {
-      case "high": return "text-red-400";
-      case "medium": return "text-yellow-400";
-      case "low": return "text-blue-400";
-      default: return "text-green-400";
+      case "high": return "text-destructive";
+      case "medium": return "text-warning";
+      case "low": return "text-info";
+      default: return "text-success";
     }
   };
 
@@ -156,8 +156,8 @@ const SubseaOperations: React.FC = () => {
             <Card className="bg-card/50 backdrop-blur border-border/50">
               <CardContent className="p-4">
                 <div className="flex items-center gap-3">
-                  <div className="p-2 rounded-lg bg-blue-500/10">
-                    <Gauge className="h-5 w-5 text-blue-400" />
+                  <div className="p-2 rounded-lg bg-info/10">
+                    <Gauge className="h-5 w-5 text-info" />
                   </div>
                   <div>
                     <p className="text-sm text-muted-foreground">Profundidade Máx</p>
@@ -170,8 +170,8 @@ const SubseaOperations: React.FC = () => {
             <Card className="bg-card/50 backdrop-blur border-border/50">
               <CardContent className="p-4">
                 <div className="flex items-center gap-3">
-                  <div className="p-2 rounded-lg bg-green-500/10">
-                    <Eye className="h-5 w-5 text-green-400" />
+                  <div className="p-2 rounded-lg bg-success/10">
+                    <Eye className="h-5 w-5 text-success" />
                   </div>
                   <div>
                     <p className="text-sm text-muted-foreground">Contatos Sonar</p>
@@ -184,8 +184,8 @@ const SubseaOperations: React.FC = () => {
             <Card className="bg-card/50 backdrop-blur border-border/50">
               <CardContent className="p-4">
                 <div className="flex items-center gap-3">
-                  <div className="p-2 rounded-lg bg-purple-500/10">
-                    <ThermometerSun className="h-5 w-5 text-purple-400" />
+                  <div className="p-2 rounded-lg bg-accent/10">
+                    <ThermometerSun className="h-5 w-5 text-accent-foreground" />
                   </div>
                   <div>
                     <p className="text-sm text-muted-foreground">Temp. Água</p>
@@ -242,7 +242,7 @@ const SubseaOperations: React.FC = () => {
           <Card className="bg-card/50 backdrop-blur border-border/50">
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
-                <Radar className="h-5 w-5 text-cyan-400" />
+                <Radar className="h-5 w-5 text-info" />
                 Contatos Sonar
               </CardTitle>
             </CardHeader>
@@ -251,7 +251,7 @@ const SubseaOperations: React.FC = () => {
                 {contacts.map((contact) => (
                   <div key={contact.id} className="p-4 rounded-lg bg-muted/30 flex items-center justify-between">
                     <div className="flex items-center gap-4">
-                      <div className={`p-2 rounded-lg ${contact.threat === "none" ? "bg-green-500/10" : "bg-yellow-500/10"}`}>
+                      <div className={`p-2 rounded-lg ${contact.threat === "none" ? "bg-success/10" : "bg-warning/10"}`}>
                         <Eye className={`h-5 w-5 ${getThreatColor(contact.threat)}`} />
                       </div>
                       <div>
@@ -341,7 +341,7 @@ const SubseaOperations: React.FC = () => {
           <Card className="bg-card/50 backdrop-blur border-border/50">
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
-                <AlertTriangle className="h-5 w-5 text-yellow-400" />
+                <AlertTriangle className="h-5 w-5 text-warning" />
                 Análise de Riscos Submarinos (Deep Risk AI)
               </CardTitle>
             </CardHeader>
@@ -353,7 +353,7 @@ const SubseaOperations: React.FC = () => {
                   { risk: "Vida marinha perigosa", level: 5, category: "ambiente" },
                   { risk: "Condições adversas", level: 3, category: "meteorologia" }
                 ].map((item, i) => (
-                  <div key={i} className="flex items-center gap-4 p-3 rounded-lg bg-muted/30">
+                <div key={item.risk} className="flex items-center gap-4 p-3 rounded-lg bg-muted/30">
                     <div className="flex-1">
                       <div className="flex items-center justify-between mb-1">
                         <span className="font-medium">{item.risk}</span>
@@ -361,7 +361,7 @@ const SubseaOperations: React.FC = () => {
                       </div>
                       <Progress value={item.level} className="h-2" />
                     </div>
-                    <span className={`font-bold ${item.level > 10 ? "text-yellow-400" : "text-green-400"}`}>
+                    <span className={`font-bold ${item.level > 10 ? "text-warning" : "text-success"}`}>
                       {item.level}%
                     </span>
                   </div>

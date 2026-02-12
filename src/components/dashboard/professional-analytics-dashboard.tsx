@@ -259,7 +259,7 @@ export function ProfessionalAnalyticsDashboard() {
                     const isAbove = percentage >= 100;
                     
                     return (
-                      <div key={idx} className="space-y-2">
+                      <div key={metric.category} className="space-y-2">
                         <div className="flex items-center justify-between">
                           <span className="text-sm font-medium">{metric.category}</span>
                           <div className="flex items-center gap-2">

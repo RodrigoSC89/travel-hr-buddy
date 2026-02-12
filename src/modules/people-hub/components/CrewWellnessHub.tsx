@@ -133,11 +133,11 @@ export default function CrewWellnessHub() {
   };
 
   const moodEmojis = [
-    { value: 1, icon: Frown, label: "Muito Baixo", color: "text-red-500" },
-    { value: 2, icon: Frown, label: "Baixo", color: "text-orange-500" },
-    { value: 3, icon: Meh, label: "Neutro", color: "text-yellow-500" },
-    { value: 4, icon: Smile, label: "Bom", color: "text-blue-500" },
-    { value: 5, icon: Smile, label: "Excelente", color: "text-green-500" },
+    { value: 1, icon: Frown, label: "Muito Baixo", color: "text-destructive" },
+    { value: 2, icon: Frown, label: "Baixo", color: "text-warning" },
+    { value: 3, icon: Meh, label: "Neutro", color: "text-warning" },
+    { value: 4, icon: Smile, label: "Bom", color: "text-info" },
+    { value: 5, icon: Smile, label: "Excelente", color: "text-success" },
   ];
 
   return (
@@ -145,18 +145,18 @@ export default function CrewWellnessHub() {
       {/* Header Stats */}
       <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
-          <Card className="bg-gradient-to-br from-emerald-500/10 to-emerald-600/5 border-emerald-500/30">
+          <Card className="bg-gradient-to-br from-success/10 to-success/5 border-success/30">
             <CardContent className="p-4">
               <div className="flex items-center justify-between">
                 <div>
                   <p className="text-xs text-muted-foreground">Bem-Estar Médio</p>
-                  <p className="text-3xl font-bold text-emerald-600">{overallStats.averageWellness}%</p>
-                  <p className="text-xs text-emerald-600 flex items-center gap-1">
+                  <p className="text-3xl font-bold text-success">{overallStats.averageWellness}%</p>
+                  <p className="text-xs text-success flex items-center gap-1">
                     <TrendingUp className="h-3 w-3" />
                     +3% vs semana anterior
                   </p>
                 </div>
-                <Heart className="h-8 w-8 text-emerald-500 opacity-60" />
+                <Heart className="h-8 w-8 text-success opacity-60" />
               </div>
             </CardContent>
           </Card>
@@ -174,7 +174,7 @@ export default function CrewWellnessHub() {
                     Conforme
                   </p>
                 </div>
-                <Moon className="h-8 w-8 text-blue-500 opacity-60" />
+                <Moon className="h-8 w-8 text-info opacity-60" />
               </div>
             </CardContent>
           </Card>
@@ -230,7 +230,7 @@ export default function CrewWellnessHub() {
         <Card>
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
-              <Brain className="h-5 w-5 text-purple-500" />
+              <Brain className="h-5 w-5 text-primary" />
               Perfil de Bem-Estar
             </CardTitle>
             <CardDescription>Análise multidimensional</CardDescription>
@@ -272,7 +272,7 @@ export default function CrewWellnessHub() {
         <Card>
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
-              <Smile className="h-5 w-5 text-amber-500" />
+              <Smile className="h-5 w-5 text-warning" />
               Distribuição de Humor
             </CardTitle>
             <CardDescription>Tripulação nas últimas 7 dias</CardDescription>
@@ -310,10 +310,10 @@ export default function CrewWellnessHub() {
         </Card>
 
         {/* Support Resources */}
-        <Card className="bg-gradient-to-br from-blue-500/5 to-purple-500/5 border-blue-500/20">
+        <Card className="bg-gradient-to-br from-info/5 to-primary/5 border-info/20">
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
-              <Shield className="h-5 w-5 text-blue-500" />
+              <Shield className="h-5 w-5 text-info" />
               Recursos de Apoio
             </CardTitle>
             <CardDescription>Suporte 24/7 disponível</CardDescription>
@@ -324,8 +324,8 @@ export default function CrewWellnessHub() {
               variant="outline"
               onClick={() => setShowSupportDialog(true)}
             >
-              <div className="p-2 rounded-lg bg-green-500/10">
-                <MessageCircle className="h-4 w-4 text-green-600" />
+              <div className="p-2 rounded-lg bg-success/10">
+                <MessageCircle className="h-4 w-4 text-success" />
               </div>
               <div className="text-left">
                 <p className="font-medium">Chat Confidencial</p>
@@ -333,8 +333,8 @@ export default function CrewWellnessHub() {
               </div>
             </Button>
             <Button className="w-full justify-start gap-3 h-12" variant="outline">
-              <div className="p-2 rounded-lg bg-blue-500/10">
-                <Phone className="h-4 w-4 text-blue-600" />
+              <div className="p-2 rounded-lg bg-info/10">
+                <Phone className="h-4 w-4 text-info" />
               </div>
               <div className="text-left">
                 <p className="font-medium">Linha de Apoio</p>
@@ -342,8 +342,8 @@ export default function CrewWellnessHub() {
               </div>
             </Button>
             <Button className="w-full justify-start gap-3 h-12" variant="outline">
-              <div className="p-2 rounded-lg bg-purple-500/10">
-                <Brain className="h-4 w-4 text-purple-600" />
+              <div className="p-2 rounded-lg bg-primary/10">
+                <Brain className="h-4 w-4 text-primary" />
               </div>
               <div className="text-left">
                 <p className="font-medium">Exercícios de Mindfulness</p>

@@ -46,8 +46,8 @@ interface IncidentDetailsDialogProps {
 
 const statusConfig = {
   open: { label: 'Aberto', color: 'bg-warning/10 text-warning border-warning/20' },
-  investigating: { label: 'Investigando', color: 'bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400' },
-  action_pending: { label: 'Ação Pendente', color: 'bg-orange-100 text-orange-700 dark:bg-orange-900/30 dark:text-orange-400' },
+  investigating: { label: 'Investigando', color: 'bg-info/10 text-info border-info/20' },
+  action_pending: { label: 'Ação Pendente', color: 'bg-warning/10 text-warning border-warning/20' },
   resolved: { label: 'Resolvido', color: 'bg-success/10 text-success border-success/20' },
   closed: { label: 'Fechado', color: 'bg-muted text-muted-foreground' },
 };
@@ -55,15 +55,15 @@ const statusConfig = {
 const severityConfig = {
   low: { label: 'Baixa', color: 'bg-success/10 text-success border-success/20' },
   medium: { label: 'Média', color: 'bg-warning/10 text-warning border-warning/20' },
-  high: { label: 'Alta', color: 'bg-orange-100 text-orange-700 dark:bg-orange-900/30' },
+  high: { label: 'Alta', color: 'bg-warning/10 text-warning border-warning/20' },
   critical: { label: 'Crítica', color: 'bg-destructive/10 text-destructive border-destructive/20' },
 };
 
 const typeConfig = {
   incident: { label: 'Incidente', icon: AlertCircle, color: 'text-destructive' },
   near_miss: { label: 'Near Miss', icon: AlertTriangle, color: 'text-warning' },
-  unsafe_condition: { label: 'Condição Insegura', icon: Shield, color: 'text-blue-500' },
-  unsafe_act: { label: 'Ato Inseguro', icon: AlertTriangle, color: 'text-orange-500' },
+  unsafe_condition: { label: 'Condição Insegura', icon: Shield, color: 'text-info' },
+  unsafe_act: { label: 'Ato Inseguro', icon: AlertTriangle, color: 'text-warning' },
 };
 
 export const IncidentDetailsDialog: React.FC<IncidentDetailsDialogProps> = ({
@@ -182,8 +182,8 @@ export const IncidentDetailsDialog: React.FC<IncidentDetailsDialogProps> = ({
                 <div className="space-y-2">
                   <h4 className="font-semibold">Testemunhas</h4>
                   <div className="flex flex-wrap gap-2">
-                    {incident.witnesses.map((witness, i) => (
-                      <Badge key={i} variant="outline">
+                    {incident.witnesses.map((witness) => (
+                      <Badge key={witness} variant="outline">
                         <User className="h-3 w-3 mr-1" />
                         {witness}
                       </Badge>
@@ -267,8 +267,8 @@ export const IncidentDetailsDialog: React.FC<IncidentDetailsDialogProps> = ({
                     </CardHeader>
                     <CardContent>
                       <ul className="space-y-2">
-                        {analysis.recommendations.map((rec, i) => (
-                          <li key={i} className="flex items-start gap-2 text-sm">
+                        {analysis.recommendations.map((rec) => (
+                          <li key={rec} className="flex items-start gap-2 text-sm">
                             <CheckCircle className="h-4 w-4 text-success mt-0.5 shrink-0" />
                             {rec}
                           </li>
@@ -295,8 +295,8 @@ export const IncidentDetailsDialog: React.FC<IncidentDetailsDialogProps> = ({
 
             <TabsContent value="actions" className="space-y-4 pr-4">
               {incident.corrective_actions && incident.corrective_actions.length > 0 ? (
-                incident.corrective_actions.map((action, i) => (
-                  <Card key={i}>
+                incident.corrective_actions.map((action) => (
+                  <Card key={action.description}>
                     <CardContent className="py-4">
                       <div className="flex items-start justify-between">
                         <div>
