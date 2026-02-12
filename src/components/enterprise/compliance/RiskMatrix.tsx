@@ -127,15 +127,19 @@ export function RiskMatrix() {
   useEffect(() => {
     supabase.from("non_conformities").select("*").limit(20).then(({ data }) => {
       if (data && data.length > 0) {
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any -- non_conformities schema fields accessed dynamically
-        setRisks(data.map((nc: any, i: number) => ({
-          id: nc.id, title: nc.description || nc.title || `Risk ${i+1}`,
-          category: nc.category || "Operacional", likelihood: Math.min(5, Math.max(1, nc.severity || 3)) as Risk["likelihood"],
-          impact: Math.min(5, Math.max(1, nc.impact_level || 3)) as Risk["impact"],
-          riskScore: (nc.severity || 3) * (nc.impact_level || 3),
+        setRisks(data.map((nc: Record<string, unknown>, i: number) => ({
+          id: String(nc.id),
+          title: String(nc.description || nc.title || `Risk ${i+1}`),
+          category: String(nc.category || "Operacional"),
+          likelihood: Math.min(5, Math.max(1, Number(nc.severity || 3))) as Risk["likelihood"],
+          impact: Math.min(5, Math.max(1, Number(nc.impact_level || 3))) as Risk["impact"],
+          riskScore: Number(nc.severity || 3) * Number(nc.impact_level || 3),
           status: nc.status === "closed" ? "mitigated" as const : "open" as const,
-          owner: nc.responsible_person || "N/A", dueDate: nc.due_date || "",
-          mitigationPlan: nc.corrective_action || "", controls: [], trend: "stable" as const,
+          owner: String(nc.responsible_person || "N/A"),
+          dueDate: String(nc.due_date || ""),
+          mitigationPlan: String(nc.corrective_action || ""),
+          controls: [],
+          trend: "stable" as const,
         })));
       }
     });

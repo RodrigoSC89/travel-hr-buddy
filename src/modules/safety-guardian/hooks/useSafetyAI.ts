@@ -136,15 +136,14 @@ export function useSafetyAI() {
 
       if (error) throw error;
 
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any -- edge function response shape
-      const recs: TrainingRecommendation[] = (data.recommendations || []).map((r: any, idx: number) => ({
-        id: r.id || `rec-${idx}`,
-        crewMemberId: r.crewMemberId || `crew-${idx}`,
-        crewMemberName: r.crewMemberName || `Tripulante ${idx + 1}`,
-        recommendedCourses: r.recommendedCourses || [],
-        priority: r.priority || 'medium',
-        reason: r.reason || 'Recomendação baseada em análise de IA',
-        predictedImpact: r.predictedImpact || 'Melhoria na segurança operacional',
+      const recs: TrainingRecommendation[] = (data.recommendations || []).map((r: Record<string, unknown>, idx: number) => ({
+        id: String(r.id || `rec-${idx}`),
+        crewMemberId: String(r.crewMemberId || `crew-${idx}`),
+        crewMemberName: String(r.crewMemberName || `Tripulante ${idx + 1}`),
+        recommendedCourses: (r.recommendedCourses as string[]) || [],
+        priority: String(r.priority || 'medium') as TrainingRecommendation['priority'],
+        reason: String(r.reason || 'Recomendação baseada em análise de IA'),
+        predictedImpact: String(r.predictedImpact || 'Melhoria na segurança operacional'),
       }));
 
       setRecommendations(recs);
@@ -183,16 +182,15 @@ export function useSafetyAI() {
 
       if (error) throw error;
 
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any -- edge function response shape
-      const predictedInsights: PredictiveInsight[] = (data.insights || []).map((i: any, idx: number) => ({
-        id: i.id || `insight-${idx}`,
-        type: i.type || 'safety_trend',
-        title: i.title || 'Insight de Segurança',
-        description: i.description || '',
-        impact: i.impact || 'medium',
-        timeframe: i.timeframe || 'Próximos 30 dias',
-        actionRequired: i.actionRequired ?? false,
-        suggestedAction: i.suggestedAction || '',
+      const predictedInsights: PredictiveInsight[] = (data.insights || []).map((i: Record<string, unknown>, idx: number) => ({
+        id: String(i.id || `insight-${idx}`),
+        type: String(i.type || 'safety_trend') as PredictiveInsight['type'],
+        title: String(i.title || 'Insight de Segurança'),
+        description: String(i.description || ''),
+        impact: String(i.impact || 'medium') as PredictiveInsight['impact'],
+        timeframe: String(i.timeframe || 'Próximos 30 dias'),
+        actionRequired: Boolean(i.actionRequired ?? false),
+        suggestedAction: String(i.suggestedAction || ''),
       }));
 
       setInsights(predictedInsights);

@@ -317,12 +317,13 @@ export function ActionPlanWithNotifications({
 
       {/* Action Plans List */}
       <div className="space-y-3">
-        {/* eslint-disable-next-line @typescript-eslint/no-explicit-any -- Supabase action_items dynamic row */}
-        {actionPlans?.map((plan: any) => (
+        {actionPlans?.map((plan) => {
+          const typedPlan = plan as unknown as ActionPlan;
+          return (
           <Card
-            key={plan.id}
+            key={typedPlan.id}
             className={`p-4 ${
-              plan.status === 'overdue' || new Date(plan.due_date) < new Date()
+              typedPlan.status === 'overdue' || (typedPlan.due_date && new Date(typedPlan.due_date) < new Date())
                 ? 'border-destructive/50 bg-destructive/5'
                 : ''
             }`}
@@ -330,15 +331,15 @@ export function ActionPlanWithNotifications({
             <div className="flex items-start justify-between gap-4">
               <div className="flex-1">
                 <div className="flex items-center gap-2 mb-2">
-                  {getPriorityBadge(plan.priority)}
-                  {getStatusBadge(plan.status, plan.due_date)}
-                  {plan.notification_sent && (
+                  {getPriorityBadge(typedPlan.priority || 'medium')}
+                  {getStatusBadge(typedPlan.status || 'pending', typedPlan.due_date || '')}
+                  {typedPlan.notification_sent && (
                     <Badge variant="outline" className="text-xs">
                       <Bell className="h-3 w-3 mr-1" />
                       Notificado
                     </Badge>
                   )}
-                  {plan.escalation_sent && (
+                  {typedPlan.escalation_sent && (
                     <Badge variant="destructive" className="text-xs">
                       <TrendingUp className="h-3 w-3 mr-1" />
                       Escalado
@@ -346,25 +347,27 @@ export function ActionPlanWithNotifications({
                   )}
                 </div>
 
-                <h4 className="font-medium">{plan.title}</h4>
-                {plan.description && (
+                <h4 className="font-medium">{typedPlan.title}</h4>
+                {typedPlan.description && (
                   <p className="text-sm text-muted-foreground mt-1 line-clamp-2">
-                    {plan.description}
+                    {typedPlan.description}
                   </p>
                 )}
 
                 <div className="flex flex-wrap gap-4 mt-3 text-xs text-muted-foreground">
                   <span className="flex items-center gap-1">
                     <User className="h-3 w-3" />
-                    {plan.responsible_name || 'Não atribuído'}
+                    {typedPlan.responsible_name || 'Não atribuído'}
                   </span>
+                  {typedPlan.due_date && (
                   <span className="flex items-center gap-1">
                     <Calendar className="h-3 w-3" />
-                    {new Date(plan.due_date).toLocaleDateString('pt-BR')}
+                    {new Date(typedPlan.due_date).toLocaleDateString('pt-BR')}
                   </span>
-                  {plan.vessel_name && (
+                  )}
+                  {typedPlan.vessel_name && (
                     <span className="flex items-center gap-1">
-                      🚢 {plan.vessel_name}
+                      🚢 {typedPlan.vessel_name}
                     </span>
                   )}
                 </div>
@@ -374,8 +377,8 @@ export function ActionPlanWithNotifications({
                 <Button
                   size="sm"
                   variant="outline"
-                  onClick={() => handleNotify(plan)}
-                  disabled={plan.status === 'completed'}
+                  onClick={() => handleNotify(typedPlan)}
+                  disabled={typedPlan.status === 'completed'}
                 >
                   <Send className="h-4 w-4 mr-1" />
                   Notificar
@@ -383,8 +386,8 @@ export function ActionPlanWithNotifications({
                 <Button
                   size="sm"
                   variant="default"
-                  onClick={() => completeActionMutation.mutate(plan.id)}
-                  disabled={plan.status === 'completed' || completeActionMutation.isPending}
+                  onClick={() => completeActionMutation.mutate(typedPlan.id)}
+                  disabled={typedPlan.status === 'completed' || completeActionMutation.isPending}
                 >
                   {completeActionMutation.isPending ? (
                     <Loader2 className="h-4 w-4 mr-1 animate-spin" />
@@ -396,7 +399,8 @@ export function ActionPlanWithNotifications({
               </div>
             </div>
           </Card>
-        ))}
+          );
+        })}
       </div>
 
       {/* Notification Dialog */}

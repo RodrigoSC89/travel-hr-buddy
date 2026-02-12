@@ -23,7 +23,7 @@ interface WindyMapPluginProps {
   height?: string;
   showControls?: boolean;
   overlay?: "wind" | "rain" | "temp" | "clouds" | "waves" | "pressure";
-  onMapReady?: (api: any) => void;
+  onMapReady?: (api: { type: string }) => void;
 }
 
 // Overlay options for the map
@@ -49,6 +49,7 @@ export const WindyMapPlugin: React.FC<WindyMapPluginProps> = ({
   const containerRef = useRef<HTMLDivElement>(null);
   const iframeRef = useRef<HTMLIFrameElement>(null);
   const mapboxContainerRef = useRef<HTMLDivElement>(null);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Mapbox Map instance loaded dynamically
   const mapboxMapRef = useRef<any>(null);
   
   const [isLoading, setIsLoading] = useState(true);
