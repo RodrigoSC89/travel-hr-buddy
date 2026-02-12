@@ -49,7 +49,7 @@ export const AnimatedButton = forwardRef<HTMLButtonElement, AnimatedButtonProps>
           onClick={handleClick}
           className={cn(
             'relative overflow-hidden',
-            success && 'bg-green-500 hover:bg-green-600',
+            success && 'bg-success hover:bg-success/90 text-success-foreground',
             className
           )}
           {...props}
