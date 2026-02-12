@@ -289,7 +289,7 @@ export default function ComplianceAuditIntelligence() {
           <Card>
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
-                <ClipboardCheck className="h-5 w-5 text-purple-500" />
+                <ClipboardCheck className="h-5 w-5 text-accent-foreground" />
                 Audit Schedule
               </CardTitle>
             </CardHeader>
@@ -389,7 +389,7 @@ export default function ComplianceAuditIntelligence() {
           <Card>
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
-                <Shield className="h-5 w-5 text-blue-500" />
+                <Shield className="h-5 w-5 text-info" />
                 Inspection Readiness
               </CardTitle>
               <CardDescription>
@@ -407,12 +407,12 @@ export default function ComplianceAuditIntelligence() {
                       </Badge>
                     </div>
                     <Progress value={r.score} className={`h-2 mb-2 ${
-                      r.score < 50 ? "[&>div]:bg-red-500" : r.score < 80 ? "[&>div]:bg-amber-500" : ""
+                      r.score < 50 ? "[&>div]:bg-destructive" : r.score < 80 ? "[&>div]:bg-warning" : ""
                     }`} />
                     <div className="grid grid-cols-3 gap-4 text-sm text-center mt-3">
                       <div>
                         <p className="text-muted-foreground">Score</p>
-                        <p className={`font-bold ${r.score >= 80 ? 'text-green-500' : r.score >= 50 ? 'text-amber-500' : 'text-red-500'}`}>
+                        <p className={`font-bold ${r.score >= 80 ? 'text-success' : r.score >= 50 ? 'text-warning' : 'text-destructive'}`}>
                           {r.score}%
                         </p>
                       </div>
