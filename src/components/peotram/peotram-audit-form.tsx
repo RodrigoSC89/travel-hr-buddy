@@ -399,8 +399,8 @@ export const PeotramAuditForm: React.FC<PeotramAuditFormProps> = ({
                     <div>
                       <h4 className="font-medium mb-2">Recomendações Prioritárias:</h4>
                       <ul className="space-y-1">
-                        {(aiInsights[currentElement.number].recommendations as string[]).slice(0, 3).map((rec: string, index: number) => (
-                          <li key={index} className="text-sm flex items-start gap-2">
+                        {(aiInsights[currentElement.number].recommendations as string[]).slice(0, 3).map((rec: string) => (
+                          <li key={rec} className="text-sm flex items-start gap-2">
                             <Star className="h-3 w-3 text-warning mt-0.5 flex-shrink-0" />
                             {rec}
                           </li>

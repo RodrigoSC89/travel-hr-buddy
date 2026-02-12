@@ -498,8 +498,8 @@ export const PeotramReportsGenerator: React.FC = () => {
                   { name: "Relatório Auditoria Q4 2024", date: "2024-12-20", format: "PDF", size: "2.3 MB" },
                   { name: "Dashboard Conformidade Nov 2024", date: "2024-12-18", format: "Excel", size: "1.8 MB" },
                   { name: "Análise Não Conformidades Q4", date: "2024-12-15", format: "Word", size: "3.1 MB" }
-                ].map((report, index) => (
-                  <div key={index} className="flex items-center justify-between p-3 border rounded-lg">
+                ].map((report) => (
+                  <div key={report.name} className="flex items-center justify-between p-3 border rounded-lg">
                     <div className="flex items-center gap-3">
                       <FileText className="w-4 h-4 text-muted-foreground" />
                       <div>

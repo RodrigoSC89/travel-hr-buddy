@@ -95,15 +95,15 @@ export const ReservationStats: React.FC<ReservationStatsProps> = ({ reservations
       title: "Conflitos",
       value: conflictedReservations,
       icon: AlertTriangle,
-      color: "text-orange-600",
-      bgColor: "bg-orange-100 dark:bg-orange-900/30"
+      color: "text-warning",
+      bgColor: "bg-warning/10"
     }
   ];
 
   return (
     <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-8 gap-4">
-      {stats.map((stat, index) => (
-        <Card key={index} className="hover:shadow-md transition-shadow">
+      {stats.map((stat) => (
+        <Card key={stat.title} className="hover:shadow-md transition-shadow">
           <CardContent className="p-4">
             <div className="flex items-center gap-3">
               <div className={`p-2 rounded-lg ${stat.bgColor}`}>

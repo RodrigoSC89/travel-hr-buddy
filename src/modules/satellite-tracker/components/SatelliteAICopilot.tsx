@@ -287,9 +287,9 @@ Para informações mais específicas, pergunte sobre:
       <CardContent className="flex-1 flex flex-col gap-3 overflow-hidden">
         {/* Quick Actions */}
         <div className="flex flex-wrap gap-2">
-          {QUICK_ACTIONS.map((action, index) => (
+          {QUICK_ACTIONS.map((action) => (
             <Button
-              key={index}
+              key={action.label}
               variant="outline"
               size="sm"
               onClick={() => handleQuickAction(action.prompt)}

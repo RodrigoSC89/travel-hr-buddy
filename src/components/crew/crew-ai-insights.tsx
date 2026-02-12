@@ -157,8 +157,8 @@ export const CrewAIInsights = ({ crew }: CrewAIInsightsProps) => {
                     Pontos Fortes
                   </h4>
                   <div className="space-y-2">
-                    {insights.strengths?.map((strength: string, index: number) => (
-                      <div key={index} className="flex items-start gap-3 p-3 bg-success/10 rounded-lg">
+                    {insights.strengths?.map((strength: string) => (
+                      <div key={strength} className="flex items-start gap-3 p-3 bg-success/10 rounded-lg">
                         <span className="text-sm">{strength}</span>
                       </div>
                     ))}
@@ -172,8 +172,8 @@ export const CrewAIInsights = ({ crew }: CrewAIInsightsProps) => {
                       Pontos de Atenção
                     </h4>
                     <div className="space-y-2">
-                      {insights.concerns.map((concern: string, index: number) => (
-                        <div key={index} className="flex items-start gap-3 p-3 bg-warning/10 rounded-lg">
+                      {insights.concerns.map((concern: string) => (
+                        <div key={concern} className="flex items-start gap-3 p-3 bg-warning/10 rounded-lg">
                           <span className="text-sm">{concern}</span>
                         </div>
                       ))}
@@ -187,8 +187,8 @@ export const CrewAIInsights = ({ crew }: CrewAIInsightsProps) => {
                     Recomendações Estratégicas
                   </h4>
                   <div className="space-y-2">
-                    {insights.recommendations?.map((rec: string, index: number) => (
-                      <div key={index} className="flex items-start gap-3 p-3 bg-accent/50 rounded-lg">
+                    {insights.recommendations?.map((rec: string) => (
+                      <div key={rec} className="flex items-start gap-3 p-3 bg-accent/50 rounded-lg">
                         <span className="text-sm">{rec}</span>
                       </div>
                     ))}
@@ -315,8 +315,8 @@ export const CrewAIInsights = ({ crew }: CrewAIInsightsProps) => {
         {/* Skills Tab */}
         <TabsContent value="skills" className="space-y-4">
           {skillGaps.length > 0 ? (
-            skillGaps.map((gap, index) => (
-              <Card key={index}>
+            skillGaps.map((gap) => (
+              <Card key={gap.position}>
                 <CardHeader>
                   <div className="flex items-center justify-between">
                     <CardTitle className="text-lg">{gap.position}</CardTitle>
