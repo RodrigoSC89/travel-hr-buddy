@@ -230,7 +230,7 @@ const DocumentationCenter: React.FC = () => {
                 <p className="text-sm text-muted-foreground">Total</p>
                 <p className="text-2xl font-bold">{stats.total}</p>
               </div>
-              <FileText className="h-8 w-8 text-blue-500 opacity-80" />
+              <FileText className="h-8 w-8 text-info opacity-80" />
             </div>
           </CardContent>
         </Card>
@@ -239,9 +239,9 @@ const DocumentationCenter: React.FC = () => {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-muted-foreground">Válidos</p>
-                <p className="text-2xl font-bold text-green-600">{stats.valid}</p>
+                <p className="text-2xl font-bold text-success">{stats.valid}</p>
               </div>
-              <CheckCircle className="h-8 w-8 text-green-500 opacity-80" />
+              <CheckCircle className="h-8 w-8 text-success opacity-80" />
             </div>
           </CardContent>
         </Card>
@@ -250,9 +250,9 @@ const DocumentationCenter: React.FC = () => {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-muted-foreground">Vencendo</p>
-                <p className="text-2xl font-bold text-amber-600">{stats.expiring}</p>
+                <p className="text-2xl font-bold text-warning">{stats.expiring}</p>
               </div>
-              <Clock className="h-8 w-8 text-amber-500 opacity-80" />
+              <Clock className="h-8 w-8 text-warning opacity-80" />
             </div>
           </CardContent>
         </Card>
@@ -261,9 +261,9 @@ const DocumentationCenter: React.FC = () => {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-muted-foreground">Expirados</p>
-                <p className="text-2xl font-bold text-red-600">{stats.expired}</p>
+                <p className="text-2xl font-bold text-destructive">{stats.expired}</p>
               </div>
-              <AlertTriangle className="h-8 w-8 text-red-500 opacity-80" />
+              <AlertTriangle className="h-8 w-8 text-destructive opacity-80" />
             </div>
           </CardContent>
         </Card>

@@ -317,11 +317,11 @@ const VesselManagement: React.FC = () => {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm font-medium text-muted-foreground">Ativas</p>
-                <p className="text-3xl font-bold text-green-600">
+                <p className="text-3xl font-bold text-success">
                   {vessels.filter(v => v.status === "active").length}
                 </p>
               </div>
-              <CheckCircle className="h-8 w-8 text-green-600" />
+              <CheckCircle className="h-8 w-8 text-success" />
             </div>
           </CardContent>
         </Card>
@@ -331,11 +331,11 @@ const VesselManagement: React.FC = () => {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm font-medium text-muted-foreground">Em Manutenção</p>
-                <p className="text-3xl font-bold text-yellow-600">
+                <p className="text-3xl font-bold text-warning">
                   {vessels.filter(v => v.status === "maintenance").length}
                 </p>
               </div>
-              <Settings className="h-8 w-8 text-yellow-600" />
+              <Settings className="h-8 w-8 text-warning" />
             </div>
           </CardContent>
         </Card>
@@ -345,9 +345,9 @@ const VesselManagement: React.FC = () => {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm font-medium text-muted-foreground">Alertas</p>
-                <p className="text-3xl font-bold text-red-600">3</p>
+                <p className="text-3xl font-bold text-destructive">3</p>
               </div>
-              <AlertTriangle className="h-8 w-8 text-red-600" />
+              <AlertTriangle className="h-8 w-8 text-destructive" />
             </div>
           </CardContent>
         </Card>

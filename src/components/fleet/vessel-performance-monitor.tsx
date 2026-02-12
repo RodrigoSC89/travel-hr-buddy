@@ -35,11 +35,11 @@ const VesselPerformanceMonitor = () => {
   const getAlertIcon = (status: string) => {
     switch (status) {
     case "critical":
-      return <AlertCircle className="h-4 w-4 text-red-500" />;
+      return <AlertCircle className="h-4 w-4 text-destructive" />;
     case "warning":
-      return <AlertCircle className="h-4 w-4 text-yellow-500" />;
+      return <AlertCircle className="h-4 w-4 text-warning" />;
     default:
-      return <CheckCircle className="h-4 w-4 text-green-500" />;
+      return <CheckCircle className="h-4 w-4 text-success" />;
     }
   };
 
@@ -48,18 +48,18 @@ const VesselPerformanceMonitor = () => {
     case "critical":
       return <Badge variant="destructive">Crítico</Badge>;
     case "warning":
-      return <Badge variant="secondary" className="bg-yellow-500/20 text-yellow-600">Alerta</Badge>;
+      return <Badge variant="secondary" className="bg-warning/20 text-warning">Alerta</Badge>;
     default:
-      return <Badge variant="default" className="bg-green-500/20 text-green-600">Optimal</Badge>;
+      return <Badge variant="default" className="bg-success/20 text-success">Optimal</Badge>;
     }
   };
 
   const getTrendIcon = (trend: string) => {
     switch (trend) {
     case "up":
-      return <TrendingUp className="h-4 w-4 text-green-500" />;
+      return <TrendingUp className="h-4 w-4 text-success" />;
     case "down":
-      return <TrendingDown className="h-4 w-4 text-red-500" />;
+      return <TrendingDown className="h-4 w-4 text-destructive" />;
     default:
       return <span className="text-muted-foreground text-xs">→</span>;
     }
@@ -177,7 +177,7 @@ const VesselPerformanceMonitor = () => {
                     <p className="text-sm text-muted-foreground">Horas Motor</p>
                     <p className="text-2xl font-bold">{selectedVesselData.engineHours.toFixed(0)}h</p>
                   </div>
-                  <Activity className="h-8 w-8 text-blue-500" />
+                  <Activity className="h-8 w-8 text-info" />
                 </div>
               </CardContent>
             </Card>
@@ -189,7 +189,7 @@ const VesselPerformanceMonitor = () => {
                     <p className="text-sm text-muted-foreground">Eficiência</p>
                     <p className="text-2xl font-bold">{selectedVesselData.efficiency}%</p>
                   </div>
-                  <TrendingUp className="h-8 w-8 text-green-500" />
+                  <TrendingUp className="h-8 w-8 text-success" />
                 </div>
                 <Progress value={selectedVesselData.efficiency} className="mt-2" />
               </CardContent>
