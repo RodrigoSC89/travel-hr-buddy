@@ -335,8 +335,8 @@ export function SystemSettings() {
                 { device: "Chrome - Windows", location: "São Paulo, BR", current: true },
                 { device: "Safari - iPhone", location: "Santos, BR", current: false },
                 { device: "Firefox - MacOS", location: "Rio de Janeiro, BR", current: false }
-              ].map((session, idx) => (
-                <div key={idx} className="flex items-center justify-between p-3 rounded-lg border">
+              ].map((session) => (
+                <div key={session.device} className="flex items-center justify-between p-3 rounded-lg border">
                   <div className="flex items-center gap-3">
                     <Monitor className="h-5 w-5 text-muted-foreground" />
                     <div>

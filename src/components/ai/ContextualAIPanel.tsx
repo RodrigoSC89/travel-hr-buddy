@@ -311,12 +311,12 @@ export function ContextualAIPanel({ defaultExpanded = true, className }: Context
           {suggestions.length > 0 && (
             <div className="space-y-2">
               <h4 className="text-sm font-medium flex items-center gap-2">
-                <Lightbulb className="h-4 w-4 text-yellow-500" />
+                <Lightbulb className="h-4 w-4 text-warning" />
                 Sugestões
               </h4>
               {suggestions.map((suggestion, idx) => (
                 <motion.div
-                  key={idx}
+                  key={`suggestion-${suggestion.title}-${idx}`}
                   initial={{ opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: idx * 0.1 }}
@@ -356,10 +356,10 @@ export function ContextualAIPanel({ defaultExpanded = true, className }: Context
                   <p className="text-sm">{analysis.summary}</p>
                   
                   {analysis.insights?.map((insight, idx) => (
-                    <div key={idx} className="flex items-start gap-2">
-                      {insight.type === "success" && <CheckCircle className="h-4 w-4 text-green-500 shrink-0" />}
-                      {insight.type === "warning" && <AlertTriangle className="h-4 w-4 text-yellow-500 shrink-0" />}
-                      {insight.type === "info" && <Info className="h-4 w-4 text-blue-500 shrink-0" />}
+                    <div key={`insight-${insight.type}-${idx}`} className="flex items-start gap-2">
+                      {insight.type === "success" && <CheckCircle className="h-4 w-4 text-success shrink-0" />}
+                      {insight.type === "warning" && <AlertTriangle className="h-4 w-4 text-warning shrink-0" />}
+                      {insight.type === "info" && <Info className="h-4 w-4 text-info shrink-0" />}
                       <p className="text-xs">{insight.message}</p>
                     </div>
                   ))}
