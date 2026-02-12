@@ -353,8 +353,8 @@ export function CrewWellnessDashboard() {
                           className={cn(
                             "p-2 rounded text-sm",
                             alert.severity === 'critical' ? "bg-destructive/10 text-destructive" :
-                            alert.severity === 'warning' ? "bg-amber-500/10 text-amber-600" :
-                            "bg-blue-500/10 text-blue-600"
+                            alert.severity === 'warning' ? "bg-warning/10 text-warning-foreground" :
+                            "bg-info/10 text-info-foreground"
                           )}
                         >
                           {alert.message}

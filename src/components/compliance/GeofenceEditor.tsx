@@ -178,17 +178,17 @@ export function GeofenceEditor({
 
   const getTypeIcon = (type: GeofenceZone['type']) => {
     switch (type) {
-      case 'inspection-required': return <Target className="h-4 w-4 text-blue-500" />;
-      case 'restricted': return <Shield className="h-4 w-4 text-red-500" />;
-      case 'warning': return <AlertTriangle className="h-4 w-4 text-orange-500" />;
+      case 'inspection-required': return <Target className="h-4 w-4 text-info" />;
+      case 'restricted': return <Shield className="h-4 w-4 text-destructive" />;
+      case 'warning': return <AlertTriangle className="h-4 w-4 text-warning" />;
     }
   };
 
   const getTypeBadge = (type: GeofenceZone['type']) => {
     const styles: Record<string, string> = {
-      'inspection-required': 'bg-blue-500/10 text-blue-500 border-blue-500/20',
-      'restricted': 'bg-red-500/10 text-red-500 border-red-500/20',
-      'warning': 'bg-orange-500/10 text-orange-500 border-orange-500/20',
+      'inspection-required': 'bg-info/10 text-info border-info/20',
+      'restricted': 'bg-destructive/10 text-destructive border-destructive/20',
+      'warning': 'bg-warning/10 text-warning border-warning/20',
     };
     const labels: Record<string, string> = {
       'inspection-required': 'Inspeção Obrigatória',
@@ -261,13 +261,13 @@ export function GeofenceEditor({
                       <SelectContent>
                         <SelectItem value="inspection-required">
                           <div className="flex items-center gap-2">
-                            <Target className="h-4 w-4 text-blue-500" />
+                            <Target className="h-4 w-4 text-info" />
                             Inspeção Obrigatória
                           </div>
                         </SelectItem>
                         <SelectItem value="restricted">
                           <div className="flex items-center gap-2">
-                            <Shield className="h-4 w-4 text-red-500" />
+                            <Shield className="h-4 w-4 text-destructive" />
                             Área Restrita
                           </div>
                         </SelectItem>
@@ -370,36 +370,36 @@ export function GeofenceEditor({
         </Card>
         <Card className="p-4">
           <div className="flex items-center gap-2">
-            <Check className="h-4 w-4 text-green-500" />
+            <Check className="h-4 w-4 text-success" />
             <div>
-              <p className="text-2xl font-bold text-green-500">{stats.active}</p>
+              <p className="text-2xl font-bold text-success">{stats.active}</p>
               <p className="text-xs text-muted-foreground">Ativas</p>
             </div>
           </div>
         </Card>
         <Card className="p-4">
           <div className="flex items-center gap-2">
-            <Target className="h-4 w-4 text-blue-500" />
+            <Target className="h-4 w-4 text-info" />
             <div>
-              <p className="text-2xl font-bold text-blue-500">{stats.inspectionRequired}</p>
+              <p className="text-2xl font-bold text-info">{stats.inspectionRequired}</p>
               <p className="text-xs text-muted-foreground">Inspeção</p>
             </div>
           </div>
         </Card>
         <Card className="p-4">
           <div className="flex items-center gap-2">
-            <Shield className="h-4 w-4 text-red-500" />
+            <Shield className="h-4 w-4 text-destructive" />
             <div>
-              <p className="text-2xl font-bold text-red-500">{stats.restricted}</p>
+              <p className="text-2xl font-bold text-destructive">{stats.restricted}</p>
               <p className="text-xs text-muted-foreground">Restritas</p>
             </div>
           </div>
         </Card>
         <Card className="p-4">
           <div className="flex items-center gap-2">
-            <AlertTriangle className="h-4 w-4 text-orange-500" />
+            <AlertTriangle className="h-4 w-4 text-warning" />
             <div>
-              <p className="text-2xl font-bold text-orange-500">{stats.warning}</p>
+              <p className="text-2xl font-bold text-warning">{stats.warning}</p>
               <p className="text-xs text-muted-foreground">Alerta</p>
             </div>
           </div>
@@ -471,7 +471,7 @@ export function GeofenceEditor({
                       <Button 
                         size="sm" 
                         variant="ghost"
-                        className="text-red-500 hover:text-red-600"
+                        className="text-destructive hover:text-destructive/80"
                         onClick={() => deleteZone(zone.id)}
                       >
                         <Trash2 className="h-4 w-4" />

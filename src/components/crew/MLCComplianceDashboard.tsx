@@ -147,7 +147,7 @@ export function MLCComplianceDashboard() {
             </div>
             <div className="grid grid-cols-3 gap-4 md:gap-8">
               <div className="text-center">
-                <Moon className="h-5 w-5 text-blue-400 mx-auto mb-1" />
+                <Moon className="h-5 w-5 text-info mx-auto mb-1" />
                 <p className="text-2xl font-bold text-foreground">{avgRestHours}h</p>
                 <p className="text-xs text-muted-foreground">Média Descanso/Dia</p>
               </div>
@@ -171,8 +171,8 @@ export function MLCComplianceDashboard() {
         <Card className="border-border/50 bg-card/50">
           <CardContent className="p-4">
             <div className="flex items-center gap-3">
-              <div className="p-2 bg-blue-500/10 rounded-lg">
-                <Clock className="h-5 w-5 text-blue-400" />
+              <div className="p-2 bg-info/10 rounded-lg">
+                <Clock className="h-5 w-5 text-info" />
               </div>
               <div>
                 <p className="text-sm text-muted-foreground">Registros (30 dias)</p>

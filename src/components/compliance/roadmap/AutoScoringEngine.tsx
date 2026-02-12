@@ -324,28 +324,28 @@ export function AutoScoringEngine() {
               <div>
                 <Label className="text-xs">Peso CRÍTICO</Label>
                 <div className="flex items-center gap-2 mt-1">
-                  <Badge className="bg-red-500">{config.pesos.critico}</Badge>
+                  <Badge className="bg-destructive">{config.pesos.critico}</Badge>
                   <span className="text-xs text-muted-foreground">pontos</span>
                 </div>
               </div>
               <div>
                 <Label className="text-xs">Peso ALTO</Label>
                 <div className="flex items-center gap-2 mt-1">
-                  <Badge className="bg-orange-500">{config.pesos.alto}</Badge>
+                  <Badge className="bg-warning">{config.pesos.alto}</Badge>
                   <span className="text-xs text-muted-foreground">pontos</span>
                 </div>
               </div>
               <div>
                 <Label className="text-xs">Peso MÉDIO</Label>
                 <div className="flex items-center gap-2 mt-1">
-                  <Badge className="bg-yellow-500 text-black">{config.pesos.medio}</Badge>
+                  <Badge className="bg-accent text-accent-foreground">{config.pesos.medio}</Badge>
                   <span className="text-xs text-muted-foreground">pontos</span>
                 </div>
               </div>
               <div>
                 <Label className="text-xs">Peso BAIXO</Label>
                 <div className="flex items-center gap-2 mt-1">
-                  <Badge className="bg-green-500">{config.pesos.baixo}</Badge>
+                  <Badge className="bg-success">{config.pesos.baixo}</Badge>
                   <span className="text-xs text-muted-foreground">pontos</span>
                 </div>
               </div>
