@@ -482,12 +482,70 @@ export const MaritimeCertificationManager = () => {
 
         <TabsContent value="reports" className="space-y-6">
           <Card>
-            <CardContent className="text-center py-12">
-              <FileText className="h-16 w-16 text-muted-foreground mx-auto mb-4" />
-              <h3 className="text-lg font-semibold mb-2">Relatórios de Certificações</h3>
-              <p className="text-muted-foreground">
-                Relatórios detalhados em desenvolvimento
-              </p>
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <FileText className="h-5 w-5" />
+                Relatórios de Certificações
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <Card className="border-dashed">
+                  <CardContent className="p-4 text-center">
+                    <FileText className="h-8 w-8 mx-auto mb-2 text-primary" />
+                    <h4 className="font-medium text-sm mb-1">Certificações por Status</h4>
+                    <p className="text-xs text-muted-foreground mb-3">Resumo de todas as certificações ativas, expiradas e pendentes</p>
+                    <Button size="sm" className="w-full" onClick={() => {
+                      const rows = ["Tripulante,Certificação,Número,Validade,Status"];
+                      (certificates || []).forEach((c) => {
+                        rows.push(`"${c.crew_member_name || ''}","${c.certification_type || ''}","${c.certificate_number || ''}","${c.expiry_date || ''}","${c.status || ''}"`);
+                      });
+                      const blob = new Blob([rows.join("\n")], { type: "text/csv;charset=utf-8;" });
+                      const url = URL.createObjectURL(blob);
+                      const a = document.createElement("a"); a.href = url; a.download = `certificacoes-status-${new Date().toISOString().split('T')[0]}.csv`; a.click(); URL.revokeObjectURL(url);
+                      toast({ title: "📄 Relatório exportado", description: "CSV de certificações por status baixado." });
+                    }}>
+                      <Download className="h-4 w-4 mr-1" /> Exportar CSV
+                    </Button>
+                  </CardContent>
+                </Card>
+                <Card className="border-dashed">
+                  <CardContent className="p-4 text-center">
+                    <AlertTriangle className="h-8 w-8 mx-auto mb-2 text-warning" />
+                    <h4 className="font-medium text-sm mb-1">Certificações Expirando</h4>
+                    <p className="text-xs text-muted-foreground mb-3">Certificações que expiram nos próximos 90 dias</p>
+                    <Button size="sm" variant="outline" className="w-full" onClick={() => {
+                      const expiring = (certificates || []).filter((c) => c.status === 'expiring' || c.status === 'expired');
+                      const rows = ["Tripulante,Certificação,Validade,Status"];
+                      expiring.forEach((c) => {
+                        rows.push(`"${c.crew_member_name || ''}","${c.certification_type || ''}","${c.expiry_date || ''}","${c.status || ''}"`);
+                      });
+                      const blob = new Blob([rows.join("\n")], { type: "text/csv;charset=utf-8;" });
+                      const url = URL.createObjectURL(blob);
+                      const a = document.createElement("a"); a.href = url; a.download = `certificacoes-expirando-${new Date().toISOString().split('T')[0]}.csv`; a.click(); URL.revokeObjectURL(url);
+                      toast({ title: "⚠️ Relatório exportado", description: `${expiring.length} certificações expirando/expiradas.` });
+                    }}>
+                      <Download className="h-4 w-4 mr-1" /> Exportar
+                    </Button>
+                  </CardContent>
+                </Card>
+                <Card className="border-dashed">
+                  <CardContent className="p-4 text-center">
+                    <CheckCircle className="h-8 w-8 mx-auto mb-2 text-success" />
+                    <h4 className="font-medium text-sm mb-1">Compliance STCW</h4>
+                    <p className="text-xs text-muted-foreground mb-3">Relatório de conformidade STCW da tripulação</p>
+                    <Button size="sm" variant="outline" className="w-full" onClick={() => {
+                      const valid = (certificates || []).filter((c) => c.status === 'valid');
+                      const total = (certificates || []).length;
+                      const score = total > 0 ? ((valid.length / total) * 100).toFixed(1) : '0';
+                      navigator.clipboard.writeText(`Compliance STCW: ${score}% | ${valid.length}/${total} certificações válidas | Data: ${new Date().toLocaleDateString('pt-BR')}`);
+                      toast({ title: "✅ Compliance STCW", description: `Score: ${score}% — ${valid.length}/${total} válidas. Dados copiados.` });
+                    }}>
+                      <FileText className="h-4 w-4 mr-1" /> Gerar
+                    </Button>
+                  </CardContent>
+                </Card>
+              </div>
             </CardContent>
           </Card>
         </TabsContent>

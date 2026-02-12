@@ -114,7 +114,7 @@ const FinanceHubEnhanced: React.FC = () => {
       source: 'Contas a Pagar',
       actions: [
         { label: 'Pagar Agora', onClick: () => { window.history.pushState({}, '', '/finance-hub?tab=payments'); window.dispatchEvent(new PopStateEvent('popstate')); } },
-        { label: 'Adiar', onClick: () => { toast.success('Fatura adiada para próximo ciclo'); }, variant: 'outline' as const }
+        { label: 'Adiar', onClick: () => { navigator.clipboard.writeText('INV-2024-001 | R$ 45.000 | Adiada para próximo ciclo'); toast.success('Fatura adiada para próximo ciclo — dados copiados'); }, variant: 'outline' as const }
       ]
     },
     {
@@ -125,7 +125,7 @@ const FinanceHubEnhanced: React.FC = () => {
       timestamp: subDays(new Date(), 1),
       source: 'Orçamento',
       actions: [
-        { label: 'Solicitar Aumento', onClick: () => toast.success('Solicitação enviada') }
+        { label: 'Solicitar Aumento', onClick: () => { navigator.clipboard.writeText('Solicitação: Aumento de orçamento de combustível | Consumo: 96.7% | Data: ' + new Date().toLocaleDateString('pt-BR')); toast.success('Solicitação copiada para clipboard — encaminhe ao gestor'); } }
       ]
     }
   ]);

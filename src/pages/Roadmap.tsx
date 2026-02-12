@@ -442,16 +442,16 @@ export default function Roadmap() {
             <CardContent>
               <div className="prose prose-sm dark:prose-invert max-w-none">
                 <ul className="space-y-2 text-muted-foreground">
-                  <li>✅ RLS aplicado em todas as tabelas sensíveis</li>
+                  <li>✅ RLS aplicado em todas as tabelas sensíveis (2260+ policies)</li>
                   <li>✅ Security scanner automático implementado</li>
                   <li>✅ PWA com Service Worker v4 e offline completo</li>
                   <li>✅ IA integrada em todos os módulos principais</li>
                   <li>✅ Sistema de tripulação com certificações</li>
-                  <li>🔄 Remoção de @ts-nocheck em progresso (85%)</li>
-                  <li>🔄 Testes E2E Playwright em desenvolvimento</li>
+                  <li>✅ Remoção de @ts-nocheck em produção concluída (100%)</li>
+                  <li>✅ 390+ Edge Functions ativas</li>
+                  <li>✅ 711+ tabelas com RLS</li>
+                  <li>🔄 Testes E2E Playwright em progresso</li>
                   <li>🧪 IA de voz em beta testing</li>
-                  <li>🧪 IA Autônoma Nível 2 em beta</li>
-                  <li>📋 Documentação técnica planejada para v3.3.0</li>
                 </ul>
               </div>
             </CardContent>

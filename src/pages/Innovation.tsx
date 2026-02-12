@@ -63,7 +63,7 @@ const Innovation = () => {
           </CardHeader>
           <CardContent>
             <p className="text-sm text-muted-foreground mb-4">
-              Iniciativas em desenvolvimento
+              Iniciativas ativas e em progresso
             </p>
             <div className="flex items-center justify-between">
               <span className="text-2xl font-bold text-success">8</span>
