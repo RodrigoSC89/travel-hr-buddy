@@ -17,19 +17,21 @@ export interface SatcomWatchdogConfig {
   reportToWatchdog: boolean;
 }
 
+interface FallbackState {
+  isActive: boolean;
+  reason?: string | null;
+}
+
 class SatcomWatchdogIntegration {
   private config: SatcomWatchdogConfig = {
     enabled: true,
-    checkIntervalMs: 30000, // 30 seconds
+    checkIntervalMs: 30000,
     reportToWatchdog: true
   };
 
   private monitoringInterval: NodeJS.Timeout | null = null;
   private connections: SatcomConnection[] = [];
 
-  /**
-   * Start SATCOM monitoring integration
-   */
   start(connections: SatcomConnection[]): void {
     if (!this.config.enabled) {
       logger.info("[SATCOM Watchdog] Integration disabled");
@@ -37,53 +39,35 @@ class SatcomWatchdogIntegration {
     }
 
     this.connections = connections;
-
-    // Initialize fallback manager
     linkFallbackManager.initialize(connections);
-
     logger.info("[SATCOM Watchdog] Starting integration with system watchdog");
-
-    // Run initial check
     this.runHealthCheck();
-
-    // Schedule periodic monitoring
     this.monitoringInterval = setInterval(() => {
       this.runHealthCheck();
     }, this.config.checkIntervalMs);
-
     logger.info("[SATCOM Watchdog] Integration started");
   }
 
-  /**
-   * Stop monitoring
-   */
   stop(): void {
     if (this.monitoringInterval) {
       clearInterval(this.monitoringInterval);
       this.monitoringInterval = null;
     }
-
     logger.info("[SATCOM Watchdog] Integration stopped");
   }
 
-  /**
-   * Run health check and report to watchdog
-   */
   async runHealthCheck(): Promise<HealthCheckResult> {
     const startTime = Date.now();
 
     try {
-      // Update connection measurements
       this.connections.forEach(conn => {
         satcomStatusMonitor.simulateLatencyMeasurement(conn);
         satcomStatusMonitor.simulatePacketLossMeasurement(conn);
       });
 
-      // Monitor connections with fallback manager
       await linkFallbackManager.monitor(this.connections);
 
-      // Get health status
-      const fallbackState = linkFallbackManager.getState();
+      const fallbackState: FallbackState = linkFallbackManager.getState();
       const healthStatus = satcomStatusMonitor.generateHealthStatus(
         this.connections,
         fallbackState.isActive
@@ -91,7 +75,6 @@ class SatcomWatchdogIntegration {
 
       const latency = Date.now() - startTime;
 
-      // Determine overall status for watchdog
       let status: "online" | "degraded" | "offline";
       let message: string | undefined;
 
@@ -119,15 +102,11 @@ class SatcomWatchdogIntegration {
         timestamp: new Date()
       };
 
-      // Report to system watchdog if enabled
       if (this.config.reportToWatchdog) {
-        // The watchdog service will handle logging
         logger.debug("[SATCOM Watchdog] Health check completed", result);
       }
 
-      // Handle alerts based on status
       this.handleAlerts(healthStatus.overall, fallbackState);
-
       return result;
     } catch (error) {
       const latency = Date.now() - startTime;
@@ -143,27 +122,19 @@ class SatcomWatchdogIntegration {
     }
   }
 
-  /**
-   * Handle alerts based on health status
-   */
   private handleAlerts(
     overall: "healthy" | "degraded" | "critical",
-    fallbackState: any
+    fallbackState: FallbackState
   ): void {
     const activeConnections = this.connections.filter(c => c.status === "connected");
 
-    // Alert for critical state (no connections)
     if (overall === "critical" && activeConnections.length === 0) {
       alertHandler.alertNoConnections();
       return;
     }
 
-    // Alert for degraded connections
     this.connections.forEach(conn => {
-      if (conn.status === "disconnected") {
-        // Connection loss is handled by fallback manager events
-        return;
-      }
+      if (conn.status === "disconnected") return;
 
       if (conn.status === "degraded") {
         const metrics = satcomStatusMonitor.getLatencyMetrics(conn.id);
@@ -177,34 +148,26 @@ class SatcomWatchdogIntegration {
       }
     });
 
-    // Check if all connections are now healthy after being critical
     if (overall === "healthy" && activeConnections.length === this.connections.length) {
       const recentAlerts = alertHandler.getActiveAlerts();
       const hadCriticalAlert = recentAlerts.some(a => a.severity === "critical");
-      
       if (hadCriticalAlert) {
         alertHandler.alertAllConnectionsRestored();
       }
     }
   }
 
-  /**
-   * Update connections
-   */
   updateConnections(connections: SatcomConnection[]): void {
     this.connections = connections;
   }
 
-  /**
-   * Get current status
-   */
   getStatus(): {
     isRunning: boolean;
     fallbackActive: boolean;
     activeConnections: number;
     totalConnections: number;
-    } {
-    const fallbackState = linkFallbackManager.getState();
+  } {
+    const fallbackState: FallbackState = linkFallbackManager.getState();
     const activeConnections = this.connections.filter(c => c.status === "connected").length;
 
     return {
@@ -215,31 +178,18 @@ class SatcomWatchdogIntegration {
     };
   }
 
-  /**
-   * Update configuration
-   */
   updateConfig(updates: Partial<SatcomWatchdogConfig>): void {
-    this.config = {
-      ...this.config,
-      ...updates
-    };
-
-    // Restart monitoring if interval changed
+    this.config = { ...this.config, ...updates };
     if (updates.checkIntervalMs && this.monitoringInterval) {
       this.stop();
       this.start(this.connections);
     }
-
     logger.info("[SATCOM Watchdog] Configuration updated", updates);
   }
 
-  /**
-   * Get configuration
-   */
   getConfig(): SatcomWatchdogConfig {
     return { ...this.config };
   }
 }
 
-// Export singleton instance
 export const satcomWatchdogIntegration = new SatcomWatchdogIntegration();

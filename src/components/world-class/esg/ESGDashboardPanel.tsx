@@ -70,8 +70,8 @@ export function ESGDashboardPanel() {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-3">
-          <div className="p-2.5 bg-emerald-500/10 rounded-xl">
-            <Leaf className="h-6 w-6 text-emerald-500" />
+          <div className="p-2.5 bg-success/10 rounded-xl">
+            <Leaf className="h-6 w-6 text-success" />
           </div>
           <div>
             <h2 className="text-xl font-bold text-foreground">ESG Intelligence Dashboard</h2>
@@ -94,43 +94,43 @@ export function ESGDashboardPanel() {
           icon={<Factory className="h-4 w-4" />}
           label="CO₂ Total"
           value={`${kpis.totalCO2.toLocaleString()} t`}
-          color="text-orange-500"
-          bgColor="bg-orange-500/10"
+          color="text-warning"
+          bgColor="bg-warning/10"
         />
         <KPICard
           icon={<BarChart3 className="h-4 w-4" />}
           label="CII Médio"
           value={kpis.avgCII}
-          color="text-blue-500"
-          bgColor="bg-blue-500/10"
+          color="text-primary"
+          bgColor="bg-primary/10"
         />
         <KPICard
           icon={<Droplets className="h-4 w-4" />}
           label="Resíduos Reciclados"
           value={`${kpis.wasteRecycledPct}%`}
-          color="text-cyan-500"
-          bgColor="bg-cyan-500/10"
+          color="text-info"
+          bgColor="bg-info/10"
         />
         <KPICard
           icon={<ShieldCheck className="h-4 w-4" />}
           label="Compliance Score"
           value={`${kpis.complianceScore}%`}
-          color="text-emerald-500"
-          bgColor="bg-emerald-500/10"
+          color="text-success"
+          bgColor="bg-success/10"
         />
         <KPICard
           icon={<TrendingDown className="h-4 w-4" />}
           label="Efic. Combustível"
           value={`${kpis.fuelEfficiency} NM/t`}
-          color="text-violet-500"
-          bgColor="bg-violet-500/10"
+          color="text-accent-foreground"
+          bgColor="bg-accent/10"
         />
         <KPICard
           icon={<Leaf className="h-4 w-4" />}
           label="Green Port Calls"
           value={String(kpis.greenPortCalls)}
-          color="text-green-500"
-          bgColor="bg-green-500/10"
+          color="text-success"
+          bgColor="bg-success/10"
         />
       </div>
 
@@ -148,7 +148,7 @@ export function ESGDashboardPanel() {
             <Card>
               <CardHeader className="pb-3">
                 <CardTitle className="text-sm font-semibold flex items-center gap-2">
-                  <Factory className="h-4 w-4 text-orange-500" />
+                  <Factory className="h-4 w-4 text-warning" />
                   Maiores Emissores
                 </CardTitle>
               </CardHeader>
@@ -176,7 +176,7 @@ export function ESGDashboardPanel() {
             <Card>
               <CardHeader className="pb-3">
                 <CardTitle className="text-sm font-semibold flex items-center gap-2">
-                  <TrendingDown className="h-4 w-4 text-emerald-500" />
+                  <TrendingDown className="h-4 w-4 text-success" />
                   Metas IMO
                 </CardTitle>
               </CardHeader>
@@ -196,9 +196,9 @@ export function ESGDashboardPanel() {
                 <div key={i} className="flex items-center justify-between p-3 rounded-lg bg-muted/30 border border-border/50">
                   <div className="flex items-center gap-3">
                     {cs.status === 'compliant' ? (
-                      <ShieldCheck className="h-5 w-5 text-emerald-500" />
+                      <ShieldCheck className="h-5 w-5 text-success" />
                     ) : cs.status === 'warning' ? (
-                      <AlertTriangle className="h-5 w-5 text-amber-500" />
+                      <AlertTriangle className="h-5 w-5 text-warning" />
                     ) : (
                       <AlertTriangle className="h-5 w-5 text-destructive" />
                     )}
@@ -256,12 +256,12 @@ export function ESGDashboardPanel() {
                   <p className="text-xs text-muted-foreground mt-1">Toneladas CO₂ equivalente</p>
                 </div>
                 <div className="grid grid-cols-2 gap-3">
-                  <div className="p-3 rounded-lg bg-emerald-500/5 border border-emerald-500/20 text-center">
-                    <p className="text-lg font-bold text-emerald-600">{carbonFootprint.ciiAverage}</p>
+                  <div className="p-3 rounded-lg bg-success/5 border border-success/20 text-center">
+                    <p className="text-lg font-bold text-success">{carbonFootprint.ciiAverage}</p>
                     <p className="text-xs text-muted-foreground">CII Médio</p>
                   </div>
-                  <div className="p-3 rounded-lg bg-blue-500/5 border border-blue-500/20 text-center">
-                    <p className="text-lg font-bold text-blue-600">{carbonFootprint.reductionPct}%</p>
+                  <div className="p-3 rounded-lg bg-primary/5 border border-primary/20 text-center">
+                    <p className="text-lg font-bold text-primary">{carbonFootprint.reductionPct}%</p>
                     <p className="text-xs text-muted-foreground">Redução vs Meta</p>
                   </div>
                 </div>
@@ -300,7 +300,7 @@ function IMOTargetBar({ label, current, target, isPercent }: {
     <div className="space-y-1">
       <div className="flex justify-between text-xs">
         <span className="font-medium">{label}</span>
-        <span className={onTrack ? 'text-emerald-500' : 'text-amber-500'}>
+        <span className={onTrack ? 'text-success' : 'text-warning'}>
           {onTrack ? '✓ No alvo' : '⚠ Acima'}
         </span>
       </div>

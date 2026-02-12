@@ -3,13 +3,15 @@ import { IntentOutput } from "./intentEngine";
 import { supabase } from "@/integrations/supabase/client";
 import { logger } from "@/lib/logger";
 
+export interface GesturalInput {
+  type: string;
+  confidence: number;
+  data: Record<string, unknown>;
+}
+
 export interface ContextData {
   visual?: VisualContext;
-  gestural?: {
-    type: string;
-    confidence: number;
-    data: any;
-  };
+  gestural?: GesturalInput;
   history?: Array<{
     timestamp: string;
     action: string;
@@ -17,7 +19,7 @@ export interface ContextData {
   }>;
   currentEnvironment?: string;
   userProfile?: {
-    preferences?: Record<string, any>;
+    preferences?: Record<string, unknown>;
     expertise?: string;
   };
 }
@@ -30,11 +32,11 @@ export interface AdaptiveResponse {
   actions?: Array<{
     type: string;
     target: string;
-    parameters: Record<string, any>;
+    parameters: Record<string, unknown>;
   }>;
   visualOverlay?: {
     type: string;
-    data: any;
+    data: Record<string, unknown>;
   };
   timestamp: string;
 }
@@ -47,9 +49,6 @@ export class ContextualAdapter {
   private contextHistory: ContextData[] = [];
   private maxHistorySize = 50;
 
-  /**
-   * Adapt response based on context
-   */
   async adaptResponse(
     intent: IntentOutput,
     context: ContextData
@@ -57,16 +56,10 @@ export class ContextualAdapter {
     const startTime = Date.now();
 
     try {
-      // Store context in history
       this.addToHistory(context);
-
-      // Build contextual prompt
       const prompt = this.buildContextualPrompt(intent, context);
-
-      // Generate adaptive response
       const response = await this.generateResponse(prompt, intent, context);
 
-      // Log performance
       const responseTime = Date.now() - startTime;
       await this.logPerformance({
         module_name: "contextual_adapter",
@@ -87,19 +80,14 @@ export class ContextualAdapter {
     }
   }
 
-  /**
-   * Build contextual prompt for LLM
-   */
   private buildContextualPrompt(intent: IntentOutput, context: ContextData): string {
     let prompt = "You are an AI assistant in a maritime operations XR environment.\n\n";
 
-    // Add intent context
     prompt += "User Intent:\n";
     prompt += `- Action: ${intent.intent}\n`;
     prompt += `- Target: ${intent.target || "none"}\n`;
     prompt += `- Confidence: ${(intent.confidence * 100).toFixed(1)}%\n\n`;
 
-    // Add visual context
     if (context.visual) {
       prompt += "Visual Context:\n";
       prompt += `- Scene: ${context.visual.sceneClassification}\n`;
@@ -110,19 +98,16 @@ export class ContextualAdapter {
       prompt += "\n";
     }
 
-    // Add gestural context
     if (context.gestural) {
       prompt += "Gestural Input:\n";
       prompt += `- Type: ${context.gestural.type}\n`;
       prompt += `- Confidence: ${(context.gestural.confidence * 100).toFixed(1)}%\n\n`;
     }
 
-    // Add environment context
     if (context.currentEnvironment) {
       prompt += `Environment: ${context.currentEnvironment}\n\n`;
     }
 
-    // Add history context
     if (context.history && context.history.length > 0) {
       prompt += "Recent Actions:\n";
       context.history.slice(-3).forEach(h => {
@@ -131,7 +116,6 @@ export class ContextualAdapter {
       prompt += "\n";
     }
 
-    // Add user profile context
     if (context.userProfile) {
       prompt += "User Profile:\n";
       if (context.userProfile.expertise) {
@@ -140,43 +124,20 @@ export class ContextualAdapter {
       prompt += "\n";
     }
 
-    prompt += `Based on the above context, provide an appropriate response that:
-1. Addresses the user's intent
-2. Considers the current environment and visual context
-3. Adapts the communication style to the user's expertise level
-4. Suggests relevant actions if needed
-
-Respond in JSON format with:
-{
-  "content": "the response message",
-  "modality": "text|voice|visual|haptic|multimodal",
-  "urgency": "low|medium|high|critical",
-  "actionRequired": true/false,
-  "actions": [{ "type": "", "target": "", "parameters": {} }],
-  "visualOverlay": { "type": "", "data": {} }
-}`;
-
+    prompt += `Based on the above context, provide an appropriate response.`;
     return prompt;
   }
 
-  /**
-   * Generate adaptive response
-   */
   private async generateResponse(
     prompt: string,
     intent: IntentOutput,
     context: ContextData
   ): Promise<AdaptiveResponse> {
     try {
-      // In production, this would call an LLM API (GPT-4o, Claude, etc.)
-      // For now, we'll use rule-based logic
-
       const response = this.generateRuleBasedResponse(intent, context);
       return response;
     } catch (error) {
       logger.error("Error generating response", { error });
-      
-      // Fallback response
       return {
         content: "I understand your request. How can I assist you?",
         modality: "text",
@@ -187,9 +148,6 @@ Respond in JSON format with:
     }
   }
 
-  /**
-   * Generate rule-based response (fallback when LLM is not available)
-   */
   private generateRuleBasedResponse(
     intent: IntentOutput,
     context: ContextData
@@ -197,7 +155,6 @@ Respond in JSON format with:
     const modality = this.determineModality(context);
     const urgency = this.determineUrgency(intent, context);
 
-    // Base response structure
     const response: AdaptiveResponse = {
       content: "",
       modality,
@@ -206,44 +163,31 @@ Respond in JSON format with:
       timestamp: new Date().toISOString(),
     };
 
-    // Generate content based on intent
     switch (intent.intent) {
     case "navigate":
       response.content = `Navigating to ${intent.target || "requested location"}.`;
       response.actionRequired = true;
-      response.actions = [{
-        type: "navigate",
-        target: intent.target || "unknown",
-        parameters: {},
-      }];
+      response.actions = [{ type: "navigate", target: intent.target || "unknown", parameters: {} }];
       break;
-
     case "query":
       response.content = this.generateQueryResponse(intent, context);
       response.actionRequired = false;
       break;
-
     case "command":
       response.content = `Executing ${intent.action} on ${intent.target || "target"}.`;
       response.actionRequired = true;
-      response.actions = [{
-        type: intent.action,
-        target: intent.target || "unknown",
-        parameters: intent.parameters,
-      }];
+      response.actions = [{ type: intent.action, target: intent.target || "unknown", parameters: intent.parameters }];
       break;
-
     default:
       response.content = "How can I assist you with your maritime operations?";
       response.actionRequired = false;
     }
 
-    // Add visual overlay if in XR mode
     if (context.currentEnvironment === "xr" && context.visual) {
       response.visualOverlay = {
         type: "highlight",
         data: {
-          objects: context.visual.detectedObjects,
+          objects: context.visual.detectedObjects as unknown as Record<string, unknown>,
           scene: context.visual.sceneClassification,
         },
       };
@@ -252,9 +196,6 @@ Respond in JSON format with:
     return response;
   }
 
-  /**
-   * Generate query-specific response
-   */
   private generateQueryResponse(intent: IntentOutput, context: ContextData): string {
     if (context.visual) {
       const scene = context.visual.sceneClassification;
@@ -267,98 +208,53 @@ Respond in JSON format with:
         return `The current scene appears to be ${scene}. How can I assist you?`;
       }
     }
-
     return "What information would you like to query?";
   }
 
-  /**
-   * Determine optimal output modality
-   */
   private determineModality(context: ContextData): "text" | "voice" | "visual" | "haptic" | "multimodal" {
-    // If in XR environment, prefer multimodal
-    if (context.currentEnvironment === "xr") {
-      return "multimodal";
-    }
-
-    // If visual context is present, prefer visual
-    if (context.visual) {
-      return "visual";
-    }
-
-    // If gestural input, prefer multimodal
-    if (context.gestural) {
-      return "multimodal";
-    }
-
-    // Default to text
+    if (context.currentEnvironment === "xr") return "multimodal";
+    if (context.visual) return "visual";
+    if (context.gestural) return "multimodal";
     return "text";
   }
 
-  /**
-   * Determine response urgency
-   */
   private determineUrgency(
     intent: IntentOutput,
     context: ContextData
   ): "low" | "medium" | "high" | "critical" {
-    // Check for critical keywords
     const criticalKeywords = ["emergency", "critical", "urgent", "danger", "alert"];
     const intentString = JSON.stringify(intent).toLowerCase();
-    
-    if (criticalKeywords.some(kw => intentString.includes(kw))) {
-      return "critical";
-    }
+    if (criticalKeywords.some(kw => intentString.includes(kw))) return "critical";
 
-    // Check for high priority actions
     const highPriorityActions = ["stop", "abort", "shutdown", "override"];
-    if (highPriorityActions.includes(intent.action.toLowerCase())) {
-      return "high";
-    }
-
-    // Check confidence level
-    if (intent.confidence < 0.5) {
-      return "medium"; // Lower confidence requires user confirmation
-    }
-
+    if (highPriorityActions.includes(intent.action.toLowerCase())) return "high";
+    if (intent.confidence < 0.5) return "medium";
     return "low";
   }
 
-  /**
-   * Add context to history
-   */
   private addToHistory(context: ContextData) {
     this.contextHistory.push(context);
-    
-    // Keep only recent history
     if (this.contextHistory.length > this.maxHistorySize) {
       this.contextHistory.shift();
     }
   }
 
-  /**
-   * Get context history
-   */
   getContextHistory(): ContextData[] {
     return this.contextHistory;
   }
 
-  /**
-   * Clear context history
-   */
   clearHistory() {
     this.contextHistory = [];
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- dynamic insert shape
-  private async logPerformance(data: any) {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- dynamic insert shape for ia_performance_log
+  private async logPerformance(data: Record<string, unknown>) {
     try {
-      // ia_performance_log exists in schema
-      await supabase.from("ia_performance_log").insert(data);
+      await (supabase.from("ia_performance_log").insert as Function)(data);
     } catch (error) {
       logger.error("Failed to log performance", { error });
     }
   }
 }
 
-// Singleton instance
 export const contextualAdapter = new ContextualAdapter();
