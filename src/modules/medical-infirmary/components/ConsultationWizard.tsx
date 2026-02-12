@@ -279,10 +279,10 @@ export function ConsultationWizard({ open, onOpenChange }: ConsultationWizardPro
                     <Button type="button" onClick={addSymptom}>Adicionar</Button>
                   </div>
                   <div className="flex flex-wrap gap-2 mt-2">
-                    {formData.symptoms.map((symptom, index) => (
-                      <Badge key={index} variant="secondary" className="gap-1">
+                    {formData.symptoms.map((symptom, symptomIdx) => (
+                      <Badge key={symptom} variant="secondary" className="gap-1">
                         {symptom}
-                        <button onClick={() => removeSymptom(index)} className="ml-1 hover:text-destructive">×</button>
+                        <button onClick={() => removeSymptom(symptomIdx)} className="ml-1 hover:text-destructive">×</button>
                       </Badge>
                     ))}
                   </div>
@@ -315,7 +315,7 @@ export function ConsultationWizard({ open, onOpenChange }: ConsultationWizardPro
                 <div className="grid grid-cols-2 gap-4">
                   <Card>
                     <CardContent className="p-4 flex items-center gap-3">
-                      <Heart className="h-8 w-8 text-red-500" />
+                      <Heart className="h-8 w-8 text-destructive" />
                       <div className="flex-1">
                         <Label className="text-xs">Pressão Arterial</Label>
                         <Input
@@ -332,7 +332,7 @@ export function ConsultationWizard({ open, onOpenChange }: ConsultationWizardPro
 
                   <Card>
                     <CardContent className="p-4 flex items-center gap-3">
-                      <Activity className="h-8 w-8 text-pink-500" />
+                      <Activity className="h-8 w-8 text-primary" />
                       <div className="flex-1">
                         <Label className="text-xs">Freq. Cardíaca</Label>
                         <Input
@@ -350,7 +350,7 @@ export function ConsultationWizard({ open, onOpenChange }: ConsultationWizardPro
 
                   <Card>
                     <CardContent className="p-4 flex items-center gap-3">
-                      <Thermometer className="h-8 w-8 text-orange-500" />
+                      <Thermometer className="h-8 w-8 text-warning" />
                       <div className="flex-1">
                         <Label className="text-xs">Temperatura</Label>
                         <Input
@@ -369,7 +369,7 @@ export function ConsultationWizard({ open, onOpenChange }: ConsultationWizardPro
 
                   <Card>
                     <CardContent className="p-4 flex items-center gap-3">
-                      <Droplets className="h-8 w-8 text-blue-500" />
+                      <Droplets className="h-8 w-8 text-info" />
                       <div className="flex-1">
                         <Label className="text-xs">Saturação O₂</Label>
                         <Input
@@ -387,7 +387,7 @@ export function ConsultationWizard({ open, onOpenChange }: ConsultationWizardPro
 
                   <Card className="col-span-2">
                     <CardContent className="p-4 flex items-center gap-3">
-                      <Wind className="h-8 w-8 text-cyan-500" />
+                      <Wind className="h-8 w-8 text-accent" />
                       <div className="flex-1">
                         <Label className="text-xs">Freq. Respiratória</Label>
                         <Input
@@ -422,18 +422,18 @@ export function ConsultationWizard({ open, onOpenChange }: ConsultationWizardPro
                 ) : aiAnalysis ? (
                   <div className="space-y-4">
                     <Card className={`border-l-4 ${
-                      aiAnalysis.urgency === 'critical' ? 'border-l-red-500 bg-red-500/5' :
-                      aiAnalysis.urgency === 'high' ? 'border-l-orange-500 bg-orange-500/5' :
-                      aiAnalysis.urgency === 'medium' ? 'border-l-amber-500 bg-amber-500/5' :
-                      'border-l-green-500 bg-green-500/5'
+                    aiAnalysis.urgency === 'critical' ? 'border-l-destructive bg-destructive/5' :
+                      aiAnalysis.urgency === 'high' ? 'border-l-warning bg-warning/5' :
+                      aiAnalysis.urgency === 'medium' ? 'border-l-warning bg-warning/5' :
+                      'border-l-success bg-success/5'
                     }`}>
                       <CardContent className="p-4">
                         <div className="flex items-center gap-2 mb-3">
                           <AlertTriangle className={`h-5 w-5 ${
-                            aiAnalysis.urgency === 'critical' ? 'text-red-500' :
-                            aiAnalysis.urgency === 'high' ? 'text-orange-500' :
-                            aiAnalysis.urgency === 'medium' ? 'text-amber-500' :
-                            'text-green-500'
+                            aiAnalysis.urgency === 'critical' ? 'text-destructive' :
+                            aiAnalysis.urgency === 'high' ? 'text-warning' :
+                            aiAnalysis.urgency === 'medium' ? 'text-warning' :
+                            'text-success'
                           }`} />
                           <span className="font-semibold">
                             Urgência: {aiAnalysis.urgency === 'critical' ? 'CRÍTICA' : 
@@ -446,8 +446,8 @@ export function ConsultationWizard({ open, onOpenChange }: ConsultationWizardPro
                           <div className="mb-3">
                             <p className="text-sm font-medium mb-1">Possíveis Diagnósticos:</p>
                             <div className="flex flex-wrap gap-1">
-                              {aiAnalysis.possibleDiagnoses.map((d: string, i: number) => (
-                                <Badge key={i} variant="outline">{d}</Badge>
+                               {aiAnalysis.possibleDiagnoses.map((d: string) => (
+                                <Badge key={d} variant="outline">{d}</Badge>
                               ))}
                             </div>
                           </div>
@@ -457,9 +457,9 @@ export function ConsultationWizard({ open, onOpenChange }: ConsultationWizardPro
                           <div>
                             <p className="text-sm font-medium mb-1">Recomendações:</p>
                             <ul className="text-sm space-y-1">
-                              {aiAnalysis.recommendations.map((r: string, i: number) => (
-                                <li key={i} className="flex items-start gap-2">
-                                  <CheckCircle2 className="h-4 w-4 text-green-500 mt-0.5" />
+                              {aiAnalysis.recommendations.map((r: string) => (
+                                <li key={r} className="flex items-start gap-2">
+                                  <CheckCircle2 className="h-4 w-4 text-success mt-0.5" />
                                   {r}
                                 </li>
                               ))}

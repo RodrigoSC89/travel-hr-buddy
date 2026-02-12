@@ -242,15 +242,15 @@ const WorkflowEngine = () => {
 
               <ScrollArea className="h-[300px]">
                 <div className="space-y-3">
-                  {newWorkflow.steps.map((step, index) => (
-                    <Card key={index}>
+                  {newWorkflow.steps.map((step, stepIdx) => (
+                    <Card key={`step-${stepIdx}-${step.type}`}>
                       <CardContent className="pt-4 space-y-3">
                         <div className="flex items-center justify-between">
-                          <Badge>Passo {index + 1}</Badge>
+                          <Badge>Passo {stepIdx + 1}</Badge>
                           <Button
                             size="sm"
                             variant="ghost"
-                            onClick={() => removeStep(index)}
+                            onClick={() => removeStep(stepIdx)}
                           >
                             <Trash2 className="h-3 w-3" />
                           </Button>
@@ -258,13 +258,13 @@ const WorkflowEngine = () => {
 
                         <Input
                           value={step.name}
-                          onChange={(e) => updateStep(index, "name", e.target.value)}
+                          onChange={(e) => updateStep(stepIdx, "name", e.target.value)}
                           placeholder="Nome do passo"
                         />
 
                         <Select
                           value={step.type}
-                          onValueChange={(value) => updateStep(index, "type", value)}
+                          onValueChange={(value) => updateStep(stepIdx, "type", value)}
                         >
                           <SelectTrigger>
                             <SelectValue />
@@ -278,7 +278,7 @@ const WorkflowEngine = () => {
 
                         <Textarea
                           value={step.description}
-                          onChange={(e) => updateStep(index, "description", e.target.value)}
+                          onChange={(e) => updateStep(stepIdx, "description", e.target.value)}
                           placeholder="Descrição ou prompt"
                           rows={2}
                         />
@@ -288,7 +288,7 @@ const WorkflowEngine = () => {
                             type="checkbox"
                             checked={step.requires_approval}
                             onChange={(e) =>
-                              updateStep(index, "requires_approval", e.target.checked)
+                              updateStep(stepIdx, "requires_approval", e.target.checked)
                             }
                             className="rounded"
                           />

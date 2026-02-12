@@ -106,9 +106,9 @@ export function PerformanceMonitor() {
   }, []);
 
   const getStatusColor = (value: number, thresholds: { warning: number; critical: number }) => {
-    if (value >= thresholds.critical) return 'text-red-500';
-    if (value >= thresholds.warning) return 'text-yellow-500';
-    return 'text-green-500';
+    if (value >= thresholds.critical) return 'text-destructive';
+    if (value >= thresholds.warning) return 'text-warning';
+    return 'text-success';
   };
 
   const formatBytes = (bytes: number) => {

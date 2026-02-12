@@ -192,9 +192,9 @@ export const MMICopilot: React.FC<MMICopilotProps> = ({ context }) => {
       {/* Quick Actions */}
       <div className="px-4 py-2 border-t">
         <div className="flex gap-2 overflow-x-auto pb-2">
-          {quickActions.map((action, idx) => (
+          {quickActions.map((action) => (
             <Button
-              key={idx}
+              key={action.label}
               variant="outline"
               size="sm"
               className="shrink-0 text-xs"
