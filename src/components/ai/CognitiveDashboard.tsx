@@ -92,11 +92,11 @@ export const CognitiveDashboard: React.FC = () => {
 
   const getRiskColor = (level: string) => {
     switch (level) {
-    case "critical": return "bg-red-500";
-    case "high": return "bg-orange-500";
-    case "medium": return "bg-yellow-500";
-    case "low": return "bg-green-500";
-    default: return "bg-gray-500";
+    case "critical": return "bg-destructive";
+    case "high": return "bg-warning";
+    case "medium": return "bg-warning/70";
+    case "low": return "bg-success";
+    default: return "bg-muted";
     }
   };
 
@@ -331,9 +331,9 @@ export const CognitiveDashboard: React.FC = () => {
                             </Badge>
                             {decision.executed && (
                               decision.success ? (
-                                <CheckCircle2 className="h-4 w-4 text-green-500" />
+                                <CheckCircle2 className="h-4 w-4 text-success" />
                               ) : (
-                                <AlertTriangle className="h-4 w-4 text-red-500" />
+                                <AlertTriangle className="h-4 w-4 text-destructive" />
                               )
                             )}
                           </div>
@@ -346,7 +346,7 @@ export const CognitiveDashboard: React.FC = () => {
                               {decision.reason}
                             </div>
                             {decision.error && (
-                              <div className="text-sm text-red-500 mt-2">
+                              <div className="text-sm text-destructive mt-2">
                                 Error: {decision.error}
                               </div>
                             )}
@@ -406,7 +406,7 @@ export const CognitiveDashboard: React.FC = () => {
                           </div>
                           <div>
                             <span className="text-muted-foreground">Delta:</span>
-                            <span className={`ml-2 font-medium ${parseFloat(deltaPercent) > 0 ? "text-orange-500" : "text-green-500"}`}>
+                            <span className={`ml-2 font-medium ${parseFloat(deltaPercent) > 0 ? "text-warning" : "text-success"}`}>
                               {deltaPercent}%
                             </span>
                           </div>

@@ -30,8 +30,8 @@ const MISSION_ICONS: Record<MissionType, React.ReactNode> = {
 
 const PRIORITY_COLORS: Record<string, string> = {
   low: "bg-muted text-muted-foreground",
-  medium: "bg-blue-500/20 text-blue-400",
-  high: "bg-yellow-500/20 text-yellow-400",
+  medium: "bg-info/20 text-info",
+  high: "bg-warning/20 text-warning",
   critical: "bg-destructive/20 text-destructive",
 };
 
@@ -127,7 +127,7 @@ export const SwarmFormationPanel: React.FC = () => {
               </div>
               <div className="rounded-lg border p-2 text-center">
                 <p className="text-xs text-muted-foreground">Redundância</p>
-                <p className="text-lg font-bold text-yellow-400">{activeSwarm.redundancy}%</p>
+                <p className="text-lg font-bold text-warning">{activeSwarm.redundancy}%</p>
               </div>
             </div>
 
@@ -144,8 +144,8 @@ export const SwarmFormationPanel: React.FC = () => {
                   >
                     <div className={cn(
                       "h-2 w-2 rounded-full shrink-0",
-                      agent.level === "SUPERVISOR" ? "bg-red-400" :
-                        agent.level === "COORDINATOR" ? "bg-yellow-400" : "bg-green-400"
+                      agent.level === "SUPERVISOR" ? "bg-destructive" :
+                        agent.level === "COORDINATOR" ? "bg-warning" : "bg-success"
                     )} />
                     <span className="font-medium truncate flex-1">{agent.name}</span>
                     {agent.id === activeSwarm.formation.leader && (

@@ -113,40 +113,40 @@ const SECTIONS = [
     name: "Gestão",
     icon: Users,
     description: "Organograma, responsabilidades e estrutura",
-    color: "text-blue-600",
-    bgColor: "bg-blue-50"
+    color: "text-info",
+    bgColor: "bg-info/10"
   },
   {
     id: "training",
     name: "Treinamentos",
     icon: GraduationCap,
     description: "Certificações, competências e capacitação",
-    color: "text-green-600",
-    bgColor: "bg-green-50"
+    color: "text-success",
+    bgColor: "bg-success/10"
   },
   {
     id: "procedures",
     name: "Procedimentos",
     icon: FileText,
     description: "FMEA, ASOG, contingência e emergência",
-    color: "text-purple-600",
-    bgColor: "bg-purple-50"
+    color: "text-accent-foreground",
+    bgColor: "bg-accent/10"
   },
   {
     id: "operation",
     name: "Operação",
     icon: Radio,
     description: "Watch keeping, comunicação e protocolos",
-    color: "text-orange-600",
-    bgColor: "bg-orange-50"
+    color: "text-warning",
+    bgColor: "bg-warning/10"
   },
   {
     id: "maintenance",
     name: "Manutenção",
     icon: Wrench,
     description: "Preventiva, preditiva e corretiva",
-    color: "text-red-600",
-    bgColor: "bg-red-50"
+    color: "text-destructive",
+    bgColor: "bg-destructive/10"
   },
   {
     id: "testing",
@@ -247,18 +247,18 @@ export const PeoDpManager: React.FC = () => {
   const getStatusBadge = (status: DPPlan["status"]) => {
     const variants = {
       draft: { label: "Rascunho", color: "bg-secondary text-secondary-foreground" },
-      in_review: { label: "Em Revisão", color: "bg-yellow-100 text-yellow-800" },
-      approved: { label: "Aprovado", color: "bg-blue-100 text-blue-800" },
-      active: { label: "Ativo", color: "bg-green-100 text-green-800" }
+      in_review: { label: "Em Revisão", color: "bg-warning/10 text-warning" },
+      approved: { label: "Aprovado", color: "bg-info/10 text-info" },
+      active: { label: "Ativo", color: "bg-success/10 text-success" }
     };
     const variant = variants[status];
     return <Badge className={variant.color}>{variant.label}</Badge>;
   };
 
   const getComplianceColor = (compliance: number) => {
-    if (compliance >= 90) return "text-green-600";
-    if (compliance >= 70) return "text-yellow-600";
-    return "text-red-600";
+    if (compliance >= 90) return "text-success";
+    if (compliance >= 70) return "text-warning";
+    return "text-destructive";
   };
 
   const getSectionProgress = (section: SectionStatus) => {
@@ -334,7 +334,7 @@ export const PeoDpManager: React.FC = () => {
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="text-3xl font-bold text-yellow-600">
+            <div className="text-3xl font-bold text-warning">
               {plans.filter(p => p.status === "in_review").length}
             </div>
           </CardContent>
@@ -362,7 +362,7 @@ export const PeoDpManager: React.FC = () => {
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="text-3xl font-bold text-blue-600">
+            <div className="text-3xl font-bold text-info">
               {audits.length}
             </div>
           </CardContent>
@@ -375,7 +375,7 @@ export const PeoDpManager: React.FC = () => {
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="text-3xl font-bold text-red-600">
+            <div className="text-3xl font-bold text-destructive">
               {plans.reduce((sum, p) => {
                 return sum + Object.values(p.sections).reduce((s, section) => 
                   s + (section.total - section.completed), 0
@@ -462,10 +462,10 @@ export const PeoDpManager: React.FC = () => {
             <TabsTrigger value="ai-chat" className="flex items-center gap-1 text-xs px-2 py-1">
               <MessageSquare className="h-3 w-3" />AI Chat
             </TabsTrigger>
-            <TabsTrigger value="ai-evidence" className="flex items-center gap-1 text-xs px-2 py-1 bg-green-500/10">
+            <TabsTrigger value="ai-evidence" className="flex items-center gap-1 text-xs px-2 py-1 bg-success/10">
               <Sparkles className="h-3 w-3" />IA Evidências
             </TabsTrigger>
-            <TabsTrigger value="voice-assistant" className="flex items-center gap-1 text-xs px-2 py-1 bg-green-500/10">
+            <TabsTrigger value="voice-assistant" className="flex items-center gap-1 text-xs px-2 py-1 bg-success/10">
               <Mic className="h-3 w-3" />Assistente Voz
             </TabsTrigger>
             {/* New Competitive Analysis Tabs */}
@@ -537,7 +537,7 @@ export const PeoDpManager: React.FC = () => {
                             </CardDescription>
                           </div>
                           {sectionData.status === "completed" && (
-                            <CheckCircle className="h-5 w-5 text-green-600" />
+                            <CheckCircle className="h-5 w-5 text-success" />
                           )}
                         </div>
                       </CardHeader>
@@ -574,10 +574,10 @@ export const PeoDpManager: React.FC = () => {
               </div>
 
               {/* Risk Assessment Card */}
-              <Card className="border-2 border-yellow-200 bg-yellow-50/50">
+              <Card className="border-2 border-warning/20 bg-warning/5">
                 <CardHeader>
                   <div className="flex items-center gap-3">
-                    <Shield className="h-6 w-6 text-yellow-600" />
+                    <Shield className="h-6 w-6 text-warning" />
                     <div>
                       <CardTitle>Análise de Risco</CardTitle>
                       <CardDescription>
@@ -588,26 +588,26 @@ export const PeoDpManager: React.FC = () => {
                 </CardHeader>
                 <CardContent>
                   <div className="space-y-3">
-                    <div className="flex items-center gap-3 p-3 bg-red-50 border border-red-200 rounded-lg">
-                      <AlertTriangle className="h-5 w-5 text-red-600" />
+                    <div className="flex items-center gap-3 p-3 bg-destructive/5 border border-destructive/20 rounded-lg">
+                      <AlertTriangle className="h-5 w-5 text-destructive" />
                       <div className="flex-1">
                         <p className="font-medium text-sm">Testes Anuais Pendentes</p>
                         <p className="text-xs text-muted-foreground">
                           Seção de testes anuais não iniciada - crítico para compliance
                         </p>
                       </div>
-                      <Badge className="bg-red-100 text-red-800">Alta Prioridade</Badge>
+                      <Badge className="bg-destructive/10 text-destructive">Alta Prioridade</Badge>
                     </div>
 
-                    <div className="flex items-center gap-3 p-3 bg-yellow-50 border border-yellow-200 rounded-lg">
-                      <AlertTriangle className="h-5 w-5 text-yellow-600" />
+                    <div className="flex items-center gap-3 p-3 bg-warning/5 border border-warning/20 rounded-lg">
+                      <AlertTriangle className="h-5 w-5 text-warning" />
                       <div className="flex-1">
                         <p className="font-medium text-sm">Treinamentos Incompletos</p>
                         <p className="text-xs text-muted-foreground">
                           2 requisitos de certificação precisam ser completados
                         </p>
                       </div>
-                      <Badge className="bg-yellow-100 text-yellow-800">Média Prioridade</Badge>
+                      <Badge className="bg-warning/10 text-warning">Média Prioridade</Badge>
                     </div>
                   </div>
                 </CardContent>

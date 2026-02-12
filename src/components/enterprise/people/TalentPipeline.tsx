@@ -20,11 +20,11 @@ interface Candidate {
 }
 
 const pipelineStages = [
-  { id: "new", label: "Novos", color: "bg-blue-500" },
-  { id: "screening", label: "Triagem", color: "bg-yellow-500" },
-  { id: "interview", label: "Entrevista", color: "bg-purple-500" },
-  { id: "offer", label: "Proposta", color: "bg-orange-500" },
-  { id: "hired", label: "Contratado", color: "bg-green-500" }
+  { id: "new", label: "Novos", color: "bg-info" },
+  { id: "screening", label: "Triagem", color: "bg-warning" },
+  { id: "interview", label: "Entrevista", color: "bg-accent" },
+  { id: "offer", label: "Proposta", color: "bg-warning/80" },
+  { id: "hired", label: "Contratado", color: "bg-success" }
 ];
 
 export function TalentPipeline() {
@@ -63,7 +63,7 @@ export function TalentPipeline() {
   const moveCandidate = (candidateId: string, newStatus: Candidate["status"]) => {
     setCandidates(prev => prev.map(c => c.id === candidateId ? { ...c, status: newStatus } : c));
   };
-  const getMatchColor = (score: number) => score >= 90 ? "text-green-500" : score >= 75 ? "text-yellow-500" : "text-red-500";
+  const getMatchColor = (score: number) => score >= 90 ? "text-success" : score >= 75 ? "text-warning" : "text-destructive";
 
   if (loading) return <div className="space-y-4">{[1,2,3].map(i => <Skeleton key={i} className="h-32 w-full" />)}</div>;
 
