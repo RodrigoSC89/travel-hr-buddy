@@ -37,7 +37,7 @@ export const UserFeedback = memo(function UserFeedback({
   if (submitted) {
     return (
       <div className={cn(
-        "flex items-center gap-2 text-sm text-green-600 dark:text-green-400",
+        "flex items-center gap-2 text-sm text-success",
         className
       )}>
         <ThumbsUp className="h-4 w-4" />
@@ -53,7 +53,7 @@ export const UserFeedback = memo(function UserFeedback({
         <Button
           variant="ghost"
           size="sm"
-          className={cn("h-7 w-7 p-0", rating === 'positive' && "text-green-500")}
+          className={cn("h-7 w-7 p-0", rating === 'positive' && "text-success")}
           onClick={() => {
             setRating('positive');
             onSubmit?.({ rating: 'positive' });
@@ -65,7 +65,7 @@ export const UserFeedback = memo(function UserFeedback({
         <Button
           variant="ghost"
           size="sm"
-          className={cn("h-7 w-7 p-0", rating === 'negative' && "text-red-500")}
+          className={cn("h-7 w-7 p-0", rating === 'negative' && "text-destructive")}
           onClick={() => {
             setRating('negative');
             setShowComment(true);
@@ -86,7 +86,7 @@ export const UserFeedback = memo(function UserFeedback({
             variant={rating === 'positive' ? 'default' : 'outline'}
             size="sm"
             onClick={() => setRating('positive')}
-            className={cn(rating === 'positive' && "bg-green-500 hover:bg-green-600")}
+            className={cn(rating === 'positive' && "bg-success hover:bg-success/90 text-success-foreground")}
           >
             <ThumbsUp className="h-4 w-4 mr-1" />
             Sim
@@ -98,7 +98,7 @@ export const UserFeedback = memo(function UserFeedback({
               setRating('negative');
               setShowComment(true);
             }}
-            className={cn(rating === 'negative' && "bg-red-500 hover:bg-red-600")}
+            className={cn(rating === 'negative' && "bg-destructive hover:bg-destructive/90 text-destructive-foreground")}
           >
             <ThumbsDown className="h-4 w-4 mr-1" />
             Não

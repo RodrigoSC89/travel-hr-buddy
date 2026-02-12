@@ -131,7 +131,7 @@ const systems = [
 
 const priorityColors = {
   critical: "bg-destructive/10 text-destructive border-destructive/30",
-  high: "bg-orange-500/10 text-orange-600 border-orange-500/30",
+  high: "bg-warning/10 text-warning border-warning/30",
   medium: "bg-warning/10 text-warning border-warning/30",
   low: "bg-muted text-muted-foreground",
 };
@@ -500,10 +500,10 @@ export default function SmartMaintenancePlanner() {
           </Card>
 
           {/* AI Predictions */}
-          <Card className="bg-gradient-to-br from-purple-500/5 to-transparent border-purple-500/20">
+          <Card className="bg-gradient-to-br from-accent/5 to-transparent border-accent/20">
             <CardHeader className="pb-3">
               <CardTitle className="text-sm flex items-center gap-2">
-                <Brain className="h-4 w-4 text-purple-500" />
+                <Brain className="h-4 w-4 text-accent-foreground" />
                 Manutenção Preditiva
               </CardTitle>
             </CardHeader>

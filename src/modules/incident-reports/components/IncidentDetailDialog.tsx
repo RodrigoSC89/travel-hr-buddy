@@ -560,7 +560,7 @@ export const IncidentDetailDialog: React.FC<IncidentDetailDialogProps> = ({
                   <div className="space-y-4">
                     {signatures.map((sig, index) => (
                       <div key={sig.id || index} className="flex items-center gap-4 p-4 border rounded-lg">
-                        <CheckCircle className="h-5 w-5 text-green-500" />
+                        <CheckCircle className="h-5 w-5 text-success" />
                         <div className="flex-1">
                           <p className="font-medium">{sig.signatory_name}</p>
                           <p className="text-sm text-muted-foreground">{sig.signatory_role}</p>
