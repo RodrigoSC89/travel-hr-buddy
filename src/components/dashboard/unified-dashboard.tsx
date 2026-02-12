@@ -232,11 +232,11 @@ const UnifiedDashboard = () => {
                   <p className="text-sm text-muted-foreground">Receita Total</p>
                   <p className="text-2xl font-bold">R$ {(availableKPIs.revenue.value / 1000000).toFixed(1)}M</p>
                   <div className="flex items-center gap-1 mt-1">
-                    <TrendingUp className="w-4 h-4 text-green-600" />
-                    <span className="text-sm text-green-600">+{availableKPIs.revenue.change}%</span>
+                    <TrendingUp className="w-4 h-4 text-success" />
+                    <span className="text-sm text-success">+{availableKPIs.revenue.change}%</span>
                   </div>
                 </div>
-                <DollarSign className="w-8 h-8 text-green-600" />
+                <DollarSign className="w-8 h-8 text-success" />
               </div>
             </CardContent>
           </Card>
@@ -268,11 +268,11 @@ const UnifiedDashboard = () => {
                   <p className="text-sm text-muted-foreground">Eficiência</p>
                   <p className="text-2xl font-bold">{availableKPIs.efficiency.value.toFixed(1)}%</p>
                   <div className="flex items-center gap-1 mt-1">
-                    <TrendingUp className="w-4 h-4 text-orange-600" />
-                    <span className="text-sm text-orange-600">+{availableKPIs.efficiency.change}%</span>
+                    <TrendingUp className="w-4 h-4 text-warning" />
+                    <span className="text-sm text-warning">+{availableKPIs.efficiency.change}%</span>
                   </div>
                 </div>
-                <Activity className="w-8 h-8 text-orange-600" />
+                <Activity className="w-8 h-8 text-warning" />
               </div>
             </CardContent>
           </Card>
@@ -377,7 +377,7 @@ const UnifiedDashboard = () => {
                 <p className="text-xs text-muted-foreground">Usuários Ativos</p>
               </div>
               <div className="text-center">
-                <p className="text-2xl font-bold text-green-600">{dashboardData.systemHealth.errorRate}%</p>
+                <p className="text-2xl font-bold text-success">{dashboardData.systemHealth.errorRate}%</p>
                 <p className="text-xs text-muted-foreground">Taxa de Erro</p>
               </div>
             </div>

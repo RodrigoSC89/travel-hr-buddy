@@ -326,13 +326,13 @@ const systemModules = [
 const getStatusColor = (status: string) => {
   switch (status) {
   case "operational":
-    return "bg-green-500";
+    return "bg-success";
   case "degraded":
-    return "bg-yellow-500";
+    return "bg-warning";
   case "offline":
-    return "bg-red-500";
+    return "bg-destructive";
   default:
-    return "bg-gray-500";
+    return "bg-muted";
   }
 };
 
@@ -446,9 +446,9 @@ export function ComprehensiveExecutiveDashboard() {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-muted-foreground">Operacionais</p>
-                <p className="text-3xl font-bold text-green-600">{operationalModules}</p>
+                <p className="text-3xl font-bold text-success">{operationalModules}</p>
               </div>
-              <CheckCircle className="h-8 w-8 text-green-600" />
+              <CheckCircle className="h-8 w-8 text-success" />
             </div>
           </CardContent>
         </Card>

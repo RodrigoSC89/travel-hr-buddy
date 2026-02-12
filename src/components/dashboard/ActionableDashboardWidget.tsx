@@ -79,10 +79,10 @@ export function ActionableDashboardWidget({
   const { toast } = useToast();
 
   const statusColors = {
-    operational: "bg-green-500",
-    warning: "bg-yellow-500",
-    critical: "bg-red-500",
-    maintenance: "bg-blue-500"
+    operational: "bg-success",
+    warning: "bg-warning",
+    critical: "bg-destructive",
+    maintenance: "bg-info"
   };
 
   const statusLabels = {
@@ -93,15 +93,15 @@ export function ActionableDashboardWidget({
   };
 
   const getTrendIcon = (trend?: "up" | "down" | "stable") => {
-    if (trend === "up") return <TrendingUp className="h-4 w-4 text-green-500" />;
-    if (trend === "down") return <TrendingDown className="h-4 w-4 text-red-500" />;
+    if (trend === "up") return <TrendingUp className="h-4 w-4 text-success" />;
+    if (trend === "down") return <TrendingDown className="h-4 w-4 text-destructive" />;
     return null;
   };
 
   const getStatusIcon = (status?: "success" | "warning" | "error" | "info") => {
-    if (status === "success") return <CheckCircle className="h-4 w-4 text-green-500" />;
-    if (status === "warning") return <AlertTriangle className="h-4 w-4 text-yellow-500" />;
-    if (status === "error") return <AlertTriangle className="h-4 w-4 text-red-500" />;
+    if (status === "success") return <CheckCircle className="h-4 w-4 text-success" />;
+    if (status === "warning") return <AlertTriangle className="h-4 w-4 text-warning" />;
+    if (status === "error") return <AlertTriangle className="h-4 w-4 text-destructive" />;
     return null;
   };
 
@@ -179,7 +179,7 @@ export function ActionableDashboardWidget({
                   {getTrendIcon(metric.trend)}
                   {getStatusIcon(metric.status)}
                   {metric.change !== undefined && (
-                    <span className={`text-xs ${metric.change >= 0 ? "text-green-500" : "text-red-500"}`}>
+                    <span className={`text-xs ${metric.change >= 0 ? "text-success" : "text-destructive"}`}>
                       {metric.change >= 0 ? "+" : ""}{metric.change}%
                     </span>
                   )}

@@ -120,19 +120,19 @@ export function AuditDashboard() {
 
   const getSeverityColor = (severity: string) => {
     switch (severity) {
-      case 'critical': return 'bg-red-500';
-      case 'high': return 'bg-orange-500';
-      case 'medium': return 'bg-yellow-500';
-      case 'low': return 'bg-blue-500';
-      default: return 'bg-gray-500';
+      case 'critical': return 'bg-destructive';
+      case 'high': return 'bg-warning';
+      case 'medium': return 'bg-warning';
+      case 'low': return 'bg-info';
+      default: return 'bg-muted';
     }
   };
 
   const getSeverityBadge = (severity: string) => {
     switch (severity) {
       case 'critical': return <Badge variant="destructive">Crítico</Badge>;
-      case 'high': return <Badge className="bg-orange-500">Alto</Badge>;
-      case 'medium': return <Badge className="bg-yellow-500 text-black">Médio</Badge>;
+      case 'high': return <Badge className="bg-warning text-warning-foreground">Alto</Badge>;
+      case 'medium': return <Badge className="bg-warning text-warning-foreground">Médio</Badge>;
       case 'low': return <Badge variant="secondary">Baixo</Badge>;
       default: return <Badge>-</Badge>;
     }
@@ -169,19 +169,19 @@ export function AuditDashboard() {
               </p>
             </div>
             <div className="text-right space-y-2">
-              <div className="flex items-center gap-2 text-green-600">
+              <div className="flex items-center gap-2 text-success">
                 <CheckCircle2 className="h-4 w-4" />
                 <span className="text-sm">97 módulos funcionais</span>
               </div>
-              <div className="flex items-center gap-2 text-green-600">
+              <div className="flex items-center gap-2 text-success">
                 <CheckCircle2 className="h-4 w-4" />
                 <span className="text-sm">289 Edge Functions</span>
               </div>
-              <div className="flex items-center gap-2 text-green-600">
+              <div className="flex items-center gap-2 text-success">
                 <CheckCircle2 className="h-4 w-4" />
                 <span className="text-sm">588 tabelas com RLS</span>
               </div>
-              <div className="flex items-center gap-2 text-yellow-600">
+              <div className="flex items-center gap-2 text-warning">
                 <AlertTriangle className="h-4 w-4" />
                 <span className="text-sm">4 issues pendentes</span>
               </div>
@@ -220,13 +220,13 @@ export function AuditDashboard() {
                       {metric.name}
                     </CardTitle>
                     {metric.status === 'success' && (
-                      <CheckCircle2 className="h-4 w-4 text-green-500" />
+                      <CheckCircle2 className="h-4 w-4 text-success" />
                     )}
                     {metric.status === 'warning' && (
-                      <AlertTriangle className="h-4 w-4 text-yellow-500" />
+                      <AlertTriangle className="h-4 w-4 text-warning" />
                     )}
                     {metric.status === 'error' && (
-                      <XCircle className="h-4 w-4 text-red-500" />
+                      <XCircle className="h-4 w-4 text-destructive" />
                     )}
                   </div>
                 </CardHeader>
@@ -325,7 +325,7 @@ export function AuditDashboard() {
                   <p className="text-sm text-muted-foreground">Tabelas</p>
                 </div>
                 <div className="p-4 border rounded-lg text-center">
-                  <p className="text-3xl font-bold text-green-500">100+</p>
+                  <p className="text-3xl font-bold text-success">100+</p>
                   <p className="text-sm text-muted-foreground">RLS Policies</p>
                 </div>
                 <div className="p-4 border rounded-lg text-center">

@@ -256,10 +256,10 @@ const fallbackFindings: Finding[] = [
 ];
 
 const typeColors: Record<string, string> = {
-  observation: "bg-blue-500/20 text-blue-600",
-  minor_nc: "bg-yellow-500/20 text-yellow-600",
-  major_nc: "bg-orange-500/20 text-orange-600",
-  critical: "bg-red-500/20 text-red-600",
+  observation: "bg-info/20 text-info",
+  minor_nc: "bg-warning/20 text-warning",
+  major_nc: "bg-warning/20 text-warning",
+  critical: "bg-destructive/20 text-destructive",
 };
 
 const typeLabels: Record<string, string> = {
@@ -598,7 +598,7 @@ export function ComplianceWorkflowEngine() {
                 <p className="text-sm text-muted-foreground">Em Andamento</p>
                 <p className="text-2xl font-bold">{stats.inProgress}</p>
               </div>
-              <Clock className="h-8 w-8 text-yellow-500" />
+              <Clock className="h-8 w-8 text-warning" />
             </div>
           </CardContent>
         </Card>
@@ -609,7 +609,7 @@ export function ComplianceWorkflowEngine() {
                 <p className="text-sm text-muted-foreground">Concluídas</p>
                 <p className="text-2xl font-bold">{stats.completed}</p>
               </div>
-              <CheckCircle2 className="h-8 w-8 text-green-500" />
+              <CheckCircle2 className="h-8 w-8 text-success" />
             </div>
           </CardContent>
         </Card>
@@ -620,7 +620,7 @@ export function ComplianceWorkflowEngine() {
                 <p className="text-sm text-muted-foreground">NCs Abertas</p>
                 <p className="text-2xl font-bold">{stats.openNCs}</p>
               </div>
-              <AlertTriangle className="h-8 w-8 text-orange-500" />
+              <AlertTriangle className="h-8 w-8 text-warning" />
             </div>
           </CardContent>
         </Card>
