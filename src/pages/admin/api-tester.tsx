@@ -134,7 +134,7 @@ const APITester = () => {
     if (!test) return;
 
     try {
-      const result = await test.testFn() as any;
+      const result = await test.testFn() as { success: boolean; message: string; responseTime?: number; data?: Record<string, unknown>; error?: string };
 
       setTests((prev) =>
         prev.map((t) =>

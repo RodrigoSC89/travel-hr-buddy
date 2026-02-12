@@ -115,13 +115,13 @@ export default function ComplianceDenuncias() {
   const createReport = useCreateComplianceReport();
 
   const displayReports = (reports && reports.length > 0) 
-    ? reports.map((r: any) => ({
-        id: r.id, protocolNumber: r.protocol_number || `DEN-${r.id.slice(0,4)}`,
-        category: r.category || "other" as const, severity: r.severity || "medium" as const,
-        status: r.status || "open" as const, isAnonymous: r.is_anonymous ?? true,
-        description: r.description || "", createdAt: r.created_at?.slice(0,10) || "",
-        updatedAt: r.updated_at?.slice(0,10) || "", aiClassification: r.ai_classification,
-        aiPriority: r.ai_priority,
+    ? reports.map((r) => ({
+        id: String(r.id), protocolNumber: String(r.report_code || `DEN-${String(r.id).slice(0,4)}`),
+        category: (r.category || "other") as Report["category"], severity: (r.severity || "medium") as Report["severity"],
+        status: (r.status || "open") as Report["status"], isAnonymous: r.is_anonymous ?? true,
+        description: String(r.description || ""), createdAt: String(r.created_at || "").slice(0,10),
+        updatedAt: String(r.updated_at || "").slice(0,10), aiClassification: r.ai_classification,
+        aiPriority: r.ai_priority_score,
       }))
     : fallbackReports;
 

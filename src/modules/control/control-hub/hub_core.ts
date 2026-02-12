@@ -101,8 +101,7 @@ export class ControlHub {
   /**
    * Add data to cache for offline storage
    */
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- cache accepts arbitrary module data
-  async addToCache(module: string, data: any): Promise<void> {
+  async addToCache(module: string, data: unknown): Promise<void> {
     await hubCache.addEntry({
       module,
       data,

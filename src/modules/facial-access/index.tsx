@@ -80,16 +80,15 @@ export default function FacialAccess() {
         return;
       }
 
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Supabase access_logs mapping
-      const mapped: AccessLog[] = (data || []).map((r: any) => ({
+      const mapped: AccessLog[] = (data || []).map((r) => ({
         id: r.id,
         userId: r.user_id || "—",
         userName: r.user_agent?.split("/")[0] || r.action || "Usuário",
         area: r.module_accessed || "—",
         timestamp: new Date(r.timestamp || r.created_at),
-        status: r.result === "success" ? "granted" : r.result === "denied" ? "denied" : "pending",
-        method: r.action?.includes("facial") ? "facial" : r.action?.includes("card") ? "card" : "pin",
-        confidence: r.details?.confidence,
+        status: r.result === "success" ? "granted" as const : r.result === "denied" ? "denied" as const : "pending" as const,
+        method: r.action?.includes("facial") ? "facial" as const : r.action?.includes("card") ? "card" as const : "pin" as const,
+        confidence: (r.details as Record<string, unknown> | null)?.confidence as number | undefined,
       }));
 
       setAccessLogs(mapped);

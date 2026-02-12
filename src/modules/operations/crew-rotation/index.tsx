@@ -156,8 +156,7 @@ export default function CrewRotationModule() {
     };
   };
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- rotation form data shape
-  const detectConflicts = (rotation: any): RotationConflict[] => {
+  const detectConflicts = (rotation: { crew_member_id: string; vessel_id?: string; start_date: string; end_date: string }): RotationConflict[] => {
     const conflicts: RotationConflict[] = [];
 
     // Check for overlapping rotations
@@ -253,8 +252,7 @@ export default function CrewRotationModule() {
     }
   };
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- rotation form data
-  const sendRotationNotification = async (type: string, rotation: any) => {
+  const sendRotationNotification = async (type: string, rotation: { crew_member_id: string; start_date: string }) => {
     try {
       await supabase.from("notifications").insert({
         user_id: rotation.crew_member_id,
