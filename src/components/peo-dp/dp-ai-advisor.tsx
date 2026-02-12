@@ -322,8 +322,8 @@ export const DPAIAdvisor: React.FC = () => {
                               <div className="mt-2 pt-2 border-t border-border/50">
                                 <p className="text-xs text-muted-foreground mb-1">Referências:</p>
                                 <div className="flex flex-wrap gap-1">
-                                  {message.references.map((ref, i) => (
-                                    <Badge key={i} variant="outline" className="text-xs">{ref}</Badge>
+                                  {message.references.map((ref) => (
+                                    <Badge key={ref} variant="outline" className="text-xs">{ref}</Badge>
                                   ))}
                                 </div>
                               </div>
@@ -331,7 +331,7 @@ export const DPAIAdvisor: React.FC = () => {
                             {message.role === "assistant" && message.id !== "welcome" && (
                               <div className="flex items-center gap-2 mt-2 pt-2 border-t border-border/50">
                                 <Button size="sm" variant="ghost" className="h-6 px-2" onClick={() => handleRating(message.id, "positive")}>
-                                  <ThumbsUp className={`h-3 w-3 ${message.rating === "positive" ? "text-green-500 fill-green-500" : ""}`} />
+                                  <ThumbsUp className={`h-3 w-3 ${message.rating === "positive" ? "text-success fill-success" : ""}`} />
                                 </Button>
                                 <Button size="sm" variant="ghost" className="h-6 px-2" onClick={() => handleRating(message.id, "negative")}>
                                   <ThumbsDown className={`h-3 w-3 ${message.rating === "negative" ? "text-red-500 fill-red-500" : ""}`} />

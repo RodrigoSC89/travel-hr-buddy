@@ -356,13 +356,13 @@ export function ProductionChecklist() {
   const getStatusIcon = (status: CheckItem['status']) => {
     switch (status) {
       case 'passed':
-        return <CheckCircle2 className="w-5 h-5 text-green-500" />;
+        return <CheckCircle2 className="w-5 h-5 text-success" />;
       case 'failed':
-        return <XCircle className="w-5 h-5 text-red-500" />;
+        return <XCircle className="w-5 h-5 text-destructive" />;
       case 'warning':
-        return <AlertTriangle className="w-5 h-5 text-yellow-500" />;
+        return <AlertTriangle className="w-5 h-5 text-warning" />;
       case 'manual':
-        return <Clock className="w-5 h-5 text-blue-500" />;
+        return <Clock className="w-5 h-5 text-info" />;
       default:
         return <Clock className="w-5 h-5 text-muted-foreground" />;
     }
@@ -371,11 +371,11 @@ export function ProductionChecklist() {
   const getStatusBadge = (status: CheckItem['status']) => {
     switch (status) {
       case 'passed':
-        return <Badge className="bg-green-500">Passou</Badge>;
+        return <Badge className="bg-success text-success-foreground">Passou</Badge>;
       case 'failed':
         return <Badge variant="destructive">Falhou</Badge>;
       case 'warning':
-        return <Badge className="bg-yellow-500">Atenção</Badge>;
+        return <Badge className="bg-warning text-warning-foreground">Atenção</Badge>;
       case 'manual':
         return <Badge variant="outline">Manual</Badge>;
       default:
@@ -425,12 +425,12 @@ export function ProductionChecklist() {
           <Progress value={progress} className="h-3" />
           
           <div className="flex flex-wrap gap-2">
-            <Badge className="bg-green-500">{passedItems} Passou</Badge>
+            <Badge className="bg-success text-success-foreground">{passedItems} Passou</Badge>
             {failedItems > 0 && (
               <Badge variant="destructive">{failedItems} Falhou</Badge>
             )}
             {warningItems > 0 && (
-              <Badge className="bg-yellow-500">{warningItems} Atenção</Badge>
+              <Badge className="bg-warning text-warning-foreground">{warningItems} Atenção</Badge>
             )}
             {manualItems > 0 && (
               <Badge variant="outline">{manualItems} Manual</Badge>
@@ -443,15 +443,15 @@ export function ProductionChecklist() {
           className={cn(
             "p-4 rounded-lg border-2",
             isReadyForProduction
-              ? "border-green-500 bg-green-50 dark:bg-green-900/20"
-              : "border-yellow-500 bg-yellow-50 dark:bg-yellow-900/20"
+              ? "border-success bg-success/10"
+              : "border-warning bg-warning/10"
           )}
         >
           <div className="flex items-center gap-3">
             {isReadyForProduction ? (
-              <CheckCircle2 className="w-8 h-8 text-green-500" />
+              <CheckCircle2 className="w-8 h-8 text-success" />
             ) : (
-              <AlertTriangle className="w-8 h-8 text-yellow-500" />
+              <AlertTriangle className="w-8 h-8 text-warning" />
             )}
             <div>
               <p className="font-semibold">

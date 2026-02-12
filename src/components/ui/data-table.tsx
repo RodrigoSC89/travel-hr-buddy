@@ -350,9 +350,9 @@ export function DataTable<T extends Record<string, any>>({
                               </Button>
                             </DropdownMenuTrigger>
                             <DropdownMenuContent align="end">
-                              {actions.custom.map((customAction, idx) => (
+                              {actions.custom.map((customAction) => (
                                 <DropdownMenuItem
-                                  key={idx}
+                                  key={customAction.label}
                                   onClick={(e) => {
                                     e.stopPropagation();
                                     customAction.action(row);

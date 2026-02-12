@@ -59,17 +59,17 @@ export function NotificationsPanel({
 
   const getIcon = (type: string) => {
     switch (type) {
-      case "critical": return <AlertOctagon className="h-4 w-4 text-red-500" />;
-      case "warning": return <AlertTriangle className="h-4 w-4 text-yellow-500" />;
-      default: return <Info className="h-4 w-4 text-blue-500" />;
+      case "critical": return <AlertOctagon className="h-4 w-4 text-destructive" />;
+      case "warning": return <AlertTriangle className="h-4 w-4 text-warning" />;
+      default: return <Info className="h-4 w-4 text-info" />;
     }
   };
 
   const getStyle = (type: string) => {
     switch (type) {
-      case "critical": return "border-l-red-500 bg-red-50/50 dark:bg-red-950/20";
-      case "warning": return "border-l-yellow-500 bg-yellow-50/50 dark:bg-yellow-950/20";
-      default: return "border-l-blue-500 bg-blue-50/50 dark:bg-blue-950/20";
+      case "critical": return "border-l-destructive bg-destructive/5";
+      case "warning": return "border-l-warning bg-warning/5";
+      default: return "border-l-info bg-info/5";
     }
   };
 
@@ -84,9 +84,9 @@ export function NotificationsPanel({
         <div className="flex items-center justify-between">
           <CardTitle className="flex items-center gap-2">
             <div className="relative">
-              <Bell className="h-5 w-5 text-orange-500" />
+              <Bell className="h-5 w-5 text-warning" />
               {unreadCount > 0 && (
-                <span className="absolute -top-1 -right-1 h-4 w-4 bg-red-500 rounded-full text-[10px] text-white flex items-center justify-center">
+                <span className="absolute -top-1 -right-1 h-4 w-4 bg-destructive rounded-full text-[10px] text-destructive-foreground flex items-center justify-center">
                   {unreadCount}
                 </span>
               )}

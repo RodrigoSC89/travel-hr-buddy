@@ -35,12 +35,12 @@ interface FlightInfo {
 }
 
 const statusColors: Record<string, string> = {
-  "Scheduled": "bg-gray-500",
-  "Departed": "bg-green-500",
-  "En Route": "bg-blue-500",
-  "Landed": "bg-purple-500",
-  "Delayed": "bg-orange-500",
-  "Cancelled": "bg-red-500",
+  "Scheduled": "bg-muted",
+  "Departed": "bg-success",
+  "En Route": "bg-info",
+  "Landed": "bg-accent",
+  "Delayed": "bg-warning",
+  "Cancelled": "bg-destructive",
 };
 
 const statusLabels: Record<string, string> = {

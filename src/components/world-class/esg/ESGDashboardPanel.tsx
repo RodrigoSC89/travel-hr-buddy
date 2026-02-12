@@ -153,10 +153,10 @@ export function ESGDashboardPanel() {
                 </CardTitle>
               </CardHeader>
               <CardContent className="space-y-3">
-                {carbonFootprint.topEmitters.length > 0 ? carbonFootprint.topEmitters.map((e, i) => (
-                  <div key={i} className="flex items-center justify-between">
+                {carbonFootprint.topEmitters.length > 0 ? carbonFootprint.topEmitters.map((e, eIdx) => (
+                  <div key={e.vessel} className="flex items-center justify-between">
                     <div className="flex items-center gap-2">
-                      <span className="text-xs font-bold text-muted-foreground w-5">#{i + 1}</span>
+                      <span className="text-xs font-bold text-muted-foreground w-5">#{eIdx + 1}</span>
                       <span className="text-sm font-medium">{e.vessel}</span>
                     </div>
                     <div className="flex items-center gap-2">
@@ -192,8 +192,8 @@ export function ESGDashboardPanel() {
         <TabsContent value="compliance" className="mt-4">
           <Card>
             <CardContent className="pt-6 space-y-3">
-              {complianceStatuses.map((cs, i) => (
-                <div key={i} className="flex items-center justify-between p-3 rounded-lg bg-muted/30 border border-border/50">
+              {complianceStatuses.map((cs) => (
+                <div key={cs.regulation} className="flex items-center justify-between p-3 rounded-lg bg-muted/30 border border-border/50">
                   <div className="flex items-center gap-3">
                     {cs.status === 'compliant' ? (
                       <ShieldCheck className="h-5 w-5 text-success" />
@@ -231,8 +231,8 @@ export function ESGDashboardPanel() {
                 <CardTitle className="text-sm font-semibold">Tendência Mensal CO₂</CardTitle>
               </CardHeader>
               <CardContent className="space-y-2">
-                {carbonFootprint.monthlyTrend.map((m, i) => (
-                  <div key={i} className="flex items-center gap-3">
+                {carbonFootprint.monthlyTrend.map((m) => (
+                  <div key={m.month} className="flex items-center gap-3">
                     <span className="text-xs font-medium w-8">{m.month}</span>
                     <div className="flex-1">
                       <Progress value={Math.min((m.co2 / Math.max(m.target * 1.5, 1)) * 100, 100)} className="h-2" />

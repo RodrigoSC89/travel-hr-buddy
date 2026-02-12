@@ -22,9 +22,9 @@ export default function AdvancedSearch() {
 
   const getIcon = (type: string) => {
     switch (type) {
-      case "document": return <FileText className="h-5 w-5 text-blue-500" />;
-      case "vessel": return <Ship className="h-5 w-5 text-green-500" />;
-      case "crew": return <Users className="h-5 w-5 text-purple-500" />;
+      case "document": return <FileText className="h-5 w-5 text-info" />;
+      case "vessel": return <Ship className="h-5 w-5 text-success" />;
+      case "crew": return <Users className="h-5 w-5 text-accent-foreground" />;
       default: return <FileText className="h-5 w-5 text-muted-foreground" />;
     }
   };

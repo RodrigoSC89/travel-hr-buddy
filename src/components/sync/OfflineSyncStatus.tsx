@@ -152,9 +152,9 @@ export function OfflineSyncStatus({ className }: OfflineSyncStatusProps) {
           )}
 
           {pendingChanges > 0 && !isSyncing && (
-            <div className="flex items-center justify-between p-2 rounded-lg bg-yellow-500/10 border border-yellow-500/20">
+            <div className="flex items-center justify-between p-2 rounded-lg bg-warning/10 border border-warning/20">
               <div className="flex items-center gap-2">
-                <AlertTriangle className="h-4 w-4 text-yellow-500" />
+                <AlertTriangle className="h-4 w-4 text-warning" />
                 <span className="text-sm">
                   {pendingChanges} alteração(ões) pendente(s)
                 </span>
@@ -164,7 +164,7 @@ export function OfflineSyncStatus({ className }: OfflineSyncStatusProps) {
 
           {lastSync && (
             <div className="flex items-center gap-2 text-sm text-muted-foreground">
-              <CheckCircle2 className="h-4 w-4 text-green-500" />
+              <CheckCircle2 className="h-4 w-4 text-success" />
               Última sync: {lastSync.toLocaleTimeString()}
             </div>
           )}
