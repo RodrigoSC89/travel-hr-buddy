@@ -237,7 +237,7 @@ export default function BackupsPage() {
               </CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold text-green-600">
+              <div className="text-2xl font-bold text-success">
                 {stats.completed_backups}
               </div>
             </CardContent>
@@ -314,7 +314,7 @@ export default function BackupsPage() {
                         <span>{backup.tables_included?.length || 0} tables</span>
                       </div>
                       {backup.error_message && (
-                        <div className="text-red-600 text-xs">{backup.error_message}</div>
+                        <div className="text-destructive text-xs">{backup.error_message}</div>
                       )}
                     </div>
                   </div>

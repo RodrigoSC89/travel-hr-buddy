@@ -44,30 +44,30 @@ export default function MMITasksPage() {
   const getPriorityColor = (priority: string) => {
     switch (priority) {
     case "critical":
-      return "bg-red-500/10 text-red-500 border-red-500/20";
+      return "bg-destructive/10 text-destructive border-destructive/20";
     case "high":
-      return "bg-orange-500/10 text-orange-500 border-orange-500/20";
+      return "bg-warning/10 text-warning border-warning/20";
     case "medium":
-      return "bg-yellow-500/10 text-yellow-500 border-yellow-500/20";
+      return "bg-warning/10 text-warning border-warning/20";
     case "low":
-      return "bg-green-500/10 text-green-500 border-green-500/20";
+      return "bg-success/10 text-success border-success/20";
     default:
-      return "bg-gray-500/10 text-gray-500 border-gray-500/20";
+      return "bg-muted/10 text-muted-foreground border-muted/20";
     }
   };
 
   const getStatusColor = (status: string) => {
     switch (status) {
     case "concluido":
-      return "bg-green-500/10 text-green-500 border-green-500/20";
+      return "bg-success/10 text-success border-success/20";
     case "em_andamento":
-      return "bg-blue-500/10 text-blue-500 border-blue-500/20";
+      return "bg-info/10 text-info border-info/20";
     case "pendente":
-      return "bg-yellow-500/10 text-yellow-500 border-yellow-500/20";
+      return "bg-warning/10 text-warning border-warning/20";
     case "cancelado":
-      return "bg-gray-500/10 text-gray-500 border-gray-500/20";
+      return "bg-muted/10 text-muted-foreground border-muted/20";
     default:
-      return "bg-gray-500/10 text-gray-500 border-gray-500/20";
+      return "bg-muted/10 text-muted-foreground border-muted/20";
     }
   };
 

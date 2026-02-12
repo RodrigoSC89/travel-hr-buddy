@@ -205,9 +205,9 @@ export function TrackingCommandCenter() {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-muted-foreground">Em Navegação</p>
-                <p className="text-2xl font-bold text-green-600">{stats.underway}</p>
+                <p className="text-2xl font-bold text-success">{stats.underway}</p>
               </div>
-              <Navigation className="h-8 w-8 text-green-600" />
+              <Navigation className="h-8 w-8 text-success" />
             </div>
           </CardContent>
         </Card>
@@ -216,9 +216,9 @@ export function TrackingCommandCenter() {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-muted-foreground">Fundeados</p>
-                <p className="text-2xl font-bold text-amber-600">{stats.atAnchor}</p>
+                <p className="text-2xl font-bold text-warning">{stats.atAnchor}</p>
               </div>
-              <Anchor className="h-8 w-8 text-amber-600" />
+              <Anchor className="h-8 w-8 text-warning" />
             </div>
           </CardContent>
         </Card>
@@ -227,9 +227,9 @@ export function TrackingCommandCenter() {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-muted-foreground">Atracados</p>
-                <p className="text-2xl font-bold text-blue-600">{stats.moored}</p>
+                <p className="text-2xl font-bold text-info">{stats.moored}</p>
               </div>
-              <MapPin className="h-8 w-8 text-blue-600" />
+              <MapPin className="h-8 w-8 text-info" />
             </div>
           </CardContent>
         </Card>

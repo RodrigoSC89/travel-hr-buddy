@@ -62,11 +62,11 @@ export default function AIAgentsDashboard() {
     <div className="space-y-6">
       {/* KPIs */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-        <Card className="bg-gradient-to-br from-green-500/10 to-green-600/5 border-green-500/20">
+        <Card className="bg-gradient-to-br from-success/10 to-success/5 border-success/20">
           <CardContent className="p-4">
             <div className="flex items-center gap-3">
-              <div className="p-2 bg-green-500/20 rounded-lg">
-                <Bot className="h-5 w-5 text-green-500" />
+              <div className="p-2 bg-success/20 rounded-lg">
+                <Bot className="h-5 w-5 text-success" />
               </div>
               <div>
                 <p className="text-2xl font-bold">{activeAgents}/{agents.length}</p>
@@ -75,11 +75,11 @@ export default function AIAgentsDashboard() {
             </div>
           </CardContent>
         </Card>
-        <Card className="bg-gradient-to-br from-blue-500/10 to-blue-600/5 border-blue-500/20">
+        <Card className="bg-gradient-to-br from-info/10 to-info/5 border-info/20">
           <CardContent className="p-4">
             <div className="flex items-center gap-3">
-              <div className="p-2 bg-blue-500/20 rounded-lg">
-                <Zap className="h-5 w-5 text-blue-500" />
+              <div className="p-2 bg-info/20 rounded-lg">
+                <Zap className="h-5 w-5 text-info" />
               </div>
               <div>
                 <p className="text-2xl font-bold">{decisions.length}</p>
@@ -88,11 +88,11 @@ export default function AIAgentsDashboard() {
             </div>
           </CardContent>
         </Card>
-        <Card className="bg-gradient-to-br from-purple-500/10 to-purple-600/5 border-purple-500/20">
+        <Card className="bg-gradient-to-br from-accent/10 to-accent/5 border-accent/20">
           <CardContent className="p-4">
             <div className="flex items-center gap-3">
-              <div className="p-2 bg-purple-500/20 rounded-lg">
-                <Brain className="h-5 w-5 text-purple-500" />
+              <div className="p-2 bg-accent/20 rounded-lg">
+                <Brain className="h-5 w-5 text-accent-foreground" />
               </div>
               <div>
                 <p className="text-2xl font-bold">{metrics.avgConfidence}%</p>
@@ -101,11 +101,11 @@ export default function AIAgentsDashboard() {
             </div>
           </CardContent>
         </Card>
-        <Card className="bg-gradient-to-br from-yellow-500/10 to-yellow-600/5 border-yellow-500/20">
+        <Card className="bg-gradient-to-br from-warning/10 to-warning/5 border-warning/20">
           <CardContent className="p-4">
             <div className="flex items-center gap-3">
-              <div className="p-2 bg-yellow-500/20 rounded-lg">
-                <Clock className="h-5 w-5 text-yellow-500" />
+              <div className="p-2 bg-warning/20 rounded-lg">
+                <Clock className="h-5 w-5 text-warning" />
               </div>
               <div>
                 <p className="text-2xl font-bold">{pendingDecisions.length}</p>
@@ -152,13 +152,13 @@ export default function AIAgentsDashboard() {
                           <div className="flex items-center gap-2">
                             <div className={cn(
                               "p-2 rounded-lg",
-                              agent.status === "active" || agent.status === "online" ? "bg-green-500/10" :
-                              agent.status === "error" ? "bg-red-500/10" : "bg-muted"
+                              agent.status === "active" || agent.status === "online" ? "bg-success/10" :
+                              agent.status === "error" ? "bg-destructive/10" : "bg-muted"
                             )}>
                               <Bot className={cn(
                                 "h-4 w-4",
-                                agent.status === "active" || agent.status === "online" ? "text-green-500" :
-                                agent.status === "error" ? "text-red-500" : "text-muted-foreground"
+                                agent.status === "active" || agent.status === "online" ? "text-success" :
+                                agent.status === "error" ? "text-destructive" : "text-muted-foreground"
                               )} />
                             </div>
                             <div>

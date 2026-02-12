@@ -21,11 +21,11 @@ interface SecurityFinding {
 }
 
 const severityColors = {
-  critical: "bg-red-600",
-  high: "bg-orange-500",
-  medium: "bg-yellow-500",
-  low: "bg-blue-500",
-  info: "bg-gray-500",
+  critical: "bg-destructive",
+  high: "bg-warning",
+  medium: "bg-warning",
+  low: "bg-info",
+  info: "bg-muted",
 };
 
 const statusIcons = {
@@ -107,25 +107,25 @@ export default function SecurityScanner() {
             </div>
           </CardContent>
         </Card>
-        <Card className={openCount > 0 ? "border-orange-500/50" : ""}>
+        <Card className={openCount > 0 ? "border-warning/50" : ""}>
           <CardContent className="pt-6">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-muted-foreground">Em Aberto</p>
-                <p className="text-3xl font-bold text-orange-500">{openCount}</p>
+                <p className="text-3xl font-bold text-warning">{openCount}</p>
               </div>
-              <AlertTriangle className="h-8 w-8 text-orange-500" />
+              <AlertTriangle className="h-8 w-8 text-warning" />
             </div>
           </CardContent>
         </Card>
-        <Card className={criticalCount > 0 ? "border-red-500/50" : ""}>
+        <Card className={criticalCount > 0 ? "border-destructive/50" : ""}>
           <CardContent className="pt-6">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-muted-foreground">Críticos</p>
-                <p className="text-3xl font-bold text-red-500">{criticalCount}</p>
+                <p className="text-3xl font-bold text-destructive">{criticalCount}</p>
               </div>
-              <XCircle className="h-8 w-8 text-red-500" />
+              <XCircle className="h-8 w-8 text-destructive" />
             </div>
           </CardContent>
         </Card>
@@ -134,11 +134,11 @@ export default function SecurityScanner() {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-muted-foreground">Corrigidos</p>
-                <p className="text-3xl font-bold text-green-500">
+                <p className="text-3xl font-bold text-success">
                   {findings.filter(f => f.status === "fixed").length}
                 </p>
               </div>
-              <CheckCircle className="h-8 w-8 text-green-500" />
+              <CheckCircle className="h-8 w-8 text-success" />
             </div>
           </CardContent>
         </Card>
@@ -180,7 +180,7 @@ export default function SecurityScanner() {
                   finding.status === "fixed" ? "opacity-60" : ""
                 } ${
                   finding.severity === "critical" && finding.status === "open" 
-                    ? "border-red-500/50 bg-red-500/5" 
+                    ? "border-destructive/50 bg-destructive/5" 
                     : "bg-muted/30"
                 }`}
               >
@@ -198,8 +198,8 @@ export default function SecurityScanner() {
                   </div>
                   <div className="flex items-center gap-2">
                     <StatusIcon className={`h-5 w-5 ${
-                      finding.status === "open" ? "text-orange-500" :
-                      finding.status === "fixed" ? "text-green-500" : "text-gray-500"
+                      finding.status === "open" ? "text-warning" :
+                      finding.status === "fixed" ? "text-success" : "text-muted-foreground"
                     }`} />
                     {finding.status === "open" && (
                       <Button 
