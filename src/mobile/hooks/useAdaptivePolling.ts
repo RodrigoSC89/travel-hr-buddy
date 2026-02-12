@@ -95,7 +95,7 @@ export const useAdaptivePolling = (config: AdaptivePollingConfig) => {
     // Battery-aware adjustment
     if (batteryAware && "getBattery" in navigator) {
       try {
-        const battery = await (navigator as any).getBattery();
+        const battery = await (navigator as unknown as { getBattery: () => Promise<{ level: number; charging: boolean }> }).getBattery();
         if (battery.level < 0.2 && !battery.charging) {
           // Low battery: reduce polling frequency
           interval = Math.min(interval * 2, maxInterval);

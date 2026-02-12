@@ -253,7 +253,7 @@ class EnhancedSonarAIService {
       return [];
     }
 
-    return (data || []).map((row: any) => ({
+    return (data || []).map((row: Record<string, unknown>) => ({
       id: row.id,
       vessel_id: row.vessel_id,
       event_type: row.event_type,
@@ -293,7 +293,7 @@ class EnhancedSonarAIService {
       return [];
     }
 
-    return (data || []).map((row: any) => ({
+    return (data || []).map((row: Record<string, unknown>) => ({
       id: row.id,
       event_id: row.event_id,
       vessel_id: row.vessel_id,
@@ -316,8 +316,7 @@ class EnhancedSonarAIService {
     status: SonarRisk["status"],
     resolutionNotes?: string
   ): Promise<boolean> {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any -- dynamic update fields
-    const update: any = { status };
+    const update: Record<string, unknown> = { status };
     
     if (status === "acknowledged") {
       update.acknowledged_at = new Date().toISOString();
@@ -368,9 +367,11 @@ class EnhancedSonarAIService {
     const byLevel: Record<string, number> = {};
     const byType: Record<string, number> = {};
 
-    (data || []).forEach((risk: any) => {
-      byLevel[risk.risk_level] = (byLevel[risk.risk_level] || 0) + 1;
-      byType[risk.risk_type] = (byType[risk.risk_type] || 0) + 1;
+    (data || []).forEach((risk: { risk_level?: string; risk_type?: string }) => {
+      const level = String(risk.risk_level || "unknown");
+      const type = String(risk.risk_type || "unknown");
+      byLevel[level] = (byLevel[level] || 0) + 1;
+      byType[type] = (byType[type] || 0) + 1;
     });
 
     return {

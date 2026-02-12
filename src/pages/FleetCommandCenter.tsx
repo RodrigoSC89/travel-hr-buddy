@@ -76,8 +76,27 @@ const KPICard = ({ title, value, suffix = "", icon: Icon, color, change, trend, 
   </motion.div>
 );
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- vessel shape from enriched dynamic Supabase query with computed fields
-const VesselCard = ({ vessel, onClick }: { vessel: any; onClick: () => void }) => {
+interface EnrichedVessel {
+  id: string;
+  name: string;
+  vessel_type?: string | null;
+  status: string;
+  imo_number?: string | null;
+  flag_state?: string | null;
+  speed?: number;
+  fuel?: number;
+  efficiency?: number;
+  crew_count?: number;
+  course?: number;
+  current_speed?: number | null;
+  current_fuel_level?: number | null;
+  crew?: number | null;
+  current_location?: string | null;
+  location?: string | null;
+  [key: string]: unknown;
+}
+
+const VesselCard = ({ vessel, onClick }: { vessel: EnrichedVessel; onClick: () => void }) => {
   const statusConfig: Record<string, { color: string; label: string; variant: "default" | "secondary" | "outline" | "destructive" }> = {
     operational: { color: "bg-success", label: "Operacional", variant: "default" },
     active: { color: "bg-success", label: "Ativa", variant: "default" },
@@ -164,13 +183,13 @@ const VesselCard = ({ vessel, onClick }: { vessel: any; onClick: () => void }) =
 import { FleetMapBox } from "@/components/fleet/FleetMapBox";
 
 // Tracking Map Panel - Uses the real Mapbox component
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- FleetMapBox props are dynamic
-const TrackingMapPanel = ({ vessels, onSelectVessel, selectedVessel }: any) => {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- FleetMapBox expects VesselPosition[], we pass enriched vessels
+const TrackingMapPanel = ({ vessels, onSelectVessel, selectedVessel }: { vessels: EnrichedVessel[]; onSelectVessel: (v: EnrichedVessel) => void; selectedVessel?: EnrichedVessel | null }) => {
   return (
     <FleetMapBox 
-      vessels={vessels}
-      onSelectVessel={onSelectVessel}
-      selectedVessel={selectedVessel}
+      vessels={vessels as any}
+      onSelectVessel={onSelectVessel as any}
+      selectedVessel={selectedVessel as any}
       height="600px"
       showList={true}
     />
@@ -178,8 +197,7 @@ const TrackingMapPanel = ({ vessels, onSelectVessel, selectedVessel }: any) => {
 };
 
 // AI Copilot Component
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- vessel shape from enriched dynamic query
-const FleetAICopilot = ({ vessels, onToast }: { vessels: any[]; onToast: (opts: { title: string; description?: string }) => void }) => {
+const FleetAICopilot = ({ vessels, onToast }: { vessels: EnrichedVessel[]; onToast: (opts: { title: string; description?: string }) => void }) => {
   const [query, setQuery] = useState("");
   const [thinking, setThinking] = useState(false);
 
@@ -316,16 +334,18 @@ export default function FleetCommandCenter() {
         .limit(50);
       
       // Enriquecer dados com campos de telemetria (fallback para simulados se não houver)
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any -- dynamic enrichment of Supabase vessel rows
-      const enrichedVessels = (vesselsData || []).map((v: any, idx: number) => {
-        const nameHash = (v.name || "v").split("").reduce((a: number, c: string) => a + c.charCodeAt(0), 0);
+      const enrichedVessels: EnrichedVessel[] = (vesselsData || []).map((v, idx: number) => {
+        const nameHash = String(v.name || "v").split("").reduce((a: number, c: string) => a + c.charCodeAt(0), 0);
         return {
           ...v,
-          speed: v.current_speed ?? (nameHash % 20),
-          fuel: v.current_fuel_level ?? (70 + nameHash % 30),
-          efficiency: v.efficiency ?? (85 + nameHash % 15),
-          crew_count: v.crew ?? (15 + nameHash % 15),
-          course: v.course ?? (nameHash * 7 % 360)
+          id: v.id,
+          name: v.name || `Vessel ${idx}`,
+          status: v.status || "operational",
+          speed: (v as Record<string, unknown>).current_speed as number ?? (nameHash % 20),
+          fuel: (v as Record<string, unknown>).current_fuel_level as number ?? (70 + nameHash % 30),
+          efficiency: (v as Record<string, unknown>).efficiency as number ?? (85 + nameHash % 15),
+          crew_count: (v as Record<string, unknown>).crew as number ?? (15 + nameHash % 15),
+          course: (v as Record<string, unknown>).course as number ?? (nameHash * 7 % 360)
         };
       });
       setVessels(enrichedVessels);
@@ -374,7 +394,7 @@ export default function FleetCommandCenter() {
       if (vesselsData && vesselsData.length > 0) {
         const operational = vesselsData.filter(v => v.status === "active" || v.status === "operational").length;
         const total = vesselsData.length;
-        const efficiencyAvg = enrichedVessels.reduce((acc, v) => acc + v.efficiency, 0) / total;
+        const efficiencyAvg = enrichedVessels.reduce((acc, v) => acc + (v.efficiency || 0), 0) / total;
         
         // Fetch safety incidents for safety score
         const { count: totalIncidents } = await supabase
@@ -581,13 +601,12 @@ export default function FleetCommandCenter() {
             <CardContent>
               {maintenance.length > 0 ? (
                 <div className="space-y-3">
-                  {/* eslint-disable-next-line @typescript-eslint/no-explicit-any -- dynamic maintenance row */}
-                  {maintenance.slice(0, 10).map((m: any) => (
+                  {maintenance.slice(0, 10).map((m: { id: string; description?: string; scheduled_date?: string; status?: string }) => (
                     <div key={m.id} className="flex items-center justify-between p-3 border rounded-lg">
                       <div>
                         <p className="font-medium">{m.description || "Manutenção Programada"}</p>
                         <p className="text-sm text-muted-foreground">
-                          {new Date(m.scheduled_date).toLocaleDateString("pt-BR")}
+                          {new Date(m.scheduled_date || Date.now()).toLocaleDateString("pt-BR")}
                         </p>
                       </div>
                       <Badge variant={m.status === "completed" ? "default" : "outline"}>

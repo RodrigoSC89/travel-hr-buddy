@@ -323,14 +323,12 @@ const AnalyticsCoreProfessional: React.FC = () => {
         .limit(100);
 
       if (events && events.length > 0) {
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any -- dynamic aggregation shape
-        const monthlyData = events.reduce((acc: Record<string, any>, event: any) => {
-          const month = new Date(event.created_at).toLocaleString('pt-BR', { month: 'short' });
+        const monthlyData = events.reduce((acc: Record<string, { month: string; receita: number; custos: number; lucro: number }>, event) => {
+          const month = new Date(event.created_at || Date.now()).toLocaleString('pt-BR', { month: 'short' });
           if (!acc[month]) {
             acc[month] = { month, receita: 0, custos: 0, lucro: 0 };
           }
-          // eslint-disable-next-line @typescript-eslint/no-explicit-any -- dynamic event value
-          const eventValue = Number((event as any).value) || 1;
+          const eventValue = Number((event as Record<string, unknown>).value) || 1;
           acc[month].receita += eventValue * 100;
           acc[month].custos += eventValue * 60;
           acc[month].lucro = acc[month].receita - acc[month].custos;

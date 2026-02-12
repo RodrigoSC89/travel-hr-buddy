@@ -119,16 +119,14 @@ export function useTrackingTelemetryData() {
           .select("id, provider")
           .in("id", linkIds);
 
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any -- satcom_links columns may vary
-        (links || []).forEach((l: any) => {
+        (links || []).forEach((l) => {
           linkMap[l.id] = l.provider || "SATCOM";
         });
       }
 
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any -- satellite_connections mapping
-      return data.map((s: any) => ({
+      return data.map((s) => ({
         id: s.id,
-        name: linkMap[s.link_id] || "SATCOM Link",
+        name: linkMap[s.link_id || ""] || "SATCOM Link",
         status: s.is_connected ? "connected" : "disconnected",
         signal_quality: s.signal_quality,
         latency_ms: s.latency_ms || 0,
@@ -194,8 +192,7 @@ export function useTrackingTelemetryData() {
   const telemetryMetrics = {
     trackedVessels: vessels.length,
     activeConnections: satellites.filter((s) => s.status === "connected" || s.status === "active").length,
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any -- sensor_readings schema may vary
-    totalSensors: new Set(sensorReadings.map((s: any) => s.sensor_type)).size,
+    totalSensors: new Set(sensorReadings.map((s) => s.sensor_id)).size,
     unacknowledgedAlerts: alerts.filter((a) => !a.acknowledged).length,
     criticalAlerts: alerts.filter((a) => a.severity === "critical" && !a.acknowledged).length,
     avgLatency: satellites.length > 0 
@@ -223,7 +220,7 @@ export function useTrackingTelemetryData() {
 
   // Get sensor data by type
   const getSensorsByType = (type: string) => {
-    return sensorReadings.filter((s: any) => s.sensor_type === type);
+    return sensorReadings.filter((s) => s.sensor_id === type);
   };
 
   return {

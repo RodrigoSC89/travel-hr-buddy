@@ -439,5 +439,5 @@ export function useAPMTransaction(name: string, type: APMTransaction['type'] = '
 
 // Export for global access
 if (typeof window !== 'undefined') {
-  (window as any).__apm = apm;
+  (window as unknown as Record<string, unknown>).__apm = apm;
 }

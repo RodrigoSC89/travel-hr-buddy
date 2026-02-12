@@ -87,7 +87,7 @@ class LowBandwidthOptimizer {
   }
 
   private detectConnection() {
-    const connection = (navigator as any).connection;
+    const connection = (navigator as unknown as Record<string, unknown>).connection as { effectiveType?: string; downlink?: number } | undefined;
     
     if (connection) {
       this.connectionType = connection.effectiveType || '4g';
@@ -112,7 +112,7 @@ class LowBandwidthOptimizer {
   }
 
   private setupConnectionListener() {
-    const connection = (navigator as any).connection;
+    const connection = (navigator as unknown as Record<string, unknown>).connection as EventTarget & { effectiveType?: string } | undefined;
     
     if (connection) {
       connection.addEventListener('change', () => {

@@ -335,7 +335,7 @@ class BathymetryExporter {
       const cacheData = JSON.parse(cached);
       
       // Convert timestamp strings back to Date objects
-      cacheData.data.readings = cacheData.data.readings.map((r: any) => ({
+      cacheData.data.readings = cacheData.data.readings.map((r: { timestamp: string; [key: string]: unknown }) => ({
         ...r,
         timestamp: new Date(r.timestamp),
       }));

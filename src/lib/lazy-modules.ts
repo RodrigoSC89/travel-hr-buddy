@@ -141,7 +141,7 @@ export const LazyAdmin = registerModule("admin", {
  * Initialize preloading based on network conditions
  */
 export function initializePreloading(): void {
-  const connection = (navigator as any).connection;
+  const connection = (navigator as unknown as Record<string, unknown>).connection as { effectiveType?: string } | undefined;
   const effectiveType = connection?.effectiveType || "4g";
   
   // Adjust preloading based on network

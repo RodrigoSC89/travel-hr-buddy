@@ -208,7 +208,7 @@ class IncidentReplayService {
           risk_score: analysis.riskScore,
         },
       };
-      await supabase.from("system_observations").insert(insertData as any);
+      await (supabase.from as Function)("system_observations").insert(insertData);
     } catch (error) {
       logger.error("Failed to save analysis:", error);
     }

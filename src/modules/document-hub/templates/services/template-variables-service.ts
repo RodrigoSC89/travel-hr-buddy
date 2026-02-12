@@ -158,17 +158,17 @@ export class TemplateVariablesService {
     };
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Supabase row result
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Supabase row result needs flexible mapping
   private mapToVariable(data: any): TemplateVariable {
     return {
-      id: data.id,
-      templateId: data.template_id,
-      variableName: data.variable_name,
-      variableType: data.variable_type,
-      defaultValue: data.default_value,
-      isRequired: data.is_required,
-      description: data.description,
-      createdAt: data.created_at
+      id: String(data.id),
+      templateId: String(data.template_id),
+      variableName: String(data.variable_name),
+      variableType: String(data.variable_type) as TemplateVariable["variableType"],
+      defaultValue: data.default_value != null ? String(data.default_value) : undefined,
+      isRequired: Boolean(data.is_required),
+      description: data.description != null ? String(data.description) : undefined,
+      createdAt: data.created_at != null ? String(data.created_at) : undefined
     };
   }
 }
