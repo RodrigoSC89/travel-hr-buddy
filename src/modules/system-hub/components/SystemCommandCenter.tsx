@@ -413,7 +413,7 @@ export function SystemCommandCenter() {
                         </div>
                       </div>
                       <div className="flex gap-2">
-                        <Button variant="ghost" size="icon" className="h-8 w-8" onClick={() => toast.info(`Chave: ${key.name}`, { description: `Criada: ${key.created || 'N/A'} | Último uso: ${key.lastUsed}` })}>
+                        <Button variant="ghost" size="icon" className="h-8 w-8" onClick={() => toast(`Chave: ${key.name}`, { description: `Criada: ${key.created || 'N/A'} | Último uso: ${key.lastUsed}`, duration: 5000 })}>
                           <Eye className="h-4 w-4" />
                         </Button>
                         <Button variant="ghost" size="icon" className="h-8 w-8" onClick={() => toast.success(`Chave "${key.name}" regenerada`, { description: "Gerencie credenciais via Supabase Dashboard > API Settings." })}>

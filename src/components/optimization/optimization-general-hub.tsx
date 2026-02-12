@@ -221,7 +221,7 @@ export const OptimizationGeneralHub = () => {
       duration: 2000
     });
 
-    setTimeout(() => {
+    requestAnimationFrame(() => {
       setOptimizations(prev => prev.map(opt => 
         opt.id === optimizationId 
           ? { ...opt, status: "completed" }
@@ -235,7 +235,7 @@ export const OptimizationGeneralHub = () => {
         description: `${optimization.title} foi implementada com sucesso!`,
         duration: 3000
       });
-    }, 3000);
+    });
   };
 
   const getStatusIcon = (status: string) => {

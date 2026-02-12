@@ -134,20 +134,18 @@ const NauticalCopilot: React.FC = () => {
     setInputMessage("");
     setIsTyping(true);
 
-    // Simular resposta inteligente
-    setTimeout(() => {
-      const response = generateIntelligentResponse(inputMessage);
-      const assistantMessage: CopilotMessage = {
-        id: (Date.now() + 1).toString(),
-        content: response.content,
-        type: "assistant",
-        timestamp: new Date(),
-        category: response.category
-      };
+    // Generate response immediately
+    const response = generateIntelligentResponse(inputMessage);
+    const assistantMessage: CopilotMessage = {
+      id: (Date.now() + 1).toString(),
+      content: response.content,
+      type: "assistant",
+      timestamp: new Date(),
+      category: response.category
+    };
 
-      setMessages(prev => [...prev, assistantMessage]);
-      setIsTyping(false);
-    }, 1500);
+    setMessages(prev => [...prev, assistantMessage]);
+    setIsTyping(false);
   };
 
   const generateIntelligentResponse = (message: string): { content: string; category: CopilotMessage["category"] } => {

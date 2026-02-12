@@ -693,7 +693,7 @@ export const EnhancedFinanceCenter: React.FC = () => {
                         </Badge>
                       </td>
                       <td className="p-4">
-                        <Button variant="ghost" size="sm" onClick={() => toast.info(`Fatura ${inv.id}`, { description: `Fornecedor: ${inv.supplier} | Embarcação: ${inv.vessel} | Valor: R$ ${inv.amount.toLocaleString('pt-BR')} | Status: ${inv.status === 'paid' ? 'Pago' : inv.status === 'overdue' ? 'Vencido' : 'Pendente'}`, duration: 6000 })}>Ver</Button>
+                        <Button variant="ghost" size="sm" onClick={() => toast(`Fatura ${inv.id}`, { description: `Fornecedor: ${inv.supplier} | Embarcação: ${inv.vessel} | Valor: R$ ${inv.amount.toLocaleString('pt-BR')} | Status: ${inv.status === 'paid' ? 'Pago' : inv.status === 'overdue' ? 'Vencido' : 'Pendente'}`, duration: 6000 })}>Ver</Button>
                       </td>
                     </tr>
                   ))}

@@ -167,7 +167,7 @@ export const TravelAnalyticsPanel: React.FC = () => {
               <SelectItem value="12m">Últimos 12 Meses</SelectItem>
             </SelectContent>
           </Select>
-          <Button variant="outline" onClick={() => toast.info("Filtros de Analytics", { description: "Período, Departamento, Tipo de Viagem, Destino, Status de Compliance" })}>
+          <Button variant="outline" onClick={() => toast("Filtros aplicados para: " + period, { description: "Selecione o período acima para ajustar a visualização dos dados." })}>
             <Filter className="h-4 w-4 mr-2" />
             Filtros
           </Button>

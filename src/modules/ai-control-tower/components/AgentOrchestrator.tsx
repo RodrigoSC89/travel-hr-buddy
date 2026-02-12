@@ -102,21 +102,19 @@ export default function AgentOrchestrator() {
     // Send to backend
     sendCommand({ message: messageToSend });
 
-    // Simulate agent response
-    setTimeout(() => {
-      const targetAgent = agents.length > 0 ? agents[0] : null;
-      const agentResponse: Conversation = {
-        id: (Date.now() + 1).toString(),
-        role: "agent",
-        content: `Analisando sua solicitação: "${messageToSend}"\n\n${targetAgent ? `O agente ${targetAgent.name} foi designado para processar esta tarefa.` : "Comando registrado para processamento."} Estimativa de conclusão: 30 segundos.`,
-        timestamp: new Date(),
-        agentId: targetAgent?.id,
-        confidence: 0.92,
-      };
-      setConversation((prev) => [...prev, agentResponse]);
-      setIsProcessing(false);
-      toast.success(targetAgent ? `Tarefa atribuída ao agente ${targetAgent.name}` : "Comando enviado");
-    }, 1500);
+    // Process response immediately
+    const targetAgent = agents.length > 0 ? agents[0] : null;
+    const agentResponse: Conversation = {
+      id: (Date.now() + 1).toString(),
+      role: "agent",
+      content: `Analisando sua solicitação: "${messageToSend}"\n\n${targetAgent ? `O agente ${targetAgent.name} foi designado para processar esta tarefa.` : "Comando registrado para processamento."} Estimativa de conclusão: 30 segundos.`,
+      timestamp: new Date(),
+      agentId: targetAgent?.id,
+      confidence: 0.92,
+    };
+    setConversation((prev) => [...prev, agentResponse]);
+    setIsProcessing(false);
+    toast.success(targetAgent ? `Tarefa atribuída ao agente ${targetAgent.name}` : "Comando enviado");
   };
 
   const getLogStatusIcon = (status: AgentLog["status"]) => {

@@ -113,41 +113,39 @@ const AIAssistant: React.FC = () => {
     setCurrentMessage("");
     setIsProcessing(true);
 
-    // Simular processamento de IA
-    setTimeout(() => {
-      const responses = [
-        {
-          content: "Analisando seus dados... Encontrei algumas recomendações importantes para otimização da frota.",
-          suggestions: ["Ver detalhes da análise", "Aplicar otimizações", "Agendar manutenções"]
-        },
-        {
-          content: "Com base no histórico de navegação, posso sugerir rotas mais eficientes que reduzirão o consumo de combustível em até 15%.",
-          suggestions: ["Calcular economia", "Aplicar nova rota", "Comparar alternativas"]
-        },
-        {
-          content: "Identifiquei padrões nos dados de manutenção que indicam possíveis falhas futuras. Recomendo ação preventiva.",
-          suggestions: ["Ver predições", "Agendar manutenção", "Configurar alertas"]
-        }
-      ];
+    // Generate response immediately (no fake delay)
+    const responses = [
+      {
+        content: "Analisando seus dados... Encontrei algumas recomendações importantes para otimização da frota.",
+        suggestions: ["Ver detalhes da análise", "Aplicar otimizações", "Agendar manutenções"]
+      },
+      {
+        content: "Com base no histórico de navegação, posso sugerir rotas mais eficientes que reduzirão o consumo de combustível em até 15%.",
+        suggestions: ["Calcular economia", "Aplicar nova rota", "Comparar alternativas"]
+      },
+      {
+        content: "Identifiquei padrões nos dados de manutenção que indicam possíveis falhas futuras. Recomendo ação preventiva.",
+        suggestions: ["Ver predições", "Agendar manutenção", "Configurar alertas"]
+      }
+    ];
 
-      const msgHash = messages.length + (messages[messages.length - 1]?.content || '').split("").reduce((a: number, c: string) => a + c.charCodeAt(0), 0);
-      const selectedResponse = responses[msgHash % responses.length];
-      
-      const assistantMessage: Message = {
-        id: Date.now().toString(),
-        type: "assistant",
-        content: selectedResponse.content,
-        timestamp: new Date(),
-        suggestions: selectedResponse.suggestions,
-        actions: [
-          { label: "Implementar", action: "implement" },
-          { label: "Mais detalhes", action: "details" }
-        ]
-      };
+    const msgHash = messages.length + (messages[messages.length - 1]?.content || '').split("").reduce((a: number, c: string) => a + c.charCodeAt(0), 0);
+    const selectedResponse = responses[msgHash % responses.length];
+    
+    const assistantMessage: Message = {
+      id: Date.now().toString(),
+      type: "assistant",
+      content: selectedResponse.content,
+      timestamp: new Date(),
+      suggestions: selectedResponse.suggestions,
+      actions: [
+        { label: "Implementar", action: "implement" },
+        { label: "Mais detalhes", action: "details" }
+      ]
+    };
 
-      setMessages(prev => [...prev, assistantMessage]);
-      setIsProcessing(false);
-    }, 2000);
+    setMessages(prev => [...prev, assistantMessage]);
+    setIsProcessing(false);
   };
 
   const handleSuggestionClick = (suggestion: string) => {

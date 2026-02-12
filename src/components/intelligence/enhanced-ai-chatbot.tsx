@@ -224,8 +224,8 @@ const EnhancedAIChatbot: React.FC = () => {
     setInputMessage("");
     setIsProcessing(true);
 
-    // Simular processamento da IA com feedback visual
-    const timeout = setTimeout(() => {
+    // Process immediately without fake delay
+    requestAnimationFrame(() => {
       const aiResponse = generateEnhancedAIResponse(inputMessage, selectedCapability);
       const aiMessage: Message = {
         id: `ai-${Date.now()}`,
@@ -239,8 +239,7 @@ const EnhancedAIChatbot: React.FC = () => {
 
       setMessages(prev => [...prev, aiMessage]);
       setIsProcessing(false);
-    }, 2000); // Tempo de resposta fixo para estabilidade
-    timeoutsRef.current.push(timeout);
+    });
   };
 
   const generateEnhancedAIResponse = (input: string, capability: string) => {
@@ -294,21 +293,18 @@ const EnhancedAIChatbot: React.FC = () => {
 
     setIsVoiceActive(!isVoiceActive);
     if (!isVoiceActive) {
-      // Simular reconhecimento de voz
-      const timeout = setTimeout(() => {
-        const voiceCommands = [
-          "Mostrar status da frota",
-          "Gerar relatório de performance",
-          "Como está o clima para navegação?",
-          "Verificar conformidade PEOTRAM",
-          "Mostrar alertas pendentes"
-        ];
-        const randomCommand = voiceCommands[Date.now() % voiceCommands.length];
-        setInputMessage(randomCommand);
-        setSelectedCapability("voice");
-        setIsVoiceActive(false);
-      }, 3000);
-      timeoutsRef.current.push(timeout);
+      // Process voice command immediately
+      const voiceCommands = [
+        "Mostrar status da frota",
+        "Gerar relatório de performance",
+        "Como está o clima para navegação?",
+        "Verificar conformidade PEOTRAM",
+        "Mostrar alertas pendentes"
+      ];
+      const randomCommand = voiceCommands[Date.now() % voiceCommands.length];
+      setInputMessage(randomCommand);
+      setSelectedCapability("voice");
+      setIsVoiceActive(false);
     }
   };
 

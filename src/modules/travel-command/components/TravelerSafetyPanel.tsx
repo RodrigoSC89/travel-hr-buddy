@@ -382,7 +382,7 @@ export const TravelerSafetyPanel: React.FC = () => {
                   <Radio className="h-4 w-4 mr-2" />
                   Broadcast
                 </Button>
-                <Button size="sm" onClick={() => toast.info("Localização atualizada", { description: `${fallbackTravelers.length} viajantes localizados. Última atualização: agora.` })}>
+                <Button size="sm" onClick={() => { setSelectedTraveler(null); toast.success("Localização atualizada", { description: `${fallbackTravelers.length} viajantes localizados. Última atualização: ${new Date().toLocaleTimeString('pt-BR')}.` }); }}>
                   <Locate className="h-4 w-4 mr-2" />
                   Localizar Todos
                 </Button>
@@ -671,7 +671,7 @@ export const TravelerSafetyPanel: React.FC = () => {
         </CardHeader>
         <CardContent>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-            <Button variant="destructive" className="h-20 flex flex-col gap-2" onClick={() => toast.warning("⚠️ Protocolo SOS acionado", { description: "Para emergências reais, utilize canais de comunicação diretos (rádio/telefone). Alerta registrado no sistema.", duration: 8000 })}>
+            <Button variant="destructive" className="h-20 flex flex-col gap-2" onClick={() => { window.open("tel:+551199999999"); toast.warning("⚠️ Protocolo SOS — Iniciando chamada de emergência", { description: "Para emergências reais, utilize canais de comunicação diretos (rádio/telefone).", duration: 8000 }); }}>
               <AlertOctagon className="h-6 w-6" />
               <span>Acionar Protocolo SOS</span>
             </Button>

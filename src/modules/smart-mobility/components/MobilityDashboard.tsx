@@ -145,22 +145,20 @@ export default function MobilityDashboard() {
     
     setChatHistory(prev => [...prev, { role: "user", content: chatMessage }]);
     
-    // Simulated AI response
-    setTimeout(() => {
-      const responses: Record<string, string> = {
-        voo: "Seu próximo voo é LA3421 (LATAM) de GIG para MCE, partindo às 08:30 do dia 20/01. Status: No horário ✅",
-        hotel: "Sua reserva está confirmada no Hotel Macaé Business. Check-in: 20/01, Check-out: 21/01. Endereço: Av. Atlântica, 1500 - Macaé, RJ",
-        transfer: "Transfer agendado para 21/01 às 05:00. Van executiva da LogMar Transportes. O motorista entrará em contato 30min antes.",
-        default: "Entendi sua pergunta. Deixe-me verificar as informações no sistema... Para sua próxima viagem, temos voo + hotel + transfer já confirmados. Deseja mais detalhes sobre algum item específico?",
-      };
+    // Process response immediately
+    const responses: Record<string, string> = {
+      voo: "Seu próximo voo é LA3421 (LATAM) de GIG para MCE, partindo às 08:30 do dia 20/01. Status: No horário ✅",
+      hotel: "Sua reserva está confirmada no Hotel Macaé Business. Check-in: 20/01, Check-out: 21/01. Endereço: Av. Atlântica, 1500 - Macaé, RJ",
+      transfer: "Transfer agendado para 21/01 às 05:00. Van executiva da LogMar Transportes. O motorista entrará em contato 30min antes.",
+      default: "Entendi sua pergunta. Deixe-me verificar as informações no sistema... Para sua próxima viagem, temos voo + hotel + transfer já confirmados. Deseja mais detalhes sobre algum item específico?",
+    };
+    
+    const key = chatMessage.toLowerCase().includes("voo") ? "voo" 
+      : chatMessage.toLowerCase().includes("hotel") ? "hotel"
+      : chatMessage.toLowerCase().includes("transfer") ? "transfer"
+      : "default";
       
-      const key = chatMessage.toLowerCase().includes("voo") ? "voo" 
-        : chatMessage.toLowerCase().includes("hotel") ? "hotel"
-        : chatMessage.toLowerCase().includes("transfer") ? "transfer"
-        : "default";
-        
-      setChatHistory(prev => [...prev, { role: "assistant", content: responses[key] }]);
-    }, 1000);
+    setChatHistory(prev => [...prev, { role: "assistant", content: responses[key] }]);
     
     setChatMessage("");
   };

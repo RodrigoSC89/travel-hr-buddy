@@ -146,8 +146,8 @@ export const OptimizationReportsManager = () => {
       duration: 2000
     });
 
-    // Simular geração do relatório
-    setTimeout(() => {
+    // Generate report immediately
+    requestAnimationFrame(() => {
       setReports(prev => prev.map(report => 
         report.id === newReport.id 
           ? {
@@ -165,7 +165,7 @@ export const OptimizationReportsManager = () => {
         description: "Relatório gerado com sucesso e pronto para download!",
         duration: 3000
       });
-    }, 3000);
+    });
   };
 
   const exportReport = (reportId: string) => {

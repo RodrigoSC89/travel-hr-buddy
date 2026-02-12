@@ -116,10 +116,10 @@ export function ScenarioSimulator() {
 
   const runSimulation = () => {
     setIsSimulating(true);
-    setTimeout(() => {
+    requestAnimationFrame(() => {
       setIsSimulating(false);
       setShowResults(true);
-    }, 1500);
+    });
   };
 
   const resetScenario = () => {

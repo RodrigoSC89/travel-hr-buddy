@@ -16,11 +16,11 @@ export default function TrainingCreatorSection() {
   const handleGenerate = async () => {
     if (!formData.topic) { toast.error("Informe o tópico do treinamento"); return; }
     setIsGenerating(true);
-    setTimeout(() => {
+    requestAnimationFrame(() => {
       setGeneratedContent(`## Treinamento: ${formData.topic}\n\n### Objetivos\n- Compreender os requisitos de ${formData.normReference || "SOLAS"}\n- Aplicar procedimentos corretos\n- Identificar não-conformidades\n\n### Conteúdo\n1. Introdução aos requisitos\n2. Procedimentos operacionais\n3. Casos práticos\n4. Avaliação\n\n### Quiz\n1. Qual a frequência obrigatória?\n2. Quem é o responsável?\n3. Como documentar?`);
       setIsGenerating(false);
       toast.success("Treinamento gerado com sucesso!");
-    }, 2000);
+    });
   };
 
   return (

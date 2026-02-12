@@ -132,7 +132,7 @@ function MaintenanceDashboard() {
               <Calendar className="h-4 w-4" />
               Agendar Inspeção
             </Button>
-            <Button className="w-full justify-start gap-2" variant="outline" onClick={() => toast.info("Análise preditiva disponível via edge function 'predictive-maintenance-ai'. Selecione um equipamento.", { duration: 4000 })}>
+            <Button className="w-full justify-start gap-2" variant="outline" onClick={() => toast.success("Selecione um equipamento na lista para ver a análise preditiva de falhas via IA.")}>
               <Bot className="h-4 w-4" />
               Análise Preditiva com IA
             </Button>

@@ -106,16 +106,12 @@ export default function MaritimeConnectivity() {
   };
 
   const handleForceSync = (vesselId: string) => {
-    toast({ title: "Sincronizando...", description: "Forçando sincronização de dados" });
-    
-    setTimeout(() => {
-      setConnections(prev => prev.map(c => 
-        c.id === vesselId 
-          ? { ...c, pendingSync: 0, offlineData: 0, lastSync: new Date().toISOString() }
-          : c
-      ));
-      toast({ title: "Sincronizado!", description: "Dados sincronizados com sucesso" });
-    }, 2000);
+    setConnections(prev => prev.map(c => 
+      c.id === vesselId 
+        ? { ...c, pendingSync: 0, offlineData: 0, lastSync: new Date().toISOString() }
+        : c
+    ));
+    toast({ title: "Sincronizado!", description: "Dados sincronizados com sucesso" });
   };
 
   const getStatusColor = (status: string) => {
