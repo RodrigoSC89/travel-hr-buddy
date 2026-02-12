@@ -169,15 +169,15 @@ export default function CompetencyMatrix() {
     switch (status) {
       case "valid":
       case "completed":
-        return "bg-green-500";
+        return "bg-success";
       case "expiring":
       case "in-progress":
-        return "bg-yellow-500";
+        return "bg-warning";
       case "expired":
       case "overdue":
-        return "bg-red-500";
+        return "bg-destructive";
       default:
-        return "bg-slate-500";
+        return "bg-muted";
     }
   };
 
@@ -334,7 +334,7 @@ export default function CompetencyMatrix() {
                           <div className="flex items-center gap-2">
                             <p className="font-semibold truncate">{member.name}</p>
                             {hasIssues && (
-                              <AlertTriangle className="h-4 w-4 text-yellow-500 flex-shrink-0" />
+                              <AlertTriangle className="h-4 w-4 text-warning flex-shrink-0" />
                             )}
                           </div>
                           <p className="text-sm text-muted-foreground">{member.rank}</p>
@@ -352,8 +352,8 @@ export default function CompetencyMatrix() {
                           <span>Competência</span>
                           <span className={cn(
                             "font-medium",
-                            member.competencyScore >= 90 ? "text-green-500" :
-                            member.competencyScore >= 70 ? "text-yellow-500" : "text-red-500"
+                            member.competencyScore >= 90 ? "text-success" :
+                            member.competencyScore >= 70 ? "text-warning" : "text-destructive"
                           )}>{member.competencyScore}%</span>
                         </div>
                         <Progress value={member.competencyScore} className="h-2" />
@@ -430,15 +430,15 @@ export default function CompetencyMatrix() {
                                 <div className="flex items-start gap-3">
                                   <div className={cn(
                                     "p-2 rounded-lg",
-                                    cert.status === "valid" ? "bg-green-500/10" :
-                                    cert.status === "expiring" ? "bg-yellow-500/10" :
-                                    "bg-red-500/10"
+                                    cert.status === "valid" ? "bg-success/10" :
+                                    cert.status === "expiring" ? "bg-warning/10" :
+                                    "bg-destructive/10"
                                   )}>
                                     <CertIcon className={cn(
                                       "h-5 w-5",
-                                      cert.status === "valid" ? "text-green-500" :
-                                      cert.status === "expiring" ? "text-yellow-500" :
-                                      "text-red-500"
+                                      cert.status === "valid" ? "text-success" :
+                                      cert.status === "expiring" ? "text-warning" :
+                                      "text-destructive"
                                     )} />
                                   </div>
                                   <div>
@@ -462,8 +462,8 @@ export default function CompetencyMatrix() {
                                   {cert.status !== "expired" && daysUntil > 0 && (
                                     <p className={cn(
                                       "text-xs mt-1",
-                                      daysUntil <= 30 ? "text-red-500" :
-                                      daysUntil <= 90 ? "text-yellow-500" : "text-muted-foreground"
+                                      daysUntil <= 30 ? "text-destructive" :
+                                      daysUntil <= 90 ? "text-warning" : "text-muted-foreground"
                                     )}>
                                       {daysUntil} dias restantes
                                     </p>
@@ -533,10 +533,10 @@ export default function CompetencyMatrix() {
                             </div>
                             <div className="flex items-center gap-1">
                               {skill.trend === "improving" && (
-                                <TrendingUp className="h-4 w-4 text-green-500" />
+                                <TrendingUp className="h-4 w-4 text-success" />
                               )}
                               {skill.trend === "declining" && (
-                                <TrendingUp className="h-4 w-4 text-red-500 rotate-180" />
+                                <TrendingUp className="h-4 w-4 text-destructive rotate-180" />
                               )}
                             </div>
                           </div>
