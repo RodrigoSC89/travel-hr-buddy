@@ -570,10 +570,10 @@ Como posso ajudá-lo especificamente hoje?`,
                   }`}
                 >
                   <div className="prose prose-sm dark:prose-invert max-w-none">
-                    {message.content.split("\n").map((line, index) => (
-                      <div key={index}>
+                    {message.content.split("\n").map((line, lineIdx) => (
+                      <div key={`${message.id}-line-${lineIdx}`}>
                         {line}
-                        {index < message.content.split("\n").length - 1 && <br />}
+                        {lineIdx < message.content.split("\n").length - 1 && <br />}
                       </div>
                     ))}
                   </div>

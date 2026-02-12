@@ -263,8 +263,8 @@ const RealTimeAnalytics = () => {
 
       {/* Metrics Cards */}
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-        {metrics.map((metric, index) => (
-          <Card key={index} className="border-border">
+        {metrics.map((metric) => (
+          <Card key={metric.title} className="border-border">
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
               <CardTitle className="text-sm font-medium">
                 {metric.title}
@@ -418,8 +418,8 @@ const RealTimeAnalytics = () => {
 
         <TabsContent value="performance" className="space-y-4">
           <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-            {performanceData.map((item, index) => (
-              <Card key={index}>
+            {performanceData.map((item) => (
+              <Card key={item.name}>
                 <CardHeader className="pb-2">
                   <CardTitle className="text-sm font-medium">
                     {item.name}

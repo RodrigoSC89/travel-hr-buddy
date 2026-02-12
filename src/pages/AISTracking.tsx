@@ -504,9 +504,9 @@ export default function AISTracking() {
                 <ScrollArea className="h-[400px]">
                   {alerts.length > 0 ? (
                     <div className="space-y-2">
-                      {alerts.map((alert, index) => (
+                      {alerts.map((alert) => (
                         <div
-                          key={index}
+                          key={`${alert.severity}-${alert.message}`}
                           className={`p-3 border rounded-lg ${
                             alert.severity === "critical" 
                               ? "border-destructive bg-destructive/10" 

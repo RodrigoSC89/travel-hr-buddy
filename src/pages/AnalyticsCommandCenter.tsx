@@ -727,8 +727,8 @@ const AnalyticsCommandCenter: React.FC = () => {
                   <div className="space-y-2">
                     <div className="text-sm font-medium">Ações Recomendadas:</div>
                     <ul className="text-xs space-y-1">
-                      {prediction.actions.map((action, index) => (
-                        <li key={index} className="flex items-center gap-2">
+                      {prediction.actions.map((action) => (
+                        <li key={action} className="flex items-center gap-2">
                           <Check className="h-3 w-3 text-primary" />
                           {action}
                         </li>

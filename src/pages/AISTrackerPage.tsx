@@ -251,8 +251,8 @@ export default function AISTrackerPage() {
                   </tr>
                 </thead>
                 <tbody>
-                  {data.track.slice(0, 10).map((point, index) => (
-                    <tr key={index} className="border-b hover:bg-muted/50">
+                  {data.track.slice(0, 10).map((point, ptIdx) => (
+                    <tr key={`track-${ptIdx}-${point.timestamp}`} className="border-b hover:bg-muted/50">
                       <td className="py-2 px-3 font-mono text-xs">
                         {point.timestamp 
                           ? new Date(point.timestamp).toLocaleString("pt-BR")

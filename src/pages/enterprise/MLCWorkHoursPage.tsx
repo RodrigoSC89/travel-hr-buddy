@@ -292,8 +292,8 @@ export default function MLCWorkHoursPage() {
               </CardHeader>
               <CardContent>
                 <div className="space-y-4">
-                  {recentViolations.map((violation, index) => (
-                    <div key={index} className="p-4 border rounded-lg">
+                  {recentViolations.map((violation) => (
+                    <div key={`${violation.crew}-${violation.type}`} className="p-4 border rounded-lg">
                       <div className="flex items-center justify-between mb-2">
                         <p className="font-medium">{violation.crew}</p>
                         <Badge variant={violation.status === "open" ? "destructive" : "secondary"}>
@@ -333,13 +333,13 @@ export default function MLCWorkHoursPage() {
                     </tr>
                   </thead>
                   <tbody>
-                    {crewHours.map((crew, index) => (
-                      <tr key={index} className="border-b hover:bg-muted/50">
+                    {crewHours.map((crew) => (
+                      <tr key={crew.name} className="border-b hover:bg-muted/50">
                         <td className="py-3 px-4 font-medium">{crew.name}</td>
                         <td className="py-3 px-4">{crew.rank}</td>
                         <td className="py-3 px-4">{crew.vessel}</td>
                         <td className="py-3 px-4 text-center">
-                          <span className={crew.workHours > crew.maxWork ? "text-red-500 font-bold" : ""}>
+                          <span className={crew.workHours > crew.maxWork ? "text-destructive font-bold" : ""}>
                             {crew.workHours}
                           </span>
                           /{crew.maxWork}
@@ -371,8 +371,8 @@ export default function MLCWorkHoursPage() {
             </CardHeader>
             <CardContent>
               <div className="space-y-4">
-                {recentViolations.map((violation, index) => (
-                  <div key={index} className="p-4 border rounded-lg">
+                {recentViolations.map((violation) => (
+                  <div key={`hist-${violation.crew}-${violation.type}`} className="p-4 border rounded-lg">
                     <div className="flex items-center justify-between mb-3">
                       <div>
                         <p className="font-medium">{violation.crew}</p>

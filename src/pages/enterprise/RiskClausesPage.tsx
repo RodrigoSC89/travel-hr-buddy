@@ -311,8 +311,8 @@ export default function RiskClausesPage() {
             </CardHeader>
             <CardContent>
               <div className="space-y-4">
-                {recentAnalyses.map((analysis, index) => (
-                  <div key={index} className="flex items-center justify-between p-4 border rounded-lg hover:bg-muted/50 transition-colors">
+                {recentAnalyses.map((analysis) => (
+                  <div key={analysis.contract} className="flex items-center justify-between p-4 border rounded-lg hover:bg-muted/50 transition-colors">
                     <div className="flex items-center gap-3">
                       <FileText className="h-8 w-8 text-muted-foreground" />
                       <div>

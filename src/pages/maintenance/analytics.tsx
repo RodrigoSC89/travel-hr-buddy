@@ -120,8 +120,8 @@ export default function MaintenanceAnalytics() {
                   { cause: 'Falha elétrica', count: 18 },
                   { cause: 'Vibração excessiva', count: 12 },
                   { cause: 'Superaquecimento', count: 8 }
-                ].map((item, index) => (
-                  <div key={index} className="flex items-center justify-between">
+                ].map((item) => (
+                  <div key={item.cause} className="flex items-center justify-between">
                     <span className="text-sm">{item.cause}</span>
                     <span className="text-sm font-medium">{item.count}</span>
                   </div>
@@ -139,14 +139,14 @@ export default function MaintenanceAnalytics() {
           </CardHeader>
           <CardContent>
             <div className="h-64 flex items-end justify-around gap-2">
-              {[38, 42, 35, 45, 48, 44].map((value, index) => (
-                <div key={index} className="flex-1 flex flex-col items-center">
+              {[38, 42, 35, 45, 48, 44].map((value, barIdx) => (
+                <div key={`bar-${barIdx}`} className="flex-1 flex flex-col items-center">
                   <div 
                     className="w-full bg-primary rounded-t hover:bg-primary/80 transition-colors cursor-pointer"
                     style={{ height: `${(value / 50) * 100}%` }}
                   ></div>
                   <span className="text-xs mt-2 text-muted-foreground">
-                    {['Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'][index]}
+                    {['Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'][barIdx]}
                   </span>
                   <span className="text-xs font-medium">{value}</span>
                 </div>

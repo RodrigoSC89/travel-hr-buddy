@@ -350,8 +350,8 @@ export default function Patch516UnderwaterDrone() {
             </CardHeader>
             <CardContent>
               <div className="space-y-2 max-h-96 overflow-y-auto">
-                {commandLogs.map((log, index) => (
-                  <div key={index} className="flex items-start gap-3 p-3 border rounded-lg">
+                {commandLogs.map((log) => (
+                  <div key={`${log.timestamp}-${log.command}`} className="flex items-start gap-3 p-3 border rounded-lg">
                     <Badge variant={log.status === "executed" ? "default" : "secondary"}>
                       {log.status}
                     </Badge>

@@ -350,8 +350,8 @@ const PredictiveAnalyticsEnhanced: React.FC = () => {
             </CardHeader>
             <CardContent>
               <div className="space-y-4">
-                {maintenancePredictions.map((prediction, index) => (
-                  <div key={index} className="flex items-center justify-between p-4 border rounded-lg">
+                {maintenancePredictions.map((prediction) => (
+                  <div key={`${prediction.vessel}-${prediction.component}`} className="flex items-center justify-between p-4 border rounded-lg">
                     <div className="space-y-2">
                       <div className="flex items-center gap-3">
                         <Ship className="h-4 w-4 text-muted-foreground" />
