@@ -39,7 +39,7 @@ export const Breadcrumbs: FC<BreadcrumbsProps> = ({
           const isLast = index === allItems.length - 1;
 
           return (
-            <li key={index} className="flex items-center gap-1.5">
+            <li key={item.label} className="flex items-center gap-1.5">
               {index > 0 && separator}
               
               {item.href && !isLast ? (

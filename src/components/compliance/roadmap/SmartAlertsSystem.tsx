@@ -190,22 +190,22 @@ const generateAlertLogs = (): AlertLog[] => {
 // Helper functions
 const getPrioridadeColor = (prioridade: string) => {
   switch (prioridade) {
-    case 'critica': return 'bg-red-500 text-white';
-    case 'alta': return 'bg-orange-500 text-white';
-    case 'media': return 'bg-yellow-500 text-black';
-    case 'baixa': return 'bg-green-500 text-white';
+    case 'critica': return 'bg-destructive text-destructive-foreground';
+    case 'alta': return 'bg-warning text-warning-foreground';
+    case 'media': return 'bg-accent text-accent-foreground';
+    case 'baixa': return 'bg-success text-success-foreground';
     default: return 'bg-muted';
   }
 };
 
 const getStatusColor = (status: string) => {
   switch (status) {
-    case 'pendente': return 'bg-yellow-500/20 text-yellow-600 border-yellow-500/30';
-    case 'enviado': return 'bg-blue-500/20 text-blue-600 border-blue-500/30';
-    case 'lido': return 'bg-purple-500/20 text-purple-600 border-purple-500/30';
-    case 'acao_tomada': return 'bg-green-500/20 text-green-600 border-green-500/30';
-    case 'expirado': return 'bg-gray-500/20 text-gray-600 border-gray-500/30';
-    case 'erro': return 'bg-red-500/20 text-red-600 border-red-500/30';
+    case 'pendente': return 'bg-warning/20 text-warning border-warning/30';
+    case 'enviado': return 'bg-info/20 text-info border-info/30';
+    case 'lido': return 'bg-accent/20 text-accent-foreground border-accent/30';
+    case 'acao_tomada': return 'bg-success/20 text-success border-success/30';
+    case 'expirado': return 'bg-muted/20 text-muted-foreground border-muted/30';
+    case 'erro': return 'bg-destructive/20 text-destructive border-destructive/30';
     default: return 'bg-muted/20 text-muted-foreground';
   }
 };
