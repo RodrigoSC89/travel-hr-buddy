@@ -42,18 +42,18 @@ const StatCard: React.FC<StatCardProps> = memo(({
 }) => {
   const colorClasses: Record<string, string> = {
     primary: "from-primary/20 to-primary/5 border-primary/30",
-    green: "from-green-500/20 to-green-500/5 border-green-500/30",
-    yellow: "from-yellow-500/20 to-yellow-500/5 border-yellow-500/30",
-    red: "from-red-500/20 to-red-500/5 border-red-500/30",
-    blue: "from-blue-500/20 to-blue-500/5 border-blue-500/30",
+    green: "from-success/20 to-success/5 border-success/30",
+    yellow: "from-warning/20 to-warning/5 border-warning/30",
+    red: "from-destructive/20 to-destructive/5 border-destructive/30",
+    blue: "from-info/20 to-info/5 border-info/30",
   };
 
   const iconColorClasses: Record<string, string> = {
     primary: "bg-primary/20 text-primary",
-    green: "bg-green-500/20 text-green-500",
-    yellow: "bg-yellow-500/20 text-yellow-500",
-    red: "bg-red-500/20 text-red-500",
-    blue: "bg-blue-500/20 text-blue-500",
+    green: "bg-success/20 text-success",
+    yellow: "bg-warning/20 text-warning",
+    red: "bg-destructive/20 text-destructive",
+    blue: "bg-info/20 text-info",
   };
 
   if (isLoading) {
@@ -85,9 +85,9 @@ const StatCard: React.FC<StatCardProps> = memo(({
             )}
             {trend && trendValue && (
               <div className="flex items-center gap-1 mt-2">
-                {trend === "up" && <TrendingUp className="h-3 w-3 text-green-500" />}
-                {trend === "down" && <TrendingDown className="h-3 w-3 text-red-500" />}
-                <span className={`text-xs font-medium ${trend === "up" ? "text-green-500" : trend === "down" ? "text-red-500" : "text-muted-foreground"}`}>
+                {trend === "up" && <TrendingUp className="h-3 w-3 text-success" />}
+                {trend === "down" && <TrendingDown className="h-3 w-3 text-destructive" />}
+                <span className={`text-xs font-medium ${trend === "up" ? "text-success" : trend === "down" ? "text-destructive" : "text-muted-foreground"}`}>
                   {trendValue}
                 </span>
               </div>
@@ -160,7 +160,7 @@ export const LiveDashboardStats: React.FC = memo(() => {
       <div className="flex items-center justify-between">
         <h3 className="text-lg font-semibold text-foreground">Indicadores em Tempo Real</h3>
         <Badge variant="outline" className="text-xs">
-          <span className="h-2 w-2 rounded-full bg-green-500 mr-2 animate-pulse" />
+          <span className="h-2 w-2 rounded-full bg-success mr-2 animate-pulse" />
           Live
         </Badge>
       </div>

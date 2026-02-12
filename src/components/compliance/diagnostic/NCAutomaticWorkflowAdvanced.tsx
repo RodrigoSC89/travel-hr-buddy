@@ -134,10 +134,10 @@ export function NCAutomaticWorkflowAdvanced() {
 
   const getSeverityBadge = (severity: NonConformity['severity']) => {
     const styles = {
-      critical: 'bg-red-500 hover:bg-red-600',
-      major: 'bg-orange-500 hover:bg-orange-600',
-      minor: 'bg-yellow-500 hover:bg-yellow-600',
-      observation: 'bg-blue-500 hover:bg-blue-600'
+      critical: 'bg-destructive hover:bg-destructive/90',
+      major: 'bg-warning hover:bg-warning/90',
+      minor: 'bg-warning hover:bg-warning/90',
+      observation: 'bg-info hover:bg-info/90'
     };
     return <Badge className={styles[severity]}>{severity.toUpperCase()}</Badge>;
   };
@@ -147,10 +147,10 @@ export function NCAutomaticWorkflowAdvanced() {
       return <Badge variant="destructive" className="animate-pulse">VENCIDA ({Math.abs(nc.days_remaining)}d)</Badge>;
     }
     const styles: Record<string, string> = {
-      open: 'bg-blue-500',
-      in_progress: 'bg-amber-500',
-      pending_approval: 'bg-purple-500',
-      closed: 'bg-green-500'
+      open: 'bg-info',
+      in_progress: 'bg-warning',
+      pending_approval: 'bg-accent',
+      closed: 'bg-success'
     };
     return <Badge className={styles[nc.status]}>{nc.status.replace('_', ' ').toUpperCase()}</Badge>;
   };
@@ -159,11 +159,11 @@ export function NCAutomaticWorkflowAdvanced() {
     <div className="space-y-6">
       {/* Header Métricas */}
       <div className="grid grid-cols-2 md:grid-cols-6 gap-4">
-        <Card className="border-red-200 bg-red-50 dark:bg-red-950/20">
+        <Card className="border-destructive/30 bg-destructive/5 dark:bg-destructive/10">
           <CardContent className="pt-4">
             <div className="text-center">
               <p className="text-sm text-muted-foreground">Vencidas</p>
-              <p className="text-3xl font-bold text-red-600">{metrics.overdue}</p>
+              <p className="text-3xl font-bold text-destructive">{metrics.overdue}</p>
             </div>
           </CardContent>
         </Card>
@@ -186,11 +186,11 @@ export function NCAutomaticWorkflowAdvanced() {
           </CardContent>
         </Card>
         
-        <Card className="border-green-200 bg-green-50 dark:bg-green-950/20">
+        <Card className="border-success/30 bg-success/5 dark:bg-success/10">
           <CardContent className="pt-4">
             <div className="text-center">
               <p className="text-sm text-muted-foreground">Fechadas</p>
-              <p className="text-3xl font-bold text-green-600">{metrics.closed}</p>
+              <p className="text-3xl font-bold text-success">{metrics.closed}</p>
             </div>
           </CardContent>
         </Card>
@@ -208,23 +208,23 @@ export function NCAutomaticWorkflowAdvanced() {
           <CardContent className="pt-4">
             <div className="text-center">
               <p className="text-sm text-muted-foreground">Taxa Fechamento</p>
-              <p className="text-3xl font-bold text-green-700">{metrics.closureRate}%</p>
+              <p className="text-3xl font-bold text-success">{metrics.closureRate}%</p>
             </div>
           </CardContent>
         </Card>
       </div>
 
       {/* ROI Card */}
-      <Card className="border-green-300 bg-gradient-to-r from-green-50 to-emerald-50 dark:from-green-950/30 dark:to-emerald-950/30">
+        <Card className="border-success/30 bg-gradient-to-r from-success/5 to-success/10 dark:from-success/10 dark:to-success/20">
         <CardContent className="pt-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-4">
-              <div className="p-3 bg-green-100 dark:bg-green-900 rounded-full">
-                <TrendingUp className="h-6 w-6 text-green-600" />
+              <div className="p-3 bg-success/10 dark:bg-success/20 rounded-full">
+                <TrendingUp className="h-6 w-6 text-success" />
               </div>
               <div>
                 <p className="text-sm text-muted-foreground">Economia com Workflow Automático de NCs</p>
-                <p className="text-2xl font-bold text-green-700">R$ 1.500 - 2.500/mês</p>
+                <p className="text-2xl font-bold text-success">R$ 1.500 - 2.500/mês</p>
               </div>
             </div>
             <div className="text-right">
