@@ -44,7 +44,7 @@ export function QuickActionsHub({ open, onOpenChange, customActions = [] }: Quic
     // Navegação Rápida
     { id: "nav-dashboard", title: "Ir para Dashboard", description: "Central de Comando", icon: Activity, category: "Navegação", shortcut: "g d", action: () => navigate("/"), keywords: ["home", "inicio", "central"] },
     { id: "nav-operations", title: "Operations Command", description: "Gestão de operações", icon: Ship, category: "Navegação", shortcut: "g o", action: () => navigate("/ops"), keywords: ["operacoes", "navios", "frota"] },
-    { id: "nav-maintenance", title: "Manutenção", description: "Planejamento de manutenção", icon: Wrench, category: "Navegação", shortcut: "g m", action: () => navigate("/maintenance"), keywords: ["reparos", "equipamentos"] },
+    { id: "nav-maintenance", title: "Manutenção", description: "Planejamento de manutenção", icon: Wrench, category: "Navegação", shortcut: "g m", action: () => navigate("/maintenance-command"), keywords: ["reparos", "equipamentos"] },
     { id: "nav-finance", title: "Finance Command", description: "Gestão financeira", icon: DollarSign, category: "Navegação", shortcut: "g f", action: () => navigate("/finance-command"), keywords: ["dinheiro", "custos", "receitas"] },
     { id: "nav-compliance", title: "Compliance & Audits", description: "Conformidade e auditorias", icon: Shield, category: "Navegação", shortcut: "g c", action: () => navigate("/compliance"), keywords: ["ism", "isps", "certificados"] },
     { id: "nav-people", title: "People Hub", description: "Gestão de pessoas", icon: Users, category: "Navegação", shortcut: "g p", action: () => navigate("/workbench?section=people"), keywords: ["tripulacao", "rh", "funcionarios"] },

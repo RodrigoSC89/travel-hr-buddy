@@ -317,11 +317,11 @@ export function VoiceAssistantWithHotword({
 
     // Local navigation commands (fast response)
     if (lowerCommand.includes('dashboard') || lowerCommand.includes('painel')) {
-      navigate('/dashboard');
+      navigate('/central-comando');
       return 'Navegando para o dashboard principal.';
     }
     if (lowerCommand.includes('tripulação') || lowerCommand.includes('crew')) {
-      navigate('/crew-management');
+      navigate('/maritime-command');
       return 'Abrindo gestão de tripulação.';
     }
     if (lowerCommand.includes('clima') || lowerCommand.includes('weather') || lowerCommand.includes('tempo')) {
@@ -341,7 +341,7 @@ export function VoiceAssistantWithHotword({
       return 'Abrindo Digital Twin Engine.';
     }
     if (lowerCommand.includes('manutenção') || lowerCommand.includes('maintenance')) {
-      navigate('/maintenance');
+      navigate('/maintenance-command');
       return 'Abrindo módulo de manutenção.';
     }
 

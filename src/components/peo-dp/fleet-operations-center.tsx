@@ -122,7 +122,7 @@ export const FleetOperationsCenter: React.FC = () => {
         title="Nenhuma embarcação cadastrada"
         description="Adicione embarcações ao sistema para visualizar o centro de operações."
         actionLabel="Ir para Frota"
-        onAction={() => navigate("/fleet")}
+        onAction={() => navigate("/fleet-command")}
       />
     );
   }

@@ -147,8 +147,8 @@ export const DashboardActions: React.FC<DashboardActionsProps> = ({
 
   const quickActions = [
     { icon: Plus, label: "Nova Missão", action: () => navigate("/mission-logs") },
-    { icon: FileText, label: "Novo Relatório", action: () => navigate("/reports") },
-    { icon: Calendar, label: "Agendar", action: () => navigate("/calendar") },
+    { icon: FileText, label: "Novo Relatório", action: () => navigate("/reports-command") },
+    { icon: Calendar, label: "Agendar", action: () => navigate("/operational-calendar") },
     { icon: Bell, label: "Notificações", action: () => navigate("/alerts-command") },
   ];
 
@@ -217,7 +217,7 @@ export const DashboardActions: React.FC<DashboardActionsProps> = ({
                   Compartilhar
                 </DropdownMenuItem>
                 <DropdownMenuSeparator />
-                <DropdownMenuItem onClick={() => navigate("/analytics")}>
+                <DropdownMenuItem onClick={() => navigate("/analytics-command")}>
                   <BarChart3 className="h-4 w-4 mr-2" />
                   Analytics
                 </DropdownMenuItem>

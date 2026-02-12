@@ -67,7 +67,7 @@ const FloatingMenu = () => {
       delay: 100,
       ariaLabel: "Abrir Chat Premium",
       action: () => {
-        navigate("/communication");
+        navigate("/communication-command");
         toast({
           title: "💬 Chat Premium",
           description: "Abrindo sistema de comunicação"
@@ -81,7 +81,7 @@ const FloatingMenu = () => {
       delay: 200,
       ariaLabel: "Abrir Analytics",
       action: () => {
-        navigate("/analytics");
+        navigate("/analytics-command");
         toast({
           title: "📊 Analytics",
           description: "Abrindo painel de análises"
@@ -95,7 +95,7 @@ const FloatingMenu = () => {
       delay: 300,
       ariaLabel: "Abrir Relatórios Globais",
       action: () => {
-        navigate("/reports");
+        navigate("/reports-command");
         toast({
           title: "🌍 Global Sync",
           description: "Abrindo relatórios e sincronização global"

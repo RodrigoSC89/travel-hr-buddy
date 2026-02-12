@@ -36,7 +36,7 @@ export const QuickActionsPanel: React.FC = () => {
     {
       icon: <Calendar className="h-4 w-4" />,
       label: "Ver Calendário",
-      onClick: () => navigate("/calendar"),
+      onClick: () => navigate("/operational-calendar"),
       color: "bg-purple-500 hover:bg-purple-600"
     },
     {
