@@ -172,8 +172,8 @@ export default function NOAAWeather() {
             </CardHeader>
             <CardContent>
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                {weatherData.forecast.map((day, index) => (
-                  <div key={index} className="p-4 bg-muted/50 rounded-lg text-center">
+                {weatherData.forecast.map((day) => (
+                  <div key={day.day} className="p-4 bg-muted/50 rounded-lg text-center">
                     <p className="font-semibold">{day.day}</p>
                     <p className="text-2xl font-bold my-2">{day.high}°/{day.low}°</p>
                     <p className="text-sm text-muted-foreground">{day.conditions}</p>
