@@ -236,6 +236,7 @@ Respond in JSON format with an array of insights, each containing: type, severit
         const parsed = JSON.parse(response.content);
         const insightsData = Array.isArray(parsed) ? parsed : parsed.insights || [];
 
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any -- AI JSON response has unpredictable shape
         insightsData.forEach((item: any, index: number) => {
           insights.push({
             id: `insight-${Date.now()}-${index}`,

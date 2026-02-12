@@ -242,6 +242,7 @@ function SimulationDetailView({ sim, onClose }: { sim: any; onClose: () => void 
               <CardContent>
                 <div className="space-y-2">
                   {/* eslint-disable-next-line @typescript-eslint/no-explicit-any -- risk factors from AI have dynamic shape */}
+                  {/* eslint-disable-next-line @typescript-eslint/no-explicit-any -- risk factors from AI have dynamic shape */}
                   {riskFactors.map((rf: any, i: number) => (
                     <div key={i} className="flex items-start gap-3 p-2 rounded border">
                       <AlertTriangle className={`h-4 w-4 mt-0.5 flex-shrink-0 ${
@@ -432,7 +433,7 @@ export function VoyageSimulatorPanel() {
                             <SelectContent>
                               <SelectItem value="none">Nenhuma</SelectItem>
                               {/* eslint-disable-next-line @typescript-eslint/no-explicit-any -- vessels from Supabase query */}
-                              {vessels.map((v: any) => (
+                              {vessels.map((v) => (
                                 <SelectItem key={v.id} value={v.id}>
                                   <span className="flex items-center gap-2">
                                     <Ship className="h-3 w-3" />

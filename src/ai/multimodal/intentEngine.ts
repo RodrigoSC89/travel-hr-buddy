@@ -12,9 +12,9 @@ interface SpeechRecognitionLike {
   continuous: boolean;
   interimResults: boolean;
   lang: string;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- SpeechRecognition event type
   onresult: ((event: any) => void) | null;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- SpeechRecognition error event type
   onerror: ((event: any) => void) | null;
   onend: (() => void) | null;
   start: () => void;

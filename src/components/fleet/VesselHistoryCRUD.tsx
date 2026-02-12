@@ -77,6 +77,7 @@ export function VesselHistoryCRUD({ vesselId = "v1", vesselName = "MV Atlantic P
 
       if (error || !data) return [];
 
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any -- navigation_history columns not fully in generated types
       return data.map((d: any): VesselEvent => ({
         id: d.id,
         vesselId: d.vessel_id || vesselId,
