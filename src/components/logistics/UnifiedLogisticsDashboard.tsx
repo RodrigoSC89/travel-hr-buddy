@@ -181,11 +181,12 @@ export function UnifiedLogisticsDashboard() {
         .select("id, company_name, trading_name, category, rating, total_orders, contact_email, contact_phone, city, country, is_active, website, services, payment_terms, lead_time_days")
         .order("rating", { ascending: false });
       if (error) { toast.error("Erro ao carregar fornecedores"); return []; }
-      return (data || []).map((s: any) => ({
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any -- supplier row shape varies, need to normalize arrays
+      return (data || []).map((s: Record<string, unknown>) => ({
         ...s,
-        category: Array.isArray(s.category) ? s.category : [s.category || "general"],
+        category: Array.isArray(s.category) ? s.category : [String(s.category || "general")],
         services: Array.isArray(s.services) ? s.services : [],
-      }));
+      })) as Supplier[];
     },
   });
 
@@ -205,10 +206,10 @@ export function UnifiedLogisticsDashboard() {
         .select("id, port_name, port_code, vessel_id, eta, etd, berth_number, purpose, status, agent_name, agent_contact, psc_risk_level, estimated_costs, documents_status, country, vessels(name)")
         .order("eta", { ascending: true });
       if (error) { toast.error("Erro ao carregar port calls"); return []; }
-      return (data || []).map((p: any) => ({
+      return (data || []).map((p) => ({
         ...p,
         vessel_name: p.vessels?.name || "N/A",
-      }));
+      })) as PortCall[];
     },
   });
 
@@ -711,8 +712,26 @@ function FormField({ label, children }: { label: string; children: React.ReactNo
   );
 }
 
+interface CargoFormData {
+  tracking_number: string; cargo_description: string; shipment_type: string;
+  weight_kg: number; volume_cbm: number; origin_port: string; destination_port: string;
+  estimated_arrival: string; shipping_cost: number; priority: string;
+}
+
+interface SupplierFormData {
+  company_name: string; trading_name: string; category: string;
+  contact_email: string; contact_phone: string; city: string; country: string;
+  website: string; payment_terms: string;
+}
+
+interface PortCallFormData {
+  port_name: string; port_code: string; vessel_id: string;
+  eta: string; etd: string; berth_number: string; purpose: string;
+  agent_name: string; agent_contact: string; country: string;
+}
+
 function CargoForm({ form, setForm, onSubmit, onCancel, loading }: {
-  form: any; setForm: (f: any) => void; onSubmit: () => void; onCancel: () => void; loading: boolean;
+  form: CargoFormData; setForm: (f: CargoFormData) => void; onSubmit: () => void; onCancel: () => void; loading: boolean;
 }) {
   return (
     <Card className="border-primary/50">
@@ -778,7 +797,7 @@ function CargoForm({ form, setForm, onSubmit, onCancel, loading }: {
 }
 
 function SupplierForm({ form, setForm, onSubmit, onCancel, loading }: {
-  form: any; setForm: (f: any) => void; onSubmit: () => void; onCancel: () => void; loading: boolean;
+  form: SupplierFormData; setForm: (f: SupplierFormData) => void; onSubmit: () => void; onCancel: () => void; loading: boolean;
 }) {
   return (
     <Card className="border-primary/50">
@@ -845,7 +864,7 @@ function SupplierForm({ form, setForm, onSubmit, onCancel, loading }: {
 }
 
 function PortCallForm({ form, setForm, onSubmit, onCancel, loading, vessels }: {
-  form: any; setForm: (f: any) => void; onSubmit: () => void; onCancel: () => void; loading: boolean; vessels: { id: string; name: string }[];
+  form: PortCallFormData; setForm: (f: PortCallFormData) => void; onSubmit: () => void; onCancel: () => void; loading: boolean; vessels: { id: string; name: string }[];
 }) {
   return (
     <Card className="border-primary/50">

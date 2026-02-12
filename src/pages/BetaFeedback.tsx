@@ -105,10 +105,11 @@ export default function BetaFeedback() {
   const onSubmit = async (data: FeedbackFormData) => {
     setIsSubmitting(true);
     try {
-      const { error } = await supabase.from("beta_feedback" as any).insert({
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any -- beta_feedback not in generated types
+      const { error } = await (supabase.from as Function)("beta_feedback").insert({
         ...data,
         modules_used: selectedModules,
-      } as any);
+      });
 
       if (error) throw error;
 

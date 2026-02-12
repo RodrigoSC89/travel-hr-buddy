@@ -41,7 +41,7 @@ interface WorkflowDefinition {
 const WorkflowEngine = () => {
   const { toast } = useToast();
   const [workflows, setWorkflows] = useState<WorkflowDefinition[]>([]);
-  const [activeExecution, setActiveExecution] = useState<any>(null);
+  const [activeExecution, setActiveExecution] = useState<Record<string, unknown> | null>(null);
   const [isCreating, setIsCreating] = useState(false);
   const [newWorkflow, setNewWorkflow] = useState<WorkflowDefinition>({
     name: "",
@@ -54,8 +54,7 @@ const WorkflowEngine = () => {
   }, []);
 
   const loadWorkflows = async () => {
-    const { data, error } = await supabase
-      .from("nautilus_workflows" as any)
+    const { data, error } = await (supabase.from as Function)("nautilus_workflows")
       .select("*")
       .order("created_at", { ascending: false });
 
@@ -66,7 +65,7 @@ const WorkflowEngine = () => {
         variant: "destructive"
       });
     } else {
-      setWorkflows((data || []) as any);
+      setWorkflows((data || []) as WorkflowDefinition[]);
     }
   };
 
@@ -82,7 +81,7 @@ const WorkflowEngine = () => {
 
     const { data: { user } } = await supabase.auth.getUser();
     
-    const { error } = await supabase.from("nautilus_workflows" as any).insert({
+    const { error } = await (supabase.from as Function)("nautilus_workflows").insert({
       name: newWorkflow.name,
       description: newWorkflow.description,
       steps: newWorkflow.steps,
@@ -107,7 +106,7 @@ const WorkflowEngine = () => {
   };
 
   const executeWorkflow = async (workflowId: string) => {
-    const { data, error } = await supabase.functions.invoke("workflow-execute" as any, {
+    const { data, error } = await supabase.functions.invoke("workflow-execute", {
       body: {
         workflow_id: workflowId,
         action: "execute",
