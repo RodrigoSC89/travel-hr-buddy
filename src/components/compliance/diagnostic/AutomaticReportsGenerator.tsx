@@ -131,24 +131,24 @@ export function AutomaticReportsGenerator() {
   return (
     <div className="space-y-6">
       {/* ROI Card */}
-      <Card className="border-green-300 bg-gradient-to-r from-green-50 to-emerald-50 dark:from-green-950/30 dark:to-emerald-950/30">
+      <Card className="border-success/30 bg-gradient-to-r from-success/5 to-success/10">
         <CardContent className="pt-6">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
             <div className="text-center">
               <p className="text-sm text-muted-foreground">Tempo Antes</p>
-              <p className="text-2xl font-bold text-red-600">{savings.time_before}</p>
+              <p className="text-2xl font-bold text-destructive">{savings.time_before}</p>
             </div>
             <div className="text-center">
               <p className="text-sm text-muted-foreground">Tempo Agora</p>
-              <p className="text-2xl font-bold text-green-600">{savings.time_after}</p>
+              <p className="text-2xl font-bold text-success">{savings.time_after}</p>
             </div>
             <div className="text-center">
               <p className="text-sm text-muted-foreground">Economia Mensal</p>
-              <p className="text-2xl font-bold text-green-700">{savings.monthly_savings}</p>
+              <p className="text-2xl font-bold text-success">{savings.monthly_savings}</p>
             </div>
             <div className="text-center">
               <p className="text-sm text-muted-foreground">Precisão</p>
-              <p className="text-2xl font-bold text-blue-600">{savings.accuracy}</p>
+              <p className="text-2xl font-bold text-info">{savings.accuracy}</p>
             </div>
           </div>
         </CardContent>
@@ -176,7 +176,7 @@ export function AutomaticReportsGenerator() {
                         <h4 className="font-medium">{template.name}</h4>
                         <Badge variant="outline">{template.frequency}</Badge>
                         {generatedReports.includes(template.id) && (
-                          <CheckCircle2 className="h-4 w-4 text-green-500" />
+                          <CheckCircle2 className="h-4 w-4 text-success" />
                         )}
                       </div>
                       <p className="text-sm text-muted-foreground">{template.description}</p>
@@ -234,8 +234,8 @@ export function AutomaticReportsGenerator() {
               <p className="text-3xl font-bold">{generatedReports.length}</p>
               <p className="text-sm text-muted-foreground">Relatórios Gerados</p>
             </div>
-            <div className="text-center p-4 bg-green-100 dark:bg-green-900/30 rounded-lg">
-              <p className="text-3xl font-bold text-green-600">
+            <div className="text-center p-4 bg-success/10 rounded-lg">
+              <p className="text-3xl font-bold text-success">
                 {Math.round((generatedReports.length / REPORT_TEMPLATES.length) * 100)}%
               </p>
               <p className="text-sm text-muted-foreground">Cobertura</p>

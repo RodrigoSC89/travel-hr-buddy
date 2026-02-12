@@ -247,15 +247,15 @@ export const GeneralSettingsTab: React.FC<GeneralSettingsTabProps> = ({
             <div className="space-y-2">
               <Label className="text-sm font-medium text-muted-foreground">Última Atualização</Label>
               <div className="text-lg font-semibold">29/09/2024</div>
-              <Badge variant="outline" className="text-xs text-green-600 border-green-200">
+              <Badge variant="outline" className="text-xs text-success border-success/30">
                 Atualizado
               </Badge>
             </div>
             
             <div className="space-y-2">
               <Label className="text-sm font-medium text-muted-foreground">Status</Label>
-              <div className="text-lg font-semibold text-green-600">Operacional</div>
-              <Badge className="text-xs bg-green-100 text-green-700 hover:bg-green-100">
+              <div className="text-lg font-semibold text-success">Operacional</div>
+              <Badge className="text-xs bg-success/10 text-success hover:bg-success/10">
                 Sistema Estável
               </Badge>
             </div>
