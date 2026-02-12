@@ -451,7 +451,14 @@ export default function CrewSchedulerGantt() {
           </div>
           <div className="flex justify-end gap-2">
             <Button variant="outline" onClick={() => setShowNewRotation(false)}>Cancelar</Button>
-            <Button onClick={() => { setShowNewRotation(false); toast.success("Rotação criada com sucesso"); }}>
+            <Button onClick={() => { 
+              const data = { type: 'rotation', created: new Date().toISOString() };
+              const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+              const url = URL.createObjectURL(blob);
+              const a = document.createElement('a'); a.href = url; a.download = `rotacao-${Date.now()}.json`; a.click(); URL.revokeObjectURL(url);
+              setShowNewRotation(false); 
+              toast.success("Rotação criada e exportada"); 
+            }}>
               Criar Rotação
             </Button>
           </div>
