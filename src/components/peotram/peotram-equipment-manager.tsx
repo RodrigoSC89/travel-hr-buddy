@@ -443,8 +443,8 @@ export const PeotramEquipmentManager: React.FC = () => {
                     <div>
                       <p className="text-sm text-muted-foreground mb-2">Peças utilizadas:</p>
                       <div className="flex flex-wrap gap-2">
-                        {record.partsUsed.map((part, index) => (
-                          <Badge key={index} variant="secondary">{part}</Badge>
+                        {record.partsUsed.map((part) => (
+                          <Badge key={part} variant="secondary">{part}</Badge>
                         ))}
                       </div>
                     </div>

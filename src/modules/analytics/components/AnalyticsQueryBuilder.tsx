@@ -189,27 +189,27 @@ export const AnalyticsQueryBuilder: React.FC = () => {
                 </Button>
               </div>
               <div className="space-y-2">
-                {queryConfig.filters.map((filter, index) => (
-                  <div key={index} className="border rounded-lg p-3 space-y-2">
+                {queryConfig.filters.map((filter, filterIdx) => (
+                  <div key={`filter-${filterIdx}-${filter.field}`} className="border rounded-lg p-3 space-y-2">
                     <div className="flex items-center justify-between">
-                      <Label className="text-xs">Filter {index + 1}</Label>
+                      <Label className="text-xs">Filter {filterIdx + 1}</Label>
                       <Button
                         size="sm"
                         variant="ghost"
-                        onClick={() => removeFilter(index)}
+                        onClick={() => removeFilter(filterIdx)}
                       >
-                        <Trash2 className="h-3 w-3 text-red-500" />
+                        <Trash2 className="h-3 w-3 text-destructive" />
                       </Button>
                     </div>
                     <Input
                       placeholder="Field name"
                       value={filter.field}
-                      onChange={(e) => updateFilter(index, "field", e.target.value)}
+                      onChange={(e) => updateFilter(filterIdx, "field", e.target.value)}
                       className="text-sm"
                     />
                     <Select
                       value={filter.operator}
-                      onValueChange={(value) => updateFilter(index, "operator", value)}
+                      onValueChange={(value) => updateFilter(filterIdx, "operator", value)}
                     >
                       <SelectTrigger className="text-sm">
                         <SelectValue />
@@ -225,7 +225,7 @@ export const AnalyticsQueryBuilder: React.FC = () => {
                     <Input
                       placeholder="Value"
                       value={filter.value}
-                      onChange={(e) => updateFilter(index, "value", e.target.value)}
+                      onChange={(e) => updateFilter(filterIdx, "value", e.target.value)}
                       className="text-sm"
                     />
                   </div>

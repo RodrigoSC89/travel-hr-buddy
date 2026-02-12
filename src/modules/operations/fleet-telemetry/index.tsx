@@ -466,8 +466,8 @@ export default function FleetTelemetryModule() {
                     { component: "Motor Principal", vessel: "Navio A", days: 7, confidence: 89 },
                     { component: "Sistema Hidráulico", vessel: "Navio B", days: 14, confidence: 76 },
                     { component: "Filtros de Óleo", vessel: "Navio C", days: 21, confidence: 92 }
-                  ].map((item, index) => (
-                    <div key={index} className="flex items-center justify-between p-3 border rounded">
+                  ].map((item) => (
+                    <div key={item.component} className="flex items-center justify-between p-3 border rounded">
                       <div>
                         <p className="font-medium">{item.component}</p>
                         <p className="text-sm text-muted-foreground">{item.vessel}</p>

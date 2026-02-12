@@ -153,12 +153,12 @@ const PeopleDashboard: FC = () => {
                 <p>Nenhum alerta ativo</p>
               </div>
             ) : (
-              alertas.map((alerta, index) => (
+              alertas.map((alerta, alertIdx) => (
                 <motion.div
-                  key={index}
+                  key={`alert-${alertIdx}-${alerta.tipo}`}
                   initial={{ opacity: 0, x: -20 }}
                   animate={{ opacity: 1, x: 0 }}
-                  transition={{ delay: index * 0.1 }}
+                  transition={{ delay: alertIdx * 0.1 }}
                   className={`p-3 rounded-lg border flex items-center justify-between ${getAlertClass(alerta.tipo)}`}
                 >
                   <span className="text-sm">{alerta.texto}</span>
@@ -185,8 +185,8 @@ const PeopleDashboard: FC = () => {
             ) : aniversariantes.length === 0 ? (
               <p className="text-center text-muted-foreground py-4">Nenhum aniversariante próximo</p>
             ) : (
-              aniversariantes.map((pessoa: Record<string, string>, index: number) => (
-                <div key={index} className="flex items-center justify-between p-2 rounded-lg bg-muted/50">
+              aniversariantes.map((pessoa: Record<string, string>) => (
+                <div key={pessoa.nome} className="flex items-center justify-between p-2 rounded-lg bg-muted/50">
                   <div>
                     <p className="font-medium text-sm">{pessoa.nome}</p>
                     <p className="text-xs text-muted-foreground">{pessoa.departamento}</p>

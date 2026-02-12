@@ -548,8 +548,8 @@ export const PeotramCommunicationCenter: React.FC = () => {
                   <div>
                     <p className="text-muted-foreground text-sm mb-1">Participantes:</p>
                     <div className="flex flex-wrap gap-1">
-                      {channel.participants.map((participant, index) => (
-                        <Badge key={index} variant="secondary" className="text-xs">
+                      {channel.participants.map((participant) => (
+                        <Badge key={participant} variant="secondary" className="text-xs">
                           {participant}
                         </Badge>
                       ))}

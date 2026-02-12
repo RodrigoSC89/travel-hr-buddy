@@ -426,10 +426,10 @@ export default function SmartMaintenancePlanner() {
                     
                     return (
                       <motion.div
-                        key={index}
+                        key={day.toISOString()}
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
-                        transition={{ delay: index * 0.01 }}
+                        transition={{ delay: 0 }}
                         className={`p-2 min-h-20 border rounded-lg cursor-pointer transition-all hover:border-primary/50 ${
                           isSameDay(day, new Date()) ? "bg-primary/5 border-primary" : ""
                         } ${hasOverdue ? "border-destructive/50" : ""}`}

@@ -220,8 +220,8 @@ export const OperationalKPIs: React.FC<OperationalKPIsProps> = ({ status }) => {
                     </CardTitle>
                   </CardHeader>
                   <CardContent className="space-y-4">
-                    {category.items.map((kpi, index) => (
-                      <div key={index} className="space-y-1">
+                    {category.items.map((kpi) => (
+                      <div key={kpi.name} className="space-y-1">
                         <div className="flex items-center justify-between text-xs">
                           <span className="text-muted-foreground truncate pr-2">
                             {kpi.name}

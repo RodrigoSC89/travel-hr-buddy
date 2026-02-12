@@ -283,9 +283,9 @@ export const FleetAICopilot: React.FC<FleetAICopilotProps> = ({
         <ScrollArea className="flex-1 pr-4" ref={scrollRef}>
           <div className="space-y-4">
             <AnimatePresence>
-              {messages.map((message, index) => (
+              {messages.map((message, msgIdx) => (
                 <motion.div
-                  key={index}
+                  key={`fleet-msg-${msgIdx}-${message.role}`}
                   initial={{ opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: -10 }}

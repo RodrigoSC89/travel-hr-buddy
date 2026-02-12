@@ -186,8 +186,8 @@ export default function SGSOAuditEditor() {
             <CardDescription>{auditResults.length} critérios selecionados</CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
-            {auditResults.map((result, index) => (
-              <AuditResultCard key={index} result={result} index={index} onUpdate={handleUpdateResult} />
+            {auditResults.map((result, resultIdx) => (
+              <AuditResultCard key={`audit-${resultIdx}`} result={result} index={resultIdx} onUpdate={handleUpdateResult} />
             ))}
           </CardContent>
         </Card>

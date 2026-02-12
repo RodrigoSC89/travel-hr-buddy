@@ -158,8 +158,8 @@ export default function ESGEmissionsTracker() {
                     <YAxis dataKey="vessel" type="category" fontSize={10} width={120} />
                     <Tooltip />
                     <Bar dataKey="ciiValue" name="CII Atual" radius={[0, 4, 4, 0]}>
-                      {vesselCIIData.map((entry, index) => (
-                        <Cell key={index} fill={getRatingBarColor(entry.rating)} />
+                      {vesselCIIData.map((entry) => (
+                        <Cell key={entry.vessel} fill={getRatingBarColor(entry.rating)} />
                       ))}
                     </Bar>
                     <Bar dataKey="target" name="Meta" fill="hsl(var(--muted-foreground))" radius={[0, 4, 4, 0]} />

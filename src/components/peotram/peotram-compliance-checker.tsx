@@ -405,8 +405,8 @@ export const PeotramComplianceChecker: React.FC = () => {
                           <div className="space-y-2">
                             <p className="font-medium">Recomendações:</p>
                             <ul className="list-disc list-inside space-y-1">
-                              {item.recommendations.map((rec, index) => (
-                                <li key={index} className="text-sm">{rec}</li>
+                              {item.recommendations.map((rec) => (
+                                <li key={rec} className="text-sm">{rec}</li>
                               ))}
                             </ul>
                           </div>
@@ -475,8 +475,8 @@ export const PeotramComplianceChecker: React.FC = () => {
                     <div>
                       <h3 className="font-semibold mb-3">Principais Recomendações</h3>
                       <ul className="space-y-2">
-                        {complianceReport.recommendations.map((rec, index) => (
-                          <li key={index} className="flex items-start gap-2">
+                        {complianceReport.recommendations.map((rec) => (
+                          <li key={rec} className="flex items-start gap-2">
                             <div className="w-2 h-2 bg-primary rounded-full mt-2 flex-shrink-0" />
                             <span className="text-sm">{rec}</span>
                           </li>
@@ -541,8 +541,8 @@ export const PeotramComplianceChecker: React.FC = () => {
                   </CardHeader>
                   <CardContent>
                     <div className="space-y-4">
-                      {complianceReport.nextActions.map((action, index) => (
-                        <div key={index} className="border rounded-lg p-4">
+                      {complianceReport.nextActions.map((action) => (
+                        <div key={action.action} className="border rounded-lg p-4">
                           <div className="flex items-start justify-between">
                             <div className="flex-1">
                               <h4 className="font-medium mb-1">{action.action}</h4>
