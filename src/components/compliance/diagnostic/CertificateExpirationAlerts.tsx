@@ -107,59 +107,59 @@ export function CertificateExpirationAlerts() {
       return <Badge variant="destructive">CRÍTICO ({cert.days_until_expiry} dias)</Badge>;
     }
     if (cert.days_until_expiry <= 30) {
-      return <Badge className="bg-amber-500 hover:bg-amber-600">{cert.days_until_expiry} dias</Badge>;
+      return <Badge className="bg-warning hover:bg-warning/90 text-warning-foreground">{cert.days_until_expiry} dias</Badge>;
     }
-    return <Badge variant="outline" className="text-green-600 border-green-600">{cert.days_until_expiry} dias</Badge>;
+    return <Badge variant="outline" className="text-success border-success">{cert.days_until_expiry} dias</Badge>;
   };
 
   return (
     <div className="space-y-6">
       {/* Header com Métricas */}
       <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
-        <Card className="border-red-200 bg-red-50 dark:bg-red-950/20">
+        <Card className="border-destructive/20 bg-destructive/5">
           <CardContent className="pt-4">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-muted-foreground">Vencidos</p>
-                <p className="text-3xl font-bold text-red-600">{metrics.expired}</p>
+                <p className="text-3xl font-bold text-destructive">{metrics.expired}</p>
               </div>
-              <AlertTriangle className="h-8 w-8 text-red-500" />
+              <AlertTriangle className="h-8 w-8 text-destructive" />
             </div>
           </CardContent>
         </Card>
         
-        <Card className="border-orange-200 bg-orange-50 dark:bg-orange-950/20">
+        <Card className="border-warning/20 bg-warning/5">
           <CardContent className="pt-4">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-muted-foreground">Críticos (≤7d)</p>
-                <p className="text-3xl font-bold text-orange-600">{metrics.critical}</p>
+                <p className="text-3xl font-bold text-warning">{metrics.critical}</p>
               </div>
-              <Clock className="h-8 w-8 text-orange-500" />
+              <Clock className="h-8 w-8 text-warning" />
             </div>
           </CardContent>
         </Card>
         
-        <Card className="border-amber-200 bg-amber-50 dark:bg-amber-950/20">
+        <Card className="border-warning/20 bg-warning/5">
           <CardContent className="pt-4">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-muted-foreground">Atenção (≤30d)</p>
-                <p className="text-3xl font-bold text-amber-600">{metrics.warning}</p>
+                <p className="text-3xl font-bold text-warning">{metrics.warning}</p>
               </div>
-              <Bell className="h-8 w-8 text-amber-500" />
+              <Bell className="h-8 w-8 text-warning" />
             </div>
           </CardContent>
         </Card>
         
-        <Card className="border-green-200 bg-green-50 dark:bg-green-950/20">
+        <Card className="border-success/20 bg-success/5">
           <CardContent className="pt-4">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-muted-foreground">OK (&gt;30d)</p>
-                <p className="text-3xl font-bold text-green-600">{metrics.ok}</p>
+                <p className="text-3xl font-bold text-success">{metrics.ok}</p>
               </div>
-              <CheckCircle2 className="h-8 w-8 text-green-500" />
+              <CheckCircle2 className="h-8 w-8 text-success" />
             </div>
           </CardContent>
         </Card>

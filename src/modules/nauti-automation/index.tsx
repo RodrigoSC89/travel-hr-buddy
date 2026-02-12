@@ -321,8 +321,8 @@ const NautilusAutomation: React.FC = () => {
                         <Zap className="h-3 w-3 mr-1" />
                         {workflow.trigger}
                       </Badge>
-                      {workflow.actions.map((action, i) => (
-                        <React.Fragment key={i}>
+                      {workflow.actions.map((action) => (
+                        <React.Fragment key={action}>
                           <ArrowRight className="h-4 w-4 text-muted-foreground shrink-0" />
                           <Badge variant="secondary" className="shrink-0">{action}</Badge>
                         </React.Fragment>
@@ -381,7 +381,7 @@ const NautilusAutomation: React.FC = () => {
                 <CardHeader className="pb-2">
                   <div className="flex items-center justify-between">
                     <CardTitle className="text-lg flex items-center gap-2">
-                      <Bot className={`h-5 w-5 ${bot.status === "running" ? "text-green-400 animate-pulse" : "text-muted-foreground"}`} />
+                      <Bot className={`h-5 w-5 ${bot.status === "running" ? "text-success animate-pulse" : "text-muted-foreground"}`} />
                       {bot.name}
                     </CardTitle>
                     {getStatusBadge(bot.status)}
@@ -433,7 +433,7 @@ const NautilusAutomation: React.FC = () => {
                 <div className="flex items-center justify-between">
                   <div className="flex-1">
                     <div className="flex items-center gap-3 mb-2">
-                      <Zap className={`h-5 w-5 ${trigger.isActive ? "text-yellow-400" : "text-muted-foreground"}`} />
+                      <Zap className={`h-5 w-5 ${trigger.isActive ? "text-warning" : "text-muted-foreground"}`} />
                       <h3 className="font-semibold text-foreground">{trigger.name}</h3>
                       <Badge variant="outline">{trigger.triggerCount} acionamentos</Badge>
                     </div>
@@ -480,12 +480,12 @@ const NautilusAutomation: React.FC = () => {
                   { time: "14:15:22", workflow: "Alerta de Manutenção", status: "warning", message: "Anomalia detectada no sensor #45" },
                   { time: "13:45:00", workflow: "DocProcessor Bot", status: "success", message: "12 documentos processados" },
                   { time: "13:00:01", workflow: "Trigger: Combustível Baixo", status: "triggered", message: "Nível 28% - notificação enviada" }
-                ].map((log, i) => (
-                  <div key={i} className="flex items-center gap-4 p-3 rounded-lg bg-muted/30">
+                ].map((log) => (
+                  <div key={`${log.time}-${log.workflow}`} className="flex items-center gap-4 p-3 rounded-lg bg-muted/30">
                     <span className="text-sm text-muted-foreground font-mono w-20">{log.time}</span>
-                    {log.status === "success" && <CheckCircle className="h-4 w-4 text-green-400" />}
-                    {log.status === "warning" && <AlertTriangle className="h-4 w-4 text-yellow-400" />}
-                    {log.status === "triggered" && <Zap className="h-4 w-4 text-yellow-400" />}
+                    {log.status === "success" && <CheckCircle className="h-4 w-4 text-success" />}
+                    {log.status === "warning" && <AlertTriangle className="h-4 w-4 text-warning" />}
+                    {log.status === "triggered" && <Zap className="h-4 w-4 text-warning" />}
                     <span className="font-medium text-foreground">{log.workflow}</span>
                     <span className="text-sm text-muted-foreground flex-1">{log.message}</span>
                   </div>

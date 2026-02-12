@@ -146,7 +146,7 @@ const PeopleDashboard: FC = () => {
           </CardHeader>
           <CardContent className="space-y-3">
             {alertsLoading ? (
-              [...Array(3)].map((_, i) => <Skeleton key={i} className="h-12" />)
+              [...Array(3)].map((_, i) => <Skeleton key={`alert-skel-${i}`} className="h-12" />)
             ) : alertas.length === 0 ? (
               <div className="text-center py-8 text-muted-foreground">
                 <AlertTriangle className="h-8 w-8 mx-auto mb-2 opacity-30" />
@@ -181,7 +181,7 @@ const PeopleDashboard: FC = () => {
           </CardHeader>
           <CardContent className="space-y-3">
             {birthdaysLoading ? (
-              [...Array(3)].map((_, i) => <Skeleton key={i} className="h-12" />)
+              [...Array(3)].map((_, i) => <Skeleton key={`bday-skel-${i}`} className="h-12" />)
             ) : aniversariantes.length === 0 ? (
               <p className="text-center text-muted-foreground py-4">Nenhum aniversariante próximo</p>
             ) : (

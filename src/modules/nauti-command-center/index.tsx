@@ -443,8 +443,8 @@ export default function NautilusCommandCenter() {
                   <div className="flex-1 overflow-y-auto p-4 space-y-4">
                     {messages.length === 0 ? (
                       <div className="text-center py-8">
-                        <div className="h-16 w-16 mx-auto rounded-full bg-gradient-to-br from-purple-500/20 to-pink-500/20 flex items-center justify-center mb-4">
-                          <Sparkles className="h-8 w-8 text-purple-500" />
+                        <div className="h-16 w-16 mx-auto rounded-full bg-gradient-to-br from-accent/20 to-primary/20 flex items-center justify-center mb-4">
+                          <Sparkles className="h-8 w-8 text-accent-foreground" />
                         </div>
                         <p className="text-sm text-muted-foreground mb-4">
                           Olá! Sou a IA do Nautilus Command Center.
@@ -454,9 +454,9 @@ export default function NautilusCommandCenter() {
                             "Mostrar status da frota",
                             "Gerar relatório executivo",
                             "Analisar riscos operacionais"
-                          ].map((suggestion, i) => (
+                          ].map((suggestion) => (
                             <Button
-                              key={i}
+                              key={suggestion}
                               variant="outline"
                               size="sm"
                               className="w-full justify-start text-xs"
