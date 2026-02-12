@@ -35,7 +35,7 @@ export const FloatingActionButton: React.FC = () => {
       label: "Notificações",
       action: () => {
         logUserAction("FAB_NOTIFICATIONS_CLICKED", { source: "floating-action-button" });
-        navigate("/notifications");
+        navigate("/alerts-command");
         toast({ title: "🔔 Notificações", description: "Abrindo centro de notificações" });
       }
     },

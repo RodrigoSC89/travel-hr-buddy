@@ -1110,10 +1110,21 @@ const AppRoutes = () => (
       <Route path="/peotram-ai" element={<Navigate to="/peotram" replace />} />
       <Route path="/gmud-workflow" element={<Navigate to="/gmud" replace />} />
       <Route path="/crew/rotations" element={<Navigate to="/crew-management" replace />} />
-      <Route path="/settings/integrations" element={<Navigate to="/integrations-center" replace />} />
+      <Route path="/settings/integrations" element={<Navigate to="/integrations" replace />} />
+      <Route path="/integrations-center" element={<Navigate to="/integrations" replace />} />
       <Route path="/hr" element={<Navigate to="/hr-dashboard" replace />} />
       <Route path="/training" element={<Navigate to="/ai-training" replace />} />
       <Route path="/voyage-planner" element={<Navigate to="/voyage-command" replace />} />
+      <Route path="/maintenance-planner" element={<Navigate to="/maintenance" replace />} />
+      <Route path="/subsea-operations" element={<Navigate to="/ocean-sonar" replace />} />
+      <Route path="/finance-command-center" element={<Navigate to="/finance-command" replace />} />
+      <Route path="/about" element={<Navigate to="/landing" replace />} />
+      <Route path="/blog" element={<Navigate to="/landing" replace />} />
+      <Route path="/contact" element={<Navigate to="/landing" replace />} />
+      <Route path="/terms" element={<Navigate to="/landing" replace />} />
+      <Route path="/privacy" element={<Navigate to="/landing" replace />} />
+      <Route path="/privacy-policy" element={<Navigate to="/landing" replace />} />
+      <Route path="/notifications" element={<Navigate to="/alerts-command" replace />} />
       
       {/* DEV ONLY - Route Dashboard */}
       <Route path="/dev-routes" element={<DevRoutesDashboard />} />

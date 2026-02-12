@@ -4,5 +4,5 @@
  */
 import { Navigate } from "react-router-dom";
 export default function DeepRiskAIRedirect() {
-  return <Navigate to="/subsea-operations" replace />;
+  return <Navigate to="/deep-risk-ai" replace />;
 }

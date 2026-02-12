@@ -177,7 +177,7 @@ export const ModernExecutiveDashboard: React.FC<ExecutiveDashboardProps> = ({ cl
       trend: "-15 min vs média",
       icon: <Clock className="w-6 h-6 text-primary-foreground" />,
       color: "green" as const,
-      onClick: () => navigate("/system-hub"),
+      onClick: () => navigate("/command?tab=monitoring"),
       actionLabel: "Monitor"
     },
     {

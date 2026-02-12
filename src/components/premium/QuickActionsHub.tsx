@@ -70,7 +70,7 @@ export function QuickActionsHub({ open, onOpenChange, customActions = [] }: Quic
     
     // Sistema
     { id: "sys-settings", title: "Configurações", description: "Ajustes do sistema", icon: Settings, category: "Sistema", shortcut: "g s", action: () => navigate("/settings"), keywords: ["preferencias", "conta"] },
-    { id: "sys-database", title: "Status do Sistema", description: "Monitoramento e saúde", icon: Database, category: "Sistema", action: () => navigate("/system-hub"), keywords: ["health", "monitoramento"] },
+    { id: "sys-database", title: "Status do Sistema", description: "Monitoramento e saúde", icon: Database, category: "Sistema", action: () => navigate("/command?tab=monitoring"), keywords: ["health", "monitoramento"] },
   ];
 
   const allActions = useMemo(() => {

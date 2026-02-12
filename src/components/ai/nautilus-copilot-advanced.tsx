@@ -286,7 +286,7 @@ What would you like assistance with today?`,
       title: "📄 Gerar Relatório",
       description: "Iniciando geração de relatório operacional"
     });
-    navigate("/admin/reports");
+    navigate("/reports-command");
   };
 
   const handleCrewPlanning = () => {

@@ -77,7 +77,7 @@ export function HRPayrollDashboard() {
   };
 
   const handleOpenFullPayroll = () => {
-    navigate('/payroll');
+    navigate('/hr/payroll');
   };
 
   const totalDeductions = (summary?.totalINSS || 0) + (summary?.totalIRRF || 0);

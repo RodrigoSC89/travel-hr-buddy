@@ -174,7 +174,7 @@ function FinanceDashboard() {
               <BarChart3 className="h-4 w-4" />
               Relatório Financeiro
             </Button>
-            <Button className="w-full justify-start gap-2" variant="outline" onClick={() => navigate("/finance-command-center")}>
+            <Button className="w-full justify-start gap-2" variant="outline" onClick={() => navigate("/finance-command")}>
               <Bot className="h-4 w-4" />
               Análise de Custos com IA
             </Button>

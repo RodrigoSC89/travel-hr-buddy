@@ -71,7 +71,7 @@ export function TelemetryConsentBanner() {
         </div>
 
         <a
-          href="/privacy-policy"
+          href="/landing#privacy"
           className="text-xs text-primary hover:underline mt-3 block text-center"
         >
           Privacy Policy
