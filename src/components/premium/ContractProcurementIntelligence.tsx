@@ -13,13 +13,18 @@ import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import {
   FileText, DollarSign, Clock, TrendingUp,
   CheckCircle, AlertTriangle, Calendar, Target, BarChart3,
-  Store, Star, Send, Globe,
+  Store, Star, Send, Globe, Plus,
   Sparkles, Zap, PieChart, Scale, Loader2
 } from "lucide-react";
 import { toast } from "sonner";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useContractProcurementData, type SupplierData, type RFQData, type SpendCategory } from "@/hooks/useContractProcurementData";
 
 // BIMCO Standard Forms (reference data)
@@ -32,8 +37,35 @@ const BIMCO_FORMS = [
 
 export default function ContractProcurementIntelligence() {
   const [activeTab, setActiveTab] = useState("suppliers");
+  const [showNewRFQDialog, setShowNewRFQDialog] = useState(false);
+  const [newRFQ, setNewRFQ] = useState({ title: "", category: "Geral", description: "", budget: "", deadline: "" });
+  const queryClient = useQueryClient();
   const { suppliers, rfqs, spendCategories, isLoading, error } = useContractProcurementData();
 
+  const createRFQMutation = useMutation({
+    mutationFn: async () => {
+      const rfqNumber = `RFQ-${Date.now().toString(36).toUpperCase()}`;
+      const { error } = await supabase.from("rfq_requests").insert({
+        rfq_number: rfqNumber,
+        title: newRFQ.title,
+        category: newRFQ.category || "Geral",
+        description: newRFQ.description || null,
+        budget_estimate: newRFQ.budget ? parseFloat(newRFQ.budget) : null,
+        deadline: newRFQ.deadline || null,
+        status: "open",
+        items: [],
+      });
+      if (error) throw error;
+      return rfqNumber;
+    },
+    onSuccess: (rfqNumber) => {
+      queryClient.invalidateQueries({ queryKey: ["procurement-rfqs"] });
+      toast.success(`RFQ ${rfqNumber} criada com sucesso!`);
+      setShowNewRFQDialog(false);
+      setNewRFQ({ title: "", category: "Geral", description: "", budget: "", deadline: "" });
+    },
+    onError: (err) => toast.error(`Erro ao criar RFQ: ${(err as Error).message}`),
+  });
   const avgSupplierRating = suppliers.length > 0
     ? (suppliers.reduce((acc, s) => acc + s.rating, 0) / suppliers.length).toFixed(1)
     : "0.0";
@@ -232,17 +264,8 @@ export default function ContractProcurementIntelligence() {
                   <Send className="h-5 w-5 text-blue-500" />
                   Request for Quotation
                 </CardTitle>
-                <Button onClick={async () => {
-                  try {
-                    await supabase.from("ai_audit_logs").insert({
-                      user_input: "Nova RFQ criada via ContractProcurementIntelligence",
-                      module_name: "procurement",
-                      interaction_type: "rfq_created"
-                    });
-                    toast.success("RFQ criada! Configure os detalhes.");
-                  } catch { toast.error("Erro ao criar RFQ"); }
-                }}>
-                  <Zap className="h-4 w-4 mr-2" />
+                <Button onClick={() => setShowNewRFQDialog(true)}>
+                  <Plus className="h-4 w-4 mr-2" />
                   Nova RFQ
                 </Button>
               </div>
@@ -363,6 +386,46 @@ export default function ContractProcurementIntelligence() {
           </Card>
         </TabsContent>
       </Tabs>
+
+      {/* New RFQ Dialog */}
+      <Dialog open={showNewRFQDialog} onOpenChange={setShowNewRFQDialog}>
+        <DialogContent className="sm:max-w-md">
+          <DialogHeader>
+            <DialogTitle>Nova Solicitação de Cotação (RFQ)</DialogTitle>
+            <DialogDescription>Preencha os dados para criar uma nova RFQ</DialogDescription>
+          </DialogHeader>
+          <div className="space-y-4 py-4">
+            <div className="space-y-2">
+              <Label htmlFor="rfq-title">Título *</Label>
+              <Input id="rfq-title" placeholder="Ex: Peças de motor principal" value={newRFQ.title} onChange={e => setNewRFQ(p => ({ ...p, title: e.target.value }))} />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="rfq-category">Categoria</Label>
+              <Input id="rfq-category" placeholder="Ex: Peças, Combustível, Serviços" value={newRFQ.category} onChange={e => setNewRFQ(p => ({ ...p, category: e.target.value }))} />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="rfq-desc">Descrição</Label>
+              <Textarea id="rfq-desc" placeholder="Detalhes da solicitação..." value={newRFQ.description} onChange={e => setNewRFQ(p => ({ ...p, description: e.target.value }))} />
+            </div>
+            <div className="grid grid-cols-2 gap-4">
+              <div className="space-y-2">
+                <Label htmlFor="rfq-budget">Orçamento Estimado (R$)</Label>
+                <Input id="rfq-budget" type="number" placeholder="0.00" value={newRFQ.budget} onChange={e => setNewRFQ(p => ({ ...p, budget: e.target.value }))} />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="rfq-deadline">Prazo</Label>
+                <Input id="rfq-deadline" type="date" value={newRFQ.deadline} onChange={e => setNewRFQ(p => ({ ...p, deadline: e.target.value }))} />
+              </div>
+            </div>
+          </div>
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setShowNewRFQDialog(false)}>Cancelar</Button>
+            <Button onClick={() => createRFQMutation.mutate()} disabled={!newRFQ.title || createRFQMutation.isPending} loading={createRFQMutation.isPending}>
+              Criar RFQ
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }
