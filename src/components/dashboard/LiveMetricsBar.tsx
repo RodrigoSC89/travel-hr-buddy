@@ -72,10 +72,10 @@ function LiveMetricsBarComponent() {
 
   const getStatusColor = (status?: string) => {
     switch (status) {
-      case 'success': return 'text-emerald-400';
-      case 'warning': return 'text-amber-400';
-      case 'error': return 'text-red-400';
-      default: return 'text-slate-300';
+      case 'success': return 'text-success';
+      case 'warning': return 'text-warning';
+      case 'error': return 'text-destructive';
+      default: return 'text-muted-foreground';
     }
   };
 

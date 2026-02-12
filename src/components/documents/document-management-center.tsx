@@ -191,11 +191,11 @@ export const DocumentManagementCenter = () => {
 
   const getStatusColor = (status: Document["status"]) => {
     switch (status) {
-    case "active": return "bg-green-500";
-    case "archived": return "bg-gray-500";
-    case "under_review": return "bg-yellow-500";
-    case "expired": return "bg-red-500";
-    default: return "bg-gray-500";
+    case "active": return "bg-success";
+    case "archived": return "bg-muted-foreground";
+    case "under_review": return "bg-warning";
+    case "expired": return "bg-destructive";
+    default: return "bg-muted-foreground";
     }
   };
 
@@ -329,7 +329,7 @@ export const DocumentManagementCenter = () => {
           
             <Card>
               <CardContent className="p-4 text-center">
-                <Upload className="h-8 w-8 mx-auto mb-2 text-green-600" />
+                <Upload className="h-8 w-8 mx-auto mb-2 text-success" />
                 <div className="text-2xl font-bold">{stats.recent_uploads}</div>
                 <div className="text-sm text-muted-foreground">Uploads Recentes</div>
               </CardContent>
@@ -337,7 +337,7 @@ export const DocumentManagementCenter = () => {
           
             <Card>
               <CardContent className="p-4 text-center">
-                <Eye className="h-8 w-8 mx-auto mb-2 text-blue-600" />
+                <Eye className="h-8 w-8 mx-auto mb-2 text-info" />
                 <div className="text-2xl font-bold">{stats.by_status.under_review || 0}</div>
                 <div className="text-sm text-muted-foreground">Em Revisão</div>
               </CardContent>
@@ -345,7 +345,7 @@ export const DocumentManagementCenter = () => {
           
             <Card>
               <CardContent className="p-4 text-center">
-                <AlertTriangle className="h-8 w-8 mx-auto mb-2 text-red-600" />
+                <AlertTriangle className="h-8 w-8 mx-auto mb-2 text-destructive" />
                 <div className="text-2xl font-bold">{stats.expiring_soon}</div>
                 <div className="text-sm text-muted-foreground">Expirados</div>
               </CardContent>
@@ -523,16 +523,16 @@ export const DocumentManagementCenter = () => {
           <TabsContent value="expired" className="space-y-6">
             <Card>
               <CardHeader>
-                <CardTitle className="text-red-600">Documentos Expirados</CardTitle>
+                <CardTitle className="text-destructive">Documentos Expirados</CardTitle>
               </CardHeader>
               <CardContent>
                 <div className="space-y-4">
                   {documents.filter(d => d.status === "expired").map((doc) => (
-                    <div key={doc.id} className="border-l-4 border-red-500 bg-red-50 p-4 rounded">
+                    <div key={doc.id} className="border-l-4 border-destructive bg-destructive/5 p-4 rounded">
                       <div className="flex items-center justify-between">
                         <div>
                           <h3 className="font-semibold">{doc.title}</h3>
-                          <p className="text-sm text-red-700">
+                          <p className="text-sm text-destructive">
                             {getTypeText(doc.type)} • Requer renovação
                           </p>
                         </div>
