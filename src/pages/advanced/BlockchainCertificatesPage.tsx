@@ -110,7 +110,7 @@ const BlockchainCertificatesPage = () => {
         </div>
         <div className="flex items-center gap-3">
           <Badge variant="outline" className="gap-2 py-1.5">
-            <Shield className="h-4 w-4 text-green-500" />
+            <Shield className="h-4 w-4 text-success" />
             Blockchain Ativo
           </Badge>
           <Button onClick={handleVerify} disabled={verifying}>
@@ -131,22 +131,22 @@ const BlockchainCertificatesPage = () => {
         </Card>
         <Card>
           <CardContent className="p-4 text-center">
-            <CheckCircle className="h-6 w-6 mx-auto text-green-500 mb-2" />
-            <p className="text-2xl font-bold text-green-500">{blockchainStats.verifiedToday}</p>
+            <CheckCircle className="h-6 w-6 mx-auto text-success mb-2" />
+            <p className="text-2xl font-bold text-success">{blockchainStats.verifiedToday}</p>
             <p className="text-xs text-muted-foreground">Verificados Hoje</p>
           </CardContent>
         </Card>
         <Card>
           <CardContent className="p-4 text-center">
-            <Clock className="h-6 w-6 mx-auto text-yellow-500 mb-2" />
-            <p className="text-2xl font-bold text-yellow-500">{blockchainStats.pendingVerification}</p>
+            <Clock className="h-6 w-6 mx-auto text-warning mb-2" />
+            <p className="text-2xl font-bold text-warning">{blockchainStats.pendingVerification}</p>
             <p className="text-xs text-muted-foreground">Pendentes</p>
           </CardContent>
         </Card>
         <Card>
           <CardContent className="p-4 text-center">
-            <AlertTriangle className="h-6 w-6 mx-auto text-red-500 mb-2" />
-            <p className="text-2xl font-bold text-red-500">{blockchainStats.revoked}</p>
+            <AlertTriangle className="h-6 w-6 mx-auto text-destructive mb-2" />
+            <p className="text-2xl font-bold text-destructive">{blockchainStats.revoked}</p>
             <p className="text-xs text-muted-foreground">Revogados</p>
           </CardContent>
         </Card>

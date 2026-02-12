@@ -320,12 +320,12 @@ const VoyageAccountingPage = () => {
             {/* Forecast */}
             <div>
               <h4 className="font-medium mb-2 flex items-center gap-2">
-                <TrendingUp className="h-4 w-4 text-blue-500" />
+                <TrendingUp className="h-4 w-4 text-info" />
                 Previsão IA
               </h4>
               <div className="grid gap-2 md:grid-cols-3">
-                {aiAnalysis.forecast.map((item, idx) => (
-                  <div key={idx} className="p-3 bg-background rounded-lg flex items-center justify-between">
+                {aiAnalysis.forecast.map((item) => (
+                  <div key={item.metric} className="p-3 bg-background rounded-lg flex items-center justify-between">
                     <div>
                       <p className="text-sm text-muted-foreground">{item.metric}</p>
                       <p className="font-medium">
@@ -333,9 +333,9 @@ const VoyageAccountingPage = () => {
                       </p>
                     </div>
                     {item.trend === "up" ? (
-                      <ArrowUp className="h-5 w-5 text-green-500" />
+                      <ArrowUp className="h-5 w-5 text-success" />
                     ) : (
-                      <ArrowDown className="h-5 w-5 text-red-500" />
+                      <ArrowDown className="h-5 w-5 text-destructive" />
                     )}
                   </div>
                 ))}
@@ -345,17 +345,17 @@ const VoyageAccountingPage = () => {
             {/* Cost Optimization */}
             <div>
               <h4 className="font-medium mb-2 flex items-center gap-2">
-                <Target className="h-4 w-4 text-green-500" />
+                <Target className="h-4 w-4 text-success" />
                 Oportunidades de Otimização
               </h4>
               <div className="space-y-2">
-                {aiAnalysis.cost_optimization.map((opt, idx) => (
-                  <div key={idx} className="p-3 bg-green-50 dark:bg-green-950/30 rounded-lg flex items-center justify-between">
+                {aiAnalysis.cost_optimization.map((opt) => (
+                  <div key={opt.area} className="p-3 bg-success/5 rounded-lg flex items-center justify-between">
                     <div>
                       <p className="font-medium">{opt.area}</p>
                       <p className="text-sm text-muted-foreground">{opt.action}</p>
                     </div>
-                    <Badge variant="default" className="bg-green-600">
+                    <Badge variant="default" className="bg-success">
                       -${opt.potential_saving.toLocaleString()}
                     </Badge>
                   </div>
@@ -366,13 +366,13 @@ const VoyageAccountingPage = () => {
             {/* Recommendations */}
             <div>
               <h4 className="font-medium mb-2 flex items-center gap-2">
-                <CheckCircle className="h-4 w-4 text-green-500" />
+                <CheckCircle className="h-4 w-4 text-success" />
                 Recomendações
               </h4>
               <ul className="space-y-1">
-                {aiAnalysis.recommendations.map((rec, idx) => (
-                  <li key={idx} className="text-sm flex items-start gap-2">
-                    <span className="text-green-500">•</span>
+                {aiAnalysis.recommendations.map((rec) => (
+                  <li key={rec} className="text-sm flex items-start gap-2">
+                    <span className="text-success">•</span>
                     {rec}
                   </li>
                 ))}

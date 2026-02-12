@@ -115,36 +115,36 @@ export default function SGSOWorkflow() {
         <Card>
           <CardHeader className="pb-2">
             <CardTitle className="text-sm font-medium flex items-center gap-2">
-              <Clock className="h-4 w-4 text-yellow-500" />
+              <Clock className="h-4 w-4 text-warning" />
               Pending
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-yellow-600">{stats.pending_audits}</div>
+            <div className="text-2xl font-bold text-warning">{stats.pending_audits}</div>
           </CardContent>
         </Card>
 
         <Card>
           <CardHeader className="pb-2">
             <CardTitle className="text-sm font-medium flex items-center gap-2">
-              <CheckCircle className="h-4 w-4 text-green-500" />
+              <CheckCircle className="h-4 w-4 text-success" />
               Approved
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-green-600">{stats.approved_audits}</div>
+            <div className="text-2xl font-bold text-success">{stats.approved_audits}</div>
           </CardContent>
         </Card>
 
         <Card>
           <CardHeader className="pb-2">
             <CardTitle className="text-sm font-medium flex items-center gap-2">
-              <XCircle className="h-4 w-4 text-red-500" />
+              <XCircle className="h-4 w-4 text-destructive" />
               Rejected
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-red-600">{stats.rejected_audits}</div>
+            <div className="text-2xl font-bold text-destructive">{stats.rejected_audits}</div>
           </CardContent>
         </Card>
 
@@ -163,21 +163,21 @@ export default function SGSOWorkflow() {
         <Card>
           <CardHeader className="pb-2">
             <CardTitle className="text-sm font-medium flex items-center gap-2">
-              <Activity className="h-4 w-4 text-orange-500" />
+              <Activity className="h-4 w-4 text-warning" />
               Open Findings
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-orange-600">{stats.open_findings}</div>
+            <div className="text-2xl font-bold text-warning">{stats.open_findings}</div>
           </CardContent>
         </Card>
       </div>
 
       {/* Approval Workflow Progress */}
-      <Card className="bg-gradient-to-r from-blue-50 to-indigo-50">
+      <Card className="bg-gradient-to-r from-info/5 to-info/10">
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
-            <TrendingUp className="h-5 w-5 text-blue-600" />
+            <TrendingUp className="h-5 w-5 text-info" />
             Workflow Status Overview
           </CardTitle>
           <CardDescription>Current state of audit approvals</CardDescription>
@@ -200,15 +200,15 @@ export default function SGSOWorkflow() {
             </div>
             <div className="grid grid-cols-3 gap-4 pt-2">
               <div className="text-center">
-                <div className="text-2xl font-bold text-yellow-600">{stats.pending_audits}</div>
+                <div className="text-2xl font-bold text-warning">{stats.pending_audits}</div>
                 <div className="text-xs text-muted-foreground">Awaiting Review</div>
               </div>
               <div className="text-center">
-                <div className="text-2xl font-bold text-green-600">{stats.approved_audits}</div>
+                <div className="text-2xl font-bold text-success">{stats.approved_audits}</div>
                 <div className="text-xs text-muted-foreground">Approved</div>
               </div>
               <div className="text-center">
-                <div className="text-2xl font-bold text-red-600">{stats.rejected_audits}</div>
+                <div className="text-2xl font-bold text-destructive">{stats.rejected_audits}</div>
                 <div className="text-xs text-muted-foreground">Rejected</div>
               </div>
             </div>
