@@ -133,10 +133,10 @@ const formatCurrency = (value: number) => {
 
 const getStatusColor = (status: string) => {
   switch (status) {
-    case "approved": return "bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400";
-    case "pending": return "bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-400";
-    case "suspended": return "bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400";
-    default: return "bg-gray-100 text-gray-800";
+    case "approved": return "bg-success/10 text-success";
+    case "pending": return "bg-warning/10 text-warning";
+    case "suspended": return "bg-destructive/10 text-destructive";
+    default: return "bg-muted text-muted-foreground";
   }
 };
 

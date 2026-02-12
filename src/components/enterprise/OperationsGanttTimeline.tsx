@@ -122,13 +122,13 @@
    const [currentDate, setCurrentDate] = useState(new Date("2026-02-01"));
  
    const getTypeConfig = (type: string) => {
-     const config: Record<string, { color: string; icon: React.ReactNode; label: string }> = {
-       voyage: { color: "bg-blue-500", icon: <Ship className="h-3 w-3" />, label: "Viagem" },
-       maintenance: { color: "bg-orange-500", icon: <Wrench className="h-3 w-3" />, label: "Manutenção" },
-       inspection: { color: "bg-purple-500", icon: <Anchor className="h-3 w-3" />, label: "Inspeção" },
-       crew_change: { color: "bg-green-500", icon: <Users className="h-3 w-3" />, label: "Tripulação" },
-       bunkering: { color: "bg-amber-500", icon: <Fuel className="h-3 w-3" />, label: "Bunkering" },
-       cargo: { color: "bg-cyan-500", icon: <Ship className="h-3 w-3" />, label: "Carga" }
+      const config: Record<string, { color: string; icon: React.ReactNode; label: string }> = {
+       voyage: { color: "bg-info", icon: <Ship className="h-3 w-3" />, label: "Viagem" },
+       maintenance: { color: "bg-warning", icon: <Wrench className="h-3 w-3" />, label: "Manutenção" },
+       inspection: { color: "bg-accent", icon: <Anchor className="h-3 w-3" />, label: "Inspeção" },
+       crew_change: { color: "bg-success", icon: <Users className="h-3 w-3" />, label: "Tripulação" },
+       bunkering: { color: "bg-warning", icon: <Fuel className="h-3 w-3" />, label: "Bunkering" },
+       cargo: { color: "bg-info", icon: <Ship className="h-3 w-3" />, label: "Carga" }
      };
      return config[type] || config.voyage;
    };
