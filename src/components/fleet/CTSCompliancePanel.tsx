@@ -447,8 +447,8 @@ export function CTSCompliancePanel({ vesselId, vesselName, onComplianceCheck }: 
               {compliance?.recommendations && compliance.recommendations.length > 0 && (
                 <div className="p-4 border rounded-lg space-y-2">
                   <p className="font-medium">Recomendações:</p>
-                  {compliance.recommendations.map((rec, idx) => (
-                    <p key={idx} className="text-sm text-muted-foreground">• {rec}</p>
+                  {compliance.recommendations.map((rec) => (
+                    <p key={rec} className="text-sm text-muted-foreground">• {rec}</p>
                   ))}
                 </div>
               )}
@@ -457,8 +457,8 @@ export function CTSCompliancePanel({ vesselId, vesselName, onComplianceCheck }: 
             <TabsContent value="positions">
               <ScrollArea className="h-[300px]">
                 <div className="space-y-3">
-                  {compliance?.positions.map((pos, idx) => (
-                    <div key={idx} className="p-3 border rounded-lg">
+                  {compliance?.positions.map((pos) => (
+                    <div key={pos.position} className="p-3 border rounded-lg">
                       <div className="flex items-center justify-between mb-2">
                         <span className="font-medium capitalize">{pos.position}</span>
                         <Badge variant={pos.current_count >= pos.required_count ? 'default' : 'destructive'}>
@@ -494,8 +494,8 @@ export function CTSCompliancePanel({ vesselId, vesselName, onComplianceCheck }: 
                   </div>
                 ) : (
                   <div className="space-y-3">
-                    {compliance?.violations.map((v, idx) => (
-                      <div key={idx} className="p-3 border rounded-lg">
+                    {compliance?.violations.map((v) => (
+                      <div key={`${v.type}-${v.position}`} className="p-3 border rounded-lg">
                         <div className="flex items-center gap-2 mb-2">
                           <Badge className={getSeverityColor(v.severity)}>
                             {v.severity.toUpperCase()}

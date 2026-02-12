@@ -174,8 +174,8 @@ export const PeotramItemEvaluator: React.FC<PeotramItemEvaluatorProps> = ({
         <div>
           <Label className="text-sm font-medium mb-2 block">Evidências Necessárias:</Label>
           <div className="flex flex-wrap gap-2">
-            {item.evidenceRequired.map((evidence, idx) => (
-              <Badge key={idx} variant="secondary" className="text-xs">
+            {item.evidenceRequired.map((evidence) => (
+              <Badge key={evidence} variant="secondary" className="text-xs">
                 {evidence}
               </Badge>
             ))}

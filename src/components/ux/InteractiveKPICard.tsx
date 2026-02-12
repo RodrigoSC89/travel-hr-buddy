@@ -230,8 +230,8 @@ export function InteractiveKPICard({
               <div className="px-4 pb-4 pt-0 space-y-3">
                 {details && (
                   <div className="grid grid-cols-2 gap-2">
-                    {details.map((detail, i) => (
-                      <div key={i} className="p-2 rounded-lg bg-background/50">
+                    {details.map((detail) => (
+                      <div key={detail.label} className="p-2 rounded-lg bg-background/50">
                         <p className="text-xs text-muted-foreground">{detail.label}</p>
                         <p className="font-medium text-sm">{detail.value}</p>
                       </div>

@@ -214,16 +214,16 @@ function OverviewTab({ analytics }: { analytics: Record<string, unknown> | null 
               { name: "Ana S.", xp: 2200, level: 7, streak: 12 },
               { name: "Pedro L.", xp: 1980, level: 6, streak: 8 },
               { name: "Maria F.", xp: 1750, level: 5, streak: 20 },
-            ].map((learner, i) => (
-              <div key={i} className="flex items-center gap-3">
+            ].map((learner, lIdx) => (
+              <div key={learner.name} className="flex items-center gap-3">
                 <span className={cn(
                   "w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold",
-                  i === 0 ? "bg-gradient-to-r from-warning to-warning text-warning-foreground" :
-                  i === 1 ? "bg-gradient-to-r from-muted to-muted text-muted-foreground" :
-                  i === 2 ? "bg-gradient-to-r from-warning to-warning text-warning-foreground" :
+                  lIdx === 0 ? "bg-gradient-to-r from-warning to-warning text-warning-foreground" :
+                  lIdx === 1 ? "bg-gradient-to-r from-muted to-muted text-muted-foreground" :
+                  lIdx === 2 ? "bg-gradient-to-r from-warning to-warning text-warning-foreground" :
                   "bg-muted"
                 )}>
-                  {i + 1}
+                  {lIdx + 1}
                 </span>
                 <div className="flex-1">
                   <p className="text-sm font-medium">{learner.name}</p>
@@ -457,8 +457,8 @@ function MicrolearningTab() {
                 <div>
                   <p className="font-medium mb-2">💡 Exemplos Práticos</p>
                   <ul className="space-y-1">
-                    {lesson.examples.map((ex, i) => (
-                      <li key={i} className="text-sm text-muted-foreground">• {ex}</li>
+                    {lesson.examples.map((ex) => (
+                      <li key={ex} className="text-sm text-muted-foreground">• {ex}</li>
                     ))}
                   </ul>
                 </div>

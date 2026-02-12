@@ -66,8 +66,8 @@ export function KanbanAISuggestions({ suggestions = [] }: KanbanAISuggestionsPro
       <h2 className="text-xl font-semibold mb-4">
         🤖 Sugestões da IA para este workflow
       </h2>
-      {suggestions.map((s, idx) => (
-        <Card key={idx} className={accepted.includes(s.etapa) ? "opacity-50" : ""}>
+      {suggestions.map((s) => (
+        <Card key={s.etapa} className={accepted.includes(s.etapa) ? "opacity-50" : ""}>
           <CardContent className="pt-6">
             <div className="space-y-3">
               <div className="flex items-center gap-2">

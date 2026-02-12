@@ -387,8 +387,8 @@ export const PSCPackagePanel: React.FC = () => {
                   { item: 'Acordos MLC', status: 'ok' },
                   { item: 'Registros de Manutenção', status: 'warning' },
                   { item: 'Relatórios de Auditoria', status: 'ok' }
-                ].map((check, idx) => (
-                  <div key={idx} className="flex items-center justify-between p-3 border rounded-lg">
+              ].map((check) => (
+                  <div key={check.item} className="flex items-center justify-between p-3 border rounded-lg">
                     <span>{check.item}</span>
                     {check.status === 'ok' ? (
                       <CheckCircle className="h-5 w-5 text-success" />

@@ -355,8 +355,8 @@ export default function TemplatesPanel() {
                 <div>
                   <p className="text-sm font-medium mb-2">Variáveis:</p>
                   <div className="flex flex-wrap gap-2">
-                    {template.variables.map((variable, idx) => (
-                      <Badge key={idx} variant="secondary">
+                    {template.variables.map((variable) => (
+                      <Badge key={variable} variant="secondary">
                         <Code className="h-3 w-3 mr-1" />
                         {variable}
                       </Badge>

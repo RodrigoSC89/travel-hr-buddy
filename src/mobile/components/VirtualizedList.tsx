@@ -65,7 +65,7 @@ function VirtualizedListInner<T>({
       <div className={cn("space-y-2", className)}>
         {Array.from({ length: loadingCount }).map((_, i) => (
           <Skeleton 
-            key={i} 
+            key={`vlist-skel-${i}`} 
             className="w-full rounded-lg"
             style={{ height: estimateSize }}
           />
@@ -168,7 +168,7 @@ function VirtualizedGridInner<T>({
       <div className={cn("grid gap-2", className)} style={{ gridTemplateColumns: `repeat(${columns}, 1fr)` }}>
         {Array.from({ length: loadingCount }).map((_, i) => (
           <Skeleton 
-            key={i} 
+            key={`vgrid-skel-${i}`} 
             className="w-full rounded-lg"
             style={{ height: estimateSize }}
           />

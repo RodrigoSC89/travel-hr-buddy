@@ -418,8 +418,8 @@ export const PeotramEmergencyResponse: React.FC = () => {
               { name: "Coletes Salva-Vidas", qty: 50, location: "Estações de Emergência", status: "OK" },
               { name: "EPIRBs", qty: 2, location: "Ponte de Comando", status: "Ativo" },
               { name: "Bombas de Incêndio", qty: 6, location: "Praça de Máquinas", status: "OK" },
-            ].map((resource, idx) => (
-              <Card key={idx} className="p-4">
+            ].map((resource) => (
+              <Card key={resource.name} className="p-4">
                 <div className="flex items-center justify-between">
                   <div>
                     <p className="font-medium">{resource.name}</p>

@@ -280,8 +280,8 @@ const EnhancedLogisticsDashboard: React.FC = () => {
 
         {/* Quick Stats */}
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-          {quickStats.map((stat, index) => (
-            <Card key={index} className={`group cursor-pointer transition-all duration-500 hover:scale-105 hover:shadow-2xl
+          {quickStats.map((stat) => (
+            <Card key={stat.label} className={`group cursor-pointer transition-all duration-500 hover:scale-105 hover:shadow-2xl
               bg-gradient-to-br from-card via-card/95 to-${stat.color}/5 border-${stat.color}/20 hover:border-${stat.color}/40`}>
               <CardContent className="p-4 flex items-center gap-3">
                 <div className={`p-3 rounded-xl bg-${stat.color}/20 group-hover:scale-110 transition-transform duration-300`}>

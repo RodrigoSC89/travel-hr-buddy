@@ -298,7 +298,7 @@ export default function SatcomDashboardEnhanced() {
               <CardContent>
                 <div className="font-mono text-sm text-slate-300 h-[300px] overflow-y-auto mb-4 p-3 bg-slate-900 rounded">
                   {terminalOutput.map((line, i) => (
-                    <div key={i} className={line.startsWith(">") ? "text-emerald-400" : ""}>
+                    <div key={`term-${i}-${line.slice(0, 12)}`} className={line.startsWith(">") ? "text-emerald-400" : ""}>
                       {line || "\u00A0"}
                     </div>
                   ))}

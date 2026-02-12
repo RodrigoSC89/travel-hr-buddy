@@ -192,7 +192,7 @@ export default function InteractivityScoreboard() {
           <div className="h-8 bg-muted rounded w-1/3" />
           <div className="grid grid-cols-4 gap-4">
             {[1, 2, 3, 4].map(i => (
-              <div key={i} className="h-24 bg-muted rounded" />
+              <div key={`score-skel-${i}`} className="h-24 bg-muted rounded" />
             ))}
           </div>
           <div className="h-96 bg-muted rounded" />

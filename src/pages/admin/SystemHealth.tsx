@@ -137,8 +137,8 @@ export default function SystemHealth() {
               <AlertTitle>Critical Issues Found</AlertTitle>
               <AlertDescription>
                 <ul className="list-disc list-inside space-y-1 mt-2">
-                  {report.criticalIssues.map((issue, idx) => (
-                    <li key={idx}>{issue}</li>
+                  {report.criticalIssues.map((issue) => (
+                    <li key={issue}>{issue}</li>
                   ))}
                 </ul>
               </AlertDescription>
@@ -152,8 +152,8 @@ export default function SystemHealth() {
               <AlertTitle>Recommendations</AlertTitle>
               <AlertDescription>
                 <ul className="list-disc list-inside space-y-1 mt-2">
-                  {report.recommendations.slice(0, 5).map((rec, idx) => (
-                    <li key={idx}>{rec}</li>
+                  {report.recommendations.slice(0, 5).map((rec) => (
+                    <li key={rec}>{rec}</li>
                   ))}
                 </ul>
               </AlertDescription>
@@ -184,9 +184,9 @@ export default function SystemHealth() {
                 </CardHeader>
                 <CardContent>
                   <div className="space-y-2">
-                    {category.checks.map((check, idx) => (
+                    {category.checks.map((check) => (
                       <div 
-                        key={idx}
+                        key={check.name}
                         className="flex items-start gap-2 text-sm border-l-2 pl-3 py-1"
                         style={{
                           borderColor: check.passed 
