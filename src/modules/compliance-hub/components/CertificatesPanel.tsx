@@ -75,24 +75,24 @@ export function CertificatesPanel({
           variant: 'default' as const,
           label: 'Válido',
           icon: <CheckCircle2 className="h-3 w-3" />,
-          color: 'text-green-500',
-          bgColor: 'bg-green-500/10',
+          color: 'text-success',
+          bgColor: 'bg-success/10',
         };
       case 'expiring-soon':
         return {
           variant: 'secondary' as const,
           label: `Expira em ${daysUntilExpiry} dias`,
           icon: <Clock className="h-3 w-3" />,
-          color: 'text-yellow-500',
-          bgColor: 'bg-yellow-500/10',
+          color: 'text-warning',
+          bgColor: 'bg-warning/10',
         };
       case 'expired':
         return {
           variant: 'destructive' as const,
           label: 'Expirado',
           icon: <XCircle className="h-3 w-3" />,
-          color: 'text-red-500',
-          bgColor: 'bg-red-500/10',
+          color: 'text-destructive',
+          bgColor: 'bg-destructive/10',
         };
       case 'pending-renewal':
         return {
@@ -170,8 +170,8 @@ export function CertificatesPanel({
         <Card>
           <CardContent className="p-4">
             <div className="flex items-center gap-3">
-              <div className="p-2 rounded-lg bg-green-500/10">
-                <CheckCircle2 className="h-5 w-5 text-green-500" />
+              <div className="p-2 rounded-lg bg-success/10">
+                <CheckCircle2 className="h-5 w-5 text-success" />
               </div>
               <div>
                 <p className="text-sm text-muted-foreground">Válidos</p>
@@ -184,8 +184,8 @@ export function CertificatesPanel({
         <Card>
           <CardContent className="p-4">
             <div className="flex items-center gap-3">
-              <div className="p-2 rounded-lg bg-yellow-500/10">
-                <Clock className="h-5 w-5 text-yellow-500" />
+              <div className="p-2 rounded-lg bg-warning/10">
+                <Clock className="h-5 w-5 text-warning" />
               </div>
               <div>
                 <p className="text-sm text-muted-foreground">Expirando</p>
@@ -198,8 +198,8 @@ export function CertificatesPanel({
         <Card>
           <CardContent className="p-4">
             <div className="flex items-center gap-3">
-              <div className="p-2 rounded-lg bg-red-500/10">
-                <XCircle className="h-5 w-5 text-red-500" />
+              <div className="p-2 rounded-lg bg-destructive/10">
+                <XCircle className="h-5 w-5 text-destructive" />
               </div>
               <div>
                 <p className="text-sm text-muted-foreground">Expirados</p>

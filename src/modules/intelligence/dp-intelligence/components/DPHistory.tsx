@@ -490,8 +490,8 @@ export default function DPHistory() {
         <Card>
           <CardContent className="pt-6">
             <div className="flex items-center gap-4">
-              <div className="p-3 rounded-full bg-purple-100 dark:bg-purple-950">
-                <TrendingUp className="h-6 w-6 text-purple-500" />
+              <div className="p-3 rounded-full bg-accent/10">
+                <TrendingUp className="h-6 w-6 text-accent-foreground" />
               </div>
               <div>
                 <p className="text-sm text-muted-foreground">Análises IA</p>
@@ -503,8 +503,8 @@ export default function DPHistory() {
         <Card>
           <CardContent className="pt-6">
             <div className="flex items-center gap-4">
-              <div className="p-3 rounded-full bg-emerald-100 dark:bg-emerald-950">
-                <Activity className="h-6 w-6 text-emerald-500" />
+              <div className="p-3 rounded-full bg-success/10">
+                <Activity className="h-6 w-6 text-success" />
               </div>
               <div>
                 <p className="text-sm text-muted-foreground">Operações</p>
@@ -516,8 +516,8 @@ export default function DPHistory() {
         <Card>
           <CardContent className="pt-6">
             <div className="flex items-center gap-4">
-              <div className="p-3 rounded-full bg-amber-100 dark:bg-amber-950">
-                <Activity className="h-6 w-6 text-amber-500" />
+              <div className="p-3 rounded-full bg-warning/10">
+                <Activity className="h-6 w-6 text-warning" />
               </div>
               <div>
                 <p className="text-sm text-muted-foreground">Alertas</p>
@@ -529,8 +529,8 @@ export default function DPHistory() {
         <Card>
           <CardContent className="pt-6">
             <div className="flex items-center gap-4">
-              <div className="p-3 rounded-full bg-blue-100 dark:bg-blue-950">
-                <FileText className="h-6 w-6 text-blue-500" />
+              <div className="p-3 rounded-full bg-info/10">
+                <FileText className="h-6 w-6 text-info" />
               </div>
               <div>
                 <p className="text-sm text-muted-foreground">Relatórios</p>

@@ -230,7 +230,7 @@ export const PerformanceMonitoringDashboard: React.FC = () => {
             <CardTitle className="text-sm font-medium">Warning Alerts</CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-yellow-600">{stats.warningAlerts}</div>
+            <div className="text-2xl font-bold text-warning">{stats.warningAlerts}</div>
             <p className="text-xs text-muted-foreground">Require attention</p>
           </CardContent>
         </Card>
@@ -240,7 +240,7 @@ export const PerformanceMonitoringDashboard: React.FC = () => {
             <CardTitle className="text-sm font-medium">Critical Alerts</CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-red-600">{stats.criticalAlerts}</div>
+            <div className="text-2xl font-bold text-destructive">{stats.criticalAlerts}</div>
             <p className="text-xs text-muted-foreground">Immediate action needed</p>
           </CardContent>
         </Card>

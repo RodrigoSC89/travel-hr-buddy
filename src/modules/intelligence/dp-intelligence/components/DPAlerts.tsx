@@ -106,11 +106,11 @@ export default function DPAlerts() {
   const getSeverityIcon = (severity: string) => {
     switch (severity) {
       case "critical":
-        return <XCircle className="h-5 w-5 text-red-500" />;
+        return <XCircle className="h-5 w-5 text-destructive" />;
       case "warning":
-        return <AlertTriangle className="h-5 w-5 text-amber-500" />;
+        return <AlertTriangle className="h-5 w-5 text-warning" />;
       case "info":
-        return <Bell className="h-5 w-5 text-blue-500" />;
+        return <Bell className="h-5 w-5 text-info" />;
       default:
         return <Bell className="h-5 w-5" />;
     }
@@ -119,11 +119,11 @@ export default function DPAlerts() {
   const getSeverityBadge = (severity: string) => {
     switch (severity) {
       case "critical":
-        return <Badge className="bg-red-100 text-red-700">Crítico</Badge>;
+        return <Badge className="bg-destructive/10 text-destructive">Crítico</Badge>;
       case "warning":
-        return <Badge className="bg-amber-100 text-amber-700">Alerta</Badge>;
+        return <Badge className="bg-warning/10 text-warning">Alerta</Badge>;
       case "info":
-        return <Badge className="bg-blue-100 text-blue-700">Info</Badge>;
+        return <Badge className="bg-info/10 text-info">Info</Badge>;
       default:
         return <Badge>{severity}</Badge>;
     }
@@ -170,9 +170,9 @@ export default function DPAlerts() {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-muted-foreground">Críticos</p>
-                <p className="text-3xl font-bold text-red-500">{stats.critical}</p>
+                <p className="text-3xl font-bold text-destructive">{stats.critical}</p>
               </div>
-              <XCircle className="h-8 w-8 text-red-500" />
+              <XCircle className="h-8 w-8 text-destructive" />
             </div>
           </CardContent>
         </Card>
