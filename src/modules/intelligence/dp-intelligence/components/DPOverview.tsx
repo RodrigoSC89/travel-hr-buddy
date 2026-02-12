@@ -37,7 +37,7 @@ export default function DPOverview() {
       value: 98,
       trend: "down",
       icon: Compass,
-      color: "text-blue-500"
+      color: "text-info"
     },
     { 
       name: "DP Confidence", 
@@ -45,7 +45,7 @@ export default function DPOverview() {
       value: 98,
       trend: "up",
       icon: Gauge,
-      color: "text-purple-500"
+      color: "text-accent-foreground"
     },
   ];
 
@@ -103,7 +103,7 @@ export default function DPOverview() {
         <Card>
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
-              <Navigation className="h-5 w-5 text-blue-500" /> Reference Systems
+              <Navigation className="h-5 w-5 text-info" /> Reference Systems
             </CardTitle>
           </CardHeader>
           <CardContent>
@@ -127,7 +127,7 @@ export default function DPOverview() {
         <Card>
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
-              <Activity className="h-5 w-5 text-purple-500" /> Thruster Status
+              <Activity className="h-5 w-5 text-accent-foreground" /> Thruster Status
             </CardTitle>
           </CardHeader>
           <CardContent>

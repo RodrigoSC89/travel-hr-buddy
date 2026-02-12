@@ -100,12 +100,12 @@ export default function AuditSchedulePanel() {
 
   const getTypeBadge = (type: string) => {
     const config: Record<string, { label: string; color: string }> = {
-      ism: { label: "ISM", color: "bg-blue-500/10 text-blue-500" },
-      isps: { label: "ISPS", color: "bg-purple-500/10 text-purple-500" },
-      sire: { label: "SIRE", color: "bg-amber-500/10 text-amber-500" },
-      psc: { label: "PSC", color: "bg-red-500/10 text-red-500" },
-      internal: { label: "Interna", color: "bg-green-500/10 text-green-500" },
-      flag_state: { label: "Flag State", color: "bg-cyan-500/10 text-cyan-500" },
+      ism: { label: "ISM", color: "bg-info/10 text-info" },
+      isps: { label: "ISPS", color: "bg-accent/10 text-accent-foreground" },
+      sire: { label: "SIRE", color: "bg-warning/10 text-warning" },
+      psc: { label: "PSC", color: "bg-destructive/10 text-destructive" },
+      internal: { label: "Interna", color: "bg-success/10 text-success" },
+      flag_state: { label: "Flag State", color: "bg-info/10 text-info" },
     };
     const c = config[type] || { label: type || "N/A", color: "bg-muted text-muted-foreground" };
     return <Badge className={c.color}>{c.label}</Badge>;
@@ -113,9 +113,9 @@ export default function AuditSchedulePanel() {
 
   const getPriorityColor = (priority: string) => {
     switch (priority) {
-      case "critical": return "text-red-500";
-      case "high": return "text-amber-500";
-      case "medium": return "text-blue-500";
+      case "critical": return "text-destructive";
+      case "high": return "text-warning";
+      case "medium": return "text-info";
       default: return "text-muted-foreground";
     }
   };
@@ -126,15 +126,15 @@ export default function AuditSchedulePanel() {
     <div className="space-y-6">
       {/* Stats */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-        <Card className="bg-gradient-to-br from-blue-500/10 to-blue-600/5">
+        <Card className="bg-gradient-to-br from-info/10 to-info/5">
           <CardContent className="p-4">
             <div className="flex items-center justify-between">
               <div><p className="text-sm text-muted-foreground">Auditorias Este Mês</p><p className="text-2xl font-bold">{auditsThisMonth.length}</p></div>
-              <CalendarDays className="h-8 w-8 text-blue-500" />
+              <CalendarDays className="h-8 w-8 text-info" />
             </div>
           </CardContent>
         </Card>
-        <Card className="bg-gradient-to-br from-amber-500/10 to-amber-600/5">
+        <Card className="bg-gradient-to-br from-warning/10 to-warning/5">
           <CardContent className="p-4">
             <div className="flex items-center justify-between">
               <div><p className="text-sm text-muted-foreground">Próximas</p><p className="text-2xl font-bold">{upcomingAudits.length}</p></div>
@@ -142,11 +142,11 @@ export default function AuditSchedulePanel() {
             </div>
           </CardContent>
         </Card>
-        <Card className="bg-gradient-to-br from-green-500/10 to-green-600/5">
+        <Card className="bg-gradient-to-br from-success/10 to-success/5">
           <CardContent className="p-4">
             <div className="flex items-center justify-between">
               <div><p className="text-sm text-muted-foreground">Concluídas</p><p className="text-2xl font-bold">{completedAudits}</p></div>
-              <CheckCircle2 className="h-8 w-8 text-green-500" />
+              <CheckCircle2 className="h-8 w-8 text-success" />
             </div>
           </CardContent>
         </Card>

@@ -113,21 +113,21 @@ export const PerformanceEngineV1: React.FC = () => {
   const getTrendIcon = (trend?: string | null) => {
     switch (trend) {
     case "improving":
-      return <TrendingUp className="h-4 w-4 text-green-500" />;
+      return <TrendingUp className="h-4 w-4 text-success" />;
     case "declining":
-      return <TrendingDown className="h-4 w-4 text-red-500" />;
+      return <TrendingDown className="h-4 w-4 text-destructive" />;
     default:
-      return <Minus className="h-4 w-4 text-gray-500" />;
+      return <Minus className="h-4 w-4 text-muted-foreground" />;
     }
   };
 
   const getSeverityColor = (severity: string) => {
     switch (severity) {
-    case "critical": return "bg-red-500";
-    case "major": return "bg-orange-500";
-    case "moderate": return "bg-yellow-500";
-    case "minor": return "bg-blue-500";
-    default: return "bg-gray-500";
+    case "critical": return "bg-destructive";
+    case "major": return "bg-warning";
+    case "moderate": return "bg-warning";
+    case "minor": return "bg-info";
+    default: return "bg-muted";
     }
   };
 
