@@ -119,7 +119,7 @@ const ComplianceChecklist = () => {
     await loadAIInsightsInternal(records);
   };
 
-  const loadAIInsightsInternal = async (currentRecords: any[]) => {
+  const loadAIInsightsInternal = async (currentRecords: ComplianceRecord[]) => {
     try {
       const nonCompliantCount = currentRecords.filter(r => r.risk_level === "non_compliant").length;
       const riskCount = currentRecords.filter(r => r.risk_level === "major_risk" || r.risk_level === "minor_risk").length;
@@ -431,12 +431,12 @@ const ComplianceChecklist = () => {
                           Findings ({record.findings.length})
                         </h4>
                         <div className="space-y-1">
-                          {record.findings.slice(0, 3).map((finding: any, idx: number) => (
+                          {record.findings.slice(0, 3).map((finding: Record<string, unknown>, idx: number) => (
                             <div key={idx} className="text-sm pl-6 text-muted-foreground">
-                              <span className="font-medium">{finding.item}:</span> {finding.issue}
-                              {finding.severity && (
+                              <span className="font-medium">{String(finding.item ?? "")}:</span> {String(finding.issue ?? "")}
+                              {Boolean(finding.severity) && (
                                 <Badge variant="outline" className="ml-2 text-xs">
-                                  {finding.severity}
+                                  {String(finding.severity)}
                                 </Badge>
                               )}
                             </div>
@@ -458,12 +458,12 @@ const ComplianceChecklist = () => {
                           Recommendations ({record.recommendations.length})
                         </h4>
                         <div className="space-y-1">
-                          {record.recommendations.slice(0, 2).map((rec: any, idx: number) => (
+                          {record.recommendations.slice(0, 2).map((rec: Record<string, unknown>, idx: number) => (
                             <div key={idx} className="text-sm pl-6 text-muted-foreground">
-                              • {rec.recommendation}
-                              {rec.priority && (
+                              • {String(rec.recommendation ?? "")}
+                              {Boolean(rec.priority) && (
                                 <Badge variant="outline" className="ml-2 text-xs">
-                                  {rec.priority}
+                                  {String(rec.priority)}
                                 </Badge>
                               )}
                             </div>

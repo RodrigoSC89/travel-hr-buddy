@@ -19,10 +19,8 @@ export interface SonarEvent {
   amplitude_db: number;
   classification: string;
   ai_model_version: string;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- raw sonar signal data
-  raw_data?: any;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- flexible metadata
-  metadata?: any;
+  raw_data?: Record<string, unknown>;
+  metadata?: Record<string, unknown>;
   detected_at?: string;
 }
 
@@ -37,8 +35,7 @@ export interface SonarRisk {
   recommended_action: string;
   urgency: "low" | "medium" | "high" | "immediate";
   status?: "active" | "acknowledged" | "mitigated" | "resolved" | "false_positive";
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- flexible metadata
-  metadata?: any;
+  metadata?: Record<string, unknown>;
 }
 
 export interface SpectrogramData {

@@ -40,12 +40,11 @@ export const PeotramTemplateManager: React.FC<TemplateManagerProps> = ({
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
   const [editingTemplate, setEditingTemplate] = useState<Partial<PeotramTemplate>>({});
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- template data shape varies
-  const createNewTemplate = async (templateData: any) => {
+  const createNewTemplate = async (templateData: Record<string, unknown>) => {
     try {
       const { data, error } = await supabase
         .from("peotram_templates")
-        .insert([templateData])
+        .insert([templateData as never])
         .select()
         .single();
 
@@ -67,8 +66,7 @@ export const PeotramTemplateManager: React.FC<TemplateManagerProps> = ({
     }
   };
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- partial template updates
-  const updateTemplate = async (id: string, updates: any) => {
+  const updateTemplate = async (id: string, updates: Record<string, unknown>) => {
     try {
       const { error } = await supabase
         .from("peotram_templates")

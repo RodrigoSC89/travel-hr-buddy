@@ -199,6 +199,7 @@ const ComplianceReports = () => {
   };
 
   // CSV Export with Excel compatibility
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- dynamic compliance data shape
   const exportToCSV = (data: any[]) => {
     try {
       const headers = ["ID", "Category", "Severity", "Status", "Title", "Date"];
@@ -236,6 +237,7 @@ const ComplianceReports = () => {
   };
 
   // Excel Export using xlsx
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- dynamic compliance data shape
   const exportToExcel = (data: any[]) => {
     try {
       const worksheet = XLSX.utils.json_to_sheet(data.map(item => ({
@@ -267,6 +269,7 @@ const ComplianceReports = () => {
   };
 
   // JSON Export with metadata
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- dynamic compliance data shape
   const exportToJSON = (data: any[]) => {
     try {
       const jsonData = {

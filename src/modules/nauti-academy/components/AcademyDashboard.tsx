@@ -1166,15 +1166,18 @@ export default function AcademyDashboard() {
               <div>
                 <h4 className="font-medium mb-2">Módulos</h4>
                 <div className="space-y-2">
-                  {selectedCourse.modules.map((mod: any, idx: number) => (
+                  {selectedCourse.modules.map((mod: unknown, idx: number) => {
+                    const m = mod as Record<string, unknown>;
+                    return (
                     <div key={idx} className="flex items-center justify-between p-2 border rounded">
                       <div className="flex items-center gap-2">
                         <span className="w-6 h-6 rounded-full bg-primary/10 flex items-center justify-center text-xs font-medium">{idx + 1}</span>
-                        <span className="text-sm">{mod.title}</span>
+                        <span className="text-sm">{String(m.title ?? "")}</span>
                       </div>
-                      <span className="text-xs text-muted-foreground">{mod.duration}h</span>
+                      <span className="text-xs text-muted-foreground">{String(m.duration ?? 0)}h</span>
                     </div>
-                  ))}
+                    );
+                  })}
                 </div>
               </div>
             )}
