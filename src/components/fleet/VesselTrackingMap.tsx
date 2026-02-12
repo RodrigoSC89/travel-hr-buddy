@@ -99,6 +99,7 @@ export function VesselTrackingMap({
 
       if (data?.vessels && data.vessels.length > 0) {
         // Map API response to component format
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any -- edge function response shape
         const mappedVessels = data.vessels.map((v: any) => ({
           mmsi: v.mmsi,
           imo: v.imo,
@@ -175,7 +176,7 @@ export function VesselTrackingMap({
           }
         });
 
-        mapInstance.on('error', (e: any) => {
+        mapInstance.on('error', (e: { error?: string; message?: string }) => {
           logger.error('Mapbox error:', e);
           if (mounted) {
             setError('Erro ao carregar o mapa');

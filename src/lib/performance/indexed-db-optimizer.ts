@@ -241,7 +241,7 @@ class IndexedDBOptimizer {
     const index = tx.store.index('by-module');
     
     let cursor = await index.openCursor(module, sortBy === 'access' ? 'prev' : 'prev');
-    const results: any[] = [];
+    const results: unknown[] = [];
     let skipped = 0;
     
     while (cursor && results.length < limit) {
@@ -359,8 +359,7 @@ class IndexedDBOptimizer {
    */
   private async buildIndexes(
     key: string,
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any -- indexes built from arbitrary data structures
-    value: any,
+    value: unknown,
     module: string,
     fields: string[]
   ): Promise<void> {
@@ -386,9 +385,8 @@ class IndexedDBOptimizer {
   /**
    * Get nested value from object
    */
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- traverses arbitrary nested objects
-  private getNestedValue(obj: any, path: string): any {
-    return path.split('.').reduce((o, k) => o?.[k], obj);
+  private getNestedValue(obj: unknown, path: string): unknown {
+    return path.split('.').reduce((o: unknown, k: string) => (o && typeof o === 'object' ? (o as Record<string, unknown>)[k] : undefined), obj);
   }
   
   /**

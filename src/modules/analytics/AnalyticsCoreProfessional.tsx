@@ -1920,7 +1920,7 @@ Este relatório apresenta uma análise abrangente dos principais indicadores de 
                     <Label>Formato</Label>
                     <Select 
                       value={reportConfig.format}
-                      onValueChange={(v: any) => setReportConfig(c => ({ ...c, format: v }))}
+                      onValueChange={(v: string) => setReportConfig(c => ({ ...c, format: v as ReportConfig["format"] }))}
                     >
                       <SelectTrigger>
                         <SelectValue />

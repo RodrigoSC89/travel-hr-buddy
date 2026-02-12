@@ -94,8 +94,8 @@ export default function TrackingMegaHub() {
 
   const trackingMetrics = useMemo(() => ({
     totalVessels: vessels.length,
-    activeVessels: vessels.filter((v: any) => v.status === 'active' || v.status === 'operational').length,
-    openAlerts: alerts.filter((a: any) => !a.resolved && !a.acknowledged).length,
+    activeVessels: vessels.filter((v) => v.status === 'active' || v.status === 'operational').length,
+    openAlerts: alerts.filter((a) => !a.resolved && !a.acknowledged).length,
   }), [vessels, alerts]);
 
   const handleTabChange = (value: string) => {
@@ -116,7 +116,7 @@ export default function TrackingMegaHub() {
       toast.error('Nenhuma embarcação para exportar');
       return;
     }
-    const exportData = vessels.map((v: any) => ({
+    const exportData = vessels.map((v) => ({
       name: v.name,
       imo: v.imo_number,
       type: v.vessel_type,

@@ -70,11 +70,9 @@ export default function CommandMegaHub() {
 
   // Build real timeline events from vessel/voyage data
   const commandTimelineEvents = useMemo(() => {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any -- PremiumTimeline event shape
-    const events: any[] = [];
+    const events: Array<{ id: string; title: string; description: string; timestamp: string; type: 'success' | 'warning' | 'info'; metadata: Record<string, unknown> }> = [];
     
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any -- dynamic vessel row from useOperationsCommandData
-    vessels.slice(0, 3).forEach((v: any) => {
+    vessels.slice(0, 3).forEach((v) => {
       events.push({
         id: `vessel-${v.id}`,
         title: `${v.name || 'Vessel'} — ${v.status || 'Unknown'}`,
@@ -85,7 +83,7 @@ export default function CommandMegaHub() {
       });
     });
 
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any -- dynamic voyage row from useOperationsCommandData
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any -- voyage_plans join may include extra columns
     voyages.slice(0, 3).forEach((voy: any) => {
       events.push({
         id: `voyage-${voy.id}`,
@@ -104,6 +102,7 @@ export default function CommandMegaHub() {
         description: 'Cadastre embarcações e viagens para ver atividades aqui.',
         timestamp: new Date().toISOString(),
         type: 'info' as const,
+        metadata: {}
       });
     }
 
