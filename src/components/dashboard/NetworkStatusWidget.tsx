@@ -68,8 +68,8 @@ const NetworkStatusWidgetComponent: React.FC = () => {
 
   const getSignalColor = () => {
     // PATCH v20: Nunca retorna vermelho por "offline"
-    if (stats.downlink < 2) return "text-amber-500";
-    return "text-green-500";
+    if (stats.downlink < 2) return "text-warning";
+    return "text-success";
   };
 
   const getSpeedLabel = () => {

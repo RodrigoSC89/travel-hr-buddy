@@ -133,13 +133,13 @@ export const CompetencyHeatmap: React.FC = () => {
   };
 
   const getHeatmapColor = (level: number, status: string) => {
-    if (status === "none") return "bg-gray-100 dark:bg-gray-800";
-    if (status === "gap") return "bg-red-200 dark:bg-red-900";
-    if (status === "expiring") return "bg-yellow-200 dark:bg-yellow-900";
-    if (level >= 90) return "bg-green-500";
-    if (level >= 75) return "bg-green-400";
-    if (level >= 60) return "bg-yellow-400";
-    return "bg-orange-400";
+    if (status === "none") return "bg-muted";
+    if (status === "gap") return "bg-destructive/20 dark:bg-destructive/30";
+    if (status === "expiring") return "bg-warning/20 dark:bg-warning/30";
+    if (level >= 90) return "bg-success";
+    if (level >= 75) return "bg-success/70";
+    if (level >= 60) return "bg-warning/70";
+    return "bg-warning";
   };
 
   const totalGaps = crew.reduce((sum, m) => sum + m.gaps, 0);
@@ -181,7 +181,7 @@ export const CompetencyHeatmap: React.FC = () => {
             <CardTitle className="text-sm font-medium">Gaps Identificados</CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-red-600">{totalGaps}</div>
+            <div className="text-2xl font-bold text-destructive">{totalGaps}</div>
             <p className="text-xs text-muted-foreground">Requerem atenção</p>
           </CardContent>
         </Card>
@@ -191,7 +191,7 @@ export const CompetencyHeatmap: React.FC = () => {
             <CardTitle className="text-sm font-medium">Cert. Vencendo</CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-yellow-600">{expiringCerts}</div>
+            <div className="text-2xl font-bold text-warning">{expiringCerts}</div>
             <p className="text-xs text-muted-foreground">Próximos 90 dias</p>
           </CardContent>
         </Card>
@@ -224,23 +224,23 @@ export const CompetencyHeatmap: React.FC = () => {
             <div className="text-sm font-medium mb-2">Legenda:</div>
             <div className="flex flex-wrap gap-4 text-xs">
               <div className="flex items-center gap-2">
-                <div className="w-4 h-4 bg-green-500 rounded"></div>
+                <div className="w-4 h-4 bg-success rounded"></div>
                 <span>Excelente (90-100%)</span>
               </div>
               <div className="flex items-center gap-2">
-                <div className="w-4 h-4 bg-green-400 rounded"></div>
+                <div className="w-4 h-4 bg-success/70 rounded"></div>
                 <span>Bom (75-89%)</span>
               </div>
               <div className="flex items-center gap-2">
-                <div className="w-4 h-4 bg-yellow-400 rounded"></div>
+                <div className="w-4 h-4 bg-warning/70 rounded"></div>
                 <span>Adequado (60-74%)</span>
               </div>
               <div className="flex items-center gap-2">
-                <div className="w-4 h-4 bg-red-200 dark:bg-red-900 rounded"></div>
+                <div className="w-4 h-4 bg-destructive/20 dark:bg-destructive/30 rounded"></div>
                 <span>Gap (abaixo do requerido)</span>
               </div>
               <div className="flex items-center gap-2">
-                <div className="w-4 h-4 bg-yellow-200 dark:bg-yellow-900 rounded"></div>
+                <div className="w-4 h-4 bg-warning/20 dark:bg-warning/30 rounded"></div>
                 <span>Certificação vencendo</span>
               </div>
             </div>
@@ -296,7 +296,7 @@ export const CompetencyHeatmap: React.FC = () => {
                             <div>Nível: {level}%</div>
                             <div>Requerido: {member.competencies.find(c => c.skill === skill)?.required}%</div>
                             {member.competencies.find(c => c.skill === skill)?.expiryDate && (
-                              <div className="text-yellow-600">
+                              <div className="text-warning">
                                 Vence: {new Date(member.competencies.find(c => c.skill === skill)!.expiryDate!).toLocaleDateString("pt-BR")}
                               </div>
                             )}
@@ -308,9 +308,9 @@ export const CompetencyHeatmap: React.FC = () => {
                   <div className="w-32 p-3 flex items-center justify-center">
                     <div className="text-center">
                       <div className={`text-2xl font-bold ${
-                        member.overallScore >= 90 ? "text-green-600" :
-                          member.overallScore >= 75 ? "text-yellow-600" :
-                            "text-red-600"
+                        member.overallScore >= 90 ? "text-success" :
+                          member.overallScore >= 75 ? "text-warning" :
+                            "text-destructive"
                       }`}>
                         {member.overallScore}%
                       </div>
@@ -320,7 +320,7 @@ export const CompetencyHeatmap: React.FC = () => {
                             {member.gaps} gap{member.gaps > 1 ? "s" : ""}
                           </Badge>
                         ) : (
-                          <Badge variant="default" className="text-xs bg-green-600">
+                          <Badge variant="default" className="text-xs bg-success">
                             <CheckCircle className="h-3 w-3 mr-1" />
                             OK
                           </Badge>
@@ -336,7 +336,7 @@ export const CompetencyHeatmap: React.FC = () => {
           {/* Individual Cards */}
           <div className="mt-6 grid grid-cols-1 md:grid-cols-2 gap-4">
             {crew.filter(m => m.gaps > 0).map(member => (
-              <Card key={member.id} className="border-l-4 border-l-red-500">
+              <Card key={member.id} className="border-l-4 border-l-destructive">
                 <CardHeader>
                   <div className="flex items-center justify-between">
                     <div>
@@ -352,13 +352,13 @@ export const CompetencyHeatmap: React.FC = () => {
                   {member.competencies
                     .filter(c => !c.certified || c.level < c.required)
                     .map((comp, idx) => (
-                      <div key={idx} className="flex items-start gap-3 p-3 bg-red-50 dark:bg-red-950 rounded-lg">
-                        <AlertCircle className="h-5 w-5 text-red-600 mt-0.5" />
+                      <div key={idx} className="flex items-start gap-3 p-3 bg-destructive/5 dark:bg-destructive/10 rounded-lg">
+                        <AlertCircle className="h-5 w-5 text-destructive mt-0.5" />
                         <div className="flex-1">
                           <div className="font-medium text-sm">{comp.skill}</div>
                           <div className="text-xs text-muted-foreground mt-1">
                             {!comp.certified ? (
-                              <span className="text-red-600">Não certificado</span>
+                              <span className="text-destructive">Não certificado</span>
                             ) : (
                               <span>Nível {comp.level}% (requerido: {comp.required}%)</span>
                             )}
