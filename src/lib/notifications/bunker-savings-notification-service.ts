@@ -88,7 +88,7 @@ class BunkerSavingsNotificationService {
       const notification = new Notification(title, { body, icon: "/favicon.ico" });
       notification.onclick = () => {
         window.focus();
-        spaNavigate("/fuel-manager");
+        spaNavigate("/fuel-management");
         notification.close();
       };
       return true;

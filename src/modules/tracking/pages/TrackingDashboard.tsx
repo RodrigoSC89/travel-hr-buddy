@@ -146,7 +146,7 @@ export default function TrackingDashboard() {
           <AlertTitle>Sem Embarcações</AlertTitle>
           <AlertDescription className="flex justify-between items-center">
             <span>Adicione embarcações para rastreamento.</span>
-            <Button size="sm" variant="outline" onClick={() => navigate('/vessels')}>
+            <Button size="sm" variant="outline" onClick={() => navigate('/fleet-command')}>
               <Settings className="h-4 w-4 mr-2" />Configurar
             </Button>
           </AlertDescription>

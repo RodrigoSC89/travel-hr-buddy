@@ -149,7 +149,7 @@ export const DashboardActions: React.FC<DashboardActionsProps> = ({
     { icon: Plus, label: "Nova Missão", action: () => navigate("/mission-logs") },
     { icon: FileText, label: "Novo Relatório", action: () => navigate("/reports") },
     { icon: Calendar, label: "Agendar", action: () => navigate("/calendar") },
-    { icon: Bell, label: "Notificações", action: () => navigate("/notifications-center") },
+    { icon: Bell, label: "Notificações", action: () => navigate("/alerts-command") },
   ];
 
   return (

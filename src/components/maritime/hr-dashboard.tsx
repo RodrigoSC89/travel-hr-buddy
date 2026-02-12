@@ -146,7 +146,7 @@ export const MaritimeHRDashboard: React.FC = () => {
   };
 
   const handlePlanRotation = () => {
-    navigate("/crew/rotations");
+    navigate("/crew-management");
   };
 
   if (isLoading) {

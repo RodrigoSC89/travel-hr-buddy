@@ -44,7 +44,7 @@ export const FloatingActionButton: React.FC = () => {
       label: "Mensagens",
       action: () => {
         logUserAction("FAB_MESSAGES_CLICKED", { source: "floating-action-button" });
-        navigate("/communication");
+        navigate("/communication-command");
         toast({ title: "💬 Mensagens", description: "Abrindo sistema de comunicação" });
       }
     },
