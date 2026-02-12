@@ -152,12 +152,12 @@ export default function SGSOReportPage() {
             </div>
           ) : (
             <div className="space-y-6">
-              {incidents.map((incident, index) => (
-                <div key={index} className="border border-gray-200 rounded-lg p-5 bg-gray-50">
+              {incidents.map((incident) => (
+                <div key={incident.date} className="border border-border rounded-lg p-5 bg-muted/30">
                   <div className="flex items-start justify-between mb-3">
                     <div className="flex-1">
-                      <p className="text-sm font-medium text-gray-600 mb-1"><strong>Data:</strong> {incident.date}</p>
-                      <p className="text-base text-gray-900 leading-relaxed">{incident.description}</p>
+                      <p className="text-sm font-medium text-muted-foreground mb-1"><strong>Data:</strong> {incident.date}</p>
+                      <p className="text-base text-foreground leading-relaxed">{incident.description}</p>
                     </div>
                     <div className={`ml-4 px-3 py-1 rounded-full text-sm font-semibold ${getRiskColor(incident.sgso_risk_level)}`}>
                       {incident.sgso_risk_level}

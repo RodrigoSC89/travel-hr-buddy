@@ -497,8 +497,8 @@ export const PeotramPerformanceIndicators: React.FC = () => {
                       <div className="space-y-2">
                         <h4 className="text-sm font-medium text-success">Melhorias Recentes:</h4>
                         <ul className="space-y-1">
-                          {supplier.improvements.map((improvement, index) => (
-                            <li key={index} className="text-xs text-muted-foreground flex items-start gap-1">
+                          {supplier.improvements.map((improvement) => (
+                            <li key={improvement} className="text-xs text-muted-foreground flex items-start gap-1">
                               <CheckCircle className="w-3 h-3 text-success mt-0.5 flex-shrink-0" />
                               {improvement}
                             </li>
@@ -511,8 +511,8 @@ export const PeotramPerformanceIndicators: React.FC = () => {
                       <div className="space-y-2">
                         <h4 className="text-sm font-medium text-warning">Riscos Identificados:</h4>
                         <ul className="space-y-1">
-                          {supplier.risks.map((risk, index) => (
-                            <li key={index} className="text-xs text-muted-foreground flex items-start gap-1">
+                          {supplier.risks.map((risk) => (
+                            <li key={risk} className="text-xs text-muted-foreground flex items-start gap-1">
                               <AlertTriangle className="w-3 h-3 text-warning mt-0.5 flex-shrink-0" />
                               {risk}
                             </li>

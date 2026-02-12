@@ -373,9 +373,9 @@ export default function VisionAI() {
                 <ScrollArea className="h-[400px]">
                   {history.length > 0 ? (
                     <div className="space-y-3">
-                      {history.map((item, index) => (
+                      {history.map((item) => (
                         <div 
-                          key={index}
+                          key={item.timestamp}
                           className="p-3 border rounded-lg hover:bg-muted/50 cursor-pointer"
                           onClick={() => setResult(item)}
                         >

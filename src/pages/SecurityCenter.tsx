@@ -504,8 +504,8 @@ export default function SecurityCenter() {
 
             <TabsContent value="rls" className="mt-4">
               <div className="grid gap-3">
-                {policies.map((policy, index) => (
-                  <Card key={index}>
+                {policies.map((policy) => (
+                  <Card key={`${policy.table}-${policy.operation}`}>
                     <CardContent className="p-4">
                       <div className="flex items-center justify-between">
                         <div className="flex items-center gap-3">
@@ -551,8 +551,8 @@ export default function SecurityCenter() {
               </Alert>
 
               <div className="grid gap-3">
-                {piiFields.map((field, index) => (
-                  <Card key={index}>
+                {piiFields.map((field) => (
+                  <Card key={`${field.table}-${field.column}`}>
                     <CardContent className="p-4">
                       <div className="flex items-center justify-between">
                         <div className="flex items-center gap-3">

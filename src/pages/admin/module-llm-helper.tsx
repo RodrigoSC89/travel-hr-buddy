@@ -354,9 +354,9 @@ export const ModuleLLMHelper: React.FC = () => {
                 <div className="space-y-2">
                   {generateModulePrompt(
                     modules.find((m) => m.id === selectedModule)!
-                  ).examples?.map((example, index) => (
+                  ).examples?.map((example) => (
                     <div
-                      key={index}
+                      key={example}
                       className="p-3 bg-muted rounded-lg text-sm font-mono"
                     >
                       {example}

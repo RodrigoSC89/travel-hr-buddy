@@ -191,9 +191,9 @@ export default function ForecastPage() {
             </div>
           ) : (
             <div className="space-y-3">
-              {forecasts.map((forecast, index) => (
+              {forecasts.map((forecast) => (
                 <div 
-                  key={index}
+                  key={forecast.month}
                   className="flex items-center justify-between p-4 border rounded-lg hover:bg-accent transition-colors"
                 >
                   <div className="flex items-center gap-3">

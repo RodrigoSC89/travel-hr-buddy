@@ -183,8 +183,8 @@ export const IntegrationMonitoring: React.FC = () => {
 
       {/* Métricas Principais */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-        {metrics.map((metric, index) => (
-          <Card key={index} className="border border-border/50">
+        {metrics.map((metric) => (
+          <Card key={metric.name} className="border border-border/50">
             <CardContent className="p-4">
               <div className="flex items-center justify-between mb-2">
                 <p className="text-sm text-muted-foreground">{metric.name}</p>

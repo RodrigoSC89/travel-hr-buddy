@@ -63,9 +63,9 @@ export const QuickActionsPanel: React.FC = () => {
       </CardHeader>
       <CardContent>
         <div className="grid grid-cols-2 gap-2">
-          {actions.map((action, index) => (
+          {actions.map((action) => (
             <Button
-              key={index}
+              key={action.label}
               variant="outline"
               size="sm"
               className="h-auto py-3 flex flex-col items-center gap-1 hover:border-primary"
