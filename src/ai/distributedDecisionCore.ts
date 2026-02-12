@@ -366,8 +366,6 @@ class DistributedDecisionCore {
     decision.executedAt = new Date();
 
     try {
-      await new Promise(resolve => setTimeout(resolve, 100));
-
       decision.status = "completed";
       decision.success = true;
       

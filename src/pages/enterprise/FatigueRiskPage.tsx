@@ -236,7 +236,7 @@ export default function FatigueRiskPage() {
                 <div>
                   <p className={cn(
                     "text-3xl font-bold",
-                    stats.avgFatigue > 60 ? 'text-red-500' : stats.avgFatigue > 40 ? 'text-yellow-500' : 'text-green-500'
+                    stats.avgFatigue > 60 ? 'text-destructive' : stats.avgFatigue > 40 ? 'text-warning' : 'text-success'
                   )}>
                     {stats.avgFatigue.toFixed(0)}%
                   </p>
@@ -253,11 +253,11 @@ export default function FatigueRiskPage() {
             <CardContent className="pt-4">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-3xl font-bold text-red-500">{stats.highRisk}</p>
+                  <p className="text-3xl font-bold text-destructive">{stats.highRisk}</p>
                   <p className="text-xs text-muted-foreground">Alto Risco</p>
                 </div>
-                <div className="p-2 rounded-lg bg-red-500/10">
-                  <AlertTriangle className="h-5 w-5 text-red-500" />
+                <div className="p-2 rounded-lg bg-destructive/10">
+                  <AlertTriangle className="h-5 w-5 text-destructive" />
                 </div>
               </div>
             </CardContent>
@@ -281,11 +281,11 @@ export default function FatigueRiskPage() {
             <CardContent className="pt-4">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-3xl font-bold text-green-500">{stats.compliant}/{crew.length}</p>
+                  <p className="text-3xl font-bold text-success">{stats.compliant}/{crew.length}</p>
                   <p className="text-xs text-muted-foreground">Conformes MLC</p>
                 </div>
-                <div className="p-2 rounded-lg bg-green-500/10">
-                  <CheckCircle2 className="h-5 w-5 text-green-500" />
+                <div className="p-2 rounded-lg bg-success/10">
+                  <CheckCircle2 className="h-5 w-5 text-success" />
                 </div>
               </div>
             </CardContent>
@@ -311,8 +311,8 @@ export default function FatigueRiskPage() {
                 >
                   <Card className={cn(
                     "border-2",
-                    member.riskLevel === 'critical' && "border-red-500/50 bg-red-500/5",
-                    member.riskLevel === 'high' && "border-orange-500/30"
+                    member.riskLevel === 'critical' && "border-destructive/50 bg-destructive/5",
+                    member.riskLevel === 'high' && "border-warning/30"
                   )}>
                     <CardContent className="pt-4">
                       <div className="flex items-start gap-4">
@@ -341,9 +341,9 @@ export default function FatigueRiskPage() {
                             </div>
                             <Progress value={member.fatigueScore} className={cn(
                               "h-2",
-                              member.fatigueScore > 70 && "[&>div]:bg-red-500",
-                              member.fatigueScore > 50 && member.fatigueScore <= 70 && "[&>div]:bg-yellow-500",
-                              member.fatigueScore <= 50 && "[&>div]:bg-green-500"
+                              member.fatigueScore > 70 && "[&>div]:bg-destructive",
+                              member.fatigueScore > 50 && member.fatigueScore <= 70 && "[&>div]:bg-warning",
+                              member.fatigueScore <= 50 && "[&>div]:bg-success"
                             )} />
                           </div>
 
@@ -363,7 +363,7 @@ export default function FatigueRiskPage() {
                               </div>
                               <span className={cn(
                                 "font-medium",
-                                member.workHoursWeek > 60 && "text-red-500"
+                                member.workHoursWeek > 60 && "text-destructive"
                               )}>{member.workHoursWeek}h</span>
                             </div>
                             <div className="p-2 bg-muted/50 rounded">
@@ -373,7 +373,7 @@ export default function FatigueRiskPage() {
                               </div>
                               <span className={cn(
                                 "font-medium",
-                                member.restHoursLast24h < 6 && "text-red-500"
+                                member.restHoursLast24h < 6 && "text-destructive"
                               )}>{member.restHoursLast24h}h</span>
                             </div>
                           </div>
@@ -382,9 +382,9 @@ export default function FatigueRiskPage() {
                           <div className="flex items-center justify-between mt-3 pt-3 border-t">
                             <div className="flex items-center gap-2">
                               {member.mlcCompliant ? (
-                                <CheckCircle2 className="h-4 w-4 text-green-500" />
+                                <CheckCircle2 className="h-4 w-4 text-success" />
                               ) : (
-                                <AlertTriangle className="h-4 w-4 text-red-500" />
+                                <AlertTriangle className="h-4 w-4 text-destructive" />
                               )}
                               <span className="text-xs">
                                 MLC 2006: {member.mlcCompliant ? 'Conforme' : 'Não Conforme'}
@@ -399,7 +399,7 @@ export default function FatigueRiskPage() {
                           {member.riskLevel !== 'low' && (
                             <div className={cn(
                               "mt-3 p-2 rounded text-xs",
-                              member.riskLevel === 'critical' ? 'bg-red-500/20' : 'bg-amber-500/10'
+                              member.riskLevel === 'critical' ? 'bg-destructive/20' : 'bg-warning/10'
                             )}>
                               <div className="flex items-center gap-1 font-medium mb-1">
                                 <Brain className="h-3 w-3" />
@@ -438,16 +438,16 @@ export default function FatigueRiskPage() {
                     >
                       <div className={cn(
                         "flex items-start gap-4 p-4 border rounded-lg",
-                        violation.severity === 'violation' ? 'border-red-500/30 bg-red-500/5' : 'border-yellow-500/30 bg-yellow-500/5'
+                        violation.severity === 'violation' ? 'border-destructive/30 bg-destructive/5' : 'border-warning/30 bg-warning/5'
                       )}>
                         <div className={cn(
                           "p-2 rounded-full",
-                          violation.severity === 'violation' ? 'bg-red-500/20' : 'bg-yellow-500/20'
+                          violation.severity === 'violation' ? 'bg-destructive/20' : 'bg-warning/20'
                         )}>
                           {violation.severity === 'violation' ? (
-                            <AlertTriangle className="h-4 w-4 text-red-500" />
+                            <AlertTriangle className="h-4 w-4 text-destructive" />
                           ) : (
-                            <Bell className="h-4 w-4 text-yellow-500" />
+                            <Bell className="h-4 w-4 text-warning" />
                           )}
                         </div>
                         <div className="flex-1">

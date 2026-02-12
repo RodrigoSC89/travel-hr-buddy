@@ -84,11 +84,11 @@ export function JourneyOrchestratorDashboard() {
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case 'active': return 'bg-blue-500';
-      case 'completed': return 'bg-green-500';
-      case 'failed': return 'bg-red-500';
-      case 'cancelled': return 'bg-gray-500';
-      default: return 'bg-yellow-500';
+      case 'active': return 'bg-info';
+      case 'completed': return 'bg-success';
+      case 'failed': return 'bg-destructive';
+      case 'cancelled': return 'bg-muted';
+      default: return 'bg-warning';
     }
   };
 
@@ -135,8 +135,8 @@ export function JourneyOrchestratorDashboard() {
         <Card>
           <CardContent className="p-4">
             <div className="flex items-center gap-3">
-              <div className="p-2 rounded-lg bg-blue-500/10">
-                <Activity className="h-5 w-5 text-blue-500" />
+              <div className="p-2 rounded-lg bg-info/10">
+                <Activity className="h-5 w-5 text-info" />
               </div>
               <div>
                 <p className="text-2xl font-bold">{statistics.active}</p>
@@ -148,8 +148,8 @@ export function JourneyOrchestratorDashboard() {
         <Card>
           <CardContent className="p-4">
             <div className="flex items-center gap-3">
-              <div className="p-2 rounded-lg bg-green-500/10">
-                <CheckCircle className="h-5 w-5 text-green-500" />
+              <div className="p-2 rounded-lg bg-success/10">
+                <CheckCircle className="h-5 w-5 text-success" />
               </div>
               <div>
                 <p className="text-2xl font-bold">{statistics.completed}</p>
@@ -174,8 +174,8 @@ export function JourneyOrchestratorDashboard() {
         <Card>
           <CardContent className="p-4">
             <div className="flex items-center gap-3">
-              <div className="p-2 rounded-lg bg-yellow-500/10">
-                <Clock className="h-5 w-5 text-yellow-500" />
+              <div className="p-2 rounded-lg bg-warning/10">
+                <Clock className="h-5 w-5 text-warning" />
               </div>
               <div>
                 <p className="text-2xl font-bold">{Math.round(statistics.averageDuration / 60000)}m</p>
@@ -292,17 +292,17 @@ export function JourneyOrchestratorDashboard() {
                               key={task.id}
                               className={cn(
                                 "flex items-center gap-3 p-2 rounded-lg",
-                                task.status === 'completed' && "bg-green-500/10",
-                                task.status === 'in_progress' && "bg-blue-500/10 animate-pulse",
-                                task.status === 'failed' && "bg-red-500/10",
+                                task.status === 'completed' && "bg-success/10",
+                                task.status === 'in_progress' && "bg-info/10 animate-pulse",
+                                task.status === 'failed' && "bg-destructive/10",
                                 task.status === 'pending' && "bg-muted/30"
                               )}
                             >
                               <div className={cn(
                                 "w-6 h-6 rounded-full flex items-center justify-center",
-                                task.status === 'completed' && "bg-green-500 text-white",
-                                task.status === 'in_progress' && "bg-blue-500 text-white",
-                                task.status === 'failed' && "bg-red-500 text-white",
+                                task.status === 'completed' && "bg-success text-success-foreground",
+                                task.status === 'in_progress' && "bg-info text-info-foreground",
+                                task.status === 'failed' && "bg-destructive text-destructive-foreground",
                                 task.status === 'pending' && "bg-muted text-muted-foreground"
                               )}>
                                 {task.status === 'completed' ? (
@@ -316,7 +316,7 @@ export function JourneyOrchestratorDashboard() {
                               <div className="flex-1 min-w-0">
                                 <p className="text-sm font-medium truncate">{task.action}</p>
                                 {task.status === 'in_progress' && (
-                                  <p className="text-xs text-blue-500">Em execução...</p>
+                                  <p className="text-xs text-info">Em execução...</p>
                                 )}
                               </div>
                               <Activity className="h-4 w-4 text-muted-foreground" />
@@ -412,7 +412,7 @@ export function JourneyOrchestratorDashboard() {
                         className="flex items-center justify-between p-3 rounded-lg border"
                       >
                         <div className="flex items-center gap-3">
-                          <CheckCircle className="h-4 w-4 text-green-500" />
+                          <CheckCircle className="h-4 w-4 text-success" />
                           <div>
                             <p className="font-medium text-sm">{journey.name}</p>
                             <p className="text-xs text-muted-foreground">
@@ -432,10 +432,10 @@ export function JourneyOrchestratorDashboard() {
                     {history.filter(j => j.status === 'failed').map((journey) => (
                       <div
                         key={journey.id}
-                        className="flex items-center justify-between p-3 rounded-lg border border-red-500/30"
+                        className="flex items-center justify-between p-3 rounded-lg border border-destructive/30"
                       >
                         <div className="flex items-center gap-3">
-                          <AlertTriangle className="h-4 w-4 text-red-500" />
+                          <AlertTriangle className="h-4 w-4 text-destructive" />
                           <div>
                             <p className="font-medium text-sm">{journey.name}</p>
                             <p className="text-xs text-muted-foreground">

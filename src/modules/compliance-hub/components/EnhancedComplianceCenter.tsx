@@ -280,16 +280,16 @@ export const EnhancedComplianceCenter: React.FC = () => {
       case 'valid':
       case 'completed':
       case 'closed':
-        return 'bg-green-500/20 text-green-500 border-green-500/30';
+        return 'bg-success/20 text-success border-success/30';
       case 'attention':
       case 'expiring_soon':
       case 'in_progress':
-        return 'bg-yellow-500/20 text-yellow-500 border-yellow-500/30';
+        return 'bg-warning/20 text-warning border-warning/30';
       case 'non_compliant':
       case 'expired':
       case 'overdue':
       case 'open':
-        return 'bg-red-500/20 text-red-500 border-red-500/30';
+        return 'bg-destructive/20 text-destructive border-destructive/30';
       default:
         return 'bg-muted text-muted-foreground';
     }
@@ -297,9 +297,9 @@ export const EnhancedComplianceCenter: React.FC = () => {
 
   const getSeverityColor = (severity: string) => {
     switch (severity) {
-      case 'critical': return 'bg-red-500 text-white';
-      case 'major': return 'bg-orange-500 text-white';
-      case 'minor': return 'bg-yellow-500 text-black';
+      case 'critical': return 'bg-destructive text-destructive-foreground';
+      case 'major': return 'bg-warning text-warning-foreground';
+      case 'minor': return 'bg-accent text-accent-foreground';
       default: return 'bg-muted';
     }
   };

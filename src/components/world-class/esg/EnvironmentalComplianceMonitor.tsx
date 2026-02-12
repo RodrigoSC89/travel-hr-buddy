@@ -105,8 +105,8 @@ export function EnvironmentalComplianceMonitor() {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-3">
-          <div className="p-2.5 bg-blue-500/10 rounded-xl">
-            <Scale className="h-6 w-6 text-blue-500" />
+          <div className="p-2.5 bg-info/10 rounded-xl">
+            <Scale className="h-6 w-6 text-info" />
           </div>
           <div>
             <h2 className="text-xl font-bold text-foreground">Environmental Compliance Monitor</h2>
@@ -125,21 +125,21 @@ export function EnvironmentalComplianceMonitor() {
 
       {/* Summary Cards */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-        <Card className="border-emerald-500/20">
+        <Card className="border-success/20">
           <CardContent className="p-4 text-center">
-            <p className="text-2xl font-bold text-emerald-600">{overallScore}%</p>
+            <p className="text-2xl font-bold text-success">{overallScore}%</p>
             <p className="text-xs text-muted-foreground">Score Geral</p>
           </CardContent>
         </Card>
         <Card>
           <CardContent className="p-4 text-center">
-            <p className="text-2xl font-bold text-emerald-500">{compliantCount}</p>
+            <p className="text-2xl font-bold text-success">{compliantCount}</p>
             <p className="text-xs text-muted-foreground">Conformes</p>
           </CardContent>
         </Card>
         <Card>
           <CardContent className="p-4 text-center">
-            <p className="text-2xl font-bold text-amber-500">{warningCount}</p>
+            <p className="text-2xl font-bold text-warning">{warningCount}</p>
             <p className="text-xs text-muted-foreground">Atenção</p>
           </CardContent>
         </Card>
@@ -157,8 +157,8 @@ export function EnvironmentalComplianceMonitor() {
           <Card
             key={reg.id}
             className={`border cursor-pointer hover:shadow-md transition-shadow ${
-              reg.status === 'compliant' ? 'border-emerald-500/20' :
-              reg.status === 'warning' ? 'border-amber-500/20' : 'border-destructive/20'
+              reg.status === 'compliant' ? 'border-success/20' :
+              reg.status === 'warning' ? 'border-warning/20' : 'border-destructive/20'
             }`}
             onClick={() => setSelectedReg(selectedReg?.id === reg.id ? null : reg)}
           >
@@ -166,9 +166,9 @@ export function EnvironmentalComplianceMonitor() {
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-3">
                   {reg.status === 'compliant' ? (
-                    <CheckCircle2 className="h-5 w-5 text-emerald-500" />
+                    <CheckCircle2 className="h-5 w-5 text-success" />
                   ) : reg.status === 'warning' ? (
-                    <AlertTriangle className="h-5 w-5 text-amber-500" />
+                    <AlertTriangle className="h-5 w-5 text-warning" />
                   ) : (
                     <AlertTriangle className="h-5 w-5 text-destructive" />
                   )}
