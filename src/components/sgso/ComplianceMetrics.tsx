@@ -271,22 +271,22 @@ export const ComplianceMetrics: React.FC = () => {
         </CardHeader>
         <CardContent>
           <div className="space-y-3">
-            {practiceCompliance.map((practice, index) => (
-              <div key={index} className="p-4 border-2 border-gray-200 rounded-lg">
+            {practiceCompliance.map((practice) => (
+              <div key={practice.practice} className="p-4 border-2 border-border rounded-lg">
                 <div className="flex items-center justify-between mb-2">
                   <div className="flex items-center gap-3">
                     <Badge
                       className={
                         practice.score >= 85
-                          ? "bg-green-600 text-white"
+                          ? "bg-success text-success-foreground"
                           : practice.score >= 70
-                            ? "bg-yellow-600 text-white"
-                            : "bg-red-600 text-white"
+                            ? "bg-warning text-warning-foreground"
+                            : "bg-destructive text-destructive-foreground"
                       }
                     >
                       {practice.practice}
                     </Badge>
-                    <span className="font-bold text-gray-900">{practice.name}</span>
+                    <span className="font-bold text-foreground">{practice.name}</span>
                   </div>
                   <span className="text-2xl font-bold text-gray-900">{practice.score}%</span>
                 </div>

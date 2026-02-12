@@ -516,8 +516,8 @@ const AIDataLake: React.FC = () => {
                     { name: "OCR Document Pipeline", source: "S3 Bucket", target: "Processed Zone", status: "running", rate: "45/min" },
                     { name: "Weather Data Sync", source: "API Externa", target: "Raw Zone", status: "idle", rate: "-" },
                     { name: "Crew Data Integration", source: "HR System", target: "Curated Zone", status: "failed", rate: "-" },
-                  ].map((pipeline, index) => (
-                    <div key={index} className="p-4 rounded-lg border bg-card">
+                  ].map((pipeline) => (
+                    <div key={pipeline.name} className="p-4 rounded-lg border bg-card">
                       <div className="flex items-center justify-between mb-3">
                         <div>
                           <p className="font-medium">{pipeline.name}</p>
