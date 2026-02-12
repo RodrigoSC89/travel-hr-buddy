@@ -235,8 +235,8 @@ const AnalyticsCore = () => {
             </CardHeader>
             <CardContent>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                {metrics.map((metric, index) => (
-                  <div key={index} className="p-4 border rounded-lg">
+                {metrics.map((metric) => (
+                  <div key={metric.name} className="p-4 border rounded-lg">
                     <div className="flex items-center justify-between mb-2">
                       <span className="font-medium">{metric.name}</span>
                       {getTrendIcon(metric.trend)}

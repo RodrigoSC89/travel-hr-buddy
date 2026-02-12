@@ -185,12 +185,12 @@ export default function DrillsCalendarSection() {
                 hasDrill: drillDates,
               }}
               modifiersClassNames={{
-                hasDrill: "bg-orange-100 dark:bg-orange-900/30 font-bold",
+                hasDrill: "bg-warning/10 font-bold",
               }}
             />
             <Separator className="my-4" />
             <Button 
-              className="w-full bg-gradient-to-r from-orange-500 to-red-600"
+              className="w-full bg-gradient-to-r from-warning to-destructive text-destructive-foreground"
               onClick={() => setScheduleDialogOpen(true)}
             >
               <Plus className="h-4 w-4 mr-2" />
@@ -327,7 +327,7 @@ export default function DrillsCalendarSection() {
         <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
           <DialogHeader>
             <DialogTitle className="flex items-center gap-2">
-              <Clock className="h-5 w-5 text-orange-500" />
+              <Clock className="h-5 w-5 text-warning" />
               Agendar Drill de Emergência
             </DialogTitle>
             <DialogDescription>
@@ -459,7 +459,7 @@ export default function DrillsCalendarSection() {
         <DialogContent className="max-w-3xl">
           <DialogHeader>
             <DialogTitle className="flex items-center gap-2">
-              <Play className="h-5 w-5 text-green-500" />
+              <Play className="h-5 w-5 text-success" />
               Executar Drill: {selectedDrill?.title}
             </DialogTitle>
             <DialogDescription>
@@ -507,7 +507,7 @@ export default function DrillsCalendarSection() {
             <Button variant="outline" onClick={() => setDrillSimulationOpen(false)}>
               Cancelar
             </Button>
-            <Button onClick={handleCompleteDrill} className="bg-green-600 hover:bg-green-700">
+            <Button onClick={handleCompleteDrill} className="bg-success hover:bg-success/90 text-success-foreground">
               <CheckCircle className="h-4 w-4 mr-2" />
               Concluir e Registrar
             </Button>

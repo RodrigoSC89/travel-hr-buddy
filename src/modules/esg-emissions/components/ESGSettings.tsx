@@ -238,13 +238,13 @@ export function ESGSettings() {
             </CardContent>
           </Card>
 
-          <Card className="bg-blue-50 dark:bg-blue-950/30 border-blue-200">
+          <Card className="bg-info/5 border-info/20">
             <CardContent className="p-4">
               <div className="flex items-start gap-3">
-                <Info className="h-5 w-5 text-blue-600 mt-0.5" />
+                <Info className="h-5 w-5 text-info mt-0.5" />
                 <div>
-                  <p className="font-medium text-blue-900 dark:text-blue-100">Sobre os Fatores de Emissão</p>
-                  <p className="text-sm text-blue-700 dark:text-blue-200 mt-1">
+                  <p className="font-medium text-foreground">Sobre os Fatores de Emissão</p>
+                  <p className="text-sm text-muted-foreground mt-1">
                     Os fatores padrão são baseados nas diretrizes IMO MEPC.308(73) e GHG Protocol. 
                     Você pode ajustar os valores conforme necessário para sua operação específica.
                     Alterações são registradas para auditoria.
@@ -282,16 +282,16 @@ export function ESGSettings() {
                     <div className="flex items-center justify-between mb-3">
                       <div className="flex items-center gap-3">
                         <div className={`p-2 rounded-lg ${
-                          target.status === "on_track" ? "bg-green-100 dark:bg-green-900" :
-                          target.status === "at_risk" ? "bg-amber-100 dark:bg-amber-900" :
-                          "bg-red-100 dark:bg-red-900"
+                          target.status === "on_track" ? "bg-success/10" :
+                          target.status === "at_risk" ? "bg-warning/10" :
+                          "bg-destructive/10"
                         }`}>
                           {target.status === "on_track" ? (
-                            <CheckCircle className="h-5 w-5 text-green-600" />
+                            <CheckCircle className="h-5 w-5 text-success" />
                           ) : target.status === "at_risk" ? (
-                            <AlertTriangle className="h-5 w-5 text-amber-600" />
+                            <AlertTriangle className="h-5 w-5 text-warning" />
                           ) : (
-                            <AlertTriangle className="h-5 w-5 text-red-600" />
+                            <AlertTriangle className="h-5 w-5 text-destructive" />
                           )}
                         </div>
                         <div>
@@ -304,7 +304,7 @@ export function ESGSettings() {
                       <Badge variant={
                         target.status === "on_track" ? "default" :
                         target.status === "at_risk" ? "secondary" : "destructive"
-                      } className={target.status === "on_track" ? "bg-green-600" : target.status === "at_risk" ? "bg-amber-500" : ""}>
+                      } className={target.status === "on_track" ? "bg-success" : target.status === "at_risk" ? "bg-warning" : ""}>
                         {target.status === "on_track" ? "No Caminho" :
                          target.status === "at_risk" ? "Em Risco" : "Fora da Meta"}
                       </Badge>
@@ -487,7 +487,7 @@ export function ESGSettings() {
                 <Card>
                   <CardContent className="p-4">
                     <div className="flex items-center gap-3 mb-3">
-                      <Download className="h-8 w-8 text-blue-600" />
+                      <Download className="h-8 w-8 text-info" />
                       <div>
                         <p className="font-medium">Exportar Configurações</p>
                         <p className="text-sm text-muted-foreground">
@@ -504,7 +504,7 @@ export function ESGSettings() {
                 <Card>
                   <CardContent className="p-4">
                     <div className="flex items-center gap-3 mb-3">
-                      <Upload className="h-8 w-8 text-green-600" />
+                      <Upload className="h-8 w-8 text-success" />
                       <div>
                         <p className="font-medium">Importar Configurações</p>
                         <p className="text-sm text-muted-foreground">
@@ -537,7 +537,7 @@ export function ESGSettings() {
                         <Badge variant={
                           api.status === "connected" ? "default" :
                           api.status === "pending" ? "secondary" : "outline"
-                        } className={api.status === "connected" ? "bg-green-600" : ""}>
+                        } className={api.status === "connected" ? "bg-success" : ""}>
                           {api.status === "connected" ? "Conectado" :
                            api.status === "pending" ? "Pendente" : "Desconectado"}
                         </Badge>

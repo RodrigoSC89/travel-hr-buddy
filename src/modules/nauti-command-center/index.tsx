@@ -471,7 +471,7 @@ export default function NautilusCommandCenter() {
                     ) : (
                       messages.map((msg, i) => (
                         <div
-                          key={i}
+                          key={`msg-${msg.role}-${i}`}
                           className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}
                         >
                           <div

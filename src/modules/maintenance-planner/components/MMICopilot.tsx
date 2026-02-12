@@ -247,8 +247,8 @@ export const MMICopilot: React.FC<MMICopilotProps> = ({ onJobCreated, context })
                 {/* Render alerts */}
                 {message.data?.alertas && message.data.alertas.length > 0 && (
                   <div className="mt-2 space-y-1">
-                    {message.data.alertas.map((alert, i) => (
-                      <div key={i} className="flex items-center gap-2 text-xs text-warning">
+                    {message.data.alertas.map((alert) => (
+                      <div key={alert} className="flex items-center gap-2 text-xs text-warning">
                         <AlertTriangle className="h-3 w-3" />
                         {alert}
                       </div>
@@ -259,9 +259,9 @@ export const MMICopilot: React.FC<MMICopilotProps> = ({ onJobCreated, context })
                 {/* Render suggested actions */}
                 {message.data?.acoes_sugeridas && message.data.acoes_sugeridas.length > 0 && (
                   <div className="mt-3 flex flex-wrap gap-2">
-                    {message.data.acoes_sugeridas.map((acao, i) => (
+                    {message.data.acoes_sugeridas.map((acao) => (
                       <Button
-                        key={i}
+                        key={acao}
                         variant="outline"
                         size="sm"
                         className="text-xs h-7"
@@ -293,9 +293,9 @@ export const MMICopilot: React.FC<MMICopilotProps> = ({ onJobCreated, context })
       {/* Quick actions */}
       <div className="px-4 py-2 border-t">
         <div className="flex gap-2 overflow-x-auto pb-2">
-          {quickActions.map((action, i) => (
+          {quickActions.map((action) => (
             <Button
-              key={i}
+              key={action.label}
               variant="outline"
               size="sm"
               className="whitespace-nowrap text-xs"

@@ -443,8 +443,8 @@ export function FleetCommandCenter() {
                       { region: 'Atlântico Sul', condition: 'Bom', wind: '12 kn', waves: '1.5m', icon: '☀️' },
                       { region: 'Caribe', condition: 'Alerta', wind: '25 kn', waves: '3.2m', icon: '⛈️' },
                       { region: 'Mediterrâneo', condition: 'Bom', wind: '8 kn', waves: '0.8m', icon: '🌤️' }
-                    ].map((weather, idx) => (
-                      <div key={idx} className="flex items-center justify-between p-3 bg-muted/50 rounded-lg">
+                    ].map((weather) => (
+                      <div key={weather.region} className="flex items-center justify-between p-3 bg-muted/50 rounded-lg">
                         <div className="flex items-center gap-2">
                           <span className="text-2xl">{weather.icon}</span>
                           <div>
@@ -699,8 +699,8 @@ export function FleetCommandCenter() {
                     { priority: 'high', title: 'Inspeção PSC iminente', desc: 'MV Pacific Star - próxima semana', action: 'Preparar' },
                     { priority: 'medium', title: 'Reabastecimento necessário', desc: 'MV Ocean Voyager com 45% combustível', action: 'Planejar' },
                     { priority: 'low', title: 'Otimizar rotas Q3', desc: 'Economia potencial de 15% em combustível', action: 'Analisar' }
-                  ].map((alert, idx) => (
-                    <div key={idx} className="flex items-center justify-between p-3 border rounded-lg hover:bg-accent/30 transition-colors">
+                  ].map((alert) => (
+                    <div key={alert.title} className="flex items-center justify-between p-3 border rounded-lg hover:bg-accent/30 transition-colors">
                       <div className="flex items-center gap-3">
                         <div className={`w-2 h-2 rounded-full ${
                           alert.priority === 'high' ? 'bg-destructive' : 
