@@ -301,12 +301,12 @@ export default function InventorySparesAIPage() {
                 </div>
 
                 <div className="space-y-2">
-                  {reorders.map((item, idx) => (
-                    <div key={idx} className="flex items-center justify-between p-4 border rounded-lg">
+                  {reorders.map((item) => (
+                    <div key={item.item} className="flex items-center justify-between p-4 border rounded-lg">
                       <div className="flex items-center gap-4">
                         <AlertTriangle className={`h-6 w-6 ${
-                          item.urgency === 'critical' ? 'text-red-500' :
-                          item.urgency === 'high' ? 'text-orange-500' : 'text-yellow-500'
+                          item.urgency === 'critical' ? 'text-destructive' :
+                          item.urgency === 'high' ? 'text-warning' : 'text-warning/70'
                         }`} />
                         <div>
                           <p className="font-medium">{item.item}</p>
@@ -316,7 +316,7 @@ export default function InventorySparesAIPage() {
                       <div className="flex items-center gap-4">
                         <div className="text-right">
                           <p className="font-medium">{item.quantity} un</p>
-                          <p className="text-sm text-green-600">Economia: ${item.savings}</p>
+                          <p className="text-sm text-success">Economia: ${item.savings}</p>
                         </div>
                         <Badge variant={
                           item.urgency === 'critical' ? 'destructive' :
