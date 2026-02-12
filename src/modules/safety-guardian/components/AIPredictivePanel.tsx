@@ -67,10 +67,10 @@ export const AIPredictivePanel: React.FC<AIPredictivePanelProps> = ({
 
   const getImpactColor = (impact: string) => {
     switch (impact) {
-      case 'critical': return 'text-red-400 bg-red-500/20 border-red-500/30';
-      case 'high': return 'text-orange-400 bg-orange-500/20 border-orange-500/30';
-      case 'medium': return 'text-yellow-400 bg-yellow-500/20 border-yellow-500/30';
-      default: return 'text-green-400 bg-green-500/20 border-green-500/30';
+      case 'critical': return 'text-destructive bg-destructive/20 border-destructive/30';
+      case 'high': return 'text-warning bg-warning/20 border-warning/30';
+      case 'medium': return 'text-warning bg-warning/20 border-warning/30';
+      default: return 'text-success bg-success/20 border-success/30';
     }
   };
 
@@ -96,11 +96,11 @@ export const AIPredictivePanel: React.FC<AIPredictivePanelProps> = ({
     <div className="space-y-6">
       {/* AI Overview Cards */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-        <Card className="bg-gradient-to-br from-purple-500/10 to-purple-500/5 border-purple-500/20">
+        <Card className="bg-gradient-to-br from-primary/10 to-primary/5 border-primary/20">
           <CardContent className="p-4">
             <div className="flex items-center gap-3">
-              <div className="p-2 bg-purple-500/20 rounded-lg">
-                <Shield className="h-5 w-5 text-purple-400" />
+              <div className="p-2 bg-primary/20 rounded-lg">
+                <Shield className="h-5 w-5 text-primary" />
               </div>
               <div>
                 <p className="text-sm text-muted-foreground">Score de Risco</p>
@@ -111,11 +111,11 @@ export const AIPredictivePanel: React.FC<AIPredictivePanelProps> = ({
           </CardContent>
         </Card>
 
-        <Card className="bg-gradient-to-br from-red-500/10 to-red-500/5 border-red-500/20">
+        <Card className="bg-gradient-to-br from-destructive/10 to-destructive/5 border-destructive/20">
           <CardContent className="p-4">
             <div className="flex items-center gap-3">
-              <div className="p-2 bg-red-500/20 rounded-lg">
-                <AlertTriangle className="h-5 w-5 text-red-400" />
+              <div className="p-2 bg-destructive/20 rounded-lg">
+                <AlertTriangle className="h-5 w-5 text-destructive" />
               </div>
               <div>
                 <p className="text-sm text-muted-foreground">Prob. Incidente</p>
@@ -126,11 +126,11 @@ export const AIPredictivePanel: React.FC<AIPredictivePanelProps> = ({
           </CardContent>
         </Card>
 
-        <Card className="bg-gradient-to-br from-green-500/10 to-green-500/5 border-green-500/20">
+        <Card className="bg-gradient-to-br from-success/10 to-success/5 border-success/20">
           <CardContent className="p-4">
             <div className="flex items-center gap-3">
-              <div className="p-2 bg-green-500/20 rounded-lg">
-                <TrendingUp className="h-5 w-5 text-green-400" />
+              <div className="p-2 bg-success/20 rounded-lg">
+                <TrendingUp className="h-5 w-5 text-success" />
               </div>
               <div>
                 <p className="text-sm text-muted-foreground">Compliance Previsto</p>
@@ -141,11 +141,11 @@ export const AIPredictivePanel: React.FC<AIPredictivePanelProps> = ({
           </CardContent>
         </Card>
 
-        <Card className="bg-gradient-to-br from-blue-500/10 to-blue-500/5 border-blue-500/20">
+        <Card className="bg-gradient-to-br from-info/10 to-info/5 border-info/20">
           <CardContent className="p-4">
             <div className="flex items-center gap-3">
-              <div className="p-2 bg-blue-500/20 rounded-lg">
-                <Activity className="h-5 w-5 text-blue-400" />
+              <div className="p-2 bg-info/20 rounded-lg">
+                <Activity className="h-5 w-5 text-info" />
               </div>
               <div>
                 <p className="text-sm text-muted-foreground">Tendência</p>
@@ -163,7 +163,7 @@ export const AIPredictivePanel: React.FC<AIPredictivePanelProps> = ({
         <Button 
           onClick={handleGenerate} 
           disabled={generating || loading}
-          className="bg-purple-600 hover:bg-purple-700"
+          className="bg-primary hover:bg-primary/90"
         >
           {generating ? (
             <RefreshCw className="h-4 w-4 mr-2 animate-spin" />
@@ -263,7 +263,7 @@ export const AIPredictivePanel: React.FC<AIPredictivePanelProps> = ({
           <Card>
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
-                <AlertTriangle className="h-5 w-5 text-red-400" />
+                <AlertTriangle className="h-5 w-5 text-destructive" />
                 Análise de Riscos Preditiva
               </CardTitle>
               <CardDescription>
@@ -278,7 +278,7 @@ export const AIPredictivePanel: React.FC<AIPredictivePanelProps> = ({
               ) : (
                 <div className="space-y-4">
                   {riskInsights.map((risk) => (
-                    <div key={risk.id} className="p-4 rounded-lg border border-red-500/20 bg-red-500/5">
+                    <div key={risk.id} className="p-4 rounded-lg border border-destructive/20 bg-destructive/5">
                       <div className="flex items-start justify-between">
                         <div>
                           <h4 className="font-medium">{risk.title}</h4>
@@ -310,7 +310,7 @@ export const AIPredictivePanel: React.FC<AIPredictivePanelProps> = ({
           <Card>
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
-                <BarChart3 className="h-5 w-5 text-blue-400" />
+                <BarChart3 className="h-5 w-5 text-info" />
                 Padrões Detectados
               </CardTitle>
               <CardDescription>
@@ -346,7 +346,7 @@ export const AIPredictivePanel: React.FC<AIPredictivePanelProps> = ({
           <Card>
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
-                <Lightbulb className="h-5 w-5 text-yellow-400" />
+                <Lightbulb className="h-5 w-5 text-warning" />
                 Recomendações da IA
               </CardTitle>
               <CardDescription>
@@ -361,7 +361,7 @@ export const AIPredictivePanel: React.FC<AIPredictivePanelProps> = ({
               ) : (
                 <div className="space-y-4">
                   {recommendations.map((rec) => (
-                    <div key={rec.id} className="p-4 rounded-lg border border-yellow-500/20 bg-yellow-500/5">
+                    <div key={rec.id} className="p-4 rounded-lg border border-warning/20 bg-warning/5">
                       <div className="flex items-start justify-between">
                         <div>
                           <h4 className="font-medium">{rec.title}</h4>

@@ -50,14 +50,14 @@ interface IncidentReportDialogProps {
 const incidentTypes = [
   { value: 'incident', label: 'Incidente', icon: AlertCircle, color: 'text-destructive' },
   { value: 'near_miss', label: 'Near Miss', icon: AlertTriangle, color: 'text-warning' },
-  { value: 'unsafe_condition', label: 'Condição Insegura', icon: Shield, color: 'text-blue-500' },
-  { value: 'unsafe_act', label: 'Ato Inseguro', icon: AlertTriangle, color: 'text-orange-500' },
+  { value: 'unsafe_condition', label: 'Condição Insegura', icon: Shield, color: 'text-info' },
+  { value: 'unsafe_act', label: 'Ato Inseguro', icon: AlertTriangle, color: 'text-warning' },
 ];
 
 const severityLevels = [
   { value: 'low', label: 'Baixa', color: 'bg-success/10 text-success border-success/20' },
   { value: 'medium', label: 'Média', color: 'bg-warning/10 text-warning border-warning/20' },
-  { value: 'high', label: 'Alta', color: 'bg-orange-100 text-orange-700 border-orange-200 dark:bg-orange-900/30 dark:text-orange-400' },
+  { value: 'high', label: 'Alta', color: 'bg-warning/10 text-warning border-warning/20' },
   { value: 'critical', label: 'Crítica', color: 'bg-destructive/10 text-destructive border-destructive/20' },
 ];
 

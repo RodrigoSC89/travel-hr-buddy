@@ -202,7 +202,7 @@ export default function DocumentHub() {
             PATCH 91.1 - Gerenciamento centralizado de documentos com IA
           </p>
         </div>
-        <Badge variant="outline" className="text-green-600">
+        <Badge variant="outline" className="text-success">
           <CheckCircle className="h-4 w-4 mr-1" />
           Operacional
         </Badge>
@@ -262,15 +262,15 @@ export default function DocumentHub() {
           )}
 
           {aiInsight && (
-            <Card className="border-blue-200 bg-blue-50 dark:bg-blue-950">
+            <Card className="border-info/20 bg-info/5">
               <CardContent className="pt-4">
                 <div className="flex items-start gap-2">
-                  <AlertCircle className="h-5 w-5 text-blue-600 mt-0.5" />
+                  <AlertCircle className="h-5 w-5 text-info mt-0.5" />
                   <div>
-                    <p className="font-medium text-blue-900 dark:text-blue-100">
+                    <p className="font-medium text-foreground">
                       Análise de IA
                     </p>
-                    <p className="text-sm text-blue-800 dark:text-blue-200 mt-1">
+                    <p className="text-sm text-muted-foreground mt-1">
                       {aiInsight}
                     </p>
                   </div>
