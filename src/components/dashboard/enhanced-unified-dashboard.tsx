@@ -524,12 +524,12 @@ const EnhancedUnifiedDashboard = () => {
                   <span className="text-xs text-muted-foreground">+12.5% vs mês anterior</span>
                 </div>
 
-                <div className="space-y-3 p-4 rounded-xl bg-gradient-to-br from-amber-50/50 to-transparent border border-amber-100/50">
+                <div className="space-y-3 p-4 rounded-xl bg-gradient-to-br from-warning/10 to-transparent border border-warning/20">
                   <div className="flex items-center gap-2">
-                    <Target className="w-4 h-4 text-amber-600" />
+                    <Target className="w-4 h-4 text-warning" />
                     <span className="text-sm font-semibold text-muted-foreground">ROE</span>
                   </div>
-                  <div className="text-3xl font-bold bg-gradient-to-r from-amber-600 to-amber-500 bg-clip-text text-transparent">
+                  <div className="text-3xl font-bold bg-gradient-to-r from-warning to-warning/80 bg-clip-text text-transparent">
                     {dashboardData.financialMetrics.roe}%
                   </div>
                   <span className="text-xs text-muted-foreground">Acima da média</span>

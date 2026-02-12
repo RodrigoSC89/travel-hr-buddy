@@ -101,8 +101,8 @@ export function StatsGridV2({ stats, columns = 4, className }: StatsGridV2Props)
                 {stat.trend && (
                   <div className={cn(
                     "flex items-center gap-1 text-xs font-medium",
-                    stat.trend.direction === "up" && "text-green-500",
-                    stat.trend.direction === "down" && "text-red-500",
+                    stat.trend.direction === "up" && "text-success",
+                    stat.trend.direction === "down" && "text-destructive",
                     stat.trend.direction === "neutral" && "text-muted-foreground"
                   )}>
                     {stat.trend.direction === "up" && <TrendingUp className="h-3 w-3" />}

@@ -97,7 +97,7 @@ export const EnhancedFinanceCenter: React.FC = () => {
           previousValue: 2180000,
           format: 'currency',
           icon: <TrendingUp className="h-5 w-5" />,
-          color: 'text-green-500',
+          color: 'text-success',
           trend: 'up',
           description: 'Receita acumulada no período'
         },
@@ -108,7 +108,7 @@ export const EnhancedFinanceCenter: React.FC = () => {
           previousValue: 1720000,
           format: 'currency',
           icon: <TrendingDown className="h-5 w-5" />,
-          color: 'text-red-500',
+          color: 'text-destructive',
           trend: 'down',
           description: 'Despesas operacionais'
         },
@@ -130,7 +130,7 @@ export const EnhancedFinanceCenter: React.FC = () => {
           previousValue: 18,
           format: 'number',
           icon: <FileText className="h-5 w-5" />,
-          color: 'text-yellow-500',
+          color: 'text-warning',
           trend: 'down',
           description: 'Aguardando pagamento'
         }
@@ -252,22 +252,22 @@ export const EnhancedFinanceCenter: React.FC = () => {
     return change;
   };
 
-  const getPriorityColor = (priority: string) => {
+   const getPriorityColor = (priority: string) => {
     switch (priority) {
-      case 'urgent': return 'bg-red-500/20 text-red-400 border-red-500/30';
-      case 'high': return 'bg-orange-500/20 text-orange-400 border-orange-500/30';
-      case 'medium': return 'bg-yellow-500/20 text-yellow-400 border-yellow-500/30';
-      case 'low': return 'bg-green-500/20 text-green-400 border-green-500/30';
+      case 'urgent': return 'bg-destructive/20 text-destructive border-destructive/30';
+      case 'high': return 'bg-warning/20 text-warning border-warning/30';
+      case 'medium': return 'bg-warning/15 text-warning/80 border-warning/20';
+      case 'low': return 'bg-success/20 text-success border-success/30';
       default: return 'bg-muted';
     }
   };
 
   const getInsightIcon = (type: string) => {
     switch (type) {
-      case 'saving': return <PiggyBank className="h-5 w-5 text-green-500" />;
-      case 'risk': return <AlertTriangle className="h-5 w-5 text-red-500" />;
-      case 'optimization': return <Zap className="h-5 w-5 text-blue-500" />;
-      case 'forecast': return <BarChart3 className="h-5 w-5 text-purple-500" />;
+      case 'saving': return <PiggyBank className="h-5 w-5 text-success" />;
+      case 'risk': return <AlertTriangle className="h-5 w-5 text-destructive" />;
+      case 'optimization': return <Zap className="h-5 w-5 text-info" />;
+      case 'forecast': return <BarChart3 className="h-5 w-5 text-accent-foreground" />;
       default: return <Brain className="h-5 w-5" />;
     }
   };
@@ -359,11 +359,11 @@ export const EnhancedFinanceCenter: React.FC = () => {
                   <p className="text-3xl font-bold">{formatValue(kpi.value, kpi.format)}</p>
                   <div className="flex items-center gap-2">
                     {kpi.trend === 'up' ? (
-                      <ArrowUpRight className="h-4 w-4 text-green-500" />
+                      <ArrowUpRight className="h-4 w-4 text-success" />
                     ) : (
-                      <ArrowDownRight className="h-4 w-4 text-red-500" />
+                      <ArrowDownRight className="h-4 w-4 text-destructive" />
                     )}
-                    <span className={`text-sm ${kpi.trend === 'up' ? 'text-green-500' : 'text-red-500'}`}>
+                    <span className={`text-sm ${kpi.trend === 'up' ? 'text-success' : 'text-destructive'}`}>
                       {Math.abs(calculateChange(kpi.value, kpi.previousValue)).toFixed(1)}%
                     </span>
                     <span className="text-xs text-muted-foreground">vs período anterior</span>
@@ -431,7 +431,7 @@ export const EnhancedFinanceCenter: React.FC = () => {
                     </div>
                     <Progress 
                       value={cat.percentage} 
-                      className={`h-2 ${cat.percentage > 95 ? '[&>div]:bg-red-500' : cat.percentage > 85 ? '[&>div]:bg-yellow-500' : ''}`}
+                      className={`h-2 ${cat.percentage > 95 ? '[&>div]:bg-destructive' : cat.percentage > 85 ? '[&>div]:bg-warning' : ''}`}
                     />
                   </div>
                 ))}
@@ -456,14 +456,14 @@ export const EnhancedFinanceCenter: React.FC = () => {
                       { type: 'expense', desc: 'Manutenção Preventiva', amount: -18500, date: subDays(new Date(), 2) },
                       { type: 'expense', desc: 'Taxas Portuárias', amount: -8200, date: subDays(new Date(), 3) },
                       { type: 'income', desc: 'Contrato Charter', amount: 280000, date: subDays(new Date(), 4) },
-                    ].map((tx, i) => (
-                      <div key={i} className="flex items-center justify-between p-3 rounded-lg bg-muted/30 hover:bg-muted/50 transition-colors">
+                    ].map((tx) => (
+                      <div key={tx.desc} className="flex items-center justify-between p-3 rounded-lg bg-muted/30 hover:bg-muted/50 transition-colors">
                         <div className="flex items-center gap-3">
-                          <div className={`p-2 rounded-lg ${tx.type === 'income' ? 'bg-green-500/10' : 'bg-red-500/10'}`}>
+                          <div className={`p-2 rounded-lg ${tx.type === 'income' ? 'bg-success/10' : 'bg-destructive/10'}`}>
                             {tx.type === 'income' ? (
-                              <ArrowUpRight className="h-4 w-4 text-green-500" />
+                              <ArrowUpRight className="h-4 w-4 text-success" />
                             ) : (
-                              <ArrowDownRight className="h-4 w-4 text-red-500" />
+                              <ArrowDownRight className="h-4 w-4 text-destructive" />
                             )}
                           </div>
                           <div>
@@ -473,7 +473,7 @@ export const EnhancedFinanceCenter: React.FC = () => {
                             </p>
                           </div>
                         </div>
-                        <span className={`font-bold ${tx.amount > 0 ? 'text-green-500' : 'text-red-500'}`}>
+                        <span className={`font-bold ${tx.amount > 0 ? 'text-success' : 'text-destructive'}`}>
                           {tx.amount > 0 ? '+' : ''}R$ {Math.abs(tx.amount).toLocaleString('pt-BR')}
                         </span>
                       </div>
@@ -571,7 +571,7 @@ export const EnhancedFinanceCenter: React.FC = () => {
             {pendingApprovals.length === 0 && (
               <Card className="p-8">
                 <div className="text-center text-muted-foreground">
-                  <CheckCircle className="h-12 w-12 mx-auto mb-4 text-green-500" />
+                  <CheckCircle className="h-12 w-12 mx-auto mb-4 text-success" />
                   <p className="font-medium">Tudo em dia!</p>
                   <p className="text-sm">Não há itens pendentes de aprovação</p>
                 </div>
@@ -609,7 +609,7 @@ export const EnhancedFinanceCenter: React.FC = () => {
                     </div>
                     <Progress 
                       value={(v.spent / v.budget) * 100} 
-                      className={`h-2 ${v.status === 'critical' ? '[&>div]:bg-red-500' : v.status === 'warning' ? '[&>div]:bg-yellow-500' : ''}`}
+                      className={`h-2 ${v.status === 'critical' ? '[&>div]:bg-destructive' : v.status === 'warning' ? '[&>div]:bg-warning' : ''}`}
                     />
                     <div className="flex justify-between mt-2 text-sm text-muted-foreground">
                       <span>Gasto: R$ {(v.spent / 1000).toFixed(0)}k</span>
