@@ -183,13 +183,13 @@ export function STCWCompetencyMatrix() {
         <Card className="border-border/50 bg-card/50">
           <CardContent className="p-4">
             <p className="text-sm text-muted-foreground">Competentes</p>
-            <p className="text-2xl font-bold text-emerald-400">{calculateStats.competent}</p>
+            <p className="text-2xl font-bold text-success">{calculateStats.competent}</p>
           </CardContent>
         </Card>
         <Card className="border-border/50 bg-card/50">
           <CardContent className="p-4">
             <p className="text-sm text-muted-foreground">Em Treinamento</p>
-            <p className="text-2xl font-bold text-amber-400">{calculateStats.inTraining}</p>
+            <p className="text-2xl font-bold text-warning">{calculateStats.inTraining}</p>
           </CardContent>
         </Card>
         <Card className="border-border/50 bg-card/50">

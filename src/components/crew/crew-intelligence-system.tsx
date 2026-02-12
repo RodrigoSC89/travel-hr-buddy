@@ -173,7 +173,7 @@ export const CrewIntelligenceSystem: React.FC = () => {
   return (
     <div className="space-y-6">
       {/* Header */}
-      <Card className="bg-gradient-to-r from-indigo-600 to-purple-600 text-white">
+      <Card className="bg-gradient-to-r from-primary to-accent text-primary-foreground">
         <CardHeader>
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
@@ -238,7 +238,7 @@ export const CrewIntelligenceSystem: React.FC = () => {
                     </span>
                     <span className="font-medium">{crew.fatigueLevel}%</span>
                   </div>
-                  <div className="h-2 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden">
+                  <div className="h-2 bg-muted rounded-full overflow-hidden">
                     <div 
                       className={`h-full ${getFatigueLevelColor(crew.fatigueLevel)} transition-all`}
                       style={{ width: `${crew.fatigueLevel}%` }}
@@ -456,7 +456,7 @@ export const CrewIntelligenceSystem: React.FC = () => {
             <div className="p-4 border rounded-lg">
               <div className="flex items-center justify-between mb-2">
                 <span className="text-sm font-medium">Certificações Válidas</span>
-                <CheckCircle className="h-5 w-5 text-green-500" />
+                <CheckCircle className="h-5 w-5 text-success" />
               </div>
               <Progress value={100} className="h-2 mb-2" />
               <p className="text-xs text-muted-foreground">
@@ -466,7 +466,7 @@ export const CrewIntelligenceSystem: React.FC = () => {
             <div className="p-4 border rounded-lg">
               <div className="flex items-center justify-between mb-2">
                 <span className="text-sm font-medium">Treinamento em Dia</span>
-                <AlertTriangle className="h-5 w-5 text-yellow-500" />
+                <AlertTriangle className="h-5 w-5 text-warning" />
               </div>
               <Progress value={78} className="h-2 mb-2" />
               <p className="text-xs text-muted-foreground">

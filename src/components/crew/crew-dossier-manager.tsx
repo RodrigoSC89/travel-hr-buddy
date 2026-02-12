@@ -166,7 +166,7 @@ export const CrewDossierManager = () => {
       case "shore_leave":
         return <Badge className="bg-warning text-warning-foreground">Licença Terra</Badge>;
       case "medical_leave":
-        return <Badge className="bg-orange-500 text-white">Licença Médica</Badge>;
+        return <Badge className="bg-warning text-warning-foreground">Licença Médica</Badge>;
       case "inactive":
         return <Badge variant="secondary">Inativo</Badge>;
     }

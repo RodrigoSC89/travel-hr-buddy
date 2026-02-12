@@ -78,11 +78,11 @@ interface VesselData {
 
 // Status color mapping with type safety
 const statusColors: Record<RotationStatus, string> = {
-  scheduled: "bg-blue-500",
-  confirmed: "bg-green-500",
+  scheduled: "bg-info",
+  confirmed: "bg-success",
   completed: "bg-muted",
   cancelled: "bg-destructive",
-  delayed: "bg-yellow-500",
+  delayed: "bg-warning",
 };
 
 // Draggable Crew Member Card
@@ -614,9 +614,9 @@ export const CrewRotationManager: React.FC = () => {
                                   {rotation.status}
                                 </Badge>
                                 {rotation.medical_clearance ? (
-                                  <CheckCircle className="h-4 w-4 text-green-500" />
+                                  <CheckCircle className="h-4 w-4 text-success" />
                                 ) : (
-                                  <Clock className="h-4 w-4 text-yellow-500" />
+                                  <Clock className="h-4 w-4 text-warning" />
                                 )}
                               </div>
                             </div>
@@ -677,8 +677,8 @@ export const CrewRotationManager: React.FC = () => {
                     <div key={idx} className="flex items-start gap-3 p-3 border rounded-lg">
                       <AlertTriangle className={`h-5 w-5 ${
                         conflict.severity === "critical" ? "text-destructive" :
-                        conflict.severity === "high" ? "text-orange-500" :
-                        "text-yellow-500"
+                        conflict.severity === "high" ? "text-warning" :
+                        "text-warning"
                       }`} />
                       <div>
                         <p className="font-medium">{conflict.type}</p>
@@ -692,7 +692,7 @@ export const CrewRotationManager: React.FC = () => {
                 </div>
               ) : (
                 <div className="text-center py-8 text-muted-foreground">
-                  <CheckCircle className="h-12 w-12 mx-auto mb-4 text-green-500" />
+                  <CheckCircle className="h-12 w-12 mx-auto mb-4 text-success" />
                   <p>No conflicts detected</p>
                   <p className="text-sm">All rotations are compliant</p>
                 </div>
