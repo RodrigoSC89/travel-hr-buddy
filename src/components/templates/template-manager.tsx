@@ -300,8 +300,8 @@ const TemplateManager = () => {
                   
                   <div className="space-y-3">
                     <div className="flex flex-wrap gap-1">
-                      {template.tags.map((tag, index) => (
-                        <Badge key={index} variant="outline" className="text-xs">
+                      {template.tags.map((tag) => (
+                        <Badge key={tag} variant="outline" className="text-xs">
                           {tag}
                         </Badge>
                       ))}

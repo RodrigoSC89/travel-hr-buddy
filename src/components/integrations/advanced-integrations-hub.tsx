@@ -992,16 +992,16 @@ const IntegrationWizard: React.FC<{
     <div className="space-y-6">
       {/* Progress */}
       <div className="flex items-center justify-between">
-        {steps.map((step, index) => (
-          <div key={index} className="flex items-center">
+        {steps.map((step, stepIdx) => (
+          <div key={step.title} className="flex items-center">
             <div className={`w-8 h-8 rounded-full flex items-center justify-center border-2 ${
-              index + 1 <= currentStep ? "bg-primary border-primary text-primary-foreground" : "border-border text-muted-foreground"
+              stepIdx + 1 <= currentStep ? "bg-primary border-primary text-primary-foreground" : "border-border text-muted-foreground"
             }`}>
-              {index + 1}
+              {stepIdx + 1}
             </div>
-            {index < steps.length - 1 && (
+            {stepIdx < steps.length - 1 && (
               <div className={`h-0.5 w-16 ml-2 ${
-                index + 1 < currentStep ? "bg-primary" : "bg-border"
+                stepIdx + 1 < currentStep ? "bg-primary" : "bg-border"
               }`} />
             )}
           </div>

@@ -167,8 +167,8 @@ export const LogisticsAIInsights = ({ operations }: LogisticsAIInsightsProps) =>
                     Recomendações Estratégicas
                   </h4>
                   <div className="space-y-2">
-                    {insights.recommendations?.map((rec: string, index: number) => (
-                      <div key={index} className="flex items-start gap-3 p-3 bg-accent/50 rounded-lg">
+                    {insights.recommendations?.map((rec: string) => (
+                      <div key={rec} className="flex items-start gap-3 p-3 bg-accent/50 rounded-lg">
                         <span className="text-sm">{rec}</span>
                       </div>
                     ))}
@@ -178,12 +178,12 @@ export const LogisticsAIInsights = ({ operations }: LogisticsAIInsightsProps) =>
                 {insights.alerts?.length > 0 && (
                   <div>
                     <h4 className="font-medium flex items-center gap-2 mb-3">
-                      <AlertTriangle className="h-4 w-4 text-orange-500" />
+                      <AlertTriangle className="h-4 w-4 text-warning" />
                       Alertas
                     </h4>
                     <div className="space-y-2">
-                      {insights.alerts.map((alert: string, index: number) => (
-                        <div key={index} className="flex items-start gap-3 p-3 bg-orange-500/10 rounded-lg">
+                      {insights.alerts.map((alert: string) => (
+                        <div key={alert} className="flex items-start gap-3 p-3 bg-warning/10 rounded-lg">
                           <span className="text-sm">{alert}</span>
                         </div>
                       ))}
@@ -313,8 +313,8 @@ export const LogisticsAIInsights = ({ operations }: LogisticsAIInsightsProps) =>
         {/* Inventory Tab */}
         <TabsContent value="inventory" className="space-y-4">
           {inventoryOptimizations.length > 0 ? (
-            inventoryOptimizations.map((inv, index) => (
-              <Card key={index}>
+            inventoryOptimizations.map((inv) => (
+              <Card key={inv.item}>
                 <CardHeader>
                   <div className="flex items-center justify-between">
                     <CardTitle className="text-lg">{inv.item}</CardTitle>

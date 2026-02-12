@@ -204,15 +204,15 @@ const PeopleAnalytics: React.FC = () => {
         </CardHeader>
         <CardContent>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            {aiInsights.map((insight, index) => (
+            {aiInsights.map((insight) => (
               <motion.div
-                key={index}
+                key={insight.titulo}
                 initial={{ opacity: 0, x: -20 }}
                 animate={{ opacity: 1, x: 0 }}
-                transition={{ delay: index * 0.1 }}
+                transition={{ delay: 0 }}
                 className={`p-4 rounded-lg border ${
-                  insight.tipo === 'alerta' ? 'bg-red-500/10 border-red-500/30' :
-                  insight.tipo === 'oportunidade' ? 'bg-green-500/10 border-green-500/30' :
+                  insight.tipo === 'alerta' ? 'bg-destructive/10 border-destructive/30' :
+                  insight.tipo === 'oportunidade' ? 'bg-success/10 border-success/30' :
                   'bg-blue-500/10 border-blue-500/30'
                 }`}
               >
@@ -347,8 +347,8 @@ const PeopleAnalytics: React.FC = () => {
           </CardHeader>
           <CardContent>
             <div className="space-y-3">
-              {turnoverRiskData.map((item, index) => (
-                <div key={index} className="flex items-center gap-3 p-3 bg-muted/50 rounded-lg">
+              {turnoverRiskData.map((item) => (
+                <div key={item.colaborador} className="flex items-center gap-3 p-3 bg-muted/50 rounded-lg">
                   <div className="flex-1">
                     <div className="flex items-center justify-between mb-1">
                       <span className="font-medium text-sm">{item.colaborador}</span>

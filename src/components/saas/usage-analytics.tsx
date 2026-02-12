@@ -196,8 +196,8 @@ export const UsageAnalytics: React.FC = () => {
                     </TableRow>
                   </TableHeader>
                   <TableBody>
-                    {activityLog.map((activity, index) => (
-                      <TableRow key={index}>
+                    {activityLog.map((activity) => (
+                      <TableRow key={`${activity.time}-${activity.user}-${activity.action}`}>
                         <TableCell className="font-mono text-sm">{formatTime(activity.time)}</TableCell>
                         <TableCell>{activity.user}</TableCell>
                         <TableCell>{activity.action}</TableCell>
