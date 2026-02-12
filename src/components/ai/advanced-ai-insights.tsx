@@ -353,8 +353,8 @@ const AdvancedAIInsights = () => {
                       Recomendações:
                     </h4>
                     <ul className="space-y-1">
-                      {insight.recommendations.map((rec, index) => (
-                        <li key={index} className="text-sm text-muted-foreground flex items-center gap-2">
+                      {insight.recommendations.map((rec) => (
+                        <li key={rec} className="text-sm text-muted-foreground flex items-center gap-2">
                           <div className="w-1.5 h-1.5 rounded-full bg-primary"></div>
                           {rec}
                         </li>
@@ -524,8 +524,8 @@ const AdvancedAIInsights = () => {
                 effort: "low",
                 impact: "medium"
               }
-            ].map((rec, index) => (
-              <Card key={index} className="hover-lift">
+            ].map((rec) => (
+              <Card key={rec.title} className="hover-lift">
                 <CardContent className="p-6">
                   <div className="flex items-center justify-between">
                     <div className="space-y-2">
@@ -544,7 +544,7 @@ const AdvancedAIInsights = () => {
                       </div>
                     </div>
                     <Button onClick={() => handleImplementInsight({
-                      id: index,
+                      id: rec.title.length,
                       title: rec.title,
                       description: rec.description,
                       confidence: 85,

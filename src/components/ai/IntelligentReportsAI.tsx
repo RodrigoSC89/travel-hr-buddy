@@ -348,12 +348,12 @@ A análise contempla o período atual e inclui comparações com períodos anter
                   <CardContent className="space-y-6">
                     <p className="text-muted-foreground">{generatedReport.content}</p>
 
-                    {generatedReport.sections.map((section, index) => (
+                    {generatedReport.sections.map((section, sectionIdx) => (
                       <motion.div
-                        key={index}
+                        key={section.title}
                         initial={{ opacity: 0, y: 10 }}
                         animate={{ opacity: 1, y: 0 }}
-                        transition={{ delay: index * 0.1 }}
+                        transition={{ delay: sectionIdx * 0.1 }}
                         className="space-y-3"
                       >
                         <h3 className="text-lg font-semibold border-b pb-2">{section.title}</h3>
@@ -361,8 +361,8 @@ A análise contempla o período atual e inclui comparações com períodos anter
 
                         {section.metrics && (
                           <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-                            {section.metrics.map((metric, mIndex) => (
-                              <div key={mIndex} className="p-3 rounded-lg bg-muted/50">
+                            {section.metrics.map((metric) => (
+                              <div key={metric.label} className="p-3 rounded-lg bg-muted/50">
                                 <p className="text-xs text-muted-foreground">{metric.label}</p>
                                 <div className="flex items-center gap-2">
                                   <p className="text-lg font-bold">{metric.value}</p>

@@ -367,9 +367,9 @@ What would you like assistance with today?`,
                           
                           {message.suggestions && (
                             <div className="flex flex-wrap gap-1 mt-3">
-                              {message.suggestions.map((suggestion, index) => (
+                              {message.suggestions.map((suggestion) => (
                                 <Button
-                                  key={index}
+                                  key={suggestion}
                                   variant="ghost"
                                   size="sm"
                                   onClick={() => handleSuggestionClick(suggestion)}
@@ -468,9 +468,9 @@ What would you like assistance with today?`,
                     <p className="text-xs font-medium text-muted-foreground uppercase tracking-wide">
                       Examples:
                     </p>
-                    {capability.examples.map((example, index) => (
+                    {capability.examples.map((example) => (
                       <Button
-                        key={index}
+                        key={example}
                         variant="ghost"
                         size="sm"
                         className="h-auto p-2 text-left justify-start text-xs w-full"
