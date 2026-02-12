@@ -103,7 +103,6 @@ export const SatelliteTrackerEnhanced = () => {
 
       if (error) throw error;
 
-      // If no data, create mock satellites
       if (!data || data.length === 0) {
         await createFallbackSatellites();
         return;
@@ -139,7 +138,6 @@ export const SatelliteTrackerEnhanced = () => {
 
   const loadCoverageEvents = async () => {
     try {
-      // satellite_coverage_events not in schema - use satellite_coverage_maps instead
       const { data, error } = await supabase
         .from("satellite_coverage_maps")
         .select("*")
@@ -222,7 +220,6 @@ export const SatelliteTrackerEnhanced = () => {
   };
 
   const simulateTLEUpdate = async () => {
-    // Simulate satellite position updates
     try {
       const t = Date.now() / 10000;
       const updates = satellites.map((sat, idx) => ({
@@ -252,7 +249,6 @@ export const SatelliteTrackerEnhanced = () => {
         });
       }
 
-      // Check for coverage events
       checkCoverageEvents(updates);
     } catch (error: unknown) {
       const errorMessage = error instanceof Error ? error.message : "Unknown error";
@@ -262,12 +258,10 @@ export const SatelliteTrackerEnhanced = () => {
 
   const checkCoverageEvents = async (satellites: SatelliteData[]) => {
     for (const sat of satellites) {
-      // Deterministic coverage events based on satellite index
       const satIdx = satellites.indexOf(sat);
       if (sat.elevation > COVERAGE_EVENT_MIN_ELEVATION && (satIdx % 3 === 0)) {
         const eventType = satIdx % 2 === 0 ? "entry" : "exit";
 
-        // Coverage events stored in satellite_coverage_maps
         await supabase.from("satellite_coverage_maps").insert({
           satellite_id: sat.satellite_id,
           coverage_geojson: { type: "Point", coordinates: [sat.longitude, sat.latitude] },
@@ -303,24 +297,24 @@ export const SatelliteTrackerEnhanced = () => {
   const getVisibilityColor = (status: string) => {
     switch (status?.toLowerCase()) {
     case "visible":
-      return "text-green-600";
+      return "text-success";
     case "eclipsed":
-      return "text-gray-600";
+      return "text-muted-foreground";
     case "daylight":
-      return "text-blue-600";
+      return "text-info";
     default:
-      return "text-gray-400";
+      return "text-muted-foreground";
     }
   };
 
   const getVisibilityIcon = (status: string) => {
     switch (status?.toLowerCase()) {
     case "visible":
-      return <CheckCircle2 className="h-4 w-4 text-green-600" />;
+      return <CheckCircle2 className="h-4 w-4 text-success" />;
     case "eclipsed":
-      return <AlertCircle className="h-4 w-4 text-gray-600" />;
+      return <AlertCircle className="h-4 w-4 text-muted-foreground" />;
     default:
-      return <Radio className="h-4 w-4 text-blue-600" />;
+      return <Radio className="h-4 w-4 text-info" />;
     }
   };
 
@@ -380,7 +374,7 @@ export const SatelliteTrackerEnhanced = () => {
             <CardTitle className="text-sm font-medium">Visible Now</CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-green-600">
+            <div className="text-2xl font-bold text-success">
               {satellites.filter((s) => s.visibility_status === "visible").length}
             </div>
             <p className="text-xs text-muted-foreground mt-1">In coverage area</p>
@@ -487,7 +481,7 @@ export const SatelliteTrackerEnhanced = () => {
 
       {/* Selected Satellite Details */}
       {selectedSatellite && (
-        <Card className="border-blue-200 bg-blue-50">
+        <Card className="border-primary/20 bg-primary/5">
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
               <Activity className="h-5 w-5" />
@@ -496,36 +490,54 @@ export const SatelliteTrackerEnhanced = () => {
           </CardHeader>
           <CardContent>
             <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-              <div className="bg-white p-4 rounded-lg">
+              <div className="bg-background p-4 rounded-lg">
                 <p className="text-sm text-muted-foreground">Satellite ID</p>
-                <p className="font-semibold">{selectedSatellite.satellite_id}</p>
+                <p className="font-bold">{selectedSatellite.satellite_id}</p>
               </div>
-              <div className="bg-white p-4 rounded-lg">
-                <p className="text-sm text-muted-foreground">Azimuth</p>
-                <p className="font-semibold">{selectedSatellite.azimuth.toFixed(2)}°</p>
+              <div className="bg-background p-4 rounded-lg">
+                <p className="text-sm text-muted-foreground">Latitude</p>
+                <p className="font-bold">{selectedSatellite.latitude.toFixed(4)}°</p>
               </div>
-              <div className="bg-white p-4 rounded-lg">
-                <p className="text-sm text-muted-foreground">Elevation</p>
-                <p className="font-semibold">{selectedSatellite.elevation.toFixed(2)}°</p>
+              <div className="bg-background p-4 rounded-lg">
+                <p className="text-sm text-muted-foreground">Longitude</p>
+                <p className="font-bold">{selectedSatellite.longitude.toFixed(4)}°</p>
               </div>
-              <div className="bg-white p-4 rounded-lg">
+              <div className="bg-background p-4 rounded-lg">
                 <p className="text-sm text-muted-foreground">Altitude</p>
-                <p className="font-semibold">{selectedSatellite.altitude_km.toFixed(2)} km</p>
+                <p className="font-bold">{selectedSatellite.altitude_km.toFixed(1)} km</p>
               </div>
-              <div className="bg-white p-4 rounded-lg">
+              <div className="bg-background p-4 rounded-lg">
                 <p className="text-sm text-muted-foreground">Velocity</p>
-                <p className="font-semibold">{selectedSatellite.velocity_kmh.toFixed(0)} km/h</p>
+                <p className="font-bold">{selectedSatellite.velocity_kmh.toFixed(0)} km/h</p>
               </div>
-              <div className="bg-white p-4 rounded-lg">
+              <div className="bg-background p-4 rounded-lg">
+                <p className="text-sm text-muted-foreground">Azimuth</p>
+                <p className="font-bold">{selectedSatellite.azimuth.toFixed(1)}°</p>
+              </div>
+              <div className="bg-background p-4 rounded-lg">
+                <p className="text-sm text-muted-foreground">Elevation</p>
+                <p className="font-bold">{selectedSatellite.elevation.toFixed(1)}°</p>
+              </div>
+              <div className="bg-background p-4 rounded-lg">
                 <p className="text-sm text-muted-foreground">Range</p>
-                <p className="font-semibold">{selectedSatellite.range_km.toFixed(2)} km</p>
+                <p className="font-bold">{selectedSatellite.range_km.toFixed(1)} km</p>
+              </div>
+              <div className="bg-background p-4 rounded-lg">
+                <p className="text-sm text-muted-foreground">Status</p>
+                <Badge variant={selectedSatellite.visibility_status === "visible" ? "default" : "secondary"}>
+                  {selectedSatellite.visibility_status}
+                </Badge>
               </div>
             </div>
+
             {selectedSatellite.tle_line1 && (
-              <div className="mt-4 bg-white p-4 rounded-lg">
-                <p className="text-sm text-muted-foreground mb-2">TLE Data</p>
-                <code className="text-xs block">{selectedSatellite.tle_line1}</code>
-                <code className="text-xs block mt-1">{selectedSatellite.tle_line2}</code>
+              <div className="mt-4 p-4 bg-background rounded-lg">
+                <p className="text-sm font-medium mb-2">TLE Data</p>
+                <pre className="text-xs font-mono text-muted-foreground">
+                  {selectedSatellite.tle_line1}
+                  {"\n"}
+                  {selectedSatellite.tle_line2}
+                </pre>
               </div>
             )}
           </CardContent>
@@ -536,37 +548,43 @@ export const SatelliteTrackerEnhanced = () => {
       <Card>
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
-            <Clock className="h-5 w-5" />
+            <Radio className="h-5 w-5" />
             Recent Coverage Events
           </CardTitle>
-          <CardDescription>Satellite entry and exit notifications</CardDescription>
+          <CardDescription>Satellite passes and coverage windows</CardDescription>
         </CardHeader>
         <CardContent>
           {coverageEvents.length > 0 ? (
-            <div className="space-y-2">
-              {coverageEvents.map((event) => (
-                <div
-                  key={event.id}
-                  className="flex items-center justify-between p-3 bg-muted rounded-lg"
-                >
-                  <div className="flex items-center gap-3">
-                    <Badge variant={event.event_type === "entry" ? "default" : "secondary"}>
-                      {event.event_type}
-                    </Badge>
-                    <span className="font-medium">{event.satellite_name}</span>
-                    <span className="text-sm text-muted-foreground">
-                      Elevation: {event.max_elevation?.toFixed(1)}° | Duration:{" "}
-                      {event.duration_seconds}s
-                    </span>
-                  </div>
-                  <span className="text-xs text-muted-foreground">
-                    {new Date(event.start_time).toLocaleString()}
-                  </span>
-                </div>
-              ))}
-            </div>
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead>Satellite</TableHead>
+                  <TableHead>Type</TableHead>
+                  <TableHead>Max Elevation</TableHead>
+                  <TableHead>Duration</TableHead>
+                  <TableHead>Start Time</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {coverageEvents.map((event) => (
+                  <TableRow key={event.id}>
+                    <TableCell className="font-medium">{event.satellite_name}</TableCell>
+                    <TableCell>
+                      <Badge variant="outline">{event.event_type}</Badge>
+                    </TableCell>
+                    <TableCell>{event.max_elevation.toFixed(1)}°</TableCell>
+                    <TableCell>{Math.floor(event.duration_seconds / 60)}m {event.duration_seconds % 60}s</TableCell>
+                    <TableCell className="text-sm text-muted-foreground">
+                      {new Date(event.start_time).toLocaleString()}
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
           ) : (
-            <p className="text-center text-muted-foreground py-8">No coverage events recorded</p>
+            <div className="text-center py-8 text-muted-foreground">
+              No coverage events recorded yet
+            </div>
           )}
         </CardContent>
       </Card>

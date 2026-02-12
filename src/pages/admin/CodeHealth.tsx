@@ -52,11 +52,11 @@ export default function CodeHealth() {
 
   const getGradeColor = (grade: string) => {
     switch (grade) {
-    case "A": return "text-green-600";
-    case "B": return "text-blue-600";
-    case "C": return "text-yellow-600";
-    case "D": return "text-orange-600";
-    case "F": return "text-red-600";
+    case "A": return "text-success";
+    case "B": return "text-info";
+    case "C": return "text-warning";
+    case "D": return "text-warning";
+    case "F": return "text-destructive";
     default: return "text-muted-foreground";
     }
   };
@@ -142,7 +142,7 @@ export default function CodeHealth() {
             <div className="space-y-3">
               <h2 className="text-xl font-semibold">Technical Debt</h2>
               {report.technicalDebt.map((debt, idx) => (
-                <Alert key={idx}>
+                <Alert key={`debt-${debt.category}-${idx}`}>
                   <AlertTriangle className="h-4 w-4" />
                   <AlertTitle className="flex items-center gap-2">
                     {debt.description}
@@ -172,7 +172,7 @@ export default function CodeHealth() {
               <CardContent>
                 <ul className="space-y-2">
                   {report.recommendations.map((rec, idx) => (
-                    <li key={idx} className="flex items-start gap-2">
+                    <li key={`rec-${idx}`} className="flex items-start gap-2">
                       <CheckCircle className="h-4 w-4 text-primary mt-0.5" />
                       <span>{rec}</span>
                     </li>
@@ -205,12 +205,12 @@ export default function CodeHealth() {
                   
                   {category.strengths.length > 0 && (
                     <div>
-                      <p className="text-sm font-medium text-green-600 mb-1">
+                      <p className="text-sm font-medium text-success mb-1">
                         ✓ Strengths
                       </p>
                       <ul className="text-xs space-y-1 text-muted-foreground">
                         {category.strengths.slice(0, 2).map((strength, idx) => (
-                          <li key={idx}>• {strength}</li>
+                          <li key={`strength-${idx}`}>• {strength}</li>
                         ))}
                       </ul>
                     </div>
@@ -218,12 +218,12 @@ export default function CodeHealth() {
 
                   {category.issues.length > 0 && (
                     <div>
-                      <p className="text-sm font-medium text-yellow-600 mb-1">
+                      <p className="text-sm font-medium text-warning mb-1">
                         ⚠ Issues
                       </p>
                       <ul className="text-xs space-y-1 text-muted-foreground">
                         {category.issues.slice(0, 2).map((issue, idx) => (
-                          <li key={idx}>• {issue}</li>
+                          <li key={`issue-${idx}`}>• {issue}</li>
                         ))}
                       </ul>
                     </div>
