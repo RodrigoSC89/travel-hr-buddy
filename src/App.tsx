@@ -1071,6 +1071,31 @@ const AppRoutes = () => (
       {/* MISSING ROUTE ALIASES */}
       <Route path="/docs" element={<Documents />} />
       
+      {/* ============================================ */}
+      {/* LEGACY REDIRECTS - Broken Route Fixes */}
+      {/* ============================================ */}
+      <Route path="/operations" element={<Navigate to="/ops" replace />} />
+      <Route path="/operations/*" element={<Navigate to="/ops" replace />} />
+      <Route path="/manutencao" element={<Navigate to="/maintenance" replace />} />
+      <Route path="/digital-infirmary" element={<Navigate to="/medical-infirmary" replace />} />
+      <Route path="/settings/sessions" element={<Navigate to="/settings" replace />} />
+      <Route path="/crew" element={<Navigate to="/crew-management" replace />} />
+      <Route path="/fleet-dashboard" element={<Navigate to="/fleet-command" replace />} />
+      <Route path="/fleet-tracking" element={<Navigate to="/tracking?tab=realtime" replace />} />
+      <Route path="/fleet-management" element={<Navigate to="/fleet-command" replace />} />
+      <Route path="/maritime-certifications" element={<Navigate to="/maritime-command" replace />} />
+      <Route path="/checklists" element={<Navigate to="/admin/checklists" replace />} />
+      <Route path="/nautilus-command" element={<Navigate to="/nauti-command" replace />} />
+      <Route path="/maintenance/planner" element={<Navigate to="/maintenance?tab=predictive" replace />} />
+      <Route path="/sistema-maritimo" element={<Navigate to="/maritime-command" replace />} />
+      <Route path="/compliance-center" element={<Navigate to="/compliance" replace />} />
+      <Route path="/compliance-center/*" element={<Navigate to="/compliance" replace />} />
+      <Route path="/intelligent-alerts" element={<Navigate to="/alerts-command" replace />} />
+      <Route path="/human-resources" element={<Navigate to="/hr-dashboard" replace />} />
+      <Route path="/sgso-report" element={<Navigate to="/sgso/report" replace />} />
+      <Route path="/executive-bi" element={<Navigate to="/command?tab=executive" replace />} />
+      <Route path="/forecast-console" element={<Navigate to="/weather-command" replace />} />
+      
       {/* DEV ONLY - Route Dashboard */}
       <Route path="/dev-routes" element={<DevRoutesDashboard />} />
     </Route>

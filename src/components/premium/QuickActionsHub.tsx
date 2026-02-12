@@ -43,17 +43,17 @@ export function QuickActionsHub({ open, onOpenChange, customActions = [] }: Quic
   const defaultActions: QuickAction[] = [
     // Navegação Rápida
     { id: "nav-dashboard", title: "Ir para Dashboard", description: "Central de Comando", icon: Activity, category: "Navegação", shortcut: "g d", action: () => navigate("/"), keywords: ["home", "inicio", "central"] },
-    { id: "nav-operations", title: "Operations Command", description: "Gestão de operações", icon: Ship, category: "Navegação", shortcut: "g o", action: () => navigate("/operations-command"), keywords: ["operacoes", "navios", "frota"] },
-    { id: "nav-maintenance", title: "Manutenção", description: "Planejamento de manutenção", icon: Wrench, category: "Navegação", shortcut: "g m", action: () => navigate("/manutencao"), keywords: ["reparos", "equipamentos"] },
+    { id: "nav-operations", title: "Operations Command", description: "Gestão de operações", icon: Ship, category: "Navegação", shortcut: "g o", action: () => navigate("/ops"), keywords: ["operacoes", "navios", "frota"] },
+    { id: "nav-maintenance", title: "Manutenção", description: "Planejamento de manutenção", icon: Wrench, category: "Navegação", shortcut: "g m", action: () => navigate("/maintenance"), keywords: ["reparos", "equipamentos"] },
     { id: "nav-finance", title: "Finance Command", description: "Gestão financeira", icon: DollarSign, category: "Navegação", shortcut: "g f", action: () => navigate("/finance-command"), keywords: ["dinheiro", "custos", "receitas"] },
-    { id: "nav-compliance", title: "Compliance & Audits", description: "Conformidade e auditorias", icon: Shield, category: "Navegação", shortcut: "g c", action: () => navigate("/compliance-hub"), keywords: ["ism", "isps", "certificados"] },
-    { id: "nav-people", title: "People Hub", description: "Gestão de pessoas", icon: Users, category: "Navegação", shortcut: "g p", action: () => navigate("/people-hub"), keywords: ["tripulacao", "rh", "funcionarios"] },
-    { id: "nav-documents", title: "Document Center", description: "Central de documentos", icon: FileText, category: "Navegação", shortcut: "g docs", action: () => navigate("/document-center"), keywords: ["arquivos", "templates"] },
-    { id: "nav-tracking", title: "Tracking & Telemetry", description: "Rastreamento e telemetria", icon: Activity, category: "Navegação", action: () => navigate("/tracking-telemetry"), keywords: ["ais", "gps", "posicao"] },
-    { id: "nav-medical", title: "Enfermaria Digital", description: "Gestão médica", icon: Stethoscope, category: "Navegação", action: () => navigate("/digital-infirmary"), keywords: ["saude", "medico", "atendimento"] },
+    { id: "nav-compliance", title: "Compliance & Audits", description: "Conformidade e auditorias", icon: Shield, category: "Navegação", shortcut: "g c", action: () => navigate("/compliance"), keywords: ["ism", "isps", "certificados"] },
+    { id: "nav-people", title: "People Hub", description: "Gestão de pessoas", icon: Users, category: "Navegação", shortcut: "g p", action: () => navigate("/workbench?section=people"), keywords: ["tripulacao", "rh", "funcionarios"] },
+    { id: "nav-documents", title: "Document Center", description: "Central de documentos", icon: FileText, category: "Navegação", shortcut: "g docs", action: () => navigate("/workbench?section=docs"), keywords: ["arquivos", "templates"] },
+    { id: "nav-tracking", title: "Tracking & Telemetry", description: "Rastreamento e telemetria", icon: Activity, category: "Navegação", action: () => navigate("/tracking"), keywords: ["ais", "gps", "posicao"] },
+    { id: "nav-medical", title: "Enfermaria Digital", description: "Gestão médica", icon: Stethoscope, category: "Navegação", action: () => navigate("/medical-infirmary"), keywords: ["saude", "medico", "atendimento"] },
     { id: "nav-waste", title: "Gestão de Resíduos", description: "MARPOL e meio ambiente", icon: Recycle, category: "Navegação", action: () => navigate("/waste-management"), keywords: ["marpol", "tanques", "descarte"] },
     { id: "nav-travel", title: "Travel Command", description: "Gestão de viagens", icon: Plane, category: "Navegação", action: () => navigate("/travel-command"), keywords: ["voos", "mobilizacao"] },
-    { id: "nav-ai", title: "AI Control Tower", description: "Centro de IA", icon: Brain, category: "Navegação", shortcut: "g a", action: () => navigate("/ai-control-tower"), keywords: ["inteligencia", "machine learning"] },
+    { id: "nav-ai", title: "AI Control Tower", description: "Centro de IA", icon: Brain, category: "Navegação", shortcut: "g a", action: () => navigate("/ai"), keywords: ["inteligencia", "machine learning"] },
     
     // Ações Rápidas
     { id: "action-new-task", title: "Nova Tarefa", description: "Criar tarefa de manutenção", icon: Plus, category: "Ações", shortcut: "n t", action: () => { toast.info("Abrindo nova tarefa..."); }, keywords: ["criar", "adicionar", "task"] },
