@@ -217,12 +217,12 @@ export function ApplyTemplateDialog({
             {/* Status indicators */}
             <div className="flex gap-4 pt-2 border-t">
               <div className="flex items-center gap-2 text-sm">
-                <CheckCircle className="h-4 w-4 text-green-600" />
+                <CheckCircle className="h-4 w-4 text-success" />
                 <span>{appliedResult.appliedVariables.length} applied</span>
               </div>
               {appliedResult.missingVariables.length > 0 && (
                 <div className="flex items-center gap-2 text-sm">
-                  <AlertCircle className="h-4 w-4 text-yellow-600" />
+                  <AlertCircle className="h-4 w-4 text-warning" />
                   <span>{appliedResult.missingVariables.length} missing</span>
                 </div>
               )}

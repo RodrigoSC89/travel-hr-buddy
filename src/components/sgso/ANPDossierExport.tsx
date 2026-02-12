@@ -57,9 +57,9 @@ const PRACTICES_STATUS: PracticeStatus[] = [
 
 const getStatusConfig = (status: PracticeStatus["status"]) => {
   const configs = {
-    conforme: { color: "bg-green-600 text-white", icon: CheckCircle, label: "Conforme" },
-    parcial: { color: "bg-yellow-600 text-white", icon: AlertTriangle, label: "Parcial" },
-    nao_conforme: { color: "bg-red-600 text-white", icon: XCircle, label: "Não Conforme" },
+    conforme: { color: "bg-success text-success-foreground", icon: CheckCircle, label: "Conforme" },
+    parcial: { color: "bg-warning text-warning-foreground", icon: AlertTriangle, label: "Parcial" },
+    nao_conforme: { color: "bg-destructive text-destructive-foreground", icon: XCircle, label: "Não Conforme" },
     pendente: { color: "bg-secondary text-secondary-foreground", icon: Clock, label: "Pendente" }
   };
   return configs[status];
@@ -144,7 +144,7 @@ export const ANPDossierExport: React.FC = () => {
                   </div>
                 </div>
                 <Badge className={`absolute -bottom-2 left-1/2 -translate-x-1/2 ${
-                  readinessScore >= 80 ? "bg-green-600" : readinessScore >= 60 ? "bg-yellow-600" : "bg-red-600"
+                  readinessScore >= 80 ? "bg-success" : readinessScore >= 60 ? "bg-warning" : "bg-destructive"
                 } text-white`}>
                   {readinessScore >= 80 ? "Pronto" : readinessScore >= 60 ? "Atenção" : "Crítico"}
                 </Badge>
@@ -156,15 +156,15 @@ export const ANPDossierExport: React.FC = () => {
                   Índice de conformidade geral: <span className="font-bold text-foreground">{overallCompliance}%</span>
                 </p>
                 <div className="flex gap-3">
-                  <Badge className="bg-green-600 text-white px-3 py-1">
+                  <Badge className="bg-success text-success-foreground px-3 py-1">
                     <CheckCircle className="h-3 w-3 mr-1" />
                     {conformeCount} Conformes
                   </Badge>
-                  <Badge className="bg-yellow-600 text-white px-3 py-1">
+                  <Badge className="bg-warning text-warning-foreground px-3 py-1">
                     <AlertTriangle className="h-3 w-3 mr-1" />
                     {parcialCount} Parciais
                   </Badge>
-                  <Badge className="bg-red-600 text-white px-3 py-1">
+                  <Badge className="bg-destructive text-destructive-foreground px-3 py-1">
                     <XCircle className="h-3 w-3 mr-1" />
                     {naoConformeCount} Não Conformes
                   </Badge>
@@ -205,7 +205,7 @@ export const ANPDossierExport: React.FC = () => {
                 <p className="text-sm text-muted-foreground">Evidências</p>
                 <p className="text-3xl font-bold">{totalEvidencias}</p>
               </div>
-              <Folder className="h-10 w-10 text-blue-600 opacity-70" />
+              <Folder className="h-10 w-10 text-info opacity-70" />
             </div>
           </CardContent>
         </Card>
@@ -215,9 +215,9 @@ export const ANPDossierExport: React.FC = () => {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-muted-foreground">NCs Abertas</p>
-                <p className="text-3xl font-bold text-red-600">{totalNCs}</p>
+                <p className="text-3xl font-bold text-destructive">{totalNCs}</p>
               </div>
-              <XCircle className="h-10 w-10 text-red-600 opacity-70" />
+              <XCircle className="h-10 w-10 text-destructive opacity-70" />
             </div>
           </CardContent>
         </Card>
@@ -227,9 +227,9 @@ export const ANPDossierExport: React.FC = () => {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-muted-foreground">CAPAs</p>
-                <p className="text-3xl font-bold text-yellow-600">{totalCAPAs}</p>
+                <p className="text-3xl font-bold text-warning">{totalCAPAs}</p>
               </div>
-              <Target className="h-10 w-10 text-yellow-600 opacity-70" />
+              <Target className="h-10 w-10 text-warning opacity-70" />
             </div>
           </CardContent>
         </Card>
@@ -239,9 +239,9 @@ export const ANPDossierExport: React.FC = () => {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-muted-foreground">Compliance Geral</p>
-                <p className="text-3xl font-bold text-green-600">{overallCompliance}%</p>
+                <p className="text-3xl font-bold text-success">{overallCompliance}%</p>
               </div>
-              <TrendingUp className="h-10 w-10 text-green-600 opacity-70" />
+              <TrendingUp className="h-10 w-10 text-success opacity-70" />
             </div>
           </CardContent>
         </Card>
@@ -284,11 +284,11 @@ export const ANPDossierExport: React.FC = () => {
                     ].map((item, idx) => (
                       <div key={idx} className="flex items-center gap-3 p-2 rounded-lg bg-muted/50">
                         {item.done ? (
-                          <CheckCircle className="h-5 w-5 text-green-600" />
+                          <CheckCircle className="h-5 w-5 text-success" />
                         ) : (
-                          <Clock className="h-5 w-5 text-yellow-600" />
+                          <Clock className="h-5 w-5 text-warning" />
                         )}
-                        <span className={item.done ? "text-green-700" : "text-yellow-700"}>
+                        <span className={item.done ? "text-success" : "text-warning"}>
                           {item.label}
                         </span>
                       </div>
@@ -299,21 +299,21 @@ export const ANPDossierExport: React.FC = () => {
                 {/* Práticas Críticas */}
                 <Card>
                   <CardHeader>
-                    <CardTitle className="text-lg text-red-600">Práticas Críticas</CardTitle>
+                    <CardTitle className="text-lg text-destructive">Práticas Críticas</CardTitle>
                   </CardHeader>
                   <CardContent className="space-y-3">
                     {PRACTICES_STATUS.filter(p => p.status === "nao_conforme").map((practice) => (
-                      <div key={practice.id} className="p-3 rounded-lg bg-red-50 border border-red-200">
+                      <div key={practice.id} className="p-3 rounded-lg bg-destructive/10 border border-destructive/20">
                         <div className="flex items-center justify-between mb-2">
-                          <span className="font-semibold text-red-800">
+                          <span className="font-semibold text-destructive">
                             Prática {practice.id} - {practice.name}
                           </span>
-                          <Badge className="bg-red-600 text-white">{practice.compliance}%</Badge>
+                          <Badge className="bg-destructive text-destructive-foreground">{practice.compliance}%</Badge>
                         </div>
                         <div className="flex gap-2 text-xs">
-                          <span className="text-red-600">{practice.ncs} NCs</span>
-                          <span className="text-yellow-600">{practice.capas} CAPAs</span>
-                          <span className="text-blue-600">{practice.evidencias} evidências</span>
+                          <span className="text-destructive">{practice.ncs} NCs</span>
+                          <span className="text-warning">{practice.capas} CAPAs</span>
+                          <span className="text-info">{practice.evidencias} evidências</span>
                         </div>
                       </div>
                     ))}
