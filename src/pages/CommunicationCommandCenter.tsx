@@ -27,6 +27,7 @@ import {
   TrendingUp
 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import { useNotificationsCenter, useCommunicationMessages, useCommunicationChannels } from "@/hooks/useCommunicationData";
 
 // Import existing components
 import { CommunicationCenterProfessional } from "@/components/communication/CommunicationCenterProfessional";
@@ -48,8 +49,7 @@ const CommunicationCommandCenter = () => {
   const [activeTab, setActiveTab] = useState("overview");
   const { toast } = useToast();
 
-  // Use real data hooks from useCommunicationData
-  const { useNotificationsCenter, useCommunicationMessages, useCommunicationChannels } = require("@/hooks/useCommunicationData");
+  // Hooks imported at top level
   
   const { notifications, unreadCount: unreadNotifications, isLoading: isLoadingNotifications } = useNotificationsCenter();
   const { data: messages = [], isLoading: isLoadingMessages } = useCommunicationMessages();
