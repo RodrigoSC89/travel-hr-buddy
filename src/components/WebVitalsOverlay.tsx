@@ -20,10 +20,10 @@ const MetricBadge: React.FC<{
   rating: string;
 }> = ({ name, value, rating }) => {
   const ratingColors = {
-    good: 'bg-green-500/20 text-green-400 border-green-500/30',
-    'needs-improvement': 'bg-yellow-500/20 text-yellow-400 border-yellow-500/30',
-    poor: 'bg-red-500/20 text-red-400 border-red-500/30',
-    unknown: 'bg-gray-500/20 text-gray-400 border-gray-500/30'
+    good: 'bg-success/20 text-success border-success/30',
+    'needs-improvement': 'bg-warning/20 text-warning border-warning/30',
+    poor: 'bg-destructive/20 text-destructive border-destructive/30',
+    unknown: 'bg-muted text-muted-foreground border-border'
   };
 
   return (
@@ -60,9 +60,9 @@ export const WebVitalsOverlay: React.FC<WebVitalsOverlayProps> = ({
   };
 
   const scoreColors = {
-    good: 'text-green-400',
-    'needs-improvement': 'text-yellow-400',
-    poor: 'text-red-400'
+    good: 'text-success',
+    'needs-improvement': 'text-warning',
+    poor: 'text-destructive'
   };
 
   if (!isOpen) {

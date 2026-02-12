@@ -323,16 +323,16 @@ export default function UsageSimulation() {
                     <div 
                       key={step.id}
                       className={`flex items-center gap-3 p-3 rounded-lg border ${
-                        step.status === 'running' ? 'bg-blue-500/10 border-blue-500' :
-                        step.status === 'success' ? 'bg-green-500/10 border-green-500/30' :
-                        step.status === 'error' ? 'bg-red-500/10 border-red-500/30' :
+                        step.status === 'running' ? 'bg-info/10 border-info' :
+                        step.status === 'success' ? 'bg-success/10 border-success/30' :
+                        step.status === 'error' ? 'bg-destructive/10 border-destructive/30' :
                         idx === currentStepIndex && isRunning ? 'border-primary' : ''
                       }`}
                     >
                       <div className={`h-8 w-8 rounded-full flex items-center justify-center ${
-                        step.status === 'running' ? 'bg-blue-500 animate-pulse' :
-                        step.status === 'success' ? 'bg-green-500' :
-                        step.status === 'error' ? 'bg-red-500' :
+                        step.status === 'running' ? 'bg-info animate-pulse' :
+                        step.status === 'success' ? 'bg-success' :
+                        step.status === 'error' ? 'bg-destructive' :
                         'bg-muted'
                       }`}>
                         {step.status === 'success' ? (
@@ -367,8 +367,8 @@ export default function UsageSimulation() {
               <CardTitle>Logs de Execução</CardTitle>
               <CardDescription>
                 <div className="flex gap-4 mt-2">
-                  <span className="text-green-500">✓ {stats.success} sucesso</span>
-                  <span className="text-red-500">✗ {stats.error} erros</span>
+                  <span className="text-success">✓ {stats.success} sucesso</span>
+                  <span className="text-destructive">✗ {stats.error} erros</span>
                   <span className="text-muted-foreground">
                     ⏱ {(stats.totalTime / 1000).toFixed(1)}s
                   </span>
@@ -377,13 +377,13 @@ export default function UsageSimulation() {
             </CardHeader>
             <CardContent>
               <ScrollArea className="h-[400px] bg-black/90 rounded-lg p-4 font-mono text-xs">
-                <div className="space-y-1 text-green-400">
-                  {logs.map((log, idx) => (
-                    <div key={idx} className={
-                      log.includes('✗') || log.includes('Erro') ? 'text-red-400' :
-                      log.includes('✓') || log.includes('sucesso') ? 'text-green-400' :
-                      log.includes('▶') || log.includes('🚀') ? 'text-blue-400' :
-                      'text-gray-400'
+                <div className="space-y-1 text-success">
+                  {logs.map((log, logIdx) => (
+                    <div key={`log-${logIdx}-${log.substring(0, 20)}`} className={
+                      log.includes('✗') || log.includes('Erro') ? 'text-destructive' :
+                      log.includes('✓') || log.includes('sucesso') ? 'text-success' :
+                      log.includes('▶') || log.includes('🚀') ? 'text-info' :
+                      'text-muted-foreground'
                     }>
                       {log}
                     </div>

@@ -25,10 +25,10 @@ interface Auditoria {
 }
 
 const corResultado: Record<string, string> = {
-  "Conforme": "bg-green-500 text-white",
-  "Não Conforme": "bg-red-500 text-white",
-  "Parcialmente Conforme": "bg-yellow-500 text-black",
-  "Não Aplicável": "bg-gray-400 text-white",
+  "Conforme": "bg-success text-success-foreground",
+  "Não Conforme": "bg-destructive text-destructive-foreground",
+  "Parcialmente Conforme": "bg-warning text-warning-foreground",
+  "Não Aplicável": "bg-muted text-muted-foreground",
 };
 
 export default function ListaAuditoriasIMCA() {
@@ -217,14 +217,14 @@ export default function ListaAuditoriasIMCA() {
                       {loadingIA === a.id ? "Gerando análise..." : "🧠 Análise IA e Plano de Ação"}
                     </Button>
                     {explicacao[a.id] && (
-                      <div className="text-sm text-muted-foreground border p-3 rounded bg-slate-50">
+                      <div className="text-sm text-muted-foreground border p-3 rounded bg-muted/50">
                         <strong>📘 Explicação IA:</strong>
                         <br />
                         <div className="mt-1 whitespace-pre-wrap">{explicacao[a.id]}</div>
                       </div>
                     )}
                     {plano[a.id] && (
-                      <div className="text-sm text-blue-800 border border-blue-300 p-3 rounded bg-blue-50">
+                      <div className="text-sm text-info border border-info/30 p-3 rounded bg-info/5">
                         <strong>📋 Plano de Ação:</strong>
                         <br />
                         <div className="mt-1 whitespace-pre-wrap">{plano[a.id]}</div>

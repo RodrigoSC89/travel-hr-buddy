@@ -38,17 +38,17 @@ interface VesselPosition {
 }
 
 const STATUS_CONFIG = {
-  navigating: { color: 'bg-green-500', label: 'Navegando', icon: Navigation },
-  anchored: { color: 'bg-yellow-500', label: 'Ancorado', icon: Anchor },
-  moored: { color: 'bg-blue-500', label: 'Atracado', icon: Ship },
-  drifting: { color: 'bg-red-500', label: 'À Deriva', icon: AlertTriangle },
+  navigating: { color: 'bg-success', label: 'Navegando', icon: Navigation },
+  anchored: { color: 'bg-warning', label: 'Ancorado', icon: Anchor },
+  moored: { color: 'bg-info', label: 'Atracado', icon: Ship },
+  drifting: { color: 'bg-destructive', label: 'À Deriva', icon: AlertTriangle },
 };
 
 const SIGNAL_CONFIG = {
-  excellent: { color: 'text-green-500', bars: 4 },
-  good: { color: 'text-yellow-500', bars: 3 },
-  poor: { color: 'text-orange-500', bars: 2 },
-  lost: { color: 'text-red-500', bars: 1 },
+  excellent: { color: 'text-success', bars: 4 },
+  good: { color: 'text-warning', bars: 3 },
+  poor: { color: 'text-warning', bars: 2 },
+  lost: { color: 'text-destructive', bars: 1 },
 };
 
 function mapVesselStatus(status: string | null, speed: number): VesselPosition['status'] {
@@ -206,19 +206,19 @@ export function RealTimeTrackingMap() {
           <div><p className="text-2xl font-bold">{vessels.length}</p><p className="text-xs text-muted-foreground">Embarcações</p></div>
         </CardContent></Card>
         <Card><CardContent className="p-3 flex items-center gap-3">
-          <Navigation className="h-8 w-8 text-green-500" />
+          <Navigation className="h-8 w-8 text-success" />
           <div><p className="text-2xl font-bold">{vessels.filter(v => v.status === 'navigating').length}</p><p className="text-xs text-muted-foreground">Navegando</p></div>
         </CardContent></Card>
         <Card><CardContent className="p-3 flex items-center gap-3">
-          <Anchor className="h-8 w-8 text-yellow-500" />
+          <Anchor className="h-8 w-8 text-warning" />
           <div><p className="text-2xl font-bold">{vessels.filter(v => v.status === 'anchored').length}</p><p className="text-xs text-muted-foreground">Ancorados</p></div>
         </CardContent></Card>
         <Card><CardContent className="p-3 flex items-center gap-3">
-          <Signal className="h-8 w-8 text-blue-500" />
+          <Signal className="h-8 w-8 text-info" />
           <div><p className="text-2xl font-bold">{vessels.filter(v => v.signalQuality !== 'lost').length}</p><p className="text-xs text-muted-foreground">Com Sinal</p></div>
         </CardContent></Card>
         <Card><CardContent className="p-3 flex items-center gap-3">
-          <AlertTriangle className="h-8 w-8 text-red-500" />
+          <AlertTriangle className="h-8 w-8 text-destructive" />
           <div><p className="text-2xl font-bold">{vessels.filter(v => v.signalQuality === 'lost').length}</p><p className="text-xs text-muted-foreground">Sem Sinal</p></div>
         </CardContent></Card>
       </div>

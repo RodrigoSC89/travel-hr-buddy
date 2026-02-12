@@ -145,9 +145,9 @@ const fallbackAlerts: SharedAlert[] = [
 ];
 
 const congestionColors = {
-  low: "bg-green-500/10 text-green-500 border-green-500/30",
-  medium: "bg-yellow-500/10 text-yellow-500 border-yellow-500/30",
-  high: "bg-red-500/10 text-red-500 border-red-500/30",
+  low: "bg-success/10 text-success border-success/30",
+  medium: "bg-warning/10 text-warning border-warning/30",
+  high: "bg-destructive/10 text-destructive border-destructive/30",
 };
 
 const alertTypeIcons = {
@@ -159,11 +159,11 @@ const alertTypeIcons = {
 };
 
 const alertTypeColors = {
-  weather: "text-blue-500",
-  safety: "text-red-500",
-  port: "text-purple-500",
-  piracy: "text-orange-500",
-  fuel: "text-green-500",
+  weather: "text-info",
+  safety: "text-destructive",
+  port: "text-accent-foreground",
+  piracy: "text-warning",
+  fuel: "text-success",
 };
 
 export function GlobalMaritimeNetwork() {
@@ -173,7 +173,7 @@ export function GlobalMaritimeNetwork() {
       <div className="flex items-center justify-between">
         <div>
           <h2 className="text-2xl font-bold flex items-center gap-2">
-            <Globe className="h-6 w-6 text-blue-500" />
+            <Globe className="h-6 w-6 text-info" />
             Global Maritime Network (UMIN)
           </h2>
           <p className="text-muted-foreground">
@@ -202,7 +202,7 @@ export function GlobalMaritimeNetwork() {
         <Card>
           <CardContent className="pt-4">
             <div className="flex items-center gap-3">
-              <BarChart3 className="h-8 w-8 text-green-500" />
+              <BarChart3 className="h-8 w-8 text-success" />
               <div>
                 <p className="text-2xl font-bold">{(fallbackStats.dataPointsToday / 1000000).toFixed(1)}M</p>
                 <p className="text-xs text-muted-foreground">Dados/Dia</p>
@@ -213,7 +213,7 @@ export function GlobalMaritimeNetwork() {
         <Card>
           <CardContent className="pt-4">
             <div className="flex items-center gap-3">
-              <AlertTriangle className="h-8 w-8 text-orange-500" />
+              <AlertTriangle className="h-8 w-8 text-warning" />
               <div>
                 <p className="text-2xl font-bold">{fallbackStats.alertsShared}</p>
                 <p className="text-xs text-muted-foreground">Alertas Hoje</p>
@@ -224,7 +224,7 @@ export function GlobalMaritimeNetwork() {
         <Card>
           <CardContent className="pt-4">
             <div className="flex items-center gap-3">
-              <Users className="h-8 w-8 text-purple-500" />
+              <Users className="h-8 w-8 text-accent-foreground" />
               <div>
                 <p className="text-2xl font-bold">{fallbackStats.totalVessels.toLocaleString()}</p>
                 <p className="text-xs text-muted-foreground">Total Network</p>
@@ -235,7 +235,7 @@ export function GlobalMaritimeNetwork() {
         <Card className="bg-gradient-to-br from-green-500/10 to-emerald-500/5">
           <CardContent className="pt-4">
             <div className="flex items-center gap-3">
-              <DollarSign className="h-8 w-8 text-green-500" />
+              <DollarSign className="h-8 w-8 text-success" />
               <div>
                 <p className="text-2xl font-bold">${(fallbackStats.savingsGenerated / 1000000).toFixed(1)}M</p>
                 <p className="text-xs text-muted-foreground">Economia/Mês</p>
@@ -301,7 +301,7 @@ export function GlobalMaritimeNetwork() {
         <Card>
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
-              <AlertTriangle className="h-5 w-5 text-orange-500" />
+              <AlertTriangle className="h-5 w-5 text-warning" />
               Live Network Alerts
             </CardTitle>
           </CardHeader>
@@ -355,21 +355,21 @@ export function GlobalMaritimeNetwork() {
           </h3>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
             <div className="text-center">
-              <div className="text-3xl font-bold text-blue-500">1000x</div>
+              <div className="text-3xl font-bold text-info">1000x</div>
               <div className="text-sm text-muted-foreground">Mais Dados</div>
               <p className="text-xs text-muted-foreground mt-1">
                 Inteligência de milhares de navios
               </p>
             </div>
             <div className="text-center">
-              <div className="text-3xl font-bold text-green-500">50%</div>
+              <div className="text-3xl font-bold text-success">50%</div>
               <div className="text-sm text-muted-foreground">Melhores Decisões</div>
               <p className="text-xs text-muted-foreground mt-1">
                 Crowdsourced intelligence
               </p>
             </div>
             <div className="text-center">
-              <div className="text-3xl font-bold text-purple-500">15-20%</div>
+              <div className="text-3xl font-bold text-accent-foreground">15-20%</div>
               <div className="text-sm text-muted-foreground">Poder de Negociação</div>
               <p className="text-xs text-muted-foreground mt-1">
                 Compras coletivas
