@@ -112,17 +112,17 @@ Competências STCW cadastradas: ${stats.competencyCount}
         <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-8 gap-4">
           {[
             { icon: Award, value: stats.certificatesValid, label: "Cert. Válidos", color: "text-emerald-500" },
-            { icon: AlertTriangle, value: stats.certificatesExpiring, label: "Expirando 90d", color: "text-amber-500" },
+            { icon: AlertTriangle, value: stats.certificatesExpiring, label: "Expirando 90d", color: "text-warning" },
             { icon: Clock, value: stats.certificatesExpired, label: "Expirados", color: "text-destructive" },
-            { icon: GraduationCap, value: `${stats.trainingRate}%`, label: "Treinamentos", color: "text-blue-500" },
-            { icon: Users, value: stats.crewCount, label: "Tripulantes", color: "text-purple-500" },
-            { icon: BookOpen, value: stats.competencyCount, label: "Competências", color: "text-cyan-500" },
-            { icon: TrendingUp, value: `${stats.stcwCompliance}%`, label: "STCW Score", color: "text-emerald-500" },
-            { icon: Shield, value: `${stats.mlcCompliance}%`, label: "MLC Score", color: "text-blue-500" },
-          ].map((kpi, idx) => {
+            { icon: GraduationCap, value: `${stats.trainingRate}%`, label: "Treinamentos", color: "text-info" },
+            { icon: Users, value: stats.crewCount, label: "Tripulantes", color: "text-accent-foreground" },
+            { icon: BookOpen, value: stats.competencyCount, label: "Competências", color: "text-info" },
+            { icon: TrendingUp, value: `${stats.stcwCompliance}%`, label: "STCW Score", color: "text-success" },
+            { icon: Shield, value: `${stats.mlcCompliance}%`, label: "MLC Score", color: "text-info" },
+          ].map((kpi) => {
             const KpiIcon = kpi.icon;
             return (
-              <Card key={idx}>
+              <Card key={kpi.label}>
                 <CardContent className="pt-4">
                   <div className="text-center">
                     <KpiIcon className={`h-5 w-5 mx-auto ${kpi.color} mb-2`} />
@@ -150,8 +150,8 @@ Competências STCW cadastradas: ${stats.competencyCount}
             </CardHeader>
             <CardContent>
               <ScrollArea className="max-h-48">
-                {messages.filter(m => m.role === "assistant").map((msg, i) => (
-                  <div key={i} className="text-sm whitespace-pre-wrap">{msg.content}</div>
+                {messages.filter(m => m.role === "assistant").map((msg, msgIdx) => (
+                  <div key={`ai-msg-${msgIdx}-${msg.content.slice(0, 20)}`} className="text-sm whitespace-pre-wrap">{msg.content}</div>
                 ))}
                 {isStreaming && <Loader2 className="h-4 w-4 animate-spin mt-2" />}
               </ScrollArea>

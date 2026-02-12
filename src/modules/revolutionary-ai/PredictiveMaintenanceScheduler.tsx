@@ -349,8 +349,8 @@ export function PredictiveMaintenanceScheduler() {
                   <div>
                     <p className="text-xs text-muted-foreground mb-2">Peças Necessárias</p>
                     <div className="space-y-2">
-                      {selectedMaintenance.partsNeeded.map((part, i) => (
-                        <div key={i} className="flex items-center justify-between text-sm p-2 rounded bg-muted/30">
+                      {selectedMaintenance.partsNeeded.map((part) => (
+                        <div key={part.name} className="flex items-center justify-between text-sm p-2 rounded bg-muted/30">
                           <span>{part.name} (x{part.quantity})</span>
                           <Badge variant={part.inStock ? 'default' : 'destructive'} className="text-xs">
                             {part.inStock ? 'Em estoque' : 'Faltando'}

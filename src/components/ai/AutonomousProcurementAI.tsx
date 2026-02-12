@@ -198,20 +198,20 @@ export const AutonomousProcurementAI: React.FC = () => {
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case 'critical': return 'bg-red-500 text-white';
-      case 'low': return 'bg-yellow-500 text-black';
-      case 'normal': return 'bg-green-500 text-white';
-      case 'excess': return 'bg-blue-500 text-white';
-      default: return 'bg-gray-500 text-white';
+      case 'critical': return 'bg-destructive text-destructive-foreground';
+      case 'low': return 'bg-warning text-warning-foreground';
+      case 'normal': return 'bg-success text-success-foreground';
+      case 'excess': return 'bg-info text-info-foreground';
+      default: return 'bg-muted text-muted-foreground';
     }
   };
 
   const getUrgencyColor = (urgency: string) => {
     switch (urgency) {
-      case 'immediate': return 'text-red-500 bg-red-500/10 border-red-500/30';
-      case 'soon': return 'text-yellow-500 bg-yellow-500/10 border-yellow-500/30';
-      case 'planned': return 'text-blue-500 bg-blue-500/10 border-blue-500/30';
-      default: return 'text-gray-500 bg-gray-500/10';
+      case 'immediate': return 'text-destructive bg-destructive/10 border-destructive/30';
+      case 'soon': return 'text-warning bg-warning/10 border-warning/30';
+      case 'planned': return 'text-info bg-info/10 border-info/30';
+      default: return 'text-muted-foreground bg-muted/10';
     }
   };
 
@@ -344,7 +344,7 @@ export const AutonomousProcurementAI: React.FC = () => {
                           <p className="text-muted-foreground">Fornecedor Sugerido</p>
                           <p className="font-medium flex items-center gap-1">
                             {rec.suggestedSupplier.name}
-                            <Star className="h-3 w-3 text-yellow-500 fill-yellow-500" />
+                            <Star className="h-3 w-3 text-warning fill-warning" />
                             {rec.suggestedSupplier.rating}
                           </p>
                         </div>
@@ -361,16 +361,16 @@ export const AutonomousProcurementAI: React.FC = () => {
                         </div>
                       </div>
 
-                      <div className="p-3 rounded-lg bg-purple-500/10 border border-purple-500/20">
+                      <div className="p-3 rounded-lg bg-accent/10 border border-accent/20">
                         <div className="flex items-center gap-2 mb-1">
-                          <Brain className="h-4 w-4 text-purple-500" />
-                          <span className="text-xs font-medium text-purple-600 dark:text-purple-400">Análise IA</span>
+                          <Brain className="h-4 w-4 text-accent-foreground" />
+                          <span className="text-xs font-medium text-accent-foreground">Análise IA</span>
                         </div>
                         <p className="text-sm">{rec.aiReasoning}</p>
                       </div>
 
                       {rec.savingsOpportunity > 0 && (
-                        <div className="flex items-center gap-2 text-green-600">
+                        <div className="flex items-center gap-2 text-success">
                           <TrendingUp className="h-4 w-4" />
                           <span className="text-sm font-medium">
                             Oportunidade de economia: R$ {rec.savingsOpportunity.toLocaleString()}
@@ -382,7 +382,7 @@ export const AutonomousProcurementAI: React.FC = () => {
                     <div className="flex flex-col gap-2">
                       <Button 
                         onClick={() => executeAutoPurchase(rec)}
-                        className={rec.urgency === 'immediate' ? 'bg-red-500 hover:bg-red-600' : ''}
+                        className={rec.urgency === 'immediate' ? 'bg-destructive hover:bg-destructive/90' : ''}
                       >
                         <ShoppingCart className="h-4 w-4 mr-2" />
                         {rec.urgency === 'immediate' ? 'Comprar Agora' : 'Aprovar Compra'}
@@ -427,20 +427,20 @@ export const AutonomousProcurementAI: React.FC = () => {
                       <Progress 
                         value={(item.currentStock / item.maxStock) * 100}
                         className={`h-2 ${
-                          item.status === 'critical' ? '[&>div]:bg-red-500' :
-                          item.status === 'low' ? '[&>div]:bg-yellow-500' : ''
+                          item.status === 'critical' ? '[&>div]:bg-destructive' :
+                          item.status === 'low' ? '[&>div]:bg-warning' : ''
                         }`}
                       />
                       <div className="flex justify-between text-xs text-muted-foreground">
                         <span>Mínimo: {item.minStock}</span>
-                        <span className={item.daysUntilEmpty <= 7 ? 'text-red-500 font-medium' : ''}>
+                        <span className={item.daysUntilEmpty <= 7 ? 'text-destructive font-medium' : ''}>
                           {item.daysUntilEmpty} dias até esgotamento
                         </span>
                       </div>
                     </div>
 
                     {item.autoOrderEnabled && (
-                      <div className="mt-3 flex items-center gap-2 text-xs text-green-600">
+                      <div className="mt-3 flex items-center gap-2 text-xs text-success">
                         <Zap className="h-3 w-3" />
                         Compra automática ativa
                       </div>
@@ -466,7 +466,7 @@ export const AutonomousProcurementAI: React.FC = () => {
                     <div className="flex items-center justify-between mb-3">
                       <h4 className="font-medium">{supplier.name}</h4>
                       <div className="flex items-center gap-1">
-                        <Star className="h-4 w-4 text-yellow-500 fill-yellow-500" />
+                        <Star className="h-4 w-4 text-warning fill-warning" />
                         <span className="font-medium">{supplier.rating}</span>
                       </div>
                     </div>
@@ -478,7 +478,7 @@ export const AutonomousProcurementAI: React.FC = () => {
                       </div>
                       <div className="flex justify-between text-sm">
                         <span className="text-muted-foreground">Índice de Preço</span>
-                        <span className={supplier.priceIndex < 0.9 ? 'text-green-500' : ''}>
+                        <span className={supplier.priceIndex < 0.9 ? 'text-success' : ''}>
                           {Math.round((1 - supplier.priceIndex) * 100)}% abaixo do mercado
                         </span>
                       </div>

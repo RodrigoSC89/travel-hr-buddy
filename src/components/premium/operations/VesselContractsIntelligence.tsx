@@ -430,8 +430,8 @@ export function VesselContractsIntelligence() {
 
                       {/* Clauses */}
                       <div className="flex flex-wrap gap-1 mt-3">
-                        {contract.clauses.map((clause, idx) => (
-                          <Badge key={idx} variant="outline" className="text-xs">
+                        {contract.clauses.map((clause) => (
+                          <Badge key={clause} variant="outline" className="text-xs">
                             {clause}
                           </Badge>
                         ))}
@@ -463,7 +463,7 @@ export function VesselContractsIntelligence() {
                           const daysToDeadline = differenceInDays(option.deadline, new Date());
                           return (
                             <Badge 
-                              key={idx}
+                              key={`${option.type}-${option.deadline}`}
                               className={cn(
                                 option.exercised ? "bg-muted" :
                                 daysToDeadline <= 30 ? "bg-warning/20 text-warning" :

@@ -386,7 +386,7 @@ export default function AILearningDashboard() {
           ) : (
             <div className="space-y-3">
               {suggestions.map((suggestion, idx) => (
-                <Card key={idx}>
+                <Card key={`suggestion-${suggestion.action_type}-${idx}`}>
                   <CardContent className="py-4">
                     <div className="flex items-start gap-4">
                       <div className={`font-bold text-lg ${getPriorityColor(suggestion.priority)}`}>
