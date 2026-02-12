@@ -332,7 +332,7 @@ export const EnhancedDashboard = () => {
       icon: Users, 
       label: "RH Maritime", 
       action: () => {
-        navigate("/hr");
+        navigate("/hr-dashboard");
         toast({ title: "👥 RH Maritime", description: "Abrindo recursos humanos marítimos" });
       }
     },
@@ -340,7 +340,7 @@ export const EnhancedDashboard = () => {
       icon: Rocket, 
       label: "Inovação", 
       action: () => {
-        navigate("/intelligence");
+        navigate("/revolutionary-features");
         toast({ title: "🚀 Inovação", description: "Abrindo centro de inteligência e inovação" });
       }
     }

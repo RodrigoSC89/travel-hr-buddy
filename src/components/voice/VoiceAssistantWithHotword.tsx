@@ -321,7 +321,7 @@ export function VoiceAssistantWithHotword({
       return 'Navegando para o dashboard principal.';
     }
     if (lowerCommand.includes('tripulação') || lowerCommand.includes('crew')) {
-      navigate('/crew');
+      navigate('/crew-management');
       return 'Abrindo gestão de tripulação.';
     }
     if (lowerCommand.includes('clima') || lowerCommand.includes('weather') || lowerCommand.includes('tempo')) {
@@ -329,11 +329,11 @@ export function VoiceAssistantWithHotword({
       return 'Abrindo Weather Command.';
     }
     if (lowerCommand.includes('peotram') || lowerCommand.includes('auditoria')) {
-      navigate('/peotram-ai');
+      navigate('/peotram');
       return 'Abrindo módulo PEOTRAM AI.';
     }
     if (lowerCommand.includes('gmud') || lowerCommand.includes('mudança')) {
-      navigate('/gmud-workflow');
+      navigate('/gmud');
       return 'Abrindo workflow GMUD.';
     }
     if (lowerCommand.includes('digital twin') || lowerCommand.includes('gêmeo')) {

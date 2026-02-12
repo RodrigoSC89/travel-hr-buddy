@@ -280,7 +280,7 @@ export const CommunicationCenterProfessional: React.FC = () => {
                 Este painel exibe apenas dados reais do banco de dados.
               </AlertDescription>
             </Alert>
-            <Button onClick={() => navigate('/settings/integrations')}>
+            <Button onClick={() => navigate('/integrations-center')}>
               <Settings className="h-4 w-4 mr-2" />
               Configurar Comunicação
             </Button>

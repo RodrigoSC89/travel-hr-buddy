@@ -76,7 +76,7 @@ export const UserMenu: React.FC = () => {
         </DropdownMenuItem>
         <DropdownMenuItem 
           className="cursor-pointer"
-          onClick={() => handleNavigate("/notifications-center")}
+          onClick={() => handleNavigate("/alerts-command")}
         >
           <Bell className="mr-2 h-4 w-4 text-foreground/70" />
           <span className="text-foreground">Notificações</span>

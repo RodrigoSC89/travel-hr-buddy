@@ -126,7 +126,7 @@ function PeopleDashboard() {
               <Ship className="h-4 w-4" />
               Registrar Embarque
             </Button>
-            <Button className="w-full justify-start gap-2" variant="outline" onClick={() => navigate("/training")}>
+            <Button className="w-full justify-start gap-2" variant="outline" onClick={() => navigate("/ai-training")}>
               <GraduationCap className="h-4 w-4" />
               Agendar Treinamento
             </Button>

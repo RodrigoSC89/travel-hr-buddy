@@ -52,7 +52,7 @@ const NautilusCommandHero = memo(() => {
   return (
     <Card 
       className="relative overflow-hidden border-2 border-primary/30 bg-gradient-to-br from-primary/10 via-background to-cyan-500/10 cursor-pointer hover:border-primary/50 transition-all duration-300 group"
-      onClick={() => navigate('/nautilus-command')}
+      onClick={() => navigate('/nauti-command')}
     >
       <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-primary/20 via-transparent to-transparent opacity-50" />
       <CardContent className="relative p-6">

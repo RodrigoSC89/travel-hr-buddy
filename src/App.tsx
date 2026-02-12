@@ -1102,6 +1102,18 @@ const AppRoutes = () => (
       <Route path="/nautilus-documents" element={<Navigate to="/documents" replace />} />
       <Route path="/maritime" element={<Navigate to="/maritime-command" replace />} />
       <Route path="/crew" element={<Navigate to="/crew-management" replace />} />
+      <Route path="/vessels" element={<Navigate to="/fleet-command" replace />} />
+      <Route path="/price-alerts" element={<Navigate to="/alerts-command" replace />} />
+      <Route path="/notifications-center" element={<Navigate to="/alerts-command" replace />} />
+      <Route path="/communication" element={<Navigate to="/communication-command" replace />} />
+      <Route path="/intelligence" element={<Navigate to="/revolutionary-features" replace />} />
+      <Route path="/peotram-ai" element={<Navigate to="/peotram" replace />} />
+      <Route path="/gmud-workflow" element={<Navigate to="/gmud" replace />} />
+      <Route path="/crew/rotations" element={<Navigate to="/crew-management" replace />} />
+      <Route path="/settings/integrations" element={<Navigate to="/integrations-center" replace />} />
+      <Route path="/hr" element={<Navigate to="/hr-dashboard" replace />} />
+      <Route path="/training" element={<Navigate to="/ai-training" replace />} />
+      <Route path="/voyage-planner" element={<Navigate to="/voyage-command" replace />} />
       
       {/* DEV ONLY - Route Dashboard */}
       <Route path="/dev-routes" element={<DevRoutesDashboard />} />

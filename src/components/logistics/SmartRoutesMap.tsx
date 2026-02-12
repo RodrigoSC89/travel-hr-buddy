@@ -286,7 +286,7 @@ export const SmartRoutesMap: React.FC<SmartRoutesMapProps> = ({ mapboxToken }) =
                 Este mapa exibe apenas rotas reais cadastradas no sistema.
               </AlertDescription>
             </Alert>
-            <Button onClick={() => navigate('/voyage-planner')}>
+            <Button onClick={() => navigate('/voyage-command')}>
               <Settings className="h-4 w-4 mr-2" />
               Criar Nova Rota
             </Button>

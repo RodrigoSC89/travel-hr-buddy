@@ -199,12 +199,12 @@ export default function Maritime() {
             <CardHeader><CardTitle>Operações Marítimas</CardTitle><CardDescription>Controle operacional e logístico</CardDescription></CardHeader>
             <CardContent>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div className="p-4 border rounded-lg text-center cursor-pointer hover:bg-muted/50" onClick={() => navigate("/task-management")}>
+                <div className="p-4 border rounded-lg text-center cursor-pointer hover:bg-muted/50" onClick={() => navigate("/tasks")}>
                   <Calendar className="h-8 w-8 mx-auto mb-2 text-primary" />
                   <h4 className="font-semibold">Planejamento</h4>
                   <p className="text-sm text-muted-foreground">Cronogramas e roteiros</p>
                 </div>
-                <div className="p-4 border rounded-lg text-center cursor-pointer hover:bg-muted/50" onClick={() => navigate("/fleet-tracking")}>
+                <div className="p-4 border rounded-lg text-center cursor-pointer hover:bg-muted/50" onClick={() => navigate("/tracking")}>
                   <Activity className="h-8 w-8 mx-auto mb-2 text-success" />
                   <h4 className="font-semibold">Monitoramento</h4>
                   <p className="text-sm text-muted-foreground">Tempo real</p>

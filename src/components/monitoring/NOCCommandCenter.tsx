@@ -117,7 +117,7 @@ export function NOCCommandCenter() {
                 Este painel exibe apenas dados reais da tabela system_status.
               </AlertDescription>
             </Alert>
-            <Button onClick={() => navigate('/settings/integrations')}>
+            <Button onClick={() => navigate('/integrations-center')}>
               <Settings className="h-4 w-4 mr-2" />
               Configurar Monitoramento
             </Button>
