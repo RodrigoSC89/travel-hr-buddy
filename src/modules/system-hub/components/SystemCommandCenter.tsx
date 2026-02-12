@@ -142,15 +142,15 @@ export function SystemCommandCenter() {
     switch (status) {
       case "online":
       case "connected":
-        return "bg-emerald-500";
+        return "bg-success";
       case "degraded":
-        return "bg-amber-500";
+        return "bg-warning";
       case "offline":
       case "error":
       case "disconnected":
-        return "bg-red-500";
+        return "bg-destructive";
       default:
-        return "bg-gray-500";
+        return "bg-muted-foreground";
     }
   };
 

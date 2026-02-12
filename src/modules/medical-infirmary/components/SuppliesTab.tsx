@@ -81,20 +81,20 @@ export default function SuppliesTab() {
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case 'ok': return 'bg-green-500/10 border-green-500/30 text-green-500';
-      case 'low': return 'bg-amber-500/10 border-amber-500/30 text-amber-500';
-      case 'expiring': return 'bg-orange-500/10 border-orange-500/30 text-orange-500';
-      case 'critical': return 'bg-red-500/10 border-red-500/30 text-red-500';
+      case 'ok': return 'bg-success/10 border-success/30 text-success';
+      case 'low': return 'bg-warning/10 border-warning/30 text-warning';
+      case 'expiring': return 'bg-accent/10 border-accent/30 text-accent-foreground';
+      case 'critical': return 'bg-destructive/10 border-destructive/30 text-destructive';
       default: return '';
     }
   };
 
   const getStatusBadge = (status: string) => {
     switch (status) {
-      case 'ok': return <Badge className="bg-green-500/20 text-green-500">OK</Badge>;
-      case 'low': return <Badge className="bg-amber-500/20 text-amber-500">Baixo</Badge>;
-      case 'expiring': return <Badge className="bg-orange-500/20 text-orange-500">Vencendo</Badge>;
-      case 'critical': return <Badge className="bg-red-500/20 text-red-500">Crítico</Badge>;
+      case 'ok': return <Badge className="bg-success/20 text-success">OK</Badge>;
+      case 'low': return <Badge className="bg-warning/20 text-warning">Baixo</Badge>;
+      case 'expiring': return <Badge className="bg-accent/20 text-accent-foreground">Vencendo</Badge>;
+      case 'critical': return <Badge className="bg-destructive/20 text-destructive">Crítico</Badge>;
       default: return null;
     }
   };
@@ -369,9 +369,9 @@ export default function SuppliesTab() {
       {/* AI Analysis */}
       {aiAnalysis && (
         <Card className={`border-l-4 ${
-          aiAnalysis.riskLevel === 'high' ? 'border-l-red-500 bg-red-500/5' :
-          aiAnalysis.riskLevel === 'medium' ? 'border-l-amber-500 bg-amber-500/5' :
-          'border-l-green-500 bg-green-500/5'
+          aiAnalysis.riskLevel === 'high' ? 'border-l-destructive bg-destructive/5' :
+          aiAnalysis.riskLevel === 'medium' ? 'border-l-warning bg-warning/5' :
+          'border-l-success bg-success/5'
         }`}>
           <CardHeader className="pb-2">
             <CardTitle className="text-lg flex items-center gap-2">
@@ -388,17 +388,17 @@ export default function SuppliesTab() {
                   {aiAnalysis.predictedIssues?.length > 0 ? 
                     aiAnalysis.predictedIssues.map((issue: string, i: number) => (
                       <li key={i} className="flex items-center gap-2">
-                        <AlertTriangle className="h-3 w-3 text-amber-500" />
+                        <AlertTriangle className="h-3 w-3 text-warning" />
                         {issue}
                       </li>
                     )) : (
                       <>
                         <li className="flex items-center gap-2">
-                          <AlertTriangle className="h-3 w-3 text-red-500" />
+                          <AlertTriangle className="h-3 w-3 text-destructive" />
                           Soro fisiológico abaixo do mínimo (8 de 15)
                         </li>
                         <li className="flex items-center gap-2">
-                          <AlertTriangle className="h-3 w-3 text-amber-500" />
+                          <AlertTriangle className="h-3 w-3 text-warning" />
                           Dipirona vence em 2 meses
                         </li>
                       </>
@@ -410,15 +410,15 @@ export default function SuppliesTab() {
                 <p className="text-sm font-medium mb-2">Recomendações:</p>
                 <ul className="text-sm space-y-1">
                   <li className="flex items-center gap-2">
-                    <CheckCircle2 className="h-3 w-3 text-green-500" />
+                    <CheckCircle2 className="h-3 w-3 text-success" />
                     Solicitar reposição urgente de Soro fisiológico
                   </li>
                   <li className="flex items-center gap-2">
-                    <CheckCircle2 className="h-3 w-3 text-green-500" />
+                    <CheckCircle2 className="h-3 w-3 text-success" />
                     Verificar uso de Dipirona antes do vencimento
                   </li>
                   <li className="flex items-center gap-2">
-                    <CheckCircle2 className="h-3 w-3 text-green-500" />
+                    <CheckCircle2 className="h-3 w-3 text-success" />
                     Repor estoque de Adrenalina
                   </li>
                 </ul>
@@ -443,40 +443,40 @@ export default function SuppliesTab() {
             </div>
           </CardContent>
         </Card>
-        <Card className="border-red-500/30">
+        <Card className="border-destructive/30">
           <CardContent className="pt-4">
             <div className="flex items-center gap-3">
-              <div className="p-2 rounded-lg bg-red-500/10">
-                <AlertTriangle className="h-5 w-5 text-red-500" />
+              <div className="p-2 rounded-lg bg-destructive/10">
+                <AlertTriangle className="h-5 w-5 text-destructive" />
               </div>
               <div>
-                <p className="text-2xl font-bold text-red-500">{statusCounts.critical}</p>
+                <p className="text-2xl font-bold text-destructive">{statusCounts.critical}</p>
                 <p className="text-xs text-muted-foreground">Críticos</p>
               </div>
             </div>
           </CardContent>
         </Card>
-        <Card className="border-amber-500/30">
+        <Card className="border-warning/30">
           <CardContent className="pt-4">
             <div className="flex items-center gap-3">
-              <div className="p-2 rounded-lg bg-amber-500/10">
-                <Clock className="h-5 w-5 text-amber-500" />
+              <div className="p-2 rounded-lg bg-warning/10">
+                <Clock className="h-5 w-5 text-warning" />
               </div>
               <div>
-                <p className="text-2xl font-bold text-amber-500">{statusCounts.expiring}</p>
+                <p className="text-2xl font-bold text-warning">{statusCounts.expiring}</p>
                 <p className="text-xs text-muted-foreground">Vencendo</p>
               </div>
             </div>
           </CardContent>
         </Card>
-        <Card className="border-orange-500/30">
+        <Card className="border-accent/30">
           <CardContent className="pt-4">
             <div className="flex items-center gap-3">
-              <div className="p-2 rounded-lg bg-orange-500/10">
-                <BarChart3 className="h-5 w-5 text-orange-500" />
+              <div className="p-2 rounded-lg bg-accent/10">
+                <BarChart3 className="h-5 w-5 text-accent-foreground" />
               </div>
               <div>
-                <p className="text-2xl font-bold text-orange-500">{statusCounts.low}</p>
+                <p className="text-2xl font-bold text-accent-foreground">{statusCounts.low}</p>
                 <p className="text-xs text-muted-foreground">Estoque Baixo</p>
               </div>
             </div>

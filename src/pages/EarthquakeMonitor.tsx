@@ -25,7 +25,7 @@ interface Earthquake {
 const getMagnitudeColor = (mag: number): string => {
   if (mag >= 7) return "bg-destructive";
   if (mag >= 5) return "bg-warning";
-  if (mag >= 3) return "bg-yellow-500";
+  if (mag >= 3) return "bg-warning";
   return "bg-success";
 };
 

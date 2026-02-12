@@ -79,13 +79,13 @@ export default function TrainingPage() {
 
   const getCategoryBadge = (category?: string) => {
     const variants: Record<string, string> = {
-      "DP Operations": "bg-blue-100 text-blue-800",
-      "Emergency Response": "bg-red-100 text-red-800",
-      "Fire Fighting": "bg-orange-100 text-orange-800",
-      "Blackout Recovery": "bg-purple-100 text-purple-800",
-      "MOB Response": "bg-yellow-100 text-yellow-800",
-      "SGSO Compliance": "bg-green-100 text-green-800",
-      "Technical": "bg-gray-100 text-gray-800",
+      "DP Operations": "bg-primary/10 text-primary",
+      "Emergency Response": "bg-destructive/10 text-destructive",
+      "Fire Fighting": "bg-accent/10 text-accent-foreground",
+      "Blackout Recovery": "bg-secondary text-secondary-foreground",
+      "MOB Response": "bg-warning/10 text-warning",
+      "SGSO Compliance": "bg-success/10 text-success",
+      "Technical": "bg-muted text-muted-foreground",
     };
     return variants[category || ""] || variants.Technical;
   };
@@ -258,8 +258,8 @@ export default function TrainingPage() {
                       <div className="flex justify-between items-start">
                         <div className="space-y-2 flex-1">
                           <div className="flex items-center gap-2">
-                            {expired && <Badge className="bg-red-100 text-red-800">Expirado</Badge>}
-                            {!expired && expiringSoon && <Badge className="bg-yellow-100 text-yellow-800">Expira em breve</Badge>}
+                            {expired && <Badge className="bg-destructive/10 text-destructive">Expirado</Badge>}
+                            {!expired && expiringSoon && <Badge className="bg-warning/10 text-warning">Expira em breve</Badge>}
                           </div>
                           <div className="text-sm space-y-1">
                             <p>Concluído em: {new Date(record.date_completed).toLocaleDateString("pt-BR")}</p>

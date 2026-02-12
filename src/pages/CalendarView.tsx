@@ -31,10 +31,10 @@ const MONTHS = [
 const WEEKDAYS = ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb'];
 
 const priorityColors: Record<string, string> = {
-  low: 'bg-green-500',
-  medium: 'bg-yellow-500',
-  high: 'bg-red-500',
-  urgent: 'bg-red-600',
+  low: 'bg-success',
+  medium: 'bg-warning',
+  high: 'bg-destructive',
+  urgent: 'bg-destructive',
 };
 
 const priorityLabels: Record<string, string> = {
@@ -483,10 +483,10 @@ const CalendarView: React.FC = () => {
               {/* Legend */}
               <div className="flex items-center gap-4 mt-4 text-xs text-muted-foreground flex-wrap">
                 <span className="font-medium">Legenda:</span>
-                <div className="flex items-center gap-1"><div className="w-3 h-3 rounded bg-green-500" /> Baixa</div>
-                <div className="flex items-center gap-1"><div className="w-3 h-3 rounded bg-yellow-500" /> Média</div>
-                <div className="flex items-center gap-1"><div className="w-3 h-3 rounded bg-red-500" /> Alta</div>
-                <div className="flex items-center gap-1"><div className="w-3 h-3 rounded bg-red-600" /> Urgente</div>
+                <div className="flex items-center gap-1"><div className="w-3 h-3 rounded bg-success" /> Baixa</div>
+                <div className="flex items-center gap-1"><div className="w-3 h-3 rounded bg-warning" /> Média</div>
+                <div className="flex items-center gap-1"><div className="w-3 h-3 rounded bg-destructive" /> Alta</div>
+                <div className="flex items-center gap-1"><div className="w-3 h-3 rounded bg-destructive" /> Urgente</div>
                 <div className="flex items-center gap-1 border-l pl-4">Duplo-clique para criar tarefa</div>
               </div>
             </CardContent>

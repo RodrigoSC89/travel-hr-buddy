@@ -120,9 +120,9 @@ const generateVesselStatuses = (): VesselStatus[] => [
 
 // Severity config
 const severityConfig = {
-  critical: { bg: "bg-red-500/20", border: "border-red-500", text: "text-red-400", icon: XCircle },
-  warning: { bg: "bg-yellow-500/20", border: "border-yellow-500", text: "text-yellow-400", icon: AlertCircle },
-  info: { bg: "bg-blue-500/20", border: "border-blue-500", text: "text-blue-400", icon: CheckCircle2 }
+  critical: { bg: "bg-destructive/20", border: "border-destructive", text: "text-destructive", icon: XCircle },
+  warning: { bg: "bg-warning/20", border: "border-warning", text: "text-warning", icon: AlertCircle },
+  info: { bg: "bg-info/20", border: "border-info", text: "text-info", icon: CheckCircle2 }
 };
 
 const statusConfig = {

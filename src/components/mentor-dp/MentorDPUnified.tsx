@@ -113,16 +113,16 @@
        {/* Header com badges */}
        <div className="flex items-center justify-between">
          <div className="flex items-center gap-2">
-           <Badge variant="outline" className="bg-blue-500/10 text-blue-500 border-blue-500/20">
-             <MessageSquare className="h-3 w-3 mr-1" />
-             AI Chat
-           </Badge>
-           <Badge variant="outline" className="bg-purple-500/10 text-purple-500 border-purple-500/20">
-             <Brain className="h-3 w-3 mr-1" />
-             NI CPD 2024
-           </Badge>
-           <Badge variant="outline" className="bg-green-500/10 text-green-500 border-green-500/20">
-             <Award className="h-3 w-3 mr-1" />
+            <Badge variant="outline" className="bg-primary/10 text-primary border-primary/20">
+              <MessageSquare className="h-3 w-3 mr-1" />
+              AI Chat
+            </Badge>
+            <Badge variant="outline" className="bg-accent/10 text-accent-foreground border-accent/20">
+              <Brain className="h-3 w-3 mr-1" />
+              NI CPD 2024
+            </Badge>
+            <Badge variant="outline" className="bg-success/10 text-success border-success/20">
+              <Award className="h-3 w-3 mr-1" />
              IMCA M117
            </Badge>
          </div>
