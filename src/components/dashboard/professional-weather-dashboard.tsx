@@ -127,7 +127,7 @@ export function ProfessionalWeatherDashboard() {
           };
           
           return (
-            <Card key={index} className={`border ${colorMap[alert.color as keyof typeof colorMap]}`}>
+            <Card key={alert.message} className={`border ${colorMap[alert.color as keyof typeof colorMap]}`}>
               <CardContent className="pt-6">
                 <div className="flex items-start gap-3">
                   <div className={`p-2 rounded-lg ${
@@ -273,7 +273,7 @@ export function ProfessionalWeatherDashboard() {
             ].map((item, index) => {
               const Icon = item.icon;
               return (
-                <Card key={index} className="border-primary/10">
+                <Card key={item.label} className="border-primary/10">
                   <CardContent className="pt-6 text-center">
                     <div className={`inline-flex p-3 rounded-xl mb-3 ${
                       item.color === "purple" ? "bg-accent/10 text-accent-foreground" :

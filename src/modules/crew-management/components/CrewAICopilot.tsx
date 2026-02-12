@@ -214,9 +214,9 @@ export function CrewAICopilot({ crewData, certificates }: CrewAICopilotProps) {
           ) : (
             <div className="space-y-4">
               <AnimatePresence mode="popLayout">
-                {messages.map((message, index) => (
+                {messages.map((message, msgIdx) => (
                   <motion.div
-                    key={index}
+                    key={`msg-${msgIdx}-${message.role}`}
                     initial={{ opacity: 0, y: 10 }}
                     animate={{ opacity: 1, y: 0 }}
                     exit={{ opacity: 0 }}

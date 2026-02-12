@@ -305,8 +305,8 @@ const UnifiedDashboard = () => {
         </CardHeader>
         <CardContent>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-            {quickActions.map((action, index) => (
-              <Card key={index} className="hover:shadow-lg hover-lift transition-all cursor-pointer border-l-4 border-l-primary">
+            {quickActions.map((action) => (
+              <Card key={action.title} className="hover:shadow-lg hover-lift transition-all cursor-pointer border-l-4 border-l-primary">
                 <CardContent className="p-4" onClick={() => navigate(action.path)}>
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-3">

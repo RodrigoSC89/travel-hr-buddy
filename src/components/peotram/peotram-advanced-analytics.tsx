@@ -133,24 +133,24 @@ export const PeotramAdvancedAnalytics: React.FC = () => {
   ]);
 
   const getScoreColor = (score: number) => {
-    if (score >= 90) return "text-green-600";
-    if (score >= 80) return "text-blue-600";
-    if (score >= 70) return "text-yellow-600";
-    return "text-red-600";
+    if (score >= 90) return "text-success";
+    if (score >= 80) return "text-info";
+    if (score >= 70) return "text-warning";
+    return "text-destructive";
   };
 
   const getSeverityBadge = (severity: Alert["severity"]) => {
     const variants = {
-      high: "bg-red-100 text-red-800",
-      medium: "bg-yellow-100 text-yellow-800",
-      low: "bg-blue-100 text-blue-800"
+      high: "bg-destructive/10 text-destructive",
+      medium: "bg-warning/10 text-warning",
+      low: "bg-info/10 text-info"
     };
     return variants[severity];
   };
 
   const getTrendIcon = (trend: "up" | "down" | "stable") => {
-    if (trend === "up") return <TrendingUp className="h-4 w-4 text-green-600" />;
-    if (trend === "down") return <TrendingDown className="h-4 w-4 text-red-600" />;
+    if (trend === "up") return <TrendingUp className="h-4 w-4 text-success" />;
+    if (trend === "down") return <TrendingDown className="h-4 w-4 text-destructive" />;
     return <Activity className="h-4 w-4 text-muted-foreground" />;
   };
 

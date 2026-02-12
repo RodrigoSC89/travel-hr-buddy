@@ -203,14 +203,14 @@ const FleetOperationsCenter: React.FC = () => {
 
       {/* Métricas Principais */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-        {metrics.map((metric, index) => (
-          <Card key={index} className="bg-card/50 backdrop-blur border-border/50">
+        {metrics.map((metric) => (
+          <Card key={metric.name} className="bg-card/50 backdrop-blur border-border/50">
             <CardContent className="p-4">
               <div className="flex items-center justify-between mb-2">
                 <span className="text-sm text-muted-foreground">{metric.name}</span>
                 <Badge 
                   variant="outline" 
-                  className={metric.trend > 0 ? "text-green-400" : metric.trend < 0 ? "text-red-400" : "text-muted-foreground"}
+                  className={metric.trend > 0 ? "text-success" : metric.trend < 0 ? "text-destructive" : "text-muted-foreground"}
                 >
                   {metric.trend > 0 ? "+" : ""}{metric.trend}%
                 </Badge>

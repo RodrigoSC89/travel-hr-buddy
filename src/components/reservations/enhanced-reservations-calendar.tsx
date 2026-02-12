@@ -157,7 +157,7 @@ export const EnhancedReservationsCalendar: React.FC = () => {
               
               return (
                 <div
-                  key={index}
+                  key={day ? day.toISOString() : `empty-${index}`}
                   className={`min-h-[100px] p-2 border rounded-lg ${
                     day ? "bg-background hover:bg-muted/50 cursor-pointer" : "bg-muted/20"
                   } ${hasConflicts ? "border-destructive bg-destructive/5" : "border-border"}`}

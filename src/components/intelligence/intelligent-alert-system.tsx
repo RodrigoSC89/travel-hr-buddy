@@ -414,8 +414,8 @@ export const IntelligentAlertSystem = () => {
                               Ações Recomendadas:
                             </div>
                             <ul className="text-sm space-y-1">
-                              {alert.recommended_actions.map((action, index) => (
-                                <li key={index} className="flex items-start gap-1">
+                              {alert.recommended_actions.map((action) => (
+                                <li key={action} className="flex items-start gap-1">
                                   <span className="text-primary">•</span>
                                   {action}
                                 </li>
@@ -468,9 +468,9 @@ export const IntelligentAlertSystem = () => {
                           {insight.insight_type}
                         </Badge>
                         <Badge className={
-                          insight.business_impact === "high" ? "bg-red-100 text-red-800" :
-                            insight.business_impact === "medium" ? "bg-yellow-100 text-yellow-800" :
-                              "bg-green-100 text-green-800"
+                          insight.business_impact === "high" ? "bg-destructive/10 text-destructive" :
+                            insight.business_impact === "medium" ? "bg-warning/10 text-warning" :
+                              "bg-success/10 text-success"
                         }>
                           {insight.business_impact === "high" ? "Alto Impacto" :
                             insight.business_impact === "medium" ? "Médio Impacto" : "Baixo Impacto"}
@@ -484,7 +484,7 @@ export const IntelligentAlertSystem = () => {
                       <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-3">
                         <div>
                           <div className="text-xs font-medium text-muted-foreground">Economia Potencial</div>
-                          <div className="text-lg font-bold text-green-600">
+                          <div className="text-lg font-bold text-success">
                             R$ {insight.cost_benefit.potential_savings.toLocaleString()}
                           </div>
                         </div>
@@ -496,7 +496,7 @@ export const IntelligentAlertSystem = () => {
                         </div>
                         <div>
                           <div className="text-xs font-medium text-muted-foreground">ROI</div>
-                          <div className="text-lg font-bold text-green-600">
+                          <div className="text-lg font-bold text-success">
                             {insight.cost_benefit.roi_percentage}%
                           </div>
                         </div>
@@ -507,8 +507,8 @@ export const IntelligentAlertSystem = () => {
                           Recomendações:
                         </div>
                         <ul className="text-sm space-y-1">
-                          {insight.recommendations.map((rec, index) => (
-                            <li key={index} className="flex items-start gap-1">
+                          {insight.recommendations.map((rec) => (
+                            <li key={rec} className="flex items-start gap-1">
                               <span className="text-primary">•</span>
                               {rec}
                             </li>
