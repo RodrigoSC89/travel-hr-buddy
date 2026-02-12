@@ -239,7 +239,7 @@ export function PerformanceDashboard() {
                         label={({ name, value }) => `${name}: ${value}`}
                       >
                         {findingsDistribution.map((entry, index) => (
-                          <Cell key={`cell-${index}`} fill={entry.color} />
+                          <Cell key={`cell-${entry.name}`} fill={entry.color} />
                         ))}
                       </Pie>
                       <Legend />
@@ -345,8 +345,8 @@ export function PerformanceDashboard() {
               </CardHeader>
               <CardContent>
                 <div className="space-y-4">
-                  {upcomingAudits.map((audit, idx) => (
-                    <div key={idx} className="flex items-center justify-between p-3 rounded-lg border">
+                  {upcomingAudits.map((audit) => (
+                    <div key={audit.type} className="flex items-center justify-between p-3 rounded-lg border">
                       <div className="space-y-1">
                         <span className="font-medium">{audit.type}</span>
                         <div className="flex items-center gap-2 text-sm text-muted-foreground">

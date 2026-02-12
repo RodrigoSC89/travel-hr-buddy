@@ -165,7 +165,7 @@ export const PredictiveMaintenanceAI: React.FC = () => {
             {predictionsLoading ? (
               <div className="space-y-3">
                 {[...Array(3)].map((_, i) => (
-                  <Skeleton key={i} className="h-24" />
+                  <Skeleton key={`pred-skeleton-${i}`} className="h-24" />
                 ))}
               </div>
             ) : predictions.length === 0 ? (
@@ -234,7 +234,7 @@ export const PredictiveMaintenanceAI: React.FC = () => {
             {alertsLoading ? (
               <div className="space-y-3">
                 {[...Array(3)].map((_, i) => (
-                  <Skeleton key={i} className="h-16" />
+                  <Skeleton key={`alert-skeleton-${i}`} className="h-16" />
                 ))}
               </div>
             ) : alerts.length === 0 ? (

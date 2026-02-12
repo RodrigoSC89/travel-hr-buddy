@@ -237,8 +237,8 @@ export function FinanceExecutiveDashboard() {
             </CardTitle>
           </CardHeader>
           <CardContent className="space-y-3">
-            {pendingItems.map((item, idx) => (
-              <div key={idx} className="p-3 rounded-lg border hover:bg-muted/50 transition-colors">
+            {pendingItems.map((item) => (
+              <div key={item.title} className="p-3 rounded-lg border hover:bg-muted/50 transition-colors">
                 <div className="flex items-start justify-between">
                   <div className="flex items-start gap-2">
                     {item.type === "invoice" ? <Receipt className="h-4 w-4 text-info mt-0.5" /> :
@@ -279,8 +279,8 @@ export function FinanceExecutiveDashboard() {
           </CardHeader>
           <CardContent>
             <div className="space-y-4">
-              {vesselPerformance.map((vessel, idx) => (
-                <div key={idx} className="p-3 rounded-lg border cursor-pointer hover:bg-muted/50 transition-colors" onClick={() => { navigator.clipboard.writeText(`${vessel.vessel} | Receita: ${formatCurrency(vessel.revenue)} | Custos: ${formatCurrency(vessel.costs)} | Margem: ${vessel.margin}%`); toast.success(`Dados de ${vessel.vessel} copiados`); }}>
+              {vesselPerformance.map((vessel) => (
+                <div key={vessel.vessel} className="p-3 rounded-lg border cursor-pointer hover:bg-muted/50 transition-colors" onClick={() => { navigator.clipboard.writeText(`${vessel.vessel} | Receita: ${formatCurrency(vessel.revenue)} | Custos: ${formatCurrency(vessel.costs)} | Margem: ${vessel.margin}%`); toast.success(`Dados de ${vessel.vessel} copiados`); }}>
                   <div className="flex items-center justify-between mb-2">
                     <div className="flex items-center gap-2">
                       <Ship className="h-4 w-4 text-primary" />
@@ -320,8 +320,8 @@ export function FinanceExecutiveDashboard() {
           </CardHeader>
           <CardContent>
             <div className="space-y-4">
-              {budgetCategories.map((cat, idx) => (
-                <div key={idx} className="space-y-2">
+              {budgetCategories.map((cat) => (
+                <div key={cat.name} className="space-y-2">
                   <div className="flex items-center justify-between text-sm">
                     <span className="font-medium">{cat.name}</span>
                     <div className="flex items-center gap-2">

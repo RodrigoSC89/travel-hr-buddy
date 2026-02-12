@@ -318,7 +318,7 @@ export function SecurityAuditCenter() {
               {checksLoading ? (
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   {[...Array(6)].map((_, i) => (
-                    <Skeleton key={i} className="h-24" />
+                    <Skeleton key={`check-skeleton-${i}`} className="h-24" />
                   ))}
                 </div>
               ) : (
@@ -360,7 +360,7 @@ export function SecurityAuditCenter() {
                 {logsLoading ? (
                   <div className="space-y-3">
                     {[...Array(5)].map((_, i) => (
-                      <Skeleton key={i} className="h-20" />
+                      <Skeleton key={`log-skeleton-${i}`} className="h-20" />
                     ))}
                   </div>
                 ) : auditLogs.length === 0 ? (
@@ -420,7 +420,7 @@ export function SecurityAuditCenter() {
               {complianceLoading ? (
                 <div className="space-y-4">
                   {[...Array(4)].map((_, i) => (
-                    <Skeleton key={i} className="h-24" />
+                    <Skeleton key={`compliance-skeleton-${i}`} className="h-24" />
                   ))}
                 </div>
               ) : complianceItems.length === 0 ? (

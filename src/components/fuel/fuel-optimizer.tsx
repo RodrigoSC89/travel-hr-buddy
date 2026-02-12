@@ -533,8 +533,8 @@ export const FuelOptimizer = () => {
                         <div className="pt-2">
                           <p className="text-sm font-medium mb-2">Recomendações:</p>
                           <ul className="space-y-1">
-                            {result.recommendations.map((rec: string, idx: number) => (
-                              <li key={idx} className="text-sm flex items-start gap-2">
+                            {result.recommendations.map((rec: string) => (
+                              <li key={rec} className="text-sm flex items-start gap-2">
                                 <CheckCircle2 className="h-4 w-4 text-green-500 mt-0.5 flex-shrink-0" />
                                 <span>{rec}</span>
                               </li>

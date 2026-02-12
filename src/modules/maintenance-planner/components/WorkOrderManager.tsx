@@ -283,8 +283,8 @@ export default function WorkOrderManager() {
               {os.requestedParts.length > 0 && (
                 <div className="bg-muted/50 p-2 rounded text-xs">
                   <p className="font-medium mb-1">Peças solicitadas:</p>
-                  {os.requestedParts.map((part, i) => (
-                    <div key={i} className="flex justify-between">
+                  {os.requestedParts.map((part) => (
+                    <div key={part.name} className="flex justify-between">
                       <span>{part.name} (x{part.quantity})</span>
                       <Badge variant={part.available ? "outline" : "destructive"} className="text-xs">
                         {part.available ? "Em estoque" : "Indisponível"}

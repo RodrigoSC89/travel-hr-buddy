@@ -299,8 +299,8 @@ export default function PurchaseOrdersSection({ searchQuery }: PurchaseOrdersSec
                   </TableCell>
                   <TableCell>
                     <div>
-                      {order.items.slice(0, 2).map((item, idx) => (
-                        <p key={idx} className="text-sm truncate max-w-48">
+                      {order.items.slice(0, 2).map((item) => (
+                        <p key={item.sku} className="text-sm truncate max-w-48">
                           {item.quantity}x {item.name}
                         </p>
                       ))}

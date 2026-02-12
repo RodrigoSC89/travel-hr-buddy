@@ -544,7 +544,7 @@ export default function CompetencyMatrix() {
                           <div className="flex items-center gap-1 mb-2">
                             {Array.from({ length: skill.maxLevel }).map((_, i) => (
                               <Star 
-                                key={i} 
+                                key={`star-${skill.id}-${i}`}
                                 className={cn(
                                   "h-5 w-5",
                                   i < skill.level 

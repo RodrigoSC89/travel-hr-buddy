@@ -334,8 +334,8 @@ export default function HRDashboardPage() {
                   { action: 'Férias solicitadas', employee: 'João Santos', time: '4h atrás', type: 'info' },
                   { action: 'Atestado enviado', employee: 'Ana Costa', time: '1d atrás', type: 'warning' },
                   { action: 'Avaliação concluída', employee: 'Carlos Oliveira', time: '2d atrás', type: 'success' },
-                ].map((item, i) => (
-                  <div key={i} className="flex items-center gap-3 p-2 rounded-lg hover:bg-muted/50">
+                ].map((item) => (
+                  <div key={item.action} className="flex items-center gap-3 p-2 rounded-lg hover:bg-muted/50">
                     <div className={`w-2 h-2 rounded-full ${
                       item.type === 'success' ? 'bg-success' : 
                       item.type === 'warning' ? 'bg-warning' : 'bg-primary'
@@ -360,8 +360,8 @@ export default function HRDashboardPage() {
                   { title: 'Documentos pendentes', count: 8, priority: 'medium' },
                   { title: 'Admissões em andamento', count: 4, priority: 'high' },
                   { title: 'Avaliações atrasadas', count: 3, priority: 'low' },
-                ].map((item, i) => (
-                  <div key={i} className="flex items-center gap-3 p-2 rounded-lg hover:bg-muted/50 cursor-pointer">
+                ].map((item) => (
+                  <div key={item.title} className="flex items-center gap-3 p-2 rounded-lg hover:bg-muted/50 cursor-pointer">
                     <Badge variant={
                       item.priority === 'high' ? 'destructive' : 
                       item.priority === 'medium' ? 'default' : 'secondary'
