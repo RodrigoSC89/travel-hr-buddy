@@ -122,12 +122,12 @@ export const VesselTracking = () => {
 
   const getStatusColor = (status: VesselPosition["status"]) => {
     switch (status) {
-    case "sailing": return "bg-blue-500";
-    case "anchored": return "bg-yellow-500";
-    case "docked": return "bg-green-500";
-    case "maintenance": return "bg-orange-500";
-    case "emergency": return "bg-red-500";
-    default: return "bg-gray-500";
+    case "sailing": return "bg-info";
+    case "anchored": return "bg-warning";
+    case "docked": return "bg-success";
+    case "maintenance": return "bg-accent";
+    case "emergency": return "bg-destructive";
+    default: return "bg-muted";
     }
   };
 

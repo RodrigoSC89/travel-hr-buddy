@@ -260,10 +260,10 @@ export function DigitalTwinInteractive() {
 
   const getStatusConfig = (status: Vessel["status"]) => {
     const config = {
-      operational: { label: "Operacional", color: "bg-green-500", icon: CheckCircle },
-      maintenance: { label: "Manutenção", color: "bg-yellow-500", icon: Clock },
-      docked: { label: "Atracada", color: "bg-blue-500", icon: Anchor },
-      archived: { label: "Arquivada", color: "bg-gray-500", icon: Archive }
+      operational: { label: "Operacional", color: "bg-success", icon: CheckCircle },
+      maintenance: { label: "Manutenção", color: "bg-warning", icon: Clock },
+      docked: { label: "Atracada", color: "bg-info", icon: Anchor },
+      archived: { label: "Arquivada", color: "bg-muted", icon: Archive }
     };
     return config[status];
   };
@@ -560,7 +560,7 @@ export function DigitalTwinInteractive() {
                           </div>
                         </div>
                         {/* Decorative elements */}
-                        <div className="absolute bottom-0 left-0 right-0 h-8 bg-blue-400/20" />
+                        <div className="absolute bottom-0 left-0 right-0 h-8 bg-primary/20" />
                       </div>
                     </CardContent>
                   </Card>
@@ -602,8 +602,8 @@ export function DigitalTwinInteractive() {
                         ].map((log, i) => (
                           <div key={i} className="flex items-center gap-4 p-3 border rounded-lg">
                             <div className={`w-2 h-2 rounded-full ${
-                              log.type === "success" ? "bg-green-500" :
-                              log.type === "warning" ? "bg-yellow-500" : "bg-blue-500"
+                              log.type === "success" ? "bg-success" :
+                              log.type === "warning" ? "bg-warning" : "bg-info"
                             }`} />
                             <span className="text-sm text-muted-foreground w-16">{log.time}</span>
                             <span className="text-sm">{log.event}</span>
