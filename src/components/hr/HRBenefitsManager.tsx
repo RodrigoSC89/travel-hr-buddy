@@ -40,10 +40,10 @@ const getIcon = (category: string) => {
 };
 
 const flexDistribution = [
-  { name: "Vale Refeição", value: 40, color: "bg-orange-500" },
-  { name: "Vale Alimentação", value: 25, color: "bg-green-500" },
-  { name: "Wellhub", value: 15, color: "bg-purple-500" },
-  { name: "Educação", value: 20, color: "bg-blue-500" },
+  { name: "Vale Refeição", value: 40, color: "bg-warning" },
+  { name: "Vale Alimentação", value: 25, color: "bg-success" },
+  { name: "Wellhub", value: 15, color: "bg-accent" },
+  { name: "Educação", value: 20, color: "bg-info" },
 ];
 
 export function HRBenefitsManager() {
@@ -117,7 +117,7 @@ export function HRBenefitsManager() {
             <CreditCard className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-green-500">R$ {totalBalance.toLocaleString("pt-BR")}</div>
+            <div className="text-2xl font-bold text-success">R$ {totalBalance.toLocaleString("pt-BR")}</div>
             <p className="text-xs text-muted-foreground">Para usar este mês</p>
           </CardContent>
         </Card>
@@ -128,7 +128,7 @@ export function HRBenefitsManager() {
             <Gift className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-purple-500">4</div>
+            <div className="text-2xl font-bold text-accent-foreground">4</div>
             <p className="text-xs text-muted-foreground">Personalizáveis</p>
           </CardContent>
         </Card>
@@ -156,11 +156,11 @@ export function HRBenefitsManager() {
 
         <TabsContent value="overview" className="space-y-4 mt-4">
           {/* AI Recommendation */}
-          <Card className="bg-gradient-to-r from-purple-500/10 to-blue-500/10 border-purple-500/20">
+           <Card className="bg-gradient-to-r from-accent/10 to-info/10 border-accent/20">
             <CardContent className="p-4">
               <div className="flex items-center gap-3 mb-3">
-                <div className="p-2 bg-purple-500/20 rounded-lg">
-                  <Brain className="h-5 w-5 text-purple-500" />
+                <div className="p-2 bg-accent/20 rounded-lg">
+                  <Brain className="h-5 w-5 text-accent-foreground" />
                 </div>
                 <div>
                   <h3 className="font-semibold">Recomendação da IA</h3>
@@ -169,7 +169,7 @@ export function HRBenefitsManager() {
               </div>
               <div className="p-3 bg-background rounded-lg">
                 <div className="flex items-center gap-2 mb-2">
-                  <Sparkles className="h-4 w-4 text-purple-500" />
+                  <Sparkles className="h-4 w-4 text-accent-foreground" />
                   <span className="font-medium text-sm">Sugestão de Otimização</span>
                 </div>
                 <p className="text-sm text-muted-foreground">
@@ -217,7 +217,7 @@ export function HRBenefitsManager() {
                     {benefit.current_balance > 0 && (
                       <div className="flex justify-between text-sm">
                         <span>Saldo</span>
-                        <span className="font-medium text-green-500">
+                        <span className="font-medium text-success">
                           R$ {benefit.current_balance.toLocaleString("pt-BR")}
                         </span>
                       </div>
@@ -257,7 +257,7 @@ export function HRBenefitsManager() {
               <div className="h-4 rounded-full overflow-hidden flex">
                 {flexDistribution.map((item, i) => (
                   <div 
-                    key={i}
+                    key={item.name}
                     className={`${item.color} transition-all`}
                     style={{ width: `${item.value}%` }}
                   />
@@ -265,8 +265,8 @@ export function HRBenefitsManager() {
               </div>
               
               <div className="grid gap-2 grid-cols-4">
-                {flexDistribution.map((item, i) => (
-                  <div key={i} className="flex items-center gap-2">
+                {flexDistribution.map((item) => (
+                  <div key={item.name} className="flex items-center gap-2">
                     <div className={`w-3 h-3 rounded-full ${item.color}`} />
                     <span className="text-sm">{item.name}</span>
                   </div>
@@ -371,8 +371,8 @@ export function HRBenefitsManager() {
                   { date: "06/01", desc: "Uber", value: -28.50, benefit: "VT", icon: <Bus className="h-4 w-4" /> },
                   { date: "05/01", desc: "Smart Fit - Mensalidade", value: -99.90, benefit: "Wellhub", icon: <Dumbbell className="h-4 w-4" /> },
                   { date: "01/01", desc: "Crédito Mensal", value: 1980.00, benefit: "Flex", icon: <Gift className="h-4 w-4" /> },
-                ].map((tx, i) => (
-                  <div key={i} className="flex items-center justify-between p-3 border rounded-lg">
+                ].map((tx) => (
+                  <div key={tx.desc} className="flex items-center justify-between p-3 border rounded-lg">
                     <div className="flex items-center gap-3">
                       <div className="p-2 bg-muted rounded">
                         {tx.icon}
@@ -382,7 +382,7 @@ export function HRBenefitsManager() {
                         <p className="text-sm text-muted-foreground">{tx.date} • {tx.benefit}</p>
                       </div>
                     </div>
-                    <span className={`font-bold ${tx.value > 0 ? "text-green-500" : ""}`}>
+                    <span className={`font-bold ${tx.value > 0 ? "text-success" : ""}`}>
                       {tx.value > 0 ? "+" : ""}R$ {Math.abs(tx.value).toFixed(2)}
                     </span>
                   </div>
@@ -406,7 +406,7 @@ export function HRBenefitsManager() {
                 <CardHeader>
                   <div className="flex items-center justify-between">
                     <CardTitle className="text-base">{partner.name}</CardTitle>
-                    <Badge variant="secondary" className="bg-green-500/10 text-green-500">
+                    <Badge variant="secondary" className="bg-success/10 text-success">
                       -{partner.discount}
                     </Badge>
                   </div>

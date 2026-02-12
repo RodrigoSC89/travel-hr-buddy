@@ -369,7 +369,7 @@ export function IASection() {
             <Card>
               <CardHeader className="pb-2">
                 <CardTitle className="text-lg flex items-center gap-2">
-                  <Eye className="h-4 w-4 text-blue-500" />
+                  <Eye className="h-4 w-4 text-info" />
                   Contexto Atual
                 </CardTitle>
               </CardHeader>
@@ -417,7 +417,7 @@ export function IASection() {
               <CardHeader className="pb-2">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-2">
-                    <Sparkles className="h-5 w-5 text-purple-500" />
+                    <Sparkles className="h-5 w-5 text-accent-foreground" />
                     <CardTitle className="text-lg">Insights em Tempo Real</CardTitle>
                   </div>
                   <Button variant="outline" size="sm" onClick={handleAnalyzeNow} disabled={isAnalyzing}>
@@ -496,15 +496,15 @@ export function IASection() {
                 <Card className="h-full">
                   <CardContent className="p-4">
                     <div className="flex items-start justify-between mb-3">
-                      <div className="p-2 rounded-lg bg-gradient-to-br from-primary/10 to-purple-500/10">
+                      <div className="p-2 rounded-lg bg-gradient-to-br from-primary/10 to-accent/10">
                         <model.icon className="h-5 w-5 text-primary" />
                       </div>
                       <Badge 
                         variant="outline" 
                         className={`text-xs ${
                           model.status === "active" 
-                            ? "bg-emerald-50 text-emerald-700 border-emerald-200" 
-                            : "bg-amber-50 text-amber-700 border-amber-200"
+                            ? "bg-success/10 text-success border-success/20" 
+                            : "bg-warning/10 text-warning border-warning/20"
                         }`}
                       >
                         {model.status === "active" ? "Ativo" : "Treinando"}

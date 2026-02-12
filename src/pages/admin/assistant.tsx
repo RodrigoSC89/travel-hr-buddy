@@ -54,7 +54,6 @@ export default function AssistantPage() {
     if (!commandText) setInput("");
 
     try {
-      // Try Supabase function first
       const { data, error } = await supabase.functions.invoke("assistant-query", {
         body: { question },
       });
@@ -84,7 +83,7 @@ export default function AssistantPage() {
       <div className="mb-4 flex items-center justify-between">
         <div>
           <h1 className="text-2xl font-bold flex items-center gap-2">
-            <Sparkles className="w-6 h-6 text-yellow-500" />
+            <Sparkles className="w-6 h-6 text-warning" />
             🤖 Assistente IA
           </h1>
           <p className="text-sm text-muted-foreground mt-1">
@@ -117,7 +116,7 @@ export default function AssistantPage() {
                 )}
                 {messages.map((msg, i) => (
                   <div
-                    key={i}
+                    key={`msg-${msg.role}-${i}`}
                     className={`flex ${msg.role === "user" ? "justify-end" : "justify-start"}`}
                   >
                     <div
@@ -128,8 +127,8 @@ export default function AssistantPage() {
                       <div
                         className={`w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 ${
                           msg.role === "user"
-                            ? "bg-blue-100 text-blue-600"
-                            : "bg-purple-100 text-purple-600"
+                            ? "bg-primary/10 text-primary"
+                            : "bg-accent text-accent-foreground"
                         }`}
                       >
                         {msg.role === "user" ? (
@@ -141,8 +140,8 @@ export default function AssistantPage() {
                       <div
                         className={`p-3 rounded-lg ${
                           msg.role === "user"
-                            ? "bg-blue-500 text-white"
-                            : "bg-gray-100 text-gray-900"
+                            ? "bg-primary text-primary-foreground"
+                            : "bg-muted text-foreground"
                         }`}
                       >
                         {msg.role === "assistant" ? (
@@ -160,10 +159,10 @@ export default function AssistantPage() {
                 {loading && (
                   <div className="flex justify-start">
                     <div className="flex gap-2 max-w-[80%]">
-                      <div className="w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 bg-purple-100 text-purple-600">
+                      <div className="w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 bg-accent text-accent-foreground">
                         <Bot className="w-4 h-4" />
                       </div>
-                      <div className="p-3 rounded-lg bg-gray-100 text-gray-900">
+                      <div className="p-3 rounded-lg bg-muted text-foreground">
                         <div className="flex items-center gap-2">
                           <Loader2 className="w-4 h-4 animate-spin" />
                           <span className="text-sm text-muted-foreground">
@@ -204,13 +203,13 @@ export default function AssistantPage() {
           <Card>
             <CardContent className="p-4">
               <h3 className="text-sm font-semibold mb-3 flex items-center gap-2">
-                <Zap className="w-4 h-4 text-yellow-500" />
+                <Zap className="w-4 h-4 text-warning" />
                 Comandos Rápidos
               </h3>
               <div className="space-y-2">
-                {quickCommands.map((cmd, idx) => (
+                {quickCommands.map((cmd) => (
                   <Button
-                    key={idx}
+                    key={cmd.command}
                     variant="outline"
                     className="w-full justify-start text-left h-auto py-2"
                     onClick={() => sendMessage(cmd.command)}
@@ -227,13 +226,13 @@ export default function AssistantPage() {
           <Card>
             <CardContent className="p-4">
               <h3 className="text-sm font-semibold mb-3 flex items-center gap-2">
-                <CheckCircle2 className="w-4 h-4 text-green-500" />
+                <CheckCircle2 className="w-4 h-4 text-success" />
                 Capacidades
               </h3>
               <div className="space-y-1.5">
-                {capabilities.map((cap, idx) => (
-                  <div key={idx} className="flex items-start gap-2 text-xs text-muted-foreground">
-                    <CheckCircle2 className="w-3 h-3 text-green-500 mt-0.5 flex-shrink-0" />
+                {capabilities.map((cap) => (
+                  <div key={cap} className="flex items-start gap-2 text-xs text-muted-foreground">
+                    <CheckCircle2 className="w-3 h-3 text-success mt-0.5 flex-shrink-0" />
                     <span>{cap}</span>
                   </div>
                 ))}
@@ -242,7 +241,7 @@ export default function AssistantPage() {
           </Card>
 
           <div className="text-center">
-            <div className="inline-flex items-center gap-2 px-3 py-1.5 bg-gradient-to-r from-purple-100 to-blue-100 rounded-full text-xs font-medium text-purple-700">
+            <div className="inline-flex items-center gap-2 px-3 py-1.5 bg-gradient-to-r from-accent/20 to-info/20 rounded-full text-xs font-medium text-accent-foreground">
               <Sparkles className="w-3 h-3" />
               Powered by GPT-4o-mini
             </div>

@@ -384,7 +384,7 @@ export function CargoFullCRUD() {
   }), [cargos]);
 
   const getStatusColor = (status: string) => {
-    return statusOptions.find(s => s.value === status)?.color || "bg-gray-500";
+    return statusOptions.find(s => s.value === status)?.color || "bg-muted";
   };
 
   const toggleSelect = (id: string) => {
@@ -445,19 +445,19 @@ export function CargoFullCRUD() {
         <Card>
           <CardContent className="p-4">
             <p className="text-xs text-muted-foreground">Em Trânsito</p>
-            <p className="text-2xl font-bold text-purple-500">{stats.inTransit}</p>
+            <p className="text-2xl font-bold text-accent-foreground">{stats.inTransit}</p>
           </CardContent>
         </Card>
         <Card>
           <CardContent className="p-4">
             <p className="text-xs text-muted-foreground">Entregues</p>
-            <p className="text-2xl font-bold text-green-500">{stats.delivered}</p>
+            <p className="text-2xl font-bold text-success">{stats.delivered}</p>
           </CardContent>
         </Card>
         <Card>
           <CardContent className="p-4">
             <p className="text-xs text-muted-foreground">Atrasadas</p>
-            <p className="text-2xl font-bold text-red-500">{stats.delayed}</p>
+            <p className="text-2xl font-bold text-destructive">{stats.delayed}</p>
           </CardContent>
         </Card>
         <Card>

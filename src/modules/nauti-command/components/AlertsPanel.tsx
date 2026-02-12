@@ -33,17 +33,17 @@ interface AlertsPanelProps {
 export const AlertsPanel: React.FC<AlertsPanelProps> = ({ alerts, onDismiss, expanded = false }) => {
   const getAlertIcon = (type: string) => {
     switch (type) {
-      case 'critical': return <AlertOctagon className="h-4 w-4 text-red-500" />;
-      case 'warning': return <AlertTriangle className="h-4 w-4 text-yellow-500" />;
-      default: return <Info className="h-4 w-4 text-blue-500" />;
+      case 'critical': return <AlertOctagon className="h-4 w-4 text-destructive" />;
+      case 'warning': return <AlertTriangle className="h-4 w-4 text-warning" />;
+      default: return <Info className="h-4 w-4 text-info" />;
     }
   };
 
   const getAlertStyle = (type: string) => {
     switch (type) {
-      case 'critical': return 'border-l-red-500 bg-red-50/50 dark:bg-red-950/20';
-      case 'warning': return 'border-l-yellow-500 bg-yellow-50/50 dark:bg-yellow-950/20';
-      default: return 'border-l-blue-500 bg-blue-50/50 dark:bg-blue-950/20';
+      case 'critical': return 'border-l-destructive bg-destructive/5';
+      case 'warning': return 'border-l-warning bg-warning/5';
+      default: return 'border-l-info bg-info/5';
     }
   };
 
@@ -56,7 +56,7 @@ export const AlertsPanel: React.FC<AlertsPanelProps> = ({ alerts, onDismiss, exp
         <div className="flex items-center justify-between">
           <div>
             <CardTitle className="flex items-center gap-2">
-              <Bell className="h-5 w-5 text-orange-500" />
+              <Bell className="h-5 w-5 text-warning" />
               Alertas Ativos
             </CardTitle>
             <CardDescription>
@@ -68,7 +68,7 @@ export const AlertsPanel: React.FC<AlertsPanelProps> = ({ alerts, onDismiss, exp
               <Badge variant="destructive">{criticalCount} Críticos</Badge>
             )}
             {warningCount > 0 && (
-              <Badge className="bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-300">
+              <Badge className="bg-warning/10 text-warning border-warning/20">
                 {warningCount} Avisos
               </Badge>
             )}
@@ -78,7 +78,7 @@ export const AlertsPanel: React.FC<AlertsPanelProps> = ({ alerts, onDismiss, exp
       <CardContent>
         {alerts.length === 0 ? (
           <div className="text-center py-8">
-            <CheckCircle className="h-12 w-12 mx-auto mb-3 text-green-500 opacity-50" />
+            <CheckCircle className="h-12 w-12 mx-auto mb-3 text-success opacity-50" />
             <p className="text-muted-foreground">Nenhum alerta ativo</p>
             <p className="text-xs text-muted-foreground mt-1">
               Todos os sistemas operando normalmente
@@ -116,7 +116,7 @@ export const AlertsPanel: React.FC<AlertsPanelProps> = ({ alerts, onDismiss, exp
                             {alert.module}
                           </Badge>
                           {alert.actionRequired && (
-                            <Badge variant="secondary" className="text-xs bg-orange-100 text-orange-700 dark:bg-orange-900/30 dark:text-orange-300">
+                            <Badge variant="secondary" className="text-xs bg-warning/10 text-warning">
                               Ação Necessária
                             </Badge>
                           )}

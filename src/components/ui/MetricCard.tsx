@@ -120,7 +120,7 @@ export const MetricCard: React.FC<MetricCardProps> = ({
           {trend && (
             <div className={cn(
               "flex items-center text-sm font-medium",
-              trend.isPositive || trend.type === "increase" ? "text-azure-50/90" : "text-red-200",
+              trend.isPositive || trend.type === "increase" ? "text-success-foreground" : "text-destructive-foreground",
             )}>
               <span className="mr-1">
                 {(trend.isPositive || trend.type === "increase") ? "↗" : "↘"}
