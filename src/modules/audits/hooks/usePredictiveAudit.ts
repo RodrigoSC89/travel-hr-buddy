@@ -93,8 +93,7 @@ export function useAuditHistory(vesselId: string) {
     queryKey: ["audit-history", vesselId],
     queryFn: async (): Promise<AuditRecord[]> => {
       // Using dynamic table accessor since audits table may not be in generated types
-      const { data, error } = await supabase
-        .from("sgso_audits" as any)
+      const { data, error } = await (supabase.from as Function)("sgso_audits")
         .select("*")
         .eq("vessel_id", vesselId)
         .order("created_at", { ascending: false })
@@ -105,13 +104,14 @@ export function useAuditHistory(vesselId: string) {
         return generateMockAuditHistory(vesselId);
       }
       
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any -- dynamic table not in generated types
       return (data || []).map((d: any) => ({
-        id: d.id,
-        vessel_id: d.vessel_id || vesselId,
-        audit_type: d.audit_type || d.type || 'Internal',
+        id: String(d.id),
+        vessel_id: String(d.vessel_id || vesselId),
+        audit_type: String(d.audit_type || d.type || 'Internal'),
         audit_date: d.audit_date || d.created_at,
-        score: d.score || d.overall_score || 85,
-        status: d.status || 'completed',
+        score: Number(d.score || d.overall_score || 85),
+        status: String(d.status || 'completed'),
       }));
     },
     enabled: !!vesselId,
@@ -123,20 +123,19 @@ export function useAuditAnalytics() {
     queryKey: ["audit-analytics"],
     queryFn: async () => {
       // Using sgso_audits as fallback
-      const { data, error } = await supabase
-        .from("sgso_audits" as any)
+      const { data, error } = await (supabase.from as Function)("sgso_audits")
         .select("*")
         .order("created_at", { ascending: false })
         .limit(100);
 
-      // Generate mock if no data
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any -- dynamic table not in generated types
       const audits: AuditRecord[] = data?.length ? data.map((d: any) => ({
-        id: d.id,
-        vessel_id: d.vessel_id,
-        audit_type: d.audit_type || d.type || 'Internal',
+        id: String(d.id),
+        vessel_id: String(d.vessel_id),
+        audit_type: String(d.audit_type || d.type || 'Internal'),
         audit_date: d.audit_date || d.created_at,
-        score: d.score || d.overall_score || 85,
-        status: d.status || 'completed',
+        score: Number(d.score || d.overall_score || 85),
+        status: String(d.status || 'completed'),
       })) : generateMockAuditHistory("all");
 
       const avgScore = audits.length 

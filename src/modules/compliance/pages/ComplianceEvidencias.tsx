@@ -31,20 +31,20 @@ export default function ComplianceEvidencias() {
   const { data: rawEvidences, isLoading } = useComplianceEvidences();
 
   // Map hook data to display format
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- compliance evidence rows have dynamic shape
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- compliance evidence rows need flexible mapping
   const displayEvidences: Evidence[] = (rawEvidences || []).map((e: any) => ({
-    id: e.id,
-    title: e.title || e.file_name || "Evidência",
-    type: e.document_type || "document",
-    fileName: e.file_name || "arquivo",
-    fileSize: e.file_size ? `${(e.file_size / 1024).toFixed(0)} KB` : "N/A",
-    regulation: e.regulation || "Geral",
+    id: String(e.id),
+    title: String(e.title || e.file_name || "Evidência"),
+    type: (["document", "image", "certificate", "report", "audit"].includes(e.document_type) ? e.document_type : "document") as Evidence["type"],
+    fileName: String(e.file_name || "arquivo"),
+    fileSize: e.file_size ? `${(Number(e.file_size) / 1024).toFixed(0)} KB` : "N/A",
+    regulation: String(e.regulation || "Geral"),
     status: e.status === "approved" ? "valid" as const : e.status === "expired" ? "expired" as const : "pending_review" as const,
-    uploadedBy: e.uploaded_by || "Sistema",
-    uploadedAt: e.created_at || "",
-    expiryDate: e.expiry_date,
+    uploadedBy: String(e.uploaded_by || "Sistema"),
+    uploadedAt: String(e.created_at || ""),
+    expiryDate: e.expiry_date as string | undefined,
     aiVerified: !!e.ai_verified || !!e.confidence_score,
-    aiConfidence: e.confidence_score,
+    aiConfidence: e.confidence_score as number | undefined,
   }));
 
   const filteredEvidences = displayEvidences.filter(ev => {

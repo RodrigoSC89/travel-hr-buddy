@@ -4,6 +4,7 @@
 
 import { supabase } from "@/integrations/supabase/client";
 import { logger } from '@/lib/logger';
+import type { Json } from "@/integrations/supabase/types";
 
 type LogSeverity = "info" | "warning" | "error" | "critical";
 
@@ -12,7 +13,7 @@ export interface MissionLog {
   missionId: string;
   userId?: string;
   eventType: string;
-  eventData?: Record<string, any>;
+  eventData?: Json;
   severity: LogSeverity;
   message?: string;
   createdAt?: string;
@@ -25,7 +26,7 @@ export class MissionLoggingService {
     eventType: string,
     severity: LogSeverity = "info",
     message?: string,
-    eventData?: Record<string, any>
+    eventData?: Json
   ): Promise<MissionLog | null> {
     try {
       const { data: { user } } = await supabase.auth.getUser();
@@ -105,17 +106,16 @@ export class MissionLoggingService {
     }
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Supabase row mapping
-  private mapToLog(data: any): MissionLog {
+  private mapToLog(data: Record<string, unknown>): MissionLog {
     return {
-      id: data.id,
-      missionId: data.mission_id,
-      userId: data.user_id,
-      eventType: data.event_type,
-      eventData: data.event_data,
-      severity: data.severity,
-      message: data.message,
-      createdAt: data.created_at
+      id: String(data.id),
+      missionId: String(data.mission_id),
+      userId: String(data.user_id),
+      eventType: String(data.event_type),
+      eventData: data.event_data as Json | undefined,
+      severity: String(data.severity) as LogSeverity,
+      message: String(data.message),
+      createdAt: String(data.created_at)
     };
   }
 }
