@@ -75,7 +75,7 @@ export default function ComplianceAuditIntelligence() {
                 <p className="text-2xl font-bold">{validCerts}/{certificates.length}</p>
                 <Progress value={certificates.length > 0 ? (validCerts / certificates.length) * 100 : 0} className="h-1 mt-1" />
               </div>
-              <Award className="h-8 w-8 text-green-500" />
+              <Award className="h-8 w-8 text-success" />
             </div>
           </CardContent>
         </Card>
@@ -93,28 +93,28 @@ export default function ComplianceAuditIntelligence() {
           </CardContent>
         </Card>
 
-        <Card className="border-l-4 border-l-red-500">
+        <Card className="border-l-4 border-l-destructive">
           <CardContent className="p-4">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-xs text-muted-foreground">Áreas Críticas</p>
                 <p className="text-2xl font-bold">{highRisks}</p>
-                <p className="text-xs text-red-500">Atenção prioritária</p>
+                <p className="text-xs text-destructive">Atenção prioritária</p>
               </div>
-              <Target className="h-8 w-8 text-red-500" />
+              <Target className="h-8 w-8 text-destructive" />
             </div>
           </CardContent>
         </Card>
 
-        <Card className="border-l-4 border-l-blue-500">
+        <Card className="border-l-4 border-l-info">
           <CardContent className="p-4">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-xs text-muted-foreground">AI Agents</p>
                 <p className="text-2xl font-bold">{activeAgents}/{agents.length}</p>
-                <p className="text-xs text-blue-500">Monitorando 24/7</p>
+                <p className="text-xs text-info">Monitorando 24/7</p>
               </div>
-              <Bot className="h-8 w-8 text-blue-500" />
+              <Bot className="h-8 w-8 text-info" />
             </div>
           </CardContent>
         </Card>
@@ -150,7 +150,7 @@ export default function ComplianceAuditIntelligence() {
           <Card>
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
-                <Award className="h-5 w-5 text-green-500" />
+                <Award className="h-5 w-5 text-success" />
                 Statutory Certifications
               </CardTitle>
               <CardDescription>
@@ -191,7 +191,7 @@ export default function ComplianceAuditIntelligence() {
                           </div>
                           <div>
                             <p className="text-muted-foreground">Validade</p>
-                            <p className={`font-medium ${cert.status === 'expired' ? 'text-red-500' : cert.status === 'renewal_due' ? 'text-amber-500' : ''}`}>
+                            <p className={`font-medium ${cert.status === 'expired' ? 'text-destructive' : cert.status === 'renewal_due' ? 'text-warning' : ''}`}>
                               {cert.expiryDate ? new Date(cert.expiryDate).toLocaleDateString('pt-BR') : 'N/A'}
                             </p>
                           </div>
@@ -210,7 +210,7 @@ export default function ComplianceAuditIntelligence() {
           <Card>
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
-                <Bot className="h-5 w-5 text-blue-500" />
+                <Bot className="h-5 w-5 text-info" />
                 Compliance AI Agents
               </CardTitle>
               <CardDescription>
@@ -231,10 +231,10 @@ export default function ComplianceAuditIntelligence() {
                         <div className="flex items-center justify-between">
                           <div className="flex items-center gap-3">
                             <div className={`w-10 h-10 rounded-full flex items-center justify-center ${
-                              agent.status === "active" ? "bg-green-500/10" : "bg-amber-500/10"
+                              agent.status === "active" ? "bg-success/10" : "bg-warning/10"
                             }`}>
                               <Brain className={`h-5 w-5 ${
-                                agent.status === "active" ? "text-green-500" : "text-amber-500"
+                                agent.status === "active" ? "text-success" : "text-warning"
                               }`} />
                             </div>
                             <div>
@@ -359,8 +359,8 @@ export default function ComplianceAuditIntelligence() {
                             <Badge variant="outline">{nc.category}</Badge>
                             <Badge className={
                               nc.severity === "major" 
-                                ? "bg-red-500/10 text-red-500" 
-                                : "bg-amber-500/10 text-amber-500"
+                                ? "bg-destructive/10 text-destructive" 
+                                : "bg-warning/10 text-warning"
                             }>
                               {nc.severity}
                             </Badge>

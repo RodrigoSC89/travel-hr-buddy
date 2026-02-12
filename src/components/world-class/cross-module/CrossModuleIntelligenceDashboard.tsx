@@ -72,27 +72,27 @@ export function CrossModuleIntelligenceDashboard() {
             </div>
           </CardContent>
         </Card>
-        <Card className="border-l-4 border-l-blue-500">
+        <Card className="border-l-4 border-l-info">
           <CardContent className="p-4 flex items-center gap-3">
-            <div className="p-2 rounded-lg bg-blue-500/10"><Users className="h-5 w-5 text-blue-500" /></div>
+            <div className="p-2 rounded-lg bg-info/10"><Users className="h-5 w-5 text-info" /></div>
             <div>
               <p className="text-2xl font-bold">{kpis?.totalCrew ?? '—'}</p>
               <p className="text-xs text-muted-foreground">Tripulantes Ativos</p>
             </div>
           </CardContent>
         </Card>
-        <Card className="border-l-4 border-l-orange-500">
+        <Card className="border-l-4 border-l-warning">
           <CardContent className="p-4 flex items-center gap-3">
-            <div className="p-2 rounded-lg bg-orange-500/10"><Wrench className="h-5 w-5 text-orange-500" /></div>
+            <div className="p-2 rounded-lg bg-warning/10"><Wrench className="h-5 w-5 text-warning" /></div>
             <div>
               <p className="text-2xl font-bold">{kpis?.openMaintenanceJobs ?? '—'}</p>
               <p className="text-xs text-muted-foreground">Manutenções Abertas</p>
             </div>
           </CardContent>
         </Card>
-        <Card className="border-l-4 border-l-red-500">
+        <Card className="border-l-4 border-l-destructive">
           <CardContent className="p-4 flex items-center gap-3">
-            <div className="p-2 rounded-lg bg-red-500/10"><AlertTriangle className="h-5 w-5 text-red-500" /></div>
+            <div className="p-2 rounded-lg bg-destructive/10"><AlertTriangle className="h-5 w-5 text-destructive" /></div>
             <div>
               <p className="text-2xl font-bold">{kpis?.criticalAlerts ?? '—'}</p>
               <p className="text-xs text-muted-foreground">Alertas Críticos</p>
@@ -115,8 +115,8 @@ export function CrossModuleIntelligenceDashboard() {
         <Card>
           <CardContent className="p-4">
             <div className="flex items-center justify-between mb-2">
-              <span className="text-sm font-medium flex items-center gap-2"><Activity className="h-4 w-4 text-blue-500" /> Safety Score</span>
-              <span className="font-bold text-blue-600">{kpis?.safetyScore ?? 0}%</span>
+              <span className="text-sm font-medium flex items-center gap-2"><Activity className="h-4 w-4 text-info" /> Safety Score</span>
+              <span className="font-bold text-info">{kpis?.safetyScore ?? 0}%</span>
             </div>
             <Progress value={kpis?.safetyScore ?? 0} className="h-2" />
           </CardContent>
