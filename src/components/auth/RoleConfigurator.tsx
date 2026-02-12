@@ -36,12 +36,12 @@ interface ModulePermission {
 }
 
 const AVAILABLE_ROLES = [
-  { value: "admin", label: "Administrador", color: "bg-red-500" },
-  { value: "hr_manager", label: "Gerente RH", color: "bg-purple-500" },
-  { value: "manager", label: "Gerente", color: "bg-blue-500" },
-  { value: "operator", label: "Operador", color: "bg-green-500" },
-  { value: "auditor", label: "Auditor", color: "bg-yellow-500" },
-  { value: "viewer", label: "Visualizador", color: "bg-gray-500" },
+  { value: "admin", label: "Administrador", color: "bg-destructive" },
+  { value: "hr_manager", label: "Gerente RH", color: "bg-primary" },
+  { value: "manager", label: "Gerente", color: "bg-info" },
+  { value: "operator", label: "Operador", color: "bg-success" },
+  { value: "auditor", label: "Auditor", color: "bg-warning" },
+  { value: "viewer", label: "Visualizador", color: "bg-muted" },
 ];
 
 const AVAILABLE_MODULES = [

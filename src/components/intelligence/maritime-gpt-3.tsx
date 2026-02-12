@@ -410,7 +410,7 @@ Por favor, seja mais específico sobre o que precisa para que eu possa fornecer 
   return (
     <div className="space-y-6">
       {/* Header */}
-      <Card className="bg-gradient-to-r from-blue-600 to-cyan-600 text-white">
+      <Card className="bg-gradient-to-r from-primary to-accent text-primary-foreground">
         <CardHeader>
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
@@ -420,7 +420,7 @@ Por favor, seja mais específico sobre o que precisa para que eu possa fornecer 
               <div>
                 <CardTitle className="text-2xl flex items-center gap-2">
                   MaritimeGPT 3.0
-                  <Badge className="bg-yellow-400 text-yellow-900 hover:bg-yellow-300">
+                  <Badge className="bg-warning text-warning-foreground hover:bg-warning/80">
                     <Sparkles className="h-3 w-3 mr-1" />
                     SUPREMO
                   </Badge>

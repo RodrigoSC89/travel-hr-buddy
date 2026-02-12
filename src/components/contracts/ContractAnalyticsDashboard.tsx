@@ -27,7 +27,7 @@ interface AnalyticsData {
   penaltyTrend: { month: string; penalty: number; avoided: number }[];
 }
 
-const COLORS = ['#3b82f6', '#10b981', '#f59e0b', '#ef4444', '#8b5cf6', '#ec4899'];
+const COLORS = ['hsl(var(--primary))', 'hsl(var(--success))', 'hsl(var(--warning))', 'hsl(var(--destructive))', 'hsl(var(--accent))', 'hsl(var(--info))'];
 
 export function ContractAnalyticsDashboard() {
   const [period, setPeriod] = useState('6m');
@@ -312,7 +312,7 @@ export function ContractAnalyticsDashboard() {
         <Card>
           <CardHeader className="pb-2">
             <CardTitle className="text-base flex items-center gap-2">
-              <Ship className="h-4 w-4 text-blue-500" />
+              <Ship className="h-4 w-4 text-info" />
               Performance por Embarcação
             </CardTitle>
           </CardHeader>
@@ -324,8 +324,8 @@ export function ContractAnalyticsDashboard() {
                 <YAxis dataKey="vessel" type="category" width={120} />
                 <Tooltip />
                 <Legend />
-                <Bar dataKey="availability" name="Disponibilidade" fill="#3b82f6" />
-                <Bar dataKey="compliance" name="Compliance" fill="#10b981" />
+                <Bar dataKey="availability" name="Disponibilidade" fill="hsl(var(--primary))" />
+                <Bar dataKey="compliance" name="Compliance" fill="hsl(var(--success))" />
               </BarChart>
             </ResponsiveContainer>
           </CardContent>
@@ -336,7 +336,7 @@ export function ContractAnalyticsDashboard() {
       <Card>
         <CardHeader className="pb-2">
           <CardTitle className="text-base flex items-center gap-2">
-            <DollarSign className="h-4 w-4 text-green-500" />
+            <DollarSign className="h-4 w-4 text-success" />
             Análise de Penalidades (Pagas vs Evitadas)
           </CardTitle>
         </CardHeader>
@@ -348,8 +348,8 @@ export function ContractAnalyticsDashboard() {
               <YAxis />
               <Tooltip formatter={(value: number) => `$${(value / 1000).toFixed(1)}k`} />
               <Legend />
-              <Bar dataKey="penalty" name="Penalidades Pagas" fill="#ef4444" />
-              <Bar dataKey="avoided" name="Penalidades Evitadas" fill="#10b981" />
+              <Bar dataKey="penalty" name="Penalidades Pagas" fill="hsl(var(--destructive))" />
+              <Bar dataKey="avoided" name="Penalidades Evitadas" fill="hsl(var(--success))" />
             </BarChart>
           </ResponsiveContainer>
         </CardContent>
