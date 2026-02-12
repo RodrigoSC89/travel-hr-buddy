@@ -163,9 +163,9 @@ export function OperationalAIChat() {
                 Pergunte sobre dados operacionais, sensores IoT, wellness da tripulação ou status da frota.
               </p>
               <div className="flex flex-wrap gap-2">
-                {suggestions.map((suggestion, i) => (
+                {suggestions.map((suggestion) => (
                   <Button
-                    key={i}
+                    key={suggestion}
                     variant="outline"
                     size="sm"
                     onClick={() => setInput(suggestion)}
@@ -180,7 +180,7 @@ export function OperationalAIChat() {
             <div className="space-y-4">
               {messages.map((msg, i) => (
                 <div
-                  key={i}
+                  key={`msg-${msg.role}-${i}`}
                   className={`flex gap-3 ${msg.role === "user" ? "justify-end" : ""}`}
                 >
                   {msg.role === "assistant" && (

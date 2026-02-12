@@ -41,11 +41,11 @@ interface WasteTank {
 }
 
 const typeLabels: Record<string, { label: string; color: string; icon: typeof Fuel }> = {
-  oily: { label: "Óleo Usado", color: "bg-amber-500", icon: Fuel },
-  sewage: { label: "Esgoto", color: "bg-stone-500", icon: Droplets },
-  bilge: { label: "Água de Porão", color: "bg-blue-500", icon: Droplets },
-  sludge: { label: "Lodo", color: "bg-orange-500", icon: Droplets },
-  garbage: { label: "Resíduos Sólidos", color: "bg-green-500", icon: Trash2 },
+  oily: { label: "Óleo Usado", color: "bg-warning", icon: Fuel },
+  sewage: { label: "Esgoto", color: "bg-muted-foreground", icon: Droplets },
+  bilge: { label: "Água de Porão", color: "bg-info", icon: Droplets },
+  sludge: { label: "Lodo", color: "bg-warning", icon: Droplets },
+  garbage: { label: "Resíduos Sólidos", color: "bg-success", icon: Trash2 },
 };
 
 function getStatus(current: number, capacity: number): "ok" | "warning" | "critical" {
@@ -242,50 +242,50 @@ export function TanksManagement() {
     <div className="space-y-6">
       {/* KPIs */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-        <Card className="border-l-4 border-l-blue-500">
+        <Card className="border-l-4 border-l-info">
           <CardContent className="p-4">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-muted-foreground">Total de Tanques</p>
                 <p className="text-2xl font-bold">{tanks.length}</p>
               </div>
-              <Droplets className="h-8 w-8 text-blue-500 opacity-80" />
+              <Droplets className="h-8 w-8 text-info opacity-80" />
             </div>
           </CardContent>
         </Card>
 
-        <Card className="border-l-4 border-l-amber-500">
+        <Card className="border-l-4 border-l-warning">
           <CardContent className="p-4">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-muted-foreground">Ocupação Média</p>
                 <p className="text-2xl font-bold">{totalCapacity > 0 ? Math.round((totalUsed / totalCapacity) * 100) : 0}%</p>
               </div>
-              <TrendingDown className="h-8 w-8 text-amber-500 opacity-80" />
+              <TrendingDown className="h-8 w-8 text-warning opacity-80" />
             </div>
           </CardContent>
         </Card>
 
-        <Card className="border-l-4 border-l-orange-500">
+        <Card className="border-l-4 border-l-warning">
           <CardContent className="p-4">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-muted-foreground">Em Alerta</p>
                 <p className="text-2xl font-bold">{warningCount}</p>
               </div>
-              <AlertTriangle className="h-8 w-8 text-orange-500 opacity-80" />
+              <AlertTriangle className="h-8 w-8 text-warning opacity-80" />
             </div>
           </CardContent>
         </Card>
 
-        <Card className="border-l-4 border-l-red-500">
+        <Card className="border-l-4 border-l-destructive">
           <CardContent className="p-4">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-muted-foreground">Críticos</p>
                 <p className="text-2xl font-bold">{criticalCount}</p>
               </div>
-              <AlertTriangle className="h-8 w-8 text-red-500 opacity-80" />
+              <AlertTriangle className="h-8 w-8 text-destructive opacity-80" />
             </div>
           </CardContent>
         </Card>
@@ -380,8 +380,8 @@ export function TanksManagement() {
             
             return (
               <Card key={tank.id} className={`relative overflow-hidden ${
-                status === "critical" ? "border-red-500/50" : 
-                status === "warning" ? "border-amber-500/50" : ""
+                status === "critical" ? "border-destructive/50" : 
+                status === "warning" ? "border-warning/50" : ""
               }`}>
                 <CardHeader className="pb-2">
                   <div className="flex items-center justify-between">
@@ -406,13 +406,13 @@ export function TanksManagement() {
                   <div>
                     <div className="flex justify-between text-sm mb-1">
                       <span>{tank.current_level} / {tank.capacity} {tank.unit || "L"}</span>
-                      <span className={percentage > 80 ? "text-red-500 font-medium" : percentage > 60 ? "text-amber-500 font-medium" : "text-muted-foreground"}>
+                      <span className={percentage > 80 ? "text-destructive font-medium" : percentage > 60 ? "text-warning font-medium" : "text-muted-foreground"}>
                         {percentage}%
                       </span>
                     </div>
                     <Progress 
                       value={percentage} 
-                      className={`h-3 ${status === "critical" ? "[&>div]:bg-red-500" : status === "warning" ? "[&>div]:bg-amber-500" : "[&>div]:bg-green-500"}`}
+                      className={`h-3 ${status === "critical" ? "[&>div]:bg-destructive" : status === "warning" ? "[&>div]:bg-warning" : "[&>div]:bg-success"}`}
                     />
                   </div>
 

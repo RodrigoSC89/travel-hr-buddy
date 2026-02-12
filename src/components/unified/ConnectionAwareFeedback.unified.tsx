@@ -310,22 +310,22 @@ function getBannerConfig(quality: ConnectionQuality) {
       };
     case "moderate":
       return {
-        bgClass: "bg-yellow-100",
-        textClass: "text-yellow-900",
+        bgClass: "bg-warning/20",
+        textClass: "text-warning-foreground",
         icon: <Signal className="h-4 w-4" />,
         message: "Conexão moderada",
       };
     case "good":
       return {
-        bgClass: "bg-green-100",
-        textClass: "text-green-900",
+        bgClass: "bg-success/20",
+        textClass: "text-success-foreground",
         icon: <Wifi className="h-4 w-4" />,
         message: "Conexão boa",
       };
     case "excellent":
       return {
-        bgClass: "bg-green-500",
-        textClass: "text-white",
+        bgClass: "bg-success",
+        textClass: "text-success-foreground",
         icon: <Zap className="h-4 w-4" />,
         message: "Conexão excelente",
       };
@@ -353,25 +353,25 @@ function getBadgeConfig(quality: ConnectionQuality) {
       };
     case "moderate":
       return {
-        bgClass: "bg-yellow-500/10",
-        textClass: "text-yellow-600",
-        borderClass: "border-yellow-500/30",
+        bgClass: "bg-warning/10",
+        textClass: "text-warning",
+        borderClass: "border-warning/30",
         icon: <Wifi />,
         label: "Moderada",
       };
     case "good":
       return {
-        bgClass: "bg-green-500/10",
-        textClass: "text-green-600",
-        borderClass: "border-green-500/30",
+        bgClass: "bg-success/10",
+        textClass: "text-success",
+        borderClass: "border-success/30",
         icon: <Wifi />,
         label: "Boa",
       };
     case "excellent":
       return {
-        bgClass: "bg-green-600/10",
-        textClass: "text-green-700",
-        borderClass: "border-green-600/30",
+        bgClass: "bg-success/10",
+        textClass: "text-success",
+        borderClass: "border-success/30",
         icon: <Zap />,
         label: "Excelente",
       };

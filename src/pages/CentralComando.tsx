@@ -500,7 +500,7 @@ function CentralComandoContent() {
                 
                 <div className="p-4 space-y-4 overflow-y-auto h-[calc(100vh-180px)]">
                   {messages.map((msg, i) => (
-                    <Card key={i} className={`${msg.role === 'assistant' ? 'bg-primary/5' : 'bg-muted/50'}`}>
+                    <Card key={`cmd-msg-${msg.role}-${i}`} className={`${msg.role === 'assistant' ? 'bg-primary/5' : 'bg-muted/50'}`}>
                       <CardContent className="p-3">
                         <p className="text-sm">{msg.content}</p>
                       </CardContent>
