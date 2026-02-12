@@ -23,29 +23,29 @@ interface ProfessionalKPICardProps {
 
 const colorVariants = {
   blue: {
-    gradient: "from-blue-500/10 to-transparent",
-    icon: "bg-blue-100 dark:bg-blue-900/20 text-blue-600 dark:text-blue-400",
-    badge: "bg-blue-500/10 text-blue-600 dark:text-blue-400 border-blue-500/20",
+    gradient: "from-info/10 to-transparent",
+    icon: "bg-info/10 text-info",
+    badge: "bg-info/10 text-info border-info/20",
   },
   green: {
-    gradient: "from-green-500/10 to-transparent",
-    icon: "bg-green-100 dark:bg-green-900/20 text-green-600 dark:text-green-400",
-    badge: "bg-green-500/10 text-green-600 dark:text-green-400 border-green-500/20",
+    gradient: "from-success/10 to-transparent",
+    icon: "bg-success/10 text-success",
+    badge: "bg-success/10 text-success border-success/20",
   },
   purple: {
-    gradient: "from-purple-500/10 to-transparent",
-    icon: "bg-purple-100 dark:bg-purple-900/20 text-purple-600 dark:text-purple-400",
-    badge: "bg-purple-500/10 text-purple-600 dark:text-purple-400 border-purple-500/20",
+    gradient: "from-accent/10 to-transparent",
+    icon: "bg-accent/10 text-accent-foreground",
+    badge: "bg-accent/10 text-accent-foreground border-accent/20",
   },
   orange: {
-    gradient: "from-orange-500/10 to-transparent",
-    icon: "bg-orange-100 dark:bg-orange-900/20 text-orange-600 dark:text-orange-400",
-    badge: "bg-orange-500/10 text-orange-600 dark:text-orange-400 border-orange-500/20",
+    gradient: "from-warning/10 to-transparent",
+    icon: "bg-warning/10 text-warning",
+    badge: "bg-warning/10 text-warning border-warning/20",
   },
   red: {
-    gradient: "from-red-500/10 to-transparent",
-    icon: "bg-red-100 dark:bg-red-900/20 text-red-600 dark:text-red-400",
-    badge: "bg-red-500/10 text-red-600 dark:text-red-400 border-red-500/20",
+    gradient: "from-destructive/10 to-transparent",
+    icon: "bg-destructive/10 text-destructive",
+    badge: "bg-destructive/10 text-destructive border-destructive/20",
   },
 };
 

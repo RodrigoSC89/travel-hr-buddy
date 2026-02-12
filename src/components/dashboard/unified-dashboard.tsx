@@ -78,21 +78,21 @@ const UnifiedDashboard = () => {
       description: "Gerar relatórios detalhados", 
       icon: BarChart3, 
       path: "/advanced-reports",
-      color: "bg-blue-500"
+      color: "bg-info"
     },
     { 
       title: "Dashboard Executivo", 
       description: "Visão estratégica completa", 
       icon: Target, 
       path: "/executive",
-      color: "bg-purple-500"
+      color: "bg-accent"
     },
     { 
       title: "Centro de Operações", 
       description: "Monitor, diagnóstico e roadmap", 
       icon: Activity, 
       path: "/system-hub",
-      color: "bg-green-500"
+      color: "bg-success"
     },
     { 
       title: "Centro Notificações", 
@@ -250,11 +250,11 @@ const UnifiedDashboard = () => {
                   <p className="text-sm text-muted-foreground">Funcionários</p>
                   <p className="text-2xl font-bold">{availableKPIs.employees.value}</p>
                   <div className="flex items-center gap-1 mt-1">
-                    <TrendingUp className="w-4 h-4 text-blue-600" />
-                    <span className="text-sm text-blue-600">+{availableKPIs.employees.change}%</span>
+                    <TrendingUp className="w-4 h-4 text-info" />
+                    <span className="text-sm text-info">+{availableKPIs.employees.change}%</span>
                   </div>
                 </div>
-                <Users className="w-8 h-8 text-blue-600" />
+                <Users className="w-8 h-8 text-info" />
               </div>
             </CardContent>
           </Card>
@@ -286,11 +286,11 @@ const UnifiedDashboard = () => {
                   <p className="text-sm text-muted-foreground">Satisfação</p>
                   <p className="text-2xl font-bold">{availableKPIs.satisfaction.value}/5</p>
                   <div className="flex items-center gap-1 mt-1">
-                    <TrendingUp className="w-4 h-4 text-purple-600" />
-                    <span className="text-sm text-purple-600">+{availableKPIs.satisfaction.change}%</span>
+                    <TrendingUp className="w-4 h-4 text-accent-foreground" />
+                    <span className="text-sm text-accent-foreground">+{availableKPIs.satisfaction.change}%</span>
                   </div>
                 </div>
-                <Target className="w-8 h-8 text-purple-600" />
+                <Target className="w-8 h-8 text-accent-foreground" />
               </div>
             </CardContent>
           </Card>
@@ -341,8 +341,8 @@ const UnifiedDashboard = () => {
                 <XAxis dataKey="time" />
                 <YAxis />
                 <Tooltip />
-                <Area type="monotone" dataKey="users" stackId="1" stroke="#3b82f6" fill="#3b82f6" fillOpacity={0.6} name="Usuários" />
-                <Area type="monotone" dataKey="performance" stackId="2" stroke="#10b981" fill="#10b981" fillOpacity={0.6} name="Performance %" />
+                <Area type="monotone" dataKey="users" stackId="1" stroke="hsl(var(--info))" fill="hsl(var(--info))" fillOpacity={0.6} name="Usuários" />
+                <Area type="monotone" dataKey="performance" stackId="2" stroke="hsl(var(--success))" fill="hsl(var(--success))" fillOpacity={0.6} name="Performance %" />
               </AreaChart>
             </ResponsiveContainer>
           </CardContent>
@@ -373,7 +373,7 @@ const UnifiedDashboard = () => {
 
             <div className="grid grid-cols-2 gap-4 pt-4">
               <div className="text-center">
-                <p className="text-2xl font-bold text-blue-600">{dashboardData.systemHealth.activeUsers}</p>
+                <p className="text-2xl font-bold text-info">{dashboardData.systemHealth.activeUsers}</p>
                 <p className="text-xs text-muted-foreground">Usuários Ativos</p>
               </div>
               <div className="text-center">

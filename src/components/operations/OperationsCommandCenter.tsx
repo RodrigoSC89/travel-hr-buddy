@@ -74,27 +74,27 @@ interface SystemHealth {
 // Severity configuration
 const severityConfig = {
   critical: {
-    color: 'text-red-500',
-    bg: 'bg-red-500/10',
-    border: 'border-red-500/30',
+    color: 'text-destructive',
+    bg: 'bg-destructive/10',
+    border: 'border-destructive/30',
     icon: XCircle,
   },
   high: {
-    color: 'text-orange-500',
-    bg: 'bg-orange-500/10',
-    border: 'border-orange-500/30',
+    color: 'text-warning',
+    bg: 'bg-warning/10',
+    border: 'border-warning/30',
     icon: AlertTriangle,
   },
   medium: {
-    color: 'text-yellow-500',
-    bg: 'bg-yellow-500/10',
-    border: 'border-yellow-500/30',
+    color: 'text-warning',
+    bg: 'bg-warning/10',
+    border: 'border-warning/30',
     icon: Clock,
   },
   low: {
-    color: 'text-blue-500',
-    bg: 'bg-blue-500/10',
-    border: 'border-blue-500/30',
+    color: 'text-info',
+    bg: 'bg-info/10',
+    border: 'border-info/30',
     icon: Bell,
   },
 };
@@ -108,9 +108,9 @@ const KPICard: React.FC<{
   status?: 'good' | 'warning' | 'critical';
 }> = ({ title, value, change, icon: Icon, status = 'good' }) => {
   const statusColors = {
-    good: 'text-green-500',
-    warning: 'text-yellow-500',
-    critical: 'text-red-500',
+    good: 'text-success',
+    warning: 'text-warning',
+    critical: 'text-destructive',
   };
 
   return (
@@ -123,18 +123,18 @@ const KPICard: React.FC<{
             {change !== undefined && (
               <div className="flex items-center gap-1 text-xs">
                 {change >= 0 ? (
-                  <TrendingUp className="h-3 w-3 text-green-500" />
+                  <TrendingUp className="h-3 w-3 text-success" />
                 ) : (
-                  <TrendingDown className="h-3 w-3 text-red-500" />
+                  <TrendingDown className="h-3 w-3 text-destructive" />
                 )}
-                <span className={change >= 0 ? 'text-green-500' : 'text-red-500'}>
+                <span className={change >= 0 ? 'text-success' : 'text-destructive'}>
                   {Math.abs(change)}%
                 </span>
                 <span className="text-muted-foreground">vs ontem</span>
               </div>
             )}
           </div>
-          <div className={cn('p-3 rounded-lg', `bg-${status === 'good' ? 'green' : status === 'warning' ? 'yellow' : 'red'}-500/10`)}>
+          <div className={cn('p-3 rounded-lg', status === 'good' ? 'bg-success/10' : status === 'warning' ? 'bg-warning/10' : 'bg-destructive/10')}>
             <Icon className={cn('h-6 w-6', statusColors[status])} />
           </div>
         </div>
@@ -190,10 +190,10 @@ const AlertItem: React.FC<{
 // Vessel Status Card
 const VesselCard: React.FC<{ vessel: VesselStatus }> = ({ vessel }) => {
   const statusColors = {
-    operational: 'bg-green-500',
-    maintenance: 'bg-yellow-500',
-    offline: 'bg-gray-500',
-    alert: 'bg-red-500',
+    operational: 'bg-success',
+    maintenance: 'bg-warning',
+    offline: 'bg-muted-foreground',
+    alert: 'bg-destructive',
   };
 
   return (
@@ -225,8 +225,8 @@ const SystemHealthPanel: React.FC<{ systems: SystemHealth[] }> = ({ systems }) =
         <div key={system.service} className="flex items-center gap-3 p-2 rounded-lg hover:bg-accent/50">
           <div className={cn(
             'w-2 h-2 rounded-full',
-            system.status === 'healthy' ? 'bg-green-500' :
-            system.status === 'degraded' ? 'bg-yellow-500 animate-pulse' : 'bg-red-500'
+            system.status === 'healthy' ? 'bg-success' :
+            system.status === 'degraded' ? 'bg-warning animate-pulse' : 'bg-destructive'
           )} />
           <span className="flex-1 text-sm">{system.service}</span>
           <span className="text-xs text-muted-foreground">{system.latency}ms</span>
@@ -497,7 +497,7 @@ export const OperationsCommandCenter: React.FC = () => {
         <Card>
           <CardContent className="pt-4">
             <div className="flex items-center gap-4">
-              <Thermometer className="h-8 w-8 text-orange-500" />
+              <Thermometer className="h-8 w-8 text-warning" />
               <div>
                 <p className="text-2xl font-bold">28°C</p>
                 <p className="text-xs text-muted-foreground">Temperatura Média</p>
@@ -508,7 +508,7 @@ export const OperationsCommandCenter: React.FC = () => {
         <Card>
           <CardContent className="pt-4">
             <div className="flex items-center gap-4">
-              <Wind className="h-8 w-8 text-blue-500" />
+              <Wind className="h-8 w-8 text-info" />
               <div>
                 <p className="text-2xl font-bold">15 kts</p>
                 <p className="text-xs text-muted-foreground">Vento Médio</p>
@@ -519,7 +519,7 @@ export const OperationsCommandCenter: React.FC = () => {
         <Card>
           <CardContent className="pt-4">
             <div className="flex items-center gap-4">
-              <Waves className="h-8 w-8 text-cyan-500" />
+              <Waves className="h-8 w-8 text-accent" />
               <div>
                 <p className="text-2xl font-bold">1.2m</p>
                 <p className="text-xs text-muted-foreground">Altura de Ondas</p>
