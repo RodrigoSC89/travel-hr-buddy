@@ -67,7 +67,7 @@ const ComplianceHub = () => {
         </CardHeader>
         <CardContent>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-            <Card className="cursor-pointer hover:shadow-lg transition-shadow" onClick={() => navigate('/pre-psc')}>
+            <Card className="cursor-pointer hover:shadow-lg transition-shadow" onClick={() => navigate('/psc-readiness')}>
               <CardHeader>
                 <div className="flex items-center gap-3">
                   <Ship className="h-6 w-6 text-primary" />
@@ -101,7 +101,7 @@ const ComplianceHub = () => {
               </CardContent>
             </Card>
 
-            <Card className="cursor-pointer hover:shadow-lg transition-shadow" onClick={() => navigate('/sgso-report')}>
+            <Card className="cursor-pointer hover:shadow-lg transition-shadow" onClick={() => navigate('/sgso')}>
               <CardHeader>
                 <div className="flex items-center gap-3">
                   <Anchor className="h-6 w-6 text-primary" />
@@ -112,7 +112,7 @@ const ComplianceHub = () => {
                 <p className="text-sm text-muted-foreground">
                   Safety Management System plans and action tracking
                 </p>
-                <Button variant="link" className="p-0 h-auto mt-2" onClick={(e) => { e.stopPropagation(); navigate('/sgso-report'); }}>
+                <Button variant="link" className="p-0 h-auto mt-2" onClick={(e) => { e.stopPropagation(); navigate('/sgso'); }}>
                   View Module →
                 </Button>
               </CardContent>

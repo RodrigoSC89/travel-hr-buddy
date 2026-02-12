@@ -215,7 +215,7 @@ const UnifiedDashboard = () => {
             <RefreshCw className={`w-4 h-4 mr-2 ${isRefreshing ? "animate-spin" : ""}`} />
             Atualizar
           </Button>
-          <Button onClick={() => navigate("/executive")}>
+          <Button onClick={() => navigate("/command?tab=executive")}>
             <Target className="w-4 h-4 mr-2" />
             Visão Executiva
           </Button>
@@ -391,7 +391,7 @@ const UnifiedDashboard = () => {
           <CardHeader>
             <CardTitle className="flex items-center justify-between">
               Alertas e Notificações
-              <Button variant="outline" size="sm" onClick={() => navigate("/notification-center")}>
+              <Button variant="outline" size="sm" onClick={() => navigate("/alerts-command")}>
                 Ver Todos
               </Button>
             </CardTitle>

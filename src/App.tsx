@@ -1095,6 +1095,13 @@ const AppRoutes = () => (
       <Route path="/sgso-report" element={<Navigate to="/sgso/report" replace />} />
       <Route path="/executive-bi" element={<Navigate to="/command?tab=executive" replace />} />
       <Route path="/forecast-console" element={<Navigate to="/weather-command" replace />} />
+      <Route path="/fuel-manager" element={<Navigate to="/fuel-management" replace />} />
+      <Route path="/executive" element={<Navigate to="/command?tab=executive" replace />} />
+      <Route path="/notification-center" element={<Navigate to="/alerts-command" replace />} />
+      <Route path="/pre-psc" element={<Navigate to="/psc-readiness" replace />} />
+      <Route path="/nautilus-documents" element={<Navigate to="/documents" replace />} />
+      <Route path="/maritime" element={<Navigate to="/maritime-command" replace />} />
+      <Route path="/crew" element={<Navigate to="/crew-management" replace />} />
       
       {/* DEV ONLY - Route Dashboard */}
       <Route path="/dev-routes" element={<DevRoutesDashboard />} />

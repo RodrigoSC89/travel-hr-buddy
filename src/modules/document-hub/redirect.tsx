@@ -4,5 +4,5 @@
  */
 import { Navigate } from "react-router-dom";
 export default function DocumentHubRedirect() {
-  return <Navigate to="/nautilus-documents" replace />;
+  return <Navigate to="/documents" replace />;
 }

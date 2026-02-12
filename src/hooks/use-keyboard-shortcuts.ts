@@ -41,7 +41,7 @@ export const useKeyboardShortcuts = (onGlobalSearch?: () => void) => {
     {
       key: "4",
       ctrlKey: true,
-      action: () => navigate("/human-resources"),
+      action: () => navigate("/hr-dashboard"),
       description: "Ir para RH"
     },
     {

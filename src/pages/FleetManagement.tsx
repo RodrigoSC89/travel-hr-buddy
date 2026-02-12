@@ -379,7 +379,7 @@ const MaritimeFleetManagement = () => {
                 <CardDescription>Programação e histórico</CardDescription>
               </CardHeader>
               <CardContent>
-                <Button variant="outline" onClick={() => navigate("/maintenance/planner")}>
+                <Button variant="outline" onClick={() => navigate("/maintenance?tab=predictive")}>
                   Ir para Planejador de Manutenção
                 </Button>
               </CardContent>
