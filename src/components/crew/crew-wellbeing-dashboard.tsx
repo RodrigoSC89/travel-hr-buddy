@@ -174,8 +174,8 @@ export function CrewWellbeingDashboard() {
                     <div className="mb-4">
                       <p className="text-sm font-medium mb-2">Recommended Actions:</p>
                       <ul className="list-disc list-inside space-y-1">
-                        {alert.recommended_actions.map((action, index) => (
-                          <li key={index} className="text-sm text-muted-foreground">{action}</li>
+                        {alert.recommended_actions.map((action) => (
+                          <li key={action} className="text-sm text-muted-foreground">{action}</li>
                         ))}
                       </ul>
                     </div>

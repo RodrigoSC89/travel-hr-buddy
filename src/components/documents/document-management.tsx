@@ -459,8 +459,8 @@ export const DocumentManagement: React.FC = () => {
                                 <Badge className={getOcrStatusColor(doc.ocr_status)}>
                                   {getOcrStatusText(doc.ocr_status)}
                                 </Badge>
-                                {getDocumentTags(doc).slice(0, 2).map((tag: string, index: number) => (
-                                  <Badge key={index} variant="secondary" className="text-xs">
+                                {getDocumentTags(doc).slice(0, 2).map((tag: string) => (
+                                  <Badge key={tag} variant="secondary" className="text-xs">
                                     {tag}
                                   </Badge>
                                 ))}
@@ -548,8 +548,8 @@ export const DocumentManagement: React.FC = () => {
                       <div>
                         <p className="text-sm font-medium mb-2">Tags</p>
                         <div className="flex gap-1 flex-wrap">
-                          {getDocumentTags(selectedDocument).map((tag: string, index: number) => (
-                            <Badge key={index} variant="outline" className="text-xs">
+                          {getDocumentTags(selectedDocument).map((tag: string) => (
+                            <Badge key={tag} variant="outline" className="text-xs">
                               <Tag className="h-3 w-3 mr-1" />
                               {tag}
                             </Badge>

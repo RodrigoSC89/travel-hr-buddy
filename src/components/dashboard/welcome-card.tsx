@@ -83,9 +83,9 @@ export const WelcomeCard: React.FC = () => {
           </p>
           
           <div className="flex flex-wrap gap-2">
-            {getQuickActions().map((action, index) => (
+            {getQuickActions().map((action) => (
               <Button
-                key={index}
+                key={action.label}
                 variant={action.variant}
                 size="sm"
                 onClick={action.action}

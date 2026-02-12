@@ -479,8 +479,8 @@ export const DocumentManagementCenter = () => {
                       
                         {doc.tags.length > 0 && (
                           <div className="mt-2 flex flex-wrap gap-1">
-                            {doc.tags.map((tag, index) => (
-                              <Badge key={index} variant="outline" className="text-xs">
+                            {doc.tags.map((tag) => (
+                              <Badge key={tag} variant="outline" className="text-xs">
                                 {tag}
                               </Badge>
                             ))}

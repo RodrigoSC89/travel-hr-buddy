@@ -353,8 +353,8 @@ export const AdvancedCrewDossierInteraction: React.FC<VoiceInteractionPanelProps
                   Conquistas ({gamificationProfile.badges_earned?.length || 0})
                 </h4>
                 <div className="flex flex-wrap gap-2">
-                  {gamificationProfile.badges_earned?.map((badge, index) => (
-                    <Badge key={index} variant="outline" className="flex items-center gap-1">
+                  {gamificationProfile.badges_earned?.map((badge) => (
+                    <Badge key={badge.name} variant="outline" className="flex items-center gap-1">
                       <span>{badge.icon}</span>
                       {badge.name}
                     </Badge>

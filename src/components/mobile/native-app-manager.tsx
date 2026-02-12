@@ -117,11 +117,11 @@ export const NativeAppManager: React.FC = () => {
             </CardHeader>
             <CardContent>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                {features.map((feature, index) => {
+                {features.map((feature) => {
                   const IconComponent = feature.icon;
                   return (
                     <div
-                      key={index}
+                      key={feature.name}
                       className="flex items-center justify-between p-3 border rounded-lg"
                     >
                       <div className="flex items-center gap-3">

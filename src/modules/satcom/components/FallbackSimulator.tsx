@@ -124,15 +124,15 @@ export const FallbackSimulator: React.FC<FallbackSimulatorProps> = ({
             <div className="text-xs font-medium mb-2 text-muted-foreground">
               Log de Simulação
             </div>
-            {simulationEvents.map((event, index) => (
-              <div key={index} className="text-xs font-mono">
+            {simulationEvents.map((event) => (
+              <div key={`${event.timestamp}-${event.type}`} className="text-xs font-mono">
                 <span className="text-muted-foreground">
                   [{new Date(event.timestamp).toLocaleTimeString("pt-BR")}]
                 </span>{" "}
                 <span className={
-                  event.type === "disconnect" ? "text-red-500" :
-                    event.type === "fallback_activated" ? "text-orange-500" :
-                      "text-green-500"
+                  event.type === "disconnect" ? "text-destructive" :
+                    event.type === "fallback_activated" ? "text-warning" :
+                      "text-success"
                 }>
                   {event.message}
                 </span>

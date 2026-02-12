@@ -241,8 +241,8 @@ export default function ExecutiveKPIDashboard() {
       </div>
 
       <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
-        {kpis.map((kpi, index) => (
-          <Card key={index}>
+        {kpis.map((kpi) => (
+          <Card key={kpi.label}>
             <CardContent className="p-4">
               <div className="flex items-start justify-between">
                 <div>
@@ -253,7 +253,7 @@ export default function ExecutiveKPIDashboard() {
               </div>
               {kpi.trend && (
                 <div className={cn("flex items-center gap-1 text-xs mt-2",
-                  kpi.trend === 'up' ? "text-emerald-500" : kpi.trend === 'down' ? "text-destructive" : "text-muted-foreground"
+                  kpi.trend === 'up' ? "text-success" : kpi.trend === 'down' ? "text-destructive" : "text-muted-foreground"
                 )}>
                   {kpi.trend === 'up' ? <TrendingUp className="h-3 w-3" /> : kpi.trend === 'down' ? <TrendingDown className="h-3 w-3" /> : null}
                 </div>
@@ -275,8 +275,8 @@ export default function ExecutiveKPIDashboard() {
               <ResponsiveContainer width="100%" height="100%">
                 <PieChart>
                   <Pie data={wellnessDistribution} cx="50%" cy="50%" innerRadius={50} outerRadius={80} dataKey="value">
-                    {wellnessDistribution.map((_, index) => (
-                      <Cell key={index} fill={WELLNESS_COLORS[index]} />
+                    {wellnessDistribution.map((entry, idx) => (
+                      <Cell key={entry.name} fill={WELLNESS_COLORS[idx]} />
                     ))}
                   </Pie>
                   <Tooltip />
@@ -284,8 +284,8 @@ export default function ExecutiveKPIDashboard() {
               </ResponsiveContainer>
             </div>
             <div className="space-y-2 mt-2">
-              {crewWellness.slice(0, 3).map((c, i) => (
-                <div key={i} className="flex items-center justify-between text-sm">
+              {crewWellness.slice(0, 3).map((c) => (
+                <div key={c.name} className="flex items-center justify-between text-sm">
                   <span>{c.name}</span>
                   <Badge variant={c.status === 'healthy' ? 'default' : c.status === 'at-risk' ? 'secondary' : 'destructive'}>{c.wellness}%</Badge>
                 </div>

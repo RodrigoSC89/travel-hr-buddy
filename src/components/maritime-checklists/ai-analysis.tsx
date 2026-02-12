@@ -183,8 +183,8 @@ export const AIAnalysisComponent: React.FC<AIAnalysisProps> = ({
                 </CardDescription>
               </CardHeader>
               <CardContent className="space-y-4">
-                {analysis.anomalies.map((anomaly, index) => (
-                  <div key={index} className={`p-4 rounded-lg border ${getSeverityColor(anomaly.severity)}`}>
+                {analysis.anomalies.map((anomaly) => (
+                  <div key={`${anomaly.type}-${anomaly.severity}`} className={`p-4 rounded-lg border ${getSeverityColor(anomaly.severity)}`}>
                     <div className="flex items-start justify-between mb-2">
                       <h4 className="font-semibold">{anomaly.type.replace("_", " ").toUpperCase()}</h4>
                       <Badge variant="outline" className={getSeverityColor(anomaly.severity)}>
@@ -193,7 +193,7 @@ export const AIAnalysisComponent: React.FC<AIAnalysisProps> = ({
                     </div>
                     <p className="text-sm mb-2">{anomaly.description}</p>
                     <div className="flex items-center justify-between">
-                      <p className="text-sm font-medium text-green-600">
+                      <p className="text-sm font-medium text-success">
                         <Lightbulb className="w-4 h-4 inline mr-1" />
                         {anomaly.suggestion}
                       </p>
@@ -211,7 +211,7 @@ export const AIAnalysisComponent: React.FC<AIAnalysisProps> = ({
           <Card>
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
-                <Lightbulb className="w-5 h-5 text-yellow-600" />
+                <Lightbulb className="w-5 h-5 text-warning" />
                 Sugestões de Melhoria
               </CardTitle>
               <CardDescription>
@@ -220,9 +220,9 @@ export const AIAnalysisComponent: React.FC<AIAnalysisProps> = ({
             </CardHeader>
             <CardContent>
               <div className="space-y-3">
-                {analysis.suggestions.map((suggestion, index) => (
-                  <div key={index} className="flex items-start gap-3 p-3 bg-yellow-50 rounded-lg border border-yellow-200">
-                    <Lightbulb className="w-5 h-5 text-yellow-600 mt-0.5 flex-shrink-0" />
+                {analysis.suggestions.map((suggestion) => (
+                  <div key={suggestion} className="flex items-start gap-3 p-3 bg-warning/10 rounded-lg border border-warning/20">
+                    <Lightbulb className="w-5 h-5 text-warning mt-0.5 flex-shrink-0" />
                     <p className="text-sm">{suggestion}</p>
                   </div>
                 ))}
@@ -234,7 +234,7 @@ export const AIAnalysisComponent: React.FC<AIAnalysisProps> = ({
           <Card>
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
-                <BarChart3 className="w-5 h-5 text-blue-600" />
+                <BarChart3 className="w-5 h-5 text-primary" />
                 Comparação Histórica
               </CardTitle>
               <CardDescription>
@@ -253,9 +253,9 @@ export const AIAnalysisComponent: React.FC<AIAnalysisProps> = ({
                 </div>
                 <div className="text-center p-4 border rounded-lg">
                   <div className={`text-xl font-bold ${
-                    analysis.comparisonWithHistory.trendAnalysis === "improving" ? "text-green-600" :
-                      analysis.comparisonWithHistory.trendAnalysis === "declining" ? "text-red-600" :
-                        "text-yellow-600"
+                    analysis.comparisonWithHistory.trendAnalysis === "improving" ? "text-success" :
+                      analysis.comparisonWithHistory.trendAnalysis === "declining" ? "text-destructive" :
+                        "text-warning"
                   }`}>
                     {analysis.comparisonWithHistory.trendAnalysis === "improving" ? "↗️" :
                       analysis.comparisonWithHistory.trendAnalysis === "declining" ? "↘️" : "→"}
@@ -271,7 +271,7 @@ export const AIAnalysisComponent: React.FC<AIAnalysisProps> = ({
             <Card>
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
-                  <TrendingUp className="w-5 h-5 text-purple-600" />
+                  <TrendingUp className="w-5 h-5 text-accent" />
                   Insights Preditivos
                 </CardTitle>
                 <CardDescription>
@@ -280,9 +280,9 @@ export const AIAnalysisComponent: React.FC<AIAnalysisProps> = ({
               </CardHeader>
               <CardContent>
                 <div className="space-y-3">
-                  {analysis.predictiveInsights.map((insight, index) => (
-                    <div key={index} className="flex items-start gap-3 p-3 bg-purple-50 rounded-lg border border-purple-200">
-                      <TrendingUp className="w-5 h-5 text-purple-600 mt-0.5 flex-shrink-0" />
+                  {analysis.predictiveInsights.map((insight) => (
+                    <div key={insight} className="flex items-start gap-3 p-3 bg-accent/10 rounded-lg border border-accent/20">
+                      <TrendingUp className="w-5 h-5 text-accent mt-0.5 flex-shrink-0" />
                       <p className="text-sm">{insight}</p>
                     </div>
                   ))}

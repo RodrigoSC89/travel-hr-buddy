@@ -152,8 +152,8 @@ export default function IntelligentTriggersPage() {
       <div className="space-y-6">
         {/* KPIs */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-          {kpis.map((kpi, index) => (
-            <Card key={index}>
+          {kpis.map((kpi) => (
+            <Card key={kpi.title}>
               <CardContent className="pt-6">
                 <div className="flex items-center justify-between">
                   <div>
@@ -171,8 +171,8 @@ export default function IntelligentTriggersPage() {
 
         {/* Trigger Types */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          {triggerTypes.map((type, index) => (
-            <Card key={index} className="hover:shadow-lg transition-all">
+          {triggerTypes.map((type) => (
+            <Card key={type.label} className="hover:shadow-lg transition-all">
               <CardContent className="pt-6">
                 <div className="flex items-center gap-4">
                   <div className="p-3 rounded-lg bg-muted">
