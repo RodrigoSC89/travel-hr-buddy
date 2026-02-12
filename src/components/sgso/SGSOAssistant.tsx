@@ -352,7 +352,7 @@ Por favor, reformule sua pergunta ou selecione um dos temas acima para que eu po
                     >
                       <div className="prose prose-sm dark:prose-invert max-w-none">
                         {message.content.split("\n").map((line, i) => (
-                          <p key={i} className="mb-2 last:mb-0">{line}</p>
+                          <p key={`line-${i}-${line.slice(0,20)}`} className="mb-2 last:mb-0">{line}</p>
                         ))}
                       </div>
                       
@@ -363,9 +363,9 @@ Por favor, reformule sua pergunta ou selecione um dos temas acima para que eu po
                             Referências Normativas:
                           </p>
                           <div className="flex flex-wrap gap-1">
-                            {message.citations.map((citation, idx) => (
+                            {message.citations.map((citation) => (
                               <Badge
-                                key={idx}
+                                key={`${citation.norma}-${citation.artigo}`}
                                 variant="outline"
                                 className="text-xs cursor-pointer hover:bg-primary/10"
                                 onClick={() => citation.link && window.open(citation.link, "_blank")}
@@ -430,9 +430,9 @@ Por favor, reformule sua pergunta ou selecione um dos temas acima para que eu po
             </CardTitle>
           </CardHeader>
           <CardContent className="space-y-2">
-            {QUICK_QUESTIONS.map((question, idx) => (
+            {QUICK_QUESTIONS.map((question) => (
               <Button
-                key={idx}
+                key={question}
                 variant="outline"
                 className="w-full justify-start text-left h-auto py-3 px-4"
                 onClick={() => handleSendMessage(question)}

@@ -251,8 +251,8 @@ export default function ComplianceAuditIntelligence() {
 
                         {agent.capabilities.length > 0 && (
                           <div className="flex flex-wrap gap-1">
-                            {agent.capabilities.slice(0, 3).map((cap, i) => (
-                              <Badge key={i} variant="outline" className="text-xs">{String(cap)}</Badge>
+                            {agent.capabilities.slice(0, 3).map((cap) => (
+                              <Badge key={String(cap)} variant="outline" className="text-xs">{String(cap)}</Badge>
                             ))}
                           </div>
                         )}
@@ -320,8 +320,8 @@ export default function ComplianceAuditIntelligence() {
                           {audit.scheduledDate ? new Date(audit.scheduledDate).toLocaleDateString('pt-BR') : 'N/A'}
                         </div>
                         <div className="flex flex-wrap gap-1">
-                          {audit.scope.map((s, i) => (
-                            <Badge key={i} variant="outline" className="text-xs">{s}</Badge>
+                          {audit.scope.map((s) => (
+                            <Badge key={s} variant="outline" className="text-xs">{s}</Badge>
                           ))}
                         </div>
                       </div>

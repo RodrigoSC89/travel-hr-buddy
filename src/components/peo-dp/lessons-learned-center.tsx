@@ -408,8 +408,8 @@ export const LessonsLearnedCenter: React.FC = () => {
                         <span className="flex items-center gap-1"><BookOpen className="h-3 w-3" />{lesson.viewCount} visualizações</span>
                       </div>
                       <div className="flex flex-wrap gap-1 mt-2">
-                        {lesson.tags.map((tag, i) => (
-                          <Badge key={i} variant="outline" className="text-xs">{tag}</Badge>
+                        {lesson.tags.map((tag) => (
+                          <Badge key={tag} variant="outline" className="text-xs">{tag}</Badge>
                         ))}
                       </div>
                     </div>
@@ -563,8 +563,8 @@ export const LessonsLearnedCenter: React.FC = () => {
                 <div>
                   <h4 className="font-semibold mb-2">Ações Corretivas</h4>
                   <ul className="list-disc list-inside text-sm text-muted-foreground space-y-1">
-                    {selectedLesson.correctiveActions.map((action, i) => (
-                      <li key={i}>{action}</li>
+                    {selectedLesson.correctiveActions.map((action) => (
+                      <li key={action}>{action}</li>
                     ))}
                   </ul>
                 </div>
@@ -572,8 +572,8 @@ export const LessonsLearnedCenter: React.FC = () => {
                 <div>
                   <h4 className="font-semibold mb-2">Ações Preventivas</h4>
                   <ul className="list-disc list-inside text-sm text-muted-foreground space-y-1">
-                    {selectedLesson.preventiveActions.map((action, i) => (
-                      <li key={i}>{action}</li>
+                    {selectedLesson.preventiveActions.map((action) => (
+                      <li key={action}>{action}</li>
                     ))}
                   </ul>
                 </div>
@@ -581,8 +581,8 @@ export const LessonsLearnedCenter: React.FC = () => {
                 <div>
                   <h4 className="font-semibold mb-2">Recomendações de Mitigação</h4>
                   <ul className="list-disc list-inside text-sm text-muted-foreground space-y-1">
-                    {selectedLesson.mitigationRecommendations.map((rec, i) => (
-                      <li key={i}>{rec}</li>
+                    {selectedLesson.mitigationRecommendations.map((rec) => (
+                      <li key={rec}>{rec}</li>
                     ))}
                   </ul>
                 </div>
@@ -590,8 +590,8 @@ export const LessonsLearnedCenter: React.FC = () => {
                 <div>
                   <h4 className="font-semibold mb-2">Documentos Relacionados</h4>
                   <div className="flex flex-wrap gap-2">
-                    {selectedLesson.relatedDocuments.map((doc, i) => (
-                      <Badge key={i} variant="outline" className="cursor-pointer hover:bg-accent">
+                    {selectedLesson.relatedDocuments.map((doc) => (
+                      <Badge key={doc} variant="outline" className="cursor-pointer hover:bg-accent">
                         <FileText className="w-3 h-3 mr-1" />{doc}
                       </Badge>
                     ))}

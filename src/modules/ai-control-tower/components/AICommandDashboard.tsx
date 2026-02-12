@@ -84,7 +84,7 @@ export function AICommandDashboard() {
     return (
       <div className="space-y-6">
         <div className="grid grid-cols-2 md:grid-cols-6 gap-4">
-          {[...Array(6)].map((_, i) => <Skeleton key={i} className="h-24" />)}
+          {[...Array(6)].map((_, i) => <Skeleton key={`cmd-skeleton-${i}`} className="h-24" />)}
         </div>
         <Skeleton className="h-96" />
       </div>
@@ -207,8 +207,8 @@ export function AICommandDashboard() {
                   </CardHeader>
                   <CardContent className="space-y-3">
                     <div className="flex flex-wrap gap-1">
-                      {(Array.isArray(agent.capabilities) ? agent.capabilities : []).slice(0, 3).map((cap: unknown, i: number) => (
-                        <Badge key={i} variant="secondary" className="text-xs">{String(cap)}</Badge>
+                      {(Array.isArray(agent.capabilities) ? agent.capabilities : []).slice(0, 3).map((cap: unknown) => (
+                        <Badge key={String(cap)} variant="secondary" className="text-xs">{String(cap)}</Badge>
                       ))}
                     </div>
                     <div className="text-xs text-muted-foreground">
@@ -284,8 +284,8 @@ export function AICommandDashboard() {
                       <div className="mt-4">
                         <p className="text-sm font-medium mb-2">Capacidades</p>
                         <div className="flex flex-wrap gap-2">
-                          {(Array.isArray(selectedAgent.capabilities) ? selectedAgent.capabilities : []).map((cap: unknown, i: number) => (
-                            <Badge key={i} variant="outline">{String(cap)}</Badge>
+                          {(Array.isArray(selectedAgent.capabilities) ? selectedAgent.capabilities : []).map((cap: unknown) => (
+                            <Badge key={String(cap)} variant="outline">{String(cap)}</Badge>
                           ))}
                         </div>
                       </div>

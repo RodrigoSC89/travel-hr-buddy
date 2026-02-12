@@ -259,8 +259,8 @@ function FuelManagementContent() {
               { name: "MV Atlantic Star", consumption: 4.2, efficiency: 96 },
               { name: "MV Pacific Explorer", consumption: 3.8, efficiency: 94 },
               { name: "MV Oceanic Pride", consumption: 4.4, efficiency: 92 },
-            ].map((vessel, i) => (
-              <div key={i} className="space-y-2">
+            ].map((vessel) => (
+              <div key={vessel.name} className="space-y-2">
                 <div className="flex justify-between text-sm">
                   <span className="font-medium">{vessel.name}</span>
                   <span>{vessel.consumption} ton/dia • {vessel.efficiency}% eficiência</span>
@@ -330,8 +330,8 @@ function WeatherContent() {
               { route: "Santos → Rio de Janeiro", condition: "Favorável", color: "success" },
               { route: "Rio de Janeiro → Vitória", condition: "Moderada", color: "warning" },
               { route: "Vitória → Salvador", condition: "Favorável", color: "success" },
-            ].map((route, i) => (
-              <div key={i} className="flex items-center justify-between p-3 border rounded-lg">
+            ].map((route) => (
+              <div key={route.route} className="flex items-center justify-between p-3 border rounded-lg">
                 <span className="font-medium">{route.route}</span>
                 <Badge variant={route.color === "success" ? "default" : "secondary"}>
                   {route.condition}

@@ -386,8 +386,8 @@ export default function AgentOrchestrator() {
                 <div>
                   <h4 className="text-sm font-medium mb-2">Capacidades</h4>
                   <div className="flex flex-wrap gap-2">
-                    {selectedAgent.capabilities.map((cap, i) => (
-                      <Badge key={i} variant="outline">
+                    {selectedAgent.capabilities.map((cap) => (
+                      <Badge key={cap} variant="outline">
                         <Sparkles className="h-3 w-3 mr-1" />
                         {cap}
                       </Badge>

@@ -257,8 +257,8 @@ export const ViewPlanDialog: React.FC<ViewPlanDialogProps> = ({
                   Procedimentos
                 </h4>
                 <ol className="list-decimal list-inside space-y-2">
-                  {details.procedures.map((proc: string, idx: number) => (
-                    <li key={idx} className="text-muted-foreground">{proc}</li>
+                  {details.procedures.map((proc: string) => (
+                    <li key={proc} className="text-muted-foreground">{proc}</li>
                   ))}
                 </ol>
               </CardContent>
@@ -272,8 +272,8 @@ export const ViewPlanDialog: React.FC<ViewPlanDialogProps> = ({
                   Equipamentos Necessários
                 </h4>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
-                  {details.equipment.map((item: string, idx: number) => (
-                    <div key={idx} className="flex items-center gap-2 text-muted-foreground">
+                  {details.equipment.map((item: string) => (
+                    <div key={item} className="flex items-center gap-2 text-muted-foreground">
                       <CheckCircle className="h-3 w-3 text-success" />
                       {item}
                     </div>
@@ -290,8 +290,8 @@ export const ViewPlanDialog: React.FC<ViewPlanDialogProps> = ({
                   Contatos de Emergência
                 </h4>
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
-                  {details.contacts.map((contact: { name: string; phone: string }, idx: number) => (
-                    <div key={idx} className="p-3 bg-muted/50 rounded-lg">
+                  {details.contacts.map((contact: { name: string; phone: string }) => (
+                    <div key={contact.name} className="p-3 bg-muted/50 rounded-lg">
                       <p className="font-medium text-sm">{contact.name}</p>
                       <p className="text-primary font-bold">{contact.phone}</p>
                     </div>

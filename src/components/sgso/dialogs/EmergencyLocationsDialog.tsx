@@ -235,8 +235,8 @@ export const EmergencyLocationsDialog: React.FC<EmergencyLocationsDialogProps> =
                               Coordenadas: {point.coordinates}
                             </p>
                             <div className="flex flex-wrap gap-1">
-                              {point.equipment.map((eq, i) => (
-                                <Badge key={i} variant="secondary" className="text-xs">
+                              {point.equipment.map((eq) => (
+                                <Badge key={eq} variant="secondary" className="text-xs">
                                   {eq}
                                 </Badge>
                               ))}
@@ -284,8 +284,8 @@ export const EmergencyLocationsDialog: React.FC<EmergencyLocationsDialogProps> =
                               {eq.location}
                             </p>
                             <div className="flex flex-wrap gap-1">
-                              {eq.items.map((item, i) => (
-                                <Badge key={i} variant="outline" className="text-xs">
+                              {eq.items.map((item) => (
+                                <Badge key={item} variant="outline" className="text-xs">
                                   {item}
                                 </Badge>
                               ))}

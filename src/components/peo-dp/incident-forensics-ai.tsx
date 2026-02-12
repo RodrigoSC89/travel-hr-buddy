@@ -329,8 +329,8 @@ export const IncidentForensicsAI: React.FC = () => {
                 <TabsContent value="timeline" className="space-y-4">
                   <ScrollArea className="h-[350px]">
                     <div className="space-y-3">
-                      {selectedIncident.timeline.map((event, idx) => (
-                        <div key={idx} className="flex items-start gap-3 p-3 rounded-lg border">
+                      {selectedIncident.timeline.map((event) => (
+                        <div key={`${event.timestamp}-${event.type}`} className="flex items-start gap-3 p-3 rounded-lg border">
                           <div className={`p-2 rounded-lg ${event.criticality === "high" ? "bg-red-500/10" : event.criticality === "medium" ? "bg-yellow-500/10" : "bg-green-500/10"}`}>
                             {getEventIcon(event.type)}
                           </div>
@@ -357,7 +357,7 @@ export const IncidentForensicsAI: React.FC = () => {
                     </h4>
                     <ul className="space-y-2">
                       {selectedIncident.rootCauses.map((cause, idx) => (
-                        <li key={idx} className="flex items-start gap-2 text-sm">
+                        <li key={cause} className="flex items-start gap-2 text-sm">
                           <span className="text-red-500 font-bold">{idx + 1}.</span>
                           {cause}
                         </li>
@@ -367,8 +367,8 @@ export const IncidentForensicsAI: React.FC = () => {
                   <div className="p-4 bg-blue-500/10 rounded-lg border border-blue-500/20">
                     <h4 className="font-medium mb-2">Sistemas Afetados</h4>
                     <div className="flex flex-wrap gap-2">
-                      {selectedIncident.affectedSystems.map((sys, idx) => (
-                        <Badge key={idx} variant="outline">{sys}</Badge>
+                      {selectedIncident.affectedSystems.map((sys) => (
+                        <Badge key={sys} variant="outline">{sys}</Badge>
                       ))}
                     </div>
                   </div>
@@ -381,8 +381,8 @@ export const IncidentForensicsAI: React.FC = () => {
                       Ações Corretivas Sugeridas
                     </h4>
                     <ul className="space-y-2">
-                      {selectedIncident.correctiveActions.map((action, idx) => (
-                        <li key={idx} className="flex items-start gap-2 text-sm">
+                      {selectedIncident.correctiveActions.map((action) => (
+                        <li key={action} className="flex items-start gap-2 text-sm">
                           <span className="text-green-500 font-bold">•</span>
                           {action}
                         </li>

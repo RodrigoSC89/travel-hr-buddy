@@ -180,8 +180,8 @@ export default function DocumentIntelligenceHub() {
                            {doc.type} • {doc.vessel} • {doc.category}
                          </p>
                          <div className="flex gap-1 mt-1">
-                           {doc.aiTags.map((tag, idx) => (
-                             <Badge key={idx} variant="outline" className="text-xs px-1.5 py-0">
+                           {doc.aiTags.map((tag) => (
+                             <Badge key={tag} variant="outline" className="text-xs px-1.5 py-0">
                                <Tag className="h-2 w-2 mr-1" />
                                {tag}
                              </Badge>
@@ -321,8 +321,8 @@ export default function DocumentIntelligenceHub() {
                  { name: "Compliance Report", desc: "Conformidade regulatória consolidada" },
                  { name: "Documentos Expirados", desc: "Lista de ações pendentes" },
                  { name: "Histórico de Uploads", desc: "Auditoria de movimentações" }
-               ].map((report, idx) => (
-                 <div key={idx} className="flex items-center justify-between p-4 border rounded-lg">
+                ].map((report) => (
+                 <div key={report.name} className="flex items-center justify-between p-4 border rounded-lg">
                    <div>
                      <p className="font-medium">{report.name}</p>
                      <p className="text-xs text-muted-foreground">{report.desc}</p>
