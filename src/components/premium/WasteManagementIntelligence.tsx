@@ -255,8 +255,8 @@ export default function WasteManagementIntelligence() {
                   { regulation: "IMO MEPC.312(74)", status: "compliant" },
                   { regulation: "EU MRV Reporting", status: "compliant" },
                   { regulation: "Paris MoU Guidelines", status: "compliant" },
-                ].map((reg, idx) => (
-                  <div key={idx} className="flex items-center justify-between p-4 border rounded-lg">
+                ].map((reg) => (
+                  <div key={reg.regulation} className="flex items-center justify-between p-4 border rounded-lg">
                     <p className="font-medium">{reg.regulation}</p>
                     <Badge className={reg.status === "compliant" ? "bg-success/10 text-success" : "bg-warning/10 text-warning"}>
                       <CheckCircle2 className="h-3 w-3 mr-1" />

@@ -140,8 +140,8 @@ export default function ComplianceReporter() {
                     </TableCell>
                     <TableCell className="text-foreground">
                       <div className="flex flex-wrap gap-1">
-                        {(incident.compliance || []).slice(0, 3).map((std, idx) => (
-                          <Badge key={idx} variant="outline" className="text-xs">
+                        {(incident.compliance || []).slice(0, 3).map((std) => (
+                          <Badge key={std} variant="outline" className="text-xs">
                             {std}
                           </Badge>
                         ))}

@@ -152,7 +152,7 @@ export function MaintenanceGanttCalendar() {
               const date = new Date(today.getTime() + i * 24 * 60 * 60 * 1000);
               const isWeekend = date.getDay() === 0 || date.getDay() === 6;
               return (
-                <div key={i} className={`flex-shrink-0 text-center text-xs p-2 border-r ${isWeekend ? 'bg-muted/50' : ''}`} style={{ width: dayWidth }}>
+                <div key={`day-${date.toISOString().slice(0,10)}`} className={`flex-shrink-0 text-center text-xs p-2 border-r ${isWeekend ? 'bg-muted/50' : ''}`} style={{ width: dayWidth }}>
                   <div className="font-medium">{date.getDate()}</div>
                   <div className="text-muted-foreground">{weekDays[date.getDay()]}</div>
                 </div>

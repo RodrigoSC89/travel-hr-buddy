@@ -181,7 +181,7 @@ export function MaintenanceCostOptimizer() {
                     const percentage = item.percentage || (totalBudget > 0 ? Math.round((item.amount_usd / totalBudget) * 100) : 0);
 
                     return (
-                      <div key={idx} className="flex items-center gap-3">
+                      <div key={item.category} className="flex items-center gap-3">
                         <span className="w-32 text-sm text-muted-foreground truncate">{item.category}</span>
                         <div className="flex-1">
                           <Progress value={percentage} className="h-2" />

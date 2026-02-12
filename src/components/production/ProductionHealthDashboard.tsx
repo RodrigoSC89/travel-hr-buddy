@@ -220,8 +220,8 @@ export function ProductionHealthDashboard({ autoRun = true, compact = false }: H
               <div className="mt-4 p-4 bg-muted rounded-lg">
                 <h4 className="font-semibold mb-2">Recomendações</h4>
                 <ul className="list-disc list-inside space-y-1 text-sm text-muted-foreground">
-                  {report.recommendations.map((rec, idx) => (
-                    <li key={idx}>{rec}</li>
+                  {report.recommendations.map((rec) => (
+                    <li key={rec}>{rec}</li>
                   ))}
                 </ul>
               </div>

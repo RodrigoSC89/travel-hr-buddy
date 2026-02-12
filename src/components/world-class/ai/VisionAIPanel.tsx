@@ -163,7 +163,7 @@ export const VisionAIPanel: React.FC = () => {
           <ScrollArea className="h-[200px]">
             <div className="space-y-2">
               {results.map((result, i) => (
-                <div key={i} className="rounded-lg border p-3 space-y-2">
+                <div key={`vision-${i}-${result.type}`} className="rounded-lg border p-3 space-y-2">
                   <div className="flex items-center justify-between">
                     <Badge variant="secondary" className="text-xs">
                       {TYPE_CONFIG[result.type].icon}

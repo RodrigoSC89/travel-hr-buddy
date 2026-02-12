@@ -618,8 +618,8 @@ const EmergencyMode = () => {
               </CardHeader>
               <CardContent>
                 <div className="grid gap-3">
-                  {protocol?.contacts.map((contact, i) => (
-                    <div key={i} className="flex items-center justify-between p-3 bg-destructive/10 rounded-lg">
+                  {protocol?.contacts.map((contact) => (
+                    <div key={`${contact.name}-${contact.phone}`} className="flex items-center justify-between p-3 bg-destructive/10 rounded-lg">
                       <div>
                         <p className="font-medium text-foreground">{contact.name}</p>
                         <p className="text-sm text-muted-foreground">{contact.role}</p>
@@ -647,9 +647,9 @@ const EmergencyMode = () => {
               <CardContent className="flex-1 flex flex-col">
                 <ScrollArea className="flex-1 h-[400px] pr-4">
                   <div className="space-y-4">
-                    {aiMessages.map((msg, i) => (
+                    {aiMessages.map((msg, idx) => (
                       <div
-                        key={i}
+                        key={`msg-${idx}-${msg.role}`}
                         className={`p-3 rounded-lg ${
                           msg.role === "assistant"
                             ? "bg-accent/10 border border-accent/30"
