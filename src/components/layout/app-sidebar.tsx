@@ -43,7 +43,7 @@ import {
   CollapsibleContent,
   CollapsibleTrigger,
 } from "@/components/ui/collapsible";
-import { SIDEBAR_ROUTES, type SidebarGroup as SidebarRouteGroup, type SidebarRoute } from "@/config/sidebar-routes";
+import { SIDEBAR_ROUTES, type SidebarGroup as SidebarRouteGroup, type SidebarRoute, type UserRole } from "@/config/sidebar-routes";
 
 /* ─── Local Storage Keys ─── */
 const PINNED_KEY = "nauti-sidebar-pinned";
@@ -173,13 +173,13 @@ export function AppSidebar({ activeItem, onItemChange }: AppSidebarProps) {
   const canAccessRoute = (item: SidebarRoute): boolean => {
     if (!item.requiredRoles || item.requiredRoles.length === 0) return true;
     if (!userRole) return false;
-    return item.requiredRoles.includes(userRole as any);
+    return item.requiredRoles.includes(userRole as UserRole);
   };
 
   const canAccessGroup = (group: SidebarRouteGroup): boolean => {
     if (!group.requiredRoles || group.requiredRoles.length === 0) return true;
     if (!userRole) return false;
-    return group.requiredRoles.includes(userRole as any);
+    return group.requiredRoles.includes(userRole as UserRole);
   };
 
   const filteredRoutes = SIDEBAR_ROUTES.filter(group => canAccessGroup(group));

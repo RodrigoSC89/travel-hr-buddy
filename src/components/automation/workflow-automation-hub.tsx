@@ -10,7 +10,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { RefreshCw, Settings, Sparkles, Plus } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
-import { useWorkflows } from "@/hooks/useWorkflows";
+import { useWorkflows, type Workflow } from "@/hooks/useWorkflows";
 import { useWorkflowAI, workflowTemplates } from "@/hooks/useWorkflowAI";
 import { WorkflowHeader } from "./workflow/WorkflowHeader";
 import { WorkflowStats } from "./workflow/WorkflowStats";
@@ -73,8 +73,8 @@ export const WorkflowAutomationHub: React.FC = () => {
     await createWorkflow({
       name: newWorkflowData.name,
       description: newWorkflowData.description,
-      category: newWorkflowData.category as any,
-      priority: newWorkflowData.priority as any,
+      category: newWorkflowData.category as Workflow["category"],
+      priority: newWorkflowData.priority as Workflow["priority"],
       status: "draft",
       steps: [],
     });
@@ -86,7 +86,7 @@ export const WorkflowAutomationHub: React.FC = () => {
     await createWorkflow({
       name: template.name,
       description: template.description,
-      category: template.category as any,
+      category: template.category as Workflow["category"],
       priority: "medium",
       status: "draft",
       steps: template.steps,
