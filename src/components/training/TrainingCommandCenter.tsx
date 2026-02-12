@@ -256,7 +256,7 @@ export const TrainingCommandCenter: React.FC = () => {
 
   const getStatusBadge = (status: Course["status"]) => {
     const config = {
-      draft: { color: "bg-gray-500/20 text-gray-400", label: "Rascunho" },
+      draft: { color: "bg-muted text-muted-foreground", label: "Rascunho" },
       published: { color: "bg-success/20 text-success", label: "Publicado" },
       archived: { color: "bg-warning/20 text-warning", label: "Arquivado" }
     };
@@ -266,8 +266,8 @@ export const TrainingCommandCenter: React.FC = () => {
 
   const getEnrollmentStatusBadge = (status: Enrollment["status"]) => {
     const config = {
-      not_started: { color: "bg-gray-500/20 text-gray-400", label: "Não Iniciado" },
-      in_progress: { color: "bg-blue-500/20 text-blue-400", label: "Em Andamento" },
+      not_started: { color: "bg-muted text-muted-foreground", label: "Não Iniciado" },
+      in_progress: { color: "bg-info/20 text-info", label: "Em Andamento" },
       completed: { color: "bg-success/20 text-success", label: "Concluído" },
       failed: { color: "bg-destructive/20 text-destructive", label: "Reprovado" },
       overdue: { color: "bg-warning/20 text-warning", label: "Atrasado" }
@@ -307,14 +307,14 @@ export const TrainingCommandCenter: React.FC = () => {
 
       {/* Stats Cards */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-        <Card className="bg-gradient-to-br from-blue-500/10 to-blue-600/5 border-blue-500/20">
+        <Card className="bg-gradient-to-br from-info/10 to-info/5 border-info/20">
           <CardContent className="p-4">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-muted-foreground">Cursos Ativos</p>
                 <p className="text-2xl font-bold">{publishedCourses}</p>
               </div>
-              <BookOpen className="h-8 w-8 text-blue-400" />
+              <BookOpen className="h-8 w-8 text-info" />
             </div>
           </CardContent>
         </Card>
@@ -331,14 +331,14 @@ export const TrainingCommandCenter: React.FC = () => {
           </CardContent>
         </Card>
 
-        <Card className="bg-gradient-to-br from-purple-500/10 to-purple-600/5 border-purple-500/20">
+        <Card className="bg-gradient-to-br from-accent/10 to-accent/5 border-accent/20">
           <CardContent className="p-4">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-muted-foreground">Concluídos</p>
                 <p className="text-2xl font-bold">{completedEnrollments}</p>
               </div>
-              <Award className="h-8 w-8 text-purple-400" />
+              <Award className="h-8 w-8 text-accent-foreground" />
             </div>
           </CardContent>
         </Card>

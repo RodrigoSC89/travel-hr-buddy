@@ -202,7 +202,7 @@ const VesselPerformanceMonitor = () => {
                     <p className="text-sm text-muted-foreground">Manutenção</p>
                     <p className="text-2xl font-bold">{selectedVesselData.maintenanceScore}%</p>
                   </div>
-                  <BarChart3 className="h-8 w-8 text-purple-500" />
+                  <BarChart3 className="h-8 w-8 text-accent-foreground" />
                 </div>
                 <Progress value={selectedVesselData.maintenanceScore} className="mt-2" />
               </CardContent>

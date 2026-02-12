@@ -18,17 +18,17 @@ import { cn } from "@/lib/utils";
 
 const getStatusColor = (status: VesselPosition["status"]) => {
   const colors: Record<string, string> = {
-    "underway": "bg-emerald-500", "anchored": "bg-amber-500",
-    "moored": "bg-blue-500", "drifting": "bg-red-500"
+    "underway": "bg-success", "anchored": "bg-warning",
+    "moored": "bg-info", "drifting": "bg-destructive"
   };
   return colors[status] || "bg-muted";
 };
 
 const getSeverityColor = (severity: TrackingAlert["severity"]) => {
   const colors: Record<string, string> = {
-    "info": "text-blue-600 bg-blue-100",
-    "warning": "text-amber-600 bg-amber-100",
-    "critical": "text-red-600 bg-red-100"
+    "info": "text-info bg-info/10",
+    "warning": "text-warning bg-warning/10",
+    "critical": "text-destructive bg-destructive/10"
   };
   return colors[severity] || "text-muted-foreground bg-muted";
 };

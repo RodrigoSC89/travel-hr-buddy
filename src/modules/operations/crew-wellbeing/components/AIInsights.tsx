@@ -64,11 +64,11 @@ export const AIInsights = () => {
 
   const getFatigueLevelColor = (level: string) => {
     switch (level) {
-    case "low": return "text-green-500";
-    case "medium": return "text-yellow-500";
-    case "high": return "text-orange-500";
-    case "critical": return "text-red-500";
-    default: return "text-gray-500";
+    case "low": return "text-success";
+    case "medium": return "text-warning";
+    case "high": return "text-warning";
+    case "critical": return "text-destructive";
+    default: return "text-muted-foreground";
     }
   };
 

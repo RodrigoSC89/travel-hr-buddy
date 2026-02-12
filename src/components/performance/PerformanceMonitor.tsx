@@ -41,16 +41,16 @@ export function PerformanceMonitor({
   };
 
   const getScoreColor = (score: number) => {
-    if (score >= 90) return 'text-green-500';
-    if (score >= 50) return 'text-yellow-500';
-    return 'text-red-500';
+    if (score >= 90) return 'text-success';
+    if (score >= 50) return 'text-warning';
+    return 'text-destructive';
   };
 
   const getRatingBadge = (rating: string) => {
     const variants = {
-      good: 'bg-green-500/10 text-green-500 border-green-500/20',
-      'needs-improvement': 'bg-yellow-500/10 text-yellow-500 border-yellow-500/20',
-      poor: 'bg-red-500/10 text-red-500 border-red-500/20',
+      good: 'bg-success/10 text-success border-success/20',
+      'needs-improvement': 'bg-warning/10 text-warning border-warning/20',
+      poor: 'bg-destructive/10 text-destructive border-destructive/20',
     };
     return variants[rating as keyof typeof variants] || variants.poor;
   };

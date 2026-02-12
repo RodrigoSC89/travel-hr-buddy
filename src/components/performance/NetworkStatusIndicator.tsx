@@ -32,9 +32,9 @@ const qualityLabels: Record<Exclude<ConnectionQuality, 'offline'>, string> = {
 };
 
 const qualityColors: Record<Exclude<ConnectionQuality, 'offline'>, string> = {
-  fast: 'text-green-500',
-  medium: 'text-yellow-500',
-  slow: 'text-orange-500',
+  fast: 'text-success',
+  medium: 'text-warning',
+  slow: 'text-warning',
 };
 
 export function NetworkStatusIndicator({

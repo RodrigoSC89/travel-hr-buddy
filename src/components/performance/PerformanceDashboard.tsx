@@ -76,15 +76,15 @@ export function PerformanceDashboard() {
   };
 
   const qualityColor = {
-    fast: 'bg-green-500',
-    medium: 'bg-yellow-500',
-    slow: 'bg-orange-500',
+    fast: 'bg-success',
+    medium: 'bg-warning',
+    slow: 'bg-warning',
     offline: 'bg-destructive',
   };
 
   const memoryColor = {
-    normal: 'bg-green-500',
-    reduce: 'bg-yellow-500',
+    normal: 'bg-success',
+    reduce: 'bg-warning',
     critical: 'bg-destructive',
   };
 

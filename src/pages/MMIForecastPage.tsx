@@ -125,7 +125,7 @@ export default function MMIForecastPage() {
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-3xl font-bold tracking-tight flex items-center gap-2">
-            <Sparkles className="h-8 w-8 text-purple-500" />
+            <Sparkles className="h-8 w-8 text-accent-foreground" />
             MMI Forecast Generator
           </h1>
           <p className="text-muted-foreground mt-1">
