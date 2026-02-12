@@ -172,8 +172,8 @@ const PredictiveAnalytics: React.FC = () => {
             </div>
           ) : (
             <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-              {predictions.map((prediction, index) => (
-                <Card key={index} className="border-l-4 border-l-primary">
+              {predictions.map((prediction) => (
+                <Card key={prediction.metric} className="border-l-4 border-l-primary">
                   <CardHeader className="pb-3">
                     <div className="flex items-center justify-between">
                       <CardTitle className="text-base">{prediction.metric}</CardTitle>
@@ -222,8 +222,8 @@ const PredictiveAnalytics: React.FC = () => {
                     <div>
                       <p className="text-xs text-muted-foreground mb-2">Fatores Influentes:</p>
                       <div className="space-y-1">
-                        {prediction.factors.slice(0, 3).map((factor, idx) => (
-                          <div key={idx} className="flex items-center gap-2">
+                        {prediction.factors.slice(0, 3).map((factor) => (
+                          <div key={factor} className="flex items-center gap-2">
                             <div className="w-1 h-1 bg-primary rounded-full" />
                             <span className="text-xs">{factor}</span>
                           </div>
@@ -254,8 +254,8 @@ const PredictiveAnalytics: React.FC = () => {
                 {predictions
                   .filter(p => p.trend === "up" && p.confidence > 80)
                   .slice(0, 3)
-                  .map((p, idx) => (
-                    <div key={idx} className="flex items-start gap-2">
+                  .map((p) => (
+                    <div key={p.metric} className="flex items-start gap-2">
                       <TrendingUp className="w-4 h-4 text-success mt-0.5" />
                       <p className="text-sm">
                         {p.metric} deve aumentar {Math.abs(calculateChange(p.current, p.predicted)).toFixed(1)}%
@@ -269,8 +269,8 @@ const PredictiveAnalytics: React.FC = () => {
                 {predictions
                   .filter(p => (p.trend === "up" && p.metric.includes("Custos")) || (p.trend === "down" && !p.metric.includes("Rotatividade")))
                   .slice(0, 3)
-                  .map((p, idx) => (
-                    <div key={idx} className="flex items-start gap-2">
+                  .map((p) => (
+                    <div key={p.metric} className="flex items-start gap-2">
                       <AlertTriangle className="w-4 h-4 text-destructive mt-0.5" />
                       <p className="text-sm">
                         {p.metric}: monitorar tendência de 

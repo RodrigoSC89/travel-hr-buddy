@@ -406,9 +406,9 @@ export function VoyageOptimizer() {
             </CardHeader>
             <CardContent>
               <div className="space-y-4">
-                {weatherWindows.map((window, idx) => (
+                {weatherWindows.map((window) => (
                   <div 
-                    key={idx}
+                    key={`${window.startDate}-${window.conditions}`}
                     className={`p-4 rounded-lg border ${
                       window.conditions === "Favorable" 
                         ? "bg-success/5 border-success/20 dark:bg-success/10" 

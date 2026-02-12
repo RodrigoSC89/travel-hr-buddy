@@ -798,8 +798,8 @@ export default function AICommandCenter() {
                     <ScrollArea className="h-[300px]">
                       {healthStatus.length > 0 ? (
                         <div className="space-y-3">
-                          {healthStatus.map((service, index) => (
-                            <div key={index} className="flex items-center justify-between p-3 rounded-lg bg-muted/50">
+                          {healthStatus.map((service) => (
+                            <div key={service.service_name} className="flex items-center justify-between p-3 rounded-lg bg-muted/50">
                               <div className="flex items-center gap-3">
                                 {getHealthStatusIcon(service.status)}
                                 <span className="font-medium text-sm">{service.service_name}</span>

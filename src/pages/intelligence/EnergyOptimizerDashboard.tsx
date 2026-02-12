@@ -356,8 +356,8 @@ export default function EnergyOptimizerDashboard() {
                   { label: "Temp. Coolant", value: "80", unit: "°C", icon: Thermometer },
                   { label: "Ar Scavenger", value: "3.2", unit: "bar", icon: Wind },
                   { label: "Carga Turbo", value: "78", unit: "%", icon: Zap }
-                ].map((param, idx) => (
-                  <div key={idx} className="p-4 rounded-lg bg-muted/50 text-center">
+                ].map((param) => (
+                  <div key={param.label} className="p-4 rounded-lg bg-muted/50 text-center">
                     <param.icon className="h-5 w-5 mx-auto mb-2 text-muted-foreground" />
                     <p className="text-xs text-muted-foreground">{param.label}</p>
                     <p className="text-xl font-bold">{param.value}</p>

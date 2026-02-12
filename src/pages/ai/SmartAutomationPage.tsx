@@ -273,10 +273,10 @@ const SmartAutomationPage: React.FC = () => {
                       </div>
 
                       <div className="flex items-center gap-2 flex-wrap">
-                        {workflow.actions.map((action, idx) => (
-                          <React.Fragment key={idx}>
+                        {workflow.actions.map((action, actionIdx) => (
+                          <React.Fragment key={action}>
                             <Badge variant="secondary" className="text-xs">{action}</Badge>
-                            {idx < workflow.actions.length - 1 && (
+                            {actionIdx < workflow.actions.length - 1 && (
                               <ArrowRight className="h-3 w-3 text-muted-foreground" />
                             )}
                           </React.Fragment>
@@ -288,7 +288,7 @@ const SmartAutomationPage: React.FC = () => {
                       <div className="text-2xl font-bold">{workflow.executions}</div>
                       <div className="text-sm text-muted-foreground">execuções</div>
                       <div className="text-sm mt-2">
-                        <span className={workflow.successRate >= 95 ? "text-green-500" : workflow.successRate >= 80 ? "text-yellow-500" : "text-red-500"}>
+                        <span className={workflow.successRate >= 95 ? "text-success" : workflow.successRate >= 80 ? "text-warning" : "text-destructive"}>
                           {workflow.successRate}% sucesso
                         </span>
                       </div>
@@ -344,7 +344,7 @@ const SmartAutomationPage: React.FC = () => {
                     <YAxis stroke="hsl(var(--muted-foreground))" />
                     <Tooltip contentStyle={{ backgroundColor: 'hsl(var(--background))', border: '1px solid hsl(var(--border))' }} />
                     <Bar dataKey="executions" fill="hsl(var(--primary))" name="Total" />
-                    <Bar dataKey="success" fill="#22c55e" name="Sucesso" />
+                    <Bar dataKey="success" fill="hsl(var(--success))" name="Sucesso" />
                   </BarChart>
                 </ResponsiveContainer>
               </CardContent>
@@ -367,13 +367,13 @@ const SmartAutomationPage: React.FC = () => {
                       { workflow: "Alerta de Manutenção", time: "Há 2 horas", status: "success" },
                       { workflow: "Escala de Tripulação", time: "Há 1 dia", status: "error" },
                       { workflow: "Otimização de Rota", time: "Há 1 dia", status: "success" },
-                    ].map((log, idx) => (
-                      <div key={idx} className="flex items-center justify-between p-3 rounded-lg bg-muted/20">
+                    ].map((log) => (
+                      <div key={`${log.workflow}-${log.time}`} className="flex items-center justify-between p-3 rounded-lg bg-muted/20">
                         <div className="flex items-center gap-3">
                           {log.status === "success" ? (
-                            <CheckCircle className="h-4 w-4 text-green-500" />
+                            <CheckCircle className="h-4 w-4 text-success" />
                           ) : (
-                            <AlertTriangle className="h-4 w-4 text-red-500" />
+                            <AlertTriangle className="h-4 w-4 text-destructive" />
                           )}
                           <span>{log.workflow}</span>
                         </div>

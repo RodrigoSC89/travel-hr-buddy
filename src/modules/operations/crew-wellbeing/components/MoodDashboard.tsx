@@ -146,8 +146,8 @@ export const MoodDashboard = () => {
           </CardHeader>
           <CardContent>
             <div className="flex flex-wrap gap-2">
-              {stats.commonFactors.map((factor, index) => (
-                <Badge key={index} variant="secondary" className="px-3 py-1">
+              {stats.commonFactors.map((factor) => (
+                <Badge key={factor.factor} variant="secondary" className="px-3 py-1">
                   {factor.factor} ({factor.count})
                 </Badge>
               ))}
