@@ -109,7 +109,7 @@ export function ESGCommandCenter() {
     return (
       <div className="space-y-6">
         <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4">
-          {Array.from({ length: 6 }).map((_, i) => <Skeleton key={i} className="h-24" />)}
+          {Array.from({ length: 6 }).map((_, i) => <Skeleton key={`esg-skeleton-${i}`} className="h-24" />)}
         </div>
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           <Skeleton className="h-96" />
@@ -331,8 +331,8 @@ export function ESGCommandCenter() {
                     cx="50%" cy="50%" innerRadius={50} outerRadius={80}
                     dataKey="count" nameKey="rating" label={({ rating, count }) => `${rating}: ${count}`}
                   >
-                    {ciiDistribution.filter(d => d.count > 0).map((entry, i) => (
-                      <Cell key={i} fill={entry.color} />
+                    {ciiDistribution.filter(d => d.count > 0).map((entry) => (
+                      <Cell key={entry.rating} fill={entry.color} />
                     ))}
                   </Pie>
                   <Tooltip />
@@ -442,7 +442,7 @@ export function ESGCommandCenter() {
               <ScrollArea className="h-[200px] mb-4 p-3 bg-background/50 rounded-lg">
                 <div className="space-y-3">
                   {chatHistory.map((msg, i) => (
-                    <div key={i} className={`flex ${msg.role === "user" ? "justify-end" : "justify-start"}`}>
+                    <div key={`esg-chat-${i}`} className={`flex ${msg.role === "user" ? "justify-end" : "justify-start"}`}>
                       <div className={`max-w-[85%] p-3 rounded-lg text-sm ${
                         msg.role === "user" ? "bg-emerald-500 text-white" : "bg-muted"
                       }`}>

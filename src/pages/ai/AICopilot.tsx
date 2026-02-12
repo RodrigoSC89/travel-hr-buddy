@@ -293,9 +293,9 @@ const AICopilot: React.FC = () => {
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-2">
-              {suggestedQuestions.map((question, idx) => (
+              {suggestedQuestions.map((question) => (
                 <Button
-                  key={idx}
+                  key={question}
                   variant="outline"
                   size="sm"
                   className="w-full justify-start text-left h-auto py-2 px-3"

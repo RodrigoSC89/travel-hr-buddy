@@ -259,8 +259,8 @@ export default function LabsStatus() {
 
       {/* Modules List */}
       <div className="space-y-4">
-        {modules.map((module, idx) => (
-          <Card key={idx}>
+        {modules.map((module) => (
+          <Card key={module.name}>
             <CardHeader>
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-3">

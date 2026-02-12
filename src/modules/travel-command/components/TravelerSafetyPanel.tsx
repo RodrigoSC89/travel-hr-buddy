@@ -537,8 +537,8 @@ export const TravelerSafetyPanel: React.FC = () => {
                           </div>
                           {alert.actions && (
                             <div className="flex gap-2 mt-2">
-                              {alert.actions.map((action, idx) => (
-                                <Button key={idx} size="sm" variant={idx === 0 ? "default" : "outline"} className="h-7 text-xs" onClick={() => {
+                              {alert.actions.map((action, actionIdx) => (
+                                <Button key={action.action} size="sm" variant={actionIdx === 0 ? "default" : "outline"} className="h-7 text-xs" onClick={() => {
                                   if (action.action === "call") { window.open("tel:+5521999999999"); }
                                   else if (action.action === "sms") { toast.success("SMS enviado", { description: `Notificação enviada para: ${alert.affectedTravelers.join(", ")}` }); }
                                   else if (action.action === "contact") { toast.success("Contato iniciado", { description: `Entrando em contato com ${alert.affectedTravelers.join(", ")}` }); }
@@ -614,8 +614,8 @@ export const TravelerSafetyPanel: React.FC = () => {
               <CardContent className="p-4">
                 <h4 className="font-semibold mb-3">Avisos de Viagem</h4>
                 <div className="space-y-2">
-                  {fallbackRiskAssessment.advisories.map((advisory, idx) => (
-                    <div key={idx} className="flex items-start gap-2 text-sm">
+                  {fallbackRiskAssessment.advisories.map((advisory) => (
+                    <div key={advisory} className="flex items-start gap-2 text-sm">
                       <AlertTriangle className="h-4 w-4 text-yellow-500 mt-0.5 flex-shrink-0" />
                       <span>{advisory}</span>
                     </div>
@@ -634,8 +634,8 @@ export const TravelerSafetyPanel: React.FC = () => {
                     <div className="flex flex-wrap gap-1">
                       {fallbackRiskAssessment.requirements.visa && <Badge variant="outline">Visto</Badge>}
                       {fallbackRiskAssessment.requirements.insurance && <Badge variant="outline">Seguro</Badge>}
-                      {fallbackRiskAssessment.requirements.vaccination.map((v, i) => (
-                        <Badge key={i} variant="outline" className="text-xs">{v.split(" ")[0]}</Badge>
+                      {fallbackRiskAssessment.requirements.vaccination.map((v) => (
+                        <Badge key={v} variant="outline" className="text-xs">{v.split(" ")[0]}</Badge>
                       ))}
                     </div>
                   </div>

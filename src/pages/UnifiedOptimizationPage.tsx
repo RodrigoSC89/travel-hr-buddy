@@ -95,8 +95,8 @@ export default function UnifiedOptimizationPage() {
 
         {/* KPIs */}
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-          {kpis.map((kpi, idx) => (
-            <Card key={idx}>
+          {kpis.map((kpi) => (
+            <Card key={kpi.label}>
               <CardContent className="p-4">
                 <div className="flex items-center justify-between">
                   <div>
@@ -160,8 +160,8 @@ export default function UnifiedOptimizationPage() {
           </CardHeader>
           <CardContent>
             <div className="space-y-4">
-              {recentOptimizations.map((opt, idx) => (
-                <div key={idx} className="flex items-center justify-between p-3 bg-muted/50 rounded-lg">
+              {recentOptimizations.map((opt) => (
+                <div key={opt.vessel} className="flex items-center justify-between p-3 bg-muted/50 rounded-lg">
                   <div className="flex items-center gap-3">
                     <Anchor className="h-5 w-5 text-muted-foreground" />
                     <div>

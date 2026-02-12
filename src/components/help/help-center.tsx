@@ -331,8 +331,8 @@ const HelpCenter = () => {
 
         <TabsContent value="faq" className="space-y-6">
           <div className="space-y-4">
-            {faqItems.map((item, index) => (
-              <Card key={index}>
+            {faqItems.map((item) => (
+              <Card key={item.question}>
                 <CardHeader>
                   <CardTitle className="text-lg">{item.question}</CardTitle>
                 </CardHeader>

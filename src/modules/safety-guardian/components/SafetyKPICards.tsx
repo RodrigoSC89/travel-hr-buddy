@@ -89,8 +89,8 @@ export const SafetyKPICards: React.FC<SafetyKPICardsProps> = ({ metrics, loading
 
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-      {kpis.slice(0, 4).map((kpi, index) => (
-        <Card key={index} className={`border-l-4 ${kpi.color}`}>
+      {kpis.slice(0, 4).map((kpi) => (
+        <Card key={kpi.title} className={`border-l-4 ${kpi.color}`}>
           <CardHeader className="pb-2">
             <CardTitle className="text-sm font-medium text-muted-foreground flex items-center gap-2">
               <kpi.icon className="h-4 w-4" />

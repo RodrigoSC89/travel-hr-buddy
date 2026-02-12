@@ -253,9 +253,9 @@ const AIAssistant: React.FC = () => {
                           </div>
                           {message.suggestions && (
                             <div className="flex flex-wrap gap-2">
-                              {message.suggestions.map((suggestion, index) => (
+                              {message.suggestions.map((suggestion) => (
                                 <Button
-                                  key={index}
+                                  key={suggestion}
                                   variant="outline"
                                   size="sm"
                                   onClick={() => handleSuggestionClick(suggestion)}

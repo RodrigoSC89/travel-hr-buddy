@@ -299,9 +299,9 @@ export const AIPricePredictor: React.FC = () => {
           </CardTitle>
         </CardHeader>
         <CardContent className="space-y-4">
-          {insights.map((insight, index) => (
+          {insights.map((insight) => (
             <div 
-              key={index}
+              key={insight.message}
               className={`p-4 rounded-lg border ${
                 insight.type === "opportunity" ? "border-success/20 bg-success/5" :
                   insight.type === "warning" ? "border-warning/20 bg-warning/5" :
@@ -342,8 +342,8 @@ export const AIPricePredictor: React.FC = () => {
 
       {/* Predictions Grid */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        {predictions.map((prediction, index) => (
-          <Card key={index} className="border-primary/20">
+        {predictions.map((prediction) => (
+          <Card key={prediction.product_name} className="border-primary/20">
             <CardHeader>
               <div className="flex items-center justify-between">
                 <CardTitle className="text-lg">{prediction.product_name}</CardTitle>
@@ -454,8 +454,8 @@ export const AIPricePredictor: React.FC = () => {
                 <div className="text-xs text-muted-foreground">
                   <p className="font-medium mb-1">Fatores considerados:</p>
                   <ul className="list-disc list-inside space-y-0.5">
-                    {prediction.market_factors.map((factor, idx) => (
-                      <li key={idx}>{factor}</li>
+                    {prediction.market_factors.map((factor) => (
+                      <li key={factor}>{factor}</li>
                     ))}
                   </ul>
                 </div>

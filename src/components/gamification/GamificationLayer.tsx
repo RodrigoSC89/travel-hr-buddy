@@ -166,8 +166,8 @@ export function GamificationLayer() {
                 <h3 className="text-xl font-bold">{currentUser.name}</h3>
                 <p className="text-muted-foreground">{currentUser.role}</p>
                 <div className="flex items-center gap-2 mt-2">
-                  {currentUser.badges.map((badge, idx) => (
-                    <span key={idx} className="text-2xl">{badge}</span>
+                  {currentUser.badges.map((badge) => (
+                    <span key={badge} className="text-2xl">{badge}</span>
                   ))}
                 </div>
               </div>
@@ -386,8 +386,8 @@ export function GamificationLayer() {
                   { name: "Equipamento Personalizado", points: 4000, icon: "🎽", available: true },
                   { name: "Mentoria com Capitão", points: 1500, icon: "🚢", available: true },
                   { name: "Certificação Especial", points: 8000, icon: "📜", available: false }
-                ].map((reward, idx) => (
-                  <Card key={idx}>
+                ].map((reward) => (
+                  <Card key={reward.name}>
                     <CardContent className="pt-6 text-center">
                       <span className="text-4xl">{reward.icon}</span>
                       <h3 className="font-bold mt-2">{reward.name}</h3>

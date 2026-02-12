@@ -319,8 +319,8 @@ export function AutonomousOperationsCenter() {
                               <div className="bg-muted/50 rounded-lg p-2 mb-3">
                                 <p className="text-xs font-medium mb-1">Raciocínio da IA:</p>
                                 <ul className="text-xs text-muted-foreground space-y-0.5">
-                                  {decision.reasoning.slice(0, 2).map((r, i) => (
-                                    <li key={i}>• {r}</li>
+                                  {decision.reasoning.slice(0, 2).map((r) => (
+                                    <li key={r}>• {r}</li>
                                   ))}
                                 </ul>
                               </div>

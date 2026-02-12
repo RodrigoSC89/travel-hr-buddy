@@ -230,8 +230,8 @@ export function SustainabilityScore() {
                   <span className="text-lg">#{selectedVessel.rank} no ranking da frota</span>
                 </div>
                 <div className="flex flex-wrap gap-2 mt-3">
-                  {selectedVessel.badges.map((badge, idx) => (
-                    <Badge key={idx} variant="secondary" className="text-sm">
+                  {selectedVessel.badges.map((badge) => (
+                    <Badge key={badge} variant="secondary" className="text-sm">
                       {badge}
                     </Badge>
                   ))}
@@ -360,8 +360,8 @@ export function SustainabilityScore() {
                         <div>
                           <p className="font-medium">{vessel.vesselName}</p>
                           <div className="flex gap-1 mt-1">
-                            {vessel.badges.slice(0, 2).map((badge, idx) => (
-                              <Badge key={idx} variant="secondary" className="text-xs">
+                            {vessel.badges.slice(0, 2).map((badge) => (
+                              <Badge key={badge} variant="secondary" className="text-xs">
                                 {badge}
                               </Badge>
                             ))}
@@ -434,8 +434,8 @@ export function SustainabilityScore() {
                 </CardHeader>
                 <CardContent>
                   <div className="space-y-4">
-                    {ESG_METRICS.filter(m => m.category === category).map((metric, idx) => (
-                      <div key={idx}>
+                    {ESG_METRICS.filter(m => m.category === category).map((metric) => (
+                      <div key={metric.metric}>
                         <div className="flex items-center justify-between text-sm mb-1">
                           <span>{metric.metric}</span>
                           <div className="flex items-center gap-2">
@@ -481,9 +481,9 @@ export function SustainabilityScore() {
                   { emoji: "🎓", name: "Training Excellence", description: "> 50h treinamento/pessoa", unlocked: false },
                   { emoji: "💯", name: "Perfect Audit", description: "Score de auditoria 100%", unlocked: false },
                   { emoji: "🌟", name: "ESG Pioneer", description: "Score geral > 95", unlocked: false }
-                ].map((badge, idx) => (
+                ].map((badge) => (
                   <div
-                    key={idx}
+                    key={badge.name}
                     className={`p-4 border rounded-lg text-center ${badge.unlocked ? "" : "opacity-50 grayscale"}`}
                   >
                     <span className="text-4xl">{badge.emoji}</span>

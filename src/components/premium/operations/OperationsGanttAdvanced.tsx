@@ -245,7 +245,7 @@ export function OperationsGanttAdvanced() {
                     const weatherInfo = showWeather ? getWeatherForDate(date) : null;
                     
                     return (
-                      <TooltipProvider key={idx}>
+                      <TooltipProvider key={`date-${format(date, "yyyy-MM-dd")}`}>
                         <Tooltip>
                           <TooltipTrigger asChild>
                             <div 
