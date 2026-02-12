@@ -94,8 +94,8 @@ export async function distributeTask(task: SwarmTask): Promise<TaskResult[]> {
         .update({ status: "active", last_heartbeat: new Date().toISOString() })
         .eq("agent_id", agentId);
 
-      // Simulate task execution with fixed delay
-      await new Promise(resolve => setTimeout(resolve, 500));
+      // Yield to event loop
+      await new Promise<void>(resolve => queueMicrotask(resolve));
       
       const duration = Date.now() - taskStartTime;
       

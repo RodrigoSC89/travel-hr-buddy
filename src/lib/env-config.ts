@@ -3,6 +3,9 @@
  * 
  * Valida todas as variáveis de ambiente necessárias
  * e fornece mensagens de erro claras
+ * 
+ * NOTE: OpenAI keys are managed server-side via edge functions.
+ * No VITE_OPENAI_API_KEY needed in frontend.
  */
 import { logger } from "@/lib/logger";
 
@@ -11,10 +14,6 @@ interface EnvConfig {
   supabaseUrl: string;
   supabaseAnonKey: string;
   supabaseServiceRoleKey?: string;
-  
-  // OpenAI
-  openaiApiKey: string;
-  openaiModel: string;
   
   // StarFix (opcional)
   starfixApiKey?: string;
@@ -39,7 +38,6 @@ interface EnvConfig {
  * Pega variável de ambiente com validação (Vite-compatible)
  */
 function getEnvVar(key: string, required: boolean = true, defaultValue?: string): string {
-  // Vite exposes env vars via import.meta.env
   const env = import.meta.env as Record<string, string | undefined>;
   
   const value = 
@@ -54,9 +52,6 @@ function getEnvVar(key: string, required: boolean = true, defaultValue?: string)
   return value || '';
 }
 
-/**
- * Valida URL
- */
 function isValidUrl(url: string): boolean {
   try {
     new URL(url);
@@ -67,28 +62,11 @@ function isValidUrl(url: string): boolean {
 }
 
 /**
- * Valida API key format
- */
-function isValidApiKey(key: string, prefix?: string): boolean {
-  if (!key || key.length < 20) {
-    return false;
-  }
-  
-  if (prefix && !key.startsWith(prefix)) {
-    return false;
-  }
-  
-  return true;
-}
-
-/**
  * Carrega e valida configuração
  */
 export function loadEnvConfig(): EnvConfig {
   const errors: string[] = [];
   const warnings: string[] = [];
-  
-  // === REQUIRED VARS ===
   
   // Supabase
   const supabaseUrl = getEnvVar('SUPABASE_URL', false) || getEnvVar('VITE_SUPABASE_URL', false);
@@ -103,34 +81,18 @@ export function loadEnvConfig(): EnvConfig {
     errors.push('Missing SUPABASE_ANON_KEY or VITE_SUPABASE_PUBLISHABLE_KEY');
   }
   
-  // OpenAI
-  const openaiApiKey = getEnvVar('OPENAI_API_KEY', false) || getEnvVar('VITE_OPENAI_API_KEY', false);
-  if (!openaiApiKey) {
-    errors.push('Missing OPENAI_API_KEY');
-  } else if (!isValidApiKey(openaiApiKey, 'sk-')) {
-    errors.push('Invalid OPENAI_API_KEY format (should start with sk-)');
-  }
-  
-  const openaiModel = getEnvVar('OPENAI_MODEL', false, 'gpt-4o-mini');
-  
   // App URL
-  const appUrl = getEnvVar('APP_URL', false) || getEnvVar('NEXT_PUBLIC_APP_URL', false) || 'http://localhost:3000';
-  if (!isValidUrl(appUrl)) {
-    errors.push('Invalid APP_URL format');
-  }
+  const appUrl = getEnvVar('APP_URL', false) || 'http://localhost:3000';
   
   // Node ENV
   const nodeEnv = (getEnvVar('NODE_ENV', false, 'development') as 'development' | 'production' | 'test');
   
   // === OPTIONAL VARS ===
-  
-  // Service Role Key (opcional, mas recomendado para produção)
   const supabaseServiceRoleKey = getEnvVar('SUPABASE_SERVICE_ROLE_KEY', false);
   if (nodeEnv === 'production' && !supabaseServiceRoleKey) {
     warnings.push('SUPABASE_SERVICE_ROLE_KEY not set (recommended for production)');
   }
   
-  // StarFix (opcional)
   const starfixApiKey = getEnvVar('STARFIX_API_KEY', false);
   const starfixApiUrl = getEnvVar('STARFIX_API_URL', false);
   const starfixOrgId = getEnvVar('STARFIX_ORG_ID', false);
@@ -139,7 +101,6 @@ export function loadEnvConfig(): EnvConfig {
     warnings.push('STARFIX_API_KEY set but missing STARFIX_API_URL or STARFIX_ORG_ID');
   }
   
-  // Terrastar (opcional)
   const terrastarApiKey = getEnvVar('TERRASTAR_API_KEY', false);
   const terrastarApiUrl = getEnvVar('TERRASTAR_API_URL', false);
   const terrastarServiceLevel = getEnvVar('TERRASTAR_SERVICE_LEVEL', false, 'PREMIUM') as 'BASIC' | 'PREMIUM' | 'RTK';
@@ -148,7 +109,6 @@ export function loadEnvConfig(): EnvConfig {
     warnings.push('TERRASTAR_API_KEY set but missing TERRASTAR_API_URL');
   }
   
-  // Security (recomendado para produção)
   const sessionSecret = getEnvVar('SESSION_SECRET', false);
   const jwtSecret = getEnvVar('JWT_SECRET', false);
   
@@ -160,8 +120,6 @@ export function loadEnvConfig(): EnvConfig {
       warnings.push('JWT_SECRET should be at least 32 characters in production');
     }
   }
-  
-  // === PRINT RESULTS ===
   
   if (errors.length > 0) {
     logger.error('CONFIGURATION ERRORS:', undefined, { errors });
@@ -178,8 +136,6 @@ export function loadEnvConfig(): EnvConfig {
     supabaseUrl,
     supabaseAnonKey,
     supabaseServiceRoleKey,
-    openaiApiKey,
-    openaiModel,
     starfixApiKey,
     starfixApiUrl,
     starfixOrgId,
@@ -193,14 +149,8 @@ export function loadEnvConfig(): EnvConfig {
   };
 }
 
-/**
- * Singleton instance
- */
 let configInstance: EnvConfig | null = null;
 
-/**
- * Get validated config (cached)
- */
 export function getConfig(): EnvConfig {
   if (!configInstance) {
     configInstance = loadEnvConfig();
@@ -210,25 +160,22 @@ export function getConfig(): EnvConfig {
 
 /**
  * Check if feature is enabled
+ * AI is always enabled via edge functions (server-side keys)
  */
 export function isFeatureEnabled(feature: 'starfix' | 'terrastar' | 'ai'): boolean {
-  const config = getConfig();
+  if (feature === 'ai') return true; // AI uses server-side keys via edge functions
   
+  const config = getConfig();
   switch (feature) {
     case 'starfix':
       return !!(config.starfixApiKey && config.starfixApiUrl && config.starfixOrgId);
     case 'terrastar':
       return !!(config.terrastarApiKey && config.terrastarApiUrl);
-    case 'ai':
-      return !!config.openaiApiKey;
     default:
       return false;
   }
 }
 
-/**
- * Print configuration summary (safe - no secrets)
- */
 export function printConfigSummary(): void {
   const config = getConfig();
   
@@ -236,20 +183,8 @@ export function printConfigSummary(): void {
   logger.debug(`  Environment: ${config.nodeEnv}`);
   logger.debug(`  App URL: ${config.appUrl}`);
   logger.debug(`  Supabase: ${config.supabaseUrl}`);
-  logger.debug(`  OpenAI Model: ${config.openaiModel}`);
+  logger.debug(`  AI Features: ✅ Enabled (server-side via edge functions)`);
   logger.debug(`  StarFix Integration: ${isFeatureEnabled('starfix') ? '✅ Enabled' : '❌ Disabled'}`);
   logger.debug(`  Terrastar Integration: ${isFeatureEnabled('terrastar') ? '✅ Enabled' : '❌ Disabled'}`);
-  logger.debug(`  AI Features: ${isFeatureEnabled('ai') ? '✅ Enabled' : '❌ Disabled'}`);
   logger.debug('');
-}
-
-// Auto-validate on import (apenas em produção ou quando explicitamente configurado)
-if (process.env.NODE_ENV === 'production' || process.env.VALIDATE_ENV === 'true') {
-  try {
-    loadEnvConfig();
-    printConfigSummary();
-  } catch (error) {
-    logger.error('Failed to validate environment:', error);
-    process.exit(1);
-  }
 }

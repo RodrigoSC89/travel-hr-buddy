@@ -101,7 +101,7 @@ const DEFAULT_PROGRESS: ProgressStats = {
   averageScore: 0,
 };
 
-const OPENAI_COMPLETIONS_URL = "https://api.openai.com/v1/chat/completions";
+// AI calls now routed through edge function proxy - no direct OpenAI access
 
 async function getOrganizationIdOrThrow(): Promise<string> {
   const { data, error } = await supabase.auth.getUser();
@@ -174,23 +174,11 @@ export async function explainNoncomplianceLLM(
   userId: string
 ): Promise<ExplanationResult> {
   try {
-    const apiKey = (import.meta as { env: Record<string, string | undefined> }).env
-      .VITE_OPENAI_API_KEY;
-
-    if (!apiKey) {
-      throw new Error("OpenAI API key not configured");
-    }
-
     const prompt = buildExplanationPrompt(finding);
 
-    const response = await fetch(OPENAI_COMPLETIONS_URL, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${apiKey}`,
-      },
-      body: JSON.stringify({
-        model: "gpt-4o-mini",
+    const { data, error } = await supabase.functions.invoke("ai-proxy", {
+      body: {
+        action: "chat",
         messages: [
           {
             role: "system",
@@ -205,21 +193,14 @@ export async function explainNoncomplianceLLM(
         temperature: 0.7,
         max_tokens: 1500,
         response_format: { type: "json_object" },
-      }),
+      },
     });
 
-    if (!response.ok) {
-      throw new Error(`OpenAI API error: ${response.status}`);
+    if (error || !data?.content) {
+      throw new Error(error ? String(error) : "AI proxy returned empty content");
     }
 
-    const data = (await response.json()) as ChatCompletionResponse;
-    const content = data.choices?.[0]?.message?.content;
-
-    if (!content) {
-      throw new Error("OpenAI API returned empty explanation content");
-    }
-
-    const explanation = parseExplanationResponse(content);
+    const explanation = parseExplanationResponse(data.content);
     const organizationId = await getOrganizationIdOrThrow();
 
     const insertPayload: NoncomplianceExplanationInsert = {
@@ -323,23 +304,11 @@ export async function generateQuizFromErrors(
   difficulty: 'basic' | 'intermediate' | 'advanced' = 'intermediate'
 ): Promise<string> {
   try {
-    const apiKey = (import.meta as { env: Record<string, string | undefined> }).env
-      .VITE_OPENAI_API_KEY;
-
-    if (!apiKey) {
-      throw new Error("OpenAI API key not configured");
-    }
-
     const prompt = buildQuizPrompt(errorHistory, quizType, difficulty);
 
-    const response = await fetch(OPENAI_COMPLETIONS_URL, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${apiKey}`,
-      },
-      body: JSON.stringify({
-        model: "gpt-4o-mini",
+    const { data, error: invokeError } = await supabase.functions.invoke("ai-proxy", {
+      body: {
+        action: "chat",
         messages: [
           {
             role: "system",
@@ -354,19 +323,14 @@ export async function generateQuizFromErrors(
         temperature: 0.8,
         max_tokens: 2000,
         response_format: { type: "json_object" },
-      }),
+      },
     });
 
-    if (!response.ok) {
-      throw new Error(`OpenAI API error: ${response.status}`);
+    if (invokeError || !data?.content) {
+      throw new Error(invokeError ? String(invokeError) : "AI proxy returned empty quiz content");
     }
 
-    const data = (await response.json()) as ChatCompletionResponse;
-    const content = data.choices?.[0]?.message?.content;
-
-    if (!content) {
-      throw new Error("OpenAI API returned empty quiz content");
-    }
+    const content = data.content;
 
     const quizData = parseJsonContent<GeneratedQuizPayload>(content, "quiz generation");
 

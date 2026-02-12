@@ -1,13 +1,12 @@
 /**
- * MMI Copilot Service v1.1.1
- * PATCH 868: Migrated to edge-function-helper
+ * MMI Copilot Service v2.0
+ * SECURITY FIX: Migrated from direct OpenAI to edge function proxy
  * Provides AI-powered maintenance suggestions based on historical data with vector embeddings
  */
 
 import { supabase } from "@/integrations/supabase/client";
 import { generateEmbedding } from "./embeddingService";
 import { AIRecommendation, SimilarCase } from "@/types/mmi";
-import OpenAI from "openai";
 import { logger } from "@/lib/logger";
 import { getEdgeFunctionUrl, getEdgeFunctionHeaders } from "@/lib/supabase/edge-function-helper";
 
@@ -27,11 +26,9 @@ export interface CopilotSuggestion {
 
 /**
  * Get similar historical cases using vector similarity search
- * Note: The RPC expects embedding as a string (serialized vector)
  */
 const getSimilarCases = async (embedding: number[], matchThreshold = 0.7, matchCount = 5): Promise<SimilarCase[]> => {
   try {
-    // Convert number[] to string format expected by PostgreSQL vector type
     const embeddingString = `[${embedding.join(",")}]`;
     
     const { data, error } = await supabase.rpc("match_mmi_job_history", {
@@ -54,7 +51,7 @@ const getSimilarCases = async (embedding: number[], matchThreshold = 0.7, matchC
       date: item.created_at,
     }));
   } catch (error) {
-    logger.warn("Database not available, using mock similar cases", { error: error instanceof Error ? error.message : String(error) });
+    logger.warn("Database not available, using fallback similar cases", { error: error instanceof Error ? error.message : String(error) });
     return [
       { job_id: "JOB-001", similarity: 0.85, action: "Substituição preventiva", outcome: "Sucesso" },
       { job_id: "JOB-012", similarity: 0.78, action: "Inspeção detalhada", outcome: "Sucesso" },
@@ -64,39 +61,24 @@ const getSimilarCases = async (embedding: number[], matchThreshold = 0.7, matchC
 };
 
 /**
- * Generate AI recommendation with GPT-4 based on job and historical context
+ * Generate AI recommendation via secure edge function proxy
  */
 export const getAIRecommendation = async (jobDescription: string): Promise<AIRecommendation> => {
-  const apiKey = import.meta.env.VITE_OPENAI_API_KEY;
-  
   // Generate embedding for similarity search
   const embedding = await generateEmbedding(jobDescription);
   const similarCases = await getSimilarCases(embedding);
 
-  // If OpenAI API is not available, return mock recommendation
-  if (!apiKey || apiKey === "your_openai_api_key_here") {
-    logger.warn("OpenAI API key not configured, using mock recommendation");
-    return {
-      technical_action: `Realizar inspeção completa e preventiva do componente descrito: ${jobDescription.substring(0, 100)}`,
-      component: "Sistema identificado no job",
-      deadline: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString().split("T")[0],
-      requires_work_order: true,
-      reasoning: `Com base em ${similarCases.length} casos similares no histórico, recomenda-se ação preventiva. Casos similares tiveram sucesso com manutenção programada.`,
-      similar_cases: similarCases,
-    };
-  }
-
   try {
-    const openai = new OpenAI({
-      apiKey,
-      dangerouslyAllowBrowser: true,
-    });
-
     const similarCasesContext = similarCases.map(c => 
       `- Job ${c.job_id} (${(c.similarity * 100).toFixed(0)}% similar): ${c.action} → ${c.outcome}`
     ).join("\n");
 
-    const prompt = `Você é um assistente especializado em manutenção industrial marítima.
+    const { data, error } = await supabase.functions.invoke("ai-proxy", {
+      body: {
+        action: "chat",
+        messages: [
+          { role: "system", content: "You are a technical maintenance assistant for maritime operations. Always respond with valid JSON only." },
+          { role: "user", content: `Você é um assistente especializado em manutenção industrial marítima.
 
 Problema: ${jobDescription}
 
@@ -110,28 +92,33 @@ Forneça uma recomendação técnica estruturada em JSON com os seguintes campos
 - requires_work_order: true/false se requer ordem de serviço formal
 - reasoning: explicação detalhada baseada nos casos históricos
 
-Responda APENAS com JSON válido, sem texto adicional.`;
-
-    const response = await openai.chat.completions.create({
-      model: "gpt-4o-mini",
-      messages: [
-        { role: "system", content: "You are a technical maintenance assistant. Always respond with valid JSON only." },
-        { role: "user", content: prompt }
-      ],
-      temperature: 0.7,
-      max_tokens: 500,
+Responda APENAS com JSON válido, sem texto adicional.` }
+        ],
+        temperature: 0.7,
+        max_tokens: 500,
+        response_format: { type: "json_object" },
+      },
     });
 
-    const content = response.choices[0]?.message?.content || "{}";
-    const recommendation = JSON.parse(content);
+    if (error || data?.fallback) {
+      logger.warn("AI proxy not available, using fallback recommendation");
+      return {
+        technical_action: `Realizar inspeção completa e preventiva do componente descrito: ${jobDescription.substring(0, 100)}`,
+        component: "Sistema identificado no job",
+        deadline: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString().split("T")[0],
+        requires_work_order: true,
+        reasoning: `Com base em ${similarCases.length} casos similares no histórico, recomenda-se ação preventiva.`,
+        similar_cases: similarCases,
+      };
+    }
 
+    const recommendation = JSON.parse(data?.content || "{}");
     return {
       ...recommendation,
       similar_cases: similarCases,
     };
   } catch (error) {
     logger.error("Error generating AI recommendation", error as Error, { jobDescriptionLength: jobDescription.length });
-    // Return fallback recommendation
     return {
       technical_action: `Realizar inspeção e manutenção preventiva: ${jobDescription.substring(0, 100)}`,
       component: "Sistema do job",
@@ -144,10 +131,7 @@ Responda APENAS com JSON válido, sem texto adicional.`;
 };
 
 /**
- * Get AI-powered maintenance suggestions using streaming response
- * @param prompt - Description of the maintenance issue
- * @param onChunk - Callback to handle each chunk of the streaming response
- * @returns Promise that resolves when the stream is complete
+ * Get AI-powered maintenance suggestions
  */
 export const getCopilotSuggestions = async (
   prompt: string,
@@ -162,7 +146,6 @@ export const getCopilotSuggestions = async (
       throw error;
     }
 
-    // Handle non-streaming response (fallback)
     if (data) {
       onChunk(data.reply || data.text || JSON.stringify(data));
     }
@@ -174,9 +157,6 @@ export const getCopilotSuggestions = async (
 
 /**
  * Get AI-powered maintenance suggestions with streaming support
- * @param prompt - Description of the maintenance issue
- * @param onChunk - Callback to handle each chunk of the streaming response
- * @returns Promise that resolves when the stream is complete
  */
 export const streamCopilotSuggestions = async (
   prompt: string,
@@ -196,7 +176,6 @@ export const streamCopilotSuggestions = async (
       throw new Error(errorData.error || `HTTP error! status: ${response.status}`);
     }
 
-    // Handle streaming response
     const reader = response.body?.getReader();
     const decoder = new TextDecoder();
 

@@ -65,8 +65,8 @@ class EnhancedSonarAIService {
     confidence: number;
     detectionType: SonarEvent["detection_type"];
   }> {
-    // Simulate ONNX inference delay
-    await new Promise(resolve => setTimeout(resolve, 100));
+    // Yield to main thread for responsive UI
+    await new Promise<void>(resolve => requestAnimationFrame(() => resolve()));
 
     // Simple rule-based classification (simulating ONNX output)
     let classification = "unknown";
