@@ -24,15 +24,15 @@ const NautilusDocuments: React.FC = () => {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-3">
-          <div className="p-3 rounded-xl bg-gradient-to-br from-amber-500/20 to-orange-600/20 border border-amber-500/30">
-            <FolderOpen className="h-8 w-8 text-amber-400" />
+          <div className="p-3 rounded-xl bg-gradient-to-br from-warning/20 to-warning/10 border border-warning/30">
+            <FolderOpen className="h-8 w-8 text-warning" />
           </div>
           <div>
             <h1 className="text-2xl font-bold text-foreground">Nautilus Documents</h1>
             <p className="text-muted-foreground">Centro Unificado de Documentos e Relatórios</p>
           </div>
         </div>
-        <Badge variant="outline" className="gap-1 bg-green-500/10 text-green-400 border-green-500/30">
+        <Badge variant="outline" className="gap-1 bg-success/10 text-success border-success/30">
           <Brain className="h-3 w-3" />
           IA Integrada
         </Badge>
