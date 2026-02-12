@@ -178,9 +178,9 @@ export function TelemetryTideChart({
         <div className="space-y-2">
           <h4 className="text-sm font-medium text-muted-foreground">Próximas 24h</h4>
           <div className="space-y-2">
-            {tides.slice(0, 6).map((tide, index) => (
+            {tides.slice(0, 6).map((tide) => (
               <div 
-                key={index}
+                key={`${tide.time}-${tide.type}`}
                 className="flex items-center justify-between p-2 rounded-md bg-muted/50 hover:bg-muted transition-colors"
               >
                 <div className="flex items-center gap-2">

@@ -409,9 +409,9 @@ const AIAssistantEnhanced: React.FC = () => {
                 </CardTitle>
               </CardHeader>
               <CardContent className="space-y-3">
-                {quickActions.map((action, index) => (
+                {quickActions.map((action) => (
                   <Button
-                    key={index}
+                    key={action.text}
                     variant="outline"
                     size="sm"
                     className="w-full text-left justify-start h-auto py-3 px-3 hover:bg-primary/5"

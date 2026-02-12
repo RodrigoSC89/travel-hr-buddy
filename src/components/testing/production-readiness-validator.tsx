@@ -183,8 +183,8 @@ export const ProductionReadinessValidator: React.FC = () => {
                   </div>
                 </div>
 
-                {results.map((category, index) => (
-                  <Card key={index} className="border border-border/50">
+                {results.map((category) => (
+                  <Card key={category.category} className="border border-border/50">
                     <CardHeader className="pb-3">
                       <CardTitle className="text-base flex items-center gap-2">
                         {category.category === "Funcionalidade" && <Monitor className="w-4 h-4" />}
@@ -196,8 +196,8 @@ export const ProductionReadinessValidator: React.FC = () => {
                       </CardTitle>
                     </CardHeader>
                     <CardContent className="space-y-2">
-                      {category.tests.map((test, testIndex) => (
-                        <div key={testIndex} className="flex items-center gap-2 p-2 rounded border border-border/30">
+                      {category.tests.map((test) => (
+                        <div key={test.name} className="flex items-center gap-2 p-2 rounded border border-border/30">
                           {getStatusIcon(test.status)}
                           <div className="flex-1 min-w-0">
                             <div className="flex items-center gap-2">

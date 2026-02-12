@@ -80,14 +80,14 @@ const columnClasses = {
 export function StatsGridV2({ stats, columns = 4, className }: StatsGridV2Props) {
   return (
     <div className={cn(`grid gap-4 ${columnClasses[columns]}`, className)}>
-      {stats.map((stat, index) => {
+      {stats.map((stat) => {
         const Icon = stat.icon;
         const color = stat.color || "blue";
         const colors = colorClasses[color];
         
         return (
           <Card 
-            key={index} 
+            key={stat.label}
             className={cn(
               "relative overflow-hidden transition-all hover:shadow-lg hover:scale-[1.02]",
               `bg-gradient-to-br ${colors.bg}`
