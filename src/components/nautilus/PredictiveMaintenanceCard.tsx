@@ -55,19 +55,19 @@ export const PredictiveMaintenanceCard: React.FC<PredictiveMaintenanceCardProps>
 
   const getSeverityColor = (severity: string) => {
     switch (severity) {
-      case 'critical': return 'text-red-500 bg-red-100 dark:bg-red-900/30';
-      case 'high': return 'text-orange-500 bg-orange-100 dark:bg-orange-900/30';
-      case 'medium': return 'text-yellow-500 bg-yellow-100 dark:bg-yellow-900/30';
-      default: return 'text-green-500 bg-green-100 dark:bg-green-900/30';
+      case 'critical': return 'text-destructive bg-destructive/10';
+      case 'high': return 'text-warning bg-warning/10';
+      case 'medium': return 'text-accent-foreground bg-accent/50';
+      default: return 'text-success bg-success/10';
     }
   };
 
   const getRiskBadge = (risk: string) => {
     const colors: Record<string, string> = {
-      critical: 'bg-red-500',
-      high: 'bg-orange-500',
-      medium: 'bg-yellow-500',
-      low: 'bg-green-500'
+      critical: 'bg-destructive',
+      high: 'bg-warning',
+      medium: 'bg-accent',
+      low: 'bg-success'
     };
     return colors[risk] || colors.low;
   };

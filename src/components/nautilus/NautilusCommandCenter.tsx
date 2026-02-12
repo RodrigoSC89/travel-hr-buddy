@@ -173,8 +173,8 @@ export function NautilusCommandCenter() {
 
             <div className="flex items-center gap-3">
               <div className="hidden md:flex items-center gap-4 mr-4 text-sm">
-                <span><Ship className="h-4 w-4 inline mr-1 text-blue-500" />{context.fleet.active} ativas</span>
-                <span><Users className="h-4 w-4 inline mr-1 text-green-500" />{context.crew.onboard} a bordo</span>
+                <span><Ship className="h-4 w-4 inline mr-1 text-info" />{context.fleet.active} ativas</span>
+                <span><Users className="h-4 w-4 inline mr-1 text-success" />{context.crew.onboard} a bordo</span>
               </div>
 
               {unreadCount > 0 && (

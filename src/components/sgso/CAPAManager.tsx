@@ -42,10 +42,10 @@ interface CAPA {
 const getStatusConfig = (status: CAPA["status"]) => {
   const configs = {
     planejada: { color: "bg-secondary text-secondary-foreground", label: "Planejada", icon: Clock },
-    executando: { color: "bg-blue-600 text-white", label: "Executando", icon: Zap },
-    concluida: { color: "bg-green-600 text-white", label: "Concluída", icon: CheckCircle },
-    rejeitada: { color: "bg-red-600 text-white", label: "Rejeitada", icon: XCircle },
-    aguardando_validacao: { color: "bg-yellow-600 text-white", label: "Aguardando Validação", icon: AlertTriangle }
+    executando: { color: "bg-info text-info-foreground", label: "Executando", icon: Zap },
+    concluida: { color: "bg-success text-success-foreground", label: "Concluída", icon: CheckCircle },
+    rejeitada: { color: "bg-destructive text-destructive-foreground", label: "Rejeitada", icon: XCircle },
+    aguardando_validacao: { color: "bg-warning text-warning-foreground", label: "Aguardando Validação", icon: AlertTriangle }
   };
   return configs[status] || configs.planejada;
 };
@@ -53,9 +53,9 @@ const getStatusConfig = (status: CAPA["status"]) => {
 const getEficaciaConfig = (eficacia?: CAPA["eficacia"]) => {
   if (!eficacia) return null;
   const configs = {
-    eficaz: { color: "bg-green-600 text-white", label: "Eficaz" },
-    parcialmente_eficaz: { color: "bg-yellow-600 text-white", label: "Parcialmente Eficaz" },
-    ineficaz: { color: "bg-red-600 text-white", label: "Ineficaz" }
+    eficaz: { color: "bg-success text-success-foreground", label: "Eficaz" },
+    parcialmente_eficaz: { color: "bg-warning text-warning-foreground", label: "Parcialmente Eficaz" },
+    ineficaz: { color: "bg-destructive text-destructive-foreground", label: "Ineficaz" }
   };
   return configs[eficacia];
 };
@@ -142,35 +142,35 @@ export const CAPAManager: React.FC = () => {
     <div className="space-y-6">
       {/* KPI Cards */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-        <Card className="bg-gradient-to-br from-blue-50 to-blue-100 dark:from-blue-950/30 dark:to-blue-900/20 border-blue-200 dark:border-blue-800">
+        <Card className="bg-gradient-to-br from-info/5 to-info/10 dark:from-info/10 dark:to-info/20 border-info/30">
           <CardContent className="p-6">
             <div className="flex items-center justify-between">
-              <div><p className="text-sm font-medium text-blue-700 dark:text-blue-300">Total CAPAs</p><p className="text-3xl font-bold text-blue-900 dark:text-blue-100">{totalCAPAs}</p></div>
-              <Target className="h-10 w-10 text-blue-600 opacity-70" />
+              <div><p className="text-sm font-medium text-info">Total CAPAs</p><p className="text-3xl font-bold">{totalCAPAs}</p></div>
+              <Target className="h-10 w-10 text-info opacity-70" />
             </div>
           </CardContent>
         </Card>
-        <Card className="bg-gradient-to-br from-yellow-50 to-yellow-100 dark:from-yellow-950/30 dark:to-yellow-900/20 border-yellow-200 dark:border-yellow-800">
+        <Card className="bg-gradient-to-br from-warning/5 to-warning/10 dark:from-warning/10 dark:to-warning/20 border-warning/30">
           <CardContent className="p-6">
             <div className="flex items-center justify-between">
-              <div><p className="text-sm font-medium text-yellow-700 dark:text-yellow-300">Em Andamento</p><p className="text-3xl font-bold text-yellow-900 dark:text-yellow-100">{emAndamento}</p></div>
-              <Zap className="h-10 w-10 text-yellow-600 opacity-70" />
+              <div><p className="text-sm font-medium text-warning">Em Andamento</p><p className="text-3xl font-bold">{emAndamento}</p></div>
+              <Zap className="h-10 w-10 text-warning opacity-70" />
             </div>
           </CardContent>
         </Card>
-        <Card className="bg-gradient-to-br from-red-50 to-red-100 dark:from-red-950/30 dark:to-red-900/20 border-red-200 dark:border-red-800">
+        <Card className="bg-gradient-to-br from-destructive/5 to-destructive/10 dark:from-destructive/10 dark:to-destructive/20 border-destructive/30">
           <CardContent className="p-6">
             <div className="flex items-center justify-between">
-              <div><p className="text-sm font-medium text-red-700 dark:text-red-300">Atrasadas</p><p className="text-3xl font-bold text-red-900 dark:text-red-100">{atrasadas}</p></div>
-              <AlertTriangle className="h-10 w-10 text-red-600 opacity-70" />
+              <div><p className="text-sm font-medium text-destructive">Atrasadas</p><p className="text-3xl font-bold">{atrasadas}</p></div>
+              <AlertTriangle className="h-10 w-10 text-destructive opacity-70" />
             </div>
           </CardContent>
         </Card>
-        <Card className="bg-gradient-to-br from-green-50 to-green-100 dark:from-green-950/30 dark:to-green-900/20 border-green-200 dark:border-green-800">
+        <Card className="bg-gradient-to-br from-success/5 to-success/10 dark:from-success/10 dark:to-success/20 border-success/30">
           <CardContent className="p-6">
             <div className="flex items-center justify-between">
-              <div><p className="text-sm font-medium text-green-700 dark:text-green-300">SLA Médio</p><p className="text-3xl font-bold text-green-900 dark:text-green-100">{slaMedio}d</p></div>
-              <TrendingUp className="h-10 w-10 text-green-600 opacity-70" />
+              <div><p className="text-sm font-medium text-success">SLA Médio</p><p className="text-3xl font-bold">{slaMedio}d</p></div>
+              <TrendingUp className="h-10 w-10 text-success opacity-70" />
             </div>
           </CardContent>
         </Card>
@@ -268,8 +268,8 @@ export const CAPAManager: React.FC = () => {
                               <p className="text-sm">{capa.acao_corretiva}</p>
                             </div>
                             {capa.acao_preventiva && (
-                              <div className="p-3 bg-green-50 dark:bg-green-950/20 rounded-lg border border-green-200 dark:border-green-800">
-                                <p className="text-sm font-medium text-green-700 dark:text-green-300 mb-1">Ação Preventiva:</p>
+                              <div className="p-3 bg-success/5 dark:bg-success/10 rounded-lg border border-success/20">
+                                <p className="text-sm font-medium text-success mb-1">Ação Preventiva:</p>
                                 <p className="text-sm">{capa.acao_preventiva}</p>
                               </div>
                             )}
@@ -277,7 +277,7 @@ export const CAPAManager: React.FC = () => {
                               <div><p className="text-muted-foreground">Responsável</p><p className="font-semibold">{capa.responsavel}</p></div>
                               <div><p className="text-muted-foreground">Prazo</p><p className="font-semibold">{new Date(capa.prazo).toLocaleDateString("pt-BR")}</p></div>
                               <div><p className="text-muted-foreground">SLA</p><p className="font-semibold">{capa.sla_dias} dias</p></div>
-                              <div><p className="text-muted-foreground">Restante</p><p className={`font-semibold ${capa.dias_restantes < 7 ? "text-red-600" : "text-green-600"}`}>{capa.dias_restantes} dias</p></div>
+                              <div><p className="text-muted-foreground">Restante</p><p className={`font-semibold ${capa.dias_restantes < 7 ? "text-destructive" : "text-success"}`}>{capa.dias_restantes} dias</p></div>
                             </div>
                             <div>
                               <div className="flex justify-between text-xs mb-1"><span className="text-muted-foreground">Progresso</span><span className="font-bold">{capa.completion_percentage}%</span></div>
@@ -343,9 +343,9 @@ export const CAPAManager: React.FC = () => {
                   <h3 className="font-bold text-lg mb-2">Resumo de CAPAs</h3>
                   <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-4">
                     <div className="p-4 bg-muted rounded-lg"><p className="text-2xl font-bold">{totalCAPAs}</p><p className="text-xs text-muted-foreground">Total</p></div>
-                    <div className="p-4 bg-muted rounded-lg"><p className="text-2xl font-bold text-green-600">{capas.filter(c => c.status === 'concluida').length}</p><p className="text-xs text-muted-foreground">Concluídas</p></div>
-                    <div className="p-4 bg-muted rounded-lg"><p className="text-2xl font-bold text-red-600">{atrasadas}</p><p className="text-xs text-muted-foreground">Atrasadas</p></div>
-                    <div className="p-4 bg-muted rounded-lg"><p className="text-2xl font-bold text-blue-600">{totalCAPAs > 0 ? Math.round(capas.reduce((a, c) => a + c.completion_percentage, 0) / totalCAPAs) : 0}%</p><p className="text-xs text-muted-foreground">Progresso Médio</p></div>
+                    <div className="p-4 bg-muted rounded-lg"><p className="text-2xl font-bold text-success">{capas.filter(c => c.status === 'concluida').length}</p><p className="text-xs text-muted-foreground">Concluídas</p></div>
+                    <div className="p-4 bg-muted rounded-lg"><p className="text-2xl font-bold text-destructive">{atrasadas}</p><p className="text-xs text-muted-foreground">Atrasadas</p></div>
+                    <div className="p-4 bg-muted rounded-lg"><p className="text-2xl font-bold text-info">{totalCAPAs > 0 ? Math.round(capas.reduce((a, c) => a + c.completion_percentage, 0) / totalCAPAs) : 0}%</p><p className="text-xs text-muted-foreground">Progresso Médio</p></div>
                   </div>
                 </CardContent>
               </Card>

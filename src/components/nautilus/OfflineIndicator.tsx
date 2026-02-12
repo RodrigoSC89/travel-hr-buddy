@@ -30,8 +30,8 @@ export const OfflineIndicator: React.FC = () => {
           <TooltipTrigger asChild>
             <div className={`flex items-center gap-1.5 px-2 py-1 rounded-full text-xs font-medium ${
               isOnline 
-                ? 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-300' 
-                : 'bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-300'
+                ? 'bg-success/10 text-success' 
+                : 'bg-destructive/10 text-destructive'
             }`}>
               {isOnline ? (
                 <>
@@ -86,7 +86,7 @@ export const OfflineIndicator: React.FC = () => {
         {lastSyncStatus === 'synced' && pendingCount === 0 && isOnline && (
           <Tooltip>
             <TooltipTrigger asChild>
-              <div className="flex items-center gap-1 text-green-600 dark:text-green-400">
+              <div className="flex items-center gap-1 text-success">
                 <Cloud className="h-4 w-4" />
               </div>
             </TooltipTrigger>
