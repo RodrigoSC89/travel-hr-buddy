@@ -215,7 +215,7 @@ export const CrewManagement2: React.FC = () => {
     switch (status) {
     case "fit": return "text-success";
     case "restricted": return "text-warning";
-    case "pending": return "text-orange-600";
+    case "pending": return "text-warning";
     default: return "text-muted-foreground";
     }
   };
@@ -256,7 +256,7 @@ export const CrewManagement2: React.FC = () => {
             <CardTitle className="text-sm font-medium">Certificações</CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-yellow-600">{expiringCerts}</div>
+            <div className="text-2xl font-bold text-warning">{expiringCerts}</div>
             <p className="text-xs text-muted-foreground">Vencendo/Vencidas</p>
           </CardContent>
         </Card>
@@ -345,12 +345,12 @@ export const CrewManagement2: React.FC = () => {
                         <div className="text-xs text-muted-foreground">Dias</div>
                       </div>
                       <div className="bg-muted/50 p-3 rounded-lg text-center">
-                        <Award className="h-4 w-4 mx-auto mb-1 text-yellow-600" />
+                        <Award className="h-4 w-4 mx-auto mb-1 text-warning" />
                         <div className="text-sm font-bold">{member.certifications.length}</div>
                         <div className="text-xs text-muted-foreground">Certificados</div>
                       </div>
                       <div className="bg-muted/50 p-3 rounded-lg text-center">
-                        <BookOpen className="h-4 w-4 mx-auto mb-1 text-purple-600" />
+                        <BookOpen className="h-4 w-4 mx-auto mb-1 text-accent-foreground" />
                         <div className="text-sm font-bold">{member.training.completed}/{member.training.pending}</div>
                         <div className="text-xs text-muted-foreground">Treinamentos</div>
                       </div>
@@ -368,8 +368,8 @@ export const CrewManagement2: React.FC = () => {
                         {member.certifications
                           .filter(c => c.status !== "valid")
                           .map((cert, idx) => (
-                            <div key={idx} className="flex items-center gap-2 p-2 bg-yellow-50 dark:bg-yellow-950 rounded-lg">
-                              <AlertTriangle className="h-4 w-4 text-yellow-600" />
+                            <div key={idx} className="flex items-center gap-2 p-2 bg-warning/10 dark:bg-warning/20 rounded-lg">
+                              <AlertTriangle className="h-4 w-4 text-warning" />
                               <span className="text-sm flex-1">
                                 {cert.name} - {cert.status === "expired" ? "Vencida" : `Vence em ${cert.daysRemaining} dias`}
                               </span>
@@ -510,13 +510,13 @@ export const CrewManagement2: React.FC = () => {
                           <div className="text-2xl font-bold">{member.performance.commendations}</div>
                           <div className="text-xs text-muted-foreground">Elogios</div>
                         </div>
-                        <div className="text-center p-4 bg-red-50 dark:bg-red-950 rounded-lg">
-                          <AlertTriangle className="h-6 w-6 mx-auto mb-2 text-red-600" />
+                        <div className="text-center p-4 bg-destructive/5 dark:bg-destructive/10 rounded-lg">
+                          <AlertTriangle className="h-6 w-6 mx-auto mb-2 text-destructive" />
                           <div className="text-2xl font-bold">{member.performance.incidents}</div>
                           <div className="text-xs text-muted-foreground">Incidentes</div>
                         </div>
-                        <div className="text-center p-4 bg-blue-50 dark:bg-blue-950 rounded-lg">
-                          <TrendingUp className="h-6 w-6 mx-auto mb-2 text-blue-600" />
+                        <div className="text-center p-4 bg-info/5 dark:bg-info/10 rounded-lg">
+                          <TrendingUp className="h-6 w-6 mx-auto mb-2 text-info" />
                           <div className="text-lg font-bold">{member.performance.trend.toUpperCase()}</div>
                           <div className="text-xs text-muted-foreground">Tendência</div>
                         </div>
@@ -535,9 +535,9 @@ export const CrewManagement2: React.FC = () => {
                       <CardTitle className="text-base flex items-center justify-between">
                         <span>{member.name}</span>
                         <Badge className={
-                          member.health.status === "fit" ? "bg-green-600" :
-                            member.health.status === "restricted" ? "bg-yellow-600" :
-                              "bg-orange-600"
+                          member.health.status === "fit" ? "bg-success" :
+                            member.health.status === "restricted" ? "bg-warning" :
+                              "bg-warning"
                         }>
                           {member.health.status.toUpperCase()}
                         </Badge>
@@ -560,12 +560,12 @@ export const CrewManagement2: React.FC = () => {
                           </Button>
                         </div>
                         {member.health.restrictions && (
-                          <div className="p-3 bg-yellow-50 dark:bg-yellow-950 rounded-lg">
+                          <div className="p-3 bg-warning/10 dark:bg-warning/20 rounded-lg">
                             <div className="font-medium text-sm mb-2">Restrições:</div>
                             <ul className="text-sm space-y-1">
                               {member.health.restrictions.map((r, idx) => (
                                 <li key={idx} className="flex items-center gap-2">
-                                  <AlertTriangle className="h-3 w-3 text-yellow-600" />
+                                  <AlertTriangle className="h-3 w-3 text-warning" />
                                   {r}
                                 </li>
                               ))}
