@@ -110,8 +110,8 @@ const NautilusAssistant: React.FC = () => {
             <p className="text-muted-foreground">Copiloto de IA para Operações Marítimas</p>
           </div>
         </div>
-        <Badge variant="outline" className="gap-1 bg-green-500/10 text-green-400 border-green-500/30">
-          <div className="h-2 w-2 rounded-full bg-green-400 animate-pulse" />
+        <Badge variant="outline" className="gap-1 bg-success/10 text-success border-success/30">
+          <div className="h-2 w-2 rounded-full bg-success animate-pulse" />
           Online
         </Badge>
       </div>
@@ -136,8 +136,8 @@ const NautilusAssistant: React.FC = () => {
         <TabsContent value="chat" className="mt-6 space-y-4">
           {/* Quick Actions */}
           <div className="flex flex-wrap gap-2">
-            {quickActions.map((action, i) => (
-              <Button key={i} variant="outline" size="sm" onClick={action.action} className="gap-2">
+            {quickActions.map((action) => (
+              <Button key={action.label} variant="outline" size="sm" onClick={action.action} className="gap-2">
                 <action.icon className="h-3 w-3" />
                 {action.label}
               </Button>
@@ -149,9 +149,9 @@ const NautilusAssistant: React.FC = () => {
             <CardContent className="p-0">
               <ScrollArea className="h-[400px] p-4">
                 <div className="space-y-4">
-                  {messages.map((msg, i) => (
+                  {messages.map((msg, msgIdx) => (
                     <div 
-                      key={i} 
+                      key={`${msg.role}-${msg.timestamp.getTime()}-${msgIdx}`} 
                       className={`flex ${msg.role === "user" ? "justify-end" : "justify-start"}`}
                     >
                       <div 

@@ -173,7 +173,7 @@ export default function AnalyticsFeedback() {
                 <div>
                   <p className="text-sm text-muted-foreground">Usuários Ativos</p>
                   <p className="text-2xl font-bold">{ANALYTICS_DATA.activeUsers}</p>
-                  <p className="text-xs text-green-500 flex items-center gap-1">
+                  <p className="text-xs text-success flex items-center gap-1">
                     <TrendingUp className="h-3 w-3" /> +12% este mês
                   </p>
                 </div>
@@ -200,12 +200,12 @@ export default function AnalyticsFeedback() {
               <div className="flex items-center justify-between">
                 <div>
                   <p className="text-sm text-muted-foreground">NPS Score</p>
-                  <p className="text-2xl font-bold text-green-500">{ANALYTICS_DATA.npsScore}</p>
-                  <p className="text-xs text-green-500 flex items-center gap-1">
+                  <p className="text-2xl font-bold text-success">{ANALYTICS_DATA.npsScore}</p>
+                  <p className="text-xs text-success flex items-center gap-1">
                     <TrendingUp className="h-3 w-3" /> {ANALYTICS_DATA.npsTrend} pts
                   </p>
                 </div>
-                <Star className="h-8 w-8 text-yellow-500" />
+                <Star className="h-8 w-8 text-warning" />
               </div>
             </CardContent>
           </Card>
@@ -276,9 +276,9 @@ export default function AnalyticsFeedback() {
                     <div className="space-y-4">
                       {RECENT_FEEDBACK.slice(0, 4).map((item) => (
                         <div key={item.id} className="flex items-start gap-3 text-sm">
-                          {item.type === 'nps' && <Star className="h-4 w-4 text-yellow-500 mt-0.5" />}
-                          {item.type === 'bug' && <Bug className="h-4 w-4 text-red-500 mt-0.5" />}
-                          {item.type === 'feature' && <Lightbulb className="h-4 w-4 text-blue-500 mt-0.5" />}
+                          {item.type === 'nps' && <Star className="h-4 w-4 text-warning mt-0.5" />}
+                          {item.type === 'bug' && <Bug className="h-4 w-4 text-destructive mt-0.5" />}
+                          {item.type === 'feature' && <Lightbulb className="h-4 w-4 text-info mt-0.5" />}
                           <div className="flex-1">
                             <p className="font-medium">
                               {item.type === 'nps' ? `NPS ${item.score}` : item.title}
@@ -305,17 +305,17 @@ export default function AnalyticsFeedback() {
                     <p className="text-sm text-muted-foreground">Sessão Média</p>
                   </div>
                   <div className="text-center">
-                    <Clock className="h-8 w-8 mx-auto text-blue-500 mb-2" />
+                    <Clock className="h-8 w-8 mx-auto text-info mb-2" />
                     <p className="text-2xl font-bold">4.2</p>
                     <p className="text-sm text-muted-foreground">Logins/Semana</p>
                   </div>
                   <div className="text-center">
-                    <CheckCircle2 className="h-8 w-8 mx-auto text-green-500 mb-2" />
+                    <CheckCircle2 className="h-8 w-8 mx-auto text-success mb-2" />
                     <p className="text-2xl font-bold">89%</p>
                     <p className="text-sm text-muted-foreground">Task Completion</p>
                   </div>
                   <div className="text-center">
-                    <ThumbsUp className="h-8 w-8 mx-auto text-yellow-500 mb-2" />
+                    <ThumbsUp className="h-8 w-8 mx-auto text-warning mb-2" />
                     <p className="text-2xl font-bold">4.6/5</p>
                     <p className="text-sm text-muted-foreground">Satisfação</p>
                   </div>
@@ -343,10 +343,10 @@ export default function AnalyticsFeedback() {
                         npsScore === score
                           ? 'bg-primary text-primary-foreground scale-110'
                           : score <= 6
-                          ? 'bg-red-100 hover:bg-red-200 text-red-800 dark:bg-red-900/30 dark:text-red-300'
+                          ? 'bg-destructive/10 hover:bg-destructive/20 text-destructive'
                           : score <= 8
-                          ? 'bg-yellow-100 hover:bg-yellow-200 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-300'
-                          : 'bg-green-100 hover:bg-green-200 text-green-800 dark:bg-green-900/30 dark:text-green-300'
+                          ? 'bg-warning/10 hover:bg-warning/20 text-warning'
+                          : 'bg-success/10 hover:bg-success/20 text-success'
                       }`}
                     >
                       {score}
@@ -390,7 +390,7 @@ export default function AnalyticsFeedback() {
               <CardContent className="space-y-6">
                 <RadioGroup
                   value={feedbackType}
-                  onValueChange={(v) => setFeedbackType(v as any)}
+                  onValueChange={(v) => setFeedbackType(v as 'feedback' | 'bug' | 'feature')}
                   className="flex gap-4"
                 >
                   <div className="flex items-center space-x-2">

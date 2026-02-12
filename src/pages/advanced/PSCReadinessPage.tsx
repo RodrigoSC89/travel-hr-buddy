@@ -97,7 +97,7 @@ const PSCReadinessPage = () => {
         </div>
         <div className="flex items-center gap-3">
           <Badge variant="outline" className="gap-2 py-1.5">
-            <Brain className="h-4 w-4 text-green-500" />
+            <Brain className="h-4 w-4 text-success" />
             IA Ativa
           </Badge>
           <Button onClick={handleScan} disabled={scanning}>
@@ -118,8 +118,8 @@ const PSCReadinessPage = () => {
               </p>
               <div className="mt-4 flex items-center gap-4">
                 <Badge className={
-                  readinessScore >= 90 ? "bg-green-500" :
-                  readinessScore >= 75 ? "bg-yellow-500" : "bg-red-500"
+                  readinessScore >= 90 ? "bg-success" :
+                  readinessScore >= 75 ? "bg-warning" : "bg-destructive"
                 }>
                   {readinessScore >= 90 ? "Excelente" :
                    readinessScore >= 75 ? "Bom" : "Requer Atenção"}
@@ -150,8 +150,8 @@ const PSCReadinessPage = () => {
                     fill="none"
                     strokeDasharray={`${readinessScore * 3.52} 352`}
                     className={
-                      readinessScore >= 90 ? "text-green-500" :
-                      readinessScore >= 75 ? "text-yellow-500" : "text-red-500"
+                      readinessScore >= 90 ? "text-success" :
+                      readinessScore >= 75 ? "text-warning" : "text-destructive"
                     }
                   />
                 </svg>
@@ -172,8 +172,8 @@ const PSCReadinessPage = () => {
               <div className="text-center">
                 <p className="text-sm text-muted-foreground">{cat.name}</p>
                 <p className={`text-2xl font-bold ${
-                  cat.score >= 90 ? "text-green-500" :
-                  cat.score >= 75 ? "text-yellow-500" : "text-red-500"
+                  cat.score >= 90 ? "text-success" :
+                  cat.score >= 75 ? "text-warning" : "text-destructive"
                 }`}>{cat.score}%</p>
                 <p className="text-xs text-muted-foreground mt-1">
                   {cat.issues} pendências
@@ -196,7 +196,7 @@ const PSCReadinessPage = () => {
           <Card>
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
-                <AlertTriangle className="h-5 w-5 text-yellow-500" />
+                <AlertTriangle className="h-5 w-5 text-warning" />
                 Pendências que Requerem Ação ({criticalIssues.length})
               </CardTitle>
             </CardHeader>
@@ -206,9 +206,9 @@ const PSCReadinessPage = () => {
                   <div 
                     key={issue.id}
                     className={`p-4 rounded-lg border-l-4 ${
-                      issue.priority === "critical" ? "border-l-red-500 bg-red-500/5" :
-                      issue.priority === "high" ? "border-l-yellow-500 bg-yellow-500/5" :
-                      "border-l-blue-500 bg-blue-500/5"
+                      issue.priority === "critical" ? "border-l-destructive bg-destructive/5" :
+                      issue.priority === "high" ? "border-l-warning bg-warning/5" :
+                      "border-l-info bg-info/5"
                     }`}
                   >
                     <div className="flex items-start justify-between">
@@ -224,8 +224,8 @@ const PSCReadinessPage = () => {
                         </div>
                       </div>
                       <Badge className={
-                        issue.priority === "critical" ? "bg-red-500" :
-                        issue.priority === "high" ? "bg-yellow-500" : "bg-blue-500"
+                         issue.priority === "critical" ? "bg-destructive" :
+                        issue.priority === "high" ? "bg-warning" : "bg-info"
                       }>
                         {issue.priority === "critical" ? "Crítico" :
                          issue.priority === "high" ? "Alto" : "Médio"}
@@ -243,19 +243,19 @@ const PSCReadinessPage = () => {
             </CardHeader>
             <CardContent>
               <div className="space-y-3">
-                <div className="p-3 bg-yellow-500/10 rounded-lg">
+                <div className="p-3 bg-warning/10 rounded-lg">
                   <p className="text-sm">
                     <strong>⚠️ MLC 2006:</strong> Área com mais pendências. Priorize correções 
                     antes da próxima escala em porto da Paris MOU.
                   </p>
                 </div>
-                <div className="p-3 bg-blue-500/10 rounded-lg">
+                <div className="p-3 bg-info/10 rounded-lg">
                   <p className="text-sm">
                     <strong>📊 Análise:</strong> Seu score está 12 pontos acima da média 
                     da frota. Manter padrão atual.
                   </p>
                 </div>
-                <div className="p-3 bg-green-500/10 rounded-lg">
+                <div className="p-3 bg-success/10 rounded-lg">
                   <p className="text-sm">
                     <strong>✅ Próxima Inspeção:</strong> Probabilidade de 89% de 
                     "No Deficiencies" se itens críticos forem resolvidos.
@@ -299,9 +299,9 @@ const PSCReadinessPage = () => {
             </CardHeader>
             <CardContent>
               <div className="space-y-3">
-                {inspectionHistory.map((insp, idx) => (
+                {inspectionHistory.map((insp) => (
                   <div 
-                    key={idx}
+                    key={`${insp.port}-${insp.date}`}
                     className="flex items-center justify-between p-3 border rounded-lg"
                   >
                     <div className="flex items-center gap-4">
@@ -316,7 +316,7 @@ const PSCReadinessPage = () => {
                         {insp.result}
                       </Badge>
                       {!insp.detained && (
-                        <CheckCircle className="h-4 w-4 text-green-500" />
+                        <CheckCircle className="h-4 w-4 text-success" />
                       )}
                     </div>
                   </div>

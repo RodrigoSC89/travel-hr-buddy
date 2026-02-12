@@ -180,9 +180,9 @@ export default function ContractAnalysisPage() {
 
   const getRiskColor = (risk: 'high' | 'medium' | 'low') => {
     switch (risk) {
-      case 'high': return 'text-red-500 bg-red-500/10 border-red-500/20';
-      case 'medium': return 'text-yellow-500 bg-yellow-500/10 border-yellow-500/20';
-      case 'low': return 'text-green-500 bg-green-500/10 border-green-500/20';
+      case 'high': return 'text-destructive bg-destructive/10 border-destructive/20';
+      case 'medium': return 'text-warning bg-warning/10 border-warning/20';
+      case 'low': return 'text-success bg-success/10 border-success/20';
     }
   };
 
@@ -284,7 +284,7 @@ export default function ContractAnalysisPage() {
               <Card>
                 <CardContent className="pt-4">
                   <div className="flex items-center gap-3">
-                    <div className="p-2 rounded-lg bg-green-500/10"><DollarSign className="h-5 w-5 text-green-500" /></div>
+                    <div className="p-2 rounded-lg bg-success/10"><DollarSign className="h-5 w-5 text-success" /></div>
                     <div>
                       <p className="text-sm font-medium">{formatCurrency(current.value, current.currency)}</p>
                       <p className="text-xs text-muted-foreground">Valor</p>
@@ -295,8 +295,8 @@ export default function ContractAnalysisPage() {
               <Card>
                 <CardContent className="pt-4">
                   <div className="flex items-center gap-3">
-                    <div className={cn("p-2 rounded-lg", current.overallRisk > 50 ? "bg-red-500/10" : current.overallRisk > 30 ? "bg-yellow-500/10" : "bg-green-500/10")}>
-                      <Shield className={cn("h-5 w-5", current.overallRisk > 50 ? "text-red-500" : current.overallRisk > 30 ? "text-yellow-500" : "text-green-500")} />
+                    <div className={cn("p-2 rounded-lg", current.overallRisk > 50 ? "bg-destructive/10" : current.overallRisk > 30 ? "bg-warning/10" : "bg-success/10")}>
+                      <Shield className={cn("h-5 w-5", current.overallRisk > 50 ? "text-destructive" : current.overallRisk > 30 ? "text-warning" : "text-success")} />
                     </div>
                     <div>
                       <p className="text-sm font-medium">{current.overallRisk}% Risco</p>
@@ -349,15 +349,15 @@ export default function ContractAnalysisPage() {
                   </CardHeader>
                   <CardContent>
                     <div className="space-y-4">
-                      {current.riskClauses.map((clause, idx) => (
-                        <motion.div key={idx} initial={{ opacity: 0, x: -10 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: idx * 0.1 }}>
+                      {current.riskClauses.map((clause, clauseIdx) => (
+                        <motion.div key={clause.clause} initial={{ opacity: 0, x: -10 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: clauseIdx * 0.1 }}>
                           <div className={cn("p-4 border rounded-lg", getRiskColor(clause.risk))}>
                             <div className="flex items-center justify-between mb-2">
                               <h4 className="font-medium">{clause.clause}</h4>
                               <Badge className={cn(
-                                clause.risk === 'high' && 'bg-red-500',
-                                clause.risk === 'medium' && 'bg-yellow-500',
-                                clause.risk === 'low' && 'bg-green-500'
+                                clause.risk === 'high' && 'bg-destructive',
+                                clause.risk === 'medium' && 'bg-warning',
+                                clause.risk === 'low' && 'bg-success'
                               )}>
                                 {clause.risk === 'high' ? 'Alto' : clause.risk === 'medium' ? 'Médio' : 'Baixo'}
                               </Badge>
@@ -383,8 +383,8 @@ export default function ContractAnalysisPage() {
                     </CardHeader>
                     <CardContent>
                       <div className="space-y-3">
-                        {current.parties.map((party, idx) => (
-                          <div key={idx} className="p-3 border rounded-lg">
+                        {current.parties.map((party) => (
+                          <div key={party.name} className="p-3 border rounded-lg">
                             <p className="font-medium">{party.name}</p>
                             <p className="text-sm text-muted-foreground">{party.role}</p>
                           </div>
@@ -398,8 +398,8 @@ export default function ContractAnalysisPage() {
                     </CardHeader>
                     <CardContent>
                       <div className="space-y-2">
-                        {current.financialTerms.map((term, idx) => (
-                          <div key={idx} className="flex items-center justify-between p-2 border rounded">
+                        {current.financialTerms.map((term) => (
+                          <div key={term.term} className="flex items-center justify-between p-2 border rounded">
                             <span className="text-sm">{term.term}</span>
                             <span className="text-sm font-medium">{term.value}</span>
                           </div>
@@ -417,8 +417,8 @@ export default function ContractAnalysisPage() {
                   </CardHeader>
                   <CardContent>
                     <div className="space-y-3">
-                      {current.keyDates.map((date, idx) => (
-                        <div key={idx} className="flex items-center gap-4 p-3 border rounded-lg">
+                      {current.keyDates.map((date) => (
+                        <div key={`${date.date}-${date.event}`} className="flex items-center gap-4 p-3 border rounded-lg">
                           <div className="p-2 bg-primary/10 rounded-lg"><Calendar className="h-4 w-4 text-primary" /></div>
                           <div className="flex-1">
                             <p className="font-medium">{date.event}</p>
@@ -440,8 +440,8 @@ export default function ContractAnalysisPage() {
                   </CardHeader>
                   <CardContent>
                     <div className="space-y-3">
-                      {current.opportunities.map((opp, idx) => (
-                        <div key={idx} className="p-4 border rounded-lg">
+                      {current.opportunities.map((opp) => (
+                        <div key={opp.description} className="p-4 border rounded-lg">
                           <div className="flex items-center justify-between">
                             <p className="font-medium">{opp.description}</p>
                             <Badge className="bg-teal-500/10 text-teal-500">{formatCurrency(opp.potentialSavings, 'USD')}</Badge>
