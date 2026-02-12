@@ -61,7 +61,7 @@ export const PerformanceDashboard: React.FC = () => {
       case 'excellent':
         return <Badge className="bg-success/20 text-success border-success/30">Excelente</Badge>;
       case 'good':
-        return <Badge className="bg-blue-500/20 text-blue-700 border-blue-500/30">Bom</Badge>;
+        return <Badge className="bg-info/20 text-info border-info/30">Bom</Badge>;
       case 'needs-improvement':
         return <Badge className="bg-warning/20 text-warning border-warning/30">Precisa Melhorar</Badge>;
       case 'poor':

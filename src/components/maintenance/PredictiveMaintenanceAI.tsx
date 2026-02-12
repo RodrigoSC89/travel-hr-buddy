@@ -168,7 +168,7 @@ export function PredictiveMaintenanceAI() {
         <Card>
           <CardContent className="pt-4">
             <div className="flex items-center gap-2">
-              <Activity className="h-5 w-5 text-blue-500" />
+              <Activity className="h-5 w-5 text-info" />
               <div>
                 <p className="text-2xl font-bold">{equipmentData.length}</p>
                 <p className="text-xs text-muted-foreground">Equipamentos Monitorados</p>

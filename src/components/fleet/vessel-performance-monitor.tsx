@@ -161,7 +161,7 @@ const VesselPerformanceMonitor = () => {
                     <p className="text-sm text-muted-foreground">Consumo</p>
                     <p className="text-2xl font-bold">{selectedVesselData.fuelConsumption.toFixed(1)} L/h</p>
                   </div>
-                  <Fuel className="h-8 w-8 text-orange-500" />
+                  <Fuel className="h-8 w-8 text-warning" />
                 </div>
                 <div className="flex items-center gap-1 mt-2">
                   {getTrendIcon(selectedVesselData.trends.fuelTrend)}

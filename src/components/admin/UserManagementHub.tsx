@@ -197,11 +197,11 @@ export const UserManagementHub: React.FC = () => {
   // Role badge colors
   const getRoleBadge = (role: string) => {
     const styles: Record<string, string> = {
-      owner: "bg-purple-500/10 text-purple-600 border-purple-500/20",
-      admin: "bg-red-500/10 text-red-600 border-red-500/20",
-      manager: "bg-blue-500/10 text-blue-600 border-blue-500/20",
-      member: "bg-green-500/10 text-green-600 border-green-500/20",
-      viewer: "bg-gray-500/10 text-gray-600 border-gray-500/20",
+      owner: "bg-accent/10 text-accent-foreground border-accent/20",
+      admin: "bg-destructive/10 text-destructive border-destructive/20",
+      manager: "bg-info/10 text-info border-info/20",
+      member: "bg-success/10 text-success border-success/20",
+      viewer: "bg-muted text-muted-foreground border-border",
     };
     const labels: Record<string, string> = {
       owner: "Proprietário",
@@ -216,10 +216,10 @@ export const UserManagementHub: React.FC = () => {
   // Status badge
   const getStatusBadge = (status: string) => {
     const styles: Record<string, string> = {
-      active: "bg-green-500/10 text-green-600 border-green-500/20",
-      pending: "bg-yellow-500/10 text-yellow-600 border-yellow-500/20",
-      inactive: "bg-gray-500/10 text-gray-600 border-gray-500/20",
-      suspended: "bg-red-500/10 text-red-600 border-red-500/20",
+      active: "bg-success/10 text-success border-success/20",
+      pending: "bg-warning/10 text-warning border-warning/20",
+      inactive: "bg-muted text-muted-foreground border-border",
+      suspended: "bg-destructive/10 text-destructive border-destructive/20",
     };
     const labels: Record<string, string> = {
       active: "Ativo",
@@ -333,7 +333,7 @@ export const UserManagementHub: React.FC = () => {
           <CardContent>
             <div className="text-2xl font-bold">{stats.total}</div>
             <p className="text-xs text-muted-foreground flex items-center gap-1">
-              <TrendingUp className="h-3 w-3 text-green-500" />
+              <TrendingUp className="h-3 w-3 text-success" />
               +2 este mês
             </p>
           </CardContent>
@@ -342,7 +342,7 @@ export const UserManagementHub: React.FC = () => {
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">Usuários Ativos</CardTitle>
-            <CheckCircle className="h-4 w-4 text-green-500" />
+            <CheckCircle className="h-4 w-4 text-success" />
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">{stats.active}</div>
@@ -355,7 +355,7 @@ export const UserManagementHub: React.FC = () => {
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">Convites Pendentes</CardTitle>
-            <Clock className="h-4 w-4 text-yellow-500" />
+            <Clock className="h-4 w-4 text-warning" />
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">{stats.pending}</div>
@@ -368,7 +368,7 @@ export const UserManagementHub: React.FC = () => {
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">Administradores</CardTitle>
-            <Shield className="h-4 w-4 text-blue-500" />
+            <Shield className="h-4 w-4 text-info" />
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">{stats.admins}</div>

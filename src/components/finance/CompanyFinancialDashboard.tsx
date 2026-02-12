@@ -320,19 +320,19 @@ export function CompanyFinancialDashboard() {
                 </CardHeader>
                 <CardContent>
                   <div className="grid grid-cols-2 gap-4">
-                    <div className="p-3 bg-green-500/10 rounded-lg">
+                    <div className="p-3 bg-success/10 rounded-lg">
                       <p className="text-sm text-muted-foreground">Receita</p>
-                      <p className="text-xl font-bold text-green-500">{formatCurrency(vessel.revenue)}</p>
+                      <p className="text-xl font-bold text-success">{formatCurrency(vessel.revenue)}</p>
                     </div>
-                    <div className="p-3 bg-red-500/10 rounded-lg">
+                    <div className="p-3 bg-destructive/10 rounded-lg">
                       <p className="text-sm text-muted-foreground">OPEX</p>
-                      <p className="text-xl font-bold text-red-500">{formatCurrency(vessel.opex)}</p>
+                      <p className="text-xl font-bold text-destructive">{formatCurrency(vessel.opex)}</p>
                     </div>
-                    <div className="p-3 bg-blue-500/10 rounded-lg">
+                    <div className="p-3 bg-info/10 rounded-lg">
                       <p className="text-sm text-muted-foreground">Lucro</p>
-                      <p className="text-xl font-bold text-blue-500">{formatCurrency(vessel.profit)}</p>
+                      <p className="text-xl font-bold text-info">{formatCurrency(vessel.profit)}</p>
                     </div>
-                    <div className="p-3 bg-purple-500/10 rounded-lg">
+                    <div className="p-3 bg-accent/10 rounded-lg">
                       <p className="text-sm text-muted-foreground">Utilização</p>
                       <p className="text-xl font-bold text-purple-500">{vessel.utilization}%</p>
                     </div>

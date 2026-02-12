@@ -572,7 +572,7 @@ export function FinanceCommandCenter() {
         <Card>
           <CardContent className="pt-4">
             <div className="flex items-center gap-2">
-              <DollarSign className="h-4 w-4 text-blue-600" />
+              <DollarSign className="h-4 w-4 text-info" />
               <span className="text-sm text-muted-foreground">Posição Líquida</span>
             </div>
             <div

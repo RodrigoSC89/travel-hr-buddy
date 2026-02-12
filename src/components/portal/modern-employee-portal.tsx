@@ -576,58 +576,58 @@ export const ModernEmployeePortal: React.FC = () => {
           <TabsContent value="dashboard" className="space-y-6">
             {/* Indicadores Principais */}
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-              <Card className="bg-gradient-to-br from-blue-50 to-blue-100 border-blue-200">
+              <Card className="bg-gradient-to-br from-info/10 to-info/5 border-info/20">
                 <CardContent className="p-6">
                   <div className="flex items-center justify-between">
                     <div>
-                      <p className="text-sm font-medium text-blue-600 mb-1">Total Embarques</p>
-                      <p className="text-3xl font-bold text-blue-900">
+                      <p className="text-sm font-medium text-info mb-1">Total Embarques</p>
+                      <p className="text-3xl font-bold">
                         {dashboardStats?.totalEmbarkations || 0}
                       </p>
                     </div>
-                    <Ship className="h-12 w-12 text-blue-500" />
+                    <Ship className="h-12 w-12 text-info" />
                   </div>
                 </CardContent>
               </Card>
 
-              <Card className="bg-gradient-to-br from-green-50 to-green-100 border-green-200">
+              <Card className="bg-gradient-to-br from-success/10 to-success/5 border-success/20">
                 <CardContent className="p-6">
                   <div className="flex items-center justify-between">
                     <div>
-                      <p className="text-sm font-medium text-green-600 mb-1">Dias de Mar</p>
-                      <p className="text-3xl font-bold text-green-900">
+                      <p className="text-sm font-medium text-success mb-1">Dias de Mar</p>
+                      <p className="text-3xl font-bold">
                         {dashboardStats?.totalSeaDays || 0}
                       </p>
                     </div>
-                    <Waves className="h-12 w-12 text-green-500" />
+                    <Waves className="h-12 w-12 text-success" />
                   </div>
                 </CardContent>
               </Card>
 
-              <Card className="bg-gradient-to-br from-purple-50 to-purple-100 border-purple-200">
+              <Card className="bg-gradient-to-br from-accent/10 to-accent/5 border-accent/20">
                 <CardContent className="p-6">
                   <div className="flex items-center justify-between">
                     <div>
-                      <p className="text-sm font-medium text-purple-600 mb-1">Performance</p>
-                      <p className="text-3xl font-bold text-purple-900">
+                      <p className="text-sm font-medium text-accent-foreground mb-1">Performance</p>
+                      <p className="text-3xl font-bold">
                         {dashboardStats?.performanceScore || 0}
                       </p>
                     </div>
-                    <Star className="h-12 w-12 text-purple-500" />
+                    <Star className="h-12 w-12 text-accent-foreground" />
                   </div>
                 </CardContent>
               </Card>
 
-              <Card className="bg-gradient-to-br from-orange-50 to-orange-100 border-orange-200">
+              <Card className="bg-gradient-to-br from-warning/10 to-warning/5 border-warning/20">
                 <CardContent className="p-6">
                   <div className="flex items-center justify-between">
                     <div>
-                      <p className="text-sm font-medium text-orange-600 mb-1">Compliance</p>
-                      <p className="text-3xl font-bold text-orange-900">
+                      <p className="text-sm font-medium text-warning mb-1">Compliance</p>
+                      <p className="text-3xl font-bold">
                         {dashboardStats?.complianceRate || 0}%
                       </p>
                     </div>
-                    <Shield className="h-12 w-12 text-orange-500" />
+                    <Shield className="h-12 w-12 text-warning" />
                   </div>
                 </CardContent>
               </Card>
@@ -635,10 +635,10 @@ export const ModernEmployeePortal: React.FC = () => {
 
             {/* Alertas Importantes */}
             {dashboardStats && dashboardStats.pendingCertificates > 0 && (
-              <Alert className="border-red-200 bg-red-50">
-                <AlertTriangle className="h-4 w-4 text-red-600" />
-                <AlertTitle className="text-red-800">Atenção Necessária</AlertTitle>
-                <AlertDescription className="text-red-700">
+              <Alert className="border-destructive/20 bg-destructive/5">
+                <AlertTriangle className="h-4 w-4 text-destructive" />
+                <AlertTitle className="text-destructive">Atenção Necessária</AlertTitle>
+                <AlertDescription className="text-destructive/80">
                   Você possui {dashboardStats.pendingCertificates} certificado(s) expirando ou expirados.
                   Verifique na aba "Documentos" para mais detalhes.
                 </AlertDescription>

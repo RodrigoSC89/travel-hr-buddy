@@ -239,7 +239,7 @@ export function DevOpsPanel() {
           <CardHeader className="pb-2">
             <CardTitle className="text-sm flex items-center gap-2">
               {networkQuality.isOnline ? (
-                <Wifi className="h-4 w-4 text-green-500" />
+                <Wifi className="h-4 w-4 text-success" />
               ) : (
                 <WifiOff className="h-4 w-4 text-destructive" />
               )}
@@ -388,7 +388,7 @@ export function DevOpsPanel() {
                 </div>
                 <div>
                   <div className="text-sm text-muted-foreground">Fallback</div>
-                  <Badge variant="outline" className="text-green-500">Ativo</Badge>
+                  <Badge variant="outline" className="text-success">Ativo</Badge>
                 </div>
                 <div>
                   <div className="text-sm text-muted-foreground">Cache de Respostas</div>
@@ -417,9 +417,9 @@ export function DevOpsPanel() {
                     <div className="flex items-center gap-3">
                       <div className={cn(
                         "w-3 h-3 rounded-full",
-                        state === 'closed' && "bg-green-500",
-                        state === 'open' && "bg-red-500",
-                        state === 'half-open' && "bg-yellow-500",
+                        state === 'closed' && "bg-success",
+                        state === 'open' && "bg-destructive",
+                        state === 'half-open' && "bg-warning",
                       )} />
                       <div>
                         <div className="font-medium capitalize">{name}</div>
@@ -465,7 +465,7 @@ export function DevOpsPanel() {
                       className={cn(
                         "text-xs font-mono p-2 rounded",
                         log.level === 'error' && "bg-destructive/10 text-destructive",
-                        log.level === 'warn' && "bg-yellow-500/10 text-yellow-700 dark:text-yellow-400",
+                        log.level === 'warn' && "bg-warning/10 text-warning",
                         log.level === 'info' && "bg-muted",
                       )}
                     >
