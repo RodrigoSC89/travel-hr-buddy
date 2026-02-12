@@ -550,8 +550,8 @@ export const MobileOptimizationCenter: React.FC = () => {
             </CardHeader>
             <CardContent>
               <div className="space-y-4">
-                {behavior.map((page, index) => (
-                  <div key={index} className="flex items-center justify-between p-4 border border-border rounded-lg">
+                {behavior.map((page) => (
+                  <div key={page.page} className="flex items-center justify-between p-4 border border-border rounded-lg">
                     <div className="flex-1">
                       <h4 className="font-medium">{page.page}</h4>
                       <div className="flex items-center space-x-6 mt-2 text-sm text-muted-foreground">

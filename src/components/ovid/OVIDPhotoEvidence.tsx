@@ -153,9 +153,9 @@ export const OVIDPhotoEvidence: React.FC<OVIDPhotoEvidenceProps> = ({
               </DialogHeader>
               <ScrollArea className="h-[300px]">
                 <div className="grid grid-cols-2 gap-3">
-                  {photos.map((photo, index) => (
+                  {photos.map((photo) => (
                     <div
-                      key={index}
+                      key={photo.file_path}
                       className="relative group rounded-lg border bg-muted/50 p-2 cursor-pointer hover:border-primary"
                       onClick={() => handlePreview(photo.file_path)}
                     >

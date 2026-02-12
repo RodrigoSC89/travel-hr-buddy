@@ -203,7 +203,7 @@ export const ReservationAI: React.FC<ReservationAIProps> = ({
         <Card>
           <CardContent className="p-4">
             <div className="flex items-center gap-2">
-              <AlertTriangle className="h-5 w-5 text-red-500" />
+              <AlertTriangle className="h-5 w-5 text-destructive" />
               <div>
                 <p className="text-sm text-muted-foreground">Conflitos</p>
                 <p className="text-2xl font-bold">
@@ -217,7 +217,7 @@ export const ReservationAI: React.FC<ReservationAIProps> = ({
         <Card>
           <CardContent className="p-4">
             <div className="flex items-center gap-2">
-              <Clock className="h-5 w-5 text-blue-500" />
+              <Clock className="h-5 w-5 text-info" />
               <div>
                 <p className="text-sm text-muted-foreground">Lembretes</p>
                 <p className="text-2xl font-bold">
@@ -231,7 +231,7 @@ export const ReservationAI: React.FC<ReservationAIProps> = ({
         <Card>
           <CardContent className="p-4">
             <div className="flex items-center gap-2">
-              <TrendingUp className="h-5 w-5 text-green-500" />
+              <TrendingUp className="h-5 w-5 text-success" />
               <div>
                 <p className="text-sm text-muted-foreground">Economia</p>
                 <p className="text-2xl font-bold">
@@ -245,7 +245,7 @@ export const ReservationAI: React.FC<ReservationAIProps> = ({
         <Card>
           <CardContent className="p-4">
             <div className="flex items-center gap-2">
-              <Lightbulb className="h-5 w-5 text-yellow-500" />
+              <Lightbulb className="h-5 w-5 text-warning" />
               <div>
                 <p className="text-sm text-muted-foreground">Otimizações</p>
                 <p className="text-2xl font-bold">
@@ -262,7 +262,7 @@ export const ReservationAI: React.FC<ReservationAIProps> = ({
         {insights.length === 0 ? (
           <Card>
             <CardContent className="p-8 text-center">
-              <CheckCircle className="h-16 w-16 text-green-500 mx-auto mb-4" />
+              <CheckCircle className="h-16 w-16 text-success mx-auto mb-4" />
               <h3 className="text-lg font-semibold mb-2">Tudo em Ordem!</h3>
               <p className="text-muted-foreground">
                 Não foram detectados problemas ou oportunidades de melhoria nas suas reservas.

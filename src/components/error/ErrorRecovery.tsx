@@ -34,13 +34,13 @@ const errorConfig = {
     icon: ServerOff,
     title: 'Erro no Servidor',
     description: 'O servidor encontrou um problema. Nossa equipe foi notificada.',
-    color: 'text-red-500',
+    color: 'text-destructive',
   },
   data: {
     icon: FileWarning,
     title: 'Erro ao Carregar Dados',
     description: 'Não foi possível carregar os dados solicitados.',
-    color: 'text-yellow-500',
+    color: 'text-warning',
   },
   unknown: {
     icon: AlertTriangle,

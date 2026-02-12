@@ -162,7 +162,7 @@ export const TaskCalendarView: React.FC<TaskCalendarViewProps> = ({
                 
                 return (
                   <div
-                    key={index}
+                    key={day.date.toISOString()}
                     onClick={() => setSelectedDate(day.date)}
                     onDoubleClick={() => onCreateTask?.(formatDateForInput(day.date))}
                     className={`

@@ -727,8 +727,8 @@ export const ProfessionalCrewDossier: React.FC = () => {
                           <div className="mt-4">
                             <label className="text-xs font-medium text-muted-foreground">Modos DP Operados</label>
                             <div className="flex flex-wrap gap-1 mt-1">
-                              {embark.dp_operation_modes.map((mode: string, index: number) => (
-                                <Badge key={index} variant="secondary" className="text-xs">
+                              {embark.dp_operation_modes.map((mode: string) => (
+                                <Badge key={mode} variant="secondary" className="text-xs">
                                   {mode}
                                 </Badge>
                               ))}
@@ -740,8 +740,8 @@ export const ProfessionalCrewDossier: React.FC = () => {
                           <div className="mt-4">
                             <label className="text-xs font-medium text-muted-foreground">Equipamentos Operados</label>
                             <div className="flex flex-wrap gap-1 mt-1">
-                              {embark.equipment_operated.map((equipment: string, index: number) => (
-                                <Badge key={index} variant="outline" className="text-xs">
+                              {embark.equipment_operated.map((equipment: string) => (
+                                <Badge key={equipment} variant="outline" className="text-xs">
                                   {equipment}
                                 </Badge>
                               ))}
@@ -931,8 +931,8 @@ export const ProfessionalCrewDossier: React.FC = () => {
                         </p>
                         {doc.tags && doc.tags.length > 0 && (
                           <div className="flex gap-1 mt-1">
-                            {doc.tags.map((tag: string, index: number) => (
-                              <Badge key={index} variant="secondary" className="text-xs">
+                            {doc.tags.map((tag: string) => (
+                              <Badge key={tag} variant="secondary" className="text-xs">
                                 {tag}
                               </Badge>
                             ))}
