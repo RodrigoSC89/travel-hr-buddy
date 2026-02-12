@@ -183,7 +183,7 @@ export function PSCReadinessDashboard() {
 
       {/* Inspections List */}
       {isLoading ? (
-        <div className="space-y-3">{[1, 2].map(i => <Card key={i}><CardContent className="p-6 h-24 animate-pulse bg-muted/30" /></Card>)}</div>
+        <div className="space-y-3">{[1, 2].map(i => <Card key={`psc-skeleton-${i}`}><CardContent className="p-6 h-24 animate-pulse bg-muted/30" /></Card>)}</div>
       ) : inspections.length === 0 ? (
         <Card>
           <CardContent className="p-12 text-center text-muted-foreground">

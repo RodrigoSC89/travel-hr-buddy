@@ -100,8 +100,8 @@ export function RiskAlertPanel({ alerts }: RiskAlertPanelProps) {
                         <div className="mt-2 pt-2 border-t">
                           <p className="text-xs font-medium mb-1">Recomendações:</p>
                           <ul className="text-xs text-muted-foreground space-y-1">
-                            {alert.recommendations.map((rec, idx) => (
-                              <li key={idx} className="flex items-start gap-1">
+                            {alert.recommendations.map((rec) => (
+                              <li key={rec} className="flex items-start gap-1">
                                 <span className="text-success">•</span>
                                 <span>{rec}</span>
                               </li>

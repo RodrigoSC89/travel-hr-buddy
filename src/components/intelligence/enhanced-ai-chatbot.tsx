@@ -495,8 +495,8 @@ const EnhancedAIChatbot: React.FC = () => {
                               
                               {message.sources && (
                                 <div className="flex flex-wrap gap-1 mt-2">
-                                  {message.sources.map((source, idx) => (
-                                    <Badge key={idx} variant="outline" className="text-xs">
+                                  {message.sources.map((source) => (
+                                    <Badge key={source} variant="outline" className="text-xs">
                                       {source}
                                     </Badge>
                                   ))}

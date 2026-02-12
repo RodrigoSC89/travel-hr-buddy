@@ -192,8 +192,8 @@ export default function ComplianceStatusPage() {
           </CardHeader>
           <CardContent>
             <ul className="space-y-2">
-              {report.recommendations.map((rec, idx) => (
-                <li key={idx} className="flex items-start gap-2">
+              {report.recommendations.map((rec) => (
+                <li key={rec} className="flex items-start gap-2">
                   <span className="text-primary mt-1">•</span>
                   <span>{rec}</span>
                 </li>

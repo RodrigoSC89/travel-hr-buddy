@@ -236,8 +236,8 @@ export const PeotramTemplateManager: React.FC<TemplateManagerProps> = ({
                     <div className="space-y-2">
                       <Label className="text-sm font-medium">Requisitos:</Label>
                       <ul className="space-y-1">
-                        {element.requirements.map((req, reqIndex) => (
-                          <li key={reqIndex} className="text-sm text-muted-foreground flex items-start gap-2">
+                        {element.requirements.map((req) => (
+                          <li key={req} className="text-sm text-muted-foreground flex items-start gap-2">
                             <div className="w-1.5 h-1.5 bg-primary rounded-full mt-2 flex-shrink-0" />
                             {req}
                           </li>

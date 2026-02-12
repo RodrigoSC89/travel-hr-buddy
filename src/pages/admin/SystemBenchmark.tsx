@@ -98,8 +98,8 @@ export default function SystemBenchmark() {
           </Card>
 
           <div className="grid gap-4 md:grid-cols-2">
-            {report.tests.map((test, idx) => (
-              <Card key={idx}>
+            {report.tests.map((test) => (
+              <Card key={test.testName}>
                 <CardHeader className="pb-3">
                   <div className="flex items-center justify-between">
                     <CardTitle className="text-lg">{test.testName}</CardTitle>

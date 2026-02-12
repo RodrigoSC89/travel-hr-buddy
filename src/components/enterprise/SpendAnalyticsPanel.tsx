@@ -198,9 +198,9 @@
                        }}
                        style={{ cursor: 'pointer' }}
                      >
-                       {pieData.map((_, index) => (
+                       {pieData.map((entry, index) => (
                          <Cell 
-                           key={`cell-${index}`} 
+                           key={`cell-${entry.name}`} 
                            fill={COLORS[index % COLORS.length]}
                            stroke="transparent"
                          />

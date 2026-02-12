@@ -745,9 +745,9 @@ const VRTrainingPage = () => {
                   { name: "Herói MOB", icon: "🌊", unlocked: true, description: "Score perfeito em Homem ao Mar" },
                   { name: "Expert em Abandono", icon: "🚤", unlocked: false, description: "Complete todos os níveis de abandono" },
                   { name: "Mestre de Emergências", icon: "👑", unlocked: false, description: "Complete todos os cenários com 90%+" }
-                ].map((achievement, idx) => (
+                ].map((achievement) => (
                   <div 
-                    key={idx}
+                    key={achievement.name}
                     className={`p-4 rounded-lg border ${
                       achievement.unlocked ? "bg-primary/5" : "bg-muted/30 opacity-60"
                     }`}

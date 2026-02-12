@@ -228,7 +228,7 @@ export function DocumentSignatureCard() {
                   <Label>Assinantes</Label>
                   <div className="space-y-2">
                     {[1, 2, 3].map(i => (
-                      <div key={i} className="grid grid-cols-3 gap-2">
+                      <div key={`signer-${i}`} className="grid grid-cols-3 gap-2">
                         <Input placeholder="Nome" />
                         <Input placeholder="Email" />
                         <Input placeholder="Cargo" />

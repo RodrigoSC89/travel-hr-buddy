@@ -632,8 +632,8 @@ const ComplianceHubEnhanced: React.FC = () => {
                   { name: 'Checklist SOLAS - Equipamentos', items: 56, completed: 42, category: 'SOLAS' },
                   { name: 'Checklist MARPOL - Ambiental', items: 38, completed: 38, category: 'MARPOL' },
                   { name: 'Checklist STCW - Certificações', items: 24, completed: 20, category: 'STCW' },
-                ].map((checklist, i) => (
-                  <Card key={i} className="cursor-pointer hover:shadow-md transition-shadow">
+                ].map((checklist) => (
+                  <Card key={checklist.name} className="cursor-pointer hover:shadow-md transition-shadow">
                     <CardContent className="p-4">
                       <div className="flex items-center justify-between mb-3">
                         <Badge>{checklist.category}</Badge>

@@ -156,7 +156,7 @@ export const MetricasPanel = () => {
               <ResponsiveContainer width="100%" height="100%">
                 <PieChart>
                   <Pie data={pieData} dataKey="value" nameKey="name" cx="50%" cy="50%" outerRadius={100} label>
-                    {pieData.map((entry, index) => (<Cell key={`cell-${index}`} fill={entry.fill} />))}
+                    {pieData.map((entry) => (<Cell key={`cell-${entry.name}`} fill={entry.fill} />))}
                   </Pie>
                   <Tooltip />
                   <Legend />

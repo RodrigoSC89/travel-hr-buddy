@@ -446,9 +446,9 @@ export const FleetCommandCenter: React.FC = () => {
                   { name: "MV Pacific Dream", x: 65, y: 45, status: "active" },
                   { name: "MV Ocean Pride", x: 45, y: 25, status: "maintenance" },
                   { name: "MV Sea Voyager", x: 75, y: 60, status: "active" },
-                ].map((vessel, i) => (
+                ].map((vessel) => (
                   <div 
-                    key={i} 
+                    key={vessel.name} 
                     className="absolute cursor-pointer group"
                     style={{ left: `${vessel.x}%`, top: `${vessel.y}%` }}
                     onClick={() => {

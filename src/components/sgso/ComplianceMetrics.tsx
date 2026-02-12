@@ -183,9 +183,9 @@ export const ComplianceMetrics: React.FC = () => {
                   ]}
                 />
                 <Bar dataKey="score" name="Score">
-                  {practiceCompliance.map((entry, index) => (
+                  {practiceCompliance.map((entry) => (
                     <Cell
-                      key={`cell-${index}`}
+                      key={`cell-${entry.name}`}
                       fill={entry.score >= 85 ? "#16a34a" : entry.score >= 70 ? "#eab308" : "#dc2626"}
                     />
                   ))}
@@ -220,8 +220,8 @@ export const ComplianceMetrics: React.FC = () => {
                   fill="#8884d8"
                   dataKey="value"
                 >
-                  {incidentStats.map((entry, index) => (
-                    <Cell key={`cell-${index}`} fill={entry.color} />
+                  {incidentStats.map((entry) => (
+                    <Cell key={`cell-${entry.name}`} fill={entry.color} />
                   ))}
                 </Pie>
                 <Tooltip />
@@ -252,8 +252,8 @@ export const ComplianceMetrics: React.FC = () => {
                   fill="#8884d8"
                   dataKey="value"
                 >
-                  {auditResults.map((entry, index) => (
-                    <Cell key={`cell-${index}`} fill={entry.color} />
+                  {auditResults.map((entry) => (
+                    <Cell key={`cell-${entry.category}`} fill={entry.color} />
                   ))}
                 </Pie>
                 <Tooltip />

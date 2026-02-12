@@ -332,8 +332,8 @@ export default function ExecutiveKPIDashboard() {
           </CardHeader>
           <CardContent>
             <div className="space-y-3">
-              {vessels.slice(0, 3).map((v, i) => (
-                <div key={i} className="p-3 border rounded-lg">
+              {vessels.slice(0, 3).map((v) => (
+                <div key={v.name} className="p-3 border rounded-lg">
                   <div className="flex items-center justify-between mb-2">
                     <span className="font-medium text-sm">{v.name}</span>
                     <Badge variant={v.status === 'at-sea' ? 'default' : 'secondary'} className="text-xs">
@@ -367,8 +367,8 @@ export default function ExecutiveKPIDashboard() {
               { href: '/tracking', icon: Ship, label: 'Vessel Tracking', color: 'text-success' },
               { href: '/compliance-hub', icon: Shield, label: 'Compliance', color: 'text-info' },
               { href: '/reports-command', icon: Activity, label: 'Relatórios', color: 'text-info' },
-            ].map((item, i) => (
-              <Button key={i} variant="outline" className="h-auto py-4 flex-col gap-2" asChild>
+            ].map((item) => (
+              <Button key={item.label} variant="outline" className="h-auto py-4 flex-col gap-2" asChild>
                 <a href={item.href}>
                   <item.icon className={cn("h-5 w-5", item.color)} />
                   <span className="text-xs">{item.label}</span>

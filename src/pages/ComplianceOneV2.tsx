@@ -99,8 +99,8 @@ export default function ComplianceOneV2() {
                   { title: "Renovação de certificado pendente", severity: "medium", area: "Regulatório" },
                   { title: "Treinamento atrasado", severity: "low", area: "RH" },
                   { title: "Documentação incompleta", severity: "high", area: "Legal" }
-                ].map((issue, idx) => (
-                  <div key={idx} className="p-3 bg-muted/50 rounded-lg flex justify-between items-center">
+                ].map((issue) => (
+                  <div key={`${issue.title}-${issue.area}`} className="p-3 bg-muted/50 rounded-lg flex justify-between items-center">
                     <div>
                       <p className="font-medium text-sm">{issue.title}</p>
                       <p className="text-xs text-muted-foreground">{issue.area}</p>

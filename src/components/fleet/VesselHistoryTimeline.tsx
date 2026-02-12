@@ -389,7 +389,7 @@ export function VesselHistoryTimeline() {
         </div>
         <div className="space-y-4">
           {[...Array(5)].map((_, i) => (
-            <Card key={i}>
+            <Card key={`timeline-skeleton-${i}`}>
               <CardContent className="p-6">
                 <div className="flex gap-4">
                   <div className="h-12 w-12 bg-muted animate-pulse rounded-full" />

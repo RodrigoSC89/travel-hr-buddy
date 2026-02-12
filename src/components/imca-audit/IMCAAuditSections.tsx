@@ -278,8 +278,8 @@ export function IMCAAuditSections({ selectedDPClass, sectionScores }: Props) {
                     </h4>
                     <ScrollArea className="h-[150px]">
                       <ul className="space-y-2">
-                        {section.keyItems.map((item, idx) => (
-                          <li key={idx} className="flex items-start gap-2 text-sm p-2 rounded-lg bg-muted/30">
+                        {section.keyItems.map((item) => (
+                          <li key={item} className="flex items-start gap-2 text-sm p-2 rounded-lg bg-muted/30">
                             <CheckCircle2 className="h-4 w-4 text-muted-foreground mt-0.5 shrink-0" />
                             <span>{item}</span>
                           </li>

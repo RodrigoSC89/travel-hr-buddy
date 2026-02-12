@@ -251,8 +251,8 @@ export const OVIDAnalyticsDashboard: React.FC = () => {
                       dataKey="value"
                       label={({ name, percent }) => `${name} ${(percent * 100).toFixed(0)}%`}
                     >
-                      {complianceData.map((entry, index) => (
-                        <Cell key={`cell-${index}`} fill={entry.color} />
+                      {complianceData.map((entry) => (
+                        <Cell key={`cell-${entry.name}`} fill={entry.color} />
                       ))}
                     </Pie>
                     <Tooltip />

@@ -429,8 +429,8 @@ export function BROAGeneratorCard({ events, vessels = [], contracts = [], onBROA
                       Ações Corretivas
                     </h5>
                     <ul className="space-y-1">
-                      {selectedBROA.corrective_actions.map((action, idx) => (
-                        <li key={idx} className="text-sm flex items-start gap-2">
+                      {selectedBROA.corrective_actions.map((action) => (
+                        <li key={action} className="text-sm flex items-start gap-2">
                           <span className="text-info">•</span>
                           {action}
                         </li>
@@ -443,8 +443,8 @@ export function BROAGeneratorCard({ events, vessels = [], contracts = [], onBROA
                 <div className="p-4 bg-muted/30 rounded-lg border">
                   <h5 className="text-sm font-medium mb-3">Assinaturas Requeridas</h5>
                   <div className="grid grid-cols-3 gap-4">
-                    {selectedBROA.signatures_required.map((sig, idx) => (
-                      <div key={idx} className="text-center p-3 border rounded-lg">
+                    {selectedBROA.signatures_required.map((sig) => (
+                      <div key={sig.role} className="text-center p-3 border rounded-lg">
                         <div className="w-12 h-12 rounded-full bg-muted mx-auto mb-2 flex items-center justify-center">
                           {sig.signed ? (
                             <CheckCircle className="h-6 w-6 text-green-500" />

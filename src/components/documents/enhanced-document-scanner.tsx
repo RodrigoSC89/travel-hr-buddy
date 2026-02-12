@@ -565,8 +565,8 @@ export const EnhancedDocumentScanner: React.FC = () => {
                   <div>
                     <Label>Pontos Principais</Label>
                     <ul className="mt-1 space-y-1">
-                      {selectedResult.analysis.keyPoints.map((point, idx) => (
-                        <li key={idx} className="flex items-start gap-2">
+                      {selectedResult.analysis.keyPoints.map((point) => (
+                        <li key={point} className="flex items-start gap-2">
                           <span>•</span>
                           <span>{point}</span>
                         </li>
@@ -577,8 +577,8 @@ export const EnhancedDocumentScanner: React.FC = () => {
                   <div>
                     <Label>Entidades Identificadas</Label>
                     <div className="mt-1 flex flex-wrap gap-1">
-                      {selectedResult.analysis.entities.map((entity, idx) => (
-                        <Badge key={idx} variant="secondary" className="text-xs">
+                      {selectedResult.analysis.entities.map((entity) => (
+                        <Badge key={entity} variant="secondary" className="text-xs">
                           {entity}
                         </Badge>
                       ))}

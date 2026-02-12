@@ -88,7 +88,7 @@ export const TableSkeletonLoader = ({ rows = 5 }: { rows?: number }) => (
   <div className="space-y-2 animate-pulse">
     <div className="h-10 bg-muted rounded"></div>
     {Array.from({ length: rows }).map((_, i) => (
-      <div key={i} className="h-12 bg-muted/50 rounded"></div>
+      <div key={`tbl-skel-${i}`} className="h-12 bg-muted/50 rounded"></div>
     ))}
   </div>
 );

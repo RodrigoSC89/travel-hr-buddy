@@ -192,7 +192,7 @@ export default function UnifiedOptimizationDashboard() {
       <div className="space-y-6 p-6">
         <Skeleton className="h-10 w-96" />
         <div className="grid grid-cols-3 gap-4">
-          {[1,2,3].map(i => <Skeleton key={i} className="h-52" />)}
+          {[1,2,3].map(i => <Skeleton key={`opt-skel-${i}`} className="h-52" />)}
         </div>
         <Skeleton className="h-24" />
         <Skeleton className="h-96" />
@@ -395,8 +395,8 @@ export default function UnifiedOptimizationDashboard() {
                     </tr>
                   </thead>
                   <tbody>
-                    {comparisonData.map((row, i) => (
-                      <tr key={i} className="border-b hover:bg-muted/50">
+                    {comparisonData.map((row) => (
+                      <tr key={row.metric} className="border-b hover:bg-muted/50">
                         <td className="py-3 px-4 font-medium">{row.metric}</td>
                         <td className={`text-center py-3 px-4 ${row.best === "monteCarlo" ? "font-bold text-blue-600" : ""}`}>
                           {row.monteCarlo}
