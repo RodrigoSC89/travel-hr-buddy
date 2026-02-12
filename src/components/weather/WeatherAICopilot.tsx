@@ -287,8 +287,8 @@ Dados meteorológicos atuais:
     <Card className="h-[500px] flex flex-col">
       <CardHeader className="pb-3 border-b">
         <CardTitle className="flex items-center gap-2 text-lg">
-          <div className="p-2 bg-blue-100 dark:bg-blue-900 rounded-lg">
-            <Bot className="h-5 w-5 text-blue-600 dark:text-blue-400" />
+          <div className="p-2 bg-info/10 rounded-lg">
+            <Bot className="h-5 w-5 text-info" />
           </div>
           Copiloto Meteorológico
           <Badge variant="outline" className="ml-auto">
@@ -302,9 +302,9 @@ Dados meteorológicos atuais:
         {/* Quick Actions */}
         <div className="p-3 border-b bg-muted/30">
           <div className="flex flex-wrap gap-2">
-            {quickActions.map((action, index) => (
+            {quickActions.map((action) => (
               <Button
-                key={index}
+                key={action.label}
                 variant="outline"
                 size="sm"
                 className="text-xs"

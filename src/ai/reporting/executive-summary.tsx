@@ -455,9 +455,9 @@ export const ExecutiveSummaryGenerator: React.FC<ExecutiveSummaryGeneratorProps>
                 <CardContent>
                   <div className="space-y-3">
                     {summaryData.insights.map((insight, index) => (
-                      <Alert key={index}>
+                      <Alert key={`insight-${insight.slice(0, 20)}`}>
                         <AlertDescription className="flex items-start space-x-2">
-                          <span className="font-semibold text-blue-600">{index + 1}.</span>
+                          <span className="font-semibold text-primary">{index + 1}.</span>
                           <span>{insight}</span>
                         </AlertDescription>
                       </Alert>
@@ -477,10 +477,10 @@ export const ExecutiveSummaryGenerator: React.FC<ExecutiveSummaryGeneratorProps>
                 </CardHeader>
                 <CardContent>
                   <div className="space-y-3">
-                    {summaryData.recommendations.map((rec, index) => (
-                      <Alert key={index}>
+                    {summaryData.recommendations.map((rec) => (
+                      <Alert key={`rec-${rec.slice(0, 20)}`}>
                         <AlertDescription className="flex items-start space-x-2">
-                          <CheckCircle className="w-5 h-5 text-green-600 mt-0.5 flex-shrink-0" />
+                          <CheckCircle className="w-5 h-5 text-success mt-0.5 flex-shrink-0" />
                           <span>{rec}</span>
                         </AlertDescription>
                       </Alert>
@@ -499,7 +499,7 @@ export const ExecutiveSummaryGenerator: React.FC<ExecutiveSummaryGeneratorProps>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     {Object.entries(summaryData.keyMetrics).map(([key, value]) => (
                       <div key={key} className="border rounded-lg p-4">
-                        <p className="text-sm text-gray-500 capitalize">
+                        <p className="text-sm text-muted-foreground capitalize">
                           {key.replace(/_/g, " ")}
                         </p>
                         <p className="text-xl font-semibold mt-1">

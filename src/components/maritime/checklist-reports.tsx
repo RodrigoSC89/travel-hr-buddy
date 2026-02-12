@@ -63,9 +63,9 @@ export const ChecklistReports = () => {
 
   const getStatusColor = (status: string) => {
     switch (status) {
-    case "completed": return "bg-green-100 text-green-800";
-    case "generating": return "bg-blue-100 text-blue-800";
-    case "failed": return "bg-red-100 text-red-800";
+    case "completed": return "bg-success/10 text-success";
+    case "generating": return "bg-info/10 text-info";
+    case "failed": return "bg-destructive/10 text-destructive";
     default: return "bg-secondary text-secondary-foreground";
     }
   };
@@ -182,15 +182,15 @@ export const ChecklistReports = () => {
                       <div className="text-sm text-muted-foreground">Total de Checklists</div>
                     </div>
                     <div className="text-center">
-                      <div className="text-2xl font-bold text-green-600">{report.metrics.completedChecklists}</div>
+                      <div className="text-2xl font-bold text-success">{report.metrics.completedChecklists}</div>
                       <div className="text-sm text-muted-foreground">Concluídos</div>
                     </div>
                     <div className="text-center">
-                      <div className="text-2xl font-bold text-blue-600">{report.metrics.complianceRate}%</div>
+                      <div className="text-2xl font-bold text-info">{report.metrics.complianceRate}%</div>
                       <div className="text-sm text-muted-foreground">Conformidade</div>
                     </div>
                     <div className="text-center">
-                      <div className="text-2xl font-bold text-red-600">{report.metrics.criticalIssues}</div>
+                      <div className="text-2xl font-bold text-destructive">{report.metrics.criticalIssues}</div>
                       <div className="text-sm text-muted-foreground">Críticos</div>
                     </div>
                   </div>

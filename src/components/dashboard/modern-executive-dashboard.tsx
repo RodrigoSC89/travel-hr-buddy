@@ -210,9 +210,9 @@ export const ModernExecutiveDashboard: React.FC<ExecutiveDashboardProps> = ({ cl
 
       {/* KPI Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {kpis.map((kpi, index) => (
+        {kpis.map((kpi) => (
           <ModernKPICard
-            key={index}
+            key={kpi.title}
             title={kpi.title}
             value={kpi.value}
             subtitle={kpi.subtitle}
