@@ -301,8 +301,8 @@ export const PersonalizedRecommendations: React.FC<PersonalizedRecommendationsPr
                               <div className="mb-4">
                                 <p className="text-xs font-medium text-muted-foreground mb-2">Benefícios:</p>
                                 <div className="flex flex-wrap gap-1">
-                                  {recommendation.benefits.map((benefit, index) => (
-                                    <Badge key={index} variant="secondary" className="text-xs">
+                                  {recommendation.benefits.map((benefit) => (
+                                    <Badge key={benefit} variant="secondary" className="text-xs">
                                       {benefit}
                                     </Badge>
                                   ))}
@@ -352,8 +352,8 @@ export const PersonalizedRecommendations: React.FC<PersonalizedRecommendationsPr
                   </div>
                 ) : (
                   <div className="space-y-3">
-                    {insights.map((insight, index) => (
-                      <Card key={index} className="p-4">
+                    {insights.map((insight, insightIdx) => (
+                      <Card key={`insight-${insightIdx}-${insight.slice(0,20)}`} className="p-4">
                         <div className="flex items-start gap-3">
                           <TrendingUp className="w-5 h-5 text-primary mt-0.5" />
                           <p className="text-sm">{insight}</p>
@@ -372,8 +372,8 @@ export const PersonalizedRecommendations: React.FC<PersonalizedRecommendationsPr
                   </div>
                 ) : (
                   <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                    {quickActions.map((action, index) => (
-                      <Card key={index} className="cursor-pointer hover:shadow-md transition-shadow">
+                    {quickActions.map((action) => (
+                      <Card key={action.title} className="cursor-pointer hover:shadow-md transition-shadow">
                         <CardContent className="p-4">
                           <div className="flex items-center justify-between">
                             <div>

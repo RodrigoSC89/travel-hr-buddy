@@ -581,8 +581,8 @@ export const HRDashboard = () => {
                   <Label className="text-muted-foreground">Certificações</Label>
                   <div className="flex flex-wrap gap-2 mt-2">
                     {selectedEmployee.certifications.length > 0 ? (
-                      selectedEmployee.certifications.map((cert, index) => (
-                        <Badge key={index} variant="secondary">
+                      selectedEmployee.certifications.map((cert) => (
+                        <Badge key={cert} variant="secondary">
                           <Award className="h-3 w-3 mr-1" />
                           {cert}
                         </Badge>

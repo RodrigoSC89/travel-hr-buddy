@@ -57,8 +57,8 @@ export const WorkflowStats: React.FC<WorkflowStatsProps> = ({
 
   return (
     <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-      {stats.map((stat, index) => (
-        <Card key={index} className="overflow-hidden border-border/50 bg-gradient-to-br from-card to-card/50">
+      {stats.map((stat) => (
+        <Card key={stat.title} className="overflow-hidden border-border/50 bg-gradient-to-br from-card to-card/50">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium text-muted-foreground">
               {stat.title}
@@ -71,7 +71,7 @@ export const WorkflowStats: React.FC<WorkflowStatsProps> = ({
             <div className="text-2xl font-bold">{stat.value}</div>
             <div className="flex items-center justify-between mt-1">
               <p className="text-xs text-muted-foreground">{stat.subtitle}</p>
-              <div className={`flex items-center text-xs ${stat.trendUp ? "text-green-600" : "text-red-500"}`}>
+              <div className={`flex items-center text-xs ${stat.trendUp ? "text-success" : "text-destructive"}`}>
                 {stat.trendUp ? (
                   <TrendingUp className="h-3 w-3 mr-0.5" />
                 ) : (

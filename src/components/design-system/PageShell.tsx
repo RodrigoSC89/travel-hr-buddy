@@ -106,9 +106,9 @@ export const PageShell: FC<PageShellProps> = ({
         {/* Breadcrumbs */}
         {breadcrumbs && breadcrumbs.length > 0 && (
           <nav className="flex items-center gap-2 text-sm text-muted-foreground mb-2" aria-label="Breadcrumb">
-            {breadcrumbs.map((crumb, index) => (
-              <span key={index} className="flex items-center gap-2">
-                {index > 0 && <span className="text-border">/</span>}
+            {breadcrumbs.map((crumb, crumbIdx) => (
+              <span key={crumb.label} className="flex items-center gap-2">
+                {crumbIdx > 0 && <span className="text-border">/</span>}
                 {crumb.href ? (
                   <a 
                     href={crumb.href} 
@@ -117,7 +117,7 @@ export const PageShell: FC<PageShellProps> = ({
                     {crumb.label}
                   </a>
                 ) : (
-                  <span className={index === breadcrumbs.length - 1 ? 'text-foreground font-medium' : ''}>
+                  <span className={crumbIdx === breadcrumbs.length - 1 ? 'text-foreground font-medium' : ''}>
                     {crumb.label}
                   </span>
                 )}
@@ -198,9 +198,9 @@ export const PageShell: FC<PageShellProps> = ({
             )}
 
             {/* Custom Actions */}
-            {customActions.map((action, index) => (
+            {customActions.map((action) => (
               <Button
-                key={index}
+                key={action.label}
                 variant={action.variant || 'outline'}
                 size="sm"
                 onClick={action.onClick}

@@ -504,8 +504,8 @@ export function MLCInspectionOverview({
                 </tr>
               </thead>
               <tbody>
-                {defaultHistory.map((item, index) => (
-                  <tr key={index} className="border-t hover:bg-muted/30 cursor-pointer">
+                {defaultHistory.map((item) => (
+                  <tr key={`${item.date}-${item.vesselName}`} className="border-t hover:bg-muted/30 cursor-pointer">
                     <td className="p-3 text-sm">{item.date}</td>
                     <td className="p-3 text-sm font-medium">{item.vesselName}</td>
                     <td className="p-3 text-sm">{item.flagState}</td>

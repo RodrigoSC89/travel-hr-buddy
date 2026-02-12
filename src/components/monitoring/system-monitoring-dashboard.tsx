@@ -320,10 +320,10 @@ const SystemMonitoringDashboard: React.FC = () => {
                 </CardHeader>
                 <CardContent>
                   <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                    {systemModules.map((module, index) => {
+                    {systemModules.map((module) => {
                       const StatusIcon = getStatusIcon(module.status);
                       return (
-                        <Card key={index} className={`transition-all duration-300 hover:scale-[1.02] hover:shadow-lg border-${getStatusColor(module.status)}/20`}>
+                        <Card key={module.module} className={`transition-all duration-300 hover:scale-[1.02] hover:shadow-lg border-${getStatusColor(module.status)}/20`}>
                           <CardContent className="p-6">
                             <div className="flex items-start justify-between mb-4">
                               <div className="flex items-center gap-3">
