@@ -45,10 +45,10 @@ export function PMSEngine() {
   const getStatusBadge = (status: string) => {
     const statusMap: Record<string, { variant: "default" | "secondary" | "destructive" | "outline"; label: string; className: string }> = {
       overdue: { variant: "destructive", label: "Overdue", className: "" },
-      due: { variant: "secondary", label: "Due Now", className: "bg-amber-100 text-amber-700" },
-      upcoming: { variant: "outline", label: "Upcoming", className: "border-blue-500 text-blue-600" },
-      completed: { variant: "secondary", label: "Completed", className: "bg-emerald-100 text-emerald-700" },
-      in_progress: { variant: "secondary", label: "In Progress", className: "bg-purple-100 text-purple-700" }
+      due: { variant: "secondary", label: "Due Now", className: "bg-warning/10 text-warning" },
+      upcoming: { variant: "outline", label: "Upcoming", className: "border-info text-info" },
+      completed: { variant: "secondary", label: "Completed", className: "bg-success/10 text-success" },
+      in_progress: { variant: "secondary", label: "In Progress", className: "bg-accent/10 text-accent-foreground" }
     };
     const config = statusMap[status] || statusMap.upcoming;
     return <Badge variant={config.variant} className={config.className}>{config.label}</Badge>;
@@ -56,10 +56,10 @@ export function PMSEngine() {
 
   const getPriorityBadge = (priority: string) => {
     const priorityMap: Record<string, string> = {
-      critical: "bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-300",
-      high: "bg-orange-100 text-orange-700 dark:bg-orange-900/30 dark:text-orange-300",
-      medium: "bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-300",
-      low: "bg-gray-100 text-gray-700 dark:bg-gray-800 dark:text-gray-300"
+      critical: "bg-destructive/10 text-destructive",
+      high: "bg-warning/10 text-warning",
+      medium: "bg-info/10 text-info",
+      low: "bg-muted text-muted-foreground"
     };
     return <Badge className={priorityMap[priority] || priorityMap.medium}>{priority}</Badge>;
   };
@@ -112,18 +112,18 @@ export function PMSEngine() {
             </div>
           </CardContent>
         </Card>
-        <Card className="border-red-200 bg-red-50/50 dark:bg-red-950/20">
+        <Card className="border-destructive/20 bg-destructive/5">
           <CardContent className="pt-4">
             <div className="text-center">
-              <p className="text-2xl font-bold text-red-600">{pmsStats.overdue}</p>
+              <p className="text-2xl font-bold text-destructive">{pmsStats.overdue}</p>
               <p className="text-xs text-muted-foreground">Overdue</p>
             </div>
           </CardContent>
         </Card>
-        <Card className="border-amber-200 bg-amber-50/50 dark:bg-amber-950/20">
+        <Card className="border-warning/20 bg-warning/5">
           <CardContent className="pt-4">
             <div className="text-center">
-              <p className="text-2xl font-bold text-amber-600">{pmsStats.dueThisWeek}</p>
+              <p className="text-2xl font-bold text-warning">{pmsStats.dueThisWeek}</p>
               <p className="text-xs text-muted-foreground">Due This Week</p>
             </div>
           </CardContent>
@@ -131,7 +131,7 @@ export function PMSEngine() {
         <Card>
           <CardContent className="pt-4">
             <div className="text-center">
-              <p className="text-2xl font-bold text-blue-600">{pmsStats.dueThisMonth}</p>
+              <p className="text-2xl font-bold text-info">{pmsStats.dueThisMonth}</p>
               <p className="text-xs text-muted-foreground">Due This Month</p>
             </div>
           </CardContent>
@@ -139,7 +139,7 @@ export function PMSEngine() {
         <Card>
           <CardContent className="pt-4">
             <div className="text-center">
-              <p className="text-2xl font-bold text-emerald-600">{pmsStats.completed}</p>
+              <p className="text-2xl font-bold text-success">{pmsStats.completed}</p>
               <p className="text-xs text-muted-foreground">Completed</p>
             </div>
           </CardContent>
@@ -155,7 +155,7 @@ export function PMSEngine() {
         <Card>
           <CardContent className="pt-4">
             <div className="text-center">
-              <p className="text-2xl font-bold text-purple-600">{pmsStats.classJobs}</p>
+              <p className="text-2xl font-bold text-accent-foreground">{pmsStats.classJobs}</p>
               <p className="text-xs text-muted-foreground">Class Jobs</p>
             </div>
           </CardContent>
@@ -210,8 +210,8 @@ export function PMSEngine() {
                     <Card 
                       key={job.id}
                       className={`hover:shadow-md transition-shadow ${
-                        job.status === "overdue" ? "border-red-300 bg-red-50/50 dark:bg-red-950/20" :
-                        job.status === "due" ? "border-amber-300 bg-amber-50/50 dark:bg-amber-950/20" : ""
+                        job.status === "overdue" ? "border-destructive/30 bg-destructive/5" :
+                        job.status === "due" ? "border-warning/30 bg-warning/5" : ""
                       }`}
                     >
                       <CardContent className="pt-4">
@@ -223,7 +223,7 @@ export function PMSEngine() {
                               {getStatusBadge(job.status)}
                               {getPriorityBadge(job.priority)}
                               {job.classRequired && (
-                                <Badge variant="secondary" className="bg-purple-100 text-purple-700">
+                                <Badge variant="secondary" className="bg-accent/10 text-accent-foreground">
                                   <Ship className="h-3 w-3 mr-1" />
                                   Class
                                 </Badge>
@@ -262,7 +262,7 @@ export function PMSEngine() {
                                 <Progress 
                                   value={getHoursProgress(job.currentHours, job.dueHours)} 
                                   className={`h-2 ${
-                                    job.currentHours > job.dueHours ? "[&>div]:bg-red-500" : ""
+                                    job.currentHours > job.dueHours ? "[&>div]:bg-destructive" : ""
                                   }`}
                                 />
                               </div>

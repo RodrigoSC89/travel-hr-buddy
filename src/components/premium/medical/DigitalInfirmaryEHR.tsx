@@ -269,8 +269,8 @@ export default function DigitalInfirmaryEHR() {
                   <p className="text-sm font-medium mb-2">Condições Médicas</p>
                   {selectedCrew.conditions.length > 0 ? (
                     <div className="flex flex-wrap gap-1">
-                      {selectedCrew.conditions.map((c, i) => (
-                        <Badge key={i} variant="secondary">{c}</Badge>
+                      {selectedCrew.conditions.map((c) => (
+                        <Badge key={c} variant="secondary">{c}</Badge>
                       ))}
                     </div>
                   ) : (
@@ -282,8 +282,8 @@ export default function DigitalInfirmaryEHR() {
                   <p className="text-sm font-medium mb-2">Alergias</p>
                   {selectedCrew.allergies.length > 0 ? (
                     <div className="flex flex-wrap gap-1">
-                      {selectedCrew.allergies.map((a, i) => (
-                        <Badge key={i} variant="destructive">{a}</Badge>
+                      {selectedCrew.allergies.map((a) => (
+                        <Badge key={a} variant="destructive">{a}</Badge>
                       ))}
                     </div>
                   ) : (
@@ -295,8 +295,8 @@ export default function DigitalInfirmaryEHR() {
                   <p className="text-sm font-medium mb-2">Medicamentos Atuais</p>
                   {selectedCrew.medications.length > 0 ? (
                     <div className="space-y-1">
-                      {selectedCrew.medications.map((m, i) => (
-                        <div key={i} className="flex items-center gap-2 text-sm">
+                      {selectedCrew.medications.map((m) => (
+                        <div key={m} className="flex items-center gap-2 text-sm">
                           <Pill className="h-3 w-3" />
                           {m}
                         </div>

@@ -280,11 +280,11 @@ export function NCAutomaticWorkflow() {
   const getStatusIcon = (status: NCStatus) => {
     switch (status) {
       case 'open': return <AlertTriangle className="h-4 w-4 text-destructive" />;
-      case 'assigned': return <User className="h-4 w-4 text-blue-500" />;
-      case 'in_progress': return <Play className="h-4 w-4 text-yellow-500" />;
-      case 'pending_approval': return <Clock className="h-4 w-4 text-orange-500" />;
-      case 'validated': return <CheckCircle2 className="h-4 w-4 text-green-500" />;
-      case 'closed': return <CheckCheck className="h-4 w-4 text-green-600" />;
+      case 'assigned': return <User className="h-4 w-4 text-info" />;
+      case 'in_progress': return <Play className="h-4 w-4 text-warning" />;
+      case 'pending_approval': return <Clock className="h-4 w-4 text-warning" />;
+      case 'validated': return <CheckCircle2 className="h-4 w-4 text-success" />;
+      case 'closed': return <CheckCheck className="h-4 w-4 text-success" />;
       case 'escalated': return <AlertCircle className="h-4 w-4 text-destructive" />;
     }
   };
