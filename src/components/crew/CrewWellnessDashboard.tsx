@@ -343,7 +343,7 @@ export function CrewWellnessDashboard() {
                 {selectedMember.alerts.length > 0 && (
                   <div>
                     <h5 className="font-medium mb-2 flex items-center gap-2">
-                      <AlertTriangle className="h-4 w-4 text-amber-500" />
+                      <AlertTriangle className="h-4 w-4 text-warning" />
                       Alertas
                     </h5>
                     <div className="space-y-2">

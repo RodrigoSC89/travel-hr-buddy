@@ -95,12 +95,12 @@ export function ConnectionIndicator({
     switch (connectionType) {
       case 'slow-2g':
       case '2g':
-        return 'bg-yellow-500/10 text-yellow-500 border-yellow-500/20';
+        return 'bg-warning/10 text-warning border-warning/20';
       case '3g':
-        return 'bg-blue-500/10 text-blue-500 border-blue-500/20';
+        return 'bg-info/10 text-info border-info/20';
       case '4g':
       default:
-        return 'bg-green-500/10 text-green-500 border-green-500/20';
+        return 'bg-success/10 text-success border-success/20';
     }
   };
 
@@ -142,7 +142,7 @@ export function ConnectionBadge({ className }: { className?: string }) {
   return (
     <div className={cn(
       'inline-flex items-center gap-1 px-2 py-0.5 rounded text-xs',
-      'bg-yellow-500/10 text-yellow-500',
+      'bg-warning/10 text-warning',
       className
     )}>
       <SignalLow className="h-3 w-3" />

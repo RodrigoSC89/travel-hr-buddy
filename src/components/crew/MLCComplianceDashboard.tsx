@@ -133,8 +133,8 @@ export function MLCComplianceDashboard() {
               <div className="flex items-end gap-2">
                 <span className={cn(
                   "text-5xl font-bold",
-                  Number(complianceRate) >= 95 ? "text-emerald-400" :
-                  Number(complianceRate) >= 80 ? "text-amber-400" : "text-destructive"
+                  Number(complianceRate) >= 95 ? "text-success" :
+                  Number(complianceRate) >= 80 ? "text-warning" : "text-destructive"
                 )}>
                   {complianceRate}%
                 </span>
@@ -152,7 +152,7 @@ export function MLCComplianceDashboard() {
                 <p className="text-xs text-muted-foreground">Média Descanso/Dia</p>
               </div>
               <div className="text-center">
-                <Sun className="h-5 w-5 text-amber-400 mx-auto mb-1" />
+                <Sun className="h-5 w-5 text-warning mx-auto mb-1" />
                 <p className="text-2xl font-bold text-foreground">{avgWorkHours}h</p>
                 <p className="text-xs text-muted-foreground">Média Trabalho/Dia</p>
               </div>
@@ -199,8 +199,8 @@ export function MLCComplianceDashboard() {
         <Card className="border-border/50 bg-card/50">
           <CardContent className="p-4">
             <div className="flex items-center gap-3">
-              <div className="p-2 bg-amber-500/10 rounded-lg">
-                <Coffee className="h-5 w-5 text-amber-400" />
+              <div className="p-2 bg-warning/10 rounded-lg">
+                <Coffee className="h-5 w-5 text-warning" />
               </div>
               <div>
                 <p className="text-sm text-muted-foreground">Mín. Descanso MLC</p>
@@ -241,7 +241,7 @@ export function MLCComplianceDashboard() {
                 className="flex items-center justify-between p-3 rounded-lg bg-muted/30 border border-border/50"
               >
                 <div className="flex items-center gap-3">
-                  <CheckCircle2 className="h-4 w-4 text-emerald-400" />
+                  <CheckCircle2 className="h-4 w-4 text-success" />
                   <span className="text-sm text-foreground">{item.label}</span>
                 </div>
                 <Badge variant="outline" className="text-xs">
@@ -263,7 +263,7 @@ export function MLCComplianceDashboard() {
           <CardContent>
             {violations.length === 0 ? (
               <div className="text-center py-8">
-                <CheckCircle2 className="h-12 w-12 text-emerald-400 mx-auto mb-3" />
+                <CheckCircle2 className="h-12 w-12 text-success mx-auto mb-3" />
                 <p className="text-muted-foreground">Nenhuma violação nos últimos 30 dias</p>
                 <p className="text-sm text-muted-foreground/70 mt-1">
                   Excelente conformidade com MLC 2006
@@ -288,7 +288,7 @@ export function MLCComplianceDashboard() {
                       <span className="text-destructive">
                         Descanso: {violation.total_rest_hours}h
                       </span>
-                      <span className="text-amber-400">
+                      <span className="text-warning">
                         Trabalho: {violation.total_work_hours}h
                       </span>
                     </div>

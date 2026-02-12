@@ -30,9 +30,9 @@ export const NetworkStatusWidget = memo(function NetworkStatusWidget({
 
   const getColor = () => {
     // PATCH v23: Removido !online check
-    if (quality === 'fast') return 'text-green-500';
-    if (quality === 'slow') return 'text-yellow-500';
-    return 'text-blue-500';
+    if (quality === 'fast') return 'text-success';
+    if (quality === 'slow') return 'text-warning';
+    return 'text-info';
   };
 
   const getLabel = () => {

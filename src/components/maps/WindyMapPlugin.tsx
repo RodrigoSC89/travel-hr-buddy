@@ -264,7 +264,7 @@ export const WindyMapPlugin: React.FC<WindyMapPluginProps> = ({
                 {latitude.toFixed(2)}, {longitude.toFixed(2)}
               </Badge>
               {useFallback && (
-                <Badge variant="outline" className="text-xs text-yellow-400 border-yellow-400/50">
+                <Badge variant="outline" className="text-xs text-warning border-warning/50">
                   <Map className="h-3 w-3 mr-1" />
                   Mapbox
                 </Badge>

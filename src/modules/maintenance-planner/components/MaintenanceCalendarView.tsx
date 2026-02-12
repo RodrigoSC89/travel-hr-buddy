@@ -64,22 +64,22 @@ export const MaintenanceCalendarView: React.FC = () => {
 
   const getTypeColor = (type: string | null) => {
     switch (type) {
-    case "corrective": return "bg-red-500";
-    case "preventive": return "bg-blue-500";
-    case "predictive": return "bg-purple-500";
-    case "routine": return "bg-green-500";
-    default: return "bg-gray-500";
+    case "corrective": return "bg-destructive";
+    case "preventive": return "bg-info";
+    case "predictive": return "bg-accent";
+    case "routine": return "bg-success";
+    default: return "bg-muted";
     }
   };
 
   const getStatusColor = (status: string | null) => {
     switch (status) {
-    case "completed": return "text-green-600";
-    case "in_progress": return "text-blue-600";
-    case "overdue": return "text-red-600";
-    case "pending": return "text-yellow-600";
-    case "scheduled": return "text-purple-600";
-    default: return "text-gray-600";
+    case "completed": return "text-success";
+    case "in_progress": return "text-info";
+    case "overdue": return "text-destructive";
+    case "pending": return "text-warning";
+    case "scheduled": return "text-accent-foreground";
+    default: return "text-muted-foreground";
     }
   };
 
@@ -118,8 +118,8 @@ export const MaintenanceCalendarView: React.FC = () => {
         <CardContent>
           {loading ? (
             <div className="space-y-2">
-              <div className="h-16 bg-gray-200 rounded animate-pulse"></div>
-              <div className="h-16 bg-gray-200 rounded animate-pulse"></div>
+              <div className="h-16 bg-muted rounded animate-pulse"></div>
+              <div className="h-16 bg-muted rounded animate-pulse"></div>
             </div>
           ) : selectedDateTasks.length === 0 ? (
             <p className="text-muted-foreground text-sm">

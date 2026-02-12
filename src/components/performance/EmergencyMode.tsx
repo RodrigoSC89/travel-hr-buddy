@@ -156,9 +156,9 @@ function EmergencyModeOverlay() {
                 {criticalFunctions.map((fn) => (
                   <div 
                     key={fn.name}
-                    className="flex items-center gap-2 p-2 rounded-lg border bg-green-50 border-green-200 dark:bg-green-950 dark:border-green-800"
+                    className="flex items-center gap-2 p-2 rounded-lg border bg-success/5 border-success/20"
                   >
-                    <fn.icon className="h-4 w-4 text-green-500" />
+                    <fn.icon className="h-4 w-4 text-success" />
                     <span className="text-sm">{fn.name}</span>
                   </div>
                 ))}

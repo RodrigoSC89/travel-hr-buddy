@@ -48,15 +48,15 @@ const metricConfig: Record<string, {
 };
 
 const ratingColors = {
-  good: 'text-green-600 dark:text-green-400',
-  'needs-improvement': 'text-yellow-600 dark:text-yellow-400',
-  poor: 'text-red-600 dark:text-red-400',
+  good: 'text-success',
+  'needs-improvement': 'text-warning',
+  poor: 'text-destructive',
 };
 
 const ratingBgColors = {
-  good: 'bg-green-500',
-  'needs-improvement': 'bg-yellow-500',
-  poor: 'bg-red-500',
+  good: 'bg-success',
+  'needs-improvement': 'bg-warning',
+  poor: 'bg-destructive',
 };
 
 export function WebVitalsDashboard({ className }: { className?: string }) {
@@ -83,8 +83,8 @@ export function WebVitalsDashboard({ className }: { className?: string }) {
             <span className="text-sm text-muted-foreground">Score:</span>
             <span className={cn(
               'text-2xl font-bold',
-              score >= 90 ? 'text-green-600' :
-              score >= 50 ? 'text-yellow-600' : 'text-red-600'
+              score >= 90 ? 'text-success' :
+              score >= 50 ? 'text-warning' : 'text-destructive'
             )}>
               {score}
             </span>
@@ -154,9 +154,9 @@ export function WebVitalsIndicator({ className }: { className?: string }) {
   const { score } = useWebVitals();
 
   const getColor = () => {
-    if (score >= 90) return 'bg-green-500';
-    if (score >= 50) return 'bg-yellow-500';
-    return 'bg-red-500';
+    if (score >= 90) return 'bg-success';
+    if (score >= 50) return 'bg-warning';
+    return 'bg-destructive';
   };
 
   return (

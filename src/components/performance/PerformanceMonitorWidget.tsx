@@ -54,11 +54,11 @@ const METRIC_CONFIG: Record<string, {
 const getRatingColor = (rating: VitalMetric['rating']): string => {
   switch (rating) {
     case 'good':
-      return 'text-green-500 bg-green-500/10';
+      return 'text-success bg-success/10';
     case 'needs-improvement':
-      return 'text-yellow-500 bg-yellow-500/10';
+      return 'text-warning bg-warning/10';
     case 'poor':
-      return 'text-red-500 bg-red-500/10';
+      return 'text-destructive bg-destructive/10';
     default:
       return 'text-muted-foreground bg-muted';
   }
@@ -94,7 +94,7 @@ export function PerformanceMonitorWidget({
     return (
       <div className={cn(
         'flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-medium',
-        hasIssues ? 'bg-destructive/10 text-destructive' : 'bg-green-500/10 text-green-600',
+        hasIssues ? 'bg-destructive/10 text-destructive' : 'bg-success/10 text-success',
         className
       )}>
         {hasIssues ? (
@@ -119,9 +119,9 @@ export function PerformanceMonitorWidget({
         </h3>
         <div className={cn(
           'px-2 py-0.5 rounded text-xs font-medium',
-          score.rating === 'good' ? 'bg-green-500/10 text-green-600' :
-          score.rating === 'needs-improvement' ? 'bg-yellow-500/10 text-yellow-600' :
-          'bg-red-500/10 text-red-600'
+          score.rating === 'good' ? 'bg-success/10 text-success' :
+          score.rating === 'needs-improvement' ? 'bg-warning/10 text-warning' :
+          'bg-destructive/10 text-destructive'
         )}>
           Score: {score.score}%
         </div>
@@ -156,7 +156,7 @@ export function PerformanceMonitorWidget({
 
       {hasIssues && (
         <div className="text-xs text-muted-foreground flex items-center gap-1">
-          <AlertTriangle className="h-3 w-3 text-yellow-500" />
+          <AlertTriangle className="h-3 w-3 text-warning" />
           Some metrics need improvement
         </div>
       )}
