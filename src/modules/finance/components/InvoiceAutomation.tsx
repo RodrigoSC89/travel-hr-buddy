@@ -273,8 +273,8 @@ export function InvoiceAutomation() {
                       </div>
                       {invoice.issues.length > 0 && (
                         <div className="flex flex-wrap gap-1 mt-1">
-                          {invoice.issues.map((issue, i) => (
-                            <Badge key={i} variant="destructive" className="text-xs">
+                          {invoice.issues.map((issue) => (
+                            <Badge key={issue} variant="destructive" className="text-xs">
                               {issue}
                             </Badge>
                           ))}

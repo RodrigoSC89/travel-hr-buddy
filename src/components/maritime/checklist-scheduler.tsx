@@ -270,7 +270,7 @@ export const ChecklistScheduler = () => {
               </div>
               <div className="grid grid-cols-7 gap-2 mt-2">
                 {Array.from({ length: 35 }, (_, i) => (
-                  <div key={i} className="aspect-square p-2 border rounded-lg flex items-center justify-center text-sm">
+                  <div key={`checklist-day-${i}`} className="aspect-square p-2 border rounded-lg flex items-center justify-center text-sm">
                     {i + 1 <= 31 ? i + 1 : ""}
                   </div>
                 ))}

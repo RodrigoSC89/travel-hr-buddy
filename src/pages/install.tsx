@@ -124,8 +124,8 @@ export default function InstallPage() {
                 { icon: '🔄', text: 'Auto-sync when online' },
                 { icon: '🎤', text: 'Voice commands' },
                 { icon: '🔔', text: 'Push notifications' }
-              ].map((feature, i) => (
-                <li key={i} className="flex items-center gap-3 text-blue-100">
+              ].map((feature) => (
+                <li key={feature.text} className="flex items-center gap-3 text-blue-100">
                   <span className="text-xl">{feature.icon}</span>
                   <span>{feature.text}</span>
                 </li>

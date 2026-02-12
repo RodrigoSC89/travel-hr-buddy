@@ -125,7 +125,7 @@ export default function RiskMatrixV2() {
             <div className="grid grid-cols-6 gap-1">
               <div className="col-span-1"></div>
               {[1, 2, 3, 4, 5].map(i => (
-                <div key={i} className="text-center text-xs font-medium p-2">I={i}</div>
+                <div key={`impact-${i}`} className="text-center text-xs font-medium p-2">I={i}</div>
               ))}
               {[5, 4, 3, 2, 1].map(p => (
                 <>

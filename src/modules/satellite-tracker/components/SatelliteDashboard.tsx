@@ -172,7 +172,7 @@ export const SatelliteDashboard: React.FC = () => {
       <div className="space-y-4">
         <Skeleton className="h-24 w-full" />
         <div className="grid grid-cols-6 gap-4">
-          {[...Array(6)].map((_, i) => <Skeleton key={i} className="h-24" />)}
+          {[...Array(6)].map((_, i) => <Skeleton key={`sat-skeleton-${i}`} className="h-24" />)}
         </div>
         <Skeleton className="h-[500px]" />
       </div>

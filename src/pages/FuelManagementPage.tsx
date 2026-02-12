@@ -197,7 +197,7 @@ export default function FuelManagementPage() {
       <div className="space-y-6 py-4">
         <Skeleton className="h-10 w-64" />
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-          {[...Array(4)].map((_, i) => <Skeleton key={i} className="h-28" />)}
+          {[...Array(4)].map((_, i) => <Skeleton key={`fuel-skeleton-${i}`} className="h-28" />)}
         </div>
         <Skeleton className="h-96" />
       </div>
@@ -426,7 +426,7 @@ export default function FuelManagementPage() {
                     const isLow = fill < 30;
                     const isCritical = fill < 15;
                     return (
-                      <div key={i} className={cn("p-3 rounded-lg border", isCritical ? "border-destructive/50 bg-destructive/5" : isLow ? "border-warning/30 bg-warning/5" : "")}>
+                      <div key={tank.name} className={cn("p-3 rounded-lg border", isCritical ? "border-destructive/50 bg-destructive/5" : isLow ? "border-warning/30 bg-warning/5" : "")}>
                         <div className="flex justify-between items-center mb-2">
                           <div className="flex items-center gap-2">
                             <Fuel className="h-4 w-4 text-primary" />
@@ -533,7 +533,7 @@ export default function FuelManagementPage() {
                     const isLow = fill < 30;
                     const isCritical = fill < 15;
                     return (
-                      <Card key={i} className={cn("bg-muted/30", isCritical && "border-destructive/50", isLow && !isCritical && "border-warning/30")}>
+                      <Card key={`fuel-card-${tank.name}`} className={cn("bg-muted/30", isCritical && "border-destructive/50", isLow && !isCritical && "border-warning/30")}>
                         <CardContent className="pt-4 space-y-4">
                           <div className="flex justify-between items-start">
                             <div>

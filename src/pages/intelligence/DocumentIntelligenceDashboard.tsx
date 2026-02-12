@@ -250,7 +250,7 @@ export default function DocumentIntelligenceDashboard() {
                     >
                       <div className="prose prose-sm dark:prose-invert max-w-none">
                         {msg.content.split("\n").map((line: string, i: number) => (
-                          <p key={i} className="mb-2 last:mb-0">{line}</p>
+                          <p key={`doc-line-${i}-${line.slice(0, 10)}`} className="mb-2 last:mb-0">{line}</p>
                         ))}
                       </div>
                       {"sources" in msg && msg.sources && (

@@ -174,8 +174,8 @@ export const SystemHealthGrid: React.FC<SystemHealthGridProps> = ({ status, expa
                   <Progress value={module.health} className={`h-1.5 mb-3 ${getHealthBg(module.health)}`} />
 
                   <div className="grid grid-cols-3 gap-2 text-center">
-                    {module.metrics.map((metric, i) => (
-                      <div key={i} className="bg-muted/50 rounded-md p-2">
+                    {module.metrics.map((metric) => (
+                      <div key={metric.label} className="bg-muted/50 rounded-md p-2">
                         <p className="text-xs text-muted-foreground">{metric.label}</p>
                         <p className="text-sm font-semibold">{metric.value}</p>
                       </div>

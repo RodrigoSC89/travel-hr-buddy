@@ -222,8 +222,8 @@ export default function CentralComandoPremium() {
                   { type: "Certificado Expirando", vessel: "MV Atlantic Star", days: 15, severity: "warning" },
                   { type: "Manutenção Pendente", vessel: "MV Pacific", days: 7, severity: "warning" },
                   { type: "Documento Vencido", vessel: "OSV-01", days: -2, severity: "error" },
-                ].map((alert, i) => (
-                  <div key={i} className={`p-3 border rounded-lg ${
+                ].map((alert) => (
+                  <div key={`${alert.type}-${alert.vessel}`} className={`p-3 border rounded-lg ${
                     alert.severity === "error" ? "border-destructive/50 bg-destructive/5" : "border-warning/50 bg-warning/5"
                   }`}>
                     <div className="flex items-center justify-between">

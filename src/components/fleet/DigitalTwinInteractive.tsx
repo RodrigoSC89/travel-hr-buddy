@@ -599,8 +599,8 @@ export function DigitalTwinInteractive() {
                           { time: "10:15", event: "Alerta de temperatura resolvido", type: "success" },
                           { time: "09:45", event: "Alerta de temperatura do motor", type: "warning" },
                           { time: "08:00", event: "Motor principal iniciado", type: "info" }
-                        ].map((log, i) => (
-                          <div key={i} className="flex items-center gap-4 p-3 border rounded-lg">
+                        ].map((log) => (
+                          <div key={`${log.time}-${log.event.slice(0, 15)}`} className="flex items-center gap-4 p-3 border rounded-lg">
                             <div className={`w-2 h-2 rounded-full ${
                               log.type === "success" ? "bg-success" :
                               log.type === "warning" ? "bg-warning" : "bg-info"

@@ -66,7 +66,7 @@ export default function ComplianceEvidencias() {
   };
   const getFileIcon = (type: string) => { switch (type) { case "certificate": return <Shield className="h-8 w-8 text-success" />; case "image": return <FileImage className="h-8 w-8 text-primary" />; case "report": return <FilePdf className="h-8 w-8 text-destructive" />; default: return <File className="h-8 w-8 text-muted-foreground" />; } };
 
-  if (isLoading) return <div className="container mx-auto p-6 space-y-4">{[1,2,3].map(i => <Skeleton key={i} className="h-32 w-full" />)}</div>;
+  if (isLoading) return <div className="container mx-auto p-6 space-y-4">{[1,2,3].map(i => <Skeleton key={`evid-skeleton-${i}`} className="h-32 w-full" />)}</div>;
 
   return (
     <div className="container mx-auto p-6 space-y-6">

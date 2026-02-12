@@ -725,7 +725,7 @@ export default function PredictiveTelemetry() {
                                           <p className="text-xs text-muted-foreground mb-1">Fatores Contribuintes:</p>
                                           <ul className="text-xs space-y-1">
                                             {anomaly.causalAnalysis.contributingFactors.map((factor, i) => (
-                                              <li key={i} className="flex items-start gap-1">
+                                              <li key={`factor-${i}-${factor.slice(0, 15)}`} className="flex items-start gap-1">
                                                 <span className="text-muted-foreground">•</span>
                                                 {factor}
                                               </li>
@@ -754,7 +754,7 @@ export default function PredictiveTelemetry() {
                                       </Alert>
                                       <ul className="mt-3 space-y-2">
                                         {anomaly.causalAnalysis.recommendations.map((rec, i) => (
-                                          <li key={i} className="flex items-start gap-2 text-sm">
+                                          <li key={`telem-rec-${i}-${rec.slice(0, 15)}`} className="flex items-start gap-2 text-sm">
                                             <CheckCircle2 className="h-4 w-4 text-success shrink-0 mt-0.5" />
                                             {rec}
                                           </li>

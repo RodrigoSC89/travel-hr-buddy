@@ -122,7 +122,7 @@ export default function Patch512Satcom() {
           <CardContent>
             <div className="space-y-2 max-h-[300px] overflow-y-auto">
               {logs.slice(-10).reverse().map((log, idx) => (
-                <div key={idx} className="p-2 bg-muted rounded text-sm">
+                <div key={`satcom-log-${idx}-${log.message.slice(0, 15)}`} className="p-2 bg-muted rounded text-sm">
                   <div className="font-mono text-xs text-muted-foreground">
                     {new Date(log.time).toLocaleTimeString()}
                   </div>

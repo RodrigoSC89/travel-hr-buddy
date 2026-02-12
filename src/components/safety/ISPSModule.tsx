@@ -366,8 +366,8 @@ export function ISPSModule() {
                   { section: "6. Security Equipment", status: "approved", lastReview: "2024-05-20" },
                   { section: "7. Training & Drills", status: "approved", lastReview: "2024-06-10" },
                   { section: "8. Records & Reports", status: "approved", lastReview: "2024-07-01" }
-                ].map((section, idx) => (
-                  <div key={idx} className="p-4 border rounded-lg hover:bg-muted/50">
+                ].map((section) => (
+                  <div key={section.section} className="p-4 border rounded-lg hover:bg-muted/50">
                     <div className="flex items-center justify-between">
                       <div>
                         <p className="font-medium">{section.section}</p>

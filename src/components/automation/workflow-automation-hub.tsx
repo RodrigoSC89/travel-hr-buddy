@@ -245,8 +245,8 @@ export const WorkflowAutomationHub: React.FC = () => {
                 <CardDescription>Tempo médio por categoria</CardDescription>
               </CardHeader>
               <CardContent className="space-y-4">
-                {[{ category: "RH", time: "2.3 dias", eff: 87 }, { category: "Financeiro", time: "4h", eff: 94 }, { category: "Operações", time: "1.8 dias", eff: 76 }].map((item, i) => (
-                  <div key={i} className="flex items-center justify-between">
+                {[{ category: "RH", time: "2.3 dias", eff: 87 }, { category: "Financeiro", time: "4h", eff: 94 }, { category: "Operações", time: "1.8 dias", eff: 76 }].map((item) => (
+                  <div key={item.category} className="flex items-center justify-between">
                     <div><p className="font-medium">{item.category}</p><p className="text-sm text-muted-foreground">{item.time}</p></div>
                     <div className="text-right"><p className="font-medium">{item.eff}%</p><Progress value={item.eff} className="w-20 h-2" /></div>
                   </div>
@@ -259,8 +259,8 @@ export const WorkflowAutomationHub: React.FC = () => {
                 <CardDescription>Últimos 30 dias</CardDescription>
               </CardHeader>
               <CardContent className="space-y-4">
-                {[{ cat: "RH", exec: 156, trend: "+12%" }, { cat: "Financeiro", exec: 289, trend: "+8%" }, { cat: "Operações", exec: 97, trend: "-3%" }].map((item, i) => (
-                  <div key={i} className="flex items-center justify-between">
+                {[{ cat: "RH", exec: 156, trend: "+12%" }, { cat: "Financeiro", exec: 289, trend: "+8%" }, { cat: "Operações", exec: 97, trend: "-3%" }].map((item) => (
+                  <div key={item.cat} className="flex items-center justify-between">
                     <p className="font-medium">{item.cat}</p>
                     <div className="text-right"><p className="font-bold">{item.exec}</p><p className={`text-sm ${item.trend.startsWith("+") ? "text-success" : "text-destructive"}`}>{item.trend}</p></div>
                   </div>
@@ -326,8 +326,8 @@ export const WorkflowAutomationHub: React.FC = () => {
               <Progress value={selectedWorkflow.progress} className="h-3" />
               <p className="text-sm text-muted-foreground">Progresso: {selectedWorkflow.progress}%</p>
               <div className="border rounded-lg p-4 max-h-60 overflow-auto space-y-2">
-                {(selectedWorkflow.steps as Array<{ name: string; status: string }>)?.map((step, i: number) => (
-                  <div key={i} className="flex items-center justify-between p-2 bg-muted/50 rounded">
+                {(selectedWorkflow.steps as Array<{ name: string; status: string }>)?.map((step) => (
+                  <div key={step.name} className="flex items-center justify-between p-2 bg-muted/50 rounded">
                     <span>{step.name}</span>
                     <Badge variant="outline">{step.status}</Badge>
                   </div>

@@ -151,7 +151,7 @@ export function AuditAssistant() {
               {packagesLoading ? (
                 <div className="space-y-3">
                   {[...Array(3)].map((_, i) => (
-                    <Skeleton key={i} className="h-32" />
+                    <Skeleton key={`audit-pkg-skeleton-${i}`} className="h-32" />
                   ))}
                 </div>
               ) : filteredPackages.length === 0 ? (
@@ -208,8 +208,8 @@ export function AuditAssistant() {
                           <div className="mb-3 p-2 rounded bg-warning/10 text-xs">
                             <p className="font-medium text-warning mb-1">Itens pendentes:</p>
                             <ul className="text-muted-foreground space-y-0.5">
-                              {pkg.missingItems.slice(0, 2).map((item, i) => (
-                                <li key={i} className="flex items-center gap-1">
+                              {pkg.missingItems.slice(0, 2).map((item) => (
+                                <li key={item} className="flex items-center gap-1">
                                   <AlertTriangle className="h-3 w-3 text-warning" />
                                   {item}
                                 </li>
@@ -275,7 +275,7 @@ export function AuditAssistant() {
               {documentsLoading ? (
                 <div className="space-y-3">
                   {[...Array(5)].map((_, i) => (
-                    <Skeleton key={i} className="h-16" />
+                    <Skeleton key={`audit-doc-skeleton-${i}`} className="h-16" />
                   ))}
                 </div>
               ) : documents.length === 0 ? (

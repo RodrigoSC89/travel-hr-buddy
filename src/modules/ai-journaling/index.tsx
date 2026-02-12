@@ -306,7 +306,7 @@ export default function AIJournaling() {
                   </h4>
                   <ul className="space-y-1">
                     {journal.highlights.map((h, idx) => (
-                      <li key={idx} className="text-sm text-muted-foreground pl-4 border-l-2 border-green-200">
+                      <li key={`highlight-${idx}-${h.slice(0, 15)}`} className="text-sm text-muted-foreground pl-4 border-l-2 border-green-200">
                         {h}
                       </li>
                     ))}
@@ -323,7 +323,7 @@ export default function AIJournaling() {
                       </h4>
                       <ul className="space-y-1">
                         {journal.decisions.map((d, idx) => (
-                          <li key={idx} className="text-sm text-muted-foreground pl-4 border-l-2 border-blue-200">
+                          <li key={`decision-${idx}-${d.slice(0, 15)}`} className="text-sm text-muted-foreground pl-4 border-l-2 border-blue-200">
                             {d}
                           </li>
                         ))}
@@ -339,7 +339,7 @@ export default function AIJournaling() {
                       </h4>
                       <ul className="space-y-1">
                         {journal.risks.map((r, idx) => (
-                          <li key={idx} className="text-sm text-muted-foreground pl-4 border-l-2 border-amber-200">
+                          <li key={`risk-${idx}-${r.slice(0, 15)}`} className="text-sm text-muted-foreground pl-4 border-l-2 border-amber-200">
                             {r}
                           </li>
                         ))}
@@ -359,9 +359,9 @@ export default function AIJournaling() {
                       Incidentes Registrados
                     </h4>
                     <ul className="space-y-1">
-                      {journal.incidents.map((i, idx) => (
-                        <li key={idx} className="text-sm text-red-700 dark:text-red-400">
-                          {i}
+                      {journal.incidents.map((inc, idx) => (
+                        <li key={`incident-${idx}-${inc.slice(0, 15)}`} className="text-sm text-red-700 dark:text-red-400">
+                          {inc}
                         </li>
                       ))}
                     </ul>

@@ -454,8 +454,8 @@ export const DocumentWorkflowManager: React.FC = () => {
                           <span>📦 {doc.fileSize}</span>
                         </div>
                         <div className="flex gap-1 mt-1">
-                          {doc.tags.map((tag, i) => (
-                            <Badge key={i} variant="secondary" className="text-xs">{tag}</Badge>
+                          {doc.tags.map((tag) => (
+                            <Badge key={tag} variant="secondary" className="text-xs">{tag}</Badge>
                           ))}
                         </div>
                       </div>

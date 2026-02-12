@@ -172,9 +172,9 @@ export function CommandBrainPanel({ context, onSettingsClick }: CommandBrainPane
                 Pergunte qualquer coisa sobre a operação
               </p>
               <div className="flex flex-wrap gap-2 justify-center">
-                {suggestions.map((s, i) => (
+                {suggestions.map((s) => (
                   <Button
-                    key={i}
+                    key={s}
                     variant="outline"
                     size="sm"
                     className="text-xs"

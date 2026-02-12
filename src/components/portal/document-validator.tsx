@@ -291,7 +291,7 @@ export const DocumentValidator: React.FC<DocumentValidatorProps> = ({
                       <strong>Problemas encontrados:</strong>
                       <ul className="list-disc list-inside mt-2 space-y-1">
                         {result.issues.map((issue, i) => (
-                          <li key={i} className="text-sm">{issue}</li>
+                          <li key={`issue-${i}-${issue.slice(0, 15)}`} className="text-sm">{issue}</li>
                         ))}
                       </ul>
                     </AlertDescription>
@@ -304,7 +304,7 @@ export const DocumentValidator: React.FC<DocumentValidatorProps> = ({
                     <p className="font-medium text-info mb-2">Sugestões de melhoria:</p>
                     <ul className="list-disc list-inside space-y-1">
                       {result.suggestions.map((suggestion, i) => (
-                        <li key={i} className="text-sm text-foreground">{suggestion}</li>
+                        <li key={`sug-${i}-${suggestion.slice(0, 15)}`} className="text-sm text-foreground">{suggestion}</li>
                       ))}
                     </ul>
                   </div>

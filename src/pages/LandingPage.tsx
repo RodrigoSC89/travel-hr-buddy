@@ -184,8 +184,8 @@ const LandingPage = () => {
 
             {/* Stats */}
             <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mt-16">
-              {stats.map((stat, idx) => (
-                <div key={idx} className="text-center p-6 rounded-xl bg-card/50 border">
+              {stats.map((stat) => (
+                <div key={stat.label} className="text-center p-6 rounded-xl bg-card/50 border">
                   <div className="text-3xl font-bold text-primary mb-1">{stat.value}</div>
                   <div className="text-sm text-muted-foreground">{stat.label}</div>
                 </div>
@@ -208,8 +208,8 @@ const LandingPage = () => {
             </div>
 
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {features.map((feature, idx) => (
-                <Card key={idx} className="group hover:border-primary/50 transition-all duration-300 hover:shadow-lg">
+              {features.map((feature) => (
+                <Card key={feature.title} className="group hover:border-primary/50 transition-all duration-300 hover:shadow-lg">
                   <CardHeader>
                     <div className="p-3 rounded-lg bg-primary/10 w-fit mb-3 group-hover:bg-primary/20 transition-colors">
                       <feature.icon className="h-6 w-6 text-primary" />
@@ -285,7 +285,7 @@ const LandingPage = () => {
 
                       <ul className="space-y-3 text-left">
                         {tier.features.slice(0, 7).map((feature, idx) => (
-                          <li key={idx} className="flex items-start gap-2">
+                          <li key={`feat-${idx}-${feature.slice(0, 15)}`} className="flex items-start gap-2">
                             <Check className="h-5 w-5 text-primary shrink-0 mt-0.5" />
                             <span className="text-sm">{feature}</span>
                           </li>
@@ -337,12 +337,12 @@ const LandingPage = () => {
             </div>
 
             <div className="grid md:grid-cols-3 gap-6">
-              {testimonials.map((testimonial, idx) => (
-                <Card key={idx} className="bg-card">
+              {testimonials.map((testimonial) => (
+                <Card key={testimonial.name} className="bg-card">
                   <CardContent className="pt-6">
                     <div className="flex gap-1 mb-4">
                       {Array.from({ length: testimonial.rating }).map((_, i) => (
-                        <Star key={i} className="h-5 w-5 fill-yellow-400 text-yellow-400" />
+                        <Star key={`star-${i}`} className="h-5 w-5 fill-yellow-400 text-yellow-400" />
                       ))}
                     </div>
                     <p className="text-muted-foreground mb-6 italic">

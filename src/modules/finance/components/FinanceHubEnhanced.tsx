@@ -318,12 +318,12 @@ const FinanceHubEnhanced: React.FC = () => {
                       { type: 'income', desc: 'Frete Internacional', amount: 125000, date: subDays(new Date(), 1) },
                       { type: 'expense', desc: 'Manutenção Preventiva', amount: -18500, date: subDays(new Date(), 2) },
                       { type: 'income', desc: 'Contrato Charter', amount: 280000, date: subDays(new Date(), 3) },
-                    ].map((tx, i) => (
+                    ].map((tx, txIdx) => (
                       <motion.div 
-                        key={i} 
+                        key={tx.desc} 
                         initial={{ opacity: 0, x: -10 }}
                         animate={{ opacity: 1, x: 0 }}
-                        transition={{ delay: i * 0.1 }}
+                        transition={{ delay: txIdx * 0.1 }}
                         className="flex items-center justify-between p-3 rounded-lg bg-muted/30 hover:bg-muted/50 transition-colors cursor-pointer"
                       >
                         <div className="flex items-center gap-3">
@@ -518,12 +518,12 @@ const FinanceHubEnhanced: React.FC = () => {
                 { type: 'saving', title: 'Economia em Combustível', desc: 'Otimização de rotas pode reduzir consumo em 8%', value: 46400, confidence: 92 },
                 { type: 'risk', title: 'Risco de Estouro Orçamentário', desc: 'Categoria "Manutenção" pode exceder orçamento', value: 52500, confidence: 78 },
                 { type: 'optimization', title: 'Consolidação de Fornecedores', desc: 'Negociação conjunta pode reduzir custos em 12%', value: 28800, confidence: 85 },
-              ].map((insight, i) => (
+              ].map((insight, insightIdx) => (
                 <motion.div
-                  key={i}
+                  key={insight.title}
                   initial={{ opacity: 0, x: -20 }}
                   animate={{ opacity: 1, x: 0 }}
-                  transition={{ delay: i * 0.1 }}
+                  transition={{ delay: insightIdx * 0.1 }}
                   className="p-4 rounded-lg bg-background/50 border border-border/50"
                 >
                   <div className="flex items-start justify-between">

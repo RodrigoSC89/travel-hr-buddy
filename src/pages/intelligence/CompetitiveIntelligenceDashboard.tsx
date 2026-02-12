@@ -932,7 +932,7 @@ export default function CompetitiveIntelligenceDashboard() {
                     <div className="space-y-2">
                       {zoneAlerts.map((alert, idx) => (
                         <div 
-                          key={idx}
+                          key={`zone-alert-${idx}-${alert.vessel.name}`}
                           className="p-2 rounded-lg bg-amber-500/10 border border-amber-500/30 flex items-center gap-3"
                         >
                           <div 

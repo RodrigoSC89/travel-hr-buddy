@@ -243,7 +243,7 @@ export const CrewScheduleVisualizer: React.FC = () => {
                     return day > 0 && day <= 31 && (scheduleDay === day || s.endDate.getDate() === day);
                   });
                   return (
-                    <div key={i} className={`aspect-square border rounded-lg flex flex-col items-center justify-center text-sm ${day > 0 && day <= 31 ? "bg-background" : "bg-muted/30"} ${hasEvent ? "ring-2 ring-primary/50" : ""}`}>
+                    <div key={`cal-day-${i}`} className={`aspect-square border rounded-lg flex flex-col items-center justify-center text-sm ${day > 0 && day <= 31 ? "bg-background" : "bg-muted/30"} ${hasEvent ? "ring-2 ring-primary/50" : ""}`}>
                       {day > 0 && day <= 31 && (
                         <>
                           <span>{day}</span>

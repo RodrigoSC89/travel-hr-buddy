@@ -299,9 +299,9 @@ export default function FlightTracker() {
       {/* Search Results */}
       {searchResults.length > 0 && (
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          {searchResults.map((result, idx) => (
+          {searchResults.map((result) => (
             <Card 
-              key={idx} 
+              key={result.flightNumber} 
               className="cursor-pointer hover:border-primary/50 transition-colors"
               onClick={() => {
                 setSearchQuery(result.flightNumber);

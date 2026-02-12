@@ -178,8 +178,8 @@ const TaskAutomation = () => {
               { name: "Safety Report", icon: AlertCircle, desc: "Weekly safety report generation" },
               { name: "Maintenance Sync", icon: Workflow, desc: "Sync maintenance with vessel position" },
               { name: "Custom Workflow", icon: Zap, desc: "Create custom automation workflow" },
-            ].map((template, i) => (
-              <Card key={i} className="cursor-pointer hover:border-primary transition-colors">
+            ].map((template) => (
+              <Card key={template.name} className="cursor-pointer hover:border-primary transition-colors">
                 <CardContent className="pt-6">
                   <div className="flex items-center gap-3 mb-3">
                     <div className="p-2 bg-primary/10 rounded-lg"><template.icon className="h-5 w-5 text-primary" /></div>
