@@ -124,14 +124,14 @@ const fallbackInspections: Inspection[] = [
 ];
 
 const INSPECTION_TYPES = [
-  { value: "PSC", label: "Port State Control", color: "bg-blue-500" },
-  { value: "FLAG_STATE", label: "Flag State", color: "bg-emerald-500" },
-  { value: "CLASS", label: "Classification Society", color: "bg-purple-500" },
-  { value: "ISM", label: "ISM Audit", color: "bg-amber-500" },
-  { value: "ISPS", label: "ISPS Audit", color: "bg-red-500" },
-  { value: "SIRE", label: "SIRE Inspection", color: "bg-cyan-500" },
-  { value: "CDI", label: "CDI Inspection", color: "bg-orange-500" },
-  { value: "RIGHTSHIP", label: "RightShip", color: "bg-green-500" },
+  { value: "PSC", label: "Port State Control", color: "bg-info" },
+  { value: "FLAG_STATE", label: "Flag State", color: "bg-success" },
+  { value: "CLASS", label: "Classification Society", color: "bg-accent" },
+  { value: "ISM", label: "ISM Audit", color: "bg-warning" },
+  { value: "ISPS", label: "ISPS Audit", color: "bg-destructive" },
+  { value: "SIRE", label: "SIRE Inspection", color: "bg-info/80" },
+  { value: "CDI", label: "CDI Inspection", color: "bg-warning/80" },
+  { value: "RIGHTSHIP", label: "RightShip", color: "bg-success/80" },
 ];
 
 export default function InspectionScheduler() {
@@ -166,7 +166,7 @@ export default function InspectionScheduler() {
   };
 
   const getTypeInfo = (type: string) => {
-    return INSPECTION_TYPES.find(t => t.value === type) || { label: type, color: "bg-gray-500" };
+    return INSPECTION_TYPES.find(t => t.value === type) || { label: type, color: "bg-muted" };
   };
 
   const getStatusBadge = (status: string) => {
@@ -174,11 +174,11 @@ export default function InspectionScheduler() {
       case "completed":
         return <Badge className="bg-success/20 text-success"><CheckCircle2 className="h-3 w-3 mr-1" />Concluída</Badge>;
       case "scheduled":
-        return <Badge className="bg-blue-500/20 text-blue-500"><Clock className="h-3 w-3 mr-1" />Agendada</Badge>;
+        return <Badge className="bg-info/20 text-info"><Clock className="h-3 w-3 mr-1" />Agendada</Badge>;
       case "in_progress":
-        return <Badge className="bg-amber-500/20 text-amber-500"><Clock className="h-3 w-3 mr-1" />Em Andamento</Badge>;
+        return <Badge className="bg-warning/20 text-warning"><Clock className="h-3 w-3 mr-1" />Em Andamento</Badge>;
       case "postponed":
-        return <Badge className="bg-orange-500/20 text-orange-500">Adiada</Badge>;
+        return <Badge className="bg-warning/15 text-warning/80">Adiada</Badge>;
       case "cancelled":
         return <Badge variant="secondary">Cancelada</Badge>;
       default:
@@ -188,7 +188,7 @@ export default function InspectionScheduler() {
 
   const getRiskColor = (risk: number) => {
     if (risk <= 15) return "text-success";
-    if (risk <= 30) return "text-amber-500";
+    if (risk <= 30) return "text-warning";
     return "text-destructive";
   };
 
@@ -207,14 +207,14 @@ export default function InspectionScheduler() {
             </div>
           </CardContent>
         </Card>
-        <Card className="border-l-4 border-l-blue-500">
+        <Card className="border-l-4 border-l-info">
           <CardContent className="pt-4">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-xs text-muted-foreground">Agendadas</p>
-                <p className="text-2xl font-bold text-blue-500">{stats.scheduled}</p>
+                <p className="text-2xl font-bold text-info">{stats.scheduled}</p>
               </div>
-              <CalendarIcon className="h-8 w-8 text-blue-500 opacity-60" />
+              <CalendarIcon className="h-8 w-8 text-info opacity-60" />
             </div>
           </CardContent>
         </Card>
@@ -240,14 +240,14 @@ export default function InspectionScheduler() {
             </div>
           </CardContent>
         </Card>
-        <Card className="border-l-4 border-l-amber-500">
+        <Card className="border-l-4 border-l-warning">
           <CardContent className="pt-4">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-xs text-muted-foreground">Prep. Média</p>
-                <p className="text-2xl font-bold text-amber-500">{stats.avgPreparation}%</p>
+                <p className="text-2xl font-bold text-warning">{stats.avgPreparation}%</p>
               </div>
-              <Shield className="h-8 w-8 text-amber-500 opacity-60" />
+              <Shield className="h-8 w-8 text-warning opacity-60" />
             </div>
           </CardContent>
         </Card>

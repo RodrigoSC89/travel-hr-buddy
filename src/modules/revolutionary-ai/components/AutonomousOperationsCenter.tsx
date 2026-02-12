@@ -205,7 +205,7 @@ export function AutonomousOperationsCenter() {
               <div>
                 <CardTitle className="text-2xl text-white flex items-center gap-2">
                   Autonomous Operations Center
-                  <Badge variant="secondary" className="bg-green-500 text-white">
+                  <Badge variant="secondary" className="bg-success text-success-foreground">
                     <span className="animate-pulse mr-1">●</span> ONLINE
                   </Badge>
                 </CardTitle>

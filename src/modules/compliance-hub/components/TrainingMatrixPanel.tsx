@@ -70,11 +70,11 @@ export function TrainingMatrixPanel({
   const getStatusIcon = (status: ComplianceTraining['status']) => {
     switch (status) {
       case 'completed':
-        return <CheckCircle2 className="h-4 w-4 text-green-500" />;
+        return <CheckCircle2 className="h-4 w-4 text-success" />;
       case 'in-progress':
-        return <Clock className="h-4 w-4 text-yellow-500" />;
+        return <Clock className="h-4 w-4 text-warning" />;
       case 'expired':
-        return <XCircle className="h-4 w-4 text-red-500" />;
+        return <XCircle className="h-4 w-4 text-destructive" />;
       default:
         return <AlertTriangle className="h-4 w-4 text-muted-foreground" />;
     }
@@ -149,8 +149,8 @@ export function TrainingMatrixPanel({
         <Card>
           <CardContent className="p-4">
             <div className="flex items-center gap-3">
-              <div className="p-2 rounded-lg bg-green-500/10">
-                <CheckCircle2 className="h-5 w-5 text-green-500" />
+              <div className="p-2 rounded-lg bg-success/10">
+                <CheckCircle2 className="h-5 w-5 text-success" />
               </div>
               <div>
                 <p className="text-sm text-muted-foreground">Concluídos</p>
@@ -163,8 +163,8 @@ export function TrainingMatrixPanel({
         <Card>
           <CardContent className="p-4">
             <div className="flex items-center gap-3">
-              <div className="p-2 rounded-lg bg-yellow-500/10">
-                <Clock className="h-5 w-5 text-yellow-500" />
+              <div className="p-2 rounded-lg bg-warning/10">
+                <Clock className="h-5 w-5 text-warning" />
               </div>
               <div>
                 <p className="text-sm text-muted-foreground">Em Progresso</p>
@@ -177,8 +177,8 @@ export function TrainingMatrixPanel({
         <Card>
           <CardContent className="p-4">
             <div className="flex items-center gap-3">
-              <div className="p-2 rounded-lg bg-red-500/10">
-                <XCircle className="h-5 w-5 text-red-500" />
+              <div className="p-2 rounded-lg bg-destructive/10">
+                <XCircle className="h-5 w-5 text-destructive" />
               </div>
               <div>
                 <p className="text-sm text-muted-foreground">Expirados</p>
@@ -191,8 +191,8 @@ export function TrainingMatrixPanel({
         <Card>
           <CardContent className="p-4">
             <div className="flex items-center gap-3">
-              <div className="p-2 rounded-lg bg-blue-500/10">
-                <GraduationCap className="h-5 w-5 text-blue-500" />
+              <div className="p-2 rounded-lg bg-info/10">
+                <GraduationCap className="h-5 w-5 text-info" />
               </div>
               <div>
                 <p className="text-sm text-muted-foreground">Conformidade</p>
@@ -319,7 +319,7 @@ export function TrainingMatrixPanel({
                     </TableCell>
                     <TableCell>
                       {training.expiryDate ? (
-                        <span className={training.status === 'expired' ? 'text-red-500' : ''}>
+                        <span className={training.status === 'expired' ? 'text-destructive' : ''}>
                           {training.expiryDate}
                         </span>
                       ) : (
