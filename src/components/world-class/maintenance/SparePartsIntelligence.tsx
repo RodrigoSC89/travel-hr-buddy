@@ -54,10 +54,10 @@ export function SparePartsIntelligence() {
 
   const criticalityColor = (c: string) => {
     switch (c) {
-      case "critical": return "text-red-500 bg-red-500/10 border-red-500/30";
-      case "high": return "text-orange-500 bg-orange-500/10 border-orange-500/30";
-      case "medium": return "text-amber-500 bg-amber-500/10 border-amber-500/30";
-      default: return "text-emerald-500 bg-emerald-500/10 border-emerald-500/30";
+      case "critical": return "text-destructive bg-destructive/10 border-destructive/30";
+      case "high": return "text-warning bg-warning/10 border-warning/30";
+      case "medium": return "text-warning bg-warning/10 border-warning/30";
+      default: return "text-success bg-success/10 border-success/30";
     }
   };
 
@@ -71,8 +71,8 @@ export function SparePartsIntelligence() {
       <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
         <Card className="border-border/50 bg-card/80">
           <CardContent className="p-4 flex items-center gap-3">
-            <div className="p-2 rounded-lg bg-emerald-500/10">
-              <Package className="h-5 w-5 text-emerald-500" />
+            <div className="p-2 rounded-lg bg-success/10">
+              <Package className="h-5 w-5 text-success" />
             </div>
             <div>
               <p className="text-2xl font-bold">{supplies.length}</p>
@@ -82,8 +82,8 @@ export function SparePartsIntelligence() {
         </Card>
         <Card className="border-border/50 bg-card/80">
           <CardContent className="p-4 flex items-center gap-3">
-            <div className="p-2 rounded-lg bg-red-500/10">
-              <AlertTriangle className="h-5 w-5 text-red-500" />
+            <div className="p-2 rounded-lg bg-destructive/10">
+              <AlertTriangle className="h-5 w-5 text-destructive" />
             </div>
             <div>
               <p className="text-2xl font-bold">{stats.critical}</p>

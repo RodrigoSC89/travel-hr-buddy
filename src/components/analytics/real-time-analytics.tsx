@@ -190,11 +190,11 @@ const RealTimeAnalytics = () => {
   const getTrendIcon = (trend: string) => {
     switch (trend) {
     case "up":
-      return <TrendingUp className="w-4 h-4 text-green-500" />;
+      return <TrendingUp className="w-4 h-4 text-success" />;
     case "down":
-      return <TrendingDown className="w-4 h-4 text-red-500" />;
+      return <TrendingDown className="w-4 h-4 text-destructive" />;
     default:
-      return <Activity className="w-4 h-4 text-blue-500" />;
+      return <Activity className="w-4 h-4 text-info" />;
     }
   };
 
@@ -275,7 +275,7 @@ const RealTimeAnalytics = () => {
               <div className="text-2xl font-bold">{metric.value}</div>
               <div className="flex items-center gap-2 text-xs text-muted-foreground">
                 {getTrendIcon(metric.trend)}
-                <span className={metric.trend === "up" ? "text-green-600" : "text-red-600"}>
+                <span className={metric.trend === "up" ? "text-success" : "text-destructive"}>
                   {metric.change}
                 </span>
                 <span>vs. período anterior</span>

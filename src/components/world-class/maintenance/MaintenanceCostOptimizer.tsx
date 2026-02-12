@@ -54,8 +54,8 @@ export function MaintenanceCostOptimizer() {
   };
 
   const trendIcon = (t?: string) => {
-    if (t === "up") return <TrendingUp className="h-3 w-3 text-red-400" />;
-    if (t === "down") return <TrendingDown className="h-3 w-3 text-emerald-400" />;
+    if (t === "up") return <TrendingUp className="h-3 w-3 text-destructive" />;
+    if (t === "down") return <TrendingDown className="h-3 w-3 text-success" />;
     return null;
   };
 
@@ -67,8 +67,8 @@ export function MaintenanceCostOptimizer() {
       <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
         <Card className="border-border/50 bg-card/80">
           <CardContent className="p-4 flex items-center gap-3">
-            <div className="p-2 rounded-lg bg-red-500/10">
-              <AlertTriangle className="h-5 w-5 text-red-500" />
+            <div className="p-2 rounded-lg bg-destructive/10">
+              <AlertTriangle className="h-5 w-5 text-destructive" />
             </div>
             <div>
               <p className="text-2xl font-bold">{stats.criticalTasks}</p>
@@ -147,12 +147,12 @@ export function MaintenanceCostOptimizer() {
                 <Badge variant="outline" className="mt-2 text-emerald-500">Recomendado</Badge>
               </CardContent>
             </Card>
-            <Card className="border-red-500/20 bg-red-500/5">
+            <Card className="border-destructive/20 bg-destructive/5">
               <CardContent className="p-4 text-center">
-                <DollarSign className="h-6 w-6 mx-auto text-red-500 mb-2" />
+                <DollarSign className="h-6 w-6 mx-auto text-destructive mb-2" />
                 <p className="text-2xl font-bold">${(costAnalysis.corrective_budget_usd || 0).toLocaleString()}</p>
                 <p className="text-sm text-muted-foreground">Custo Corretivo</p>
-                <Badge variant="outline" className="mt-2 text-red-500">Evitar</Badge>
+                <Badge variant="outline" className="mt-2 text-destructive">Evitar</Badge>
               </CardContent>
             </Card>
             <Card className="border-primary/20 bg-primary/5">

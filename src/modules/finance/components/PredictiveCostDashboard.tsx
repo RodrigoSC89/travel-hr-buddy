@@ -26,12 +26,12 @@ const categoryIcons: Record<string, React.ElementType> = {
 };
 
 const categoryColors: Record<string, string> = {
-  fuel: 'bg-amber-500',
-  maintenance: 'bg-purple-500',
-  crew: 'bg-blue-500',
-  port: 'bg-green-500',
-  insurance: 'bg-red-500',
-  other: 'bg-gray-500'
+  fuel: 'bg-warning',
+  maintenance: 'bg-accent',
+  crew: 'bg-info',
+  port: 'bg-success',
+  insurance: 'bg-destructive',
+  other: 'bg-muted'
 };
 
 export function PredictiveCostDashboard() {
@@ -146,12 +146,12 @@ export function PredictiveCostDashboard() {
               <div className="flex items-center justify-between">
                 <div>
                   <p className="text-sm text-muted-foreground">Economia Potencial</p>
-                  <p className="text-2xl font-bold text-green-600">${(totalSavings / 1000).toFixed(0)}k</p>
-                  <p className="text-xs text-green-600 mt-1">
+                  <p className="text-2xl font-bold text-success">${(totalSavings / 1000).toFixed(0)}k</p>
+                  <p className="text-xs text-success mt-1">
                     {savings.length} oportunidades
                   </p>
                 </div>
-                <TrendingDown className="h-8 w-8 text-green-500 opacity-80" />
+                <TrendingDown className="h-8 w-8 text-success opacity-80" />
               </div>
             </CardContent>
           </Card>
@@ -163,10 +163,10 @@ export function PredictiveCostDashboard() {
               <div className="flex items-center justify-between">
                 <div>
                   <p className="text-sm text-muted-foreground">Confiança ML</p>
-                  <p className="text-2xl font-bold text-blue-600">{avgConfidence.toFixed(0)}%</p>
+                  <p className="text-2xl font-bold text-info">{avgConfidence.toFixed(0)}%</p>
                   <Progress value={avgConfidence} className="h-1 mt-2 w-24" />
                 </div>
-                <Sparkles className="h-8 w-8 text-blue-500 opacity-80" />
+                <Sparkles className="h-8 w-8 text-info opacity-80" />
               </div>
             </CardContent>
           </Card>
@@ -274,7 +274,7 @@ export function PredictiveCostDashboard() {
                           <p className="text-xl font-bold">${(pred.total / 1000).toFixed(0)}k</p>
                           {idx > 0 && (
                             <div className={`flex items-center text-xs ${
-                              pred.total > predictions[idx - 1].total ? 'text-red-500' : 'text-green-500'
+                              pred.total > predictions[idx - 1].total ? 'text-destructive' : 'text-success'
                             }`}>
                               {pred.total > predictions[idx - 1].total ? (
                                 <TrendingUp className="h-3 w-3 mr-1" />
@@ -298,7 +298,7 @@ export function PredictiveCostDashboard() {
           <Card>
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
-                <Lightbulb className="h-5 w-5 text-yellow-500" />
+                <Lightbulb className="h-5 w-5 text-warning" />
                 Oportunidades Identificadas por IA
               </CardTitle>
               <CardDescription>
@@ -339,7 +339,7 @@ export function PredictiveCostDashboard() {
                           </div>
                         </div>
                         <div className="text-right">
-                          <p className="text-xl font-bold text-green-600">
+                          <p className="text-xl font-bold text-success">
                             -${(opportunity.potentialSavings / 1000).toFixed(0)}k
                           </p>
                           <p className="text-sm text-muted-foreground">

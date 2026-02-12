@@ -331,10 +331,10 @@ export const AdvancedFleetAnalytics = () => {
 
   const getImpactColor = (impact: PredictiveInsight["impact"]) => {
     switch (impact) {
-    case "high": return "text-red-600 bg-red-100";
-    case "medium": return "text-yellow-600 bg-yellow-100";
-    case "low": return "text-green-600 bg-green-100";
-    default: return "text-muted-foreground bg-gray-100";
+    case "high": return "text-destructive bg-destructive/10";
+    case "medium": return "text-warning bg-warning/10";
+    case "low": return "text-success bg-success/10";
+    default: return "text-muted-foreground bg-muted";
     }
   };
 
@@ -389,8 +389,8 @@ export const AdvancedFleetAnalytics = () => {
                   <p className="text-sm text-muted-foreground">Eficiência Geral</p>
                   <p className="text-2xl font-bold">{metrics.efficiency}%</p>
                   <div className="flex items-center gap-1 mt-1">
-                    <TrendingUp className="h-3 w-3 text-green-600" />
-                    <span className="text-xs text-green-600">+2.3%</span>
+                    <TrendingUp className="h-3 w-3 text-success" />
+                    <span className="text-xs text-success">+2.3%</span>
                   </div>
                 </div>
                 <div className="w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center">
@@ -407,12 +407,12 @@ export const AdvancedFleetAnalytics = () => {
                   <p className="text-sm text-muted-foreground">Margem de Lucro</p>
                   <p className="text-2xl font-bold">{metrics.profit_margin}%</p>
                   <div className="flex items-center gap-1 mt-1">
-                    <TrendingUp className="h-3 w-3 text-green-600" />
-                    <span className="text-xs text-green-600">+5.1%</span>
+                    <TrendingUp className="h-3 w-3 text-success" />
+                    <span className="text-xs text-success">+5.1%</span>
                   </div>
                 </div>
-                <div className="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center">
-                  <DollarSign className="h-6 w-6 text-green-600" />
+                <div className="w-12 h-12 bg-success/10 rounded-full flex items-center justify-center">
+                  <DollarSign className="h-6 w-6 text-success" />
                 </div>
               </div>
             </CardContent>
@@ -425,12 +425,12 @@ export const AdvancedFleetAnalytics = () => {
                   <p className="text-sm text-muted-foreground">Utilização da Frota</p>
                   <p className="text-2xl font-bold">{metrics.vessel_utilization}%</p>
                   <div className="flex items-center gap-1 mt-1">
-                    <TrendingDown className="h-3 w-3 text-red-600" />
-                    <span className="text-xs text-red-600">-1.2%</span>
+                    <TrendingDown className="h-3 w-3 text-destructive" />
+                    <span className="text-xs text-destructive">-1.2%</span>
                   </div>
                 </div>
-                <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center">
-                  <Ship className="h-6 w-6 text-blue-600" />
+                <div className="w-12 h-12 bg-info/10 rounded-full flex items-center justify-center">
+                  <Ship className="h-6 w-6 text-info" />
                 </div>
               </div>
             </CardContent>
@@ -443,12 +443,12 @@ export const AdvancedFleetAnalytics = () => {
                   <p className="text-sm text-muted-foreground">Score de Segurança</p>
                   <p className="text-2xl font-bold">{metrics.safety_score}%</p>
                   <div className="flex items-center gap-1 mt-1">
-                    <CheckCircle className="h-3 w-3 text-green-600" />
-                    <span className="text-xs text-green-600">Excelente</span>
+                    <CheckCircle className="h-3 w-3 text-success" />
+                    <span className="text-xs text-success">Excelente</span>
                   </div>
                 </div>
-                <div className="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center">
-                  <CheckCircle className="h-6 w-6 text-green-600" />
+                <div className="w-12 h-12 bg-success/10 rounded-full flex items-center justify-center">
+                  <CheckCircle className="h-6 w-6 text-success" />
                 </div>
               </div>
             </CardContent>
@@ -544,7 +544,7 @@ export const AdvancedFleetAnalytics = () => {
                   </div>
                   <Progress value={75} className="h-2" />
                   
-                  <div className="text-xs text-green-600">
+                  <div className="text-xs text-success">
                     -5.8% vs período anterior
                   </div>
                 </div>
@@ -566,7 +566,7 @@ export const AdvancedFleetAnalytics = () => {
                   </div>
                   <Progress value={metrics?.environmental_score} className="h-2" />
                   
-                  <div className="text-xs text-green-600">
+                  <div className="text-xs text-success">
                     +1.9% vs período anterior
                   </div>
                 </div>
@@ -653,7 +653,7 @@ export const AdvancedFleetAnalytics = () => {
                         </Badge>
                       </div>
                       <div className="text-right">
-                        <div className="text-lg font-bold text-green-600">
+                        <div className="text-lg font-bold text-success">
                           R$ {vessel.profit.toLocaleString()}
                         </div>
                         <div className="text-xs text-muted-foreground">Lucro mensal</div>
