@@ -282,8 +282,8 @@ const CareerDevelopment: React.FC = () => {
                     Tempo estimado: {careerPath.tempoEstimado}
                   </p>
                   <div className="flex flex-wrap gap-2">
-                    {careerPath.competenciasNecessarias.map((comp, idx) => (
-                      <Badge key={idx} variant="outline">{comp}</Badge>
+                    {careerPath.competenciasNecessarias.map((comp) => (
+                      <Badge key={comp} variant="outline">{comp}</Badge>
                     ))}
                   </div>
                 </div>
@@ -453,7 +453,7 @@ const CareerDevelopment: React.FC = () => {
               </CardHeader>
               <CardContent className="space-y-3">
                 {[1, 2, 3].map((_, idx) => (
-                  <div key={idx} className="p-3 bg-muted/50 rounded-lg">
+                  <div key={`mentoria-session-${idx}`} className="p-3 bg-muted/50 rounded-lg">
                     <div className="flex justify-between items-start mb-1">
                       <span className="font-medium text-sm">Sessão {3 - idx}</span>
                       <Badge variant="outline" className="text-xs">

@@ -107,9 +107,9 @@ export default function CrewingPayrollAIPage() {
           </CardHeader>
           <CardContent>
             <div className="space-y-4">
-              {rotations.map((rotation, idx) => (
+              {rotations.map((rotation) => (
                 <div 
-                  key={idx}
+                  key={rotation.crew}
                   className="flex items-center justify-between p-4 rounded-lg border"
                 >
                   <div className="flex items-center gap-4">

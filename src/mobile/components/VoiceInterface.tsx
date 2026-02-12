@@ -356,9 +356,9 @@ export const VoiceInterface: React.FC<VoiceInterfaceProps> = ({
           <div>
             <p className="text-sm font-medium mb-2">Suggested actions:</p>
             <div className="flex flex-wrap gap-2">
-              {intentParser.getSuggestedActions(detectedIntent).map((action, index) => (
+              {intentParser.getSuggestedActions(detectedIntent).map((action) => (
                 <Button
-                  key={index}
+                  key={action}
                   variant="outline"
                   size="sm"
                   onClick={() => { window.history.pushState({}, '', '/command-center'); window.dispatchEvent(new PopStateEvent('popstate')); }}

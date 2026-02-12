@@ -158,8 +158,8 @@ export function SparePartsIntelligence() {
           <CardContent>
             <ScrollArea className="h-[250px]">
               <div className="space-y-2">
-                {aiResult.spare_parts_analysis.critical_parts.map((part, idx) => (
-                  <div key={idx} className="flex items-center gap-3 p-3 rounded-lg border border-border/50 bg-muted/10">
+                {aiResult.spare_parts_analysis.critical_parts.map((part) => (
+                  <div key={part.part_name} className="flex items-center gap-3 p-3 rounded-lg border border-border/50 bg-muted/10">
                     <Badge variant="outline" className={`text-xs ${criticalityColor(part.criticality)}`}>
                       {part.criticality.toUpperCase()}
                     </Badge>

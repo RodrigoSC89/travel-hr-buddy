@@ -530,8 +530,8 @@ const ApiGatewayEnhanced = () => {
                               </p>
                               {route.tags && route.tags.length > 0 && (
                                 <div className="flex items-center gap-2 mt-2">
-                                  {route.tags.map((tag, idx) => (
-                                    <Badge key={idx} variant="outline" className="text-xs">
+                                  {route.tags.map((tag) => (
+                                    <Badge key={tag} variant="outline" className="text-xs">
                                       {tag}
                                     </Badge>
                                   ))}

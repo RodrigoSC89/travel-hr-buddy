@@ -299,8 +299,8 @@ export const PredictiveMaintenanceRevolution: React.FC = () => {
                     <div className="mb-3">
                       <div className="text-xs font-medium text-muted-foreground mb-1">Fatores de Risco:</div>
                       <div className="flex flex-wrap gap-1">
-                        {prediction.riskFactors.map((factor, idx) => (
-                          <Badge key={idx} variant="outline" className="text-xs">
+                        {prediction.riskFactors.map((factor) => (
+                          <Badge key={factor} variant="outline" className="text-xs">
                             {factor}
                           </Badge>
                         ))}
@@ -398,8 +398,8 @@ export const PredictiveMaintenanceRevolution: React.FC = () => {
         </CardHeader>
         <CardContent>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
-            {roiMetrics.map((metric, idx) => (
-              <div key={idx} className="p-4 border rounded-lg">
+            {roiMetrics.map((metric) => (
+              <div key={metric.metric} className="p-4 border rounded-lg">
                 <div className="flex items-center justify-between mb-3">
                   <h4 className="font-medium">{metric.metric}</h4>
                   {metric.trend === "up" ? (

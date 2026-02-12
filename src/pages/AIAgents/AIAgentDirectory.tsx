@@ -57,8 +57,8 @@ function AgentCard({ agent }: { agent: AgentContext }) {
         </CardHeader>
         <CardContent className="pt-0 space-y-3">
           <div className="flex flex-wrap gap-1">
-            {agent.expertise.slice(0, 3).map((skill, idx) => (
-              <Badge key={idx} variant="secondary" className={cn("text-[10px] px-1.5 py-0", colors.badge)}>
+            {agent.expertise.slice(0, 3).map((skill) => (
+              <Badge key={skill} variant="secondary" className={cn("text-[10px] px-1.5 py-0", colors.badge)}>
                 {skill.length > 25 ? skill.substring(0, 22) + "..." : skill}
               </Badge>
             ))}

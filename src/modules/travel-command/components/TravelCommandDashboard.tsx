@@ -559,9 +559,9 @@ const TravelCommandDashboard: React.FC = () => {
             </CardHeader>
             <CardContent>
               <div className="space-y-3">
-                {routePerformance.map((route, idx) => (
+                {routePerformance.map((route) => (
                   <div
-                    key={idx}
+                    key={route.route}
                     className="p-3 rounded-lg border hover:bg-muted/50 transition-colors"
                   >
                     <div className="flex items-center justify-between mb-2">

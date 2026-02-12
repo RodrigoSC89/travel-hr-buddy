@@ -386,11 +386,11 @@ export default function ReportsSection() {
             </CardHeader>
             <CardContent>
               <div className="space-y-4">
-                {spendingByCategory.map((cat, idx) => (
-                  <div key={idx} className="flex items-center gap-4">
+                {spendingByCategory.map((cat, catIdx) => (
+                  <div key={cat.category} className="flex items-center gap-4">
                     <div 
                       className="w-3 h-3 rounded-full" 
-                      style={{ backgroundColor: COLORS[idx % COLORS.length] }}
+                      style={{ backgroundColor: COLORS[catIdx % COLORS.length] }}
                     />
                     <div className="flex-1">
                       <div className="flex items-center justify-between mb-1">
@@ -402,7 +402,7 @@ export default function ReportsSection() {
                           className="h-full rounded-full transition-all"
                           style={{ 
                             width: `${cat.percentage}%`,
-                            backgroundColor: COLORS[idx % COLORS.length]
+                            backgroundColor: COLORS[catIdx % COLORS.length]
                           }}
                         />
                       </div>
@@ -473,8 +473,8 @@ export default function ReportsSection() {
 
           {/* Inventory KPIs */}
           <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-            {inventoryValue.map((cat, idx) => (
-              <Card key={idx}>
+            {inventoryValue.map((cat) => (
+              <Card key={cat.category}>
                 <CardContent className="p-4">
                   <div className="flex items-center justify-between mb-2">
                     <Badge variant="outline">{cat.category}</Badge>
@@ -515,8 +515,8 @@ export default function ReportsSection() {
           </Card>
 
           <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-            {supplierPerformance.map((supplier, idx) => (
-              <Card key={idx}>
+            {supplierPerformance.map((supplier) => (
+              <Card key={supplier.name}>
                 <CardContent className="p-4">
                   <div className="flex items-center gap-2 mb-3">
                     <Building2 className="h-5 w-5 text-primary" />

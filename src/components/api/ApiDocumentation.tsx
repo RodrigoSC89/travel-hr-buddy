@@ -278,9 +278,9 @@ export const ApiDocumentation: React.FC = () => {
                     </Badge>
                   </CollapsibleTrigger>
                   <CollapsibleContent className="pl-8 space-y-1 mt-1">
-                    {categoryEndpoints.map((endpoint, idx) => (
+                    {categoryEndpoints.map((endpoint) => (
                       <button
-                        key={idx}
+                        key={endpoint.path}
                         onClick={() => setSelectedEndpoint(endpoint)}
                         className={`w-full text-left p-2 rounded-lg hover:bg-muted transition-colors flex items-center gap-2 ${
                           selectedEndpoint?.path === endpoint.path ? 'bg-primary/10' : ''
@@ -347,8 +347,8 @@ export const ApiDocumentation: React.FC = () => {
                     <div>
                       <h4 className="font-medium mb-2">Parâmetros de Query</h4>
                       <div className="border rounded-lg divide-y">
-                        {selectedEndpoint.parameters.map((param, idx) => (
-                          <div key={idx} className="p-3 flex items-start justify-between">
+                        {selectedEndpoint.parameters.map((param) => (
+                          <div key={param.name} className="p-3 flex items-start justify-between">
                             <div>
                               <code className="text-sm font-mono">{param.name}</code>
                               <Badge variant="secondary" className="ml-2 text-xs">{param.type}</Badge>

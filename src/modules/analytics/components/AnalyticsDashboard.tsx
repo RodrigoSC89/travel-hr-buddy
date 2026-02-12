@@ -492,8 +492,8 @@ export function AnalyticsDashboard() {
                     { title: 'Demanda de Frete', prediction: 'Crescimento de 15% no segmento bulk', action: 'Expandir', priority: 'medium' },
                     { title: 'Custos de Tripulação', prediction: 'Estável nos próximos 6 meses', action: 'Manter', priority: 'low' },
                     { title: 'Manutenção Preditiva', prediction: '3 intervenções críticas previstas em 90 dias', action: 'Planejar', priority: 'high' }
-                  ].map((item, idx) => (
-                    <div key={idx} className="flex items-center justify-between p-3 border rounded-lg hover:bg-accent/30 transition-colors">
+                  ].map((item) => (
+                    <div key={item.title} className="flex items-center justify-between p-3 border rounded-lg hover:bg-accent/30 transition-colors">
                       <div className="flex items-center gap-3">
                         <div className={`w-2 h-2 rounded-full ${
                           item.priority === 'high' ? 'bg-destructive' : 

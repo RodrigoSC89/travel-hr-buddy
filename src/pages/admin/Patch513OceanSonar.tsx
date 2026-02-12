@@ -126,7 +126,7 @@ export default function Patch513OceanSonar() {
           <CardContent>
             <div className="space-y-2 max-h-[400px] overflow-y-auto">
               {detectionLogs.slice(-15).reverse().map((log, idx) => (
-                <div key={idx} className="p-2 bg-muted rounded text-sm flex justify-between">
+                <div key={`sonar-${idx}-${log.type}-${log.distance.toFixed(0)}`} className="p-2 bg-muted rounded text-sm flex justify-between">
                   <div>
                     <div className="font-mono text-xs text-muted-foreground">
                       {new Date(log.time).toLocaleTimeString()}

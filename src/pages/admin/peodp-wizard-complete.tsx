@@ -691,7 +691,7 @@ export default function PeoDpWizardComplete() {
                   <CardContent>
                     <ul className="space-y-2">
                       {inferenceResults.critical_findings.map((finding, idx) => (
-                        <li key={idx} className="text-sm text-red-600">{finding}</li>
+                        <li key={`finding-${idx}-${finding.slice(0, 15)}`} className="text-sm text-red-600">{finding}</li>
                       ))}
                     </ul>
                   </CardContent>
@@ -707,7 +707,7 @@ export default function PeoDpWizardComplete() {
                     <ScrollArea className="h-48">
                       <ul className="space-y-2">
                         {inferenceResults.recommendations.map((rec, idx) => (
-                          <li key={idx} className="text-sm text-muted-foreground">
+                          <li key={`rec-${idx}-${rec.slice(0, 15)}`} className="text-sm text-muted-foreground">
                             • {rec}
                           </li>
                         ))}
@@ -728,7 +728,7 @@ export default function PeoDpWizardComplete() {
                 <ScrollArea className="h-48">
                   <ul className="space-y-2">
                     {validationResults.map((result, idx) => (
-                      <li key={idx} className="flex items-start gap-2 text-sm">
+                      <li key={`validation-${idx}-${result.status}`} className="flex items-start gap-2 text-sm">
                         {result.status === "pass" ? (
                           <CheckCircle className="h-4 w-4 text-green-600 mt-0.5" />
                         ) : result.status === "warning" ? (

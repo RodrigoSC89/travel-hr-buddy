@@ -168,7 +168,7 @@ export default function VoiceAssistantIntelligence() {
                       const barHeight = 20 + Math.sin(i * 0.8) * 30 + 20;
                       return (
                         <div
-                          key={i}
+                          key={`voice-bar-${i}`}
                           className="w-1 bg-primary rounded-full animate-pulse"
                           style={{
                             height: `${barHeight}px`,

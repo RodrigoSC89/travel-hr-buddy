@@ -28,7 +28,7 @@ export default function IoTDashboardIntelligence() {
     return (
       <div className="space-y-6">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
-          {[...Array(5)].map((_, i) => <Skeleton key={i} className="h-24" />)}
+          {[...Array(5)].map((_, i) => <Skeleton key={`iot-skeleton-${i}`} className="h-24" />)}
         </div>
         <Skeleton className="h-96" />
       </div>

@@ -264,8 +264,8 @@ export const AIAnalyticsDashboard: React.FC = () => {
               </CardHeader>
               <CardContent>
                 <div className="space-y-4">
-                  {analytics.categories.map((category, index) => (
-                    <div key={index} className="space-y-2">
+                  {analytics.categories.map((category) => (
+                    <div key={category.name} className="space-y-2">
                       <div className="flex items-center justify-between text-sm">
                         <span>{category.name}</span>
                         <span className="font-medium">{category.value}%</span>
@@ -309,8 +309,8 @@ export const AIAnalyticsDashboard: React.FC = () => {
             </CardHeader>
             <CardContent>
               <div className="space-y-4">
-                {analytics.trends.map((trend, index) => (
-                  <div key={index} className="flex items-center justify-between p-3 border rounded">
+                {analytics.trends.map((trend) => (
+                  <div key={trend.period} className="flex items-center justify-between p-3 border rounded">
                     <div>
                       <p className="font-medium">{trend.period}</p>
                       <p className="text-sm text-muted-foreground">
@@ -338,7 +338,7 @@ export const AIAnalyticsDashboard: React.FC = () => {
             <CardContent>
               <div className="space-y-3">
                 {analytics.insights.map((insight, index) => (
-                  <div key={index} className="flex items-start gap-3 p-3 border rounded">
+                  <div key={`insight-${index}-${insight.slice(0, 20)}`} className="flex items-start gap-3 p-3 border rounded">
                     <Zap className="w-5 h-5 text-primary mt-0.5 flex-shrink-0" />
                     <p className="text-sm">{insight}</p>
                   </div>

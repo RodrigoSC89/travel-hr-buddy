@@ -262,8 +262,8 @@ function RiskCard({
             Risk Factors
           </h4>
           <div className="space-y-2">
-            {risk.factors.map((factor, idx) => (
-              <div key={idx} className="text-sm">
+            {risk.factors.map((factor) => (
+              <div key={factor.factor} className="text-sm">
                 <div className="flex justify-between mb-1">
                   <span className="font-medium">{factor.factor}</span>
                   <span className="text-muted-foreground">
@@ -283,8 +283,8 @@ function RiskCard({
             Recommended Actions
           </h4>
           <ul className="space-y-1">
-            {risk.recommendedActions.map((action, idx) => (
-              <li key={idx} className="text-sm flex items-start gap-2">
+            {risk.recommendedActions.map((action) => (
+              <li key={action} className="text-sm flex items-start gap-2">
                 <span className="text-blue-600 mt-1">•</span>
                 <span>{action}</span>
               </li>

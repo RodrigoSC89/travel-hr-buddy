@@ -229,7 +229,7 @@ export function DataSkeleton({ rows = 5, columns = 4, className }: DataSkeletonP
       {/* Rows */}
       {Array.from({ length: rows }).map((_, i) => (
         <div 
-          key={i} 
+          key={`tbl-row-${i}`} 
           className="grid gap-4" 
           style={{ gridTemplateColumns: `repeat(${columns}, 1fr)` }}
         >
@@ -274,7 +274,7 @@ export function CardSkeletonGrid({
       }}
     >
       {Array.from({ length: actualCount }).map((_, i) => (
-        <div key={i} className="p-6 space-y-4 bg-card border rounded-lg">
+        <div key={`card-skeleton-${i}`} className="p-6 space-y-4 bg-card border rounded-lg">
           <Skeleton className="h-4 w-3/4" />
           <Skeleton className="h-8 w-1/2" />
           <div className="space-y-2">

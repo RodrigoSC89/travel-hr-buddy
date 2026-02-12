@@ -343,8 +343,8 @@ export default function MedicalConsultationsTab() {
                     <p className="text-sm mb-3">{consultation.chief_complaint}</p>
 
                     <div className="flex flex-wrap gap-1 mb-3">
-                      {consultation.symptoms.map((symptom, i) => (
-                        <Badge key={i} variant="outline" className="text-xs">
+                      {consultation.symptoms.map((symptom) => (
+                        <Badge key={symptom} variant="outline" className="text-xs">
                           {symptom}
                         </Badge>
                       ))}

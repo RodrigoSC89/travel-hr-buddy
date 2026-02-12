@@ -379,8 +379,8 @@ export function IntegrationHub() {
                         </div>
                         <p className="text-sm text-muted-foreground font-mono mt-1">{webhook.url}</p>
                         <div className="flex gap-2 mt-2">
-                          {webhook.events.map((event, idx) => (
-                            <Badge key={idx} variant="outline" className="text-xs">
+                          {webhook.events.map((event) => (
+                            <Badge key={event} variant="outline" className="text-xs">
                               {event}
                             </Badge>
                           ))}

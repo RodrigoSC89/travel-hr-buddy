@@ -311,8 +311,8 @@ export function IMCAAuditGenerator() {
                   <div>
                     <h4 className="font-semibold mb-3">Module Evaluations</h4>
                     <div className="space-y-3">
-                      {report.moduleEvaluations.map((module, idx) => (
-                        <Card key={idx}>
+                      {report.moduleEvaluations.map((module) => (
+                        <Card key={module.moduleName}>
                           <CardHeader className="pb-3">
                             <div className="flex items-center justify-between">
                               <CardTitle className="text-base">{module.moduleName}</CardTitle>

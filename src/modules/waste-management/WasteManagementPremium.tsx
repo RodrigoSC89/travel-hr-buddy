@@ -69,7 +69,7 @@ function DashboardContent() {
       <div className="space-y-6">
         <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
           {[1,2,3,4,5].map(i => (
-            <Card key={i} className="animate-pulse">
+            <Card key={`waste-skeleton-${i}`} className="animate-pulse">
               <CardContent className="p-4"><div className="h-16 bg-muted rounded" /></CardContent>
             </Card>
           ))}

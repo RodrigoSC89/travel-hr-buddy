@@ -238,7 +238,7 @@ export function HRPerformanceReview() {
                 <div className="flex justify-center gap-1 mt-2">
                   {[1, 2, 3, 4, 5].map(i => (
                     <Star
-                      key={i}
+                      key={`star-${i}`}
                       className={`h-5 w-5 ${i <= Math.round(selectedEmployee.overall_score) ? "fill-yellow-400 text-yellow-400" : "text-muted"}`}
                     />
                   ))}
@@ -277,8 +277,8 @@ export function HRPerformanceReview() {
               {/* Competencies */}
               <div className="space-y-3">
                 <h4 className="font-medium">Competências</h4>
-                {selectedEmployee.competencies.map((comp, i) => (
-                  <div key={i} className="space-y-1">
+                {selectedEmployee.competencies.map((comp) => (
+                  <div key={comp.name} className="space-y-1">
                     <div className="flex justify-between text-sm">
                       <span>{comp.name}</span>
                       <span className={getScoreColor(comp.score)}>{comp.score.toFixed(1)}</span>
@@ -330,7 +330,7 @@ export function HRPerformanceReview() {
                     <h4 className="font-medium mb-3">Evolução do Desempenho</h4>
                     <div className="flex items-end gap-2 h-32">
                       {[3.8, 4.0, 3.9, 4.1, 4.2].map((score, i) => (
-                        <div key={i} className="flex-1 flex flex-col items-center gap-1">
+                        <div key={`perf-q${i}`} className="flex-1 flex flex-col items-center gap-1">
                           <div 
                             className="w-full bg-primary rounded-t transition-all"
                             style={{ height: `${(score / 5) * 100}%` }}
@@ -343,8 +343,8 @@ export function HRPerformanceReview() {
                 </TabsContent>
 
                 <TabsContent value="okrs" className="space-y-4">
-                  {selectedEmployee.okrs.map((okr, i) => (
-                    <div key={i} className="p-4 border rounded-lg">
+                  {selectedEmployee.okrs.map((okr) => (
+                    <div key={okr.objective} className="p-4 border rounded-lg">
                       <div className="flex items-center justify-between mb-2">
                         <div className="flex items-center gap-2">
                           <Target className="h-5 w-5 text-primary" />
@@ -369,7 +369,7 @@ export function HRPerformanceReview() {
 
                 <TabsContent value="feedback" className="space-y-4">
                   {selectedEmployee.feedbacks.map((fb, i) => (
-                    <div key={i} className="p-4 border rounded-lg">
+                    <div key={`fb-${i}-${fb.from}`} className="p-4 border rounded-lg">
                       <div className="flex items-center justify-between mb-2">
                         <div className="flex items-center gap-2">
                           <Avatar className="h-8 w-8">

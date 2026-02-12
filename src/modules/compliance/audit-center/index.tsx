@@ -436,7 +436,7 @@ const AuditCenter = () => {
                         <p className="text-sm font-medium text-destructive mb-2">Critical Issues</p>
                         <ul className="text-sm space-y-1">
                           {aiResponse.critical_issues.map((issue, i) => (
-                            <li key={i} className="text-destructive">• {issue}</li>
+                            <li key={`issue-${i}-${issue.slice(0, 20)}`} className="text-destructive">• {issue}</li>
                           ))}
                         </ul>
                       </div>
@@ -447,7 +447,7 @@ const AuditCenter = () => {
                         <p className="text-sm font-medium mb-2">Recommendations</p>
                         <ul className="text-sm space-y-1 text-muted-foreground">
                           {aiResponse.recommendations.slice(0, 3).map((rec, i) => (
-                            <li key={i}>• {rec}</li>
+                            <li key={`rec-${i}-${rec.slice(0, 20)}`}>• {rec}</li>
                           ))}
                         </ul>
                       </div>

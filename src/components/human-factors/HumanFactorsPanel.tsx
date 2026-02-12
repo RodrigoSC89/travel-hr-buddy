@@ -254,8 +254,8 @@ export function HumanFactorsPanel({
                 </CardHeader>
                 <CardContent>
                   <div className="flex flex-wrap gap-2">
-                    {assessment.stress_indicators.map((indicator, idx) => (
-                      <Badge key={idx} variant="outline" className="border-warning/30 text-warning">
+                    {assessment.stress_indicators.map((indicator) => (
+                      <Badge key={indicator} variant="outline" className="border-warning/30 text-warning">
                         {indicator}
                       </Badge>
                     ))}
@@ -294,16 +294,16 @@ export function HumanFactorsPanel({
               </CardHeader>
               <CardContent className="space-y-4">
                 {assessment.hfacs_analysis.length > 0 ? (
-                  assessment.hfacs_analysis.map((category, idx) => (
-                    <div key={idx} className="p-4 rounded-lg bg-muted/50 space-y-3">
+                  assessment.hfacs_analysis.map((category) => (
+                    <div key={category.category} className="p-4 rounded-lg bg-muted/50 space-y-3">
                       <h4 className="font-semibold text-primary">{category.category}</h4>
                       
                       {category.subcategories.length > 0 && (
                         <div>
                           <span className="text-sm text-muted-foreground">Subcategorias:</span>
                           <div className="flex flex-wrap gap-2 mt-1">
-                            {category.subcategories.map((sub, subIdx) => (
-                              <Badge key={subIdx} variant="secondary">{sub}</Badge>
+                            {category.subcategories.map((sub) => (
+                              <Badge key={sub} variant="secondary">{sub}</Badge>
                             ))}
                           </div>
                         </div>
@@ -313,8 +313,8 @@ export function HumanFactorsPanel({
                         <div>
                           <span className="text-sm text-muted-foreground">Fatores Contribuintes:</span>
                           <ul className="list-disc list-inside mt-1 text-sm">
-                            {category.contributing_factors.map((factor, fIdx) => (
-                              <li key={fIdx}>{factor}</li>
+                            {category.contributing_factors.map((factor) => (
+                              <li key={factor}>{factor}</li>
                             ))}
                           </ul>
                         </div>
@@ -382,8 +382,8 @@ export function HumanFactorsPanel({
                   <div>
                     <h4 className="font-medium mb-2">Indicadores Identificados:</h4>
                     <div className="flex flex-wrap gap-2">
-                      {assessment.fatigue_assessment.indicators.map((indicator, idx) => (
-                        <Badge key={idx} variant="outline" className="border-warning/30">
+                      {assessment.fatigue_assessment.indicators.map((indicator) => (
+                        <Badge key={indicator} variant="outline" className="border-warning/30">
                           {indicator}
                         </Badge>
                       ))}
@@ -396,7 +396,7 @@ export function HumanFactorsPanel({
                     <h4 className="font-medium mb-2">Recomendações:</h4>
                     <ul className="space-y-2">
                       {assessment.fatigue_assessment.recommendations.map((rec, idx) => (
-                        <li key={idx} className="flex items-start gap-2 text-sm">
+                        <li key={`fatigue-rec-${idx}-${rec.slice(0, 15)}`} className="flex items-start gap-2 text-sm">
                           <CheckCircle2 className="h-4 w-4 text-success mt-0.5 flex-shrink-0" />
                           {rec}
                         </li>
@@ -422,7 +422,7 @@ export function HumanFactorsPanel({
                 <CardContent>
                   <ul className="space-y-2">
                     {assessment.recommendations.immediate.map((action, idx) => (
-                      <li key={idx} className="flex items-start gap-2 text-sm">
+                      <li key={`immed-${idx}-${action.slice(0, 15)}`} className="flex items-start gap-2 text-sm">
                         <XCircle className="h-4 w-4 text-destructive mt-0.5 flex-shrink-0" />
                         {action}
                       </li>
@@ -444,7 +444,7 @@ export function HumanFactorsPanel({
                 <CardContent>
                   <ul className="space-y-2">
                     {assessment.recommendations.short_term.map((action, idx) => (
-                      <li key={idx} className="flex items-start gap-2 text-sm">
+                      <li key={`short-${idx}-${action.slice(0, 15)}`} className="flex items-start gap-2 text-sm">
                         <Zap className="h-4 w-4 text-warning mt-0.5 flex-shrink-0" />
                         {action}
                       </li>
@@ -466,7 +466,7 @@ export function HumanFactorsPanel({
                 <CardContent>
                   <ul className="space-y-2">
                     {assessment.recommendations.long_term.map((action, idx) => (
-                      <li key={idx} className="flex items-start gap-2 text-sm">
+                      <li key={`long-${idx}-${action.slice(0, 15)}`} className="flex items-start gap-2 text-sm">
                         <CheckCircle2 className="h-4 w-4 text-info mt-0.5 flex-shrink-0" />
                         {action}
                       </li>
@@ -487,8 +487,8 @@ export function HumanFactorsPanel({
                 </CardHeader>
                 <CardContent>
                   <div className="flex flex-wrap gap-2">
-                    {assessment.training_gaps.map((gap, idx) => (
-                      <Badge key={idx} className="bg-accent/20 text-accent border-accent/30">
+                    {assessment.training_gaps.map((gap) => (
+                      <Badge key={gap} className="bg-accent/20 text-accent border-accent/30">
                         {gap}
                       </Badge>
                     ))}

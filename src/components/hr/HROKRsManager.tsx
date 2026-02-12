@@ -279,7 +279,7 @@ export function HROKRsManager() {
           {isLoading ? (
             <div className="space-y-4">
               {[1, 2, 3].map((i) => (
-                <Skeleton key={i} className="h-32 w-full" />
+                <Skeleton key={`okr-skeleton-${i}`} className="h-32 w-full" />
               ))}
             </div>
           ) : okrs.length === 0 ? (

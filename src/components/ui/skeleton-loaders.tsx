@@ -45,7 +45,7 @@ export function TableRowSkeleton({ columns = 5 }: { columns?: number }) {
   return (
     <tr className="border-b">
       {Array.from({ length: columns }).map((_, i) => (
-        <td key={i} className="p-3">
+        <td key={`tbl-cell-${i}`} className="p-3">
           <Skeleton className="h-4 w-full" />
         </td>
       ))}
@@ -64,7 +64,7 @@ export function TableSkeleton({
         <thead className="bg-muted/50">
           <tr>
             {Array.from({ length: columns }).map((_, i) => (
-              <th key={i} className="p-3 text-left">
+              <th key={`tbl-hdr-cell-${i}`} className="p-3 text-left">
                 <Skeleton className="h-4 w-20" />
               </th>
             ))}
@@ -72,7 +72,7 @@ export function TableSkeleton({
         </thead>
         <tbody>
           {Array.from({ length: rows }).map((_, i) => (
-            <TableRowSkeleton key={i} columns={columns} />
+            <TableRowSkeleton key={`tbl-row-${i}`} columns={columns} />
           ))}
         </tbody>
       </table>

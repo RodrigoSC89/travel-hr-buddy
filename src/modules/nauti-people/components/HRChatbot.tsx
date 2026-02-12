@@ -138,9 +138,9 @@ const HRChatbot: React.FC = () => {
     <div className="flex flex-col h-full">
       {/* Quick Actions */}
       <div className="p-3 border-b flex gap-2 overflow-x-auto">
-        {quickActions.map((action, idx) => (
+        {quickActions.map((action) => (
           <Button
-            key={idx}
+            key={action.label}
             variant="outline"
             size="sm"
             className="shrink-0"

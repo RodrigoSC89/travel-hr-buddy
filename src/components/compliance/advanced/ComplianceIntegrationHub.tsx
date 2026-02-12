@@ -206,7 +206,7 @@ export function ComplianceIntegrationHub() {
             <div className="space-y-3">
               {loadingIntegrations ? (
                 Array(5).fill(0).map((_, i) => (
-                  <Skeleton key={i} className="h-10 w-full" />
+                  <Skeleton key={`int-skeleton-${i}`} className="h-10 w-full" />
                 ))
               ) : integrations.length === 0 ? (
                 <p className="text-sm text-muted-foreground text-center py-4">
@@ -243,7 +243,7 @@ export function ComplianceIntegrationHub() {
               <div className="space-y-3">
                 {loadingActivities ? (
                   Array(5).fill(0).map((_, i) => (
-                    <Skeleton key={i} className="h-14 w-full" />
+                    <Skeleton key={`act-skeleton-${i}`} className="h-14 w-full" />
                   ))
                 ) : activities.length === 0 ? (
                   <p className="text-sm text-muted-foreground text-center py-4">

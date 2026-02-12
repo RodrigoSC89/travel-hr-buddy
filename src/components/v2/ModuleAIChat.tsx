@@ -312,9 +312,9 @@ export function ModuleAIChat({
               
               {quickQuestions.length > 0 && (
                 <div className="grid grid-cols-2 gap-2 w-full max-w-lg">
-                  {quickQuestions.slice(0, 6).map((q, i) => (
+                  {quickQuestions.slice(0, 6).map((q) => (
                     <Button
-                      key={i}
+                      key={q}
                       variant="outline"
                       size="sm"
                       className="text-xs h-auto py-2 justify-start text-left"

@@ -310,7 +310,7 @@ export function AIInsightWidget({
                 <div className="space-y-2">
                   {chatHistory.map((msg, i) => (
                     <div
-                      key={i}
+                      key={`chat-${i}-${msg.role}`}
                       className={`flex ${msg.role === "user" ? "justify-end" : "justify-start"}`}
                     >
                       <div

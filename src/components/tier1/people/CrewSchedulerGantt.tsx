@@ -327,7 +327,7 @@ export default function CrewSchedulerGantt() {
                   const style = getRotationStyle(rotation);
                   return (
                     <div
-                      key={idx}
+                      key={`${rotation.type}-${rotation.start}-${rotation.end}`}
                       className={`absolute top-1/2 -translate-y-1/2 h-8 rounded cursor-pointer transition-all hover:opacity-80 flex items-center justify-center text-xs font-medium text-white ${
                         rotation.type === 'onboard' ? 'bg-primary' : 'bg-success/60'
                       }`}

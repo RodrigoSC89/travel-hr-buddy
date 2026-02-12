@@ -463,8 +463,8 @@ export function AutoScoringEngine() {
               </PieChart>
             </ResponsiveContainer>
             <div className="flex justify-center gap-4 text-xs">
-              {pieData.map((d, i) => (
-                <div key={i} className="flex items-center gap-1">
+              {pieData.map((d) => (
+                <div key={d.name} className="flex items-center gap-1">
                   <div className="w-2 h-2 rounded-full" style={{ backgroundColor: d.color }} />
                   <span>{d.name}</span>
                 </div>
