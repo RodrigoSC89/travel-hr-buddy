@@ -92,7 +92,7 @@ export default function DevRoutesDashboard() {
         } else {
           // Run local validation
           setCIStatus('running');
-          await new Promise(r => setTimeout(r, 500));
+          await new Promise<void>(resolve => requestAnimationFrame(() => resolve()));
           setCIStatus('success');
           const now = new Date();
           setLastCIRun(now);

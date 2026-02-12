@@ -111,9 +111,9 @@ export async function validateAllAPIKeys(): Promise<APIValidationReport> {
   const openAIStatus = determineStatus(openAIResult);
   results.push({
     name: "OpenAI",
-    key: "VITE_OPENAI_API_KEY",
+    key: "OPENAI_API_KEY (server-side)",
     status: openAIStatus,
-    configured: isConfigured(import.meta.env.VITE_OPENAI_API_KEY),
+    configured: openAIResult.success,
     responseTime: openAIResult.responseTime,
     message: openAIResult.message,
     error: openAIResult.error,
@@ -254,9 +254,9 @@ export async function validateAllAPIKeys(): Promise<APIValidationReport> {
   const whisperStatus = determineStatus(whisperResult);
   results.push({
     name: "Whisper (OpenAI Audio)",
-    key: "VITE_OPENAI_API_KEY",
+    key: "OPENAI_API_KEY (server-side)",
     status: whisperStatus,
-    configured: isConfigured(import.meta.env.VITE_OPENAI_API_KEY),
+    configured: whisperResult.success,
     responseTime: whisperResult.responseTime,
     message: whisperResult.message,
     error: whisperResult.error,

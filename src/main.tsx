@@ -42,8 +42,14 @@ const initializeAccessibilityChecker = async () => {
 
 // Defer non-critical initializations - only after app is loaded
 const initializeOptionalFeatures = async () => {
-  // Wait for app to be interactive first
-  await new Promise(resolve => setTimeout(resolve, 2000));
+  // Wait for app to be interactive first (use requestIdleCallback when available)
+  await new Promise<void>(resolve => {
+    if ('requestIdleCallback' in window) {
+      window.requestIdleCallback(() => resolve());
+    } else {
+      requestAnimationFrame(() => resolve());
+    }
+  });
   
   try {
     // Initialize accessibility checker in dev
