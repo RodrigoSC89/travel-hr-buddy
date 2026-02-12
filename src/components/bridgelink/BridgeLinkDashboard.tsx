@@ -49,7 +49,7 @@ export default function BridgeLinkDashboard() {
               <p className="text-muted-foreground">Nenhum evento registrado</p>
             ) : (
               logs.map((log, idx) => (
-                <div key={idx} className="font-mono">
+                <div key={`log-${idx}-${log.slice(0, 20)}`} className="font-mono">
                   {log}
                 </div>
               ))

@@ -39,7 +39,7 @@ export function OptimizedSkeleton({
       <div className="space-y-2">
         {Array.from({ length: lines }).map((_, i) => (
           <div
-            key={i}
+            key={`opt-line-${i}`}
             className={cn(baseStyles, variantStyles[variant], className)}
             style={{
               ...style,
@@ -83,7 +83,7 @@ export function TableSkeleton({ rows = 5 }: { rows?: number }) {
         <OptimizedSkeleton height={16} width="15%" />
       </div>
       {Array.from({ length: rows }).map((_, i) => (
-        <div key={i} className="flex gap-4 py-2">
+        <div key={`opt-row-${i}`} className="flex gap-4 py-2">
           <OptimizedSkeleton height={14} width="20%" />
           <OptimizedSkeleton height={14} width="30%" />
           <OptimizedSkeleton height={14} width="25%" />
@@ -106,7 +106,7 @@ export function DashboardSkeleton() {
       {/* Stats Cards */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
         {Array.from({ length: 4 }).map((_, i) => (
-          <div key={i} className="rounded-lg border bg-card p-4 space-y-2">
+          <div key={`opt-stat-${i}`} className="rounded-lg border bg-card p-4 space-y-2">
             <OptimizedSkeleton height={14} width="40%" />
             <OptimizedSkeleton height={28} width="60%" />
             <OptimizedSkeleton height={12} width="80%" />

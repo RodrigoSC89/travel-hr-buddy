@@ -25,7 +25,7 @@ export const TableSkeleton: FC<TableSkeletonProps> = ({
     {showHeader && (
       <div className="flex gap-4 pb-3 border-b border-border">
         {Array.from({ length: columns }).map((_, i) => (
-          <Skeleton key={i} className="h-4 flex-1" />
+          <Skeleton key={`ds-tbl-hdr-${i}`} className="h-4 flex-1" />
         ))}
       </div>
     )}
@@ -97,7 +97,7 @@ export const CardsGridSkeleton: FC<CardsGridSkeletonProps> = ({
     )}
   >
     {Array.from({ length: cards }).map((_, i) => (
-      <CardSkeleton key={i} />
+      <CardSkeleton key={`ds-card-${i}`} />
     ))}
   </div>
 );
@@ -133,7 +133,7 @@ export const KPIGridSkeleton: FC<KPIGridSkeletonProps> = ({
 }) => (
   <div className={cn('grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4', className)}>
     {Array.from({ length: count }).map((_, i) => (
-      <KPISkeleton key={i} />
+      <KPISkeleton key={`ds-kpi-${i}`} />
     ))}
   </div>
 );
@@ -150,7 +150,7 @@ export const FormSkeleton: FC<FormSkeletonProps> = ({
 }) => (
   <div className={cn('space-y-6', className)}>
     {Array.from({ length: fields }).map((_, i) => (
-      <div key={i} className="space-y-2">
+      <div key={`ds-form-${i}`} className="space-y-2">
         <Skeleton className="h-4 w-24" />
         <Skeleton className="h-10 w-full" />
       </div>
@@ -220,7 +220,7 @@ export const ChartSkeleton: FC<ChartSkeletonProps> = ({
     <div className="flex-1 flex items-end justify-around gap-2 h-[calc(100%-60px)]">
       {type === 'bar' && Array.from({ length: 8 }).map((_, i) => (
         <Skeleton 
-          key={i} 
+          key={`ds-bar-${i}`} 
           className="flex-1 max-w-12" 
           style={{ height: `${30 + ((i * 37 + 13) % 70)}%` }}
         />
@@ -264,7 +264,7 @@ export const ListSkeleton: FC<ListSkeletonProps> = ({
 }) => (
   <div className={cn('space-y-4', className)}>
     {Array.from({ length: items }).map((_, i) => (
-      <div key={i} className="flex items-center gap-4 p-3 rounded-lg border border-border">
+      <div key={`ds-list-${i}`} className="flex items-center gap-4 p-3 rounded-lg border border-border">
         {showAvatar && <Skeleton className="h-10 w-10 rounded-full flex-shrink-0" />}
         <div className="flex-1 space-y-2">
           <Skeleton className="h-4 w-3/4" />

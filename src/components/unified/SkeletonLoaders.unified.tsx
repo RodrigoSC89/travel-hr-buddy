@@ -251,14 +251,14 @@ export const SkeletonTable = memo(function SkeletonTable({
       {/* Header */}
       <div className="flex gap-4 p-4 border-b">
         {Array.from({ length: columns }).map((_, i) => (
-          <Skeleton key={i} className="h-4 flex-1" />
+          <Skeleton key={`tbl-hdr-${i}`} className="h-4 flex-1" />
         ))}
       </div>
       {/* Rows */}
       {Array.from({ length: rows }).map((_, i) => (
-        <div key={i} className="flex gap-4 p-4">
+        <div key={`tbl-row-${i}`} className="flex gap-4 p-4">
           {Array.from({ length: columns }).map((_, j) => (
-            <Skeleton key={j} className="h-4 flex-1" />
+            <Skeleton key={`tbl-col-${j}`} className="h-4 flex-1" />
           ))}
         </div>
       ))}
@@ -283,7 +283,7 @@ export const SkeletonList = memo(function SkeletonList({
     return (
       <div className={cn("space-y-2", className)}>
         {Array.from({ length: items }).map((_, i) => (
-          <div key={i} className="flex items-center gap-2 p-2">
+          <div key={`list-compact-${i}`} className="flex items-center gap-2 p-2">
             <Skeleton className="h-4 flex-1" />
           </div>
         ))}
@@ -294,7 +294,7 @@ export const SkeletonList = memo(function SkeletonList({
   return (
     <div className={cn("space-y-3", className)}>
       {Array.from({ length: items }).map((_, i) => (
-        <div key={i} className="flex items-center gap-4 p-4 border rounded-lg">
+        <div key={`list-item-${i}`} className="flex items-center gap-4 p-4 border rounded-lg">
           {variant === "avatar" && (
             <Skeleton className="h-10 w-10 rounded-full" />
           )}
@@ -336,7 +336,7 @@ export const SkeletonChart = memo(function SkeletonChart({
             const h = [65, 40, 85, 30, 70, 50, 90][i];
             return (
               <Skeleton 
-                key={i} 
+                key={`chart-bar-${i}`} 
                 className="flex-1" 
                 style={{ height: `${h}%` }}
               />
@@ -377,7 +377,7 @@ export const SkeletonDashboard = memo(function SkeletonDashboard({
       {/* KPI Cards */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         {Array.from({ length: kpiCount }).map((_, i) => (
-          <SkeletonCard key={i} variant="metric" />
+          <SkeletonCard key={`kpi-${i}`} variant="metric" />
         ))}
       </div>
 
@@ -387,7 +387,7 @@ export const SkeletonDashboard = memo(function SkeletonDashboard({
         chartCount === 1 ? "grid-cols-1" : "grid-cols-1 lg:grid-cols-2"
       )}>
         {Array.from({ length: chartCount }).map((_, i) => (
-          <SkeletonChart key={i} className="h-80" />
+          <SkeletonChart key={`dash-chart-${i}`} className="h-80" />
         ))}
       </div>
 
@@ -431,7 +431,7 @@ export const SkeletonPage = memo(function SkeletonPage({
           <div className="w-64 border-r bg-card p-4 hidden lg:block">
             <div className="space-y-4">
               {Array.from({ length: 6 }).map((_, i) => (
-                <Skeleton key={i} className="h-10 w-full rounded" />
+                <Skeleton key={`sidebar-${i}`} className="h-10 w-full rounded" />
               ))}
             </div>
           </div>
@@ -444,7 +444,7 @@ export const SkeletonPage = memo(function SkeletonPage({
           
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
             {Array.from({ length: 4 }).map((_, i) => (
-              <SkeletonCard key={i} />
+              <SkeletonCard key={`page-card-${i}`} />
             ))}
           </div>
 
@@ -472,7 +472,7 @@ export const SkeletonForm = memo(function SkeletonForm({
   return (
     <div className={cn("space-y-6", className)}>
       {Array.from({ length: fields }).map((_, i) => (
-        <div key={i} className="space-y-2">
+        <div key={`form-field-${i}`} className="space-y-2">
           <Skeleton className="h-4 w-24" />
           <Skeleton className="h-10 w-full" />
         </div>
@@ -499,7 +499,7 @@ export const SkeletonProfile = memo(function SkeletonProfile({ className }: { cl
       </div>
       <div className="grid gap-4">
         {Array.from({ length: 4 }).map((_, i) => (
-          <div key={i} className="flex justify-between p-4 border rounded-lg">
+          <div key={`profile-${i}`} className="flex justify-between p-4 border rounded-lg">
             <Skeleton className="h-4 w-24" />
             <Skeleton className="h-4 w-32" />
           </div>

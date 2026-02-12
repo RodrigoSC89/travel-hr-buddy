@@ -227,7 +227,7 @@ export const AdaptiveLoader = memo(function AdaptiveLoader({
         <div className="flex gap-2">
           {[0, 1, 2].map((i) => (
             <div
-              key={i}
+              key={`dot-${i}`}
               className={cn(
                 "rounded-full bg-primary animate-bounce",
                 connection.quality === "slow" ? "h-4 w-4" : "h-3 w-3"

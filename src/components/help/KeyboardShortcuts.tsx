@@ -138,9 +138,9 @@ export const KeyboardShortcutsHelp: React.FC = () => {
                 {SHORTCUT_CATEGORIES[category as keyof typeof SHORTCUT_CATEGORIES] || category}
               </h3>
               <div className="space-y-2">
-                {categoryShortcuts.map((shortcut, idx) => (
+                {categoryShortcuts.map((shortcut) => (
                   <div 
-                    key={idx}
+                    key={shortcut.label}
                     className="flex items-center justify-between py-2 px-3 rounded-lg hover:bg-muted/50 transition-colors"
                   >
                     <div>

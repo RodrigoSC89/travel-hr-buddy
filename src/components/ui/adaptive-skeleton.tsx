@@ -73,7 +73,7 @@ export const ChartSkeleton = memo(function ChartSkeleton() {
       <div className="h-64 flex items-end gap-2 pt-4">
         {Array.from({ length: 12 }).map((_, i) => (
           <AdaptiveSkeleton 
-            key={i} 
+            key={`adapt-bar-${i}`} 
             className="flex-1" 
             style={{ height: `${20 + ((i * 17 + 5) % 80)}%` } as React.CSSProperties} 
           />
@@ -98,7 +98,7 @@ export const DashboardSkeleton = memo(function DashboardSkeleton() {
       {/* KPI Cards */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
         {Array.from({ length: 4 }).map((_, i) => (
-          <CardSkeleton key={i} />
+          <CardSkeleton key={`adapt-card-${i}`} />
         ))}
       </div>
       
@@ -114,7 +114,7 @@ export const DashboardSkeleton = memo(function DashboardSkeleton() {
           <AdaptiveSkeleton className="h-6 w-40" />
         </div>
         {Array.from({ length: 5 }).map((_, i) => (
-          <TableRowSkeleton key={i} />
+          <TableRowSkeleton key={`adapt-trow-${i}`} />
         ))}
       </div>
     </div>
@@ -125,7 +125,7 @@ export const ListSkeleton = memo(function ListSkeleton({ count = 5 }: { count?: 
   return (
     <div className="space-y-2">
       {Array.from({ length: count }).map((_, i) => (
-        <div key={i} className="flex items-center gap-3 p-3 rounded-lg border">
+        <div key={`adapt-list-${i}`} className="flex items-center gap-3 p-3 rounded-lg border">
           <AdaptiveSkeleton className="h-10 w-10 rounded-full" />
           <div className="flex-1 space-y-2">
             <AdaptiveSkeleton className="h-4 w-3/4" />
