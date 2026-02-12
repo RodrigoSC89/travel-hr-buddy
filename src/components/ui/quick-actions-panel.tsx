@@ -128,11 +128,11 @@ export const QuickActionsPanel: React.FC = () => {
       
       <CardContent>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-          {filteredActions.map((action, index) => {
+          {filteredActions.map((action) => {
             const Icon = action.icon;
             return (
               <Card 
-                key={index}
+                key={action.module}
                 className="cursor-pointer transition-all duration-300 hover:shadow-lg hover:-translate-y-1 bg-gradient-to-br from-card to-secondary/5 group"
                 onClick={() => handleQuickAction(action.module)}
               >

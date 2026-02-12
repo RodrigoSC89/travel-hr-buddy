@@ -91,10 +91,10 @@ export const SystemMonitoringDashboard: React.FC = () => {
         </CardHeader>
         <CardContent>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-            {systemStatus.map((system, index) => {
+            {systemStatus.map((system) => {
               const StatusIcon = getStatusIcon(system.status);
               return (
-                <Card key={index} className="p-4">
+                <Card key={system.name} className="p-4">
                   <div className="flex items-center justify-between mb-3">
                     <h4 className="font-medium text-sm">{system.name}</h4>
                     <div className={`flex items-center gap-1 px-2 py-1 rounded-full text-xs ${getStatusColor(system.status)}`}>
@@ -132,11 +132,11 @@ export const SystemMonitoringDashboard: React.FC = () => {
         </CardHeader>
         <CardContent>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-            {kpiMetrics.map((metric, index) => {
+            {kpiMetrics.map((metric) => {
               const Icon = metric.icon;
               return (
                 <Card 
-                  key={index} 
+                  key={metric.title} 
                   className={`p-4 cursor-pointer transition-all hover:shadow-md ${
                     selectedMetric === metric.title ? "ring-2 ring-primary" : ""
                   }`}

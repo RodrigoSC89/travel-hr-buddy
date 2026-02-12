@@ -131,11 +131,11 @@ const ProfessionalKPICards = () => {
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-      {kpiData.map((kpi, index) => {
+      {kpiData.map((kpi) => {
         const colorClasses = getColorClasses(kpi.color);
         return (
           <Card 
-            key={index} 
+            key={kpi.title} 
             className={`relative group hover:shadow-2xl transition-all duration-500 border-2 ${colorClasses.card} hover:${colorClasses.border} cursor-pointer overflow-hidden backdrop-blur-sm`}
           >
             {/* Background Gradient - Fundo Escuro Premium */}

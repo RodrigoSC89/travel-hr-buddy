@@ -205,8 +205,8 @@ const SystemStatusDashboard = () => {
 
         {/* Metrics Grid */}
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
-          {systemMetrics.map((metric, index) => (
-            <div key={index} className="text-center space-y-3 p-4 rounded-xl border border-border/50 hover:border-border transition-colors">
+          {systemMetrics.map((metric) => (
+            <div key={metric.name} className="text-center space-y-3 p-4 rounded-xl border border-border/50 hover:border-border transition-colors">
               <div className={`p-3 rounded-full mx-auto w-fit ${getIconColor(metric.color)}`}>
                 <metric.icon className="w-6 h-6" />
               </div>

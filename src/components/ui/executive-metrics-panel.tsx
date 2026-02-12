@@ -134,8 +134,8 @@ const ExecutiveMetricsPanel = () => {
         </CardHeader>
         <CardContent className="p-6">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            {executiveMetrics.map((metric, index) => (
-              <div key={index} className="relative p-6 rounded-xl border-2 border-border/30 hover:border-primary/30 transition-all bg-gradient-to-br from-background to-muted/20">
+            {executiveMetrics.map((metric) => (
+              <div key={metric.title} className="relative p-6 rounded-xl border-2 border-border/30 hover:border-primary/30 transition-all bg-gradient-to-br from-background to-muted/20">
                 <div className="space-y-4">
                   <div className="flex items-center justify-between">
                     <div>
@@ -221,8 +221,8 @@ const ExecutiveMetricsPanel = () => {
           </CardHeader>
           <CardContent className="p-6">
             <div className="space-y-6">
-              {operationalKPIs.map((kpi, index) => (
-                <div key={index} className="space-y-3">
+              {operationalKPIs.map((kpi) => (
+                <div key={kpi.title} className="space-y-3">
                   <div className="flex items-center justify-between">
                     <span className="text-sm font-medium">{kpi.title}</span>
                     <Badge className={getStatusColor(kpi.status)} variant="outline">
