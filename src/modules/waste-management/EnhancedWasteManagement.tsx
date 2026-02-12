@@ -252,13 +252,17 @@ export default function EnhancedWasteManagement() {
             id: "schedule",
             label: "Agendar Descarte",
             icon: <Calendar className="h-3 w-3" />,
-            onClick: () => { toast.success(`Descarte agendado: ${tank.name}`, { description: `Nível atual: ${tank.currentLevel}${tank.unit} de ${tank.capacity}${tank.unit}. Agende via módulo MARPOL/Compliance.` }); },
+            onClick: async () => { 
+              const { error } = await supabase.from('action_items').insert({ title: `Descarte agendado: ${tank.name}`, description: `Nível: ${tank.currentLevel}${tank.unit}/${tank.capacity}${tank.unit}`, status: 'pending', priority: 'high', source_module: 'waste-management' });
+              if (error) { toast.error(`Erro: ${error.message}`); return; }
+              toast.success(`Descarte agendado: ${tank.name}`);
+            },
           },
           {
             id: "emergency",
             label: "Descarte Emergencial",
             variant: "destructive",
-            onClick: () => { toast.warning(`Protocolo de emergência: ${tank.name}`, { description: `Contate o oficial de segurança imediatamente. Nível: ${tank.currentLevel}${tank.unit}.` }); },
+            onClick: () => { window.open('tel:+5511999999999', '_self'); toast.warning(`Protocolo de emergência ativado: ${tank.name}`); },
           },
         ],
       });

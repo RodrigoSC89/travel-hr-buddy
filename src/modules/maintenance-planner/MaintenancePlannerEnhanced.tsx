@@ -129,7 +129,7 @@ const MaintenancePlannerEnhanced = () => {
       source: 'Sensor IoT',
       actions: [
         { label: 'Criar OS', onClick: () => setShowNewWorkOrder(true) },
-        { label: 'Ver Dados', onClick: () => toast.info('Abrindo telemetria...'), variant: 'outline' as const }
+        { label: 'Ver Dados', onClick: () => { window.history.pushState({}, '', '/telemetry'); window.dispatchEvent(new PopStateEvent('popstate')); }, variant: 'outline' as const }
       ]
     },
     {

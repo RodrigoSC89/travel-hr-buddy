@@ -315,7 +315,7 @@ export default function SettingsDialog({ open, onOpenChange }: SettingsDialogPro
                 <p className="text-sm text-muted-foreground">
                   Configure integrações adicionais com APIs externas
                 </p>
-                <Button variant="outline" className="mt-2" onClick={() => toast.success("Acesse o painel Supabase para gerenciar Edge Functions e integrações de API.", { description: "Configurações de API são gerenciadas no Supabase Dashboard > Edge Functions." })}>
+                <Button variant="outline" className="mt-2" onClick={() => { window.history.pushState({}, '', '/admin/settings'); window.dispatchEvent(new PopStateEvent('popstate')); }}>
                   Gerenciar APIs
                 </Button>
               </div>

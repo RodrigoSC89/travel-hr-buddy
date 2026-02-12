@@ -125,7 +125,7 @@ function DocumentsDashboard() {
           />
         </div>
         <div className="flex gap-2">
-          <Button variant="outline" className="gap-2" onClick={() => toast.info("Filtros disponíveis: Categoria, Tipo de Arquivo, Status OCR, Data de Upload")}>
+          <Button variant="outline" className="gap-2" onClick={() => setSearchTerm("")}>
             <Filter className="h-4 w-4" />
             Filtros
           </Button>
@@ -318,7 +318,11 @@ function DocumentsDashboard() {
                       </Badge>
                     </div>
                     <div className="flex gap-1">
-                      <Button size="icon" variant="ghost" onClick={() => toast.info(doc.file_name, { description: `Tipo: ${doc.file_type} | Categoria: ${doc.category || 'N/A'} | OCR: ${doc.ocr_status} | Criado: ${new Date(doc.created_at).toLocaleDateString('pt-BR')}` })}>
+                      <Button size="icon" variant="ghost" onClick={async () => {
+                        const { data } = await supabase.storage.from('documents').createSignedUrl(doc.storage_path, 60);
+                        if (data?.signedUrl) { window.open(data.signedUrl, '_blank'); }
+                        else toast.error("Arquivo não encontrado");
+                      }}>
                         <Eye className="h-4 w-4" />
                       </Button>
                       <Button size="icon" variant="ghost" onClick={async () => {

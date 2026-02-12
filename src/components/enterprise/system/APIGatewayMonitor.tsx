@@ -410,9 +410,9 @@ export function APIGatewayMonitor() {
                     </div>
                   </div>
                 ))}
-                <Button className="w-full" variant="outline" onClick={() => toast.success("Gerencie suas credenciais via Supabase Dashboard > Settings > API")}>
+                <Button className="w-full" variant="outline" onClick={() => { window.history.pushState({}, '', '/admin/settings'); window.dispatchEvent(new PopStateEvent('popstate')); }}>
                   <Key className="h-4 w-4 mr-2" />
-                  Gerar Nova API Key
+                  Gerenciar API Keys
                 </Button>
               </CardContent>
             </Card>

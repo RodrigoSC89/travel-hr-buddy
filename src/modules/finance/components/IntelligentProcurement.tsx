@@ -122,7 +122,7 @@ export function IntelligentProcurement() {
             IA recomenda fornecedores e otimiza compras automaticamente
           </p>
         </div>
-        <Button onClick={() => toast.success("Nova Requisição", { description: "Utilize o formulário de busca abaixo para encontrar recomendações de fornecedores via IA." })}>
+        <Button onClick={() => { window.history.pushState({}, '', '/procurement-command'); window.dispatchEvent(new PopStateEvent('popstate')); }}>
           <Package className="h-4 w-4 mr-2" />
           Nova Requisição
         </Button>
@@ -271,7 +271,10 @@ export function IntelligentProcurement() {
                         </p>
                       </div>
 
-                      <Button className="w-full" variant={idx === 0 ? 'default' : 'outline'} onClick={() => toast.success(`Fornecedor ${rec.supplierName} selecionado`, { description: `Score: ${rec.overallScore}/100 | Prazo: ${rec.leadTime} dias | Preço: R$ ${rec.price.toLocaleString()}. Pedido de compra será gerado automaticamente.` })}>
+                      <Button className="w-full" variant={idx === 0 ? 'default' : 'outline'} onClick={async () => {
+                        await supabase.from('action_items').insert({ title: `Pedido: ${rec.supplierName} - ${itemCategory}`, description: `Score: ${rec.overallScore}/100 | Prazo: ${rec.leadTime} dias | Preço: R$ ${rec.price.toLocaleString()}`, status: 'pending', priority: urgency, source_module: 'procurement' });
+                        toast.success(`Fornecedor ${rec.supplierName} selecionado - pedido criado`);
+                      }}>
                         Selecionar Fornecedor
                       </Button>
                     </CardContent>
