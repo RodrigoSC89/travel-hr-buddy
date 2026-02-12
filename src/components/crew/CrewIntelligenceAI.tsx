@@ -422,8 +422,8 @@ export function CrewIntelligenceAI() {
                         </Badge>
                       </div>
                       <div className="flex gap-1 mt-2 flex-wrap">
-                        {pos.requirements.map((req, i) => (
-                          <Badge key={i} variant="secondary" className="text-xs">{req}</Badge>
+                        {pos.requirements.map((req) => (
+                          <Badge key={req} variant="secondary" className="text-xs">{req}</Badge>
                         ))}
                       </div>
                     </div>
@@ -463,8 +463,8 @@ export function CrewIntelligenceAI() {
                           </Badge>
                         </div>
                         <div className="mt-2 space-y-1">
-                          {match.reasons.map((reason, i) => (
-                            <p key={i} className="text-xs text-muted-foreground flex items-center gap-1">
+                          {match.reasons.map((reason) => (
+                            <p key={reason} className="text-xs text-muted-foreground flex items-center gap-1">
                               <span className="w-1 h-1 bg-success rounded-full" />
                               {reason}
                             </p>

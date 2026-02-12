@@ -189,8 +189,8 @@ export default function MedicalDashboard() {
               </CardHeader>
               <CardContent>
                 <div className="space-y-3">
-                  {crew.flatMap(c => c.certifications.filter(cert => cert.status !== "valid").map(cert => ({ crew: c, cert }))).map(({ crew: c, cert }, i) => (
-                    <div key={i} className="flex items-center justify-between p-3 rounded-lg border bg-card">
+                  {crew.flatMap(c => c.certifications.filter(cert => cert.status !== "valid").map(cert => ({ crew: c, cert }))).map(({ crew: c, cert }) => (
+                    <div key={`${c.name}-${cert.name}`} className="flex items-center justify-between p-3 rounded-lg border bg-card">
                       <div><p className="font-medium text-sm">{c.name}</p><p className="text-xs text-muted-foreground">{cert.name}</p></div>
                       <div className="text-right">
                         <Badge variant={cert.status === "expired" ? "destructive" : "secondary"}>{cert.status === "expired" ? "Vencido" : "Vencendo"}</Badge>

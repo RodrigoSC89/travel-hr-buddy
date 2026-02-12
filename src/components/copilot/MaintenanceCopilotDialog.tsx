@@ -210,9 +210,9 @@ export function MaintenanceCopilotDialog({
         {/* Messages */}
         <ScrollArea className="flex-1 pr-4" ref={scrollRef}>
           <div className="space-y-4 py-4">
-            {messages.map((message, index) => (
+            {messages.map((message, idx) => (
               <div
-                key={index}
+                key={`msg-${idx}-${message.role}`}
                 className={`flex ${message.role === "user" ? "justify-end" : "justify-start"}`}
               >
                 <div

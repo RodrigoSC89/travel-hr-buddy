@@ -281,8 +281,8 @@ export const LogisticsAIInsights = ({ operations }: LogisticsAIInsightsProps) =>
                       Fatores de Risco
                     </span>
                     <ul className="list-disc list-inside text-sm space-y-1 text-muted-foreground">
-                      {pred.riskFactors.map((factor: string, idx: number) => (
-                        <li key={idx}>{factor}</li>
+                      {pred.riskFactors.map((factor: string) => (
+                        <li key={factor}>{factor}</li>
                       ))}
                     </ul>
                   </div>
@@ -293,8 +293,8 @@ export const LogisticsAIInsights = ({ operations }: LogisticsAIInsightsProps) =>
                       Ações de Mitigação
                     </span>
                     <ul className="list-disc list-inside text-sm space-y-1 text-muted-foreground">
-                      {pred.mitigationActions.map((action: string, idx: number) => (
-                        <li key={idx}>{action}</li>
+                      {pred.mitigationActions.map((action: string) => (
+                        <li key={action}>{action}</li>
                       ))}
                     </ul>
                   </div>

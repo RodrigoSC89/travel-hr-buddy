@@ -172,8 +172,8 @@ export const WeeklyFeedbackReportComponent: React.FC<WeeklyFeedbackReportProps> 
                 <p className="text-sm text-muted-foreground">No patterns detected yet.</p>
               ) : (
                 <div className="space-y-2">
-                  {report.top_patterns.slice(0, 5).map((pattern, idx) => (
-                    <Card key={idx}>
+                  {report.top_patterns.slice(0, 5).map((pattern) => (
+                    <Card key={`${pattern.pattern_type}-${pattern.module}`}>
                       <CardContent className="pt-4">
                         <div className="flex items-start justify-between">
                           <div className="space-y-1 flex-1">

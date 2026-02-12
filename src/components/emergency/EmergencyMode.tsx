@@ -261,9 +261,9 @@ export function EmergencyMode() {
             </CardTitle>
           </CardHeader>
           <CardContent className="space-y-2">
-            {DEFAULT_CONTACTS.map((contact, idx) => (
+            {DEFAULT_CONTACTS.map((contact) => (
               <a
-                key={idx}
+                key={contact.name}
                 href={`tel:${contact.phone}`}
                 className="flex items-center justify-between p-3 bg-red-800/50 rounded-lg hover:bg-red-800 transition-colors"
               >

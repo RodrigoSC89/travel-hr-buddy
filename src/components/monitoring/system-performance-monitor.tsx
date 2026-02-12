@@ -257,8 +257,8 @@ const SystemPerformanceMonitor = () => {
         <TabsContent value="overview" className="space-y-6">
           {/* Métricas Principais */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {systemMetrics.map((metric, index) => (
-              <Card key={index}>
+            {systemMetrics.map((metric) => (
+              <Card key={metric.name}>
                 <CardContent className="p-6">
                   <div className="flex items-center justify-between mb-4">
                     <div className="flex items-center gap-2">
@@ -433,8 +433,8 @@ const SystemPerformanceMonitor = () => {
 
         <TabsContent value="services" className="space-y-6">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {services.map((service, index) => (
-              <Card key={index}>
+            {services.map((service) => (
+              <Card key={service.name}>
                 <CardContent className="p-6">
                   <div className="flex items-center justify-between mb-4">
                     <h3 className="font-semibold">{service.name}</h3>

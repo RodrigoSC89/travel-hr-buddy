@@ -255,9 +255,9 @@ export const TrustScoreDisplay: React.FC<TrustScoreDisplayProps> = ({
           </CardHeader>
           <CardContent>
             <div className="space-y-2">
-              {history.map((event, index) => (
+              {history.map((event, idx) => (
                 <div
-                  key={index}
+                  key={`${event.event_type}-${event.timestamp}`}
                   className="flex items-center justify-between p-2 border rounded hover:bg-accent/50"
                 >
                   <div className="flex items-center gap-3">
@@ -267,15 +267,15 @@ export const TrustScoreDisplay: React.FC<TrustScoreDisplayProps> = ({
                       <div>{new Date(event.timestamp).toLocaleString()}</div>
                     </div>
                   </div>
-                  {index < history.length - 1 && (
+                  {idx < history.length - 1 && (
                     <div className="text-xs">
-                      {event.score > history[index + 1].score ? (
+                      {event.score > history[idx + 1].score ? (
                         <span className="text-green-500">
-                          +{event.score - history[index + 1].score}
+                          +{event.score - history[idx + 1].score}
                         </span>
-                      ) : event.score < history[index + 1].score ? (
+                      ) : event.score < history[idx + 1].score ? (
                         <span className="text-red-500">
-                          {event.score - history[index + 1].score}
+                          {event.score - history[idx + 1].score}
                         </span>
                       ) : (
                         <span className="text-muted-foreground">0</span>

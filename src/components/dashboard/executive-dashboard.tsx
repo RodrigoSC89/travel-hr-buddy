@@ -381,8 +381,8 @@ export function ExecutiveDashboard() {
             </CardHeader>
             <CardContent>
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-                {fleetPerformance.map((vessel, index) => (
-                  <VesselPerformanceCard key={index} vessel={vessel} />
+                {fleetPerformance.map((vessel) => (
+                  <VesselPerformanceCard key={vessel.vessel} vessel={vessel} />
                 ))}
               </div>
             </CardContent>

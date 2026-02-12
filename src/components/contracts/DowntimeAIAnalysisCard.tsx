@@ -275,8 +275,8 @@ export function DowntimeAIAnalysisCard({ events, contracts, onAnalysisComplete }
                         Recomendações IA
                       </h5>
                       <ul className="space-y-1">
-                        {result.recommendations.map((rec, idx) => (
-                          <li key={idx} className="text-sm text-muted-foreground flex items-start gap-2">
+                        {result.recommendations.map((rec) => (
+                          <li key={rec} className="text-sm text-muted-foreground flex items-start gap-2">
                             <span className="text-blue-500">•</span>
                             {rec}
                           </li>

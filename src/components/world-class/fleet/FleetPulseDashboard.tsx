@@ -97,8 +97,8 @@ function VesselCard({ vessel }: { vessel: FleetPulseVessel }) {
 
           {vessel.alerts.length > 0 && (
             <div className="mt-2 space-y-1">
-              {vessel.alerts.map((alert, i) => (
-                <div key={i} className="flex items-center gap-1 text-xs text-amber-600">
+              {vessel.alerts.map((alert) => (
+                <div key={alert.message} className="flex items-center gap-1 text-xs text-amber-600">
                   <AlertTriangle className="h-3 w-3" />
                   {alert.message}
                 </div>

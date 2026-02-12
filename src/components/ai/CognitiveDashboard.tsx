@@ -247,9 +247,9 @@ export const CognitiveDashboard: React.FC = () => {
                 </div>
               ) : (
                 <div className="space-y-3">
-                  {filteredPredictions.map((pred, idx) => (
+                  {filteredPredictions.map((pred) => (
                     <div
-                      key={idx}
+                      key={`${(pred as any).module_name || pred.moduleName}-${(pred as any).risk_score || pred.riskScore}`}
                       className="p-4 border rounded-lg hover:bg-muted/50 transition-colors"
                     >
                       <div className="flex items-start justify-between">
@@ -278,8 +278,8 @@ export const CognitiveDashboard: React.FC = () => {
                               <div className="mt-2">
                                 <span className="text-sm text-muted-foreground">Factors:</span>
                                 <ul className="list-disc list-inside text-sm mt-1">
-                                  {pred.factors.map((factor, fidx) => (
-                                    <li key={fidx}>{factor}</li>
+                                  {pred.factors.map((factor) => (
+                                    <li key={factor}>{factor}</li>
                                   ))}
                                 </ul>
                               </div>
@@ -484,8 +484,8 @@ export const CognitiveDashboard: React.FC = () => {
                     <div>
                       <h3 className="font-semibold mb-3">Key Insights</h3>
                       <div className="space-y-2">
-                        {evolutionReport.insights.map((insight, idx) => (
-                          <div key={idx} className="p-3 border rounded-lg">
+                        {evolutionReport.insights.map((insight) => (
+                          <div key={insight.pattern} className="p-3 border rounded-lg">
                             <div className="flex items-center justify-between mb-1">
                               <span className="font-medium">{insight.pattern}</span>
                               <Badge variant={
