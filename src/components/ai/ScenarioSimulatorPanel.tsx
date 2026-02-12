@@ -162,9 +162,9 @@ export function ScenarioSimulatorPanel() {
   const getImpactIcon = (impact: string) => {
     switch (impact) {
       case "positive":
-        return <TrendingUp className="h-4 w-4 text-green-500" />;
+        return <TrendingUp className="h-4 w-4 text-success" />;
       case "negative":
-        return <TrendingDown className="h-4 w-4 text-red-500" />;
+        return <TrendingDown className="h-4 w-4 text-destructive" />;
       default:
         return <Minus className="h-4 w-4 text-muted-foreground" />;
     }
@@ -320,7 +320,7 @@ export function ScenarioSimulatorPanel() {
                         ? `$${(result.simulated / 1000).toFixed(0)}k`
                         : result.simulated.toFixed(1)}
                     </span>
-                    <span className={`text-xs ${result.change > 0 ? "text-red-500" : "text-green-500"}`}>
+                    <span className={`text-xs ${result.change > 0 ? "text-destructive" : "text-success"}`}>
                       {result.change > 0 ? "+" : ""}{result.change.toFixed(1)}%
                     </span>
                   </div>

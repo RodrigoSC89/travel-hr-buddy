@@ -191,7 +191,7 @@ export function ActiveSessionDisplay() {
           <div className="pt-4 border-t">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2 text-sm">
-                <CheckCircle className="w-4 h-4 text-green-600" />
+                <CheckCircle className="w-4 h-4 text-success" />
                 <span className="text-muted-foreground">
                   Automatic token refresh enabled
                 </span>
@@ -217,15 +217,15 @@ export function ActiveSessionDisplay() {
         <CardContent>
           <ul className="space-y-2 text-sm">
             <li className="flex items-center gap-2">
-              <CheckCircle className="w-4 h-4 text-green-600" />
+              <CheckCircle className="w-4 h-4 text-success" />
               <span>JWT tokens with automatic refresh</span>
             </li>
             <li className="flex items-center gap-2">
-              <CheckCircle className="w-4 h-4 text-green-600" />
+              <CheckCircle className="w-4 h-4 text-success" />
               <span>Secure token invalidation on logout</span>
             </li>
             <li className="flex items-center gap-2">
-              <CheckCircle className="w-4 h-4 text-green-600" />
+              <CheckCircle className="w-4 h-4 text-success" />
               <span>Session expiry monitoring</span>
             </li>
             <li className="flex items-center gap-2">

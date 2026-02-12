@@ -83,8 +83,8 @@ export function AIDecisionAuditTrail() {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-3">
-          <div className="p-2.5 bg-blue-500/10 rounded-xl">
-            <Shield className="h-6 w-6 text-blue-500" />
+          <div className="p-2.5 bg-primary/10 rounded-xl">
+            <Shield className="h-6 w-6 text-primary" />
           </div>
           <div>
             <h2 className="text-xl font-bold text-foreground">AI Decision Audit Trail</h2>
@@ -104,10 +104,10 @@ export function AIDecisionAuditTrail() {
 
       {/* Governance Report */}
       {report && (
-        <Card className="border-blue-500/30 bg-blue-500/5">
+        <Card className="border-primary/30 bg-primary/5">
           <CardHeader className="pb-2">
             <CardTitle className="text-sm font-semibold flex items-center gap-2">
-              <FileText className="h-4 w-4 text-blue-500" />
+              <FileText className="h-4 w-4 text-primary" />
               Relatório de Governança de IA
             </CardTitle>
           </CardHeader>
@@ -201,11 +201,11 @@ export function AIDecisionAuditTrail() {
         {/* Blockchain Tab */}
         <TabsContent value="blockchain" className="mt-4 space-y-2">
           {blocks.length > 0 ? blocks.map((block, i) => (
-            <Card key={block.id} className="border-blue-500/10">
+            <Card key={block.id} className="border-primary/10">
               <CardContent className="p-3">
                 <div className="flex items-center gap-3">
-                  <div className="p-2 rounded-lg bg-blue-500/10">
-                    <Link2 className="h-4 w-4 text-blue-500" />
+                  <div className="p-2 rounded-lg bg-primary/10">
+                    <Link2 className="h-4 w-4 text-primary" />
                   </div>
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-2 mb-1">

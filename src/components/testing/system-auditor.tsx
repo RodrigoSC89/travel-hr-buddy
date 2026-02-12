@@ -328,12 +328,12 @@ const SystemAuditor: React.FC = () => {
     case "completed":
       return <CheckCircle className="w-4 h-4 text-green-500" />;
     case "warning":
-      return <AlertTriangle className="w-4 h-4 text-yellow-500" />;
+      return <AlertTriangle className="w-4 h-4 text-warning" />;
     case "error":
     case "failed":
-      return <XCircle className="w-4 h-4 text-red-500" />;
+      return <XCircle className="w-4 h-4 text-destructive" />;
     case "running":
-      return <RefreshCw className="w-4 h-4 text-blue-500 animate-spin" />;
+      return <RefreshCw className="w-4 h-4 text-primary animate-spin" />;
     default:
       return <Activity className="w-4 h-4 text-muted-foreground" />;
     }
@@ -341,10 +341,10 @@ const SystemAuditor: React.FC = () => {
 
   const getSeverityColor = (severity: string) => {
     switch (severity) {
-    case "critical": return "bg-red-100 text-red-800 border-red-200";
-    case "high": return "bg-orange-100 text-orange-800 border-orange-200";
-    case "medium": return "bg-yellow-100 text-yellow-800 border-yellow-200";
-    case "low": return "bg-green-100 text-green-800 border-green-200";
+    case "critical": return "bg-destructive/10 text-destructive border-destructive/20";
+    case "high": return "bg-warning/10 text-warning border-warning/20";
+    case "medium": return "bg-warning/10 text-warning border-warning/20";
+    case "low": return "bg-success/10 text-success border-success/20";
     default: return "bg-secondary text-secondary-foreground border-border";
     }
   };
@@ -363,7 +363,7 @@ const SystemAuditor: React.FC = () => {
               <Shield className="w-5 h-5 text-primary" />
               <div>
                 <p className="text-sm text-muted-foreground">Problemas Críticos</p>
-                <p className="text-2xl font-bold text-red-600">{totalCritical}</p>
+                <p className="text-2xl font-bold text-destructive">{totalCritical}</p>
               </div>
             </div>
           </CardContent>
@@ -401,11 +401,11 @@ const SystemAuditor: React.FC = () => {
                 <p className="text-sm text-muted-foreground">Status Geral</p>
                 <p className="text-lg font-bold">
                   {totalCritical === 0 && totalHigh === 0 ? (
-                    <span className="text-green-600">✓ APROVADO</span>
+                    <span className="text-success">✓ APROVADO</span>
                   ) : totalCritical > 0 ? (
-                    <span className="text-red-600">✗ CRÍTICO</span>
+                    <span className="text-destructive">✗ CRÍTICO</span>
                   ) : (
-                    <span className="text-yellow-600">⚠ ATENÇÃO</span>
+                    <span className="text-warning">⚠ ATENÇÃO</span>
                   )}
                 </p>
               </div>

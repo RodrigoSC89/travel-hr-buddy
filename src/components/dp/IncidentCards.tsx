@@ -589,13 +589,13 @@ export default function IncidentCards() {
                   <Card>
                     <CardContent className="pt-4">
                       <h4 className="font-semibold mb-3 flex items-center gap-2">
-                        <Shield className="h-4 w-4 text-green-500" />
+                        <Shield className="h-4 w-4 text-success" />
                         Medidas Preventivas
                       </h4>
                       <ul className="space-y-2">
                         {aiAnalysis.preventiveMeasures.map((measure, i) => (
                           <li key={i} className="flex items-start gap-2 text-sm text-muted-foreground">
-                            <CheckCircle className="h-4 w-4 text-green-500 mt-0.5 flex-shrink-0" />
+                            <CheckCircle className="h-4 w-4 text-success mt-0.5 flex-shrink-0" />
                             {measure}
                           </li>
                         ))}

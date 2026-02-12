@@ -45,33 +45,33 @@ export const FuelAnalysisPanel: React.FC<FuelAnalysisPanelProps> = ({
   const getStatusColor = (status: string) => {
     switch (status) {
       case "optimal":
-        return "bg-green-500";
+        return "bg-success";
       case "warning":
-        return "bg-yellow-500";
+        return "bg-warning";
       case "critical":
-        return "bg-red-500";
+        return "bg-destructive";
       default:
-        return "bg-gray-500";
+        return "bg-muted-foreground";
     }
   };
 
   const getStatusBadge = (status: string) => {
     switch (status) {
       case "optimal":
-        return <Badge className="bg-green-100 text-green-700 dark:bg-green-900 dark:text-green-300">Ótimo</Badge>;
+        return <Badge className="bg-success/10 text-success">Ótimo</Badge>;
       case "warning":
-        return <Badge className="bg-yellow-100 text-yellow-700 dark:bg-yellow-900 dark:text-yellow-300">Atenção</Badge>;
+        return <Badge className="bg-warning/10 text-warning">Atenção</Badge>;
       case "critical":
-        return <Badge className="bg-red-100 text-red-700 dark:bg-red-900 dark:text-red-300">Crítico</Badge>;
+        return <Badge className="bg-destructive/10 text-destructive">Crítico</Badge>;
       default:
         return null;
     }
   };
 
   const getTrendIcon = (current: number, target: number) => {
-    if (current < target) return <TrendingDown className="h-4 w-4 text-green-500" />;
-    if (current > target) return <TrendingUp className="h-4 w-4 text-red-500" />;
-    return <Minus className="h-4 w-4 text-gray-500" />;
+    if (current < target) return <TrendingDown className="h-4 w-4 text-success" />;
+    if (current > target) return <TrendingUp className="h-4 w-4 text-destructive" />;
+    return <Minus className="h-4 w-4 text-muted-foreground" />;
   };
 
   return (

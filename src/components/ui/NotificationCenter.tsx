@@ -173,6 +173,7 @@ export const NotificationCenter: React.FC<NotificationCenterProps> = ({
     }
   };
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Supabase realtime payload
   const handleNewNotification = (payload: any) => {
     const newNotification: Notification = {
       id: payload.new.id,
@@ -196,6 +197,7 @@ export const NotificationCenter: React.FC<NotificationCenterProps> = ({
     });
   };
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- dynamic alert shape
   const createNotificationFromAlert = (alert: any) => {
     const notification: Notification = {
       id: `alert-${alert.id}`,
@@ -212,6 +214,7 @@ export const NotificationCenter: React.FC<NotificationCenterProps> = ({
     setUnreadCount(prev => prev + 1);
   };
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- dynamic maintenance shape
   const createNotificationFromMaintenance = (maintenance: any) => {
     const notification: Notification = {
       id: `maintenance-${maintenance.id}`,
@@ -295,15 +298,15 @@ export const NotificationCenter: React.FC<NotificationCenterProps> = ({
   const getPriorityIcon = (priority: string) => {
     switch (priority) {
     case "critical":
-      return <AlertTriangle className="h-5 w-5 text-red-500" />;
+      return <AlertTriangle className="h-5 w-5 text-destructive" />;
     case "high":
-      return <TrendingUp className="h-5 w-5 text-orange-500" />;
+      return <TrendingUp className="h-5 w-5 text-warning" />;
     case "medium":
-      return <Activity className="h-5 w-5 text-yellow-500" />;
+      return <Activity className="h-5 w-5 text-warning" />;
     case "low":
-      return <TrendingDown className="h-5 w-5 text-blue-500" />;
+      return <TrendingDown className="h-5 w-5 text-primary" />;
     default:
-      return <Bell className="h-5 w-5 text-gray-500" />;
+      return <Bell className="h-5 w-5 text-muted-foreground" />;
     }
   };
 
@@ -427,14 +430,14 @@ export const NotificationCenter: React.FC<NotificationCenterProps> = ({
                         {!notification.isRead && (
                           <button
                             onClick={() => markAsRead(notification.id)}
-                            className="text-blue-600 hover:text-blue-800 font-medium"
+                            className="text-primary hover:text-primary/80 font-medium"
                           >
                             Marcar como lida
                           </button>
                         )}
                         <button
                           onClick={() => deleteNotification(notification.id)}
-                          className="text-red-600 hover:text-red-800 font-medium"
+                          className="text-destructive hover:text-destructive/80 font-medium"
                         >
                           <X className="h-3 w-3" />
                         </button>

@@ -114,8 +114,8 @@ export const InsightImplementationDialog: React.FC<InsightImplementationDialogPr
             <CardContent>
               <p className="text-muted-foreground mb-3">{insight.description}</p>
               <div className="flex items-center gap-2">
-                <Zap className="h-4 w-4 text-green-500" />
-                <span className="text-sm font-medium text-green-600">
+                <Zap className="h-4 w-4 text-success" />
+                <span className="text-sm font-medium text-success">
                   Economia estimada: {insight.estimatedSavings}
                 </span>
               </div>
@@ -131,7 +131,7 @@ export const InsightImplementationDialog: React.FC<InsightImplementationDialogPr
                     currentPhase === phase 
                       ? "bg-primary text-primary-foreground" 
                       : index < ["plan", "execute", "review"].indexOf(currentPhase)
-                        ? "bg-green-100 text-green-700"
+                        ? "bg-success/10 text-success"
                         : "bg-muted text-muted-foreground"
                   }`}>
                     {index < ["plan", "execute", "review"].indexOf(currentPhase) && (
@@ -204,7 +204,7 @@ export const InsightImplementationDialog: React.FC<InsightImplementationDialogPr
                     <div className="text-xs text-muted-foreground">{step.description}</div>
                   </div>
                   {step.completed && (
-                    <CheckCircle className="h-5 w-5 text-green-500" />
+                    <CheckCircle className="h-5 w-5 text-success" />
                   )}
                 </div>
               ))}
