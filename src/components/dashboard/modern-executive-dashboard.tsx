@@ -187,7 +187,7 @@ export const ModernExecutiveDashboard: React.FC<ExecutiveDashboardProps> = ({ cl
       trend: "Dentro da meta (>90%)",
       icon: <Anchor className="w-6 h-6 text-primary-foreground" />,
       color: "blue" as const,
-      onClick: () => navigate("/fleet-dashboard"),
+      onClick: () => navigate("/fleet-command"),
       actionLabel: "Frota"
     }
   ];

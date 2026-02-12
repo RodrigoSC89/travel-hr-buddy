@@ -139,7 +139,7 @@ export function BunkerPriceWidget({ compact = false, showForecast = true }: Bunk
         className={`cursor-pointer transition-all hover:shadow-md ${
           hasOpportunity ? "border-success/50 bg-success/5" : ""
         }`}
-        onClick={() => navigate("/fuel-manager")}
+        onClick={() => navigate("/fuel-management")}
       >
         <CardContent className="pt-4">
           <div className="flex items-center justify-between">
@@ -296,7 +296,7 @@ export function BunkerPriceWidget({ compact = false, showForecast = true }: Bunk
           variant="ghost" 
           size="sm" 
           className="w-full text-xs"
-          onClick={() => navigate("/fuel-manager")}
+          onClick={() => navigate("/fuel-management")}
         >
           Ver análise completa
           <ChevronRight className="h-3 w-3 ml-1" />

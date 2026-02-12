@@ -762,7 +762,7 @@ export default function IncidentSimulator() {
                     <RefreshCw className="h-4 w-4 mr-2" />
                     Novo Cenário
                   </Button>
-                  <Button onClick={() => navigate("/nautilus-command")} className="flex-1">
+                  <Button onClick={() => navigate("/nauti-command")} className="flex-1">
                     <Ship className="h-4 w-4 mr-2" />
                     Voltar ao Command Center
                   </Button>

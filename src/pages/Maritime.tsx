@@ -86,11 +86,11 @@ export default function Maritime() {
       />
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-4">
-        <StatCard title="Embarcações" value={stats.totalVessels} icon={Ship} trend="+2 este mês" onClick={() => navigate("/fleet-dashboard")} />
-        <StatCard title="Tripulação Ativa" value={stats.activeCrew} icon={Users} variant="success" trend="100% operacional" onClick={() => navigate("/crew")} />
-        <StatCard title="Certificações Pendentes" value={stats.pendingCertifications} icon={AlertTriangle} variant="warning" trend="3 vencem em 30 dias" onClick={() => navigate("/maritime-certifications")} />
+        <StatCard title="Embarcações" value={stats.totalVessels} icon={Ship} trend="+2 este mês" onClick={() => navigate("/fleet-command")} />
+        <StatCard title="Tripulação Ativa" value={stats.activeCrew} icon={Users} variant="success" trend="100% operacional" onClick={() => navigate("/crew-management")} />
+        <StatCard title="Certificações Pendentes" value={stats.pendingCertifications} icon={AlertTriangle} variant="warning" trend="3 vencem em 30 dias" onClick={() => navigate("/maritime-command")} />
         <StatCard title="Auditorias Completas" value={stats.completedAudits} icon={CheckCircle} variant="success" trend="+4 este mês" onClick={() => navigate("/peotram")} />
-        <StatCard title="Alertas Ativos" value={stats.activeAlerts} icon={AlertTriangle} variant="danger" trend="2 críticos" onClick={() => navigate("/intelligent-alerts")} />
+        <StatCard title="Alertas Ativos" value={stats.activeAlerts} icon={AlertTriangle} variant="danger" trend="2 críticos" onClick={() => navigate("/alerts-command")} />
         <StatCard title="Compliance Score" value={`${stats.complianceScore}%`} icon={TrendingUp} variant="success" trend="+5% vs mês anterior" />
       </div>
 
@@ -126,7 +126,7 @@ export default function Maritime() {
                 )) : (
                   <div className="text-center py-4 text-muted-foreground">Carregando embarcações...</div>
                 )}
-                <Button variant="outline" className="w-full" onClick={() => navigate("/fleet-dashboard")}>Ver Todas as Embarcações</Button>
+                <Button variant="outline" className="w-full" onClick={() => navigate("/fleet-command")}>Ver Todas as Embarcações</Button>
               </CardContent>
             </Card>
 
@@ -137,10 +137,10 @@ export default function Maritime() {
               </CardHeader>
               <CardContent className="space-y-3">
                 <Button className="w-full justify-start" variant="outline" onClick={() => navigate("/peotram")}><FileText className="h-4 w-4 mr-2" />Nova Auditoria PEOTRAM</Button>
-                <Button className="w-full justify-start" variant="outline" onClick={() => navigate("/crew")}><Users className="h-4 w-4 mr-2" />Gerenciar Tripulação</Button>
-                <Button className="w-full justify-start" variant="outline" onClick={() => navigate("/maritime-certifications")}><Shield className="h-4 w-4 mr-2" />Verificar Certificações</Button>
-                <Button className="w-full justify-start" variant="outline" onClick={() => navigate("/checklists")}><BarChart3 className="h-4 w-4 mr-2" />Dashboard de Checklists</Button>
-                <Button className="w-full justify-start" variant="outline" onClick={() => navigate("/maintenance/planner")}><Wrench className="h-4 w-4 mr-2" />Manutenção Preditiva</Button>
+                <Button className="w-full justify-start" variant="outline" onClick={() => navigate("/crew-management")}><Users className="h-4 w-4 mr-2" />Gerenciar Tripulação</Button>
+                <Button className="w-full justify-start" variant="outline" onClick={() => navigate("/maritime-command")}><Shield className="h-4 w-4 mr-2" />Verificar Certificações</Button>
+                <Button className="w-full justify-start" variant="outline" onClick={() => navigate("/admin/checklists")}><BarChart3 className="h-4 w-4 mr-2" />Dashboard de Checklists</Button>
+                <Button className="w-full justify-start" variant="outline" onClick={() => navigate("/maintenance?tab=predictive")}><Wrench className="h-4 w-4 mr-2" />Manutenção Preditiva</Button>
               </CardContent>
             </Card>
           </div>
@@ -174,7 +174,7 @@ export default function Maritime() {
                 <Ship className="h-16 w-16 mx-auto text-muted-foreground mb-4" />
                 <h3 className="text-lg font-semibold mb-2">Módulo de Frota</h3>
                 <p className="text-muted-foreground mb-4">Acesse a gestão completa da frota através do menu dedicado</p>
-                <Button onClick={() => navigate("/fleet-dashboard")}>Ir para Gestão de Frota</Button>
+                <Button onClick={() => navigate("/fleet-command")}>Ir para Gestão de Frota</Button>
               </div>
             </CardContent>
           </Card>

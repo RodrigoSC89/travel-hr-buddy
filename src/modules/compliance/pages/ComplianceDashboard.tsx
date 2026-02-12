@@ -18,47 +18,49 @@ import { Link } from "react-router-dom";
 import { UnifiedComplianceDashboard } from "@/components/compliance/UnifiedComplianceDashboard";
 
 export default function ComplianceDashboard() {
-  const { data: stats, isLoading: statsLoading } = useComplianceDashboardStats();
-  const { data: risks = [] } = useComplianceRisks();
-  const { data: recommendations = [] } = useComplianceRecommendations();
-
-  const pendingRecommendations = recommendations.filter((r) => r.status === "pending").slice(0, 3);
-  const recentRisks = risks.slice(0, 5);
+  const { data: stats, isLoading } = useComplianceDashboardStats();
+  const { data: recentRisks = [] } = useComplianceRisks();
+  const { data: pendingRecommendations = [] } = useComplianceRecommendations();
 
   const getScoreColor = (score: number) => {
-    if (score >= 80) return "text-green-600";
-    if (score >= 60) return "text-yellow-600";
-    return "text-red-600";
+    if (score >= 80) return "text-success";
+    if (score >= 60) return "text-warning";
+    return "text-destructive";
   };
 
   const getScoreBg = (score: number) => {
-    if (score >= 80) return "bg-green-500";
-    if (score >= 60) return "bg-yellow-500";
-    return "bg-red-500";
+    if (score >= 80) return "bg-success/20";
+    if (score >= 60) return "bg-warning/20";
+    return "bg-destructive/20";
   };
 
+  if (isLoading) {
+    return (
+      <div className="flex items-center justify-center min-h-[400px]">
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary" />
+      </div>
+    );
+  }
+
   return (
-    <div className="container mx-auto p-6 space-y-6">
+    <div className="space-y-6 p-6">
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-3xl font-bold flex items-center gap-3">
-            <Shield className="h-8 w-8 text-primary" />
-            Compliance One
-          </h1>
-          <p className="text-muted-foreground mt-1">
+          <h1 className="text-3xl font-bold">Compliance Dashboard</h1>
+          <p className="text-muted-foreground">
             Sistema de Gestão de Compliance • ISO 37301
           </p>
         </div>
         <div className="flex gap-2">
           <Button variant="outline" asChild>
-            <Link to="/compliance-center/ia-recommendations">
+            <Link to="/compliance?tab=reports">
               <Brain className="h-4 w-4 mr-2" />
               IA Recomendações
             </Link>
           </Button>
           <Button asChild>
-            <Link to="/compliance-center/relatorios">
+            <Link to="/compliance?tab=reports">
               Gerar Relatório
             </Link>
           </Button>
@@ -112,14 +114,14 @@ export default function ComplianceDashboard() {
         <Card>
           <CardHeader className="flex flex-row items-center justify-between pb-2">
             <CardTitle className="text-sm font-medium">Riscos Abertos</CardTitle>
-            <AlertTriangle className="h-4 w-4 text-orange-500" />
+            <AlertTriangle className="h-4 w-4 text-warning" />
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">{stats?.openRisks || 0}</div>
             <p className="text-xs text-muted-foreground">
               {stats?.criticalRisks || 0} críticos
             </p>
-            <Link to="/compliance-center/riscos" className="text-xs text-primary hover:underline flex items-center mt-2">
+            <Link to="/risk-matrix" className="text-xs text-primary hover:underline flex items-center mt-2">
               Ver todos <ChevronRight className="h-3 w-3" />
             </Link>
           </CardContent>
@@ -128,14 +130,14 @@ export default function ComplianceDashboard() {
         <Card>
           <CardHeader className="flex flex-row items-center justify-between pb-2">
             <CardTitle className="text-sm font-medium">Evidências</CardTitle>
-            <FileCheck className="h-4 w-4 text-blue-500" />
+            <FileCheck className="h-4 w-4 text-info" />
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">{stats?.totalEvidences || 0}</div>
             <p className="text-xs text-muted-foreground">
               {stats?.pendingEvidences || 0} pendentes, {stats?.expiredEvidences || 0} expiradas
             </p>
-            <Link to="/compliance-center/evidencias" className="text-xs text-primary hover:underline flex items-center mt-2">
+            <Link to="/evidences" className="text-xs text-primary hover:underline flex items-center mt-2">
               Ver todas <ChevronRight className="h-3 w-3" />
             </Link>
           </CardContent>
@@ -144,14 +146,14 @@ export default function ComplianceDashboard() {
         <Card>
           <CardHeader className="flex flex-row items-center justify-between pb-2">
             <CardTitle className="text-sm font-medium">Terceiros</CardTitle>
-            <Users className="h-4 w-4 text-purple-500" />
+            <Users className="h-4 w-4 text-accent-foreground" />
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">{stats?.totalThirdParties || 0}</div>
             <p className="text-xs text-muted-foreground">
               {stats?.highRiskThirdParties || 0} alto risco, {stats?.blockedThirdParties || 0} bloqueados
             </p>
-            <Link to="/compliance-center/terceiros" className="text-xs text-primary hover:underline flex items-center mt-2">
+            <Link to="/due-diligence" className="text-xs text-primary hover:underline flex items-center mt-2">
               Ver todos <ChevronRight className="h-3 w-3" />
             </Link>
           </CardContent>
@@ -160,14 +162,14 @@ export default function ComplianceDashboard() {
         <Card>
           <CardHeader className="flex flex-row items-center justify-between pb-2">
             <CardTitle className="text-sm font-medium">Workflows</CardTitle>
-            <Clock className="h-4 w-4 text-cyan-500" />
+            <Clock className="h-4 w-4 text-primary" />
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">{stats?.totalWorkflows || 0}</div>
             <p className="text-xs text-muted-foreground">
               {stats?.overdueWorkflows || 0} atrasados
             </p>
-            <Link to="/compliance-center/workflows" className="text-xs text-primary hover:underline flex items-center mt-2">
+            <Link to="/nc-workflow" className="text-xs text-primary hover:underline flex items-center mt-2">
               Ver todos <ChevronRight className="h-3 w-3" />
             </Link>
           </CardContent>
@@ -201,8 +203,8 @@ export default function ComplianceDashboard() {
                       }>
                         {risk.risk_score}
                       </Badge>
-                      {risk.status === "open" && <AlertCircle className="h-4 w-4 text-orange-500" />}
-                      {risk.status === "mitigated" && <CheckCircle className="h-4 w-4 text-green-500" />}
+                      {risk.status === "open" && <AlertCircle className="h-4 w-4 text-warning" />}
+                      {risk.status === "mitigated" && <CheckCircle className="h-4 w-4 text-success" />}
                     </div>
                   </div>
                 ))}
@@ -211,7 +213,7 @@ export default function ComplianceDashboard() {
               <p className="text-muted-foreground text-center py-8">Nenhum risco cadastrado</p>
             )}
             <Button variant="outline" className="w-full mt-4" asChild>
-              <Link to="/compliance-center/riscos">Ver Matriz de Riscos</Link>
+              <Link to="/risk-matrix">Ver Matriz de Riscos</Link>
             </Button>
           </CardContent>
         </Card>
@@ -220,7 +222,7 @@ export default function ComplianceDashboard() {
         <Card>
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
-              <Brain className="h-5 w-5 text-purple-500" />
+              <Brain className="h-5 w-5 text-accent-foreground" />
               Recomendações da IA
               {stats?.pendingRecommendations && stats.pendingRecommendations > 0 && (
                 <Badge variant="secondary">{stats.pendingRecommendations} pendentes</Badge>
@@ -231,7 +233,7 @@ export default function ComplianceDashboard() {
             {pendingRecommendations.length > 0 ? (
               <div className="space-y-3">
                 {pendingRecommendations.map((rec) => (
-                  <div key={rec.id} className="p-3 bg-purple-500/10 border border-purple-500/20 rounded-lg">
+                  <div key={rec.id} className="p-3 bg-accent/10 border border-accent/20 rounded-lg">
                     <div className="flex items-start justify-between">
                       <div className="flex-1">
                         <p className="font-medium text-sm">{rec.title}</p>
@@ -250,7 +252,7 @@ export default function ComplianceDashboard() {
               <p className="text-muted-foreground text-center py-8">Nenhuma recomendação pendente</p>
             )}
             <Button variant="outline" className="w-full mt-4" asChild>
-              <Link to="/compliance-center/ia-recommendations">Ver Todas Recomendações</Link>
+              <Link to="/compliance?tab=reports">Ver Todas Recomendações</Link>
             </Button>
           </CardContent>
         </Card>
@@ -264,44 +266,45 @@ export default function ComplianceDashboard() {
         <CardContent>
           <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-3">
             <Button variant="outline" className="h-auto py-4 flex-col gap-2" asChild>
-              <Link to="/compliance-center/regulamentos">
+              <Link to="/regulations">
                 <FileCheck className="h-5 w-5" />
                 <span className="text-xs">Regulamentos</span>
               </Link>
             </Button>
             <Button variant="outline" className="h-auto py-4 flex-col gap-2" asChild>
-              <Link to="/compliance-center/riscos">
+              <Link to="/risk-matrix">
                 <AlertTriangle className="h-5 w-5" />
                 <span className="text-xs">Novo Risco</span>
               </Link>
             </Button>
             <Button variant="outline" className="h-auto py-4 flex-col gap-2" asChild>
-              <Link to="/compliance-center/evidencias">
+              <Link to="/evidences">
                 <FileCheck className="h-5 w-5" />
                 <span className="text-xs">Upload Evidência</span>
               </Link>
             </Button>
             <Button variant="outline" className="h-auto py-4 flex-col gap-2" asChild>
-              <Link to="/compliance-center/terceiros">
+              <Link to="/due-diligence">
                 <Users className="h-5 w-5" />
                 <span className="text-xs">Due Diligence</span>
               </Link>
             </Button>
             <Button variant="outline" className="h-auto py-4 flex-col gap-2" asChild>
-              <Link to="/compliance-center/denuncias">
+              <Link to="/whistleblower">
                 <AlertCircle className="h-5 w-5" />
                 <span className="text-xs">Denúncias</span>
               </Link>
             </Button>
             <Button variant="outline" className="h-auto py-4 flex-col gap-2" asChild>
-              <Link to="/compliance-center/relatorios">
+              <Link to="/compliance?tab=reports">
                 <TrendingUp className="h-5 w-5" />
                 <span className="text-xs">Relatórios</span>
               </Link>
             </Button>
           </div>
-          </CardContent>
-        </Card>
+        </CardContent>
+      </Card>
+
         </TabsContent>
       </Tabs>
     </div>

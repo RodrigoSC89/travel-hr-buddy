@@ -432,7 +432,7 @@ const EnhancedUnifiedDashboard = () => {
                       Atualizar Dados
                     </Button>
                     <Button 
-                      onClick={() => navigate("/executive")}
+                      onClick={() => navigate("/command?tab=executive")}
                       className="bg-gradient-ocean text-white hover:shadow-glow shadow-azure"
                     >
                       <Target className="w-4 h-4 mr-2" />
