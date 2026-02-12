@@ -611,8 +611,8 @@ export const MessageComposer: React.FC<MessageComposerProps> = ({
             
             {attachments.length > 0 && (
               <div className="space-y-2">
-                {attachments.map((file, index) => (
-                  <div key={index} className="flex items-center justify-between p-2 bg-muted rounded">
+                {attachments.map((file, fileIdx) => (
+                  <div key={`attach-${fileIdx}-${file.name}`} className="flex items-center justify-between p-2 bg-muted rounded">
                     <div className="flex items-center gap-2">
                       <Paperclip className="h-4 w-4" />
                       <span className="text-sm">{file.name}</span>
@@ -623,7 +623,7 @@ export const MessageComposer: React.FC<MessageComposerProps> = ({
                     <Button
                       variant="ghost"
                       size="sm"
-                      onClick={() => removeAttachment(index)}
+                      onClick={() => removeAttachment(fileIdx)}
                     >
                       ×
                     </Button>
@@ -641,8 +641,8 @@ export const MessageComposer: React.FC<MessageComposerProps> = ({
                 <div className="flex-1">
                   <p className="font-medium text-destructive mb-2">Erros de Validação:</p>
                   <ul className="space-y-1 text-sm text-destructive/90">
-                    {validationErrors.map((error, index) => (
-                      <li key={index}>• {error}</li>
+                    {validationErrors.map((error) => (
+                      <li key={error}>• {error}</li>
                     ))}
                   </ul>
                 </div>

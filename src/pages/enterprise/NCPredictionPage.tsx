@@ -289,8 +289,8 @@ export default function NCPredictionPage() {
             </CardHeader>
             <CardContent>
               <div className="space-y-4">
-                {riskFactors.map((factor, index) => (
-                  <div key={index} className="p-4 border rounded-lg">
+                {riskFactors.map((factor) => (
+                  <div key={factor.factor} className="p-4 border rounded-lg">
                     <div className="flex items-center justify-between mb-2">
                       <h3 className="font-medium">{factor.factor}</h3>
                       <Badge className="bg-primary">{factor.weight}%</Badge>

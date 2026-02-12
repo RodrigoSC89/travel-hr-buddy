@@ -156,7 +156,7 @@ export const CommunicationModule = () => {
           const textColorClass = colorClass.split(" ")[5] || "text-blue-600";
 
           return (
-            <Card key={index} className={`relative overflow-hidden bg-gradient-to-br ${colorClass} hover:shadow-lg group cursor-pointer border backdrop-blur-sm transition-all duration-300`}>
+            <Card key={stat.title} className={`relative overflow-hidden bg-gradient-to-br ${colorClass} hover:shadow-lg group cursor-pointer border backdrop-blur-sm transition-all duration-300`}>
               <CardContent className="p-6">
                 <div className="flex items-center justify-between">
                   <div className="space-y-3">
@@ -206,7 +206,7 @@ export const CommunicationModule = () => {
                 const Icon = action.icon;
                 return (
                   <Button
-                    key={index}
+                    key={action.label}
                     variant="outline"
                     className="w-full justify-start h-auto p-4 hover:scale-105 transition-all duration-200"
                     onClick={() => setActiveTab("chat")}
@@ -250,7 +250,7 @@ export const CommunicationModule = () => {
 
                 return (
                   <div
-                    key={index}
+                    key={`${activity.type}-${activity.time}`}
                     className={`p-4 border-l-4 rounded-lg ${priorityClass} hover:scale-[1.02] transition-all duration-300`}
                   >
                     <div className="flex items-start gap-3">

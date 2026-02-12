@@ -274,9 +274,9 @@ export function DataTable<T extends Record<string, any>>({
                 </td>
               </tr>
             ) : (
-              paginatedData.map((row, index) => (
+              paginatedData.map((row, rowIdx) => (
                 <tr
-                  key={index}
+                  key={`row-${rowIdx}`}
                   className={cn(
                     "border-b border-border hover:bg-accent/50 transition-colors",
                     onRowClick && "cursor-pointer"

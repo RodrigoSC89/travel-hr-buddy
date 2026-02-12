@@ -348,8 +348,8 @@ export default function Patch519DeepRiskAI() {
                 Fatores de Risco Analisados
               </div>
               <div className="space-y-2">
-                {selectedAnalysis.factors.map((factor, index) => (
-                  <Card key={index} className="p-3">
+                {selectedAnalysis.factors.map((factor) => (
+                  <Card key={factor.name} className="p-3">
                     <div className="space-y-2">
                       <div className="flex items-center justify-between">
                         <span className="font-medium">{factor.name}</span>
@@ -373,13 +373,13 @@ export default function Patch519DeepRiskAI() {
             {/* Recommendations */}
             <div className="space-y-3">
               <div className="font-medium flex items-center gap-2">
-                <AlertTriangle className="h-4 w-4 text-orange-500" />
+                <AlertTriangle className="h-4 w-4 text-warning" />
                 Recomendações
               </div>
               <ul className="space-y-2">
-                {selectedAnalysis.recommendations.map((rec, index) => (
-                  <li key={index} className="flex items-start gap-2 text-sm">
-                    <span className="text-orange-500 mt-1">•</span>
+                {selectedAnalysis.recommendations.map((rec) => (
+                  <li key={rec} className="flex items-start gap-2 text-sm">
+                    <span className="text-warning mt-1">•</span>
                     <span>{rec}</span>
                   </li>
                 ))}
@@ -389,13 +389,13 @@ export default function Patch519DeepRiskAI() {
             {/* Mitigation Strategies */}
             <div className="space-y-3">
               <div className="font-medium flex items-center gap-2">
-                <Shield className="h-4 w-4 text-blue-500" />
+                <Shield className="h-4 w-4 text-primary" />
                 Estratégias de Mitigação
               </div>
               <ul className="space-y-2">
-                {selectedAnalysis.mitigationStrategies.map((strategy, index) => (
-                  <li key={index} className="flex items-start gap-2 text-sm">
-                    <span className="text-blue-500 mt-1">•</span>
+                {selectedAnalysis.mitigationStrategies.map((strategy) => (
+                  <li key={strategy} className="flex items-start gap-2 text-sm">
+                    <span className="text-primary mt-1">•</span>
                     <span>{strategy}</span>
                   </li>
                 ))}

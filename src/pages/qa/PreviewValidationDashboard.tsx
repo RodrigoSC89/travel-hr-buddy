@@ -219,9 +219,9 @@ function GuidelineSection({ title, items }: { title: string; items: string[] }) 
     <div className="space-y-2">
       <h4 className="font-medium">{title}</h4>
       <ul className="space-y-1 text-sm text-muted-foreground">
-        {items.map((item, index) => (
-          <li key={index} className="flex items-start gap-2">
-            <CheckCircle2 className="h-4 w-4 mt-0.5 text-green-500 flex-shrink-0" />
+        {items.map((item) => (
+          <li key={item} className="flex items-start gap-2">
+            <CheckCircle2 className="h-4 w-4 mt-0.5 text-success flex-shrink-0" />
             <span>{item}</span>
           </li>
         ))}

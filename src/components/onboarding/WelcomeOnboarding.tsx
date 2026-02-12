@@ -204,9 +204,9 @@ export const WelcomeOnboarding: React.FC = () => {
 
                 {/* Step indicators */}
                 <div className="flex justify-center gap-2 mb-8">
-                  {ONBOARDING_STEPS.map((_, index) => (
+                  {ONBOARDING_STEPS.map((step, index) => (
                     <button
-                      key={index}
+                      key={step.title}
                       onClick={() => setCurrentStep(index)}
                       className={`w-2 h-2 rounded-full transition-all ${
                         index === currentStep 

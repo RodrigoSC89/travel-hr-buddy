@@ -295,8 +295,8 @@ export default function AITemplatesPage() {
                     </div>
                     {template.tags?.length > 0 && (
                       <div className="flex gap-1 flex-wrap">
-                        {template.tags.map((tag, index) => (
-                          <Badge key={index} variant="secondary" className="text-xs">{tag}</Badge>
+                        {template.tags.map((tag) => (
+                          <Badge key={tag} variant="secondary" className="text-xs">{tag}</Badge>
                         ))}
                       </div>
                     )}
@@ -361,8 +361,8 @@ export default function AITemplatesPage() {
               </div>
               {formData.tags.length > 0 && (
                 <div className="flex gap-1 flex-wrap">
-                  {formData.tags.map((tag, index) => (
-                    <Badge key={index} variant="secondary" className="cursor-pointer" onClick={() => handleRemoveTag(tag)}>{tag} ×</Badge>
+                  {formData.tags.map((tag) => (
+                    <Badge key={tag} variant="secondary" className="cursor-pointer" onClick={() => handleRemoveTag(tag)}>{tag} ×</Badge>
                   ))}
                 </div>
               )}

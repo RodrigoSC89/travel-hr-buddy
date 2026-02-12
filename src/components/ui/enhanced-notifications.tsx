@@ -336,9 +336,9 @@ const EnhancedNotifications: React.FC<EnhancedNotificationsProps> = ({ isOpen, o
                             
                             {notification.actions && notification.actions.length > 0 && (
                               <div className="flex gap-2 flex-wrap">
-                                {notification.actions.map((action, index) => (
+                                {notification.actions.map((action) => (
                                   <Button
-                                    key={index}
+                                    key={action.label}
                                     variant={action.variant || "outline"}
                                     size="sm"
                                     onClick={(e) => {

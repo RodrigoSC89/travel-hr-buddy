@@ -156,8 +156,8 @@ export const InteractiveKPICard: React.FC<InteractiveKPICardProps> = ({
                 className="mt-4 pt-4 border-t border-border/50"
               >
                 <div className="space-y-2">
-                  {details.map((detail, index) => (
-                    <div key={index} className="flex items-center justify-between text-sm">
+                  {details.map((detail) => (
+                    <div key={detail.label} className="flex items-center justify-between text-sm">
                       <span className="text-muted-foreground">{detail.label}</span>
                       <div className="flex items-center gap-2">
                         <span className="font-medium">{detail.value}</span>
