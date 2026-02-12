@@ -576,8 +576,8 @@ const SmartWorkflowAutomation = () => {
                   </div>
 
                   <div className="flex flex-wrap gap-1">
-                    {workflow.tags.map((tag, index) => (
-                      <Badge key={index} variant="outline" className="text-xs">
+                    {workflow.tags.map((tag) => (
+                      <Badge key={tag} variant="outline" className="text-xs">
                         {tag}
                       </Badge>
                     ))}
@@ -679,8 +679,8 @@ const SmartWorkflowAutomation = () => {
 
         <TabsContent value="templates" className="space-y-4">
           <div className="grid gap-4 md:grid-cols-2">
-            {workflowTemplates.map((template, index) => (
-              <Card key={index} className="border-border hover:shadow-md transition-shadow cursor-pointer">
+            {workflowTemplates.map((template) => (
+              <Card key={template.name} className="border-border hover:shadow-md transition-shadow cursor-pointer">
                 <CardHeader>
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-2">

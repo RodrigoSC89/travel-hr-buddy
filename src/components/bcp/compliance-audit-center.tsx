@@ -148,11 +148,11 @@ export const ComplianceAuditCenter: React.FC = () => {
   const getStatusColor = (status: string) => {
     switch (status) {
     case "compliant": 
-    case "completed": return "text-green-500";
+    case "completed": return "text-success";
     case "warning": 
-    case "in_progress": return "text-yellow-500";
+    case "in_progress": return "text-warning";
     case "non_compliant": 
-    case "failed": return "text-red-500";
+    case "failed": return "text-destructive";
     default: return "text-muted-foreground";
     }
   };
@@ -160,12 +160,12 @@ export const ComplianceAuditCenter: React.FC = () => {
   const getStatusBadge = (status: string) => {
     switch (status) {
     case "compliant": 
-    case "completed": return "bg-green-100 text-green-800 dark:bg-green-900/20 dark:text-green-300";
+    case "completed": return "bg-success/10 text-success";
     case "warning": 
-    case "in_progress": return "bg-yellow-100 text-yellow-800 dark:bg-yellow-900/20 dark:text-yellow-300";
+    case "in_progress": return "bg-warning/10 text-warning";
     case "non_compliant": 
-    case "failed": return "bg-red-100 text-red-800 dark:bg-red-900/20 dark:text-red-300";
-    default: return "bg-gray-100 text-gray-800 dark:bg-gray-900/20 dark:text-gray-300";
+    case "failed": return "bg-destructive/10 text-destructive";
+    default: return "bg-muted text-muted-foreground";
     }
   };
 
@@ -244,13 +244,13 @@ export const ComplianceAuditCenter: React.FC = () => {
                 </CardTitle>
               </CardHeader>
               <CardContent className="space-y-4">
-                {complianceStatus.lgpd.items.map((item, index) => (
-                  <div key={index} className="flex items-center justify-between p-4 border rounded-lg">
+                {complianceStatus.lgpd.items.map((item) => (
+                  <div key={item.name} className="flex items-center justify-between p-4 border rounded-lg">
                     <div className="flex items-center gap-3">
                       {item.status === "compliant" ? (
-                        <CheckCircle className="w-5 h-5 text-green-500" />
+                        <CheckCircle className="w-5 h-5 text-success" />
                       ) : (
-                        <AlertTriangle className="w-5 h-5 text-yellow-500" />
+                        <AlertTriangle className="w-5 h-5 text-warning" />
                       )}
                       <div>
                         <h4 className="font-medium">{item.name}</h4>
@@ -307,10 +307,10 @@ export const ComplianceAuditCenter: React.FC = () => {
                 </CardTitle>
               </CardHeader>
               <CardContent className="space-y-4">
-                {complianceStatus.gdpr.items.map((item, index) => (
-                  <div key={index} className="flex items-center justify-between p-4 border rounded-lg">
+                {complianceStatus.gdpr.items.map((item) => (
+                  <div key={item.name} className="flex items-center justify-between p-4 border rounded-lg">
                     <div className="flex items-center gap-3">
-                      <CheckCircle className="w-5 h-5 text-green-500" />
+                      <CheckCircle className="w-5 h-5 text-success" />
                       <div>
                         <h4 className="font-medium">{item.name}</h4>
                         <p className="text-sm text-muted-foreground">{item.details}</p>
@@ -365,13 +365,13 @@ export const ComplianceAuditCenter: React.FC = () => {
                 </CardTitle>
               </CardHeader>
               <CardContent className="space-y-4">
-                {complianceStatus.iso27001.items.map((item, index) => (
-                  <div key={index} className="flex items-center justify-between p-4 border rounded-lg">
+                {complianceStatus.iso27001.items.map((item) => (
+                  <div key={item.name} className="flex items-center justify-between p-4 border rounded-lg">
                     <div className="flex items-center gap-3">
                       {item.status === "compliant" ? (
-                        <CheckCircle className="w-5 h-5 text-green-500" />
+                        <CheckCircle className="w-5 h-5 text-success" />
                       ) : (
-                        <AlertTriangle className="w-5 h-5 text-yellow-500" />
+                        <AlertTriangle className="w-5 h-5 text-warning" />
                       )}
                       <div>
                         <h4 className="font-medium">{item.name}</h4>
@@ -421,13 +421,13 @@ export const ComplianceAuditCenter: React.FC = () => {
                 </CardTitle>
               </CardHeader>
               <CardContent className="space-y-4">
-                {complianceStatus.imo.items.map((item, index) => (
-                  <div key={index} className="flex items-center justify-between p-4 border rounded-lg">
+                {complianceStatus.imo.items.map((item) => (
+                  <div key={item.name} className="flex items-center justify-between p-4 border rounded-lg">
                     <div className="flex items-center gap-3">
                       {item.status === "compliant" ? (
-                        <CheckCircle className="w-5 h-5 text-green-500" />
+                        <CheckCircle className="w-5 h-5 text-success" />
                       ) : (
-                        <AlertTriangle className="w-5 h-5 text-yellow-500" />
+                        <AlertTriangle className="w-5 h-5 text-warning" />
                       )}
                       <div>
                         <h4 className="font-medium">{item.name}</h4>

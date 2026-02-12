@@ -361,8 +361,8 @@ const SmartIntegrationHub: React.FC = () => {
                       <div>
                         <p className="text-xs font-medium mb-2">Dados Disponíveis:</p>
                         <div className="flex gap-1 flex-wrap">
-                          {integration.dataPoints.map((point, index) => (
-                            <Badge key={index} variant="outline" className="text-xs">
+                          {integration.dataPoints.map((point) => (
+                            <Badge key={point} variant="outline" className="text-xs">
                               {point}
                             </Badge>
                           ))}
@@ -471,12 +471,12 @@ const SmartIntegrationHub: React.FC = () => {
             <Card>
               <CardHeader className="pb-3">
                 <CardTitle className="flex items-center gap-2 text-lg">
-                  <Activity className="w-5 h-5 text-green-500" />
+                  <Activity className="w-5 h-5 text-success" />
                   Status Geral
                 </CardTitle>
               </CardHeader>
               <CardContent>
-                <div className="text-3xl font-bold text-green-500 mb-2">94%</div>
+                <div className="text-3xl font-bold text-success mb-2">94%</div>
                 <p className="text-sm text-muted-foreground">Integrações funcionando</p>
               </CardContent>
             </Card>
@@ -484,12 +484,12 @@ const SmartIntegrationHub: React.FC = () => {
             <Card>
               <CardHeader className="pb-3">
                 <CardTitle className="flex items-center gap-2 text-lg">
-                  <Cpu className="w-5 h-5 text-blue-500" />
+                  <Cpu className="w-5 h-5 text-info" />
                   Requisições/h
                 </CardTitle>
               </CardHeader>
               <CardContent>
-                <div className="text-3xl font-bold text-blue-500 mb-2">2.4k</div>
+                <div className="text-3xl font-bold text-info mb-2">2.4k</div>
                 <p className="text-sm text-muted-foreground">Última hora</p>
               </CardContent>
             </Card>
@@ -497,12 +497,12 @@ const SmartIntegrationHub: React.FC = () => {
             <Card>
               <CardHeader className="pb-3">
                 <CardTitle className="flex items-center gap-2 text-lg">
-                  <Webhook className="w-5 h-5 text-purple-500" />
+                  <Webhook className="w-5 h-5 text-accent-foreground" />
                   Automações
                 </CardTitle>
               </CardHeader>
               <CardContent>
-                <div className="text-3xl font-bold text-purple-500 mb-2">156</div>
+                <div className="text-3xl font-bold text-accent-foreground mb-2">156</div>
                 <p className="text-sm text-muted-foreground">Executadas hoje</p>
               </CardContent>
             </Card>
@@ -520,12 +520,12 @@ const SmartIntegrationHub: React.FC = () => {
                   { time: "14:15", event: "Falha na conexão com Maritime Analytics AI", status: "error" },
                   { time: "14:10", event: "Backup automático concluído", status: "success" },
                   { time: "14:05", event: "Nova regra de automação criada", status: "info" }
-                ].map((log, index) => (
-                  <div key={index} className="flex items-center gap-3 p-2 rounded-lg bg-muted/20">
+                ].map((log) => (
+                  <div key={log.time} className="flex items-center gap-3 p-2 rounded-lg bg-muted/20">
                     <span className="text-xs text-muted-foreground">{log.time}</span>
                     <div className={`w-2 h-2 rounded-full ${
-                      log.status === "success" ? "bg-green-500" :
-                        log.status === "error" ? "bg-red-500" : "bg-blue-500"
+                      log.status === "success" ? "bg-success" :
+                        log.status === "error" ? "bg-destructive" : "bg-info"
                     }`} />
                     <span className="text-sm">{log.event}</span>
                   </div>
