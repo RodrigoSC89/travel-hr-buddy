@@ -50,11 +50,11 @@ const KPICard = ({ title, value, suffix = "", icon: Icon, color, change, trend, 
     transition={{ delay, duration: 0.3 }}
   >
     <Card className="relative overflow-hidden group hover:shadow-lg transition-all duration-300">
-      <div className={`absolute inset-0 bg-gradient-to-br from-${color}-500/10 to-transparent opacity-50 group-hover:opacity-100 transition-opacity`} />
+      <div className="absolute inset-0 bg-gradient-to-br from-primary/10 to-transparent opacity-50 group-hover:opacity-100 transition-opacity" />
       <CardHeader className="pb-2">
         <div className="flex items-center justify-between">
           <CardTitle className="text-sm font-medium text-muted-foreground">{title}</CardTitle>
-          <Icon className={`h-5 w-5 text-${color}-500`} />
+          <Icon className="h-5 w-5 text-primary" />
         </div>
       </CardHeader>
       <CardContent>
@@ -203,14 +203,14 @@ const FleetAICopilot = ({ vessels, onToast }: { vessels: any[]; onToast: (opts: 
         <div className="space-y-2">
           {insights.map((insight, i) => (
             <div key={i} className={`flex items-start gap-2 p-2 rounded-lg ${
-              insight.type === "success" ? "bg-green-50 dark:bg-green-950/20" :
-              insight.type === "warning" ? "bg-yellow-50 dark:bg-yellow-950/20" :
-              "bg-blue-50 dark:bg-blue-950/20"
+              insight.type === "success" ? "bg-success/10" :
+              insight.type === "warning" ? "bg-warning/10" :
+              "bg-info/10"
             }`}>
               <insight.icon className={`h-4 w-4 mt-0.5 ${
-                insight.type === "success" ? "text-green-600" :
-                insight.type === "warning" ? "text-yellow-600" :
-                "text-blue-600"
+                insight.type === "success" ? "text-success" :
+                insight.type === "warning" ? "text-warning" :
+                "text-info"
               }`} />
               <span className="text-sm">{insight.text}</span>
             </div>
@@ -291,13 +291,16 @@ const FALLBACK_PERFORMANCE_METRICS = [
 
 export default function FleetCommandCenter() {
   const { toast } = useToast();
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- enriched vessel rows with computed fields
   const [vessels, setVessels] = useState<any[]>([]);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- dynamic maintenance rows  
   const [maintenance, setMaintenance] = useState<any[]>([]);
   const [fuelTrend, setFuelTrend] = useState(FALLBACK_FUEL_TREND);
   const [performanceMetrics, setPerformanceMetrics] = useState(FALLBACK_PERFORMANCE_METRICS);
   const [loading, setLoading] = useState(true);
   const [showAddDialog, setShowAddDialog] = useState(false);
   const [showMissionDialog, setShowMissionDialog] = useState(false);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- enriched vessel
   const [selectedVessel, setSelectedVessel] = useState<any>(null);
   const [activeTab, setActiveTab] = useState("overview");
   const [newVessel, setNewVessel] = useState({ name: "", imo_number: "", vessel_type: "cargo", location: "" });
@@ -508,10 +511,10 @@ export default function FleetCommandCenter() {
 
       {/* KPIs */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-        <KPICard title="Total de Embarcações" value={totalVessels} icon={Ship} color="blue" delay={0} />
-        <KPICard title="Em Operação" value={operationalVessels} icon={CheckCircle} color="green" change={8.3} trend="operacional" delay={0.1} />
-        <KPICard title="Eficiência Média" value={avgEfficiency} suffix="%" icon={Gauge} color="purple" change={5.2} trend="performance" delay={0.2} />
-        <KPICard title="Combustível Médio" value={avgFuel} suffix="%" icon={Fuel} color="orange" change={-3.5} trend="consumo" delay={0.3} />
+        <KPICard title="Total de Embarcações" value={totalVessels} icon={Ship} color="primary" delay={0} />
+        <KPICard title="Em Operação" value={operationalVessels} icon={CheckCircle} color="primary" change={8.3} trend="operacional" delay={0.1} />
+        <KPICard title="Eficiência Média" value={avgEfficiency} suffix="%" icon={Gauge} color="primary" change={5.2} trend="performance" delay={0.2} />
+        <KPICard title="Combustível Médio" value={avgFuel} suffix="%" icon={Fuel} color="primary" change={-3.5} trend="consumo" delay={0.3} />
       </div>
 
       {/* Main Content */}

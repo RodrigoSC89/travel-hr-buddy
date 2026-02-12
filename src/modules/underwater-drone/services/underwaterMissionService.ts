@@ -7,8 +7,8 @@ import { supabase } from "@/integrations/supabase/client";
 import { logger } from "@/lib/logger";
 import type { Mission, Waypoint } from "../missionUploadSub";
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Dynamic tables not in generated types
-const dynamicSupabase = () => supabase as any;
+// Dynamic query helper for tables not in generated types
+const dynamicFrom = (table: string) => (supabase.from as Function)(table);
 
 export interface UnderwaterMissionRecord {
   id: string;
@@ -114,8 +114,7 @@ class UnderwaterMissionService {
         },
       };
 
-      const { data, error } = await dynamicSupabase()
-        .from("underwater_missions")
+      const { data, error } = await dynamicFrom("underwater_missions")
         .insert(missionData)
         .select()
         .single();
@@ -168,8 +167,7 @@ class UnderwaterMissionService {
         timestamp: new Date().toISOString(),
       };
 
-      const { data, error } = await dynamicSupabase()
-        .from("drone_telemetry")
+      const { data, error } = await dynamicFrom("drone_telemetry")
         .insert(telemetryData)
         .select()
         .single();
@@ -213,8 +211,7 @@ class UnderwaterMissionService {
         timestamp: new Date().toISOString(),
       };
 
-      const { data, error } = await dynamicSupabase()
-        .from("mission_events")
+      const { data, error } = await dynamicFrom("mission_events")
         .insert(eventData)
         .select()
         .single();
@@ -242,8 +239,7 @@ class UnderwaterMissionService {
         return [];
       }
 
-      const { data, error } = await dynamicSupabase()
-        .from("underwater_missions")
+      const { data, error } = await dynamicFrom("underwater_missions")
         .select("*")
         .eq("user_id", user.id)
         .order("created_at", { ascending: false })
@@ -254,8 +250,7 @@ class UnderwaterMissionService {
         return [];
       }
 
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any -- untyped DB row
-      return (data || []).map((row: any) => this.mapMissionFromDB(row));
+      return (data || []).map((row: Record<string, unknown>) => this.mapMissionFromDB(row));
     } catch (error) {
       logger.error("Error fetching missions:", error);
       return [];
@@ -281,8 +276,7 @@ class UnderwaterMissionService {
         return null;
       }
 
-      const { data, error } = await dynamicSupabase()
-        .from("underwater_missions")
+      const { data, error } = await dynamicFrom("underwater_missions")
         .select("*")
         .eq("user_id", user.id);
 
@@ -291,8 +285,7 @@ class UnderwaterMissionService {
         return null;
       }
 
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any -- untyped DB row
-      const missions: UnderwaterMissionRecord[] = (data || []).map((row: any) => this.mapMissionFromDB(row));
+      const missions: UnderwaterMissionRecord[] = (data || []).map((row: Record<string, unknown>) => this.mapMissionFromDB(row));
 
       return {
         totalMissions: missions.length,
@@ -316,87 +309,84 @@ class UnderwaterMissionService {
   /**
    * Map database record to UnderwaterMissionRecord
    */
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- untyped DB mapping
-  private mapMissionFromDB(data: any): UnderwaterMissionRecord {
+  private mapMissionFromDB(data: Record<string, unknown>): UnderwaterMissionRecord {
     return {
-      id: data.id,
-      user_id: data.user_id,
-      drone_id: data.drone_id,
-      name: data.mission_name || data.name || "",
-      description: data.description,
-      mission_type: data.mission_type || "survey",
-      status: data.status || "pending",
-      priority: data.priority,
-      start_location: data.start_location || {},
-      current_location: data.current_location,
-      waypoints: data.waypoints || [],
-      trajectory: data.trajectory,
-      scheduled_start: data.scheduled_start,
-      actual_start: data.actual_start,
-      estimated_end: data.estimated_end,
-      actual_end: data.actual_end || data.end_time,
-      progress: data.progress || data.completion_percentage || 0,
-      distance_covered_m: data.distance_covered_m,
-      max_depth_reached: data.max_depth_reached || data.max_depth,
-      duration_minutes: data.duration_minutes,
-      objectives: data.objectives,
-      findings: data.findings,
-      samples_collected: data.samples_collected,
-      incidents: data.incidents,
-      success_rate: data.success_rate,
-      result_summary: data.result_summary,
-      metadata: data.metadata,
-      created_at: data.created_at,
-      updated_at: data.updated_at || data.created_at,
+      id: String(data.id),
+      user_id: String(data.user_id),
+      drone_id: data.drone_id as string | undefined,
+      name: String(data.mission_name || data.name || ""),
+      description: data.description as string | undefined,
+      mission_type: String(data.mission_type || "survey"),
+      status: String(data.status || "pending"),
+      priority: data.priority as string | undefined,
+      start_location: (data.start_location || {}) as Record<string, unknown>,
+      current_location: data.current_location as Record<string, unknown> | undefined,
+      waypoints: (data.waypoints || []) as Array<Record<string, unknown>>,
+      trajectory: data.trajectory as Array<Record<string, unknown>> | undefined,
+      scheduled_start: data.scheduled_start as string | undefined,
+      actual_start: data.actual_start as string | undefined,
+      estimated_end: data.estimated_end as string | undefined,
+      actual_end: (data.actual_end || data.end_time) as string | undefined,
+      progress: Number(data.progress || data.completion_percentage || 0),
+      distance_covered_m: data.distance_covered_m as number | undefined,
+      max_depth_reached: (data.max_depth_reached || data.max_depth) as number | undefined,
+      duration_minutes: data.duration_minutes as number | undefined,
+      objectives: data.objectives as Record<string, unknown> | undefined,
+      findings: data.findings as Record<string, unknown> | undefined,
+      samples_collected: data.samples_collected as Record<string, unknown> | undefined,
+      incidents: data.incidents as Array<Record<string, unknown>> | undefined,
+      success_rate: data.success_rate as number | undefined,
+      result_summary: data.result_summary as string | undefined,
+      metadata: data.metadata as Record<string, unknown> | undefined,
+      created_at: String(data.created_at),
+      updated_at: String(data.updated_at || data.created_at),
     };
   }
 
   /**
    * Map database record to DroneTelemetryRecord
    */
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- untyped DB mapping
-  private mapTelemetryFromDB(data: any): DroneTelemetryRecord {
+  private mapTelemetryFromDB(data: Record<string, unknown>): DroneTelemetryRecord {
     return {
-      id: data.id,
-      mission_id: data.mission_id,
-      drone_id: data.drone_id,
-      user_id: data.user_id || "",
-      position: data.position || { x: data.position_x, y: data.position_y, z: data.position_z },
-      orientation: data.orientation || { heading: data.heading_degrees, pitch: data.pitch_degrees, roll: data.roll_degrees },
-      velocity: data.velocity,
-      water_temperature: data.water_temperature || data.water_temperature_celsius,
-      pressure: data.pressure || data.pressure_bar,
-      visibility: data.visibility,
-      current_speed: data.current_speed,
-      current_direction: data.current_direction,
-      battery_level: data.battery_level || data.battery_percentage || 0,
-      battery_time_remaining: data.battery_time_remaining,
-      signal_strength: data.signal_strength || 0,
-      connection_type: data.connection_type,
-      thruster_status: data.thruster_status,
-      sensor_status: data.sensor_status,
-      system_alerts: data.system_alerts || data.alerts,
-      timestamp: data.timestamp,
-      created_at: data.created_at,
+      id: String(data.id),
+      mission_id: data.mission_id as string | undefined,
+      drone_id: data.drone_id as string | undefined,
+      user_id: String(data.user_id || ""),
+      position: (data.position || { x: data.position_x, y: data.position_y, z: data.position_z }) as Record<string, unknown>,
+      orientation: (data.orientation || { heading: data.heading_degrees, pitch: data.pitch_degrees, roll: data.roll_degrees }) as Record<string, unknown> | undefined,
+      velocity: data.velocity as Record<string, unknown> | undefined,
+      water_temperature: (data.water_temperature || data.water_temperature_celsius) as number | undefined,
+      pressure: (data.pressure || data.pressure_bar) as number | undefined,
+      visibility: data.visibility as number | undefined,
+      current_speed: data.current_speed as number | undefined,
+      current_direction: data.current_direction as number | undefined,
+      battery_level: Number(data.battery_level || data.battery_percentage || 0),
+      battery_time_remaining: data.battery_time_remaining as number | undefined,
+      signal_strength: Number(data.signal_strength || 0),
+      connection_type: data.connection_type as string | undefined,
+      thruster_status: data.thruster_status as Record<string, unknown> | undefined,
+      sensor_status: data.sensor_status as Record<string, unknown> | undefined,
+      system_alerts: (data.system_alerts || data.alerts) as Array<Record<string, unknown>> | undefined,
+      timestamp: String(data.timestamp),
+      created_at: String(data.created_at),
     };
   }
 
   /**
    * Map database record to MissionEventRecord
    */
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- untyped DB mapping
-  private mapEventFromDB(data: any): MissionEventRecord {
+  private mapEventFromDB(data: Record<string, unknown>): MissionEventRecord {
     return {
-      id: data.id,
-      mission_id: data.mission_id || "",
-      user_id: data.user_id || "",
-      event_type: data.event_type,
-      severity: data.severity || "info",
-      message: data.message,
-      location: data.location,
-      details: data.details || data.event_data,
-      timestamp: data.timestamp || data.created_at,
-      created_at: data.created_at,
+      id: String(data.id),
+      mission_id: String(data.mission_id || ""),
+      user_id: String(data.user_id || ""),
+      event_type: String(data.event_type),
+      severity: String(data.severity || "info"),
+      message: String(data.message),
+      location: data.location as Record<string, unknown> | undefined,
+      details: (data.details || data.event_data) as Record<string, unknown> | undefined,
+      timestamp: String(data.timestamp || data.created_at),
+      created_at: String(data.created_at),
     };
   }
 }
