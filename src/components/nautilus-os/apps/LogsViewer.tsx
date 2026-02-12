@@ -11,9 +11,9 @@ export function LogsViewer() {
 
   return (
     <div className="space-y-2 font-mono text-xs">
-      {logs.map((log, idx) => (
+      {logs.map((log) => (
         <div
-          key={idx}
+          key={log.time}
           className={`flex items-start gap-2 p-2 rounded border ${
             log.level === "error"
               ? "bg-destructive/10 border-destructive/30"

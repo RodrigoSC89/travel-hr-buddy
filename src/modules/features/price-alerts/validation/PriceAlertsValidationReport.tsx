@@ -170,24 +170,24 @@ export const PriceAlertsValidationReport: React.FC = () => {
   const getStatusIcon = (status: ValidationTest["status"]) => {
     switch (status) {
     case "passed":
-      return <CheckCircle2 className="w-5 h-5 text-green-500" />;
+      return <CheckCircle2 className="w-5 h-5 text-success" />;
     case "failed":
-      return <XCircle className="w-5 h-5 text-red-500" />;
+      return <XCircle className="w-5 h-5 text-destructive" />;
     case "running":
-      return <RefreshCw className="w-5 h-5 text-blue-500 animate-spin" />;
+      return <RefreshCw className="w-5 h-5 text-info animate-spin" />;
     default:
-      return <AlertCircle className="w-5 h-5 text-gray-400" />;
+      return <AlertCircle className="w-5 h-5 text-muted-foreground" />;
     }
   };
 
   const getStatusBadge = (status: ValidationTest["status"]) => {
     switch (status) {
     case "passed":
-      return <Badge className="bg-green-500">Aprovado</Badge>;
+      return <Badge className="bg-success text-success-foreground">Aprovado</Badge>;
     case "failed":
       return <Badge variant="destructive">Falhou</Badge>;
     case "running":
-      return <Badge className="bg-blue-500">Executando</Badge>;
+      return <Badge className="bg-info text-info-foreground">Executando</Badge>;
     default:
       return <Badge variant="secondary">Pendente</Badge>;
     }
@@ -221,11 +221,11 @@ export const PriceAlertsValidationReport: React.FC = () => {
         <CardContent>
           <div className="grid grid-cols-3 gap-4 mb-4">
             <div className="text-center">
-              <div className="text-3xl font-bold text-green-500">{passedTests}</div>
+              <div className="text-3xl font-bold text-success">{passedTests}</div>
               <div className="text-sm text-muted-foreground">Aprovados</div>
             </div>
             <div className="text-center">
-              <div className="text-3xl font-bold text-red-500">{failedTests}</div>
+              <div className="text-3xl font-bold text-destructive">{failedTests}</div>
               <div className="text-sm text-muted-foreground">Falharam</div>
             </div>
             <div className="text-center">
@@ -235,12 +235,12 @@ export const PriceAlertsValidationReport: React.FC = () => {
           </div>
           
           {passedTests > 0 && (
-            <div className={`p-4 rounded-lg ${isApproved ? "bg-green-50 border border-green-200" : "bg-yellow-50 border border-yellow-200"}`}>
+            <div className={`p-4 rounded-lg ${isApproved ? "bg-success/10 border border-success/20" : "bg-warning/10 border border-warning/20"}`}>
               <div className="flex items-center gap-2">
                 {isApproved ? (
-                  <CheckCircle2 className="w-6 h-6 text-green-600" />
+                  <CheckCircle2 className="w-6 h-6 text-success" />
                 ) : (
-                  <AlertCircle className="w-6 h-6 text-yellow-600" />
+                  <AlertCircle className="w-6 h-6 text-warning" />
                 )}
                 <div>
                   <div className="font-semibold">
@@ -294,19 +294,19 @@ export const PriceAlertsValidationReport: React.FC = () => {
         <CardContent>
           <ul className="space-y-2">
             <li className="flex items-start gap-2">
-              <CheckCircle2 className="w-5 h-5 text-green-500 mt-0.5" />
+              <CheckCircle2 className="w-5 h-5 text-success mt-0.5" />
               <span>UI lista e ordena alertas corretamente</span>
             </li>
             <li className="flex items-start gap-2">
-              <CheckCircle2 className="w-5 h-5 text-green-500 mt-0.5" />
+              <CheckCircle2 className="w-5 h-5 text-success mt-0.5" />
               <span>Criação e exclusão de alertas funcionais</span>
             </li>
             <li className="flex items-start gap-2">
-              <CheckCircle2 className="w-5 h-5 text-green-500 mt-0.5" />
+              <CheckCircle2 className="w-5 h-5 text-success mt-0.5" />
               <span>Notificações automáticas disparadas via WebSocket</span>
             </li>
             <li className="flex items-start gap-2">
-              <CheckCircle2 className="w-5 h-5 text-green-500 mt-0.5" />
+              <CheckCircle2 className="w-5 h-5 text-success mt-0.5" />
               <span>Alerta criado aparece no dashboard com acionamento válido</span>
             </li>
           </ul>

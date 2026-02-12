@@ -154,10 +154,10 @@ export function KnowledgeUploader({
   };
 
   const getFileIcon = (file: File) => {
-    if (file.type.startsWith('image/')) return <FileImage className="h-5 w-5 text-purple-500" />;
+    if (file.type.startsWith('image/')) return <FileImage className="h-5 w-5 text-accent-foreground" />;
     if (file.type.includes('spreadsheet') || file.type.includes('excel')) 
-      return <FileSpreadsheet className="h-5 w-5 text-green-500" />;
-    return <FileText className="h-5 w-5 text-blue-500" />;
+      return <FileSpreadsheet className="h-5 w-5 text-success" />;
+    return <FileText className="h-5 w-5 text-info" />;
   };
 
   const formatFileSize = (bytes: number) => {
@@ -175,7 +175,7 @@ export function KnowledgeUploader({
             className={cn(
               "rounded-lg p-8 text-center cursor-pointer transition-all",
               isDragActive && "bg-primary/5",
-              isDragAccept && "bg-green-500/10 border-green-500",
+              isDragAccept && "bg-success/10 border-success",
               isDragReject && "bg-destructive/10 border-destructive"
             )}
           >
