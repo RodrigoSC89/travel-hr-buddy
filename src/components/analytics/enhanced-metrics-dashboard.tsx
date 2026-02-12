@@ -304,8 +304,8 @@ const EnhancedMetricsDashboard = () => {
 
         <TabsContent value="performance" className="space-y-6">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {performanceMetrics.map((metric, index) => (
-              <Card key={index} className={`border-l-4 ${metric.bgColor}`}>
+            {performanceMetrics.map((metric) => (
+              <Card key={metric.title} className={`border-l-4 ${metric.bgColor}`}>
                 <CardContent className="p-6">
                   <div className="flex items-center justify-between">
                     <div className="space-y-2">

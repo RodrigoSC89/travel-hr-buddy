@@ -143,8 +143,8 @@ export const FleetAIInsights = ({ vessels }: FleetAIInsightsProps) => {
                 <CardDescription>{recommendations.summary}</CardDescription>
               </CardHeader>
               <CardContent className="space-y-3">
-                {recommendations.recommendations?.map((rec: string, index: number) => (
-                  <div key={index} className="flex items-start gap-3 p-3 bg-accent/50 rounded-lg">
+                {recommendations.recommendations?.map((rec: string) => (
+                  <div key={rec} className="flex items-start gap-3 p-3 bg-accent/50 rounded-lg">
                     <TrendingUp className="h-5 w-5 text-primary mt-0.5" />
                     <span className="text-sm">{rec}</span>
                   </div>
@@ -156,8 +156,8 @@ export const FleetAIInsights = ({ vessels }: FleetAIInsightsProps) => {
                       <AlertTriangle className="h-4 w-4 text-warning" />
                       Alertas
                     </h4>
-                    {recommendations.alerts.map((alert: string, index: number) => (
-                      <div key={index} className="text-sm text-muted-foreground pl-6">
+                    {recommendations.alerts.map((alert: string) => (
+                      <div key={alert} className="text-sm text-muted-foreground pl-6">
                         • {alert}
                       </div>
                     ))}

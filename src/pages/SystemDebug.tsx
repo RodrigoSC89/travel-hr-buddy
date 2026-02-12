@@ -151,8 +151,8 @@ export default function SystemDebugPage() {
         <CardContent>
           <ScrollArea className="h-[500px]">
             <div className="space-y-3">
-              {health?.checks.map((check, index) => (
-                <HealthCheckCard key={index} check={check} />
+              {health?.checks.map((check) => (
+                <HealthCheckCard key={check.name} check={check} />
               ))}
               {loading && !health && (
                 <div className="flex items-center justify-center py-12">

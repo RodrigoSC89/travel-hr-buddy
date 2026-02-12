@@ -241,8 +241,8 @@ const PerformanceAnalysis: React.FC = () => {
                 <div className="space-y-2">
                   <h3 className="font-semibold text-lg mb-3">Validation Results</h3>
                   <ScrollArea className="h-[400px] pr-4">
-                    {validationReport.results.map((result, index) => (
-                      <Card key={index} className="mb-3">
+                    {validationReport.results.map((result) => (
+                      <Card key={`${result.category}-${result.name}`} className="mb-3">
                         <CardContent className="pt-4">
                           <div className="flex items-start justify-between">
                             <div className="flex items-start gap-3 flex-1">

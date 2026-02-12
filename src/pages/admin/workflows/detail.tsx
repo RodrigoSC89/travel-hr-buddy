@@ -881,9 +881,9 @@ export default function WorkflowDetailPage() {
             </CardHeader>
             <CardContent>
               <div className="space-y-4">
-                {demoSuggestions.map((suggestion, index) => (
+                {demoSuggestions.map((suggestion) => (
                   <div 
-                    key={index} 
+                    key={suggestion.etapa}
                     className="p-4 border rounded-lg bg-muted/50 hover:bg-muted transition-colors"
                   >
                     <div className="space-y-2">

@@ -413,13 +413,13 @@ const CalendarView: React.FC = () => {
 
               {/* Calendar days */}
               <div className="grid grid-cols-7 gap-1">
-                {calendarDays.map((day, index) => {
+                {calendarDays.map((day) => {
                   const dayTasks = getTasksForDate(day.date);
                   const overdueDay = hasOverdueTasks(day.date);
 
                   return (
                     <div
-                      key={index}
+                      key={day.date.toISOString()}
                       onClick={() => setSelectedDate(day.date)}
                       onDoubleClick={() => { setSelectedDate(day.date); openCreateForDate(day.date); }}
                       className={`

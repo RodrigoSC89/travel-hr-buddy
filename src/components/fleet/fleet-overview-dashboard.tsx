@@ -288,8 +288,8 @@ const FleetOverviewDashboard: React.FC<FleetOverviewProps> = ({ stats, onRefresh
               </ResponsiveContainer>
               
               <div className="flex-1 space-y-2">
-                {fleetDistribution.map((item, index) => (
-                  <div key={index} className="flex items-center justify-between">
+                {fleetDistribution.map((item) => (
+                  <div key={item.name} className="flex items-center justify-between">
                     <div className="flex items-center gap-2">
                       <div 
                         className="w-3 h-3 rounded-full" 

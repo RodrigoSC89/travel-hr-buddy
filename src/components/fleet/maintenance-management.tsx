@@ -738,8 +738,8 @@ const MaintenanceManagement: React.FC = () => {
                 <div>
                   <Label>Peças Necessárias</Label>
                   <div className="mt-2 space-y-2">
-                    {selectedRecord.parts_required.map((part, index) => (
-                      <div key={index} className="flex items-center gap-2">
+                    {selectedRecord.parts_required.map((part) => (
+                      <div key={part} className="flex items-center gap-2">
                         <CheckCircle className="h-4 w-4 text-success" />
                         <span className="text-sm">{part}</span>
                       </div>

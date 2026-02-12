@@ -263,8 +263,8 @@ export const AdvancedMetricsDashboard: React.FC = () => {
         <TabsContent value="overview" className="space-y-4">
           {/* KPI Cards */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-            {filteredMetrics.map((metric, index) => (
-              <Card key={index}>
+            {filteredMetrics.map((metric) => (
+              <Card key={metric.name}>
                 <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                   <CardTitle className="text-sm font-medium">
                     {metric.name}
