@@ -380,11 +380,11 @@ export function InteractiveKPICard({
         {variant === "detailed" && breakdown && breakdown.length > 0 && (
           <div className="space-y-2 mb-3">
             <p className="text-xs font-medium text-muted-foreground">Composição</p>
-            {breakdown.map((item, idx) => (
-              <div key={idx} className="flex items-center gap-2">
+            {breakdown.map((item) => (
+              <div key={item.label} className="flex items-center gap-2">
                 <div
                   className="w-3 h-3 rounded-full"
-                  style={{ backgroundColor: item.color || `hsl(${idx * 60}, 70%, 50%)` }}
+                  style={{ backgroundColor: item.color || `hsl(${breakdown.indexOf(item) * 60}, 70%, 50%)` }}
                 />
                 <span className="text-xs flex-1">{item.label}</span>
                 <span className="text-xs font-medium">{item.percentage}%</span>

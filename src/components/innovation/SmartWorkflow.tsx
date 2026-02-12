@@ -322,8 +322,8 @@ export const SmartWorkflow = () => {
                   <div className="space-y-2">
                     <p className="text-xs font-medium">Triggers:</p>
                     <div className="flex flex-wrap gap-1">
-                      {template.triggers.map((trigger, index) => (
-                        <Badge key={index} variant="outline" className="text-xs">
+                      {template.triggers.map((trigger) => (
+                        <Badge key={trigger} variant="outline" className="text-xs">
                           {trigger}
                         </Badge>
                       ))}
@@ -333,8 +333,8 @@ export const SmartWorkflow = () => {
                   <div className="space-y-2">
                     <p className="text-xs font-medium">Ações:</p>
                     <div className="flex flex-wrap gap-1">
-                      {template.actions.map((action, index) => (
-                        <Badge key={index} variant="outline" className="text-xs">
+                      {template.actions.map((action) => (
+                        <Badge key={action} variant="outline" className="text-xs">
                           {action}
                         </Badge>
                       ))}

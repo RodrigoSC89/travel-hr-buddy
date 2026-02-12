@@ -314,8 +314,8 @@ export const CompleteSecurity: React.FC = () => {
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              {permissions.map((perm, index) => (
-                <Card key={index}>
+              {permissions.map((perm) => (
+                <Card key={perm.role}>
                   <CardContent className="p-4">
                     <div className="flex items-center justify-between mb-3">
                       <h4 className="font-medium">{perm.role}</h4>
@@ -323,8 +323,8 @@ export const CompleteSecurity: React.FC = () => {
                     </div>
                     <p className="text-sm text-muted-foreground mb-3">{perm.description}</p>
                     <div className="flex flex-wrap gap-1 mb-3">
-                      {perm.permissions.map((permission, i) => (
-                        <Badge key={i} variant="secondary" className="text-xs">
+                      {perm.permissions.map((permission) => (
+                        <Badge key={permission} variant="secondary" className="text-xs">
                           {permission}
                         </Badge>
                       ))}

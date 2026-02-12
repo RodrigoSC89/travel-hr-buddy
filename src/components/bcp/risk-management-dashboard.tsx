@@ -368,8 +368,8 @@ export const RiskManagementDashboard: React.FC = () => {
           <div className="space-y-4">
             <h3 className="text-lg font-semibold">Planos de Contingência</h3>
             <div className="space-y-4">
-              {contingencyPlans.map((plan, index) => (
-                <Card key={index}>
+              {contingencyPlans.map((plan) => (
+                <Card key={plan.risk}>
                   <CardHeader>
                     <CardTitle className="flex items-center gap-2">
                       <Zap className="w-5 h-5 text-orange-500" />

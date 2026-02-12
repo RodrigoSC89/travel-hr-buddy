@@ -458,8 +458,8 @@ const SystemAuditor: React.FC = () => {
 
               {auditResults.length > 0 && (
                 <div className="space-y-3">
-                  {auditResults.map((result, index) => (
-                    <div key={index} className="border rounded-lg p-4">
+                  {auditResults.map((result) => (
+                    <div key={result.module} className="border rounded-lg p-4">
                       <div className="flex items-start justify-between">
                         <div className="flex items-start gap-3">
                           {getStatusIcon(result.status)}
@@ -470,7 +470,7 @@ const SystemAuditor: React.FC = () => {
                               <p className="text-xs text-muted-foreground mt-1">{result.details}</p>
                             )}
                             {result.actionRequired && (
-                              <p className="text-xs text-blue-600 mt-1">
+                              <p className="text-xs text-info mt-1">
                                 <strong>Ação necessária:</strong> {result.actionRequired}
                               </p>
                             )}
@@ -542,7 +542,7 @@ const SystemAuditor: React.FC = () => {
                               <p className="text-sm font-medium">{test.name}</p>
                               <p className="text-xs text-muted-foreground">{test.description}</p>
                               {test.result && (
-                                <p className="text-xs text-blue-600">{test.result}</p>
+                                <p className="text-xs text-info">{test.result}</p>
                               )}
                             </div>
                           </div>
@@ -586,9 +586,9 @@ const SystemAuditor: React.FC = () => {
                       "Backup configurado",
                       "Monitoramento ativo",
                       "Documentação atualizada"
-                    ].map((item, index) => (
-                      <div key={index} className="flex items-center gap-2">
-                        <CheckCircle className="w-4 h-4 text-green-500" />
+                    ].map((item) => (
+                      <div key={item} className="flex items-center gap-2">
+                        <CheckCircle className="w-4 h-4 text-success" />
                         <span className="text-sm">{item}</span>
                       </div>
                     ))}

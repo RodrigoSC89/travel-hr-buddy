@@ -166,9 +166,9 @@ export function PredictiveDowntimeCard({ contractId, vesselId }: PredictiveDownt
             )}
 
             <div className="space-y-4">
-              {predictions.map((pred, idx) => (
+              {predictions.map((pred) => (
                 <div 
-                  key={idx} 
+                  key={pred.vessel_name}
                   className={`p-4 rounded-lg border ${getRiskBgColor(pred.probability)} hover:shadow-md transition-shadow`}
                 >
                   <div className="flex items-start justify-between mb-3">

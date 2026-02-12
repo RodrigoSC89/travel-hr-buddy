@@ -27,23 +27,23 @@ export const QuickStats = memo(function QuickStats({
 }: QuickStatsProps) {
   const getTrendIcon = (change?: number) => {
     if (change === undefined) return null;
-    if (change > 0) return <TrendingUp className="h-3 w-3 text-green-500" />;
-    if (change < 0) return <TrendingDown className="h-3 w-3 text-red-500" />;
+    if (change > 0) return <TrendingUp className="h-3 w-3 text-success" />;
+    if (change < 0) return <TrendingDown className="h-3 w-3 text-destructive" />;
     return <Minus className="h-3 w-3 text-muted-foreground" />;
   };
 
   const getTrendColor = (change?: number) => {
     if (change === undefined) return '';
-    if (change > 0) return 'text-green-500';
-    if (change < 0) return 'text-red-500';
+    if (change > 0) return 'text-success';
+    if (change < 0) return 'text-destructive';
     return 'text-muted-foreground';
   };
 
   if (compact) {
     return (
       <div className={cn("flex items-center gap-4 text-sm", className)}>
-        {stats.map((stat, index) => (
-          <div key={index} className="flex items-center gap-1.5">
+        {stats.map((stat) => (
+          <div key={stat.label} className="flex items-center gap-1.5">
             <span className="text-muted-foreground">{stat.label}:</span>
             <span className="font-medium">{stat.value}</span>
             {stat.change !== undefined && (
@@ -66,9 +66,9 @@ export const QuickStats = memo(function QuickStats({
       "grid-cols-2 sm:grid-cols-4",
       className
     )}>
-      {stats.map((stat, index) => (
+      {stats.map((stat) => (
         <div 
-          key={index} 
+          key={stat.label}
           className="bg-card border border-border rounded-lg p-3 space-y-1"
         >
           <p className="text-xs text-muted-foreground">{stat.label}</p>

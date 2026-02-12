@@ -267,9 +267,9 @@ export function DataGrid<T extends { id: string | number }>({
             <span className="text-sm text-muted-foreground">
               {selectedIds.size} selecionado{selectedIds.size > 1 ? 's' : ''}
             </span>
-            {bulkActions.map((action, index) => (
+            {bulkActions.map((action) => (
               <Button
-                key={index}
+                key={action.label}
                 variant={action.variant === 'destructive' ? 'destructive' : 'outline'}
                 size="sm"
                 onClick={() => action.onClick(selectedRows)}

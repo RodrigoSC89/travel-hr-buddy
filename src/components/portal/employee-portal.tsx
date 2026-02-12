@@ -272,8 +272,8 @@ export const EmployeePortal: React.FC = () => {
               />
 
               <div className="space-y-2">
-                {timeEntries.map((entry, index) => (
-                  <div key={index} className="flex items-center justify-between p-3 border rounded-lg">
+                {timeEntries.map((entry) => (
+                  <div key={`${entry.project}-${entry.date}`} className="flex items-center justify-between p-3 border rounded-lg">
                     <div className="flex-1">
                       <div className="font-medium">{entry.project}</div>
                       <div className="text-sm text-muted-foreground">
@@ -355,9 +355,9 @@ export const EmployeePortal: React.FC = () => {
             <CardContent>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 {achievements.map((achievement) => (
-                  <div key={achievement.id} className={`p-4 border rounded-lg ${achievement.earned ? "bg-green-50 border-green-200" : "bg-gray-50"}`}>
+                    <div key={achievement.id} className={`p-4 border rounded-lg ${achievement.earned ? "bg-success/10 border-success/30" : "bg-muted/50"}`}>
                     <div className="flex items-start space-x-3">
-                      <div className={`p-2 rounded-full ${achievement.earned ? "bg-green-100 text-green-600" : "bg-gray-100 text-muted-foreground"}`}>
+                      <div className={`p-2 rounded-full ${achievement.earned ? "bg-success/20 text-success" : "bg-muted text-muted-foreground"}`}>
                         {achievement.earned ? <CheckCircle className="h-5 w-5" /> : <Award className="h-5 w-5" />}
                       </div>
                       <div className="flex-1">
@@ -366,7 +366,7 @@ export const EmployeePortal: React.FC = () => {
                         <div className="flex items-center justify-between mt-2">
                           <Badge variant="outline">{achievement.points} pts</Badge>
                           {achievement.earned && achievement.earnedDate && (
-                            <span className="text-xs text-green-600">
+                            <span className="text-xs text-success">
                               Conquistado em {new Date(achievement.earnedDate).toLocaleDateString()}
                             </span>
                           )}
@@ -389,7 +389,7 @@ export const EmployeePortal: React.FC = () => {
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
-              <div className="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center">
+              <div className="border-2 border-dashed border-border rounded-lg p-6 text-center">
                 <Upload className="h-12 w-12 mx-auto text-muted-foreground mb-4" />
                 <p className="text-sm text-muted-foreground mb-2">
                   Arraste arquivos aqui ou clique para selecionar
@@ -402,10 +402,10 @@ export const EmployeePortal: React.FC = () => {
                   { name: "Certificado STCW.pdf", date: "2024-01-10", status: "verified" },
                   { name: "Carteira de Trabalho.pdf", date: "2024-01-08", status: "pending" },
                   { name: "Exame Médico.pdf", date: "2024-01-05", status: "verified" }
-                ].map((doc, index) => (
-                  <div key={index} className="flex items-center justify-between p-3 border rounded-lg">
+                ].map((doc) => (
+                  <div key={doc.name} className="flex items-center justify-between p-3 border rounded-lg">
                     <div className="flex items-center space-x-3">
-                      <FileText className="h-5 w-5 text-blue-500" />
+                      <FileText className="h-5 w-5 text-primary" />
                       <div>
                         <div className="font-medium">{doc.name}</div>
                         <div className="text-sm text-muted-foreground">

@@ -24,8 +24,8 @@ export const Breadcrumbs: React.FC<BreadcrumbsProps> = ({ items, className = "" 
         <Home className="h-4 w-4" />
       </Link>
       
-      {items.map((item, index) => (
-        <React.Fragment key={index}>
+      {items.map((item) => (
+        <React.Fragment key={item.label}>
           <ChevronRight className="h-3 w-3 text-muted-foreground/60" />
           {item.href && !item.current ? (
             <Link 

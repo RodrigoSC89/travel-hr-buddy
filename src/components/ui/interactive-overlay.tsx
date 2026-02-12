@@ -107,19 +107,19 @@ const FloatingMenu = () => {
   return (
     <div className="fixed bottom-8 right-80 z-40 hidden md:block">
       <div className={`flex flex-col gap-4 transition-all duration-700 ${isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"}`}>
-        {actions.map((action, index) => (
+        {actions.map((action, actionIndex) => (
           <div
-            key={index}
+            key={action.label}
             className={`transform transition-all duration-500 ${isVisible ? "translate-x-0" : "translate-x-16"}`}
             style={{ transitionDelay: `${action.delay}ms` }}
-            onMouseEnter={() => setHoveredIndex(index)}
+            onMouseEnter={() => setHoveredIndex(actionIndex)}
             onMouseLeave={() => setHoveredIndex(-1)}
           >
             <div className="relative group">
               {/* Tooltip */}
               <div className={`absolute right-16 top-1/2 transform -translate-y-1/2 
                 bg-gray-900 text-azure-50 px-3 py-2 rounded-lg text-sm whitespace-nowrap
-                transition-all duration-300 ${hoveredIndex === index ? "opacity-100 scale-100" : "opacity-0 scale-95"}`}>
+                transition-all duration-300 ${hoveredIndex === actionIndex ? "opacity-100 scale-100" : "opacity-0 scale-95"}`}>
                 {action.label}
                 <div className="absolute top-1/2 -right-1 transform -translate-y-1/2 
                   w-2 h-2 bg-gray-900 rotate-45" />
@@ -213,8 +213,8 @@ const StatusWidget = () => {
         <div className="flex items-center justify-between mb-4">
           <h3 className="font-semibold font-display">System Status</h3>
           <div className="flex items-center gap-1">
-            <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse" />
-            <span className="text-xs text-green-600">Online</span>
+            <div className="w-2 h-2 bg-success rounded-full animate-pulse" />
+            <span className="text-xs text-success">Online</span>
           </div>
         </div>
         
@@ -223,8 +223,8 @@ const StatusWidget = () => {
             { label: "Performance", value: stats.performance, icon: TrendingUp, color: "emerald" },
             { label: "System Health", value: stats.health, icon: Heart, color: "red" },
             { label: "Efficiency", value: stats.efficiency, icon: Zap, color: "blue" }
-          ].map((item, index) => (
-            <div key={index} className="space-y-2">
+          ].map((item, itemIdx) => (
+            <div key={item.label} className="space-y-2">
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2">
                   <item.icon className={`w-4 h-4 text-${item.color}-500`} />
@@ -238,7 +238,7 @@ const StatusWidget = () => {
                     transition-all duration-1000 ease-out`}
                   style={{ 
                     width: `${item.value}%`,
-                    transitionDelay: `${index * 200}ms`
+                    transitionDelay: `${itemIdx * 200}ms`
                   }}
                 />
               </div>

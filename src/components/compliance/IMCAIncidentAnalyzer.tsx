@@ -305,8 +305,8 @@ export function IMCAIncidentAnalyzer() {
                         <p>Nenhum incidente similar encontrado na base IMCA</p>
                       </div>
                     ) : (
-                      result.similar_incidents.map((incident, idx) => (
-                        <div key={idx} className="p-4 border rounded-lg space-y-3">
+                      result.similar_incidents.map((incident) => (
+                        <div key={incident.bulletin_id} className="p-4 border rounded-lg space-y-3">
                           <div className="flex items-center justify-between">
                             <div>
                               <Badge variant="outline" className="mb-1">{incident.bulletin_id}</Badge>
@@ -376,8 +376,8 @@ export function IMCAIncidentAnalyzer() {
                       Gaps de Compliance
                     </p>
                     <ul className="space-y-1">
-                      {result.compliance_gaps.map((gap, idx) => (
-                        <li key={idx} className="text-sm text-muted-foreground flex items-start gap-2">
+                      {result.compliance_gaps.map((gap) => (
+                        <li key={gap} className="text-sm text-muted-foreground flex items-start gap-2">
                           <span className="text-destructive">•</span>
                           {gap}
                         </li>
@@ -399,10 +399,10 @@ export function IMCAIncidentAnalyzer() {
                         Nenhuma ação preventiva específica identificada
                       </p>
                     ) : (
-                      result.preventive_actions.map((action, idx) => (
-                        <div key={idx} className="flex items-start gap-3 p-3 bg-muted/30 rounded-lg">
+                      result.preventive_actions.map((action, actionIdx) => (
+                        <div key={action} className="flex items-start gap-3 p-3 bg-muted/30 rounded-lg">
                           <div className="flex items-center justify-center h-6 w-6 rounded-full bg-info text-info-foreground text-sm font-medium">
-                            {idx + 1}
+                            {actionIdx + 1}
                           </div>
                           <p className="text-sm flex-1">{action}</p>
                           <CheckCircle2 className="h-5 w-5 text-muted-foreground hover:text-success cursor-pointer" />
@@ -425,8 +425,8 @@ export function IMCAIncidentAnalyzer() {
                         Nenhum treinamento específico identificado
                       </p>
                     ) : (
-                      result.training_recommendations.map((training, idx) => (
-                        <div key={idx} className="p-4 border rounded-lg flex items-start gap-3">
+                      result.training_recommendations.map((training) => (
+                        <div key={training} className="p-4 border rounded-lg flex items-start gap-3">
                           <Users className="h-5 w-5 text-info mt-0.5" />
                           <div className="flex-1">
                             <p className="text-sm">{training}</p>

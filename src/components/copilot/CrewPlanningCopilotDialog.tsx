@@ -198,9 +198,9 @@ export function CrewPlanningCopilotDialog({
         {/* Messages */}
         <ScrollArea className="flex-1 pr-4" ref={scrollRef}>
           <div className="space-y-4 py-4">
-            {messages.map((message, index) => (
+            {messages.map((message, msgIdx) => (
               <div
-                key={index}
+                key={`${message.role}-${msgIdx}`}
                 className={`flex ${message.role === "user" ? "justify-end" : "justify-start"}`}
               >
                 <div

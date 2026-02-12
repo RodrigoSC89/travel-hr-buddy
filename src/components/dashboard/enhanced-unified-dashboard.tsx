@@ -559,9 +559,9 @@ const EnhancedUnifiedDashboard = () => {
             
             <CardContent className="relative p-6">
               <div className="space-y-4">
-                {operationalData.map((item, index) => (
+                {operationalData.map((item) => (
                   <div 
-                    key={index} 
+                    key={item.metric}
                     className="group/item p-4 rounded-xl border border-border/50 hover:border-azure-300 hover:shadow-soft transition-all duration-300 bg-gradient-to-r from-background to-azure-50/30"
                   >
                     <div className="flex items-center justify-between mb-3">
@@ -629,9 +629,9 @@ const EnhancedUnifiedDashboard = () => {
             
             <CardContent className="relative p-8">
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {quickActions.map((action, index) => (
+                {quickActions.map((action) => (
                   <Link 
-                    key={index} 
+                    key={action.path}
                     to={action.path}
                     className="block"
                   >
@@ -820,8 +820,8 @@ const EnhancedUnifiedDashboard = () => {
               
               {/* Legend */}
               <div className="grid grid-cols-2 gap-3 mt-4">
-                {moduleUsageData.map((item, index) => (
-                  <div key={index} className="flex items-center gap-2 p-2 rounded-lg bg-gradient-to-r from-background to-purple-50/30 border border-purple-100/50">
+                {moduleUsageData.map((item) => (
+                  <div key={item.name} className="flex items-center gap-2 p-2 rounded-lg bg-gradient-to-r from-background to-purple-50/30 border border-purple-100/50">
                     <div 
                       className="w-3 h-3 rounded-full shadow-sm" 
                       style={{ backgroundColor: item.color }}
