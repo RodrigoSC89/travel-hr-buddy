@@ -201,9 +201,9 @@ export function BROAGeneratorCard({ events, vessels = [], contracts = [], onBROA
       case 'draft':
         return <Badge variant="secondary">Rascunho</Badge>;
       case 'pending_approval':
-        return <Badge variant="outline" className="border-yellow-500 text-yellow-500">Pendente</Badge>;
+        return <Badge variant="outline" className="border-warning text-warning">Pendente</Badge>;
       case 'approved':
-        return <Badge variant="outline" className="border-blue-500 text-blue-500">Aprovado</Badge>;
+        return <Badge variant="outline" className="border-info text-info">Aprovado</Badge>;
       case 'finalized':
         return <Badge variant="default">Finalizado</Badge>;
     }
@@ -227,12 +227,12 @@ export function BROAGeneratorCard({ events, vessels = [], contracts = [], onBROA
 
   return (
     <>
-      <Card className="border-green-500/20">
+      <Card className="border-success/20">
         <CardHeader className="pb-4">
           <div className="flex items-center justify-between">
             <div>
               <CardTitle className="flex items-center gap-2">
-                <FileCheck className="h-5 w-5 text-green-500" />
+                <FileCheck className="h-5 w-5 text-success" />
                 BROA - Gerador com IA
               </CardTitle>
               <p className="text-sm text-muted-foreground mt-1">
@@ -262,12 +262,12 @@ export function BROAGeneratorCard({ events, vessels = [], contracts = [], onBROA
                     >
                       <div className="flex items-center gap-3">
                         <div className={`p-2 rounded-lg ${
-                          event.impact_level === 'critical' ? 'bg-red-500/20' : 
-                          event.impact_level === 'high' ? 'bg-orange-500/20' : 'bg-yellow-500/20'
+                          event.impact_level === 'critical' ? 'bg-destructive/20' : 
+                          event.impact_level === 'high' ? 'bg-warning/20' : 'bg-warning/10'
                         }`}>
                           <AlertTriangle className={`h-4 w-4 ${
-                            event.impact_level === 'critical' ? 'text-red-500' : 
-                            event.impact_level === 'high' ? 'text-orange-500' : 'text-yellow-500'
+                            event.impact_level === 'critical' ? 'text-destructive' : 
+                            event.impact_level === 'high' ? 'text-warning' : 'text-warning'
                           }`} />
                         </div>
                         <div>
@@ -288,7 +288,7 @@ export function BROAGeneratorCard({ events, vessels = [], contracts = [], onBROA
                         size="sm"
                         onClick={() => generateBROA(event)}
                         disabled={generating === event.id}
-                        className="bg-green-600 hover:bg-green-700"
+                        className="bg-success hover:bg-success/90"
                       >
                         {generating === event.id ? (
                           <Loader2 className="h-4 w-4 animate-spin" />
@@ -311,7 +311,7 @@ export function BROAGeneratorCard({ events, vessels = [], contracts = [], onBROA
           {/* BROAs Gerados */}
           <div className="space-y-3">
             <h4 className="text-sm font-medium flex items-center gap-2">
-              <FileCheck className="h-4 w-4 text-green-500" />
+              <FileCheck className="h-4 w-4 text-success" />
               BROAs Gerados ({broaRecords.length})
             </h4>
             
@@ -329,7 +329,7 @@ export function BROAGeneratorCard({ events, vessels = [], contracts = [], onBROA
                     className="flex items-center justify-between p-3 bg-muted/50 rounded-lg border hover:bg-muted/70 transition-colors"
                   >
                     <div className="flex items-center gap-3">
-                      <FileCheck className="h-5 w-5 text-green-500" />
+                      <FileCheck className="h-5 w-5 text-success" />
                       <div>
                         <p className="text-sm font-medium">{broa.broa_number}</p>
                         <p className="text-xs text-muted-foreground">
@@ -375,7 +375,7 @@ export function BROAGeneratorCard({ events, vessels = [], contracts = [], onBROA
         <DialogContent className="max-w-3xl max-h-[90vh] overflow-hidden">
           <DialogHeader>
             <DialogTitle className="flex items-center gap-2">
-              <FileCheck className="h-5 w-5 text-green-500" />
+              <FileCheck className="h-5 w-5 text-success" />
               {selectedBROA?.broa_number || 'BROA'}
             </DialogTitle>
           </DialogHeader>
@@ -412,8 +412,8 @@ export function BROAGeneratorCard({ events, vessels = [], contracts = [], onBROA
 
                 {/* Cause Analysis */}
                 {selectedBROA.cause_analysis && (
-                  <div className="p-4 bg-orange-500/10 rounded-lg border border-orange-500/20">
-                    <h5 className="text-sm font-medium mb-2 flex items-center gap-2 text-orange-500">
+                   <div className="p-4 bg-warning/10 rounded-lg border border-warning/20">
+                    <h5 className="text-sm font-medium mb-2 flex items-center gap-2 text-warning">
                       <AlertTriangle className="h-4 w-4" />
                       Análise de Causa
                     </h5>
@@ -423,15 +423,15 @@ export function BROAGeneratorCard({ events, vessels = [], contracts = [], onBROA
 
                 {/* Corrective Actions */}
                 {selectedBROA.corrective_actions && selectedBROA.corrective_actions.length > 0 && (
-                  <div className="p-4 bg-blue-500/10 rounded-lg border border-blue-500/20">
-                    <h5 className="text-sm font-medium mb-2 flex items-center gap-2 text-blue-500">
+                  <div className="p-4 bg-info/10 rounded-lg border border-info/20">
+                    <h5 className="text-sm font-medium mb-2 flex items-center gap-2 text-info">
                       <CheckCircle className="h-4 w-4" />
                       Ações Corretivas
                     </h5>
                     <ul className="space-y-1">
                       {selectedBROA.corrective_actions.map((action, idx) => (
                         <li key={idx} className="text-sm flex items-start gap-2">
-                          <span className="text-blue-500">•</span>
+                          <span className="text-info">•</span>
                           {action}
                         </li>
                       ))}

@@ -125,14 +125,14 @@ export function SLADashboardCard({ contracts, downtimeEvents }: SLADashboardCard
 
   const getCategoryColor = (category: string) => {
     const colors: Record<string, string> = {
-      'mechanical': 'bg-orange-500',
-      'electrical': 'bg-yellow-500',
-      'weather': 'bg-blue-500',
-      'operational': 'bg-purple-500',
-      'regulatory': 'bg-red-500',
-      'other': 'bg-gray-500'
+      'mechanical': 'bg-warning',
+      'electrical': 'bg-warning',
+      'weather': 'bg-info',
+      'operational': 'bg-accent',
+      'regulatory': 'bg-destructive',
+      'other': 'bg-muted'
     };
-    return colors[category] || 'bg-gray-500';
+    return colors[category] || 'bg-muted';
   };
 
   const topCategories = Object.entries(slaMetrics.categoryBreakdown)
@@ -142,10 +142,10 @@ export function SLADashboardCard({ contracts, downtimeEvents }: SLADashboardCard
   const totalCategoryHours = Object.values(slaMetrics.categoryBreakdown).reduce((a, b) => a + b, 0);
 
   return (
-    <Card className="border-blue-500/20">
+    <Card className="border-info/20">
       <CardHeader className="pb-4">
         <CardTitle className="flex items-center gap-2">
-          <Shield className="h-5 w-5 text-blue-500" />
+          <Shield className="h-5 w-5 text-info" />
           Dashboard SLA
         </CardTitle>
         <p className="text-sm text-muted-foreground">
@@ -157,15 +157,15 @@ export function SLADashboardCard({ contracts, downtimeEvents }: SLADashboardCard
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
           <div className="p-4 bg-muted/50 rounded-lg">
             <div className="flex items-center gap-2 mb-2">
-              <Target className="h-4 w-4 text-blue-500" />
+              <Target className="h-4 w-4 text-info" />
               <span className="text-xs text-muted-foreground">Uptime Atual</span>
             </div>
             <div className="flex items-baseline gap-2">
               <span className="text-2xl font-bold">{slaMetrics.uptime.toFixed(1)}%</span>
               {slaMetrics.slaCompliance ? (
-                <TrendingUp className="h-4 w-4 text-green-500" />
+                <TrendingUp className="h-4 w-4 text-success" />
               ) : (
-                <TrendingDown className="h-4 w-4 text-red-500" />
+                <TrendingDown className="h-4 w-4 text-destructive" />
               )}
             </div>
             <p className="text-xs text-muted-foreground mt-1">
@@ -186,7 +186,7 @@ export function SLADashboardCard({ contracts, downtimeEvents }: SLADashboardCard
           
           <div className="p-4 bg-muted/50 rounded-lg">
             <div className="flex items-center gap-2 mb-2">
-              <DollarSign className="h-4 w-4 text-green-500" />
+              <DollarSign className="h-4 w-4 text-success" />
               <span className="text-xs text-muted-foreground">Penalidades Est.</span>
             </div>
             <span className="text-2xl font-bold">
@@ -199,7 +199,7 @@ export function SLADashboardCard({ contracts, downtimeEvents }: SLADashboardCard
           
           <div className="p-4 bg-muted/50 rounded-lg">
             <div className="flex items-center gap-2 mb-2">
-              <Shield className="h-4 w-4 text-blue-500" />
+              <Shield className="h-4 w-4 text-info" />
               <span className="text-xs text-muted-foreground">Status SLA</span>
             </div>
             <Badge 
@@ -230,7 +230,7 @@ export function SLADashboardCard({ contracts, downtimeEvents }: SLADashboardCard
             />
             <div className="flex justify-between text-xs text-muted-foreground">
               <span>0%</span>
-              <span className="text-blue-500">Meta: {slaMetrics.avgSLATarget.toFixed(1)}%</span>
+              <span className="text-info">Meta: {slaMetrics.avgSLATarget.toFixed(1)}%</span>
               <span>100%</span>
             </div>
           </div>
@@ -238,18 +238,18 @@ export function SLADashboardCard({ contracts, downtimeEvents }: SLADashboardCard
 
         {/* Justification Status */}
         <div className="grid grid-cols-3 gap-3">
-          <div className="p-3 bg-green-500/10 rounded-lg border border-green-500/20 text-center">
-            <CheckCircle className="h-5 w-5 text-green-500 mx-auto mb-1" />
+          <div className="p-3 bg-success/10 rounded-lg border border-success/20 text-center">
+            <CheckCircle className="h-5 w-5 text-success mx-auto mb-1" />
             <p className="text-lg font-bold">{slaMetrics.justifiedCount}</p>
             <p className="text-xs text-muted-foreground">Justificados</p>
           </div>
-          <div className="p-3 bg-yellow-500/10 rounded-lg border border-yellow-500/20 text-center">
-            <Clock className="h-5 w-5 text-yellow-500 mx-auto mb-1" />
+          <div className="p-3 bg-warning/10 rounded-lg border border-warning/20 text-center">
+            <Clock className="h-5 w-5 text-warning mx-auto mb-1" />
             <p className="text-lg font-bold">{slaMetrics.pendingCount}</p>
             <p className="text-xs text-muted-foreground">Pendentes</p>
           </div>
-          <div className="p-3 bg-red-500/10 rounded-lg border border-red-500/20 text-center">
-            <XCircle className="h-5 w-5 text-red-500 mx-auto mb-1" />
+          <div className="p-3 bg-destructive/10 rounded-lg border border-destructive/20 text-center">
+            <XCircle className="h-5 w-5 text-destructive mx-auto mb-1" />
             <p className="text-lg font-bold">{slaMetrics.unjustifiedCount}</p>
             <p className="text-xs text-muted-foreground">Rejeitados</p>
           </div>
@@ -288,10 +288,10 @@ export function SLADashboardCard({ contracts, downtimeEvents }: SLADashboardCard
 
         {/* Alerts */}
         {!slaMetrics.slaCompliance && (
-          <div className="p-4 bg-red-500/10 rounded-lg border border-red-500/20">
+          <div className="p-4 bg-destructive/10 rounded-lg border border-destructive/20">
             <div className="flex items-center gap-2 mb-2">
-              <AlertTriangle className="h-4 w-4 text-red-500" />
-              <span className="font-medium text-red-500">Alerta de Violação SLA</span>
+              <AlertTriangle className="h-4 w-4 text-destructive" />
+              <span className="font-medium text-destructive">Alerta de Violação SLA</span>
             </div>
             <p className="text-sm text-muted-foreground">
               O uptime atual ({slaMetrics.uptime.toFixed(2)}%) está abaixo da meta de {slaMetrics.avgSLATarget.toFixed(2)}%. 
@@ -301,10 +301,10 @@ export function SLADashboardCard({ contracts, downtimeEvents }: SLADashboardCard
         )}
 
         {slaMetrics.criticalDowntimes > 0 && (
-          <div className="p-4 bg-orange-500/10 rounded-lg border border-orange-500/20">
+          <div className="p-4 bg-warning/10 rounded-lg border border-warning/20">
             <div className="flex items-center gap-2 mb-2">
-              <AlertTriangle className="h-4 w-4 text-orange-500" />
-              <span className="font-medium text-orange-500">Atenção</span>
+              <AlertTriangle className="h-4 w-4 text-warning" />
+              <span className="font-medium text-warning">Atenção</span>
             </div>
             <p className="text-sm text-muted-foreground">
               {slaMetrics.criticalDowntimes} evento(s) de downtime crítico detectado(s). 
