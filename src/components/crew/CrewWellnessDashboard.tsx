@@ -347,9 +347,9 @@ export function CrewWellnessDashboard() {
                       Alertas
                     </h5>
                     <div className="space-y-2">
-                      {selectedMember.alerts.map((alert, i) => (
+                      {selectedMember.alerts.map((alert) => (
                         <div 
-                          key={i}
+                          key={alert.message}
                           className={cn(
                             "p-2 rounded text-sm",
                             alert.severity === 'critical' ? "bg-destructive/10 text-destructive" :

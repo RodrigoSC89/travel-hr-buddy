@@ -258,9 +258,9 @@ export function AIModuleEnhancer({
 
             {suggestions.length > 0 && (
               <div className="flex flex-wrap gap-2 pt-2 border-t">
-                {suggestions.map((s, i) => (
+                {suggestions.map((s) => (
                   <Button
-                    key={i}
+                    key={s}
                     variant="secondary"
                     size="sm"
                     className="text-xs h-7"

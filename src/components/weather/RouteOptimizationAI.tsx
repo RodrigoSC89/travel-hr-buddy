@@ -361,8 +361,8 @@ export function RouteOptimizationAI() {
                     <div className="pt-2 border-t">
                       <p className="text-xs text-muted-foreground mb-2">Waypoints</p>
                       <div className="flex flex-wrap gap-1">
-                        {route.waypoints.map((wp, idx) => (
-                          <Badge key={idx} variant="outline" className="text-xs">
+                        {route.waypoints.map((wp) => (
+                          <Badge key={wp.name} variant="outline" className="text-xs">
                             {wp.name}
                           </Badge>
                         ))}
@@ -425,7 +425,7 @@ export function RouteOptimizationAI() {
                 <div className="space-y-3">
                   {scenarioResults.map((scenario, idx) => (
                     <div
-                      key={idx}
+                      key={scenario.scenario}
                       className={`p-4 border rounded-lg ${idx === 0 ? "bg-primary/5 border-primary/30" : ""}`}
                     >
                       <div className="flex items-center justify-between">

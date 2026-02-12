@@ -388,10 +388,10 @@ export const CrewIntelligenceSystem: React.FC = () => {
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
-            {shiftOptimizations.map((opt, idx) => {
+            {shiftOptimizations.map((opt) => {
               const crew = crewMembers.find(c => c.id === opt.crewMemberId);
               return (
-                <div key={idx} className="p-4 border rounded-lg space-y-3">
+                <div key={opt.crewMemberId} className="p-4 border rounded-lg space-y-3">
                   <div className="flex items-start justify-between">
                     <div>
                       <h4 className="font-semibold">{crew?.name}</h4>

@@ -350,7 +350,7 @@ Gere sugestões em formato JSON array.`
         </CardHeader>
         <CardContent className="space-y-3">
           {[1, 2, 3].map(i => (
-            <Skeleton key={i} className="h-24 w-full" />
+            <Skeleton key={`workflow-skeleton-${i}`} className="h-24 w-full" />
           ))}
         </CardContent>
       </Card>

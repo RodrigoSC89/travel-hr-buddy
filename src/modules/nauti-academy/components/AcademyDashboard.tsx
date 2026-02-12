@@ -464,9 +464,9 @@ export default function AcademyDashboard() {
         </CardHeader>
         <CardContent>
           <div className="grid gap-3">
-            {aiSuggestions.map((suggestion, index) => (
+            {aiSuggestions.map((suggestion) => (
               <div
-                key={index}
+                key={`${suggestion.type}-${suggestion.message.slice(0, 30)}`}
                 className={`flex items-center gap-3 p-3 rounded-lg ${
                   suggestion.priority === "high"
                     ? "bg-destructive/10 border border-destructive/20"
@@ -1169,7 +1169,7 @@ export default function AcademyDashboard() {
                   {selectedCourse.modules.map((mod: unknown, idx: number) => {
                     const m = mod as Record<string, unknown>;
                     return (
-                    <div key={idx} className="flex items-center justify-between p-2 border rounded">
+                    <div key={`mod-${idx}-${String(m.title ?? "")}`} className="flex items-center justify-between p-2 border rounded">
                       <div className="flex items-center gap-2">
                         <span className="w-6 h-6 rounded-full bg-primary/10 flex items-center justify-center text-xs font-medium">{idx + 1}</span>
                         <span className="text-sm">{String(m.title ?? "")}</span>
@@ -1299,7 +1299,7 @@ export default function AcademyDashboard() {
               ) : (
                 <div className="space-y-3">
                   {chatMessages.map((msg, idx) => (
-                    <div key={idx} className={`flex ${msg.role === "user" ? "justify-end" : "justify-start"}`}>
+                    <div key={`msg-${idx}-${msg.role}`} className={`flex ${msg.role === "user" ? "justify-end" : "justify-start"}`}>
                       <div className={`max-w-[80%] p-3 rounded-lg ${msg.role === "user" ? "bg-primary text-primary-foreground" : "bg-muted"}`}>
                         <p className="text-sm">{msg.content}</p>
                       </div>

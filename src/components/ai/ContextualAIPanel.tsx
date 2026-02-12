@@ -368,8 +368,8 @@ export function ContextualAIPanel({ defaultExpanded = true, className }: Context
                     <div className="pt-2 border-t">
                       <p className="text-xs font-medium mb-1">Recomendações:</p>
                       <ul className="text-xs text-muted-foreground space-y-1">
-                        {analysis.recommendations.map((rec, idx) => (
-                          <li key={idx}>• {rec}</li>
+                        {analysis.recommendations.map((rec) => (
+                          <li key={rec}>• {rec}</li>
                         ))}
                       </ul>
                     </div>
@@ -389,7 +389,7 @@ export function ContextualAIPanel({ defaultExpanded = true, className }: Context
             <div className="space-y-2">
               {chatMessages.slice(-4).map((msg, idx) => (
                 <div
-                  key={idx}
+                  key={`ctx-msg-${idx}-${msg.role}`}
                   className={cn(
                     "text-xs p-2 rounded-lg",
                     msg.role === "user" 

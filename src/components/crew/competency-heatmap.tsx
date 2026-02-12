@@ -351,8 +351,8 @@ export const CompetencyHeatmap: React.FC = () => {
                 <CardContent className="space-y-3">
                   {member.competencies
                     .filter(c => !c.certified || c.level < c.required)
-                    .map((comp, idx) => (
-                      <div key={idx} className="flex items-start gap-3 p-3 bg-destructive/5 dark:bg-destructive/10 rounded-lg">
+                    .map((comp) => (
+                      <div key={comp.skill} className="flex items-start gap-3 p-3 bg-destructive/5 dark:bg-destructive/10 rounded-lg">
                         <AlertCircle className="h-5 w-5 text-destructive mt-0.5" />
                         <div className="flex-1">
                           <div className="font-medium text-sm">{comp.skill}</div>

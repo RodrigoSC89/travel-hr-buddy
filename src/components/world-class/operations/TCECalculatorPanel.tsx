@@ -124,8 +124,8 @@ export function TCECalculatorPanel() {
                 <CardTitle className="text-sm">Cenários Comparativos</CardTitle>
               </CardHeader>
               <CardContent className="space-y-2">
-                {result.scenarios.map((s, i) => (
-                  <div key={i} className="flex items-center justify-between p-2 rounded bg-muted/30 text-xs">
+                {result.scenarios.map((s) => (
+                  <div key={s.label} className="flex items-center justify-between p-2 rounded bg-muted/30 text-xs">
                     <span className="flex-1">{s.label}</span>
                     <div className="flex items-center gap-2">
                       <span className="font-mono font-bold">${s.tce_per_day.toLocaleString()}/d</span>

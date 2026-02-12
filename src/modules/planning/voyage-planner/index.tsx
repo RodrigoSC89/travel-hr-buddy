@@ -68,7 +68,7 @@ const VoyagePlanner = () => {
         <Skeleton className="h-12 w-64" />
         <div className="grid grid-cols-5 gap-4">
           {[...Array(5)].map((_, i) => (
-            <Skeleton key={i} className="h-24" />
+            <Skeleton key={`voyage-skeleton-${i}`} className="h-24" />
           ))}
         </div>
         <Skeleton className="h-96" />

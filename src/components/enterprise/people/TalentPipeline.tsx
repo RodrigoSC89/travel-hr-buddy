@@ -65,7 +65,7 @@ export function TalentPipeline() {
   };
   const getMatchColor = (score: number) => score >= 90 ? "text-success" : score >= 75 ? "text-warning" : "text-destructive";
 
-  if (loading) return <div className="space-y-4">{[1,2,3].map(i => <Skeleton key={i} className="h-32 w-full" />)}</div>;
+  if (loading) return <div className="space-y-4">{[1,2,3].map(i => <Skeleton key={`talent-skeleton-${i}`} className="h-32 w-full" />)}</div>;
 
   return (
     <div className="space-y-6">

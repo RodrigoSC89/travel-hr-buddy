@@ -228,7 +228,7 @@ export default function TelemedicinePanel() {
                     <div className="flex items-center gap-2 mb-4"><MessageSquare className="h-5 w-5" /><span className="font-medium">Chat</span></div>
                     <ScrollArea className="flex-1 border rounded-lg p-3">
                       {chatMessages.map((msg, i) => (
-                        <div key={i} className={`mb-3 ${msg.sender === "Você" ? "text-right" : ""}`}>
+                        <div key={`tele-msg-${i}-${msg.sender}`} className={`mb-3 ${msg.sender === "Você" ? "text-right" : ""}`}>
                           <div className={`inline-block px-3 py-2 rounded-lg max-w-[80%] ${msg.sender === "Você" ? "bg-primary text-primary-foreground" : "bg-muted"}`}>
                             <p className="text-sm">{msg.message}</p>
                             <p className="text-xs opacity-70 mt-1">{format(msg.time, "HH:mm")}</p>

@@ -123,8 +123,8 @@ export const SystemStatusIndicator = memo(function SystemStatusIndicator({
               <div className="pt-2 border-t border-border">
                 <span className="text-xs font-medium text-warning">Alertas:</span>
                 <ul className="mt-1 space-y-1">
-                  {health.issues.map((issue, i) => (
-                    <li key={i} className="text-xs text-muted-foreground flex items-start gap-1">
+                  {health.issues.map((issue) => (
+                    <li key={issue} className="text-xs text-muted-foreground flex items-start gap-1">
                       <span className="text-warning">•</span>
                       {issue}
                     </li>

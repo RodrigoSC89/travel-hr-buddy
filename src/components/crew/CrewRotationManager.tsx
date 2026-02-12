@@ -537,8 +537,8 @@ export const CrewRotationManager: React.FC = () => {
           </CardHeader>
           <CardContent>
             <div className="space-y-2">
-              {conflicts.slice(0, 5).map((conflict, idx) => (
-                <div key={idx} className="flex items-center gap-2 text-sm">
+              {conflicts.slice(0, 5).map((conflict) => (
+                <div key={conflict.message} className="flex items-center gap-2 text-sm">
                   <Badge variant={conflict.severity === "critical" ? "destructive" : "default"}>
                     {conflict.severity}
                   </Badge>
@@ -673,8 +673,8 @@ export const CrewRotationManager: React.FC = () => {
             <CardContent>
               {conflicts.length > 0 ? (
                 <div className="space-y-3">
-                  {conflicts.map((conflict, idx) => (
-                    <div key={idx} className="flex items-start gap-3 p-3 border rounded-lg">
+                  {conflicts.map((conflict) => (
+                    <div key={`${conflict.type}-${conflict.message.slice(0, 20)}`} className="flex items-start gap-3 p-3 border rounded-lg">
                       <AlertTriangle className={`h-5 w-5 ${
                         conflict.severity === "critical" ? "text-destructive" :
                         conflict.severity === "high" ? "text-warning" :

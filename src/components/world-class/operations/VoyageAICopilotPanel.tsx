@@ -85,8 +85,8 @@ export function VoyageAICopilotPanel() {
           <Card>
             <CardHeader className="pb-2"><CardTitle className="text-sm">Waypoints</CardTitle></CardHeader>
             <CardContent className="space-y-1">
-              {r.waypoints.map((wp: { name: string; reason: string }, i: number) => (
-                <div key={i} className="flex items-center gap-2 text-xs">
+              {r.waypoints.map((wp: { name: string; reason: string }) => (
+                <div key={wp.name} className="flex items-center gap-2 text-xs">
                   <MapPin className="h-3 w-3 text-primary" />
                   <span className="font-medium">{wp.name}</span>
                   <span className="text-muted-foreground">— {wp.reason}</span>
@@ -172,8 +172,8 @@ export function VoyageAICopilotPanel() {
     };
     return (
       <div className="space-y-2">
-        {result.risks.map((risk: { type: string; severity: string; description: string; mitigation: string }, i: number) => (
-          <Card key={i}>
+        {result.risks.map((risk: { type: string; severity: string; description: string; mitigation: string }) => (
+          <Card key={`${risk.type}-${risk.severity}`}>
             <CardContent className="p-3">
               <div className="flex items-center justify-between mb-1">
                 <div className="flex items-center gap-2">
@@ -294,8 +294,8 @@ export function VoyageAICopilotPanel() {
                 </CardHeader>
                 <CardContent>
                   <ul className="space-y-1">
-                    {result.recommendations.map((rec: string, i: number) => (
-                      <li key={i} className="text-xs flex items-start gap-2">
+                    {result.recommendations.map((rec: string) => (
+                      <li key={rec} className="text-xs flex items-start gap-2">
                         <span className="text-primary font-bold">•</span>
                         {rec}
                       </li>

@@ -149,8 +149,8 @@ export function DryDockPlanner() {
             {aiPlan.drydock_plan.yard_recommendations?.length > 0 && (
               <div className="flex flex-wrap gap-2">
                 <MapPin className="h-4 w-4 text-muted-foreground" />
-                {aiPlan.drydock_plan.yard_recommendations.map((yard: string, idx: number) => (
-                  <Badge key={idx} variant="outline" className="text-xs">{yard}</Badge>
+                {aiPlan.drydock_plan.yard_recommendations.map((yard: string) => (
+                  <Badge key={yard} variant="outline" className="text-xs">{yard}</Badge>
                 ))}
               </div>
             )}

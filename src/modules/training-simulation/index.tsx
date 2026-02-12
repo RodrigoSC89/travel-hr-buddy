@@ -328,7 +328,7 @@ export default function TrainingSimulation() {
                 <div className="space-y-3">
                   {simulationSteps[currentStep].options.map((option, idx) => (
                     <button
-                      key={idx}
+                      key={`option-${currentStep}-${idx}-${option.text.slice(0, 15)}`}
                       onClick={() => handleAnswer(idx)}
                       disabled={showFeedback}
                       className={`w-full p-4 rounded-lg border text-left transition-all ${

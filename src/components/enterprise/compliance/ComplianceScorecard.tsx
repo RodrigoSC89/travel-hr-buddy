@@ -52,7 +52,7 @@ export function ComplianceScorecard() {
     switch (status) { case "compliant": return <Badge className="bg-success/10 text-success border-success/20">Conforme</Badge>; case "attention": return <Badge className="bg-warning/10 text-warning border-warning/20">Atenção</Badge>; case "critical": return <Badge className="bg-destructive/10 text-destructive border-destructive/20">Crítico</Badge>; }
   };
 
-  if (loading) return <div className="space-y-4">{[1,2,3].map(i => <Skeleton key={i} className="h-32 w-full" />)}</div>;
+  if (loading) return <div className="space-y-4">{[1,2,3].map(i => <Skeleton key={`compliance-skeleton-${i}`} className="h-32 w-full" />)}</div>;
 
   const fleetAverage = vessels.length > 0 ? Math.round(vessels.reduce((acc, v) => acc + v.overallScore, 0) / vessels.length) : 0;
   const totalFindings = vessels.reduce((acc, v) => acc + v.openFindings, 0);

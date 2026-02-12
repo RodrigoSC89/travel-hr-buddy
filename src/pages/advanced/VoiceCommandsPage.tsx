@@ -156,7 +156,7 @@ const VoiceCommandsPage = () => {
                   <div className="flex items-center justify-center gap-1">
                     {[1,2,3,4,5].map((i) => (
                       <div 
-                        key={i}
+                        key={`voice-bar-${i}`}
                         className="w-1 bg-primary rounded-full animate-pulse"
                         style={{ 
                           height: `${8 + (i * 7) % 24}px`,
@@ -253,9 +253,9 @@ const VoiceCommandsPage = () => {
                 </CardHeader>
                 <CardContent>
                   <ul className="space-y-2">
-                    {cat.commands.map((cmd, idx) => (
+                    {cat.commands.map((cmd) => (
                       <li 
-                        key={idx}
+                        key={cmd}
                         className="text-sm text-muted-foreground hover:text-foreground cursor-pointer flex items-center gap-2"
                       >
                         <Mic className="h-3 w-3" />
@@ -276,8 +276,8 @@ const VoiceCommandsPage = () => {
             </CardHeader>
             <CardContent>
               <div className="space-y-3">
-                {recentCommands.map((cmd, idx) => (
-                  <div key={idx} className="flex items-start justify-between p-3 border rounded-lg">
+                {recentCommands.map((cmd) => (
+                  <div key={`${cmd.command}-${cmd.time}`} className="flex items-start justify-between p-3 border rounded-lg">
                     <div className="space-y-1">
                       <div className="flex items-center gap-2">
                         <Mic className="h-4 w-4 text-primary" />

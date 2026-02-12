@@ -475,8 +475,8 @@ export function ESGReports() {
                   { name: "EU MRV Trimestral", frequency: "Trimestral", nextRun: "01/04/2024", enabled: true },
                   { name: "CII Anual", frequency: "Anual", nextRun: "01/01/2025", enabled: true },
                   { name: "Relatório Executivo Semanal", frequency: "Semanal", nextRun: "22/01/2024", enabled: false },
-                ].map((schedule, idx) => (
-                  <div key={idx} className="flex items-center justify-between p-4 border rounded-lg">
+                ].map((schedule) => (
+                  <div key={schedule.name} className="flex items-center justify-between p-4 border rounded-lg">
                     <div className="flex items-center gap-4">
                       <div className={`p-2 rounded-lg ${schedule.enabled ? "bg-green-100 dark:bg-green-900" : "bg-muted"}`}>
                         <FileText className={`h-5 w-5 ${schedule.enabled ? "text-green-600" : "text-muted-foreground"}`} />

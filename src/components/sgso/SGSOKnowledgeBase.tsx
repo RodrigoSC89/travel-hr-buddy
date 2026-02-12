@@ -306,8 +306,8 @@ export const SGSOKnowledgeBase: React.FC = () => {
                         </AccordionTrigger>
                         <AccordionContent>
                           <ul className="space-y-2">
-                            {evidences.map((evidence, idx) => (
-                              <li key={idx} className="flex items-center gap-2 text-sm">
+                            {evidences.map((evidence) => (
+                              <li key={evidence} className="flex items-center gap-2 text-sm">
                                 <FileText className="h-4 w-4 text-muted-foreground" />
                                 {evidence}
                               </li>

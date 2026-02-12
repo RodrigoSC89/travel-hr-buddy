@@ -192,7 +192,7 @@ function SimulationDetailView({ sim, onClose }: { sim: any; onClose: () => void 
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
                   {scenarios.map((s: VoyageScenario, i: number) => (
                     <div 
-                      key={i} 
+                      key={`scenario-${s.name}-${i}`} 
                       className={`p-3 rounded-lg border ${
                         sim.recommended_scenario === i ? "border-primary bg-primary/5 ring-1 ring-primary/30" : ""
                       }`}
@@ -244,7 +244,7 @@ function SimulationDetailView({ sim, onClose }: { sim: any; onClose: () => void 
                   {/* eslint-disable-next-line @typescript-eslint/no-explicit-any -- risk factors from AI have dynamic shape */}
                   {/* eslint-disable-next-line @typescript-eslint/no-explicit-any -- risk factors from AI have dynamic shape */}
                   {riskFactors.map((rf: any, i: number) => (
-                    <div key={i} className="flex items-start gap-3 p-2 rounded border">
+                    <div key={`rf-${i}-${rf.factor}`} className="flex items-start gap-3 p-2 rounded border">
                       <AlertTriangle className={`h-4 w-4 mt-0.5 flex-shrink-0 ${
                         rf.severity === "high" || rf.impact === "high" ? "text-destructive" : 
                         rf.severity === "medium" || rf.impact === "medium" ? "text-warning" : "text-muted-foreground"
@@ -464,7 +464,7 @@ export function VoyageSimulatorPanel() {
                       </div>
 
                       {scenarios.map((scenario, idx) => (
-                        <Card key={idx} className="relative">
+                        <Card key={`edit-scenario-${scenario.name}-${idx}`} className="relative">
                           <CardHeader className="pb-2 pt-3 px-4">
                             <div className="flex items-center justify-between">
                               <Input 

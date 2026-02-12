@@ -140,7 +140,7 @@ export const RiskAssessmentMatrix: React.FC = () => {
           <div className="overflow-x-auto">
             <div className="grid grid-cols-6 gap-1 p-2 bg-muted rounded-lg min-w-[600px]">
               <div className="p-2 text-xs font-bold text-center bg-background rounded">P↓ / I→</div>
-              {impactLabels.map((l, i) => <div key={i} className="p-2 text-xs font-medium text-center bg-primary/10 rounded">{l}</div>)}
+              {impactLabels.map((l) => <div key={l} className="p-2 text-xs font-medium text-center bg-primary/10 rounded">{l}</div>)}
               {[5,4,3,2,1].map(prob => (
                 <React.Fragment key={prob}>
                   <div className="p-2 text-xs font-medium text-center bg-primary/10 rounded">{probabilityLabels[prob-1]}</div>

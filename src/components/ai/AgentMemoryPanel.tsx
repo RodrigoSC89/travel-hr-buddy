@@ -72,7 +72,7 @@ export default function AgentMemoryPanel() {
             <ScrollArea className="h-[500px]">
               {loadingConvos ? (
                 <div className="p-4 space-y-3">
-                  {[1, 2, 3].map((i) => <Skeleton key={i} className="h-16" />)}
+                  {[1, 2, 3].map((i) => <Skeleton key={`convo-skeleton-${i}`} className="h-16" />)}
                 </div>
               ) : conversations.length === 0 ? (
                 <div className="p-6 text-center text-muted-foreground text-sm">
@@ -152,7 +152,7 @@ export default function AgentMemoryPanel() {
             <ScrollArea className="h-[500px] p-4">
               {loadingMsgs ? (
                 <div className="space-y-3">
-                  {[1, 2, 3].map((i) => <Skeleton key={i} className="h-20" />)}
+                  {[1, 2, 3].map((i) => <Skeleton key={`msg-skeleton-${i}`} className="h-20" />)}
                 </div>
               ) : !selectedConversation ? (
                 <div className="flex flex-col items-center justify-center h-full text-muted-foreground gap-3 py-12">

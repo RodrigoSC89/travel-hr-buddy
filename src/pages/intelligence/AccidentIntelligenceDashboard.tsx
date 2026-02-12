@@ -257,8 +257,8 @@ export default function AccidentIntelligenceDashboard() {
 
                 <div className="space-y-3">
                   <h5 className="font-medium text-sm">Causas Raiz Identificadas:</h5>
-                  {patternAnalysis.rootCauses.map((cause, idx) => (
-                    <div key={idx} className="space-y-1">
+                  {patternAnalysis.rootCauses.map((cause) => (
+                    <div key={cause.cause} className="space-y-1">
                       <div className="flex justify-between text-sm">
                         <span>{cause.cause}</span>
                         <span className="font-medium">{cause.percentage}%</span>
@@ -303,8 +303,8 @@ export default function AccidentIntelligenceDashboard() {
                   </RechartsPie>
                 </ResponsiveContainer>
                 <div className="flex flex-wrap justify-center gap-3 mt-4">
-                  {categoryDistribution.map((cat, idx) => (
-                    <div key={idx} className="flex items-center gap-2">
+                  {categoryDistribution.map((cat) => (
+                    <div key={cat.name} className="flex items-center gap-2">
                       <div className="w-3 h-3 rounded-full" style={{ backgroundColor: cat.color }} />
                       <span className="text-xs">{cat.name} ({cat.value}%)</span>
                     </div>
@@ -544,9 +544,9 @@ export default function AccidentIntelligenceDashboard() {
             </CardHeader>
             <CardContent>
               <div className="space-y-4">
-                {patternAnalysis.recommendations.map((rec, idx) => (
+                {patternAnalysis.recommendations.map((rec) => (
                   <div 
-                    key={idx}
+                    key={rec.action}
                     className={`p-4 rounded-lg border ${
                        rec.priority === 1 
                         ? "bg-success/10 border-success/20" 

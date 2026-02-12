@@ -36,7 +36,7 @@ export function FuelConsumptionDashboard() {
     staleTime: 30000,
   });
 
-  if (isLoading) return <div className="space-y-4"><div className="grid grid-cols-4 gap-4">{[...Array(4)].map((_, i) => <Skeleton key={i} className="h-24" />)}</div><Skeleton className="h-64" /></div>;
+  if (isLoading) return <div className="space-y-4"><div className="grid grid-cols-4 gap-4">{[...Array(4)].map((_, i) => <Skeleton key={`fuel-dash-skeleton-${i}`} className="h-24" />)}</div><Skeleton className="h-64" /></div>;
 
   const { fuelRecords = [], vessels = [] } = data || {};
 

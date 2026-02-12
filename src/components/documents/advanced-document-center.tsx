@@ -161,11 +161,11 @@ export const AdvancedDocumentCenter: React.FC = () => {
     return (
       <div className="space-y-6">
         <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-          {[...Array(4)].map((_, i) => <Skeleton key={i} className="h-28" />)}
+          {[...Array(4)].map((_, i) => <Skeleton key={`doc-stat-skeleton-${i}`} className="h-28" />)}
         </div>
         <Skeleton className="h-12 w-full" />
         <div className="space-y-3">
-          {[...Array(5)].map((_, i) => <Skeleton key={i} className="h-20" />)}
+          {[...Array(5)].map((_, i) => <Skeleton key={`doc-list-skeleton-${i}`} className="h-20" />)}
         </div>
       </div>
     );
@@ -444,14 +444,14 @@ export const AdvancedDocumentCenter: React.FC = () => {
             </div>
             {uploadedFiles.length > 0 && (
               <div className="space-y-2">
-                {uploadedFiles.map((file, i) => (
-                  <div key={i} className="flex items-center justify-between p-2 bg-muted/50 rounded">
+                {uploadedFiles.map((file, fileIdx) => (
+                  <div key={file.name} className="flex items-center justify-between p-2 bg-muted/50 rounded">
                     <div className="flex items-center gap-2">
                       <File className="h-4 w-4" />
                       <span className="text-sm truncate max-w-[200px]">{file.name}</span>
                       <span className="text-xs text-muted-foreground">{formatFileSize(file.size)}</span>
                     </div>
-                    <Button variant="ghost" size="icon" onClick={() => setUploadedFiles(prev => prev.filter((_, j) => j !== i))}>
+                    <Button variant="ghost" size="icon" onClick={() => setUploadedFiles(prev => prev.filter((_, j) => j !== fileIdx))}>
                       <X className="h-3 w-3" />
                     </Button>
                   </div>

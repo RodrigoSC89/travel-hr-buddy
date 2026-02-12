@@ -252,9 +252,9 @@ export const WeatherChat: React.FC<WeatherChatProps> = ({
         <div className="px-4 pb-2">
           <p className="text-xs text-white/50 mb-2">Perguntas sugeridas:</p>
           <div className="flex flex-wrap gap-2">
-            {QUICK_PROMPTS.slice(0, 3).map((prompt, idx) => (
+            {QUICK_PROMPTS.slice(0, 3).map((prompt) => (
               <Badge
-                key={idx}
+                key={prompt}
                 variant="outline"
                 className="cursor-pointer hover:bg-white/10 text-white/70 border-white/20"
                 onClick={() => sendMessage(prompt)}

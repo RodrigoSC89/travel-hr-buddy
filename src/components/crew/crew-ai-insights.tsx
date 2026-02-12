@@ -295,8 +295,8 @@ export const CrewAIInsights = ({ crew }: CrewAIInsightsProps) => {
                   <div>
                     <span className="text-sm font-medium">Benefícios:</span>
                     <ul className="list-disc list-inside text-sm mt-2 space-y-1 text-muted-foreground">
-                      {rot.benefits.map((benefit: string, idx: number) => (
-                        <li key={idx}>{benefit}</li>
+                      {rot.benefits.map((benefit: string) => (
+                        <li key={benefit}>{benefit}</li>
                       ))}
                     </ul>
                   </div>
@@ -345,8 +345,8 @@ export const CrewAIInsights = ({ crew }: CrewAIInsightsProps) => {
                   <div>
                     <span className="text-sm font-medium">Habilidades Requeridas:</span>
                     <div className="flex flex-wrap gap-2 mt-2">
-                      {gap.requiredSkills.map((skill: string, idx: number) => (
-                        <Badge key={idx} variant="secondary">{skill}</Badge>
+                      {gap.requiredSkills.map((skill: string) => (
+                        <Badge key={skill} variant="secondary">{skill}</Badge>
                       ))}
                     </div>
                   </div>
@@ -358,8 +358,8 @@ export const CrewAIInsights = ({ crew }: CrewAIInsightsProps) => {
                         Lacunas Críticas
                       </span>
                       <ul className="list-disc list-inside text-sm mt-2 space-y-1">
-                        {gap.criticalGaps.map((crit: string, idx: number) => (
-                          <li key={idx}>{crit}</li>
+                        {gap.criticalGaps.map((crit: string) => (
+                          <li key={crit}>{crit}</li>
                         ))}
                       </ul>
                     </div>
@@ -368,8 +368,8 @@ export const CrewAIInsights = ({ crew }: CrewAIInsightsProps) => {
                   <div>
                     <span className="text-sm font-medium">Treinamentos Recomendados:</span>
                     <ul className="list-disc list-inside text-sm mt-2 space-y-1 text-muted-foreground">
-                      {gap.trainingRecommendations.map((rec: string, idx: number) => (
-                        <li key={idx}>{rec}</li>
+                      {gap.trainingRecommendations.map((rec: string) => (
+                        <li key={rec}>{rec}</li>
                       ))}
                     </ul>
                   </div>

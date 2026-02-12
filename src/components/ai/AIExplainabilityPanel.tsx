@@ -256,8 +256,8 @@ export function AIExplainabilityPanel() {
                       Riscos Identificados
                     </h4>
                     <ul className="list-disc list-inside text-sm mt-2 space-y-1">
-                      {selectedDecision.justification_risks.map((risk, i) => (
-                        <li key={i}>{risk}</li>
+                      {selectedDecision.justification_risks.map((risk) => (
+                        <li key={risk}>{risk}</li>
                       ))}
                     </ul>
                   </div>
@@ -285,8 +285,8 @@ export function AIExplainabilityPanel() {
                     
                     return (
                       <div className="space-y-3">
-                        {factors.map((factor, i) => (
-                          <div key={i} className="flex items-center gap-3">
+                        {factors.map((factor) => (
+                          <div key={factor.name} className="flex items-center gap-3">
                             <div className="flex-1">
                               <div className="flex items-center justify-between mb-1">
                                 <span className="text-sm">{factor.name}</span>
