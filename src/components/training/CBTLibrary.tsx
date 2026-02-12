@@ -60,10 +60,10 @@ const contentTypeIcons: Record<string, typeof Video> = {
 
 const statusColors: Record<string, string> = {
   not_started: "bg-muted text-muted-foreground",
-  in_progress: "bg-amber-500/20 text-amber-400",
-  completed: "bg-emerald-500/20 text-emerald-400",
+  in_progress: "bg-warning/20 text-warning",
+  completed: "bg-success/20 text-success",
   failed: "bg-destructive/20 text-destructive",
-  expired: "bg-orange-500/20 text-orange-400",
+  expired: "bg-warning/20 text-warning",
 };
 
 export function CBTLibrary() {

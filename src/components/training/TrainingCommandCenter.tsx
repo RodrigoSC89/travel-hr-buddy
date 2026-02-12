@@ -244,11 +244,11 @@ export const TrainingCommandCenter: React.FC = () => {
 
   const getCategoryBadge = (category: Course["category"]) => {
     const config = {
-      safety: { color: "bg-red-500/20 text-red-400", label: "Segurança" },
-      technical: { color: "bg-blue-500/20 text-blue-400", label: "Técnico" },
-      compliance: { color: "bg-purple-500/20 text-purple-400", label: "Compliance" },
-      leadership: { color: "bg-green-500/20 text-green-400", label: "Liderança" },
-      emergency: { color: "bg-orange-500/20 text-orange-400", label: "Emergência" }
+      safety: { color: "bg-destructive/20 text-destructive", label: "Segurança" },
+      technical: { color: "bg-info/20 text-info", label: "Técnico" },
+      compliance: { color: "bg-accent/20 text-accent-foreground", label: "Compliance" },
+      leadership: { color: "bg-success/20 text-success", label: "Liderança" },
+      emergency: { color: "bg-warning/20 text-warning", label: "Emergência" }
     };
     const { color, label } = config[category];
     return <Badge className={color}>{label}</Badge>;
@@ -257,8 +257,8 @@ export const TrainingCommandCenter: React.FC = () => {
   const getStatusBadge = (status: Course["status"]) => {
     const config = {
       draft: { color: "bg-gray-500/20 text-gray-400", label: "Rascunho" },
-      published: { color: "bg-green-500/20 text-green-400", label: "Publicado" },
-      archived: { color: "bg-yellow-500/20 text-yellow-400", label: "Arquivado" }
+      published: { color: "bg-success/20 text-success", label: "Publicado" },
+      archived: { color: "bg-warning/20 text-warning", label: "Arquivado" }
     };
     const { color, label } = config[status];
     return <Badge className={color}>{label}</Badge>;
@@ -268,9 +268,9 @@ export const TrainingCommandCenter: React.FC = () => {
     const config = {
       not_started: { color: "bg-gray-500/20 text-gray-400", label: "Não Iniciado" },
       in_progress: { color: "bg-blue-500/20 text-blue-400", label: "Em Andamento" },
-      completed: { color: "bg-green-500/20 text-green-400", label: "Concluído" },
-      failed: { color: "bg-red-500/20 text-red-400", label: "Reprovado" },
-      overdue: { color: "bg-orange-500/20 text-orange-400", label: "Atrasado" }
+      completed: { color: "bg-success/20 text-success", label: "Concluído" },
+      failed: { color: "bg-destructive/20 text-destructive", label: "Reprovado" },
+      overdue: { color: "bg-warning/20 text-warning", label: "Atrasado" }
     };
     const { color, label } = config[status];
     return <Badge className={color}>{label}</Badge>;
@@ -319,14 +319,14 @@ export const TrainingCommandCenter: React.FC = () => {
           </CardContent>
         </Card>
 
-        <Card className="bg-gradient-to-br from-green-500/10 to-green-600/5 border-green-500/20">
+        <Card className="bg-gradient-to-br from-success/10 to-success/5 border-success/20">
           <CardContent className="p-4">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-muted-foreground">Matrículas</p>
                 <p className="text-2xl font-bold">{totalEnrollments}</p>
               </div>
-              <Users className="h-8 w-8 text-green-400" />
+              <Users className="h-8 w-8 text-success" />
             </div>
           </CardContent>
         </Card>
@@ -343,14 +343,14 @@ export const TrainingCommandCenter: React.FC = () => {
           </CardContent>
         </Card>
 
-        <Card className="bg-gradient-to-br from-orange-500/10 to-orange-600/5 border-orange-500/20">
+        <Card className="bg-gradient-to-br from-warning/10 to-warning/5 border-warning/20">
           <CardContent className="p-4">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-muted-foreground">Progresso Médio</p>
                 <p className="text-2xl font-bold">{avgProgress.toFixed(0)}%</p>
               </div>
-              <TrendingUp className="h-8 w-8 text-orange-400" />
+              <TrendingUp className="h-8 w-8 text-warning" />
             </div>
           </CardContent>
         </Card>

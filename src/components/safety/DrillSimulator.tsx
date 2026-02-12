@@ -277,8 +277,8 @@ export function DrillSimulator() {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-3">
-          <div className="p-3 bg-gradient-to-br from-orange-500/20 to-red-500/20 rounded-xl">
-            <Siren className="h-6 w-6 text-orange-500" />
+          <div className="p-3 bg-gradient-to-br from-warning/20 to-destructive/20 rounded-xl">
+            <Siren className="h-6 w-6 text-warning" />
           </div>
           <div>
             <h2 className="text-xl font-bold flex items-center gap-2">

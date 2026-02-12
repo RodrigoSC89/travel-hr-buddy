@@ -140,10 +140,10 @@ export function FinanceAnalyticsAI() {
 
   const getDifficultyColor = (diff: string) => {
     switch (diff) {
-      case "easy": return "bg-green-500";
-      case "medium": return "bg-yellow-500";
-      case "hard": return "bg-red-500";
-      default: return "bg-gray-500";
+      case "easy": return "bg-success";
+      case "medium": return "bg-warning";
+      case "hard": return "bg-destructive";
+      default: return "bg-muted";
     }
   };
 
@@ -152,8 +152,8 @@ export function FinanceAnalyticsAI() {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-3">
-          <div className="p-3 bg-gradient-to-br from-yellow-500/20 to-amber-500/20 rounded-xl">
-            <DollarSign className="h-6 w-6 text-yellow-500" />
+          <div className="p-3 bg-gradient-to-br from-warning/20 to-warning/10 rounded-xl">
+            <DollarSign className="h-6 w-6 text-warning" />
           </div>
           <div>
             <h2 className="text-xl font-bold flex items-center gap-2">
@@ -196,7 +196,7 @@ export function FinanceAnalyticsAI() {
         <Card>
           <CardContent className="pt-4">
             <div className="flex items-center gap-2">
-              <DollarSign className="h-5 w-5 text-green-500" />
+              <DollarSign className="h-5 w-5 text-success" />
               <div>
                 <p className="text-2xl font-bold">${(totalActual / 1000).toFixed(0)}k</p>
                 <p className="text-xs text-muted-foreground">Realizado</p>
@@ -208,12 +208,12 @@ export function FinanceAnalyticsAI() {
           <CardContent className="pt-4">
             <div className="flex items-center gap-2">
               {totalVariance > 0 ? (
-                <TrendingUp className="h-5 w-5 text-red-500" />
+                <TrendingUp className="h-5 w-5 text-destructive" />
               ) : (
-                <TrendingDown className="h-5 w-5 text-green-500" />
+                <TrendingDown className="h-5 w-5 text-success" />
               )}
               <div>
-                <p className={`text-2xl font-bold ${totalVariance > 0 ? "text-red-500" : "text-green-500"}`}>
+                <p className={`text-2xl font-bold ${totalVariance > 0 ? "text-destructive" : "text-success"}`}>
                   {totalVariance > 0 ? "+" : ""}{totalVariance.toFixed(1)}%
                 </p>
                 <p className="text-xs text-muted-foreground">Variação</p>
@@ -274,9 +274,9 @@ export function FinanceAnalyticsAI() {
                       <div className="h-3 bg-muted rounded-full overflow-hidden">
                         <div
                           className={`h-full transition-all ${
-                            cost.variance > 5 ? "bg-red-500" :
-                            cost.variance > 0 ? "bg-yellow-500" :
-                            "bg-green-500"
+                            cost.variance > 5 ? "bg-destructive" :
+                            cost.variance > 0 ? "bg-warning" :
+                            "bg-success"
                           }`}
                           style={{ width: `${Math.min(100, (cost.actual / cost.budget) * 100)}%` }}
                         />
@@ -285,9 +285,9 @@ export function FinanceAnalyticsAI() {
                     <Badge
                       variant="outline"
                       className={
-                        cost.variance > 5 ? "text-red-500" :
-                        cost.variance > 0 ? "text-yellow-500" :
-                        "text-green-500"
+                        cost.variance > 5 ? "text-destructive" :
+                        cost.variance > 0 ? "text-warning" :
+                        "text-success"
                       }
                     >
                       {cost.variance > 0 ? "+" : ""}{cost.variance.toFixed(1)}%

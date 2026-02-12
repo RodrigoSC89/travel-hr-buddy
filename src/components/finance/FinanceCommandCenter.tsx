@@ -550,10 +550,10 @@ export function FinanceCommandCenter() {
         <Card>
           <CardContent className="pt-4">
             <div className="flex items-center gap-2">
-              <TrendingUp className="h-4 w-4 text-green-600" />
+              <TrendingUp className="h-4 w-4 text-success" />
               <span className="text-sm text-muted-foreground">A Receber</span>
             </div>
-            <div className="text-xl font-bold text-green-600 mt-1">
+            <div className="text-xl font-bold text-success mt-1">
               {formatCurrency(financialStats.totalReceivable)}
             </div>
           </CardContent>
@@ -561,10 +561,10 @@ export function FinanceCommandCenter() {
         <Card>
           <CardContent className="pt-4">
             <div className="flex items-center gap-2">
-              <TrendingDown className="h-4 w-4 text-red-600" />
+              <TrendingDown className="h-4 w-4 text-destructive" />
               <span className="text-sm text-muted-foreground">A Pagar</span>
             </div>
-            <div className="text-xl font-bold text-red-600 mt-1">
+            <div className="text-xl font-bold text-destructive mt-1">
               {formatCurrency(financialStats.totalPayable)}
             </div>
           </CardContent>
@@ -577,7 +577,7 @@ export function FinanceCommandCenter() {
             </div>
             <div
               className={`text-xl font-bold mt-1 ${
-                financialStats.netPosition >= 0 ? "text-green-600" : "text-red-600"
+                financialStats.netPosition >= 0 ? "text-success" : "text-destructive"
               }`}
             >
               {formatCurrency(financialStats.netPosition)}
@@ -587,10 +587,10 @@ export function FinanceCommandCenter() {
         <Card>
           <CardContent className="pt-4">
             <div className="flex items-center gap-2">
-              <Clock className="h-4 w-4 text-yellow-600" />
+              <Clock className="h-4 w-4 text-warning" />
               <span className="text-sm text-muted-foreground">Despesas Pendentes</span>
             </div>
-            <div className="text-xl font-bold text-yellow-600 mt-1">
+            <div className="text-xl font-bold text-warning mt-1">
               {formatCurrency(financialStats.pendingExpenses)}
             </div>
           </CardContent>
@@ -598,7 +598,7 @@ export function FinanceCommandCenter() {
         <Card>
           <CardContent className="pt-4">
             <div className="flex items-center gap-2">
-              <CheckCircle className="h-4 w-4 text-green-600" />
+              <CheckCircle className="h-4 w-4 text-success" />
               <span className="text-sm text-muted-foreground">Despesas Aprovadas</span>
             </div>
             <div className="text-xl font-bold mt-1">
@@ -609,10 +609,10 @@ export function FinanceCommandCenter() {
         <Card>
           <CardContent className="pt-4">
             <div className="flex items-center gap-2">
-              <AlertCircle className="h-4 w-4 text-red-600" />
+              <AlertCircle className="h-4 w-4 text-destructive" />
               <span className="text-sm text-muted-foreground">Faturas Vencidas</span>
             </div>
-            <div className="text-xl font-bold text-red-600 mt-1">
+            <div className="text-xl font-bold text-destructive mt-1">
               {financialStats.overdueInvoices}
             </div>
           </CardContent>
@@ -687,14 +687,14 @@ export function FinanceCommandCenter() {
                         <div
                           className={`w-10 h-10 rounded-lg flex items-center justify-center ${
                             inv.type === "receivable"
-                              ? "bg-green-500/10"
-                              : "bg-red-500/10"
+                              ? "bg-success/10"
+                              : "bg-destructive/10"
                           }`}
                         >
                           {inv.type === "receivable" ? (
-                            <TrendingUp className="h-5 w-5 text-green-600" />
+                            <TrendingUp className="h-5 w-5 text-success" />
                           ) : (
-                            <TrendingDown className="h-5 w-5 text-red-600" />
+                            <TrendingDown className="h-5 w-5 text-destructive" />
                           )}
                         </div>
                         <div>
@@ -713,8 +713,8 @@ export function FinanceCommandCenter() {
                           <div
                             className={`text-lg font-bold ${
                               inv.type === "receivable"
-                                ? "text-green-600"
-                                : "text-red-600"
+                                ? "text-success"
+                                : "text-destructive"
                             }`}
                           >
                             {inv.type === "receivable" ? "+" : "-"}

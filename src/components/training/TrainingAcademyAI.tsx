@@ -224,10 +224,10 @@ export function TrainingAcademyAI() {
 
   const getDifficultyColor = (diff: string) => {
     switch (diff) {
-      case "beginner": return "bg-green-500";
-      case "intermediate": return "bg-yellow-500";
-      case "advanced": return "bg-red-500";
-      default: return "bg-gray-500";
+      case "beginner": return "bg-success";
+      case "intermediate": return "bg-warning";
+      case "advanced": return "bg-destructive";
+      default: return "bg-muted";
     }
   };
 
@@ -274,7 +274,7 @@ export function TrainingAcademyAI() {
         <Card>
           <CardContent className="pt-4">
             <div className="flex items-center gap-2">
-              <CheckCircle className="h-5 w-5 text-green-500" />
+              <CheckCircle className="h-5 w-5 text-success" />
               <div>
                 <p className="text-2xl font-bold">
                   {learningPaths.reduce((acc, lp) => acc + lp.completedModules, 0)}
@@ -287,7 +287,7 @@ export function TrainingAcademyAI() {
         <Card>
           <CardContent className="pt-4">
             <div className="flex items-center gap-2">
-              <Award className="h-5 w-5 text-yellow-500" />
+              <Award className="h-5 w-5 text-warning" />
               <div>
                 <p className="text-2xl font-bold">
                   {learningPaths.reduce((acc, lp) => acc + lp.certifications.length, 0)}
@@ -480,8 +480,8 @@ export function TrainingAcademyAI() {
             <CardHeader>
               <CardTitle className="text-sm flex items-center gap-2">
                 Tutor IA 24/7
-                <Badge variant="outline" className="bg-green-500/10 text-green-500">
-                  <span className="w-2 h-2 bg-green-500 rounded-full mr-1 animate-pulse" />
+                <Badge variant="outline" className="bg-success/10 text-success">
+                  <span className="w-2 h-2 bg-success rounded-full mr-1 animate-pulse" />
                   Online
                 </Badge>
               </CardTitle>

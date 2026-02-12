@@ -624,7 +624,7 @@ export function VRARScenarioManager() {
                 <p className="text-sm text-muted-foreground">Concluídas</p>
                 <p className="text-2xl font-bold">{stats.completedSessions}</p>
               </div>
-              <CheckCircle2 className="h-8 w-8 text-green-500" />
+              <CheckCircle2 className="h-8 w-8 text-success" />
             </div>
           </CardContent>
         </Card>
@@ -1204,7 +1204,7 @@ export function VRARScenarioManager() {
                     key={idx}
                     className={`flex items-center gap-2 p-2 rounded ${
                       idx < executionState.currentObjective
-                        ? "bg-green-500/10 text-green-600"
+                        ? "bg-success/10 text-success"
                         : idx === executionState.currentObjective
                         ? "bg-primary/10 text-primary"
                         : "text-muted-foreground"
