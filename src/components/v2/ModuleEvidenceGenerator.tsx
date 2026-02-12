@@ -61,10 +61,10 @@ interface ModuleEvidenceGeneratorProps {
 }
 
 const DEFAULT_NC_TYPES = [
-  { value: "critical", label: "Crítico", color: "bg-red-500" },
-  { value: "major", label: "Maior", color: "bg-orange-500" },
-  { value: "minor", label: "Menor", color: "bg-yellow-500" },
-  { value: "observation", label: "Observação", color: "bg-blue-500" },
+  { value: "critical", label: "Crítico", color: "bg-destructive" },
+  { value: "major", label: "Maior", color: "bg-warning" },
+  { value: "minor", label: "Menor", color: "bg-warning/70" },
+  { value: "observation", label: "Observação", color: "bg-info" },
 ];
 
 export function ModuleEvidenceGenerator({
@@ -217,7 +217,7 @@ ${result.deadline_suggestion}
         <Card>
           <CardHeader>
             <CardTitle className="text-lg flex items-center gap-2">
-              <AlertTriangle className="h-5 w-5 text-orange-500" />
+              <AlertTriangle className="h-5 w-5 text-warning" />
               Dados da Não Conformidade
             </CardTitle>
             <CardDescription>
@@ -249,7 +249,7 @@ ${result.deadline_suggestion}
 
             {fields.map((field) => (
               <div key={field.name} className="space-y-2">
-                <Label>{field.label} {field.required && <span className="text-red-500">*</span>}</Label>
+                <Label>{field.label} {field.required && <span className="text-destructive">*</span>}</Label>
                 {field.type === 'textarea' ? (
                   <Textarea
                     placeholder={field.placeholder}

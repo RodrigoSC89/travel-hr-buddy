@@ -180,9 +180,9 @@ const CONTRACT_TYPES = [
       case "active":
         return <Badge className="bg-success/20 text-success"><CheckCircle2 className="h-3 w-3 mr-1" />Ativo</Badge>;
       case "pending_approval":
-        return <Badge className="bg-amber-500/20 text-amber-500"><Clock className="h-3 w-3 mr-1" />Pendente Aprovação</Badge>;
+        return <Badge className="bg-warning/20 text-warning"><Clock className="h-3 w-3 mr-1" />Pendente Aprovação</Badge>;
       case "renewal":
-        return <Badge className="bg-blue-500/20 text-blue-500"><RefreshCw className="h-3 w-3 mr-1" />Renovação</Badge>;
+        return <Badge className="bg-info/20 text-info"><RefreshCw className="h-3 w-3 mr-1" />Renovação</Badge>;
       case "expired":
         return <Badge className="bg-destructive/20 text-destructive">Expirado</Badge>;
       case "terminated":

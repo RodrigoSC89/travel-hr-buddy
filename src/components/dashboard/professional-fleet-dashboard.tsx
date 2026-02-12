@@ -289,9 +289,9 @@ export function ProfessionalFleetDashboard() {
               </CardDescription>
             </CardHeader>
             <CardContent>
-              <div className="relative h-[400px] bg-gradient-to-br from-blue-50 to-cyan-50 dark:from-blue-950/20 dark:to-cyan-950/20 rounded-lg border-2 border-dashed flex items-center justify-center">
+              <div className="relative h-[400px] bg-gradient-to-br from-info/5 to-info/10 rounded-lg border-2 border-dashed flex items-center justify-center">
                 <div className="text-center space-y-2">
-                  <Waves className="h-16 w-16 mx-auto text-blue-500 animate-pulse" />
+                  <Waves className="h-16 w-16 mx-auto text-info animate-pulse" />
                   <p className="text-lg font-semibold">Mapa Interativo</p>
                   <p className="text-sm text-muted-foreground">
                     Integração com sistema de rastreamento via satélite
