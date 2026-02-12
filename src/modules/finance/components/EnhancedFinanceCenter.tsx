@@ -635,9 +635,9 @@ export const EnhancedFinanceCenter: React.FC = () => {
               />
             </div>
             <div className="flex gap-2">
-              <Button variant="outline" onClick={() => toast.success("Filtros disponíveis", { description: "Utilize a busca acima para localizar faturas por fornecedor, embarcação ou ID." })}>
+              <Button variant="outline" onClick={() => { setSearchQuery(''); toast.success("Filtros limpos"); }}>
                 <Filter className="h-4 w-4 mr-2" />
-                Filtros
+                Limpar Filtros
               </Button>
               <Button variant="outline" onClick={() => {
                 const csvData = 'Fatura,Fornecedor,Embarcação,Valor,Vencimento,Status\nINV-2024-001,Petrobrás,MV Atlantic Star,45000,' + format(new Date(), 'dd/MM/yyyy') + ',Pendente\nINV-2024-002,PortoServices,MV Pacific Explorer,12300,' + format(subDays(new Date(), 3), 'dd/MM/yyyy') + ',Pago';
@@ -653,7 +653,7 @@ export const EnhancedFinanceCenter: React.FC = () => {
                 <Download className="h-4 w-4 mr-2" />
                 Exportar
               </Button>
-              <Button onClick={() => toast.success("Nova Fatura", { description: "Utilize o módulo Procurement para criar solicitações de compra ou a aba Invoices acima." })}>
+              <Button onClick={() => { window.history.pushState({}, '', '/procurement-command'); window.dispatchEvent(new PopStateEvent('popstate')); }}>
                 <Plus className="h-4 w-4 mr-2" />
                 Nova Fatura
               </Button>
@@ -693,7 +693,7 @@ export const EnhancedFinanceCenter: React.FC = () => {
                         </Badge>
                       </td>
                       <td className="p-4">
-                        <Button variant="ghost" size="sm" onClick={() => toast(`Fatura ${inv.id}`, { description: `Fornecedor: ${inv.supplier} | Embarcação: ${inv.vessel} | Valor: R$ ${inv.amount.toLocaleString('pt-BR')} | Status: ${inv.status === 'paid' ? 'Pago' : inv.status === 'overdue' ? 'Vencido' : 'Pendente'}`, duration: 6000 })}>Ver</Button>
+                        <Button variant="ghost" size="sm" onClick={() => { navigator.clipboard.writeText(`Fatura: ${inv.id} | Fornecedor: ${inv.supplier} | Embarcação: ${inv.vessel} | Valor: R$ ${inv.amount.toLocaleString('pt-BR')} | Status: ${inv.status}`); toast.success(`Dados da fatura ${inv.id} copiados`); }}>Ver</Button>
                       </td>
                     </tr>
                   ))}
@@ -742,7 +742,7 @@ export const EnhancedFinanceCenter: React.FC = () => {
                           {insight.type === 'risk' ? '-' : '+'} R$ {insight.potentialValue.toLocaleString('pt-BR')}
                         </span>
                         {insight.actionable && (
-                          <Button size="sm" onClick={() => toast.success(`Recomendação "${insight.title}" aplicada`, { description: `Economia potencial: R$ ${insight.potentialValue.toLocaleString('pt-BR')}` })}>
+                          <Button size="sm" onClick={() => { navigator.clipboard.writeText(`Recomendação: ${insight.title} | ${insight.description} | Economia: R$ ${insight.potentialValue.toLocaleString('pt-BR')}`); toast.success(`Recomendação "${insight.title}" copiada`); }}>
                             Aplicar Recomendação
                           </Button>
                         )}

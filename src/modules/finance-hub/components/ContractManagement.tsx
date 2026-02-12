@@ -4,6 +4,7 @@
  */
 
 import React, { useState } from "react";
+import { supabase } from "@/integrations/supabase/client";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -150,12 +151,15 @@ function ContractCard({ contract }: { contract: Contract }) {
       </div>
 
       <div className="flex gap-2 mt-3">
-        <Button size="sm" variant="outline" className="flex-1 gap-1" onClick={() => toast(`${contract.title}`, { description: `Contraparte: ${contract.counterparty} | Valor: ${formatCurrency(contract.value, contract.currency)} | Período: ${contract.startDate} a ${contract.endDate}${contract.vessel ? ` | Navio: ${contract.vessel}` : ''}`, duration: 6000 })}>
+        <Button size="sm" variant="outline" className="flex-1 gap-1" onClick={() => { navigator.clipboard.writeText(`Contrato: ${contract.number} | ${contract.title} | Contraparte: ${contract.counterparty} | Valor: ${formatCurrency(contract.value, contract.currency)} | Período: ${contract.startDate} a ${contract.endDate}${contract.vessel ? ` | Navio: ${contract.vessel}` : ''}`); toast.success(`Dados do contrato ${contract.number} copiados`); }}>
           <Eye className="h-3 w-3" />
           Detalhes
         </Button>
         {contract.renewalOption && contract.status === "expiring" && (
-          <Button size="sm" className="flex-1 gap-1" onClick={() => toast.success(`Renovação iniciada: ${contract.number}`, { description: `${contract.title} - ${contract.counterparty}. Contrato marcado para renovação.` })}>
+          <Button size="sm" className="flex-1 gap-1" onClick={async () => {
+            const { error } = await supabase.from('action_items').insert({ title: `Renovar contrato ${contract.number}`, description: `${contract.title} - ${contract.counterparty}`, status: 'pending', priority: 'high', source_module: 'contracts' });
+            if (error) { toast.error("Erro: " + error.message); } else { toast.success(`Renovação registrada: ${contract.number}`); }
+          }}>
             <RefreshCw className="h-3 w-3" />
             Renovar
           </Button>

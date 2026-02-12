@@ -200,7 +200,7 @@ function AuditChecklist({ items }: { items: AuditItem[] }) {
                   </Badge>
                 )}
                 {getStatusBadge(item.status)}
-                <Button variant="ghost" size="sm" onClick={() => toast.success(`${item.requirement}`, { description: `Código: ${item.code} | Status: ${item.status} | Evidências: ${item.evidence.length} documento(s)` })}>
+                <Button variant="ghost" size="sm" onClick={() => { navigator.clipboard.writeText(`${item.code} | ${item.requirement} | Status: ${item.status} | Evidências: ${item.evidence.length}`); toast.success("Dados do requisito copiados"); }}>
                   <Eye className="h-4 w-4" />
                 </Button>
               </div>
@@ -246,7 +246,7 @@ function NCRTracker({ ncrs }: { ncrs: NonConformity[] }) {
             <AlertTriangle className="h-4 w-4" />
             Non-Conformities & Observations
           </CardTitle>
-          <Button size="sm" onClick={() => toast.success("Novo NCR", { description: "Registre uma nova Não-Conformidade com descrição, severidade e ação corretiva." })}>
+          <Button size="sm" onClick={() => { window.history.pushState({}, '', '/compliance?tab=evidencias'); window.dispatchEvent(new PopStateEvent('popstate')); }}>
             <FileText className="h-4 w-4 mr-2" />
             New NCR
           </Button>

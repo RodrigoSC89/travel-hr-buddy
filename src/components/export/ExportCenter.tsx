@@ -314,7 +314,7 @@ export function ExportCenter() {
                     </SelectContent>
                   </Select>
                 </div>
-                <Button variant="outline" onClick={() => toast.success("Filtros aplicados", { duration: 1500 })}>
+                <Button variant="outline" onClick={() => toast.success("Filtros aplicados")}>
                   <Filter className="h-4 w-4 mr-2" />
                   Aplicar
                 </Button>

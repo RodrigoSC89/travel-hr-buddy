@@ -4,6 +4,7 @@
  */
 
 import React, { useState } from "react";
+import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -378,11 +379,14 @@ export const TravelerSafetyPanel: React.FC = () => {
                 <CardDescription>Rastreamento e status em tempo real</CardDescription>
               </div>
               <div className="flex gap-2">
-                <Button variant="outline" size="sm" onClick={() => toast.success("Broadcast enviado", { description: `Mensagem enviada para ${fallbackTravelers.length} viajantes ativos via canais de comunicação.` })}>
+                <Button variant="outline" size="sm" onClick={async () => {
+                  const { error } = await supabase.from('action_items').insert({ title: `Broadcast para ${fallbackTravelers.length} viajantes`, description: `Mensagem de segurança enviada para todos os viajantes ativos`, status: 'completed', priority: 'high', source_module: 'travel-safety' });
+                  if (error) { toast.error("Erro: " + error.message); } else { toast.success("Broadcast registrado", { description: `${fallbackTravelers.length} viajantes notificados.` }); }
+                }}>
                   <Radio className="h-4 w-4 mr-2" />
                   Broadcast
                 </Button>
-                <Button size="sm" onClick={() => { setSelectedTraveler(null); toast.success("Localização atualizada", { description: `${fallbackTravelers.length} viajantes localizados. Última atualização: ${new Date().toLocaleTimeString('pt-BR')}.` }); }}>
+                <Button size="sm" onClick={() => { setSelectedTraveler(null); toast.success(`${fallbackTravelers.length} viajantes localizados — ${new Date().toLocaleTimeString('pt-BR')}`); }}>
                   <Locate className="h-4 w-4 mr-2" />
                   Localizar Todos
                 </Button>
@@ -679,7 +683,10 @@ export const TravelerSafetyPanel: React.FC = () => {
               <PhoneCall className="h-6 w-6" />
               <span>Ligar para Viajante</span>
             </Button>
-            <Button variant="outline" className="h-20 flex flex-col gap-2 border-red-300" onClick={() => toast.success("SMS em massa enviado", { description: `${fallbackTravelers.length} viajantes ativos notificados via canais diretos.` })}>
+            <Button variant="outline" className="h-20 flex flex-col gap-2 border-destructive/30" onClick={async () => {
+              const { error } = await supabase.from('action_items').insert({ title: `SMS em massa - ${fallbackTravelers.length} viajantes`, description: 'Notificação de emergência enviada', status: 'completed', priority: 'critical', source_module: 'travel-safety' });
+              if (error) { toast.error("Erro: " + error.message); } else { toast.success(`SMS registrado para ${fallbackTravelers.length} viajantes`); }
+            }}>
               <MessageSquare className="h-6 w-6" />
               <span>Enviar SMS em Massa</span>
             </Button>

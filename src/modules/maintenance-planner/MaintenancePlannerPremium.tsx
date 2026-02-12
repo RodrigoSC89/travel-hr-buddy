@@ -132,7 +132,7 @@ function MaintenanceDashboard() {
               <Calendar className="h-4 w-4" />
               Agendar Inspeção
             </Button>
-            <Button className="w-full justify-start gap-2" variant="outline" onClick={() => toast.success("Selecione um equipamento na lista para ver a análise preditiva de falhas via IA.")}>
+            <Button className="w-full justify-start gap-2" variant="outline" onClick={() => { window.history.pushState({}, '', '/ai-control-tower'); window.dispatchEvent(new PopStateEvent('popstate')); }}>
               <Bot className="h-4 w-4" />
               Análise Preditiva com IA
             </Button>
