@@ -108,7 +108,7 @@ const IncidentInvestigationPage = () => {
         <Card>
           <CardContent className="p-4">
             <div className="flex items-center gap-3">
-              <AlertTriangle className="h-8 w-8 text-red-500" />
+              <AlertTriangle className="h-8 w-8 text-destructive" />
               <div>
                 <p className="text-sm text-muted-foreground">Em Investigação</p>
                 <p className="text-2xl font-bold">3</p>
@@ -119,7 +119,7 @@ const IncidentInvestigationPage = () => {
         <Card>
           <CardContent className="p-4">
             <div className="flex items-center gap-3">
-              <Clock className="h-8 w-8 text-yellow-500" />
+              <Clock className="h-8 w-8 text-warning" />
               <div>
                 <p className="text-sm text-muted-foreground">Tempo Médio</p>
                 <p className="text-2xl font-bold">4.2 dias</p>
@@ -130,7 +130,7 @@ const IncidentInvestigationPage = () => {
         <Card>
           <CardContent className="p-4">
             <div className="flex items-center gap-3">
-              <CheckCircle className="h-8 w-8 text-green-500" />
+              <CheckCircle className="h-8 w-8 text-success" />
               <div>
                 <p className="text-sm text-muted-foreground">Resolvidos 2024</p>
                 <p className="text-2xl font-bold">12</p>
@@ -141,7 +141,7 @@ const IncidentInvestigationPage = () => {
         <Card>
           <CardContent className="p-4">
             <div className="flex items-center gap-3">
-              <Target className="h-8 w-8 text-blue-500" />
+              <Target className="h-8 w-8 text-info" />
               <div>
                 <p className="text-sm text-muted-foreground">Ações Pendentes</p>
                 <p className="text-2xl font-bold">8</p>

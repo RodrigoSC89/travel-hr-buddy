@@ -150,10 +150,10 @@ export const UserFeedbackSystem: React.FC = () => {
 
   const getTypeIcon = (type: string) => {
     switch (type) {
-    case "bug": return <AlertTriangle className="h-4 w-4 text-red-500" />;
-    case "suggestion": return <Lightbulb className="h-4 w-4 text-blue-500" />;
-    case "improvement": return <TrendingUp className="h-4 w-4 text-green-500" />;
-    case "question": return <MessageSquare className="h-4 w-4 text-purple-500" />;
+    case "bug": return <AlertTriangle className="h-4 w-4 text-destructive" />;
+    case "suggestion": return <Lightbulb className="h-4 w-4 text-info" />;
+    case "improvement": return <TrendingUp className="h-4 w-4 text-success" />;
+    case "question": return <MessageSquare className="h-4 w-4 text-primary" />;
     default: return <MessageSquare className="h-4 w-4 text-muted-foreground" />;
     }
   };
@@ -163,9 +163,9 @@ export const UserFeedbackSystem: React.FC = () => {
     case "open":
       return <Badge variant="outline">Aberto</Badge>;
     case "in_progress":
-      return <Badge variant="secondary" className="bg-blue-500 text-azure-50">Em Análise</Badge>;
+      return <Badge variant="secondary" className="bg-info text-info-foreground">Em Análise</Badge>;
     case "resolved":
-      return <Badge variant="default" className="bg-green-500 text-azure-50">Resolvido</Badge>;
+      return <Badge variant="default" className="bg-success text-success-foreground">Resolvido</Badge>;
     case "closed":
       return <Badge variant="secondary">Fechado</Badge>;
     default:
@@ -228,7 +228,7 @@ export const UserFeedbackSystem: React.FC = () => {
         
         <Card className="p-4">
           <div className="flex items-center gap-2">
-            <CheckCircle className="h-5 w-5 text-green-500" />
+            <CheckCircle className="h-5 w-5 text-success" />
             <div>
               <p className="text-2xl font-bold">{feedbackStats.resolved}</p>
               <p className="text-sm text-muted-foreground">Resolvidos</p>
@@ -238,7 +238,7 @@ export const UserFeedbackSystem: React.FC = () => {
         
         <Card className="p-4">
           <div className="flex items-center gap-2">
-            <Star className="h-5 w-5 text-yellow-500" />
+            <Star className="h-5 w-5 text-warning" />
             <div>
               <p className="text-2xl font-bold">{feedbackStats.avgRating}</p>
               <p className="text-sm text-muted-foreground">Avaliação Média</p>
@@ -328,7 +328,7 @@ export const UserFeedbackSystem: React.FC = () => {
                       key={rating}
                       className={`h-6 w-6 cursor-pointer transition-colors ${
                         rating <= formData.rating 
-                          ? "text-yellow-500 fill-current" 
+                          ? "text-warning fill-current" 
                           : "text-muted-foreground"
                       }`}
                       onClick={() => setFormData(prev => ({ ...prev, rating }))}
@@ -404,7 +404,7 @@ export const UserFeedbackSystem: React.FC = () => {
                           <span>Criado: {new Date(feedback.created_at).toLocaleDateString("pt-BR")}</span>
                           {feedback.rating && (
                             <div className="flex items-center gap-1">
-                              <Star className="h-3 w-3 text-yellow-500 fill-current" />
+                              <Star className="h-3 w-3 text-warning fill-current" />
                               <span>{feedback.rating}</span>
                             </div>
                           )}

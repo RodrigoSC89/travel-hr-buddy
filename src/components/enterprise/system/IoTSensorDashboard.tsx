@@ -338,15 +338,15 @@ export function IoTSensorDashboard() {
                     <div className="relative h-2 bg-muted rounded-full overflow-hidden">
                       <div 
                         className={`absolute h-full rounded-full transition-all ${
-                          sensor.status === "critical" ? "bg-red-500" :
-                          sensor.status === "warning" ? "bg-yellow-500" :
-                          "bg-green-500"
+                          sensor.status === "critical" ? "bg-destructive" :
+                          sensor.status === "warning" ? "bg-warning" :
+                          "bg-success"
                         }`}
                         style={{ width: `${Math.min(valuePosition, 100)}%` }}
                       />
                       {/* Threshold markers */}
                       <div 
-                        className="absolute top-0 h-full w-0.5 bg-red-600"
+                        className="absolute top-0 h-full w-0.5 bg-destructive"
                         style={{ left: `${(sensor.maxThreshold / (sensor.maxThreshold * 1.2)) * 100}%` }}
                       />
                     </div>
