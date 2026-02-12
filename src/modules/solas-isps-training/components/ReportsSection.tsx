@@ -36,8 +36,8 @@ export default function ReportsSection() {
         <CardHeader><CardTitle className="flex items-center gap-2"><Calendar className="h-5 w-5" />Histórico de Relatórios</CardTitle></CardHeader>
         <CardContent>
           <div className="space-y-3">
-            {["Safety Drill Log - Janeiro 2024", "Compliance Report Q4 2023", "ISPS Audit Report - Dez 2023"].map((report, i) => (
-              <div key={i} className="flex items-center justify-between p-3 border rounded-lg">
+            {["Safety Drill Log - Janeiro 2024", "Compliance Report Q4 2023", "ISPS Audit Report - Dez 2023"].map((report) => (
+              <div key={report} className="flex items-center justify-between p-3 border rounded-lg">
                 <div className="flex items-center gap-3"><FileText className="h-5 w-5 text-muted-foreground" /><span>{report}</span></div>
                 <Button variant="outline" size="sm"><Download className="h-4 w-4" /></Button>
               </div>

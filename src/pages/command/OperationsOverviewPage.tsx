@@ -68,7 +68,7 @@ export default function OperationsOverviewPage() {
           <CardContent>
             <div className="space-y-3">
               {[...Array(4)].map((_, i) => (
-                <Skeleton key={i} className="h-24 w-full" />
+                <Skeleton key={`ops-overview-skel-${i}`} className="h-24 w-full" />
               ))}
             </div>
           </CardContent>

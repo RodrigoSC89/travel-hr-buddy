@@ -362,7 +362,7 @@ const ReportsCommandCenter = () => {
                   {isLoadingAnalytics ? (
                     <div className="space-y-3">
                       {[1, 2, 3].map((i) => (
-                        <Skeleton key={i} className="h-16 w-full" />
+                        <Skeleton key={`rpt-recent-skel-${i}`} className="h-16 w-full" />
                       ))}
                     </div>
                   ) : analyticsData?.recentReports.length === 0 ? (
@@ -417,7 +417,7 @@ const ReportsCommandCenter = () => {
                   {isLoadingAnalytics ? (
                     <div className="space-y-3">
                       {[1, 2, 3].map((i) => (
-                        <Skeleton key={i} className="h-10 w-full" />
+                        <Skeleton key={`rpt-insight-skel-${i}`} className="h-10 w-full" />
                       ))}
                     </div>
                   ) : Object.keys(analyticsData?.insightsByCategory || {}).length === 0 ? (
@@ -627,7 +627,7 @@ const ReportsCommandCenter = () => {
                   {isLoadingAnalytics ? (
                     <div className="space-y-3">
                       {[1, 2, 3].map((i) => (
-                        <Skeleton key={i} className="h-16 w-full" />
+                        <Skeleton key={`rpt-recent2-skel-${i}`} className="h-16 w-full" />
                       ))}
                     </div>
                   ) : analyticsData?.recentReports.length === 0 ? (
@@ -676,7 +676,7 @@ const ReportsCommandCenter = () => {
                   {isLoadingAnalytics ? (
                     <div className="space-y-3">
                       {[1, 2, 3].map((i) => (
-                        <Skeleton key={i} className="h-10 w-full" />
+                        <Skeleton key={`rpt-insight2-skel-${i}`} className="h-10 w-full" />
                       ))}
                     </div>
                   ) : Object.keys(analyticsData?.insightsByCategory || {}).length === 0 ? (

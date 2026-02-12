@@ -436,8 +436,8 @@ export function TravelApprovalWorkflow() {
                     <div>
                       <Label className="text-xs text-muted-foreground mb-2 block">Itens</Label>
                       <div className="space-y-2">
-                        {selectedRequest.items.map((item, i) => (
-                          <div key={i} className="flex items-center justify-between text-sm p-2 bg-muted/50 rounded-lg">
+                        {selectedRequest.items.map((item) => (
+                          <div key={item.description} className="flex items-center justify-between text-sm p-2 bg-muted/50 rounded-lg">
                             <div className="flex items-center gap-2">
                               {item.type === "flight" && <Plane className="h-4 w-4 text-blue-500" />}
                               {item.type === "hotel" && <Hotel className="h-4 w-4 text-amber-500" />}
@@ -463,8 +463,8 @@ export function TravelApprovalWorkflow() {
                     <div>
                       <Label className="text-xs text-muted-foreground mb-2 block">Fluxo de Aprovação</Label>
                       <div className="space-y-2">
-                        {selectedRequest.approvers.map((approver, i) => (
-                          <div key={i} className="flex items-center gap-3 p-2 bg-muted/30 rounded-lg">
+                        {selectedRequest.approvers.map((approver) => (
+                          <div key={approver.name} className="flex items-center gap-3 p-2 bg-muted/30 rounded-lg">
                             <div className={`p-1 rounded-full ${
                               approver.status === "approved" ? "bg-green-500" :
                               approver.status === "rejected" ? "bg-red-500" :

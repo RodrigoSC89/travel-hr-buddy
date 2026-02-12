@@ -68,8 +68,8 @@ export default function HRDashboard() {
                 { title: "Treinamento STCW", date: "05/02/2026", type: "training" },
                 { title: "Avaliação de Desempenho", date: "10/02/2026", type: "evaluation" },
                 { title: "Reunião de Equipe", date: "12/02/2026", type: "meeting" },
-              ].map((event, i) => (
-                <div key={i} className="flex items-center justify-between border-b pb-2 last:border-0">
+              ].map((event) => (
+                <div key={event.title} className="flex items-center justify-between border-b pb-2 last:border-0">
                   <div>
                     <p className="font-medium">{event.title}</p>
                     <div className="flex items-center gap-2 text-sm text-muted-foreground">

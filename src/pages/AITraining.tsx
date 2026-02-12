@@ -412,7 +412,7 @@ const AITraining: React.FC = () => {
       {/* Stats Cards */}
       {isLoading ? (
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-          {[...Array(4)].map((_, i) => <Skeleton key={i} className="h-28" />)}
+          {[...Array(4)].map((_, i) => <Skeleton key={`train-stat-skel-${i}`} className="h-28" />)}
         </div>
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
@@ -487,7 +487,7 @@ const AITraining: React.FC = () => {
         <TabsContent value="all" className="space-y-4 mt-4">
           {isLoading ? (
             <div className="space-y-3">
-              {[...Array(3)].map((_, i) => <Skeleton key={i} className="h-32" />)}
+              {[...Array(3)].map((_, i) => <Skeleton key={`train-sess-skel-${i}`} className="h-32" />)}
             </div>
           ) : sessions.length === 0 ? (
             <Card>

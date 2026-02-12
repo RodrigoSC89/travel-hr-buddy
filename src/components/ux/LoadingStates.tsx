@@ -212,7 +212,7 @@ export const TypingIndicator = () => (
   <div className="flex items-center gap-1 p-2">
     {[0, 1, 2].map((i) => (
       <motion.div
-        key={i}
+        key={`typing-dot-${i}`}
         className="h-2 w-2 bg-muted-foreground rounded-full"
         animate={{ y: [0, -8, 0] }}
         transition={{

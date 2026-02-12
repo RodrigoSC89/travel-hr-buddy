@@ -520,8 +520,8 @@ export const ESGAnalyticsBenchmark: React.FC = () => {
         {/* Predictive Tab */}
         <TabsContent value="predictive" className="space-y-6">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {predictiveInsights.map((insight, idx) => (
-              <Card key={idx} className={`border-l-4 ${
+            {predictiveInsights.map((insight) => (
+              <Card key={insight.title} className={`border-l-4 ${
                 insight.impact === "high" ? "border-l-red-500" :
                 insight.impact === "medium" ? "border-l-yellow-500" : "border-l-green-500"
               }`}>

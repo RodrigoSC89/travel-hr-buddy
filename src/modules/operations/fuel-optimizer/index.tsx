@@ -210,8 +210,8 @@ const FuelOptimizer = () => {
               <div>
                 <p className="text-sm font-medium mb-2">Recomendações AI:</p>
                 <ul className="space-y-2">
-                  {optimization.recommendations.map((rec: string, idx: number) => (
-                    <li key={idx} className="flex items-start gap-2 text-sm">
+                  {optimization.recommendations.map((rec: string) => (
+                    <li key={rec} className="flex items-start gap-2 text-sm">
                       <MapPin className="h-4 w-4 text-primary mt-0.5 flex-shrink-0" />
                       <span>{rec}</span>
                     </li>

@@ -25,15 +25,15 @@ export const TableSkeleton = ({ rows = 5 }: { rows?: number }) => (
     <div className="border-b p-4">
       <div className="flex gap-4">
         {[...Array(6)].map((_, i) => (
-          <Skeleton key={i} className="h-4 flex-1" />
+          <Skeleton key={`tbl-hdr-${i}`} className="h-4 flex-1" />
         ))}
       </div>
     </div>
     {[...Array(rows)].map((_, i) => (
-      <div key={i} className="border-b last:border-0 p-4">
+      <div key={`tbl-row-${i}`} className="border-b last:border-0 p-4">
         <div className="flex gap-4">
           {[...Array(6)].map((_, j) => (
-            <Skeleton key={j} className="h-4 flex-1" />
+            <Skeleton key={`tbl-cell-${i}-${j}`} className="h-4 flex-1" />
           ))}
         </div>
       </div>
@@ -53,7 +53,7 @@ export const DashboardSkeleton = () => (
     </div>
     <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
       {[...Array(4)].map((_, i) => (
-        <CardSkeleton key={i} />
+        <CardSkeleton key={`dash-card-${i}`} />
       ))}
     </div>
     <TableSkeleton rows={5} />
@@ -70,7 +70,7 @@ export const ChartSkeleton = ({ height = 300 }: { height?: number }) => (
     <div className="mt-4 flex items-end justify-between gap-2" style={{ height }}>
       {[...Array(12)].map((_, i) => (
         <Skeleton 
-          key={i} 
+          key={`chart-bar-${i}`} 
           className="flex-1 rounded-t" 
           style={{ height: `${[65, 40, 85, 55, 75, 30, 90, 50, 70, 35, 80, 45][i]}%` }} 
         />
@@ -83,7 +83,7 @@ export const ChartSkeleton = ({ height = 300 }: { height?: number }) => (
 export const FormSkeleton = ({ fields = 4 }: { fields?: number }) => (
   <div className="space-y-4">
     {[...Array(fields)].map((_, i) => (
-      <div key={i} className="space-y-2">
+      <div key={`form-field-${i}`} className="space-y-2">
         <Skeleton className="h-4 w-24" />
         <Skeleton className="h-10 w-full" />
       </div>
@@ -99,7 +99,7 @@ export const FormSkeleton = ({ fields = 4 }: { fields?: number }) => (
 export const ListSkeleton = ({ items = 5 }: { items?: number }) => (
   <div className="space-y-3">
     {[...Array(items)].map((_, i) => (
-      <div key={i} className="flex items-center gap-4 p-4 border rounded-lg">
+      <div key={`list-item-${i}`} className="flex items-center gap-4 p-4 border rounded-lg">
         <Skeleton className="h-10 w-10 rounded-full" />
         <div className="flex-1 space-y-2">
           <Skeleton className="h-4 w-48" />
@@ -115,7 +115,7 @@ export const ListSkeleton = ({ items = 5 }: { items?: number }) => (
 export const NavSkeleton = () => (
   <div className="space-y-2">
     {[...Array(8)].map((_, i) => (
-      <div key={i} className="flex items-center gap-3 p-2">
+      <div key={`nav-item-${i}`} className="flex items-center gap-3 p-2">
         <Skeleton className="h-5 w-5" />
         <Skeleton className="h-4 flex-1" />
       </div>
@@ -138,7 +138,7 @@ export const ProfileSkeleton = () => (
 export const StatsGridSkeleton = ({ count = 4 }: { count?: number }) => (
   <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
     {[...Array(count)].map((_, i) => (
-      <CardSkeleton key={i} />
+      <CardSkeleton key={`stats-card-${i}`} />
     ))}
   </div>
 );

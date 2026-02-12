@@ -48,7 +48,7 @@ export const SkeletonTable = memo(({ rows = 5 }: { rows?: number }) => (
     </div>
     {/* Rows */}
     {Array.from({ length: rows }).map((_, i) => (
-      <div key={i} className="border-b border-border/30 p-4 last:border-0">
+      <div key={`skel-tbl-row-${i}`} className="border-b border-border/30 p-4 last:border-0">
         <div className="flex gap-4 items-center">
           <SkeletonBase className="h-4 w-32" />
           <SkeletonBase className="h-4 w-24" />
@@ -77,7 +77,7 @@ SkeletonChart.displayName = "SkeletonChart";
 export const SkeletonList = memo(({ items = 4 }: { items?: number }) => (
   <div className="space-y-3">
     {Array.from({ length: items }).map((_, i) => (
-      <div key={i} className="flex items-center gap-4 p-4 rounded-lg border border-border/30 bg-card">
+      <div key={`skel-list-${i}`} className="flex items-center gap-4 p-4 rounded-lg border border-border/30 bg-card">
         <SkeletonBase className="h-10 w-10 rounded-full" />
         <div className="flex-1 space-y-2">
           <SkeletonBase className="h-4 w-3/4" />
@@ -108,7 +108,7 @@ export const SkeletonDashboard = memo(() => (
     {/* Metrics Grid */}
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
       {Array.from({ length: 4 }).map((_, i) => (
-        <SkeletonMetricCard key={i} />
+        <SkeletonMetricCard key={`skel-metric-${i}`} />
       ))}
     </div>
     
@@ -139,7 +139,7 @@ export const SkeletonModule = memo(() => (
     {/* Content Grid */}
     <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
       {Array.from({ length: 3 }).map((_, i) => (
-        <SkeletonMetricCard key={i} />
+        <SkeletonMetricCard key={`skel-mod-${i}`} />
       ))}
     </div>
     
@@ -164,7 +164,7 @@ export const SkeletonSidebar = memo(() => (
     {/* Nav Items */}
     <div className="space-y-2 pt-4">
       {Array.from({ length: 8 }).map((_, i) => (
-        <div key={i} className="flex items-center gap-3 p-3 rounded-lg">
+        <div key={`skel-nav-${i}`} className="flex items-center gap-3 p-3 rounded-lg">
           <SkeletonBase className="h-5 w-5 rounded" />
           <SkeletonBase className="h-4 w-28" />
         </div>
@@ -181,7 +181,7 @@ export const SkeletonForm = memo(({ fields = 4 }: { fields?: number }) => (
     
     <div className="space-y-4">
       {Array.from({ length: fields }).map((_, i) => (
-        <div key={i} className="space-y-2">
+        <div key={`skel-field-${i}`} className="space-y-2">
           <SkeletonBase className="h-4 w-24" />
           <SkeletonBase className="h-10 w-full rounded-lg" />
         </div>

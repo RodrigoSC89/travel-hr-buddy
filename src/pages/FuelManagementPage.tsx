@@ -872,8 +872,8 @@ export default function FuelManagementPage() {
                     <CardContent className="space-y-3">
                       {prediction.optimization_tips && prediction.optimization_tips.length > 0 ? (
                         <ul className="space-y-2">
-                          {prediction.optimization_tips.map((tip, i) => (
-                            <li key={i} className="flex items-start gap-2 text-sm">
+                          {prediction.optimization_tips.map((tip) => (
+                            <li key={tip} className="flex items-start gap-2 text-sm">
                               <Zap className="h-4 w-4 text-primary mt-0.5 flex-shrink-0" />
                               <span>{tip}</span>
                             </li>

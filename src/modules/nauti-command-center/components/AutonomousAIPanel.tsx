@@ -151,8 +151,8 @@ export function AutonomousAIPanel() {
               <div className="space-y-2">
                 <h4 className="text-sm font-semibold">Dados Analisados</h4>
                 <div className="grid grid-cols-2 gap-2">
-                  {decision.justification.dataPoints.map((dp, i) => (
-                    <div key={i} className="bg-muted/50 rounded-md p-2 text-sm">
+                  {decision.justification.dataPoints.map((dp) => (
+                    <div key={dp.metric} className="bg-muted/50 rounded-md p-2 text-sm">
                       <span className="text-muted-foreground">{dp.metric}:</span>{' '}
                       <span className="font-mono font-medium">{dp.value}</span>
                       {dp.trend && (
@@ -195,8 +195,8 @@ export function AutonomousAIPanel() {
             {decision.justification.alternatives && decision.justification.alternatives.length > 0 && (
               <div className="space-y-2">
                 <h4 className="text-sm font-semibold">Alternativas Consideradas</h4>
-                {decision.justification.alternatives.map((alt, i) => (
-                  <div key={i} className="bg-muted/30 rounded-md p-2 text-sm">
+                {decision.justification.alternatives.map((alt) => (
+                  <div key={alt.action} className="bg-muted/30 rounded-md p-2 text-sm">
                     <p className="font-medium">{alt.action}</p>
                     <p className="text-muted-foreground text-xs">
                       Confiança: {(alt.confidence * 100).toFixed(0)}%

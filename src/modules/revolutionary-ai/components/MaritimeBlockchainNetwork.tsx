@@ -146,7 +146,7 @@ export function MaritimeBlockchainNetwork() {
                 <ScrollArea className="h-[400px]">
                   <div className="space-y-3">
                     {isLoading ? (
-                      Array.from({ length: 3 }).map((_, i) => <Skeleton key={i} className="h-24 w-full" />)
+                      Array.from({ length: 3 }).map((_, i) => <Skeleton key={`contract-skel-${i}`} className="h-24 w-full" />)
                     ) : contracts.length === 0 ? (
                       <p className="text-center text-muted-foreground py-8">Nenhum contrato registrado</p>
                     ) : contracts.map((contract: SmartContract, i: number) => (
@@ -252,7 +252,7 @@ contract CharterParty {
             <CardContent>
               <div className="space-y-3">
                 {isLoading ? (
-                  Array.from({ length: 3 }).map((_, i) => <Skeleton key={i} className="h-16 w-full" />)
+                  Array.from({ length: 3 }).map((_, i) => <Skeleton key={`cert-skel-${i}`} className="h-16 w-full" />)
                 ) : certificates.length === 0 ? (
                   <p className="text-center text-muted-foreground py-8">Nenhum certificado registrado</p>
                 ) : certificates.map((cert: BlockchainCertificate, i: number) => (

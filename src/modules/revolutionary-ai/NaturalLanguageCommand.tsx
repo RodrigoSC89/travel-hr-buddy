@@ -293,8 +293,8 @@ export function NaturalLanguageCommand() {
           </CardHeader>
           <CardContent>
             <div className="space-y-2">
-              {commandHistory.slice(0, 5).map((item, i) => (
-                <div key={i} className="flex items-start gap-2 text-xs p-2 rounded bg-muted/30">
+              {commandHistory.slice(0, 5).map((item) => (
+                <div key={item.command} className="flex items-start gap-2 text-xs p-2 rounded bg-muted/30">
                   {item.success ? (
                     <CheckCircle className="h-4 w-4 text-success shrink-0 mt-0.5" />
                   ) : (

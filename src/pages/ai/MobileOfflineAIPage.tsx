@@ -105,8 +105,8 @@ export default function MobileOfflineAIPage() {
               { name: 'Dados de Tripulação', size: '320 MB', synced: 100, lastSync: '2 min' },
               { name: 'Manutenção & Jobs', size: '280 MB', synced: 95, lastSync: '10 min' },
               { name: 'Certificados', size: '180 MB', synced: 100, lastSync: '1 hr' },
-            ].map((module, idx) => (
-              <div key={idx} className="p-4 rounded-lg border">
+            ].map((module) => (
+              <div key={module.name} className="p-4 rounded-lg border">
                 <div className="flex items-center justify-between mb-2">
                   <div className="flex items-center gap-2">
                     {module.synced === 100 ? (
@@ -145,8 +145,8 @@ export default function MobileOfflineAIPage() {
                 { feature: 'Comandos de Voz', available: true },
                 { feature: 'Relatórios PDF', available: true },
                 { feature: 'Chat com IA', available: false },
-              ].map((item, idx) => (
-                <div key={idx} className="flex items-center justify-between p-2 rounded-lg bg-muted/50">
+              ].map((item) => (
+                <div key={item.feature} className="flex items-center justify-between p-2 rounded-lg bg-muted/50">
                   <span>{item.feature}</span>
                   {item.available ? (
                     <Badge variant="default" className="bg-emerald-500">Disponível</Badge>

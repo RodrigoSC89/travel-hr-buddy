@@ -245,7 +245,7 @@ function TrendLine({ label, data, color }: { label: string; data: number[]; colo
       <div className="flex-1 flex items-center gap-1">
         {data.map((value, i) => (
           <div
-            key={i}
+            key={`spark-${label}-${i}`}
             className={cn("flex-1 rounded", `bg-${color}-500`)}
             style={{ 
               height: `${((value - min) / (max - min) * 20) + 8}px`,
@@ -676,8 +676,8 @@ function WellnessView({ wellness }: { wellness: WellnessAnalysis }) {
             <div>
               <p className="text-sm font-medium text-green-400 mb-2">✅ Positivos</p>
               <ul className="space-y-1 text-sm">
-                {wellness.positiveIndicators.map((item, i) => (
-                  <li key={i}>• {item}</li>
+                {wellness.positiveIndicators.map((item) => (
+                  <li key={item}>• {item}</li>
                 ))}
               </ul>
             </div>
@@ -686,8 +686,8 @@ function WellnessView({ wellness }: { wellness: WellnessAnalysis }) {
               <div>
                 <p className="text-sm font-medium text-orange-400 mb-2">⚠️ Preocupações</p>
                 <ul className="space-y-1 text-sm">
-                  {wellness.concerns.map((item, i) => (
-                    <li key={i}>• {item}</li>
+                  {wellness.concerns.map((item) => (
+                    <li key={item}>• {item}</li>
                   ))}
                 </ul>
               </div>

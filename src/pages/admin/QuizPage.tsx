@@ -285,7 +285,7 @@ export default function QuizPage() {
               {questions.map((q, idx) => {
                 const isCorrect = q.userAnswer === q.correct_answer;
                 return (
-                  <div key={idx} className="border rounded-lg p-4">
+                  <div key={`review-q-${idx}-${q.question.slice(0, 15)}`} className="border rounded-lg p-4">
                     <div className="flex items-start gap-2 mb-2">
                       {isCorrect ? <CheckCircle2 className="h-5 w-5 text-green-500 mt-0.5" /> : <XCircle className="h-5 w-5 text-red-500 mt-0.5" />}
                       <div className="flex-1">
@@ -337,7 +337,7 @@ export default function QuizPage() {
             <RadioGroup value={selectedAnswer} onValueChange={setSelectedAnswer}>
               <div className="space-y-3">
                 {currentQuestion?.options.map((option, idx) => (
-                  <div key={idx} className="flex items-center space-x-2 border rounded-lg p-4 hover:bg-accent cursor-pointer">
+                  <div key={option} className="flex items-center space-x-2 border rounded-lg p-4 hover:bg-accent cursor-pointer">
                     <RadioGroupItem value={option} id={`option-${idx}`} />
                     <Label htmlFor={`option-${idx}`} className="flex-1 cursor-pointer">{option}</Label>
                   </div>

@@ -447,8 +447,8 @@ export const FMEADPTrialsIntegration: React.FC = () => {
                     <div>
                       <h5 className="text-sm font-medium mb-2">Condições de Gatilho:</h5>
                       <ul className="space-y-1">
-                        {level.thresholds.map((threshold, idx) => (
-                          <li key={idx} className="flex items-start gap-2 text-sm">
+                        {level.thresholds.map((threshold) => (
+                          <li key={threshold} className="flex items-start gap-2 text-sm">
                             <AlertTriangle className="h-4 w-4 mt-0.5 flex-shrink-0" />
                             {threshold}
                           </li>
@@ -458,8 +458,8 @@ export const FMEADPTrialsIntegration: React.FC = () => {
                     <div>
                       <h5 className="text-sm font-medium mb-2">Ações Requeridas:</h5>
                       <ul className="space-y-1">
-                        {level.actions.map((action, idx) => (
-                          <li key={idx} className="flex items-start gap-2 text-sm">
+                        {level.actions.map((action) => (
+                          <li key={action} className="flex items-start gap-2 text-sm">
                             <CheckCircle className="h-4 w-4 mt-0.5 flex-shrink-0" />
                             {action}
                           </li>

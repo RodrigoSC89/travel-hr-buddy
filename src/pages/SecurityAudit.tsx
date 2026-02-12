@@ -535,8 +535,8 @@ export default function SecurityAudit() {
                       { name: "Minimização de Dados", status: true },
                       { name: "Criptografia em Repouso", status: true },
                       { name: "Logs de Auditoria", status: true },
-                    ].map((item, i) => (
-                      <div key={i} className="flex items-center justify-between">
+                    ].map((item) => (
+                      <div key={item.name} className="flex items-center justify-between">
                         <span className="text-sm">{item.name}</span>
                         {item.status ? (
                           <CheckCircle2 className="h-5 w-5 text-success" />
@@ -564,8 +564,8 @@ export default function SecurityAudit() {
                       { name: "XXE (XML External Entities)", status: true },
                       { name: "Controle de Acesso", status: true },
                       { name: "Segurança de Sessão", status: true },
-                    ].map((item, i) => (
-                      <div key={i} className="flex items-center justify-between">
+                    ].map((item) => (
+                      <div key={item.name} className="flex items-center justify-between">
                         <span className="text-sm">{item.name}</span>
                         {item.status ? (
                           <CheckCircle2 className="h-5 w-5 text-success" />

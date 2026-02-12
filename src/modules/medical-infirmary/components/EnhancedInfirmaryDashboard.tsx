@@ -214,7 +214,7 @@ export default function EnhancedInfirmaryDashboard() {
       <div className="space-y-6">
         <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
           {[...Array(5)].map((_, i) => (
-            <Skeleton key={i} className="h-32" />
+            <Skeleton key={`infirmary-skel-${i}`} className="h-32" />
           ))}
         </div>
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
@@ -357,7 +357,7 @@ export default function EnhancedInfirmaryDashboard() {
             <div className="h-72 overflow-y-auto space-y-3 mb-4 p-3 bg-background/50 rounded-lg border">
               {chatHistory.map((msg, i) => (
                 <motion.div
-                  key={i}
+                  key={`infirmary-msg-${i}-${msg.role}`}
                   initial={{ opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}
                   className={`flex ${msg.role === "user" ? "justify-end" : "justify-start"}`}

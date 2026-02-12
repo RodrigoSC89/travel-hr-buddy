@@ -254,8 +254,8 @@ export default function CIIMonitorDashboard() {
         </CardHeader>
         <CardContent>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            {recommendations.map((rec, i) => (
-              <div key={i} className="p-4 bg-background rounded-lg border">
+            {recommendations.map((rec) => (
+              <div key={rec.title} className="p-4 bg-background rounded-lg border">
                 <div className="flex items-center justify-between mb-2">
                   <span className="font-medium">{rec.title}</span>
                   <Badge variant={

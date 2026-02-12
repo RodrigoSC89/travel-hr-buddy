@@ -369,8 +369,8 @@ export default function AIOperationsCenter() {
                                     </div>
                                     <div>
                                       <h4 className="text-sm font-medium mb-2">Dados Utilizados</h4>
-                                      {log.explanation.dataPoints.map((dp, i) => (
-                                        <div key={i} className="flex justify-between text-sm mb-1">
+                                      {log.explanation.dataPoints.map((dp) => (
+                                        <div key={dp.metric} className="flex justify-between text-sm mb-1">
                                           <span className="text-muted-foreground">{dp.metric}</span>
                                           <span className="font-medium">{String(dp.value)}</span>
                                         </div>
