@@ -134,9 +134,9 @@ export default function DPAIAnalyzer() {
   };
 
   const getStatusColor = (confidence: number) => {
-    if (confidence >= 95) return "text-emerald-500";
-    if (confidence >= 80) return "text-amber-500";
-    return "text-red-500";
+    if (confidence >= 95) return "text-success";
+    if (confidence >= 80) return "text-warning";
+    return "text-destructive";
   };
 
   const getStatusBadge = (status: string) => {
@@ -181,7 +181,7 @@ export default function DPAIAnalyzer() {
           <div className="p-4 rounded-lg bg-muted/50">
             <div className="flex items-center justify-between mb-2">
               <span className="text-sm text-muted-foreground">Thrusters</span>
-              <Activity className="h-4 w-4 text-blue-500" />
+              <Activity className="h-4 w-4 text-info" />
             </div>
             <p className="text-2xl font-bold">
               {telemetry.activeThrusters}
@@ -196,7 +196,7 @@ export default function DPAIAnalyzer() {
           <div className="p-4 rounded-lg bg-muted/50">
             <div className="flex items-center justify-between mb-2">
               <span className="text-sm text-muted-foreground">Potência</span>
-              <Zap className="h-4 w-4 text-amber-500" />
+              <Zap className="h-4 w-4 text-warning" />
             </div>
             <p className="text-2xl font-bold">
               {telemetry.totalPower.toFixed(1)}
@@ -207,7 +207,7 @@ export default function DPAIAnalyzer() {
           <div className="p-4 rounded-lg bg-muted/50">
             <div className="flex items-center justify-between mb-2">
               <span className="text-sm text-muted-foreground">Bus Status</span>
-              <Shield className="h-4 w-4 text-emerald-500" />
+              <Shield className="h-4 w-4 text-success" />
             </div>
             <div className="flex items-center gap-2">
               <span className="text-sm">A:</span>
@@ -220,7 +220,7 @@ export default function DPAIAnalyzer() {
           <div className="p-4 rounded-lg bg-muted/50">
             <div className="flex items-center justify-between mb-2">
               <span className="text-sm text-muted-foreground">Gyro Drift</span>
-              <TrendingUp className="h-4 w-4 text-purple-500" />
+              <TrendingUp className="h-4 w-4 text-accent-foreground" />
             </div>
             <p className="text-2xl font-bold">
               {telemetry.gyroDrift}
@@ -304,7 +304,7 @@ export default function DPAIAnalyzer() {
                 <div className="flex flex-col items-center justify-center py-8 space-y-4">
                   <div className="relative">
                     <Brain className="h-12 w-12 text-primary animate-pulse" />
-                    <Sparkles className="h-6 w-6 text-amber-500 absolute -top-1 -right-1 animate-bounce" />
+                    <Sparkles className="h-6 w-6 text-warning absolute -top-1 -right-1 animate-bounce" />
                   </div>
                   <p className="text-muted-foreground">
                     Analisando dados de telemetria com IA...

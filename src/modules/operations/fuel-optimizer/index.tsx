@@ -91,7 +91,7 @@ const FuelOptimizer = () => {
             <CardTitle className="text-sm font-medium">Economia Total</CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-green-600">{totalSavings}L</div>
+            <div className="text-2xl font-bold text-success">{totalSavings}L</div>
             <p className="text-xs text-muted-foreground">Últimos 30 dias</p>
           </CardContent>
         </Card>
@@ -117,7 +117,7 @@ const FuelOptimizer = () => {
             <CardTitle className="text-sm font-medium">Alertas Ativos</CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-amber-600">2</div>
+            <div className="text-2xl font-bold text-warning">2</div>
           </CardContent>
         </Card>
       </div>
@@ -194,14 +194,14 @@ const FuelOptimizer = () => {
                 </div>
                 <div>
                   <p className="text-sm text-muted-foreground mb-1">Consumo Otimizado</p>
-                  <p className="text-2xl font-bold text-green-600">{optimization.optimized_consumption}L</p>
+                  <p className="text-2xl font-bold text-success">{optimization.optimized_consumption}L</p>
                 </div>
               </div>
 
-              <div className="bg-green-50 dark:bg-green-950 border border-green-200 dark:border-green-800 rounded-lg p-4">
+              <div className="bg-success/10 border border-success/20 rounded-lg p-4">
                 <div className="flex items-center gap-2 mb-2">
-                  <TrendingDown className="h-5 w-5 text-green-600" />
-                  <span className="font-semibold text-green-600">
+                  <TrendingDown className="h-5 w-5 text-success" />
+                  <span className="font-semibold text-success">
                     Economia: {optimization.savings_liters}L ({optimization.savings_percentage}%)
                   </span>
                 </div>
@@ -240,7 +240,7 @@ const FuelOptimizer = () => {
                   <p className="text-sm text-muted-foreground">
                     Estimado: {item.estimated_consumption}L | Real: {item.actual_consumption}L
                   </p>
-                  <Badge className={item.savings >= 0 ? "bg-green-500" : "bg-red-500"}>
+                  <Badge className={item.savings >= 0 ? "bg-success" : "bg-destructive"}>
                     {item.savings >= 0 ? "+" : ""}{item.savings}L
                   </Badge>
                 </div>

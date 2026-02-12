@@ -165,7 +165,7 @@ function FleetStatusContent() {
         <Card>
           <CardHeader className="pb-2">
             <CardTitle className="text-sm flex items-center gap-2">
-              <Gauge className="h-4 w-4 text-blue-500" />
+              <Gauge className="h-4 w-4 text-info" />
               RPM Médio
             </CardTitle>
           </CardHeader>
@@ -179,7 +179,7 @@ function FleetStatusContent() {
         <Card>
           <CardHeader className="pb-2">
             <CardTitle className="text-sm flex items-center gap-2">
-              <Navigation className="h-4 w-4 text-green-500" />
+              <Navigation className="h-4 w-4 text-success" />
               Velocidade Média
             </CardTitle>
           </CardHeader>
@@ -199,14 +199,14 @@ function FuelManagementContent() {
   return (
     <div className="space-y-6">
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-        <Card className="border-l-4 border-l-amber-500">
+        <Card className="border-l-4 border-l-warning">
           <CardContent className="p-4">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-xs text-muted-foreground">Consumo Diário</p>
                 <p className="text-2xl font-bold">12.4 ton</p>
               </div>
-              <Fuel className="h-8 w-8 text-amber-500 opacity-60" />
+              <Fuel className="h-8 w-8 text-warning opacity-60" />
             </div>
           </CardContent>
         </Card>
