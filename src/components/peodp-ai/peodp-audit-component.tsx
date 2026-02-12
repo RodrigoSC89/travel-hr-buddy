@@ -235,18 +235,18 @@ export function PEODPAuditComponent() {
                 </CardHeader>
                 <CardContent>
                   <div className="space-y-2">
-                    {auditoria.resultado.map((item, index) => (
+                    {auditoria.resultado.map((item) => (
                       <div
-                        key={index}
+                        key={item.item}
                         className="flex items-start gap-3 p-3 rounded-lg border"
                       >
                         <div className="mt-0.5">
                           {item.cumprimento === "OK" ? (
-                            <CheckCircle2 className="h-5 w-5 text-green-600" />
+                            <CheckCircle2 className="h-5 w-5 text-success" />
                           ) : item.cumprimento === "Não Conforme" ? (
-                            <AlertCircle className="h-5 w-5 text-red-600" />
+                            <AlertCircle className="h-5 w-5 text-destructive" />
                           ) : (
-                            <AlertCircle className="h-5 w-5 text-yellow-600" />
+                            <AlertCircle className="h-5 w-5 text-warning" />
                           )}
                         </div>
                         <div className="flex-1">
@@ -284,8 +284,8 @@ export function PEODPAuditComponent() {
                   </CardHeader>
                   <CardContent>
                     <ul className="space-y-2">
-                      {recomendacoes.map((rec, index) => (
-                        <li key={index} className="flex gap-2">
+                      {recomendacoes.map((rec, recIdx) => (
+                        <li key={`rec-${recIdx}-${rec.slice(0,20)}`} className="flex gap-2">
                           <span className="text-muted-foreground">•</span>
                           <span>{rec}</span>
                         </li>

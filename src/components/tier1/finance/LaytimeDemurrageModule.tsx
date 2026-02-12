@@ -252,8 +252,8 @@ function NORTimeline() {
       </CardHeader>
       <CardContent>
         <div className="space-y-3">
-          {norEvents.map((event, index) => (
-            <div key={index} className="flex items-center gap-3">
+          {norEvents.map((event) => (
+            <div key={event.label} className="flex items-center gap-3">
               <div className={`h-3 w-3 rounded-full ${
                 event.status === 'completed' ? 'bg-success' : 
                 event.status === 'demurrage' ? 'bg-destructive' : 'bg-muted'

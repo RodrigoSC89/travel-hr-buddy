@@ -413,8 +413,8 @@ export const GamificationSystem: React.FC = () => {
               { title: "Upgrade de Equipamento", points: 3000, description: "Melhore seu setup de trabalho", available: true },
               { title: "Estacionamento VIP", points: 1000, description: "Vaga exclusiva por 1 mês", available: true },
               { title: "Happy Hour da Equipe", points: 800, description: "Organize um happy hour para sua equipe", available: true }
-            ].map((reward, index) => (
-              <Card key={index}>
+            ].map((reward) => (
+              <Card key={reward.title}>
                 <CardContent className="p-4 text-center">
                   <Award className="h-12 w-12 mx-auto text-primary mb-3" />
                   <h3 className="font-semibold mb-2">{reward.title}</h3>

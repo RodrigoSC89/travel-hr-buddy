@@ -242,8 +242,8 @@ const PredictiveAnalytics: React.FC = () => {
                   <div className="space-y-2">
                     <div className="text-sm font-medium">Ações Recomendadas:</div>
                     <ul className="text-xs space-y-1">
-                      {prediction.actions.map((action, index) => (
-                        <li key={index} className="flex items-center gap-2">
+                      {prediction.actions.map((action) => (
+                        <li key={action} className="flex items-center gap-2">
                           <div className="w-1 h-1 bg-primary rounded-full" />
                           {action}
                         </li>
@@ -299,8 +299,8 @@ const PredictiveAnalytics: React.FC = () => {
 
         <TabsContent value="performance" className="space-y-4">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-            {performanceData.map((item, index) => (
-              <Card key={index}>
+            {performanceData.map((item) => (
+              <Card key={item.category}>
                 <CardHeader>
                   <div className="flex items-center justify-between">
                     <CardTitle className="text-lg">{item.category}</CardTitle>

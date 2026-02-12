@@ -355,8 +355,8 @@ export const ARInterface: React.FC = () => {
             <div>
               <h4 className="font-medium mb-2">Ações Disponíveis:</h4>
               <div className="flex flex-wrap gap-2">
-                {selectedObject.actions.map((action, index) => (
-                  <Button key={index} variant="outline" size="sm">
+                {selectedObject.actions.map((action) => (
+                  <Button key={action} variant="outline" size="sm">
                     {action}
                   </Button>
                 ))}
@@ -513,8 +513,8 @@ export const ARInterface: React.FC = () => {
                   { title: "Manutenção de Motores", duration: "45 min", level: "Intermediário" },
                   { title: "Navegação Avançada", duration: "60 min", level: "Avançado" },
                   { title: "Procedimentos de Emergência", duration: "40 min", level: "Intermediário" }
-                ].map((module, index) => (
-                  <div key={index} className="flex items-center justify-between p-3 border rounded-lg">
+                ].map((module) => (
+                  <div key={module.title} className="flex items-center justify-between p-3 border rounded-lg">
                     <div>
                       <div className="font-medium">{module.title}</div>
                       <div className="text-sm text-muted-foreground">
@@ -541,8 +541,8 @@ export const ARInterface: React.FC = () => {
                     { name: "Manutenção Motores", progress: 65, status: "in_progress" },
                     { name: "Navegação", progress: 0, status: "not_started" },
                     { name: "Emergências", progress: 25, status: "in_progress" }
-                  ].map((course, index) => (
-                    <div key={index} className="space-y-2">
+                  ].map((course) => (
+                    <div key={course.name} className="space-y-2">
                       <div className="flex justify-between items-center">
                         <span className="text-sm font-medium">{course.name}</span>
                         <div className="flex items-center gap-2">
