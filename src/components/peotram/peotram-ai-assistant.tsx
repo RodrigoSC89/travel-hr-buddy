@@ -390,8 +390,8 @@ Por favor, tente novamente ou consulte:
                               <div className="mt-2 pt-2 border-t border-border/50">
                                 <p className="text-xs text-muted-foreground mb-1">Referências:</p>
                                 <div className="flex flex-wrap gap-1">
-                                  {message.references.map((ref, i) => (
-                                    <Badge key={i} variant="outline" className="text-xs">{ref}</Badge>
+                                  {message.references.map((ref) => (
+                                    <Badge key={ref} variant="outline" className="text-xs">{ref}</Badge>
                                   ))}
                                 </div>
                               </div>

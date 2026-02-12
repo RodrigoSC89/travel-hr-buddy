@@ -86,11 +86,11 @@ export function HRAdmissionPipeline() {
         </div>
         <div className="grid grid-cols-2 md:grid-cols-6 gap-2">
           {[1, 2, 3, 4, 5, 6].map(i => (
-            <Skeleton key={i} className="h-16" />
+            <Skeleton key={`stat-skeleton-${i}`} className="h-16" />
           ))}
         </div>
         {[1, 2, 3].map(i => (
-          <Skeleton key={i} className="h-32" />
+          <Skeleton key={`card-skeleton-${i}`} className="h-32" />
         ))}
       </div>
     );

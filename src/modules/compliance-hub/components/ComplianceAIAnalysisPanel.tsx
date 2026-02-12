@@ -147,8 +147,8 @@ export function ComplianceAIAnalysisPanel({
                     <Target className="h-4 w-4 text-primary" />
                     Áreas de Risco
                   </h4>
-                  {analysis.riskAreas.map((area, index) => (
-                    <div key={index} className="p-3 rounded-lg bg-muted/50 space-y-2">
+                  {analysis.riskAreas.map((area) => (
+                    <div key={area.area} className="p-3 rounded-lg bg-muted/50 space-y-2">
                       <div className="flex items-center justify-between">
                         <span className="font-medium text-sm">{area.area}</span>
                         <div className="flex items-center gap-2">
@@ -169,8 +169,8 @@ export function ComplianceAIAnalysisPanel({
                       <AlertTriangle className="h-4 w-4 text-yellow-500" />
                       Lacunas de Conformidade
                     </h4>
-                    {analysis.complianceGaps.slice(0, 3).map((gap, index) => (
-                      <div key={index} className="p-3 rounded-lg border border-yellow-500/20 bg-yellow-500/5">
+                    {analysis.complianceGaps.slice(0, 3).map((gap) => (
+                      <div key={gap.regulation} className="p-3 rounded-lg border border-yellow-500/20 bg-yellow-500/5">
                         <div className="flex items-center justify-between mb-1">
                           <span className="font-medium text-sm">{gap.regulation}</span>
                           <Badge variant="outline" className={
@@ -199,8 +199,8 @@ export function ComplianceAIAnalysisPanel({
           </TabsContent>
 
           <TabsContent value="risks" className="space-y-4">
-            {analysis?.predictedIssues.map((issue, index) => (
-              <div key={index} className="p-4 rounded-lg border">
+            {analysis?.predictedIssues.map((issue) => (
+              <div key={issue.issue} className="p-4 rounded-lg border">
                 <div className="flex items-start gap-3">
                   <div className="p-2 rounded-lg bg-orange-500/10">
                     <Zap className="h-4 w-4 text-orange-500" />
@@ -228,8 +228,8 @@ export function ComplianceAIAnalysisPanel({
           </TabsContent>
 
           <TabsContent value="readiness" className="space-y-4">
-            {analysis?.auditReadiness.map((audit, index) => (
-              <div key={index} className="p-4 rounded-lg border">
+            {analysis?.auditReadiness.map((audit) => (
+              <div key={audit.type} className="p-4 rounded-lg border">
                 <div className="flex items-center justify-between mb-3">
                   <span className="font-medium">{audit.type}</span>
                   <div className="flex items-center gap-2">
@@ -248,8 +248,8 @@ export function ComplianceAIAnalysisPanel({
                   <div className="mb-3">
                     <span className="text-xs text-muted-foreground">Áreas a melhorar:</span>
                     <div className="flex flex-wrap gap-1 mt-1">
-                      {audit.weakAreas.map((area, i) => (
-                        <Badge key={i} variant="outline" className="text-xs">
+                      {audit.weakAreas.map((area) => (
+                        <Badge key={area} variant="outline" className="text-xs">
                           {area}
                         </Badge>
                       ))}
@@ -258,8 +258,8 @@ export function ComplianceAIAnalysisPanel({
                 )}
                 
                 <div className="space-y-1">
-                  {audit.recommendations.map((rec, i) => (
-                    <div key={i} className="flex items-start gap-2 text-xs">
+                  {audit.recommendations.map((rec) => (
+                    <div key={rec} className="flex items-start gap-2 text-xs">
                       <Lightbulb className="h-3 w-3 text-yellow-500 mt-0.5 flex-shrink-0" />
                       <span className="text-muted-foreground">{rec}</span>
                     </div>
@@ -295,9 +295,9 @@ export function ComplianceAIAnalysisPanel({
                     </div>
                   </div>
                 ) : (
-                  conversation.map((msg, index) => (
+                  conversation.map((msg, msgIndex) => (
                     <div
-                      key={index}
+                      key={`${msg.role}-${msgIndex}`}
                       className={`p-3 rounded-lg ${
                         msg.role === 'user'
                           ? 'bg-primary/10 ml-8'

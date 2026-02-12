@@ -375,9 +375,9 @@ export function SeaTimeCalculator() {
 
                             {/* Certificate eligibility */}
                             <div className="flex items-center gap-2 mt-3 flex-wrap">
-                              {crew.certificates.map((cert, idx) => (
+                              {crew.certificates.map((cert) => (
                                 <Badge 
-                                  key={idx} 
+                                  key={cert.name} 
                                   variant="outline" 
                                   className={`text-xs ${
                                      cert.eligible 
@@ -504,8 +504,8 @@ export function SeaTimeCalculator() {
                       { rule: "Min 77 hours rest per 7-day period", status: "compliant", value: "84h avg" },
                       { rule: "Max work hours per day: 14h", status: "compliant", value: "12.8h max" },
                       { rule: "Max work hours per week: 72h", status: "warning", value: "71h current" }
-                    ].map((item, idx) => (
-                      <div key={idx} className="flex items-center justify-between p-3 rounded-lg border">
+                    ].map((item) => (
+                      <div key={item.rule} className="flex items-center justify-between p-3 rounded-lg border">
                         <div className="flex items-center gap-2">
                            {item.status === "compliant" ? (
                             <CheckCircle2 className="h-4 w-4 text-success" />

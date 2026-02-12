@@ -139,12 +139,12 @@ export function ICPDashboard() {
               </CardHeader>
               <CardContent>
                 <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
-                  {prediction.predictedIssues.map((issue, i) => (
+                  {prediction.predictedIssues.map((issue, issueIdx) => (
                     <motion.div 
-                      key={i} 
+                      key={issue.category} 
                       initial={{ opacity: 0, y: 10 }} 
                       animate={{ opacity: 1, y: 0 }}
-                      transition={{ delay: i * 0.1 }}
+                      transition={{ delay: issueIdx * 0.1 }}
                       className={cn(
                         "p-4 rounded-lg border",
                         issue.estimatedImpact === 'high' && "border-red-500/50 bg-red-500/5",
@@ -219,10 +219,10 @@ export function ICPDashboard() {
             <ScrollArea className="h-[250px]">
               {deadlines.length > 0 ? (
                 <div className="space-y-2">
-                  {deadlines.map((d, i) => {
+                  {deadlines.map((d) => {
                     const daysLeft = Math.ceil((new Date(d.expirationDate).getTime() - Date.now()) / (1000 * 60 * 60 * 24));
                     return (
-                      <div key={i} className={cn(
+                      <div key={String(d.expirationDate)} className={cn(
                         "p-3 rounded-lg border flex items-center justify-between",
                         daysLeft <= 7 && "border-red-500/50 bg-red-500/5",
                         daysLeft > 7 && daysLeft <= 30 && "border-yellow-500/50"

@@ -286,8 +286,8 @@ export default function VoiceAssistantIntelligence() {
                   </CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-2">
-                  {category.commands.map((cmd, idx) => (
-                    <div key={idx} className="flex items-center justify-between p-2 bg-muted/50 rounded">
+                  {category.commands.map((cmd) => (
+                    <div key={cmd.phrase} className="flex items-center justify-between p-2 bg-muted/50 rounded">
                       <div>
                         <p className="text-sm font-medium">"{cmd.phrase}"</p>
                         <p className="text-xs text-muted-foreground">Intent: {cmd.intent}</p>

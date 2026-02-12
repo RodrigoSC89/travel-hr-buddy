@@ -396,8 +396,8 @@ export const IncidentReplay: React.FC<IncidentReplayProps> = ({ incidentId, onCl
                       Causas Prováveis ({analysis.probableCauses.length})
                     </h3>
                     <div className="space-y-3">
-                      {analysis.probableCauses.map((cause, index) => (
-                        <div key={index} className="p-3 border rounded-lg">
+                      {analysis.probableCauses.map((cause) => (
+                        <div key={cause.cause} className="p-3 border rounded-lg">
                           <div className="flex items-start justify-between mb-2">
                             <h4 className="font-medium text-sm">{cause.cause}</h4>
                             <Badge variant="outline">{cause.confidence}%</Badge>
@@ -406,8 +406,8 @@ export const IncidentReplay: React.FC<IncidentReplayProps> = ({ incidentId, onCl
                             {cause.explanation}
                           </p>
                           <div className="space-y-1">
-                            {cause.supportingData.map((data, idx) => (
-                              <div key={idx} className="text-xs flex items-start gap-1">
+                            {cause.supportingData.map((data) => (
+                              <div key={data} className="text-xs flex items-start gap-1">
                                 <CheckCircle className="w-3 h-3 mt-0.5 text-green-500" />
                                 <span>{data}</span>
                               </div>
@@ -425,10 +425,10 @@ export const IncidentReplay: React.FC<IncidentReplayProps> = ({ incidentId, onCl
                       Recomendações ({analysis.recommendations.length})
                     </h3>
                     <div className="space-y-2">
-                      {analysis.recommendations.map((rec, index) => (
-                        <div key={index} className="flex items-start gap-2 text-sm">
+                      {analysis.recommendations.map((rec, recIndex) => (
+                        <div key={rec} className="flex items-start gap-2 text-sm">
                           <span className="font-medium text-muted-foreground">
-                            {index + 1}.
+                            {recIndex + 1}.
                           </span>
                           <span>{rec}</span>
                         </div>

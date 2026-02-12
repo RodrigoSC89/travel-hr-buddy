@@ -100,7 +100,7 @@ export default function PredictiveMaintenancePanel() {
       <div className="space-y-6">
         <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
           {[1, 2, 3, 4, 5].map(i => (
-            <Card key={i}><CardContent className="p-4"><Skeleton className="h-16 w-full" /></CardContent></Card>
+            <Card key={`skeleton-${i}`}><CardContent className="p-4"><Skeleton className="h-16 w-full" /></CardContent></Card>
           ))}
         </div>
         <Card><CardContent className="p-6"><Skeleton className="h-64 w-full" /></CardContent></Card>
@@ -384,8 +384,8 @@ export default function PredictiveMaintenancePanel() {
               <div className="space-y-3">
                 <h4 className="font-medium">Peças Necessárias</h4>
                 <div className="space-y-2">
-                  {selectedEquipment.partsNeeded.map((part, i) => (
-                    <div key={i} className="flex items-center justify-between text-sm p-2 bg-muted/50 rounded">
+                  {selectedEquipment.partsNeeded.map((part) => (
+                    <div key={part.name} className="flex items-center justify-between text-sm p-2 bg-muted/50 rounded">
                       <span>{part.name} (x{part.quantity})</span>
                       <Badge variant={part.inStock ? "default" : "destructive"}>
                         {part.inStock ? "Em estoque" : "Faltando"}

@@ -367,8 +367,8 @@ export const CrewManagement2: React.FC = () => {
                       <div className="space-y-2">
                         {member.certifications
                           .filter(c => c.status !== "valid")
-                          .map((cert, idx) => (
-                            <div key={idx} className="flex items-center gap-2 p-2 bg-warning/10 dark:bg-warning/20 rounded-lg">
+                          .map((cert) => (
+                            <div key={cert.name} className="flex items-center gap-2 p-2 bg-warning/10 dark:bg-warning/20 rounded-lg">
                               <AlertTriangle className="h-4 w-4 text-warning" />
                               <span className="text-sm flex-1">
                                 {cert.name} - {cert.status === "expired" ? "Vencida" : `Vence em ${cert.daysRemaining} dias`}
@@ -420,8 +420,8 @@ export const CrewManagement2: React.FC = () => {
                     </CardHeader>
                     <CardContent>
                       <div className="space-y-2">
-                        {member.certifications.map((cert, idx) => (
-                          <div key={idx} className="flex items-center justify-between p-3 bg-muted/50 rounded-lg">
+                        {member.certifications.map((cert) => (
+                          <div key={cert.name} className="flex items-center justify-between p-3 bg-muted/50 rounded-lg">
                             <div className="flex items-center gap-3">
                               <Shield className="h-5 w-5 text-primary" />
                               <div>
@@ -563,8 +563,8 @@ export const CrewManagement2: React.FC = () => {
                           <div className="p-3 bg-warning/10 dark:bg-warning/20 rounded-lg">
                             <div className="font-medium text-sm mb-2">Restrições:</div>
                             <ul className="text-sm space-y-1">
-                              {member.health.restrictions.map((r, idx) => (
-                                <li key={idx} className="flex items-center gap-2">
+                              {member.health.restrictions.map((r) => (
+                                <li key={r} className="flex items-center gap-2">
                                   <AlertTriangle className="h-3 w-3 text-warning" />
                                   {r}
                                 </li>

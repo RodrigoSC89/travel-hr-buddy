@@ -403,8 +403,8 @@ export const QuantumSecurityShield: React.FC = () => {
         </CardHeader>
         <CardContent>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            {securityMetrics.map((metric, idx) => (
-              <div key={idx} className="p-4 border rounded-lg">
+            {securityMetrics.map((metric) => (
+              <div key={metric.metric} className="p-4 border rounded-lg">
                 <div className="flex items-center justify-between mb-3">
                   <h4 className="font-medium">{metric.metric}</h4>
                   <div className={`flex items-center gap-1 ${getMetricStatusColor(metric.status)}`}>

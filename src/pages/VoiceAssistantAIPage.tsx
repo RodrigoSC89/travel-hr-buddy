@@ -104,8 +104,8 @@ export default function VoiceAssistantAIPage() {
 
         {/* Features Grid */}
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-          {voiceFeatures.map((feature, idx) => (
-            <Card key={idx}>
+          {voiceFeatures.map((feature) => (
+            <Card key={feature.name}>
               <CardContent className="p-4">
                 <div className="flex items-center gap-3">
                   <div className="p-2 bg-primary/10 rounded-lg">
@@ -137,8 +137,8 @@ export default function VoiceAssistantAIPage() {
           </CardHeader>
           <CardContent>
             <div className="space-y-4">
-              {recentCommands.map((item, idx) => (
-                <div key={idx} className="flex items-start gap-4 p-3 bg-muted/50 rounded-lg">
+              {recentCommands.map((item) => (
+                <div key={item.command} className="flex items-start gap-4 p-3 bg-muted/50 rounded-lg">
                   <MessageSquare className="h-5 w-5 text-primary mt-1" />
                   <div className="flex-1">
                     <p className="font-medium">{item.command}</p>

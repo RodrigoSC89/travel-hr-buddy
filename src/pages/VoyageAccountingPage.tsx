@@ -431,8 +431,8 @@ const VoyageAccountingPage = () => {
               </CardHeader>
               <CardContent>
                 <div className="space-y-3">
-                  {costs.slice(0, 5).map((cost, idx) => (
-                    <div key={idx}>
+                  {costs.slice(0, 5).map((cost) => (
+                    <div key={cost.category}>
                       <div className="flex justify-between text-sm mb-1">
                         <span>{cost.category}</span>
                         <span className="font-medium">{cost.percent_of_total}%</span>
@@ -539,8 +539,8 @@ const VoyageAccountingPage = () => {
                   </TableRow>
                 </TableHeader>
                 <TableBody>
-                  {costs.map((cost, idx) => (
-                    <TableRow key={idx}>
+                  {costs.map((cost) => (
+                    <TableRow key={cost.category}>
                       <TableCell className="font-medium">{cost.category}</TableCell>
                       <TableCell className="text-right">${cost.budgeted.toLocaleString()}</TableCell>
                       <TableCell className="text-right">${cost.actual.toLocaleString()}</TableCell>

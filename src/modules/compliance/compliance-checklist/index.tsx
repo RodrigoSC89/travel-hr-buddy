@@ -431,8 +431,8 @@ const ComplianceChecklist = () => {
                           Findings ({record.findings.length})
                         </h4>
                         <div className="space-y-1">
-                          {record.findings.slice(0, 3).map((finding: Record<string, unknown>, idx: number) => (
-                            <div key={idx} className="text-sm pl-6 text-muted-foreground">
+                          {record.findings.slice(0, 3).map((finding: Record<string, unknown>, findIdx: number) => (
+                            <div key={`finding-${String(finding.item ?? findIdx)}`} className="text-sm pl-6 text-muted-foreground">
                               <span className="font-medium">{String(finding.item ?? "")}:</span> {String(finding.issue ?? "")}
                               {Boolean(finding.severity) && (
                                 <Badge variant="outline" className="ml-2 text-xs">
@@ -458,8 +458,8 @@ const ComplianceChecklist = () => {
                           Recommendations ({record.recommendations.length})
                         </h4>
                         <div className="space-y-1">
-                          {record.recommendations.slice(0, 2).map((rec: Record<string, unknown>, idx: number) => (
-                            <div key={idx} className="text-sm pl-6 text-muted-foreground">
+                          {record.recommendations.slice(0, 2).map((rec: Record<string, unknown>, recIdx: number) => (
+                            <div key={`rec-${String(rec.recommendation ?? recIdx)}`} className="text-sm pl-6 text-muted-foreground">
                               • {String(rec.recommendation ?? "")}
                               {Boolean(rec.priority) && (
                                 <Badge variant="outline" className="ml-2 text-xs">

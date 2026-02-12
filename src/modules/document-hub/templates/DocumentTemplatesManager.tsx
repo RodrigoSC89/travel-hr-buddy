@@ -514,8 +514,8 @@ const DocumentTemplatesManager = () => {
                           {template.variables && template.variables.length > 0 && (
                             <div className="flex items-center gap-2 flex-wrap">
                               <span className="text-xs text-muted-foreground">Variables:</span>
-                              {template.variables.map((variable, idx) => (
-                                <Badge key={idx} variant="outline" className="text-xs">
+                              {template.variables.map((variable) => (
+                                <Badge key={variable} variant="outline" className="text-xs">
                                   {variable}
                                 </Badge>
                               ))}
@@ -524,8 +524,8 @@ const DocumentTemplatesManager = () => {
                           {template.tags && template.tags.length > 0 && (
                             <div className="flex items-center gap-2 flex-wrap mt-2">
                               <span className="text-xs text-muted-foreground">Tags:</span>
-                              {template.tags.map((tag, idx) => (
-                                <Badge key={idx} variant="secondary" className="text-xs">
+                              {template.tags.map((tag) => (
+                                <Badge key={tag} variant="secondary" className="text-xs">
                                   {tag}
                                 </Badge>
                               ))}

@@ -353,9 +353,9 @@ const DeepRiskAI: React.FC = () => {
             </CardHeader>
             <CardContent>
               <div className="space-y-3">
-                {recommendations.map((rec, idx) => (
+                {recommendations.map((rec) => (
                   <div
-                    key={idx}
+                    key={rec.category}
                     className={`p-4 rounded border ${getPriorityColor(rec.priority)}`}
                   >
                     <div className="flex items-start justify-between mb-2">

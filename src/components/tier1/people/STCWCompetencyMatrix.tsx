@@ -401,8 +401,8 @@ export function STCWCompetencyMatrix() {
                               {/* Certificates */}
                               {cc.certificates.length > 0 && (
                                 <div className="flex items-center gap-2 mt-2 flex-wrap">
-                                  {cc.certificates.map((cert, idx) => (
-                                    <Badge key={idx} variant="outline" className="text-xs">
+                                  {cc.certificates.map((cert) => (
+                                    <Badge key={cert} variant="outline" className="text-xs">
                                       <Award className="h-3 w-3 mr-1" />
                                       {cert}
                                     </Badge>
@@ -455,16 +455,16 @@ export function STCWCompetencyMatrix() {
                             <div>
                               <p className="text-xs font-medium mb-1">Assessment Methods:</p>
                               <div className="flex flex-wrap gap-1">
-                                {comp.methods.map((method, idx) => (
-                                  <Badge key={idx} variant="outline" className="text-xs">{method}</Badge>
+                                {comp.methods.map((method) => (
+                                  <Badge key={method} variant="outline" className="text-xs">{method}</Badge>
                                 ))}
                               </div>
                             </div>
                             <div>
                               <p className="text-xs font-medium mb-1">Competence Criteria:</p>
                               <div className="flex flex-wrap gap-1">
-                                {comp.criteria.map((crit, idx) => (
-                                  <Badge key={idx} variant="outline" className="text-xs">{crit}</Badge>
+                                {comp.criteria.map((crit) => (
+                                  <Badge key={crit} variant="outline" className="text-xs">{crit}</Badge>
                                 ))}
                               </div>
                             </div>

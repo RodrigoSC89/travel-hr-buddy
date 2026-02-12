@@ -124,8 +124,8 @@ export const SimulationVisualization: React.FC<SimulationVisualizationProps> = (
                 <div className="space-y-2">
                   <p className="font-semibold">Warnings:</p>
                   <ul className="list-disc list-inside space-y-1">
-                    {simulation.warnings.map((warning, index) => (
-                      <li key={index} className="text-sm">
+                    {simulation.warnings.map((warning) => (
+                      <li key={warning} className="text-sm">
                         {warning}
                       </li>
                     ))}
@@ -142,8 +142,8 @@ export const SimulationVisualization: React.FC<SimulationVisualizationProps> = (
                 <div className="space-y-2">
                   <p className="font-semibold">Recommendations:</p>
                   <ul className="list-disc list-inside space-y-1">
-                    {simulation.recommendations.map((rec, index) => (
-                      <li key={index} className="text-sm">
+                    {simulation.recommendations.map((rec) => (
+                      <li key={rec} className="text-sm">
                         {rec}
                       </li>
                     ))}
@@ -295,8 +295,8 @@ export const SimulationVisualization: React.FC<SimulationVisualizationProps> = (
                   <div className="mt-4 p-3 bg-muted rounded-lg">
                     <p className="text-sm font-semibold mb-2">Critical Path</p>
                     <ul className="list-disc list-inside space-y-1">
-                      {simulation.metrics.time.criticalPath.slice(0, 5).map((action, index) => (
-                        <li key={index} className="text-sm text-muted-foreground">
+                      {simulation.metrics.time.criticalPath.slice(0, 5).map((action) => (
+                        <li key={action} className="text-sm text-muted-foreground">
                           {action}
                         </li>
                       ))}
@@ -399,8 +399,8 @@ export const SimulationVisualization: React.FC<SimulationVisualizationProps> = (
                   <div className="mt-3">
                     <p className="text-xs text-muted-foreground mb-1">Triggers:</p>
                     <div className="flex flex-wrap gap-1">
-                      {scenario.triggers.map((trigger, index) => (
-                        <Badge key={index} variant="secondary" className="text-xs">
+                      {scenario.triggers.map((trigger) => (
+                        <Badge key={trigger} variant="secondary" className="text-xs">
                           {trigger}
                         </Badge>
                       ))}
