@@ -120,7 +120,7 @@ export function OfflineSync() {
 
   const getStatusIcon = (type: string) => {
     switch (type) {
-      case 'synced': return <CheckCircle className="h-4 w-4 text-green-500" />;
+      case 'synced': return <CheckCircle className="h-4 w-4 text-success" />;
       case 'error': return <AlertTriangle className="h-4 w-4 text-destructive" />;
       case 'syncing': return <RefreshCw className="h-4 w-4 text-primary animate-spin" />;
       default: return <Clock className="h-4 w-4 text-muted-foreground" />;
@@ -136,7 +136,7 @@ export function OfflineSync() {
             animate={{ scale: [1, 1.1, 1] }}
             transition={{ duration: 0.5 }}
           >
-            <div className="flex items-center gap-2 text-green-500">
+            <div className="flex items-center gap-2 text-success">
               <Wifi className="h-6 w-6" />
               <span className="font-medium">Conectado</span>
             </div>
@@ -204,8 +204,8 @@ export function OfflineSync() {
         <Card>
           <CardContent className="pt-6">
             <div className="flex items-center gap-4">
-              <div className="p-3 rounded-full bg-green-500/10">
-                <Cloud className="h-6 w-6 text-green-500" />
+              <div className="p-3 rounded-full bg-success/10">
+                <Cloud className="h-6 w-6 text-success" />
               </div>
               <div>
                 <p className="text-sm text-muted-foreground">Última Sincronização</p>

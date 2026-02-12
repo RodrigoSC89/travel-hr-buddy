@@ -349,22 +349,22 @@ export const IncidentDetailDialog: React.FC<IncidentDetailDialogProps> = ({
 
   const getSeverityColor = (severity: string) => {
     const colors: Record<string, string> = {
-      low: "bg-green-500",
-      medium: "bg-yellow-500",
-      high: "bg-orange-500",
-      critical: "bg-red-500"
+      low: "bg-success",
+      medium: "bg-warning",
+      high: "bg-warning",
+      critical: "bg-destructive"
     };
-    return colors[severity?.toLowerCase()] || "bg-gray-500";
+    return colors[severity?.toLowerCase()] || "bg-muted";
   };
 
   const getStatusColor = (status: string) => {
     const colors: Record<string, string> = {
-      new: "bg-blue-500",
-      investigating: "bg-yellow-500",
-      resolved: "bg-green-500",
-      closed: "bg-gray-500"
+      new: "bg-info",
+      investigating: "bg-warning",
+      resolved: "bg-success",
+      closed: "bg-muted"
     };
-    return colors[status?.toLowerCase()] || "bg-gray-500";
+    return colors[status?.toLowerCase()] || "bg-muted";
   };
 
   if (!incident) return null;
