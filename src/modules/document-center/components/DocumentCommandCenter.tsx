@@ -881,7 +881,14 @@ export function DocumentCommandCenter() {
           </div>
           <DialogFooter>
             <Button variant="outline" onClick={() => setShowTemplateDialog(false)}>Cancelar</Button>
-            <Button onClick={() => { toast.success(`Documento criado a partir de "${selectedTemplate?.name}"`); setShowTemplateDialog(false); }}>
+            <Button onClick={() => { 
+              const docName = `${selectedTemplate?.name || 'Documento'} - ${new Date().toLocaleDateString('pt-BR')}`;
+              const blob = new Blob([`# ${docName}\n\nTemplate: ${selectedTemplate?.name}\nCriado em: ${new Date().toLocaleString('pt-BR')}\n\n---\n\nConteúdo do documento aqui...`], { type: 'text/markdown' });
+              const url = URL.createObjectURL(blob);
+              const a = document.createElement('a'); a.href = url; a.download = `${docName}.md`; a.click(); URL.revokeObjectURL(url);
+              toast.success(`Documento "${docName}" criado e baixado`); 
+              setShowTemplateDialog(false); 
+            }}>
               Criar Documento
             </Button>
           </DialogFooter>

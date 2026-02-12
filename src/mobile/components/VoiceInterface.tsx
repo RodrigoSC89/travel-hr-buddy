@@ -361,7 +361,7 @@ export const VoiceInterface: React.FC<VoiceInterfaceProps> = ({
                   key={index}
                   variant="outline"
                   size="sm"
-                  onClick={() => toast.success(`Ação executada: ${action}`, { description: "Comando de voz processado com sucesso." })}
+                  onClick={() => { window.history.pushState({}, '', '/command-center'); window.dispatchEvent(new PopStateEvent('popstate')); }}
                 >
                   {action}
                 </Button>

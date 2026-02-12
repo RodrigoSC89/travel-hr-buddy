@@ -639,7 +639,7 @@ export function UnifiedEvidenceGenerator() {
                 key={template.id} 
                 variant="outline" 
                 className="h-auto py-4 flex-col gap-2"
-                onClick={() => { toast.success(`Template "${template.name}" selecionado`); }}
+                onClick={() => { navigator.clipboard.writeText(JSON.stringify({ template: template.name, id: template.id }, null, 2)); toast.success(`Template "${template.name}" copiado`); }}
               >
                 <template.icon className="h-6 w-6" />
                 <span className="text-xs text-center">{template.name}</span>
