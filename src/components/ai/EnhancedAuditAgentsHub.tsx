@@ -372,7 +372,7 @@ Precisa de mais detalhes sobre algum aspecto específico?`;
             Atualizar
           </Button>
           <Badge variant="outline" className="gap-1 px-3 py-1.5">
-            <Activity className="h-3 w-3 text-green-500 animate-pulse" />
+            <Activity className="h-3 w-3 text-success animate-pulse" />
             {AUDIT_AGENTS.filter(a => a.status === "active").length} ativos
           </Badge>
         </div>
@@ -472,9 +472,9 @@ Precisa de mais detalhes sobre algum aspecto específico?`;
                             <div className="flex items-center justify-between mb-1">
                               <h4 className="font-semibold truncate">{agent.name}</h4>
                               <div className={`h-2.5 w-2.5 rounded-full ${
-                                agent.status === "active" ? "bg-green-500 animate-pulse" : 
-                                agent.status === "processing" ? "bg-blue-500 animate-ping" : 
-                                "bg-gray-400"
+                                 agent.status === "active" ? "bg-success animate-pulse" : 
+                                agent.status === "processing" ? "bg-primary animate-ping" : 
+                                "bg-muted-foreground"
                               }`} />
                             </div>
                             <p className="text-xs text-muted-foreground line-clamp-2">
@@ -537,7 +537,7 @@ Precisa de mais detalhes sobre algum aspecto específico?`;
                   )}
                 </div>
                 {selectedAgent && (
-                  <div className="h-2 w-2 rounded-full bg-green-500 animate-pulse" />
+                  <div className="h-2 w-2 rounded-full bg-success animate-pulse" />
                 )}
               </CardTitle>
             </CardHeader>

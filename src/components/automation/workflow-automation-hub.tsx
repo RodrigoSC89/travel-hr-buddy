@@ -262,7 +262,7 @@ export const WorkflowAutomationHub: React.FC = () => {
                 {[{ cat: "RH", exec: 156, trend: "+12%" }, { cat: "Financeiro", exec: 289, trend: "+8%" }, { cat: "Operações", exec: 97, trend: "-3%" }].map((item, i) => (
                   <div key={i} className="flex items-center justify-between">
                     <p className="font-medium">{item.cat}</p>
-                    <div className="text-right"><p className="font-bold">{item.exec}</p><p className={`text-sm ${item.trend.startsWith("+") ? "text-green-600" : "text-red-600"}`}>{item.trend}</p></div>
+                    <div className="text-right"><p className="font-bold">{item.exec}</p><p className={`text-sm ${item.trend.startsWith("+") ? "text-success" : "text-destructive"}`}>{item.trend}</p></div>
                   </div>
                 ))}
               </CardContent>

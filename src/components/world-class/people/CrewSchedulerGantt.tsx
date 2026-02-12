@@ -34,10 +34,10 @@ interface CrewMember {
 }
 
 const STATUS_COLORS = {
-  onboard: 'bg-green-500',
-  onleave: 'bg-blue-500',
-  training: 'bg-purple-500',
-  available: 'bg-gray-400',
+  onboard: 'bg-success',
+  onleave: 'bg-primary',
+  training: 'bg-accent',
+  available: 'bg-muted-foreground',
 };
 
 const STATUS_LABELS = {
@@ -195,10 +195,10 @@ export function CrewSchedulerGantt() {
           </CardContent>
         </Card>
         
-        <Card className={`border-l-4 ${mlcViolations.length > 0 ? 'border-l-red-500' : 'border-l-green-500'}`}>
+        <Card className={`border-l-4 ${mlcViolations.length > 0 ? 'border-l-destructive' : 'border-l-success'}`}>
           <CardContent className="p-4">
             <div className="flex items-center gap-3">
-              <Heart className={`h-8 w-8 ${mlcViolations.length > 0 ? 'text-red-500' : 'text-green-500'}`} />
+              <Heart className={`h-8 w-8 ${mlcViolations.length > 0 ? 'text-destructive' : 'text-success'}`} />
               <div>
                 <p className="text-2xl font-bold">{mlcViolations.length}</p>
                 <p className="text-xs text-muted-foreground">Violações MLC</p>

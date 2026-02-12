@@ -170,15 +170,15 @@ export const NonConformityManager: React.FC = () => {
     <div className="space-y-6">
       {/* Summary Cards */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-        <Card className="bg-gradient-to-br from-red-50 to-red-100 border-red-200">
+        <Card className="bg-destructive/5 border-destructive/20">
           <CardContent className="p-6">
             <div className="flex items-center justify-between mb-4">
-              <XCircle className="h-10 w-10 text-red-600" />
-              <Badge className="bg-red-600 text-white font-bold">ABERTAS</Badge>
+              <XCircle className="h-10 w-10 text-destructive" />
+              <Badge className="bg-destructive text-destructive-foreground font-bold">ABERTAS</Badge>
             </div>
-            <h3 className="text-sm font-medium text-red-700 mb-1">NCs Abertas</h3>
-            <p className="text-3xl font-bold text-red-900">{openCount}</p>
-            <p className="text-xs text-red-600 mt-2">Sem tratamento</p>
+            <h3 className="text-sm font-medium text-destructive mb-1">NCs Abertas</h3>
+            <p className="text-3xl font-bold text-foreground">{openCount}</p>
+            <p className="text-xs text-destructive mt-2">Sem tratamento</p>
           </CardContent>
         </Card>
 

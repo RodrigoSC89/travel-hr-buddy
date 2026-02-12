@@ -39,12 +39,12 @@ import { logger } from '@/lib/logger';
 
 const statusColors: Record<string, string> = {
   draft: 'bg-muted text-muted-foreground',
-  pending_review: 'bg-yellow-500/20 text-yellow-600',
-  pending_approval: 'bg-yellow-500/20 text-yellow-600',
-  approved: 'bg-green-500/20 text-green-600',
-  rejected: 'bg-red-500/20 text-red-600',
-  superseded: 'bg-gray-500/20 text-gray-600',
-  archived: 'bg-gray-500/20 text-gray-600'
+  pending_review: 'bg-warning/20 text-warning',
+  pending_approval: 'bg-warning/20 text-warning',
+  approved: 'bg-success/20 text-success',
+  rejected: 'bg-destructive/20 text-destructive',
+  superseded: 'bg-muted text-muted-foreground',
+  archived: 'bg-muted text-muted-foreground'
 };
 
 const categoryLabels: Record<string, string> = {
@@ -411,7 +411,7 @@ export const DocumentWorkflowPanel: React.FC = () => {
                             <Button 
                               variant="outline" 
                               size="sm"
-                              className="text-red-600"
+                              className="text-destructive"
                               onClick={() => handleApprove(approval.id, 'rejected', 'Documento rejeitado')}
                             >
                               Rejeitar

@@ -249,7 +249,7 @@ export default function APIGatewayDashboard() {
                   {[
                     { label: "< 100ms", value: 65, color: "bg-success" },
                     { label: "100-500ms", value: 25, color: "bg-warning" },
-                    { label: "500ms-1s", value: 8, color: "bg-orange-500" },
+                    { label: "500ms-1s", value: 8, color: "bg-warning" },
                     { label: "> 1s", value: 2, color: "bg-destructive" }
                   ].map((item) => (
                     <div key={item.label} className="flex items-center gap-3">

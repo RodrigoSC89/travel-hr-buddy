@@ -204,8 +204,8 @@ export const TwoFactorSettings: React.FC<TwoFactorSettingsProps> = ({ onClose })
   const renderVerifyStep = () => (
     <div className="space-y-6">
       <div className="text-center space-y-4">
-        <div className="mx-auto w-16 h-16 bg-green-100 rounded-full flex items-center justify-center">
-          <KeyRound className="h-8 w-8 text-green-600" />
+        <div className="mx-auto w-16 h-16 bg-success/10 rounded-full flex items-center justify-center">
+          <KeyRound className="h-8 w-8 text-success" />
         </div>
         <div>
           <h3 className="text-lg font-semibold">Verificar Configuração</h3>
@@ -278,8 +278,8 @@ export const TwoFactorSettings: React.FC<TwoFactorSettingsProps> = ({ onClose })
   const renderEnabledStep = () => (
     <div className="space-y-6">
       <div className="text-center space-y-4">
-        <div className="mx-auto w-16 h-16 bg-green-100 rounded-full flex items-center justify-center">
-          <Shield className="h-8 w-8 text-green-600" />
+        <div className="mx-auto w-16 h-16 bg-success/10 rounded-full flex items-center justify-center">
+          <Shield className="h-8 w-8 text-success" />
         </div>
         <div>
           <h3 className="text-lg font-semibold">2FA Ativado</h3>

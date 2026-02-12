@@ -139,9 +139,9 @@ const IntegrationsHub = () => {
   const getStatusIcon = (status: string) => {
     switch (status) {
     case "connected":
-      return <CheckCircle className="w-4 h-4 text-green-600" />;
+      return <CheckCircle className="w-4 h-4 text-success" />;
     case "error":
-      return <AlertTriangle className="w-4 h-4 text-red-600" />;
+      return <AlertTriangle className="w-4 h-4 text-destructive" />;
     default:
       return <RefreshCw className="w-4 h-4 text-muted-foreground" />;
     }
@@ -150,11 +150,11 @@ const IntegrationsHub = () => {
   const getStatusColor = (status: string) => {
     switch (status) {
     case "connected":
-      return "text-green-600 bg-green-100";
+      return "text-success bg-success/10";
     case "error":
-      return "text-red-600 bg-red-100";
+      return "text-destructive bg-destructive/10";
     default:
-      return "text-muted-foreground bg-gray-100";
+      return "text-muted-foreground bg-muted";
     }
   };
 

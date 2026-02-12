@@ -40,10 +40,10 @@ const INCIDENT_TYPES = [
 ];
 
 const SEVERITY_LEVELS = [
-  { value: "low", label: "Baixa", color: "text-green-500" },
-  { value: "medium", label: "Média", color: "text-yellow-500" },
-  { value: "high", label: "Alta", color: "text-orange-500" },
-  { value: "critical", label: "Crítica", color: "text-red-500" },
+  { value: "low", label: "Baixa", color: "text-success" },
+  { value: "medium", label: "Média", color: "text-warning" },
+  { value: "high", label: "Alta", color: "text-warning" },
+  { value: "critical", label: "Crítica", color: "text-destructive" },
 ];
 
 export const CreateSGSOIncidentDialog: FC<CreateSGSOIncidentDialogProps> = ({

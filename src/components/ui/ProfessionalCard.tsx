@@ -53,7 +53,7 @@ export const MetricCard: React.FC<MetricCardProps> = ({
             <div className="flex items-center gap-1 mt-2">
               <span className={cn(
                 "text-xs font-medium",
-                change.value >= 0 ? "text-green-600 dark:text-green-400" : "text-red-600 dark:text-red-400"
+                change.value >= 0 ? "text-success" : "text-destructive"
               )}>
                 {change.value >= 0 ? '+' : ''}{change.value}%
               </span>
