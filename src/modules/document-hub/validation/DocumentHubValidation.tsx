@@ -80,11 +80,11 @@ export default function DocumentHubValidation() {
         <CardContent>
           <div className="grid grid-cols-3 gap-4 text-center">
             <div>
-              <div className="text-3xl font-bold text-green-600">{passCount}</div>
+              <div className="text-3xl font-bold text-success">{passCount}</div>
               <div className="text-sm text-muted-foreground">Aprovados</div>
             </div>
             <div>
-              <div className="text-3xl font-bold text-red-600">
+              <div className="text-3xl font-bold text-destructive">
                 {totalCount - passCount}
               </div>
               <div className="text-sm text-muted-foreground">Reprovados</div>
@@ -107,8 +107,8 @@ export default function DocumentHubValidation() {
                   <div
                     className={`p-2 rounded-lg ${
                       check.status === "pass"
-                        ? "bg-green-100 text-green-600"
-                        : "bg-red-100 text-red-600"
+                      ? "bg-success/10 text-success"
+                        : "bg-destructive/10 text-destructive"
                     }`}
                   >
                     {check.status === "pass" ? (
@@ -136,18 +136,18 @@ export default function DocumentHubValidation() {
         })}
       </div>
 
-      <Card className="border-green-200 bg-green-50">
+      <Card className="border-success/20 bg-success/5">
         <CardHeader>
-          <CardTitle className="text-green-800 flex items-center gap-2">
+          <CardTitle className="text-success flex items-center gap-2">
             <CheckCircle2 className="w-6 h-6" />
             Conclusão da Validação
           </CardTitle>
         </CardHeader>
         <CardContent>
-          <p className="text-green-800 font-semibold">
+          <p className="text-success font-semibold">
             ✅ APROVADO - Document Hub consolidado está completo e funcional
           </p>
-          <ul className="mt-4 space-y-2 text-sm text-green-700">
+          <ul className="mt-4 space-y-2 text-sm text-success/80">
             <li>• Módulo único operacional em /dashboard/document-hub</li>
             <li>• Upload, parsing e IA totalmente integrados</li>
             <li>• Testes automatizados com 100% de aprovação</li>

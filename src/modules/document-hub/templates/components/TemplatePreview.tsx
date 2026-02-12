@@ -168,8 +168,8 @@ export const TemplatePreview: React.FC<TemplatePreviewProps> = ({
             </div>
 
             {/* Info */}
-            <div className="p-3 bg-blue-500/10 border border-blue-500/20 rounded-lg">
-              <p className="text-sm text-blue-400">
+            <div className="p-3 bg-info/10 border border-info/20 rounded-lg">
+              <p className="text-sm text-info">
                 <Eye className="inline w-4 h-4 mr-1" />
                 Preview shows how the template will look with filled variables
               </p>
