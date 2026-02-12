@@ -35,24 +35,24 @@ interface FinanceRequest {
 }
 
 const TYPE_CONFIG = {
-  purchase: { icon: Receipt, color: 'bg-blue-500', label: 'Compra' },
-  expense: { icon: CreditCard, color: 'bg-purple-500', label: 'Despesa' },
-  invoice: { icon: FileText, color: 'bg-green-500', label: 'Fatura' },
-  budget: { icon: PiggyBank, color: 'bg-amber-500', label: 'Orçamento' },
-  payment: { icon: DollarSign, color: 'bg-teal-500', label: 'Pagamento' },
+  purchase: { icon: Receipt, color: 'bg-info', label: 'Compra' },
+  expense: { icon: CreditCard, color: 'bg-accent', label: 'Despesa' },
+  invoice: { icon: FileText, color: 'bg-success', label: 'Fatura' },
+  budget: { icon: PiggyBank, color: 'bg-warning', label: 'Orçamento' },
+  payment: { icon: DollarSign, color: 'bg-primary', label: 'Pagamento' },
 };
 
 const STATUS_CONFIG = {
-  pending: { color: 'bg-yellow-100 text-yellow-700', label: 'Pendente' },
-  approved: { color: 'bg-green-100 text-green-700', label: 'Aprovado' },
-  rejected: { color: 'bg-red-100 text-red-700', label: 'Rejeitado' },
-  review: { color: 'bg-blue-100 text-blue-700', label: 'Em Revisão' },
+  pending: { color: 'bg-warning/10 text-warning', label: 'Pendente' },
+  approved: { color: 'bg-success/10 text-success', label: 'Aprovado' },
+  rejected: { color: 'bg-destructive/10 text-destructive', label: 'Rejeitado' },
+  review: { color: 'bg-info/10 text-info', label: 'Em Revisão' },
 };
 
 const URGENCY_CONFIG = {
-  low: { color: 'bg-gray-100 text-gray-600', label: 'Baixa' },
-  medium: { color: 'bg-blue-100 text-blue-600', label: 'Média' },
-  high: { color: 'bg-red-100 text-red-600', label: 'Alta' },
+  low: { color: 'bg-muted text-muted-foreground', label: 'Baixa' },
+  medium: { color: 'bg-info/10 text-info', label: 'Média' },
+  high: { color: 'bg-destructive/10 text-destructive', label: 'Alta' },
 };
 
 function mapStatus(status: string | null): FinanceRequest['status'] {
@@ -234,43 +234,43 @@ export function FinanceApprovalWorkflow() {
                 <p className="text-2xl font-bold">{requests.filter(r => r.status === 'pending').length}</p>
                 <p className="text-xs text-muted-foreground">{formatCurrency(totalPending, 'USD')}</p>
               </div>
-              <Clock className="h-10 w-10 text-yellow-500 opacity-50" />
+              <Clock className="h-10 w-10 text-warning opacity-50" />
             </div>
           </CardContent>
         </Card>
         
-        <Card className="border-l-4 border-l-blue-500">
+        <Card className="border-l-4 border-l-info">
           <CardContent className="p-4">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-muted-foreground">Em Revisão</p>
                 <p className="text-2xl font-bold">{requests.filter(r => r.status === 'review').length}</p>
               </div>
-              <FileText className="h-10 w-10 text-blue-500 opacity-50" />
+              <FileText className="h-10 w-10 text-info opacity-50" />
             </div>
           </CardContent>
         </Card>
         
-        <Card className="border-l-4 border-l-green-500">
+        <Card className="border-l-4 border-l-success">
           <CardContent className="p-4">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-muted-foreground">Aprovados</p>
                 <p className="text-2xl font-bold">{formatCurrency(totalApproved, 'USD')}</p>
               </div>
-              <TrendingUp className="h-10 w-10 text-green-500 opacity-50" />
+              <TrendingUp className="h-10 w-10 text-success opacity-50" />
             </div>
           </CardContent>
         </Card>
         
-        <Card className="border-l-4 border-l-red-500">
+        <Card className="border-l-4 border-l-destructive">
           <CardContent className="p-4">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-muted-foreground">Rejeitados</p>
                 <p className="text-2xl font-bold">{rejectedCount}</p>
               </div>
-              <TrendingDown className="h-10 w-10 text-red-500 opacity-50" />
+              <TrendingDown className="h-10 w-10 text-destructive opacity-50" />
             </div>
           </CardContent>
         </Card>
