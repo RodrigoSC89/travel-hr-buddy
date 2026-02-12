@@ -785,19 +785,19 @@ export default function OperationsCommandCenter() {
             </CardHeader>
             <CardContent>
               <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-                {businessKpis.map((kpi, index) => (
-                  <div key={index} className="p-4 bg-muted/30 rounded-lg">
+                {businessKpis.map((kpi) => (
+                  <div key={kpi.title} className="p-4 bg-muted/30 rounded-lg">
                     <div className="flex items-center justify-between">
                       <div>
                         <p className="text-sm text-muted-foreground">{kpi.title}</p>
                         <p className="text-2xl font-bold mt-1">{kpi.value}</p>
                         <div className="flex items-center gap-1 mt-1">
                           {kpi.trend === "up" ? (
-                            <ArrowUpRight className="h-4 w-4 text-emerald-500" />
+                            <ArrowUpRight className="h-4 w-4 text-success" />
                           ) : (
-                            <ArrowDownRight className="h-4 w-4 text-red-500" />
+                            <ArrowDownRight className="h-4 w-4 text-destructive" />
                           )}
-                          <span className={`text-sm ${kpi.trend === "up" ? "text-emerald-500" : "text-red-500"}`}>
+                          <span className={`text-sm ${kpi.trend === "up" ? "text-success" : "text-destructive"}`}>
                             {kpi.change}
                           </span>
                         </div>
@@ -953,18 +953,18 @@ export default function OperationsCommandCenter() {
             <Card>
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
-                  <BarChart3 className="h-5 w-5 text-blue-500" />
+                  <BarChart3 className="h-5 w-5 text-info" />
                   Performance por Área
                 </CardTitle>
               </CardHeader>
               <CardContent className="space-y-4">
-                {trends.map((trend, index) => (
-                  <div key={index} className="space-y-2">
+                {trends.map((trend) => (
+                  <div key={trend.category} className="space-y-2">
                     <div className="flex items-center justify-between">
                       <span className="text-sm font-medium">{trend.category}</span>
                       <div className="flex items-center gap-2">
                         <span className="text-sm font-bold">{trend.score}%</span>
-                        <span className={`text-xs ${trend.change >= 0 ? "text-emerald-500" : "text-red-500"}`}>
+                        <span className={`text-xs ${trend.change >= 0 ? "text-success" : "text-destructive"}`}>
                           {trend.change >= 0 ? "+" : ""}{trend.change}%
                         </span>
                       </div>

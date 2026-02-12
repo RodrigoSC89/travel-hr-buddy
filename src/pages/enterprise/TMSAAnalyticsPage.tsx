@@ -51,28 +51,28 @@ export default function TMSAAnalyticsPage() {
 
   const getLevelColor = (level: number) => {
     switch (level) {
-      case 4: return "bg-green-500";
-      case 3: return "bg-yellow-500";
-      case 2: return "bg-orange-500";
-      case 1: return "bg-red-500";
-      default: return "bg-gray-500";
+      case 4: return "bg-success";
+      case 3: return "bg-warning";
+      case 2: return "bg-warning";
+      case 1: return "bg-destructive";
+      default: return "bg-muted";
     }
   };
 
   const getTrendIcon = (trend: string) => {
     switch (trend) {
-      case "up": return <TrendingUp className="h-4 w-4 text-green-500" />;
-      case "down": return <TrendingUp className="h-4 w-4 text-red-500 rotate-180" />;
-      default: return <div className="h-4 w-4 border-t-2 border-gray-400" />;
+      case "up": return <TrendingUp className="h-4 w-4 text-success" />;
+      case "down": return <TrendingUp className="h-4 w-4 text-destructive rotate-180" />;
+      default: return <div className="h-4 w-4 border-t-2 border-muted-foreground" />;
     }
   };
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case "completed": return "bg-green-500";
-      case "in_progress": return "bg-blue-500";
-      case "pending": return "bg-yellow-500";
-      default: return "bg-gray-500";
+      case "completed": return "bg-success";
+      case "in_progress": return "bg-info";
+      case "pending": return "bg-warning";
+      default: return "bg-muted";
     }
   };
 
@@ -81,13 +81,13 @@ export default function TMSAAnalyticsPage() {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-4">
-          <div className="p-3 bg-blue-500/20 rounded-xl">
-            <BarChart3 className="h-8 w-8 text-blue-500" />
+          <div className="p-3 bg-primary/10 rounded-xl">
+            <BarChart3 className="h-8 w-8 text-primary" />
           </div>
           <div>
             <h1 className="text-2xl font-bold flex items-center gap-2">
               TMSA Analytics
-              <Badge variant="secondary" className="bg-blue-500/20 text-blue-400">
+              <Badge variant="secondary" className="bg-primary/10 text-primary">
                 OCIMF
               </Badge>
             </h1>
@@ -191,8 +191,8 @@ export default function TMSAAnalyticsPage() {
               </CardHeader>
               <CardContent>
                 <div className="space-y-3">
-                  {elementScores.slice(0, 6).map((el, index) => (
-                    <div key={index} className="space-y-1">
+                  {elementScores.slice(0, 6).map((el) => (
+                    <div key={el.element} className="space-y-1">
                       <div className="flex justify-between items-center text-sm">
                         <span className="truncate flex-1 mr-2">{el.element}</span>
                         <div className="flex items-center gap-2">
@@ -258,8 +258,8 @@ export default function TMSAAnalyticsPage() {
             </CardHeader>
             <CardContent>
               <div className="space-y-4">
-                {elementScores.map((el, index) => (
-                  <div key={index} className="p-4 border rounded-lg hover:bg-muted/50 transition-colors">
+                {elementScores.map((el) => (
+                  <div key={el.element} className="p-4 border rounded-lg hover:bg-muted/50 transition-colors">
                     <div className="flex items-center justify-between mb-2">
                       <h3 className="font-medium">{el.element}</h3>
                       <div className="flex items-center gap-3">
@@ -286,8 +286,8 @@ export default function TMSAAnalyticsPage() {
             </CardHeader>
             <CardContent>
               <div className="space-y-4">
-                {recentActions.map((action, index) => (
-                  <div key={index} className="flex items-center justify-between p-4 border rounded-lg">
+                {recentActions.map((action) => (
+                  <div key={action.action} className="flex items-center justify-between p-4 border rounded-lg">
                     <div className="flex items-center gap-3">
                       <div className={`w-3 h-3 rounded-full ${getStatusColor(action.status)}`} />
                       <div>
