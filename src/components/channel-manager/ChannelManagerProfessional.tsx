@@ -577,7 +577,7 @@ export default function ChannelManagerProfessional() {
         <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
           <div>
             <h1 className="text-3xl font-bold text-foreground flex items-center gap-3">
-              <div className="p-2 rounded-xl bg-gradient-to-br from-primary/20 to-purple-500/20">
+              <div className="p-2 rounded-xl bg-gradient-to-br from-primary/20 to-accent/20">
                 <Radio className="h-6 w-6 text-primary" />
               </div>
               Gerenciador de Canais
@@ -634,19 +634,19 @@ export default function ChannelManagerProfessional() {
           <StatCard
             title="Canais Ativos"
             value={stats.activeChannels}
-            icon={<Wifi className="h-5 w-5 text-green-500" />}
+            icon={<Wifi className="h-5 w-5 text-success" />}
           />
           <StatCard
             title="Total de Membros"
             value={stats.totalMembers}
-            icon={<Users className="h-5 w-5 text-blue-500" />}
+            icon={<Users className="h-5 w-5 text-primary" />}
             trend="+5 hoje"
             trendUp={true}
           />
           <StatCard
             title="Mensagens Não Lidas"
             value={stats.unreadMessages}
-            icon={<MessageCircle className="h-5 w-5 text-orange-500" />}
+            icon={<MessageCircle className="h-5 w-5 text-warning" />}
           />
         </div>
 
@@ -661,9 +661,9 @@ export default function ChannelManagerProfessional() {
                   variant="ghost"
                   size="sm"
                   onClick={() => setShowFavoritesOnly(!showFavoritesOnly)}
-                  className={showFavoritesOnly ? 'text-yellow-500' : ''}
+                  className={showFavoritesOnly ? 'text-warning' : ''}
                 >
-                  <Star className={`h-4 w-4 ${showFavoritesOnly ? 'fill-yellow-500' : ''}`} />
+                  <Star className={`h-4 w-4 ${showFavoritesOnly ? 'fill-warning' : ''}`} />
                 </Button>
               </div>
               
@@ -736,7 +736,7 @@ export default function ChannelManagerProfessional() {
                               <div className="flex items-center gap-2">
                                 <span className="font-medium text-sm truncate">{channel.name}</span>
                                 {channel.is_favorite && (
-                                  <Star className="h-3 w-3 text-yellow-500 fill-yellow-500 flex-shrink-0" />
+                                  <Star className="h-3 w-3 text-warning fill-warning flex-shrink-0" />
                                 )}
                                 {channel.is_muted && (
                                   <VolumeX className="h-3 w-3 text-muted-foreground flex-shrink-0" />
@@ -754,7 +754,7 @@ export default function ChannelManagerProfessional() {
                             </span>
                             <div className="flex items-center gap-1">
                               {channel.is_active ? (
-                                <span className="w-2 h-2 rounded-full bg-green-500" />
+                                <span className="w-2 h-2 rounded-full bg-success" />
                               ) : (
                                 <span className="w-2 h-2 rounded-full bg-muted-foreground" />
                               )}
@@ -775,7 +775,7 @@ export default function ChannelManagerProfessional() {
                             className="h-6 w-6"
                             onClick={(e) => { e.stopPropagation(); handleToggleFavorite(channel); }}
                           >
-                            <Star className={`h-3 w-3 ${channel.is_favorite ? 'fill-yellow-500 text-yellow-500' : ''}`} />
+                            <Star className={`h-3 w-3 ${channel.is_favorite ? 'fill-warning text-warning' : ''}`} />
                           </Button>
                           <Button
                             variant="ghost"
@@ -791,7 +791,7 @@ export default function ChannelManagerProfessional() {
                             className="h-6 w-6"
                             onClick={(e) => { e.stopPropagation(); handleToggleChannel(channel); }}
                           >
-                            <Power className={`h-3 w-3 ${channel.is_active ? 'text-green-500' : 'text-muted-foreground'}`} />
+                            <Power className={`h-3 w-3 ${channel.is_active ? 'text-success' : 'text-muted-foreground'}`} />
                           </Button>
                           <DropdownMenu>
                             <DropdownMenuTrigger asChild onClick={(e) => e.stopPropagation()}>
@@ -860,7 +860,7 @@ export default function ChannelManagerProfessional() {
                           <span className="flex items-center gap-1">
                             {selectedChannel.is_active ? (
                               <>
-                                <Wifi className="h-3 w-3 text-green-500" />
+                                <Wifi className="h-3 w-3 text-success" />
                                 Online
                               </>
                             ) : (
@@ -1479,7 +1479,7 @@ export default function ChannelManagerProfessional() {
                         <div>
                           <div className="flex items-center gap-2">
                             <span className="font-medium">{member.name}</span>
-                            {member.role === 'admin' && <Crown className="h-4 w-4 text-yellow-500" />}
+                            {member.role === 'admin' && <Crown className="h-4 w-4 text-warning" />}
                           </div>
                           <span className="text-xs text-muted-foreground capitalize">{member.role}</span>
                         </div>

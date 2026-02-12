@@ -199,8 +199,8 @@ export default function TrainingDashboard() {
             <div className="space-y-3">
               {drills.map((drill: Drill) => (
                 <div key={drill.id} className={`p-4 rounded-lg border ${
-                  drill.status === "overdue" ? "bg-red-500/10 border-red-500/30" :
-                  drill.status === "due" ? "bg-amber-500/10 border-amber-500/30" :
+                  drill.status === "overdue" ? "bg-destructive/10 border-destructive/30" :
+                  drill.status === "due" ? "bg-warning/10 border-warning/30" :
                   "bg-muted/30 border-border"
                 }`}>
                   <div className="flex items-start justify-between mb-2">
@@ -266,8 +266,8 @@ export default function TrainingDashboard() {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
             {trainings.map((training: TrainingRecord) => (
               <div key={training.id} className={`p-4 rounded-lg border ${
-                training.status === "expired" ? "bg-red-500/10 border-red-500/30" :
-                training.status === "expiring" ? "bg-amber-500/10 border-amber-500/30" :
+                training.status === "expired" ? "bg-destructive/10 border-destructive/30" :
+                training.status === "expiring" ? "bg-warning/10 border-warning/30" :
                 "bg-muted/30 border-border"
               }`}>
                 <div className="flex items-center justify-between mb-2">

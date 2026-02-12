@@ -265,10 +265,10 @@ const roadmapItems: RoadmapItem[] = [
 
 const getStatusColor = (status: RoadmapItem["status"]) => {
   switch (status) {
-    case "completed": return "bg-green-500/20 text-green-400 border-green-500/30";
-    case "in-progress": return "bg-blue-500/20 text-blue-400 border-blue-500/30";
-    case "planned": return "bg-gray-500/20 text-gray-400 border-gray-500/30";
-    case "beta": return "bg-amber-500/20 text-amber-400 border-amber-500/30";
+    case "completed": return "bg-success/20 text-success border-success/30";
+    case "in-progress": return "bg-primary/20 text-primary border-primary/30";
+    case "planned": return "bg-muted text-muted-foreground border-border";
+    case "beta": return "bg-warning/20 text-warning border-warning/30";
   }
 };
 

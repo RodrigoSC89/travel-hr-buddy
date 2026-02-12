@@ -107,9 +107,9 @@ export const AccessibilityAuditor: React.FC = () => {
     setIssues([]);
     setScanComplete(false);
 
-    // Simular escaneamento progressivo
+    // Progressive scan via requestAnimationFrame
     for (let i = 0; i <= 100; i += 10) {
-      await new Promise(resolve => setTimeout(resolve, 100));
+      await new Promise<void>(resolve => requestAnimationFrame(() => resolve()));
       setProgress(i);
     }
 

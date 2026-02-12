@@ -442,10 +442,10 @@ export const MultimodalAIInspection: React.FC = () => {
                           key={finding.id}
                           className={cn(
                             "p-3 rounded-lg border flex items-start gap-3",
-                            finding.severity === 'critical' && "border-red-500/50 bg-red-500/10",
-                            finding.severity === 'warning' && "border-yellow-500/50 bg-yellow-500/10",
-                            finding.severity === 'info' && "border-blue-500/50 bg-blue-500/10",
-                            finding.severity === 'ok' && "border-green-500/50 bg-green-500/10"
+                            finding.severity === 'critical' && "border-destructive/50 bg-destructive/10",
+                            finding.severity === 'warning' && "border-warning/50 bg-warning/10",
+                            finding.severity === 'info' && "border-info/50 bg-info/10",
+                            finding.severity === 'ok' && "border-success/50 bg-success/10"
                           )}
                         >
                           {getSeverityIcon(finding.severity)}

@@ -146,7 +146,7 @@ export const PredictiveMaintenanceRevolution: React.FC = () => {
               <div>
                 <CardTitle className="text-2xl flex items-center gap-2">
                   Predictive Maintenance Revolution
-                  <Badge className="bg-yellow-400 text-yellow-900 hover:bg-yellow-300">
+                  <Badge className="bg-warning text-warning-foreground hover:bg-warning/90">
                     <Sparkles className="h-3 w-3 mr-1" />
                     IA AVANÇADA
                   </Badge>
@@ -277,7 +277,7 @@ export const PredictiveMaintenanceRevolution: React.FC = () => {
                         </div>
                       </div>
                       <div className="flex items-center gap-2">
-                        <DollarSign className="h-4 w-4 text-green-600" />
+                        <DollarSign className="h-4 w-4 text-success" />
                         <div>
                           <div className="text-xs text-muted-foreground">Custo Est.</div>
                           <div className="font-semibold">${prediction.estimatedCost.toLocaleString()}</div>
@@ -286,10 +286,10 @@ export const PredictiveMaintenanceRevolution: React.FC = () => {
                     </div>
 
                     {/* Pattern Matched */}
-                    <div className="p-2 bg-purple-50 dark:bg-purple-900/10 rounded-lg mb-3">
+                    <div className="p-2 bg-accent/10 dark:bg-accent/5 rounded-lg mb-3">
                       <div className="flex items-center gap-2">
-                        <Sparkles className="h-4 w-4 text-purple-600" />
-                        <span className="text-sm font-medium text-purple-900 dark:text-purple-300">
+                        <Sparkles className="h-4 w-4 text-accent-foreground" />
+                        <span className="text-sm font-medium text-accent-foreground">
                           {prediction.patternMatched}
                         </span>
                       </div>
@@ -434,11 +434,11 @@ export const PredictiveMaintenanceRevolution: React.FC = () => {
                   ${(totalSavings/1000).toFixed(0)}k
                 </h3>
                 <p className="text-sm text-muted-foreground">Economia Total Anual</p>
-                <p className="text-xs text-green-600 mt-1">ROI de 500% em 6 meses</p>
+                <p className="text-xs text-success mt-1">ROI de 500% em 6 meses</p>
               </div>
               <div className="text-right">
                 <div className="text-4xl mb-2">💰</div>
-                <Badge className="bg-green-600 text-white">
+                <Badge className="bg-success text-success-foreground">
                   <TrendingUp className="h-3 w-3 mr-1" />
                   Economia Contínua
                 </Badge>

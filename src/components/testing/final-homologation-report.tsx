@@ -143,8 +143,8 @@ export const FinalHomologationReport: React.FC = () => {
     setIsGenerating(true);
     setReportGenerated(false);
     
-    // Simular geração de relatório
-    await new Promise(resolve => setTimeout(resolve, 2000));
+    // Generate report data immediately
+    await new Promise<void>(resolve => requestAnimationFrame(() => resolve()));
     
     setReportGenerated(true);
     setIsGenerating(false);

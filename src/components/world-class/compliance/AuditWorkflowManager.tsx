@@ -41,11 +41,11 @@ interface AuditCategory {
 }
 
 const STATUS_CONFIG = {
-  pending: { color: 'bg-gray-100 text-gray-600', icon: Clock, label: 'Pendente' },
-  compliant: { color: 'bg-green-100 text-green-600', icon: CheckCircle, label: 'Conforme' },
-  non_compliant: { color: 'bg-red-100 text-red-600', icon: XCircle, label: 'Não Conforme' },
-  observation: { color: 'bg-yellow-100 text-yellow-600', icon: AlertTriangle, label: 'Observação' },
-  not_applicable: { color: 'bg-gray-100 text-gray-400', icon: FileText, label: 'N/A' },
+  pending: { color: 'bg-muted text-muted-foreground', icon: Clock, label: 'Pendente' },
+  compliant: { color: 'bg-success/10 text-success', icon: CheckCircle, label: 'Conforme' },
+  non_compliant: { color: 'bg-destructive/10 text-destructive', icon: XCircle, label: 'Não Conforme' },
+  observation: { color: 'bg-warning/10 text-warning', icon: AlertTriangle, label: 'Observação' },
+  not_applicable: { color: 'bg-muted text-muted-foreground', icon: FileText, label: 'N/A' },
 };
 
 function mapItemStatus(status: string | null): AuditItem['status'] {

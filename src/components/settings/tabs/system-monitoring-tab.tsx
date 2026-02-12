@@ -98,9 +98,9 @@ export const SystemMonitoringTab: React.FC<SystemMonitoringTabProps> = ({
 
   const getStatusColor = (color: string) => {
     switch (color) {
-    case "red": return "text-red-600 bg-red-100";
-    case "yellow": return "text-yellow-600 bg-yellow-100";
-    case "green": return "text-green-600 bg-green-100";
+    case "red": return "text-destructive bg-destructive/10";
+    case "yellow": return "text-warning bg-warning/10";
+    case "green": return "text-success bg-success/10";
     default: return "text-muted-foreground bg-secondary";
     }
   };
@@ -155,12 +155,12 @@ export const SystemMonitoringTab: React.FC<SystemMonitoringTabProps> = ({
 
           {/* System Status */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <div className="p-4 bg-green-50 dark:bg-green-900/20 border border-green-200 rounded-lg">
+            <div className="p-4 bg-success/5 dark:bg-success/10 border border-success/20 rounded-lg">
               <div className="flex items-center gap-2 mb-2">
-                <CheckCircle className="w-5 h-5 text-green-600" />
-                <span className="font-medium text-green-800 dark:text-green-200">Sistema Operacional</span>
+                <CheckCircle className="w-5 h-5 text-success" />
+                <span className="font-medium text-success">Sistema Operacional</span>
               </div>
-              <div className="text-sm text-green-700 dark:text-green-300">
+              <div className="text-sm text-success/80">
                 Uptime: {realTimeData.uptime}% • {realTimeData.activeUsers} usuários ativos
               </div>
             </div>

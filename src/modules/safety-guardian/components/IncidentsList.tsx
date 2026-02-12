@@ -51,14 +51,14 @@ interface IncidentsListProps {
 const typeConfig = {
   incident: { label: 'Incidente', icon: AlertCircle, bgColor: 'bg-destructive/10', textColor: 'text-destructive' },
   near_miss: { label: 'Near Miss', icon: AlertTriangle, bgColor: 'bg-warning/10', textColor: 'text-warning' },
-  unsafe_condition: { label: 'Cond. Insegura', icon: Shield, bgColor: 'bg-blue-100 dark:bg-blue-900/30', textColor: 'text-blue-600 dark:text-blue-400' },
-  unsafe_act: { label: 'Ato Inseguro', icon: AlertTriangle, bgColor: 'bg-orange-100 dark:bg-orange-900/30', textColor: 'text-orange-600 dark:text-orange-400' },
+  unsafe_condition: { label: 'Cond. Insegura', icon: Shield, bgColor: 'bg-info/10', textColor: 'text-info' },
+  unsafe_act: { label: 'Ato Inseguro', icon: AlertTriangle, bgColor: 'bg-accent/10', textColor: 'text-accent-foreground' },
 };
 
 const statusConfig = {
   open: { label: 'Aberto', color: 'bg-warning/10 text-warning border-warning/20' },
-  investigating: { label: 'Investigando', color: 'bg-blue-100 text-blue-700 border-blue-200 dark:bg-blue-900/30 dark:text-blue-400' },
-  action_pending: { label: 'Ação Pendente', color: 'bg-orange-100 text-orange-700 border-orange-200 dark:bg-orange-900/30 dark:text-orange-400' },
+  investigating: { label: 'Investigando', color: 'bg-info/10 text-info border-info/20' },
+  action_pending: { label: 'Ação Pendente', color: 'bg-accent/10 text-accent-foreground border-accent/20' },
   resolved: { label: 'Resolvido', color: 'bg-success/10 text-success border-success/20' },
   closed: { label: 'Fechado', color: 'bg-muted text-muted-foreground' },
 };
@@ -66,7 +66,7 @@ const statusConfig = {
 const severityConfig = {
   low: 'bg-success/10 text-success',
   medium: 'bg-warning/10 text-warning',
-  high: 'bg-orange-100 text-orange-700 dark:bg-orange-900/30 dark:text-orange-400',
+  high: 'bg-accent/10 text-accent-foreground',
   critical: 'bg-destructive/10 text-destructive',
 };
 
