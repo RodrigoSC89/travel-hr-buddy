@@ -104,10 +104,10 @@ export default function SOLASISPSTrainingPage() {
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case "completed": return "bg-green-500";
-      case "in_progress": return "bg-blue-500";
-      case "pending": return "bg-yellow-500";
-      default: return "bg-gray-500";
+      case "completed": return "bg-success";
+      case "in_progress": return "bg-info";
+      case "pending": return "bg-warning";
+      default: return "bg-muted-foreground";
     }
   };
 
@@ -302,8 +302,8 @@ export default function SOLASISPSTrainingPage() {
             </CardHeader>
             <CardContent>
               <div className="space-y-4">
-                {upcomingTrainings.map((training, index) => (
-                  <div key={index} className="flex items-center justify-between p-4 border rounded-lg">
+                {upcomingTrainings.map((training) => (
+                  <div key={training.name} className="flex items-center justify-between p-4 border rounded-lg">
                     <div>
                       <h3 className="font-medium">{training.name}</h3>
                       <p className="text-sm text-muted-foreground">{training.vessel}</p>
@@ -329,17 +329,17 @@ export default function SOLASISPSTrainingPage() {
             </CardHeader>
             <CardContent>
               <div className="space-y-4">
-                {certifications.map((cert, index) => (
-                  <div key={index} className="flex items-center justify-between p-4 border rounded-lg">
+                {certifications.map((cert) => (
+                  <div key={cert.name} className="flex items-center justify-between p-4 border rounded-lg">
                     <div className="flex items-center gap-3">
-                      <Award className={`h-8 w-8 ${cert.status === "valid" ? "text-green-500" : "text-yellow-500"}`} />
+                      <Award className={`h-8 w-8 ${cert.status === "valid" ? "text-success" : "text-warning"}`} />
                       <div>
                         <h3 className="font-medium">{cert.name}</h3>
                         <p className="text-sm text-muted-foreground">{cert.crew} tripulantes certificados</p>
                       </div>
                     </div>
                     <div className="text-right">
-                      <Badge className={cert.status === "valid" ? "bg-green-500" : "bg-yellow-500"}>
+                      <Badge className={cert.status === "valid" ? "bg-success" : "bg-warning"}>
                         {cert.status === "valid" ? "Válido" : "Expirando"}
                       </Badge>
                       <p className="text-sm text-muted-foreground mt-1">
@@ -370,8 +370,8 @@ export default function SOLASISPSTrainingPage() {
                   { type: "Segurança ISPS", frequency: "Trimestral", lastDrill: "2024-11-15", next: "2025-02-15" },
                   { type: "Derramamento de Óleo", frequency: "Semestral", lastDrill: "2024-08-01", next: "2025-02-01" },
                   { type: "Evacuação Médica", frequency: "Trimestral", lastDrill: "2024-12-20", next: "2025-03-20" },
-                ].map((drill, index) => (
-                  <div key={index} className="p-4 border rounded-lg">
+                ].map((drill) => (
+                  <div key={drill.type} className="p-4 border rounded-lg">
                     <div className="flex items-center justify-between mb-2">
                       <h3 className="font-medium">{drill.type}</h3>
                       <Badge variant="outline">{drill.frequency}</Badge>

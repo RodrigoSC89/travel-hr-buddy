@@ -229,8 +229,8 @@ const AnalyticsDashboard = () => {
                     { name: "Eficiência Operacional", current: 87, target: 90, colorClass: "bg-accent" },
                     { name: "Redução de Custos", current: 76, target: 85, colorClass: "bg-warning" },
                     { name: "Inovação (IA)", current: 68, target: 80, colorClass: "bg-primary" }
-                  ].map((goal, index) => (
-                    <div key={index} className="space-y-2">
+                  ].map((goal) => (
+                    <div key={goal.name} className="space-y-2">
                       <div className="flex items-center justify-between">
                         <span className="font-medium">{goal.name}</span>
                         <span className="text-sm text-muted-foreground">

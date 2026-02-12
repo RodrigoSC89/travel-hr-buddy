@@ -92,7 +92,7 @@ export const InsightImplementationDialog: React.FC<InsightImplementationDialogPr
       <DialogContent className="max-w-3xl max-h-[90vh] overflow-y-auto">
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2">
-            <Lightbulb className="h-5 w-5 text-yellow-500" />
+            <Lightbulb className="h-5 w-5 text-warning" />
             Implementar Insight
           </DialogTitle>
           <DialogDescription>
@@ -106,7 +106,7 @@ export const InsightImplementationDialog: React.FC<InsightImplementationDialogPr
             <CardHeader className="pb-3">
               <div className="flex items-center justify-between">
                 <CardTitle className="text-lg">{insight.title}</CardTitle>
-                <Badge variant="outline" className="bg-green-50 text-green-700 border-green-200">
+                <Badge variant="outline" className="bg-success/10 text-success border-success/20">
                   {insight.confidence}% Confiança
                 </Badge>
               </div>
@@ -191,7 +191,7 @@ export const InsightImplementationDialog: React.FC<InsightImplementationDialogPr
                 <div 
                   key={step.id} 
                   className={`flex items-start gap-3 p-3 rounded-lg border transition-colors ${
-                    step.completed ? "bg-green-50 border-green-200" : "bg-muted/50"
+                    step.completed ? "bg-success/5 border-success/20" : "bg-muted/50"
                   }`}
                 >
                   <Checkbox
