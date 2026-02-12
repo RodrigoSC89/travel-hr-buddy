@@ -376,8 +376,8 @@ class LangTrainingEngine {
         
         logger.info(`[LangTraining] Epoch ${epoch + 1}/${config.epochs}: loss=${metrics.loss.toFixed(4)}, accuracy=${(metrics.accuracy * 100).toFixed(1)}%, BLEU=${metrics.bleu_score.toFixed(3)}`);
         
-        // Small delay to simulate training time
-        await new Promise(resolve => setTimeout(resolve, 100));
+        // Yield to UI thread between epochs
+        await new Promise<void>(resolve => requestAnimationFrame(() => resolve()));
       }
 
       // Mark session as completed

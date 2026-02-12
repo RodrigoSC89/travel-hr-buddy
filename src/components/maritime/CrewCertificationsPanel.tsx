@@ -108,7 +108,7 @@ export const CrewCertificationsPanel: React.FC<CrewCertificationsPanelProps> = (
     }
 
     setIsLoading(true);
-    await new Promise(r => setTimeout(r, 500));
+    await new Promise<void>(resolve => requestAnimationFrame(() => resolve()));
 
     const crew = crewMembers.find(c => c.id === newCert.crewId);
     const daysUntilExpiry = differenceInDays(new Date(newCert.expiryDate), new Date());
