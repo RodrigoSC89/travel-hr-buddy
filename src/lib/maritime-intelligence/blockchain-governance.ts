@@ -305,8 +305,8 @@ export class BlockchainGovernanceSystem {
       return { valid: false, blockConfirmations: 0, integrityHash: '' };
     }
 
-    // Simulate blockchain verification
-    await new Promise(resolve => setTimeout(resolve, 500));
+    // Yield for verification computation
+    await new Promise<void>(resolve => queueMicrotask(resolve));
 
     return {
       valid: event.verified,

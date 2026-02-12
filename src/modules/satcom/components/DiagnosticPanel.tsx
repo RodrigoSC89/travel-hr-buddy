@@ -207,7 +207,7 @@ export const DiagnosticPanel: React.FC<DiagnosticPanelProps> = ({
         success: true,
       });
 
-      await new Promise((resolve) => setTimeout(resolve, 300));
+      await new Promise<void>((resolve) => requestAnimationFrame(() => resolve()));
     }
   };
 

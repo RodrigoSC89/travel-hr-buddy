@@ -103,8 +103,8 @@ export function AdaptiveInterface() {
     setIsApplying(true);
     setSelectedProfile(profile);
     
-    // Simulate applying profile
-    await new Promise(resolve => setTimeout(resolve, 1500));
+    // Apply profile preferences
+    await new Promise<void>(resolve => requestAnimationFrame(() => resolve()));
     
     setIsApplying(false);
   };

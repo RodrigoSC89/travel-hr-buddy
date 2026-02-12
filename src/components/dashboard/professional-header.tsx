@@ -40,8 +40,8 @@ export function ProfessionalHeader({
       if (onRefresh) {
         await onRefresh();
       } else {
-        // Default behavior: reload page data
-        window.location.reload();
+        // Default behavior: trigger re-render via React state
+        window.dispatchEvent(new Event('focus'));
       }
       toast.success("Dados atualizados com sucesso");
     } catch (error) {
