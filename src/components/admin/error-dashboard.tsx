@@ -35,20 +35,20 @@ export const ErrorDashboard: React.FC = () => {
       case 'critical':
         return <XCircle className="w-4 h-4 text-destructive" />;
       case 'high':
-        return <AlertTriangle className="w-4 h-4 text-red-500" />;
+        return <AlertTriangle className="w-4 h-4 text-destructive" />;
       case 'medium':
         return <AlertCircle className="w-4 h-4 text-warning" />;
       case 'low':
-        return <Info className="w-4 h-4 text-blue-500" />;
+        return <Info className="w-4 h-4 text-info" />;
     }
   };
 
   const getSeverityBadge = (severity: ErrorSeverity) => {
     const variants = {
       critical: <Badge variant="destructive">Crítico</Badge>,
-      high: <Badge className="bg-red-500/20 text-red-700 border-red-500/30">Alto</Badge>,
+      high: <Badge className="bg-destructive/20 text-destructive border-destructive/30">Alto</Badge>,
       medium: <Badge className="bg-warning/20 text-warning border-warning/30">Médio</Badge>,
-      low: <Badge className="bg-blue-500/20 text-blue-700 border-blue-500/30">Baixo</Badge>,
+      low: <Badge className="bg-info/20 text-info border-info/30">Baixo</Badge>,
     };
     return variants[severity];
   };
@@ -71,13 +71,13 @@ export const ErrorDashboard: React.FC = () => {
   const getCategoryColor = (category: ErrorCategory): string => {
     switch (category) {
       case 'network':
-        return 'text-blue-500';
+        return 'text-info';
       case 'authentication':
-        return 'text-red-500';
+        return 'text-destructive';
       case 'runtime':
-        return 'text-purple-500';
+        return 'text-accent-foreground';
       case 'validation':
-        return 'text-yellow-500';
+        return 'text-warning';
       case 'unknown':
         return 'text-muted-foreground';
     }

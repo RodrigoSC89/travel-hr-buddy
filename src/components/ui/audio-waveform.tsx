@@ -47,7 +47,7 @@ export const AudioWaveform: React.FC<AudioWaveformProps> = ({
             "w-1 rounded-full transition-all duration-150",
             type === 'input' 
               ? 'bg-primary' 
-              : 'bg-green-500',
+              : 'bg-success',
             isActive ? 'opacity-100' : 'opacity-30'
           )}
           style={{
@@ -88,7 +88,7 @@ export const AnimatedAudioWaveform: React.FC<AudioWaveformProps> = ({
               "w-1 rounded-full transition-opacity",
               type === 'input' 
                 ? 'bg-gradient-to-t from-primary/50 to-primary' 
-                : 'bg-gradient-to-t from-green-500/50 to-green-500',
+                : 'bg-gradient-to-t from-success/50 to-success',
               isActive ? 'opacity-100' : 'opacity-20'
             )}
             style={{
@@ -240,14 +240,14 @@ export const PulseIndicator: React.FC<PulseIndicatorProps> = ({
             className={cn(
               "absolute rounded-full animate-ping",
               pulseClasses[size],
-              type === 'input' ? 'bg-primary/30' : 'bg-green-500/30'
+              type === 'input' ? 'bg-primary/30' : 'bg-success/30'
             )}
           />
           <div 
             className={cn(
               "absolute rounded-full animate-pulse",
               pulseClasses[size],
-              type === 'input' ? 'bg-primary/20' : 'bg-green-500/20'
+              type === 'input' ? 'bg-primary/20' : 'bg-success/20'
             )}
             style={{ animationDelay: '0.2s' }}
           />
@@ -260,7 +260,7 @@ export const PulseIndicator: React.FC<PulseIndicatorProps> = ({
           "rounded-full z-10 transition-colors",
           sizeClasses[size],
           isActive
-            ? type === 'input' ? 'bg-primary' : 'bg-green-500'
+            ? type === 'input' ? 'bg-primary' : 'bg-success'
             : 'bg-muted-foreground/30'
         )}
       />

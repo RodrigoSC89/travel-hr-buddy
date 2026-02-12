@@ -19,10 +19,10 @@ interface DashboardFiltersProps {
 }
 
 const availableKPIs = [
-  { id: "revenue", label: "Receita Total", icon: DollarSign, color: "text-green-600" },
-  { id: "users", label: "Usuários Ativos", icon: Users, color: "text-blue-600" },
-  { id: "performance", label: "Performance Sistema", icon: Activity, color: "text-orange-600" },
-  { id: "satisfaction", label: "Satisfação", icon: TrendingUp, color: "text-purple-600" },
+  { id: "revenue", label: "Receita Total", icon: DollarSign, color: "text-success" },
+  { id: "users", label: "Usuários Ativos", icon: Users, color: "text-info" },
+  { id: "performance", label: "Performance Sistema", icon: Activity, color: "text-warning" },
+  { id: "satisfaction", label: "Satisfação", icon: TrendingUp, color: "text-accent-foreground" },
 ];
 
 const periodOptions = [

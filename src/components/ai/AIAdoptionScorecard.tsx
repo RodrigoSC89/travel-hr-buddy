@@ -122,9 +122,9 @@ export function AIAdoptionScorecard({ organizationId, className }: AIAdoptionSco
   }
 
   const getScoreColor = (score: number) => {
-    if (score >= 80) return "text-green-500";
-    if (score >= 60) return "text-yellow-500";
-    return "text-red-500";
+    if (score >= 80) return "text-success";
+    if (score >= 60) return "text-warning";
+    return "text-destructive";
   };
 
   const getScoreBadge = (score: number) => {
@@ -168,7 +168,7 @@ export function AIAdoptionScorecard({ organizationId, className }: AIAdoptionSco
         {/* Stats Grid */}
         <div className="grid grid-cols-2 gap-4">
           <div className="flex items-center gap-3 p-3 rounded-lg bg-muted/50">
-            <TrendingUp className="h-5 w-5 text-blue-500" />
+            <TrendingUp className="h-5 w-5 text-info" />
             <div>
               <p className="text-2xl font-semibold">{metrics?.totalInteractions || 0}</p>
               <p className="text-xs text-muted-foreground">Interações</p>
@@ -176,7 +176,7 @@ export function AIAdoptionScorecard({ organizationId, className }: AIAdoptionSco
           </div>
 
           <div className="flex items-center gap-3 p-3 rounded-lg bg-muted/50">
-            <Clock className="h-5 w-5 text-orange-500" />
+            <Clock className="h-5 w-5 text-warning" />
             <div>
               <p className="text-2xl font-semibold">{metrics?.avgResponseTime || 0}ms</p>
               <p className="text-xs text-muted-foreground">Tempo Médio</p>
@@ -184,7 +184,7 @@ export function AIAdoptionScorecard({ organizationId, className }: AIAdoptionSco
           </div>
 
           <div className="flex items-center gap-3 p-3 rounded-lg bg-muted/50">
-            <CheckCircle2 className="h-5 w-5 text-green-500" />
+            <CheckCircle2 className="h-5 w-5 text-success" />
             <div>
               <p className="text-2xl font-semibold">{metrics?.acceptedSuggestions || 0}</p>
               <p className="text-xs text-muted-foreground">Aceitas</p>
@@ -192,7 +192,7 @@ export function AIAdoptionScorecard({ organizationId, className }: AIAdoptionSco
           </div>
 
           <div className="flex items-center gap-3 p-3 rounded-lg bg-muted/50">
-            <XCircle className="h-5 w-5 text-red-500" />
+            <XCircle className="h-5 w-5 text-destructive" />
             <div>
               <p className="text-2xl font-semibold">{metrics?.rejectedSuggestions || 0}</p>
               <p className="text-xs text-muted-foreground">Rejeitadas</p>

@@ -137,7 +137,7 @@ export function EUETSCompliance() {
         <Card>
           <CardContent className="pt-4">
             <div className="flex items-center gap-2">
-              <Ship className="h-5 w-5 text-blue-500" />
+              <Ship className="h-5 w-5 text-info" />
               <span className="text-sm text-muted-foreground">EU Voyages YTD</span>
             </div>
             <p className="text-2xl font-bold mt-2">
@@ -152,18 +152,18 @@ export function EUETSCompliance() {
         <Card>
           <CardContent className="pt-4">
             <div className="flex items-center gap-2">
-              <Euro className="h-5 w-5 text-green-500" />
+              <Euro className="h-5 w-5 text-success" />
               <span className="text-sm text-muted-foreground">EUA Price</span>
             </div>
             <p className="text-2xl font-bold mt-2">€{euaPosition.euaPrice}</p>
-            <p className="text-xs text-green-500">+2.3% this week</p>
+            <p className="text-xs text-success">+2.3% this week</p>
           </CardContent>
         </Card>
 
         <Card>
           <CardContent className="pt-4">
             <div className="flex items-center gap-2">
-              <Wallet className="h-5 w-5 text-purple-500" />
+              <Wallet className="h-5 w-5 text-accent-foreground" />
               <span className="text-sm text-muted-foreground">EUAs Held</span>
             </div>
             <p className="text-2xl font-bold mt-2">{euaPosition.euasHeld.toLocaleString()}</p>
@@ -174,13 +174,13 @@ export function EUETSCompliance() {
           </CardContent>
         </Card>
 
-        <Card className={shortfall > 0 ? 'border-orange-500' : ''}>
+        <Card className={shortfall > 0 ? 'border-warning' : ''}>
           <CardContent className="pt-4">
             <div className="flex items-center gap-2">
-              <AlertTriangle className={`h-5 w-5 ${shortfall > 0 ? 'text-orange-500' : 'text-green-500'}`} />
+              <AlertTriangle className={`h-5 w-5 ${shortfall > 0 ? 'text-warning' : 'text-success'}`} />
               <span className="text-sm text-muted-foreground">Shortfall</span>
             </div>
-            <p className={`text-2xl font-bold mt-2 ${shortfall > 0 ? 'text-orange-500' : 'text-green-500'}`}>
+            <p className={`text-2xl font-bold mt-2 ${shortfall > 0 ? 'text-warning' : 'text-success'}`}>
               {shortfall > 0 ? shortfall.toLocaleString() : 'None'}
             </p>
             {shortfall > 0 && (
@@ -192,7 +192,7 @@ export function EUETSCompliance() {
         <Card>
           <CardContent className="pt-4">
             <div className="flex items-center gap-2">
-              <Calendar className="h-5 w-5 text-red-500" />
+              <Calendar className="h-5 w-5 text-destructive" />
               <span className="text-sm text-muted-foreground">Surrender Deadline</span>
             </div>
             <p className="text-2xl font-bold mt-2">Sep 30</p>
@@ -266,7 +266,7 @@ export function EUETSCompliance() {
                       </div>
                       <div className="text-right">
                         <p className="font-bold">{voyage.co2Emissions.toLocaleString()} t CO₂</p>
-                        <p className={`text-sm ${voyage.euaCost > 0 ? 'text-orange-500' : 'text-muted-foreground'}`}>
+                        <p className={`text-sm ${voyage.euaCost > 0 ? 'text-warning' : 'text-muted-foreground'}`}>
                           {voyage.euaCost > 0 ? `€${voyage.euaCost.toLocaleString()}` : 'No EUA cost'}
                         </p>
                       </div>
@@ -322,9 +322,9 @@ export function EUETSCompliance() {
                     />
                   </div>
                   
-                  <div className={`p-4 rounded-lg ${shortfall > 0 ? 'bg-orange-500/10 border border-orange-500' : 'bg-green-500/10 border border-green-500'}`}>
+                  <div className={`p-4 rounded-lg ${shortfall > 0 ? 'bg-warning/10 border border-warning' : 'bg-success/10 border border-success'}`}>
                     <p className="text-sm text-muted-foreground">Status</p>
-                    <p className={`text-3xl font-bold ${shortfall > 0 ? 'text-orange-500' : 'text-green-500'}`}>
+                    <p className={`text-3xl font-bold ${shortfall > 0 ? 'text-warning' : 'text-success'}`}>
                       {shortfall > 0 ? `${shortfall.toLocaleString()} Shortfall` : 'Compliant'}
                     </p>
                     {shortfall > 0 && (
@@ -369,12 +369,12 @@ export function EUETSCompliance() {
                   </div>
                   <div className="p-4 border rounded-lg text-center">
                     <p className="text-sm text-muted-foreground">2026 (100%)</p>
-                    <p className="text-2xl font-bold text-orange-500">€3.15M</p>
+                    <p className="text-2xl font-bold text-warning">€3.15M</p>
                   </div>
                 </div>
 
-                <div className="p-4 bg-blue-500/10 border border-blue-500 rounded-lg">
-                  <p className="font-semibold text-blue-500">💡 Cost Reduction Opportunities</p>
+                <div className="p-4 bg-info/10 border border-info rounded-lg">
+                  <p className="font-semibold text-info">💡 Cost Reduction Opportunities</p>
                   <ul className="mt-2 space-y-1 text-sm">
                     <li>• Speed optimization: -15% emissions = €470K savings</li>
                     <li>• Shore power usage: -5% emissions = €157K savings</li>

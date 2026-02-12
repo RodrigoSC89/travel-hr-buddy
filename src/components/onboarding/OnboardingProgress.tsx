@@ -61,7 +61,7 @@ export const OnboardingProgress = memo(function OnboardingProgress({
             className={cn(
               "flex items-start gap-3 p-3 rounded-lg transition-colors",
               step.completed 
-                ? "bg-green-500/5" 
+                ? "bg-success/5" 
                 : index === currentStep 
                   ? "bg-primary/5 border border-primary/20" 
                   : "bg-muted/30"
@@ -70,7 +70,7 @@ export const OnboardingProgress = memo(function OnboardingProgress({
             <div className={cn(
               "flex-shrink-0 w-6 h-6 rounded-full flex items-center justify-center",
               step.completed 
-                ? "bg-green-500 text-white" 
+                ? "bg-success text-success-foreground" 
                 : index === currentStep 
                   ? "bg-primary text-primary-foreground" 
                   : "bg-muted text-muted-foreground"
@@ -85,7 +85,7 @@ export const OnboardingProgress = memo(function OnboardingProgress({
             <div className="flex-1 min-w-0">
               <p className={cn(
                 "font-medium text-sm",
-                step.completed && "text-green-600 dark:text-green-400"
+                step.completed && "text-success"
               )}>
                 {step.title}
               </p>
