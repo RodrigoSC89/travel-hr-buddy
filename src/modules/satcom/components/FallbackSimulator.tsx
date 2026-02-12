@@ -74,10 +74,10 @@ export const FallbackSimulator: React.FC<FallbackSimulatorProps> = ({
                   <div
                     className={`w-3 h-3 rounded-full ${
                       conn.status === "connected"
-                        ? "bg-green-500"
+                        ? "bg-success"
                         : conn.status === "degraded"
-                          ? "bg-yellow-500"
-                          : "bg-red-500"
+                          ? "bg-warning"
+                          : "bg-destructive"
                     }`}
                   />
                   <div>
