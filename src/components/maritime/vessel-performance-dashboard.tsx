@@ -332,8 +332,8 @@ export const VesselPerformanceDashboard = () => {
                 </CardHeader>
                 <CardContent>
                   <div className="space-y-2">
-                    {selectedVesselData.certificates.map((cert, index) => (
-                      <div key={index} className="flex items-center justify-between">
+                    {selectedVesselData.certificates.map((cert) => (
+                      <div key={cert} className="flex items-center justify-between">
                         <span className="text-sm">{cert}</span>
                         <Badge variant="outline" className="text-xs">
                           Válido
