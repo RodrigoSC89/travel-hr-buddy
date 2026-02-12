@@ -112,9 +112,9 @@ export default function SystemHealthPage() {
 
   const getStatusIcon = (success: boolean) => {
     return success ? (
-      <CheckCircle2 className="h-5 w-5 text-green-500" />
+      <CheckCircle2 className="h-5 w-5 text-success" />
     ) : (
-      <XCircle className="h-5 w-5 text-red-500" />
+      <XCircle className="h-5 w-5 text-destructive" />
     );
   };
 
@@ -266,7 +266,7 @@ export default function SystemHealthPage() {
             </CardHeader>
             <CardContent>
               <div className="flex items-center gap-2">
-                <CheckCircle2 className="h-5 w-5 text-green-500" />
+                <CheckCircle2 className="h-5 w-5 text-success" />
                 <span className="text-2xl font-bold">{status.routes}</span>
               </div>
               <p className="text-xs text-muted-foreground mt-2">

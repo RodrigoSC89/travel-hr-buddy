@@ -192,7 +192,7 @@ export const NeuralRouteOptimizer: React.FC = () => {
   return (
     <div className="space-y-6">
       {/* Header */}
-      <Card className="bg-gradient-to-r from-cyan-600 to-blue-600 text-white">
+      <Card className="bg-gradient-to-r from-primary to-primary/80 text-primary-foreground">
         <CardHeader>
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
@@ -343,7 +343,7 @@ export const NeuralRouteOptimizer: React.FC = () => {
                         <div className="text-xs font-medium text-muted-foreground mb-1">Condições Meteorológicas:</div>
                         <div className="flex flex-wrap gap-1">
                           {route.weatherConditions.map((condition, idx) => (
-                            <Badge key={idx} variant="outline" className="text-xs">
+                          <Badge key={condition} variant="outline" className="text-xs">
                               <Cloud className="h-3 w-3 mr-1" />
                               {condition}
                             </Badge>
@@ -353,8 +353,8 @@ export const NeuralRouteOptimizer: React.FC = () => {
                       <div>
                         <div className="text-xs font-medium text-muted-foreground mb-1">Condições Oceânicas:</div>
                         <div className="flex flex-wrap gap-1">
-                          {route.currentConditions.map((condition, idx) => (
-                            <Badge key={idx} variant="outline" className="text-xs">
+                          {route.currentConditions.map((condition) => (
+                            <Badge key={condition} variant="outline" className="text-xs">
                               <Waves className="h-3 w-3 mr-1" />
                               {condition}
                             </Badge>
@@ -389,8 +389,8 @@ export const NeuralRouteOptimizer: React.FC = () => {
           </CardHeader>
           <CardContent>
             <div className="space-y-3 max-h-[600px] overflow-y-auto">
-              {weatherForecast.map((forecast, idx) => (
-                <div key={idx} className="p-3 border rounded-lg space-y-2">
+              {weatherForecast.map((forecast) => (
+                <div key={forecast.date.toISOString()} className="p-3 border rounded-lg space-y-2">
                   <div className="flex items-center justify-between">
                     <span className="font-medium text-sm">
                       {forecast.date.toLocaleDateString("pt-BR", { 

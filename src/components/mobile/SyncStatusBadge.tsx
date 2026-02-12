@@ -26,15 +26,15 @@ export function SyncStatusBadge({ className }: SyncStatusBadgeProps) {
   const getStatusInfo = () => {
     // PATCH v12: Removido estado offline
     if (isSyncing) {
-      return { icon: RefreshCw, color: 'text-blue-500', bg: 'bg-blue-500/10', label: 'Sincronizando' };
+      return { icon: RefreshCw, color: 'text-info', bg: 'bg-info/10', label: 'Sincronizando' };
     }
     if (failedCount > 0) {
-      return { icon: AlertCircle, color: 'text-red-500', bg: 'bg-red-500/10', label: 'Erro' };
+      return { icon: AlertCircle, color: 'text-destructive', bg: 'bg-destructive/10', label: 'Erro' };
     }
     if (pendingCount > 0) {
-      return { icon: Cloud, color: 'text-orange-500', bg: 'bg-orange-500/10', label: 'Pendente' };
+      return { icon: Cloud, color: 'text-warning', bg: 'bg-warning/10', label: 'Pendente' };
     }
-    return { icon: Check, color: 'text-green-500', bg: 'bg-green-500/10', label: 'Sincronizado' };
+    return { icon: Check, color: 'text-success', bg: 'bg-success/10', label: 'Sincronizado' };
   };
 
   const status = getStatusInfo();

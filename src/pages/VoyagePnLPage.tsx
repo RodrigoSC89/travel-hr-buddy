@@ -114,7 +114,7 @@ export default function VoyagePnLPage() {
                 <p className="text-sm text-muted-foreground flex items-center gap-1">
                   <TrendingUp className="h-4 w-4" /> Receita Total
                 </p>
-                <p className="text-2xl font-bold text-green-600">
+                <p className="text-2xl font-bold text-success">
                   ${(stats?.totalRevenue || 0).toLocaleString()}
                 </p>
               </CardContent>
@@ -124,7 +124,7 @@ export default function VoyagePnLPage() {
                 <p className="text-sm text-muted-foreground flex items-center gap-1">
                   <TrendingDown className="h-4 w-4" /> Custos Total
                 </p>
-                <p className="text-2xl font-bold text-red-600">
+                <p className="text-2xl font-bold text-destructive">
                   ${(stats?.totalCosts || 0).toLocaleString()}
                 </p>
               </CardContent>
@@ -134,7 +134,7 @@ export default function VoyagePnLPage() {
                 <p className="text-sm text-muted-foreground flex items-center gap-1">
                   <DollarSign className="h-4 w-4" /> Lucro Total
                 </p>
-                <p className={`text-2xl font-bold ${(stats?.totalProfit || 0) >= 0 ? 'text-green-600' : 'text-red-600'}`}>
+                <p className={`text-2xl font-bold ${(stats?.totalProfit || 0) >= 0 ? 'text-success' : 'text-destructive'}`}>
                   ${(stats?.totalProfit || 0).toLocaleString()}
                 </p>
               </CardContent>
@@ -144,7 +144,7 @@ export default function VoyagePnLPage() {
                 <p className="text-sm text-muted-foreground flex items-center gap-1">
                   <Ship className="h-4 w-4" /> Margem Média
                 </p>
-                <p className={`text-2xl font-bold ${(stats?.avgMargin || 0) >= 0 ? 'text-green-600' : 'text-red-600'}`}>
+                <p className={`text-2xl font-bold ${(stats?.avgMargin || 0) >= 0 ? 'text-success' : 'text-destructive'}`}>
                   {(stats?.avgMargin || 0).toFixed(1)}%
                 </p>
               </CardContent>
@@ -218,16 +218,16 @@ export default function VoyagePnLPage() {
                       <td className="p-2 text-sm text-muted-foreground">
                         {voyage.departurePort} → {voyage.arrivalPort}
                       </td>
-                      <td className="p-2 text-right text-green-600">
+                      <td className="p-2 text-right text-success">
                         ${voyage.revenue.toLocaleString()}
                       </td>
-                      <td className="p-2 text-right text-red-600">
+                      <td className="p-2 text-right text-destructive">
                         ${voyage.costs.toLocaleString()}
                       </td>
-                      <td className={`p-2 text-right font-bold ${voyage.profit >= 0 ? 'text-green-600' : 'text-red-600'}`}>
+                      <td className={`p-2 text-right font-bold ${voyage.profit >= 0 ? 'text-success' : 'text-destructive'}`}>
                         ${voyage.profit.toLocaleString()}
                       </td>
-                      <td className={`p-2 text-right ${voyage.margin >= 0 ? 'text-green-600' : 'text-red-600'}`}>
+                      <td className={`p-2 text-right ${voyage.margin >= 0 ? 'text-success' : 'text-destructive'}`}>
                         {voyage.margin.toFixed(1)}%
                       </td>
                       <td className="p-2 text-right text-muted-foreground">

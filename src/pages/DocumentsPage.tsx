@@ -73,7 +73,7 @@ export default function DocumentsPage() {
             <CardTitle className="text-sm">Uploads Hoje</CardTitle>
           </CardHeader>
           <CardContent>
-            <span className="text-3xl font-bold text-green-500">5</span>
+            <span className="text-3xl font-bold text-success">5</span>
           </CardContent>
         </Card>
         <Card>

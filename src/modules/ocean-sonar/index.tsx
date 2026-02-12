@@ -116,11 +116,11 @@ const OceanSonar: React.FC = () => {
   const getRiskColor = (risk: SonarReading["riskLevel"]) => {
     switch (risk) {
     case "safe":
-      return "text-green-400 bg-green-500/10";
+      return "text-success bg-success/10";
     case "caution":
-      return "text-yellow-400 bg-yellow-500/10";
+      return "text-warning bg-warning/10";
     case "danger":
-      return "text-red-400 bg-red-500/10";
+      return "text-destructive bg-destructive/10";
     }
   };
 
@@ -185,8 +185,8 @@ const OceanSonar: React.FC = () => {
               </>
             ) : (
               <>
-                <Waves className="w-4 h-4 text-blue-400" />
-                <span className="text-blue-400">Ready</span>
+                <Waves className="w-4 h-4 text-info" />
+                <span className="text-info">Ready</span>
               </>
             )}
           </div>
@@ -197,10 +197,10 @@ const OceanSonar: React.FC = () => {
           <Card className="bg-zinc-800/50 border-blue-500/30">
             <CardContent className="p-4">
               <div className="flex items-center gap-2 mb-2">
-                <Database className="w-4 h-4 text-blue-400" />
-                <span className="text-xs text-zinc-400">Total Scans</span>
+                <Database className="w-4 h-4 text-info" />
+                <span className="text-xs text-muted-foreground">Total Scans</span>
               </div>
-              <div className="text-2xl font-bold text-blue-400">
+              <div className="text-2xl font-bold text-info">
                 {sonarStats.totalReadings}
               </div>
             </CardContent>
@@ -209,10 +209,10 @@ const OceanSonar: React.FC = () => {
           <Card className="bg-zinc-800/50 border-green-500/30">
             <CardContent className="p-4">
               <div className="flex items-center gap-2 mb-2">
-                <CheckCircle className="w-4 h-4 text-green-400" />
-                <span className="text-xs text-zinc-400">Safe Areas</span>
+                <CheckCircle className="w-4 h-4 text-success" />
+                <span className="text-xs text-muted-foreground">Safe Areas</span>
               </div>
-              <div className="text-2xl font-bold text-green-400">
+              <div className="text-2xl font-bold text-success">
                 {sonarStats.safeReadings}
               </div>
             </CardContent>
@@ -221,10 +221,10 @@ const OceanSonar: React.FC = () => {
           <Card className="bg-zinc-800/50 border-orange-500/30">
             <CardContent className="p-4">
               <div className="flex items-center gap-2 mb-2">
-                <AlertTriangle className="w-4 h-4 text-orange-400" />
-                <span className="text-xs text-zinc-400">Caution Areas</span>
+                <AlertTriangle className="w-4 h-4 text-warning" />
+                <span className="text-xs text-muted-foreground">Caution Areas</span>
               </div>
-              <div className="text-2xl font-bold text-orange-400">
+              <div className="text-2xl font-bold text-warning">
                 {sonarStats.cautionReadings}
               </div>
             </CardContent>
@@ -233,10 +233,10 @@ const OceanSonar: React.FC = () => {
           <Card className="bg-zinc-800/50 border-purple-500/30">
             <CardContent className="p-4">
               <div className="flex items-center gap-2 mb-2">
-                <Brain className="w-4 h-4 text-purple-400" />
-                <span className="text-xs text-zinc-400">AI Predictions</span>
+                <Brain className="w-4 h-4 text-accent-foreground" />
+                <span className="text-xs text-muted-foreground">AI Predictions</span>
               </div>
-              <div className="text-2xl font-bold text-purple-400">
+              <div className="text-2xl font-bold text-accent-foreground">
                 {sonarStats.totalPredictions}
               </div>
             </CardContent>
@@ -355,7 +355,7 @@ const OceanSonar: React.FC = () => {
                   )}
                 </div>
                 {hasCachedData && (
-                  <Badge className="mt-2 bg-green-500/20 text-green-400 border-green-500/30">
+                  <Badge className="mt-2 bg-success/20 text-success border-success/30">
                     Data cached for offline use
                   </Badge>
                 )}
@@ -386,9 +386,9 @@ const OceanSonar: React.FC = () => {
 
               {aiAnalysis.warnings.length > 0 && (
                 <div className="space-y-2">
-                  <div className="text-sm font-semibold text-yellow-400">Detected Hazards:</div>
-                  {aiAnalysis.warnings.map((warning, idx) => (
-                    <div key={idx} className="flex items-center gap-2 text-sm text-yellow-300 bg-yellow-500/10 p-2 rounded">
+                   <div className="text-sm font-semibold text-warning">Detected Hazards:</div>
+                  {aiAnalysis.warnings.map((warning) => (
+                    <div key={warning} className="flex items-center gap-2 text-sm text-warning bg-warning/10 p-2 rounded">
                       <AlertTriangle className="w-4 h-4" />
                       {warning}
                     </div>
