@@ -172,35 +172,35 @@ export default function ControlHubPanel() {
       </div>
 
       {/* Telemetry Console - Real-time events from BridgeLink + MQTT */}
-      <Card className="bg-slate-950 border-slate-800">
+      <Card className="bg-card border-border">
         <CardHeader>
           <div className="flex items-center justify-between">
             <div>
-              <CardTitle className="text-green-400">🌐 Console de Telemetria Global</CardTitle>
-              <CardDescription className="text-slate-400">
+              <CardTitle className="text-success">🌐 Console de Telemetria Global</CardTitle>
+              <CardDescription className="text-muted-foreground">
                 Eventos em tempo real (BridgeLink + MQTT)
               </CardDescription>
             </div>
             <div className="flex items-center gap-2">
-              <span className="text-sm text-slate-400">Status MQTT:</span>
+              <span className="text-sm text-muted-foreground">Status MQTT:</span>
               <span className="text-lg">{mqttConnected ? "🟢" : "🔴"}</span>
-              <span className="text-sm text-slate-400">
+              <span className="text-sm text-muted-foreground">
                 {mqttConnected ? "Conectado" : "Desconectado"}
               </span>
             </div>
           </div>
         </CardHeader>
         <CardContent>
-          <div className="bg-slate-900 rounded-lg p-4 border border-slate-800 h-64 overflow-y-auto font-mono text-sm">
+          <div className="bg-muted/30 rounded-lg p-4 border border-border h-64 overflow-y-auto font-mono text-sm">
             {telemetryLogs.length === 0 ? (
-              <div className="text-slate-500 text-center py-8">
+              <div className="text-muted-foreground text-center py-8">
                 Aguardando eventos de telemetria...
               </div>
             ) : (
               <div className="space-y-1">
                 {telemetryLogs.map((log, index) => (
-                  <div key={index} className="text-green-400">
-                    <span className="text-slate-500">[{log.timestamp}]</span> {log.message}
+                  <div key={index} className="text-success">
+                    <span className="text-muted-foreground">[{log.timestamp}]</span> {log.message}
                   </div>
                 ))}
               </div>

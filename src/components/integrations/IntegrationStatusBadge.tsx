@@ -113,11 +113,11 @@ export function IntegrationNotConfiguredAlert({
   configPath?: string;
 }) {
   return (
-    <div className="rounded-lg border border-slate-500/30 bg-slate-500/10 p-4">
+    <div className="rounded-lg border border-muted bg-muted/10 p-4">
       <div className="flex items-start gap-3">
-        <Settings className="h-5 w-5 text-slate-400 mt-0.5" />
+        <Settings className="h-5 w-5 text-muted-foreground mt-0.5" />
         <div>
-          <h4 className="font-medium text-slate-200">
+          <h4 className="font-medium text-foreground">
             {integrationName} não configurado
           </h4>
           <p className="text-sm text-muted-foreground mt-1">
@@ -149,11 +149,11 @@ export function IntegrationErrorAlert({
   isRetrying?: boolean;
 }) {
   return (
-    <div className="rounded-lg border border-red-500/30 bg-red-500/10 p-4">
+    <div className="rounded-lg border border-destructive/30 bg-destructive/10 p-4">
       <div className="flex items-start gap-3">
-        <XCircle className="h-5 w-5 text-red-400 mt-0.5" />
+        <XCircle className="h-5 w-5 text-destructive mt-0.5" />
         <div className="flex-1">
-          <h4 className="font-medium text-red-200">
+          <h4 className="font-medium text-destructive-foreground">
             Erro na integração {integrationName}
           </h4>
           <p className="text-sm text-muted-foreground mt-1">
@@ -163,7 +163,7 @@ export function IntegrationErrorAlert({
             <button
               onClick={onRetry}
               disabled={isRetrying}
-              className="mt-2 text-sm text-red-400 hover:text-red-300 flex items-center gap-1"
+              className="mt-2 text-sm text-destructive hover:text-destructive/80 flex items-center gap-1"
             >
               {isRetrying ? (
                 <>

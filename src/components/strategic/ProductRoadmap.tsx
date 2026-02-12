@@ -51,7 +51,7 @@ const roadmapData: Phase[] = [
     status: "completed",
     overallProgress: 100,
     expectedResult: "Sistema estável e funcional, pronto para ser homologado por usuários-chave",
-    color: "bg-green-500",
+    color: "bg-success",
     sprints: [
       {
         id: 1,
@@ -93,7 +93,7 @@ const roadmapData: Phase[] = [
     status: "completed",
     overallProgress: 100,
     expectedResult: "Sistema escalável, com estrutura pronta para múltiplos clientes e uso intenso",
-    color: "bg-blue-500",
+    color: "bg-info",
     sprints: [
       {
         id: 4,
@@ -177,7 +177,7 @@ const roadmapData: Phase[] = [
     status: "in-progress",
     overallProgress: 75,
     expectedResult: "Produto com métricas claras, estrutura comercial e gestão inteligente de clientes",
-    color: "bg-orange-500",
+    color: "bg-warning",
     sprints: [
       {
         id: 10,
@@ -209,7 +209,7 @@ const roadmapData: Phase[] = [
     status: "in-progress",
     overallProgress: 60,
     expectedResult: "Produto confiável, auditável e seguro, pronto para escalar comercialmente",
-    color: "bg-red-500",
+    color: "bg-destructive",
     sprints: [
       {
         id: 12,
@@ -241,9 +241,9 @@ const ProductRoadmap: React.FC = () => {
   const getStatusIcon = (status: string) => {
     switch (status) {
     case "completed":
-      return <CheckCircle className="w-4 h-4 text-green-500" />;
+      return <CheckCircle className="w-4 h-4 text-success" />;
     case "in-progress":
-      return <Clock className="w-4 h-4 text-blue-500" />;
+      return <Clock className="w-4 h-4 text-info" />;
     case "planned":
       return <AlertCircle className="w-4 h-4 text-muted-foreground" />;
     default:
@@ -254,9 +254,9 @@ const ProductRoadmap: React.FC = () => {
   const getStatusColor = (status: string) => {
     switch (status) {
     case "completed":
-      return "text-green-600 bg-green-50 border-green-200";
+      return "text-success bg-success/10 border-success/30";
     case "in-progress":
-      return "text-blue-600 bg-blue-50 border-blue-200";
+      return "text-info bg-info/10 border-info/30";
     case "planned":
       return "text-muted-foreground bg-gray-50 border-gray-200";
     default:
@@ -482,7 +482,7 @@ const ProductRoadmap: React.FC = () => {
             <Card>
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
-                  <Clock className="w-5 h-5 text-blue-500" />
+                  <Clock className="w-5 h-5 text-info" />
                   Sprints em Andamento
                 </CardTitle>
               </CardHeader>
@@ -494,7 +494,7 @@ const ProductRoadmap: React.FC = () => {
                     <div key={sprint.id} className="border rounded-lg p-4">
                       <div className="flex justify-between items-start mb-2">
                         <h4 className="font-medium">Sprint {sprint.id}: {sprint.name}</h4>
-                        <Badge className="text-blue-600 bg-blue-50 border-blue-200">
+                        <Badge className="text-info bg-info/10 border-info/30">
                           Em Andamento
                         </Badge>
                       </div>

@@ -219,8 +219,8 @@ export function IASection() {
                   <Badge 
                     variant="outline" 
                     className={`text-xs ${
-                      metric.trend === "up" ? "text-emerald-600 border-emerald-200" :
-                      metric.trend === "down" ? "text-red-600 border-red-200" :
+                      metric.trend === "up" ? "text-success border-success/30" :
+                      metric.trend === "down" ? "text-destructive border-destructive/30" :
                       "text-muted-foreground"
                     }`}
                   >
@@ -249,7 +249,7 @@ export function IASection() {
             <Sparkles className="h-4 w-4" />
             Insights
             {insights.filter(i => i.actionable).length > 0 && (
-              <Badge className="ml-1 h-5 w-5 p-0 flex items-center justify-center bg-red-500">
+              <Badge className="ml-1 h-5 w-5 p-0 flex items-center justify-center bg-destructive">
                 {insights.filter(i => i.actionable).length}
               </Badge>
             )}

@@ -127,13 +127,13 @@ const QuantumComputingPage: React.FC = () => {
   const getStatusBadge = (status: QuantumExperiment["status"]) => {
     switch (status) {
       case "running":
-        return <Badge className="bg-blue-500/20 text-blue-400"><Activity className="h-3 w-3 mr-1 animate-pulse" />Executando</Badge>;
+        return <Badge className="bg-info/20 text-info"><Activity className="h-3 w-3 mr-1 animate-pulse" />Executando</Badge>;
       case "completed":
-        return <Badge className="bg-green-500/20 text-green-400"><CheckCircle className="h-3 w-3 mr-1" />Concluído</Badge>;
+        return <Badge className="bg-success/20 text-success"><CheckCircle className="h-3 w-3 mr-1" />Concluído</Badge>;
       case "queued":
-        return <Badge className="bg-yellow-500/20 text-yellow-400"><Clock className="h-3 w-3 mr-1" />Na Fila</Badge>;
+        return <Badge className="bg-warning/20 text-warning"><Clock className="h-3 w-3 mr-1" />Na Fila</Badge>;
       case "failed":
-        return <Badge className="bg-red-500/20 text-red-400"><AlertTriangle className="h-3 w-3 mr-1" />Falhou</Badge>;
+        return <Badge className="bg-destructive/20 text-destructive"><AlertTriangle className="h-3 w-3 mr-1" />Falhou</Badge>;
     }
   };
 
@@ -142,11 +142,11 @@ const QuantumComputingPage: React.FC = () => {
       case "optimization":
         return <Badge variant="outline" className="border-purple-500/30 text-purple-400">Otimização</Badge>;
       case "simulation":
-        return <Badge variant="outline" className="border-blue-500/30 text-blue-400">Simulação</Badge>;
+        return <Badge variant="outline" className="border-info/30 text-info">Simulação</Badge>;
       case "cryptography":
-        return <Badge variant="outline" className="border-green-500/30 text-green-400">Criptografia</Badge>;
+        return <Badge variant="outline" className="border-success/30 text-success">Criptografia</Badge>;
       case "ml":
-        return <Badge variant="outline" className="border-orange-500/30 text-orange-400">Machine Learning</Badge>;
+        return <Badge variant="outline" className="border-warning/30 text-warning">Machine Learning</Badge>;
     }
   };
 
@@ -272,7 +272,7 @@ const QuantumComputingPage: React.FC = () => {
                         {exp.accuracy > 0 && (
                           <div className="text-sm">
                             <span className="text-muted-foreground">Precisão:</span>
-                            <span className="ml-2 text-green-500 font-medium">{exp.accuracy}%</span>
+                            <span className="ml-2 text-success font-medium">{exp.accuracy}%</span>
                           </div>
                         )}
                       </div>

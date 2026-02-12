@@ -117,17 +117,17 @@ export const TechnicalValidationPanel: React.FC = () => {
   };
 
   const getHealthColor = (score: number): string => {
-    if (score >= 80) return "text-green-500";
-    if (score >= 60) return "text-yellow-500";
-    if (score >= 40) return "text-orange-500";
-    return "text-red-500";
+    if (score >= 80) return "text-success";
+    if (score >= 60) return "text-warning";
+    if (score >= 40) return "text-warning";
+    return "text-destructive";
   };
 
   const getHealthBadge = (score: number) => {
-    if (score >= 80) return <Badge className="bg-green-500">Healthy</Badge>;
-    if (score >= 60) return <Badge className="bg-yellow-500">Warning</Badge>;
-    if (score >= 40) return <Badge className="bg-orange-500">Issues</Badge>;
-    return <Badge className="bg-red-500">Critical</Badge>;
+    if (score >= 80) return <Badge className="bg-success">Healthy</Badge>;
+    if (score >= 60) return <Badge className="bg-warning">Warning</Badge>;
+    if (score >= 40) return <Badge className="bg-warning">Issues</Badge>;
+    return <Badge className="bg-destructive">Critical</Badge>;
   };
 
   const exportToCSV = () => {
@@ -206,7 +206,7 @@ export const TechnicalValidationPanel: React.FC = () => {
             <CardTitle className="text-sm font-medium">Healthy</CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-green-500">{stats.healthy}</div>
+            <div className="text-2xl font-bold text-success">{stats.healthy}</div>
           </CardContent>
         </Card>
         <Card>
@@ -214,7 +214,7 @@ export const TechnicalValidationPanel: React.FC = () => {
             <CardTitle className="text-sm font-medium">With Issues</CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-orange-500">{stats.issues}</div>
+            <div className="text-2xl font-bold text-warning">{stats.issues}</div>
           </CardContent>
         </Card>
         <Card>
@@ -258,15 +258,15 @@ export const TechnicalValidationPanel: React.FC = () => {
                 <Progress value={module.healthScore} className="h-2 mb-4" />
                 <div className="grid grid-cols-3 gap-4">
                   <div className="flex items-center gap-2">
-                    {module.hasTests ? <CheckCircle className="h-5 w-5 text-green-500" /> : <XCircle className="h-5 w-5 text-red-500" />}
+                    {module.hasTests ? <CheckCircle className="h-5 w-5 text-success" /> : <XCircle className="h-5 w-5 text-destructive" />}
                     <span className="text-sm">Tests</span>
                   </div>
                   <div className="flex items-center gap-2">
-                    {module.hasDocumentation ? <CheckCircle className="h-5 w-5 text-green-500" /> : <XCircle className="h-5 w-5 text-red-500" />}
+                    {module.hasDocumentation ? <CheckCircle className="h-5 w-5 text-success" /> : <XCircle className="h-5 w-5 text-destructive" />}
                     <span className="text-sm">Docs</span>
                   </div>
                   <div className="flex items-center gap-2">
-                    {!module.hasDuplication ? <CheckCircle className="h-5 w-5 text-green-500" /> : <AlertTriangle className="h-5 w-5 text-orange-500" />}
+                    {!module.hasDuplication ? <CheckCircle className="h-5 w-5 text-success" /> : <AlertTriangle className="h-5 w-5 text-warning" />}
                     <span className="text-sm">No Duplicates</span>
                   </div>
                 </div>

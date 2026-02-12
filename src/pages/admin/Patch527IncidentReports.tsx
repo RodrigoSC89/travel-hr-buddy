@@ -52,7 +52,7 @@ export default function Patch527IncidentReports() {
             <div className="flex-1">
               <div className="flex items-center gap-2">
                 {checks.singleModule ? (
-                  <CheckCircle2 className="h-4 w-4 text-green-500" />
+                  <CheckCircle2 className="h-4 w-4 text-success" />
                 ) : (
                   <Circle className="h-4 w-4 text-muted-foreground" />
                 )}
@@ -69,7 +69,7 @@ export default function Patch527IncidentReports() {
             <div className="flex-1">
               <div className="flex items-center gap-2">
                 {checks.dataMigrated ? (
-                  <CheckCircle2 className="h-4 w-4 text-green-500" />
+                  <CheckCircle2 className="h-4 w-4 text-success" />
                 ) : (
                   <Circle className="h-4 w-4 text-muted-foreground" />
                 )}
@@ -90,7 +90,7 @@ export default function Patch527IncidentReports() {
             <div className="flex-1">
               <div className="flex items-center gap-2">
                 {checks.aiReplayActive ? (
-                  <CheckCircle2 className="h-4 w-4 text-green-500" />
+                  <CheckCircle2 className="h-4 w-4 text-success" />
                 ) : (
                   <Circle className="h-4 w-4 text-muted-foreground" />
                 )}
@@ -107,7 +107,7 @@ export default function Patch527IncidentReports() {
             <div className="flex-1">
               <div className="flex items-center gap-2">
                 {checks.logsAccessible ? (
-                  <CheckCircle2 className="h-4 w-4 text-green-500" />
+                  <CheckCircle2 className="h-4 w-4 text-success" />
                 ) : (
                   <Circle className="h-4 w-4 text-muted-foreground" />
                 )}
