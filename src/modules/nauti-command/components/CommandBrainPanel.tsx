@@ -144,7 +144,7 @@ export function CommandBrainPanel({ context, onSettingsClick }: CommandBrainPane
             </div>
           </CardTitle>
           <div className="flex gap-1">
-            <Button variant="ghost" size="icon" className="h-8 w-8" onClick={() => toast.success(`${messages.length} mensagens nesta sessão`)}>
+            <Button variant="ghost" size="icon" className="h-8 w-8" title={`${messages.length} mensagens`} onClick={() => { const el = document.querySelector('[data-chat-history]'); if (el) el.scrollTo({ top: 0, behavior: 'smooth' }); }}>
               <History className="h-4 w-4" />
             </Button>
             <Button variant="ghost" size="icon" className="h-8 w-8" onClick={exportChat}>
