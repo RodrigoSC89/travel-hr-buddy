@@ -40,7 +40,7 @@ export function IMCADPCompetencyMatrix({ selectedDPClass }: Props) {
           </TableHeader>
           <TableBody>
             {competencyRequirements.map((req, i) => (
-              <TableRow key={i}>
+              <TableRow key={req.role}>
                 <TableCell className="font-medium">{req.role}</TableCell>
                 <TableCell><Badge variant="outline">{req.imcaM117}</Badge></TableCell>
                 <TableCell>{req.stcw}</TableCell>

@@ -649,8 +649,8 @@ export default function WorkflowCommandCenter() {
                     { category: "Financeiro", time: "4h", eff: 94 },
                     { category: "Operações", time: "1.8 dias", eff: 76 },
                     { category: "Manutenção", time: "3.2 dias", eff: 82 },
-                  ].map((item, i) => (
-                    <div key={i} className="flex items-center justify-between">
+                  ].map((item) => (
+                    <div key={item.category} className="flex items-center justify-between">
                       <div>
                         <p className="font-medium">{item.category}</p>
                         <p className="text-sm text-muted-foreground">{item.time}</p>
@@ -675,8 +675,8 @@ export default function WorkflowCommandCenter() {
                     { cat: "Financeiro", exec: 289, trend: "+8%" },
                     { cat: "Operações", exec: 97, trend: "-3%" },
                     { cat: "Manutenção", exec: 234, trend: "+15%" },
-                  ].map((item, i) => (
-                    <div key={i} className="flex items-center justify-between">
+                  ].map((item) => (
+                    <div key={item.cat} className="flex items-center justify-between">
                       <p className="font-medium">{item.cat}</p>
                       <div className="text-right">
                         <p className="font-bold">{item.exec}</p>
@@ -783,8 +783,8 @@ export default function WorkflowCommandCenter() {
                 <Progress value={selectedWorkflow.progress} className="h-3" />
                 <p className="text-sm text-muted-foreground">Progresso: {selectedWorkflow.progress}%</p>
                 <div className="border rounded-lg p-4 max-h-60 overflow-auto space-y-2">
-                  {selectedWorkflow.steps?.map((step: { name: string; status: string }, i: number) => (
-                    <div key={i} className="flex items-center justify-between p-2 bg-muted/50 rounded">
+                  {selectedWorkflow.steps?.map((step: { name: string; status: string }) => (
+                    <div key={step.name} className="flex items-center justify-between p-2 bg-muted/50 rounded">
                       <span>{step.name}</span>
                       <Badge variant="outline">{step.status}</Badge>
                     </div>

@@ -397,7 +397,7 @@ export const EnhancedMaintenanceCenter: React.FC = () => {
       <div className="space-y-6 p-6">
         <Skeleton className="h-10 w-64" />
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-          {[1, 2, 3, 4].map(i => <Skeleton key={i} className="h-32" />)}
+          {[1, 2, 3, 4].map(i => <Skeleton key={`maint-skeleton-${i}`} className="h-32" />)}
         </div>
         <Skeleton className="h-96" />
       </div>
@@ -793,8 +793,8 @@ export const EnhancedMaintenanceCenter: React.FC = () => {
                         <div className="mt-3">
                           <p className="text-sm font-medium mb-2">Fatores de Risco:</p>
                           <div className="flex flex-wrap gap-2">
-                            {pred.riskFactors.map((factor, i) => (
-                              <Badge key={i} variant="outline">{factor}</Badge>
+                            {pred.riskFactors.map((factor) => (
+                              <Badge key={factor} variant="outline">{factor}</Badge>
                             ))}
                           </div>
                         </div>

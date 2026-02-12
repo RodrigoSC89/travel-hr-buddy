@@ -200,7 +200,7 @@ export default function PharmacyManagementPanel() {
     return (
       <div className="space-y-6">
         <div className="grid grid-cols-2 md:grid-cols-6 gap-4">
-          {[...Array(6)].map((_, i) => <Card key={i}><CardContent className="p-4"><div className="animate-pulse h-16 bg-muted rounded" /></CardContent></Card>)}
+          {[...Array(6)].map((_, i) => <Card key={`pharm-skeleton-${i}`}><CardContent className="p-4"><div className="animate-pulse h-16 bg-muted rounded" /></CardContent></Card>)}
         </div>
         <div className="text-center py-12"><Loader2 className="h-8 w-8 animate-spin mx-auto text-primary" /></div>
       </div>

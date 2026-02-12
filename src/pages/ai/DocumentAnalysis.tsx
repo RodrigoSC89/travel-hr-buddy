@@ -274,9 +274,9 @@ Autoridade Marítima do Brasil`,
                 Documentos de exemplo:
               </p>
               <div className="flex gap-2 flex-wrap">
-                {sampleDocuments.map((doc, idx) => (
+                {sampleDocuments.map((doc) => (
                   <Button
-                    key={idx}
+                    key={doc.title}
                     variant="outline"
                     size="sm"
                     onClick={() => setDocumentText(doc.text)}

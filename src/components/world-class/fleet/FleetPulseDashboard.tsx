@@ -251,7 +251,7 @@ Forneça:
       {isLoading ? (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           {[1, 2, 3].map(i => (
-            <Card key={i}><CardContent className="p-4 h-48 animate-pulse bg-muted/50" /></Card>
+            <Card key={`fleet-skeleton-${i}`}><CardContent className="p-4 h-48 animate-pulse bg-muted/50" /></Card>
           ))}
         </div>
       ) : filtered.length === 0 ? (

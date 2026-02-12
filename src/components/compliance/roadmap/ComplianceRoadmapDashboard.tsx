@@ -577,11 +577,11 @@ export function ComplianceRoadmapDashboard() {
                     { problema: 'Certificados NR-10 vencidos', impacto: 25, acao: 'Agendamento em massa' },
                     { problema: 'Documentação incompleta', impacto: 18, acao: 'Revisar procedimento arquivo' },
                     { problema: 'Treinamentos atrasados', impacto: 12, acao: 'Alertas 60 dias antes' },
-                  ].map((item, idx) => (
-                    <div key={idx} className="flex items-center justify-between p-3 rounded-lg bg-muted/30">
+                  ].map((item, itemIdx) => (
+                    <div key={item.problema} className="flex items-center justify-between p-3 rounded-lg bg-muted/30">
                       <div className="flex-1">
                         <div className="flex items-center gap-2">
-                          <Badge variant="outline">{idx + 1}º</Badge>
+                          <Badge variant="outline">{itemIdx + 1}º</Badge>
                           <span className="font-medium text-sm">{item.problema}</span>
                         </div>
                         <p className="text-xs text-muted-foreground mt-1">Ação: {item.acao}</p>

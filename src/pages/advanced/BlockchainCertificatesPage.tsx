@@ -288,8 +288,8 @@ const BlockchainCertificatesPage = () => {
             </CardHeader>
             <CardContent>
               <div className="space-y-3">
-                {recentVerifications.map((ver, idx) => (
-                  <div key={idx} className="flex items-center justify-between p-3 border rounded-lg">
+                {recentVerifications.map((ver) => (
+                  <div key={`${ver.cert}-${ver.by}-${ver.time}`} className="flex items-center justify-between p-3 border rounded-lg">
                     <div className="flex items-center gap-3">
                       <CheckCircle className="h-5 w-5 text-green-500" />
                       <div>

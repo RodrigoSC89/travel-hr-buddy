@@ -433,8 +433,8 @@ export default function AIControlTowerHubEnhanced() {
                       { time: "15min", action: "Previsão de manutenção gerada" },
                       { time: "32min", action: "Documento classificado" },
                       { time: "1h", action: "Workflow automatizado" }
-                    ].map((item, idx) => (
-                      <div key={idx} className="flex items-center gap-2 text-sm">
+                    ].map((item) => (
+                      <div key={`${item.time}-${item.action.slice(0, 15)}`} className="flex items-center gap-2 text-sm">
                         <Badge variant="outline" className="min-w-[45px] text-xs justify-center">
                           {item.time}
                         </Badge>

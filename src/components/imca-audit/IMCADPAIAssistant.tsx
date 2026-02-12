@@ -117,7 +117,7 @@ export function IMCADPAIAssistant({ selectedDPClass }: Props) {
               </div>
             )}
             {messages.map((msg, i) => (
-              <div key={i} className={`flex ${msg.role === "user" ? "justify-end" : "justify-start"}`}>
+              <div key={`msg-${i}-${msg.role}`} className={`flex ${msg.role === "user" ? "justify-end" : "justify-start"}`}>
                 <div className={`max-w-[80%] rounded-lg p-3 ${msg.role === "user" ? "bg-primary text-primary-foreground" : "bg-muted"}`}>
                   <p className="text-sm whitespace-pre-wrap">{msg.content}</p>
                 </div>

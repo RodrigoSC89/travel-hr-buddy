@@ -205,9 +205,9 @@ export function NaturalLanguageInterface() {
           <div className="space-y-2">
             <p className="text-xs text-muted-foreground">Comandos sugeridos:</p>
             <div className="flex flex-wrap gap-2">
-              {SUGGESTED_COMMANDS.slice(0, 4).map((cmd, i) => (
+              {SUGGESTED_COMMANDS.slice(0, 4).map((cmd) => (
                 <Button
-                  key={i}
+                  key={cmd.text}
                   variant="outline"
                   size="sm"
                   className="text-xs h-7"
@@ -264,8 +264,8 @@ export function NaturalLanguageInterface() {
                         <p className="text-sm whitespace-pre-wrap">{result.response}</p>
                         {result.actions && (
                           <div className="flex gap-2 mt-2">
-                            {result.actions.map((action, i) => (
-                              <Button key={i} variant="ghost" size="sm" className="h-6 text-xs">
+                            {result.actions.map((action) => (
+                              <Button key={action.label} variant="ghost" size="sm" className="h-6 text-xs">
                                 <Zap className="h-3 w-3 mr-1" />
                                 {action.label}
                               </Button>

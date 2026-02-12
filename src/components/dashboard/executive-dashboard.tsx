@@ -317,8 +317,8 @@ export function ExecutiveDashboard() {
                       paddingAngle={5}
                       dataKey="value"
                     >
-                      {operationalMetrics.map((entry, index) => (
-                        <Cell key={`cell-${index}`} fill={entry.color} />
+                      {operationalMetrics.map((entry) => (
+                        <Cell key={`cell-${entry.name}`} fill={entry.color} />
                       ))}
                     </Pie>
                     <Tooltip />

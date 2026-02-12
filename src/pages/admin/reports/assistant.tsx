@@ -266,8 +266,8 @@ export default function AssistantReportLogsPage() {
           </div>
         ) : (
           <div className="space-y-2">
-            {logs.map((log, i) => (
-              <Card key={i} className="p-4">
+            {logs.map((log) => (
+              <Card key={log.sent_at} className="p-4">
                 <p className="text-xs text-muted-foreground">
                   📅 {new Date(log.sent_at).toLocaleString()}
                 </p>

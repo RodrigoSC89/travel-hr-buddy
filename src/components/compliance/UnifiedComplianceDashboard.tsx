@@ -521,8 +521,8 @@ export function UnifiedComplianceDashboard() {
                       paddingAngle={5}
                       dataKey="value"
                     >
-                      {statusDistribution.map((entry, index) => (
-                        <Cell key={`cell-${index}`} fill={entry.color} />
+                      {statusDistribution.map((entry) => (
+                        <Cell key={`cell-${entry.name}`} fill={entry.color} />
                       ))}
                     </Pie>
                     <Tooltip />

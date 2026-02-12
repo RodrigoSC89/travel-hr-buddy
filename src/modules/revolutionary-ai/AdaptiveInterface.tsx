@@ -339,7 +339,7 @@ export function AdaptiveInterface() {
               <div className={`grid ${settings.viewMode === 'grid' ? 'grid-cols-2' : 'grid-cols-1'} gap-2`}>
                 {[1, 2, 3, 4].map(i => (
                   <motion.div
-                    key={i}
+                    key={`adaptive-card-${i}`}
                     animate={settings.animations ? { scale: [1, 1.02, 1] } : {}}
                     transition={{ duration: 0.3 }}
                     className={`rounded ${settings.darkMode ? 'bg-slate-800' : 'bg-gray-100'} ${

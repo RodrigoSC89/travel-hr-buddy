@@ -111,7 +111,7 @@ export const ChecklistDashboard = ({ userId }: { userId: string }) => {
       <div className="space-y-6">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
           {[...Array(4)].map((_, i) => (
-            <Card key={i}>
+            <Card key={`checklist-skeleton-${i}`}>
               <CardContent className="p-6">
                 <div className="animate-pulse space-y-2">
                   <div className="h-4 bg-muted rounded w-3/4"></div>

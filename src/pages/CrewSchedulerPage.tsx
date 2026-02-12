@@ -277,7 +277,7 @@ export default function CrewSchedulerPage() {
       <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4">
         {isLoading ? (
           Array.from({ length: 6 }).map((_, i) => (
-            <Card key={i}>
+            <Card key={`crew-sched-skeleton-${i}`}>
               <CardContent className="p-4">
                 <Skeleton className="h-4 w-16 mb-2" />
                 <Skeleton className="h-8 w-12" />

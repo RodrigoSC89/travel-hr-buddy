@@ -199,8 +199,8 @@ export default function CrewHealthTab() {
                 <p className="text-sm font-medium mb-2">Riscos Identificados:</p>
                 <ul className="text-sm space-y-1">
                   {aiPrediction.predictedIssues?.length > 0 ? 
-                    aiPrediction.predictedIssues.map((issue: string, i: number) => (
-                      <li key={i} className="flex items-center gap-2">
+                    aiPrediction.predictedIssues.map((issue: string) => (
+                      <li key={issue} className="flex items-center gap-2">
                         <AlertTriangle className="h-3 w-3 text-amber-500" />
                         {issue}
                       </li>
@@ -212,8 +212,8 @@ export default function CrewHealthTab() {
               <div>
                 <p className="text-sm font-medium mb-2">Recomendações:</p>
                 <ul className="text-sm space-y-1">
-                  {aiPrediction.recommendations?.slice(0, 3).map((rec: string, i: number) => (
-                    <li key={i} className="flex items-center gap-2">
+                  {aiPrediction.recommendations?.slice(0, 3).map((rec: string) => (
+                    <li key={rec} className="flex items-center gap-2">
                       <CheckCircle2 className="h-3 w-3 text-green-500" />
                       {rec}
                     </li>
@@ -319,14 +319,14 @@ export default function CrewHealthTab() {
                       </div>
                       {(member.allergies.length > 0 || member.conditions.length > 0) && (
                         <div className="mt-3 flex flex-wrap gap-2">
-                          {member.allergies.map((allergy, i) => (
-                            <Badge key={i} variant="destructive" className="text-xs">
+                          {member.allergies.map((allergy) => (
+                            <Badge key={allergy} variant="destructive" className="text-xs">
                               <AlertTriangle className="h-3 w-3 mr-1" />
                               {allergy}
                             </Badge>
                           ))}
-                          {member.conditions.map((condition, i) => (
-                            <Badge key={i} variant="secondary" className="text-xs">
+                          {member.conditions.map((condition) => (
+                            <Badge key={condition} variant="secondary" className="text-xs">
                               {condition}
                             </Badge>
                           ))}
@@ -380,8 +380,8 @@ export default function CrewHealthTab() {
                           <p className="text-sm font-medium text-red-500 mb-2">Alergias</p>
                           {member.allergies.length > 0 ? (
                             <div className="flex flex-wrap gap-2">
-                              {member.allergies.map((allergy, i) => (
-                                <Badge key={i} variant="destructive">{allergy}</Badge>
+                              {member.allergies.map((allergy) => (
+                                <Badge key={`dlg-allergy-${allergy}`} variant="destructive">{allergy}</Badge>
                               ))}
                             </div>
                           ) : (
@@ -393,8 +393,8 @@ export default function CrewHealthTab() {
                           <p className="text-sm font-medium mb-2">Condições de Saúde</p>
                           {member.conditions.length > 0 ? (
                             <div className="flex flex-wrap gap-2">
-                              {member.conditions.map((condition, i) => (
-                                <Badge key={i} variant="secondary">{condition}</Badge>
+                              {member.conditions.map((condition) => (
+                                <Badge key={`dlg-cond-${condition}`} variant="secondary">{condition}</Badge>
                               ))}
                             </div>
                           ) : (
@@ -406,8 +406,8 @@ export default function CrewHealthTab() {
                       <TabsContent value="vaccines" className="mt-4">
                         <div className="space-y-3">
                           {member.vaccinations.length > 0 ? (
-                            member.vaccinations.map((vaccine, i) => (
-                              <div key={i} className="flex items-center justify-between p-3 rounded-lg bg-muted/50">
+                            member.vaccinations.map((vaccine) => (
+                              <div key={`${vaccine.name}-${vaccine.date}`} className="flex items-center justify-between p-3 rounded-lg bg-muted/50">
                                 <div className="flex items-center gap-3">
                                   {getVaccinationStatus(vaccine.status)}
                                   <div>

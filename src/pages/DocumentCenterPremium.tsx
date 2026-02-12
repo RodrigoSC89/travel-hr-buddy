@@ -39,7 +39,7 @@ function LoadingSkeleton() {
     <div className="space-y-4">
       <div className="grid grid-cols-4 gap-4">
         {[...Array(4)].map((_, i) => (
-          <Skeleton key={i} className="h-24" />
+          <Skeleton key={`doc-skel-${i}`} className="h-24" />
         ))}
       </div>
       <Skeleton className="h-96" />

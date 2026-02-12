@@ -45,7 +45,7 @@ export const LoadingState: React.FC<LoadingStateProps> = ({
         <div className="flex space-x-2">
           {[0, 1, 2].map((i) => (
             <div
-              key={i}
+              key={`dot-${i}`}
               className="h-3 w-3 rounded-full bg-primary animate-bounce"
               style={{ animationDelay: `${i * 0.15}s` }}
             />
@@ -60,7 +60,7 @@ export const LoadingState: React.FC<LoadingStateProps> = ({
   return (
     <div className={cn('space-y-4 p-4', className)}>
       {Array.from({ length: rows }).map((_, i) => (
-        <div key={i} className="space-y-2">
+        <div key={`ux-skeleton-${i}`} className="space-y-2">
           <Skeleton className="h-4 w-3/4" />
           <Skeleton className="h-4 w-1/2" />
         </div>

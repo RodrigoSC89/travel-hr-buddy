@@ -229,9 +229,9 @@ Formate a resposta em markdown estruturado com informações práticas para nave
             <div className="space-y-2">
               <p className="text-sm font-medium">Rotas Frequentes:</p>
               <div className="space-y-2">
-                {commonRoutes.map((route, idx) => (
+                {commonRoutes.map((route) => (
                   <Button
-                    key={idx}
+                    key={`${route.origin}-${route.destination}`}
                     variant="outline"
                     size="sm"
                     className="w-full justify-between text-xs"

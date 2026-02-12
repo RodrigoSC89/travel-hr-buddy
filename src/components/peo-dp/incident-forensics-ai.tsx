@@ -398,8 +398,8 @@ export const IncidentForensicsAI: React.FC = () => {
                       Documentos FMEA Relacionados
                     </h4>
                     <div className="flex flex-wrap gap-2">
-                      {selectedIncident.relatedFMEA.map((fmea, idx) => (
-                        <Badge key={idx} variant="outline" className="cursor-pointer hover:bg-accent">
+                      {selectedIncident.relatedFMEA.map((fmea) => (
+                        <Badge key={fmea} variant="outline" className="cursor-pointer hover:bg-accent">
                           <FileText className="w-3 h-3 mr-1" />{fmea}
                         </Badge>
                       ))}

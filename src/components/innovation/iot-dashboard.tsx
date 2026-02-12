@@ -374,9 +374,9 @@ export const IoTDashboard: React.FC = () => {
                   { name: "Sensor Umidade", x: 50, y: 45, status: "warning" },
                   { name: "Node A", x: 75, y: 25, status: "offline" },
                   { name: "Gateway", x: 40, y: 70, status: "online" },
-                ].map((device, i) => (
+                ].map((device) => (
                   <div
-                    key={i}
+                    key={device.name}
                     className="absolute cursor-pointer group"
                     style={{ left: `${device.x}%`, top: `${device.y}%` }}
                     onClick={() => { navigator.clipboard.writeText(`${device.name} — Status: ${device.status}`); toast.success(`${device.name}: ${device.status}`); }}

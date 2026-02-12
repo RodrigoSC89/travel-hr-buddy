@@ -439,8 +439,8 @@ export default function CrewWellnessHub() {
 
                         {member.alerts.length > 0 && (
                           <div className="mt-3 space-y-1">
-                            {member.alerts.map((alert, i) => (
-                              <div key={i} className="flex items-center gap-2 text-xs text-warning">
+                            {member.alerts.map((alert) => (
+                              <div key={alert} className="flex items-center gap-2 text-xs text-warning">
                                 <AlertTriangle className="h-3 w-3" />
                                 {alert}
                               </div>

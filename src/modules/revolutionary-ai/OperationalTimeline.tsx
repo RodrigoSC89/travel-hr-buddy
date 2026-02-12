@@ -70,7 +70,7 @@ export function OperationalTimeline() {
   const formatTimeAgo = (date: Date) => { const diff = Date.now() - date.getTime(); const hours = Math.floor(diff / 3600000); const days = Math.floor(hours / 24); if (days > 0) return `Há ${days} dia${days > 1 ? 's' : ''}`; if (hours > 0) return `Há ${hours} hora${hours > 1 ? 's' : ''}`; return 'Agora'; };
   const toggleType = (type: string) => setSelectedTypes(prev => prev.includes(type) ? prev.filter(t => t !== type) : [...prev, type]);
 
-  if (loading) return <div className="space-y-4">{[1,2,3].map(i => <Skeleton key={i} className="h-24 w-full" />)}</div>;
+  if (loading) return <div className="space-y-4">{[1,2,3].map(i => <Skeleton key={`timeline-skel-${i}`} className="h-24 w-full" />)}</div>;
 
   return (
     <div className="space-y-6">

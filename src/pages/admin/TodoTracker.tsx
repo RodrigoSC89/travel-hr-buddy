@@ -266,9 +266,9 @@ export default function TodoTracker() {
                   <CardContent>
                     {module.items.length > 0 && (
                       <div className="space-y-2">
-                        {module.items.map((item, itemIdx) => (
+                        {module.items.map((item) => (
                           <div
-                            key={itemIdx}
+                            key={`${item.file}-${item.line}-${item.type}`}
                             className="p-3 border rounded-lg bg-muted/30"
                           >
                             <div className="flex items-start justify-between mb-1">

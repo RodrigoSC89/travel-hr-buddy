@@ -325,8 +325,8 @@ export const BrazilianSourcesPanel: React.FC<BrazilianSourcesPanelProps> = ({
                 <CardContent>
                   <ScrollArea className="w-full">
                     <div className="flex gap-3">
-                      {marinhaData.previsao.map((prev, i) => (
-                        <Card key={i} className="bg-slate-900/50 border-white/10 p-3 min-w-[180px]">
+                      {marinhaData.previsao.map((prev) => (
+                        <Card key={prev.periodo} className="bg-slate-900/50 border-white/10 p-3 min-w-[180px]">
                           <p className="text-xs text-white/50 mb-2">{prev.periodo}</p>
                           <div className="space-y-2">
                             <div className="flex items-center gap-2">
@@ -413,12 +413,12 @@ export const BrazilianSourcesPanel: React.FC<BrazilianSourcesPanelProps> = ({
             <CardContent>
               {cptecData?.previsoes && cptecData.previsoes.length > 0 ? (
                 <div className="space-y-2">
-                  {cptecData.previsoes.map((prev, i) => (
+                  {cptecData.previsoes.map((prev, prevIdx) => (
                     <div 
-                      key={i}
+                      key={prev.dia}
                       className={cn(
                         "flex items-center justify-between p-2 rounded-lg",
-                        i === 0 && "bg-primary/20"
+                        prevIdx === 0 && "bg-primary/20"
                       )}
                     >
                       <div className="flex items-center gap-3">
@@ -455,8 +455,8 @@ export const BrazilianSourcesPanel: React.FC<BrazilianSourcesPanelProps> = ({
               {wavesData?.ondas && wavesData.ondas.length > 0 ? (
                 <ScrollArea className="h-[300px]">
                   <div className="space-y-3">
-                    {wavesData.ondas.map((dia, i) => (
-                      <div key={i} className="bg-slate-900/50 rounded-lg p-3">
+                    {wavesData.ondas.map((dia) => (
+                      <div key={dia.dia} className="bg-slate-900/50 rounded-lg p-3">
                         <p className="text-white font-medium mb-2">
                           {new Date(dia.dia).toLocaleDateString('pt-BR', { weekday: 'long', day: 'numeric' })}
                         </p>

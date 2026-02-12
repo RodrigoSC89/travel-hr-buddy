@@ -262,8 +262,8 @@ export default function NCPredictionPage() {
                       <div>
                         <p className="text-muted-foreground">Fatores:</p>
                         <div className="flex flex-wrap gap-1">
-                          {pred.factors.map((f, i) => (
-                            <Badge key={i} variant="secondary" className="text-xs">{f}</Badge>
+                          {pred.factors.map((f) => (
+                            <Badge key={f} variant="secondary" className="text-xs">{f}</Badge>
                           ))}
                         </div>
                       </div>

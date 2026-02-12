@@ -338,7 +338,7 @@ export default function StatusPage() {
                 });
                 return (
                   <div
-                    key={i}
+                    key={`uptime-day-${i}`}
                     className={`h-8 flex-1 rounded-sm ${
                       hasIncident ? "bg-yellow-400" : "bg-green-400"
                     }`}

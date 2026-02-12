@@ -262,8 +262,8 @@ export const Peotram13ElementsTabs: React.FC<Peotram13ElementsTabsProps> = ({
               <div className="mt-4 p-3 bg-muted/30 rounded-lg">
                 <p className="text-sm font-medium mb-2">Documentação Necessária:</p>
                 <div className="flex flex-wrap gap-1">
-                  {element.documentationRequired.map((doc, idx) => (
-                    <Badge key={idx} variant="outline" className="text-xs">
+                  {element.documentationRequired.map((doc) => (
+                    <Badge key={doc} variant="outline" className="text-xs">
                       {doc}
                     </Badge>
                   ))}

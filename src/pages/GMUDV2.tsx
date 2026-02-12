@@ -191,8 +191,8 @@ export default function GMUDV2() {
                     <Badge>{req.current_step}/{req.total_steps}</Badge>
                   </div>
                   <div className="flex gap-4">
-                    {req.approvers.map((approver, idx) => (
-                      <div key={idx} className="flex-1 p-3 bg-background rounded-lg border text-center">
+                    {req.approvers.map((approver) => (
+                      <div key={approver.role} className="flex-1 p-3 bg-background rounded-lg border text-center">
                         {approver.status === 'approved' ? (
                           <CheckCircle className="h-6 w-6 mx-auto text-green-500 mb-2" />
                         ) : approver.status === 'pending' ? (

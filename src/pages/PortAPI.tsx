@@ -228,8 +228,8 @@ export default function PortAPI() {
               <div>
                 <h4 className="font-medium mb-3">Terminais</h4>
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
-                  {portDetails.terminals.map((terminal: PortTerminal, idx: number) => (
-                    <div key={idx} className="p-3 rounded-lg border bg-card">
+                  {portDetails.terminals.map((terminal: PortTerminal) => (
+                    <div key={terminal.name} className="p-3 rounded-lg border bg-card">
                       <p className="font-medium">{terminal.name}</p>
                       <p className="text-sm text-muted-foreground">{terminal.type}</p>
                       <Badge variant="outline" className="mt-2">{terminal.berths} berços</Badge>
@@ -244,8 +244,8 @@ export default function PortAPI() {
               <div>
                 <h4 className="font-medium mb-3">Serviços Disponíveis</h4>
                 <div className="flex flex-wrap gap-2">
-                  {portDetails.services.map((service: string, idx: number) => (
-                    <Badge key={idx} variant="secondary">{service}</Badge>
+                  {portDetails.services.map((service: string) => (
+                    <Badge key={service} variant="secondary">{service}</Badge>
                   ))}
                 </div>
               </div>

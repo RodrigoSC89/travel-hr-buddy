@@ -119,7 +119,7 @@ const CommunicationCommandCenter = () => {
               {isLoading ? (
                 <>
                   {[1, 2, 3, 4].map((i) => (
-                    <Card key={i}>
+                    <Card key={`comm-skel-${i}`}>
                       <CardContent className="pt-6">
                         <Skeleton className="h-8 w-16 mb-2" />
                         <Skeleton className="h-4 w-24" />
