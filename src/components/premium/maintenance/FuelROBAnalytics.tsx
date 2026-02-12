@@ -91,18 +91,18 @@ export default function FuelROBAnalytics() {
 
       {/* ROB Cards */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-        <Card className="border-l-4 border-l-amber-500">
+        <Card className="border-l-4 border-l-warning">
           <CardContent className="p-4">
             <div className="flex items-center justify-between mb-3">
               <div>
                 <p className="text-xs text-muted-foreground">HFO (Heavy Fuel Oil)</p>
                 <p className="text-2xl font-bold">{currentROB.hfo} MT</p>
               </div>
-              <Fuel className="h-8 w-8 text-amber-500 opacity-60" />
+              <Fuel className="h-8 w-8 text-warning opacity-60" />
             </div>
             <Progress 
               value={getPercentage(currentROB.hfo, currentROB.capacity.hfo)} 
-              className="h-2 [&>div]:bg-amber-500"
+              className="h-2 [&>div]:bg-warning"
             />
             <div className="flex justify-between text-xs text-muted-foreground mt-1">
               <span>Capacidade: {currentROB.capacity.hfo} MT</span>
@@ -117,18 +117,18 @@ export default function FuelROBAnalytics() {
           </CardContent>
         </Card>
 
-        <Card className="border-l-4 border-l-blue-500">
+        <Card className="border-l-4 border-l-info">
           <CardContent className="p-4">
             <div className="flex items-center justify-between mb-3">
               <div>
                 <p className="text-xs text-muted-foreground">MGO (Marine Gas Oil)</p>
                 <p className="text-2xl font-bold">{currentROB.mgo} MT</p>
               </div>
-              <Fuel className="h-8 w-8 text-blue-500 opacity-60" />
+              <Fuel className="h-8 w-8 text-info opacity-60" />
             </div>
             <Progress 
               value={getPercentage(currentROB.mgo, currentROB.capacity.mgo)} 
-              className="h-2 [&>div]:bg-blue-500"
+              className="h-2 [&>div]:bg-info"
             />
             <div className="flex justify-between text-xs text-muted-foreground mt-1">
               <span>Capacidade: {currentROB.capacity.mgo} MT</span>
@@ -143,14 +143,14 @@ export default function FuelROBAnalytics() {
           </CardContent>
         </Card>
 
-        <Card className="border-l-4 border-l-green-500">
+        <Card className="border-l-4 border-l-success">
           <CardContent className="p-4">
             <div className="flex items-center justify-between mb-3">
               <div>
                 <p className="text-xs text-muted-foreground">LSFO (Low Sulfur)</p>
                 <p className="text-2xl font-bold">{currentROB.lsfo} MT</p>
               </div>
-              <Fuel className="h-8 w-8 text-green-500 opacity-60" />
+              <Fuel className="h-8 w-8 text-success opacity-60" />
             </div>
             <div className="text-center text-sm text-muted-foreground py-4">
               Não utilizado nesta embarcação
@@ -192,8 +192,8 @@ export default function FuelROBAnalytics() {
                   <YAxis fontSize={12} />
                   <Tooltip />
                   <Legend />
-                  <Area type="monotone" dataKey="hfo" stackId="1" stroke="#f59e0b" fill="#f59e0b" fillOpacity={0.6} name="HFO (MT)" />
-                  <Area type="monotone" dataKey="mgo" stackId="1" stroke="#3b82f6" fill="#3b82f6" fillOpacity={0.6} name="MGO (MT)" />
+                  <Area type="monotone" dataKey="hfo" stackId="1" stroke="hsl(var(--warning))" fill="hsl(var(--warning))" fillOpacity={0.6} name="HFO (MT)" />
+                  <Area type="monotone" dataKey="mgo" stackId="1" stroke="hsl(var(--info))" fill="hsl(var(--info))" fillOpacity={0.6} name="MGO (MT)" />
                 </AreaChart>
               </ResponsiveContainer>
             </CardContent>
@@ -213,8 +213,8 @@ export default function FuelROBAnalytics() {
                   <YAxis fontSize={12} />
                   <Tooltip />
                   <Legend />
-                  <Bar dataKey="hfo" fill="#f59e0b" name="HFO" radius={[4, 4, 0, 0]} />
-                  <Bar dataKey="mgo" fill="#3b82f6" name="MGO" radius={[4, 4, 0, 0]} />
+                  <Bar dataKey="hfo" fill="hsl(var(--warning))" name="HFO" radius={[4, 4, 0, 0]} />
+                  <Bar dataKey="mgo" fill="hsl(var(--info))" name="MGO" radius={[4, 4, 0, 0]} />
                 </BarChart>
               </ResponsiveContainer>
             </CardContent>
@@ -306,8 +306,8 @@ export default function FuelROBAnalytics() {
             </CardHeader>
             <CardContent>
               <div className="space-y-3">
-                {bunkerPurchases.map((purchase, idx) => (
-                  <div key={idx} className="flex items-center justify-between p-4 border rounded-lg">
+                {bunkerPurchases.map((purchase) => (
+                  <div key={`${purchase.date}-${purchase.port}`} className="flex items-center justify-between p-4 border rounded-lg">
                     <div className="flex items-center gap-4">
                       <div className="p-2 bg-muted rounded-lg">
                         <MapPin className="h-5 w-5" />

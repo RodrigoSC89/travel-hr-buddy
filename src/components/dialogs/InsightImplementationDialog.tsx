@@ -166,8 +166,8 @@ export const InsightImplementationDialog: React.FC<InsightImplementationDialogPr
             </CardHeader>
             <CardContent>
               <ul className="space-y-2">
-                {insight.recommendations.map((rec, index) => (
-                  <li key={index} className="flex items-start gap-2 text-sm">
+                 {insight.recommendations.map((rec, index) => (
+                   <li key={`rec-${index}`} className="flex items-start gap-2 text-sm">
                     <div className="w-5 h-5 rounded-full bg-primary/10 text-primary flex items-center justify-center text-xs font-medium mt-0.5">
                       {index + 1}
                     </div>

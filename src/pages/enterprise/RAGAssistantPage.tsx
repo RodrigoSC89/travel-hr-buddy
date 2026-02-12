@@ -315,9 +315,9 @@ export default function RAGAssistantPage() {
                               Fontes consultadas:
                             </p>
                             <div className="space-y-1">
-                              {message.sources.map((source, idx) => (
-                                <div
-                                  key={idx}
+                               {message.sources.map((source) => (
+                                 <div
+                                   key={source.title}
                                   className="flex items-center justify-between text-xs bg-background/50 rounded p-2"
                                 >
                                   <span className="flex items-center gap-2">
@@ -342,7 +342,7 @@ export default function RAGAssistantPage() {
                               onClick={() => copyToClipboard(message.content, message.id)}
                             >
                               {copiedId === message.id ? (
-                                <Check className="h-3 w-3 text-green-500" />
+                                <Check className="h-3 w-3 text-success" />
                               ) : (
                                 <Copy className="h-3 w-3" />
                               )}
@@ -352,7 +352,7 @@ export default function RAGAssistantPage() {
                               size="icon"
                               className={cn(
                                 "h-7 w-7",
-                                message.feedback === 'positive' && "text-green-500"
+                                message.feedback === 'positive' && "text-success"
                               )}
                               onClick={() => provideFeedback(message.id, 'positive')}
                             >
@@ -363,7 +363,7 @@ export default function RAGAssistantPage() {
                               size="icon"
                               className={cn(
                                 "h-7 w-7",
-                                message.feedback === 'negative' && "text-red-500"
+                                message.feedback === 'negative' && "text-destructive"
                               )}
                               onClick={() => provideFeedback(message.id, 'negative')}
                             >
@@ -410,9 +410,9 @@ export default function RAGAssistantPage() {
                       Faça perguntas sobre manuais, procedimentos, checklists e qualquer documento da sua base de conhecimento.
                     </p>
                     <div className="grid grid-cols-2 gap-2 max-w-lg">
-                      {suggestedQuestions.map((question, idx) => (
-                        <Button
-                          key={idx}
+                       {suggestedQuestions.map((question) => (
+                         <Button
+                           key={question}
                           variant="outline"
                           className="text-left h-auto py-3 px-4"
                           onClick={() => {

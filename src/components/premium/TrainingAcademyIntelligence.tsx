@@ -32,7 +32,7 @@ export default function TrainingAcademyIntelligence() {
     return (
       <div className="space-y-6">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-          {[...Array(4)].map((_, i) => <Skeleton key={i} className="h-24" />)}
+          {[1, 2, 3, 4].map((n) => <Skeleton key={`skel-${n}`} className="h-24" />)}
         </div>
         <Skeleton className="h-96" />
       </div>
@@ -209,8 +209,8 @@ export default function TrainingAcademyIntelligence() {
             </CardHeader>
             <CardContent>
               <div className="space-y-4">
-                {certTrackers.map((cert, i) => (
-                  <div key={i} className="flex items-center justify-between p-4 border rounded-lg">
+                {certTrackers.map((cert) => (
+                  <div key={cert.name} className="flex items-center justify-between p-4 border rounded-lg">
                     <div className="flex items-center gap-4">
                       <Badge variant="outline">{cert.type}</Badge>
                       <div>
@@ -249,8 +249,8 @@ export default function TrainingAcademyIntelligence() {
             </CardHeader>
             <CardContent>
               <div className="space-y-4">
-                {crewProgress.map((crew, i) => (
-                  <div key={i} className="p-4 border rounded-lg space-y-3">
+                {crewProgress.map((crew) => (
+                  <div key={crew.name} className="p-4 border rounded-lg space-y-3">
                     <div className="flex items-center justify-between">
                       <div>
                         <p className="font-semibold">{crew.name}</p>

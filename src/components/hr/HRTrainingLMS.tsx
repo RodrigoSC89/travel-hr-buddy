@@ -48,9 +48,9 @@ export function HRTrainingLMS() {
 
   const getLevelColor = (level: string) => {
     switch (level) {
-      case "beginner": return "bg-green-500/10 text-green-500";
-      case "intermediate": return "bg-blue-500/10 text-blue-500";
-      case "advanced": return "bg-purple-500/10 text-purple-500";
+      case "beginner": return "bg-success/10 text-success";
+      case "intermediate": return "bg-info/10 text-info";
+      case "advanced": return "bg-accent/10 text-accent-foreground";
       default: return "bg-muted text-muted-foreground";
     }
   };
@@ -84,7 +84,7 @@ export function HRTrainingLMS() {
         </div>
         <div className="grid gap-4 md:grid-cols-4">
           {[1, 2, 3, 4].map(i => (
-            <Skeleton key={i} className="h-24" />
+            <Skeleton key={`skeleton-${i}`} className="h-24" />
           ))}
         </div>
       </div>
@@ -141,7 +141,7 @@ export function HRTrainingLMS() {
             <Award className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-green-500">8</div>
+            <div className="text-2xl font-bold text-success">8</div>
             <p className="text-xs text-muted-foreground">+3 este mês</p>
           </CardContent>
         </Card>
@@ -152,7 +152,7 @@ export function HRTrainingLMS() {
             <Trophy className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-purple-500">1,850</div>
+            <div className="text-2xl font-bold text-accent-foreground">1,850</div>
             <p className="text-xs text-muted-foreground">Rank #4 da empresa</p>
           </CardContent>
         </Card>
@@ -227,7 +227,7 @@ export function HRTrainingLMS() {
                       <span>{course.modules} módulos</span>
                     </div>
                     <div className="flex items-center gap-1">
-                      <Star className="h-4 w-4 fill-yellow-400 text-yellow-400" />
+                      <Star className="h-4 w-4 fill-warning text-warning" />
                       <span>{course.rating}</span>
                     </div>
                   </div>
@@ -299,10 +299,10 @@ export function HRTrainingLMS() {
         </TabsContent>
 
         <TabsContent value="ai-recommended" className="space-y-4 mt-4">
-          <Card className="p-6 bg-gradient-to-r from-purple-500/10 to-blue-500/10 border-purple-500/20">
+          <Card className="p-6 bg-gradient-to-r from-accent/10 to-primary/10 border-accent/20">
             <div className="flex items-center gap-3 mb-4">
-              <div className="p-2 bg-purple-500/20 rounded-lg">
-                <Brain className="h-6 w-6 text-purple-500" />
+              <div className="p-2 bg-accent/20 rounded-lg">
+                <Brain className="h-6 w-6 text-accent-foreground" />
               </div>
               <div>
                 <h3 className="font-semibold">Trilha Personalizada pela IA</h3>
@@ -314,8 +314,8 @@ export function HRTrainingLMS() {
 
             <div className="space-y-3">
               <div className="flex items-center gap-3 p-3 bg-background rounded-lg">
-                <div className="h-10 w-10 bg-green-500/20 rounded-full flex items-center justify-center">
-                  <CheckCircle2 className="h-5 w-5 text-green-500" />
+                <div className="h-10 w-10 bg-success/20 rounded-full flex items-center justify-center">
+                  <CheckCircle2 className="h-5 w-5 text-success" />
                 </div>
                 <div className="flex-1">
                   <p className="font-medium">1. Segurança Marítima - STCW</p>
@@ -377,7 +377,7 @@ export function HRTrainingLMS() {
           <Card>
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
-                <Trophy className="h-5 w-5 text-yellow-500" />
+                <Trophy className="h-5 w-5 text-warning" />
                 Ranking de Aprendizado
               </CardTitle>
               <CardDescription>Top performers do mês</CardDescription>

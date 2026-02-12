@@ -137,16 +137,16 @@
              <p className="font-bold">${lowestPrice.toLocaleString()}</p>
            </CardContent>
          </Card>
-         <Card className="bg-gradient-to-br from-blue-500/10 to-blue-500/5">
-           <CardContent className="p-3 text-center">
-             <Truck className="h-5 w-5 mx-auto text-blue-500 mb-1" />
+        <Card className="bg-gradient-to-br from-info/10 to-info/5">
+            <CardContent className="p-3 text-center">
+              <Truck className="h-5 w-5 mx-auto text-info mb-1" />
              <p className="text-xs text-muted-foreground">Entrega Mais Rápida</p>
              <p className="font-bold">{fastestDelivery} dias</p>
            </CardContent>
          </Card>
-         <Card className="bg-gradient-to-br from-amber-500/10 to-amber-500/5">
-           <CardContent className="p-3 text-center">
-             <Star className="h-5 w-5 mx-auto text-amber-500 mb-1" />
+        <Card className="bg-gradient-to-br from-warning/10 to-warning/5">
+            <CardContent className="p-3 text-center">
+              <Star className="h-5 w-5 mx-auto text-warning mb-1" />
              <p className="text-xs text-muted-foreground">Melhor Rating</p>
              <p className="font-bold">{bestRating.toFixed(1)}</p>
            </CardContent>
@@ -191,7 +191,7 @@
                    <div>
                      <CardTitle className="text-base">{quotation.supplier}</CardTitle>
                      <div className="flex items-center gap-1 mt-1">
-                       <Star className="h-3 w-3 fill-amber-400 text-amber-400" />
+                       <Star className="h-3 w-3 fill-warning text-warning" />
                        <span className="text-sm">{quotation.supplierRating.toFixed(1)}</span>
                      </div>
                    </div>
@@ -241,7 +241,7 @@
                      <span className="flex items-center gap-1 text-muted-foreground">
                        <Truck className="h-3 w-3" /> Lead Time
                      </span>
-                     <span className={cn("font-medium", isFastest && "text-blue-500")}>
+                     <span className={cn("font-medium", isFastest && "text-info")}>
                        {quotation.leadTime} dias
                        {isFastest && " ⚡"}
                      </span>
@@ -278,8 +278,8 @@
                  <div className="space-y-2">
                    <div>
                      <p className="text-xs font-medium text-success mb-1">Vantagens</p>
-                     {quotation.pros.map((pro, i) => (
-                       <div key={i} className="flex items-start gap-1 text-xs text-muted-foreground">
+                      {quotation.pros.map((pro) => (
+                        <div key={pro} className="flex items-start gap-1 text-xs text-muted-foreground">
                          <CheckCircle className="h-3 w-3 text-success shrink-0 mt-0.5" />
                          <span>{pro}</span>
                        </div>
@@ -287,8 +287,8 @@
                    </div>
                    <div>
                      <p className="text-xs font-medium text-destructive mb-1">Desvantagens</p>
-                     {quotation.cons.map((con, i) => (
-                       <div key={i} className="flex items-start gap-1 text-xs text-muted-foreground">
+                      {quotation.cons.map((con) => (
+                        <div key={con} className="flex items-start gap-1 text-xs text-muted-foreground">
                          <XCircle className="h-3 w-3 text-destructive shrink-0 mt-0.5" />
                          <span>{con}</span>
                        </div>
