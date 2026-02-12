@@ -149,37 +149,37 @@ const IntelligentDocumentManager = () => {
   const getStatusIcon = (status: string) => {
     switch (status) {
     case "completed":
-      return <CheckCircle className="w-4 h-4 text-green-500" />;
+      return <CheckCircle className="w-4 h-4 text-success" />;
     case "processing":
-      return <Zap className="w-4 h-4 text-blue-500 animate-pulse" />;
+      return <Zap className="w-4 h-4 text-info animate-pulse" />;
     case "error":
-      return <FileX className="w-4 h-4 text-red-500" />;
+      return <FileX className="w-4 h-4 text-destructive" />;
     default:
-      return <AlertCircle className="w-4 h-4 text-yellow-500" />;
+      return <AlertCircle className="w-4 h-4 text-warning" />;
     }
   };
 
   const getStatusColor = (status: string) => {
     switch (status) {
     case "completed":
-      return "bg-green-100 text-green-800";
+      return "bg-success/10 text-success";
     case "processing":
-      return "bg-blue-100 text-blue-800";
+      return "bg-info/10 text-info";
     case "error":
-      return "bg-red-100 text-red-800";
+      return "bg-destructive/10 text-destructive";
     default:
-      return "bg-yellow-100 text-yellow-800";
+      return "bg-warning/10 text-warning";
     }
   };
 
   const getTypeIcon = (type: string) => {
     switch (type.toLowerCase()) {
     case "pdf":
-      return <FileText className="w-8 h-8 text-red-500" />;
+      return <FileText className="w-8 h-8 text-destructive" />;
     case "excel":
-      return <FileText className="w-8 h-8 text-green-500" />;
+      return <FileText className="w-8 h-8 text-success" />;
     case "word":
-      return <FileText className="w-8 h-8 text-blue-500" />;
+      return <FileText className="w-8 h-8 text-info" />;
     default:
       return <FileText className="w-8 h-8 text-muted-foreground" />;
     }
@@ -372,7 +372,7 @@ const IntelligentDocumentManager = () => {
         <Card>
           <CardContent className="p-4">
             <div className="flex items-center gap-2">
-              <FileText className="w-4 h-4 text-blue-500" />
+              <FileText className="w-4 h-4 text-info" />
               <span className="text-sm font-medium">Total</span>
             </div>
             <div className="text-2xl font-bold">{documents.length}</div>
@@ -382,7 +382,7 @@ const IntelligentDocumentManager = () => {
         <Card>
           <CardContent className="p-4">
             <div className="flex items-center gap-2">
-              <Zap className="w-4 h-4 text-yellow-500" />
+              <Zap className="w-4 h-4 text-warning" />
               <span className="text-sm font-medium">Processando</span>
             </div>
             <div className="text-2xl font-bold">
@@ -394,7 +394,7 @@ const IntelligentDocumentManager = () => {
         <Card>
           <CardContent className="p-4">
             <div className="flex items-center gap-2">
-              <Star className="w-4 h-4 text-orange-500" />
+              <Star className="w-4 h-4 text-warning" />
               <span className="text-sm font-medium">Favoritos</span>
             </div>
             <div className="text-2xl font-bold">

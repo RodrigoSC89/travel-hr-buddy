@@ -482,7 +482,7 @@ export function ExecutiveDashboard() {
             <CardContent>
               <div className="space-y-4">
                 <div className="flex items-start gap-4 p-4 border rounded-lg">
-                  <Zap className="h-5 w-5 text-yellow-600 mt-1" />
+                  <Zap className="h-5 w-5 text-warning mt-1" />
                   <div>
                     <h4 className="font-semibold">Previsão de Receita</h4>
                     <p className="text-sm text-muted-foreground">
@@ -492,7 +492,7 @@ export function ExecutiveDashboard() {
                 </div>
 
                 <div className="flex items-start gap-4 p-4 border rounded-lg">
-                  <AlertTriangle className="h-5 w-5 text-orange-600 mt-1" />
+                  <AlertTriangle className="h-5 w-5 text-warning mt-1" />
                   <div>
                     <h4 className="font-semibold">Alerta de Manutenção</h4>
                     <p className="text-sm text-muted-foreground">
@@ -502,7 +502,7 @@ export function ExecutiveDashboard() {
                 </div>
 
                 <div className="flex items-start gap-4 p-4 border rounded-lg">
-                  <TrendingUp className="h-5 w-5 text-green-600 mt-1" />
+                  <TrendingUp className="h-5 w-5 text-success mt-1" />
                   <div>
                     <h4 className="font-semibold">Oportunidade Detectada</h4>
                     <p className="text-sm text-muted-foreground">

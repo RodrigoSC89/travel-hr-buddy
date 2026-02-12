@@ -117,9 +117,9 @@ export function OperationsDashboard() {
 
   const getMetricColor = (value: number, threshold: number, reverse = false) => {
     if (reverse) {
-      return value <= threshold ? "text-green-500" : "text-red-500";
+      return value <= threshold ? "text-success" : "text-destructive";
     }
-    return value >= threshold ? "text-green-500" : "text-yellow-500";
+    return value >= threshold ? "text-success" : "text-warning";
   };
 
   if (loading) {
@@ -141,7 +141,7 @@ export function OperationsDashboard() {
         </div>
         <div className="flex items-center gap-2">
           <Badge variant="outline" className="flex items-center gap-1">
-            <Activity className="h-3 w-3 animate-pulse text-green-500" />
+            <Activity className="h-3 w-3 animate-pulse text-success" />
             Live Data
           </Badge>
         </div>
@@ -214,7 +214,7 @@ export function OperationsDashboard() {
           <div className="flex items-center justify-between">
             <div>
               <CardTitle className="flex items-center">
-                <TrendingUp className="mr-2 h-5 w-5 text-blue-500" />
+                <TrendingUp className="mr-2 h-5 w-5 text-info" />
                 AI Operational Insights
               </CardTitle>
               <CardDescription>
@@ -229,10 +229,10 @@ export function OperationsDashboard() {
             {aiSuggestions.map((suggestion, index) => (
               <div
                 key={index}
-                className="flex items-start gap-3 p-3 bg-blue-50 dark:bg-blue-950 rounded-lg border border-blue-200 dark:border-blue-800"
+                className="flex items-start gap-3 p-3 bg-info/5 dark:bg-info/10 rounded-lg border border-info/20 dark:border-info/30"
               >
                 <div className="flex-shrink-0 mt-0.5">
-                  <div className="w-6 h-6 rounded-full bg-blue-500 flex items-center justify-center text-white text-xs font-bold">
+                  <div className="w-6 h-6 rounded-full bg-info flex items-center justify-center text-info-foreground text-xs font-bold">
                     {index + 1}
                   </div>
                 </div>

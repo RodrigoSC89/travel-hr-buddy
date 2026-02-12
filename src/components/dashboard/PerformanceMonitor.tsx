@@ -114,7 +114,7 @@ function PerformanceMonitorComponent() {
         <div className="space-y-1">
           <div className="flex items-center justify-between text-sm">
             <span className="flex items-center gap-1.5 text-foreground font-bold">
-              <Cpu className="h-4 w-4 text-blue-400" />
+              <Cpu className="h-4 w-4 text-info" />
               Memória
             </span>
             <span className="font-bold text-white">{metrics.memory.toFixed(1)} MB</span>
@@ -126,7 +126,7 @@ function PerformanceMonitorComponent() {
         <div className="space-y-1">
           <div className="flex items-center justify-between text-sm">
             <span className="flex items-center gap-1.5 text-foreground font-bold">
-              <Wifi className="h-4 w-4 text-blue-400" />
+              <Wifi className="h-4 w-4 text-info" />
               Latência
             </span>
             <span className={cn("font-bold text-base", getLatencyColor(metrics.latency))}>

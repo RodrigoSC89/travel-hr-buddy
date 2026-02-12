@@ -153,7 +153,7 @@ export const FleetAIInsights = ({ vessels }: FleetAIInsightsProps) => {
                 {recommendations.alerts?.length > 0 && (
                   <div className="mt-4 pt-4 border-t space-y-2">
                     <h4 className="font-medium flex items-center gap-2">
-                      <AlertTriangle className="h-4 w-4 text-orange-500" />
+                      <AlertTriangle className="h-4 w-4 text-warning" />
                       Alertas
                     </h4>
                     {recommendations.alerts.map((alert: string, index: number) => (
@@ -258,7 +258,7 @@ export const FleetAIInsights = ({ vessels }: FleetAIInsightsProps) => {
                     </div>
                     <div>
                       <span className="text-muted-foreground">Rota Otimizada:</span>
-                      <p className="font-medium text-green-600">{opt.optimizedRoute}</p>
+                      <p className="font-medium text-success">{opt.optimizedRoute}</p>
                     </div>
                   </div>
 

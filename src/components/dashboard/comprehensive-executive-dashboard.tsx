@@ -458,9 +458,9 @@ export function ComprehensiveExecutiveDashboard() {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-muted-foreground">Uptime Médio</p>
-                <p className="text-3xl font-bold text-blue-600">{avgUptime}%</p>
+                <p className="text-3xl font-bold text-info">{avgUptime}%</p>
               </div>
-              <TrendingUp className="h-8 w-8 text-blue-600" />
+              <TrendingUp className="h-8 w-8 text-info" />
             </div>
           </CardContent>
         </Card>

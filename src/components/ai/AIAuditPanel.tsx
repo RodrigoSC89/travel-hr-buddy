@@ -101,9 +101,9 @@ export const AIAuditPanel: React.FC = () => {
 
   const getConfidenceBadge = (confidence: number | undefined) => {
     if (!confidence) return null;
-    if (confidence >= 0.8) return <Badge className="bg-green-500/20 text-green-600">{(confidence * 100).toFixed(0)}%</Badge>;
-    if (confidence >= 0.5) return <Badge className="bg-yellow-500/20 text-yellow-600">{(confidence * 100).toFixed(0)}%</Badge>;
-    return <Badge className="bg-red-500/20 text-red-600">{(confidence * 100).toFixed(0)}%</Badge>;
+    if (confidence >= 0.8) return <Badge className="bg-success/20 text-success">{(confidence * 100).toFixed(0)}%</Badge>;
+    if (confidence >= 0.5) return <Badge className="bg-warning/20 text-warning">{(confidence * 100).toFixed(0)}%</Badge>;
+    return <Badge className="bg-destructive/20 text-destructive">{(confidence * 100).toFixed(0)}%</Badge>;
   };
 
   return (
@@ -124,8 +124,8 @@ export const AIAuditPanel: React.FC = () => {
         <Card>
           <CardContent className="pt-6">
             <div className="flex items-center gap-3">
-              <div className="p-2 rounded-lg bg-blue-500/20">
-                <Activity className="h-5 w-5 text-blue-500" />
+              <div className="p-2 rounded-lg bg-info/20">
+                <Activity className="h-5 w-5 text-info" />
               </div>
               <div>
                 <p className="text-2xl font-bold">{stats.totalInteractions}</p>
@@ -137,8 +137,8 @@ export const AIAuditPanel: React.FC = () => {
         <Card>
           <CardContent className="pt-6">
             <div className="flex items-center gap-3">
-              <div className="p-2 rounded-lg bg-green-500/20">
-                <CheckCircle className="h-5 w-5 text-green-500" />
+              <div className="p-2 rounded-lg bg-success/20">
+                <CheckCircle className="h-5 w-5 text-success" />
               </div>
               <div>
                 <p className="text-2xl font-bold">{(stats.avgConfidence * 100).toFixed(0)}%</p>
@@ -163,8 +163,8 @@ export const AIAuditPanel: React.FC = () => {
         <Card>
           <CardContent className="pt-6">
             <div className="flex items-center gap-3">
-              <div className="p-2 rounded-lg bg-orange-500/20">
-                <Brain className="h-5 w-5 text-orange-500" />
+              <div className="p-2 rounded-lg bg-warning/20">
+                <Brain className="h-5 w-5 text-warning" />
               </div>
               <div>
                 <p className="text-2xl font-bold">{(stats.ragUsageRate).toFixed(0)}%</p>
@@ -247,17 +247,17 @@ export const AIAuditPanel: React.FC = () => {
                         )}
                         {log.requires_approval && (
                           log.approval_decision === 'approved' ? (
-                            <Badge className="bg-green-500/20 text-green-600">
+                            <Badge className="bg-success/20 text-success">
                               <CheckCircle className="h-3 w-3 mr-1" />
                               Aprovado
                             </Badge>
                           ) : log.approval_decision === 'rejected' ? (
-                            <Badge className="bg-red-500/20 text-red-600">
+                            <Badge className="bg-destructive/20 text-destructive">
                               <XCircle className="h-3 w-3 mr-1" />
                               Rejeitado
                             </Badge>
                           ) : (
-                            <Badge className="bg-yellow-500/20 text-yellow-600">
+                            <Badge className="bg-warning/20 text-warning">
                               <Clock className="h-3 w-3 mr-1" />
                               Pendente
                             </Badge>

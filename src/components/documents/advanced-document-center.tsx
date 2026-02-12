@@ -35,11 +35,11 @@ const documentTypes = [
 ];
 
 const statusConfig: Record<string, { label: string; color: string; icon: React.ReactNode }> = {
-  active: { label: "Ativo", color: "bg-green-500/10 text-green-600 border-green-500/20", icon: <CheckCircle className="h-3.5 w-3.5" /> },
-  draft: { label: "Rascunho", color: "bg-blue-500/10 text-blue-600 border-blue-500/20", icon: <Edit className="h-3.5 w-3.5" /> },
+  active: { label: "Ativo", color: "bg-success/10 text-success border-success/20", icon: <CheckCircle className="h-3.5 w-3.5" /> },
+  draft: { label: "Rascunho", color: "bg-info/10 text-info border-info/20", icon: <Edit className="h-3.5 w-3.5" /> },
   expired: { label: "Expirado", color: "bg-destructive/10 text-destructive border-destructive/20", icon: <AlertTriangle className="h-3.5 w-3.5" /> },
   archived: { label: "Arquivado", color: "bg-muted text-muted-foreground border-muted", icon: <Archive className="h-3.5 w-3.5" /> },
-  review: { label: "Em Revisão", color: "bg-amber-500/10 text-amber-600 border-amber-500/20", icon: <Clock className="h-3.5 w-3.5" /> },
+  review: { label: "Em Revisão", color: "bg-warning/10 text-warning border-warning/20", icon: <Clock className="h-3.5 w-3.5" /> },
 };
 
 function formatFileSize(bytes: number | null) {
