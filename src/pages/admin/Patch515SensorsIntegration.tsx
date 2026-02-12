@@ -76,7 +76,7 @@ export default function Patch515SensorsIntegration() {
               return (
                 <Card key={sensor.id} className="relative overflow-hidden">
                   <div className={`absolute top-0 right-0 w-2 h-2 rounded-full m-2 ${
-                    sensor.status === "active" ? "bg-green-500 animate-pulse" : "bg-red-500"
+                    sensor.status === "active" ? "bg-success animate-pulse" : "bg-destructive"
                   }`} />
                   <CardContent className="pt-6">
                     <div className="flex items-center gap-3 mb-3">
@@ -109,7 +109,7 @@ export default function Patch515SensorsIntegration() {
                 <div key={sensor.id} className="flex items-center justify-between p-3 bg-muted rounded">
                   <div className="flex items-center gap-3">
                     <div className={`w-2 h-2 rounded-full ${
-                      sensor.status === "active" ? "bg-green-500" : "bg-red-500"
+                      sensor.status === "active" ? "bg-success" : "bg-destructive"
                     }`} />
                     <div className="text-sm">{sensor.name}</div>
                   </div>
@@ -128,9 +128,9 @@ export default function Patch515SensorsIntegration() {
           </CardHeader>
           <CardContent>
             <div className="space-y-4">
-              <div className="flex items-center justify-between p-4 bg-green-50 border border-green-200 rounded-lg">
+              <div className="flex items-center justify-between p-4 bg-success/10 border border-success/20 rounded-lg">
                 <div className="flex items-center gap-3">
-                  <Radio className="w-6 h-6 text-green-600" />
+                  <Radio className="w-6 h-6 text-success" />
                   <div>
                     <div className="font-semibold">WebSocket</div>
                     <div className="text-sm text-muted-foreground">Conectado</div>
@@ -171,8 +171,8 @@ export default function Patch515SensorsIntegration() {
                   <div
                     className={`p-2 rounded-lg ${
                       check.status === "pass"
-                        ? "bg-green-100 text-green-600"
-                        : "bg-red-100 text-red-600"
+                        ? "bg-success/10 text-success"
+                        : "bg-destructive/10 text-destructive"
                     }`}
                   >
                     {check.status === "pass" ? (
@@ -200,15 +200,15 @@ export default function Patch515SensorsIntegration() {
         })}
       </div>
 
-      <Card className="border-green-200 bg-green-50">
+      <Card className="border-success/20 bg-success/5">
         <CardHeader>
-          <CardTitle className="text-green-800 flex items-center gap-2">
+          <CardTitle className="text-success flex items-center gap-2">
             <CheckCircle2 className="w-6 h-6" />
             Conclusão da Validação
           </CardTitle>
         </CardHeader>
         <CardContent>
-          <p className="text-green-800 font-semibold">
+          <p className="text-success font-semibold">
             ✅ APROVADO - Sensores reconhecidos, dados visíveis e atualização em tempo real confirmada
           </p>
         </CardContent>

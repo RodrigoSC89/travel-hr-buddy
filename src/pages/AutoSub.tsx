@@ -37,7 +37,7 @@ export default function AutoSub() {
   const handleStop = (id: string) => { setMissions(p => p.map(m => m.id === id ? { ...m, status: 'completed' } : m)); toast.success('Concluída'); };
 
   const filtered = missions.filter(m => m.name.toLowerCase().includes(search.toLowerCase()));
-  const statusColors = { planned: 'bg-gray-500', active: 'bg-green-500', completed: 'bg-blue-500' };
+  const statusColors = { planned: 'bg-muted', active: 'bg-success', completed: 'bg-info' };
 
   return (
     <div className="p-6 space-y-6">

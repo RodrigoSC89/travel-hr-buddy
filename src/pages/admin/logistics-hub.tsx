@@ -175,12 +175,12 @@ export default function LogisticsHub() {
 
   const getPriorityColor = (priority: string) => {
     const colors = {
-      low: "bg-gray-500",
-      medium: "bg-blue-500",
-      high: "bg-orange-500",
-      urgent: "bg-red-500",
+      low: "bg-muted",
+      medium: "bg-info",
+      high: "bg-warning",
+      urgent: "bg-destructive",
     };
-    return colors[priority as keyof typeof colors] || "bg-gray-500";
+    return colors[priority as keyof typeof colors] || "bg-muted";
   };
 
   const getStatusIcon = (status: string) => {
@@ -188,11 +188,11 @@ export default function LogisticsHub() {
     case "pending":
       return <Clock className="h-4 w-4" />;
     case "approved":
-      return <CheckCircle className="h-4 w-4 text-green-500" />;
+      return <CheckCircle className="h-4 w-4 text-success" />;
     case "rejected":
-      return <XCircle className="h-4 w-4 text-red-500" />;
+      return <XCircle className="h-4 w-4 text-destructive" />;
     case "delivered":
-      return <Truck className="h-4 w-4 text-blue-500" />;
+      return <Truck className="h-4 w-4 text-info" />;
     default:
       return null;
     }
@@ -200,11 +200,11 @@ export default function LogisticsHub() {
 
   const getStockStatusColor = (status: string) => {
     const colors = {
-      in_stock: "bg-green-500",
-      low_stock: "bg-yellow-500",
-      out_of_stock: "bg-red-500",
+      in_stock: "bg-success",
+      low_stock: "bg-warning",
+      out_of_stock: "bg-destructive",
     };
-    return colors[status as keyof typeof colors] || "bg-gray-500";
+    return colors[status as keyof typeof colors] || "bg-muted";
   };
 
   const calculateETA = (createdAt: string): number => {
@@ -356,7 +356,7 @@ export default function LogisticsHub() {
                       </Badge>
                     </div>
                     {item.quantity <= item.reorder_level && (
-                      <div className="mt-2 p-2 bg-yellow-50 border border-yellow-200 rounded text-sm">
+                      <div className="mt-2 p-2 bg-warning/10 border border-warning/20 rounded text-sm">
                         ⚠️ Below reorder level ({item.reorder_level} {item.unit})
                       </div>
                     )}
