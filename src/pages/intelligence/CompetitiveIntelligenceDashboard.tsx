@@ -174,7 +174,9 @@ export default function CompetitiveIntelligenceDashboard() {
   const [showTrails, setShowTrails] = useState(true);
   const [vesselHistory, setVesselHistory] = useState<Record<string, [number, number][]>>({});
   const [zoneAlerts, setZoneAlerts] = useState<{ vessel: VesselPosition; zone: typeof INTEREST_ZONES[0] }[]>([]);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Mapbox GL Map instance loaded dynamically
   const mapRef = useRef<any>(null);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Mapbox GL Marker instances
   const markersRef = useRef<any[]>([]);
   const routeSourcesRef = useRef<string[]>([]);
   const trailSourcesRef = useRef<string[]>([]);
@@ -397,6 +399,7 @@ export default function CompetitiveIntelligenceDashboard() {
   };
 
   // Update map markers and routes
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Mapbox GL map instance from external library
   const updateMapMarkers = async (map: any) => {
     mapRef.current = map;
     const mb = await loadMapbox();

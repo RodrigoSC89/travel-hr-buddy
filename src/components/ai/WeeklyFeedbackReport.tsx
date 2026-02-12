@@ -52,9 +52,9 @@ export const WeeklyFeedbackReportComponent: React.FC<WeeklyFeedbackReportProps> 
   };
 
   const getConfidenceColor = (confidence: number) => {
-    if (confidence >= 0.8) return "text-green-600";
-    if (confidence >= 0.5) return "text-yellow-600";
-    return "text-red-600";
+    if (confidence >= 0.8) return "text-success";
+    if (confidence >= 0.5) return "text-warning";
+    return "text-destructive";
   };
 
   const getConfidenceBadgeVariant = (confidence: number): "default" | "secondary" | "destructive" | "outline" => {
@@ -140,7 +140,7 @@ export const WeeklyFeedbackReportComponent: React.FC<WeeklyFeedbackReportProps> 
                 </CardHeader>
                 <CardContent>
                   <div className="flex items-center gap-2">
-                    <CheckCircle className="h-4 w-4 text-green-600" />
+                    <CheckCircle className="h-4 w-4 text-success" />
                     <div className="text-2xl font-bold">
                       {(report.acceptance_rate * 100).toFixed(1)}%
                     </div>
@@ -155,7 +155,7 @@ export const WeeklyFeedbackReportComponent: React.FC<WeeklyFeedbackReportProps> 
                 </CardHeader>
                 <CardContent>
                   <div className="flex items-center gap-2">
-                    <XCircle className="h-4 w-4 text-red-600" />
+                    <XCircle className="h-4 w-4 text-destructive" />
                     <div className="text-2xl font-bold">
                       {(report.rejection_rate * 100).toFixed(1)}%
                     </div>
@@ -220,11 +220,11 @@ export const WeeklyFeedbackReportComponent: React.FC<WeeklyFeedbackReportProps> 
                     <Alert key={idx} className="relative">
                       <div className="flex items-start gap-3">
                         {insight.category === "success_pattern" ? (
-                          <TrendingUp className="h-4 w-4 text-green-600 mt-0.5" />
+                          <TrendingUp className="h-4 w-4 text-success mt-0.5" />
                         ) : insight.category === "rejection_pattern" ? (
-                          <TrendingDown className="h-4 w-4 text-red-600 mt-0.5" />
+                          <TrendingDown className="h-4 w-4 text-destructive mt-0.5" />
                         ) : (
-                          <AlertCircle className="h-4 w-4 text-yellow-600 mt-0.5" />
+                          <AlertCircle className="h-4 w-4 text-warning mt-0.5" />
                         )}
                         <div className="flex-1 space-y-2">
                           <AlertTitle className="flex items-center justify-between">
@@ -278,11 +278,11 @@ export const WeeklyFeedbackReportComponent: React.FC<WeeklyFeedbackReportProps> 
                               </div>
                               <div>
                                 <div className="text-muted-foreground">Accepted</div>
-                                <div className="font-medium text-green-600">{perf.accepted}</div>
+                                <div className="font-medium text-success">{perf.accepted}</div>
                               </div>
                               <div>
                                 <div className="text-muted-foreground">Rejected</div>
-                                <div className="font-medium text-red-600">{perf.rejected}</div>
+                                <div className="font-medium text-destructive">{perf.rejected}</div>
                               </div>
                             </div>
                           </div>

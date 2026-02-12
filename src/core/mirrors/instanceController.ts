@@ -551,19 +551,24 @@ class InstanceController {
     return localStorage.getItem("instance_id") || "main-instance";
   }
 
-  private deserializeInstance(data: any): MirrorInstance {
+  private deserializeInstance(data: MirrorInstanceRow): MirrorInstance {
+    const config = data.config as Record<string, unknown> | null;
     return {
       id: data.id,
-      name: data.name,
-      endpoint: data.endpoint,
-      status: data.status,
-      lastSeen: new Date(data.last_seen),
-      syncStatus: data.sync_status || { percentage: 0, lastSync: new Date(), inProgress: false },
-      capabilities: data.capabilities || [],
-      location: data.location,
-      metrics: data.metrics || { latency: 0, uptime: 0, memoryUsage: 0, storageUsage: 0 },
-      version: data.version || "1.0.0",
-      parentInstanceId: data.parent_instance_id,
+      name: data.instance_name,
+      endpoint: (config?.endpoint as string) || "",
+      status: data.status as InstanceStatus,
+      lastSeen: new Date(data.updated_at || Date.now()),
+      syncStatus: {
+        percentage: (config?.syncStatus as Record<string, unknown>)?.percentage as number || 0,
+        lastSync: data.last_sync ? new Date(data.last_sync) : new Date(),
+        inProgress: false,
+      },
+      capabilities: (config?.capabilities as string[]) || [],
+      location: config?.location as MirrorInstance["location"],
+      metrics: (config?.metrics as MirrorInstance["metrics"]) || { latency: 0, uptime: 0, memoryUsage: 0, storageUsage: 0 },
+      version: (config?.version as string) || "1.0.0",
+      parentInstanceId: (config?.parentInstanceId as string) || undefined,
     };
   }
 
