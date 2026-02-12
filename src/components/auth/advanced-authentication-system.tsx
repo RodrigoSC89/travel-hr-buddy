@@ -232,8 +232,8 @@ export const AdvancedAuthenticationSystem: React.FC = () => {
                     Use estes códigos se perder acesso ao seu autenticador
                   </p>
                   <div className="grid grid-cols-1 gap-2">
-                    {backupCodes.map((code, index) => (
-                      <div key={index} className="flex items-center gap-2">
+                    {backupCodes.map((code) => (
+                      <div key={code} className="flex items-center gap-2">
                         <Input value={code} readOnly className="font-mono text-sm" />
                         <Button size="sm" variant="outline" onClick={() => copyToClipboard(code)}>
                           <Copy className="w-4 h-4" />

@@ -299,8 +299,8 @@ const AdvancedReportsSystem = () => {
               </Card>
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                {performanceData.map((dept, index) => (
-                  <Card key={index}>
+                {performanceData.map((dept) => (
+                  <Card key={dept.category}>
                     <CardContent className="p-4">
                       <div className="flex items-center justify-between mb-2">
                         <h4 className="font-medium">{dept.category}</h4>
@@ -343,8 +343,8 @@ const AdvancedReportsSystem = () => {
                         </tr>
                       </thead>
                       <tbody>
-                        {departmentData.map((dept, index) => (
-                          <tr key={index} className="border-b">
+                        {departmentData.map((dept) => (
+                          <tr key={dept.name} className="border-b">
                             <td className="p-2 font-medium">{dept.name}</td>
                             <td className="p-2 text-right">R$ {dept.budget.toLocaleString()}</td>
                             <td className="p-2 text-right">R$ {dept.spent.toLocaleString()}</td>

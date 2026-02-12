@@ -54,12 +54,12 @@ interface VesselGridProps {
 }
 
 const statusConfig: Record<string, { color: string; label: string; bgColor: string }> = {
-  active: { color: "text-green-600", label: "Operacional", bgColor: "bg-green-500" },
-  operational: { color: "text-green-600", label: "Operacional", bgColor: "bg-green-500" },
-  maintenance: { color: "text-yellow-600", label: "Manutenção", bgColor: "bg-yellow-500" },
-  "in-port": { color: "text-blue-600", label: "Em Porto", bgColor: "bg-blue-500" },
-  docked: { color: "text-blue-600", label: "Atracado", bgColor: "bg-blue-500" },
-  inactive: { color: "text-gray-500", label: "Inativo", bgColor: "bg-gray-500" },
+  active: { color: "text-success", label: "Operacional", bgColor: "bg-success" },
+  operational: { color: "text-success", label: "Operacional", bgColor: "bg-success" },
+  maintenance: { color: "text-warning", label: "Manutenção", bgColor: "bg-warning" },
+  "in-port": { color: "text-primary", label: "Em Porto", bgColor: "bg-primary" },
+  docked: { color: "text-primary", label: "Atracado", bgColor: "bg-primary" },
+  inactive: { color: "text-muted-foreground", label: "Inativo", bgColor: "bg-muted-foreground" },
 };
 
 const VesselCard: React.FC<{ 
@@ -131,17 +131,17 @@ const VesselCard: React.FC<{
           {/* Stats Grid - Responsive */}
           <div className="grid grid-cols-3 gap-1.5 sm:gap-3">
             <div className="text-center p-1.5 sm:p-2 rounded-lg bg-muted/50">
-              <Fuel className="h-3 w-3 sm:h-4 sm:w-4 mx-auto text-orange-500 mb-0.5 sm:mb-1" />
+              <Fuel className="h-3 w-3 sm:h-4 sm:w-4 mx-auto text-warning mb-0.5 sm:mb-1" />
               <p className="text-sm sm:text-lg font-bold">{fuelLevel}%</p>
               <p className="text-[10px] sm:text-xs text-muted-foreground truncate">Combustível</p>
             </div>
             <div className="text-center p-1.5 sm:p-2 rounded-lg bg-muted/50">
-              <Users className="h-3 w-3 sm:h-4 sm:w-4 mx-auto text-blue-500 mb-0.5 sm:mb-1" />
+              <Users className="h-3 w-3 sm:h-4 sm:w-4 mx-auto text-primary mb-0.5 sm:mb-1" />
               <p className="text-sm sm:text-lg font-bold">{crewCount}</p>
               <p className="text-[10px] sm:text-xs text-muted-foreground truncate">Tripulação</p>
             </div>
             <div className="text-center p-1.5 sm:p-2 rounded-lg bg-muted/50">
-              <Activity className="h-3 w-3 sm:h-4 sm:w-4 mx-auto text-green-500 mb-0.5 sm:mb-1" />
+              <Activity className="h-3 w-3 sm:h-4 sm:w-4 mx-auto text-success mb-0.5 sm:mb-1" />
               <p className="text-sm sm:text-lg font-bold">{efficiency}%</p>
               <p className="text-[10px] sm:text-xs text-muted-foreground truncate">Eficiência</p>
             </div>

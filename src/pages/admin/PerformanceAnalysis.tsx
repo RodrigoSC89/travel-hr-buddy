@@ -324,8 +324,8 @@ const PerformanceAnalysis: React.FC = () => {
 
                 <ScrollArea className="h-[500px] pr-4">
                   <div className="space-y-3">
-                    {analysisReport.issues.slice(0, 50).map((issue, index) => (
-                      <Card key={index}>
+                    {analysisReport.issues.slice(0, 50).map((issue, issueIdx) => (
+                      <Card key={`issue-${issueIdx}-${issue.type}`}>
                         <CardContent className="pt-4">
                           <div className="flex items-start justify-between">
                             <div className="flex-1">

@@ -248,8 +248,8 @@ export default function ChecklistsBuilderPage() {
             </CardHeader>
             <CardContent>
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                {templates.map((template, index) => (
-                  <div key={index} className="p-4 border rounded-lg hover:border-primary/50 transition-colors">
+                {templates.map((template) => (
+                  <div key={template.name} className="p-4 border rounded-lg hover:border-primary/50 transition-colors">
                     <div className="flex items-center gap-3 mb-3">
                       {getCategoryIcon(template.category)}
                       <div>

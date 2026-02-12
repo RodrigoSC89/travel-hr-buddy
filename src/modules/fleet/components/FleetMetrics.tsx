@@ -26,11 +26,11 @@ interface MetricCardProps {
 }
 
 const colorClasses = {
-  blue: "from-blue-500/20 to-blue-600/5 text-blue-600",
-  green: "from-green-500/20 to-green-600/5 text-green-600",
-  orange: "from-orange-500/20 to-orange-600/5 text-orange-600",
-  red: "from-red-500/20 to-red-600/5 text-red-600",
-  purple: "from-purple-500/20 to-purple-600/5 text-purple-600",
+  blue: "from-primary/20 to-primary/5 text-primary",
+  green: "from-success/20 to-success/5 text-success",
+  orange: "from-warning/20 to-warning/5 text-warning",
+  red: "from-destructive/20 to-destructive/5 text-destructive",
+  purple: "from-accent/20 to-accent/5 text-accent-foreground",
 };
 
 const MetricCard: React.FC<MetricCardProps> = ({
@@ -67,7 +67,7 @@ const MetricCard: React.FC<MetricCardProps> = ({
             {trend !== undefined && (
               <span className={cn(
                 "text-sm font-medium flex items-center gap-1",
-                trend >= 0 ? "text-green-600" : "text-red-600"
+                trend >= 0 ? "text-success" : "text-destructive"
               )}>
                 {trend >= 0 ? <TrendingUp className="h-3 w-3" /> : <TrendingDown className="h-3 w-3" />}
                 {Math.abs(trend)}%

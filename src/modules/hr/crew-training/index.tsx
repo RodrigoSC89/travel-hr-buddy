@@ -118,11 +118,11 @@ const CrewTraining = () => {
         <AlertTriangle className="h-3 w-3" /> Expired
       </Badge>;
     case "expiring_soon":
-      return <Badge variant="outline" className="flex items-center gap-1 text-orange-600 border-orange-600">
+      return <Badge variant="outline" className="flex items-center gap-1 text-warning border-warning">
         <Clock className="h-3 w-3" /> Expiring Soon
       </Badge>;
     case "valid":
-      return <Badge variant="secondary" className="flex items-center gap-1 text-green-600">
+      return <Badge variant="secondary" className="flex items-center gap-1 text-success">
         <CheckCircle className="h-3 w-3" /> Valid
       </Badge>;
     case "pending":
@@ -196,10 +196,10 @@ const CrewTraining = () => {
         <Card>
           <CardHeader className="flex flex-row items-center justify-between pb-2">
             <CardTitle className="text-sm font-medium">Expiring Soon</CardTitle>
-            <Clock className="h-4 w-4 text-orange-600" />
+            <Clock className="h-4 w-4 text-warning" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-orange-600">{expiringCount}</div>
+            <div className="text-2xl font-bold text-warning">{expiringCount}</div>
             <p className="text-xs text-muted-foreground">Within 30 days</p>
           </CardContent>
         </Card>
@@ -207,10 +207,10 @@ const CrewTraining = () => {
         <Card>
           <CardHeader className="flex flex-row items-center justify-between pb-2">
             <CardTitle className="text-sm font-medium">Compliance Rate</CardTitle>
-            <CheckCircle className="h-4 w-4 text-green-600" />
+            <CheckCircle className="h-4 w-4 text-success" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-green-600">{complianceRate}%</div>
+            <div className="text-2xl font-bold text-success">{complianceRate}%</div>
             <p className="text-xs text-muted-foreground">{validCount} valid certs</p>
           </CardContent>
         </Card>

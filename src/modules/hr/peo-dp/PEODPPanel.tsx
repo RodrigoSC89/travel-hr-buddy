@@ -126,22 +126,22 @@ export default function PEODPPanel() {
   };
 
   const getScoreColor = (score: number) => {
-    if (score >= 90) return "text-green-500";
-    if (score >= 75) return "text-yellow-500";
-    if (score >= 60) return "text-orange-500";
-    return "text-red-500";
+    if (score >= 90) return "text-success";
+    if (score >= 75) return "text-warning";
+    if (score >= 60) return "text-warning";
+    return "text-destructive";
   };
 
   const getStatusBadge = (status: string) => {
     switch (status) {
       case "Excellent":
-        return <Badge className="bg-green-500/20 text-green-500 border-green-500/30">Excelente</Badge>;
+        return <Badge className="bg-success/20 text-success border-success/30">Excelente</Badge>;
       case "Good":
-        return <Badge className="bg-blue-500/20 text-blue-500 border-blue-500/30">Bom</Badge>;
+        return <Badge className="bg-primary/20 text-primary border-primary/30">Bom</Badge>;
       case "Acceptable":
-        return <Badge className="bg-yellow-500/20 text-yellow-500 border-yellow-500/30">Aceitável</Badge>;
+        return <Badge className="bg-warning/20 text-warning border-warning/30">Aceitável</Badge>;
       case "Critical":
-        return <Badge className="bg-red-500/20 text-red-500 border-red-500/30">Crítico</Badge>;
+        return <Badge className="bg-destructive/20 text-destructive border-destructive/30">Crítico</Badge>;
       default:
         return <Badge variant="secondary">N/A</Badge>;
     }
@@ -163,7 +163,7 @@ export default function PEODPPanel() {
           </div>
         </div>
         {isMonitoring && (
-          <Badge variant="outline" className="animate-pulse border-green-500 text-green-500">
+          <Badge variant="outline" className="animate-pulse border-success text-success">
             <Activity className="h-3 w-3 mr-1" />
             Monitoramento Ativo
           </Badge>
@@ -283,19 +283,19 @@ export default function PEODPPanel() {
                     <Progress value={auditoria.score} className="h-3" />
                     <div className="grid grid-cols-2 gap-4 text-sm">
                       <div className="flex items-center gap-2">
-                        <CheckCircle2 className="h-4 w-4 text-green-500" />
+                        <CheckCircle2 className="h-4 w-4 text-success" />
                         <span>
                           {auditoria.resultado.filter(r => r.cumprimento === "OK").length} Conformes
                         </span>
                       </div>
                       <div className="flex items-center gap-2">
-                        <AlertTriangle className="h-4 w-4 text-red-500" />
+                        <AlertTriangle className="h-4 w-4 text-destructive" />
                         <span>
                           {auditoria.resultado.filter(r => r.cumprimento === "Não Conforme").length} Não Conformes
                         </span>
                       </div>
                       <div className="flex items-center gap-2">
-                        <Clock className="h-4 w-4 text-yellow-500" />
+                        <Clock className="h-4 w-4 text-warning" />
                         <span>
                           {auditoria.resultado.filter(r => r.cumprimento === "Pendente").length} Pendentes
                         </span>
@@ -415,7 +415,7 @@ export default function PEODPPanel() {
                     </div>
                     <div className="flex justify-between">
                       <span className="text-muted-foreground">Eventos Críticos</span>
-                      <span className="font-medium text-red-500">{sessionReport.statistics.criticalEvents}</span>
+                      <span className="font-medium text-destructive">{sessionReport.statistics.criticalEvents}</span>
                     </div>
                     <div className="flex justify-between">
                       <span className="text-muted-foreground">Taxa de Violação</span>
@@ -463,7 +463,7 @@ export default function PEODPPanel() {
                     <div className="text-sm text-muted-foreground">Eventos</div>
                   </div>
                   <div className="text-center p-4 rounded-lg bg-muted">
-                    <div className="text-3xl font-bold text-red-500">{summary.criticalIncidents}</div>
+                    <div className="text-3xl font-bold text-destructive">{summary.criticalIncidents}</div>
                     <div className="text-sm text-muted-foreground">Críticos</div>
                   </div>
                   <div className="text-center p-4 rounded-lg bg-muted">
