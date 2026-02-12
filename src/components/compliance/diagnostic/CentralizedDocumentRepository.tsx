@@ -163,11 +163,11 @@ export function CentralizedDocumentRepository() {
   const getStatusBadge = (status: Document['status']) => {
     switch (status) {
       case 'current':
-        return <Badge className="bg-green-500 hover:bg-green-600">Atual</Badge>;
+        return <Badge className="bg-success hover:bg-success/90 text-success-foreground">Atual</Badge>;
       case 'outdated':
         return <Badge variant="destructive">Desatualizado</Badge>;
       case 'draft':
-        return <Badge className="bg-amber-500 hover:bg-amber-600">Rascunho</Badge>;
+        return <Badge className="bg-warning hover:bg-warning/90 text-warning-foreground">Rascunho</Badge>;
       case 'archived':
         return <Badge variant="secondary">Arquivado</Badge>;
     }
@@ -205,16 +205,16 @@ export function CentralizedDocumentRepository() {
       </div>
 
       {/* ROI Card */}
-      <Card className="border-green-300 bg-gradient-to-r from-green-50 to-emerald-50 dark:from-green-950/30 dark:to-emerald-950/30">
+      <Card className="border-success/30 bg-gradient-to-r from-success/5 to-success/10">
         <CardContent className="pt-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-4">
-              <div className="p-3 bg-green-100 dark:bg-green-900 rounded-full">
-                <Zap className="h-6 w-6 text-green-600" />
+              <div className="p-3 bg-success/10 rounded-full">
+                <Zap className="h-6 w-6 text-success" />
               </div>
               <div>
                 <p className="text-sm text-muted-foreground">Economia com Busca Rápida</p>
-                <p className="text-2xl font-bold text-green-700">R$ 1.200 - 1.800/mês</p>
+                <p className="text-2xl font-bold text-success">R$ 1.200 - 1.800/mês</p>
               </div>
             </div>
             <div className="text-right">
@@ -337,11 +337,11 @@ export function CentralizedDocumentRepository() {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-muted-foreground">Indexados (OCR)</p>
-                <p className="text-2xl font-bold text-green-600">
+                <p className="text-2xl font-bold text-success">
                   {documents.filter(d => d.ocr_indexed).length}
                 </p>
               </div>
-              <Sparkles className="h-8 w-8 text-green-500 opacity-50" />
+              <Sparkles className="h-8 w-8 text-success opacity-50" />
             </div>
           </CardContent>
         </Card>
@@ -415,7 +415,7 @@ export function CentralizedDocumentRepository() {
                               </Badge>
                               {getStatusBadge(doc.status)}
                               {doc.ocr_indexed && (
-                                <Badge variant="outline" className="text-xs text-purple-600 border-purple-300">
+                                <Badge variant="outline" className="text-xs text-accent-foreground border-accent/30">
                                   <Sparkles className="h-3 w-3 mr-1" />
                                   OCR
                                 </Badge>

@@ -94,12 +94,12 @@ export const IncidentAIClassificationModal: React.FC<IncidentAIClassificationMod
 
   const getRiskLevelColor = (level: string) => {
     const colors: Record<string, string> = {
-      crítico: "bg-red-600 text-white border-red-700",
-      alto: "bg-orange-600 text-white border-orange-700",
-      moderado: "bg-yellow-600 text-white border-yellow-700",
-      baixo: "bg-blue-600 text-white border-blue-700",
+      crítico: "bg-destructive text-destructive-foreground border-destructive",
+      alto: "bg-warning text-warning-foreground border-warning",
+      moderado: "bg-warning text-warning-foreground border-warning",
+      baixo: "bg-info text-info-foreground border-info",
     };
-    return colors[level.toLowerCase()] || "bg-gray-600 text-white";
+    return colors[level.toLowerCase()] || "bg-muted text-muted-foreground";
   };
 
   return (
@@ -107,7 +107,7 @@ export const IncidentAIClassificationModal: React.FC<IncidentAIClassificationMod
       <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2 text-2xl">
-            <Sparkles className="h-6 w-6 text-purple-600" />
+            <Sparkles className="h-6 w-6 text-accent-foreground" />
             Classificar Incidente com IA
           </DialogTitle>
           <DialogDescription>
@@ -137,7 +137,7 @@ export const IncidentAIClassificationModal: React.FC<IncidentAIClassificationMod
             <Button
               onClick={handleClassify}
               disabled={isClassifying || !description.trim()}
-              className="w-full bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700"
+              className="w-full bg-gradient-to-r from-accent to-primary hover:from-accent/90 hover:to-primary/90"
             >
               {isClassifying ? (
                 <>
@@ -154,8 +154,8 @@ export const IncidentAIClassificationModal: React.FC<IncidentAIClassificationMod
           )}
 
           {classification && (
-            <div className="space-y-4 p-4 border rounded-lg bg-gradient-to-br from-green-50 to-blue-50">
-              <div className="flex items-center gap-2 text-green-700 font-semibold">
+            <div className="space-y-4 p-4 border rounded-lg bg-gradient-to-br from-success/5 to-info/5">
+              <div className="flex items-center gap-2 text-success font-semibold">
                 <CheckCircle className="h-5 w-5" />
                 Classificação IA Concluída
               </div>
@@ -183,9 +183,9 @@ export const IncidentAIClassificationModal: React.FC<IncidentAIClassificationMod
                 </div>
               </div>
 
-              <div className="flex items-start gap-2 p-3 bg-blue-50 border border-blue-200 rounded">
-                <AlertTriangle className="h-5 w-5 text-blue-600 mt-0.5 flex-shrink-0" />
-                <div className="text-sm text-blue-900">
+              <div className="flex items-start gap-2 p-3 bg-info/5 border border-info/20 rounded">
+                <AlertTriangle className="h-5 w-5 text-info mt-0.5 flex-shrink-0" />
+                <div className="text-sm text-foreground">
                   <p className="font-semibold">Benefícios da Classificação IA:</p>
                   <ul className="list-disc list-inside mt-1 space-y-1">
                     <li>Classificação rápida e padronizada</li>
@@ -210,7 +210,7 @@ export const IncidentAIClassificationModal: React.FC<IncidentAIClassificationMod
           {classification && (
             <Button
               onClick={handleApplyClassification}
-              className="bg-green-600 hover:bg-green-700"
+              className="bg-success hover:bg-success/90 text-success-foreground"
             >
               <CheckCircle className="h-4 w-4 mr-2" />
               Aplicar Classificação

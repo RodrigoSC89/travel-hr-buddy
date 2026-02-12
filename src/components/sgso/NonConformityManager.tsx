@@ -91,19 +91,19 @@ const getTypeConfig = (type: string) => {
 const getStatusConfig = (status: string) => {
   const configs = {
     open: {
-      color: "bg-red-600 text-white",
+      color: "bg-destructive text-destructive-foreground",
       label: "Aberta"
     },
     in_treatment: {
-      color: "bg-yellow-600 text-white",
+      color: "bg-warning text-warning-foreground",
       label: "Em Tratamento"
     },
     closed: {
-      color: "bg-green-600 text-white",
+      color: "bg-success text-success-foreground",
       label: "Fechada"
     },
     verified: {
-      color: "bg-blue-600 text-white",
+      color: "bg-info text-info-foreground",
       label: "Verificada"
     }
   };
@@ -182,39 +182,39 @@ export const NonConformityManager: React.FC = () => {
           </CardContent>
         </Card>
 
-        <Card className="bg-gradient-to-br from-yellow-50 to-yellow-100 border-yellow-200">
+        <Card className="bg-gradient-to-br from-warning/10 to-warning/5 border-warning/20">
           <CardContent className="p-6">
             <div className="flex items-center justify-between mb-4">
-              <Clock className="h-10 w-10 text-yellow-600" />
-              <Badge className="bg-yellow-600 text-white font-bold">TRATAMENTO</Badge>
+              <Clock className="h-10 w-10 text-warning" />
+              <Badge className="bg-warning text-warning-foreground font-bold">TRATAMENTO</Badge>
             </div>
-            <h3 className="text-sm font-medium text-yellow-700 mb-1">Em Tratamento</h3>
-            <p className="text-3xl font-bold text-yellow-900">{inTreatmentCount}</p>
-            <p className="text-xs text-yellow-600 mt-2">Em andamento</p>
+            <h3 className="text-sm font-medium text-foreground mb-1">Em Tratamento</h3>
+            <p className="text-3xl font-bold text-foreground">{inTreatmentCount}</p>
+            <p className="text-xs text-warning mt-2">Em andamento</p>
           </CardContent>
         </Card>
 
-        <Card className="bg-gradient-to-br from-green-50 to-green-100 border-green-200">
+        <Card className="bg-gradient-to-br from-success/10 to-success/5 border-success/20">
           <CardContent className="p-6">
             <div className="flex items-center justify-between mb-4">
-              <CheckCircle className="h-10 w-10 text-green-600" />
-              <Badge className="bg-green-600 text-white font-bold">FECHADAS</Badge>
+              <CheckCircle className="h-10 w-10 text-success" />
+              <Badge className="bg-success text-success-foreground font-bold">FECHADAS</Badge>
             </div>
-            <h3 className="text-sm font-medium text-green-700 mb-1">NCs Fechadas</h3>
-            <p className="text-3xl font-bold text-green-900">{closedCount}</p>
-            <p className="text-xs text-green-600 mt-2">Resolvidas</p>
+            <h3 className="text-sm font-medium text-foreground mb-1">NCs Fechadas</h3>
+            <p className="text-3xl font-bold text-foreground">{closedCount}</p>
+            <p className="text-xs text-success mt-2">Resolvidas</p>
           </CardContent>
         </Card>
 
-        <Card className="bg-gradient-to-br from-blue-50 to-blue-100 border-blue-200">
+        <Card className="bg-gradient-to-br from-info/10 to-info/5 border-info/20">
           <CardContent className="p-6">
             <div className="flex items-center justify-between mb-4">
-              <TrendingDown className="h-10 w-10 text-blue-600" />
-              <Badge className="bg-blue-600 text-white font-bold">TOTAL</Badge>
+              <TrendingDown className="h-10 w-10 text-info" />
+              <Badge className="bg-info text-info-foreground font-bold">TOTAL</Badge>
             </div>
-            <h3 className="text-sm font-medium text-blue-700 mb-1">Total Ativas</h3>
-            <p className="text-3xl font-bold text-blue-900">{totalOpen}</p>
-            <p className="text-xs text-blue-600 mt-2">Requerem atenção</p>
+            <h3 className="text-sm font-medium text-foreground mb-1">Total Ativas</h3>
+            <p className="text-3xl font-bold text-foreground">{totalOpen}</p>
+            <p className="text-xs text-info mt-2">Requerem atenção</p>
           </CardContent>
         </Card>
       </div>
@@ -341,7 +341,7 @@ export const NonConformityManager: React.FC = () => {
                         {nc.status !== "closed" && (
                           <Button
                             size="sm"
-                            className="min-h-[44px] px-6 bg-blue-600 hover:bg-blue-700 text-white"
+                            className="min-h-[44px] px-6 bg-primary hover:bg-primary/90 text-primary-foreground"
                             onClick={() => handleUpdateNC(nc.id, nc.number)}
                             disabled={isLoading}
                           >
@@ -375,7 +375,7 @@ export const NonConformityManager: React.FC = () => {
         <CardContent>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
             <Button
-              className="bg-red-600 hover:bg-red-700 text-white min-h-[56px] flex-col gap-2"
+              className="bg-destructive hover:bg-destructive/90 text-destructive-foreground min-h-[56px] flex-col gap-2"
               onClick={() => handleCreate("Não Conformidade")}
               disabled={isLoading}
             >
@@ -383,7 +383,7 @@ export const NonConformityManager: React.FC = () => {
               <span className="font-semibold">Registrar NC</span>
             </Button>
             <Button
-              className="bg-blue-600 hover:bg-blue-700 text-white min-h-[56px] flex-col gap-2"
+              className="bg-primary hover:bg-primary/90 text-primary-foreground min-h-[56px] flex-col gap-2"
               onClick={() => handleGenerateReport("Relatório de Não Conformidades")}
               disabled={isLoading}
             >
@@ -391,7 +391,7 @@ export const NonConformityManager: React.FC = () => {
               <span className="font-semibold">Relatório</span>
             </Button>
             <Button
-              className="bg-yellow-600 hover:bg-yellow-700 text-white min-h-[56px] flex-col gap-2"
+              className="bg-warning hover:bg-warning/90 text-warning-foreground min-h-[56px] flex-col gap-2"
               onClick={() => showInfo("NCs Vencendo", "Abrindo lista de não conformidades próximas do vencimento")}
               disabled={isLoading}
             >

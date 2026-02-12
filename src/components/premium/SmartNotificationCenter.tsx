@@ -39,7 +39,7 @@ const typeConfig = {
   warning: { icon: AlertTriangle, color: "text-warning", bg: "bg-warning/10" },
   info: { icon: Info, color: "text-primary", bg: "bg-primary/10" },
   success: { icon: Check, color: "text-success", bg: "bg-success/10" },
-  ai: { icon: Brain, color: "text-purple-500", bg: "bg-purple-500/10" }
+  ai: { icon: Brain, color: "text-accent-foreground", bg: "bg-accent/10" }
 };
 
 const categoryIcons: Record<string, React.ElementType> = {
@@ -181,7 +181,7 @@ export function SmartNotificationCenter({ trigger }: SmartNotificationCenterProp
                             </div>
                             <Button variant="ghost" size="icon" className="h-6 w-6 shrink-0"
                               onClick={(e) => { e.stopPropagation(); handleToggleStar(notification.id); }}>
-                              {notification.starred ? <Star className="h-4 w-4 fill-yellow-500 text-yellow-500" /> : <StarOff className="h-4 w-4 text-muted-foreground" />}
+                              {notification.starred ? <Star className="h-4 w-4 fill-warning text-warning" /> : <StarOff className="h-4 w-4 text-muted-foreground" />}
                             </Button>
                           </div>
                           <div className="flex items-center gap-2 text-xs text-muted-foreground mt-2">

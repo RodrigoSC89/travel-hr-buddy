@@ -178,16 +178,16 @@ export function CertificateExpirationAlerts() {
       </div>
 
       {/* ROI Card */}
-      <Card className="border-green-300 bg-gradient-to-r from-green-50 to-emerald-50 dark:from-green-950/30 dark:to-emerald-950/30">
+      <Card className="border-success/30 bg-gradient-to-r from-success/5 to-success/10">
         <CardContent className="pt-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-4">
-              <div className="p-3 bg-green-100 dark:bg-green-900 rounded-full">
-                <TrendingUp className="h-6 w-6 text-green-600" />
+              <div className="p-3 bg-success/10 rounded-full">
+                <TrendingUp className="h-6 w-6 text-success" />
               </div>
               <div>
                 <p className="text-sm text-muted-foreground">Economia Estimada com Alertas Automáticos</p>
-                <p className="text-2xl font-bold text-green-700">R$ 2.000 - 5.000/mês</p>
+                <p className="text-2xl font-bold text-success">R$ 2.000 - 5.000/mês</p>
               </div>
             </div>
             <div className="text-right">
@@ -274,24 +274,24 @@ export function CertificateExpirationAlerts() {
                 <div className="space-y-3">
                   {filteredCertificates.map(cert => (
                     <Card key={cert.id} className={`
-                      ${cert.days_until_expiry < 0 ? 'border-red-300 bg-red-50/50 dark:bg-red-950/20' : ''}
-                      ${cert.days_until_expiry >= 0 && cert.days_until_expiry <= 7 ? 'border-orange-300 bg-orange-50/50 dark:bg-orange-950/20' : ''}
-                      ${cert.days_until_expiry > 7 && cert.days_until_expiry <= 30 ? 'border-amber-300 bg-amber-50/50 dark:bg-amber-950/20' : ''}
+                      ${cert.days_until_expiry < 0 ? 'border-destructive/30 bg-destructive/5' : ''}
+                      ${cert.days_until_expiry >= 0 && cert.days_until_expiry <= 7 ? 'border-warning/30 bg-warning/5' : ''}
+                      ${cert.days_until_expiry > 7 && cert.days_until_expiry <= 30 ? 'border-warning/30 bg-warning/5' : ''}
                     `}>
                       <CardContent className="pt-4">
                         <div className="flex items-center justify-between">
                           <div className="flex items-center gap-4">
                             <div className={`p-2 rounded-full ${
-                              cert.days_until_expiry < 0 ? 'bg-red-100 dark:bg-red-900' :
-                              cert.days_until_expiry <= 7 ? 'bg-orange-100 dark:bg-orange-900' :
-                              cert.days_until_expiry <= 30 ? 'bg-amber-100 dark:bg-amber-900' :
-                              'bg-green-100 dark:bg-green-900'
+                              cert.days_until_expiry < 0 ? 'bg-destructive/10' :
+                              cert.days_until_expiry <= 7 ? 'bg-warning/10' :
+                              cert.days_until_expiry <= 30 ? 'bg-warning/10' :
+                              'bg-success/10'
                             }`}>
                               <User className={`h-5 w-5 ${
-                                cert.days_until_expiry < 0 ? 'text-red-600' :
-                                cert.days_until_expiry <= 7 ? 'text-orange-600' :
-                                cert.days_until_expiry <= 30 ? 'text-amber-600' :
-                                'text-green-600'
+                                cert.days_until_expiry < 0 ? 'text-destructive' :
+                                cert.days_until_expiry <= 7 ? 'text-warning' :
+                                cert.days_until_expiry <= 30 ? 'text-warning' :
+                                'text-success'
                               }`} />
                             </div>
                             <div>
