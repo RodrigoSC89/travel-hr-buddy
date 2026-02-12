@@ -37,7 +37,7 @@ export default function ProcurementDashboard() {
     message: `${o.order_number} - ${o.supplier_name || "Fornecedor"} (${o.status})`,
     time: new Date(o.created_at).toLocaleDateString("pt-BR"),
     icon: o.status === "delivered" ? Package : o.status === "approved" ? ShoppingCart : Truck,
-    color: o.status === "delivered" ? "text-green-500" : o.status === "pending" ? "text-amber-500" : "text-primary",
+    color: o.status === "delivered" ? "text-success" : o.status === "pending" ? "text-warning" : "text-primary",
   }));
 
   // Top suppliers
@@ -49,7 +49,7 @@ export default function ProcurementDashboard() {
     return (
       <div className="space-y-6">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-6 gap-4">
-          {Array.from({ length: 6 }).map((_, i) => <Skeleton key={i} className="h-24" />)}
+          {Array.from({ length: 6 }).map((_, i) => <Skeleton key={`skel-${i}`} className="h-24" />)}
         </div>
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           <Skeleton className="h-80 lg:col-span-2" />
@@ -69,7 +69,7 @@ export default function ProcurementDashboard() {
               <div>
                 <p className="text-sm text-muted-foreground">Itens em Estoque</p>
                 <p className="text-2xl font-bold">{stats.totalItems.toLocaleString()}</p>
-                <div className="flex items-center gap-1 text-xs text-green-600">
+              <div className="flex items-center gap-1 text-xs text-success">
                   <ArrowUpRight className="h-3 w-3" />
                   Dados reais
                 </div>
@@ -81,25 +81,25 @@ export default function ProcurementDashboard() {
           </CardContent>
         </Card>
 
-        <Card className="border-l-4 border-l-blue-500 bg-gradient-to-r from-blue-500/5 to-transparent">
+        <Card className="border-l-4 border-l-info bg-gradient-to-r from-info/5 to-transparent">
           <CardContent className="p-4">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-muted-foreground">Pedidos Ativos</p>
                 <p className="text-2xl font-bold">{stats.activeOrders}</p>
-                <div className="flex items-center gap-1 text-xs text-blue-600">
+                <div className="flex items-center gap-1 text-xs text-info">
                   <Activity className="h-3 w-3" />
                   {orders.filter((o) => o.status === "in_transit").length} em trânsito
                 </div>
               </div>
-              <div className="p-3 rounded-full bg-blue-500/10">
-                <ShoppingCart className="h-6 w-6 text-blue-500" />
+              <div className="p-3 rounded-full bg-info/10">
+                <ShoppingCart className="h-6 w-6 text-info" />
               </div>
             </div>
           </CardContent>
         </Card>
 
-        <Card className="border-l-4 border-l-green-500 bg-gradient-to-r from-green-500/5 to-transparent">
+        <Card className="border-l-4 border-l-success bg-gradient-to-r from-success/5 to-transparent">
           <CardContent className="p-4">
             <div className="flex items-center justify-between">
               <div>
@@ -109,67 +109,67 @@ export default function ProcurementDashboard() {
                     ? `$${(stats.totalOrderValue / 1000).toFixed(0)}k`
                     : "$0"}
                 </p>
-                <div className="flex items-center gap-1 text-xs text-green-600">
+                <div className="flex items-center gap-1 text-xs text-success">
                   <ArrowDownRight className="h-3 w-3" />
                   {orders.length} pedidos
                 </div>
               </div>
-              <div className="p-3 rounded-full bg-green-500/10">
-                <DollarSign className="h-6 w-6 text-green-500" />
+              <div className="p-3 rounded-full bg-success/10">
+                <DollarSign className="h-6 w-6 text-success" />
               </div>
             </div>
           </CardContent>
         </Card>
 
-        <Card className="border-l-4 border-l-amber-500 bg-gradient-to-r from-amber-500/5 to-transparent">
+        <Card className="border-l-4 border-l-warning bg-gradient-to-r from-warning/5 to-transparent">
           <CardContent className="p-4">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-muted-foreground">Alertas Estoque</p>
                 <p className="text-2xl font-bold">{stats.lowStockItems}</p>
-                <div className="flex items-center gap-1 text-xs text-amber-600">
+                <div className="flex items-center gap-1 text-xs text-warning">
                   <AlertTriangle className="h-3 w-3" />
                   {stats.criticalItems} crítico(s)
                 </div>
               </div>
-              <div className="p-3 rounded-full bg-amber-500/10">
-                <AlertCircle className="h-6 w-6 text-amber-500" />
+              <div className="p-3 rounded-full bg-warning/10">
+                <AlertCircle className="h-6 w-6 text-warning" />
               </div>
             </div>
           </CardContent>
         </Card>
 
-        <Card className="border-l-4 border-l-purple-500 bg-gradient-to-r from-purple-500/5 to-transparent">
+        <Card className="border-l-4 border-l-accent bg-gradient-to-r from-accent/5 to-transparent">
           <CardContent className="p-4">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-muted-foreground">Fornecedores</p>
                 <p className="text-2xl font-bold">{stats.totalSuppliers}</p>
-                <div className="flex items-center gap-1 text-xs text-purple-600">
+                <div className="flex items-center gap-1 text-xs text-accent-foreground">
                   <Building2 className="h-3 w-3" />
                   Ativos
                 </div>
               </div>
-              <div className="p-3 rounded-full bg-purple-500/10">
-                <Building2 className="h-6 w-6 text-purple-500" />
+              <div className="p-3 rounded-full bg-accent/10">
+                <Building2 className="h-6 w-6 text-accent-foreground" />
               </div>
             </div>
           </CardContent>
         </Card>
 
-        <Card className="border-l-4 border-l-cyan-500 bg-gradient-to-r from-cyan-500/5 to-transparent">
+        <Card className="border-l-4 border-l-secondary bg-gradient-to-r from-secondary/5 to-transparent">
           <CardContent className="p-4">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-muted-foreground">Lead Time Médio</p>
                 <p className="text-2xl font-bold">{stats.avgLeadTime}d</p>
-                <div className="flex items-center gap-1 text-xs text-cyan-600">
+                <div className="flex items-center gap-1 text-xs text-secondary-foreground">
                   <TrendingDown className="h-3 w-3" />
                   Fornecedores
                 </div>
               </div>
-              <div className="p-3 rounded-full bg-cyan-500/10">
-                <Clock className="h-6 w-6 text-cyan-500" />
+              <div className="p-3 rounded-full bg-secondary/10">
+                <Clock className="h-6 w-6 text-secondary-foreground" />
               </div>
             </div>
           </CardContent>
@@ -255,7 +255,7 @@ export default function ProcurementDashboard() {
           <CardHeader className="pb-2">
             <div className="flex items-center justify-between">
               <CardTitle className="flex items-center gap-2">
-                <AlertTriangle className="h-5 w-5 text-amber-500" />
+                <AlertTriangle className="h-5 w-5 text-warning" />
                 Alertas de Estoque
               </CardTitle>
               <Badge variant={lowStockAlerts.length > 0 ? "destructive" : "secondary"}>
@@ -270,8 +270,8 @@ export default function ProcurementDashboard() {
                 <p className="text-sm">Todos os itens acima do mínimo</p>
               </div>
             ) : (
-              lowStockAlerts.map((alert, idx) => (
-                <div key={idx} className="space-y-2">
+              lowStockAlerts.map((alert) => (
+                <div key={alert.item} className="space-y-2">
                   <div className="flex items-center justify-between">
                     <span className="text-sm font-medium truncate">{alert.item}</span>
                     <Badge variant={alert.status === "critical" ? "destructive" : "default"}>
@@ -280,7 +280,7 @@ export default function ProcurementDashboard() {
                   </div>
                   <Progress
                     value={alert.min > 0 ? (alert.current / alert.min) * 100 : 0}
-                    className={`h-2 ${alert.status === "critical" ? "[&>div]:bg-destructive" : "[&>div]:bg-amber-500"}`}
+                    className={`h-2 ${alert.status === "critical" ? "[&>div]:bg-destructive" : "[&>div]:bg-warning"}`}
                   />
                 </div>
               ))
@@ -288,10 +288,10 @@ export default function ProcurementDashboard() {
           </CardContent>
         </Card>
 
-        <Card className="bg-gradient-to-br from-purple-500/5 to-blue-500/5 border-purple-500/20">
+        <Card className="bg-gradient-to-br from-primary/5 to-secondary/5 border-primary/20">
           <CardHeader className="pb-2">
             <CardTitle className="flex items-center gap-2">
-              <Brain className="h-5 w-5 text-purple-500" />
+              <Brain className="h-5 w-5 text-primary" />
               Insights Supabase
               <Badge variant="secondary" className="ml-auto">
                 <Sparkles className="h-3 w-3 mr-1" />
@@ -322,7 +322,7 @@ export default function ProcurementDashboard() {
               <div className="p-3 rounded-lg bg-background/50 space-y-2">
                 <div className="flex items-center justify-between">
                   <span className="text-sm font-medium">Base de Fornecedores</span>
-                  <span className="text-xs font-semibold text-green-600">{stats.totalSuppliers} ativos</span>
+                  <span className="text-xs font-semibold text-success">{stats.totalSuppliers} ativos</span>
                 </div>
                 <span className="text-xs text-muted-foreground">Lead time médio: {stats.avgLeadTime} dias</span>
               </div>
@@ -344,8 +344,8 @@ export default function ProcurementDashboard() {
                 <p className="text-sm">Nenhum pedido recente</p>
               </div>
             ) : (
-              recentActivity.map((activity, idx) => (
-                <div key={idx} className="flex items-start gap-3">
+              recentActivity.map((activity) => (
+                <div key={activity.message} className="flex items-start gap-3">
                   <div className={`p-2 rounded-full bg-muted ${activity.color}`}>
                     <activity.icon className="h-4 w-4" />
                   </div>

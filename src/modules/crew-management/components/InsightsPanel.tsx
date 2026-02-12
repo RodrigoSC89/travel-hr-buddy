@@ -376,8 +376,8 @@ export function InsightsPanel() {
 
               {crew.alerts.length > 0 && (
                 <div className="space-y-1">
-                  {crew.alerts.map((alert, i) => (
-                    <div key={i} className="flex items-center gap-2 text-xs text-destructive">
+                  {crew.alerts.map((alert) => (
+                    <div key={alert} className="flex items-center gap-2 text-xs text-destructive">
                       <AlertTriangle className="h-3 w-3" />
                       <span>{alert}</span>
                     </div>

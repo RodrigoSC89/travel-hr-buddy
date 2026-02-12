@@ -204,8 +204,8 @@ export function PerformanceMonitor() {
       </CardHeader>
       <CardContent className="space-y-3">
         {/* Core Web Vitals */}
-        {metrics.map((metric, i) => (
-          <div key={i} className="space-y-1">
+        {metrics.map((metric) => (
+          <div key={metric.abbrev} className="space-y-1">
             <div className="flex items-center justify-between text-sm">
               <span className="flex items-center gap-1.5">
                 {metric.icon && <metric.icon className="h-3.5 w-3.5 text-muted-foreground" />}

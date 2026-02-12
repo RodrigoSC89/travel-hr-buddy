@@ -124,11 +124,11 @@ const AutoSub: React.FC = () => {
 
   const getRiskBadge = (risk: string) => {
     const colors = {
-      low: "bg-green-500",
-      medium: "bg-yellow-500",
-      high: "bg-red-500",
+      low: "bg-success",
+      medium: "bg-warning",
+      high: "bg-destructive",
     };
-    return colors[risk as keyof typeof colors] || "bg-gray-500";
+    return colors[risk as keyof typeof colors] || "bg-muted-foreground";
   };
 
   const getStatusBadge = (status: string) => {
@@ -152,7 +152,7 @@ const AutoSub: React.FC = () => {
               <Bot className="w-8 h-8 text-secondary animate-pulse" />
               AutoSub - Autonomous Mission Planner
             </h1>
-            <p className="text-zinc-400 mt-1">
+            <p className="text-muted-foreground mt-1">
               AI-driven autonomous underwater operations - PATCH 184.0
             </p>
           </div>
@@ -165,128 +165,128 @@ const AutoSub: React.FC = () => {
 
         {/* Configuration */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-          <Card className="bg-zinc-800/50 border-zinc-700">
+          <Card className="bg-card/50 border-border">
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
-                <Map className="w-5 h-5 text-cyan-400" />
+                <Map className="w-5 h-5 text-secondary" />
                 Survey Area Definition
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
               <div>
-                <label className="text-xs text-zinc-400 mb-2 block">Area Name</label>
+                <label className="text-xs text-muted-foreground mb-2 block">Area Name</label>
                 <Input
                   value={areaName}
                   onChange={(e) => setAreaName(e.target.value)}
-                  className="bg-zinc-900/50 border-zinc-700 text-white"
+                  className="bg-background/50 border-border"
                 />
               </div>
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <label className="text-xs text-zinc-400 mb-2 block">North Bound</label>
+                  <label className="text-xs text-muted-foreground mb-2 block">North Bound</label>
                   <Input
                     type="number"
                     step="0.01"
                     value={northBound}
                     onChange={(e) => setNorthBound(parseFloat(e.target.value))}
-                    className="bg-zinc-900/50 border-zinc-700 text-white"
+                    className="bg-background/50 border-border"
                   />
                 </div>
                 <div>
-                  <label className="text-xs text-zinc-400 mb-2 block">South Bound</label>
+                  <label className="text-xs text-muted-foreground mb-2 block">South Bound</label>
                   <Input
                     type="number"
                     step="0.01"
                     value={southBound}
                     onChange={(e) => setSouthBound(parseFloat(e.target.value))}
-                    className="bg-zinc-900/50 border-zinc-700 text-white"
+                    className="bg-background/50 border-border"
                   />
                 </div>
                 <div>
-                  <label className="text-xs text-zinc-400 mb-2 block">East Bound</label>
+                  <label className="text-xs text-muted-foreground mb-2 block">East Bound</label>
                   <Input
                     type="number"
                     step="0.01"
                     value={eastBound}
                     onChange={(e) => setEastBound(parseFloat(e.target.value))}
-                    className="bg-zinc-900/50 border-zinc-700 text-white"
+                    className="bg-background/50 border-border"
                   />
                 </div>
                 <div>
-                  <label className="text-xs text-zinc-400 mb-2 block">West Bound</label>
+                  <label className="text-xs text-muted-foreground mb-2 block">West Bound</label>
                   <Input
                     type="number"
                     step="0.01"
                     value={westBound}
                     onChange={(e) => setWestBound(parseFloat(e.target.value))}
-                    className="bg-zinc-900/50 border-zinc-700 text-white"
+                    className="bg-background/50 border-border"
                   />
                 </div>
                 <div>
-                  <label className="text-xs text-zinc-400 mb-2 block">Min Depth (m)</label>
+                  <label className="text-xs text-muted-foreground mb-2 block">Min Depth (m)</label>
                   <Input
                     type="number"
                     value={minDepth}
                     onChange={(e) => setMinDepth(parseFloat(e.target.value))}
-                    className="bg-zinc-900/50 border-zinc-700 text-white"
+                    className="bg-background/50 border-border"
                   />
                 </div>
                 <div>
-                  <label className="text-xs text-zinc-400 mb-2 block">Max Depth (m)</label>
+                  <label className="text-xs text-muted-foreground mb-2 block">Max Depth (m)</label>
                   <Input
                     type="number"
                     value={maxDepth}
                     onChange={(e) => setMaxDepth(parseFloat(e.target.value))}
-                    className="bg-zinc-900/50 border-zinc-700 text-white"
+                    className="bg-background/50 border-border"
                   />
                 </div>
               </div>
             </CardContent>
           </Card>
 
-          <Card className="bg-zinc-800/50 border-zinc-700">
+          <Card className="bg-card/50 border-border">
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
-                <Settings className="w-5 h-5 text-blue-400" />
+                <Settings className="w-5 h-5 text-info" />
                 Environmental Parameters
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
               <div>
-                <label className="text-xs text-zinc-400 mb-2 block">Max Current Speed (knots)</label>
+                <label className="text-xs text-muted-foreground mb-2 block">Max Current Speed (knots)</label>
                 <Input
                   type="number"
                   step="0.1"
                   value={maxCurrent}
                   onChange={(e) => setMaxCurrent(parseFloat(e.target.value))}
-                  className="bg-zinc-900/50 border-zinc-700 text-white"
+                  className="bg-background/50 border-border"
                 />
               </div>
               <div>
-                <label className="text-xs text-zinc-400 mb-2 block">Max Wave Height (m)</label>
+                <label className="text-xs text-muted-foreground mb-2 block">Max Wave Height (m)</label>
                 <Input
                   type="number"
                   step="0.1"
                   value={maxWaves}
                   onChange={(e) => setMaxWaves(parseFloat(e.target.value))}
-                  className="bg-zinc-900/50 border-zinc-700 text-white"
+                  className="bg-background/50 border-border"
                 />
               </div>
               <div>
-                <label className="text-xs text-zinc-400 mb-2 block">Min Visibility (m)</label>
+                <label className="text-xs text-muted-foreground mb-2 block">Min Visibility (m)</label>
                 <Input
                   type="number"
                   value={minVisibility}
                   onChange={(e) => setMinVisibility(parseFloat(e.target.value))}
-                  className="bg-zinc-900/50 border-zinc-700 text-white"
+                  className="bg-background/50 border-border"
                 />
               </div>
               <div>
-                <label className="text-xs text-zinc-400 mb-2 block">Scan Pattern</label>
+                <label className="text-xs text-muted-foreground mb-2 block">Scan Pattern</label>
                 <select
                   value={scanPattern}
-                  onChange={(e) => setScanPattern(e.target.value as any)}
-                  className="w-full bg-zinc-900/50 border border-zinc-700 text-white rounded-md p-2"
+                  onChange={(e) => setScanPattern(e.target.value as "grid" | "spiral" | "random")}
+                  className="w-full bg-background/50 border border-border text-foreground rounded-md p-2"
                 >
                   <option value="grid">Grid (Lawnmower)</option>
                   <option value="spiral">Spiral</option>
@@ -295,7 +295,7 @@ const AutoSub: React.FC = () => {
               </div>
               <Button
                 onClick={handleGeneratePlan}
-                className="w-full bg-purple-600 hover:bg-purple-700"
+                className="w-full"
               >
                 <Bot className="w-4 h-4 mr-2" />
                 Generate Autonomous Plan
@@ -307,11 +307,11 @@ const AutoSub: React.FC = () => {
         {/* Mission Plan */}
         {currentPlan && (
           <>
-            <Card className="bg-gradient-to-br from-purple-900/30 to-blue-900/30 border-purple-500/30">
+            <Card className="bg-gradient-to-br from-primary/10 to-secondary/10 border-primary/30">
               <CardHeader>
                 <CardTitle className="flex items-center justify-between">
                   <div className="flex items-center gap-2">
-                    <Navigation className="w-5 h-5 text-purple-400" />
+                    <Navigation className="w-5 h-5 text-primary" />
                     Mission Plan: {currentPlan.name}
                   </div>
                   <Badge className={getRiskBadge(currentPlan.riskLevel)}>
@@ -322,20 +322,20 @@ const AutoSub: React.FC = () => {
               <CardContent className="space-y-4">
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
                   <div>
-                    <div className="text-zinc-400 text-xs">Waypoints</div>
-                    <div className="text-2xl font-bold text-purple-400">{currentPlan.waypoints.length}</div>
+                    <div className="text-muted-foreground text-xs">Waypoints</div>
+                    <div className="text-2xl font-bold text-primary">{currentPlan.waypoints.length}</div>
                   </div>
                   <div>
-                    <div className="text-zinc-400 text-xs">Distance</div>
-                    <div className="text-2xl font-bold text-cyan-400">{currentPlan.estimatedDistance.toFixed(1)} NM</div>
+                    <div className="text-muted-foreground text-xs">Distance</div>
+                    <div className="text-2xl font-bold text-secondary">{currentPlan.estimatedDistance.toFixed(1)} NM</div>
                   </div>
                   <div>
-                    <div className="text-zinc-400 text-xs">Duration</div>
-                    <div className="text-2xl font-bold text-blue-400">{currentPlan.estimatedDuration} min</div>
+                    <div className="text-muted-foreground text-xs">Duration</div>
+                    <div className="text-2xl font-bold text-info">{currentPlan.estimatedDuration} min</div>
                   </div>
                   <div>
-                    <div className="text-zinc-400 text-xs">Objectives</div>
-                    <div className="text-lg font-bold text-green-400">{currentPlan.objectives.length}</div>
+                    <div className="text-muted-foreground text-xs">Objectives</div>
+                    <div className="text-lg font-bold text-success">{currentPlan.objectives.length}</div>
                   </div>
                 </div>
 
@@ -363,25 +363,25 @@ const AutoSub: React.FC = () => {
             </Card>
 
             {/* Feedback Log */}
-            <Card className="bg-zinc-800/50 border-zinc-700">
+            <Card className="bg-card/50 border-border">
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
-                  <Activity className="w-5 h-5 text-green-400" />
+                  <Activity className="w-5 h-5 text-success" />
                   Mission Feedback ({feedback.length})
                 </CardTitle>
               </CardHeader>
               <CardContent>
                 {feedback.length === 0 ? (
-                  <div className="text-center py-8 text-zinc-500">
+                  <div className="text-center py-8 text-muted-foreground">
                     <AlertCircle className="w-12 h-12 mx-auto mb-2 opacity-50" />
                     <p>No feedback yet</p>
                   </div>
                 ) : (
                   <div className="space-y-2 max-h-96 overflow-y-auto">
-                    {feedback.map((fb, idx) => (
+                    {feedback.map((fb) => (
                       <div
-                        key={idx}
-                        className="p-3 bg-zinc-900/50 rounded border border-zinc-700"
+                        key={`${fb.type}-${fb.timestamp}`}
+                        className="p-3 bg-background/50 rounded border border-border"
                       >
                         <div className="flex justify-between items-start mb-1">
                           <Badge className={
