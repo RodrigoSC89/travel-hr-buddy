@@ -262,7 +262,7 @@ class DeepLinkingService {
         break;
       default:
         logger.warn("[DeepLink] Unknown notification action:", action);
-        spaNavigate(`/notifications`);
+        spaNavigate(`/alerts-command`);
     }
   }
 

@@ -4,5 +4,5 @@
  */
 import { Navigate } from "react-router-dom";
 export default function SonarAIRedirect() {
-  return <Navigate to="/subsea-operations" replace />;
+  return <Navigate to="/ocean-sonar" replace />;
 }

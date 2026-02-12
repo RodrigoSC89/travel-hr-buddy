@@ -252,7 +252,7 @@ export function NOCMonitoringCenter() {
                 Este painel exibe apenas dados reais. Configure as integrações para começar.
               </AlertDescription>
             </Alert>
-            <Button onClick={() => navigate('/integrations-center')}>
+            <Button onClick={() => navigate('/integrations')}>
               <Settings className="h-4 w-4 mr-2" />
               Configurar Monitoramento
             </Button>

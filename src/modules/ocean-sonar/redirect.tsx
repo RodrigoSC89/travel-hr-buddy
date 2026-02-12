@@ -4,5 +4,5 @@
  */
 import { Navigate } from "react-router-dom";
 export default function OceanSonarRedirect() {
-  return <Navigate to="/subsea-operations" replace />;
+  return <Navigate to="/ops?tab=subsea" replace />;
 }

@@ -93,7 +93,7 @@ export default function GnssLive() {
                 Por segurança, não são exibidas posições simuladas.
               </AlertDescription>
             </Alert>
-            <Button onClick={() => navigate('/integrations-center')}>
+            <Button onClick={() => navigate('/integrations')}>
               <Settings className="h-4 w-4 mr-2" />
               Configurar Integração
             </Button>
