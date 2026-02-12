@@ -198,8 +198,8 @@ export default function ControlHubPanel() {
               </div>
             ) : (
               <div className="space-y-1">
-                {telemetryLogs.map((log, index) => (
-                  <div key={index} className="text-success">
+                {telemetryLogs.map((log) => (
+                  <div key={`${log.timestamp}-${log.message}`} className="text-success">
                     <span className="text-muted-foreground">[{log.timestamp}]</span> {log.message}
                   </div>
                 ))}

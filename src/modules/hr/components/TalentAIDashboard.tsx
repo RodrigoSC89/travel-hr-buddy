@@ -472,15 +472,15 @@ function CareerPathView({ path }: { path: CareerPath }) {
         </CardHeader>
         <CardContent>
           <div className="relative">
-            <div className="absolute left-4 top-0 bottom-0 w-0.5 bg-gradient-to-b from-purple-500 to-pink-500" />
+            <div className="absolute left-4 top-0 bottom-0 w-0.5 bg-gradient-to-b from-accent to-primary" />
             
-            {path.timeline.map((milestone, index) => (
-              <div key={index} className="relative pl-12 pb-8 last:pb-0">
+            {path.timeline.map((milestone, milestoneIdx) => (
+              <div key={`${milestone.year}-${milestone.position}`} className="relative pl-12 pb-8 last:pb-0">
                 <div className={cn(
                   "absolute left-2 w-5 h-5 rounded-full flex items-center justify-center text-xs font-bold",
-                  index === 0 ? "bg-purple-500 text-white" :
-                  index === path.timeline.length - 1 ? "bg-pink-500 text-white" :
-                  "bg-muted border-2 border-purple-300"
+                  milestoneIdx === 0 ? "bg-accent text-accent-foreground" :
+                  milestoneIdx === path.timeline.length - 1 ? "bg-primary text-primary-foreground" :
+                  "bg-muted border-2 border-accent/50"
                 )}>
                   {milestone.year}
                 </div>
@@ -508,25 +508,25 @@ function CareerPathView({ path }: { path: CareerPath }) {
       <Card>
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
-            <GraduationCap className="h-5 w-5 text-blue-400" />
+            <GraduationCap className="h-5 w-5 text-primary" />
             Plano de Desenvolvimento
           </CardTitle>
         </CardHeader>
         <CardContent>
           <div className="space-y-3">
-            {path.developmentPlan.map((item, index) => (
-              <div key={index} className="flex items-center gap-4 p-3 rounded-lg bg-muted/50">
+            {path.developmentPlan.map((item, devIdx) => (
+              <div key={`dev-${devIdx}-${item.type}`} className="flex items-center gap-4 p-3 rounded-lg bg-muted/50">
                 <div className={cn(
                   "p-2 rounded-lg",
-                  item.type === 'certification' ? "bg-blue-500/20" :
-                  item.type === 'training' ? "bg-green-500/20" :
-                  item.type === 'experience' ? "bg-orange-500/20" :
-                  "bg-purple-500/20"
+                  item.type === 'certification' ? "bg-primary/20" :
+                  item.type === 'training' ? "bg-success/20" :
+                  item.type === 'experience' ? "bg-warning/20" :
+                  "bg-accent/20"
                 )}>
-                  {item.type === 'certification' ? <Award className="h-4 w-4 text-blue-400" /> :
-                   item.type === 'training' ? <GraduationCap className="h-4 w-4 text-green-400" /> :
-                   item.type === 'experience' ? <Target className="h-4 w-4 text-orange-400" /> :
-                   <Users className="h-4 w-4 text-purple-400" />}
+                  {item.type === 'certification' ? <Award className="h-4 w-4 text-primary" /> :
+                   item.type === 'training' ? <GraduationCap className="h-4 w-4 text-success" /> :
+                   item.type === 'experience' ? <Target className="h-4 w-4 text-warning" /> :
+                   <Users className="h-4 w-4 text-accent" />}
                 </div>
                 
                 <div className="flex-1">

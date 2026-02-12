@@ -319,8 +319,8 @@ export const PeotramAnalyticsPanel: React.FC = () => {
                   </PieChart>
                 </ResponsiveContainer>
                 <div className="mt-4 grid grid-cols-2 gap-2">
-                  {data.nonConformityDistribution.map((item, index) => (
-                    <div key={index} className="flex items-center gap-2">
+                  {data.nonConformityDistribution.map((item) => (
+                    <div key={item.type} className="flex items-center gap-2">
                       <div 
                         className="w-3 h-3 rounded" 
                         style={{ backgroundColor: item.color }}
@@ -376,11 +376,11 @@ export const PeotramAnalyticsPanel: React.FC = () => {
             </CardHeader>
             <CardContent>
               <div className="space-y-4">
-                {data.elementPerformance.map((element, index) => (
-                  <div key={index} className="flex items-center justify-between p-3 border rounded-lg">
+                {data.elementPerformance.map((element, elIdx) => (
+                  <div key={element.element} className="flex items-center justify-between p-3 border rounded-lg">
                     <div className="flex items-center gap-3">
                       <div className="w-8 h-8 rounded-full bg-primary/20 flex items-center justify-center text-sm font-medium">
-                        {index + 1}
+                        {elIdx + 1}
                       </div>
                       <div>
                         <h4 className="font-medium">{element.element}</h4>

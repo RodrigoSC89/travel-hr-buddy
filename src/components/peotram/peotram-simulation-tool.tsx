@@ -488,8 +488,8 @@ export const PeotramSimulationTool: React.FC = () => {
                 <div className="space-y-2">
                   <h4 className="font-medium">Recomendações Principais</h4>
                   <ul className="space-y-1">
-                    {currentScenario.results.recommendations.map((rec, index) => (
-                      <li key={index} className="flex items-start gap-2 text-sm">
+                    {currentScenario.results.recommendations.map((rec) => (
+                      <li key={rec} className="flex items-start gap-2 text-sm">
                         <CheckCircle className="w-4 h-4 text-success mt-0.5 flex-shrink-0" />
                         {rec}
                       </li>

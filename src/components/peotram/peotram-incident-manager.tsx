@@ -472,8 +472,8 @@ export const PeotramIncidentManager: React.FC = () => {
                       <div>
                         <p className="font-medium mb-2">Descobertas:</p>
                         <ul className="list-disc list-inside text-sm space-y-1">
-                          {investigation.findings.map((finding, index) => (
-                            <li key={index}>{finding}</li>
+                          {investigation.findings.map((finding) => (
+                            <li key={finding}>{finding}</li>
                           ))}
                         </ul>
                       </div>
@@ -483,8 +483,8 @@ export const PeotramIncidentManager: React.FC = () => {
                       <div>
                         <p className="font-medium mb-2">Recomendações:</p>
                         <ul className="list-disc list-inside text-sm space-y-1">
-                          {investigation.recommendations.map((rec, index) => (
-                            <li key={index}>{rec}</li>
+                          {investigation.recommendations.map((rec) => (
+                            <li key={rec}>{rec}</li>
                           ))}
                         </ul>
                       </div>

@@ -338,9 +338,9 @@ export default function PEODPPanel() {
               <CardContent>
                 <ScrollArea className="h-[300px]">
                   <div className="space-y-2">
-                    {auditoria.resultado.map((item, index) => (
+                    {auditoria.resultado.map((item) => (
                       <div 
-                        key={index}
+                        key={item.item}
                         className="flex items-center justify-between p-3 rounded-lg border bg-card"
                       >
                         <div className="flex-1">

@@ -348,8 +348,8 @@ export default function TemplateValidationReport() {
           {/* Test Results */}
           <div className="space-y-3">
             <h3 className="text-lg font-semibold">Resultados dos Testes</h3>
-            {results.map((result, index) => (
-              <Card key={index} className="border-l-4" style={{
+            {results.map((result, resIdx) => (
+              <Card key={`result-${resIdx}-${result.status}`} className="border-l-4" style={{
                 borderLeftColor: 
                   result.status === "passed" ? "hsl(var(--success))" :
                     result.status === "failed" ? "hsl(var(--destructive))" :

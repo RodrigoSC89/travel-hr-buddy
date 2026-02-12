@@ -388,8 +388,8 @@ export const PeotramComplianceTracker: React.FC = () => {
                   <div>
                     <p className="text-sm font-medium mb-2">Ações Necessárias:</p>
                     <ul className="text-sm text-muted-foreground space-y-1">
-                      {requirement.actions.map((action, index) => (
-                        <li key={index} className="flex items-center gap-2">
+                      {requirement.actions.map((action) => (
+                        <li key={action} className="flex items-center gap-2">
                           <div className="w-1.5 h-1.5 rounded-full bg-primary" />
                           {action}
                         </li>

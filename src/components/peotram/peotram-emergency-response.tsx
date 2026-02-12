@@ -349,8 +349,8 @@ export const PeotramEmergencyResponse: React.FC = () => {
                   <div>
                     <h4 className="font-medium mb-2">Passos do Procedimento:</h4>
                     <ol className="list-decimal list-inside space-y-1 text-sm">
-                      {procedure.steps.map((step, index) => (
-                        <li key={index}>{step}</li>
+                      {procedure.steps.map((step) => (
+                        <li key={step}>{step}</li>
                       ))}
                     </ol>
                   </div>

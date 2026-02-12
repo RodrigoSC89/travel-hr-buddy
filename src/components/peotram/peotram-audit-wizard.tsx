@@ -675,8 +675,8 @@ export const PeotramAuditWizard: React.FC<PeotramAuditWizardProps> = ({
             <div>
               <h4 className="font-medium mb-2">Evidências Requeridas</h4>
               <ul className="space-y-1">
-                {requirement.evidenceRequired.map((evidence, index) => (
-                  <li key={index} className="text-sm text-muted-foreground flex items-start gap-2">
+                {requirement.evidenceRequired.map((evidence) => (
+                  <li key={evidence} className="text-sm text-muted-foreground flex items-start gap-2">
                     <CheckCircle className="w-3 h-3 text-success mt-1 flex-shrink-0" />
                     {evidence}
                   </li>
