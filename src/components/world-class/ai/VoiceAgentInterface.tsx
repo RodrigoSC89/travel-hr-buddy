@@ -135,12 +135,14 @@ export const VoiceAgentInterface: React.FC = () => {
       return;
     }
 
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any -- SpeechRecognition not in standard types
     const SpeechRecognitionAPI = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
     const recognition = new SpeechRecognitionAPI();
     recognition.lang = "pt-BR";
     recognition.continuous = false;
     recognition.interimResults = false;
 
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any -- SpeechRecognition event type
     recognition.onresult = (event: any) => {
       const transcript = event.results[0][0].transcript;
       processMessage(transcript, true);

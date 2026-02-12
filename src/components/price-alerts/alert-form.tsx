@@ -33,7 +33,7 @@ import { logger } from '@/lib/logger';
 interface AlertFormProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
-  onSubmit: (data: any) => Promise<void>;
+  onSubmit: (data: CreatePriceAlertInput) => Promise<void>;
   alert?: PriceAlert | null;
   mode: "create" | "edit";
 }
@@ -249,7 +249,7 @@ export const AlertForm: React.FC<AlertFormProps> = ({
               <Label htmlFor="notification_frequency">Notification Frequency</Label>
               <Select
                 value={formData.notification_frequency}
-                onValueChange={(value: any) =>
+                onValueChange={(value: "immediate" | "daily" | "weekly") =>
                   setFormData({ ...formData, notification_frequency: value })
                 }
               >

@@ -40,6 +40,7 @@ interface ModuleAIChatProps {
   quickQuestions?: string[];
   onQuestionAsked?: (question: string, answer: string) => void;
   edgeFunctionName?: string;
+  /** @deprecated Use semantic tokens instead of dynamic color classes */
   accentColor?: string;
 }
 
@@ -257,8 +258,8 @@ export function ModuleAIChat({
       <CardHeader className="pb-3">
         <CardTitle className="flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <div className={`p-2 bg-gradient-to-br from-${accentColor}-500/20 to-${accentColor}-500/10 rounded-lg`}>
-              <Brain className={`h-5 w-5 text-${accentColor}-500`} />
+            <div className="p-2 bg-gradient-to-br from-primary/20 to-primary/10 rounded-lg">
+              <Brain className="h-5 w-5 text-primary" />
             </div>
             <div>
               <span className="text-lg">{moduleName} AI</span>
@@ -342,7 +343,7 @@ export function ModuleAIChat({
                   >
                     {message.role === 'assistant' && (
                       <div className="flex items-center gap-2 mb-2">
-                        <Brain className={`h-4 w-4 text-${accentColor}-500`} />
+                        <Brain className="h-4 w-4 text-primary" />
                         <span className="text-xs font-medium">{moduleName} AI</span>
                       </div>
                     )}
@@ -358,7 +359,7 @@ export function ModuleAIChat({
                 <div className="flex justify-start">
                   <div className="bg-muted p-3 rounded-lg mr-8">
                     <div className="flex items-center gap-2">
-                      <Loader2 className={`h-4 w-4 animate-spin text-${accentColor}-500`} />
+                      <Loader2 className="h-4 w-4 animate-spin text-primary" />
                       <span className="text-sm text-muted-foreground">Analisando...</span>
                     </div>
                   </div>
