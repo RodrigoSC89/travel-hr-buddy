@@ -133,10 +133,10 @@ export function PEODPEnhancedAI() {
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case "green": return "bg-green-500";
-      case "yellow": return "bg-yellow-500";
-      case "red": return "bg-red-500";
-      default: return "bg-gray-500";
+      case "green": return "bg-success";
+      case "yellow": return "bg-warning";
+      case "red": return "bg-destructive";
+      default: return "bg-muted-foreground";
     }
   };
 
@@ -175,9 +175,9 @@ export function PEODPEnhancedAI() {
 
       {/* ASOG Status Card */}
       <Card className={`border-2 ${
-        asogStatus.current === "green" ? "border-green-500 bg-green-500/5" :
-        asogStatus.current === "yellow" ? "border-yellow-500 bg-yellow-500/5" :
-        "border-red-500 bg-red-500/5"
+        asogStatus.current === "green" ? "border-success bg-success/5" :
+        asogStatus.current === "yellow" ? "border-warning bg-warning/5" :
+        "border-destructive bg-destructive/5"
       }`}>
         <CardContent className="pt-4">
           <div className="flex items-center justify-between">
@@ -207,7 +207,7 @@ export function PEODPEnhancedAI() {
               <p className="text-sm font-medium mb-2">Recomendações IA:</p>
               {asogStatus.recommendations.map((rec, i) => (
                 <p key={i} className="text-xs text-muted-foreground flex items-center gap-1">
-                  <AlertCircle className="h-3 w-3 text-yellow-500" />
+                  <AlertCircle className="h-3 w-3 text-warning" />
                   {rec}
                 </p>
               ))}
@@ -241,9 +241,9 @@ export function PEODPEnhancedAI() {
                     <Badge variant="outline">{pillar.score}%</Badge>
                   </div>
                   <Progress value={pillar.score} className={`h-2 mb-2 ${
-                    pillar.status === "green" ? "[&>div]:bg-green-500" :
-                    pillar.status === "yellow" ? "[&>div]:bg-yellow-500" :
-                    "[&>div]:bg-red-500"
+                    pillar.status === "green" ? "[&>div]:bg-success" :
+                    pillar.status === "yellow" ? "[&>div]:bg-warning" :
+                    "[&>div]:bg-destructive"
                   }`} />
                   <div className="flex justify-between text-xs text-muted-foreground">
                     <span>{pillar.compliant}/{pillar.items} itens conformes</span>

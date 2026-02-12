@@ -318,28 +318,28 @@ export const ProjectTimeline: React.FC<ProjectTimelineProps> = () => {
   const getStatusColor = (status: string) => {
     switch (status) {
     case "completed":
-      return "bg-green-500";
+      return "bg-success";
     case "in_progress":
-      return "bg-blue-500";
+      return "bg-info";
     case "blocked":
-      return "bg-red-500";
+      return "bg-destructive";
     case "cancelled":
-      return "bg-gray-500";
+      return "bg-muted-foreground";
     default:
-      return "bg-yellow-500";
+      return "bg-warning";
     }
   };
 
   const getPriorityColor = (priority: string) => {
     switch (priority) {
     case "critical":
-      return "bg-red-100 text-red-800 dark:bg-red-900/20 dark:text-red-300";
+      return "bg-destructive/10 text-destructive dark:bg-destructive/20 dark:text-destructive";
     case "high":
-      return "bg-orange-100 text-orange-800 dark:bg-orange-900/20 dark:text-orange-300";
+      return "bg-warning/10 text-warning dark:bg-warning/20 dark:text-warning";
     case "medium":
-      return "bg-yellow-100 text-yellow-800 dark:bg-yellow-900/20 dark:text-yellow-300";
+      return "bg-info/10 text-info dark:bg-info/20 dark:text-info";
     default:
-      return "bg-green-100 text-green-800 dark:bg-green-900/20 dark:text-green-300";
+      return "bg-success/10 text-success dark:bg-success/20 dark:text-success";
     }
   };
 

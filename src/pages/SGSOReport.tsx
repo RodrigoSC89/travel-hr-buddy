@@ -214,11 +214,11 @@ const SGSOReportPage: React.FC = () => {
   const getStatusColor = (status: string) => {
     switch (status) {
       case 'conforme':
-        return 'bg-green-100 text-green-800 border-green-200';
+        return 'bg-success/10 text-success border-success/20';
       case 'parcial':
-        return 'bg-yellow-100 text-yellow-800 border-yellow-200';
+        return 'bg-warning/10 text-warning border-warning/20';
       case 'não_conforme':
-        return 'bg-red-100 text-red-800 border-red-200';
+        return 'bg-destructive/10 text-destructive border-destructive/20';
       default:
         return '';
     }

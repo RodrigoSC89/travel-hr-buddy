@@ -118,7 +118,7 @@ export const PredictiveMaintenanceRevolution: React.FC = () => {
   const getPriorityColor = (priority: MaintenancePrediction["priority"]) => {
     switch (priority) {
     case "critical": return "bg-destructive/10 text-destructive dark:bg-destructive/20 dark:text-destructive";
-    case "high": return "bg-orange-100 text-orange-800 dark:bg-orange-900/20 dark:text-orange-300";
+    case "high": return "bg-warning/10 text-warning dark:bg-warning/20 dark:text-warning";
     case "medium": return "bg-warning/10 text-warning dark:bg-warning/20 dark:text-warning";
     case "low": return "bg-success/10 text-success dark:bg-success/20 dark:text-success";
     }
