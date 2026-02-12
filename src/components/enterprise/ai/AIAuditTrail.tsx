@@ -65,7 +65,7 @@ export function AIAuditTrail() {
     return (
       <div className="space-y-6">
         <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
-          {[...Array(5)].map((_, i) => <Skeleton key={i} className="h-20" />)}
+          {[...Array(5)].map((_, i) => <Skeleton key={`skeleton-${i}`} className="h-20" />)}
         </div>
         <Skeleton className="h-96" />
       </div>

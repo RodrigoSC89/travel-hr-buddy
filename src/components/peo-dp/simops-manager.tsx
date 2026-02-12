@@ -176,17 +176,17 @@ export const SIMOPSManager: React.FC = () => {
   const getRiskBadge = (risk: string) => {
     switch (risk) {
       case "critical": return <Badge variant="destructive">Crítico</Badge>;
-      case "high": return <Badge className="bg-orange-500">Alto</Badge>;
-      case "medium": return <Badge className="bg-yellow-500 text-black">Médio</Badge>;
+      case "high": return <Badge className="bg-warning">Alto</Badge>;
+      case "medium": return <Badge className="bg-warning/80 text-warning-foreground">Médio</Badge>;
       default: return <Badge variant="secondary">Baixo</Badge>;
     }
   };
 
   const getStatusBadge = (status: string) => {
     switch (status) {
-      case "active": return <Badge className="bg-green-500">Ativo</Badge>;
-      case "planned": return <Badge className="bg-blue-500">Planejado</Badge>;
-      case "paused": return <Badge className="bg-yellow-500 text-black">Pausado</Badge>;
+      case "active": return <Badge className="bg-success">Ativo</Badge>;
+      case "planned": return <Badge className="bg-info">Planejado</Badge>;
+      case "paused": return <Badge className="bg-warning text-warning-foreground">Pausado</Badge>;
       case "completed": return <Badge variant="secondary">Concluído</Badge>;
       default: return <Badge variant="outline">{status}</Badge>;
     }
@@ -242,7 +242,7 @@ export const SIMOPSManager: React.FC = () => {
                 <p className="text-sm text-muted-foreground">Operações Ativas</p>
                 <p className="text-2xl font-bold">{activeOperations.length}</p>
               </div>
-              <Activity className="h-8 w-8 text-green-500" />
+              <Activity className="h-8 w-8 text-success" />
             </div>
           </CardContent>
         </Card>
@@ -253,7 +253,7 @@ export const SIMOPSManager: React.FC = () => {
                 <p className="text-sm text-muted-foreground">Planejadas</p>
                 <p className="text-2xl font-bold">{plannedOperations.length}</p>
               </div>
-              <Calendar className="h-8 w-8 text-blue-500" />
+              <Calendar className="h-8 w-8 text-info" />
             </div>
           </CardContent>
         </Card>
@@ -264,7 +264,7 @@ export const SIMOPSManager: React.FC = () => {
                 <p className="text-sm text-muted-foreground">Zonas Ativas</p>
                 <p className="text-2xl font-bold">{zones.filter(z => z.active).length}</p>
               </div>
-              <MapPin className="h-8 w-8 text-purple-500" />
+              <MapPin className="h-8 w-8 text-primary" />
             </div>
           </CardContent>
         </Card>
@@ -275,7 +275,7 @@ export const SIMOPSManager: React.FC = () => {
                 <p className="text-sm text-muted-foreground">Conflitos</p>
                 <p className="text-2xl font-bold">{conflicts.length}</p>
               </div>
-              <AlertCircle className="h-8 w-8 text-yellow-500" />
+              <AlertCircle className="h-8 w-8 text-warning" />
             </div>
           </CardContent>
         </Card>
@@ -286,7 +286,7 @@ export const SIMOPSManager: React.FC = () => {
                 <p className="text-sm text-muted-foreground">Pessoal Envolvido</p>
                 <p className="text-2xl font-bold">{activeOperations.reduce((acc, op) => acc + op.personnel, 0)}</p>
               </div>
-              <Users className="h-8 w-8 text-cyan-500" />
+              <Users className="h-8 w-8 text-accent-foreground" />
             </div>
           </CardContent>
         </Card>
@@ -500,9 +500,9 @@ export const SIMOPSManager: React.FC = () => {
                 <div>
                   <p className="text-sm text-muted-foreground mb-2">Restrições</p>
                   <div className="space-y-1">
-                    {selectedOperation.restrictions.map((r, i) => (
-                      <div key={i} className="flex items-center gap-2 text-sm">
-                        <Shield className="h-4 w-4 text-yellow-500" />
+                    {selectedOperation.restrictions.map((r) => (
+                      <div key={r} className="flex items-center gap-2 text-sm">
+                        <Shield className="h-4 w-4 text-warning" />
                         {r}
                       </div>
                     ))}

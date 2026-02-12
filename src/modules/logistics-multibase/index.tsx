@@ -226,19 +226,19 @@ export default function LogisticsMultibase() {
 
   const getPriorityColor = (priority: string) => {
     switch (priority) {
-      case "urgent": return "bg-red-500/20 text-red-600";
-      case "high": return "bg-orange-500/20 text-orange-600";
-      case "medium": return "bg-amber-500/20 text-amber-600";
-      default: return "bg-blue-500/20 text-blue-600";
+      case "urgent": return "bg-destructive/20 text-destructive";
+      case "high": return "bg-warning/20 text-warning";
+      case "medium": return "bg-accent/20 text-accent-foreground";
+      default: return "bg-info/20 text-info";
     }
   };
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case "delivered": return "bg-green-500/20 text-green-600";
-      case "in_transit": return "bg-blue-500/20 text-blue-600";
-      case "routed": return "bg-purple-500/20 text-purple-600";
-      case "optimizing": return "bg-amber-500/20 text-amber-600";
+      case "delivered": return "bg-success/20 text-success";
+      case "in_transit": return "bg-info/20 text-info";
+      case "routed": return "bg-primary/20 text-primary";
+      case "optimizing": return "bg-warning/20 text-warning";
       default: return "bg-muted text-muted-foreground";
     }
   };
@@ -249,7 +249,7 @@ export default function LogisticsMultibase() {
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-3">
           <div className="p-3 rounded-xl bg-gradient-to-br from-orange-500 to-red-600 text-white">
-            <Route className="h-8 w-8" />
+            <Route className="h-8 w-8 text-primary-foreground" />
           </div>
           <div>
             <h1 className="text-2xl font-bold flex items-center gap-2">
@@ -275,7 +275,7 @@ export default function LogisticsMultibase() {
                 <p className="text-sm text-muted-foreground">Bases Ativas</p>
                 <p className="text-2xl font-bold">{bases.length}</p>
               </div>
-              <MapPin className="h-8 w-8 text-blue-500 opacity-80" />
+              <MapPin className="h-8 w-8 text-info opacity-80" />
             </div>
           </CardContent>
         </Card>
@@ -286,7 +286,7 @@ export default function LogisticsMultibase() {
                 <p className="text-sm text-muted-foreground">Solicitações</p>
                 <p className="text-2xl font-bold">{requests.length}</p>
               </div>
-              <Package className="h-8 w-8 text-amber-500 opacity-80" />
+              <Package className="h-8 w-8 text-warning opacity-80" />
             </div>
           </CardContent>
         </Card>
@@ -297,7 +297,7 @@ export default function LogisticsMultibase() {
                 <p className="text-sm text-muted-foreground">Em Trânsito</p>
                 <p className="text-2xl font-bold">{requests.filter(r => r.status === "in_transit").length}</p>
               </div>
-              <Truck className="h-8 w-8 text-green-500 opacity-80" />
+              <Truck className="h-8 w-8 text-success opacity-80" />
             </div>
           </CardContent>
         </Card>
@@ -306,9 +306,9 @@ export default function LogisticsMultibase() {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-muted-foreground">Economia IA</p>
-                <p className="text-2xl font-bold text-green-600">R$ 45k</p>
+                <p className="text-2xl font-bold text-success">R$ 45k</p>
               </div>
-              <TrendingUp className="h-8 w-8 text-green-500 opacity-80" />
+              <TrendingUp className="h-8 w-8 text-success opacity-80" />
             </div>
           </CardContent>
         </Card>
@@ -347,8 +347,8 @@ export default function LogisticsMultibase() {
                 </CardHeader>
                 <CardContent className="space-y-4">
                   <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
-                    {request.items.map((item, idx) => (
-                      <div key={idx} className="p-2 bg-muted/30 rounded text-sm">
+                    {request.items.map((item) => (
+                      <div key={item.name} className="p-2 bg-muted/30 rounded text-sm">
                         <div className="flex items-center justify-between">
                           <span>{item.name}</span>
                           <Badge className={`text-xs ${getPriorityColor(item.priority)}`}>
@@ -361,10 +361,10 @@ export default function LogisticsMultibase() {
                   </div>
 
                   {request.selectedBase && (
-                    <div className="p-3 bg-green-500/10 rounded-lg border border-green-500/30">
+                    <div className="p-3 bg-success/10 rounded-lg border border-success/30">
                       <div className="flex items-center gap-2 mb-2">
-                        <CheckCircle className="h-4 w-4 text-green-600" />
-                        <span className="font-medium text-green-700">Base Selecionada: {request.selectedBase}</span>
+                        <CheckCircle className="h-4 w-4 text-success" />
+                        <span className="font-medium text-success">Base Selecionada: {request.selectedBase}</span>
                       </div>
                       <div className="flex gap-4 text-sm text-muted-foreground">
                         <span className="flex items-center gap-1">
@@ -406,16 +406,16 @@ export default function LogisticsMultibase() {
                                 {rec.estimatedTime}h
                               </span>
                               {rec.savings > 0 && (
-                                <span className="text-green-600 font-medium">
+                                <span className="text-success font-medium">
                                   -R$ {rec.savings.toLocaleString()}
                                 </span>
                               )}
                             </div>
                           </div>
                           <ul className="text-xs text-muted-foreground space-y-1">
-                            {rec.reasons.map((reason, idx) => (
-                              <li key={idx} className="flex items-center gap-1">
-                                <CheckCircle className="h-3 w-3 text-green-500" />
+                            {rec.reasons.map((reason) => (
+                              <li key={reason} className="flex items-center gap-1">
+                                <CheckCircle className="h-3 w-3 text-success" />
                                 {reason}
                               </li>
                             ))}

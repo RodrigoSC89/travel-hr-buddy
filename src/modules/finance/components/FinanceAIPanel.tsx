@@ -131,21 +131,21 @@ export function FinanceAIPanel({ transactions, income, expenses }: FinanceAIPane
 
         {/* Quick Insights */}
         <div className="grid grid-cols-2 gap-2">
-          <div className="p-3 rounded-lg bg-green-500/10 border border-green-500/20">
-            <div className="flex items-center gap-2 text-green-600">
+          <div className="p-3 rounded-lg bg-success/10 border border-success/20">
+            <div className="flex items-center gap-2 text-success">
               <TrendingUp className="h-4 w-4" />
               <span className="text-xs font-medium">Receitas</span>
             </div>
-            <p className="text-lg font-bold text-green-600">
+            <p className="text-lg font-bold text-success">
               R$ {income.toLocaleString("pt-BR", { minimumFractionDigits: 0 })}
             </p>
           </div>
-          <div className="p-3 rounded-lg bg-red-500/10 border border-red-500/20">
-            <div className="flex items-center gap-2 text-red-600">
+          <div className="p-3 rounded-lg bg-destructive/10 border border-destructive/20">
+            <div className="flex items-center gap-2 text-destructive">
               <TrendingDown className="h-4 w-4" />
               <span className="text-xs font-medium">Despesas</span>
             </div>
-            <p className="text-lg font-bold text-red-600">
+            <p className="text-lg font-bold text-destructive">
               R$ {expenses.toLocaleString("pt-BR", { minimumFractionDigits: 0 })}
             </p>
           </div>
@@ -167,9 +167,9 @@ export function FinanceAIPanel({ transactions, income, expenses }: FinanceAIPane
         {/* Chat History */}
         {chatHistory.length > 0 && (
           <ScrollArea className="h-32 p-2 rounded-lg bg-muted/30">
-            {chatHistory.map((msg, i) => (
+            {chatHistory.map((msg, msgIndex) => (
               <div
-                key={i}
+                key={`${msg.role}-${msgIndex}-${msg.content.slice(0, 20)}`}
                 className={`mb-2 p-2 rounded-lg text-sm ${
                   msg.role === "user" 
                     ? "bg-primary/10 text-right ml-8" 
