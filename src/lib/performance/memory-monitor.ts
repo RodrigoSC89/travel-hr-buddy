@@ -65,7 +65,7 @@ class MemoryMonitor {
       return;
     }
 
-    const memory = (performance as any).memory;
+    const memory = (performance as unknown as { memory: { usedJSHeapSize: number; totalJSHeapSize: number; jsHeapSizeLimit: number } }).memory;
     const snapshot: MemorySnapshot = {
       timestamp: new Date(),
       usedJSHeapSize: memory.usedJSHeapSize,
@@ -157,11 +157,12 @@ class MemoryMonitor {
    * Get current memory usage
    */
   getCurrentMemory(): MemorySnapshot | null {
-    if (!(performance as any).memory) {
+    const perfWithMemory = performance as unknown as { memory?: { usedJSHeapSize: number; totalJSHeapSize: number; jsHeapSizeLimit: number } };
+    if (!perfWithMemory.memory) {
       return null;
     }
 
-    const memory = (performance as any).memory;
+    const memory = perfWithMemory.memory;
     return {
       timestamp: new Date(),
       usedJSHeapSize: memory.usedJSHeapSize,

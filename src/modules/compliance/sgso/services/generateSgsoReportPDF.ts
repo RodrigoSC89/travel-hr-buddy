@@ -85,7 +85,7 @@ export const generateSgsoReportPDF = async (
     },
   });
 
-  yPosition = (doc as any).lastAutoTable.finalY + 15;
+  yPosition = (doc as unknown as { lastAutoTable: { finalY: number } }).lastAutoTable.finalY + 15;
 
   // Description
   if (plan.description) {
@@ -137,7 +137,7 @@ export const generateSgsoReportPDF = async (
     },
   });
 
-  yPosition = (doc as any).lastAutoTable.finalY + 15;
+  yPosition = (doc as unknown as { lastAutoTable: { finalY: number } }).lastAutoTable.finalY + 15;
 
   // Check if we need a new page
   if (yPosition > 250) {
@@ -179,7 +179,7 @@ export const generateSgsoReportPDF = async (
     },
   });
 
-  yPosition = (doc as any).lastAutoTable.finalY + 15;
+  yPosition = (doc as unknown as { lastAutoTable: { finalY: number } }).lastAutoTable.finalY + 15;
 
   // Actions with descriptions (on new pages if needed)
   if (actions.length > 0) {

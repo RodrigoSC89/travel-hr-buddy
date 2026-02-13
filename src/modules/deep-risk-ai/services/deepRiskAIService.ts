@@ -159,7 +159,7 @@ class DeepRiskAIService {
           notes: event.notes,
         },
       };
-      const { error } = await supabase.from("system_observations").insert(insertData as any);
+      const { error } = await supabase.from("system_observations").insert(insertData as never);
 
       if (error) throw error;
       logger.info("Risk event logged", { eventType: event.eventType, riskScore: event.riskScore });

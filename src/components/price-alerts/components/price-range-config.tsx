@@ -65,7 +65,7 @@ export function PriceRangeConfig() {
           notification_push: pushEnabled,
           notification_frequency: notificationFrequency,
           active: true
-        } as any);
+        } as never);
 
       if (error) throw error;
 

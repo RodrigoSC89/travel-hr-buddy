@@ -69,14 +69,13 @@ export const OVIDPhotoEvidence: React.FC<OVIDPhotoEvidenceProps> = ({
 
       // Save to database if inspectionId exists
       if (inspectionId) {
-        await (supabase
-          .from('ovid_evidence_photos' as any)
+        await (supabase.from as Function)('ovid_evidence_photos')
           .insert({
             inspection_id: inspectionId,
             question_id: questionId,
             file_path: filePath,
             file_name: file.name,
-          }) as any);
+          } as never);
       }
 
       toast.success('Foto anexada com sucesso');

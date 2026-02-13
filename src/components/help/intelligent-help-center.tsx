@@ -216,9 +216,9 @@ export const IntelligentHelpCenter: React.FC = () => {
         .insert({
           knowledge_item_id: itemId || null,
           action_type: action,
-          session_data: data ? (data as any) : {},
-          user_id: null // Seria auth.uid() se autenticado
-        });
+          session_data: data ? (data as Record<string, unknown>) : {},
+          user_id: null
+        } as never);
     } catch (error) {
       logger.error("Failed to track user action:", error);
     }

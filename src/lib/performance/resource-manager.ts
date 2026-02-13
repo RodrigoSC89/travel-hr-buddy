@@ -45,7 +45,7 @@ class ResourceManager {
   private async initBatteryMonitor(): Promise<void> {
     if ('getBattery' in navigator) {
       try {
-        this.batteryManager = await (navigator as any).getBattery();
+        this.batteryManager = await (navigator as unknown as { getBattery: () => Promise<BatteryManager> }).getBattery();
         this.batteryManager?.addEventListener('levelchange', this.batteryLevelHandler);
         this.batteryManager?.addEventListener('chargingchange', this.batteryChargingHandler);
       } catch {

@@ -277,24 +277,25 @@ export default function ChannelManagerProfessional() {
   // Populate channels from DB data
   useEffect(() => {
     if (dbChannels && dbChannels.length > 0) {
-      const mappedChannels: Channel[] = dbChannels.map((ch, i) => ({
-        id: ch.id,
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any -- dynamic Supabase column names
-        name: (ch as any).channel_name || (ch as any).name || '',
-        description: ch.description || undefined,
-        is_active: ch.is_active,
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any -- dynamic Supabase column names
-        channel_type: (ch as any).channel_type,
-        is_private: !(ch as any).is_public,
-        created_at: ch.created_at,
-        created_by: ch.created_by,
-        member_count: (ch as any).member_count || 0,
-        unread_count: 0,
-        is_favorite: false,
-        is_muted: false,
-        last_message: '',
-        last_message_time: ch.created_at,
-      }));
+      const mappedChannels: Channel[] = dbChannels.map((ch, i) => {
+        const dynCh = ch as Record<string, unknown>;
+        return {
+          id: ch.id,
+          name: String(dynCh.channel_name || dynCh.name || ''),
+          description: ch.description || undefined,
+          is_active: ch.is_active,
+          channel_type: String(dynCh.channel_type || 'general'),
+          is_private: !dynCh.is_public,
+          created_at: ch.created_at,
+          created_by: ch.created_by,
+          member_count: Number(dynCh.member_count) || 0,
+          unread_count: 0,
+          is_favorite: false,
+          is_muted: false,
+          last_message: '',
+          last_message_time: ch.created_at,
+        };
+      });
       setChannels(mappedChannels);
     }
   }, [dbChannels]);
@@ -386,8 +387,7 @@ export default function ChannelManagerProfessional() {
           channel_type: newChannelType,
           is_private: newChannelPrivate,
           created_by: user?.id,
-          // eslint-disable-next-line @typescript-eslint/no-explicit-any -- dynamic insert fields
-        } as any)
+        } as never)
         .select()
         .single();
       if (error) throw error;
@@ -451,7 +451,7 @@ export default function ChannelManagerProfessional() {
           channel_id: selectedChannel.id,
           sender_id: user?.id,
           message_content: messageContent,
-        } as any);
+        } as never);
 
       const newMessage: Message = {
         id: Date.now().toString(),

@@ -237,8 +237,7 @@ export const EnhancedPeotramManager: React.FC = () => {
   ];
 
   const handleSaveAudit = async (auditData: Record<string, unknown>) => {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Supabase insert expects dynamic audit row shape
-    const { error } = await supabase.from('peotram_audits').insert(auditData as any);
+    const { error } = await supabase.from('peotram_audits').insert(auditData as never);
     if (error) { toast.error('Erro ao salvar auditoria'); return; }
     await loadData();
   };

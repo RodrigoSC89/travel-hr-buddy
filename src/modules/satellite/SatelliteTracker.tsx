@@ -78,8 +78,8 @@ const SatelliteTracker = () => {
         // Extract vessels array from result
         if (Array.isArray(vesselData)) {
           setVessels(vesselData);
-        } else if (vesselData && Array.isArray((vesselData as any).data)) {
-          setVessels((vesselData as any).data);
+        } else if (vesselData && typeof vesselData === 'object' && 'data' in vesselData && Array.isArray((vesselData as { data: unknown[] }).data)) {
+          setVessels((vesselData as { data: typeof vessels }).data);
         }
       } catch (error) {
         logger.error("Error fetching AIS data:", error);

@@ -421,15 +421,14 @@ export function FuelReportDialog({ open, onOpenChange }: { open: boolean; onOpen
       return;
     }
     const headers = ["Embarcação", "Combustível Atual", "Capacidade", "Nível (%)", "Status"];
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any -- vessel fuel data from dynamic query
-    const rows = vessels.map((v: any) => [
+    const rows = vessels.map((v) => [
       v.name,
-      v.current_fuel_level ?? "N/A",
-      v.fuel_capacity ?? "N/A",
-      v.fuel_capacity ? `${Math.round(((v.current_fuel_level || 0) / v.fuel_capacity) * 100)}%` : "N/A",
+      String(v.current_fuel_level ?? "N/A"),
+      String(v.fuel_capacity ?? "N/A"),
+      v.fuel_capacity ? `${Math.round(((Number(v.current_fuel_level) || 0) / Number(v.fuel_capacity)) * 100)}%` : "N/A",
       v.status || "N/A",
     ]);
-    const csv = [headers.join(","), ...rows.map((r: string[]) => r.join(","))].join("\n");
+    const csv = [headers.join(","), ...rows.map((r) => r.join(","))].join("\n");
     const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
     const url = URL.createObjectURL(blob);
     const link = document.createElement("a");
@@ -464,8 +463,7 @@ export function FuelReportDialog({ open, onOpenChange }: { open: boolean; onOpen
           ) : (
             <ScrollArea className="h-[300px]">
               <div className="space-y-3">
-                {/* eslint-disable-next-line @typescript-eslint/no-explicit-any -- vessel fuel data */}
-                {vessels.map((v: any) => {
+                {vessels.map((v) => {
                   const fuelCap = Number(v.fuel_capacity) || 0;
                   const fuelLevel = Number(v.current_fuel_level) || 0;
                   const level = fuelCap ? Math.round((fuelLevel / fuelCap) * 100) : null;
@@ -561,8 +559,7 @@ export function ChecklistDialog({ open, onOpenChange }: { open: boolean; onOpenC
           ) : (
             <ScrollArea className="h-[300px]">
               <div className="space-y-2">
-                {/* eslint-disable-next-line @typescript-eslint/no-explicit-any -- non_conformities dynamic query */}
-                {checklists.map((item: any) => (
+                {checklists.map((item) => (
                   <div key={item.id} className="flex items-center justify-between p-3 border rounded-lg hover:bg-accent/30 transition-colors">
                     <div className="flex items-center gap-3 flex-1 min-w-0">
                       {item.severity === "critical" ? (
@@ -573,7 +570,7 @@ export function ChecklistDialog({ open, onOpenChange }: { open: boolean; onOpenC
                       <div className="min-w-0">
                         <p className="font-medium truncate">{item.title}</p>
                         <p className="text-xs text-muted-foreground">
-                          {new Date(item.created_at).toLocaleDateString("pt-BR")}
+                          {item.created_at ? new Date(item.created_at).toLocaleDateString("pt-BR") : "N/A"}
                         </p>
                       </div>
                     </div>

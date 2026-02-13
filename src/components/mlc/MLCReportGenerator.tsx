@@ -230,7 +230,7 @@ export const MLCReportGenerator: React.FC<MLCReportGeneratorProps> = ({
 
       // Executive Summary (if provided)
       if (executiveSummary) {
-        y = (pdf as any).lastAutoTable.finalY + 15;
+        y = (pdf as unknown as { lastAutoTable: { finalY: number } }).lastAutoTable.finalY + 15;
         pdf.setFontSize(12);
         pdf.setFont('helvetica', 'bold');
         pdf.setTextColor(0, 82, 147);
@@ -415,7 +415,7 @@ export const MLCReportGenerator: React.FC<MLCReportGeneratorProps> = ({
         }
 
         if (actionPlanNotes) {
-          y = (pdf as any).lastAutoTable?.finalY || y + 10;
+          y = (pdf as unknown as { lastAutoTable?: { finalY: number } }).lastAutoTable?.finalY || y + 10;
           y += 15;
           
           pdf.setFontSize(10);

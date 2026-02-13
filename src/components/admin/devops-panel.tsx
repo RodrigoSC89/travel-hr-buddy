@@ -57,7 +57,7 @@ export function DevOpsPanel() {
     
     try {
       // Memory (if available)
-      const memory = (performance as any).memory;
+      const memory = (performance as unknown as { memory?: { usedJSHeapSize: number; jsHeapSizeLimit: number } }).memory;
       const memoryInfo = memory ? {
         used: memory.usedJSHeapSize,
         total: memory.jsHeapSizeLimit,
