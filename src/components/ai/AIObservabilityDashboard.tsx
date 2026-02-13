@@ -181,7 +181,7 @@ export function AIObservabilityDashboard() {
       info: { color: "text-blue-600 bg-blue-100" },
       warning: { color: "text-yellow-600 bg-yellow-100" },
       error: { color: "text-red-600 bg-red-100" },
-      debug: { color: "text-gray-600 bg-gray-100" }
+      debug: { color: "text-muted-foreground bg-muted" }
     };
     return config[level];
   };

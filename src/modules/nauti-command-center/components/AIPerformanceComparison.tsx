@@ -197,7 +197,7 @@ export function AIPerformanceComparison() {
 
   // Calculate trend
   const getTrend = (current: number, previous: number) => {
-    if (current === previous) return { icon: Minus, color: 'text-gray-400', label: 'Estável' };
+    if (current === previous) return { icon: Minus, color: 'text-muted-foreground', label: 'Estável' };
     if (current > previous) return { icon: TrendingUp, color: 'text-green-400', label: 'Subindo' };
     return { icon: TrendingDown, color: 'text-red-400', label: 'Caindo' };
   };

@@ -352,7 +352,7 @@ export const EnhancedMaintenanceCenter: React.FC = () => {
       case 'on_hold':
         return 'bg-blue-500/20 text-blue-500 border-blue-500/30';
       case 'offline':
-        return 'bg-gray-500/20 text-gray-500 border-gray-500/30';
+        return 'bg-muted text-muted-foreground border-border';
       default:
         return 'bg-muted text-muted-foreground';
     }

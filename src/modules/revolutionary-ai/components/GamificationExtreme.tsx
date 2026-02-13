@@ -340,7 +340,7 @@ export function GamificationExtreme() {
                     >
                       <div className="w-12 text-center">
                         {member.rank === 1 && <Crown className="h-8 w-8 mx-auto text-amber-500" />}
-                        {member.rank === 2 && <Medal className="h-8 w-8 mx-auto text-gray-400" />}
+                        {member.rank === 2 && <Medal className="h-8 w-8 mx-auto text-muted-foreground" />}
                         {member.rank === 3 && <Medal className="h-8 w-8 mx-auto text-amber-700" />}
                         {member.rank > 3 && <span className="text-2xl font-bold text-muted-foreground">#{member.rank}</span>}
                       </div>
@@ -387,7 +387,7 @@ export function GamificationExtreme() {
                       <div className="flex items-center gap-3">
                         <div className="w-10 text-center">
                           {team.rank === 1 && <Trophy className="h-6 w-6 text-amber-500" />}
-                          {team.rank === 2 && <Medal className="h-6 w-6 text-gray-400" />}
+                          {team.rank === 2 && <Medal className="h-6 w-6 text-muted-foreground" />}
                           {team.rank === 3 && <Medal className="h-6 w-6 text-amber-700" />}
                           {team.rank > 3 && <span className="font-bold text-muted-foreground">#{team.rank}</span>}
                         </div>

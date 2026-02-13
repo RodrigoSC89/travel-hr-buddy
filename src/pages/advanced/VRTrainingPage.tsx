@@ -706,7 +706,7 @@ const VRTrainingPage = () => {
                     <div className="flex items-center gap-4">
                       <div className={`w-10 h-10 rounded-full flex items-center justify-center font-bold ${
                         user.rank === 1 ? "bg-yellow-500 text-yellow-950" :
-                        user.rank === 2 ? "bg-gray-300 text-gray-700" :
+                        user.rank === 2 ? "bg-muted text-foreground" :
                         user.rank === 3 ? "bg-orange-400 text-orange-950" :
                         "bg-muted text-muted-foreground"
                       }`}>

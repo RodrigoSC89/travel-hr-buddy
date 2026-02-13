@@ -62,7 +62,7 @@ export const OVIDInspectionHistory: React.FC<OVIDInspectionHistoryProps> = ({
     
     if (current > previous) return <TrendingUp className="w-4 h-4 text-green-500" />;
     if (current < previous) return <TrendingDown className="w-4 h-4 text-red-500" />;
-    return <Minus className="w-4 h-4 text-gray-400" />;
+    return <Minus className="w-4 h-4 text-muted-foreground" />;
   };
 
   // Chart data

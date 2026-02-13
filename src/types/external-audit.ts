@@ -215,7 +215,7 @@ export const getSeverityColor = (severity: NonConformity["severity"]): string =>
   case "minor":
     return "text-yellow-600 bg-yellow-50";
   default:
-    return "text-gray-600 bg-gray-50";
+    return "text-muted-foreground bg-muted";
   }
 };
 
@@ -230,7 +230,7 @@ export const getStatusColor = (status: EvidenceStatus): string => {
   case "pending":
     return "text-yellow-600 bg-yellow-50";
   default:
-    return "text-gray-600 bg-gray-50";
+    return "text-muted-foreground bg-muted";
   }
 };
 

@@ -282,12 +282,12 @@ const IoTRealtimeSensors: React.FC = () => {
           </CardContent>
         </Card>
 
-        <Card className="bg-gray-50 border-gray-200">
+        <Card className="bg-muted border-border">
           <CardContent className="p-4">
             <div className="flex items-center gap-2">
               <Radio className="h-4 w-4 text-muted-foreground" />
               <div>
-                <div className="text-sm font-medium text-gray-700">Offline</div>
+                <div className="text-sm font-medium text-foreground">Offline</div>
                 <div className="text-lg font-bold text-muted-foreground">
                   {sensors.filter(s => s.status === "offline").length}
                 </div>

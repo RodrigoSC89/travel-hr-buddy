@@ -297,7 +297,7 @@ export default function RestoreReportLogsPage() {
     case "pending":
       return <Clock className="w-5 h-5 text-yellow-600" />;
     default:
-      return <AlertCircle className="w-5 h-5 text-gray-600" />;
+      return <AlertCircle className="w-5 h-5 text-muted-foreground" />;
     }
   }
 
@@ -310,7 +310,7 @@ export default function RestoreReportLogsPage() {
     case "pending":
       return "border-l-yellow-500 bg-yellow-50/50";
     default:
-      return "border-l-gray-500 bg-gray-50/50";
+      return "border-l-muted bg-muted/50";
     }
   }
 
@@ -318,7 +318,7 @@ export default function RestoreReportLogsPage() {
   const errorCount = logs.filter((log) => log.status === "error").length;
 
   return (
-    <div className="min-h-screen p-6 bg-gray-50">
+    <div className="min-h-screen p-6 bg-background">
       <div className="max-w-6xl mx-auto space-y-4">
         {/* Header */}
         <div className="flex items-center justify-between">
@@ -531,7 +531,7 @@ export default function RestoreReportLogsPage() {
                         
                         {log.message && (
                           <div className="pl-8">
-                            <p className="text-sm text-gray-700">{log.message}</p>
+                            <p className="text-sm text-foreground">{log.message}</p>
                           </div>
                         )}
 

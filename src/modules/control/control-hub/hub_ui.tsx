@@ -97,10 +97,10 @@ export function ConnectionStatus({ quality, lastCheck }: ConnectionStatusProps) 
       };
     case "offline":
       return {
-        icon: <WifiOff className="h-4 w-4 text-gray-500" />,
+        icon: <WifiOff className="h-4 w-4 text-muted-foreground" />,
         text: "Offline",
-        color: "text-gray-600",
-        bgColor: "bg-gray-100",
+        color: "text-muted-foreground",
+        bgColor: "bg-muted",
       };
     }
   };
