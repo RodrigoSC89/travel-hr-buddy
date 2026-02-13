@@ -367,7 +367,7 @@ export default function AIMegaHub() {
                   }
                 ]}
               />
-              <AIAgentHealthDashboard />
+              {/* AIAgentHealthDashboard removed */}
               <AIAgentDirectory />
               <AutonomousCommandCenter />
             </TabsContent>

@@ -308,7 +308,7 @@ export default function WorkbenchMegaHub() {
                 ]}
                 onRefresh={handleRefresh}
               />
-              <DocumentVersionControl />
+              {/* DocumentVersionControl removed */}
             </TabsContent>
 
             {/* PEOPLE SECTION */}
@@ -393,7 +393,7 @@ export default function WorkbenchMegaHub() {
                   }
                 ]}
               />
-              <CrewSchedulerGantt />
+              {/* CrewSchedulerGantt removed */}
             </TabsContent>
 
             {/* FINANCE SECTION */}
@@ -450,7 +450,7 @@ export default function WorkbenchMegaHub() {
                 ]}
                 onRefresh={handleRefresh}
               />
-              <FinanceApprovalWorkflow />
+              {/* FinanceApprovalWorkflow removed */}
             </TabsContent>
             
             <TabsContent value="travel" className="mt-0 space-y-6">

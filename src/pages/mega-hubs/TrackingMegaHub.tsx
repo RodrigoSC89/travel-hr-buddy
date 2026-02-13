@@ -310,8 +310,8 @@ export default function TrackingMegaHub() {
                 ]}
               />
 
-              {/* World-Class Real-Time Tracking Map */}
-              <RealTimeTrackingMap />
+              {/* RealTimeTrackingMap removed - using RealTimeTrackingPage */}
+              <Suspense fallback={<LoadingSkeleton />}><RealTimeTrackingPage /></Suspense>
             </TabsContent>
             
             <TabsContent value="realtime" className="mt-0">
