@@ -18,7 +18,7 @@ import {
 import { toast } from 'sonner';
 import { trackingIntelligence, type TelemetryInsight, type TelemetryAlert } from '@/services/tracking/tracking-intelligence.service';
 
-const INSIGHT_ICONS: Record<string, React.ComponentType<any>> = {
+const INSIGHT_ICONS: Record<string, React.ComponentType<{ className?: string }>> = {
   anomaly: AlertTriangle,
   prediction: Brain,
   optimization: TrendingUp,

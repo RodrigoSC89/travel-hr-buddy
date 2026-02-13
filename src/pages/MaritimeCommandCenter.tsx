@@ -87,6 +87,7 @@ interface MaritimeStats {
 export default function MaritimeCommandCenter() {
   const [activeTab, setActiveTab] = useState("overview");
   const [crewMembers, setCrewMembers] = useState<CrewMember[]>([]);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Supabase vessel row rendered directly in JSX
   const [vessels, setVessels] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState("");

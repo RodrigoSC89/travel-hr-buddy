@@ -10,8 +10,11 @@ import { Activity, Brain, CheckCircle, AlertTriangle, Zap, TrendingUp, Shield } 
 
 export default function AutonomyConsole() {
   const [actions, setActions] = useState<AutonomousAction[]>([]);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- autonomy engine statistics shape is deeply dynamic
   const [stats, setStats] = useState<any>(null);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- pattern recognition statistics shape is deeply dynamic
   const [patternStats, setPatternStats] = useState<any>(null);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- hotfix manager statistics shape is deeply dynamic
   const [hotfixStats, setHotfixStats] = useState<any>(null);
   const [isActive, setIsActive] = useState(false);
 

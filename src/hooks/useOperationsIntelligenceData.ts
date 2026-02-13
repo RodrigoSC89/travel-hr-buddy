@@ -180,6 +180,7 @@ export function useOperationsIntelligenceData() {
         .order("record_date", { ascending: false })
         .limit(50);
 
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any -- voyage row accessed for port/date fields
       const voyageMap = new Map<string, any>();
       (voyages || []).forEach(v => {
         if (v.vessel_id && !voyageMap.has(v.vessel_id)) voyageMap.set(v.vessel_id, v);

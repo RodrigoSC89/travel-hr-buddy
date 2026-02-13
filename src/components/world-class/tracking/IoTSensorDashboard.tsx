@@ -18,7 +18,7 @@ import { toast } from 'sonner';
 import { trackingIntelligence, type IoTSensor, type IoTAlert } from '@/services/tracking/tracking-intelligence.service';
 import { logger } from '@/lib/logger';
 
-const SENSOR_ICONS: Record<string, React.ComponentType<any>> = {
+const SENSOR_ICONS: Record<string, React.ComponentType<{ className?: string }>> = {
   temperature: Thermometer,
   humidity: Droplets,
   pressure: Gauge,

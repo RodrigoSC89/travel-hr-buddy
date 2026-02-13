@@ -23,6 +23,7 @@ import { supabase } from "@/integrations/supabase/client";
 export function FleetIntelligencePanel() {
   const { toast } = useToast();
   const [benchmarks, setBenchmarks] = useState<FleetBenchmark[]>([]);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- analytics data shape is deeply dynamic from service
   const [analytics, setAnalytics] = useState<any>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [aiInsight, setAiInsight] = useState<string | null>(null);
@@ -143,7 +144,7 @@ Forneça:
         <Card>
           <CardContent className="p-4 text-center">
             <Target className="h-5 w-5 mx-auto mb-1 text-blue-500" />
-            <p className="text-2xl font-bold">{analytics?.total_simulations || 0}</p>
+            <p className="text-2xl font-bold">{analytics?.total_simulations != null ? String(analytics.total_simulations) : 0}</p>
             <p className="text-xs text-muted-foreground">Simulações</p>
           </CardContent>
         </Card>
