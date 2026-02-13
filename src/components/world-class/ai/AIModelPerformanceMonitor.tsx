@@ -43,7 +43,7 @@ export function AIModelPerformanceMonitor() {
     return (
       <div className="space-y-4">
         {[1, 2, 3].map(i => (
-          <Card key={i} className="animate-pulse">
+          <Card key={`ai-model-skel-${i}`} className="animate-pulse">
             <CardContent className="p-6"><div className="h-20 bg-muted rounded" /></CardContent>
           </Card>
         ))}
@@ -107,8 +107,8 @@ export function AIModelPerformanceMonitor() {
 
       {/* Model Cards */}
       <div className="space-y-3">
-        {metrics.length > 0 ? metrics.map((m, i) => (
-          <Card key={i} className="hover:shadow-md transition-shadow">
+        {metrics.length > 0 ? metrics.map((m) => (
+          <Card key={`model-${m.model}`} className="hover:shadow-md transition-shadow">
             <CardContent className="p-4">
               <div className="flex items-center justify-between mb-3">
                 <div className="flex items-center gap-2">

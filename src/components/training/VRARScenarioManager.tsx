@@ -1177,8 +1177,8 @@ export function VRARScenarioManager() {
               <div className="p-4 bg-muted rounded-lg">
                 <h4 className="font-medium mb-2">Objetivos:</h4>
                 <ul className="space-y-1">
-                  {selectedScenario?.objectives.map((obj, idx) => (
-                    <li key={idx} className="flex items-center gap-2 text-sm">
+                  {selectedScenario?.objectives.map((obj) => (
+                    <li key={`obj-${obj}`} className="flex items-center gap-2 text-sm">
                       <Target className="h-4 w-4 text-muted-foreground" />
                       {obj}
                     </li>

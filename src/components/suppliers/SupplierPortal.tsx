@@ -151,7 +151,7 @@ export const SupplierPortal: React.FC = () => {
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
         {isLoading ? (
           Array.from({ length: 4 }).map((_, i) => (
-            <Card key={i} className="bg-card/50 border-border/50">
+            <Card key={`supplier-stat-skel-${i}`} className="bg-card/50 border-border/50">
               <CardContent className="p-4"><Skeleton className="h-16" /></CardContent>
             </Card>
           ))
@@ -251,7 +251,7 @@ export const SupplierPortal: React.FC = () => {
             <CardContent>
               {loadingSuppliers ? (
                 <div className="space-y-3">
-                  {Array.from({ length: 4 }).map((_, i) => <Skeleton key={i} className="h-24" />)}
+                  {Array.from({ length: 4 }).map((_, i) => <Skeleton key={`supplier-skel-${i}`} className="h-24" />)}
                 </div>
               ) : filteredSuppliers.length === 0 ? (
                 <div className="text-center py-8 text-muted-foreground">
@@ -330,7 +330,7 @@ export const SupplierPortal: React.FC = () => {
             <CardContent>
               {loadingOrders ? (
                 <div className="space-y-4">
-                  {Array.from({ length: 3 }).map((_, i) => <Skeleton key={i} className="h-32" />)}
+                  {Array.from({ length: 3 }).map((_, i) => <Skeleton key={`order-skel-${i}`} className="h-32" />)}
                 </div>
               ) : orders.length === 0 ? (
                 <div className="text-center py-8 text-muted-foreground">

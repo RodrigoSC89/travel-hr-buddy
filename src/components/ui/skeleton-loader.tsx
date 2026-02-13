@@ -71,7 +71,7 @@ export function SkeletonList({ items = 5, className }: SkeletonProps & { items?:
   return (
     <div className={cn('space-y-3', className)}>
       {Array.from({ length: items }).map((_, i) => (
-        <div key={i} className="flex items-center gap-3 p-3 rounded-lg border">
+        <div key={`skel-list-${i}`} className="flex items-center gap-3 p-3 rounded-lg border">
           <Skeleton className="h-10 w-10 rounded-full shrink-0" />
           <div className="flex-1 space-y-2">
             <Skeleton className="h-4 w-1/3" />
@@ -90,7 +90,7 @@ export function SkeletonDashboard({ className }: SkeletonProps) {
       {/* Stats row */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
         {Array.from({ length: 4 }).map((_, i) => (
-          <div key={i} className="rounded-lg border bg-card p-4 space-y-2">
+          <div key={`skel-stat-${i}`} className="rounded-lg border bg-card p-4 space-y-2">
             <Skeleton className="h-3 w-20" />
             <Skeleton className="h-8 w-16" />
           </div>
@@ -129,7 +129,7 @@ export function SkeletonForm({ fields = 4, className }: SkeletonProps & { fields
   return (
     <div className={cn('space-y-4', className)}>
       {Array.from({ length: fields }).map((_, i) => (
-        <div key={i} className="space-y-2">
+        <div key={`skel-form-${i}`} className="space-y-2">
           <Skeleton className="h-4 w-24" />
           <Skeleton className="h-10 w-full" />
         </div>

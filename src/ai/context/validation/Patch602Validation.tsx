@@ -157,8 +157,8 @@ export function Patch602Validation() {
                       
                       <div className="space-y-1">
                         <div className="text-xs font-medium text-muted-foreground">Adapted Actions:</div>
-                        {layer.actions.map((action, i) => (
-                          <div key={i} className="text-sm flex items-center gap-2">
+                        {layer.actions.map((action) => (
+                          <div key={`${layer.level}-${action}`} className="text-sm flex items-center gap-2">
                             <ArrowRight className="h-3 w-3 text-primary" />
                             {action}
                           </div>

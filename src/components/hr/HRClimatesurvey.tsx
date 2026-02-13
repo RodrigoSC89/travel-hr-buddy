@@ -179,7 +179,7 @@ export function HRClimateSurvey() {
                 <div className="flex justify-center gap-2 mb-4">
                   {pulseQuestions.map((_, i) => (
                     <div
-                      key={i}
+                      key={`pulse-step-${i}`}
                       className={`h-2 w-12 rounded-full ${
                         i < currentQuestion ? "bg-primary" :
                         i === currentQuestion ? "bg-primary/50" :
@@ -363,7 +363,7 @@ export function HRClimateSurvey() {
                     <div key={row.tema} className="font-medium py-2">{row.tema}</div>
                     {row.scores.map((score, i) => (
                       <div
-                        key={i}
+                        key={`heat-${row.tema}-${i}`}
                         className={`py-2 text-center rounded ${
                           score >= 80 ? "bg-green-500/30 text-green-700" :
                           score >= 70 ? "bg-blue-500/30 text-blue-700" :

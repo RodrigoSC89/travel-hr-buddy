@@ -436,8 +436,8 @@ export default function AIDocuments() {
                         
                         {doc.extracted_keywords.length > 0 && (
                           <div className="flex flex-wrap gap-1">
-                            {doc.extracted_keywords.slice(0, 5).map((kw, i) => (
-                              <Badge key={i} variant="outline" className="text-xs">
+                            {doc.extracted_keywords.slice(0, 5).map((kw) => (
+                              <Badge key={`kw-${kw.text}`} variant="outline" className="text-xs">
                                 {kw.text}
                               </Badge>
                             ))}

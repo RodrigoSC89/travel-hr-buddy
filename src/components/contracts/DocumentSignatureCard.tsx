@@ -379,9 +379,9 @@ export function DocumentSignatureCard() {
                 </div>
 
                 <div className="flex items-center justify-between">
-                  {wf.steps.map((step, idx) => (
-                    <div key={idx} className="flex items-center">
-                      <div className={`flex flex-col items-center ${idx > 0 ? 'ml-4' : ''}`}>
+                  {wf.steps.map((step) => (
+                    <div key={`wf-step-${step.order}-${step.approver}`} className="flex items-center">
+                      <div className={`flex flex-col items-center ${step.order > 1 ? 'ml-4' : ''}`}>
                         <div className={`w-10 h-10 rounded-full flex items-center justify-center border-2 
                           ${step.status === 'approved' 
                             ? 'bg-green-500 border-green-500 text-white' 
@@ -412,7 +412,7 @@ export function DocumentSignatureCard() {
                           </Button>
                         )}
                       </div>
-                      {idx < wf.steps.length - 1 && (
+                      {step.order < wf.total_steps && (
                         <ArrowRight className={`h-4 w-4 mx-2 ${
                           step.status === 'approved' ? 'text-green-500' : 'text-muted-foreground/30'
                         }`} />

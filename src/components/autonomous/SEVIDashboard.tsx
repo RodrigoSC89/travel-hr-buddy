@@ -206,7 +206,7 @@ export function SEVIDashboard() {
               {recommendations.length > 0 ? (
                 <div className="space-y-2">
                   {recommendations.map((rec, i) => (
-                    <motion.div key={i} initial={{ opacity: 0, x: -10 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: i * 0.1 }} className="p-3 rounded-lg bg-muted/50 border-l-4 border-primary">
+                    <motion.div key={`sevi-rec-${i}-${rec.slice(0, 12)}`} initial={{ opacity: 0, x: -10 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: i * 0.1 }} className="p-3 rounded-lg bg-muted/50 border-l-4 border-primary">
                       <p className="text-sm">{rec}</p>
                     </motion.div>
                   ))}
@@ -227,8 +227,8 @@ export function SEVIDashboard() {
           </CardHeader>
           <CardContent>
             <div className="grid md:grid-cols-3 gap-4">
-              {patterns.map((p, i) => (
-                <div key={i} className="p-4 rounded-lg border">
+              {patterns.map((p) => (
+                <div key={`pattern-${p.pattern}`} className="p-4 rounded-lg border">
                   <div className="flex items-center justify-between mb-2">
                     <Badge variant={p.confidence > 0.7 ? 'destructive' : 'secondary'}>
                       {(p.confidence * 100).toFixed(0)}% confiança

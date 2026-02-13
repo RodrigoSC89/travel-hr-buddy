@@ -154,9 +154,9 @@ export default function PortugueseVoiceAssistantPage() {
             </CardHeader>
             <CardContent>
               <div className="space-y-2">
-                {quickCommands.map((cmd, idx) => (
+                {quickCommands.map((cmd) => (
                   <Button 
-                    key={idx} 
+                    key={`vcmd-${cmd}`}
                     variant="outline" 
                     className="w-full justify-start text-left h-auto py-2"
                     onClick={() => {
@@ -184,7 +184,7 @@ export default function PortugueseVoiceAssistantPage() {
             <div className="space-y-4 max-h-96 overflow-y-auto">
               {conversationHistory.map((msg, idx) => (
                 <div 
-                  key={idx} 
+                  key={`voice-msg-${idx}-${msg.type}`}
                   className={`flex ${msg.type === "user" ? "justify-end" : "justify-start"}`}
                 >
                   <div className={`max-w-[80%] p-3 rounded-lg ${

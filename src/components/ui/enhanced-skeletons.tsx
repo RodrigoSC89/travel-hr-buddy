@@ -34,7 +34,7 @@ export const TableRowSkeleton: React.FC<{ columns?: number } & SkeletonProps> = 
 }) => (
   <div className={cn('flex items-center gap-4 py-4 border-b', className)}>
     {Array.from({ length: columns }).map((_, i) => (
-      <Skeleton key={i} className="h-4 flex-1" />
+      <Skeleton key={`tbl-row-col-${i}`} className="h-4 flex-1" />
     ))}
   </div>
 );
@@ -46,16 +46,14 @@ export const TableSkeleton: React.FC<{ rows?: number; columns?: number } & Skele
   className
 }) => (
   <div className={cn('rounded-lg border bg-card', className)}>
-    {/* Header */}
     <div className="flex items-center gap-4 p-4 border-b bg-muted/50">
       {Array.from({ length: columns }).map((_, i) => (
-        <Skeleton key={i} className="h-4 flex-1" />
+        <Skeleton key={`tbl-hdr-${i}`} className="h-4 flex-1" />
       ))}
     </div>
-    {/* Rows */}
     <div className="p-4 space-y-2">
       {Array.from({ length: rows }).map((_, i) => (
-        <TableRowSkeleton key={i} columns={columns} />
+        <TableRowSkeleton key={`tbl-body-${i}`} columns={columns} />
       ))}
     </div>
   </div>
@@ -77,20 +75,15 @@ export const StatsSkeleton: React.FC<SkeletonProps> = ({ className }) => (
 // Dashboard Skeleton
 export const DashboardSkeleton: React.FC<SkeletonProps> = ({ className }) => (
   <div className={cn('space-y-6', className)}>
-    {/* Stats Row */}
     <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
       {Array.from({ length: 4 }).map((_, i) => (
-        <StatsSkeleton key={i} />
+        <StatsSkeleton key={`dash-stat-${i}`} />
       ))}
     </div>
-    
-    {/* Chart Area */}
     <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
       <CardSkeleton className="h-64" />
       <CardSkeleton className="h-64" />
     </div>
-    
-    {/* Table */}
     <TableSkeleton rows={5} columns={4} />
   </div>
 );
@@ -102,7 +95,7 @@ export const FormSkeleton: React.FC<{ fields?: number } & SkeletonProps> = ({
 }) => (
   <div className={cn('space-y-6', className)}>
     {Array.from({ length: fields }).map((_, i) => (
-      <div key={i} className="space-y-2">
+      <div key={`form-field-${i}`} className="space-y-2">
         <Skeleton className="h-4 w-24" />
         <Skeleton className="h-10 w-full" />
       </div>
@@ -133,7 +126,7 @@ export const ListSkeleton: React.FC<{ items?: number } & SkeletonProps> = ({
 }) => (
   <div className={cn('rounded-lg border bg-card divide-y', className)}>
     {Array.from({ length: items }).map((_, i) => (
-      <ListItemSkeleton key={i} />
+      <ListItemSkeleton key={`list-item-${i}`} />
     ))}
   </div>
 );
@@ -150,7 +143,7 @@ export const ProfileSkeleton: React.FC<SkeletonProps> = ({ className }) => (
     </div>
     <div className="grid grid-cols-2 gap-4">
       {Array.from({ length: 4 }).map((_, i) => (
-        <div key={i} className="space-y-2">
+        <div key={`profile-field-${i}`} className="space-y-2">
           <Skeleton className="h-3 w-16" />
           <Skeleton className="h-5 w-24" />
         </div>
@@ -163,7 +156,7 @@ export const ProfileSkeleton: React.FC<SkeletonProps> = ({ className }) => (
 export const NavigationSkeleton: React.FC<SkeletonProps> = ({ className }) => (
   <div className={cn('space-y-2 p-4', className)}>
     {Array.from({ length: 8 }).map((_, i) => (
-      <div key={i} className="flex items-center gap-3 p-2">
+      <div key={`nav-item-${i}`} className="flex items-center gap-3 p-2">
         <Skeleton className="h-5 w-5" />
         <Skeleton className="h-4 w-24" />
       </div>
@@ -174,7 +167,6 @@ export const NavigationSkeleton: React.FC<SkeletonProps> = ({ className }) => (
 // Module Page Skeleton - Generic for any module
 export const ModulePageSkeleton: React.FC<SkeletonProps> = ({ className }) => (
   <div className={cn('space-y-6 p-6', className)}>
-    {/* Header */}
     <div className="flex items-center justify-between">
       <div className="space-y-2">
         <Skeleton className="h-8 w-48" />
@@ -185,8 +177,6 @@ export const ModulePageSkeleton: React.FC<SkeletonProps> = ({ className }) => (
         <Skeleton className="h-10 w-10" />
       </div>
     </div>
-    
-    {/* Content */}
     <DashboardSkeleton />
   </div>
 );
