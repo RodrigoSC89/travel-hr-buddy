@@ -225,7 +225,7 @@ export default function CrewComplianceTab() {
       badge={`${complianceScore}% compliance`}
       isLoading={isLoading}
       refreshable
-      onRefresh={() => { refetch(); toast.success("Dados atualizados"); }}
+      onRefresh={() => { refetch(); }}
       exportable
       onExport={() => {
         const rows = ["Nome;Tipo;Status;Validade", ...certifications.map((c) => `${(c as unknown as Record<string, unknown>).crew_member_name || ""};${c.type};${c.status};${c.expiry_date || ""}`)];

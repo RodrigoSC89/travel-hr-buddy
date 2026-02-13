@@ -384,7 +384,7 @@ export function CrewScheduler() {
                       </p>
                     </div>
                   </div>
-                  <Button variant="destructive" size="sm" onClick={() => { window.history.pushState({}, '', '/workbench?tab=people'); window.dispatchEvent(new PopStateEvent('popstate')); toast.success(`Planejando rendição de ${rotation.crewName}`, { description: `${rotation.daysOnBoard} dias a bordo (máx: ${rotation.maxDays}). Navegando para People Hub.` }); }}>
+                  <Button variant="destructive" size="sm" onClick={() => { window.history.pushState({}, '', '/workbench?tab=people'); window.dispatchEvent(new PopStateEvent('popstate')); }}>
                     Planejar Rendição
                   </Button>
                 </div>

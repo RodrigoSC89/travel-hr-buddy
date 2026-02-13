@@ -51,7 +51,7 @@ export const safeLazyImport = (
       };
 
       try {
-        localStorage.setItem('safeLazyImport:lastError', JSON.stringify(errorInfo));
+        sessionStorage.setItem('safeLazyImport:lastError', JSON.stringify(errorInfo));
       } catch {
         // Silent fail
       }

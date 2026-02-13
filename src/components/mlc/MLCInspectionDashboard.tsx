@@ -107,7 +107,7 @@ export const MLCInspectionDashboard: React.FC = () => {
         </div>
         <div className="flex gap-2">
           <Button variant="outline" onClick={() => { setActiveTab('checklist'); }}><Filter className="w-4 h-4 mr-2" />Filtros</Button>
-          <Button onClick={() => { setInspectionStarted(true); setActiveTab('checklist'); toast.success('Inspeção iniciada'); }}>
+          <Button onClick={() => { setInspectionStarted(true); setActiveTab('checklist'); }}>
             <Plus className="w-4 h-4 mr-2" />Nova Inspeção
           </Button>
         </div>

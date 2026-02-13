@@ -138,7 +138,7 @@ export default function GMUDV2() {
             title="Solicitações de Mudança"
             icon={GitBranch}
             searchable
-            onRefresh={() => toast.success("Dados atualizados")}
+            onRefresh={() => { /* handled by component */ }}
             loading={loading}
             actions={[
               { label: "Ver Workflow", icon: Users, onClick: (item) => handleOpenApproval(item) },

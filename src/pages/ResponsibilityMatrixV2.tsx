@@ -115,7 +115,7 @@ export default function ResponsibilityMatrixV2() {
             title="Matriz de Responsabilidades"
             icon={LayoutGrid}
             searchable
-            onRefresh={() => toast.success("Dados atualizados")}
+            onRefresh={() => { /* handled by component */ }}
             loading={loading}
             actions={[
               { label: "Notificar R", icon: Send, onClick: (item: ResponsibilityItem) => { navigator.clipboard?.writeText(`Notificar: ${item.responsible} sobre tarefa "${item.task}"`); toast.success(`Dados de notificação copiados para ${item.responsible}`); } },

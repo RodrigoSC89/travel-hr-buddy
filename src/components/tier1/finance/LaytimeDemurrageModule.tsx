@@ -361,7 +361,7 @@ export default function LaytimeDemurrageModule() {
               <FileText className="h-12 w-12 mx-auto mb-3 opacity-50" />
               <p className="font-medium">Demurrage/Despatch Claims</p>
               <p className="text-sm">Manage claims with charterers and track settlements</p>
-              <Button className="mt-4" onClick={() => { const tabEl = document.querySelector('[value="calculator"]') as HTMLElement; if (tabEl) tabEl.click(); toast.success("Navegando para Calculadora de Demurrage"); }}>
+              <Button className="mt-4" onClick={() => { const tabEl = document.querySelector('[value="calculator"]') as HTMLElement; if (tabEl) tabEl.click(); }}>
                 <FileText className="h-4 w-4 mr-2" />
                 New Claim
               </Button>

@@ -125,7 +125,7 @@ const ComplianceHubEnhanced: React.FC = () => {
   ];
 
   // Alerts
-  const [alerts] = useState([
+  const [alerts, setAlerts] = useState([
     {
       id: '1',
       title: 'Certificado ISSC Expirado',
@@ -217,7 +217,7 @@ const ComplianceHubEnhanced: React.FC = () => {
       {alerts.length > 0 && (
         <ActionableAlertList 
           alerts={alerts}
-          onDismiss={(id) => toast.success(`Alerta ${id} arquivado`)}
+          onDismiss={(id) => setAlerts(prev => prev.filter(a => a.id !== id))}
           maxVisible={3}
         />
       )}

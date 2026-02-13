@@ -62,7 +62,7 @@ const lastAlerts = new Map<string, number>(); // alertType -> timestamp
 // ===============================
 
 export function getWeatherAlertConfig(): Partial<WeatherAlertConfig> {
-  const stored = localStorage.getItem(STORAGE_KEY);
+  const stored = sessionStorage.getItem(STORAGE_KEY) || localStorage.getItem(STORAGE_KEY);
   if (stored) {
     return JSON.parse(stored);
   }
@@ -70,7 +70,7 @@ export function getWeatherAlertConfig(): Partial<WeatherAlertConfig> {
 }
 
 export function saveWeatherAlertConfig(config: Partial<WeatherAlertConfig>): void {
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(config));
+  sessionStorage.setItem(STORAGE_KEY, JSON.stringify(config));
 }
 
 // ===============================
