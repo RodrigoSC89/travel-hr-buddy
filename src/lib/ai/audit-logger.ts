@@ -93,7 +93,7 @@ export async function logAIInteraction(entry: AIAuditEntry): Promise<string | nu
 
     const { data, error } = await supabase
       .from('ai_audit_logs')
-      .insert(insertData as any)
+      .insert(insertData as never)
       .select('id')
       .single();
 

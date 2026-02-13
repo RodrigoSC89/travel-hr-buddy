@@ -290,7 +290,7 @@ async function generatePDFPackage(request: InspectionPackageRequest): Promise<Bl
     styles: { fontSize: 9 },
   });
 
-  yPos = (doc as any).lastAutoTable.finalY + 15;
+  yPos = (doc as unknown as { lastAutoTable: { finalY: number } }).lastAutoTable.finalY + 15;
 
   // Required Documents Checklist
   if (request.includeDocuments) {
@@ -324,7 +324,7 @@ async function generatePDFPackage(request: InspectionPackageRequest): Promise<Bl
       styles: { fontSize: 8 },
     });
 
-    yPos = (doc as any).lastAutoTable.finalY + 15;
+    yPos = (doc as unknown as { lastAutoTable: { finalY: number } }).lastAutoTable.finalY + 15;
   }
 
   // Audit Records
@@ -358,7 +358,7 @@ async function generatePDFPackage(request: InspectionPackageRequest): Promise<Bl
       styles: { fontSize: 8 },
     });
 
-    yPos = (doc as any).lastAutoTable.finalY + 15;
+    yPos = (doc as unknown as { lastAutoTable: { finalY: number } }).lastAutoTable.finalY + 15;
   }
 
   // Crew Certificates
@@ -390,7 +390,7 @@ async function generatePDFPackage(request: InspectionPackageRequest): Promise<Bl
       styles: { fontSize: 8 },
     });
 
-    yPos = (doc as any).lastAutoTable.finalY + 15;
+    yPos = (doc as unknown as { lastAutoTable: { finalY: number } }).lastAutoTable.finalY + 15;
   }
 
   // Critical Alerts Section

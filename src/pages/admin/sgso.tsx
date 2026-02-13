@@ -63,7 +63,7 @@ const AdminSGSO = () => {
       
       // ANP Practices section
       doc.setFontSize(14);
-      doc.text("17 Práticas Obrigatórias ANP", 14, (doc as any).lastAutoTable.finalY + 15);
+      doc.text("17 Práticas Obrigatórias ANP", 14, (doc as unknown as { lastAutoTable: { finalY: number } }).lastAutoTable.finalY + 15);
       
       const practices = [
         ["1", "Liderança e Compromisso", "Conforme", "100%"],
@@ -86,7 +86,7 @@ const AdminSGSO = () => {
       ];
       
       autoTable(doc, {
-        startY: (doc as any).lastAutoTable.finalY + 20,
+        startY: (doc as unknown as { lastAutoTable: { finalY: number } }).lastAutoTable.finalY + 20,
         head: [["#", "Prática", "Status", "Conformidade"]],
         body: practices,
         theme: 'grid',

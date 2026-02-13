@@ -584,8 +584,10 @@ function SessionCard({
   onComplete: (score: number) => void;
 }) {
   const moduleLabel = TRAINING_MODULES.find(m => m.value === session.session_type)?.label || session.session_type;
-  const content = session.content as any;
-  const hasQuiz = content?.quiz_data?.length > 0 || content?.quiz?.length > 0;
+  const content = session.content as Record<string, unknown> | null;
+  const quizData = content?.quiz_data as unknown[] | undefined;
+  const quiz = content?.quiz as unknown[] | undefined;
+  const hasQuiz = (quizData?.length ?? 0) > 0 || (quiz?.length ?? 0) > 0;
   const isInProgress = !session.completed_at && session.status !== 'completed' && session.status !== 'failed';
 
   return (
@@ -628,14 +630,14 @@ function SessionCard({
             </div>
           )}
 
-          {content?.training_content && (
+          {typeof content?.training_content === 'string' && (
             <div className="p-3 bg-muted/50 rounded-lg text-sm max-h-40 overflow-y-auto">
               <p className="text-xs font-medium text-muted-foreground mb-1 flex items-center gap-1">
                 <Sparkles className="h-3 w-3" />
                 Conteúdo Gerado por IA
               </p>
               <p className="whitespace-pre-wrap text-muted-foreground line-clamp-4">
-                {content.training_content.substring(0, 300)}...
+                {(content.training_content as string).substring(0, 300)}...
               </p>
             </div>
           )}

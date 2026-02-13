@@ -400,7 +400,7 @@ export const SGSOPDFReportGenerator: React.FC = () => {
         });
 
         // Detailed findings
-        yPos = (doc as any).lastAutoTable.finalY + 15;
+        yPos = (doc as unknown as Record<string, Record<string, number>>).lastAutoTable.finalY + 15;
         
         auditData.findings.forEach((finding, index) => {
           checkPageBreak(50);

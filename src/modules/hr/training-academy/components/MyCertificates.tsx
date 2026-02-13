@@ -33,8 +33,7 @@ export const MyCertificates: React.FC = () => {
       const { data: { user } } = await supabase.auth.getUser();
       if (!user) return;
 
-      const { data, error } = await (supabase
-        .from("academy_certificates" as any)
+      const { data, error } = await ((supabase.from as Function)("academy_certificates")
         .select("*, academy_courses(title)")
         .eq("user_id", user.id)
         .order("issued_date", { ascending: false }) as unknown as Promise<{ data: Certificate[] | null; error: Error | null }>);

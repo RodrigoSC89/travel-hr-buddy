@@ -157,7 +157,7 @@ export function MissionAutonomy() {
                 <div className="flex-1 space-y-1">
                   <div className="flex items-center gap-2">
                     <p className="font-medium">{insight.title}</p>
-                    <Badge variant={getImpactColor(insight.impact) as any}>
+                    <Badge variant={getImpactColor(insight.impact) as "default" | "secondary" | "destructive" | "outline"}>
                       {insight.impact} impact
                     </Badge>
                   </div>

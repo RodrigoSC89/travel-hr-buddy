@@ -266,7 +266,7 @@ export function IMCAAuditManager({
                     <Label>Criticidade</Label>
                     <Select 
                       value={newItem.criticality} 
-                      onValueChange={v => setNewItem({ ...newItem, criticality: v as any })}
+                      onValueChange={v => setNewItem({ ...newItem, criticality: v as CustomChecklistItem['criticality'] })}
                     >
                       <SelectTrigger>
                         <SelectValue />
@@ -575,7 +575,7 @@ export function IMCAAuditManager({
                     <Label>Criticidade</Label>
                     <Select 
                       value={editingItem.criticality} 
-                      onValueChange={v => setEditingItem({ ...editingItem, criticality: v as any })}
+                      onValueChange={v => setEditingItem({ ...editingItem, criticality: v as CustomChecklistItem['criticality'] })}
                     >
                       <SelectTrigger>
                         <SelectValue />

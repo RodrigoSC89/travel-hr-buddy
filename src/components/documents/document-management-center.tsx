@@ -104,7 +104,7 @@ export const DocumentManagementCenter = () => {
         confidential: false,
         version: "1.0",
         description: doc.description || "",
-        tags: Array.isArray(doc.extracted_keywords) ? (doc.extracted_keywords as any[]).map(String) : [],
+        tags: Array.isArray(doc.extracted_keywords) ? (doc.extracted_keywords as unknown[]).map(String) : [],
       }));
 
       // Use fallback if no data

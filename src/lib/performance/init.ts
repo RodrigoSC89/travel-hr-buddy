@@ -168,9 +168,10 @@ function setupPerformanceObserver() {
     // CLS Observer
     let clsScore = 0;
     const clsObserver = new PerformanceObserver((list) => {
-      for (const entry of list.getEntries() as any[]) {
-        if (!entry.hadRecentInput) {
-          clsScore += entry.value;
+      for (const entry of list.getEntries()) {
+        const layoutEntry = entry as PerformanceEntry & { hadRecentInput?: boolean; value?: number };
+        if (!layoutEntry.hadRecentInput) {
+          clsScore += layoutEntry.value || 0;
         }
       }
     });
@@ -199,7 +200,7 @@ export function getPerformanceReport() {
     loadTime: performance.now() - startTime,
     bandwidth: bandwidthOptimizer.getConfig(),
     connectionType: bandwidthOptimizer.getConnectionType(),
-    memory: (performance as any).memory?.usedJSHeapSize || 0,
+    memory: (performance as unknown as { memory?: { usedJSHeapSize?: number } }).memory?.usedJSHeapSize || 0,
   };
 }
 

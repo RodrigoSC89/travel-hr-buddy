@@ -143,10 +143,10 @@ class UnifiedLogger {
 
     try {
       if (typeof window !== "undefined") {
-        const Sentry = (window as any).Sentry;
+        const Sentry = (window as unknown as Record<string, unknown>).Sentry as { captureMessage?: (msg: string, opts: Record<string, unknown>) => void; captureException?: (err: unknown, opts: Record<string, unknown>) => void } | undefined;
         if (Sentry) {
           if (entry.error) {
-            Sentry.captureMessage(entry.message, {
+            Sentry.captureMessage?.(entry.message, {
               level: entry.level === "critical" ? "fatal" : entry.level,
               extra: {
                 ...entry.context,

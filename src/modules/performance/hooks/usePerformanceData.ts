@@ -46,22 +46,19 @@ export const usePerformanceData = (period: number = 7) => {
       // Try to load real data, fall back to empty states
       
       // Load fleet logs (if table exists)
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any -- dynamic tables not in typed schema
-      const { data: fleetLogs, error: fleetError } = await (supabase.from as any)("fleet_logs")
+      const { data: fleetLogs, error: fleetError } = await (supabase.from as Function)("fleet_logs")
         .select("*")
         .gte("created_at", startDate.toISOString())
         .order("created_at", { ascending: false });
 
       // Load mission activities
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any -- dynamic tables not in typed schema
-      const { data: missions, error: missionsError } = await (supabase.from as any)("mission_activities")
+      const { data: missions, error: missionsError } = await (supabase.from as Function)("mission_activities")
         .select("*")
         .gte("created_at", startDate.toISOString())
         .order("created_at", { ascending: false });
 
       // Load fuel usage
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any -- dynamic tables not in typed schema
-      const { data: fuelUsage, error: fuelError } = await (supabase.from as any)("fuel_usage")
+      const { data: fuelUsage, error: fuelError } = await (supabase.from as Function)("fuel_usage")
         .select("*")
         .gte("recorded_at", startDate.toISOString())
         .order("recorded_at", { ascending: false });

@@ -56,7 +56,7 @@ export async function requestBackgroundSync(tag: string = 'sync-data'): Promise<
 
   try {
     const registration = await navigator.serviceWorker.ready;
-    await (registration as any).sync.register(tag);
+    await (registration as unknown as { sync: { register: (tag: string) => Promise<void> } }).sync.register(tag);
     return true;
   } catch (error) {
     logger.error('[SW] Erro ao solicitar sync:', error);

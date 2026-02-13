@@ -82,8 +82,7 @@ export const EmployeePersonalDocuments: React.FC = () => {
       const { data: { user } } = await supabase.auth.getUser();
       if (!user) throw new Error("Not authenticated");
 
-      const { data, error } = await (supabase
-        .from("employee_personal_documents" as any)
+      const { data, error } = await ((supabase.from as Function)("employee_personal_documents")
         .select("*")
         .eq("employee_id", user.id)
         .order("created_at", { ascending: false }) as unknown as Promise<{ data: PersonalDocument[] | null; error: Error | null }>);
@@ -142,8 +141,7 @@ export const EmployeePersonalDocuments: React.FC = () => {
         }
       }
 
-      const { error } = await (supabase
-        .from("employee_personal_documents" as any)
+      const { error } = await ((supabase.from as Function)("employee_personal_documents")
         .insert({
           employee_id: user.id,
           document_type: formData.document_type,
@@ -184,8 +182,7 @@ export const EmployeePersonalDocuments: React.FC = () => {
     if (!confirm("Are you sure you want to delete this document?")) return;
 
     try {
-      const { error } = await (supabase
-        .from("employee_personal_documents" as any)
+      const { error } = await ((supabase.from as Function)("employee_personal_documents")
         .delete()
         .eq("id", documentId) as unknown as Promise<{ error: Error | null }>);
 

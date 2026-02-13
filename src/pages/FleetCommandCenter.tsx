@@ -187,9 +187,9 @@ import { FleetMapBox } from "@/components/fleet/FleetMapBox";
 const TrackingMapPanel = ({ vessels, onSelectVessel, selectedVessel }: { vessels: EnrichedVessel[]; onSelectVessel: (v: EnrichedVessel) => void; selectedVessel?: EnrichedVessel | null }) => {
   return (
     <FleetMapBox 
-      vessels={vessels as any}
-      onSelectVessel={onSelectVessel as any}
-      selectedVessel={selectedVessel as any}
+      vessels={vessels as unknown as Parameters<typeof FleetMapBox>[0]['vessels']}
+      onSelectVessel={onSelectVessel as unknown as Parameters<typeof FleetMapBox>[0]['onSelectVessel']}
+      selectedVessel={selectedVessel as unknown as Parameters<typeof FleetMapBox>[0]['selectedVessel']}
       height="600px"
       showList={true}
     />
@@ -356,7 +356,7 @@ export default function FleetCommandCenter() {
         .select("*")
         .order("scheduled_date", { ascending: false })
         .limit(50);
-      setMaintenance((maintenanceData as any[]) || []);
+      setMaintenance((maintenanceData as Record<string, unknown>[]) || []);
 
       // Carregar dados de combustível (typed - table exists)
       const sevenDaysAgo = new Date();

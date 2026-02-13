@@ -38,12 +38,12 @@ class ConnectionResilience {
   }
 
   private getInitialState(): ConnectionState {
-    const conn = (navigator as any).connection;
+    const conn = (navigator as unknown as { connection?: { effectiveType?: string; downlink?: number; rtt?: number; saveData?: boolean } }).connection;
     
     // PATCH v17 iOS PWA: Sempre assumir online
     return {
       isOnline: true,
-      effectiveType: conn?.effectiveType || '4g',
+      effectiveType: (conn?.effectiveType as ConnectionState['effectiveType']) || '4g',
       downlink: conn?.downlink || 10,
       rtt: conn?.rtt || 50,
       saveData: conn?.saveData || false,
@@ -56,10 +56,10 @@ class ConnectionResilience {
     // REMOVIDO: listener 'offline' - causava falsos positivos no iOS
 
     if ('connection' in navigator) {
-      const conn = (navigator as any).connection;
+      const conn = (navigator as unknown as { connection?: { effectiveType?: string; downlink?: number; rtt?: number; saveData?: boolean; addEventListener: (ev: string, fn: () => void) => void } }).connection;
       conn?.addEventListener('change', () => {
         this.updateState({
-          effectiveType: conn.effectiveType || 'unknown',
+          effectiveType: (conn.effectiveType as ConnectionState['effectiveType']) || 'unknown',
           downlink: conn.downlink || 10,
           rtt: conn.rtt || 50,
           saveData: conn.saveData || false,
