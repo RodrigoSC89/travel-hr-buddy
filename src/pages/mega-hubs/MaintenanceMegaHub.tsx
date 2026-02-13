@@ -21,7 +21,7 @@ import { Wrench, Shield, Brain, Anchor, Fuel, Cpu, Trash2, Leaf, Calendar, Plus,
 import { Skeleton } from '@/components/ui/skeleton';
 import { EnhancedActionBar } from '@/components/ui/world-class/EnhancedActionBar';
 import { WorkflowStatusBar } from '@/components/ui/world-class/WorkflowStatusBar';
-import { MaintenanceGanttCalendar } from '@/components/world-class';
+// MaintenanceGanttCalendar removed - world-class deleted
 import { HubEmptyState } from '@/components/ui/HubEmptyState';
 import { useQueryClient, useQuery } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
@@ -29,9 +29,9 @@ import { useRealActionHandlers } from '@/hooks/useRealActionHandlers';
 import { toast } from 'sonner';
 
 // Lazy load sub-components
-const MaintenanceHub = lazy(() => import('@/pages/MaintenanceHubPremium'));
+const MaintenanceHub = lazy(() => import('@/pages/MaintenanceCommandCenter'));
 const ClassSurveysPage = lazy(() => import('@/pages/maintenance/ClassSurveysPage'));
-const DrydockManagement = lazy(() => import('@/pages/DrydockManagement'));
+const DrydockManagement = lazy(() => import('@/pages/MaintenanceCommandCenter'));
 const PredictiveMaintenancePage = lazy(() => import('@/pages/PredictiveMaintenancePage'));
 const FuelManagementPage = lazy(() => import('@/pages/FuelManagementPage'));
 const DigitalTwinPage = lazy(() => import('@/pages/DigitalTwinPage'));

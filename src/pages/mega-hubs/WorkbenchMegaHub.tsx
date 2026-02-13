@@ -17,11 +17,7 @@ import { Briefcase, FileText, Users, DollarSign, Settings, Plane, Plus, Download
 import { Skeleton } from '@/components/ui/skeleton';
 import { EnhancedActionBar } from '@/components/ui/world-class/EnhancedActionBar';
 import { WorkflowStatusBar } from '@/components/ui/world-class/WorkflowStatusBar';
-import { 
-  CrewSchedulerGantt, 
-  FinanceApprovalWorkflow, 
-  DocumentVersionControl 
-} from '@/components/world-class';
+// world-class components removed
 import { HubEmptyState } from '@/components/ui/HubEmptyState';
 import { useQueryClient, useQuery } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
@@ -29,11 +25,11 @@ import { useRealActionHandlers } from '@/hooks/useRealActionHandlers';
 import { toast } from 'sonner';
 
 // Lazy load sub-components
-const DocumentCenterHub = lazy(() => import('@/pages/DocumentCenterPremium'));
-const PeopleHub = lazy(() => import('@/pages/PeopleHubPremium'));
-const FinanceHub = lazy(() => import('@/pages/FinanceCommandCenterPremium'));
-const SystemHub = lazy(() => import('@/pages/SystemHubPremium'));
-const TravelCommandPremium = lazy(() => import('@/pages/TravelCommandPremium'));
+const DocumentCenterHub = lazy(() => import('@/pages/Documents'));
+const PeopleHub = lazy(() => import('@/pages/HRDashboardPage'));
+const FinanceHub = lazy(() => import('@/pages/VoyageAccountingPage'));
+const SystemHub = lazy(() => import('@/pages/Settings'));
+const TravelCommandPremium = lazy(() => import('@/pages/Documents'));
 
 const LoadingSkeleton = () => (
   <div className="space-y-4 p-6">

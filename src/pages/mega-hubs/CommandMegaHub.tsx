@@ -31,9 +31,9 @@ const CentralComando = lazy(() => import('@/pages/CentralComando'));
 const OperationsOverviewPage = lazy(() => import('@/pages/command/OperationsOverviewPage'));
 const ExecutiveDashboardPage = lazy(() => import('@/pages/command/ExecutiveDashboardPage'));
 const NOC = lazy(() => import('@/pages/NOC'));
-const SOCPage = lazy(() => import('@/pages/SOCPage'));
-const CommunicationCommandCenter = lazy(() => import('@/pages/CommunicationCommandCenter'));
-const AlertsCommandCenter = lazy(() => import('@/pages/AlertsCommandCenter'));
+const SOCPage = lazy(() => import('@/pages/NOC'));
+const CommunicationCommandCenter = lazy(() => import('@/pages/NOC'));
+const AlertsCommandCenter = lazy(() => import('@/pages/NOC'));
 
 const LoadingSkeleton = () => (
   <div className="space-y-4 p-6">

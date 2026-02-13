@@ -24,7 +24,7 @@ import { Skeleton } from '@/components/ui/skeleton';
 import type { LucideIcon } from 'lucide-react';
 import { EnhancedActionBar } from '@/components/ui/world-class/EnhancedActionBar';
 import { WorkflowStatusBar } from '@/components/ui/world-class/WorkflowStatusBar';
-import { AuditWorkflowManager } from '@/components/world-class';
+// AuditWorkflowManager removed - world-class deleted
 import { HubEmptyState } from '@/components/ui/HubEmptyState';
 import { ConfirmDialog } from '@/components/ui/ConfirmDialog';
 import { useQueryClient, useQuery } from '@tanstack/react-query';
@@ -35,21 +35,21 @@ import { toast } from 'sonner';
 // ═══════════════════════════════════════════════════════════
 // LAZY LOAD - SUB-COMPONENTS
 // ═══════════════════════════════════════════════════════════
-const ComplianceHubPage = lazy(() => import('@/pages/ComplianceHubPremium'));
+const ComplianceHubPage = lazy(() => import('@/pages/ComplianceRoadmapPage'));
 const AgentsDashboard = lazy(() => import('@/pages/audit-agents/AgentsDashboard'));
 const DiagnosticCertificatesPage = lazy(() => import('@/pages/DiagnosticCertificatesPage'));
-const RiskMatrixV2 = lazy(() => import('@/pages/RiskMatrixV2'));
+const RiskMatrixV2 = lazy(() => import('@/pages/DiagnosticNCsPage'));
 const DiagnosticNCsPage = lazy(() => import('@/pages/DiagnosticNCsPage'));
-const RegulationsV2 = lazy(() => import('@/pages/RegulationsV2'));
+const RegulationsV2 = lazy(() => import('@/pages/ComplianceRoadmapPage'));
 const SecurityCenter = lazy(() => import('@/pages/SecurityCenter'));
 
 // ═══════════════════════════════════════════════════════════
 // 12 AUDITORIAS MARÍTIMAS COMPLETAS - ZERO SUPRESSÃO
 // ═══════════════════════════════════════════════════════════
 const PEODP = lazy(() => import('@/pages/PEODP'));
-const PEOTRAM = lazy(() => import('@/pages/PEOTRAM'));
-const SafetyIMCAV2 = lazy(() => import('@/pages/SafetyIMCAV2'));
-const ISPSSecurityV2 = lazy(() => import('@/pages/ISPSSecurityV2'));
+const PEOTRAM = lazy(() => import('@/pages/PEODP'));
+const SafetyIMCAV2 = lazy(() => import('@/pages/PreOVIDInspection'));
+const ISPSSecurityV2 = lazy(() => import('@/pages/SecurityCenter'));
 const SOLASInspection = lazy(() => import('@/pages/SOLASInspection'));
 const WasteManagementPremium = lazy(() => import('@/pages/WasteManagementPremium'));
 const PreOVIDInspection = lazy(() => import('@/pages/PreOVIDInspection'));
