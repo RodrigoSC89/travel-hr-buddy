@@ -243,7 +243,7 @@ export default function SupplierPerformanceDashboard() {
                  </div>
                  {selectedSupplier.issues > 0 && (<div className="p-3 bg-warning/10 border border-warning/30 rounded-lg"><div className="flex items-center gap-2"><AlertTriangle className="h-4 w-4 text-warning" /><span className="text-sm font-medium">{selectedSupplier.issues} issues pendentes</span></div></div>)}
                  <div className="flex gap-2">
-                   <Button className="flex-1" size="sm"><FileText className="h-4 w-4 mr-2" />Ver Histórico</Button>
+                   <Button className="flex-1" size="sm" onClick={() => { window.history.pushState({}, '', '/procurement'); window.dispatchEvent(new PopStateEvent('popstate')); }}><FileText className="h-4 w-4 mr-2" />Ver Histórico</Button>
                    <Button variant="outline" size="sm" aria-label="Enviar email ao fornecedor" title="Email"><Mail className="h-4 w-4" /></Button>
                    <Button variant="outline" size="sm" aria-label="Ligar para fornecedor" title="Telefone"><Phone className="h-4 w-4" /></Button>
                  </div>

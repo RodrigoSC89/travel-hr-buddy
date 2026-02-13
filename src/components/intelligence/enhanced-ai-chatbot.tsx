@@ -76,21 +76,17 @@ const EnhancedAIChatbot: React.FC = () => {
     setIsLoaded(true);
     setVoiceSupported("webkitSpeechRecognition" in window || "SpeechRecognition" in window);
     
-    // Mensagem de boas-vindas com delay para efeito visual
-    const timer = setTimeout(() => {
-      setMessages([
-        {
-          id: "welcome",
-          type: "ai",
-          content: "🌊 Olá! Sou o Assistente IA do Nautilus One, seu companheiro inteligente para operações marítimas. Como posso ajudá-lo hoje? \n\n💡 **Dicas rápidas:**\n• Use comandos de voz clicando no 🎙️\n• Envie imagens para análise\n• Digite \"/\" para ver comandos especiais\n• Pressione Tab para navegar rapidamente",
-          timestamp: new Date(),
-          category: "general",
-          confidence: 100
-        }
-      ]);
-    }, 500);
-    
-    return () => clearTimeout(timer);
+    // Mensagem de boas-vindas imediata
+    setMessages([
+      {
+        id: "welcome",
+        type: "ai",
+        content: "🌊 Olá! Sou o Assistente IA do Nautilus One, seu companheiro inteligente para operações marítimas. Como posso ajudá-lo hoje? \n\n💡 **Dicas rápidas:**\n• Use comandos de voz clicando no 🎙️\n• Envie imagens para análise\n• Digite \"/\" para ver comandos especiais\n• Pressione Tab para navegar rapidamente",
+        timestamp: new Date(),
+        category: "general",
+        confidence: 100
+      }
+    ]);
   }, []);
 
   useEffect(() => {
@@ -309,23 +305,43 @@ const EnhancedAIChatbot: React.FC = () => {
   };
 
   const handleQuickCommand = (command: string, category: string) => {
-    setInputMessage(command);
     setSelectedCapability(category);
-    const timeout = setTimeout(() => {
-      handleSendMessage();
-    }, 100);
-    timeoutsRef.current.push(timeout);
+    // Set input and trigger send in next frame
+    setInputMessage(command);
+    requestAnimationFrame(() => {
+      const userMsg: Message = {
+        id: `user-${Date.now()}`, type: "user", content: command,
+        timestamp: new Date(), category: category as Message["category"]
+      };
+      setMessages(prev => [...prev, userMsg]);
+      setInputMessage("");
+      const aiResponse = generateEnhancedAIResponse(command, category);
+      const aiMsg: Message = {
+        id: `ai-${Date.now()}`, type: "ai", content: aiResponse.content,
+        timestamp: new Date(), category: category as Message["category"],
+        confidence: aiResponse.confidence, sources: aiResponse.sources
+      };
+      setMessages(prev => [...prev, aiMsg]);
+    });
   };
 
   const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (file) {
       setSelectedCapability("image");
-      setInputMessage(`📎 Arquivo enviado: ${file.name}`);
-      const timeout = setTimeout(() => {
-        handleSendMessage();
-      }, 500);
-      timeoutsRef.current.push(timeout);
+      const command = `📎 Arquivo enviado: ${file.name}`;
+      const userMsg: Message = {
+        id: `user-${Date.now()}`, type: "user", content: command,
+        timestamp: new Date(), category: "image"
+      };
+      setMessages(prev => [...prev, userMsg]);
+      const aiResponse = generateEnhancedAIResponse(command, "image");
+      const aiMsg: Message = {
+        id: `ai-${Date.now()}`, type: "ai", content: aiResponse.content,
+        timestamp: new Date(), category: "image",
+        confidence: aiResponse.confidence, sources: aiResponse.sources
+      };
+      setMessages(prev => [...prev, aiMsg]);
     }
   };
 

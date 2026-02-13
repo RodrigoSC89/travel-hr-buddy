@@ -226,7 +226,10 @@ export default function FleetTrackingDashboard() {
                         {vessel.engineStatus === "running" ? "Em Operação" : vessel.engineStatus === "idle" ? "Em Espera" : "Parado"}
                       </Badge>
                     </div>
-                    <Button className="w-full" size="sm"><Eye className="h-4 w-4 mr-2" />Ver Detalhes Completos</Button>
+                    <Button className="w-full" size="sm" onClick={() => {
+                      window.history.pushState({}, '', `/vessels/${vessel.id}`);
+                      window.dispatchEvent(new PopStateEvent('popstate'));
+                    }}><Eye className="h-4 w-4 mr-2" />Ver Detalhes Completos</Button>
                   </div>
                 </CardContent>
               </Card>

@@ -399,8 +399,13 @@ export function AuditWorkflowManager() {
                         <div key={file} className="flex items-center gap-2 p-2 bg-muted rounded">
                           <FileText className="h-4 w-4 text-primary" />
                           <span className="text-sm flex-1 truncate">{file}</span>
-                          <Button variant="ghost" size="sm"><Eye className="h-4 w-4" /></Button>
-                          <Button variant="ghost" size="sm"><Download className="h-4 w-4" /></Button>
+                          <Button variant="ghost" size="sm" aria-label="Visualizar evidência" title="Visualizar" onClick={() => window.open(file, '_blank')}><Eye className="h-4 w-4" /></Button>
+                          <Button variant="ghost" size="sm" aria-label="Baixar evidência" title="Baixar" onClick={() => {
+                            const a = document.createElement('a');
+                            a.href = file;
+                            a.download = file.split('/').pop() || 'evidence';
+                            a.click();
+                          }}><Download className="h-4 w-4" /></Button>
                         </div>
                       ))}
                     </div>
