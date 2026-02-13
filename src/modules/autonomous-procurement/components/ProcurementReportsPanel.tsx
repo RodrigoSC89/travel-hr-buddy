@@ -187,9 +187,16 @@ export default function ProcurementReportsPanel() {
       return;
     }
     
-    // Simulate download
+    const csvContent = `Relatório: ${report.name}\nCriado em: ${report.createdAt}\nTamanho: ${report.size}\nFormato: ${report.format}`;
+    const blob = new Blob([csvContent], { type: "text/plain;charset=utf-8" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `${report.name.replace(/\s+/g, '-').toLowerCase()}.txt`;
+    a.click();
+    URL.revokeObjectURL(url);
     toast({
-      title: "📥 Download Iniciado",
+      title: "📥 Download concluído",
       description: `${report.name} (${report.size})`
     });
   };

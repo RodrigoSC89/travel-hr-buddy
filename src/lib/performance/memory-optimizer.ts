@@ -41,8 +41,8 @@ class MemoryOptimizer {
       const maxAge = maxAgeDays * 24 * 60 * 60 * 1000;
       const now = Date.now();
       
-      for (let i = localStorage.length - 1; i >= 0; i--) {
-        const key = localStorage.key(i);
+      for (let i = sessionStorage.length - 1; i >= 0; i--) {
+        const key = sessionStorage.key(i);
         if (key?.startsWith('cache_')) {
           try {
             const item = JSON.parse(sessionStorage.getItem(key) || '{}');

@@ -31,7 +31,7 @@ class PredictiveUIEngine {
   
   private loadPatterns(): void {
     try {
-      const stored = localStorage.getItem(this.storageKey);
+      const stored = sessionStorage.getItem(this.storageKey);
       if (stored) {
         const data = JSON.parse(stored);
         this.patterns = new Map(Object.entries(data));
@@ -44,7 +44,7 @@ class PredictiveUIEngine {
   private savePatterns(): void {
     try {
       const data = Object.fromEntries(this.patterns);
-      localStorage.setItem(this.storageKey, JSON.stringify(data));
+      sessionStorage.setItem(this.storageKey, JSON.stringify(data));
     } catch {
       // Ignore storage errors
     }
@@ -204,7 +204,7 @@ class PredictiveUIEngine {
   clearData(): void {
     this.actions = [];
     this.patterns.clear();
-    localStorage.removeItem(this.storageKey);
+    sessionStorage.removeItem(this.storageKey);
   }
 }
 

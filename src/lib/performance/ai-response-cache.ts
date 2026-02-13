@@ -316,7 +316,7 @@ class AIResponseCache {
   private saveToStorage(): void {
     try {
       const data = Array.from(this.cache.entries());
-      localStorage.setItem('ai_response_cache', JSON.stringify(data));
+      sessionStorage.setItem('ai_response_cache', JSON.stringify(data));
     } catch (e) {
       logger.warn('[AICache] Failed to save to storage', e instanceof Error ? { message: e.message } : undefined);
     }
@@ -327,7 +327,7 @@ class AIResponseCache {
    */
   private loadFromStorage(): void {
     try {
-      const data = localStorage.getItem('ai_response_cache');
+      const data = sessionStorage.getItem('ai_response_cache');
       if (data) {
         const entries: [string, CachedResponse][] = JSON.parse(data);
         this.cache = new Map(entries);
@@ -355,7 +355,7 @@ class AIResponseCache {
   clear(): void {
     this.cache.clear();
     this.semanticIndex.clear();
-    localStorage.removeItem('ai_response_cache');
+    sessionStorage.removeItem('ai_response_cache');
   }
 }
 

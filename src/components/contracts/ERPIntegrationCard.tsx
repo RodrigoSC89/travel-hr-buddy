@@ -149,15 +149,12 @@ export function ERPIntegrationCard() {
     setSyncing(true);
     toast.loading('Sincronizando com ERP...');
     
-    setTimeout(() => {
+    try {
       setConnections(prev => prev.map(c => 
         c.id === connectionId 
           ? { ...c, last_sync: new Date().toISOString() }
           : c
       ));
-      setSyncing(false);
-      toast.dismiss();
-      toast.success('Sincronização concluída!');
       
       // Add sync log
       setSyncLogs(prev => [{
@@ -169,7 +166,12 @@ export function ERPIntegrationCard() {
         details: 'Full sync completed successfully',
         record_id: '-'
       }, ...prev]);
-    }, 2000);
+      
+      toast.dismiss();
+      toast.success('Sincronização concluída!');
+    } finally {
+      setSyncing(false);
+    }
   };
 
   const toggleAutoSync = (connectionId: string) => {

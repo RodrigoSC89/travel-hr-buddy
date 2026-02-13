@@ -262,17 +262,18 @@ export function CrewCertificationsManager({ crewMembers = [] }: CrewCertificatio
             </div>
             <div className="flex gap-2">
               <Button variant="outline" onClick={() => {
-                toast({
-                  title: "Exportando certificações",
-                  description: "Gerando arquivo Excel com dados de certificações...",
-                });
-                // Simulate export
-                setTimeout(() => {
-                  toast({
-                    title: "Exportação concluída",
-                    description: "Arquivo de certificações exportado com sucesso",
-                  });
-                }, 1500);
+                const csvHeader = "Nome,Tipo,Número,Emissão,Validade,Autoridade,Status\n";
+                const csvRows = filteredCertifications.map(c => 
+                  `"${c.crewMemberName}","${c.type}","${c.number}","${c.issueDate}","${c.expiryDate}","${c.issuingAuthority}","${c.status}"`
+                ).join("\n");
+                const blob = new Blob([csvHeader + csvRows], { type: "text/csv;charset=utf-8" });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement("a");
+                a.href = url;
+                a.download = `certificacoes-${new Date().toISOString().slice(0,10)}.csv`;
+                a.click();
+                URL.revokeObjectURL(url);
+                toast({ title: "Exportação concluída", description: `${filteredCertifications.length} certificações exportadas como CSV` });
               }}>
                 <Download className="h-4 w-4 mr-2" />
                 Exportar
