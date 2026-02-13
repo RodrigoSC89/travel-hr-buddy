@@ -305,8 +305,7 @@ export default function MaintenanceMegaHub() {
                 ]}
               />
 
-              {/* World-Class Gantt Calendar */}
-              <MaintenanceGanttCalendar />
+              {/* MaintenanceGanttCalendar removed */}
             </TabsContent>
             
             <TabsContent value="surveys" className="mt-0">

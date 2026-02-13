@@ -228,7 +228,7 @@ export default function OpsMegaHub() {
               />
 
               {/* Operations Action Panel with Real Data */}
-              {showActionPanel && <OperationsActionPanel />}
+              {/* OperationsActionPanel removed */}
 
               {/* Empty state when no data */}
               {!isLoading && metrics.totalVessels === 0 && (

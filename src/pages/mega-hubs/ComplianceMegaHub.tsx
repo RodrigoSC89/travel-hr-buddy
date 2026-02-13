@@ -359,8 +359,7 @@ export default function ComplianceMegaHub() {
                 ]}
                 onRefresh={handleRefresh}
               />
-              {/* World-Class Audit Workflow Manager */}
-              <AuditWorkflowManager />
+              {/* AuditWorkflowManager removed */}
             </TabsContent>
             
             <TabsContent value="scorecard" className="mt-0">
