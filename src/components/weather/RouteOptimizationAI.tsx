@@ -179,18 +179,18 @@ export function RouteOptimizationAI() {
   };
 
   const getRiskColor = (risk: number) => {
-    if (risk < 20) return "text-green-500";
-    if (risk < 40) return "text-yellow-500";
-    return "text-red-500";
+    if (risk < 20) return "text-success";
+    if (risk < 40) return "text-warning";
+    return "text-destructive";
   };
 
   const getConditionColor = (condition: string) => {
     switch (condition) {
-      case "good": return "bg-green-500";
-      case "moderate": return "bg-yellow-500";
-      case "poor": return "bg-orange-500";
-      case "severe": return "bg-red-500";
-      default: return "bg-gray-500";
+      case "good": return "bg-success";
+      case "moderate": return "bg-warning";
+      case "poor": return "bg-warning";
+      case "severe": return "bg-destructive";
+      default: return "bg-muted";
     }
   };
 
@@ -199,13 +199,13 @@ export function RouteOptimizationAI() {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-3">
-          <div className="p-3 bg-gradient-to-br from-blue-500/20 to-cyan-500/20 rounded-xl">
-            <Navigation className="h-6 w-6 text-blue-500" />
+          <div className="p-3 bg-gradient-to-br from-info/20 to-accent/20 rounded-xl">
+            <Navigation className="h-6 w-6 text-info" />
           </div>
           <div>
             <h2 className="text-xl font-bold flex items-center gap-2">
               Otimização de Rotas IA
-              <Badge className="bg-gradient-to-r from-blue-500 to-cyan-500">
+              <Badge className="bg-gradient-to-r from-info to-accent-foreground">
                 <Brain className="h-3 w-3 mr-1" />
                 Weather Routing
               </Badge>
@@ -305,7 +305,7 @@ export function RouteOptimizationAI() {
                     <CardTitle className="text-sm flex items-center gap-2">
                       {route.name}
                       {route.recommended && (
-                        <Badge className="bg-green-500/20 text-green-500">
+                        <Badge className="bg-success/20 text-success">
                           <CheckCircle className="h-3 w-3 mr-1" />
                           Recomendada
                         </Badge>
@@ -443,9 +443,9 @@ export function RouteOptimizationAI() {
                             <p className="text-xs text-muted-foreground">Combustível</p>
                             <p className="font-bold flex items-center gap-1 justify-end">
                               {scenario.fuelUsed > scenarioResults[0].fuelUsed ? (
-                                <TrendingUp className="h-3 w-3 text-red-500" />
+                                <TrendingUp className="h-3 w-3 text-destructive" />
                               ) : scenario.fuelUsed < scenarioResults[0].fuelUsed ? (
-                                <TrendingDown className="h-3 w-3 text-green-500" />
+                                <TrendingDown className="h-3 w-3 text-success" />
                               ) : null}
                               {scenario.fuelUsed} ton
                             </p>

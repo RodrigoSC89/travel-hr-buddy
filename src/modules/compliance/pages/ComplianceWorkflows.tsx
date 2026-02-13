@@ -186,7 +186,7 @@ export default function ComplianceWorkflows() {
                 <p className="text-sm text-muted-foreground">Workflows Ativos</p>
                 <p className="text-2xl font-bold">{stats.active}</p>
               </div>
-              <Play className="h-8 w-8 text-emerald-400" />
+              <Play className="h-8 w-8 text-success" />
             </div>
           </CardContent>
         </Card>
@@ -197,7 +197,7 @@ export default function ComplianceWorkflows() {
                 <p className="text-sm text-muted-foreground">Concluídos</p>
                 <p className="text-2xl font-bold">{stats.completed}</p>
               </div>
-              <CheckCircle2 className="h-8 w-8 text-blue-400" />
+              <CheckCircle2 className="h-8 w-8 text-info" />
             </div>
           </CardContent>
         </Card>
@@ -208,7 +208,7 @@ export default function ComplianceWorkflows() {
                 <p className="text-sm text-muted-foreground">Automação Média</p>
                 <p className="text-2xl font-bold">{stats.avgAutomation}%</p>
               </div>
-              <Zap className="h-8 w-8 text-amber-400" />
+              <Zap className="h-8 w-8 text-warning" />
             </div>
           </CardContent>
         </Card>
@@ -308,7 +308,7 @@ export default function ComplianceWorkflows() {
                     {/* Automation */}
                     <div className="w-full lg:w-32 text-center">
                       <div className="flex items-center justify-center gap-1 text-sm">
-                        <Zap className="h-4 w-4 text-amber-400" />
+                        <Zap className="h-4 w-4 text-warning" />
                         <span className="font-medium">{workflow.automationLevel}%</span>
                       </div>
                       <p className="text-xs text-muted-foreground">Automação</p>

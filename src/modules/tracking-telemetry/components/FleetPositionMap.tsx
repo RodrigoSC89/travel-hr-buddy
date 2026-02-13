@@ -55,7 +55,7 @@ const StatusBadge = ({ status }: { status: string }) => {
   const config: Record<string, { color: string, label: string }> = {
     underway: { color: "bg-success text-success-foreground", label: "Navegando" },
     anchored: { color: "bg-warning text-warning-foreground", label: "Fundeado" },
-    moored: { color: "bg-blue-500 text-white", label: "Atracado" },
+    moored: { color: "bg-info text-info-foreground", label: "Atracado" },
     drifting: { color: "bg-destructive text-destructive-foreground", label: "À Deriva" },
   };
   const { color, label } = config[status] || { color: "bg-muted", label: status };
@@ -114,7 +114,7 @@ export default function FleetPositionMap() {
       <div className="flex items-center justify-between">
         <div>
           <h2 className="text-2xl font-bold flex items-center gap-2">
-            <Map className="h-6 w-6 text-blue-500" />
+            <Map className="h-6 w-6 text-info" />
             Posicionamento da Frota
           </h2>
           <p className="text-muted-foreground">
@@ -134,33 +134,33 @@ export default function FleetPositionMap() {
       </div>
 
       {/* Weather Bar */}
-      <Card className="bg-gradient-to-r from-blue-500/10 to-cyan-500/10">
+      <Card className="bg-gradient-to-r from-info/10 to-accent/10">
         <CardContent className="p-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-6">
               <div className="flex items-center gap-2">
-                <Wind className="h-5 w-5 text-blue-500" />
+                <Wind className="h-5 w-5 text-info" />
                 <div>
                   <p className="text-xs text-muted-foreground">Vento</p>
                   <p className="font-semibold">{weatherData.windSpeed} kts {weatherData.windDirection}</p>
                 </div>
               </div>
               <div className="flex items-center gap-2">
-                <Waves className="h-5 w-5 text-cyan-500" />
+                <Waves className="h-5 w-5 text-accent-foreground" />
                 <div>
                   <p className="text-xs text-muted-foreground">Ondas</p>
                   <p className="font-semibold">{weatherData.waveHeight}m</p>
                 </div>
               </div>
               <div className="flex items-center gap-2">
-                <Thermometer className="h-5 w-5 text-orange-500" />
+                <Thermometer className="h-5 w-5 text-warning" />
                 <div>
                   <p className="text-xs text-muted-foreground">Temperatura</p>
                   <p className="font-semibold">{weatherData.temperature}°C</p>
                 </div>
               </div>
               <div className="flex items-center gap-2">
-                <Eye className="h-5 w-5 text-green-500" />
+                <Eye className="h-5 w-5 text-success" />
                 <div>
                   <p className="text-xs text-muted-foreground">Visibilidade</p>
                   <p className="font-semibold">{weatherData.visibility}</p>
@@ -201,7 +201,7 @@ export default function FleetPositionMap() {
                   >
                     <div className={`p-2 rounded-full ${
                       vessel.status === "underway" ? "bg-success" :
-                      vessel.status === "anchored" ? "bg-warning" : "bg-blue-500"
+                      vessel.status === "anchored" ? "bg-warning" : "bg-info"
                     } transition-transform group-hover:scale-125`}>
                       <Ship className="h-4 w-4 text-white" style={{ transform: `rotate(${vessel.course}deg)` }} />
                     </div>
