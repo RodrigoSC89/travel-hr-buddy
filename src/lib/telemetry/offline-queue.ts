@@ -28,7 +28,7 @@ export class OfflineQueue {
         queue.splice(0, queue.length - MAX_QUEUE_SIZE);
       }
 
-      localStorage.setItem(QUEUE_KEY, JSON.stringify(queue));
+      sessionStorage.setItem(QUEUE_KEY, JSON.stringify(queue));
     } catch {
       // Silent fail - telemetry is non-critical
     }
@@ -39,7 +39,7 @@ export class OfflineQueue {
    */
   static getQueue(): (TelemetryEvent & { queued_at?: string })[] {
     try {
-      const queueJson = localStorage.getItem(QUEUE_KEY);
+      const queueJson = sessionStorage.getItem(QUEUE_KEY);
       return queueJson ? JSON.parse(queueJson) : [];
     } catch {
       return [];
@@ -51,7 +51,7 @@ export class OfflineQueue {
    */
   static clearQueue(): void {
     try {
-      localStorage.removeItem(QUEUE_KEY);
+      sessionStorage.removeItem(QUEUE_KEY);
     } catch {
       // Silent fail
     }
@@ -87,7 +87,7 @@ export class OfflineQueue {
         // Keep remaining events in queue
         const remaining = queue.slice(i);
         try {
-          localStorage.setItem(QUEUE_KEY, JSON.stringify(remaining));
+          sessionStorage.setItem(QUEUE_KEY, JSON.stringify(remaining));
         } catch {
           // Silent fail
         }

@@ -72,10 +72,10 @@ export default function DeepRiskAI() {
               <div className="flex justify-between items-start mb-3">
                 <div><div className="flex items-center gap-2 mb-1"><h3 className="font-semibold">{r.title}</h3><Badge className={severityColors[r.severity]}>{r.severity}</Badge><Badge variant={r.status === 'mitigated' ? 'default' : 'outline'}>{r.status}</Badge></div><p className="text-sm text-muted-foreground">{r.description}</p></div>
                 <div className="flex gap-2">
-                  <Button size="sm" variant="outline" onClick={() => handleAnalyze(r.id)}><Brain className="h-4 w-4 mr-1" />IA</Button>
-                  {r.status !== 'mitigated' && <Button size="sm" variant="outline" onClick={() => handleMitigate(r.id)}><Shield className="h-4 w-4" /></Button>}
-                  <Button size="sm" variant="ghost" onClick={() => { setEditing(r); setForm({ title: r.title, severity: r.severity, probability: r.probability, impact: r.impact, description: r.description }); setIsOpen(true); }}><Edit2 className="h-4 w-4" /></Button>
-                  <Button size="sm" variant="ghost" onClick={() => handleDelete(r.id)}><Trash2 className="h-4 w-4 text-destructive" /></Button>
+                  <Button size="sm" variant="outline" onClick={() => handleAnalyze(r.id)} aria-label={`Analisar risco ${r.title} com IA`} title="Analisar com IA"><Brain className="h-4 w-4 mr-1" />IA</Button>
+                  {r.status !== 'mitigated' && <Button size="sm" variant="outline" onClick={() => handleMitigate(r.id)} aria-label={`Mitigar risco ${r.title}`} title="Mitigar"><Shield className="h-4 w-4" /></Button>}
+                  <Button size="sm" variant="ghost" onClick={() => { setEditing(r); setForm({ title: r.title, severity: r.severity, probability: r.probability, impact: r.impact, description: r.description }); setIsOpen(true); }} aria-label={`Editar risco ${r.title}`} title="Editar"><Edit2 className="h-4 w-4" /></Button>
+                  <Button size="sm" variant="ghost" onClick={() => handleDelete(r.id)} aria-label={`Excluir risco ${r.title}`} title="Excluir"><Trash2 className="h-4 w-4 text-destructive" /></Button>
                 </div>
               </div>
               <div className="grid grid-cols-3 gap-4"><div><p className="text-xs text-muted-foreground mb-1">Probabilidade</p><div className="flex items-center gap-2"><Progress value={r.probability} className="h-2 flex-1" /><span className="text-sm">{r.probability}%</span></div></div><div><p className="text-xs text-muted-foreground mb-1">Impacto</p><div className="flex items-center gap-2"><Progress value={r.impact} className="h-2 flex-1" /><span className="text-sm">{r.impact}%</span></div></div><div><p className="text-xs text-muted-foreground mb-1">Score</p><span className="text-lg font-bold">{getScore(r.probability, r.impact)}</span></div></div>

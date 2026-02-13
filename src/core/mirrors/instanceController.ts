@@ -555,7 +555,7 @@ class InstanceController {
   }
 
   private getMainInstanceId(): string {
-    return localStorage.getItem("instance_id") || "main-instance";
+    return sessionStorage.getItem("instance_id") || "main-instance";
   }
 
   private deserializeInstance(data: MirrorInstanceRow): MirrorInstance {

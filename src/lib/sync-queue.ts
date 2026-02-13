@@ -57,7 +57,7 @@ class SyncQueue {
    */
   private loadFromStorage() {
     try {
-      const stored = localStorage.getItem(STORAGE_KEY);
+      const stored = sessionStorage.getItem(STORAGE_KEY);
       if (stored) {
         this.state = JSON.parse(stored);
         // Reset status de itens que estavam sending
@@ -78,7 +78,7 @@ class SyncQueue {
    */
   private saveToStorage() {
     try {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(this.state));
+      sessionStorage.setItem(STORAGE_KEY, JSON.stringify(this.state));
     } catch (e) {
       logger.error("Failed to save sync queue to storage", e as Error);
     }
