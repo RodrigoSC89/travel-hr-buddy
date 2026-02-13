@@ -65,26 +65,43 @@ const isSlowConnection = (): boolean => {
 };
 
 // Custom fetch with retry for maritime satellite connections
-// CRITICAL: Auth requests use native fetch to prevent AbortController from killing login
+// Auth requests get special treatment: NO AbortController, generous retry with backoff
 const customFetch = async (input: RequestInfo | URL, init?: RequestInit): Promise<Response> => {
   const url = typeof input === 'string' ? input : input instanceof URL ? input.toString() : (input as Request).url;
-  
-  // Auth requests: use generous timeout (30s) but still have one
-  // Without timeout, broken connections hang for 75+ seconds
   const isAuthRequest = url.includes('/auth/v1/');
   
   if (isAuthRequest) {
-    const controller = new AbortController();
-    const authTimeout = setTimeout(() => controller.abort(), 30000);
+    // Auth requests: strip ALL abort signals, retry up to 5 times with exponential backoff
+    // The SDK adds its own AbortController which kills requests on slow connections
     const { signal: _stripped, ...cleanInit } = init || {};
-    try {
-      const response = await fetch(input, { ...cleanInit, signal: controller.signal } as RequestInit);
-      clearTimeout(authTimeout);
-      return response;
-    } catch (error) {
-      clearTimeout(authTimeout);
-      throw error;
+    const MAX_AUTH_RETRIES = 5;
+    
+    for (let attempt = 0; attempt < MAX_AUTH_RETRIES; attempt++) {
+      try {
+        // Use native fetch with NO signal - let browser handle timeout (120s default)
+        const response = await fetch(input, cleanInit as RequestInit);
+        
+        // Retry on server errors (502, 503, 504) - Supabase might be restarting
+        if (response.status >= 500 && attempt < MAX_AUTH_RETRIES - 1) {
+          const delay = Math.pow(2, attempt) * 1000 + Math.random() * 500;
+          await new Promise(resolve => setTimeout(resolve, Math.min(delay, 15000)));
+          continue;
+        }
+        
+        return response;
+      } catch (error) {
+        if (attempt < MAX_AUTH_RETRIES - 1) {
+          const delay = Math.pow(2, attempt) * 1000 + Math.random() * 500;
+          // eslint-disable-next-line no-console
+          console.log(`[Auth] Attempt ${attempt + 1} failed, retrying in ${Math.round(delay)}ms...`);
+          await new Promise(resolve => setTimeout(resolve, Math.min(delay, 15000)));
+        } else {
+          throw error;
+        }
+      }
     }
+    // Should never reach here, but TypeScript needs it
+    throw new Error('Max auth retries exceeded');
   }
   
   // Non-auth requests: use retry with conservative timeouts
@@ -146,7 +163,6 @@ const customFetch = async (input: RequestInfo | URL, init?: RequestInit): Promis
         throw error;
       }
       
-      // Simple backoff: 2s, 4s
       const delay = 2000 * (attempt + 1) + Math.random() * 500;
       await new Promise(resolve => setTimeout(resolve, delay));
     }
