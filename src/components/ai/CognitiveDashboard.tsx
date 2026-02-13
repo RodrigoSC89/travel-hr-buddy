@@ -387,6 +387,7 @@ export const CognitiveDashboard: React.FC = () => {
                 <div className="text-center py-8">Loading parameters...</div>
               ) : (
                 <div className="space-y-4">
+                  {/* eslint-disable-next-line @typescript-eslint/no-explicit-any -- adaptive parameter entries have deeply dynamic shape */}
                   {Object.entries(parameters).map(([key, param]: [string, any]) => {
                     const deltaPercent = ((param.currentValue - param.defaultValue) / param.defaultValue * 100).toFixed(1);
                     const isAdjusted = Math.abs(parseFloat(deltaPercent)) > 5;

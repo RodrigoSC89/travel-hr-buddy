@@ -20,7 +20,7 @@ import { PreOVIDChapterTabs, ChapterProgress } from './PreOVIDChapterTabs';
 import { useOVIDInspection, OVIDAnswer } from '@/hooks/useOVIDInspection';
 import { OVIDPhotoEvidence } from './OVIDPhotoEvidence';
 
-const CHAPTER_ICONS: Record<number, React.FC<any>> = {
+const CHAPTER_ICONS: Record<number, React.FC<{ className?: string }>> = {
   1: Ship, 2: FileText, 3: Users, 4: Navigation, 5: Shield, 6: LifeBuoy,
   7: Flame, 8: Droplets, 9: Building2, 10: Wrench, 11: Anchor, 12: Radio,
   13: Settings, 14: Eye, 15: Snowflake, 16: Plane, 17: Target,

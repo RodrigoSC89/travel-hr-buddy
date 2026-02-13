@@ -31,7 +31,7 @@ export default function ComplianceEvidencias() {
   const { data: rawEvidences, isLoading } = useComplianceEvidences();
 
   // Map hook data to display format
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- compliance evidence rows have heterogeneous schemas
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- compliance evidence rows have heterogeneous schemas requiring dynamic property access
   const displayEvidences: Evidence[] = (rawEvidences || []).map((e: any) => ({
     id: String(e.id),
     title: String(e.title || e.file_name || "Evidência"),

@@ -21,6 +21,7 @@ import { useNavigate } from "react-router-dom";
 
 // Finance Dashboard
 function FinanceDashboard() {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Supabase transaction rows rendered directly in JSX
   const [transactions, setTransactions] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();

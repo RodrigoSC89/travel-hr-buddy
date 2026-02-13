@@ -24,6 +24,7 @@ import { logger } from "@/lib/logger";
 
 export default function ComplianceDashboard() {
   const [risks, setRisks] = useState<RiskScore[]>([]);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- compliance summary has dynamic AI-generated shape
   const [summary, setSummary] = useState<any>(null);
   const [loading, setLoading] = useState(true);
   const [lastUpdate, setLastUpdate] = useState<Date>(new Date());

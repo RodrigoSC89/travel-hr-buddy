@@ -32,6 +32,7 @@ import { logger } from '@/lib/logger';
 export const SonarAIDashboard: React.FC = () => {
   const [events, setEvents] = useState<SonarEvent[]>([]);
   const [risks, setRisks] = useState<SonarRisk[]>([]);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- sonar statistics has dynamic aggregated shape
   const [statistics, setStatistics] = useState<any>(null);
   const [spectrogramData, setSpectrogramData] = useState<SpectrogramData | null>(null);
   const [scanning, setScanning] = useState(false);

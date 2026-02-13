@@ -18,6 +18,7 @@ import { logger } from '@/lib/logger';
 export default function SGSOSystem() {
   const [activeTab, setActiveTab] = useState("plans");
   const [showCreateDialog, setShowCreateDialog] = useState(false);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- SGSO plan has dynamic shape from Supabase
   const [selectedPlan, setSelectedPlan] = useState<any>(null);
   const [stats, setStats] = useState({
     totalPlans: 0,

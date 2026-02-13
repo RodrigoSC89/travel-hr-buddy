@@ -101,7 +101,7 @@ function ScenarioSlider({ label, value, onChange, min, max, step, unit, icon: Ic
   );
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- simulation results from Supabase have deeply dynamic shape
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- simulation results require deeply dynamic property access for JSX rendering
 function SimulationDetailView({ sim, onClose }: { sim: Record<string, any>; onClose: () => void }) {
   const scenarios = Array.isArray(sim.scenarios) ? sim.scenarios : [];
   const riskFactors = Array.isArray(sim.risk_factors) ? sim.risk_factors : [];
@@ -269,7 +269,7 @@ function SimulationDetailView({ sim, onClose }: { sim: Record<string, any>; onCl
 export function VoyageSimulatorPanel() {
   const { simulations, isLoading, createSimulation, deleteSimulation, refetch } = useVoyageSimulator();
   const [isOpen, setIsOpen] = useState(false);
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- simulation result dynamic shape
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- simulation result deeply dynamic shape for JSX rendering
   const [selectedSim, setSelectedSim] = useState<Record<string, any> | null>(null);
   const [simName, setSimName] = useState("");
   const [origin, setOrigin] = useState("");
@@ -352,7 +352,7 @@ export function VoyageSimulatorPanel() {
     await deleteSimulation.mutateAsync(id);
   };
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- simulation result dynamic shape
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- simulation result deeply dynamic shape
   const handleExport = (sim: Record<string, any>) => {
     const blob = new Blob([JSON.stringify(sim, null, 2)], { type: "application/json" });
     const url = URL.createObjectURL(blob);

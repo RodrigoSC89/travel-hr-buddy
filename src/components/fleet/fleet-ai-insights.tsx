@@ -20,9 +20,13 @@ export const FleetAIInsights = ({ vessels }: FleetAIInsightsProps) => {
     generateFleetRecommendations,
   } = useFleetAI();
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- AI prediction results have dynamic shapes per analysis type
   const [maintenancePredictions, setMaintenancePredictions] = useState<any[]>([]);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- AI route optimization results
   const [routeOptimizations, setRouteOptimizations] = useState<any[]>([]);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- AI fuel prediction results
   const [fuelPredictions, setFuelPredictions] = useState<any[]>([]);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- AI fleet recommendations aggregate
   const [recommendations, setRecommendations] = useState<any>(null);
 
   const handlePredictMaintenance = async () => {
