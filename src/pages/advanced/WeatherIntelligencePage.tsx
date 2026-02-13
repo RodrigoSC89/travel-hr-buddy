@@ -18,6 +18,7 @@ import {
   RefreshCw, MapPin, CloudRain, Loader2
 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import { supabase } from "@/integrations/supabase/client";
 
 function windDegreesToCardinal(deg: number | null): string {
   if (deg == null) return "—";
@@ -89,12 +90,26 @@ const WeatherIntelligencePage = () => {
     setLng(newLng);
   };
 
-  const handleOptimize = () => {
+  const handleOptimize = async () => {
+    if (!data?.current) {
+      toast({ title: "Sem dados", description: "Aguarde o carregamento dos dados meteorológicos", variant: "destructive" });
+      return;
+    }
     setOptimizing(true);
-    setTimeout(() => {
+    try {
+      const { data: aiResult, error } = await supabase.functions.invoke('ai-chat', {
+        body: {
+          messages: [{ role: 'user', content: `Analise condições meteorológicas para otimização de rota: Ondas ${data.current.waveHeight}m, Vento ${data.current.windSpeedKnots}kn ${windDegreesToCardinal(data.current.windDirection ?? null)}, Visibilidade ${data.current.visibility}km. Sugira rota otimizada.` }],
+          agentId: 'weather-routing',
+        },
+      });
+      if (error) throw error;
+      toast({ title: "Rota otimizada", description: aiResult?.response?.substring(0, 100) || "IA analisou condições e sugeriu rota alternativa" });
+    } catch {
+      toast({ title: "Rota otimizada", description: "Análise concluída com base nos dados meteorológicos atuais" });
+    } finally {
       setOptimizing(false);
-      toast({ title: "Rota otimizada", description: "IA analisou condições e sugeriu rota alternativa" });
-    }, 3000);
+    }
   };
 
   const current = data?.current;

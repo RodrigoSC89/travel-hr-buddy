@@ -24,6 +24,7 @@ import {
   Loader2
 } from "lucide-react";
 import { useCrewRealData } from "@/hooks/useCrewRealData";
+import { supabase } from "@/integrations/supabase/client";
 
 interface Employee {
   id: string;
@@ -77,23 +78,50 @@ export const EmployeeManagement = () => {
     }));
   }, [data?.crew]);
 
-  const handleCreateEmployee = () => {
+  const handleCreateEmployee = async () => {
     if (!newEmployee.name || !newEmployee.position || !newEmployee.department) {
       toast({ title: "Erro", description: "Preencha todos os campos obrigatórios", variant: "destructive" });
       return;
     }
-    toast({ title: "Funcionário criado", description: `${newEmployee.name} foi adicionado ao sistema` });
-    setIsCreatingEmployee(false);
-    setNewEmployee({ name: "", position: "", department: "", email: "", phone: "", location: "", status: "active", certifications: [], rating: 4.0, salary: 0 });
+    try {
+      const { error } = await supabase.from("crew_members").insert({
+        full_name: newEmployee.name,
+        position: newEmployee.position,
+        nationality: newEmployee.location || "BR",
+        employee_id: `EMP-${Date.now().toString(36).toUpperCase()}`,
+        status: "active",
+        email: newEmployee.email || null,
+        phone: newEmployee.phone || null,
+      });
+      if (error) throw error;
+      toast({ title: "Funcionário criado", description: `${newEmployee.name} foi adicionado ao sistema` });
+      setIsCreatingEmployee(false);
+      setNewEmployee({ name: "", position: "", department: "", email: "", phone: "", location: "", status: "active", certifications: [], rating: 4.0, salary: 0 });
+    } catch {
+      toast({ title: "Erro", description: "Falha ao criar funcionário", variant: "destructive" });
+    }
   };
 
-  const handleRemoveEmployee = (id: string) => {
+  const handleRemoveEmployee = async (id: string) => {
     const employee = employees.find(e => e.id === id);
-    toast({ title: "Funcionário removido", description: `${employee?.name} foi removido do sistema` });
+    try {
+      const { error } = await supabase.from("crew_members").update({ status: "inactive" }).eq("id", id);
+      if (error) throw error;
+      toast({ title: "Funcionário removido", description: `${employee?.name} foi desativado do sistema` });
+    } catch {
+      toast({ title: "Erro", description: "Falha ao remover funcionário", variant: "destructive" });
+    }
   };
 
-  const handleStatusChange = (employeeId: string, newStatus: Employee["status"]) => {
-    toast({ title: "Status atualizado", description: "Status do funcionário foi alterado com sucesso" });
+  const handleStatusChange = async (employeeId: string, newStatus: Employee["status"]) => {
+    const statusMap: Record<string, string> = { active: "active", vacation: "on_leave", travel: "traveling", inactive: "inactive" };
+    try {
+      const { error } = await supabase.from("crew_members").update({ status: statusMap[newStatus] || newStatus }).eq("id", employeeId);
+      if (error) throw error;
+      toast({ title: "Status atualizado", description: "Status do funcionário foi alterado com sucesso" });
+    } catch {
+      toast({ title: "Erro", description: "Falha ao atualizar status", variant: "destructive" });
+    }
   };
 
   const filteredEmployees = employees.filter(employee => {

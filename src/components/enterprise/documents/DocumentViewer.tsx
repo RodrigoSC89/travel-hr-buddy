@@ -230,10 +230,10 @@ export function DocumentViewer() {
                   <div className="flex items-center gap-4" onClick={(e) => e.stopPropagation()}>
                     <div className="text-right text-sm"><p className="text-muted-foreground">{doc.size}</p><p className="text-xs text-muted-foreground">v{doc.version}</p></div>
                     <div className="flex gap-1">
-                      <Button variant="ghost" size="sm" onClick={() => handleView(doc)} title="Visualizar"><Eye className="h-4 w-4" /></Button>
-                      <Button variant="ghost" size="sm" onClick={() => handleDownload(doc)} title="Baixar"><Download className="h-4 w-4" /></Button>
-                      <Button variant="ghost" size="sm" onClick={() => handleVersionHistory(doc)} title="Histórico"><History className="h-4 w-4" /></Button>
-                      <Button variant="ghost" size="sm" onClick={() => handleShare(doc)} title="Compartilhar"><Share2 className="h-4 w-4" /></Button>
+                      <Button variant="ghost" size="sm" onClick={() => handleView(doc)} title="Visualizar" aria-label="Visualizar documento"><Eye className="h-4 w-4" /></Button>
+                      <Button variant="ghost" size="sm" onClick={() => handleDownload(doc)} title="Baixar" aria-label="Baixar documento"><Download className="h-4 w-4" /></Button>
+                      <Button variant="ghost" size="sm" onClick={() => handleVersionHistory(doc)} title="Histórico" aria-label="Ver histórico de versões"><History className="h-4 w-4" /></Button>
+                      <Button variant="ghost" size="sm" onClick={() => handleShare(doc)} title="Compartilhar" aria-label="Compartilhar documento"><Share2 className="h-4 w-4" /></Button>
                     </div>
                   </div>
                 </div>

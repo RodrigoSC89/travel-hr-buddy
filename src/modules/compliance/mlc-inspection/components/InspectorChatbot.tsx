@@ -38,16 +38,14 @@ export function InspectorChatbot() {
     setInput("");
     setLoading(true);
 
-    // Simulate AI response based on knowledge base
-    setTimeout(() => {
-      const response = findRelevantResponse(input);
-      const assistantMessage: Message = {
-        role: "assistant",
-        content: response
-      };
-      setMessages(prev => [...prev, assistantMessage]);
-      setLoading(false);
-    }, 1000);
+    // Use local knowledge base for instant response
+    const response = findRelevantResponse(input);
+    const assistantMessage: Message = {
+      role: "assistant",
+      content: response
+    };
+    setMessages(prev => [...prev, assistantMessage]);
+    setLoading(false);
   };
 
   const findRelevantResponse = (query: string): string => {
@@ -132,7 +130,7 @@ export function InspectorChatbot() {
               onKeyPress={handleKeyPress}
               disabled={loading}
             />
-            <Button onClick={handleSend} disabled={loading || !input.trim()}>
+            <Button onClick={handleSend} disabled={loading || !input.trim()} aria-label="Enviar mensagem">
               <Send className="h-4 w-4" />
             </Button>
           </div>
