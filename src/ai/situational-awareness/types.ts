@@ -92,8 +92,7 @@ export interface SituationalState {
   modules: Record<ModuleSource, {
     status: "healthy" | "degraded" | "failed" | "unknown";
     lastUpdate: number;
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any -- module metrics shape varies
-    metrics: Record<string, any>;
+    metrics: Record<string, unknown>;
   }>;
   activeAlerts: PreventiveAlert[];
   recentInsights: SituationalInsight[];

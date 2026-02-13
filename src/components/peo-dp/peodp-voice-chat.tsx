@@ -61,7 +61,7 @@ export function PeodpVoiceChat() {
   // Initialize speech recognition
   useEffect(() => {
     if (typeof window !== 'undefined' && ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window)) {
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Web Speech API vendor-prefixed
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Web Speech API vendor-prefixed constructor
       const SpeechRecognition = (window as any).webkitSpeechRecognition || (window as any).SpeechRecognition;
       const recognition = new SpeechRecognition();
       recognitionRef.current = recognition;

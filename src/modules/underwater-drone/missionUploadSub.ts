@@ -64,7 +64,7 @@ class MissionUploadSub {
         : missionJson;
 
       // Validate mission structure
-      const validation = this.validateMission(mission);
+      const validation = this.validateMission(mission as unknown as Record<string, unknown>);
       if (!validation.valid) {
         return { success: false, error: validation.error };
       }
@@ -96,41 +96,42 @@ class MissionUploadSub {
   /**
    * Validate mission structure
    */
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- dynamic mission JSON input
-  private validateMission(mission: any): { valid: boolean; error?: string } {
+  private validateMission(mission: Record<string, unknown>): { valid: boolean; error?: string } {
     if (!mission.id || !mission.name) {
       return { valid: false, error: "Mission must have id and name" };
     }
 
-    if (!Array.isArray(mission.waypoints) || mission.waypoints.length === 0) {
+    const waypoints = mission.waypoints as Record<string, unknown>[] | undefined;
+    if (!Array.isArray(waypoints) || waypoints.length === 0) {
       return { valid: false, error: "Mission must have at least one waypoint" };
     }
 
     // Validate waypoints
-    for (let i = 0; i < mission.waypoints.length; i++) {
-      const wp = mission.waypoints[i];
+    for (let i = 0; i < waypoints.length; i++) {
+      const wp = waypoints[i] as Record<string, unknown>;
       if (!wp.id || !wp.position) {
         return { valid: false, error: `Waypoint ${i + 1} is invalid` };
       }
 
+      const pos = wp.position as Record<string, unknown>;
       if (
-        typeof wp.position.lat !== "number" ||
-        typeof wp.position.lon !== "number" ||
-        typeof wp.position.depth !== "number"
+        typeof pos.lat !== "number" ||
+        typeof pos.lon !== "number" ||
+        typeof pos.depth !== "number"
       ) {
         return { valid: false, error: `Waypoint ${i + 1} has invalid position` };
       }
 
       // Validate coordinates
-      if (wp.position.lat < -90 || wp.position.lat > 90) {
+      if (Number(pos.lat) < -90 || Number(pos.lat) > 90) {
         return { valid: false, error: `Waypoint ${i + 1} has invalid latitude` };
       }
 
-      if (wp.position.lon < -180 || wp.position.lon > 180) {
+      if (Number(pos.lon) < -180 || Number(pos.lon) > 180) {
         return { valid: false, error: `Waypoint ${i + 1} has invalid longitude` };
       }
 
-      if (wp.position.depth < 0 || wp.position.depth > 1000) {
+      if (Number(pos.depth) < 0 || Number(pos.depth) > 1000) {
         return { valid: false, error: `Waypoint ${i + 1} has invalid depth (must be 0-1000m)` };
       }
     }

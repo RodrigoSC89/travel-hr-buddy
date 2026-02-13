@@ -80,29 +80,28 @@ export const CAPAManager: React.FC = () => {
 
       if (error || !data) return [];
 
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any -- corrective_actions dynamic Supabase row with flexible fields
-      return data.map((d: any): CAPA => {
-        const prazo = d.due_date || d.target_date || new Date().toISOString();
+      return data.map((d: Record<string, unknown>): CAPA => {
+        const prazo = String(d.due_date || d.target_date || new Date().toISOString());
         const diasRestantes = Math.ceil((new Date(prazo).getTime() - Date.now()) / (1000 * 60 * 60 * 24));
         const statusMap: Record<string, CAPA['status']> = {
           open: 'planejada', in_progress: 'executando', closed: 'concluida',
           completed: 'concluida', rejected: 'rejeitada', pending: 'aguardando_validacao'
         };
         return {
-          id: d.id,
-          nc_number: d.nc_id || d.reference_number || `CA-${d.id.slice(0, 6)}`,
-          nc_title: d.title || d.description?.slice(0, 60) || 'Ação Corretiva',
-          practice_id: d.practice_id || 0,
-          status: statusMap[d.status] || 'planejada',
-          acao_corretiva: d.description || d.corrective_action || '',
-          acao_preventiva: d.preventive_action,
-          responsavel: d.assigned_to || d.responsible || 'Não atribuído',
+          id: String(d.id),
+          nc_number: String(d.nc_id || d.reference_number || `CA-${String(d.id).slice(0, 6)}`),
+          nc_title: String(d.title || (d.description as string)?.slice(0, 60) || 'Ação Corretiva'),
+          practice_id: Number(d.practice_id || 0),
+          status: statusMap[String(d.status)] || 'planejada',
+          acao_corretiva: String(d.description || d.corrective_action || ''),
+          acao_preventiva: d.preventive_action ? String(d.preventive_action) : undefined,
+          responsavel: String(d.assigned_to || d.responsible || 'Não atribuído'),
           prazo: prazo,
-          created_at: d.created_at,
-          sla_dias: d.sla_days || 60,
+          created_at: String(d.created_at),
+          sla_dias: Number(d.sla_days || 60),
           dias_restantes: diasRestantes,
           eficacia: d.effectiveness as CAPA['eficacia'],
-          completion_percentage: d.completion_percentage || (d.status === 'completed' || d.status === 'closed' ? 100 : d.status === 'in_progress' ? 50 : 0),
+          completion_percentage: Number(d.completion_percentage || (d.status === 'completed' || d.status === 'closed' ? 100 : d.status === 'in_progress' ? 50 : 0)),
         };
       });
     },

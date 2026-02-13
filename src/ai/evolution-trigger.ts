@@ -77,10 +77,10 @@ class EvolutionTrigger {
       const config = autoTuningEngine.getConfig();
 
       // Calculate performance score
-      const performanceScore = this.calculatePerformanceScore(metrics, config);
+      const performanceScore = this.calculatePerformanceScore(metrics, config as unknown as Record<string, unknown>);
 
       // Detect anomalies
-      const anomalies = this.detectAnomalies(metrics, config);
+      const anomalies = this.detectAnomalies(metrics, config as unknown as Record<string, unknown>);
 
       // Generate recommendations
       const recommendations = this.generateRecommendations(metrics, anomalies);
@@ -122,8 +122,7 @@ class EvolutionTrigger {
   /**
    * Calculate overall performance score
    */
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- AutoTuningConfig dynamic thresholds
-  private calculatePerformanceScore(metrics: TuningMetrics, config: any): number {
+  private calculatePerformanceScore(metrics: TuningMetrics, config: Record<string, unknown>): number {
     const accuracyScore = metrics.accuracy_rate;
     const confidenceScore = metrics.avg_confidence;
     const speedScore = Math.max(0, 1 - metrics.avg_response_time / 3000);
@@ -138,33 +137,34 @@ class EvolutionTrigger {
   /**
    * Detect performance anomalies
    */
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- AutoTuningConfig dynamic thresholds
-  private detectAnomalies(metrics: TuningMetrics, config: any): string[] {
+  private detectAnomalies(metrics: TuningMetrics, config: Record<string, unknown>): string[] {
     const anomalies: string[] = [];
 
+    const thresholds = config.thresholds as Record<string, number> | undefined;
+
     // Check if accuracy is below target
-    if (metrics.accuracy_rate < config.thresholds.accuracy_target) {
+    if (thresholds && metrics.accuracy_rate < (thresholds.accuracy_target ?? 0)) {
       anomalies.push(
         `Low accuracy: ${(metrics.accuracy_rate * 100).toFixed(1)}% (target: ${
-          (config.thresholds.accuracy_target * 100).toFixed(1)
+          ((thresholds.accuracy_target ?? 0) * 100).toFixed(1)
         }%)`
       );
     }
 
     // Check if confidence is too low
-    if (metrics.avg_confidence < config.thresholds.confidence_min) {
+    if (thresholds && metrics.avg_confidence < (thresholds.confidence_min ?? 0)) {
       anomalies.push(
         `Low confidence: ${(metrics.avg_confidence * 100).toFixed(1)}% (min: ${
-          (config.thresholds.confidence_min * 100).toFixed(1)
+          ((thresholds.confidence_min ?? 0) * 100).toFixed(1)
         }%)`
       );
     }
 
     // Check if response time is too high
-    if (metrics.avg_response_time > config.thresholds.response_time_max) {
+    if (thresholds && metrics.avg_response_time > (thresholds.response_time_max ?? Infinity)) {
       anomalies.push(
         `Slow response: ${metrics.avg_response_time.toFixed(0)}ms (max: ${
-          config.thresholds.response_time_max
+          thresholds.response_time_max
         }ms)`
       );
     }

@@ -497,10 +497,8 @@ export class SelfEvolutionModel {
   private async getLatestMutationLog(functionId: string): Promise<MutationLog | null> {
     try {
       // behavior_mutation_log table is optional
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any -- behavior_mutation_log not in generated types
-      const supabaseQuery: any = supabase;
-      const { data, error } = await supabaseQuery
-        .from("behavior_mutation_log")
+      const supabaseQuery = supabase.from as Function;
+      const { data, error } = await supabaseQuery("behavior_mutation_log")
         .select("*")
         .eq("function_id", functionId)
         .order("timestamp", { ascending: false })

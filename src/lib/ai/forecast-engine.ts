@@ -4,9 +4,9 @@
  */
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any -- ONNX runtime typing is complex
-let ort: Record<string, any> | null = null;
+let ort: any = null;
 const loadORT = async () => {
-  if (!ort) { ort = await import("onnxruntime-web") as Record<string, any>; }
+  if (!ort) { ort = await import("onnxruntime-web"); }
   return ort;
 };
 import { logger } from "@/lib/logger";

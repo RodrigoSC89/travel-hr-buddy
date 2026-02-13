@@ -10,11 +10,11 @@
  * @version 1.0.0 (Patch 21)
  */
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- ONNX runtime typing is complex, InferenceSession/Tensor APIs accessed dynamically
-let ort: { InferenceSession: any; Tensor: any } | null = null;
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- ONNX runtime typing is complex
+let ort: any = null;
 const loadORT = async () => {
   if (!ort) {
-    ort = await import("onnxruntime-web") as unknown as { InferenceSession: any; Tensor: any };
+    ort = await import("onnxruntime-web");
   }
   return ort;
 };

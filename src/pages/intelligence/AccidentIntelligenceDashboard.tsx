@@ -496,8 +496,8 @@ export default function AccidentIntelligenceDashboard() {
                         backgroundColor: "hsl(var(--card))", 
                         border: "1px solid hsl(var(--border))" 
                       }}
-                      // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Recharts Tooltip formatter signature requires any
-                      formatter={(value: number, name: string, props: Record<string, any>) => [
+                      // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Recharts Tooltip formatter signature
+                      formatter={(_value: number, _name: string, props: any) => [
                         `${props.payload.incidents} incidentes`,
                         props.payload.location
                       ]}
