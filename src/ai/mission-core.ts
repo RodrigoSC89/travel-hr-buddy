@@ -34,7 +34,7 @@ export interface IncidentHistory {
   resolution: string;
   outcome: "resolved" | "escalated" | "pending";
   lessons_learned: string[];
-  metadata: Record<string, any>;
+  metadata: Record<string, unknown>;
 }
 
 export interface WeatherPattern {

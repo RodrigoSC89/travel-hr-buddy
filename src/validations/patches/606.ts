@@ -12,7 +12,7 @@ export const patch606Validator = createValidator(
   "ai-visual",
   async (): Promise<ValidationResult> => {
     const tests: Record<string, boolean> = {};
-    const metadata: Record<string, any> = {};
+    const metadata: Record<string, unknown> = {};
 
     try {
       // Test 1: IA detectou padrões em dashboards/mapas

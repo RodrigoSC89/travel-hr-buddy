@@ -69,13 +69,12 @@ const CrewTraining = () => {
   const loadTrainingRecords = async () => {
     try {
       setLoading(true);
-      const { data, error } = await supabase
-        .from("training_expiry_status" as any)
+      const { data, error } = await (supabase.from as Function)("training_expiry_status")
         .select("*");
 
       if (error) throw error;
 
-      setRecords((data || []) as any);
+      setRecords((data || []) as TrainingRecord[]);
     } catch (error) {
       logger.error("Error loading training records:", error);
       toast({

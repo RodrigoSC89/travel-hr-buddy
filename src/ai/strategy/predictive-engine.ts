@@ -27,10 +27,10 @@ export interface Signal {
   id: string;
   source: SignalSource;
   type: string;
-  data: Record<string, any>;
+  data: Record<string, unknown>;
   priority: number; // 0-100
   timestamp: Date;
-  metadata?: Record<string, any>;
+  metadata?: Record<string, unknown>;
 }
 
 export interface Strategy {

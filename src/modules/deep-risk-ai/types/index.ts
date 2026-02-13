@@ -10,7 +10,7 @@ export interface RiskPrediction {
   confidence: number;
   description: string;
   predictedAt: string;
-  metadata: Record<string, any>;
+  metadata: Record<string, unknown>;
 }
 
 export interface Anomaly {
@@ -22,5 +22,5 @@ export interface Anomaly {
   value: number;
   expectedValue: number;
   deviation: number;
-  metadata: Record<string, any>;
+  metadata: Record<string, unknown>;
 }

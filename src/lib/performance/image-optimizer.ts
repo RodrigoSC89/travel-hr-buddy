@@ -178,7 +178,7 @@ export const createBlurPlaceholder = async (
  * Adaptive image quality based on network
  */
 export const getAdaptiveQuality = (): keyof typeof QUALITY_PRESETS => {
-  const conn = (navigator as any).connection;
+  const conn = (navigator as unknown as { connection?: { saveData?: boolean; effectiveType?: string } }).connection;
   
   if (!conn) return 'medium';
   

@@ -15,8 +15,8 @@ export type DecisionPriority = "low" | "medium" | "high" | "critical";
 export interface DecisionContext {
   moduleName: string;
   decisionType: string;
-  contextData: Record<string, any>;
-  constraints?: Record<string, any>;
+  contextData: Record<string, unknown>;
+  constraints?: Record<string, unknown>;
   dependencies?: string[];
 }
 

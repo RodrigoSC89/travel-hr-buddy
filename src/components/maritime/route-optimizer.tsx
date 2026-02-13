@@ -146,7 +146,7 @@ export const RealTimeRouteOptimizer: React.FC = () => {
     }
   ]);
 
-  const getStatusColor = (status: string) => {
+  const getStatusColor = (status: string): "default" | "secondary" | "outline" | "destructive" => {
     switch (status) {
     case "active": return "default";
     case "pending": return "secondary";
@@ -246,7 +246,7 @@ export const RealTimeRouteOptimizer: React.FC = () => {
                   <div className="space-y-2">
                     <div className="flex items-center gap-2">
                       <Badge variant="outline">{opt.vessel}</Badge>
-                      <Badge variant={getStatusColor(opt.status) as any}>
+                      <Badge variant={getStatusColor(opt.status)}>
                         {opt.status.toUpperCase()}
                       </Badge>
                     </div>

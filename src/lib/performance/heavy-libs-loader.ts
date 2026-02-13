@@ -129,7 +129,7 @@ export const isLibLoaded = (key: string): boolean => !!loadedLibs[key];
 /**
  * Preload libraries in background (useful for anticipated usage)
  */
-export const preloadLibs = async (libs: Array<() => Promise<any>>): Promise<void> => {
+export const preloadLibs = async (libs: Array<() => Promise<unknown>>): Promise<void> => {
   await Promise.allSettled(libs.map(loader => loader()));
 };
 

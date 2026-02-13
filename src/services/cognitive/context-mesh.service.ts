@@ -12,7 +12,7 @@ export interface ContextMessage {
   id?: string;
   moduleName: string;
   contextType: ContextType;
-  contextData: Record<string, any>;
+  contextData: Record<string, unknown>;
   timestamp?: Date;
   source: string;
   syncStatus?: SyncStatus;

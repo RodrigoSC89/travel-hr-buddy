@@ -360,7 +360,7 @@ export function startMetricCollection(intervalMs: number = 30000): () => void {
 
     // Memory usage (browser)
     if ('memory' in performance) {
-      const memory = (performance as any).memory;
+      const memory = (performance as unknown as { memory?: { usedJSHeapSize: number; jsHeapSizeLimit: number } }).memory;
       if (memory) {
         metrics.push({
           name: 'memory_usage',

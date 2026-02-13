@@ -142,7 +142,7 @@ export const FormField = forwardRef<HTMLInputElement, FormFieldProps>(({
             )}
             aria-invalid={hasError}
             aria-describedby={hasError ? `${id}-error` : helperText ? `${id}-helper` : undefined}
-            {...(inputProps as any)}
+            {...(inputProps as React.TextareaHTMLAttributes<HTMLTextAreaElement>)}
           />
         ) : (
           <Input

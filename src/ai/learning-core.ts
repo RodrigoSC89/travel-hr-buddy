@@ -122,7 +122,7 @@ class LearningCore {
   async trackSystemEvent(
     eventName: string,
     moduleName: string,
-    eventData: Record<string, any>,
+    eventData: Record<string, unknown>,
     outcome?: "success" | "failure"
   ): Promise<void> {
     if (!this.config.learning_enabled) return;

@@ -188,13 +188,13 @@ export const RealTimeNotificationCenter: React.FC = () => {
       // Aqui você pode implementar diferentes tipos de ações
       switch (notification.action_type) {
       case "navigate":
-        navigate(notification.action_data.url);
+        navigate(notification.action_data?.url);
         break;
       case "download":
-        window.open(notification.action_data.downloadUrl, "_blank");
+        window.open(notification.action_data?.downloadUrl, "_blank");
         break;
       case "external_link":
-        window.open(notification.action_data.url, "_blank");
+        window.open(notification.action_data?.url, "_blank");
         break;
       default:
       }
@@ -257,7 +257,7 @@ export const RealTimeNotificationCenter: React.FC = () => {
   // Filtrar notificações
   // eslint-disable-next-line @typescript-eslint/no-explicit-any -- accepts both Notification and IntelligentNotification
   const getFilteredNotifications = (notifs: any[], isIntelligent = false) => {
-    const filtered = notifs.filter(n => {
+    const filtered = notifs.filter((n: any) => {
       const isRead = isIntelligent ? n.is_read : n.read;
       const matchesSearch = n.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
                            n.message.toLowerCase().includes(searchTerm.toLowerCase());

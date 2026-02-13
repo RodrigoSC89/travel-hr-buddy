@@ -191,7 +191,7 @@ class NetworkQualityMonitor {
     rtt: number;
     saveData: boolean;
   } {
-    const connection = (navigator as any).connection;
+    const connection = (navigator as unknown as { connection?: { effectiveType?: string; downlink?: number; rtt?: number; saveData?: boolean } }).connection;
     
     // PATCH v17 iOS PWA: Nunca usar navigator.onLine para determinar tipo
     if (!connection) {
@@ -204,7 +204,7 @@ class NetworkQualityMonitor {
     }
     
     return {
-      effectiveType: connection.effectiveType || '4g',
+      effectiveType: (connection.effectiveType as NetworkQuality['type']) || '4g',
       downlink: connection.downlink || 10,
       rtt: connection.rtt || 100,
       saveData: connection.saveData || false,
@@ -263,7 +263,7 @@ class NetworkQualityMonitor {
   }
 
   private setupEventListeners(): void {
-    const connection = (navigator as any).connection;
+    const connection = (navigator as unknown as { connection?: { addEventListener: (event: string, cb: () => void) => void } }).connection;
     
     // Connection API changes
     if (connection) {

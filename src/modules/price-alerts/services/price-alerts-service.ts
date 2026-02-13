@@ -117,7 +117,7 @@ export class PriceAlertsService {
     }
   ) {
     try {
-      const updateData: Record<string, any> = {};
+      const updateData: Record<string, unknown> = {};
       
       if (updates.currentPrice !== undefined) {
         updateData.current_price = updates.currentPrice;

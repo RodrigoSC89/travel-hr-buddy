@@ -26,7 +26,7 @@ export interface IMOAlert {
   deficiency_count?: number;
   detention_days?: number;
   source_url?: string;
-  metadata: Record<string, any>;
+  metadata: Record<string, unknown>;
   assigned_to?: string;
   acknowledged_at?: string;
   acknowledged_by?: string;
