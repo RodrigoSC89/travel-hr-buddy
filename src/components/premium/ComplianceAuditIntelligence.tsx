@@ -86,9 +86,9 @@ export default function ComplianceAuditIntelligence() {
               <div>
                 <p className="text-xs text-muted-foreground">NCs Abertas</p>
                 <p className="text-2xl font-bold">{openNCs}</p>
-                <p className="text-xs text-amber-500">Requerem ação</p>
+                <p className="text-xs text-warning">Requerem ação</p>
               </div>
-              <AlertTriangle className="h-8 w-8 text-amber-500" />
+              <AlertTriangle className="h-8 w-8 text-warning" />
             </div>
           </CardContent>
         </Card>
@@ -338,7 +338,7 @@ export default function ComplianceAuditIntelligence() {
           <Card>
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
-                <AlertTriangle className="h-5 w-5 text-amber-500" />
+                <AlertTriangle className="h-5 w-5 text-warning" />
                 Non-Conformities & CAPAs
               </CardTitle>
             </CardHeader>
@@ -422,7 +422,7 @@ export default function ComplianceAuditIntelligence() {
                       </div>
                       <div>
                         <p className="text-muted-foreground">Itens Críticos</p>
-                        <p className="font-bold text-red-500">{r.criticalItems}</p>
+                        <p className="font-bold text-destructive">{r.criticalItems}</p>
                       </div>
                     </div>
                   </div>

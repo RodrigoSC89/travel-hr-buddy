@@ -391,9 +391,9 @@ export const EnhancedReservationsDashboard: React.FC = () => {
               <CardContent>
                 <div className="space-y-2">
                   {reservations.filter(r => r.conflict_detected).map(reservation => (
-                    <div key={reservation.id} className="p-2 bg-red-50 rounded">
-                      <p className="font-medium text-red-800">{reservation.title}</p>
-                      <p className="text-sm text-red-600">
+                    <div key={reservation.id} className="p-2 bg-destructive/10 rounded">
+                      <p className="font-medium text-destructive">{reservation.title}</p>
+                      <p className="text-sm text-destructive/80">
                         {new Date(reservation.start_date).toLocaleDateString("pt-BR")} - 
                         {new Date(reservation.end_date).toLocaleDateString("pt-BR")}
                       </p>

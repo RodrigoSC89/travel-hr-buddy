@@ -82,9 +82,9 @@ const certifications = [
 export const GovernanceESGPanel: React.FC = () => {
   const getRiskBadge = (level: string) => {
     const colors: Record<string, string> = {
-      high: "bg-red-500",
-      medium: "bg-yellow-500",
-      low: "bg-green-500"
+      high: "bg-destructive",
+      medium: "bg-warning",
+      low: "bg-success"
     };
     return <Badge className={`${colors[level]} text-white text-xs`}>{level}</Badge>;
   };
@@ -93,21 +93,21 @@ export const GovernanceESGPanel: React.FC = () => {
     <div className="space-y-6">
       {/* KPI Cards */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
-        <Card className="bg-gradient-to-br from-blue-500/10 to-blue-600/10 border-blue-500/20">
+        <Card className="bg-gradient-to-br from-info/10 to-info/5 border-info/20">
           <CardContent className="p-4">
             <div className="flex items-center justify-between mb-2">
-              <Building2 className="h-5 w-5 text-blue-600" />
+              <Building2 className="h-5 w-5 text-info" />
             </div>
             <p className="text-2xl font-bold">56%</p>
             <p className="text-sm text-muted-foreground">Conselho Independente</p>
           </CardContent>
         </Card>
 
-        <Card className="bg-gradient-to-br from-green-500/10 to-green-600/10 border-green-500/20">
+        <Card className="bg-gradient-to-br from-success/10 to-success/5 border-success/20">
           <CardContent className="p-4">
             <div className="flex items-center justify-between mb-2">
-              <Shield className="h-5 w-5 text-green-600" />
-              <Badge className="bg-green-500">100%</Badge>
+              <Shield className="h-5 w-5 text-success" />
+              <Badge className="bg-success">100%</Badge>
             </div>
             <p className="text-2xl font-bold">0</p>
             <p className="text-sm text-muted-foreground">Detenções PSC</p>

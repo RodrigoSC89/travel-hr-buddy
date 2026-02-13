@@ -443,19 +443,19 @@ export function CertificateManager() {
         </Card>
         <Card>
           <CardContent className="pt-4">
-            <div className="text-2xl font-bold text-green-600">{stats.valid}</div>
+            <div className="text-2xl font-bold text-success">{stats.valid}</div>
             <p className="text-sm text-muted-foreground">Válidos</p>
           </CardContent>
         </Card>
         <Card>
           <CardContent className="pt-4">
-            <div className="text-2xl font-bold text-yellow-600">{stats.expiring}</div>
+            <div className="text-2xl font-bold text-warning">{stats.expiring}</div>
             <p className="text-sm text-muted-foreground">Vencendo</p>
           </CardContent>
         </Card>
         <Card>
           <CardContent className="pt-4">
-            <div className="text-2xl font-bold text-red-600">{stats.expired}</div>
+            <div className="text-2xl font-bold text-destructive">{stats.expired}</div>
             <p className="text-sm text-muted-foreground">Vencidos</p>
           </CardContent>
         </Card>

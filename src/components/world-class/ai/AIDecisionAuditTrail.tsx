@@ -59,9 +59,9 @@ export function AIDecisionAuditTrail() {
 
   const statusIcon = (status: string) => {
     switch (status) {
-      case 'approved': case 'executed': return <CheckCircle2 className="h-4 w-4 text-emerald-500" />;
+      case 'approved': case 'executed': return <CheckCircle2 className="h-4 w-4 text-success" />;
       case 'rejected': return <XCircle className="h-4 w-4 text-destructive" />;
-      case 'pending': return <Clock className="h-4 w-4 text-amber-500" />;
+      case 'pending': return <Clock className="h-4 w-4 text-warning" />;
       default: return <AlertTriangle className="h-4 w-4 text-muted-foreground" />;
     }
   };
@@ -147,8 +147,8 @@ export function AIDecisionAuditTrail() {
                   <div className="flex items-center gap-2">
                     <Badge variant="outline" className="text-xs">{d.type}</Badge>
                     <Badge className={`text-xs ${
-                      d.confidence >= 0.9 ? 'bg-emerald-500/10 text-emerald-600' :
-                      d.confidence >= 0.7 ? 'bg-amber-500/10 text-amber-600' :
+                      d.confidence >= 0.9 ? 'bg-success/10 text-success' :
+                      d.confidence >= 0.7 ? 'bg-warning/10 text-warning' :
                       'bg-destructive/10 text-destructive'
                     } border-0`}>
                       {(d.confidence * 100).toFixed(0)}% confiança
