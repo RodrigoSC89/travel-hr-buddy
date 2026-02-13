@@ -69,14 +69,22 @@ const isSlowConnection = (): boolean => {
 const customFetch = async (input: RequestInfo | URL, init?: RequestInit): Promise<Response> => {
   const url = typeof input === 'string' ? input : input instanceof URL ? input.toString() : (input as Request).url;
   
-  // Auth requests (login, signup, token refresh) MUST NOT be aborted by timeout
-  // These are critical and should be allowed to complete naturally
+  // Auth requests: use generous timeout (30s) but still have one
+  // Without timeout, broken connections hang for 75+ seconds
   const isAuthRequest = url.includes('/auth/v1/');
   
   if (isAuthRequest) {
-    // Use native fetch for auth - no AbortController, no retry overhead
-    // Let the browser handle the timeout naturally (typically 60-120s)
-    return fetch(input, init);
+    const controller = new AbortController();
+    const authTimeout = setTimeout(() => controller.abort(), 30000);
+    const { signal: _stripped, ...cleanInit } = init || {};
+    try {
+      const response = await fetch(input, { ...cleanInit, signal: controller.signal } as RequestInit);
+      clearTimeout(authTimeout);
+      return response;
+    } catch (error) {
+      clearTimeout(authTimeout);
+      throw error;
+    }
   }
   
   // Non-auth requests: use retry with conservative timeouts
