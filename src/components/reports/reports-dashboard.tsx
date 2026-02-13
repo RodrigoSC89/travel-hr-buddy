@@ -3,7 +3,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { FileText, Brain, TrendingUp, Download } from "lucide-react";
 import AIReportGenerator from "./AIReportGenerator";
-import DocumentProcessor from "../intelligence/DocumentProcessor";
+const DocumentProcessor = () => <div className="text-center py-12 text-muted-foreground">Processador de documentos não disponível.</div>;
 
 const ReportsDashboard = () => {
   const [activeReport, setActiveReport] = useState<unknown>(null);
