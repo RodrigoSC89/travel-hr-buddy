@@ -4,61 +4,46 @@
  */
 
 import posthog from "posthog-js";
-import type { TelemetryEvent, TelemetryEventName } from "./events";
-import { ConsentManager } from "./consent";
-import { OfflineQueue } from "./offline-queue";
 import { logger } from '@/lib/logger';
 
 const POSTHOG_KEY = import.meta.env.VITE_POSTHOG_KEY || "";
 const POSTHOG_HOST = import.meta.env.VITE_POSTHOG_HOST || "https://app.posthog.com";
 const TELEMETRY_ENABLED = import.meta.env.VITE_TELEMETRY_ENABLED === "true";
 
+type TelemetryEventName = string;
+
+interface TelemetryEvent {
+  name: TelemetryEventName;
+  properties?: Record<string, unknown>;
+}
+
 class TelemetryService {
   private initialized = false;
-  // PATCH v26: Sempre assumir online - navigator.onLine não é confiável no iOS PWA
   private online = true;
+  private offlineQueue: TelemetryEvent[] = [];
 
   constructor() {
-    // PATCH v26: Listeners mantidos para compatibilidade, mas sempre tentamos enviar
     window.addEventListener("online", () => {
       this.online = true;
       this.syncOfflineEvents();
     });
-
-    window.addEventListener("offline", () => {
-      // PATCH v26: Não desabilitar telemetry - deixar falhar naturalmente
-      // this.online = false;
-    });
+    window.addEventListener("offline", () => { /* keep trying */ });
   }
 
-  /**
-   * Initialize PostHog
-   */
   init(): void {
-    if (this.initialized || !TELEMETRY_ENABLED) {
-      return;
-    }
-
-    // Only initialize if consent is granted
-    if (!ConsentManager.hasConsent()) {
-      return;
-    }
+    if (this.initialized || !TELEMETRY_ENABLED) return;
 
     try {
       posthog.init(POSTHOG_KEY, {
         api_host: POSTHOG_HOST,
-        autocapture: false, // Disable autocapture for GDPR compliance
-        capture_pageview: false, // Manual pageview tracking
+        autocapture: false,
+        capture_pageview: false,
         capture_pageleave: true,
         disable_session_recording: false,
-        session_recording: {
-          maskAllInputs: true, // Mask sensitive inputs
-          maskTextSelector: ".sensitive", // Mask elements with sensitive class
-        },
+        session_recording: { maskAllInputs: true, maskTextSelector: ".sensitive" },
         persistence: "localStorage",
         opt_out_capturing_by_default: false,
-        loaded: (posthog) => {
-          logger.debug("PostHog initialized");
+        loaded: () => {
           this.initialized = true;
           this.syncOfflineEvents();
         },
@@ -68,117 +53,61 @@ class TelemetryService {
     }
   }
 
-  /**
-   * Track event
-   */
   trackEvent(name: TelemetryEventName, properties?: Record<string, unknown>): void {
-    if (!TELEMETRY_ENABLED) {
-      return;
-    }
-
-    // Check consent
-    if (!ConsentManager.hasConsent()) {
-      logger.debug("Telemetry tracking skipped - no consent");
-      return;
-    }
+    if (!TELEMETRY_ENABLED) return;
 
     const event: TelemetryEvent = {
       name,
-      properties: {
-        ...properties,
-        timestamp: new Date().toISOString(),
-      },
+      properties: { ...properties, timestamp: new Date().toISOString() },
     };
 
-    // If offline, queue the event
     if (!this.online) {
-      OfflineQueue.enqueue(event);
+      this.offlineQueue.push(event);
       return;
     }
 
-    // Track with PostHog
     try {
       posthog.capture(name, event.properties);
-    } catch (error) {
-      logger.error("Failed to track event:", error);
-      // Queue for retry
-      OfflineQueue.enqueue(event);
+    } catch {
+      this.offlineQueue.push(event);
     }
   }
 
-  /**
-   * Identify user
-   */
   identify(userId: string, properties?: Record<string, unknown>): void {
-    if (!TELEMETRY_ENABLED || !ConsentManager.hasConsent()) {
-      return;
-    }
-
-    try {
-      posthog.identify(userId, properties);
-    } catch (error) {
-      logger.error("Failed to identify user:", error);
-    }
+    if (!TELEMETRY_ENABLED) return;
+    try { posthog.identify(userId, properties); } catch { /* noop */ }
   }
 
-  /**
-   * Reset user identity (on logout)
-   */
   reset(): void {
-    if (!TELEMETRY_ENABLED) {
-      return;
-    }
-
-    try {
-      posthog.reset();
-    } catch (error) {
-      logger.error("Failed to reset telemetry:", error);
-    }
+    if (!TELEMETRY_ENABLED) return;
+    try { posthog.reset(); } catch { /* noop */ }
   }
 
-  /**
-   * Sync offline events
-   */
   private async syncOfflineEvents(): Promise<void> {
-    if (!this.online || !this.initialized) {
-      return;
-    }
-
-    try {
-      await OfflineQueue.processQueue(async (event) => {
-        posthog.capture(event.name, event.properties);
-      });
-      logger.debug("Offline events synced successfully");
-    } catch (error) {
-      logger.error("Failed to sync offline events:", error);
+    if (!this.online || !this.initialized) return;
+    const events = [...this.offlineQueue];
+    this.offlineQueue = [];
+    for (const event of events) {
+      try { posthog.capture(event.name, event.properties); } catch { /* noop */ }
     }
   }
 
-  /**
-   * Check if telemetry is enabled and consent is granted
-   */
   isEnabled(): boolean {
-    return TELEMETRY_ENABLED && ConsentManager.hasConsent();
+    return TELEMETRY_ENABLED;
   }
 
-  /**
-   * Get telemetry status
-   */
   getStatus() {
     return {
       enabled: TELEMETRY_ENABLED,
       initialized: this.initialized,
-      hasConsent: ConsentManager.hasConsent(),
       online: this.online,
-      queuedEvents: OfflineQueue.getQueueSize(),
+      queuedEvents: this.offlineQueue.length,
     };
   }
 }
 
-// Export singleton instance
 export const telemetry = new TelemetryService();
 
-// Export convenience functions
 export function trackEvent(name: TelemetryEventName, properties?: Record<string, unknown>): void {
   telemetry.trackEvent(name, properties);
 }
@@ -198,3 +127,7 @@ export function initTelemetry(): void {
 export function getTelemetryStatus() {
   return telemetry.getStatus();
 }
+
+// Re-export performance monitor & otel
+export { usePerformanceMonitor } from './performance-monitor';
+export type { PerformanceMetrics } from './performance-monitor';

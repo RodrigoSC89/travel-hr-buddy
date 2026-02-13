@@ -69,16 +69,8 @@ class UnifiedSystemInit {
   }
 
   private async initCoreSystem(): Promise<void> {
-    // Initialize monitoring (already done in App.tsx)
-    // This ensures it's called if not already initialized
-    try {
-      const { initializeMonitoring, isMonitoringInitialized } = await import('@/lib/monitoring/init');
-      if (!isMonitoringInitialized()) {
-        initializeMonitoring();
-      }
-    } catch {
-      // Monitoring may not be available
-    }
+    // Monitoring is initialized in App.tsx
+    logger.debug('Core system initialization complete');
   }
 
   private async initPWA(): Promise<void> {
@@ -102,10 +94,6 @@ class UnifiedSystemInit {
     if (typeof window === 'undefined') return;
 
     try {
-      // Initialize web vitals monitoring
-      const { webVitalsMonitor } = await import('@/lib/monitoring/web-vitals');
-      webVitalsMonitor.init();
-
       // Initialize bandwidth optimizer
       const { bandwidthOptimizer } = await import('@/lib/performance/low-bandwidth-optimizer');
       bandwidthOptimizer.init();

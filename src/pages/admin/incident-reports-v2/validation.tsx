@@ -1,5 +1,5 @@
-import IncidentReportsV2Validation from "@/modules/incident-reports/validation/IncidentReportsV2Validation";
+import { Navigate } from "react-router-dom";
 
 export default function IncidentReportsV2ValidationPage() {
-  return <IncidentReportsV2Validation />;
+  return <Navigate to="/documents" replace />;
 }

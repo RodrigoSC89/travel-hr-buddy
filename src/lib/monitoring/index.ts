@@ -4,13 +4,6 @@
  */
 
 export { 
-  webVitalsMonitor, 
-  useWebVitals, 
-  PERFORMANCE_BUDGETS, 
-  checkBudget 
-} from './web-vitals';
-
-export { 
   logger, 
   createModuleLogger 
 } from './structured-logging';

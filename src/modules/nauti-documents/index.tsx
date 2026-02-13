@@ -1,20 +1,15 @@
 /**
  * Nautilus Documents - Módulo Unificado de Documentos
  * PATCH UNIFY-3.0 - Fusão dos módulos de Documentos
- * 
- * Módulos fundidos:
- * - document-hub → Nautilus Documents
- * - incident-reports → Nautilus Documents
  */
 
 import React, { useState } from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
-import { FileText, AlertTriangle, FolderOpen, Brain } from "lucide-react";
+import { FileText, FolderOpen } from "lucide-react";
 
 // Import dos módulos originais
 import DocumentHub from "@/modules/document-hub";
-import IncidentReports from "@/modules/incident-reports";
 
 const NautilusDocuments: React.FC = () => {
   const [activeTab, setActiveTab] = useState("documents");
@@ -24,38 +19,27 @@ const NautilusDocuments: React.FC = () => {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-3">
-          <div className="p-3 rounded-xl bg-gradient-to-br from-warning/20 to-warning/10 border border-warning/30">
-            <FolderOpen className="h-8 w-8 text-warning" />
-          </div>
+          <FileText className="h-8 w-8 text-primary" />
           <div>
-            <h1 className="text-2xl font-bold text-foreground">Nautilus Documents</h1>
-            <p className="text-muted-foreground">Centro Unificado de Documentos e Relatórios</p>
+            <h1 className="text-3xl font-bold">Nautilus Documents</h1>
+            <p className="text-sm text-muted-foreground">
+              Document management hub
+            </p>
           </div>
+          <Badge variant="outline" className="ml-2">Unified</Badge>
         </div>
-        <Badge variant="outline" className="gap-1 bg-success/10 text-success border-success/30">
-          <Brain className="h-3 w-3" />
-          IA Integrada
-        </Badge>
       </div>
 
       <Tabs value={activeTab} onValueChange={setActiveTab}>
-        <TabsList className="grid grid-cols-2 w-full max-w-md">
-          <TabsTrigger value="documents" className="gap-2">
-            <FileText className="h-4 w-4" />
-            Documentos
-          </TabsTrigger>
-          <TabsTrigger value="incidents" className="gap-2">
-            <AlertTriangle className="h-4 w-4" />
-            Incidentes
+        <TabsList>
+          <TabsTrigger value="documents">
+            <FolderOpen className="mr-2 h-4 w-4" />
+            Documents
           </TabsTrigger>
         </TabsList>
 
-        <TabsContent value="documents" className="mt-6">
+        <TabsContent value="documents">
           <DocumentHub />
-        </TabsContent>
-
-        <TabsContent value="incidents" className="mt-6">
-          <IncidentReports />
         </TabsContent>
       </Tabs>
     </div>
