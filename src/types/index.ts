@@ -17,8 +17,6 @@ export type * from "./common";
 // Control Hub Types
 export type * from "./controlhub";
 
-// Cron/Scheduling Types
-export type * from "./cron";
 
 // Dashboard Types
 export type * from "./dashboard";
@@ -55,8 +53,6 @@ export type * from "./mmi";
 // PEODP Audit Types
 export type * from "./peodp-audit";
 
-// Simulation Types
-export type * from "./simulation";
 
 // Training Types
 export type * from "./training";

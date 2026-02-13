@@ -296,7 +296,7 @@ export function useWebVitals(): WebVitals {
       let clsValue = 0;
       const clsObserver = new PerformanceObserver((list) => {
         list.getEntries().forEach((entry) => {
-          const layoutShift = entry as LayoutShift;
+          const layoutShift = entry as PerformanceEntry & { hadRecentInput: boolean; value: number };
           if (!layoutShift.hadRecentInput) {
             clsValue += layoutShift.value;
           }
