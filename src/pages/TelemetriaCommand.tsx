@@ -83,13 +83,13 @@ export default function TelemetriaCommand() {
   // Fetch telemetry data (tables may not be in types yet)
   const fetchData = useCallback(async () => {
     try {
-      // Use type assertions for tables not yet in generated types
-      const sensorsRes = await (supabase.from("telemetry_logs" as any) as any)
+      // Use dynamic table access for tables not in generated types
+      const sensorsRes = await (supabase.from as Function)("telemetry_logs")
         .select("*")
         .order("timestamp", { ascending: false })
         .limit(100);
       
-      const alertsRes = await (supabase.from("telemetry_alerts" as any) as any)
+      const alertsRes = await (supabase.from as Function)("telemetry_alerts")
         .select("*")
         .eq("resolved", false)
         .order("created_at", { ascending: false })

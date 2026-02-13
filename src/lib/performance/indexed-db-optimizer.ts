@@ -90,7 +90,7 @@ class IndexedDBOptimizer {
           
           // Search index store
           if (!db.objectStoreNames.contains('search_index')) {
-            const searchStore = db.createObjectStore('search_index', { keyPath: 'id', autoIncrement: true } as any);
+            const searchStore = db.createObjectStore('search_index', { keyPath: 'id', autoIncrement: true } as IDBObjectStoreParameters);
             searchStore.createIndex('by-module-field', ['module', 'field']);
             searchStore.createIndex('by-value', 'value');
           }
@@ -377,7 +377,7 @@ class IndexedDBOptimizer {
           field,
           value: stringValue,
           keys: [key]
-        } as any);
+        });
       }
     }
   }

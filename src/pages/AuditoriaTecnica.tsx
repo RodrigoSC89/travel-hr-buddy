@@ -72,11 +72,12 @@ export default function AuditoriaTecnica() {
           (supabase.from as Function)("telemetry_logs").select("*", { count: "exact", head: true })
         ]);
 
-        if (results[0].status === "fulfilled") logsCount = (results[0].value as any).count || 0;
-        if (results[1].status === "fulfilled") errorLogs = (results[1].value as any).count || 0;
-        if (results[2].status === "fulfilled") aiDecisions = (results[2].value as any).count || 0;
-        if (results[3].status === "fulfilled") alertsCount = (results[3].value as any).count || 0;
-        if (results[4].status === "fulfilled") sensorData = (results[4].value as any).count || 0;
+        type SupabaseCountResult = { count: number | null };
+        if (results[0].status === "fulfilled") logsCount = (results[0].value as SupabaseCountResult).count || 0;
+        if (results[1].status === "fulfilled") errorLogs = (results[1].value as SupabaseCountResult).count || 0;
+        if (results[2].status === "fulfilled") aiDecisions = (results[2].value as SupabaseCountResult).count || 0;
+        if (results[3].status === "fulfilled") alertsCount = (results[3].value as SupabaseCountResult).count || 0;
+        if (results[4].status === "fulfilled") sensorData = (results[4].value as SupabaseCountResult).count || 0;
       } catch (e) {
         logger.warn("Some audit queries failed, using defaults");
       }

@@ -337,8 +337,7 @@ const AnalyticsCoreProfessional: React.FC = () => {
         
         const chartData = Object.values(monthlyData).slice(0, 6);
         if (chartData.length > 0) {
-          // eslint-disable-next-line @typescript-eslint/no-explicit-any -- chart data shape
-          setRevenueData(chartData as any[]);
+          setRevenueData(chartData);
         }
       }
     } catch (error) {
@@ -607,7 +606,9 @@ const AnalyticsCoreProfessional: React.FC = () => {
         m.category
       ]);
       
-      (doc as any).autoTable({
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any -- jspdf-autotable extends jsPDF prototype
+      const docWithAutoTable = doc as unknown as { autoTable: (opts: Record<string, unknown>) => void; lastAutoTable: { finalY: number } };
+      docWithAutoTable.autoTable({
         startY: yPosition,
         head: [["Métrica", "Valor", "Tendência", "Variação", "Categoria"]],
         body: metricsTableData,
@@ -617,7 +618,7 @@ const AnalyticsCoreProfessional: React.FC = () => {
         alternateRowStyles: { fillColor: [245, 247, 250] }
       });
       
-      yPosition = (doc as any).lastAutoTable.finalY + 15;
+      yPosition = docWithAutoTable.lastAutoTable.finalY + 15;
       
       // Revenue Data Section
       if (yPosition > 220) {
@@ -636,7 +637,7 @@ const AnalyticsCoreProfessional: React.FC = () => {
         `R$ ${r.lucro.toLocaleString("pt-BR")}`
       ]);
       
-      (doc as any).autoTable({
+      docWithAutoTable.autoTable({
         startY: yPosition,
         head: [["Mês", "Receita", "Custos", "Lucro"]],
         body: revenueTableData,
@@ -645,7 +646,7 @@ const AnalyticsCoreProfessional: React.FC = () => {
         headStyles: { fillColor: [16, 185, 129], textColor: 255 }
       });
       
-      yPosition = (doc as any).lastAutoTable.finalY + 15;
+      yPosition = docWithAutoTable.lastAutoTable.finalY + 15;
       
       // AI Insights Section
       if (insights.length > 0) {
@@ -667,7 +668,7 @@ const AnalyticsCoreProfessional: React.FC = () => {
           i.priority === "high" ? "Alta" : i.priority === "medium" ? "Média" : "Baixa"
         ]);
         
-        (doc as any).autoTable({
+        docWithAutoTable.autoTable({
           startY: yPosition,
           head: [["Insight", "Tipo", "Confiança", "Prioridade"]],
           body: insightsTableData,

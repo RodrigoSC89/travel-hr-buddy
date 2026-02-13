@@ -41,8 +41,7 @@ export const ProgressDashboard: React.FC = () => {
       if (!user) return;
 
       // Get enrolled courses
-      const { data: progress } = await (supabase
-        .from("academy_progress" as any)
+      const { data: progress } = await ((supabase.from as Function)("academy_progress")
         .select("course_id, is_completed, score, updated_at")
         .eq("user_id", user.id) as unknown as Promise<{ data: Array<{ course_id: string; is_completed: boolean; score: number | null }> | null }>);
 
@@ -54,8 +53,7 @@ export const ProgressDashboard: React.FC = () => {
         : 0;
 
       // Get certificates
-      const { data: certificates } = await (supabase
-        .from("academy_certificates" as any)
+      const { data: certificates } = await ((supabase.from as Function)("academy_certificates")
         .select("id")
         .eq("user_id", user.id) as unknown as Promise<{ data: Array<{ id: string }> | null }>);
 

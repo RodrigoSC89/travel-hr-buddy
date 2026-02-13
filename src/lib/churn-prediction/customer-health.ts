@@ -74,7 +74,7 @@ class CustomerHealthService {
     properties?: Record<string, unknown>
   ): Promise<boolean> {
     try {
-      const { error } = await (supabase.from('usage_events') as any).insert({
+      const { error } = await (supabase.from as Function)('usage_events').insert({
         organization_id: organizationId,
         user_id: userId,
         event_name: eventName,

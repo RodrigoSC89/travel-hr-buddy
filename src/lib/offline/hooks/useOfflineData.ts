@@ -104,7 +104,7 @@ export function useUpdateOfflineVessel() {
         try {
           const { error } = await supabase
             .from('vessels')
-            .update(data as any)
+            .update(data as never)
             .eq('id', id);
 
           if (!error) {
@@ -207,7 +207,7 @@ export function useCreateOfflineCrew() {
         try {
           const { error } = await supabase
             .from('crew_members')
-            .insert(crewMember as any);
+            .insert(crewMember as never);
 
           if (!error) {
             await db.crew_members.update(id, { _synced: true });
@@ -285,7 +285,7 @@ export function useCreateOfflineMaintenanceOrder() {
         try {
           const { error } = await supabase
             .from('maintenance_orders')
-            .insert(order as any);
+            .insert(order as never);
 
           if (!error) {
             await db.maintenance_orders.update(id, { _synced: true });
@@ -324,7 +324,7 @@ export function useUpdateOfflineMaintenanceOrder() {
         try {
           const { error } = await supabase
             .from('maintenance_orders')
-            .update(data as any)
+            .update(data as never)
             .eq('id', id);
 
           if (!error) {

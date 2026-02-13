@@ -121,7 +121,7 @@ export async function generateWeatherComparisonPDF(
     }
   });
 
-  yPos = (doc as any).lastAutoTable.finalY + 15;
+  yPos = (doc as unknown as { lastAutoTable: { finalY: number } }).lastAutoTable.finalY + 15;
 
   // 7-Day Forecast Comparison
   doc.setTextColor(51, 65, 85);
@@ -182,7 +182,7 @@ export async function generateWeatherComparisonPDF(
     }
   });
 
-  yPos = (doc as any).lastAutoTable.finalY + 15;
+  yPos = (doc as unknown as { lastAutoTable: { finalY: number } }).lastAutoTable.finalY + 15;
 
   // Rain Probability Table
   if (yPos < pageHeight - 60) {

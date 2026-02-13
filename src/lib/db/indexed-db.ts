@@ -153,7 +153,7 @@ export const offlineDB = {
     const items = await indexedDBSync.getPendingOperations(100);
     return items.map(item => ({
       id: item.id,
-      type: item.operation as any,
+      type: item.operation as PendingAction['type'],
       table: item.table,
       data: item.data as PendingAction['data'],
       timestamp: new Date(item.timestamp).toISOString(),

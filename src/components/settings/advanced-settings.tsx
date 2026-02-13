@@ -95,10 +95,10 @@ export const AdvancedSettings: React.FC = () => {
       const { supabase } = await import("@/integrations/supabase/client");
       const { error } = await supabase.from('ai_configurations').upsert({
         config_key: `user_settings_${user?.id || 'default'}`,
-        config_value: settings as any,
+        config_value: JSON.parse(JSON.stringify(settings)),
         description: 'User advanced settings',
         updated_by: user?.id || null,
-      }, { onConflict: 'config_key' });
+      } as never, { onConflict: 'config_key' });
       
       if (error) throw error;
       

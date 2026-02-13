@@ -288,11 +288,11 @@ export default function OperationsCommandCenter() {
 
       const vesselsList = ((vessels || []) as unknown as VesselRecord[]).map(v => ({
         ...v,
-        name: (v as any).name || 'Unknown'
+        name: String('name' in v ? v.name : 'Unknown')
       }));
       const crewList = ((crew || []) as unknown as CrewRecord[]).map(c => ({
         ...c,
-        full_name: (c as any).full_name || 'Unknown'
+        full_name: String('full_name' in c ? c.full_name : 'Unknown')
       }));
       
       const activeVessels = vesselsList.filter((v) => v.status === "active" || v.status === "operational").length;

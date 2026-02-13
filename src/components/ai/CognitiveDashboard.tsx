@@ -247,26 +247,33 @@ export const CognitiveDashboard: React.FC = () => {
                 </div>
               ) : (
                 <div className="space-y-3">
-                  {filteredPredictions.map((pred) => (
+                  {filteredPredictions.map((pred) => {
+                    const predRecord = pred as unknown as Record<string, unknown>;
+                    const moduleName = String(predRecord.module_name || pred.moduleName);
+                    const riskScore = Number(predRecord.risk_score || pred.riskScore);
+                    const riskLevel = String(predRecord.risk_level || pred.riskLevel);
+                    const forecastEvent = String(predRecord.forecast_event || pred.forecastEvent);
+                    const predictedAt = String(predRecord.predicted_at || pred.predictedAt);
+                    return (
                     <div
-                      key={`${(pred as any).module_name || pred.moduleName}-${(pred as any).risk_score || pred.riskScore}`}
+                      key={`${moduleName}-${riskScore}`}
                       className="p-4 border rounded-lg hover:bg-muted/50 transition-colors"
                     >
                       <div className="flex items-start justify-between">
                         <div className="flex-1">
                           <div className="flex items-center gap-3 mb-2">
-                            <h3 className="font-semibold">{(pred as any).module_name || pred.moduleName}</h3>
-                            <Badge className={getRiskColor((pred as any).risk_level || pred.riskLevel)}>
-                              {(pred as any).risk_level || pred.riskLevel}
+                            <h3 className="font-semibold">{moduleName}</h3>
+                            <Badge className={getRiskColor(riskLevel)}>
+                              {riskLevel}
                             </Badge>
                             <Badge variant="outline">
-                              {(pred as any).forecast_event || pred.forecastEvent}
+                              {forecastEvent}
                             </Badge>
                           </div>
                           <div className="space-y-1">
                             <div className="flex items-center gap-2 text-sm">
                               <span className="text-muted-foreground">Risk Score:</span>
-                              <span className="font-medium">{(pred as any).risk_score || pred.riskScore}/100</span>
+                              <span className="font-medium">{riskScore}/100</span>
                             </div>
                             <div className="flex items-center gap-2 text-sm">
                               <span className="text-muted-foreground">Confidence:</span>
@@ -288,11 +295,12 @@ export const CognitiveDashboard: React.FC = () => {
                         </div>
                         <div className="text-right text-sm text-muted-foreground">
                           <Clock className="h-4 w-4 inline mr-1" />
-                          {formatTimestamp((pred as any).predicted_at || pred.predictedAt)}
+                          {formatTimestamp(predictedAt)}
                         </div>
                       </div>
                     </div>
-                  ))}
+                    );
+                  })}
                 </div>
               )}
             </CardContent>
@@ -326,7 +334,7 @@ export const CognitiveDashboard: React.FC = () => {
                         <div className="flex-1">
                           <div className="flex items-center gap-3 mb-2">
                             <h3 className="font-semibold">{decision.moduleName}</h3>
-                            <Badge variant={getPriorityColor(decision.priority) as any}>
+                            <Badge variant={getPriorityColor(decision.priority) as "default" | "secondary" | "destructive" | "outline"}>
                               {decision.priority}
                             </Badge>
                             {decision.executed && (

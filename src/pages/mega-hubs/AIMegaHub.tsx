@@ -380,7 +380,7 @@ export default function AIMegaHub() {
                   { id: 'voice', label: '🎙️ Voice Assistant' },
                 ]}
                 active={chatSubTab}
-                onChange={(id) => setChatSubTab(id as any)}
+                onChange={(id) => setChatSubTab(id as 'chat' | 'voice')}
               />
               {chatSubTab === 'chat' && <AICommandCenter />}
               {chatSubTab === 'voice' && <VoiceAssistant />}
@@ -395,7 +395,7 @@ export default function AIMegaHub() {
                   { id: 'monitoring', label: '🔔 Monitoring' },
                 ]}
                 active={swarmSubTab}
-                onChange={(id) => setSwarmSubTab(id as any)}
+                onChange={(id) => setSwarmSubTab(id as 'consensus' | 'memory' | 'monitoring')}
               />
               {swarmSubTab === 'consensus' && <MultiAgentConsensus />}
               {swarmSubTab === 'memory' && <AgentMemoryPanel />}
@@ -420,7 +420,7 @@ export default function AIMegaHub() {
                   { id: 'ocr', label: '📄 OCR Center' },
                 ]}
                 active={intelligenceSubTab}
-                onChange={(id) => setIntelligenceSubTab(id as any)}
+                onChange={(id) => setIntelligenceSubTab(id as 'rag' | 'ocr')}
               />
               {intelligenceSubTab === 'rag' && <RAGAssistantPage />}
               {intelligenceSubTab === 'ocr' && <OCRCenterPage />}
@@ -435,7 +435,7 @@ export default function AIMegaHub() {
                   { id: 'observability', label: '👁️ Observability' },
                 ]}
                 active={analyticsSubTab}
-                onChange={(id) => setAnalyticsSubTab(id as any)}
+                onChange={(id) => setAnalyticsSubTab(id as 'analytics' | 'agent-analytics' | 'observability')}
               />
               {analyticsSubTab === 'analytics' && <AIAnalyticsDashboard />}
               {analyticsSubTab === 'agent-analytics' && <AgentAnalyticsPanel />}
