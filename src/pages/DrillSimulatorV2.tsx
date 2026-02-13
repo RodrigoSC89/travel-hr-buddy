@@ -125,7 +125,7 @@ export default function DrillSimulatorV2() {
               { type: "Abandono", icon: Users, color: "orange", description: "Procedimentos de abandono de navio" },
               { type: "Homem ao Mar", icon: AlertTriangle, color: "blue", description: "Resgate de pessoa na água" }
             ].map(drill => (
-              <CardV2 key={drill.type} icon={drill.icon} title={`Drill: ${drill.type}`} description={drill.description} gradient={drill.color as any}>
+              <CardV2 key={drill.type} icon={drill.icon} title={`Drill: ${drill.type}`} description={drill.description} gradient={drill.color as "red" | "orange" | "blue"}>
                 <div className="space-y-4">
                   <div className="p-4 bg-muted/50 rounded-lg text-center">
                     <drill.icon className="h-12 w-12 mx-auto mb-2 opacity-50" />

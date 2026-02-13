@@ -216,15 +216,15 @@ export class KPITracker {
 
     // Store in database
     const { error } = await supabase
-      .from('analytics_metrics' as any)
+      .from('analytics_metrics')
       .insert({
         metric_name: kpi.id,
         metric_value: value,
         metric_unit: kpi.unit,
-        dimensions: metadata,
+        dimensions: metadata as Record<string, unknown>,
         period_start: new Date().toISOString(),
         period_end: new Date().toISOString()
-      });
+      } as never);
 
     if (error) {
       // Fallback to localStorage
@@ -265,7 +265,7 @@ export class KPITracker {
       .single();
 
     if (!error && data) {
-      const value = (data as any).metric_value;
+      const value = (data as Record<string, unknown>).metric_value as number;
       this.cache.set(kpi.id, { value, timestamp: Date.now() });
       return value;
     }
@@ -355,7 +355,7 @@ export class KPITracker {
     const { data: session } = await supabase.auth.getSession();
     const userId = session?.session?.user?.id ?? 'anonymous';
 
-    await supabase.from('analytics_events' as any).insert({
+    await (supabase.from as Function)('analytics_events').insert({
       event_name: event,
       event_category: 'engagement',
       user_id: userId,
@@ -373,8 +373,7 @@ export class KPITracker {
     const monthStart = new Date(now.getFullYear(), now.getMonth(), 1);
 
     // Get unique users today
-    const { data: dailyUsers } = await supabase
-      .from('analytics_events' as any)
+    const { data: dailyUsers } = await (supabase.from as Function)('analytics_events')
       .select('user_id')
       .gte('timestamp', dayStart.toISOString())
       .not('user_id', 'is', null);
@@ -383,8 +382,7 @@ export class KPITracker {
     await this.trackKPI('DAU', dau);
 
     // Get unique users this month
-    const { data: monthlyUsers } = await supabase
-      .from('analytics_events' as any)
+    const { data: monthlyUsers } = await (supabase.from as Function)('analytics_events')
       .select('user_id')
       .gte('timestamp', monthStart.toISOString())
       .not('user_id', 'is', null);

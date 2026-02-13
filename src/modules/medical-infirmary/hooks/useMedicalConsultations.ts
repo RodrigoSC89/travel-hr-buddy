@@ -101,16 +101,15 @@ export function useCreateConsultation() {
       const { data, error } = await supabase
         .from('medical_consultations')
         .insert({
-          crew_member_id: consultation.crew_member_id || null,
           crew_member_name: consultation.crew_member_name,
           consultation_type: consultation.consultation_type,
           chief_complaint: consultation.chief_complaint,
-          symptoms: consultation.symptoms as unknown as any,
-          vital_signs: consultation.vital_signs as unknown as any,
+          symptoms: consultation.symptoms as unknown as Record<string, unknown>,
+          vital_signs: consultation.vital_signs as unknown as Record<string, unknown>,
           diagnosis: consultation.diagnosis || null,
           treatment: consultation.treatment || null,
-          prescribed_medications: consultation.prescribed_medications as unknown as any,
-          ai_suggestions: consultation.ai_suggestions as unknown as any,
+          prescribed_medications: consultation.prescribed_medications as unknown as Record<string, unknown>,
+          ai_suggestions: consultation.ai_suggestions as unknown as Record<string, unknown>,
           follow_up_date: consultation.follow_up_date || null,
           status: consultation.status || 'pending',
           severity: consultation.severity || 'low',
@@ -118,7 +117,7 @@ export function useCreateConsultation() {
           attending_officer_id: user?.id || null,
           notes: consultation.notes || null,
           vessel_id: consultation.vessel_id || null
-        })
+        } as never)
         .select()
         .single();
 

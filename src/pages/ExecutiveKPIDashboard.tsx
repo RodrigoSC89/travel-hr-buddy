@@ -150,9 +150,9 @@ export default function ExecutiveKPIDashboard() {
           id: v.id,
           name: v.name,
           status: vesselStatus,
-          location: (v as any).current_location || 'Em trânsito',
-          nextPort: (v as any).next_port || 'A definir',
-          eta: (v as any).eta || `${2 + (idx % 5)}d ${(nameHash % 12) + 1}h`,
+          location: (v as Record<string, unknown>).current_location as string || 'Em trânsito',
+          nextPort: (v as Record<string, unknown>).next_port as string || 'A definir',
+          eta: (v as Record<string, unknown>).eta as string || `${2 + (idx % 5)}d ${(nameHash % 12) + 1}h`,
           fuelLevel,
         };
       });

@@ -81,7 +81,7 @@ export function BunkerOptimizerPanel() {
           <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-4">
             <div>
               <Label className="text-xs">Tipo Combustível</Label>
-              <Select value={fuelType} onValueChange={v => setFuelType(v as any)}>
+              <Select value={fuelType} onValueChange={v => setFuelType(v as typeof fuelType)}>
                 <SelectTrigger><SelectValue /></SelectTrigger>
                 <SelectContent>
                   <SelectItem value="VLSFO">VLSFO (0.5%S)</SelectItem>

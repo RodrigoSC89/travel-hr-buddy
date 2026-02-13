@@ -124,8 +124,8 @@ class CodeQualityChecker {
     });
 
     // Check memory usage
-    if (typeof window !== "undefined" && (performance as any).memory) {
-      const memory = (performance as any).memory;
+    if (typeof window !== "undefined" && 'memory' in performance) {
+      const memory = (performance as unknown as { memory: { usedJSHeapSize: number; jsHeapSizeLimit: number } }).memory;
       const usedMB = Math.round(memory.usedJSHeapSize / 1024 / 1024);
       const limitMB = Math.round(memory.jsHeapSizeLimit / 1024 / 1024);
       const usage = usedMB / limitMB;

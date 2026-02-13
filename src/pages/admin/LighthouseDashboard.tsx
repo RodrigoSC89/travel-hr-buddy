@@ -204,7 +204,7 @@ export default function LighthouseDashboard() {
                       Target: {score.target}+
                     </p>
                   </div>
-                  <Badge variant={getScoreBadge(score.score, score.target) as any}>
+                  <Badge variant={getScoreBadge(score.score, score.target) as "default" | "secondary" | "outline" | "destructive"}>
                     {score.score >= score.target ? "Passing" : "Needs Work"}
                   </Badge>
                   <p className="text-xs text-muted-foreground">

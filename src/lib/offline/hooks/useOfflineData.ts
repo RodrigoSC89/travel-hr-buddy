@@ -53,7 +53,7 @@ export function useCreateOfflineVessel() {
         try {
           const { error } = await supabase
             .from('vessels')
-            .insert(vessel as any);
+            .insert(vessel as never);
 
           if (!error) {
             await db.vessels.update(id, { _synced: true });

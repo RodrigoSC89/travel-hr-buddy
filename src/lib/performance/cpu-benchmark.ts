@@ -217,8 +217,8 @@ class CPUBenchmark {
     return {
       userAgent: navigator.userAgent,
       cores: navigator.hardwareConcurrency || 1,
-      memory: (performance as any).memory?.jsHeapSizeLimit 
-        ? Math.round((performance as any).memory.jsHeapSizeLimit / 1024 / 1024)
+      memory: (performance as unknown as Record<string, { jsHeapSizeLimit?: number }>).memory?.jsHeapSizeLimit 
+        ? Math.round(((performance as unknown as Record<string, { jsHeapSizeLimit: number }>).memory.jsHeapSizeLimit) / 1024 / 1024)
         : 0
     };
   }

@@ -258,7 +258,7 @@ export default function TrackingTelemetryPremium() {
       if (error) throw error;
       const total = data?.length || 0;
       // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Supabase dynamic query
-      const online = (data as any[])?.filter((v) => v.status === 'active' || v.status === 'operational').length || 0;
+      const online = (data as Array<{ status: string }>)?.filter((v) => v.status === 'active' || v.status === 'operational').length || 0;
       return { total, online };
     },
     staleTime: 30000,
