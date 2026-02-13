@@ -396,12 +396,11 @@ async function createReviewNotification(checklist: Checklist) {
   }
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- DB row shape varies
-function transformDbToChecklist(data: Record<string, any>): Checklist {
+function transformDbToChecklist(data: Record<string, unknown>): Checklist {
   return {
     id: String(data.id || ''),
     title: String(data.title || ''),
-    type: data.type || 'safety',
+    type: (data.type as Checklist['type']) || 'safety',
     version: String(data.version || '1.0'),
     description: String(data.description || ''),
     vessel: {
@@ -422,23 +421,23 @@ function transformDbToChecklist(data: Record<string, any>): Checklist {
       phone: '',
       certifications: []
     },
-    status: data.status || 'draft',
+    status: (data.status as Checklist['status']) || 'draft',
     items: Array.isArray(data.items) ? data.items : [],
     createdAt: String(data.created_at || ''),
     updatedAt: String(data.updated_at || ''),
     completedAt: data.completed_at ? String(data.completed_at) : undefined,
-    priority: data.priority || 'medium',
+    priority: (data.priority as Checklist['priority']) || 'medium',
     scheduledFor: data.scheduled_for ? String(data.scheduled_for) : undefined,
     dueDate: data.due_date ? String(data.due_date) : undefined,
     estimatedDuration: Number(data.estimated_duration || 60),
     actualDuration: data.actual_duration != null ? Number(data.actual_duration) : undefined,
     complianceScore: data.compliance_score != null ? Number(data.compliance_score) : undefined,
-    aiAnalysis: data.ai_analysis,
+    aiAnalysis: data.ai_analysis as Checklist['aiAnalysis'],
     workflow: Array.isArray(data.workflow) ? data.workflow : createDefaultWorkflow(),
     tags: Array.isArray(data.tags) ? data.tags : [],
-    location: data.location,
-    weather: data.weather,
+    location: data.location as Checklist['location'],
+    weather: data.weather as Checklist['weather'],
     template: false,
-    syncStatus: data.sync_status || 'synced'
+    syncStatus: (data.sync_status as Checklist['syncStatus']) || 'synced'
   };
 }

@@ -71,7 +71,7 @@ class TelemetryService {
   /**
    * Track event
    */
-  trackEvent(name: TelemetryEventName, properties?: Record<string, any>): void {
+  trackEvent(name: TelemetryEventName, properties?: Record<string, unknown>): void {
     if (!TELEMETRY_ENABLED) {
       return;
     }
@@ -109,7 +109,7 @@ class TelemetryService {
   /**
    * Identify user
    */
-  identify(userId: string, properties?: Record<string, any>): void {
+  identify(userId: string, properties?: Record<string, unknown>): void {
     if (!TELEMETRY_ENABLED || !ConsentManager.hasConsent()) {
       return;
     }
@@ -179,11 +179,11 @@ class TelemetryService {
 export const telemetry = new TelemetryService();
 
 // Export convenience functions
-export function trackEvent(name: TelemetryEventName, properties?: Record<string, any>): void {
+export function trackEvent(name: TelemetryEventName, properties?: Record<string, unknown>): void {
   telemetry.trackEvent(name, properties);
 }
 
-export function identifyUser(userId: string, properties?: Record<string, any>): void {
+export function identifyUser(userId: string, properties?: Record<string, unknown>): void {
   telemetry.identify(userId, properties);
 }
 

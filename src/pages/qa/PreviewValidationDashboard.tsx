@@ -39,12 +39,12 @@ export default function PreviewValidationDashboard() {
   ];
 
   const getPriorityBadge = (priority: string) => {
-    const variants: Record<string, any> = {
+    const variants: Record<string, string> = {
       high: "destructive",
       medium: "default",
       low: "secondary"
     };
-    return <Badge variant={variants[priority] || "default"}>{priority}</Badge>;
+    return <Badge variant={(variants[priority] as "destructive" | "default" | "secondary") || "default"}>{priority}</Badge>;
   };
 
   return (

@@ -8,7 +8,7 @@ import { logger } from "@/lib/logger";
 export interface UserEvent {
   name: string;
   category: string;
-  properties?: Record<string, any>;
+  properties?: Record<string, unknown>;
   timestamp: number;
 }
 
@@ -87,7 +87,7 @@ class UserAnalytics {
   /**
    * Track custom event
    */
-  trackEvent(name: string, category: string, properties?: Record<string, any>): void {
+  trackEvent(name: string, category: string, properties?: Record<string, unknown>): void {
     if (!this.session) return;
 
     const event: UserEvent = {
@@ -144,7 +144,7 @@ class UserAnalytics {
   /**
    * Track feature usage
    */
-  trackFeatureUsage(feature: string, action: string, metadata?: Record<string, any>): void {
+  trackFeatureUsage(feature: string, action: string, metadata?: Record<string, unknown>): void {
     this.trackEvent(`feature_${action}`, "feature_usage", {
       feature,
       ...metadata,
@@ -154,7 +154,7 @@ class UserAnalytics {
   /**
    * Track user interaction
    */
-  trackInteraction(element: string, action: string, metadata?: Record<string, any>): void {
+  trackInteraction(element: string, action: string, metadata?: Record<string, unknown>): void {
     this.trackEvent(`${element}_${action}`, "interaction", metadata);
   }
 
@@ -236,7 +236,7 @@ class UserAnalytics {
     return this.events
       .filter(e => e.category === "feature_usage")
       .reduce((acc, event) => {
-        const feature = event.properties?.feature || "unknown";
+        const feature = String(event.properties?.feature || "unknown");
         acc[feature] = (acc[feature] || 0) + 1;
         return acc;
       }, {} as Record<string, number>);

@@ -11,10 +11,10 @@
  */
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any -- ONNX runtime typing is complex
-let ort: Record<string, any> | null = null;
+let ort: { InferenceSession: any; Tensor: any } | null = null;
 const loadORT = async () => {
   if (!ort) {
-    ort = await import("onnxruntime-web") as Record<string, any>;
+    ort = await import("onnxruntime-web") as unknown as { InferenceSession: any; Tensor: any };
   }
   return ort;
 };

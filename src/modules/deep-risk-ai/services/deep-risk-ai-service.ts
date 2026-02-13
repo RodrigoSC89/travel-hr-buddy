@@ -142,7 +142,7 @@ export class DeepRiskAIService {
 interface HistoricalDataPoint {
   timestamp: string;
   value: number;
-  metadata?: Record<string, any>;
+  metadata?: Record<string, unknown>;
 }
 
 export const deepRiskAIService = new DeepRiskAIService();

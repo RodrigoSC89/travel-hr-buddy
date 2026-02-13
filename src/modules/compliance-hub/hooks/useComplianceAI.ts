@@ -17,7 +17,7 @@ interface AIAnalysisState {
 
 interface DocumentAnalysis {
   documentType: string;
-  extractedInfo: Record<string, any>;
+  extractedInfo: Record<string, unknown>;
   complianceStatus: 'compliant' | 'non-compliant' | 'needs-review';
   issues: string[];
   recommendations: string[];

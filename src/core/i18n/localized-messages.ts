@@ -24,7 +24,7 @@ export type WatchdogMessageId =
 
 interface LocalizedMessage {
   id: WatchdogMessageId;
-  params?: Record<string, any>;
+  params?: Record<string, unknown>;
   language?: SupportedLanguage;
 }
 
@@ -170,7 +170,7 @@ class MultilingualMessageManager {
   /**
    * Formata uma mensagem com parâmetros
    */
-  private formatMessage(template: string, params?: Record<string, any>): string {
+  private formatMessage(template: string, params?: Record<string, unknown>): string {
     if (!params) return template;
 
     let formatted = template;
@@ -260,7 +260,7 @@ export const messageManager = MultilingualMessageManager.getInstance();
  */
 export function getLocalizedMessage(
   id: WatchdogMessageId,
-  params?: Record<string, any>,
+  params?: Record<string, unknown>,
   language?: SupportedLanguage
 ): string {
   const targetLang = language || messageManager.getDefaultLanguage();
@@ -280,7 +280,7 @@ export function getLocalizedMessage(
  */
 export async function getLocalizedMessageAsync(
   id: WatchdogMessageId,
-  params?: Record<string, any>,
+  params?: Record<string, unknown>,
   language?: SupportedLanguage
 ): Promise<string> {
   return messageManager.getMessage({ id, params, language });
