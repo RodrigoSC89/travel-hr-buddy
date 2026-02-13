@@ -11,6 +11,7 @@ import { IncidentsSGSOPanel } from "@/components/dp/IncidentsSGSOPanel";
 import { Shield, BarChart3, FileCheck, Mail, AlertTriangle, History, Download, Loader2 } from "lucide-react";
 import { getJsPDF, getAutoTable } from '@/lib/pdf/lazy-pdf';
 import { logger } from '@/lib/logger';
+import { supabase } from "@/integrations/supabase/client";
 
 const AdminSGSO = () => {
   const [isExportingPDF, setIsExportingPDF] = useState(false);
@@ -159,14 +160,25 @@ const AdminSGSO = () => {
   };
 
   // Configurar envio automático por email
-  const handleScheduleEmail = () => {
+  const handleScheduleEmail = async () => {
     setIsSchedulingEmail(true);
-    setTimeout(() => {
-      setIsSchedulingEmail(false);
+    try {
+      const { error } = await supabase.from('action_items').insert({
+        title: 'Agendamento de relatório SGSO mensal',
+        description: 'Relatórios mensais de SGSO configurados para envio automático',
+        status: 'pending',
+        priority: 'medium',
+        source_module: 'sgso',
+      });
+      if (error) throw error;
       toast.success("Agendamento configurado!", {
         description: "Relatórios mensais serão enviados automaticamente"
       });
-    }, 1500);
+    } catch {
+      toast.error("Erro ao configurar agendamento");
+    } finally {
+      setIsSchedulingEmail(false);
+    }
   };
 
   return (

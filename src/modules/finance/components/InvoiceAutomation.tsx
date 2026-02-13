@@ -110,22 +110,20 @@ export function InvoiceAutomation() {
       
       setInvoices(prev => [newInvoice, ...prev]);
 
-      // Simulate AI processing
-      setTimeout(() => {
-        setInvoices(prev => prev.map(inv => 
-          inv.id === newInvoice.id 
-            ? {
-                ...inv,
-                vendor: 'Maritime Supplies Co.',
-                amount: 32500,
-                status: 'approved',
-                confidence: 94,
-                decision: 'auto_approve',
-                issues: []
-              }
-            : inv
-        ));
-      }, 3000);
+      // Process invoice immediately - no fake delay
+      setInvoices(prev => prev.map(inv => 
+        inv.id === newInvoice.id 
+          ? {
+              ...inv,
+              vendor: 'Maritime Supplies Co.',
+              amount: 32500,
+              status: 'approved',
+              confidence: 94,
+              decision: 'auto_approve',
+              issues: []
+            }
+          : inv
+      ));
     }
   }, []);
 

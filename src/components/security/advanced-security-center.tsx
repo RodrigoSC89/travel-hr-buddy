@@ -180,10 +180,9 @@ export const AdvancedSecurityCenter: React.FC = () => {
 
   const handleRunScan = () => {
     setIsLoading(true);
-    setTimeout(() => {
-      generateSecurityData();
-      toast({ title: "Varredura concluída", description: "Nova análise de segurança foi executada com sucesso." });
-    }, 3000);
+    // Generate data synchronously, no fake delay
+    generateSecurityData();
+    toast({ title: "Varredura concluída", description: "Nova análise de segurança foi executada com sucesso." });
   };
 
   if (isLoading) {
