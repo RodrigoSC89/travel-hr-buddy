@@ -310,7 +310,7 @@ export default function DocumentAIEditorPage() {
           </div>
         </CardHeader>
         <CardContent>
-          <div className="border rounded-lg bg-white">
+          <div className="border rounded-lg bg-card">
             <EditorContent editor={editor} />
           </div>
           

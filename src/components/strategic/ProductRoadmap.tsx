@@ -258,9 +258,9 @@ const ProductRoadmap: React.FC = () => {
     case "in-progress":
       return "text-info bg-info/10 border-info/30";
     case "planned":
-      return "text-muted-foreground bg-gray-50 border-gray-200";
+      return "text-muted-foreground bg-muted border-border";
     default:
-      return "text-muted-foreground bg-gray-50 border-gray-200";
+      return "text-muted-foreground bg-muted border-border";
     }
   };
 

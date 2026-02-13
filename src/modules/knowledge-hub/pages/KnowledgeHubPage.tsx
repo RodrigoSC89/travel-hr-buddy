@@ -87,7 +87,7 @@ const CATEGORY_COLORS: Record<DocumentCategory, string> = {
   crew: 'bg-purple-500/10 text-purple-600',
   environmental: 'bg-green-500/10 text-green-600',
   commercial: 'bg-indigo-500/10 text-indigo-600',
-  legal: 'bg-gray-500/10 text-gray-600',
+  legal: 'bg-muted text-muted-foreground',
   quality: 'bg-teal-500/10 text-teal-600',
   training: 'bg-orange-500/10 text-orange-600',
   medical: 'bg-pink-500/10 text-pink-600',
@@ -95,7 +95,7 @@ const CATEGORY_COLORS: Record<DocumentCategory, string> = {
   emergency: 'bg-red-600/10 text-red-700',
   operations: 'bg-cyan-500/10 text-cyan-600',
   maintenance: 'bg-yellow-500/10 text-yellow-600',
-  general: 'bg-gray-400/10 text-gray-500',
+  general: 'bg-muted text-muted-foreground',
 };
 
 const AI_STATUS_CONFIG = {

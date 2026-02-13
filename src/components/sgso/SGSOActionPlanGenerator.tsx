@@ -144,17 +144,17 @@ export const SGSOActionPlanGenerator: React.FC = () => {
   return (
     <div className="space-y-6">
       {/* Header */}
-      <Card className="bg-gradient-to-br from-purple-50 to-blue-50 border-purple-200">
+      <Card className="bg-gradient-to-br from-primary/5 to-info/5 border-primary/20">
         <CardContent className="p-6">
           <div className="flex items-center gap-4">
-            <div className="p-4 bg-white rounded-xl shadow-lg">
-              <Brain className="h-12 w-12 text-purple-600" />
+            <div className="p-4 bg-card rounded-xl shadow-lg">
+              <Brain className="h-12 w-12 text-primary" />
             </div>
             <div>
-              <h2 className="text-2xl font-bold text-gray-900 mb-1">
+              <h2 className="text-2xl font-bold text-foreground mb-1">
                 Gerador de Plano de Ação com IA
               </h2>
-              <p className="text-gray-700">
+              <p className="text-muted-foreground">
                 Análise inteligente baseada em padrões IMCA/IMO e Resolução ANP 43/2007
               </p>
             </div>
@@ -260,7 +260,6 @@ export const SGSOActionPlanGenerator: React.FC = () => {
               onClick={handleClear}
               variant="outline"
               disabled={loading}
-              className="border-gray-300 text-gray-700 hover:bg-gray-50"
             >
               <Trash2 className="h-4 w-4 mr-2" />
               Limpar
@@ -272,7 +271,7 @@ export const SGSOActionPlanGenerator: React.FC = () => {
       {/* Results */}
       {actionPlan && (
         <div className="space-y-4">
-          <h3 className="text-lg font-semibold text-gray-900 flex items-center gap-2">
+          <h3 className="text-lg font-semibold text-foreground flex items-center gap-2">
             <Sparkles className="h-5 w-5 text-purple-600" />
             Plano de Ação Gerado
           </h3>
@@ -284,7 +283,7 @@ export const SGSOActionPlanGenerator: React.FC = () => {
               </CardTitle>
             </CardHeader>
             <CardContent>
-              <p className="text-gray-800 leading-relaxed">{actionPlan.corrective_action}</p>
+              <p className="text-foreground leading-relaxed">{actionPlan.corrective_action}</p>
             </CardContent>
           </Card>
 
@@ -295,7 +294,7 @@ export const SGSOActionPlanGenerator: React.FC = () => {
               </CardTitle>
             </CardHeader>
             <CardContent>
-              <p className="text-gray-800 leading-relaxed">{actionPlan.preventive_action}</p>
+              <p className="text-foreground leading-relaxed">{actionPlan.preventive_action}</p>
             </CardContent>
           </Card>
 
@@ -306,7 +305,7 @@ export const SGSOActionPlanGenerator: React.FC = () => {
               </CardTitle>
             </CardHeader>
             <CardContent>
-              <p className="text-gray-800 leading-relaxed">{actionPlan.recommendation}</p>
+              <p className="text-foreground leading-relaxed">{actionPlan.recommendation}</p>
             </CardContent>
           </Card>
         </div>

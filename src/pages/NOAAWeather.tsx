@@ -153,10 +153,10 @@ export default function NOAAWeather() {
               </CardContent>
             </Card>
 
-            <Card className="bg-gradient-to-br from-gray-500/10 to-gray-600/5">
+            <Card className="bg-gradient-to-br from-muted/50 to-muted/20">
               <CardContent className="pt-6">
                 <div className="flex items-center gap-4">
-                  <Cloud className="w-8 h-8 text-gray-500" />
+                  <Cloud className="w-8 h-8 text-muted-foreground" />
                   <div>
                     <p className="text-lg font-bold">{weatherData.conditions}</p>
                     <p className="text-sm text-muted-foreground">Condições</p>

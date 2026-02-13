@@ -144,7 +144,7 @@ function KPICard({
             {change !== undefined && (
               <Badge 
                 variant="outline" 
-                className={`${trend === 'up' ? 'text-emerald-400 border-emerald-400/30' : trend === 'down' ? 'text-red-400 border-red-400/30' : 'text-gray-400 border-gray-400/30'}`}
+                className={`${trend === 'up' ? 'text-emerald-400 border-emerald-400/30' : trend === 'down' ? 'text-red-400 border-red-400/30' : 'text-muted-foreground border-muted-foreground/30'}`}
               >
                 {trend === 'up' ? <ArrowUpRight className="w-3 h-3 mr-1" /> : <ArrowDownRight className="w-3 h-3 mr-1" />}
                 {change > 0 ? '+' : ''}{change}%
@@ -153,9 +153,9 @@ function KPICard({
           </div>
           
           <div className="space-y-1">
-            <p className="text-xs text-gray-400 uppercase tracking-wider">{title}</p>
+            <p className="text-xs text-muted-foreground uppercase tracking-wider">{title}</p>
             <p className={`text-2xl font-bold ${colors.text}`}>{value}</p>
-            {subtitle && <p className="text-xs text-gray-500">{subtitle}</p>}
+            {subtitle && <p className="text-xs text-muted-foreground">{subtitle}</p>}
           </div>
           
           {sparklineData && sparklineData.length > 0 && (
@@ -165,7 +165,7 @@ function KPICard({
           )}
           
           {changeLabel && (
-            <p className="text-xs text-gray-500 mt-2">{changeLabel}</p>
+            <p className="text-xs text-muted-foreground mt-2">{changeLabel}</p>
           )}
         </CardContent>
       </Card>
@@ -204,7 +204,7 @@ function StatusRing({ percentage, label, color }: { percentage: number; label: s
           <span className="text-sm font-bold text-white">{percentage}%</span>
         </div>
       </div>
-      <span className="text-xs text-gray-400 mt-1">{label}</span>
+      <span className="text-xs text-muted-foreground mt-1">{label}</span>
     </div>
   );
 }
@@ -327,8 +327,8 @@ export function AIExecutiveDashboard() {
     return (
       <div className="flex items-center justify-center h-64">
         <div className="flex items-center gap-3">
-          <Cpu className="w-6 h-6 text-blue-400 animate-pulse" />
-          <span className="text-gray-400">Carregando KPIs da IA...</span>
+          <Cpu className="w-6 h-6 text-primary animate-pulse" />
+          <span className="text-muted-foreground">Carregando KPIs da IA...</span>
         </div>
       </div>
     );
@@ -344,7 +344,7 @@ export function AIExecutiveDashboard() {
           </div>
           <div>
             <h2 className="text-xl font-bold text-white">Dashboard Executivo IA</h2>
-            <p className="text-sm text-gray-400">Últimos 7 dias • Atualizado agora</p>
+            <p className="text-sm text-muted-foreground">Últimos 7 dias • Atualizado agora</p>
           </div>
         </div>
         <Badge variant="outline" className="text-emerald-400 border-emerald-400/30">
@@ -408,10 +408,10 @@ export function AIExecutiveDashboard() {
       {/* Status Overview */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         {/* Quick Status */}
-        <Card className="bg-[#12121a]/80 border-gray-800 backdrop-blur-sm">
+        <Card className="bg-card/80 border-border backdrop-blur-sm">
           <CardHeader className="pb-2">
-            <CardTitle className="text-sm font-medium text-gray-300 flex items-center gap-2">
-              <Gauge className="w-4 h-4 text-blue-400" />
+            <CardTitle className="text-sm font-medium text-muted-foreground flex items-center gap-2">
+              <Gauge className="w-4 h-4 text-primary" />
               Status Geral da IA
             </CardTitle>
           </CardHeader>
@@ -434,7 +434,7 @@ export function AIExecutiveDashboard() {
               />
             </div>
             
-            <Separator className="my-4 bg-gray-800" />
+            <Separator className="my-4 bg-border" />
             
             <div className="grid grid-cols-2 gap-4">
               <div className="text-center p-3 rounded-lg bg-amber-500/10">
@@ -442,23 +442,23 @@ export function AIExecutiveDashboard() {
                   <AlertTriangle className="w-4 h-4 text-amber-400" />
                   <span className="text-lg font-bold text-amber-400">{kpiData.criticalAlerts}</span>
                 </div>
-                <span className="text-xs text-gray-400">Alertas Críticos</span>
+                <span className="text-xs text-muted-foreground">Alertas Críticos</span>
               </div>
-              <div className="text-center p-3 rounded-lg bg-blue-500/10">
+              <div className="text-center p-3 rounded-lg bg-primary/10">
                 <div className="flex items-center justify-center gap-2 mb-1">
-                  <Clock className="w-4 h-4 text-blue-400" />
-                  <span className="text-lg font-bold text-blue-400">{kpiData.pendingDecisions}</span>
+                  <Clock className="w-4 h-4 text-primary" />
+                  <span className="text-lg font-bold text-primary">{kpiData.pendingDecisions}</span>
                 </div>
-                <span className="text-xs text-gray-400">Pendentes</span>
+                <span className="text-xs text-muted-foreground">Pendentes</span>
               </div>
             </div>
           </CardContent>
         </Card>
         
         {/* Decision Types */}
-        <Card className="bg-[#12121a]/80 border-gray-800 backdrop-blur-sm">
+        <Card className="bg-card/80 border-border backdrop-blur-sm">
           <CardHeader className="pb-2">
-            <CardTitle className="text-sm font-medium text-gray-300 flex items-center gap-2">
+            <CardTitle className="text-sm font-medium text-muted-foreground flex items-center gap-2">
               <BarChart3 className="w-4 h-4 text-purple-400" />
               Distribuição por Tipo
             </CardTitle>
@@ -473,7 +473,7 @@ export function AIExecutiveDashboard() {
                 return (
                   <div key={type} className="space-y-1">
                     <div className="flex items-center justify-between text-sm">
-                      <span className="text-gray-400 capitalize">{type.replace(/_/g, ' ')}</span>
+                      <span className="text-muted-foreground capitalize">{type.replace(/_/g, ' ')}</span>
                       <span className={colorClasses[colors[index % colors.length]].text}>
                         {count} ({percentage}%)
                       </span>
@@ -487,7 +487,7 @@ export function AIExecutiveDashboard() {
               })}
               
               {Object.keys(kpiData.typeDistribution).length === 0 && (
-                <div className="text-center py-6 text-gray-500">
+                <div className="text-center py-6 text-muted-foreground">
                   <Sparkles className="w-8 h-8 mx-auto mb-2 opacity-50" />
                   <p className="text-sm">Sem dados de tipos ainda</p>
                 </div>

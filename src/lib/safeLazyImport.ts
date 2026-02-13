@@ -23,7 +23,7 @@ export function safeLazyImport(
 
   return (props: Record<string, unknown>) => createElement(
     Suspense,
-    { fallback: createElement("div", { className: "p-4 text-gray-400" }, "⏳ Carregando...") },
+    { fallback: createElement("div", { className: "p-4 text-muted-foreground" }, "⏳ Carregando...") },
     createElement(LazyComponent, props)
   );
 }
