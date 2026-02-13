@@ -60,21 +60,20 @@ export function ModuleAIChat({
   const [isSpeaking, setIsSpeaking] = useState(false);
   const [voiceEnabled, setVoiceEnabled] = useState(false);
   
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- SpeechRecognition API not in standard types
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Web Speech API not in standard TS types
   const recognitionRef = useRef<any>(null);
   const scrollRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any -- SpeechRecognition not in standard types
-    const SpeechRecognitionAPI = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
+    const w = window as unknown as { SpeechRecognition?: new () => any; webkitSpeechRecognition?: new () => any };
+    const SpeechRecognitionAPI = w.SpeechRecognition || w.webkitSpeechRecognition;
     if (SpeechRecognitionAPI) {
       recognitionRef.current = new SpeechRecognitionAPI();
       recognitionRef.current.continuous = false;
       recognitionRef.current.interimResults = false;
       recognitionRef.current.lang = 'pt-BR';
 
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any -- SpeechRecognition event
-      recognitionRef.current.onresult = (event: any) => {
+      recognitionRef.current.onresult = (event: { results: { 0: { 0: { transcript: string } } } }) => {
         const transcript = event.results[0][0].transcript;
         setInput(transcript);
         setIsListening(false);

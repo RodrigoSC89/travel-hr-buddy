@@ -137,8 +137,9 @@ export function HotwordDetector({
 
   const initializeSpeechRecognition = (): boolean => {
     try {
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Web Speech API not in standard TypeScript lib
-      const SpeechRecognitionAPI = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Web Speech API not in standard TS types
+      const w = window as unknown as { SpeechRecognition?: new () => any; webkitSpeechRecognition?: new () => any };
+      const SpeechRecognitionAPI = w.SpeechRecognition || w.webkitSpeechRecognition;
       
       if (!SpeechRecognitionAPI) {
         logger.warn('[HotwordDetector] SpeechRecognition not supported, using audio-only mode');

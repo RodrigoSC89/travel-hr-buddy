@@ -39,14 +39,15 @@ interface SpeechRecognitionLike {
 
 export function isBrowserSupported(): boolean {
   if (typeof window === "undefined") return false;
-  return !!((window as any).SpeechRecognition || (window as any).webkitSpeechRecognition);
+  const w = window as unknown as { SpeechRecognition?: unknown; webkitSpeechRecognition?: unknown };
+  return !!(w.SpeechRecognition || w.webkitSpeechRecognition);
 }
 
 function getSpeechRecognitionCtor(): (new () => SpeechRecognitionLike) | null {
   if (typeof window === "undefined") return null;
-  return (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition || null;
+  const w = window as unknown as { SpeechRecognition?: new () => SpeechRecognitionLike; webkitSpeechRecognition?: new () => SpeechRecognitionLike };
+  return w.SpeechRecognition || w.webkitSpeechRecognition || null;
 }
-/* eslint-enable @typescript-eslint/no-explicit-any */
 
 export class VoiceRecognitionEngine {
   private recognition: SpeechRecognitionLike | null = null;

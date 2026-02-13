@@ -92,7 +92,7 @@ export default function AdminDashboard() {
           logger.error("Error fetching trend data", { error });
         } else if (data) {
           // Transform data for chart
-          const chartData: TrendDataPoint[] = (data as any[]).map((item: { day: string; count: number }) => ({
+          const chartData: TrendDataPoint[] = (data as { day: string; count: number }[]).map((item) => ({
             day: new Date(item.day).toLocaleDateString("pt-BR", { day: "2-digit", month: "2-digit" }),
             count: item.count
           }));
@@ -122,7 +122,7 @@ export default function AdminDashboard() {
         if (error) {
           logger.error("Error fetching monthly summary", { error });
         } else if (data) {
-          setMonthlySummary((data as any) || []);
+          setMonthlySummary((data as unknown as MonthlySummaryDataPoint[]) || []);
         }
       } catch (error) {
         logger.error("Error fetching monthly summary:", error);

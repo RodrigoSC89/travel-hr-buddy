@@ -140,10 +140,13 @@ export function NaturalLanguageInterface() {
   const toggleVoice = () => {
     if (!isListening) {
       if ("webkitSpeechRecognition" in window || "SpeechRecognition" in window) {
-        const SpeechRecognition = (window as any).webkitSpeechRecognition || (window as any).SpeechRecognition;
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Web Speech API not in standard TS types
+        const w = window as unknown as { webkitSpeechRecognition?: new () => any; SpeechRecognition?: new () => any };
+        const SpeechRecognition = w.webkitSpeechRecognition || w.SpeechRecognition;
+        if (!SpeechRecognition) return;
         const recognition = new SpeechRecognition();
         recognition.lang = "pt-BR";
-        recognition.onresult = (event: any) => {
+        recognition.onresult = (event: { results: { 0: { 0: { transcript: string } } } }) => {
           const transcript = event.results[0][0].transcript;
           setInput(transcript);
           setIsListening(false);

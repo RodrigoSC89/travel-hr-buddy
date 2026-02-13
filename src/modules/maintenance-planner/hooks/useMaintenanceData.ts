@@ -80,7 +80,7 @@ export function useMaintenanceData() {
   const [selectedEquipment, setSelectedEquipment] = useState<string | null>(null);
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any -- dynamic table access for tables not in generated types
-  const dynamicDb = supabase as any;
+  const dynamicDb = { from: supabase.from as Function } as any;
 
   // Fetch equipment
   const { data: equipment = [], isLoading: equipmentLoading } = useQuery({

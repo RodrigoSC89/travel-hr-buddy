@@ -45,8 +45,7 @@ export interface SpectrogramData {
 }
 
 // Helper to get the dynamic supabase client for untyped tables
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- sonar tables not in generated types
-const dynamicSupabase = () => supabase as any;
+const dynamicSupabase = () => ({ from: supabase.from as Function });
 
 class EnhancedSonarAIService {
   private modelVersion = "v1.0.0-onnx";

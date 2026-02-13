@@ -121,7 +121,7 @@ export const ManagerAlerts: React.FC = () => {
     }
   };
 
-  const getSeverityColor = (severity: string) => {
+  const getSeverityColor = (severity: string): "destructive" | "secondary" | "default" => {
     switch (severity) {
     case "critical":
       return "destructive";
@@ -205,7 +205,7 @@ export const ManagerAlerts: React.FC = () => {
                   <div className="flex-1">
                     <div className="flex items-center gap-2 mb-2">
                       {getSeverityIcon(alert.severity)}
-                      <Badge variant={getSeverityColor(alert.severity) as any}>
+                      <Badge variant={getSeverityColor(alert.severity)}>
                         {alert.alert_type.replace("_", " ")}
                       </Badge>
                     </div>

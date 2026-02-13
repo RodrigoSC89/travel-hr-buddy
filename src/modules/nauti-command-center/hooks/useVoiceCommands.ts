@@ -82,8 +82,9 @@ export function useVoiceCommands(options: UseVoiceCommandsOptions = {}): UseVoic
   useEffect(() => {
     if (!isSupported) return;
 
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const SpeechRecognitionClass = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
+    const w = window as unknown as { SpeechRecognition?: new () => SpeechRecognitionInstance; webkitSpeechRecognition?: new () => SpeechRecognitionInstance };
+    const SpeechRecognitionClass = w.SpeechRecognition || w.webkitSpeechRecognition;
+    if (!SpeechRecognitionClass) return;
     const recognition: SpeechRecognitionInstance = new SpeechRecognitionClass();
 
     recognition.lang = language;

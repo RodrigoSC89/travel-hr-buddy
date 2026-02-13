@@ -89,7 +89,7 @@ export function usePerformanceMonitor(options: UsePerformanceMonitorOptions = {}
       lastFrameTime.current = now;
 
       // Get memory info (Chrome only)
-      const memory = (performance as any).memory;
+      const memory = (performance as unknown as { memory?: { usedJSHeapSize: number; jsHeapSizeLimit: number } }).memory;
       const memoryInfo = memory
         ? {
             used: memory.usedJSHeapSize,
@@ -105,7 +105,7 @@ export function usePerformanceMonitor(options: UsePerformanceMonitorOptions = {}
       lastHeapSize.current = memory?.usedJSHeapSize || 0;
 
       // Get network type
-      const connection = (navigator as any).connection;
+      const connection = (navigator as unknown as { connection?: { effectiveType?: string } }).connection;
       const networkType = connection?.effectiveType || "unknown";
 
       // Get render timing

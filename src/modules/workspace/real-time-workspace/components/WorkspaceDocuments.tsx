@@ -82,7 +82,7 @@ const getFileIcon = (type: SharedDocument["type"]) => {
   }
 };
 
-const getTypeBadgeVariant = (type: SharedDocument["type"]) => {
+const getTypeBadgeVariant = (type: SharedDocument["type"]): "destructive" | "default" | "secondary" | "outline" => {
   switch (type) {
     case "PDF": return "destructive";
     case "DOCX": return "default";
@@ -295,7 +295,7 @@ export const WorkspaceDocuments: React.FC<WorkspaceDocumentsProps> = ({
                     </div>
                   </div>
                   
-                  <Badge variant={getTypeBadgeVariant(doc.type) as any} className="text-xs">
+                  <Badge variant={getTypeBadgeVariant(doc.type)} className="text-xs">
                     {doc.type}
                   </Badge>
                   
@@ -370,7 +370,7 @@ export const WorkspaceDocuments: React.FC<WorkspaceDocumentsProps> = ({
           >
             {selectedFile ? (
               <div className="flex flex-col items-center gap-2">
-                {getFileIcon(selectedFile.name.split('.').pop()?.toUpperCase() as any || "OTHER")}
+                {getFileIcon((selectedFile.name.split('.').pop()?.toUpperCase() || "OTHER") as SharedDocument["type"])}
                 <p className="font-medium">{selectedFile.name}</p>
                 <p className="text-sm text-muted-foreground">
                   {(selectedFile.size / 1024 / 1024).toFixed(2)} MB
