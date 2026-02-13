@@ -28,10 +28,10 @@ import { toast } from 'sonner';
 const TrackingTelemetryHub = lazy(() => import('@/pages/TelemetriaCommand'));
 const RealTimeTrackingPage = lazy(() => import('@/pages/tracking/RealTimeTrackingPage'));
 const AISTrackerPage = lazy(() => import('@/pages/AISTrackerPage'));
-const SatcomDashboardEnhanced = lazy(() => import('@/pages/SatcomDashboardEnhanced'));
+const SatcomDashboardEnhanced = lazy(() => import('@/pages/TelemetriaCommand'));
 const WeatherIntelligencePage = lazy(() => import('@/pages/advanced/WeatherIntelligencePage'));
 const AlertsCommandCenter = lazy(() => import('@/pages/TelemetriaCommand'));
-const PredictiveTelemetry = lazy(() => import('@/pages/PredictiveTelemetry'));
+const PredictiveTelemetry = lazy(() => import('@/pages/TelemetriaCommand'));
 
 const LoadingSkeleton = () => (
   <div className="space-y-4 p-6">

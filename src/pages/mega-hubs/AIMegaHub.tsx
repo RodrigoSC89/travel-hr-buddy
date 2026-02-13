@@ -35,7 +35,7 @@ const AICommandCenter = lazy(() => import('@/pages/AIHubPage'));
 const AutonomousCommandCenter = lazy(() => import('@/pages/AIHubPage'));
 const AIAgentDirectory = lazy(() => import('@/pages/AIAgents/AIAgentDirectory'));
 const WorkflowCommandCenter = lazy(() => import('@/pages/WorkflowCommandCenter'));
-const VoiceAssistant = lazy(() => import('@/pages/VoiceAssistant'));
+const VoiceAssistant = lazy(() => import('@/pages/AIHubPage'));
 const AIModulesHubPage = lazy(() => import('@/pages/ai/AIModulesHubPage'));
 const RAGAssistantPage = lazy(() => import('@/pages/enterprise/RAGAssistantPage'));
 const OCRCenterPage = lazy(() => import('@/pages/enterprise/OCRCenterPage'));

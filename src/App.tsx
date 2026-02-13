@@ -71,10 +71,10 @@ const MissionCommandCenter = lazy(() => import("@/pages/MaritimeCommandCenter"))
 const BridgeLink = lazy(() => import("@/pages/MaritimeCommandCenter"));
 
 // Digital Twin & Advanced
-const DigitalTwinPage = lazy(() => import("@/pages/DigitalTwinPage"));
+const DigitalTwinPage = lazy(() => import("@/pages/advanced/DigitalTwin3DPage"));
 const RecruitmentPage = lazy(() => import("@/pages/RecruitmentPage"));
 const AgentOrchestrationPage = lazy(() => import("@/pages/AgentOrchestrationPage"));
-const BlockchainCompliancePage = lazy(() => import("@/pages/BlockchainCompliancePage"));
+const BlockchainCompliancePage = lazy(() => import("@/pages/advanced/BlockchainCertificatesPage"));
 const CompanyFinancialPage = lazy(() => import("@/pages/CompanyFinancialPage"));
 
 // Módulos Completos
@@ -82,7 +82,7 @@ const MedicalInfirmary = lazy(() => import("@/modules/medical-infirmary"));
 const EnhancedWasteManagement = lazy(() => import("@/pages/ESGEmissionsPremium"));
 const CentralComandoAprimorada = lazy(() => import("@/pages/dashboard/CentralComandoAprimorada"));
 const MedicalInfirmaryEnhanced = lazy(() => import("@/pages/MedicalInfirmaryEnhanced"));
-const SatcomDashboardEnhanced = lazy(() => import("@/pages/SatcomDashboardEnhanced"));
+const SatcomDashboardEnhanced = lazy(() => import("@/pages/TelemetriaCommand"));
 
 // ============================================
 // MANUTENÇÃO
@@ -92,13 +92,13 @@ const PredictiveMaintenancePage = lazy(() => import("@/pages/PredictiveMaintenan
 const FuelManagementPage = lazy(() => import("@/pages/FuelManagementPage"));
 
 // ============================================
-// OPERAÇÕES SUBMARINAS
+// OPERAÇÕES SUBMARINAS (redirected to MaritimeCommandCenter)
 // ============================================
-const OceanSonar = lazy(() => import("@/pages/OceanSonar"));
-const UnderwaterDrone = lazy(() => import("@/pages/UnderwaterDrone"));
-const AutoSub = lazy(() => import("@/pages/AutoSub"));
-const SonarAI = lazy(() => import("@/pages/SonarAI"));
-const DeepRiskAI = lazy(() => import("@/pages/DeepRiskAI"));
+const OceanSonar = lazy(() => import("@/pages/MaritimeCommandCenter"));
+const UnderwaterDrone = lazy(() => import("@/pages/MaritimeCommandCenter"));
+const AutoSub = lazy(() => import("@/pages/MaritimeCommandCenter"));
+const SonarAI = lazy(() => import("@/pages/MaritimeCommandCenter"));
+const DeepRiskAI = lazy(() => import("@/pages/MaritimeCommandCenter"));
 
 // ============================================
 // IA & AUTOMAÇÃO
@@ -111,9 +111,9 @@ const RevolutionaryFeaturesPage = lazy(() => import("@/pages/AIHubPage"));
 const AIObservabilityDashboard = lazy(() => import("@/pages/AIObservabilityDashboard"));
 const WorkflowCommandCenter = lazy(() => import("@/pages/WorkflowCommandCenter"));
 const AIAudit = lazy(() => import("@/pages/AIAudit"));
-const VoiceAssistant = lazy(() => import("@/pages/VoiceAssistant"));
-const VoiceAssistantAIPage = lazy(() => import("@/pages/VoiceAssistantAIPage"));
-const PortugueseVoiceAssistantPage = lazy(() => import("@/pages/PortugueseVoiceAssistantPage"));
+const VoiceAssistant = lazy(() => import("@/pages/AIHubPage"));
+const VoiceAssistantAIPage = lazy(() => import("@/pages/AIHubPage"));
+const PortugueseVoiceAssistantPage = lazy(() => import("@/pages/AIHubPage"));
 const AIOperationsCenter = lazy(() => import("@/pages/AIHubPage"));
 const QualityDashboard = lazy(() => import("@/pages/QualityDashboard"));
 const AgentChat = lazy(() => import("@/pages/AIAgents/AgentChat"));
@@ -128,10 +128,10 @@ const UnifiedOptimizationPage = lazy(() => import("@/pages/UnifiedOptimizationPa
 // TELEMETRIA & MONITORAMENTO
 // ============================================
 const TelemetriaCommand = lazy(() => import("@/pages/TelemetriaCommand"));
-const PredictiveTelemetry = lazy(() => import("@/pages/PredictiveTelemetry"));
-const SatelliteOptimizerPage = lazy(() => import("@/pages/SatelliteOptimizerPage"));
+const PredictiveTelemetry = lazy(() => import("@/pages/TelemetriaCommand"));
+const SatelliteOptimizerPage = lazy(() => import("@/pages/TelemetriaCommand"));
 const VesselTrackingPage = lazy(() => import("@/pages/VesselTrackingPage"));
-const IncidentSimulator = lazy(() => import("@/pages/IncidentSimulator"));
+const IncidentSimulator = lazy(() => import("@/pages/MaritimeCommandCenter"));
 const CalendarView = lazy(() => import("@/pages/CalendarView"));
 
 // ============================================
@@ -143,11 +143,11 @@ const Integrations = lazy(() => import("@/pages/Integrations"));
 const WeatherMaritime = lazy(() => import("@/pages/WeatherMaritime"));
 const AISTrackerPage = lazy(() => import("@/pages/AISTrackerPage"));
 const PortAPI = lazy(() => import("@/pages/PortAPI"));
-const FlightTracker = lazy(() => import("@/pages/FlightTracker"));
-const NOAAWeather = lazy(() => import("@/pages/NOAAWeather"));
-const OpenSkyFlights = lazy(() => import("@/pages/OpenSkyFlights"));
-const EarthquakeMonitor = lazy(() => import("@/pages/EarthquakeMonitor"));
-const VoiceTranscriber = lazy(() => import("@/pages/VoiceTranscriber"));
+const FlightTracker = lazy(() => import("@/pages/WeatherMaritime"));
+const NOAAWeather = lazy(() => import("@/pages/WeatherMaritime"));
+const OpenSkyFlights = lazy(() => import("@/pages/WeatherMaritime"));
+const EarthquakeMonitor = lazy(() => import("@/pages/WeatherMaritime"));
+const VoiceTranscriber = lazy(() => import("@/pages/AIHubPage"));
 
 // ============================================
 // RELATÓRIOS & DOCUMENTOS
@@ -235,9 +235,9 @@ const Settings = lazy(() => import("@/pages/Settings"));
 const IntegrationsCenter = lazy(() => import("@/pages/IntegrationsCenter"));
 const APIGateway = lazy(() => import("@/pages/IntegrationsCenter"));
 const Collaboration = lazy(() => import("@/pages/Collaboration"));
-const Roadmap = lazy(() => import("@/pages/Roadmap"));
-const StatusPage = lazy(() => import("@/pages/StatusPage"));
-const DemoPage = lazy(() => import("@/pages/DemoPage"));
+const Roadmap = lazy(() => import("@/pages/LandingPage"));
+const StatusPage = lazy(() => import("@/pages/LandingPage"));
+const DemoPage = lazy(() => import("@/pages/LandingPage"));
 const SecuritySettings = lazy(() => import("@/pages/settings/Security"));
 
 // ============================================
