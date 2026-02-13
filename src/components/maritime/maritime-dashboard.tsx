@@ -81,8 +81,8 @@ export const MaritimeDashboard: React.FC = () => {
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-4xl font-bold bg-gradient-to-r from-blue-600 via-cyan-600 to-blue-800 bg-clip-text text-transparent flex items-center gap-3">
-            <Ship className="h-10 w-10 text-blue-600" />
+          <h1 className="text-4xl font-bold bg-gradient-to-r from-primary via-accent-foreground to-primary bg-clip-text text-transparent flex items-center gap-3">
+            <Ship className="h-10 w-10 text-primary" />
             NAUTILUS MARITIME OS
           </h1>
           <p className="text-xl text-muted-foreground mt-2">
@@ -169,53 +169,53 @@ const OverviewDashboard: React.FC<OverviewDashboardProps> = ({ onNavigate }) => 
 
       {/* KPIs Principais */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-        <Card className="bg-gradient-to-br from-blue-50 to-blue-100 border-blue-200">
+        <Card className="bg-gradient-to-br from-info/10 to-info/5 border-info/20">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">Embarcações Ativas</CardTitle>
-            <Ship className="h-4 w-4 text-blue-600" />
+            <Ship className="h-4 w-4 text-info" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-blue-800">24</div>
-            <p className="text-xs text-blue-600">
+            <div className="text-2xl font-bold">24</div>
+            <p className="text-xs text-muted-foreground">
               18 em navegação, 6 no porto
             </p>
           </CardContent>
         </Card>
 
-        <Card className="bg-gradient-to-br from-green-50 to-green-100 border-green-200">
+        <Card className="bg-gradient-to-br from-success/10 to-success/5 border-success/20">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">Tripulantes Ativos</CardTitle>
-            <Users className="h-4 w-4 text-green-600" />
+            <Users className="h-4 w-4 text-success" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-green-800">487</div>
-            <p className="text-xs text-green-600">
+            <div className="text-2xl font-bold">487</div>
+            <p className="text-xs text-muted-foreground">
               324 a bordo, 163 em terra
             </p>
           </CardContent>
         </Card>
 
-        <Card className="bg-gradient-to-br from-purple-50 to-purple-100 border-purple-200">
+        <Card className="bg-gradient-to-br from-primary/10 to-primary/5 border-primary/20">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">Compliance Score</CardTitle>
-            <Shield className="h-4 w-4 text-purple-600" />
+            <Shield className="h-4 w-4 text-primary" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-purple-800">97.8%</div>
-            <p className="text-xs text-purple-600">
+            <div className="text-2xl font-bold">97.8%</div>
+            <p className="text-xs text-muted-foreground">
               +2.1% vs mês anterior
             </p>
           </CardContent>
         </Card>
 
-        <Card className="bg-gradient-to-br from-orange-50 to-orange-100 border-orange-200">
+        <Card className="bg-gradient-to-br from-warning/10 to-warning/5 border-warning/20">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">Eficiência IA</CardTitle>
-            <Brain className="h-4 w-4 text-orange-600" />
+            <Brain className="h-4 w-4 text-warning" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-orange-800">94.5%</div>
-            <p className="text-xs text-orange-600">
+            <div className="text-2xl font-bold">94.5%</div>
+            <p className="text-xs text-muted-foreground">
               Otimização automática
             </p>
           </CardContent>
@@ -237,12 +237,12 @@ const OverviewDashboard: React.FC<OverviewDashboardProps> = ({ onNavigate }) => 
           <CardContent>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div 
-                className="p-4 border rounded-lg cursor-pointer hover:bg-blue-50 transition-colors"
+                className="p-4 border rounded-lg cursor-pointer hover:bg-info/5 transition-colors"
                 onClick={() => onNavigate("vessels")}
               >
                 <div className="flex items-center gap-3 mb-3">
-                  <div className="p-2 bg-blue-100 rounded-lg">
-                    <Ship className="h-5 w-5 text-blue-600" />
+                  <div className="p-2 bg-info/10 rounded-lg">
+                    <Ship className="h-5 w-5 text-info" />
                   </div>
                   <h3 className="font-semibold">Gestão de Embarcações</h3>
                 </div>
@@ -257,12 +257,12 @@ const OverviewDashboard: React.FC<OverviewDashboardProps> = ({ onNavigate }) => 
               </div>
 
               <div 
-                className="p-4 border rounded-lg cursor-pointer hover:bg-green-50 transition-colors"
+                className="p-4 border rounded-lg cursor-pointer hover:bg-success/5 transition-colors"
                 onClick={() => onNavigate("crew")}
               >
                 <div className="flex items-center gap-3 mb-3">
-                  <div className="p-2 bg-green-100 rounded-lg">
-                    <Users className="h-5 w-5 text-green-600" />
+                  <div className="p-2 bg-success/10 rounded-lg">
+                    <Users className="h-5 w-5 text-success" />
                   </div>
                   <h3 className="font-semibold">Rotação Inteligente</h3>
                 </div>
@@ -277,12 +277,12 @@ const OverviewDashboard: React.FC<OverviewDashboardProps> = ({ onNavigate }) => 
               </div>
 
               <div 
-                className="p-4 border rounded-lg cursor-pointer hover:bg-purple-50 transition-colors"
+                className="p-4 border rounded-lg cursor-pointer hover:bg-primary/5 transition-colors"
                 onClick={() => onNavigate("certifications")}
               >
                 <div className="flex items-center gap-3 mb-3">
-                  <div className="p-2 bg-purple-100 rounded-lg">
-                    <Shield className="h-5 w-5 text-purple-600" />
+                  <div className="p-2 bg-primary/10 rounded-lg">
+                    <Shield className="h-5 w-5 text-primary" />
                   </div>
                   <h3 className="font-semibold">Certificações Automáticas</h3>
                 </div>

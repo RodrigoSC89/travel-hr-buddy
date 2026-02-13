@@ -220,7 +220,7 @@ export const CrewManagementDashboard = () => {
         
         <Card>
           <CardContent className="p-4 text-center">
-            <Award className="h-8 w-8 mx-auto mb-2 text-purple-600" />
+            <Award className="h-8 w-8 mx-auto mb-2 text-primary" />
             <div className="text-2xl font-bold">{crewStats.training}</div>
             <div className="text-sm text-muted-foreground">Treinamento</div>
           </CardContent>

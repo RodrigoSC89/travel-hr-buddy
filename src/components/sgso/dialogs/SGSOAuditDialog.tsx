@@ -81,7 +81,7 @@ export function SGSOAuditDialog({ open, onOpenChange, triggerClassName }: SGSOAu
       <DialogContent className="max-w-lg">
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2">
-            <FileText className="h-5 w-5 text-blue-600" />
+            <FileText className="h-5 w-5 text-info" />
             Agendar Nova Auditoria
           </DialogTitle>
           <DialogDescription>

@@ -329,8 +329,8 @@ Autoridade Marítima do Brasil`,
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
         <Card>
           <CardContent className="p-4 flex items-center gap-3">
-            <div className="p-2 rounded-lg bg-green-500/10">
-              <CheckCircle className="h-5 w-5 text-green-500" />
+            <div className="p-2 rounded-lg bg-success/10">
+              <CheckCircle className="h-5 w-5 text-success" />
             </div>
             <div>
               <p className="font-medium text-sm">Extração Inteligente</p>
@@ -343,8 +343,8 @@ Autoridade Marítima do Brasil`,
 
         <Card>
           <CardContent className="p-4 flex items-center gap-3">
-            <div className="p-2 rounded-lg bg-blue-500/10">
-              <FileText className="h-5 w-5 text-blue-500" />
+            <div className="p-2 rounded-lg bg-info/10">
+              <FileText className="h-5 w-5 text-info" />
             </div>
             <div>
               <p className="font-medium text-sm">Resumo Automático</p>
@@ -357,8 +357,8 @@ Autoridade Marítima do Brasil`,
 
         <Card>
           <CardContent className="p-4 flex items-center gap-3">
-            <div className="p-2 rounded-lg bg-purple-500/10">
-              <AlertCircle className="h-5 w-5 text-purple-500" />
+            <div className="p-2 rounded-lg bg-primary/10">
+              <AlertCircle className="h-5 w-5 text-primary" />
             </div>
             <div>
               <p className="font-medium text-sm">Recomendações</p>

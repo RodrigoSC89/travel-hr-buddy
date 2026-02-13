@@ -401,7 +401,7 @@ export const NotificationCenter: React.FC<NotificationCenterProps> = ({
                 className={`p-4 rounded-lg border transition-colors ${
                   notification.isRead
                     ? "bg-card border-border"
-                    : "bg-blue-50 dark:bg-blue-950/20 border-blue-200 dark:border-blue-900"
+                    : "bg-primary/5 border-primary/20"
                 }`}
               >
                 <div className="flex items-start gap-3">

@@ -102,7 +102,7 @@ export default function UnifiedOptimizationPage() {
                   <div>
                     <p className="text-sm text-muted-foreground">{kpi.label}</p>
                     <p className="text-2xl font-bold">{kpi.value}</p>
-                    <Badge variant="outline" className="text-green-600 mt-1">
+                    <Badge variant="outline" className="text-success mt-1">
                       {kpi.trend}
                     </Badge>
                   </div>
@@ -130,7 +130,7 @@ export default function UnifiedOptimizationPage() {
                 <div className="space-y-4">
                   <div className="flex items-center justify-between">
                     <span className="text-sm text-muted-foreground">Economia Mensal</span>
-                    <span className="font-bold text-green-600">{module.savings}</span>
+                    <span className="font-bold text-success">{module.savings}</span>
                   </div>
                   <div>
                     <div className="flex items-center justify-between text-sm mb-1">
@@ -170,7 +170,7 @@ export default function UnifiedOptimizationPage() {
                     </div>
                   </div>
                   <div className="text-right">
-                    <p className="font-bold text-green-600">{opt.savings}</p>
+                    <p className="font-bold text-success">{opt.savings}</p>
                     <p className="text-xs text-muted-foreground">{opt.date}</p>
                   </div>
                 </div>

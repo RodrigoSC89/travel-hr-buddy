@@ -223,9 +223,9 @@ const statusColors: Record<Agent["status"], string> = {
 
 const autonomyLabels: Record<number, { label: string; color: string }> = {
   0: { label: "Manual", color: "text-muted-foreground" },
-  1: { label: "Recomenda", color: "text-blue-500" },
-  2: { label: "Auto + Notifica", color: "text-amber-500" },
-  3: { label: "Autônomo", color: "text-green-500" }
+  1: { label: "Recomenda", color: "text-info" },
+  2: { label: "Auto + Notifica", color: "text-warning" },
+  3: { label: "Autônomo", color: "text-success" }
 };
 
 export function AgentOrchestrationDashboard() {
@@ -261,7 +261,7 @@ export function AgentOrchestrationDashboard() {
         <div className="flex items-center gap-3">
           <Badge 
             variant="outline" 
-            className={`${systemStatus === "operational" ? "border-green-500 text-green-500" : "border-red-500 text-red-500"}`}
+            className={`${systemStatus === "operational" ? "border-success text-success" : "border-destructive text-destructive"}`}
           >
             <Activity className="h-3 w-3 mr-1" />
             {systemStatus === "operational" ? "Sistema Operacional" : "Degradado"}
@@ -293,7 +293,7 @@ export function AgentOrchestrationDashboard() {
                 <p className="text-sm text-muted-foreground">Agentes Ativos</p>
                 <p className="text-2xl font-bold">{activeAgents}/{agents.length}</p>
               </div>
-              <Bot className="h-8 w-8 text-blue-500 opacity-80" />
+              <Bot className="h-8 w-8 text-info opacity-80" />
             </div>
           </CardContent>
         </Card>
@@ -304,7 +304,7 @@ export function AgentOrchestrationDashboard() {
                 <p className="text-sm text-muted-foreground">Consenso Médio</p>
                 <p className="text-2xl font-bold">{avgConsensus.toFixed(1)}%</p>
               </div>
-              <CheckCircle2 className="h-8 w-8 text-green-500 opacity-80" />
+              <CheckCircle2 className="h-8 w-8 text-success opacity-80" />
             </div>
           </CardContent>
         </Card>
@@ -315,7 +315,7 @@ export function AgentOrchestrationDashboard() {
                 <p className="text-sm text-muted-foreground">Tasks Completadas</p>
                 <p className="text-2xl font-bold">{totalTasks.toLocaleString()}</p>
               </div>
-              <Zap className="h-8 w-8 text-amber-500 opacity-80" />
+              <Zap className="h-8 w-8 text-warning opacity-80" />
             </div>
           </CardContent>
         </Card>
@@ -328,7 +328,7 @@ export function AgentOrchestrationDashboard() {
                   {recentDecisions.filter(d => d.status === "pending").length}
                 </p>
               </div>
-              <Clock className="h-8 w-8 text-purple-500 opacity-80" />
+              <Clock className="h-8 w-8 text-primary opacity-80" />
             </div>
           </CardContent>
         </Card>
@@ -431,8 +431,8 @@ export function AgentOrchestrationDashboard() {
                           <Badge 
                             variant={decision.status === "executed" ? "default" : "secondary"}
                             className={
-                              decision.status === "pending" ? "bg-amber-500" :
-                              decision.status === "executed" ? "bg-green-500" : ""
+                              decision.status === "pending" ? "bg-warning" :
+                              decision.status === "executed" ? "bg-success" : ""
                             }
                           >
                             {decision.status === "pending" ? "Aguardando" :

@@ -213,15 +213,15 @@ export const SIMOPSManager: React.FC = () => {
 
       {/* Alerts */}
       {criticalConflicts.length > 0 && (
-        <Card className="border-red-500/50 bg-red-500/5">
+        <Card className="border-destructive/50 bg-destructive/5">
           <CardContent className="pt-4">
             <div className="flex items-start gap-3">
-              <AlertTriangle className="h-6 w-6 text-red-500 mt-0.5" />
+              <AlertTriangle className="h-6 w-6 text-destructive mt-0.5" />
               <div className="flex-1">
-                <p className="font-medium text-red-600">Conflitos Críticos Detectados ({criticalConflicts.length})</p>
+                <p className="font-medium text-destructive">Conflitos Críticos Detectados ({criticalConflicts.length})</p>
                 <div className="mt-2 space-y-2">
                   {criticalConflicts.map(conflict => (
-                    <div key={conflict.id} className="p-2 bg-red-500/10 rounded border border-red-500/20">
+                    <div key={conflict.id} className="p-2 bg-destructive/10 rounded border border-destructive/20">
                       <p className="text-sm font-medium">{conflict.description}</p>
                       <p className="text-xs text-muted-foreground mt-1">Recomendação: {conflict.recommendation}</p>
                     </div>
@@ -235,7 +235,7 @@ export const SIMOPSManager: React.FC = () => {
 
       {/* Stats */}
       <div className="grid grid-cols-5 gap-4">
-        <Card className="bg-gradient-to-br from-green-500/10 to-green-600/5">
+        <Card className="bg-gradient-to-br from-success/10 to-success/5">
           <CardContent className="pt-4">
             <div className="flex items-center justify-between">
               <div>
@@ -246,7 +246,7 @@ export const SIMOPSManager: React.FC = () => {
             </div>
           </CardContent>
         </Card>
-        <Card className="bg-gradient-to-br from-blue-500/10 to-blue-600/5">
+        <Card className="bg-gradient-to-br from-info/10 to-info/5">
           <CardContent className="pt-4">
             <div className="flex items-center justify-between">
               <div>
@@ -257,7 +257,7 @@ export const SIMOPSManager: React.FC = () => {
             </div>
           </CardContent>
         </Card>
-        <Card className="bg-gradient-to-br from-purple-500/10 to-purple-600/5">
+        <Card className="bg-gradient-to-br from-primary/10 to-primary/5">
           <CardContent className="pt-4">
             <div className="flex items-center justify-between">
               <div>
@@ -268,7 +268,7 @@ export const SIMOPSManager: React.FC = () => {
             </div>
           </CardContent>
         </Card>
-        <Card className="bg-gradient-to-br from-yellow-500/10 to-yellow-600/5">
+        <Card className="bg-gradient-to-br from-warning/10 to-warning/5">
           <CardContent className="pt-4">
             <div className="flex items-center justify-between">
               <div>
@@ -279,7 +279,7 @@ export const SIMOPSManager: React.FC = () => {
             </div>
           </CardContent>
         </Card>
-        <Card className="bg-gradient-to-br from-cyan-500/10 to-cyan-600/5">
+        <Card className="bg-gradient-to-br from-accent/10 to-accent/5">
           <CardContent className="pt-4">
             <div className="flex items-center justify-between">
               <div>
@@ -309,9 +309,9 @@ export const SIMOPSManager: React.FC = () => {
               {/* Zones */}
               {zones.filter(z => z.active).map((zone, i) => {
                 const colors = {
-                  exclusion: "border-red-500 bg-red-500/10",
-                  caution: "border-yellow-500 bg-yellow-500/10",
-                  operational: "border-blue-500 bg-blue-500/10"
+                  exclusion: "border-destructive bg-destructive/10",
+                  caution: "border-warning bg-warning/10",
+                  operational: "border-info bg-info/10"
                 };
                 const sizes = { 500: "w-48 h-48", 200: "w-24 h-24", 1000: "w-64 h-64", 300: "w-32 h-32", 50: "w-12 h-12" };
                 const size = sizes[zone.radius as keyof typeof sizes] || "w-24 h-24";
@@ -351,15 +351,15 @@ export const SIMOPSManager: React.FC = () => {
                 <p className="text-xs font-medium mb-2">Legenda</p>
                 <div className="space-y-1">
                   <div className="flex items-center gap-2 text-xs">
-                    <div className="w-3 h-3 rounded-full border-2 border-dashed border-red-500" />
+                    <div className="w-3 h-3 rounded-full border-2 border-dashed border-destructive" />
                     <span>Zona de Exclusão</span>
                   </div>
                   <div className="flex items-center gap-2 text-xs">
-                    <div className="w-3 h-3 rounded-full border-2 border-dashed border-yellow-500" />
+                    <div className="w-3 h-3 rounded-full border-2 border-dashed border-warning" />
                     <span>Zona de Cautela</span>
                   </div>
                   <div className="flex items-center gap-2 text-xs">
-                    <div className="w-3 h-3 rounded-full border-2 border-dashed border-blue-500" />
+                    <div className="w-3 h-3 rounded-full border-2 border-dashed border-info" />
                     <span>Zona Operacional</span>
                   </div>
                 </div>
@@ -374,7 +374,7 @@ export const SIMOPSManager: React.FC = () => {
           <Card>
             <CardHeader className="pb-2">
               <CardTitle className="text-lg flex items-center gap-2">
-                <Activity className="h-5 w-5 text-green-500" />
+                <Activity className="h-5 w-5 text-success" />
                 Operações Ativas
               </CardTitle>
             </CardHeader>
@@ -417,7 +417,7 @@ export const SIMOPSManager: React.FC = () => {
                 {zones.map(zone => (
                   <div key={zone.id} className="flex items-center justify-between p-2 rounded-lg border">
                     <div className="flex items-center gap-2">
-                      <CircleDot className={`h-4 w-4 ${zone.type === "exclusion" ? "text-red-500" : zone.type === "caution" ? "text-yellow-500" : "text-blue-500"}`} />
+                      <CircleDot className={`h-4 w-4 ${zone.type === "exclusion" ? "text-destructive" : zone.type === "caution" ? "text-warning" : "text-info"}`} />
                       <div>
                         <p className="text-sm font-medium">{zone.name}</p>
                         <p className="text-xs text-muted-foreground">{zone.radius}m</p>
