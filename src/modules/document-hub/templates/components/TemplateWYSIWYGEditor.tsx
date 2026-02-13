@@ -72,7 +72,7 @@ export const TemplateWYSIWYGEditor: React.FC<TemplateWYSIWYGEditorProps> = ({
   ];
 
   return (
-    <div className="border rounded-lg bg-white">
+    <div className="border rounded-lg bg-card">
       {/* Toolbar */}
       <div className="flex items-center gap-1 p-2 border-b bg-muted/50 flex-wrap">
         <Button

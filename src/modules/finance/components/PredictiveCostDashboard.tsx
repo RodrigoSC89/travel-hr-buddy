@@ -226,7 +226,7 @@ export function PredictiveCostDashboard() {
                       .filter(([key]) => !['month', 'total', 'confidence'].includes(key))
                       .map(([category, value]) => {
                         const Icon = categoryIcons[category] || MoreHorizontal;
-                        const color = categoryColors[category] || 'bg-gray-500';
+                        const color = categoryColors[category] || 'bg-muted-foreground';
                         const percentage = ((value as number) / predictions[0].total) * 100;
                         
                         return (
@@ -301,7 +301,7 @@ export function PredictiveCostDashboard() {
               <div className="space-y-4">
                 {savings.map((opportunity, idx) => {
                   const Icon = categoryIcons[opportunity.category] || MoreHorizontal;
-                  const color = categoryColors[opportunity.category] || 'bg-gray-500';
+                  const color = categoryColors[opportunity.category] || 'bg-muted-foreground';
                   
                   return (
                     <motion.div 

@@ -257,11 +257,11 @@ export default function MaritimeCommandCenter() {
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case "active": return "bg-green-500";
-      case "shore_leave": return "bg-yellow-500";
-      case "medical_leave": return "bg-orange-500";
-      case "inactive": return "bg-gray-500";
-      default: return "bg-gray-500";
+      case "active": return "bg-success";
+      case "shore_leave": return "bg-warning";
+      case "medical_leave": return "bg-warning";
+      case "inactive": return "bg-muted-foreground";
+      default: return "bg-muted-foreground";
     }
   };
 

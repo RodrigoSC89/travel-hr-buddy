@@ -27,7 +27,7 @@ export const LTICounterBanner: React.FC<LTICounterBannerProps> = ({
       <CardContent className="py-6 relative">
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
           <div className="flex items-center gap-4">
-            <div className="p-3 bg-white/20 rounded-full">
+            <div className="p-3 bg-success-foreground/20 rounded-full">
               {isGoalReached ? (
                 <Trophy className="h-8 w-8" />
               ) : (
@@ -43,7 +43,7 @@ export const LTICounterBanner: React.FC<LTICounterBannerProps> = ({
           </div>
           
           <div className="flex flex-col items-start md:items-end gap-2">
-            <Badge className="bg-white/20 text-success-foreground text-lg px-4 py-2 border-0">
+            <Badge className="bg-success-foreground/20 text-success-foreground text-lg px-4 py-2 border-0">
               <Target className="h-4 w-4 mr-2" />
               Meta: {goal} dias
             </Badge>
@@ -55,7 +55,7 @@ export const LTICounterBanner: React.FC<LTICounterBannerProps> = ({
               </div>
               <Progress 
                 value={progress} 
-                className="h-2 bg-white/20 [&>div]:bg-white" 
+                className="h-2 bg-success-foreground/20 [&>div]:bg-success-foreground" 
               />
             </div>
           </div>

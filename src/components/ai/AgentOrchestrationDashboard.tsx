@@ -215,10 +215,10 @@ const recentDecisions: Decision[] = [
 ];
 
 const statusColors: Record<Agent["status"], string> = {
-  active: "bg-green-500",
-  idle: "bg-gray-400",
-  processing: "bg-blue-500 animate-pulse",
-  consensus: "bg-purple-500 animate-pulse"
+  active: "bg-success",
+  idle: "bg-muted-foreground",
+  processing: "bg-info animate-pulse",
+  consensus: "bg-accent animate-pulse"
 };
 
 const autonomyLabels: Record<number, { label: string; color: string }> = {

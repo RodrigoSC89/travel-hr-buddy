@@ -129,7 +129,7 @@ export default function CopilotJobFormExample() {
             <CardTitle>💻 Exemplo de Integração</CardTitle>
           </CardHeader>
           <CardContent>
-            <pre className="bg-gray-50 p-4 rounded-lg overflow-x-auto text-xs">
+            <pre className="bg-muted p-4 rounded-lg overflow-x-auto text-xs">
               <code>{`import JobFormWithExamples from '@/components/copilot/JobFormWithExamples';
 
 function MyMaintenancePage() {
@@ -190,7 +190,7 @@ function MyMaintenancePage() {
         </Card>
 
         {/* Technical Details */}
-        <Card className="bg-gray-50">
+        <Card className="bg-muted">
           <CardHeader>
             <CardTitle className="text-sm">🔧 Detalhes Técnicos</CardTitle>
           </CardHeader>

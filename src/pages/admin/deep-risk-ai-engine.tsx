@@ -446,7 +446,7 @@ const DeepRiskAIPage: React.FC = () => {
                                     {((factor.weight * factor.value) * 100).toFixed(1)}%
                                   </span>
                                 </div>
-                                <div className="h-2 bg-gray-200 rounded-full overflow-hidden">
+                                <div className="h-2 bg-muted rounded-full overflow-hidden">
                                   <div
                                     className="h-full bg-primary"
                                     style={{ width: `${(factor.weight * factor.value) * 100}%` }}

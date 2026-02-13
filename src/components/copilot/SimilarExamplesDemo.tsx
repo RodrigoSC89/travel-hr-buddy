@@ -188,7 +188,7 @@ export default function SimilarExamplesDemo() {
         </Card>
 
         {/* Technical Info */}
-        <Card className="bg-gray-50">
+        <Card className="bg-muted">
           <CardHeader>
             <CardTitle className="text-sm">Informações Técnicas</CardTitle>
           </CardHeader>

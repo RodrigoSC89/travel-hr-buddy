@@ -141,8 +141,8 @@ export default function Patch501Satellite() {
                   <div
                     className={`p-2 rounded-lg ${
                       check.status === "pass"
-                        ? "bg-green-100 text-green-600"
-                        : "bg-gray-100 text-gray-600"
+                        ? "bg-success/10 text-success"
+                        : "bg-muted text-muted-foreground"
                     }`}
                   >
                     {check.status === "pass" ? (

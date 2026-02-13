@@ -97,8 +97,8 @@ export default function Patch505MissionControl() {
                 key={module.id}
                 className={`p-4 rounded-lg border-2 ${
                   module.status
-                    ? "border-green-500 bg-green-50"
-                    : "border-gray-300 bg-gray-50"
+                    ? "border-success bg-success/10"
+                    : "border-border bg-muted"
                 }`}
               >
                 <div className="text-center">
