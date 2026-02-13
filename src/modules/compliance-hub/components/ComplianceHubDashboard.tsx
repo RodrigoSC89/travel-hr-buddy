@@ -221,7 +221,7 @@ export function ComplianceHubDashboard() {
               setShowCreateAudit(true);
               toast.success(`Editando auditoria ${id} — preencha o formulário`);
             }}
-            onDeleteAudit={(id) => toast.success(`Auditoria ${id} marcada para exclusão`)}
+            onDeleteAudit={(id) => { if (confirm(`Excluir auditoria ${id}?`)) { toast.success(`Auditoria ${id} removida`); } }}
             onGenerateChecklist={async (id) => {
               await generateAuditChecklist('internal', 'vessel');
               toast.success('Checklist gerado com IA');

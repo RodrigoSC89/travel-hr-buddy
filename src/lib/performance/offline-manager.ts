@@ -84,23 +84,23 @@ class OfflineManager {
   }
 
   /**
-   * Persiste cache em localStorage
+   * Persiste cache em sessionStorage
    */
   private saveToStorage(): void {
     try {
       const data = Array.from(this.storage.entries());
-      localStorage.setItem(this.STORAGE_KEY, JSON.stringify(data));
+      sessionStorage.setItem(this.STORAGE_KEY, JSON.stringify(data));
     } catch (error) {
-      logger.warn("Failed to save cache to localStorage", { error });
+      logger.warn("Failed to save cache to sessionStorage", { error });
     }
   }
 
   /**
-   * Carrega cache do localStorage
+   * Carrega cache do sessionStorage
    */
   private loadFromStorage(): void {
     try {
-      const data = localStorage.getItem(this.STORAGE_KEY);
+      const data = sessionStorage.getItem(this.STORAGE_KEY);
       if (data) {
         const entries = JSON.parse(data);
         this.storage = new Map(entries);

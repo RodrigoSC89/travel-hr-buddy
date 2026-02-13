@@ -59,7 +59,7 @@ class RequestQueueManager {
     if (!this.config.persistQueue) return;
 
     try {
-      const stored = localStorage.getItem(STORAGE_KEY);
+      const stored = sessionStorage.getItem(STORAGE_KEY);
       if (stored) {
         const items: QueuedRequest[] = JSON.parse(stored);
         items.forEach((item) => {
@@ -79,7 +79,7 @@ class RequestQueueManager {
       const items = Array.from(this.queue.values()).filter(
         (r) => r.status === 'pending' || r.status === 'processing'
       );
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(items));
+      sessionStorage.setItem(STORAGE_KEY, JSON.stringify(items));
     } catch (error) {
       logger.warn('Failed to save request queue to storage', { error });
     }

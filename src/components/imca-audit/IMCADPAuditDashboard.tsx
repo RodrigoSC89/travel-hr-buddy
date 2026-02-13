@@ -533,9 +533,9 @@ export function IMCADPAuditDashboard() {
                       <Download className="h-4 w-4 mr-2" />
                       Exportar PDF
                     </Button>
-                    <Button variant="outline" onClick={() => { const jsonData = JSON.stringify({ audit: "IMCA DP", date: new Date().toISOString() }, null, 2); navigator.clipboard.writeText(jsonData); toast({ title: "JSON copiado", description: "Dados do relatório copiados para clipboard." }); }}>
+                    <Button variant="outline" onClick={() => { const csvRows = ['Audit Type,Date,Status', `IMCA DP,${new Date().toISOString()},Complete`]; const blob = new Blob([csvRows.join('\n')], { type: 'text/csv;charset=utf-8' }); const url = URL.createObjectURL(blob); const a = document.createElement('a'); a.href = url; a.download = `imca-audit-${Date.now()}.csv`; a.click(); URL.revokeObjectURL(url); toast({ title: "CSV exportado", description: "Relatório exportado em formato CSV." }); }}>
                       <Download className="h-4 w-4 mr-2" />
-                      Exportar Excel
+                      Exportar CSV
                     </Button>
                     <Button variant="outline" onClick={() => { const jsonData = JSON.stringify({ audit: "IMCA DP", date: new Date().toISOString() }, null, 2); const blob = new Blob([jsonData], { type: 'application/json' }); const url = URL.createObjectURL(blob); const a = document.createElement('a'); a.href = url; a.download = `imca-audit-${Date.now()}.json`; a.click(); URL.revokeObjectURL(url); toast({ title: "JSON exportado" }); }}>
                       <Download className="h-4 w-4 mr-2" />

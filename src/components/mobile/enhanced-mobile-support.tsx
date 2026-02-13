@@ -179,7 +179,7 @@ export const EnhancedMobileSupport: React.FC = () => {
   };
 
   const loadMobileSettings = () => {
-    const savedSettings = localStorage.getItem("mobileSettings");
+    const savedSettings = sessionStorage.getItem("mobileSettings");
     if (savedSettings) {
       setMobileSettings(JSON.parse(savedSettings));
     }
@@ -188,7 +188,7 @@ export const EnhancedMobileSupport: React.FC = () => {
   const saveMobileSettings = (newSettings: Partial<MobileSettings>) => {
     const updated = { ...mobileSettings, ...newSettings };
     setMobileSettings(updated);
-    localStorage.setItem("mobileSettings", JSON.stringify(updated));
+    sessionStorage.setItem("mobileSettings", JSON.stringify(updated));
   };
 
   const installPWA = async () => {
