@@ -505,7 +505,7 @@ export default function BetaDashboard() {
                             <Star
                               key={`star-${j}`}
                               className={`w-4 h-4 ${
-                                j < Math.round(t.rating / 2) ? "text-yellow-500 fill-yellow-500" : "text-gray-300"
+                                j < Math.round(t.rating / 2) ? "text-yellow-500 fill-yellow-500" : "text-muted-foreground/30"
                               }`}
                             />
                           ))}

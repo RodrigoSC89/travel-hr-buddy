@@ -236,9 +236,9 @@ export default function JobCards() {
             <CardContent className="space-y-2">
               <div className="flex justify-between items-start">
                 <h3 className="font-semibold text-yellow-900">{job.title}</h3>
-                <span className="text-xs text-gray-500">{job.due_date}</span>
+                <span className="text-xs text-muted-foreground">{job.due_date}</span>
               </div>
-              <p className="text-sm text-gray-700">
+              <p className="text-sm text-muted-foreground">
                 Componente: {job.component.name} — Embarcação: {job.component.asset.vessel}
               </p>
               <div className="flex flex-wrap gap-1 text-xs pt-1">
@@ -248,7 +248,7 @@ export default function JobCards() {
                 {job.can_postpone && <Badge className="bg-green-100 text-green-800">🕒 Pode postergar</Badge>}
               </div>
               {job.suggestion_ia && (
-                <div className="mt-2 bg-gray-50 p-2 rounded text-xs text-gray-800">
+                <div className="mt-2 bg-muted p-2 rounded text-xs text-muted-foreground">
                   {job.suggestion_ia}
                 </div>
               )}
@@ -345,9 +345,9 @@ export default function JobCards() {
           ) : selectedJob?.ai_recommendation ? (
             <div className="space-y-4">
               {/* Job Info */}
-              <div className="bg-gray-50 p-4 rounded-lg">
+              <div className="bg-muted p-4 rounded-lg">
                 <h4 className="font-semibold text-lg mb-2">{selectedJob.title}</h4>
-                <p className="text-sm text-gray-600">
+                <p className="text-sm text-muted-foreground">
                   <strong>Componente:</strong> {selectedJob.component.name}<br />
                   <strong>Embarcação:</strong> {selectedJob.component.asset.vessel}<br />
                   <strong>Prazo atual:</strong> {selectedJob.due_date}
@@ -384,7 +384,7 @@ export default function JobCards() {
                             {(sc.similarity * 100).toFixed(0)}% similar
                           </span>
                         </div>
-                        <p className="text-xs text-gray-700">
+                        <p className="text-xs text-muted-foreground">
                           <strong>Ação:</strong> {sc.action}<br />
                           <strong>Resultado:</strong> {sc.outcome}
                         </p>
@@ -395,7 +395,7 @@ export default function JobCards() {
               )}
             </div>
           ) : (
-            <p className="text-center py-8 text-gray-500">Nenhuma recomendação disponível</p>
+            <p className="text-center py-8 text-muted-foreground">Nenhuma recomendação disponível</p>
           )}
         </DialogContent>
       </Dialog>

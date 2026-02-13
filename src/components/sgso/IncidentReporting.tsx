@@ -261,12 +261,12 @@ export const IncidentReporting: React.FC = () => {
           </CardContent>
         </Card>
 
-        <Card className="bg-gradient-to-br from-gray-50 to-gray-100 border-gray-200">
+        <Card className="bg-gradient-to-br from-muted/50 to-muted border-border">
           <CardContent className="p-6">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium text-gray-700">Total</p>
-                <p className="text-3xl font-bold text-gray-900">{incidents.length}</p>
+                <p className="text-sm font-medium text-muted-foreground">Total</p>
+                <p className="text-3xl font-bold text-foreground">{incidents.length}</p>
               </div>
               <FileText className="h-12 w-12 text-muted-foreground opacity-70" />
             </div>
@@ -522,7 +522,7 @@ export const IncidentReporting: React.FC = () => {
                           <Badge variant="outline" className="bg-secondary text-secondary-foreground border-border font-bold">
                             {incident.number}
                           </Badge>
-                          <h3 className="font-bold text-lg text-gray-900">{incident.title}</h3>
+                          <h3 className="font-bold text-lg text-foreground">{incident.title}</h3>
                         </div>
                         
                         <div className="flex gap-3 text-sm text-muted-foreground">
@@ -594,7 +594,7 @@ export const IncidentReporting: React.FC = () => {
                             <Badge variant="outline" className="bg-secondary text-secondary-foreground border-border font-bold">
                               {incident.number}
                             </Badge>
-                            <h3 className="font-bold text-lg text-gray-900">{incident.title}</h3>
+                            <h3 className="font-bold text-lg text-foreground">{incident.title}</h3>
                           </div>
                           
                           <div className="flex gap-2">

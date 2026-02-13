@@ -182,7 +182,7 @@ export default function Patch504AiCopilot() {
                     className={`p-2 rounded-lg ${
                       check.status === "pass"
                         ? "bg-green-100 text-green-600"
-                        : "bg-gray-100 text-gray-600"
+                        : "bg-muted text-muted-foreground"
                     }`}
                   >
                     {check.status === "pass" ? (

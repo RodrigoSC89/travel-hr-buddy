@@ -958,7 +958,7 @@ Este relatório apresenta uma análise abrangente dos principais indicadores de 
       alert: { label: "Alerta", color: "bg-red-500/10 text-red-500" },
       trend: { label: "Tendência", color: "bg-purple-500/10 text-purple-500" }
     };
-    const { label, color } = config[type] || { label: type, color: "bg-gray-500/10 text-gray-500" };
+    const { label, color } = config[type] || { label: type, color: "bg-muted text-muted-foreground" };
     return <Badge className={`${color} border-0`}>{label}</Badge>;
   };
 

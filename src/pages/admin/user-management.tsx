@@ -144,7 +144,7 @@ export default function UserManagement() {
     return status === "active" ? (
       <Badge className="bg-success text-success-foreground">Active</Badge>
     ) : (
-      <Badge variant="outline" className="text-gray-500">
+      <Badge variant="outline" className="text-muted-foreground">
         Inactive
       </Badge>
     );

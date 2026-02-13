@@ -74,7 +74,7 @@ export default function CronMonitorPage() {
   const getStatusBadge = (status: string) => {
     const variants: Record<string, { className: string; label: string }> = {
       active: { className: "bg-green-100 text-green-800", label: "Ativo" },
-      inactive: { className: "bg-gray-100 text-gray-800", label: "Inativo" },
+      inactive: { className: "bg-muted text-muted-foreground", label: "Inativo" },
       error: { className: "bg-red-100 text-red-800", label: "Erro" },
     };
     return variants[status] || variants.inactive;
@@ -86,7 +86,7 @@ export default function CronMonitorPage() {
       failed: { className: "bg-red-100 text-red-800", label: "Falhou" },
       running: { className: "bg-blue-100 text-blue-800", label: "Executando" },
     };
-    return variants[status] || { className: "bg-gray-100 text-gray-800", label: status };
+    return variants[status] || { className: "bg-muted text-muted-foreground", label: status };
   };
 
   const formatDuration = (ms?: number | null) => {

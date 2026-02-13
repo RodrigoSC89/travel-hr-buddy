@@ -112,11 +112,11 @@ function getStatusColorClass(status: IntegrationStatus): string {
     case 'DISCONNECTED':
       return 'border-orange-500 text-orange-700 bg-orange-50 dark:bg-orange-950 dark:text-orange-400';
     case 'NOT_CONFIGURED':
-      return 'border-gray-400 text-gray-600 bg-gray-50 dark:bg-gray-900 dark:text-gray-400';
+      return 'border-border text-muted-foreground bg-muted dark:bg-muted dark:text-muted-foreground';
     case 'ERROR':
       return 'border-red-500 text-red-700 bg-red-50 dark:bg-red-950 dark:text-red-400';
     default:
-      return 'border-gray-400 text-gray-600';
+      return 'border-border text-muted-foreground';
   }
 }
 
@@ -166,13 +166,13 @@ export function IntegrationNotConfigured({
   onConfigure,
 }: IntegrationNotConfiguredProps) {
   return (
-    <div className="flex flex-col items-center justify-center p-8 border-2 border-dashed border-gray-300 dark:border-gray-700 rounded-lg bg-gray-50 dark:bg-gray-900">
-      <Settings className="h-12 w-12 text-gray-400 mb-4" />
-      <h3 className="text-lg font-semibold text-gray-700 dark:text-gray-300 mb-2">
+    <div className="flex flex-col items-center justify-center p-8 border-2 border-dashed border-border rounded-lg bg-muted">
+      <Settings className="h-12 w-12 text-muted-foreground mb-4" />
+      <h3 className="text-lg font-semibold text-foreground mb-2">
         {integrationName} não configurado
       </h3>
       {description && (
-        <p className="text-sm text-gray-500 dark:text-gray-400 text-center mb-4 max-w-md">
+        <p className="text-sm text-muted-foreground text-center mb-4 max-w-md">
           {description}
         </p>
       )}

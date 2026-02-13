@@ -138,7 +138,7 @@ function MyMaintenancePage() {
     const { error } = await supabase
       .from('maintenance_tasks')
       .insert(data);
-    if (error) console.error(error);
+    if (error) logger.error("Failed to insert maintenance task", error);
   };
 
   return (
