@@ -228,7 +228,7 @@ export function OperacoesSection({ systemStatus, isLoading: propsLoading }: Oper
                           />
                         </div>
                         <span className="text-xs text-muted-foreground w-10">{process.progress}%</span>
-                        <Button variant="ghost" size="icon" className="h-6 w-6" onClick={() => toggleProcess(process.id, process.status)}>
+                        <Button variant="ghost" size="icon" className="h-6 w-6" onClick={() => toggleProcess(process.id, process.status)} aria-label={process.status === "running" ? "Pausar processo" : "Iniciar processo"}>
                           {process.status === "running" ? (
                             <Pause className="h-3 w-3" />
                           ) : (

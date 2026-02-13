@@ -114,7 +114,16 @@ const MaintenancePlannerEnhanced = () => {
       id: 'export',
       label: 'Exportar',
       icon: <Download className="h-4 w-4" />,
-      onClick: () => toast.success('Relatório exportado!')
+      onClick: () => {
+        const csvContent = "data:text/csv;charset=utf-8,Tipo,Status,Prioridade,Data\n";
+        const link = document.createElement("a");
+        link.setAttribute("href", encodeURI(csvContent));
+        link.setAttribute("download", `maintenance-report-${new Date().toISOString().split('T')[0]}.csv`);
+        document.body.appendChild(link);
+        link.click();
+        link.remove();
+        toast.success('Relatório exportado com sucesso');
+      }
     }
   ];
 
@@ -140,7 +149,7 @@ const MaintenancePlannerEnhanced = () => {
       timestamp: addDays(new Date(), -1),
       source: 'Cronograma',
       actions: [
-        { label: 'Reagendar', onClick: () => toast.success('Reagendado para amanhã') }
+        { label: 'Reagendar', onClick: () => { setShowNewWorkOrder(true); toast.info('Abra uma nova OS para reagendar'); } }
       ]
     }
   ]);

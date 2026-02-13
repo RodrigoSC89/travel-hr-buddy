@@ -106,8 +106,8 @@ export default function DueDiligenceV2() {
               toast.success("Dados atualizados");
             }}
             actions={[
-              { label: "Analisar IA", icon: Brain, onClick: (item) => toast.success(`Analisando ${item.subject_name}`) },
-              { label: "Concluir", icon: CheckCircle, onClick: (item) => toast.success(`Relatório concluído`) },
+              { label: "Analisar IA", icon: Brain, onClick: (item: DueDiligenceReport) => { navigator.clipboard?.writeText(`Due Diligence: ${item.subject_name} | Score: ${item.risk_score} | Status: ${item.report_status}`); toast.success(`Dados de ${item.subject_name} copiados para análise`); } },
+              { label: "Concluir", icon: CheckCircle, onClick: (item: DueDiligenceReport) => { navigator.clipboard?.writeText(`Relatório concluído: ${item.subject_name}`); toast.success(`Relatório ${item.subject_name} marcado para conclusão`); } },
             ]}
           />
         </TabsContent>

@@ -268,6 +268,7 @@ export default function NautilusCommandCenter() {
                   size="icon"
                   onClick={toggleVoice}
                   className={isListening ? "bg-red-500 hover:bg-red-600 animate-pulse" : ""}
+                  aria-label={isListening ? "Parar comando de voz" : "Ativar comando de voz"}
                 >
                   {isListening ? <Mic className="h-4 w-4" /> : <MicOff className="h-4 w-4" />}
                 </Button>
@@ -279,15 +280,16 @@ export default function NautilusCommandCenter() {
                 onClick={handleRefresh}
                 disabled={isRefreshing}
                 className="relative"
+                aria-label="Atualizar dados"
               >
                 <RefreshCw className={`h-4 w-4 ${isRefreshing ? 'animate-spin' : ''}`} />
               </Button>
               
-              <Button variant="ghost" size="icon" onClick={toggleTheme}>
+              <Button variant="ghost" size="icon" onClick={toggleTheme} aria-label={isDarkMode ? "Modo claro" : "Modo escuro"}>
                 {isDarkMode ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
               </Button>
               
-              <Button variant="ghost" size="icon" onClick={toggleFullscreen} className="hidden lg:flex">
+              <Button variant="ghost" size="icon" onClick={toggleFullscreen} className="hidden lg:flex" aria-label="Tela cheia">
                 <Maximize2 className="h-4 w-4" />
               </Button>
 
@@ -512,7 +514,7 @@ export default function NautilusCommandCenter() {
                           }
                         }}
                       />
-                      <Button size="icon" className="rounded-full">
+                      <Button size="icon" className="rounded-full" aria-label="Enviar mensagem">
                         <ChevronRight className="h-4 w-4" />
                       </Button>
                     </div>

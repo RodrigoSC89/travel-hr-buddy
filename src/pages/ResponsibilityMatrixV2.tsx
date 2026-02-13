@@ -118,8 +118,8 @@ export default function ResponsibilityMatrixV2() {
             onRefresh={() => toast.success("Dados atualizados")}
             loading={loading}
             actions={[
-              { label: "Notificar R", icon: Send, onClick: (item) => toast.success(`Notificação enviada para ${item.responsible}`) },
-              { label: "Marcar Concluída", icon: CheckCircle, onClick: (item) => toast.success(`Tarefa concluída`) },
+              { label: "Notificar R", icon: Send, onClick: (item: ResponsibilityItem) => { navigator.clipboard?.writeText(`Notificar: ${item.responsible} sobre tarefa "${item.task}"`); toast.success(`Dados de notificação copiados para ${item.responsible}`); } },
+              { label: "Marcar Concluída", icon: CheckCircle, onClick: (item: ResponsibilityItem) => { setItems(prev => prev.map(m => m.id === item.id ? { ...m, status: 'completed' } : m)); toast.success(`Tarefa "${item.task}" marcada como concluída`); } },
             ]}
           />
         </TabsContent>

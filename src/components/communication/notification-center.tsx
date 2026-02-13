@@ -117,7 +117,7 @@ export const NotificationCenter = () => {
     return () => {
       mounted = false;
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- mount-only initialization, functions are stable
   }, []);
 
   const loadNotifications = async () => {

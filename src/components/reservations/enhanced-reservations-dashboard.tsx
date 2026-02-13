@@ -85,7 +85,7 @@ export const EnhancedReservationsDashboard: React.FC = () => {
 
   useEffect(() => {
     fetchReservations();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- mount-only fetch, fetchReservations is stable
   }, []);
 
   const fetchReservations = async () => {

@@ -359,6 +359,7 @@ export function AIDecisionHistory() {
               <Button 
                 variant="ghost" 
                 size="icon"
+                aria-label="Limpar filtros"
                 onClick={() => {
                   setSearchQuery('');
                   setStatusFilter('all');

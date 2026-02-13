@@ -156,7 +156,7 @@ const ComplianceHubEnhanced: React.FC = () => {
       timestamp: addDays(new Date(), -1),
       source: 'Certificados',
       actions: [
-        { label: 'Agendar Renovação', onClick: () => toast.success('Renovação agendada'), variant: 'outline' as const }
+        { label: 'Agendar Renovação', onClick: () => { setActiveTab('certificates'); toast.success('Navegando para Certificados para agendar renovação'); }, variant: 'outline' as const }
       ]
     }
   ]);

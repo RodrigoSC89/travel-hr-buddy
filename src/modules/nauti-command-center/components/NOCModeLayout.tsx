@@ -158,6 +158,7 @@ export function NOCModeLayout() {
             size="icon"
             onClick={() => setSoundEnabled(!soundEnabled)}
             className="text-muted-foreground hover:text-foreground"
+            aria-label={soundEnabled ? "Desativar som" : "Ativar som"}
           >
             {soundEnabled ? <Volume2 className="h-5 w-5" /> : <VolumeX className="h-5 w-5" />}
           </Button>
@@ -167,6 +168,7 @@ export function NOCModeLayout() {
             size="icon"
             onClick={toggleFullscreen}
             className="text-muted-foreground hover:text-foreground"
+            aria-label="Tela cheia"
           >
             <Maximize2 className="h-5 w-5" />
           </Button>

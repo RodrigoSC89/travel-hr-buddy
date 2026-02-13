@@ -88,7 +88,7 @@ export const EnhancedCommunicationCenter = () => {
     return () => {
       mounted = false;
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- mount-only initialization
   }, []);
 
   const getTabIcon = (tab: string) => {
