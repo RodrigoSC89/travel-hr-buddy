@@ -58,13 +58,13 @@ export const TrainingPanel: React.FC<TrainingPanelProps> = ({
   const getStatusBadge = (status: string) => {
     switch (status) {
       case 'completed':
-        return <Badge className="bg-green-500/20 text-green-400 border-green-500/30">Concluído</Badge>;
+        return <Badge className="bg-success/20 text-success border-success/30">Concluído</Badge>;
       case 'in_progress':
-        return <Badge className="bg-blue-500/20 text-blue-400 border-blue-500/30">Em Andamento</Badge>;
+        return <Badge className="bg-info/20 text-info border-info/30">Em Andamento</Badge>;
       case 'pending':
-        return <Badge className="bg-yellow-500/20 text-yellow-400 border-yellow-500/30">Pendente</Badge>;
+        return <Badge className="bg-warning/20 text-warning border-warning/30">Pendente</Badge>;
       case 'expired':
-        return <Badge className="bg-red-500/20 text-red-400 border-red-500/30">Expirado</Badge>;
+        return <Badge className="bg-destructive/20 text-destructive border-destructive/30">Expirado</Badge>;
       default:
         return <Badge variant="outline">{status}</Badge>;
     }
@@ -73,11 +73,11 @@ export const TrainingPanel: React.FC<TrainingPanelProps> = ({
   const getPriorityBadge = (priority: string) => {
     switch (priority) {
       case 'critical':
-        return <Badge className="bg-red-500 text-white">Crítico</Badge>;
+        return <Badge variant="destructive">Crítico</Badge>;
       case 'high':
-        return <Badge className="bg-orange-500 text-white">Alta</Badge>;
+        return <Badge className="bg-warning text-warning-foreground">Alta</Badge>;
       case 'medium':
-        return <Badge className="bg-yellow-500 text-black">Média</Badge>;
+        return <Badge variant="secondary">Média</Badge>;
       default:
         return <Badge variant="outline">Baixa</Badge>;
     }
@@ -203,7 +203,7 @@ export const TrainingPanel: React.FC<TrainingPanelProps> = ({
                           <div className="flex items-center gap-2">
                             <h4 className="font-medium">{training.course_name}</h4>
                             {training.ai_recommended && (
-                              <Badge className="bg-purple-500/20 text-purple-400 border-purple-500/30">
+                              <Badge className="bg-accent/20 text-accent border-accent/30">
                                 <Brain className="h-3 w-3 mr-1" />
                                 IA
                               </Badge>
@@ -221,10 +221,10 @@ export const TrainingPanel: React.FC<TrainingPanelProps> = ({
                       {training.expiry_date && (
                         <div className="mt-2 flex items-center gap-2 text-sm">
                           <Calendar className="h-4 w-4 text-muted-foreground" />
-                          <span className={
-                            differenceInDays(new Date(training.expiry_date), new Date()) < 30
-                              ? 'text-red-400'
-                              : 'text-muted-foreground'
+                           <span className={
+                             differenceInDays(new Date(training.expiry_date), new Date()) < 30
+                               ? 'text-destructive'
+                               : 'text-muted-foreground'
                           }>
                             Vence em: {format(new Date(training.expiry_date), "dd/MM/yyyy", { locale: ptBR })}
                           </span>
@@ -271,22 +271,22 @@ export const TrainingPanel: React.FC<TrainingPanelProps> = ({
                       <p className="text-xs text-muted-foreground">Total</p>
                     </div>
                     <div>
-                      <p className="font-semibold text-green-400">{crew.completedTrainings}</p>
-                      <p className="text-xs text-muted-foreground">Concluídos</p>
-                    </div>
-                    <div>
-                      <p className="font-semibold text-yellow-400">{crew.pendingTrainings}</p>
-                      <p className="text-xs text-muted-foreground">Pendentes</p>
-                    </div>
-                    <div>
-                      <p className="font-semibold text-red-400">{crew.expiredCertifications}</p>
+                       <p className="font-semibold text-success">{crew.completedTrainings}</p>
+                       <p className="text-xs text-muted-foreground">Concluídos</p>
+                     </div>
+                     <div>
+                       <p className="font-semibold text-warning">{crew.pendingTrainings}</p>
+                       <p className="text-xs text-muted-foreground">Pendentes</p>
+                     </div>
+                     <div>
+                       <p className="font-semibold text-destructive">{crew.expiredCertifications}</p>
                       <p className="text-xs text-muted-foreground">Expirados</p>
                     </div>
                   </div>
                   {crew.upcomingExpirations > 0 && (
-                    <div className="mt-3 p-2 rounded bg-yellow-500/10 border border-yellow-500/20">
-                      <p className="text-sm text-yellow-400">
-                        <AlertTriangle className="h-4 w-4 inline mr-1" />
+                     <div className="mt-3 p-2 rounded bg-warning/10 border border-warning/20">
+                       <p className="text-sm text-warning">
+                         <AlertTriangle className="h-4 w-4 inline mr-1" />
                         {crew.upcomingExpirations} certificações vencem em 30 dias
                       </p>
                     </div>
@@ -301,7 +301,7 @@ export const TrainingPanel: React.FC<TrainingPanelProps> = ({
           <Card>
             <CardHeader>
               <CardTitle className="text-lg flex items-center gap-2">
-                <Brain className="h-5 w-5 text-purple-400" />
+                <Brain className="h-5 w-5 text-accent" />
                 Recomendações da IA
               </CardTitle>
             </CardHeader>
@@ -317,15 +317,15 @@ export const TrainingPanel: React.FC<TrainingPanelProps> = ({
                   {aiRecommended.map((training) => (
                     <div
                       key={training.id}
-                      className="p-4 rounded-lg border border-purple-500/20 bg-purple-500/5"
-                    >
+                       className="p-4 rounded-lg border border-accent/20 bg-accent/5"
+                     >
                       <div className="flex items-start justify-between">
                         <div className="space-y-1">
                           <h4 className="font-medium">{training.course_name}</h4>
                           <p className="text-sm text-muted-foreground">
                             Recomendado para: {training.crew_member_name}
                           </p>
-                          <p className="text-xs text-purple-400">
+                          <p className="text-xs text-accent">
                             Baseado em análise de padrões de incidentes e gaps de competência
                           </p>
                         </div>

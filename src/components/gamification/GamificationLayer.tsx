@@ -109,19 +109,19 @@ export function GamificationLayer() {
 
   const getRankIcon = (rank: number) => {
     switch (rank) {
-      case 1: return <Crown className="h-6 w-6 text-yellow-500" />;
-      case 2: return <Medal className="h-6 w-6 text-gray-400" />;
-      case 3: return <Medal className="h-6 w-6 text-amber-600" />;
+      case 1: return <Crown className="h-6 w-6 text-warning" />;
+      case 2: return <Medal className="h-6 w-6 text-muted-foreground" />;
+      case 3: return <Medal className="h-6 w-6 text-warning" />;
       default: return <span className="text-lg font-bold text-muted-foreground">#{rank}</span>;
     }
   };
 
   const getChallengeTypeColor = (type: string) => {
     switch (type) {
-      case "daily": return "bg-green-500/20 text-green-500";
-      case "weekly": return "bg-blue-500/20 text-blue-500";
-      case "monthly": return "bg-purple-500/20 text-purple-500";
-      case "special": return "bg-gradient-to-r from-yellow-500 to-orange-500 text-white";
+      case "daily": return "bg-success/20 text-success";
+      case "weekly": return "bg-info/20 text-info";
+      case "monthly": return "bg-accent/20 text-accent";
+      case "special": return "bg-gradient-to-r from-warning to-warning text-warning-foreground";
       default: return "bg-muted";
     }
   };
@@ -134,13 +134,13 @@ export function GamificationLayer() {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-3">
-          <div className="p-3 bg-gradient-to-br from-yellow-500/20 to-orange-500/20 rounded-xl">
-            <Trophy className="h-6 w-6 text-yellow-500" />
+          <div className="p-3 bg-gradient-to-br from-warning/20 to-warning/10 rounded-xl">
+            <Trophy className="h-6 w-6 text-warning" />
           </div>
           <div>
             <h2 className="text-xl font-bold flex items-center gap-2">
               Gamification
-              <Badge className="bg-gradient-to-r from-yellow-500 to-orange-500">
+              <Badge className="bg-gradient-to-r from-warning to-warning">
                 <Sparkles className="h-3 w-3 mr-1" />
                 Level {currentUser.level}
               </Badge>
@@ -250,7 +250,7 @@ export function GamificationLayer() {
                       {challenge.type === "special" && "Especial"}
                     </Badge>
                     <div className="flex items-center gap-1">
-                      <Star className="h-4 w-4 text-yellow-500" />
+                      <Star className="h-4 w-4 text-warning" />
                       <span className="font-bold">{challenge.points}</span>
                     </div>
                   </div>
@@ -268,7 +268,7 @@ export function GamificationLayer() {
                     </div>
                     <Progress value={(challenge.progress / challenge.target) * 100} />
                     {challenge.completed && (
-                      <Badge className="bg-green-500/20 text-green-500 w-full justify-center">
+                      <Badge className="bg-success/20 text-success w-full justify-center">
                         <CheckCircle className="h-3 w-3 mr-1" />
                         Concluído
                       </Badge>
@@ -312,15 +312,15 @@ export function GamificationLayer() {
                     </div>
                     <div className="flex items-center gap-6">
                       <div className="flex items-center gap-1">
-                        <Flame className="h-4 w-4 text-orange-500" />
+                        <Flame className="h-4 w-4 text-warning" />
                         <span>{user.streak} dias</span>
                       </div>
                       <div className="flex items-center gap-1">
-                        <Zap className="h-4 w-4 text-purple-500" />
+                        <Zap className="h-4 w-4 text-accent" />
                         <span>Lvl {user.level}</span>
                       </div>
                       <div className="flex items-center gap-1 min-w-20 justify-end">
-                        <Star className="h-4 w-4 text-yellow-500" />
+                        <Star className="h-4 w-4 text-warning" />
                         <span className="font-bold">{user.points.toLocaleString()}</span>
                       </div>
                     </div>

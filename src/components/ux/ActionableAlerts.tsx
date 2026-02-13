@@ -78,33 +78,33 @@ export function ActionableAlerts({
       case "critical":
         return {
           icon: <AlertTriangle className="h-5 w-5" />,
-          bgColor: "bg-red-500/10",
-          borderColor: "border-l-red-500",
-          iconColor: "text-red-500",
+          bgColor: "bg-destructive/10",
+          borderColor: "border-l-destructive",
+          iconColor: "text-destructive",
           badgeVariant: "destructive" as const,
         };
       case "warning":
         return {
           icon: <AlertCircle className="h-5 w-5" />,
-          bgColor: "bg-amber-500/10",
-          borderColor: "border-l-amber-500",
-          iconColor: "text-amber-500",
+          bgColor: "bg-warning/10",
+          borderColor: "border-l-warning",
+          iconColor: "text-warning",
           badgeVariant: "secondary" as const,
         };
       case "success":
         return {
           icon: <CheckCircle2 className="h-5 w-5" />,
-          bgColor: "bg-green-500/10",
-          borderColor: "border-l-green-500",
-          iconColor: "text-green-500",
+          bgColor: "bg-success/10",
+          borderColor: "border-l-success",
+          iconColor: "text-success",
           badgeVariant: "default" as const,
         };
       default:
         return {
           icon: <Info className="h-5 w-5" />,
-          bgColor: "bg-blue-500/10",
-          borderColor: "border-l-blue-500",
-          iconColor: "text-blue-500",
+          bgColor: "bg-info/10",
+          borderColor: "border-l-info",
+          iconColor: "text-info",
           badgeVariant: "outline" as const,
         };
     }
@@ -172,8 +172,8 @@ export function ActionableAlerts({
                   animate={{ opacity: 1 }}
                   className="flex flex-col items-center justify-center py-8 text-center"
                 >
-                  <CheckCircle2 className="h-12 w-12 text-green-500 mb-3" />
-                  <p className="font-medium text-green-600">{emptyMessage}</p>
+                   <CheckCircle2 className="h-12 w-12 text-success mb-3" />
+                   <p className="font-medium text-success">{emptyMessage}</p>
                   <p className="text-sm text-muted-foreground mt-1">
                     Todas as pendências foram resolvidas
                   </p>
@@ -323,15 +323,15 @@ export function AlertSummaryBanner({
       animate={{ opacity: 1, y: 0 }}
       className={`flex items-center justify-between p-3 rounded-lg ${
         criticalCount > 0
-          ? "bg-red-500/10 border border-red-500/30"
-          : "bg-amber-500/10 border border-amber-500/30"
+           ? "bg-destructive/10 border border-destructive/30"
+           : "bg-warning/10 border border-warning/30"
       } ${className}`}
     >
       <div className="flex items-center gap-3">
         {criticalCount > 0 ? (
-          <AlertTriangle className="h-5 w-5 text-red-500" />
-        ) : (
-          <AlertCircle className="h-5 w-5 text-amber-500" />
+           <AlertTriangle className="h-5 w-5 text-destructive" />
+         ) : (
+           <AlertCircle className="h-5 w-5 text-warning" />
         )}
         <div>
           <p className="font-medium text-sm">

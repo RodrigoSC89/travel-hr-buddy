@@ -178,10 +178,10 @@ const categoryIcons: Record<string, React.ReactNode> = {
 };
 
 const categoryColors: Record<string, string> = {
-  legislation: 'bg-red-100 text-red-700',
-  standard: 'bg-blue-100 text-blue-700',
-  guide: 'bg-green-100 text-green-700',
-  practice: 'bg-purple-100 text-purple-700',
+  legislation: 'bg-destructive/10 text-destructive',
+  standard: 'bg-info/10 text-info',
+  guide: 'bg-success/10 text-success',
+  practice: 'bg-accent/10 text-accent',
 };
 
 export const SGSOKnowledgeBase: React.FC = () => {
@@ -326,17 +326,17 @@ export const SGSOKnowledgeBase: React.FC = () => {
 
       {/* Quick Reference Cards */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-        <Card className="bg-gradient-to-br from-red-50 to-red-100 dark:from-red-950/30 dark:to-red-900/20">
+         <Card className="bg-gradient-to-br from-destructive/5 to-destructive/10 dark:from-destructive/10 dark:to-destructive/5">
           <CardContent className="pt-6">
             <div className="flex items-center gap-3 mb-3">
-              <Scale className="h-8 w-8 text-red-600" />
+              <Scale className="h-8 w-8 text-destructive" />
               <div>
                 <h3 className="font-bold">Prazos NC - ANP</h3>
                 <p className="text-sm text-muted-foreground">Classificação de não conformidades</p>
               </div>
             </div>
             <div className="space-y-2 text-sm">
-              <div className="flex justify-between"><span>Crítica:</span><span className="font-bold text-red-600">Interdição</span></div>
+              <div className="flex justify-between"><span>Crítica:</span><span className="font-bold text-destructive">Interdição</span></div>
               <div className="flex justify-between"><span>Grave:</span><span className="font-bold">30 dias</span></div>
               <div className="flex justify-between"><span>Moderada:</span><span className="font-bold">90 dias</span></div>
               <div className="flex justify-between"><span>Leve:</span><span className="font-bold">180 dias</span></div>
@@ -344,10 +344,10 @@ export const SGSOKnowledgeBase: React.FC = () => {
           </CardContent>
         </Card>
 
-        <Card className="bg-gradient-to-br from-blue-50 to-blue-100 dark:from-blue-950/30 dark:to-blue-900/20">
+         <Card className="bg-gradient-to-br from-info/5 to-info/10 dark:from-info/10 dark:to-info/5">
           <CardContent className="pt-6">
             <div className="flex items-center gap-3 mb-3">
-              <Globe className="h-8 w-8 text-blue-600" />
+              <Globe className="h-8 w-8 text-info" />
               <div>
                 <h3 className="font-bold">Órgãos de Referência</h3>
                 <p className="text-sm text-muted-foreground">Entidades reguladoras</p>
@@ -362,10 +362,10 @@ export const SGSOKnowledgeBase: React.FC = () => {
           </CardContent>
         </Card>
 
-        <Card className="bg-gradient-to-br from-green-50 to-green-100 dark:from-green-950/30 dark:to-green-900/20">
+         <Card className="bg-gradient-to-br from-success/5 to-success/10 dark:from-success/10 dark:to-success/5">
           <CardContent className="pt-6">
             <div className="flex items-center gap-3 mb-3">
-              <Building2 className="h-8 w-8 text-green-600" />
+              <Building2 className="h-8 w-8 text-success" />
               <div>
                 <h3 className="font-bold">DSO Obrigatória</h3>
                 <p className="text-sm text-muted-foreground">Documentação de Segurança</p>

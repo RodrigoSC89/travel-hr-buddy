@@ -242,20 +242,20 @@ export default function WasteManagementDashboard() {
           </CardContent>
         </Card>
 
-        <Card className={cn(pendingSignatures > 0 && "border-amber-500/50")}>
+        <Card className={cn(pendingSignatures > 0 && "border-warning/50")}>
           <CardContent className="p-6">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-muted-foreground">Assinaturas Pend.</p>
-                <p className={cn("text-3xl font-bold", pendingSignatures > 0 ? "text-amber-600" : "text-muted-foreground")}>
+                <p className={cn("text-3xl font-bold", pendingSignatures > 0 ? "text-warning" : "text-muted-foreground")}>
                   {pendingSignatures}
                 </p>
                 <p className="text-xs text-muted-foreground mt-1">
                   Diários de bordo
                 </p>
               </div>
-              <div className="p-3 bg-amber-500/20 rounded-xl">
-                <PenTool className="h-6 w-6 text-amber-600" />
+              <div className="p-3 bg-warning/20 rounded-xl">
+                <PenTool className="h-6 w-6 text-warning" />
               </div>
             </div>
           </CardContent>
@@ -347,8 +347,8 @@ export default function WasteManagementDashboard() {
                               <div key={tank.id} className={cn(
                                 "p-3 rounded-lg border",
                                 tank.status === "critical" && "border-destructive/50 bg-destructive/5",
-                                tank.status === "warning" && "border-amber-500/50 bg-amber-500/5"
-                              )}>
+                                 tank.status === "warning" && "border-warning/50 bg-warning/5"
+                               )}>
                                 <div className="flex items-center gap-2 mb-2">
                                   <TankIcon className={cn("h-4 w-4", getStatusColor(tank.status))} />
                                   <span className="text-sm font-medium truncate">{tank.name}</span>
@@ -358,7 +358,7 @@ export default function WasteManagementDashboard() {
                                   className={cn(
                                     "h-2",
                                     tank.status === "critical" && "[&>div]:bg-destructive",
-                                    tank.status === "warning" && "[&>div]:bg-amber-500"
+                                     tank.status === "warning" && "[&>div]:bg-warning"
                                   )}
                                 />
                                 <p className="text-xs text-muted-foreground mt-1">
@@ -384,11 +384,11 @@ export default function WasteManagementDashboard() {
               <CardContent>
                 <div className="space-y-4">
                   {[
-                    { name: "Anexo I - Óleos", compliance: 100, color: "bg-emerald-500" },
-                    { name: "Anexo II - Substâncias Nocivas", compliance: 98, color: "bg-emerald-500" },
-                    { name: "Anexo IV - Esgoto", compliance: 95, color: "bg-amber-500" },
-                    { name: "Anexo V - Lixo", compliance: 100, color: "bg-emerald-500" },
-                    { name: "Anexo VI - Emissões", compliance: 97, color: "bg-emerald-500" },
+                     { name: "Anexo I - Óleos", compliance: 100, color: "bg-success" },
+                     { name: "Anexo II - Substâncias Nocivas", compliance: 98, color: "bg-success" },
+                     { name: "Anexo IV - Esgoto", compliance: 95, color: "bg-warning" },
+                     { name: "Anexo V - Lixo", compliance: 100, color: "bg-success" },
+                     { name: "Anexo VI - Emissões", compliance: 97, color: "bg-success" },
                   ].map((item) => (
                     <div key={item.name} className="space-y-1">
                       <div className="flex items-center justify-between text-sm">

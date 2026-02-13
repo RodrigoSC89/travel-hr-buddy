@@ -50,7 +50,7 @@ export default function OceanSonar() {
   };
 
   const filtered = scans.filter(s => s.name.toLowerCase().includes(search.toLowerCase()));
-  const statusColors = { queued: 'bg-gray-500', scanning: 'bg-blue-500', completed: 'bg-green-500' };
+  const statusColors = { queued: 'bg-muted-foreground', scanning: 'bg-info', completed: 'bg-success' };
 
   return (
     <div className="p-6 space-y-6">

@@ -176,20 +176,20 @@ export default function PortAPIConnector() {
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case "connected": return "bg-green-500/20 text-green-400";
+      case "connected": return "bg-success/20 text-success";
       case "disconnected": return "bg-muted text-muted-foreground";
-      case "error": return "bg-red-500/20 text-red-400";
-      case "syncing": return "bg-blue-500/20 text-blue-400";
+      case "error": return "bg-destructive/20 text-destructive";
+      case "syncing": return "bg-info/20 text-info";
       default: return "bg-muted text-muted-foreground";
     }
   };
 
   const getStatusIcon = (status: string) => {
     switch (status) {
-      case "connected": return <CheckCircle2 className="h-4 w-4 text-green-400" />;
+      case "connected": return <CheckCircle2 className="h-4 w-4 text-success" />;
       case "disconnected": return <XCircle className="h-4 w-4 text-muted-foreground" />;
-      case "error": return <AlertTriangle className="h-4 w-4 text-red-400" />;
-      case "syncing": return <RefreshCw className="h-4 w-4 text-blue-400 animate-spin" />;
+      case "error": return <AlertTriangle className="h-4 w-4 text-destructive" />;
+      case "syncing": return <RefreshCw className="h-4 w-4 text-info animate-spin" />;
       default: return <Clock className="h-4 w-4" />;
     }
   };
@@ -223,8 +223,8 @@ export default function PortAPIConnector() {
         <Card>
           <CardContent className="pt-6">
             <div className="flex items-center gap-3">
-              <div className="p-2 rounded-lg bg-green-500/10">
-                <Globe className="h-5 w-5 text-green-400" />
+               <div className="p-2 rounded-lg bg-success/10">
+                 <Globe className="h-5 w-5 text-success" />
               </div>
               <div>
                 <p className="text-2xl font-bold">{connections.filter(c => c.status === "connected").length}</p>
@@ -236,8 +236,8 @@ export default function PortAPIConnector() {
         <Card>
           <CardContent className="pt-6">
             <div className="flex items-center gap-3">
-              <div className="p-2 rounded-lg bg-blue-500/10">
-                <Activity className="h-5 w-5 text-blue-400" />
+               <div className="p-2 rounded-lg bg-info/10">
+                 <Activity className="h-5 w-5 text-info" />
               </div>
               <div>
                 <p className="text-2xl font-bold">{connections.reduce((acc, c) => acc + c.messagesProcessed, 0).toLocaleString()}</p>
@@ -249,8 +249,8 @@ export default function PortAPIConnector() {
         <Card>
           <CardContent className="pt-6">
             <div className="flex items-center gap-3">
-              <div className="p-2 rounded-lg bg-red-500/10">
-                <AlertTriangle className="h-5 w-5 text-red-400" />
+               <div className="p-2 rounded-lg bg-destructive/10">
+                 <AlertTriangle className="h-5 w-5 text-destructive" />
               </div>
               <div>
                 <p className="text-2xl font-bold">{connections.filter(c => c.status === "error").length}</p>
@@ -284,7 +284,7 @@ export default function PortAPIConnector() {
         <TabsContent value="connections">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             {connections.map((conn) => (
-              <Card key={conn.id} className={`hover:border-primary/50 transition-colors ${conn.status === "error" ? "border-red-500/50" : ""}`}>
+              <Card key={conn.id} className={`hover:border-primary/50 transition-colors ${conn.status === "error" ? "border-destructive/50" : ""}`}>
                 <CardHeader className="pb-2">
                   <div className="flex items-start justify-between">
                     <div className="flex items-center gap-2">
@@ -367,11 +367,11 @@ export default function PortAPIConnector() {
                     >
                       <div className="flex items-center gap-3">
                         {log.status === "success" ? (
-                          <CheckCircle2 className="h-4 w-4 text-green-400" />
+                         <CheckCircle2 className="h-4 w-4 text-success" />
                         ) : log.status === "error" ? (
-                          <XCircle className="h-4 w-4 text-red-400" />
+                          <XCircle className="h-4 w-4 text-destructive" />
                         ) : (
-                          <Clock className="h-4 w-4 text-yellow-400" />
+                          <Clock className="h-4 w-4 text-warning" />
                         )}
                         <div>
                           <p className="font-medium text-sm">{log.action}</p>

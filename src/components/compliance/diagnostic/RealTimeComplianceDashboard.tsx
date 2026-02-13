@@ -146,15 +146,15 @@ export function RealTimeComplianceDashboard() {
   const totalCritical = useMemo(() => MODULE_STATUS.reduce((acc, m) => acc + m.critical, 0), []);
 
   const getScoreColor = (score: number) => {
-    if (score >= 90) return 'text-green-600';
-    if (score >= 80) return 'text-amber-600';
-    return 'text-red-600';
+    if (score >= 90) return 'text-success';
+    if (score >= 80) return 'text-warning';
+    return 'text-destructive';
   };
 
   const getTrendIcon = (trend: 'up' | 'down' | 'stable') => {
-    if (trend === 'up') return <TrendingUp className="h-4 w-4 text-green-500" />;
-    if (trend === 'down') return <TrendingDown className="h-4 w-4 text-red-500" />;
-    return <Activity className="h-4 w-4 text-gray-500" />;
+    if (trend === 'up') return <TrendingUp className="h-4 w-4 text-success" />;
+    if (trend === 'down') return <TrendingDown className="h-4 w-4 text-destructive" />;
+    return <Activity className="h-4 w-4 text-muted-foreground" />;
   };
 
   const exportDashboard = async () => {
@@ -225,16 +225,16 @@ export function RealTimeComplianceDashboard() {
       </div>
 
       {/* ROI Card */}
-      <Card className="border-green-300 bg-gradient-to-r from-green-50 to-emerald-50 dark:from-green-950/30 dark:to-emerald-950/30">
+       <Card className="border-success/30 bg-gradient-to-r from-success/5 to-success/10 dark:from-success/10 dark:to-success/5">
         <CardContent className="pt-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-4">
-              <div className="p-3 bg-green-100 dark:bg-green-900 rounded-full">
-                <Eye className="h-6 w-6 text-green-600" />
+              <div className="p-3 bg-success/20 rounded-full">
+                <Eye className="h-6 w-6 text-success" />
               </div>
               <div>
                 <p className="text-sm text-muted-foreground">Economia com Visibilidade em Tempo Real</p>
-                <p className="text-2xl font-bold text-green-700">R$ 800 - 1.500/mês</p>
+                <p className="text-2xl font-bold text-success">R$ 800 - 1.500/mês</p>
               </div>
             </div>
             <div className="text-right">
@@ -255,17 +255,17 @@ export function RealTimeComplianceDashboard() {
           { label: 'Certificados OK', value: 94, target: 100, unit: '%', status: 'good' as const },
           { label: 'Auditorias em Dia', value: 12, target: 12, unit: '', status: 'good' as const }
         ] as ComplianceMetric[]).map((metric) => (
-          <Card key={metric.label} className={`
-            ${metric.status === 'critical' ? 'border-red-300 bg-red-50/50 dark:bg-red-950/20' : ''}
-            ${metric.status === 'warning' ? 'border-amber-300 bg-amber-50/50 dark:bg-amber-950/20' : ''}
-            ${metric.status === 'good' ? 'border-green-300 bg-green-50/50 dark:bg-green-950/20' : ''}
+           <Card key={metric.label} className={`
+            ${metric.status === 'critical' ? 'border-destructive/30 bg-destructive/5' : ''}
+            ${metric.status === 'warning' ? 'border-warning/30 bg-warning/5' : ''}
+            ${metric.status === 'good' ? 'border-success/30 bg-success/5' : ''}
           `}>
             <CardContent className="pt-4">
               <p className="text-xs text-muted-foreground mb-1">{metric.label}</p>
               <div className="flex items-end justify-between">
-                <p className={`text-2xl font-bold ${
-                  metric.status === 'good' ? 'text-green-600' :
-                  metric.status === 'warning' ? 'text-amber-600' : 'text-red-600'
+                 <p className={`text-2xl font-bold ${
+                   metric.status === 'good' ? 'text-success' :
+                   metric.status === 'warning' ? 'text-warning' : 'text-destructive'
                 }`}>
                   {metric.value}{metric.unit}
                 </p>
@@ -302,11 +302,11 @@ export function RealTimeComplianceDashboard() {
               </p>
               <div className="flex gap-4 mt-4">
                 <div className="text-center">
-                  <p className="text-2xl font-bold text-amber-600">{totalNCs}</p>
-                  <p className="text-xs text-muted-foreground">NCs Abertas</p>
+                   <p className="text-2xl font-bold text-warning">{totalNCs}</p>
+                   <p className="text-xs text-muted-foreground">NCs Abertas</p>
                 </div>
                 <div className="text-center">
-                  <p className="text-2xl font-bold text-red-600">{totalCritical}</p>
+                  <p className="text-2xl font-bold text-destructive">{totalCritical}</p>
                   <p className="text-xs text-muted-foreground">Críticas</p>
                 </div>
               </div>
@@ -327,9 +327,9 @@ export function RealTimeComplianceDashboard() {
               {MODULE_STATUS.map(module => (
                 <div key={module.id} className="flex items-center justify-between p-3 rounded-lg bg-muted/30">
                   <div className="flex items-center gap-3">
-                    <div className={`w-3 h-3 rounded-full ${
-                      module.score >= 90 ? 'bg-green-500' :
-                      module.score >= 80 ? 'bg-amber-500' : 'bg-red-500'
+                     <div className={`w-3 h-3 rounded-full ${
+                       module.score >= 90 ? 'bg-success' :
+                       module.score >= 80 ? 'bg-warning' : 'bg-destructive'
                     }`} />
                     <div>
                       <p className="font-medium">{module.name}</p>
@@ -342,9 +342,9 @@ export function RealTimeComplianceDashboard() {
                   <div className="flex items-center gap-6">
                     <div className="flex items-center gap-1">
                       {getTrendIcon(module.trend)}
-                      <span className={`text-sm ${
-                        module.trend === 'up' ? 'text-green-600' :
-                        module.trend === 'down' ? 'text-red-600' : 'text-gray-500'
+                       <span className={`text-sm ${
+                         module.trend === 'up' ? 'text-success' :
+                         module.trend === 'down' ? 'text-destructive' : 'text-muted-foreground'
                       }`}>
                         {module.trendValue > 0 ? '+' : ''}{module.trendValue}%
                       </span>
@@ -357,7 +357,7 @@ export function RealTimeComplianceDashboard() {
                     
                     <div className="text-center min-w-[60px]">
                       <p className="text-xs text-muted-foreground">Críticas</p>
-                      <p className={`font-semibold ${module.critical > 0 ? 'text-red-600' : 'text-green-600'}`}>
+                      <p className={`font-semibold ${module.critical > 0 ? 'text-destructive' : 'text-success'}`}>
                         {module.critical}
                       </p>
                     </div>
