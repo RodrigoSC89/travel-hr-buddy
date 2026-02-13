@@ -33,7 +33,7 @@ export interface PrePSCInspection {
   created_at?: string;
   updated_at?: string;
   completed_at?: string;
-  metadata?: Record<string, any>;
+  metadata?: Record<string, unknown>;
 }
 
 export interface PrePSCChecklistItem {
@@ -59,7 +59,7 @@ export interface PrePSCChecklistItem {
   created_at?: string;
   updated_at?: string;
   inspector_comments?: string;
-  metadata?: Record<string, any>;
+  metadata?: Record<string, unknown>;
 }
 
 export interface InspectionStats {

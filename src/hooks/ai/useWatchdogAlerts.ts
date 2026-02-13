@@ -16,11 +16,22 @@ interface WatchdogAlert {
   expected_behavior?: string;
   deviation_score?: number;
   resolution_action?: string;
-  metadata?: Record<string, any>;
+  metadata?: Record<string, unknown>;
+}
+
+interface WatchdogAlertRow {
+  id: string;
+  alert_type: string;
+  component_name: string;
+  anomaly_detected: string;
+  severity: string;
+  resolved_at: string | null;
+  created_at: string | null;
+  [key: string]: unknown;
 }
 
 export function useWatchdogAlerts() {
-  const [alerts, setAlerts] = useState<any[]>([]);
+  const [alerts, setAlerts] = useState<WatchdogAlertRow[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [unreadCount, setUnreadCount] = useState(0);
 
@@ -38,8 +49,8 @@ export function useWatchdogAlerts() {
           expected_behavior: alert.expected_behavior,
           deviation_score: alert.deviation_score,
           resolution_action: alert.resolution_action,
-          metadata: alert.metadata,
-        })
+          metadata: alert.metadata as import("@/integrations/supabase/types").Json,
+        } as never)
         .select()
         .single();
 
@@ -91,7 +102,7 @@ export function useWatchdogAlerts() {
 
       if (error) throw error;
 
-      setAlerts(data || []);
+      setAlerts(data as WatchdogAlertRow[] || []);
       setUnreadCount(data?.length || 0);
       return data || [];
     } catch (error) {
@@ -115,7 +126,7 @@ export function useWatchdogAlerts() {
         },
         (payload) => {
           logger.info("[Watchdog Alert] New alert received", payload.new);
-          setAlerts((prev) => [payload.new, ...prev]);
+          setAlerts((prev) => [payload.new as WatchdogAlertRow, ...prev]);
           setUnreadCount((prev) => prev + 1);
         }
       )

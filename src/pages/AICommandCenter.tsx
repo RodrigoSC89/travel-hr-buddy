@@ -972,7 +972,7 @@ export default function AICommandCenter() {
                                 </div>
                                 <p className="mt-1">{alert.anomaly_detected}</p>
                                 <p className="text-xs text-muted-foreground mt-1">
-                                  {new Date(alert.created_at).toLocaleString()}
+                                  {new Date(alert.created_at || Date.now()).toLocaleString()}
                                 </p>
                               </div>
                             </div>

@@ -127,7 +127,7 @@ class ModuleIntegrationService {
     }
   }
 
-  async batchExecute(actions: ModuleAction[]): Promise<any[]> {
+  async batchExecute(actions: ModuleAction[]): Promise<Record<string, unknown>[]> {
     return Promise.all(actions.map(action => this.executeAction(action)));
   }
 }

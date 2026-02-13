@@ -11,9 +11,9 @@ export interface CloneConfiguration {
   name: string;
   modules: string[];
   aiContext: {
-    memories: Record<string, any>[];
-    learnings: Record<string, any>[];
-    preferences: Record<string, any>;
+    memories: Record<string, unknown>[];
+    learnings: Record<string, unknown>[];
+    preferences: Record<string, unknown>;
   };
   llmConfig: {
     model: string;

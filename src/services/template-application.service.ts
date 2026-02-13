@@ -20,7 +20,7 @@ export interface TemplateApplicationResult {
 export interface ExportOptions {
   format: "PDF" | "DOCX" | "HTML" | "TXT";
   filename?: string;
-  metadata?: Record<string, any>;
+  metadata?: Record<string, unknown>;
 }
 
 export class TemplateApplicationService {
@@ -167,7 +167,7 @@ export class TemplateApplicationService {
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>${this.escapeHtml(options.metadata?.title || "Document")}</title>
+  <title>${this.escapeHtml(String((options.metadata as Record<string, unknown>)?.title || "Document"))}</title>
   <style>
     body {
       font-family: Arial, sans-serif;

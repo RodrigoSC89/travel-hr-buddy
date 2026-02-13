@@ -44,19 +44,18 @@ export function SyncStatus() {
   /**
    * Sync a single document to Supabase
    */
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- offline cache returns dynamic shapes
-  const syncDocument = async (doc: Record<string, any>): Promise<boolean> => {
+  const syncDocument = async (doc: Record<string, unknown>): Promise<boolean> => {
     try {
       const { error } = await supabase
         .from('ai_documents')
         .upsert({
-          id: doc.id,
-          file_name: doc.file_name || doc.name,
-          file_type: doc.file_type || doc.type || 'application/octet-stream',
-          storage_path: doc.storage_path || `offline/${doc.id}`,
+          id: String(doc.id || ''),
+          file_name: String(doc.file_name || doc.name || ''),
+          file_type: String(doc.file_type || doc.type || 'application/octet-stream'),
+          storage_path: String(doc.storage_path || `offline/${doc.id}`),
           ocr_status: 'pending',
           updated_at: new Date().toISOString(),
-        }, { onConflict: 'id' });
+        } as never, { onConflict: 'id' });
 
       if (error) {
         logger.error("Failed to sync document:", error);
@@ -72,17 +71,17 @@ export function SyncStatus() {
   /**
    * Sync a log entry to Supabase
    */
-  const syncLog = async (log: Record<string, any>): Promise<boolean> => {
+  const syncLog = async (log: Record<string, unknown>): Promise<boolean> => {
     try {
       const { error } = await supabase
         .from('access_logs')
         .insert({
-          action: log.action || 'offline_action',
-          module_accessed: log.module || 'offline',
-          result: log.result || 'synced',
-          severity: log.severity || 'info',
-          details: log.details || {},
-          timestamp: log.timestamp || new Date().toISOString(),
+          action: String(log.action || 'offline_action'),
+          module_accessed: String(log.module || 'offline'),
+          result: String(log.result || 'synced'),
+          severity: String(log.severity || 'info'),
+          details: (log.details || {}) as import("@/integrations/supabase/types").Json,
+          timestamp: String(log.timestamp || new Date().toISOString()),
         });
 
       if (error) {
@@ -99,37 +98,36 @@ export function SyncStatus() {
   /**
    * Process a pending action (crew update, checklist item, etc.)
    */
-  const processAction = async (action: Record<string, any>): Promise<boolean> => {
+  const processAction = async (action: Record<string, unknown>): Promise<boolean> => {
     try {
-      const { actionType, payload, table } = action;
+      const actionType = String(action.actionType || '');
+      const payload = action.payload as Record<string, unknown> | undefined;
+      const table = String(action.table || 'action_items');
 
       switch (actionType) {
-        case 'CREATE':
-          const { error: createError } = await supabase
-            .from(table || 'action_items')
+        case 'CREATE': {
+          const { error: createError } = await (supabase.from as Function)(table)
             .insert(payload);
           if (createError) throw createError;
           break;
-
-        case 'UPDATE':
-          const { error: updateError } = await supabase
-            .from(table || 'action_items')
-            .update(payload.data)
-            .eq('id', payload.id);
+        }
+        case 'UPDATE': {
+          const { error: updateError } = await (supabase.from as Function)(table)
+            .update((payload as Record<string, unknown>)?.data)
+            .eq('id', (payload as Record<string, unknown>)?.id);
           if (updateError) throw updateError;
           break;
-
-        case 'DELETE':
-          const { error: deleteError } = await supabase
-            .from(table || 'action_items')
+        }
+        case 'DELETE': {
+          const { error: deleteError } = await (supabase.from as Function)(table)
             .delete()
-            .eq('id', payload.id);
+            .eq('id', (payload as Record<string, unknown>)?.id);
           if (deleteError) throw deleteError;
           break;
-
+        }
         default:
           logger.warn("Unknown action type", { actionType });
-          return true; // Mark as processed
+          return true;
       }
 
       return true;

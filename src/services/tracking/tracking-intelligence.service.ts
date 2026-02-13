@@ -265,7 +265,7 @@ export class TrackingIntelligenceService {
   }
 
   async resolveAlert(alertId: string, table: 'iot_sensor_alerts' | 'telemetry_alerts'): Promise<boolean> {
-    const updateData: Record<string, any> = { resolved: true, resolved_at: new Date().toISOString() };
+    const updateData: Record<string, unknown> = { resolved: true, resolved_at: new Date().toISOString() };
     const { error } = await supabase
       .from(table)
       .update(updateData)
