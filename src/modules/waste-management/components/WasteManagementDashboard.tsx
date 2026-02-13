@@ -125,49 +125,47 @@ export default function WasteManagementDashboard() {
       ]);
 
       // Map waste_tanks
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any -- dynamic table not in generated types
-      const mappedTanks: WasteTank[] = (tanksRes.data || []).map((t: Record<string, any>) => {
-        const capacity = t.capacity || 100;
-        const currentLevel = t.current_level ?? t.currentLevel ?? 0;
+      const mappedTanks: WasteTank[] = (tanksRes.data || []).map((t: Record<string, unknown>) => {
+        const capacity = Number(t.capacity) || 100;
+        const currentLevel = Number(t.current_level ?? (t as Record<string, unknown>).currentLevel ?? 0);
+        const vessels = t.vessels as Record<string, unknown> | undefined;
         return {
-          id: t.id,
-          name: t.name || t.tank_name || "Tanque",
-          type: t.waste_type || t.type || "garbage",
+          id: String(t.id),
+          name: String(t.name || (t as Record<string, unknown>).tank_name || "Tanque"),
+          type: String(t.waste_type || t.type || "garbage"),
           capacity,
           currentLevel,
-          unit: t.unit || "m³",
-          vessel: t.vessels?.name || t.vessel_name || "—",
-          lastDischarge: t.last_discharge_date || t.updated_at || "—",
+          unit: String(t.unit || "m³"),
+          vessel: String(vessels?.name || (t as Record<string, unknown>).vessel_name || "—"),
+          lastDischarge: String((t as Record<string, unknown>).last_discharge_date || t.updated_at || "—"),
           status: deriveTankStatus(currentLevel, capacity),
         };
       });
 
       // Map waste_records to discharges and record books
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any -- dynamic table not in generated types
-      const mappedDischarges: DischargeRecord[] = (recordsRes.data || []).map((r: Record<string, any>) => ({
-        id: r.id,
-        vessel: r.vessels?.name || r.vessel_name || "—",
-        type: r.waste_type || r.type || "Waste",
-        quantity: r.quantity || 0,
-        unit: r.unit || "m³",
-        method: r.disposal_method || r.method || "port",
-        location: r.location || r.position || "—",
-        date: r.record_date || r.created_at?.split("T")[0] || "—",
-        signedBy: r.signed_by || r.recorded_by || "—",
-        oilRecordBook: r.book_type === "ORB" || r.waste_type?.includes("oil") || r.waste_type?.includes("sludge") || r.waste_type?.includes("bilge"),
-        garbageRecordBook: r.book_type === "GRB" || r.waste_type?.includes("garbage") || r.waste_type?.includes("plastic") || r.waste_type?.includes("food"),
+      const mappedDischarges: DischargeRecord[] = (recordsRes.data || []).map((r: Record<string, unknown>) => ({
+        id: String(r.id),
+        vessel: String((r.vessels as Record<string, unknown>)?.name || r.vessel_name || "—"),
+        type: String(r.waste_type || r.type || "Waste"),
+        quantity: Number(r.quantity) || 0,
+        unit: String(r.unit || "m³"),
+        method: String(r.disposal_method || r.method || "port"),
+        location: String(r.location || r.position || "—"),
+        date: String(r.record_date || (typeof r.created_at === "string" ? r.created_at.split("T")[0] : "") || "—"),
+        signedBy: String(r.signed_by || r.recorded_by || "—"),
+        oilRecordBook: r.book_type === "ORB" || String(r.waste_type || "").includes("oil") || String(r.waste_type || "").includes("sludge") || String(r.waste_type || "").includes("bilge"),
+        garbageRecordBook: r.book_type === "GRB" || String(r.waste_type || "").includes("garbage") || String(r.waste_type || "").includes("plastic") || String(r.waste_type || "").includes("food"),
       }));
 
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any -- dynamic table not in generated types
-      const mappedRecordBooks: RecordBookEntry[] = (recordsRes.data || []).map((r: Record<string, any>) => ({
-        id: r.id,
-        bookType: (r.book_type === "GRB" || r.waste_type?.includes("garbage")) ? "GRB" : "ORB",
-        vessel: r.vessels?.name || r.vessel_name || "—",
-        operationType: r.operation_type || r.description || r.waste_type || "Operação",
-        date: r.record_date || r.created_at?.split("T")[0] || "—",
-        quantity: `${r.quantity || 0} ${r.unit || "m³"}`,
-        position: r.position || r.location || "—",
-        remarks: r.remarks || r.notes || "",
+      const mappedRecordBooks: RecordBookEntry[] = (recordsRes.data || []).map((r: Record<string, unknown>) => ({
+        id: String(r.id),
+        bookType: (r.book_type === "GRB" || String(r.waste_type || "").includes("garbage")) ? "GRB" as const : "ORB" as const,
+        vessel: String((r.vessels as Record<string, unknown>)?.name || r.vessel_name || "—"),
+        operationType: String(r.operation_type || r.description || r.waste_type || "Operação"),
+        date: String(r.record_date || (typeof r.created_at === "string" ? r.created_at.split("T")[0] : "") || "—"),
+        quantity: `${Number(r.quantity) || 0} ${String(r.unit || "m³")}`,
+        position: String(r.position || r.location || "—"),
+        remarks: String(r.remarks || r.notes || ""),
         signedBy: r.signed_by || r.recorded_by || "—",
         status: r.verification_status || r.status || "draft",
       }));

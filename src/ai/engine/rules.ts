@@ -10,10 +10,8 @@ import { logger } from "@/lib/logger";
 export interface RuleTemplate {
   name: string;
   description: string;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- rule builders need dynamic param access for arithmetic/indexing
-  conditionBuilder: (params: Record<string, any>) => (event: AutonomousEvent) => boolean;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- rule builders need dynamic param access for arithmetic/indexing
-  actionBuilder: (params: Record<string, any>) => (event: AutonomousEvent) => Promise<AutonomousActionResult>;
+  conditionBuilder: (params: Record<string, unknown>) => (event: AutonomousEvent) => boolean;
+  actionBuilder: (params: Record<string, unknown>) => (event: AutonomousEvent) => Promise<AutonomousActionResult>;
 }
 
 class RulesManager {
@@ -34,20 +32,20 @@ class RulesManager {
       conditionBuilder: (params) => (event) => {
         return (
           event.type === "error_threshold" &&
-          event.data.error_count >= (params.threshold || 5)
+          Number(event.data.error_count) >= (Number(params.threshold) || 5)
         );
       },
       actionBuilder: (params) => async (event) => {
         logger.warn("[RulesManager] Error threshold exceeded", {
           module: event.module,
-          count: event.data.error_count,
-          threshold: params.threshold,
+          count: Number(event.data.error_count),
+          threshold: Number(params.threshold),
         });
 
         return {
           success: true,
-          action: params.action || "notify",
-          description: `Error threshold exceeded: ${event.data.error_count} errors`,
+          action: String(params.action || "notify"),
+          description: `Error threshold exceeded: ${Number(event.data.error_count)} errors`,
         };
       },
     });
@@ -59,20 +57,20 @@ class RulesManager {
       conditionBuilder: (params) => (event) => {
         return (
           event.type === "high_latency" &&
-          event.data.latency >= (params.threshold_ms || 3000)
+          Number(event.data.latency) >= (Number(params.threshold_ms) || 3000)
         );
       },
       actionBuilder: (params) => async (event) => {
         logger.warn("[RulesManager] Latency threshold exceeded", {
           module: event.module,
-          latency: event.data.latency,
-          threshold: params.threshold_ms,
+          latency: Number(event.data.latency),
+          threshold: Number(params.threshold_ms),
         });
 
         return {
           success: true,
-          action: params.action || "notify",
-          description: `Latency threshold exceeded: ${event.data.latency}ms`,
+          action: String(params.action || "notify"),
+          description: `Latency threshold exceeded: ${Number(event.data.latency)}ms`,
         };
       },
     });
@@ -85,20 +83,20 @@ class RulesManager {
         return (
           event.type === "custom" &&
           event.data.metric === "memory" &&
-          event.data.usage >= (params.threshold_mb || 512)
+          Number(event.data.usage) >= (Number(params.threshold_mb) || 512)
         );
       },
       actionBuilder: (params) => async (event) => {
         logger.warn("[RulesManager] Memory threshold exceeded", {
           module: event.module,
-          usage: event.data.usage,
-          threshold: params.threshold_mb,
+          usage: Number(event.data.usage),
+          threshold: Number(params.threshold_mb),
         });
 
         return {
           success: true,
-          action: params.action || "cleanup",
-          description: `Memory threshold exceeded: ${event.data.usage}MB`,
+          action: String(params.action || "cleanup"),
+          description: `Memory threshold exceeded: ${Number(event.data.usage)}MB`,
         };
       },
     });
@@ -111,20 +109,20 @@ class RulesManager {
         return (
           event.type === "custom" &&
           event.data.metric === "request_rate" &&
-          event.data.rate >= (params.max_requests_per_minute || 100)
+          Number(event.data.rate) >= (Number(params.max_requests_per_minute) || 100)
         );
       },
       actionBuilder: (params) => async (event) => {
         logger.warn("[RulesManager] Rate limit exceeded", {
           module: event.module,
-          rate: event.data.rate,
-          limit: params.max_requests_per_minute,
+          rate: Number(event.data.rate),
+          limit: Number(params.max_requests_per_minute),
         });
 
         return {
           success: true,
-          action: params.action || "throttle",
-          description: `Rate limit exceeded: ${event.data.rate} req/min`,
+          action: String(params.action || "throttle"),
+          description: `Rate limit exceeded: ${Number(event.data.rate)} req/min`,
         };
       },
     });
@@ -136,8 +134,7 @@ class RulesManager {
   createRuleFromTemplate(
     templateId: string,
     ruleId: string,
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any -- dynamic rule params
-    params: Record<string, any>,
+    params: Record<string, unknown>,
     priority: number = 5
   ): AutonomousRule | null {
     const template = this.templates.get(templateId);
@@ -149,8 +146,8 @@ class RulesManager {
 
     const rule: AutonomousRule = {
       id: ruleId,
-      name: params.name || template.name,
-      description: params.description || template.description,
+      name: String(params.name || template.name),
+      description: String(params.description || template.description),
       condition: template.conditionBuilder(params),
       action: template.actionBuilder(params),
       priority,
