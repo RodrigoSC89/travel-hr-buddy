@@ -1,7 +1,7 @@
 import { useState, useCallback, useEffect } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
-import { useDebounce } from './use-debounce';
+import { useDebouncedValue } from './use-debounced-value';
 import { logger } from '@/lib/logger';
 
 export interface OVIDInspection {
@@ -46,7 +46,7 @@ export function useOVIDInspection(inspectionId?: string) {
   const [isSaving, setIsSaving] = useState(false);
   const [pendingUpdates, setPendingUpdates] = useState<Record<string, OVIDAnswer>>({});
   
-  const debouncedUpdates = useDebounce(pendingUpdates, 1000);
+  const debouncedUpdates = useDebouncedValue(pendingUpdates, 1000);
 
   // Load inspection data
   const loadInspection = useCallback(async (id: string) => {
@@ -147,9 +147,9 @@ export function useOVIDInspection(inspectionId?: string) {
         const updates = Object.entries(debouncedUpdates).map(([qId, ans]) => ({
           inspection_id: inspection.id,
           question_id: qId,
-          chapter_id: ans.chapter_id,
-          answer: ans.answer,
-          observation: ans.observation,
+          chapter_id: (ans as OVIDAnswer).chapter_id,
+          answer: (ans as OVIDAnswer).answer,
+          observation: (ans as OVIDAnswer).observation,
         }));
 
         const { error } = await (supabase.from as Function)('ovid_answers')
