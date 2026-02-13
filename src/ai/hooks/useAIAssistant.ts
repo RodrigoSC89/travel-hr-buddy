@@ -20,7 +20,7 @@ import { logger } from '@/lib/logger';
 
 export interface AIAssistantOptions {
   userId?: string;
-  additionalContext?: Record<string, any>;
+  additionalContext?: Record<string, unknown>;
   model?: "gpt-4o-mini" | "gpt-4o" | "gpt-3.5-turbo";
   temperature?: number;
 }

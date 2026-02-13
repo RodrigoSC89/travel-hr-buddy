@@ -94,34 +94,37 @@ export default function BetaDashboard() {
 
       // eslint-disable-next-line @typescript-eslint/no-explicit-any -- beta_feedback dynamic shape
       // eslint-disable-next-line @typescript-eslint/no-explicit-any -- beta_feedback dynamic shape
-      const feedbacks = ((feedbackData || []) as Array<Record<string, any>>);
+      const feedbacks = ((feedbackData || []) as Array<Record<string, string | number | boolean | null>>);
       if (feedbacks.length > 0) {
         const total = feedbacks.length;
-        const avgOverallRating = feedbacks.reduce((acc, f) => acc + (f.overall_rating || 0), 0) / total;
-        const avgOnboardingRating = feedbacks.reduce((acc, f) => acc + (f.onboarding_rating || 0), 0) / total;
-        const avgInterfaceRating = feedbacks.reduce((acc, f) => acc + (f.interface_rating || 0), 0) / total;
+        const avgOverallRating = feedbacks.reduce((acc, f) => acc + (Number(f.overall_rating) || 0), 0) / total;
+        const avgOnboardingRating = feedbacks.reduce((acc, f) => acc + (Number(f.onboarding_rating) || 0), 0) / total;
+        const avgInterfaceRating = feedbacks.reduce((acc, f) => acc + (Number(f.interface_rating) || 0), 0) / total;
 
         // Count recommendations
         const wouldRecommend: Record<string, number> = {};
         feedbacks.forEach((f) => {
-          if (f.would_recommend) {
-            wouldRecommend[f.would_recommend] = (wouldRecommend[f.would_recommend] || 0) + 1;
+          const key = String(f.would_recommend || "");
+          if (key) {
+            wouldRecommend[key] = (wouldRecommend[key] || 0) + 1;
           }
         });
 
         // Count would pay
         const wouldPay: Record<string, number> = {};
         feedbacks.forEach((f) => {
-          if (f.would_pay) {
-            wouldPay[f.would_pay] = (wouldPay[f.would_pay] || 0) + 1;
+          const key = String(f.would_pay || "");
+          if (key) {
+            wouldPay[key] = (wouldPay[key] || 0) + 1;
           }
         });
 
         // Count error frequency
         const errorFrequency: Record<string, number> = {};
         feedbacks.forEach((f) => {
-          if (f.error_frequency) {
-            errorFrequency[f.error_frequency] = (errorFrequency[f.error_frequency] || 0) + 1;
+          const key = String(f.error_frequency || "");
+          if (key) {
+            errorFrequency[key] = (errorFrequency[key] || 0) + 1;
           }
         });
 
@@ -139,9 +142,9 @@ export default function BetaDashboard() {
         const testimonials = feedbacks
           .filter((f) => f.willing_testimonial && f.testimonial_text)
           .map((f) => ({
-            name: f.name,
-            text: f.testimonial_text as string,
-            rating: f.overall_rating || 0,
+            name: String(f.name || ""),
+            text: String(f.testimonial_text),
+            rating: Number(f.overall_rating) || 0,
           }));
 
         setStats({

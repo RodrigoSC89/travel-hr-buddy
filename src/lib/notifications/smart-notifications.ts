@@ -28,7 +28,7 @@ interface SmartNotification {
   actionUrl?: string;
   actionLabel?: string;
   icon?: string;
-  metadata?: Record<string, any>;
+  metadata?: Record<string, unknown>;
   expiresAt?: Date;
   groupId?: string;
 }

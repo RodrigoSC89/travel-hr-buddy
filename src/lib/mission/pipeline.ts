@@ -37,7 +37,7 @@ export interface Mission {
   endTime?: string;
   progress: number; // 0-100
   agents?: string[]; // Agent IDs involved
-  metadata?: Record<string, any>;
+  metadata?: Record<string, unknown>;
   aiSuggestions?: AIStrategyRecommendation[];
 }
 

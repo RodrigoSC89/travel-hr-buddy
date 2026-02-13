@@ -11,7 +11,7 @@ export interface LogEntry {
   level: LogLevel;
   origin: string;
   message: string;
-  details?: Record<string, any>;
+  details?: Record<string, unknown>;
   user_id?: string;
   created_at: string;
 }

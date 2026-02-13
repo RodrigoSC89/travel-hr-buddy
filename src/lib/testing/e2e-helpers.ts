@@ -159,7 +159,7 @@ export const storageUtils = {
   /**
    * Seed localStorage with test data
    */
-  seedLocalStorage(data: Record<string, any>) {
+  seedLocalStorage(data: Record<string, unknown>) {
     Object.entries(data).forEach(([key, value]) => {
       localStorage.setItem(key, JSON.stringify(value));
     });

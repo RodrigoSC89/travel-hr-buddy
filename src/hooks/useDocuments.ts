@@ -83,7 +83,7 @@ export function useUploadDocument() {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: async ({ file, metadata }: { file: File; metadata?: Record<string, any> }) => {
+    mutationFn: async ({ file, metadata }: { file: File; metadata?: Record<string, unknown> }) => {
       const fileExt = file.name.split('.').pop();
       const fileName = `${crypto.randomUUID()}.${fileExt}`;
       const filePath = `documents/${fileName}`;

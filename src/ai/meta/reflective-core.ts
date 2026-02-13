@@ -17,7 +17,7 @@ export interface DecisionRecord {
   id: string;
   missionId: string;
   decisionType: string;
-  context: Record<string, any>;
+  context: Record<string, unknown>;
   chosenAction: string;
   alternativeActions: string[];
   outcome: "success" | "failure" | "partial" | "unknown";

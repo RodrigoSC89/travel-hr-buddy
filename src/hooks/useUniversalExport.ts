@@ -23,7 +23,7 @@ export interface ExportOptions {
 
 export type ExportFormat = 'csv' | 'json' | 'excel' | 'pdf';
 
-export function useUniversalExport<T extends Record<string, any>>() {
+export function useUniversalExport<T extends Record<string, unknown>>() {
   const [isExporting, setIsExporting] = useState(false);
   const [exportProgress, setExportProgress] = useState(0);
 

@@ -50,7 +50,7 @@ export interface GovernanceEvaluation {
   approvedBy?: string;
   approvedAt?: Date;
   evaluatedAt: Date;
-  metadata?: Record<string, any>;
+  metadata?: Record<string, unknown>;
 }
 
 export interface GovernanceViolation {
@@ -85,8 +85,8 @@ export interface AuditEntry {
   entityId: string;
   userId?: string;
   decision: GovernanceDecision;
-  details: Record<string, any>;
-  metadata?: Record<string, any>;
+  details: Record<string, unknown>;
+  metadata?: Record<string, unknown>;
 }
 
 class NeuralGovernance {

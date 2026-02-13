@@ -98,7 +98,7 @@ export function useSlackNotify() {
     options: {
       title?: string;
       severity?: "critical" | "warning" | "info" | "success";
-      details?: Record<string, any>;
+      details?: Record<string, unknown>;
     } = {}
   ) => {
     const { data, error } = await supabase.functions.invoke("notify-slack", {

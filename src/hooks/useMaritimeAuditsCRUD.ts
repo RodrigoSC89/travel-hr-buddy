@@ -360,7 +360,7 @@ export function useDeleteMaritimeAudit() {
  * Hook for exporting audit data
  */
 export function useMaritimeAuditExport(auditType: AuditType) {
-  const { exportData, isExporting, exportProgress } = useUniversalExport<MaritimeAudit>();
+  const { exportData, isExporting, exportProgress } = useUniversalExport<Record<string, unknown>>();
   const label = AUDIT_LABELS[auditType];
   
   const exportColumns: ExportColumn[] = [

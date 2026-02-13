@@ -61,7 +61,7 @@ export default function VirtualizedLogsCenter() {
         level: (row.severity === 'error' ? 'error' : row.severity === 'warning' ? 'warn' : 'info') as LogLevel,
         origin: row.module_accessed || 'system',
         message: row.action || row.result || '',
-        details: row.details as Record<string, any> | undefined,
+        details: row.details as Record<string, unknown> | undefined,
         user_id: row.user_id || undefined,
         created_at: row.created_at,
       }));
@@ -150,12 +150,12 @@ export default function VirtualizedLogsCenter() {
   const getLevelIcon = (level: LogLevel) => {
     switch (level) {
     case "error":
-      return <AlertCircle className="h-4 w-4 text-red-500" />;
+      return <AlertCircle className="h-4 w-4 text-destructive" />;
     case "warn":
-      return <AlertTriangle className="h-4 w-4 text-amber-500" />;
+      return <AlertTriangle className="h-4 w-4 text-warning" />;
     case "info":
     default:
-      return <Info className="h-4 w-4 text-blue-500" />;
+      return <Info className="h-4 w-4 text-info" />;
     }
   };
 

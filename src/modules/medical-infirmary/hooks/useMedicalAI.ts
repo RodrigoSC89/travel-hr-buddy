@@ -38,12 +38,13 @@ export function useMedicalAI() {
     });
 
     if (result?.response) {
+      const resp = result.response as Record<string, unknown>;
       return {
-        urgency: result.response.urgency || 'medium',
-        recommendations: result.response.recommendations || [],
-        possibleDiagnoses: result.response.possibleDiagnoses || [],
-        suggestedTests: result.response.suggestedTests || [],
-        medicationSuggestions: result.response.medicationSuggestions || []
+        urgency: (resp.urgency as TriageResult["urgency"]) || 'medium',
+        recommendations: (resp.recommendations as string[]) || [],
+        possibleDiagnoses: (resp.possibleDiagnoses as string[]) || [],
+        suggestedTests: (resp.suggestedTests as string[]) || [],
+        medicationSuggestions: (resp.medicationSuggestions as string[]) || []
       };
     }
     return null;
@@ -56,7 +57,7 @@ export function useMedicalAI() {
       analysisType: 'drug_interactions'
     });
 
-    return result?.response?.interactions || [];
+    return ((result?.response as Record<string, unknown>)?.interactions as string[]) || [];
   }, [invoke]);
 
   const analyzeInventoryRisks = useCallback(async (supplies: MedicalSupply[]): Promise<AIAnalysis | null> => {
@@ -66,11 +67,12 @@ export function useMedicalAI() {
     });
 
     if (result?.response) {
+      const resp = result.response as Record<string, unknown>;
       return {
-        riskLevel: result.response.riskLevel || 'low',
-        recommendations: result.response.recommendations || [],
-        predictedIssues: result.response.predictedIssues || [],
-        confidence: result.response.confidence || 0.8
+        riskLevel: (resp.riskLevel as string) || 'low',
+        recommendations: (resp.recommendations as string[]) || [],
+        predictedIssues: (resp.predictedIssues as string[]) || [],
+        confidence: Number(resp.confidence) || 0.8
       };
     }
     return null;
@@ -84,11 +86,12 @@ export function useMedicalAI() {
     });
 
     if (result?.response) {
+      const resp = result.response as Record<string, unknown>;
       return {
-        riskLevel: result.response.riskLevel || 'low',
-        recommendations: result.response.recommendations || [],
-        predictedIssues: result.response.predictedIssues || [],
-        confidence: result.response.confidence || 0.75
+        riskLevel: (resp.riskLevel as string) || 'low',
+        recommendations: (resp.recommendations as string[]) || [],
+        predictedIssues: (resp.predictedIssues as string[]) || [],
+        confidence: Number(resp.confidence) || 0.75
       };
     }
     return null;
@@ -107,9 +110,10 @@ export function useMedicalAI() {
     });
 
     if (result?.response) {
+      const resp = result.response as Record<string, unknown>;
       return {
-        treatment: result.response.treatment || '',
-        medications: result.response.medications || []
+        treatment: String(resp.treatment || ''),
+        medications: (resp.medications as PrescribedMedication[]) || []
       };
     }
     return null;
@@ -126,9 +130,10 @@ export function useMedicalAI() {
     let response = 'Desculpe, não consegui processar sua solicitação. Tente novamente.';
 
     if (result?.response) {
+      const resp = result.response as Record<string, unknown>;
       response = typeof result.response === 'string' 
         ? result.response 
-        : result.response.message || result.response.guidance || response;
+        : String(resp.message || resp.guidance || response);
     } else {
       // Fallback responses based on keywords
       const lowerMessage = message.toLowerCase();

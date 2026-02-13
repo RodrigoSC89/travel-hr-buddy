@@ -123,7 +123,7 @@ export class DistributedAIEngine {
     vesselId: string,
     request: {
       prompt: string;
-      context?: Record<string, any>;
+      context?: Record<string, unknown>;
       decision_type?: string;
     }
   ): Promise<AIDecision | null> {
