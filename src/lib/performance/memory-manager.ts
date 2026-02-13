@@ -26,7 +26,7 @@ class MemoryManager {
    * Get current memory status
    */
   getStatus(): MemoryStatus {
-    const memory = (performance as any).memory as MemoryInfo | undefined;
+    const memory = (performance as unknown as Record<string, unknown>).memory as MemoryInfo | undefined;
     
     if (!memory) {
       return {
@@ -86,7 +86,7 @@ class MemoryManager {
 
     // Suggest garbage collection (doesn't guarantee it runs)
     if ('gc' in window) {
-      (window as any).gc();
+      (window as unknown as Record<string, () => void>).gc();
     }
   }
 

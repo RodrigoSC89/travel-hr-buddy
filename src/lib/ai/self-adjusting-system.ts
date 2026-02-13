@@ -327,11 +327,11 @@ class SelfAdjustingSystem {
     else if (cores <= 2) profile.deviceType = 'low';
 
     // Detect network speed
-    const connection = (navigator as any).connection;
+    const connection = (navigator as unknown as Record<string, unknown>).connection as { effectiveType?: string; downlink?: number } | undefined;
     if (connection) {
-      if (connection.effectiveType === '4g' && connection.downlink > 5) {
+      if (connection.effectiveType === '4g' && (connection.downlink ?? 0) > 5) {
         profile.networkSpeed = 'fast';
-      } else if (connection.effectiveType === '2g' || connection.downlink < 1) {
+      } else if (connection.effectiveType === '2g' || (connection.downlink ?? 10) < 1) {
         profile.networkSpeed = 'slow';
       }
     }
@@ -341,7 +341,7 @@ class SelfAdjustingSystem {
 
     // Detect memory pressure
     if ('memory' in performance) {
-      const memory = (performance as any).memory;
+      const memory = (performance as unknown as Record<string, unknown>).memory as { usedJSHeapSize: number; jsHeapSizeLimit: number } | undefined;
       if (memory) {
         const usage = memory.usedJSHeapSize / memory.jsHeapSizeLimit;
         if (usage > 0.8) profile.memoryPressure = 'high';
@@ -352,7 +352,7 @@ class SelfAdjustingSystem {
     // Detect battery
     if ('getBattery' in navigator) {
       try {
-        const battery = await (navigator as any).getBattery();
+        const battery = await (navigator as unknown as Record<string, () => Promise<{ level: number }>>).getBattery();
         profile.batteryLevel = Math.round(battery.level * 100);
       } catch (e) {
         // Battery API not supported

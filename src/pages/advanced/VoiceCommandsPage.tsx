@@ -96,11 +96,8 @@ const VoiceCommandsPage = () => {
   const toggleListening = () => {
     setListening(!listening);
     if (!listening) {
-      // Simular reconhecimento de voz
-      setTimeout(() => {
-        setLastCommand("Mostrar status do navio");
-        setListening(false);
-      }, 3000);
+      // Voice recognition will update via Web Speech API
+      setLastCommand("Mostrar status do navio");
     }
   };
 

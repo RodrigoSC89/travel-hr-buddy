@@ -183,7 +183,7 @@ export const perfUtils = {
    * Get memory usage
    */
   getMemoryUsage(): { used: number; total: number; limit: number } | null {
-    const memory = (performance as any).memory;
+    const memory = (performance as unknown as Record<string, unknown>).memory as { usedJSHeapSize: number; totalJSHeapSize: number; jsHeapSizeLimit: number } | undefined;
     if (!memory) return null;
     
     return {

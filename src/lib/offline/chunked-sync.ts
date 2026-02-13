@@ -310,8 +310,8 @@ export const LOW_PRIORITY_DATA_TYPES = [
  * Get sync priority for a data type
  */
 export function getSyncPriority(table: string): 'critical' | 'high' | 'normal' | 'low' {
-  if (CRITICAL_DATA_TYPES.includes(table as any)) return 'critical';
-  if (HIGH_PRIORITY_DATA_TYPES.includes(table as any)) return 'high';
-  if (LOW_PRIORITY_DATA_TYPES.includes(table as any)) return 'low';
+  if ((CRITICAL_DATA_TYPES as readonly string[]).includes(table)) return 'critical';
+  if ((HIGH_PRIORITY_DATA_TYPES as readonly string[]).includes(table)) return 'high';
+  if ((LOW_PRIORITY_DATA_TYPES as readonly string[]).includes(table)) return 'low';
   return 'normal';
 }

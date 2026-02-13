@@ -432,8 +432,8 @@ export default function IntegrationsDashboard() {
                     <div>
                       <h4 className="font-medium mb-3">Funcionalidades</h4>
                       <div className="flex flex-wrap gap-2">
-                        {selectedIntegration.features.map((feature, i) => (
-                          <Badge key={i} variant="secondary">
+                        {selectedIntegration.features.map((feature) => (
+                          <Badge key={`feat-${feature}`} variant="secondary">
                             <CheckCircle2 className="h-3 w-3 mr-1" />
                             {feature}
                           </Badge>

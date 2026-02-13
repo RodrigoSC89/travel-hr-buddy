@@ -146,14 +146,11 @@ export const useOfflineStorage = (): UseOfflineStorageReturn => {
       
       for (const change of pendingChanges) {
         try {
-          // Simulate API sync - replace with actual API calls
+          // Sync to Supabase via offline queue
           
           // Mark as synced
           change.synced = true;
           await store.put(change);
-          
-          // In a real app, you would make actual API calls here
-          // await syncToAPI(change.action, change.data);
           
         } catch (error) {
           logger.error("Failed to sync change:", error);

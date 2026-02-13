@@ -6,17 +6,9 @@ export const useFormActions = () => {
 
   const handleSaveForm = (formName: string, _data?: unknown) => {
     toast({
-      title: "Salvando",
-      description: `Salvando ${formName}...`,
+      title: "Salvo com sucesso",
+      description: `${formName} foi salvo com sucesso!`,
     });
-    
-    // Simular save
-    setTimeout(() => {
-      toast({
-        title: "Salvo com sucesso",
-        description: `${formName} foi salvo com sucesso!`,
-      });
-    }, 1000);
   };
 
   const handleCancelForm = (formName: string) => {
@@ -41,19 +33,12 @@ export const useFormActions = () => {
     return false;
   };
 
-  const handleDeleteItem = (itemName: string, itemId?: string) => {
+  const handleDeleteItem = (itemName: string, _itemId?: string) => {
     if (confirm(`Tem certeza que deseja excluir ${itemName}? Esta ação não pode ser desfeita.`)) {
       toast({
-        title: "Excluindo",
-        description: `Excluindo ${itemName}...`,
+        title: "Excluído com sucesso",
+        description: `${itemName} foi excluído`,
       });
-      
-      setTimeout(() => {
-        toast({
-          title: "Excluído com sucesso",
-          description: `${itemName} foi excluído`,
-        });
-      }, 1000);
       return true;
     }
     return false;

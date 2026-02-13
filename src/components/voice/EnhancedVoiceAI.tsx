@@ -186,14 +186,12 @@ export function EnhancedVoiceAI() {
     // Erros de rede serão tratados na camada de API
 
     addCommand({ text: command, status: 'processing' });
-    // Simulate processing
-    setTimeout(() => {
-      addCommand({ 
-        text: command, 
-        response: getQuickResponse(command), 
-        status: 'completed' 
-      });
-    }, 1000);
+    // Process command immediately
+    addCommand({ 
+      text: command, 
+      response: getQuickResponse(command), 
+      status: 'completed' 
+    });
   };
 
   const getQuickResponse = (command: string): string => {
