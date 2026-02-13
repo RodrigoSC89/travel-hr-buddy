@@ -290,7 +290,7 @@ export const dataIntegrityTests = {
       
       // Read test
       const readTx = db.transaction(storeName, 'readonly');
-      const result = await new Promise<any>(resolve => {
+      const result = await new Promise<{ data?: string } | null>(resolve => {
         const request = readTx.objectStore(storeName).get(1);
         request.onsuccess = () => resolve(request.result);
       });

@@ -221,7 +221,7 @@ class MobileAICore {
 
     default:
       // Try to answer based on conversation history
-      const history = await localMemory.searchHistory(intent.entities.subject || "");
+      const history = await localMemory.searchHistory(String(intent.entities.subject || ""));
       if (history.length > 0) {
         const lastRelevant = history[0];
         response = `Based on recent conversation: ${lastRelevant.content}`;

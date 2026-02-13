@@ -16,7 +16,7 @@ import {
 
 interface PredictiveMaintenanceCardProps {
   vesselId?: string;
-  maintenanceData?: Record<string, any>;
+  maintenanceData?: Record<string, unknown>;
 }
 
 export const PredictiveMaintenanceCard: React.FC<PredictiveMaintenanceCardProps> = ({

@@ -167,8 +167,7 @@ export default function OperationsCommandHubEnhanced() {
       details: [
         { label: "Ativas", value: String(metrics.activeMissions) },
         { label: "Total", value: String(missions.length) },
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Supabase dynamic row
-        { label: "Planejadas", value: String(missions.filter((m: any) => m.status === "planning").length) }
+        { label: "Planejadas", value: String(missions.filter((m: Record<string, unknown>) => m.status === "planning").length) }
       ]
     },
     {
@@ -180,10 +179,8 @@ export default function OperationsCommandHubEnhanced() {
       icon: <MapPin className="h-5 w-5" />,
       details: [
         { label: "Total", value: String(ports.length) },
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Supabase dynamic row
-        { label: "Ativos", value: String(ports.filter((p: any) => p.status === "active").length) },
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Supabase dynamic row
-        { label: "Países", value: String(new Set(ports.map((p: any) => p.country)).size) }
+        { label: "Ativos", value: String(ports.filter((p: Record<string, unknown>) => p.status === "active").length) },
+        { label: "Países", value: String(new Set(ports.map((p: Record<string, unknown>) => p.country)).size) }
       ]
     }
   ], [metrics, missions, ports, vessels]);
@@ -238,15 +235,14 @@ export default function OperationsCommandHubEnhanced() {
     const alerts: Array<{id: string; title: string; description: string; severity: "high" | "medium" | "info"; timestamp: Date; module: string; actions: Array<{label: string; onClick: () => void}>}> = [];
     
     // Generate alerts from real vessel data
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Supabase dynamic row shape
-    vessels.forEach((v: any, idx: number) => {
+    vessels.forEach((v: Record<string, unknown>, idx: number) => {
       if (v.status === 'maintenance') {
         alerts.push({
-          id: `vessel-maint-${v.id || idx}`,
-          title: `${v.name || 'Embarcação'} em manutenção`,
-          description: `Embarcação ${v.name} está em manutenção programada`,
+          id: `vessel-maint-${String(v.id) || idx}`,
+          title: `${String(v.name || 'Embarcação')} em manutenção`,
+          description: `Embarcação ${String(v.name)} está em manutenção programada`,
           severity: "medium",
-          timestamp: new Date(v.updated_at || Date.now()),
+          timestamp: new Date(String(v.updated_at) || Date.now()),
           module: "Manutenção",
           actions: [
             { label: "Ver Detalhes", onClick: () => handleTabChange("fleet") },
@@ -487,11 +483,9 @@ export default function OperationsCommandHubEnhanced() {
                     <div className="space-y-2">
                       <div className="flex justify-between text-sm">
                         <span className="text-muted-foreground">Manutenção</span>
-                        {/* eslint-disable-next-line @typescript-eslint/no-explicit-any -- Supabase dynamic row */}
-                        <span className="font-medium text-muted-foreground">{vessels.filter((v: any) => v.status === 'maintenance').length}</span>
+                        <span className="font-medium text-muted-foreground">{vessels.filter((v: Record<string, unknown>) => v.status === 'maintenance').length}</span>
                       </div>
-                      {/* eslint-disable-next-line @typescript-eslint/no-explicit-any -- Supabase dynamic row */}
-                      <Progress value={metrics.totalVessels > 0 ? (vessels.filter((v: any) => v.status === 'maintenance').length / metrics.totalVessels) * 100 : 0} className="h-2 [&>div]:bg-warning" />
+                      <Progress value={metrics.totalVessels > 0 ? (vessels.filter((v: Record<string, unknown>) => v.status === 'maintenance').length / metrics.totalVessels) * 100 : 0} className="h-2 [&>div]:bg-warning" />
                     </div>
                     <div className="space-y-2">
                       <div className="flex justify-between text-sm">
@@ -516,13 +510,13 @@ export default function OperationsCommandHubEnhanced() {
                   </CardHeader>
                    <CardContent className="space-y-3">
                      {voyages.length > 0 ? (
-                        voyages.slice(0, 3).map((voy: any, idx: number) => (
-                         <div key={voy.id || idx} className="flex items-center gap-3 text-sm">
+                        voyages.slice(0, 3).map((voy: Record<string, unknown>, idx: number) => (
+                         <div key={String(voy.id) || idx} className="flex items-center gap-3 text-sm">
                            <Badge variant="outline" className="min-w-[60px] justify-center text-xs">
-                             {voy.status === 'in_progress' ? '🟢' : voy.status === 'planned' ? '🟡' : '✅'} {voy.status || 'N/A'}
+                             {voy.status === 'in_progress' ? '🟢' : voy.status === 'planned' ? '🟡' : '✅'} {String(voy.status || 'N/A')}
                            </Badge>
                            <span className="flex-1 truncate">
-                             {voy.voyage_number || `Voyage ${idx + 1}`} — {voy.origin_port || '?'} → {voy.destination_port || '?'}
+                             {String(voy.voyage_number || `Voyage ${idx + 1}`)} — {String(voy.origin_port || '?')} → {String(voy.destination_port || '?')}
                            </span>
                          </div>
                        ))

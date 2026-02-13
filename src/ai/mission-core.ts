@@ -14,7 +14,7 @@ export interface EmergencyProtocol {
   scenario: string;
   priority: "low" | "medium" | "high" | "critical";
   steps: ProtocolStep[];
-  conditions: Record<string, any>;
+  conditions: Record<string, unknown>;
   requires_human_override: boolean;
 }
 

@@ -7,9 +7,9 @@ export interface AIMemoryEvent {
   user_id?: string;
   organization_id?: string;
   event_type: string;
-  event_data: Record<string, any>;
+  event_data: Record<string, unknown>;
   context?: string;
-  metadata?: Record<string, any>;
+  metadata?: Record<string, unknown>;
   confidence?: number;
   created_at?: string;
 }
@@ -28,9 +28,9 @@ export class AIMemoryService {
         .insert({
           user_id: user.id,
           event_type: event.event_type,
-          event_data: event.event_data,
+          event_data: event.event_data as import("@/integrations/supabase/types").Json,
           context: event.context,
-          metadata: event.metadata || {},
+          metadata: (event.metadata || {}) as import("@/integrations/supabase/types").Json,
           confidence: event.confidence || 0.0,
           organization_id: event.organization_id
         });
@@ -70,9 +70,9 @@ export class AIMemoryService {
         user_id: d.user_id || undefined,
         organization_id: d.organization_id || undefined,
         event_type: d.event_type,
-        event_data: d.event_data as Record<string, any>,
+        event_data: d.event_data as Record<string, unknown>,
         context: d.context || undefined,
-        metadata: d.metadata as Record<string, any>,
+        metadata: d.metadata as Record<string, unknown>,
         confidence: d.confidence || undefined,
         created_at: d.created_at
       }));
@@ -106,9 +106,9 @@ export class AIMemoryService {
         user_id: d.user_id || undefined,
         organization_id: d.organization_id || undefined,
         event_type: d.event_type,
-        event_data: d.event_data as Record<string, any>,
+        event_data: d.event_data as Record<string, unknown>,
         context: d.context || undefined,
-        metadata: d.metadata as Record<string, any>,
+        metadata: d.metadata as Record<string, unknown>,
         confidence: d.confidence || undefined,
         created_at: d.created_at
       }));
@@ -142,9 +142,9 @@ export class AIMemoryService {
         user_id: d.user_id || undefined,
         organization_id: d.organization_id || undefined,
         event_type: d.event_type,
-        event_data: d.event_data as Record<string, any>,
+        event_data: d.event_data as Record<string, unknown>,
         context: d.context || undefined,
-        metadata: d.metadata as Record<string, any>,
+        metadata: d.metadata as Record<string, unknown>,
         confidence: d.confidence || undefined,
         created_at: d.created_at
       }));

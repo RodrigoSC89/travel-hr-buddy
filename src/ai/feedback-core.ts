@@ -18,17 +18,17 @@ export interface CognitiveFeedbackEntry {
   // Decision tracking
   decision_type: "suggestion" | "automation" | "recommendation" | "prediction" | "analysis";
   module_name: string;
-  decision_context: Record<string, any>;
-  ai_decision: Record<string, any>;
+  decision_context: Record<string, unknown>;
+  ai_decision: Record<string, unknown>;
   
   // Operator interaction
   operator_action?: "accepted" | "rejected" | "modified" | "ignored";
-  operator_change?: Record<string, any>;
+  operator_change?: Record<string, unknown>;
   operator_feedback?: string;
   
   // Outcome tracking
   result?: "success" | "failure" | "partial";
-  result_metrics?: Record<string, any>;
+  result_metrics?: Record<string, unknown>;
   
   // Pattern detection metadata
   similar_decisions_count?: number;
@@ -126,10 +126,10 @@ class CognitiveFeedbackCore {
     feedbackId: string,
     update: {
       operator_action?: CognitiveFeedbackEntry["operator_action"];
-      operator_change?: Record<string, any>;
+      operator_change?: Record<string, unknown>;
       operator_feedback?: string;
       result?: "success" | "failure" | "partial";
-      result_metrics?: Record<string, any>;
+      result_metrics?: Record<string, unknown>;
     }
   ): Promise<boolean> {
     try {
@@ -234,13 +234,13 @@ class CognitiveFeedbackCore {
   }
 
   private findContextSimilarities(entries: CognitiveFeedbackEntry[]): Array<{
-    context: Record<string, any>;
+    context: Record<string, unknown>;
     count: number;
     confidence: number;
     examples: CognitiveFeedbackEntry[];
   }> {
     const similarities: Map<string, {
-      context: Record<string, any>;
+      context: Record<string, unknown>;
       count: number;
       examples: CognitiveFeedbackEntry[];
     }> = new Map();
@@ -276,7 +276,7 @@ class CognitiveFeedbackCore {
   private generatePatternDescription(
     module: string,
     action: string,
-    context: Record<string, any>
+    context: Record<string, unknown>
   ): string {
     const contextStr = Object.entries(context)
       .map(([key, value]) => `${key}=${JSON.stringify(value)}`)

@@ -117,7 +117,7 @@ class SystemBenchmark {
   }
 
   private benchmarkMemory(): { usage: number; score: number } {
-    const perf = performance as any;
+    const perf = performance as Performance & { memory?: { usedJSHeapSize: number; jsHeapSizeLimit: number } };
     if (perf.memory) {
       const usage = perf.memory.usedJSHeapSize / perf.memory.jsHeapSizeLimit;
       // Lower usage = higher score

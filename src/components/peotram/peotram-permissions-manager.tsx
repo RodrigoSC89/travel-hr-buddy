@@ -108,8 +108,7 @@ export const PeotramPermissionsManager: React.FC = () => {
 
       if (error) throw error;
       
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any -- user_feature_permissions join shape
-      const mappedPermissions = (data || []).map((permission: any) => ({
+      const mappedPermissions = (data || []).map((permission: Record<string, unknown>) => ({
         ...permission,
         permission_level: permission.permission_level as "none" | "read" | "write" | "admin",
         location_type: permission.location_type as "vessel" | "shore" | "both"

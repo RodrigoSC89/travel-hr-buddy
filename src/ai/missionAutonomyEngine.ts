@@ -18,13 +18,13 @@ export interface AutonomyAction {
   action_type: string;
   decision_level: DecisionLevel;
   status: ActionStatus;
-  context: Record<string, any>;
+  context: Record<string, unknown>;
   reasoning: string;
   confidence_score: number;
   risk_score: number;
   approved_by?: string;
   executed_at?: Date;
-  result?: Record<string, any>;
+  result?: Record<string, unknown>;
   created_at?: Date;
   updated_at?: Date;
 }
@@ -34,7 +34,7 @@ export interface DecisionRule {
   decision_level: DecisionLevel;
   risk_threshold: number;
   confidence_threshold: number;
-  requires_approval_if: (context: Record<string, any>) => boolean;
+  requires_approval_if: (context: Record<string, unknown>) => boolean;
 }
 
 export interface WebhookNotification {
@@ -42,7 +42,7 @@ export interface WebhookNotification {
   action_type: string;
   priority: "low" | "medium" | "high" | "critical";
   message: string;
-  context: Record<string, any>;
+  context: Record<string, unknown>;
   timestamp: Date;
 }
 
@@ -89,7 +89,7 @@ class MissionAutonomyEngine {
       decision_level: "auto_execute",
       risk_threshold: 0.3,
       confidence_threshold: 0.7,
-      requires_approval_if: (context) => context.deviation_percentage > 20,
+      requires_approval_if: (context) => Number(context.deviation_percentage) > 20,
     });
 
     // Speed change - auto-execute for minor changes
@@ -98,7 +98,7 @@ class MissionAutonomyEngine {
       decision_level: "auto_execute",
       risk_threshold: 0.4,
       confidence_threshold: 0.6,
-      requires_approval_if: (context) => Math.abs(context.speed_delta) > 5,
+      requires_approval_if: (context) => Math.abs(Number(context.speed_delta)) > 5,
     });
 
     // Resource allocation - request approval for significant changes
@@ -107,7 +107,7 @@ class MissionAutonomyEngine {
       decision_level: "request_approval",
       risk_threshold: 0.6,
       confidence_threshold: 0.7,
-      requires_approval_if: (context) => context.resource_value > 10000,
+      requires_approval_if: (context) => Number(context.resource_value) > 10000,
     });
 
     // Emergency protocol - always request approval
@@ -171,7 +171,7 @@ class MissionAutonomyEngine {
    */
   async proposeAction(
     action_type: string,
-    context: Record<string, any>,
+    context: Record<string, unknown>,
     reasoning: string,
     confidence_score: number,
     risk_score: number
@@ -248,7 +248,7 @@ class MissionAutonomyEngine {
   private async createAction(
     action_type: string,
     decision_level: DecisionLevel,
-    context: Record<string, any>,
+    context: Record<string, unknown>,
     reasoning: string,
     confidence_score: number,
     risk_score: number
@@ -365,7 +365,7 @@ class MissionAutonomyEngine {
    */
   private async performAction(
     action: AutonomyAction
-  ): Promise<Record<string, any>> {
+  ): Promise<Record<string, unknown>> {
     logger.info("[MissionAutonomy] Performing action", {
       action_type: action.action_type,
     });
