@@ -245,13 +245,13 @@ class ContextMesh {
       if (this.useLocalStorage) {
         // Clean up local storage
         const key = "context_mesh_history";
-        const stored = localStorage.getItem(key);
+        const stored = sessionStorage.getItem(key);
         if (stored) {
           const history = JSON.parse(stored) as ContextMessage[];
           const cleaned = history.filter(msg => 
             new Date(msg.timestamp!) > cutoffDate
           );
-          localStorage.setItem(key, JSON.stringify(cleaned));
+          sessionStorage.setItem(key, JSON.stringify(cleaned));
         }
       } else {
         // Clean up Supabase
@@ -322,7 +322,7 @@ class ContextMesh {
   private async saveToLocalStorage(message: ContextMessage): Promise<void> {
     try {
       const key = "context_mesh_history";
-      const stored = localStorage.getItem(key);
+      const stored = sessionStorage.getItem(key);
       const history: ContextMessage[] = stored ? JSON.parse(stored) : [];
       
       history.unshift({
@@ -331,11 +331,11 @@ class ContextMesh {
         syncStatus: "synced"
       });
       
-      // Keep only last 1000 messages in local storage
+      // Keep only last 1000 messages in session storage
       const trimmed = history.slice(0, 1000);
-      localStorage.setItem(key, JSON.stringify(trimmed));
+      sessionStorage.setItem(key, JSON.stringify(trimmed));
     } catch (error) {
-      logger.error("[ContextMesh] Failed to save to localStorage", { error: String(error) });
+      logger.error("[ContextMesh] Failed to save to sessionStorage", { error: String(error) });
       
       // Try IndexedDB as fallback
       try {
@@ -383,7 +383,7 @@ class ContextMesh {
   ): ContextMessage[] {
     try {
       const key = "context_mesh_history";
-      const stored = localStorage.getItem(key);
+      const stored = sessionStorage.getItem(key);
       if (!stored) return [];
       
       const history = JSON.parse(stored) as ContextMessage[];

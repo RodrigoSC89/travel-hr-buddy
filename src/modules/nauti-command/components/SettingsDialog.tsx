@@ -53,7 +53,7 @@ export function SettingsDialog({ open, onOpenChange }: SettingsDialogProps) {
   });
 
   const handleSave = () => {
-    localStorage.setItem("nautilus-settings", JSON.stringify(settings));
+    sessionStorage.setItem("nautilus-settings", JSON.stringify(settings));
     toast.success("Configurações salvas com sucesso!");
     onOpenChange(false);
   };

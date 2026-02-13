@@ -137,7 +137,7 @@ const AnalyticsCoreProfessional: React.FC = () => {
   });
   
   const [settings, setSettings] = useState<SettingsConfig>(() => {
-    const saved = localStorage.getItem("analyticsSettings");
+    const saved = sessionStorage.getItem("analyticsSettings");
     return saved ? JSON.parse(saved) : {
       emailNotifications: true,
       pushNotifications: true,
@@ -867,7 +867,7 @@ Este relatório apresenta uma análise abrangente dos principais indicadores de 
 
   // Save Settings
   const saveSettings = () => {
-    localStorage.setItem("analyticsSettings", JSON.stringify(settings));
+    sessionStorage.setItem("analyticsSettings", JSON.stringify(settings));
     toast({
       title: "Configurações Salvas",
       description: "Suas preferências foram atualizadas"

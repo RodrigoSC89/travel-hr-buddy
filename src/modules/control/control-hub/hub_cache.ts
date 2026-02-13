@@ -114,7 +114,7 @@ export class HubCache {
    */
   private getCache(): CacheEntry[] {
     try {
-      const data = localStorage.getItem(this.storageKey);
+      const data = sessionStorage.getItem(this.storageKey);
       if (!data) return [];
       
       const parsed = JSON.parse(data);
@@ -133,7 +133,7 @@ export class HubCache {
    */
   private setCache(cache: CacheEntry[]): void {
     try {
-      localStorage.setItem(this.storageKey, JSON.stringify(cache));
+      sessionStorage.setItem(this.storageKey, JSON.stringify(cache));
     } catch (error) {
       logger.error("Failed to set cache:", error);
     }

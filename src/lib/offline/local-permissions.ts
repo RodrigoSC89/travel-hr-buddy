@@ -126,7 +126,7 @@ class LocalPermissionsSystem {
    */
   private loadFromStorage(): void {
     try {
-      const stored = localStorage.getItem(USER_PERMS_KEY);
+      const stored = sessionStorage.getItem(USER_PERMS_KEY);
       if (stored) {
         const data = JSON.parse(stored);
         Object.entries(data).forEach(([userId, perms]) => {
@@ -147,7 +147,7 @@ class LocalPermissionsSystem {
       this.userPermissions.forEach((perms, userId) => {
         data[userId] = perms;
       });
-      localStorage.setItem(USER_PERMS_KEY, JSON.stringify(data));
+      sessionStorage.setItem(USER_PERMS_KEY, JSON.stringify(data));
     } catch {
       // Silent fail - storage may not be available in all environments
     }

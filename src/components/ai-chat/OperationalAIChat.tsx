@@ -232,7 +232,7 @@ export function OperationalAIChat() {
               }
             }}
           />
-          <Button onClick={sendMessage} disabled={!input.trim() || isLoading} size="icon" className="shrink-0">
+          <Button onClick={sendMessage} disabled={!input.trim() || isLoading} size="icon" className="shrink-0" aria-label="Enviar mensagem" title="Enviar">
             {isLoading ? <Loader2 className="h-4 w-4 animate-spin" /> : <Send className="h-4 w-4" />}
           </Button>
         </div>

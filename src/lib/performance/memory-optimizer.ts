@@ -45,13 +45,13 @@ class MemoryOptimizer {
         const key = localStorage.key(i);
         if (key?.startsWith('cache_')) {
           try {
-            const item = JSON.parse(localStorage.getItem(key) || '{}');
+            const item = JSON.parse(sessionStorage.getItem(key) || '{}');
             if (item.timestamp && now - item.timestamp > maxAge) {
-              localStorage.removeItem(key);
+              sessionStorage.removeItem(key);
             }
           } catch {
             // Invalid JSON, remove it
-            localStorage.removeItem(key);
+            sessionStorage.removeItem(key);
           }
         }
       }

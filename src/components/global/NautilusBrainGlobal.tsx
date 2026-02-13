@@ -418,10 +418,10 @@ Como posso ajudar?`;
               </div>
             </div>
             <div className="flex items-center gap-1">
-              <Button variant="ghost" size="icon" onClick={() => setIsMinimized(true)}>
+              <Button variant="ghost" size="icon" onClick={() => setIsMinimized(true)} aria-label="Minimizar assistente" title="Minimizar">
                 <Minimize2 className="h-4 w-4" />
               </Button>
-              <Button variant="ghost" size="icon" onClick={onClose}>
+              <Button variant="ghost" size="icon" onClick={onClose} aria-label="Fechar assistente" title="Fechar">
                 <X className="h-4 w-4" />
               </Button>
             </div>
@@ -467,11 +467,11 @@ Como posso ajudar?`;
                     
                     {message.role === 'assistant' && message.content && (
                       <div className="flex items-center gap-2 mt-2 pt-2 border-t border-border/50">
-                        <Button variant="ghost" size="sm" className="h-7 text-xs" onClick={() => copyMessage(message.content)}>
+                        <Button variant="ghost" size="sm" className="h-7 text-xs" onClick={() => copyMessage(message.content)} aria-label="Copiar mensagem" title="Copiar">
                           <Copy className="h-3 w-3 mr-1" />
                           Copiar
                         </Button>
-                        <Button variant="ghost" size="sm" className="h-7">
+                        <Button variant="ghost" size="sm" className="h-7" aria-label="Avaliar positivamente" title="Útil">
                           <ThumbsUp className="h-3 w-3" />
                         </Button>
                         <Button variant="ghost" size="sm" className="h-7">

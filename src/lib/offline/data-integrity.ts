@@ -193,7 +193,7 @@ class DataIntegrity {
   private saveToStorage(): void {
     try {
       const data = Array.from(this.checks.entries());
-      localStorage.setItem(this.STORAGE_KEY, JSON.stringify(data));
+      sessionStorage.setItem(this.STORAGE_KEY, JSON.stringify(data));
     } catch (error) {
       logger.error('[DataIntegrity] Failed to save', { error });
     }
@@ -201,7 +201,7 @@ class DataIntegrity {
 
   private loadFromStorage(): void {
     try {
-      const stored = localStorage.getItem(this.STORAGE_KEY);
+      const stored = sessionStorage.getItem(this.STORAGE_KEY);
       if (stored) {
         const data = JSON.parse(stored) as [string, IntegrityCheck][];
         this.checks = new Map(data);

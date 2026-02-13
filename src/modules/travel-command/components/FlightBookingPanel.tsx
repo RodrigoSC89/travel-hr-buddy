@@ -268,6 +268,7 @@ export function FlightBookingPanel() {
                 size="icon"
                 onClick={handleSwapAirports}
                 className="mb-0.5"
+                aria-label="Trocar origem e destino" title="Trocar"
               >
                 <ArrowUpDown className="h-4 w-4" />
               </Button>
@@ -363,6 +364,7 @@ export function FlightBookingPanel() {
                   size="icon"
                   className="h-10"
                   onClick={() => setPassengers(Math.max(1, passengers - 1))}
+                  aria-label="Diminuir passageiros" title="Menos"
                 >
                   <Minus className="h-4 w-4" />
                 </Button>
@@ -372,6 +374,7 @@ export function FlightBookingPanel() {
                   size="icon"
                   className="h-10"
                   onClick={() => setPassengers(Math.min(10, passengers + 1))}
+                  aria-label="Aumentar passageiros" title="Mais"
                 >
                   <Plus className="h-4 w-4" />
                 </Button>

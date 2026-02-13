@@ -282,7 +282,7 @@ export function ProcurementHub() {
                   className="pl-9"
                 />
               </div>
-              <Button variant="outline" size="icon" onClick={() => setSearchTerm("")}>
+              <Button variant="outline" size="icon" onClick={() => setSearchTerm("")} aria-label="Limpar filtro" title="Limpar filtro">
                 <Filter className="h-4 w-4" />
               </Button>
             </div>

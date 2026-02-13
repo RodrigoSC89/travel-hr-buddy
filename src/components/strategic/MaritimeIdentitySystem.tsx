@@ -290,7 +290,7 @@ const MaritimeIdentitySystem: React.FC = () => {
   };
 
   const saveConfiguration = () => {
-    localStorage.setItem("nautilus-customization", JSON.stringify(settings));
+    sessionStorage.setItem("nautilus-customization", JSON.stringify(settings));
     toast({
       title: "Configuração Salva",
       description: "Personalização aplicada permanentemente",

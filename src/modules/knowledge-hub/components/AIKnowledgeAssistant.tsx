@@ -280,13 +280,14 @@ export function AIKnowledgeAssistant({
                                 variant="ghost" 
                                 className="h-6 w-6"
                                 onClick={() => copyToClipboard(message.content)}
+                                aria-label="Copiar resposta" title="Copiar"
                               >
                                 <Copy className="h-3 w-3" />
                               </Button>
-                              <Button size="icon" variant="ghost" className="h-6 w-6">
+                              <Button size="icon" variant="ghost" className="h-6 w-6" aria-label="Avaliar positivamente" title="Útil">
                                 <ThumbsUp className="h-3 w-3" />
                               </Button>
-                              <Button size="icon" variant="ghost" className="h-6 w-6">
+                              <Button size="icon" variant="ghost" className="h-6 w-6" aria-label="Avaliar negativamente" title="Não útil">
                                 <ThumbsDown className="h-3 w-3" />
                               </Button>
                             </div>
@@ -323,6 +324,7 @@ export function AIKnowledgeAssistant({
               onClick={handleSend} 
               disabled={!input.trim() || isLoading}
               size="icon"
+              aria-label="Enviar pergunta" title="Enviar"
             >
               {isLoading ? (
                 <Loader2 className="h-4 w-4 animate-spin" />
