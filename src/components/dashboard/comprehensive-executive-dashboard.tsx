@@ -383,7 +383,7 @@ const ModuleCard = ({ module }: { module: typeof systemModules[0] }) => {
           <p className="text-xs font-semibold text-muted-foreground">Funcionalidades</p>
           <div className="flex flex-wrap gap-1">
             {module.features.map((feature, idx) => (
-              <Badge key={idx} variant="outline" className="text-xs">
+              <Badge key={`feat-${feature}-${idx}`} variant="outline" className="text-xs">
                 {feature}
               </Badge>
             ))}

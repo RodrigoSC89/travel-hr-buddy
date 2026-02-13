@@ -284,7 +284,7 @@ export default function DPAnalyticsDashboard() {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
             {insights.map((insight, i) => (
               <div
-                key={i}
+                key={`insight-${insight.title}-${i}`}
                 className={`p-4 rounded-lg border ${
                   insight.type === "alert" ? "bg-red-500/10 border-red-500/30" :
                   insight.type === "prediction" ? "bg-purple-500/10 border-purple-500/30" :
@@ -368,7 +368,7 @@ export default function DPAnalyticsDashboard() {
           <CardContent>
             <div className="space-y-4">
               {compliance.map((metric, i) => (
-                <div key={i} className="space-y-2">
+                <div key={`compl-${metric.category}`} className="space-y-2">
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-2">
                       <span className="text-sm font-medium">{metric.category}</span>

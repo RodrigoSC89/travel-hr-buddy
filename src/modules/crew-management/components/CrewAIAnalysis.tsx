@@ -339,7 +339,7 @@ const CrewCard = ({ crew }: { crew: CrewMemberAnalysis }) => {
             <p className="text-xs text-muted-foreground mb-1">Certificações pendentes:</p>
             <div className="flex flex-wrap gap-1">
               {crew.certificationGaps.map((cert, i) => (
-                <Badge key={i} variant="outline" className="text-xs">
+                <Badge key={`cert-gap-${cert}-${i}`} variant="outline" className="text-xs">
                   {cert}
                 </Badge>
               ))}
@@ -444,7 +444,7 @@ export default function CrewAIAnalysis() {
             <div className="space-y-3">
               {insights.map((insight, i) => (
                 <div
-                  key={i}
+                  key={`insight-${insight.title}-${i}`}
                   className={`flex items-start justify-between p-3 rounded-lg ${
                     insight.type === "warning" ? "bg-destructive/10 border border-destructive/20" :
                     insight.type === "success" ? "bg-success/10 border border-success/20" :

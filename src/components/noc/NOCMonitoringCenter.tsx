@@ -267,7 +267,7 @@ export function NOCMonitoringCenter() {
       <div className="space-y-6 p-6">
         <Skeleton className="h-16 w-full" />
         <div className="grid grid-cols-4 gap-4">
-          {[...Array(4)].map((_, i) => <Skeleton key={i} className="h-24" />)}
+          {[...Array(4)].map((_, i) => <Skeleton key={`noc-skel-${i}`} className="h-24" />)}
         </div>
         <Skeleton className="h-[400px]" />
       </div>

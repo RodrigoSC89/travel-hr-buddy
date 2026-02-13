@@ -205,7 +205,7 @@ export function GanttSchedule() {
             <div className="p-2 text-sm font-medium text-muted-foreground">Embarcação</div>
             {days.map((day, i) => (
               <div 
-                key={i} 
+                key={`gantt-day-${day.toISOString()}`} 
                 className={cn(
                   "p-1 text-center text-xs border-l border-border/30",
                   day.getDay() === 0 || day.getDay() === 6 ? 'bg-muted/30' : ''

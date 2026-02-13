@@ -554,7 +554,7 @@ const AlertsCommandCenter = () => {
                           <p className="text-sm font-medium mb-2">Ações Recomendadas:</p>
                           <ul className="text-sm text-muted-foreground space-y-1">
                             {alert.recommended_actions.map((action, idx) => (
-                              <li key={idx} className="flex items-start gap-2">
+                              <li key={`alert-action-${idx}-${action.slice(0,15)}`} className="flex items-start gap-2">
                                 <CheckCircle className="h-4 w-4 text-green-500 mt-0.5 flex-shrink-0" />
                                 {action}
                               </li>
@@ -661,7 +661,7 @@ const AlertsCommandCenter = () => {
                 <p className="text-sm font-medium">Ações Recomendadas:</p>
                 <ul className="space-y-2">
                   {selectedAlert.recommended_actions.map((action, idx) => (
-                    <li key={idx} className="flex items-start gap-2 text-sm">
+                    <li key={`sel-action-${idx}-${action.slice(0,15)}`} className="flex items-start gap-2 text-sm">
                       <CheckCircle className="h-4 w-4 text-green-500 mt-0.5 flex-shrink-0" />
                       {action}
                     </li>

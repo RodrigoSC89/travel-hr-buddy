@@ -90,7 +90,7 @@ export const VesselDigitalTwin2D: React.FC<VesselDigitalTwin2DProps> = ({
           <div className="absolute inset-0 overflow-hidden">
             {[...Array(5)].map((_, i) => (
               <div
-                key={i}
+                key={`wave-${i}`}
                 className="absolute w-full h-8 opacity-20"
                 style={{
                   bottom: `${i * 20}%`,

@@ -488,7 +488,7 @@ export default function VoyageCommandCenter() {
             <CardContent>
               <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
                 {weather.length > 0 ? weather.map((w: WeatherCondition, idx: number) => (
-                  <div key={idx} className={`p-4 rounded-lg ${getWeatherBgColor(w.risk)}`}>
+                  <div key={`wx-${w.location}-${idx}`} className={`p-4 rounded-lg ${getWeatherBgColor(w.risk)}`}>
                     <p className="font-medium text-sm">{w.location}</p>
                     <p className="text-xs text-muted-foreground mt-1">{w.condition}</p>
                     <div className="flex items-center gap-2 mt-2">
@@ -597,7 +597,7 @@ export default function VoyageCommandCenter() {
                       </div>
                       <ul className="space-y-1">
                         {voyage.aiRecommendations.map((rec, idx) => (
-                          <li key={idx} className="text-sm text-muted-foreground flex items-start gap-2">
+                          <li key={`voy-rec-${idx}-${rec.slice(0,15)}`} className="text-sm text-muted-foreground flex items-start gap-2">
                             <CheckCircle2 className="h-4 w-4 text-green-500 mt-0.5 shrink-0" />
                             {rec}
                           </li>
@@ -656,7 +656,7 @@ export default function VoyageCommandCenter() {
               <CardContent className="flex-1 flex flex-col">
                 <div className="flex-1 overflow-y-auto space-y-4 mb-4">
                   {aiMessages.map((msg, idx) => (
-                    <div key={idx} className={`flex ${msg.role === "user" ? "justify-end" : "justify-start"}`}>
+                    <div key={`ai-msg-${idx}-${msg.role}`} className={`flex ${msg.role === "user" ? "justify-end" : "justify-start"}`}>
                       <div className={`max-w-[80%] p-3 rounded-lg ${
                         msg.role === "user" 
                           ? "bg-primary text-primary-foreground" 
@@ -781,7 +781,7 @@ export default function VoyageCommandCenter() {
                 <p className="text-muted-foreground">Carregando dados meteorológicos em tempo real...</p>
               </div>
             ) : weather.length > 0 ? weather.map((w: WeatherCondition, idx: number) => (
-              <Card key={idx} className={getWeatherBgColor(w.risk)}>
+              <Card key={`wx-card-${w.location}-${idx}`} className={getWeatherBgColor(w.risk)}>
                 <CardHeader>
                   <CardTitle className="flex items-center gap-2">
                     {w.risk === "low" && <ThermometerSun className="h-5 w-5 text-green-500" />}

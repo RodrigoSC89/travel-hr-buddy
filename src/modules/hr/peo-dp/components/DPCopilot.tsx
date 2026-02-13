@@ -394,7 +394,7 @@ Por favor, forneça mais detalhes sobre a situação específica que está enfre
             <div className="flex flex-wrap gap-2">
               {quickActions.map((action, i) => (
                 <Button
-                  key={i}
+                  key={`quick-${action.query.slice(0,15)}`}
                   variant="outline"
                   size="sm"
                   onClick={() => {

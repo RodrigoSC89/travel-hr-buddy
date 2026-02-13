@@ -161,7 +161,7 @@ export const NotificationSettings = () => {
         <CardContent>
           <div className="space-y-4">
             {[...Array(5)].map((_, i) => (
-              <div key={i} className="flex justify-between items-center">
+              <div key={`notif-skel-${i}`} className="flex justify-between items-center">
                 <div className="h-4 bg-muted rounded w-1/2 animate-pulse"></div>
                 <div className="h-6 bg-muted rounded w-12 animate-pulse"></div>
               </div>

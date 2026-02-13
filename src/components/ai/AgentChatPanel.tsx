@@ -313,7 +313,7 @@ export function AgentChatPanel({ agentId, agentName, agentRole, onClose }: Agent
                         {message.executionLog && (
                           <div className="mt-2 p-2 bg-muted/50 rounded text-[10px] font-mono text-muted-foreground max-w-full">
                             {message.executionLog.slice(0, 2).map((log, idx) => (
-                              <div key={idx}>{log}</div>
+                              <div key={`exec-log-${idx}-${log.slice(0,10)}`}>{log}</div>
                             ))}
                           </div>
                         )}
@@ -384,7 +384,7 @@ export function AgentChatPanel({ agentId, agentName, agentRole, onClose }: Agent
                   <p className="text-muted-foreground">Nenhum log ainda...</p>
                 ) : (
                   executionLogs.map((log, idx) => (
-                    <div key={idx} className="text-muted-foreground">
+                    <div key={`log-${idx}-${log.slice(0,10)}`} className="text-muted-foreground">
                       {log}
                     </div>
                   ))

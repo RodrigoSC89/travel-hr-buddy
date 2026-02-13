@@ -119,7 +119,7 @@ export default function HealthCheckPage() {
           <AlertDescription>
             <ul className="list-disc list-inside space-y-1 mt-2">
               {health.errors.map((error, i) => (
-                <li key={i}>{error}</li>
+                <li key={`err-${i}-${error.slice(0,15)}`}>{error}</li>
               ))}
             </ul>
           </AlertDescription>
@@ -134,7 +134,7 @@ export default function HealthCheckPage() {
           <AlertDescription>
             <ul className="list-disc list-inside space-y-1 mt-2">
               {health.warnings.map((warning, i) => (
-                <li key={i}>{warning}</li>
+                <li key={`warn-${i}-${warning.slice(0,15)}`}>{warning}</li>
               ))}
             </ul>
           </AlertDescription>
@@ -168,7 +168,7 @@ export default function HealthCheckPage() {
                 <p className="text-sm font-medium">Issues:</p>
                 <ul className="text-xs text-muted-foreground space-y-1">
                   {health.checks.modules.issues.slice(0, 3).map((issue, i) => (
-                    <li key={i}>• {issue}</li>
+                    <li key={`mod-issue-${i}-${issue.slice(0,15)}`}>• {issue}</li>
                   ))}
                   {health.checks.modules.issues.length > 3 && (
                     <li>• ... and {health.checks.modules.issues.length - 3} more</li>
@@ -206,7 +206,7 @@ export default function HealthCheckPage() {
                 <p className="text-sm font-medium">Duplicate Routes:</p>
                 <ul className="text-xs text-muted-foreground space-y-1">
                   {health.checks.routes.duplicates.map((dup, i) => (
-                    <li key={i}>• {dup}</li>
+                    <li key={`dup-${i}-${dup.slice(0,15)}`}>• {dup}</li>
                   ))}
                 </ul>
               </div>
@@ -237,7 +237,7 @@ export default function HealthCheckPage() {
                 <p className="text-sm font-medium">Missing Dependencies:</p>
                 <ul className="text-xs text-muted-foreground space-y-1">
                   {health.checks.dependencies.missing.slice(0, 3).map((dep, i) => (
-                    <li key={i}>
+                    <li key={`dep-${i}-${dep.module}`}>
                       • {dep.module} → {dep.dependency}
                     </li>
                   ))}

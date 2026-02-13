@@ -72,7 +72,7 @@ export default function HRTurnoverPredictionPage() {
       <div className="grid md:grid-cols-3 gap-4">
         {AI_INSIGHTS.map((insight, i) => (
           <Card 
-            key={i} 
+            key={`insight-${insight.title}`} 
             className={`border ${
               insight.type === 'warning' ? 'border-amber-500/30 bg-amber-500/5' :
               insight.type === 'success' ? 'border-green-500/30 bg-green-500/5' :

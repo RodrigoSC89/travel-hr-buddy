@@ -242,7 +242,7 @@ export function ProactiveAssistant({
               <div className="p-4 space-y-3">
                 {chatMessages.map((msg, i) => (
                   <div
-                    key={i}
+                    key={`chat-${i}-${msg.role}`}
                     className={`p-3 rounded-lg text-sm ${
                       msg.role === 'user'
                         ? 'bg-primary text-primary-foreground ml-8'

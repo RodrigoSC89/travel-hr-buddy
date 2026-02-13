@@ -159,7 +159,7 @@ export const WindyMap: React.FC<WindyMapProps> = ({
           {/* Simulated weather cells */}
           {[...Array(20)].map((_, i) => (
             <div
-              key={i}
+              key={`weather-cell-${i}`}
               className="absolute rounded-full animate-pulse"
               style={{
                 left: `${(i * 37 + 13) % 100}%`,

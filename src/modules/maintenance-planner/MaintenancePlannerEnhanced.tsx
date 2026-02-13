@@ -298,7 +298,7 @@ const MaintenancePlannerEnhanced = () => {
                       { equipment: 'Bomba de Lastro', type: 'Preventiva', vessel: 'MV Caribbean Queen', date: addDays(new Date(), 10), priority: 'medium' },
                     ].map((item, i) => (
                       <motion.div
-                        key={i}
+                        key={`maint-item-${item.equipment}`}
                         initial={{ opacity: 0, x: -10 }}
                         animate={{ opacity: 1, x: 0 }}
                         transition={{ delay: i * 0.1 }}
@@ -349,7 +349,7 @@ const MaintenancePlannerEnhanced = () => {
                     { component: 'Gerador Auxiliar', vessel: 'MV Ocean Titan', days: 45, probability: 45, status: 'normal' }
                   ].map((pred, i) => (
                     <motion.div
-                      key={i}
+                      key={`pred-${pred.component}`}
                       initial={{ opacity: 0, y: 10 }}
                       animate={{ opacity: 1, y: 0 }}
                       transition={{ delay: i * 0.1 }}

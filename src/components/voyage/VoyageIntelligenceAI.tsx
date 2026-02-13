@@ -407,7 +407,7 @@ export function VoyageIntelligenceAI() {
                           </p>
                           <div className="flex gap-1 mt-2 flex-wrap">
                             {port.facilities.map((f, i) => (
-                              <Badge key={i} variant="outline" className="text-xs">{f}</Badge>
+                              <Badge key={`facility-${f}-${i}`} variant="outline" className="text-xs">{f}</Badge>
                             ))}
                           </div>
                           <p className="text-xs mt-2 p-2 bg-muted rounded">

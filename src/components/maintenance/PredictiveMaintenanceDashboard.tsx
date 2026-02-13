@@ -337,7 +337,7 @@ export function PredictiveMaintenanceDashboard() {
                     <h5 className="font-medium mb-2">Peças necessárias:</h5>
                     <div className="flex flex-wrap gap-1">
                       {selectedEquipment.partsNeeded.map((part, i) => (
-                        <Badge key={i} variant="outline">{part}</Badge>
+                        <Badge key={`part-${part}-${i}`} variant="outline">{part}</Badge>
                       ))}
                     </div>
                   </div>
@@ -484,7 +484,7 @@ export function PredictiveMaintenanceDashboard() {
                       {pred.risk_factors && pred.risk_factors.length > 0 && (
                         <div className="flex flex-wrap gap-1 mt-1">
                           {pred.risk_factors.map((f, i) => (
-                            <Badge key={i} variant="outline" className="text-[10px]">{f}</Badge>
+                            <Badge key={`risk-${f}-${i}`} variant="outline" className="text-[10px]">{f}</Badge>
                           ))}
                         </div>
                       )}

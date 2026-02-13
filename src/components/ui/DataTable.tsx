@@ -138,7 +138,7 @@ export function DataTable<T extends { id: string }>({
       <div className={cn("border rounded-lg", className)}>
         <div className="p-4 space-y-3">
           {Array.from({ length: 5 }).map((_, i) => (
-            <Skeleton key={i} className="h-10 w-full" />
+            <Skeleton key={`dt-skel-${i}`} className="h-10 w-full" />
           ))}
         </div>
       </div>

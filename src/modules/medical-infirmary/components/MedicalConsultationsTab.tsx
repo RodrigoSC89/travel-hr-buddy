@@ -455,7 +455,7 @@ export default function MedicalConsultationsTab() {
                       <Label className="text-xs text-muted-foreground">Medicações Prescritas</Label>
                       <div className="flex flex-wrap gap-2 mt-1">
                         {selectedConsultation.medications_prescribed.map((med, i) => (
-                          <Badge key={i} variant="secondary">
+                          <Badge key={`med-${med}-${i}`} variant="secondary">
                             {med}
                           </Badge>
                         ))}

@@ -90,7 +90,7 @@ export default function PeopleAnalytics() {
                 { level: "Senior", count: 58, percentage: 26 },
                 { level: "Especialista", count: 22, percentage: 10 },
               ].map((item, i) => (
-                <div key={i}>
+                <div key={`level-${item.level}`}>
                   <div className="flex items-center justify-between mb-1">
                     <span className="text-sm font-medium">{item.level}</span>
                     <span className="text-sm text-muted-foreground">{item.count} ({item.percentage}%)</span>

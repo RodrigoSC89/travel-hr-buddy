@@ -118,7 +118,7 @@ export function AnalyticsDashboard() {
           <div className="space-y-2 max-h-64 overflow-auto">
             {events.slice(-10).reverse().map((event, i) => (
               <motion.div
-                key={i}
+                key={`event-${event.name}-${i}`}
                 initial={{ opacity: 0, x: -10 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ delay: i * 0.05 }}

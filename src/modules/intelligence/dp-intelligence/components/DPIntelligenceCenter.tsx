@@ -356,7 +356,7 @@ export default function DPIntelligenceCenter() {
                           <strong>Ações Corretivas:</strong>
                           <ul className="list-disc list-inside">
                             {incident.plan_of_action.acoes_corretivas.map((action, i) => (
-                              <li key={i}>{action}</li>
+                              <li key={`corr-action-${i}-${action.slice(0,15)}`}>{action}</li>
                             ))}
                           </ul>
                         </div>
@@ -396,7 +396,7 @@ export default function DPIntelligenceCenter() {
               <TabsContent value="standards" className="space-y-2">
                 <ul className="list-disc list-inside">
                   {selectedIncident.ai_analysis.standards.map((std, i) => (
-                    <li key={i}>{std}</li>
+                    <li key={`std-${i}-${std.slice(0,15)}`}>{std}</li>
                   ))}
                 </ul>
               </TabsContent>
@@ -404,7 +404,7 @@ export default function DPIntelligenceCenter() {
               <TabsContent value="causes" className="space-y-2">
                 <ul className="list-disc list-inside">
                   {selectedIncident.ai_analysis.root_causes.map((cause, i) => (
-                    <li key={i}>{cause}</li>
+                    <li key={`cause-${i}-${cause.slice(0,15)}`}>{cause}</li>
                   ))}
                 </ul>
               </TabsContent>
@@ -412,7 +412,7 @@ export default function DPIntelligenceCenter() {
               <TabsContent value="prevention" className="space-y-2">
                 <ul className="list-disc list-inside">
                   {selectedIncident.ai_analysis.preventive_measures.map((measure, i) => (
-                    <li key={i}>{measure}</li>
+                    <li key={`prev-${i}-${measure.slice(0,15)}`}>{measure}</li>
                   ))}
                 </ul>
               </TabsContent>
@@ -420,7 +420,7 @@ export default function DPIntelligenceCenter() {
               <TabsContent value="actions" className="space-y-2">
                 <ul className="list-disc list-inside">
                   {selectedIncident.ai_analysis.corrective_actions.map((action, i) => (
-                    <li key={i}>{action}</li>
+                    <li key={`action-${i}-${action.slice(0,15)}`}>{action}</li>
                   ))}
                 </ul>
               </TabsContent>

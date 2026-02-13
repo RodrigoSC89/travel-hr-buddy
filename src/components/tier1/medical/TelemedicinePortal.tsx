@@ -570,7 +570,7 @@ function VideoCallInterface({
               <ScrollArea className="flex-1 p-3">
                 <div className="space-y-3">
                   {chatMessages.map((msg, i) => (
-                    <div key={i} className={`text-sm ${msg.sender === 'you' ? 'text-right' : ''}`}>
+                    <div key={`chat-msg-${i}-${msg.sender}`} className={`text-sm ${msg.sender === 'you' ? 'text-right' : ''}`}>
                       <span className={`inline-block px-3 py-2 rounded-lg max-w-[90%] ${
                         msg.sender === 'you' 
                           ? 'bg-primary text-primary-foreground' 
@@ -814,7 +814,7 @@ export default function TelemedicinePortal() {
                 <p className="text-3xl font-bold text-purple-500">98%</p>
                 <div className="flex gap-0.5 mt-1">
                   {[1,2,3,4,5].map(i => (
-                    <Star key={i} className="h-3 w-3 fill-warning text-warning" />
+                    <Star key={`star-rating-${i}`} className="h-3 w-3 fill-warning text-warning" />
                   ))}
                 </div>
               </div>

@@ -482,7 +482,7 @@ Precisa de mais detalhes sobre algum aspecto específico?`;
                             </p>
                             <div className="flex flex-wrap gap-1 mt-3">
                               {agent.compliance.slice(0, 2).map((c, i) => (
-                                <Badge key={i} variant="secondary" className="text-xs font-medium">
+                                <Badge key={`compliance-${c}-${i}`} variant="secondary" className="text-xs font-medium">
                                   {c}
                                 </Badge>
                               ))}

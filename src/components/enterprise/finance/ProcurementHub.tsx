@@ -416,7 +416,7 @@ export function ProcurementHub() {
                     </thead>
                     <tbody>
                       {selectedPR.items.map((item, idx) => (
-                        <tr key={idx} className="border-b last:border-0">
+                        <tr key={`pr-item-${item.name}-${idx}`} className="border-b last:border-0">
                           <td className="p-3 text-sm">{item.name}</td>
                           <td className="p-3 text-sm text-center">{item.quantity}</td>
                           <td className="p-3 text-sm text-right">{formatCurrency(item.unitPrice)}</td>
@@ -441,7 +441,7 @@ export function ProcurementHub() {
                 <h4 className="text-sm font-medium mb-3">Fluxo de Aprovação</h4>
                 <div className="flex items-center justify-between">
                   {selectedPR.approvers.map((approver, idx) => (
-                    <React.Fragment key={idx}>
+                    <React.Fragment key={`approver-${approver.status}-${idx}`}>
                       <div className="flex flex-col items-center">
                         <div className={`w-10 h-10 rounded-full flex items-center justify-center ${
                           approver.status === "approved" ? "bg-success/10 text-success" :

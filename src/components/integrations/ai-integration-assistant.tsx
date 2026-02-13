@@ -289,7 +289,7 @@ export const AIIntegrationAssistant: React.FC = () => {
                       <p className="text-xs font-medium text-destructive mb-1">Problemas Detectados:</p>
                       <ul className="text-xs text-muted-foreground space-y-1">
                         {diagnostic.issues.map((issue, idx) => (
-                          <li key={idx} className="flex items-start gap-1">
+                          <li key={`issue-${idx}-${issue.slice(0,15)}`} className="flex items-start gap-1">
                             <span className="text-destructive">•</span>
                             {issue}
                           </li>
@@ -302,7 +302,7 @@ export const AIIntegrationAssistant: React.FC = () => {
                     <p className="text-xs font-medium text-primary mb-1">Recomendações IA:</p>
                     <ul className="text-xs text-muted-foreground space-y-1">
                       {diagnostic.recommendations.map((rec, idx) => (
-                        <li key={idx} className="flex items-start gap-1">
+                        <li key={`rec-${idx}-${rec.slice(0,15)}`} className="flex items-start gap-1">
                           <span className="text-primary">•</span>
                           {rec}
                         </li>

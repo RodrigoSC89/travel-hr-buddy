@@ -240,7 +240,7 @@ export const CarbonTrackingPanel: React.FC = () => {
       {/* Summary Cards - Real Data */}
       {isLoading ? (
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-          {[...Array(4)].map((_, i) => <Skeleton key={i} className="h-24" />)}
+          {[...Array(4)].map((_, i) => <Skeleton key={`carbon-skel-${i}`} className="h-24" />)}
         </div>
       ) : (
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4">

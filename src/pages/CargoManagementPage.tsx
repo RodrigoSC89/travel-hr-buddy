@@ -385,7 +385,7 @@ const CargoManagementPage = () => {
                 </h4>
                 <div className="space-y-2">
                   {aiAnalysis.anomalies.map((anomaly, idx) => (
-                    <div key={idx} className="p-3 bg-orange-50 dark:bg-orange-950/30 rounded-lg flex items-start gap-2">
+                    <div key={`anomaly-${anomaly.description.slice(0,15)}-${idx}`} className="p-3 bg-orange-50 dark:bg-orange-950/30 rounded-lg flex items-start gap-2">
                       <Badge variant={anomaly.severity === "high" ? "destructive" : "outline"}>
                         {anomaly.severity}
                       </Badge>
@@ -403,7 +403,7 @@ const CargoManagementPage = () => {
               </h4>
               <ul className="space-y-1">
                 {aiAnalysis.recommendations.map((rec, idx) => (
-                  <li key={idx} className="text-sm flex items-start gap-2">
+                  <li key={`cargo-rec-${idx}-${rec.slice(0,15)}`} className="text-sm flex items-start gap-2">
                     <span className="text-green-500">•</span>
                     {rec}
                   </li>
