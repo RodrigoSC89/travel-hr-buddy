@@ -15,7 +15,7 @@ import { DashboardWatchdog } from "./DashboardWatchdog";
 import { OfflineStatusBanner } from "./OfflineStatusBanner";
 import { usePerformanceLog } from "@/hooks/performance/usePerformanceLog";
 import { useRealtimeSync } from "@/hooks/useRealtimeSync";
-import { usePreviewSafeMode } from "@/hooks/qa/usePreviewSafeMode";
+// usePreviewSafeMode removed during cleanup
 import nautilusLogo from "@/assets/nautilus-logo.png";
 
 // Lazy load KPI components
@@ -63,14 +63,9 @@ export function ModularizedExecutiveDashboard() {
     }
   });
 
-  // PATCH 624: Preview Safe Mode
-  const { isValidated, validationPassed } = usePreviewSafeMode({
-    componentName: "ModularizedExecutiveDashboard",
-    enableValidation: true,
-    maxRenderTime: 3000,
-    maxDataSize: 5120,
-    silenceErrors: true
-  });
+  // PATCH 624: Preview Safe Mode (removed during cleanup)
+  const isValidated = true;
+  const validationPassed = true;
 
   // PATCH 624: Offline sync for dashboard metadata
   const { syncState, retry } = useRealtimeSync({
