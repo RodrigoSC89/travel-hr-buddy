@@ -93,7 +93,7 @@ class LearningCore {
     moduleName: string,
     action: string,
     userId?: string,
-    additionalData?: Record<string, any>
+    additionalData?: Record<string, unknown>
   ): Promise<void> {
     if (!this.config.learning_enabled) return;
 
@@ -185,8 +185,8 @@ class LearningCore {
   async trackDecision(
     moduleName: string,
     decisionType: string,
-    input: Record<string, any>,
-    output: Record<string, any>,
+    input: Record<string, unknown> | Json,
+    output: Record<string, unknown> | Json,
     confidence?: number
   ): Promise<void> {
     if (!this.config.learning_enabled) return;
@@ -196,8 +196,8 @@ class LearningCore {
       module_name: moduleName,
       event_data: {
         decision_type: decisionType,
-        input,
-        output,
+        input: input as Json,
+        output: output as Json,
         confidence: confidence || 0,
       },
       context: {

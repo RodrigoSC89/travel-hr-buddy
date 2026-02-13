@@ -19,7 +19,7 @@ export interface AIMessage {
   role: "user" | "assistant" | "system";
   content: string;
   timestamp?: Date;
-  metadata?: Record<string, any>;
+  metadata?: Record<string, unknown>;
 }
 
 export interface AIResponse {
@@ -265,7 +265,7 @@ export function useAIMemory(namespace: string = "default") {
 // =====================================
 
 export function useAIDecisions() {
-  const [decisions, setDecisions] = useState<any[]>([]);
+  const [decisions, setDecisions] = useState<Record<string, unknown>[]>([]);
   const [isLoading, setIsLoading] = useState(false);
 
   const fetchDecisions = useCallback(async (status?: string) => {
@@ -352,7 +352,7 @@ export function useAIDecisions() {
 // =====================================
 
 export function useAIInsights(organizationId?: string) {
-  const [insights, setInsights] = useState<any[]>([]);
+  const [insights, setInsights] = useState<Record<string, unknown>[]>([]);
   const [isLoading, setIsLoading] = useState(false);
 
   const fetchInsights = useCallback(async () => {

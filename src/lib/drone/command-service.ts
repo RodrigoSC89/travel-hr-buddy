@@ -47,7 +47,7 @@ export interface DroneState {
 export interface CommandPayload {
   droneId: string;
   command: DroneCommand;
-  params?: Record<string, any>;
+  params?: Record<string, unknown>;
   timestamp: string;
 }
 
@@ -173,7 +173,7 @@ export class DroneCommandService {
   /**
    * Validate command before sending
    */
-  validateCommand(droneId: string, command: DroneCommand, params?: Record<string, any>): CommandValidationResult {
+  validateCommand(droneId: string, command: DroneCommand, params?: Record<string, unknown>): CommandValidationResult {
     const errors: string[] = [];
     const drone = this.drones.get(droneId);
 
@@ -213,7 +213,7 @@ export class DroneCommandService {
 
     // Validate dive command
     if (command === "dive") {
-      const targetDepth = params?.depth || 0;
+      const targetDepth = Number(params?.depth) || 0;
       if (targetDepth < 0 || targetDepth > 500) {
         errors.push("Dive depth must be between 0 and 500 meters");
       }
@@ -246,7 +246,7 @@ export class DroneCommandService {
   async sendCommand(
     droneId: string, 
     command: DroneCommand, 
-    params?: Record<string, any>
+    params?: Record<string, unknown>
   ): Promise<CommandResponse> {
     // Validate command
     const validation = this.validateCommand(droneId, command, params);

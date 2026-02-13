@@ -28,7 +28,7 @@ type PredictionType = 'maintenance' | 'inventory' | 'route' | 'compliance';
 interface UseNautilusPredictionsReturn {
   isLoading: boolean;
   error: string | null;
-  getPredictions: (type: PredictionType, data: Record<string, any>) => Promise<PredictionResult | null>;
+  getPredictions: (type: PredictionType, data: Record<string, unknown>) => Promise<PredictionResult | null>;
 }
 
 export function useNautilusPredictions(): UseNautilusPredictionsReturn {
@@ -37,7 +37,7 @@ export function useNautilusPredictions(): UseNautilusPredictionsReturn {
 
   const getPredictions = useCallback(async (
     type: PredictionType, 
-    data: Record<string, any>
+    data: Record<string, unknown>
   ): Promise<PredictionResult | null> => {
     setIsLoading(true);
     setError(null);

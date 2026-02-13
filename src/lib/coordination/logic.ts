@@ -16,7 +16,7 @@ export interface Agent {
   position?: { lat: number; lng: number; alt?: number };
   battery?: number;
   lastUpdate: string;
-  metadata?: Record<string, any>;
+  metadata?: Record<string, unknown>;
 }
 
 export interface CoordinationRule {
@@ -31,7 +31,7 @@ export interface CoordinationRule {
 export interface CoordinationAction {
   agentId: string;
   action: string;
-  params?: Record<string, any>;
+  params?: Record<string, unknown>;
   reason: string;
 }
 

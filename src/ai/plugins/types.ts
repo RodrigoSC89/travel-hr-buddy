@@ -14,21 +14,16 @@ export interface AIPluginMetadata {
 }
 
 export interface AIPluginInput {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- plugin context is heterogeneous
-  context?: Record<string, any>;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- plugin data can be any shape
-  data?: any;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- plugin parameters are dynamic
-  parameters?: Record<string, any>;
+  context?: Record<string, unknown>;
+  data?: unknown;
+  parameters?: Record<string, unknown>;
 }
 
 export interface AIPluginOutput {
   success: boolean;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- plugin result is heterogeneous
-  result?: any;
+  result?: unknown;
   error?: string;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- plugin metadata is dynamic
-  metadata?: Record<string, any>;
+  metadata?: Record<string, unknown>;
 }
 
 export interface AIPlugin {

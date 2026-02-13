@@ -30,7 +30,7 @@ class RequestQueueManager {
     
     if ('connection' in navigator) {
       // eslint-disable-next-line @typescript-eslint/no-explicit-any -- non-standard Navigator.connection API
-      ((navigator as Record<string, any>).connection)?.addEventListener('change', () => {
+      ((navigator as Record<string, unknown>).connection as EventTarget | undefined)?.addEventListener('change', () => {
         this.updateConcurrency();
       });
     }
@@ -38,7 +38,7 @@ class RequestQueueManager {
 
   private updateConcurrency() {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any -- non-standard Navigator.connection API
-    const connection = (navigator as Record<string, any>).connection;
+    const connection = (navigator as unknown as Record<string, Record<string, unknown>>).connection;
     if (!connection) return;
 
     const effectiveType = connection.effectiveType;

@@ -37,10 +37,10 @@ export function useNautilusEnhancementAI() {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const invoke = useCallback(async <T = any>(
+  const invoke = useCallback(async <T = unknown>(
     type: EnhancementType,
     message?: string,
-    context?: Record<string, any>
+    context?: Record<string, unknown>
   ): Promise<EnhancementResponse<T> | null> => {
     setIsLoading(true);
     setError(null);

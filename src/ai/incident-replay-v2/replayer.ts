@@ -167,8 +167,7 @@ export class AIIncidentReplayerV2 {
   /**
    * Collect sensor data for a specific timestamp
    */
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- sensor data shape is dynamic/variable
-  private async collectSensorData(timestamp: number): Promise<Record<string, any>> {
+  private async collectSensorData(timestamp: number): Promise<Record<string, unknown>> {
     // In production, query actual sensor logs
     return {
       timestamp,
@@ -219,9 +218,8 @@ export class AIIncidentReplayerV2 {
   /**
    * Collect system data for a specific timestamp
    */
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- system status shape is dynamic
   private async collectSystemData(_timestamp: number): Promise<{
-    status: Record<string, any>;
+    status: Record<string, unknown>;
     alerts: string[];
     errors: string[];
   }> {

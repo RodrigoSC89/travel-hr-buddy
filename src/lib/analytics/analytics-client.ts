@@ -9,7 +9,7 @@ import { getEdgeFunctionUrl } from "@/lib/supabase/edge-function-helper";
 interface AnalyticsEvent {
   event_name: string;
   event_category?: string;
-  properties?: Record<string, any>;
+  properties?: Record<string, unknown>;
   page_url?: string;
   referrer?: string;
   timestamp?: string;
@@ -86,7 +86,7 @@ class AnalyticsClient {
     }
   }
 
-  track(eventName: string, properties?: Record<string, any>) {
+  track(eventName: string, properties?: Record<string, unknown>) {
     if (!this.config.enabled) return;
 
     const event: AnalyticsEvent = {
@@ -123,7 +123,7 @@ class AnalyticsClient {
     return 'general';
   }
 
-  pageView(pageName?: string, properties?: Record<string, any>) {
+  pageView(pageName?: string, properties?: Record<string, unknown>) {
     this.track('page_view', {
       page_name: pageName || document.title,
       page_path: window.location.pathname,
@@ -131,11 +131,11 @@ class AnalyticsClient {
     });
   }
 
-  click(elementId: string, properties?: Record<string, any>) {
+  click(elementId: string, properties?: Record<string, unknown>) {
     this.track('click_' + elementId, properties);
   }
 
-  error(errorType: string, error: Error | string, properties?: Record<string, any>) {
+  error(errorType: string, error: Error | string, properties?: Record<string, unknown>) {
     this.track('error_' + errorType, {
       error_message: error instanceof Error ? error.message : error,
       error_stack: error instanceof Error ? error.stack : undefined,
@@ -217,7 +217,7 @@ class AnalyticsClient {
     return 'Unknown';
   }
 
-  identify(userId: string, traits?: Record<string, any>) {
+  identify(userId: string, traits?: Record<string, unknown>) {
     this.userId = userId;
     this.track('user_identified', { user_id: userId, ...traits });
   }
@@ -260,15 +260,15 @@ export function useAnalytics() {
     analytics.pageView();
   }, [location.pathname]);
 
-  const trackEvent = useCallback((name: string, props?: Record<string, any>) => {
+  const trackEvent = useCallback((name: string, props?: Record<string, unknown>) => {
     analytics.track(name, props);
   }, []);
 
-  const trackClick = useCallback((elementId: string, props?: Record<string, any>) => {
+  const trackClick = useCallback((elementId: string, props?: Record<string, unknown>) => {
     analytics.click(elementId, props);
   }, []);
 
-  const trackError = useCallback((type: string, error: Error | string, props?: Record<string, any>) => {
+  const trackError = useCallback((type: string, error: Error | string, props?: Record<string, unknown>) => {
     analytics.error(type, error, props);
   }, []);
 

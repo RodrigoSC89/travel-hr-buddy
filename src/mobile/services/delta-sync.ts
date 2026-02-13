@@ -1,3 +1,5 @@
+// ============= Full file contents =============
+
 /**
  * PATCH 589 - Delta Sync Service
  * Implements efficient delta synchronization to minimize bandwidth
@@ -9,8 +11,8 @@ import { compressionService } from "./compression-service";
 export interface DeltaChange {
   path: string;
   operation: "add" | "remove" | "replace";
-  value?: any;
-  oldValue?: any;
+  value?: unknown;
+  oldValue?: unknown;
 }
 
 export interface DeltaPacket {
@@ -24,7 +26,7 @@ export interface DeltaPacket {
 export interface SyncState {
   version: string;
   lastSync: number;
-  data: Record<string, any>;
+  data: Record<string, unknown>;
 }
 
 /**
@@ -70,8 +72,8 @@ class DeltaSyncService {
    * Calculate diff between two objects
    */
   calculateDiff(
-    oldData: Record<string, any>,
-    newData: Record<string, any>,
+    oldData: Record<string, unknown>,
+    newData: Record<string, unknown>,
     path: string = ""
   ): DeltaChange[] {
     const changes: DeltaChange[] = [];
@@ -98,10 +100,9 @@ class DeltaSyncService {
           operation: "add",
           value: newData[key]
         });
-      } else if (typeof oldData[key] === "object" && typeof newData[key] === "object") {
+      } else if (typeof oldData[key] === "object" && typeof newData[key] === "object" && oldData[key] !== null && newData[key] !== null) {
         // Recursively diff objects
         if (Array.isArray(oldData[key]) && Array.isArray(newData[key])) {
-          // For arrays, use simple comparison
           if (JSON.stringify(oldData[key]) !== JSON.stringify(newData[key])) {
             changes.push({
               path: currentPath,
@@ -110,15 +111,8 @@ class DeltaSyncService {
               oldValue: oldData[key]
             });
           }
-        } else if (oldData[key] !== null && newData[key] !== null) {
-          changes.push(...this.calculateDiff(oldData[key], newData[key], currentPath));
-        } else if (oldData[key] !== newData[key]) {
-          changes.push({
-            path: currentPath,
-            operation: "replace",
-            value: newData[key],
-            oldValue: oldData[key]
-          });
+        } else {
+          changes.push(...this.calculateDiff(oldData[key] as Record<string, unknown>, newData[key] as Record<string, unknown>, currentPath));
         }
       } else if (oldData[key] !== newData[key]) {
         changes.push({
@@ -136,8 +130,8 @@ class DeltaSyncService {
   /**
    * Apply delta changes to data
    */
-  applyDelta(data: Record<string, any>, changes: DeltaChange[]): Record<string, any> {
-    const result = { ...data };
+  applyDelta(data: Record<string, unknown>, changes: DeltaChange[]): Record<string, unknown> {
+    const result: Record<string, unknown> = { ...data };
 
     for (const change of changes) {
       const pathParts = change.path.split(".");
@@ -172,7 +166,7 @@ class DeltaSyncService {
    */
   async createDeltaPacket(
     entityType: string,
-    newData: Record<string, any>
+    newData: Record<string, unknown>
   ): Promise<DeltaPacket | null> {
     const state = this.localState.get(entityType);
     
@@ -222,7 +216,7 @@ class DeltaSyncService {
   async processDeltaPacket(
     entityType: string,
     packet: DeltaPacket
-  ): Promise<Record<string, any> | null> {
+  ): Promise<Record<string, unknown> | null> {
     const state = this.localState.get(entityType);
 
     if (!state || state.version !== packet.baseVersion) {
@@ -262,7 +256,7 @@ class DeltaSyncService {
   /**
    * Set initial state for an entity type
    */
-  setInitialState(entityType: string, data: Record<string, any>): void {
+  setInitialState(entityType: string, data: Record<string, unknown>): void {
     this.localState.set(entityType, {
       version: this.generateVersion(),
       lastSync: Date.now(),
@@ -295,7 +289,7 @@ class DeltaSyncService {
   /**
    * Calculate checksum for data integrity
    */
-  private async calculateChecksum(data: Record<string, any>): Promise<string> {
+  private async calculateChecksum(data: Record<string, unknown>): Promise<string> {
     const str = JSON.stringify(data);
     
     // Use SubtleCrypto if available

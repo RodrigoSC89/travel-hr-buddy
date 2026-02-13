@@ -107,7 +107,7 @@ export function useOfflineSync(options: UseOfflineSyncOptions = {}) {
   const queueMutation = useCallback(async (
     table: string,
     operation: 'insert' | 'update' | 'delete',
-    data: Record<string, any>,
+    data: Record<string, unknown>,
     priority: 'critical' | 'high' | 'normal' | 'low' = 'normal'
   ) => {
     const id = await queueForSync(table, operation, data, priority);

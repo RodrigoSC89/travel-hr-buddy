@@ -17,7 +17,7 @@ import {
 import { Progress } from '@/components/ui/progress';
 import { useUniversalExport, ExportColumn, ExportFormat } from '@/hooks/useUniversalExport';
 
-export interface ExportButtonProps<T extends Record<string, any>> {
+export interface ExportButtonProps<T extends Record<string, unknown>> {
   data: T[];
   columns: ExportColumn[];
   filename: string;
@@ -30,7 +30,7 @@ export interface ExportButtonProps<T extends Record<string, any>> {
   disabled?: boolean;
 }
 
-export function ExportButton<T extends Record<string, any>>({
+export function ExportButton<T extends Record<string, unknown>>({
   data,
   columns,
   filename,
@@ -56,7 +56,7 @@ export function ExportButton<T extends Record<string, any>>({
   const formatIcons: Record<ExportFormat, React.ReactNode> = {
     csv: <FileText className="h-4 w-4 mr-2" />,
     excel: <FileSpreadsheet className="h-4 w-4 mr-2" />,
-    pdf: <FileText className="h-4 w-4 mr-2 text-red-500" />,
+    pdf: <FileText className="h-4 w-4 mr-2 text-destructive" />,
     json: <FileJson className="h-4 w-4 mr-2" />,
   };
 
