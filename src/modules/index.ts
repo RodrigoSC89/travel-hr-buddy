@@ -28,9 +28,8 @@ export { default as MaintenancePlanner } from "./maintenance-planner";
 export { default as NautilusMaintenance } from "./nauti-maintenance";
 
 // ============================================
-// MISSION CONTROL
+// MISSION CONTROL (removed - redirected to /ops?tab=mission)
 // ============================================
-export { default as MissionControl } from "./mission-control";
 
 // ============================================
 // VOYAGE & ROUTES (UNIFIED → NAUTILUS VOYAGE)
@@ -95,8 +94,7 @@ export { default as NautilusPeople } from "./nauti-people";
 // DOCUMENTS (UNIFIED → NAUTILUS DOCUMENTS)
 // ============================================
 export { default as NautilusDocuments } from "./nauti-documents";
-// incident-reports module merged into nauti-documents
-export { default as DocumentHub } from "./document-hub";
+// document-hub removed during cleanup
 
 // ============================================
 // ASSISTANTS (UNIFIED → NAUTILUS ASSISTANT)

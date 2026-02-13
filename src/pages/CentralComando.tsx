@@ -34,21 +34,21 @@ import {
 // Tour guiado
 import { GuidedTour, tourStyles } from "@/components/onboarding/GuidedTour";
 
-// Seções do módulo unificado
-import { VisaoGeralSection } from "@/modules/nauti-command-center/sections/VisaoGeralSection";
-import { OperacoesSection } from "@/modules/nauti-command-center/sections/OperacoesSection";
-import { ExecutivoSection } from "@/modules/nauti-command-center/sections/ExecutivoSection";
-import { IASection } from "@/modules/nauti-command-center/sections/IASection";
-import { AlertasSection } from "@/modules/nauti-command-center/sections/AlertasSection";
-import { ConfigSection } from "@/modules/nauti-command-center/sections/ConfigSection";
-import { ResilienciaSection } from "@/modules/nauti-command-center/sections/ResilienciaSection";
+// Seções do módulo unificado (removed - module deleted)
+const VisaoGeralSection = () => <div className="text-center py-12 text-muted-foreground">Visão Geral em manutenção.</div>;
+const OperacoesSection = () => <div className="text-center py-12 text-muted-foreground">Operações em manutenção.</div>;
+const ExecutivoSection = () => <div className="text-center py-12 text-muted-foreground">Executivo em manutenção.</div>;
+const IASection = () => <div className="text-center py-12 text-muted-foreground">IA em manutenção.</div>;
+const AlertasSection = () => <div className="text-center py-12 text-muted-foreground">Alertas em manutenção.</div>;
+const ConfigSection = () => <div className="text-center py-12 text-muted-foreground">Configurações em manutenção.</div>;
+const ResilienciaSection = () => <div className="text-center py-12 text-muted-foreground">Resiliência em manutenção.</div>;
 
-// Hooks de IA
-import { useUnifiedCommandAI } from "@/modules/nauti-command-center/hooks/useUnifiedCommandAI";
-import { useVoiceCommands } from "@/modules/nauti-command-center/hooks/useVoiceCommands";
+// Hooks de IA (removed)
+const useUnifiedCommandAI = () => ({ messages: [] as Array<{role: string; content: string}>, sendMessage: async (_msg: string) => {}, isLoading: false, clearMessages: () => {} });
+const useVoiceCommands = (_opts?: Record<string, unknown>) => ({ isListening: false, isSupported: false, transcript: '', toggleVoice: () => {}, stopListening: () => {} });
 
-// Voice Assistant with Hotword (ARIA)
-import { VoiceAssistantWithHotword } from "@/components/voice/VoiceAssistantWithHotword";
+// Voice Assistant with Hotword (removed)
+const VoiceAssistantWithHotword = () => null;
 
 export interface SystemStatus {
   fleet: { total: number; active: number; maintenance: number; alerts: number };

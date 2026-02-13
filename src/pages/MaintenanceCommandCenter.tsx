@@ -56,11 +56,11 @@ import WorkOrderManager from "@/modules/maintenance-planner/components/WorkOrder
 import AdvancedCopilot from "@/modules/maintenance-planner/components/AdvancedCopilot";
 import DigitalTwin from "@/modules/maintenance-planner/components/DigitalTwin";
 
-// MMI specific components
-import MMIForecastSection from "@/modules/intelligent-maintenance/components/MMIForecastSection";
-import MMIHistorySection from "@/modules/intelligent-maintenance/components/MMIHistorySection";
-import MMIJobsPanelSection from "@/modules/intelligent-maintenance/components/MMIJobsPanelSection";
-import MMIDashboardSection from "@/modules/intelligent-maintenance/components/MMIDashboardSection";
+// MMI specific components (removed - module deleted)
+const MMIForecastSection = () => <div className="text-center py-8 text-muted-foreground">MMI Forecast não disponível.</div>;
+const MMIHistorySection = () => <div className="text-center py-8 text-muted-foreground">MMI History não disponível.</div>;
+const MMIJobsPanelSection = () => <div className="text-center py-8 text-muted-foreground">MMI Jobs não disponível.</div>;
+const MMIDashboardSection = () => <div className="text-center py-8 text-muted-foreground">MMI Dashboard não disponível.</div>;
 import { logger } from '@/lib/logger';
 
 // Premium Maintenance Command Center

@@ -30,9 +30,9 @@ import { useRealActionHandlers } from '@/hooks/useRealActionHandlers';
 import { toast } from 'sonner';
 
 // Lazy load sub-components
-const AIControlTowerHub = lazy(() => import('@/pages/AICommandCenter'));
-const AICommandCenter = lazy(() => import('@/pages/AICommandCenter'));
-const AutonomousCommandCenter = lazy(() => import('@/pages/AICommandCenter'));
+const AIControlTowerHub = lazy(() => import('@/pages/AIHubPage'));
+const AICommandCenter = lazy(() => import('@/pages/AIHubPage'));
+const AutonomousCommandCenter = lazy(() => import('@/pages/AIHubPage'));
 const AIAgentDirectory = lazy(() => import('@/pages/AIAgents/AIAgentDirectory'));
 const WorkflowCommandCenter = lazy(() => import('@/pages/WorkflowCommandCenter'));
 const VoiceAssistant = lazy(() => import('@/pages/VoiceAssistant'));

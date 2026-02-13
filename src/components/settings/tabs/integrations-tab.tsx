@@ -7,8 +7,8 @@ import { Badge } from "@/components/ui/badge";
 import { Switch } from "@/components/ui/switch";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useToast } from "@/hooks/use-toast";
-import { ServiceStatusPanel } from "@/components/integration/service-status-panel";
-import { ConnectionTestPanel } from "@/components/integration/connection-test-panel";
+const ServiceStatusPanel = () => <div className="text-center py-8 text-muted-foreground">Status de serviços não disponível.</div>;
+const ConnectionTestPanel = () => <div className="text-center py-8 text-muted-foreground">Teste de conexão não disponível.</div>;
 import { 
   Link2, 
   Key, 

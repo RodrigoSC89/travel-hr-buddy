@@ -7,7 +7,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { MetricasPanel } from "@/components/sgso/MetricasPanel";
 import { SGSOTrendChart } from "@/components/sgso/SGSOTrendChart";
-import { IncidentsSGSOPanel } from "@/components/dp/IncidentsSGSOPanel";
+const IncidentsSGSOPanel = () => <div className="text-center py-8 text-muted-foreground">Painel de incidentes SGSO não disponível.</div>;
 import { Shield, BarChart3, FileCheck, Mail, AlertTriangle, History, Download, Loader2 } from "lucide-react";
 import { getJsPDF, getAutoTable } from '@/lib/pdf/lazy-pdf';
 import { logger } from '@/lib/logger';

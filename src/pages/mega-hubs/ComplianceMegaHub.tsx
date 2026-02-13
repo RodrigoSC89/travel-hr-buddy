@@ -51,7 +51,7 @@ const PEOTRAM = lazy(() => import('@/pages/PEODP'));
 const SafetyIMCAV2 = lazy(() => import('@/pages/PreOVIDInspection'));
 const ISPSSecurityV2 = lazy(() => import('@/pages/SecurityCenter'));
 const SOLASInspection = lazy(() => import('@/pages/SOLASInspection'));
-const WasteManagementPremium = lazy(() => import('@/pages/WasteManagementPremium'));
+const WasteManagementPremium = lazy(() => import('@/pages/ESGEmissionsPremium'));
 const PreOVIDInspection = lazy(() => import('@/pages/PreOVIDInspection'));
 const MLCInspection = lazy(() => import('@/pages/MLCInspection'));
 const PSCPackage = lazy(() => import('@/pages/PSCPackage'));

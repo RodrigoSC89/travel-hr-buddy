@@ -51,8 +51,8 @@ const LandingPage = lazy(() => import("@/pages/LandingPage"));
 const CentralComando = lazy(() => import("@/pages/CentralComando"));
 const NotFound = lazy(() => import("@/pages/NotFound"));
 const DevRoutesDashboard = lazy(() => import("@/pages/DevRoutesDashboard"));
-const Billing = lazy(() => import("@/pages/Billing"));
-const BillingPortal = lazy(() => import("@/pages/BillingPortal"));
+const Billing = lazy(() => import("@/pages/Settings"));
+const BillingPortal = lazy(() => import("@/pages/Settings"));
 const OnboardingDashboard = lazy(() => import("@/pages/OnboardingDashboard"));
 const InteractiveOnboarding = lazy(() => import("@/pages/InteractiveOnboarding"));
 const AnalyticsFeedback = lazy(() => import("@/pages/AnalyticsFeedback"));
@@ -67,8 +67,8 @@ const HealthMonitor = lazy(() => import("@/pages/HealthMonitor"));
 const MaritimeCommandCenter = lazy(() => import("@/pages/MaritimeCommandCenter"));
 const FleetCommandCenter = lazy(() => import("@/pages/FleetCommandCenter"));
 const VoyageCommandCenter = lazy(() => import("@/pages/VoyageCommandCenter"));
-const MissionCommandCenter = lazy(() => import("@/pages/MissionCommandCenter"));
-const BridgeLink = lazy(() => import("@/pages/BridgeLink"));
+const MissionCommandCenter = lazy(() => import("@/pages/MaritimeCommandCenter"));
+const BridgeLink = lazy(() => import("@/pages/MaritimeCommandCenter"));
 
 // Digital Twin & Advanced
 const DigitalTwinPage = lazy(() => import("@/pages/DigitalTwinPage"));
@@ -79,7 +79,7 @@ const CompanyFinancialPage = lazy(() => import("@/pages/CompanyFinancialPage"));
 
 // Módulos Completos
 const MedicalInfirmary = lazy(() => import("@/modules/medical-infirmary"));
-const EnhancedWasteManagement = lazy(() => import("@/pages/WasteManagementPremium"));
+const EnhancedWasteManagement = lazy(() => import("@/pages/ESGEmissionsPremium"));
 const CentralComandoAprimorada = lazy(() => import("@/pages/dashboard/CentralComandoAprimorada"));
 const MedicalInfirmaryEnhanced = lazy(() => import("@/pages/MedicalInfirmaryEnhanced"));
 const SatcomDashboardEnhanced = lazy(() => import("@/pages/SatcomDashboardEnhanced"));
@@ -103,18 +103,18 @@ const DeepRiskAI = lazy(() => import("@/pages/DeepRiskAI"));
 // ============================================
 // IA & AUTOMAÇÃO
 // ============================================
-const NautilusCommand = lazy(() => import("@/pages/NautilusCommand"));
-const AICommandCenter = lazy(() => import("@/pages/AICommandCenter"));
+const NautilusCommand = lazy(() => import("@/pages/AIHubPage"));
+const AICommandCenter = lazy(() => import("@/pages/AIHubPage"));
 const AIHubPage = lazy(() => import("@/pages/AIHubPage"));
 const AIAnalyticsDashboard = lazy(() => import("@/pages/AIAnalyticsDashboard"));
-const RevolutionaryFeaturesPage = lazy(() => import("@/pages/RevolutionaryFeaturesPage"));
+const RevolutionaryFeaturesPage = lazy(() => import("@/pages/AIHubPage"));
 const AIObservabilityDashboard = lazy(() => import("@/pages/AIObservabilityDashboard"));
 const WorkflowCommandCenter = lazy(() => import("@/pages/WorkflowCommandCenter"));
 const AIAudit = lazy(() => import("@/pages/AIAudit"));
 const VoiceAssistant = lazy(() => import("@/pages/VoiceAssistant"));
 const VoiceAssistantAIPage = lazy(() => import("@/pages/VoiceAssistantAIPage"));
 const PortugueseVoiceAssistantPage = lazy(() => import("@/pages/PortugueseVoiceAssistantPage"));
-const AIOperationsCenter = lazy(() => import("@/pages/AIOperationsCenter"));
+const AIOperationsCenter = lazy(() => import("@/pages/AIHubPage"));
 const QualityDashboard = lazy(() => import("@/pages/QualityDashboard"));
 const AgentChat = lazy(() => import("@/pages/AIAgents/AgentChat"));
 
@@ -204,7 +204,7 @@ const HRTurnoverPredictionPage = lazy(() => import("@/pages/HRTurnoverPrediction
 // TREINAMENTOS
 // ============================================
 const AITraining = lazy(() => import("@/pages/AITraining"));
-const DPIntelligence = lazy(() => import("@/pages/DPIntelligence"));
+const DPIntelligence = lazy(() => import("@/pages/AITraining"));
 
 // ============================================
 // FINANÇAS & PROCUREMENT
@@ -233,7 +233,7 @@ const SOLASISPSTrainingPage = lazy(() => import("@/pages/SOLASISPSTrainingPage")
 // ============================================
 const Settings = lazy(() => import("@/pages/Settings"));
 const IntegrationsCenter = lazy(() => import("@/pages/IntegrationsCenter"));
-const APIGateway = lazy(() => import("@/pages/APIGateway"));
+const APIGateway = lazy(() => import("@/pages/IntegrationsCenter"));
 const Collaboration = lazy(() => import("@/pages/Collaboration"));
 const Roadmap = lazy(() => import("@/pages/Roadmap"));
 const StatusPage = lazy(() => import("@/pages/StatusPage"));
