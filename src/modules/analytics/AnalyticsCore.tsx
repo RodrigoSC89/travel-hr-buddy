@@ -99,7 +99,7 @@ const AnalyticsCore = () => {
     try {
       await exportService.exportToCSV(
         "KPI Metrics Export",
-        metrics,
+        metrics as unknown as Record<string, unknown>[],
         ["name", "value", "unit", "trend", "change", "category"]
       );
 

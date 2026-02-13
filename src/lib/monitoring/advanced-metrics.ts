@@ -31,9 +31,9 @@ interface SLAConfig {
 
 // PostHog-like tracking (can be replaced with real PostHog)
 class AnalyticsTracker {
-  private events: Array<{ event: string; properties: Record<string, any>; timestamp: Date }> = [];
+  private events: Array<{ event: string; properties: Record<string, unknown>; timestamp: Date }> = [];
   
-  capture(params: { distinctId: string; event: string; properties?: Record<string, any> }) {
+  capture(params: { distinctId: string; event: string; properties?: Record<string, unknown> }) {
     const eventData = {
       event: params.event,
       properties: {
@@ -139,9 +139,9 @@ export class AdvancedMonitoring {
   }
   
   // Track user journey steps
-  static trackUserJourney(step: string, metadata?: Record<string, any>) {
+  static trackUserJourney(step: string, metadata?: Record<string, unknown>) {
     analyticsTracker.capture({
-      distinctId: metadata?.userId || 'anonymous',
+      distinctId: String(metadata?.userId ?? 'anonymous'),
       event: `journey_${step}`,
       properties: {
         step,
@@ -160,7 +160,7 @@ export class AdvancedMonitoring {
   }
   
   // Track feature usage
-  static trackFeatureUsage(feature: string, userId: string, metadata?: Record<string, any>) {
+  static trackFeatureUsage(feature: string, userId: string, metadata?: Record<string, unknown>) {
     analyticsTracker.capture({
       distinctId: userId,
       event: 'feature_used',
@@ -195,7 +195,7 @@ export class AdvancedMonitoring {
   }
   
   // Track errors with context
-  static trackError(error: Error, context?: Record<string, any>) {
+  static trackError(error: Error, context?: Record<string, unknown>) {
     Sentry.captureException(error, {
       extra: context,
     });

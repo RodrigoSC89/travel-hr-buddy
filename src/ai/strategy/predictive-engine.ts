@@ -50,7 +50,7 @@ export interface Strategy {
   actions: StrategyAction[];
   signals: string[]; // Signal IDs that generated this strategy
   generatedAt: Date;
-  metadata?: Record<string, any>;
+  metadata?: Record<string, unknown>;
 }
 
 export interface StrategyAction {
@@ -67,7 +67,7 @@ export interface StrategyProposal {
   id: string;
   strategies: Strategy[];
   topStrategy: Strategy;
-  analysisContext: Record<string, any>;
+  analysisContext: Record<string, unknown>;
   proposedAt: Date;
   missionId?: string;
 }
@@ -75,7 +75,7 @@ export interface StrategyProposal {
 export interface FeedbackRecord {
   strategyId: string;
   feedback: LearningFeedback;
-  actualOutcome: Record<string, any>;
+  actualOutcome: Record<string, unknown>;
   timestamp: Date;
   comments?: string;
   userId?: string;
@@ -225,8 +225,8 @@ class PredictiveStrategyEngine {
   /**
    * Get learning statistics
    */
-  getLearningStats(): Record<string, any> {
-    const stats: Record<string, any> = {};
+  getLearningStats(): Record<string, unknown> {
+    const stats: Record<string, unknown> = {};
     
     for (const [type, successRate] of this.learningModel.entries()) {
       stats[type] = {
@@ -558,7 +558,7 @@ class PredictiveStrategyEngine {
     return alternatives;
   }
 
-  private buildAnalysisContext(): Record<string, any> {
+  private buildAnalysisContext(): Record<string, unknown> {
     return {
       activeSignalCount: this.activeSignals.size,
       signalSources: Array.from(new Set(Array.from(this.activeSignals.values()).map(s => s.source))),

@@ -100,7 +100,7 @@ interface SettingsData {
   integrations: {
     apiKeys: Record<string, string>;
     webhooks: Array<{ id: string; name: string; url: string; active: boolean; events: string[] }>;
-    externalServices: Record<string, any>;
+    externalServices: Record<string, unknown>;
     rateLimits: Record<string, number>;
     enableApiVersioning: boolean;
   };
@@ -109,7 +109,7 @@ interface SettingsData {
     debugMode: boolean;
     performanceMonitoring: boolean;
     errorTracking: boolean;
-    customFields: Record<string, any>;
+    customFields: Record<string, unknown>;
     workflowAutomation: boolean;
     enableBetaFeatures: boolean;
   };
@@ -536,8 +536,7 @@ export const EnhancedSettingsHub: React.FC = () => {
     }
   };
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- flexible log data shape
-  const logSettingsChange = async (action: string, data: any) => {
+  const logSettingsChange = async (action: string, data: unknown) => {
     const logEntry = {
       timestamp: new Date().toISOString(),
       user: user?.email || "sistema",
