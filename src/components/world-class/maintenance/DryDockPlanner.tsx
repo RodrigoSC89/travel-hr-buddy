@@ -38,8 +38,7 @@ const priorityColors: Record<string, string> = {
 export function DryDockPlanner() {
   const [projects, setProjects] = useState<DryDockProject[]>([]);
   const [loading, setLoading] = useState(true);
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- AI plan shape is dynamic from optimization service
-  const [aiPlan, setAiPlan] = useState<Record<string, any> | null>(null);
+  const [aiPlan, setAiPlan] = useState<{ drydock_plan?: { recommended_date?: string; estimated_duration_days?: number; estimated_cost_usd?: number; scope_items?: string[]; yard_recommendations?: string[] }; summary?: string } | null>(null);
   const [analyzing, setAnalyzing] = useState(false);
 
   useEffect(() => {
@@ -124,32 +123,32 @@ export function DryDockPlanner() {
                   <p className="text-xs text-muted-foreground">Data Recomendada</p>
                 </div>
               )}
-              {aiPlan.drydock_plan.estimated_duration_days > 0 && (
+              {(aiPlan.drydock_plan.estimated_duration_days ?? 0) > 0 && (
                 <div className="p-3 rounded-lg border border-border/50 bg-muted/20 text-center">
                   <Clock className="h-4 w-4 mx-auto text-primary mb-1" />
                   <p className="text-sm font-bold">{aiPlan.drydock_plan.estimated_duration_days} dias</p>
                   <p className="text-xs text-muted-foreground">Duração Estimada</p>
                 </div>
               )}
-              {aiPlan.drydock_plan.estimated_cost_usd > 0 && (
+              {(aiPlan.drydock_plan.estimated_cost_usd ?? 0) > 0 && (
                 <div className="p-3 rounded-lg border border-border/50 bg-muted/20 text-center">
                   <DollarSign className="h-4 w-4 mx-auto text-primary mb-1" />
-                  <p className="text-sm font-bold">${aiPlan.drydock_plan.estimated_cost_usd.toLocaleString()}</p>
+                  <p className="text-sm font-bold">${(aiPlan.drydock_plan.estimated_cost_usd ?? 0).toLocaleString()}</p>
                   <p className="text-xs text-muted-foreground">Custo Estimado</p>
                 </div>
               )}
-              {aiPlan.drydock_plan.scope_items?.length > 0 && (
+              {(aiPlan.drydock_plan.scope_items?.length ?? 0) > 0 && (
                 <div className="p-3 rounded-lg border border-border/50 bg-muted/20 text-center">
                   <Wrench className="h-4 w-4 mx-auto text-primary mb-1" />
-                  <p className="text-sm font-bold">{aiPlan.drydock_plan.scope_items.length}</p>
+                  <p className="text-sm font-bold">{aiPlan.drydock_plan.scope_items!.length}</p>
                   <p className="text-xs text-muted-foreground">Itens de Escopo</p>
                 </div>
               )}
             </div>
-            {aiPlan.drydock_plan.yard_recommendations?.length > 0 && (
+            {(aiPlan.drydock_plan.yard_recommendations?.length ?? 0) > 0 && (
               <div className="flex flex-wrap gap-2">
                 <MapPin className="h-4 w-4 text-muted-foreground" />
-                {aiPlan.drydock_plan.yard_recommendations.map((yard: string) => (
+                {aiPlan.drydock_plan.yard_recommendations!.map((yard: string) => (
                   <Badge key={yard} variant="outline" className="text-xs">{yard}</Badge>
                 ))}
               </div>

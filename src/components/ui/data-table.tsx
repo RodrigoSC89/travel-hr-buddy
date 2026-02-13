@@ -58,6 +58,7 @@ export interface DataTableProps<T = any> {
 
 type SortDirection = "asc" | "desc" | null;
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- generic data table requires flexible row types
 export function DataTable<T extends Record<string, any>>({
   data,
   columns,

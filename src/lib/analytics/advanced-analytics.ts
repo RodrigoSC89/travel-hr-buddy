@@ -9,7 +9,7 @@ import { logger } from '@/lib/logger';
 export interface AnalyticsEvent {
   name: string;
   category: string;
-  properties?: Record<string, any>;
+  properties?: Record<string, unknown>;
   timestamp: Date;
   userId?: string;
   sessionId: string;
@@ -116,7 +116,7 @@ class AdvancedAnalytics {
   }
 
   // Track custom event
-  track(name: string, category: string, properties?: Record<string, any>): void {
+  track(name: string, category: string, properties?: Record<string, unknown>): void {
     if (!this.config.enabled) return;
     if (Math.random() > this.config.sampleRate) return;
 
@@ -148,7 +148,7 @@ class AdvancedAnalytics {
   }
 
   // Track user interaction
-  trackInteraction(element: string, action: string, properties?: Record<string, any>): void {
+  trackInteraction(element: string, action: string, properties?: Record<string, unknown>): void {
     this.track('interaction', 'engagement', {
       element,
       action,
@@ -157,7 +157,7 @@ class AdvancedAnalytics {
   }
 
   // Track error
-  trackError(error: Error, context?: Record<string, any>): void {
+  trackError(error: Error, context?: Record<string, unknown>): void {
     this.track('error', 'system', {
       message: error.message,
       stack: error.stack,
@@ -303,15 +303,15 @@ if (typeof window !== 'undefined') {
 
 // React hooks
 export function useAnalytics() {
-  const track = useCallback((name: string, category: string, properties?: Record<string, any>) => {
+  const track = useCallback((name: string, category: string, properties?: Record<string, unknown>) => {
     analytics.track(name, category, properties);
   }, []);
 
-  const trackInteraction = useCallback((element: string, action: string, properties?: Record<string, any>) => {
+  const trackInteraction = useCallback((element: string, action: string, properties?: Record<string, unknown>) => {
     analytics.trackInteraction(element, action, properties);
   }, []);
 
-  const trackError = useCallback((error: Error, context?: Record<string, any>) => {
+  const trackError = useCallback((error: Error, context?: Record<string, unknown>) => {
     analytics.trackError(error, context);
   }, []);
 

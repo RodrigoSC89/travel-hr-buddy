@@ -153,7 +153,7 @@ class AITranslator {
 
   private async loadTranslationsFromJSON(
     lang: SupportedLanguage
-  ): Promise<Record<string, any>> {
+  ): Promise<Record<string, unknown>> {
     try {
       const response = await fetch(`/locales/${lang}.json`);
       if (!response.ok) throw new Error(`Failed to load ${lang}.json`);

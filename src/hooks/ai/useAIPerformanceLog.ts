@@ -13,7 +13,7 @@ interface AIPerformanceMetric {
   execution_time_ms: number;
   success?: boolean;
   error_message?: string;
-  metadata?: Record<string, any>;
+  metadata?: Record<string, unknown>;
   cpu_usage_percent?: number;
   memory_used_mb?: number;
 }
@@ -35,7 +35,7 @@ export function useAIPerformanceLog() {
           metadata: metric.metadata,
           cpu_usage_percent: metric.cpu_usage_percent,
           memory_used_mb: metric.memory_used_mb,
-        });
+        } as never);
 
       if (error) throw error;
 

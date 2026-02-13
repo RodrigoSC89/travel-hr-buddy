@@ -122,7 +122,7 @@ export default function PortAPIConnector() {
   const [connections, setConnections] = useState<PortConnection[]>(fallbackConnections);
   const [logs, setLogs] = useState<APILog[]>(fallbackLogs);
   const [isSyncing, setIsSyncing] = useState(false);
-  const [aiStatus, setAiStatus] = useState<Record<string, any>>({});
+  const [aiStatus, setAiStatus] = useState<Record<string, unknown>>({});
 
   const syncAll = async () => {
     setIsSyncing(true);

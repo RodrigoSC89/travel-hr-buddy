@@ -14,11 +14,11 @@ interface HealthMetric {
   error_rate?: number;
   uptime_percentage?: number;
   last_error?: string;
-  metadata?: Record<string, any>;
+  metadata?: Record<string, unknown>;
 }
 
 export function useSystemHealth() {
-  const [healthStatus, setHealthStatus] = useState<any[]>([]);
+  const [healthStatus, setHealthStatus] = useState<Record<string, unknown>[]>([]);
   const [overallStatus, setOverallStatus] = useState<"healthy" | "degraded" | "critical">("healthy");
   const [isLoading, setIsLoading] = useState(false);
 
@@ -33,7 +33,7 @@ export function useSystemHealth() {
         last_error: metric.last_error,
         last_check: new Date().toISOString(),
         metadata: metric.metadata,
-      });
+      } as never);
 
       if (error) throw error;
 

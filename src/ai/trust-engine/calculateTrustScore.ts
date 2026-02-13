@@ -11,7 +11,7 @@ export interface TrustInput {
   entityType: "user" | "incident" | "token" | "system";
   eventType: "incident_resolved" | "incident_created" | "validation_success" | "validation_failure" | "breach_detected" | "audit_passed" | "audit_failed";
   sourceSystem?: string;
-  metadata?: Record<string, any>;
+  metadata?: Record<string, unknown>;
 }
 
 export interface TrustScore {
@@ -155,7 +155,7 @@ export async function calculateTrustScore(input: TrustInput): Promise<TrustScore
           alert_message: `Trust score calculated for ${entityType} ${entityId}: ${finalScore}/100 (${level})`,
           metadata: metadata || {},
         },
-      });
+      } as never);
 
     if (insertError) {
       logger.error("Error logging trust event:", insertError);

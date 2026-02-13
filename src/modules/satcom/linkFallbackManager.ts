@@ -31,7 +31,7 @@ export interface FallbackEvent {
   toConnection: string;
   reason: string;
   success: boolean;
-  metadata?: Record<string, any>;
+  metadata?: Record<string, unknown>;
 }
 
 export interface FallbackState {

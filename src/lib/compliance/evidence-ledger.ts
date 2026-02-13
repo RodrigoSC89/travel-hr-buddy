@@ -129,9 +129,9 @@ export async function recordEvidence(
   moduleName: string,
   originator: string,
   description: string,
-  data: Record<string, any>,
+  data: Record<string, unknown>,
   vesselId?: string,
-  metadata?: Record<string, any>
+  metadata?: Record<string, unknown>
 ): Promise<EvidenceEntry> {
   try {
     // Ensure ledger is initialized

@@ -20,7 +20,7 @@ export interface FailoverLogEntry {
   signal_strength?: number;
   bandwidth_kbps?: number;
   duration_seconds?: number;
-  metadata?: Record<string, any>;
+  metadata?: Record<string, unknown>;
 }
 
 export interface ConnectionStatus {
@@ -213,8 +213,8 @@ class SatcomFailoverService {
       // Extract providers from metadata
       const providerCounts: Record<string, number> = {};
       logs.forEach((l) => {
-        const meta = l.metadata as Record<string, any> | null;
-        const provider = meta?.to_provider || meta?.from_provider || "unknown";
+        const meta = l.metadata as Record<string, unknown> | null;
+        const provider = String(meta?.to_provider || meta?.from_provider || "unknown");
         providerCounts[provider] = (providerCounts[provider] || 0) + 1;
       });
       const mostCommon = Object.entries(providerCounts).sort(([, a], [, b]) => b - a)[0]?.[0] || "N/A";

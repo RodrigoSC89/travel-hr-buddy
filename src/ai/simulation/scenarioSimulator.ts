@@ -26,7 +26,7 @@ export interface ScenarioConfig {
   environment: string;
   objectives: string[];
   aiEnabled?: boolean;
-  parameters?: Record<string, any>;
+  parameters?: Record<string, unknown>;
 }
 
 export interface SimulationEvent {

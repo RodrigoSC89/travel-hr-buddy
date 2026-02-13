@@ -229,7 +229,7 @@ export default function AICommandCenter() {
   };
 
   const avgResponseTime = healthStatus.length > 0
-    ? Math.round(healthStatus.reduce((sum, h) => sum + (h.response_time_ms || 0), 0) / healthStatus.length)
+    ? Math.round(healthStatus.reduce((sum, h) => sum + Number(h.response_time_ms || 0), 0) / healthStatus.length)
     : 0;
 
   const successRate = healthStatus.length > 0
@@ -799,15 +799,15 @@ export default function AICommandCenter() {
                       {healthStatus.length > 0 ? (
                         <div className="space-y-3">
                           {healthStatus.map((service) => (
-                            <div key={service.service_name} className="flex items-center justify-between p-3 rounded-lg bg-muted/50">
+                            <div key={String(service.service_name)} className="flex items-center justify-between p-3 rounded-lg bg-muted/50">
                               <div className="flex items-center gap-3">
-                                {getHealthStatusIcon(service.status)}
-                                <span className="font-medium text-sm">{service.service_name}</span>
+                                {getHealthStatusIcon(String(service.status))}
+                                <span className="font-medium text-sm">{String(service.service_name)}</span>
                               </div>
                               <div className="flex items-center gap-4 text-sm text-muted-foreground">
-                                <span>{service.response_time_ms || 0}ms</span>
+                                <span>{Number(service.response_time_ms || 0)}ms</span>
                                 <Badge variant={service.status === "critical" ? "destructive" : service.status === "degraded" ? "outline" : "default"}>
-                                  {service.status}
+                                  {String(service.status)}
                                 </Badge>
                               </div>
                             </div>

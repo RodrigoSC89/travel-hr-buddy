@@ -32,7 +32,7 @@ export interface Agent {
   votingWeight: number; // 0-1
   specializations: string[];
   active: boolean;
-  metadata?: Record<string, any>;
+  metadata?: Record<string, unknown>;
 }
 
 export interface AgentVote {
@@ -76,7 +76,7 @@ export interface ConsensusResult {
   recommendations: string[];
   achievedAt: Date;
   missionId?: string;
-  metadata?: Record<string, any>;
+  metadata?: Record<string, unknown>;
 }
 
 export interface FallbackRule {

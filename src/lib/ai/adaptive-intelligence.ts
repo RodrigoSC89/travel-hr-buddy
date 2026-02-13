@@ -160,7 +160,7 @@ export class PromptAdjuster {
    */
   static async generateFinalPrompt(
     inspectionType: InspectionType,
-    context?: Record<string, any>
+    context?: Record<string, unknown>
   ): Promise<string> {
     const config = await this.getAdaptivePrompt(inspectionType);
 
@@ -429,7 +429,7 @@ export class AdaptiveIntelligence {
     inspectionType: InspectionType,
     query: string,
     inspectorId?: string,
-    context?: Record<string, any>
+    context?: Record<string, unknown>
   ): Promise<string> {
     // Generate adaptive prompt
     const prompt = await PromptAdjuster.generateFinalPrompt(inspectionType, context);
@@ -460,7 +460,7 @@ export class AdaptiveIntelligence {
     options?: {
       severity?: 'low' | 'medium' | 'high' | 'critical';
       inspectorId?: string;
-      context?: Record<string, any>;
+      context?: Record<string, unknown>;
     }
   ): Promise<void> {
     await FeedbackStorage.storeFeedback({
