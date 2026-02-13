@@ -274,15 +274,15 @@ AI Performance Alert:
 
     logger.warn(alertMessage);
 
-    // Save alert to storage for watchdog to pick up
+    // Save alert to sessionStorage for watchdog to pick up (ephemeral runtime data)
     try {
-      const alerts = JSON.parse(localStorage.getItem("watchdog_alerts") || "[]");
+      const alerts = JSON.parse(sessionStorage.getItem("watchdog_alerts") || "[]");
       alerts.push({
         type: "performance_degradation",
         timestamp: audit.timestamp,
         data: audit,
       });
-      localStorage.setItem("watchdog_alerts", JSON.stringify(alerts.slice(-50)));
+      sessionStorage.setItem("watchdog_alerts", JSON.stringify(alerts.slice(-50)));
     } catch (error) {
       logger.error("[EvolutionTrigger] Error saving watchdog alert:", error);
     }

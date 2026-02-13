@@ -1531,7 +1531,7 @@ export default function ChannelManagerProfessional() {
             </div>
             <DialogFooter>
               <Button variant="outline" onClick={() => setIsEditDialogOpen(false)}>Cancelar</Button>
-              <Button onClick={() => { setIsEditDialogOpen(false); toast({ title: "Canal atualizado!" }); }}>
+              <Button onClick={() => { setIsEditDialogOpen(false); queryClient.invalidateQueries({ queryKey: ['channels'] }); toast({ title: "Canal atualizado!" }); }}>
                 Salvar
               </Button>
             </DialogFooter>

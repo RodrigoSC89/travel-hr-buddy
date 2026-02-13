@@ -93,10 +93,12 @@ export class EnhancedErrorBoundary extends Component<Props, State> {
     }
   };
 
+  // ErrorBoundary: full reload is acceptable as React tree is corrupted
   private handleGoHome = (): void => {
     window.location.href = "/";
   };
 
+  // ErrorBoundary: full reload is acceptable as React tree is corrupted
   private handleReload = (): void => {
     window.location.reload();
   };

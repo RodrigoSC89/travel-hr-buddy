@@ -42,9 +42,9 @@ export const logEvent = (
 
   logger.info(`[SATCOM Event] ${eventType}`, logEntry);
 
-  // Store in localStorage for operational logs
+  // Store in sessionStorage for operational logs (ephemeral session data)
   try {
-    const existingLogs = localStorage.getItem("satcom_operational_logs");
+    const existingLogs = sessionStorage.getItem("satcom_operational_logs");
     const logs = existingLogs ? JSON.parse(existingLogs) : [];
     logs.push(logEntry);
     
@@ -53,7 +53,7 @@ export const logEvent = (
       logs.shift();
     }
     
-    localStorage.setItem("satcom_operational_logs", JSON.stringify(logs));
+    sessionStorage.setItem("satcom_operational_logs", JSON.stringify(logs));
   } catch (error) {
     logger.error("Failed to store SATCOM log", error);
   }
@@ -169,7 +169,7 @@ export const getNextFallback = (
  */
 export const getOperationalLogs = (): Record<string, unknown>[] => {
   try {
-    const logs = localStorage.getItem("satcom_operational_logs");
+    const logs = sessionStorage.getItem("satcom_operational_logs");
     return logs ? JSON.parse(logs) : [];
   } catch (error) {
     logger.error("Failed to retrieve SATCOM logs", error);

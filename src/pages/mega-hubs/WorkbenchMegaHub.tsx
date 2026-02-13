@@ -382,7 +382,7 @@ export default function WorkbenchMegaHub() {
                     id: 'add-rotation',
                     label: 'New Rotation',
                     icon: <Plus className="h-4 w-4" />,
-                    onClick: () => { toast.success('Selecione um tripulante no Gantt abaixo para criar rotação'); },
+                    onClick: () => { setSearchParams({ action: 'new-rotation' }); toast.info('Selecione um tripulante no Gantt abaixo para criar rotação'); },
                     variant: 'default',
                     tooltip: 'Criar nova rotação de escala'
                   },
@@ -447,7 +447,7 @@ export default function WorkbenchMegaHub() {
                     id: 'bulk-approve',
                     label: 'Bulk Approve',
                     icon: <DollarSign className="h-4 w-4" />,
-                    onClick: () => { toast.success('Selecione itens no workflow abaixo para aprovação em lote'); },
+                    onClick: () => { setSearchParams({ action: 'bulk-approve' }); toast.info('Selecione itens no workflow abaixo para aprovação em lote'); },
                     variant: 'default',
                     tooltip: 'Aprovar múltiplos itens de uma vez'
                   }
