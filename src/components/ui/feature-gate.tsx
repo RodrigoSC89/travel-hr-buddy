@@ -4,13 +4,13 @@
  */
 
 import React from 'react';
-import { useFeatureFlags, FeatureFlags } from '@/lib/feature-flags';
+import { useAllFeatureFlags } from '@/lib/feature-flags';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Lock, Construction } from 'lucide-react';
 
 interface FeatureGateProps {
-  flag: keyof FeatureFlags;
+  flag: string;
   children: React.ReactNode;
   fallback?: React.ReactNode;
   showDisabledMessage?: boolean;
@@ -24,7 +24,7 @@ export function FeatureGate({
   showDisabledMessage = true,
   featureName
 }: FeatureGateProps) {
-  const flags = useFeatureFlags();
+  const flags = useAllFeatureFlags();
   const isEnabled = flags[flag];
   
   if (isEnabled) {
@@ -66,7 +66,7 @@ export function FeatureGate({
  */
 export function withFeatureGate<P extends object>(
   WrappedComponent: React.ComponentType<P>,
-  flag: keyof FeatureFlags,
+  flag: string,
   featureName?: string
 ) {
   return function FeatureGatedComponent(props: P) {
