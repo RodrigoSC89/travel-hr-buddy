@@ -139,7 +139,7 @@ class SatcomFailoverService {
     }
   }
 
-  async getRecentFailovers(vesselId: string, limit: number = 50): Promise<any[]> {
+  async getRecentFailovers(vesselId: string, limit: number = 50): Promise<Record<string, unknown>[]> {
     try {
       const { data, error } = await supabase
         .from("satcom_failover_logs")

@@ -231,7 +231,7 @@ class IndexedDBOptimizer {
   async getByModule(
     module: string,
     options: { offset?: number; limit?: number; sortBy?: 'timestamp' | 'access' } = {}
-  ): Promise<any[]> {
+  ): Promise<unknown[]> {
     await this.init();
     if (!this.db) return [];
     

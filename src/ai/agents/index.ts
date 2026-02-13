@@ -4,6 +4,7 @@
 
 export * from "./types";
 export * from "./BaseAgent";
+import { BaseAgent } from "./BaseAgent";
 export * from "./RiskSentinelAgent";
 export * from "./ESGAdvisorAgent";
 export * from "./AuditBotAgent";
@@ -14,7 +15,7 @@ import { getAuditBot } from "./AuditBotAgent";
 import type { AgentType, AgentContext, AgentDecision, AgentAction } from "./types";
 
 export interface AgentOrchestrator {
-  agents: Map<string, any>;
+  agents: Map<string, BaseAgent>;
   runAgent: (type: AgentType, context: AgentContext) => Promise<AgentDecision[]>;
   runAllAgents: (context: AgentContext) => Promise<Map<AgentType, AgentDecision[]>>;
   executeDecision: (type: AgentType, decision: AgentDecision) => Promise<AgentAction>;
@@ -25,7 +26,7 @@ let orchestrator: AgentOrchestrator | null = null;
 
 export function getAgentOrchestrator(): AgentOrchestrator {
   if (!orchestrator) {
-    const agents = new Map<string, any>();
+    const agents = new Map<string, BaseAgent>();
     agents.set("risk", getRiskSentinel());
     agents.set("esg", getESGAdvisor());
     agents.set("audit", getAuditBot());

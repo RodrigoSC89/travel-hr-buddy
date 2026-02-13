@@ -162,7 +162,7 @@ export async function getPrevisaoOndas(
 /**
  * Get current conditions for all state capitals
  */
-export async function getCondicoesCapitais(): Promise<any[]> {
+export async function getCondicoesCapitais(): Promise<Record<string, unknown>[]> {
   const data = await fetchCPTECData({ type: "capitais" });
   return data.capitais || [];
 }
