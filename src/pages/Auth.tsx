@@ -143,10 +143,17 @@ const Auth: React.FC = () => {
     setIsLoading(true);
     
     try {
+      // Show progress feedback for slow connections
+      const progressToast = toast.loading("Conectando ao servidor...", {
+        description: "Aguarde, tentando estabelecer conexão segura."
+      });
+      
       const { data: authData, error } = await supabase.auth.signInWithPassword({
         email: data.email.toLowerCase().trim(),
         password: data.password,
       });
+      
+      toast.dismiss(progressToast);
       
       if (error) {
         const errorMsg = error.message.toLowerCase();
@@ -171,7 +178,6 @@ const Auth: React.FC = () => {
       const errorMessage = err instanceof Error ? err.message : String(err);
       logger.error('[Auth] Login exception:', errorMessage);
       
-      // Handle CORS and network errors - usually means Supabase is unreachable
       if (errorMessage.includes('CORS') ||
           errorMessage.includes('Failed to fetch') || 
           errorMessage.includes('NetworkError') ||
@@ -181,8 +187,8 @@ const Auth: React.FC = () => {
           errorMessage.includes('aborted') ||
           errorMessage.includes('ERR_FAILED')) {
         toast.error("Servidor indisponível", { 
-          description: "O servidor está temporariamente fora do ar. Aguarde 1-2 minutos e tente novamente.",
-          duration: 10000,
+          description: "O servidor está reiniciando. O sistema tentou 5 vezes automaticamente. Aguarde 2-3 minutos e tente novamente.",
+          duration: 15000,
         });
         setShowTroubleshooting(true);
       } else {
