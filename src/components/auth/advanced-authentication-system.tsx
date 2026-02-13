@@ -124,9 +124,9 @@ export const AdvancedAuthenticationSystem: React.FC = () => {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm font-medium text-muted-foreground">Status</p>
-                <p className="text-lg font-bold text-green-600">Seguro</p>
+                <p className="text-lg font-bold text-success">Seguro</p>
               </div>
-              <CheckCircle className="h-8 w-8 text-green-500" />
+              <CheckCircle className="h-8 w-8 text-success" />
             </div>
           </CardContent>
         </Card>
@@ -138,7 +138,7 @@ export const AdvancedAuthenticationSystem: React.FC = () => {
                 <p className="text-sm font-medium text-muted-foreground">2FA</p>
                 <p className="text-lg font-bold">{isEnabled2FA ? "Ativo" : "Inativo"}</p>
               </div>
-              <Key className={`h-8 w-8 ${isEnabled2FA ? "text-green-500" : "text-muted-foreground"}`} />
+              <Key className={`h-8 w-8 ${isEnabled2FA ? "text-success" : "text-muted-foreground"}`} />
             </div>
           </CardContent>
         </Card>
@@ -150,7 +150,7 @@ export const AdvancedAuthenticationSystem: React.FC = () => {
                 <p className="text-sm font-medium text-muted-foreground">Biometria</p>
                 <p className="text-lg font-bold">{isBiometricEnabled ? "Ativo" : "Inativo"}</p>
               </div>
-              <Fingerprint className={`h-8 w-8 ${isBiometricEnabled ? "text-green-500" : "text-muted-foreground"}`} />
+              <Fingerprint className={`h-8 w-8 ${isBiometricEnabled ? "text-success" : "text-muted-foreground"}`} />
             </div>
           </CardContent>
         </Card>
@@ -162,7 +162,7 @@ export const AdvancedAuthenticationSystem: React.FC = () => {
                 <p className="text-sm font-medium text-muted-foreground">Sessões</p>
                 <p className="text-lg font-bold">{activeSessions.length}</p>
               </div>
-              <Smartphone className="h-8 w-8 text-blue-500" />
+              <Smartphone className="h-8 w-8 text-info" />
             </div>
           </CardContent>
         </Card>
@@ -194,14 +194,14 @@ export const AdvancedAuthenticationSystem: React.FC = () => {
             </div>
 
             {!isEnabled2FA && (
-              <div className="p-4 bg-amber-50 dark:bg-amber-900/20 rounded-lg border border-amber-200 dark:border-amber-800">
+              <div className="p-4 bg-warning/10 rounded-lg border border-warning/30">
                 <div className="flex items-center gap-2 mb-2">
-                  <AlertTriangle className="w-4 h-4 text-amber-600" />
-                  <span className="font-medium text-amber-800 dark:text-amber-200">
+                  <AlertTriangle className="w-4 h-4 text-warning" />
+                  <span className="font-medium text-warning">
                     Recomendado
                   </span>
                 </div>
-                <p className="text-sm text-amber-700 dark:text-amber-300">
+                <p className="text-sm text-muted-foreground">
                   Configure a autenticação de dois fatores para aumentar a segurança da sua conta.
                 </p>
               </div>
@@ -272,7 +272,7 @@ export const AdvancedAuthenticationSystem: React.FC = () => {
             </div>
 
             <div className="p-4 border rounded-lg text-center">
-              <Fingerprint className={`w-16 h-16 mx-auto mb-4 ${isBiometricEnabled ? "text-green-500" : "text-muted-foreground"}`} />
+              <Fingerprint className={`w-16 h-16 mx-auto mb-4 ${isBiometricEnabled ? "text-success" : "text-muted-foreground"}`} />
               <p className="font-medium">
                 {isBiometricEnabled ? "Biometria Ativa" : "Biometria Inativa"}
               </p>
@@ -313,7 +313,7 @@ export const AdvancedAuthenticationSystem: React.FC = () => {
               <div
                 key={session.id}
                 className={`flex items-center justify-between p-4 border rounded-lg ${
-                  session.current ? "border-green-200 bg-green-50 dark:bg-green-900/20" : ""
+                  session.current ? "border-success/30 bg-success/5" : ""
                 }`}
               >
                 <div className="flex items-center gap-3">
@@ -332,7 +332,7 @@ export const AdvancedAuthenticationSystem: React.FC = () => {
                 </div>
                 <div className="flex items-center gap-2">
                   {session.current && (
-                    <Badge className="bg-green-100 text-green-800 dark:bg-green-900/20 dark:text-green-300">
+                    <Badge className="bg-success/10 text-success">
                       Atual
                     </Badge>
                   )}
@@ -366,9 +366,9 @@ export const AdvancedAuthenticationSystem: React.FC = () => {
               <div key={log.id} className="flex items-center justify-between p-3 border rounded-lg">
                 <div className="flex items-center gap-3">
                   {log.status === "success" ? (
-                    <CheckCircle className="w-5 h-5 text-green-500" />
+                    <CheckCircle className="w-5 h-5 text-success" />
                   ) : (
-                    <AlertTriangle className="w-5 h-5 text-red-500" />
+                    <AlertTriangle className="w-5 h-5 text-destructive" />
                   )}
                   <div>
                     <p className="font-medium">{log.action}</p>

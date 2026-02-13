@@ -193,17 +193,17 @@ export const PersonalizedRecommendations: React.FC<PersonalizedRecommendationsPr
 
   const getPriorityColor = (priority: string) => {
     switch (priority) {
-    case "high": return "bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200";
-    case "medium": return "bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200";
-    default: return "bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200";
+    case "high": return "bg-destructive/10 text-destructive";
+    case "medium": return "bg-warning/10 text-warning";
+    default: return "bg-info/10 text-info";
     }
   };
 
   const getImpactColor = (impact: string) => {
     switch (impact.toLowerCase()) {
-    case "alto": return "text-green-600";
-    case "médio": return "text-yellow-600";
-    default: return "text-blue-600";
+    case "alto": return "text-success";
+    case "médio": return "text-warning";
+    default: return "text-info";
     }
   };
 

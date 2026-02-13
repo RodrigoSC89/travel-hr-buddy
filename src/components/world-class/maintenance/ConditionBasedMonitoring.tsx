@@ -18,9 +18,9 @@ import { maintenanceIntelligence, CBMAlert } from "@/services/maintenance";
 import { toast } from "sonner";
 
 const severityConfig = {
-  critical: { color: "bg-red-500", text: "text-red-500", border: "border-red-500/30", icon: ShieldAlert, label: "Crítico" },
-  warning: { color: "bg-amber-500", text: "text-amber-500", border: "border-amber-500/30", icon: AlertTriangle, label: "Atenção" },
-  info: { color: "bg-blue-500", text: "text-blue-500", border: "border-blue-500/30", icon: Activity, label: "Info" },
+  critical: { color: "bg-destructive", text: "text-destructive", border: "border-destructive/30", icon: ShieldAlert, label: "Crítico" },
+  warning: { color: "bg-warning", text: "text-warning", border: "border-warning/30", icon: AlertTriangle, label: "Atenção" },
+  info: { color: "bg-info", text: "text-info", border: "border-info/30", icon: Activity, label: "Info" },
 };
 
 export function ConditionBasedMonitoring() {
@@ -68,8 +68,8 @@ export function ConditionBasedMonitoring() {
       <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
         <Card className="border-border/50 bg-card/80">
           <CardContent className="p-4 flex items-center gap-3">
-            <div className="p-2 rounded-lg bg-blue-500/10">
-              <Activity className="h-5 w-5 text-blue-500" />
+            <div className="p-2 rounded-lg bg-info/10">
+              <Activity className="h-5 w-5 text-info" />
             </div>
             <div>
               <p className="text-2xl font-bold">{alerts.length}</p>
@@ -79,8 +79,8 @@ export function ConditionBasedMonitoring() {
         </Card>
         <Card className="border-border/50 bg-card/80">
           <CardContent className="p-4 flex items-center gap-3">
-            <div className="p-2 rounded-lg bg-red-500/10">
-              <ShieldAlert className="h-5 w-5 text-red-500" />
+            <div className="p-2 rounded-lg bg-destructive/10">
+              <ShieldAlert className="h-5 w-5 text-destructive" />
             </div>
             <div>
               <p className="text-2xl font-bold">{criticalCount}</p>
@@ -90,8 +90,8 @@ export function ConditionBasedMonitoring() {
         </Card>
         <Card className="border-border/50 bg-card/80">
           <CardContent className="p-4 flex items-center gap-3">
-            <div className="p-2 rounded-lg bg-amber-500/10">
-              <AlertTriangle className="h-5 w-5 text-amber-500" />
+            <div className="p-2 rounded-lg bg-warning/10">
+              <AlertTriangle className="h-5 w-5 text-warning" />
             </div>
             <div>
               <p className="text-2xl font-bold">{warningCount}</p>
@@ -148,7 +148,7 @@ export function ConditionBasedMonitoring() {
           <ScrollArea className="h-[400px]">
             {filteredAlerts.length === 0 ? (
               <div className="flex flex-col items-center justify-center py-16 text-muted-foreground">
-                <CheckCircle className="h-12 w-12 mb-3 text-emerald-500/50" />
+                <CheckCircle className="h-12 w-12 mb-3 text-success/50" />
                 <p className="font-medium">Nenhum alerta nesta categoria</p>
                 <p className="text-sm">Todos os equipamentos dentro dos parâmetros</p>
               </div>

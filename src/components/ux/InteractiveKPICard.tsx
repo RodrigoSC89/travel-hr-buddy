@@ -73,11 +73,11 @@ export function InteractiveKPICard({
   const getStatusColor = () => {
     switch (status) {
       case "good":
-        return "border-l-green-500";
+        return "border-l-success";
       case "warning":
-        return "border-l-amber-500";
+        return "border-l-warning";
       case "critical":
-        return "border-l-red-500";
+        return "border-l-destructive";
       default:
         return "border-l-primary";
     }
@@ -86,11 +86,11 @@ export function InteractiveKPICard({
   const getStatusBg = () => {
     switch (status) {
       case "good":
-        return "from-green-500/10";
+        return "from-success/10";
       case "warning":
-        return "from-amber-500/10";
+        return "from-warning/10";
       case "critical":
-        return "from-red-500/10";
+        return "from-destructive/10";
       default:
         return "from-primary/10";
     }
@@ -98,14 +98,14 @@ export function InteractiveKPICard({
 
   const getTrendIcon = () => {
     if (!trend) return <Minus className="h-3 w-3 text-muted-foreground" />;
-    if (trend > 0) return <TrendingUp className="h-3 w-3 text-green-500" />;
-    return <TrendingDown className="h-3 w-3 text-red-500" />;
+    if (trend > 0) return <TrendingUp className="h-3 w-3 text-success" />;
+    return <TrendingDown className="h-3 w-3 text-destructive" />;
   };
 
   const getTrendColor = () => {
     if (!trend) return "text-muted-foreground";
-    if (trend > 0) return "text-green-500";
-    return "text-red-500";
+    if (trend > 0) return "text-success";
+    return "text-destructive";
   };
 
   // Simple sparkline SVG

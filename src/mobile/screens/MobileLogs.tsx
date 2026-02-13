@@ -51,11 +51,11 @@ export const MobileLogs: React.FC = () => {
   const getLogIcon = (level: LogLevel) => {
     switch (level) {
     case "error":
-      return <AlertTriangle className="h-4 w-4 text-red-500" />;
+      return <AlertTriangle className="h-4 w-4 text-destructive" />;
     case "warn":
-      return <AlertCircle className="h-4 w-4 text-yellow-500" />;
+      return <AlertCircle className="h-4 w-4 text-warning" />;
     case "info":
-      return <Info className="h-4 w-4 text-blue-500" />;
+      return <Info className="h-4 w-4 text-info" />;
     case "debug":
       return <CheckCircle className="h-4 w-4 text-muted-foreground" />;
     }
@@ -113,19 +113,19 @@ export const MobileLogs: React.FC = () => {
       <div className="grid grid-cols-4 gap-2">
         <Card className="cursor-pointer hover:bg-accent transition-colors">
           <CardContent className="pt-3 pb-3 text-center">
-            <p className="text-xl font-bold text-red-500">{stats.error}</p>
+            <p className="text-xl font-bold text-destructive">{stats.error}</p>
             <p className="text-xs text-muted-foreground">Erros</p>
           </CardContent>
         </Card>
         <Card className="cursor-pointer hover:bg-accent transition-colors">
           <CardContent className="pt-3 pb-3 text-center">
-            <p className="text-xl font-bold text-yellow-500">{stats.warn}</p>
+            <p className="text-xl font-bold text-warning">{stats.warn}</p>
             <p className="text-xs text-muted-foreground">Avisos</p>
           </CardContent>
         </Card>
         <Card className="cursor-pointer hover:bg-accent transition-colors">
           <CardContent className="pt-3 pb-3 text-center">
-            <p className="text-xl font-bold text-blue-500">{stats.info}</p>
+            <p className="text-xl font-bold text-info">{stats.info}</p>
             <p className="text-xs text-muted-foreground">Info</p>
           </CardContent>
         </Card>
@@ -221,10 +221,10 @@ export const MobileLogs: React.FC = () => {
 
                       {log.error && (
                         <details className="mt-2">
-                          <summary className="text-xs text-red-500 cursor-pointer hover:text-red-600">
+                          <summary className="text-xs text-destructive cursor-pointer hover:text-destructive/80">
                             Ver erro
                           </summary>
-                          <pre className="mt-1 p-2 bg-red-50 dark:bg-red-950 rounded text-xs overflow-auto text-red-600 dark:text-red-400">
+                          <pre className="mt-1 p-2 bg-destructive/5 rounded text-xs overflow-auto text-destructive">
                             {log.error.message}
                             {log.error.stack && `\n\n${log.error.stack}`}
                           </pre>

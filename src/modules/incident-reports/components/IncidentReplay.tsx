@@ -255,7 +255,7 @@ export const IncidentReplay: React.FC<IncidentReplayProps> = ({ incidentId, onCl
   if (!incident) {
     return (
       <div className="text-center p-8">
-        <AlertTriangle className="w-12 h-12 mx-auto mb-4 text-orange-500" />
+        <AlertTriangle className="w-12 h-12 mx-auto mb-4 text-warning" />
         <p>Incidente não encontrado</p>
       </div>
     );
@@ -361,7 +361,7 @@ export const IncidentReplay: React.FC<IncidentReplayProps> = ({ incidentId, onCl
         <Card>
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
-              <Brain className="w-5 h-5 text-purple-500" />
+              <Brain className="w-5 h-5 text-accent-foreground" />
               Análise de IA
               {isAnalyzing && <Clock className="w-4 h-4 animate-spin ml-auto" />}
             </CardTitle>
@@ -392,7 +392,7 @@ export const IncidentReplay: React.FC<IncidentReplayProps> = ({ incidentId, onCl
                   {/* Probable Causes */}
                   <div>
                     <h3 className="font-semibold mb-3 flex items-center gap-2">
-                      <AlertTriangle className="w-4 h-4 text-orange-500" />
+                      <AlertTriangle className="w-4 h-4 text-warning" />
                       Causas Prováveis ({analysis.probableCauses.length})
                     </h3>
                     <div className="space-y-3">
@@ -408,7 +408,7 @@ export const IncidentReplay: React.FC<IncidentReplayProps> = ({ incidentId, onCl
                           <div className="space-y-1">
                             {cause.supportingData.map((data) => (
                               <div key={data} className="text-xs flex items-start gap-1">
-                                <CheckCircle className="w-3 h-3 mt-0.5 text-green-500" />
+                                <CheckCircle className="w-3 h-3 mt-0.5 text-success" />
                                 <span>{data}</span>
                               </div>
                             ))}
@@ -421,7 +421,7 @@ export const IncidentReplay: React.FC<IncidentReplayProps> = ({ incidentId, onCl
                   {/* Recommendations */}
                   <div>
                     <h3 className="font-semibold mb-3 flex items-center gap-2">
-                      <CheckCircle className="w-4 h-4 text-green-500" />
+                      <CheckCircle className="w-4 h-4 text-success" />
                       Recomendações ({analysis.recommendations.length})
                     </h3>
                     <div className="space-y-2">
