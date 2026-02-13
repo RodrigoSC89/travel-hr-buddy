@@ -64,43 +64,96 @@ const isSlowConnection = (): boolean => {
   return false;
 };
 
+// XHR-based fetch fallback - bypasses any fetch interceptors/proxies
+const xhrFetch = (url: string, method: string, headers: Record<string, string>, body?: string): Promise<Response> => {
+  return new Promise((resolve, reject) => {
+    const xhr = new XMLHttpRequest();
+    xhr.open(method, url, true);
+    xhr.timeout = 60000; // 60s timeout for slow connections
+    
+    for (const [key, value] of Object.entries(headers)) {
+      xhr.setRequestHeader(key, value);
+    }
+    
+    xhr.onload = () => {
+      const responseHeaders = new Headers();
+      xhr.getAllResponseHeaders().trim().split(/[\r\n]+/).forEach(line => {
+        const parts = line.split(': ');
+        if (parts.length === 2) responseHeaders.append(parts[0], parts[1]);
+      });
+      resolve(new Response(xhr.responseText, {
+        status: xhr.status,
+        statusText: xhr.statusText,
+        headers: responseHeaders,
+      }));
+    };
+    
+    xhr.onerror = () => reject(new Error('XHR network error'));
+    xhr.ontimeout = () => reject(new Error('XHR timeout'));
+    xhr.send(body || null);
+  });
+};
+
 // Custom fetch with retry for maritime satellite connections
-// Auth requests get special treatment: NO AbortController, generous retry with backoff
+// Auth requests use XHR fallback to bypass fetch interceptors
 const customFetch = async (input: RequestInfo | URL, init?: RequestInit): Promise<Response> => {
   const url = typeof input === 'string' ? input : input instanceof URL ? input.toString() : (input as Request).url;
   const isAuthRequest = url.includes('/auth/v1/');
   
   if (isAuthRequest) {
-    // Auth requests: strip ALL abort signals, retry up to 5 times with exponential backoff
-    // The SDK adds its own AbortController which kills requests on slow connections
     const { signal: _stripped, ...cleanInit } = init || {};
-    const MAX_AUTH_RETRIES = 5;
+    const MAX_AUTH_RETRIES = 3;
+    
+    // Extract headers for XHR fallback
+    const headers: Record<string, string> = {};
+    if (cleanInit.headers) {
+      if (cleanInit.headers instanceof Headers) {
+        cleanInit.headers.forEach((v, k) => { headers[k] = v; });
+      } else if (typeof cleanInit.headers === 'object') {
+        Object.assign(headers, cleanInit.headers);
+      }
+    }
+    const bodyStr = typeof cleanInit.body === 'string' ? cleanInit.body : undefined;
+    const method = cleanInit.method || 'GET';
     
     for (let attempt = 0; attempt < MAX_AUTH_RETRIES; attempt++) {
       try {
-        // Use native fetch with NO signal - let browser handle timeout (120s default)
-        const response = await fetch(input, cleanInit as RequestInit);
+        // First attempt: try native fetch (fast path)
+        // Subsequent attempts: use XHR to bypass any fetch interceptors
+        let response: Response;
+        if (attempt === 0) {
+          try {
+            response = await fetch(input, cleanInit as RequestInit);
+          } catch {
+            // If native fetch fails immediately, try XHR
+            // eslint-disable-next-line no-console
+            console.log('[Auth] Native fetch failed, switching to XHR fallback');
+            response = await xhrFetch(url, method, headers, bodyStr);
+          }
+        } else {
+          // eslint-disable-next-line no-console
+          console.log(`[Auth] Retry ${attempt} using XHR fallback`);
+          response = await xhrFetch(url, method, headers, bodyStr);
+        }
         
-        // Retry on server errors (502, 503, 504) - Supabase might be restarting
         if (response.status >= 500 && attempt < MAX_AUTH_RETRIES - 1) {
           const delay = Math.pow(2, attempt) * 1000 + Math.random() * 500;
-          await new Promise(resolve => setTimeout(resolve, Math.min(delay, 15000)));
+          await new Promise(resolve => setTimeout(resolve, Math.min(delay, 10000)));
           continue;
         }
         
         return response;
       } catch (error) {
         if (attempt < MAX_AUTH_RETRIES - 1) {
-          const delay = Math.pow(2, attempt) * 1000 + Math.random() * 500;
+          const delay = Math.pow(2, attempt) * 1500 + Math.random() * 500;
           // eslint-disable-next-line no-console
           console.log(`[Auth] Attempt ${attempt + 1} failed, retrying in ${Math.round(delay)}ms...`);
-          await new Promise(resolve => setTimeout(resolve, Math.min(delay, 15000)));
+          await new Promise(resolve => setTimeout(resolve, delay));
         } else {
           throw error;
         }
       }
     }
-    // Should never reach here, but TypeScript needs it
     throw new Error('Max auth retries exceeded');
   }
   
