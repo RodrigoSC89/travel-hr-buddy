@@ -167,7 +167,7 @@ export class TranslatorService {
     this.cache.set(cacheKey, cache);
   }
 
-  private static async loadTranslationsFromJSON(lang: SupportedLanguage): Promise<Record<string, any>> {
+  private static async loadTranslationsFromJSON(lang: SupportedLanguage): Promise<Record<string, unknown>> {
     try {
       const response = await fetch(`/locales/${lang}.json`);
       if (!response.ok) throw new Error(`Failed to load ${lang}.json`);
@@ -178,13 +178,13 @@ export class TranslatorService {
     }
   }
 
-  private static getTranslationFromJSON(translations: Record<string, any>, key: string): string | null {
+  private static getTranslationFromJSON(translations: Record<string, unknown>, key: string): string | null {
     const parts = key.split(".");
-    let current = translations;
+    let current: unknown = translations;
 
     for (const part of parts) {
-      if (current && typeof current === "object" && part in current) {
-        current = current[part];
+      if (current && typeof current === "object" && !Array.isArray(current) && part in (current as Record<string, unknown>)) {
+        current = (current as Record<string, unknown>)[part];
       } else {
         return null;
       }

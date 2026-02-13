@@ -110,19 +110,19 @@ function useFleetData() {
     maintenance: 'maintenance', drydock: 'drydock', inactive: 'layup', laid_up: 'layup',
   };
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Supabase join returns dynamic shape
-  const vessels: Vessel[] = rawVessels.map((v: Record<string, any>) => {
+  const vessels: Vessel[] = rawVessels.map((v) => {
     const crewCount = rawCrew.filter((c) => c.vessel_id === v.id).length;
     let hash = 0;
-    for (let i = 0; i < v.id.length; i++) { hash = ((hash << 5) - hash) + v.id.charCodeAt(i); hash |= 0; }
+    const vid = String(v.id);
+    for (let i = 0; i < vid.length; i++) { hash = ((hash << 5) - hash) + vid.charCodeAt(i); hash |= 0; }
     return {
-      id: v.id, name: v.name || 'Unknown', type: v.vessel_type || 'General',
+      id: vid, name: v.name || 'Unknown', type: v.vessel_type || 'General',
       imo: v.imo_number || 'N/A', flag: v.flag_state || 'N/A',
-      status: statusMap[v.status] || 'operational',
+      status: statusMap[v.status || ''] || 'operational',
       position: { lat: -25 + (Math.abs(hash % 200) / 10), lng: -50 + (Math.abs((hash >> 8) % 300) / 10) },
       speed: v.status === 'active' || v.status === 'navigating' ? Math.round(8 + Math.abs(hash % 10)) : 0,
       heading: Math.abs(hash % 360),
-      destination: v.home_port || 'Santos, Brazil',
+      destination: (v as Record<string, unknown>).home_port as string || 'Santos, Brazil',
       eta: v.status === 'active' ? new Date(Date.now() + 48 * 3600000).toISOString() : '-',
       fuelLevel: Math.round(40 + Math.abs((hash >> 4) % 55)),
       crew: crewCount, crewCapacity: Math.max(crewCount, 20),
@@ -133,17 +133,17 @@ function useFleetData() {
   });
 
   const now = new Date();
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Supabase join returns dynamic shape
-  const voyages: VoyageData[] = rawVoyages.map((vp: Record<string, any>) => {
-    const dep = new Date(vp.departure_date || vp.created_at);
+  const voyages: VoyageData[] = rawVoyages.map((vp) => {
+    const dep = new Date(vp.departure_date || vp.created_at || Date.now());
     const arr = new Date(vp.arrival_date || Date.now() + 7 * 86400000);
     const progress = Math.min(100, Math.max(0, Math.round(((now.getTime() - dep.getTime()) / (arr.getTime() - dep.getTime())) * 100)));
     const sMap: Record<string, VoyageData['status']> = { planned: 'planned', in_progress: 'in-progress', in_transit: 'in-progress', completed: 'completed', delayed: 'delayed' };
+    const vesselData = vp.vessels as Record<string, unknown> | null;
     return {
-      id: vp.id, vesselId: vp.vessel_id, vesselName: vp.vessels?.name || 'N/A',
-      origin: vp.departure_port || 'N/A', destination: vp.arrival_port || vp.destination || 'N/A',
+      id: vp.id, vesselId: vp.vessel_id || '', vesselName: (vesselData?.name as string) || 'N/A',
+      origin: vp.origin_port || 'N/A', destination: vp.destination_port || 'N/A',
       departureDate: vp.departure_date || '', arrivalDate: vp.arrival_date || '',
-      status: sMap[vp.status] || 'planned',
+      status: sMap[vp.status || ''] || 'planned',
       cargo: vp.cargo_type || 'General', cargoWeight: vp.cargo_quantity || 0,
       progress: vp.status === 'completed' ? 100 : progress,
     };

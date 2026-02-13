@@ -36,7 +36,7 @@ export function useModuleIntegration(moduleName: string) {
     });
   }, [moduleName]);
 
-  const execute = useCallback(async (action: string, payload?: Record<string, any>) => {
+  const execute = useCallback(async (action: string, payload?: Record<string, unknown>) => {
     return moduleIntegration.executeAction({
       module: moduleName,
       action,
@@ -44,7 +44,7 @@ export function useModuleIntegration(moduleName: string) {
     });
   }, [moduleName]);
 
-  const getData = useCallback(async (targetModule: string, query?: Record<string, any>) => {
+  const getData = useCallback(async (targetModule: string, query?: Record<string, unknown>) => {
     return moduleIntegration.getModuleData(targetModule, query);
   }, []);
 

@@ -211,7 +211,7 @@ class LocalCrypto {
   /**
    * Decrypt sensitive fields in an object
    */
-  async decryptFields<T extends Record<string, any>>(
+  async decryptFields<T extends Record<string, unknown>>(
     obj: T,
     fields: (keyof T)[],
     password: string
@@ -219,9 +219,10 @@ class LocalCrypto {
     const result = { ...obj };
 
     for (const field of fields) {
-      if (result[field] && typeof result[field] === 'object' && 'iv' in result[field]) {
+      const value = result[field];
+      if (value && typeof value === 'object' && 'iv' in (value as Record<string, unknown>)) {
         try {
-          const decrypted = await this.decrypt(result[field] as EncryptedData, password);
+          const decrypted = await this.decrypt(value as unknown as EncryptedData, password);
           (result as Record<string, unknown>)[field as string] = decrypted;
         } catch {
           // Keep encrypted if decryption fails

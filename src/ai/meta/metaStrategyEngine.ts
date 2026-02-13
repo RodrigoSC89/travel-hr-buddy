@@ -55,13 +55,23 @@ export interface MetaStrategyDecision {
   }>;
 }
 
+export interface StrategyContext {
+  budget: number;
+  expectedValue: number;
+  timeline: number;
+  maxTimeline: number;
+  allowInnovation?: boolean;
+  availableResources?: string[];
+  [key: string]: unknown;
+}
+
 export class MetaStrategyEngine {
   /**
    * Generate multiple strategic alternatives for a given mission
    */
   async generateStrategies(
     missionId: string,
-    context: Record<string, any>
+    context: StrategyContext
   ): Promise<Strategy[]> {
     const strategies: Strategy[] = [];
 
@@ -127,7 +137,7 @@ export class MetaStrategyEngine {
    */
   async evaluateStrategies(
     strategies: Strategy[],
-    context: Record<string, any>
+    context: StrategyContext
   ): Promise<StrategyEvaluation[]> {
     const evaluations: StrategyEvaluation[] = [];
 
@@ -164,7 +174,7 @@ export class MetaStrategyEngine {
   async selectBestStrategy(
     strategies: Strategy[],
     evaluations: StrategyEvaluation[],
-    context: Record<string, any>
+    context: StrategyContext
   ): Promise<MetaStrategyDecision> {
     const bestEvaluation = evaluations[0];
     const selectedStrategy = strategies.find(s => s.id === bestEvaluation.strategyId)!;
@@ -214,7 +224,7 @@ export class MetaStrategyEngine {
   }
 
   // Helper methods for strategy generation
-  private generateConservativeActions(context: Record<string, any>): StrategyAction[] {
+  private generateConservativeActions(_context: StrategyContext): StrategyAction[] {
     return [
       { step: 1, action: "Comprehensive risk assessment", duration: 120, dependencies: [], resources: ["analyst"] },
       { step: 2, action: "Detailed planning phase", duration: 180, dependencies: [1], resources: ["planner"] },
@@ -223,7 +233,7 @@ export class MetaStrategyEngine {
     ];
   }
 
-  private generateAggressiveActions(context: Record<string, any>): StrategyAction[] {
+  private generateAggressiveActions(_context: StrategyContext): StrategyAction[] {
     return [
       { step: 1, action: "Rapid assessment", duration: 30, dependencies: [], resources: ["analyst"] },
       { step: 2, action: "Parallel execution streams", duration: 150, dependencies: [1], resources: ["executor", "specialist"] },
@@ -231,7 +241,7 @@ export class MetaStrategyEngine {
     ];
   }
 
-  private generateBalancedActions(context: Record<string, any>): StrategyAction[] {
+  private generateBalancedActions(_context: StrategyContext): StrategyAction[] {
     return [
       { step: 1, action: "Standard risk assessment", duration: 60, dependencies: [], resources: ["analyst"] },
       { step: 2, action: "Adaptive planning", duration: 90, dependencies: [1], resources: ["planner"] },
@@ -240,7 +250,7 @@ export class MetaStrategyEngine {
     ];
   }
 
-  private generateInnovativeActions(context: Record<string, any>): StrategyAction[] {
+  private generateInnovativeActions(_context: StrategyContext): StrategyAction[] {
     return [
       { step: 1, action: "Technology scan", duration: 45, dependencies: [], resources: ["researcher"] },
       { step: 2, action: "Prototype development", duration: 120, dependencies: [1], resources: ["developer", "specialist"] },
@@ -250,26 +260,26 @@ export class MetaStrategyEngine {
   }
 
   // Resource allocation helpers
-  private getMinimalResources(context: Record<string, any>): string[] {
+  private getMinimalResources(_context: StrategyContext): string[] {
     return ["basic_equipment", "standard_team"];
   }
 
-  private getExtendedResources(context: Record<string, any>): string[] {
+  private getExtendedResources(_context: StrategyContext): string[] {
     return ["basic_equipment", "standard_team", "advanced_tools", "specialist_support"];
   }
 
-  private getStandardResources(context: Record<string, any>): string[] {
+  private getStandardResources(_context: StrategyContext): string[] {
     return ["basic_equipment", "standard_team", "advanced_tools"];
   }
 
-  private getSpecializedResources(context: Record<string, any>): string[] {
+  private getSpecializedResources(_context: StrategyContext): string[] {
     return ["advanced_equipment", "specialized_team", "cutting_edge_tools", "research_support"];
   }
 
   // Simulation and scoring
   private async runSimulations(
     strategy: Strategy,
-    context: Record<string, any>
+    _context: StrategyContext
   ): Promise<SimulationResult[]> {
     const scenarios = ["optimal", "normal", "degraded", "crisis"];
     return scenarios.map(scenario => ({
@@ -280,7 +290,7 @@ export class MetaStrategyEngine {
     }));
   }
 
-  private calculateFeasibility(strategy: Strategy, context: Record<string, any>): number {
+  private calculateFeasibility(strategy: Strategy, context: StrategyContext): number {
     let score = 100;
     
     // Check budget constraints

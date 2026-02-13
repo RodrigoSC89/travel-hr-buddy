@@ -57,8 +57,12 @@ export default function EarthquakeMonitor() {
       if (error) throw error;
 
       if (data?.features) {
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any -- USGS GeoJSON feature shape is dynamic
-        const formatted: Earthquake[] = data.features.map((f: Record<string, any>) => ({
+        interface USGSFeature {
+          id: string;
+          properties: { mag: number; place: string; time: number; tsunami: number };
+          geometry: { coordinates: [number, number, number] };
+        }
+        const formatted: Earthquake[] = data.features.map((f: USGSFeature) => ({
           id: f.id,
           magnitude: f.properties.mag,
           location: f.properties.place,

@@ -51,12 +51,11 @@ function PerformanceMonitorComponent() {
     
     const totalTransfer = resources.reduce((acc, r) => acc + (r.transferSize || 0), 0);
     
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any -- non-standard browser APIs (performance.memory, navigator.connection)
-    const perfMemory = (performance as Record<string, any>).memory;
-    const navConnection = (navigator as Record<string, any>).connection;
+    const perfMemory = (performance as unknown as Record<string, unknown>).memory as { usedJSHeapSize?: number } | undefined;
+    const navConnection = (navigator as unknown as Record<string, unknown>).connection as { rtt?: number; effectiveType?: string } | undefined;
     setMetrics({
       fps: 60,
-      memory: perfMemory?.usedJSHeapSize / 1048576 || 0,
+      memory: perfMemory?.usedJSHeapSize ?? 0 / 1048576,
       latency: Math.round(navConnection?.rtt || 50),
       ttfb: perfEntries?.responseStart - perfEntries?.requestStart || 0,
       domLoad: perfEntries?.domContentLoadedEventEnd - perfEntries?.startTime || 0,
@@ -71,7 +70,7 @@ function PerformanceMonitorComponent() {
 
     // Detectar tipo de conexão
     if ('connection' in navigator) {
-      const conn = (navigator as Record<string, any>).connection; // eslint-disable-line @typescript-eslint/no-explicit-any -- non-standard API
+      const conn = (navigator as unknown as Record<string, unknown>).connection as { effectiveType?: string } | undefined;
       setConnectionType(conn?.effectiveType || 'unknown');
     }
 

@@ -66,7 +66,7 @@ export class TravelService {
           status: itinerary.status,
           booking_reference: itinerary.bookingReference,
           metadata: itinerary.metadata || {}
-        } as any)
+        } as never)
         .select()
         .single();
 
@@ -156,7 +156,7 @@ export class TravelService {
           current_price: alert.currentPrice,
           alert_type: "price_drop",
           is_active: true
-        } as any)
+        } as never)
         .select()
         .single();
 
