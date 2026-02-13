@@ -1,4 +1,4 @@
-// @ts-nocheck
+// @ts-nocheck — Test mocks: PDF export and Supabase mock types
 import { describe, it, expect, vi, beforeEach } from "vitest";
 import { render, screen, fireEvent } from "@testing-library/react";
 import { ExportarComentariosPDF } from "@/components/sgso/ExportarComentariosPDF";

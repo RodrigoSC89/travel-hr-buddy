@@ -1,4 +1,4 @@
-// @ts-nocheck - Mock type compatibility
+// @ts-nocheck — Test mocks: Mock type compatibility with Supabase and AI response types
 import { describe, it, expect, vi, beforeEach } from "vitest";
 import { render, screen, waitFor, fireEvent } from "@testing-library/react";
 import JobsForecastReport from "@/components/bi/JobsForecastReport";

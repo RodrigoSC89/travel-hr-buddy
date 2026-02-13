@@ -1,4 +1,4 @@
-// @ts-nocheck
+// @ts-nocheck — Test mocks: Supabase client mock types incompatible with strict generics
 import { describe, it, expect, beforeEach, vi } from "vitest";
 import { render, screen, waitFor, fireEvent } from "@testing-library/react";
 import DPIntelligenceCenter from "@/modules/intelligence/dp-intelligence/components/DPIntelligenceCenter";

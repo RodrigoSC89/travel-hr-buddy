@@ -1,4 +1,4 @@
-// @ts-nocheck
+// @ts-nocheck — Test mocks: AI response mock types incompatible with strict SDK types
 /**
  * Tests for Incident Response AI Core
  */

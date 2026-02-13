@@ -1,4 +1,4 @@
-// @ts-nocheck
+// @ts-nocheck — Test mocks: PEO-DP realtime mock types with dynamic structures
 /**
  * PEO-DP Real-time Monitoring Tests
  */

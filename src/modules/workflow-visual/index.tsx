@@ -517,7 +517,7 @@ const WorkflowVisual = () => {
                     onChange={(e) => setAiPrompt(e.target.value)}
                     onKeyDown={(e) => e.key === "Enter" && askAI()}
                   />
-                  <Button size="icon" onClick={askAI} disabled={isAnalyzing}>
+                  <Button size="icon" onClick={askAI} disabled={isAnalyzing} aria-label="Enviar pergunta à IA" title="Enviar pergunta à IA">
                     {isAnalyzing ? (
                       <Loader2 className="h-4 w-4 animate-spin" />
                     ) : (

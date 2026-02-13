@@ -1,4 +1,4 @@
-// @ts-nocheck
+// @ts-nocheck — Test mocks: Supabase client mock types incompatible with strict generics
 /**
  * Tests for Workflow API Service Layer
  * Uses proper mocking for dynamic table accessors

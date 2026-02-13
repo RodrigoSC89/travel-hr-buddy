@@ -265,7 +265,7 @@ export function CrewAICopilot({ crewData, certificates }: CrewAICopilotProps) {
               disabled={isLoading}
               className="flex-1"
             />
-            <Button type="submit" size="icon" disabled={isLoading || !input.trim()}>
+            <Button type="submit" size="icon" disabled={isLoading || !input.trim()} aria-label="Enviar pergunta" title="Enviar pergunta">
               {isLoading ? (
                 <Loader2 className="h-4 w-4 animate-spin" />
               ) : (

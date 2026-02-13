@@ -1,4 +1,4 @@
-// @ts-nocheck
+// @ts-nocheck — Test mocks: PDF report mock types with jsPDF dynamic structures
 import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 import { generatePDFReport, generateJobReport } from "@/services/mmi/pdfReportService";
 import { MMIJob } from "@/types/mmi";

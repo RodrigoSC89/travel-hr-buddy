@@ -1,4 +1,4 @@
-// @ts-nocheck
+// @ts-nocheck — Test mocks: component structure validation with mock data
 import { describe, it, expect } from "vitest";
 
 describe("WorkflowAIScoreCard Component", () => {

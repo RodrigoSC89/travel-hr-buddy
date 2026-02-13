@@ -5,7 +5,7 @@
  * statistics about DP incidents grouped by vessel, severity, and month
  */
 
-// @ts-nocheck
+// @ts-nocheck — Test mocks: Edge function mock types with dynamic response structures
 import { describe, it, expect, beforeEach, vi } from "vitest";
 
 describe("DP Intelligence Stats API Endpoint", () => {

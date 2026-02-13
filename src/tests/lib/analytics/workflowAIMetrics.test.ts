@@ -1,4 +1,4 @@
-// @ts-nocheck
+// @ts-nocheck — Test mocks: Workflow AI metrics with dynamic data structures
 import { describe, it, expect } from "vitest";
 
 describe("workflowAIMetrics Module", () => {

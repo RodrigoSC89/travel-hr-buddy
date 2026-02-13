@@ -299,7 +299,7 @@ export const WorkspaceChatPanel: React.FC<WorkspaceChatPanelProps> = ({
             <TooltipProvider>
               <Tooltip>
                 <TooltipTrigger asChild>
-                  <Button variant="ghost" size="icon" className="h-8 w-8" onClick={onStartCall}>
+                  <Button variant="ghost" size="icon" className="h-8 w-8" onClick={onStartCall} aria-label="Iniciar chamada de voz" title="Iniciar chamada de voz">
                     <Phone className="h-4 w-4" />
                   </Button>
                 </TooltipTrigger>
@@ -307,7 +307,7 @@ export const WorkspaceChatPanel: React.FC<WorkspaceChatPanelProps> = ({
               </Tooltip>
               <Tooltip>
                 <TooltipTrigger asChild>
-                  <Button variant="ghost" size="icon" className="h-8 w-8" onClick={onStartVideo}>
+                  <Button variant="ghost" size="icon" className="h-8 w-8" onClick={onStartVideo} aria-label="Iniciar videochamada" title="Iniciar videochamada">
                     <Video className="h-4 w-4" />
                   </Button>
                 </TooltipTrigger>
@@ -315,7 +315,7 @@ export const WorkspaceChatPanel: React.FC<WorkspaceChatPanelProps> = ({
               </Tooltip>
               <Tooltip>
                 <TooltipTrigger asChild>
-                  <Button variant="ghost" size="icon" className="h-8 w-8">
+                  <Button variant="ghost" size="icon" className="h-8 w-8" aria-label="Configurar notificações" title="Configurar notificações">
                     <Bell className="h-4 w-4" />
                   </Button>
                 </TooltipTrigger>
@@ -419,7 +419,7 @@ export const WorkspaceChatPanel: React.FC<WorkspaceChatPanelProps> = ({
           {/* Attachment dropdown */}
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Button variant="ghost" size="icon" className="h-9 w-9 flex-shrink-0">
+              <Button variant="ghost" size="icon" className="h-9 w-9 flex-shrink-0" aria-label="Anexar arquivo" title="Anexar arquivo">
                 <Paperclip className="h-4 w-4" />
               </Button>
             </DropdownMenuTrigger>
@@ -470,6 +470,8 @@ export const WorkspaceChatPanel: React.FC<WorkspaceChatPanelProps> = ({
                   variant="ghost" 
                   size="icon" 
                   className="absolute right-1 top-1/2 -translate-y-1/2 h-7 w-7"
+                  aria-label="Selecionar emoji"
+                  title="Selecionar emoji"
                 >
                   <Smile className="h-4 w-4 text-muted-foreground" />
                 </Button>
@@ -543,6 +545,8 @@ export const WorkspaceChatPanel: React.FC<WorkspaceChatPanelProps> = ({
             size="icon" 
             className="h-9 w-9 flex-shrink-0"
             disabled={!newMessage.trim() || isRecording}
+            aria-label="Enviar mensagem"
+            title="Enviar mensagem"
           >
             <Send className="h-4 w-4" />
           </Button>

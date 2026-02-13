@@ -1,4 +1,4 @@
-// @ts-nocheck
+// @ts-nocheck — Test mocks: Database type assertions for versioning structures
 import { describe, it, expect } from "vitest";
 import type { Database } from "@/integrations/supabase/types";
 

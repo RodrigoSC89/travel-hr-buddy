@@ -1,5 +1,6 @@
-// @ts-nocheck
 import { describe, it, expect } from "vitest";
+
+// eslint-disable-next-line @typescript-eslint/no-empty-interface -- simple data test
 
 describe("Send Restore Dashboard API", () => {
   it("should have proper request structure", () => {
@@ -21,7 +22,7 @@ describe("Send Restore Dashboard API", () => {
     expect(requestWithEmail.email).toBeDefined();
 
     // Test without email (authenticated user)
-    const requestWithoutEmail = {};
+    const requestWithoutEmail: Record<string, string> = {};
 
     expect(requestWithoutEmail.email).toBeUndefined();
   });

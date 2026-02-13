@@ -1,4 +1,4 @@
-// @ts-nocheck
+// @ts-nocheck — Test mocks: dynamic import mock types incompatible with strict module resolution
 import { describe, it, expect, vi, beforeEach } from "vitest";
 import { TrainingModuleService } from "../services/training-module";
 

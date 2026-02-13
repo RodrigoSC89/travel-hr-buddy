@@ -1,4 +1,4 @@
-// @ts-nocheck
+// @ts-nocheck — Test mocks: PDF export mock types with jsPDF dynamic structures
 import { describe, it, expect, vi, beforeEach } from "vitest";
 import { exportSuggestionsToPDF } from "@/components/workflows/ExportSuggestionsPDF";
 import { Suggestion } from "@/components/workflows";
