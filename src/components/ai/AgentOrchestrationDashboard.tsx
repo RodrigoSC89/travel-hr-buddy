@@ -222,7 +222,7 @@ const statusColors: Record<Agent["status"], string> = {
 };
 
 const autonomyLabels: Record<number, { label: string; color: string }> = {
-  0: { label: "Manual", color: "text-gray-500" },
+  0: { label: "Manual", color: "text-muted-foreground" },
   1: { label: "Recomenda", color: "text-blue-500" },
   2: { label: "Auto + Notifica", color: "text-amber-500" },
   3: { label: "Autônomo", color: "text-green-500" }

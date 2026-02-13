@@ -70,10 +70,10 @@ export default function AgentOrchestrator() {
   const getStatusBadge = (status: Agent["status"]) => {
     const config = {
       active: { label: "Ativo", color: "bg-green-500/10 text-green-500" },
-      idle: { label: "Ocioso", color: "bg-gray-500/10 text-gray-500" },
+      idle: { label: "Ocioso", color: "bg-muted text-muted-foreground" },
       processing: { label: "Processando", color: "bg-blue-500/10 text-blue-500" },
       error: { label: "Erro", color: "bg-destructive/10 text-destructive" },
-      disabled: { label: "Desativado", color: "bg-gray-500/10 text-gray-400" },
+      disabled: { label: "Desativado", color: "bg-muted text-muted-foreground" },
     };
     const { label, color } = config[status];
     return <Badge className={color}>{label}</Badge>;
@@ -223,7 +223,7 @@ export default function AgentOrchestrator() {
                         <Bot className={`h-5 w-5 ${
                           agent.status === "active" ? "text-green-500" :
                           agent.status === "processing" ? "text-blue-500" :
-                          "text-gray-500"
+                          "text-muted-foreground"
                         }`} />
                       </div>
                       <div className="flex-1 min-w-0">

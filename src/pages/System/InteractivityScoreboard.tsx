@@ -418,7 +418,7 @@ export default function InteractivityScoreboard() {
 
               {module.featureFlagOff && (
                 <div className="mt-3 p-3 bg-muted/50 rounded-md">
-                  <div className="flex items-center gap-2 text-sm text-gray-600">
+                  <div className="flex items-center gap-2 text-sm text-muted-foreground">
                     <Shield className="h-4 w-4" />
                     <span>Feature flag UNDERWATER_ENABLED=false - Módulo removido do sistema</span>
                   </div>

@@ -438,7 +438,7 @@ export default function AssistantLogsPage() {
                           <div className="flex-1">
                             <p className="text-sm font-medium mb-1">Resposta</p>
                             <div 
-                              className="text-sm text-gray-700"
+                              className="text-sm text-muted-foreground"
                               dangerouslySetInnerHTML={createSafeHTML(log.answer || "")}
                             />
                           </div>

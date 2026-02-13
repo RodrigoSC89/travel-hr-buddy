@@ -433,8 +433,8 @@ export const PreOVIDReportGenerator: React.FC<PreOVIDReportGeneratorProps> = ({
             <p className="text-2xl font-bold text-red-500">{totals.nonCompliant}</p>
             <p className="text-xs text-muted-foreground">Não Conforme</p>
           </div>
-          <div className="p-3 rounded-lg bg-gray-500/10 text-center">
-            <p className="text-2xl font-bold text-gray-500">{totals.notApplicable}</p>
+          <div className="p-3 rounded-lg bg-muted text-center">
+            <p className="text-2xl font-bold text-muted-foreground">{totals.notApplicable}</p>
             <p className="text-xs text-muted-foreground">N/A</p>
           </div>
           <div className="p-3 rounded-lg bg-yellow-500/10 text-center">

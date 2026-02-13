@@ -50,7 +50,7 @@ export default function SGSOFindings() {
       case 'closed': return 'text-green-600';
       case 'in_progress': return 'text-blue-600';
       case 'open': return 'text-orange-600';
-      default: return 'text-gray-600';
+      default: return 'text-muted-foreground';
     }
   };
 

@@ -73,7 +73,7 @@ const dados = [
 const corPorRisco: Record<string, string> = {
   crítico: "bg-red-600 text-white",
   alto: "bg-orange-500 text-white",
-  médio: "bg-yellow-500 text-gray-900",
+  médio: "bg-yellow-500 text-yellow-foreground",
   baixo: "bg-green-600 text-white",
 };
 

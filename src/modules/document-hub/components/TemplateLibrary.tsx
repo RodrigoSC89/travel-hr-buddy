@@ -406,7 +406,7 @@ export const TemplateLibrary: React.FC = () => {
                       rows={15}
                       className="font-mono text-sm"
                     />
-                    <p className="text-xs text-gray-500 mt-1">
+                    <p className="text-xs text-muted-foreground mt-1">
                       Use double curly braces for placeholders, e.g., {"{{company_name}}"}, {"{{date}}"}
                     </p>
                   </div>
@@ -454,7 +454,7 @@ export const TemplateLibrary: React.FC = () => {
           {loading ? (
             <div className="text-center py-8">Loading templates...</div>
           ) : filteredTemplates.length === 0 ? (
-            <div className="text-center py-8 text-gray-500">
+            <div className="text-center py-8 text-muted-foreground">
               No templates found. Create your first template to get started.
             </div>
           ) : (

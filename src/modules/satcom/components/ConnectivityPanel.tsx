@@ -96,7 +96,7 @@ export const ConnectivityPanel: React.FC = () => {
   };
 
   const getSignalColor = (strength: number | null) => {
-    if (!strength) return "text-gray-400";
+    if (!strength) return "text-muted-foreground";
     if (strength >= 80) return "text-green-500";
     if (strength >= 50) return "text-yellow-500";
     return "text-red-500";

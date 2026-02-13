@@ -296,22 +296,22 @@ export const AnalyticsQueryBuilder: React.FC = () => {
           </CardHeader>
           <CardContent>
             {!queryResult ? (
-              <div className="h-[500px] flex items-center justify-center text-gray-500">
+              <div className="h-[500px] flex items-center justify-center text-muted-foreground">
                 Configure and run a query to see results
               </div>
             ) : queryResult.rows.length === 0 ? (
-              <div className="h-[500px] flex items-center justify-center text-gray-500">
+              <div className="h-[500px] flex items-center justify-center text-muted-foreground">
                 No results found
               </div>
             ) : (
               <div className="border rounded-lg overflow-auto max-h-[500px]">
                 <table className="w-full text-sm">
-                  <thead className="bg-gray-50 sticky top-0">
+                  <thead className="bg-muted sticky top-0">
                     <tr>
                       {queryResult.columns.map((column) => (
                         <th
                           key={column}
-                          className="px-4 py-2 text-left font-medium text-gray-600"
+                          className="px-4 py-2 text-left font-medium text-muted-foreground"
                         >
                           {column}
                         </th>
@@ -322,12 +322,12 @@ export const AnalyticsQueryBuilder: React.FC = () => {
                     {queryResult.rows.map((row, rowIndex) => (
                       <tr
                         key={rowIndex}
-                        className="border-t hover:bg-gray-50"
+                        className="border-t hover:bg-muted/50"
                       >
                         {queryResult.columns.map((column) => (
                           <td
                             key={column}
-                            className="px-4 py-2 text-gray-700"
+                            className="px-4 py-2 text-foreground"
                           >
                             {typeof row[column] === "object"
                               ? JSON.stringify(row[column])

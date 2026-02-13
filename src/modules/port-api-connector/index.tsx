@@ -177,7 +177,7 @@ export default function PortAPIConnector() {
   const getStatusColor = (status: string) => {
     switch (status) {
       case "connected": return "bg-green-500/20 text-green-400";
-      case "disconnected": return "bg-gray-500/20 text-gray-400";
+      case "disconnected": return "bg-muted text-muted-foreground";
       case "error": return "bg-red-500/20 text-red-400";
       case "syncing": return "bg-blue-500/20 text-blue-400";
       default: return "bg-muted text-muted-foreground";
@@ -187,7 +187,7 @@ export default function PortAPIConnector() {
   const getStatusIcon = (status: string) => {
     switch (status) {
       case "connected": return <CheckCircle2 className="h-4 w-4 text-green-400" />;
-      case "disconnected": return <XCircle className="h-4 w-4 text-gray-400" />;
+      case "disconnected": return <XCircle className="h-4 w-4 text-muted-foreground" />;
       case "error": return <AlertTriangle className="h-4 w-4 text-red-400" />;
       case "syncing": return <RefreshCw className="h-4 w-4 text-blue-400 animate-spin" />;
       default: return <Clock className="h-4 w-4" />;

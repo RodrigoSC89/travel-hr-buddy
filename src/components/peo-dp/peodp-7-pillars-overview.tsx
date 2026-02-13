@@ -205,7 +205,7 @@ export function PEODP7PillarsOverview() {
 
   const getStatusBadge = (status: PillarData["status"]) => {
     const variants = {
-      pending: { label: "Pendente", className: "bg-gray-100 text-gray-800 dark:bg-gray-800 dark:text-gray-200" },
+      pending: { label: "Pendente", className: "bg-muted text-muted-foreground" },
       in_progress: { label: "Em Andamento", className: "bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-400" },
       completed: { label: "Concluído", className: "bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400" },
       review_needed: { label: "Revisão Necessária", className: "bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400" }

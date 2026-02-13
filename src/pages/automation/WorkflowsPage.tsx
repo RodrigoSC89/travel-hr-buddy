@@ -175,7 +175,7 @@ export default function WorkflowsPage() {
                               className={
                                 workflowStates[workflow.id]
                                   ? "bg-green-100 text-green-700"
-                                  : "bg-gray-100 text-gray-700"
+                                  : "bg-muted text-muted-foreground"
                               }
                             >
                               {workflowStates[workflow.id] ? "Ativo" : "Pausado"}
@@ -263,12 +263,12 @@ export default function WorkflowsPage() {
                   <Card key={workflow.id} className="hover:shadow-lg transition-all">
                     <CardContent className="pt-6">
                       <div className="flex items-center gap-4">
-                        <Workflow className="h-5 w-5 text-gray-500" />
+                        <Workflow className="h-5 w-5 text-muted-foreground" />
                         <div className="flex-1">
                           <h3 className="font-semibold">{workflow.name}</h3>
                           <p className="text-sm text-muted-foreground">{workflow.description}</p>
                         </div>
-                        <Badge className="bg-gray-100 text-gray-700">Pausado</Badge>
+                        <Badge className="bg-muted text-muted-foreground">Pausado</Badge>
                         <Button size="sm">
                           <Play className="h-4 w-4 mr-2" />
                           Ativar

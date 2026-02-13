@@ -132,7 +132,7 @@ export default function AdminWallPage() {
     case "in_progress":
       return <Clock className="text-yellow-500 animate-pulse" size={32} />;
     default:
-      return <Clock className="text-gray-500" size={32} />;
+      return <Clock className="text-muted-foreground" size={32} />;
     }
   };
 

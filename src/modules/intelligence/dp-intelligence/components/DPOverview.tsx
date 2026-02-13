@@ -137,7 +137,7 @@ export default function DPOverview() {
                   <div className="flex items-center gap-2">
                     <span className="text-sm font-medium">{thr.name}</span>
                     <Badge 
-                      className={thr.status === "active" ? "bg-emerald-100 text-emerald-700" : "bg-gray-100 text-gray-700"}
+                      className={thr.status === "active" ? "bg-emerald-100 text-emerald-700" : "bg-muted text-muted-foreground"}
                     >
                       {thr.status}
                     </Badge>

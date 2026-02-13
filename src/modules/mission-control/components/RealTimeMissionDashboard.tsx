@@ -157,9 +157,9 @@ export const RealTimeMissionDashboard = () => {
     case "paused":
       return <Pause className="w-4 h-4 text-yellow-400" />;
     case "planning":
-      return <Clock className="w-4 h-4 text-gray-400" />;
+      return <Clock className="w-4 h-4 text-muted-foreground" />;
     case "cancelled":
-      return <XCircle className="w-4 h-4 text-gray-400" />;
+      return <XCircle className="w-4 h-4 text-muted-foreground" />;
     default:
       return <Activity className="w-4 h-4" />;
     }

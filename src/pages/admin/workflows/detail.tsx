@@ -924,7 +924,7 @@ export default function WorkflowDetailPage() {
                 <span className={`text-sm px-2 py-1 rounded ${
                   workflow.status === "active" 
                     ? "bg-green-100 text-green-800"
-                    : "bg-gray-100 text-gray-800"
+                    : "bg-muted text-muted-foreground"
                 }`}>
                   {workflow.status === "active" ? "Ativo" : "Rascunho"}
                 </span>
