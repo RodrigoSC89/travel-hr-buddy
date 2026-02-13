@@ -407,7 +407,7 @@ Como posso ajudar?`;
               <div>
                 <h2 className="text-lg font-bold flex items-center gap-2">
                   Nautilus Brain
-                  <Badge variant="secondary" className="bg-purple-100 text-purple-700 dark:bg-purple-900/30 dark:text-purple-300 text-xs">
+                  <Badge variant="secondary" className="bg-accent/20 text-accent-foreground text-xs">
                     <Sparkles className="h-3 w-3 mr-1" />
                     IA Central
                   </Badge>

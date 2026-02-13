@@ -39,16 +39,16 @@ import {
 } from '@/lib/compliance/inspection-package-generator';
 
 const severityColors: Record<string, string> = {
-  critical: 'bg-red-500/20 text-red-600 border-red-500',
-  high: 'bg-orange-500/20 text-orange-600 border-orange-500',
-  medium: 'bg-yellow-500/20 text-yellow-600 border-yellow-500',
-  low: 'bg-blue-500/20 text-blue-600 border-blue-500',
+  critical: 'bg-destructive/20 text-destructive border-destructive',
+  high: 'bg-warning/20 text-warning border-warning',
+  medium: 'bg-accent/20 text-accent-foreground border-accent',
+  low: 'bg-info/20 text-info border-info',
 };
 
 const statusColors: Record<string, string> = {
-  compliant: 'bg-green-500/20 text-green-600',
-  warning: 'bg-yellow-500/20 text-yellow-600',
-  non_compliant: 'bg-red-500/20 text-red-600',
+  compliant: 'bg-success/20 text-success',
+  warning: 'bg-warning/20 text-warning',
+  non_compliant: 'bg-destructive/20 text-destructive',
 };
 
 export const ProactiveComplianceMonitor: React.FC = () => {
@@ -147,7 +147,7 @@ export const ProactiveComplianceMonitor: React.FC = () => {
               </p>
             </div>
             <div className="text-right">
-              <div className={`text-4xl font-bold ${result.overallScore >= 90 ? 'text-green-500' : result.overallScore >= 70 ? 'text-yellow-500' : 'text-red-500'}`}>
+              <div className={`text-4xl font-bold ${result.overallScore >= 90 ? 'text-success' : result.overallScore >= 70 ? 'text-warning' : 'text-destructive'}`}>
                 {result.overallScore}%
               </div>
               <Badge className={statusColors[result.overallStatus]}>
@@ -231,7 +231,7 @@ export const ProactiveComplianceMonitor: React.FC = () => {
             <CardContent className="pt-6">
               {result.criticalAlerts.length === 0 ? (
                 <div className="text-center py-8 text-muted-foreground">
-                  <CheckCircle className="h-12 w-12 mx-auto mb-4 text-green-500" />
+                  <CheckCircle className="h-12 w-12 mx-auto mb-4 text-success" />
                   <p>Nenhum alerta crítico</p>
                 </div>
               ) : (
@@ -266,7 +266,7 @@ export const ProactiveComplianceMonitor: React.FC = () => {
             <CardContent className="pt-6">
               {result.upcomingExpirations.length === 0 ? (
                 <div className="text-center py-8 text-muted-foreground">
-                  <CheckCircle className="h-12 w-12 mx-auto mb-4 text-green-500" />
+                  <CheckCircle className="h-12 w-12 mx-auto mb-4 text-success" />
                   <p>Nenhum vencimento próximo</p>
                 </div>
               ) : (

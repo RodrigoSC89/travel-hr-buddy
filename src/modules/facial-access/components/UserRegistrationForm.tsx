@@ -174,10 +174,10 @@ export function UserRegistrationForm() {
 
   const getAccessLevelColor = (level: string) => {
     switch (level) {
-      case 'critical': return 'bg-red-500/20 text-red-400 border-red-500/50';
-      case 'high': return 'bg-orange-500/20 text-orange-400 border-orange-500/50';
-      case 'medium': return 'bg-yellow-500/20 text-yellow-400 border-yellow-500/50';
-      case 'low': return 'bg-green-500/20 text-green-400 border-green-500/50';
+      case 'critical': return 'bg-destructive/20 text-destructive border-destructive/50';
+      case 'high': return 'bg-warning/20 text-warning border-warning/50';
+      case 'medium': return 'bg-accent/20 text-accent-foreground border-accent/50';
+      case 'low': return 'bg-success/20 text-success border-success/50';
       default: return '';
     }
   };
@@ -264,7 +264,7 @@ export function UserRegistrationForm() {
           <div className="flex items-center justify-between">
             <Label>Captura Facial ({capturedPhotos.length}/3 fotos)</Label>
             {capturedPhotos.length >= 3 && (
-              <Badge className="bg-green-500/20 text-green-500">
+              <Badge className="bg-success/20 text-success">
                 <CheckCircle className="h-3 w-3 mr-1" />
                 Completo
               </Badge>

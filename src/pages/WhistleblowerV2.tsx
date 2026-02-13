@@ -327,10 +327,10 @@ Atribuído a: ${report.assigned_to || "Não atribuído"}
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
             <CardV2 icon={MessageSquare} title="Enviar Denúncia" description="Seu relato é 100% confidencial" gradient="red">
               <div className="space-y-4">
-                <div className="p-4 bg-green-500/10 rounded-lg border border-green-500/20">
+                <div className="p-4 bg-success/10 rounded-lg border border-success/20">
                   <div className="flex items-center gap-2 mb-2">
-                    <Lock className="h-5 w-5 text-green-500" />
-                    <span className="font-medium text-green-500">Comunicação Segura</span>
+                    <Lock className="h-5 w-5 text-success" />
+                    <span className="font-medium text-success">Comunicação Segura</span>
                   </div>
                   <p className="text-sm text-muted-foreground">
                     Sua identidade será protegida. Você pode denunciar de forma anônima.
@@ -393,7 +393,7 @@ Atribuído a: ${report.assigned_to || "Não atribuído"}
                   { title: "Feedback do Processo", desc: "Acompanhe o status pelo protocolo" }
                 ].map(item => (
                   <div key={item.title} className="flex items-start gap-3 p-3 bg-muted/50 rounded-lg">
-                    <CheckCircle className="h-5 w-5 text-green-500 mt-0.5" />
+                    <CheckCircle className="h-5 w-5 text-success mt-0.5" />
                     <div>
                       <p className="font-medium text-sm">{item.title}</p>
                       <p className="text-xs text-muted-foreground">{item.desc}</p>

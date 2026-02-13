@@ -332,8 +332,8 @@ export const EnhancedComplianceCenter: React.FC = () => {
         className="flex flex-col md:flex-row md:items-center justify-between gap-4"
       >
         <div className="flex items-center gap-4">
-          <div className="p-3 rounded-2xl bg-gradient-to-br from-blue-500/20 to-indigo-500/10 border border-blue-500/20">
-            <Shield className="h-8 w-8 text-blue-500" />
+          <div className="p-3 rounded-2xl bg-gradient-to-br from-primary/20 to-accent/10 border border-primary/20">
+            <Shield className="h-8 w-8 text-primary" />
           </div>
           <div>
             <h1 className="text-3xl font-bold">Centro de Compliance</h1>
@@ -365,7 +365,7 @@ export const EnhancedComplianceCenter: React.FC = () => {
                 <h2 className="text-lg font-medium text-muted-foreground">Score Geral de Compliance</h2>
                 <div className="flex items-baseline gap-2 mt-2">
                   <span className="text-5xl font-bold text-primary">{getOverallScore()}%</span>
-                  <Badge className="bg-green-500">
+                  <Badge className="bg-success">
                     <TrendingUp className="h-3 w-3 mr-1" />
                     +3% vs mês anterior
                   </Badge>
@@ -373,15 +373,15 @@ export const EnhancedComplianceCenter: React.FC = () => {
               </div>
               <div className="grid grid-cols-3 gap-6">
                 <div className="text-center">
-                  <p className="text-3xl font-bold text-green-500">{complianceScores.filter(c => c.status === 'compliant').length}</p>
+                  <p className="text-3xl font-bold text-success">{complianceScores.filter(c => c.status === 'compliant').length}</p>
                   <p className="text-sm text-muted-foreground">Conformes</p>
                 </div>
                 <div className="text-center">
-                  <p className="text-3xl font-bold text-yellow-500">{complianceScores.filter(c => c.status === 'attention').length}</p>
+                  <p className="text-3xl font-bold text-warning">{complianceScores.filter(c => c.status === 'attention').length}</p>
                   <p className="text-sm text-muted-foreground">Atenção</p>
                 </div>
                 <div className="text-center">
-                  <p className="text-3xl font-bold text-red-500">{nonConformities.filter(nc => nc.status === 'open' || nc.status === 'overdue').length}</p>
+                  <p className="text-3xl font-bold text-destructive">{nonConformities.filter(nc => nc.status === 'open' || nc.status === 'overdue').length}</p>
                   <p className="text-sm text-muted-foreground">Não Conformidades</p>
                 </div>
               </div>
@@ -421,7 +421,7 @@ export const EnhancedComplianceCenter: React.FC = () => {
                       stroke="currentColor"
                       strokeWidth="4"
                       strokeDasharray={`${(cat.score / 100) * 176} 176`}
-                      className={cat.status === 'compliant' ? 'text-green-500' : cat.status === 'attention' ? 'text-yellow-500' : 'text-red-500'}
+                      className={cat.status === 'compliant' ? 'text-success' : cat.status === 'attention' ? 'text-warning' : 'text-destructive'}
                     />
                   </svg>
                   <span className="absolute inset-0 flex items-center justify-center text-lg font-bold">

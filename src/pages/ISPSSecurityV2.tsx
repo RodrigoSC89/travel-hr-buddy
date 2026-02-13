@@ -81,7 +81,7 @@ export default function ISPSSecurityV2() {
             <CardV2 icon={Shield} title="Status ISPS" description="Conformidade com ISPS Code" gradient="green">
               <div className="space-y-4">
                 <div className="text-center">
-                  <p className="text-5xl font-bold text-green-500">{metrics.complianceScore}%</p>
+                  <p className="text-5xl font-bold text-success">{metrics.complianceScore}%</p>
                   <p className="text-muted-foreground">Score de Conformidade</p>
                 </div>
                 <div className="space-y-2">
@@ -104,13 +104,13 @@ export default function ISPSSecurityV2() {
             </CardV2>
             <CardV2 icon={ShieldAlert} title="MARSEC Level" description="Nível de alerta de segurança marítima" gradient="orange">
               <div className="space-y-4">
-                <div className="text-center p-6 bg-green-500/10 rounded-lg border border-green-500/20">
-                  <p className="text-6xl font-bold text-green-500">{metrics.marsecLevel}</p>
+                <div className="text-center p-6 bg-success/10 rounded-lg border border-success/20">
+                  <p className="text-6xl font-bold text-success">{metrics.marsecLevel}</p>
                   <p className="text-muted-foreground mt-2">Operações Normais</p>
                 </div>
                 <div className="grid grid-cols-3 gap-2">
                   {[1, 2, 3].map(level => (
-                    <div key={level} className={`p-3 rounded-lg text-center ${level === metrics.marsecLevel ? 'bg-green-500/20 border border-green-500' : 'bg-muted/50'}`}>
+                    <div key={level} className={`p-3 rounded-lg text-center ${level === metrics.marsecLevel ? 'bg-success/20 border border-success' : 'bg-muted/50'}`}>
                       <p className="font-bold">Level {level}</p>
                       <p className="text-xs text-muted-foreground">
                         {level === 1 ? 'Normal' : level === 2 ? 'Elevado' : 'Excepcional'}
@@ -135,7 +135,7 @@ export default function ISPSSecurityV2() {
                 ].map(item => (
                   <div key={item.label} className="flex justify-between items-center p-3 bg-muted/50 rounded-lg">
                     <div className="flex items-center gap-2">
-                      <item.icon className={`h-5 w-5 ${item.status === 'active' ? 'text-green-500' : 'text-orange-500'}`} />
+                      <item.icon className={`h-5 w-5 ${item.status === 'active' ? 'text-success' : 'text-warning'}`} />
                       <span>{item.label}</span>
                     </div>
                     <Badge variant={item.status === 'active' ? 'default' : 'secondary'}>
@@ -147,10 +147,10 @@ export default function ISPSSecurityV2() {
             </CardV2>
             <CardV2 icon={Eye} title="Monitoramento" description="Detecção de ameaças em tempo real" gradient="blue">
               <div className="space-y-4">
-                <div className="p-4 bg-green-500/10 rounded-lg border border-green-500/20">
+                <div className="p-4 bg-success/10 rounded-lg border border-success/20">
                   <div className="flex items-center gap-2 mb-2">
-                    <CheckCircle className="h-5 w-5 text-green-500" />
-                    <span className="font-medium text-green-500">Sem Ameaças Detectadas</span>
+                    <CheckCircle className="h-5 w-5 text-success" />
+                    <span className="font-medium text-success">Sem Ameaças Detectadas</span>
                   </div>
                   <p className="text-sm text-muted-foreground">Última verificação: há 5 minutos</p>
                 </div>
