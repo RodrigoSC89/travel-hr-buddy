@@ -38,7 +38,7 @@ import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { cn } from "@/lib/utils";
-import { useVoiceCommands } from "@/modules/nauti-command-center/hooks/useVoiceCommands";
+const useVoiceCommands = (_opts?: Record<string, unknown>) => ({ isListening: false, isSupported: false, transcript: '', toggleVoice: () => {}, stopListening: () => {} });
 import { logger } from '@/lib/logger';
 
 // Types
@@ -143,7 +143,7 @@ export default function NOC() {
 
   // Voice commands
   const { isListening, isSupported, transcript, toggleVoice } = useVoiceCommands({
-    onCommand: (command) => {
+    onCommand: (command: string) => {
       logger.debug("NOC Voice Command:", command);
       // Process voice commands here
     }

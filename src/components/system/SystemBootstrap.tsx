@@ -9,7 +9,7 @@ import { OfflineBanner } from '@/components/OfflineBanner';
 import { OfflineIndicator } from '@/components/pwa/OfflineIndicator';
 import { UpdatePrompt } from '@/components/pwa/UpdatePrompt';
 import { InstallPrompt } from '@/components/pwa/InstallPrompt';
-import { VoiceCommandButton } from '@/components/voice/VoiceCommandButton';
+// VoiceCommandButton removed during cleanup
 import { NotificationBell } from '@/components/notifications/NotificationCenter';
 
 interface SystemBootstrapProps {
@@ -52,7 +52,7 @@ export function SystemBootstrap({
       )}
       
       {/* Voice Commands */}
-      {showVoiceCommands && <VoiceCommandButton />}
+      {/* Voice Commands removed */}
     </>
   );
 }

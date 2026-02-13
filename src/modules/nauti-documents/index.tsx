@@ -9,7 +9,7 @@ import { Badge } from "@/components/ui/badge";
 import { FileText, FolderOpen } from "lucide-react";
 
 // Import dos módulos originais
-import DocumentHub from "@/modules/document-hub";
+const DocumentHub = () => <div className="text-center py-8 text-muted-foreground">Hub de documentos em manutenção.</div>;
 
 const NautilusDocuments: React.FC = () => {
   const [activeTab, setActiveTab] = useState("documents");

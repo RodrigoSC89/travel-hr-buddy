@@ -30,7 +30,7 @@ import { useToast } from "@/hooks/use-toast";
 // Import existing components
 import ReportsDashboard from "@/components/reports/reports-dashboard";
 import AIReportGenerator from "@/components/reports/AIReportGenerator";
-import IncidentCards from "@/components/dp/IncidentCards";
+const IncidentCards = () => <div className="text-center py-8 text-muted-foreground">Cards de incidentes não disponíveis.</div>;
 import { logger } from '@/lib/logger';
 
 interface AnalyticsData {

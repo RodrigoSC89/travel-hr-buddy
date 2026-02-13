@@ -28,7 +28,7 @@ const OperationsCommandHub = lazy(() => import('@/pages/OperationsCommandCenter'
 const MaritimeCommandCenter = lazy(() => import('@/pages/MaritimeCommandCenter'));
 const FleetCommandCenter = lazy(() => import('@/pages/FleetCommandCenter'));
 const VoyageCommandCenter = lazy(() => import('@/pages/VoyageCommandCenter'));
-const MissionCommandCenter = lazy(() => import('@/pages/MissionCommandCenter'));
+const MissionCommandCenter = lazy(() => import('@/pages/MaritimeCommandCenter'));
 const LogisticsCommandPage = lazy(() => import('@/pages/FleetCommandCenter'));
 const VesselContractsUnified = lazy(() => import('@/pages/FleetCommandCenter'));
 

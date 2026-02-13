@@ -30,7 +30,8 @@ import {
   VolumeX
 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
-import { useVoiceCommands } from "@/modules/nauti-command-center/hooks/useVoiceCommands";
+// Voice commands removed during cleanup
+const useVoiceCommands = (_opts?: Record<string, unknown>) => ({ isListening: false, isSupported: false, transcript: '', toggleVoice: () => {}, stopListening: () => {} });
 import { cn } from "@/lib/utils";
 import { toast } from "sonner";
 import { logger } from '@/lib/logger';
@@ -69,7 +70,7 @@ export function QuickCopilotDialog({ open, onOpenChange }: QuickCopilotDialogPro
 
   // Voice commands integration
   const { isListening, isSupported, transcript, toggleVoice, stopListening } = useVoiceCommands({
-    onCommand: (command) => {
+    onCommand: (command: string) => {
       if (command.trim()) {
         sendMessage(command);
         stopListening();

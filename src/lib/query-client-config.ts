@@ -5,7 +5,13 @@
  */
 
 import { QueryClient, QueryClientConfig } from '@tanstack/react-query';
-import { isSlowConnection } from './llm-optimizer';
+const isSlowConnection = (): boolean => {
+  if (typeof navigator !== 'undefined' && 'connection' in navigator) {
+    const conn = (navigator as unknown as { connection: { effectiveType?: string } }).connection;
+    return conn?.effectiveType === '2g' || conn?.effectiveType === 'slow-2g';
+  }
+  return false;
+};
 
 // Default stale times based on data freshness requirements
 const STALE_TIMES = {

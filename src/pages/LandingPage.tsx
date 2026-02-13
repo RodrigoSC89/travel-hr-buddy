@@ -28,7 +28,14 @@ import {
   Award,
   Gift
 } from 'lucide-react';
-import { PRICING_TIERS, formatPrice } from '@/lib/billing/pricing-tiers';
+// Pricing tiers inline
+const PRICING_TIERS = [
+  { id: 'free', name: 'Starter', price: 0, priceMonthly: 0, isFree: true, isEnterprise: false, recommended: false, description: 'Para pequenas operações', employeeLimit: 5, features: ['5 embarcações', 'Dashboard básico', 'Suporte por email'] },
+  { id: 'pro', name: 'Professional', price: 299, priceMonthly: 299, isFree: false, isEnterprise: false, recommended: true, description: 'Para operações em crescimento', employeeLimit: 25, features: ['25 embarcações', 'IA Avançada', 'API Access', 'Suporte prioritário', 'Compliance MLC', 'Relatórios avançados', 'Treinamento online', 'Integrações'] },
+  { id: 'business', name: 'Business', price: 599, priceMonthly: 599, isFree: false, isEnterprise: false, recommended: false, description: 'Para frotas médias', employeeLimit: 100, features: ['100 embarcações', 'Tudo do Pro', 'Multi-tenant', 'SSO/SAML', 'Auditoria completa'] },
+  { id: 'enterprise', name: 'Enterprise', price: 999, priceMonthly: 999, isFree: false, isEnterprise: true, recommended: false, description: 'Para grandes frotas', employeeLimit: 0, features: ['Ilimitado', 'IA + Compliance', 'White-label', 'Suporte 24/7', 'SLA Garantido', 'On-premise disponível'] },
+];
+const formatPrice = (price: number) => price === 0 ? 'Grátis' : `R$ ${price}`;
 
 const LandingPage = () => {
   const navigate = useNavigate();

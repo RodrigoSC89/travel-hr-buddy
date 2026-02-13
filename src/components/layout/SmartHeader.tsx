@@ -9,7 +9,7 @@ import { Button } from "@/components/ui/button";
 import { useTheme } from "@/components/layout/theme-provider";
 import { SimpleGlobalSearch } from "@/components/ui/simple-global-search";
 import { UserMenu } from "@/components/auth/user-menu";
-import { useVoiceCommands } from "@/modules/nauti-command-center/hooks/useVoiceCommands";
+// Voice commands removed during cleanup
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import { cn } from "@/lib/utils";
 // Lazy load dialogs para evitar problemas de hooks
@@ -26,13 +26,11 @@ export function SmartHeader() {
   const [alertsOpen, setAlertsOpen] = useState(false);
   const [copilotOpen, setCopilotOpen] = useState(false);
 
-  // Voice commands integration
-  const { isListening, isSupported, transcript, toggleVoice } = useVoiceCommands({
-    onCommand: (command) => {
-      // Open copilot when voice command is received
-      setCopilotOpen(true);
-    }
-  });
+  // Voice commands removed during cleanup
+  const isListening = false;
+  const isSupported = false;
+  const transcript = '';
+  const toggleVoice = () => {};
 
   const toggleTheme = () => {
     setTheme(theme === "dark" ? "light" : "dark");

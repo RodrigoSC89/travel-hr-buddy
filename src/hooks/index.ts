@@ -54,7 +54,7 @@ export { useBreadcrumbs } from "./use-breadcrumbs";
 
 export { useTravelPredictions } from "./use-travel-predictions";
 export { useVoiceNavigation } from "./use-voice-navigation";
-export { useServiceIntegrations } from "./use-service-integrations";
+// useServiceIntegrations removed during cleanup
 
 // PATCH 800: Performance & Offline Hooks
 export { useDebouncedValue, useDebouncedCallback, useThrottledCallback } from "./use-debounced-value";
@@ -80,17 +80,10 @@ export { useVirtualizedData } from "@/components/performance/VirtualizedList";
 export { useErrorBoundary } from "@/components/performance/ErrorBoundaryAdvanced";
 // ConnectionIndicator removed during cleanup
 
-// PATCH 836: Revolutionary UX
-export { usePredictiveUI, useSmartPrefetching } from "@/lib/ux/predictive-ui";
-export { useHapticFeedback } from "@/lib/ux/haptic-feedback";
-export { useGestureNavigation, useSwipeNavigation } from "@/lib/ux/gesture-navigation";
-export { useRippleEffect, useButtonPress, useStaggeredList, usePulseOnChange, useShakeOnError } from "@/lib/ux/micro-interactions";
-export { useSmartSuggestions, useContextualHelp } from "@/lib/ux/smart-suggestions";
-export { useOnboarding } from "@/lib/ux/onboarding-system";
+// PATCH 836: Revolutionary UX (removed - lib/ux deleted)
 
 // PATCH 837: Collaboration & Voice
 export { usePresence, useCursorTracking, useUsersOnPage } from "@/lib/collaboration/realtime-presence";
-export { useVoiceCommands } from "@/lib/voice/advanced-voice-commands";
 
 // PATCH 837: PWA Enhanced
 export { useOfflineSync as usePWAOfflineSync } from "@/lib/pwa/offline-sync";
