@@ -8,7 +8,7 @@ export default function BridgeLinkDashboard() {
   const [logs, setLogs] = useState<string[]>([]);
   const [isSyncing, setIsSyncing] = useState(false);
 
-  const handleManualSync = () => {
+  const handleManualSync = async () => {
     setIsSyncing(true);
     publishEvent("nautilus/bridgelink/manual-sync", {
       timestamp: new Date().toISOString(),
@@ -18,10 +18,21 @@ export default function BridgeLinkDashboard() {
     const timestamp = new Date().toLocaleTimeString();
     setLogs((prev) => [...prev, `[${timestamp}] Manual sync triggered`]);
     
-    setTimeout(() => {
+    try {
+      const { supabase } = await import("@/integrations/supabase/client");
+      const { error } = await supabase.functions.invoke("health-check", {
+        body: { action: "bridge-sync", source: "manual" },
+      });
+      if (error) {
+        setLogs((prev) => [...prev, `[${timestamp}] Sync failed: ${error.message}`]);
+      } else {
+        setLogs((prev) => [...prev, `[${timestamp}] Sync completed`]);
+      }
+    } catch (err) {
+      setLogs((prev) => [...prev, `[${timestamp}] Sync error: ${err instanceof Error ? err.message : "Unknown"}`]);
+    } finally {
       setIsSyncing(false);
-      setLogs((prev) => [...prev, `[${timestamp}] Sync completed`]);
-    }, 2000);
+    }
   };
 
   return (

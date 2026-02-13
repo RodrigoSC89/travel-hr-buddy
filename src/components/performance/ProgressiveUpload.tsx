@@ -212,6 +212,7 @@ export function ProgressiveUpload({
                   size="icon"
                   className="h-8 w-8 shrink-0"
                   onClick={() => removeFile(file.id)}
+                  aria-label="Remover arquivo" title="Remover"
                 >
                   <X className="h-4 w-4" />
                 </Button>

@@ -91,6 +91,7 @@ export function PerformanceMonitor({
                   size="icon"
                   className="h-6 w-6"
                   onClick={() => setExpanded(!expanded)}
+                  aria-label="Alternar expansão" title="Expandir"
                 >
                   <RefreshCw className="h-3 w-3" />
                 </Button>
@@ -100,6 +101,7 @@ export function PerformanceMonitor({
                     size="icon"
                     className="h-6 w-6"
                     onClick={onClose}
+                    aria-label="Fechar monitor" title="Fechar"
                   >
                     <X className="h-3 w-3" />
                   </Button>

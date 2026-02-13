@@ -142,6 +142,7 @@ export function CalendarSyncPanel({
               variant="outline"
               size="icon"
               onClick={handleCopySubscriptionUrl}
+              aria-label="Copiar URL de inscrição" title="Copiar URL"
             >
               {copied ? <Check className="h-4 w-4" /> : <Copy className="h-4 w-4" />}
             </Button>

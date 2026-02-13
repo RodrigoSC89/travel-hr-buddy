@@ -150,6 +150,7 @@ export function LiteModeToggle({ className }: { className?: string }) {
             size="icon"
             onClick={() => toggleLiteMode()}
             className={className}
+            aria-label={isLiteMode ? "Desativar modo lite" : "Ativar modo lite"} title="Modo Lite"
           >
             {isLiteMode ? (
               <ZapOff className="h-4 w-4" />
