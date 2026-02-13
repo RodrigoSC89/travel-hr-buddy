@@ -55,9 +55,7 @@ const initializeOptionalFeatures = async () => {
     // Initialize accessibility checker in dev
     await initializeAccessibilityChecker();
     
-    // Initialize route prefetching for better navigation
-    const { initRoutePrefetch } = await import("@/lib/performance/route-prefetch");
-    initRoutePrefetch();
+    // Route prefetching removed during dead code cleanup
     
     // Only initialize monitoring in production
     if (import.meta.env.PROD) {

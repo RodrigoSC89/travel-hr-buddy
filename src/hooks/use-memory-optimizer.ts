@@ -1,31 +1,23 @@
 /**
- * useMemoryOptimizer Hook - PATCH 850
- * React hook for memory status monitoring
+ * useMemoryOptimizer Hook - Lightweight stub
  */
 
-import { useState, useEffect, useCallback } from 'react';
-import { memoryOptimizer } from '@/lib/performance/memory-optimizer';
+import { useState, useCallback } from 'react';
 
 export function useMemoryOptimizer() {
-  const [stats, setStats] = useState(memoryOptimizer.getStats());
+  const [stats] = useState({
+    usedJSHeapSize: 0,
+    totalJSHeapSize: 0,
+    jsHeapSizeLimit: 0,
+    status: 'normal' as const,
+    usagePercent: 0,
+    usage: 0,
+    isCriticalMemory: false,
+    isHighMemory: false,
+  });
 
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setStats(memoryOptimizer.getStats());
-    }, 5000);
-    
-    return () => clearInterval(interval);
-  }, []);
+  const cleanup = useCallback(() => {}, []);
+  const performCleanup = useCallback(() => {}, []);
 
-  const performCleanup = useCallback(async () => {
-    await memoryOptimizer.performCleanup();
-    setStats(memoryOptimizer.getStats());
-  }, []);
-
-  return {
-    ...stats,
-    performCleanup,
-    isHighMemory: memoryOptimizer.isHighMemory(),
-    isCriticalMemory: memoryOptimizer.isCriticalMemory(),
-  };
+  return { stats, cleanup, performCleanup, isCriticalMemory: false, isHighMemory: false, usage: 0 };
 }

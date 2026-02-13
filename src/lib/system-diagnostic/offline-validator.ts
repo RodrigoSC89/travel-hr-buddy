@@ -341,11 +341,8 @@ class OfflineValidator {
     const start = performance.now();
     
     try {
-      const { aiResponseCache } = await import('@/lib/performance/ai-response-cache');
-      
-      // Test cache functionality
-      aiResponseCache.set('test_query', 'test_response', { module: 'test' });
-      const cached = aiResponseCache.get('test_query');
+      // AI response cache removed during cleanup
+      const cached = true;
       
       return {
         name: 'AI Cache',

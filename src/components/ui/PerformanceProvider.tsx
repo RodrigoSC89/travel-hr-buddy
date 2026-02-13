@@ -6,7 +6,7 @@
 import React, { createContext, useContext, useEffect, useState } from 'react';
 import { useConnectionAdaptive } from '@/hooks/useConnectionAdaptive';
 import { useOfflineMode } from '@/hooks/useOfflineMode';
-import { PERFORMANCE_CONFIG } from '@/lib/performance';
+const PERFORMANCE_CONFIG = { enableAdaptive: true, enableOffline: true, enablePrefetch: true, DEBOUNCE_SLOW: 500 };
 
 interface PerformanceContextValue {
   // Conexão
