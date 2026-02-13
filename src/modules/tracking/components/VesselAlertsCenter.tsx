@@ -497,7 +497,7 @@ export default function VesselAlertsCenter() {
                         checked={rule.enabled}
                         onCheckedChange={() => toggleRule(rule.id)}
                       />
-                      <Button variant="ghost" size="icon">
+                      <Button variant="ghost" size="icon" aria-label="Configurar regra de alerta" title="Configurar">
                         <Settings className="h-4 w-4" />
                       </Button>
                     </div>

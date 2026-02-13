@@ -396,7 +396,7 @@ export default function EnhancedInfirmaryDashboard() {
                 onKeyPress={(e) => e.key === "Enter" && handleSendMessage()}
                 className="flex-1"
               />
-              <Button size="icon" onClick={handleSendMessage} disabled={isTyping}>
+              <Button size="icon" onClick={handleSendMessage} disabled={isTyping} aria-label="Enviar mensagem" title="Enviar">
                 <Send className="h-4 w-4" />
               </Button>
             </div>

@@ -315,7 +315,7 @@ export default function CertificateExpiryPanel() {
                 <SelectItem value="vessel">Embarcações</SelectItem>
               </SelectContent>
             </Select>
-            <Button variant="outline" size="icon">
+            <Button variant="outline" size="icon" aria-label="Exportar certificados" title="Exportar">
               <Download className="h-4 w-4" />
             </Button>
             <Button variant="outline" className="gap-2">

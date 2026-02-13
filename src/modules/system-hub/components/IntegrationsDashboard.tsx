@@ -367,7 +367,7 @@ export default function IntegrationsDashboard() {
                       <span className="text-sm text-muted-foreground">Ativo</span>
                       <Switch checked={selectedIntegration.enabled} />
                     </div>
-                    <Button variant="outline" size="icon">
+                    <Button variant="outline" size="icon" aria-label="Configurações da integração" title="Configurações">
                       <Settings className="h-4 w-4" />
                     </Button>
                   </div>

@@ -146,17 +146,17 @@ export function CommandBrainPanel({ context, onSettingsClick }: CommandBrainPane
             </div>
           </CardTitle>
           <div className="flex gap-1">
-            <Button variant="ghost" size="icon" className="h-8 w-8" title={`${messages.length} mensagens`} onClick={() => { const el = document.querySelector('[data-chat-history]'); if (el) el.scrollTo({ top: 0, behavior: 'smooth' }); }}>
+            <Button variant="ghost" size="icon" className="h-8 w-8" title={`${messages.length} mensagens`} aria-label="Histórico de mensagens" onClick={() => { const el = document.querySelector('[data-chat-history]'); if (el) el.scrollTo({ top: 0, behavior: 'smooth' }); }}>
               <History className="h-4 w-4" />
             </Button>
-            <Button variant="ghost" size="icon" className="h-8 w-8" onClick={exportChat}>
+            <Button variant="ghost" size="icon" className="h-8 w-8" onClick={exportChat} aria-label="Exportar conversa" title="Exportar">
               <Download className="h-4 w-4" />
             </Button>
-            <Button variant="ghost" size="icon" className="h-8 w-8" onClick={onSettingsClick}>
+            <Button variant="ghost" size="icon" className="h-8 w-8" onClick={onSettingsClick} aria-label="Configurações" title="Configurações">
               <Settings className="h-4 w-4" />
             </Button>
             {messages.length > 0 && (
-              <Button variant="ghost" size="icon" className="h-8 w-8 text-destructive" onClick={clearMessages}>
+              <Button variant="ghost" size="icon" className="h-8 w-8 text-destructive" onClick={clearMessages} aria-label="Limpar conversa" title="Limpar">
                 <Trash2 className="h-4 w-4" />
               </Button>
             )}

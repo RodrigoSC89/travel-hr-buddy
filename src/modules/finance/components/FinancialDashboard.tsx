@@ -446,10 +446,10 @@ export default function FinancialDashboard() {
                           Vence: {inv.dueDate}
                         </div>
                         <div className="flex gap-1">
-                          <Button variant="ghost" size="icon" className="h-7 w-7">
+                          <Button variant="ghost" size="icon" className="h-7 w-7" aria-label="Visualizar fatura" title="Visualizar">
                             <Eye className="h-4 w-4" />
                           </Button>
-                          <Button variant="ghost" size="icon" className="h-7 w-7">
+                          <Button variant="ghost" size="icon" className="h-7 w-7" aria-label="Enviar fatura" title="Enviar">
                             <Send className="h-4 w-4" />
                           </Button>
                         </div>

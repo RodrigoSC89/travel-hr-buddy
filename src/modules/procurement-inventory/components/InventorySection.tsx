@@ -274,7 +274,7 @@ export default function InventorySection({ searchQuery }: InventorySectionProps)
               </SelectContent>
             </Select>
 
-            <Button variant="outline" size="icon">
+            <Button variant="outline" size="icon" aria-label="Exportar inventário" title="Exportar">
               <Download className="h-4 w-4" />
             </Button>
 
@@ -396,7 +396,7 @@ export default function InventorySection({ searchQuery }: InventorySectionProps)
                           >
                             <ArrowUp className="h-4 w-4 text-destructive" />
                           </Button>
-                          <Button variant="ghost" size="icon">
+                          <Button variant="ghost" size="icon" aria-label="Visualizar item" title="Visualizar">
                             <Eye className="h-4 w-4" />
                           </Button>
                         </div>

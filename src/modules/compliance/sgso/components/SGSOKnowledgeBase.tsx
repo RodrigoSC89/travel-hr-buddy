@@ -351,7 +351,7 @@ export const SGSOKnowledgeBase: React.FC = () => {
                           </p>
                         </div>
                       </div>
-                      <Button variant="ghost" size="icon">
+                      <Button variant="ghost" size="icon" aria-label="Baixar template" title="Baixar">
                         <Download className="h-4 w-4" />
                       </Button>
                     </CardContent>

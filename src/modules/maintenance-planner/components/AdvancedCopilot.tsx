@@ -336,7 +336,7 @@ export default function AdvancedCopilot() {
                   <VolumeX className="h-4 w-4" />
                 )}
               </Button>
-              <Button variant="ghost" size="icon" title="Histórico">
+              <Button variant="ghost" size="icon" title="Histórico" aria-label="Histórico de manutenção">
                 <History className="h-4 w-4" />
               </Button>
             </div>

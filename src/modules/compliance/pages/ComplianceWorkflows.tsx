@@ -337,7 +337,7 @@ export default function ComplianceWorkflows() {
                         <Brain className="h-4 w-4 mr-1" />
                         IA
                       </Button>
-                      <Button variant="ghost" size="icon">
+                      <Button variant="ghost" size="icon" aria-label="Mais opções do workflow" title="Mais opções">
                         <MoreVertical className="h-4 w-4" />
                       </Button>
                     </div>

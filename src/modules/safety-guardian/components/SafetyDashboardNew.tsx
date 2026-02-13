@@ -82,7 +82,7 @@ export const SafetyDashboard: React.FC = () => {
           <Button variant="outline" size="icon" onClick={refresh} disabled={loading}>
             <RefreshCw className={`h-4 w-4 ${loading ? 'animate-spin' : ''}`} />
           </Button>
-          <Button variant="outline" size="icon">
+          <Button variant="outline" size="icon" aria-label="Configurações de segurança" title="Configurações">
             <Settings className="h-4 w-4" />
           </Button>
           <Button 

@@ -310,13 +310,13 @@ export default function ComplianceRelatorios() {
                             <Download className="h-4 w-4 mr-1" />
                             {report.format}
                           </Button>
-                          <Button variant="ghost" size="icon" onClick={() => { navigator.clipboard.writeText(`${report.name} | Score: ${report.score}% | Findings: ${report.findings} | Período: ${report.period}`); toast.success("Dados do relatório copiados"); }}>
+                          <Button variant="ghost" size="icon" aria-label="Copiar dados do relatório" title="Copiar dados" onClick={() => { navigator.clipboard.writeText(`${report.name} | Score: ${report.score}% | Findings: ${report.findings} | Período: ${report.period}`); toast.success("Dados do relatório copiados"); }}>
                             <Eye className="h-4 w-4" />
                           </Button>
-                          <Button variant="ghost" size="icon" onClick={() => { navigator.clipboard.writeText(`${window.location.origin}/compliance/reports/${report.id}`); toast.success("Link copiado para compartilhamento"); }}>
+                          <Button variant="ghost" size="icon" aria-label="Compartilhar relatório" title="Compartilhar" onClick={() => { navigator.clipboard.writeText(`${window.location.origin}/compliance/reports/${report.id}`); toast.success("Link copiado para compartilhamento"); }}>
                             <Share2 className="h-4 w-4" />
                           </Button>
-                          <Button variant="ghost" size="icon" onClick={() => { window.print(); }}>
+                          <Button variant="ghost" size="icon" aria-label="Imprimir relatório" title="Imprimir" onClick={() => { window.print(); }}>
                             <Printer className="h-4 w-4" />
                           </Button>
                         </>
