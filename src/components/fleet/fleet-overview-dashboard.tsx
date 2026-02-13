@@ -35,8 +35,11 @@ interface FleetOverviewProps {
 
 const FleetOverviewDashboard: React.FC<FleetOverviewProps> = ({ stats, onRefresh }) => {
   const { toast } = useToast();
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- chart data has dynamic shape from Recharts
   const [performanceData, setPerformanceData] = useState<any[]>([]);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- chart data has dynamic shape from Recharts
   const [fleetDistribution, setFleetDistribution] = useState<any[]>([]);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- activity items have dynamic shape from Supabase
   const [recentActivities, setRecentActivities] = useState<any[]>([]);
 
   useEffect(() => {

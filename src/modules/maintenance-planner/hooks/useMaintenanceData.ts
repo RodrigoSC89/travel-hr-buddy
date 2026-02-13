@@ -96,7 +96,7 @@ export function useMaintenanceData() {
       }
 
       // Generate equipment from vessels
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any -- vessel query returns dynamic join shape
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any -- vessel query returns dynamic join shape with nested property access
       return (data || []).flatMap((v: any): Equipment[] => {
         const vId = String(v.id || '');
         const vName = String(v.name || 'Embarcação');
@@ -155,7 +155,7 @@ export function useMaintenanceData() {
         return [];
       }
 
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any -- maintenance_orders join shape
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any -- maintenance_orders join shape with nested property access
       return (data || []).map((o: any): MaintenanceOrder => ({
         id: String(o.id),
         orderNumber: String(o.order_number || `WO-${String(o.id).slice(0, 8)}`),
@@ -195,7 +195,7 @@ export function useMaintenanceData() {
         ];
       }
 
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any -- inventory_items dynamic shape
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any -- inventory_items dynamic shape with nested property access
       return (data || []).map((p: any): SparePart => ({
         id: String(p.id),
         partNumber: String(p.part_number || p.sku || 'N/A'),
@@ -239,7 +239,7 @@ export function useMaintenanceData() {
           }));
       }
 
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any -- AI predictions dynamic shape
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any -- AI predictions dynamic shape with nested property access
       return (data || []).map((p: any): MaintenancePrediction => ({
         equipmentId: String(p.equipment_id || ''),
         equipmentName: String(p.equipment_name || ''),

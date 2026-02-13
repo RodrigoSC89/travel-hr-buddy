@@ -17,6 +17,7 @@ export const ConnectivityPanel: React.FC = () => {
   const [pinging, setPinging] = useState(false);
   const [lastPingTime, setLastPingTime] = useState<Date | null>(null);
   const [autoPing, setAutoPing] = useState(false);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- ping stats have dynamic numeric properties for JSX rendering
   const [stats, setStats] = useState<Map<string, any>>(new Map());
 
   useEffect(() => {

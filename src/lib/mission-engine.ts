@@ -183,7 +183,8 @@ export class MissionEngine {
 
       // Transform the data to include vessels array
       // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Supabase nested join dynamic shape
-      const vessels = mission?.mission_vessels?.map((mv: any) => ({
+      const vessels = mission?.mission_vessels?.map((mv: Record<string, any>) => ({
+        ...mv.vessels,
         ...mv.vessels,
         mission_role: String(mv.role || ""),
         mission_status: String(mv.status || "")
@@ -390,7 +391,7 @@ export class MissionEngine {
       }
 
       // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Supabase nested join dynamic shape
-      return data?.map((mv: any) => ({
+      return data?.map((mv: Record<string, any>) => ({
         ...mv.vessels,
         mission_role: String(mv.role || ""),
         mission_status: String(mv.status || "")

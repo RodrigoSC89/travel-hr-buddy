@@ -23,7 +23,7 @@ import { logger } from "@/lib/logger";
 
 type AnalysisTab = "route" | "bunker" | "pnl" | "risks";
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- AI response shape is deeply dynamic per analysis type
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- AI response shape is deeply dynamic per analysis type with nested property access
 type AIResult = Record<string, any>;
 
 export function VoyageAICopilotPanel() {

@@ -65,6 +65,7 @@ const EVIDENCE_FIELDS = [
 
 export default function PortCallOptimizationV2() {
   const [portCalls, setPortCalls] = useState<PortCall[]>([]);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Supabase vessel rows with dynamic property access
   const [vessels, setVessels] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [showAddDialog, setShowAddDialog] = useState(false);

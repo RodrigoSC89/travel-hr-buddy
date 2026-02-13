@@ -20,6 +20,7 @@ import { supabase } from "@/integrations/supabase/client";
 
 // Real-time Fleet Status
 function FleetStatusContent() {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Supabase vessel rows used with dynamic property access in JSX
   const [vessels, setVessels] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
 

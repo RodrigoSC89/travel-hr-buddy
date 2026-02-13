@@ -50,7 +50,9 @@ const DeepRiskAI: React.FC = () => {
   const [riskScore, setRiskScore] = useState<RiskScore | null>(null);
   const [recommendations, setRecommendations] = useState<RiskRecommendation[]>([]);
   const [isAnalyzing, setIsAnalyzing] = useState(false);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- AI prediction result has dynamic shape
   const [prediction, setPrediction] = useState<any>(null);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- event history from Supabase dynamic rows
   const [eventHistory, setEventHistory] = useState<any[]>([]);
 
   // Load event history on mount

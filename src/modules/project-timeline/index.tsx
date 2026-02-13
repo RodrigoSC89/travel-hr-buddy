@@ -12,6 +12,7 @@ import { ExportActions } from "./components/ExportActions";
 
 const ProjectTimeline = () => {
   const [activeTab, setActiveTab] = useState("overview");
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- task items have dynamic shape
   const [tasks, setTasks] = useState<any[]>([]);
 
   return (

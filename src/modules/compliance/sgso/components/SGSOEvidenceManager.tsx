@@ -21,6 +21,7 @@ const PRACTICE_OPTIONS = [
 ];
 
 export const SGSOEvidenceManager: React.FC = () => {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- SGSO evidence rows have dynamic Supabase shape
   const [evidences, setEvidences] = useState<any[]>([]);
   const [isUploading, setIsUploading] = useState(false);
   const [selectedPractice, setSelectedPractice] = useState("");
