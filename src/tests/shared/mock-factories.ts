@@ -275,7 +275,7 @@ export const mockNotification = (overrides = {}) => ({
 /**
  * Create multiple instances of a mock
  */
-export const createMany = <T>(factory: (overrides?: any) => T, count: number, overrides = {}): T[] => {
+export const createMany = <T>(factory: (overrides?: Record<string, unknown>) => T, count: number, overrides = {}): T[] => {
   return Array.from({ length: count }, () => factory(overrides));
 };
 
@@ -283,9 +283,9 @@ export const createMany = <T>(factory: (overrides?: any) => T, count: number, ov
  * Create a sequence of mocks with incremental IDs
  */
 export const createSequence = <T>(
-  factory: (overrides?: any) => T,
+  factory: (overrides?: Record<string, unknown>) => T,
   count: number,
-  customizer: (index: number) => any = () => ({})
+  customizer: (index: number) => Record<string, unknown> = () => ({})
 ): T[] => {
   return Array.from({ length: count }, (_, index) => 
     factory({ ...customizer(index), id: `${index + 1}` })

@@ -48,8 +48,7 @@ export interface MissionTask {
   endTime?: Date;
   estimatedDuration?: number; // hours
   dependencies?: string[]; // Task IDs
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Supabase Json type
-  metadata?: Record<string, any>;
+  metadata?: Record<string, unknown>;
 }
 
 // External Entity (system, vessel, unit, etc.)
@@ -61,8 +60,7 @@ export interface ExternalEntity {
   endpoint?: string;
   capabilities: string[];
   status: "available" | "busy" | "offline";
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Supabase Json type
-  metadata?: Record<string, any>;
+  metadata?: Record<string, unknown>;
 }
 
 // Joint Mission
@@ -85,8 +83,7 @@ export interface JointMission {
   syncStatus: SyncStatus;
   syncErrors: string[];
   lastSyncAt?: Date;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Supabase Json type
-  missionData?: Record<string, any>;
+  missionData?: Record<string, unknown>;
 }
 
 // Task Assignment Result
@@ -341,8 +338,7 @@ export async function updateTaskStatus(
   missionId: string,
   taskId: string,
   status: MissionTask["status"],
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Supabase Json type
-  metadata?: Record<string, any>
+  metadata?: Record<string, unknown>
 ): Promise<{ success: boolean; error?: string }> {
   logger.info(`[JointTasking] Updating task ${taskId} status to ${status}`);
 

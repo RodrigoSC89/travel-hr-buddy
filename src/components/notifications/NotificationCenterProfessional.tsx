@@ -124,19 +124,18 @@ const loadNotificationsFromSupabase = async (): Promise<Notification[]> => {
 
     if (error || !data || data.length === 0) return [];
 
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any -- intelligent_notifications dynamic schema
-    return data.map((n: any) => ({
-      id: n.id,
-      title: n.title || "Notificação",
-      message: n.message || "",
+    return data.map((n: Record<string, unknown>) => ({
+      id: String(n.id),
+      title: String(n.title || "Notificação"),
+      message: String(n.message || ""),
       type: n.priority === "critical" ? "critical" as const : n.priority === "high" ? "warning" as const : "info" as const,
-      category: n.category || "sistema",
-      isRead: n.is_read || false,
+      category: String(n.category || "sistema"),
+      isRead: Boolean(n.is_read),
       isStarred: false,
       isArchived: false,
-      createdAt: n.created_at,
-      source: n.source_module || "Sistema",
-      action: n.action_type ? { label: n.action_text || "Ver", url: n.action_data?.url || "#" } : undefined,
+      createdAt: String(n.created_at),
+      source: String(n.source_module || "Sistema"),
+      action: n.action_type ? { label: String((n as Record<string, unknown>).action_text || "Ver"), url: String(((n as Record<string, unknown>).action_data as Record<string, unknown>)?.url || "#") } : undefined,
     }));
   } catch {
     return [];

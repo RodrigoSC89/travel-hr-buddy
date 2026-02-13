@@ -7,8 +7,7 @@ export interface AIDecision {
   sourceAI: string;
   action: string;
   confidence: number;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- decision parameters accessed dynamically
-  parameters: Record<string, any>;
+  parameters: Record<string, unknown>;
   timestamp?: Date;
 }
 
@@ -134,7 +133,7 @@ class SupervisorAI {
   /**
    * Validate decision parameters
    */
-  private checkParameters(parameters: Record<string, any>): boolean {
+  private checkParameters(parameters: Record<string, unknown>): boolean {
     if (!parameters || typeof parameters !== "object") {
       return false;
     }
@@ -159,7 +158,7 @@ class SupervisorAI {
   /**
    * Safety check for critical actions
    */
-  private checkSafety(action: string, parameters: Record<string, any>): boolean {
+  private checkSafety(action: string, parameters: Record<string, unknown>): boolean {
     const criticalActions = ["delete", "shutdown", "terminate", "emergency_stop"];
     
     if (criticalActions.some(critical => action.toLowerCase().includes(critical))) {
@@ -178,8 +177,8 @@ class SupervisorAI {
     const { action, parameters } = decision;
 
     // Example: scaling down when already at minimum
-    if (action === "scale_resources" && parameters.to <= parameters.from) {
-      if (parameters.to === 0) return false; // Don't scale to zero
+    if (action === "scale_resources" && Number(parameters.to) <= Number(parameters.from)) {
+      if (Number(parameters.to) === 0) return false; // Don't scale to zero
     }
 
     return true;

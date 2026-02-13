@@ -290,8 +290,7 @@ const parseRecommendationsResponse = (
 
     const parsed = JSON.parse(jsonMatch[0]);
     
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any -- dynamic AI JSON response shape
-    return (parsed.recommendations || []).map((rec: Record<string, any>) => ({
+    return (parsed.recommendations || []).map((rec: Record<string, unknown>) => ({
       id: `rec-${Date.now()}-${crypto.randomUUID().slice(0, 9)}`,
       anomalyId: rec.anomalyId,
       title: rec.title,
@@ -300,8 +299,8 @@ const parseRecommendationsResponse = (
       autoFixScript: rec.autoFixScript,
       manualSteps: Array.isArray(rec.manualSteps) ? rec.manualSteps : [],
       confidence: typeof rec.confidence === "number" ? rec.confidence : 0.6,
-      estimatedImpact: ["low", "medium", "high"].includes(rec.estimatedImpact) 
-        ? rec.estimatedImpact 
+      estimatedImpact: ["low", "medium", "high"].includes(String(rec.estimatedImpact)) 
+        ? (String(rec.estimatedImpact) as "low" | "medium" | "high")
         : "medium"
     }));
   } catch (error) {

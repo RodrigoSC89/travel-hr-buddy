@@ -22,7 +22,9 @@ export const SatelliteGlobeMap: React.FC<SatelliteGlobeMapProps> = ({
   onSelectSatellite
 }) => {
   const mapContainer = useRef<HTMLDivElement>(null);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Mapbox GL map instance from external library
   const map = useRef<any>(null);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Mapbox GL marker instances from external library
   const markers = useRef<any[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);

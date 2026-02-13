@@ -590,15 +590,14 @@ Respond only with valid JSON.`,
    * Export to JSON
    */
   private exportToJSON(options: ExportOptions): string {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any -- spread replay for selective export
-    const data: any = { ...this.replay };
+    const data: Record<string, unknown> = { ...this.replay };
 
     if (!options.includeContext) {
       data.reconstruction = undefined;
     }
     
     if (!options.includeAIExplanations) {
-      data.aiDecisions = data.aiDecisions?.map((d: AIDecisionRecord) => ({
+      data.aiDecisions = (data.aiDecisions as AIDecisionRecord[] | undefined)?.map((d: AIDecisionRecord) => ({
         ...d,
         explanation: undefined,
       }));
