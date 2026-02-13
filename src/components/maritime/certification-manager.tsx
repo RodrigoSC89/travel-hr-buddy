@@ -346,7 +346,7 @@ export const CertificationManager: React.FC = () => {
 
                 <div className="border rounded-lg overflow-hidden">
                   <table className="w-full">
-                    <thead className="bg-gray-50">
+                    <thead className="bg-muted">
                       <tr>
                         <th className="text-left p-4 font-semibold">Certificação</th>
                         <th className="text-left p-4 font-semibold">Tripulante</th>
@@ -473,8 +473,8 @@ export const CertificationManager: React.FC = () => {
                       <p className="text-sm text-muted-foreground">IMO Regulation</p>
                     </div>
                     <div className="flex items-center gap-2">
-                      <div className="w-12 h-2 bg-gray-200 rounded-full">
-                        <div className="w-10 h-2 bg-green-500 rounded-full"></div>
+                      <div className="w-12 h-2 bg-muted rounded-full">
+                        <div className="w-10 h-2 bg-success rounded-full"></div>
                       </div>
                       <span className="text-sm font-medium">87%</span>
                     </div>
@@ -485,8 +485,8 @@ export const CertificationManager: React.FC = () => {
                       <p className="text-sm text-muted-foreground">Maritime Labour Convention</p>
                     </div>
                     <div className="flex items-center gap-2">
-                      <div className="w-12 h-2 bg-gray-200 rounded-full">
-                        <div className="w-11 h-2 bg-green-500 rounded-full"></div>
+                      <div className="w-12 h-2 bg-muted rounded-full">
+                        <div className="w-11 h-2 bg-success rounded-full"></div>
                       </div>
                       <span className="text-sm font-medium">92%</span>
                     </div>
@@ -497,8 +497,8 @@ export const CertificationManager: React.FC = () => {
                       <p className="text-sm text-muted-foreground">Ship Security</p>
                     </div>
                     <div className="flex items-center gap-2">
-                      <div className="w-12 h-2 bg-gray-200 rounded-full">
-                        <div className="w-9 h-2 bg-yellow-500 rounded-full"></div>
+                      <div className="w-12 h-2 bg-muted rounded-full">
+                        <div className="w-9 h-2 bg-warning rounded-full"></div>
                       </div>
                       <span className="text-sm font-medium">78%</span>
                     </div>

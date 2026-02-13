@@ -440,10 +440,10 @@ export function ExpenseManagementPanel() {
                     <h4 className="text-sm font-medium mb-3">Despesas por Categoria</h4>
                     <div className="space-y-2">
                       {[
-                        { cat: "Alimentação", value: 35, color: "bg-orange-500" },
-                        { cat: "Transporte", value: 28, color: "bg-blue-500" },
-                        { cat: "Hospedagem", value: 25, color: "bg-purple-500" },
-                        { cat: "Outros", value: 12, color: "bg-gray-500" },
+                        { cat: "Alimentação", value: 35, color: "bg-warning" },
+                        { cat: "Transporte", value: 28, color: "bg-info" },
+                        { cat: "Hospedagem", value: 25, color: "bg-accent" },
+                        { cat: "Outros", value: 12, color: "bg-muted-foreground" },
                       ].map((item) => (
                         <div key={item.cat} className="flex items-center gap-3">
                           <div className={`w-3 h-3 rounded-full ${item.color}`} />

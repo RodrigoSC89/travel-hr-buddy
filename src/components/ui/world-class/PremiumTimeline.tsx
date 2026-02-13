@@ -148,20 +148,20 @@ const eventColors: Record<EventType, string> = {
   maintenance: 'bg-orange-500',
   voyage: 'bg-blue-500',
   compliance: 'bg-violet-500',
-  system: 'bg-gray-500',
+  system: 'bg-muted-foreground',
   // Simple types
-  success: 'bg-green-500',
-  warning: 'bg-yellow-500',
-  error: 'bg-red-500',
-  info: 'bg-blue-500',
+  success: 'bg-success',
+  warning: 'bg-warning',
+  error: 'bg-destructive',
+  info: 'bg-info',
 };
 
 const statusColors: Record<EventStatus, string> = {
-  completed: 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400',
-  pending: 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-400',
-  'in-progress': 'bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-400',
-  cancelled: 'bg-gray-100 text-gray-800 dark:bg-gray-900/30 dark:text-gray-400',
-  warning: 'bg-orange-100 text-orange-800 dark:bg-orange-900/30 dark:text-orange-400',
+  completed: 'bg-success/10 text-success',
+  pending: 'bg-warning/10 text-warning',
+  'in-progress': 'bg-info/10 text-info',
+  cancelled: 'bg-muted text-muted-foreground',
+  warning: 'bg-warning/10 text-warning',
 };
 
 const statusLabels: Record<EventStatus, string> = {

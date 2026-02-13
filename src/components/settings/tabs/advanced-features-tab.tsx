@@ -215,7 +215,7 @@ export const AdvancedFeaturesTab: React.FC<AdvancedFeaturesTabProps> = ({
                   <span className="text-sm">Análise de Sentimentos</span>
                   <Badge className="bg-blue-100 text-blue-800">Treinando</Badge>
                 </div>
-                <div className="flex items-center justify-between p-2 bg-gray-50 dark:bg-gray-900/20 rounded">
+                <div className="flex items-center justify-between p-2 bg-muted rounded">
                   <span className="text-sm">Previsão de Demanda</span>
                   <Badge variant="outline">Pausado</Badge>
                 </div>

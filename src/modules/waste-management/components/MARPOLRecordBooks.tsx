@@ -435,7 +435,7 @@ export default function MARPOLRecordBooks() {
                       <div className="flex items-start justify-between mb-3">
                         <div className="flex items-center gap-3">
                           <div className={`h-10 w-10 rounded-lg flex items-center justify-center font-bold text-white ${
-                            GARBAGE_CATEGORIES.find(c => entry.garbage_category.startsWith(c.code))?.color || "bg-gray-500"
+                            GARBAGE_CATEGORIES.find(c => entry.garbage_category.startsWith(c.code))?.color || "bg-muted-foreground"
                           }`}>
                             {entry.garbage_category.charAt(0)}
                           </div>

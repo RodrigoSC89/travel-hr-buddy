@@ -62,21 +62,21 @@ export const MissionPlanning: React.FC<MissionPlanningProps> = ({ missions, onRe
 
   const getStatusColor = (status: string) => {
     switch (status) {
-    case "planned": return "bg-blue-500/20 text-blue-500";
-    case "in-progress": return "bg-green-500/20 text-green-500";
-    case "completed": return "bg-gray-500/20 text-gray-500";
-    case "cancelled": return "bg-red-500/20 text-red-500";
-    default: return "bg-gray-500/20 text-gray-500";
+    case "planned": return "bg-info/20 text-info";
+    case "in-progress": return "bg-success/20 text-success";
+    case "completed": return "bg-muted text-muted-foreground";
+    case "cancelled": return "bg-destructive/20 text-destructive";
+    default: return "bg-muted text-muted-foreground";
     }
   };
 
   const getPriorityColor = (priority: string) => {
     switch (priority) {
-    case "critical": return "bg-red-500/20 text-red-500";
-    case "high": return "bg-orange-500/20 text-orange-500";
-    case "medium": return "bg-yellow-500/20 text-yellow-500";
-    case "low": return "bg-green-500/20 text-green-500";
-    default: return "bg-gray-500/20 text-gray-500";
+    case "critical": return "bg-destructive/20 text-destructive";
+    case "high": return "bg-warning/20 text-warning";
+    case "medium": return "bg-warning/20 text-warning";
+    case "low": return "bg-success/20 text-success";
+    default: return "bg-muted text-muted-foreground";
     }
   };
 

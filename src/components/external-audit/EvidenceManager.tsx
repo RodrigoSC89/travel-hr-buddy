@@ -81,11 +81,11 @@ export function EvidenceManager() {
   const getStatusBadge = (status: Evidence['status']) => {
     switch (status) {
       case 'approved':
-        return <Badge className="bg-green-100 text-green-700 hover:bg-green-100"><CheckCircle className="h-3 w-3 mr-1" /> Aprovado</Badge>;
+        return <Badge className="bg-success/10 text-success hover:bg-success/10"><CheckCircle className="h-3 w-3 mr-1" /> Aprovado</Badge>;
       case 'pending':
-        return <Badge className="bg-yellow-100 text-yellow-700 hover:bg-yellow-100"><Clock className="h-3 w-3 mr-1" /> Pendente</Badge>;
+        return <Badge className="bg-warning/10 text-warning hover:bg-warning/10"><Clock className="h-3 w-3 mr-1" /> Pendente</Badge>;
       case 'rejected':
-        return <Badge className="bg-red-100 text-red-700 hover:bg-red-100"><AlertTriangle className="h-3 w-3 mr-1" /> Rejeitado</Badge>;
+        return <Badge className="bg-destructive/10 text-destructive hover:bg-destructive/10"><AlertTriangle className="h-3 w-3 mr-1" /> Rejeitado</Badge>;
     }
   };
 

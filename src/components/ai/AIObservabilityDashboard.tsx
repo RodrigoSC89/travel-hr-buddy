@@ -168,19 +168,19 @@ export function AIObservabilityDashboard() {
 
   const getStatusConfig = (status: AgentStatus) => {
     const config = {
-      running: { label: "Executando", color: "bg-green-500", textColor: "text-green-600" },
-      idle: { label: "Ocioso", color: "bg-blue-500", textColor: "text-blue-600" },
-      paused: { label: "Pausado", color: "bg-yellow-500", textColor: "text-yellow-600" },
-      error: { label: "Erro", color: "bg-red-500", textColor: "text-red-600" }
+      running: { label: "Executando", color: "bg-success", textColor: "text-success" },
+      idle: { label: "Ocioso", color: "bg-info", textColor: "text-info" },
+      paused: { label: "Pausado", color: "bg-warning", textColor: "text-warning" },
+      error: { label: "Erro", color: "bg-destructive", textColor: "text-destructive" }
     };
     return config[status];
   };
 
   const getLevelConfig = (level: AILog["level"]) => {
     const config = {
-      info: { color: "text-blue-600 bg-blue-100" },
-      warning: { color: "text-yellow-600 bg-yellow-100" },
-      error: { color: "text-red-600 bg-red-100" },
+      info: { color: "text-info bg-info/10" },
+      warning: { color: "text-warning bg-warning/10" },
+      error: { color: "text-destructive bg-destructive/10" },
       debug: { color: "text-muted-foreground bg-muted" }
     };
     return config[level];

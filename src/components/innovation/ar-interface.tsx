@@ -211,11 +211,11 @@ export const ARInterface: React.FC = () => {
 
   const getStatusColor = (status: string) => {
     switch (status) {
-    case "active": return "text-green-600 bg-green-100";
-    case "normal": return "text-blue-600 bg-blue-100";
-    case "warning": return "text-yellow-600 bg-yellow-100";
-    case "maintenance": return "text-red-600 bg-red-100";
-    default: return "text-muted-foreground bg-gray-100";
+    case "active": return "text-success bg-success/10";
+    case "normal": return "text-info bg-info/10";
+    case "warning": return "text-warning bg-warning/10";
+    case "maintenance": return "text-destructive bg-destructive/10";
+    default: return "text-muted-foreground bg-muted";
     }
   };
 
@@ -552,10 +552,10 @@ export const ARInterface: React.FC = () => {
                           )}
                         </div>
                       </div>
-                      <div className="w-full bg-gray-200 rounded-full h-2">
+                      <div className="w-full bg-muted rounded-full h-2">
                         <div
                           className={`h-2 rounded-full ${
-                            course.status === "completed" ? "bg-green-500" : "bg-blue-500"
+                            course.status === "completed" ? "bg-success" : "bg-info"
                           }`}
                           style={{ width: `${course.progress}%` }}
                         />

@@ -81,9 +81,9 @@ export function ESGCommandCenter() {
   const getCIIColor = (rating: string) => CII_COLORS[rating] || "#6b7280";
   const getCIIBg = (rating: string) => {
     const map: Record<string, string> = {
-      A: "bg-green-500", B: "bg-lime-500", C: "bg-yellow-500", D: "bg-orange-500", E: "bg-red-500"
+      A: "bg-success", B: "bg-success/80", C: "bg-warning", D: "bg-warning/80", E: "bg-destructive"
     };
-    return map[rating] || "bg-gray-500";
+    return map[rating] || "bg-muted-foreground";
   };
 
   // Build chart data from real vessels
