@@ -17,7 +17,7 @@ import { Badge } from '@/components/ui/badge';
 import { Satellite, Activity, Ship, Radio, Cloud, AlertTriangle, Map, RefreshCw, Download, Filter, Wifi, Bell } from 'lucide-react';
 import { Skeleton } from '@/components/ui/skeleton';
 import { EnhancedActionBar } from '@/components/ui/world-class/EnhancedActionBar';
-import { RealTimeTrackingMap } from '@/components/world-class';
+// RealTimeTrackingMap removed - world-class deleted
 import { HubEmptyState } from '@/components/ui/HubEmptyState';
 import { useQueryClient, useQuery } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
@@ -25,12 +25,12 @@ import { useRealActionHandlers } from '@/hooks/useRealActionHandlers';
 import { toast } from 'sonner';
 
 // Lazy load sub-components
-const TrackingTelemetryHub = lazy(() => import('@/pages/TrackingTelemetryPremium'));
+const TrackingTelemetryHub = lazy(() => import('@/pages/TelemetriaCommand'));
 const RealTimeTrackingPage = lazy(() => import('@/pages/tracking/RealTimeTrackingPage'));
 const AISTrackerPage = lazy(() => import('@/pages/AISTrackerPage'));
 const SatcomDashboardEnhanced = lazy(() => import('@/pages/SatcomDashboardEnhanced'));
 const WeatherIntelligencePage = lazy(() => import('@/pages/advanced/WeatherIntelligencePage'));
-const AlertsCommandCenter = lazy(() => import('@/pages/AlertsCommandCenter'));
+const AlertsCommandCenter = lazy(() => import('@/pages/TelemetriaCommand'));
 const PredictiveTelemetry = lazy(() => import('@/pages/PredictiveTelemetry'));
 
 const LoadingSkeleton = () => (

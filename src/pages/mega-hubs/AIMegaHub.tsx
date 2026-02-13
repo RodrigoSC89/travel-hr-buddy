@@ -22,7 +22,7 @@ import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
 import { Skeleton } from '@/components/ui/skeleton';
 import { EnhancedActionBar } from '@/components/ui/world-class/EnhancedActionBar';
-import { AIAgentHealthDashboard } from '@/components/world-class';
+// AIAgentHealthDashboard removed - world-class deleted
 import { HubEmptyState } from '@/components/ui/HubEmptyState';
 import { useQueryClient, useQuery } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
@@ -30,9 +30,9 @@ import { useRealActionHandlers } from '@/hooks/useRealActionHandlers';
 import { toast } from 'sonner';
 
 // Lazy load sub-components
-const AIControlTowerHub = lazy(() => import('@/pages/AIControlTowerHubEnhanced'));
+const AIControlTowerHub = lazy(() => import('@/pages/AICommandCenter'));
 const AICommandCenter = lazy(() => import('@/pages/AICommandCenter'));
-const AutonomousCommandCenter = lazy(() => import('@/pages/AutonomousCommandCenter'));
+const AutonomousCommandCenter = lazy(() => import('@/pages/AICommandCenter'));
 const AIAgentDirectory = lazy(() => import('@/pages/AIAgents/AIAgentDirectory'));
 const WorkflowCommandCenter = lazy(() => import('@/pages/WorkflowCommandCenter'));
 const VoiceAssistant = lazy(() => import('@/pages/VoiceAssistant'));

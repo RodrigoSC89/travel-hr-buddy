@@ -39,11 +39,4 @@ export {
   type StatusTimelineProps 
 } from "../status-timeline";
 
-// Premium Intelligence Components (re-export from @/components/premium)
-export { 
-  VesselContractsAdvanced,
-  MaintenanceIntelligence,
-  CrewIntelligenceHub,
-  ComplianceIntelligence,
-  TrackingIntelligence
-} from "@/components/premium";
+// Premium Intelligence Components removed - orphaned module

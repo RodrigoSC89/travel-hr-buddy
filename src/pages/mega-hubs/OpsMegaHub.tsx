@@ -15,7 +15,7 @@ import { Compass, Anchor, Ship, Map, Target, Package, FileText, Plus, CheckCircl
 import { Skeleton } from '@/components/ui/skeleton';
 import { EnhancedActionBar } from '@/components/ui/world-class/EnhancedActionBar';
 import { WorkflowStatusBar } from '@/components/ui/world-class/WorkflowStatusBar';
-import { OperationsActionPanel } from '@/components/world-class';
+// OperationsActionPanel removed - world-class deleted
 import { HubEmptyState } from '@/components/ui/HubEmptyState';
 import { ConfirmDialog } from '@/components/ui/ConfirmDialog';
 import { useQueryClient } from '@tanstack/react-query';
@@ -24,13 +24,13 @@ import { useRealActionHandlers } from '@/hooks/useRealActionHandlers';
 import { toast } from 'sonner';
 import { NewVoyageDialog } from '@/components/operations/QuickActionDialogs';
 // Lazy load sub-components
-const OperationsCommandHub = lazy(() => import('@/pages/OperationsCommandHubEnhanced'));
+const OperationsCommandHub = lazy(() => import('@/pages/OperationsCommandCenter'));
 const MaritimeCommandCenter = lazy(() => import('@/pages/MaritimeCommandCenter'));
 const FleetCommandCenter = lazy(() => import('@/pages/FleetCommandCenter'));
 const VoyageCommandCenter = lazy(() => import('@/pages/VoyageCommandCenter'));
 const MissionCommandCenter = lazy(() => import('@/pages/MissionCommandCenter'));
-const LogisticsCommandPage = lazy(() => import('@/pages/LogisticsCommandPage'));
-const VesselContractsUnified = lazy(() => import('@/pages/VesselContractsUnified'));
+const LogisticsCommandPage = lazy(() => import('@/pages/FleetCommandCenter'));
+const VesselContractsUnified = lazy(() => import('@/pages/FleetCommandCenter'));
 
 const LoadingSkeleton = () => (
   <div className="space-y-4 p-6">
