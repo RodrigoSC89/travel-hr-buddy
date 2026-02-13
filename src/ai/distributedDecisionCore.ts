@@ -408,25 +408,28 @@ class DistributedDecisionCore {
     logger.debug("[DistributedDecisionCore] Received context update", contextData);
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Supabase ai_decisions row mapping
-  private mapRowToDecision(row: any): Decision {
+  private mapRowToDecision(row: Record<string, unknown>): Decision {
     return {
-      id: row.id,
-      moduleName: row.decision_type,
-      decisionLevel: row.decision_level,
-      decisionType: row.decision_type,
-      context: row.context || {},
-      action: row.outcome || "no_action",
-      priority: row.priority,
-      status: row.decision_status || "completed",
+      id: String(row.id),
+      moduleName: String(row.decision_type || ""),
+      decisionLevel: (row.decision_level || "local") as DecisionLevel,
+      decisionType: String(row.decision_type || ""),
+      context: {
+        moduleName: String(row.decision_type || ""),
+        decisionType: String(row.decision_type || ""),
+        contextData: (row.context as Record<string, unknown>) || {},
+      },
+      action: String(row.outcome || "no_action"),
+      priority: (row.priority || "medium") as DecisionPriority,
+      status: (row.decision_status || "completed") as DecisionStatus,
       timeoutMs: 5000,
       executed: true,
       success: row.decision_status === "completed",
       errorMessage: undefined,
-      simulationResults: row.simulation_result,
-      escalationReason: row.escalation_reason,
-      timestamp: new Date(row.created_at),
-      executedAt: row.executed_at ? new Date(row.executed_at) : undefined
+      simulationResults: Array.isArray(row.simulation_result) ? row.simulation_result as SimulationResult[] : [],
+      escalationReason: row.escalation_reason as string | undefined,
+      timestamp: new Date(String(row.created_at)),
+      executedAt: row.executed_at ? new Date(String(row.executed_at)) : undefined
     };
   }
 }

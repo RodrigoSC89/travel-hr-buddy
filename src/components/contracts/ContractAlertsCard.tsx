@@ -72,12 +72,11 @@ export function ContractAlertsCard() {
         .order('created_at', { ascending: false });
 
       if (rulesData) {
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any -- alert_rules not in generated types
-        setRules((rulesData as any[]).map((r) => ({
+        setRules((rulesData as Record<string, unknown>[]).map((r) => ({
           id: String(r.id),
           name: String(r.name),
           type: String(r.rule_type) as AlertRule["type"],
-          condition: String(r.condition_text || getConditionText(r.rule_type, r.threshold, r.advance_days)),
+          condition: String(r.condition_text || getConditionText(String(r.rule_type), Number(r.threshold || 0), Number(r.advance_days || 0))),
           channels: (r.channels || []) as AlertRule["channels"],
           recipients: (r.recipients || []) as string[],
           enabled: Boolean(r.is_enabled),
@@ -94,8 +93,7 @@ export function ContractAlertsCard() {
         .limit(50);
 
       if (logsData) {
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any -- contract_alert_logs not in generated types
-        setLogs((logsData as any[]).map((l) => ({
+        setLogs((logsData as Record<string, unknown>[]).map((l) => ({
           id: String(l.id),
           rule_name: String(l.rule_id || 'Sistema'),
           channel: String((l.channels as string[])?.[0] || 'email'),

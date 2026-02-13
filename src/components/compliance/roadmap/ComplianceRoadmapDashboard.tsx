@@ -124,7 +124,7 @@ export function ComplianceRoadmapDashboard() {
   const { data: departmentScoresData = [] } = useDepartmentScores();
   const updateNCMutation = useUpdateNCStatus();
 
-  const [items] = useState(() => [] as any[]);
+  const [items] = useState<Array<Record<string, any>>>(() => []);
   const [nonConformities, setNonConformities] = useState<NonConformity[]>([]);
   const [alerts, setAlerts] = useState<ComplianceAlert[]>([]);
   const [departmentScores, setDepartmentScores] = useState<DepartmentScore[]>([]);

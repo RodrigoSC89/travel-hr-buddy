@@ -55,11 +55,11 @@ export function CrewManagement() {
       }
 
       if (data && data.length > 0) {
-        const mappedCrew: CrewMember[] = data.map((c: any) => ({
+        const mappedCrew: CrewMember[] = data.map((c) => ({
           id: c.id,
           name: c.full_name || "Tripulante",
           position: c.position || "Marinheiro",
-          vessel: c.vessels?.name || "Sem embarcação",
+          vessel: (c as Record<string, unknown> & { vessels?: { name?: string } }).vessels?.name || "Sem embarcação",
           certifications: [
             { 
               name: "STCW", 

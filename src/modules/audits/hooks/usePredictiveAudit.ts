@@ -104,12 +104,11 @@ export function useAuditHistory(vesselId: string) {
         return generateMockAuditHistory(vesselId);
       }
       
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any -- dynamic table not in generated types
-      return (data || []).map((d: any) => ({
+      return (data || []).map((d: Record<string, unknown>) => ({
         id: String(d.id),
         vessel_id: String(d.vessel_id || vesselId),
         audit_type: String(d.audit_type || d.type || 'Internal'),
-        audit_date: d.audit_date || d.created_at,
+        audit_date: String(d.audit_date || d.created_at || ''),
         score: Number(d.score || d.overall_score || 85),
         status: String(d.status || 'completed'),
       }));
@@ -128,12 +127,11 @@ export function useAuditAnalytics() {
         .order("created_at", { ascending: false })
         .limit(100);
 
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any -- dynamic table not in generated types
-      const audits: AuditRecord[] = data?.length ? data.map((d: any) => ({
+      const audits: AuditRecord[] = data?.length ? data.map((d: Record<string, unknown>) => ({
         id: String(d.id),
         vessel_id: String(d.vessel_id),
         audit_type: String(d.audit_type || d.type || 'Internal'),
-        audit_date: d.audit_date || d.created_at,
+        audit_date: String(d.audit_date || d.created_at || ''),
         score: Number(d.score || d.overall_score || 85),
         status: String(d.status || 'completed'),
       })) : generateMockAuditHistory("all");

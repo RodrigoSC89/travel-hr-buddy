@@ -36,6 +36,7 @@ import {
 import { situationalAwareness } from "@/ai/situational-awareness";
 import { tacticalResponse } from "@/ai/tactical-response";
 import { BridgeLink } from "@/core/BridgeLink";
+import type { BridgeLinkEventType } from "@/core/BridgeLink";
 
 /**
  * Props for ReactionMapper component
@@ -161,7 +162,8 @@ export const ReactionMapper: React.FC<ReactionMapperProps> = ({
 
     // Trigger simulation event
     if (integrateWithControlHub) {
-      BridgeLink.emit("reaction-mapper:simulation-started" as any, "ReactionMapper", {
+      BridgeLink.emit("telemetry:log" as BridgeLinkEventType, "ReactionMapper", {
+        event: "reaction-mapper:simulation-started",
         scenarioId: state.currentScenario.id,
         timestamp: Date.now(),
       });
@@ -266,7 +268,8 @@ export const ReactionMapper: React.FC<ReactionMapperProps> = ({
     }));
 
     if (integrateWithControlHub) {
-      BridgeLink.emit("reaction-mapper:simulation-stopped" as any, "ReactionMapper", {
+      BridgeLink.emit("telemetry:log" as BridgeLinkEventType, "ReactionMapper", {
+        event: "reaction-mapper:simulation-stopped",
         timestamp: Date.now(),
       });
     }
