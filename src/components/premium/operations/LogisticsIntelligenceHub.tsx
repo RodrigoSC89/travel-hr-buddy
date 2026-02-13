@@ -114,13 +114,12 @@ export function LogisticsIntelligenceHub() {
       try {
         const { data, error } = await supabase.from("fuel_records").select("id, fuel_type, quantity_liters, total_cost, record_date, vessel_id, vessels(name)").order("record_date", { ascending: false }).limit(10);
         if (!error && data && data.length > 0) {
-          // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Supabase join returns dynamic shape with vessel relation
-          const mapped: Shipment[] = data.map((row: any, i: number) => ({
-            id: row.id, trackingNumber: `NTLS-${i + 1}`, type: "bulk" as const, status: "delivered" as const,
+          const mapped: Shipment[] = data.map((row: Record<string, unknown>, i: number) => ({
+            id: String(row.id), trackingNumber: `NTLS-${i + 1}`, type: "bulk" as const, status: "delivered" as const,
             origin: { port: "Fornecedor", country: "BR" }, destination: { port: "Base", country: "BR" },
-            vessel: (row.vessels as { name?: string })?.name || "Embarcação",
-            eta: new Date(row.record_date || Date.now()), etd: new Date(row.record_date || Date.now()),
-            cargo: { description: `${row.fuel_type || "Combustível"}`, weight: Number(row.quantity_liters) || 0, volume: Number(row.quantity_liters) || 0, value: Number(row.total_cost) || 0 },
+            vessel: ((row.vessels as Record<string, unknown>)?.name as string) || "Embarcação",
+            eta: new Date(String(row.record_date) || Date.now()), etd: new Date(String(row.record_date) || Date.now()),
+            cargo: { description: `${String(row.fuel_type || "Combustível")}`, weight: Number(row.quantity_liters) || 0, volume: Number(row.quantity_liters) || 0, value: Number(row.total_cost) || 0 },
             milestones: [{ name: "Entregue", status: "completed" as const }],
             documents: [], aiPredictions: { delayRisk: 5, etaConfidence: 98, suggestedActions: [] },
           }));

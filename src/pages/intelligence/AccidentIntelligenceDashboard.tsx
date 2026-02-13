@@ -492,14 +492,13 @@ export default function AccidentIntelligenceDashboard() {
                     <YAxis type="number" dataKey="y" name="Y" stroke="hsl(var(--muted-foreground))" hide />
                     <Tooltip 
                       cursor={{ strokeDasharray: '3 3' }}
-                      contentStyle={{ 
+                    contentStyle={{ 
                         backgroundColor: "hsl(var(--card))", 
                         border: "1px solid hsl(var(--border))" 
                       }}
-                      // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Recharts Tooltip formatter signature
-                      formatter={(_value: number, _name: string, props: any) => [
-                        `${props.payload.incidents} incidentes`,
-                        props.payload.location
+                      formatter={(_value: number, _name: string, props: { payload?: { incidents: number; location: string } }) => [
+                        `${props.payload?.incidents ?? 0} incidentes`,
+                        props.payload?.location ?? ""
                       ]}
                     />
                     <Scatter 

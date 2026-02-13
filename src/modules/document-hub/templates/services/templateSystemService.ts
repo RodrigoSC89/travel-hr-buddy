@@ -201,8 +201,7 @@ class TemplateSystemService {
    */
   async generateDocument(
     templateId: string,
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any -- dynamic form values
-    fieldValues: Record<string, any>,
+    fieldValues: Record<string, unknown>,
     userId: string
   ): Promise<GeneratedDocument> {
     try {
@@ -368,8 +367,7 @@ class TemplateSystemService {
    */
   private validateFieldValues(
     fields: TemplateField[],
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any -- dynamic form values
-    values: Record<string, any>
+    values: Record<string, unknown>
   ): void {
     fields.forEach((field) => {
       const value = values[field.name];
@@ -399,13 +397,13 @@ class TemplateSystemService {
           break;
 
         case "date":
-          if (isNaN(Date.parse(value))) {
+          if (isNaN(Date.parse(String(value)))) {
             throw new Error(`Field "${field.label}" must be a valid date`);
           }
           break;
 
         case "select":
-          if (field.options && !field.options.includes(value)) {
+          if (field.options && !field.options.includes(String(value))) {
             throw new Error(
               `Field "${field.label}" must be one of: ${field.options.join(", ")}`
             );

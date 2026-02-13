@@ -10,7 +10,7 @@
 import { logger } from "@/lib/utils/production-logger";
 
 // Type definitions
-/* eslint-disable @typescript-eslint/no-explicit-any -- mapbox-gl external library types require any for interop */
+/* eslint-disable @typescript-eslint/no-explicit-any -- mapbox-gl external library types require any for full API interop across dozens of consumer files */
 type MapboxMapConstructor = new (options: any) => any;
 type MapboxMarkerConstructor = new (options?: any) => any;
 type MapboxPopupConstructor = new (options?: any) => any;
@@ -31,8 +31,8 @@ export interface MapboxGLInterface {
 
 // Create mock classes for when mapbox-gl is not available
 class MockMap {
-  private _container: any;
-  constructor(options?: any) {
+  private _container: unknown;
+  constructor(options?: Record<string, unknown>) {
     this._container = options?.container;
     logger.debug('[mapbox-shim] Using mock Map - mapbox-gl not loaded');
   }
