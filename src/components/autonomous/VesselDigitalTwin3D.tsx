@@ -136,7 +136,7 @@ function Propeller({ rpm = 850 }: { rpm?: number }) {
     <group position={[-4.5, -0.5, 0]}>
       <group ref={propRef}>
         {[0, 1, 2, 3].map((i) => (
-          <mesh key={i} rotation={[0, 0, (Math.PI / 2) * i]}>
+          <mesh key={`prop-blade-${i}`} rotation={[0, 0, (Math.PI / 2) * i]}>
             <boxGeometry args={[0.6, 0.1, 0.2]} />
             <meshStandardMaterial color="#d4af37" metalness={0.8} roughness={0.2} />
           </mesh>

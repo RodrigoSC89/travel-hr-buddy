@@ -97,8 +97,8 @@ export default function HRDashboard() {
                 { cert: "STCW", valid: 180, total: 198 },
                 { cert: "Primeiros Socorros", valid: 165, total: 198 },
                 { cert: "Segurança", valid: 192, total: 198 },
-              ].map((item, i) => (
-                <div key={i}>
+              ].map((item) => (
+                <div key={`cert-${item.cert}`}>
                   <div className="flex items-center justify-between mb-1">
                     <span className="text-sm font-medium">{item.cert}</span>
                     <span className="text-sm text-muted-foreground">{item.valid}/{item.total}</span>

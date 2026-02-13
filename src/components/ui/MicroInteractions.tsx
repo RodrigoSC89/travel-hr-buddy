@@ -230,7 +230,7 @@ export const LoadingDots: React.FC<{ className?: string }> = ({ className }) => 
   <span className={cn("inline-flex items-center gap-1", className)}>
     {[0, 1, 2].map(i => (
       <motion.span
-        key={i}
+        key={`loading-dot-${i}`}
         className="h-1.5 w-1.5 rounded-full bg-current"
         animate={{ opacity: [0.3, 1, 0.3] }}
         transition={{

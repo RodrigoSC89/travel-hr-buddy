@@ -133,7 +133,7 @@ export const DashboardSkeleton: React.FC = () => {
         <Skeleton className="h-5 w-40 mb-4" />
         <div className="grid grid-cols-3 md:grid-cols-5 lg:grid-cols-9 gap-3">
           {Array.from({ length: 9 }).map((_, i) => (
-            <Skeleton key={i} className="h-24 rounded-lg" />
+            <Skeleton key={`dash-quick-skel-${i}`} className="h-24 rounded-lg" />
           ))}
         </div>
       </div>
@@ -144,7 +144,7 @@ export const DashboardSkeleton: React.FC = () => {
       {/* Tabs */}
       <div className="bg-card/50 border border-border rounded-lg p-1 flex gap-1">
         {[1, 2, 3].map((i) => (
-          <Skeleton key={i} className="h-10 flex-1 rounded-md" />
+          <Skeleton key={`dash-tab-skel-${i}`} className="h-10 flex-1 rounded-md" />
         ))}
       </div>
       

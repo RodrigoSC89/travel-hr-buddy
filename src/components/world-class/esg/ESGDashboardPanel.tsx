@@ -53,7 +53,7 @@ export function ESGDashboardPanel() {
     return (
       <div className="space-y-4">
         {[1, 2, 3].map(i => (
-          <Card key={i} className="animate-pulse">
+          <Card key={`esg-skel-${i}`} className="animate-pulse">
             <CardContent className="p-6"><div className="h-24 bg-muted rounded" /></CardContent>
           </Card>
         ))}

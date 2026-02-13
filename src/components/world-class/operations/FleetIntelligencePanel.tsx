@@ -86,7 +86,7 @@ Forneça:
     return (
       <div className="space-y-4">
         {[1, 2, 3].map(i => (
-          <Card key={i}><CardContent className="p-6 h-20 animate-pulse bg-muted/30" /></Card>
+          <Card key={`fleet-intel-skel-${i}`}><CardContent className="p-6 h-20 animate-pulse bg-muted/30" /></Card>
         ))}
       </div>
     );
