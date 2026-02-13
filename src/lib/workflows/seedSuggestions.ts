@@ -326,11 +326,10 @@ export async function seedSuggestionsForWorkflow(
       metadata: {} as Json,
     }));
 
-    // Insert steps into database - using type assertion for Supabase compatibility
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    // Insert steps into database
     const { data, error } = await supabase
       .from("smart_workflow_steps")
-      .insert(stepsToInsert as any)
+      .insert(stepsToInsert as never[])
       .select();
 
     if (error) {

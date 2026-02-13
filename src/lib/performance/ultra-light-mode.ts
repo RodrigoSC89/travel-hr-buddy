@@ -68,7 +68,7 @@ class UltraLightMode {
   }
 
   private detectAndApply() {
-    const connection = (navigator as any).connection;
+    const connection = (navigator as unknown as Record<string, unknown>).connection as { effectiveType?: string; downlink?: number; rtt?: number; saveData?: boolean; addEventListener?: (type: string, cb: () => void) => void } | undefined;
     
     // Check for slow connection
     if (connection) {
@@ -103,10 +103,10 @@ class UltraLightMode {
   }
 
   private setupListeners() {
-    const connection = (navigator as any).connection;
+    const connection = (navigator as unknown as Record<string, unknown>).connection as { addEventListener?: (type: string, cb: () => void) => void } | undefined;
     
     if (connection) {
-      connection.addEventListener('change', () => this.detectAndApply());
+      connection.addEventListener?.('change', () => this.detectAndApply());
     }
 
     // Listen for user preference changes

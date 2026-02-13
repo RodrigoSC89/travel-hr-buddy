@@ -84,7 +84,7 @@ class SmartPrefetchManager {
     if (this.prefetchedRoutes.has(route)) return;
     
     // Don't prefetch on slow connections
-    const connection = (navigator as any).connection;
+    const connection = (navigator as unknown as Record<string, unknown>).connection as { saveData?: boolean; effectiveType?: string } | undefined;
     if (connection?.saveData || connection?.effectiveType === '2g') {
       return;
     }

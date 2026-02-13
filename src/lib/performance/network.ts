@@ -26,7 +26,7 @@ export function useNetworkQuality(): NetworkInfo {
 
   useEffect(() => {
     const updateNetworkInfo = () => {
-      const connection = (navigator as any).connection;
+      const connection = (navigator as unknown as Record<string, unknown>).connection as { effectiveType?: string; downlink?: number; rtt?: number; saveData?: boolean } | undefined;
 
       if (!navigator.onLine) {
         setNetworkInfo({ quality: "offline" });
@@ -42,9 +42,9 @@ export function useNetworkQuality(): NetworkInfo {
 
       let quality: NetworkQuality = "fast";
 
-      if (effectiveType === "slow-2g" || effectiveType === "2g" || downlink < 0.5) {
+      if (effectiveType === "slow-2g" || effectiveType === "2g" || (downlink ?? 10) < 0.5) {
         quality = "slow";
-      } else if (effectiveType === "3g" || downlink < 2) {
+      } else if (effectiveType === "3g" || (downlink ?? 10) < 2) {
         quality = "medium";
       }
 
@@ -64,16 +64,16 @@ export function useNetworkQuality(): NetworkInfo {
     updateNetworkInfo();
 
     // Listen for changes
-    const connection = (navigator as any).connection;
+    const connection = (navigator as unknown as Record<string, unknown>).connection as { addEventListener?: (type: string, cb: () => void) => void; removeEventListener?: (type: string, cb: () => void) => void } | undefined;
     if (connection) {
-      connection.addEventListener("change", updateNetworkInfo);
+      connection.addEventListener?.("change", updateNetworkInfo);
     }
     window.addEventListener("online", updateNetworkInfo);
     window.addEventListener("offline", updateNetworkInfo);
 
     return () => {
       if (connection) {
-        connection.removeEventListener("change", updateNetworkInfo);
+        connection.removeEventListener?.("change", updateNetworkInfo);
       }
       window.removeEventListener("online", updateNetworkInfo);
       window.removeEventListener("offline", updateNetworkInfo);

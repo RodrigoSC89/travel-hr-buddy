@@ -187,7 +187,7 @@ export async function generatePayslipPDF(data: PayslipData): Promise<void> {
 
   // Salário líquido
   const finalY = Math.max(
-    (doc as any).lastAutoTable?.finalY || 150,
+    (doc as unknown as Record<string, { finalY?: number }>).lastAutoTable?.finalY || 150,
     150
   ) + 10;
 

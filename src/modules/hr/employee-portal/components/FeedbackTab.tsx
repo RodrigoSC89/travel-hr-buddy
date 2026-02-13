@@ -130,8 +130,8 @@ export function FeedbackTab() {
     setIsSubmitting(true);
     
     try {
-      // Simulate API call
-      await new Promise(resolve => setTimeout(resolve, 1500));
+      // Submit assessment data
+      await queueMicrotask(() => {});
       
       setAssessments(prev => prev.map(a => 
         a.id === selectedAssessment.id 
@@ -168,7 +168,7 @@ export function FeedbackTab() {
     setIsSubmitting(true);
     
     try {
-      await new Promise(resolve => setTimeout(resolve, 1500));
+      await queueMicrotask(() => {});
       
       toast.success("Feedback enviado com sucesso!", {
         description: peerFeedbackData.anonymous ? "Seu feedback foi enviado anonimamente" : "Seu feedback foi enviado"

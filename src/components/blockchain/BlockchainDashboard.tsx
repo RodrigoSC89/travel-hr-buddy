@@ -154,11 +154,9 @@ export const BlockchainDashboard: React.FC = () => {
       networkHealth: 99.7
     };
 
-    setTimeout(() => {
-      setTransactions(fallbackTransactions);
-      setStats(fallbackStats);
-      setIsLoading(false);
-    }, 1000);
+    setTransactions(fallbackTransactions);
+    setStats(fallbackStats);
+    setIsLoading(false);
   };
 
   const getTypeIcon = (type: BlockchainTransaction['type']) => {

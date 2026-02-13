@@ -270,8 +270,8 @@ export const SystemHealthDashboard = memo(() => {
                   Recomendações
                 </h4>
                 <ul className="space-y-1 text-sm text-muted-foreground">
-                  {benchmark.recommendations.map((rec, i) => (
-                    <li key={i}>• {rec}</li>
+                  {benchmark.recommendations.map((rec) => (
+                    <li key={`rec-${rec.slice(0, 30)}`}>• {rec}</li>
                   ))}
                 </ul>
               </div>

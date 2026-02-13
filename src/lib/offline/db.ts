@@ -262,7 +262,7 @@ export async function deleteFromLocal<T extends { id: string }>(
   const record = await table.get(id);
   
   if (record) {
-    await (table as any).update(id, {
+    await (table as unknown as { update: (id: string, changes: Record<string, unknown>) => Promise<void> }).update(id, {
       _deleted: true,
       _synced: false,
       _lastModified: Date.now(),
@@ -288,7 +288,7 @@ export async function markAsSynced<T>(
   table: Table<T, string>,
   id: string
 ): Promise<void> {
-  await (table as any).update(id, { _synced: true });
+  await (table as unknown as { update: (id: string, changes: Record<string, unknown>) => Promise<void> }).update(id, { _synced: true });
 }
 
 /**

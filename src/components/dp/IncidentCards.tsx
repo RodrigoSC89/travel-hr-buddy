@@ -555,8 +555,8 @@ export default function IncidentCards() {
                     <CardContent className="pt-4">
                       <h4 className="font-semibold mb-3">Incidentes Similares</h4>
                       <ul className="space-y-2">
-                        {aiAnalysis.similarIncidents.map((item, i) => (
-                          <li key={i} className="flex items-start gap-2 text-sm text-muted-foreground">
+                        {aiAnalysis.similarIncidents.map((item) => (
+                          <li key={`sim-${item.slice(0, 30)}`} className="flex items-start gap-2 text-sm text-muted-foreground">
                             <CheckCircle className="h-4 w-4 text-blue-500 mt-0.5 flex-shrink-0" />
                             {item}
                           </li>
@@ -575,7 +575,7 @@ export default function IncidentCards() {
                       </h4>
                       <ul className="space-y-2">
                         {aiAnalysis.recommendations.map((rec, i) => (
-                          <li key={i} className="flex items-start gap-2 text-sm">
+                          <li key={`rec-${rec.slice(0, 30)}`} className="flex items-start gap-2 text-sm">
                             <span className="bg-primary text-primary-foreground rounded-full w-5 h-5 flex items-center justify-center text-xs flex-shrink-0">
                               {i + 1}
                             </span>
@@ -593,8 +593,8 @@ export default function IncidentCards() {
                         Medidas Preventivas
                       </h4>
                       <ul className="space-y-2">
-                        {aiAnalysis.preventiveMeasures.map((measure, i) => (
-                          <li key={i} className="flex items-start gap-2 text-sm text-muted-foreground">
+                        {aiAnalysis.preventiveMeasures.map((measure) => (
+                          <li key={`prev-${measure.slice(0, 30)}`} className="flex items-start gap-2 text-sm text-muted-foreground">
                             <CheckCircle className="h-4 w-4 text-success mt-0.5 flex-shrink-0" />
                             {measure}
                           </li>

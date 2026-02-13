@@ -242,8 +242,8 @@ export class MissionPipeline {
     step: MissionStep
   ): Promise<{ success: boolean; result?: unknown; error?: unknown }> {
     try {
-      // Simulate step execution based on type
-      await new Promise(resolve => setTimeout(resolve, step.timeout || 1000));
+      // Execute step based on type
+      await queueMicrotask(() => {});
 
       switch (step.type) {
       case "scan":

@@ -214,5 +214,5 @@ export const pollingManager = new PollingManager();
 
 // Expose to window for debugging
 if (typeof window !== "undefined") {
-  (window as any).__NAUTILUS_POLLING__ = pollingManager;
+  (window as unknown as Record<string, unknown>).__NAUTILUS_POLLING__ = pollingManager;
 }

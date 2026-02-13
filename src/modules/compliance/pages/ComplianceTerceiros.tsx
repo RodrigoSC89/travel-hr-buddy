@@ -399,8 +399,8 @@ export default function ComplianceTerceiros() {
                   {tp.aiRiskFlags.length > 0 && (
                     <div className="flex items-center gap-2 flex-wrap mt-2">
                     <Brain className="h-4 w-4 text-accent-foreground" />
-                      {tp.aiRiskFlags.map((flag: string, i: number) => (
-                        <Badge key={i} variant="outline" className="text-xs bg-accent/10 text-accent-foreground border-accent/30">
+                      {tp.aiRiskFlags.map((flag: string) => (
+                        <Badge key={`risk-${flag}`} variant="outline" className="text-xs bg-accent/10 text-accent-foreground border-accent/30">
                           {flag}
                         </Badge>
                       ))}

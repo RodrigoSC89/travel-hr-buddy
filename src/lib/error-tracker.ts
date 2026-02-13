@@ -67,7 +67,7 @@ class ErrorTracker {
 
     // Store in window for debugging
     if (typeof window !== 'undefined') {
-      (window as any).__NAUTILUS_ERRORS__ = this.errors;
+      (window as unknown as Record<string, unknown>).__NAUTILUS_ERRORS__ = this.errors;
     }
 
     // Log to console based on severity
@@ -164,7 +164,7 @@ class ErrorTracker {
   clear(): void {
     this.errors = [];
     if (typeof window !== 'undefined') {
-      (window as any).__NAUTILUS_ERRORS__ = [];
+      (window as unknown as Record<string, unknown>).__NAUTILUS_ERRORS__ = [];
     }
   }
 
@@ -247,5 +247,5 @@ if (typeof window !== 'undefined') {
 
 // Export for debugging
 if (typeof window !== 'undefined') {
-  (window as any).__NAUTILUS_ERROR_TRACKER__ = errorTracker;
+  (window as unknown as Record<string, unknown>).__NAUTILUS_ERROR_TRACKER__ = errorTracker;
 }
