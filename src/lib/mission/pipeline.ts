@@ -396,10 +396,10 @@ export class MissionPipeline {
   }
 
   /**
-   * Get AI strategy recommendation (simulated)
+   * Get AI strategy recommendation
+   * Note: Uses local heuristics. Future: call AI edge function for real inference.
    */
   async getAIStrategyRecommendation(missionId: string, stepId: string): Promise<AIStrategyRecommendation> {
-    await new Promise(resolve => setTimeout(resolve, 500));
 
     const mission = this.missions.get(missionId);
     const step = mission?.steps.find(s => s.id === stepId);

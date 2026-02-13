@@ -123,7 +123,7 @@ export const ErrorDashboard: React.FC = () => {
               <Button 
                 variant="outline" 
                 size="sm"
-                onClick={() => window.location.reload()}
+                onClick={() => { clear(); }}
               >
                 <RefreshCw className="w-4 h-4 mr-2" />
                 Atualizar

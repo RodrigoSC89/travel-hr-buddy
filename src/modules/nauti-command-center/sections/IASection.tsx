@@ -308,11 +308,11 @@ export function IASection() {
                           <p className="text-sm whitespace-pre-wrap">{msg.content || (msg.status === "streaming" ? "..." : "")}</p>
                           {msg.role === "assistant" && msg.status === "complete" && (
                             <div className="flex gap-1 mt-2 pt-2 border-t border-border/50">
-                              <Button variant="ghost" size="icon" className="h-6 w-6" onClick={() => { navigator.clipboard.writeText(msg.content); toast.success("Copiado!"); }}>
+                              <Button variant="ghost" size="icon" className="h-6 w-6" aria-label="Copiar resposta" onClick={() => { navigator.clipboard.writeText(msg.content); toast.success("Copiado!"); }}>
                                 <Copy className="h-3 w-3" />
                               </Button>
-                              <Button variant="ghost" size="icon" className="h-6 w-6"><ThumbsUp className="h-3 w-3" /></Button>
-                              <Button variant="ghost" size="icon" className="h-6 w-6"><ThumbsDown className="h-3 w-3" /></Button>
+                              <Button variant="ghost" size="icon" className="h-6 w-6" aria-label="Resposta útil"><ThumbsUp className="h-3 w-3" /></Button>
+                              <Button variant="ghost" size="icon" className="h-6 w-6" aria-label="Resposta não útil"><ThumbsDown className="h-3 w-3" /></Button>
                             </div>
                           )}
                         </div>

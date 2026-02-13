@@ -149,7 +149,7 @@ export function DataLoader({
       <div className={className}>
         <ErrorFallback 
           error={error} 
-          resetErrorBoundary={onRetry || (() => window.location.reload())}
+          resetErrorBoundary={onRetry || (() => { /* Retry handled by ErrorBoundary reset */ })}
         />
       </div>
     );

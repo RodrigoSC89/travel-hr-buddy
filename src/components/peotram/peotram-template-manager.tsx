@@ -51,7 +51,7 @@ export const PeotramTemplateManager: React.FC<TemplateManagerProps> = ({
       if (error) throw error;
 
       // Trigger refresh of templates list
-      window.location.reload();
+      onTemplateUpdate(data as unknown as PeotramTemplate);
       
       toast({
         title: "Sucesso",

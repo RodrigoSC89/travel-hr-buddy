@@ -259,7 +259,8 @@ export const WelcomeOnboarding: React.FC = () => {
 export const useResetOnboarding = () => {
   return () => {
     localStorage.removeItem(STORAGE_KEY);
-    window.location.reload();
+    // SPA-safe: force re-render without full page reload
+    window.dispatchEvent(new CustomEvent('onboarding-reset'));
   };
 };
 

@@ -240,7 +240,8 @@ export const LaunchCelebration: React.FC = () => {
 export const useResetLaunchCelebration = () => {
   return () => {
     localStorage.removeItem(LAUNCH_CELEBRATION_KEY);
-    window.location.reload();
+    // SPA-safe: force re-render without full page reload
+    window.dispatchEvent(new CustomEvent('celebration-reset'));
   };
 };
 

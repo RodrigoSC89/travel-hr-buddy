@@ -322,9 +322,9 @@ export function VesselTrackingMap({
                 Verifique a configuração do Mapbox
               </p>
             </div>
-            <Button variant="outline" onClick={() => window.location.reload()}>
+            <Button variant="outline" onClick={() => { setError(null); }}>
               <RefreshCw className="h-4 w-4 mr-2" />
-              Recarregar
+              Tentar Novamente
             </Button>
           </div>
         </CardContent>

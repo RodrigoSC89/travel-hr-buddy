@@ -592,8 +592,8 @@ class IncidentManager {
     for (const step of autoSteps) {
       await this.completeRunbookStep(incidentId, step.step, 'system', 'Auto-executed');
       
-      // Add small delay between auto-steps
-      await new Promise(resolve => setTimeout(resolve, 1000));
+      // Small delay between auto-steps to avoid race conditions
+      await new Promise(resolve => setTimeout(resolve, 100));
     }
   }
 }
