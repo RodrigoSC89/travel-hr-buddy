@@ -95,7 +95,7 @@ export { default as NautilusPeople } from "./nauti-people";
 // DOCUMENTS (UNIFIED → NAUTILUS DOCUMENTS)
 // ============================================
 export { default as NautilusDocuments } from "./nauti-documents";
-export { default as IncidentReports } from "./incident-reports";
+// incident-reports module merged into nauti-documents
 export { default as DocumentHub } from "./document-hub";
 
 // ============================================
