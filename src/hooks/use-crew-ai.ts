@@ -267,22 +267,26 @@ export const useCrewAI = () => {
         },
       });
 
-      return {
-        summary: response.message || "Equipe operando com níveis adequados de experiência e certificação",
-        strengths: response.metadata?.strengths || [
+      const strengths = Array.isArray(response.metadata?.strengths) ? response.metadata.strengths as string[] : [
           "Alta taxa de retenção de tripulantes experientes",
           "Diversidade de competências técnicas",
           "Bom balanceamento de idade e experiência",
-        ],
-        concerns: response.metadata?.concerns || [
+        ];
+      const concerns = Array.isArray(response.metadata?.concerns) ? response.metadata.concerns as string[] : [
           "Renovação de certificações pendentes para 3 tripulantes",
           "Necessidade de treinamento em novos sistemas",
-        ],
-        recommendations: response.metadata?.recommendations || [
+        ];
+      const recs = Array.isArray(response.metadata?.recommendations) ? response.metadata.recommendations as string[] : [
           "Implementar programa de mentoria interna",
           "Agendar treinamentos preventivos",
           "Planejar sucessão para posições críticas",
-        ],
+        ];
+
+      return {
+        summary: response.message || "Equipe operando com níveis adequados de experiência e certificação",
+        strengths,
+        concerns,
+        recommendations: recs,
       };
     } catch (error) {
       toast({

@@ -32,7 +32,7 @@ const DEFAULT_CONFIG: SimulatorConfig = {
 
 export function useIoTSimulator(): UseIoTSimulatorReturn {
   const [isRunning, setIsRunning] = useState(false);
-  const [lastResult, setLastResult] = useState<any>(null);
+  const [lastResult, setLastResult] = useState<Record<string, unknown> | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [totalSent, setTotalSent] = useState(0);
   const [anomaliesGenerated, setAnomaliesGenerated] = useState(0);

@@ -2,7 +2,14 @@ import { useState, useEffect } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { useLogisticsAI, type LogisticsOperation } from "@/hooks/use-logistics-ai";
+import { useLogisticsAI, type LogisticsOperation, type RouteOptimization, type DelayPrediction, type InventoryOptimization } from "@/hooks/use-logistics-ai";
+
+interface LogisticsInsights {
+  summary: string;
+  efficiency: { overall: number; onTimeDelivery: number; routeOptimization: number };
+  recommendations?: string[];
+  alerts?: string[];
+}
 import { Brain, Navigation, AlertTriangle, TrendingUp, Package, Loader2, CheckCircle } from "lucide-react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Progress } from "@/components/ui/progress";
@@ -20,10 +27,10 @@ export const LogisticsAIInsights = ({ operations }: LogisticsAIInsightsProps) =>
     generateLogisticsInsights,
   } = useLogisticsAI();
 
-  const [routeOptimizations, setRouteOptimizations] = useState<any[]>([]);
-  const [delayPredictions, setDelayPredictions] = useState<any[]>([]);
-  const [inventoryOptimizations, setInventoryOptimizations] = useState<any[]>([]);
-  const [insights, setInsights] = useState<any>(null);
+  const [routeOptimizations, setRouteOptimizations] = useState<RouteOptimization[]>([]);
+  const [delayPredictions, setDelayPredictions] = useState<DelayPrediction[]>([]);
+  const [inventoryOptimizations, setInventoryOptimizations] = useState<InventoryOptimization[]>([]);
+  const [insights, setInsights] = useState<LogisticsInsights | null>(null);
 
   const handleOptimizeRoutes = async () => {
     const opts = await optimizeRoutes(operations);
@@ -175,14 +182,14 @@ export const LogisticsAIInsights = ({ operations }: LogisticsAIInsightsProps) =>
                   </div>
                 </div>
 
-                {insights.alerts?.length > 0 && (
+                {(insights.alerts?.length ?? 0) > 0 && (
                   <div>
                     <h4 className="font-medium flex items-center gap-2 mb-3">
                       <AlertTriangle className="h-4 w-4 text-warning" />
                       Alertas
                     </h4>
                     <div className="space-y-2">
-                      {insights.alerts.map((alert: string) => (
+                      {insights.alerts?.map((alert: string) => (
                         <div key={alert} className="flex items-start gap-3 p-3 bg-warning/10 rounded-lg">
                           <span className="text-sm">{alert}</span>
                         </div>

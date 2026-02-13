@@ -15,7 +15,7 @@ import { logger } from "@/lib/logger";
 
 export const AIEvolutionDashboard: React.FC = () => {
   const [snapshots, setSnapshots] = useState<ModelSnapshot[]>([]);
-  const [currentMetrics, setCurrentMetrics] = useState<any>(null);
+  const [currentMetrics, setCurrentMetrics] = useState<{ total_decisions: number; accuracy_rate?: number; avg_confidence?: number } | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {

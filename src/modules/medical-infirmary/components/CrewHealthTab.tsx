@@ -30,7 +30,7 @@ export default function CrewHealthTab() {
   const [statusFilter, setStatusFilter] = useState<string | null>(null);
   const [selectedCrew, setSelectedCrew] = useState<CrewHealthMember | null>(null);
   const [showFilters, setShowFilters] = useState(false);
-  const [aiPrediction, setAiPrediction] = useState<any>(null);
+  const [aiPrediction, setAiPrediction] = useState<{ riskLevel: string; confidence: number; predictedIssues?: string[]; recommendations?: string[] } | null>(null);
 
   const filteredCrew = crewMembers.filter(member => {
     const matchesSearch = member.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -198,8 +198,8 @@ export default function CrewHealthTab() {
               <div>
                 <p className="text-sm font-medium mb-2">Riscos Identificados:</p>
                 <ul className="text-sm space-y-1">
-                  {aiPrediction.predictedIssues?.length > 0 ? 
-                    aiPrediction.predictedIssues.map((issue: string) => (
+                  {(aiPrediction.predictedIssues?.length ?? 0) > 0 ? 
+                    aiPrediction.predictedIssues?.map((issue: string) => (
                       <li key={issue} className="flex items-center gap-2">
                         <AlertTriangle className="h-3 w-3 text-amber-500" />
                         {issue}

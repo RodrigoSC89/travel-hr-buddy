@@ -2,7 +2,13 @@ import { useState, useEffect } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { useFleetAI, type VesselData } from "@/hooks/use-fleet-ai";
+import { useFleetAI, type VesselData, type MaintenancePrediction, type RouteOptimization, type FuelPrediction } from "@/hooks/use-fleet-ai";
+
+interface FleetRecommendations {
+  summary: string;
+  recommendations?: string[];
+  alerts?: string[];
+}
 import { Brain, TrendingUp, Wrench, Fuel, Route, AlertTriangle, Loader2 } from "lucide-react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Progress } from "@/components/ui/progress";
@@ -20,14 +26,10 @@ export const FleetAIInsights = ({ vessels }: FleetAIInsightsProps) => {
     generateFleetRecommendations,
   } = useFleetAI();
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- AI prediction results have dynamic shapes per analysis type
-  const [maintenancePredictions, setMaintenancePredictions] = useState<any[]>([]);
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- AI route optimization results
-  const [routeOptimizations, setRouteOptimizations] = useState<any[]>([]);
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- AI fuel prediction results
-  const [fuelPredictions, setFuelPredictions] = useState<any[]>([]);
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- AI fleet recommendations aggregate
-  const [recommendations, setRecommendations] = useState<any>(null);
+  const [maintenancePredictions, setMaintenancePredictions] = useState<MaintenancePrediction[]>([]);
+  const [routeOptimizations, setRouteOptimizations] = useState<RouteOptimization[]>([]);
+  const [fuelPredictions, setFuelPredictions] = useState<FuelPrediction[]>([]);
+  const [recommendations, setRecommendations] = useState<FleetRecommendations | null>(null);
 
   const handlePredictMaintenance = async () => {
     const predictions = await predictMaintenance(vessels);
@@ -154,13 +156,13 @@ export const FleetAIInsights = ({ vessels }: FleetAIInsightsProps) => {
                   </div>
                 ))}
 
-                {recommendations.alerts?.length > 0 && (
+                {(recommendations.alerts?.length ?? 0) > 0 && (
                   <div className="mt-4 pt-4 border-t space-y-2">
                     <h4 className="font-medium flex items-center gap-2">
                       <AlertTriangle className="h-4 w-4 text-warning" />
                       Alertas
                     </h4>
-                    {recommendations.alerts.map((alert: string) => (
+                    {recommendations.alerts?.map((alert: string) => (
                       <div key={alert} className="text-sm text-muted-foreground pl-6">
                         • {alert}
                       </div>

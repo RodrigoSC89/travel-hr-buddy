@@ -158,7 +158,8 @@ export function usePWA() {
   // PATCH v16 iOS PWA: SEMPRE false - navigator.onLine causa falsos positivos
   const [isOffline] = useState(false);
   const [hasUpdate, setHasUpdate] = useState(false);
-  const [deferredPrompt, setDeferredPrompt] = useState<any>(null);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- BeforeInstallPromptEvent is not in standard TypeScript DOM lib
+  const [deferredPrompt, setDeferredPrompt] = useState<(Event & { prompt: () => void; userChoice: Promise<{ outcome: string }> }) | null>(null);
 
   useEffect(() => {
     // Check if installed
@@ -168,7 +169,7 @@ export function usePWA() {
     // Listen for install prompt
     const handleBeforeInstall = (e: Event) => {
       e.preventDefault();
-      setDeferredPrompt(e);
+      setDeferredPrompt(e as Event & { prompt: () => void; userChoice: Promise<{ outcome: string }> });
       setIsInstallable(true);
     };
 

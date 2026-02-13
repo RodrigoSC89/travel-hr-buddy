@@ -136,7 +136,7 @@ export default function TrainingSimulation() {
   const [selectedAnswer, setSelectedAnswer] = useState<number | null>(null);
   const [showFeedback, setShowFeedback] = useState(false);
   const [completedSimulations, setCompletedSimulations] = useState<string[]>([]);
-  const [aiEvaluation, setAiEvaluation] = useState<any>(null);
+  const [aiEvaluation, setAiEvaluation] = useState<Record<string, unknown> | null>(null);
 
   const startSimulation = (sim: Simulation) => {
     setActiveSimulation(sim);
@@ -184,7 +184,7 @@ export default function TrainingSimulation() {
       }]);
       
       if (result?.response) {
-        setAiEvaluation(result.response);
+        setAiEvaluation(result.response as Record<string, unknown>);
         toast.info("Avaliação de IA disponível!");
       }
     }
