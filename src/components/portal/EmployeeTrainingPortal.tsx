@@ -73,7 +73,7 @@ export const EmployeeTrainingPortal: React.FC = () => {
       <div className="space-y-6">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
           {[...Array(4)].map((_, i) => (
-            <Card key={i}>
+            <Card key={`training-skel-${i}`}>
               <CardContent className="p-4">
                 <Skeleton className="h-16 w-full" />
               </CardContent>

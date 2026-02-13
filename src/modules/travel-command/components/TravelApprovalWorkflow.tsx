@@ -500,7 +500,7 @@ export function TravelApprovalWorkflow() {
                           <Label className="text-xs text-muted-foreground mb-2 block">Comentários</Label>
                           <div className="space-y-2">
                             {selectedRequest.comments.map((comment, i) => (
-                              <div key={i} className="p-2 bg-muted/30 rounded-lg">
+                              <div key={`comment-${comment.author}-${comment.date}-${i}`} className="p-2 bg-muted/30 rounded-lg">
                                 <div className="flex items-center justify-between mb-1">
                                   <span className="text-xs font-medium">{comment.author}</span>
                                   <span className="text-xs text-muted-foreground">{comment.date}</span>

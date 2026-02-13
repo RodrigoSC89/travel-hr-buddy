@@ -232,7 +232,7 @@ export function PremiumTimeline({
         <CardContent>
           <div className="space-y-4">
             {[1, 2, 3].map(i => (
-              <div key={i} className="flex gap-4 animate-pulse">
+              <div key={`timeline-skel-${i}`} className="flex gap-4 animate-pulse">
                 <div className="w-8 h-8 rounded-full bg-muted" />
                 <div className="flex-1 space-y-2">
                   <div className="h-4 bg-muted rounded w-3/4" />

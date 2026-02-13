@@ -325,7 +325,7 @@ export function IMCAIncidentAnalyzer() {
                               <p className="text-xs text-muted-foreground mb-1">Fatores em Comum:</p>
                               <div className="flex flex-wrap gap-1">
                                 {incident.matching_factors.map((f, i) => (
-                                  <Badge key={i} variant="secondary" className="text-xs">{f}</Badge>
+                                  <Badge key={`factor-${f}-${i}`} variant="secondary" className="text-xs">{f}</Badge>
                                 ))}
                               </div>
                             </div>

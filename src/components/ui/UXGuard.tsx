@@ -67,7 +67,7 @@ function SmartSkeleton() {
       {/* KPI cards skeleton */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         {[1, 2, 3, 4].map((i) => (
-          <Card key={i} className="p-4">
+          <Card key={`ux-kpi-skel-${i}`} className="p-4">
             <Skeleton className="h-3 w-20 mb-2" />
             <Skeleton className="h-7 w-16 mb-1" />
             <Skeleton className="h-2 w-24" />
@@ -82,7 +82,7 @@ function SmartSkeleton() {
             <Skeleton className="h-8 w-24" />
           </div>
           {[1, 2, 3, 4, 5].map((i) => (
-            <div key={i} className="flex gap-4 items-center">
+            <div key={`ux-row-skel-${i}`} className="flex gap-4 items-center">
               <Skeleton className="h-4 w-4" />
               <Skeleton className="h-4 flex-1" />
               <Skeleton className="h-4 w-20" />
@@ -150,7 +150,7 @@ function SmartEmpty({
             </div>
             <ul className="space-y-1.5">
               {tips.map((tip, i) => (
-                <li key={i} className="text-xs text-muted-foreground flex items-start gap-2">
+                <li key={`tip-${i}-${tip.slice(0, 12)}`} className="text-xs text-muted-foreground flex items-start gap-2">
                   <ArrowRight className="h-3 w-3 mt-0.5 flex-shrink-0 text-primary" />
                   {tip}
                 </li>

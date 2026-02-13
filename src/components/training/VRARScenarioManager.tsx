@@ -1201,7 +1201,7 @@ export function VRARScenarioManager() {
               <div className="space-y-2">
                 {selectedScenario?.objectives.map((obj, idx) => (
                   <div
-                    key={idx}
+                    key={`obj-${obj.slice(0, 15)}-${idx}`}
                     className={`flex items-center gap-2 p-2 rounded ${
                       idx < executionState.currentObjective
                         ? "bg-success/10 text-success"
