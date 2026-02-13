@@ -182,7 +182,7 @@ class AdvancedVoiceEngine {
     this.registerCommand({
       id: 'action-refresh',
       patterns: ['atualizar', 'recarregar', 'refresh'],
-      action: () => window.location.reload(),
+      action: () => { window.history.pushState({}, '', window.location.pathname); window.dispatchEvent(new PopStateEvent('popstate')); },
       description: 'Atualizar página',
       category: 'action',
     });

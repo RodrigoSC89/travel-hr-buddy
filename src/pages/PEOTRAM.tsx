@@ -132,7 +132,7 @@ const PEOTRAM = () => {
             id: "refresh",
             label: "Atualizar",
             icon: <RefreshCw className="h-3 w-3" />,
-            action: () => handleRefresh("PEOTRAM", async () => window.location.reload()),
+            action: () => handleRefresh("PEOTRAM"),
             shortcut: "F5"
           },
           {

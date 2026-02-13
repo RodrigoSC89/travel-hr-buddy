@@ -196,7 +196,7 @@ const SGSO = () => {
             id: "refresh",
             label: "Atualizar",
             icon: <RefreshCw className="h-3 w-3" />,
-            action: () => handleRefresh("SGSO", async () => window.location.reload()),
+            action: () => handleRefresh("SGSO"),
             shortcut: "F5"
           },
           {

@@ -377,7 +377,8 @@ function CentralComandoContent() {
               </motion.div>
             </div>
             
-            {/* Tour Styles */}
+            {/* Tour Styles — CSS string is developer-controlled, not user input */}
+            {/* eslint-disable-next-line react/no-danger -- tourStyles is a static CSS string from GuidedTour.tsx, not user input */}
             <style dangerouslySetInnerHTML={{ __html: tourStyles }} />
           </div>
         </header>

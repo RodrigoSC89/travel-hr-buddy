@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { useToast } from "@/hooks/use-toast";
 import { useKeyboardShortcuts } from "./use-keyboard-shortcuts";
 import { useOfflineStorage } from "./use-offline-storage";
+import { useQueryClient } from "@tanstack/react-query";
 
 // Hook para funcionalidades globais do sistema
 export const useSystemActions = () => {
@@ -41,55 +42,36 @@ export const useSystemActions = () => {
     // Implementar abertura de modal de perfil ou navegação
   };
 
+  const queryClient = useQueryClient();
+
   const handleExportData = (format: string) => {
     toast({
       title: "Exportando",
       description: `Preparando export em formato ${format.toUpperCase()}`,
     });
-    // Implementar lógica de export
-    setTimeout(() => {
-      toast({
-        title: "Export Concluído",
-        description: `Dados exportados em ${format.toUpperCase()}`,
-      });
-    }, 2000);
+    // Export is handled by specific module export handlers
   };
 
   const handleBackup = () => {
     toast({
       title: "Backup",
-      description: "Iniciando backup dos dados",
+      description: "Backup dos dados é gerenciado automaticamente pelo Supabase",
     });
-    // Implementar lógica de backup
-    setTimeout(() => {
-      toast({
-        title: "Backup Concluído",
-        description: "Dados salvos com sucesso",
-      });
-    }, 3000);
   };
 
   const handleRefreshData = async () => {
-    // PATCH v19: Removida verificação isOnline - sempre tentar atualizar
     toast({
       title: "Atualizando",
       description: "Carregando dados mais recentes",
     });
     
-    // Implementar refresh dos dados com timeout
     try {
-      const timeout = new Promise((_, reject) => 
-        setTimeout(() => reject(new Error("Timeout")), 5000)
-      );
-      
-      await Promise.race([
-        // Aqui você adicionaria a lógica real de refresh
-        new Promise(resolve => setTimeout(resolve, 500)),
-        timeout
-      ]);
-      
-      window.location.reload();
-    } catch (error) {
+      await queryClient.invalidateQueries();
+      toast({
+        title: "Atualizado",
+        description: "Dados carregados com sucesso",
+      });
+    } catch {
       toast({
         title: "Erro",
         description: "Não foi possível atualizar os dados",

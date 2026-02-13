@@ -3,7 +3,7 @@ import { Outlet } from "react-router-dom";
 import { SmartSidebar } from "@/components/layout/SmartSidebar";
 import { SmartHeader } from "@/components/layout/SmartHeader";
 import { ThemeProvider } from "@/components/layout/theme-provider";
-import { Toaster } from "@/components/ui/sonner";
+import { Toaster as _Toaster } from "@/components/ui/sonner"; // kept for type reference only - single instance in App.tsx
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { mobileClasses } from "@/styles/mobile-ui-kit";
 import { SkipToContent } from "@/components/ui/AccessibleButton";
@@ -61,8 +61,7 @@ export function SmartLayout() {
             </main>
           </div>
 
-          {/* Toast Notifications */}
-          <Toaster />
+          {/* Toast Notifications — single instance in App.tsx */}
           
           {/* Push Notification Prompt */}
           <Suspense fallback={null}>

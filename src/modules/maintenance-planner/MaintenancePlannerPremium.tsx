@@ -16,9 +16,11 @@ import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
+import { useQueryClient } from "@tanstack/react-query";
 
 // Dashboard Content
 function MaintenanceDashboard() {
+  const queryClient = useQueryClient();
   // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Supabase maintenance_tasks row rendered directly in JSX
   const [tasks, setTasks] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
@@ -120,15 +122,15 @@ function MaintenanceDashboard() {
           </CardHeader>
           <CardContent className="space-y-3">
             <Button className="w-full justify-start gap-2" variant="outline" onClick={async () => {
-              const { error } = await supabase.from("maintenance_tasks").insert({ title: "Nova Ordem de Serviço", status: "pending", priority: "medium" });
-              if (error) { toast.error("Erro ao criar ordem: " + error.message); } else { toast.success("Ordem de serviço criada!"); window.location.reload(); }
+              const { error } = await supabase.from("maintenance_tasks").insert({ title: "Nova Ordem de Serviço", status: "pending", priority: "medium" } as never);
+              if (error) { toast.error("Erro ao criar ordem: " + error.message); } else { toast.success("Ordem de serviço criada!"); queryClient.invalidateQueries({ queryKey: ['maintenance'] }); }
             }}>
               <Wrench className="h-4 w-4" />
               Nova Ordem de Serviço
             </Button>
             <Button className="w-full justify-start gap-2" variant="outline" onClick={async () => {
-              const { error } = await supabase.from("maintenance_tasks").insert({ title: "Inspeção Agendada", status: "scheduled", priority: "medium", task_type: "inspection" });
-              if (error) { toast.error("Erro ao agendar: " + error.message); } else { toast.success("Inspeção agendada!"); window.location.reload(); }
+              const { error } = await supabase.from("maintenance_tasks").insert({ title: "Inspeção Agendada", status: "scheduled", priority: "medium", task_type: "inspection" } as never);
+              if (error) { toast.error("Erro ao agendar: " + error.message); } else { toast.success("Inspeção agendada!"); queryClient.invalidateQueries({ queryKey: ['maintenance'] }); }
             }}>
               <Calendar className="h-4 w-4" />
               Agendar Inspeção
@@ -188,8 +190,8 @@ function MaintenanceDashboard() {
               <Wrench className="h-12 w-12 mx-auto mb-4 opacity-50" />
               <p>Nenhuma tarefa encontrada</p>
               <Button className="mt-4" onClick={async () => {
-                const { error } = await supabase.from("maintenance_tasks").insert({ title: "Primeira Tarefa", status: "pending", priority: "medium" });
-                if (error) { toast.error("Erro: " + error.message); } else { toast.success("Tarefa criada!"); window.location.reload(); }
+                const { error } = await supabase.from("maintenance_tasks").insert({ title: "Primeira Tarefa", status: "pending", priority: "medium" } as never);
+                if (error) { toast.error("Erro: " + error.message); } else { toast.success("Tarefa criada!"); queryClient.invalidateQueries({ queryKey: ['maintenance'] }); }
               }}>
                 <Plus className="h-4 w-4 mr-2" />
                 Criar Primeira Tarefa
