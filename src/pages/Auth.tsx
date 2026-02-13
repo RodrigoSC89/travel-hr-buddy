@@ -171,15 +171,18 @@ const Auth: React.FC = () => {
       const errorMessage = err instanceof Error ? err.message : String(err);
       logger.error('[Auth] Login exception:', errorMessage);
       
-      // Handle network errors specifically  
-      if (errorMessage.includes('Failed to fetch') || 
+      // Handle CORS and network errors - usually means Supabase is unreachable
+      if (errorMessage.includes('CORS') ||
+          errorMessage.includes('Failed to fetch') || 
           errorMessage.includes('NetworkError') ||
           errorMessage.includes('fetch') ||
           errorMessage.includes('network') ||
           errorMessage.includes('Load failed') ||
-          errorMessage.includes('aborted')) {
-        toast.error("Erro de conexão", { 
-          description: "Verifique sua conexão com a internet e tente novamente." 
+          errorMessage.includes('aborted') ||
+          errorMessage.includes('ERR_FAILED')) {
+        toast.error("Servidor indisponível", { 
+          description: "O servidor está temporariamente fora do ar. Aguarde 1-2 minutos e tente novamente.",
+          duration: 10000,
         });
         setShowTroubleshooting(true);
       } else {
