@@ -120,32 +120,31 @@ export const CrewIntelligenceSystem: React.FC = () => {
   const analyzeCrewOptimization = () => {
     setIsAnalyzing(true);
 
-    setTimeout(() => {
-      const optimizations: ShiftOptimization[] = [
-        {
-          crewMemberId: "3",
-          currentShift: "00:00 - 12:00",
-          recommendedShift: "08:00 - 16:00",
-          reason: "Alto nível de fadiga detectado. Recomenda-se descanso imediato de 10 horas.",
-          impact: "positive"
-        },
-        {
-          crewMemberId: "2",
-          currentShift: "12:00 - 20:00",
-          recommendedShift: "14:00 - 22:00",
-          reason: "Fadiga moderada. Ajuste de 2 horas para otimizar desempenho.",
-          impact: "positive"
-        }
-      ];
+    // Process synchronously - no fake delay
+    const optimizations: ShiftOptimization[] = [
+      {
+        crewMemberId: "3",
+        currentShift: "00:00 - 12:00",
+        recommendedShift: "08:00 - 16:00",
+        reason: "Alto nível de fadiga detectado. Recomenda-se descanso imediato de 10 horas.",
+        impact: "positive"
+      },
+      {
+        crewMemberId: "2",
+        currentShift: "12:00 - 20:00",
+        recommendedShift: "14:00 - 22:00",
+        reason: "Fadiga moderada. Ajuste de 2 horas para otimizar desempenho.",
+        impact: "positive"
+      }
+    ];
 
-      setShiftOptimizations(optimizations);
-      setIsAnalyzing(false);
+    setShiftOptimizations(optimizations);
+    setIsAnalyzing(false);
 
-      toast({
-        title: "✅ Análise Completa",
-        description: `${optimizations.length} otimizações de escala identificadas`,
-      });
-    }, 2000);
+    toast({
+      title: "✅ Análise Completa",
+      description: `${optimizations.length} otimizações de escala identificadas`,
+    });
   };
 
   const getFatigueLevelColor = (level: number) => {

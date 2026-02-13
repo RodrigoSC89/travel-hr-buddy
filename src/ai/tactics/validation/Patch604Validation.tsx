@@ -36,46 +36,45 @@ export function Patch604Validation() {
   const runOptimization = () => {
     setIsOptimizing(true);
     
-    setTimeout(() => {
-      const newOpts: TacticOptimization[] = [
-        {
-          id: "opt-1",
-          tactic: "Route Planning",
-          before: { efficiency: 0.72, riskScore: 0.45, completionTime: 180 },
-          after: { efficiency: 0.91, riskScore: 0.28, completionTime: 142 },
-          justification: "Optimized waypoints using real-time weather data",
-          improvement: 0.26
-        },
-        {
-          id: "opt-2",
-          tactic: "Resource Allocation",
-          before: { efficiency: 0.68, riskScore: 0.52, completionTime: 240 },
-          after: { efficiency: 0.87, riskScore: 0.31, completionTime: 198 },
-          justification: "Redistributed assets based on mission priority matrix",
-          improvement: 0.28
-        },
-        {
-          id: "opt-3",
-          tactic: "Communication Protocol",
-          before: { efficiency: 0.75, riskScore: 0.38, completionTime: 90 },
-          after: { efficiency: 0.93, riskScore: 0.19, completionTime: 72 },
-          justification: "Implemented direct channels for critical updates",
-          improvement: 0.24
-        }
-      ];
+    // Process synchronously - no fake delay
+    const newOpts: TacticOptimization[] = [
+      {
+        id: "opt-1",
+        tactic: "Route Planning",
+        before: { efficiency: 0.72, riskScore: 0.45, completionTime: 180 },
+        after: { efficiency: 0.91, riskScore: 0.28, completionTime: 142 },
+        justification: "Optimized waypoints using real-time weather data",
+        improvement: 0.26
+      },
+      {
+        id: "opt-2",
+        tactic: "Resource Allocation",
+        before: { efficiency: 0.68, riskScore: 0.52, completionTime: 240 },
+        after: { efficiency: 0.87, riskScore: 0.31, completionTime: 198 },
+        justification: "Redistributed assets based on mission priority matrix",
+        improvement: 0.28
+      },
+      {
+        id: "opt-3",
+        tactic: "Communication Protocol",
+        before: { efficiency: 0.75, riskScore: 0.38, completionTime: 90 },
+        after: { efficiency: 0.93, riskScore: 0.19, completionTime: 72 },
+        justification: "Implemented direct channels for critical updates",
+        improvement: 0.24
+      }
+    ];
+    
+    setOptimizations(newOpts);
+    setIsOptimizing(false);
       
-      setOptimizations(newOpts);
-      setIsOptimizing(false);
+    const avgImprovement = (newOpts.reduce((sum, o) => sum + o.improvement, 0) / newOpts.length * 100).toFixed(1);
       
-      const avgImprovement = (newOpts.reduce((sum, o) => sum + o.improvement, 0) / newOpts.length * 100).toFixed(1);
+    toast({
+      title: "Optimization Complete",
+      description: `${newOpts.length} tactics optimized with ${avgImprovement}% avg improvement`,
+    });
       
-      toast({
-        title: "Optimization Complete",
-        description: `${newOpts.length} tactics optimized with ${avgImprovement}% avg improvement`,
-      });
-      
-      logger.debug("PATCH 604 ✅ Tactic optimizations:", newOpts);
-    }, 2000);
+    logger.debug("PATCH 604 ✅ Tactic optimizations:", newOpts);
   };
 
   const avgImprovement = optimizations.length > 0

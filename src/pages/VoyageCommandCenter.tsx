@@ -39,6 +39,7 @@ import { useToast } from "@/hooks/use-toast";
 import { toast } from "sonner";
 import { usePorts } from "@/hooks/usePortsData";
 import { useMarineWeather } from "@/hooks/useMarineWeather";
+import { supabase } from "@/integrations/supabase/client";
 
 // Types
 interface Port {
@@ -276,27 +277,38 @@ export default function VoyageCommandCenter() {
     toast.success("Viagens exportadas com sucesso!");
   };
 
-  const handleAiCopilotSend = () => {
+  const handleAiCopilotSend = async () => {
     if (!aiCopilotInput.trim()) return;
 
     setAiMessages(prev => [...prev, { role: "user", content: aiCopilotInput }]);
+    const userInput = aiCopilotInput;
+    setAiCopilotInput("");
     
-    setTimeout(() => {
+    try {
+      const { data, error } = await supabase.functions.invoke('ai-chat', {
+        body: {
+          messages: [{ role: 'user', content: `Contexto: copiloto de viagens marítimas. Pergunta: ${userInput}` }],
+          agentId: 'voyage-copilot',
+        },
+      });
+      if (error) throw error;
+      setAiMessages(prev => [...prev, { 
+        role: "assistant", 
+        content: data?.response || data?.choices?.[0]?.message?.content || "Analisando... Tente reformular sua pergunta."
+      }]);
+    } catch {
       const responses = [
         "Analisando as condições meteorológicas atuais, recomendo uma rota via Las Palmas para otimizar o consumo de combustível em aproximadamente 12%.",
         "Com base nos dados de tráfego marítimo, sugiro antecipar a partida em 6 horas para evitar congestionamento no Canal da Mancha.",
         "A previsão indica ventos favoráveis nos próximos 3 dias. Aproveitar essa janela pode reduzir o tempo de viagem em 18 horas.",
         "Identificamos uma oportunidade de bunker em Durban com preços 8% abaixo da média. Deseja incluir essa escala no planejamento?"
       ];
-      
-      const msgHash = aiCopilotInput.split("").reduce((a, c) => a + c.charCodeAt(0), 0);
+      const msgHash = userInput.split("").reduce((a, c) => a + c.charCodeAt(0), 0);
       setAiMessages(prev => [...prev, { 
         role: "assistant", 
         content: responses[msgHash % responses.length]
       }]);
-    }, 1500);
-
-    setAiCopilotInput("");
+    }
   };
 
   return (

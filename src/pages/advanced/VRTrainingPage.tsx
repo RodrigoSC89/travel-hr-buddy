@@ -147,43 +147,39 @@ const VRTrainingPage = () => {
 
   const handleCreate = useCallback(() => {
     setIsLoading(true);
-    setTimeout(() => {
-      const newScenario: VRScenario = {
-        id: `scenario-${Date.now()}`,
-        title: formData.title,
-        description: formData.description,
-        duration: formData.duration,
-        difficulty: formData.difficulty,
-        category: formData.category,
-        completions: 0,
-        avgScore: 0,
-        status: "draft",
-        createdAt: new Date().toISOString().split("T")[0]
-      };
-      setScenarios(prev => [...prev, newScenario]);
-      setIsCreateOpen(false);
-      setFormData({ title: "", description: "", duration: "20 min", difficulty: "intermediate", category: "emergency" });
-      toast.success("Cenário VR criado com sucesso!", {
-        description: `"${newScenario.title}" está pronto para edição`
-      });
-      setIsLoading(false);
-    }, 800);
+    const newScenario: VRScenario = {
+      id: `scenario-${Date.now()}`,
+      title: formData.title,
+      description: formData.description,
+      duration: formData.duration,
+      difficulty: formData.difficulty,
+      category: formData.category,
+      completions: 0,
+      avgScore: 0,
+      status: "draft",
+      createdAt: new Date().toISOString().split("T")[0]
+    };
+    setScenarios(prev => [...prev, newScenario]);
+    setIsCreateOpen(false);
+    setFormData({ title: "", description: "", duration: "20 min", difficulty: "intermediate", category: "emergency" });
+    toast.success("Cenário VR criado com sucesso!", {
+      description: `"${newScenario.title}" está pronto para edição`
+    });
+    setIsLoading(false);
   }, [formData]);
 
   const handleEdit = useCallback(() => {
     if (!editingScenario) return;
     setIsLoading(true);
-    setTimeout(() => {
-      setScenarios(prev => prev.map(s => 
-        s.id === editingScenario.id 
-          ? { ...s, title: formData.title, description: formData.description, duration: formData.duration, difficulty: formData.difficulty, category: formData.category }
-          : s
-      ));
-      setIsEditOpen(false);
-      setEditingScenario(null);
-      toast.success("Cenário atualizado com sucesso!");
-      setIsLoading(false);
-    }, 600);
+    setScenarios(prev => prev.map(s => 
+      s.id === editingScenario.id 
+        ? { ...s, title: formData.title, description: formData.description, duration: formData.duration, difficulty: formData.difficulty, category: formData.category }
+        : s
+    ));
+    setIsEditOpen(false);
+    setEditingScenario(null);
+    toast.success("Cenário atualizado com sucesso!");
+    setIsLoading(false);
   }, [editingScenario, formData]);
 
   const handleDelete = useCallback((id: string) => {

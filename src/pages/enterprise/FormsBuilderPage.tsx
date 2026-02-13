@@ -194,30 +194,27 @@ export default function FormsBuilderPage() {
   };
 
   const generateWithAI = async () => {
+    if (!activeTemplate) return;
     toast.loading('Gerando campos com IA...');
     
-    setTimeout(() => {
-      if (!activeTemplate) return;
-      
-      const aiFields: FormField[] = [
-        { id: crypto.randomUUID(), type: 'date', label: 'Data da Inspeção', required: true },
-        { id: crypto.randomUUID(), type: 'text', label: 'Responsável', required: true },
-        { id: crypto.randomUUID(), type: 'select', label: 'Área Inspecionada', required: true, options: ['Ponte', 'Casa de Máquinas', 'Convés', 'Praça de Máquinas'] },
-        { id: crypto.randomUUID(), type: 'checkbox', label: 'Equipamentos de segurança verificados', required: true },
-        { id: crypto.randomUUID(), type: 'checkbox', label: 'Documentação em dia', required: true },
-        { id: crypto.randomUUID(), type: 'rating', label: 'Condição geral', required: true },
-        { id: crypto.randomUUID(), type: 'textarea', label: 'Não conformidades encontradas', required: false },
-        { id: crypto.randomUUID(), type: 'photo', label: 'Evidência fotográfica', required: false },
-      ];
-      
-      setActiveTemplate(prev => prev ? {
-        ...prev,
-        fields: [...prev.fields, ...aiFields],
-      } : null);
-      
-      toast.dismiss();
-      toast.success('8 campos gerados com IA!');
-    }, 2000);
+    const aiFields: FormField[] = [
+      { id: crypto.randomUUID(), type: 'date', label: 'Data da Inspeção', required: true },
+      { id: crypto.randomUUID(), type: 'text', label: 'Responsável', required: true },
+      { id: crypto.randomUUID(), type: 'select', label: 'Área Inspecionada', required: true, options: ['Ponte', 'Casa de Máquinas', 'Convés', 'Praça de Máquinas'] },
+      { id: crypto.randomUUID(), type: 'checkbox', label: 'Equipamentos de segurança verificados', required: true },
+      { id: crypto.randomUUID(), type: 'checkbox', label: 'Documentação em dia', required: true },
+      { id: crypto.randomUUID(), type: 'rating', label: 'Condição geral', required: true },
+      { id: crypto.randomUUID(), type: 'textarea', label: 'Não conformidades encontradas', required: false },
+      { id: crypto.randomUUID(), type: 'photo', label: 'Evidência fotográfica', required: false },
+    ];
+    
+    setActiveTemplate(prev => prev ? {
+      ...prev,
+      fields: [...prev.fields, ...aiFields],
+    } : null);
+    
+    toast.dismiss();
+    toast.success('8 campos gerados com IA!');
   };
 
   return (
