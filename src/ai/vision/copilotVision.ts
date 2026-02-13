@@ -208,10 +208,10 @@ export class CopilotVision {
         },
       });
 
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Tesseract result has dynamic structure
-      const ocrData = result as Record<string, any>;
+      const ocrData = result as unknown as Record<string, unknown>;
+      const dataObj = ocrData?.data as Record<string, unknown> | undefined;
       const words: Array<{ text: string; confidence: number; bbox: OCRResult["bbox"] }> = 
-        (ocrData?.data?.words as Array<{ text: string; confidence: number; bbox: OCRResult["bbox"] }>) || [];
+        (dataObj?.words as Array<{ text: string; confidence: number; bbox: OCRResult["bbox"] }>) || [];
       if (words.length === 0) {
         return [];
       }

@@ -17,12 +17,10 @@ export interface SystemObservation {
   severity: Severity;
   modulesAffected: string[];
   description: string;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- detection data shape varies by observation type
-  detectionData: Record<string, any>;
+  detectionData: Record<string, unknown>;
   suggestedAction?: string;
   autoCorrectionAttempted: boolean;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- correction result shape varies
-  autoCorrectionResult?: Record<string, any>;
+  autoCorrectionResult?: Record<string, unknown>;
   escalated: boolean;
   escalationReason?: string;
   resolved: boolean;
@@ -76,7 +74,7 @@ class ConsciousCore {
       moduleName: "ConsciousCore",
       contextTypes: ["mission", "risk", "ai", "prediction", "telemetry"],
       handler: (message) => {
-        this.analyzeContextMessage(message);
+        this.analyzeContextMessage(message as unknown as Record<string, unknown>);
       }
     });
 
@@ -171,7 +169,7 @@ class ConsciousCore {
         severity: "critical",
         modulesAffected: [health.moduleName],
         description: `Module ${health.moduleName} is in critical state`,
-        detectionData: health,
+        detectionData: health as unknown as Record<string, unknown>,
         autoCorrectionAttempted: false,
         escalated: false,
         resolved: false,
@@ -378,7 +376,7 @@ class ConsciousCore {
 
     try {
       // Determine auto-correction strategy based on observation type
-      let correctionResult: Record<string, any> = {};
+      let correctionResult: Record<string, unknown> = {};
 
       switch (observation.observationType) {
       case "loop_detection":
@@ -412,7 +410,7 @@ class ConsciousCore {
     }
   }
 
-  private async correctLoop(observation: SystemObservation): Promise<Record<string, any>> {
+  private async correctLoop(observation: SystemObservation): Promise<Record<string, unknown>> {
     // Clear loop detector for affected modules
     observation.modulesAffected.forEach(module => {
       this.loopDetector.delete(module);
@@ -425,7 +423,7 @@ class ConsciousCore {
     };
   }
 
-  private async correctFailurePattern(observation: SystemObservation): Promise<Record<string, any>> {
+  private async correctFailurePattern(observation: SystemObservation): Promise<Record<string, unknown>> {
     // Suggest escalation for repeated failures
     return {
       action: "escalate",
@@ -434,7 +432,7 @@ class ConsciousCore {
     };
   }
 
-  private async correctAnomaly(observation: SystemObservation): Promise<Record<string, any>> {
+  private async correctAnomaly(observation: SystemObservation): Promise<Record<string, unknown>> {
     // Log anomaly for investigation
     return {
       action: "log_for_investigation",
@@ -443,8 +441,7 @@ class ConsciousCore {
     };
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- ContextMessage shape varies by type
-  private analyzeContextMessage(message: any): void {
+  private analyzeContextMessage(message: Record<string, unknown>): void {
     const moduleName = String(message.moduleName);
 
     // Track timing for loop detection
@@ -477,7 +474,7 @@ class ConsciousCore {
           escalation_reason: observation.escalationReason
         },
         resolved: observation.resolved
-      });
+      } as never);
 
       if (error) {
         logger.error("[ConsciousCore] Failed to log observation", error);

@@ -23,12 +23,14 @@ import { logger } from "@/lib/logger";
 
 type AnalysisTab = "route" | "bunker" | "pnl" | "risks";
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- AI response shape is deeply dynamic per analysis type
+type AIResult = Record<string, any>;
+
 export function VoyageAICopilotPanel() {
   const { toast } = useToast();
   const [isLoading, setIsLoading] = useState(false);
   const [activeTab, setActiveTab] = useState<AnalysisTab>("route");
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Dynamic AI response shape varies per analysis type
-  const [result, setResult] = useState<Record<string, any> | null>(null);
+  const [result, setResult] = useState<AIResult | null>(null);
   const [voyage, setVoyage] = useState<VoyagePlan>({
     origin: "",
     destination: "",

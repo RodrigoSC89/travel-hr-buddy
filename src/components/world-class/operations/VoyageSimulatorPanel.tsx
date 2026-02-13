@@ -102,7 +102,7 @@ function ScenarioSlider({ label, value, onChange, min, max, step, unit, icon: Ic
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any -- simulation results from Supabase have deeply dynamic shape
-function SimulationDetailView({ sim, onClose }: { sim: any; onClose: () => void }) {
+function SimulationDetailView({ sim, onClose }: { sim: Record<string, any>; onClose: () => void }) {
   const scenarios = Array.isArray(sim.scenarios) ? sim.scenarios : [];
   const riskFactors = Array.isArray(sim.risk_factors) ? sim.risk_factors : [];
 
@@ -270,7 +270,7 @@ export function VoyageSimulatorPanel() {
   const { simulations, isLoading, createSimulation, deleteSimulation, refetch } = useVoyageSimulator();
   const [isOpen, setIsOpen] = useState(false);
   // eslint-disable-next-line @typescript-eslint/no-explicit-any -- simulation result dynamic shape
-  const [selectedSim, setSelectedSim] = useState<any>(null);
+  const [selectedSim, setSelectedSim] = useState<Record<string, any> | null>(null);
   const [simName, setSimName] = useState("");
   const [origin, setOrigin] = useState("");
   const [destination, setDestination] = useState("");
@@ -353,12 +353,12 @@ export function VoyageSimulatorPanel() {
   };
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any -- simulation result dynamic shape
-  const handleExport = (sim: any) => {
+  const handleExport = (sim: Record<string, any>) => {
     const blob = new Blob([JSON.stringify(sim, null, 2)], { type: "application/json" });
     const url = URL.createObjectURL(blob);
     const a = document.createElement("a");
     a.href = url;
-    a.download = `voyage-sim-${sim.simulation_name?.replace(/\s+/g, "-")}.json`;
+    a.download = `voyage-sim-${String(sim.simulation_name || "export").replace(/\s+/g, "-")}.json`;
     a.click();
     URL.revokeObjectURL(url);
     toast.success("Simulação exportada");

@@ -16,7 +16,7 @@ export interface AgentAction {
   confidence: number;
   timestamp: Date;
   result?: string;
-  parameters?: Record<string, any>;
+  parameters?: Record<string, unknown>;
 }
 
 export interface Agent {
@@ -128,7 +128,7 @@ export function useAutonomousAgentsData() {
           confidence: decision.confidence,
           timestamp: new Date(decision.created_at),
           result: decision.description,
-          parameters: decision.action_payload as Record<string, any> || undefined,
+          parameters: decision.action_payload as Record<string, unknown> || undefined,
         });
       });
 

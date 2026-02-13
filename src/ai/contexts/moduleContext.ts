@@ -13,17 +13,17 @@ export interface ModuleContext {
   moduleName: string;
   userId?: string;
   sessionId?: string;
-  state?: Record<string, any>;
+  state?: Record<string, unknown>;
   history?: ContextHistoryEntry[];
   permissions?: string[];
-  metadata?: Record<string, any>;
+  metadata?: Record<string, unknown>;
 }
 
 export interface ContextHistoryEntry {
   action: string;
   timestamp: string;
   result?: string;
-  metadata?: Record<string, any>;
+  metadata?: Record<string, unknown>;
 }
 
 // In-memory context store (per session)
@@ -139,7 +139,7 @@ export const cleanupOldContexts = (): void => {
   
   contextStore.forEach((context, key) => {
     const lastAccessed = context.metadata?.lastAccessed;
-    if (lastAccessed && new Date(lastAccessed).getTime() < oneHourAgo) {
+    if (lastAccessed && new Date(String(lastAccessed)).getTime() < oneHourAgo) {
       contextStore.delete(key);
     }
   });

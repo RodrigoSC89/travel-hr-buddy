@@ -66,7 +66,7 @@ interface AgentAction {
   description: string;
   status: "pending" | "approved" | "rejected" | "executed";
   impact?: "low" | "medium" | "high";
-  params?: Record<string, any>;
+  params?: Record<string, unknown>;
 }
 
 interface Agent {
@@ -91,7 +91,7 @@ interface ExecutionLog {
   message: string;
   timestamp: string;
   duration_ms?: number;
-  details?: Record<string, any>;
+  details?: Record<string, unknown>;
 }
 
 const fallbackAgents: Agent[] = [

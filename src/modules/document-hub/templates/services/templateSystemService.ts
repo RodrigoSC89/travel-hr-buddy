@@ -58,8 +58,7 @@ export interface GeneratedDocument {
   id?: string;
   templateId: string;
   templateName: string;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- dynamic form values from template fields
-  fieldValues: Record<string, any>;
+  fieldValues: Record<string, unknown>;
   generatedHtml: string;
   generatedPdf?: Blob;
   createdAt: string;

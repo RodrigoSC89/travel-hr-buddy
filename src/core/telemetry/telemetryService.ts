@@ -3,7 +3,6 @@
  * PATCH 623 - Core telemetry logging service
  */
 
-import { supabase } from "@/integrations/supabase/client";
 import { logger } from "@/lib/logger";
 
 export interface TelemetryEvent {
@@ -11,7 +10,7 @@ export interface TelemetryEvent {
   component: string;
   metric_name: string;
   metric_value: number;
-  metadata?: Record<string, any>;
+  metadata?: Record<string, unknown>;
   timestamp?: string;
 }
 
@@ -28,7 +27,7 @@ class TelemetryService {
   /**
    * Log a performance metric
    */
-  logPerformance(component: string, metricName: string, value: number, metadata?: Record<string, any>) {
+  logPerformance(component: string, metricName: string, value: number, metadata?: Record<string, unknown>) {
     this.addEvent({
       event_type: "performance",
       component,
@@ -41,7 +40,7 @@ class TelemetryService {
   /**
    * Log an error
    */
-  logError(component: string, error: Error, metadata?: Record<string, any>) {
+  logError(component: string, error: Error, metadata?: Record<string, unknown>) {
     this.addEvent({
       event_type: "error",
       component,
@@ -58,7 +57,7 @@ class TelemetryService {
   /**
    * Log a user action
    */
-  logUserAction(component: string, action: string, metadata?: Record<string, any>) {
+  logUserAction(component: string, action: string, metadata?: Record<string, unknown>) {
     this.addEvent({
       event_type: "user_action",
       component,
