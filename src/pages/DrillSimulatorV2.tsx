@@ -110,7 +110,7 @@ export default function DrillSimulatorV2() {
             title="Histórico de Exercícios"
             icon={Siren}
             searchable
-            onRefresh={() => toast.success("Dados atualizados")}
+            onRefresh={() => { setDrills([...drills]); }}
             actions={[
               { label: "Avaliar com IA", icon: Brain, onClick: (item) => { navigator.clipboard?.writeText(`Drill: ${item.drill_type} | Participantes: ${item.participants} | Score: ${item.score}%`); toast.success(`Avaliação de "${item.drill_type}" copiada`, { description: `Score: ${item.score}% | ${item.participants} participantes` }); } },
               { label: "Ver Relatório", icon: Target, onClick: (item) => { navigator.clipboard?.writeText(`Relatório: ${item.drill_type} | Score: ${item.score}% | Duração: ${item.duration_minutes} min | Data: ${new Date(item.date).toLocaleDateString('pt-BR')}`); toast.info(`Relatório: ${item.drill_type}`, { description: `Score: ${item.score}% | Duração: ${item.duration_minutes} min | Data: ${new Date(item.date).toLocaleDateString('pt-BR')}`, duration: 6000 }); } },

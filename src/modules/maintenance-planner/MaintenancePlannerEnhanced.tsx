@@ -128,7 +128,7 @@ const MaintenancePlannerEnhanced = () => {
   ];
 
   // Alerts
-  const [alerts] = useState([
+  const [alerts, setAlerts] = useState([
     {
       id: '1',
       title: 'Motor Principal - Vibração Anormal',
@@ -149,7 +149,7 @@ const MaintenancePlannerEnhanced = () => {
       timestamp: addDays(new Date(), -1),
       source: 'Cronograma',
       actions: [
-        { label: 'Reagendar', onClick: () => { setShowNewWorkOrder(true); toast.info('Abra uma nova OS para reagendar'); } }
+        { label: 'Reagendar', onClick: () => { setShowNewWorkOrder(true); } }
       ]
     }
   ]);
@@ -195,7 +195,7 @@ const MaintenancePlannerEnhanced = () => {
       {alerts.length > 0 && (
         <ActionableAlertList 
           alerts={alerts}
-          onDismiss={(id) => toast.info('Alerta removido')}
+          onDismiss={(id) => setAlerts(prev => prev.filter(a => a.id !== id))}
           maxVisible={2}
         />
       )}
@@ -417,7 +417,7 @@ const MaintenancePlannerEnhanced = () => {
         </TabsContent>
 
         <TabsContent value="tasks" className="mt-6">
-          <MaintenanceTasksTable onRefresh={() => toast.info('Dados atualizados')} />
+          <MaintenanceTasksTable onRefresh={() => { /* real refresh handled by component */ }} />
         </TabsContent>
       </Tabs>
 

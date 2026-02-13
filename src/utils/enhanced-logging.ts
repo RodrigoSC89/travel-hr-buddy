@@ -30,14 +30,14 @@ export const logUserAction = (action: string, details?: Record<string, unknown>)
   
   logger.info("🎯 User Action:", { logEntry });
   
-  // Persist to localStorage for debugging (keep last 50)
+  // Persist to sessionStorage for debugging (keep last 50)
   try {
-    const logs = JSON.parse(localStorage.getItem("user-actions") || "[]");
+    const logs = JSON.parse(sessionStorage.getItem("user-actions") || "[]");
     logs.push(logEntry);
     const recentLogs = logs.slice(-50); // Keep only last 50 logs
-    localStorage.setItem("user-actions", JSON.stringify(recentLogs));
+    sessionStorage.setItem("user-actions", JSON.stringify(recentLogs));
   } catch (error) {
-    logger.error("Error saving log to localStorage:", error);
+    logger.error("Error saving log to sessionStorage:", error);
   }
 };
 
@@ -47,9 +47,9 @@ export const logUserAction = (action: string, details?: Record<string, unknown>)
  */
 export const getUserActionLogs = (): LogEntry[] => {
   try {
-    return JSON.parse(localStorage.getItem("user-actions") || "[]");
+    return JSON.parse(sessionStorage.getItem("user-actions") || "[]");
   } catch (error) {
-    logger.error("Error reading logs from localStorage:", error);
+    logger.error("Error reading logs from sessionStorage:", error);
     return [];
   }
 };
@@ -59,7 +59,7 @@ export const getUserActionLogs = (): LogEntry[] => {
  */
 export const clearUserActionLogs = (): void => {
   try {
-    localStorage.removeItem("user-actions");
+    sessionStorage.removeItem("user-actions");
     logger.info("✅ User action logs cleared");
   } catch (error) {
     logger.error("Error clearing logs:", error);

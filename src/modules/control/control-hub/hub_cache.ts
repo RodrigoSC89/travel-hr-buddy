@@ -85,7 +85,7 @@ export class HubCache {
    * Clear all cache
    */
   clearAll(): void {
-    localStorage.removeItem(this.storageKey);
+    sessionStorage.removeItem(this.storageKey);
   }
 
   /**

@@ -119,7 +119,7 @@ export default function EvidencesV2() {
             icon={FolderOpen}
             searchable
             searchPlaceholder="Buscar evidências..."
-            onRefresh={() => toast.success("Dados atualizados")}
+            onRefresh={() => { setEvidences([...evidences]); }}
             actions={[
               { label: "Visualizar", icon: FileText, onClick: (item) => toast.info(item.title, { description: `Categoria: ${item.category} | Status: ${item.status} | Módulo: ${item.module || 'N/A'}`, duration: 6000 }) },
               { label: "Aprovar", icon: CheckCircle, onClick: (item) => {

@@ -247,8 +247,9 @@ export function useAIMemory(namespace: string = "default") {
   const clearMemory = useCallback(() => {
     setMemory([]);
     try {
-      localStorage.removeItem(storageKey);
-    } catch { /* localStorage unavailable */ }
+      sessionStorage.removeItem(storageKey);
+      localStorage.removeItem(storageKey); // cleanup legacy
+    } catch { /* storage unavailable */ }
   }, [storageKey]);
 
   return {

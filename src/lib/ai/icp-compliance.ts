@@ -377,18 +377,18 @@ export class ICPCompliancePredictor {
         complianceHistory: this.complianceHistory.slice(-200),
         modelWeights: Array.from(this.modelWeights.entries())
       };
-      localStorage.setItem('icp_compliance_state', JSON.stringify(state));
+      sessionStorage.setItem('icp_compliance_state', JSON.stringify(state));
     } catch (e) {
-      // Silent fail for localStorage operations in compliance predictor
+      // Silent fail for sessionStorage operations in compliance predictor
     }
   }
 
   /**
-   * Load state from localStorage
+   * Load state from sessionStorage
    */
   private loadState(): void {
     try {
-      const saved = localStorage.getItem('icp_compliance_state');
+      const saved = sessionStorage.getItem('icp_compliance_state') || localStorage.getItem('icp_compliance_state');
       if (saved) {
         const state = JSON.parse(saved);
         this.complianceHistory = (state.complianceHistory || []).map((r: ComplianceRecord) => ({

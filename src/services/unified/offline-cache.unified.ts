@@ -30,7 +30,7 @@ export const localStorageCache = {
   get<T>(key: string): T | null {
     try {
       const cacheKey = CACHE_PREFIX + key;
-      const cached = localStorage.getItem(cacheKey);
+      const cached = sessionStorage.getItem(cacheKey) || localStorage.getItem(cacheKey);
       
       if (!cached) return null;
 
@@ -58,15 +58,15 @@ export const localStorageCache = {
         expiresAt: Date.now() + ttl
       };
 
-      localStorage.setItem(cacheKey, JSON.stringify(entry));
-      logger.debug("Stored in localStorage cache", { key, ttl: ttl / 1000 });
+      sessionStorage.setItem(cacheKey, JSON.stringify(entry));
+      logger.debug("Stored in sessionStorage cache", { key, ttl: ttl / 1000 });
     } catch (error) {
       logger.error("Error writing to localStorage cache", error as Error, { key });
       if (error instanceof Error && error.name === "QuotaExceededError") {
         this.clearExpired();
         try {
           const cacheKey = CACHE_PREFIX + key;
-          localStorage.setItem(cacheKey, JSON.stringify({
+          sessionStorage.setItem(cacheKey, JSON.stringify({
             data,
             timestamp: Date.now(),
             expiresAt: Date.now() + ttl
@@ -80,7 +80,7 @@ export const localStorageCache = {
 
   remove(key: string): void {
     try {
-      localStorage.removeItem(CACHE_PREFIX + key);
+      sessionStorage.removeItem(CACHE_PREFIX + key);
     } catch (error) {
       logger.error("Error removing from localStorage cache", error as Error, { key });
     }
@@ -89,21 +89,21 @@ export const localStorageCache = {
   clearExpired(): void {
     try {
       const now = Date.now();
-      const keys = Object.keys(localStorage);
+      const keys = Object.keys(sessionStorage);
       
       for (const key of keys) {
         if (key.startsWith(CACHE_PREFIX)) {
           try {
-            const cached = localStorage.getItem(key);
+            const cached = sessionStorage.getItem(key);
             if (cached) {
               const entry: CacheEntry<unknown> = JSON.parse(cached);
               if (now > entry.expiresAt) {
-                localStorage.removeItem(key);
+                sessionStorage.removeItem(key);
                 logger.debug("Cleared expired entry", { key });
               }
             }
           } catch {
-            localStorage.removeItem(key);
+            sessionStorage.removeItem(key);
           }
         }
       }
@@ -114,13 +114,13 @@ export const localStorageCache = {
 
   clearAll(): void {
     try {
-      const keys = Object.keys(localStorage);
+      const keys = Object.keys(sessionStorage);
       for (const key of keys) {
         if (key.startsWith(CACHE_PREFIX)) {
-          localStorage.removeItem(key);
+          sessionStorage.removeItem(key);
         }
       }
-      logger.info("Cleared all localStorage cache");
+      logger.info("Cleared all sessionStorage cache");
     } catch (error) {
       logger.error("Error clearing all localStorage cache", error as Error);
     }
@@ -128,14 +128,14 @@ export const localStorageCache = {
 
   getStats(): { count: number; totalSize: number } {
     try {
-      const keys = Object.keys(localStorage);
+      const keys = Object.keys(sessionStorage);
       let count = 0;
       let totalSize = 0;
 
       for (const key of keys) {
         if (key.startsWith(CACHE_PREFIX)) {
           count++;
-          const value = localStorage.getItem(key);
+          const value = sessionStorage.getItem(key);
           if (value) {
             totalSize += new Blob([value]).size;
           }
@@ -144,7 +144,7 @@ export const localStorageCache = {
 
       return { count, totalSize };
     } catch (error) {
-      logger.error("Error getting localStorage cache stats", error as Error);
+      logger.error("Error getting sessionStorage cache stats", error as Error);
       return { count: 0, totalSize: 0 };
     }
   }

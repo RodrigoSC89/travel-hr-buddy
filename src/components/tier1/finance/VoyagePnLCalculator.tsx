@@ -139,7 +139,7 @@ function VoyageDetailCard({ voyage, onSelect }: { voyage: VoyagePnL; onSelect?: 
           <span className="text-sm font-medium">TCE Rate</span>
           <Badge variant="outline" className="font-mono">${voyage.tce.toLocaleString()}/day</Badge>
         </div>
-        <Button variant="outline" size="sm" className="w-full" onClick={() => { onSelect?.(voyage); toast.success(`P&L detalhado: ${voyage.voyageNumber}`, { description: `${voyage.vessel} • Margem: ${voyage.margin.toFixed(1)}%` }); }}><BarChart3 className="h-4 w-4 mr-2" />View Full P&L</Button>
+        <Button variant="outline" size="sm" className="w-full" onClick={() => { onSelect?.(voyage); }}><BarChart3 className="h-4 w-4 mr-2" />View Full P&L</Button>
       </CardContent>
     </Card>
   );
