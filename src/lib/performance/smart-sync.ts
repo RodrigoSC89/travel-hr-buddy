@@ -262,15 +262,15 @@ class SmartSyncManager {
 
   private saveQueue(): void {
     try {
-      localStorage.setItem('smart_sync_queue', JSON.stringify(this.queue));
+      sessionStorage.setItem('smart_sync_queue', JSON.stringify(this.queue));
     } catch {
-      // Silent fail - localStorage may be full
+      // Silent fail - sessionStorage may be full
     }
   }
 
   private loadQueue(): void {
     try {
-      const saved = localStorage.getItem('smart_sync_queue');
+      const saved = sessionStorage.getItem('smart_sync_queue') || localStorage.getItem('smart_sync_queue');
       if (saved) {
         this.queue = JSON.parse(saved);
       }
@@ -281,12 +281,12 @@ class SmartSyncManager {
 
   private saveFailedItem(item: SyncItem): void {
     try {
-      const failed = JSON.parse(localStorage.getItem('smart_sync_failed') || '[]');
+      const failed = JSON.parse(sessionStorage.getItem('smart_sync_failed') || '[]');
       failed.push({ ...item, failedAt: Date.now() });
       if (failed.length > 100) failed.shift();
-      localStorage.setItem('smart_sync_failed', JSON.stringify(failed));
+      sessionStorage.setItem('smart_sync_failed', JSON.stringify(failed));
     } catch {
-      // Silent fail - localStorage may be full
+      // Silent fail - sessionStorage may be full
     }
   }
 
@@ -322,12 +322,12 @@ class SmartSyncManager {
   }
 
   clearFailed(): void {
-    localStorage.removeItem('smart_sync_failed');
+    sessionStorage.removeItem('smart_sync_failed');
   }
 
   retryFailed(): void {
     try {
-      const failed = JSON.parse(localStorage.getItem('smart_sync_failed') || '[]');
+      const failed = JSON.parse(sessionStorage.getItem('smart_sync_failed') || '[]');
       for (const item of failed) {
         item.retries = 0;
         this.queue.push(item);

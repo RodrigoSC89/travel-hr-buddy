@@ -56,7 +56,7 @@ class GeolocationService {
    */
   private loadCachedPosition(): void {
     try {
-      const cached = localStorage.getItem("nauti_last_position");
+      const cached = sessionStorage.getItem("nauti_last_position") || localStorage.getItem("nauti_last_position");
       if (cached) {
         this.lastPosition = JSON.parse(cached);
       }
@@ -70,7 +70,7 @@ class GeolocationService {
    */
   private cachePosition(position: GeolocationPosition): void {
     try {
-      localStorage.setItem("nauti_last_position", JSON.stringify(position));
+      sessionStorage.setItem("nauti_last_position", JSON.stringify(position));
       this.lastPosition = position;
     } catch (error) {
       logger.warn("[Geolocation] Failed to cache position:", error);

@@ -312,7 +312,7 @@ export function AuditManagement() {
       {/* Actions */}
       <div className="flex justify-end gap-3">
         <Button variant="outline" onClick={() => {
-          toast.success("Rascunho salvo localmente", { description: "Os dados da auditoria foram salvos na sessão atual." });
+          try { sessionStorage.setItem('audit-draft', JSON.stringify({ timestamp: new Date().toISOString() })); toast.success("Rascunho salvo na sessão atual"); } catch { toast.error("Erro ao salvar rascunho"); }
         }}>
           <FileText className="h-4 w-4 mr-2" />
           Salvar Rascunho

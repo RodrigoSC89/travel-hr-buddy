@@ -112,7 +112,7 @@ export default function RiskMatrixV2() {
             title="Registro de Riscos"
             icon={AlertTriangle}
             searchable
-            onRefresh={() => toast.success("Dados atualizados")}
+            onRefresh={() => { /* data refresh */ }}
             actions={[
               { label: "Analisar IA", icon: Brain, onClick: (item) => { navigator.clipboard?.writeText(`Risco: ${item.title} | P:${item.probability} I:${item.impact}`); toast.success(`Análise copiada: ${item.title}`); } },
               { label: "Mitigar", icon: Shield, onClick: (item) => { navigator.clipboard?.writeText(item.mitigation || 'Definir plano'); toast.success(`Mitigação copiada: ${item.title}`); } },

@@ -361,7 +361,7 @@ export const offlineStorage = {
   set: async (key: string, value: unknown): Promise<void> => {
     try {
       const data = JSON.stringify(value);
-      localStorage.setItem(`nauti_offline_${key}`, data);
+      sessionStorage.setItem(`nauti_offline_${key}`, data);
     } catch (error) {
       logger.error('[OfflineStorage] Failed to store:', error);
     }
@@ -372,7 +372,7 @@ export const offlineStorage = {
    */
   get: async <T>(key: string): Promise<T | null> => {
     try {
-      const data = localStorage.getItem(`nauti_offline_${key}`);
+      const data = sessionStorage.getItem(`nauti_offline_${key}`) || localStorage.getItem(`nauti_offline_${key}`);
       return data ? JSON.parse(data) : null;
     } catch {
       return null;
@@ -383,15 +383,16 @@ export const offlineStorage = {
    * Remove offline data
    */
   remove: async (key: string): Promise<void> => {
-    localStorage.removeItem(`nauti_offline_${key}`);
+    sessionStorage.removeItem(`nauti_offline_${key}`);
+    localStorage.removeItem(`nauti_offline_${key}`); // cleanup legacy
   },
 
   /**
    * Clear all offline data
    */
   clear: async (): Promise<void> => {
-    const keys = Object.keys(localStorage).filter(k => k.startsWith('nauti_offline_'));
-    keys.forEach(k => localStorage.removeItem(k));
+    const keys = [...Object.keys(sessionStorage), ...Object.keys(localStorage)].filter(k => k.startsWith('nauti_offline_'));
+    keys.forEach(k => { try { sessionStorage.removeItem(k); localStorage.removeItem(k); } catch { /* ignore */ } });
   },
 };
 
