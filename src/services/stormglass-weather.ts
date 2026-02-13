@@ -126,7 +126,7 @@ class StormGlassService {
   /**
    * Get tide data for a location
    */
-  async getTideData(location: WeatherLocation): Promise<any[] | null> {
+  async getTideData(location: WeatherLocation): Promise<Record<string, unknown>[] | null> {
     try {
       const { data, error } = await supabase.functions.invoke("stormglass-weather", {
         body: {

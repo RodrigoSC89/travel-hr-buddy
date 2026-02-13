@@ -79,8 +79,8 @@ export function useVesselPerformanceData(vesselId?: string) {
         maintenanceScores.set(id, Math.round((completed / total) * 100));
       });
 
-      const latestLogs = new Map<string, any>();
-      const previousLogs = new Map<string, any>();
+      const latestLogs = new Map<string, Record<string, unknown>>();
+      const previousLogs = new Map<string, Record<string, unknown>>();
       
       logs?.forEach(log => {
         if (log.vessel_id) {
@@ -120,7 +120,7 @@ export function useVesselPerformanceData(vesselId?: string) {
           engineHours,
           maintenanceScore,
           efficiency,
-          lastUpdate: latest?.recorded_at || new Date().toISOString(),
+          lastUpdate: String(latest?.recorded_at || new Date().toISOString()),
           status,
           trends: {
             fuelTrend: getTrend(fuelConsumption, prevFuel, true),

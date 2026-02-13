@@ -300,7 +300,7 @@ class SQLiteStorage {
   /**
    * Get cached data by ID
    */
-  async getCached(table: string, id: string): Promise<any | null> {
+  async getCached(table: string, id: string): Promise<unknown> {
     const db = await this.ensureDB();
 
     return new Promise((resolve, reject) => {
@@ -332,7 +332,7 @@ class SQLiteStorage {
   /**
    * Get all cached records for a table
    */
-  async getAllCached(table: string): Promise<any[]> {
+  async getAllCached(table: string): Promise<unknown[]> {
     const db = await this.ensureDB();
 
     return new Promise((resolve, reject) => {

@@ -114,7 +114,7 @@ class LocalSyncManager {
   /**
    * Get cached data for offline access
    */
-  async getCachedData(key: string): Promise<any | null> {
+  async getCachedData(key: string): Promise<unknown> {
     if (!this.db) await this.init();
 
     return new Promise((resolve, reject) => {

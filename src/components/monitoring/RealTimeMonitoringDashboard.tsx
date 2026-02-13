@@ -10,13 +10,17 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Activity, AlertTriangle, TrendingUp, Users, Zap } from "lucide-react";
 import { performanceMonitor, WebVitalMetric, PerformanceSnapshot } from "@/lib/monitoring/performance-monitor";
 import { errorTracker, TrackedError } from "@/lib/monitoring/error-tracker";
-import { userAnalytics } from "@/lib/monitoring/user-analytics";
+import { userAnalytics, type UserEvent } from "@/lib/monitoring/user-analytics";
 
 export default function RealTimeMonitoringDashboard() {
   const [perfSnapshot, setPerfSnapshot] = useState<PerformanceSnapshot | null>(null);
   const [recentErrors, setRecentErrors] = useState<TrackedError[]>([]);
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- userAnalytics.getSummary() returns complex dynamic shape
-  const [analytics, setAnalytics] = useState<any>(null);
+  interface AnalyticsSummary {
+    engagement: { sessionDuration: number; avgPageDuration: number };
+    pageViews: { total: number };
+    events: { total: number; recent: UserEvent[] };
+  }
+  const [analytics, setAnalytics] = useState<AnalyticsSummary | null>(null);
   const [liveMetrics, setLiveMetrics] = useState<Record<string, WebVitalMetric>>({});
 
   useEffect(() => {
@@ -337,7 +341,7 @@ export default function RealTimeMonitoringDashboard() {
                 </CardHeader>
                 <CardContent>
                   <div className="space-y-2">
-                    {analytics.events.recent.map((event: Record<string, unknown>, idx: number) => (
+                    {analytics.events.recent.map((event: UserEvent, idx: number) => (
                       <div key={`event-${idx}-${String(event.name)}`} className="flex justify-between items-center p-2 rounded bg-muted/50">
                         <div>
                           <span className="text-sm font-medium">{String(event.name)}</span>

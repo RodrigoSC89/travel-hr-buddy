@@ -138,7 +138,7 @@ class EvoAIConnector {
   /**
    * Sync feedback core data
    */
-  private async syncFeedbackCore(): Promise<any[]> {
+  private async syncFeedbackCore(): Promise<Record<string, unknown>[]> {
     try {
       const { data } = await supabase
         .from("user_feedback")
@@ -156,7 +156,7 @@ class EvoAIConnector {
   /**
    * Sync predictive engine data
    */
-  private async syncPredictiveEngine(): Promise<any[]> {
+  private async syncPredictiveEngine(): Promise<Record<string, unknown>[]> {
     try {
       const predictions = await predictiveEngine.getRecentPredictions(1000);
       return predictions;
@@ -169,7 +169,7 @@ class EvoAIConnector {
   /**
    * Sync adaptive metrics data
    */
-  private async syncAdaptiveMetrics(): Promise<any[]> {
+  private async syncAdaptiveMetrics(): Promise<Record<string, unknown>[]> {
     try {
       const history = await adaptiveMetricsEngine.getAdjustmentHistory(500);
       return history;
