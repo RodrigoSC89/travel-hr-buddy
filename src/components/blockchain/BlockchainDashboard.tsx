@@ -214,7 +214,7 @@ export const BlockchainDashboard: React.FC = () => {
             Sincronizar
           </Button>
           <Badge variant="outline" className="gap-1 py-2">
-            <div className="h-2 w-2 rounded-full bg-green-500 animate-pulse" />
+            <div className="h-2 w-2 rounded-full bg-success animate-pulse" />
             Rede Ativa
           </Badge>
         </div>
@@ -240,9 +240,9 @@ export const BlockchainDashboard: React.FC = () => {
               <div className="flex items-center justify-between">
                 <div>
                   <p className="text-sm text-muted-foreground">Blocos Confirmados</p>
-                  <p className="text-2xl font-bold text-green-500">{stats.confirmedBlocks.toLocaleString()}</p>
+                  <p className="text-2xl font-bold text-success">{stats.confirmedBlocks.toLocaleString()}</p>
                 </div>
-                <CheckCircle className="h-8 w-8 text-green-500 opacity-50" />
+                <CheckCircle className="h-8 w-8 text-success opacity-50" />
               </div>
             </CardContent>
           </Card>
@@ -252,9 +252,9 @@ export const BlockchainDashboard: React.FC = () => {
               <div className="flex items-center justify-between">
                 <div>
                   <p className="text-sm text-muted-foreground">Pendentes</p>
-                  <p className="text-2xl font-bold text-yellow-500">{stats.pendingBlocks}</p>
+                  <p className="text-2xl font-bold text-warning">{stats.pendingBlocks}</p>
                 </div>
-                <Clock className="h-8 w-8 text-yellow-500 opacity-50" />
+                <Clock className="h-8 w-8 text-warning opacity-50" />
               </div>
             </CardContent>
           </Card>

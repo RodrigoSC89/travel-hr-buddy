@@ -548,20 +548,20 @@ export function FlightBookingPanel() {
                       <div className="mt-3 flex items-center justify-between">
                         <div className="flex items-center gap-2">
                           {flight.isMarineFare && (
-                            <Badge className="bg-blue-500/10 text-blue-600 border-blue-500/20">
+                            <Badge className="bg-info/10 text-info border-info/20">
                               <Star className="h-3 w-3 mr-1" />
                               Marine Fare
                             </Badge>
                           )}
                           {flight.isRecommended && (
-                            <Badge className="bg-green-500/10 text-green-600 border-green-500/20">
+                            <Badge className="bg-success/10 text-success border-success/20">
                               <Sparkles className="h-3 w-3 mr-1" />
                               Recomendado
                             </Badge>
                           )}
                           <Badge variant="outline">{flight.class}</Badge>
                           {flight.originalPrice && (
-                            <Badge className="bg-orange-500/10 text-orange-600 border-orange-500/20">
+                            <Badge className="bg-warning/10 text-warning border-warning/20">
                               <TrendingDown className="h-3 w-3 mr-1" />
                               -{Math.round((1 - flight.price / flight.originalPrice) * 100)}%
                             </Badge>
@@ -638,7 +638,7 @@ export function FlightBookingPanel() {
                                 <ul className="space-y-1 text-muted-foreground">
                                   <li>• 1x mala de mão (10kg)</li>
                                   <li>• 1x mala despachada (23kg)</li>
-                                  {flight.isMarineFare && <li className="text-green-600">• Alteração gratuita</li>}
+                                  {flight.isMarineFare && <li className="text-success">• Alteração gratuita</li>}
                                 </ul>
                               </div>
                               <div>
@@ -646,7 +646,7 @@ export function FlightBookingPanel() {
                                 <ul className="space-y-1 text-muted-foreground">
                                   {flight.isMarineFare ? (
                                     <>
-                                      <li className="text-green-600">• Cancelamento gratuito até 24h</li>
+                                      <li className="text-success">• Cancelamento gratuito até 24h</li>
                                       <li>• Reembolso total em créditos</li>
                                     </>
                                   ) : (

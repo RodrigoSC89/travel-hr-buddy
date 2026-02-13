@@ -743,7 +743,7 @@ export const APIHubNautilus: React.FC = () => {
                           <span className="font-medium">99.87%</span>
                         </div>
                         <div className="h-2 bg-muted rounded-full overflow-hidden">
-                          <div className="h-full bg-green-500" style={{width: "99.87%"}}></div>
+                          <div className="h-full bg-success" style={{width: "99.87%"}}></div>
                         </div>
                       </div>
                       <div>
@@ -752,7 +752,7 @@ export const APIHubNautilus: React.FC = () => {
                           <span className="font-medium">245ms</span>
                         </div>
                         <div className="h-2 bg-muted rounded-full overflow-hidden">
-                          <div className="h-full bg-blue-500" style={{width: "78%"}}></div>
+                          <div className="h-full bg-info" style={{width: "78%"}}></div>
                         </div>
                       </div>
                       <div>
@@ -761,7 +761,7 @@ export const APIHubNautilus: React.FC = () => {
                           <span className="font-medium">0.13%</span>
                         </div>
                         <div className="h-2 bg-muted rounded-full overflow-hidden">
-                          <div className="h-full bg-red-500" style={{width: "0.13%"}}></div>
+                          <div className="h-full bg-destructive" style={{width: "0.13%"}}></div>
                         </div>
                       </div>
                     </div>
@@ -775,11 +775,11 @@ export const APIHubNautilus: React.FC = () => {
                   <CardContent>
                     <div className="space-y-3">
                       {[
-                        { category: "IoT Sensors", percentage: 48, color: "bg-purple-500" },
-                        { category: "Vessel Data", percentage: 25, color: "bg-blue-500" },
-                        { category: "Weather", percentage: 13, color: "bg-green-500" },
-                        { category: "Analytics", percentage: 9, color: "bg-yellow-500" },
-                        { category: "Crew", percentage: 5, color: "bg-red-500" }
+                        { category: "IoT Sensors", percentage: 48, color: "bg-accent" },
+                        { category: "Vessel Data", percentage: 25, color: "bg-info" },
+                        { category: "Weather", percentage: 13, color: "bg-success" },
+                        { category: "Analytics", percentage: 9, color: "bg-warning" },
+                        { category: "Crew", percentage: 5, color: "bg-destructive" }
                       ].map((item) => (
                         <div key={item.category}>
                           <div className="flex justify-between text-sm mb-1">

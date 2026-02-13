@@ -116,9 +116,9 @@ export default function MaritimeConnectivity() {
 
   const getStatusColor = (status: string) => {
     const colors: Record<string, string> = {
-      online: "bg-green-500/10 text-green-600",
-      degraded: "bg-amber-500/10 text-amber-600",
-      offline: "bg-red-500/10 text-red-600"
+      online: "bg-success/10 text-success",
+      degraded: "bg-warning/10 text-warning",
+      offline: "bg-destructive/10 text-destructive"
     };
     return colors[status] || colors.offline;
   };
@@ -133,9 +133,9 @@ export default function MaritimeConnectivity() {
   };
 
   const getSignalIcon = (strength: number) => {
-    if (strength >= 70) return <SignalHigh className="h-4 w-4 text-green-500" />;
-    if (strength >= 40) return <SignalLow className="h-4 w-4 text-amber-500" />;
-    if (strength > 0) return <SignalZero className="h-4 w-4 text-red-500" />;
+    if (strength >= 70) return <SignalHigh className="h-4 w-4 text-success" />;
+    if (strength >= 40) return <SignalLow className="h-4 w-4 text-warning" />;
+    if (strength > 0) return <SignalZero className="h-4 w-4 text-destructive" />;
     return <WifiOff className="h-4 w-4 text-muted-foreground" />;
   };
 

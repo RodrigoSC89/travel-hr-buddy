@@ -207,19 +207,19 @@ export const SatelliteGlobeMap: React.FC<SatelliteGlobeMapProps> = ({
         <div className="text-xs font-medium mb-2">Legenda de Órbitas</div>
         <div className="space-y-1">
           <div className="flex items-center gap-2">
-            <div className="w-3 h-3 rounded-full bg-blue-500" />
+            <div className="w-3 h-3 rounded-full bg-info" />
             <span className="text-xs">LEO (Órbita Baixa)</span>
           </div>
           <div className="flex items-center gap-2">
-            <div className="w-3 h-3 rounded-full bg-green-500" />
+            <div className="w-3 h-3 rounded-full bg-success" />
             <span className="text-xs">MEO (Órbita Média)</span>
           </div>
           <div className="flex items-center gap-2">
-            <div className="w-3 h-3 rounded-full bg-purple-500" />
+            <div className="w-3 h-3 rounded-full bg-accent" />
             <span className="text-xs">GEO (Geoestacionária)</span>
           </div>
           <div className="flex items-center gap-2">
-            <div className="w-3 h-3 rounded-full bg-orange-500" />
+            <div className="w-3 h-3 rounded-full bg-warning" />
             <span className="text-xs">HEO (Órbita Alta)</span>
           </div>
         </div>

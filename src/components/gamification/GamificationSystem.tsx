@@ -40,9 +40,9 @@ export function GamificationSystem() {
 
   const getRankBadge = (rank: number) => {
     switch (rank) {
-      case 1: return <Crown className="h-5 w-5 text-yellow-500" />;
+      case 1: return <Crown className="h-5 w-5 text-warning" />;
       case 2: return <Medal className="h-5 w-5 text-muted-foreground" />;
-      case 3: return <Medal className="h-5 w-5 text-amber-600" />;
+      case 3: return <Medal className="h-5 w-5 text-warning" />;
       default: return <span className="text-sm font-bold text-muted-foreground">#{rank}</span>;
     }
   };
@@ -70,31 +70,31 @@ export function GamificationSystem() {
                   {topUser ? topUser.name.split(' ').map((n: string) => n[0]).join('').slice(0, 2) : "?"}
                 </AvatarFallback>
               </Avatar>
-              <div className="absolute -bottom-1 -right-1 p-1.5 rounded-full bg-yellow-500">
-                <Crown className="h-4 w-4 text-white" />
+              <div className="absolute -bottom-1 -right-1 p-1.5 rounded-full bg-warning">
+                <Crown className="h-4 w-4 text-warning-foreground" />
               </div>
             </div>
             <div className="flex-1">
               <div className="flex items-center gap-3 mb-2">
                 <h2 className="text-2xl font-bold">{topUser?.name || "Sem dados"}</h2>
-                <Badge className="bg-gradient-to-r from-yellow-400 to-orange-500 text-white">
+                <Badge className="bg-gradient-to-r from-warning to-warning/80 text-warning-foreground">
                   Level {Math.floor((topUser?.points || 0) / 500)}
                 </Badge>
               </div>
               <p className="text-muted-foreground mb-3">{topUser?.vessel || "Sem embarcação"}</p>
               <div className="flex items-center gap-6">
                 <div className="flex items-center gap-2">
-                  <Trophy className="h-5 w-5 text-yellow-500" />
+                  <Trophy className="h-5 w-5 text-warning" />
                   <span className="font-bold">{topUser?.points?.toLocaleString() || 0}</span>
                   <span className="text-sm text-muted-foreground">pontos</span>
                 </div>
                 <div className="flex items-center gap-2">
-                  <Flame className="h-5 w-5 text-orange-500" />
+                  <Flame className="h-5 w-5 text-destructive" />
                   <span className="font-bold">{topUser?.streak || 0}</span>
                   <span className="text-sm text-muted-foreground">dias streak</span>
                 </div>
                 <div className="flex items-center gap-2">
-                  <Award className="h-5 w-5 text-purple-500" />
+                  <Award className="h-5 w-5 text-accent" />
                   <span className="font-bold">{badges.filter(b => b.earned).length}</span>
                   <span className="text-sm text-muted-foreground">badges</span>
                 </div>
@@ -117,7 +117,7 @@ export function GamificationSystem() {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <Card>
               <CardHeader className="pb-2">
-                <CardTitle className="text-sm font-medium flex items-center gap-2"><Star className="h-4 w-4 text-yellow-500" />Total de Pontos</CardTitle>
+                <CardTitle className="text-sm font-medium flex items-center gap-2"><Star className="h-4 w-4 text-warning" />Total de Pontos</CardTitle>
               </CardHeader>
               <CardContent>
                 <div className="text-3xl font-bold">{leaderboard.reduce((acc, l) => acc + l.points, 0).toLocaleString()}</div>
@@ -126,7 +126,7 @@ export function GamificationSystem() {
             </Card>
             <Card>
               <CardHeader className="pb-2">
-                <CardTitle className="text-sm font-medium flex items-center gap-2"><Target className="h-4 w-4 text-blue-500" />Desafios Ativos</CardTitle>
+                <CardTitle className="text-sm font-medium flex items-center gap-2"><Target className="h-4 w-4 text-info" />Desafios Ativos</CardTitle>
               </CardHeader>
               <CardContent>
                 <div className="text-3xl font-bold">{challenges.length}</div>
@@ -135,7 +135,7 @@ export function GamificationSystem() {
             </Card>
             <Card>
               <CardHeader className="pb-2">
-                <CardTitle className="text-sm font-medium flex items-center gap-2"><Users className="h-4 w-4 text-purple-500" />Participantes</CardTitle>
+                <CardTitle className="text-sm font-medium flex items-center gap-2"><Users className="h-4 w-4 text-accent" />Participantes</CardTitle>
               </CardHeader>
               <CardContent>
                 <div className="text-3xl font-bold">{leaderboard.length}</div>
@@ -148,7 +148,7 @@ export function GamificationSystem() {
         <TabsContent value="leaderboard" className="mt-6">
           <Card>
             <CardHeader>
-              <CardTitle className="flex items-center gap-2"><Trophy className="h-5 w-5 text-yellow-500" />Ranking</CardTitle>
+              <CardTitle className="flex items-center gap-2"><Trophy className="h-5 w-5 text-warning" />Ranking</CardTitle>
               <CardDescription>Top performers da frota</CardDescription>
             </CardHeader>
             <CardContent>
@@ -168,9 +168,9 @@ export function GamificationSystem() {
                         transition={{ delay: index * 0.1 }}
                         className={cn(
                           "flex items-center gap-4 p-3 rounded-lg",
-                          user.rank === 1 ? "bg-yellow-500/10 border border-yellow-500/20" :
+                          user.rank === 1 ? "bg-warning/10 border border-warning/20" :
                           user.rank === 2 ? "bg-muted/50" :
-                          user.rank === 3 ? "bg-amber-500/10" : "bg-muted/30"
+                          user.rank === 3 ? "bg-warning/10" : "bg-muted/30"
                         )}
                       >
                         <div className="w-8 flex justify-center">{getRankBadge(user.rank)}</div>
@@ -180,7 +180,7 @@ export function GamificationSystem() {
                           <p className="text-xs text-muted-foreground">{user.vessel}</p>
                         </div>
                         <div className="flex items-center gap-2">
-                          <Flame className="h-4 w-4 text-orange-500" />
+                          <Flame className="h-4 w-4 text-destructive" />
                           <span className="text-sm">{user.streak}</span>
                         </div>
                         <div className="text-right">
@@ -210,15 +210,15 @@ export function GamificationSystem() {
                     "w-16 h-16 mx-auto rounded-full flex items-center justify-center mb-3",
                     badge.earned ? `bg-gradient-to-br ${getRarityColor(badge.rarity)}` : "bg-muted"
                   )}>
-                    <Icon className={cn("h-8 w-8", badge.earned ? "text-white" : "text-muted-foreground")} />
+                    <Icon className={cn("h-8 w-8", badge.earned ? "text-primary-foreground" : "text-muted-foreground")} />
                   </div>
                   <h3 className="text-center font-medium mb-1">{badge.name}</h3>
                   <p className="text-center text-xs text-muted-foreground">{badge.description}</p>
                   <Badge className={cn(
                     "absolute top-2 right-2 text-[10px]",
-                    badge.rarity === "legendary" ? "bg-yellow-500" :
-                    badge.rarity === "epic" ? "bg-purple-500" :
-                    badge.rarity === "rare" ? "bg-blue-500" : "bg-gray-500"
+                    badge.rarity === "legendary" ? "bg-warning" :
+                    badge.rarity === "epic" ? "bg-accent" :
+                    badge.rarity === "rare" ? "bg-info" : "bg-muted-foreground"
                   )}>{badge.rarity}</Badge>
                   {!badge.earned && (
                     <div className="absolute inset-0 flex items-center justify-center bg-background/50 rounded-xl">

@@ -27,7 +27,7 @@ export default function TipTapPreview({ content, readOnly = true, className = ""
   });
 
   return (
-    <div className={`border rounded-lg bg-white ${className}`}>
+    <div className={`border rounded-lg bg-background ${className}`}>
       <EditorContent editor={editor} />
     </div>
   );

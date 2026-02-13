@@ -212,7 +212,7 @@ export const CrewManagementDashboard = () => {
         
         <Card>
           <CardContent className="p-4 text-center">
-            <Calendar className="h-8 w-8 mx-auto mb-2 text-yellow-600" />
+            <Calendar className="h-8 w-8 mx-auto mb-2 text-warning" />
             <div className="text-2xl font-bold">{crewStats.on_leave}</div>
             <div className="text-sm text-muted-foreground">De Licença</div>
           </CardContent>

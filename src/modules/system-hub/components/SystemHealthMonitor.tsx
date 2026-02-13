@@ -321,7 +321,7 @@ export default function SystemHealthMonitor() {
         <Card className="hover:shadow-md transition-shadow">
           <CardContent className="p-4">
             <div className="flex items-center gap-2 mb-2">
-              <Cpu className="h-4 w-4 text-blue-500" />
+              <Cpu className="h-4 w-4 text-info" />
               <span className="text-sm text-muted-foreground">CPU</span>
             </div>
             <p className="text-2xl font-bold">{currentMetrics.cpu.toFixed(1)}%</p>
@@ -332,7 +332,7 @@ export default function SystemHealthMonitor() {
         <Card className="hover:shadow-md transition-shadow">
           <CardContent className="p-4">
             <div className="flex items-center gap-2 mb-2">
-              <HardDrive className="h-4 w-4 text-purple-500" />
+              <HardDrive className="h-4 w-4 text-accent" />
               <span className="text-sm text-muted-foreground">Memória</span>
             </div>
             <p className="text-2xl font-bold">{currentMetrics.memory.toFixed(1)}%</p>
@@ -354,7 +354,7 @@ export default function SystemHealthMonitor() {
         <Card className="hover:shadow-md transition-shadow">
           <CardContent className="p-4">
             <div className="flex items-center gap-2 mb-2">
-              <Network className="h-4 w-4 text-green-500" />
+              <Network className="h-4 w-4 text-success" />
               <span className="text-sm text-muted-foreground">Rede</span>
             </div>
             <p className="text-2xl font-bold">{currentMetrics.network.toFixed(0)} MB/s</p>
@@ -374,7 +374,7 @@ export default function SystemHealthMonitor() {
         <Card className="hover:shadow-md transition-shadow">
           <CardContent className="p-4">
             <div className="flex items-center gap-2 mb-2">
-              <AlertTriangle className="h-4 w-4 text-red-500" />
+              <AlertTriangle className="h-4 w-4 text-destructive" />
               <span className="text-sm text-muted-foreground">Erros</span>
             </div>
             <p className="text-2xl font-bold">{currentMetrics.errors}</p>

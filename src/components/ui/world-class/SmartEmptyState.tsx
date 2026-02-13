@@ -102,17 +102,17 @@ const moduleIcons: Record<ModuleType, React.ReactNode> = {
 };
 
 const moduleColors: Record<ModuleType, string> = {
-  vessels: 'text-blue-500',
-  crew: 'text-green-500',
-  documents: 'text-amber-500',
-  maintenance: 'text-orange-500',
-  compliance: 'text-violet-500',
-  operations: 'text-cyan-500',
-  tracking: 'text-teal-500',
-  finance: 'text-emerald-500',
-  ai: 'text-purple-500',
-  procurement: 'text-rose-500',
-  generic: 'text-gray-500',
+  vessels: 'text-info',
+  crew: 'text-success',
+  documents: 'text-warning',
+  maintenance: 'text-warning',
+  compliance: 'text-accent',
+  operations: 'text-info',
+  tracking: 'text-info',
+  finance: 'text-success',
+  ai: 'text-accent',
+  procurement: 'text-destructive',
+  generic: 'text-muted-foreground',
 };
 
 const defaultContent: Record<EmptyStateType, { title: string; description: string }> = {

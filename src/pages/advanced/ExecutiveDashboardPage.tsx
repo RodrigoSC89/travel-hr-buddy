@@ -22,7 +22,7 @@ const ExecutiveDashboardPage = () => {
       change: "+8.3%", 
       trend: "up",
       icon: DollarSign,
-      color: "text-green-500"
+      color: "text-success"
     },
     { 
       name: "OPEX Total", 
@@ -30,7 +30,7 @@ const ExecutiveDashboardPage = () => {
       change: "-3.1%", 
       trend: "down",
       icon: TrendingDown,
-      color: "text-green-500"
+      color: "text-success"
     },
     { 
       name: "Utilização da Frota", 
@@ -38,7 +38,7 @@ const ExecutiveDashboardPage = () => {
       change: "+2.1%", 
       trend: "up",
       icon: Ship,
-      color: "text-blue-500"
+      color: "text-info"
     },
     { 
       name: "TCE Médio", 
@@ -46,7 +46,7 @@ const ExecutiveDashboardPage = () => {
       change: "+12.4%", 
       trend: "up",
       icon: Target,
-      color: "text-green-500"
+      color: "text-success"
     }
   ];
 
@@ -129,9 +129,9 @@ const ExecutiveDashboardPage = () => {
                   <p className="text-2xl font-bold mt-1">{kpi.value}</p>
                   <div className="flex items-center gap-1 mt-2">
                     {kpi.trend === "up" ? (
-                      <TrendingUp className="h-4 w-4 text-green-500" />
+                      <TrendingUp className="h-4 w-4 text-success" />
                     ) : (
-                      <TrendingDown className="h-4 w-4 text-green-500" />
+                      <TrendingDown className="h-4 w-4 text-success" />
                     )}
                     <span className={kpi.color}>{kpi.change}</span>
                   </div>
@@ -182,9 +182,9 @@ const ExecutiveDashboardPage = () => {
                         </td>
                         <td className="p-3 text-right">
                           <span className={
-                            vessel.utilization >= 95 ? "text-green-500" :
-                            vessel.utilization >= 85 ? "text-yellow-500" :
-                            vessel.utilization > 0 ? "text-red-500" : "text-muted-foreground"
+                            vessel.utilization >= 95 ? "text-success" :
+                            vessel.utilization >= 85 ? "text-warning" :
+                            vessel.utilization > 0 ? "text-destructive" : "text-muted-foreground"
                           }>
                             {vessel.utilization > 0 ? `${vessel.utilization}%` : "-"}
                           </span>
@@ -192,8 +192,8 @@ const ExecutiveDashboardPage = () => {
                         <td className="p-3 text-right">${vessel.opex.toLocaleString()}</td>
                         <td className="p-3 text-center">
                           <Badge className={
-                            vessel.status === "operating" ? "bg-green-500" :
-                            vessel.status === "drydock" ? "bg-yellow-500" : "bg-red-500"
+                            vessel.status === "operating" ? "bg-success" :
+                            vessel.status === "drydock" ? "bg-warning" : "bg-destructive"
                           }>
                             {vessel.status === "operating" ? "Operando" :
                              vessel.status === "drydock" ? "Docagem" : vessel.status}
@@ -228,8 +228,8 @@ const ExecutiveDashboardPage = () => {
                       </div>
                     </div>
                     <Badge className={
-                      item.variance < 0 ? "bg-green-500" :
-                      item.variance > 0 ? "bg-red-500" : "bg-gray-500"
+                      item.variance < 0 ? "bg-success" :
+                      item.variance > 0 ? "bg-destructive" : "bg-muted-foreground"
                     }>
                       {item.variance > 0 ? "+" : ""}{item.variance.toFixed(1)}%
                     </Badge>
@@ -251,7 +251,7 @@ const ExecutiveDashboardPage = () => {
               </CardHeader>
               <CardContent>
                 <div className="text-center mb-6">
-                  <div className="text-5xl font-bold text-green-500">{complianceMetrics.overall}%</div>
+                  <div className="text-5xl font-bold text-success">{complianceMetrics.overall}%</div>
                   <p className="text-muted-foreground">Score Geral</p>
                 </div>
                 <div className="space-y-3">
@@ -259,8 +259,8 @@ const ExecutiveDashboardPage = () => {
                     <div key={key} className="flex items-center justify-between">
                       <span className="capitalize">{key}</span>
                       <span className={`font-bold ${
-                        Number(value) >= 95 ? "text-green-500" :
-                        Number(value) >= 85 ? "text-yellow-500" : "text-red-500"
+                        Number(value) >= 95 ? "text-success" :
+                        Number(value) >= 85 ? "text-warning" : "text-destructive"
                       }`}>{value}%</span>
                     </div>
                   ))}
@@ -274,19 +274,19 @@ const ExecutiveDashboardPage = () => {
               </CardHeader>
               <CardContent>
                 <div className="space-y-4">
-                  <div className="p-4 bg-green-500/10 rounded-lg">
+                  <div className="p-4 bg-success/10 rounded-lg">
                     <p className="text-sm text-muted-foreground">PSC Deficiency Rate</p>
-                    <p className="text-2xl font-bold text-green-500">{complianceMetrics.pscDeficiencyRate}</p>
+                    <p className="text-2xl font-bold text-success">{complianceMetrics.pscDeficiencyRate}</p>
                     <p className="text-xs text-muted-foreground">Meta: &lt; 1.0</p>
                   </div>
-                  <div className="p-4 bg-blue-500/10 rounded-lg">
+                  <div className="p-4 bg-info/10 rounded-lg">
                     <p className="text-sm text-muted-foreground">Dias sem LTI</p>
-                    <p className="text-2xl font-bold text-blue-500">847</p>
+                    <p className="text-2xl font-bold text-info">847</p>
                     <p className="text-xs text-muted-foreground">Record: 1,200 dias</p>
                   </div>
-                  <div className="p-4 bg-yellow-500/10 rounded-lg">
+                  <div className="p-4 bg-warning/10 rounded-lg">
                     <p className="text-sm text-muted-foreground">Near Misses (YTD)</p>
-                    <p className="text-2xl font-bold text-yellow-500">23</p>
+                    <p className="text-2xl font-bold text-warning">23</p>
                     <p className="text-xs text-muted-foreground">100% investigados</p>
                   </div>
                 </div>
@@ -306,30 +306,30 @@ const ExecutiveDashboardPage = () => {
             </Card>
             <Card>
               <CardContent className="p-6 text-center">
-                <TrendingUp className="h-8 w-8 mx-auto text-green-500 mb-2" />
+                <TrendingUp className="h-8 w-8 mx-auto text-success mb-2" />
                 <p className="text-sm text-muted-foreground">Retenção</p>
-                <p className="text-2xl font-bold text-green-500">{crewMetrics.retention}%</p>
+                <p className="text-2xl font-bold text-success">{crewMetrics.retention}%</p>
               </CardContent>
             </Card>
             <Card>
               <CardContent className="p-6 text-center">
-                <Clock className="h-8 w-8 mx-auto text-blue-500 mb-2" />
+                <Clock className="h-8 w-8 mx-auto text-info mb-2" />
                 <p className="text-sm text-muted-foreground">Tempo Médio</p>
-                <p className="text-2xl font-bold text-blue-500">{crewMetrics.avgTenure}</p>
+                <p className="text-2xl font-bold text-info">{crewMetrics.avgTenure}</p>
               </CardContent>
             </Card>
             <Card>
               <CardContent className="p-6 text-center">
-                <Target className="h-8 w-8 mx-auto text-purple-500 mb-2" />
+                <Target className="h-8 w-8 mx-auto text-accent mb-2" />
                 <p className="text-sm text-muted-foreground">Training Score</p>
-                <p className="text-2xl font-bold text-purple-500">{crewMetrics.training}%</p>
+                <p className="text-2xl font-bold text-accent">{crewMetrics.training}%</p>
               </CardContent>
             </Card>
             <Card>
               <CardContent className="p-6 text-center">
-                <Shield className="h-8 w-8 mx-auto text-orange-500 mb-2" />
+                <Shield className="h-8 w-8 mx-auto text-warning mb-2" />
                 <p className="text-sm text-muted-foreground">Wellness Score</p>
-                <p className="text-2xl font-bold text-orange-500">{crewMetrics.wellness}%</p>
+                <p className="text-2xl font-bold text-warning">{crewMetrics.wellness}%</p>
               </CardContent>
             </Card>
           </div>

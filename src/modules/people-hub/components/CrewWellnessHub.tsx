@@ -530,7 +530,7 @@ export default function CrewWellnessHub() {
         <DialogContent>
           <DialogHeader>
             <DialogTitle className="flex items-center gap-2">
-              <Shield className="h-5 w-5 text-blue-500" />
+              <Shield className="h-5 w-5 text-info" />
               Chat Confidencial
             </DialogTitle>
             <DialogDescription>

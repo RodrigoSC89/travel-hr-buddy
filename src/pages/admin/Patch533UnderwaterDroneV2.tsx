@@ -30,7 +30,7 @@ export default function Patch533UnderwaterDroneV2() {
           </p>
         </div>
         {allChecked && (
-          <Badge className="bg-green-500 text-white text-lg px-4 py-2">
+          <Badge className="bg-success text-success-foreground text-lg px-4 py-2">
             <CheckCircle2 className="h-5 w-5 mr-2" />
             VALIDADO
           </Badge>
@@ -113,9 +113,9 @@ export default function Patch533UnderwaterDroneV2() {
         </CardContent>
       </Card>
 
-      <Card className="border-green-500/50 bg-green-500/5">
+      <Card className="border-success/50 bg-success/5">
         <CardHeader>
-          <CardTitle className="text-green-700 dark:text-green-400">
+          <CardTitle className="text-success">
             Critério de Aprovação
           </CardTitle>
         </CardHeader>

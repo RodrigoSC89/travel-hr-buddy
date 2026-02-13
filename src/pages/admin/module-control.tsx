@@ -144,19 +144,19 @@ export const ModuleControl: React.FC = () => {
 
   const getActionIcon = (action: ModuleHistoryEntry['action']) => {
     switch (action) {
-      case 'activated': return <Activity className="h-4 w-4 text-green-500" />;
-      case 'deactivated': return <Activity className="h-4 w-4 text-red-500" />;
-      case 'updated': return <Activity className="h-4 w-4 text-blue-500" />;
-      case 'created': return <Activity className="h-4 w-4 text-purple-500" />;
+      case 'activated': return <Activity className="h-4 w-4 text-success" />;
+      case 'deactivated': return <Activity className="h-4 w-4 text-destructive" />;
+      case 'updated': return <Activity className="h-4 w-4 text-info" />;
+      case 'created': return <Activity className="h-4 w-4 text-accent" />;
     }
   };
 
   const getActionBadge = (action: ModuleHistoryEntry['action']) => {
     switch (action) {
-      case 'activated': return <Badge className="bg-green-100 text-green-700 dark:bg-green-900 dark:text-green-300">Ativado</Badge>;
-      case 'deactivated': return <Badge className="bg-red-100 text-red-700 dark:bg-red-900 dark:text-red-300">Desativado</Badge>;
-      case 'updated': return <Badge className="bg-blue-100 text-blue-700 dark:bg-blue-900 dark:text-blue-300">Atualizado</Badge>;
-      case 'created': return <Badge className="bg-purple-100 text-purple-700 dark:bg-purple-900 dark:text-purple-300">Criado</Badge>;
+      case 'activated': return <Badge className="bg-success/20 text-success">Ativado</Badge>;
+      case 'deactivated': return <Badge className="bg-destructive/20 text-destructive">Desativado</Badge>;
+      case 'updated': return <Badge className="bg-info/20 text-info">Atualizado</Badge>;
+      case 'created': return <Badge className="bg-accent/20 text-accent">Criado</Badge>;
     }
   };
 
@@ -217,7 +217,7 @@ export const ModuleControl: React.FC = () => {
             <CardTitle className="text-sm font-medium">✅ Production</CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-green-600">{statistics.production}</div>
+            <div className="text-2xl font-bold text-success">{statistics.production}</div>
           </CardContent>
         </Card>
         <Card>
@@ -225,7 +225,7 @@ export const ModuleControl: React.FC = () => {
             <CardTitle className="text-sm font-medium">⚠️ Development</CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-yellow-600">{statistics.development}</div>
+            <div className="text-2xl font-bold text-warning">{statistics.development}</div>
           </CardContent>
         </Card>
         <Card>
@@ -241,7 +241,7 @@ export const ModuleControl: React.FC = () => {
             <CardTitle className="text-sm font-medium">AI Enabled</CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-blue-600">{statistics.withAI}</div>
+            <div className="text-2xl font-bold text-info">{statistics.withAI}</div>
           </CardContent>
         </Card>
       </div>
