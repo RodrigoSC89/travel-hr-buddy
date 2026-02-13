@@ -250,11 +250,11 @@ async function logWatchdogEvent(data: Record<string, unknown>) {
   try {
     logger.info("[Watchdog Event]", data);
     
-    // Store in localStorage for debugging
+    // Store in sessionStorage for debugging (ephemeral)
     try {
-      const logs = JSON.parse(localStorage.getItem("watchdog_events") || "[]");
+      const logs = JSON.parse(sessionStorage.getItem("watchdog_events") || "[]");
       logs.push({ ...data, timestamp: new Date().toISOString() });
-      localStorage.setItem("watchdog_events", JSON.stringify(logs.slice(-50))); // Keep last 50
+      sessionStorage.setItem("watchdog_events", JSON.stringify(logs.slice(-50))); // Keep last 50
     } catch (e) {
       // Ignore localStorage errors
     }

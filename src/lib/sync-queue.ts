@@ -192,8 +192,8 @@ class SyncQueue {
         
         this.updateItemStatus(item.id, "sent");
         
-        // Remover itens enviados com sucesso após 5 segundos
-        setTimeout(() => this.dequeue(item.id), 5000);
+        // Remove sent items immediately
+        this.dequeue(item.id);
         
       } catch (error) {
         const errorMsg = error instanceof Error ? error.message : "Unknown error";

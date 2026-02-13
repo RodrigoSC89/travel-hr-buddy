@@ -76,7 +76,7 @@ export const CityAlertManager: React.FC<CityAlertManagerProps> = ({
   // Load saved configs
   useEffect(() => {
     try {
-      const saved = localStorage.getItem(STORAGE_KEY);
+      const saved = sessionStorage.getItem(STORAGE_KEY);
       if (saved) {
         setAlertConfigs(JSON.parse(saved));
       }
@@ -87,7 +87,7 @@ export const CityAlertManager: React.FC<CityAlertManagerProps> = ({
 
   // Save configs
   useEffect(() => {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(alertConfigs));
+    sessionStorage.setItem(STORAGE_KEY, JSON.stringify(alertConfigs));
   }, [alertConfigs]);
 
   // Request push permission

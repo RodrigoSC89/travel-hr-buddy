@@ -292,7 +292,7 @@ export interface CacheEntry<T> {
  */
 export function getCached<T>(key: string): T | null {
   try {
-    const raw = localStorage.getItem(CACHE_PREFIX + key);
+    const raw = sessionStorage.getItem(CACHE_PREFIX + key);
     if (!raw) return null;
     
     const entry: CacheEntry<T> = JSON.parse(raw);
@@ -300,7 +300,7 @@ export function getCached<T>(key: string): T | null {
     
     // Check if expired
     if (now - entry.timestamp > entry.ttl) {
-      localStorage.removeItem(CACHE_PREFIX + key);
+      sessionStorage.removeItem(CACHE_PREFIX + key);
       return null;
     }
     
@@ -337,12 +337,12 @@ export function setCached<T>(
   };
   
   try {
-    localStorage.setItem(CACHE_PREFIX + key, JSON.stringify(entry));
+    sessionStorage.setItem(CACHE_PREFIX + key, JSON.stringify(entry));
   } catch (e) {
     // Handle quota exceeded
     clearOldCache();
     try {
-      localStorage.setItem(CACHE_PREFIX + key, JSON.stringify(entry));
+      sessionStorage.setItem(CACHE_PREFIX + key, JSON.stringify(entry));
     } catch {
       // Silently fail if still can't store
     }
@@ -355,11 +355,11 @@ export function setCached<T>(
 export function clearOldCache(): void {
   const keysToRemove: string[] = [];
   
-  for (let i = 0; i < localStorage.length; i++) {
-    const key = localStorage.key(i);
+  for (let i = 0; i < sessionStorage.length; i++) {
+    const key = sessionStorage.key(i);
     if (key?.startsWith(CACHE_PREFIX)) {
       try {
-        const raw = localStorage.getItem(key);
+        const raw = sessionStorage.getItem(key);
         if (raw) {
           const entry = JSON.parse(raw);
           if (Date.now() - entry.timestamp > entry.ttl) {
@@ -372,7 +372,7 @@ export function clearOldCache(): void {
     }
   }
   
-  keysToRemove.forEach(key => localStorage.removeItem(key));
+  keysToRemove.forEach(key => sessionStorage.removeItem(key));
 }
 
 // ==================== LOADING STATE HELPERS ====================

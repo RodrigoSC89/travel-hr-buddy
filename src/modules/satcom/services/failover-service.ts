@@ -240,7 +240,7 @@ class SatcomFailoverService {
 
   async simulateFailoverTest(vesselId: string, fromConnectionId: string, toConnectionId: string, fromProvider: "Iridium" | "Starlink" | "Inmarsat" | "Thuraya", toProvider: "Iridium" | "Starlink" | "Inmarsat" | "Thuraya"): Promise<void> {
     await this.logFailover({ vessel_id: vesselId, event_type: "fallback_initiated", from_provider: fromProvider, to_provider: toProvider, from_connection_id: fromConnectionId, to_connection_id: toConnectionId, reason: "Manual failover test", success: true });
-    await new Promise((resolve) => setTimeout(resolve, 2000));
+    // No artificial delay - execute failover immediately
     await this.logFailover({ vessel_id: vesselId, event_type: "fallback_completed", from_provider: fromProvider, to_provider: toProvider, from_connection_id: fromConnectionId, to_connection_id: toConnectionId, reason: "Manual failover test completed", success: true, duration_seconds: 2 });
     await this.updateConnectionStatus({ vessel_id: vesselId, connection_id: fromConnectionId, provider: fromProvider, status: "disconnected", signal_strength: 0, is_active: false });
     await this.updateConnectionStatus({ vessel_id: vesselId, connection_id: toConnectionId, provider: toProvider, status: "connected", signal_strength: 85, is_active: true });

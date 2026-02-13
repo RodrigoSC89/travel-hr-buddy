@@ -490,9 +490,8 @@ function VideoCallInterface({
     if (!newMessage.trim()) return;
     setChatMessages([...chatMessages, { sender: 'you', message: newMessage, time: 'now' }]);
     setNewMessage('');
-    setTimeout(() => {
-      setChatMessages(prev => [...prev, { sender: 'doctor', message: 'I understand. Let me check your symptoms.', time: 'now' }]);
-    }, 2000);
+    // Immediate response (no artificial delay)
+    setChatMessages(prev => [...prev, { sender: 'doctor', message: 'I understand. Let me check your symptoms.', time: 'now' }]);
   };
 
   return (
@@ -742,10 +741,9 @@ export default function TelemedicinePortal() {
     setStep('connecting');
     toast.loading(`Connecting to ${selectedPhysician?.name}...`);
     
-    setTimeout(() => {
-      setStep('call');
-      toast.success('Consultation started!');
-    }, 3000);
+    // Transition immediately (no artificial delay)
+    setStep('call');
+    toast.success('Consultation started!');
   };
 
   const handleEndCall = () => {

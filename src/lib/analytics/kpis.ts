@@ -227,15 +227,15 @@ export class KPITracker {
       } as never);
 
     if (error) {
-      // Fallback to localStorage
-      const metrics = JSON.parse(localStorage.getItem('kpi_metrics') || '[]');
+      // Fallback to sessionStorage for ephemeral metrics
+      const metrics = JSON.parse(sessionStorage.getItem('kpi_metrics') || '[]');
       metrics.push({
         kpiId: kpi.id,
         value,
         timestamp: new Date().toISOString(),
         metadata
       });
-      localStorage.setItem('kpi_metrics', JSON.stringify(metrics.slice(-1000)));
+      sessionStorage.setItem('kpi_metrics', JSON.stringify(metrics.slice(-1000)));
     }
 
     // Update cache
@@ -270,8 +270,8 @@ export class KPITracker {
       return value;
     }
 
-    // Fallback to localStorage
-    const metrics = JSON.parse(localStorage.getItem('kpi_metrics') || '[]');
+    // Fallback to sessionStorage for ephemeral metrics
+    const metrics = JSON.parse(sessionStorage.getItem('kpi_metrics') || '[]');
     const latest = metrics.filter((m: Record<string, unknown>) => m.kpiId === kpi.id).pop();
     return (latest?.value as number) ?? null;
   }

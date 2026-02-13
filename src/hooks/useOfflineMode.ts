@@ -38,7 +38,7 @@ export function useOfflineMode() {
         timestamp: Date.now(),
         expiresAt: Date.now() + ttlMs,
       };
-      localStorage.setItem(`${CACHE_PREFIX}${key}`, JSON.stringify(cacheItem));
+      sessionStorage.setItem(`${CACHE_PREFIX}${key}`, JSON.stringify(cacheItem));
       return true;
     } catch (error) {
       logger.warn('[Offline] Erro ao salvar cache:', { error });
@@ -51,14 +51,14 @@ export function useOfflineMode() {
    */
   const getCachedData = useCallback(<T>(key: string): T | null => {
     try {
-      const item = localStorage.getItem(`${CACHE_PREFIX}${key}`);
+      const item = sessionStorage.getItem(`${CACHE_PREFIX}${key}`);
       if (!item) return null;
 
       const cached: OfflineData = JSON.parse(item);
       
       // Verificar expiração
       if (cached.expiresAt && cached.expiresAt < Date.now()) {
-        localStorage.removeItem(`${CACHE_PREFIX}${key}`);
+        sessionStorage.removeItem(`${CACHE_PREFIX}${key}`);
         return null;
       }
 
@@ -72,16 +72,16 @@ export function useOfflineMode() {
    * Limpar cache expirado
    */
   const clearExpiredCache = useCallback(() => {
-    const keys = Object.keys(localStorage).filter(k => k.startsWith(CACHE_PREFIX));
+    const keys = Object.keys(sessionStorage).filter(k => k.startsWith(CACHE_PREFIX));
     let cleared = 0;
 
     keys.forEach(key => {
       try {
-        const item = localStorage.getItem(key);
+        const item = sessionStorage.getItem(key);
         if (item) {
           const cached: OfflineData = JSON.parse(item);
           if (cached.expiresAt && cached.expiresAt < Date.now()) {
-            localStorage.removeItem(key);
+            sessionStorage.removeItem(key);
             cleared++;
           }
         }
