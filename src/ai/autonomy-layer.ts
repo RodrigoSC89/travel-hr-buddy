@@ -22,7 +22,7 @@ export interface AutonomousEvent {
   type: "module_crash" | "high_latency" | "api_failure" | "error_threshold" | "custom";
   module: string;
   severity: "low" | "medium" | "high" | "critical";
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- dynamic event data with arbitrary properties
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- event data accessed dynamically by rule conditions
   data: Record<string, any>;
   timestamp: Date;
 }
@@ -32,7 +32,7 @@ export interface AutonomousActionResult {
   action: string;
   description: string;
   requiresHumanReview?: boolean;
-  metadata?: Record<string, any>;
+  metadata?: Record<string, unknown>;
 }
 
 class AutonomyLayer {

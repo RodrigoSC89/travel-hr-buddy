@@ -10,7 +10,7 @@ export interface RecordedCommand {
   timestamp: number;
   type: "movement" | "depth_change" | "orientation" | "system";
   command: string;
-  parameters: Record<string, any>;
+  parameters: Record<string, unknown>;
   position: DronePosition;
 }
 
@@ -141,7 +141,7 @@ class MissionRecorderService {
   recordCommand(
     type: RecordedCommand["type"],
     command: string,
-    parameters: Record<string, any>,
+    parameters: Record<string, unknown>,
     position: DronePosition
   ): void {
     if (!this.isRecording || !this.currentRecording) {

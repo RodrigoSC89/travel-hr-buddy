@@ -17,6 +17,7 @@ export interface MultimodalContext {
   userIntent?: string;
   environment?: string;
   capabilities?: string[];
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- constraints accessed dynamically (e.g. maxLength)
   constraints?: Record<string, any>;
 }
 
@@ -25,7 +26,7 @@ export interface AIResponse {
   mode: ResponseMode;
   priority: ResponsePriority;
   adaptations?: string[];
-  metadata?: Record<string, any>;
+  metadata?: Record<string, unknown>;
 }
 
 export interface AdaptedResponse {

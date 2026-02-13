@@ -21,6 +21,7 @@ export interface AgentContext {
 export interface AgentObservation {
   id: string;
   type: 'metric' | 'event' | 'alert' | 'pattern' | 'anomaly';
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- observation data shape varies by type
   data: Record<string, any>;
   source: string;
   timestamp: Date;
@@ -37,6 +38,7 @@ export interface AgentDecision {
   impact: 'low' | 'medium' | 'high' | 'critical';
   requiresApproval: boolean;
   autoExecute: boolean;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- decision parameters shape varies
   parameters?: Record<string, any>;
   deadline?: Date;
   createdAt: Date;

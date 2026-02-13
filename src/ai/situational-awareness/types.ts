@@ -51,7 +51,7 @@ export interface SituationalInsight {
   affectedModules: ModuleSource[];
   confidence: number; // 0-1
   suggestedActions: string[];
-  context: Record<string, any>;
+  context: Record<string, unknown>;
 }
 
 /**
@@ -92,6 +92,7 @@ export interface SituationalState {
   modules: Record<ModuleSource, {
     status: "healthy" | "degraded" | "failed" | "unknown";
     lastUpdate: number;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any -- module metrics shape varies
     metrics: Record<string, any>;
   }>;
   activeAlerts: PreventiveAlert[];
@@ -124,6 +125,6 @@ export interface SituationalLogEntry {
   level: "debug" | "info" | "warn" | "error";
   category: "analysis" | "alert" | "decision" | "data_collection";
   message: string;
-  context: Record<string, any>;
+  context: Record<string, unknown>;
   moduleSource?: ModuleSource;
 }

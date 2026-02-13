@@ -285,7 +285,7 @@ export interface SecurityEvent {
   severity: 'low' | 'medium' | 'high' | 'critical';
   user_id?: string;
   ip_address?: string;
-  details: Record<string, any>;
+  details: Record<string, unknown>;
   timestamp: string;
 }
 

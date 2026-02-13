@@ -73,7 +73,7 @@ export class MissionControlService {
           end_date: mission.endDate,
           created_by: user?.id,
           metadata: mission.metadata || {}
-        })
+        } as never)
         .select()
         .single();
 
@@ -190,7 +190,7 @@ export class MissionControlService {
           assigned_to: task.assignedTo,
           due_date: task.dueDate,
           metadata: task.metadata || {}
-        })
+        } as never)
         .select()
         .single();
 

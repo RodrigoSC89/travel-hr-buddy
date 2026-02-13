@@ -17,9 +17,11 @@ export interface SystemObservation {
   severity: Severity;
   modulesAffected: string[];
   description: string;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- detection data shape varies by observation type
   detectionData: Record<string, any>;
   suggestedAction?: string;
   autoCorrectionAttempted: boolean;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- correction result shape varies
   autoCorrectionResult?: Record<string, any>;
   escalated: boolean;
   escalationReason?: string;
