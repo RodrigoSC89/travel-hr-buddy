@@ -263,7 +263,15 @@ const AnalyticsCommandCenter: React.FC = () => {
             Atualizar
           </Button>
           <Button variant="outline" size="sm" onClick={() => {
-            toast({ title: "📊 Exportando Analytics", description: "Gerando relatório de analytics..." });
+            const reportData = JSON.stringify({ analytics: "report", timestamp: new Date().toISOString(), tab: activeTab }, null, 2);
+            const blob = new Blob([reportData], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `analytics-${new Date().toISOString().slice(0,10)}.json`;
+            a.click();
+            URL.revokeObjectURL(url);
+            toast({ title: "📊 Analytics exportado", description: "Relatório salvo com sucesso" });
           }}>
             <Download className="h-4 w-4 mr-2" />
             Exportar

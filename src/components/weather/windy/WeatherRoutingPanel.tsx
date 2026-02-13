@@ -571,18 +571,34 @@ export const WeatherRoutingPanel: React.FC<WeatherRoutingPanelProps> = ({
                   size="sm"
                   className="border-white/20 text-white hover:bg-white/10"
                   onClick={() => {
-                    toast({ title: "Exportando PDF..." });
+                    const reportData = JSON.stringify({ route: optimizedRoute, exportedAt: new Date().toISOString() }, null, 2);
+                    const blob = new Blob([reportData], { type: 'application/json' });
+                    const url = URL.createObjectURL(blob);
+                    const a = document.createElement('a');
+                    a.href = url;
+                    a.download = `weather-route-${Date.now()}.json`;
+                    a.click();
+                    URL.revokeObjectURL(url);
+                    toast({ title: "Rota exportada com sucesso" });
                   }}
                 >
                   <FileText className="h-4 w-4 mr-2" />
-                  Exportar PDF
+                  Exportar Rota
                 </Button>
                 <Button
                   variant="outline"
                   size="sm"
                   className="border-white/20 text-white hover:bg-white/10"
                   onClick={() => {
-                    toast({ title: "Exportando GPX..." });
+                    const gpxContent = `<?xml version="1.0" encoding="UTF-8"?>\n<gpx version="1.1">\n<trk><name>Optimized Route</name><trkseg>\n${optimizedRoute.waypoints.map(wp => `<trkpt lat="${wp.lat}" lon="${wp.lng}"><name>${wp.name}</name></trkpt>`).join('\n')}\n</trkseg></trk>\n</gpx>`;
+                    const blob = new Blob([gpxContent], { type: 'application/gpx+xml' });
+                    const url = URL.createObjectURL(blob);
+                    const a = document.createElement('a');
+                    a.href = url;
+                    a.download = `weather-route-${Date.now()}.gpx`;
+                    a.click();
+                    URL.revokeObjectURL(url);
+                    toast({ title: "GPX exportado com sucesso" });
                   }}
                 >
                   <Download className="h-4 w-4 mr-2" />

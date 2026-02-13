@@ -121,26 +121,26 @@ export const WindyWeatherPage: React.FC = () => {
     enableAlerts: true
   });
 
-  // Load favorites from localStorage
+  // Load favorites from sessionStorage
   useEffect(() => {
     try {
-      const saved = localStorage.getItem('weather_favorites');
+      const saved = sessionStorage.getItem('weather_favorites');
       if (saved) setFavorites(JSON.parse(saved));
       
-      const savedRecent = localStorage.getItem('weather_recent');
+      const savedRecent = sessionStorage.getItem('weather_recent');
       if (savedRecent) setRecentSearches(JSON.parse(savedRecent));
     } catch (e) {
       logger.error('Failed to load saved locations:', e);
     }
   }, []);
 
-  // Save favorites to localStorage
+  // Save favorites to sessionStorage
   useEffect(() => {
-    localStorage.setItem('weather_favorites', JSON.stringify(favorites));
+    sessionStorage.setItem('weather_favorites', JSON.stringify(favorites));
   }, [favorites]);
 
   useEffect(() => {
-    localStorage.setItem('weather_recent', JSON.stringify(recentSearches));
+    sessionStorage.setItem('weather_recent', JSON.stringify(recentSearches));
   }, [recentSearches]);
 
   // Fetch comparison data when cities change

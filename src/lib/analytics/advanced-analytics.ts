@@ -263,8 +263,8 @@ class AdvancedAnalytics {
         logger.debug('[Analytics] Flushing:', { events, metrics });
       }
 
-      // Store locally for now
-      const stored = JSON.parse(localStorage.getItem('analytics_history') || '[]');
+      // Store in sessionStorage (ephemeral analytics data)
+      const stored = JSON.parse(sessionStorage.getItem('analytics_history') || '[]');
       stored.push({ events, metrics, timestamp: new Date().toISOString() });
       
       // Keep only last 100 entries
@@ -272,7 +272,7 @@ class AdvancedAnalytics {
         stored.splice(0, stored.length - 100);
       }
       
-      localStorage.setItem('analytics_history', JSON.stringify(stored));
+      sessionStorage.setItem('analytics_history', JSON.stringify(stored));
     } catch (error) {
       // Re-queue on failure
       this.eventQueue = [...events, ...this.eventQueue];

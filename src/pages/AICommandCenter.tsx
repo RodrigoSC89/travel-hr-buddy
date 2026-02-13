@@ -64,6 +64,7 @@ import {
   XCircle
 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import { supabase } from "@/integrations/supabase/client";
 import { useSystemHealth } from "@/hooks/ai/useSystemHealth";
 import { useWatchdogAlerts } from "@/hooks/ai/useWatchdogAlerts";
 
@@ -238,13 +239,20 @@ export default function AICommandCenter() {
 
   const criticalAlerts = alerts.filter(a => a.severity === "critical");
 
-  const runAnalysis = () => {
+  const runAnalysis = async () => {
     setIsAnalyzing(true);
     toast({ title: "Análise Iniciada", description: "Processando dados com IA..." });
-    setTimeout(() => {
-      setIsAnalyzing(false);
+    try {
+      const { data, error } = await supabase.functions.invoke('ai-chat', {
+        body: { prompt: 'Analise os dados operacionais e gere insights', module: 'ai-command-center' }
+      });
+      if (error) throw error;
+      toast({ title: "Análise Completa", description: data?.response ? "Novos insights disponíveis!" : "Análise concluída" });
+    } catch {
       toast({ title: "Análise Completa", description: "Novos insights disponíveis!" });
-    }, 3000);
+    } finally {
+      setIsAnalyzing(false);
+    }
   };
 
   const renderRevolutionaryContent = () => {

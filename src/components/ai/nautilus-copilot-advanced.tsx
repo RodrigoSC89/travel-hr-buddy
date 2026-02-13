@@ -205,13 +205,25 @@ What would you like assistance with today?`,
               id: "1",
               label: "View Details",
               icon: <BarChart3 className="h-3 w-3" />,
-              action: () => toast({ title: "Opening detailed view..." })
+              action: () => {
+                window.history.pushState({}, '', '/analytics');
+                window.dispatchEvent(new PopStateEvent('popstate'));
+              }
             },
             {
               id: "2",
               label: "Export Data",
               icon: <FileText className="h-3 w-3" />,
-              action: () => toast({ title: "Exporting data..." })
+              action: () => {
+                const content = data?.response || data?.answer || "No data";
+                const blob = new Blob([content], { type: 'text/plain' });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = `copilot-export-${Date.now()}.txt`;
+                a.click();
+                URL.revokeObjectURL(url);
+              }
             }
           ],
           suggestions: [
