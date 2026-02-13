@@ -163,8 +163,8 @@ class OfflineAIProcessor {
       response += `${index + 1}. ${rule}\n`;
     });
 
-    if (intent.entities && intent.entities.length > 0) {
-      response += `\nEntidades identificadas: ${intent.entities.join(", ")}`;
+    if (intent.entities && Object.keys(intent.entities).length > 0) {
+      response += `\nEntidades identificadas: ${Object.keys(intent.entities).join(", ")}`;
     }
 
     return response;

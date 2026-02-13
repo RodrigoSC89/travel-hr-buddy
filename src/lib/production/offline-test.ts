@@ -93,7 +93,7 @@ class OfflineTester {
       });
 
       // Read test
-      const result = await new Promise<any>((resolve, reject) => {
+      const result = await new Promise<{ data?: string } | null>((resolve, reject) => {
         const tx = db.transaction(storeName, 'readonly');
         const request = tx.objectStore(storeName).get(1);
         request.onsuccess = () => resolve(request.result);

@@ -106,16 +106,15 @@ export default function CollaborationPage() {
 
       // Fetch author emails
       const commentsWithEmails = await Promise.all(
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any -- dynamic Supabase row with join
-        (data || []).map(async (comment: any) => {
+        (data || []).map(async (comment: Record<string, unknown>) => {
           const { data: profile } = await supabase
             .from("profiles")
             .select("email")
-            .eq("id", comment.author_id)
+            .eq("id", String(comment.author_id))
             .single();
 
           // Fetch replies for each comment
-          await fetchReplies(comment.id);
+          await fetchReplies(String(comment.id));
 
           return {
             ...comment,
@@ -208,12 +207,11 @@ export default function CollaborationPage() {
 
       // Fetch author emails for replies
       const repliesWithEmails = await Promise.all(
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any -- dynamic Supabase row
-        (data || []).map(async (reply: any) => {
+        (data || []).map(async (reply: Record<string, unknown>) => {
           const { data: profile } = await supabase
             .from("profiles")
             .select("email")
-            .eq("id", reply.author_id)
+            .eq("id", String(reply.author_id))
             .single();
 
           return {

@@ -60,7 +60,7 @@ export const useAIAssistant = (type: "crew" | "general") => {
     }
   }, [openDB]);
 
-  const getCachedContext = useCallback(async (key: string): Promise<any> => {
+  const getCachedContext = useCallback(async (key: string): Promise<string | null> => {
     try {
       const db = await openDB();
       const transaction = db.transaction([STORE_NAME], "readonly");

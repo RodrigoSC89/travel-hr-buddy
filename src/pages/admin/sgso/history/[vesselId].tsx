@@ -42,10 +42,9 @@ const SGSOHistoryPage: React.FC = () => {
 
       if (dbError) throw dbError;
 
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Supabase action_items row mapped to SGSOActionPlan
-      const mapped: SGSOActionPlan[] = (data || []).map((item: any) => ({
-        id: item.id,
-        incident_id: item.source_reference_id || item.id,
+      const mapped: SGSOActionPlan[] = (data || []).map((item) => ({
+        id: String(item.id),
+        incident_id: String(item.source_reference_id || item.id),
         vessel_id: vesselId!,
         correction_action: item.description || null,
         prevention_action: null,
@@ -58,10 +57,10 @@ const SGSOHistoryPage: React.FC = () => {
         created_at: item.created_at || new Date().toISOString(),
         updated_at: item.updated_at || new Date().toISOString(),
         incident: {
-          id: item.source_reference_id || item.id,
-          title: item.title,
+          id: String(item.source_reference_id || item.id),
+          title: String(item.title),
           incident_date: item.created_at || new Date().toISOString(),
-          severity: item.priority || "medium",
+          severity: String(item.priority || "medium"),
           sgso_category: item.source_module || null,
           sgso_risk_level: null,
           description: item.description || null,

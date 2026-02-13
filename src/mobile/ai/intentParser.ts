@@ -6,7 +6,7 @@
 export interface Intent {
   type: "query" | "command" | "navigation" | "checklist" | "weather" | "status" | "unknown";
   confidence: number;
-  entities: Record<string, any>;
+  entities: Record<string, unknown>;
   action?: string;
 }
 
@@ -146,8 +146,8 @@ class IntentParser {
   /**
    * Extract entities from input
    */
-  private extractEntities(input: string): Record<string, any> {
-    const entities: Record<string, any> = {};
+  private extractEntities(input: string): Record<string, unknown> {
+    const entities: Record<string, unknown> = {};
     
     // Extract time references
     const timeMatch = /(\d+)\s*(hour|minute|day)s?/i.exec(input);

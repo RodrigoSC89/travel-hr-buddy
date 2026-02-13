@@ -165,14 +165,14 @@ class SatcomFailoverService {
         .order("updated_at", { ascending: false });
 
       if (error) { logger.error("Failed to fetch connection status", { error: error.message }); throw error; }
-      return (data || []) as any;
+      return (data || []) as unknown as ConnectionStatus[];
     } catch (error) {
       logger.error("Error fetching connection status", error);
       return [];
     }
   }
 
-  async getRecentCommunications(vesselId: string, limit: number = 100): Promise<any[]> {
+  async getRecentCommunications(vesselId: string, limit: number = 100): Promise<Record<string, unknown>[]> {
     try {
       const { data, error } = await supabase
         .from("satcom_communication_logs")

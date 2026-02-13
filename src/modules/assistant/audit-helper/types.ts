@@ -35,7 +35,7 @@ export interface VoiceCommand {
   command_type: VoiceCommandType;
   raw_text: string;
   parsed_intent: string;
-  parameters: Record<string, any>;
+  parameters: Record<string, unknown>;
   confidence_score: number;
   executed: boolean;
   executed_at?: string;

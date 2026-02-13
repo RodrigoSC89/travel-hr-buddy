@@ -35,7 +35,7 @@ export const offlineDB = {
   },
 
   // ============ GENERIC CRUD ============
-  async save<T extends Record<string, any>>(
+  async save<T extends Record<string, unknown>>(
     store: string,
     data: T
   ): Promise<T> {
@@ -68,7 +68,7 @@ export const offlineDB = {
     return indexedDBCache.get<T>(`${store}:${id}`);
   },
 
-  async update<T extends Record<string, any>>(
+  async update<T extends Record<string, unknown>>(
     store: string,
     id: string,
     data: Partial<T>

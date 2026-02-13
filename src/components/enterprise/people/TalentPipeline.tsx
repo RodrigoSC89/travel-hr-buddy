@@ -39,8 +39,7 @@ export function TalentPipeline() {
         .order("created_at", { ascending: false })
         .limit(20);
 
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any -- ai_crew_matches join with vessels needs flexible access
-      const mapped: Candidate[] = (data || []).map((m: any) => ({
+      const mapped: Candidate[] = (data || []).map((m) => ({
         id: String(m.id),
         name: String(m.candidate_id || "Candidato"),
         rank: String(m.position_id || "N/A"),

@@ -222,7 +222,7 @@ class LocalCrypto {
       if (result[field] && typeof result[field] === 'object' && 'iv' in result[field]) {
         try {
           const decrypted = await this.decrypt(result[field] as EncryptedData, password);
-          (result as any)[field] = decrypted;
+          (result as Record<string, unknown>)[field as string] = decrypted;
         } catch {
           // Keep encrypted if decryption fails
         }
