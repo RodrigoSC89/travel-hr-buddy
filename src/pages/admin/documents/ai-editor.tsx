@@ -49,16 +49,16 @@ export default function DocumentAIEditorPage() {
   useEffect(() => {
     if (!editor) return;
     
-    const storedTemplate = localStorage.getItem("applied_template");
-    const storedTitle = localStorage.getItem("applied_template_title");
+    const storedTemplate = sessionStorage.getItem("applied_template");
+    const storedTitle = sessionStorage.getItem("applied_template_title");
     
     if (storedTemplate) {
       editor.commands.setContent(storedTemplate);
-      localStorage.removeItem("applied_template");
+      sessionStorage.removeItem("applied_template");
       
       if (storedTitle) {
         setTitle(storedTitle);
-        localStorage.removeItem("applied_template_title");
+        sessionStorage.removeItem("applied_template_title");
       }
       
       toast({

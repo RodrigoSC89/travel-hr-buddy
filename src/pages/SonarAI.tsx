@@ -40,10 +40,11 @@ export default function SonarAI() {
   const handleTrain = (id: string) => { 
     setItems(p => p.map(i => i.id === id ? { ...i, status: 'training' } : i)); 
     toast.info('Treinamento iniciado...'); 
-    setTimeout(() => { 
+    // Simulate training completion immediately (no artificial delay)
+    requestAnimationFrame(() => {
       setItems(p => p.map(i => i.id === id ? { ...i, status: 'active', accuracy: Math.min(i.accuracy + 2.5, 99) } : i)); 
       toast.success('Treinamento concluído'); 
-    }, 3000); 
+    });
   };
 
   const filtered = items.filter(i => i.name.toLowerCase().includes(search.toLowerCase()));

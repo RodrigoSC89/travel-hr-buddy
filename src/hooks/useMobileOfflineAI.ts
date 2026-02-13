@@ -82,8 +82,8 @@ export function useMobileOfflineAI() {
 
   const getSyncStatus = useCallback(async (): Promise<SyncStatus | null> => {
     try {
-      // Check local storage for pending changes
-      const pendingData = localStorage.getItem('pendingSync');
+      // Check sessionStorage for pending changes
+      const pendingData = sessionStorage.getItem('pendingSync');
       const pending = pendingData ? JSON.parse(pendingData) : [];
       
       setPendingSync(pending.length);
@@ -91,9 +91,9 @@ export function useMobileOfflineAI() {
       return {
         isOnline: navigator.onLine,
         pendingChanges: pending.length,
-        lastSync: localStorage.getItem('lastSync'),
+        lastSync: sessionStorage.getItem('lastSync'),
         syncInProgress: false,
-        storageUsed: JSON.stringify(localStorage).length,
+        storageUsed: JSON.stringify(sessionStorage).length,
         storageLimit: 5 * 1024 * 1024 // 5MB
       };
     } catch (err) {
@@ -119,11 +119,11 @@ export function useMobileOfflineAI() {
         syncAttempts: 0
       };
 
-      // Save to local storage
-      const pendingData = localStorage.getItem('pendingSync');
+      // Save to sessionStorage
+      const pendingData = sessionStorage.getItem('pendingSync');
       const pending = pendingData ? JSON.parse(pendingData) : [];
       pending.push(offlineData);
-      localStorage.setItem('pendingSync', JSON.stringify(pending));
+      sessionStorage.setItem('pendingSync', JSON.stringify(pending));
       
       setPendingSync(pending.length);
 
@@ -151,7 +151,7 @@ export function useMobileOfflineAI() {
     setError(null);
 
     try {
-      const pendingData = localStorage.getItem('pendingSync');
+      const pendingData = sessionStorage.getItem('pendingSync');
       const pending: OfflineData[] = pendingData ? JSON.parse(pendingData) : [];
       
       let synced = 0;
@@ -177,8 +177,8 @@ export function useMobileOfflineAI() {
         }
       }
 
-      localStorage.setItem('pendingSync', JSON.stringify(remaining));
-      localStorage.setItem('lastSync', new Date().toISOString());
+      sessionStorage.setItem('pendingSync', JSON.stringify(remaining));
+      sessionStorage.setItem('lastSync', new Date().toISOString());
       setPendingSync(remaining.length);
 
       toast({
@@ -299,7 +299,7 @@ export function useMobileOfflineAI() {
 
   const clearOfflineData = useCallback(async (): Promise<boolean> => {
     try {
-      localStorage.removeItem('pendingSync');
+      sessionStorage.removeItem('pendingSync');
       setPendingSync(0);
       
       toast({

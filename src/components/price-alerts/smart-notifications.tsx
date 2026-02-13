@@ -85,8 +85,8 @@ export const SmartNotifications: React.FC = () => {
 
   const loadNotificationSettings = async () => {
     try {
-      // Since we don't have a notification_settings table, we'll use localStorage for demo
-      const stored = localStorage.getItem(`notification_settings_${user?.id}`);
+      // Use sessionStorage for ephemeral notification settings
+      const stored = sessionStorage.getItem(`notification_settings_${user?.id}`);
       if (stored) {
         setSettings(JSON.parse(stored));
       } else {
@@ -158,8 +158,8 @@ export const SmartNotifications: React.FC = () => {
 
     setIsSaving(true);
     try {
-      // Store in localStorage for demo
-      localStorage.setItem(`notification_settings_${user?.id}`, JSON.stringify(settings));
+      // Store in sessionStorage for ephemeral notification settings
+      sessionStorage.setItem(`notification_settings_${user?.id}`, JSON.stringify(settings));
       
       toast({
         title: "Configurações salvas!",

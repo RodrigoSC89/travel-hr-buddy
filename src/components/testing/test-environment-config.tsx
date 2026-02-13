@@ -38,8 +38,8 @@ export const TestEnvironmentConfig: React.FC = () => {
   };
 
   const applyConfiguration = () => {
-    // Simulate applying configuration
-    localStorage.setItem("nautilus-test-config", JSON.stringify(config));
+    // Apply configuration to sessionStorage (ephemeral test config)
+    sessionStorage.setItem("nautilus-test-config", JSON.stringify(config));
     
     toast({
       title: "Configuração Aplicada",

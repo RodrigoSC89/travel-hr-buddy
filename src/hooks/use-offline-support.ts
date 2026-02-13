@@ -126,7 +126,7 @@ export function useOfflineData<T>(
 
     try {
       // Try to get cached data first
-      const cached = localStorage.getItem(`offline-cache:${key}`);
+      const cached = sessionStorage.getItem(`offline-cache:${key}`);
       if (cached) {
         const { data: cachedData, timestamp } = JSON.parse(cached);
         const isExpired = Date.now() - timestamp > staleTime;
@@ -147,7 +147,7 @@ export function useOfflineData<T>(
         setIsStale(false);
         
         // Cache the data
-        localStorage.setItem(`offline-cache:${key}`, JSON.stringify({
+        sessionStorage.setItem(`offline-cache:${key}`, JSON.stringify({
           data: freshData,
           timestamp: Date.now()
         }));

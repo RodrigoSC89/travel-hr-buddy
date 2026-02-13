@@ -102,8 +102,8 @@ export function CargoFullCRUD() {
   const loadCargos = useCallback(async () => {
     setLoading(true);
     try {
-      // Since cargo table may not exist, we simulate with local storage
-      const cached = localStorage.getItem("nauti_cargo_data");
+      // Since cargo table may not exist, use sessionStorage for ephemeral data
+      const cached = sessionStorage.getItem("nauti_cargo_data");
       if (cached) {
         setCargos(JSON.parse(cached));
       } else {
@@ -160,7 +160,7 @@ export function CargoFullCRUD() {
           }
         ];
         setCargos(sampleCargos);
-        localStorage.setItem("nauti_cargo_data", JSON.stringify(sampleCargos));
+        sessionStorage.setItem("nauti_cargo_data", JSON.stringify(sampleCargos));
       }
     } catch (error) {
       toast({
@@ -177,10 +177,10 @@ export function CargoFullCRUD() {
     loadCargos();
   }, [loadCargos]);
 
-  // Save to localStorage
+  // Save to sessionStorage
   const persistCargos = (newCargos: Cargo[]) => {
     setCargos(newCargos);
-    localStorage.setItem("nauti_cargo_data", JSON.stringify(newCargos));
+    sessionStorage.setItem("nauti_cargo_data", JSON.stringify(newCargos));
   };
 
   // Create/Update cargo

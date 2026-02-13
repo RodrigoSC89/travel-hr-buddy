@@ -70,13 +70,13 @@ class OfflineQueue {
       variables,
       timestamp: Date.now(),
     });
-    localStorage.setItem(this.STORAGE_KEY, JSON.stringify(queue));
+    sessionStorage.setItem(this.STORAGE_KEY, JSON.stringify(queue));
     this.notifyChange();
   }
 
   async getQueue(): Promise<QueuedAction[]> {
     try {
-      const stored = localStorage.getItem(this.STORAGE_KEY);
+      const stored = sessionStorage.getItem(this.STORAGE_KEY);
       return stored ? JSON.parse(stored) : [];
     } catch {
       return [];
@@ -89,14 +89,14 @@ class OfflineQueue {
   }
 
   async clear(): Promise<void> {
-    localStorage.removeItem(this.STORAGE_KEY);
+    sessionStorage.removeItem(this.STORAGE_KEY);
     this.notifyChange();
   }
 
   async remove(id: string): Promise<void> {
     const queue = await this.getQueue();
     const filtered = queue.filter(item => item.id !== id);
-    localStorage.setItem(this.STORAGE_KEY, JSON.stringify(filtered));
+    sessionStorage.setItem(this.STORAGE_KEY, JSON.stringify(filtered));
     this.notifyChange();
   }
 
@@ -234,7 +234,7 @@ export function useOfflineData<T>(options: OfflineDataOptions<T>) {
 
     try {
       // Try to get cached data first
-      const cached = localStorage.getItem(`offline-cache:${key}`);
+      const cached = sessionStorage.getItem(`offline-cache:${key}`);
       if (cached) {
         const { data: cachedData, timestamp } = JSON.parse(cached);
         const isExpired = Date.now() - timestamp > staleTime;
@@ -254,7 +254,7 @@ export function useOfflineData<T>(options: OfflineDataOptions<T>) {
         setIsStale(false);
         
         // Cache the data
-        localStorage.setItem(`offline-cache:${key}`, JSON.stringify({
+        sessionStorage.setItem(`offline-cache:${key}`, JSON.stringify({
           data: freshData,
           timestamp: Date.now()
         }));
@@ -326,7 +326,7 @@ export function usePendingActionsCount(): number {
 export function useOfflineStorage<T>(key: string, initialValue: T) {
   const [value, setValue] = useState<T>(() => {
     try {
-      const stored = localStorage.getItem(`offline-storage:${key}`);
+      const stored = sessionStorage.getItem(`offline-storage:${key}`);
       return stored ? JSON.parse(stored) : initialValue;
     } catch {
       return initialValue;
@@ -338,13 +338,13 @@ export function useOfflineStorage<T>(key: string, initialValue: T) {
       const resolvedValue = typeof newValue === 'function' 
         ? (newValue as (prev: T) => T)(prev) 
         : newValue;
-      localStorage.setItem(`offline-storage:${key}`, JSON.stringify(resolvedValue));
+      sessionStorage.setItem(`offline-storage:${key}`, JSON.stringify(resolvedValue));
       return resolvedValue;
     });
   }, [key]);
 
   const removeValue = useCallback(() => {
-    localStorage.removeItem(`offline-storage:${key}`);
+    sessionStorage.removeItem(`offline-storage:${key}`);
     setValue(initialValue);
   }, [key, initialValue]);
 

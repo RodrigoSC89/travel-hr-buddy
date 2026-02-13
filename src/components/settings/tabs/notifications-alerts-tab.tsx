@@ -373,7 +373,7 @@ const InspectionAlertsSection: React.FC<{
   } = useInspectionNotifications();
 
   const [inspectionAlerts, setInspectionAlerts] = useState<InspectionAlertSettings>(() => {
-    const saved = localStorage.getItem('inspection-alert-settings');
+    const saved = sessionStorage.getItem('inspection-alert-settings');
     return saved ? JSON.parse(saved) : {
       overdue: true,
       dueToday: true,
@@ -384,7 +384,7 @@ const InspectionAlertsSection: React.FC<{
   });
 
   useEffect(() => {
-    localStorage.setItem('inspection-alert-settings', JSON.stringify(inspectionAlerts));
+    sessionStorage.setItem('inspection-alert-settings', JSON.stringify(inspectionAlerts));
   }, [inspectionAlerts]);
 
   const updateInspectionAlert = (key: keyof InspectionAlertSettings, value: boolean) => {
