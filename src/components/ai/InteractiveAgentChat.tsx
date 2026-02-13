@@ -484,7 +484,7 @@ export function InteractiveAgentChat() {
                 </div>
               </div>
             </div>
-            <Button variant="ghost" size="icon">
+            <Button variant="ghost" size="icon" aria-label="Configurações do agente" title="Configurações">
               <Settings className="h-4 w-4" />
             </Button>
           </div>
@@ -606,6 +606,8 @@ export function InteractiveAgentChat() {
                         size="icon"
                         className="h-6 w-6"
                         onClick={() => handleCopy(msg.content)}
+                        aria-label="Copiar mensagem"
+                        title="Copiar"
                       >
                         <Copy className="h-3 w-3" />
                       </Button>

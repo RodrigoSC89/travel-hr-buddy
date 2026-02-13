@@ -168,6 +168,8 @@ export const WeatherMapWind: React.FC<WeatherMapWindProps> = ({
           size="icon"
           className="absolute top-4 right-4 z-30 bg-black/30 hover:bg-black/50 text-white"
           onClick={onClose}
+          aria-label="Fechar mapa de vento"
+          title="Fechar mapa"
         >
           <X className="h-5 w-5" />
         </Button>

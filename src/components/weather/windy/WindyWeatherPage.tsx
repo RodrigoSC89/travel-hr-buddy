@@ -383,6 +383,8 @@ export const WindyWeatherPage: React.FC = () => {
               size="icon"
               onClick={() => handleToggleFavorite(location)}
               className="text-muted-foreground hover:text-foreground"
+              aria-label="Favoritar localização"
+              title="Favoritar localização"
             >
               <Heart className={favorites.some(f => f.id === location.id) ? "fill-destructive text-destructive" : ""} />
             </Button>
@@ -450,6 +452,8 @@ export const WindyWeatherPage: React.FC = () => {
                     variant="outline"
                     size="icon"
                     className="border-white/20 text-white"
+                    aria-label="Configurações do tempo"
+                    title="Configurações"
                   >
                     <Settings className="h-4 w-4" />
                   </Button>

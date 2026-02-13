@@ -409,6 +409,8 @@ What would you like assistance with today?`,
                     size="icon"
                     onClick={handleVoiceToggle}
                     className={isListening ? "bg-destructive text-destructive-foreground" : ""}
+                    aria-label={isListening ? "Parar gravação" : "Iniciar gravação por voz"}
+                    title={isListening ? "Parar gravação" : "Gravação por voz"}
                   >
                     {isListening ? <MicOff className="h-4 w-4" /> : <Mic className="h-4 w-4" />}
                   </Button>
@@ -426,6 +428,8 @@ What would you like assistance with today?`,
                   <Button
                     variant="outline"
                     size="icon"
+                    aria-label="Anexar arquivo"
+                    title="Anexar arquivo"
                   >
                     <Paperclip className="h-4 w-4" />
                   </Button>

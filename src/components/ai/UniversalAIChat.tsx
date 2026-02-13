@@ -254,11 +254,11 @@ export function UniversalAIChat({
           </div>
         </div>
         <div className="flex items-center gap-1">
-          <Button variant="ghost" size="icon" onClick={clearChat} title="Limpar">
+          <Button variant="ghost" size="icon" onClick={clearChat} title="Limpar" aria-label="Limpar conversa">
             <RefreshCw className="h-4 w-4" />
           </Button>
           {showExpand && (
-            <Button variant="ghost" size="icon" onClick={() => setIsExpanded(!isExpanded)}>
+            <Button variant="ghost" size="icon" onClick={() => setIsExpanded(!isExpanded)} aria-label={isExpanded ? "Minimizar chat" : "Expandir chat"} title={isExpanded ? "Minimizar" : "Expandir"}>
               {isExpanded ? <Minimize2 className="h-4 w-4" /> : <Maximize2 className="h-4 w-4" />}
             </Button>
           )}
@@ -299,11 +299,11 @@ export function UniversalAIChat({
                       
                       {message.role === 'assistant' && (
                         <div className="flex items-center gap-1 mt-2 pt-2 border-t border-border/50">
-                          <Button variant="ghost" size="icon" className="h-6 w-6" onClick={() => copyMessage(message.id, message.content)}>
+                          <Button variant="ghost" size="icon" className="h-6 w-6" onClick={() => copyMessage(message.id, message.content)} aria-label="Copiar resposta" title="Copiar">
                             {copiedId === message.id ? <Check className="h-3 w-3 text-success" /> : <Copy className="h-3 w-3" />}
                           </Button>
                           {showVoice && (
-                            <Button variant="ghost" size="icon" className="h-6 w-6" onClick={() => isSpeaking ? stopSpeaking() : speak(message.content)}>
+                            <Button variant="ghost" size="icon" className="h-6 w-6" onClick={() => isSpeaking ? stopSpeaking() : speak(message.content)} aria-label={isSpeaking ? "Parar narração" : "Ouvir resposta"} title={isSpeaking ? "Parar" : "Ouvir"}>
                               {isSpeaking ? <VolumeX className="h-3 w-3" /> : <Volume2 className="h-3 w-3" />}
                             </Button>
                           )}

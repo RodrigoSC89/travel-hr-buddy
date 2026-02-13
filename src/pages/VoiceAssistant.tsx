@@ -407,6 +407,8 @@ export default function VoiceAssistant() {
                 className="shrink-0"
                 onClick={isRecording ? stopRecording : startRecording}
                 disabled={isProcessing}
+                aria-label={isRecording ? "Parar gravação" : "Iniciar gravação"}
+                title={isRecording ? "Parar gravação" : "Iniciar gravação"}
               >
                 {isRecording ? (
                   <MicOff className="h-5 w-5" />

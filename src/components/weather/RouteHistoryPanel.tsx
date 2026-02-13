@@ -224,6 +224,8 @@ export function RouteHistoryPanel({
                               size="icon"
                               className="h-8 w-8"
                               onClick={() => handleSaveEdit(route.id)}
+                              aria-label="Salvar nome"
+                              title="Salvar"
                             >
                               <Save className="h-4 w-4" />
                             </Button>
@@ -232,6 +234,8 @@ export function RouteHistoryPanel({
                               size="icon"
                               className="h-8 w-8"
                               onClick={() => setEditingId(null)}
+                              aria-label="Cancelar edição"
+                              title="Cancelar"
                             >
                               <X className="h-4 w-4" />
                             </Button>
@@ -246,6 +250,8 @@ export function RouteHistoryPanel({
                               size="icon"
                               className="h-6 w-6"
                               onClick={() => handleStartEdit(route)}
+                              aria-label="Editar nome da rota"
+                              title="Editar nome"
                             >
                               <Edit className="h-3 w-3" />
                             </Button>
@@ -266,6 +272,8 @@ export function RouteHistoryPanel({
                           className="h-8 w-8"
                           onClick={() => handleToggleCompare(route.id)}
                           disabled={!selectedForCompare.includes(route.id) && selectedForCompare.length >= 3}
+                          aria-label={selectedForCompare.includes(route.id) ? "Remover da comparação" : "Comparar rota"}
+                          title={selectedForCompare.includes(route.id) ? "Remover da comparação" : "Comparar rota"}
                         >
                           {selectedForCompare.includes(route.id) ? (
                             <CheckCircle className="h-4 w-4" />
@@ -330,6 +338,8 @@ export function RouteHistoryPanel({
                         className="h-8 w-8 text-destructive hover:text-destructive"
                         onClick={() => deleteRoute(route.id)}
                         disabled={isDeleting}
+                        aria-label="Excluir rota"
+                        title="Excluir rota"
                       >
                         <Trash2 className="h-4 w-4" />
                       </Button>

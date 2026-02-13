@@ -272,6 +272,8 @@ export const CityAlertManager: React.FC<CityAlertManagerProps> = ({
                         size="icon"
                         className="h-8 w-8 text-white/50 hover:text-white"
                         onClick={() => setEditingCity(editingCity === config.cityId ? null : config.cityId)}
+                        aria-label="Configurar alertas"
+                        title="Configurar alertas"
                       >
                         <Settings2 className="h-4 w-4" />
                       </Button>
@@ -280,6 +282,8 @@ export const CityAlertManager: React.FC<CityAlertManagerProps> = ({
                         size="icon"
                         className="h-8 w-8 text-white/50 hover:text-red-400"
                         onClick={() => removeCityAlert(config.cityId)}
+                        aria-label="Remover alerta"
+                        title="Remover alerta"
                       >
                         <Trash2 className="h-4 w-4" />
                       </Button>

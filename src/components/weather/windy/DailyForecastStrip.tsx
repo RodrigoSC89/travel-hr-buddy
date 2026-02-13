@@ -52,6 +52,8 @@ export const DailyForecastStrip: React.FC<DailyForecastStripProps> = ({
           size="icon"
           className="absolute -top-2 -right-2 z-10 h-6 w-6 rounded-full bg-destructive hover:bg-destructive/90 text-destructive-foreground"
           onClick={onClose}
+          aria-label="Fechar previsão diária"
+          title="Fechar"
         >
           <X className="h-4 w-4" />
         </Button>

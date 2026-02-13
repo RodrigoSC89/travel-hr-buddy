@@ -345,20 +345,22 @@ function CentralComandoContent() {
                   size="icon"
                   onClick={toggleVoice}
                   className={isListening ? "bg-destructive hover:bg-destructive/90 animate-pulse" : ""}
+                  aria-label={isListening ? "Parar reconhecimento de voz" : "Ativar reconhecimento de voz"}
+                  title={isListening ? "Parar voz" : "Ativar voz"}
                 >
                   {isListening ? <Mic className="h-4 w-4" /> : <MicOff className="h-4 w-4" />}
                 </Button>
               )}
 
-              <Button variant="ghost" size="icon" onClick={handleRefresh} disabled={isRefreshing}>
+              <Button variant="ghost" size="icon" onClick={handleRefresh} disabled={isRefreshing} aria-label="Atualizar dados" title="Atualizar">
                 <RefreshCw className={`h-4 w-4 ${isRefreshing ? 'animate-spin' : ''}`} />
               </Button>
               
-              <Button variant="ghost" size="icon" onClick={toggleTheme}>
+              <Button variant="ghost" size="icon" onClick={toggleTheme} aria-label="Alternar tema" title="Alternar tema">
                 {isDarkMode ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
               </Button>
               
-              <Button variant="ghost" size="icon" onClick={toggleFullscreen} className="hidden lg:flex">
+              <Button variant="ghost" size="icon" onClick={toggleFullscreen} className="hidden lg:flex" aria-label="Tela cheia" title="Tela cheia">
                 <Maximize2 className="h-4 w-4" />
               </Button>
 
@@ -492,6 +494,7 @@ function CentralComandoContent() {
                         onClick={() => setShowAIPanel(false)}
                         className="h-8 w-8"
                         title="Fechar chat"
+                        aria-label="Fechar painel de IA"
                       >
                         <X className="h-4 w-4" />
                       </Button>
@@ -533,7 +536,7 @@ function CentralComandoContent() {
                         }
                       }}
                     />
-                    <Button size="icon" variant="default">
+                    <Button size="icon" variant="default" aria-label="Enviar comando" title="Enviar">
                       <Zap className="h-4 w-4" />
                     </Button>
                   </div>

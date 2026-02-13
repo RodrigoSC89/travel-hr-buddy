@@ -498,6 +498,7 @@ Gere sugestões em formato JSON array.`
                               className="h-8 w-8 text-success hover:text-success hover:bg-success/10"
                               onClick={() => handleApply(suggestion)}
                               title="Aplicar sugestão"
+                              aria-label="Aplicar sugestão"
                             >
                               <Play className="h-4 w-4" />
                             </Button>
@@ -507,6 +508,7 @@ Gere sugestões em formato JSON array.`
                               className="h-8 w-8 text-muted-foreground hover:text-destructive"
                               onClick={() => handleDismiss(suggestion)}
                               title="Descartar"
+                              aria-label="Descartar sugestão"
                             >
                               <X className="h-4 w-4" />
                             </Button>

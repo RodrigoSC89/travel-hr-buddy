@@ -257,6 +257,8 @@ export default function APIGateway() {
                         size="icon"
                         className="h-6 w-6"
                         onClick={() => toggleKeyVisibility(apiKey.id)}
+                        aria-label={visibleKeys.has(apiKey.id) ? "Ocultar chave" : "Mostrar chave"}
+                        title={visibleKeys.has(apiKey.id) ? "Ocultar" : "Mostrar"}
                       >
                         {visibleKeys.has(apiKey.id) ? (
                           <EyeOff className="h-3 w-3" />
@@ -269,6 +271,8 @@ export default function APIGateway() {
                         size="icon"
                         className="h-6 w-6"
                         onClick={() => copyKey(apiKey.key)}
+                        aria-label="Copiar chave"
+                        title="Copiar chave"
                       >
                         <Copy className="h-3 w-3" />
                       </Button>
@@ -306,7 +310,7 @@ export default function APIGateway() {
                   <TableCell>
                     <DropdownMenu>
                       <DropdownMenuTrigger asChild>
-                        <Button variant="ghost" size="icon" className="h-8 w-8">
+                        <Button variant="ghost" size="icon" className="h-8 w-8" aria-label="Mais opções da chave" title="Mais opções">
                           <MoreHorizontal className="h-4 w-4" />
                         </Button>
                       </DropdownMenuTrigger>
