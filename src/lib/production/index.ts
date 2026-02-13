@@ -33,15 +33,13 @@ export {
   type SecurityAuditReport
 } from '../security/security-audit-service';
 
-// Performance
-export {
-  performanceThresholds,
-  lazyLoadingConfig,
-  cachingStrategy,
-  preloadConfig,
-  measureCoreWebVitals,
-  reportWebVitalsToAnalytics
-} from '../performance/lighthouse-config';
+// Performance config stubs (lighthouse-config removed during cleanup)
+export const performanceThresholds = { LCP: 2500, FID: 100, CLS: 0.1 };
+export const lazyLoadingConfig = { retries: 3, delay: 1000 };
+export const cachingStrategy = { staleTime: 120000, gcTime: 600000 };
+export const preloadConfig = { criticalRoutes: [] as string[] };
+export const measureCoreWebVitals = () => ({});
+export const reportWebVitalsToAnalytics = () => {};
 
 // Billing
 export {

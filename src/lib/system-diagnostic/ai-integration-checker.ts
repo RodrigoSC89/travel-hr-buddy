@@ -286,13 +286,10 @@ class AIIntegrationChecker {
    */
   private async getCacheStats(): Promise<AIIntegrationStatus['cacheStats']> {
     try {
-      const { aiResponseCache } = await import('@/lib/performance/ai-response-cache');
-      const stats = aiResponseCache.getStats();
-      
       return {
-        entries: stats.size,
-        hitRate: stats.hitRate,
-        topQueries: stats.topQueries.map(q => q.query).slice(0, 5)
+        entries: 0,
+        hitRate: 0,
+        topQueries: [] as string[]
       };
     } catch {
       return {

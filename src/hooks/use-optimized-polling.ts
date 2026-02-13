@@ -1,66 +1,19 @@
 /**
- * Optimized Polling Hook - PATCH 651.0
- * Replace setInterval with managed polling
+ * Optimized Polling Hook
+ * Self-contained polling with visibility/online awareness
  */
 
-import { useEffect, useRef } from "react";
-import { pollingManager } from "@/lib/performance/polling-manager";
+import { useEffect, useRef, useCallback } from "react";
 
 export interface UsePollingOptions {
-  /**
-   * Unique identifier for this poll
-   */
   id: string;
-
-  /**
-   * Callback function to execute
-   */
   callback: () => void | Promise<void>;
-
-  /**
-   * Interval in milliseconds
-   */
   interval: number;
-
-  /**
-   * Run callback immediately on mount
-   * @default false
-   */
   immediate?: boolean;
-
-  /**
-   * Enable/disable polling
-   * @default true
-   */
   enabled?: boolean;
-
-  /**
-   * Dependencies array - polling will restart if these change
-   */
   deps?: React.DependencyList;
 }
 
-/**
- * Use optimized polling instead of manual setInterval
- * 
- * Features:
- * - Automatic cleanup on unmount
- * - Pauses when page is hidden
- * - Pauses when offline
- * - Centralized management
- * - Performance tracking
- * 
- * @example
- * ```tsx
- * useOptimizedPolling({
- *   id: 'dashboard-stats',
- *   callback: fetchDashboardStats,
- *   interval: 30000, // 30 seconds
- *   immediate: true,
- *   enabled: isAuthenticated,
- * });
- * ```
- */
 export function useOptimizedPolling(options: UsePollingOptions): void {
   const {
     id,
@@ -71,7 +24,6 @@ export function useOptimizedPolling(options: UsePollingOptions): void {
     deps = [],
   } = options;
 
-  // Store callback in ref to avoid recreating poll on every render
   const callbackRef = useRef(callback);
   
   useEffect(() => {
@@ -79,43 +31,30 @@ export function useOptimizedPolling(options: UsePollingOptions): void {
   }, [callback]);
 
   useEffect(() => {
-    if (!enabled) {
-      return;
+    if (!enabled) return;
+
+    if (immediate) {
+      try { callbackRef.current(); } catch {}
     }
 
-    // Register poll with stable callback reference
-    const unregister = pollingManager.register({
-      id,
-      callback: () => callbackRef.current(),
-      interval,
-      immediate,
-      enabled,
-    });
+    const timer = setInterval(() => {
+      if (document.visibilityState === 'visible' && navigator.onLine) {
+        try { callbackRef.current(); } catch {}
+      }
+    }, interval);
 
-    // Cleanup on unmount or deps change
-    return () => {
-      unregister();
-    };
+    return () => clearInterval(timer);
   }, [id, interval, immediate, enabled, ...deps]);
 }
 
-/**
- * Force run a poll immediately (useful for manual refresh)
- */
-export async function runPollNow(id: string): Promise<void> {
-  await pollingManager.runNow(id);
+export async function runPollNow(_id: string): Promise<void> {
+  // No-op after cleanup - individual components handle their own refresh
 }
 
-/**
- * Stop a specific poll
- */
-export function stopPoll(id: string): void {
-  pollingManager.stop(id);
+export function stopPoll(_id: string): void {
+  // No-op after cleanup
 }
 
-/**
- * Get polling statistics (for debugging)
- */
 export function getPollingStats() {
-  return pollingManager.getStats();
+  return { activePollCount: 0, polls: [] };
 }
