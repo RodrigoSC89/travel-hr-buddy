@@ -309,7 +309,7 @@ class BathymetryExporter {
   }
 
   /**
-   * Save bathymetric data to localStorage (offline support)
+   * Save bathymetric data to sessionStorage (offline support, ephemeral cache)
    */
   saveToCache(data: BathymetricData, key: string = "bathymetry-cache"): void {
     try {
@@ -318,18 +318,18 @@ class BathymetryExporter {
         timestamp: new Date().toISOString(),
         version: "183.0",
       };
-      localStorage.setItem(key, JSON.stringify(cacheData));
+      sessionStorage.setItem(key, JSON.stringify(cacheData));
     } catch (error) {
       logger.error("Failed to save bathymetry data to cache:", error);
     }
   }
 
   /**
-   * Load bathymetric data from localStorage
+   * Load bathymetric data from sessionStorage
    */
   loadFromCache(key: string = "bathymetry-cache"): BathymetricData | null {
     try {
-      const cached = localStorage.getItem(key);
+      const cached = sessionStorage.getItem(key);
       if (!cached) return null;
 
       const cacheData = JSON.parse(cached);
@@ -351,14 +351,14 @@ class BathymetryExporter {
    * Clear cached data
    */
   clearCache(key: string = "bathymetry-cache"): void {
-    localStorage.removeItem(key);
+    sessionStorage.removeItem(key);
   }
 
   /**
    * Check if cache exists
    */
   hasCachedData(key: string = "bathymetry-cache"): boolean {
-    return localStorage.getItem(key) !== null;
+    return sessionStorage.getItem(key) !== null;
   }
 
   /**
@@ -370,7 +370,7 @@ class BathymetryExporter {
     size: number;
   } | null {
     try {
-      const cached = localStorage.getItem(key);
+      const cached = sessionStorage.getItem(key);
       if (!cached) return null;
 
       const cacheData = JSON.parse(cached);

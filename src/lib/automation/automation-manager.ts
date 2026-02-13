@@ -104,11 +104,11 @@ class AutomationManager {
     try {
       // Clean localStorage expired items
       const keysToRemove: string[] = [];
-      for (let i = 0; i < localStorage.length; i++) {
-        const key = localStorage.key(i);
+      for (let i = 0; i < sessionStorage.length; i++) {
+        const key = sessionStorage.key(i);
         if (key?.startsWith('cache_')) {
           try {
-            const data = JSON.parse(localStorage.getItem(key) || '{}');
+            const data = JSON.parse(sessionStorage.getItem(key) || '{}');
             if (data.expiresAt && data.expiresAt < Date.now()) {
               keysToRemove.push(key);
             }
@@ -119,7 +119,7 @@ class AutomationManager {
         }
       }
 
-      keysToRemove.forEach(key => localStorage.removeItem(key));
+      keysToRemove.forEach(key => sessionStorage.removeItem(key));
       if (keysToRemove.length > 0) {
         logger.info(`[AutomationManager] Cleaned ${keysToRemove.length} expired cache items`);
       }
@@ -149,7 +149,7 @@ class AutomationManager {
   private async checkSyncQueue(): Promise<void> {
     try {
       // Check if there are pending sync items
-      const pendingSync = localStorage.getItem('nautilus_pending_sync');
+      const pendingSync = sessionStorage.getItem('nautilus_pending_sync');
       if (pendingSync) {
         const items = JSON.parse(pendingSync);
         if (Array.isArray(items) && items.length > 0) {

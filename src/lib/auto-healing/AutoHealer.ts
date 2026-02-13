@@ -197,9 +197,9 @@ class AutoHealer {
   private async applyRollbackStrategy(issue: SystemIssue): Promise<boolean> {
     try {
       // Clear module-specific state from storage
-      if (typeof localStorage !== "undefined") {
+      if (typeof sessionStorage !== "undefined") {
         const stateKey = `module_state_${issue.module}`;
-        localStorage.removeItem(stateKey);
+        sessionStorage.removeItem(stateKey);
       }
 
       // Emit rollback event
@@ -249,13 +249,13 @@ class AutoHealer {
   private async applyIsolateStrategy(issue: SystemIssue): Promise<boolean> {
     try {
       // Store isolation state
-      if (typeof localStorage !== "undefined") {
+      if (typeof sessionStorage !== "undefined") {
         const isolatedModules = JSON.parse(
-          localStorage.getItem("isolated_modules") || "[]"
+          sessionStorage.getItem("isolated_modules") || "[]"
         );
         if (!isolatedModules.includes(issue.module)) {
           isolatedModules.push(issue.module);
-          localStorage.setItem("isolated_modules", JSON.stringify(isolatedModules));
+          sessionStorage.setItem("isolated_modules", JSON.stringify(isolatedModules));
         }
       }
 
