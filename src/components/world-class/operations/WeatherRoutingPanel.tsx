@@ -36,8 +36,7 @@ const riskColors: Record<string, string> = {
 export function WeatherRoutingPanel() {
   const { toast } = useToast();
   const [isLoading, setIsLoading] = useState(false);
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Edge function returns dynamic weather shape
-  const [forecast, setForecast] = useState<any>(null);
+  const [forecast, setForecast] = useState<Record<string, unknown> | null>(null);
   const [analysisType, setAnalysisType] = useState<string>("forecast");
   const [route, setRoute] = useState({
     origin: { name: "", lat: 0, lng: 0 },
@@ -64,7 +63,7 @@ export function WeatherRoutingPanel() {
         },
       });
       if (error) throw error;
-      setForecast(data.result);
+      setForecast(data.result as Record<string, unknown>);
       toast({ title: "🌤️ Análise meteorológica concluída" });
     } catch (err) {
       logger.error("Weather routing error", err as Error);
@@ -141,21 +140,21 @@ export function WeatherRoutingPanel() {
         {forecast && (
           <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="space-y-4">
             {/* Overall */}
-            {forecast.overall_conditions && (
+            {typeof forecast.overall_conditions === 'string' && forecast.overall_conditions && (
               <Card className="border-primary/20 bg-primary/5">
                 <CardContent className="p-4">
-                  <p className="text-sm"><span className="font-medium text-primary">Condições Gerais:</span> {forecast.overall_conditions}</p>
-                  {forecast.recommendation && (
-                    <p className="text-sm mt-2"><span className="font-medium text-primary">Recomendação:</span> {forecast.recommendation}</p>
+                  <p className="text-sm"><span className="font-medium text-primary">Condições Gerais:</span> {String(forecast.overall_conditions)}</p>
+                  {typeof forecast.recommendation === 'string' && forecast.recommendation && (
+                    <p className="text-sm mt-2"><span className="font-medium text-primary">Recomendação:</span> {String(forecast.recommendation)}</p>
                   )}
                 </CardContent>
               </Card>
             )}
 
             {/* Daily Forecast */}
-            {forecast.forecast_days?.length > 0 && (
+            {Array.isArray(forecast.forecast_days) && (forecast.forecast_days as Record<string, unknown>[]).length > 0 && (
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3">
-                {forecast.forecast_days.map((day: Record<string, unknown>, i: number) => (
+                {(forecast.forecast_days as Record<string, unknown>[]).map((day: Record<string, unknown>, i: number) => (
                   <motion.div key={`forecast-day-${i}-${String(day.date || i)}`} initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.05 }}>
                     <Card>
                       <CardHeader className="pb-2">
@@ -203,16 +202,16 @@ export function WeatherRoutingPanel() {
             )}
 
             {/* Alerts */}
-            {forecast.alerts?.length > 0 && (
+            {Array.isArray(forecast.alerts) && (forecast.alerts as Record<string, unknown>[]).length > 0 && (
               <Card className="border-warning/20">
                 <CardHeader className="pb-2">
                   <CardTitle className="text-sm flex items-center gap-2">
                     <AlertTriangle className="h-4 w-4 text-warning" />
-                    Alertas Meteorológicos ({forecast.alerts.length})
+                    Alertas Meteorológicos ({(forecast.alerts as Record<string, unknown>[]).length})
                   </CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-2">
-                  {forecast.alerts.map((alert: Record<string, unknown>, i: number) => (
+                  {(forecast.alerts as Record<string, unknown>[]).map((alert: Record<string, unknown>, i: number) => (
                     <div key={`alert-${i}-${String(alert.type)}`} className="p-2 rounded bg-warning/5 border border-warning/20 text-xs">
                       <div className="flex items-center gap-2 mb-1">
                         <Badge variant="outline" className="text-warning">{String(alert.severity)}</Badge>

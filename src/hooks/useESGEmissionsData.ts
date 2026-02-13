@@ -43,6 +43,7 @@ export function useESGEmissionsData() {
       if (error) throw error;
 
       // Group by vessel for CII
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any -- grouping heterogeneous Supabase join rows
       const byVessel = new Map<string, any[]>();
       for (const r of records || []) {
         const vName = r.vessels?.name || "Vessel";

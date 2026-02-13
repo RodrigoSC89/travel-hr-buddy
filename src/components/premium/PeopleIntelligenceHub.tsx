@@ -37,7 +37,7 @@ const stcwFunctions = [
 
 export default function PeopleIntelligenceHub() {
     const { data: crewMembers = [], isLoading } = usePeopleIntelligenceData();
-    const [selectedCrew, setSelectedCrew] = useState<any>(null);
+    const [selectedCrew, setSelectedCrew] = useState<import("@/hooks/usePeopleIntelligenceData").CrewMemberProfile | null>(null);
  
    const getStatusColor = (status: string) => {
      switch (status) {

@@ -19,6 +19,7 @@ import { supabase } from "@/integrations/supabase/client";
 
 // Dashboard Content
 function MaintenanceDashboard() {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Supabase maintenance_tasks row rendered directly in JSX
   const [tasks, setTasks] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
 

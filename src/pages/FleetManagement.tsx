@@ -58,6 +58,7 @@ const MaritimeFleetManagement = () => {
   });
 
   // Vessels data for AI
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Supabase vessel row rendered directly in JSX
   const [vessels, setVessels] = useState<any[]>([]);
 
   const loadFleetStats = useCallback(async () => {

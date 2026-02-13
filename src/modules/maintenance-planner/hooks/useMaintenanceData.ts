@@ -241,12 +241,12 @@ export function useMaintenanceData() {
 
       // eslint-disable-next-line @typescript-eslint/no-explicit-any -- AI predictions dynamic shape
       return (data || []).map((p: any): MaintenancePrediction => ({
-        equipmentId: p.equipment_id,
-        equipmentName: p.equipment_name,
+        equipmentId: String(p.equipment_id || ''),
+        equipmentName: String(p.equipment_name || ''),
         failureProbability: Number(p.failure_probability),
         predictedFailureDate: new Date(p.predicted_failure_date || Date.now()),
-        riskFactors: Array.isArray(p.risk_factors) ? (p.risk_factors as string[]) : [],
-        recommendedAction: p.recommended_action || 'Verificar equipamento',
+        riskFactors: Array.isArray(p.risk_factors) ? (p.risk_factors as unknown as string[]) : [],
+        recommendedAction: String(p.recommended_action || 'Verificar equipamento'),
         confidence: Number(p.confidence) || 0.8,
       }));
     },

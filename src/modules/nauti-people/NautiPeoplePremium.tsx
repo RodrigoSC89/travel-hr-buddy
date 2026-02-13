@@ -23,6 +23,7 @@ import { supabase } from "@/integrations/supabase/client";
 // People Dashboard
 function PeopleDashboard() {
   const navigate = useNavigate();
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Supabase crew_members row rendered directly in JSX
   const [crew, setCrew] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
 
