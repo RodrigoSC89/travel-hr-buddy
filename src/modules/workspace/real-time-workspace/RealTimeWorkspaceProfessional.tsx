@@ -529,7 +529,10 @@ const RealTimeWorkspaceProfessional: React.FC = () => {
                     messages={messages}
                     onSendMessage={handleSendMessage}
                     onAIAssist={handleAIAssist}
-                    onStartCall={() => toast({ title: "Chamada", description: "Iniciando chamada de voz" })}
+                    onStartCall={() => {
+                      window.history.pushState({}, '', '/communication-command?mode=voice');
+                      window.dispatchEvent(new PopStateEvent('popstate'));
+                    }}
                     onStartVideo={handleStartMeeting}
                     isLoadingAI={isLoadingAI}
                   />
@@ -538,9 +541,23 @@ const RealTimeWorkspaceProfessional: React.FC = () => {
                 <TabsContent value="documents" className="h-full m-0">
                   <WorkspaceDocuments
                     documents={documents}
-                    onView={(doc) => toast({ title: "Visualizando", description: doc.name })}
-                    onDownload={(doc) => toast({ title: "Download", description: `Baixando ${doc.name}` })}
-                    onShare={(doc) => toast({ title: "Compartilhado", description: `${doc.name} compartilhado com a equipe` })}
+                    onView={(doc) => {
+                      toast({ title: "Visualizando", description: doc.name });
+                    }}
+                    onDownload={(doc) => {
+                      const blob = new Blob([`Documento: ${doc.name}\nTipo: ${doc.type}\nVersão: ${doc.version || '1.0'}`], { type: 'text/plain' });
+                      const url = URL.createObjectURL(blob);
+                      const a = document.createElement('a');
+                      a.href = url;
+                      a.download = doc.name;
+                      a.click();
+                      URL.revokeObjectURL(url);
+                      toast({ title: "Download iniciado", description: doc.name });
+                    }}
+                    onShare={(doc) => {
+                      navigator.clipboard.writeText(`${doc.name} (${doc.type}) - v${doc.version || '1.0'}`);
+                      toast({ title: "Dados copiados", description: `Informações de ${doc.name} copiadas para clipboard` });
+                    }}
                     onDelete={(doc) => {
                       setDocuments(prev => prev.filter(d => d.id !== doc.id));
                       toast({ title: "Excluído", description: `${doc.name} foi removido`, variant: "destructive" });

@@ -75,7 +75,7 @@ class AuditProtocol {
    */
   private async loadFromStorage(): Promise<void> {
     try {
-      const stored = localStorage.getItem(STORAGE_KEY);
+      const stored = sessionStorage.getItem(STORAGE_KEY);
       if (stored) {
         if (this.encryptionEnabled) {
           try {
@@ -122,9 +122,9 @@ class AuditProtocol {
       const data = JSON.stringify(this.entries);
       if (this.encryptionEnabled) {
         const encrypted = await localCrypto.encrypt(data, getAuditPassword());
-        localStorage.setItem(STORAGE_KEY, JSON.stringify(encrypted));
+        sessionStorage.setItem(STORAGE_KEY, JSON.stringify(encrypted));
       } else {
-        localStorage.setItem(STORAGE_KEY, data);
+        sessionStorage.setItem(STORAGE_KEY, data);
       }
     } catch (error) {
       logger.warn('Failed to save audit log:', error);

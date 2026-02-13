@@ -182,7 +182,7 @@ export const getOperationalLogs = (): Record<string, unknown>[] => {
  */
 export const clearOperationalLogs = (): void => {
   try {
-    localStorage.removeItem("satcom_operational_logs");
+    sessionStorage.removeItem("satcom_operational_logs");
     logger.info("SATCOM operational logs cleared");
   } catch (error) {
     logger.error("Failed to clear SATCOM logs", error);

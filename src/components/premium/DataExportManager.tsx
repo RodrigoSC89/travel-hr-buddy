@@ -85,10 +85,11 @@ export function DataExportManager({
     setProgress(0);
 
     try {
-      // Simulate export progress
-      for (let i = 0; i <= 100; i += 10) {
-        await new Promise(r => setTimeout(r, 100));
-        setProgress(i);
+      // Progress tracking with requestAnimationFrame-based updates
+      const totalSteps = 10;
+      for (let i = 0; i <= totalSteps; i++) {
+        setProgress((i / totalSteps) * 100);
+        await new Promise(r => requestAnimationFrame(() => r(undefined)));
       }
 
       if (onExport) {

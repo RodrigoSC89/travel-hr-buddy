@@ -30,7 +30,7 @@ class SmartPrefetchManager {
 
   private loadPatterns() {
     try {
-      const stored = localStorage.getItem(STORAGE_KEY);
+      const stored = sessionStorage.getItem(STORAGE_KEY);
       if (stored) {
         this.patterns = JSON.parse(stored);
         this.cleanOldPatterns();
@@ -42,7 +42,7 @@ class SmartPrefetchManager {
 
   private savePatterns() {
     try {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(this.patterns.slice(0, MAX_PATTERNS)));
+      sessionStorage.setItem(STORAGE_KEY, JSON.stringify(this.patterns.slice(0, MAX_PATTERNS)));
     } catch {
       // Storage full or unavailable
     }

@@ -148,10 +148,10 @@ const SmartTooltipSystem: React.FC = () => {
     // Simular detecção de contexto
     const checkContext = () => {
       // Verificar se é novo usuário
-      const isNewUser = !localStorage.getItem("nautilus_visited");
+      const isNewUser = !sessionStorage.getItem("nautilus_visited");
       if (isNewUser) {
         showAssistant("first-visit");
-        localStorage.setItem("nautilus_visited", "true");
+        sessionStorage.setItem("nautilus_visited", "true");
       }
 
       // Verificar tempo de inatividade
