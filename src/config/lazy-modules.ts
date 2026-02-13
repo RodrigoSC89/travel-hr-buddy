@@ -7,7 +7,7 @@ import { lazy, ComponentType } from 'react';
 import { logger } from "@/lib/logger";
 
 // Wrapper para lazy loading com timeout e retry
-export const lazyWithRetry = <T extends ComponentType<any>>(
+export const lazyWithRetry = <T extends ComponentType<Record<string, unknown>>>(
   importFn: () => Promise<{ default: T }>,
   fallback: T | null = null
 ) => {
@@ -58,9 +58,13 @@ export const preloadCriticalModules = () => {
 };
 
 // Desabilitar módulos pesados em modo de desenvolvimento/baixa performance
+interface PerformanceWithMemory extends Performance {
+  memory?: { jsHeapSizeLimit: number; totalJSHeapSize: number; usedJSHeapSize: number };
+}
+
 export const shouldLoadHeavyModule = (moduleName: string): boolean => {
   // Verificar performance do dispositivo
-  const memory = (performance as any).memory;
+  const memory = (performance as PerformanceWithMemory).memory;
   if (memory && memory.jsHeapSizeLimit < 2000000000) {
     // Menos de 2GB de heap: não carregar módulos pesados
     logger.warn(`Módulo ${moduleName} desabilitado: memória insuficiente`);

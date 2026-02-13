@@ -116,17 +116,17 @@ export const IoTSensorDashboard: React.FC = () => {
   useEffect(() => {
     if (vesselData && vesselData.length > 0) {
       // Map vessel data to sensor readings format
+      interface VesselSensor { id: string; name?: string; type?: string; value?: number; unit?: string; status?: string; min?: number; max?: number; }
       const mappedSensors = vesselData.flatMap(vessel => 
         vessel.sensors.length > 0 
-          // eslint-disable-next-line @typescript-eslint/no-explicit-any -- vessel sensor data is dynamic
-          ? vessel.sensors.map((s: any) => ({
+          ? vessel.sensors.map((s: VesselSensor) => ({
               id: s.id,
               sensorId: s.id,
-              sensorName: s.name,
+              sensorName: s.name || 'Sensor',
               sensorType: s.type || 'generic',
               value: s.value || 0,
               unit: s.unit || '',
-              status: s.status || 'normal',
+              status: (s.status || 'normal') as SensorReading['status'],
               lastUpdate: 'Real-time',
               location: vessel.vesselName,
               threshold: { min: s.min || 0, max: s.max || 100 }
@@ -157,14 +157,13 @@ export const IoTSensorDashboard: React.FC = () => {
 
   const alerts: AlertData[] = useMemo(() => {
     if (alertsData && alertsData.length > 0) {
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any -- alert data shape varies
-      return alertsData.map((alert: any) => ({
+      return alertsData.map((alert) => ({
         id: alert.id,
-        sensorName: alert.source || 'Sensor',
-        message: alert.message || alert.description,
-        severity: alert.severity || 'info',
-        timestamp: new Date(alert.created_at).toLocaleString(),
-        acknowledged: alert.acknowledged || false
+        sensorName: alert.title || alert.alert_type || 'Sensor',
+        message: alert.message || alert.description || '',
+        severity: (alert.severity || 'info') as AlertData['severity'],
+        timestamp: new Date(alert.created_at || Date.now()).toLocaleString(),
+        acknowledged: Boolean(alert.acknowledged_at)
       }));
     }
     // Default alerts for demonstration

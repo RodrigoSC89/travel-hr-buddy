@@ -271,8 +271,7 @@ class MissionSimulationCore {
       
       const tableExists = await this.checkTableExists();
       if (tableExists) {
-        await supabase
-          .from("simulated_missions" as any)
+        await (supabase.from as Function)("simulated_missions")
           .update({ status: "failed" })
           .eq("id", simulationId);
       }
@@ -531,8 +530,7 @@ class MissionSimulationCore {
         return null;
       }
 
-      const { data, error } = await supabase
-        .from("simulated_missions" as any)
+      const { data, error } = await (supabase.from as Function)("simulated_missions")
         .select("*")
         .eq("id", simulationId)
         .single();
@@ -540,17 +538,17 @@ class MissionSimulationCore {
       if (error) throw error;
       if (!data) return null;
 
-      const d = data as any;
+      const d = data as Record<string, unknown>;
       return {
-        id: d.id,
-        name: d.name,
-        description: d.description,
-        vessels: d.vessels,
-        weather: d.weather,
-        crew: d.crew,
-        payload: d.payload,
-        riskFactors: d.risk_factors,
-        failureInjections: d.failure_injections,
+        id: String(d.id),
+        name: String(d.name),
+        description: String(d.description || ""),
+        vessels: (d.vessels || []) as SimulationBlueprint["vessels"],
+        weather: (d.weather || []) as SimulationBlueprint["weather"],
+        crew: (d.crew || []) as SimulationBlueprint["crew"],
+        payload: (d.payload || []) as SimulationBlueprint["payload"],
+        riskFactors: (d.risk_factors || []) as SimulationBlueprint["riskFactors"],
+        failureInjections: d.failure_injections as SimulationBlueprint["failureInjections"],
         duration_hours: 24,
       };
     } catch (error) {
@@ -562,7 +560,7 @@ class MissionSimulationCore {
   /**
    * List all simulations - with graceful fallback
    */
-  async listSimulations(): Promise<any[]> {
+  async listSimulations(): Promise<(SimulationBlueprint | Record<string, unknown>)[]> {
     try {
       const tableExists = await this.checkTableExists();
       
@@ -573,8 +571,7 @@ class MissionSimulationCore {
         return this.getMockSimulations();
       }
 
-      const { data, error } = await supabase
-        .from("simulated_missions" as any)
+      const { data, error } = await (supabase.from as Function)("simulated_missions")
         .select("*")
         .order("created_at", { ascending: false });
 
@@ -629,8 +626,7 @@ class MissionSimulationCore {
         return;
       }
 
-      const { error } = await supabase
-        .from("simulated_missions" as any)
+      const { error } = await (supabase.from as Function)("simulated_missions")
         .delete()
         .eq("id", simulationId);
 

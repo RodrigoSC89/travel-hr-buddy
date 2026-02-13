@@ -64,7 +64,7 @@ export interface ReactionScenario {
   triggerEvent: {
     type: string;
     severity: string;
-    data: Record<string, any>;
+    data: Record<string, unknown>;
   };
   expectedOutcome: string;
   nodes: DecisionNode[];
@@ -87,7 +87,7 @@ export interface ReactionLogEntry {
   event: string;
   actor: string;
   status: NodeStatus;
-  details: Record<string, any>;
+  details: Record<string, unknown>;
 }
 
 /**

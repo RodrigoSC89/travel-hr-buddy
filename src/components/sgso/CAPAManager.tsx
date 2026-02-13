@@ -120,7 +120,7 @@ export const CAPAManager: React.FC = () => {
         sla_days: formData.sla_dias,
         status: 'open',
         reference_number: formData.nc_number,
-      } as any);
+      } as never);
       if (error) throw error;
     },
     onSuccess: () => {

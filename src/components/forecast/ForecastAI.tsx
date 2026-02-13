@@ -1,13 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Brain, AlertTriangle, CheckCircle, XCircle } from "lucide-react";
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- ONNX Runtime dynamic import
-let ort: any = null;
+let ort: typeof import("onnxruntime-web") | null = null;
 const loadORT = async () => {
   if (!ort) {
     ort = await import("onnxruntime-web");
   }
-  return ort;
+  return ort!;
 };
 import { publishEvent } from "@/lib/mqtt/publisher";
 import { logger } from '@/lib/logger';
@@ -29,11 +28,12 @@ export default function ForecastAI() {
       try {
         setStatus("loading");
         
+        const ortLib = await loadORT();
         // Attempt to load ONNX model
-        const session = await ort.InferenceSession.create("/models/nautilus_forecast.onnx");
+        const session = await ortLib.InferenceSession.create("/models/nautilus_forecast.onnx");
         
         // Example input: [pressure_hPa, temperature_C, wind_speed_kn, wave_height_m]
-        const input = new ort.Tensor(
+        const input = new ortLib.Tensor(
           "float32",
           new Float32Array([1013, 22.5, 3.2, 1.5]),
           [1, 4]

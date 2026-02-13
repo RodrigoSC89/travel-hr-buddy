@@ -42,8 +42,11 @@ class ExportService {
         m.trend
       ]);
 
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any -- jspdf-autotable augments jsPDF
-      (doc as any).autoTable({
+      const docWithAutoTable = doc as unknown as {
+        autoTable: (options: Record<string, unknown>) => void;
+        lastAutoTable: { finalY: number };
+      };
+      docWithAutoTable.autoTable({
         startY: yPosition,
         head: [["Metric", "Value", "Change", "Trend"]],
         body: tableData,
@@ -52,16 +55,15 @@ class ExportService {
         headStyles: { fillColor: [41, 128, 185] }
       });
 
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any -- jspdf-autotable augments jsPDF
-      yPosition = (doc as any).lastAutoTable.finalY + 15;
+      yPosition = docWithAutoTable.lastAutoTable.finalY + 15;
     }
 
     doc.save(`analytics-report-${Date.now()}.pdf`);
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- CSV export accepts dynamic row shapes
   async exportToCSV(
     title: string,
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any -- CSV export accepts dynamic row data
     data: any[],
     headers: string[]
   ): Promise<void> {

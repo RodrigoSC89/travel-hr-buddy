@@ -92,34 +92,33 @@ export function AutomaticReportsScheduler() {
   const { data: schedules = [], isLoading } = useQuery({
     queryKey: ['report-schedules-real'],
     queryFn: async () => {
-      const { data, error } = await supabase
-        .from('report_schedules' as any)
+      const { data, error } = await (supabase.from as Function)('report_schedules')
         .select('*')
         .order('created_at', { ascending: false });
 
       if (error || !data) return [];
 
-      return (data as any[]).map((d): ScheduledReport => ({
-        id: d.id,
-        template_id: d.template_id || '',
-        template_name: d.template_name || d.name || '',
-        name: d.name || '',
-        description: d.description,
-        report_type: d.report_type || 'compliance',
-        frequency: d.frequency || 'monthly',
-        day_of_week: d.day_of_week,
-        day_of_month: d.day_of_month,
-        time_of_day: d.time_of_day,
-        recipients: d.recipients || [],
-        format: d.format || 'pdf',
-        parameters: d.parameters || {},
-        is_active: d.is_active ?? true,
-        last_run_at: d.last_run_at,
-        next_run_at: d.next_run_at,
-        created_by: d.created_by,
-        created_at: d.created_at,
-        updated_at: d.updated_at,
-        last_status: d.last_status,
+      return (data as Record<string, unknown>[]).map((d): ScheduledReport => ({
+        id: String(d.id),
+        template_id: String(d.template_id || ''),
+        template_name: String(d.template_name || d.name || ''),
+        name: String(d.name || ''),
+        description: (d.description as string | null) ?? null,
+        report_type: (d.report_type as ScheduledReport["report_type"]) || 'compliance',
+        frequency: (d.frequency as ReportFrequency) || 'monthly',
+        day_of_week: (d.day_of_week as number | null) ?? null,
+        day_of_month: (d.day_of_month as number | null) ?? null,
+        time_of_day: (d.time_of_day as string | null) ?? null,
+        recipients: Array.isArray(d.recipients) ? d.recipients as string[] : [],
+        format: (d.format as ReportFormat) || 'pdf',
+        parameters: (d.parameters as Record<string, unknown>) || {},
+        is_active: Boolean(d.is_active ?? true),
+        last_run_at: (d.last_run_at as string | null) ?? null,
+        next_run_at: (d.next_run_at as string | null) ?? null,
+        created_by: (d.created_by as string | null) ?? null,
+        created_at: String(d.created_at || ''),
+        updated_at: String(d.updated_at || ''),
+        last_status: d.last_status as ScheduledReport["last_status"],
       }));
     },
   });
@@ -160,7 +159,7 @@ export function AutomaticReportsScheduler() {
         }
       };
 
-      const { error } = await supabase.from('report_schedules' as any).insert({
+      const { error } = await (supabase.from as Function)('report_schedules').insert({
         name: schedule.name,
         description: schedule.description || null,
         report_type: schedule.report_type,
@@ -172,7 +171,7 @@ export function AutomaticReportsScheduler() {
         format: schedule.format,
         is_active: true,
         next_run_at: getNextRunDate(schedule.frequency),
-      } as any);
+      });
 
       if (error) throw error;
     },
@@ -188,7 +187,7 @@ export function AutomaticReportsScheduler() {
   // Toggle active mutation
   const toggleMutation = useMutation({
     mutationFn: async ({ id, is_active }: { id: string; is_active: boolean }) => {
-      const { error } = await supabase.from('report_schedules' as any).update({ is_active } as any).eq('id', id);
+      const { error } = await (supabase.from as Function)('report_schedules').update({ is_active }).eq('id', id);
       if (error) throw error;
     },
     onSuccess: () => {
@@ -200,7 +199,7 @@ export function AutomaticReportsScheduler() {
   // Delete mutation
   const deleteMutation = useMutation({
     mutationFn: async (id: string) => {
-      const { error } = await supabase.from('report_schedules' as any).delete().eq('id', id);
+      const { error } = await (supabase.from as Function)('report_schedules').delete().eq('id', id);
       if (error) throw error;
     },
     onSuccess: () => {
@@ -285,7 +284,7 @@ export function AutomaticReportsScheduler() {
               <div className="grid grid-cols-2 gap-4">
                 <div className="space-y-2">
                   <Label>Tipo de Relatório</Label>
-                  <Select value={newSchedule.report_type} onValueChange={v => setNewSchedule(p => ({ ...p, report_type: v as any }))}>
+                  <Select value={newSchedule.report_type} onValueChange={v => setNewSchedule(p => ({ ...p, report_type: v as typeof p.report_type }))}>
                     <SelectTrigger><SelectValue /></SelectTrigger>
                     <SelectContent>
                       {REPORT_TYPES.map(type => (
@@ -487,7 +486,7 @@ export function AutomaticReportsScheduler() {
             <CardContent className="py-8">
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                 {REPORT_TYPES.map(type => (
-                  <Card key={type.id} className="cursor-pointer hover:border-primary transition-colors" onClick={() => { setNewSchedule(p => ({ ...p, report_type: type.id as any, name: type.name })); setIsCreating(true); }}>
+                  <Card key={type.id} className="cursor-pointer hover:border-primary transition-colors" onClick={() => { setNewSchedule(p => ({ ...p, report_type: type.id as typeof p.report_type, name: type.name })); setIsCreating(true); }}>
                     <CardContent className="pt-6">
                       <div className="flex items-center gap-3 mb-2">
                         <div className="p-2 rounded-lg bg-primary/10"><type.icon className="h-5 w-5 text-primary" /></div>
