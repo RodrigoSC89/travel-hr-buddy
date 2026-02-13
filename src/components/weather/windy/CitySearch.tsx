@@ -116,6 +116,8 @@ export const CitySearch: React.FC<CitySearchProps> = ({
               size="icon"
               className="absolute right-1 top-1/2 -translate-y-1/2 h-6 w-6 text-white/50 hover:text-white"
               onClick={() => setQuery("")}
+              aria-label="Limpar busca"
+              title="Limpar busca"
             >
               <X className="h-3 w-3" />
             </Button>
@@ -129,6 +131,8 @@ export const CitySearch: React.FC<CitySearchProps> = ({
           onClick={handleGeolocation}
           disabled={isLocating}
           className="border-white/20 text-white/70 hover:text-white hover:bg-white/10"
+          aria-label="Usar minha localização"
+          title="Usar minha localização"
         >
           {isLocating ? (
             <Loader2 className="h-4 w-4 animate-spin" />
@@ -212,6 +216,8 @@ export const CitySearch: React.FC<CitySearchProps> = ({
                               variant="ghost"
                               size="icon"
                               className="h-6 w-6"
+                              aria-label="Favoritar cidade"
+                              title="Favoritar cidade"
                               onClick={(e) => {
                                 e.stopPropagation();
                                 onToggleFavorite(city);

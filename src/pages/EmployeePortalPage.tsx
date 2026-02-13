@@ -91,7 +91,7 @@ export default function EmployeePortalPage() {
               {employee.department}
             </Badge>
           </div>
-          <Button variant="ghost" size="icon" className="text-primary-foreground relative">
+          <Button variant="ghost" size="icon" className="text-primary-foreground relative" aria-label="Notificações" title="Notificações">
             <Bell className="h-5 w-5" />
             {notifications.filter(n => n.unread).length > 0 && (
               <span className="absolute -top-1 -right-1 h-4 w-4 bg-red-500 rounded-full text-xs flex items-center justify-center">

@@ -260,6 +260,7 @@ export function WeatherPanel({
               onClick={refetch}
               disabled={isFetching}
               title="Atualizar dados"
+              aria-label="Atualizar dados meteorológicos"
             >
               <RefreshCw className={cn("h-4 w-4", isFetching && "animate-spin")} />
             </Button>

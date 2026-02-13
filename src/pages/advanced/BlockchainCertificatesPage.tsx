@@ -206,13 +206,13 @@ const BlockchainCertificatesPage = () => {
                         <p className="text-xs text-muted-foreground mt-1">{cert.issuer}</p>
                       </div>
                       <div className="flex gap-1">
-                        <Button size="icon" variant="ghost">
+                        <Button size="icon" variant="ghost" aria-label="Ver QR Code" title="QR Code">
                           <QrCode className="h-4 w-4" />
                         </Button>
-                        <Button size="icon" variant="ghost">
+                        <Button size="icon" variant="ghost" aria-label="Ver certificado" title="Ver certificado">
                           <Eye className="h-4 w-4" />
                         </Button>
-                        <Button size="icon" variant="ghost">
+                        <Button size="icon" variant="ghost" aria-label="Baixar certificado" title="Baixar">
                           <Download className="h-4 w-4" />
                         </Button>
                       </div>

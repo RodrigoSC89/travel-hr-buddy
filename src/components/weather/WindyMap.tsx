@@ -278,7 +278,7 @@ export const WindyMap: React.FC<WindyMapProps> = ({
             </CardDescription>
           </div>
           <div className="flex items-center gap-2">
-            <Button variant="outline" size="icon" onClick={handleRefresh}>
+            <Button variant="outline" size="icon" onClick={handleRefresh} aria-label="Atualizar mapa" title="Atualizar mapa">
               <RefreshCw className="h-4 w-4" />
             </Button>
             <Badge variant="outline" className="flex items-center gap-1">

@@ -242,7 +242,7 @@ export default function VisionAI() {
                   onChange={handleFileUpload}
                   className="flex-1"
                 />
-                <Button variant="outline" size="icon" onClick={handleCameraCapture}>
+                <Button variant="outline" size="icon" onClick={handleCameraCapture} aria-label="Capturar com câmera" title="Capturar com câmera">
                   <Camera className="h-4 w-4" />
                 </Button>
               </div>

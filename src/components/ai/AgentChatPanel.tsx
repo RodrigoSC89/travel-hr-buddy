@@ -251,7 +251,7 @@ export function AgentChatPanel({ agentId, agentName, agentRole, onClose }: Agent
                 <Zap className="h-3 w-3 mr-1" />
                 Online
               </Badge>
-              <Button variant="ghost" size="icon" onClick={onClose}>
+              <Button variant="ghost" size="icon" onClick={onClose} aria-label="Fechar painel do agente" title="Fechar">
                 <X className="h-4 w-4" />
               </Button>
             </div>
@@ -374,7 +374,7 @@ export function AgentChatPanel({ agentId, agentName, agentRole, onClose }: Agent
           <div className="w-80 flex flex-col bg-muted/30">
             <div className="p-3 border-b flex items-center justify-between">
               <span className="text-sm font-medium">Logs de Execução</span>
-              <Button variant="ghost" size="icon" onClick={copyLogs}>
+              <Button variant="ghost" size="icon" onClick={copyLogs} aria-label="Copiar logs" title="Copiar logs">
                 <Copy className="h-4 w-4" />
               </Button>
             </div>

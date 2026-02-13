@@ -193,10 +193,10 @@ Como posso ajudar?`,
           </div>
         </div>
         <div className="flex items-center gap-1">
-          <Button variant="ghost" size="icon" className="h-7 w-7" onClick={() => setIsMinimized(!isMinimized)}>
+          <Button variant="ghost" size="icon" className="h-7 w-7" onClick={() => setIsMinimized(!isMinimized)} aria-label={isMinimized ? "Expandir assistente" : "Minimizar assistente"} title={isMinimized ? "Expandir" : "Minimizar"}>
             {isMinimized ? <Maximize2 className="h-3.5 w-3.5" /> : <Minimize2 className="h-3.5 w-3.5" />}
           </Button>
-          <Button variant="ghost" size="icon" className="h-7 w-7" onClick={() => setIsOpen(false)}>
+          <Button variant="ghost" size="icon" className="h-7 w-7" onClick={() => setIsOpen(false)} aria-label="Fechar assistente" title="Fechar">
             <X className="h-3.5 w-3.5" />
           </Button>
         </div>
@@ -268,6 +268,8 @@ Como posso ajudar?`,
                 className="h-9 w-9 shrink-0"
                 onClick={sendMessage}
                 disabled={isStreaming || !input.trim()}
+                aria-label="Enviar mensagem"
+                title="Enviar"
               >
                 {isStreaming ? <Loader2 className="h-4 w-4 animate-spin" /> : <Send className="h-4 w-4" />}
               </Button>

@@ -275,7 +275,7 @@ export default function ClassSurveysPage() {
                   className="pl-10"
                 />
               </div>
-              <Button variant="outline" size="icon">
+              <Button variant="outline" size="icon" aria-label="Filtrar vistorias" title="Filtrar">
                 <Filter className="h-4 w-4" />
               </Button>
             </div>
@@ -411,7 +411,7 @@ export default function ClassSurveysPage() {
                                 {survey.status}
                               </Badge>
                               
-                              <Button variant="ghost" size="icon">
+                              <Button variant="ghost" size="icon" aria-label="Ver detalhes da vistoria" title="Ver detalhes">
                                 <ExternalLink className="h-4 w-4" />
                               </Button>
                             </div>
