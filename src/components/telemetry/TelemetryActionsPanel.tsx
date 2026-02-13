@@ -296,7 +296,7 @@ export function TelemetryActionsPanel() {
               key={metric.key}
               className={`cursor-pointer transition-all ${
                 selectedMetric === metric.key ? "ring-2 ring-primary" : ""
-              } ${status === "critical" ? "border-red-500" : status === "warning" ? "border-yellow-500" : ""}`}
+              } ${status === "critical" ? "border-destructive" : status === "warning" ? "border-warning" : ""}`}
               onClick={() => setSelectedMetric(metric.key)}
             >
               <CardContent className="p-4">
@@ -305,8 +305,8 @@ export function TelemetryActionsPanel() {
                     {metric.icon}
                     {metric.label}
                   </div>
-                  {status === "critical" && <AlertTriangle className="h-4 w-4 text-red-500" />}
-                  {status === "warning" && <AlertTriangle className="h-4 w-4 text-yellow-500" />}
+                   {status === "critical" && <AlertTriangle className="h-4 w-4 text-destructive" />}
+                   {status === "warning" && <AlertTriangle className="h-4 w-4 text-warning" />}
                 </div>
                 <p className="text-2xl font-bold">
                   {value.toFixed(1)}
@@ -441,10 +441,10 @@ export function TelemetryActionsPanel() {
 
       {/* Alerts Panel */}
       {alerts.filter(a => !a.acknowledged).length > 0 && (
-        <Card className="border-yellow-500">
+        <Card className="border-warning">
           <CardHeader className="pb-2">
             <CardTitle className="text-lg flex items-center gap-2">
-              <Bell className="h-5 w-5 text-yellow-500" />
+              <Bell className="h-5 w-5 text-warning" />
               Alertas Ativos ({alerts.filter(a => !a.acknowledged).length})
             </CardTitle>
           </CardHeader>
@@ -453,13 +453,13 @@ export function TelemetryActionsPanel() {
               {alerts.filter(a => !a.acknowledged).map(alert => (
                 <div 
                   key={alert.id}
-                  className={`flex items-center justify-between p-3 rounded-lg ${
-                    alert.type === "critical" ? "bg-red-500/10" : "bg-yellow-500/10"
-                  }`}
-                >
-                  <div className="flex items-center gap-3">
-                    <AlertTriangle className={`h-5 w-5 ${
-                      alert.type === "critical" ? "text-red-500" : "text-yellow-500"
+                   className={`flex items-center justify-between p-3 rounded-lg ${
+                     alert.type === "critical" ? "bg-destructive/10" : "bg-warning/10"
+                   }`}
+                 >
+                   <div className="flex items-center gap-3">
+                     <AlertTriangle className={`h-5 w-5 ${
+                       alert.type === "critical" ? "text-destructive" : "text-warning"
                     }`} />
                     <div>
                       <p className="font-medium">{alert.message}</p>

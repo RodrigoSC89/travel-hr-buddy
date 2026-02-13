@@ -31,7 +31,7 @@ export default function AIModulesHub() {
             <CardHeader className="pb-3">
               <div className="flex items-center justify-between">
                 <module.icon className="h-8 w-8 text-primary" />
-                <Badge variant="outline" className="bg-green-100 text-green-800">
+                <Badge variant="outline" className="bg-success/10 text-success">
                   {module.status === "active" ? "Ativo" : "Inativo"}
                 </Badge>
               </div>

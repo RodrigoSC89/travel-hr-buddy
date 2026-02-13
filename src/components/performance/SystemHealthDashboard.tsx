@@ -43,7 +43,7 @@ const StatusBadge = memo(({ status }: { status: string }) => {
 StatusBadge.displayName = 'StatusBadge';
 
 const ScoreCircle = memo(({ score, size = 80 }: { score: number; size?: number }) => {
-  const color = score >= 80 ? 'text-green-500' : score >= 60 ? 'text-yellow-500' : 'text-red-500';
+  const color = score >= 80 ? 'text-success' : score >= 60 ? 'text-warning' : 'text-destructive';
   const circumference = 2 * Math.PI * 35;
   const offset = circumference - (score / 100) * circumference;
   
@@ -266,7 +266,7 @@ export const SystemHealthDashboard = memo(() => {
             {benchmark.recommendations.length > 0 && (
               <div className="bg-muted/50 rounded-lg p-4">
                 <h4 className="font-medium mb-2 flex items-center gap-2">
-                  <AlertTriangle className="h-4 w-4 text-yellow-500" />
+                  <AlertTriangle className="h-4 w-4 text-warning" />
                   Recomendações
                 </h4>
                 <ul className="space-y-1 text-sm text-muted-foreground">
@@ -301,7 +301,7 @@ export const SystemHealthDashboard = memo(() => {
             {cleanupSuggestion.shouldClean && (
               <div className={`flex items-center gap-2 p-3 rounded-lg ${
                 cleanupSuggestion.urgency === 'high' ? 'bg-destructive/10 text-destructive' :
-                cleanupSuggestion.urgency === 'medium' ? 'bg-yellow-500/10 text-yellow-600' :
+                cleanupSuggestion.urgency === 'medium' ? 'bg-warning/10 text-warning' :
                 'bg-muted'
               }`}>
                 <AlertTriangle className="h-4 w-4" />
@@ -358,7 +358,7 @@ export const SystemHealthDashboard = memo(() => {
                 )}
                 
                 {syncStats.pending === 0 && syncStats.failed === 0 && (
-                  <div className="flex items-center gap-2 text-sm text-green-600">
+                  <div className="flex items-center gap-2 text-sm text-success">
                     <CheckCircle className="h-4 w-4" />
                     Tudo sincronizado
                   </div>

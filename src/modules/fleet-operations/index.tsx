@@ -145,13 +145,13 @@ const FleetOperationsCenter: React.FC = () => {
   const getStatusBadge = (status: string) => {
     switch (status) {
       case "operational":
-        return <Badge className="bg-green-500/20 text-green-400 border-green-500/30">Operacional</Badge>;
+        return <Badge className="bg-success/20 text-success border-success/30">Operacional</Badge>;
       case "transit":
-        return <Badge className="bg-blue-500/20 text-blue-400 border-blue-500/30">Em Trânsito</Badge>;
+        return <Badge className="bg-info/20 text-info border-info/30">Em Trânsito</Badge>;
       case "docked":
-        return <Badge className="bg-yellow-500/20 text-yellow-400 border-yellow-500/30">Atracado</Badge>;
+        return <Badge className="bg-warning/20 text-warning border-warning/30">Atracado</Badge>;
       case "maintenance":
-        return <Badge className="bg-orange-500/20 text-orange-400 border-orange-500/30">Manutenção</Badge>;
+        return <Badge className="bg-warning/20 text-warning border-warning/30">Manutenção</Badge>;
       default:
         return <Badge variant="secondary">{status}</Badge>;
     }
@@ -159,9 +159,9 @@ const FleetOperationsCenter: React.FC = () => {
 
   const getMetricColor = (status: string) => {
     switch (status) {
-      case "good": return "text-green-400";
-      case "warning": return "text-yellow-400";
-      case "critical": return "text-red-400";
+      case "good": return "text-success";
+      case "warning": return "text-warning";
+      case "critical": return "text-destructive";
       default: return "text-foreground";
     }
   };
@@ -195,7 +195,7 @@ const FleetOperationsCenter: React.FC = () => {
             />
           </div>
           <Badge variant="outline" className="gap-1">
-            <div className="h-2 w-2 rounded-full bg-green-400 animate-pulse" />
+            <div className="h-2 w-2 rounded-full bg-success animate-pulse" />
             {vessels.filter(v => v.status === "operational" || v.status === "transit").length} embarcações ativas
           </Badge>
         </div>
@@ -257,10 +257,10 @@ const FleetOperationsCenter: React.FC = () => {
               <CardContent>
                 <div className="space-y-4">
                   {[
-                    { label: "Operacional", count: vessels.filter(v => v.status === "operational").length, color: "bg-green-500" },
-                    { label: "Em Trânsito", count: vessels.filter(v => v.status === "transit").length, color: "bg-blue-500" },
-                    { label: "Atracado", count: vessels.filter(v => v.status === "docked").length, color: "bg-yellow-500" },
-                    { label: "Manutenção", count: vessels.filter(v => v.status === "maintenance").length, color: "bg-orange-500" }
+                    { label: "Operacional", count: vessels.filter(v => v.status === "operational").length, color: "bg-success" },
+                    { label: "Em Trânsito", count: vessels.filter(v => v.status === "transit").length, color: "bg-info" },
+                    { label: "Atracado", count: vessels.filter(v => v.status === "docked").length, color: "bg-warning" },
+                    { label: "Manutenção", count: vessels.filter(v => v.status === "maintenance").length, color: "bg-warning" }
                   ].map((item) => (
                     <div key={item.label} className="flex items-center justify-between">
                       <div className="flex items-center gap-2">
@@ -278,7 +278,7 @@ const FleetOperationsCenter: React.FC = () => {
             <Card className="bg-card/50 backdrop-blur border-border/50">
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
-                  <AlertTriangle className="h-5 w-5 text-yellow-400" />
+                   <AlertTriangle className="h-5 w-5 text-warning" />
                   Alertas Ativos
                 </CardTitle>
               </CardHeader>
@@ -291,9 +291,9 @@ const FleetOperationsCenter: React.FC = () => {
                   ].map((alert) => (
                     <div key={alert.vessel} className="flex items-start gap-3 p-2 rounded-lg bg-muted/30">
                       {alert.severity === "warning" ? (
-                        <AlertTriangle className="h-4 w-4 text-yellow-400 mt-0.5" />
-                      ) : (
-                        <Clock className="h-4 w-4 text-blue-400 mt-0.5" />
+                         <AlertTriangle className="h-4 w-4 text-warning mt-0.5" />
+                       ) : (
+                         <Clock className="h-4 w-4 text-info mt-0.5" />
                       )}
                       <div>
                         <p className="text-sm font-medium text-foreground">{alert.vessel}</p>
