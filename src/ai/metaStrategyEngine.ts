@@ -15,7 +15,7 @@ export interface Strategy {
   description: string;
   score: number;
   reasoning: string;
-  parameters: Record<string, any>;
+  parameters: Record<string, unknown>;
   estimated_impact: number;
   risk_level: "low" | "medium" | "high";
   complexity: number;
@@ -23,8 +23,8 @@ export interface Strategy {
 
 export interface StrategyContext {
   goal: string;
-  constraints: Record<string, any>;
-  current_state: Record<string, any>;
+  constraints: Record<string, unknown>;
+  current_state: Record<string, unknown>;
   available_resources: string[];
   priority: "low" | "medium" | "high" | "critical";
 }
@@ -198,7 +198,7 @@ class MetaStrategyEngine {
   /**
    * Get strategy logs from ai_audit_logs
    */
-  async getStrategyLogs(limit: number = 50): Promise<any[]> {
+  async getStrategyLogs(limit: number = 50): Promise<Record<string, unknown>[]> {
     try {
       const { data, error } = await supabase
         .from("ai_audit_logs")

@@ -17,6 +17,7 @@ export interface AIContextRequest {
   module: string;
   userId?: string;
   action?: string;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- module context accessed dynamically
   context?: Record<string, any>;
 }
 
@@ -24,7 +25,7 @@ export interface AIContextResponse {
   type: "suggestion" | "recommendation" | "risk" | "diagnosis" | "action";
   message: string;
   confidence: number; // 0-100
-  metadata?: Record<string, any>;
+  metadata?: Record<string, unknown>;
   timestamp: Date;
 }
 

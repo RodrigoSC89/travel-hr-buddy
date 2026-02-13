@@ -10,7 +10,9 @@ import { logger } from "@/lib/logger";
 export interface RuleTemplate {
   name: string;
   description: string;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- rule builders access dynamic params
   conditionBuilder: (params: Record<string, any>) => (event: AutonomousEvent) => boolean;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- rule builders access dynamic params
   actionBuilder: (params: Record<string, any>) => (event: AutonomousEvent) => Promise<AutonomousActionResult>;
 }
 
@@ -134,6 +136,7 @@ class RulesManager {
   createRuleFromTemplate(
     templateId: string,
     ruleId: string,
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any -- dynamic rule params
     params: Record<string, any>,
     priority: number = 5
   ): AutonomousRule | null {

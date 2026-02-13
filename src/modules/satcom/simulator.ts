@@ -30,7 +30,7 @@ export const logEvent = (
   eventType: string,
   timestamp: string,
   vesselId: string,
-  metadata?: Record<string, any>
+  metadata?: Record<string, unknown>
 ) => {
   const logEntry = {
     module,

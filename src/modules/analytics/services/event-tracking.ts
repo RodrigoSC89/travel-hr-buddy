@@ -9,6 +9,7 @@ import { logger } from '@/lib/logger';
 export interface TrackEventOptions {
   eventName: string;
   eventCategory?: string;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- properties stored as Json in Supabase
   properties?: Record<string, any>;
   pageUrl?: string;
   referrer?: string;

@@ -12,7 +12,7 @@ interface TelemetryEvent {
   elementId?: string;
   elementName?: string;
   action: string;
-  context?: Record<string, any>;
+  context?: Record<string, unknown>;
   isError?: boolean;
   errorMessage?: string;
 }
@@ -170,7 +170,7 @@ class TelemetryTracker {
     });
   }
 
-  trackFeatureUse(featureName: string, details?: Record<string, any>): void {
+  trackFeatureUse(featureName: string, details?: Record<string, unknown>): void {
     this.track({
       eventType: "feature_use",
       action: "feature_used",
@@ -179,7 +179,7 @@ class TelemetryTracker {
     });
   }
 
-  trackInteraction(elementId: string, interactionType: string, details?: Record<string, any>): void {
+  trackInteraction(elementId: string, interactionType: string, details?: Record<string, unknown>): void {
     this.track({
       eventType: "interaction",
       elementId,

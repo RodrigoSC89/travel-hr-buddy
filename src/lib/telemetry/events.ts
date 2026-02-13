@@ -28,7 +28,7 @@ export type TelemetryEventName =
 
 export interface TelemetryEvent {
   name: TelemetryEventName;
-  properties?: Record<string, any>;
+  properties?: Record<string, unknown>;
   timestamp?: string;
 }
 
@@ -50,7 +50,7 @@ export interface FeatureUsedEvent {
   feature: string;
   module: string;
   action: string;
-  metadata?: Record<string, any>;
+  metadata?: Record<string, unknown>;
 }
 
 // Event validators

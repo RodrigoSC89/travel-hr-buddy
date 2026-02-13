@@ -17,6 +17,7 @@ export interface Mission {
   assignedTo?: string;
   createdBy: string;
   createdAt: string;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Supabase Json type
   metadata: Record<string, any>;
 }
 
@@ -30,6 +31,7 @@ export interface MissionTask {
   assignedTo?: string;
   dueDate?: string;
   createdAt: string;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Supabase Json type
   metadata: Record<string, any>;
 }
 
@@ -40,5 +42,6 @@ export interface MissionLog {
   severity: "info" | "warning" | "error" | "critical";
   message: string;
   timestamp: string;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Supabase Json type
   metadata: Record<string, any>;
 }

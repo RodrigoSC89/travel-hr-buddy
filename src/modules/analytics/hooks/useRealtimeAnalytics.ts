@@ -15,6 +15,7 @@ export interface AnalyticsEvent {
   session_id: string;
   event_name: string;
   event_category: string;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Supabase Json type
   properties: Record<string, any>;
   page_url: string;
   timestamp: string;
@@ -29,6 +30,7 @@ export interface AnalyticsMetric {
   metric_name: string;
   metric_value: number;
   metric_unit: string;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Supabase Json type
   dimensions: Record<string, any>;
   period_start: string;
   period_end: string;

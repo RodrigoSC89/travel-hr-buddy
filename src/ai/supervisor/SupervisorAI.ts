@@ -7,6 +7,7 @@ export interface AIDecision {
   sourceAI: string;
   action: string;
   confidence: number;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- decision parameters accessed dynamically
   parameters: Record<string, any>;
   timestamp?: Date;
 }

@@ -12,6 +12,7 @@ interface ErrorReport {
   stack?: string;
   component?: string;
   action?: string;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- metadata includes dynamic browser/viewport info
   metadata?: Record<string, any>;
   user_id?: string;
   url?: string;
@@ -104,6 +105,7 @@ class ErrorTracker {
 
   captureError(
     error: Error | string,
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any -- context includes dynamic error metadata
     context?: Record<string, any>
   ) {
     if (!this.config.enabled) return;
