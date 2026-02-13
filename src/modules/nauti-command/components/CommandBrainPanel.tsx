@@ -63,8 +63,10 @@ export function CommandBrainPanel({ context, onSettingsClick }: CommandBrainPane
       return;
     }
 
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Web Speech API types not available in TS
-    const SpeechRecognition = (window as any).webkitSpeechRecognition || (window as any).SpeechRecognition;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Web Speech API not in standard TS types
+    const w = window as unknown as { webkitSpeechRecognition?: new () => any; SpeechRecognition?: new () => any };
+    const SpeechRecognition = w.webkitSpeechRecognition || w.SpeechRecognition;
+    if (!SpeechRecognition) return;
     const recognition = new SpeechRecognition();
     recognition.lang = "pt-BR";
     recognition.interimResults = true;

@@ -42,16 +42,15 @@ export const WellbeingDashboard: React.FC = () => {
       if (!user) return;
 
       // Fetch calculated wellbeing score
-      const { data: scoreData } = await (supabase
-        .rpc("calculate_wellbeing_score" as any, { p_user_id: user.id, p_days: 7 }) as unknown as Promise<{ data: number | null }>);
+      const rpc = supabase.rpc as Function;
+      const { data: scoreData } = await rpc("calculate_wellbeing_score", { p_user_id: user.id, p_days: 7 });
 
       // Fetch recent health check-ins
-      const { data: checkins } = await (supabase
-        .from("health_checkins" as any)
+      const { data: checkins } = await (supabase.from as Function)("health_checkins")
         .select("*")
         .eq("user_id", user.id)
         .order("checkin_date", { ascending: false })
-        .limit(7) as unknown as Promise<{ data: Array<{ energy_level?: number; mood_rating?: number }> | null }>);
+        .limit(7);
 
       // Fetch active alerts
       const { data: alerts } = await (supabase
@@ -66,10 +65,10 @@ export const WellbeingDashboard: React.FC = () => {
       const overallScore = scoreData || 7.0;
       const checkinsArr = checkins || [];
       const physicalScore = checkinsArr.length > 0
-        ? checkinsArr.reduce((acc, c) => acc + (c.energy_level || 3), 0) / checkinsArr.length * 2
+        ? checkinsArr.reduce((acc: number, c: { energy_level?: number }) => acc + (c.energy_level || 3), 0) / checkinsArr.length * 2
         : 7.0;
       const mentalScore = checkinsArr.length > 0
-        ? checkinsArr.reduce((acc, c) => acc + (c.mood_rating || 3), 0) / checkinsArr.length * 2
+        ? checkinsArr.reduce((acc: number, c: { mood_rating?: number }) => acc + (c.mood_rating || 3), 0) / checkinsArr.length * 2
         : 7.0;
 
       setScore({

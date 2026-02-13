@@ -181,7 +181,7 @@ export default function TrainingAcademyEnhanced() {
     }
   };
 
-  const getStatusColor = (status: string | null) => {
+  const getStatusColor = (status: string | null): "default" | "secondary" | "outline" => {
     switch (status) {
     case "completed": return "default";
     case "in_progress": return "secondary";
@@ -292,7 +292,7 @@ export default function TrainingAcademyEnhanced() {
                                 Módulo atual: {progress.current_module || 0}
                               </p>
                             </div>
-                            <Badge variant={getStatusColor(progress.status) as any}>
+                            <Badge variant={getStatusColor(progress.status)}>
                               {progress.status || "unknown"}
                             </Badge>
                           </div>

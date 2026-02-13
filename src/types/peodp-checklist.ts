@@ -651,7 +651,7 @@ export function calculateSectionScores(
     }
   });
 
-  const result: Record<PEODPSection, number> = {} as any;
+  const result = {} as Record<PEODPSection, number>;
   for (const [section, data] of Object.entries(sectionScores)) {
     result[section as PEODPSection] = data.total > 0 
       ? Math.round((data.earned / data.total) * 100) 

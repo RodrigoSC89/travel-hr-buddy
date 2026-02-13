@@ -135,20 +135,24 @@ export const VoiceAgentInterface: React.FC = () => {
       return;
     }
 
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any -- SpeechRecognition not in standard types
-    const SpeechRecognitionAPI = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Web Speech API not in standard TS types
+    const w = window as unknown as { SpeechRecognition?: new () => any; webkitSpeechRecognition?: new () => any };
+    const SpeechRecognitionAPI = w.SpeechRecognition || w.webkitSpeechRecognition;
+    if (!SpeechRecognitionAPI) {
+      toast.error("Reconhecimento de voz não suportado");
+      return;
+    }
     const recognition = new SpeechRecognitionAPI();
     recognition.lang = "pt-BR";
     recognition.continuous = false;
     recognition.interimResults = false;
 
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any -- SpeechRecognition event type
-    recognition.onresult = (event: any) => {
+    recognition.onresult = (event: { results: { 0: { 0: { transcript: string } } } }) => {
       const transcript = event.results[0][0].transcript;
       processMessage(transcript, true);
     };
 
-    recognition.onerror = (event: any) => {
+    recognition.onerror = (event: { error: string }) => {
       logger.error("Speech recognition error: " + event.error);
       setIsListening(false);
       if (event.error !== "aborted") {

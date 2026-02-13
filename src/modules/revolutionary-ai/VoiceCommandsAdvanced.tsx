@@ -93,7 +93,7 @@ export function VoiceCommandsAdvanced() {
         cmd.id === newCommand.id 
           ? { 
               ...cmd, 
-              status: (error ? 'error' : 'success') as any, 
+              status: (error ? 'error' : 'success') as VoiceCommand['status'], 
               result: error ? `Erro: ${error.message}` : (data?.message || `Comando "${text}" processado`),
               action: error ? 'failed' : 'executed'
             }
@@ -102,7 +102,7 @@ export function VoiceCommandsAdvanced() {
     } catch {
       setCommandHistory(prev => prev.map(cmd => 
         cmd.id === newCommand.id 
-          ? { ...cmd, status: 'error' as any, result: 'Serviço indisponível', action: 'failed' }
+          ? { ...cmd, status: 'error' as VoiceCommand['status'], result: 'Serviço indisponível', action: 'failed' }
           : cmd
       ));
     }

@@ -48,19 +48,18 @@ export function ConversationalInput({
 
   // Initialize speech recognition
   useEffect(() => {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any -- SpeechRecognition not in standard types
-    const SpeechRecognitionAPI = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Web Speech API not in standard TS types
+    const w = window as unknown as { SpeechRecognition?: new () => any; webkitSpeechRecognition?: new () => any };
+    const SpeechRecognitionAPI = w.SpeechRecognition || w.webkitSpeechRecognition;
     if (SpeechRecognitionAPI) {
       recognitionRef.current = new SpeechRecognitionAPI();
       recognitionRef.current.continuous = false;
       recognitionRef.current.interimResults = true;
       recognitionRef.current.lang = 'pt-BR';
 
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any -- SpeechRecognition event types
-      recognitionRef.current.onresult = (event: any) => {
+      recognitionRef.current.onresult = (event: { results: ArrayLike<{ 0: { transcript: string } }> }) => {
         const transcript = Array.from(event.results)
-          // eslint-disable-next-line @typescript-eslint/no-explicit-any -- SpeechRecognitionResult
-          .map((result: any) => result[0].transcript)
+          .map((result) => result[0].transcript)
           .join('');
         setVoiceState(s => ({ ...s, transcript }));
         setQuery(transcript);

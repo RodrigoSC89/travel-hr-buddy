@@ -72,8 +72,7 @@ class SmartSyncManager {
 
   private detectConnectionSpeed(): void {
     if ('connection' in navigator) {
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Navigator.connection not in standard TS types
-      const conn = (navigator as any).connection;
+      const conn = (navigator as unknown as { connection?: { effectiveType?: string; addEventListener: (type: string, cb: () => void) => void } }).connection;
       const effectiveType = conn?.effectiveType || '4g';
       
       if (effectiveType === '2g' || effectiveType === 'slow-2g' || effectiveType === '3g') {

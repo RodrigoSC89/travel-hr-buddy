@@ -144,8 +144,8 @@ export default function TelemetriaCommand() {
 
   // Acknowledge alert
   const acknowledgeAlert = async (alertId: string) => {
-    const { error } = await (supabase.from("telemetry_alerts" as any) as any)
-      .update({ acknowledged: true, acknowledged_at: new Date().toISOString() })
+    const { error } = await (supabase.from as Function)("telemetry_alerts")
+      .update({ acknowledged: true, acknowledged_at: new Date().toISOString() } as never)
       .eq("id", alertId);
     
     if (!error) {
@@ -156,8 +156,8 @@ export default function TelemetriaCommand() {
 
   // Resolve alert
   const resolveAlert = async (alertId: string) => {
-    const { error } = await (supabase.from("telemetry_alerts" as any) as any)
-      .update({ resolved: true, resolved_at: new Date().toISOString() })
+    const { error } = await (supabase.from as Function)("telemetry_alerts")
+      .update({ resolved: true, resolved_at: new Date().toISOString() } as never)
       .eq("id", alertId);
     
     if (!error) {

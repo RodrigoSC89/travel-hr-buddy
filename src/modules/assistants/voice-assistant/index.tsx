@@ -59,14 +59,15 @@ const VoiceAssistant: React.FC = () => {
   const [volume, setVolume] = useState(1);
   const [useElevenLabs, setUseElevenLabs] = useState(true);
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- SpeechRecognition type not in standard lib
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Web Speech API not in standard TS types
   const recognitionRef = useRef<any>(null);
   const synthRef = useRef<SpeechSynthesis | null>(null);
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const scrollRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    const SpeechRecognition = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
+    const w = window as unknown as { SpeechRecognition?: new () => any; webkitSpeechRecognition?: new () => any };
+    const SpeechRecognition = w.SpeechRecognition || w.webkitSpeechRecognition;
     
     if (!SpeechRecognition || !window.speechSynthesis) {
       setIsSupported(false);

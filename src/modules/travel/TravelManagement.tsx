@@ -36,8 +36,7 @@ const loadJsPDF = async () => {
 };
 
 // Helper to get dynamic supabase client for untyped tables
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- dynamic table access for tables not in generated types
-const dynamicSupabase = () => supabase as any;
+const dynamicSupabase = () => ({ from: supabase.from as Function });
 
 interface TravelItinerary {
   id: string;

@@ -260,7 +260,7 @@ export default function NautiPeoplePremium() {
     try {
       const { data } = await supabase.from('crew_members').select('full_name, rank, nationality, status').order('full_name');
       if (!data || data.length === 0) { toast.error("Sem dados para exportar"); return; }
-      const csvRows = ['Nome;Posto;Nacionalidade;Status', ...(data as any[]).map(c => `${c.full_name};${c.rank || ''};${c.nationality || ''};${c.status || ''}`)];
+      const csvRows = ['Nome;Posto;Nacionalidade;Status', ...(data as { full_name: string; rank: string | null; nationality: string | null; status: string | null }[]).map(c => `${c.full_name};${c.rank || ''};${c.nationality || ''};${c.status || ''}`)];
       const blob = new Blob(['\uFEFF' + csvRows.join('\n')], { type: 'text/csv;charset=utf-8;' });
       const url = URL.createObjectURL(blob);
       const a = document.createElement('a');

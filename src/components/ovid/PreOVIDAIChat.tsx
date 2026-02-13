@@ -48,8 +48,9 @@ export const PreOVIDAIChat: React.FC<PreOVIDAIChatProps> = ({
   // Initialize speech recognition
   useEffect(() => {
     if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any -- SpeechRecognition not in standard types
-      const SpeechRecognitionClass = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Web Speech API not in standard TS types
+      const w = window as unknown as { SpeechRecognition?: new () => any; webkitSpeechRecognition?: new () => any };
+      const SpeechRecognitionClass = w.SpeechRecognition || w.webkitSpeechRecognition;
       if (!SpeechRecognitionClass) return;
       recognitionRef.current = new SpeechRecognitionClass();
       recognitionRef.current!.continuous = false;

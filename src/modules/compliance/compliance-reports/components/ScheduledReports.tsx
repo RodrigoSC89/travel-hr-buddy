@@ -49,16 +49,14 @@ export const ScheduledReports: React.FC = () => {
 
   const fetchScheduledReports = async () => {
     try {
-      const { data, error } = await supabase
-        .from("scheduled_compliance_reports" as any)
+      const { data, error } = await (supabase.from as Function)("scheduled_compliance_reports")
         .select("*")
         .order("next_run", { ascending: true });
 
       if (error || !data) {
-        // Table doesn't exist yet — show honest empty state
         setReports([]);
       } else {
-        setReports((data as any) || []);
+        setReports(data as ScheduledReport[]);
       }
     } catch (error) {
       logger.error("Error fetching scheduled reports:", error);
@@ -79,7 +77,7 @@ export const ScheduledReports: React.FC = () => {
     try {
       const nextRun = calculateNextRun(formData.frequency);
 
-      const { error } = await supabase.from("scheduled_compliance_reports" as any).insert({
+      const { error } = await (supabase.from as Function)("scheduled_compliance_reports").insert({
         title: formData.title,
         template: formData.template,
         format: formData.format,
@@ -147,13 +145,12 @@ export const ScheduledReports: React.FC = () => {
       const fileName = `${report.title.replace(/\s+/g, "-")}-${Date.now()}.${report.format}`;
       const storagePath = `compliance-reports/${fileName}`;
 
-      const { error } = await supabase
-        .from("scheduled_compliance_reports" as any)
+      const { error } = await (supabase.from as Function)("scheduled_compliance_reports")
         .update({
           last_run: new Date().toISOString(),
           next_run: calculateNextRun(report.frequency),
           storage_path: storagePath,
-        })
+        } as never)
         .eq("id", reportId);
 
       if (error) {

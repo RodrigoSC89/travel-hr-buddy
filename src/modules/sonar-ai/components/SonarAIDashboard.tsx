@@ -149,14 +149,14 @@ export const SonarAIDashboard: React.FC = () => {
     }
   };
 
-  const getRiskLevelBadge = (level: string) => {
-    const colors = {
+  const getRiskLevelBadge = (level: string): "destructive" | "default" | "secondary" => {
+    const colors: Record<string, "destructive" | "default" | "secondary"> = {
       critical: "destructive",
       high: "destructive",
       medium: "default",
       low: "secondary",
     };
-    return colors[level as keyof typeof colors] || "secondary";
+    return colors[level] || "secondary";
   };
 
   return (
@@ -280,7 +280,7 @@ export const SonarAIDashboard: React.FC = () => {
                           <div className="flex items-center gap-3">
                             <div className={`w-3 h-3 rounded-full ${getRiskLevelColor(risk.risk_level)}`} />
                             <div>
-                              <Badge variant={getRiskLevelBadge(risk.risk_level) as any}>
+                              <Badge variant={getRiskLevelBadge(risk.risk_level)}>
                                 {risk.risk_level.toUpperCase()}
                               </Badge>
                               <Badge variant="outline" className="ml-2">

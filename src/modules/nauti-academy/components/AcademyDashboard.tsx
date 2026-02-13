@@ -653,9 +653,9 @@ export default function AcademyDashboard() {
                         <Badge variant="secondary" className="text-xs">
                           <Award className="h-3 w-3 mr-1" />{crew.certifications}
                         </Badge>
-                        {(crew as any).expiringCerts > 0 && (
+                        {'expiringCerts' in crew && (crew as unknown as { expiringCerts: number }).expiringCerts > 0 && (
                           <Badge variant="destructive" className="text-xs">
-                            {(crew as any).expiringCerts} vencendo
+                            {(crew as unknown as { expiringCerts: number }).expiringCerts} vencendo
                           </Badge>
                         )}
                       </div>

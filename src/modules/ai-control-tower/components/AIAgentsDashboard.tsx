@@ -176,7 +176,7 @@ export default function AIAgentsDashboard() {
                             <Badge key={String(cap)} variant="secondary" className="text-xs">{String(cap)}</Badge>
                           ))}
                           {(Array.isArray(agent.capabilities) ? agent.capabilities : []).length > 2 && (
-                            <Badge variant="outline" className="text-xs">+{(agent.capabilities as any[]).length - 2}</Badge>
+                            <Badge variant="outline" className="text-xs">+{(agent.capabilities as unknown[]).length - 2}</Badge>
                           )}
                         </div>
                       </div>

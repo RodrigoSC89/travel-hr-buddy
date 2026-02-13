@@ -96,7 +96,7 @@ const getActivityColor = (type: WorkspaceActivity["type"]) => {
   }
 };
 
-const getPriorityColor = (priority?: WorkspaceActivity["priority"]) => {
+const getPriorityColor = (priority?: WorkspaceActivity["priority"]): "destructive" | "secondary" | "outline" => {
   switch (priority) {
     case "high": return "destructive";
     case "medium": return "secondary";
@@ -391,7 +391,7 @@ export const WorkspaceActivities: React.FC<WorkspaceActivitiesProps> = ({
                             </div>
                             {activity.priority && activity.priority !== "low" && (
                               <Badge 
-                                variant={getPriorityColor(activity.priority) as any}
+                                variant={getPriorityColor(activity.priority)}
                                 className="text-xs flex-shrink-0"
                               >
                                 {activity.priority === "high" ? "Alta" : "Média"}

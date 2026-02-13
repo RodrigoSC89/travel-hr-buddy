@@ -21,7 +21,7 @@ class CriticalPathOptimizer {
 
   private detectConnectionSpeed() {
     if ('connection' in navigator) {
-      const conn = (navigator as any).connection;
+      const conn = (navigator as unknown as { connection?: { effectiveType?: string; addEventListener: (type: string, cb: () => void) => void } }).connection;
       const effectiveType = conn?.effectiveType || '4g';
       
       if (effectiveType === 'slow-2g' || effectiveType === '2g') {
