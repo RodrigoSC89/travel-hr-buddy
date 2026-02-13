@@ -150,7 +150,7 @@ export default function SettingsDialog({ open, onOpenChange }: SettingsDialogPro
               <div className="flex items-center justify-between">
                 <div className="space-y-0.5">
                   <Label className="flex items-center gap-2">
-                    <Zap className="h-4 w-4 text-purple-500" />
+                    <Zap className="h-4 w-4 text-accent-foreground" />
                     Requisições Automáticas
                   </Label>
                   <p className="text-sm text-muted-foreground">
@@ -167,7 +167,7 @@ export default function SettingsDialog({ open, onOpenChange }: SettingsDialogPro
               <div className="flex items-center justify-between">
                 <div className="space-y-0.5">
                   <Label className="flex items-center gap-2">
-                    <Brain className="h-4 w-4 text-purple-500" />
+                    <Brain className="h-4 w-4 text-accent-foreground" />
                     Previsões Preditivas
                   </Label>
                   <p className="text-sm text-muted-foreground">
@@ -184,7 +184,7 @@ export default function SettingsDialog({ open, onOpenChange }: SettingsDialogPro
               <div className="flex items-center justify-between">
                 <div className="space-y-0.5">
                   <Label className="flex items-center gap-2">
-                    <Building2 className="h-4 w-4 text-purple-500" />
+                    <Building2 className="h-4 w-4 text-accent-foreground" />
                     Seleção Automática de Fornecedor
                   </Label>
                   <p className="text-sm text-muted-foreground">

@@ -62,8 +62,8 @@ export default function AIAssistant() {
             {messages.map((msg, i) => (
               <div key={`solas-msg-${i}-${msg.role}`} className={`flex gap-3 ${msg.role === "user" ? "justify-end" : "justify-start"}`}>
                 {msg.role === "assistant" && (
-                  <div className="w-8 h-8 rounded-full bg-orange-500/10 flex items-center justify-center flex-shrink-0">
-                    <Bot className="h-4 w-4 text-orange-500" />
+                  <div className="w-8 h-8 rounded-full bg-accent/10 flex items-center justify-center flex-shrink-0">
+                    <Bot className="h-4 w-4 text-accent-foreground" />
                   </div>
                 )}
                 <div className={`max-w-[85%] p-3 rounded-lg ${msg.role === "user" ? "bg-primary text-primary-foreground" : "bg-muted"}`}>
@@ -84,8 +84,8 @@ export default function AIAssistant() {
             ))}
             {isLoading && (
               <div className="flex gap-3">
-                <div className="w-8 h-8 rounded-full bg-orange-500/10 flex items-center justify-center">
-                  <Loader2 className="h-4 w-4 text-orange-500 animate-spin" />
+                <div className="w-8 h-8 rounded-full bg-accent/10 flex items-center justify-center">
+                  <Loader2 className="h-4 w-4 text-accent-foreground animate-spin" />
                 </div>
                 <div className="p-3 rounded-lg bg-muted">
                   <p className="text-sm text-muted-foreground">Processando...</p>

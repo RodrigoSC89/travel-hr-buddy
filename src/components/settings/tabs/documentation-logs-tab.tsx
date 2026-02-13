@@ -142,11 +142,11 @@ export const DocumentationLogsTab: React.FC = () => {
 
   const getActionIcon = (type: string) => {
     switch (type) {
-    case "config_change": return <Settings className="w-4 h-4 text-blue-600" />;
-    case "user_management": return <User className="w-4 h-4 text-green-600" />;
-    case "system_action": return <Shield className="w-4 h-4 text-purple-600" />;
-    case "integration": return <Settings className="w-4 h-4 text-orange-600" />;
-    case "system_update": return <CheckCircle className="w-4 h-4 text-emerald-600" />;
+    case "config_change": return <Settings className="w-4 h-4 text-info" />;
+    case "user_management": return <User className="w-4 h-4 text-success" />;
+    case "system_action": return <Shield className="w-4 h-4 text-accent-foreground" />;
+    case "integration": return <Settings className="w-4 h-4 text-warning" />;
+    case "system_update": return <CheckCircle className="w-4 h-4 text-success" />;
     default: return <Eye className="w-4 h-4 text-muted-foreground" />;
     }
   };
@@ -154,11 +154,11 @@ export const DocumentationLogsTab: React.FC = () => {
   const getPriorityBadge = (priority: string) => {
     switch (priority) {
     case "high":
-      return <Badge className="bg-red-100 text-red-800">Alta Prioridade</Badge>;
+      return <Badge className="bg-destructive/20 text-destructive">Alta Prioridade</Badge>;
     case "medium":
-      return <Badge className="bg-yellow-100 text-yellow-800">Média Prioridade</Badge>;
+      return <Badge className="bg-warning/20 text-warning">Média Prioridade</Badge>;
     case "low":
-      return <Badge className="bg-blue-100 text-blue-800">Baixa Prioridade</Badge>;
+      return <Badge className="bg-info/20 text-info">Baixa Prioridade</Badge>;
     default:
       return <Badge variant="outline">Normal</Badge>;
     }
@@ -366,12 +366,12 @@ export const DocumentationLogsTab: React.FC = () => {
                 </div>
               ))}
 
-              <div className="p-4 bg-blue-50 border border-blue-200 rounded-lg">
+              <div className="p-4 bg-info/10 border border-info/20 rounded-lg">
                 <div className="flex items-center gap-2 mb-2">
-                  <Sparkles className="w-4 h-4 text-blue-600" />
-                  <span className="font-medium text-blue-800">IA em Ação</span>
+                  <Sparkles className="w-4 h-4 text-info" />
+                  <span className="font-medium text-foreground">IA em Ação</span>
                 </div>
-                <p className="text-sm text-blue-700">
+                <p className="text-sm text-muted-foreground">
                   Nossa IA analisa continuamente o uso do sistema para sugerir otimizações.
                   Novas recomendações são geradas automaticamente a cada 24 horas.
                 </p>

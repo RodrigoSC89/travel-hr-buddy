@@ -175,8 +175,8 @@ export const CommunicationAnalytics: React.FC<CommunicationAnalyticsProps> = ({ 
               <MessageSquare className="h-8 w-8 text-primary" />
             </div>
             <div className="flex items-center gap-1 mt-2 text-sm">
-              <TrendingUp className="h-4 w-4 text-green-500" />
-              <span className="text-green-500">+12%</span>
+              <TrendingUp className="h-4 w-4 text-success" />
+              <span className="text-success">+12%</span>
               <span className="text-muted-foreground">vs período anterior</span>
             </div>
           </CardContent>
@@ -189,11 +189,11 @@ export const CommunicationAnalytics: React.FC<CommunicationAnalyticsProps> = ({ 
                 <p className="text-sm text-muted-foreground">Conversas Ativas</p>
                 <p className="text-3xl font-bold">{metrics?.activeConversations || 0}</p>
               </div>
-              <Users className="h-8 w-8 text-blue-500" />
+              <Users className="h-8 w-8 text-info" />
             </div>
             <div className="flex items-center gap-1 mt-2 text-sm">
-              <TrendingUp className="h-4 w-4 text-green-500" />
-              <span className="text-green-500">+5%</span>
+              <TrendingUp className="h-4 w-4 text-success" />
+              <span className="text-success">+5%</span>
               <span className="text-muted-foreground">engajamento</span>
             </div>
           </CardContent>
@@ -206,11 +206,11 @@ export const CommunicationAnalytics: React.FC<CommunicationAnalyticsProps> = ({ 
                 <p className="text-sm text-muted-foreground">Tempo de Resposta</p>
                 <p className="text-3xl font-bold">{metrics?.averageResponseTime?.toFixed(1) || 0}min</p>
               </div>
-              <Clock className="h-8 w-8 text-yellow-500" />
+              <Clock className="h-8 w-8 text-warning" />
             </div>
             <div className="flex items-center gap-1 mt-2 text-sm">
-              <TrendingDown className="h-4 w-4 text-green-500" />
-              <span className="text-green-500">-8%</span>
+              <TrendingDown className="h-4 w-4 text-success" />
+              <span className="text-success">-8%</span>
               <span className="text-muted-foreground">mais rápido</span>
             </div>
           </CardContent>
@@ -223,10 +223,10 @@ export const CommunicationAnalytics: React.FC<CommunicationAnalyticsProps> = ({ 
                 <p className="text-sm text-muted-foreground">Canais Ativos</p>
                 <p className="text-3xl font-bold">{channelStats?.length || 0}</p>
               </div>
-              <BarChart3 className="h-8 w-8 text-purple-500" />
+              <BarChart3 className="h-8 w-8 text-accent-foreground" />
             </div>
             <div className="flex items-center gap-1 mt-2 text-sm">
-              <Activity className="h-4 w-4 text-blue-500" />
+              <Activity className="h-4 w-4 text-info" />
               <span className="text-muted-foreground">em uso ativo</span>
             </div>
           </CardContent>
@@ -363,9 +363,9 @@ export const CommunicationAnalytics: React.FC<CommunicationAnalyticsProps> = ({ 
         </CardHeader>
         <CardContent>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-            <div className="p-4 rounded-lg border bg-green-500/10 border-green-500/20">
+            <div className="p-4 rounded-lg border bg-success/10 border-success/20">
               <div className="flex items-center gap-2 mb-2">
-                <CheckCircle2 className="h-5 w-5 text-green-500" />
+                <CheckCircle2 className="h-5 w-5 text-success" />
                 <span className="font-medium">Comunicação Eficiente</span>
               </div>
               <p className="text-sm text-muted-foreground">
@@ -373,9 +373,9 @@ export const CommunicationAnalytics: React.FC<CommunicationAnalyticsProps> = ({ 
               </p>
             </div>
             
-            <div className="p-4 rounded-lg border bg-blue-500/10 border-blue-500/20">
+            <div className="p-4 rounded-lg border bg-info/10 border-info/20">
               <div className="flex items-center gap-2 mb-2">
-                <Users className="h-5 w-5 text-blue-500" />
+                <Users className="h-5 w-5 text-info" />
                 <span className="font-medium">Engajamento Alto</span>
               </div>
               <p className="text-sm text-muted-foreground">
@@ -383,9 +383,9 @@ export const CommunicationAnalytics: React.FC<CommunicationAnalyticsProps> = ({ 
               </p>
             </div>
             
-            <div className="p-4 rounded-lg border bg-yellow-500/10 border-yellow-500/20">
+            <div className="p-4 rounded-lg border bg-warning/10 border-warning/20">
               <div className="flex items-center gap-2 mb-2">
-                <Activity className="h-5 w-5 text-yellow-500" />
+                <Activity className="h-5 w-5 text-warning" />
                 <span className="font-medium">Canais em Uso</span>
               </div>
               <p className="text-sm text-muted-foreground">

@@ -153,9 +153,9 @@ export function DocumentSignatureCard() {
     switch (status) {
       case 'approved':
       case 'signed':
-        return <Badge className="bg-green-500">Aprovado</Badge>;
+        return <Badge className="bg-success">Aprovado</Badge>;
       case 'pending':
-        return <Badge className="bg-yellow-500">Pendente</Badge>;
+        return <Badge className="bg-warning">Pendente</Badge>;
       case 'rejected':
         return <Badge variant="destructive">Rejeitado</Badge>;
       case 'expired':
@@ -301,7 +301,7 @@ export function DocumentSignatureCard() {
         <Card>
           <CardHeader className="pb-3">
             <CardTitle className="text-base flex items-center gap-2">
-              <Pen className="h-4 w-4 text-blue-500" />
+              <Pen className="h-4 w-4 text-info" />
               Assinaturas Pendentes
             </CardTitle>
           </CardHeader>
@@ -326,9 +326,9 @@ export function DocumentSignatureCard() {
                             <p className="text-xs text-muted-foreground">{signer.role}</p>
                           </div>
                           {signer.signed ? (
-                            <CheckCircle className="h-4 w-4 text-green-500" />
+                            <CheckCircle className="h-4 w-4 text-success" />
                           ) : (
-                            <Clock className="h-4 w-4 text-yellow-500" />
+                            <Clock className="h-4 w-4 text-warning" />
                           )}
                         </div>
                       ))}
@@ -360,7 +360,7 @@ export function DocumentSignatureCard() {
       <Card>
         <CardHeader className="pb-3">
           <CardTitle className="text-base flex items-center gap-2">
-            <Users className="h-4 w-4 text-purple-500" />
+            <Users className="h-4 w-4 text-accent-foreground" />
             Workflows de Aprovação
           </CardTitle>
         </CardHeader>
@@ -384,9 +384,9 @@ export function DocumentSignatureCard() {
                       <div className={`flex flex-col items-center ${step.order > 1 ? 'ml-4' : ''}`}>
                         <div className={`w-10 h-10 rounded-full flex items-center justify-center border-2 
                           ${step.status === 'approved' 
-                            ? 'bg-green-500 border-green-500 text-white' 
+                            ? 'bg-success border-success text-success-foreground' 
                             : step.status === 'rejected'
-                            ? 'bg-red-500 border-red-500 text-white'
+                            ? 'bg-destructive border-destructive text-destructive-foreground'
                             : step.order === wf.current_step
                             ? 'border-primary bg-primary/10'
                             : 'border-muted-foreground/30'
@@ -414,7 +414,7 @@ export function DocumentSignatureCard() {
                       </div>
                       {step.order < wf.total_steps && (
                         <ArrowRight className={`h-4 w-4 mx-2 ${
-                          step.status === 'approved' ? 'text-green-500' : 'text-muted-foreground/30'
+                          step.status === 'approved' ? 'text-success' : 'text-muted-foreground/30'
                         }`} />
                       )}
                     </div>

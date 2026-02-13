@@ -160,20 +160,20 @@ export default function SmartLogistics() {
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case "ok": return "bg-green-500/20 text-green-400";
-      case "low": return "bg-yellow-500/20 text-yellow-400";
-      case "critical": return "bg-red-500/20 text-red-400";
-      case "ordered": return "bg-blue-500/20 text-blue-400";
+      case "ok": return "bg-success/20 text-success";
+      case "low": return "bg-warning/20 text-warning";
+      case "critical": return "bg-destructive/20 text-destructive";
+      case "ordered": return "bg-info/20 text-info";
       default: return "bg-muted text-muted-foreground";
     }
   };
 
   const getRecommendationIcon = (type: string) => {
     switch (type) {
-      case "reorder": return <ShoppingCart className="h-5 w-5 text-blue-400" />;
-      case "optimization": return <TrendingUp className="h-5 w-5 text-green-400" />;
-      case "alert": return <AlertTriangle className="h-5 w-5 text-red-400" />;
-      case "savings": return <Sparkles className="h-5 w-5 text-yellow-400" />;
+      case "reorder": return <ShoppingCart className="h-5 w-5 text-info" />;
+      case "optimization": return <TrendingUp className="h-5 w-5 text-success" />;
+      case "alert": return <AlertTriangle className="h-5 w-5 text-destructive" />;
+      case "savings": return <Sparkles className="h-5 w-5 text-warning" />;
       default: return <Brain className="h-5 w-5 text-primary" />;
     }
   };
@@ -279,16 +279,16 @@ export default function SmartLogistics() {
                     <div 
                       key={item.id} 
                       className={`p-4 rounded-lg border ${
-                        item.status === "critical" ? "border-red-500/50 bg-red-500/5" :
-                        item.status === "low" ? "border-yellow-500/50 bg-yellow-500/5" :
+                        item.status === "critical" ? "border-destructive/50 bg-destructive/5" :
+                        item.status === "low" ? "border-warning/50 bg-warning/5" :
                         "border-border bg-muted/30"
                       }`}
                     >
                       <div className="flex items-start justify-between mb-3">
                         <div className="flex items-center gap-3">
                           <div className={`p-2 rounded-lg ${
-                            item.status === "critical" ? "bg-red-500/10" :
-                            item.status === "low" ? "bg-yellow-500/10" :
+                            item.status === "critical" ? "bg-destructive/10" :
+                            item.status === "low" ? "bg-warning/10" :
                             "bg-primary/10"
                           }`}>
                             {getCategoryIcon(item.category)}
@@ -310,9 +310,9 @@ export default function SmartLogistics() {
                       <Progress 
                         value={stockPercentage(item)} 
                         className={`h-2 ${
-                          stockPercentage(item) < 20 ? '[&>div]:bg-red-500' :
-                          stockPercentage(item) < 40 ? '[&>div]:bg-yellow-500' :
-                          '[&>div]:bg-green-500'
+                          stockPercentage(item) < 20 ? '[&>div]:bg-destructive' :
+                          stockPercentage(item) < 40 ? '[&>div]:bg-warning' :
+                          '[&>div]:bg-success'
                         }`}
                       />
 
@@ -374,7 +374,7 @@ export default function SmartLogistics() {
                             <Badge variant="outline" className="text-xs">
                               {rec.confidence}% confiança
                             </Badge>
-                            <span className="text-xs text-green-400">{rec.impact}</span>
+                            <span className="text-xs text-success">{rec.impact}</span>
                           </div>
                           {rec.action && (
                             <Button 

@@ -363,18 +363,18 @@ export const SGSOEvidenceManager: React.FC = () => {
 
   const getComplianceIcon = (status?: string) => {
     switch (status) {
-      case 'compliant': return <CheckCircle className="h-4 w-4 text-green-600" />;
-      case 'non_compliant': return <XCircle className="h-4 w-4 text-red-600" />;
-      case 'partial': return <AlertCircle className="h-4 w-4 text-yellow-600" />;
+      case 'compliant': return <CheckCircle className="h-4 w-4 text-success" />;
+      case 'non_compliant': return <XCircle className="h-4 w-4 text-destructive" />;
+      case 'partial': return <AlertCircle className="h-4 w-4 text-warning" />;
       default: return <FileCheck className="h-4 w-4 text-muted-foreground" />;
     }
   };
 
   const getComplianceBadge = (status?: string) => {
     switch (status) {
-      case 'compliant': return <Badge className="bg-green-600">Conforme</Badge>;
-      case 'non_compliant': return <Badge className="bg-red-600">Não Conforme</Badge>;
-      case 'partial': return <Badge className="bg-yellow-600">Parcial</Badge>;
+      case 'compliant': return <Badge className="bg-success">Conforme</Badge>;
+      case 'non_compliant': return <Badge className="bg-destructive">Não Conforme</Badge>;
+      case 'partial': return <Badge className="bg-warning">Parcial</Badge>;
       default: return <Badge variant="outline">N/A</Badge>;
     }
   };
@@ -395,12 +395,12 @@ export const SGSOEvidenceManager: React.FC = () => {
   return (
     <div className="space-y-6">
       {/* Header */}
-      <Card className="bg-gradient-to-br from-blue-50 to-indigo-50 dark:from-blue-950/30 dark:to-indigo-950/30 border-blue-200 dark:border-blue-800">
+      <Card className="bg-gradient-to-br from-primary/5 to-accent/5 border-primary/20">
         <CardHeader>
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-4">
-              <div className="p-3 bg-blue-600 rounded-xl">
-                <FileText className="h-8 w-8 text-white" />
+              <div className="p-3 bg-primary rounded-xl">
+                <FileText className="h-8 w-8 text-primary-foreground" />
               </div>
               <div>
                 <CardTitle className="text-2xl">Módulo de Evidências SGSO</CardTitle>
@@ -411,7 +411,7 @@ export const SGSOEvidenceManager: React.FC = () => {
             </div>
             <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
               <DialogTrigger asChild>
-                <Button className="bg-blue-600 hover:bg-blue-700">
+                <Button>
                   <Upload className="h-4 w-4 mr-2" />
                   Nova Evidência
                 </Button>
@@ -419,7 +419,7 @@ export const SGSOEvidenceManager: React.FC = () => {
               <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
                 <DialogHeader>
                   <DialogTitle className="flex items-center gap-2">
-                    <FileCheck className="h-5 w-5 text-blue-600" />
+                    <FileCheck className="h-5 w-5 text-primary" />
                     Registrar Nova Evidência
                   </DialogTitle>
                 </DialogHeader>
@@ -504,7 +504,7 @@ export const SGSOEvidenceManager: React.FC = () => {
                   {/* File Upload */}
                   <div className="space-y-2">
                     <Label>Arquivo (PDF, Imagem)</Label>
-                    <div className="border-2 border-dashed rounded-lg p-6 text-center hover:border-blue-400 transition-colors">
+                    <div className="border-2 border-dashed rounded-lg p-6 text-center hover:border-primary transition-colors">
                       <input
                         type="file"
                         accept=".pdf,.jpg,.jpeg,.png,.webp,.doc,.docx"
@@ -515,7 +515,7 @@ export const SGSOEvidenceManager: React.FC = () => {
                       <label htmlFor="evidence-file" className="cursor-pointer">
                         {uploadedFile ? (
                           <div className="flex items-center justify-center gap-2">
-                            <FileText className="h-8 w-8 text-blue-600" />
+                            <FileText className="h-8 w-8 text-primary" />
                             <span className="font-medium">{uploadedFile.name}</span>
                           </div>
                         ) : (
@@ -535,8 +535,8 @@ export const SGSOEvidenceManager: React.FC = () => {
 
                   {/* OCR Result */}
                   {isProcessingOCR && (
-                    <div className="flex items-center gap-2 p-4 bg-blue-50 dark:bg-blue-950/30 rounded-lg">
-                      <Loader2 className="h-5 w-5 animate-spin text-blue-600" />
+                    <div className="flex items-center gap-2 p-4 bg-info/10 rounded-lg">
+                      <Loader2 className="h-5 w-5 animate-spin text-info" />
                       <span>Processando OCR...</span>
                     </div>
                   )}
@@ -545,7 +545,7 @@ export const SGSOEvidenceManager: React.FC = () => {
                     <div className="space-y-2">
                       <div className="flex items-center justify-between">
                         <Label className="flex items-center gap-2">
-                          <ScanLine className="h-4 w-4 text-blue-600" />
+                          <ScanLine className="h-4 w-4 text-primary" />
                           Texto Extraído (OCR)
                         </Label>
                         <Badge variant="outline">
@@ -564,7 +564,7 @@ export const SGSOEvidenceManager: React.FC = () => {
                   <Button 
                     onClick={uploadEvidence} 
                     disabled={isUploading}
-                    className="w-full bg-blue-600 hover:bg-blue-700"
+                    className="w-full"
                   >
                     {isUploading ? (
                       <>

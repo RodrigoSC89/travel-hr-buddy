@@ -197,8 +197,8 @@ export default function NOC() {
               <Activity className="h-6 w-6 text-primary animate-pulse" />
               NOC 24/7
             </h1>
-            <Badge variant="outline" className="border-green-500 text-green-400">
-              <span className="w-2 h-2 bg-green-500 rounded-full mr-2 animate-pulse" />
+            <Badge variant="outline" className="border-success text-success">
+              <span className="w-2 h-2 bg-success rounded-full mr-2 animate-pulse" />
               ONLINE
             </Badge>
           </div>
@@ -240,8 +240,8 @@ export default function NOC() {
 
         {/* Critical Alerts Banner */}
         {criticalAlerts.length > 0 && (
-          <div className="mb-4 p-4 bg-red-500/20 border border-red-500 rounded-lg animate-pulse">
-            <div className="flex items-center gap-2 text-red-400">
+          <div className="mb-4 p-4 bg-destructive/20 border border-destructive rounded-lg animate-pulse">
+            <div className="flex items-center gap-2 text-destructive">
               <AlertTriangle className="h-6 w-6" />
               <span className="font-bold text-lg">
                 {criticalAlerts.length} ALERTA{criticalAlerts.length > 1 ? "S" : ""} CRÍTICO{criticalAlerts.length > 1 ? "S" : ""}
@@ -268,9 +268,9 @@ export default function NOC() {
                       key={metric.id}
                       className={cn(
                         "p-4 rounded-lg border",
-                        metric.status === "good" && "bg-green-500/10 border-green-500/30",
-                        metric.status === "warning" && "bg-yellow-500/10 border-yellow-500/30",
-                        metric.status === "critical" && "bg-red-500/10 border-red-500/30"
+                        metric.status === "good" && "bg-success/10 border-success/30",
+                        metric.status === "warning" && "bg-warning/10 border-warning/30",
+                        metric.status === "critical" && "bg-destructive/10 border-destructive/30"
                       )}
                     >
                       <div className="text-sm text-muted-foreground">{metric.label}</div>
@@ -279,8 +279,8 @@ export default function NOC() {
                       </div>
                       <div className={cn(
                         "text-xs mt-1",
-                        metric.trend === "up" && "text-green-400",
-                        metric.trend === "down" && "text-red-400",
+                        metric.trend === "up" && "text-success",
+                        metric.trend === "down" && "text-destructive",
                         metric.trend === "stable" && "text-muted-foreground"
                       )}>
                         {metric.trend === "up" && "↑"}
@@ -309,7 +309,7 @@ export default function NOC() {
                       key={vessel.id}
                       className={cn(
                         "p-3 rounded-lg border border-zinc-800 bg-zinc-800/50",
-                        vessel.status === "alert" && "border-red-500 animate-pulse"
+                        vessel.status === "alert" && "border-destructive animate-pulse"
                       )}
                     >
                       <div className="flex items-center justify-between mb-2">
