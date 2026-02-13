@@ -82,19 +82,10 @@ const Auth: React.FC = () => {
     defaultValues: { email: "" }
   });
 
-  // Live system metrics - visible without authentication
-  const { data: systemStats } = useQuery({
-    queryKey: ['auth-system-stats'],
-    queryFn: async () => {
-      const { data, error } = await supabase.rpc('get_system_stats');
-      if (error || !data) {
-        return { vessels: 0, crew: 0, audits: 0, documents: 0, maintenance: 0, certificates: 0 };
-      }
-      return data as { vessels: number; crew: number; audits: number; documents: number; maintenance: number; certificates: number };
-    },
-    staleTime: 300000,
-    retry: 1,
-  });
+  // Live system metrics - disabled to prevent blocking login
+  // The RPC call was failing and retrying (4x with 20s+ timeouts each),
+  // consuming all browser connections and aborting the auth request
+  const systemStats = null;
 
   // Cleanup corrupted tokens on mount
   useEffect(() => {
@@ -425,37 +416,7 @@ const Auth: React.FC = () => {
           </div>
 
           {/* Live System Stats */}
-          {systemStats && (
-            <div className="space-y-4">
-              <div className="flex items-center gap-2">
-                <div className="h-2 w-2 rounded-full bg-success animate-pulse" />
-                <span className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">
-                  Sistema Ativo — Dados em Tempo Real
-                </span>
-              </div>
-              <div className="grid grid-cols-3 gap-3">
-                {[
-                  { label: 'Embarcações', value: systemStats.vessels, icon: Ship, color: 'text-primary' },
-                  { label: 'Tripulantes', value: systemStats.crew, icon: Users, color: 'text-emerald-500' },
-                  { label: 'Auditorias', value: systemStats.audits, icon: Shield, color: 'text-destructive' },
-                  { label: 'Documentos', value: systemStats.documents, icon: FileText, color: 'text-warning' },
-                  { label: 'Manutenções', value: systemStats.maintenance, icon: Wrench, color: 'text-hub-maintenance' },
-                  { label: 'Certificados', value: systemStats.certificates, icon: CheckCircle, color: 'text-info' },
-                ].map((stat) => (
-                  <div
-                    key={stat.label}
-                    className="bg-card/80 border border-border/40 rounded-xl p-3.5 flex items-center gap-3 shadow-premium-sm hover:shadow-premium transition-shadow duration-200"
-                  >
-                    <stat.icon className={`h-4.5 w-4.5 ${stat.color} shrink-0`} />
-                    <div className="min-w-0">
-                      <p className="text-xl font-bold leading-tight tracking-tight">{stat.value}</p>
-                      <p className="text-[10px] text-muted-foreground truncate font-medium">{stat.label}</p>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-          )}
+          {/* System stats disabled to fix login blocking */}
 
           {/* 7 Mega-Hubs */}
           <div className="space-y-3">
