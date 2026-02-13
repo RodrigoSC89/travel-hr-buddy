@@ -61,10 +61,9 @@ class ExportService {
     doc.save(`analytics-report-${Date.now()}.pdf`);
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- CSV accepts dynamic rows
   async exportToCSV(
     title: string,
-    data: any[],
+    data: Record<string, unknown>[],
     headers: string[]
   ): Promise<void> {
     let csvContent = `${title}\n`;

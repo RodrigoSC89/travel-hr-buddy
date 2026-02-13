@@ -35,7 +35,7 @@ export interface IntentOutput {
   target: string | null;
   confidence: number;
   action: string;
-  parameters: Record<string, any>;
+  parameters: Record<string, unknown>;
   inputType: "voice" | "gesture" | "text" | "multimodal";
   timestamp: string;
 }
@@ -167,7 +167,7 @@ export class MultimodalIntentEngine {
   }
 
   private extractIntentFromPrompt(prompt: string): {
-    intent: string; target: string | null; confidence: number; action: string; parameters: Record<string, any>;
+    intent: string; target: string | null; confidence: number; action: string; parameters: Record<string, unknown>;
   } {
     const lowerPrompt = prompt.toLowerCase();
     

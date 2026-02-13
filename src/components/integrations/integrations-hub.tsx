@@ -31,7 +31,7 @@ interface Integration {
   icon: React.ElementType;
   isEnabled: boolean;
   lastSync?: string;
-  config?: Record<string, any>;
+  config?: Record<string, unknown>;
 }
 
 export const IntegrationsHub: React.FC = () => {

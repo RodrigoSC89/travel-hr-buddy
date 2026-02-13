@@ -31,7 +31,7 @@ interface DataExportManagerProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
   title?: string;
-  data: Record<string, any>[];
+  data: Record<string, unknown>[];
   columns: ExportColumn[];
   filename?: string;
   onExport?: (format: string, columns: string[], options: ExportOptions) => Promise<void>;

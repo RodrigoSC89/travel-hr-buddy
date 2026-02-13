@@ -102,7 +102,7 @@ export function NaturalLanguageInterface() {
 
     try {
       const response = await analyze(
-        module as any,
+        module as Parameters<typeof analyze>[0],
         command,
         { command, module, timestamp: new Date().toISOString() }
       );
@@ -140,8 +140,8 @@ export function NaturalLanguageInterface() {
   const toggleVoice = () => {
     if (!isListening) {
       if ("webkitSpeechRecognition" in window || "SpeechRecognition" in window) {
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Web Speech API not in standard TS types
-        const w = window as unknown as { webkitSpeechRecognition?: new () => any; SpeechRecognition?: new () => any };
+        const w = window as unknown as { webkitSpeechRecognition?: new () => SpeechRecognition; SpeechRecognition?: new () => SpeechRecognition };
+        interface SpeechRecognition { lang: string; onresult: ((e: { results: { 0: { 0: { transcript: string } } } }) => void) | null; onerror: (() => void) | null; onend: (() => void) | null; start: () => void; }
         const SpeechRecognition = w.webkitSpeechRecognition || w.SpeechRecognition;
         if (!SpeechRecognition) return;
         const recognition = new SpeechRecognition();

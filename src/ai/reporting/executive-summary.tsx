@@ -59,7 +59,7 @@ export interface ExecutiveSummaryData {
   };
   insights: string[];
   recommendations: string[];
-  keyMetrics: Record<string, any>;
+  keyMetrics: Record<string, unknown>;
   generatedAt: Date;
 }
 
@@ -573,8 +573,7 @@ export const ExecutiveSummaryGenerator: React.FC<ExecutiveSummaryGeneratorProps>
   );
 };
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-type AnyRecord = Record<string, any>;
+type AnyRecord = Record<string, unknown>;
 
 async function fetchStrategies(
   _missionId?: string,
@@ -722,7 +721,7 @@ async function generateNaturalLanguageInsights(
   const vetoed = g.filter((e) => e.decision === "vetoed").length;
   if (vetoed > 0) insights.push(`Governance vetoed ${vetoed} strategies.`);
   if (c.length > 0) {
-    const avg = c.reduce((s, x) => s + (x.consensusScore || 0), 0) / c.length;
+    const avg = c.reduce((s, x) => s + (Number(x.consensusScore) || 0), 0) / c.length;
     if (avg > 80) insights.push(`High consensus score (${avg.toFixed(1)}).`);
   }
   const completed = sim.filter((s) => s.status === "completed").length;
@@ -741,7 +740,7 @@ function generateRecommendations(
   if (highRisk > 0) r.push(`Review ${highRisk} high-risk strategies.`);
   const pending = g.filter((e) => e.approvalRequired).length;
   if (pending > 0) r.push(`${pending} strategies pending approval.`);
-  const lowConf = sim.filter((s) => (s.confidenceLevel || 0) < 50).length;
+  const lowConf = sim.filter((s) => (Number(s.confidenceLevel) || 0) < 50).length;
   if (lowConf > 0) r.push(`${lowConf} simulations show low confidence.`);
   if (strategies.length > 0) r.push("Continue monitoring and gather feedback.");
   return r;
@@ -756,16 +755,16 @@ function calculateKeyMetrics(
   return {
     total_strategies: strategies.length,
     avg_confidence_score: strategies.length > 0 ? strategies.reduce((s, x) => s + x.confidenceScore, 0) / strategies.length : 0,
-    avg_consensus_score: c.length > 0 ? c.reduce((s, x) => s + (x.consensusScore || 0), 0) / c.length : 0,
+    avg_consensus_score: c.length > 0 ? c.reduce((s, x) => s + (Number(x.consensusScore) || 0), 0) / c.length : 0,
     total_simulations: simulations.length,
     completed_simulations: done.length,
-    avg_simulation_confidence: done.length > 0 ? done.reduce((s, x) => s + (x.confidenceLevel || 0), 0) / done.length : 0,
+    avg_simulation_confidence: done.length > 0 ? done.reduce((s, x) => s + (Number(x.confidenceLevel) || 0), 0) / done.length : 0,
   };
 }
 
 async function saveSummaryToDatabase(summaryData: ExecutiveSummaryData): Promise<void> {
   try {
-    await supabase.from("ai_insights").insert({
+    await supabase.from("ai_insights").insert([{
       title: `Executive Summary - ${summaryData.id}`,
       description: `${summaryData.summary.totalStrategies} strategies, ${summaryData.summary.approvedStrategies} approved`,
       category: "executive_summary",
@@ -779,9 +778,9 @@ async function saveSummaryToDatabase(summaryData: ExecutiveSummaryData): Promise
         mission_id: summaryData.missionId,
         insights: summaryData.insights,
         recommendations: summaryData.recommendations,
-        key_metrics: summaryData.keyMetrics,
-      },
-    });
+        key_metrics: summaryData.keyMetrics as Record<string, string | number | boolean | null>,
+      } as unknown as import("@/integrations/supabase/types").Json,
+    }]);
     logger.info("[ExecutiveSummary] Summary saved", { summaryId: summaryData.id });
   } catch (error) {
     logger.error("[ExecutiveSummary] Failed to save summary", error);

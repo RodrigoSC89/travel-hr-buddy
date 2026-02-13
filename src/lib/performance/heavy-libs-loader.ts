@@ -18,7 +18,7 @@
  */
 
 // Cache for loaded libraries
-const loadedLibs: Record<string, any> = {};
+const loadedLibs: Record<string, unknown> = {};
 
 /**
  * Generic loader with caching

@@ -10,8 +10,8 @@ interface UseOfflineSyncReturn {
   isSyncing: boolean;
   pendingCount: number;
   lastSyncStatus: 'synced' | 'syncing' | 'error' | null;
-  queueAction: (type: 'create' | 'update' | 'delete', table: string, data: Record<string, any>) => Promise<string>;
-  cacheData: (table: string, data: Record<string, any>[], ttlMinutes?: number) => Promise<void>;
+  queueAction: (type: 'create' | 'update' | 'delete', table: string, data: Record<string, unknown>) => Promise<string>;
+  cacheData: (table: string, data: Record<string, unknown>[], ttlMinutes?: number) => Promise<void>;
   getCachedData: <T>(table: string) => Promise<T[] | null>;
   forceSync: () => Promise<void>;
 }
@@ -52,7 +52,7 @@ export function useOfflineSync(): UseOfflineSyncReturn {
   const queueAction = useCallback(async (
     type: 'create' | 'update' | 'delete',
     table: string,
-    data: Record<string, any>
+    data: Record<string, unknown>
   ): Promise<string> => {
     const id = await offlineManager.queueAction(type, table, data);
     const count = await offlineManager.getPendingCount();
@@ -62,7 +62,7 @@ export function useOfflineSync(): UseOfflineSyncReturn {
 
   const cacheData = useCallback(async (
     table: string,
-    data: Record<string, any>[],
+    data: Record<string, unknown>[],
     ttlMinutes?: number
   ): Promise<void> => {
     await offlineManager.cacheData(table, data, ttlMinutes);
