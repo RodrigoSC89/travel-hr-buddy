@@ -1,4 +1,4 @@
-// @ts-nocheck
+// @ts-nocheck — Test mocks: Edge function mock types with dynamic response structures
 import { describe, it, expect, beforeEach } from "vitest";
 
 describe("MMI Save Forecast API - Request Validation", () => {

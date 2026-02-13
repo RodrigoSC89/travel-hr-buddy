@@ -1,4 +1,3 @@
-// @ts-nocheck
 import { describe, it, expect } from "vitest";
 
 describe("Templates API [id] Endpoint", () => {
@@ -95,8 +94,9 @@ describe("Templates API [id] Endpoint", () => {
 
   it("should default is_favorite to false when not provided", () => {
     const defaultValue = false;
-    const isFavorite = undefined ?? defaultValue;
-    expect(isFavorite).toBe(false);
+    const isFavorite: boolean | undefined = undefined;
+    const result = isFavorite ?? defaultValue;
+    expect(result).toBe(false);
   });
 
   it("should return 401 for unauthorized requests", () => {

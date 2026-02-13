@@ -1,4 +1,4 @@
-// @ts-nocheck
+// @ts-nocheck — Test mocks: AI forecast mock types with dynamic response structures
 /**
  * Forecast Global Intelligence - Component Tests
  * Validates ForecastGlobal page and its components

@@ -1,4 +1,4 @@
-// @ts-nocheck
+// @ts-nocheck — Test mocks: Supabase RPC mock types incompatible with strict PostgrestSingleResponse generics
 import { describe, it, expect, vi, beforeEach } from "vitest";
 import { querySimilarJobs } from "@/lib/ai/copilot/querySimilarJobs";
 import { supabase } from "@/integrations/supabase/client";

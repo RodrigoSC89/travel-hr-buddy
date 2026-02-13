@@ -1,4 +1,4 @@
-// @ts-nocheck
+// @ts-nocheck — Test mocks: OpenAI response mock types incompatible with strict SDK types
 import { describe, it, expect, vi, beforeEach } from "vitest";
 import { explainRequirementSGSO } from "@/lib/ai/sgso/explainRequirement";
 

@@ -1,4 +1,4 @@
-// @ts-nocheck
+// @ts-nocheck — Test mocks: OpenAI SDK mock types incompatible with strict type definitions
 import { describe, it, expect, beforeEach, vi } from "vitest";
 import { createEmbedding } from "@/lib/ai/openai/createEmbedding";
 

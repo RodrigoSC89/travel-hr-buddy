@@ -1,4 +1,4 @@
-// @ts-nocheck
+// @ts-nocheck — Test mocks: PEO-DP integration mock types with dynamic structures
 /**
  * PEO-DP Core Phase 2 Integration Tests
  */

@@ -499,6 +499,8 @@ const RealTimeWorkspaceProfessional: React.FC = () => {
                     size="icon" 
                     className="h-8 w-8"
                     onClick={() => setShowSettingsDialog(true)}
+                    aria-label="Configurações do workspace"
+                    title="Configurações"
                   >
                     <Settings className="h-4 w-4" />
                   </Button>
@@ -507,6 +509,8 @@ const RealTimeWorkspaceProfessional: React.FC = () => {
                     size="icon" 
                     className="h-8 w-8"
                     onClick={toggleFullscreen}
+                    aria-label={isFullscreen ? "Sair da tela cheia" : "Tela cheia"}
+                    title={isFullscreen ? "Sair da tela cheia" : "Tela cheia"}
                   >
                     {isFullscreen ? (
                       <Minimize2 className="h-4 w-4" />

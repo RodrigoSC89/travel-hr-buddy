@@ -1,5 +1,4 @@
-// @ts-nocheck
-import { describe, it, expect, vi } from "vitest";
+// @ts-nocheck — Test mocks: html2pdf.js dynamic import incompatible with React.lazy
 import { render, screen, fireEvent } from "@testing-library/react";
 import { ExportBIReport } from "@/components/bi/ExportPDF";
 

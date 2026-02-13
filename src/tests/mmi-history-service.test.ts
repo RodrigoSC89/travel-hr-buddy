@@ -1,4 +1,4 @@
-// @ts-nocheck
+// @ts-nocheck — Test mocks: Supabase client mock types incompatible with strict generics
 import { describe, it, expect, beforeEach, vi } from "vitest";
 import {
   fetchMMIHistory,

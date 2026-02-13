@@ -1,4 +1,4 @@
-// @ts-nocheck
+// @ts-nocheck — Test mocks: PEO-DP workflow mock types with dynamic structures
 /**
  * PEO-DP Workflow Integration Tests
  */

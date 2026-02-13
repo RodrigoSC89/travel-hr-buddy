@@ -410,7 +410,7 @@ const TravelCommandDashboard: React.FC = () => {
                           </p>
                           <p className="text-xs text-muted-foreground mt-1">{alert.time}</p>
                         </div>
-                        <Button variant="ghost" size="icon" className="h-8 w-8" onClick={() => { navigator.clipboard.writeText(`Alerta: ${alert.flight} | ${alert.message} | ${alert.crewMember} | ${alert.time}`); toast.success("Dados do alerta copiados"); }}>
+                        <Button variant="ghost" size="icon" className="h-8 w-8" onClick={() => { navigator.clipboard.writeText(`Alerta: ${alert.flight} | ${alert.message} | ${alert.crewMember} | ${alert.time}`); toast.success("Dados do alerta copiados"); }} aria-label="Copiar dados do alerta" title="Copiar dados do alerta">
                           <Eye className="h-4 w-4" />
                         </Button>
                       </div>
@@ -631,7 +631,7 @@ const TravelCommandDashboard: React.FC = () => {
                   onKeyPress={(e) => e.key === "Enter" && handleSendMessage()}
                   className="flex-1"
                 />
-                <Button size="icon" onClick={handleSendMessage} className="bg-primary hover:bg-primary/90">
+                <Button size="icon" onClick={handleSendMessage} className="bg-primary hover:bg-primary/90" aria-label="Enviar mensagem" title="Enviar mensagem">
                   <Send className="h-4 w-4" />
                 </Button>
               </div>

@@ -1,4 +1,4 @@
-// @ts-nocheck
+// @ts-nocheck — Test mocks: dynamic imports with incompatible module paths
 /**
  * Control Hub Tests
  */

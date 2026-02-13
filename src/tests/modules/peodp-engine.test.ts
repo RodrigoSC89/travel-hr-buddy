@@ -1,4 +1,4 @@
-// @ts-nocheck
+// @ts-nocheck — Test mocks: PEO-DP engine mock types with dynamic structures
 /**
  * PEO-DP Engine Tests
  */
