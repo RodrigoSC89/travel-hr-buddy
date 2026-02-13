@@ -156,7 +156,7 @@ export const useDebouncedFetch = <T>(
         clearTimeout(timeoutRef.current);
       }
     };
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+  // eslint-disable-next-line react-hooks/exhaustive-deps -- dependencies spread from caller, fetchFn excluded to avoid loops
   }, [...dependencies, network.isSlowConnection]);
 
   return { data, loading, error };

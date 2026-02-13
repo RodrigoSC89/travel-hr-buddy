@@ -153,7 +153,7 @@ export const useWorkflows = () => {
       await fetchAutomationRules();
     };
     loadData();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- mount-only load, fetch functions depend on user which is stable after auth
   }, []);
 
   // Create a new workflow
