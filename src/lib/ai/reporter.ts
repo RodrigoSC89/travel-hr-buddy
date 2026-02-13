@@ -13,7 +13,7 @@ export const reportInsight = async (category: string, payload: unknown): Promise
     };
 
     // Armazena localmente e envia depois
-    localStorage.setItem(`insight-${entry.timestamp}`, JSON.stringify(entry));
+    sessionStorage.setItem(`insight-${entry.timestamp}`, JSON.stringify(entry));
 
     // Envia em background sem bloquear a UI usando ai_logs table
     queueMicrotask(async () => {

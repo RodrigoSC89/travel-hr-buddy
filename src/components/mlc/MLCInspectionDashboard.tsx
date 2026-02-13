@@ -174,7 +174,7 @@ export const MLCInspectionDashboard: React.FC = () => {
             <CardContent><ScrollArea className="h-[300px] mb-4 p-4 border rounded">{aiMessages.length === 0 ? <p className="text-muted-foreground text-center">Pergunte sobre MLC 2006, requisitos, conformidade...</p> : 
               aiMessages.map((m, msgIdx) => <div key={`${m.role}-${msgIdx}-${m.content.slice(0,10)}`} className={`mb-3 p-2 rounded ${m.role === 'user' ? 'bg-primary/10 ml-8' : 'bg-muted mr-8'}`}><p className="text-sm whitespace-pre-wrap">{m.content}</p></div>)}</ScrollArea>
               <div className="flex gap-2"><Textarea value={aiInput} onChange={e => setAiInput(e.target.value)} placeholder="Ex: Quais são os requisitos de horas de descanso?" className="flex-1" onKeyDown={e => e.key === 'Enter' && !e.shiftKey && (e.preventDefault(), sendAiMessage())} />
-                <Button onClick={sendAiMessage} disabled={isLoading}><MessageSquare className="w-4 h-4" /></Button></div></CardContent></Card>
+                <Button onClick={sendAiMessage} disabled={isLoading} aria-label="Enviar pergunta à IA" title="Enviar"><MessageSquare className="w-4 h-4" /></Button></div></CardContent></Card>
         </TabsContent>
 
         <TabsContent value="settings">

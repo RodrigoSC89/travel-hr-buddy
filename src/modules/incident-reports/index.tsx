@@ -295,7 +295,7 @@ const IncidentReports = () => {
                           <Badge className={incident.severity === "critical" ? "bg-destructive/20 text-destructive" : "bg-warning/20 text-warning"}>
                             {incident.severity}
                           </Badge>
-                          <Button size="sm" variant="outline"><Eye className="h-3 w-3" /></Button>
+                          <Button size="sm" variant="outline" aria-label="Ver detalhes do incidente" title="Ver detalhes"><Eye className="h-3 w-3" /></Button>
                         </div>
                       </div>
                     </Card>

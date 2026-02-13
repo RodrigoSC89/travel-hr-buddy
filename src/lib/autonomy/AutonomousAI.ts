@@ -458,10 +458,10 @@ class AutonomousAI {
   private async optimizeCache(): Promise<boolean> {
     try {
       // Clear non-essential caches
-      const cacheKeys = Object.keys(localStorage).filter(k => 
+      const cacheKeys = Object.keys(sessionStorage).filter(k => 
         k.startsWith("cache_") && !k.includes("critical")
       );
-      cacheKeys.forEach(k => localStorage.removeItem(k));
+      cacheKeys.forEach(k => sessionStorage.removeItem(k));
       return true;
     } catch {
       return false;
@@ -470,7 +470,7 @@ class AutonomousAI {
 
   private async reallocateResources(): Promise<boolean> {
     // Enable offline-first mode
-    localStorage.setItem("nautilus_offline_first", "true");
+    sessionStorage.setItem("nautilus_offline_first", "true");
     return true;
   }
 
@@ -613,7 +613,7 @@ class AutonomousAI {
   // Persistence
   private loadState() {
     try {
-      const stored = localStorage.getItem(this.STORAGE_KEY);
+      const stored = sessionStorage.getItem(this.STORAGE_KEY);
       if (stored) {
         const data = JSON.parse(stored);
         this.decisions = new Map(data.decisions || []);
@@ -626,7 +626,7 @@ class AutonomousAI {
 
   private saveState() {
     try {
-      localStorage.setItem(this.STORAGE_KEY, JSON.stringify({
+      sessionStorage.setItem(this.STORAGE_KEY, JSON.stringify({
         decisions: Array.from(this.decisions.entries()),
         learningMetrics: this.learningMetrics
       }));

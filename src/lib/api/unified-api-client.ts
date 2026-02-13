@@ -59,7 +59,7 @@ class UnifiedAPIClient {
 
   private async loadPendingRequests() {
     try {
-      const stored = localStorage.getItem('api_pending_requests');
+      const stored = sessionStorage.getItem('api_pending_requests');
       if (stored) {
         this.pendingRequests = JSON.parse(stored);
       }
@@ -70,7 +70,7 @@ class UnifiedAPIClient {
 
   private savePendingRequests() {
     try {
-      localStorage.setItem('api_pending_requests', JSON.stringify(this.pendingRequests));
+      sessionStorage.setItem('api_pending_requests', JSON.stringify(this.pendingRequests));
     } catch (error) {
       logger.error('Failed to save pending requests:', error);
     }

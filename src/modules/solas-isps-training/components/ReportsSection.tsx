@@ -39,7 +39,7 @@ export default function ReportsSection() {
             {["Safety Drill Log - Janeiro 2024", "Compliance Report Q4 2023", "ISPS Audit Report - Dez 2023"].map((report) => (
               <div key={report} className="flex items-center justify-between p-3 border rounded-lg">
                 <div className="flex items-center gap-3"><FileText className="h-5 w-5 text-muted-foreground" /><span>{report}</span></div>
-                <Button variant="outline" size="sm"><Download className="h-4 w-4" /></Button>
+                <Button variant="outline" size="sm" aria-label={`Baixar relatório ${report}`} title="Baixar"><Download className="h-4 w-4" /></Button>
               </div>
             ))}
           </div>
