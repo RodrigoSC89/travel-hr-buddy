@@ -210,10 +210,10 @@ export function CommandBrainPanel({ context, onSettingsClick }: CommandBrainPane
                     >
                       {message.role === "assistant" && (
                         <div className="flex items-center gap-2 mb-2">
-                          <Brain className="h-3 w-3 text-purple-500" />
-                          <span className="text-xs font-medium text-purple-600">Nautilus Brain</span>
+                          <Brain className="h-3 w-3 text-primary" />
+                          <span className="text-xs font-medium text-primary">Nautilus Brain</span>
                           {message.status === "pending" && (
-                            <Loader2 className="h-3 w-3 animate-spin text-purple-500" />
+                            <Loader2 className="h-3 w-3 animate-spin text-primary" />
                           )}
                         </div>
                       )}

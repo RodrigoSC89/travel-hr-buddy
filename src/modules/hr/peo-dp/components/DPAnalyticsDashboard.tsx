@@ -263,7 +263,7 @@ export default function DPAnalyticsDashboard() {
                 <p className="text-sm text-muted-foreground">Previsões IA</p>
                 <p className="text-2xl font-bold">{predictedIssues.length}</p>
               </div>
-              <Brain className="h-8 w-8 text-purple-500 opacity-50" />
+              <Brain className="h-8 w-8 text-primary opacity-50" />
             </div>
           </CardContent>
         </Card>
@@ -286,16 +286,16 @@ export default function DPAnalyticsDashboard() {
               <div
                 key={`insight-${insight.title}-${i}`}
                 className={`p-4 rounded-lg border ${
-                  insight.type === "alert" ? "bg-red-500/10 border-red-500/30" :
-                  insight.type === "prediction" ? "bg-purple-500/10 border-purple-500/30" :
-                  "bg-blue-500/10 border-blue-500/30"
+                  insight.type === "alert" ? "bg-destructive/10 border-destructive/30" :
+                  insight.type === "prediction" ? "bg-primary/10 border-primary/30" :
+                  "bg-info/10 border-info/30"
                 }`}
               >
                 <div className="flex items-start justify-between mb-2">
                   <div className="flex items-center gap-2">
-                    {insight.type === "alert" && <AlertTriangle className="h-4 w-4 text-red-500" />}
-                    {insight.type === "prediction" && <TrendingUp className="h-4 w-4 text-purple-500" />}
-                    {insight.type === "recommendation" && <Zap className="h-4 w-4 text-blue-500" />}
+                    {insight.type === "alert" && <AlertTriangle className="h-4 w-4 text-destructive" />}
+                    {insight.type === "prediction" && <TrendingUp className="h-4 w-4 text-primary" />}
+                    {insight.type === "recommendation" && <Zap className="h-4 w-4 text-info" />}
                     <span className="font-medium text-sm">{insight.title}</span>
                   </div>
                   <Badge variant="outline" className="text-xs">

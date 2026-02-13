@@ -104,10 +104,10 @@ export function AICommandDashboard() {
             <p className="text-2xl font-bold mt-1">{metrics.activeAgents}/{metrics.totalAgents}</p>
           </CardContent>
         </Card>
-        <Card className="bg-gradient-to-br from-emerald-500/10 to-green-500/10 border-emerald-500/30">
+        <Card className="bg-gradient-to-br from-success/10 to-success/5 border-success/30">
           <CardContent className="p-4">
             <div className="flex items-center gap-2">
-              <CheckCircle2 className="h-5 w-5 text-emerald-400" />
+              <CheckCircle2 className="h-5 w-5 text-success" />
               <span className="text-sm text-muted-foreground">Taxa Aprovação</span>
             </div>
             <p className="text-2xl font-bold mt-1">
@@ -115,37 +115,37 @@ export function AICommandDashboard() {
             </p>
           </CardContent>
         </Card>
-        <Card className="bg-gradient-to-br from-blue-500/10 to-cyan-500/10 border-blue-500/30">
+        <Card className="bg-gradient-to-br from-info/10 to-info/5 border-info/30">
           <CardContent className="p-4">
             <div className="flex items-center gap-2">
-              <Target className="h-5 w-5 text-blue-400" />
+              <Target className="h-5 w-5 text-info" />
               <span className="text-sm text-muted-foreground">Confiança Média</span>
             </div>
             <p className="text-2xl font-bold mt-1">{metrics.avgConfidence}%</p>
           </CardContent>
         </Card>
-        <Card className="bg-gradient-to-br from-amber-500/10 to-orange-500/10 border-amber-500/30">
+        <Card className="bg-gradient-to-br from-warning/10 to-warning/5 border-warning/30">
           <CardContent className="p-4">
             <div className="flex items-center gap-2">
-              <Zap className="h-5 w-5 text-amber-400" />
+              <Zap className="h-5 w-5 text-warning" />
               <span className="text-sm text-muted-foreground">Interações</span>
             </div>
             <p className="text-2xl font-bold mt-1">{metrics.totalInteractions}</p>
           </CardContent>
         </Card>
-        <Card className="bg-gradient-to-br from-pink-500/10 to-rose-500/10 border-pink-500/30">
+        <Card className="bg-gradient-to-br from-accent/10 to-accent/5 border-accent/30">
           <CardContent className="p-4">
             <div className="flex items-center gap-2">
-              <Activity className="h-5 w-5 text-pink-400" />
+              <Activity className="h-5 w-5 text-accent-foreground" />
               <span className="text-sm text-muted-foreground">Tempo Resposta</span>
             </div>
             <p className="text-2xl font-bold mt-1">{metrics.avgResponseTime}ms</p>
           </CardContent>
         </Card>
-        <Card className="bg-gradient-to-br from-cyan-500/10 to-teal-500/10 border-cyan-500/30">
+        <Card className="bg-gradient-to-br from-muted/50 to-muted/30 border-border">
           <CardContent className="p-4">
             <div className="flex items-center gap-2">
-              <Clock className="h-5 w-5 text-cyan-400" />
+              <Clock className="h-5 w-5 text-muted-foreground" />
               <span className="text-sm text-muted-foreground">Pendentes</span>
             </div>
             <p className="text-2xl font-bold mt-1">{metrics.pendingDecisions}</p>
@@ -264,7 +264,7 @@ export function AICommandDashboard() {
                         <p className="text-xs text-muted-foreground">{(Array.isArray(selectedAgent.capabilities) ? selectedAgent.capabilities : []).length}</p>
                       </div>
                       <div className="text-center p-4 rounded-lg bg-muted/50">
-                        <Clock className="h-8 w-8 mx-auto text-blue-500 mb-2" />
+                        <Clock className="h-8 w-8 mx-auto text-info mb-2" />
                         <p className="text-sm font-medium">Heartbeat</p>
                         <p className="text-xs text-muted-foreground">
                           {selectedAgent.last_heartbeat
@@ -273,7 +273,7 @@ export function AICommandDashboard() {
                         </p>
                       </div>
                       <div className="text-center p-4 rounded-lg bg-muted/50">
-                        <Brain className="h-8 w-8 mx-auto text-purple-500 mb-2" />
+                        <Brain className="h-8 w-8 mx-auto text-primary mb-2" />
                         <p className="text-sm font-medium">Criado em</p>
                         <p className="text-xs text-muted-foreground">
                           {new Date(selectedAgent.created_at).toLocaleDateString("pt-BR")}

@@ -170,17 +170,17 @@ export const OperationalKPIs: React.FC<OperationalKPIsProps> = ({ status }) => {
 
   const getTrendIcon = (trend: string) => {
     switch (trend) {
-      case 'up': return <TrendingUp className="h-4 w-4 text-green-500" />;
-      case 'down': return <TrendingDown className="h-4 w-4 text-red-500" />;
+      case 'up': return <TrendingUp className="h-4 w-4 text-success" />;
+      case 'down': return <TrendingDown className="h-4 w-4 text-destructive" />;
       default: return <Gauge className="h-4 w-4 text-muted-foreground" />;
     }
   };
 
   const getValueColor = (value: number, target: number | null) => {
     if (target === null) return 'text-foreground';
-    if (value >= target) return 'text-green-600';
-    if (value >= target * 0.8) return 'text-yellow-600';
-    return 'text-red-600';
+    if (value >= target) return 'text-success';
+    if (value >= target * 0.8) return 'text-warning';
+    return 'text-destructive';
   };
 
   return (
