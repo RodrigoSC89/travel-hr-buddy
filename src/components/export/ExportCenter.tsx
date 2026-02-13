@@ -314,9 +314,9 @@ export function ExportCenter() {
                     </SelectContent>
                   </Select>
                 </div>
-                <Button variant="outline" onClick={() => { setSearchQuery?.(''); toast.success("Filtros aplicados"); }}>
+                <Button variant="outline" onClick={() => { setSearchQuery?.(''); }}>
                   <Filter className="h-4 w-4 mr-2" />
-                  Aplicar
+                  Limpar
                 </Button>
               </div>
             </CardContent>

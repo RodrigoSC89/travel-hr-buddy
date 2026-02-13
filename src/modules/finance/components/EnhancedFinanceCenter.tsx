@@ -635,7 +635,7 @@ export const EnhancedFinanceCenter: React.FC = () => {
               />
             </div>
             <div className="flex gap-2">
-              <Button variant="outline" onClick={() => { setSearchQuery(''); toast.success("Filtros limpos"); }}>
+              <Button variant="outline" onClick={() => { setSearchQuery(''); }}>
                 <Filter className="h-4 w-4 mr-2" />
                 Limpar Filtros
               </Button>

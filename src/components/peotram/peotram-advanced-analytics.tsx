@@ -196,7 +196,7 @@ export const PeotramAdvancedAnalytics: React.FC = () => {
               </div>
             </div>
             <div className="flex gap-2">
-              <Button variant="outline" onClick={() => { toast.success("Dados atualizados"); }}>
+              <Button variant="outline" onClick={() => { window.history.pushState({}, '', '/peotram'); window.dispatchEvent(new PopStateEvent('popstate')); }}>
                 <RefreshCw className="h-4 w-4 mr-2" />
                 Atualizar
               </Button>
