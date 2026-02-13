@@ -17,8 +17,7 @@ export interface AIContextRequest {
   module: string;
   userId?: string;
   action?: string;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- module context accessed dynamically
-  context?: Record<string, any>;
+  context?: Record<string, unknown>;
 }
 
 export interface AIContextResponse {
@@ -525,10 +524,10 @@ const MODULE_AI_PATTERNS: Record<string, (context: AIContextRequest) => Promise<
   
   // PATCH 94.0 - Logs Center AI Pattern
   "log-audit": async (ctx) => {
-    const totalLogs = ctx.context?.totalLogs || 0;
-    const errorCount = ctx.context?.errorCount || 0;
-    const warnCount = ctx.context?.warnCount || 0;
-    const recentErrors = ctx.context?.recentErrors || [];
+    const totalLogs = Number(ctx.context?.totalLogs || 0);
+    const errorCount = Number(ctx.context?.errorCount || 0);
+    const warnCount = Number(ctx.context?.warnCount || 0);
+    const recentErrors = (ctx.context?.recentErrors || []) as Record<string, unknown>[];
     
     // Analyze error patterns
     const errorRate = totalLogs > 0 ? (errorCount / totalLogs) * 100 : 0;
@@ -585,9 +584,9 @@ const MODULE_AI_PATTERNS: Record<string, (context: AIContextRequest) => Promise<
 
   // PATCH 111.0 - Inventory Hub AI Pattern
   "supply-analyzer": async (ctx) => {
-    const criticalCount = ctx.context?.criticalCount || 0;
-    const lowCount = ctx.context?.lowCount || 0;
-    const totalItems = ctx.context?.totalItems || 0;
+    const criticalCount = Number(ctx.context?.criticalCount || 0);
+    const lowCount = Number(ctx.context?.lowCount || 0);
+    const totalItems = Number(ctx.context?.totalItems || 0);
     
     let message = "";
     let type: "suggestion" | "recommendation" | "risk" | "diagnosis" | "action" = "diagnosis";
@@ -621,9 +620,9 @@ const MODULE_AI_PATTERNS: Record<string, (context: AIContextRequest) => Promise<
 
   // PATCH 112.0 - Crew Training AI Pattern
   "training-validator": async (ctx) => {
-    const expiredCount = ctx.context?.expiredCount || 0;
-    const expiringCount = ctx.context?.expiringCount || 0;
-    const totalCrew = ctx.context?.totalCrew || 0;
+    const expiredCount = Number(ctx.context?.expiredCount || 0);
+    const expiringCount = Number(ctx.context?.expiringCount || 0);
+    const totalCrew = Number(ctx.context?.totalCrew || 0);
     
     let message = "";
     let type: "suggestion" | "recommendation" | "risk" | "diagnosis" | "action" = "diagnosis";
@@ -657,10 +656,10 @@ const MODULE_AI_PATTERNS: Record<string, (context: AIContextRequest) => Promise<
 
   // PATCH 113.0 - Compliance Checklist AI Pattern
   "compliance-auditor": async (ctx) => {
-    const nonCompliantCount = ctx.context?.nonCompliantCount || 0;
-    const riskCount = ctx.context?.riskCount || 0;
-    const compliantCount = ctx.context?.compliantCount || 0;
-    const totalChecklists = ctx.context?.totalChecklists || 0;
+    const nonCompliantCount = Number(ctx.context?.nonCompliantCount || 0);
+    const riskCount = Number(ctx.context?.riskCount || 0);
+    const compliantCount = Number(ctx.context?.compliantCount || 0);
+    const totalChecklists = Number(ctx.context?.totalChecklists || 0);
     
     let message = "";
     let type: "suggestion" | "recommendation" | "risk" | "diagnosis" | "action" = "diagnosis";
@@ -697,10 +696,10 @@ const MODULE_AI_PATTERNS: Record<string, (context: AIContextRequest) => Promise<
 
   // PATCH 114.0 - Smart Alerts AI Pattern
   "anomaly-detector": async (ctx) => {
-    const criticalAlerts = ctx.context?.criticalAlerts || 0;
-    const warningAlerts = ctx.context?.warningAlerts || 0;
-    const predictedIssues = ctx.context?.predictedIssues || 0;
-    const totalAlerts = ctx.context?.totalAlerts || 0;
+    const criticalAlerts = Number(ctx.context?.criticalAlerts || 0);
+    const warningAlerts = Number(ctx.context?.warningAlerts || 0);
+    const predictedIssues = Number(ctx.context?.predictedIssues || 0);
+    const totalAlerts = Number(ctx.context?.totalAlerts || 0);
     
     let message = "";
     let type: "suggestion" | "recommendation" | "risk" | "diagnosis" | "action" = "diagnosis";
@@ -737,10 +736,10 @@ const MODULE_AI_PATTERNS: Record<string, (context: AIContextRequest) => Promise<
 
   // PATCH 115.0 - Workflow Automation AI Pattern
   "automation-suggester": async (ctx) => {
-    const activeRules = ctx.context?.activeRules || 0;
-    const executionsToday = ctx.context?.executionsToday || 0;
-    const timeSaved = ctx.context?.timeSaved || 0;
-    const suggestedAutomations = ctx.context?.suggestedAutomations || 0;
+    const activeRules = Number(ctx.context?.activeRules || 0);
+    const executionsToday = Number(ctx.context?.executionsToday || 0);
+    const timeSaved = Number(ctx.context?.timeSaved || 0);
+    const suggestedAutomations = Number(ctx.context?.suggestedAutomations || 0);
     
     let message = "";
     let type: "suggestion" | "recommendation" | "risk" | "diagnosis" | "action" = "diagnosis";

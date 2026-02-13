@@ -179,17 +179,17 @@ export class AuditBotAgent extends BaseAgent {
     const findings: AuditFinding[] = [];
 
     for (const obs of observations) {
-      const area = obs.data.auditArea || "general";
+      const area = String(obs.data.auditArea || "general");
 
       if (obs.type === "anomaly" && area === "access_control") {
-        const failureRate = obs.data.failureRate || 0;
+        const failureRate = Number(obs.data.failureRate || 0);
         if (failureRate > 0.1) {
           findings.push({
             id: crypto.randomUUID(),
             type: "warning",
             area: "Controle de Acesso",
-            description: `Taxa de falha de ${(failureRate * 100).toFixed(1)}% detectada`,
-            severity: failureRate > 0.2 ? 8 : 5,
+            description: `Taxa de falha de ${(Number(failureRate) * 100).toFixed(1)}% detectada`,
+            severity: Number(failureRate) > 0.2 ? 8 : 5,
             recommendation: "Revisar políticas de acesso e verificar tentativas suspeitas",
           });
         }
@@ -200,7 +200,7 @@ export class AuditBotAgent extends BaseAgent {
           id: crypto.randomUUID(),
           type: "violation",
           area: "Segurança",
-          description: `${obs.data.highSeverityCount} eventos de alta severidade detectados`,
+          description: `${Number(obs.data.highSeverityCount)} eventos de alta severidade detectados`,
           severity: 9,
           recommendation: "Investigar imediatamente e tomar ações corretivas",
         });
@@ -211,7 +211,7 @@ export class AuditBotAgent extends BaseAgent {
           id: crypto.randomUUID(),
           type: "observation",
           area: "Compliance",
-          description: `${obs.data.lowComplianceCount} auditorias com score abaixo de 80%`,
+          description: `${Number(obs.data.lowComplianceCount)} auditorias com score abaixo de 80%`,
           severity: 6,
           recommendation: "Planejar ações corretivas para melhorar compliance",
         });
@@ -255,12 +255,12 @@ export class AuditBotAgent extends BaseAgent {
         audit_type: "automated_audit",
         action: decision.action,
         compliance_score: decision.impact === "low" ? 95 : decision.impact === "medium" ? 80 : decision.impact === "high" ? 65 : 50,
-        checklist_data: decision.parameters?.findings || [],
+        checklist_data: (decision.parameters?.findings || []) as unknown as import("@/integrations/supabase/types").Json,
         metadata: {
           agentVersion: "1.0",
           analysisTimestamp: new Date().toISOString(),
         },
-      });
+      } as never);
 
       // Create insight for dashboard
       await supabase.from("analytics_insights").insert({
@@ -270,8 +270,8 @@ export class AuditBotAgent extends BaseAgent {
         priority: decision.impact,
         is_actionable: true,
         confidence: decision.confidenceScore,
-        data_reference: decision.parameters,
-      });
+        data_reference: decision.parameters as unknown as import("@/integrations/supabase/types").Json,
+      } as never);
 
       return {
         id: actionId,

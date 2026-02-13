@@ -165,11 +165,11 @@ export class ESGAdvisorAgent extends BaseAgent {
 
     // Process observations by category
     for (const obs of observations) {
-      const category = obs.data.category as keyof ESGMetrics;
+      const category = String(obs.data.category) as keyof ESGMetrics;
       if (!category || !metrics[category]) continue;
 
       if (obs.data.metric === "fleet_efficiency") {
-        const efficiency = obs.data.efficiencyRate || 1;
+        const efficiency = Number(obs.data.efficiencyRate || 1);
         metrics.environmental.score = Math.min(metrics.environmental.score, efficiency * 100);
         if (efficiency < 0.8) {
           metrics.environmental.issues.push("Eficiência da frota abaixo do ideal");
@@ -177,7 +177,7 @@ export class ESGAdvisorAgent extends BaseAgent {
       }
 
       if (obs.data.metric === "workforce_diversity") {
-        const diversity = obs.data.diversityIndex || 0;
+        const diversity = Number(obs.data.diversityIndex || 0);
         metrics.social.score = Math.min(metrics.social.score, Math.min(diversity * 50, 100));
         if (diversity < 0.5) {
           metrics.social.issues.push("Índice de diversidade pode ser melhorado");
@@ -185,7 +185,7 @@ export class ESGAdvisorAgent extends BaseAgent {
       }
 
       if (obs.data.metric === "compliance_score") {
-        metrics.governance.score = obs.data.avgScore || 100;
+        metrics.governance.score = Number(obs.data.avgScore || 100);
         if (metrics.governance.score < 85) {
           metrics.governance.issues.push(`Score de compliance em ${metrics.governance.score.toFixed(1)}%`);
         }
@@ -247,8 +247,8 @@ export class ESGAdvisorAgent extends BaseAgent {
         priority: decision.impact,
         is_actionable: true,
         confidence: decision.confidenceScore,
-        data_reference: decision.parameters,
-      });
+        data_reference: decision.parameters as unknown as import("@/integrations/supabase/types").Json,
+      } as never);
 
       return {
         id: actionId,

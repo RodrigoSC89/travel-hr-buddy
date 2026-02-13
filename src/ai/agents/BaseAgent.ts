@@ -161,7 +161,7 @@ export abstract class BaseAgent {
     try {
       await supabase.from("ai_commands").update({
         execution_status: action.status,
-        result: action.result,
+        result: action.result as unknown as import("@/integrations/supabase/types").Json,
         error_details: action.error,
         completed_at: action.executedAt?.toISOString(),
       }).eq("command_hash", action.decisionId);

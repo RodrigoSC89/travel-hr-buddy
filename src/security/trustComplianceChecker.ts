@@ -131,7 +131,7 @@ export async function evaluateTrust(
   }
 
   // Check 4: Payload schema validation
-  const schemaCheck = checkPayloadSchema(protocol, payload);
+  const schemaCheck = checkPayloadSchema(protocol, (payload || {}) as Record<string, unknown>);
   checks.push(schemaCheck);
   if (!schemaCheck.passed) {
     failedChecks.push("schema_validation");
@@ -286,8 +286,7 @@ function checkProtocolSecurity(protocol: ProtocolType): CheckResult {
 /**
  * Check payload schema compliance
  */
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- dynamic protocol payloads have varying shapes
-function checkPayloadSchema(protocol: ProtocolType, payload: any): CheckResult {
+function checkPayloadSchema(protocol: ProtocolType, payload: Record<string, unknown>): CheckResult {
   const errors: string[] = [];
 
   // Basic payload validation

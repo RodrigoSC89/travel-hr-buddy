@@ -154,7 +154,7 @@ export class RiskSentinelAgent extends BaseAgent {
 
     // Group observations by risk type
     const byRiskType = observations.reduce((acc, obs) => {
-      const riskType = obs.data.riskType || "unknown";
+      const riskType = String(obs.data.riskType || "unknown");
       if (!acc[riskType]) acc[riskType] = [];
       acc[riskType].push(obs);
       return acc;
@@ -232,8 +232,8 @@ export class RiskSentinelAgent extends BaseAgent {
           priority: decision.impact,
           is_actionable: true,
           confidence: decision.confidenceScore,
-          data_reference: decision.parameters,
-        });
+          data_reference: decision.parameters as unknown as import("@/integrations/supabase/types").Json,
+        } as never);
 
         return {
           id: actionId,
