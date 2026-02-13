@@ -149,22 +149,21 @@ const TravelManagement = () => {
       if (error) throw error;
       
       // Map database results to TravelItinerary interface
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any -- DB columns may not match interface exactly
-      const mappedData: TravelItinerary[] = (data || []).map((row: any) => ({
-        id: row.id,
-        itinerary_number: row.itinerary_number || `ITN-${row.id?.slice(0, 8)}`,
-        status: row.status || "pending",
-        departure_location: row.origin || row.departure_location || "",
-        arrival_location: row.destination || row.arrival_location || "",
-        departure_date: row.departure_date || "",
-        arrival_date: row.return_date || row.arrival_date || "",
-        travel_purpose: row.trip_name || row.travel_purpose || "",
-        total_cost: row.total_cost || 0,
-        currency: row.currency || "USD",
-        crew_member_id: row.crew_member_id,
-        vessel_id: row.vessel_id,
-        mission_id: row.mission_id,
-        created_at: row.created_at,
+      const mappedData: TravelItinerary[] = (data || []).map((row: Record<string, unknown>) => ({
+        id: String(row.id),
+        itinerary_number: String(row.itinerary_number || `ITN-${String(row.id).slice(0, 8)}`),
+        status: String(row.status || "pending"),
+        departure_location: String(row.origin || row.departure_location || ""),
+        arrival_location: String(row.destination || row.arrival_location || ""),
+        departure_date: String(row.departure_date || ""),
+        arrival_date: String(row.return_date || row.arrival_date || ""),
+        travel_purpose: String(row.trip_name || row.travel_purpose || ""),
+        total_cost: Number(row.total_cost || 0),
+        currency: String(row.currency || "USD"),
+        crew_member_id: row.crew_member_id as string | undefined,
+        vessel_id: row.vessel_id as string | undefined,
+        mission_id: row.mission_id as string | undefined,
+        created_at: String(row.created_at),
         legs: Array.isArray(row.legs) ? row.legs : [],
       }));
       
@@ -194,14 +193,13 @@ const TravelManagement = () => {
       if (error) throw error;
       
       // Map database results to TravelConflict interface
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any -- DB columns may not match interface exactly
-      const mappedData: TravelConflict[] = (data || []).map((row: any) => ({
-        id: row.id,
-        conflict_type: row.conflict_type || "unknown",
-        severity: row.severity || "low",
-        conflict_description: row.conflict_description || row.description || "",
-        resolved: row.resolved || false,
-        created_at: row.created_at,
+      const mappedData: TravelConflict[] = (data || []).map((row: Record<string, unknown>) => ({
+        id: String(row.id),
+        conflict_type: String(row.conflict_type || "unknown"),
+        severity: String(row.severity || "low"),
+        conflict_description: String(row.conflict_description || row.description || ""),
+        resolved: Boolean(row.resolved),
+        created_at: String(row.created_at),
       }));
       
       setConflicts(mappedData);

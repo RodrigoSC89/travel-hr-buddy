@@ -13,7 +13,7 @@ export interface AccessLog {
   result: AccessResult;
   ip_address?: string;
   user_agent?: string;
-  details?: Record<string, any>;
+  details?: Record<string, unknown>;
   severity: LogSeverity;
   created_at: string;
 }

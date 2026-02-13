@@ -75,7 +75,7 @@ export interface RecoveryActionItem {
   action: RecoveryAction;
   targetModule: string;
   description: string;
-  parameters: Record<string, any>;
+  parameters: Record<string, unknown>;
   estimatedImpact: string;
   requiredDowntime: number;
 }
@@ -86,8 +86,8 @@ export interface RecoveryExecution {
   actionId: string;
   startTime: string;
   endTime: string | null;
-  beforeState: Record<string, any>;
-  afterState: Record<string, any>;
+  beforeState: Record<string, unknown>;
+  afterState: Record<string, unknown>;
   success: boolean;
   logs: string[];
   metrics: {
@@ -393,7 +393,7 @@ export class SelfDiagnosisLoop {
   private determineRecoveryAction(anomaly: Anomaly): RecoveryActionItem {
     let action: RecoveryAction;
     let description: string;
-    let parameters: Record<string, any> = {};
+    let parameters: Record<string, unknown> = {};
     let estimatedImpact: string;
     let requiredDowntime: number;
 

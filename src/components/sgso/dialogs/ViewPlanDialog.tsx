@@ -44,9 +44,16 @@ interface ViewPlanDialogProps {
   plan: EmergencyPlan | null;
 }
 
-const getPlanDetails = (plan: EmergencyPlan) => {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- dynamic plan detail shapes
-  const details: Record<string, any> = {
+interface PlanDetail {
+  objective: string;
+  scope: string;
+  procedures: string[];
+  equipment: string[];
+  contacts: { name: string; phone: string }[];
+}
+
+const getPlanDetails = (plan: EmergencyPlan): PlanDetail => {
+  const details: Record<string, PlanDetail> = {
     fire: {
       objective: "Combater e extinguir incêndios a bordo, protegendo vidas e propriedade.",
       scope: "Aplica-se a todas as embarcações e instalações marítimas da organização.",

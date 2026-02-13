@@ -110,12 +110,11 @@ function useTripsData() {
     }
   });
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Supabase joined query returns dynamic shape
-  const trips: Trip[] = crew.slice(0, 5).map((c: any, i: number) => ({
+  const trips: Trip[] = crew.slice(0, 5).map((c: Record<string, unknown>, i: number) => ({
     id: String(c.id),
     crewMember: String(c.full_name || c.name || `Tripulante ${i + 1}`),
     role: String(c.rank || c.position || 'Crew'),
-    vessel: c.vessels?.name || 'N/A',
+    vessel: (c.vessels as Record<string, unknown> | null)?.name ? String((c.vessels as Record<string, unknown>).name) : 'N/A',
     type: i % 2 === 0 ? 'mobilization' as const : 'demobilization' as const,
     status: c.status === 'active' ? 'in_progress' as const : 'scheduled' as const,
     flight: {

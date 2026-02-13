@@ -138,7 +138,7 @@ class EvolutionTrigger {
   /**
    * Detect performance anomalies
    */
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- AutoTuningConfig has dynamic thresholds shape
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- AutoTuningConfig dynamic thresholds
   private detectAnomalies(metrics: TuningMetrics, config: any): string[] {
     const anomalies: string[] = [];
 

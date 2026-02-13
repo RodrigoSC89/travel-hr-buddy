@@ -6,11 +6,12 @@
 import { useState, useCallback } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { logger } from "@/lib/logger";
+import type { Json } from "@/integrations/supabase/types";
 
 interface AISuggestion {
   suggestion_type: string;
   suggestion_text: string;
-  context?: Record<string, unknown> | import("@/integrations/supabase/types").Json;
+  context?: Record<string, unknown>;
   confidence_score?: number;
   accepted?: boolean;
   feedback?: string;
@@ -29,13 +30,13 @@ export function useAISuggestionsLog() {
         .insert({
           suggestion_type: suggestion.suggestion_type,
           suggestion_text: suggestion.suggestion_text,
-          context: suggestion.context,
+          context: (suggestion.context ?? null) as unknown as Json,
           confidence_score: suggestion.confidence_score,
           accepted: suggestion.accepted ?? false,
           feedback: suggestion.feedback,
           category: suggestion.category,
           impact_level: suggestion.impact_level,
-        })
+        } as never)
         .select()
         .single();
 

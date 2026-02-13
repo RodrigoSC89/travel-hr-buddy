@@ -35,12 +35,12 @@ interface PendingRequest {
 }
 
 class UnifiedAPIClient {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- cache stores heterogeneous API responses
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- cache stores heterogeneous API responses across generic types
   private cache = new Map<string, { data: any; expiry: number }>();
   private pendingRequests: PendingRequest[] = [];
   // PATCH v17 iOS PWA: Sempre assumir online
   private isOnline = true;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- request dedup stores heterogeneous promises
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- request dedup stores heterogeneous generic promises
   private requestQueue: Map<string, Promise<any>> = new Map();
 
   constructor() {
