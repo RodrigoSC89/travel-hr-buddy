@@ -81,48 +81,14 @@ export {
   useProgressiveImage 
 } from "./use-intersection-preload";
 
-// PATCH 831: Performance utilities
-export { useOfflineSync } from "@/lib/performance/offline-sync";
-export { 
-  useOptimisticUpdate, 
-  useOptimisticList, 
-  useDebouncedOptimisticUpdate 
-} from "@/lib/performance/optimistic-updates";
-export { 
-  useDebouncedInput, 
-  useValidatedField, 
-  useOptimizedForm, 
-  useAutoSave 
-} from "@/lib/performance/form-optimization";
+// PATCH 831: Performance utilities (consolidated)
 export { 
   useConnection, 
   useAdaptiveFetch 
 } from "@/components/performance/ConnectionAware";
 export { useVirtualizedData } from "@/components/performance/VirtualizedList";
-
-// PATCH 832: Advanced utilities
-export { useRequestQueue } from "@/lib/performance/request-queue-manager";
-export { useCachedFetch } from "@/lib/performance/api-cache-layer";
 export { useErrorBoundary } from "@/components/performance/ErrorBoundaryAdvanced";
-
-// PATCH 833: PWA & System utilities
-export { usePWA } from "@/lib/pwa/service-worker-registration";
-export { useWebVitals } from "@/lib/performance/web-vitals-monitor";
-export { useAPI, useSupabaseQuery } from "@/lib/api/unified-api-client";
-export { useSystemConfig } from "@/lib/system/system-config";
-export { useRealtimeSubscription, useRealtimeConnectionStatus } from "@/lib/realtime/realtime-manager";
-export { useAnalytics } from "@/lib/analytics/analytics-client";
-export { useErrorTracking } from "@/lib/error-tracking/error-tracker";
-
-// PATCH 834: Low bandwidth optimizations
-export { useBandwidthOptimizer } from "@/lib/performance/low-bandwidth-optimizer";
-export { useOptimizedFetch } from "@/lib/performance/request-optimizer";
 export { useSlowConnectionWarning } from "@/components/performance/ConnectionIndicator";
-
-// PATCH 835: Advanced performance utilities
-export { useNetworkStatus as useNetworkMonitor, useNetworkAware } from "@/lib/performance/network-monitor";
-export { useVirtualScroll, useInfiniteScroll as useInfiniteScrollAdvanced, useWindowedData } from "@/lib/performance/virtual-scroll";
-export { useCompressedFetch } from "@/lib/performance/data-compressor";
 
 // PATCH 836: Revolutionary UX
 export { usePredictiveUI, useSmartPrefetching } from "@/lib/ux/predictive-ui";
