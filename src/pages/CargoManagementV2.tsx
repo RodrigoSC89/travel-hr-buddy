@@ -254,7 +254,8 @@ export default function CargoManagementV2() {
     { label: "Ver Detalhes", icon: Eye, onClick: (item: CargoItem) => toast.success(`${item.cargo_name}`, { description: `Tipo: ${item.cargo_type} | Peso: ${item.weight_mt} MT | Vol: ${item.volume_cbm} CBM | Posição: ${item.stowage_position} | BL: ${item.bill_of_lading} | Origem: ${item.origin_port} → Destino: ${item.destination_port}${item.imo_class ? ` | IMO: ${item.imo_class}` : ''}${item.un_number ? ` | UN: ${item.un_number}` : ''}`, duration: 8000 }) },
     { label: "Analisar com IA", icon: Brain, onClick: (item: CargoItem) => analyzeCargoWithAI(item.id) },
     { label: "Editar", icon: Edit, onClick: (item: CargoItem) => {
-      toast.success(`Editando: ${item.cargo_name}`, { description: `Tipo: ${item.cargo_type} | Peso: ${item.weight_mt} MT | Posição: ${item.stowage_position} | BL: ${item.bill_of_lading}. Use o formulário de Nova Carga para alterar.`, duration: 6000 });
+      setNewCargo({ cargo_name: item.cargo_name, cargo_type: item.cargo_type, weight_mt: String(item.weight_mt), volume_cbm: String(item.volume_cbm || 0), origin_port: item.origin_port || '', destination_port: item.destination_port || '', stowage_position: item.stowage_position || '', bill_of_lading: item.bill_of_lading || '', imo_class: item.imo_class || '', un_number: item.un_number || '' });
+      setShowNewCargo(true);
     }},
   ];
 

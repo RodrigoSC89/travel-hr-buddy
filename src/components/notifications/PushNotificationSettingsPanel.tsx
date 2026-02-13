@@ -91,9 +91,9 @@ export function PushNotificationSettingsPanel() {
     sendTestNotification
   } = useCompliancePushNotifications();
 
-  // Load saved settings from localStorage
+  // Load saved settings from sessionStorage
   useEffect(() => {
-    const saved = localStorage.getItem('nautilus-notification-settings');
+    const saved = sessionStorage.getItem('nautilus-notification-settings');
     if (saved) {
       try {
         const parsed = JSON.parse(saved);
@@ -132,7 +132,7 @@ export function PushNotificationSettingsPanel() {
   const saveSettings = async () => {
     setIsSaving(true);
     try {
-      localStorage.setItem('nautilus-notification-settings', JSON.stringify(settings));
+      sessionStorage.setItem('nautilus-notification-settings', JSON.stringify(settings));
       
       // If push is enabled but not subscribed, subscribe
       if (settings.globalEnabled && settings.channels.find(c => c.id === 'push')?.enabled && !isSubscribed) {

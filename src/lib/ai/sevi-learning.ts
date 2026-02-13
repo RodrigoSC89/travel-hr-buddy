@@ -336,18 +336,18 @@ export class SEVILearningEngine {
         patterns: this.patterns,
         learningRate: this.learningRate
       };
-      localStorage.setItem('sevi_learning_state', JSON.stringify(state));
+      sessionStorage.setItem('sevi_learning_state', JSON.stringify(state));
     } catch (e) {
-      // Silent fail for localStorage operations in learning engine
+      // Silent fail for sessionStorage operations in learning engine
     }
   }
 
   /**
-   * Load state from localStorage
+   * Load state from sessionStorage
    */
   private loadState(): void {
     try {
-      const saved = localStorage.getItem('sevi_learning_state');
+      const saved = sessionStorage.getItem('sevi_learning_state');
       if (saved) {
         const state = JSON.parse(saved);
         this.feedbackHistory = (state.feedbackHistory || []).map((fb: FeedbackEntry) => ({
@@ -362,7 +362,7 @@ export class SEVILearningEngine {
         this.learningRate = state.learningRate || 0.01;
       }
     } catch (e) {
-      // Silent fail for localStorage operations in learning engine
+      // Silent fail for sessionStorage operations in learning engine
     }
   }
 
@@ -374,7 +374,7 @@ export class SEVILearningEngine {
     this.learningVectors.clear();
     this.patterns = [];
     this.learningRate = 0.01;
-    localStorage.removeItem('sevi_learning_state');
+    sessionStorage.removeItem('sevi_learning_state');
   }
 }
 

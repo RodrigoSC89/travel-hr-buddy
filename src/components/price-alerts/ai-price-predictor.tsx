@@ -62,8 +62,8 @@ export const AIPricePredictor: React.FC = () => {
   }, []);
 
   const loadExistingPredictions = async () => {
-    // Load existing predictions from localStorage or API
-    const stored = localStorage.getItem("ai_price_predictions");
+    // Load existing predictions from sessionStorage (ephemeral)
+    const stored = sessionStorage.getItem("ai_price_predictions");
     if (stored) {
       setPredictions(JSON.parse(stored));
     }
@@ -98,8 +98,8 @@ export const AIPricePredictor: React.FC = () => {
       const newPredictions = [...predictions, prediction];
       setPredictions(newPredictions);
       
-      // Store predictions
-      localStorage.setItem("ai_price_predictions", JSON.stringify(newPredictions));
+      // Store predictions in sessionStorage
+      sessionStorage.setItem("ai_price_predictions", JSON.stringify(newPredictions));
       
       toast({
         title: "Previsão gerada!",

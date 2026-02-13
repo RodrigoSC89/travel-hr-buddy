@@ -131,14 +131,14 @@ export class BlockchainComplianceLedger {
       });
 
     if (error) {
-      // Fallback to localStorage for demo
-      const records = JSON.parse(localStorage.getItem('compliance_ledger') || '[]');
+      // Fallback to sessionStorage for ephemeral compliance records
+      const records = JSON.parse(sessionStorage.getItem('compliance_ledger') || '[]');
       records.push({
         ...transaction,
         evidenceId: evidence.id,
         auditId: evidence.auditId
       });
-      localStorage.setItem('compliance_ledger', JSON.stringify(records));
+      sessionStorage.setItem('compliance_ledger', JSON.stringify(records));
     }
 
     return {
@@ -156,8 +156,8 @@ export class BlockchainComplianceLedger {
     let storedHash = '';
     let blockchainTimestamp = '';
 
-    // Try localStorage first (main storage for demo)
-    const records = JSON.parse(localStorage.getItem('compliance_ledger') || '[]') as Array<Record<string, unknown>>;
+    // Try sessionStorage first (ephemeral fallback)
+    const records = JSON.parse(sessionStorage.getItem('compliance_ledger') || '[]') as Array<Record<string, unknown>>;
     const record = records.find((r) => r.evidenceId === evidence.id);
     if (record) {
       storedHash = String(record.hash).replace('0x', '');

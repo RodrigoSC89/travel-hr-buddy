@@ -60,7 +60,7 @@ export function OfflineSyncStatus({ className }: OfflineSyncStatusProps) {
 
   const checkPendingChanges = () => {
     try {
-      const pending = localStorage.getItem("nautilus_pending_changes");
+      const pending = sessionStorage.getItem("nautilus_pending_changes");
       const changes = pending ? JSON.parse(pending) : [];
       setPendingChanges(changes.length);
     } catch {
@@ -76,7 +76,7 @@ export function OfflineSyncStatus({ className }: OfflineSyncStatusProps) {
     setSyncProgress(0);
 
     try {
-      const pending = localStorage.getItem("nautilus_pending_changes");
+      const pending = sessionStorage.getItem("nautilus_pending_changes");
       const changes = pending ? JSON.parse(pending) : [];
 
       if (changes.length === 0) {
@@ -91,7 +91,7 @@ export function OfflineSyncStatus({ className }: OfflineSyncStatusProps) {
         await new Promise((r) => requestAnimationFrame(r));
       }
 
-      localStorage.removeItem("nautilus_pending_changes");
+      sessionStorage.removeItem("nautilus_pending_changes");
       setPendingChanges(0);
       setLastSync(new Date());
       toast.success(`${changes.length} alteração(ões) sincronizada(s)`);
