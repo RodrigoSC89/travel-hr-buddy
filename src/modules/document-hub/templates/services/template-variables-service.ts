@@ -158,8 +158,7 @@ export class TemplateVariablesService {
     };
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Supabase row result
-  private mapToVariable(data: any): TemplateVariable {
+  private mapToVariable(data: Record<string, unknown>): TemplateVariable {
     return {
       id: String(data.id),
       templateId: String(data.template_id),

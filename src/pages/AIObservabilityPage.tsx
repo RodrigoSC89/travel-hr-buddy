@@ -99,8 +99,7 @@ export default function AIObservabilityPage() {
                   <p>Nenhuma atividade registrada ainda</p>
                 </div>
               ) : (
-                // eslint-disable-next-line @typescript-eslint/no-explicit-any -- audit log rows from hook
-                auditLogs.slice(0, 30).map((log: any) => (
+                auditLogs.slice(0, 30).map((log) => (
                   <div key={log.id} className="flex items-center justify-between border-b pb-2 last:border-0">
                     <div className="flex items-center gap-3">
                       <Brain className="h-4 w-4 text-muted-foreground" />
@@ -108,7 +107,7 @@ export default function AIObservabilityPage() {
                         <span className="text-sm font-medium">{(log.user_input || "").slice(0, 60)}</span>
                         <div className="flex items-center gap-2 text-xs text-muted-foreground mt-1">
                           <Clock className="h-3 w-3" />
-                          <span>{format(new Date(log.created_at), "dd/MM HH:mm", { locale: ptBR })}</span>
+                          <span>{format(new Date(log.created_at || ""), "dd/MM HH:mm", { locale: ptBR })}</span>
                           {log.model_version && <Badge variant="outline" className="text-xs">{log.model_version}</Badge>}
                           {log.response_time_ms && <span>{log.response_time_ms}ms</span>}
                         </div>

@@ -109,8 +109,7 @@ export default function DPCopilot() {
       recognitionRef.current.interimResults = false;
       recognitionRef.current.lang = "pt-BR";
 
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any -- SpeechRecognition event type varies by browser
-      recognitionRef.current.onresult = (event: any) => {
+      recognitionRef.current.onresult = (event: SpeechRecognitionEvent) => {
         const transcript = event.results[0][0].transcript;
         setInput(transcript);
         setIsListening(false);

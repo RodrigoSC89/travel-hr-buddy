@@ -255,6 +255,7 @@ export const EnhancedSettingsHub: React.FC = () => {
     calculateHealth();
   }, [settings]);
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- SettingsData union requires flexible updates
   const updateSettings = (category: keyof SettingsData, updates: any) => {
     setSettings(prev => ({
       ...prev,
@@ -535,6 +536,7 @@ export const EnhancedSettingsHub: React.FC = () => {
     }
   };
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- flexible log data shape
   const logSettingsChange = async (action: string, data: any) => {
     const logEntry = {
       timestamp: new Date().toISOString(),

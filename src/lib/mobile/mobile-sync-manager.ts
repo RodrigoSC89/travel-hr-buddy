@@ -225,25 +225,20 @@ class MobileSyncManager {
 
     switch (type) {
       case 'create': {
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        const { error } = await supabase.from(table as any).insert(data as any);
+        const { error } = await (supabase.from as Function)(table).insert(data);
         if (error) throw error;
         break;
       }
       case 'update': {
         const { id, ...updateData } = data;
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        const { error } = await supabase
-          .from(table as any)
+        const { error } = await (supabase.from as Function)(table)
           .update(updateData)
           .eq('id', id as string);
         if (error) throw error;
         break;
       }
       case 'delete': {
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        const { error } = await supabase
-          .from(table as any)
+        const { error } = await (supabase.from as Function)(table)
           .delete()
           .eq('id', data.id as string);
         if (error) throw error;

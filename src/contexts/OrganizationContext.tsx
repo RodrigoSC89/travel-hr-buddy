@@ -217,15 +217,20 @@ export const OrganizationProvider = ({ children }: { children: ReactNode }) => {
         .eq("organization_id", currentOrganization.id);
 
       if (!error && data && data.length > 0) {
-        return data.map((m) => ({
-          id: m.user_id || m.id,
-          email: (m.metadata as any)?.email || "",
-          role: m.role || "member",
-          status: m.status || "active",
-          full_name: (m.metadata as any)?.full_name || "",
-          joined_at: m.joined_at || m.created_at || new Date().toISOString(),
-          last_active_at: m.last_active_at || new Date().toISOString(),
-        }));
+        return data.map((m) => {
+          const meta = (m.metadata && typeof m.metadata === 'object' && !Array.isArray(m.metadata)) 
+            ? m.metadata as Record<string, unknown> 
+            : {};
+          return {
+            id: m.user_id || m.id,
+            email: String(meta.email || ""),
+            role: m.role || "member",
+            status: m.status || "active",
+            full_name: String(meta.full_name || ""),
+            joined_at: m.joined_at || m.created_at || new Date().toISOString(),
+            last_active_at: m.last_active_at || new Date().toISOString(),
+          };
+        });
       }
     } catch {
       logger.warn("Error fetching org users, using fallback");

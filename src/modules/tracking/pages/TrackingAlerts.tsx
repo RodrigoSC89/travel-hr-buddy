@@ -179,7 +179,7 @@ function AlertRulesConfig() {
                 </div>
                 <div className="space-y-2">
                   <Label>Severidade</Label>
-                  <Select value={formData.severity} onValueChange={v => setFormData({ ...formData, severity: v as any })}>
+                  <Select value={formData.severity} onValueChange={v => setFormData({ ...formData, severity: v as "critical" | "warning" | "info" })}>
                     <SelectTrigger><SelectValue /></SelectTrigger>
                     <SelectContent>
                       <SelectItem value="critical">Crítico</SelectItem>

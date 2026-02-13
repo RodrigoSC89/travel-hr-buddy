@@ -430,27 +430,26 @@ class TemplateSystemService {
   /**
    * Helper: Map database record to Template
    */
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Supabase row shape
-  private mapDatabaseTemplate(data: any): Template {
+  private mapDatabaseTemplate(data: Record<string, unknown>): Template {
     return {
-      id: data.id,
+      id: String(data.id || ""),
       metadata: {
-        id: data.id,
-        name: data.name,
-        description: data.description,
-        category: data.category,
-        version: data.version,
-        author: data.author,
-        createdAt: data.created_at,
-        updatedAt: data.updated_at,
-        tags: data.tags || [],
-        isActive: data.is_active,
+        id: String(data.id || ""),
+        name: String(data.name || ""),
+        description: String(data.description || ""),
+        category: String(data.category || ""),
+        version: String(data.version || "1.0"),
+        author: String(data.author || ""),
+        createdAt: String(data.created_at || ""),
+        updatedAt: String(data.updated_at || ""),
+        tags: Array.isArray(data.tags) ? data.tags as string[] : [],
+        isActive: Boolean(data.is_active),
       },
-      fields: data.fields || [],
-      content: data.content || "",
-      css: data.css,
-      documentType: data.document_type,
-      userId: data.user_id,
+      fields: Array.isArray(data.fields) ? data.fields as Template["fields"] : [],
+      content: String(data.content || ""),
+      css: data.css != null ? String(data.css) : undefined,
+      documentType: data.document_type != null ? String(data.document_type) : undefined,
+      userId: data.user_id != null ? String(data.user_id) : undefined,
     };
   }
 

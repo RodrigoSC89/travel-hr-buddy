@@ -19,8 +19,7 @@ const loadJsPDF = async () => {
   return { jsPDF, autoTable: autoTableModule.default };
 };
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- XLSX dynamic import has no typed module
-let XLSX: any = null;
+let XLSX: typeof import("xlsx") | null = null;
 const loadXLSX = async () => {
   if (!XLSX) {
     XLSX = await import("xlsx");
@@ -35,8 +34,7 @@ const ComplianceReports = () => {
   const { toast } = useToast();
   const [showForm, setShowForm] = useState(false);
   const [showFilters, setShowFilters] = useState(false);
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- compliance data from dynamic table
-  const [complianceData, setComplianceData] = useState<any[]>([]);
+  const [complianceData, setComplianceData] = useState<Record<string, unknown>[]>([]);
   const [loading, setLoading] = useState(false);
   
   const [reportConfig, setReportConfig] = useState({
@@ -147,8 +145,7 @@ const ComplianceReports = () => {
   };
 
   // PDF Export using jsPDF
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- dynamic compliance data shape
-  const exportToPDF = async (data: any[]) => {
+  const exportToPDF = async (data: Record<string, unknown>[]) => {
     try {
       const { jsPDF, autoTable } = await loadJsPDF();
       const doc = new jsPDF();
@@ -164,12 +161,12 @@ const ComplianceReports = () => {
       
       // Prepare table data
       const tableData = data.map(item => [
-        item.id || "N/A",
-        item.category || "N/A",
-        item.severity || "N/A",
-        item.status || "N/A",
-        item.title || "N/A",
-        item.created_at ? format(new Date(item.created_at), "dd/MM/yyyy") : "N/A"
+        String(item.id || "N/A"),
+        String(item.category || "N/A"),
+        String(item.severity || "N/A"),
+        String(item.status || "N/A"),
+        String(item.title || "N/A"),
+        item.created_at ? format(new Date(String(item.created_at)), "dd/MM/yyyy") : "N/A"
       ]);
       
       // Add table using autoTable
@@ -199,17 +196,16 @@ const ComplianceReports = () => {
   };
 
   // CSV Export with Excel compatibility
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- dynamic compliance data shape
-  const exportToCSV = (data: any[]) => {
+  const exportToCSV = (data: Record<string, unknown>[]) => {
     try {
       const headers = ["ID", "Category", "Severity", "Status", "Title", "Date"];
       const rows = data.map(item => [
-        item.id || "",
-        item.category || "",
-        item.severity || "",
-        item.status || "",
-        (item.title || "").replace(/"/g, "\"\""), // Escape quotes
-        item.created_at ? format(new Date(item.created_at), "dd/MM/yyyy") : ""
+        String(item.id || ""),
+        String(item.category || ""),
+        String(item.severity || ""),
+        String(item.status || ""),
+        String(item.title || "").replace(/"/g, "\"\""),
+        item.created_at ? format(new Date(String(item.created_at)), "dd/MM/yyyy") : ""
       ]);
       
       // PATCH 540: Otimização - pré-processar linhas CSV
@@ -237,22 +233,23 @@ const ComplianceReports = () => {
   };
 
   // Excel Export using xlsx
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- dynamic compliance data shape
-  const exportToExcel = (data: any[]) => {
+  const exportToExcel = (data: Record<string, unknown>[]) => {
     try {
-      const worksheet = XLSX.utils.json_to_sheet(data.map(item => ({
-        "ID": item.id,
-        "Category": item.category,
-        "Severity": item.severity,
-        "Status": item.status,
-        "Title": item.title,
-        "Date": item.created_at ? format(new Date(item.created_at), "dd/MM/yyyy") : ""
+      if (!XLSX) { toast({ title: "XLSX não carregado", variant: "destructive" }); return; }
+      const xl = XLSX;
+      const worksheet = xl.utils.json_to_sheet(data.map(item => ({
+        "ID": String(item.id || ""),
+        "Category": String(item.category || ""),
+        "Severity": String(item.severity || ""),
+        "Status": String(item.status || ""),
+        "Title": String(item.title || ""),
+        "Date": item.created_at ? format(new Date(String(item.created_at)), "dd/MM/yyyy") : ""
       })));
       
-      const workbook = XLSX.utils.book_new();
-      XLSX.utils.book_append_sheet(workbook, worksheet, "Compliance Data");
+      const workbook = xl.utils.book_new();
+      xl.utils.book_append_sheet(workbook, worksheet, "Compliance Data");
       
-      XLSX.writeFile(workbook, `${reportConfig.title || "compliance-report"}.xlsx`);
+      xl.writeFile(workbook, `${reportConfig.title || "compliance-report"}.xlsx`);
       
       toast({
         title: "Excel gerado",
@@ -269,8 +266,7 @@ const ComplianceReports = () => {
   };
 
   // JSON Export with metadata
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- dynamic compliance data shape
-  const exportToJSON = (data: any[]) => {
+  const exportToJSON = (data: Record<string, unknown>[]) => {
     try {
       const jsonData = {
         metadata: {

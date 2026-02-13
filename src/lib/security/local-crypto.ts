@@ -190,21 +190,22 @@ class LocalCrypto {
   /**
    * Encrypt sensitive fields in an object
    */
-  async encryptFields<T extends Record<string, any>>(
+  async encryptFields<T extends Record<string, unknown>>(
     obj: T,
     fields: (keyof T)[],
     password: string
   ): Promise<T> {
-    const result = { ...obj };
+    const result = { ...obj } as Record<string, unknown>;
 
     for (const field of fields) {
-      if (result[field] !== undefined && result[field] !== null) {
-        const encrypted = await this.encrypt(String(result[field]), password);
-        (result as any)[field] = encrypted;
+      const key = field as string;
+      if (result[key] !== undefined && result[key] !== null) {
+        const encrypted = await this.encrypt(String(result[key]), password);
+        result[key] = encrypted;
       }
     }
 
-    return result;
+    return result as T;
   }
 
   /**
