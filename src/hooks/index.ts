@@ -35,8 +35,7 @@ export { useArrowNavigation } from "./use-arrow-navigation";
 // System & Operations
 export { useOfflineStorage } from "./use-offline-storage";
 export { useAPIHealth } from "./use-api-health";
-export { useRestoreLogsSummary } from "./use-restore-logs-summary";
-export { useRestoreLogsMetrics } from "./use-restore-logs-metrics";
+// useRestoreLogsSummary and useRestoreLogsMetrics removed during cleanup
 
 // Business Logic
 export { useUserProfile as useProfile, useUserProfile } from "./unified/useUserProfile";
@@ -52,7 +51,7 @@ export { useBreadcrumbs } from "./use-breadcrumbs";
 
 // Specialized Features
 
-export { useTravelPredictions } from "./use-travel-predictions";
+// useTravelPredictions removed during cleanup
 export { useVoiceNavigation } from "./use-voice-navigation";
 // useServiceIntegrations removed during cleanup
 
