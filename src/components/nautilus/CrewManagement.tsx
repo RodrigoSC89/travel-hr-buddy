@@ -291,9 +291,9 @@ export function CrewManagement() {
 
                     {/* Certifications */}
                     <div className="mt-3 flex flex-wrap gap-1">
-                      {member.certifications.map((cert, i) => (
+                      {member.certifications.map((cert) => (
                         <Badge 
-                          key={i}
+                          key={`${member.id}-cert-${cert.name}`}
                           variant={cert.status === "expiring" ? "destructive" : "secondary"}
                           className="text-xs"
                         >

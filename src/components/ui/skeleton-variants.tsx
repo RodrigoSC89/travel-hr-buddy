@@ -128,7 +128,7 @@ export const ModulePageSkeleton: FC = () => (
     {/* Stats Row */}
     <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
       {Array.from({ length: 4 }).map((_, i) => (
-        <StatsCardSkeleton key={i} />
+        <StatsCardSkeleton key={`mod-stat-skel-${i}`} />
       ))}
     </div>
 
@@ -139,7 +139,7 @@ export const ModulePageSkeleton: FC = () => (
       </div>
       <div className="space-y-4">
         {Array.from({ length: 3 }).map((_, i) => (
-          <CrewCardSkeleton key={i} />
+          <CrewCardSkeleton key={`mod-crew-skel-${i}`} />
         ))}
       </div>
     </div>

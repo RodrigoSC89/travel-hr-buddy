@@ -85,7 +85,7 @@ export function ListSkeleton({ items = 5 }: { items?: number }) {
   return (
     <div className="space-y-3">
       {Array.from({ length: items }).map((_, i) => (
-        <div key={i} className="flex items-center gap-3 p-3 border rounded-lg">
+        <div key={`list-skel-${i}`} className="flex items-center gap-3 p-3 border rounded-lg">
           <Skeleton className="h-10 w-10 rounded-full" />
           <div className="flex-1 space-y-2">
             <Skeleton className="h-4 w-1/3" />
@@ -104,7 +104,7 @@ export function DashboardSkeleton() {
       {/* Stats Row */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
         {Array.from({ length: 4 }).map((_, i) => (
-          <div key={i} className="p-4 border rounded-lg space-y-2">
+          <div key={`dash-skel-stat-${i}`} className="p-4 border rounded-lg space-y-2">
             <Skeleton className="h-3 w-20" />
             <Skeleton className="h-8 w-16" />
           </div>
@@ -128,7 +128,7 @@ export function FormSkeleton({ fields = 4 }: { fields?: number }) {
   return (
     <div className="space-y-4">
       {Array.from({ length: fields }).map((_, i) => (
-        <div key={i} className="space-y-2">
+        <div key={`form-skel-${i}`} className="space-y-2">
           <Skeleton className="h-4 w-24" />
           <Skeleton className="h-10 w-full" />
         </div>
@@ -154,7 +154,7 @@ export function ProfileSkeleton() {
       </div>
       <div className="grid grid-cols-2 gap-4">
         {Array.from({ length: 4 }).map((_, i) => (
-          <div key={i} className="space-y-1">
+          <div key={`prof-skel-${i}`} className="space-y-1">
             <Skeleton className="h-3 w-16" />
             <Skeleton className="h-5 w-full" />
           </div>
@@ -169,7 +169,7 @@ export function NavSkeleton() {
   return (
     <div className="space-y-2">
       {Array.from({ length: 8 }).map((_, i) => (
-        <div key={i} className="flex items-center gap-2 p-2">
+        <div key={`nav-skel-${i}`} className="flex items-center gap-2 p-2">
           <Skeleton className="h-5 w-5" />
           <Skeleton className="h-4 w-24" />
         </div>
@@ -193,7 +193,7 @@ export function ChartSkeleton({ type = 'bar' }: { type?: 'bar' | 'line' | 'pie' 
       <div className="flex items-end gap-2 h-48">
         {Array.from({ length: 7 }).map((_, i) => (
           <Skeleton 
-            key={i} 
+            key={`chart-bar-${i}`}
             className="flex-1" 
             style={{ height: `${[50, 75, 40, 85, 60, 90, 45][i]}%` }}
           />
@@ -201,7 +201,7 @@ export function ChartSkeleton({ type = 'bar' }: { type?: 'bar' | 'line' | 'pie' 
       </div>
       <div className="flex justify-between pt-2">
         {Array.from({ length: 7 }).map((_, i) => (
-          <Skeleton key={i} className="h-3 w-8" />
+          <Skeleton key={`chart-label-${i}`} className="h-3 w-8" />
         ))}
       </div>
     </div>
@@ -232,7 +232,7 @@ export function TextBlockSkeleton({ lines = 3 }: { lines?: number }) {
     <div className="space-y-2">
       {Array.from({ length: lines }).map((_, i) => (
         <Skeleton 
-          key={i} 
+          key={`text-line-${i}`}
           className="h-4" 
           style={{ width: i === lines - 1 ? '60%' : '100%' }}
         />

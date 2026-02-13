@@ -468,9 +468,9 @@ export const MultimodalAIInspection: React.FC = () => {
                 </TabsContent>
 
                 <TabsContent value="compliance" className="space-y-3">
-                  {currentInspection.analysis.compliance.map((check, i) => (
+                  {currentInspection.analysis.compliance.map((check) => (
                     <div 
-                      key={i}
+                      key={`compliance-${check.standard}`}
                       className="flex items-center justify-between p-3 rounded-lg bg-muted/50"
                     >
                       <div>
@@ -493,7 +493,7 @@ export const MultimodalAIInspection: React.FC = () => {
                 <TabsContent value="actions" className="space-y-3">
                   {currentInspection.analysis.recommendations.map((rec, i) => (
                     <div 
-                      key={i}
+                      key={`insp-rec-${i}-${rec.slice(0, 10)}`}
                       className="flex items-start gap-3 p-3 rounded-lg bg-muted/50"
                     >
                       <Wrench className="h-4 w-4 text-primary mt-0.5" />

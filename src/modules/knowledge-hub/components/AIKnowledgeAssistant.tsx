@@ -176,9 +176,9 @@ export function AIKnowledgeAssistant({
               </p>
               
               <div className="flex flex-wrap gap-2 justify-center">
-                {suggestedQuestions.slice(0, 4).map((q, i) => (
+                {suggestedQuestions.slice(0, 4).map((q) => (
                   <Button
-                    key={i}
+                    key={`suggest-${q.slice(0, 20)}`}
                     variant="outline"
                     size="sm"
                     className="text-xs"
@@ -232,9 +232,9 @@ export function AIKnowledgeAssistant({
                                 Fontes ({message.sources.length})
                               </p>
                               <div className="space-y-1">
-                                {message.sources.map((source, i) => (
+                                {message.sources.map((source) => (
                                   <div 
-                                    key={i}
+                                    key={`src-${source.documentTitle}-${source.pageNumber || 0}`}
                                     className="text-xs p-2 rounded bg-background/50 flex items-center gap-2"
                                   >
                                     <FileText className="h-3 w-3 shrink-0" />
@@ -255,9 +255,9 @@ export function AIKnowledgeAssistant({
                             <div className="mt-3 pt-3 border-t border-border/50">
                               <p className="text-xs font-medium mb-2">Ações sugeridas:</p>
                               <div className="flex flex-wrap gap-2">
-                                {message.actions.map((action, i) => (
+                                {message.actions.map((action) => (
                                   <Button
-                                    key={i}
+                                    key={`action-${action.type}`}
                                     size="sm"
                                     variant="secondary"
                                     className="text-xs h-7"

@@ -110,7 +110,7 @@ export function LoadingState({
         <div className="flex gap-1.5">
           {[0, 1, 2].map((i) => (
             <div
-              key={i}
+              key={`loading-dot-${i}`}
               className={cn(
                 "rounded-full bg-primary animate-bounce",
                 size === "sm" && "w-1.5 h-1.5",

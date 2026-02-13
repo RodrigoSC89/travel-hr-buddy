@@ -312,8 +312,8 @@ export function QHSEAutonomousAI() {
                           {item.gaps.length > 0 && (
                             <div className="space-y-1">
                               <p className="text-xs font-medium text-orange-500">Gaps:</p>
-                              {item.gaps.map((gap, i) => (
-                                <p key={i} className="text-xs text-muted-foreground flex items-center gap-1">
+                              {item.gaps.map((gap) => (
+                                <p key={`gap-${gap.slice(0, 15)}`} className="text-xs text-muted-foreground flex items-center gap-1">
                                   <AlertCircle className="h-3 w-3 text-orange-500" />
                                   {gap}
                                 </p>
@@ -379,8 +379,8 @@ export function QHSEAutonomousAI() {
                           </div>
                           <div className="mt-2">
                             <p className="text-sm font-medium">Recomendações IA:</p>
-                            {prep.recommendations.map((rec, i) => (
-                              <p key={i} className="text-xs text-muted-foreground flex items-center gap-1">
+                            {prep.recommendations.map((rec) => (
+                              <p key={`prep-rec-${rec.slice(0, 15)}`} className="text-xs text-muted-foreground flex items-center gap-1">
                                 <CheckCircle className="h-3 w-3 text-green-500" />
                                 {rec}
                               </p>

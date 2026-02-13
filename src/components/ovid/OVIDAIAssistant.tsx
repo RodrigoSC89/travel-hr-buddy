@@ -103,8 +103,8 @@ export const OVIDAIAssistant: React.FC<OVIDAIAssistantProps> = ({ vesselType }) 
       </CardHeader>
       <CardContent className="flex-1 flex flex-col">
         <div className="flex flex-wrap gap-2 mb-4">
-          {quickActions.map((action, i) => (
-            <Button key={i} variant="outline" size="sm" onClick={() => sendMessage(action.prompt)} disabled={isLoading}>
+          {quickActions.map((action) => (
+            <Button key={action.label} variant="outline" size="sm" onClick={() => sendMessage(action.prompt)} disabled={isLoading}>
               <action.icon className="w-4 h-4 mr-1" />
               {action.label}
             </Button>
@@ -120,7 +120,7 @@ export const OVIDAIAssistant: React.FC<OVIDAIAssistantProps> = ({ vesselType }) 
           ) : (
             <div className="space-y-4">
               {messages.map((msg, i) => (
-                <div key={i} className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}>
+                <div key={`ovid-msg-${i}-${msg.role}`} className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}>
                   <div className={`max-w-[80%] p-3 rounded-lg ${msg.role === 'user' ? 'bg-primary text-primary-foreground' : 'bg-muted'}`}>
                     <p className="text-sm whitespace-pre-wrap">{msg.content}</p>
                   </div>

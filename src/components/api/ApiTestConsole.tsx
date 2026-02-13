@@ -266,9 +266,9 @@ export function ApiTestConsole({
             <div className="space-y-2">
               <Label className="text-xs text-muted-foreground">Endpoints Rápidos</Label>
               <div className="flex flex-wrap gap-1">
-                {PRESET_ENDPOINTS.map((preset, idx) => (
+                {PRESET_ENDPOINTS.map((preset) => (
                   <Button
-                    key={idx}
+                    key={`preset-${preset.method}-${preset.path}`}
                     variant="outline"
                     size="sm"
                     className="text-xs h-7"
@@ -349,7 +349,7 @@ export function ApiTestConsole({
                   <div className="space-y-1">
                     {history.map((item, idx) => (
                       <div
-                        key={idx}
+                        key={`api-hist-${idx}-${item.status}`}
                         className="flex items-center justify-between text-xs p-2 bg-muted rounded cursor-pointer hover:bg-muted/80"
                         onClick={() => setResult(item)}
                       >

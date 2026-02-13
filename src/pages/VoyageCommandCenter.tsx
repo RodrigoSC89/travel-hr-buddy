@@ -1104,7 +1104,7 @@ export default function VoyageCommandCenter() {
                   </div>
                   <ul className="space-y-1">
                     {selectedVoyage.aiRecommendations.map((rec, idx) => (
-                      <li key={idx} className="text-sm text-muted-foreground flex items-start gap-2">
+                      <li key={`vcc-rec-${idx}-${rec.slice(0, 10)}`} className="text-sm text-muted-foreground flex items-start gap-2">
                         <CheckCircle2 className="h-4 w-4 text-green-500 mt-0.5 shrink-0" />
                         {rec}
                       </li>

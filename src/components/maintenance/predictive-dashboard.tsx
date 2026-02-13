@@ -356,7 +356,7 @@ export function PredictiveDashboard() {
           <CardContent>
             <ul className="space-y-3">
               {prediction.recommendations.map((rec, idx) => (
-                <li key={idx} className="flex items-start gap-3 p-3 bg-muted/50 rounded-lg">
+                <li key={`pred-rec-${idx}-${rec.slice(0, 10)}`} className="flex items-start gap-3 p-3 bg-muted/50 rounded-lg">
                   <span className="text-lg">{rec.split(' ')[0]}</span>
                   <p className="text-sm">{rec.substring(rec.indexOf(' ') + 1)}</p>
                 </li>
