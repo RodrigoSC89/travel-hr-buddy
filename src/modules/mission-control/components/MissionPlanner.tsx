@@ -120,14 +120,14 @@ export const MissionPlanner: React.FC = () => {
       case "ready":
         return "bg-yellow-600";
       case "planning":
-        return "bg-gray-600";
+        return "bg-muted-foreground";
       case "paused":
         return "bg-orange-600";
       case "cancelled":
       case "failed":
         return "bg-red-600";
       default:
-        return "bg-gray-600";
+        return "bg-muted-foreground";
     }
   };
 
@@ -140,9 +140,9 @@ export const MissionPlanner: React.FC = () => {
       case "normal":
         return "border-blue-600 bg-blue-50";
       case "low":
-        return "border-gray-600 bg-gray-50";
+        return "border-muted-foreground bg-muted";
       default:
-        return "border-gray-600 bg-gray-50";
+        return "border-muted-foreground bg-muted";
     }
   };
 
@@ -267,7 +267,7 @@ export const MissionPlanner: React.FC = () => {
                       <span className="text-muted-foreground">Progress</span>
                       <span className="font-semibold">{mission.progress_percentage}%</span>
                     </div>
-                    <div className="w-full bg-gray-200 rounded-full h-2">
+                    <div className="w-full bg-secondary rounded-full h-2">
                       <div
                         className="bg-green-600 h-2 rounded-full transition-all"
                         style={{ width: `${mission.progress_percentage}%` }}

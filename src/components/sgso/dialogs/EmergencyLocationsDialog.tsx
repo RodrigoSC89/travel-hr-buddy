@@ -180,7 +180,7 @@ export const EmergencyLocationsDialog: React.FC<EmergencyLocationsDialogProps> =
                     </div>
                     <div className="relative bg-blue-100 rounded-lg p-8 min-h-[150px]">
                       {/* Simplified ship shape */}
-                      <div className="absolute inset-x-8 inset-y-4 bg-gray-300 rounded-t-[50%] rounded-b-lg border-2 border-gray-400">
+                      <div className="absolute inset-x-8 inset-y-4 bg-muted rounded-t-[50%] rounded-b-lg border-2 border-border">
                         {/* Meeting points markers */}
                         <div className="absolute top-1/3 left-4 w-8 h-8 bg-warning rounded-full flex items-center justify-center text-white text-xs font-bold shadow-lg">
                           1

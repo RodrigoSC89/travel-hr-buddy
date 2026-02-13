@@ -18,8 +18,8 @@ export default function ForecastPage() {
     <main className="container mx-auto p-6 space-y-6">
       {/* Page Header */}
       <div className="space-y-2">
-        <h1 className="text-3xl font-bold text-blue-400">Forecast Global</h1>
-        <p className="text-gray-400">
+        <h1 className="text-3xl font-bold text-primary">Forecast Global</h1>
+        <p className="text-muted-foreground">
           Previsão preditiva com IA embarcada via ONNX Runtime e sincronização MQTT
         </p>
       </div>
@@ -29,7 +29,7 @@ export default function ForecastPage() {
         <Card>
           <CardHeader className="pb-3">
             <div className="flex items-center gap-2">
-              <TrendingUp className="h-5 w-5 text-blue-500" aria-hidden="true" />
+              <TrendingUp className="h-5 w-5 text-primary" aria-hidden="true" />
               <CardTitle className="text-lg">Previsões em Tempo Real</CardTitle>
             </div>
           </CardHeader>
@@ -43,7 +43,7 @@ export default function ForecastPage() {
         <Card>
           <CardHeader className="pb-3">
             <div className="flex items-center gap-2">
-              <Activity className="h-5 w-5 text-green-500" aria-hidden="true" />
+              <Activity className="h-5 w-5 text-success" aria-hidden="true" />
               <CardTitle className="text-lg">IA Cliente-Side</CardTitle>
             </div>
           </CardHeader>
@@ -57,7 +57,7 @@ export default function ForecastPage() {
         <Card>
           <CardHeader className="pb-3">
             <div className="flex items-center gap-2">
-              <Zap className="h-5 w-5 text-purple-500" aria-hidden="true" />
+              <Zap className="h-5 w-5 text-accent" aria-hidden="true" />
               <CardTitle className="text-lg">Sincronização MQTT</CardTitle>
             </div>
           </CardHeader>
@@ -70,17 +70,17 @@ export default function ForecastPage() {
       </div>
 
       {/* AI Forecast Component */}
-      <Suspense fallback={<div className="p-4 text-gray-400">Carregando previsão IA...</div>}>
+      <Suspense fallback={<div className="p-4 text-muted-foreground">Carregando previsão IA...</div>}>
         <ForecastAI />
       </Suspense>
 
       {/* Metrics Component */}
-      <Suspense fallback={<div className="p-4 text-gray-400">Carregando métricas...</div>}>
+      <Suspense fallback={<div className="p-4 text-muted-foreground">Carregando métricas...</div>}>
         <ForecastMetrics />
       </Suspense>
 
       {/* Map Component */}
-      <Suspense fallback={<div className="p-4 text-gray-400">Carregando mapa...</div>}>
+      <Suspense fallback={<div className="p-4 text-muted-foreground">Carregando mapa...</div>}>
         <ForecastMap />
       </Suspense>
     </main>

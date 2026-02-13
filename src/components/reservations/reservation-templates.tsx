@@ -464,7 +464,7 @@ export const ReservationTemplates: React.FC<ReservationTemplatesProps> = ({
                     reservation_type: e.target.value as "hotel" | "transport" | "embarkation" | "flight" | "other",
                     template_type: e.target.value 
                   })}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md"
+                  className="w-full px-3 py-2 border border-border rounded-md bg-background text-foreground"
                 >
                   <option value="hotel">Hotel</option>
                   <option value="flight">Voo</option>

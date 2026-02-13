@@ -238,7 +238,7 @@ export function IncidentsSGSOPanel() {
                 </div>
               </CardHeader>
               <CardContent className="space-y-3">
-                <p className="text-sm text-gray-700">{incident.description}</p>
+                <p className="text-sm text-foreground">{incident.description}</p>
                 
                 <div className="flex flex-wrap gap-2 text-xs">
                   <Badge variant="outline">Classe: {incident.dpClass}</Badge>
@@ -246,15 +246,15 @@ export function IncidentsSGSOPanel() {
                 </div>
 
                 {/* SGSO Classification */}
-                <div className="pt-2 border-t border-gray-200 space-y-1">
-                  <p className="text-xs font-semibold text-gray-700">Classificação SGSO:</p>
+                <div className="pt-2 border-t border-border space-y-1">
+                  <p className="text-xs font-semibold text-foreground">Classificação SGSO:</p>
                   {incident.sgsoCategory && (
                     <Badge variant="outline" className="text-xs">
                       {incident.sgsoCategory}
                     </Badge>
                   )}
                   {incident.rootCause && (
-                    <p className="text-xs text-gray-600 mt-1">
+                    <p className="text-xs text-muted-foreground mt-1">
                       <span className="font-medium">Causa Raiz:</span> {incident.rootCause}
                     </p>
                   )}

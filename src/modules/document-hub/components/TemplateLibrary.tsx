@@ -321,7 +321,7 @@ export const TemplateLibrary: React.FC = () => {
       compliance: "bg-red-100 text-red-800"
     };
 
-    return <Badge className={variants[category] || "bg-gray-100"}>{category}</Badge>;
+    return <Badge className={variants[category] || "bg-muted text-muted-foreground"}>{category}</Badge>;
   };
 
   return (
@@ -476,7 +476,7 @@ export const TemplateLibrary: React.FC = () => {
                       <TableCell>
                         <div className="font-medium">{template.name}</div>
                         {template.description && (
-                          <div className="text-xs text-gray-500">{template.description}</div>
+                          <div className="text-xs text-muted-foreground">{template.description}</div>
                         )}
                       </TableCell>
                       <TableCell>{getCategoryBadge(template.category)}</TableCell>
@@ -484,14 +484,14 @@ export const TemplateLibrary: React.FC = () => {
                         <Badge variant="outline">v{template.version}</Badge>
                       </TableCell>
                       <TableCell>
-                        <div className="text-xs text-gray-600">
+                        <div className="text-xs text-muted-foreground">
                           {template.placeholders && template.placeholders.length > 0
                             ? template.placeholders.length + " placeholder(s)"
                             : "No placeholders"}
                         </div>
                       </TableCell>
                       <TableCell>
-                        <Badge className={template.is_public ? "bg-green-100 text-green-800" : "bg-gray-100 text-gray-800"}>
+                        <Badge className={template.is_public ? "bg-success/10 text-success" : "bg-muted text-muted-foreground"}>
                           {template.is_public ? "Public" : "Private"}
                         </Badge>
                       </TableCell>
@@ -577,19 +577,19 @@ export const TemplateLibrary: React.FC = () => {
           </DialogHeader>
           <div className="py-4">
             {versions.length === 0 ? (
-              <div className="text-center text-gray-500 text-sm">No version history available</div>
+              <div className="text-center text-muted-foreground text-sm">No version history available</div>
             ) : (
               <div className="space-y-2">
                 {versions.map((version) => (
                   <div key={version.id} className="border rounded-lg p-3">
                     <div className="flex items-center justify-between mb-2">
                       <Badge>Version {version.version_number}</Badge>
-                      <div className="text-xs text-gray-500">
+                      <div className="text-xs text-muted-foreground">
                         {new Date(version.created_at).toLocaleDateString()}
                       </div>
                     </div>
                     {version.change_summary && (
-                      <div className="text-sm text-gray-600">{version.change_summary}</div>
+                      <div className="text-sm text-muted-foreground">{version.change_summary}</div>
                     )}
                   </div>
                 ))}

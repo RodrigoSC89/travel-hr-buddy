@@ -296,7 +296,7 @@ export const DocumentManagementCenter = () => {
                     <Input placeholder="Ex: segurança, procedimento, treinamento" />
                   </div>
                 
-                  <div className="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center">
+                  <div className="border-2 border-dashed border-border rounded-lg p-6 text-center">
                     <Upload className="h-12 w-12 mx-auto text-muted-foreground mb-4" />
                     <p className="text-foreground">Arraste arquivos aqui ou clique para selecionar</p>
                     <p className="text-sm text-muted-foreground">PDF, DOC, DOCX até 10MB</p>
