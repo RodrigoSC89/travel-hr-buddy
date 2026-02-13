@@ -241,15 +241,15 @@ function SimulationDetailView({ sim, onClose }: { sim: any; onClose: () => void 
               </CardHeader>
               <CardContent>
                 <div className="space-y-2">
-                  {riskFactors.map((rf: any, i: number) => (
+                  {riskFactors.map((rf: Record<string, unknown>, i: number) => (
                     <div key={`rf-${i}-${String(rf.factor)}`} className="flex items-start gap-3 p-2 rounded border">
                       <AlertTriangle className={`h-4 w-4 mt-0.5 flex-shrink-0 ${
                         rf.severity === "high" || rf.impact === "high" ? "text-destructive" : 
                         rf.severity === "medium" || rf.impact === "medium" ? "text-warning" : "text-muted-foreground"
                       }`} />
                       <div className="flex-1 min-w-0">
-                        <p className="text-sm font-medium">{String(rf.factor)}</p>
-                        {rf.mitigation && <p className="text-xs text-muted-foreground mt-0.5">{String(rf.mitigation)}</p>}
+                        <p className="text-sm font-medium">{String(rf.factor ?? '')}</p>
+                        {rf.mitigation ? <p className="text-xs text-muted-foreground mt-0.5">{String(rf.mitigation)}</p> : null}
                       </div>
                       <Badge variant="outline" className="text-[10px] flex-shrink-0">
                         {String(rf.severity || rf.probability || "—")}

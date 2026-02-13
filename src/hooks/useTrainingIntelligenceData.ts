@@ -60,22 +60,22 @@ export function useTrainingIntelligenceData() {
       const crew = crewRes.data || [];
 
       // Map courses from training_modules
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any -- complex Supabase join mapping
-      type ModuleRow = Record<string, any>;
-      type RecordRow = Record<string, any>;
+      type ModuleRow = Record<string, unknown>;
+      type RecordRow = Record<string, unknown>;
       const courses: Course[] = (modules as ModuleRow[]).map((m) => {
         const relatedRecords = (records as RecordRow[]).filter((r) => r.training_name === m.title || r.training_type === m.category);
         const completedCount = relatedRecords.filter((r) => r.status === "completed" || r.passed).length;
+        const content = m.content as Record<string, unknown> | null;
         return {
-          id: m.id,
-          title: m.title || "Curso",
-          category: m.category || "General",
+          id: String(m.id),
+          title: String(m.title || "Curso"),
+          category: String(m.category || "General"),
           duration: m.duration_hours ? `${m.duration_hours}h` : "8h",
-          format: m.content?.format || "E-Learning",
+          format: String(content?.format || "E-Learning"),
           enrolled: relatedRecords.length || Math.max(10, Math.round(crew.length * 0.3)),
           completed: completedCount || Math.max(5, Math.round(crew.length * 0.2)),
           rating: relatedRecords.length > 0 ? Math.min(5, 3.5 + (completedCount / Math.max(relatedRecords.length, 1)) * 1.5) : 4.0,
-          status: m.status || "active",
+          status: String(m.status || "active"),
           expiry: m.expiration_months ? `${m.expiration_months} meses` : "3 years",
         };
       });
@@ -93,7 +93,7 @@ export function useTrainingIntelligenceData() {
         const entry = certMap.get(key)!;
         entry.holders++;
         if (c.expiry_date || c.expires_at) {
-          const expDate = new Date(c.expiry_date || c.expires_at);
+          const expDate = new Date(String(c.expiry_date || c.expires_at));
           if (expDate < now) entry.expired++;
           else if (expDate < in30Days) entry.expiring30++;
         }
@@ -111,8 +111,8 @@ export function useTrainingIntelligenceData() {
         const totalCourses = Math.max(memberRecords.length, 1);
         const pending = memberRecords.filter((r) => r.status === "in_progress" || r.status === "pending").length;
         return {
-          name: c.full_name || "Tripulante",
-          role: c.rank || "Crew",
+          name: String(c.full_name || "Tripulante"),
+          role: String(c.rank || "Crew"),
           progress: Math.round((completedCourses / totalCourses) * 100),
           courses: totalCourses,
           pending,

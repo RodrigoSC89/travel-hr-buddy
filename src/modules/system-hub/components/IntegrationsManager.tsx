@@ -63,7 +63,7 @@ interface Integration {
   health: number;
   requests24h: number;
   errors24h: number;
-  config?: Record<string, any>;
+  config?: Record<string, unknown>;
   icon: React.ElementType;
 }
 

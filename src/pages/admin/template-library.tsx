@@ -28,7 +28,7 @@ export default function TemplateLibraryPage() {
   const [selectedType, setSelectedType] = useState<string>("all");
   const { toast } = useToast();
 
-  const typeIcons: Record<string, any> = {
+  const typeIcons: Record<string, React.ElementType> = {
     document: FileText,
     incident: AlertCircle,
     fmea: Activity,

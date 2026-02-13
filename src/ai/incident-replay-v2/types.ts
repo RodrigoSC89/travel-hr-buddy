@@ -33,7 +33,7 @@ export interface ContextSnapshot {
   timestamp: number;
   source: ReplayDataSource;
   data: {
-    sensors?: Record<string, any>;
+    sensors?: Record<string, unknown>;
     crew?: {
       onDuty: string[];
       actions: string[];
@@ -46,7 +46,7 @@ export interface ContextSnapshot {
       decisions: string[];
     };
     system?: {
-      status: Record<string, any>;
+      status: Record<string, unknown>;
       alerts: string[];
       errors: string[];
     };
@@ -132,10 +132,10 @@ export interface IncidentReplay {
   timeline: TimelineEvent[];
   aiDecisions: AIDecisionRecord[];
   reconstruction: {
-    sensorData: Record<number, any>; // timestamp -> data
-    crewActivity: Record<number, any>; // timestamp -> activity
-    systemState: Record<number, any>; // timestamp -> state
-    aiAnalysis: Record<number, any>; // timestamp -> analysis
+    sensorData: Record<number, unknown>; // timestamp -> data
+    crewActivity: Record<number, unknown>; // timestamp -> activity
+    systemState: Record<number, unknown>; // timestamp -> state
+    aiAnalysis: Record<number, unknown>; // timestamp -> analysis
   };
   statistics: {
     totalEvents: number;

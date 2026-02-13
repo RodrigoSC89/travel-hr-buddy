@@ -412,7 +412,7 @@ export function useAllMaritimeAudits() {
       
       const allAudits: MaritimeAudit[] = [];
       
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any -- normalizing heterogeneous audit table schemas
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any -- normalizing heterogeneous audit table schemas requires dynamic access
       type AuditRow = Record<string, any>;
       
       // Normalize and combine all audit data

@@ -28,10 +28,8 @@ interface SystemNotification {
   is_read: boolean;
   created_at: string;
   action_type?: string;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Supabase Json type is union with string/number/null
-  action_data?: any;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Supabase Json type
-  metadata?: any;
+  action_data?: Record<string, unknown>;
+  metadata?: Record<string, unknown>;
 }
 
 export const EnhancedNotificationCenter: React.FC = () => {
@@ -55,8 +53,10 @@ export const EnhancedNotificationCenter: React.FC = () => {
         type: (item.type as "info" | "warning" | "error" | "success") || "info",
         priority: (item.priority as "low" | "medium" | "high" | "urgent") || "medium",
         action_type: nullToUndefined(item.action_type),
+        action_data: (item.action_data as Record<string, unknown> | null) ?? undefined,
+        metadata: (item.metadata as Record<string, unknown> | null) ?? undefined,
         action_text: nullToUndefined(item.action_text)
-      })));
+      })) as SystemNotification[]);
     } catch (error) {
       toast({
         title: "Erro",
