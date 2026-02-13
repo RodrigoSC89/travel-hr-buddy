@@ -271,58 +271,58 @@ export const LessonsLearnedCenter: React.FC = () => {
 
       {/* Stats */}
       <div className="grid grid-cols-5 gap-4">
-        <Card className="bg-gradient-to-br from-blue-500/10 to-blue-600/5">
+        <Card className="bg-gradient-to-br from-info/10 to-info/5">
           <CardContent className="pt-4">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-muted-foreground">Total de Lições</p>
                 <p className="text-2xl font-bold">{stats.total}</p>
               </div>
-              <BookOpen className="h-8 w-8 text-blue-500" />
+              <BookOpen className="h-8 w-8 text-info" />
             </div>
           </CardContent>
         </Card>
-        <Card className="bg-gradient-to-br from-red-500/10 to-red-600/5">
+        <Card className="bg-gradient-to-br from-destructive/10 to-destructive/5">
           <CardContent className="pt-4">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-muted-foreground">Críticos</p>
                 <p className="text-2xl font-bold">{stats.critical}</p>
               </div>
-              <AlertTriangle className="h-8 w-8 text-red-500" />
+              <AlertTriangle className="h-8 w-8 text-destructive" />
             </div>
           </CardContent>
         </Card>
-        <Card className="bg-gradient-to-br from-green-500/10 to-green-600/5">
+        <Card className="bg-gradient-to-br from-success/10 to-success/5">
           <CardContent className="pt-4">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-muted-foreground">Em Treinamentos</p>
                 <p className="text-2xl font-bold">{stats.usedInTraining}</p>
               </div>
-              <Target className="h-8 w-8 text-green-500" />
+              <Target className="h-8 w-8 text-success" />
             </div>
           </CardContent>
         </Card>
-        <Card className="bg-gradient-to-br from-purple-500/10 to-purple-600/5">
+        <Card className="bg-gradient-to-br from-accent/10 to-accent/5">
           <CardContent className="pt-4">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-muted-foreground">Falha Humana</p>
                 <p className="text-2xl font-bold">{lessons.filter(l => l.failureType === "Human").length}</p>
               </div>
-              <Activity className="h-8 w-8 text-purple-500" />
+              <Activity className="h-8 w-8 text-accent-foreground" />
             </div>
           </CardContent>
         </Card>
-        <Card className="bg-gradient-to-br from-yellow-500/10 to-yellow-600/5">
+        <Card className="bg-gradient-to-br from-warning/10 to-warning/5">
           <CardContent className="pt-4">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-muted-foreground">Falha Elétrica</p>
                 <p className="text-2xl font-bold">{lessons.filter(l => l.failureType === "Electrical").length}</p>
               </div>
-              <Zap className="h-8 w-8 text-yellow-500" />
+              <Zap className="h-8 w-8 text-warning" />
             </div>
           </CardContent>
         </Card>
@@ -397,8 +397,8 @@ export const LessonsLearnedCenter: React.FC = () => {
                         <Badge className={sourceColors[lesson.source]}>{lesson.source}</Badge>
                         <Badge className={failureTypeColors[lesson.failureType]}>{lesson.failureType}</Badge>
                         {getSeverityBadge(lesson.severity)}
-                        {lesson.usedInTraining && <Badge variant="outline" className="border-green-500 text-green-500"><CheckCircle className="w-3 h-3 mr-1" />Treinamento</Badge>}
-                        {lesson.usedInAudit && <Badge variant="outline" className="border-blue-500 text-blue-500"><Shield className="w-3 h-3 mr-1" />Auditoria</Badge>}
+                        {lesson.usedInTraining && <Badge variant="outline" className="border-success text-success"><CheckCircle className="w-3 h-3 mr-1" />Treinamento</Badge>}
+                        {lesson.usedInAudit && <Badge variant="outline" className="border-info text-info"><Shield className="w-3 h-3 mr-1" />Auditoria</Badge>}
                       </div>
                       <h3 className="font-semibold text-lg">{lesson.title}</h3>
                       <p className="text-sm text-muted-foreground line-clamp-2">{lesson.description}</p>
@@ -456,16 +456,16 @@ export const LessonsLearnedCenter: React.FC = () => {
               </CardHeader>
               <CardContent>
                 <div className="space-y-4">
-                  <div className="p-3 bg-red-500/10 rounded-lg border border-red-500/20">
-                    <p className="font-medium text-red-600">⚠️ Tendência Crescente</p>
+                  <div className="p-3 bg-destructive/10 rounded-lg border border-destructive/20">
+                    <p className="font-medium text-destructive">⚠️ Tendência Crescente</p>
                     <p className="text-sm text-muted-foreground">Falhas de Software aumentaram 25% no último trimestre</p>
                   </div>
-                  <div className="p-3 bg-green-500/10 rounded-lg border border-green-500/20">
-                    <p className="font-medium text-green-600">✅ Tendência Decrescente</p>
+                  <div className="p-3 bg-success/10 rounded-lg border border-success/20">
+                    <p className="font-medium text-success">✅ Tendência Decrescente</p>
                     <p className="text-sm text-muted-foreground">Erros humanos reduziram 15% após treinamentos</p>
                   </div>
-                  <div className="p-3 bg-yellow-500/10 rounded-lg border border-yellow-500/20">
-                    <p className="font-medium text-yellow-600">📊 Estável</p>
+                  <div className="p-3 bg-warning/10 rounded-lg border border-warning/20">
+                    <p className="font-medium text-warning">📊 Estável</p>
                     <p className="text-sm text-muted-foreground">Falhas elétricas mantêm média histórica</p>
                   </div>
                 </div>
@@ -485,9 +485,9 @@ export const LessonsLearnedCenter: React.FC = () => {
             </CardHeader>
             <CardContent>
               <div className="space-y-4">
-                <div className="p-4 bg-blue-500/10 rounded-lg border border-blue-500/20">
+                <div className="p-4 bg-info/10 rounded-lg border border-info/20">
                   <div className="flex items-start gap-3">
-                    <Lightbulb className="h-5 w-5 text-blue-500 mt-1" />
+                    <Lightbulb className="h-5 w-5 text-info mt-1" />
                     <div>
                       <p className="font-medium">Recomendação: Atualização de ASOG</p>
                       <p className="text-sm text-muted-foreground mt-1">Com base em 3 eventos similares de perda de referência, recomenda-se incluir threshold de alarme antecipado para degradação de sinal PRS no ASOG.</p>
@@ -499,9 +499,9 @@ export const LessonsLearnedCenter: React.FC = () => {
                     </div>
                   </div>
                 </div>
-                <div className="p-4 bg-purple-500/10 rounded-lg border border-purple-500/20">
+                <div className="p-4 bg-accent/10 rounded-lg border border-accent/20">
                   <div className="flex items-start gap-3">
-                    <Target className="h-5 w-5 text-purple-500 mt-1" />
+                    <Target className="h-5 w-5 text-accent-foreground mt-1" />
                     <div>
                       <p className="font-medium">Recomendação: Treinamento Específico</p>
                       <p className="text-sm text-muted-foreground mt-1">Padrão identificado: 40% dos erros humanos relacionados a configuração de ganho. Sugestão: incluir módulo prático no próximo ciclo de treinamento CPD.</p>
@@ -513,9 +513,9 @@ export const LessonsLearnedCenter: React.FC = () => {
                     </div>
                   </div>
                 </div>
-                <div className="p-4 bg-green-500/10 rounded-lg border border-green-500/20">
+                <div className="p-4 bg-success/10 rounded-lg border border-success/20">
                   <div className="flex items-start gap-3">
-                    <Shield className="h-5 w-5 text-green-500 mt-1" />
+                    <Shield className="h-5 w-5 text-success mt-1" />
                     <div>
                       <p className="font-medium">Recomendação: Atualização de FMEA</p>
                       <p className="text-sm text-muted-foreground mt-1">Evento de cross-connection sugere revisão da matriz FMEA para incluir verificação de modificações não documentadas em sistemas elétricos.</p>

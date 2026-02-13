@@ -281,7 +281,7 @@ export default function FormsBuilderPage() {
                       <div className="flex items-center justify-between mb-1">
                         <h4 className="font-medium text-sm truncate">{template.title}</h4>
                         {template.isPublished ? (
-                          <Badge variant="outline" className="text-xs bg-green-500/10 text-green-600">
+                          <Badge variant="outline" className="text-xs bg-success/10 text-success">
                             Ativo
                           </Badge>
                         ) : (
@@ -363,7 +363,7 @@ export default function FormsBuilderPage() {
                         <div key={field.id} className="space-y-2">
                           <Label className="flex items-center gap-1">
                             {field.label}
-                            {field.required && <span className="text-red-500">*</span>}
+                            {field.required && <span className="text-destructive">*</span>}
                           </Label>
                           {field.type === 'text' && <Input placeholder={field.placeholder} />}
                           {field.type === 'number' && <Input type="number" placeholder={field.placeholder} />}
