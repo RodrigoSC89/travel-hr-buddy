@@ -106,12 +106,12 @@ class MockLngLat {
 const createMockMapbox = (): MapboxGLInterface => {
   return {
     accessToken: '',
-    Map: MockMap as any,
-    Marker: MockMarker as any,
-    Popup: MockPopup as any,
-    NavigationControl: MockNavigationControl as any,
-    LngLatBounds: MockLngLatBounds as any,
-    LngLat: MockLngLat as any,
+    Map: MockMap as unknown as MapboxGLInterface["Map"],
+    Marker: MockMarker as unknown as MapboxGLInterface["Marker"],
+    Popup: MockPopup as unknown as MapboxGLInterface["Popup"],
+    NavigationControl: MockNavigationControl as unknown as MapboxGLInterface["NavigationControl"],
+    LngLatBounds: MockLngLatBounds as unknown as MapboxGLInterface["LngLatBounds"],
+    LngLat: MockLngLat as unknown as MapboxGLInterface["LngLat"],
   };
 };
 
@@ -153,25 +153,30 @@ const loadMapboxGL = async (): Promise<MapboxGLInterface> => {
     logger.debug('[mapbox-shim] Module keys:', { keys: Object.keys(mapboxModule) });
     
     // Handle various possible module structures
-    let resolved: any = null;
+    let resolved: unknown = null;
     
     // Try different resolution strategies
     if (mapboxModule && typeof mapboxModule === 'object') {
+      const mod = mapboxModule as Record<string, unknown>;
       // Strategy 1: Direct module has Map
-      if (mapboxModule.Map && typeof mapboxModule.Map === 'function') {
+      if ('Map' in mod && typeof mod.Map === 'function') {
         resolved = mapboxModule;
       }
       // Strategy 2: Default export has Map
-      else if ((mapboxModule as any).default?.Map) {
-        resolved = (mapboxModule as any).default;
+      else if (mod.default && typeof mod.default === 'object' && 'Map' in (mod.default as Record<string, unknown>)) {
+        resolved = mod.default;
       }
       // Strategy 3: Nested default
-      else if ((mapboxModule as any).default?.default?.Map) {
-        resolved = (mapboxModule as any).default.default;
+      else if (mod.default && typeof mod.default === 'object' && 'default' in (mod.default as Record<string, unknown>)) {
+        const nested = (mod.default as Record<string, unknown>).default;
+        if (nested && typeof nested === 'object' && 'Map' in (nested as Record<string, unknown>)) {
+          resolved = nested;
+        }
       }
     }
     
-    if (resolved && resolved.Map) {
+    const res = resolved as Record<string, unknown> | null;
+    if (res && res.Map) {
       logger.debug('[mapbox-shim] Successfully resolved mapbox-gl');
       
       // Create mutable wrapper with proper accessToken handling
@@ -179,33 +184,33 @@ const loadMapboxGL = async (): Promise<MapboxGLInterface> => {
       
       const wrapper: MapboxGLInterface = {
         get accessToken() { 
-          return _accessToken || resolved.accessToken || ''; 
+          return _accessToken || String(res.accessToken || ''); 
         },
         set accessToken(value: string) {
           _accessToken = value;
           // Try to set on original module
           try { 
-            if (resolved && typeof resolved === 'object') {
-              resolved.accessToken = value;
+            if (res && typeof res === 'object') {
+              res.accessToken = value;
             }
           } catch (e) {
             // Ignore if read-only
           }
         },
-        Map: resolved.Map,
-        Marker: resolved.Marker || MockMarker as any,
-        Popup: resolved.Popup || MockPopup as any,
-        NavigationControl: resolved.NavigationControl || MockNavigationControl as any,
-        LngLatBounds: resolved.LngLatBounds || MockLngLatBounds as any,
-        LngLat: resolved.LngLat || MockLngLat as any,
+        Map: res.Map as MapboxGLInterface["Map"],
+        Marker: (res.Marker || MockMarker) as unknown as MapboxGLInterface["Marker"],
+        Popup: (res.Popup || MockPopup) as unknown as MapboxGLInterface["Popup"],
+        NavigationControl: (res.NavigationControl || MockNavigationControl) as unknown as MapboxGLInterface["NavigationControl"],
+        LngLatBounds: (res.LngLatBounds || MockLngLatBounds) as unknown as MapboxGLInterface["LngLatBounds"],
+        LngLat: (res.LngLat || MockLngLat) as unknown as MapboxGLInterface["LngLat"],
       };
       
       // Copy additional properties safely
-      if (resolved && typeof resolved === 'object') {
-        Object.keys(resolved).forEach(key => {
+      if (res && typeof res === 'object') {
+        Object.keys(res).forEach(key => {
           if (!(key in wrapper)) {
             try { 
-              (wrapper as any)[key] = resolved[key]; 
+              (wrapper as Record<string, unknown>)[key] = res[key]; 
             } catch (e) {
               // Ignore copy errors
             }

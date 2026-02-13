@@ -90,7 +90,7 @@ export class EmissionTrackingService {
         intensity: {
           eeoi: eeoi,
           cii: cii.value,
-          ciiRating: cii.rating as any
+          ciiRating: String(cii.rating) as "A" | "B" | "C" | "D" | "E"
         },
         verification: {
           status: "draft",

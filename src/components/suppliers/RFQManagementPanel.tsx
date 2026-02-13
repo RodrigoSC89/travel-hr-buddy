@@ -80,28 +80,25 @@ export default function RFQManagementPanel() {
   const { data: rfqs = [], isLoading, refetch } = useQuery({
     queryKey: ["rfq-management"],
     queryFn: async () => {
-      const { data, error } = await supabase
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any -- rfq_requests not in generated types
-        .from("rfq_requests" as any)
+      const { data, error } = await (supabase.from as Function)("rfq_requests")
         .select("*")
         .order("created_at", { ascending: false });
       
       if (error) throw error;
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any -- dynamic table schema
-      return (data || []).map((item: any) => ({
-        id: item.id,
-        rfq_number: item.rfq_number || `RFQ-${item.id.slice(0, 8)}`,
-        title: item.title,
-        description: item.description || "",
-        category: item.category,
-        status: item.status || "draft",
-        deadline: item.deadline,
-        budget_estimate: item.budget_estimate || 0,
-        currency: item.currency || "BRL",
-        delivery_port: item.delivery_port || "",
-        suppliers_invited: ((item.id?.charCodeAt(0) || 65) % 5) + 1,
-        quotes_received: ((item.id?.charCodeAt(1) || 66) % 3),
-        created_at: item.created_at
+      return ((data || []) as unknown as Record<string, unknown>[]).map((item) => ({
+        id: String(item.id),
+        rfq_number: String(item.rfq_number || `RFQ-${String(item.id).slice(0, 8)}`),
+        title: String(item.title),
+        description: String(item.description || ""),
+        category: String(item.category),
+        status: String(item.status || "draft"),
+        deadline: String(item.deadline),
+        budget_estimate: Number(item.budget_estimate) || 0,
+        currency: String(item.currency || "BRL"),
+        delivery_port: String(item.delivery_port || ""),
+        suppliers_invited: ((String(item.id)?.charCodeAt(0) || 65) % 5) + 1,
+        quotes_received: ((String(item.id)?.charCodeAt(1) || 66) % 3),
+        created_at: String(item.created_at)
       })) as RFQRequest[];
     }
   });
@@ -116,7 +113,7 @@ export default function RFQManagementPanel() {
   // Create RFQ mutation
   const createMutation = useMutation({
     mutationFn: async (data: typeof formData) => {
-      const { error } = await supabase.from("rfq_requests" as any).insert({
+      const { error } = await (supabase.from as Function)("rfq_requests").insert({
         rfq_number: `RFQ-${Date.now()}`,
         title: data.title,
         description: data.description,
@@ -143,7 +140,7 @@ export default function RFQManagementPanel() {
   // Update RFQ mutation
   const updateMutation = useMutation({
     mutationFn: async ({ id, ...data }: { id: string } & typeof formData) => {
-      const { error } = await supabase.from("rfq_requests" as any)
+      const { error } = await (supabase.from as Function)("rfq_requests")
         .update({
           title: data.title,
           description: data.description,
@@ -165,7 +162,7 @@ export default function RFQManagementPanel() {
   // Delete RFQ mutation
   const deleteMutation = useMutation({
     mutationFn: async (id: string) => {
-      const { error } = await supabase.from("rfq_requests" as any).delete().eq("id", id);
+      const { error } = await (supabase.from as Function)("rfq_requests").delete().eq("id", id);
       if (error) throw error;
     },
     onSuccess: () => {
@@ -177,7 +174,7 @@ export default function RFQManagementPanel() {
   // Status update mutation
   const statusMutation = useMutation({
     mutationFn: async ({ id, status }: { id: string; status: string }) => {
-      const { error } = await supabase.from("rfq_requests" as any)
+      const { error } = await (supabase.from as Function)("rfq_requests")
         .update({ status })
         .eq("id", id);
       if (error) throw error;

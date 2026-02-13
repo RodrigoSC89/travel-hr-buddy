@@ -177,8 +177,7 @@ export const ScheduledReports: React.FC = () => {
 
   const deleteSchedule = async (reportId: string) => {
     try {
-      const { error } = await supabase
-        .from("scheduled_compliance_reports" as any)
+      const { error } = await (supabase.from as Function)("scheduled_compliance_reports")
         .delete()
         .eq("id", reportId);
 

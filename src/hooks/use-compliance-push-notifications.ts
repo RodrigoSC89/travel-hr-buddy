@@ -39,8 +39,8 @@ export function useCompliancePushNotifications(): UseCompliancePushNotifications
           try {
             const registration = await navigator.serviceWorker.getRegistration('/sw-compliance.js');
             if (registration) {
-              // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Push API not in default TS lib
-              const subscription = await (registration as any).pushManager.getSubscription();
+              const reg = registration as unknown as { pushManager: { getSubscription: () => Promise<PushSubscription | null> } };
+              const subscription = await reg.pushManager.getSubscription();
               setIsSubscribed(!!subscription);
             }
           } catch (error) {
@@ -98,8 +98,8 @@ export function useCompliancePushNotifications(): UseCompliancePushNotifications
       if ('serviceWorker' in navigator) {
         const registration = await navigator.serviceWorker.getRegistration('/sw-compliance.js');
         if (registration) {
-          // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Push API not in default TS lib
-          const subscription = await (registration as any).pushManager.getSubscription();
+          const reg = registration as unknown as { pushManager: { getSubscription: () => Promise<PushSubscription | null> } };
+          const subscription = await reg.pushManager.getSubscription();
           if (subscription) {
             await subscription.unsubscribe();
             setIsSubscribed(false);

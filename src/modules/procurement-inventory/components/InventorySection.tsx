@@ -178,7 +178,7 @@ export default function InventorySection({ searchQuery }: InventorySectionProps)
         ? selectedItem.quantity - movementData.quantity
         : selectedItem.quantity + movementData.quantity;
 
-    updateInventory.mutate({ id: selectedItem.id, updates: { quantity: newQuantity } as any });
+    updateInventory.mutate({ id: selectedItem.id, updates: { quantity: newQuantity } as never });
     setShowMovement(false);
     setSelectedItem(null);
     setMovementData({ quantity: 0, reason: "", reference: "" });

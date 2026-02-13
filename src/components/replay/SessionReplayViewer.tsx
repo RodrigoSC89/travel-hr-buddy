@@ -280,7 +280,7 @@ export function SessionReplayViewer() {
                       {event.type === "input" && <Keyboard className="h-3 w-3 mr-1" />}
                       {event.type}
                     </Badge>
-                    <span className="text-xs text-muted-foreground truncate">{(event.data as any)?.module || (event.data as any)?.action || ''}</span>
+                    <span className="text-xs text-muted-foreground truncate">{(event.data as Record<string, unknown>)?.module as string || (event.data as Record<string, unknown>)?.action as string || ''}</span>
                   </div>
                 ))}
               </div>

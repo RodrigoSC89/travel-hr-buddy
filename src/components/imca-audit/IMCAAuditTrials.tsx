@@ -366,7 +366,7 @@ export function IMCAAuditTrials({ selectedDPClass }: Props) {
                 <Label>Resultado do Teste</Label>
                 <Select 
                   value={executionData.result}
-                  onValueChange={v => setExecutionData({ ...executionData, result: v as any })}
+                  onValueChange={v => setExecutionData({ ...executionData, result: v as typeof executionData.result })}
                 >
                   <SelectTrigger>
                     <SelectValue />

@@ -54,12 +54,11 @@ export const HealthMetricsDashboard: React.FC = () => {
       const thirtyDaysAgo = new Date();
       thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
 
-      const { data: metricsData, error: metricsError } = await (supabase
-        .from("crew_health_metrics" as any)
+      const { data: metricsData, error: metricsError } = await (supabase.from as Function)("crew_health_metrics")
         .select("*")
         .eq("user_id", user.id)
         .gte("recorded_at", thirtyDaysAgo.toISOString())
-        .order("recorded_at", { ascending: true }) as unknown as Promise<{ data: HealthMetric[] | null; error: Error | null }>);
+        .order("recorded_at", { ascending: true }) as { data: HealthMetric[] | null; error: Error | null };
 
       if (metricsError) throw metricsError;
 
@@ -84,13 +83,12 @@ export const HealthMetricsDashboard: React.FC = () => {
       }
 
       // Load recent anomalies
-      const { data: anomaliesData, error: anomaliesError } = await (supabase
-        .from("health_anomalies" as any)
+      const { data: anomaliesData, error: anomaliesError } = await (supabase.from as Function)("health_anomalies")
         .select("*")
         .eq("user_id", user.id)
         .eq("is_resolved", false)
         .order("created_at", { ascending: false })
-        .limit(5) as unknown as Promise<{ data: HealthAnomaly[] | null; error: Error | null }>);
+        .limit(5) as { data: HealthAnomaly[] | null; error: Error | null };
 
       if (anomaliesError) throw anomaliesError;
       setAnomalies(anomaliesData || []);

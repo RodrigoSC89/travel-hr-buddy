@@ -124,8 +124,7 @@ export function DrydockPlanningTimeline() {
           .limit(10);
 
         if (data && data.length > 0) {
-          // eslint-disable-next-line @typescript-eslint/no-explicit-any -- maintenance_tasks row mapping with estimated_cost not in generated types
-          const mapped: DrydockProject[] = (data as any[]).map((t) => ({
+          const mapped: DrydockProject[] = ((data as unknown) as Record<string, unknown>[]).map((t) => ({
             id: String(t.id),
             vessel: String(t.title || "Embarcação"),
             vesselId: String(t.vessel_id || "v1"),
@@ -133,8 +132,8 @@ export function DrydockPlanningTimeline() {
             type: "special_survey" as const,
             status: (t.status === "completed" ? "completed" : t.status === "in_progress" ? "in_progress" : "planning") as DrydockProject["status"],
             shipyard: String(t.description || "TBD"),
-            startDate: new Date(t.scheduled_date || Date.now()),
-            endDate: new Date(t.due_date || Date.now()),
+            startDate: new Date(String(t.scheduled_date) || Date.now()),
+            endDate: new Date(String(t.due_date) || Date.now()),
             budgetEstimated: Number(t.estimated_cost) || 0,
             budgetActual: 0,
             completionPercent: Number(t.progress_percent) || 0,

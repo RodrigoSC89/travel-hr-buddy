@@ -49,12 +49,11 @@ export default function CrewWellbeing() {
         if (error) throw error;
         
         // Transform to wellbeing format with calculated values
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Supabase query result mapped to UI model
-        const wellbeingData: CrewWellbeing[] = (crewMembers as any[] || []).map((member) => ({
-          id: member.id,
-          name: member.full_name || 'N/A',
-          position: member.position || 'N/A',
-          vessel: member.vessel_id || 'N/A',
+        const wellbeingData: CrewWellbeing[] = (crewMembers || []).map((member) => ({
+          id: String(member.id),
+          name: String(member.full_name || 'N/A'),
+          position: String(member.position || 'N/A'),
+          vessel: String(member.vessel_id || 'N/A'),
           fatigueLevel: 'low' as const,
           hoursWorked: 40,
           restHours: 24,

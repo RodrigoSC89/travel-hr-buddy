@@ -56,7 +56,7 @@ class ResourceManager {
 
   private initNetworkMonitor(): void {
     if ('connection' in navigator) {
-      const conn = (navigator as any).connection;
+      const conn = (navigator as unknown as { connection?: EventTarget }).connection;
       conn?.addEventListener('change', this.networkChangeHandler);
     }
     
@@ -74,7 +74,7 @@ class ResourceManager {
     
     // Remove network listeners
     if ('connection' in navigator) {
-      const conn = (navigator as any).connection;
+      const conn = (navigator as unknown as { connection?: EventTarget }).connection;
       conn?.removeEventListener('change', this.networkChangeHandler);
     }
     
@@ -87,7 +87,7 @@ class ResourceManager {
   private updateStatus(): void {
     // PATCH v17 iOS PWA: Nunca definir network como 'offline' baseado em navigator.onLine
     if ('connection' in navigator) {
-      const conn = (navigator as any).connection;
+      const conn = (navigator as unknown as { connection?: { effectiveType?: string } }).connection;
       const effectiveType = conn?.effectiveType || '4g';
       
       if (effectiveType === '2g' || effectiveType === 'slow-2g') {
@@ -113,7 +113,7 @@ class ResourceManager {
     }
 
     // Memory (if available)
-    const perf = performance as any;
+    const perf = performance as unknown as { memory?: { usedJSHeapSize: number; jsHeapSizeLimit: number } };
     if (perf.memory) {
       const usage = perf.memory.usedJSHeapSize / perf.memory.jsHeapSizeLimit;
       if (usage > 0.9) {

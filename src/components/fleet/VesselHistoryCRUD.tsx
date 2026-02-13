@@ -105,7 +105,7 @@ export function VesselHistoryCRUD({ vesselId = "v1", vesselName = "MV Atlantic P
         event_date: formData.date || new Date().toISOString(),
         location: formData.location || null,
         status: formData.status,
-      } as any);
+      } as never);
       if (error) throw error;
     },
     onSuccess: () => {

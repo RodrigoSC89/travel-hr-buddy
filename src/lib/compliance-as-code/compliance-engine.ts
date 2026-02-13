@@ -391,8 +391,7 @@ class ComplianceEngine {
         detected_at: new Date().toISOString()
       };
 
-      const { data, error } = await (supabase
-        .from('compliance_violations') as any)
+      const { data, error } = await (supabase.from as Function)('compliance_violations')
         .insert(violation)
         .select()
         .single();

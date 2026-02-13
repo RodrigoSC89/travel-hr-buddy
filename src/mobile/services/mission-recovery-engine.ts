@@ -340,8 +340,7 @@ class MissionRecoveryEngine {
    */
   private async syncMissionState(missionId: string, state: MissionState): Promise<void> {
     try {
-      const { error } = await supabase
-        .from("missions" as any)
+      const { error } = await (supabase.from as Function)("missions")
         .upsert({
           id: missionId,
           status: state.status,

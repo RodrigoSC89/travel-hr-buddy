@@ -33,8 +33,8 @@ class ONNXSessionWrapper implements ONNXInferenceSession {
         logSeverityLevel: this.config.logSeverityLevel ?? 2,
       });
 
-      const inputNames = (this.session as any).inputNames as string[];
-      const outputNames = (this.session as any).outputNames as string[];
+      const inputNames = (this.session as unknown as { inputNames: string[] }).inputNames;
+      const outputNames = (this.session as unknown as { outputNames: string[] }).outputNames;
 
       this.model = new ONNXModelWrapper(this.session, inputNames, outputNames);
       
@@ -59,7 +59,7 @@ class ONNXSessionWrapper implements ONNXInferenceSession {
       this.model = null;
     }
     if (this.session) {
-      (this.session as any).release?.();
+      (this.session as unknown as { release?: () => void }).release?.();
       this.session = null;
     }
     logger.info("[ONNX] Session released");
@@ -78,23 +78,24 @@ class ONNXModelWrapper implements ONNXModel {
       // Convert inputs to ONNX format
       const feeds: Record<string, unknown> = {};
       for (const [name, tensor] of Object.entries(inputs)) {
-        feeds[name] = new (window as any).ort.Tensor(
+        feeds[name] = new (window as unknown as { ort: { Tensor: new (type: string, data: unknown, dims: number[]) => unknown } }).ort.Tensor(
           tensor.type,
-          tensor.data,
+          tensor.data as unknown,
           tensor.dims
         );
       }
 
       // Run inference
-      const results = await (this.session as any).run(feeds);
+      const results = await (this.session as unknown as { run: (feeds: Record<string, unknown>) => Promise<Record<string, unknown>> }).run(feeds);
 
       // Convert outputs to our format
       const outputs: ONNXOutputs = {};
       for (const [name, tensor] of Object.entries(results)) {
+        const t = tensor as { data: Float32Array; dims: number[]; type: ONNXTensor["type"] };
         outputs[name] = {
-          data: (tensor as any).data as Float32Array,
-          dims: (tensor as any).dims as number[],
-          type: (tensor as any).type as ONNXTensor["type"],
+          data: t.data,
+          dims: t.dims,
+          type: t.type,
         };
       }
 

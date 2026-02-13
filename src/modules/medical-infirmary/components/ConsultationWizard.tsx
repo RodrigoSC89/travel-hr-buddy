@@ -100,7 +100,7 @@ export function ConsultationWizard({ open, onOpenChange }: ConsultationWizardPro
       // Auto-set severity based on AI analysis
       setFormData(prev => ({
         ...prev,
-        severity: result.urgency as any
+        severity: result.urgency as "low" | "medium" | "high" | "critical"
       }));
     }
     setCurrentStep(4);

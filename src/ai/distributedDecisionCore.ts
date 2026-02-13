@@ -176,13 +176,13 @@ class DistributedDecisionCore {
       const { error } = await supabase.from("distributed_decisions").insert({
         decision_level: decision.decisionLevel,
         decision_type: decision.decisionType,
-        context: decision.context as any,
+        context: decision.context as never,
         priority: decision.priority,
         decision_status: decision.status,
         confidence: decision.success ? 1.0 : 0.0,
         outcome: decision.action,
         escalation_reason: decision.escalationReason,
-        simulation_result: decision.simulationResults as any,
+        simulation_result: decision.simulationResults as never,
         executed_at: decision.executedAt?.toISOString(),
       });
 
