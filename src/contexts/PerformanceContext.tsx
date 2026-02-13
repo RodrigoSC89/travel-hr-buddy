@@ -59,9 +59,13 @@ function useSimpleNetworkState() {
     }
 
     // Check connection quality only (not online/offline status)
-    const connection = (navigator as any).connection || 
-                      (navigator as any).mozConnection || 
-                      (navigator as any).webkitConnection;
+    interface NavigatorWithConnection extends Navigator {
+      connection?: { effectiveType?: string; downlink?: number; addEventListener?: (type: string, cb: () => void) => void; removeEventListener?: (type: string, cb: () => void) => void };
+      mozConnection?: NavigatorWithConnection['connection'];
+      webkitConnection?: NavigatorWithConnection['connection'];
+    }
+    const nav = navigator as NavigatorWithConnection;
+    const connection = nav.connection || nav.mozConnection || nav.webkitConnection;
 
     const updateNetworkQuality = () => {
       if (connection) {

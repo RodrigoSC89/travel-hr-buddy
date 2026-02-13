@@ -70,18 +70,17 @@ export function CrewSchedulerGantt() {
         .limit(30);
 
       const now = new Date();
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any -- crew_members dynamic row mapping
-      return (members || []).map((m: any, idx: number) => {
-        const contractStart = m.contract_start ? new Date(m.contract_start) : new Date(now.getTime() - (idx * 5 + 10) * 86400000);
-        const contractEnd = m.contract_end ? new Date(m.contract_end) : new Date(contractStart.getTime() + 90 * 86400000);
+      return (members || []).map((m: Record<string, unknown>, idx: number) => {
+        const contractStart = m.contract_start ? new Date(String(m.contract_start)) : new Date(now.getTime() - (idx * 5 + 10) * 86400000);
+        const contractEnd = m.contract_end ? new Date(String(m.contract_end)) : new Date(contractStart.getTime() + 90 * 86400000);
         const rotationDays = Math.max(0, Math.floor((now.getTime() - contractStart.getTime()) / 86400000));
-        const s = (m.status || '').toLowerCase();
+        const s = String(m.status || '').toLowerCase();
         const status: CrewMember['status'] = s.includes('active') || s.includes('onboard') ? 'onboard' : s.includes('leave') || s.includes('inactive') ? 'onleave' : s.includes('train') ? 'training' : 'available';
 
         return {
-          id: m.id,
-          name: m.full_name,
-          rank: m.rank || m.position,
+          id: String(m.id),
+          name: String(m.full_name),
+          rank: String(m.rank || m.position),
           vessel: 'Fleet',
           onboardDate: contractStart,
           offboardDate: contractEnd,

@@ -70,7 +70,7 @@ export function JourneyOrchestratorDashboard() {
     setIsCreating(true);
     try {
       await triggerJourney(
-        eventType as any,
+        eventType as Parameters<typeof triggerJourney>[0],
         { 
           vesselId: 'vessel-001',
           vesselName: 'MV Nautilus One',

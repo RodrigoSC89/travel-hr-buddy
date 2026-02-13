@@ -205,7 +205,7 @@ export class OfflineStorageService {
         return null;
       },
       set: async <T>(table: string, key: string, value: T) => {
-        await sqliteStorage.save(table, { id: key, ...value } as any, "create");
+        await sqliteStorage.save(table, { id: key, ...(value as Record<string, unknown>) } as never, "create");
       },
       delete: async (table: string, key: string) => {
         await sqliteStorage.save(table, { id: key }, "delete");

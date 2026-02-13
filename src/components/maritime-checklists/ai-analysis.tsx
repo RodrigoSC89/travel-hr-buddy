@@ -59,16 +59,15 @@ export const AIAnalysisComponent: React.FC<AIAnalysisProps> = ({
       onAnalysisComplete?.(aiAnalysis);
 
       // Save analysis to database
-      const { error: dbError } = await supabase
-        .from("checklist_ai_analysis")
+      const { error: dbError } = await (supabase.from as Function)("checklist_ai_analysis")
         .insert({
           checklist_id: checklist.id,
           overall_score: aiAnalysis.overallScore,
           analysis_type: "comprehensive",
-          analysis_data: aiAnalysis as any,
+          analysis_data: aiAnalysis as unknown as Record<string, unknown>,
           recommendations: aiAnalysis.suggestions,
           issues_found: aiAnalysis.anomalies.length,
-          critical_issues: aiAnalysis.anomalies.filter(a => a.severity === "critical").length,
+          critical_issues: aiAnalysis.anomalies.filter((a: Anomaly) => a.severity === "critical").length,
           confidence_level: 0.85,
           inconsistencies: aiAnalysis.inconsistencies || [],
           missing_fields: aiAnalysis.missingItems || []

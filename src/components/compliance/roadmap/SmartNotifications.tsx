@@ -195,10 +195,9 @@ export const SmartNotifications = () => {
     try {
       const { error } = await supabase.from('ai_configurations').upsert({
         config_key: 'notification_preferences',
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Supabase upsert requires Json-compatible value
-      config_value: preferences as any,
+        config_value: JSON.parse(JSON.stringify(preferences)),
         updated_at: new Date().toISOString()
-      }, { onConflict: 'config_key' });
+      } as never, { onConflict: 'config_key' });
       if (error) throw error;
       logSuccess("UPDATE", "notification_preferences", null, { ...preferences } as Record<string, unknown>);
       toast.success("Preferências salvas com sucesso!");

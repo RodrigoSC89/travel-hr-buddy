@@ -34,17 +34,19 @@ export const PWAStatus: React.FC = () => {
   
   const [pendingCount, setPendingCount] = React.useState(0);
   const [isInstallable, setIsInstallable] = React.useState(false);
-  const [deferredPrompt, setDeferredPrompt] = React.useState<{
+
+  interface BeforeInstallPromptEvent extends Event {
     prompt: () => void;
     userChoice: Promise<{ outcome: string }>;
-      } | null>(null);
+  }
+
+  const [deferredPrompt, setDeferredPrompt] = React.useState<BeforeInstallPromptEvent | null>(null);
 
   // Check if app is installable
   React.useEffect(() => {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any -- BeforeInstallPromptEvent not in standard lib
-    const handler = (e: any) => {
+    const handler = (e: Event) => {
       e.preventDefault();
-      setDeferredPrompt(e);
+      setDeferredPrompt(e as BeforeInstallPromptEvent);
       setIsInstallable(true);
     };
 
