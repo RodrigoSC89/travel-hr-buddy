@@ -36,7 +36,7 @@ export interface VesselAlert {
     lat: number;
     lng: number;
   };
-  metadata?: Record<string, any>;
+  metadata?: Record<string, unknown>;
   timestamp: string;
   expires_at?: string;
 }
@@ -299,7 +299,7 @@ export class IntervesselSync {
   static async replicateLog(log: {
     log_type: string;
     message: string;
-    metadata?: Record<string, any>;
+    metadata?: Record<string, unknown>;
   }): Promise<boolean> {
     if (!this.vesselId) {
       logger.error("Sync layer not initialized");
@@ -349,7 +349,7 @@ export class IntervesselSync {
   /**
    * Get replicated logs from trusted vessels
    */
-  static async getReplicatedLogs(limit: number = 50): Promise<any[]> {
+  static async getReplicatedLogs(limit: number = 50): Promise<Record<string, unknown>[]> {
     if (!this.vesselId) {
       logger.error("Sync layer not initialized");
       return [];
@@ -423,7 +423,7 @@ export class IntervesselSync {
   /**
    * Get vessel status from fleet
    */
-  static async getFleetStatus(): Promise<any[]> {
+  static async getFleetStatus(): Promise<Record<string, unknown>[]> {
     try {
       const { data, error } = await supabase
         .from("vessels")
@@ -431,7 +431,6 @@ export class IntervesselSync {
           id,
           name,
           status,
-          last_known_position,
           vessel_type,
           maintenance_status
         `)
@@ -443,7 +442,7 @@ export class IntervesselSync {
         return [];
       }
 
-      return data || [];
+      return (data || []) as unknown as Record<string, unknown>[];
     } catch (error) {
       logger.error("Error in getFleetStatus:", error);
       return [];

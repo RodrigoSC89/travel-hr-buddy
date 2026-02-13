@@ -86,7 +86,7 @@ export interface TimelineEvent {
     role?: string;
   };
   status?: EventStatus;
-  metadata?: Record<string, any>;
+  metadata?: Record<string, unknown>;
   actions?: {
     label: string;
     onClick: () => void;

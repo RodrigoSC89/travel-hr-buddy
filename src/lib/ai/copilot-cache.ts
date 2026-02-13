@@ -23,7 +23,7 @@ export interface ChatContext {
   sessionId: string;
   messages: ChatMessage[];
   lastUpdated: string;
-  metadata?: Record<string, any>;
+  metadata?: Record<string, unknown>;
 }
 
 /**

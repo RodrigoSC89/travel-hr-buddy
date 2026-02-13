@@ -17,7 +17,7 @@ interface Alert {
   mean?: number;
   stdDev?: number;
   action?: string;
-  metadata?: Record<string, any>;
+  metadata?: Record<string, unknown>;
 }
 
 interface AlertConfig {

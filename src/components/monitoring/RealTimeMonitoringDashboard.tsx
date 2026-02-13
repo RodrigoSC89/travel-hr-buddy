@@ -15,8 +15,8 @@ import { userAnalytics } from "@/lib/monitoring/user-analytics";
 export default function RealTimeMonitoringDashboard() {
   const [perfSnapshot, setPerfSnapshot] = useState<PerformanceSnapshot | null>(null);
   const [recentErrors, setRecentErrors] = useState<TrackedError[]>([]);
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- userAnalytics.getSummary() returns dynamic shape
-  const [analytics, setAnalytics] = useState<Record<string, any> | null>(null);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- userAnalytics.getSummary() returns complex dynamic shape
+  const [analytics, setAnalytics] = useState<any>(null);
   const [liveMetrics, setLiveMetrics] = useState<Record<string, WebVitalMetric>>({});
 
   useEffect(() => {

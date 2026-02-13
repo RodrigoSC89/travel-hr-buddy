@@ -180,19 +180,18 @@ class DeepRiskAIService {
 
       if (error) throw error;
 
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any -- system_observations dynamic JSON
-      return (data || []).map((d: any) => {
-        const meta = d.metadata as Record<string, unknown> | null;
+      return (data || []).map((d: Record<string, unknown>) => {
+        const meta = (d.metadata ?? {}) as Record<string, unknown>;
         return {
-          id: d.id,
-          timestamp: d.created_at || new Date().toISOString(),
-          eventType: (meta?.event_type as RiskEvent["eventType"]) || "risk_assessment",
-          riskScore: (meta?.risk_score as number) || 0,
-          riskLevel: (meta?.risk_level as string) || "low",
-          factors: (meta?.factors as RiskFactors) || {} as RiskFactors,
-          recommendations: (meta?.recommendations as RiskRecommendation[]) || [],
-          resolved: (meta?.resolved as boolean) || false,
-          notes: meta?.notes as string | undefined,
+          id: String(d.id),
+          timestamp: String(d.created_at || new Date().toISOString()),
+          eventType: (meta.event_type as RiskEvent["eventType"]) || "risk_assessment",
+          riskScore: Number(meta.risk_score) || 0,
+          riskLevel: String(meta.risk_level || "low"),
+          factors: (meta.factors as RiskFactors) || ({} as RiskFactors),
+          recommendations: (meta.recommendations as RiskRecommendation[]) || [],
+          resolved: Boolean(meta.resolved),
+          notes: meta.notes as string | undefined,
         };
       });
     } catch (error) {
@@ -285,15 +284,14 @@ class DeepRiskAIService {
         .order("timestamp", { ascending: false })
         .limit(50);
 
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any -- incidents dynamic columns
-      return (data || []).map((d: any) => ({
-        id: d.id as string,
-        type: d.type as string,
-        severity: d.severity as string,
-        timestamp: d.timestamp as string,
-        description: d.description as string,
-        location: d.location as string | undefined,
-        resolved: (d.resolved as boolean) || false,
+      return (data || []).map((d: Record<string, unknown>) => ({
+        id: String(d.id),
+        type: String(d.type),
+        severity: String(d.severity),
+        timestamp: String(d.timestamp),
+        description: String(d.description),
+        location: d.location ? String(d.location) : undefined,
+        resolved: Boolean(d.resolved),
       }));
     } catch (error) {
       logger.error("Failed to fetch incidents", error);
