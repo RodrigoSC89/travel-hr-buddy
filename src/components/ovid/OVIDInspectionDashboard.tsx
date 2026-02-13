@@ -23,7 +23,7 @@ import { OVIDReports } from './OVIDReports';
 import { PreOVIDChapterTabs, OVIQ4_CHAPTERS, ChapterProgress } from './PreOVIDChapterTabs';
 import { PreOVIDAIChat } from './PreOVIDAIChat';
 import { PreOVIDVoiceChat } from './PreOVIDVoiceChat';
-import { PreOVIDRealtimeVoice } from './PreOVIDRealtimeVoice';
+
 import { PreOVIDEvidenceGenerator } from './PreOVIDEvidenceGenerator';
 import { PreOVIDReportGenerator } from './PreOVIDReportGenerator';
 import { PreOVIDCompleteChecklist } from './PreOVIDCompleteChecklist';
@@ -666,11 +666,6 @@ export const OVIDInspectionDashboard: React.FC = () => {
               />
             </div>
             <div className="space-y-6">
-              {/* OpenAI Realtime Voice - WebRTC */}
-              <PreOVIDRealtimeVoice 
-                vesselType={selectedVesselType}
-                chapterName="OVIQ4 Realtime Voice"
-              />
               
               {/* Fallback Voice Chat - Web Speech API */}
               <PreOVIDVoiceChat 

@@ -51,7 +51,7 @@ export { useNavigationManager } from "./use-navigation-manager";
 export { useBreadcrumbs } from "./use-breadcrumbs";
 
 // Specialized Features
-export { useTrainingModules } from "./use-training-modules";
+
 export { useTravelPredictions } from "./use-travel-predictions";
 export { useVoiceNavigation } from "./use-voice-navigation";
 export { useServiceIntegrations } from "./use-service-integrations";
