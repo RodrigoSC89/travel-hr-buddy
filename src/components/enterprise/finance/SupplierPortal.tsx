@@ -244,7 +244,7 @@ export function SupplierPortal() {
                   className="pl-9"
                 />
               </div>
-              <Button variant="outline" size="icon" onClick={() => setSearchTerm("")}>
+              <Button variant="outline" size="icon" onClick={() => setSearchTerm("")} aria-label="Limpar filtros" title="Limpar filtros">
                 <Filter className="h-4 w-4" />
               </Button>
             </div>
@@ -309,7 +309,7 @@ export function SupplierPortal() {
                     <MessageSquare className="h-4 w-4 mr-1" />
                     Mensagem
                   </Button>
-                  <Button variant="outline" size="icon" onClick={() => { window.history.pushState({}, '', `/procurement-command?supplier=${selectedSupplier.id}`); window.dispatchEvent(new PopStateEvent('popstate')); }}>
+                  <Button variant="outline" size="icon" onClick={() => { window.history.pushState({}, '', `/procurement-command?supplier=${selectedSupplier.id}`); window.dispatchEvent(new PopStateEvent('popstate')); }} aria-label="Mais opções do fornecedor" title="Mais opções">
                     <MoreVertical className="h-4 w-4" />
                   </Button>
                 </div>

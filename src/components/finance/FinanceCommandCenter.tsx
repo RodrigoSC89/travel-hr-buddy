@@ -727,7 +727,7 @@ export function FinanceCommandCenter() {
                         {getInvoiceStatusBadge(inv.status)}
                         <DropdownMenu>
                           <DropdownMenuTrigger asChild>
-                            <Button variant="ghost" size="icon">
+                            <Button variant="ghost" size="icon" aria-label="Opções da fatura" title="Opções da fatura">
                               <MoreHorizontal className="h-4 w-4" />
                             </Button>
                           </DropdownMenuTrigger>
@@ -833,7 +833,7 @@ export function FinanceCommandCenter() {
                         {getExpenseStatusBadge(exp.status)}
                         <DropdownMenu>
                           <DropdownMenuTrigger asChild>
-                            <Button variant="ghost" size="icon">
+                            <Button variant="ghost" size="icon" aria-label="Opções da despesa" title="Opções da despesa">
                               <MoreHorizontal className="h-4 w-4" />
                             </Button>
                           </DropdownMenuTrigger>

@@ -249,7 +249,7 @@ export function APIGatewayMonitor() {
                       className="pl-9 w-64"
                     />
                   </div>
-                  <Button variant="outline" size="icon">
+                  <Button variant="outline" size="icon" aria-label="Filtrar endpoints" title="Filtrar endpoints">
                     <Filter className="h-4 w-4" />
                   </Button>
                 </div>
@@ -398,13 +398,13 @@ export function APIGatewayMonitor() {
                       <Button variant="ghost" size="icon" onClick={() => {
                         navigator.clipboard?.writeText(`Key: ${key.name} | Status: ${key.status} | Created: ${new Date(key.created).toLocaleDateString("pt-BR")} | Last Used: ${new Date(key.lastUsed).toLocaleDateString("pt-BR")}`);
                         toast.success("Detalhes da chave copiados");
-                      }}>
+                      }} aria-label="Ver detalhes da chave" title="Ver detalhes">
                         <Eye className="h-4 w-4" />
                       </Button>
                       <Button variant="ghost" size="icon" onClick={() => {
                         navigator.clipboard?.writeText(key.name);
                         toast.success("Nome da chave copiado para a área de transferência");
-                      }}>
+                      }} aria-label="Copiar nome da chave" title="Copiar chave">
                         <Copy className="h-4 w-4" />
                       </Button>
                     </div>

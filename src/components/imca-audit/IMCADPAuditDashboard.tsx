@@ -186,12 +186,14 @@ export function IMCADPAuditDashboard() {
               </Button>
             ))}
           </div>
-          <Button variant="outline" size="icon" onClick={handleFilterSettings}>
+          <Button variant="outline" size="icon" onClick={handleFilterSettings} aria-label="Filtrar auditoria" title="Filtrar auditoria">
             <Filter className="h-4 w-4" />
           </Button>
           <Button 
             variant="outline" 
             size="icon" 
+            aria-label="Resetar auditoria"
+            title="Resetar auditoria"
             onClick={() => {
               setAuditData({});
               toast({
@@ -199,7 +201,6 @@ export function IMCADPAuditDashboard() {
                 description: "Todos os dados da auditoria foram limpos.",
               });
             }}
-            title="Resetar auditoria"
           >
             <RefreshCw className="h-4 w-4" />
           </Button>

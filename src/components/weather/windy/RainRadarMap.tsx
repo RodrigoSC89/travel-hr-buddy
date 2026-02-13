@@ -291,6 +291,8 @@ export const RainRadarMap: React.FC<RainRadarMapProps> = ({
             size="icon"
             className="h-8 w-8 text-white/70 hover:text-white"
             onClick={() => setZoom(z => Math.min(z + 0.5, 3))}
+            aria-label="Aumentar zoom"
+            title="Aumentar zoom"
           >
             <ZoomIn className="h-4 w-4" />
           </Button>
@@ -299,6 +301,8 @@ export const RainRadarMap: React.FC<RainRadarMapProps> = ({
             size="icon"
             className="h-8 w-8 text-white/70 hover:text-white"
             onClick={() => setZoom(z => Math.max(z - 0.5, 0.5))}
+            aria-label="Diminuir zoom"
+            title="Diminuir zoom"
           >
             <ZoomOut className="h-4 w-4" />
           </Button>
@@ -308,6 +312,8 @@ export const RainRadarMap: React.FC<RainRadarMapProps> = ({
             className="h-8 w-8 text-white/70 hover:text-white"
             onClick={fetchPrecipitationData}
             disabled={isLoading}
+            aria-label="Atualizar radar"
+            title="Atualizar radar"
           >
             <RefreshCw className={cn("h-4 w-4", isLoading && "animate-spin")} />
           </Button>
@@ -397,6 +403,8 @@ export const RainRadarMap: React.FC<RainRadarMapProps> = ({
             size="icon"
             className="h-8 w-8 text-white/70 hover:text-white"
             onClick={() => setCurrentFrameIndex(0)}
+            aria-label="Voltar ao início"
+            title="Voltar ao início"
           >
             <SkipBack className="h-4 w-4" />
           </Button>
@@ -405,6 +413,8 @@ export const RainRadarMap: React.FC<RainRadarMapProps> = ({
             size="icon"
             className="h-10 w-10 rounded-full border-white/30 text-white hover:bg-white/10"
             onClick={() => setIsPlaying(!isPlaying)}
+            aria-label={isPlaying ? "Pausar" : "Reproduzir"}
+            title={isPlaying ? "Pausar" : "Reproduzir"}
           >
             {isPlaying ? <Pause className="h-5 w-5" /> : <Play className="h-5 w-5" />}
           </Button>
@@ -413,6 +423,8 @@ export const RainRadarMap: React.FC<RainRadarMapProps> = ({
             size="icon"
             className="h-8 w-8 text-white/70 hover:text-white"
             onClick={() => setCurrentFrameIndex(frames.length - 1)}
+            aria-label="Ir para o final"
+            title="Ir para o final"
           >
             <SkipForward className="h-4 w-4" />
           </Button>

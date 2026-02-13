@@ -439,6 +439,8 @@ export function IMCAAuditManager({
                     size="icon"
                     className="h-4 w-4 ml-1"
                     onClick={() => onDeleteCategory(cat.code)}
+                    aria-label={`Remover categoria ${cat.code}`}
+                    title="Remover categoria"
                   >
                     <Trash2 className="h-3 w-3" />
                   </Button>
@@ -513,6 +515,8 @@ export function IMCAAuditManager({
                           variant="ghost"
                           size="icon"
                           onClick={() => setEditingItem(item)}
+                          aria-label="Editar item"
+                          title="Editar item"
                         >
                           <Edit className="h-4 w-4" />
                         </Button>
@@ -523,6 +527,8 @@ export function IMCAAuditManager({
                             onDeleteItem(item.id);
                             toast({ title: "Item removido" });
                           }}
+                          aria-label="Remover item"
+                          title="Remover item"
                         >
                           <Trash2 className="h-4 w-4" />
                         </Button>

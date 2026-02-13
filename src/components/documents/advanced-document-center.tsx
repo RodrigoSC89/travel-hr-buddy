@@ -344,13 +344,13 @@ export const AdvancedDocumentCenter: React.FC = () => {
                             {status.icon}
                             <span className="ml-1">{status.label}</span>
                           </Badge>
-                          <Button variant="ghost" size="icon" onClick={() => { setSelectedDocument(doc); setIsViewDialogOpen(true); }}>
+                          <Button variant="ghost" size="icon" onClick={() => { setSelectedDocument(doc); setIsViewDialogOpen(true); }} aria-label="Visualizar documento" title="Visualizar documento">
                             <Eye className="h-4 w-4" />
                           </Button>
-                          <Button variant="ghost" size="icon" onClick={() => handleDownload(doc)}>
+                          <Button variant="ghost" size="icon" onClick={() => handleDownload(doc)} aria-label="Baixar documento" title="Baixar documento">
                             <Download className="h-4 w-4" />
                           </Button>
-                          <Button variant="ghost" size="icon" className="text-destructive" onClick={() => { setDocToDelete(doc); setIsDeleteDialogOpen(true); }}>
+                          <Button variant="ghost" size="icon" className="text-destructive" onClick={() => { setDocToDelete(doc); setIsDeleteDialogOpen(true); }} aria-label="Excluir documento" title="Excluir documento">
                             <Trash2 className="h-4 w-4" />
                           </Button>
                         </div>
@@ -451,7 +451,7 @@ export const AdvancedDocumentCenter: React.FC = () => {
                       <span className="text-sm truncate max-w-[200px]">{file.name}</span>
                       <span className="text-xs text-muted-foreground">{formatFileSize(file.size)}</span>
                     </div>
-                    <Button variant="ghost" size="icon" onClick={() => setUploadedFiles(prev => prev.filter((_, j) => j !== fileIdx))}>
+                    <Button variant="ghost" size="icon" onClick={() => setUploadedFiles(prev => prev.filter((_, j) => j !== fileIdx))} aria-label="Remover arquivo" title="Remover arquivo">
                       <X className="h-3 w-3" />
                     </Button>
                   </div>

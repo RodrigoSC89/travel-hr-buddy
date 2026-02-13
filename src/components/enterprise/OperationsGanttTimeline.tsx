@@ -192,10 +192,10 @@
                  <SelectItem value="month">Mês</SelectItem>
                </SelectContent>
              </Select>
-             <Button variant="outline" size="icon" onClick={() => navigateTimeline("prev")}>
+             <Button variant="outline" size="icon" onClick={() => navigateTimeline("prev")} aria-label="Período anterior" title="Período anterior">
                <ChevronLeft className="h-4 w-4" />
              </Button>
-             <Button variant="outline" size="icon" onClick={() => navigateTimeline("next")}>
+             <Button variant="outline" size="icon" onClick={() => navigateTimeline("next")} aria-label="Próximo período" title="Próximo período">
                <ChevronRight className="h-4 w-4" />
              </Button>
              <Button variant="outline" size="sm">
