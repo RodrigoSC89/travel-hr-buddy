@@ -440,7 +440,7 @@ export function AdvancedDataTable<T extends Record<string, unknown>>({
                       <TableCell className="text-center" onClick={(e) => e.stopPropagation()}>
                         <DropdownMenu>
                           <DropdownMenuTrigger asChild>
-                            <Button variant="ghost" size="icon" className="h-8 w-8">
+                            <Button variant="ghost" size="icon" className="h-8 w-8" aria-label="Mais opções" title="Mais opções">
                               <MoreHorizontal className="h-4 w-4" />
                             </Button>
                           </DropdownMenuTrigger>
@@ -517,6 +517,8 @@ export function AdvancedDataTable<T extends Record<string, unknown>>({
               size="icon"
               onClick={() => setCurrentPage(1)}
               disabled={currentPage === 1}
+              aria-label="Primeira página"
+              title="Primeira página"
             >
               <ChevronsLeft className="h-4 w-4" />
             </Button>
@@ -525,6 +527,8 @@ export function AdvancedDataTable<T extends Record<string, unknown>>({
               size="icon"
               onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
               disabled={currentPage === 1}
+              aria-label="Página anterior"
+              title="Página anterior"
             >
               <ChevronLeft className="h-4 w-4" />
             </Button>
@@ -536,6 +540,8 @@ export function AdvancedDataTable<T extends Record<string, unknown>>({
               size="icon"
               onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}
               disabled={currentPage === totalPages || totalPages === 0}
+              aria-label="Próxima página"
+              title="Próxima página"
             >
               <ChevronRight className="h-4 w-4" />
             </Button>
@@ -544,6 +550,8 @@ export function AdvancedDataTable<T extends Record<string, unknown>>({
               size="icon"
               onClick={() => setCurrentPage(totalPages)}
               disabled={currentPage === totalPages || totalPages === 0}
+              aria-label="Última página"
+              title="Última página"
             >
               <ChevronsRight className="h-4 w-4" />
             </Button>

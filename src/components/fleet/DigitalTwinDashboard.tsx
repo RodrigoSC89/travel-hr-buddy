@@ -258,6 +258,8 @@ export function DigitalTwinDashboard({ vesselId }: DigitalTwinDashboardProps) {
               queryClient.invalidateQueries({ queryKey: ["predictive-maintenance"] });
               toast.success("Data refreshed");
             }}
+            aria-label="Atualizar dados"
+            title="Atualizar dados"
           >
             <RefreshCw className="h-4 w-4" />
           </Button>

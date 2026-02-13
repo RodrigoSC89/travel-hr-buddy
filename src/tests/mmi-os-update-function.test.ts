@@ -1,4 +1,4 @@
-// @ts-nocheck
+// Tests for mmi-os-update Edge Function
 import { describe, it, expect } from "vitest";
 
 describe("mmi-os-update Edge Function", () => {
@@ -34,7 +34,7 @@ describe("mmi-os-update Edge Function", () => {
   });
 
   it("should handle partial updates", async () => {
-    const mockRequest = {
+    const mockRequest: Record<string, unknown> = {
       id: "test-id",
       technician_comment: "Apenas comentário",
     };

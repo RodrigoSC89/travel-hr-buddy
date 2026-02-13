@@ -382,6 +382,8 @@ export default function AgentsDashboard() {
               size="icon"
               onClick={() => setViewMode("grid")}
               className={viewMode === "grid" ? "bg-muted" : ""}
+              aria-label="Visualização em grade"
+              title="Visualização em grade"
             >
               <Grid3X3 className="h-4 w-4" />
             </Button>
@@ -390,6 +392,8 @@ export default function AgentsDashboard() {
               size="icon"
               onClick={() => setViewMode("list")}
               className={viewMode === "list" ? "bg-muted" : ""}
+              aria-label="Visualização em lista"
+              title="Visualização em lista"
             >
               <List className="h-4 w-4" />
             </Button>
@@ -554,7 +558,7 @@ export default function AgentsDashboard() {
                             <Play className="h-3 w-3 mr-1" />
                             Executar
                           </Button>
-                          <Button variant="ghost" size="icon">
+                          <Button variant="ghost" size="icon" aria-label="Ver detalhes" title="Ver detalhes">
                             <ChevronRight className="h-4 w-4" />
                           </Button>
                         </div>

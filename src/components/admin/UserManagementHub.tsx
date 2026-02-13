@@ -263,7 +263,7 @@ export const UserManagementHub: React.FC = () => {
           {/* Notifications */}
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Button variant="outline" size="icon" className="relative">
+              <Button variant="outline" size="icon" className="relative" aria-label="Notificações" title="Notificações">
                 <Bell className="h-4 w-4" />
                 {unreadNotifications > 0 && (
                   <span className="absolute -top-1 -right-1 h-4 w-4 rounded-full bg-destructive text-[10px] font-medium text-destructive-foreground flex items-center justify-center">
@@ -303,11 +303,11 @@ export const UserManagementHub: React.FC = () => {
             </DropdownMenuContent>
           </DropdownMenu>
 
-          <Button variant="outline" size="icon" onClick={() => setShowSettingsDialog(true)}>
+          <Button variant="outline" size="icon" onClick={() => setShowSettingsDialog(true)} aria-label="Configurações" title="Configurações">
             <Settings className="h-4 w-4" />
           </Button>
 
-          <Button variant="outline" size="icon" onClick={fetchUsers} disabled={isLoading}>
+          <Button variant="outline" size="icon" onClick={fetchUsers} disabled={isLoading} aria-label="Atualizar lista" title="Atualizar lista">
             <RefreshCw className={`h-4 w-4 ${isLoading ? "animate-spin" : ""}`} />
           </Button>
 
@@ -522,7 +522,7 @@ export const UserManagementHub: React.FC = () => {
                       <TableCell className="text-right">
                         <DropdownMenu>
                           <DropdownMenuTrigger asChild>
-                            <Button variant="ghost" size="icon" className="h-8 w-8">
+                            <Button variant="ghost" size="icon" className="h-8 w-8" aria-label="Mais opções" title="Mais opções">
                               <MoreVertical className="h-4 w-4" />
                             </Button>
                           </DropdownMenuTrigger>

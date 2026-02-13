@@ -202,7 +202,7 @@ export default function RealTimeTrackingPage() {
                   <RefreshCw className="h-4 w-4 mr-2" />
                   Atualizar
                 </Button>
-                <Button variant="outline" size="icon">
+                <Button variant="outline" size="icon" aria-label="Tela cheia" title="Tela cheia">
                   <Maximize2 className="h-4 w-4" />
                 </Button>
               </div>

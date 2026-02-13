@@ -1,4 +1,4 @@
-// @ts-nocheck
+// Tests for Assistant Logs API Route
 import { describe, it, expect } from "vitest";
 
 describe("Assistant Logs API Route", () => {
@@ -53,7 +53,7 @@ describe("Assistant Logs API Route", () => {
       user_id: "user-123",
       profiles: {
         email: "user@example.com",
-      },
+      } as { email: string } | null,
     };
 
     const formattedLog = {
@@ -65,7 +65,7 @@ describe("Assistant Logs API Route", () => {
   });
 
   it("should handle anonymous users when email is missing", () => {
-    const mockRawLog = {
+    const mockRawLog: { id: string; question: string; answer: string; created_at: string; user_id: string; profiles: { email: string } | null } = {
       id: "log-123",
       question: "Test question",
       answer: "Test answer",

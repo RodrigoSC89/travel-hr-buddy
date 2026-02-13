@@ -363,7 +363,7 @@ export function ComplianceInspectionMap({
                   <SelectItem value="compliant">Conformes ({stats.compliant})</SelectItem>
                 </SelectContent>
               </Select>
-              <Button variant="outline" size="icon" className="h-8 w-8">
+              <Button variant="outline" size="icon" className="h-8 w-8" aria-label="Camadas do mapa" title="Camadas do mapa">
                 <Layers className="h-4 w-4" />
               </Button>
             </div>

@@ -200,13 +200,13 @@ export const CrewRealtimeWorkspace = () => {
                   </TabsTrigger>
                 </TabsList>
                 <div className="flex items-center gap-2">
-                  <Button variant="ghost" size="icon">
+                  <Button variant="ghost" size="icon" aria-label="Chamada de voz" title="Chamada de voz">
                     <Phone className="h-4 w-4" />
                   </Button>
-                  <Button variant="ghost" size="icon">
+                  <Button variant="ghost" size="icon" aria-label="Videochamada" title="Videochamada">
                     <Video className="h-4 w-4" />
                   </Button>
-                  <Button variant="ghost" size="icon">
+                  <Button variant="ghost" size="icon" aria-label="Notificações" title="Notificações">
                     <Bell className="h-4 w-4" />
                   </Button>
                 </div>
@@ -257,7 +257,7 @@ export const CrewRealtimeWorkspace = () => {
 
                 {/* Message Input */}
                 <div className="flex items-center gap-2 mt-4 pt-4 border-t">
-                  <Button variant="ghost" size="icon">
+                  <Button variant="ghost" size="icon" aria-label="Anexar arquivo" title="Anexar arquivo">
                     <Paperclip className="h-4 w-4" />
                   </Button>
                   <Input
@@ -267,10 +267,10 @@ export const CrewRealtimeWorkspace = () => {
                     onKeyDown={(e) => e.key === "Enter" && handleSendMessage()}
                     className="flex-1"
                   />
-                  <Button variant="ghost" size="icon">
+                  <Button variant="ghost" size="icon" aria-label="Gravar áudio" title="Gravar áudio">
                     <Mic className="h-4 w-4" />
                   </Button>
-                  <Button size="icon" onClick={handleSendMessage}>
+                  <Button size="icon" onClick={handleSendMessage} aria-label="Enviar mensagem" title="Enviar mensagem">
                     <Send className="h-4 w-4" />
                   </Button>
                 </div>

@@ -277,7 +277,7 @@ export function IoTSensorDashboard() {
                     <option key={v} value={v}>{v}</option>
                   ))}
                 </select>
-                <Button variant="outline" size="icon">
+                <Button variant="outline" size="icon" aria-label="Atualizar sensores" title="Atualizar sensores">
                   <RefreshCw className="h-4 w-4" />
                 </Button>
               </div>

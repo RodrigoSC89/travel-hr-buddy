@@ -214,6 +214,8 @@ export function ScheduledExportsDialog({ open, onOpenChange, templates }: Schedu
                           size="icon"
                           variant="ghost"
                           onClick={() => handleToggleActive(schedule.id)}
+                          aria-label={schedule.isActive ? "Pausar agendamento" : "Ativar agendamento"}
+                          title={schedule.isActive ? "Pausar agendamento" : "Ativar agendamento"}
                         >
                           {schedule.isActive ? (
                             <Pause className="h-4 w-4" />
@@ -226,6 +228,8 @@ export function ScheduledExportsDialog({ open, onOpenChange, templates }: Schedu
                           variant="ghost"
                           className="text-destructive hover:text-destructive"
                           onClick={() => handleDeleteSchedule(schedule.id)}
+                          aria-label="Excluir agendamento"
+                          title="Excluir agendamento"
                         >
                           <Trash2 className="h-4 w-4" />
                         </Button>

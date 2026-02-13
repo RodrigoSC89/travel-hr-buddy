@@ -1,4 +1,4 @@
-// @ts-nocheck
+// Tests for Auditoria Resumo API
 /**
  * Auditoria Resumo API Endpoint Tests
  * 
@@ -131,7 +131,7 @@ describe("Auditoria Resumo API Endpoint", () => {
       ];
 
       const resumo: Record<string, number> = {};
-      mockData.forEach((item: unknown) => {
+      mockData.forEach((item) => {
         const nome_navio = item.vessels?.name || "Sem Navio";
         resumo[nome_navio] = (resumo[nome_navio] || 0) + 1;
       });
@@ -141,12 +141,12 @@ describe("Auditoria Resumo API Endpoint", () => {
     });
 
     it("should handle missing vessel data with default", () => {
-      const mockData = [
+      const mockData: Array<{ id: string; audit_date: string; created_by: string; vessel_id: string | null; vessels: { id: string; name: string } | null }> = [
         { id: "1", audit_date: "2025-10-01", created_by: "uuid-1", vessel_id: null, vessels: null }
       ];
 
       const resumo: Record<string, number> = {};
-      mockData.forEach((item: unknown) => {
+      mockData.forEach((item) => {
         const nome_navio = item.vessels?.name || "Sem Navio";
         resumo[nome_navio] = (resumo[nome_navio] || 0) + 1;
       });

@@ -464,7 +464,7 @@ export const CrewDossierManager = () => {
                           <p>Validade: {cert.expiryDate}</p>
                         </div>
                         {getCertStatusBadge(cert.status)}
-                        <Button variant="ghost" size="icon">
+                        <Button variant="ghost" size="icon" aria-label="Baixar certificado" title="Baixar certificado">
                           <Download className="h-4 w-4" />
                         </Button>
                       </div>
@@ -489,10 +489,10 @@ export const CrewDossierManager = () => {
                         </div>
                       </div>
                       <div className="flex items-center gap-2">
-                        <Button variant="ghost" size="icon">
+                        <Button variant="ghost" size="icon" aria-label="Visualizar documento" title="Visualizar documento">
                           <Eye className="h-4 w-4" />
                         </Button>
-                        <Button variant="ghost" size="icon">
+                        <Button variant="ghost" size="icon" aria-label="Baixar documento" title="Baixar documento">
                           <Download className="h-4 w-4" />
                         </Button>
                       </div>

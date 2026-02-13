@@ -1,4 +1,4 @@
-// @ts-nocheck
+// Tests for MMI Forecast API
 import { describe, it, expect, vi, beforeEach } from "vitest";
 
 describe("MMI Forecast API - Request Validation", () => {
@@ -22,7 +22,7 @@ describe("MMI Forecast API - Request Validation", () => {
     });
 
     it("should identify missing vessel_name", () => {
-      const invalidRequest = {
+      const invalidRequest: Record<string, unknown> = {
         system_name: "Sistema hidráulico do guindaste",
         last_maintenance_dates: ["12/04/2025 - troca de óleo"],
         current_hourmeter: 870
@@ -32,7 +32,7 @@ describe("MMI Forecast API - Request Validation", () => {
     });
 
     it("should identify missing system_name", () => {
-      const invalidRequest = {
+      const invalidRequest: Record<string, unknown> = {
         vessel_name: "FPSO Alpha",
         last_maintenance_dates: ["12/04/2025 - troca de óleo"],
         current_hourmeter: 870
@@ -42,7 +42,7 @@ describe("MMI Forecast API - Request Validation", () => {
     });
 
     it("should identify missing last_maintenance_dates", () => {
-      const invalidRequest = {
+      const invalidRequest: Record<string, unknown> = {
         vessel_name: "FPSO Alpha",
         system_name: "Sistema hidráulico do guindaste",
         current_hourmeter: 870
@@ -52,7 +52,7 @@ describe("MMI Forecast API - Request Validation", () => {
     });
 
     it("should identify missing current_hourmeter", () => {
-      const invalidRequest = {
+      const invalidRequest: Record<string, unknown> = {
         vessel_name: "FPSO Alpha",
         system_name: "Sistema hidráulico do guindaste",
         last_maintenance_dates: ["12/04/2025 - troca de óleo"]

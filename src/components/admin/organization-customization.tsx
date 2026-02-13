@@ -355,7 +355,7 @@ export const OrganizationCustomization: React.FC = () => {
                       onChange={(e) => setCustomization({...customization, logo_url: e.target.value})}
                       placeholder="https://exemplo.com/logo.png"
                     />
-                    <Button variant="outline" size="icon">
+                    <Button variant="outline" size="icon" aria-label="Enviar logo" title="Enviar logo">
                       <Upload className="w-4 h-4" />
                     </Button>
                   </div>

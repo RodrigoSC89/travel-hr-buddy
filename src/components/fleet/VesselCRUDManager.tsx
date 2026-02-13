@@ -312,6 +312,7 @@ export function VesselCRUDManager({ vessels, onRefresh }: VesselCRUDManagerProps
                         onClick={() => duplicateMutation.mutate(vessel)}
                         disabled={duplicateMutation.isPending}
                         title="Duplicar"
+                        aria-label="Duplicar embarcação"
                       >
                         <Copy className="h-4 w-4" />
                       </Button>
@@ -320,6 +321,7 @@ export function VesselCRUDManager({ vessels, onRefresh }: VesselCRUDManagerProps
                         size="icon"
                         onClick={() => handleEdit(vessel)}
                         title="Editar"
+                        aria-label="Editar embarcação"
                       >
                         <Pencil className="h-4 w-4" />
                       </Button>
@@ -332,6 +334,7 @@ export function VesselCRUDManager({ vessels, onRefresh }: VesselCRUDManagerProps
                         })}
                         disabled={archiveMutation.isPending}
                         title={vessel.status === "archived" ? "Restaurar" : "Arquivar"}
+                        aria-label={vessel.status === "archived" ? "Restaurar embarcação" : "Arquivar embarcação"}
                       >
                         {vessel.status === "archived" ? (
                           <RotateCcw className="h-4 w-4" />
@@ -345,6 +348,7 @@ export function VesselCRUDManager({ vessels, onRefresh }: VesselCRUDManagerProps
                         onClick={() => handleDelete(vessel)}
                         className="text-destructive hover:text-destructive"
                         title="Excluir"
+                        aria-label="Excluir embarcação"
                       >
                         <Trash2 className="h-4 w-4" />
                       </Button>

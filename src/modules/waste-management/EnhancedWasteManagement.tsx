@@ -281,7 +281,7 @@ export default function EnhancedWasteManagement() {
             id: "remind",
             label: "Lembrar na Escala",
             icon: <Ship className="h-3 w-3" />,
-            onClick: () => { toast.success("Lembrete configurado"); },
+            onClick: () => { setActiveTab("dashboard"); toast.success("Lembrete configurado — verifique na próxima escala"); },
           },
         ],
       });

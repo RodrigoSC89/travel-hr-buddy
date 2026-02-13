@@ -392,7 +392,7 @@ export const AuditTrailSystem = () => {
                           </Badge>
                           <span className="text-sm text-muted-foreground">{log.module}</span>
                         </div>
-                        <Button variant="ghost" size="icon">
+                        <Button variant="ghost" size="icon" aria-label="Ver detalhes" title="Ver detalhes">
                           <Eye className="h-4 w-4" />
                         </Button>
                       </div>
