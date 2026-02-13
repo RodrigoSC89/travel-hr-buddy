@@ -466,7 +466,7 @@ export default function CertificateBlockchain() {
                       <img 
                         src={issuedCertificate.qrCodeUrl} 
                         alt="QR Code" 
-                        className="w-48 h-48 border rounded-lg bg-white p-2"
+                        className="w-48 h-48 border rounded-lg bg-card p-2"
                       />
                     </div>
 

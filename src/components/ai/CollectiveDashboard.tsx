@@ -568,7 +568,7 @@ export const CollectiveDashboard: React.FC = () => {
                     </div>
                     <p className="text-sm mb-2">{obs.description}</p>
                     {obs.suggestedAction && (
-                      <div className="bg-white border rounded p-2 text-sm">
+                      <div className="bg-card border rounded p-2 text-sm">
                         <strong>Suggested Action:</strong> {obs.suggestedAction}
                       </div>
                     )}

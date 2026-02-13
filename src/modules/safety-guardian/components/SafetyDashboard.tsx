@@ -243,7 +243,7 @@ export const SafetyDashboard: React.FC = () => {
         <CardContent className="py-6">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-4">
-              <div className="p-3 bg-white/20 rounded-full">
+              <div className="p-3 bg-success-foreground/20 rounded-full">
                 <Shield className="h-8 w-8" />
               </div>
               <div>
@@ -252,7 +252,7 @@ export const SafetyDashboard: React.FC = () => {
               </div>
             </div>
             <div className="text-right">
-              <Badge className="bg-white/20 text-white text-lg px-4 py-2">
+              <Badge className="bg-success-foreground/20 text-success-foreground text-lg px-4 py-2">
                 Meta: 365 dias
               </Badge>
               <p className="text-sm text-green-100 mt-2">

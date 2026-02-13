@@ -90,7 +90,7 @@ export default function SGSOReportPage() {
         </Button>
       </div>
 
-      <div ref={reportRef} className="bg-white p-8 rounded-lg shadow-lg">
+      <div ref={reportRef} className="bg-card p-8 rounded-lg shadow-lg">
         {/* Report Header */}
        <div className="mb-8 border-b-2 border-border pb-6">
           <div className="flex items-center justify-between mb-4">
@@ -190,7 +190,7 @@ export default function SGSOReportPage() {
         {/* Trend Chart */}
         <div className="mb-8">
           <h2 className="text-2xl font-semibold text-foreground mb-4">📈 Tendência de Riscos</h2>
-          <div className="bg-white rounded-lg"><SGSOTrendChart /></div>
+          <div className="bg-card rounded-lg"><SGSOTrendChart /></div>
         </div>
 
         {/* Footer */}

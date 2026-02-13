@@ -151,7 +151,7 @@ export const TemplatePreview: React.FC<TemplatePreviewProps> = ({
           <TabsContent value="preview" className="space-y-4">
             {/* Preview Area */}
             <div 
-              className="p-6 border border-zinc-700 rounded-lg bg-white text-black min-h-[400px] prose prose-sm max-w-none"
+              className="p-6 border rounded-lg bg-card text-foreground min-h-[400px] prose prose-sm max-w-none"
               dangerouslySetInnerHTML={createSafeHTML(previewContent)}
             />
 

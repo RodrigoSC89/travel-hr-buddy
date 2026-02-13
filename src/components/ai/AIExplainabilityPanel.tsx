@@ -303,9 +303,9 @@ export function AIExplainabilityPanel() {
                               <Progress 
                                 value={factor.weight} 
                                 className={cn(
-                                  factor.impact === 'positive' && '[&>div]:bg-green-500',
-                                  factor.impact === 'negative' && '[&>div]:bg-red-500',
-                                  factor.impact === 'neutral' && '[&>div]:bg-gray-500'
+                                   factor.impact === 'positive' && '[&>div]:bg-success',
+                                   factor.impact === 'negative' && '[&>div]:bg-destructive',
+                                   factor.impact === 'neutral' && '[&>div]:bg-muted-foreground'
                                 )}
                               />
                             </div>

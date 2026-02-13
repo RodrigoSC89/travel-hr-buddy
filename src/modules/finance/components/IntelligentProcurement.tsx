@@ -38,11 +38,11 @@ const fallbackPOs: PurchaseOrder[] = [
 ];
 
 const statusColors: Record<PurchaseOrder['status'], string> = {
-  draft: 'bg-gray-500',
-  pending: 'bg-amber-500',
-  approved: 'bg-blue-500',
-  ordered: 'bg-purple-500',
-  delivered: 'bg-green-500'
+  draft: 'bg-muted-foreground',
+  pending: 'bg-warning',
+  approved: 'bg-info',
+  ordered: 'bg-accent',
+  delivered: 'bg-success'
 };
 
 const statusLabels: Record<PurchaseOrder['status'], string> = {

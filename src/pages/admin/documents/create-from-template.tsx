@@ -177,7 +177,7 @@ export default function CreateFromTemplate({
 
         {isApplied && (
           <div className="space-y-4">
-            <div className="mt-6 border rounded-xl p-4 shadow-lg bg-white">
+            <div className="mt-6 border rounded-xl p-4 shadow-lg bg-card">
               <TipTapEditor content={content} onChange={setContent} />
             </div>
 
@@ -192,7 +192,7 @@ export default function CreateFromTemplate({
 
         {!isApplied && vars.length === 0 && (
           <div className="space-y-4">
-            <div className="mt-6 border rounded-xl p-4 shadow-lg bg-white">
+            <div className="mt-6 border rounded-xl p-4 shadow-lg bg-card">
               <TipTapEditor content={content} onChange={setContent} />
             </div>
 

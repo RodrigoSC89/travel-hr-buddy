@@ -268,7 +268,7 @@ export default function AssistantLogsPage() {
   const hasFilters = searchKeyword || emailFilter || startDate || endDate;
 
   return (
-    <div className="min-h-screen p-6 bg-gray-50">
+    <div className="min-h-screen p-6 bg-background">
       <div className="max-w-6xl mx-auto space-y-4">
         {/* Header */}
         <div className="flex items-center justify-between">
@@ -414,7 +414,7 @@ export default function AssistantLogsPage() {
                             <span>—</span>
                             <span>{format(new Date(log.created_at), "dd/MM/yyyy 'às' HH:mm:ss")}</span>
                           </div>
-                          <div className="text-xs px-2 py-1 bg-gray-100 rounded">
+                          <div className="text-xs px-2 py-1 bg-muted rounded">
                             {log.origin}
                           </div>
                         </div>
@@ -426,7 +426,7 @@ export default function AssistantLogsPage() {
                           </div>
                           <div className="flex-1">
                             <p className="text-sm font-medium mb-1">Pergunta</p>
-                            <p className="text-sm text-gray-700">{log.question}</p>
+                            <p className="text-sm text-muted-foreground">{log.question}</p>
                           </div>
                         </div>
 

@@ -126,10 +126,10 @@ const severityConfig = {
 };
 
 const statusConfig = {
-  operational: { bg: "bg-green-500", text: "Operacional" },
-  maintenance: { bg: "bg-yellow-500", text: "Manutenção" },
-  alert: { bg: "bg-red-500", text: "Alerta" },
-  standby: { bg: "bg-gray-500", text: "Standby" }
+  operational: { bg: "bg-success", text: "Operacional" },
+  maintenance: { bg: "bg-warning", text: "Manutenção" },
+  alert: { bg: "bg-destructive", text: "Alerta" },
+  standby: { bg: "bg-muted-foreground", text: "Standby" }
 };
 
 export default function NOC() {

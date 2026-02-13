@@ -91,10 +91,10 @@ export default function MLCWorkHoursPage() {
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case "compliant": return "bg-green-500";
-      case "warning": return "bg-yellow-500";
-      case "violation": return "bg-red-500";
-      default: return "bg-gray-500";
+      case "compliant": return "bg-success";
+      case "warning": return "bg-warning";
+      case "violation": return "bg-destructive";
+      default: return "bg-muted-foreground";
     }
   };
 

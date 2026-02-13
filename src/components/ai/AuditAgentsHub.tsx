@@ -492,9 +492,9 @@ Precisa de mais detalhes sobre algum aspecto específico?`;
                           <div className="flex items-center justify-between">
                             <h4 className="font-medium truncate">{agent.name}</h4>
                             <div className={`h-2 w-2 rounded-full ${
-                              agent.status === "active" ? "bg-green-500" : 
-                              agent.status === "processing" ? "bg-blue-500 animate-pulse" : 
-                              "bg-gray-400"
+                              agent.status === "active" ? "bg-success" : 
+                              agent.status === "processing" ? "bg-info animate-pulse" : 
+                              "bg-muted-foreground"
                             }`} />
                           </div>
                           <p className="text-xs text-muted-foreground line-clamp-2 mt-1">

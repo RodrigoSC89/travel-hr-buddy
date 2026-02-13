@@ -179,7 +179,7 @@ export default function FlightTracker() {
                 <Plane className="h-5 w-5 text-primary" />
                 {flight.flightNumber}
               </CardTitle>
-              <Badge className={statusColors[flight.status] || "bg-gray-500"}>
+              <Badge className={statusColors[flight.status] || "bg-muted-foreground"}>
                 {statusLabels[flight.status] || flight.status}
               </Badge>
             </div>

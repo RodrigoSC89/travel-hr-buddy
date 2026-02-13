@@ -329,7 +329,7 @@ export function PerformanceMonitor() {
                         {module.accepted_suggestions} accepted
                       </span>
                     </div>
-                    <div className="flex items-center gap-1 text-gray-600">
+                    <div className="flex items-center gap-1 text-muted-foreground">
                       <XCircle className="h-4 w-4" />
                       <span className="text-sm">
                         {module.total_suggestions - module.accepted_suggestions} rejected
