@@ -338,7 +338,7 @@ export function ResilienciaSection() {
                 </div>
                 <div className="flex flex-wrap gap-2 mt-3">
                   {plan.actions.map((action, i) => (
-                    <Badge key={i} variant="secondary" className="text-xs">
+                    <Badge key={`action-${action}-${i}`} variant="secondary" className="text-xs">
                       {action}
                     </Badge>
                   ))}

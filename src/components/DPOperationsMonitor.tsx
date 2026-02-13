@@ -218,7 +218,7 @@ export function DPOperationsMonitor({
           <h3>⚠️ Reasons for {status.status} Status</h3>
           <ul>
             {status.reasons.map((reason, i) => (
-              <li key={i}>{reason}</li>
+              <li key={`reason-${i}-${reason.slice(0,15)}`}>{reason}</li>
             ))}
           </ul>
         </div>
@@ -229,7 +229,7 @@ export function DPOperationsMonitor({
         <h3>📋 Recommendations</h3>
         <ul>
           {status.recommendations.map((rec, i) => (
-            <li key={i}>{rec}</li>
+            <li key={`rec-${i}-${rec.slice(0,15)}`}>{rec}</li>
           ))}
         </ul>
       </div>
@@ -333,7 +333,7 @@ function PDOPChart({ data }: PDOPChartProps) {
         {/* Points */}
         {data.map((d, i) => (
           <circle
-            key={i}
+            key={`pdop-pt-${d.time}-${i}`}
             cx={xScale(i)}
             cy={yScale(d.pdop)}
             r="4"

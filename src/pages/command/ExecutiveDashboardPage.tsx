@@ -25,7 +25,7 @@ export default function ExecutiveDashboardPage() {
       <div className="space-y-6">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
           {[...Array(4)].map((_, i) => (
-            <Card key={i}>
+            <Card key={`exec-skel-${i}`}>
               <CardContent className="pt-4">
                 <Skeleton className="h-20 w-full" />
               </CardContent>

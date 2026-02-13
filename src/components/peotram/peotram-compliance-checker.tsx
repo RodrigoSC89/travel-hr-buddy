@@ -512,7 +512,7 @@ export const PeotramComplianceChecker: React.FC = () => {
                       { label: "Fev", value: 85 },
                       { label: "Mar", value: 87 },
                     ].map((month, i) => (
-                      <div key={i} className="text-center">
+                      <div key={`month-${month.label}`} className="text-center">
                         <div className="h-20 bg-muted rounded relative overflow-hidden">
                           <div 
                             className="absolute bottom-0 left-0 right-0 bg-primary/80"

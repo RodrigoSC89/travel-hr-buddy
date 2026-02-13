@@ -310,7 +310,7 @@ export function CrewSchedulerGantt() {
                 const isWeekend = day.getDay() === 0 || day.getDay() === 6;
                 return (
                   <div 
-                    key={i}
+                    key={`gantt-day-${day.toISOString()}`}
                     className={`flex-shrink-0 text-center text-xs p-2 border-r ${
                       isToday ? 'bg-primary/20 font-bold' : isWeekend ? 'bg-muted/50' : ''
                     }`}

@@ -386,7 +386,7 @@ export default function AdvancedCopilot() {
                     {message.metadata?.actions && (
                       <div className="flex flex-wrap gap-2 mt-2">
                         {message.metadata.actions.map((action, i) => (
-                          <Button key={i} size="sm" variant="secondary">
+                          <Button key={`action-${action.label}-${i}`} size="sm" variant="secondary">
                             {action.label}
                           </Button>
                         ))}

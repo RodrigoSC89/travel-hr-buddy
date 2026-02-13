@@ -284,7 +284,7 @@ export function SmartEmptyState({
           <div className="flex flex-wrap gap-2 justify-center">
             {suggestions.map((suggestion, idx) => (
               <span
-                key={idx}
+                key={`sug-${suggestion}-${idx}`}
                 className="px-2 py-1 text-xs bg-muted rounded-md text-muted-foreground"
               >
                 {suggestion}

@@ -305,7 +305,7 @@ Por favor, especifique o que precisa ou pergunte diretamente!`,
             <ScrollArea className="h-72 mb-4 p-3 bg-background/50 rounded-lg border">
               <div className="space-y-3">
                 {chatHistory.map((msg, i) => (
-                  <div key={i} className={`flex ${msg.role === "user" ? "justify-end" : "justify-start"}`}>
+                  <div key={`train-chat-${i}-${msg.role}`} className={`flex ${msg.role === "user" ? "justify-end" : "justify-start"}`}>
                     <div className={`max-w-[90%] p-3 rounded-lg text-sm whitespace-pre-wrap ${
                       msg.role === "user" 
                         ? "bg-primary text-primary-foreground" 

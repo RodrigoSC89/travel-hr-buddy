@@ -310,7 +310,7 @@ export default function AuditoriaTecnica() {
                   <div className="space-y-3">
                     {section.items.map((item, i) => (
                       <div 
-                        key={i} 
+                        key={`audit-item-${item.name}-${i}`} 
                         className="flex items-center justify-between p-3 rounded-lg border bg-card hover:bg-muted/50 transition-colors"
                       >
                         <div className="flex items-center gap-3">

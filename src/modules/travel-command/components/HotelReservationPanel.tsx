@@ -469,7 +469,7 @@ export function HotelReservationPanel() {
                               </div>
                               <div className="flex items-center gap-1 mb-2">
                                 {Array.from({ length: hotel.stars }).map((_, i) => (
-                                  <Star key={i} className="h-4 w-4 fill-amber-400 text-amber-400" />
+                                  <Star key={`star-${hotel.name}-${i}`} className="h-4 w-4 fill-amber-400 text-amber-400" />
                                 ))}
                                 <span className="text-sm text-muted-foreground ml-2">
                                   {hotel.category}

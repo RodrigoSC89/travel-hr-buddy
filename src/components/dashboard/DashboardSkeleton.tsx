@@ -25,7 +25,7 @@ export const KPICardSkeleton: React.FC<{ count?: number }> = ({ count = 4 }) => 
     <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
       {Array.from({ length: count }).map((_, i) => (
         <div 
-          key={i} 
+          key={`kpi-skel-${i}`} 
           className={cn(
             "bg-card border border-border rounded-lg p-4",
             !isLightMode && "animate-pulse"
@@ -59,7 +59,7 @@ export const ChartSkeleton: React.FC<{ height?: string }> = ({ height = "h-64" }
       <div className={cn(height, "flex items-end gap-2 pt-4")}>
         {[40, 65, 45, 80, 55, 70, 60].map((h, i) => (
           <Skeleton 
-            key={i} 
+            key={`chart-bar-${i}`} 
             className="flex-1 rounded-t" 
             style={{ height: `${h}%` }} 
           />
@@ -81,12 +81,12 @@ export const TableSkeleton: React.FC<{ rows?: number }> = ({ rows = 5 }) => {
       {/* Header */}
       <div className="bg-muted/30 p-3 border-b border-border flex gap-4">
         {[1, 2, 3, 4].map((i) => (
-          <Skeleton key={i} className="h-4 flex-1" />
+          <Skeleton key={`tbl-hdr-${i}`} className="h-4 flex-1" />
         ))}
       </div>
       {/* Rows */}
       {Array.from({ length: rows }).map((_, i) => (
-        <div key={i} className="p-3 border-b border-border/50 flex gap-4">
+        <div key={`tbl-row-${i}`} className="p-3 border-b border-border/50 flex gap-4">
           {[1, 2, 3, 4].map((j) => (
             <Skeleton key={j} className="h-4 flex-1" />
           ))}

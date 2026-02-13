@@ -204,7 +204,7 @@ export default function ElectronicGarbageRecordBook() {
               {isLoading ? (
                 <div className="space-y-3">
                   {[1, 2, 3].map(i => (
-                    <div key={i} className="h-16 bg-muted/30 rounded-lg animate-pulse" />
+                    <div key={`garbage-skel-${i}`} className="h-16 bg-muted/30 rounded-lg animate-pulse" />
                   ))}
                 </div>
               ) : records.length === 0 ? (

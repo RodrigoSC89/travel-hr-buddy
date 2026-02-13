@@ -162,7 +162,7 @@ export default function ReportingAnalyticsAIPage() {
             <div className="space-y-4">
               {reports.map((report, idx) => (
                 <div 
-                  key={idx}
+                  key={`report-${report.title}-${idx}`}
                   className="flex items-center justify-between p-4 rounded-lg border"
                 >
                   <div className="flex items-center gap-4">

@@ -115,7 +115,7 @@ export const KPISkeleton: React.FC = () => (
   <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
     {[...Array(4)].map((_, i) => (
       <motion.div
-        key={i}
+        key={`kpi-skel-${i}`}
         initial={{ opacity: 0.5 }}
         animate={{ opacity: [0.5, 1, 0.5] }}
         transition={{ duration: 1.5, repeat: Infinity, delay: i * 0.1 }}
@@ -135,20 +135,20 @@ export const TableSkeleton: React.FC<{ rows?: number }> = ({ rows = 5 }) => (
     {/* Header */}
     <div className="bg-muted/50 p-4 flex gap-4">
       {[...Array(4)].map((_, i) => (
-        <div key={i} className="h-4 bg-muted rounded flex-1" />
+        <div key={`tbl-hdr-${i}`} className="h-4 bg-muted rounded flex-1" />
       ))}
     </div>
     {/* Rows */}
     {[...Array(rows)].map((_, rowIdx) => (
       <motion.div
-        key={rowIdx}
+        key={`tbl-row-${rowIdx}`}
         initial={{ opacity: 0.5 }}
         animate={{ opacity: [0.5, 1, 0.5] }}
         transition={{ duration: 1.5, repeat: Infinity, delay: rowIdx * 0.1 }}
         className="p-4 flex gap-4 border-t border-border"
       >
         {[...Array(4)].map((_, i) => (
-          <div key={i} className="h-4 bg-muted rounded flex-1" />
+          <div key={`tbl-cell-${rowIdx}-${i}`} className="h-4 bg-muted rounded flex-1" />
         ))}
       </motion.div>
     ))}
@@ -164,7 +164,7 @@ export const ChartSkeleton: React.FC = () => (
         const heights = [45, 70, 35, 80, 50, 65, 40];
         return (
           <motion.div
-            key={i}
+            key={`chart-bar-${i}`}
             initial={{ height: "20%" }}
             animate={{ height: ["20%", `${heights[i]}%`, "20%"] }}
             transition={{ duration: 2, repeat: Infinity, delay: i * 0.15 }}

@@ -217,7 +217,7 @@ export function NaturalLanguageCommand() {
                 <div className="flex flex-wrap gap-2">
                   {suggestions.map((suggestion, i) => (
                     <motion.button
-                      key={i}
+                      key={`sug-${suggestion.text.slice(0,15)}-${i}`}
                       initial={{ opacity: 0, scale: 0.9 }}
                       animate={{ opacity: 1, scale: 1 }}
                       transition={{ delay: i * 0.1 }}
@@ -238,7 +238,7 @@ export function NaturalLanguageCommand() {
             <div className="flex flex-wrap gap-2">
               {COMMAND_EXAMPLES.map((ex, i) => (
                 <button
-                  key={i}
+                  key={`ex-${ex.text.slice(0,15)}`}
                   onClick={() => setCommand(ex.text)}
                   className="text-xs px-2 py-1 rounded bg-muted/50 hover:bg-muted transition-colors text-muted-foreground hover:text-foreground"
                 >
@@ -264,7 +264,7 @@ export function NaturalLanguageCommand() {
               <div className="space-y-4">
                 {messages.map((msg, i) => (
                   <motion.div
-                    key={i}
+                    key={`nlc-msg-${i}-${msg.role}`}
                     initial={{ opacity: 0, x: msg.role === 'user' ? 20 : -20 }}
                     animate={{ opacity: 1, x: 0 }}
                     className={`p-3 rounded-lg ${

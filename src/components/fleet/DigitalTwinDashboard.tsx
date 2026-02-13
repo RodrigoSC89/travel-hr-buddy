@@ -453,7 +453,7 @@ export function DigitalTwinDashboard({ vesselId }: DigitalTwinDashboardProps) {
                       <div className="space-y-3">
                         {(maintenanceData?.maintenance_schedule || []).map((item: MaintenanceScheduleItem, idx: number) => (
                           <div
-                            key={idx}
+                            key={`maint-${item.equipment_name}-${idx}`}
                             className="flex items-center justify-between p-4 rounded-lg border bg-card"
                           >
                             <div className="flex items-center gap-4">
@@ -607,7 +607,7 @@ export function DigitalTwinDashboard({ vesselId }: DigitalTwinDashboardProps) {
                         const Icon = getSensorIcon(reading.sensor_type);
                         return (
                           <div
-                            key={idx}
+                            key={`sensor-${reading.sensor_type}-${idx}`}
                             className="flex items-center justify-between p-3 rounded-lg bg-muted/30"
                           >
                             <div className="flex items-center gap-3">

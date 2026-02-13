@@ -253,7 +253,7 @@ export function GamificationExtreme() {
                       <div className="flex gap-1">
                         {Array.from({ length: skill.maxLevel }).map((_, i) => (
                           <Star
-                            key={i}
+                            key={`star-${skill.name}-${i}`}
                             className={`h-4 w-4 ${
                               i < skill.level ? "text-amber-500 fill-amber-500" : "text-muted"
                             }`}

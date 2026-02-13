@@ -464,7 +464,7 @@ export default function KnowledgeHubPage() {
                           {doc.tags && doc.tags.length > 0 && (
                             <div className="flex flex-wrap gap-1 mt-2">
                               {doc.tags.slice(0, 3).map((tag, i) => (
-                                <Badge key={i} variant="outline" className="text-[10px] px-1">
+                                <Badge key={`tag-${tag}-${i}`} variant="outline" className="text-[10px] px-1">
                                   {tag}
                                 </Badge>
                               ))}
@@ -648,7 +648,7 @@ export default function KnowledgeHubPage() {
                     "Quais são os requisitos MARPOL para descarte de óleo?",
                   ].map((q, i) => (
                     <Button
-                      key={i}
+                      key={`kb-q-${i}-${q.slice(0,15)}`}
                       variant="ghost"
                       className="w-full justify-start text-left h-auto py-2 text-sm"
                       onClick={() => askKnowledge({ question: q })}

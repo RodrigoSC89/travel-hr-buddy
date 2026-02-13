@@ -187,7 +187,7 @@ export function ModuleOnboarding({
               <div className="flex gap-1">
                 {steps.map((_, i) => (
                   <div
-                    key={i}
+                    key={`step-dot-${i}`}
                     className={`w-2 h-2 rounded-full transition-colors ${
                       i === currentStep
                         ? "bg-primary"

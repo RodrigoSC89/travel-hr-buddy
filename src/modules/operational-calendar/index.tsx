@@ -340,7 +340,7 @@ const OperationalCalendar = () => {
                   </h4>
                   <ul className="space-y-1">
                     {aiSuggestions.map((s, i) => (
-                      <li key={i} className="text-sm text-purple-600 dark:text-purple-400 flex items-start gap-2">
+                      <li key={`ai-sug-${i}-${s.slice(0,15)}`} className="text-sm text-purple-600 dark:text-purple-400 flex items-start gap-2">
                         <CheckCircle className="h-4 w-4 mt-0.5 flex-shrink-0" />
                         {s}
                       </li>

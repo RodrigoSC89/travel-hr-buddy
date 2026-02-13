@@ -60,7 +60,7 @@ export default function AIAssistant() {
         <ScrollArea className="flex-1 pr-4" ref={scrollRef}>
           <div className="space-y-4">
             {messages.map((msg, i) => (
-              <div key={i} className={`flex gap-3 ${msg.role === "user" ? "justify-end" : "justify-start"}`}>
+              <div key={`solas-msg-${i}-${msg.role}`} className={`flex gap-3 ${msg.role === "user" ? "justify-end" : "justify-start"}`}>
                 {msg.role === "assistant" && (
                   <div className="w-8 h-8 rounded-full bg-orange-500/10 flex items-center justify-center flex-shrink-0">
                     <Bot className="h-4 w-4 text-orange-500" />
@@ -98,7 +98,7 @@ export default function AIAssistant() {
         <div className="mt-4 space-y-3">
           <div className="flex flex-wrap gap-2">
             {quickActions.map((action, i) => (
-              <Button key={i} variant="outline" size="sm" onClick={() => setInput(action)} disabled={isLoading}>
+              <Button key={`quick-${action}`} variant="outline" size="sm" onClick={() => setInput(action)} disabled={isLoading}>
                 {action}
               </Button>
             ))}

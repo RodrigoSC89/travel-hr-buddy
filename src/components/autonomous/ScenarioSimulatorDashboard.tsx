@@ -204,7 +204,7 @@ export function ScenarioSimulatorDashboard() {
                     <h4 className="font-medium mb-3">Recomendações</h4>
                     <div className="space-y-2">
                       {result.recommendations.map((rec, i) => (
-                        <div key={i} className="flex items-start gap-2 p-3 rounded-lg bg-muted/50">
+                        <div key={`rec-${rec.action.slice(0,15)}-${i}`} className="flex items-start gap-2 p-3 rounded-lg bg-muted/50">
                           <CheckCircle className="h-4 w-4 text-primary mt-0.5" />
                           <span className="text-sm">{rec.action}</span>
                           <Badge variant="outline" className="ml-auto">{rec.priority}</Badge>

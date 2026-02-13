@@ -353,7 +353,7 @@ export function DocumentVersionHistory({ documentTitle, versions }: Props) {
                 <div className="space-y-0.5">
                   {diffResult.map((line, i) => (
                     <div
-                      key={i}
+                      key={`diff-unified-${i}-${line.type}`}
                       className={cn(
                         "px-3 py-0.5 rounded-sm flex items-start gap-2",
                         line.type === "added" && "bg-green-500/10 text-green-600",
@@ -387,7 +387,7 @@ export function DocumentVersionHistory({ documentTitle, versions }: Props) {
                     </p>
                     {diffResult.map((line, i) => (
                       <div
-                        key={i}
+                        key={`diff-old-${i}-${line.type}`}
                         className={cn(
                           "px-2 py-0.5 rounded-sm text-xs",
                           line.type === "removed" && "bg-red-500/10 text-red-600",
@@ -410,7 +410,7 @@ export function DocumentVersionHistory({ documentTitle, versions }: Props) {
                     </p>
                     {diffResult.map((line, i) => (
                       <div
-                        key={i}
+                        key={`diff-new-${i}-${line.type}`}
                         className={cn(
                           "px-2 py-0.5 rounded-sm text-xs",
                           line.type === "added" && "bg-green-500/10 text-green-600",

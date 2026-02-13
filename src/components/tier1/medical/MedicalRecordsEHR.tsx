@@ -425,7 +425,7 @@ function PatientDetailView({ member }: { member: CrewMember }) {
               <CardContent>
                 <div className="space-y-2">
                   {medications.filter(m => m.status === 'active').map((med, i) => (
-                    <div key={i} className="flex justify-between items-center">
+                    <div key={`active-med-${med.name}`} className="flex justify-between items-center">
                       <span className="text-sm">{med.name}</span>
                       <Badge variant="outline">{med.dosage}</Badge>
                     </div>
@@ -605,7 +605,7 @@ function PatientDetailView({ member }: { member: CrewMember }) {
           
           <div className="grid gap-3">
             {vaccinations.map((vax, i) => (
-              <Card key={i} className={`${
+              <Card key={`vax-${vax.vaccine}-${i}`} className={`${
                 vax.status === 'expired' ? 'border-destructive/50' :
                 vax.status === 'due-soon' ? 'border-warning/50' : ''
               }`}>
@@ -659,7 +659,7 @@ function PatientDetailView({ member }: { member: CrewMember }) {
           
           <div className="grid gap-3">
             {medications.map((med, i) => (
-              <Card key={i} className={med.status === 'active' ? 'border-primary/50' : ''}>
+              <Card key={`med-${med.name}`} className={med.status === 'active' ? 'border-primary/50' : ''}>
                 <CardContent className="p-4">
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-4">
@@ -713,7 +713,7 @@ function PatientDetailView({ member }: { member: CrewMember }) {
               { title: "Hospitalizations", icon: Heart, items: ["None recorded"] },
               { title: "Family History", icon: User, items: ["Hypertension (Father)", "Diabetes (Mother)"] },
             ].map((section, i) => (
-              <Card key={i}>
+              <Card key={`hist-${section.title}`}>
                 <CardHeader className="pb-2">
                   <CardTitle className="text-sm flex items-center gap-2">
                     <section.icon className="h-4 w-4" />

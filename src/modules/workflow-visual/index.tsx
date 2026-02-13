@@ -464,7 +464,7 @@ const WorkflowVisual = () => {
                     <div className="space-y-3">
                       {aiSuggestions.map((s, i) => (
                         <motion.div
-                          key={i}
+                          key={`ai-sug-${s.priority}-${i}`}
                           initial={{ opacity: 0, x: 20 }}
                           animate={{ opacity: 1, x: 0 }}
                           className={`p-3 rounded-lg border ${

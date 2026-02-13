@@ -447,7 +447,7 @@ export const PreOVIDRealtimeVoice: React.FC<PreOVIDRealtimeVoiceProps> = ({
             <div className="flex gap-1.5 flex-wrap justify-center">
               {quickCommands.map((cmd, i) => (
                 <Button
-                  key={i}
+                  key={`cmd-${cmd.label}`}
                   variant="outline"
                   size="sm"
                   className="text-xs h-7 px-2"
@@ -490,7 +490,7 @@ export const PreOVIDRealtimeVoice: React.FC<PreOVIDRealtimeVoiceProps> = ({
               <div className="space-y-3">
                 {messages.map((msg, i) => (
                   <div 
-                    key={i} 
+                    key={`msg-${i}-${msg.role}`} 
                     className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}
                   >
                     <div className={`max-w-[85%] p-2 rounded-lg ${

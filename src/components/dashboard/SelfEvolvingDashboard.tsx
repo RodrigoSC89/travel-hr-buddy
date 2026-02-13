@@ -250,7 +250,7 @@ export function SelfEvolvingDashboard() {
               </div>
               <ul className="space-y-1">
                 {aiSuggestions.map((suggestion, i) => (
-                  <li key={i} className="text-xs text-muted-foreground flex items-center gap-2">
+                  <li key={`ai-sug-${i}-${suggestion.slice(0,15)}`} className="text-xs text-muted-foreground flex items-center gap-2">
                     <span className="w-1.5 h-1.5 rounded-full bg-primary" />
                     {suggestion}
                   </li>

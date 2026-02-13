@@ -25,7 +25,7 @@ export function SkeletonText({ lines = 3, className }: SkeletonProps & { lines?:
     <div className={cn('space-y-2', className)}>
       {Array.from({ length: lines }).map((_, i) => (
         <Skeleton
-          key={i}
+          key={`skel-text-${i}`}
           className={cn('h-4', i === lines - 1 ? 'w-3/4' : 'w-full')}
         />
       ))}
@@ -52,12 +52,12 @@ export function SkeletonTable({ rows = 5, cols = 4, className }: SkeletonProps &
       {/* Header */}
       <div className="flex gap-4 p-4 border-b bg-muted/50">
         {Array.from({ length: cols }).map((_, i) => (
-          <Skeleton key={i} className="h-4 flex-1" />
+          <Skeleton key={`skel-tbl-hdr-${i}`} className="h-4 flex-1" />
         ))}
       </div>
       {/* Rows */}
       {Array.from({ length: rows }).map((_, rowIndex) => (
-        <div key={rowIndex} className="flex gap-4 p-4 border-b last:border-0">
+        <div key={`skel-tbl-row-${rowIndex}`} className="flex gap-4 p-4 border-b last:border-0">
           {Array.from({ length: cols }).map((_, colIndex) => (
             <Skeleton key={colIndex} className="h-4 flex-1" />
           ))}

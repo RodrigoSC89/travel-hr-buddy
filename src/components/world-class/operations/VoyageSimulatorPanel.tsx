@@ -580,7 +580,7 @@ export function VoyageSimulatorPanel() {
         {isLoading ? (
           <div className="space-y-3">
             {[1, 2, 3].map(i => (
-              <Card key={i}><CardContent className="p-6 h-28 animate-pulse bg-muted/30" /></Card>
+              <Card key={`sim-skel-${i}`}><CardContent className="p-6 h-28 animate-pulse bg-muted/30" /></Card>
             ))}
           </div>
         ) : simulations.length === 0 ? (

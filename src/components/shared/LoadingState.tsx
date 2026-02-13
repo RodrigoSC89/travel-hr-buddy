@@ -40,7 +40,7 @@ export function LoadingState({ variant = 'spinner', count = 3, className = '' }:
         </div>
         {/* Data rows */}
         {Array.from({ length: count }).map((_, i) => (
-          <div key={i} className="flex gap-4">
+          <div key={`load-tbl-row-${i}`} className="flex gap-4">
             <Skeleton className="h-12 flex-1" />
             <Skeleton className="h-12 w-32" />
             <Skeleton className="h-12 w-24" />
@@ -55,7 +55,7 @@ export function LoadingState({ variant = 'spinner', count = 3, className = '' }:
     return (
       <div className={`grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 ${className}`} data-testid="loading-state">
         {Array.from({ length: count }).map((_, i) => (
-          <div key={i} className="rounded-lg border bg-card p-4 space-y-3">
+          <div key={`load-card-${i}`} className="rounded-lg border bg-card p-4 space-y-3">
             <Skeleton className="h-6 w-3/4" />
             <Skeleton className="h-4 w-full" />
             <Skeleton className="h-4 w-1/2" />
@@ -78,7 +78,7 @@ export function LoadingState({ variant = 'spinner', count = 3, className = '' }:
       </div>
       <div className="grid grid-cols-2 gap-4">
         {Array.from({ length: count * 2 }).map((_, i) => (
-          <div key={i} className="space-y-1">
+          <div key={`load-detail-${i}`} className="space-y-1">
             <Skeleton className="h-4 w-20" />
             <Skeleton className="h-6 w-full" />
           </div>
