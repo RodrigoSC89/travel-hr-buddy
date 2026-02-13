@@ -81,8 +81,7 @@ export const MissionPlanner: React.FC = () => {
   const activateMission = async (missionId: string) => {
     setActivating(missionId);
     try {
-      // Use type assertion for RPC not in generated types
-      const { data, error } = await (supabase.rpc as any)("activate_mission", {
+      const { data, error } = await (supabase.rpc as Function)("activate_mission", {
         p_mission_id: missionId,
       });
 

@@ -142,7 +142,7 @@ export function getModulesByDomain(domain: DomainName): string[] {
  */
 export function getDomainForModule(moduleId: string): DomainName | null {
   for (const [domain, modules] of Object.entries(MODULE_DOMAINS)) {
-    if (Object.values(modules).includes(moduleId as any)) {
+    if ((Object.values(modules) as string[]).includes(moduleId)) {
       return domain as DomainName;
     }
   }

@@ -360,15 +360,15 @@ class CognitiveFeedbackCore {
         return null;
       }
 
-      const entries = data as any[];
+      const entries = data as Record<string, unknown>[];
       const totalDecisions = entries.length;
       const accepted = entries.filter(d => d.operator_action === "accepted").length;
       const rejected = entries.filter(d => d.operator_action === "rejected").length;
       const modified = entries.filter(d => d.operator_action === "modified").length;
 
-      const modulePerformance: Record<string, any> = {};
+      const modulePerformance: Record<string, { total: number; accepted: number; rejected: number; success_rate: number }> = {};
       entries.forEach(entry => {
-        const moduleKey = entry.module_name || "unknown";
+        const moduleKey = String(entry.module_name || "unknown");
         if (!modulePerformance[moduleKey]) {
           modulePerformance[moduleKey] = { total: 0, accepted: 0, rejected: 0, success_rate: 0 };
         }

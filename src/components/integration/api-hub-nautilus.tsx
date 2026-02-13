@@ -522,7 +522,7 @@ export const APIHubNautilus: React.FC = () => {
                           <Badge className={getMethodColor(endpoint.method)}>
                             {endpoint.method}
                           </Badge>
-                          <Badge variant={getStatusColor(endpoint.status) as any}>
+                          <Badge variant={getStatusColor(endpoint.status) as "default" | "secondary" | "destructive" | "outline"}>
                             {endpoint.status}
                           </Badge>
                         </div>

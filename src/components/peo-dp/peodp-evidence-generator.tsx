@@ -270,7 +270,7 @@ export function PeodpEvidenceGenerator() {
               <Label htmlFor="status">Status</Label>
               <Select 
                 value={input.status} 
-                onValueChange={(v) => handleInputChange("status", v as any)}
+                onValueChange={(v) => handleInputChange("status", v as "non_compliant" | "partial" | "compliant" | "not_verified")}
               >
                 <SelectTrigger>
                   <SelectValue />

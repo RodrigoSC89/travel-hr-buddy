@@ -477,8 +477,7 @@ export class SelfEvolutionModel {
 
     try {
       // behavior_mutation_log table is optional
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any -- behavior_mutation_log not in generated types
-      await (supabase as any).from("behavior_mutation_log").insert({
+      await (supabase.from as Function)("behavior_mutation_log").insert({
         function_id: original.id,
         function_name: original.name,
         mutation_type: alternative.mutationType,

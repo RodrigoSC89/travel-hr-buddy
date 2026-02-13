@@ -63,7 +63,7 @@ export async function exportAuditToPDF(
 
   // Summary
   const summary = calculateSummary(results);
-  const finalY = ((doc as any).lastAutoTable?.finalY || 100) + 10;
+  const finalY = ((doc as unknown as { lastAutoTable?: { finalY: number } }).lastAutoTable?.finalY || 100) + 10;
 
   doc.setFontSize(12);
   doc.text("Resumo:", 14, finalY);

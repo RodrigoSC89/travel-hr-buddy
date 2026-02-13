@@ -103,8 +103,7 @@ export default function DPCopilot() {
   // Initialize speech recognition
   useEffect(() => {
     if (typeof window !== "undefined" && "webkitSpeechRecognition" in window) {
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any -- webkitSpeechRecognition is vendor-specific API
-      const SpeechRecognitionClass = (window as any).webkitSpeechRecognition;
+      const SpeechRecognitionClass = (window as unknown as { webkitSpeechRecognition: new () => typeof recognitionRef.current }).webkitSpeechRecognition;
       recognitionRef.current = new SpeechRecognitionClass();
       recognitionRef.current.continuous = false;
       recognitionRef.current.interimResults = false;

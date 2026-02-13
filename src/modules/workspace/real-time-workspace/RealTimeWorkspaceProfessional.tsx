@@ -371,7 +371,7 @@ const RealTimeWorkspaceProfessional: React.FC = () => {
     const newDoc: SharedDocument = {
       id: String(Date.now()),
       name: file.name,
-      type: file.name.split('.').pop()?.toUpperCase() as any || "OTHER",
+      type: (file.name.split('.').pop()?.toUpperCase() || "OTHER") as SharedDocument["type"],
       size: `${(file.size / 1024).toFixed(1)} KB`,
       lastModified: "Agora",
       modifiedBy: "Você",

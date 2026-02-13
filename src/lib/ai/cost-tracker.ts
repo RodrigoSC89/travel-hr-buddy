@@ -178,8 +178,9 @@ export async function getMonthlyCostSummary(organizationId?: string): Promise<Co
     const byDayMap: Record<string, number> = {};
 
     for (const log of logs) {
-      const model = (log.metadata as any)?.model || 'unknown';
-      const cost = (log.metadata as any)?.cost || 0;
+      const meta = log.metadata as Record<string, unknown> | null;
+      const model = (meta?.model as string) || 'unknown';
+      const cost = Number(meta?.cost) || 0;
       const tokens = (log.tokens_input || 0) + (log.tokens_output || 0);
       const day = new Date(log.created_at || '').toISOString().split('T')[0];
 

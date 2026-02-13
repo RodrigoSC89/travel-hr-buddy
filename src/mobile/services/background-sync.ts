@@ -10,7 +10,7 @@ import { logger } from "@/lib/logger";
 
 // Capacitor Background Task plugin
 const BackgroundTask = typeof window !== "undefined" && 
-  (window as any).Capacitor?.Plugins?.BackgroundTask;
+  (window as unknown as { Capacitor?: { Plugins?: { BackgroundTask?: { beforeExit: (cb: () => Promise<void>) => Promise<string>; finish: (opts: { taskId: string }) => void } } } }).Capacitor?.Plugins?.BackgroundTask;
 
 interface BackgroundSyncConfig {
   minInterval: number; // Minimum interval between syncs (ms)

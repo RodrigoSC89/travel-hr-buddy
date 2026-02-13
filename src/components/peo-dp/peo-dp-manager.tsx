@@ -227,7 +227,7 @@ export const PeoDpManager: React.FC = () => {
       status: "concluido",
       items,
       score,
-      scoreBySection: {} as any,
+      scoreBySection: {} as Record<string, number>,
       recommendations: [],
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString(),
@@ -387,7 +387,7 @@ export const PeoDpManager: React.FC = () => {
       </div>
 
       {/* Main Content */}
-      <Tabs value={activeView} onValueChange={(v) => setActiveView(v as any)} className="space-y-6">
+      <Tabs value={activeView} onValueChange={(v) => setActiveView(v as typeof activeView)} className="space-y-6">
         <div className="flex items-center justify-between">
           <TabsList className="flex flex-wrap gap-1 h-auto p-1">
             <TabsTrigger value="dashboard" className="flex items-center gap-1 text-xs px-2 py-1">
@@ -915,7 +915,7 @@ export const PeoDpManager: React.FC = () => {
             </div>
             <div className="space-y-2">
               <Label>Classe DP</Label>
-              <Select value={newAuditDpClass} onValueChange={(v) => setNewAuditDpClass(v as any)}>
+              <Select value={newAuditDpClass} onValueChange={(v) => setNewAuditDpClass(v as typeof newAuditDpClass)}>
                 <SelectTrigger>
                   <SelectValue />
                 </SelectTrigger>

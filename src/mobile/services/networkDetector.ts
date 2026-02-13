@@ -36,9 +36,8 @@ class NetworkDetector {
       return { isOnline: true };
     }
 
-    const connection = (navigator as any).connection || 
-                      (navigator as any).mozConnection || 
-                      (navigator as any).webkitConnection;
+    const nav = navigator as unknown as { connection?: { effectiveType?: "2g" | "3g" | "4g" | "slow-2g"; downlink?: number; rtt?: number }; mozConnection?: { effectiveType?: "2g" | "3g" | "4g" | "slow-2g"; downlink?: number; rtt?: number }; webkitConnection?: { effectiveType?: "2g" | "3g" | "4g" | "slow-2g"; downlink?: number; rtt?: number } };
+    const connection = nav.connection || nav.mozConnection || nav.webkitConnection;
 
     return {
       isOnline: true, // PATCH v19: Sempre online
@@ -59,9 +58,8 @@ class NetworkDetector {
     window.addEventListener("offline", () => this.handleStatusChange());
 
     // Listen for connection quality changes
-    const connection = (navigator as any).connection || 
-                      (navigator as any).mozConnection || 
-                      (navigator as any).webkitConnection;
+    const nav = navigator as unknown as { connection?: EventTarget; mozConnection?: EventTarget; webkitConnection?: EventTarget };
+    const connection = nav.connection || nav.mozConnection || nav.webkitConnection;
 
     if (connection) {
       connection.addEventListener("change", () => this.handleStatusChange());

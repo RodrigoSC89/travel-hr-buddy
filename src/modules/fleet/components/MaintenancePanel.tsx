@@ -95,9 +95,7 @@ export const MaintenancePanel: React.FC<MaintenancePanelProps> = ({
     }
 
     try {
-      const { error } = await supabase
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any -- untyped table
-        .from("maintenance_schedules" as any)
+      const { error } = await (supabase.from as Function)("maintenance_schedules")
         .insert([{
           vessel_id: newMaintenance.vessel_id,
           maintenance_type: newMaintenance.type,

@@ -325,7 +325,7 @@ Provide helpful, professional responses. Keep answers concise and actionable. Fo
    * Update context
    */
   async updateContext(context: Record<string, unknown>) {
-    return localMemory.updateContext(context as any);
+    return localMemory.updateContext(context as never);
   }
 }
 

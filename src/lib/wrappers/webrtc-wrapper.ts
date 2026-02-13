@@ -196,7 +196,16 @@ class WebRTCDataChannelWrapper implements WebRTCDataChannel {
     }
     
     try {
-      this.channel.send(data as any);
+      if (typeof data === "string") {
+        this.channel.send(data);
+      } else if (data instanceof Blob) {
+        this.channel.send(data);
+      } else if (data instanceof ArrayBuffer) {
+        this.channel.send(data);
+      } else {
+        // ArrayBufferView - send underlying buffer
+        this.channel.send(new Uint8Array(data.buffer as ArrayBuffer, data.byteOffset, data.byteLength));
+      }
       logger.debug(`[WebRTC DataChannel] Sent data on ${this.channel.label}`);
     } catch (error) {
       logger.error("[WebRTC DataChannel] Failed to send data:", error);

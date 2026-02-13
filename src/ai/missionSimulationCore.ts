@@ -132,8 +132,7 @@ class MissionSimulationCore {
     }
 
     try {
-      const { error } = await supabase
-        .from("simulated_missions" as any)
+      const { error } = await (supabase.from as Function)("simulated_missions")
         .select("id")
         .limit(1);
 
@@ -167,14 +166,13 @@ class MissionSimulationCore {
         // Use in-memory storage
         const simulationId = crypto.randomUUID();
         blueprint.id = simulationId;
-        this.simulations.set(simulationId, { ...blueprint, predictions } as any);
+        this.simulations.set(simulationId, { ...blueprint, predictions } as never);
         logger.info("[MissionSimulationCore] Simulation created in memory", { id: simulationId });
         return simulationId;
       }
 
       // Save to Supabase
-      const { data, error } = await supabase
-        .from("simulated_missions" as any)
+      const { data, error } = await (supabase.from as Function)("simulated_missions")
         .insert({
           name: blueprint.name,
           description: blueprint.description,
@@ -192,7 +190,7 @@ class MissionSimulationCore {
 
       if (error) throw error;
 
-      const simulationId = (data as any).id;
+      const simulationId = String((data as Record<string, unknown>).id);
       blueprint.id = simulationId;
       this.simulations.set(simulationId, blueprint);
 
@@ -227,8 +225,7 @@ class MissionSimulationCore {
 
       if (tableExists) {
         // Update status to running
-        await supabase
-          .from("simulated_missions" as any)
+        await (supabase.from as Function)("simulated_missions")
           .update({ status: "running" })
           .eq("id", simulationId);
       }
@@ -240,8 +237,7 @@ class MissionSimulationCore {
 
       if (tableExists) {
         // Update status and save outcome
-        await supabase
-          .from("simulated_missions" as any)
+        await (supabase.from as Function)("simulated_missions")
           .update({
             status: outcome.success ? "completed" : "failed",
             outcome: outcome,

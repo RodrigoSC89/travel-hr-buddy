@@ -82,8 +82,7 @@ export function GlobalVoiceIA({ className, onCommand }: GlobalVoiceIAProps) {
   // Initialize Web Speech API
   useEffect(() => {
     if (typeof window !== "undefined" && "webkitSpeechRecognition" in window) {
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      const SpeechRecognitionClass = (window as any).webkitSpeechRecognition;
+      const SpeechRecognitionClass = (window as unknown as { webkitSpeechRecognition: new () => SpeechRecognitionInstance }).webkitSpeechRecognition;
       recognitionRef.current = new SpeechRecognitionClass() as SpeechRecognitionInstance;
       recognitionRef.current.continuous = false;
       recognitionRef.current.interimResults = true;

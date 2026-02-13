@@ -141,9 +141,8 @@ export default function ComplianceTerceiros() {
   const { data: thirdParties, isLoading } = useComplianceThirdParties();
   const { user } = useAuth();
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- hook returns dynamic Supabase shape
   const displayData = (thirdParties && thirdParties.length > 0) 
-    ? (thirdParties as any[]).map((tp) => ({
+    ? ((thirdParties as unknown) as Record<string, unknown>[]).map((tp) => ({
         id: String(tp.id),
         name: String(tp.name || tp.title || "Unknown"),
         type: (String(tp.type || "supplier")) as ThirdParty["type"],

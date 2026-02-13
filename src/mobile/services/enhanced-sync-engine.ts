@@ -205,9 +205,7 @@ export class EnhancedSyncEngine {
   private async pollTable(table: string): Promise<void> {
     const lastSync = this.status.lastSync || new Date(0);
     
-    const { data, error } = await supabase
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any -- dynamic table name from config
-      .from(table as any)
+    const { data, error } = await (supabase.from as Function)(table)
       .select("*")
       .gte("updated_at", lastSync.toISOString())
       .order("updated_at", { ascending: false })
