@@ -76,7 +76,7 @@ export function AISettingsDialog({
 
   const handleSave = () => {
     onSave?.(currentSettings);
-    localStorage.setItem("ai_settings", JSON.stringify(currentSettings));
+    sessionStorage.setItem("ai_settings", JSON.stringify(currentSettings));
     toast.success("Configurações salvas com sucesso!");
     onOpenChange(false);
   };

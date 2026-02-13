@@ -243,12 +243,12 @@ class UserAnalytics {
   }
 
   /**
-   * Save session to localStorage
+   * Save session to sessionStorage
    */
   private saveSession(): void {
     if (this.session && typeof window !== "undefined") {
       try {
-        localStorage.setItem("nautilus_session", JSON.stringify(this.session));
+        sessionStorage.setItem("nautilus_session", JSON.stringify(this.session));
       } catch (error) {
         logger.warn("Failed to save session", { error: String(error) });
       }

@@ -35,7 +35,7 @@ function getAudioContext(): AudioContext {
 
 function getConfig(): SoundAlertConfig {
   try {
-    const stored = localStorage.getItem(STORAGE_KEY);
+    const stored = sessionStorage.getItem(STORAGE_KEY) || localStorage.getItem(STORAGE_KEY);
     return stored ? { ...DEFAULT_CONFIG, ...JSON.parse(stored) } : DEFAULT_CONFIG;
   } catch {
     return DEFAULT_CONFIG;
@@ -45,7 +45,7 @@ function getConfig(): SoundAlertConfig {
 function saveConfig(config: Partial<SoundAlertConfig>): void {
   const current = getConfig();
   const updated = { ...current, ...config };
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(updated));
+  sessionStorage.setItem(STORAGE_KEY, JSON.stringify(updated));
 }
 
 // Generate beep sound using Web Audio API

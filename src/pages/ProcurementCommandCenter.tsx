@@ -26,7 +26,7 @@ import {
   TrendingUp, TrendingDown, Users, Package, Award,
   Brain, ShoppingCart, AlertTriangle, DollarSign,
   Truck, Sparkles, Building2, Zap, RefreshCw, ArrowRight,
-  BarChart3, Edit, Trash2, Download, Eye
+  BarChart3, Edit, Trash2, Download, Eye, Copy
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useToast } from "@/hooks/use-toast";
@@ -980,8 +980,8 @@ export default function ProcurementCommandCenter() {
                           </div>
                         </div>
                         <div className="flex gap-2">
-                          <Button size="sm" variant="outline" onClick={() => { navigator.clipboard.writeText(`Item: ${item.name} | Estoque: ${item.current_stock}/${item.minimum_stock} | Valor: R$ ${item.total_value?.toFixed(2) || '0.00'}`); toast({ title: "✏️ Dados copiados", description: "Dados do item copiados para clipboard." }); }}>
-                            <Edit className="h-4 w-4" />
+                          <Button size="sm" variant="outline" aria-label="Copiar dados do item" title="Copiar dados" onClick={() => { navigator.clipboard.writeText(`Item: ${item.name} | Estoque: ${item.current_stock}/${item.minimum_stock} | Valor: R$ ${item.total_value?.toFixed(2) || '0.00'}`); toast({ title: "✏️ Dados copiados", description: "Dados do item copiados para clipboard." }); }}>
+                            <Copy className="h-4 w-4" />
                           </Button>
                         </div>
                       </div>

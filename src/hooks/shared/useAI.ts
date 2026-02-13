@@ -196,7 +196,7 @@ export function useAIMemory(namespace: string = "default") {
 
   useEffect(() => {
     try {
-      const stored = localStorage.getItem(storageKey);
+      const stored = sessionStorage.getItem(storageKey) || localStorage.getItem(storageKey);
       if (stored) {
         const parsed = JSON.parse(stored);
         // Filter expired entries
@@ -205,14 +205,14 @@ export function useAIMemory(namespace: string = "default") {
         );
         setMemory(valid);
       }
-    } catch { /* localStorage unavailable */ }
+    } catch { /* storage unavailable */ }
   }, [storageKey]);
 
   const saveMemory = useCallback((entries: AIMemoryEntry[]) => {
     setMemory(entries);
     try {
-      localStorage.setItem(storageKey, JSON.stringify(entries));
-    } catch { /* localStorage unavailable */ }
+      sessionStorage.setItem(storageKey, JSON.stringify(entries));
+    } catch { /* storage unavailable */ }
   }, [storageKey]);
 
   const addEntry = useCallback((entry: Omit<AIMemoryEntry, "id" | "createdAt">) => {

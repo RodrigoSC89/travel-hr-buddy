@@ -78,9 +78,9 @@ export function useAuditChatPersistence(activeModule: 'peotram' | 'peodp') {
       }
     }
 
-    // Fallback to localStorage
+    // Fallback to sessionStorage
     try {
-      const savedSessions = localStorage.getItem(LOCAL_STORAGE_KEY);
+      const savedSessions = sessionStorage.getItem(LOCAL_STORAGE_KEY) || localStorage.getItem(LOCAL_STORAGE_KEY);
       if (savedSessions) {
         const parsed: ChatSession[] = JSON.parse(savedSessions);
         setSessions(parsed.filter(s => s.module === activeModule));
@@ -94,12 +94,12 @@ export function useAuditChatPersistence(activeModule: 'peotram' | 'peodp') {
   }, [activeModule, user?.id]);
 
   const saveToLocalStorage = useCallback((allSessions: ChatSession[]) => {
-    localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(allSessions));
+    sessionStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(allSessions));
   }, []);
 
   const getAllLocalSessions = useCallback((): ChatSession[] => {
     try {
-      const saved = localStorage.getItem(LOCAL_STORAGE_KEY);
+      const saved = sessionStorage.getItem(LOCAL_STORAGE_KEY) || localStorage.getItem(LOCAL_STORAGE_KEY);
       return saved ? JSON.parse(saved) : [];
     } catch {
       return [];

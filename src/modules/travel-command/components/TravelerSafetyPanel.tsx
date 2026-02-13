@@ -386,7 +386,7 @@ export const TravelerSafetyPanel: React.FC = () => {
                   <Radio className="h-4 w-4 mr-2" />
                   Broadcast
                 </Button>
-                <Button size="sm" onClick={() => { setSelectedTraveler(null); toast.success(`${fallbackTravelers.length} viajantes localizados — ${new Date().toLocaleTimeString('pt-BR')}`); }}>
+                <Button size="sm" onClick={() => { setSelectedTraveler(null); navigator.clipboard.writeText(fallbackTravelers.map(t => `${t.name} — ${t.currentLocation.city}, ${t.currentLocation.country}`).join('\n')); toast.success(`${fallbackTravelers.length} viajantes localizados — dados copiados`); }}>
                   <Locate className="h-4 w-4 mr-2" />
                   Localizar Todos
                 </Button>

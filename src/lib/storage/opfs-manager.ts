@@ -68,7 +68,7 @@ class OPFSManager {
 
   private loadIndex(): void {
     try {
-      const stored = localStorage.getItem(INDEX_KEY);
+      const stored = sessionStorage.getItem(INDEX_KEY) || localStorage.getItem(INDEX_KEY);
       if (stored) {
         const parsed = JSON.parse(stored);
         this.fileIndex = new Map(Object.entries(parsed));
@@ -81,7 +81,7 @@ class OPFSManager {
   private saveIndex(): void {
     try {
       const obj = Object.fromEntries(this.fileIndex);
-      localStorage.setItem(INDEX_KEY, JSON.stringify(obj));
+      sessionStorage.setItem(INDEX_KEY, JSON.stringify(obj));
     } catch (error) {
       logger.error('Failed to save OPFS index:', error);
     }

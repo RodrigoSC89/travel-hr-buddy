@@ -43,7 +43,7 @@ export function useUniversalSearch(): UseUniversalSearchReturn {
   const [isLoading, setIsLoading] = useState(false);
   const [recentSearches, setRecentSearches] = useState<string[]>(() => {
     try {
-      const stored = localStorage.getItem(RECENT_SEARCHES_KEY);
+      const stored = sessionStorage.getItem(RECENT_SEARCHES_KEY) || localStorage.getItem(RECENT_SEARCHES_KEY);
       return stored ? JSON.parse(stored) : [];
     } catch {
       return [];
@@ -109,9 +109,9 @@ export function useUniversalSearch(): UseUniversalSearchReturn {
     setRecentSearches(prev => {
       const newSearches = [query, ...prev.filter(s => s !== query)].slice(0, MAX_RECENT_SEARCHES);
       try {
-        localStorage.setItem(RECENT_SEARCHES_KEY, JSON.stringify(newSearches));
+        sessionStorage.setItem(RECENT_SEARCHES_KEY, JSON.stringify(newSearches));
       } catch {
-        // Ignore localStorage errors
+        // Ignore storage errors
       }
       return newSearches;
     });

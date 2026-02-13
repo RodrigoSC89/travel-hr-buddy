@@ -17,7 +17,8 @@ import {
   Activity,
   Zap,
   Droplets,
-  Wind
+  Wind,
+  Copy
 } from "lucide-react";
 
 interface SensorData {
@@ -418,7 +419,9 @@ export const IoTDashboard: React.FC = () => {
                     setSensors(prev => prev.map(s => s.type === "humidity" ? { ...s, status: "online" as const } : s));
                     toast.success("Alerta de bateria baixa marcado como resolvido");
                   }}>Marcar como Resolvido</Button>
-                  <Button variant="outline" size="sm" onClick={() => { navigator.clipboard.writeText("Sensor Umidade — Bateria: 45% | Local: Ponte de Comando | Última leitura: 72% umidade relativa"); toast.success("Dados do sensor copiados"); }}>Ver Detalhes</Button>
+                  <Button variant="outline" size="sm" onClick={() => { navigator.clipboard.writeText("Sensor Umidade — Bateria: 45% | Local: Ponte de Comando | Última leitura: 72% umidade relativa"); toast.success("Dados do sensor copiados para clipboard"); }}>
+                    <Copy className="h-3 w-3 mr-1" />Copiar Detalhes
+                  </Button>
                 </div>
               </CardContent>
             </Card>
@@ -440,7 +443,9 @@ export const IoTDashboard: React.FC = () => {
                     setDevices(prev => prev.map(d => d.name === "Sensor Node A" ? { ...d, status: "online" as const, lastSeen: "just now", signalStrength: 75 } : d));
                     toast.success("Sensor Node A reiniciado com sucesso");
                   }}>Reiniciar Dispositivo</Button>
-                  <Button variant="outline" size="sm" onClick={() => { navigator.clipboard.writeText("Sensor Node A — Local: Sala de Máquinas | Sinal: 0% | Último contato: 2h atrás | Ação: Verificar alimentação e conexão de rede"); toast.success("Diagnóstico copiado"); }}>Diagnosticar</Button>
+                  <Button variant="outline" size="sm" onClick={() => { navigator.clipboard.writeText("Sensor Node A — Local: Sala de Máquinas | Sinal: 0% | Último contato: 2h atrás | Ação: Verificar alimentação e conexão de rede"); toast.success("Diagnóstico copiado para clipboard"); }}>
+                    <Copy className="h-3 w-3 mr-1" />Copiar Diagnóstico
+                  </Button>
                 </div>
               </CardContent>
             </Card>

@@ -221,7 +221,8 @@ export default function OperationsCommandHubEnhanced() {
         setDialogOpen(p => ({ ...p, checklist: true }));
         break;
       default:
-        toast.success(`Ação "${actionId}" registrada`, { description: 'Utilize as abas acima para acessar funcionalidades específicas.' });
+        navigator.clipboard.writeText(`Ação: ${actionId} — ${new Date().toISOString()}`);
+        toast.success(`Ação "${actionId}" copiada`, { description: 'Dados copiados para clipboard. Utilize as abas acima para funcionalidades específicas.' });
     }
   };
 
