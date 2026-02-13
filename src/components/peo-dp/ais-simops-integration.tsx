@@ -209,9 +209,9 @@ export const AISSimopsIntegration: React.FC = () => {
             <span className="text-sm text-muted-foreground">AIS Feed</span>
             <Switch checked={isAISEnabled} onCheckedChange={setIsAISEnabled} />
           </div>
-          <Button variant="outline" onClick={() => { setIsAISEnabled(prev => !prev); toast.success("Feed AIS alternado"); }}>
+          <Button variant="outline" onClick={() => { setIsAISEnabled(prev => !prev); }}>
             <RefreshCw className="w-4 h-4 mr-2" />
-            Atualizar
+            Alternar AIS
           </Button>
         </div>
       </div>

@@ -106,7 +106,7 @@ export const MLCInspectionDashboard: React.FC = () => {
           <p className="text-muted-foreground">Convenção do Trabalho Marítimo - ILO</p>
         </div>
         <div className="flex gap-2">
-          <Button variant="outline" onClick={() => { setActiveTab('checklist'); toast.success("Filtros aplicados - exibindo checklist completo"); }}><Filter className="w-4 h-4 mr-2" />Filtros</Button>
+          <Button variant="outline" onClick={() => { setActiveTab('checklist'); }}><Filter className="w-4 h-4 mr-2" />Filtros</Button>
           <Button onClick={() => { setInspectionStarted(true); setActiveTab('checklist'); toast.success('Inspeção iniciada'); }}>
             <Plus className="w-4 h-4 mr-2" />Nova Inspeção
           </Button>

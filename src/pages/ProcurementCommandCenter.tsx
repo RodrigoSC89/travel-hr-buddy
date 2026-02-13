@@ -1004,9 +1004,9 @@ export default function ProcurementCommandCenter() {
                   onChange={(e) => setSearchQuery(e.target.value)}
                 />
               </div>
-              <Button variant="outline" className="gap-2" onClick={() => { setSearchQuery(''); toast({ title: "🔍 Filtros limpos" }); }}>
+              <Button variant="outline" className="gap-2" onClick={() => { setSearchQuery(''); }}>
                 <Filter className="h-4 w-4" />
-                Filtros
+                Limpar Filtros
               </Button>
             </div>
 
@@ -1017,7 +1017,7 @@ export default function ProcurementCommandCenter() {
                 <div className="col-span-full text-center py-12">
                   <Store className="h-16 w-16 text-muted-foreground/50 mx-auto mb-4" />
                   <p className="text-muted-foreground">Nenhum fornecedor encontrado</p>
-                  <Button variant="link" className="mt-2" onClick={() => { setActiveTab('suppliers'); toast({ title: "➕ Adicionar Fornecedor", description: "Use o formulário de cadastro na aba Suppliers." }); }}>
+                  <Button variant="link" className="mt-2" onClick={() => { setActiveTab('suppliers'); }}>
                     <Plus className="h-4 w-4 mr-1" />
                     Adicionar Fornecedor
                   </Button>

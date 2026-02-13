@@ -167,9 +167,9 @@ export const TravelAnalyticsPanel: React.FC = () => {
               <SelectItem value="12m">Últimos 12 Meses</SelectItem>
             </SelectContent>
           </Select>
-          <Button variant="outline" onClick={() => { setPeriod("12m"); toast.success("Período resetado para 12 meses"); }}>
+          <Button variant="outline" onClick={() => { setPeriod("12m"); }}>
             <Filter className="h-4 w-4 mr-2" />
-            Filtros
+            Resetar
           </Button>
           <Button variant="outline" onClick={() => {
             const csv = ["Mês;Aéreo;Hotel;Carro;Outros", ...spendTrendData.map(d => `${d.month};${d.flights};${d.hotels};${d.cars};${d.other}`)].join('\n');

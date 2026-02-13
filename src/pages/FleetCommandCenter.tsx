@@ -240,25 +240,33 @@ const FleetAICopilot = ({ vessels, onToast }: { vessels: EnrichedVessel[]; onToa
           <Label className="text-xs text-muted-foreground">Ações Rápidas</Label>
           <div className="grid grid-cols-2 gap-2">
             <Button variant="outline" size="sm" className="justify-start" onClick={() => {
-              onToast({ title: "🛣️ Otimizando Rotas", description: "Análise de rotas marítimas iniciada..." });
+              window.history.pushState({}, '', '/operations?tab=routes');
+              window.dispatchEvent(new PopStateEvent('popstate'));
+              onToast({ title: "🛣️ Otimizando Rotas", description: "Navegando para Otimização de Rotas..." });
             }}>
               <Route className="h-3 w-3 mr-2" />
               Otimizar Rotas
             </Button>
             <Button variant="outline" size="sm" className="justify-start" onClick={() => {
-              onToast({ title: "⛽ Análise Combustível", description: "Relatório de consumo sendo gerado..." });
+              window.history.pushState({}, '', '/fuel-analytics');
+              window.dispatchEvent(new PopStateEvent('popstate'));
+              onToast({ title: "⛽ Análise Combustível", description: "Navegando para Análise de Combustível..." });
             }}>
               <Fuel className="h-3 w-3 mr-2" />
               Análise Combustível
             </Button>
             <Button variant="outline" size="sm" className="justify-start" onClick={() => {
-              onToast({ title: "🔧 Manutenção Preditiva", description: "Executando análise preditiva de manutenção..." });
+              window.history.pushState({}, '', '/maintenance?tab=predictive');
+              window.dispatchEvent(new PopStateEvent('popstate'));
+              onToast({ title: "🔧 Manutenção Preditiva", description: "Navegando para Manutenção Preditiva..." });
             }}>
               <Wrench className="h-3 w-3 mr-2" />
               Pred. Manutenção
             </Button>
             <Button variant="outline" size="sm" className="justify-start" onClick={() => {
-              onToast({ title: "📊 Gerando Relatório", description: "Relatório executivo sendo preparado..." });
+              window.history.pushState({}, '', '/workbench?tab=reports');
+              window.dispatchEvent(new PopStateEvent('popstate'));
+              onToast({ title: "📊 Gerando Relatório", description: "Navegando para Centro de Relatórios..." });
             }}>
               <BarChart3 className="h-3 w-3 mr-2" />
               Relatório

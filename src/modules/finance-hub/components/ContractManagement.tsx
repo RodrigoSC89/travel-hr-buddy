@@ -308,10 +308,10 @@ export default function ContractManagement() {
                   onChange={(e) => setSearchTerm(e.target.value)}
                 />
               </div>
-              <Button variant="outline" size="icon" onClick={() => { setSearchTerm(''); toast.success("Filtros limpos"); }}>
+              <Button variant="outline" size="icon" onClick={() => { setSearchTerm(''); }} aria-label="Limpar filtro" title="Limpar filtro">
                 <Filter className="h-4 w-4" />
               </Button>
-              <Button className="gap-2" onClick={() => { setActiveTab("expiring"); toast.success("Filtrando contratos que precisam de ação"); }}>
+              <Button className="gap-2" onClick={() => { setActiveTab("expiring"); }}>
                 <Plus className="h-4 w-4" />
                 Novo Contrato
               </Button>
