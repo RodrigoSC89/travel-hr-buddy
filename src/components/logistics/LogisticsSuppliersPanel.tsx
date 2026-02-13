@@ -405,19 +405,19 @@ export function LogisticsSuppliersPanel() {
                       <TableCell className="text-right">
                         <div className="flex justify-end gap-1">
                           {supplier.status === "pending" && (
-                            <Button variant="ghost" size="icon" onClick={() => handleApprove(supplier)} title="Aprovar">
+                            <Button variant="ghost" size="icon" onClick={() => handleApprove(supplier)} title="Aprovar" aria-label="Aprovar fornecedor">
                               <CheckCircle className="h-4 w-4 text-success" />
                             </Button>
                           )}
                           {supplier.status === "active" && (
-                            <Button variant="ghost" size="icon" onClick={() => handleSuspend(supplier)} title="Suspender">
+                            <Button variant="ghost" size="icon" onClick={() => handleSuspend(supplier)} title="Suspender" aria-label="Suspender fornecedor">
                               <XCircle className="h-4 w-4 text-warning" />
                             </Button>
                           )}
-                          <Button variant="ghost" size="icon" onClick={() => openEditDialog(supplier)}>
+                          <Button variant="ghost" size="icon" onClick={() => openEditDialog(supplier)} aria-label="Editar fornecedor" title="Editar">
                             <Edit className="h-4 w-4" />
                           </Button>
-                          <Button variant="ghost" size="icon" onClick={() => openDeleteDialog(supplier)}>
+                          <Button variant="ghost" size="icon" onClick={() => openDeleteDialog(supplier)} aria-label="Excluir fornecedor" title="Excluir">
                             <Trash2 className="h-4 w-4 text-destructive" />
                           </Button>
                         </div>

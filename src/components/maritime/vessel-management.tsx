@@ -378,7 +378,7 @@ export function VesselManagement() {
                   <CardTitle className="text-lg">{vessel.name}</CardTitle>
                 </div>
                 <div className="flex space-x-1">
-                  <Button variant="ghost" size="icon" onClick={() => handleEditVessel(vessel)}>
+                  <Button variant="ghost" size="icon" onClick={() => handleEditVessel(vessel)} aria-label="Editar embarcação" title="Editar embarcação">
                     <Edit className="w-4 h-4" />
                   </Button>
                   <Button 
@@ -386,6 +386,8 @@ export function VesselManagement() {
                     size="icon" 
                     onClick={() => handleDeleteVessel(vessel.id)}
                     className="text-destructive hover:text-destructive"
+                    aria-label="Excluir embarcação"
+                    title="Excluir embarcação"
                   >
                     <Trash2 className="w-4 h-4" />
                   </Button>

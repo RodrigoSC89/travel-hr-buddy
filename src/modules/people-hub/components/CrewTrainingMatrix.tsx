@@ -370,7 +370,7 @@ export default function CrewTrainingMatrix() {
                 ))}
               </SelectContent>
             </Select>
-            <Button variant="outline" size="icon">
+            <Button variant="outline" size="icon" aria-label="Baixar matriz de treinamento" title="Baixar matriz de treinamento">
               <Download className="h-4 w-4" />
             </Button>
           </div>

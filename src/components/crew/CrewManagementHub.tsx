@@ -579,6 +579,8 @@ export function CrewManagementHub() {
                 setDepartmentFilter("all");
                 setVesselFilter("all");
               }}
+              aria-label="Limpar filtros"
+              title="Limpar filtros"
             >
               <RefreshCw className="h-4 w-4" />
             </Button>
@@ -624,7 +626,7 @@ export function CrewManagementHub() {
                     {getStatusBadge(member.status)}
                     <DropdownMenu>
                       <DropdownMenuTrigger asChild>
-                        <Button variant="ghost" size="icon">
+                        <Button variant="ghost" size="icon" aria-label="Mais opções" title="Mais opções">
                           <MoreHorizontal className="h-4 w-4" />
                         </Button>
                       </DropdownMenuTrigger>

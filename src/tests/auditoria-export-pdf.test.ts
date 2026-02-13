@@ -1,4 +1,4 @@
-// @ts-nocheck
+// Tests for Auditoria Export PDF API
 /**
  * Auditoria Export PDF API Endpoint Tests
  * 
@@ -169,7 +169,7 @@ describe("Auditoria Export Comentarios PDF API Endpoint", () => {
     });
 
     it("should handle empty comments gracefully", () => {
-      const emptyComments = [];
+      const emptyComments: Record<string, unknown>[] = [];
       expect(Array.isArray(emptyComments)).toBe(true);
       expect(emptyComments).toHaveLength(0);
     });

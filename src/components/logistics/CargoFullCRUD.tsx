@@ -602,22 +602,22 @@ export function CargoFullCRUD() {
                     </div>
 
                     <div className="flex gap-1">
-                      <Button size="icon" variant="ghost" onClick={() => openEdit(cargo)}>
+                      <Button size="icon" variant="ghost" onClick={() => openEdit(cargo)} aria-label="Editar carga" title="Editar">
                         <Edit className="h-4 w-4" />
                       </Button>
-                      <Button size="icon" variant="ghost" onClick={() => duplicateCargo(cargo)}>
+                      <Button size="icon" variant="ghost" onClick={() => duplicateCargo(cargo)} aria-label="Duplicar carga" title="Duplicar">
                         <Copy className="h-4 w-4" />
                       </Button>
                       {cargo.archived_at ? (
-                        <Button size="icon" variant="ghost" onClick={() => restoreCargo(cargo)}>
+                        <Button size="icon" variant="ghost" onClick={() => restoreCargo(cargo)} aria-label="Restaurar carga" title="Restaurar">
                           <RotateCcw className="h-4 w-4" />
                         </Button>
                       ) : (
-                        <Button size="icon" variant="ghost" onClick={() => archiveCargo(cargo)}>
+                        <Button size="icon" variant="ghost" onClick={() => archiveCargo(cargo)} aria-label="Arquivar carga" title="Arquivar">
                           <Archive className="h-4 w-4" />
                         </Button>
                       )}
-                      <Button size="icon" variant="ghost" className="text-destructive" onClick={() => openDelete(cargo)}>
+                      <Button size="icon" variant="ghost" className="text-destructive" onClick={() => openDelete(cargo)} aria-label="Excluir carga" title="Excluir">
                         <Trash2 className="h-4 w-4" />
                       </Button>
                     </div>

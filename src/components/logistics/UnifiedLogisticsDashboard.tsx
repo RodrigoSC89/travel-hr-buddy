@@ -501,7 +501,7 @@ export function UnifiedLogisticsDashboard() {
                               </div>
                             )}
                           </div>
-                          <Button variant="ghost" size="icon" className="text-destructive hover:bg-destructive/10" onClick={() => { if(confirm("Deseja deletar esta carga?")) deleteCargoMutation.mutate(cargo.id); }}>
+                          <Button variant="ghost" size="icon" className="text-destructive hover:bg-destructive/10" onClick={() => { if(confirm("Deseja deletar esta carga?")) deleteCargoMutation.mutate(cargo.id); }} aria-label="Excluir carga" title="Excluir carga">
                             <Trash2 className="h-4 w-4" />
                           </Button>
                         </div>
@@ -555,7 +555,7 @@ export function UnifiedLogisticsDashboard() {
                             <Badge variant={supplier.is_active ? "default" : "outline"} className="text-xs">
                               {supplier.is_active ? "Ativo" : "Inativo"}
                             </Badge>
-                            <Button variant="ghost" size="icon" className="h-7 w-7 opacity-0 group-hover:opacity-100 text-destructive" onClick={() => { if(confirm(`Remover ${supplier.company_name}?`)) deleteSupplierMutation.mutate(supplier.id); }}>
+                            <Button variant="ghost" size="icon" className="h-7 w-7 opacity-0 group-hover:opacity-100 text-destructive" onClick={() => { if(confirm(`Remover ${supplier.company_name}?`)) deleteSupplierMutation.mutate(supplier.id); }} aria-label={`Remover ${supplier.company_name}`} title="Remover fornecedor">
                               <Trash2 className="h-3 w-3" />
                             </Button>
                           </div>
@@ -683,7 +683,7 @@ export function UnifiedLogisticsDashboard() {
                                 </p>
                               )}
                             </div>
-                            <Button variant="ghost" size="icon" className="h-7 w-7 opacity-0 group-hover:opacity-100 text-destructive" onClick={() => { if(confirm("Remover este port call?")) deletePortCallMutation.mutate(call.id); }}>
+                            <Button variant="ghost" size="icon" className="h-7 w-7 opacity-0 group-hover:opacity-100 text-destructive" onClick={() => { if(confirm("Remover este port call?")) deletePortCallMutation.mutate(call.id); }} aria-label="Remover port call" title="Remover port call">
                               <Trash2 className="h-3 w-3" />
                             </Button>
                           </div>
@@ -737,7 +737,7 @@ function CargoForm({ form, setForm, onSubmit, onCancel, loading }: {
     <Card className="border-primary/50">
       <CardHeader className="flex flex-row items-center justify-between pb-3">
         <CardTitle className="text-lg">Adicionar Nova Carga</CardTitle>
-        <Button variant="ghost" size="icon" onClick={onCancel}><X className="h-4 w-4" /></Button>
+        <Button variant="ghost" size="icon" onClick={onCancel} aria-label="Fechar formulário" title="Fechar"><X className="h-4 w-4" /></Button>
       </CardHeader>
       <CardContent>
         <form onSubmit={(e) => { e.preventDefault(); onSubmit(); }} className="grid grid-cols-2 md:grid-cols-3 gap-4">
@@ -803,7 +803,7 @@ function SupplierForm({ form, setForm, onSubmit, onCancel, loading }: {
     <Card className="border-primary/50">
       <CardHeader className="flex flex-row items-center justify-between pb-3">
         <CardTitle className="text-lg">Adicionar Fornecedor</CardTitle>
-        <Button variant="ghost" size="icon" onClick={onCancel}><X className="h-4 w-4" /></Button>
+        <Button variant="ghost" size="icon" onClick={onCancel} aria-label="Fechar formulário" title="Fechar"><X className="h-4 w-4" /></Button>
       </CardHeader>
       <CardContent>
         <form onSubmit={(e) => { e.preventDefault(); onSubmit(); }} className="grid grid-cols-2 md:grid-cols-3 gap-4">
@@ -870,7 +870,7 @@ function PortCallForm({ form, setForm, onSubmit, onCancel, loading, vessels }: {
     <Card className="border-primary/50">
       <CardHeader className="flex flex-row items-center justify-between pb-3">
         <CardTitle className="text-lg">Agendar Port Call</CardTitle>
-        <Button variant="ghost" size="icon" onClick={onCancel}><X className="h-4 w-4" /></Button>
+        <Button variant="ghost" size="icon" onClick={onCancel} aria-label="Fechar formulário" title="Fechar"><X className="h-4 w-4" /></Button>
       </CardHeader>
       <CardContent>
         <form onSubmit={(e) => { e.preventDefault(); onSubmit(); }} className="grid grid-cols-2 md:grid-cols-3 gap-4">

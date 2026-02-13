@@ -173,13 +173,13 @@ export function GanttSchedule() {
             Cronograma de Docagens
           </CardTitle>
           <div className="flex items-center gap-2">
-            <Button variant="outline" size="icon" onClick={handlePrev}>
+            <Button variant="outline" size="icon" onClick={handlePrev} aria-label="Período anterior" title="Período anterior">
               <ChevronLeft className="h-4 w-4" />
             </Button>
             <span className="text-sm font-medium min-w-[200px] text-center">
               {format(days[0], "dd MMM", { locale: ptBR })} - {format(days[days.length - 1], "dd MMM yyyy", { locale: ptBR })}
             </span>
-            <Button variant="outline" size="icon" onClick={handleNext}>
+            <Button variant="outline" size="icon" onClick={handleNext} aria-label="Próximo período" title="Próximo período">
               <ChevronRight className="h-4 w-4" />
             </Button>
             <Select value={viewMode} onValueChange={(v: 'week' | 'month') => setViewMode(v)}>

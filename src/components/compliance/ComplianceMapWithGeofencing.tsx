@@ -630,7 +630,7 @@ export function ComplianceMapWithGeofencing({
                   <SelectItem value="compliant">Conformes ({stats.compliant})</SelectItem>
                 </SelectContent>
               </Select>
-              <Button variant="outline" size="icon" className="h-8 w-8" onClick={() => fetchVessels()}>
+              <Button variant="outline" size="icon" className="h-8 w-8" onClick={() => fetchVessels()} aria-label="Atualizar embarcações" title="Atualizar embarcações">
                 <RefreshCw className="h-4 w-4" />
               </Button>
             </div>

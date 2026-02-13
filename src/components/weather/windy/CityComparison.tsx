@@ -237,6 +237,8 @@ export const CityComparison: React.FC<CityComparisonProps> = ({
                       size="icon"
                       className="h-6 w-6 text-white/50 hover:text-white flex-shrink-0"
                       onClick={() => onRemoveCity(city.id)}
+                      aria-label={`Remover ${city.name.split(',')[0]}`}
+                      title={`Remover ${city.name.split(',')[0]}`}
                     >
                       <X className="h-3 w-3" />
                     </Button>

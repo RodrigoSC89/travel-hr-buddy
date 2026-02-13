@@ -173,6 +173,8 @@ export const FleetCommandCenter: React.FC = () => {
             onClick={() => {
               refetchVessels();
             }}
+            aria-label="Atualizar frota"
+            title="Atualizar frota"
           >
             <RefreshCw className={`h-4 w-4 ${autoRefresh ? "animate-spin" : ""}`} />
           </Button>
