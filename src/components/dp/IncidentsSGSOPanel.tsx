@@ -231,7 +231,7 @@ export function IncidentsSGSOPanel() {
                     </CardDescription>
                   </div>
                   {incident.riskLevel && (
-                    <Badge className={`${RISK_LEVEL_COLORS[incident.riskLevel as keyof typeof RISK_LEVEL_COLORS]?.badge || "bg-gray-600"}`}>
+                    <Badge className={`${RISK_LEVEL_COLORS[incident.riskLevel as keyof typeof RISK_LEVEL_COLORS]?.badge || "bg-muted"}`}>
                       {RISK_LEVEL_COLORS[incident.riskLevel as keyof typeof RISK_LEVEL_COLORS]?.icon} {incident.riskLevel}
                     </Badge>
                   )}

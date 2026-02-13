@@ -164,10 +164,10 @@ export function SGACompleto() {
 
   const getOperationColor = (operation: string) => {
     switch (operation) {
-      case "intake": return "bg-blue-500";
-      case "discharge": return "bg-orange-500";
-      case "exchange": return "bg-green-500";
-      default: return "bg-gray-500";
+      case "intake": return "bg-info";
+      case "discharge": return "bg-warning";
+      case "exchange": return "bg-success";
+      default: return "bg-muted-foreground";
     }
   };
 

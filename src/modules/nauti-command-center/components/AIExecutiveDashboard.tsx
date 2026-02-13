@@ -505,7 +505,7 @@ export function AIExecutiveDashboard() {
               <Sparkles className="w-5 h-5 text-blue-400" />
               <div>
                 <p className="text-sm font-medium text-white">Insights da IA</p>
-                <p className="text-xs text-gray-400">
+                <p className="text-xs text-muted-foreground">
                   {kpiData.accuracy >= 80 
                     ? 'Performance excelente! A IA está operando acima das expectativas.' 
                     : kpiData.accuracy >= 60

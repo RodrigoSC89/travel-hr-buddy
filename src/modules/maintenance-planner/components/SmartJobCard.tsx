@@ -61,10 +61,10 @@ export const SmartJobCard: React.FC<SmartJobCardProps> = ({
 
   const getCriticalityColor = (criticidade: string) => {
     switch (criticidade) {
-      case "alta": return "bg-red-500 text-white";
-      case "media": return "bg-yellow-500 text-white";
-      case "baixa": return "bg-green-500 text-white";
-      default: return "bg-gray-500";
+      case "alta": return "bg-destructive text-destructive-foreground";
+      case "media": return "bg-warning text-warning-foreground";
+      case "baixa": return "bg-success text-success-foreground";
+      default: return "bg-muted-foreground";
     }
   };
 

@@ -21,11 +21,11 @@ import {
 } from "lucide-react";
 
 const severityColors: Record<string, string> = {
-  critical: "bg-red-500 text-white",
-  high: "bg-orange-500 text-white",
-  medium: "bg-yellow-500 text-black",
-  low: "bg-blue-500 text-white",
-  info: "bg-gray-500 text-white",
+  critical: "bg-destructive text-destructive-foreground",
+  high: "bg-warning text-warning-foreground",
+  medium: "bg-warning text-warning-foreground",
+  low: "bg-info text-info-foreground",
+  info: "bg-muted text-muted-foreground",
 };
 
 const severityIcons: Record<string, React.ReactNode> = {

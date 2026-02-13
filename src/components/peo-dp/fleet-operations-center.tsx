@@ -66,10 +66,10 @@ export const FleetOperationsCenter: React.FC = () => {
 
   const getAsogStatusColor = (status: string | undefined) => {
     switch (status) {
-      case "green": return "bg-green-500";
-      case "yellow": return "bg-yellow-500";
-      case "red": return "bg-red-500";
-      default: return "bg-gray-500";
+      case "green": return "bg-success";
+      case "yellow": return "bg-warning";
+      case "red": return "bg-destructive";
+      default: return "bg-muted-foreground";
     }
   };
 

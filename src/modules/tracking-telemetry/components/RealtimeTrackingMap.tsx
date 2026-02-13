@@ -124,10 +124,10 @@ export default function RealtimeTrackingMap() {
 
   const getStatusBadge = (status: VesselPosition["status"]) => {
     const config = {
-      underway: { label: "Navegando", color: "bg-green-500/10 text-green-500" },
-      anchored: { label: "Ancorado", color: "bg-blue-500/10 text-blue-500" },
-      moored: { label: "Atracado", color: "bg-purple-500/10 text-purple-500" },
-      not_defined: { label: "Indefinido", color: "bg-gray-500/10 text-gray-500" },
+      underway: { label: "Navegando", color: "bg-success/10 text-success" },
+      anchored: { label: "Ancorado", color: "bg-info/10 text-info" },
+      moored: { label: "Atracado", color: "bg-accent/10 text-accent" },
+      not_defined: { label: "Indefinido", color: "bg-muted text-muted-foreground" },
     };
     const { label, color } = config[status];
     return <Badge className={color}>{label}</Badge>;

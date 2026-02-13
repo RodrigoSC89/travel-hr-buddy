@@ -326,12 +326,12 @@ export function AdaptiveInterface() {
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <div className={`p-4 rounded-lg border ${settings.darkMode ? 'bg-slate-900' : 'bg-white'} transition-colors`}>
+            <div className={`p-4 rounded-lg border ${settings.darkMode ? 'bg-slate-900' : 'bg-card'} transition-colors`}>
               <div className="flex items-center gap-2 mb-4">
-                <div className={`p-2 rounded ${settings.darkMode ? 'bg-slate-800' : 'bg-gray-100'}`}>
+                <div className={`p-2 rounded ${settings.darkMode ? 'bg-slate-800' : 'bg-muted'}`}>
                   <Monitor className="h-4 w-4" />
                 </div>
-                <div className={`p-2 rounded ${settings.darkMode ? 'bg-slate-800' : 'bg-gray-100'}`}>
+                <div className={`p-2 rounded ${settings.darkMode ? 'bg-slate-800' : 'bg-muted'}`}>
                   <Smartphone className="h-4 w-4" />
                 </div>
               </div>
@@ -342,13 +342,13 @@ export function AdaptiveInterface() {
                     key={`adaptive-card-${i}`}
                     animate={settings.animations ? { scale: [1, 1.02, 1] } : {}}
                     transition={{ duration: 0.3 }}
-                    className={`rounded ${settings.darkMode ? 'bg-slate-800' : 'bg-gray-100'} ${
+                    className={`rounded ${settings.darkMode ? 'bg-slate-800' : 'bg-muted'} ${
                       settings.density === 'compact' ? 'p-2' : 
                       settings.density === 'spacious' ? 'p-6' : 'p-4'
                     }`}
                   >
-                    <div className={`h-2 rounded ${settings.darkMode ? 'bg-slate-700' : 'bg-gray-200'} mb-2 w-3/4`} />
-                    <div className={`h-2 rounded ${settings.darkMode ? 'bg-slate-700' : 'bg-gray-200'} w-1/2`} />
+                    <div className={`h-2 rounded ${settings.darkMode ? 'bg-slate-700' : 'bg-muted-foreground/20'} mb-2 w-3/4`} />
+                    <div className={`h-2 rounded ${settings.darkMode ? 'bg-slate-700' : 'bg-muted-foreground/20'} w-1/2`} />
                   </motion.div>
                 ))}
               </div>

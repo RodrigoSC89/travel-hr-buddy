@@ -197,7 +197,7 @@ export const SGSOKnowledgeBase: React.FC = () => {
     case "IMO":
       return "bg-orange-500";
     default:
-      return "bg-gray-500";
+      return "bg-muted-foreground";
     }
   };
 

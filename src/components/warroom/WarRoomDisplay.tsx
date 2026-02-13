@@ -176,11 +176,11 @@ export function WarRoomDisplay() {
   const getStatusColor = (status: KPIMetric["status"]) => {
     switch (status) {
       case "good":
-        return "text-green-500 bg-green-500/10 border-green-500/20";
+        return "text-success bg-success/10 border-success/20";
       case "warning":
-        return "text-yellow-500 bg-yellow-500/10 border-yellow-500/20";
+        return "text-warning bg-warning/10 border-warning/20";
       case "critical":
-        return "text-red-500 bg-red-500/10 border-red-500/20 animate-pulse";
+        return "text-destructive bg-destructive/10 border-destructive/20 animate-pulse";
     }
   };
 
@@ -312,10 +312,10 @@ export function WarRoomDisplay() {
                     className={cn(
                       "p-3 rounded-lg border-l-4 transition-all",
                       alert.severity === "critical"
-                        ? "border-l-red-500 bg-red-500/10 animate-pulse"
+                        ? "border-l-destructive bg-destructive/10 animate-pulse"
                         : alert.severity === "high"
-                        ? "border-l-orange-500 bg-orange-500/10"
-                        : "border-l-yellow-500 bg-yellow-500/10"
+                        ? "border-l-warning bg-warning/10"
+                        : "border-l-warning bg-warning/10"
                     )}
                   >
                     <div className="flex items-start justify-between">
@@ -347,12 +347,12 @@ export function WarRoomDisplay() {
           <CardContent>
             <div className="grid grid-cols-2 gap-4">
               {[
-                { name: "Database", status: 100, color: "bg-green-500" },
-                { name: "Edge Functions", status: 100, color: "bg-green-500" },
-                { name: "Auth Service", status: 100, color: "bg-green-500" },
-                { name: "Storage", status: 100, color: "bg-green-500" },
-                { name: "Realtime", status: 98, color: "bg-yellow-500" },
-                { name: "AI Gateway", status: 100, color: "bg-green-500" },
+                { name: "Database", status: 100, color: "bg-success" },
+                { name: "Edge Functions", status: 100, color: "bg-success" },
+                { name: "Auth Service", status: 100, color: "bg-success" },
+                { name: "Storage", status: 100, color: "bg-success" },
+                { name: "Realtime", status: 98, color: "bg-warning" },
+                { name: "AI Gateway", status: 100, color: "bg-success" },
               ].map((system) => (
                 <div key={system.name} className="space-y-2">
                   <div className="flex items-center justify-between text-sm">
