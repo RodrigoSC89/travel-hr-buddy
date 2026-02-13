@@ -55,7 +55,7 @@ class SmartNotificationManager {
   }
 
   private loadPreferences(): NotificationPreferences {
-    const saved = localStorage.getItem('notification-preferences');
+    const saved = sessionStorage.getItem('notification-preferences') || localStorage.getItem('notification-preferences');
     if (saved) {
       return JSON.parse(saved);
     }
@@ -79,7 +79,7 @@ class SmartNotificationManager {
   }
 
   private savePreferences(): void {
-    localStorage.setItem('notification-preferences', JSON.stringify(this.preferences));
+    sessionStorage.setItem('notification-preferences', JSON.stringify(this.preferences));
   }
 
   async checkPermission(): Promise<NotificationPermission> {

@@ -78,11 +78,11 @@ export function BetaFeedbackForm() {
 
       if (error) throw error;
 
-      // Also store locally for CSV/JSON export
-      const existing = localStorage.getItem("beta_feedback") || "[]";
+      // Also store in session for CSV/JSON export
+      const existing = sessionStorage.getItem("beta_feedback") || "[]";
       const feedbacks = JSON.parse(existing);
       feedbacks.push(feedbackData);
-      localStorage.setItem("beta_feedback", JSON.stringify(feedbacks));
+      sessionStorage.setItem("beta_feedback", JSON.stringify(feedbacks));
 
       toast({
         title: "Feedback Enviado!",

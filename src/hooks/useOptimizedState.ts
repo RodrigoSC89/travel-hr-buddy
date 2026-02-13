@@ -43,7 +43,7 @@ export function useDebouncedState<T>(
 }
 
 /**
- * useState que persiste no localStorage
+ * useState que persiste no sessionStorage (dados efêmeros por sessão)
  */
 export function usePersistedState<T>(
   key: string,
@@ -51,7 +51,7 @@ export function usePersistedState<T>(
 ): [T, (value: T | ((prev: T) => T)) => void] {
   const [storedValue, setStoredValue] = useState<T>(() => {
     try {
-      const item = window.localStorage.getItem(key);
+      const item = window.sessionStorage.getItem(key) || window.localStorage.getItem(key);
       return item ? JSON.parse(item) : initialValue;
     } catch {
       return initialValue;
@@ -63,9 +63,9 @@ export function usePersistedState<T>(
       try {
         const valueToStore = value instanceof Function ? value(storedValue) : value;
         setStoredValue(valueToStore);
-        window.localStorage.setItem(key, JSON.stringify(valueToStore));
+        window.sessionStorage.setItem(key, JSON.stringify(valueToStore));
       } catch {
-        // Silent fail - localStorage may not be available or full
+        // Silent fail - storage may not be available or full
       }
     },
     [key, storedValue]

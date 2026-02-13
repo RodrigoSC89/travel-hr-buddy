@@ -1531,7 +1531,14 @@ export default function ChannelManagerProfessional() {
             </div>
             <DialogFooter>
               <Button variant="outline" onClick={() => setIsEditDialogOpen(false)}>Cancelar</Button>
-              <Button onClick={() => { setIsEditDialogOpen(false); queryClient.invalidateQueries({ queryKey: ['channels'] }); toast({ title: "Canal atualizado!" }); }}>
+              <Button onClick={async () => {
+                if (selectedChannel) {
+                  const nameInput = document.querySelector<HTMLInputElement>('[defaultValue="' + selectedChannel.name + '"]');
+                  const { error } = await supabase.from('communication_channels').update({ name: nameInput?.value || selectedChannel.name }).eq('id', selectedChannel.id);
+                  if (error) { toast({ title: "Erro ao salvar", variant: "destructive" }); } else { queryClient.invalidateQueries({ queryKey: ['channels'] }); toast({ title: "Canal atualizado!" }); }
+                }
+                setIsEditDialogOpen(false);
+              }}>
                 Salvar
               </Button>
             </DialogFooter>

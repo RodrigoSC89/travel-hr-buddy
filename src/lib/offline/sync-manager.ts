@@ -175,13 +175,13 @@ class OfflineSyncManager {
   }
 
   private saveQueueToStorage(): void {
-    try { localStorage.setItem(this.STORAGE_KEY, JSON.stringify(this.queue)); }
+    try { sessionStorage.setItem(this.STORAGE_KEY, JSON.stringify(this.queue)); }
     catch (error) { logger.error("[OfflineSync] Failed to save queue to storage", { error }); }
   }
 
   private loadQueueFromStorage(): void {
     try {
-      const stored = localStorage.getItem(this.STORAGE_KEY);
+      const stored = sessionStorage.getItem(this.STORAGE_KEY) || localStorage.getItem(this.STORAGE_KEY);
       if (stored) { this.queue = JSON.parse(stored); logger.info(`[OfflineSync] Loaded ${this.queue.length} items from storage`); }
     } catch (error) { logger.error("[OfflineSync] Failed to load queue from storage", { error }); this.queue = []; }
   }
