@@ -79,19 +79,15 @@ export function useMaintenanceData() {
   const [selectedVessel, setSelectedVessel] = useState<string | null>(null);
   const [selectedEquipment, setSelectedEquipment] = useState<string | null>(null);
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- dynamic table access for tables not in generated types
-  const dynamicDb = { from: supabase.from as Function } as any;
+  const dynamicFrom = supabase.from as Function;
 
   // Fetch equipment
   const { data: equipment = [], isLoading: equipmentLoading } = useQuery({
     queryKey: ['maintenance-equipment', selectedVessel],
     queryFn: async () => {
-      let query = dynamicDb
-        .from('vessels')
+      let query = dynamicFrom('vessels')
         .select('*')
         .order('name');
-
-      // Use vessels as equipment source since equipment table may not exist
       const { data, error } = await query;
 
       if (error) {
@@ -187,8 +183,7 @@ export function useMaintenanceData() {
   const { data: spareParts = [], isLoading: partsLoading } = useQuery({
     queryKey: ['maintenance-spare-parts'],
     queryFn: async () => {
-      const { data, error } = await dynamicDb
-        .from('inventory_items')
+      const { data, error } = await dynamicFrom('inventory_items')
         .select('*')
         .order('name');
 
@@ -261,8 +256,7 @@ export function useMaintenanceData() {
   // Mutations
   const createOrder = useMutation({
     mutationFn: async (order: Partial<MaintenanceOrder>) => {
-      const { data, error } = await dynamicDb
-        .from('maintenance_orders')
+      const { data, error } = await dynamicFrom('maintenance_orders')
         .insert({
           order_number: order.orderNumber || `WO-${Date.now()}`,
           title: order.title,
@@ -295,8 +289,7 @@ export function useMaintenanceData() {
         if (actualHours) updates.actual_hours = actualHours;
       }
 
-      const { error } = await dynamicDb
-        .from('maintenance_orders')
+      const { error } = await dynamicFrom('maintenance_orders')
         .update(updates)
         .eq('id', orderId);
 
@@ -317,8 +310,7 @@ export function useMaintenanceData() {
         ? part.quantity + quantity 
         : Math.max(0, part.quantity - quantity);
 
-      const { error } = await dynamicDb
-        .from('inventory_items')
+      const { error } = await dynamicFrom('inventory_items')
         .update({ 
           quantity: newQty,
           updated_at: new Date().toISOString(),

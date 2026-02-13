@@ -2,8 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Brain, AlertTriangle } from "lucide-react";
 import { logger } from '@/lib/logger';
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- ONNX runtime has dynamic exports
-let ort: any = null;
+let ort: typeof import("onnxruntime-web") | null = null;
 const loadORT = async () => {
   if (!ort) {
     ort = await import("onnxruntime-web");
@@ -18,11 +17,14 @@ export default function ForecastAIInsights() {
     async function runModel() {
       try {
         const ortLib = await loadORT();
+        if (!ortLib) throw new Error("ONNX runtime not available");
         const session = await ortLib.InferenceSession.create("/models/forecast.onnx");
         const input = new ortLib.Tensor("float32", Float32Array.from([2.5, 1.7, 28.3, 5.0]), [1, 4]);
-        const output = await session.run({ input });
-        const value = output.result.data[0];
-        setPrediction(typeof value === 'bigint' ? Number(value) : value);
+        const feeds = { input } as unknown as Parameters<typeof session.run>[0];
+        const output = await session.run(feeds);
+        const resultTensor = output["result"];
+        const value = resultTensor.data[0];
+        setPrediction(typeof value === 'bigint' ? Number(value) : Number(value));
       } catch (err) {
         logger.error("AI Forecast Error:", err);
         setPrediction("Erro na previsão IA");

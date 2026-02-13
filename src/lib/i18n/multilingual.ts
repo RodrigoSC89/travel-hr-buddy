@@ -231,23 +231,22 @@ class MultilingualSystem {
    */
   t(key: string, fallback?: string): string {
     const parts = key.split('.');
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any -- deeply nested translation object traversal
-    let current: any = { ...TRANSLATIONS, ...this.customTranslations };
+    let current: Record<string, unknown> = { ...TRANSLATIONS, ...this.customTranslations };
 
     for (const part of parts) {
-      if (current[part] === undefined) {
+      if (typeof current !== 'object' || current === null || (current as Record<string, unknown>)[part] === undefined) {
         logger.warn(`Translation not found: ${key}`);
         return fallback || key;
       }
-      current = current[part];
+      current = (current as Record<string, unknown>)[part] as Record<string, unknown>;
     }
 
-    if (typeof current === 'object' && current[this.currentLanguage]) {
-      return current[this.currentLanguage];
+    if (typeof current === 'object' && current !== null && (current as Record<string, unknown>)[this.currentLanguage]) {
+      return String((current as Record<string, unknown>)[this.currentLanguage]);
     }
 
     logger.warn(`Translation missing for language ${this.currentLanguage}: ${key}`);
-    return fallback || current.pt || key;
+    return fallback || (typeof current === 'object' && current !== null ? String((current as Record<string, unknown>).pt || key) : String(current || key));
   }
 
   /**

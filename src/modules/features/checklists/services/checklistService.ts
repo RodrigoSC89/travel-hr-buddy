@@ -49,19 +49,18 @@ export class ChecklistService {
           certifications: ["Maritime Inspector"]
         },
         status: (item.status || "draft") as Checklist["status"],
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any -- checklist_items join shape
-        items: item.checklist_items?.map((checklistItem: any) => ({
-          id: checklistItem.id,
-          title: checklistItem.title,
-          description: checklistItem.description,
+        items: item.checklist_items?.map((checklistItem: Record<string, unknown>) => ({
+          id: String(checklistItem.id),
+          title: String(checklistItem.title),
+          description: String(checklistItem.description),
           type: "boolean",
-          required: checklistItem.required,
+          required: Boolean(checklistItem.required),
           category: "General",
-          order: checklistItem.order_index,
-          status: checklistItem.completed ? "completed" : "pending",
-          value: checklistItem.completed,
-          notes: checklistItem.notes,
-          timestamp: checklistItem.completed_at
+          order: Number(checklistItem.order_index),
+          status: checklistItem.completed ? "completed" as const : "pending" as const,
+          value: Boolean(checklistItem.completed),
+          notes: checklistItem.notes ? String(checklistItem.notes) : undefined,
+          timestamp: checklistItem.completed_at ? String(checklistItem.completed_at) : undefined
         })) || [],
         createdAt: item.created_at,
         updatedAt: item.updated_at,

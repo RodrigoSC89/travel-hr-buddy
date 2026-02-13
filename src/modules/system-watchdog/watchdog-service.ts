@@ -96,7 +96,7 @@ class WatchdogService {
     const startTime = Date.now();
     try {
       // Use a simple query that doesn't expose user data
-      const { error } = await (supabase.rpc as any)("health_check").single();
+      const { error } = await (supabase.rpc as Function)("health_check");
       const latency = Date.now() - startTime;
 
       if (error) {

@@ -27,8 +27,8 @@ interface JsonRpcMessage {
   params?: unknown;
 }
 
-// Dynamic DB access for tables not in schema - use any for untyped tables
-const dynamicDb = supabase as any;
+// Dynamic DB access for tables not in schema
+const dynamicFrom = supabase.from as Function;
 
 // JSON-RPC Protocol Handler
 export async function handleJsonRpc(message: unknown): Promise<ProtocolResponse> {
@@ -131,7 +131,7 @@ async function logInterop(
   errorMessage?: string
 ): Promise<void> {
   try {
-    await dynamicDb.from("interop_log").insert({
+    await dynamicFrom("interop_log").insert({
       protocol_type: protocolType,
       message: message,
       status: status,
@@ -144,8 +144,7 @@ async function logInterop(
 
 // Get recent logs
 export async function getInteropLogs(protocolType?: string, limit: number = 50) {
-  let query = dynamicDb
-    .from("interop_log")
+  let query = dynamicFrom("interop_log")
     .select("*")
     .order("created_at", { ascending: false })
     .limit(limit);

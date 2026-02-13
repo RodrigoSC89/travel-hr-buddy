@@ -154,10 +154,19 @@ const CRITICALITY_LEVELS = {
   "✓✓": { label: "Excelência", color: "hsl(var(--success))" }
 };
 
+interface AuditResult {
+  auditId: string;
+  auditType: string;
+  elements: AuditElement[];
+  progress: number;
+  completedAt: string | null;
+  [key: string]: unknown;
+}
+
 interface PeotramAuditWizardProps {
   auditId?: string;
-  onSave?: (data: any) => void;
-  onComplete?: (data: any) => void;
+  onSave?: (data: AuditResult) => void;
+  onComplete?: (data: AuditResult) => void;
   onCancel?: () => void;
 }
 

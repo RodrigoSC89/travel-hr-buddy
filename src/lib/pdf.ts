@@ -115,8 +115,7 @@ export async function exportToPDF(
     };
 
     // Merge custom options with defaults, including nested jsPDF options
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any -- html2pdf options are deeply nested and untyped
-    const options: any = {
+    const options: PdfExportOptions = {
       ...defaultOptions,
       ...customOptions,
       jsPDF: {

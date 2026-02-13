@@ -98,7 +98,7 @@ export class SituationalAwarenessCore {
   public async collectContext(
     source: ModuleSource,
     dataSource: DataSource,
-    data: Record<string, any>,
+    data: Record<string, unknown>,
     metadata?: ModuleContextData["metadata"]
   ): Promise<void> {
     const context: ModuleContextData = {
@@ -236,19 +236,18 @@ Respond in JSON format with an array of insights, each containing: type, severit
         const parsed = JSON.parse(response.content);
         const insightsData = Array.isArray(parsed) ? parsed : parsed.insights || [];
 
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any -- AI JSON response has unpredictable shape
-        insightsData.forEach((item: any, index: number) => {
+        insightsData.forEach((item: Record<string, unknown>, index: number) => {
           insights.push({
             id: `insight-${Date.now()}-${index}`,
             timestamp: Date.now(),
-            type: item.type || "risk",
-            severity: item.severity || "medium",
-            title: item.title || "Situational Insight",
-            description: item.description || "",
-            affectedModules: item.affectedModules || [],
-            confidence: item.confidence || 0.7,
-            suggestedActions: item.suggestedActions || [],
-            context: item.context || {},
+            type: (String(item.type || "risk")) as SituationalInsight["type"],
+            severity: (String(item.severity || "medium")) as AlertSeverity,
+            title: String(item.title || "Situational Insight"),
+            description: String(item.description || ""),
+            affectedModules: (item.affectedModules || []) as ModuleSource[],
+            confidence: Number(item.confidence || 0.7),
+            suggestedActions: (item.suggestedActions || []) as string[],
+            context: (item.context || {}) as Record<string, unknown>,
           });
         });
       } catch (parseError) {
@@ -425,7 +424,7 @@ Respond in JSON format with an array of insights, each containing: type, severit
   /**
    * Determine module status based on data
    */
-  private determineModuleStatus(data: Record<string, any>): "healthy" | "degraded" | "failed" | "unknown" {
+  private determineModuleStatus(data: Record<string, unknown>): "healthy" | "degraded" | "failed" | "unknown" {
     if (!data || Object.keys(data).length === 0) {
       return "unknown";
     }
@@ -475,7 +474,7 @@ Respond in JSON format with an array of insights, each containing: type, severit
     level: SituationalLogEntry["level"],
     category: SituationalLogEntry["category"],
     message: string,
-    context: Record<string, any> = {}
+    context: Record<string, unknown> = {}
   ): void {
     const entry: SituationalLogEntry = {
       id: `log-${Date.now()}-${crypto.randomUUID().slice(0, 9)}`,
