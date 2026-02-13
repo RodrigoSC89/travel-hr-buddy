@@ -56,17 +56,17 @@ export function QuickActionsHub({ open, onOpenChange, customActions = [] }: Quic
     { id: "nav-ai", title: "AI Control Tower", description: "Centro de IA", icon: Brain, category: "Navegação", shortcut: "g a", action: () => navigate("/ai"), keywords: ["inteligencia", "machine learning"] },
     
     // Ações Rápidas
-    { id: "action-new-task", title: "Nova Tarefa", description: "Criar tarefa de manutenção", icon: Plus, category: "Ações", shortcut: "n t", action: () => { toast.info("Abrindo nova tarefa..."); }, keywords: ["criar", "adicionar", "task"] },
-    { id: "action-new-document", title: "Novo Documento", description: "Upload ou criar documento", icon: FileText, category: "Ações", shortcut: "n d", action: () => { toast.info("Abrindo uploader..."); }, keywords: ["criar", "upload", "arquivo"] },
-    { id: "action-schedule-audit", title: "Agendar Auditoria", description: "Programar nova auditoria", icon: Calendar, category: "Ações", action: () => { toast.info("Abrindo agendamento..."); }, keywords: ["auditar", "inspecao"] },
-    { id: "action-new-crew", title: "Adicionar Tripulante", description: "Cadastrar novo tripulante", icon: Users, category: "Ações", shortcut: "n c", action: () => { toast.info("Abrindo cadastro..."); }, keywords: ["funcionario", "marinheiro"] },
-    { id: "action-report", title: "Gerar Relatório", description: "Criar relatório executivo", icon: BarChart3, category: "Ações", shortcut: "n r", action: () => { toast.info("Selecionando tipo de relatório..."); }, keywords: ["exportar", "pdf", "excel"] },
-    { id: "action-alert", title: "Registrar Alerta", description: "Criar alerta de segurança", icon: AlertTriangle, category: "Ações", action: () => { toast.info("Abrindo formulário de alerta..."); }, keywords: ["emergencia", "incidente", "seguranca"] },
+    { id: "action-new-task", title: "Nova Tarefa", description: "Criar tarefa de manutenção", icon: Plus, category: "Ações", shortcut: "n t", action: () => navigate("/workbench?section=maintenance"), keywords: ["criar", "adicionar", "task"] },
+    { id: "action-new-document", title: "Novo Documento", description: "Upload ou criar documento", icon: FileText, category: "Ações", shortcut: "n d", action: () => navigate("/workbench?section=docs"), keywords: ["criar", "upload", "arquivo"] },
+    { id: "action-schedule-audit", title: "Agendar Auditoria", description: "Programar nova auditoria", icon: Calendar, category: "Ações", action: () => navigate("/compliance-hub?tab=audits"), keywords: ["auditar", "inspecao"] },
+    { id: "action-new-crew", title: "Adicionar Tripulante", description: "Cadastrar novo tripulante", icon: Users, category: "Ações", shortcut: "n c", action: () => navigate("/workbench?section=people"), keywords: ["funcionario", "marinheiro"] },
+    { id: "action-report", title: "Gerar Relatório", description: "Criar relatório executivo", icon: BarChart3, category: "Ações", shortcut: "n r", action: () => navigate("/command?tab=reports"), keywords: ["exportar", "pdf", "excel"] },
+    { id: "action-alert", title: "Registrar Alerta", description: "Criar alerta de segurança", icon: AlertTriangle, category: "Ações", action: () => navigate("/safety-guardian"), keywords: ["emergencia", "incidente", "seguranca"] },
     
     // IA
-    { id: "ai-analyze", title: "Análise IA", description: "Solicitar análise inteligente", icon: Sparkles, category: "Inteligência Artificial", shortcut: "a i", action: () => { toast.info("Iniciando análise IA..."); }, keywords: ["gpt", "machine learning", "predicao"] },
-    { id: "ai-predict", title: "Previsão de Manutenção", description: "Predição de falhas", icon: Brain, category: "Inteligência Artificial", action: () => { toast.info("Gerando previsões..."); }, keywords: ["manutencao preditiva"] },
-    { id: "ai-optimize", title: "Otimizar Rotas", description: "Sugestões de economia", icon: Zap, category: "Inteligência Artificial", action: () => { toast.info("Calculando rotas otimizadas..."); }, keywords: ["combustivel", "economia"] },
+    { id: "ai-analyze", title: "Análise IA", description: "Solicitar análise inteligente", icon: Sparkles, category: "Inteligência Artificial", shortcut: "a i", action: () => navigate("/ai"), keywords: ["gpt", "machine learning", "predicao"] },
+    { id: "ai-predict", title: "Previsão de Manutenção", description: "Predição de falhas", icon: Brain, category: "Inteligência Artificial", action: () => navigate("/workbench?section=maintenance&tab=predictive"), keywords: ["manutencao preditiva"] },
+    { id: "ai-optimize", title: "Otimizar Rotas", description: "Sugestões de economia", icon: Zap, category: "Inteligência Artificial", action: () => navigate("/tracking"), keywords: ["combustivel", "economia"] },
     
     // Sistema
     { id: "sys-settings", title: "Configurações", description: "Ajustes do sistema", icon: Settings, category: "Sistema", shortcut: "g s", action: () => navigate("/settings"), keywords: ["preferencias", "conta"] },
