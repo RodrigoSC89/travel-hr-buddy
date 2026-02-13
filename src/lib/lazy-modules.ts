@@ -74,7 +74,7 @@ export function preloadByPriority(priority: Priority): void {
 
 // Critical routes - load immediately after shell
 export const LazyDashboard = registerModule("dashboard", {
-  loader: () => import("@/pages/Index"),
+  loader: () => import("@/pages/CentralComando"),
   priority: "critical",
   preloadOn: "route",
 });
