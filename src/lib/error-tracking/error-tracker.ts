@@ -12,8 +12,7 @@ interface ErrorReport {
   stack?: string;
   component?: string;
   action?: string;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- metadata includes dynamic browser/viewport info
-  metadata?: Record<string, any>;
+  metadata?: Record<string, unknown>;
   user_id?: string;
   url?: string;
   timestamp: string;
@@ -105,8 +104,7 @@ class ErrorTracker {
 
   captureError(
     error: Error | string,
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any -- context includes dynamic error metadata
-    context?: Record<string, any>
+    context?: Record<string, unknown>
   ) {
     if (!this.config.enabled) return;
     if (this.errorCount >= this.config.maxErrors) return;
@@ -124,11 +122,11 @@ class ErrorTracker {
     }
 
     const report: ErrorReport = {
-      type: context?.type || 'error',
+      type: (context?.type as ErrorReport["type"]) || 'error',
       message: errorObj.message,
       stack: errorObj.stack,
-      component: context?.component,
-      action: context?.action,
+      component: context?.component as string | undefined,
+      action: context?.action as string | undefined,
       metadata: {
         ...context,
         userAgent: navigator.userAgent,
@@ -158,7 +156,7 @@ class ErrorTracker {
     }
   }
 
-  captureWarning(message: string, context?: Record<string, any>) {
+  captureWarning(message: string, context?: Record<string, unknown>) {
     this.captureError(new Error(message), { ...context, type: 'warning' });
   }
 
@@ -243,11 +241,11 @@ export function useErrorTracking(componentName?: string) {
     // Component mount tracking for debugging
   }, []);
 
-  const trackError = useCallback((error: Error | string, context?: Record<string, any>) => {
+  const trackError = useCallback((error: Error | string, context?: Record<string, unknown>) => {
     errorTracker.captureError(error, { ...context, component: componentName });
   }, [componentName]);
 
-  const trackWarning = useCallback((message: string, context?: Record<string, any>) => {
+  const trackWarning = useCallback((message: string, context?: Record<string, unknown>) => {
     errorTracker.captureWarning(message, { ...context, component: componentName });
   }, [componentName]);
 

@@ -182,8 +182,8 @@ export default function CrewTrainingMatrix() {
         .select("id, first_name, last_name, rank, department, vessel_id, vessels(name)")
         .limit(50);
       if (members && members.length > 0) {
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any -- crew_members joined query
-        setCrewData(members.map((m: any) => ({
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any -- crew_members joined query with dynamic columns
+        setCrewData((members as any[]).map((m) => ({
           id: String(m.id),
           name: `${String(m.first_name || "")} ${String(m.last_name || "")}`.trim(),
           rank: String(m.rank || "Crew"),
@@ -197,15 +197,15 @@ export default function CrewTrainingMatrix() {
         .limit(200);
       if (certs && certs.length > 0) {
         // eslint-disable-next-line @typescript-eslint/no-explicit-any -- certifications dynamic schema
-        const records: TrainingRecord[] = certs.map((c: any) => {
+        const records: TrainingRecord[] = (certs as any[]).map((c) => {
           const now = new Date();
           const expiry = c.expiry_date ? new Date(c.expiry_date) : null;
           let status: TrainingRecord["status"] = "completed";
           if (expiry && expiry < now) status = "expired";
           else if (expiry && expiry.getTime() - now.getTime() < 90 * 86400000) status = "expiring";
           return {
-            crewId: String(c.crew_member_id),
-            trainingId: String(c.certificate_name || c.id),
+            crewId: String(c.crew_member_id || ""),
+            trainingId: String(c.certificate_name || c.id || ""),
             status,
             completedDate: c.issue_date ? String(c.issue_date).slice(0, 10) : undefined,
             expiryDate: c.expiry_date ? String(c.expiry_date).slice(0, 10) : undefined,

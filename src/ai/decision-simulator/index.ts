@@ -18,7 +18,7 @@ export interface SimulationParameters {
   iterations?: number; // Number of Monte Carlo iterations
   timeHorizon?: number; // Simulation time horizon in hours
   uncertaintyFactor?: number; // 0-1, how much uncertainty to introduce
-  environmentalFactors?: Record<string, any>;
+  environmentalFactors?: Record<string, unknown>;
   crewAvailability?: number; // 0-100
   resourceConstraints?: Record<string, number>;
 }
@@ -88,7 +88,7 @@ export interface SimulationResult {
   completedAt?: Date;
   duration?: number; // in seconds
   missionId?: string;
-  metadata?: Record<string, any>;
+  metadata?: Record<string, unknown>;
 }
 
 export interface SimulationArchive {

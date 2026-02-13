@@ -3,7 +3,7 @@
  * Coordinates all Control Hub subsystems
  */
 
-import { ControlHubState, SystemHealth, HealthCheckResult } from "./types";
+import { ControlHubState, SystemHealth, HealthCheckResult, type ModuleState } from "./types";
 import { hubMonitor } from "./hub_monitor";
 import { hubSync } from "./hub_sync";
 import { hubCache } from "./hub_cache";
@@ -80,7 +80,7 @@ export class ControlHub {
    */
   async getHealth(): Promise<HealthCheckResult> {
     const modules = hubMonitor.getModulesState();
-    const moduleStatuses: Record<string, any> = {};
+    const moduleStatuses: Record<string, ModuleState["status"]> = {};
     
     for (const [key, state] of Object.entries(modules)) {
       moduleStatuses[key] = state.status;

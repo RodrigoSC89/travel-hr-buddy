@@ -28,8 +28,7 @@ interface Notification {
   priority: "low" | "medium" | "high" | "urgent";
   read: boolean;
   created_at: string;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Supabase Json type
-  action_data?: any;
+  action_data?: Record<string, unknown>;
   expires_at?: string;
 }
 
@@ -41,11 +40,9 @@ interface IntelligentNotification {
   priority: string;
   is_read: boolean;
   created_at: string;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Supabase Json type
-  metadata?: any;
+  metadata?: Record<string, unknown>;
   action_type?: string;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Supabase Json type
-  action_data?: any;
+  action_data?: Record<string, unknown>;
   action_text?: string;
 }
 
@@ -88,11 +85,14 @@ export const RealTimeNotificationCenter: React.FC = () => {
       if (smartError) throw smartError;
 
       setNotifications((regularNotifications || []) as Notification[]);
-      const mappedSmartNotifications = (smartNotifications || []).map(n => ({
+      const mappedSmartNotifications: IntelligentNotification[] = (smartNotifications || []).map(n => ({
         ...n,
+        user_id: n.user_id ?? undefined,
+        metadata: (n.metadata as Record<string, unknown>) ?? undefined,
+        action_data: (n.action_data as Record<string, unknown>) ?? undefined,
         action_type: nullToUndefined(n.action_type),
         action_text: nullToUndefined(n.action_text)
-      }));
+      })) as IntelligentNotification[];
       setIntelligentNotifications(mappedSmartNotifications);
     } catch (error) {
       toast({
@@ -188,13 +188,13 @@ export const RealTimeNotificationCenter: React.FC = () => {
       // Aqui você pode implementar diferentes tipos de ações
       switch (notification.action_type) {
       case "navigate":
-        navigate(notification.action_data?.url);
+        navigate(String(notification.action_data?.url || ""));
         break;
       case "download":
-        window.open(notification.action_data?.downloadUrl, "_blank");
+        window.open(String(notification.action_data?.downloadUrl || ""), "_blank");
         break;
       case "external_link":
-        window.open(notification.action_data?.url, "_blank");
+        window.open(String(notification.action_data?.url || ""), "_blank");
         break;
       default:
       }

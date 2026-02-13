@@ -17,8 +17,7 @@ export interface AILogEntry {
   tokens_used?: number;
   status: "success" | "error" | "timeout";
   error_message?: string;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- metadata stored as Json in Supabase
-  metadata?: Record<string, any>;
+  metadata?: Record<string, unknown>;
 }
 
 class AILogger {
@@ -47,7 +46,7 @@ class AILogger {
 
       const { error } = await supabase
         .from("ai_logs")
-        .insert(logData);
+        .insert(logData as never);
 
       if (error) {
         logger.error("Failed to log AI interaction", error as Error, { service: entry.service, status: entry.status });
