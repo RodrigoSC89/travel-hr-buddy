@@ -147,29 +147,29 @@ export const PredictiveInsights: React.FC<PredictiveInsightsProps> = ({ systemSt
 
   const getTypeIcon = (type: string) => {
     switch (type) {
-      case 'prediction': return <TrendingUp className="h-4 w-4 text-blue-500" />;
-      case 'recommendation': return <Lightbulb className="h-4 w-4 text-yellow-500" />;
-      case 'risk': return <AlertTriangle className="h-4 w-4 text-red-500" />;
-      case 'opportunity': return <Target className="h-4 w-4 text-green-500" />;
+      case 'prediction': return <TrendingUp className="h-4 w-4 text-info" />;
+      case 'recommendation': return <Lightbulb className="h-4 w-4 text-warning" />;
+      case 'risk': return <AlertTriangle className="h-4 w-4 text-destructive" />;
+      case 'opportunity': return <Target className="h-4 w-4 text-success" />;
       default: return <Sparkles className="h-4 w-4" />;
     }
   };
 
   const getTypeBadge = (type: string) => {
     switch (type) {
-      case 'prediction': return <Badge className="bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-300">Previsão</Badge>;
-      case 'recommendation': return <Badge className="bg-yellow-100 text-yellow-700 dark:bg-yellow-900/30 dark:text-yellow-300">Recomendação</Badge>;
+      case 'prediction': return <Badge className="bg-info/10 text-info">Previsão</Badge>;
+      case 'recommendation': return <Badge className="bg-warning/10 text-warning">Recomendação</Badge>;
       case 'risk': return <Badge variant="destructive">Risco</Badge>;
-      case 'opportunity': return <Badge className="bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-300">Oportunidade</Badge>;
+      case 'opportunity': return <Badge className="bg-success/10 text-success">Oportunidade</Badge>;
       default: return <Badge variant="secondary">{type}</Badge>;
     }
   };
 
   const getPriorityColor = (priority: string) => {
     switch (priority) {
-      case 'high': return 'border-l-red-500';
-      case 'medium': return 'border-l-yellow-500';
-      default: return 'border-l-green-500';
+      case 'high': return 'border-l-destructive';
+      case 'medium': return 'border-l-warning';
+      default: return 'border-l-success';
     }
   };
 
@@ -179,7 +179,7 @@ export const PredictiveInsights: React.FC<PredictiveInsightsProps> = ({ systemSt
         <CardContent className="p-6">
           <div className="flex items-center justify-center py-12">
             <div className="text-center">
-              <Brain className="h-12 w-12 mx-auto mb-3 text-purple-500 animate-pulse" />
+              <Brain className="h-12 w-12 mx-auto mb-3 text-primary animate-pulse" />
               <p className="text-muted-foreground">Nautilus Brain está analisando os dados...</p>
             </div>
           </div>
@@ -195,7 +195,7 @@ export const PredictiveInsights: React.FC<PredictiveInsightsProps> = ({ systemSt
           <div className="flex items-center justify-between">
             <div>
               <CardTitle className="flex items-center gap-2">
-                <Sparkles className="h-5 w-5 text-purple-500" />
+                <Sparkles className="h-5 w-5 text-primary" />
                 Insights Preditivos
               </CardTitle>
               <CardDescription>

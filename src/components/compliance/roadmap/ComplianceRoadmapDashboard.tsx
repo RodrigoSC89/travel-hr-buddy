@@ -280,7 +280,7 @@ export function ComplianceRoadmapDashboard() {
             onClick={() => setShowAlerts(!showAlerts)}
             className="relative"
           >
-            {unreadAlerts > 0 ? <BellRing className="h-4 w-4 mr-2 text-red-500 animate-pulse" /> : <Bell className="h-4 w-4 mr-2" />}
+            {unreadAlerts > 0 ? <BellRing className="h-4 w-4 mr-2 text-destructive animate-pulse" /> : <Bell className="h-4 w-4 mr-2" />}
             Alertas
             {unreadAlerts > 0 && (
               <Badge variant="destructive" className="absolute -top-2 -right-2 h-5 w-5 p-0 flex items-center justify-center text-xs">
@@ -332,10 +332,10 @@ export function ComplianceRoadmapDashboard() {
       
       {/* Alerts Panel */}
       {showAlerts && (
-        <Card className="border-amber-500/30 bg-amber-500/5">
+        <Card className="border-warning/30 bg-warning/5">
           <CardHeader className="pb-2">
             <div className="flex items-center justify-between">
-              <CardTitle className="flex items-center gap-2 text-amber-600">
+              <CardTitle className="flex items-center gap-2 text-warning">
                 <BellRing className="h-5 w-5" />
                 Sistema de Alertas Inteligentes ({unreadAlerts} não lidos)
               </CardTitle>
@@ -349,11 +349,11 @@ export function ComplianceRoadmapDashboard() {
               {alerts.map(alert => (
                 <div
                   key={alert.id}
-                  className={`flex items-center justify-between p-3 rounded-lg border ${!alert.lido ? 'bg-background border-amber-500/30' : 'bg-muted/30 border-muted'}`}
+                  className={`flex items-center justify-between p-3 rounded-lg border ${!alert.lido ? 'bg-background border-warning/30' : 'bg-muted/30 border-muted'}`}
                   onClick={() => handleMarkAlertRead(alert.id)}
                 >
                   <div className="flex items-center gap-3">
-                    <AlertTriangle className={`h-4 w-4 ${getCriticidadeColor(alert.criticidade).includes('red') ? 'text-red-500' : getCriticidadeColor(alert.criticidade).includes('orange') ? 'text-orange-500' : 'text-yellow-500'}`} />
+                    <AlertTriangle className={`h-4 w-4 ${getCriticidadeColor(alert.criticidade).includes('red') ? 'text-destructive' : getCriticidadeColor(alert.criticidade).includes('orange') ? 'text-warning' : 'text-warning'}`} />
                     <div>
                       <p className="font-medium text-sm">{alert.titulo}</p>
                       <p className="text-xs text-muted-foreground">{alert.mensagem}</p>
@@ -387,7 +387,7 @@ export function ComplianceRoadmapDashboard() {
                 Score ponderado por criticidade
               </p>
               {metrics.criticos > 0 && (
-                <p className="text-xs text-red-500 mt-1">
+                <p className="text-xs text-destructive mt-1">
                   -{metrics.criticos * 5}% por {metrics.criticos} item(s) crítico(s)
                 </p>
               )}
@@ -401,9 +401,9 @@ export function ComplianceRoadmapDashboard() {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-muted-foreground">NCs Abertas</p>
-                <p className="text-3xl font-bold text-orange-600">{ncMetrics.abertas}</p>
+                <p className="text-3xl font-bold text-warning">{ncMetrics.abertas}</p>
               </div>
-              <AlertCircle className="h-8 w-8 text-orange-500/50" />
+              <AlertCircle className="h-8 w-8 text-warning/50" />
             </div>
             <div className="mt-2 flex items-center gap-2 text-xs">
               <Badge variant="destructive">{ncMetrics.criticas} Críticas</Badge>
@@ -418,9 +418,9 @@ export function ComplianceRoadmapDashboard() {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-muted-foreground">Conformes</p>
-                <p className="text-3xl font-bold text-green-600">{metrics.conformes}/{metrics.total}</p>
+                <p className="text-3xl font-bold text-success">{metrics.conformes}/{metrics.total}</p>
               </div>
-              <CheckCircle className="h-8 w-8 text-green-500/50" />
+              <CheckCircle className="h-8 w-8 text-success/50" />
             </div>
             <Progress value={metrics.taxaConformidade} className="mt-2 h-2" />
             <p className="text-xs text-muted-foreground mt-1">{metrics.taxaConformidade}% taxa de conformidade</p>
@@ -433,9 +433,9 @@ export function ComplianceRoadmapDashboard() {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-muted-foreground">Próx. 30 dias</p>
-                <p className="text-3xl font-bold text-yellow-600">{metrics.proxAVencer}</p>
+                <p className="text-3xl font-bold text-warning">{metrics.proxAVencer}</p>
               </div>
-              <Clock className="h-8 w-8 text-yellow-500/50" />
+              <Clock className="h-8 w-8 text-warning/50" />
             </div>
             <div className="mt-2 flex items-center gap-2 text-xs">
               <Badge variant="destructive">{metrics.vencidos} Vencidos</Badge>
@@ -453,7 +453,7 @@ export function ComplianceRoadmapDashboard() {
               </div>
               <Target className="h-8 w-8 text-primary/50" />
             </div>
-            <div className="mt-2 flex items-center gap-1 text-xs text-green-600">
+            <div className="mt-2 flex items-center gap-1 text-xs text-success">
               <TrendingDown className="h-3 w-3" />
               <span>-3 dias vs mês anterior</span>
             </div>
@@ -587,7 +587,7 @@ export function ComplianceRoadmapDashboard() {
                         <p className="text-xs text-muted-foreground mt-1">Ação: {item.acao}</p>
                       </div>
                       <div className="text-right">
-                        <span className="text-lg font-bold text-orange-600">{item.impacto}%</span>
+                        <span className="text-lg font-bold text-warning">{item.impacto}%</span>
                         <p className="text-xs text-muted-foreground">do total</p>
                       </div>
                     </div>
@@ -604,7 +604,7 @@ export function ComplianceRoadmapDashboard() {
             <CardHeader>
               <div className="flex items-center justify-between">
                 <CardTitle className="flex items-center gap-2">
-                  <AlertTriangle className="h-5 w-5 text-orange-500" />
+                   <AlertTriangle className="h-5 w-5 text-warning" />
                   Gestão de Não Conformidades
                 </CardTitle>
                 <div className="flex items-center gap-2">
@@ -677,7 +677,7 @@ export function ComplianceRoadmapDashboard() {
               const abaixoMeta = dept.score < dept.meta;
               
               return (
-                <Card key={dept.departamento} className={abaixoMeta ? 'border-orange-500/30' : ''}>
+                <Card key={dept.departamento} className={abaixoMeta ? 'border-warning/30' : ''}>
                   <CardContent className="pt-6">
                     <div className="flex items-center justify-between mb-4">
                       <h3 className="font-semibold">{dept.departamento}</h3>
@@ -690,9 +690,9 @@ export function ComplianceRoadmapDashboard() {
                     <Progress value={dept.score} className="h-2 mb-4" />
                     <div className="flex items-center justify-between text-sm">
                       <div className="flex items-center gap-1">
-                        {dept.tendencia === 'up' && <TrendingUp className="h-4 w-4 text-green-500" />}
-                        {dept.tendencia === 'down' && <TrendingDown className="h-4 w-4 text-red-500" />}
-                        {dept.tendencia === 'stable' && <Activity className="h-4 w-4 text-yellow-500" />}
+                        {dept.tendencia === 'up' && <TrendingUp className="h-4 w-4 text-success" />}
+                        {dept.tendencia === 'down' && <TrendingDown className="h-4 w-4 text-destructive" />}
+                        {dept.tendencia === 'stable' && <Activity className="h-4 w-4 text-warning" />}
                         <span className="text-muted-foreground">Tendência</span>
                       </div>
                       <div className="flex items-center gap-2">

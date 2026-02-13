@@ -19,25 +19,25 @@ export const QuickActionsPanel: React.FC = () => {
       icon: <Plus className="h-4 w-4" />,
       label: "Nova Requisição",
       onClick: () => navigate("/procurement-command"),
-      color: "bg-green-500 hover:bg-green-600"
+      color: "bg-success hover:bg-success/80"
     },
     {
       icon: <Wrench className="h-4 w-4" />,
       label: "Agendar Manutenção",
       onClick: () => navigate("/maintenance-command"),
-      color: "bg-orange-500 hover:bg-orange-600"
+      color: "bg-warning hover:bg-warning/80"
     },
     {
       icon: <FileText className="h-4 w-4" />,
       label: "Gerar Relatório",
       onClick: () => navigate("/analytics-command"),
-      color: "bg-blue-500 hover:bg-blue-600"
+      color: "bg-info hover:bg-info/80"
     },
     {
       icon: <Calendar className="h-4 w-4" />,
       label: "Ver Calendário",
       onClick: () => navigate("/operational-calendar"),
-      color: "bg-purple-500 hover:bg-purple-600"
+      color: "bg-primary hover:bg-primary/80"
     },
     {
       icon: <Users className="h-4 w-4" />,

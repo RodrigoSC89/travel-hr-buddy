@@ -350,7 +350,7 @@ export function Predictive30_60_90() {
 
                       <div className="bg-muted/50 p-3 rounded-lg mt-2">
                         <p className="text-sm flex items-start gap-2">
-                          <Brain className="h-4 w-4 text-purple-500 mt-0.5 shrink-0" />
+                          <Brain className="h-4 w-4 text-primary mt-0.5 shrink-0" />
                           <span>{prediction.aiRecommendation}</span>
                         </p>
                       </div>

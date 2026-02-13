@@ -132,13 +132,13 @@ export function CertificationsPanel({ certificates, crewMembers }: Certification
               <Clock className="h-5 w-5 text-warning" />
             </div>
           </Card>
-          <Card className="p-3 border-yellow-500/30 bg-yellow-500/5">
+          <Card className="p-3 border-warning/30 bg-warning/5">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-xs text-muted-foreground">Atenção (60d)</p>
-                <p className="text-2xl font-bold text-yellow-600">{categorizedCerts.expiring60.length}</p>
+                <p className="text-2xl font-bold text-warning">{categorizedCerts.expiring60.length}</p>
               </div>
-              <Calendar className="h-5 w-5 text-yellow-600" />
+              <Calendar className="h-5 w-5 text-warning" />
             </div>
           </Card>
           <Card className="p-3 border-success/30 bg-success/5">

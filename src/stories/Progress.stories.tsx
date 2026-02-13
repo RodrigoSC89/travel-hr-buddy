@@ -85,28 +85,28 @@ export const MultipleProgress: Story = {
       <div>
         <div className="flex justify-between text-sm mb-1">
           <span>PEOTRAM</span>
-          <span className="text-green-400">100%</span>
+          <span className="text-success">100%</span>
         </div>
         <Progress value={100} />
       </div>
       <div>
         <div className="flex justify-between text-sm mb-1">
           <span>PEO-DP</span>
-          <span className="text-blue-400">85%</span>
+          <span className="text-info">85%</span>
         </div>
         <Progress value={85} />
       </div>
       <div>
         <div className="flex justify-between text-sm mb-1">
           <span>SGSO</span>
-          <span className="text-yellow-400">60%</span>
+          <span className="text-warning">60%</span>
         </div>
         <Progress value={60} />
       </div>
       <div>
         <div className="flex justify-between text-sm mb-1">
           <span>ISPS</span>
-          <span className="text-red-400">25%</span>
+          <span className="text-destructive">25%</span>
         </div>
         <Progress value={25} />
       </div>

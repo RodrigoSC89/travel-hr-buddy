@@ -224,20 +224,20 @@ export function MaintenanceCommandCenter() {
       case "open":
         return <Badge variant="outline"><Clock className="h-3 w-3 mr-1" />Aberta</Badge>;
       case "in_progress":
-        return <Badge className="bg-blue-500/20 text-blue-400"><Play className="h-3 w-3 mr-1" />Em Andamento</Badge>;
+        return <Badge className="bg-info/20 text-info"><Play className="h-3 w-3 mr-1" />Em Andamento</Badge>;
       case "pending_parts":
-        return <Badge className="bg-amber-500/20 text-amber-400"><Package className="h-3 w-3 mr-1" />Aguardando Peças</Badge>;
+        return <Badge className="bg-warning/20 text-warning"><Package className="h-3 w-3 mr-1" />Aguardando Peças</Badge>;
       case "completed":
-        return <Badge className="bg-emerald-500/20 text-emerald-400"><CheckCircle2 className="h-3 w-3 mr-1" />Concluída</Badge>;
+        return <Badge className="bg-success/20 text-success"><CheckCircle2 className="h-3 w-3 mr-1" />Concluída</Badge>;
       default:
         return null;
     }
   };
 
   const getHealthColor = (health: number) => {
-    if (health >= 80) return "text-emerald-500";
-    if (health >= 50) return "text-amber-500";
-    return "text-red-500";
+    if (health >= 80) return "text-success";
+    if (health >= 50) return "text-warning";
+    return "text-destructive";
   };
 
   // Métricas
@@ -256,80 +256,80 @@ export function MaintenanceCommandCenter() {
     <div className="space-y-6">
       {/* KPIs */}
       <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-8 gap-4">
-        <Card className="bg-gradient-to-br from-blue-500/10 to-cyan-500/10 border-blue-500/30">
+        <Card className="bg-gradient-to-br from-info/10 to-info/5 border-info/30">
           <CardContent className="p-4">
             <div className="flex items-center gap-2">
-              <Wrench className="h-5 w-5 text-blue-400" />
+              <Wrench className="h-5 w-5 text-info" />
               <span className="text-sm text-muted-foreground">Ordens Abertas</span>
             </div>
             <p className="text-2xl font-bold mt-1">{metrics.openOrders}</p>
           </CardContent>
         </Card>
 
-        <Card className="bg-gradient-to-br from-red-500/10 to-rose-500/10 border-red-500/30">
+        <Card className="bg-gradient-to-br from-destructive/10 to-destructive/5 border-destructive/30">
           <CardContent className="p-4">
             <div className="flex items-center gap-2">
-              <AlertTriangle className="h-5 w-5 text-red-400" />
+              <AlertTriangle className="h-5 w-5 text-destructive" />
               <span className="text-sm text-muted-foreground">Críticas</span>
             </div>
             <p className="text-2xl font-bold mt-1">{metrics.criticalOrders}</p>
           </CardContent>
         </Card>
 
-        <Card className="bg-gradient-to-br from-amber-500/10 to-orange-500/10 border-amber-500/30">
+        <Card className="bg-gradient-to-br from-warning/10 to-warning/5 border-warning/30">
           <CardContent className="p-4">
             <div className="flex items-center gap-2">
-              <Clock className="h-5 w-5 text-amber-400" />
+              <Clock className="h-5 w-5 text-warning" />
               <span className="text-sm text-muted-foreground">Atrasadas</span>
             </div>
             <p className="text-2xl font-bold mt-1">{metrics.overdueOrders}</p>
           </CardContent>
         </Card>
 
-        <Card className="bg-gradient-to-br from-emerald-500/10 to-green-500/10 border-emerald-500/30">
+        <Card className="bg-gradient-to-br from-success/10 to-success/5 border-success/30">
           <CardContent className="p-4">
             <div className="flex items-center gap-2">
-              <CheckCircle2 className="h-5 w-5 text-emerald-400" />
+              <CheckCircle2 className="h-5 w-5 text-success" />
               <span className="text-sm text-muted-foreground">Concluídas/Mês</span>
             </div>
             <p className="text-2xl font-bold mt-1">{metrics.completedThisMonth}</p>
           </CardContent>
         </Card>
 
-        <Card className="bg-gradient-to-br from-purple-500/10 to-pink-500/10 border-purple-500/30">
+        <Card className="bg-gradient-to-br from-primary/10 to-primary/5 border-primary/30">
           <CardContent className="p-4">
             <div className="flex items-center gap-2">
-              <TrendingUp className="h-5 w-5 text-purple-400" />
+              <TrendingUp className="h-5 w-5 text-primary" />
               <span className="text-sm text-muted-foreground">MTBF</span>
             </div>
             <p className="text-2xl font-bold mt-1">{metrics.mtbf}h</p>
           </CardContent>
         </Card>
 
-        <Card className="bg-gradient-to-br from-cyan-500/10 to-teal-500/10 border-cyan-500/30">
+        <Card className="bg-gradient-to-br from-accent/10 to-accent/5 border-accent/30">
           <CardContent className="p-4">
             <div className="flex items-center gap-2">
-              <TrendingDown className="h-5 w-5 text-cyan-400" />
+              <TrendingDown className="h-5 w-5 text-accent-foreground" />
               <span className="text-sm text-muted-foreground">MTTR</span>
             </div>
             <p className="text-2xl font-bold mt-1">{metrics.mttr}h</p>
           </CardContent>
         </Card>
 
-        <Card className="bg-gradient-to-br from-indigo-500/10 to-violet-500/10 border-indigo-500/30">
+        <Card className="bg-gradient-to-br from-secondary/30 to-secondary/10 border-secondary/50">
           <CardContent className="p-4">
             <div className="flex items-center gap-2">
-              <Gauge className="h-5 w-5 text-indigo-400" />
+              <Gauge className="h-5 w-5 text-secondary-foreground" />
               <span className="text-sm text-muted-foreground">Saúde Frota</span>
             </div>
             <p className="text-2xl font-bold mt-1">{metrics.equipmentHealth}%</p>
           </CardContent>
         </Card>
 
-        <Card className="bg-gradient-to-br from-orange-500/10 to-yellow-500/10 border-orange-500/30">
+        <Card className="bg-gradient-to-br from-warning/10 to-warning/5 border-warning/30">
           <CardContent className="p-4">
             <div className="flex items-center gap-2">
-              <Package className="h-5 w-5 text-orange-400" />
+              <Package className="h-5 w-5 text-warning" />
               <span className="text-sm text-muted-foreground">Estoque Baixo</span>
             </div>
             <p className="text-2xl font-bold mt-1">{metrics.partsLowStock}</p>

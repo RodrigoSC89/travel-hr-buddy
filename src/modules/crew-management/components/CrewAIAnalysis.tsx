@@ -243,7 +243,7 @@ const FatigueIndicator = ({ score, risk }: { score: number; risk: string }) => {
     <div className="space-y-1">
       <div className="flex items-center justify-between text-xs">
         <span className="text-muted-foreground">Fadiga</span>
-        <span className={`font-medium ${risk === "critical" ? "text-red-500" : ""}`}>
+        <span className={`font-medium ${risk === "critical" ? "text-destructive" : ""}`}>
           {score}%
         </span>
       </div>

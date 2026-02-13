@@ -278,7 +278,7 @@ Qual área você gostaria de explorar em detalhes?`;
             <div>
               <h2 className="text-xl font-bold flex items-center gap-2">
                 Nautilus Brain
-                <Badge variant="secondary" className="bg-purple-100 text-purple-700 dark:bg-purple-900/30 dark:text-purple-300">
+                <Badge variant="secondary" className="bg-primary/10 text-primary">
                   <Sparkles className="h-3 w-3 mr-1" />
                   IA Central
                 </Badge>
@@ -312,8 +312,8 @@ Qual área você gostaria de explorar em detalhes?`;
                 >
                   {message.role === 'assistant' && (
                     <div className="flex items-center gap-2 mb-2">
-                      <Brain className="h-4 w-4 text-purple-500" />
-                      <span className="text-sm font-medium text-purple-600 dark:text-purple-400">
+                      <Brain className="h-4 w-4 text-primary" />
+                      <span className="text-sm font-medium text-primary">
                         Nautilus Brain
                       </span>
                       {message.context && (
@@ -380,7 +380,7 @@ Qual área você gostaria de explorar em detalhes?`;
                 className="flex justify-start"
               >
                 <div className="bg-muted rounded-2xl p-4 flex items-center gap-2">
-                  <Loader2 className="h-4 w-4 animate-spin text-purple-500" />
+                  <Loader2 className="h-4 w-4 animate-spin text-primary" />
                   <span className="text-sm text-muted-foreground">
                     Nautilus Brain está analisando...
                   </span>

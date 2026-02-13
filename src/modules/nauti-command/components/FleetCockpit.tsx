@@ -84,9 +84,9 @@ export const FleetCockpit: React.FC<FleetCockpitProps> = ({ vessels: propVessels
 
   const getStatusBadge = (status: string) => {
     switch (status) {
-      case 'active': return <Badge className="bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-300">Operando</Badge>;
-      case 'maintenance': return <Badge className="bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-300">Manutenção</Badge>;
-      case 'docked': return <Badge className="bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-300">Atracado</Badge>;
+      case 'active': return <Badge className="bg-success/10 text-success">Operando</Badge>;
+      case 'maintenance': return <Badge className="bg-warning/10 text-warning">Manutenção</Badge>;
+      case 'docked': return <Badge className="bg-info/10 text-info">Atracado</Badge>;
       case 'alert': return <Badge variant="destructive">Alerta</Badge>;
       default: return <Badge variant="secondary">{status}</Badge>;
     }
@@ -111,7 +111,7 @@ export const FleetCockpit: React.FC<FleetCockpitProps> = ({ vessels: propVessels
         <div className="flex items-center justify-between">
           <div>
             <CardTitle className="flex items-center gap-2">
-              <Ship className="h-5 w-5 text-blue-500" />
+              <Ship className="h-5 w-5 text-info" />
               Fleet Cockpit
             </CardTitle>
             <CardDescription>
@@ -120,7 +120,7 @@ export const FleetCockpit: React.FC<FleetCockpitProps> = ({ vessels: propVessels
           </div>
           <div className="flex items-center gap-2">
             <Badge variant="outline" className="gap-1">
-              <Radio className="h-3 w-3 animate-pulse text-green-500" />
+              <Radio className="h-3 w-3 animate-pulse text-success" />
               Tempo Real
             </Badge>
           </div>

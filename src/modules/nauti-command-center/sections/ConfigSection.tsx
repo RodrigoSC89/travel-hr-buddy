@@ -87,7 +87,7 @@ export function ConfigSection() {
                   <Plug className="h-4 w-4" />
                   <span>{int.name}</span>
                 </div>
-                <Badge variant="outline" className="bg-emerald-50 text-emerald-700">
+                <Badge variant="outline" className="bg-success/10 text-success">
                   <CheckCircle className="h-3 w-3 mr-1" />
                   Conectado
                 </Badge>
