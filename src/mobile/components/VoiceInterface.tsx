@@ -80,8 +80,7 @@ export const VoiceInterface: React.FC<VoiceInterfaceProps> = ({
       return;
     }
 
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Web Speech API not fully typed
-    const recognition: VoiceSpeechRecognition = new (SpeechRecognitionClass as any)();
+    const recognition: VoiceSpeechRecognition = new (SpeechRecognitionClass as unknown as { new(): VoiceSpeechRecognition })();
     recognition.interimResults = true;
     recognition.lang = "en-US";
 

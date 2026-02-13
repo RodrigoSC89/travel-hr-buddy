@@ -135,10 +135,9 @@ export const AdvancedPriceAlerts: React.FC = () => {
       
       // Enhance with AI predictions
       const enhancedAlerts = await Promise.all(
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any -- price_alerts dynamic schema with AI predictions
-        (data || []).map(async (alert: any) => ({
+        (data || []).map(async (alert) => ({
           ...alert,
-          threshold_type: alert.threshold_type || "below",
+          threshold_type: (alert as Record<string, unknown>).threshold_type as string || "below",
           notification_settings: {
             email: true,
             push: true,
@@ -201,19 +200,20 @@ export const AdvancedPriceAlerts: React.FC = () => {
     setInsights(mockInsights);
   };
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- price alert row for AI prediction
-  const generateAIPredictions = async (alert: any) => {
+  const generateAIPredictions = async (alert: Record<string, unknown>) => {
     // Simulated AI predictions - in production, this would use real ML models
     // Deterministic prediction based on price data
-    const trend = alert.current_price && alert.target_price 
-      ? (alert.current_price > alert.target_price ? "falling" as const : "rising" as const)
+    const currentPrice = Number(alert.current_price || 0);
+    const targetPrice = Number(alert.target_price || 0);
+    const trend = currentPrice && targetPrice
+      ? (currentPrice > targetPrice ? "falling" as const : "rising" as const)
       : "stable" as const;
     
     return {
       trend,
       confidence: 0.78,
       best_time_to_buy: trend === "falling" ? "Agora" : "Aguardar 1-2 semanas",
-      predicted_low: alert.current_price ? alert.current_price * 0.95 : undefined
+      predicted_low: currentPrice ? currentPrice * 0.95 : undefined
     };
   };
 

@@ -193,7 +193,10 @@ class OfflineQueueManager {
     if ('serviceWorker' in navigator && 'SyncManager' in window) {
       try {
         const registration = await navigator.serviceWorker.ready;
-        await (registration as any).sync.register('sync-data');
+        const reg = registration as ServiceWorkerRegistration & { sync?: { register(tag: string): Promise<void> } };
+        if (reg.sync) {
+          await reg.sync.register('sync-data');
+        }
         return true;
       } catch {
         return false;

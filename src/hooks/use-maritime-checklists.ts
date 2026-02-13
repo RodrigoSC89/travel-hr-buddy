@@ -301,8 +301,7 @@ export const useMaritimeChecklists = (userId: string) => {
 
       // Transform data to match our Checklist interface
       const typedData = (data ?? []) as ChecklistQueryResult[];
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any -- ChecklistQueryResult join shape needs flexible access
-      const transformedChecklists: Checklist[] = typedData.map((item: any) => ({
+      const transformedChecklists: Checklist[] = typedData.map((item) => ({
         id: item.id,
         title: item.title,
         type: (item.type as Checklist["type"]) ?? "dp",
@@ -327,24 +326,23 @@ export const useMaritimeChecklists = (userId: string) => {
           certifications: ["Maritime Inspector"]
         },
         status: (item.status as Checklist["status"]) ?? "draft",
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any -- checklist_items join shape
-        items: (item.checklist_items ?? []).map((checklistItem: any) => ({
-          id: checklistItem.id,
-          title: checklistItem.title,
-          description: checklistItem.description,
+        items: (item.checklist_items ?? []).map((checklistItem: Record<string, unknown>) => ({
+          id: String(checklistItem.id),
+          title: String(checklistItem.title),
+          description: String(checklistItem.description),
           type: "boolean",
-          required: checklistItem.required,
+          required: Boolean(checklistItem.required),
           category: "General",
-          order: checklistItem.order_index,
-          status: checklistItem.completed ? "completed" : "pending",
-          value: checklistItem.completed,
-          notes: checklistItem.notes,
-          timestamp: checklistItem.completed_at
+          order: Number(checklistItem.order_index),
+          status: checklistItem.completed ? "completed" as const : "pending" as const,
+          value: Boolean(checklistItem.completed),
+          notes: String(checklistItem.notes || ""),
+          timestamp: String(checklistItem.completed_at || "")
         })) || [],
         createdAt: item.created_at,
         updatedAt: item.updated_at,
-        completedAt: item.status === "completed" ? item.updated_at : undefined, // Set undefined instead of null
-        priority: (item.priority as Checklist["priority"]) ?? "medium",
+        completedAt: item.status === "completed" ? item.updated_at : undefined,
+        priority: ((item as Record<string, unknown>).priority as Checklist["priority"]) ?? "medium",
         estimatedDuration: 180, // Default duration
         complianceScore: item.compliance_score ?? undefined,
         workflow: [],
@@ -397,8 +395,7 @@ export const useMaritimeChecklists = (userId: string) => {
       }
 
       const transformed = records
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any -- template record metadata is Json
-        .map((record: any) => transformTemplateRecord(record))
+        .map((record) => transformTemplateRecord(record as unknown as SupabaseTemplateRecord))
         .filter((template): template is ChecklistTemplate => Boolean(template));
 
       if (!transformed.length) {

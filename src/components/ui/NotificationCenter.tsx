@@ -41,7 +41,8 @@ export interface Notification {
   actionData?: any;
   action_url?: string;
   auto_dismiss?: boolean;
-  metadata?: Record<string, any>;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Supabase Json type
+  metadata?: any;
 }
 
 export interface NotificationCenterProps {

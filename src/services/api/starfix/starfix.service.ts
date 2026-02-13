@@ -155,22 +155,25 @@ export async function fetchStarFixInspections(imoNumber: string): Promise<StarFi
     const data = await response.json();
 
     // Transform and store inspections
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any -- External API response
-    const inspections: StarFixInspection[] = data.inspections.map((inspection: any) => ({
-      vessel_id: imoNumber,
-      imo_number: imoNumber,
-      inspection_date: inspection.date,
-      port_name: inspection.port?.name,
-      port_country: inspection.port?.country,
-      inspection_type: inspection.type,
-      authority: inspection.authority,
-      deficiencies_count: inspection.deficiencies?.length || 0,
-      detentions: inspection.detention ? 1 : 0,
-      inspection_result: inspection.detention ? 'DETENTION' : inspection.deficiencies?.length > 0 ? 'DEFICIENCY' : 'CLEAR',
-      deficiencies: inspection.deficiencies || [],
-      starfix_sync_status: 'synced',
-      last_sync_date: new Date().toISOString(),
-    }));
+    const inspections: StarFixInspection[] = data.inspections.map((inspection: Record<string, unknown>) => {
+      const port = (inspection.port && typeof inspection.port === 'object') ? inspection.port as Record<string, unknown> : {};
+      const deficiencies = Array.isArray(inspection.deficiencies) ? inspection.deficiencies : [];
+      return {
+        vessel_id: imoNumber,
+        imo_number: imoNumber,
+        inspection_date: String(inspection.date || ""),
+        port_name: String(port.name || ""),
+        port_country: String(port.country || ""),
+        inspection_type: String(inspection.type || ""),
+        authority: String(inspection.authority || ""),
+        deficiencies_count: deficiencies.length,
+        detentions: inspection.detention ? 1 : 0,
+        inspection_result: inspection.detention ? 'DETENTION' : deficiencies.length > 0 ? 'DEFICIENCY' : 'CLEAR',
+        deficiencies,
+        starfix_sync_status: 'synced',
+        last_sync_date: new Date().toISOString(),
+      };
+    });
 
     // Store in local database
     if (inspections.length > 0) {
