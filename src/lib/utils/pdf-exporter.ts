@@ -27,7 +27,7 @@ class PDFExporter {
   private pageWidth: number = 210;
   private pageHeight: number = 297;
   private margin: number = 20;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- autoTable plugin loaded dynamically with vendor-specific API
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- autoTable plugin loaded dynamically
   private autoTableFn: any;
 
   private constructor() {}

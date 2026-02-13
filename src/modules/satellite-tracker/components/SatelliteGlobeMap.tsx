@@ -22,10 +22,9 @@ export const SatelliteGlobeMap: React.FC<SatelliteGlobeMapProps> = ({
   onSelectSatellite
 }) => {
   const mapContainer = useRef<HTMLDivElement>(null);
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Mapbox GL map instance from external library
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Mapbox GL map instance
   const map = useRef<any>(null);
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Mapbox GL marker instances from external library
-  const markers = useRef<any[]>([]);
+  const markers = useRef<{ remove: () => void }[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const mapboxToken = import.meta.env.VITE_MAPBOX_ACCESS_TOKEN || import.meta.env.VITE_MAPBOX_TOKEN || "";
@@ -97,7 +96,7 @@ export const SatelliteGlobeMap: React.FC<SatelliteGlobeMapProps> = ({
     };
   }, [mapboxToken]);
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- mapboxgl dynamic import
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Mapbox GL dynamic import returns any-typed module
   const updateMarkers = async (mapboxgl: any) => {
     if (!map.current) return;
 

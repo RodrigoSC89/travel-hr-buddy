@@ -152,7 +152,7 @@ export async function exportLogsAsPDF(
       2: { cellWidth: 50 },
       3: { cellWidth: "auto" },
     },
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any -- jspdf-autotable callback type not exported
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any -- jspdf-autotable CellHookData type
     didDrawCell: (data: any) => {
       // Color-code level column
       if (data.column.index === 1 && data.section === "body") {

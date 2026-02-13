@@ -5,7 +5,7 @@
  */
 
 // Import html2pdf dynamically to support both browser and server environments
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- html2pdf.js has no type definitions
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- html2pdf.js has no type definitions available
 let html2pdfModule: any = null;
 
 async function loadHtml2Pdf() {
