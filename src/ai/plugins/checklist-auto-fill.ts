@@ -44,7 +44,7 @@ export class ChecklistAutoFillPlugin extends BaseAIPlugin {
 
   async run(input: AIPluginInput): Promise<AIPluginOutput> {
     try {
-      const { checklistTemplate, historicalData, context } = (input.data || {}) as Record<string, unknown>;
+      const { checklistTemplate, historicalData, context } = (input.data || {}) as { checklistTemplate?: ChecklistTemplate; historicalData?: HistoricalEntry[]; context?: Record<string, unknown> };
       
       if (!checklistTemplate) {
         return {

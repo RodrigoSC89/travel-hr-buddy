@@ -132,7 +132,7 @@ export default function BetaDashboard() {
         const modulesUsage: Record<string, number> = {};
         feedbacks.forEach((f) => {
           if (f.modules_used) {
-            (f.modules_used as string[]).forEach((m) => {
+            (f.modules_used as unknown as string[]).forEach((m) => {
               modulesUsage[m] = (modulesUsage[m] || 0) + 1;
             });
           }

@@ -69,7 +69,7 @@ export function useMedicalAI() {
     if (result?.response) {
       const resp = result.response as Record<string, unknown>;
       return {
-        riskLevel: (resp.riskLevel as string) || 'low',
+        riskLevel: (resp.riskLevel as AIAnalysis['riskLevel']) || 'low',
         recommendations: (resp.recommendations as string[]) || [],
         predictedIssues: (resp.predictedIssues as string[]) || [],
         confidence: Number(resp.confidence) || 0.8
@@ -88,7 +88,7 @@ export function useMedicalAI() {
     if (result?.response) {
       const resp = result.response as Record<string, unknown>;
       return {
-        riskLevel: (resp.riskLevel as string) || 'low',
+        riskLevel: (resp.riskLevel as AIAnalysis['riskLevel']) || 'low',
         recommendations: (resp.recommendations as string[]) || [],
         predictedIssues: (resp.predictedIssues as string[]) || [],
         confidence: Number(resp.confidence) || 0.75

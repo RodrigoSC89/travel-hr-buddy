@@ -378,7 +378,7 @@ export function useMaritimeAuditExport(auditType: AuditType) {
   ];
   
   const doExport = async (data: MaritimeAudit[], format: ExportFormat) => {
-    await exportData(data, format, {
+    await exportData(data as unknown as Record<string, unknown>[], format, {
       filename: `${auditType}-audits-${new Date().toISOString().split('T')[0]}`,
       columns: exportColumns,
       title: label,
