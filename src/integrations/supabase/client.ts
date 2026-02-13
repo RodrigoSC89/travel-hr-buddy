@@ -65,16 +65,27 @@ const isSlowConnection = (): boolean => {
 };
 
 // Custom fetch with retry for maritime satellite connections
+// CRITICAL: Auth requests use native fetch to prevent AbortController from killing login
 const customFetch = async (input: RequestInfo | URL, init?: RequestInit): Promise<Response> => {
-  const MAX_RETRIES = 4;
+  const url = typeof input === 'string' ? input : input instanceof URL ? input.toString() : (input as Request).url;
+  
+  // Auth requests (login, signup, token refresh) MUST NOT be aborted by timeout
+  // These are critical and should be allowed to complete naturally
+  const isAuthRequest = url.includes('/auth/v1/');
+  
+  if (isAuthRequest) {
+    // Use native fetch for auth - no AbortController, no retry overhead
+    // Let the browser handle the timeout naturally (typically 60-120s)
+    return fetch(input, init);
+  }
+  
+  // Non-auth requests: use retry with conservative timeouts
+  const MAX_RETRIES = 2;
   const slow = isSlowConnection();
   
-  // Adaptive timeouts - reduced to prevent blocking browser connections
-  // Auth requests were being aborted because retries consumed all connections
-  // Slow: 12s/18s/24s/30s | Normal: 8s/12s/16s/20s
   const getTimeout = (attempt: number) => {
-    const base = slow ? 12000 : 8000;
-    return base + (attempt * (slow ? 6000 : 4000));
+    const base = slow ? 15000 : 10000;
+    return base + (attempt * (slow ? 10000 : 5000));
   };
   
   let lastError: Error | null = null;
@@ -84,7 +95,6 @@ const customFetch = async (input: RequestInfo | URL, init?: RequestInit): Promis
     const timeout = getTimeout(attempt);
     const timeoutId = setTimeout(() => controller.abort(), timeout);
     
-    // Handle external abort signal
     const externalSignal = init?.signal;
     let externalAbortHandler: (() => void) | undefined;
     
@@ -110,46 +120,26 @@ const customFetch = async (input: RequestInfo | URL, init?: RequestInit): Promis
       }
       lastError = error as Error;
       
-      // Check if aborted by external signal (user cancelled)
       if (externalSignal?.aborted) {
         throw error;
       }
       
-      // Check if error is retryable (network errors, iOS Safari PWA specific errors)
       const isAborted = (error as Error).name === 'AbortError';
       const errorMessage = (error as Error).message || '';
       const isNetworkError = 
         errorMessage.includes('Failed to fetch') ||
         errorMessage.includes('NetworkError') ||
-        errorMessage.includes('network') ||
-        errorMessage.includes('Network request failed') ||
-        errorMessage.includes('fetch') ||
-        errorMessage.includes('CORS') ||
         errorMessage.includes('Load failed') ||
-        errorMessage.includes('cancelled') ||
-        errorMessage.includes('The operation was aborted') ||
-        errorMessage.includes('A network error') ||
-        errorMessage.includes('The Internet connection appears to be offline') ||
-        errorMessage.includes('Could not connect to the server');
+        errorMessage.includes('The Internet connection appears to be offline');
       
       const isRetryable = isAborted || isNetworkError;
       
-      // If not retryable or last attempt, throw error
       if (!isRetryable || attempt === MAX_RETRIES - 1) {
-        if (import.meta.env.DEV) {
-          console.error(`[Supabase] Request failed after ${attempt + 1} attempts:`, errorMessage);
-        }
         throw error;
       }
       
-      // Exponential backoff with jitter: 1.5s, 3s, 6s (+ random 0-1s)
-      const jitter = Math.random() * 1000;
-      const delay = Math.min(1500 * Math.pow(2, attempt) + jitter, 10000);
-      
-      if (import.meta.env.DEV) {
-        console.log(`[Supabase] Retry ${attempt + 1}/${MAX_RETRIES} after ${Math.round(delay)}ms`);
-      }
-      
+      // Simple backoff: 2s, 4s
+      const delay = 2000 * (attempt + 1) + Math.random() * 500;
       await new Promise(resolve => setTimeout(resolve, delay));
     }
   }
