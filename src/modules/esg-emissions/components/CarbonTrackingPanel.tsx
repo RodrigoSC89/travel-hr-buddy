@@ -143,7 +143,7 @@ export const CarbonTrackingPanel: React.FC = () => {
               onChange={(e) => setSearchTerm(e.target.value)}
             />
           </div>
-          <Button variant="outline" size="icon">
+          <Button variant="outline" size="icon" aria-label="Filtrar emissões" title="Filtrar">
             <Filter className="h-4 w-4" />
           </Button>
         </div>
@@ -372,7 +372,7 @@ export const CarbonTrackingPanel: React.FC = () => {
                         )}
                       </TableCell>
                       <TableCell>
-                        <Button variant="ghost" size="icon">
+                        <Button variant="ghost" size="icon" aria-label="Visualizar detalhes da emissão" title="Visualizar">
                           <Eye className="h-4 w-4" />
                         </Button>
                       </TableCell>

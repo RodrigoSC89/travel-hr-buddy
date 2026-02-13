@@ -111,7 +111,7 @@ export default function AIAssistant() {
               onKeyPress={(e) => e.key === "Enter" && handleSend()}
               disabled={isLoading}
             />
-            <Button size="icon" onClick={handleSend} disabled={isLoading || !input.trim()}>
+            <Button size="icon" onClick={handleSend} disabled={isLoading || !input.trim()} aria-label="Enviar mensagem" title="Enviar">
               {isLoading ? <Loader2 className="h-4 w-4 animate-spin" /> : <Send className="h-4 w-4" />}
             </Button>
           </div>

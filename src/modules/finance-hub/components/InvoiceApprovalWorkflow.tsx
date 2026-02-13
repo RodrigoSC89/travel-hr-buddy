@@ -183,7 +183,7 @@ export default function InvoiceApprovalWorkflow() {
                     onChange={(e) => setSearchQuery(e.target.value)}
                   />
                 </div>
-                <Button variant="outline" size="icon">
+                <Button variant="outline" size="icon" aria-label="Filtrar faturas" title="Filtrar">
                   <Filter className="h-4 w-4" />
                 </Button>
               </div>

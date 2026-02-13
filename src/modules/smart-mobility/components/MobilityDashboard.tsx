@@ -277,7 +277,7 @@ export default function MobilityDashboard() {
                 onChange={(e) => setChatMessage(e.target.value)}
                 onKeyPress={(e) => e.key === "Enter" && handleSendMessage()}
               />
-              <Button size="icon" onClick={handleSendMessage}>
+              <Button size="icon" onClick={handleSendMessage} aria-label="Enviar mensagem" title="Enviar">
                 <Send className="h-4 w-4" />
               </Button>
             </div>

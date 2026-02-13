@@ -278,7 +278,7 @@ export function SystemCommandCenter() {
                         </div>
                       </div>
                     </div>
-                    <Button variant="ghost" size="icon" className="h-8 w-8">
+                    <Button variant="ghost" size="icon" className="h-8 w-8" aria-label="Atualizar serviço" title="Atualizar">
                       <RefreshCw className="h-4 w-4" />
                     </Button>
                   </div>

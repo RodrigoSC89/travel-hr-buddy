@@ -518,10 +518,12 @@ export default function IntegrationsManager() {
                               variant="ghost"
                               size="icon"
                               onClick={() => setShowApiKey(!showApiKey)}
+                              aria-label={showApiKey ? "Ocultar chave API" : "Mostrar chave API"}
+                              title={showApiKey ? "Ocultar chave" : "Mostrar chave"}
                             >
                               {showApiKey ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
                             </Button>
-                            <Button variant="ghost" size="icon">
+                            <Button variant="ghost" size="icon" aria-label="Copiar chave API" title="Copiar chave" onClick={() => navigator.clipboard.writeText("sk-...").then(() => {})}>
                               <Copy className="h-4 w-4" />
                             </Button>
                           </div>
@@ -545,7 +547,7 @@ export default function IntegrationsManager() {
                             <CheckCircle2 className="h-4 w-4 mr-2" />
                             Salvar
                           </Button>
-                          <Button variant="destructive" size="icon">
+                          <Button variant="destructive" size="icon" aria-label="Excluir integração" title="Excluir">
                             <Trash2 className="h-4 w-4" />
                           </Button>
                         </div>

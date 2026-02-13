@@ -402,7 +402,7 @@ export function MaintenanceCommandCenter() {
                             {order.vessel} • {order.equipment}
                           </p>
                         </div>
-                        <Button variant="ghost" size="icon" className="h-8 w-8">
+                        <Button variant="ghost" size="icon" className="h-8 w-8" aria-label="Visualizar ordem de serviço" title="Visualizar">
                           <Eye className="h-4 w-4" />
                         </Button>
                       </div>
@@ -545,10 +545,10 @@ export function MaintenanceCommandCenter() {
                           </div>
                         </div>
                         <div className="flex gap-2">
-                          <Button variant="ghost" size="icon" className="h-8 w-8">
+                          <Button variant="ghost" size="icon" className="h-8 w-8" aria-label="Visualizar ordem" title="Visualizar">
                             <Eye className="h-4 w-4" />
                           </Button>
-                          <Button variant="ghost" size="icon" className="h-8 w-8">
+                          <Button variant="ghost" size="icon" className="h-8 w-8" aria-label="Ver documento" title="Documento">
                             <FileText className="h-4 w-4" />
                           </Button>
                         </div>

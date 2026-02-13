@@ -259,7 +259,7 @@ export default function InspectionReadinessPanel() {
                             <Calendar className="h-3 w-3 inline mr-1" />
                             {new Date(item.dueDate).toLocaleDateString("pt-BR")}
                           </span>
-                          <Button variant="ghost" size="icon" className="h-8 w-8">
+                          <Button variant="ghost" size="icon" className="h-8 w-8" aria-label="Visualizar item de inspeção" title="Visualizar">
                             <Eye className="h-4 w-4" />
                           </Button>
                         </div>

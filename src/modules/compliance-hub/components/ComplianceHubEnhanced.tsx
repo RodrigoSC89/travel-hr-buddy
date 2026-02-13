@@ -483,7 +483,7 @@ const ComplianceHubEnhanced: React.FC = () => {
                           {format(audit.dueDate, "dd/MM/yyyy")}
                         </p>
                       </div>
-                      <Button variant="ghost" size="icon">
+                      <Button variant="ghost" size="icon" aria-label="Visualizar auditoria" title="Visualizar">
                         <Eye className="h-4 w-4" />
                       </Button>
                     </div>

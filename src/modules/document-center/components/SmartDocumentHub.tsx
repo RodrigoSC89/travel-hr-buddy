@@ -257,7 +257,7 @@ export default function SmartDocumentHub() {
                     {/* Actions */}
                     <DropdownMenu>
                       <DropdownMenuTrigger asChild>
-                        <Button variant="ghost" size="icon">
+                        <Button variant="ghost" size="icon" aria-label="Mais opções do documento" title="Mais opções">
                           <MoreVertical className="h-4 w-4" />
                         </Button>
                       </DropdownMenuTrigger>

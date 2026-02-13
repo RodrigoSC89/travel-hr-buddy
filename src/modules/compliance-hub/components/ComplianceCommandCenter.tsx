@@ -351,10 +351,10 @@ export function ComplianceCommandCenter() {
               onChange={(e) => setSearchTerm(e.target.value)}
               className="w-[200px]"
             />
-            <Button variant="outline" size="icon">
+            <Button variant="outline" size="icon" aria-label="Filtrar itens" title="Filtrar">
               <Filter className="h-4 w-4" />
             </Button>
-            <Button variant="outline" size="icon">
+            <Button variant="outline" size="icon" aria-label="Exportar dados" title="Exportar">
               <Download className="h-4 w-4" />
             </Button>
             <Button className="gap-2">

@@ -328,7 +328,7 @@ export default function InspectionScheduler() {
                   <SelectItem value="in_progress">Em Andamento</SelectItem>
                 </SelectContent>
               </Select>
-              <Button variant="outline" size="icon">
+              <Button variant="outline" size="icon" aria-label="Exportar inspeções" title="Exportar">
                 <Download className="h-4 w-4" />
               </Button>
             </div>

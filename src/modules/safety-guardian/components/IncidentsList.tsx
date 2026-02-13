@@ -232,7 +232,7 @@ export const IncidentsList: React.FC<IncidentsListProps> = ({
                       
                       <DropdownMenu>
                         <DropdownMenuTrigger asChild>
-                          <Button variant="ghost" size="icon">
+                          <Button variant="ghost" size="icon" aria-label="Mais opções do incidente" title="Mais opções">
                             <MoreVertical className="h-4 w-4" />
                           </Button>
                         </DropdownMenuTrigger>
