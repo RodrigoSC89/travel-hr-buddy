@@ -1,7 +1,7 @@
 /**
  * IMCA Audit Service
  * DEBT-FIX: auditorias_imca doesn't exist in schema.
- * Using localStorage persistence for audit reports.
+ * Using sessionStorage persistence for audit reports (ephemeral session data).
  */
 import { supabase } from "@/integrations/supabase/client";
 import type { IMCAAuditReport, IMCAAuditInput } from "@/types/imca-audit";
@@ -11,13 +11,13 @@ const STORAGE_KEY = "nautilus_imca_audits";
 
 function loadAudits(): Array<{ id: string; user_id: string; report_data: IMCAAuditReport; created_at: string; updated_at: string }> {
   try {
-    const raw = localStorage.getItem(STORAGE_KEY);
+    const raw = sessionStorage.getItem(STORAGE_KEY);
     return raw ? JSON.parse(raw) : [];
   } catch { return []; }
 }
 
 function saveAuditsToStorage(audits: Array<{ id: string; user_id: string; report_data: IMCAAuditReport; created_at: string; updated_at: string }>): void {
-  try { localStorage.setItem(STORAGE_KEY, JSON.stringify(audits)); } catch (err) { logger.error("[IMCAAudit] Failed to save audits", err as Error); }
+  try { sessionStorage.setItem(STORAGE_KEY, JSON.stringify(audits)); } catch (err) { logger.error("[IMCAAudit] Failed to save audits", err as Error); }
 }
 
 export async function generateIMCAAudit(input: IMCAAuditInput): Promise<IMCAAuditReport> {

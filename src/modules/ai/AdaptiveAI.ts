@@ -212,22 +212,22 @@ export class AdaptiveAI {
   }
 
   /**
-   * Save logs to localStorage
+   * Save logs to sessionStorage (ephemeral AI diagnostic data)
    */
   private saveToStorage(): void {
     try {
-      localStorage.setItem("nautilusAI_logs", JSON.stringify(this.logs));
+      sessionStorage.setItem("nautilusAI_logs", JSON.stringify(this.logs));
     } catch (error) {
       Logger.error("Failed to save AI logs", error, "AdaptiveAI");
     }
   }
 
   /**
-   * Load logs from localStorage
+   * Load logs from sessionStorage
    */
   private loadFromStorage(): void {
     try {
-      const stored = localStorage.getItem("nautilusAI_logs");
+      const stored = sessionStorage.getItem("nautilusAI_logs");
       if (stored) {
         this.logs = JSON.parse(stored);
         Logger.info(`Loaded ${this.logs.length} AI logs from storage`, { count: this.logs.length }, "AdaptiveAI");

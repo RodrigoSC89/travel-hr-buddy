@@ -627,8 +627,8 @@ class MissionAICore {
       this.weatherPatterns = this.weatherPatterns.slice(-50);
     }
 
-    // Save to storage
-    localStorage.setItem("weather_patterns", JSON.stringify(this.weatherPatterns));
+    // Save to sessionStorage (ephemeral runtime data, not sensitive operational records)
+    sessionStorage.setItem("weather_patterns", JSON.stringify(this.weatherPatterns));
 
     logger.info("[MissionCore] Weather pattern recorded", {
       location: pattern.location,

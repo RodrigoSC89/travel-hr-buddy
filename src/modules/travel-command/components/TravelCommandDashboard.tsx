@@ -4,6 +4,7 @@
  */
 
 import React, { useState } from "react";
+import { useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -165,6 +166,7 @@ const CHART_COLORS = [
 ];
 
 const TravelCommandDashboard: React.FC = () => {
+  const queryClient = useQueryClient();
   const [chatMessage, setChatMessage] = useState("");
   const [chatHistory, setChatHistory] = useState([
     { role: "assistant", content: "Olá! Sou o assistente de viagens IA. Posso ajudar com otimização de rotas, análise de custos e recomendações de economia. Como posso ajudar?" },
@@ -220,7 +222,7 @@ const TravelCommandDashboard: React.FC = () => {
         </div>
         
         <div className="flex items-center gap-2">
-          <Button variant="outline" size="sm" onClick={() => { toast.success("Dados atualizados"); }}>
+          <Button variant="outline" size="sm" onClick={() => { queryClient.invalidateQueries({ queryKey: ['travel-command'] }); toast.success("Dados atualizados"); }}>
             <RefreshCw className="h-4 w-4 mr-2" />
             Atualizar
           </Button>

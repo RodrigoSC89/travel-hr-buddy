@@ -273,9 +273,9 @@ class SelfHealingEngine {
         result = "partial";
         automatic = true;
         confidence = 75;
-        // Enable fallback mode (stored in localStorage)
+        // Enable fallback mode (ephemeral runtime flag)
         try {
-          localStorage.setItem("api-fallback-mode", "true");
+          sessionStorage.setItem("api-fallback-mode", "true");
         } catch {}
         break;
 

@@ -476,8 +476,8 @@ class KnowledgeSync {
   ): Promise<void> {
     logger.info("[KnowledgeSync] Updating local model", { module, metric, value });
 
-    // Store in localStorage for local access
-    const localModels = JSON.parse(localStorage.getItem("local_models") || "{}");
+    // Store in sessionStorage for local access (ephemeral runtime cache)
+    const localModels = JSON.parse(sessionStorage.getItem("local_models") || "{}");
     
     if (!localModels[module]) {
       localModels[module] = {};
@@ -489,7 +489,7 @@ class KnowledgeSync {
       source: "global",
     };
 
-    localStorage.setItem("local_models", JSON.stringify(localModels));
+    sessionStorage.setItem("local_models", JSON.stringify(localModels));
   }
 
   /**

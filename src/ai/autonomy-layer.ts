@@ -447,9 +447,9 @@ class AutonomyLayer {
   private async disableFeature(moduleName: string, feature: string): Promise<void> {
     logger.warn("[AutonomyLayer] Disabling feature", { module: moduleName, feature });
 
-    // Store in localStorage
+    // Store in sessionStorage (ephemeral runtime state)
     const disabledFeatures = JSON.parse(
-      localStorage.getItem("disabled_features") || "{}"
+      sessionStorage.getItem("disabled_features") || "{}"
     );
     
     if (!disabledFeatures[moduleName]) {
@@ -460,7 +460,7 @@ class AutonomyLayer {
       disabledFeatures[moduleName].push(feature);
     }
 
-    localStorage.setItem("disabled_features", JSON.stringify(disabledFeatures));
+    sessionStorage.setItem("disabled_features", JSON.stringify(disabledFeatures));
 
     // Dispatch event
     window.dispatchEvent(
@@ -479,10 +479,10 @@ class AutonomyLayer {
       route,
     });
 
-    // Store fallback state
-    const fallbacks = JSON.parse(localStorage.getItem("active_fallbacks") || "{}");
+    // Store fallback state in sessionStorage (ephemeral runtime state)
+    const fallbacks = JSON.parse(sessionStorage.getItem("active_fallbacks") || "{}");
     fallbacks[moduleName] = { route, activated_at: new Date().toISOString() };
-    localStorage.setItem("active_fallbacks", JSON.stringify(fallbacks));
+    sessionStorage.setItem("active_fallbacks", JSON.stringify(fallbacks));
 
     // Dispatch event
     window.dispatchEvent(
@@ -500,7 +500,7 @@ class AutonomyLayer {
 
     // Clear cache for module
     const cacheKey = `cache_${moduleName}`;
-    localStorage.removeItem(cacheKey);
+    sessionStorage.removeItem(cacheKey);
 
     // Dispatch event
     window.dispatchEvent(
@@ -521,15 +521,15 @@ class AutonomyLayer {
       action: result.action,
     });
 
-    // Store review request
-    const reviews = JSON.parse(localStorage.getItem("review_requests") || "[]");
+    // Store review request in sessionStorage (ephemeral runtime state)
+    const reviews = JSON.parse(sessionStorage.getItem("review_requests") || "[]");
     reviews.push({
       event,
       result,
       requested_at: new Date().toISOString(),
       status: "pending",
     });
-    localStorage.setItem("review_requests", JSON.stringify(reviews));
+    sessionStorage.setItem("review_requests", JSON.stringify(reviews));
 
     // Dispatch event
     window.dispatchEvent(

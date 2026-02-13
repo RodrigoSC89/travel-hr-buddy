@@ -102,6 +102,7 @@ export class ErrorBoundaryAdvanced extends Component<ErrorBoundaryProps, ErrorBo
   };
 
   goHome = () => {
+    // ErrorBoundary: full reload is acceptable as React tree is corrupted
     window.location.href = '/';
   };
 

@@ -30,7 +30,7 @@ export function useCopilot(options: UseCopilotOptions = {}) {
   const [messages, setMessages] = useState<CopilotMessage[]>(() => {
     if (persistMessages) {
       try {
-        const stored = localStorage.getItem(STORAGE_KEY);
+        const stored = sessionStorage.getItem(STORAGE_KEY);
         return stored ? JSON.parse(stored) : [];
       } catch {
         return [];
@@ -62,7 +62,7 @@ export function useCopilot(options: UseCopilotOptions = {}) {
   // Persist messages
   useEffect(() => {
     if (persistMessages && messages.length > 0) {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(messages.slice(-50)));
+      sessionStorage.setItem(STORAGE_KEY, JSON.stringify(messages.slice(-50)));
     }
   }, [messages, persistMessages]);
 
@@ -163,7 +163,7 @@ export function useCopilot(options: UseCopilotOptions = {}) {
   const clearMessages = useCallback(() => {
     setMessages([]);
     if (persistMessages) {
-      localStorage.removeItem(STORAGE_KEY);
+      sessionStorage.removeItem(STORAGE_KEY);
     }
   }, [persistMessages]);
 

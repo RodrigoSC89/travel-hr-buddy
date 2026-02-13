@@ -216,11 +216,11 @@ export async function saveReport(results: ModuleCheckResult[]): Promise<string> 
   const report = generateMarkdownReport(results);
   const filePath = "/dev/checklists/modules_status_table.md";
   
-  // Salvar em localStorage para acesso no navegador
+  // Save to sessionStorage (ephemeral diagnostic data)
   try {
-    localStorage.setItem("nautilus_module_health_report", report);
-    localStorage.setItem("nautilus_module_health_report_timestamp", new Date().toISOString());
-    logger.info("[Module Checker] Report saved to localStorage");
+    sessionStorage.setItem("nautilus_module_health_report", report);
+    sessionStorage.setItem("nautilus_module_health_report_timestamp", new Date().toISOString());
+    logger.info("[Module Checker] Report saved to sessionStorage");
   } catch (error) {
     logger.error("[Module Checker] Failed to save report:", error);
   }

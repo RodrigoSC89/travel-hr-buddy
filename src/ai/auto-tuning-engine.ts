@@ -225,7 +225,7 @@ class AutoTuningEngine {
     }
 
     try {
-      localStorage.setItem("ai_tuning_snapshots", JSON.stringify(this.snapshots));
+      sessionStorage.setItem("ai_tuning_snapshots", JSON.stringify(this.snapshots));
     } catch (error) {
       logger.error("[AutoTuning] Error saving snapshot:", error);
     }
@@ -248,12 +248,12 @@ class AutoTuningEngine {
 
   private async loadConfiguration() {
     try {
-      const saved = localStorage.getItem("ai_tuning_config");
+      const saved = sessionStorage.getItem("ai_tuning_config");
       if (saved) {
         this.currentConfig = JSON.parse(saved);
       }
 
-      const savedSnapshots = localStorage.getItem("ai_tuning_snapshots");
+      const savedSnapshots = sessionStorage.getItem("ai_tuning_snapshots");
       if (savedSnapshots) {
         this.snapshots = JSON.parse(savedSnapshots);
       }
@@ -264,7 +264,7 @@ class AutoTuningEngine {
 
   private async saveConfiguration() {
     try {
-      localStorage.setItem("ai_tuning_config", JSON.stringify(this.currentConfig));
+      sessionStorage.setItem("ai_tuning_config", JSON.stringify(this.currentConfig));
     } catch (error) {
       logger.error("[AutoTuning] Error saving configuration:", error);
     }
