@@ -43,7 +43,11 @@ const ModuleLoadError: FC<{ moduleId: string }> = ({ moduleId }) => {
       'button',
       { 
         className: 'mt-4 px-4 py-2 bg-primary text-primary-foreground rounded-md',
-        onClick: () => window.location.reload()
+        onClick: () => {
+          // SPA-safe reload: re-trigger current route
+          window.history.pushState({}, '', window.location.pathname);
+          window.dispatchEvent(new PopStateEvent('popstate'));
+        }
       },
       'Recarregar'
     )

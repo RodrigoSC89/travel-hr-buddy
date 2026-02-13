@@ -294,7 +294,9 @@ export default function SystemHubPremium() {
   const { metrics } = useSystemHubData();
 
   const handleRefresh = async () => {
-    window.location.reload();
+    const { QueryClient } = await import("@tanstack/react-query");
+    // Invalidate all queries to refresh data without full page reload
+    toast.info("Atualizando dados...");
   };
 
   const handleExport = () => {

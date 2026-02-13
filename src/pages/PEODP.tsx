@@ -172,7 +172,7 @@ const PEODP = () => {
             id: "refresh",
             label: "Atualizar",
             icon: <RefreshCw className="h-3 w-3" />,
-            action: () => handleRefresh("PEO-DP", async () => window.location.reload()),
+            action: () => handleRefresh("PEO-DP"),
             shortcut: "F5"
           },
           {

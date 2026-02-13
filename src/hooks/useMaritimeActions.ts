@@ -1,5 +1,6 @@
 import { useToast } from "@/hooks/use-toast";
 import { useCallback, useState } from "react";
+import { useQueryClient } from "@tanstack/react-query";
 
 /**
  * Hook for maritime module actions with proper loading states and feedback
@@ -7,6 +8,7 @@ import { useCallback, useState } from "react";
 export const useMaritimeActions = () => {
   const { toast } = useToast();
   const [isLoading, setIsLoading] = useState(false);
+  const queryClient = useQueryClient();
 
   const showSuccess = useCallback((message: string, description?: string) => {
     toast({
@@ -47,20 +49,20 @@ export const useMaritimeActions = () => {
   }, [showSuccess, showError]);
 
   const handleRefresh = useCallback(async (moduleName: string, callback?: () => Promise<void>) => {
-    if (!callback) {
-      showInfo("Refresh", `Nenhuma ação de refresh configurada para ${moduleName}`);
-      return;
-    }
     setIsLoading(true);
     try {
-      await callback();
+      if (callback) {
+        await callback();
+      }
+      // Invalidate all queries for the module to fetch fresh data
+      await queryClient.invalidateQueries({ queryKey: [moduleName.toLowerCase()] });
       showSuccess("Dados atualizados", `${moduleName} atualizado com sucesso`);
-    } catch (error) {
+    } catch {
       showError("Erro ao atualizar", "Não foi possível atualizar os dados");
     } finally {
       setIsLoading(false);
     }
-  }, [showSuccess, showError, showInfo]);
+  }, [showSuccess, showError, queryClient]);
 
   const handleCreate = useCallback(async (itemName: string, callback?: () => Promise<void>) => {
     setIsLoading(true);

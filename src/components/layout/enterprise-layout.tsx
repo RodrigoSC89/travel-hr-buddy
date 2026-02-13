@@ -5,7 +5,7 @@ import { AppSidebar } from "@/components/layout/app-sidebar";
 import { Header } from "@/components/layout/header";
 import { NotificationSystem } from "@/components/ui/notification-system";
 import { useSystemActions } from "@/hooks/use-system-actions";
-import { Toaster } from "@/components/ui/sonner";
+// Toaster removed — single instance in App.tsx
 import { ThemeProvider } from "@/components/layout/theme-provider";
 import { ErrorBoundary } from "@/components/layout/error-boundary";
 import { useAuth } from "@/contexts/AuthContext";
@@ -73,9 +73,7 @@ export const EnterpriseLayout: FC = () => {
               </main>
             </div>
             
-            
-            {/* Toast Notifications */}
-            <Toaster />
+            {/* Toast Notifications — single instance in App.tsx */}
           </div>
         </SidebarProvider>
       </ErrorBoundary>

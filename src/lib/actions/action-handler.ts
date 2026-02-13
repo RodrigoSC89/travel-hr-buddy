@@ -206,10 +206,12 @@ export const commonActions = {
   },
 
   /**
-   * Refresh page or data
+   * Refresh page or data — uses SPA-safe navigation
    */
   refresh: (): ActionResult => {
-    window.location.reload();
+    // SPA-safe: dispatch popstate to re-render current route without full reload
+    window.history.pushState({}, '', window.location.pathname);
+    window.dispatchEvent(new PopStateEvent('popstate'));
     return { success: true };
   },
 

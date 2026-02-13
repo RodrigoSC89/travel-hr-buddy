@@ -228,7 +228,7 @@ export default function DevRoutesDashboard() {
               <LayoutDashboard className="h-4 w-4 mr-2" />
               Central
             </Button>
-            <Button variant="outline" onClick={() => window.location.reload()}>
+            <Button variant="outline" onClick={() => { window.history.pushState({}, '', window.location.pathname); window.dispatchEvent(new PopStateEvent('popstate')); }}>
               Reload
             </Button>
           </div>

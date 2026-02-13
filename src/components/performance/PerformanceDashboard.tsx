@@ -188,7 +188,10 @@ export function PerformanceDashboard() {
             <Trash2 className="h-4 w-4 mr-2" />
             Limpar Cache
           </Button>
-          <Button variant="outline" size="sm" onClick={() => window.location.reload()}>
+          <Button variant="outline" size="sm" onClick={() => {
+            window.history.pushState({}, '', window.location.pathname);
+            window.dispatchEvent(new PopStateEvent('popstate'));
+          }}>
             <RefreshCw className="h-4 w-4 mr-2" />
             Recarregar
           </Button>

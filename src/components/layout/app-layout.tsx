@@ -7,7 +7,7 @@ import { Header } from "@/components/layout/header";
 import { MobileBottomNav } from "@/components/layout/mobile-bottom-nav";
 
 import { useSystemActions } from "@/hooks/use-system-actions";
-import { Toaster } from "@/components/ui/sonner";
+// Toaster removed — single instance in App.tsx
 import { ThemeProvider } from "@/components/layout/theme-provider";
 import { SEOWrapper } from "@/components/layout/seo-wrapper";
 import GlobalSearch from "@/components/ui/global-search";
@@ -57,8 +57,7 @@ export const AppLayout: FC = () => {
               onClose={() => setIsNotificationsOpen(false)}
             />
             
-            {/* Toast Notifications */}
-            <Toaster />
+            {/* Toast Notifications — single instance in App.tsx */}
           </div>
         </SidebarProvider>
       </SEOWrapper>
