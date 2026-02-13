@@ -234,7 +234,7 @@ export function LogisticsIntelligenceHub() {
                 className="pl-8 w-64"
               />
             </div>
-            <Button variant="outline" size="icon">
+            <Button variant="outline" size="icon" aria-label="Filtrar logística" title="Filtrar">
               <Filter className="h-4 w-4" />
             </Button>
           </div>

@@ -323,7 +323,7 @@ export default function CrewMatchingPage() {
                       className="pl-9 w-48"
                     />
                   </div>
-                  <Button variant="outline" size="icon">
+                  <Button variant="outline" size="icon" aria-label="Filtrar candidatos" title="Filtrar">
                     <Filter className="h-4 w-4" />
                   </Button>
                 </div>

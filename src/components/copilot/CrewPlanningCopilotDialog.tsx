@@ -237,7 +237,7 @@ export function CrewPlanningCopilotDialog({
             disabled={isLoading}
             className="flex-1"
           />
-          <Button onClick={() => sendMessage()} disabled={!input.trim() || isLoading} size="icon">
+          <Button onClick={() => sendMessage()} disabled={!input.trim() || isLoading} size="icon" aria-label="Enviar mensagem" title="Enviar">
             {isLoading ? <Loader2 className="h-4 w-4 animate-spin" /> : <Send className="h-4 w-4" />}
           </Button>
         </div>

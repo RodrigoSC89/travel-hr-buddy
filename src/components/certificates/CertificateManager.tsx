@@ -606,7 +606,7 @@ export function CertificateManager() {
                       {getStatusBadge(cert.status, days > 0 ? days : undefined)}
                       <DropdownMenu>
                         <DropdownMenuTrigger asChild>
-                          <Button variant="ghost" size="icon">
+                          <Button variant="ghost" size="icon" aria-label="Mais opções do certificado" title="Mais opções">
                             <MoreHorizontal className="h-4 w-4" />
                           </Button>
                         </DropdownMenuTrigger>

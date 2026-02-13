@@ -236,7 +236,7 @@ export const SGSOIncidentsList: React.FC = () => {
                         </Badge>
                       </TableCell>
                       <TableCell className="text-right">
-                        <Button variant="ghost" size="icon">
+                        <Button variant="ghost" size="icon" aria-label="Visualizar incidente" title="Visualizar">
                           <Eye className="h-4 w-4" />
                         </Button>
                       </TableCell>
