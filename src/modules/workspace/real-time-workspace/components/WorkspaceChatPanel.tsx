@@ -505,6 +505,7 @@ export const WorkspaceChatPanel: React.FC<WorkspaceChatPanelProps> = ({
                     className="h-9 w-9 flex-shrink-0 border-primary/50 hover:bg-primary/10"
                     onClick={handleAIAssist}
                     disabled={isLoadingAI}
+                    aria-label="Copilot IA" title="Assistência inteligente"
                   >
                     {isLoadingAI ? (
                       <Loader2 className="h-4 w-4 animate-spin" />
@@ -527,6 +528,7 @@ export const WorkspaceChatPanel: React.FC<WorkspaceChatPanelProps> = ({
                   size="icon" 
                   className="h-9 w-9 flex-shrink-0"
                   onClick={handleVoiceRecord}
+                  aria-label={isRecording ? "Parar gravação" : "Gravar voz"} title={isRecording ? "Parar" : "Gravar"}
                 >
                   {isRecording ? (
                     <MicOff className="h-4 w-4" />

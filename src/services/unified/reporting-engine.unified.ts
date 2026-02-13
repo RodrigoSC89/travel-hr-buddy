@@ -130,7 +130,7 @@ const STORAGE_KEY_SCHEDULES = "nautilus_report_schedules";
 
 function loadStore<T>(key: string): T[] {
   try {
-    const raw = localStorage.getItem(key);
+    const raw = sessionStorage.getItem(key);
     return raw ? JSON.parse(raw) : [];
   } catch {
     return [];
@@ -139,7 +139,7 @@ function loadStore<T>(key: string): T[] {
 
 function saveStore<T>(key: string, data: T[]): void {
   try {
-    localStorage.setItem(key, JSON.stringify(data));
+    sessionStorage.setItem(key, JSON.stringify(data));
   } catch (error) {
     logger.error(`Failed to save ${key}`, error as Error);
   }

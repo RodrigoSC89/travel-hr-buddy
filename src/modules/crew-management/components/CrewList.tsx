@@ -204,6 +204,7 @@ function CrewListComponent({ crewMembers, onViewMember, onAddMember, onExport }:
                           variant="ghost" 
                           size="icon"
                           onClick={() => onViewMember(member)}
+                          aria-label="Ver detalhes do tripulante" title="Ver detalhes"
                         >
                           <Eye className="h-4 w-4" />
                         </Button>

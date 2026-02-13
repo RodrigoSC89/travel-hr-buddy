@@ -176,7 +176,7 @@ export class IntelligentAlerting {
   // Get recent alerts from local storage
   static getRecentAlerts(count: number = 50): Array<Alert & { timestamp: string }> {
     try {
-      const stored = localStorage.getItem('nautilus_alerts');
+      const stored = sessionStorage.getItem('nautilus_alerts');
       if (!stored) return [];
       
       const alerts: Array<Alert & { timestamp: string }> = JSON.parse(stored);
@@ -189,7 +189,7 @@ export class IntelligentAlerting {
   // Clear old alerts
   static clearOldAlerts(daysToKeep: number = 7) {
     try {
-      const stored = localStorage.getItem('nautilus_alerts');
+      const stored = sessionStorage.getItem('nautilus_alerts');
       if (!stored) return;
       
       const alerts: Array<Alert & { timestamp: string }> = JSON.parse(stored);
@@ -197,7 +197,7 @@ export class IntelligentAlerting {
       cutoff.setDate(cutoff.getDate() - daysToKeep);
       
       const filtered = alerts.filter(a => new Date(a.timestamp) > cutoff);
-      localStorage.setItem('nautilus_alerts', JSON.stringify(filtered));
+      sessionStorage.setItem('nautilus_alerts', JSON.stringify(filtered));
     } catch {
       // Ignore errors
     }
@@ -206,7 +206,7 @@ export class IntelligentAlerting {
   // Private: Store alert locally
   private static storeAlertLocally(alert: Alert) {
     try {
-      const stored = localStorage.getItem('nautilus_alerts');
+      const stored = sessionStorage.getItem('nautilus_alerts');
       const alerts: Array<Alert & { timestamp: string }> = stored ? JSON.parse(stored) : [];
       
       alerts.push({
@@ -219,7 +219,7 @@ export class IntelligentAlerting {
         alerts.splice(0, alerts.length - 500);
       }
       
-      localStorage.setItem('nautilus_alerts', JSON.stringify(alerts));
+      sessionStorage.setItem('nautilus_alerts', JSON.stringify(alerts));
     } catch {
       // Ignore storage errors
     }

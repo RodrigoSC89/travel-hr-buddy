@@ -381,6 +381,7 @@ export default function PurchaseOrdersSection({ searchQuery }: PurchaseOrdersSec
                           setSelectedOrder(order);
                           setShowDetails(true);
                         }}
+                        aria-label="Visualizar pedido" title="Visualizar"
                       >
                         <Eye className="h-4 w-4" />
                       </Button>

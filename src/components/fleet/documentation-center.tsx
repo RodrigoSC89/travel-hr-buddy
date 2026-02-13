@@ -364,16 +364,17 @@ const DocumentationCenter: React.FC = () => {
                         {cert.status === "valid" ? "Válido" :
                          cert.status === "expiring" ? "Vencendo" : "Expirado"}
                       </Badge>
-                      <Button variant="ghost" size="icon" title="Visualizar">
+                      <Button variant="ghost" size="icon" title="Visualizar" aria-label="Visualizar certificado">
                         <Eye className="h-4 w-4" />
                       </Button>
-                      <Button variant="ghost" size="icon" title="Editar" onClick={() => openEditDialog(cert)}>
+                      <Button variant="ghost" size="icon" title="Editar" aria-label="Editar certificado" onClick={() => openEditDialog(cert)}>
                         <Edit className="h-4 w-4" />
                       </Button>
                       <Button 
                         variant="ghost" 
                         size="icon" 
                         title="Excluir"
+                        aria-label="Excluir certificado"
                         className="text-destructive hover:text-destructive"
                         onClick={() => {
                           setSelectedCertificate(cert);

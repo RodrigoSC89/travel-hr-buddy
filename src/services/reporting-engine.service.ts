@@ -22,7 +22,7 @@ const STORAGE_KEYS = {
 
 function loadFromStorage<T>(key: string): T[] {
   try {
-    const raw = localStorage.getItem(key);
+    const raw = sessionStorage.getItem(key);
     return raw ? JSON.parse(raw) : [];
   } catch {
     return [];
@@ -31,7 +31,7 @@ function loadFromStorage<T>(key: string): T[] {
 
 function saveToStorage<T>(key: string, data: T[]): void {
   try {
-    localStorage.setItem(key, JSON.stringify(data));
+    sessionStorage.setItem(key, JSON.stringify(data));
   } catch (error) {
     logger.error('Failed to save to storage', error as Error);
   }
