@@ -170,7 +170,7 @@ export const IncidentAIClassificationModal: React.FC<IncidentAIClassificationMod
 
                 <div className="space-y-2">
                   <Label className="text-sm font-medium">Causa Raiz Provável</Label>
-                  <div className="p-3 bg-white rounded border">
+                  <div className="p-3 bg-card rounded border">
                     <p className="text-sm">{classification.sgso_root_cause}</p>
                   </div>
                 </div>

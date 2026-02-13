@@ -733,7 +733,7 @@ The undersigned parties hereby confirm that:
               <div className="text-xs text-muted-foreground">Não Conforme</div>
             </div>
             <div className="text-center">
-              <div className="text-2xl font-bold text-gray-400">{naItems}</div>
+              <div className="text-2xl font-bold text-muted-foreground">{naItems}</div>
               <div className="text-xs text-muted-foreground">N/A</div>
             </div>
             <div className="text-center">

@@ -523,7 +523,7 @@ const ProductRoadmap: React.FC = () => {
                     <div key={sprint.id} className="border rounded-lg p-4">
                       <div className="flex justify-between items-start mb-2">
                         <h4 className="font-medium">Sprint {sprint.id}: {sprint.name}</h4>
-                        <Badge className="text-muted-foreground bg-gray-50 border-gray-200">
+                        <Badge className="text-muted-foreground bg-muted border-border">
                           Planejado
                         </Badge>
                       </div>

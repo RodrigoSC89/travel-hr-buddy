@@ -79,7 +79,7 @@ export const statusConfig = {
   },
   not_applicable: {
     label: "Não Aplicável",
-    color: "bg-gray-100 text-gray-800",
+    color: "bg-muted text-muted-foreground",
     icon: "FileText",
   },
 } as const;
@@ -97,6 +97,6 @@ export function getStatusLabel(status: string): string {
 export function getStatusColor(status: string): string {
   return (
     statusConfig[status as keyof typeof statusConfig]?.color ||
-    "bg-gray-100 text-gray-800"
+    "bg-muted text-muted-foreground"
   );
 }

@@ -53,11 +53,11 @@ export function PlanStatusSelect({ incident, onUpdate }: PlanStatusSelectProps) 
 
   return (
     <div className="space-y-1">
-      <label className="text-sm font-medium text-gray-700">Status do Plano</label>
+      <label className="text-sm font-medium text-foreground">Status do Plano</label>
       <select
         value={status}
         onChange={handleChange}
-        className="w-full p-2 border rounded-md bg-white disabled:opacity-50 disabled:cursor-not-allowed focus:outline-none focus:ring-2 focus:ring-blue-500"
+        className="w-full p-2 border rounded-md bg-background disabled:opacity-50 disabled:cursor-not-allowed focus:outline-none focus:ring-2 focus:ring-primary"
         disabled={loading}
       >
         <option value="pendente">🕒 Pendente</option>
@@ -65,7 +65,7 @@ export function PlanStatusSelect({ incident, onUpdate }: PlanStatusSelectProps) 
         <option value="concluído">✅ Concluído</option>
       </select>
       {incident.plan_updated_at && (
-        <p className="text-xs text-gray-500">
+        <p className="text-xs text-muted-foreground">
           Atualizado em {new Date(incident.plan_updated_at).toLocaleDateString("pt-BR", {
             day: "2-digit",
             month: "2-digit",
