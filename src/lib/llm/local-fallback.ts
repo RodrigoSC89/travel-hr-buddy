@@ -181,21 +181,21 @@ export function cacheResponse(query: string, response: string): void {
   const key = generateCacheKey(query);
   responseCache.set(key, { response, timestamp: Date.now() });
   
-  // Persist to localStorage
+  // Persist to sessionStorage
   try {
     const cacheData = Object.fromEntries(responseCache);
-    localStorage.setItem('llm_response_cache', JSON.stringify(cacheData));
+    sessionStorage.setItem('llm_response_cache', JSON.stringify(cacheData));
   } catch (error) {
     logger.warn('[LocalLLM] Failed to persist cache', { error });
   }
 }
 
 /**
- * Load cached responses from localStorage
+ * Load cached responses from sessionStorage
  */
 export function loadCachedResponses(): void {
   try {
-    const stored = localStorage.getItem('llm_response_cache');
+    const stored = sessionStorage.getItem('llm_response_cache');
     if (stored) {
       const data = JSON.parse(stored);
       for (const [key, value] of Object.entries(data)) {

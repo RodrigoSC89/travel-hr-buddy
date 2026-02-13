@@ -227,11 +227,11 @@ class AutonomousExecutor {
 
   private loadState() {
     try {
-      const savedLogs = localStorage.getItem(this.STORAGE_KEY);
+      const savedLogs = sessionStorage.getItem(this.STORAGE_KEY);
       if (savedLogs) {
         this.logs = JSON.parse(savedLogs);
       }
-      const savedRules = localStorage.getItem(this.RULES_KEY);
+      const savedRules = sessionStorage.getItem(this.RULES_KEY);
       if (savedRules) {
         const rules = JSON.parse(savedRules) as ExecutionRule[];
         rules.forEach(r => this.rules.set(r.id, r));
@@ -243,8 +243,8 @@ class AutonomousExecutor {
 
   private saveState() {
     try {
-      localStorage.setItem(this.STORAGE_KEY, JSON.stringify(this.logs.slice(-500)));
-      localStorage.setItem(this.RULES_KEY, JSON.stringify(Array.from(this.rules.values())));
+      sessionStorage.setItem(this.STORAGE_KEY, JSON.stringify(this.logs.slice(-500)));
+      sessionStorage.setItem(this.RULES_KEY, JSON.stringify(Array.from(this.rules.values())));
     } catch (error) {
       Logger.error("Failed to save executor state", error, "AutonomousExecutor");
     }

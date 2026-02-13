@@ -238,7 +238,7 @@ export default function TelemedicinePanel() {
                     </ScrollArea>
                     <div className="flex gap-2 mt-4">
                       <Input placeholder="Digite uma mensagem..." value={newMessage} onChange={(e) => setNewMessage(e.target.value)} onKeyDown={(e) => e.key === "Enter" && sendMessage()} />
-                      <Button onClick={sendMessage}><Send className="h-4 w-4" /></Button>
+                      <Button onClick={sendMessage} aria-label="Enviar mensagem" title="Enviar"><Send className="h-4 w-4" /></Button>
                     </div>
                   </div>
                 </div>

@@ -126,8 +126,8 @@ export function SmartNotificationCenter({ trigger }: SmartNotificationCenterProp
               {stats.unread > 0 && <Badge variant="secondary">{stats.unread} novas</Badge>}
             </SheetTitle>
             <div className="flex items-center gap-1">
-              <Button variant="ghost" size="icon" onClick={handleMarkAllAsRead}><CheckCheck className="h-4 w-4" /></Button>
-              <Button variant="ghost" size="icon"><Settings className="h-4 w-4" /></Button>
+              <Button variant="ghost" size="icon" onClick={handleMarkAllAsRead} aria-label="Marcar todas como lidas" title="Marcar todas como lidas"><CheckCheck className="h-4 w-4" /></Button>
+              <Button variant="ghost" size="icon" aria-label="Configurações de notificação" title="Configurações"><Settings className="h-4 w-4" /></Button>
             </div>
           </div>
           <SheetDescription className="sr-only">Central de notificações do sistema</SheetDescription>

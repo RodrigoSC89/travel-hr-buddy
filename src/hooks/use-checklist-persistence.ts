@@ -74,12 +74,12 @@ export function useChecklistPersistence(options: UseChecklistPersistenceOptions)
           }], { onConflict: 'id' });
         
         if (error) {
-          logger.error('[ChecklistPersistence] Database error, falling back to localStorage', { error: String(error) });
-          localStorage.setItem(`checklist_${checklist.id}`, JSON.stringify(checklistData));
+          logger.error('[ChecklistPersistence] Database error, falling back to sessionStorage', { error: String(error) });
+          sessionStorage.setItem(`checklist_${checklist.id}`, JSON.stringify(checklistData));
         }
       } catch (dbError) {
-        logger.warn('[ChecklistPersistence] Table may not exist yet, using localStorage', { error: String(dbError) });
-        localStorage.setItem(`checklist_${checklist.id}`, JSON.stringify(checklistData));
+        logger.warn('[ChecklistPersistence] Table may not exist yet, using sessionStorage', { error: String(dbError) });
+        sessionStorage.setItem(`checklist_${checklist.id}`, JSON.stringify(checklistData));
       }
 
       setLastSaved(new Date());
@@ -101,7 +101,7 @@ export function useChecklistPersistence(options: UseChecklistPersistenceOptions)
       
       // Fallback to local storage
       try {
-        localStorage.setItem(`checklist_${checklist.id}`, JSON.stringify(checklist));
+        sessionStorage.setItem(`checklist_${checklist.id}`, JSON.stringify(checklist));
         // PATCH v15 iOS PWA: Mensagem genérica sem mencionar conexão
         toast({
           title: "📝 Salvo localmente",
@@ -182,7 +182,7 @@ export function useChecklistPersistence(options: UseChecklistPersistenceOptions)
       };
 
       // Store submission locally (table may not exist yet)
-      localStorage.setItem(`checklist_submit_${checklist.id}`, JSON.stringify(submitData));
+      sessionStorage.setItem(`checklist_submit_${checklist.id}`, JSON.stringify(submitData));
 
       // Create notification for reviewers
       await createReviewNotification(checklist);
@@ -300,7 +300,7 @@ export function useChecklistPersistence(options: UseChecklistPersistenceOptions)
   const loadChecklist = useCallback(async (checklistId: string): Promise<Checklist | null> => {
     try {
       // Try local storage (table may not exist yet)
-      const localData = localStorage.getItem(`checklist_${checklistId}`);
+      const localData = sessionStorage.getItem(`checklist_${checklistId}`);
       if (localData) {
         return JSON.parse(localData);
       }

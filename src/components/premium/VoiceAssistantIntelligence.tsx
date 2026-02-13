@@ -210,11 +210,11 @@ export default function VoiceAssistantIntelligence() {
               </div>
 
               <div className="flex items-center gap-4 mt-6">
-                <Button variant="outline" size="sm" onClick={() => setIsMuted(!isMuted)}>
+                <Button variant="outline" size="sm" onClick={() => setIsMuted(!isMuted)} aria-label={isMuted ? "Ativar som" : "Silenciar"} title={isMuted ? "Ativar som" : "Silenciar"}>
                   {isMuted ? <VolumeX className="h-4 w-4" /> : <Volume2 className="h-4 w-4" />}
                 </Button>
-                <Button variant="outline" size="sm"><Settings className="h-4 w-4" /></Button>
-                <Button variant="outline" size="sm"><HelpCircle className="h-4 w-4" /></Button>
+                <Button variant="outline" size="sm" aria-label="Configurações do assistente" title="Configurações"><Settings className="h-4 w-4" /></Button>
+                <Button variant="outline" size="sm" aria-label="Ajuda do assistente de voz" title="Ajuda"><HelpCircle className="h-4 w-4" /></Button>
               </div>
             </div>
           </CardContent>

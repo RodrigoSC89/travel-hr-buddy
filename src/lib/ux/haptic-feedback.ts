@@ -23,7 +23,7 @@ class HapticFeedbackEngine {
   
   private loadConfig(): void {
     try {
-      const stored = localStorage.getItem(this.storageKey);
+      const stored = sessionStorage.getItem(this.storageKey);
       if (stored) {
         this.config = JSON.parse(stored);
       }
@@ -34,7 +34,7 @@ class HapticFeedbackEngine {
   
   private saveConfig(): void {
     try {
-      localStorage.setItem(this.storageKey, JSON.stringify(this.config));
+      sessionStorage.setItem(this.storageKey, JSON.stringify(this.config));
     } catch {
       // Ignore
     }

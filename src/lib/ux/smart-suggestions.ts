@@ -39,7 +39,7 @@ class SmartSuggestionsEngine {
   
   private loadDismissed(): void {
     try {
-      const stored = localStorage.getItem(this.storageKey);
+      const stored = sessionStorage.getItem(this.storageKey);
       if (stored) {
         this.dismissedIds = new Set(JSON.parse(stored));
       }
@@ -50,7 +50,7 @@ class SmartSuggestionsEngine {
   
   private saveDismissed(): void {
     try {
-      localStorage.setItem(this.storageKey, JSON.stringify([...this.dismissedIds]));
+      sessionStorage.setItem(this.storageKey, JSON.stringify([...this.dismissedIds]));
     } catch {
       // Ignore
     }

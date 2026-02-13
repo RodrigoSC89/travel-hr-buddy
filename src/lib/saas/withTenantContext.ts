@@ -48,8 +48,8 @@ export function getCurrentTenantContext(): TenantContext | null {
       }
     }
 
-    // Try localStorage (fallback for development)
-    const storedTenantId = localStorage.getItem("tenant_id");
+    // Try sessionStorage (fallback for development)
+    const storedTenantId = sessionStorage.getItem("tenant_id");
     if (storedTenantId) {
       return {
         tenantId: storedTenantId,
@@ -64,10 +64,10 @@ export function getCurrentTenantContext(): TenantContext | null {
 }
 
 /**
- * Set tenant context in localStorage (for development/testing)
+ * Set tenant context in sessionStorage (for development/testing)
  */
 export function setTenantContext(tenantId: string): void {
-  localStorage.setItem("tenant_id", tenantId);
+  sessionStorage.setItem("tenant_id", tenantId);
   logger.info("[TenantContext] Tenant context set", { tenantId });
 }
 
@@ -75,7 +75,7 @@ export function setTenantContext(tenantId: string): void {
  * Clear tenant context
  */
 export function clearTenantContext(): void {
-  localStorage.removeItem("tenant_id");
+  sessionStorage.removeItem("tenant_id");
   logger.info("[TenantContext] Tenant context cleared");
 }
 

@@ -93,8 +93,8 @@ export default function AITemplatesPage() {
   };
 
   const handleApplyTemplate = (template: AIDocumentTemplate) => {
-    localStorage.setItem("applied_template", template.content);
-    localStorage.setItem("applied_template_title", template.title);
+    sessionStorage.setItem("applied_template", template.content);
+    sessionStorage.setItem("applied_template_title", template.title);
     toast({ title: "Template aplicado", description: "Redirecionando para o editor..." });
     navigate("/admin/documents/ai");
   };
