@@ -419,7 +419,7 @@ export function RiskMatrix() {
                       </div>
 
                       <div className="flex gap-2 pt-4 border-t">
-                        <Button className="flex-1" onClick={() => { window.history.pushState({}, '', '/compliance?tab=risks'); window.dispatchEvent(new PopStateEvent('popstate')); toast.success("Navegando para Compliance Hub > Riscos"); }}>Editar Risco</Button>
+                        <Button className="flex-1" onClick={() => { window.history.pushState({}, '', '/compliance?tab=risks'); window.dispatchEvent(new PopStateEvent('popstate')); }}>Editar Risco</Button>
                         <Button variant="outline" className="flex-1" onClick={() => { window.history.pushState({}, '', '/compliance?tab=evidencias'); window.dispatchEvent(new PopStateEvent('popstate')); }}>
                           <FileText className="h-4 w-4 mr-2" />
                           Ver Histórico

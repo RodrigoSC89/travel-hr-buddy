@@ -356,7 +356,7 @@ export function ProcurementHub() {
                 </div>
                 <div className="flex gap-2">
                   {selectedPR.status === "draft" && (
-                    <Button size="sm" onClick={() => { window.history.pushState({}, '', '/procurement-command'); window.dispatchEvent(new PopStateEvent('popstate')); toast.success(`${selectedPR.prNumber} enviada para aprovação`); }}>
+                    <Button size="sm" onClick={() => { window.history.pushState({}, '', '/procurement-command'); window.dispatchEvent(new PopStateEvent('popstate')); }}>
                       <Send className="h-4 w-4 mr-1" />
                       Enviar
                     </Button>

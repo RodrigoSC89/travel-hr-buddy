@@ -217,7 +217,7 @@ export function RealTimeComplianceDashboard() {
             <Download className="h-4 w-4 mr-2" />
             Exportar
           </Button>
-          <Button onClick={() => { queryClient.invalidateQueries({ queryKey: ['compliance-dashboard-metrics'] }); toast.success('Dashboard atualizado!'); }}>
+          <Button onClick={() => { queryClient.invalidateQueries({ queryKey: ['compliance-dashboard-metrics'] }); }}>
             <RefreshCw className="h-4 w-4 mr-2" />
             Atualizar
           </Button>

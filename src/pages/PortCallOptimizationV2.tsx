@@ -336,7 +336,7 @@ export default function PortCallOptimizationV2() {
             title="Escalas Portuárias"
             icon={Anchor}
             searchable
-            onRefresh={() => { loadPortCalls(); toast.success("Dados atualizados"); }}
+            onRefresh={() => { loadPortCalls(); }}
             loading={loading}
             actions={[
               { label: "Otimizar ETA", icon: Brain, onClick: (item) => {

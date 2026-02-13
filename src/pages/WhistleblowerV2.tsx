@@ -314,7 +314,7 @@ Atribuído a: ${report.assigned_to || "Não atribuído"}
             title="Denúncias Recebidas"
             icon={Flag}
             searchable
-            onRefresh={() => toast.success("Dados atualizados")}
+            onRefresh={() => { /* handled by component */ }}
             actions={[
               { label: "Investigar", icon: Eye, onClick: handleInvestigate },
               { label: "Classificar IA", icon: Brain, onClick: handleClassifyAI },

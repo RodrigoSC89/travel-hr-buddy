@@ -83,7 +83,7 @@ export default function ComplianceEvidencias() {
                 <div className="space-y-2"><Label>Regulamento</Label><Select><SelectTrigger><SelectValue placeholder="Selecione" /></SelectTrigger><SelectContent><SelectItem value="mlc-2006">MLC 2006</SelectItem><SelectItem value="stcw">STCW</SelectItem><SelectItem value="solas">SOLAS</SelectItem><SelectItem value="marpol">MARPOL</SelectItem></SelectContent></Select></div>
               </div>
               <div className="flex items-center gap-2 p-3 bg-accent/10 border border-accent/30 rounded-lg"><Brain className="h-5 w-5 text-accent-foreground" /><span className="text-sm">IA irá verificar automaticamente a validade do documento</span></div>
-              <Button className="w-full" onClick={() => { setShowUploadDialog(false); window.history.pushState({}, "", '/documents?action=upload'); window.dispatchEvent(new PopStateEvent("popstate")); toast.success("Redirecionando para upload."); }}><Upload className="h-4 w-4 mr-2" />Enviar para Análise</Button>
+              <Button className="w-full" onClick={() => { setShowUploadDialog(false); window.history.pushState({}, "", '/documents?action=upload'); window.dispatchEvent(new PopStateEvent("popstate")); }}><Upload className="h-4 w-4 mr-2" />Enviar para Análise</Button>
             </div>
           </DialogContent>
         </Dialog>

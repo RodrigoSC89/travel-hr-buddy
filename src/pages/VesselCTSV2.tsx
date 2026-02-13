@@ -111,7 +111,7 @@ export default function VesselCTSV2() {
             title="Gestão de Tripulação"
             icon={Users}
             searchable
-            onRefresh={() => toast.success("Dados atualizados")}
+            onRefresh={() => { /* handled by component */ }}
             loading={loading}
             actions={[
               { label: "Verificar STCW", icon: Brain, onClick: (item) => {

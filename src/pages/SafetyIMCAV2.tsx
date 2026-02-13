@@ -118,7 +118,7 @@ export default function SafetyIMCAV2() {
             title="Base de Incidentes IMCA"
             icon={Shield}
             searchable
-            onRefresh={() => toast.success("Dados atualizados")}
+            onRefresh={() => { /* handled by component */ }}
             loading={loading}
             actions={[
               { label: "Analisar com IA", icon: Brain, onClick: (item) => { navigator.clipboard?.writeText(`IMCA ${item.id}: Cat=${item.category} Sev=${item.severity}`); toast.success(`Análise copiada: ${item.id}`); } },

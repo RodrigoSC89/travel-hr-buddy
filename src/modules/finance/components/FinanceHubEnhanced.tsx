@@ -104,7 +104,7 @@ const FinanceHubEnhanced: React.FC = () => {
   ];
 
   // Alerts
-  const [alerts] = useState([
+  const [alerts, setAlerts] = useState([
     {
       id: '1',
       title: 'Fatura Vencendo Hoje',
@@ -171,7 +171,7 @@ const FinanceHubEnhanced: React.FC = () => {
       {alerts.length > 0 && (
         <ActionableAlertList 
           alerts={alerts}
-          onDismiss={(id) => toast.info('Alerta removido')}
+          onDismiss={(id) => setAlerts(prev => prev.filter(a => a.id !== id))}
           maxVisible={3}
         />
       )}

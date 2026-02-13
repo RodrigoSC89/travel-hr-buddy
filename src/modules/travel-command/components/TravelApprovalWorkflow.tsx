@@ -247,7 +247,7 @@ export function TravelApprovalWorkflow() {
                   <ClipboardCheck className="h-5 w-5 text-primary" />
                   Solicitações de Viagem
                 </CardTitle>
-                <Button size="sm" className="gap-2" onClick={() => { const event = new CustomEvent('travel:switch-tab', { detail: 'flights' }); window.dispatchEvent(event); toast.success("Navegando para aba de Passagens para criar solicitação"); }}>
+                <Button size="sm" className="gap-2" onClick={() => { const event = new CustomEvent('travel:switch-tab', { detail: 'flights' }); window.dispatchEvent(event); }}>
                   <Send className="h-4 w-4" />
                   Nova Solicitação
                 </Button>

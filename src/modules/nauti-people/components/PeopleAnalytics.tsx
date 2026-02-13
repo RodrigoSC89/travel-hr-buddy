@@ -142,7 +142,7 @@ const PeopleAnalytics: React.FC = () => {
               <SelectItem value="ytd">Ano atual</SelectItem>
             </SelectContent>
           </Select>
-          <Button variant="outline" onClick={() => { setSelectedPeriod("12m"); toast.success("Filtros resetados para 12 meses"); }}>
+          <Button variant="outline" onClick={() => { setSelectedPeriod("12m"); }}>
             <Filter className="w-4 h-4 mr-2" />
             Filtros
           </Button>
