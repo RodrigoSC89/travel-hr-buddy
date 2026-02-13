@@ -15,7 +15,7 @@ export interface NotificationPreferences {
 const STORAGE_KEY = "nautilus_notification_prefs";
 
 export function getNotificationPreferences(): NotificationPreferences {
-  const stored = localStorage.getItem(STORAGE_KEY);
+  const stored = sessionStorage.getItem(STORAGE_KEY) || localStorage.getItem(STORAGE_KEY);
   if (stored) {
     return JSON.parse(stored);
   }
@@ -28,7 +28,7 @@ export function getNotificationPreferences(): NotificationPreferences {
 }
 
 export function saveNotificationPreferences(prefs: NotificationPreferences): void {
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(prefs));
+  sessionStorage.setItem(STORAGE_KEY, JSON.stringify(prefs));
 }
 
 export async function requestNotificationPermission(): Promise<boolean> {

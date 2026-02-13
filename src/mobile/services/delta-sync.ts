@@ -46,7 +46,7 @@ class DeltaSyncService {
    */
   private loadState(): void {
     try {
-      const stored = localStorage.getItem(this.STORAGE_KEY);
+      const stored = sessionStorage.getItem(this.STORAGE_KEY) || localStorage.getItem(this.STORAGE_KEY);
       if (stored) {
         const parsed = JSON.parse(stored);
         this.localState = new Map(Object.entries(parsed));
@@ -62,7 +62,7 @@ class DeltaSyncService {
   private saveState(): void {
     try {
       const obj = Object.fromEntries(this.localState);
-      localStorage.setItem(this.STORAGE_KEY, JSON.stringify(obj));
+      sessionStorage.setItem(this.STORAGE_KEY, JSON.stringify(obj));
     } catch (error) {
       structuredLogger.error("Failed to save delta state", error as Error);
     }
@@ -338,7 +338,8 @@ class DeltaSyncService {
    */
   clear(): void {
     this.localState.clear();
-    localStorage.removeItem(this.STORAGE_KEY);
+    sessionStorage.removeItem(this.STORAGE_KEY);
+    localStorage.removeItem(this.STORAGE_KEY); // cleanup legacy
   }
 }
 
