@@ -194,7 +194,7 @@ export const WeatherChat: React.FC<WeatherChatProps> = ({
           </div>
         </div>
         {onClose && (
-          <Button variant="ghost" size="icon" onClick={onClose} className="text-white/60 hover:text-white">
+          <Button variant="ghost" size="icon" onClick={onClose} className="text-white/60 hover:text-white" aria-label="Fechar chat" title="Fechar chat">
             <X className="h-4 w-4" />
           </Button>
         )}
@@ -281,6 +281,8 @@ export const WeatherChat: React.FC<WeatherChatProps> = ({
             onClick={() => sendMessage(input)} 
             disabled={!input.trim() || isLoading}
             size="icon"
+            aria-label="Enviar mensagem"
+            title="Enviar mensagem"
           >
             <Send className="h-4 w-4" />
           </Button>

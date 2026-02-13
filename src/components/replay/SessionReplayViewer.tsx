@@ -243,11 +243,11 @@ export function SessionReplayViewer() {
               <Slider value={[currentTime]} max={selectedSession.duration * 1000} step={100} onValueChange={([value]) => setCurrentTime(value)} className="w-full" />
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2">
-                  <Button variant="outline" size="icon" onClick={() => setCurrentTime(p => Math.max(p - 10000, 0))}><SkipBack className="h-4 w-4" /></Button>
-                  <Button variant="outline" size="icon" onClick={() => setPlaybackSpeed(Math.max(0.5, playbackSpeed - 0.5))}><Rewind className="h-4 w-4" /></Button>
-                  <Button size="icon" onClick={() => setIsPlaying(!isPlaying)}>{isPlaying ? <Pause className="h-4 w-4" /> : <Play className="h-4 w-4" />}</Button>
-                  <Button variant="outline" size="icon" onClick={() => setPlaybackSpeed(Math.min(4, playbackSpeed + 0.5))}><FastForward className="h-4 w-4" /></Button>
-                  <Button variant="outline" size="icon" onClick={() => selectedSession && setCurrentTime(p => Math.min(p + 10000, selectedSession.duration * 1000))}><SkipForward className="h-4 w-4" /></Button>
+                  <Button variant="outline" size="icon" onClick={() => setCurrentTime(p => Math.max(p - 10000, 0))} aria-label="Voltar 10 segundos" title="Voltar 10 segundos"><SkipBack className="h-4 w-4" /></Button>
+                  <Button variant="outline" size="icon" onClick={() => setPlaybackSpeed(Math.max(0.5, playbackSpeed - 0.5))} aria-label="Reduzir velocidade" title="Reduzir velocidade"><Rewind className="h-4 w-4" /></Button>
+                  <Button size="icon" onClick={() => setIsPlaying(!isPlaying)} aria-label={isPlaying ? "Pausar" : "Reproduzir"} title={isPlaying ? "Pausar" : "Reproduzir"}>{isPlaying ? <Pause className="h-4 w-4" /> : <Play className="h-4 w-4" />}</Button>
+                  <Button variant="outline" size="icon" onClick={() => setPlaybackSpeed(Math.min(4, playbackSpeed + 0.5))} aria-label="Aumentar velocidade" title="Aumentar velocidade"><FastForward className="h-4 w-4" /></Button>
+                  <Button variant="outline" size="icon" onClick={() => selectedSession && setCurrentTime(p => Math.min(p + 10000, selectedSession.duration * 1000))} aria-label="Avançar 10 segundos" title="Avançar 10 segundos"><SkipForward className="h-4 w-4" /></Button>
                 </div>
                 <div className="flex items-center gap-4 text-sm text-muted-foreground">
                   <span>{formatTime(currentTime)} / {formatTime(selectedSession.duration * 1000)}</span>

@@ -223,6 +223,8 @@ export function CrewScheduler() {
               <Button
                 variant="outline"
                 size="icon"
+                aria-label="Mês anterior"
+                title="Mês anterior"
                 onClick={() => {
                   if (currentMonth === 0) {
                     setCurrentMonth(11);
@@ -240,6 +242,8 @@ export function CrewScheduler() {
               <Button
                 variant="outline"
                 size="icon"
+                aria-label="Próximo mês"
+                title="Próximo mês"
                 onClick={() => {
                   if (currentMonth === 11) {
                     setCurrentMonth(0);

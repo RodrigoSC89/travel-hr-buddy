@@ -107,7 +107,7 @@ export const InteractiveKPICard: React.FC<InteractiveKPICardProps> = ({
               <div className="flex items-center gap-2 mb-2">
                 <span className="text-sm font-medium text-muted-foreground">{title}</span>
                 {details && (
-                  <Button variant="ghost" size="icon" className="h-5 w-5">
+                  <Button variant="ghost" size="icon" className="h-5 w-5" aria-label={isExpanded ? "Recolher detalhes" : "Expandir detalhes"} title={isExpanded ? "Recolher detalhes" : "Expandir detalhes"}>
                     {isExpanded ? <ChevronUp className="h-3 w-3" /> : <ChevronDown className="h-3 w-3" />}
                   </Button>
                 )}

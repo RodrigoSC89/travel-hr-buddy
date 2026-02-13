@@ -590,7 +590,7 @@ export default function ChannelManagerProfessional() {
           <div className="flex items-center gap-2 flex-wrap">
             <Tooltip>
               <TooltipTrigger asChild>
-                <Button variant="outline" size="icon" onClick={handleRefresh} disabled={isRefreshing}>
+                <Button variant="outline" size="icon" onClick={handleRefresh} disabled={isRefreshing} aria-label="Atualizar canais" title="Atualizar canais">
                   <RefreshCw className={`h-4 w-4 ${isRefreshing ? 'animate-spin' : ''}`} />
                 </Button>
               </TooltipTrigger>
@@ -599,7 +599,7 @@ export default function ChannelManagerProfessional() {
 
             <Tooltip>
               <TooltipTrigger asChild>
-                <Button variant="outline" size="icon" onClick={() => setIsAiDialogOpen(true)}>
+                <Button variant="outline" size="icon" onClick={() => setIsAiDialogOpen(true)} aria-label="Assistente IA" title="Assistente IA">
                   <Sparkles className="h-4 w-4" />
                 </Button>
               </TooltipTrigger>
@@ -608,7 +608,7 @@ export default function ChannelManagerProfessional() {
 
             <Tooltip>
               <TooltipTrigger asChild>
-                <Button variant="outline" size="icon" onClick={() => setIsSettingsDialogOpen(true)}>
+                <Button variant="outline" size="icon" onClick={() => setIsSettingsDialogOpen(true)} aria-label="Configurações" title="Configurações">
                   <Settings className="h-4 w-4" />
                 </Button>
               </TooltipTrigger>
@@ -795,7 +795,7 @@ export default function ChannelManagerProfessional() {
                           </Button>
                           <DropdownMenu>
                             <DropdownMenuTrigger asChild onClick={(e) => e.stopPropagation()}>
-                              <Button variant="ghost" size="icon" className="h-6 w-6">
+                              <Button variant="ghost" size="icon" className="h-6 w-6" aria-label="Mais opções do canal" title="Mais opções">
                                 <MoreVertical className="h-3 w-3" />
                               </Button>
                             </DropdownMenuTrigger>
@@ -877,7 +877,7 @@ export default function ChannelManagerProfessional() {
                     <div className="flex items-center gap-2">
                       <Tooltip>
                         <TooltipTrigger asChild>
-                          <Button variant="outline" size="icon" onClick={() => setIsMembersDialogOpen(true)}>
+                          <Button variant="outline" size="icon" onClick={() => setIsMembersDialogOpen(true)} aria-label="Ver membros" title="Ver membros">
                             <Users className="h-4 w-4" />
                           </Button>
                         </TooltipTrigger>
@@ -885,7 +885,7 @@ export default function ChannelManagerProfessional() {
                       </Tooltip>
                       <Tooltip>
                         <TooltipTrigger asChild>
-                          <Button variant="outline" size="icon" onClick={() => setIsUploadDialogOpen(true)}>
+                          <Button variant="outline" size="icon" onClick={() => setIsUploadDialogOpen(true)} aria-label="Upload arquivo" title="Upload arquivo">
                             <Upload className="h-4 w-4" />
                           </Button>
                         </TooltipTrigger>
@@ -893,7 +893,7 @@ export default function ChannelManagerProfessional() {
                       </Tooltip>
                       <Tooltip>
                         <TooltipTrigger asChild>
-                          <Button variant="outline" size="icon" onClick={handleExportChannel}>
+                          <Button variant="outline" size="icon" onClick={handleExportChannel} aria-label="Exportar canal" title="Exportar">
                             <Download className="h-4 w-4" />
                           </Button>
                         </TooltipTrigger>
@@ -901,7 +901,7 @@ export default function ChannelManagerProfessional() {
                       </Tooltip>
                       <Tooltip>
                         <TooltipTrigger asChild>
-                          <Button variant="outline" size="icon" onClick={() => setIsShareDialogOpen(true)}>
+                          <Button variant="outline" size="icon" onClick={() => setIsShareDialogOpen(true)} aria-label="Compartilhar canal" title="Compartilhar">
                             <Share2 className="h-4 w-4" />
                           </Button>
                         </TooltipTrigger>
@@ -909,7 +909,7 @@ export default function ChannelManagerProfessional() {
                       </Tooltip>
                       <DropdownMenu>
                         <DropdownMenuTrigger asChild>
-                          <Button variant="outline" size="icon">
+                          <Button variant="outline" size="icon" aria-label="Mais opções" title="Mais opções">
                             <MoreVertical className="h-4 w-4" />
                           </Button>
                         </DropdownMenuTrigger>
@@ -1484,7 +1484,7 @@ export default function ChannelManagerProfessional() {
                           <span className="text-xs text-muted-foreground capitalize">{member.role}</span>
                         </div>
                       </div>
-                      <Button variant="ghost" size="icon">
+                      <Button variant="ghost" size="icon" aria-label="Opções do membro" title="Opções do membro">
                         <MoreVertical className="h-4 w-4" />
                       </Button>
                     </div>

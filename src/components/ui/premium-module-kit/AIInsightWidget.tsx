@@ -92,7 +92,7 @@ export function AIInsightWidget({
               GPT-4o
             </Badge>
             {onRefresh && (
-              <Button variant="ghost" size="icon" onClick={onRefresh} disabled={loading}>
+              <Button variant="ghost" size="icon" onClick={onRefresh} disabled={loading} aria-label="Atualizar insights" title="Atualizar insights">
                 <RefreshCw className={`h-4 w-4 ${loading ? "animate-spin" : ""}`} />
               </Button>
             )}

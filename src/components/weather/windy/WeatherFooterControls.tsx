@@ -96,6 +96,8 @@ export const WeatherFooterControls: React.FC<WeatherFooterControlsProps> = ({
             size="icon"
             className="h-8 w-8 text-white/80 hover:text-white hover:bg-white/10"
             onClick={onSettings}
+            aria-label="Configurações meteorológicas"
+            title="Configurações"
           >
             <Settings className="h-4 w-4" />
           </Button>
@@ -106,6 +108,8 @@ export const WeatherFooterControls: React.FC<WeatherFooterControlsProps> = ({
             size="icon"
             className="h-8 w-8 text-white/80 hover:text-white hover:bg-white/10"
             onClick={onShare}
+            aria-label="Compartilhar previsão"
+            title="Compartilhar"
           >
             <Share2 className="h-4 w-4" />
           </Button>
