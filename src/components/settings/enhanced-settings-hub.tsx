@@ -255,8 +255,7 @@ export const EnhancedSettingsHub: React.FC = () => {
     calculateHealth();
   }, [settings]);
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- SettingsData union requires flexible updates
-  const updateSettings = (category: keyof SettingsData, updates: any) => {
+  const updateSettings = (category: keyof SettingsData, updates: Record<string, unknown>) => {
     setSettings(prev => ({
       ...prev,
       [category]: {
