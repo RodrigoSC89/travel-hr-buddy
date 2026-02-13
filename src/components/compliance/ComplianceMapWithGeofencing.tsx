@@ -85,8 +85,11 @@ export function ComplianceMapWithGeofencing({
   showControls = true
 }: ComplianceMapWithGeofencingProps) {
   const mapContainer = useRef<HTMLDivElement>(null);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Mapbox GL Map instance loaded dynamically
   const mapRef = useRef<any>(null);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Mapbox GL module loaded dynamically
   const mapboxglRef = useRef<any>(null);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Mapbox GL Marker instances
   const markersRef = useRef<any[]>([]);
   const geofenceSourcesRef = useRef<Set<string>>(new Set());
   const mapLoadedRef = useRef(false);
@@ -164,7 +167,7 @@ export function ComplianceMapWithGeofencing({
         const mapped: VesselInspection[] = [];
         
         for (const vessel of data) {
-          const loc = parseLocation(vessel.current_location, vessel.metadata);
+          const loc = parseLocation(vessel.current_location, vessel.metadata as Record<string, unknown> | null);
           // Generate deterministic positions for vessels without coordinates
           const nameHash = (vessel.name || '').split('').reduce((a: number, c: string) => a + c.charCodeAt(0), 0);
           const defaultLat = -23.0 + (nameHash % 50);
@@ -201,13 +204,13 @@ export function ComplianceMapWithGeofencing({
     }
   }, []);
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Supabase JSONB metadata
-  function parseLocation(locationStr: string | null, metadata: any): { lat: number; lng: number } | null {
-    if (metadata?.position?.lat && metadata?.position?.lng) {
-      return { lat: metadata.position.lat, lng: metadata.position.lng };
+  function parseLocation(locationStr: string | null, metadata: Record<string, unknown> | null): { lat: number; lng: number } | null {
+    const meta = (metadata || {}) as Record<string, Record<string, unknown>>;
+    if (meta.position?.lat && meta.position?.lng) {
+      return { lat: Number(meta.position.lat), lng: Number(meta.position.lng) };
     }
-    if (metadata?.coordinates?.lat && metadata?.coordinates?.lng) {
-      return { lat: metadata.coordinates.lat, lng: metadata.coordinates.lng };
+    if (meta.coordinates?.lat && meta.coordinates?.lng) {
+      return { lat: Number(meta.coordinates.lat), lng: Number(meta.coordinates.lng) };
     }
     if (locationStr) {
       const match = locationStr.match(/(-?\d+\.?\d*)[,\s]+(-?\d+\.?\d*)/);

@@ -9,8 +9,7 @@ import { logger } from '@/lib/logger';
 export interface TrackEventOptions {
   eventName: string;
   eventCategory?: string;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- properties stored as Json in Supabase
-  properties?: Record<string, any>;
+  properties?: Record<string, unknown>;
   pageUrl?: string;
   referrer?: string;
 }
@@ -78,7 +77,7 @@ class EventTrackingService {
         session_id: this.sessionId,
         event_name: options.eventName,
         event_category: options.eventCategory || "user_interaction",
-        properties: options.properties || {},
+        properties: (options.properties || {}) as Record<string, string | number | boolean | null>,
         page_url: options.pageUrl || window.location.href,
         referrer: options.referrer || document.referrer,
         user_agent: navigator.userAgent,
@@ -116,7 +115,7 @@ class EventTrackingService {
   /**
    * Track button click
    */
-  async trackClick(buttonName: string, properties?: Record<string, any>): Promise<void> {
+  async trackClick(buttonName: string, properties?: Record<string, unknown>): Promise<void> {
     await this.trackEvent({
       eventName: "button_click",
       eventCategory: "interaction",
@@ -130,7 +129,7 @@ class EventTrackingService {
   /**
    * Track form submission
    */
-  async trackFormSubmit(formName: string, properties?: Record<string, any>): Promise<void> {
+  async trackFormSubmit(formName: string, properties?: Record<string, unknown>): Promise<void> {
     await this.trackEvent({
       eventName: "form_submit",
       eventCategory: "interaction",
@@ -158,7 +157,7 @@ class EventTrackingService {
   /**
    * Track feature usage
    */
-  async trackFeatureUse(featureName: string, properties?: Record<string, any>): Promise<void> {
+  async trackFeatureUse(featureName: string, properties?: Record<string, unknown>): Promise<void> {
     await this.trackEvent({
       eventName: "feature_use",
       eventCategory: "engagement",

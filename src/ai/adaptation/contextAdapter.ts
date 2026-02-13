@@ -17,8 +17,7 @@ export interface MultimodalContext {
   userIntent?: string;
   environment?: string;
   capabilities?: string[];
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- constraints accessed dynamically (e.g. maxLength)
-  constraints?: Record<string, any>;
+  constraints?: Record<string, unknown>;
 }
 
 export interface AIResponse {
@@ -213,7 +212,7 @@ class ContextualResponseAdapter {
 
     // Apply constraints if any
     if (context.constraints?.maxLength) {
-      adapted = this.truncateText(adapted, context.constraints.maxLength);
+      adapted = this.truncateText(adapted, Number(context.constraints.maxLength));
     }
 
     // Format markdown properly

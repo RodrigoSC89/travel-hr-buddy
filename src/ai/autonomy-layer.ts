@@ -22,8 +22,7 @@ export interface AutonomousEvent {
   type: "module_crash" | "high_latency" | "api_failure" | "error_threshold" | "custom";
   module: string;
   severity: "low" | "medium" | "high" | "critical";
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- event data accessed dynamically by rule conditions
-  data: Record<string, any>;
+  data: Record<string, unknown>;
   timestamp: Date;
 }
 
@@ -104,18 +103,18 @@ class AutonomyLayer {
       priority: 5,
       enabled: true,
       condition: (event) => {
-        return event.type === "high_latency" && event.data.latency > 5000;
+        return event.type === "high_latency" && Number(event.data.latency) > 5000;
       },
       action: async (event) => {
         logger.warn("[AutonomyLayer] High latency detected", {
           module: event.module,
-          latency: event.data.latency,
+          latency: Number(event.data.latency),
         });
 
         try {
           await this.sendNotification(
             "High Latency Alert",
-            `Module ${event.module} has latency of ${event.data.latency}ms`,
+            `Module ${event.module} has latency of ${Number(event.data.latency)}ms`,
             event.severity
           );
 
@@ -145,23 +144,23 @@ class AutonomyLayer {
       condition: (event) => {
         return (
           event.type === "error_threshold" &&
-          event.data.error_count > 10 &&
+          Number(event.data.error_count) > 10 &&
           event.severity === "critical"
         );
       },
       action: async (event) => {
         logger.warn("[AutonomyLayer] Disabling faulty feature", {
           module: event.module,
-          error_count: event.data.error_count,
+          error_count: Number(event.data.error_count),
         });
 
         try {
-          await this.disableFeature(event.module, event.data.feature);
+          await this.disableFeature(event.module, String(event.data.feature));
 
           await learningCore.trackDecision(
             "autonomy-layer",
             "feature_disable",
-            { module: event.module, feature: event.data.feature },
+            { module: event.module, feature: String(event.data.feature) },
             { success: true },
             0.85
           );
@@ -169,7 +168,7 @@ class AutonomyLayer {
           return {
             success: true,
             action: "disable",
-            description: `Feature ${event.data.feature} in ${event.module} disabled`,
+            description: `Feature ${String(event.data.feature)} in ${event.module} disabled`,
             requiresHumanReview: true,
           };
         } catch (error) {
@@ -192,16 +191,16 @@ class AutonomyLayer {
       priority: 7,
       enabled: true,
       condition: (event) => {
-        return event.type === "api_failure" && event.data.consecutive_failures > 3;
+        return event.type === "api_failure" && Number(event.data.consecutive_failures) > 3;
       },
       action: async (event) => {
         logger.warn("[AutonomyLayer] Activating route fallback", {
           module: event.module,
-          failures: event.data.consecutive_failures,
+          failures: Number(event.data.consecutive_failures),
         });
 
         try {
-          await this.activateFallbackRoute(event.module, event.data.route);
+          await this.activateFallbackRoute(event.module, String(event.data.route));
 
           return {
             success: true,

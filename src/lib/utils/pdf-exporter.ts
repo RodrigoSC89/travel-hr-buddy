@@ -21,13 +21,13 @@ interface TableData {
 }
 
 class PDFExporter {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- jsPDF instance loaded dynamically
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- jsPDF instance loaded dynamically with vendor-specific API
   private doc: any;
   private yPosition: number = 20;
   private pageWidth: number = 210;
   private pageHeight: number = 297;
   private margin: number = 20;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- autoTable plugin loaded dynamically
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- autoTable plugin loaded dynamically with vendor-specific API
   private autoTableFn: any;
 
   private constructor() {}

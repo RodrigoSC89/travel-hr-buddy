@@ -169,12 +169,11 @@ class AITranslator {
     key: string
   ): string | null {
     const parts = key.split(".");
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any -- deeply nested translation object traversal
-    let current: any = translations;
+    let current: unknown = translations;
 
     for (const part of parts) {
-      if (current && typeof current === "object" && part in current) {
-        current = current[part];
+      if (current && typeof current === "object" && part in (current as Record<string, unknown>)) {
+        current = (current as Record<string, unknown>)[part];
       } else {
         return null;
       }
