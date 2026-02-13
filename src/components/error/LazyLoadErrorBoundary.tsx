@@ -96,30 +96,22 @@ export class LazyLoadErrorBoundary extends Component<Props, State> {
     logger.debug('[LazyLoadErrorBoundary] Starting cache clear...');
     
     try {
-      // Use the centralized SW manager if available
-      try {
-        const { forceFullCacheClear } = await import('@/lib/sw-update-manager');
-        await forceFullCacheClear();
-      } catch {
-        // Fallback: manual cleanup
-        if ('serviceWorker' in navigator) {
-          const registrations = await navigator.serviceWorker.getRegistrations();
-          for (const registration of registrations) {
-            if (registration.waiting) {
-              registration.waiting.postMessage({ type: 'SKIP_WAITING' });
-            }
-            await registration.unregister();
+      if ('serviceWorker' in navigator) {
+        const registrations = await navigator.serviceWorker.getRegistrations();
+        for (const registration of registrations) {
+          if (registration.waiting) {
+            registration.waiting.postMessage({ type: 'SKIP_WAITING' });
           }
-          logger.debug('[LazyLoadErrorBoundary] Service workers unregistered');
+          await registration.unregister();
         }
-        
-        if ('caches' in window) {
-          const cacheNames = await caches.keys();
-          await Promise.all(cacheNames.map(name => caches.delete(name)));
-          logger.debug('[LazyLoadErrorBoundary] All caches cleared');
-        }
+        logger.debug('[LazyLoadErrorBoundary] Service workers unregistered');
       }
       
+      if ('caches' in window) {
+        const cacheNames = await caches.keys();
+        await Promise.all(cacheNames.map(name => caches.delete(name)));
+        logger.debug('[LazyLoadErrorBoundary] All caches cleared');
+      }
     } catch (e) {
       logger.error('[LazyLoadErrorBoundary] Cache clear error:', e);
     }
