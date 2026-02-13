@@ -58,10 +58,7 @@ const initializeOptionalFeatures = async () => {
     // Route prefetching removed during dead code cleanup
     
     // Only initialize monitoring in production
-    if (import.meta.env.PROD) {
-      const { webVitalsMonitor } = await import("@/lib/web-vitals-monitor");
-      webVitalsMonitor.initialize();
-    }
+    // Web vitals monitoring removed during dead code cleanup
   } catch (error) {
     logger.warn("Optional features init failed:", error instanceof Error ? { message: error.message } : undefined);
   }

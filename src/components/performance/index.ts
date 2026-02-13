@@ -1,24 +1,7 @@
 /**
  * Performance Components Index
- * PATCH 835: Central export for all performance components
+ * Cleaned: Only active components remain
  */
-
-// Data loading
-export { DataLoader, SuspenseLoader, InlineLoader } from './DataLoader';
-
-// Connection awareness
-export { ConnectionIndicator, ConnectionBadge, useSlowConnectionWarning } from './ConnectionIndicator';
-
-// Performance monitoring
-export { PerformanceMonitor, DevPerformanceOverlay } from './PerformanceMonitor';
-
-// Main wrapper
-export { 
-  PerformanceWrapper, 
-  withPerformance, 
-  PerformanceProvider, 
-  usePerformanceContext 
-} from './PerformanceWrapper';
 
 // Virtualized list
 export { VirtualizedList, useVirtualizedData } from './VirtualizedList';
@@ -35,27 +18,5 @@ export {
   useAdaptiveFetch 
 } from './ConnectionAware';
 
-// Optimized image (re-export from lib)
+// Optimized image
 export { OptimizedImage, OptimizedAvatar } from './OptimizedImage';
-
-// Bandwidth indicator
-export { BandwidthIndicator, BandwidthBadge } from './BandwidthIndicator';
-
-// Skeleton loaders
-export { 
-  Skeleton, 
-  SkeletonCard, 
-  SkeletonTable, 
-  SkeletonDashboard, 
-  SkeletonList 
-} from './SkeletonLoader';
-
-// Network status
-export { NetworkStatusIndicator } from './NetworkStatusIndicator';
-
-// Resilience indicator (PATCH 900)
-export { ResilienceIndicator, ResilienceBadge } from './ResilienceIndicator';
-
-// System Health Dashboard (PATCH 970)
-export { SystemHealthDashboard } from './SystemHealthDashboard';
-

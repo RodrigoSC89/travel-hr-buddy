@@ -93,13 +93,7 @@ class UnifiedSystemInit {
   private async initPerformance(): Promise<void> {
     if (typeof window === 'undefined') return;
 
-    try {
-      // Initialize bandwidth optimizer
-      const { bandwidthOptimizer } = await import('@/lib/performance/low-bandwidth-optimizer');
-      bandwidthOptimizer.init();
-    } catch (error) {
-      logger.warn('Performance monitoring initialization failed', { error });
-    }
+    // Performance monitoring removed during dead code cleanup
   }
 
   private async initAccessibility(): Promise<void> {

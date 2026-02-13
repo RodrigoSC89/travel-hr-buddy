@@ -7,8 +7,7 @@ import { RealTimeNotificationCenter } from "@/components/notifications/real-time
 import { UserMenu } from "@/components/auth/user-menu";
 import { SimpleGlobalSearch } from "@/components/ui/simple-global-search";
 import { OrganizationSelector } from "@/components/admin/organization-selector";
-import { SystemStatusIndicator } from "@/components/ui/SystemStatusIndicator";
-import { OfflineSyncIndicator } from "@/components/ui/OfflineSyncIndicator";
+// SystemStatusIndicator & OfflineSyncIndicator removed during cleanup
 import { useHighContrastTheme } from "@/hooks/useHighContrastTheme";
 import { useNavigate } from "react-router-dom";
 import { Settings, Menu } from "lucide-react";
@@ -79,8 +78,7 @@ export const Header: FC = () => {
               </>
             ) : (
               <>
-                <OfflineSyncIndicator />
-                <SystemStatusIndicator />
+                {/* OfflineSyncIndicator & SystemStatusIndicator removed */}
                 <OrganizationSelector />
                 <RealTimeNotificationCenter />
                 
