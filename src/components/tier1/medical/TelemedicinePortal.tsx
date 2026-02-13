@@ -196,7 +196,7 @@ function PreConsultationFormComponent({ onSubmit }: { onSubmit: (data: PreConsul
           <label className="text-sm font-medium mb-1.5 block">Severity *</label>
           <Select 
             value={form.severity} 
-            onValueChange={(v) => setForm({ ...form, severity: v as any })}
+            onValueChange={(v) => setForm({ ...form, severity: v as PreConsultationForm["severity"] })}
           >
             <SelectTrigger>
               <SelectValue />
@@ -234,7 +234,7 @@ function PreConsultationFormComponent({ onSubmit }: { onSubmit: (data: PreConsul
           <label className="text-sm font-medium mb-1.5 block">Urgency *</label>
           <Select 
             value={form.urgency} 
-            onValueChange={(v) => setForm({ ...form, urgency: v as any })}
+            onValueChange={(v) => setForm({ ...form, urgency: v as PreConsultationForm["urgency"] })}
           >
             <SelectTrigger>
               <SelectValue />

@@ -30,7 +30,7 @@ export interface ModuleContextData {
   source: ModuleSource;
   dataSource: DataSource;
   timestamp: number;
-  data: Record<string, any>;
+  data: Record<string, unknown>;
   metadata?: {
     quality?: number; // Data quality score 0-1
     latency?: number; // Data age in ms

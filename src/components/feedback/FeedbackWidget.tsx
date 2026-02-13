@@ -25,6 +25,7 @@ import {
 } from 'lucide-react';
 import { toast } from 'sonner';
 import { supabase } from '@/integrations/supabase/client';
+import type { Json } from '@/integrations/supabase/types';
 import { logger } from '@/lib/logger';
 
 interface FeedbackData {
@@ -104,21 +105,20 @@ export function FeedbackWidget() {
       const { data: { user } } = await supabase.auth.getUser();
 
       // Store feedback in database
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Supabase insert overload mismatch with single object vs array
-      const { error } = await (supabase.from('ai_feedback_scores') as any)
-        .insert({
+      const { error } = await supabase.from('ai_feedback_scores')
+        .insert([{
           command_type: feedbackPayload.type,
           self_score: feedbackPayload.score || 0,
-          command_data: feedbackPayload as unknown as Record<string, unknown>,
+          command_data: feedbackPayload as unknown as Json,
           feedback_data: {
             title: feedbackPayload.title,
             description: feedbackPayload.description,
             priority: feedbackPayload.priority,
             module: feedbackPayload.module,
             submitted_at: new Date().toISOString(),
-          } as unknown as Record<string, unknown>,
+          } as unknown as Json,
           user_id: user?.id,
-        });
+        }]);
 
       if (error) throw error;
 

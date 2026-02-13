@@ -14,6 +14,7 @@ interface LazyModuleOptions {
 }
 
 // Cache for preloaded modules
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- heterogeneous module cache
 const moduleCache = new Map<string, Promise<any>>();
 
 /**
@@ -84,6 +85,7 @@ export const HeavyModules = {
  * Preload modules based on route
  */
 export function preloadRouteModules(route: string) {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- dynamic module loaders
   const routeModules: Record<string, (() => Promise<any>)[]> = {
     '/dashboard': [HeavyModules.Recharts],
     '/reports': [HeavyModules.JsPDF, HeavyModules.XLSX],

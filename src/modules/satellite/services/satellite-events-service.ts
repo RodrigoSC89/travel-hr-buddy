@@ -10,7 +10,7 @@ export interface SatelliteEvent {
   satelliteId: string;
   noradId: number;
   eventType: "position_update" | "orbit_change" | "signal_loss" | "signal_restore" | "anomaly";
-  eventData: Record<string, any>;
+  eventData: Record<string, unknown>;
   latitude?: number;
   longitude?: number;
   altitude?: number;
@@ -21,8 +21,7 @@ export class SatelliteEventsService {
   
   async logEvent(event: SatelliteEvent): Promise<SatelliteEvent | null> {
     try {
-      const { data, error } = await supabase
-        .from("satellite_events")
+      const { data, error } = await (supabase.from as Function)("satellite_events")
         .insert({
           satellite_id: event.satelliteId,
           norad_id: event.noradId,
@@ -99,18 +98,17 @@ export class SatelliteEventsService {
     }
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- dynamic Supabase row shape
-  private mapToEvent(data: Record<string, any>): SatelliteEvent {
+  private mapToEvent(data: Record<string, unknown>): SatelliteEvent {
     return {
-      id: data.id,
-      satelliteId: data.satellite_id,
-      noradId: data.norad_id,
-      eventType: data.event_type,
-      eventData: data.event_data || {},
-      latitude: data.latitude,
-      longitude: data.longitude,
-      altitude: data.altitude,
-      timestamp: data.timestamp
+      id: String(data.id),
+      satelliteId: String(data.satellite_id),
+      noradId: Number(data.norad_id),
+      eventType: String(data.event_type) as SatelliteEvent["eventType"],
+      eventData: (data.event_data as Record<string, unknown>) || {},
+      latitude: data.latitude != null ? Number(data.latitude) : undefined,
+      longitude: data.longitude != null ? Number(data.longitude) : undefined,
+      altitude: data.altitude != null ? Number(data.altitude) : undefined,
+      timestamp: data.timestamp ? String(data.timestamp) : undefined
     };
   }
 }

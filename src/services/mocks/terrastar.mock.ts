@@ -263,7 +263,7 @@ export const TerrastarMockAPI = {
   /**
    * Obter previsão 24h
    */
-  async getForecast(latitude: number, longitude: number): Promise<any> {
+  async getForecast(latitude: number, longitude: number): Promise<unknown> {
     logger.debug('🟡 [MOCK] Terrastar: Getting 24h forecast...');
     await simulateNetworkDelay(200, 600);
     const forecast = generateMockForecast(latitude, longitude);
@@ -274,7 +274,7 @@ export const TerrastarMockAPI = {
   /**
    * Obter estatísticas
    */
-  async getStatistics(vesselId: string): Promise<any> {
+  async getStatistics(vesselId: string): Promise<unknown> {
     logger.debug('🟡 [MOCK] Terrastar: Getting statistics...');
     await simulateNetworkDelay(100, 300);
     const stats = generateMockStatistics(vesselId);

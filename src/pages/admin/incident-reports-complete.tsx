@@ -39,7 +39,7 @@ interface IncidentReport {
   type: string;
   created_at: string | null;
   updated_at: string | null;
-  metadata: Record<string, any> | null;
+  metadata: Record<string, unknown> | null;
 }
 
 // In-memory followup storage (incident_followups table doesn't exist)

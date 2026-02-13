@@ -246,7 +246,7 @@ export function DashboardWatchdog({ onHeal }: DashboardWatchdogProps) {
 /**
  * Log watchdog event (console only for now)
  */
-async function logWatchdogEvent(data: Record<string, any>) {
+async function logWatchdogEvent(data: Record<string, unknown>) {
   try {
     logger.info("[Watchdog Event]", data);
     

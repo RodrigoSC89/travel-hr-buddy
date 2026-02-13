@@ -102,7 +102,7 @@ class ModuleIntegrationService {
     if (allListeners) allListeners.forEach(callback => callback(event));
   }
 
-  async getModuleData(module: string, query?: Record<string, any>): Promise<any> {
+  async getModuleData(module: string, query?: Record<string, unknown>): Promise<{ data: unknown[]; error?: string | null }> {
     const table = MODULE_TABLE_MAP[module];
     if (!table) return { data: [], error: "Module not mapped" };
 
@@ -112,9 +112,9 @@ class ModuleIntegrationService {
         .select("*")
         .limit(query?.limit || 100);
 
-      return { data: data || [], error };
-    } catch (error) {
-      return { data: [], error };
+      return { data: data || [], error: error?.message || null };
+    } catch (err) {
+      return { data: [], error: err instanceof Error ? err.message : "Unknown error" };
     }
   }
 

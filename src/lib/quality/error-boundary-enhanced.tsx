@@ -57,8 +57,8 @@ export class EnhancedErrorBoundary extends Component<Props, State> {
   private async reportError(error: Error, errorInfo: ErrorInfo): Promise<void> {
     try {
       // Report to Sentry if available
-      if (typeof window !== "undefined" && (window as any).Sentry) {
-        (window as any).Sentry.captureException(error, {
+      if (typeof window !== "undefined" && (window as unknown as { Sentry?: { captureException: (error: Error, context: Record<string, unknown>) => void } }).Sentry) {
+        (window as unknown as { Sentry: { captureException: (error: Error, context: Record<string, unknown>) => void } }).Sentry.captureException(error, {
           extra: {
             componentStack: errorInfo.componentStack,
             retryCount: this.state.retryCount,

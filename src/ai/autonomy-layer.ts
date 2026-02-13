@@ -22,6 +22,7 @@ export interface AutonomousEvent {
   type: "module_crash" | "high_latency" | "api_failure" | "error_threshold" | "custom";
   module: string;
   severity: "low" | "medium" | "high" | "critical";
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- dynamic event data with arbitrary properties
   data: Record<string, any>;
   timestamp: Date;
 }

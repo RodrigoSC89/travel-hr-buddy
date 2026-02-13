@@ -98,7 +98,7 @@ class MQTTClientManager {
       });
 
       // Emitir evento de conexão
-      BridgeLink.emit("nautilus:event" as any, "MQTTClient", {
+      BridgeLink.emit("telemetry:log" as BridgeLinkEventType, "MQTTClient", {
         message: "📡 Conectado ao broker MQTT",
         timestamp: new Date().toISOString()
       });
@@ -109,7 +109,7 @@ class MQTTClientManager {
       logger.info(`📡 [MQTT] Mensagem recebida de ${topic}:`, messageStr);
 
       // Emitir evento através do BridgeLink
-      BridgeLink.emit("nautilus:event" as any, "MQTTClient", {
+      BridgeLink.emit("telemetry:log" as BridgeLinkEventType, "MQTTClient", {
         message: `[MQTT] ${messageStr}`,
         topic,
         timestamp: new Date().toISOString()
@@ -125,7 +125,7 @@ class MQTTClientManager {
       logger.info("📡 [MQTT] Desconectado do broker");
       this.isConnecting = false;
       
-      BridgeLink.emit("nautilus:event" as any, "MQTTClient", {
+      BridgeLink.emit("telemetry:log" as BridgeLinkEventType, "MQTTClient", {
         message: "📡 Desconectado do broker MQTT",
         timestamp: new Date().toISOString()
       });

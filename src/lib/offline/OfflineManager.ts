@@ -9,7 +9,7 @@ interface PendingAction {
   id: string;
   type: 'create' | 'update' | 'delete';
   table: string;
-  data: Record<string, any>;
+  data: Record<string, unknown>;
   timestamp: number;
   retries: number;
   synced: boolean;
@@ -62,7 +62,7 @@ class OfflineManagerService {
     // REMOVIDO: listener 'offline' que causava falsos positivos no iOS
   }
 
-  async queueAction(type: 'create' | 'update' | 'delete', table: string, data: Record<string, any>): Promise<string> {
+  async queueAction(type: 'create' | 'update' | 'delete', table: string, data: Record<string, unknown>): Promise<string> {
     const id = `action-${Date.now()}-${crypto.randomUUID().slice(0, 9)}`;
     
     this.pendingActions.push({
@@ -84,7 +84,7 @@ class OfflineManagerService {
     return id;
   }
 
-  async cacheData(table: string, data: Record<string, any>[], ttlMinutes: number = 60): Promise<void> {
+  async cacheData(table: string, data: Record<string, unknown>[], ttlMinutes: number = 60): Promise<void> {
     try {
       const cacheKey = `nautilus_cache_${table}`;
       localStorage.setItem(cacheKey, JSON.stringify({

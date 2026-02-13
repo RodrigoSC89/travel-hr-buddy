@@ -92,8 +92,7 @@ export default function CrewRotationModule() {
   const loadRotations = async () => {
     setLoading(true);
     try {
-      const { data, error } = await (supabase
-        .from("crew_rotations" as any)
+      const { data, error } = await ((supabase.from as Function)("crew_rotations")
         .select(`
           *,
           crew_member:crew_members(name),
@@ -211,8 +210,7 @@ export default function CrewRotationModule() {
     }
 
     try {
-      const { error } = await (supabase
-        .from("crew_rotations" as any)
+      const { error } = await ((supabase.from as Function)("crew_rotations")
         .insert({
           crew_member_id: newRotation.crew_member_id,
           vessel_id: newRotation.vessel_id || null,

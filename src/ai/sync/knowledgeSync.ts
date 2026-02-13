@@ -133,7 +133,7 @@ class KnowledgeSync {
       await learningCore.trackSystemEvent(
         "knowledge_sync_completed",
         "knowledge-sync",
-        result,
+        result as unknown as Record<string, unknown>,
         "success"
       );
     } catch (error) {

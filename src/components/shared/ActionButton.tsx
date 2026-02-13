@@ -10,7 +10,7 @@ import { toast } from "sonner";
 import { logger } from '@/lib/logger';
 
 interface ActionButtonProps extends Omit<ButtonProps, "onClick"> {
-  action: () => Promise<any> | void;
+  action: () => Promise<unknown> | void;
   successMessage?: string;
   errorMessage?: string;
   confirmMessage?: string;

@@ -22,7 +22,7 @@ interface OfflineDataContextType {
   // Data operations
   getData: <T>(table: string, id: string) => Promise<T | null>;
   getAllData: <T>(table: string) => Promise<T[]>;
-  saveData: (table: string, data: Record<string, any>, priority?: "high" | "medium" | "low") => Promise<void>;
+  saveData: (table: string, data: Record<string, unknown>, priority?: "high" | "medium" | "low") => Promise<void>;
   deleteData: (table: string, id: string) => Promise<void>;
   
   // Sync operations
@@ -129,7 +129,7 @@ export function OfflineDataProvider({ children }: OfflineDataProviderProps) {
    */
   const saveData = useCallback(async (
     table: string,
-    data: Record<string, any>,
+    data: Record<string, unknown>,
     priority: "high" | "medium" | "low" = "medium"
   ): Promise<void> => {
     const action = data.id ? "update" : "create";

@@ -137,7 +137,7 @@ export function useUpdateConsultation() {
 
   return useMutation({
     mutationFn: async ({ id, ...updates }: Partial<MedicalConsultation> & { id: string }) => {
-      const updateData: Record<string, any> = {
+      const updateData: Record<string, unknown> = {
         updated_at: new Date().toISOString()
       };
       
