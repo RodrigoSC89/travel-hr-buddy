@@ -122,7 +122,7 @@ export function GamificationLayer() {
       case "weekly": return "bg-blue-500/20 text-blue-500";
       case "monthly": return "bg-purple-500/20 text-purple-500";
       case "special": return "bg-gradient-to-r from-yellow-500 to-orange-500 text-white";
-      default: return "bg-gray-500/20";
+      default: return "bg-muted";
     }
   };
 

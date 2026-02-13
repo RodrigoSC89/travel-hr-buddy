@@ -281,7 +281,7 @@ export default function NOC() {
                         "text-xs mt-1",
                         metric.trend === "up" && "text-green-400",
                         metric.trend === "down" && "text-red-400",
-                        metric.trend === "stable" && "text-gray-400"
+                        metric.trend === "stable" && "text-muted-foreground"
                       )}>
                         {metric.trend === "up" && "↑"}
                         {metric.trend === "down" && "↓"}

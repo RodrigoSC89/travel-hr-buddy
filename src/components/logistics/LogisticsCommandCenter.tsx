@@ -272,11 +272,11 @@ export function LogisticsCommandCenter() {
 
   const getPriorityBadge = (priority: string) => {
     const config: Record<string, { label: string; className: string }> = {
-      low: { label: 'Baixa', className: 'bg-gray-100 text-gray-800' },
+      low: { label: 'Baixa', className: 'bg-muted text-muted-foreground' },
       medium: { label: 'Média', className: 'bg-blue-100 text-blue-800' },
       high: { label: 'Alta', className: 'bg-orange-100 text-orange-800' },
       urgent: { label: 'Urgente', className: 'bg-red-100 text-red-800' },
-      normal: { label: 'Normal', className: 'bg-gray-100 text-gray-800' },
+      normal: { label: 'Normal', className: 'bg-muted text-muted-foreground' },
       critical: { label: 'Crítica', className: 'bg-red-100 text-red-800' }
     };
     const { label, className } = config[priority] || { label: priority, className: '' };

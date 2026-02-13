@@ -167,7 +167,7 @@ const DeepRiskAIPage: React.FC = () => {
       high: "text-orange-600 bg-orange-100 border-orange-300",
       critical: "text-red-600 bg-red-100 border-red-300",
     };
-    return colors[level] || "text-gray-600 bg-gray-100 border-gray-300";
+    return colors[level] || "text-muted-foreground bg-muted border-border";
   };
 
   const getRiskIcon = (level: string) => {

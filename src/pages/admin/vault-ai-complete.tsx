@@ -234,7 +234,7 @@ export default function VaultAIComplete() {
     if (score >= 0.8) return "text-green-600";
     if (score >= 0.6) return "text-blue-600";
     if (score >= 0.4) return "text-yellow-600";
-    return "text-gray-600";
+    return "text-muted-foreground";
   };
 
   const uniqueTypes = Array.from(new Set(documents.map(d => d.document_type).filter(Boolean)));

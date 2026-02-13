@@ -215,7 +215,7 @@ export default function PersonalRestoreDashboard() {
               {summary.avg_per_day}
               {trendIndicator === "up" && <TrendingUp className="w-5 h-5 text-green-500" />}
               {trendIndicator === "down" && <TrendingDown className="w-5 h-5 text-red-500" />}
-              {trendIndicator === "stable" && <Minus className="w-5 h-5 text-gray-500" />}
+              {trendIndicator === "stable" && <Minus className="w-5 h-5 text-muted-foreground" />}
             </div>
           </Card>
         </div>

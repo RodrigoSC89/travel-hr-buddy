@@ -187,7 +187,7 @@ const APITester = () => {
     case "error":
       return <XCircle className="h-5 w-5 text-red-600" />;
     default:
-      return <AlertCircle className="h-5 w-5 text-gray-400" />;
+      return <AlertCircle className="h-5 w-5 text-muted-foreground" />;
     }
   };
 
@@ -213,7 +213,7 @@ const APITester = () => {
       );
     default:
       return (
-        <Badge variant="outline" className="bg-gray-50 text-gray-600">
+        <Badge variant="outline" className="bg-muted text-muted-foreground">
             Not Tested
         </Badge>
       );
