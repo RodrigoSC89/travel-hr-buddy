@@ -22,7 +22,7 @@ export const ErrorDebugBanner: React.FC = () => {
     // Check for errors on mount and every 2 seconds
     const checkErrors = () => {
       try {
-        const stored = localStorage.getItem('safeLazyImport:lastError');
+        const stored = sessionStorage.getItem('safeLazyImport:lastError');
         if (stored) {
           const parsed = JSON.parse(stored) as ErrorInfo;
           // Only show errors from last 5 minutes
@@ -49,7 +49,7 @@ export const ErrorDebugBanner: React.FC = () => {
   };
 
   const handleClear = () => {
-    localStorage.removeItem('safeLazyImport:lastError');
+    sessionStorage.removeItem('safeLazyImport:lastError');
     setErrorInfo(null);
     setIsDismissed(true);
   };

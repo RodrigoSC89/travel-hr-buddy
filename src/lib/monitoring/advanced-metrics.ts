@@ -215,7 +215,7 @@ export class AdvancedMonitoring {
   private static storeMetricLocally(metric: Metric) {
     try {
       const storageKey = `metric_${metric.name}`;
-      const existing = localStorage.getItem(storageKey);
+      const existing = sessionStorage.getItem(storageKey);
       const history: Array<{ value: number; timestamp: string }> = existing 
         ? JSON.parse(existing) 
         : [];
@@ -230,7 +230,7 @@ export class AdvancedMonitoring {
         history.shift();
       }
       
-      localStorage.setItem(storageKey, JSON.stringify(history));
+      sessionStorage.setItem(storageKey, JSON.stringify(history));
     } catch (error) {
       // Ignore storage errors
     }
@@ -240,7 +240,7 @@ export class AdvancedMonitoring {
   static getMetricHistory(metricName: string, days: number = 7): number[] {
     try {
       const storageKey = `metric_${metricName}`;
-      const existing = localStorage.getItem(storageKey);
+      const existing = sessionStorage.getItem(storageKey);
       if (!existing) return [];
       
       const history: Array<{ value: number; timestamp: string }> = JSON.parse(existing);

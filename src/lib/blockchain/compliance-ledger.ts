@@ -219,16 +219,16 @@ export class BlockchainComplianceLedger {
    * Store compliance record
    */
   private async storeComplianceRecord(record: ComplianceRecord): Promise<void> {
-    const records = JSON.parse(localStorage.getItem('compliance_records') || '[]');
+    const records = JSON.parse(sessionStorage.getItem('compliance_records') || '[]');
     records.push(record);
-    localStorage.setItem('compliance_records', JSON.stringify(records));
+    sessionStorage.setItem('compliance_records', JSON.stringify(records));
   }
 
   /**
    * Get audit trail for entity
    */
   async getAuditTrail(entityId: string): Promise<ComplianceRecord[]> {
-    const records = JSON.parse(localStorage.getItem('compliance_records') || '[]');
+    const records = JSON.parse(sessionStorage.getItem('compliance_records') || '[]');
     return records.filter((r: ComplianceRecord) => r.entityId === entityId);
   }
 
@@ -246,7 +246,7 @@ export class BlockchainComplianceLedger {
     const hashes: string[] = [];
 
     for (const id of evidenceIds) {
-      const records = JSON.parse(localStorage.getItem('compliance_ledger') || '[]') as Array<Record<string, unknown>>;
+      const records = JSON.parse(sessionStorage.getItem('compliance_ledger') || '[]') as Array<Record<string, unknown>>;
       const record = records.find((r) => r.evidenceId === id);
       if (record) {
         hashes.push(String(record.hash));

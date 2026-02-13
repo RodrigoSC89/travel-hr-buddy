@@ -234,11 +234,10 @@ export function createNavigationHandler(
 ) {
   return (path: string) => {
     setLoading?.(true);
-    // Small delay for visual feedback
-    setTimeout(() => {
-      navigate(path);
+    navigate(path);
+    requestAnimationFrame(() => {
       setLoading?.(false);
-    }, 100);
+    });
   };
 }
 

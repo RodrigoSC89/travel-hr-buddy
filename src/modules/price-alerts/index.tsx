@@ -205,18 +205,21 @@ export const CompletePriceAlertsUI: React.FC = () => {
   };
 
   const checkPrices = async () => {
-    toast.info("Checking prices... (simulated)");
-    setTimeout(() => {
-      toast.success("Prices checked and updated");
-      loadAlerts();
-    }, 2000);
+    toast.info("Verificando preços...");
+    await loadAlerts();
+    toast.success("Preços verificados e atualizados");
   };
 
   const sendTestEmail = async (alertId: string) => {
-    toast.info("Sending test email notification...");
-    setTimeout(() => {
-      toast.success("Test email sent successfully");
-    }, 1500);
+    try {
+      const { error } = await supabase.functions.invoke("send-notification", {
+        body: { type: "price_alert_test", alertId }
+      });
+      if (error) throw error;
+      toast.success("E-mail de teste enviado com sucesso");
+    } catch {
+      toast.error("Falha ao enviar e-mail de teste");
+    }
   };
 
   // Recharts data

@@ -101,7 +101,7 @@ class SystemConfigManager {
 
   private loadConfig(): SystemConfig {
     try {
-      const stored = localStorage.getItem('system_config');
+      const stored = sessionStorage.getItem('system_config');
       if (stored) {
         return { ...defaultConfig, ...JSON.parse(stored) };
       }
@@ -113,7 +113,7 @@ class SystemConfigManager {
 
   private saveConfig() {
     try {
-      localStorage.setItem('system_config', JSON.stringify(this.config));
+      sessionStorage.setItem('system_config', JSON.stringify(this.config));
     } catch (error) {
       logger.error('Failed to save system config:', error);
     }
@@ -163,7 +163,7 @@ class SystemConfigManager {
 
   reset() {
     this.config = defaultConfig;
-    localStorage.removeItem('system_config');
+    sessionStorage.removeItem('system_config');
     this.notifyListeners();
   }
 

@@ -36,7 +36,7 @@ class WebhookManager {
   initialize(): void {
     // Load from localStorage for demo (in production, use edge function)
     try {
-      const stored = localStorage.getItem("webhook_config");
+      const stored = sessionStorage.getItem("webhook_config");
       if (stored) {
         this.config = JSON.parse(stored);
       }
@@ -51,7 +51,7 @@ class WebhookManager {
    */
   setConfig(config: Partial<WebhookConfig>): void {
     this.config = { ...this.config, ...config };
-    localStorage.setItem("webhook_config", JSON.stringify(this.config));
+    sessionStorage.setItem("webhook_config", JSON.stringify(this.config));
   }
 
   /**
