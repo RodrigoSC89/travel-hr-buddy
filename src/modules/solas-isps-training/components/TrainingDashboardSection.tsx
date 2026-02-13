@@ -333,7 +333,7 @@ Por favor, especifique o que precisa ou pergunte diretamente!`,
                 onKeyDown={(e) => e.key === "Enter" && handleSendMessage()}
                 disabled={isLoading}
               />
-              <Button size="icon" onClick={handleSendMessage} disabled={isLoading}>
+              <Button size="icon" onClick={handleSendMessage} disabled={isLoading} aria-label="Enviar mensagem">
                 <Send className="h-4 w-4" />
               </Button>
             </div>

@@ -48,10 +48,10 @@ export function AILevel3Wrapper({
                   IA Autônoma Level 3
                 </span>
                 <div className="flex gap-1">
-                  <Button variant="ghost" size="icon" className="h-6 w-6" onClick={() => setIsMinimized(true)}>
+                  <Button variant="ghost" size="icon" className="h-6 w-6" onClick={() => setIsMinimized(true)} aria-label="Minimizar">
                     <Minimize2 className="h-3 w-3" />
                   </Button>
-                  <Button variant="ghost" size="icon" className="h-6 w-6" onClick={() => setIsExpanded(false)}>
+                  <Button variant="ghost" size="icon" className="h-6 w-6" onClick={() => setIsExpanded(false)} aria-label="Fechar">
                     <X className="h-3 w-3" />
                   </Button>
                 </div>

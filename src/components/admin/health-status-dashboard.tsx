@@ -199,7 +199,7 @@ export const HealthStatusDashboard: React.FC = () => {
               <CardTitle>Saúde dos Serviços</CardTitle>
               <CardDescription>Status em tempo real das APIs e integrações externas</CardDescription>
             </div>
-            <Button variant="outline" size="sm" onClick={() => window.location.reload()}>
+            <Button variant="outline" size="sm" onClick={() => { setLastUpdate(new Date()); }}>
               <RefreshCw className="h-4 w-4 mr-2" />
               Atualizar
             </Button>

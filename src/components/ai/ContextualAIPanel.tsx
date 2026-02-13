@@ -215,6 +215,7 @@ export function ContextualAIPanel({ defaultExpanded = true, className }: Context
           size="icon"
           onClick={() => setIsExpanded(true)}
           className="h-10 w-10"
+          aria-label="Expandir painel IA"
         >
           <ChevronLeft className="h-5 w-5" />
         </Button>
@@ -223,6 +224,7 @@ export function ContextualAIPanel({ defaultExpanded = true, className }: Context
           variant="ghost"
           size="icon"
           className="relative"
+          aria-label={`Assistente IA${context.activeAlerts > 0 ? ` - ${context.activeAlerts} alertas` : ''}`}
         >
           <Brain className="h-5 w-5" />
           {context.activeAlerts > 0 && (
@@ -236,6 +238,7 @@ export function ContextualAIPanel({ defaultExpanded = true, className }: Context
           variant="ghost"
           size="icon"
           onClick={() => setIsMinimized(true)}
+          aria-label="Minimizar painel IA"
         >
           <Minimize2 className="h-4 w-4" />
         </Button>
@@ -265,13 +268,13 @@ export function ContextualAIPanel({ defaultExpanded = true, className }: Context
           </Badge>
         </div>
         <div className="flex items-center gap-1">
-          <Button variant="ghost" size="icon" onClick={fetchSuggestions} disabled={isLoading}>
+          <Button variant="ghost" size="icon" onClick={fetchSuggestions} disabled={isLoading} aria-label="Atualizar sugestões">
             <RefreshCw className={cn("h-4 w-4", isLoading && "animate-spin")} />
           </Button>
-          <Button variant="ghost" size="icon" onClick={() => setIsExpanded(false)}>
+          <Button variant="ghost" size="icon" onClick={() => setIsExpanded(false)} aria-label="Recolher painel">
             <ChevronRight className="h-4 w-4" />
           </Button>
-          <Button variant="ghost" size="icon" onClick={() => setIsMinimized(true)}>
+          <Button variant="ghost" size="icon" onClick={() => setIsMinimized(true)} aria-label="Minimizar painel">
             <Minimize2 className="h-4 w-4" />
           </Button>
         </div>

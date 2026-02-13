@@ -518,6 +518,7 @@ export function RouteMap({
             variant="secondary" 
             className="h-8 w-8 shadow-lg bg-background/90 backdrop-blur-sm"
             onClick={() => handleZoom(1)}
+            aria-label="Aumentar zoom"
           >
             <ZoomIn className="h-4 w-4" />
           </Button>
@@ -526,6 +527,7 @@ export function RouteMap({
             variant="secondary" 
             className="h-8 w-8 shadow-lg bg-background/90 backdrop-blur-sm"
             onClick={() => handleZoom(-1)}
+            aria-label="Diminuir zoom"
           >
             <ZoomOut className="h-4 w-4" />
           </Button>
@@ -534,6 +536,7 @@ export function RouteMap({
             variant="secondary" 
             className="h-8 w-8 shadow-lg bg-background/90 backdrop-blur-sm"
             onClick={handleFitBounds}
+            aria-label="Ajustar mapa aos limites"
           >
             <Maximize2 className="h-4 w-4" />
           </Button>
