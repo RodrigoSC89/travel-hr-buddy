@@ -35,20 +35,20 @@ import {
 import { GuidedTour, tourStyles } from "@/components/onboarding/GuidedTour";
 
 // Seções do módulo unificado (removed - module deleted)
-const VisaoGeralSection = () => <div className="text-center py-12 text-muted-foreground">Visão Geral em manutenção.</div>;
-const OperacoesSection = () => <div className="text-center py-12 text-muted-foreground">Operações em manutenção.</div>;
-const ExecutivoSection = () => <div className="text-center py-12 text-muted-foreground">Executivo em manutenção.</div>;
+const VisaoGeralSection = (_props: Record<string, unknown>) => <div className="text-center py-12 text-muted-foreground">Visão Geral em manutenção.</div>;
+const OperacoesSection = (_props: Record<string, unknown>) => <div className="text-center py-12 text-muted-foreground">Operações em manutenção.</div>;
+const ExecutivoSection = (_props: Record<string, unknown>) => <div className="text-center py-12 text-muted-foreground">Executivo em manutenção.</div>;
 const IASection = () => <div className="text-center py-12 text-muted-foreground">IA em manutenção.</div>;
-const AlertasSection = () => <div className="text-center py-12 text-muted-foreground">Alertas em manutenção.</div>;
+const AlertasSection = (_props: Record<string, unknown>) => <div className="text-center py-12 text-muted-foreground">Alertas em manutenção.</div>;
 const ConfigSection = () => <div className="text-center py-12 text-muted-foreground">Configurações em manutenção.</div>;
 const ResilienciaSection = () => <div className="text-center py-12 text-muted-foreground">Resiliência em manutenção.</div>;
 
 // Hooks de IA (removed)
-const useUnifiedCommandAI = () => ({ messages: [] as Array<{role: string; content: string}>, sendMessage: async (_msg: string) => {}, isLoading: false, clearMessages: () => {} });
+const useUnifiedCommandAI = () => ({ messages: [] as Array<{role: string; content: string}>, sendMessage: async (_msg: string) => {}, isLoading: false, clearMessages: () => {}, isConnected: false });
 const useVoiceCommands = (_opts?: Record<string, unknown>) => ({ isListening: false, isSupported: false, transcript: '', toggleVoice: () => {}, stopListening: () => {} });
 
 // Voice Assistant with Hotword (removed)
-const VoiceAssistantWithHotword = () => null;
+const VoiceAssistantWithHotword = (_props: Record<string, unknown>) => null;
 
 export interface SystemStatus {
   fleet: { total: number; active: number; maintenance: number; alerts: number };
@@ -548,7 +548,7 @@ function CentralComandoContent() {
 
         {/* ARIA Voice Assistant with Hotword - Centered Bottom */}
         <VoiceAssistantWithHotword 
-          onCommand={(cmd) => {
+          onCommand={(cmd: string) => {
             sendMessage(cmd);
           }}
         />
