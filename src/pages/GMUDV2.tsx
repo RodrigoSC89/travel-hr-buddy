@@ -194,11 +194,11 @@ export default function GMUDV2() {
                     {req.approvers.map((approver) => (
                       <div key={approver.role} className="flex-1 p-3 bg-background rounded-lg border text-center">
                         {approver.status === 'approved' ? (
-                          <CheckCircle className="h-6 w-6 mx-auto text-green-500 mb-2" />
+                          <CheckCircle className="h-6 w-6 mx-auto text-success mb-2" />
                         ) : approver.status === 'pending' ? (
-                          <Clock className="h-6 w-6 mx-auto text-orange-500 mb-2" />
+                          <Clock className="h-6 w-6 mx-auto text-warning mb-2" />
                         ) : (
-                          <XCircle className="h-6 w-6 mx-auto text-red-500 mb-2" />
+                          <XCircle className="h-6 w-6 mx-auto text-destructive mb-2" />
                         )}
                         <p className="text-sm font-medium">{approver.role}</p>
                         <p className="text-xs text-muted-foreground">

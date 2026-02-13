@@ -81,18 +81,18 @@ interface PortCall {
 
 // ── Status helpers ───────────────────────────────────────────────────
 const STATUS_CONFIG: Record<string, { label: string; class: string }> = {
-  preparing: { label: "Preparando", class: "bg-blue-500/20 text-blue-400 border-blue-500/30" },
-  in_transit: { label: "Em Trânsito", class: "bg-purple-500/20 text-purple-400 border-purple-500/30" },
-  customs: { label: "Alfândega", class: "bg-yellow-500/20 text-yellow-400 border-yellow-500/30" },
-  delivered: { label: "Entregue", class: "bg-green-500/20 text-green-400 border-green-500/30" },
+  preparing: { label: "Preparando", class: "bg-info/20 text-info border-info/30" },
+  in_transit: { label: "Em Trânsito", class: "bg-primary/20 text-primary border-primary/30" },
+  customs: { label: "Alfândega", class: "bg-warning/20 text-warning border-warning/30" },
+  delivered: { label: "Entregue", class: "bg-success/20 text-success border-success/30" },
   delayed: { label: "Atrasado", class: "bg-destructive/20 text-destructive border-destructive/30" },
   cancelled: { label: "Cancelado", class: "bg-muted text-muted-foreground border-muted" },
-  scheduled: { label: "Agendado", class: "bg-blue-500/20 text-blue-400 border-blue-500/30" },
-  approaching: { label: "Aproximando", class: "bg-yellow-500/20 text-yellow-400 border-yellow-500/30" },
-  arrived: { label: "Atracado", class: "bg-green-500/20 text-green-400 border-green-500/30" },
-  berthed: { label: "Atracado", class: "bg-green-500/20 text-green-400 border-green-500/30" },
+  scheduled: { label: "Agendado", class: "bg-info/20 text-info border-info/30" },
+  approaching: { label: "Aproximando", class: "bg-warning/20 text-warning border-warning/30" },
+  arrived: { label: "Atracado", class: "bg-success/20 text-success border-success/30" },
+  berthed: { label: "Atracado", class: "bg-success/20 text-success border-success/30" },
   departed: { label: "Partiu", class: "bg-muted text-muted-foreground border-muted" },
-  completed: { label: "Concluído", class: "bg-green-500/20 text-green-400 border-green-500/30" },
+  completed: { label: "Concluído", class: "bg-success/20 text-success border-success/30" },
 };
 
 function StatusBadge({ status }: { status: string }) {

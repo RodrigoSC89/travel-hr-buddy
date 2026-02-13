@@ -213,8 +213,8 @@ export default function PersonalRestoreDashboard() {
             <div className="text-sm text-muted-foreground">Média por dia</div>
             <div className="flex items-center justify-center gap-2 text-2xl font-bold">
               {summary.avg_per_day}
-              {trendIndicator === "up" && <TrendingUp className="w-5 h-5 text-green-500" />}
-              {trendIndicator === "down" && <TrendingDown className="w-5 h-5 text-red-500" />}
+              {trendIndicator === "up" && <TrendingUp className="w-5 h-5 text-success" />}
+              {trendIndicator === "down" && <TrendingDown className="w-5 h-5 text-destructive" />}
               {trendIndicator === "stable" && <Minus className="w-5 h-5 text-muted-foreground" />}
             </div>
           </Card>

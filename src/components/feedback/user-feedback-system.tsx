@@ -178,7 +178,7 @@ export const UserFeedbackSystem: React.FC = () => {
     case "urgent":
       return <Badge variant="destructive">Urgente</Badge>;
     case "high":
-      return <Badge variant="secondary" className="bg-orange-500 text-azure-50">Alto</Badge>;
+      return <Badge variant="secondary" className="bg-warning text-warning-foreground">Alto</Badge>;
     case "medium":
       return <Badge variant="outline">Médio</Badge>;
     default:
@@ -218,7 +218,7 @@ export const UserFeedbackSystem: React.FC = () => {
         
         <Card className="p-4">
           <div className="flex items-center gap-2">
-            <Clock className="h-5 w-5 text-orange-500" />
+            <Clock className="h-5 w-5 text-warning" />
             <div>
               <p className="text-2xl font-bold">{feedbackStats.open}</p>
               <p className="text-sm text-muted-foreground">Em Aberto</p>
