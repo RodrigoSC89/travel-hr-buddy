@@ -83,15 +83,15 @@ export default function CommandMegaHub() {
       });
     });
 
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any -- voyage_plans join may include extra columns
-    voyages.slice(0, 3).forEach((voy: any) => {
+    voyages.slice(0, 3).forEach((voy) => {
+      const v = voy as Record<string, unknown>;
       events.push({
-        id: `voyage-${voy.id}`,
-        title: `Voyage ${voy.voyage_number || ''}`,
-        description: `${voy.origin_port || '?'} → ${voy.destination_port || '?'} | Status: ${voy.status || 'N/A'}`,
-        timestamp: voy.created_at || new Date().toISOString(),
-        type: voy.status === 'completed' ? 'success' as const : voy.status === 'in_progress' ? 'info' as const : 'warning' as const,
-        metadata: { voyage: voy.voyage_number }
+        id: `voyage-${v.id}`,
+        title: `Voyage ${v.voyage_number || ''}`,
+        description: `${v.origin_port || '?'} → ${v.destination_port || '?'} | Status: ${v.status || 'N/A'}`,
+        timestamp: String(v.created_at || new Date().toISOString()),
+        type: v.status === 'completed' ? 'success' as const : v.status === 'in_progress' ? 'info' as const : 'warning' as const,
+        metadata: { voyage: String(v.voyage_number || '') }
       });
     });
 

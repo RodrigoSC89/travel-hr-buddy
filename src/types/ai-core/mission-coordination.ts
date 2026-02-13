@@ -8,8 +8,8 @@ export type VesselRole = "primary" | "support" | "backup" | "observer";
 export interface VesselAIContext {
   vessel_id: string;
   context_id: string;
-  local_data: Record<string, any>;
-  global_data: Record<string, any>;
+  local_data: Record<string, unknown>;
+  global_data: Record<string, unknown>;
   last_sync: string;
   model_version: string;
   interaction_count: number;

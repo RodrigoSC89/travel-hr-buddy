@@ -111,16 +111,19 @@ const fetchChecklistHistory = async (
       return [];
     }
     
-    return (data || []).map((record: ChecklistCompletionRow) => ({
+    return (data || []).map((record: ChecklistCompletionRow) => {
+      const completionData = record.completion_data as Record<string, unknown> | null;
+      return ({
       id: record.id,
       checklistType: record.checklist_name,
-      items: Array.isArray((record.completion_data as any)?.items) 
-        ? (record.completion_data as any).items 
+      items: Array.isArray(completionData?.items) 
+        ? completionData.items as ChecklistItem[]
         : [],
       completedAt: record.completed_at || record.started_at,
       vessel: record.vessel_id || undefined,
       user: record.completed_by || undefined
-    }));
+    });
+    });
   } catch (error) {
     logger.error("Error fetching checklist history", error);
     return [];
@@ -346,7 +349,7 @@ export const saveChecklistCompletion = async (
   try {
     const insertData: ChecklistCompletionInsert = {
       checklist_name: checklistType,
-      completion_data: { items } as any, // JSON type with items array
+      completion_data: { items } as unknown as import("@/integrations/supabase/types").Json,
       vessel_id: context?.vessel || null,
       completed_by: context?.userId || null,
       completed_at: new Date().toISOString(),

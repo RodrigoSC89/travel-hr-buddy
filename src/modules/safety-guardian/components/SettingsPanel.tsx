@@ -55,8 +55,8 @@ export const SettingsPanel: React.FC<SettingsPanelProps> = ({
     setSettings(prev => {
       const parts = path.split('.');
       const newSettings = { ...prev };
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any -- dynamic nested path update requires runtime traversal
-      let current: Record<string, any> = newSettings;
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any -- dynamic nested path update requires runtime traversal of SafetySettings
+      let current: Record<string, any> = newSettings as Record<string, any>;
       
       for (let i = 0; i < parts.length - 1; i++) {
         current[parts[i]] = { ...current[parts[i]] };

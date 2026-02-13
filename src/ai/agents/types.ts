@@ -21,7 +21,7 @@ export interface AgentContext {
 export interface AgentObservation {
   id: string;
   type: 'metric' | 'event' | 'alert' | 'pattern' | 'anomaly';
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- observation data shape varies by type
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- observation data requires arithmetic/indexing
   data: Record<string, any>;
   source: string;
   timestamp: Date;
@@ -38,7 +38,7 @@ export interface AgentDecision {
   impact: 'low' | 'medium' | 'high' | 'critical';
   requiresApproval: boolean;
   autoExecute: boolean;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- decision parameters shape varies
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- decision parameters used for dynamic operations
   parameters?: Record<string, any>;
   deadline?: Date;
   createdAt: Date;
@@ -49,6 +49,7 @@ export interface AgentAction {
   decisionId: string;
   type: 'alert' | 'correction' | 'escalation' | 'report' | 'automation';
   status: 'pending' | 'executing' | 'completed' | 'failed' | 'cancelled';
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- action result shape varies
   result?: Record<string, any>;
   error?: string;
   executedAt?: Date;

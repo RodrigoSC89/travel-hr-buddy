@@ -51,17 +51,16 @@ export default function OpenSkyFlights() {
       if (error) throw error;
 
       if (data?.states) {
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any -- OpenSky API returns array-of-arrays state vectors
-        const formattedAircraft: Aircraft[] = data.states.slice(0, 50).map((state: any[]) => ({
-          icao24: state[0] || "",
-          callsign: state[1]?.trim() || "N/A",
-          origin_country: state[2] || "Desconhecido",
-          longitude: state[5] || 0,
-          latitude: state[6] || 0,
-          altitude: state[7] || 0,
-          velocity: state[9] || 0,
-          heading: state[10] || 0,
-          on_ground: state[8] || false
+        const formattedAircraft: Aircraft[] = data.states.slice(0, 50).map((state: unknown[]) => ({
+          icao24: String(state[0] || ""),
+          callsign: String(state[1] || "").trim() || "N/A",
+          origin_country: String(state[2] || "Desconhecido"),
+          longitude: Number(state[5]) || 0,
+          latitude: Number(state[6]) || 0,
+          altitude: Number(state[7]) || 0,
+          velocity: Number(state[9]) || 0,
+          heading: Number(state[10]) || 0,
+          on_ground: Boolean(state[8])
         }));
         setAircraft(formattedAircraft);
         toast.success(`${formattedAircraft.length} aeronaves encontradas!`);

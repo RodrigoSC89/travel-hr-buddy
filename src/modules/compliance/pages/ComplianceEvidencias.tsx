@@ -35,7 +35,7 @@ export default function ComplianceEvidencias() {
   const displayEvidences: Evidence[] = (rawEvidences || []).map((e: any) => ({
     id: String(e.id),
     title: String(e.title || e.file_name || "Evidência"),
-    type: (["document", "image", "certificate", "report", "audit"].includes(e.document_type) ? e.document_type : "document") as Evidence["type"],
+    type: (["document", "image", "certificate", "report", "audit"].includes(String(e.document_type)) ? String(e.document_type) : "document") as Evidence["type"],
     fileName: String(e.file_name || "arquivo"),
     fileSize: e.file_size ? `${(Number(e.file_size) / 1024).toFixed(0)} KB` : "N/A",
     regulation: String(e.regulation || "Geral"),

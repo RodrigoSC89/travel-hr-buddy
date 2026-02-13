@@ -10,7 +10,7 @@ import { logger } from "@/lib/logger";
 interface AISuggestion {
   suggestion_type: string;
   suggestion_text: string;
-  context?: Record<string, any>;
+  context?: Record<string, unknown> | import("@/integrations/supabase/types").Json;
   confidence_score?: number;
   accepted?: boolean;
   feedback?: string;

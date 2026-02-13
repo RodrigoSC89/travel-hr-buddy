@@ -91,8 +91,7 @@ const trustedProtocols: Set<ProtocolType> = new Set([
 export async function evaluateTrust(
   sourceSystem: string,
   protocol: ProtocolType,
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- dynamic protocol payloads have varying shapes
-  payload: any,
+  payload: unknown,
   sourceIp?: string
 ): Promise<TrustEvaluation> {
   logger.info(`[TrustComplianceChecker] Evaluating trust for ${sourceSystem}`);

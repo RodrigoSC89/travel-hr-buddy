@@ -73,20 +73,19 @@ export default function OrdersListPanel() {
         .order("created_at", { ascending: false });
       
       if (error) throw error;
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any -- dynamic table mapping
-      return (data || []).map((item: any) => ({
-        id: item.id,
-        order_number: item.rfq_number || `PO-${item.id.slice(0, 8)}`,
-        title: item.title,
-        description: item.description || "",
-        category: item.category,
-        status: item.status || "draft",
-        total_amount: item.budget_estimate || 0,
-        currency: item.currency || "BRL",
-        supplier_id: item.supplier_id || "",
-        supplier_name: item.supplier_name || "Fornecedor não definido",
-        created_at: item.created_at,
-        updated_at: item.updated_at
+      return (data || []).map((item: Record<string, unknown>) => ({
+        id: String(item.id),
+        order_number: String(item.rfq_number || `PO-${String(item.id).slice(0, 8)}`),
+        title: String(item.title),
+        description: String(item.description || ""),
+        category: String(item.category),
+        status: (String(item.status) || "draft") as PurchaseOrder['status'],
+        total_amount: Number(item.budget_estimate) || 0,
+        currency: String(item.currency || "BRL"),
+        supplier_id: String(item.supplier_id || ""),
+        supplier_name: String(item.supplier_name || "Fornecedor não definido"),
+        created_at: String(item.created_at),
+        updated_at: String(item.updated_at)
       })) as PurchaseOrder[];
     }
   });
