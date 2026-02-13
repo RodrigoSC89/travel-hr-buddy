@@ -69,12 +69,12 @@ const customFetch = async (input: RequestInfo | URL, init?: RequestInit): Promis
   const MAX_RETRIES = 4;
   const slow = isSlowConnection();
   
-  // Adaptive timeouts for maritime/satellite connections
-  // First attempt has longer timeout to avoid premature failures
-  // Slow: 30s/45s/60s/75s | Normal: 20s/30s/40s/50s
+  // Adaptive timeouts - reduced to prevent blocking browser connections
+  // Auth requests were being aborted because retries consumed all connections
+  // Slow: 12s/18s/24s/30s | Normal: 8s/12s/16s/20s
   const getTimeout = (attempt: number) => {
-    const base = slow ? 30000 : 20000;
-    return base + (attempt * (slow ? 15000 : 10000));
+    const base = slow ? 12000 : 8000;
+    return base + (attempt * (slow ? 6000 : 4000));
   };
   
   let lastError: Error | null = null;
