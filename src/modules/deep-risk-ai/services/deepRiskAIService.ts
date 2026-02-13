@@ -180,7 +180,7 @@ class DeepRiskAIService {
 
       if (error) throw error;
 
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any -- system_observations metadata is dynamic JSON
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any -- system_observations dynamic JSON
       return (data || []).map((d: any) => {
         const meta = d.metadata as Record<string, unknown> | null;
         return {
@@ -285,7 +285,7 @@ class DeepRiskAIService {
         .order("timestamp", { ascending: false })
         .limit(50);
 
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any -- incidents table fields accessed dynamically
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any -- incidents dynamic columns
       return (data || []).map((d: any) => ({
         id: d.id as string,
         type: d.type as string,

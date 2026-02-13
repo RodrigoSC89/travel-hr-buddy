@@ -99,8 +99,7 @@ export function VesselTrackingMap({
 
       if (data?.vessels && data.vessels.length > 0) {
         // Map API response to component format
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any -- edge function response shape
-        const mappedVessels = data.vessels.map((v: any) => ({
+        const mappedVessels = data.vessels.map((v: Record<string, unknown>) => ({
           mmsi: v.mmsi,
           imo: v.imo,
           name: v.name,

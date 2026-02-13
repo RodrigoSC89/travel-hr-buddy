@@ -71,8 +71,7 @@ export const SmartInsights: React.FC = () => {
       if (error) throw error;
 
       if (data.success && data.insights) {
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any -- edge function response shape
-        setInsights(data.insights.map((insight: any) => ({
+        setInsights(data.insights.map((insight: { id?: string; title?: string; description?: string; priority?: string; confidence?: number; category?: string; actionable?: boolean; impact_value?: string; related_module?: string }) => ({
           id: insight.id || `insight-${Date.now()}-${insight.title?.slice(0,5) || 'x'}`,
           type: insight.priority === "high" ? "warning" : "recommendation",
           title: insight.title,
@@ -179,13 +178,12 @@ export const SmartInsights: React.FC = () => {
 
       if (data.success) {
         // Convert performance data to predictions format
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any -- edge function response
-        const predictiveData = data.metrics?.slice(0, 4).map((metric: any, index: number) => ({
+        const predictiveData = data.metrics?.slice(0, 4).map((metric: { name?: string; value?: number; target?: number; unit?: string }, index: number) => ({
           id: `prediction_${index}`,
-          name: `Previsão ${metric.name}`,
-          currentValue: metric.value,
-          predictedValue: metric.target || metric.value * 1.1,
-          trend: metric.value < (metric.target || metric.value * 1.1) ? "up" : "down",
+          name: `Previsão ${metric.name || 'Métrica'}`,
+          currentValue: metric.value ?? 0,
+          predictedValue: metric.target || (metric.value ?? 0) * 1.1,
+          trend: (metric.value ?? 0) < (metric.target || (metric.value ?? 0) * 1.1) ? "up" : "down",
           confidence: 85 + (index * 3) % 10,
           timeFrame: "30 dias",
           unit: metric.unit

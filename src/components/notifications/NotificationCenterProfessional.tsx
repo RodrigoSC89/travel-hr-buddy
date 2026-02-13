@@ -124,7 +124,7 @@ const loadNotificationsFromSupabase = async (): Promise<Notification[]> => {
 
     if (error || !data || data.length === 0) return [];
 
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Supabase row shape is dynamic
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any -- intelligent_notifications dynamic schema
     return data.map((n: any) => ({
       id: n.id,
       title: n.title || "Notificação",

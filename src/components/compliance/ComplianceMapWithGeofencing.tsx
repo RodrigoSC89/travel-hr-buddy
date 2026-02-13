@@ -201,7 +201,7 @@ export function ComplianceMapWithGeofencing({
     }
   }, []);
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Supabase JSONB metadata has dynamic position/coordinates shape
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Supabase JSONB metadata
   function parseLocation(locationStr: string | null, metadata: any): { lat: number; lng: number } | null {
     if (metadata?.position?.lat && metadata?.position?.lng) {
       return { lat: metadata.position.lat, lng: metadata.position.lng };

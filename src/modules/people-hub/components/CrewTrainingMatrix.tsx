@@ -182,7 +182,7 @@ export default function CrewTrainingMatrix() {
         .select("id, first_name, last_name, rank, department, vessel_id, vessels(name)")
         .limit(50);
       if (members && members.length > 0) {
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any -- crew_members select with joined vessels
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any -- crew_members joined query
         setCrewData(members.map((m: any) => ({
           id: String(m.id),
           name: `${String(m.first_name || "")} ${String(m.last_name || "")}`.trim(),
@@ -196,7 +196,7 @@ export default function CrewTrainingMatrix() {
         .select("id, crew_member_id, certificate_name, issue_date, expiry_date, status")
         .limit(200);
       if (certs && certs.length > 0) {
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any -- crew_certifications dynamic schema
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any -- certifications dynamic schema
         const records: TrainingRecord[] = certs.map((c: any) => {
           const now = new Date();
           const expiry = c.expiry_date ? new Date(c.expiry_date) : null;

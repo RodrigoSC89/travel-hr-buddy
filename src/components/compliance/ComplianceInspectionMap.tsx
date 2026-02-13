@@ -204,7 +204,7 @@ export function ComplianceInspectionMap({
   }, [mapboxToken]);
 
   // Add vessel markers
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Mapbox GL dynamic import
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Mapbox GL runtime types require flexible access
   const addVesselMarkers = useCallback((mapInstance: any, mapboxgl: any) => {
     // Clear existing markers
     markersRef.current.forEach(marker => marker.remove());

@@ -69,8 +69,7 @@ export function ConversationalInput({
         setVoiceState(s => ({ ...s, isListening: false }));
       };
 
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any -- SpeechRecognition error event
-      recognitionRef.current.onerror = (event: any) => {
+      recognitionRef.current.onerror = (event: Event) => {
       };
     }
   }, []);

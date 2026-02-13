@@ -155,7 +155,7 @@ export async function fetchStarFixInspections(imoNumber: string): Promise<StarFi
     const data = await response.json();
 
     // Transform and store inspections
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any -- External API response shape
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any -- External API response
     const inspections: StarFixInspection[] = data.inspections.map((inspection: any) => ({
       vessel_id: imoNumber,
       imo_number: imoNumber,
