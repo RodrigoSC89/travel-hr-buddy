@@ -62,17 +62,7 @@ export { useNetworkStatus, useAdaptiveSettings, type ConnectionQuality } from ".
 export { useVirtualList, useInfiniteScroll } from "./use-virtual-list";
 export { useOfflineMutation } from "./use-offline-mutation";
 
-// PATCH 810: Optimized Data Fetching
-export { useOptimizedQuery, useOptimizedMutation, useInfiniteOptimizedQuery } from "./use-optimized-query";
-
-// PATCH 815: Adaptive Performance
-export { 
-  useAdaptivePerformance, 
-  useThrottledRealtime, 
-  useAdaptivePolling,
-  useFeatureFlags,
-  type PerformanceConfig 
-} from "./use-adaptive-performance";
+// PATCH 810-815: Performance hooks removed during cleanup
 
 // PATCH 820: Intersection-based Preloading
 export { 
@@ -88,7 +78,7 @@ export {
 } from "@/components/performance/ConnectionAware";
 export { useVirtualizedData } from "@/components/performance/VirtualizedList";
 export { useErrorBoundary } from "@/components/performance/ErrorBoundaryAdvanced";
-export { useSlowConnectionWarning } from "@/components/performance/ConnectionIndicator";
+// ConnectionIndicator removed during cleanup
 
 // PATCH 836: Revolutionary UX
 export { usePredictiveUI, useSmartPrefetching } from "@/lib/ux/predictive-ui";

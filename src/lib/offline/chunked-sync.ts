@@ -5,7 +5,7 @@
 
 import { logger } from '@/lib/logger';
 import { compressPayload, decompressPayload, CompressedPayload } from './payload-compression';
-import { bandwidthOptimizer } from '@/lib/performance/low-bandwidth-optimizer';
+// bandwidthOptimizer removed during cleanup
 
 interface SyncChunk {
   id: string;
@@ -58,7 +58,7 @@ class ChunkedSyncManager {
    * Get optimal chunk size based on current connection
    */
   private getChunkSize(): number {
-    const connectionType = bandwidthOptimizer.getConnectionType();
+    const connectionType = 'wifi' as const; // bandwidthOptimizer removed
     return CHUNK_SIZES[connectionType] || this.config.baseChunkSize;
   }
 

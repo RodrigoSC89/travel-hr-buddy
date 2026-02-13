@@ -7,7 +7,8 @@
 import { useState, useCallback, useRef, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
-import { useLiteMode } from "@/components/performance/LiteMode";
+// LiteMode removed during cleanup - always full mode
+const useLiteMode = () => ({ isLite: false, isLiteMode: false });
 import { logger } from '@/lib/logger';
 import { getEdgeFunctionUrl, getEdgeFunctionHeaders } from '@/lib/supabase/edge-function-helper';
 

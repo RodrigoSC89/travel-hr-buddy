@@ -4,7 +4,7 @@
  */
 
 import { useCallback, useRef, useState, useEffect } from 'react';
-import { bandwidthOptimizer } from '@/lib/performance/low-bandwidth-optimizer';
+// bandwidthOptimizer removed during cleanup - micro-interactions always enabled
 
 type InteractionType = 
   | 'button-press'
@@ -82,7 +82,7 @@ const ANIMATIONS: Record<InteractionType, Record<string, AnimationConfig>> = {
  * Get animation config based on connection
  */
 function getAnimationConfig(type: InteractionType): AnimationConfig {
-  const isSlowConnection = bandwidthOptimizer.isLowBandwidth();
+  const isSlowConnection = false; // bandwidthOptimizer removed
   return ANIMATIONS[type][isSlowConnection ? 'slow' : 'fast'];
 }
 
@@ -151,7 +151,7 @@ export function useRippleEffect() {
   const nextId = useRef(0);
   
   const createRipple = useCallback((event: React.MouseEvent<HTMLElement>) => {
-    if (bandwidthOptimizer.isLowBandwidth()) return;
+    if (false) return; // bandwidthOptimizer removed
     
     const element = event.currentTarget;
     const rect = element.getBoundingClientRect();
@@ -195,7 +195,7 @@ export function useButtonPress() {
  */
 export function useStaggeredList<T>(items: T[], staggerDelay = 50) {
   const [visibleCount, setVisibleCount] = useState(0);
-  const isSlowConnection = bandwidthOptimizer.isLowBandwidth();
+  const isSlowConnection = false; // bandwidthOptimizer removed
   
   useEffect(() => {
     if (isSlowConnection) {
@@ -244,7 +244,7 @@ export function usePulseOnChange<T>(value: T) {
     }
   }, [value]);
   
-  const pulseClass = isPulsing && !bandwidthOptimizer.isLowBandwidth() 
+  const pulseClass = isPulsing 
     ? 'animate-pulse' 
     : '';
   
@@ -268,7 +268,7 @@ export function useShakeOnError(hasError: boolean) {
     prevError.current = hasError;
   }, [hasError]);
   
-  const shakeStyle: React.CSSProperties = isShaking && !bandwidthOptimizer.isLowBandwidth()
+  const shakeStyle: React.CSSProperties = isShaking
     ? { animation: 'shake 0.3s ease-out' }
     : {};
   
