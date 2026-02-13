@@ -178,11 +178,11 @@ export default function AILearningDashboard() {
     switch (trend) {
     case "excellent":
     case "good":
-      return <TrendingUp className="w-4 h-4 text-green-600" />;
+      return <TrendingUp className="w-4 h-4 text-success" />;
     case "needs_improvement":
-      return <AlertCircle className="w-4 h-4 text-yellow-600" />;
+      return <AlertCircle className="w-4 h-4 text-warning" />;
     case "poor":
-      return <TrendingDown className="w-4 h-4 text-red-600" />;
+      return <TrendingDown className="w-4 h-4 text-destructive" />;
     default:
       return <Target className="w-4 h-4" />;
     }
@@ -201,11 +201,11 @@ export default function AILearningDashboard() {
   const getPriorityColor = (priority: number) => {
     switch (priority) {
     case 1:
-      return "text-red-600";
+      return "text-destructive";
     case 2:
-      return "text-yellow-600";
+      return "text-warning";
     case 3:
-      return "text-blue-600";
+      return "text-info";
     default:
       return "text-muted-foreground";
     }

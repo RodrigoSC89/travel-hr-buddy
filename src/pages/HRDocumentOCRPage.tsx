@@ -215,7 +215,7 @@ export default function HRDocumentOCRPage() {
                   >
                     <doc.icon className="h-4 w-4" />
                     {doc.label}
-                    {doc.required && <span className="text-red-500">*</span>}
+                    {doc.required && <span className="text-destructive">*</span>}
                   </Button>
                 ))}
               </div>
@@ -297,7 +297,7 @@ export default function HRDocumentOCRPage() {
                 <div 
                   key={doc.id}
                   className={`flex items-center justify-between p-2 rounded-lg ${
-                    processed ? 'bg-green-500/10' : 'bg-muted/50'
+                    processed ? 'bg-success/10' : 'bg-muted/50'
                   }`}
                 >
                   <div className="flex items-center gap-2">
@@ -308,7 +308,7 @@ export default function HRDocumentOCRPage() {
                     <Badge variant="outline" className="text-xs">Obrigatório</Badge>
                   )}
                   {processed && (
-                    <CheckCircle2 className="h-4 w-4 text-green-500" />
+                    <CheckCircle2 className="h-4 w-4 text-success" />
                   )}
                 </div>
               );
@@ -332,8 +332,8 @@ export default function HRDocumentOCRPage() {
                 <div 
                   key={result.id}
                   className={`p-4 rounded-lg border ${
-                    result.status === 'success' ? 'border-green-500/30 bg-green-500/5' :
-                    result.status === 'error' ? 'border-red-500/30 bg-red-500/5' :
+                    result.status === 'success' ? 'border-success/30 bg-success/5' :
+                    result.status === 'error' ? 'border-destructive/30 bg-destructive/5' :
                     'border-primary/30 bg-primary/5'
                   }`}
                 >
@@ -343,10 +343,10 @@ export default function HRDocumentOCRPage() {
                         <Loader2 className="h-4 w-4 animate-spin text-primary" />
                       )}
                       {result.status === 'success' && (
-                        <CheckCircle2 className="h-4 w-4 text-green-500" />
+                        <CheckCircle2 className="h-4 w-4 text-success" />
                       )}
                       {result.status === 'error' && (
-                        <AlertCircle className="h-4 w-4 text-red-500" />
+                        <AlertCircle className="h-4 w-4 text-destructive" />
                       )}
                       <span className="font-medium">{getDocumentLabel(result.type)}</span>
                       {result.status === 'success' && (

@@ -213,22 +213,22 @@ export default function FlightTracker() {
             {flight.position && (
               <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                 <div className="p-4 rounded-lg bg-muted/50 text-center">
-                  <ArrowUp className="h-6 w-6 mx-auto mb-2 text-blue-500" />
+                  <ArrowUp className="h-6 w-6 mx-auto mb-2 text-info" />
                   <p className="text-lg font-bold">{flight.position.altitude.toLocaleString()} ft</p>
                   <p className="text-sm text-muted-foreground">Altitude</p>
                 </div>
                 <div className="p-4 rounded-lg bg-muted/50 text-center">
-                  <Gauge className="h-6 w-6 mx-auto mb-2 text-orange-500" />
+                  <Gauge className="h-6 w-6 mx-auto mb-2 text-warning" />
                   <p className="text-lg font-bold">{flight.position.speed} kts</p>
                   <p className="text-sm text-muted-foreground">Velocidade</p>
                 </div>
                 <div className="p-4 rounded-lg bg-muted/50 text-center">
-                  <Navigation className="h-6 w-6 mx-auto mb-2 text-purple-500" />
+                  <Navigation className="h-6 w-6 mx-auto mb-2 text-accent" />
                   <p className="text-lg font-bold">{flight.position.heading}°</p>
                   <p className="text-sm text-muted-foreground">Heading</p>
                 </div>
                 <div className="p-4 rounded-lg bg-muted/50 text-center">
-                  <MapPin className="h-6 w-6 mx-auto mb-2 text-green-500" />
+                  <MapPin className="h-6 w-6 mx-auto mb-2 text-success" />
                   <p className="text-sm font-medium">
                     {flight.position.latitude.toFixed(2)}°, {flight.position.longitude.toFixed(2)}°
                   </p>
@@ -331,7 +331,7 @@ export default function FlightTracker() {
                 </div>
                 <div className="flex justify-between text-sm">
                   <span className="text-muted-foreground">Preço:</span>
-                  <span className="font-medium text-green-500">
+                  <span className="font-medium text-success">
                     R$ {result.price?.economy?.toLocaleString() || "---"}
                   </span>
                 </div>

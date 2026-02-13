@@ -47,13 +47,13 @@ const TimeTracking: React.FC = () => {
   const getStatusBadge = (status: string) => {
     switch (status) {
       case 'normal':
-        return <Badge className="bg-green-500 text-white"><CheckCircle className="w-3 h-3 mr-1" />Normal</Badge>;
+        return <Badge className="bg-success text-success-foreground"><CheckCircle className="w-3 h-3 mr-1" />Normal</Badge>;
       case 'late':
-        return <Badge className="bg-yellow-500 text-white"><AlertTriangle className="w-3 h-3 mr-1" />Atraso</Badge>;
+        return <Badge className="bg-warning text-warning-foreground"><AlertTriangle className="w-3 h-3 mr-1" />Atraso</Badge>;
       case 'absent':
-        return <Badge className="bg-red-500 text-white"><XCircle className="w-3 h-3 mr-1" />Falta</Badge>;
+        return <Badge className="bg-destructive text-destructive-foreground"><XCircle className="w-3 h-3 mr-1" />Falta</Badge>;
       case 'vacation':
-        return <Badge className="bg-blue-500 text-white"><Sun className="w-3 h-3 mr-1" />Férias</Badge>;
+        return <Badge className="bg-info text-info-foreground"><Sun className="w-3 h-3 mr-1" />Férias</Badge>;
       case 'off':
         return <Badge variant="secondary"><Coffee className="w-3 h-3 mr-1" />Folga</Badge>;
       default:
@@ -101,43 +101,43 @@ const TimeTracking: React.FC = () => {
 
         {/* Stats Cards */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-          <Card className="bg-gradient-to-br from-green-500/10 to-green-600/5 border-green-500/20">
+          <Card className="bg-gradient-to-br from-success/10 to-success/5 border-success/20">
             <CardContent className="p-4">
               <div className="flex items-center justify-between">
                 <div>
                   <p className="text-2xl font-bold">{stats.presentToday}</p>
                   <p className="text-sm text-muted-foreground">Presentes Hoje</p>
                 </div>
-                <CheckCircle className="w-8 h-8 text-green-500" />
+                <CheckCircle className="w-8 h-8 text-success" />
               </div>
             </CardContent>
           </Card>
           
-          <Card className="bg-gradient-to-br from-yellow-500/10 to-yellow-600/5 border-yellow-500/20">
+          <Card className="bg-gradient-to-br from-warning/10 to-warning/5 border-warning/20">
             <CardContent className="p-4">
               <div className="flex items-center justify-between">
                 <div>
                   <p className="text-2xl font-bold">{stats.lateToday}</p>
                   <p className="text-sm text-muted-foreground">Atrasos</p>
                 </div>
-                <AlertTriangle className="w-8 h-8 text-yellow-500" />
+                <AlertTriangle className="w-8 h-8 text-warning" />
               </div>
             </CardContent>
           </Card>
           
-          <Card className="bg-gradient-to-br from-blue-500/10 to-blue-600/5 border-blue-500/20">
+          <Card className="bg-gradient-to-br from-info/10 to-info/5 border-info/20">
             <CardContent className="p-4">
               <div className="flex items-center justify-between">
                 <div>
                   <p className="text-2xl font-bold">{stats.onVacation}</p>
                   <p className="text-sm text-muted-foreground">Em Férias</p>
                 </div>
-                <Sun className="w-8 h-8 text-blue-500" />
+                <Sun className="w-8 h-8 text-info" />
               </div>
             </CardContent>
           </Card>
           
-          <Card className="bg-gradient-to-br from-purple-500/10 to-purple-600/5 border-purple-500/20">
+          <Card className="bg-gradient-to-br from-accent/10 to-accent/5 border-accent/20">
             <CardContent className="p-4">
               <div className="flex items-center justify-between">
                 <div>

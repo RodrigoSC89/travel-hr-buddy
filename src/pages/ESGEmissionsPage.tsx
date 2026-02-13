@@ -129,7 +129,7 @@ export default function ESGEmissionsPage() {
               <div>
                 <p className="text-sm text-muted-foreground">CII Frota</p>
                 <div className="flex items-center gap-2">
-                  <div className={`w-10 h-10 rounded-lg ${getCIIColor(emissionsData.ciiRating)} flex items-center justify-center text-white font-bold text-xl`}>
+                  <div className={`w-10 h-10 rounded-lg ${getCIIColor(emissionsData.ciiRating)} flex items-center justify-center text-primary-foreground font-bold text-xl`}>
                     {emissionsData.ciiRating}
                   </div>
                 </div>
@@ -229,7 +229,7 @@ export default function ESGEmissionsPage() {
                         <Ship className="h-5 w-5 text-primary" />
                         <span className="font-medium">{vessel.name}</span>
                       </div>
-                      <div className={`w-8 h-8 rounded ${getCIIColor(vessel.cii)} flex items-center justify-center text-white font-bold`}>
+                      <div className={`w-8 h-8 rounded ${getCIIColor(vessel.cii)} flex items-center justify-center text-primary-foreground font-bold`}>
                         {vessel.cii}
                       </div>
                     </div>

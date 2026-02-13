@@ -18,10 +18,10 @@ export function ChecklistCard({ checklist, onView, onAnalyze }: ChecklistCardPro
   
   const getStatusColor = (status: string) => {
     switch (status) {
-    case "completed": return "bg-green-500";
-    case "in_progress": return "bg-blue-500";
-    case "approved": return "bg-purple-500";
-    default: return "bg-gray-500";
+    case "completed": return "bg-success";
+    case "in_progress": return "bg-info";
+    case "approved": return "bg-accent";
+    default: return "bg-muted-foreground";
     }
   };
 
