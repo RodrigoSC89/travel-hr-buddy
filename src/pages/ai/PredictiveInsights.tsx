@@ -283,7 +283,7 @@ Formate a resposta em markdown estruturado.`,
                       </div>
                       <div className="flex items-center gap-2">
                         {getTrendIcon(prediction.trend)}
-                        <Badge variant={getImpactColor(prediction.impact) as any}>
+                        <Badge variant={getImpactColor(prediction.impact) as "default" | "secondary" | "outline" | "destructive"}>
                           {prediction.impact === "high" ? "Alto Impacto" : 
                            prediction.impact === "medium" ? "Médio Impacto" : "Baixo Impacto"}
                         </Badge>

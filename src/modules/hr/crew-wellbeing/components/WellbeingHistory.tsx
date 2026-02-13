@@ -44,8 +44,7 @@ export const WellbeingHistory: React.FC = () => {
       if (!user) return;
 
       // Fetch health check-ins for the last 30 days
-      const { data: checkins, error } = await (supabase
-        .from("health_checkins" as any)
+      const { data: checkins, error } = await ((supabase.from as Function)("health_checkins")
         .select("*")
         .eq("user_id", user.id)
         .gte("checkin_date", new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString())
@@ -54,8 +53,7 @@ export const WellbeingHistory: React.FC = () => {
       if (error) throw error;
 
       // Fetch wellbeing logs
-      const { data: logs } = await (supabase
-        .from("crew_wellbeing_logs" as any)
+      const { data: logs } = await ((supabase.from as Function)("crew_wellbeing_logs")
         .select("*")
         .eq("user_id", user.id)
         .order("created_at", { ascending: true })

@@ -100,13 +100,13 @@ export default function MedicalRecordsPanel() {
         id: data.id,
         name: data.full_name || 'N/A',
         rank: data.rank || 'N/A',
-        birthDate: (data as any).date_of_birth ? new Date((data as any).date_of_birth) : new Date(1990, 0, 1),
-        bloodType: (data as any).blood_type || 'N/A',
-        allergies: (data as any).allergies || [],
-        chronicConditions: (data as any).chronic_conditions || [],
+        birthDate: (data as Record<string, unknown>).date_of_birth ? new Date(String((data as Record<string, unknown>).date_of_birth)) : new Date(1990, 0, 1),
+        bloodType: String((data as Record<string, unknown>).blood_type || 'N/A'),
+        allergies: ((data as Record<string, unknown>).allergies as string[]) || [],
+        chronicConditions: ((data as Record<string, unknown>).chronic_conditions as string[]) || [],
         emergencyContact: data.emergency_contact ? String(typeof data.emergency_contact === 'object' ? JSON.stringify(data.emergency_contact) : data.emergency_contact) : 'Não informado',
-        lastCheckup: (data as any).last_medical_checkup ? new Date((data as any).last_medical_checkup) : new Date(),
-        fitnessStatus: ((data as any).medical_status || 'fit') as CrewMember['fitnessStatus'],
+        lastCheckup: (data as Record<string, unknown>).last_medical_checkup ? new Date(String((data as Record<string, unknown>).last_medical_checkup)) : new Date(),
+        fitnessStatus: (String((data as Record<string, unknown>).medical_status || 'fit')) as CrewMember['fitnessStatus'],
       } as CrewMember;
     },
     enabled: crewList.length > 0,
@@ -119,7 +119,7 @@ export default function MedicalRecordsPanel() {
       if (!selectedCrew?.id) return [];
       
       const { data } = await supabase
-        .from('medical_records' as any)
+        .from('medical_records')
         .select('*')
         .eq('crew_member_id', selectedCrew.id)
         .order('created_at', { ascending: false })
@@ -127,14 +127,14 @@ export default function MedicalRecordsPanel() {
 
       if (!data || data.length === 0) return [];
 
-      return (data as any[]).map((d): MedicalEvent => ({
-        id: d.id,
-        type: (d.record_type || d.type || 'consultation') as MedicalEvent['type'],
-        date: new Date(d.visit_date || d.created_at),
-        title: d.title || d.diagnosis || 'Registro Médico',
-        description: d.description || d.notes || d.treatment || '',
-        provider: d.provider || d.doctor_name || 'Médico de Bordo',
-        results: d.results || d.lab_results,
+      return (data as Record<string, unknown>[]).map((d): MedicalEvent => ({
+        id: String(d.id),
+        type: (String(d.record_type || d.type || 'consultation')) as MedicalEvent['type'],
+        date: new Date(String(d.visit_date || d.created_at)),
+        title: String(d.title || d.diagnosis || 'Registro Médico'),
+        description: String(d.description || d.notes || d.treatment || ''),
+        provider: String(d.provider || d.doctor_name || 'Médico de Bordo'),
+        results: String(d.results || d.lab_results || ''),
       }));
     },
     enabled: !!selectedCrew?.id,
@@ -146,8 +146,8 @@ export default function MedicalRecordsPanel() {
     queryFn: async () => {
       if (!selectedCrew?.id) return [];
       
-      const { data } = await supabase
-        .from('medical_prescriptions' as any)
+      const { data } = await (supabase.from as Function)('medical_prescriptions')
+        .select('*')
         .select('*')
         .eq('crew_member_id', selectedCrew.id)
         .order('created_at', { ascending: false })
@@ -155,14 +155,14 @@ export default function MedicalRecordsPanel() {
 
       if (!data || data.length === 0) return [];
 
-      return (data as any[]).map((d): ActiveMedication => ({
-        id: d.id,
-        name: d.medication_name || d.name || 'Medicação',
-        dosage: d.dosage || '',
-        frequency: d.frequency || '',
-        startDate: new Date(d.start_date || d.created_at),
-        prescribedBy: d.prescribed_by || 'Médico de Bordo',
-        status: (d.status || 'active') as ActiveMedication['status'],
+      return (data as Record<string, unknown>[]).map((d): ActiveMedication => ({
+        id: String(d.id),
+        name: String(d.medication_name || d.name || 'Medicação'),
+        dosage: String(d.dosage || ''),
+        frequency: String(d.frequency || ''),
+        startDate: new Date(String(d.start_date || d.created_at)),
+        prescribedBy: String(d.prescribed_by || 'Médico de Bordo'),
+        status: (String(d.status || 'active')) as ActiveMedication['status'],
       }));
     },
     enabled: !!selectedCrew?.id,
@@ -172,13 +172,13 @@ export default function MedicalRecordsPanel() {
   const addEntryMutation = useMutation({
     mutationFn: async () => {
       if (!selectedCrew?.id) throw new Error('Sem paciente selecionado');
-      const { error } = await supabase.from('medical_records' as any).insert({
+      const { error } = await (supabase.from as Function)('medical_records').insert({
         crew_member_id: selectedCrew.id,
         record_type: newEntry.type,
         title: newEntry.title,
         description: newEntry.description,
         visit_date: newEntry.date,
-      } as any);
+      });
       if (error) throw error;
     },
     onSuccess: () => {

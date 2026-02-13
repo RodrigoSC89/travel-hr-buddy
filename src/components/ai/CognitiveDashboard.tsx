@@ -65,7 +65,7 @@ export const CognitiveDashboard: React.FC = () => {
 
       // Load predictions
       const recentPredictions = await predictiveEngine.getRecentPredictions(50);
-      setPredictions(recentPredictions as any);
+      setPredictions(recentPredictions as unknown as typeof predictions);
 
       // Load tactical decisions
       const decisionHistory = await tacticalAI.getDecisionHistory(undefined, 50);
@@ -197,7 +197,7 @@ export const CognitiveDashboard: React.FC = () => {
             <select
               className="w-full p-2 border rounded-md"
               value={filterTimeRange}
-              onChange={(e) => setFilterTimeRange(e.target.value as any)}
+              onChange={(e) => setFilterTimeRange(e.target.value as typeof filterTimeRange)}
             >
               <option value="1h">Last Hour</option>
               <option value="24h">Last 24 Hours</option>

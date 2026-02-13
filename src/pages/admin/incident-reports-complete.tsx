@@ -506,7 +506,7 @@ export default function IncidentReportsComplete() {
                     <div className="flex items-center gap-2">
                       {getStatusIcon(incident.status)}
                       <h3 className="font-semibold">{incident.title}</h3>
-                      <Badge variant={getSeverityColor(incident.severity) as any}>
+                      <Badge variant={getSeverityColor(incident.severity) as "default" | "secondary" | "outline" | "destructive"}>
                         {incident.severity}
                       </Badge>
                     </div>
@@ -556,7 +556,7 @@ export default function IncidentReportsComplete() {
                   <div className="grid grid-cols-2 gap-4">
                     <div>
                       <Label className="text-muted-foreground">Severidade</Label>
-                      <div><Badge variant={getSeverityColor(selectedIncident.severity) as any}>{selectedIncident.severity}</Badge></div>
+                      <div><Badge variant={getSeverityColor(selectedIncident.severity) as "default" | "secondary" | "outline" | "destructive"}>{selectedIncident.severity}</Badge></div>
                     </div>
                     <div>
                       <Label className="text-muted-foreground">Status</Label>

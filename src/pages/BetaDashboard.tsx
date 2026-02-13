@@ -87,15 +87,14 @@ export default function BetaDashboard() {
     setIsLoading(true);
     try {
       // Fetch feedback data - using raw query since table might not be in types yet
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any -- beta_feedback not in generated types
-      const { data: feedbackData, error } = await (supabase as any)
-        .from("beta_feedback")
+      const { data: feedbackData, error } = await (supabase.from as Function)("beta_feedback")
         .select("*");
 
       if (error) throw error;
 
       // eslint-disable-next-line @typescript-eslint/no-explicit-any -- beta_feedback dynamic shape
-      const feedbacks = (feedbackData as any[]) || [];
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any -- beta_feedback dynamic shape
+      const feedbacks = ((feedbackData || []) as Array<Record<string, any>>);
       if (feedbacks.length > 0) {
         const total = feedbacks.length;
         const avgOverallRating = feedbacks.reduce((acc, f) => acc + (f.overall_rating || 0), 0) / total;
@@ -172,7 +171,7 @@ export default function BetaDashboard() {
 
       // Fetch email logs
       // eslint-disable-next-line @typescript-eslint/no-explicit-any -- beta_email_logs not in generated types
-      const { data: logsData } = await (supabase as any)
+      const { data: logsData } = await (supabase.from as Function)("beta_email_logs")
         .from("beta_email_logs")
         .select("*")
         .order("created_at", { ascending: false })

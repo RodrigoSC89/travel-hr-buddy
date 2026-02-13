@@ -77,7 +77,7 @@ class OfflineSyncManager {
         const registration = await navigator.serviceWorker.ready;
         if (registration && 'sync' in registration) {
           // Use a short tag name to avoid "tag too long" error
-          await (registration as any).sync.register('sync');
+          await (registration as unknown as { sync: { register: (tag: string) => Promise<void> } }).sync.register('sync');
         }
       }
     } catch (error) {

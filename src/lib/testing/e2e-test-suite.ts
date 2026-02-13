@@ -436,7 +436,7 @@ export async function runFullE2ETestSuite(): Promise<TestSuite> {
 
 // Export for global access in dev tools
 if (typeof window !== 'undefined') {
-  (window as any).__e2eTests = {
+  (window as unknown as Record<string, unknown>).__e2eTests = {
     runFullSuite: runFullE2ETestSuite,
     auth: authTests,
     offline: offlineTests,

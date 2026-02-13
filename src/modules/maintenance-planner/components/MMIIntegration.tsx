@@ -38,8 +38,8 @@ export const MMIIntegration: React.FC = () => {
     try {
       // Fetch from MMI system (mocked for now, would integrate with real MMI API)
       // eslint-disable-next-line @typescript-eslint/no-explicit-any -- dynamic table not in generated types
-      const { data, error } = await (supabase as any)
-        .from("mmi_maintenance_jobs")
+      const { data, error } = await (supabase.from as Function)("mmi_maintenance_jobs")
+        
         .select("*")
         .order("created_at", { ascending: false })
         .limit(10);
@@ -98,7 +98,7 @@ export const MMIIntegration: React.FC = () => {
   const scheduleMaintenanceFromPrediction = async (prediction: MMIPrediction) => {
     try {
       // eslint-disable-next-line @typescript-eslint/no-explicit-any -- dynamic table
-      const { error } = await (supabase as any).from("maintenance_tasks").insert({
+      const { error } = await (supabase.from as Function)("maintenance_tasks").insert({
         task_name: `Preventive: ${prediction.equipment_name}`,
         equipment_id: prediction.equipment_id,
         scheduled_date: prediction.predicted_date.split("T")[0],

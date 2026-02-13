@@ -59,7 +59,7 @@ class ApiProxyRouterService {
 
     try {
       // Real Supabase query instead of simulation
-      const { data, error } = await supabase.from(route.path as any).select('id').limit(1);
+      const { data, error } = await (supabase.from as Function)(route.path).select('id').limit(1);
       
       const latency = Date.now() - startTime;
       this.updateRouteStats(route, latency, !error);

@@ -109,9 +109,9 @@ const EnhancedLogisticsDashboard: React.FC = () => {
     cargo: `Carga ${item.id}`,
     origin: item.origin,
     destination: item.destination,
-    status: item.status as any,
+    status: item.status as LogisticsOperation['status'],
     estimatedArrival: item.estimatedDelivery,
-    priority: item.priority as any,
+    priority: item.priority as LogisticsOperation['priority'],
   }));
 
   const quickStats = [

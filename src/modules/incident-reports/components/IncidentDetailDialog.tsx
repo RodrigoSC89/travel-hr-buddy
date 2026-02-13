@@ -305,14 +305,15 @@ export const IncidentDetailDialog: React.FC<IncidentDetailDialogProps> = ({
           action.status
         ]);
         
-        (doc as any).autoTable({
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any -- jspdf-autotable plugin extends jsPDF
+        (doc as unknown as { autoTable: (opts: Record<string, unknown>) => void }).autoTable({
           startY: yPos,
           head: [["Descrição", "Responsável", "Prazo", "Status"]],
           body: actionData,
           styles: { fontSize: 8 }
         });
         
-        yPos = (doc as any).lastAutoTable.finalY + 10;
+        yPos = (doc as unknown as { lastAutoTable: { finalY: number } }).lastAutoTable.finalY + 10;
       }
       
       // Signatures

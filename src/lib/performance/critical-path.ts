@@ -167,7 +167,7 @@ export const deferWork = (
   timeout = 2000
 ): void => {
   if ('requestIdleCallback' in window) {
-    (window as any).requestIdleCallback(callback, { timeout });
+    (window.requestIdleCallback as (cb: () => void, opts?: { timeout: number }) => number)(callback, { timeout });
   } else {
     setTimeout(callback, 100);
   }
@@ -190,14 +190,14 @@ export const scheduleIdleWork = <T>(
     }
 
     if (index < tasks.length) {
-      (window as any).requestIdleCallback(processNext);
+      (window.requestIdleCallback as (cb: (d: IdleDeadline) => void) => number)(processNext);
     } else if (onComplete) {
       onComplete(results);
     }
   };
 
   if ('requestIdleCallback' in window) {
-    (window as any).requestIdleCallback(processNext);
+    (window.requestIdleCallback as (cb: (d: IdleDeadline) => void) => number)(processNext);
   } else {
     // Fallback: execute all synchronously
     tasks.forEach((task) => results.push(task()));
@@ -210,7 +210,7 @@ export const scheduleIdleWork = <T>(
  */
 export const setupSmartPrefetch = (routes: string[]): void => {
   // Only prefetch on fast connections
-  const conn = (navigator as any).connection;
+  const conn = (navigator as unknown as Record<string, { saveData?: boolean; effectiveType?: string }>).connection;
   if (conn && (conn.saveData || conn.effectiveType === '2g')) {
     logger.info('[CriticalPath] Skipping prefetch on slow connection');
     return;

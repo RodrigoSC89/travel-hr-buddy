@@ -188,7 +188,7 @@ export const UserManagementHub: React.FC = () => {
 
   const handleSaveEdit = useCallback(async () => {
     if (!userToEdit) return;
-    await updateUserRole(userToEdit.id, editData.role as any);
+    await updateUserRole(userToEdit.id, editData.role as "admin" | "manager" | "member" | "owner" | "viewer");
     toast({ title: "Usuário atualizado", description: "As alterações foram salvas com sucesso" });
     setShowEditDialog(false);
     setUserToEdit(null);
@@ -595,7 +595,7 @@ export const UserManagementHub: React.FC = () => {
                 <Label>Função</Label>
                 <Select 
                   value={inviteData.role} 
-                  onValueChange={(v) => setInviteData(p => ({ ...p, role: v as any }))}
+                  onValueChange={(v) => setInviteData(p => ({ ...p, role: v as typeof p.role }))}
                 >
                   <SelectTrigger>
                     <SelectValue />

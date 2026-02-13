@@ -84,9 +84,9 @@ export class TemplatePDFRenderer {
           title: `${template.title} - ${new Date().toISOString().split("T")[0]}`,
           html_content: renderedContent,
           format: "pdf",
-          variables: placeholderValues as any,
+          variables: placeholderValues as Record<string, unknown>,
           rendered_at: new Date().toISOString(),
-        })
+        } as never)
         .select()
         .single();
 

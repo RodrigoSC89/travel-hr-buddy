@@ -227,7 +227,7 @@ class ImageOptimizationService {
   
   async compress(file: File, isSlowConnection: boolean = false): Promise<Blob> {
     const config = getOptimalImageConfig(isSlowConnection);
-    config.format = this.getBestFormat() as any;
+    config.format = this.getBestFormat() as typeof config.format;
     return compressImage(file, config);
   }
 }
