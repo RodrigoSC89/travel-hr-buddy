@@ -262,7 +262,7 @@ export function CollaborativeChat() {
             </Badge>
             <Popover>
               <PopoverTrigger asChild>
-                <Button variant="ghost" size="icon">
+                <Button variant="ghost" size="icon" aria-label="Ver participantes" title="Participantes">
                   <Users className="h-4 w-4" />
                 </Button>
               </PopoverTrigger>

@@ -285,7 +285,7 @@ export const ClientCustomization = () => {
                       <Label htmlFor="logo-upload">Logo da Empresa</Label>
                       <div className="mt-1 flex gap-2">
                         <Input type="file" accept="image/*" className="flex-1" />
-                        <Button variant="outline" size="icon">
+                        <Button variant="outline" size="icon" aria-label="Upload de imagem" title="Upload">
                           <Upload className="h-4 w-4" />
                         </Button>
                       </div>

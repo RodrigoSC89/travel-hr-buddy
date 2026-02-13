@@ -159,7 +159,7 @@ export default function CopilotV2() {
                 onKeyPress={(e) => e.key === "Enter" && handleTextInput()}
                 className="flex-1"
               />
-              <Button onClick={handleTextInput} size="icon">
+              <Button onClick={handleTextInput} size="icon" aria-label="Enviar mensagem" title="Enviar">
                 <Send className="h-4 w-4" />
               </Button>
               <Button

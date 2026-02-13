@@ -1041,7 +1041,7 @@ export default function ChannelManagerProfessional() {
                           </div>
                           <Tooltip>
                             <TooltipTrigger asChild>
-                              <Button variant="outline" size="icon">
+                              <Button variant="outline" size="icon" aria-label="Gravação de áudio" title="Gravar áudio">
                                 <Mic className="h-4 w-4" />
                               </Button>
                             </TooltipTrigger>

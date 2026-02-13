@@ -178,7 +178,7 @@ export function CommandCockpit() {
           <Button variant="ghost" size="icon" onClick={toggleFullscreen}>
             {isFullscreen ? <Minimize2 className="h-4 w-4" /> : <Maximize2 className="h-4 w-4" />}
           </Button>
-          <Button variant="ghost" size="icon">
+          <Button variant="ghost" size="icon" aria-label="Configurações do cockpit" title="Configurações">
             <Settings className="h-4 w-4" />
           </Button>
         </div>

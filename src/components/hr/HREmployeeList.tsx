@@ -184,7 +184,7 @@ export function HREmployeeList({ searchQuery = '' }: HREmployeeListProps) {
                   <SelectItem value="terminated">Desligados</SelectItem>
                 </SelectContent>
               </Select>
-              <Button variant="outline" size="icon">
+              <Button variant="outline" size="icon" aria-label="Exportar funcionários" title="Exportar">
                 <Download className="h-4 w-4" />
               </Button>
               <Button className="gap-2" onClick={handleAddNew}>
@@ -246,7 +246,7 @@ export function HREmployeeList({ searchQuery = '' }: HREmployeeListProps) {
                       <TableCell>
                         <DropdownMenu>
                           <DropdownMenuTrigger asChild>
-                            <Button variant="ghost" size="icon">
+                            <Button variant="ghost" size="icon" aria-label="Mais opções do funcionário" title="Mais opções">
                               <MoreHorizontal className="h-4 w-4" />
                             </Button>
                           </DropdownMenuTrigger>

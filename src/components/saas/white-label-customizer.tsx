@@ -228,7 +228,7 @@ export const WhiteLabelCustomizer: React.FC = () => {
                       onChange={(e) => handleInputChange("logo_url", e.target.value)}
                       placeholder="https://exemplo.com/logo.png"
                     />
-                    <Button variant="outline" size="icon">
+                    <Button variant="outline" size="icon" aria-label="Upload do logo" title="Upload logo">
                       <Upload className="h-4 w-4" />
                     </Button>
                   </div>
@@ -244,7 +244,7 @@ export const WhiteLabelCustomizer: React.FC = () => {
                     onChange={(e) => handleInputChange("favicon_url", e.target.value)}
                     placeholder="https://exemplo.com/favicon.ico"
                   />
-                  <Button variant="outline" size="icon">
+                  <Button variant="outline" size="icon" aria-label="Upload do favicon" title="Upload favicon">
                     <Upload className="h-4 w-4" />
                   </Button>
                 </div>

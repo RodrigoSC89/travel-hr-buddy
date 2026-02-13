@@ -145,7 +145,7 @@ export function AutonomousAgentPanel() {
             >
               {isActive ? <Pause className="h-4 w-4" /> : <Play className="h-4 w-4" />}
             </Button>
-            <Button variant="ghost" size="icon">
+            <Button variant="ghost" size="icon" aria-label="Configurações do agente" title="Configurações">
               <Settings className="h-4 w-4" />
             </Button>
           </div>

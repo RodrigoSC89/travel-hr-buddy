@@ -332,11 +332,11 @@ export function IntegrationHub() {
                         }>
                           {integration.status}
                         </Badge>
-                        <Button variant="ghost" size="icon">
+                        <Button variant="ghost" size="icon" aria-label="Configurações da integração" title="Configurações">
                           <Settings className="h-4 w-4" />
                         </Button>
                         {integration.status === 'error' && (
-                          <Button variant="outline" size="icon">
+                          <Button variant="outline" size="icon" aria-label="Reconectar integração" title="Reconectar">
                             <RefreshCw className="h-4 w-4" />
                           </Button>
                         )}
@@ -397,7 +397,7 @@ export function IntegrationHub() {
                           </p>
                         </div>
                         <Switch checked={webhook.status === 'active'} />
-                        <Button variant="ghost" size="icon">
+                        <Button variant="ghost" size="icon" aria-label="Configurações do webhook" title="Configurações">
                           <Settings className="h-4 w-4" />
                         </Button>
                       </div>
