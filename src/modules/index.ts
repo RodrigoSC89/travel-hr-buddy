@@ -39,10 +39,9 @@ export { default as NautilusMaintenance } from "./nauti-maintenance";
 // export { default as VoyagePlanner } from "./voyage-planner";
 
 // ============================================
-// COMMUNICATION & CONNECTIVITY (UNIFIED → SATCOM & NAUTILUS COMMS)
+// COMMUNICATION & CONNECTIVITY (UNIFIED → NAUTILUS COMMS)
 // ============================================
-export { CommunicationCenter } from "./communication-center";
-export { default as SatcomDashboard } from "./satcom";
+// communication-center and satcom removed during cleanup
 export { default as NautilusComms } from "./nauti-comms";
 
 // ============================================
@@ -100,7 +99,6 @@ export { default as NautilusDocuments } from "./nauti-documents";
 // ASSISTANTS (UNIFIED → NAUTILUS ASSISTANT)
 // ============================================
 export { default as NautilusAssistant } from "./nauti-assistant";
-export { default as VoiceAssistant } from "./assistants/voice-assistant";
 
 // ============================================
 // FINANCE
