@@ -330,17 +330,17 @@ const OperationalCalendar = () => {
 
         {/* AI Suggestions Banner */}
         {aiSuggestions.length > 0 && (
-          <Card className="border-purple-200 bg-purple-50 dark:bg-purple-900/20">
+          <Card className="border-primary/30 bg-primary/5">
             <CardContent className="py-4">
               <div className="flex items-start gap-3">
-                <Sparkles className="h-5 w-5 text-purple-500 mt-0.5" />
+                <Sparkles className="h-5 w-5 text-primary mt-0.5" />
                 <div>
-                  <h4 className="font-semibold text-purple-700 dark:text-purple-300 mb-2">
+                  <h4 className="font-semibold text-primary mb-2">
                     Sugestões da IA
                   </h4>
                   <ul className="space-y-1">
                     {aiSuggestions.map((s, i) => (
-                      <li key={`ai-sug-${i}-${s.slice(0,15)}`} className="text-sm text-purple-600 dark:text-purple-400 flex items-start gap-2">
+                      <li key={`ai-sug-${i}-${s.slice(0,15)}`} className="text-sm text-primary/80 flex items-start gap-2">
                         <CheckCircle className="h-4 w-4 mt-0.5 flex-shrink-0" />
                         {s}
                       </li>
@@ -487,12 +487,12 @@ const OperationalCalendar = () => {
                   </div>
                 )}
                 {selectedEvent.conflict && (
-                  <div className="p-3 bg-red-50 dark:bg-red-900/20 rounded-lg border border-red-200">
-                    <div className="flex items-center gap-2 text-red-600">
+                  <div className="p-3 bg-destructive/10 rounded-lg border border-destructive/30">
+                    <div className="flex items-center gap-2 text-destructive">
                       <AlertTriangle className="h-4 w-4" />
                       <span className="font-medium">Conflito Detectado</span>
                     </div>
-                    <p className="text-sm text-red-500 mt-1">
+                    <p className="text-sm text-destructive/80 mt-1">
                       Este evento conflita com outros agendamentos. Use a IA para sugerir reorganização.
                     </p>
                   </div>

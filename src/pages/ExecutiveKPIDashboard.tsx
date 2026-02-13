@@ -163,11 +163,11 @@ export default function ExecutiveKPIDashboard() {
       const avgWellness = Array.from(crewMap.values()).reduce((sum, c) => sum + c.wellness, 0) / (totalCrew || 1);
 
       setKpis([
-        { label: 'Embarcações', value: vesselsData?.length || 0, trend: 'stable', icon: Ship, color: 'text-blue-500' },
-        { label: 'Tripulação', value: totalCrew, change: Math.round(healthyCrew / (totalCrew || 1) * 100), trend: 'up', icon: Users, color: 'text-emerald-500' },
-        { label: 'Alertas', value: criticalSensors.length + anomalySensors.length, trend: 'down', icon: AlertTriangle, color: criticalSensors.length > 0 ? 'text-destructive' : 'text-amber-500' },
-        { label: 'Wellness', value: `${Math.round(avgWellness)}%`, trend: avgWellness >= 60 ? 'up' : 'down', icon: Heart, color: avgWellness >= 60 ? 'text-emerald-500' : 'text-amber-500' },
-        { label: 'Sensores', value: `${onlineSensors.length}/${sensors?.length || 0}`, trend: 'stable', icon: Activity, color: 'text-blue-500' },
+        { label: 'Embarcações', value: vesselsData?.length || 0, trend: 'stable', icon: Ship, color: 'text-info' },
+        { label: 'Tripulação', value: totalCrew, change: Math.round(healthyCrew / (totalCrew || 1) * 100), trend: 'up', icon: Users, color: 'text-success' },
+        { label: 'Alertas', value: criticalSensors.length + anomalySensors.length, trend: 'down', icon: AlertTriangle, color: criticalSensors.length > 0 ? 'text-destructive' : 'text-warning' },
+        { label: 'Wellness', value: `${Math.round(avgWellness)}%`, trend: avgWellness >= 60 ? 'up' : 'down', icon: Heart, color: avgWellness >= 60 ? 'text-success' : 'text-warning' },
+        { label: 'Sensores', value: `${onlineSensors.length}/${sensors?.length || 0}`, trend: 'stable', icon: Activity, color: 'text-info' },
         { label: 'Compliance', value: '94%', change: 2, trend: 'up', icon: Shield, color: 'text-emerald-500' },
       ]);
 

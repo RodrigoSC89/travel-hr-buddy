@@ -559,7 +559,7 @@ export function UnifiedComplianceDashboard() {
           <Card>
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
-                <TrendingUp className="h-5 w-5 text-blue-500" />
+                <TrendingUp className="h-5 w-5 text-info" />
                 Evolução Histórica de Compliance (6 Meses)
               </CardTitle>
             </CardHeader>
@@ -595,7 +595,7 @@ export function UnifiedComplianceDashboard() {
             <Card>
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
-                  <BarChart3 className="h-5 w-5 text-purple-500" />
+                  <BarChart3 className="h-5 w-5 text-primary" />
                   Score vs Meta (85%)
                 </CardTitle>
               </CardHeader>
@@ -741,7 +741,7 @@ export function UnifiedComplianceDashboard() {
       <Card>
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
-            <Brain className="h-5 w-5 text-purple-500" />
+            <Brain className="h-5 w-5 text-primary" />
             Ações Rápidas
           </CardTitle>
         </CardHeader>

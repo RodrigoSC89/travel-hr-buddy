@@ -177,12 +177,12 @@ export const EmployeeDossierSummary: React.FC = () => {
     switch (status) {
     case "valid":
     case "active":
-      return "bg-green-100 text-green-800";
+      return "bg-success/20 text-success";
     case "expiring_soon":
     case "expiring":
-      return "bg-yellow-100 text-yellow-800";
+      return "bg-warning/20 text-warning";
     case "expired":
-      return "bg-red-100 text-red-800";
+      return "bg-destructive/20 text-destructive";
     default:
       return "bg-secondary text-secondary-foreground";
     }
@@ -244,8 +244,8 @@ export const EmployeeDossierSummary: React.FC = () => {
         <Card>
           <CardContent className="p-4">
             <div className="flex items-center space-x-4">
-              <div className="p-3 rounded-full bg-blue-100">
-                <User className="h-6 w-6 text-blue-600" />
+              <div className="p-3 rounded-full bg-info/20">
+                <User className="h-6 w-6 text-info" />
               </div>
               <div>
                 <div className="font-medium">{crewMember.full_name}</div>
@@ -261,8 +261,8 @@ export const EmployeeDossierSummary: React.FC = () => {
         <Card>
           <CardContent className="p-4">
             <div className="flex items-center space-x-4">
-              <div className="p-3 rounded-full bg-green-100">
-                <Award className="h-6 w-6 text-green-600" />
+              <div className="p-3 rounded-full bg-success/20">
+                <Award className="h-6 w-6 text-success" />
               </div>
               <div>
                 <div className="text-2xl font-bold">{complianceScore}%</div>
@@ -276,8 +276,8 @@ export const EmployeeDossierSummary: React.FC = () => {
         <Card>
           <CardContent className="p-4">
             <div className="flex items-center space-x-4">
-              <div className="p-3 rounded-full bg-purple-100">
-                <Ship className="h-6 w-6 text-purple-600" />
+              <div className="p-3 rounded-full bg-primary/20">
+                <Ship className="h-6 w-6 text-primary" />
               </div>
               <div>
                 <div className="text-2xl font-bold">{Math.round(totalSeaTime / 24)}</div>

@@ -152,30 +152,30 @@ export const EnhancedPeopleHub: React.FC = () => {
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case 'onboard': return 'bg-green-500/20 text-green-500 border-green-500/30';
-      case 'on_leave': return 'bg-blue-500/20 text-blue-500 border-blue-500/30';
-      case 'standby': return 'bg-yellow-500/20 text-yellow-500 border-yellow-500/30';
-      case 'training': return 'bg-purple-500/20 text-purple-500 border-purple-500/30';
+      case 'onboard': return 'bg-success/20 text-success border-success/30';
+      case 'on_leave': return 'bg-info/20 text-info border-info/30';
+      case 'standby': return 'bg-warning/20 text-warning border-warning/30';
+      case 'training': return 'bg-primary/20 text-primary border-primary/30';
       default: return 'bg-muted text-muted-foreground';
     }
   };
 
   const getCertStatusColor = (status: string) => {
     switch (status) {
-      case 'valid': return 'bg-green-500/20 text-green-500';
-      case 'expiring': return 'bg-yellow-500/20 text-yellow-500';
-      case 'expired': return 'bg-red-500/20 text-red-500';
+      case 'valid': return 'bg-success/20 text-success';
+      case 'expiring': return 'bg-warning/20 text-warning';
+      case 'expired': return 'bg-destructive/20 text-destructive';
       default: return 'bg-muted';
     }
   };
 
   const getEventTypeIcon = (type: string) => {
     switch (type) {
-      case 'embark': return <Ship className="h-4 w-4 text-green-500" />;
-      case 'disembark': return <Ship className="h-4 w-4 text-red-500" />;
-      case 'leave': return <Calendar className="h-4 w-4 text-blue-500" />;
-      case 'training': return <GraduationCap className="h-4 w-4 text-purple-500" />;
-      case 'medical': return <Heart className="h-4 w-4 text-pink-500" />;
+      case 'embark': return <Ship className="h-4 w-4 text-success" />;
+      case 'disembark': return <Ship className="h-4 w-4 text-destructive" />;
+      case 'leave': return <Calendar className="h-4 w-4 text-info" />;
+      case 'training': return <GraduationCap className="h-4 w-4 text-primary" />;
+      case 'medical': return <Heart className="h-4 w-4 text-accent-foreground" />;
       default: return <Calendar className="h-4 w-4" />;
     }
   };
@@ -240,9 +240,9 @@ export const EnhancedPeopleHub: React.FC = () => {
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
         {[
           { label: 'Total Tripulantes', value: crew.length, icon: Users, color: 'text-primary' },
-          { label: 'A Bordo', value: crew.filter(c => c.status === 'onboard').length, icon: Ship, color: 'text-green-500' },
-          { label: 'Certificados Vencendo', value: certificates.filter(c => c.status === 'expiring').length, icon: AlertTriangle, color: 'text-yellow-500' },
-          { label: 'Eventos Próximos', value: schedule.length, icon: Calendar, color: 'text-blue-500' },
+          { label: 'A Bordo', value: crew.filter(c => c.status === 'onboard').length, icon: Ship, color: 'text-success' },
+          { label: 'Certificados Vencendo', value: certificates.filter(c => c.status === 'expiring').length, icon: AlertTriangle, color: 'text-warning' },
+          { label: 'Eventos Próximos', value: schedule.length, icon: Calendar, color: 'text-info' },
         ].map((stat, index) => (
           <motion.div
             key={stat.label}
@@ -335,13 +335,13 @@ export const EnhancedPeopleHub: React.FC = () => {
                             {member.certifications} certificados
                           </span>
                           {member.expiringSoon > 0 && (
-                            <Badge variant="outline" className="text-yellow-500 border-yellow-500">
+                            <Badge variant="outline" className="text-warning border-warning">
                               <AlertTriangle className="h-3 w-3 mr-1" />
                               {member.expiringSoon} vencendo
                             </Badge>
                           )}
                           <span className="flex items-center gap-1">
-                            <Star className="h-3 w-3 text-yellow-500" />
+                            <Star className="h-3 w-3 text-warning" />
                             {member.rating}
                           </span>
                         </div>
@@ -494,7 +494,7 @@ export const EnhancedPeopleHub: React.FC = () => {
                         <p className="text-sm text-muted-foreground">{member.rank}</p>
                       </div>
                       <div className="flex items-center gap-1">
-                        <Star className="h-4 w-4 text-yellow-500 fill-yellow-500" />
+                        <Star className="h-4 w-4 text-warning fill-warning" />
                         <span className="font-bold">{member.rating}</span>
                       </div>
                     </div>
