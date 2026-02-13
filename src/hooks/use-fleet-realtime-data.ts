@@ -79,7 +79,7 @@ export function useFleetVessels() {
       // Parse vessel locations from metadata or current_location
       const mappedVessels: VesselLocation[] = (vessels || []).map(vessel => {
         const loc = parseVesselLocation(vessel.current_location, vessel.metadata);
-        const meta = (vessel.metadata as Record<string, any>) || {};
+        const meta = (vessel.metadata as Record<string, unknown>) || {};
         
         return {
           id: vessel.id,
@@ -87,16 +87,16 @@ export function useFleetVessels() {
           type: vessel.vessel_type || 'cargo',
           latitude: loc.lat,
           longitude: loc.lng,
-          course: meta.course || meta.heading || 0,
-          speed: meta.speed || 0,
+          course: Number(meta.course) || Number(meta.heading) || 0,
+          speed: Number(meta.speed) || 0,
           status: mapVesselStatus(vessel.status),
           last_update: vessel.updated_at || vessel.created_at || new Date().toISOString(),
-          captain: meta.captain || meta.master,
-          destination: meta.destination || vessel.next_port || undefined,
+          captain: (meta.captain || meta.master) as string | undefined,
+          destination: (meta.destination as string) || vessel.next_port || undefined,
           imo_number: vessel.imo_number || undefined,
           flag: vessel.flag || vessel.flag_state || undefined,
-          dp_class: meta.dp_class,
-          crew_count: meta.crew_count || meta.crew,
+          dp_class: meta.dp_class as string | undefined,
+          crew_count: Number(meta.crew_count) || Number(meta.crew) || undefined,
         };
       });
 
@@ -182,8 +182,8 @@ export function useFleetStats() {
         anchored_vessels: vesselList.filter(v => v.status === 'anchored' || v.status === 'inactive').length,
         maintenance_vessels: vesselList.filter(v => v.status === 'maintenance').length,
         total_crew: vesselList.reduce((sum, v) => {
-          const meta = (v.metadata as Record<string, any>) || {};
-          return sum + (meta.crew_count || meta.crew || 0);
+          const meta = (v.metadata as Record<string, unknown>) || {};
+          return sum + (Number(meta.crew_count) || Number(meta.crew) || 0);
         }, 0),
         active_alerts: alerts?.length || 0,
       };
@@ -233,20 +233,22 @@ function parseVesselLocation(
   locationStr: string | null,
   metadata: unknown
 ): { lat: number; lng: number } {
-  const meta = metadata as Record<string, any> || {};
+  const meta = metadata as Record<string, unknown> || {};
   
   // Try metadata first
-  if (meta.position?.lat && meta.position?.lng) {
-    return { lat: meta.position.lat, lng: meta.position.lng };
+  const pos = meta.position as Record<string, unknown> | undefined;
+  if (pos?.lat && pos?.lng) {
+    return { lat: Number(pos.lat), lng: Number(pos.lng) };
   }
-  if (meta.coordinates?.lat && meta.coordinates?.lng) {
-    return { lat: meta.coordinates.lat, lng: meta.coordinates.lng };
+  const coords = meta.coordinates as Record<string, unknown> | undefined;
+  if (coords?.lat && coords?.lng) {
+    return { lat: Number(coords.lat), lng: Number(coords.lng) };
   }
   if (meta.latitude && meta.longitude) {
-    return { lat: meta.latitude, lng: meta.longitude };
+    return { lat: Number(meta.latitude), lng: Number(meta.longitude) };
   }
   if (meta.lat && meta.lng) {
-    return { lat: meta.lat, lng: meta.lng };
+    return { lat: Number(meta.lat), lng: Number(meta.lng) };
   }
 
   // Try parsing location string

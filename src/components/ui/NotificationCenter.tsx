@@ -37,12 +37,10 @@ export interface Notification {
   is_read?: boolean;
   createdAt: Date;
   timestamp?: string;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Supabase Json type
-  actionData?: any;
+  actionData?: Record<string, unknown>;
   action_url?: string;
   auto_dismiss?: boolean;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Supabase Json type
-  metadata?: any;
+  metadata?: Record<string, unknown>;
 }
 
 export interface NotificationCenterProps {
@@ -155,7 +153,7 @@ export const NotificationCenter: React.FC<NotificationCenterProps> = ({
         is_read: n.is_read,
         createdAt: new Date(n.created_at),
         timestamp: n.created_at,
-        actionData: n.action_data,
+        actionData: (n.action_data as Record<string, unknown>) ?? undefined,
         metadata: typeof n.metadata === "object" && n.metadata !== null && !Array.isArray(n.metadata)
           ? n.metadata as Record<string, unknown>
           : {}
@@ -174,19 +172,19 @@ export const NotificationCenter: React.FC<NotificationCenterProps> = ({
     }
   };
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Supabase realtime payload
-  const handleNewNotification = (payload: any) => {
+  const handleNewNotification = (payload: { new: Record<string, unknown> }) => {
+    const row = payload.new;
     const newNotification: Notification = {
-      id: payload.new.id,
-      type: payload.new.type,
-      title: payload.new.title,
-      message: payload.new.message,
-      description: payload.new.description || payload.new.message,
-      priority: payload.new.priority,
+      id: String(row.id),
+      type: String(row.type) as Notification["type"],
+      title: String(row.title),
+      message: String(row.message),
+      description: String(row.description || row.message),
+      priority: String(row.priority) as Notification["priority"],
       isRead: false,
-      createdAt: new Date(payload.new.created_at),
-      timestamp: payload.new.created_at,
-      actionData: payload.new.action_data
+      createdAt: new Date(String(row.created_at)),
+      timestamp: String(row.created_at),
+      actionData: row.action_data as Record<string, unknown>,
     };
 
     setNotifications(prev => [newNotification, ...prev]);
@@ -198,34 +196,32 @@ export const NotificationCenter: React.FC<NotificationCenterProps> = ({
     });
   };
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- dynamic alert shape
-  const createNotificationFromAlert = (alert: any) => {
+  const createNotificationFromAlert = (alert: Record<string, unknown>) => {
     const notification: Notification = {
-      id: `alert-${alert.id}`,
+      id: `alert-${String(alert.id)}`,
       type: "compliance_alert",
       title: "Novo Alerta Marítimo",
-      message: alert.message || "Um novo alerta foi criado",
-      priority: alert.severity || "medium",
+      message: String(alert.message || "Um novo alerta foi criado"),
+      priority: (String(alert.severity || "medium")) as Notification["priority"],
       isRead: false,
-      createdAt: new Date(alert.created_at),
-      actionData: alert
+      createdAt: new Date(String(alert.created_at)),
+      actionData: alert,
     };
 
     setNotifications(prev => [notification, ...prev]);
     setUnreadCount(prev => prev + 1);
   };
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- dynamic maintenance shape
-  const createNotificationFromMaintenance = (maintenance: any) => {
+  const createNotificationFromMaintenance = (maintenance: Record<string, unknown>) => {
     const notification: Notification = {
-      id: `maintenance-${maintenance.id}`,
+      id: `maintenance-${String(maintenance.id)}`,
       type: "maintenance_due",
       title: "Nova Manutenção Registrada",
-      message: maintenance.description || "Uma nova manutenção foi registrada",
-      priority: maintenance.priority || "medium",
+      message: String(maintenance.description || "Uma nova manutenção foi registrada"),
+      priority: (String(maintenance.priority || "medium")) as Notification["priority"],
       isRead: false,
-      createdAt: new Date(maintenance.created_at),
-      actionData: maintenance
+      createdAt: new Date(String(maintenance.created_at)),
+      actionData: maintenance,
     };
 
     setNotifications(prev => [notification, ...prev]);

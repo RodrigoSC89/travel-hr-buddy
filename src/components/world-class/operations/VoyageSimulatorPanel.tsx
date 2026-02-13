@@ -101,7 +101,7 @@ function ScenarioSlider({ label, value, onChange, min, max, step, unit, icon: Ic
   );
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- simulation result has dynamic shape from Supabase
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- simulation results from Supabase have deeply dynamic shape
 function SimulationDetailView({ sim, onClose }: { sim: any; onClose: () => void }) {
   const scenarios = Array.isArray(sim.scenarios) ? sim.scenarios : [];
   const riskFactors = Array.isArray(sim.risk_factors) ? sim.risk_factors : [];
@@ -241,20 +241,18 @@ function SimulationDetailView({ sim, onClose }: { sim: any; onClose: () => void 
               </CardHeader>
               <CardContent>
                 <div className="space-y-2">
-                  {/* eslint-disable-next-line @typescript-eslint/no-explicit-any -- risk factors from AI have dynamic shape */}
-                  {/* eslint-disable-next-line @typescript-eslint/no-explicit-any -- risk factors from AI have dynamic shape */}
                   {riskFactors.map((rf: any, i: number) => (
-                    <div key={`rf-${i}-${rf.factor}`} className="flex items-start gap-3 p-2 rounded border">
+                    <div key={`rf-${i}-${String(rf.factor)}`} className="flex items-start gap-3 p-2 rounded border">
                       <AlertTriangle className={`h-4 w-4 mt-0.5 flex-shrink-0 ${
                         rf.severity === "high" || rf.impact === "high" ? "text-destructive" : 
                         rf.severity === "medium" || rf.impact === "medium" ? "text-warning" : "text-muted-foreground"
                       }`} />
                       <div className="flex-1 min-w-0">
-                        <p className="text-sm font-medium">{rf.factor}</p>
-                        {rf.mitigation && <p className="text-xs text-muted-foreground mt-0.5">{rf.mitigation}</p>}
+                        <p className="text-sm font-medium">{String(rf.factor)}</p>
+                        {rf.mitigation && <p className="text-xs text-muted-foreground mt-0.5">{String(rf.mitigation)}</p>}
                       </div>
                       <Badge variant="outline" className="text-[10px] flex-shrink-0">
-                        {rf.severity || rf.probability || "—"}
+                        {String(rf.severity || rf.probability || "—")}
                       </Badge>
                     </div>
                   ))}

@@ -11,7 +11,7 @@ interface LogEntry {
   level: LogLevel;
   message: string;
   timestamp: string;
-  context?: Record<string, any>;
+  context?: Record<string, unknown>;
   error?: {
     name: string;
     message: string;
@@ -50,7 +50,7 @@ class StructuredLogger {
   private flushTimer: NodeJS.Timeout | null = null;
   private sessionId: string;
   private userId?: string;
-  private globalContext: Record<string, any> = {};
+  private globalContext: Record<string, unknown> = {};
 
   constructor() {
     this.sessionId = this.generateSessionId();
@@ -83,7 +83,7 @@ class StructuredLogger {
   /**
    * Set global context
    */
-  setContext(context: Record<string, any>) {
+  setContext(context: Record<string, unknown>) {
     this.globalContext = { ...this.globalContext, ...context };
   }
 
@@ -93,7 +93,7 @@ class StructuredLogger {
   private log(
     level: LogLevel,
     message: string,
-    context?: Record<string, any>,
+    context?: Record<string, unknown>,
     error?: Error,
     tags?: string[]
   ) {
@@ -145,13 +145,13 @@ class StructuredLogger {
     
     console.groupCollapsed(`%c${prefix} ${entry.message}`, style[entry.level]);
     if (entry.context && Object.keys(entry.context).length > 0) {
-      logger.debug('Context:', entry.context);
+      baseLogger.debug('Context:', entry.context as Record<string, unknown>);
     }
     if (entry.error) {
-      logger.error('Error:', entry.error);
+      baseLogger.error('Error:', entry.error as unknown as Record<string, unknown>);
     }
     if (entry.tags) {
-      logger.debug('Tags:', entry.tags);
+      baseLogger.debug('Tags:', entry.tags as unknown as Record<string, unknown>);
     }
     console.groupEnd();
   }
@@ -186,26 +186,26 @@ class StructuredLogger {
   }
 
   // Convenience methods
-  debug(message: string, context?: Record<string, any>) {
+  debug(message: string, context?: Record<string, unknown>) {
     this.log('debug', message, context);
   }
 
-  info(message: string, context?: Record<string, any>, tags?: string[]) {
+  info(message: string, context?: Record<string, unknown>, tags?: string[]) {
     this.log('info', message, context, undefined, tags);
   }
 
-  warn(message: string, context?: Record<string, any>, tags?: string[]) {
+  warn(message: string, context?: Record<string, unknown>, tags?: string[]) {
     this.log('warn', message, context, undefined, tags);
   }
 
-  error(message: string, error?: Error, context?: Record<string, any>, tags?: string[]) {
+  error(message: string, error?: Error, context?: Record<string, unknown>, tags?: string[]) {
     this.log('error', message, context, error, tags);
   }
 
   /**
    * Create child logger with additional context
    */
-  child(context: Record<string, any>): ChildLogger {
+  child(context: Record<string, unknown>): ChildLogger {
     return new ChildLogger(this, context);
   }
 }
@@ -213,22 +213,22 @@ class StructuredLogger {
 class ChildLogger {
   constructor(
     private parent: StructuredLogger,
-    private context: Record<string, any>
+    private context: Record<string, unknown>
   ) {}
 
-  debug(message: string, context?: Record<string, any>) {
+  debug(message: string, context?: Record<string, unknown>) {
     this.parent.debug(message, { ...this.context, ...context });
   }
 
-  info(message: string, context?: Record<string, any>, tags?: string[]) {
+  info(message: string, context?: Record<string, unknown>, tags?: string[]) {
     this.parent.info(message, { ...this.context, ...context }, tags);
   }
 
-  warn(message: string, context?: Record<string, any>, tags?: string[]) {
+  warn(message: string, context?: Record<string, unknown>, tags?: string[]) {
     this.parent.warn(message, { ...this.context, ...context }, tags);
   }
 
-  error(message: string, error?: Error, context?: Record<string, any>, tags?: string[]) {
+  error(message: string, error?: Error, context?: Record<string, unknown>, tags?: string[]) {
     this.parent.error(message, error, { ...this.context, ...context }, tags);
   }
 }

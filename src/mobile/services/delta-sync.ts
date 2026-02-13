@@ -135,14 +135,14 @@ class DeltaSyncService {
 
     for (const change of changes) {
       const pathParts = change.path.split(".");
-      let current: any = result;
+      let current: Record<string, unknown> = result;
 
       // Navigate to parent
       for (let i = 0; i < pathParts.length - 1; i++) {
         if (!(pathParts[i] in current)) {
           current[pathParts[i]] = {};
         }
-        current = current[pathParts[i]];
+        current = current[pathParts[i]] as Record<string, unknown>;
       }
 
       const lastKey = pathParts[pathParts.length - 1];
