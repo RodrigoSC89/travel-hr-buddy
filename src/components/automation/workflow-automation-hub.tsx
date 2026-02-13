@@ -39,8 +39,7 @@ export const WorkflowAutomationHub: React.FC = () => {
   const [showNewWorkflow, setShowNewWorkflow] = useState(false);
   const [showDetails, setShowDetails] = useState(false);
   const [showSettings, setShowSettings] = useState(false);
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- workflow shape from dynamic hook
-  const [selectedWorkflow, setSelectedWorkflow] = useState<any>(null);
+  const [selectedWorkflow, setSelectedWorkflow] = useState<Workflow | null>(null);
   const [newWorkflowData, setNewWorkflowData] = useState({ name: "", description: "", category: "custom", priority: "medium" });
 
   // Filtered workflows

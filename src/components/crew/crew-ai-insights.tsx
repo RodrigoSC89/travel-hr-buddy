@@ -2,7 +2,14 @@ import { useState, useEffect } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { useCrewAI, type CrewMember } from "@/hooks/use-crew-ai";
+import { useCrewAI, type CrewMember, type CrewRecommendation, type RotationOptimization, type SkillGapAnalysis } from "@/hooks/use-crew-ai";
+
+interface CrewInsights {
+  summary: string;
+  strengths?: string[];
+  concerns?: string[];
+  recommendations?: string[];
+}
 import { Brain, Users, RefreshCw, Award, TrendingUp, AlertTriangle, Loader2, CheckCircle } from "lucide-react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Progress } from "@/components/ui/progress";
@@ -20,10 +27,10 @@ export const CrewAIInsights = ({ crew }: CrewAIInsightsProps) => {
     generateCrewInsights,
   } = useCrewAI();
 
-  const [recommendations, setRecommendations] = useState<any[]>([]);
-  const [rotations, setRotations] = useState<any[]>([]);
-  const [skillGaps, setSkillGaps] = useState<any[]>([]);
-  const [insights, setInsights] = useState<any>(null);
+  const [recommendations, setRecommendations] = useState<CrewRecommendation[]>([]);
+  const [rotations, setRotations] = useState<RotationOptimization[]>([]);
+  const [skillGaps, setSkillGaps] = useState<SkillGapAnalysis[]>([]);
+  const [insights, setInsights] = useState<CrewInsights | null>(null);
 
   const handleGenerateRecommendations = async () => {
     const recs = await generateCrewRecommendations(crew);
@@ -165,14 +172,14 @@ export const CrewAIInsights = ({ crew }: CrewAIInsightsProps) => {
                   </div>
                 </div>
 
-                {insights.concerns?.length > 0 && (
+                {(insights.concerns?.length ?? 0) > 0 && (
                   <div>
                     <h4 className="font-medium flex items-center gap-2 mb-3">
                       <AlertTriangle className="h-4 w-4 text-warning" />
                       Pontos de Atenção
                     </h4>
                     <div className="space-y-2">
-                      {insights.concerns.map((concern: string) => (
+                      {insights.concerns?.map((concern: string) => (
                         <div key={concern} className="flex items-start gap-3 p-3 bg-warning/10 rounded-lg">
                           <span className="text-sm">{concern}</span>
                         </div>

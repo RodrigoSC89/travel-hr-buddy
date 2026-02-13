@@ -146,6 +146,7 @@ export function useDebouncedState<T>(
  * const debouncedSave = useDebouncedCallback((data) => saveToServer(data), 500);
  * // debouncedSave only executes 500ms after last call
  */
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- generic callback constraint requires any
 export function useDebouncedCallback<T extends (...args: any[]) => any>(
   callback: T,
   delay: number = 300
@@ -227,6 +228,7 @@ export function useDebouncedInput<T>(
 /**
  * Hook alias for useDebounceCallback (backward compatibility)
  */
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- generic callback constraint requires any
 export function useDebounce<T extends (...args: any[]) => any>(
   callback: T,
   delay: number
@@ -246,6 +248,7 @@ export function useDebounce<T extends (...args: any[]) => any>(
  * const throttledScroll = useThrottledCallback((e) => handleScroll(e), 100);
  * // throttledScroll executes at most every 100ms
  */
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- generic throttle constraint requires any
 export function useThrottledCallback<T extends (...args: any[]) => any>(
   callback: T,
   delay: number = 300
@@ -274,6 +277,7 @@ export function useThrottledCallback<T extends (...args: any[]) => any>(
 /**
  * Hook alias for useThrottledCallback (backward compatibility)
  */
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- generic throttle constraint requires any
 export function useThrottle<T extends (...args: any[]) => any>(
   callback: T,
   delay: number
@@ -330,6 +334,7 @@ export function useThrottledValue<T>(value: T, delay: number = 300): T {
  * Debounced callback with leading edge execution.
  * Executes immediately on first call, then debounces subsequent calls.
  */
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- generic callback constraint requires any
 export function useLeadingDebouncedCallback<T extends (...args: any[]) => any>(
   callback: T,
   delay: number = 300
@@ -375,6 +380,7 @@ export function useLeadingDebouncedCallback<T extends (...args: any[]) => any>(
  * Throttled callback with trailing edge execution.
  * Ensures the last call is always executed.
  */
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- generic callback constraint requires any
 export function useTrailingThrottledCallback<T extends (...args: any[]) => any>(
   callback: T,
   delay: number = 300
@@ -430,6 +436,7 @@ export function useTrailingThrottledCallback<T extends (...args: any[]) => any>(
  * Adaptive debounce based on network conditions.
  * Increases delay on slow connections.
  */
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- generic callback constraint requires any
 export function useAdaptiveDebounce<T extends (...args: any[]) => any>(
   callback: T,
   baseDelay: number = 300

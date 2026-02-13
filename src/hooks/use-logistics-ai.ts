@@ -229,6 +229,13 @@ export const useLogisticsAI = () => {
         },
       });
 
+      const recs = Array.isArray(response.metadata?.recommendations) ? response.metadata.recommendations as string[] : [
+          "Consolidar cargas para reduzir custos de transporte",
+          "Implementar rastreamento em tempo real em todas as rotas",
+          "Revisar contratos com fornecedores de transporte",
+        ];
+      const alerts = Array.isArray(response.metadata?.alerts) ? response.metadata.alerts as string[] : [];
+
       return {
         summary: response.message || "Operações logísticas em níveis normais de eficiência",
         efficiency: {
@@ -236,12 +243,8 @@ export const useLogisticsAI = () => {
           onTimeDelivery: operations.length > 0 ? Math.round((operations.filter(o => o.status !== "delayed").length / operations.length) * 100) : 0,
           routeOptimization: operations.filter(o => o.status === "in_transit").length > 0 ? 75 : 0,
         },
-        recommendations: response.metadata?.recommendations || [
-          "Consolidar cargas para reduzir custos de transporte",
-          "Implementar rastreamento em tempo real em todas as rotas",
-          "Revisar contratos com fornecedores de transporte",
-        ],
-        alerts: response.metadata?.alerts || [],
+        recommendations: recs,
+        alerts,
       };
     } catch (error) {
       toast({

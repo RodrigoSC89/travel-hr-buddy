@@ -233,14 +233,17 @@ export const useFleetAI = () => {
         },
       });
 
-      return {
-        summary: response.message || "Frota operando dentro dos parâmetros normais",
-        recommendations: response.metadata?.recommendations || [
+      const recs = Array.isArray(response.metadata?.recommendations) ? response.metadata.recommendations as string[] : [
           "Considere redistribuir carga entre embarcações para melhor eficiência",
           "Agende manutenção preventiva para 3 embarcações nas próximas 2 semanas",
           "Otimize rotas para reduzir consumo de combustível em 12%",
-        ],
-        alerts: response.metadata?.alerts || [],
+        ];
+      const alerts = Array.isArray(response.metadata?.alerts) ? response.metadata.alerts as string[] : [];
+
+      return {
+        summary: response.message || "Frota operando dentro dos parâmetros normais",
+        recommendations: recs,
+        alerts,
       };
     } catch (error) {
       toast({
