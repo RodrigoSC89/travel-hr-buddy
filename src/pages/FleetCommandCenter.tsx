@@ -242,7 +242,6 @@ const FleetAICopilot = ({ vessels, onToast }: { vessels: EnrichedVessel[]; onToa
             <Button variant="outline" size="sm" className="justify-start" onClick={() => {
               window.history.pushState({}, '', '/operations?tab=routes');
               window.dispatchEvent(new PopStateEvent('popstate'));
-              onToast({ title: "🛣️ Otimizando Rotas", description: "Navegando para Otimização de Rotas..." });
             }}>
               <Route className="h-3 w-3 mr-2" />
               Otimizar Rotas
@@ -250,7 +249,6 @@ const FleetAICopilot = ({ vessels, onToast }: { vessels: EnrichedVessel[]; onToa
             <Button variant="outline" size="sm" className="justify-start" onClick={() => {
               window.history.pushState({}, '', '/fuel-analytics');
               window.dispatchEvent(new PopStateEvent('popstate'));
-              onToast({ title: "⛽ Análise Combustível", description: "Navegando para Análise de Combustível..." });
             }}>
               <Fuel className="h-3 w-3 mr-2" />
               Análise Combustível
@@ -258,7 +256,6 @@ const FleetAICopilot = ({ vessels, onToast }: { vessels: EnrichedVessel[]; onToa
             <Button variant="outline" size="sm" className="justify-start" onClick={() => {
               window.history.pushState({}, '', '/maintenance?tab=predictive');
               window.dispatchEvent(new PopStateEvent('popstate'));
-              onToast({ title: "🔧 Manutenção Preditiva", description: "Navegando para Manutenção Preditiva..." });
             }}>
               <Wrench className="h-3 w-3 mr-2" />
               Pred. Manutenção
@@ -266,7 +263,6 @@ const FleetAICopilot = ({ vessels, onToast }: { vessels: EnrichedVessel[]; onToa
             <Button variant="outline" size="sm" className="justify-start" onClick={() => {
               window.history.pushState({}, '', '/workbench?tab=reports');
               window.dispatchEvent(new PopStateEvent('popstate'));
-              onToast({ title: "📊 Gerando Relatório", description: "Navegando para Centro de Relatórios..." });
             }}>
               <BarChart3 className="h-3 w-3 mr-2" />
               Relatório

@@ -27,7 +27,8 @@ export const FloatingActionButton: React.FC = () => {
       label: "Buscar",
       action: () => {
         logUserAction("FAB_SEARCH_CLICKED", { source: "floating-action-button" });
-        toast({ title: "🔍 Busca Global", description: "Sistema de busca ativado" });
+        // Trigger Command Palette (Ctrl+K)
+        document.dispatchEvent(new KeyboardEvent('keydown', { key: 'k', ctrlKey: true, bubbles: true }));
       }
     },
     {
@@ -36,7 +37,6 @@ export const FloatingActionButton: React.FC = () => {
       action: () => {
         logUserAction("FAB_NOTIFICATIONS_CLICKED", { source: "floating-action-button" });
         navigate("/alerts-command");
-        toast({ title: "🔔 Notificações", description: "Abrindo centro de notificações" });
       }
     },
     {
@@ -45,7 +45,6 @@ export const FloatingActionButton: React.FC = () => {
       action: () => {
         logUserAction("FAB_MESSAGES_CLICKED", { source: "floating-action-button" });
         navigate("/communication-command");
-        toast({ title: "💬 Mensagens", description: "Abrindo sistema de comunicação" });
       }
     },
     {
@@ -54,7 +53,6 @@ export const FloatingActionButton: React.FC = () => {
       action: () => {
         logUserAction("FAB_SETTINGS_CLICKED", { source: "floating-action-button" });
         navigate("/settings");
-        toast({ title: "⚙️ Configurações", description: "Abrindo configurações do sistema" });
       }
     }
   ];

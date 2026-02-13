@@ -890,7 +890,7 @@ Este relatório apresenta uma análise abrangente dos principais indicadores de 
       soundNotifications: false
     };
     setSettings(defaultSettings);
-    localStorage.removeItem("analyticsSettings");
+    sessionStorage.removeItem("analyticsSettings");
     toast({ title: "Configurações restauradas para o padrão" });
   };
 
