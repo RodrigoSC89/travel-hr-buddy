@@ -58,7 +58,7 @@ export const WeeklyAssessment: React.FC = () => {
         ? formData.concerns.split(",").map((c) => c.trim()).filter((c) => c)
         : [];
 
-      const { error } = await (supabase.from("health_checkins" as any).insert({
+      const { error } = await ((supabase.from as Function)("health_checkins").insert({
         user_id: user.id,
         sleep_hours: formData.sleep_hours,
         sleep_quality: formData.sleep_quality,

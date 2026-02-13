@@ -53,8 +53,7 @@ export const WellbeingDashboard: React.FC = () => {
         .limit(7);
 
       // Fetch active alerts
-      const { data: alerts } = await (supabase
-        .from("wellbeing_alerts" as any)
+      const { data: alerts } = await ((supabase.from as Function)("wellbeing_alerts")
         .select("*")
         .eq("user_id", user.id)
         .eq("status", "active")

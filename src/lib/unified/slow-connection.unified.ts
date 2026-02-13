@@ -29,9 +29,9 @@ export interface ConnectionMetrics {
  * PATCH v12: Sempre retorna isOnline: true - navigator.onLine não é confiável no iOS PWA
  */
 export function detectConnectionQuality(): ConnectionMetrics {
-  const connection = (navigator as any).connection || 
-                     (navigator as any).mozConnection || 
-                     (navigator as any).webkitConnection;
+  interface NetworkInfo { effectiveType?: string; downlink?: number; rtt?: number; saveData?: boolean }
+  const nav = navigator as unknown as { connection?: NetworkInfo; mozConnection?: NetworkInfo; webkitConnection?: NetworkInfo };
+  const connection: NetworkInfo | undefined = nav.connection || nav.mozConnection || nav.webkitConnection;
   
   // PATCH v12: Nunca retornar offline - navigator.onLine não é confiável
   // Deixar a rede falhar naturalmente se realmente offline
@@ -486,7 +486,7 @@ export function useSlowConnectionFetch<T>(
     fetchData();
     
     // Listen for connection changes
-    const conn = (navigator as any).connection;
+    const conn = (navigator as unknown as { connection?: { addEventListener: (t: string, h: () => void) => void; removeEventListener: (t: string, h: () => void) => void } }).connection;
     if (conn) {
       const handleChange = () => setConnection(detectConnectionQuality());
       conn.addEventListener("change", handleChange);
@@ -514,7 +514,7 @@ export function useConnectionQuality() {
     window.addEventListener("offline", updateMetrics);
     
     // Listen for connection changes
-    const conn = (navigator as any).connection;
+    const conn = (navigator as unknown as { connection?: { addEventListener: (t: string, h: () => void) => void; removeEventListener: (t: string, h: () => void) => void } }).connection;
     if (conn) {
       conn.addEventListener("change", updateMetrics);
     }

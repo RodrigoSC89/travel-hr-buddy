@@ -161,7 +161,7 @@ class SmartSync {
   }
 
   private isOnBatterySaver(): boolean {
-    const battery = (navigator as any).getBattery;
+    const battery = (navigator as unknown as { getBattery?: () => Promise<unknown> }).getBattery;
     if (!battery) return false;
     
     // This is async, so we cache the result

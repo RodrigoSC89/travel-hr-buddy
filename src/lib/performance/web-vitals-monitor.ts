@@ -87,7 +87,7 @@ class WebVitalsMonitor {
   }
 
   generateReport(): PerformanceReport {
-    const connection = (navigator as any).connection;
+    const connection = (navigator as unknown as { connection?: { effectiveType?: string; downlink?: number; rtt?: number } }).connection;
     
     return {
       vitals: this.getMetrics(),
@@ -95,9 +95,9 @@ class WebVitalsMonitor {
       url: window.location.href,
       userAgent: navigator.userAgent,
       connection: connection ? {
-        effectiveType: connection.effectiveType,
-        downlink: connection.downlink,
-        rtt: connection.rtt,
+        effectiveType: connection.effectiveType || 'unknown',
+        downlink: connection.downlink || 0,
+        rtt: connection.rtt || 0,
       } : undefined,
     };
   }

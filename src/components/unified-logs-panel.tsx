@@ -255,8 +255,7 @@ export function UnifiedLogsPanel() {
     });
 
     // Logs table
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any -- jsPDF plugin extends doc dynamically
-    const finalY = (doc as any).lastAutoTable?.finalY || 100;
+    const finalY = (doc as unknown as { lastAutoTable?: { finalY: number } }).lastAutoTable?.finalY || 100;
     doc.setFontSize(14);
     doc.text("Log Entries", 14, finalY + 10);
     autoTable(doc, {

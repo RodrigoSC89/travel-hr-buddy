@@ -298,7 +298,7 @@ class SonarAIService {
     const hazards = analysis.patterns.filter(
       (p) => p.type === "object" || p.type === "anomaly"
     );
-    const clearAreas = analysis.patterns.filter((p) => (p.type as any) === "clear");
+    const clearAreas = analysis.patterns.filter((p) => (p.type as string) === "clear");
 
     if (hazards.length > 3) {
       return "High hazard density detected. Recommend reducing speed and increasing scan frequency. Consider alternative route.";

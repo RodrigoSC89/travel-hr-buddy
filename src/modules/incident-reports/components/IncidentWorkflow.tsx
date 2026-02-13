@@ -51,9 +51,7 @@ export const IncidentWorkflow: React.FC<IncidentWorkflowProps> = ({ incident, on
 
   const updateIncidentStatus = async () => {
     try {
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any -- incident_reports not in generated types
-      const { error } = await supabase
-        .from("incident_reports" as any)
+      const { error } = await (supabase.from as Function)("incident_reports")
         .update({
           status,
           updated_at: new Date().toISOString(),
@@ -63,8 +61,7 @@ export const IncidentWorkflow: React.FC<IncidentWorkflowProps> = ({ incident, on
       if (error) throw error;
 
       try {
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any -- incident_workflow_logs not in generated types
-        await supabase.from("incident_workflow_logs" as any).insert({
+        await (supabase.from as Function)("incident_workflow_logs").insert({
           incident_id: incident.id,
           action: `Status changed to ${status}`,
           notes,
@@ -107,8 +104,7 @@ export const IncidentWorkflow: React.FC<IncidentWorkflowProps> = ({ incident, on
       if (uploadError) throw uploadError;
 
       try {
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any -- incident_attachments not in generated types
-        await supabase.from("incident_attachments" as any).insert({
+        await (supabase.from as Function)("incident_attachments").insert({
           incident_id: incident.id,
           file_name: file.name,
           file_path: filePath,

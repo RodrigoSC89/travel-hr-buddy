@@ -35,7 +35,8 @@ const NetworkStatusWidgetComponent: React.FC = () => {
 
   // PATCH v20: Sempre assume online - navigator.onLine não confiável no iOS PWA
   const updateStats = useCallback(() => {
-    const connection = (navigator as any).connection;
+    const nav = navigator as unknown as { connection?: { downlink?: number; rtt?: number; effectiveType?: string; addEventListener: (t: string, h: () => void) => void; removeEventListener: (t: string, h: () => void) => void } };
+    const connection = nav.connection;
     setStats({
       downlink: connection?.downlink || 10,
       rtt: connection?.rtt || 50,
@@ -47,14 +48,15 @@ const NetworkStatusWidgetComponent: React.FC = () => {
   useEffect(() => {
     updateStats();
     
+    const nav = navigator as unknown as { connection?: { addEventListener: (t: string, h: () => void) => void; removeEventListener: (t: string, h: () => void) => void } };
     // PATCH v20: Apenas eventos de mudança de conexão, NÃO online/offline
-    if ('connection' in navigator) {
-      (navigator as any).connection?.addEventListener('change', updateStats);
+    if (nav.connection) {
+      nav.connection.addEventListener('change', updateStats);
     }
 
     return () => {
-      if ('connection' in navigator) {
-        (navigator as any).connection?.removeEventListener('change', updateStats);
+      if (nav.connection) {
+        nav.connection.removeEventListener('change', updateStats);
       }
     };
   }, [updateStats]);

@@ -288,7 +288,7 @@ const TravelManagement = () => {
           leg.status
         ]);
 
-        (doc as any).autoTable({
+        (doc as unknown as { autoTable: (opts: Record<string, unknown>) => void }).autoTable({
           startY: 100,
           head: [["Leg", "Type", "Carrier", "From", "To", "Departure", "Status"]],
           body: tableData,
@@ -298,7 +298,7 @@ const TravelManagement = () => {
       }
       
       // Footer
-      const pageCount = (doc as any).internal.getNumberOfPages();
+      const pageCount = (doc as unknown as { internal: { getNumberOfPages: () => number } }).internal.getNumberOfPages();
       doc.setFontSize(8);
       doc.text(`Generated: ${new Date().toLocaleString()}`, 14, doc.internal.pageSize.height - 10);
       doc.text(`Page ${pageCount}`, doc.internal.pageSize.width - 30, doc.internal.pageSize.height - 10);

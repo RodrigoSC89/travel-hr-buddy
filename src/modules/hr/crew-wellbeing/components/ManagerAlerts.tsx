@@ -32,8 +32,7 @@ export const ManagerAlerts: React.FC = () => {
       const { data: { user } } = await supabase.auth.getUser();
       if (!user) return;
 
-      const { data, error } = await (supabase
-        .from("wellbeing_alerts" as any)
+      const { data, error } = await ((supabase.from as Function)("wellbeing_alerts")
         .select("*")
         .eq("user_id", user.id)
         .order("created_at", { ascending: false }) as unknown as Promise<{ data: WellbeingAlert[] | null; error: Error | null }>);
@@ -54,8 +53,7 @@ export const ManagerAlerts: React.FC = () => {
 
   const acknowledgeAlert = async (alertId: string) => {
     try {
-      const { error } = await (supabase
-        .from("wellbeing_alerts" as any)
+      const { error } = await ((supabase.from as Function)("wellbeing_alerts")
         .update({
           status: "acknowledged",
           acknowledged_at: new Date().toISOString(),
@@ -82,8 +80,7 @@ export const ManagerAlerts: React.FC = () => {
 
   const resolveAlert = async (alertId: string) => {
     try {
-      const { error } = await (supabase
-        .from("wellbeing_alerts" as any)
+      const { error } = await ((supabase.from as Function)("wellbeing_alerts")
         .update({
           status: "resolved",
           resolved_at: new Date().toISOString(),

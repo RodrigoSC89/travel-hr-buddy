@@ -142,7 +142,7 @@ export const PreOVIDReportGenerator: React.FC<PreOVIDReportGeneratorProps> = ({
       });
 
       // Summary
-      y = (pdf as any).lastAutoTable.finalY + 15;
+      y = (pdf as unknown as { lastAutoTable: { finalY: number } }).lastAutoTable.finalY + 15;
       pdf.setFontSize(14);
       pdf.setFont('helvetica', 'bold');
       pdf.text('INSPECTION SUMMARY', margin, y);

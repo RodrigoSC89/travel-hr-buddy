@@ -7,20 +7,17 @@ import { supabase } from "@/integrations/supabase/client";
 import { logger } from "@/lib/logger";
 import type { Json } from "@/integrations/supabase/types";
 
-// eslint-disable-next-line @typescript-eslint/no-empty-interface
-interface SpeechRecognitionLike {
+// SpeechRecognition interface for cross-browser compat
+interface SpeechRecognitionInstance {
   continuous: boolean;
   interimResults: boolean;
   lang: string;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- SpeechRecognition event type
-  onresult: ((event: any) => void) | null;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- SpeechRecognition error event type
-  onerror: ((event: any) => void) | null;
+  onresult: ((event: SpeechRecognitionEvent) => void) | null;
+  onerror: ((event: SpeechRecognitionErrorEvent) => void) | null;
   onend: (() => void) | null;
   start: () => void;
   stop: () => void;
 }
-type SpeechRecognitionInstance = SpeechRecognitionLike;
 
 export interface IntentInput {
   voiceCommand?: string;
@@ -106,15 +103,16 @@ export class MultimodalIntentEngine {
     }
 
     return new Promise((resolve, reject) => {
-      this.recognitionService!.onresult = (event) => {
+      this.recognitionService!.onresult = (event: SpeechRecognitionEvent) => {
         const transcript = event.results[0][0].transcript;
         onResult(transcript);
         resolve();
       };
 
-      this.recognitionService!.onerror = (event) => {
-        if (onError) onError(event.error);
-        reject(event.error);
+      this.recognitionService!.onerror = (event: SpeechRecognitionErrorEvent) => {
+        const errMsg = event.error || 'unknown';
+        if (onError) onError(errMsg);
+        reject(errMsg);
       };
 
       this.recognitionService!.onend = () => {

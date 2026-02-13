@@ -138,8 +138,7 @@ class EventStore {
         created_at: new Date().toISOString()
       };
 
-      const { data: inserted, error } = await (supabase
-        .from('domain_events') as any)
+      const { data: inserted, error } = await (supabase.from as Function)('domain_events')
         .insert(event)
         .select()
         .single();
@@ -268,8 +267,7 @@ class EventStore {
       created_at: new Date().toISOString()
     };
 
-    const { error } = await (supabase
-      .from('event_snapshots') as any)
+    const { error } = await (supabase.from as Function)('event_snapshots')
       .insert(snapshot);
 
     return !error;
