@@ -218,7 +218,7 @@ export default function DashboardAuditorias() {
       {/* Mensagem quando não há dados */}
       {!loading && dados.length === 0 && (
         <Card className="shadow-md">
-          <CardContent className="p-6 text-center text-gray-500">
+          <CardContent className="p-6 text-center text-muted-foreground">
             <p>Clique em &quot;Filtrar&quot; para carregar os dados das auditorias</p>
           </CardContent>
         </Card>

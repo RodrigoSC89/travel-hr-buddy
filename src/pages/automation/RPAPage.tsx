@@ -121,7 +121,7 @@ export default function RPAPage() {
     if (status === "scheduled") {
       return <Badge className="bg-blue-100 text-blue-700">Agendado</Badge>;
     }
-    return <Badge className="bg-gray-100 text-gray-700">Pausado</Badge>;
+    return <Badge className="bg-muted text-muted-foreground">Pausado</Badge>;
   };
 
   return (
@@ -216,7 +216,7 @@ export default function RPAPage() {
                       }`}
                     >
                       <Bot
-                        className={`h-6 w-6 ${botStates[bot.id] ? "text-red-500" : "text-gray-400"}`}
+                        className={`h-6 w-6 ${botStates[bot.id] ? "text-red-500" : "text-muted-foreground"}`}
                       />
                     </div>
                     <div className="flex-1">

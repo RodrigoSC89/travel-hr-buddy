@@ -337,9 +337,9 @@ export default function Org360Dashboard() {
                   <p className="text-2xl font-bold text-yellow-600">{risks?.medium}</p>
                   <p className="text-sm text-yellow-900">Medium</p>
                 </div>
-                <div className="text-center p-4 border border-gray-200 rounded-lg bg-gray-50">
-                  <p className="text-2xl font-bold text-gray-600">{risks?.low}</p>
-                  <p className="text-sm text-gray-900">Low</p>
+                <div className="text-center p-4 border border-border rounded-lg bg-muted">
+                  <p className="text-2xl font-bold text-muted-foreground">{risks?.low}</p>
+                  <p className="text-sm text-foreground">Low</p>
                 </div>
               </div>
             </CardContent>

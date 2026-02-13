@@ -207,7 +207,7 @@ export default function AILearningDashboard() {
     case 3:
       return "text-blue-600";
     default:
-      return "text-gray-600";
+      return "text-muted-foreground";
     }
   };
 

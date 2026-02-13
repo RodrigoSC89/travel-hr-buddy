@@ -241,8 +241,8 @@ const MissionCommandCenter: React.FC = () => {
       case "operational": return "text-green-500 bg-green-500/10";
       case "warning": return "text-yellow-500 bg-yellow-500/10";
       case "critical": return "text-red-500 bg-red-500/10";
-      case "offline": return "text-gray-500 bg-gray-500/10";
-      default: return "text-gray-500 bg-gray-500/10";
+      case "offline": return "text-muted-foreground bg-muted";
+      default: return "text-muted-foreground bg-muted";
     }
   };
 

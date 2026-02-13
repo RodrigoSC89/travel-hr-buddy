@@ -112,7 +112,7 @@ export default function IncidentAiModal() {
           
           {analysis && (
             <>
-              <div className="mt-4 p-4 bg-gray-50 dark:bg-gray-900 rounded-lg text-sm whitespace-pre-line border">
+              <div className="mt-4 p-4 bg-muted rounded-lg text-sm whitespace-pre-line border">
                 {analysis}
               </div>
               <Button 

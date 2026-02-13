@@ -172,7 +172,7 @@ export default function VoyageCommandCenter() {
     const colors: Record<string, string> = {
       planned: "bg-blue-500/10 text-blue-600",
       active: "bg-green-500/10 text-green-600",
-      completed: "bg-gray-500/10 text-gray-600",
+      completed: "bg-muted text-muted-foreground",
       cancelled: "bg-red-500/10 text-red-600"
     };
     return colors[status] || colors.planned;
@@ -913,8 +913,8 @@ export default function VoyageCommandCenter() {
                     </div>
                     <p className="text-sm text-muted-foreground">Planejadas</p>
                   </div>
-                  <div className="text-center p-4 rounded-lg bg-gray-500/10">
-                    <div className="text-3xl font-bold text-gray-500">
+                  <div className="text-center p-4 rounded-lg bg-muted">
+                    <div className="text-3xl font-bold text-muted-foreground">
                       {voyages.filter(v => v.status === "completed").length}
                     </div>
                     <p className="text-sm text-muted-foreground">Concluídas</p>
