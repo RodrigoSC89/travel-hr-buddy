@@ -157,7 +157,7 @@ const Documents = lazy(() => import("@/pages/Documents"));
 const Templates = lazy(() => import("@/pages/Templates"));
 const DocumentWorkflow = lazy(() => import("@/pages/DocumentWorkflow"));
 const ExportCenterPage = lazy(() => import("@/pages/ExportCenterPage"));
-const KnowledgeHubPage = lazy(() => import("@/modules/knowledge-hub/pages/KnowledgeHubPage"));
+const KnowledgeHubPage = lazy(() => import("@/pages/Documents"));
 
 // ============================================
 // AUDITORIAS & COMPLIANCE
