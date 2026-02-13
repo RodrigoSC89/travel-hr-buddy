@@ -145,7 +145,7 @@ export function SonarDataUpload() {
       </CardHeader>
       <CardContent>
         <div className="space-y-4">
-          <div className="border-2 border-dashed border-gray-300 rounded-lg p-8 text-center hover:border-primary transition-colors">
+          <div className="border-2 border-dashed border-border rounded-lg p-8 text-center hover:border-primary transition-colors">
             <input
               type="file"
               accept=".json,.csv,.txt"
@@ -183,7 +183,7 @@ export function SonarDataUpload() {
                 <span>Processing sonar data...</span>
                 <span>{Math.round(progress)}%</span>
               </div>
-              <div className="w-full bg-gray-200 rounded-full h-2">
+              <div className="w-full bg-muted rounded-full h-2">
                 <div 
                   className="bg-primary h-2 rounded-full transition-all duration-300"
                   style={{ width: `${progress}%` }}

@@ -377,7 +377,7 @@ export default function JobCards() {
                   <h4 className="font-semibold text-green-900 mb-3">📊 Casos Similares (Top {selectedJob.ai_recommendation.similar_cases.length})</h4>
                   <div className="space-y-2">
                     {selectedJob.ai_recommendation.similar_cases.map((sc) => (
-                      <div key={sc.job_id} className="bg-white p-3 rounded border border-green-200">
+                      <div key={sc.job_id} className="bg-card p-3 rounded border border-green-200">
                         <div className="flex justify-between items-start mb-1">
                           <span className="font-semibold text-sm">{sc.job_id}</span>
                           <span className="text-xs bg-green-200 text-green-800 px-2 py-1 rounded">

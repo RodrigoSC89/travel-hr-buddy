@@ -41,7 +41,7 @@ export function GamificationSystem() {
   const getRankBadge = (rank: number) => {
     switch (rank) {
       case 1: return <Crown className="h-5 w-5 text-yellow-500" />;
-      case 2: return <Medal className="h-5 w-5 text-gray-400" />;
+      case 2: return <Medal className="h-5 w-5 text-muted-foreground" />;
       case 3: return <Medal className="h-5 w-5 text-amber-600" />;
       default: return <span className="text-sm font-bold text-muted-foreground">#{rank}</span>;
     }
@@ -169,7 +169,7 @@ export function GamificationSystem() {
                         className={cn(
                           "flex items-center gap-4 p-3 rounded-lg",
                           user.rank === 1 ? "bg-yellow-500/10 border border-yellow-500/20" :
-                          user.rank === 2 ? "bg-gray-500/10" :
+                          user.rank === 2 ? "bg-muted/50" :
                           user.rank === 3 ? "bg-amber-500/10" : "bg-muted/30"
                         )}
                       >

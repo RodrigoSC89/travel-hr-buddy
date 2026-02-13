@@ -121,9 +121,9 @@ export function NOCModeLayout() {
   const warningCount = alerts.filter(a => a.severity === "warning" && !a.acknowledged).length;
 
   return (
-    <div className="min-h-screen bg-[#0a0a0f] text-gray-100 p-4">
+    <div className="min-h-screen bg-[#0a0a0f] text-foreground p-4">
       {/* Top Status Bar */}
-      <div className="flex items-center justify-between mb-4 p-3 bg-[#12121a] rounded-lg border border-gray-800">
+      <div className="flex items-center justify-between mb-4 p-3 bg-[#12121a] rounded-lg border border-border">
         <div className="flex items-center gap-4">
           <div className="flex items-center gap-2">
             <Monitor className="h-5 w-5 text-primary" />
@@ -177,7 +177,7 @@ export function NOCModeLayout() {
 
       {/* Tab Navigation */}
       <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-4">
-        <TabsList className="bg-[#12121a] border border-gray-800">
+        <TabsList className="bg-[#12121a] border border-border">
           <TabsTrigger value="executive" className="data-[state=active]:bg-success/20">
             <LayoutDashboard className="h-4 w-4 mr-2" />
             Executivo
@@ -218,7 +218,7 @@ export function NOCModeLayout() {
         </TabsList>
 
         <TabsContent value="executive" className="mt-0">
-          <Card className="bg-[#12121a] border-gray-800 p-6">
+          <Card className="bg-[#12121a] border-border p-6">
             <AIExecutiveDashboard />
           </Card>
         </TabsContent>
@@ -226,7 +226,7 @@ export function NOCModeLayout() {
         <TabsContent value="monitoring" className="mt-0">
           <div className="grid grid-cols-12 gap-4">
             {/* Systems Status Panel */}
-            <Card className="col-span-3 bg-[#12121a] border-gray-800">
+            <Card className="col-span-3 bg-[#12121a] border-border">
               <CardHeader className="pb-2">
                 <CardTitle className="text-sm flex items-center gap-2">
                   <Activity className="h-4 w-4 text-success" />
@@ -251,27 +251,27 @@ export function NOCModeLayout() {
             {/* Main Metrics */}
             <div className="col-span-6 space-y-4">
               <div className="grid grid-cols-4 gap-3">
-                <Card className="bg-[#12121a] border-gray-800">
+                <Card className="bg-[#12121a] border-border">
                   <CardContent className="pt-4 text-center">
                     <div className="text-3xl font-bold text-success">99.9%</div>
                     <div className="text-xs text-muted-foreground">Uptime</div>
                   </CardContent>
                 </Card>
-                <Card className="bg-[#12121a] border-gray-800">
+                <Card className="bg-[#12121a] border-border">
                   <CardContent className="pt-4 text-center">
                     <div className="text-3xl font-bold text-info">1,234</div>
                     <div className="text-xs text-muted-foreground">Req/min</div>
                   </CardContent>
                 </Card>
-                <Card className="bg-[#12121a] border-gray-800">
+                <Card className="bg-[#12121a] border-border">
                   <CardContent className="pt-4 text-center">
                     <div className="text-3xl font-bold text-warning">45ms</div>
                     <div className="text-xs text-muted-foreground">Latência</div>
                   </CardContent>
                 </Card>
-                <Card className="bg-[#12121a] border-gray-800">
+                <Card className="bg-[#12121a] border-border">
                   <CardContent className="pt-4 text-center">
-                    <div className={cn("text-3xl font-bold", isActive ? "text-green-400" : "text-muted-foreground")}>
+                    <div className={cn("text-3xl font-bold", isActive ? "text-success" : "text-muted-foreground")}>
                       {isActive ? "ON" : "OFF"}
                     </div>
                     <div className="text-xs text-muted-foreground">IA Autônoma</div>
@@ -280,7 +280,7 @@ export function NOCModeLayout() {
               </div>
 
               {/* Activity Feed */}
-              <Card className="bg-[#12121a] border-gray-800 h-[400px]">
+              <Card className="bg-[#12121a] border-border h-[400px]">
                 <CardHeader className="pb-2">
                   <div className="flex items-center justify-between">
                     <CardTitle className="text-sm flex items-center gap-2">
@@ -299,7 +299,7 @@ export function NOCModeLayout() {
                             {new Date(Date.now() - i * 30000).toLocaleTimeString('pt-BR')}
                           </span>
                           <span className="text-success">[INFO]</span>
-                          <span className="text-gray-300">
+                          <span className="text-muted-foreground">
                             {i % 3 === 0 ? "API request OK" : i % 3 === 1 ? "DB query 12ms" : "Session validated"}
                           </span>
                         </div>
@@ -311,7 +311,7 @@ export function NOCModeLayout() {
             </div>
 
             {/* Alerts Panel */}
-            <Card className="col-span-3 bg-[#12121a] border-gray-800">
+            <Card className="col-span-3 bg-[#12121a] border-border">
               <CardHeader className="pb-2">
                 <CardTitle className="text-sm flex items-center gap-2">
                   <Bell className="h-4 w-4 text-warning" />
@@ -322,7 +322,7 @@ export function NOCModeLayout() {
                 <ScrollArea className="h-[500px] pr-2">
                   <div className="space-y-2">
                     {alerts.map((alert) => (
-                      <div key={alert.id} className={cn("p-3 rounded-lg border", alert.acknowledged ? "opacity-60 border-gray-800" : "border-gray-700")}>
+                      <div key={alert.id} className={cn("p-3 rounded-lg border", alert.acknowledged ? "opacity-60 border-border" : "border-border")}>
                         <div className="flex items-start justify-between mb-2">
                           <Badge className={getSeverityColor(alert.severity)}>{alert.severity.toUpperCase()}</Badge>
                           <span className="text-xs text-muted-foreground">{Math.round((Date.now() - alert.timestamp.getTime()) / 60000)}m</span>
@@ -344,37 +344,37 @@ export function NOCModeLayout() {
         </TabsContent>
 
         <TabsContent value="ai" className="mt-0">
-          <Card className="bg-[#12121a] border-gray-800 p-6">
+          <Card className="bg-[#12121a] border-border p-6">
             <AutonomousAIPanel />
           </Card>
         </TabsContent>
 
         <TabsContent value="metrics" className="mt-0">
-          <Card className="bg-[#12121a] border-gray-800 p-6">
+          <Card className="bg-[#12121a] border-border p-6">
             <AILearningMetricsDashboard />
           </Card>
         </TabsContent>
 
         <TabsContent value="history" className="mt-0">
-          <Card className="bg-[#12121a] border-gray-800 p-6">
+          <Card className="bg-[#12121a] border-border p-6">
             <AIDecisionHistory />
           </Card>
         </TabsContent>
 
         <TabsContent value="comparison" className="mt-0">
-          <Card className="bg-[#12121a] border-gray-800 p-6">
+          <Card className="bg-[#12121a] border-border p-6">
             <AIPerformanceComparison />
           </Card>
         </TabsContent>
 
         <TabsContent value="insights" className="mt-0">
-          <Card className="bg-[#12121a] border-gray-800 p-6">
+          <Card className="bg-[#12121a] border-border p-6">
             <AIInsightsPanel />
           </Card>
         </TabsContent>
 
         <TabsContent value="config" className="mt-0">
-          <Card className="bg-[#12121a] border-gray-800 p-6">
+          <Card className="bg-[#12121a] border-border p-6">
             <AIConfigurationPanel />
           </Card>
         </TabsContent>

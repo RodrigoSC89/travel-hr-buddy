@@ -110,7 +110,7 @@ export default function AutonomyConsole() {
               {isActive ? (
                 <span className="text-green-500">Ativo</span>
               ) : (
-                <span className="text-gray-500">Inativo</span>
+                <span className="text-muted-foreground">Inativo</span>
               )}
             </div>
             <p className="text-xs text-muted-foreground mt-1">

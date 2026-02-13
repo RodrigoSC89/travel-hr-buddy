@@ -92,22 +92,22 @@ export default function SGSOReportPage() {
 
       <div ref={reportRef} className="bg-white p-8 rounded-lg shadow-lg">
         {/* Report Header */}
-        <div className="mb-8 border-b-2 border-gray-300 pb-6">
+       <div className="mb-8 border-b-2 border-border pb-6">
           <div className="flex items-center justify-between mb-4">
             <div>
-              <h1 className="text-3xl font-bold text-gray-900 mb-2">📄 Relatório SGSO</h1>
-              <p className="text-lg text-gray-700">Sistema de Gestão de Segurança Operacional</p>
-              <p className="text-sm text-gray-600 mt-1">Conformidade ANP Resolução 43/2007</p>
+              <h1 className="text-3xl font-bold text-foreground mb-2">📄 Relatório SGSO</h1>
+              <p className="text-lg text-muted-foreground">Sistema de Gestão de Segurança Operacional</p>
+              <p className="text-sm text-muted-foreground mt-1">Conformidade ANP Resolução 43/2007</p>
             </div>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
             <div>
-              <p className="text-sm text-gray-600">Embarcação:</p>
-              <p className="text-lg font-semibold text-gray-900">{VESSEL_NAME}</p>
+              <p className="text-sm text-muted-foreground">Embarcação:</p>
+              <p className="text-lg font-semibold text-foreground">{VESSEL_NAME}</p>
             </div>
             <div>
-              <p className="text-sm text-gray-600">Data de Geração:</p>
-              <p className="text-lg font-semibold text-gray-900">
+              <p className="text-sm text-muted-foreground">Data de Geração:</p>
+              <p className="text-lg font-semibold text-foreground">
                 {new Date().toLocaleDateString("pt-BR", { day: "2-digit", month: "long", year: "numeric" })}
               </p>
             </div>
@@ -116,7 +116,7 @@ export default function SGSOReportPage() {
 
         {/* Statistics Summary */}
         <div className="mb-8">
-          <h2 className="text-2xl font-semibold text-gray-900 mb-4">📊 Resumo Estatístico</h2>
+          <h2 className="text-2xl font-semibold text-foreground mb-4">📊 Resumo Estatístico</h2>
           <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
             <div className="bg-blue-50 p-4 rounded-lg border border-blue-200">
               <p className="text-sm text-blue-700 font-medium">Total</p>
@@ -143,9 +143,9 @@ export default function SGSOReportPage() {
 
         {/* Incidents List */}
         <div className="mb-8">
-          <h2 className="text-2xl font-semibold text-gray-900 mb-4">📋 Incidentes Classificados</h2>
+          <h2 className="text-2xl font-semibold text-foreground mb-4">📋 Incidentes Classificados</h2>
           {incidents.length === 0 ? (
-            <div className="text-center py-12 text-gray-500">
+            <div className="text-center py-12 text-muted-foreground">
               <AlertCircle className="h-12 w-12 mx-auto mb-4 opacity-50" />
               <p className="text-lg">Nenhum incidente registrado</p>
               <p className="text-sm">Os incidentes aparecerão aqui quando forem registrados na tabela de não conformidades.</p>
@@ -163,23 +163,23 @@ export default function SGSOReportPage() {
                       {incident.sgso_risk_level}
                     </div>
                   </div>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-3 mt-3 pt-3 border-t border-gray-200">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-3 mt-3 pt-3 border-t border-border">
                     <div>
-                      <p className="text-xs text-gray-600 uppercase font-medium mb-1">Categoria SGSO</p>
-                      <p className="text-sm text-gray-900">{incident.sgso_category}</p>
+                      <p className="text-xs text-muted-foreground uppercase font-medium mb-1">Categoria SGSO</p>
+                      <p className="text-sm text-foreground">{incident.sgso_category}</p>
                     </div>
                     <div>
-                      <p className="text-xs text-gray-600 uppercase font-medium mb-1">Nível de Risco</p>
-                      <p className="text-sm text-gray-900">{incident.sgso_risk_level}</p>
+                      <p className="text-xs text-muted-foreground uppercase font-medium mb-1">Nível de Risco</p>
+                      <p className="text-sm text-foreground">{incident.sgso_risk_level}</p>
                     </div>
                   </div>
-                  <div className="mt-3 pt-3 border-t border-gray-200">
-                    <p className="text-xs text-gray-600 uppercase font-medium mb-1">🧠 Causa Raiz</p>
-                    <p className="text-sm text-gray-900 leading-relaxed">{incident.sgso_root_cause}</p>
+                  <div className="mt-3 pt-3 border-t border-border">
+                    <p className="text-xs text-muted-foreground uppercase font-medium mb-1">🧠 Causa Raiz</p>
+                    <p className="text-sm text-foreground leading-relaxed">{incident.sgso_root_cause}</p>
                   </div>
-                  <div className="mt-3 pt-3 border-t border-gray-200">
-                    <p className="text-xs text-gray-600 uppercase font-medium mb-1">📋 Plano de Ação</p>
-                    <p className="text-sm text-gray-900 leading-relaxed">{incident.action_plan}</p>
+                  <div className="mt-3 pt-3 border-t border-border">
+                    <p className="text-xs text-muted-foreground uppercase font-medium mb-1">📋 Plano de Ação</p>
+                    <p className="text-sm text-foreground leading-relaxed">{incident.action_plan}</p>
                   </div>
                 </div>
               ))}
@@ -189,25 +189,25 @@ export default function SGSOReportPage() {
 
         {/* Trend Chart */}
         <div className="mb-8">
-          <h2 className="text-2xl font-semibold text-gray-900 mb-4">📈 Tendência de Riscos</h2>
+          <h2 className="text-2xl font-semibold text-foreground mb-4">📈 Tendência de Riscos</h2>
           <div className="bg-white rounded-lg"><SGSOTrendChart /></div>
         </div>
 
         {/* Footer */}
-        <div className="mt-12 pt-6 border-t-2 border-gray-300">
+        <div className="mt-12 pt-6 border-t-2 border-border">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             <div>
-              <p className="text-sm text-gray-600 mb-2">Responsável pela Emissão:</p>
-              <div className="border-t-2 border-gray-400 pt-2 mt-8"><p className="text-sm text-gray-800">Nome / Assinatura</p></div>
+              <p className="text-sm text-muted-foreground mb-2">Responsável pela Emissão:</p>
+              <div className="border-t-2 border-border pt-2 mt-8"><p className="text-sm text-foreground">Nome / Assinatura</p></div>
             </div>
             <div>
-              <p className="text-sm text-gray-600 mb-2">Aprovado por:</p>
-              <div className="border-t-2 border-gray-400 pt-2 mt-8"><p className="text-sm text-gray-800">Nome / Assinatura</p></div>
+              <p className="text-sm text-muted-foreground mb-2">Aprovado por:</p>
+              <div className="border-t-2 border-border pt-2 mt-8"><p className="text-sm text-foreground">Nome / Assinatura</p></div>
             </div>
           </div>
           <div className="mt-8 text-center">
-            <p className="text-xs text-gray-500">Gerado automaticamente por Nautilus One - Sistema de Gestão Marítima</p>
-            <p className="text-xs text-gray-500 mt-1">Documento confidencial - Propriedade da empresa</p>
+            <p className="text-xs text-muted-foreground">Gerado automaticamente por Nautilus One - Sistema de Gestão Marítima</p>
+            <p className="text-xs text-muted-foreground mt-1">Documento confidencial - Propriedade da empresa</p>
           </div>
         </div>
       </div>
