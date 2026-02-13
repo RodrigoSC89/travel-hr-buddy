@@ -89,22 +89,24 @@ export const useWorkflows = () => {
       }
 
       // Map database workflows to our interface
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      const mappedWorkflows: Workflow[] = (dbWorkflows || []).map((w: Record<string, any>) => ({
-        id: w.id,
-        name: w.name,
-        description: w.description,
-        category: w.steps?.category || "custom",
-        status: w.steps?.status || "draft",
-        progress: calculateProgress(w.steps?.steps || []),
-        steps: w.steps?.steps || [],
-        created_at: w.created_at,
-        updated_at: w.updated_at,
-        created_by: w.created_by,
-        priority: w.steps?.priority || "medium",
-        estimated_duration: w.steps?.estimated_duration,
-        tags: w.steps?.tags || [],
-      }));
+      const mappedWorkflows: Workflow[] = (dbWorkflows || []).map((w: Record<string, unknown>) => {
+        const steps = w.steps as Record<string, unknown> | null;
+        return ({
+        id: String(w.id),
+        name: String(w.name),
+        description: w.description as string | null,
+        category: (steps?.category as Workflow['category']) || "custom",
+        status: (steps?.status as Workflow['status']) || "draft",
+        progress: calculateProgress((steps?.steps as WorkflowStep[]) || []),
+        steps: (steps?.steps as WorkflowStep[]) || [],
+        created_at: String(w.created_at),
+        updated_at: String(w.updated_at),
+        created_by: String(w.created_by),
+        priority: (steps?.priority as Workflow['priority']) || "medium",
+        estimated_duration: steps?.estimated_duration as number | undefined,
+        tags: (steps?.tags as string[]) || [],
+      });
+      });
 
       // If no workflows, add sample data
       if (mappedWorkflows.length === 0) {

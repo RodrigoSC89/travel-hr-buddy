@@ -111,15 +111,16 @@ export class PEOReport {
       didParseCell: (data: any) => {
         if (data.column.index === 2 && data.section === "body") {
           const status = data.cell.raw as string;
+          const styles = data.cell.styles;
           if (status === "OK") {
-            data.cell.styles.textColor = [0, 128, 0];
-            data.cell.styles.fontStyle = "bold";
+            styles.textColor = [0, 128, 0];
+            styles.fontStyle = "bold";
           } else if (status === "Não Conforme") {
-            data.cell.styles.textColor = [255, 0, 0];
-            data.cell.styles.fontStyle = "bold";
+            styles.textColor = [255, 0, 0];
+            styles.fontStyle = "bold";
           } else if (status === "Pendente") {
-            data.cell.styles.textColor = [255, 165, 0];
-            data.cell.styles.fontStyle = "bold";
+            styles.textColor = [255, 165, 0];
+            styles.fontStyle = "bold";
           }
         }
       },

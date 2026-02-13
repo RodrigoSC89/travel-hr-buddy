@@ -78,8 +78,7 @@ export interface MedicalReport {
   generatedAt: string;
   period: string;
   status: 'draft' | 'completed' | 'submitted';
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Supabase Json type
-  data: Record<string, any>;
+  data: Record<string, unknown>;
 }
 
 export interface AIAnalysis {

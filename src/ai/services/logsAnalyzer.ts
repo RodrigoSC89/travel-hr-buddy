@@ -96,8 +96,19 @@ export const analyzeSystemLogs = async (
 /**
  * Extract log analysis logic for reusability
  */
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- logs come from both DB (typed) and in-memory (untyped) sources
-const analyzeLogsData = async (allLogs: any[]): Promise<LogAnalysisResult> => {
+interface LogEntry {
+  level?: string | null;
+  severity?: string | null;
+  message?: string;
+  error?: string;
+  module?: string;
+  component?: string;
+  source?: string;
+  timestamp?: string;
+  created_at?: string;
+}
+
+const analyzeLogsData = async (allLogs: LogEntry[]): Promise<LogAnalysisResult> => {
   if (allLogs.length === 0) {
     return {
       anomalies: [],
@@ -127,8 +138,7 @@ const analyzeLogsData = async (allLogs: any[]): Promise<LogAnalysisResult> => {
 /**
  * Detect anomalies in logs
  */
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- mixed log sources with dynamic shapes
-const detectAnomalies = (logs: any[]): Anomaly[] => {
+const detectAnomalies = (logs: LogEntry[]): Anomaly[] => {
   const anomalies: Anomaly[] = [];
   
   // Group logs by type and message pattern
@@ -148,8 +158,8 @@ const detectAnomalies = (logs: any[]): Anomaly[] => {
         severity: group.length > 10 ? "high" : "medium",
         description: `Falha recorrente detectada: ${pattern}`,
         frequency: group.length,
-        firstSeen: group[group.length - 1].timestamp || group[group.length - 1].created_at,
-        lastSeen: group[0].timestamp || group[0].created_at,
+        firstSeen: group[group.length - 1].timestamp || group[group.length - 1].created_at || "",
+        lastSeen: group[0].timestamp || group[0].created_at || "",
         pattern,
         affectedModule: extractModule(group[0])
       });
@@ -164,8 +174,8 @@ const detectAnomalies = (logs: any[]): Anomaly[] => {
       severity: authLogs.length > 20 ? "critical" : "medium",
       description: `${authLogs.length} erros de autenticação detectados`,
       frequency: authLogs.length,
-      firstSeen: authLogs[authLogs.length - 1].timestamp || authLogs[authLogs.length - 1].created_at,
-      lastSeen: authLogs[0].timestamp || authLogs[0].created_at
+      firstSeen: authLogs[authLogs.length - 1].timestamp || authLogs[authLogs.length - 1].created_at || "",
+      lastSeen: authLogs[0].timestamp || authLogs[0].created_at || ""
     });
   }
   
@@ -180,8 +190,8 @@ const detectAnomalies = (logs: any[]): Anomaly[] => {
         description: `Módulo ${module} apresenta instabilidade`,
         affectedModule: module,
         frequency: errors.length,
-        firstSeen: errors[errors.length - 1].timestamp || errors[errors.length - 1].created_at,
-        lastSeen: errors[0].timestamp || errors[0].created_at
+        firstSeen: errors[errors.length - 1].timestamp || errors[errors.length - 1].created_at || "",
+        lastSeen: errors[0].timestamp || errors[0].created_at || ""
       });
     }
   });
@@ -194,8 +204,7 @@ const detectAnomalies = (logs: any[]): Anomaly[] => {
  */
 const generateRecommendations = async (
   anomalies: Anomaly[],
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- mixed log sources with dynamic shapes
-  logs: any[]
+  logs: LogEntry[]
 ): Promise<Recommendation[]> => {
   if (anomalies.length === 0) {
     return [];
@@ -378,9 +387,8 @@ export const storeAutoFixHistory = async (
 
 // Helper functions
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- mixed log sources with dynamic shapes
-const groupByPattern = (logs: any[]): Map<string, any[]> => {
-  const patterns = new Map<string, any[]>();
+const groupByPattern = (logs: LogEntry[]): Map<string, LogEntry[]> => {
+  const patterns = new Map<string, LogEntry[]>();
   
   logs.forEach(log => {
     const message = log.message || log.error || "";
@@ -396,9 +404,8 @@ const groupByPattern = (logs: any[]): Map<string, any[]> => {
   return patterns;
 };
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- mixed log sources with dynamic shapes
-const groupByModule = (logs: any[]): Map<string, any[]> => {
-  const modules = new Map<string, any[]>();
+const groupByModule = (logs: LogEntry[]): Map<string, LogEntry[]> => {
+  const modules = new Map<string, LogEntry[]>();
   
   logs.forEach(log => {
     const module = extractModule(log);
@@ -412,8 +419,7 @@ const groupByModule = (logs: any[]): Map<string, any[]> => {
   return modules;
 };
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- mixed log sources
-const extractModule = (log: any): string => {
+const extractModule = (log: LogEntry): string => {
   return log.module || log.component || log.source || "unknown";
 };
 

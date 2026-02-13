@@ -62,29 +62,29 @@ export function PeodpVoiceChat() {
   useEffect(() => {
     if (typeof window !== 'undefined' && ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window)) {
       // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Web Speech API vendor-prefixed
-      const SpeechRecognition = (window as Record<string, any>).webkitSpeechRecognition || (window as Record<string, any>).SpeechRecognition;
-      recognitionRef.current = new SpeechRecognition();
-      recognitionRef.current.continuous = false;
-      recognitionRef.current.interimResults = true;
-      recognitionRef.current.lang = 'pt-BR';
+      const SpeechRecognition = (window as any).webkitSpeechRecognition || (window as any).SpeechRecognition;
+      const recognition = new SpeechRecognition();
+      recognitionRef.current = recognition;
+      recognition.continuous = false;
+      recognition.interimResults = true;
+      recognition.lang = 'pt-BR';
 
       // eslint-disable-next-line @typescript-eslint/no-explicit-any -- SpeechRecognition event types not standardized
-      recognitionRef.current.onresult = (event: Record<string, any>) => {
-        const transcript = Array.from(event.results as ArrayLike<Record<string, any>>)
-          .map((result) => (result as Record<string, any>)[0].transcript)
+      recognition.onresult = (event: any) => {
+        const transcript = Array.from(event.results)
+          .map((result: any) => result[0].transcript)
           .join('');
         setTranscript(transcript);
       };
 
-      recognitionRef.current.onend = () => {
+      recognition.onend = () => {
         setIsListening(false);
         if (transcript.trim()) {
           handleQuestion(transcript);
         }
       };
 
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any -- SpeechRecognition error event
-      recognitionRef.current.onerror = (event: Record<string, unknown>) => {
+      recognition.onerror = (event: Record<string, unknown>) => {
         logger.error('Speech recognition error:', event.error);
         setIsListening(false);
         toast.error("Erro no reconhecimento de voz");

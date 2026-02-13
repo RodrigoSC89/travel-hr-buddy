@@ -10,9 +10,9 @@ import { logger } from "@/lib/logger";
 export interface RuleTemplate {
   name: string;
   description: string;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- rule builders access dynamic params
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- rule builders need dynamic param access for arithmetic/indexing
   conditionBuilder: (params: Record<string, any>) => (event: AutonomousEvent) => boolean;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- rule builders access dynamic params
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- rule builders need dynamic param access for arithmetic/indexing
   actionBuilder: (params: Record<string, any>) => (event: AutonomousEvent) => Promise<AutonomousActionResult>;
 }
 

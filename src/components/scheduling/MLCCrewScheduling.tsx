@@ -58,10 +58,11 @@ export const MLCCrewScheduling: React.FC = () => {
       }
 
       const now = new Date();
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any -- crew_assignments join types not inferred
-    const mapped: CrewSchedule[] = (assignments || []).map((a: any) => {
-        const startDate = new Date(a.start_date);
-        const endDate = a.end_date ? new Date(a.end_date) : new Date(startDate.getTime() + 90 * 86400000);
+    const mapped: CrewSchedule[] = (assignments || []).map((a: Record<string, unknown>) => {
+        const crewMembers = a.crew_members as Record<string, unknown> | null;
+        const vessels = a.vessels as Record<string, unknown> | null;
+        const startDate = new Date(String(a.start_date));
+        const endDate = a.end_date ? new Date(String(a.end_date)) : new Date(startDate.getTime() + 90 * 86400000);
         const contractDays = Math.ceil((endDate.getTime() - startDate.getTime()) / 86400000);
         const daysOnboard = Math.max(0, Math.ceil((now.getTime() - startDate.getTime()) / 86400000));
         const maxDays = 90; // MLC 2006 standard
@@ -72,13 +73,13 @@ export const MLCCrewScheduling: React.FC = () => {
           mlcStatus === 'warning' ? 89 : 95;
 
         return {
-          id: a.id,
-          crewMemberId: a.crew_member_id || a.id,
-          crewMemberName: a.crew_members?.full_name || a.position || 'Unknown',
-          rank: a.position || a.crew_members?.rank || 'Crew',
-          vesselName: a.vessels?.name || 'Unassigned',
-          embarkDate: a.start_date?.split('T')[0] || '',
-          disembarkDate: (a.end_date || endDate.toISOString()).split('T')[0],
+          id: String(a.id),
+          crewMemberId: String(a.crew_member_id || a.id),
+          crewMemberName: String(crewMembers?.full_name || a.position || 'Unknown'),
+          rank: String(a.position || crewMembers?.rank || 'Crew'),
+          vesselName: String(vessels?.name || 'Unassigned'),
+          embarkDate: String(a.start_date || '').split('T')[0] || '',
+          disembarkDate: (String(a.end_date || endDate.toISOString())).split('T')[0],
           contractDays,
           daysOnboard,
           maxDaysAllowed: maxDays,

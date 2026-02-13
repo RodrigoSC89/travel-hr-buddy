@@ -77,19 +77,18 @@ export function VesselHistoryCRUD({ vesselId = "v1", vesselName = "MV Atlantic P
 
       if (error || !data) return [];
 
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any -- navigation_history columns not fully in generated types
-      return data.map((d: any): VesselEvent => ({
-        id: d.id,
-        vesselId: d.vessel_id || vesselId,
-        type: (d.event_type || d.action || 'voyage') as EventType,
-        title: d.title || d.description?.slice(0, 60) || `Evento ${d.id.slice(0, 6)}`,
-        description: d.description || d.notes || '',
-        date: new Date(d.event_date || d.created_at),
-        endDate: d.end_date ? new Date(d.end_date) : undefined,
-        location: d.location || d.port_name || '',
-        status: (d.status || 'completed') as VesselEvent['status'],
-        createdBy: d.created_by || d.user_id || 'Sistema',
-        createdAt: new Date(d.created_at),
+      return data.map((d: Record<string, unknown>): VesselEvent => ({
+        id: String(d.id),
+        vesselId: String(d.vessel_id || vesselId),
+        type: (String(d.event_type || d.action || 'voyage')) as EventType,
+        title: String(d.title || String(d.description || '').slice(0, 60) || `Evento ${String(d.id).slice(0, 6)}`),
+        description: String(d.description || d.notes || ''),
+        date: new Date(String(d.event_date || d.created_at)),
+        endDate: d.end_date ? new Date(String(d.end_date)) : undefined,
+        location: String(d.location || d.port_name || ''),
+        status: (String(d.status || 'completed')) as VesselEvent['status'],
+        createdBy: String(d.created_by || d.user_id || 'Sistema'),
+        createdAt: new Date(String(d.created_at)),
       }));
     },
   });

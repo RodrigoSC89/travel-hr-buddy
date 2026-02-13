@@ -48,11 +48,12 @@ export function PainelBI() {
 
         // Transform to compliance data format
         const grouped: Record<string, ComplianceData> = {};
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any -- psc_inspections dynamic columns
-        (inspections || []).forEach((ins: any) => {
-          const key = `${ins.vessel_name}-${ins.inspection_date?.slice(0, 7) || "N/A"}`;
+        (inspections || []).forEach((ins: Record<string, unknown>) => {
+          const vesselName = String(ins.vessel_name || "N/A");
+          const inspDate = String(ins.inspection_date || "");
+          const key = `${vesselName}-${inspDate.slice(0, 7) || "N/A"}`;
           if (!grouped[key]) {
-            grouped[key] = { navio: ins.vessel_name || "N/A", mes: ins.inspection_date?.slice(0, 7) || "N/A", conforme: 0, nao_conforme: 0, observacao: 0 };
+            grouped[key] = { navio: vesselName, mes: inspDate.slice(0, 7) || "N/A", conforme: 0, nao_conforme: 0, observacao: 0 };
           }
           if (ins.status === "compliant" || ins.status === "approved") grouped[key].conforme++;
           else if (ins.status === "non_compliant" || ins.status === "failed") grouped[key].nao_conforme++;
