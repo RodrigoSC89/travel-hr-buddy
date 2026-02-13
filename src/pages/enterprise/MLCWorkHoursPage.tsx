@@ -112,13 +112,13 @@ export default function MLCWorkHoursPage() {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-4">
-          <div className="p-3 bg-purple-500/20 rounded-xl">
-            <Clock className="h-8 w-8 text-purple-500" />
+          <div className="p-3 bg-primary/20 rounded-xl">
+            <Clock className="h-8 w-8 text-primary" />
           </div>
           <div>
             <h1 className="text-2xl font-bold flex items-center gap-2">
               MLC Work Hours
-              <Badge variant="secondary" className="bg-purple-500/20 text-purple-400">
+              <Badge variant="secondary" className="bg-primary/20 text-primary">
                 MLC 2006
               </Badge>
             </h1>
@@ -158,9 +158,9 @@ export default function MLCWorkHoursPage() {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-muted-foreground">Conformes</p>
-                <p className="text-3xl font-bold text-green-500">{mlcStats.compliant}</p>
+                <p className="text-3xl font-bold text-success">{mlcStats.compliant}</p>
               </div>
-              <CheckCircle2 className="h-10 w-10 text-green-500/30" />
+              <CheckCircle2 className="h-10 w-10 text-success/30" />
             </div>
           </CardContent>
         </Card>
@@ -170,9 +170,9 @@ export default function MLCWorkHoursPage() {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-muted-foreground">Atenção</p>
-                <p className="text-3xl font-bold text-yellow-500">{mlcStats.warnings}</p>
+                <p className="text-3xl font-bold text-warning">{mlcStats.warnings}</p>
               </div>
-              <AlertTriangle className="h-10 w-10 text-yellow-500/30" />
+              <AlertTriangle className="h-10 w-10 text-warning/30" />
             </div>
           </CardContent>
         </Card>
@@ -182,9 +182,9 @@ export default function MLCWorkHoursPage() {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-muted-foreground">Violações</p>
-                <p className="text-3xl font-bold text-red-500">{mlcStats.violations}</p>
+                <p className="text-3xl font-bold text-destructive">{mlcStats.violations}</p>
               </div>
-              <AlertTriangle className="h-10 w-10 text-red-500/30" />
+              <AlertTriangle className="h-10 w-10 text-destructive/30" />
             </div>
           </CardContent>
         </Card>
@@ -203,26 +203,26 @@ export default function MLCWorkHoursPage() {
       </div>
 
       {/* MLC Limits Info */}
-      <Card className="border-purple-500/30 bg-gradient-to-r from-purple-500/5 to-transparent">
+      <Card className="border-primary/30 bg-gradient-to-r from-primary/5 to-transparent">
         <CardContent className="p-4">
           <div className="grid grid-cols-1 md:grid-cols-4 gap-4 text-center">
             <div className="p-3 bg-background rounded-lg">
-              <Sun className="h-6 w-6 mx-auto mb-2 text-orange-500" />
+              <Sun className="h-6 w-6 mx-auto mb-2 text-warning" />
               <p className="font-bold">14h</p>
               <p className="text-xs text-muted-foreground">Máx. por dia</p>
             </div>
             <div className="p-3 bg-background rounded-lg">
-              <Calendar className="h-6 w-6 mx-auto mb-2 text-blue-500" />
+              <Calendar className="h-6 w-6 mx-auto mb-2 text-info" />
               <p className="font-bold">72h</p>
               <p className="text-xs text-muted-foreground">Máx. por semana</p>
             </div>
             <div className="p-3 bg-background rounded-lg">
-              <Moon className="h-6 w-6 mx-auto mb-2 text-indigo-500" />
+              <Moon className="h-6 w-6 mx-auto mb-2 text-primary" />
               <p className="font-bold">10h</p>
               <p className="text-xs text-muted-foreground">Mín. descanso/dia</p>
             </div>
             <div className="p-3 bg-background rounded-lg">
-              <Clock className="h-6 w-6 mx-auto mb-2 text-green-500" />
+              <Clock className="h-6 w-6 mx-auto mb-2 text-success" />
               <p className="font-bold">77h</p>
               <p className="text-xs text-muted-foreground">Mín. descanso/semana</p>
             </div>
@@ -266,14 +266,14 @@ export default function MLCWorkHoursPage() {
                           <p className="text-muted-foreground">Trabalho: {crew.workHours}h / {crew.maxWork}h</p>
                           <Progress 
                             value={(crew.workHours / crew.maxWork) * 100} 
-                            className={crew.workHours > crew.maxWork ? "[&>div]:bg-red-500" : ""}
+                            className={crew.workHours > crew.maxWork ? "[&>div]:bg-destructive" : ""}
                           />
                         </div>
                         <div>
                           <p className="text-muted-foreground">Descanso: {crew.restHours}h / {crew.minRest}h</p>
                           <Progress 
                             value={(crew.restHours / 168) * 100}
-                            className={crew.restHours < crew.minRest ? "[&>div]:bg-red-500" : "[&>div]:bg-green-500"}
+                            className={crew.restHours < crew.minRest ? "[&>div]:bg-destructive" : "[&>div]:bg-success"}
                           />
                         </div>
                       </div>
@@ -286,7 +286,7 @@ export default function MLCWorkHoursPage() {
             <Card>
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
-                  <AlertTriangle className="h-5 w-5 text-red-500" />
+                  <AlertTriangle className="h-5 w-5 text-destructive" />
                   Violações Recentes
                 </CardTitle>
               </CardHeader>
@@ -345,7 +345,7 @@ export default function MLCWorkHoursPage() {
                           /{crew.maxWork}
                         </td>
                         <td className="py-3 px-4 text-center">
-                          <span className={crew.restHours < crew.minRest ? "text-red-500 font-bold" : ""}>
+                          <span className={crew.restHours < crew.minRest ? "text-destructive font-bold" : ""}>
                             {crew.restHours}
                           </span>
                           /{crew.minRest}

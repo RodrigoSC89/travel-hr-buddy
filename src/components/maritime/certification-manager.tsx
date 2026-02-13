@@ -441,13 +441,13 @@ export const CertificationManager: React.FC = () => {
                 </CardHeader>
                 <CardContent>
                   <div className="space-y-3">
-                    <div className="p-3 bg-blue-50 rounded-lg border border-blue-200">
-                      <p className="text-sm font-medium text-blue-800">Renovação BST</p>
-                      <p className="text-xs text-blue-600">João Silva - AB Seaman</p>
+                    <div className="p-3 bg-info/10 rounded-lg border border-info/20">
+                      <p className="text-sm font-medium">Renovação BST</p>
+                      <p className="text-xs text-muted-foreground">João Silva - AB Seaman</p>
                     </div>
-                    <div className="p-3 bg-green-50 rounded-lg border border-green-200">
-                      <p className="text-sm font-medium text-green-800">Exame Médico</p>
-                      <p className="text-xs text-green-600">Maria Santos - Cook</p>
+                    <div className="p-3 bg-success/10 rounded-lg border border-success/20">
+                      <p className="text-sm font-medium">Exame Médico</p>
+                      <p className="text-xs text-muted-foreground">Maria Santos - Cook</p>
                     </div>
                   </div>
                 </CardContent>
