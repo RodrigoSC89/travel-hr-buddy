@@ -128,6 +128,7 @@ export function ConversationalInput({
                 size="icon"
                 className="absolute right-2 top-1/2 -translate-y-1/2 h-6 w-6"
                 onClick={() => { setQuery(''); setIntent(null); }}
+                aria-label="Limpar busca" title="Limpar"
               >
                 <X className="h-3 w-3" />
               </Button>
@@ -142,6 +143,7 @@ export function ConversationalInput({
             className="shrink-0"
             onClick={toggleVoice}
             disabled={!recognitionRef.current}
+            aria-label={voiceState.isListening ? "Parar gravação" : "Iniciar gravação de voz"} title="Voz"
           >
             {voiceState.isListening ? (
               <MicOff className="h-4 w-4 animate-pulse" />
@@ -156,6 +158,7 @@ export function ConversationalInput({
             size="icon"
             className="shrink-0"
             disabled={!query.trim() || isProcessing}
+            aria-label="Enviar comando" title="Enviar"
           >
             {isProcessing ? (
               <Loader2 className="h-4 w-4 animate-spin" />

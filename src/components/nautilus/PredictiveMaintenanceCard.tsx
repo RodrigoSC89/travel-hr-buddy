@@ -95,6 +95,7 @@ export const PredictiveMaintenanceCard: React.FC<PredictiveMaintenanceCardProps>
               className="h-8 w-8"
               onClick={fetchPredictions}
               disabled={isLoading}
+              aria-label="Atualizar predições" title="Atualizar"
             >
               {isLoading ? (
                 <Loader2 className="h-4 w-4 animate-spin" />

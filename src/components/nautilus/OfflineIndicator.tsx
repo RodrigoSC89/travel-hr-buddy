@@ -105,6 +105,7 @@ export const OfflineIndicator: React.FC = () => {
                 size="icon"
                 className="h-7 w-7"
                 onClick={handleSync}
+                aria-label="Sincronizar dados" title="Sincronizar"
               >
                 <RefreshCw className="h-3.5 w-3.5" />
               </Button>

@@ -186,11 +186,11 @@ export function NautilusCommandCenter() {
                 <Wifi className="h-3 w-3 mr-1" />Online
               </Badge>
 
-              <Button variant="ghost" size="icon" onClick={handleRefresh} disabled={isRefreshing || isSyncing}>
+              <Button variant="ghost" size="icon" onClick={handleRefresh} disabled={isRefreshing || isSyncing} aria-label="Atualizar dados" title="Atualizar">
                 <RefreshCw className={`h-5 w-5 ${isRefreshing ? "animate-spin" : ""}`} />
               </Button>
 
-              <Button variant="ghost" size="icon" onClick={() => setSettingsOpen(true)}>
+              <Button variant="ghost" size="icon" onClick={() => setSettingsOpen(true)} aria-label="Configurações" title="Configurações">
                 <Settings className="h-5 w-5" />
               </Button>
             </div>

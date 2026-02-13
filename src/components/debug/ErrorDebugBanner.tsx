@@ -78,6 +78,7 @@ export const ErrorDebugBanner: React.FC = () => {
               size="icon"
               className="h-6 w-6"
               onClick={handleClear}
+              aria-label="Fechar banner de erro" title="Fechar"
             >
               <X className="h-4 w-4" />
             </Button>

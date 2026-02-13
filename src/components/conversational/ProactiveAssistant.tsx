@@ -160,7 +160,7 @@ export function ProactiveAssistant({
               <Brain className="h-5 w-5 text-primary animate-pulse" />
               <span className="font-semibold">Assistente IA</span>
             </div>
-            <Button variant="ghost" size="icon" onClick={onClose}>
+            <Button variant="ghost" size="icon" onClick={onClose} aria-label="Fechar assistente" title="Fechar">
               <X className="h-4 w-4" />
             </Button>
           </div>
@@ -280,7 +280,7 @@ export function ProactiveAssistant({
                   className="flex-1 bg-muted/50 border border-border/50 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-primary"
                   disabled={isLoading}
                 />
-                <Button type="submit" size="icon" disabled={isLoading || !chatInput.trim()}>
+                <Button type="submit" size="icon" disabled={isLoading || !chatInput.trim()} aria-label="Enviar mensagem" title="Enviar">
                   <MessageSquare className="h-4 w-4" />
                 </Button>
               </div>
