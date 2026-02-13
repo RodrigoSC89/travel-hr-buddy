@@ -60,12 +60,12 @@ const AI_SUGGESTIONS = [
   "Equipamentos com saúde crítica"
 ];
 
-// Hook for recent searches from localStorage
+// Hook for recent searches from sessionStorage
 function useRecentSearches() {
   const [searches, setSearches] = useState<string[]>([]);
 
   useEffect(() => {
-    const stored = localStorage.getItem('nautilus_recent_searches');
+    const stored = sessionStorage.getItem('nautilus_recent_searches');
     if (stored) {
       try {
         setSearches(JSON.parse(stored).slice(0, 5));
@@ -79,7 +79,7 @@ function useRecentSearches() {
     if (!term.trim()) return;
     setSearches(prev => {
       const updated = [term, ...prev.filter(s => s !== term)].slice(0, 5);
-      localStorage.setItem('nautilus_recent_searches', JSON.stringify(updated));
+      sessionStorage.setItem('nautilus_recent_searches', JSON.stringify(updated));
       return updated;
     });
   }, []);

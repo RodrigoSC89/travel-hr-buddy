@@ -674,9 +674,9 @@ export class JourneyOrchestrator {
    * Persist journey to database
    */
   private async persistJourney(journey: JourneyDefinition): Promise<void> {
-    // Store in localStorage for persistence (database table would need migration)
+    // Store in sessionStorage for ephemeral persistence (operational data)
     try {
-      const stored = localStorage.getItem('ojac_journeys') || '[]';
+      const stored = sessionStorage.getItem('ojac_journeys') || '[]';
       const journeys = JSON.parse(stored);
       const existing = journeys.findIndex((j: JourneyDefinition) => j.id === journey.id);
       if (existing >= 0) {
@@ -684,7 +684,7 @@ export class JourneyOrchestrator {
       } else {
         journeys.push(journey);
       }
-      localStorage.setItem('ojac_journeys', JSON.stringify(journeys.slice(-50)));
+      sessionStorage.setItem('ojac_journeys', JSON.stringify(journeys.slice(-50)));
     } catch (error) {
       logger.error('[OJAC] Failed to persist journey:', error);
     }

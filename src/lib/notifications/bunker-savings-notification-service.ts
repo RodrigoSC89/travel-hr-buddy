@@ -47,14 +47,14 @@ class BunkerSavingsNotificationService {
 
   private isInCooldown(port: string): boolean {
     const key = this.getCooldownKey(port);
-    const lastNotification = localStorage.getItem(key);
+    const lastNotification = sessionStorage.getItem(key);
     if (!lastNotification) return false;
     const lastTime = new Date(lastNotification).getTime();
     return Date.now() - lastTime < COOLDOWN_HOURS * 60 * 60 * 1000;
   }
 
   private setCooldown(port: string): void {
-    localStorage.setItem(this.getCooldownKey(port), new Date().toISOString());
+    sessionStorage.setItem(this.getCooldownKey(port), new Date().toISOString());
   }
 
   async checkAndNotify(alert: BunkerSavingsAlert): Promise<boolean> {
