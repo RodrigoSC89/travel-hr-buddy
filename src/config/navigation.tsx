@@ -18,7 +18,7 @@ export const NAVIGATION = [
   { name: "BridgeLink", path: "/bridgelink", component: safeLazyImport(() => import("@/modules/control/bridgelink/BridgeLinkDashboard"), "BridgeLink") },
   // PATCH UNIFY-10.0: Weather Command Center (fusão de 2 módulos meteorológicos)
   { name: "Weather Command Center", path: "/weather-command", component: safeLazyImport(() => import("@/pages/WeatherCommandCenter"), "Weather Command Center") },
-  { name: "Weather Dashboard", path: "/weather-dashboard", component: safeLazyImport(() => import("@/pages/WeatherDashboard"), "Weather Dashboard") },
+  { name: "Weather Dashboard", path: "/weather-dashboard", component: safeLazyImport(() => import("@/pages/WeatherCommandCenter"), "Weather Dashboard") },
   { name: "Forecast Global", path: "/forecast-global", component: safeLazyImport(() => import("@/modules/control/forecast-global/ForecastConsole"), "Forecast Global") },
   { name: "Control Hub", path: "/control-hub", component: safeLazyImport(() => import("@/modules/control/control-hub/ControlHubPanel"), "Control Hub") },
   // PATCH UNIFY-3.0: Unified Maintenance Command Center (fusão de 8 módulos de manutenção)
@@ -47,8 +47,8 @@ export const NAVIGATION = [
   { name: "Nauti People Hub", path: "/nautilus-people", component: safeLazyImport(() => import("@/modules/nauti-people"), "Nauti People Hub") },
   { name: "PEO-DP", path: "/peo-dp", component: safeLazyImport(() => import("@/modules/hr/peo-dp/PEODPPanel"), "PEO-DP") },
   { name: "System Diagnostic", path: "/system-diagnostic", component: safeLazyImport(() => import("@/pages/SystemHubPremium"), "System Hub") },
-  { name: "Execution Roadmap", path: "/execution-roadmap", component: safeLazyImport(() => import("@/pages/ExecutionRoadmap"), "Execution Roadmap") },
-  { name: "Usage Simulation", path: "/usage-simulation", component: safeLazyImport(() => import("@/pages/UsageSimulation"), "Usage Simulation") },
+  { name: "Execution Roadmap", path: "/roadmap", component: safeLazyImport(() => import("@/pages/Roadmap"), "Execution Roadmap") },
+  { name: "Usage Simulation", path: "/usage-simulation", component: safeLazyImport(() => import("@/pages/DemoPage"), "Usage Simulation") },
 ];
 
 export const SuspenseFallback = <div className="p-8 text-center text-gray-400">🔄 Carregando módulo...</div>;

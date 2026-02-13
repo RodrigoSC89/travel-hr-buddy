@@ -20,9 +20,9 @@ import {
 } from "lucide-react";
 
 const CommunicationCommand = lazy(() => import("@/pages/CommunicationCommandCenter"));
-const AlertsCommand = lazy(() => import("@/pages/AlertsCommandPage"));
+const AlertsCommand = lazy(() => import("@/pages/AlertsCommandCenter"));
 const RealTimeWorkspace = lazy(() => import("@/modules/workspace/real-time-workspace/RealTimeWorkspaceProfessional"));
-const MaritimeConnectivity = lazy(() => import("@/pages/MaritimeConnectivityPage"));
+const MaritimeConnectivity = lazy(() => import("@/pages/CommunicationCommandCenter"));
 
 // Enterprise Component - Phase 4
 import { AlertsNotificationCenter } from "@/components/enterprise";

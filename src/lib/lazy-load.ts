@@ -92,7 +92,7 @@ export const LazyModules = {
   
   // Error pages
   NotFound: lazyWithRetry(() => import('@/pages/NotFound'), { chunkName: 'NotFound' }),
-  Unauthorized: lazyWithRetry(() => import('@/pages/Unauthorized'), { chunkName: 'Unauthorized' }),
+  Unauthorized: lazyWithRetry(() => import('@/pages/NotFound'), { chunkName: 'Unauthorized' }),
 };
 
 export default {

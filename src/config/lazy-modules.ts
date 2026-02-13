@@ -39,7 +39,7 @@ export const HEAVY_MODULES = {
   
   // Large Data Modules
   SatelliteLive: lazyWithRetry(() => 
-    import('@/pages/satellite-live')
+    import('@/pages/SatelliteOptimizerPage')
   ),
 };
 

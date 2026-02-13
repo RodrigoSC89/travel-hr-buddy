@@ -37,9 +37,9 @@ const AgentOrchestrationDashboard = lazy(() => import("@/components/ai/AgentOrch
 const AIAgentsDashboard = lazy(() => import("@/modules/ai-control-tower/components/AIAgentsDashboard"));
 const AICommandDashboard = lazy(() => import("@/modules/ai-control-tower/components/AICommandDashboard"));
 const AIAnalyticsDashboard = lazy(() => import("@/pages/AIAnalyticsDashboard"));
-const AIObservabilityPage = lazy(() => import("@/pages/AIObservabilityPage"));
-const AIAuditPage = lazy(() => import("@/pages/AIAuditPage"));
-const AIJournalingPage = lazy(() => import("@/pages/AIJournalingPage"));
+const AIObservabilityPage = lazy(() => import("@/pages/AIObservabilityDashboard"));
+const AIAuditPage = lazy(() => import("@/pages/AIAudit"));
+const AIJournalingPage = lazy(() => import("@/pages/Documents"));
 const WorkflowCommand = lazy(() => import("@/pages/mission-control/workflow-engine"));
 const VoiceAssistantIntelligence = lazy(() => import("@/components/premium/VoiceAssistantIntelligence"));
 
