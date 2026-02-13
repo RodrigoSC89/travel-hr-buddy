@@ -162,7 +162,7 @@ export function AIDecisionHistory() {
       automation: 'Automação'
     };
     return (
-      <Badge className={styles[type] || 'bg-gray-500/10 text-gray-400'}>
+      <Badge className={styles[type] || 'bg-muted text-muted-foreground'}>
         {labels[type] || type}
       </Badge>
     );

@@ -168,7 +168,7 @@ const SonarAI: React.FC = () => {
     case "medium": return "bg-yellow-500/20 text-yellow-400 border-yellow-500/30";
     case "high": return "bg-orange-500/20 text-orange-400 border-orange-500/30";
     case "critical": return "bg-red-500/20 text-red-400 border-red-500/30";
-    default: return "bg-gray-500/20 text-gray-400 border-gray-500/30";
+    default: return "bg-muted text-muted-foreground border-border";
     }
   };
 

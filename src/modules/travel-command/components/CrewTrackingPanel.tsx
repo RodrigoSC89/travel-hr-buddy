@@ -169,7 +169,7 @@ export function CrewTrackingPanel() {
       at_destination: { label: "No Destino", className: "bg-green-500/10 text-green-600 border-green-500/20" },
       delayed: { label: "Atrasado", className: "bg-orange-500/10 text-orange-600 border-orange-500/20" },
       emergency: { label: "Emergência", className: "bg-red-500/10 text-red-600 border-red-500/20" },
-      offline: { label: "Offline", className: "bg-gray-500/10 text-gray-600 border-gray-500/20" }
+      offline: { label: "Offline", className: "bg-muted text-muted-foreground border-border" }
     };
     const c = config[status] || config.offline;
     return <Badge className={c.className}>{c.label}</Badge>;
@@ -181,7 +181,7 @@ export function CrewTrackingPanel() {
       at_destination: <CheckCircle2 className="h-4 w-4 text-green-500" />,
       delayed: <Clock className="h-4 w-4 text-orange-500" />,
       emergency: <AlertTriangle className="h-4 w-4 text-red-500" />,
-      offline: <WifiOff className="h-4 w-4 text-gray-500" />
+      offline: <WifiOff className="h-4 w-4 text-muted-foreground" />
     };
     return icons[status] || icons.offline;
   };
@@ -238,14 +238,14 @@ export function CrewTrackingPanel() {
           </CardContent>
         </Card>
 
-        <Card className="border-l-4 border-l-gray-500">
+        <Card className="border-l-4 border-l-border">
           <CardContent className="pt-4">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-xs text-muted-foreground uppercase">Offline</p>
-                <p className="text-2xl font-bold text-gray-600">{stats.offline}</p>
+                <p className="text-2xl font-bold text-muted-foreground">{stats.offline}</p>
               </div>
-              <WifiOff className="h-6 w-6 text-gray-500 opacity-50" />
+              <WifiOff className="h-6 w-6 text-muted-foreground opacity-50" />
             </div>
           </CardContent>
         </Card>
@@ -344,7 +344,7 @@ export function CrewTrackingPanel() {
                                   {traveler.status !== "offline" ? (
                                     <Wifi className="h-3 w-3 text-green-500" />
                                   ) : (
-                                    <WifiOff className="h-3 w-3 text-gray-500" />
+                                    <WifiOff className="h-3 w-3 text-muted-foreground" />
                                   )}
                                   {traveler.lastUpdate}
                                 </div>

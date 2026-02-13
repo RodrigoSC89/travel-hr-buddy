@@ -55,7 +55,7 @@ export function IncidentFormModal({ open, onOpenChange, incident, onSave }: Inci
         <form onSubmit={handleSubmit} className="space-y-6">
           {/* Basic Information Section */}
           <div className="space-y-4">
-            <h3 className="text-sm font-semibold text-gray-700 border-b pb-2">
+            <h3 className="text-sm font-semibold text-foreground border-b pb-2">
               Informações Básicas
             </h3>
 
@@ -164,7 +164,7 @@ export function IncidentFormModal({ open, onOpenChange, incident, onSave }: Inci
 
           {/* SGSO Classification Section */}
           <div className="space-y-4">
-            <h3 className="text-sm font-semibold text-gray-700 border-b pb-2">
+            <h3 className="text-sm font-semibold text-foreground border-b pb-2">
               Classificação SGSO
             </h3>
 

@@ -57,7 +57,7 @@ export const MobileLogs: React.FC = () => {
     case "info":
       return <Info className="h-4 w-4 text-blue-500" />;
     case "debug":
-      return <CheckCircle className="h-4 w-4 text-gray-500" />;
+      return <CheckCircle className="h-4 w-4 text-muted-foreground" />;
     }
   };
 
@@ -131,7 +131,7 @@ export const MobileLogs: React.FC = () => {
         </Card>
         <Card className="cursor-pointer hover:bg-accent transition-colors">
           <CardContent className="pt-3 pb-3 text-center">
-            <p className="text-xl font-bold text-gray-500">{stats.debug}</p>
+            <p className="text-xl font-bold text-muted-foreground">{stats.debug}</p>
             <p className="text-xs text-muted-foreground">Debug</p>
           </CardContent>
         </Card>

@@ -236,7 +236,7 @@ export const PreOVIDCompleteChecklist: React.FC<PreOVIDCompleteChecklistProps> =
                             ) : answer?.answer === 'no' ? (
                               <XCircle className="w-5 h-5 text-red-500" />
                             ) : (
-                              <AlertTriangle className="w-5 h-5 text-gray-400" />
+                              <AlertTriangle className="w-5 h-5 text-muted-foreground" />
                             )
                           ) : (
                             <div className="w-5 h-5 rounded-full border-2 border-muted-foreground/30" />
@@ -304,7 +304,7 @@ export const PreOVIDCompleteChecklist: React.FC<PreOVIDCompleteChecklistProps> =
                             <div className="flex items-center space-x-2">
                               <RadioGroupItem value="na" id={`${question.id}-na`} />
                               <Label htmlFor={`${question.id}-na`} className="flex items-center gap-1 cursor-pointer">
-                                <AlertTriangle className="w-4 h-4 text-gray-400" />
+                                <AlertTriangle className="w-4 h-4 text-muted-foreground" />
                                 N/A
                               </Label>
                             </div>

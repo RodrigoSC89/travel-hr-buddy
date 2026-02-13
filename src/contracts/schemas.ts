@@ -142,7 +142,7 @@ export type ActionItem = z.infer<typeof ActionItemSchema>;
 export function safeParse<T>(schema: z.ZodSchema<T>, data: unknown): T | null {
   const result = schema.safeParse(data);
   if (result.success) return result.data;
-  console.warn('[DataContract] Validation failed:', result.error.issues);
+  if (import.meta.env.DEV) console.warn('[DataContract] Validation failed:', result.error.issues);
   return null;
 }
 

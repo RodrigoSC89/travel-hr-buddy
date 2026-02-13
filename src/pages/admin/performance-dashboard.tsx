@@ -277,7 +277,7 @@ export default function PerformanceDashboard() {
             <ScrollArea className="h-32">
               <div className="space-y-2">
                 {unresolvedAlerts.slice(0, 5).map(alert => (
-                  <div key={alert.id} className="flex items-start gap-2 p-2 bg-white dark:bg-gray-800 rounded">
+                  <div key={alert.id} className="flex items-start gap-2 p-2 bg-card rounded">
                     {getSeverityIcon(alert.severity)}
                     <div className="flex-1">
                       <p className="text-sm font-medium">{alert.message}</p>

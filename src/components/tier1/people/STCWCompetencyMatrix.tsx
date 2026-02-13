@@ -181,7 +181,7 @@ export function STCWCompetencyMatrix() {
     const levelMap: Record<string, string> = {
       management: "bg-purple-100 text-purple-700",
       operational: "bg-blue-100 text-blue-700",
-      support: "bg-gray-100 text-gray-700"
+      support: "bg-muted text-muted-foreground"
     };
     return <Badge className={levelMap[level] || levelMap.operational}>{level}</Badge>;
   };

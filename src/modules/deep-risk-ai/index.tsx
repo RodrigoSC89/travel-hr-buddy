@@ -165,7 +165,7 @@ const DeepRiskAI: React.FC = () => {
       high: "bg-orange-500/20 text-orange-400 border-orange-500/30",
       critical: "bg-red-500/20 text-red-400 border-red-500/30",
     };
-    return colors[priority as keyof typeof colors] || "bg-gray-500/20 text-gray-400";
+    return colors[priority as keyof typeof colors] || "bg-muted text-muted-foreground";
   };
 
   return (

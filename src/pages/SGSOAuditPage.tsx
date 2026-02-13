@@ -198,9 +198,9 @@ export default function SGSOAuditPage() {
 
       {/* Hidden PDF container - only used for PDF generation */}
       <div id="sgso-audit-pdf" className="hidden">
-        <div className="bg-white p-4">
+        <div className="bg-background p-4">
           <h2 className="text-xl font-semibold mb-4">Auditoria SGSO</h2>
-          <p className="text-sm text-gray-600 mb-4">
+          <p className="text-sm text-muted-foreground mb-4">
             Embarcação: {vessels.find(v => v.id === selectedVessel)?.name || "---"}
           </p>
 

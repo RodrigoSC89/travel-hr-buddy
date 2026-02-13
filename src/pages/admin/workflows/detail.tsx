@@ -701,7 +701,7 @@ export default function WorkflowDetailPage() {
                         .map((step) => (
                           <Card 
                             key={step.id} 
-                            className="p-3 bg-white hover:shadow-md transition cursor-move"
+                            className="p-3 bg-card hover:shadow-md transition cursor-move"
                             draggable
                             onDragStart={(e) => handleDragStart(e, step)}
                           >

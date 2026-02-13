@@ -27,7 +27,7 @@ export const SignalHistory: React.FC<SignalHistoryProps> = ({ events }) => {
     case "maintenance":
       return <Settings className="h-4 w-4 text-blue-500" />;
     default:
-      return <History className="h-4 w-4 text-gray-500" />;
+      return <History className="h-4 w-4 text-muted-foreground" />;
     }
   };
 
