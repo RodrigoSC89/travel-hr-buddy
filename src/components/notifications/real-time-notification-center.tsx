@@ -255,9 +255,8 @@ export const RealTimeNotificationCenter: React.FC = () => {
   }, [user]);
 
   // Filtrar notificações
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- accepts both Notification and IntelligentNotification
-  const getFilteredNotifications = (notifs: any[], isIntelligent = false) => {
-    const filtered = notifs.filter((n: any) => {
+  const getFilteredNotifications = <T extends { title: string; message: string; priority?: string; is_read?: boolean; read?: boolean }>(notifs: T[], isIntelligent = false) => {
+    const filtered = notifs.filter((n) => {
       const isRead = isIntelligent ? n.is_read : n.read;
       const matchesSearch = n.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
                            n.message.toLowerCase().includes(searchTerm.toLowerCase());

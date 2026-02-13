@@ -196,7 +196,7 @@ export const PeoDpManager: React.FC = () => {
     setIsWizardOpen(true);
   };
 
-  const handleWizardComplete = async (data: any) => {
+  const handleWizardComplete = async (data: Record<string, unknown>) => {
     setIsWizardOpen(false);
     toast.success("Plano PEO-DP criado com sucesso!");
   };

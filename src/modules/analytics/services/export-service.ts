@@ -61,7 +61,7 @@ class ExportService {
     doc.save(`analytics-report-${Date.now()}.pdf`);
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- CSV export accepts dynamic row shapes
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- CSV accepts dynamic rows
   async exportToCSV(
     title: string,
     data: any[],

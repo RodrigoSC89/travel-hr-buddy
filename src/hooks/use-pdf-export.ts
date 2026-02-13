@@ -7,16 +7,15 @@ import { useState, useCallback } from "react";
 import { useToast } from "@/hooks/use-toast";
 import { logger } from '@/lib/logger';
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- jsPDF autoTable has dynamic cell/row shapes
 type AutoTableUserInput = {
-  head?: any[][];
-  body?: any[][];
-  columns?: any[];
+  head?: (string | number | boolean)[][];
+  body?: (string | number | boolean)[][];
+  columns?: Record<string, unknown>[];
   startY?: number;
   margin?: { top?: number; left?: number; right?: number; bottom?: number };
-  styles?: Record<string, any>;
-  headStyles?: Record<string, any>;
-  bodyStyles?: Record<string, any>;
+  styles?: Record<string, unknown>;
+  headStyles?: Record<string, unknown>;
+  bodyStyles?: Record<string, unknown>;
   theme?: "striped" | "grid" | "plain";
 };
 

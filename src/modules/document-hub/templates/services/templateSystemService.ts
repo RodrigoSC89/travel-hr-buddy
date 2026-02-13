@@ -430,7 +430,7 @@ class TemplateSystemService {
   /**
    * Helper: Map database record to Template
    */
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Supabase row shape is dynamic
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Supabase row shape
   private mapDatabaseTemplate(data: any): Template {
     return {
       id: data.id,

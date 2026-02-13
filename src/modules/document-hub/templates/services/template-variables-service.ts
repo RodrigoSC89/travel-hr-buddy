@@ -158,7 +158,7 @@ export class TemplateVariablesService {
     };
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Supabase row result needs flexible mapping
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Supabase row result
   private mapToVariable(data: any): TemplateVariable {
     return {
       id: String(data.id),

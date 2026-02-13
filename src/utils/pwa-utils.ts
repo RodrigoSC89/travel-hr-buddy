@@ -108,8 +108,7 @@ export async function subscribeToPushNotifications(
       };
     }
 
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Push API not in default TS lib
-    const subscription = await (swRegistration as any).pushManager.subscribe({
+    const subscription = await (swRegistration as unknown as { pushManager: { subscribe: (options: { userVisibleOnly: boolean; applicationServerKey: BufferSource }) => Promise<PushSubscription> } }).pushManager.subscribe({
       userVisibleOnly: true,
       applicationServerKey: urlBase64ToUint8Array(vapidPublicKey) as BufferSource
     });
@@ -146,8 +145,7 @@ function urlBase64ToUint8Array(base64String: string): Uint8Array {
 export async function getCurrentSubscription(): Promise<PushSubscription | null> {
   try {
     const registration = await navigator.serviceWorker.ready;
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Push API not in default TS lib
-    return await (registration as any).pushManager.getSubscription();
+    return await (registration as unknown as { pushManager: { getSubscription: () => Promise<PushSubscription | null> } }).pushManager.getSubscription();
   } catch (error) {
     logger.error("Failed to get push subscription", error);
     return null;
@@ -249,11 +247,11 @@ export function setupInstallPrompt(
     logger.info("✅ PWA installed successfully");
   };
 
-  window.addEventListener("beforeinstallprompt", handleBeforeInstallPrompt as any);
+  window.addEventListener("beforeinstallprompt", handleBeforeInstallPrompt as EventListener);
   window.addEventListener("appinstalled", handleAppInstalled);
 
   return () => {
-    window.removeEventListener("beforeinstallprompt", handleBeforeInstallPrompt as any);
+    window.removeEventListener("beforeinstallprompt", handleBeforeInstallPrompt as EventListener);
     window.removeEventListener("appinstalled", handleAppInstalled);
   };
 }

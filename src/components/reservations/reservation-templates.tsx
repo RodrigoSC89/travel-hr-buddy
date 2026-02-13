@@ -49,7 +49,7 @@ interface ReservationTemplate {
 interface ReservationTemplatesProps {
   isOpen: boolean;
   onClose: () => void;
-  onUseTemplate: (templateData: any) => void;
+  onUseTemplate: (templateData: Record<string, unknown>) => void;
 }
 
 export const ReservationTemplates: React.FC<ReservationTemplatesProps> = ({

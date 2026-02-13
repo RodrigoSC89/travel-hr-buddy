@@ -48,7 +48,7 @@ export function PainelBI() {
 
         // Transform to compliance data format
         const grouped: Record<string, ComplianceData> = {};
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any -- psc_inspections dynamic schema
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any -- psc_inspections dynamic columns
         (inspections || []).forEach((ins: any) => {
           const key = `${ins.vessel_name}-${ins.inspection_date?.slice(0, 7) || "N/A"}`;
           if (!grouped[key]) {

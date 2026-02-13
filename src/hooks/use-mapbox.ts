@@ -16,11 +16,13 @@ interface UseMapboxOptions {
   projection?: string;
 }
 
+/** Mapbox GL module loaded at runtime */
+type MapboxGLModule = Record<string, unknown> & { Map: new (...args: unknown[]) => MapboxMapInstance; Marker: new (...args: unknown[]) => unknown; Popup: new (...args: unknown[]) => unknown };
+type MapboxMapInstance = Record<string, unknown> & { remove: () => void; on: (event: string, cb: () => void) => void; resize: () => void };
+
 interface UseMapboxReturn {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Mapbox GL types are dynamically loaded
-  mapboxgl: any;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Mapbox Map instance loaded at runtime
-  map: any;
+  mapboxgl: MapboxGLModule | null;
+  map: MapboxMapInstance | null;
   mapContainer: React.RefObject<HTMLDivElement>;
   isLoading: boolean;
   error: string | null;
@@ -39,8 +41,8 @@ export function useMapbox(options: UseMapboxOptions = {}): UseMapboxReturn {
   const opts = { ...DEFAULT_OPTIONS, ...options };
   
   const mapContainer = useRef<HTMLDivElement>(null);
-  const map = useRef<any>(null);
-  const mapboxRef = useRef<any>(null);
+  const map = useRef<MapboxMapInstance | null>(null);
+  const mapboxRef = useRef<MapboxGLModule | null>(null);
   
   const [token, setToken] = useState<string>("");
   const [isLoading, setIsLoading] = useState(true);
