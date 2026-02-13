@@ -15,9 +15,9 @@ const Preferences = capacitorPlugins?.Preferences as {
   get: (opts: PreferencesOpts) => Promise<{ value: string | null }>;
   remove: (opts: PreferencesOpts) => Promise<void>;
 } || {
-  set: async (opts: PreferencesOpts) => localStorage.setItem(opts.key, opts.value || ""),
-  get: async (opts: PreferencesOpts) => ({ value: localStorage.getItem(opts.key) }),
-  remove: async (opts: PreferencesOpts) => localStorage.removeItem(opts.key),
+  set: async (opts: PreferencesOpts) => sessionStorage.setItem(opts.key, opts.value || ""),
+  get: async (opts: PreferencesOpts) => ({ value: sessionStorage.getItem(opts.key) || localStorage.getItem(opts.key) }),
+  remove: async (opts: PreferencesOpts) => { sessionStorage.removeItem(opts.key); localStorage.removeItem(opts.key); },
 };
 
 interface BiometricAuthOpts { reason?: string; cancelTitle?: string; allowDeviceCredential?: boolean; iosFallbackTitle?: string }

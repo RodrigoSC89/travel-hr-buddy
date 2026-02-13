@@ -33,7 +33,8 @@ class HotfixManager {
       description: "Clear DP Intelligence cache",
       fix: async () => {
         try {
-          localStorage.removeItem("cache_dp-intelligence");
+          sessionStorage.removeItem("cache_dp-intelligence");
+          localStorage.removeItem("cache_dp-intelligence"); // cleanup legacy
           return true;
         } catch {
           return false;

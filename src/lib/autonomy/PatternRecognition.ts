@@ -111,7 +111,7 @@ class PatternRecognition {
 
   private loadPatterns() {
     try {
-      const stored = localStorage.getItem("nautilus_patterns");
+      const stored = sessionStorage.getItem("nautilus_patterns") || localStorage.getItem("nautilus_patterns");
       if (stored) {
         const data = JSON.parse(stored);
         this.patterns = new Map(data.patterns || []);
@@ -124,7 +124,7 @@ class PatternRecognition {
 
   private savePatterns() {
     try {
-      localStorage.setItem("nautilus_patterns", JSON.stringify({
+      sessionStorage.setItem("nautilus_patterns", JSON.stringify({
         patterns: Array.from(this.patterns.entries()),
         failurePatterns: Array.from(this.failurePatterns.entries()),
       }));

@@ -313,10 +313,10 @@ export class EnhancedSyncEngine {
   private async updateLocalStorage(table: string, record: Record<string, unknown>): Promise<void> {
     try {
       const storageKey = `sync_${table}`;
-      const existing = localStorage.getItem(storageKey);
+      const existing = sessionStorage.getItem(storageKey) || localStorage.getItem(storageKey);
       const data: Record<string, Record<string, unknown>> = existing ? JSON.parse(existing) : {};
       data[String(record.id)] = { ...record, _synced: true, _syncedAt: new Date().toISOString() };
-      localStorage.setItem(storageKey, JSON.stringify(data));
+      sessionStorage.setItem(storageKey, JSON.stringify(data));
       structuredLogger.debug(`Updated local storage for ${table}:${record.id}`);
     } catch (error) {
       structuredLogger.error(`Failed to update local storage for ${table}`, error as Error);
@@ -329,11 +329,11 @@ export class EnhancedSyncEngine {
   private async deleteFromLocalStorage(table: string, recordId: string): Promise<void> {
     try {
       const storageKey = `sync_${table}`;
-      const existing = localStorage.getItem(storageKey);
+      const existing = sessionStorage.getItem(storageKey) || localStorage.getItem(storageKey);
       if (existing) {
         const data: Record<string, unknown> = JSON.parse(existing);
         delete data[recordId];
-        localStorage.setItem(storageKey, JSON.stringify(data));
+        sessionStorage.setItem(storageKey, JSON.stringify(data));
         structuredLogger.debug(`Deleted from local storage: ${table}:${recordId}`);
       }
     } catch (error) {
