@@ -13,7 +13,7 @@ import { ISPSModule } from "@/components/safety/ISPSModule";
 import { ComplianceVoiceChat } from "@/components/compliance/ComplianceVoiceChat";
 import { CompliancePredictiveAI } from "@/components/compliance/CompliancePredictiveAI";
 import { ComplianceEvidenceGenerator } from "@/components/compliance/ComplianceEvidenceGenerator";
-import { ComplianceSGIAutoEvidence, ComplianceGapAnalyzer, ComplianceInterviewSimulator, ComplianceOneClickAuditPrep } from "@/components/compliance/ai";
+import { ComplianceSGIAutoEvidence, ComplianceGapAnalyzer, ComplianceInterviewSimulator, ComplianceOneClickAuditPrep, ComplianceScoreBenchmark, ComplianceAutoNCResolver, CompliancePhotoEvidenceAI, CompliancePSCRiskPredictor } from "@/components/compliance/ai";
 import { useMaritimeActions } from "@/hooks/useMaritimeActions";
 import {
   Shield, Lock, ShieldAlert, Users, RefreshCw, Download,
@@ -86,6 +86,22 @@ const ISPSSecurityPage = () => {
           <TabsTrigger value="ai-voice" className="gap-2">
             <Mic className="h-4 w-4" />
             Assistente Voz
+          </TabsTrigger>
+          <TabsTrigger value="ai-benchmark" className="gap-2">
+            <Eye className="h-4 w-4" />
+            Benchmarking
+          </TabsTrigger>
+          <TabsTrigger value="ai-nc-resolver" className="gap-2">
+            <AlertTriangle className="h-4 w-4" />
+            NC Resolver
+          </TabsTrigger>
+          <TabsTrigger value="ai-photo" className="gap-2">
+            <Search className="h-4 w-4" />
+            Foto IA
+          </TabsTrigger>
+          <TabsTrigger value="psc-risk" className="gap-2">
+            <ShieldAlert className="h-4 w-4" />
+            Risco PSC
           </TabsTrigger>
           <TabsTrigger value="ai-predictive" className="gap-2">
             <TrendingUp className="h-4 w-4" />
@@ -176,7 +192,27 @@ const ISPSSecurityPage = () => {
               { name: "Drill Readiness", score: 91, trend: "up" },
               { name: "Threat Level", score: 82, trend: "stable" },
             ]}
-          />
+           />
+        </TabsContent>
+
+        {/* COMPLIANCE SCORE + BENCHMARKING */}
+        <TabsContent value="ai-benchmark" className="space-y-4">
+          <ComplianceScoreBenchmark moduleId="isps-security" moduleName="ISPS Code" />
+        </TabsContent>
+
+        {/* AUTO NC RESOLVER */}
+        <TabsContent value="ai-nc-resolver" className="space-y-4">
+          <ComplianceAutoNCResolver moduleId="isps-security" moduleName="ISPS Code" />
+        </TabsContent>
+
+        {/* PHOTO EVIDENCE AI */}
+        <TabsContent value="ai-photo" className="space-y-4">
+          <CompliancePhotoEvidenceAI moduleId="isps-security" moduleName="ISPS Code" />
+        </TabsContent>
+
+        {/* PSC RISK PREDICTOR */}
+        <TabsContent value="psc-risk" className="space-y-4">
+          <CompliancePSCRiskPredictor moduleId="isps-security" moduleName="ISPS Code" />
         </TabsContent>
       </Tabs>
 

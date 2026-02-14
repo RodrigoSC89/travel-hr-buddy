@@ -24,6 +24,10 @@ const ComplianceAutoChecklistGenerator = lazy(() => import('@/components/complia
 const ComplianceDocCrossReference = lazy(() => import('@/components/compliance/ai/ComplianceDocCrossReference').then(m => ({ default: m.ComplianceDocCrossReference })));
 const ComplianceTimeline = lazy(() => import('@/components/compliance/ai/ComplianceTimeline').then(m => ({ default: m.ComplianceTimeline })));
 const ComplianceRegulatoryChangeTracker = lazy(() => import('@/components/compliance/ai/ComplianceRegulatoryChangeTracker').then(m => ({ default: m.ComplianceRegulatoryChangeTracker })));
+const ComplianceScoreBenchmark = lazy(() => import('@/components/compliance/ai/ComplianceScoreBenchmark').then(m => ({ default: m.ComplianceScoreBenchmark })));
+const ComplianceAutoNCResolver = lazy(() => import('@/components/compliance/ai/ComplianceAutoNCResolver').then(m => ({ default: m.ComplianceAutoNCResolver })));
+const CompliancePhotoEvidenceAI = lazy(() => import('@/components/compliance/ai/CompliancePhotoEvidenceAI').then(m => ({ default: m.CompliancePhotoEvidenceAI })));
+const CompliancePSCRiskPredictor = lazy(() => import('@/components/compliance/ai/CompliancePSCRiskPredictor').then(m => ({ default: m.CompliancePSCRiskPredictor })));
 
 const LoadingFallback = () => <div className="space-y-4"><Skeleton className="h-8 w-64" /><Skeleton className="h-64" /></div>;
 
@@ -84,6 +88,10 @@ const SOLASInspection: FC = () => {
           <TabsTrigger value="checklist-gen" className="gap-1"><ClipboardCheck className="h-3 w-3" />Checklist IA</TabsTrigger>
           <TabsTrigger value="doc-crossref" className="gap-1"><FileSearch className="h-3 w-3" />Cross-Ref</TabsTrigger>
           <TabsTrigger value="timeline" className="gap-1"><Clock className="h-3 w-3" />Timeline</TabsTrigger>
+          <TabsTrigger value="score-benchmark" className="gap-1"><BarChart3 className="h-3 w-3" />Benchmarking</TabsTrigger>
+          <TabsTrigger value="nc-resolver" className="gap-1"><AlertTriangle className="h-3 w-3" />NC Resolver</TabsTrigger>
+          <TabsTrigger value="photo-ai" className="gap-1"><Flame className="h-3 w-3" />Foto IA</TabsTrigger>
+          <TabsTrigger value="psc-risk" className="gap-1"><ShieldCheck className="h-3 w-3" />Risco PSC</TabsTrigger>
           <TabsTrigger value="reg-tracker" className="gap-1"><Globe className="h-3 w-3" />Regulatório</TabsTrigger>
         </TabsList>
 
@@ -259,6 +267,18 @@ const SOLASInspection: FC = () => {
           </TabsContent>
           <TabsContent value="reg-tracker" className="space-y-4">
             <ComplianceRegulatoryChangeTracker moduleId="solas" moduleName="SOLAS/LSA/FFE" />
+          </TabsContent>
+          <TabsContent value="score-benchmark" className="space-y-4">
+            <ComplianceScoreBenchmark moduleId="solas" moduleName="SOLAS/LSA/FFE" />
+          </TabsContent>
+          <TabsContent value="nc-resolver" className="space-y-4">
+            <ComplianceAutoNCResolver moduleId="solas" moduleName="SOLAS/LSA/FFE" />
+          </TabsContent>
+          <TabsContent value="photo-ai" className="space-y-4">
+            <CompliancePhotoEvidenceAI moduleId="solas" moduleName="SOLAS/LSA/FFE" />
+          </TabsContent>
+          <TabsContent value="psc-risk" className="space-y-4">
+            <CompliancePSCRiskPredictor moduleId="solas" moduleName="SOLAS/LSA/FFE" />
           </TabsContent>
         </Suspense>
       </Tabs>

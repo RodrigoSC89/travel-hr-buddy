@@ -572,6 +572,21 @@ const ISMCodePage = () => {
             ]}
           />
         </TabsContent>
+
+        {/* COMPLIANCE SCORE + BENCHMARKING */}
+        <TabsContent value="ai-benchmark" className="space-y-4">
+          <ComplianceScoreBenchmark moduleId="ism-code" moduleName="ISM Code" />
+        </TabsContent>
+
+        {/* AUTO NC RESOLVER */}
+        <TabsContent value="ai-nc-resolver" className="space-y-4">
+          <ComplianceAutoNCResolver moduleId="ism-code" moduleName="ISM Code" />
+        </TabsContent>
+
+        {/* PHOTO EVIDENCE AI */}
+        <TabsContent value="ai-photo" className="space-y-4">
+          <CompliancePhotoEvidenceAI moduleId="ism-code" moduleName="ISM Code" />
+        </TabsContent>
       </Tabs>
 
       <ModuleActionButton

@@ -26,6 +26,10 @@ const ComplianceRegulatoryChangeTracker = lazy(() => import('@/components/compli
 const ComplianceAutoChecklistGenerator = lazy(() => import('@/components/compliance/ai/ComplianceAutoChecklistGenerator').then(m => ({ default: m.ComplianceAutoChecklistGenerator })));
 const ComplianceDocCrossReference = lazy(() => import('@/components/compliance/ai/ComplianceDocCrossReference').then(m => ({ default: m.ComplianceDocCrossReference })));
 const ComplianceTimeline = lazy(() => import('@/components/compliance/ai/ComplianceTimeline').then(m => ({ default: m.ComplianceTimeline })));
+const ComplianceScoreBenchmark = lazy(() => import('@/components/compliance/ai/ComplianceScoreBenchmark').then(m => ({ default: m.ComplianceScoreBenchmark })));
+const ComplianceAutoNCResolver = lazy(() => import('@/components/compliance/ai/ComplianceAutoNCResolver').then(m => ({ default: m.ComplianceAutoNCResolver })));
+const CompliancePhotoEvidenceAI = lazy(() => import('@/components/compliance/ai/CompliancePhotoEvidenceAI').then(m => ({ default: m.CompliancePhotoEvidenceAI })));
+const CompliancePSCRiskPredictor = lazy(() => import('@/components/compliance/ai/CompliancePSCRiskPredictor').then(m => ({ default: m.CompliancePSCRiskPredictor })));
 
 const AILoader = () => <div className="flex items-center justify-center p-12"><div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary" /></div>;
 
@@ -109,6 +113,10 @@ const PreSIREInspection: FC = () => {
           <TabsTrigger value="checklist-gen" className="gap-1"><CheckCircle2 className="h-3 w-3" />Checklist Gen</TabsTrigger>
           <TabsTrigger value="doc-crossref" className="gap-1"><GitCompare className="h-3 w-3" />Doc Cross-Ref</TabsTrigger>
           <TabsTrigger value="timeline" className="gap-1"><Calendar className="h-3 w-3" />Timeline</TabsTrigger>
+          <TabsTrigger value="score-benchmark" className="gap-1"><Target className="h-3 w-3" />Benchmarking</TabsTrigger>
+          <TabsTrigger value="nc-resolver" className="gap-1"><AlertTriangle className="h-3 w-3" />NC Resolver</TabsTrigger>
+          <TabsTrigger value="photo-ai" className="gap-1"><Search className="h-3 w-3" />Foto IA</TabsTrigger>
+          <TabsTrigger value="psc-risk" className="gap-1"><Shield className="h-3 w-3" />Risco PSC</TabsTrigger>
         </TabsList>
 
         <TabsContent value="dashboard" className="space-y-6">
@@ -332,6 +340,18 @@ const PreSIREInspection: FC = () => {
           <Suspense fallback={<AILoader />}>
             <ComplianceTimeline moduleId="pre-sire" moduleName="Pre-SIRE 2.0" />
           </Suspense>
+        </TabsContent>
+        <TabsContent value="score-benchmark">
+          <Suspense fallback={<AILoader />}><ComplianceScoreBenchmark moduleId="pre-sire" moduleName="Pre-SIRE 2.0" /></Suspense>
+        </TabsContent>
+        <TabsContent value="nc-resolver">
+          <Suspense fallback={<AILoader />}><ComplianceAutoNCResolver moduleId="pre-sire" moduleName="Pre-SIRE 2.0" /></Suspense>
+        </TabsContent>
+        <TabsContent value="photo-ai">
+          <Suspense fallback={<AILoader />}><CompliancePhotoEvidenceAI moduleId="pre-sire" moduleName="Pre-SIRE 2.0" /></Suspense>
+        </TabsContent>
+        <TabsContent value="psc-risk">
+          <Suspense fallback={<AILoader />}><CompliancePSCRiskPredictor moduleId="pre-sire" moduleName="Pre-SIRE 2.0" /></Suspense>
         </TabsContent>
       </Tabs>
     </ModulePageWrapper>
