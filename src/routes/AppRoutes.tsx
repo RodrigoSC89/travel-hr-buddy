@@ -6,8 +6,10 @@ import { Suspense } from "react";
 import { Routes, Route, Navigate } from "react-router-dom";
 import { ProtectedRoute } from "./ProtectedRoute";
 import { AuthenticatedLayout } from "./AuthenticatedLayout";
-import { AppLoader } from "./AppLoader";
+import { RouteLoadingSkeleton } from "@/components/ui/RouteLoadingSkeleton";
 import * as Pages from "./lazy-pages";
+
+const RouteFallback = () => <RouteLoadingSkeleton />;
 
 export const AppRoutes = () => (
   <Routes>
@@ -311,29 +313,29 @@ export const AppRoutes = () => (
       <Route path="/finance-command" element={<Navigate to="/workbench" replace />} />
       
       {/* ======== ADMIN ======== */}
-      <Route path="/admin" element={<Suspense fallback={<AppLoader />}><Pages.AdminRoute><Pages.Admin /></Pages.AdminRoute></Suspense>} />
-      <Route path="/admin/dashboard" element={<Suspense fallback={<AppLoader />}><Pages.AdminRoute><Pages.AdminDashboard /></Pages.AdminRoute></Suspense>} />
-      <Route path="/admin/bi" element={<Suspense fallback={<AppLoader />}><Pages.AdminBI /></Suspense>} />
-      <Route path="/admin/documents" element={<Suspense fallback={<AppLoader />}><Pages.AdminRoute><Pages.AdminDocumentList /></Pages.AdminRoute></Suspense>} />
-      <Route path="/admin/documents/ai" element={<Suspense fallback={<AppLoader />}><Pages.AdminRoute><Pages.AdminAIEditor /></Pages.AdminRoute></Suspense>} />
-      <Route path="/admin/documents/ai/templates" element={<Suspense fallback={<AppLoader />}><Pages.AdminRoute><Pages.AdminAITemplates /></Pages.AdminRoute></Suspense>} />
-      <Route path="/admin/documents/view/:id" element={<Suspense fallback={<AppLoader />}><Pages.AdminRoute><Pages.AdminDocumentView /></Pages.AdminRoute></Suspense>} />
-      <Route path="/admin/documents/history/:id" element={<Suspense fallback={<AppLoader />}><Pages.AdminRoute><Pages.AdminDocumentHistory /></Pages.AdminRoute></Suspense>} />
-      <Route path="/admin/documents/editor/:id" element={<Suspense fallback={<AppLoader />}><Pages.AdminRoute><Pages.AdminDocumentEditorDemo /></Pages.AdminRoute></Suspense>} />
-      <Route path="/admin/documents/collaborate/:id" element={<Suspense fallback={<AppLoader />}><Pages.AdminRoute><Pages.AdminCollaborativeEditor /></Pages.AdminRoute></Suspense>} />
-      <Route path="/admin/templates" element={<Suspense fallback={<AppLoader />}><Pages.AdminRoute><Pages.AdminTemplates /></Pages.AdminRoute></Suspense>} />
-      <Route path="/admin/templates/edit/:id" element={<Suspense fallback={<AppLoader />}><Pages.AdminRoute><Pages.AdminTemplateEdit /></Pages.AdminRoute></Suspense>} />
-      <Route path="/admin/sgso" element={<Suspense fallback={<AppLoader />}><Pages.AdminRoute><Pages.AdminSGSO /></Pages.AdminRoute></Suspense>} />
-      <Route path="/admin/sgso/history/:vesselId" element={<Suspense fallback={<AppLoader />}><Pages.AdminRoute><Pages.AdminSGSOHistory /></Pages.AdminRoute></Suspense>} />
-      <Route path="/admin/assistant" element={<Suspense fallback={<AppLoader />}><Pages.AdminRoute><Pages.AdminAssistant /></Pages.AdminRoute></Suspense>} />
-      <Route path="/admin/assistant/logs" element={<Suspense fallback={<AppLoader />}><Pages.AdminRoute><Pages.AdminAssistantLogs /></Pages.AdminRoute></Suspense>} />
-      <Route path="/admin/reports/assistant" element={<Suspense fallback={<AppLoader />}><Pages.AdminRoute><Pages.AdminReportsAssistant /></Pages.AdminRoute></Suspense>} />
-      <Route path="/admin/reports/logs" element={<Suspense fallback={<AppLoader />}><Pages.AdminRoute><Pages.AdminReportsLogs /></Pages.AdminRoute></Suspense>} />
-      <Route path="/admin/reports/restore-analytics" element={<Suspense fallback={<AppLoader />}><Pages.AdminRoute><Pages.AdminReportsRestoreAnalytics /></Pages.AdminRoute></Suspense>} />
-      <Route path="/admin/collaboration" element={<Suspense fallback={<AppLoader />}><Pages.AdminRoute><Pages.AdminCollaboration /></Pages.AdminRoute></Suspense>} />
-      <Route path="/admin/checklists" element={<Suspense fallback={<AppLoader />}><Pages.AdminRoute><Pages.MaritimeCommandCenter /></Pages.AdminRoute></Suspense>} />
-      <Route path="/admin/checklists/dashboard" element={<Suspense fallback={<AppLoader />}><Pages.AdminRoute><Pages.AdminChecklistsDashboard /></Pages.AdminRoute></Suspense>} />
-      <Route path="/admin/api-tester" element={<Suspense fallback={<AppLoader />}><Pages.AdminRoute><Pages.AdminApiTester /></Pages.AdminRoute></Suspense>} />
+      <Route path="/admin" element={<Suspense fallback={<RouteFallback />}><Pages.AdminRoute><Pages.Admin /></Pages.AdminRoute></Suspense>} />
+      <Route path="/admin/dashboard" element={<Suspense fallback={<RouteFallback />}><Pages.AdminRoute><Pages.AdminDashboard /></Pages.AdminRoute></Suspense>} />
+      <Route path="/admin/bi" element={<Suspense fallback={<RouteFallback />}><Pages.AdminBI /></Suspense>} />
+      <Route path="/admin/documents" element={<Suspense fallback={<RouteFallback />}><Pages.AdminRoute><Pages.AdminDocumentList /></Pages.AdminRoute></Suspense>} />
+      <Route path="/admin/documents/ai" element={<Suspense fallback={<RouteFallback />}><Pages.AdminRoute><Pages.AdminAIEditor /></Pages.AdminRoute></Suspense>} />
+      <Route path="/admin/documents/ai/templates" element={<Suspense fallback={<RouteFallback />}><Pages.AdminRoute><Pages.AdminAITemplates /></Pages.AdminRoute></Suspense>} />
+      <Route path="/admin/documents/view/:id" element={<Suspense fallback={<RouteFallback />}><Pages.AdminRoute><Pages.AdminDocumentView /></Pages.AdminRoute></Suspense>} />
+      <Route path="/admin/documents/history/:id" element={<Suspense fallback={<RouteFallback />}><Pages.AdminRoute><Pages.AdminDocumentHistory /></Pages.AdminRoute></Suspense>} />
+      <Route path="/admin/documents/editor/:id" element={<Suspense fallback={<RouteFallback />}><Pages.AdminRoute><Pages.AdminDocumentEditorDemo /></Pages.AdminRoute></Suspense>} />
+      <Route path="/admin/documents/collaborate/:id" element={<Suspense fallback={<RouteFallback />}><Pages.AdminRoute><Pages.AdminCollaborativeEditor /></Pages.AdminRoute></Suspense>} />
+      <Route path="/admin/templates" element={<Suspense fallback={<RouteFallback />}><Pages.AdminRoute><Pages.AdminTemplates /></Pages.AdminRoute></Suspense>} />
+      <Route path="/admin/templates/edit/:id" element={<Suspense fallback={<RouteFallback />}><Pages.AdminRoute><Pages.AdminTemplateEdit /></Pages.AdminRoute></Suspense>} />
+      <Route path="/admin/sgso" element={<Suspense fallback={<RouteFallback />}><Pages.AdminRoute><Pages.AdminSGSO /></Pages.AdminRoute></Suspense>} />
+      <Route path="/admin/sgso/history/:vesselId" element={<Suspense fallback={<RouteFallback />}><Pages.AdminRoute><Pages.AdminSGSOHistory /></Pages.AdminRoute></Suspense>} />
+      <Route path="/admin/assistant" element={<Suspense fallback={<RouteFallback />}><Pages.AdminRoute><Pages.AdminAssistant /></Pages.AdminRoute></Suspense>} />
+      <Route path="/admin/assistant/logs" element={<Suspense fallback={<RouteFallback />}><Pages.AdminRoute><Pages.AdminAssistantLogs /></Pages.AdminRoute></Suspense>} />
+      <Route path="/admin/reports/assistant" element={<Suspense fallback={<RouteFallback />}><Pages.AdminRoute><Pages.AdminReportsAssistant /></Pages.AdminRoute></Suspense>} />
+      <Route path="/admin/reports/logs" element={<Suspense fallback={<RouteFallback />}><Pages.AdminRoute><Pages.AdminReportsLogs /></Pages.AdminRoute></Suspense>} />
+      <Route path="/admin/reports/restore-analytics" element={<Suspense fallback={<RouteFallback />}><Pages.AdminRoute><Pages.AdminReportsRestoreAnalytics /></Pages.AdminRoute></Suspense>} />
+      <Route path="/admin/collaboration" element={<Suspense fallback={<RouteFallback />}><Pages.AdminRoute><Pages.AdminCollaboration /></Pages.AdminRoute></Suspense>} />
+      <Route path="/admin/checklists" element={<Suspense fallback={<RouteFallback />}><Pages.AdminRoute><Pages.MaritimeCommandCenter /></Pages.AdminRoute></Suspense>} />
+      <Route path="/admin/checklists/dashboard" element={<Suspense fallback={<RouteFallback />}><Pages.AdminRoute><Pages.AdminChecklistsDashboard /></Pages.AdminRoute></Suspense>} />
+      <Route path="/admin/api-tester" element={<Suspense fallback={<RouteFallback />}><Pages.AdminRoute><Pages.AdminApiTester /></Pages.AdminRoute></Suspense>} />
       
       {/* ======== DASHBOARD ALIASES ======== */}
       <Route path="/dashboard" element={<Navigate to="/command" replace />} />
