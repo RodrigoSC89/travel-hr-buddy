@@ -134,7 +134,7 @@ const WeatherIntelligencePage = () => {
             <Brain className="h-4 w-4 text-primary" />
             ML Ativo
           </Badge>
-          <Button variant="outline" size="icon" onClick={() => refetch()} disabled={isFetching}>
+          <Button variant="outline" size="icon" onClick={() => refetch()} disabled={isFetching} aria-label="Atualizar dados meteorológicos" title="Atualizar">
             <RefreshCw className={`h-4 w-4 ${isFetching ? "animate-spin" : ""}`} />
           </Button>
           <Button onClick={handleOptimize} disabled={optimizing || isLoading}>

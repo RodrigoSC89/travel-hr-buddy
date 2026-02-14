@@ -79,7 +79,7 @@ export const SafetyDashboard: React.FC = () => {
         </Select>
 
         <div className="flex items-center gap-2">
-          <Button variant="outline" size="icon" onClick={refresh} disabled={loading}>
+          <Button variant="outline" size="icon" onClick={refresh} disabled={loading} aria-label="Atualizar" title="Atualizar">
             <RefreshCw className={`h-4 w-4 ${loading ? 'animate-spin' : ''}`} />
           </Button>
           <Button variant="outline" size="icon" aria-label="Configurações de segurança" title="Configurações">

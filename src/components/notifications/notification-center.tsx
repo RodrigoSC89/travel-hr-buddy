@@ -53,7 +53,7 @@ export const NotificationCenter: React.FC = () => {
   return (
     <Popover>
       <PopoverTrigger asChild>
-        <Button variant="ghost" size="icon" className="h-9 w-9 relative hover:bg-accent transition-colors">
+        <Button variant="ghost" size="icon" className="h-9 w-9 relative hover:bg-accent transition-colors" aria-label="Notificações" title="Notificações">
           <Bell className="h-4 w-4 text-foreground" />
           {unreadCount > 0 && (
             <Badge 

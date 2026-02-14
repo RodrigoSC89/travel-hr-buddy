@@ -329,6 +329,7 @@ export default function AdvancedCopilot() {
                 size="icon"
                 onClick={() => setVoiceEnabled(!voiceEnabled)}
                 title={voiceEnabled ? "Desativar voz" : "Ativar voz"}
+                aria-label={voiceEnabled ? "Desativar voz" : "Ativar voz"}
               >
                 {voiceEnabled ? (
                   <Volume2 className="h-4 w-4" />
@@ -413,6 +414,7 @@ export default function AdvancedCopilot() {
               size="icon"
               onClick={isListening ? stopListening : startListening}
               disabled={isLoading}
+              aria-label={isListening ? "Parar gravação" : "Gravar voz"} title={isListening ? "Parar" : "Gravar"}
             >
               {isListening ? (
                 <MicOff className="h-4 w-4" />
@@ -439,6 +441,7 @@ export default function AdvancedCopilot() {
                 size="icon"
                 onClick={handleSend}
                 disabled={isLoading || !input.trim()}
+                aria-label="Enviar mensagem" title="Enviar"
               >
                 {isLoading ? (
                   <Loader2 className="h-4 w-4 animate-spin" />
@@ -446,7 +449,7 @@ export default function AdvancedCopilot() {
                   <Send className="h-4 w-4" />
                 )}
               </Button>
-              <Button variant="outline" size="icon" title="Enviar imagem">
+              <Button variant="outline" size="icon" title="Enviar imagem" aria-label="Enviar imagem">
                 <Image className="h-4 w-4" />
               </Button>
             </div>

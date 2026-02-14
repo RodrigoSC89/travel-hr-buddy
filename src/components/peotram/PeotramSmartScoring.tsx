@@ -272,8 +272,8 @@ Sugira a nota mais provável considerando o cenário típico de uma embarcação
                       <div>
                         <p className="text-xs font-semibold mb-1 flex items-center gap-1"><AlertTriangle className="h-3 w-3 text-destructive" /> Riscos Identificados:</p>
                         <ul className="space-y-1">
-                          {selected.risks.map((r, i) => (
-                            <li key={i} className="text-xs text-muted-foreground flex items-start gap-1">
+                          {selected.risks.map((r) => (
+                            <li key={r} className="text-xs text-muted-foreground flex items-start gap-1">
                               <Minus className="h-3 w-3 shrink-0 mt-0.5 text-destructive" />{r}
                             </li>
                           ))}
@@ -286,8 +286,8 @@ Sugira a nota mais provável considerando o cenário típico de uma embarcação
                       <div>
                         <p className="text-xs font-semibold mb-1 flex items-center gap-1"><TrendingUp className="h-3 w-3 text-success" /> Melhorias para Nota 4:</p>
                         <ul className="space-y-1">
-                          {selected.improvements.map((imp, i) => (
-                            <li key={i} className="text-xs text-muted-foreground flex items-start gap-1">
+                          {selected.improvements.map((imp) => (
+                            <li key={imp} className="text-xs text-muted-foreground flex items-start gap-1">
                               <CheckCircle className="h-3 w-3 shrink-0 mt-0.5 text-success" />{imp}
                             </li>
                           ))}

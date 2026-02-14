@@ -33,11 +33,12 @@ const DocumentationCenter: React.FC = () => {
     queryFn: async () => {
       const { data, error } = await supabase.from("certificates").select("*, vessels(name)").order("expiry_date", { ascending: true }).limit(100);
       if (error) throw error;
-      return (data || []).map((c: any) => {
-        const expiry = c.expiry_date ? new Date(c.expiry_date) : null;
+      return (data || []).map((c: Record<string, unknown>) => {
+        const vessels = c.vessels as Record<string, unknown> | null;
+        const expiry = c.expiry_date ? new Date(String(c.expiry_date)) : null;
         const now = new Date();
         const daysLeft = expiry ? Math.ceil((expiry.getTime() - now.getTime()) / 86400000) : 999;
-        return { ...c, vesselName: c.vessels?.name, computedStatus: daysLeft < 0 ? "expired" : daysLeft <= 90 ? "expiring" : "valid" };
+        return { ...c, vesselName: vessels?.name as string | undefined, computedStatus: daysLeft < 0 ? "expired" : daysLeft <= 90 ? "expiring" : "valid" };
       });
     },
   });
@@ -51,7 +52,7 @@ const DocumentationCenter: React.FC = () => {
         expiry_date: formData.expiry_date || null,
         issuing_authority: formData.issuing_authority || null,
         status: "active",
-      } as any);
+      } as never);
       if (error) throw error;
     },
     onSuccess: () => { queryClient.invalidateQueries({ queryKey: ["doc-center-certs"] }); setIsCreateOpen(false); toast.success("Certificado adicionado!"); },
@@ -66,13 +67,15 @@ const DocumentationCenter: React.FC = () => {
     onSuccess: () => { queryClient.invalidateQueries({ queryKey: ["doc-center-certs"] }); setIsDeleteOpen(false); toast.success("Certificado excluído!"); },
   });
 
-  const filtered = (certificates || []).filter((c: any) => {
-    const matchesSearch = (c.certificate_type || "").toLowerCase().includes(searchTerm.toLowerCase()) || (c.vesselName || "").toLowerCase().includes(searchTerm.toLowerCase());
-    const matchesStatus = statusFilter === "all" || c.computedStatus === statusFilter;
+  interface CertRow extends Record<string, unknown> { certificate_type?: string; vesselName?: string; computedStatus: string; }
+  const filtered = (certificates || []).filter((c) => {
+    const cert = c as CertRow;
+    const matchesSearch = (String(cert.certificate_type || "")).toLowerCase().includes(searchTerm.toLowerCase()) || (String(cert.vesselName || "")).toLowerCase().includes(searchTerm.toLowerCase());
+    const matchesStatus = statusFilter === "all" || cert.computedStatus === statusFilter;
     return matchesSearch && matchesStatus;
   });
 
-  const stats = { total: certificates?.length || 0, valid: certificates?.filter((c: any) => c.computedStatus === "valid").length || 0, expiring: certificates?.filter((c: any) => c.computedStatus === "expiring").length || 0, expired: certificates?.filter((c: any) => c.computedStatus === "expired").length || 0 };
+  const stats = { total: certificates?.length || 0, valid: certificates?.filter((c) => (c as CertRow).computedStatus === "valid").length || 0, expiring: certificates?.filter((c) => (c as CertRow).computedStatus === "expiring").length || 0, expired: certificates?.filter((c) => (c as CertRow).computedStatus === "expired").length || 0 };
 
   if (isLoading) return <div className="flex items-center justify-center h-96"><Loader2 className="h-8 w-8 animate-spin text-primary" /></div>;
 

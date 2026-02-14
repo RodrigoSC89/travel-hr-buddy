@@ -244,13 +244,13 @@ function MapPlaceholder({ selectedVessel }: { selectedVessel: Vessel | null }) {
 
       {/* Map Controls */}
       <div className="absolute top-4 right-4 flex flex-col gap-2">
-        <Button size="icon" variant="secondary" className="h-8 w-8">
+        <Button size="icon" variant="secondary" className="h-8 w-8" aria-label="Tela cheia" title="Tela cheia">
           <Maximize2 className="h-4 w-4" />
         </Button>
-        <Button size="icon" variant="secondary" className="h-8 w-8">
+        <Button size="icon" variant="secondary" className="h-8 w-8" aria-label="Camadas" title="Camadas">
           <Layers className="h-4 w-4" />
         </Button>
-        <Button size="icon" variant="secondary" className="h-8 w-8">
+        <Button size="icon" variant="secondary" className="h-8 w-8" aria-label="Satélite" title="Satélite">
           <Satellite className="h-4 w-4" />
         </Button>
       </div>

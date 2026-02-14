@@ -405,6 +405,7 @@ export default function InteractiveOnboarding() {
               onClick={prevStep}
               disabled={currentStep === 0 || isAnimating}
               className="rounded-full shadow-lg"
+              aria-label="Módulo anterior" title="Anterior"
             >
               <ArrowLeft className="h-4 w-4" />
             </Button>
@@ -416,6 +417,7 @@ export default function InteractiveOnboarding() {
               onClick={nextStep}
               disabled={currentStep === MODULES.length - 1 || isAnimating}
               className="rounded-full shadow-lg"
+              aria-label="Próximo módulo" title="Próximo"
             >
               <ArrowRight className="h-4 w-4" />
             </Button>

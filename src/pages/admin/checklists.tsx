@@ -859,6 +859,7 @@ export default function SmartChecklistsPage() {
                       size="icon"
                       className="h-6 w-6"
                       onClick={() => handleRemoveItem(item.id)}
+                      aria-label="Remover item" title="Remover"
                     >
                       <X className="h-3 w-3" />
                     </Button>

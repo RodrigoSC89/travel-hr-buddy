@@ -392,10 +392,10 @@ const CalendarView: React.FC = () => {
                   <Button variant="outline" size="sm" onClick={() => { setCurrentDate(new Date()); setSelectedDate(new Date()); }}>
                     Hoje
                   </Button>
-                  <Button variant="ghost" size="icon" onClick={() => navigateMonth('prev')}>
+                  <Button variant="ghost" size="icon" onClick={() => navigateMonth('prev')} aria-label="Mês anterior" title="Mês anterior">
                     <ChevronLeft className="h-4 w-4" />
                   </Button>
-                  <Button variant="ghost" size="icon" onClick={() => navigateMonth('next')}>
+                  <Button variant="ghost" size="icon" onClick={() => navigateMonth('next')} aria-label="Próximo mês" title="Próximo mês">
                     <ChevronRight className="h-4 w-4" />
                   </Button>
                 </div>
@@ -557,7 +557,7 @@ const CalendarView: React.FC = () => {
                             </div>
                             <DropdownMenu>
                               <DropdownMenuTrigger asChild>
-                                <Button variant="ghost" size="icon" className="h-7 w-7 shrink-0">
+                                <Button variant="ghost" size="icon" className="h-7 w-7 shrink-0" aria-label="Mais opções" title="Mais opções">
                                   <MoreHorizontal className="h-4 w-4" />
                                 </Button>
                               </DropdownMenuTrigger>

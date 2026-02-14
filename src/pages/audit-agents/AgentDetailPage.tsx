@@ -199,7 +199,7 @@ Faça sua pergunta sobre compliance, auditoria ou regulamentações!`);
         animate={{ opacity: 1, y: 0 }}
         className="flex flex-col md:flex-row items-start md:items-center gap-4"
       >
-        <Button variant="ghost" size="icon" onClick={() => navigate("/audit-agents")}>
+        <Button variant="ghost" size="icon" onClick={() => navigate("/audit-agents")} aria-label="Voltar" title="Voltar">
           <ArrowLeft className="h-5 w-5" />
         </Button>
         <div className={`p-4 rounded-2xl bg-gradient-to-br ${agent.bgColor} border border-white/10`}>
