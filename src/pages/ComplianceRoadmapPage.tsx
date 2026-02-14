@@ -8,7 +8,8 @@ import { Helmet } from 'react-helmet-async';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Skeleton } from '@/components/ui/skeleton';
 import {
-  LayoutDashboard, Bell, Calculator, GitBranch, Brain, Calendar, History, BellRing
+  LayoutDashboard, Bell, Calculator, GitBranch, Brain, Calendar, History, BellRing,
+  Sparkles, Search, MessageSquare, Zap
 } from 'lucide-react';
 
 // Lazy load components for better performance
@@ -36,6 +37,18 @@ const AuditTrailSystem = lazy(() =>
 const SmartNotifications = lazy(() => 
   import('@/components/compliance/roadmap/SmartNotifications').then(m => ({ default: m.SmartNotifications }))
 );
+const ComplianceSGIAutoEvidence = lazy(() =>
+  import('@/components/compliance/ai/ComplianceSGIAutoEvidence').then(m => ({ default: m.ComplianceSGIAutoEvidence }))
+);
+const ComplianceGapAnalyzer = lazy(() =>
+  import('@/components/compliance/ai/ComplianceGapAnalyzer').then(m => ({ default: m.ComplianceGapAnalyzer }))
+);
+const ComplianceInterviewSimulator = lazy(() =>
+  import('@/components/compliance/ai/ComplianceInterviewSimulator').then(m => ({ default: m.ComplianceInterviewSimulator }))
+);
+const ComplianceOneClickAuditPrep = lazy(() =>
+  import('@/components/compliance/ai/ComplianceOneClickAuditPrep').then(m => ({ default: m.ComplianceOneClickAuditPrep }))
+);
 
 const LoadingFallback = () => (
   <div className="space-y-4">
@@ -57,7 +70,11 @@ const tabs = [
   { id: 'predictive', label: 'Preditivo', icon: Brain },
   { id: 'calendar', label: 'Calendário', icon: Calendar },
   { id: 'notifications', label: 'Notificações', icon: BellRing },
-  { id: 'audit', label: 'Audit Trail', icon: History }
+  { id: 'audit', label: 'Audit Trail', icon: History },
+  { id: 'sgi-evidence', label: 'SGI Evidence', icon: Sparkles },
+  { id: 'gap-analyzer', label: 'Gap Analyzer', icon: Search },
+  { id: 'interview-sim', label: 'Simulador', icon: MessageSquare },
+  { id: 'audit-prep', label: 'Audit Prep', icon: Zap },
 ];
 
 export default function ComplianceRoadmapPage() {
@@ -79,7 +96,7 @@ export default function ComplianceRoadmapPage() {
         </div>
 
         <Tabs value={activeTab} onValueChange={setActiveTab}>
-          <TabsList className="grid w-full grid-cols-8">
+          <TabsList className="grid w-full grid-cols-6 lg:grid-cols-12">
             {tabs.map(tab => {
               const Icon = tab.icon;
               return (
@@ -116,6 +133,40 @@ export default function ComplianceRoadmapPage() {
               </TabsContent>
               <TabsContent value="audit" className="m-0">
                 <AuditTrailSystem />
+              </TabsContent>
+              <TabsContent value="sgi-evidence" className="m-0">
+                <ComplianceSGIAutoEvidence
+                  moduleId="compliance-roadmap"
+                  moduleName="Compliance Center"
+                  checklistItems={[
+                    { id: "ISM-1", name: "ISM Code - Safety Management System", description: "SMS implementation and DOC/SMC" },
+                    { id: "ISPS-1", name: "ISPS Code - Ship Security", description: "SSP, SSA, Security Levels" },
+                    { id: "SOLAS-1", name: "SOLAS - Safety of Life at Sea", description: "Life-saving, fire safety, navigation" },
+                    { id: "MARPOL-1", name: "MARPOL - Pollution Prevention", description: "Annexes I-VI compliance" },
+                    { id: "MLC-1", name: "MLC 2006 - Maritime Labour", description: "Working conditions, crew welfare" },
+                    { id: "STCW-1", name: "STCW - Training Standards", description: "Certificates, competencies" },
+                  ]}
+                />
+              </TabsContent>
+              <TabsContent value="gap-analyzer" className="m-0">
+                <ComplianceGapAnalyzer
+                  moduleId="compliance-roadmap"
+                  moduleName="Compliance Center"
+                  standards={["ISM Code", "ISPS Code", "SOLAS", "MARPOL", "MLC 2006", "STCW", "TMSA", "OCIMF SIRE"]}
+                />
+              </TabsContent>
+              <TabsContent value="interview-sim" className="m-0">
+                <ComplianceInterviewSimulator
+                  moduleId="compliance-roadmap"
+                  moduleName="Compliance Center"
+                  standardContext="Multi-framework compliance audit covering ISM, ISPS, SOLAS, MARPOL, MLC, and STCW. Prepare crew for external auditor interviews across all major maritime regulatory frameworks."
+                />
+              </TabsContent>
+              <TabsContent value="audit-prep" className="m-0">
+                <ComplianceOneClickAuditPrep
+                  moduleId="compliance-roadmap"
+                  moduleName="Compliance Center"
+                />
               </TabsContent>
             </Suspense>
           </div>
