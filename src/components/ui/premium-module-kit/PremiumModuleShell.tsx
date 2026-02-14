@@ -160,7 +160,7 @@ export function PremiumModuleShell({
                   Atualizar
                 </Button>
               )}
-              <Button variant="ghost" size="icon" onClick={() => setShowHelp(!showHelp)}>
+              <Button variant="ghost" size="icon" onClick={() => setShowHelp(!showHelp)} aria-label="Ajuda" title="Ajuda">
                 <HelpCircle className="h-4 w-4" />
               </Button>
             </div>

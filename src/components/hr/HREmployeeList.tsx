@@ -156,7 +156,7 @@ export function HREmployeeList({ searchQuery = '' }: HREmployeeListProps) {
           <div className="flex flex-col md:flex-row justify-between gap-4">
             <div className="flex items-center gap-2">
               <CardTitle>Colaboradores ({employees.length})</CardTitle>
-              <Button variant="ghost" size="icon" onClick={handleRefresh}>
+              <Button variant="ghost" size="icon" onClick={handleRefresh} aria-label="Atualizar lista" title="Atualizar">
                 <RefreshCw className="h-4 w-4" />
               </Button>
             </div>

@@ -142,6 +142,8 @@ export function AutonomousAgentPanel() {
               variant="ghost"
               size="icon"
               onClick={() => setIsActive(!isActive)}
+              aria-label={isActive ? "Pausar agente" : "Iniciar agente"}
+              title={isActive ? "Pausar" : "Iniciar"}
             >
               {isActive ? <Pause className="h-4 w-4" /> : <Play className="h-4 w-4" />}
             </Button>

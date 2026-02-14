@@ -301,6 +301,8 @@ Sou seu assistente especializado em **Sistema de Gestão de Segurança Operacion
                           size="icon"
                           className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity h-6 w-6"
                           onClick={() => copyToClipboard(message.content)}
+                          aria-label="Copiar mensagem"
+                          title="Copiar"
                         >
                           <Copy className="h-3 w-3" />
                         </Button>

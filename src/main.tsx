@@ -1,10 +1,14 @@
-// main.tsx - PATCH 851 - React initialization
+// main.tsx - PATCH 852 - React initialization + Sentry
 import * as React from "react";
 import { createRoot } from "react-dom/client";
 import { HelmetProvider } from "react-helmet-async";
 import App from "./App.tsx";
 import "./index.css";
 import { logger } from "@/lib/logger";
+import { initializeSentry } from "@/lib/monitoring/sentry-init";
+
+// Initialize Sentry before anything else
+initializeSentry();
 
 // Initialize i18n
 import "@/i18n";
