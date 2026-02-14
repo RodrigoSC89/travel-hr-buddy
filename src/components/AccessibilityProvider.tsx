@@ -109,6 +109,22 @@ export function AccessibilityProvider({
         Pular para conteúdo principal
       </a>
       
+      {/* Persistent ARIA live regions for screen reader announcements */}
+      <div
+        id="aria-live-polite"
+        aria-live="polite"
+        aria-atomic="true"
+        role="status"
+        className="sr-only"
+      />
+      <div
+        id="aria-live-assertive"
+        aria-live="assertive"
+        aria-atomic="true"
+        role="alert"
+        className="sr-only"
+      />
+      
       {children}
     </AccessibilityContext.Provider>
   );

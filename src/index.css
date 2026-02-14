@@ -1655,16 +1655,137 @@ button,
   --info-foreground: 210 50% 5%;
 }
 
-/* High Contrast Mode Specific */
+/* ============================================= */
+/* === WCAG AAA HIGH CONTRAST MODE (7:1+)   === */
+/* ============================================= */
 .high-contrast {
   --background: 0 0% 0%;
   --foreground: 0 0% 100%;
-  --card: 0 0% 10%;
+  --card: 0 0% 8%;
   --card-foreground: 0 0% 100%;
+  --popover: 0 0% 5%;
+  --popover-foreground: 0 0% 100%;
+  --primary: 54 100% 50%;
+  --primary-foreground: 0 0% 0%;
+  --secondary: 0 0% 15%;
+  --secondary-foreground: 0 0% 100%;
+  --muted: 0 0% 12%;
+  --muted-foreground: 0 0% 85%;
+  --accent: 54 100% 50%;
+  --accent-foreground: 0 0% 0%;
+  --destructive: 0 100% 60%;
+  --destructive-foreground: 0 0% 0%;
+  --border: 0 0% 40%;
+  --input: 0 0% 15%;
+  --ring: 54 100% 50%;
+  --success: 120 100% 40%;
+  --success-foreground: 0 0% 0%;
+  --warning: 45 100% 50%;
+  --warning-foreground: 0 0% 0%;
+  --danger: 0 100% 55%;
+  --danger-foreground: 0 0% 0%;
+  --info: 200 100% 60%;
+  --info-foreground: 0 0% 0%;
+  --sidebar-background: 0 0% 5%;
+  --sidebar-foreground: 0 0% 100%;
+  --sidebar-primary: 54 100% 50%;
+  --sidebar-primary-foreground: 0 0% 0%;
+  --sidebar-accent: 0 0% 15%;
+  --sidebar-accent-foreground: 0 0% 100%;
+  --sidebar-border: 0 0% 35%;
+  --sidebar-ring: 54 100% 50%;
 }
 
 .high-contrast * {
-  font-weight: var(--font-weight-medium);
+  font-weight: var(--font-weight-medium) !important;
+  text-shadow: none !important;
+}
+
+.high-contrast img {
+  filter: contrast(1.1);
+}
+
+.high-contrast a,
+.high-contrast [role="link"] {
+  text-decoration: underline !important;
+  text-decoration-thickness: 2px !important;
+  text-underline-offset: 3px !important;
+}
+
+.high-contrast button,
+.high-contrast [role="button"],
+.high-contrast input,
+.high-contrast select,
+.high-contrast textarea {
+  border: 2px solid hsl(0 0% 100%) !important;
+}
+
+.high-contrast *:focus-visible {
+  outline: 3px solid hsl(54 100% 50%) !important;
+  outline-offset: 3px !important;
+  box-shadow: 0 0 0 6px hsl(0 0% 0%), 0 0 0 9px hsl(54 100% 50%) !important;
+}
+
+/* ============================================= */
+/* === GLOBAL FOCUS INDICATORS (WCAG AAA)    === */
+/* ============================================= */
+*:focus-visible {
+  outline: 2px solid hsl(var(--ring));
+  outline-offset: 2px;
+  border-radius: 2px;
+}
+
+/* Enhanced focus for interactive elements */
+button:focus-visible,
+a:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible,
+[role="button"]:focus-visible,
+[role="tab"]:focus-visible,
+[role="menuitem"]:focus-visible,
+[tabindex]:focus-visible {
+  outline: 2px solid hsl(var(--ring));
+  outline-offset: 2px;
+  box-shadow: 0 0 0 4px hsl(var(--ring) / 0.25);
+}
+
+/* Remove default outline for mouse users */
+:focus:not(:focus-visible) {
+  outline: none;
+  box-shadow: none;
+}
+
+/* ============================================= */
+/* === ARIA LIVE REGION STYLES              === */
+/* ============================================= */
+[aria-live="polite"],
+[aria-live="assertive"],
+[role="status"],
+[role="alert"],
+[role="log"] {
+  contain: layout;
+}
+
+[role="alert"] {
+  border-left: 4px solid hsl(var(--destructive));
+  padding-left: 0.75rem;
+}
+
+/* ============================================= */
+/* === TOUCH TARGET COMPLIANCE (44x44px)    === */
+/* ============================================= */
+@media (pointer: coarse) {
+  button,
+  a,
+  input[type="checkbox"],
+  input[type="radio"],
+  [role="button"],
+  [role="tab"],
+  [role="menuitem"] {
+    min-height: 44px;
+    min-width: 44px;
+  }
 }
 
 /* === PATCH 752: Performance & Micro-Interaction Animations === */
