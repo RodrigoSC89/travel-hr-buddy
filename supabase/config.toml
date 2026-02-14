@@ -639,8 +639,8 @@ verify_jwt = true
 comment = "AI analysis of checklists"
 
 [functions.generate-checklist]
-verify_jwt = true
-comment = "Generate checklists from templates"
+verify_jwt = false
+comment = "AI checklist generation via Lovable AI Gateway (Gemini 3 Flash)"
 
 [functions.summarize-checklist]
 verify_jwt = true

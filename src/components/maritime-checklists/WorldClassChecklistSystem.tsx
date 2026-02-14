@@ -33,6 +33,8 @@ import { motion, AnimatePresence } from "framer-motion";
 import { useToast } from "@/hooks/use-toast";
 import { useChecklists, useCreateChecklist, useUpdateChecklist, useDeleteChecklist } from "@/hooks/useChecklistsData";
 import type { Checklist, ChecklistItem } from "@/hooks/useChecklistsData";
+import { supabase } from "@/integrations/supabase/client";
+import { createPDF } from "@/lib/pdf/lazy-pdf";
 
 // ==================== HELPERS ====================
 
@@ -155,30 +157,112 @@ export const WorldClassChecklistSystem: React.FC = () => {
     setIsDetailOpen(false);
   }, [deleteMutation]);
 
-  const handleAIGenerate = useCallback(() => {
+  const [isAILoading, setIsAILoading] = useState(false);
+
+  const handleAIGenerate = useCallback(async () => {
     if (!aiPrompt.trim()) return;
-    // Generate items from the prompt
-    const generatedItems: ChecklistItem[] = [
-      { id: 'ai-1', title: `Verificação de ${aiPrompt} - Item principal`, completed: false, criticality: 'high' },
-      { id: 'ai-2', title: `Inspeção visual de componentes`, completed: false, criticality: 'medium' },
-      { id: 'ai-3', title: `Teste funcional do sistema`, completed: false, criticality: 'high' },
-      { id: 'ai-4', title: `Registro de evidências fotográficas`, completed: false, criticality: 'low' },
-      { id: 'ai-5', title: `Verificação de documentação atualizada`, completed: false, criticality: 'medium' },
-      { id: 'ai-6', title: `Conferência de certificados válidos`, completed: false, criticality: 'critical' },
-      { id: 'ai-7', title: `Assinatura e aprovação final`, completed: false, criticality: 'high' },
-    ];
-    createMutation.mutate({
-      title: `Checklist IA: ${aiPrompt}`,
-      type: 'inspection',
-      items: generatedItems,
-      created_by: 'Nauti Brain IA',
-      status: 'draft',
-      source: 'ai',
-    });
-    toast({ title: "🧠 Checklist gerado com IA", description: `${generatedItems.length} itens criados a partir do prompt` });
-    setIsAIGenerateOpen(false);
-    setAiPrompt("");
+    setIsAILoading(true);
+    try {
+      const { data, error } = await supabase.functions.invoke('generate-checklist', {
+        body: { prompt: aiPrompt },
+      });
+
+      if (error) throw error;
+      if (!data?.success || !data?.items?.length) throw new Error(data?.error || 'Nenhum item gerado');
+
+      const generatedItems: ChecklistItem[] = data.items.map((item: { id: string; title: string; criticality: string }, idx: number) => ({
+        id: item.id || `ai-${idx}`,
+        title: item.title,
+        completed: false,
+        criticality: (item.criticality || 'medium') as ChecklistItem['criticality'],
+      }));
+
+      createMutation.mutate({
+        title: data.title || `Checklist IA: ${aiPrompt}`,
+        type: 'inspection',
+        items: generatedItems,
+        created_by: 'Nauti Brain IA',
+        status: 'draft',
+        source: 'ai',
+      });
+      toast({ title: "🧠 Checklist gerado com IA", description: `${generatedItems.length} itens criados pela Gemini 3 Flash` });
+      setIsAIGenerateOpen(false);
+      setAiPrompt("");
+    } catch (err) {
+      const msg = err instanceof Error ? err.message : 'Erro desconhecido';
+      toast({ title: "Erro na geração IA", description: msg, variant: "destructive" });
+    } finally {
+      setIsAILoading(false);
+    }
   }, [aiPrompt, createMutation, toast]);
+
+  const handleExportPDF = useCallback(async (checklist: Checklist) => {
+    try {
+      const doc = await createPDF('portrait');
+
+      // Header
+      doc.setFontSize(18);
+      doc.setFont('helvetica', 'bold');
+      doc.text('Nautilus One - Checklist Report', 20, 20);
+
+      doc.setFontSize(10);
+      doc.setFont('helvetica', 'normal');
+      doc.text(`Gerado em: ${new Date().toLocaleDateString('pt-BR', { hour: '2-digit', minute: '2-digit' })}`, 20, 28);
+
+      // Checklist info
+      doc.setFontSize(14);
+      doc.setFont('helvetica', 'bold');
+      doc.text(checklist.title, 20, 40);
+
+      doc.setFontSize(10);
+      doc.setFont('helvetica', 'normal');
+      const completionRate = checklist.items.length > 0
+        ? Math.round((checklist.items.filter(i => i.completed).length / checklist.items.length) * 100)
+        : 0;
+      doc.text(`Tipo: ${checklist.type} | Status: ${getStatusLabel(checklist.status)} | Conclusão: ${completionRate}%`, 20, 48);
+      doc.text(`Criado por: ${checklist.created_by} | Itens: ${checklist.items.length}`, 20, 54);
+
+      // Items table
+      const tableData = checklist.items.map((item, idx) => [
+        String(idx + 1),
+        item.title,
+        getPriorityConfig(item.criticality).label,
+        item.completed ? '✅ Sim' : '❌ Não',
+        item.notes || '-',
+      ]);
+
+      (doc as any).autoTable({
+        startY: 62,
+        head: [['#', 'Item', 'Criticidade', 'Concluído', 'Observações']],
+        body: tableData,
+        theme: 'striped',
+        headStyles: { fillColor: [0, 82, 136], textColor: 255, fontSize: 9 },
+        bodyStyles: { fontSize: 8 },
+        columnStyles: {
+          0: { cellWidth: 10 },
+          1: { cellWidth: 80 },
+          2: { cellWidth: 25 },
+          3: { cellWidth: 20 },
+          4: { cellWidth: 40 },
+        },
+        margin: { left: 20, right: 20 },
+      });
+
+      // Footer
+      const pageCount = (doc as any).getNumberOfPages?.() || 1;
+      for (let i = 1; i <= pageCount; i++) {
+        doc.setPage(i);
+        doc.setFontSize(8);
+        doc.setFont('helvetica', 'italic');
+        doc.text(`Nautilus One © ${new Date().getFullYear()} - Página ${i}/${pageCount}`, 20, 285);
+      }
+
+      doc.save(`checklist-${checklist.id.slice(0, 8)}-${new Date().toISOString().slice(0, 10)}.pdf`);
+      toast({ title: "📄 PDF exportado", description: `${checklist.title} salvo com sucesso` });
+    } catch (err) {
+      toast({ title: "Erro ao gerar PDF", description: String(err), variant: "destructive" });
+    }
+  }, [toast]);
 
   const getCompletionRate = (cl: Checklist) => {
     if (cl.items.length === 0) return 0;
@@ -570,9 +654,12 @@ export const WorldClassChecklistSystem: React.FC = () => {
                       <CheckCircle2 className="h-3 w-3 mr-1" /> Concluir
                     </Button>
                   )}
-                  <Button size="sm" variant="destructive" onClick={() => handleDelete(selectedChecklist.id)}>
-                    <Trash2 className="h-3 w-3 mr-1" /> Excluir
-                  </Button>
+                   <Button size="sm" variant="destructive" onClick={() => handleDelete(selectedChecklist.id)}>
+                     <Trash2 className="h-3 w-3 mr-1" /> Excluir
+                   </Button>
+                   <Button size="sm" variant="outline" onClick={() => handleExportPDF(selectedChecklist)}>
+                     <Download className="h-3 w-3 mr-1" /> Exportar PDF
+                   </Button>
                 </div>
 
                 <Separator />
@@ -676,10 +763,11 @@ export const WorldClassChecklistSystem: React.FC = () => {
               </div>
             </div>
             <DialogFooter>
-              <Button variant="outline" onClick={() => setIsAIGenerateOpen(false)}>Cancelar</Button>
-              <Button onClick={handleAIGenerate} disabled={!aiPrompt.trim() || createMutation.isPending}>
-                <Sparkles className="h-4 w-4 mr-1" /> Gerar Checklist
-              </Button>
+               <Button variant="outline" onClick={() => setIsAIGenerateOpen(false)}>Cancelar</Button>
+               <Button onClick={handleAIGenerate} disabled={!aiPrompt.trim() || isAILoading}>
+                 {isAILoading ? <Loader2 className="h-4 w-4 animate-spin mr-1" /> : <Sparkles className="h-4 w-4 mr-1" />}
+                 {isAILoading ? 'Gerando...' : 'Gerar Checklist'}
+               </Button>
             </DialogFooter>
           </DialogContent>
         </Dialog>
