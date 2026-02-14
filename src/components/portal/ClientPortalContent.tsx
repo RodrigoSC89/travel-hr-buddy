@@ -58,17 +58,32 @@ function useClientPortalData() {
     staleTime: 5 * 60 * 1000,
   });
 
+  const nonConformities = useQuery({
+    queryKey: ["portal-ncs"],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("non_conformities")
+        .select("id, title, status, severity, created_at")
+        .order("created_at", { ascending: false })
+        .limit(50);
+      if (error) throw error;
+      return data || [];
+    },
+    staleTime: 5 * 60 * 1000,
+  });
+
   return {
     vessels: vessels.data || [],
     certifications: certifications.data || [],
     maintenance: maintenance.data || [],
-    isLoading: vessels.isLoading || certifications.isLoading || maintenance.isLoading,
+    nonConformities: nonConformities.data || [],
+    isLoading: vessels.isLoading || certifications.isLoading || maintenance.isLoading || nonConformities.isLoading,
   };
 }
 
 export default function ClientPortalContent() {
   const [activeTab, setActiveTab] = useState("overview");
-  const { vessels, certifications, maintenance, isLoading } = useClientPortalData();
+  const { vessels, certifications, maintenance, nonConformities, isLoading } = useClientPortalData();
   const queryClient = useQueryClient();
 
   const activeVessels = vessels.filter((v) => v.status === "active" || v.status === "operational");
@@ -82,6 +97,7 @@ export default function ClientPortalContent() {
     queryClient.invalidateQueries({ queryKey: ["portal-vessels"] });
     queryClient.invalidateQueries({ queryKey: ["portal-certifications"] });
     queryClient.invalidateQueries({ queryKey: ["portal-maintenance"] });
+    queryClient.invalidateQueries({ queryKey: ["portal-ncs"] });
   };
 
   const handleExportReport = () => {
@@ -180,10 +196,11 @@ export default function ClientPortalContent() {
 
       {/* Main Tabs */}
       <Tabs value={activeTab} onValueChange={setActiveTab}>
-        <TabsList className="grid w-full grid-cols-3">
+        <TabsList className="grid w-full grid-cols-4">
           <TabsTrigger value="overview" className="flex items-center gap-2"><BarChart3 className="w-4 h-4" />Frota</TabsTrigger>
           <TabsTrigger value="compliance" className="flex items-center gap-2"><Shield className="w-4 h-4" />Compliance</TabsTrigger>
           <TabsTrigger value="maintenance" className="flex items-center gap-2"><Activity className="w-4 h-4" />Manutenções</TabsTrigger>
+          <TabsTrigger value="ncs" className="flex items-center gap-2"><AlertTriangle className="w-4 h-4" />NCs</TabsTrigger>
         </TabsList>
 
         <TabsContent value="overview" className="space-y-4">
@@ -298,6 +315,42 @@ export default function ClientPortalContent() {
                   ))}
                   {maintenance.length === 0 && (
                     <p className="text-center text-muted-foreground py-8">Nenhuma manutenção registrada</p>
+                  )}
+                </div>
+              </ScrollArea>
+            </CardContent>
+          </Card>
+        </TabsContent>
+
+        <TabsContent value="ncs" className="space-y-4">
+          <Card>
+            <CardHeader>
+              <CardTitle>Não-Conformidades</CardTitle>
+              <CardDescription>{nonConformities.length} registros</CardDescription>
+            </CardHeader>
+            <CardContent>
+              <ScrollArea className="h-[400px]">
+                <div className="space-y-2">
+                  {nonConformities.map((nc) => (
+                    <div key={nc.id} className={`p-3 rounded-lg border-l-4 ${nc.severity === "critical" || nc.severity === "high" ? "border-l-destructive bg-destructive/5" : nc.severity === "medium" ? "border-l-warning bg-warning/5" : "border-l-muted bg-muted/5"}`}>
+                      <div className="flex items-center justify-between">
+                        <div>
+                          <p className="font-medium text-sm">{nc.title || "NC sem título"}</p>
+                          <p className="text-xs text-muted-foreground">
+                            {nc.created_at ? new Date(nc.created_at).toLocaleDateString("pt-BR") : ""}
+                          </p>
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <Badge variant="outline">{nc.severity || "low"}</Badge>
+                          <Badge variant={nc.status === "closed" ? "default" : "secondary"}>
+                            {nc.status || "aberta"}
+                          </Badge>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                  {nonConformities.length === 0 && (
+                    <p className="text-center text-muted-foreground py-8">Nenhuma não-conformidade registrada ✅</p>
                   )}
                 </div>
               </ScrollArea>

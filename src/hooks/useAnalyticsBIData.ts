@@ -105,6 +105,20 @@ export function useAnalyticsBIData() {
     staleTime: 5 * 60 * 1000,
   });
 
+  // Non-conformities (incidents)
+  const { data: nonConformities, isLoading: loadingNCs } = useQuery({
+    queryKey: ["bi-non-conformities"],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("non_conformities")
+        .select("id, status, severity, created_at")
+        .limit(500);
+      if (error) throw error;
+      return data || [];
+    },
+    staleTime: 5 * 60 * 1000,
+  });
+
   // Compute KPIs
   const kpis = useMemo<BIKPIData>(() => {
     const now = new Date();
@@ -122,18 +136,20 @@ export function useAnalyticsBIData() {
     const totalCerts = certifications?.length || 1;
     const validCerts = certifications?.filter((c) => c.status === "valid" || c.status === "active")?.length || 0;
 
+    const openNCs = nonConformities?.filter((nc) => nc.status === "open" || nc.status === "in_progress") || [];
+
     return {
       totalVessels: activeVessels.length,
       activeCrew: activeCrew.length,
       complianceScore: Math.round((validCerts / totalCerts) * 100),
       maintenancePending: pendingMaint.length,
       certificatesExpiring: expiringCerts.length,
-      incidentCount: 0,
+      incidentCount: openNCs.length,
       vesselsTrend: 2.5,
       crewTrend: 1.8,
       complianceTrend: 3.2,
     };
-  }, [vessels, crew, maintenance, certifications]);
+  }, [vessels, crew, maintenance, certifications, nonConformities]);
 
   // Monthly chart data (last 6 months)
   const chartData = useMemo<BIChartData[]>(() => {
@@ -159,9 +175,14 @@ export function useAnalyticsBIData() {
         return d >= monthStart && d <= monthEnd;
       })?.length || 0;
 
-      return { label, vessels: monthVessels, crew: monthCrew, incidents: 0, maintenance: monthMaint };
+      const monthIncidents = nonConformities?.filter((nc) => {
+        const d = new Date(nc.created_at || "");
+        return d >= monthStart && d <= monthEnd;
+      })?.length || 0;
+
+      return { label, vessels: monthVessels, crew: monthCrew, incidents: monthIncidents, maintenance: monthMaint };
     });
-  }, [vessels, crew, maintenance]);
+  }, [vessels, crew, maintenance, nonConformities]);
 
   // Compliance breakdown
   const complianceBreakdown = useMemo<BIComplianceBreakdown[]>(() => {
@@ -189,6 +210,6 @@ export function useAnalyticsBIData() {
     chartData,
     complianceBreakdown,
     insights: insights || [],
-    isLoading: loadingVessels || loadingCrew || loadingMaintenance || loadingCerts || loadingInsights,
+    isLoading: loadingVessels || loadingCrew || loadingMaintenance || loadingCerts || loadingInsights || loadingNCs,
   };
 }

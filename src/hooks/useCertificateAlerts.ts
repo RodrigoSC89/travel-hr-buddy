@@ -34,7 +34,8 @@ export function useCertificateAlerts(enabled = true) {
           crew_member_id,
           certification_name,
           expiry_date,
-          status
+          status,
+          crew_members!crew_certifications_crew_member_id_fkey(full_name)
         `)
         .lte("expiry_date", sixtyDaysFromNow.toISOString())
         .gte("expiry_date", now.toISOString())
@@ -46,11 +47,12 @@ export function useCertificateAlerts(enabled = true) {
       const results: CertificateAlert[] = (data || []).map((cert) => {
         const expiry = new Date(cert.expiry_date!);
         const daysUntilExpiry = Math.ceil((expiry.getTime() - now.getTime()) / (1000 * 60 * 60 * 24));
+        const crewData = cert.crew_members as { full_name: string } | null;
 
         return {
           id: cert.id,
           crewMemberId: cert.crew_member_id || "",
-          crewName: "",
+          crewName: crewData?.full_name || "Tripulante",
           certificationName: cert.certification_name || "Certificação",
           expiryDate: cert.expiry_date || "",
           daysUntilExpiry,

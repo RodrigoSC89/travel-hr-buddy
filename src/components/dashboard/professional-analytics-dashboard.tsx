@@ -137,11 +137,12 @@ export function ProfessionalAnalyticsDashboard() {
       </div>
 
       {/* KPI Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
         <KPICard title="Embarcações Ativas" value={kpis.totalVessels} change={kpis.vesselsTrend} icon={Ship} subtitle="na frota" loading={isLoading} />
         <KPICard title="Tripulação Ativa" value={kpis.activeCrew} change={kpis.crewTrend} icon={Users} subtitle="embarcados" loading={isLoading} />
         <KPICard title="Compliance Score" value={`${kpis.complianceScore}%`} change={kpis.complianceTrend} icon={Shield} subtitle="certificações válidas" loading={isLoading} />
         <KPICard title="Manutenções Pendentes" value={kpis.maintenancePending} change={-2.1} icon={Wrench} subtitle="aguardando execução" loading={isLoading} />
+        <KPICard title="Não-Conformidades" value={kpis.incidentCount} change={-1.5} icon={AlertTriangle} subtitle="abertas" loading={isLoading} />
       </div>
 
       {/* Main Tabs */}
@@ -256,7 +257,7 @@ export function ProfessionalAnalyticsDashboard() {
                         <div className="flex items-center justify-between">
                           <div>
                             <p className="text-sm font-medium">{alert.certificationName}</p>
-                            <p className="text-xs text-muted-foreground">Vence em {alert.daysUntilExpiry} dias</p>
+                            <p className="text-xs text-muted-foreground">{alert.crewName} • Vence em {alert.daysUntilExpiry} dias</p>
                           </div>
                           <Badge variant={alert.severity === "critical" ? "destructive" : "secondary"}>
                             {alert.daysUntilExpiry}d
