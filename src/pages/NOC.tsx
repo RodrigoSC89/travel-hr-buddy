@@ -29,6 +29,24 @@ const statusConfig: Record<string, { bg: string; text: string }> = {
   inactive: { bg: "bg-muted-foreground", text: "Inativo" },
 };
 
+interface NocVessel {
+  id: string;
+  name: string;
+  status: string;
+  vessel_type: string | null;
+}
+
+interface NocAlert {
+  id: string;
+  title: string;
+  message: string;
+  severity: string;
+  source_module: string | null;
+  acknowledged: boolean;
+  created_at: string;
+  [key: string]: unknown;
+}
+
 export default function NOC() {
   const [isFullscreen, setIsFullscreen] = useState(false);
   const [isSoundEnabled, setIsSoundEnabled] = useState(true);
@@ -49,10 +67,10 @@ export default function NOC() {
     queryFn: async () => {
       const { data, error } = await supabase.from("soc_alerts").select("*").order("created_at", { ascending: false }).limit(20);
       if (error) throw error;
-      return (data || []).map((a: any) => ({
+      return (data || []).map((a): NocAlert => ({
         ...a,
         severity: a.severity || "info",
-        acknowledged: a.status === "acknowledged" || a.status === "resolved",
+        acknowledged: a.is_acknowledged === true || false,
       }));
     },
     refetchInterval: 5000,
@@ -93,8 +111,8 @@ export default function NOC() {
     refetchAlerts();
   };
 
-  const activeVessels = vessels?.filter((v: any) => v.status === "active" || v.status === "operational").length || 0;
-  const criticalAlerts = (alerts || []).filter((a: any) => a.severity === "critical" && !a.acknowledged);
+  const activeVessels = vessels?.filter((v) => v.status === "active" || v.status === "operational").length || 0;
+  const criticalAlerts = (alerts || []).filter((a) => a.severity === "critical" && !a.acknowledged);
   const currentTime = new Date().toLocaleTimeString("pt-BR", { hour: "2-digit", minute: "2-digit", second: "2-digit" });
 
   const metrics = [
@@ -102,7 +120,7 @@ export default function NOC() {
     { id: "2", label: "Embarcações Ativas", value: activeVessels, unit: `/${vessels?.length || 0}`, status: "good" as const },
     { id: "3", label: "Manutenções Pendentes", value: maintenanceCount || 0, unit: "", status: (maintenanceCount || 0) > 5 ? "warning" : "good" },
     { id: "4", label: "Tripulação Ativa", value: crewCount || 0, unit: "", status: "good" as const },
-    { id: "5", label: "Alertas Abertos", value: (alerts || []).filter((a: any) => !a.acknowledged).length, unit: "", status: criticalAlerts.length > 0 ? "critical" : "good" },
+    { id: "5", label: "Alertas Abertos", value: (alerts || []).filter((a) => !a.acknowledged).length, unit: "", status: criticalAlerts.length > 0 ? "critical" : "good" },
     { id: "6", label: "Alertas Críticos", value: criticalAlerts.length, unit: "", status: criticalAlerts.length > 0 ? "critical" : "good" },
   ];
 
@@ -151,8 +169,8 @@ export default function NOC() {
               <CardHeader className="pb-2"><CardTitle className="flex items-center gap-2 text-lg"><Ship className="h-5 w-5 text-primary" />Status da Frota</CardTitle></CardHeader>
               <CardContent>
                 <div className="grid grid-cols-3 gap-3">
-                  {(vessels || []).map((vessel: any) => {
-                    const st = statusConfig[vessel.status] || statusConfig.inactive;
+                  {(vessels || []).map((vessel) => {
+                    const st = statusConfig[vessel.status || 'inactive'] || statusConfig.inactive;
                     return (
                       <div key={vessel.id} className={cn("p-3 rounded-lg border border-zinc-800 bg-zinc-800/50", vessel.status === "alert" && "border-destructive animate-pulse")}>
                         <div className="flex items-center justify-between mb-2"><span className="font-medium">{vessel.name}</span><span className={cn("w-2 h-2 rounded-full", st.bg)} /></div>
@@ -168,11 +186,11 @@ export default function NOC() {
 
           <div className="col-span-4">
             <Card className="bg-zinc-900 border-zinc-800 h-full">
-              <CardHeader className="pb-2"><CardTitle className="flex items-center gap-2 text-lg"><AlertTriangle className="h-5 w-5 text-primary" />Central de Alertas<Badge variant="secondary" className="ml-auto">{(alerts || []).filter((a: any) => !a.acknowledged).length}</Badge></CardTitle></CardHeader>
+              <CardHeader className="pb-2"><CardTitle className="flex items-center gap-2 text-lg"><AlertTriangle className="h-5 w-5 text-primary" />Central de Alertas<Badge variant="secondary" className="ml-auto">{(alerts || []).filter((a) => !a.acknowledged).length}</Badge></CardTitle></CardHeader>
               <CardContent>
                 <ScrollArea className="h-[500px] pr-4">
                   <div className="space-y-3">
-                    {(alerts || []).map((alert: any) => {
+                    {(alerts || []).map((alert) => {
                       const config = severityConfig[alert.severity as keyof typeof severityConfig] || severityConfig.info;
                       const Icon = config.icon;
                       return (
