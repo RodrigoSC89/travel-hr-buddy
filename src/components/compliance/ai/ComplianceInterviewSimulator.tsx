@@ -425,7 +425,7 @@ Avalie a qualidade e completude da resposta.`,
                         <CheckCircle className="h-3.5 w-3.5" /> Tópicos Cobertos:
                       </p>
                       {currentEval.evaluation.covered_topics.map((t, i) => (
-                        <p key={i} className="text-sm text-muted-foreground flex items-center gap-1 ml-1">
+                        <p key={`cov-${i}-${t.slice(0,15)}`} className="text-sm text-muted-foreground flex items-center gap-1 ml-1">
                           <ChevronRight className="h-3 w-3" /> {t}
                         </p>
                       ))}
@@ -435,7 +435,7 @@ Avalie a qualidade e completude da resposta.`,
                         <XCircle className="h-3.5 w-3.5" /> Tópicos que Faltaram:
                       </p>
                       {currentEval.evaluation.missed_topics.map((t, i) => (
-                        <p key={i} className="text-sm text-muted-foreground flex items-center gap-1 ml-1">
+                        <p key={`miss-${i}-${t.slice(0,15)}`} className="text-sm text-muted-foreground flex items-center gap-1 ml-1">
                           <ChevronRight className="h-3 w-3" /> {t}
                         </p>
                       ))}
@@ -459,7 +459,7 @@ Avalie a qualidade e completude da resposta.`,
                         <Sparkles className="h-3.5 w-3.5 text-warning" /> Dicas de Melhoria:
                       </p>
                       {currentEval.evaluation.improvement_tips.map((tip, i) => (
-                        <p key={i} className="text-sm text-muted-foreground flex items-center gap-1 ml-1 mb-1">
+                        <p key={`tip-${i}-${tip.slice(0,15)}`} className="text-sm text-muted-foreground flex items-center gap-1 ml-1 mb-1">
                           <Target className="h-3 w-3 text-warning" /> {tip}
                         </p>
                       ))}

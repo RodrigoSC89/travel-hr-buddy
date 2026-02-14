@@ -6,6 +6,7 @@
  * Usa ISMChecklist + ProactiveComplianceMonitor + Supabase real data
  */
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
@@ -74,6 +75,7 @@ const ISM_CODE_ELEMENTS = [
 ];
 
 const ISMCodePage = () => {
+  const navigate = useNavigate();
   const { handleExport, handleRefresh, handleGenerateReport } = useMaritimeActions();
   const [activeTab, setActiveTab] = useState("overview");
 
@@ -343,7 +345,7 @@ const ISMCodePage = () => {
                   <div className="text-center py-8 text-muted-foreground">
                     <FileCheck className="h-10 w-10 mx-auto mb-2 opacity-40" />
                     <p>Nenhuma auditoria ISM registrada.</p>
-                    <Button size="sm" variant="outline" className="mt-3" onClick={() => toast.info("Navegue ao Compliance Hub para criar uma auditoria ISM")}>
+                    <Button size="sm" variant="outline" className="mt-3" onClick={() => navigate('/compliance?tab=ism')}>
                       <Plus className="h-4 w-4 mr-2" />
                       Criar Auditoria ISM
                     </Button>

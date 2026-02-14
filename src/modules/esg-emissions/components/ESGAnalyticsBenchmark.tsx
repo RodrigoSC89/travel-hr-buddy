@@ -294,7 +294,7 @@ export const ESGAnalyticsBenchmark: React.FC = () => {
               ) : (
                 <div className="space-y-4">
                   {d.predictiveInsights.map((insight: any, idx: number) => (
-                    <Card key={idx} className="border-l-4 border-l-primary">
+                    <Card key={`insight-${idx}-${insight.title}`} className="border-l-4 border-l-primary">
                       <CardContent className="p-4">
                         <div className="flex items-center justify-between mb-1">
                           <h4 className="font-semibold">{insight.title}</h4>

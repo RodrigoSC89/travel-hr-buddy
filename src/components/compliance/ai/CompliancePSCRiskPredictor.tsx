@@ -394,8 +394,8 @@ Calcule a probabilidade de detenção e gere o plano de mitigação completo.`,
               </CardHeader>
               <CardContent>
                 <div className="space-y-3">
-                  {prediction.risk_factors.map((rf, i) => (
-                    <div key={i} className="p-3 border rounded-lg">
+                  {prediction.risk_factors.map((rf) => (
+                    <div key={rf.factor} className="p-3 border rounded-lg">
                       <div className="flex items-center justify-between mb-1">
                         <span className="font-medium text-sm">{rf.factor}</span>
                         <div className="flex items-center gap-2">
@@ -425,7 +425,7 @@ Calcule a probabilidade de detenção e gere o plano de mitigação completo.`,
               <CardContent>
                 <div className="space-y-2">
                   {prediction.mitigation_plan.map((m, i) => (
-                    <div key={i} className="flex items-start gap-3 p-3 border rounded-lg">
+                    <div key={`mit-${i}-${m.action.slice(0,15)}`} className="flex items-start gap-3 p-3 border rounded-lg">
                       <Badge className={`shrink-0 text-xs ${
                         m.priority === "immediate" ? "bg-destructive/20 text-destructive" :
                         m.priority === "before_arrival" ? "bg-warning/20 text-warning" :
@@ -468,7 +468,7 @@ Calcule a probabilidade de detenção e gere o plano de mitigação completo.`,
                 <CardContent>
                   <ScrollArea className="h-[200px]">
                     {prediction.pre_arrival_checklist.map((item, i) => (
-                      <div key={i} className="flex items-start gap-2 mb-2 text-sm">
+                      <div key={`chk-${i}-${item.slice(0,15)}`} className="flex items-start gap-2 mb-2 text-sm">
                         <CheckCircle className="h-3.5 w-3.5 text-success shrink-0 mt-0.5" />
                         <span>{item}</span>
                       </div>

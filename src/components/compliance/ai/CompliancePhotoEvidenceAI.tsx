@@ -396,7 +396,7 @@ Baseado no contexto fornecido, identifique possíveis itens de conformidade e n�
 
                         {/* Findings */}
                         {selectedPhotoData.analysis.findings.map((f, i) => (
-                          <div key={i} className="flex items-start gap-2 p-2 border rounded">
+                          <div key={`find-${i}-${f.item}`} className="flex items-start gap-2 p-2 border rounded">
                             {getStatusIcon(f.status)}
                             <div>
                               <p className="text-sm font-medium">{f.item}</p>
@@ -410,7 +410,7 @@ Baseado no contexto fornecido, identifique possíveis itens de conformidade e n�
                           <div className="p-3 rounded-lg bg-warning/5 border border-warning/10">
                             <p className="text-sm font-medium mb-1">Recomendações:</p>
                             {selectedPhotoData.analysis.recommendations.map((r, i) => (
-                              <p key={i} className="text-xs text-muted-foreground">• {r}</p>
+                              <p key={`rec-${i}-${r.slice(0,15)}`} className="text-xs text-muted-foreground">• {r}</p>
                             ))}
                           </div>
                         )}
@@ -418,7 +418,7 @@ Baseado no contexto fornecido, identifique possíveis itens de conformidade e n�
                         {/* References */}
                         <div className="flex flex-wrap gap-1">
                           {selectedPhotoData.analysis.regulatory_references.map((r, i) => (
-                            <Badge key={i} variant="outline" className="text-xs">{r}</Badge>
+                            <Badge key={`rref-${i}-${r}`} variant="outline" className="text-xs">{r}</Badge>
                           ))}
                         </div>
 

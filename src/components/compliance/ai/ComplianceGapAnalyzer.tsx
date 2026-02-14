@@ -353,7 +353,7 @@ Identifique gaps, severidades, ações corretivas e referências cruzadas entre 
               <CardContent>
                 <div className="space-y-2">
                   {result.priority_actions.map((action, i) => (
-                    <div key={i} className="flex items-start gap-3 p-2 rounded-lg bg-warning/5 border border-warning/10">
+                    <div key={`prio-${i}-${action.slice(0, 20)}`} className="flex items-start gap-3 p-2 rounded-lg bg-warning/5 border border-warning/10">
                       <Badge className="bg-warning text-warning-foreground shrink-0 mt-0.5">{i + 1}</Badge>
                       <span className="text-sm">{action}</span>
                     </div>
@@ -432,7 +432,7 @@ Identifique gaps, severidades, ações corretivas e referências cruzadas entre 
               <CardContent>
                 <div className="space-y-2">
                   {result.cross_references.map((ref, i) => (
-                    <div key={i} className="flex items-center gap-3 p-3 border rounded-lg">
+                    <div key={`xref-${ref.from}-${ref.to}`} className="flex items-center gap-3 p-3 border rounded-lg">
                       <Badge variant="outline">{ref.from}</Badge>
                       <ArrowRight className="h-4 w-4 text-muted-foreground" />
                       <Badge variant="outline">{ref.to}</Badge>

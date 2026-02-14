@@ -202,9 +202,9 @@ export function ComplianceVoiceChat({
         {/* Suggested Questions */}
         {messages.length === 0 && (
           <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
-            {defaultQuestions.map((q, i) => (
+            {defaultQuestions.map((q) => (
               <Button
-                key={i}
+                key={q}
                 variant="outline"
                 className="text-left text-xs h-auto py-2 px-3 justify-start"
                 onClick={() => handleSendMessage(q)}

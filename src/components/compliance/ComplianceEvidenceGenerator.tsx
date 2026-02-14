@@ -253,7 +253,7 @@ Inclua: análise técnica, referências normativas (IMO, SOLAS, ${moduleName}), 
                   <Separator className="my-4" />
                   <h4 className="font-semibold text-sm mb-2">Recomendações:</h4>
                   {evidence.recommendations.map((r, i) => (
-                    <div key={i} className="flex items-start gap-2 text-sm mb-1">
+                    <div key={`rec-${i}-${r.slice(0, 20)}`} className="flex items-start gap-2 text-sm mb-1">
                       <CheckCircle className="h-3.5 w-3.5 text-success shrink-0 mt-0.5" />
                       <span>{r}</span>
                     </div>
@@ -265,7 +265,7 @@ Inclua: análise técnica, referências normativas (IMO, SOLAS, ${moduleName}), 
                   <Separator className="my-4" />
                   <h4 className="font-semibold text-sm mb-2">Ações Corretivas:</h4>
                   {evidence.corrective_actions.map((a, i) => (
-                    <div key={i} className="flex items-start gap-2 text-sm mb-1">
+                    <div key={`ca-${i}-${a.slice(0, 20)}`} className="flex items-start gap-2 text-sm mb-1">
                       <Target className="h-3.5 w-3.5 text-warning shrink-0 mt-0.5" />
                       <span>{a}</span>
                     </div>
