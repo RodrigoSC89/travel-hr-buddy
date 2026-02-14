@@ -13,7 +13,7 @@ import React, { Suspense, lazy, useMemo, useCallback } from 'react';
 import { useSearchParams, useLocation, useNavigate } from 'react-router-dom';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Badge } from '@/components/ui/badge';
-import { Briefcase, FileText, Users, DollarSign, Settings, Plane, Plus, Download, Upload, Calendar, Wifi } from 'lucide-react';
+import { Briefcase, FileText, Users, DollarSign, Settings, Plane, Plus, Download, Upload, Calendar, Wifi, Brain, Heart } from 'lucide-react';
 import { Skeleton } from '@/components/ui/skeleton';
 import { EnhancedActionBar } from '@/components/ui/world-class/EnhancedActionBar';
 import { WorkflowStatusBar } from '@/components/ui/world-class/WorkflowStatusBar';
@@ -30,6 +30,9 @@ const PeopleHub = lazy(() => import('@/pages/HRDashboardPage'));
 const FinanceHub = lazy(() => import('@/pages/VoyageAccountingPage'));
 const SystemHub = lazy(() => import('@/pages/Settings'));
 const TravelCommandPremium = lazy(() => import('@/pages/Documents'));
+const CrewAIHub = lazy(() => import('@/components/crew/ai/CrewAIHub'));
+const FinanceAIHub = lazy(() => import('@/components/finance/ai/FinanceAIHub'));
+const DocumentsAIHub = lazy(() => import('@/components/documents/ai/DocumentsAIHub'));
 
 const LoadingSkeleton = () => (
   <div className="space-y-4 p-6">
@@ -52,6 +55,9 @@ const sectionConfig = [
   { id: 'approvals', label: 'Approvals', icon: DollarSign, color: 'yellow' },
   { id: 'travel', label: 'Travel', icon: Plane, color: 'purple' },
   { id: 'system', label: 'System', icon: Settings, color: 'gray' },
+  { id: 'ai-crew', label: '🧠 Crew AI', icon: Heart, color: 'pink' },
+  { id: 'ai-finance', label: '🧠 Finance AI', icon: Brain, color: 'indigo' },
+  { id: 'ai-docs', label: '🧠 Docs AI', icon: Brain, color: 'cyan' },
 ];
 
 export default function WorkbenchMegaHub() {
@@ -501,6 +507,18 @@ export default function WorkbenchMegaHub() {
                 searchPlaceholder="Search settings, integrations..."
               />
               <SystemHub />
+            </TabsContent>
+
+            <TabsContent value="ai-crew" className="mt-0">
+              <CrewAIHub />
+            </TabsContent>
+
+            <TabsContent value="ai-finance" className="mt-0">
+              <FinanceAIHub />
+            </TabsContent>
+
+            <TabsContent value="ai-docs" className="mt-0">
+              <DocumentsAIHub />
             </TabsContent>
           </Suspense>
         </div>

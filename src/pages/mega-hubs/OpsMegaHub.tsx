@@ -11,7 +11,7 @@ import React, { Suspense, lazy, useState, useMemo, useCallback } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Badge } from '@/components/ui/badge';
-import { Compass, Anchor, Ship, Map, Target, Package, FileText, Plus, CheckCircle, Wifi, Download } from 'lucide-react';
+import { Compass, Anchor, Ship, Map, Target, Package, FileText, Plus, CheckCircle, Wifi, Download, Brain } from 'lucide-react';
 import { Skeleton } from '@/components/ui/skeleton';
 import { EnhancedActionBar } from '@/components/ui/world-class/EnhancedActionBar';
 import { WorkflowStatusBar } from '@/components/ui/world-class/WorkflowStatusBar';
@@ -31,6 +31,7 @@ const VoyageCommandCenter = lazy(() => import('@/pages/VoyageCommandCenter'));
 const MissionCommandCenter = lazy(() => import('@/pages/MaritimeCommandCenter'));
 const LogisticsCommandPage = lazy(() => import('@/pages/FleetCommandCenter'));
 const VesselContractsUnified = lazy(() => import('@/pages/FleetCommandCenter'));
+const OperationsAIHub = lazy(() => import('@/components/operations/ai/OperationsAIHub'));
 
 const LoadingSkeleton = () => (
   <div className="space-y-4 p-6">
@@ -52,6 +53,7 @@ const tabConfig = [
   { id: 'missions', label: 'Missions', icon: Target },
   { id: 'logistics', label: 'Logistics', icon: Package },
   { id: 'contracts', label: 'Contracts', icon: FileText },
+  { id: 'ai-copilot', label: '🧠 IA Copiloto', icon: Brain },
 ];
 
 export default function OpsMegaHub() {
@@ -264,6 +266,10 @@ export default function OpsMegaHub() {
             
             <TabsContent value="contracts" className="mt-0">
               <VesselContractsUnified />
+            </TabsContent>
+
+            <TabsContent value="ai-copilot" className="mt-0">
+              <OperationsAIHub />
             </TabsContent>
           </Suspense>
         </div>
