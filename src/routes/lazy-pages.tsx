@@ -10,6 +10,7 @@ import { lazy } from "react";
 export const Auth = lazy(() => import("@/pages/Auth"));
 export const AuthCallback = lazy(() => import("@/pages/AuthCallback"));
 export const LandingPage = lazy(() => import("@/pages/LandingPage"));
+export const AboutSystem = lazy(() => import("@/pages/AboutSystem"));
 export const CentralComando = lazy(() => import("@/pages/CentralComando"));
 export const NotFound = lazy(() => import("@/pages/NotFound"));
 export const DevRoutesDashboard = lazy(() => import("@/pages/DevRoutesDashboard"));
