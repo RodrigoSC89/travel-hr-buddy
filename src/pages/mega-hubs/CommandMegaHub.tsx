@@ -8,12 +8,12 @@
  */
 
 import React, { Suspense, lazy, useMemo, useCallback } from 'react';
-// P2-005: data-testid instrumentation applied
+import { useNavigate } from 'react-router-dom';
 import { useSearchParams } from 'react-router-dom';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { Compass, Activity, BarChart3, Eye, Shield, Bell, Radio, RefreshCw, Wifi, WifiOff, Brain } from 'lucide-react';
+import { Compass, Activity, BarChart3, Eye, Shield, Bell, Radio, RefreshCw, Wifi, WifiOff, Brain, Ship, Users, FileText, Wrench, Plus, AlertTriangle } from 'lucide-react';
 import { Skeleton } from '@/components/ui/skeleton';
 import { EnhancedActionBar } from '@/components/ui/world-class/EnhancedActionBar';
 import { PremiumTimeline } from '@/components/ui/world-class/PremiumTimeline';
@@ -61,6 +61,7 @@ const tabConfig = [
 
 export default function CommandMegaHub() {
   const [searchParams, setSearchParams] = useSearchParams();
+  const navigate = useNavigate();
   const activeTab = searchParams.get('tab') || 'overview';
   const queryClient = useQueryClient();
   const { quickActions, exportToCSV } = useRealActionHandlers();
@@ -200,6 +201,27 @@ export default function CommandMegaHub() {
                 <span>{metrics.activeVoyages} viagens ativas</span>
                 <span>•</span>
                 <span>Atualizado: {new Date().toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' })}</span>
+              </div>
+
+              {/* Quick Action Cards */}
+              <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
+                {[
+                  { label: 'Nova Viagem', icon: Plus, color: 'text-primary', bg: 'bg-primary/10', onClick: () => navigate('/ops?tab=voyage') },
+                  { label: 'Tripulação', icon: Users, color: 'text-blue-500', bg: 'bg-blue-500/10', onClick: () => navigate('/workbench?section=people') },
+                  { label: 'Manutenção', icon: Wrench, color: 'text-orange-500', bg: 'bg-orange-500/10', onClick: () => navigate('/maintenance') },
+                  { label: 'Documentos', icon: FileText, color: 'text-emerald-500', bg: 'bg-emerald-500/10', onClick: () => navigate('/workbench?section=docs') },
+                  { label: 'Compliance', icon: Shield, color: 'text-violet-500', bg: 'bg-violet-500/10', onClick: () => navigate('/compliance') },
+                  { label: 'Alertas', icon: AlertTriangle, color: 'text-destructive', bg: 'bg-destructive/10', onClick: () => setSearchParams({ tab: 'alerts' }) },
+                ].map((action) => (
+                  <button
+                    key={action.label}
+                    onClick={action.onClick}
+                    className={`flex flex-col items-center gap-2 p-4 rounded-xl ${action.bg} border border-transparent hover:border-border/50 transition-all duration-200 active:scale-[0.97] group`}
+                  >
+                    <action.icon className={`h-5 w-5 ${action.color} group-hover:scale-110 transition-transform`} />
+                    <span className="text-xs font-medium text-foreground">{action.label}</span>
+                  </button>
+                ))}
               </div>
 
               {/* System Health KPIs - Always visible */}

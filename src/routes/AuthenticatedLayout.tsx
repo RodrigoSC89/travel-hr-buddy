@@ -12,6 +12,7 @@ import { ProductOnboardingTour } from "@/components/onboarding/ProductOnboarding
 import { ModuleErrorBoundary } from "@/components/layout/module-error-boundary";
 import { PresenceAvatars } from "@/components/ui/PresenceAvatars";
 import { HealthStatusBar } from "@/components/ui/HealthStatusBar";
+import { useRealtimeToasts } from "@/hooks/useRealtimeToasts";
 
 const OfflineStatusBar = lazy(() => 
   import("@/components/offline/OfflineStatusBar").then(mod => ({ default: mod.OfflineStatusBar }))
@@ -22,6 +23,9 @@ const GlobalAIAssistant = lazy(() =>
 );
 
 export const AuthenticatedLayout = () => {
+  // Global real-time toast notifications for critical events
+  useRealtimeToasts();
+
   return (
     <SidebarProvider defaultOpen={true}>
       <div className="min-h-screen flex w-full bg-background">
