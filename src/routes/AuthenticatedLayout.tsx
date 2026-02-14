@@ -9,6 +9,9 @@ import { AppSidebar } from "@/components/layout/app-sidebar";
 import { Header } from "@/components/layout/header";
 import { MobileBottomNav } from "@/components/layout/mobile-bottom-nav";
 import { ProductOnboardingTour } from "@/components/onboarding/ProductOnboardingTour";
+import { ModuleErrorBoundary } from "@/components/layout/module-error-boundary";
+import { PresenceAvatars } from "@/components/ui/PresenceAvatars";
+import { HealthStatusBar } from "@/components/ui/HealthStatusBar";
 
 const OfflineStatusBar = lazy(() => 
   import("@/components/offline/OfflineStatusBar").then(mod => ({ default: mod.OfflineStatusBar }))
@@ -25,8 +28,15 @@ export const AuthenticatedLayout = () => {
         <AppSidebar />
         <div className="flex-1 flex flex-col min-w-0 w-full">
           <Header />
+          {/* Health + Presence bar */}
+          <div className="flex items-center justify-between px-4 py-1.5 border-b border-border/40 bg-card/50">
+            <HealthStatusBar />
+            <PresenceAvatars />
+          </div>
           <main className="flex-1 overflow-auto px-3 pb-20 md:px-6 md:pb-6">
-            <Outlet />
+            <ModuleErrorBoundary moduleName="Page">
+              <Outlet />
+            </ModuleErrorBoundary>
           </main>
         </div>
         <MobileBottomNav />
