@@ -267,7 +267,7 @@ export function HRChatbot() {
                 disabled={isLoading}
                 className="flex-1"
               />
-              <Button type="submit" size="icon" disabled={!input.trim() || isLoading}>
+              <Button type="submit" size="icon" disabled={!input.trim() || isLoading} aria-label="Enviar mensagem" title="Enviar">
                 <Send className="h-4 w-4" />
               </Button>
             </form>

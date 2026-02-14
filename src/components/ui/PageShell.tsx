@@ -239,7 +239,7 @@ export function PageShell({
               {helpText && (
                 <Tooltip>
                   <TooltipTrigger asChild>
-                    <Button variant="ghost" size="icon" className="h-6 w-6">
+                    <Button variant="ghost" size="icon" className="h-6 w-6" aria-label="Ajuda" title="Ajuda">
                       <HelpCircle className="h-4 w-4 text-muted-foreground" />
                     </Button>
                   </TooltipTrigger>
