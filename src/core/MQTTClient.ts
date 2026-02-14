@@ -121,7 +121,7 @@ class MQTTClientManager {
       this.isConnecting = false;
     });
 
-    this.client.on("disconnect", () => {
+    this.client.on("end", () => {
       logger.info("📡 [MQTT] Desconectado do broker");
       this.isConnecting = false;
       

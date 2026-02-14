@@ -75,15 +75,13 @@ export default defineConfig(({ mode }) => ({
           // Animation
           if (id.includes('framer-motion')) return 'animation-vendor';
           // Charts - separate chunk, loaded on dashboard routes
-          if (id.includes('recharts') || id.includes('chart.js') || id.includes('react-chartjs-2')) {
-            return 'charts-vendor';
-          }
+          if (id.includes('recharts')) return 'charts-vendor';
           // PDF generation - lazy loaded on export actions (~600KB)
           if (id.includes('jspdf') || id.includes('jspdf-autotable')) return 'pdf-vendor';
           // Excel - lazy loaded on export actions (~400KB)
           if (id.includes('/xlsx')) return 'xlsx-vendor';
           // 3D rendering - lazy loaded (~500KB+)
-          if (id.includes('three') || id.includes('@react-three')) return 'three-vendor';
+          if (id.includes('three')) return 'three-vendor';
           // Date utilities
           if (id.includes('date-fns')) return 'date-vendor';
           // Form handling
@@ -92,8 +90,6 @@ export default defineConfig(({ mode }) => ({
           }
           // Maps
           if (id.includes('mapbox-gl')) return 'mapbox-vendor';
-          // Calendar - lazy loaded on schedule routes
-          if (id.includes('react-big-calendar')) return 'calendar-vendor';
           // Router
           if (id.includes('react-router')) return 'router-vendor';
           // Tesseract OCR - lazy loaded on OCR actions (~500KB)
@@ -127,19 +123,14 @@ export default defineConfig(({ mode }) => ({
       "react-smooth",
     ],
     exclude: [
-      "@tensorflow/tfjs",
-      "@tensorflow-models/coco-ssd",
       "onnxruntime-web",
       "three",
-      "@react-three/fiber",
-      "@react-three/drei",
       "mapbox-gl",
       "tesseract.js",
       "jspdf",
       "jspdf-autotable",
       "xlsx",
       "firebase",
-      "reactflow",
     ],
     esbuildOptions: {
       target: "esnext",
