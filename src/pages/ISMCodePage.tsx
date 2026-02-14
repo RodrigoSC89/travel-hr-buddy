@@ -22,6 +22,7 @@ import { ProactiveComplianceMonitor } from "@/components/compliance/ProactiveCom
 import { ComplianceVoiceChat } from "@/components/compliance/ComplianceVoiceChat";
 import { CompliancePredictiveAI } from "@/components/compliance/CompliancePredictiveAI";
 import { ComplianceEvidenceGenerator } from "@/components/compliance/ComplianceEvidenceGenerator";
+import { ComplianceSGIAutoEvidence, ComplianceGapAnalyzer, ComplianceInterviewSimulator, ComplianceOneClickAuditPrep } from "@/components/compliance/ai";
 import { useMaritimeActions } from "@/hooks/useMaritimeActions";
 import { toast } from "sonner";
 import {
@@ -42,6 +43,10 @@ import {
   Settings,
   ClipboardCheck,
   Plus,
+  Sparkles,
+  Search,
+  MessageSquare,
+  Zap,
 } from "lucide-react";
 
 const ISM_CODE_ELEMENTS = [
@@ -174,6 +179,22 @@ const ISMCodePage = () => {
           <TabsTrigger value="ai-evidence" className="gap-2">
             <Target className="h-4 w-4" />
             IA Evidências
+          </TabsTrigger>
+          <TabsTrigger value="sgi-evidence" className="gap-2">
+            <Sparkles className="h-4 w-4" />
+            SGI Auto-Evidence
+          </TabsTrigger>
+          <TabsTrigger value="gap-analyzer" className="gap-2">
+            <Search className="h-4 w-4" />
+            Gap Analyzer
+          </TabsTrigger>
+          <TabsTrigger value="interview-sim" className="gap-2">
+            <MessageSquare className="h-4 w-4" />
+            Simulador Entrevista
+          </TabsTrigger>
+          <TabsTrigger value="audit-prep" className="gap-2">
+            <Zap className="h-4 w-4" />
+            Audit Prep 1-Click
           </TabsTrigger>
           <TabsTrigger value="ai-voice" className="gap-2">
             <Users className="h-4 w-4" />
@@ -458,6 +479,45 @@ const ISMCodePage = () => {
             moduleId="ism-code"
             moduleName="ISM Code"
             elements={ISM_CODE_ELEMENTS.map(e => ({ id: e.id, name: e.name }))}
+          />
+        </TabsContent>
+
+        {/* SGI AUTO-EVIDENCE */}
+        <TabsContent value="sgi-evidence" className="space-y-4">
+          <ComplianceSGIAutoEvidence
+            moduleId="ism-code"
+            moduleName="ISM Code"
+            checklistItems={ISM_CODE_ELEMENTS.map(e => ({
+              id: String(e.id),
+              name: `Elemento ${e.id} - ${e.name}`,
+              description: e.description,
+            }))}
+          />
+        </TabsContent>
+
+        {/* GAP ANALYZER */}
+        <TabsContent value="gap-analyzer" className="space-y-4">
+          <ComplianceGapAnalyzer
+            moduleId="ism-code"
+            moduleName="ISM Code"
+            standards={["ISM Code", "SOLAS Ch. IX", "DOC/SMC Requirements", "Flag State Requirements"]}
+          />
+        </TabsContent>
+
+        {/* INTERVIEW SIMULATOR */}
+        <TabsContent value="interview-sim" className="space-y-4">
+          <ComplianceInterviewSimulator
+            moduleId="ism-code"
+            moduleName="ISM Code"
+            standardContext="ISM Code audit - Safety Management System verification as per SOLAS Chapter IX and IMO Resolution A.741(18). Focus on SMS implementation, emergency preparedness, maintenance procedures, and documentation control."
+          />
+        </TabsContent>
+
+        {/* ONE-CLICK AUDIT PREP */}
+        <TabsContent value="audit-prep" className="space-y-4">
+          <ComplianceOneClickAuditPrep
+            moduleId="ism-code"
+            moduleName="ISM Code"
           />
         </TabsContent>
 

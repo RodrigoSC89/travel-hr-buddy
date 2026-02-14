@@ -13,10 +13,12 @@ import { ISPSModule } from "@/components/safety/ISPSModule";
 import { ComplianceVoiceChat } from "@/components/compliance/ComplianceVoiceChat";
 import { CompliancePredictiveAI } from "@/components/compliance/CompliancePredictiveAI";
 import { ComplianceEvidenceGenerator } from "@/components/compliance/ComplianceEvidenceGenerator";
+import { ComplianceSGIAutoEvidence, ComplianceGapAnalyzer, ComplianceInterviewSimulator, ComplianceOneClickAuditPrep } from "@/components/compliance/ai";
 import { useMaritimeActions } from "@/hooks/useMaritimeActions";
 import {
   Shield, Lock, ShieldAlert, Users, RefreshCw, Download,
   FileCheck, AlertTriangle, Eye, Sparkles, Brain, Mic, TrendingUp,
+  Search, MessageSquare, Zap,
 } from "lucide-react";
 
 const ISPS_ELEMENTS = [
@@ -65,6 +67,22 @@ const ISPSSecurityPage = () => {
             <Sparkles className="h-4 w-4" />
             IA Evidências
           </TabsTrigger>
+          <TabsTrigger value="sgi-evidence" className="gap-2">
+            <Eye className="h-4 w-4" />
+            SGI Auto-Evidence
+          </TabsTrigger>
+          <TabsTrigger value="gap-analyzer" className="gap-2">
+            <Search className="h-4 w-4" />
+            Gap Analyzer
+          </TabsTrigger>
+          <TabsTrigger value="interview-sim" className="gap-2">
+            <MessageSquare className="h-4 w-4" />
+            Simulador Entrevista
+          </TabsTrigger>
+          <TabsTrigger value="audit-prep" className="gap-2">
+            <Zap className="h-4 w-4" />
+            Audit Prep 1-Click
+          </TabsTrigger>
           <TabsTrigger value="ai-voice" className="gap-2">
             <Mic className="h-4 w-4" />
             Assistente Voz
@@ -86,6 +104,45 @@ const ISPSSecurityPage = () => {
             moduleId="isps-security"
             moduleName="ISPS Code"
             elements={ISPS_ELEMENTS}
+          />
+        </TabsContent>
+
+        {/* SGI AUTO-EVIDENCE */}
+        <TabsContent value="sgi-evidence" className="space-y-4">
+          <ComplianceSGIAutoEvidence
+            moduleId="isps-security"
+            moduleName="ISPS Code"
+            checklistItems={ISPS_ELEMENTS.map(e => ({
+              id: e.id,
+              name: e.name,
+              description: `ISPS Code requirement: ${e.name}`,
+            }))}
+          />
+        </TabsContent>
+
+        {/* GAP ANALYZER */}
+        <TabsContent value="gap-analyzer" className="space-y-4">
+          <ComplianceGapAnalyzer
+            moduleId="isps-security"
+            moduleName="ISPS Code"
+            standards={["ISPS Code Part A", "ISPS Code Part B", "SOLAS Ch. XI-2", "Maritime Cybersecurity Guidelines"]}
+          />
+        </TabsContent>
+
+        {/* INTERVIEW SIMULATOR */}
+        <TabsContent value="interview-sim" className="space-y-4">
+          <ComplianceInterviewSimulator
+            moduleId="isps-security"
+            moduleName="ISPS Code"
+            standardContext="ISPS Code verification audit - Ship and Port Facility Security as per SOLAS Chapter XI-2. Focus on SSP implementation, Security Levels 1-3, Declaration of Security, access control, cybersecurity, and drill readiness."
+          />
+        </TabsContent>
+
+        {/* ONE-CLICK AUDIT PREP */}
+        <TabsContent value="audit-prep" className="space-y-4">
+          <ComplianceOneClickAuditPrep
+            moduleId="isps-security"
+            moduleName="ISPS Code"
           />
         </TabsContent>
 
