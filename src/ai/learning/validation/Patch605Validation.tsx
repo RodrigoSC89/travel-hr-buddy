@@ -137,7 +137,7 @@ export function Patch605Validation() {
             {isLearning ? "Learning..." : "Run Learning Loop"}
           </Button>
           {events.length > 0 && (
-            <Button onClick={exportReport} variant="outline" size="icon">
+            <Button onClick={exportReport} variant="outline" size="icon" aria-label="Exportar relatório" title="Exportar">
               <Download className="h-4 w-4" />
             </Button>
           )}

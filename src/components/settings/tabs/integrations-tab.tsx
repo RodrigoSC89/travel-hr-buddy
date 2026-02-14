@@ -93,7 +93,7 @@ export const IntegrationsTab: React.FC<IntegrationsTabProps> = ({
       description: "Backend e banco de dados",
       icon: "⚡",
       status: "connected",
-      required: ["url", "anon_key", "service_role_key"]
+      required: ["url", "anon_key"]
     }
   ];
 
