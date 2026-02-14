@@ -15,8 +15,10 @@ export const useHighContrastTheme = () => {
     
     if (isHighContrast) {
       root.classList.add("high-contrast");
+      root.setAttribute("data-high-contrast", "true");
     } else {
       root.classList.remove("high-contrast");
+      root.removeAttribute("data-high-contrast");
     }
     
     localStorage.setItem("nautilus-high-contrast", String(isHighContrast));

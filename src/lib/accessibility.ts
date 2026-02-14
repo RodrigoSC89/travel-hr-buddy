@@ -49,6 +49,20 @@ export function createSkipLink(): HTMLAnchorElement {
 
 // Announce to screen readers
 export function announce(message: string, priority: 'polite' | 'assertive' = 'polite'): void {
+  // Use persistent ARIA live regions from AccessibilityProvider when available
+  const regionId = priority === 'assertive' ? 'aria-live-assertive' : 'aria-live-polite';
+  const persistentRegion = document.getElementById(regionId);
+  
+  if (persistentRegion) {
+    persistentRegion.textContent = '';
+    // Force reflow so screen readers detect the change
+    void persistentRegion.offsetHeight;
+    persistentRegion.textContent = message;
+    setTimeout(() => { persistentRegion.textContent = ''; }, 3000);
+    return;
+  }
+
+  // Fallback: create ephemeral element
   const announcement = document.createElement('div');
   announcement.setAttribute('role', 'status');
   announcement.setAttribute('aria-live', priority);
