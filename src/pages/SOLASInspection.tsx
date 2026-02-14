@@ -1,17 +1,40 @@
 /**
  * SOLAS/LSA/FFE Inspection Page
  * Safety of Life at Sea + Life-Saving Appliances + Fire-Fighting Equipment
+ * Enhanced with 8 AI-powered compliance tools
  */
 import type { FC } from 'react';
-import { useState } from 'react';
+import { useState, Suspense, lazy } from 'react';
 import { ModulePageWrapper } from '@/components/ui/module-page-wrapper';
 import { ModuleHeader } from '@/components/ui/module-header';
-import { Ship, FileCheck, Brain, AlertTriangle, CheckCircle2, Flame, LifeBuoy, ShieldCheck, Clock, Calendar, BarChart3 } from 'lucide-react';
+import { Ship, FileCheck, Brain, AlertTriangle, CheckCircle2, Flame, LifeBuoy, ShieldCheck, Clock, Calendar, BarChart3, Sparkles, Search, MessageSquare, Zap, Globe, ClipboardCheck, FileSearch } from 'lucide-react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Progress } from '@/components/ui/progress';
+import { Skeleton } from '@/components/ui/skeleton';
+
+// Lazy load AI components
+const ComplianceSGIAutoEvidence = lazy(() => import('@/components/compliance/ai/ComplianceSGIAutoEvidence').then(m => ({ default: m.ComplianceSGIAutoEvidence })));
+const ComplianceGapAnalyzer = lazy(() => import('@/components/compliance/ai/ComplianceGapAnalyzer').then(m => ({ default: m.ComplianceGapAnalyzer })));
+const ComplianceInterviewSimulator = lazy(() => import('@/components/compliance/ai/ComplianceInterviewSimulator').then(m => ({ default: m.ComplianceInterviewSimulator })));
+const ComplianceOneClickAuditPrep = lazy(() => import('@/components/compliance/ai/ComplianceOneClickAuditPrep').then(m => ({ default: m.ComplianceOneClickAuditPrep })));
+const ComplianceAutoChecklistGenerator = lazy(() => import('@/components/compliance/ai/ComplianceAutoChecklistGenerator').then(m => ({ default: m.ComplianceAutoChecklistGenerator })));
+const ComplianceDocCrossReference = lazy(() => import('@/components/compliance/ai/ComplianceDocCrossReference').then(m => ({ default: m.ComplianceDocCrossReference })));
+const ComplianceTimeline = lazy(() => import('@/components/compliance/ai/ComplianceTimeline').then(m => ({ default: m.ComplianceTimeline })));
+const ComplianceRegulatoryChangeTracker = lazy(() => import('@/components/compliance/ai/ComplianceRegulatoryChangeTracker').then(m => ({ default: m.ComplianceRegulatoryChangeTracker })));
+
+const LoadingFallback = () => <div className="space-y-4"><Skeleton className="h-8 w-64" /><Skeleton className="h-64" /></div>;
+
+const SOLAS_CHECKLIST_ITEMS = [
+  { id: "LSA-1", name: "Life-Saving Appliances (LSA)", description: "SOLAS Ch.III - Lifeboats, liferafts, lifejackets, immersion suits" },
+  { id: "FFE-1", name: "Fire-Fighting Equipment (FFE)", description: "SOLAS Ch.II-2 - Extinguishers, fire mains, detection systems" },
+  { id: "NAV-1", name: "Navigation Equipment", description: "SOLAS Ch.V - ECDIS, radar, AIS, compass, echo sounder" },
+  { id: "GMDSS-1", name: "Radio Equipment (GMDSS)", description: "SOLAS Ch.IV - VHF, MF/HF, EPIRB, SART, Navtex" },
+  { id: "STRUCT-1", name: "Structural Fire Protection", description: "SOLAS Ch.II-2 - Fire divisions, insulation, means of escape" },
+  { id: "DRILL-1", name: "Safety Drills & Musters", description: "SOLAS Ch.III Reg.19 - Abandon ship, fire, man overboard drills" },
+];
 
 const SOLASInspection: FC = () => {
   const [activeTab, setActiveTab] = useState('dashboard');
@@ -49,15 +72,22 @@ const SOLASInspection: FC = () => {
       />
 
       <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
-        <TabsList className="grid w-full grid-cols-4 lg:w-auto lg:inline-grid">
+        <TabsList className="flex-wrap">
           <TabsTrigger value="dashboard">Dashboard</TabsTrigger>
           <TabsTrigger value="equipment">Equipment</TabsTrigger>
           <TabsTrigger value="drills">Drills</TabsTrigger>
           <TabsTrigger value="certificates">Certificates</TabsTrigger>
+          <TabsTrigger value="sgi-evidence" className="gap-1"><Sparkles className="h-3 w-3" />SGI Evidence</TabsTrigger>
+          <TabsTrigger value="gap-analyzer" className="gap-1"><Search className="h-3 w-3" />Gap Analyzer</TabsTrigger>
+          <TabsTrigger value="interview-sim" className="gap-1"><MessageSquare className="h-3 w-3" />Simulador</TabsTrigger>
+          <TabsTrigger value="audit-prep" className="gap-1"><Zap className="h-3 w-3" />Audit Prep</TabsTrigger>
+          <TabsTrigger value="checklist-gen" className="gap-1"><ClipboardCheck className="h-3 w-3" />Checklist IA</TabsTrigger>
+          <TabsTrigger value="doc-crossref" className="gap-1"><FileSearch className="h-3 w-3" />Cross-Ref</TabsTrigger>
+          <TabsTrigger value="timeline" className="gap-1"><Clock className="h-3 w-3" />Timeline</TabsTrigger>
+          <TabsTrigger value="reg-tracker" className="gap-1"><Globe className="h-3 w-3" />Regulatório</TabsTrigger>
         </TabsList>
 
         <TabsContent value="dashboard" className="space-y-6">
-          {/* KPI Cards */}
           <div className="grid gap-4 md:grid-cols-4">
             <Card>
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
@@ -92,7 +122,7 @@ const SOLASInspection: FC = () => {
             <Card>
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                 <CardTitle className="text-sm font-medium">Upcoming Drills</CardTitle>
-                <Calendar className="h-4 w-4 text-info" />
+                <Calendar className="h-4 w-4 text-primary" />
               </CardHeader>
               <CardContent>
                 <div className="text-2xl font-bold">{upcomingDrills.length}</div>
@@ -101,7 +131,6 @@ const SOLASInspection: FC = () => {
             </Card>
           </div>
 
-          {/* Category Cards */}
           <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
             {solasCategories.map((category) => {
               const CategoryIcon = category.icon;
@@ -124,9 +153,7 @@ const SOLASInspection: FC = () => {
                       <div className="flex justify-between text-xs text-muted-foreground pt-2">
                         <span>{category.compliant}/{category.items} items</span>
                         {category.expiring > 0 && (
-                        <Badge variant="outline" className="text-warning">
-                            {category.expiring} expiring
-                          </Badge>
+                          <Badge variant="outline" className="text-warning">{category.expiring} expiring</Badge>
                         )}
                       </div>
                     </div>
@@ -144,10 +171,7 @@ const SOLASInspection: FC = () => {
                 <CardTitle>Equipment Inventory</CardTitle>
                 <CardDescription>SOLAS-regulated safety equipment across fleet</CardDescription>
               </div>
-              <Button>
-                <FileCheck className="h-4 w-4 mr-2" />
-                Add Equipment
-              </Button>
+              <Button><FileCheck className="h-4 w-4 mr-2" />Add Equipment</Button>
             </CardHeader>
             <CardContent>
               <div className="text-center py-8 text-muted-foreground">
@@ -165,17 +189,14 @@ const SOLASInspection: FC = () => {
                 <CardTitle>Safety Drills</CardTitle>
                 <CardDescription>SOLAS-mandated drills and exercises</CardDescription>
               </div>
-              <Button>
-                <Calendar className="h-4 w-4 mr-2" />
-                Schedule Drill
-              </Button>
+              <Button><Calendar className="h-4 w-4 mr-2" />Schedule Drill</Button>
             </CardHeader>
             <CardContent>
               <div className="space-y-4">
                 {upcomingDrills.map((drill) => (
                   <div key={drill.type} className="flex items-center justify-between p-4 border rounded-lg">
                     <div className="flex items-center gap-4">
-                      <div className={`p-2 rounded ${drill.type.includes('Fire') ? 'bg-destructive/10 text-destructive' : 'bg-info/10 text-info'}`}>
+                      <div className={`p-2 rounded ${drill.type.includes('Fire') ? 'bg-destructive/10 text-destructive' : 'bg-primary/10 text-primary'}`}>
                         {drill.type.includes('Fire') ? <Flame className="h-5 w-5" /> : <LifeBuoy className="h-5 w-5" />}
                       </div>
                       <div>
@@ -186,9 +207,7 @@ const SOLASInspection: FC = () => {
                     <div className="flex items-center gap-4">
                       <div className="text-right">
                         <p className="text-sm font-medium">{drill.date}</p>
-                        <Badge variant={drill.status === 'scheduled' ? 'default' : 'outline'}>
-                          {drill.status}
-                        </Badge>
+                        <Badge variant={drill.status === 'scheduled' ? 'default' : 'outline'}>{drill.status}</Badge>
                       </div>
                       <Button variant="ghost" size="sm">Details</Button>
                     </div>
@@ -214,6 +233,34 @@ const SOLASInspection: FC = () => {
             </CardContent>
           </Card>
         </TabsContent>
+
+        {/* AI-POWERED TABS */}
+        <Suspense fallback={<LoadingFallback />}>
+          <TabsContent value="sgi-evidence" className="space-y-4">
+            <ComplianceSGIAutoEvidence moduleId="solas" moduleName="SOLAS/LSA/FFE" checklistItems={SOLAS_CHECKLIST_ITEMS} />
+          </TabsContent>
+          <TabsContent value="gap-analyzer" className="space-y-4">
+            <ComplianceGapAnalyzer moduleId="solas" moduleName="SOLAS/LSA/FFE" standards={["SOLAS Ch.II-2", "SOLAS Ch.III", "SOLAS Ch.IV", "SOLAS Ch.V", "FSS Code", "LSA Code"]} />
+          </TabsContent>
+          <TabsContent value="interview-sim" className="space-y-4">
+            <ComplianceInterviewSimulator moduleId="solas" moduleName="SOLAS/LSA/FFE" standardContext="SOLAS inspection covering Life-Saving Appliances (Ch.III), Fire Safety (Ch.II-2), Navigation (Ch.V), and Radio/GMDSS (Ch.IV). Focus on equipment readiness, drill execution, and certificate validity." />
+          </TabsContent>
+          <TabsContent value="audit-prep" className="space-y-4">
+            <ComplianceOneClickAuditPrep moduleId="solas" moduleName="SOLAS/LSA/FFE" />
+          </TabsContent>
+          <TabsContent value="checklist-gen" className="space-y-4">
+            <ComplianceAutoChecklistGenerator moduleId="solas" moduleName="SOLAS/LSA/FFE" />
+          </TabsContent>
+          <TabsContent value="doc-crossref" className="space-y-4">
+            <ComplianceDocCrossReference moduleId="solas" moduleName="SOLAS/LSA/FFE" />
+          </TabsContent>
+          <TabsContent value="timeline" className="space-y-4">
+            <ComplianceTimeline moduleId="solas" moduleName="SOLAS/LSA/FFE" />
+          </TabsContent>
+          <TabsContent value="reg-tracker" className="space-y-4">
+            <ComplianceRegulatoryChangeTracker moduleId="solas" moduleName="SOLAS/LSA/FFE" />
+          </TabsContent>
+        </Suspense>
       </Tabs>
     </ModulePageWrapper>
   );
