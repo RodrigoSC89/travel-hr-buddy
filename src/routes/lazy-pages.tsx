@@ -259,6 +259,7 @@ export const AdminReportsLogs = lazy(() => import("@/pages/admin/reports/logs"))
 export const AdminReportsRestoreAnalytics = lazy(() => import("@/pages/admin/reports/restore-analytics"));
 export const AdminCollaboration = lazy(() => import("@/pages/admin/collaboration"));
 export const AdminDashboard = lazy(() => import("@/pages/admin/dashboard"));
+export const AdminBI = lazy(() => import("@/pages/admin/bi"));
 export const AdminChecklistsDashboard = lazy(() => import("@/pages/admin/checklists-dashboard"));
 export const AdminApiTester = lazy(() => import("@/pages/admin/api-tester"));
 
