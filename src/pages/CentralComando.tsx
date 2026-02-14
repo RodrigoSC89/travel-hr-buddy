@@ -12,7 +12,7 @@
  * - /central-comando/config (Configurações)
  */
 
-import { useState, useEffect, useCallback, useMemo } from "react";
+import React, { useState, useEffect, useCallback, useMemo, Suspense } from "react";
 import { Routes, Route, Navigate, useNavigate, useLocation } from "react-router-dom";
 import { Helmet } from "react-helmet-async";
 import { motion, AnimatePresence } from "framer-motion";
@@ -34,14 +34,14 @@ import {
 // Tour guiado
 import { GuidedTour, tourStyles } from "@/components/onboarding/GuidedTour";
 
-// Seções do módulo unificado (removed - module deleted)
-const VisaoGeralSection = (_props: Record<string, unknown>) => <div className="text-center py-12 text-muted-foreground">Visão Geral em manutenção.</div>;
-const OperacoesSection = (_props: Record<string, unknown>) => <div className="text-center py-12 text-muted-foreground">Operações em manutenção.</div>;
-const ExecutivoSection = (_props: Record<string, unknown>) => <div className="text-center py-12 text-muted-foreground">Executivo em manutenção.</div>;
-const IASection = () => <div className="text-center py-12 text-muted-foreground">IA em manutenção.</div>;
-const AlertasSection = (_props: Record<string, unknown>) => <div className="text-center py-12 text-muted-foreground">Alertas em manutenção.</div>;
-const ConfigSection = () => <div className="text-center py-12 text-muted-foreground">Configurações em manutenção.</div>;
-const ResilienciaSection = () => <div className="text-center py-12 text-muted-foreground">Resiliência em manutenção.</div>;
+// Seções do módulo unificado - lazy loaded
+const VisaoGeralSection = React.lazy(() => import("@/components/dashboard/enhanced-unified-dashboard"));
+const OperacoesSection = React.lazy(() => import("@/components/operations/OperationsCommandCenter"));
+const ExecutivoSection = React.lazy(() => import("@/components/dashboard/executive-dashboard").then(m => ({ default: m.ExecutiveDashboard })));
+const IASection = React.lazy(() => import("@/components/ai/AIObservabilityDashboard"));
+const AlertasSection = React.lazy(() => import("@/components/fleet/intelligent-alerts"));
+const ConfigSection = React.lazy(() => import("@/pages/Settings"));
+const ResilienciaSection = React.lazy(() => import("@/components/dashboard/organization-health-check").then(m => ({ default: m.OrganizationHealthCheck })));
 
 // Hooks de IA (removed)
 const useUnifiedCommandAI = () => ({ messages: [] as Array<{role: string; content: string}>, sendMessage: async (_msg: string) => {}, isLoading: false, clearMessages: () => {}, isConnected: false });
@@ -438,31 +438,45 @@ function CentralComandoContent() {
                   transition={{ duration: 0.3 }}
                 >
                   <TabsContent value="visao-geral" className="mt-0 focus-visible:outline-none">
-                    <VisaoGeralSection systemStatus={systemStatus} isLoading={isLoading} onNavigate={handleTabChange} />
+                    <Suspense fallback={<div className="py-12 text-center text-muted-foreground">Carregando...</div>}>
+                      <VisaoGeralSection />
+                    </Suspense>
                   </TabsContent>
 
                   <TabsContent value="operacoes" className="mt-0 focus-visible:outline-none">
-                    <OperacoesSection systemStatus={systemStatus} isLoading={isLoading} />
+                    <Suspense fallback={<div className="py-12 text-center text-muted-foreground">Carregando...</div>}>
+                      <OperacoesSection />
+                    </Suspense>
                   </TabsContent>
 
                   <TabsContent value="executivo" className="mt-0 focus-visible:outline-none">
-                    <ExecutivoSection systemStatus={systemStatus} isLoading={isLoading} />
+                    <Suspense fallback={<div className="py-12 text-center text-muted-foreground">Carregando...</div>}>
+                      <ExecutivoSection />
+                    </Suspense>
                   </TabsContent>
 
                   <TabsContent value="ia" className="mt-0 focus-visible:outline-none">
-                    <IASection />
+                    <Suspense fallback={<div className="py-12 text-center text-muted-foreground">Carregando...</div>}>
+                      <IASection />
+                    </Suspense>
                   </TabsContent>
 
                   <TabsContent value="resiliencia" className="mt-0 focus-visible:outline-none">
-                    <ResilienciaSection />
+                    <Suspense fallback={<div className="py-12 text-center text-muted-foreground">Carregando...</div>}>
+                      <ResilienciaSection />
+                    </Suspense>
                   </TabsContent>
 
                   <TabsContent value="alertas" className="mt-0 focus-visible:outline-none">
-                    <AlertasSection alerts={alerts} setAlerts={setAlerts} />
+                    <Suspense fallback={<div className="py-12 text-center text-muted-foreground">Carregando...</div>}>
+                      <AlertasSection />
+                    </Suspense>
                   </TabsContent>
 
                   <TabsContent value="config" className="mt-0 focus-visible:outline-none">
-                    <ConfigSection />
+                    <Suspense fallback={<div className="py-12 text-center text-muted-foreground">Carregando...</div>}>
+                      <ConfigSection />
+                    </Suspense>
                   </TabsContent>
                 </motion.div>
               </AnimatePresence>
