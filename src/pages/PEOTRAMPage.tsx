@@ -23,13 +23,17 @@ import { ComplianceEvidenceGenerator } from "@/components/compliance/ComplianceE
 import { PeotramElementSelector } from "@/components/peotram/PeotramElementSelector";
 import { PeotramElementChecklist } from "@/components/peotram/PeotramElementChecklist";
 import { PeotramAutoEvidenceEngine } from "@/components/peotram/PeotramAutoEvidenceEngine";
+import { PeotramSmartScoring } from "@/components/peotram/PeotramSmartScoring";
+import { PeotramNCAutoGenerator } from "@/components/peotram/PeotramNCAutoGenerator";
+import { PeotramReportGenerator } from "@/components/peotram/PeotramReportGenerator";
+import { PeotramAuditWizard } from "@/components/peotram/PeotramAuditWizard";
 import { PEOTRAM_ELEMENTS } from "@/data/peotram-elements-data";
 import { useMaritimeActions } from "@/hooks/useMaritimeActions";
 import { toast } from "sonner";
 import {
   Shield, Target, FileCheck, AlertTriangle, TrendingUp, CheckCircle,
   Plus, RefreshCw, Download, BarChart3, Activity, ClipboardCheck,
-  Anchor, Flame, Siren, Brain, Zap, Mic, Sparkles,
+  Anchor, Flame, Siren, Brain, Zap, Mic, Sparkles, Wand2, FileText,
 } from "lucide-react";
 
 const PEOTRAMPage = () => {
@@ -96,7 +100,6 @@ const PEOTRAMPage = () => {
     toast.success("Dados PEOTRAM atualizados");
   };
 
-  // Elements for evidence generator
   const evidenceElements = PEOTRAM_ELEMENTS.map(e => ({ id: e.id, name: `${e.sigla} - ${e.name}` }));
 
   return (
@@ -120,28 +123,31 @@ const PEOTRAMPage = () => {
             <BarChart3 className="h-3.5 w-3.5" /> Visão Geral
           </TabsTrigger>
           <TabsTrigger value="checklist" className="gap-1.5">
-            <ClipboardCheck className="h-3.5 w-3.5" /> Checklist 13 Elementos
+            <ClipboardCheck className="h-3.5 w-3.5" /> Checklist
+          </TabsTrigger>
+          <TabsTrigger value="smart-scoring" className="gap-1.5">
+            <Brain className="h-3.5 w-3.5" /> Scoring IA
           </TabsTrigger>
           <TabsTrigger value="auto-evidence" className="gap-1.5">
-            <Zap className="h-3.5 w-3.5" /> Evidências Auto IA
+            <Zap className="h-3.5 w-3.5" /> Evidências Auto
           </TabsTrigger>
-          <TabsTrigger value="audits" className="gap-1.5">
-            <FileCheck className="h-3.5 w-3.5" /> Auditorias
+          <TabsTrigger value="nc-generator" className="gap-1.5">
+            <AlertTriangle className="h-3.5 w-3.5" /> Gerador NCs
           </TabsTrigger>
-          <TabsTrigger value="ncs" className="gap-1.5">
-            <AlertTriangle className="h-3.5 w-3.5" /> Não Conformidades
+          <TabsTrigger value="report" className="gap-1.5">
+            <FileText className="h-3.5 w-3.5" /> Relatório
           </TabsTrigger>
-          <TabsTrigger value="actions" className="gap-1.5">
-            <Target className="h-3.5 w-3.5" /> Planos de Ação
-          </TabsTrigger>
-          <TabsTrigger value="ai-evidence" className="gap-1.5">
-            <Sparkles className="h-3.5 w-3.5" /> IA Evidências
+          <TabsTrigger value="audit-wizard" className="gap-1.5">
+            <Wand2 className="h-3.5 w-3.5" /> Wizard Prep
           </TabsTrigger>
           <TabsTrigger value="ai-voice" className="gap-1.5">
-            <Mic className="h-3.5 w-3.5" /> Assistente Voz
+            <Mic className="h-3.5 w-3.5" /> Voz IA
           </TabsTrigger>
           <TabsTrigger value="ai-predictive" className="gap-1.5">
-            <TrendingUp className="h-3.5 w-3.5" /> IA Preditiva
+            <TrendingUp className="h-3.5 w-3.5" /> Preditiva
+          </TabsTrigger>
+          <TabsTrigger value="ncs" className="gap-1.5">
+            <AlertTriangle className="h-3.5 w-3.5" /> NCs
           </TabsTrigger>
           <TabsTrigger value="monitor" className="gap-1.5">
             <Activity className="h-3.5 w-3.5" /> Monitor
@@ -150,7 +156,6 @@ const PEOTRAMPage = () => {
 
         {/* ============ OVERVIEW ============ */}
         <TabsContent value="overview" className="space-y-6">
-          {/* Stats Row */}
           <div className="grid grid-cols-2 md:grid-cols-5 gap-3">
             <Card className="md:col-span-2 bg-gradient-to-br from-warning/10 to-warning/5 border-warning/20">
               <CardContent className="pt-5">
@@ -172,86 +177,51 @@ const PEOTRAMPage = () => {
                 </div>
               </CardContent>
             </Card>
-
             <Card>
               <CardContent className="pt-5">
-                <div className="flex items-center gap-2 mb-1">
-                  <FileCheck className="h-4 w-4 text-primary" />
-                  <p className="text-xs text-muted-foreground">Auditorias</p>
-                </div>
+                <div className="flex items-center gap-2 mb-1"><FileCheck className="h-4 w-4 text-primary" /><p className="text-xs text-muted-foreground">Auditorias</p></div>
                 <p className="text-2xl font-bold">{audits.length}</p>
                 <p className="text-xs text-muted-foreground">{completedAudits} concluídas</p>
               </CardContent>
             </Card>
-
             <Card>
               <CardContent className="pt-5">
-                <div className="flex items-center gap-2 mb-1">
-                  <AlertTriangle className="h-4 w-4 text-destructive" />
-                  <p className="text-xs text-muted-foreground">NCs Abertas</p>
-                </div>
+                <div className="flex items-center gap-2 mb-1"><AlertTriangle className="h-4 w-4 text-destructive" /><p className="text-xs text-muted-foreground">NCs Abertas</p></div>
                 <p className="text-2xl font-bold text-destructive">{openNCs}</p>
                 <p className="text-xs text-muted-foreground">{nonConformities.length} total</p>
               </CardContent>
             </Card>
-
             <Card>
               <CardContent className="pt-5">
-                <div className="flex items-center gap-2 mb-1">
-                  <Target className="h-4 w-4 text-warning" />
-                  <p className="text-xs text-muted-foreground">Ações</p>
-                </div>
+                <div className="flex items-center gap-2 mb-1"><Target className="h-4 w-4 text-warning" /><p className="text-xs text-muted-foreground">Ações</p></div>
                 <p className="text-2xl font-bold">{pendingActions}</p>
                 <p className="text-xs text-muted-foreground">pendentes</p>
               </CardContent>
             </Card>
           </div>
 
-          {/* Element Grid */}
           <Card>
             <CardHeader className="pb-3">
-              <CardTitle className="text-lg flex items-center gap-2">
-                <Target className="h-5 w-5 text-warning" />
-                13 Elementos PEOTRAM
-              </CardTitle>
+              <CardTitle className="text-lg flex items-center gap-2"><Target className="h-5 w-5 text-warning" />13 Elementos PEOTRAM</CardTitle>
               <CardDescription>Clique para abrir o checklist detalhado de cada elemento</CardDescription>
             </CardHeader>
             <CardContent>
-              <PeotramElementSelector
-                elements={PEOTRAM_ELEMENTS}
-                selectedElementId={null}
-                onSelectElement={(id) => {
-                  setSelectedElementId(id);
-                  setActiveTab("checklist");
-                }}
-              />
+              <PeotramElementSelector elements={PEOTRAM_ELEMENTS} selectedElementId={null} onSelectElement={(id) => { setSelectedElementId(id); setActiveTab("checklist"); }} />
             </CardContent>
           </Card>
 
-          {/* Critical Elements Highlight */}
           <Card className="border-destructive/20">
             <CardHeader className="pb-3">
-              <CardTitle className="text-lg flex items-center gap-2">
-                <AlertTriangle className="h-5 w-5 text-destructive" />
-                Elementos Críticos (Maior Peso)
-              </CardTitle>
+              <CardTitle className="text-lg flex items-center gap-2"><AlertTriangle className="h-5 w-5 text-destructive" />Elementos Críticos</CardTitle>
             </CardHeader>
             <CardContent>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                 {criticalElements.map(el => (
-                  <div
-                    key={el.id}
-                    className="flex items-center gap-3 p-3 border border-destructive/20 rounded-lg hover:bg-destructive/5 cursor-pointer transition-colors"
-                    onClick={() => { setSelectedElementId(el.id); setActiveTab("checklist"); }}
-                  >
-                    <div className="w-10 h-10 rounded-full bg-destructive/10 flex items-center justify-center text-destructive font-bold">
-                      {el.id}
-                    </div>
+                  <div key={el.id} className="flex items-center gap-3 p-3 border border-destructive/20 rounded-lg hover:bg-destructive/5 cursor-pointer transition-colors" onClick={() => { setSelectedElementId(el.id); setActiveTab("checklist"); }}>
+                    <div className="w-10 h-10 rounded-full bg-destructive/10 flex items-center justify-center text-destructive font-bold">{el.id}</div>
                     <div className="flex-1">
                       <p className="font-medium text-sm">{el.name}</p>
-                      <p className="text-xs text-muted-foreground">
-                        {el.subelements.reduce((a, s) => a + s.items.length, 0)} itens • Peso: {el.weightPercentage}%
-                      </p>
+                      <p className="text-xs text-muted-foreground">{el.subelements.reduce((a, s) => a + s.items.length, 0)} itens • Peso: {el.weightPercentage}%</p>
                     </div>
                     <Badge variant="destructive" className="text-xs">CRÍTICO</Badge>
                   </div>
@@ -259,81 +229,22 @@ const PEOTRAMPage = () => {
               </div>
             </CardContent>
           </Card>
-
-          {/* Recent Audits */}
-          <Card>
-            <CardHeader className="pb-3">
-              <div className="flex items-center justify-between">
-                <CardTitle className="text-lg flex items-center gap-2">
-                  <Activity className="h-5 w-5 text-primary" />
-                  Auditorias Recentes
-                </CardTitle>
-                <Button size="sm" variant="outline" onClick={handleRefreshAll}>
-                  <RefreshCw className="h-4 w-4 mr-1" /> Atualizar
-                </Button>
-              </div>
-            </CardHeader>
-            <CardContent>
-              {audits.length === 0 ? (
-                <div className="text-center py-6 text-muted-foreground">
-                  <FileCheck className="h-8 w-8 mx-auto mb-2 opacity-40" />
-                  <p className="text-sm">Nenhuma auditoria PEOTRAM registrada.</p>
-                </div>
-              ) : (
-                <ScrollArea className="h-[180px]">
-                  <div className="space-y-2">
-                    {audits.slice(0, 8).map((audit: any) => (
-                      <div key={audit.id} className="flex items-center justify-between p-3 border rounded-lg hover:bg-muted/50 transition-colors">
-                        <div>
-                          <p className="font-medium text-sm">{audit.audit_number || "Auditoria"}</p>
-                          <p className="text-xs text-muted-foreground">{audit.scope || audit.audit_type} • {new Date(audit.created_at).toLocaleDateString("pt-BR")}</p>
-                        </div>
-                        <Badge variant={audit.status === "completed" ? "default" : "secondary"}>{audit.status}</Badge>
-                      </div>
-                    ))}
-                  </div>
-                </ScrollArea>
-              )}
-            </CardContent>
-          </Card>
         </TabsContent>
 
-        {/* ============ CHECKLIST 13 ELEMENTS ============ */}
+        {/* ============ CHECKLIST ============ */}
         <TabsContent value="checklist" className="space-y-4">
-          {/* Audit context */}
           <Card>
             <CardContent className="pt-4 pb-3">
               <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
-                <div className="space-y-1">
-                  <Label className="text-xs">Embarcação</Label>
-                  <Input value={vesselName} onChange={e => setVesselName(e.target.value)} placeholder="Nome da embarcação" className="h-8 text-sm" />
-                </div>
-                <div className="space-y-1">
-                  <Label className="text-xs">Auditor</Label>
-                  <Input value={auditorName} onChange={e => setAuditorName(e.target.value)} placeholder="Nome do auditor" className="h-8 text-sm" />
-                </div>
-                <div className="space-y-1">
-                  <Label className="text-xs">Data da Auditoria</Label>
-                  <Input type="date" defaultValue={new Date().toISOString().split("T")[0]} className="h-8 text-sm" />
-                </div>
+                <div className="space-y-1"><Label className="text-xs">Embarcação</Label><Input value={vesselName} onChange={e => setVesselName(e.target.value)} placeholder="Nome da embarcação" className="h-8 text-sm" /></div>
+                <div className="space-y-1"><Label className="text-xs">Auditor</Label><Input value={auditorName} onChange={e => setAuditorName(e.target.value)} placeholder="Nome do auditor" className="h-8 text-sm" /></div>
+                <div className="space-y-1"><Label className="text-xs">Data da Auditoria</Label><Input type="date" defaultValue={new Date().toISOString().split("T")[0]} className="h-8 text-sm" /></div>
               </div>
             </CardContent>
           </Card>
-
-          {/* Element Selector */}
-          <PeotramElementSelector
-            elements={PEOTRAM_ELEMENTS}
-            selectedElementId={selectedElementId}
-            onSelectElement={setSelectedElementId}
-          />
-
-          {/* Element Checklist */}
+          <PeotramElementSelector elements={PEOTRAM_ELEMENTS} selectedElementId={selectedElementId} onSelectElement={setSelectedElementId} />
           {selectedElement ? (
-            <PeotramElementChecklist
-              element={selectedElement}
-              vesselName={vesselName}
-              auditorName={auditorName}
-            />
+            <PeotramElementChecklist element={selectedElement} vesselName={vesselName} auditorName={auditorName} />
           ) : (
             <Card className="border-dashed">
               <CardContent className="py-12 text-center text-muted-foreground">
@@ -345,54 +256,36 @@ const PEOTRAMPage = () => {
           )}
         </TabsContent>
 
-        {/* ============ AUTO EVIDENCE ENGINE ============ */}
+        {/* ============ SMART SCORING ============ */}
+        <TabsContent value="smart-scoring" className="space-y-4">
+          <PeotramSmartScoring />
+        </TabsContent>
+
+        {/* ============ AUTO EVIDENCE ============ */}
         <TabsContent value="auto-evidence" className="space-y-4">
           <PeotramAutoEvidenceEngine />
         </TabsContent>
 
-        {/* ============ AUDITS ============ */}
-        <TabsContent value="audits" className="space-y-4">
-          <Card>
-            <CardHeader>
-              <div className="flex items-center justify-between">
-                <CardTitle className="flex items-center gap-2">
-                  <FileCheck className="h-5 w-5" /> Auditorias PEOTRAM
-                </CardTitle>
-                <Button size="sm" variant="outline" onClick={() => handleGenerateReport("PEOTRAM")}>
-                  <Download className="h-4 w-4 mr-1" /> Relatório ANP
-                </Button>
-              </div>
-            </CardHeader>
-            <CardContent>
-              {audits.length === 0 ? (
-                <div className="text-center py-8 text-muted-foreground">
-                  <FileCheck className="h-10 w-10 mx-auto mb-2 opacity-40" />
-                  <p>Nenhuma auditoria PEOTRAM registrada.</p>
-                </div>
-              ) : (
-                <div className="space-y-3">
-                  {audits.map((audit: any) => (
-                    <div key={audit.id} className="flex items-center justify-between p-4 border rounded-lg hover:bg-muted/50 transition-colors">
-                      <div>
-                        <p className="font-medium">{audit.audit_number || "Auditoria"}</p>
-                        <p className="text-sm text-muted-foreground">{audit.scope || audit.audit_type} • {new Date(audit.created_at).toLocaleDateString("pt-BR")}</p>
-                      </div>
-                      <Badge variant={audit.status === "completed" ? "default" : "secondary"}>{audit.status}</Badge>
-                    </div>
-                  ))}
-                </div>
-              )}
-            </CardContent>
-          </Card>
+        {/* ============ NC GENERATOR ============ */}
+        <TabsContent value="nc-generator" className="space-y-4">
+          <PeotramNCAutoGenerator />
+        </TabsContent>
+
+        {/* ============ REPORT GENERATOR ============ */}
+        <TabsContent value="report" className="space-y-4">
+          <PeotramReportGenerator />
+        </TabsContent>
+
+        {/* ============ AUDIT WIZARD ============ */}
+        <TabsContent value="audit-wizard" className="space-y-4">
+          <PeotramAuditWizard />
         </TabsContent>
 
         {/* ============ NCs ============ */}
         <TabsContent value="ncs" className="space-y-4">
           <Card>
             <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <AlertTriangle className="h-5 w-5 text-destructive" /> Não Conformidades PEOTRAM
-              </CardTitle>
+              <CardTitle className="flex items-center gap-2"><AlertTriangle className="h-5 w-5 text-destructive" /> Não Conformidades PEOTRAM</CardTitle>
             </CardHeader>
             <CardContent>
               {nonConformities.length === 0 ? (
@@ -417,71 +310,22 @@ const PEOTRAMPage = () => {
           </Card>
         </TabsContent>
 
-        {/* ============ ACTION PLANS ============ */}
-        <TabsContent value="actions" className="space-y-4">
-          <Card>
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <Target className="h-5 w-5 text-primary" /> Planos de Ação PEOTRAM
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              {actionItems.length === 0 ? (
-                <div className="text-center py-8 text-muted-foreground">
-                  <ClipboardCheck className="h-10 w-10 mx-auto mb-2 opacity-40" />
-                  <p>Nenhum plano de ação registrado.</p>
-                </div>
-              ) : (
-                <div className="space-y-3">
-                  {actionItems.map((action: any) => (
-                    <div key={action.id} className="flex items-center justify-between p-4 border rounded-lg hover:bg-muted/50 transition-colors">
-                      <div className="flex-1">
-                        <p className="font-medium">{action.title}</p>
-                        <p className="text-sm text-muted-foreground">
-                          {action.assigned_to_name || "Sem responsável"} • {action.due_date ? new Date(action.due_date).toLocaleDateString("pt-BR") : "Sem prazo"}
-                        </p>
-                      </div>
-                      <div className="flex items-center gap-2">
-                        <Badge variant={action.priority === "high" ? "destructive" : "secondary"}>{action.priority || "normal"}</Badge>
-                        <Badge variant={action.status === "completed" ? "default" : "secondary"}>{action.status}</Badge>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              )}
-            </CardContent>
-          </Card>
-        </TabsContent>
-
-        {/* ============ AI EVIDENCE GENERATOR ============ */}
-        <TabsContent value="ai-evidence" className="space-y-4">
-          <ComplianceEvidenceGenerator
-            moduleId="peotram"
-            moduleName="PEOTRAM"
-            elements={evidenceElements}
-          />
-        </TabsContent>
-
         {/* ============ AI VOICE ============ */}
         <TabsContent value="ai-voice" className="space-y-4">
           <ComplianceVoiceChat
-            moduleId="peotram"
-            moduleName="PEOTRAM"
+            moduleId="peotram" moduleName="PEOTRAM"
             moduleDescription="Assistente de voz IA para auditoria PEOTRAM - 13 Elementos ANP/Petrobras"
             systemContext={`PEOTRAM é o Programa de Excelência Operacional em Transporte Marítimo da Petrobras com 13 elementos:
 1-LGR (Liderança), 2-CL (Conformidade Legal), 3-GR (Gestão de Riscos), 4-OP (Operação - CRÍTICO),
-5-ST (Saúde e Segurança do Trabalho - CRÍTICO), 6-MN (Manutenção - CRÍTICO), 7-GM (Gestão de Mudanças),
+5-ST (Saúde e Segurança do Trabalho), 6-MN (Manutenção - CRÍTICO), 7-GM (Gestão de Mudanças),
 8-AQ (Aquisição), 9-RH (Recursos Humanos), 10-GI (Gestão de Informação), 11-PE (Planejamento de Emergências - CRÍTICO),
 12-AI (Análise de Incidentes - CRÍTICO), 13-MC (Melhoria Contínua).
-Sistema de notas 0-4. Classificações NC: A (Crítica/10 dias), B (Grave/15 dias), C (Moderada/30 dias), D (Leve/60 dias).
-Normas: ISM Code, SOLAS, MARPOL, STCW, NRs (10,12,20,30,33,34,35,37), IMCA, N-2782, NORMAM.`}
+Sistema de notas 0-4. Classificações NC: A (Crítica/10 dias), B (Grave/15 dias), C (Moderada/30 dias), D (Leve/60 dias).`}
             suggestedQuestions={[
               "Quais são os elementos críticos do PEOTRAM?",
               "Como pontuar um item nota 3 vs nota 4?",
               "Quais NCs mais comuns no Elemento 4 (Operação)?",
               "Me ajude a preparar evidências para o Elemento 6 (Manutenção)",
-              "Qual a diferença entre NC tipo A, B, C e D?",
-              "Como preparar a autoavaliação 15 dias antes da auditoria?",
             ]}
           />
         </TabsContent>
@@ -489,14 +333,12 @@ Normas: ISM Code, SOLAS, MARPOL, STCW, NRs (10,12,20,30,33,34,35,37), IMCA, N-27
         {/* ============ AI PREDICTIVE ============ */}
         <TabsContent value="ai-predictive" className="space-y-4">
           <CompliancePredictiveAI
-            moduleId="peotram"
-            moduleName="PEOTRAM"
-            moduleContext="Programa de Excelência Operacional em Transporte Marítimo (13 Elementos ANP/Petrobras). Análise de conformidade, tendências de NCs por elemento, previsão de riscos operacionais e recomendações proativas para auditorias."
+            moduleId="peotram" moduleName="PEOTRAM"
+            moduleContext="Programa de Excelência Operacional em Transporte Marítimo (13 Elementos ANP/Petrobras)."
             riskAreas={[
               { name: "Liderança (LGR)", score: 95, trend: "up" },
               { name: "Operação (OP)", score: 78, trend: "down" },
               { name: "Manutenção (MN)", score: 82, trend: "stable" },
-              { name: "Saúde (ST)", score: 88, trend: "up" },
               { name: "Emergências (PE)", score: 85, trend: "stable" },
             ]}
           />
@@ -509,19 +351,18 @@ Normas: ISM Code, SOLAS, MARPOL, STCW, NRs (10,12,20,30,33,34,35,37), IMCA, N-27
       </Tabs>
 
       <ModuleActionButton
-        moduleId="peotram"
-        moduleName="PEOTRAM"
+        moduleId="peotram" moduleName="PEOTRAM"
         actions={[
           { id: "checklist", label: "Checklist", icon: <ClipboardCheck className="h-3 w-3" />, action: () => setActiveTab("checklist") },
+          { id: "smart-scoring", label: "Scoring IA", icon: <Brain className="h-3 w-3" />, action: () => setActiveTab("smart-scoring") },
           { id: "auto-evidence", label: "Evidências Auto", icon: <Zap className="h-3 w-3" />, action: () => setActiveTab("auto-evidence") },
-          { id: "ai-voice", label: "Assistente Voz", icon: <Mic className="h-3 w-3" />, action: () => setActiveTab("ai-voice") },
-          { id: "ai-predictive", label: "IA Preditiva", icon: <TrendingUp className="h-3 w-3" />, action: () => setActiveTab("ai-predictive") },
-          { id: "ncs", label: "NCs", icon: <AlertTriangle className="h-3 w-3" />, action: () => setActiveTab("ncs") },
+          { id: "nc-generator", label: "Gerador NCs", icon: <AlertTriangle className="h-3 w-3" />, action: () => setActiveTab("nc-generator") },
+          { id: "report", label: "Relatório", icon: <FileText className="h-3 w-3" />, action: () => setActiveTab("report") },
+          { id: "audit-wizard", label: "Wizard Prep", icon: <Wand2 className="h-3 w-3" />, action: () => setActiveTab("audit-wizard") },
         ]}
         quickActions={[
           { id: "refresh", label: "Atualizar", icon: <RefreshCw className="h-3 w-3" />, action: handleRefreshAll, shortcut: "F5" },
-          { id: "export", label: "Exportar ANP", icon: <Download className="h-3 w-3" />, action: () => handleExport("PEOTRAM") },
-          { id: "report", label: "Relatório", icon: <BarChart3 className="h-3 w-3" />, action: () => handleGenerateReport("PEOTRAM") },
+          { id: "export", label: "Exportar", icon: <Download className="h-3 w-3" />, action: () => handleExport("PEOTRAM") },
         ]}
       />
     </ModulePageWrapper>
