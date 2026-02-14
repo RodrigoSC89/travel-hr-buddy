@@ -47,9 +47,9 @@ const SecurityCenter = lazy(() => import('@/pages/SecurityCenter'));
 // 12 AUDITORIAS MARÍTIMAS COMPLETAS - ZERO SUPRESSÃO
 // ═══════════════════════════════════════════════════════════
 const PEODP = lazy(() => import('@/pages/PEODP'));
-const PEOTRAM = lazy(() => import('@/pages/PEODP'));
-const SafetyIMCAV2 = lazy(() => import('@/pages/PreOVIDInspection'));
-const ISPSSecurityV2 = lazy(() => import('@/pages/SecurityCenter'));
+const PEOTRAM = lazy(() => import('@/pages/PEOTRAMPage'));
+const SafetyIMCAV2 = lazy(() => import('@/pages/ISMCodePage'));
+const ISPSSecurityV2 = lazy(() => import('@/pages/ISPSSecurityPage'));
 const SOLASInspection = lazy(() => import('@/pages/SOLASInspection'));
 const WasteManagementPremium = lazy(() => import('@/pages/ESGEmissionsPremium'));
 const PreOVIDInspection = lazy(() => import('@/pages/PreOVIDInspection'));
