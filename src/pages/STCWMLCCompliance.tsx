@@ -21,10 +21,10 @@ import { useComplianceStats, useCrewCertifications, useSTCWCompetencies } from "
 import { useAuditAgentChat } from "@/hooks/useAuditAgentChat";
 import { toast } from "sonner";
 
-// Lazy load tier-1 components (removed - using fallback)
-const STCWCompetencyMatrix = lazy(() => Promise.resolve({ default: () => <div className="text-center py-8 text-muted-foreground">Matriz STCW em manutenção.</div> }));
-const SeaTimeCalculator = lazy(() => Promise.resolve({ default: () => <div className="text-center py-8 text-muted-foreground">Calculadora de tempo de mar em manutenção.</div> }));
-const MLCComplianceModule = lazy(() => Promise.resolve({ default: () => <div className="text-center py-8 text-muted-foreground">Módulo MLC em manutenção.</div> }));
+// Lazy load tier-1 components
+const STCWCompetencyMatrix = lazy(() => import("@/components/crew/STCWCompetencyMatrix").then(m => ({ default: m.STCWCompetencyMatrix })));
+const SeaTimeCalculator = lazy(() => import("@/components/crew/STCWCompetencyMatrix").then(m => ({ default: m.STCWCompetencyMatrix }))); // Reuse STCW matrix for sea time
+const MLCComplianceModule = lazy(() => import("@/components/crew/MLCComplianceDashboard").then(m => ({ default: m.MLCComplianceDashboard })));
 
 function LoadingSkeleton() {
   return (
