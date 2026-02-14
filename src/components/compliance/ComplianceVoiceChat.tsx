@@ -3,6 +3,7 @@
  * Supports ISM, ISPS, PEOTRAM, SOLAS, MARPOL, etc.
  */
 import React, { useState, useEffect, useCallback, useRef } from "react";
+import { getSpeechRecognitionAPI, type SpeechRecognitionInstance } from "@/types/speech-recognition";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -47,19 +48,18 @@ export function ComplianceVoiceChat({
   const [isSpeaking, setIsSpeaking] = useState(false);
   const [transcript, setTranscript] = useState("");
   const [textInput, setTextInput] = useState("");
-  const recognitionRef = useRef<any>(null);
+  const recognitionRef = useRef<SpeechRecognitionInstance | null>(null);
   const scrollRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    const w = window as any;
-    const SpeechRecognitionAPI = w.SpeechRecognition || w.webkitSpeechRecognition;
+    const SpeechRecognitionAPI = getSpeechRecognitionAPI();
     if (SpeechRecognitionAPI) {
       recognitionRef.current = new SpeechRecognitionAPI();
       recognitionRef.current.continuous = false;
       recognitionRef.current.interimResults = true;
       recognitionRef.current.lang = "pt-BR";
 
-      recognitionRef.current.onresult = (event: any) => {
+      recognitionRef.current.onresult = (event) => {
         const result = event.results[event.resultIndex];
         const text = result[0].transcript;
         setTranscript(text);

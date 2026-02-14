@@ -374,7 +374,7 @@ export function CollaborativeChat() {
           {/* Message Input */}
           <div className="p-3 border-t">
             <div className="flex items-center gap-2">
-              <Button variant="ghost" size="icon" className="flex-shrink-0">
+              <Button variant="ghost" size="icon" className="flex-shrink-0" aria-label="Anexar arquivo" title="Anexar">
                 <Paperclip className="h-4 w-4" />
               </Button>
               <Input
@@ -392,10 +392,10 @@ export function CollaborativeChat() {
                 }}
                 className="flex-1"
               />
-              <Button variant="ghost" size="icon" className="flex-shrink-0">
+              <Button variant="ghost" size="icon" className="flex-shrink-0" aria-label="Emojis" title="Emojis">
                 <Smile className="h-4 w-4" />
               </Button>
-              <Button onClick={sendMessage} size="icon" disabled={!message.trim()}>
+              <Button onClick={sendMessage} size="icon" disabled={!message.trim()} aria-label="Enviar mensagem" title="Enviar">
                 <Send className="h-4 w-4" />
               </Button>
             </div>

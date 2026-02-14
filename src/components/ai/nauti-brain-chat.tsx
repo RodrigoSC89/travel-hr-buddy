@@ -222,7 +222,7 @@ ${initialContext ? `\n📍 **Contexto:** ${initialContext}` : ''}
           </div>
         </div>
         <div className="flex items-center gap-2">
-          <Button variant="ghost" size="icon" onClick={clearChat} title="Limpar conversa">
+          <Button variant="ghost" size="icon" onClick={clearChat} title="Limpar conversa" aria-label="Limpar conversa">
             <Trash2 className="h-4 w-4" />
           </Button>
           {onClose && (
@@ -306,10 +306,10 @@ ${initialContext ? `\n📍 **Contexto:** ${initialContext}` : ''}
                         >
                           <Copy className="h-3 w-3" />
                         </Button>
-                        <Button variant="ghost" size="icon" className="h-5 w-5">
+                        <Button variant="ghost" size="icon" className="h-5 w-5" aria-label="Resposta útil" title="Útil">
                           <ThumbsUp className="h-3 w-3" />
                         </Button>
-                        <Button variant="ghost" size="icon" className="h-5 w-5">
+                        <Button variant="ghost" size="icon" className="h-5 w-5" aria-label="Resposta não útil" title="Não útil">
                           <ThumbsDown className="h-3 w-3" />
                         </Button>
                       </div>

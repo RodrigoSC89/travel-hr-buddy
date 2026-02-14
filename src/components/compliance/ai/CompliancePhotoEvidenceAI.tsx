@@ -323,7 +323,7 @@ Baseado no contexto fornecido, identifique poss√≠veis itens de conformidade e n√
                       </div>
                       {/* Actions */}
                       <div className="absolute bottom-1 right-1 flex gap-1">
-                        <Button size="icon" variant="ghost" className="h-6 w-6 bg-background/80" onClick={e => { e.stopPropagation(); removePhoto(photo.id); }}>
+                        <Button size="icon" variant="ghost" className="h-6 w-6 bg-background/80" onClick={e => { e.stopPropagation(); removePhoto(photo.id); }} aria-label="Remover foto" title="Remover">
                           <Trash2 className="h-3 w-3" />
                         </Button>
                       </div>

@@ -156,11 +156,11 @@ export function ActionableDashboardWidget({
               <Badge variant="outline" className="text-xs">
                 {statusLabels[status]}
               </Badge>
-              <Button variant="ghost" size="icon" className="h-8 w-8" onClick={() => setIsCommentsOpen(true)}>
+              <Button variant="ghost" size="icon" className="h-8 w-8" onClick={() => setIsCommentsOpen(true)} aria-label="Comentários" title="Comentários">
                 <MessageSquare className="h-4 w-4" />
               </Button>
               {onDrillDown && (
-                <Button variant="ghost" size="icon" className="h-8 w-8" onClick={onDrillDown}>
+                <Button variant="ghost" size="icon" className="h-8 w-8" onClick={onDrillDown} aria-label="Ver detalhes" title="Ver detalhes">
                   <Eye className="h-4 w-4" />
                 </Button>
               )}

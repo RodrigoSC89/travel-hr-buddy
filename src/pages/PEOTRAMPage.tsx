@@ -257,7 +257,7 @@ const PEOTRAMPage = () => {
         <TabsContent value="smart-scoring">
           <PeotramSmartScoring
             vesselName={currentAudit?.vessel_name}
-            itemStates={itemStates as any}
+            itemStates={itemStates}
             onApplyScores={(applied) => {
               for (const [id, score] of Object.entries(applied)) {
                 updateState(id, { score });
@@ -277,7 +277,7 @@ const PEOTRAMPage = () => {
           <PeotramNCAutoGenerator
             vesselName={currentAudit?.vessel_name}
             auditorName={currentAudit?.auditor_name || ""}
-            itemStates={itemStates as any}
+            itemStates={itemStates}
           />
         </TabsContent>
         <TabsContent value="report">
