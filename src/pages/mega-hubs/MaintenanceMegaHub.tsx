@@ -17,7 +17,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
 import { Badge } from '@/components/ui/badge';
-import { Wrench, Shield, Brain, Anchor, Fuel, Cpu, Trash2, Leaf, Calendar, Plus, Download, Wifi } from 'lucide-react';
+import { Wrench, Shield, Brain, Anchor, Fuel, Cpu, Trash2, Leaf, Calendar, Plus, Download, Wifi, Sparkles } from 'lucide-react';
 import { Skeleton } from '@/components/ui/skeleton';
 import { EnhancedActionBar } from '@/components/ui/world-class/EnhancedActionBar';
 import { WorkflowStatusBar } from '@/components/ui/world-class/WorkflowStatusBar';
@@ -37,6 +37,7 @@ const FuelManagementPage = lazy(() => import('@/pages/FuelManagementPage'));
 const DigitalTwinPage = lazy(() => import('@/pages/advanced/DigitalTwin3DPage'));
 const WasteManagementPremium = lazy(() => import('@/pages/ESGEmissionsPremium'));
 const ESGEmissionsPremium = lazy(() => import('@/pages/ESGEmissionsPremium'));
+const MaintenanceAIHub = lazy(() => import('@/components/maintenance/ai/MaintenanceAIHub'));
 
 const LoadingSkeleton = () => (
   <div className="space-y-4 p-6">
@@ -60,6 +61,7 @@ const tabConfig = [
   { id: 'digital-twin', label: 'Digital Twin', icon: Cpu },
   { id: 'waste-marpol', label: 'MARPOL & Waste', icon: Trash2 },
   { id: 'esg', label: 'ESG Emissions', icon: Leaf },
+  { id: 'ai-hub', label: '🧠 IA Hub', icon: Sparkles },
 ];
 
 export default function MaintenanceMegaHub() {
@@ -334,6 +336,10 @@ export default function MaintenanceMegaHub() {
             
             <TabsContent value="esg" className="mt-0">
               <ESGEmissionsPremium />
+            </TabsContent>
+
+            <TabsContent value="ai-hub" className="mt-0">
+              <MaintenanceAIHub />
             </TabsContent>
           </Suspense>
         </div>
