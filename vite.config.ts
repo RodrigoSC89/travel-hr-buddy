@@ -104,22 +104,22 @@ export default defineConfig(({ mode }) => ({
           // Router
           if (id.includes('react-router')) return 'router-vendor';
           // Tesseract OCR - lazy loaded on OCR actions (~500KB)
-              if (id.includes('tesseract.js')) return 'tesseract-vendor';
-              // Sentry monitoring
-              if (id.includes('@sentry')) return 'sentry-vendor';
-              // ONNX runtime
-              if (id.includes('onnx')) return 'onnx-vendor';
-              // Lucide icons
-              if (id.includes('lucide-react')) return 'icons-vendor';
-              // Firebase
-              if (id.includes('firebase')) return 'firebase-vendor';
-              // OpenAI
-              if (id.includes('openai')) return 'openai-vendor';
-              // TipTap editor
-              if (id.includes('@tiptap') || id.includes('prosemirror') || id.includes('yjs')) return 'editor-vendor';
-              // MQTT
-              if (id.includes('mqtt')) return 'mqtt-vendor';
-            },
+          if (id.includes('tesseract.js')) return 'tesseract-vendor';
+          // Sentry monitoring
+          if (id.includes('@sentry')) return 'sentry-vendor';
+          // ONNX runtime
+          if (id.includes('onnx')) return 'onnx-vendor';
+          // Lucide icons
+          if (id.includes('lucide-react')) return 'icons-vendor';
+          // Firebase
+          if (id.includes('firebase')) return 'firebase-vendor';
+          // OpenAI
+          if (id.includes('openai')) return 'openai-vendor';
+          // TipTap editor
+          if (id.includes('@tiptap') || id.includes('prosemirror') || id.includes('yjs')) return 'editor-vendor';
+          // MQTT
+          if (id.includes('mqtt')) return 'mqtt-vendor';
+        },
         // Ensure consistent chunk naming for caching
         chunkFileNames: (chunkInfo) => {
           const facadeModuleId = chunkInfo.facadeModuleId;
