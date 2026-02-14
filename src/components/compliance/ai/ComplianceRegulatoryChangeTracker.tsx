@@ -2,21 +2,21 @@
  * Compliance Regulatory Change Tracker
  * Monitors and alerts on regulatory changes from IMO, ILO, Flag States, OCIMF, etc.
  * Uses AI to assess impact on the company's SMS and recommend actions.
+ * ✅ P0-002: Real Supabase data from maritime_regulations table
  */
 
 import { useState, useCallback } from "react";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Textarea } from "@/components/ui/textarea";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { Progress } from "@/components/ui/progress";
-import { Separator } from "@/components/ui/separator";
 import { useNautilusAI } from "@/hooks/useNautilusAI";
-import { toast } from "sonner";
+import { useQuery } from "@tanstack/react-query";
+import { supabase } from "@/integrations/supabase/client";
+import { logger } from "@/lib/logger";
 import {
   Globe, AlertTriangle, CheckCircle, Clock, TrendingUp, Sparkles,
-  FileText, Shield, Calendar, ArrowRight, Loader2, RefreshCw
+  FileText, Shield, Calendar, Loader2
 } from "lucide-react";
 
 export interface ComplianceRegulatoryChangeTrackerProps {
@@ -36,55 +36,52 @@ interface RegulatoryChange {
   aiRecommendation?: string;
 }
 
-const MOCK_RECENT_CHANGES: RegulatoryChange[] = [
+const mapImpactLevel = (aiScore: number | null): RegulatoryChange["impactLevel"] => {
+  if (aiScore === null) return "medium";
+  if (aiScore >= 90) return "critical";
+  if (aiScore >= 70) return "high";
+  if (aiScore >= 40) return "medium";
+  return "low";
+};
+
+const mapStatus = (status: string | null): RegulatoryChange["status"] => {
+  switch (status) {
+    case "compliant": return "completed";
+    case "in_progress": return "implementing";
+    case "non_compliant": return "assessed";
+    default: return "new";
+  }
+};
+
+const mapRegulationToChange = (reg: {
+  id: string;
+  title: string;
+  description: string | null;
+  regulation_type: string | null;
+  due_date: string | null;
+  ai_score: number | null;
+  status: string | null;
+  requirement_code: string | null;
+}): RegulatoryChange => ({
+  id: reg.id,
+  source: reg.regulation_type || "IMO",
+  title: reg.title,
+  description: reg.description || "Sem descrição disponível.",
+  effectiveDate: reg.due_date || new Date().toISOString().split("T")[0],
+  impactLevel: mapImpactLevel(reg.ai_score),
+  affectedAreas: [reg.regulation_type || "Compliance", reg.requirement_code || "Operations"].filter(Boolean),
+  status: mapStatus(reg.status),
+});
+
+const FALLBACK_CHANGES: RegulatoryChange[] = [
   {
-    id: "RC-001",
+    id: "fallback-1",
     source: "IMO MEPC 83",
-    title: "Revised MARPOL Annex VI - CII Rating Adjustments",
-    description: "Updated Carbon Intensity Indicator calculation methods and correction factors for 2026-2030.",
-    effectiveDate: "2026-01-01",
-    impactLevel: "high",
-    affectedAreas: ["Environmental", "Operations", "Reporting"],
-    status: "assessed",
-  },
-  {
-    id: "RC-002",
-    source: "IMO MSC 109",
-    title: "SOLAS Chapter V - ECDIS Software Standards Update",
-    description: "New requirements for ECDIS software validation and chart update protocols.",
-    effectiveDate: "2026-07-01",
-    impactLevel: "medium",
-    affectedAreas: ["Navigation", "Training", "Documentation"],
-    status: "new",
-  },
-  {
-    id: "RC-003",
-    source: "ILO MLC Amendment",
-    title: "MLC 2006 Amendments - Mental Health Provisions",
-    description: "Enhanced requirements for crew mental health support, shore leave policies, and onboard connectivity.",
-    effectiveDate: "2026-06-01",
-    impactLevel: "high",
-    affectedAreas: ["Crew Welfare", "Medical", "HR Policy"],
-    status: "new",
-  },
-  {
-    id: "RC-004",
-    source: "OCIMF",
-    title: "SIRE 2.0 VIQ 8 - Updated Inspection Protocol",
-    description: "New vessel inspection questionnaire version with enhanced focus on cybersecurity and environmental compliance.",
-    effectiveDate: "2026-03-01",
-    impactLevel: "critical",
-    affectedAreas: ["Vetting", "Cybersecurity", "Operations", "Documentation"],
-    status: "implementing",
-  },
-  {
-    id: "RC-005",
-    source: "Flag State (Liberia)",
-    title: "Marine Notice 2026-001 - Ballast Water Management",
-    description: "Updated compliance schedule for D-2 standard implementation on existing vessels.",
-    effectiveDate: "2026-09-01",
-    impactLevel: "medium",
-    affectedAreas: ["Environmental", "Maintenance", "Documentation"],
+    title: "Sem dados disponíveis — verifique a conexão",
+    description: "Não foi possível carregar mudanças regulatórias do banco de dados.",
+    effectiveDate: new Date().toISOString().split("T")[0],
+    impactLevel: "low",
+    affectedAreas: ["Sistema"],
     status: "new",
   },
 ];
@@ -93,11 +90,30 @@ export function ComplianceRegulatoryChangeTracker({
   moduleId,
   moduleName,
 }: ComplianceRegulatoryChangeTrackerProps) {
-  const { analyze, isLoading } = useNautilusAI();
-  const [changes, setChanges] = useState<RegulatoryChange[]>(MOCK_RECENT_CHANGES);
+  const { analyze } = useNautilusAI();
   const [selectedChange, setSelectedChange] = useState<RegulatoryChange | null>(null);
   const [impactAnalysis, setImpactAnalysis] = useState<string>("");
   const [isAnalyzing, setIsAnalyzing] = useState(false);
+
+  const { data: changes = FALLBACK_CHANGES, isLoading: isLoadingData } = useQuery({
+    queryKey: ["regulatory-changes", moduleId],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("maritime_regulations")
+        .select("id, title, description, regulation_type, due_date, ai_score, status, requirement_code")
+        .order("created_at", { ascending: false })
+        .limit(20);
+
+      if (error) {
+        logger.warn("Failed to fetch maritime_regulations", { error: error.message });
+        return FALLBACK_CHANGES;
+      }
+
+      if (!data || data.length === 0) return FALLBACK_CHANGES;
+      return data.map(mapRegulationToChange);
+    },
+    staleTime: 5 * 60 * 1000,
+  });
 
   const getImpactColor = (level: string) => {
     switch (level) {
@@ -146,9 +162,6 @@ Forneça:
 
     if (result?.response) {
       setImpactAnalysis(result.response);
-      setChanges(prev => prev.map(c => 
-        c.id === change.id ? { ...c, status: "assessed" as const, aiRecommendation: result.response } : c
-      ));
     }
     setIsAnalyzing(false);
   }, [analyze, moduleId, moduleName]);
@@ -159,6 +172,15 @@ Forneça:
     new: changes.filter(c => c.status === "new").length,
     implementing: changes.filter(c => c.status === "implementing").length,
   };
+
+  if (isLoadingData) {
+    return (
+      <div className="flex items-center justify-center py-16">
+        <Loader2 className="h-8 w-8 animate-spin text-primary" />
+        <span className="ml-2 text-muted-foreground">Carregando mudanças regulatórias...</span>
+      </div>
+    );
+  }
 
   return (
     <div className="space-y-6">
