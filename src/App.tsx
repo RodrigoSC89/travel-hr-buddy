@@ -20,6 +20,7 @@ import { logger } from "@/lib/logger";
 import { AppRoutes } from "@/routes/AppRoutes";
 import { AppLoader } from "@/routes/AppLoader";
 import { prefetchCriticalRoutes } from "@/lib/performance/route-prefetch";
+import { initNautiOneDB } from "@/lib/offline/db";
 
 // ============================================
 // GLOBAL ERROR HANDLERS - Prevent white screens
@@ -61,9 +62,13 @@ const queryClient = new QueryClient({
 });
 
 function App() {
-  // Prefetch critical routes after initial render
+  // Prefetch critical routes and init offline DB after initial render
   useEffect(() => {
     prefetchCriticalRoutes();
+    // Initialize IndexedDB for offline-first support
+    initNautiOneDB().catch((err) => {
+      logger.warn('[App] IndexedDB init skipped:', err);
+    });
   }, []);
 
   return (

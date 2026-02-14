@@ -25,6 +25,12 @@ const CommandPalette = lazy(() => import("@/components/shared/CommandPalette"));
 const GlobalAIAssistant = lazy(() => 
   import("@/components/ai/GlobalAIAssistant").then(mod => ({ default: mod.GlobalAIAssistant }))
 );
+const InstallPrompt = lazy(() => 
+  import("@/components/pwa/InstallPrompt").then(mod => ({ default: mod.InstallPrompt }))
+);
+const UpdatePrompt = lazy(() => 
+  import("@/components/pwa/UpdatePrompt").then(mod => ({ default: mod.UpdatePrompt }))
+);
 
 export const AuthenticatedLayout = () => {
   // Global real-time toast notifications for critical events
@@ -75,6 +81,8 @@ export const AuthenticatedLayout = () => {
         <Suspense fallback={null}><OfflineStatusBar position="bottom" showDetails={true} /></Suspense>
         <Suspense fallback={null}><CommandPalette /></Suspense>
         <Suspense fallback={null}><GlobalAIAssistant /></Suspense>
+        <Suspense fallback={null}><InstallPrompt /></Suspense>
+        <Suspense fallback={null}><UpdatePrompt /></Suspense>
       </div>
     </SidebarProvider>
   );

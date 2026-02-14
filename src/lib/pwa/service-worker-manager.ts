@@ -2,8 +2,8 @@
  * PATCH 837: Service Worker Manager
  * Advanced PWA capabilities for offline-first experience
  */
+import { useState, useEffect } from 'react';
 import { logger } from "@/lib/logger";
-
 interface ServiceWorkerConfig {
   scope: string;
   updateInterval: number;
@@ -232,4 +232,3 @@ export function useServiceWorker() {
   };
 }
 
-import { useState, useEffect } from 'react';
