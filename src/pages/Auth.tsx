@@ -4,6 +4,7 @@
  */
 import React, { useState, useEffect } from "react";
 import { Navigate, useNavigate } from "react-router-dom";
+import { useDemoMode } from "@/contexts/DemoContext";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -60,6 +61,7 @@ type ResetFormData = z.infer<typeof resetSchema>;
 const Auth: React.FC = () => {
   const navigate = useNavigate();
   const { user, isLoading: authLoading, clearSession } = useAuth();
+  const { enableDemoMode } = useDemoMode();
   const [showPassword, setShowPassword] = useState(false);
   const [activeTab, setActiveTab] = useState("signin");
   const [isLoading, setIsLoading] = useState(false);
@@ -730,7 +732,10 @@ const Auth: React.FC = () => {
             <Button
               variant="outline"
               className="w-full max-w-md border-primary/30 text-primary hover:bg-primary/5"
-              onClick={() => navigate('/demo')}
+              onClick={() => {
+                enableDemoMode();
+                navigate('/command');
+              }}
             >
               <BarChart3 className="mr-2 h-4 w-4" />
               Ver Demo do Sistema (sem login)
