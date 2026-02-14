@@ -431,19 +431,48 @@ export const PEOTRAM_ELEMENTS: PeotramElement[] = [
   },
   {
     id: 7, name: "Gestão de Mudanças", sigla: "GM", description: "Controle de mudanças temporárias e permanentes", weightPercentage: 6.0, isCritical: false, importanceLevel: "normal", icon: "RefreshCw", category: "Gestão",
-    subelements: [{ id: "7.1", name: "Gestão de Mudanças (MOC)", items: [
-      { id: "7.1.1", subelement: "MOC", description: "Procedimento formal de gestão de mudanças (MOC) implementado? Cobre mudanças organizacionais, operacionais, equipamentos, processos?", evidences: "Procedimento MOC; Registros de mudanças; Análise de risco para mudanças; Aprovação hierárquica; Comunicação", weight: 3, isCritical: false, norms: ["ISM Code", "NR-37"] },
-      { id: "7.1.2", subelement: "MOC", description: "Mudanças temporárias são controladas com prazo definido e reversão planejada?", evidences: "Registros de mudanças temporárias; Controle de prazos; Reversão documentada", weight: 3, isCritical: false, norms: ["ISM Code"] },
-      { id: "7.1.3", subelement: "MOC", description: "Análise de risco realizada antes de toda mudança significativa? Impactos em SMS avaliados?", evidences: "Análises de risco de mudanças; Registros de avaliação de impacto", weight: 3, isCritical: false, norms: ["ISM Code"] }
-    ]}]
+    subelements: [
+      { id: "7.1", name: "Procedimento de Gestão de Mudanças", items: [
+        { id: "7.1.1", subelement: "MOC", description: "Procedimento formal de gestão de mudanças (MOC) implementado? Cobre mudanças organizacionais, operacionais, equipamentos, processos?", evidences: "Procedimento MOC; Registros de mudanças; Análise de risco para mudanças; Aprovação hierárquica; Comunicação", weight: 3, isCritical: false, norms: ["ISM Code", "NR-37"] },
+        { id: "7.1.2", subelement: "MOC", description: "Mudanças temporárias são controladas com prazo definido e reversão planejada?", evidences: "Registros de mudanças temporárias; Controle de prazos; Reversão documentada", weight: 3, isCritical: false, norms: ["ISM Code"] },
+        { id: "7.1.3", subelement: "MOC", description: "Análise de risco realizada antes de toda mudança significativa? Impactos em SMS avaliados?", evidences: "Análises de risco de mudanças; Registros de avaliação de impacto", weight: 3, isCritical: false, norms: ["ISM Code"] },
+        { id: "7.1.4", subelement: "MOC", description: "Registro formal de todas as mudanças realizadas? Base de dados atualizada com histórico completo?", evidences: "Software/planilha de gestão de mudanças; Histórico completo; Rastreabilidade", weight: 3, isCritical: false, norms: ["ISM Code"] }
+      ]},
+      { id: "7.2", name: "Gestão de Mudanças de Pessoal", items: [
+        { id: "7.2.1", subelement: "Mudanças Pessoal", description: "Mudanças de função, área ou embarcação são tratadas dentro do MOC? Familiarização e integração garantidas?", evidences: "Procedimento; Registros de familiarização; Checklist de integração para novos tripulantes", weight: 3, isCritical: false, norms: ["ISM Code", "STCW"] },
+        { id: "7.2.2", subelement: "Mudanças Pessoal", description: "Transferência de conhecimento garantida quando há troca de tripulação em posições críticas?", evidences: "Procedimento de handover; Registros de transferência de responsabilidades; Período de sobreposição", weight: 3, isCritical: false, norms: ["ISM Code"] }
+      ]},
+      { id: "7.3", name: "Gestão de Mudanças em Equipamentos", items: [
+        { id: "7.3.1", subelement: "Mudanças Equipamentos", description: "Modificações em equipamentos críticos passam por aprovação da Sociedade Classificadora e/ou Bandeira?", evidences: "Lista de modificações; Aprovações da Classe; Certificados atualizados", weight: 3, isCritical: true, norms: ["Sociedade Classificadora", "SOLAS"] },
+        { id: "7.3.2", subelement: "Mudanças Equipamentos", description: "Mudanças em software de sistemas críticos (DP, navegação, automação) são documentadas e validadas?", evidences: "Registros de atualizações; Testes de validação; Aprovação técnica", weight: 3, isCritical: false, norms: ["IMCA 103", "ISM Code"] },
+        { id: "7.3.3", subelement: "Mudanças Equipamentos", description: "Impactos de mudanças em equipamentos são avaliados em relação a manutenção, sobressalentes e treinamento?", evidences: "Análise de impacto; Atualização de PMS; Requisição de sobressalentes; Necessidade de treinamento", weight: 3, isCritical: false, norms: ["ISM Code"] }
+      ]},
+      { id: "7.4", name: "Comunicação de Mudanças", items: [
+        { id: "7.4.1", subelement: "Comunicação Mudanças", description: "Todas as partes interessadas são comunicadas das mudanças de forma efetiva? Registros de ciência?", evidences: "Comunicados de mudança; Confirmações de recebimento; Briefings de segurança", weight: 3, isCritical: false, norms: ["ISM Code"] },
+        { id: "7.4.2", subelement: "Comunicação Mudanças", description: "Mudanças relevantes são informadas à Petrobras conforme requisitos contratuais?", evidences: "Registros de comunicação ao cliente; Conformidade contratual", weight: 3, isCritical: false, norms: ["Contrato Petrobras"] }
+      ]}
+    ]
   },
   {
     id: 8, name: "Aquisição de Bens e Serviços", sigla: "AQ", description: "Qualificação de fornecedores e requisitos de SMS na cadeia", weightPercentage: 5.5, isCritical: false, importanceLevel: "normal", icon: "ShoppingCart", category: "Suprimentos",
-    subelements: [{ id: "8.1", name: "Qualificação e Gestão de Fornecedores", items: [
-      { id: "8.1.1", subelement: "Fornecedores", description: "Sistemática de qualificação de fornecedores com critérios de SMS?", evidences: "Procedimento de qualificação; Critérios de SMS; Auditorias em fornecedores; Lista de fornecedores qualificados", weight: 3, isCritical: false, norms: ["ISM Code"] },
-      { id: "8.1.2", subelement: "Fornecedores", description: "Avaliação periódica de desempenho de fornecedores com indicadores de SMS?", evidences: "Avaliações de desempenho; Indicadores; Planos de ação para desvios", weight: 3, isCritical: false, norms: ["ISM Code"] },
-      { id: "8.1.3", subelement: "Fornecedores", description: "Fornecedores de serviços críticos (terceirizados a bordo) atendem aos mesmos requisitos de SMS da empresa?", evidences: "Contratos com requisitos de SMS; Evidências de monitoramento; Treinamentos para terceirizados", weight: 3, isCritical: false, norms: ["ISM Code", "NR-34"] }
-    ]}]
+    subelements: [
+      { id: "8.1", name: "Qualificação de Fornecedores", items: [
+        { id: "8.1.1", subelement: "Fornecedores", description: "Sistemática de qualificação de fornecedores com critérios de SMS?", evidences: "Procedimento de qualificação; Critérios de SMS; Auditorias em fornecedores; Lista de fornecedores qualificados", weight: 3, isCritical: false, norms: ["ISM Code"] },
+        { id: "8.1.2", subelement: "Fornecedores", description: "Pré-qualificação inclui análise de certificações, histórico de acidentes e conformidade legal?", evidences: "Critérios de pré-qualificação; Formulários preenchidos; Documentação verificada", weight: 3, isCritical: false, norms: ["ISM Code", "IMCA"] },
+        { id: "8.1.3", subelement: "Fornecedores", description: "Fornecedores de serviços críticos (terceirizados a bordo) atendem aos mesmos requisitos de SMS da empresa?", evidences: "Contratos com requisitos de SMS; Evidências de monitoramento; Treinamentos para terceirizados", weight: 3, isCritical: false, norms: ["ISM Code", "NR-34"] },
+        { id: "8.1.4", subelement: "Fornecedores", description: "Auditorias periódicas realizadas em fornecedores críticos?", evidences: "Programa de auditorias em fornecedores; Relatórios; Planos de ação; Acompanhamento", weight: 3, isCritical: false, norms: ["ISM Code"] }
+      ]},
+      { id: "8.2", name: "Contratos e Requisitos SMS", items: [
+        { id: "8.2.1", subelement: "Contratos SMS", description: "Contratos com fornecedores incluem cláusulas específicas de SMS, meio ambiente e saúde?", evidences: "Modelos de contratos; Cláusulas de SMS; Penalidades por não conformidade", weight: 3, isCritical: false, norms: ["ISM Code"] },
+        { id: "8.2.2", subelement: "Contratos SMS", description: "Matriz de responsabilidades (Bridge Document) definida entre empresa e terceirizados a bordo?", evidences: "Bridge Documents; Contratos; Definição clara de responsabilidades", weight: 3, isCritical: false, norms: ["ISM Code", "IMCA"] },
+        { id: "8.2.3", subelement: "Contratos SMS", description: "Avaliação de SMS realizada antes da contratação de serviços críticos (mergulho, ROV, guindaste offshore)?", evidences: "Avaliações de SMS; Certificações; Relatórios de pré-mobilização", weight: 3, isCritical: false, norms: ["IMCA"] }
+      ]},
+      { id: "8.3", name: "Monitoramento de Desempenho", items: [
+        { id: "8.3.1", subelement: "Desempenho Fornecedores", description: "Avaliação periódica de desempenho de fornecedores com indicadores de SMS?", evidences: "Avaliações de desempenho; Indicadores; Planos de ação para desvios", weight: 3, isCritical: false, norms: ["ISM Code"] },
+        { id: "8.3.2", subelement: "Desempenho Fornecedores", description: "Feedback da tripulação sobre fornecedores é considerado na avaliação?", evidences: "Formulários de avaliação; Registros de reclamações; Ações tomadas", weight: 3, isCritical: false, norms: ["ISM Code"] },
+        { id: "8.3.3", subelement: "Desempenho Fornecedores", description: "Fornecedores com desempenho insatisfatório são desqualificados ou possuem plano de melhoria?", evidences: "Registros de desqualificação; Planos de melhoria; Reavaliação", weight: 3, isCritical: false, norms: ["ISM Code"] }
+      ]}
+    ]
   },
   {
     id: 9, name: "Gestão de Recursos Humanos", sigla: "RH", description: "Treinamentos, certificações, fatores humanos e CRM", weightPercentage: 8.0, isCritical: false, importanceLevel: "high", icon: "GraduationCap", category: "RH",
@@ -451,51 +480,122 @@ export const PEOTRAM_ELEMENTS: PeotramElement[] = [
       { id: "9.1", name: "Capacitação e Treinamento", items: [
         { id: "9.1.1", subelement: "Capacitação", description: "Matriz de treinamento implementada incluindo requisitos STCW, cliente, legais e organizacionais?", evidences: "Matriz de exigências de treinamento; Registros de treinamento; Software de gestão de tripulantes", weight: 3, isCritical: false, norms: ["STCW", "ISM Code"] },
         { id: "9.1.2", subelement: "Capacitação", description: "Treinamentos de familiarização a bordo realizados para todos os tripulantes?", evidences: "Registros de familiarização; Checklist de familiarização; Entrevistas", weight: 3, isCritical: false, norms: ["ISM Code", "STCW"] },
-        { id: "9.1.3", subelement: "Capacitação", description: "Avaliação de eficácia dos treinamentos realizados?", evidences: "Avaliações de eficácia; Avaliações práticas; Entrevistas", weight: 3, isCritical: false, norms: ["ISM Code"] }
+        { id: "9.1.3", subelement: "Capacitação", description: "Avaliação de eficácia dos treinamentos realizados?", evidences: "Avaliações de eficácia; Avaliações práticas; Entrevistas", weight: 3, isCritical: false, norms: ["ISM Code"] },
+        { id: "9.1.4", subelement: "Capacitação", description: "Treinamentos em simuladores realizados periodicamente (BRM, ERM, DP, combate a incêndio)?", evidences: "Certificados de simulador; Registros de participação; Instituições credenciadas", weight: 3, isCritical: false, norms: ["STCW", "IMCA 117"] }
       ]},
       { id: "9.2", name: "Fatores Humanos", items: [
         { id: "9.2.1", subelement: "Fatores Humanos", description: "Programa de fatores humanos implementado (fadiga, CRM, BRM)?", evidences: "Programa de FH; Controle de horas de trabalho/descanso (MLC 2006); Treinamento CRM/BRM", weight: 3, isCritical: false, norms: ["STCW", "MLC 2006", "IMCA 117"] },
         { id: "9.2.2", subelement: "Fatores Humanos", description: "Controle efetivo de horas de trabalho e descanso conforme STCW/MLC 2006?", evidences: "Registros de horas; Software de controle; Conformidade com limites", weight: 3, isCritical: false, norms: ["STCW", "MLC 2006"] },
-        { id: "9.2.3", subelement: "Fatores Humanos", description: "Investigação de incidentes considera fatores humanos na análise de causa raiz?", evidences: "Relatórios de investigação com análise de FH; Metodologia (Reason, HFACS)", weight: 3, isCritical: false, norms: ["ISM Code"] }
+        { id: "9.2.3", subelement: "Fatores Humanos", description: "Investigação de incidentes considera fatores humanos na análise de causa raiz?", evidences: "Relatórios de investigação com análise de FH; Metodologia (Reason, HFACS)", weight: 3, isCritical: false, norms: ["ISM Code"] },
+        { id: "9.2.4", subelement: "Fatores Humanos", description: "Suporte psicológico disponível para tripulação? Programa de saúde mental implementado?", evidences: "Contrato com serviço de apoio psicológico; Programa de saúde mental; Registros de atendimento", weight: 3, isCritical: false, norms: ["MLC 2006", "NR-7"] }
+      ]},
+      { id: "9.3", name: "Certificações e Qualificações", items: [
+        { id: "9.3.1", subelement: "Certificações", description: "Todos os tripulantes possuem certificações STCW válidas e compatíveis com a função?", evidences: "Matriz de certificações; Certificados STCW válidos; Controle de vencimento", weight: 3, isCritical: true, norms: ["STCW"] },
+        { id: "9.3.2", subelement: "Certificações", description: "Operadores de DP qualificados conforme IMCA 117? Logbook de DP atualizado?", evidences: "Certificados DPO; DP Logbook; Registros de treinamento em simulador", weight: 3, isCritical: true, norms: ["IMCA 117"] },
+        { id: "9.3.3", subelement: "Certificações", description: "ASO (Atestado de Saúde Ocupacional) válido para toda a tripulação?", evidences: "ASO válidos; Cronograma de exames; Laudos médicos; NR-7", weight: 3, isCritical: false, norms: ["NR-7", "NORMAM-01"] },
+        { id: "9.3.4", subelement: "Certificações", description: "Avaliação periódica de competências práticas e teóricas dos tripulantes?", evidences: "Avaliações de competência; Registros; Planos de desenvolvimento individual", weight: 3, isCritical: false, norms: ["ISM Code", "STCW"] }
+      ]},
+      { id: "9.4", name: "Treinamento de Emergência", items: [
+        { id: "9.4.1", subelement: "Treinamento Emergência", description: "Todos os tripulantes participam de simulados e drills de emergência obrigatórios?", evidences: "Listas de presença; Cronograma de drills; Relatórios de simulados", weight: 3, isCritical: true, norms: ["SOLAS", "ISM Code 8"] },
+        { id: "9.4.2", subelement: "Treinamento Emergência", description: "Treinamento de combate a incêndio atualizado e com exercícios práticos?", evidences: "Certificados de treinamento; Registros de exercícios práticos; Equipamentos de treinamento", weight: 3, isCritical: true, norms: ["SOLAS II", "STCW"] },
+        { id: "9.4.3", subelement: "Treinamento Emergência", description: "Treinamento de sobrevivência no mar e primeiros socorros atualizado?", evidences: "Certificados; Registros de treinamento; Material de primeiros socorros verificado", weight: 3, isCritical: false, norms: ["STCW", "SOLAS"] }
       ]}
     ]
   },
   {
     id: 10, name: "Gestão da Informação", sigla: "GI", description: "Sistema documental, comunicação e ouvidoria", weightPercentage: 5.0, isCritical: false, importanceLevel: "normal", icon: "FileText", category: "Informação",
-    subelements: [{ id: "10.1", name: "Controle de Documentos e Comunicação", items: [
-      { id: "10.1.1", subelement: "Documentos", description: "Sistema de controle de documentos implementado com lista mestra, revisões e aprovações?", evidences: "Lista mestra; Sistema de gestão documental; Procedimentos de aprovação e revisão", weight: 3, isCritical: false, norms: ["ISM Code 11"] },
-      { id: "10.1.2", subelement: "Documentos", description: "Comunicação interna efetiva entre base e embarcações sobre mudanças em procedimentos, alertas de SMS?", evidences: "Registros de comunicação; Circulares; Evidências de recebimento; Ouvidoria", weight: 3, isCritical: false, norms: ["ISM Code 11"] },
-      { id: "10.1.3", subelement: "Documentos", description: "Documentos e procedimentos disponíveis e atualizados a bordo?", evidences: "Verificação a bordo; Versões atualizadas; Acesso pelos tripulantes", weight: 3, isCritical: false, norms: ["ISM Code 11"] }
-    ]}]
+    subelements: [
+      { id: "10.1", name: "Controle de Documentos", items: [
+        { id: "10.1.1", subelement: "Documentos", description: "Sistema de controle de documentos implementado com lista mestra, revisões e aprovações?", evidences: "Lista mestra; Sistema de gestão documental; Procedimentos de aprovação e revisão", weight: 3, isCritical: false, norms: ["ISM Code 11"] },
+        { id: "10.1.2", subelement: "Documentos", description: "Documentos e procedimentos disponíveis e atualizados a bordo?", evidences: "Verificação a bordo; Versões atualizadas; Acesso pelos tripulantes", weight: 3, isCritical: false, norms: ["ISM Code 11"] },
+        { id: "10.1.3", subelement: "Documentos", description: "Sistemática de controle de revisões que garanta remoção de documentos obsoletos?", evidences: "Procedimento de controle; Registros de distribuição; Verificação de versões a bordo", weight: 3, isCritical: false, norms: ["ISM Code 11"] },
+        { id: "10.1.4", subelement: "Documentos", description: "Informações digitais conforme NR-1 item 1.6 para registros de SST?", evidences: "Sistema digital; Registros eletrônicos; Backup; Acessibilidade", weight: 3, isCritical: false, norms: ["NR-1"] }
+      ]},
+      { id: "10.2", name: "Comunicação Interna e Externa", items: [
+        { id: "10.2.1", subelement: "Comunicação", description: "Comunicação interna efetiva entre base e embarcações sobre mudanças, alertas de SMS?", evidences: "Registros de comunicação; Circulares; Evidências de recebimento", weight: 3, isCritical: false, norms: ["ISM Code 11"] },
+        { id: "10.2.2", subelement: "Comunicação", description: "Reuniões periódicas de segurança (Safety Meetings) realizadas e documentadas a bordo?", evidences: "Atas de reuniões; Listas de presença; Registros de ações", weight: 3, isCritical: false, norms: ["ISM Code"] },
+        { id: "10.2.3", subelement: "Comunicação", description: "Alertas de segurança e comunicados SMS divulgados e confirmados pela tripulação?", evidences: "Comunicados emitidos; Confirmações de recebimento; Registros de briefing", weight: 3, isCritical: false, norms: ["ISM Code"] }
+      ]},
+      { id: "10.3", name: "Ouvidoria e Feedback", items: [
+        { id: "10.3.1", subelement: "Ouvidoria", description: "Sistemática 'Na Dúvida, Pare' implementada? Fluxo de comunicação para parada segura?", evidences: "Procedimento; Comunicados; Registros de aplicação; Entrevistas", weight: 3, isCritical: false, norms: ["ISM Code"] },
+        { id: "10.3.2", subelement: "Ouvidoria", description: "Canal de ouvidoria ou SAC para tripulação reportar situações inseguras sem represálias?", evidences: "Procedimento de ouvidoria; Registros; Ações tomadas; Feedback aos reportantes", weight: 3, isCritical: false, norms: ["ISM Code", "MLC 2006"] },
+        { id: "10.3.3", subelement: "Ouvidoria", description: "Sistema de sugestões e feedback da tripulação para melhoria contínua?", evidences: "Formulários de sugestões; Registros de respostas; Implementações realizadas", weight: 3, isCritical: false, norms: ["ISM Code"] }
+      ]}
+    ]
   },
   {
     id: 11, name: "Preparação e Resposta a Emergências", sigla: "PE", description: "Planos de contingência, simulados e ICS", weightPercentage: 8.5, isCritical: true, importanceLevel: "critical", icon: "Siren", category: "Emergência",
-    subelements: [{ id: "11.1", name: "Planos de Emergência e Simulados", items: [
-      { id: "11.1.1", subelement: "Emergências", description: "Planos de emergência (SOPEP, Contingência, Abandono) disponíveis, atualizados e conhecidos pela tripulação?", evidences: "Planos de emergência; Registros de treinamento; Entrevistas; Estações de emergência", weight: 3, isCritical: true, norms: ["ISM Code 8", "SOLAS III", "MARPOL"] },
-      { id: "11.1.2", subelement: "Emergências", description: "Simulados de emergência realizados com periodicidade adequada cobrindo todos os cenários?", evidences: "Cronograma de simulados; Relatórios de simulados; Avaliações; Ações de melhoria", weight: 3, isCritical: true, norms: ["ISM Code 8", "SOLAS"] },
-      { id: "11.1.3", subelement: "Emergências", description: "Sistema de Comando de Incidentes (ICS) implementado e treinado?", evidences: "Procedimento ICS; Treinamentos; Registros; Organização de crise", weight: 3, isCritical: true, norms: ["ISM Code 8"] },
-      { id: "11.1.4", subelement: "Emergências", description: "Equipamentos de emergência (salvatagem, combate a incêndio) inspecionados e certificados?", evidences: "Certificados válidos; Registros de inspeção; Manutenção periódica", weight: 3, isCritical: true, norms: ["SOLAS III", "NORMAM-01"] },
-      { id: "11.1.5", subelement: "Emergências", description: "Procedimento de notificação de emergências para autoridades competentes e Petrobras?", evidences: "Procedimento de notificação; Contatos atualizados; Registros de comunicação", weight: 3, isCritical: false, norms: ["ISM Code 8"] }
-    ]}]
+    subelements: [
+      { id: "11.1", name: "Planos de Emergência", items: [
+        { id: "11.1.1", subelement: "Planos", description: "Planos de emergência (SOPEP, Contingência, Abandono) disponíveis, atualizados e conhecidos pela tripulação?", evidences: "Planos de emergência; Registros de treinamento; Entrevistas; Estações de emergência", weight: 3, isCritical: true, norms: ["ISM Code 8", "SOLAS III", "MARPOL"] },
+        { id: "11.1.2", subelement: "Planos", description: "Sistema de Comando de Incidentes (ICS) implementado e treinado?", evidences: "Procedimento ICS; Treinamentos; Registros; Organização de crise", weight: 3, isCritical: true, norms: ["ISM Code 8"] },
+        { id: "11.1.3", subelement: "Planos", description: "Plano de abandono da embarcação com procedimentos detalhados e pontos de reunião?", evidences: "Plano de abandono; Estações de reunião; Exercícios de abandono; Avaliações", weight: 3, isCritical: true, norms: ["SOLAS III"] },
+        { id: "11.1.4", subelement: "Planos", description: "Plano de combate a incêndio com procedimentos específicos para cada área?", evidences: "Plano de incêndio; Fire Control Plan; Exercícios práticos; Equipamentos", weight: 3, isCritical: true, norms: ["SOLAS II"] },
+        { id: "11.1.5", subelement: "Planos", description: "SOPEP (Shipboard Oil Pollution Emergency Plan) atualizado e tripulação treinada?", evidences: "SOPEP atualizado; Equipamentos anti-poluição; Registros de treinamento", weight: 3, isCritical: true, norms: ["MARPOL"] },
+        { id: "11.1.6", subelement: "Planos", description: "Todos os cenários críticos mapeados possuem planos específicos (homem ao mar, avaria, alagamento, colisão, incêndio, poluição, terrorismo)?", evidences: "Planos específicos para cada cenário; Exercícios realizados; Avaliações", weight: 3, isCritical: true, norms: ["ISM Code 8", "SOLAS"] }
+      ]},
+      { id: "11.2", name: "Simulados e Exercícios", items: [
+        { id: "11.2.1", subelement: "Simulados", description: "Simulados de emergência realizados com periodicidade adequada cobrindo todos os cenários?", evidences: "Cronograma de simulados; Relatórios de simulados; Avaliações; Ações de melhoria", weight: 3, isCritical: true, norms: ["ISM Code 8", "SOLAS"] },
+        { id: "11.2.2", subelement: "Simulados", description: "Exercícios realizados em condições adversas (noite, mau tempo) pelo menos anualmente?", evidences: "Registros de drills noturnos; Relatórios; Fotos; Avaliações de desempenho", weight: 3, isCritical: false, norms: ["SOLAS"] },
+        { id: "11.2.3", subelement: "Simulados", description: "Relatórios de simulados incluem avaliação de tempo de resposta, pontos de melhoria e ações corretivas?", evidences: "Relatórios detalhados; Cronometragem; Pontos de melhoria; Follow-up", weight: 3, isCritical: false, norms: ["ISM Code 8"] },
+        { id: "11.2.4", subelement: "Simulados", description: "Simulados conjuntos com Petrobras/plataformas realizados conforme requisitos contratuais?", evidences: "Programação de simulados conjuntos; Relatórios; Participação documentada", weight: 3, isCritical: false, norms: ["Contrato Petrobras"] }
+      ]},
+      { id: "11.3", name: "Equipamentos de Emergência", items: [
+        { id: "11.3.1", subelement: "Equipamentos", description: "Bote de resgate lançado em até 5 minutos com tripulação treinada?", evidences: "Registro de tempo de lançamento; Treinamento prático; Verificação em campo", weight: 3, isCritical: true, norms: ["SOLAS III"] },
+        { id: "11.3.2", subelement: "Equipamentos", description: "Equipamentos de salvatagem (LSA) inspecionados e certificados conforme SOLAS?", evidences: "Certificados válidos; Checklists de inspeção; Manutenção periódica; Registros", weight: 3, isCritical: true, norms: ["SOLAS III", "NORMAM-01"] },
+        { id: "11.3.3", subelement: "Equipamentos", description: "Equipamentos de combate a incêndio (FFE) operacionais e certificados?", evidences: "Certificados; Inspeções periódicas; Recargas; Testes hidrostáticos", weight: 3, isCritical: true, norms: ["SOLAS II"] },
+        { id: "11.3.4", subelement: "Equipamentos", description: "Serviço de telemedicina/medicina remota 24h disponível?", evidences: "Contrato com serviço médico; Procedimento de acionamento; Registros de uso", weight: 3, isCritical: false, norms: ["STCW", "MLC 2006"] },
+        { id: "11.3.5", subelement: "Equipamentos", description: "Procedimento de notificação de emergências para autoridades competentes e Petrobras?", evidences: "Procedimento de notificação; Contatos atualizados; Registros de comunicação", weight: 3, isCritical: false, norms: ["ISM Code 8"] }
+      ]}
+    ]
   },
   {
     id: 12, name: "Análise de Acidentes e Incidentes", sigla: "AI", description: "Investigação, análise de causa raiz e aprendizado organizacional", weightPercentage: 8.0, isCritical: true, importanceLevel: "critical", icon: "Search", category: "Segurança",
-    subelements: [{ id: "12.1", name: "Investigação e Análise", items: [
-      { id: "12.1.1", subelement: "Investigação", description: "Procedimento de investigação de acidentes/incidentes implementado com metodologia estruturada?", evidences: "Procedimento de investigação; Metodologia (IOGP 621, Bow-Tie, Reason); Registros de investigações realizadas", weight: 3, isCritical: true, norms: ["ISM Code 9", "IOGP 621"] },
-      { id: "12.1.2", subelement: "Investigação", description: "Análises de causa raiz realizadas para todos os incidentes significativos?", evidences: "Relatórios de investigação com análise de causa raiz; Ações corretivas; Prazos de implementação", weight: 3, isCritical: true, norms: ["ISM Code 9"] },
-      { id: "12.1.3", subelement: "Investigação", description: "Compartilhamento de lições aprendidas com toda a frota?", evidences: "Alertas de SMS; Comunicações; Reuniões de segurança; Registros de divulgação", weight: 3, isCritical: false, norms: ["ISM Code 9"] },
-      { id: "12.1.4", subelement: "Investigação", description: "Sistema de reporte de quase-acidentes (near miss) implementado e incentivado?", evidences: "Procedimento de reporte; Registros de near miss; Análise e tratamento; Indicadores", weight: 3, isCritical: false, norms: ["ISM Code 9"] },
-      { id: "12.1.5", subelement: "Investigação", description: "Notificação de acidentes para Petrobras e autoridades realizada conforme prazos definidos?", evidences: "Procedimento de notificação; Registros; Conformidade com prazos", weight: 3, isCritical: true, norms: ["ISM Code 9", "NORMAM"] }
-    ]}]
+    subelements: [
+      { id: "12.1", name: "Sistemática de Investigação", items: [
+        { id: "12.1.1", subelement: "Investigação", description: "Procedimento de investigação de acidentes/incidentes implementado com metodologia estruturada?", evidences: "Procedimento de investigação; Metodologia (IOGP 621, Bow-Tie, Reason); Registros de investigações realizadas", weight: 3, isCritical: true, norms: ["ISM Code 9", "IOGP 621"] },
+        { id: "12.1.2", subelement: "Investigação", description: "Critérios de classificação de incidentes definidos e alinhados com Petrobras?", evidences: "Matriz de classificação; Procedimento; Alinhamento com critérios Petrobras", weight: 3, isCritical: false, norms: ["ISM Code 9"] },
+        { id: "12.1.3", subelement: "Investigação", description: "Comissões de investigação formadas por pessoas qualificadas e treinadas em técnicas de investigação?", evidences: "Lista de investigadores qualificados; Certificados de treinamento (IOGP 621, TapRoot)", weight: 3, isCritical: false, norms: ["ISM Code 9"] },
+        { id: "12.1.4", subelement: "Investigação", description: "Notificação de acidentes para Petrobras e autoridades (DPC) realizada conforme prazos definidos?", evidences: "Procedimento de notificação; Registros; Conformidade com prazos; Protocolos", weight: 3, isCritical: true, norms: ["ISM Code 9", "NORMAM"] }
+      ]},
+      { id: "12.2", name: "Análise de Causa Raiz", items: [
+        { id: "12.2.1", subelement: "Causa Raiz", description: "Análises de causa raiz realizadas para todos os incidentes significativos usando técnicas estruturadas?", evidences: "Relatórios com análise de causa raiz; Árvore de eventos; Bow-Tie; IOGP 621", weight: 3, isCritical: true, norms: ["ISM Code 9", "IOGP 621"] },
+        { id: "12.2.2", subelement: "Causa Raiz", description: "Investigações abrangem fatores humanos, organizacionais e sistêmicos além de causas imediatas?", evidences: "Relatórios com análise de FH; Modelo de Reason; Fatores contribuintes identificados", weight: 3, isCritical: false, norms: ["ISM Code 9"] },
+        { id: "12.2.3", subelement: "Causa Raiz", description: "Eficácia das ações corretivas implementadas é verificada após implementação?", evidences: "Registros de verificação de eficácia; Follow-up; Evidências de melhoria", weight: 3, isCritical: false, norms: ["ISM Code 9"] }
+      ]},
+      { id: "12.3", name: "Lições Aprendidas e Estatísticas", items: [
+        { id: "12.3.1", subelement: "Lições Aprendidas", description: "Compartilhamento de lições aprendidas com toda a frota de forma sistemática?", evidences: "Alertas de SMS; Comunicações fleet-wide; Reuniões de segurança; Registros de divulgação", weight: 3, isCritical: false, norms: ["ISM Code 9"] },
+        { id: "12.3.2", subelement: "Lições Aprendidas", description: "Sistema de reporte de quase-acidentes (near miss) implementado e incentivado?", evidences: "Procedimento de reporte; Registros de near miss; Análise e tratamento; Indicadores; Cultura just", weight: 3, isCritical: false, norms: ["ISM Code 9"] },
+        { id: "12.3.3", subelement: "Lições Aprendidas", description: "Estatísticas de acidentes/incidentes analisadas em tendências com indicadores proativos e reativos?", evidences: "Dashboard de indicadores; Relatórios periódicos; Análise de tendências; Benchmarking", weight: 3, isCritical: false, norms: ["ISM Code"] },
+        { id: "12.3.4", subelement: "Lições Aprendidas", description: "Alertas de segurança da Petrobras e indústria são analisados e ações implementadas?", evidences: "Registros de recebimento de alertas; Análise de aplicabilidade; Ações implementadas; Treinamentos", weight: 3, isCritical: false, norms: ["ISM Code 9"] }
+      ]}
+    ]
   },
   {
     id: 13, name: "Processo de Melhoria Contínua", sigla: "MC", description: "Auditorias internas, análise crítica e indicadores de desempenho", weightPercentage: 7.5, isCritical: false, importanceLevel: "high", icon: "TrendingUp", category: "Melhoria",
-    subelements: [{ id: "13.1", name: "Auditorias e Análise Crítica", items: [
-      { id: "13.1.1", subelement: "Melhoria Contínua", description: "Programa de auditorias internas com cronograma para toda a frota cobrindo todos os elementos?", evidences: "Programa de auditorias; Cronograma; Relatórios; Qualificação dos auditores; Ações corretivas", weight: 3, isCritical: false, norms: ["ISM Code 12", "ISO 9001"] },
-      { id: "13.1.2", subelement: "Melhoria Contínua", description: "Análise Crítica pela Direção (Management Review) realizada periodicamente?", evidences: "Atas de análise crítica; Indicadores revisados; Metas definidas; Planos de ação", weight: 3, isCritical: false, norms: ["ISM Code 12"] },
-      { id: "13.1.3", subelement: "Melhoria Contínua", description: "Indicadores de desempenho de SMS são monitorados e analisados em tendências?", evidences: "Painel de indicadores; Análise de tendências; Benchmarking; Ações para desvios", weight: 3, isCritical: false, norms: ["ISM Code 12"] },
-      { id: "13.1.4", subelement: "Melhoria Contínua", description: "Não conformidades de auditorias anteriores foram tratadas e eficácia verificada?", evidences: "Registros de NC; Ações corretivas; Verificação de eficácia; Fechamento no BROA", weight: 3, isCritical: false, norms: ["ISM Code 12"] }
-    ]}]
+    subelements: [
+      { id: "13.1", name: "Auditorias Internas e Inspeções", items: [
+        { id: "13.1.1", subelement: "Auditorias", description: "Programa de auditorias internas com cronograma para toda a frota cobrindo todos os elementos?", evidences: "Programa de auditorias; Cronograma; Relatórios; Qualificação dos auditores; Ações corretivas", weight: 3, isCritical: false, norms: ["ISM Code 12", "ISO 9001"] },
+        { id: "13.1.2", subelement: "Auditorias", description: "Inspeções de terceiros (Sociedade Classificadora, Flag State) planejadas e sem condições pendentes?", evidences: "Relatórios de auditorias externas; CAPs encerradas; Status de condições de classe", weight: 3, isCritical: true, norms: ["SOLAS", "Sociedade Classificadora"] },
+        { id: "13.1.3", subelement: "Auditorias", description: "Auditores internos qualificados e treinados conforme requisitos ISM/ISO?", evidences: "Certificados de qualificação; Registros de treinamento; Experiência documentada", weight: 3, isCritical: false, norms: ["ISM Code 12"] }
+      ]},
+      { id: "13.2", name: "Auditorias Externas e Certificação", items: [
+        { id: "13.2.1", subelement: "Auditorias Externas", description: "Auditorias de certificação ISM (DOC/SMC) realizadas e certificados válidos?", evidences: "Certificados DOC e SMC válidos; Relatórios de auditorias de certificação; NC tratadas", weight: 3, isCritical: true, norms: ["ISM Code 13"] },
+        { id: "13.2.2", subelement: "Auditorias Externas", description: "Auditorias ISPS Code realizadas e certificados ISSC válidos?", evidences: "ISSC válido; Relatórios de auditoria ISPS; Verificações intermediárias", weight: 3, isCritical: false, norms: ["ISPS Code"] },
+        { id: "13.2.3", subelement: "Auditorias Externas", description: "NC de auditorias externas tratadas dentro dos prazos com verificação de eficácia?", evidences: "Registros de NC; Prazos cumpridos; Verificação de eficácia; Fechamento formal", weight: 3, isCritical: false, norms: ["ISM Code 12"] }
+      ]},
+      { id: "13.3", name: "Indicadores e Benchmarking", items: [
+        { id: "13.3.1", subelement: "Indicadores", description: "Indicadores de desempenho de SMS proativos e reativos monitorados e analisados?", evidences: "Painel de indicadores; Análise de tendências; Metas definidas; Ações para desvios", weight: 3, isCritical: false, norms: ["ISM Code 12"] },
+        { id: "13.3.2", subelement: "Indicadores", description: "Benchmarking realizado com empresas do setor e padrões de referência?", evidences: "Relatórios comparativos; Participação em fóruns do setor; Gráficos de comparação", weight: 3, isCritical: false, norms: ["IMCA"] },
+        { id: "13.3.3", subelement: "Indicadores", description: "Indicadores incluem: TAR, TOR, TFCA, TG, ICMP, falhas de DP, near miss, desvios, VCP?", evidences: "Dashboard com todos os indicadores requeridos; Histórico de medições", weight: 3, isCritical: false, norms: ["Petrobras", "ISM Code"] }
+      ]},
+      { id: "13.4", name: "Análise Crítica e Melhoria", items: [
+        { id: "13.4.1", subelement: "Análise Crítica", description: "Análise Crítica pela Direção (Management Review) realizada periodicamente com todos os indicadores?", evidences: "Atas de análise crítica; Indicadores revisados; Metas definidas; Planos de ação", weight: 3, isCritical: false, norms: ["ISM Code 12"] },
+        { id: "13.4.2", subelement: "Análise Crítica", description: "Revisão anual do sistema SMS com atualização de políticas, procedimentos e objetivos?", evidences: "Ata de revisão anual; Plano de ação da direção; Atualização de documentos", weight: 3, isCritical: false, norms: ["ISM Code 12"] },
+        { id: "13.4.3", subelement: "Análise Crítica", description: "Não conformidades de auditorias anteriores (PEOTRAM e outras) foram tratadas e eficácia verificada?", evidences: "Registros de NC; Ações corretivas; Verificação de eficácia; Fechamento no BROA", weight: 3, isCritical: false, norms: ["ISM Code 12"] },
+        { id: "13.4.4", subelement: "Análise Crítica", description: "Análise crítica inclui avaliação de fatores humanos e aspectos comportamentais?", evidences: "Programa de FH na análise crítica; Resultados de pesquisas; Melhorias implementadas", weight: 3, isCritical: false, norms: ["STCW", "ISM Code"] }
+      ]}
+    ]
   }
 ];
 
