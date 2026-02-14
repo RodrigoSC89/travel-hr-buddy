@@ -295,6 +295,15 @@ const config: Config = {
         "shimmer": {
           "100%": { transform: "translateX(100%)" },
         },
+        "sonar": {
+          "0%": { transform: "scale(1)", opacity: "0.7" },
+          "100%": { transform: "scale(2.5)", opacity: "0" },
+        },
+        "gradient-shift": {
+          "0%": { backgroundPosition: "0% 50%" },
+          "50%": { backgroundPosition: "100% 50%" },
+          "100%": { backgroundPosition: "0% 50%" },
+        },
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
@@ -318,6 +327,8 @@ const config: Config = {
         "slide-up": "slide-up 0.4s ease-out",
         "slide-down": "slide-down 0.4s ease-out",
         "blur-in": "blur-in 0.3s ease-out",
+        "sonar": "sonar 2s cubic-bezier(0, 0, 0.2, 1) infinite",
+        "gradient-shift": "gradient-shift 6s ease infinite",
       },
     },
   },

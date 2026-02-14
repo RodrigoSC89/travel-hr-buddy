@@ -20,6 +20,8 @@ import { motion } from "framer-motion";
 import { useAnalyticsBIData } from "@/hooks/useAnalyticsBIData";
 import { useCertificateAlerts } from "@/hooks/useCertificateAlerts";
 import { useQueryClient } from "@tanstack/react-query";
+import { AnimatedCounter } from "@/components/ui/AnimatedCounter";
+import { PremiumCard } from "@/components/ui/PremiumCard";
 
 const COLORS = [
   "hsl(var(--primary))", "hsl(var(--success))", "hsl(var(--warning))", "hsl(var(--destructive))",
@@ -35,31 +37,47 @@ interface KPICardProps {
   loading?: boolean;
 }
 
+const glowColors: Record<string, "cyan" | "primary" | "success" | "warning" | "destructive"> = {
+  ship: "cyan",
+  users: "primary",
+  wrench: "warning",
+  shield: "success",
+  alert: "destructive",
+};
+
 const KPICard = ({ title, value, change, icon: Icon, subtitle, loading }: KPICardProps) => {
-  if (loading) return <Skeleton className="h-32 rounded-lg" />;
+  if (loading) return <Skeleton className="h-36 rounded-xl" />;
   const isPositive = change >= 0;
+  const numericValue = typeof value === "string" ? parseFloat(value.replace(/[^\d.-]/g, "")) : value;
 
   return (
-    <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} whileHover={{ y: -4 }} transition={{ duration: 0.3 }}>
-      <Card className="relative overflow-hidden">
-        <div className="absolute top-0 right-0 w-24 h-24 bg-gradient-to-br from-primary/10 to-transparent rounded-full -mr-12 -mt-12" />
-        <CardHeader className="pb-2">
-          <CardTitle className="text-sm font-medium text-muted-foreground flex items-center gap-2">
+    <PremiumCard glowColor="primary" className="overflow-hidden">
+      {/* Decorative gradient orb */}
+      <div className="absolute top-0 right-0 w-28 h-28 bg-gradient-to-br from-primary/8 via-primary/4 to-transparent rounded-full -mr-10 -mt-10 blur-sm" />
+      <div className="absolute bottom-0 left-0 w-16 h-16 bg-gradient-to-tr from-primary/5 to-transparent rounded-full -ml-6 -mb-6" />
+      
+      <div className="relative z-10">
+        <div className="flex items-center justify-between mb-3">
+          <span className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">{title}</span>
+          <div className="p-2 rounded-lg bg-primary/10 text-primary">
             <Icon className="h-4 w-4" />
-            {title}
-          </CardTitle>
-        </CardHeader>
-        <CardContent>
-          <p className="text-3xl font-bold">{value}</p>
-          <p className="text-xs text-muted-foreground flex items-center gap-1 mt-1">
-            <span className={isPositive ? "text-success" : "text-destructive"}>
-              {isPositive ? "↑" : "↓"} {Math.abs(change)}%
-            </span>
-            {subtitle}
-          </p>
-        </CardContent>
-      </Card>
-    </motion.div>
+          </div>
+        </div>
+        <p className="text-3xl font-bold tracking-tight">
+          {!isNaN(numericValue) ? (
+            <AnimatedCounter value={numericValue} />
+          ) : (
+            value
+          )}
+        </p>
+        <div className="flex items-center gap-2 mt-2">
+          <Badge variant={isPositive ? "default" : "destructive"} className="text-xs px-1.5 py-0.5 font-mono">
+            {isPositive ? "↑" : "↓"} {Math.abs(change)}%
+          </Badge>
+          <span className="text-xs text-muted-foreground">{subtitle}</span>
+        </div>
+      </div>
+    </PremiumCard>
   );
 };
 
