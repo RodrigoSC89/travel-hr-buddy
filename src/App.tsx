@@ -57,11 +57,13 @@ function App() {
         <AuthProvider>
           <Router>
             <TooltipProvider>
-              <LazyLoadErrorBoundary>
-                <Suspense fallback={<AppLoader />}>
-                  <AppRoutes />
-                </Suspense>
-              </LazyLoadErrorBoundary>
+               <LazyLoadErrorBoundary>
+                <main id="main-content" role="main">
+                  <Suspense fallback={<AppLoader />}>
+                    <AppRoutes />
+                  </Suspense>
+                </main>
+               </LazyLoadErrorBoundary>
               <Toaster />
             </TooltipProvider>
           </Router>

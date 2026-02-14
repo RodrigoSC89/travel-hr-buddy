@@ -33,18 +33,47 @@
     <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;800;900&family=JetBrains+Mono:wght@400;500&display=swap"></noscript>
     
     <title>Nauti One - Sistema de Gestão Marítima</title>
-    <meta name="description" content="Nauti One - Sistema revolucionário de gestão marítima com IA integrada. Tripulação, Documentos, Compliance, Operações e muito mais." />
+    <meta name="description" content="Nauti One - Plataforma de gestão marítima com IA. Tripulação, compliance MLC 2006, STCW, operações e documentos." />
     <meta name="author" content="Nauti One" />
-    <meta name="keywords" content="gestão marítima, tripulação, compliance, PEOTRAM, PEO-DP, MLC 2006, STCW, navios, embarcações" />
+    <meta name="keywords" content="gestão marítima, tripulação, compliance, MLC 2006, STCW, SOLAS, navios, embarcações" />
+    <link rel="canonical" href="https://travel-hr-buddy.lovable.app/" />
 
-    <meta property="og:title" content="Nauti One - Sistema de Gestão Marítima" />
-    <meta property="og:description" content="Sistema revolucionário de gestão marítima com IA integrada. Tripulação, Documentos, Compliance, Operações." />
+    <meta property="og:title" content="Nauti One - Gestão Marítima com IA" />
+    <meta property="og:description" content="Plataforma de gestão marítima com IA. Tripulação, compliance MLC 2006, STCW, operações." />
     <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://travel-hr-buddy.lovable.app/" />
     <meta property="og:image" content="/icons/nauti-one-logo.png" />
+    <meta property="og:locale" content="pt_BR" />
+    <meta property="og:site_name" content="Nauti One" />
 
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:site" content="@nautione" />
+    <meta name="twitter:title" content="Nauti One - Gestão Marítima com IA" />
+    <meta name="twitter:description" content="Plataforma de gestão marítima com IA. Tripulação, compliance, operações." />
     <meta name="twitter:image" content="/icons/nauti-one-logo.png" />
+
+    <!-- JSON-LD Structured Data -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "SoftwareApplication",
+      "name": "Nauti One",
+      "applicationCategory": "BusinessApplication",
+      "operatingSystem": "Web",
+      "description": "Plataforma de gestão marítima com IA integrada para tripulação, compliance e operações.",
+      "url": "https://travel-hr-buddy.lovable.app/",
+      "inLanguage": "pt-BR",
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "BRL"
+      },
+      "creator": {
+        "@type": "Organization",
+        "name": "Nauti One"
+      }
+    }
+    </script>
   </head>
 
   <body>
@@ -58,6 +87,10 @@
     </div>
     <style>@keyframes spin{to{transform:rotate(360deg)}}#initial-loader{will-change:opacity;}</style>
     
+    <!-- Skip to content link for accessibility -->
+    <a href="#main-content" class="sr-only focus:not-sr-only focus:absolute focus:z-[10000] focus:top-2 focus:left-2 focus:px-4 focus:py-2 focus:bg-primary focus:text-primary-foreground focus:rounded-md focus:text-sm" style="position:absolute;left:-9999px;">
+      Pular para o conteúdo principal
+    </a>
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
     
