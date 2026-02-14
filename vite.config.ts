@@ -2,6 +2,7 @@ import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react-swc";
 import path from "path";
 import { componentTagger } from "lovable-tagger";
+import viteCompression from "vite-plugin-compression";
 
 // Fix for multiple React instances and ESM compatibility
 export default defineConfig(({ mode }) => ({
@@ -15,6 +16,19 @@ export default defineConfig(({ mode }) => ({
   plugins: [
     react(),
     mode === "development" && componentTagger(),
+    // Gzip compression for production builds
+    mode === "production" && viteCompression({
+      algorithm: "gzip",
+      ext: ".gz",
+      threshold: 1024,
+      deleteOriginFile: false,
+    }),
+    // Brotli compression for production builds
+    mode === "production" && viteCompression({
+      algorithm: "brotliCompress",
+      ext: ".br",
+      threshold: 1024,
+    }),
   ].filter(Boolean),
   resolve: {
     alias: {
@@ -51,12 +65,9 @@ export default defineConfig(({ mode }) => ({
     outDir: "dist",
     sourcemap: false,
     minify: "esbuild",
-    target: "esnext",
-    chunkSizeWarningLimit: 100000,
-    cssCodeSplit: true,
-    cssMinify: true,
-    modulePreload: { polyfill: false }, // Modern browsers don't need polyfill
-    reportCompressedSize: false,
+    target: "es2020",
+    chunkSizeWarningLimit: 500,
+    reportCompressedSize: true,
     assetsInlineLimit: 4096, // Inline small assets < 4KB
     rollupOptions: {
       output: {
@@ -93,8 +104,22 @@ export default defineConfig(({ mode }) => ({
           // Router
           if (id.includes('react-router')) return 'router-vendor';
           // Tesseract OCR - lazy loaded on OCR actions (~500KB)
-          if (id.includes('tesseract.js')) return 'tesseract-vendor';
-        },
+              if (id.includes('tesseract.js')) return 'tesseract-vendor';
+              // Sentry monitoring
+              if (id.includes('@sentry')) return 'sentry-vendor';
+              // ONNX runtime
+              if (id.includes('onnx')) return 'onnx-vendor';
+              // Lucide icons
+              if (id.includes('lucide-react')) return 'icons-vendor';
+              // Firebase
+              if (id.includes('firebase')) return 'firebase-vendor';
+              // OpenAI
+              if (id.includes('openai')) return 'openai-vendor';
+              // TipTap editor
+              if (id.includes('@tiptap') || id.includes('prosemirror') || id.includes('yjs')) return 'editor-vendor';
+              // MQTT
+              if (id.includes('mqtt')) return 'mqtt-vendor';
+            },
         // Ensure consistent chunk naming for caching
         chunkFileNames: (chunkInfo) => {
           const facadeModuleId = chunkInfo.facadeModuleId;
