@@ -4,6 +4,7 @@
  */
 import { Suspense, lazy } from "react";
 import { Outlet, useNavigate } from "react-router-dom";
+import { SmoothPageTransition } from "@/components/ui/SmoothPageTransition";
 import { SidebarProvider } from "@/components/ui/sidebar";
 import { AppSidebar } from "@/components/layout/app-sidebar";
 import { Header } from "@/components/layout/header";
@@ -63,7 +64,9 @@ export const AuthenticatedLayout = () => {
           </div>
           <main className="flex-1 overflow-auto px-3 pb-20 md:px-6 md:pb-6">
             <ModuleErrorBoundary moduleName="Page">
-              <Outlet />
+              <SmoothPageTransition>
+                <Outlet />
+              </SmoothPageTransition>
             </ModuleErrorBoundary>
           </main>
         </div>

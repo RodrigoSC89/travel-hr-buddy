@@ -407,8 +407,13 @@ const Auth: React.FC = () => {
   );
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-background via-background to-primary/5 flex items-center justify-center p-4">
-      <div className="w-full max-w-5xl grid lg:grid-cols-2 gap-12 items-center">
+    <div className="min-h-screen bg-gradient-to-br from-background via-background to-primary/5 flex items-center justify-center p-4 overflow-hidden relative">
+      {/* Animated background particles */}
+      <div className="absolute inset-0 pointer-events-none overflow-hidden">
+        <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-primary/5 rounded-full blur-3xl animate-pulse" />
+        <div className="absolute bottom-1/4 right-1/4 w-80 h-80 bg-accent/5 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '1s' }} />
+      </div>
+      <div className="w-full max-w-5xl grid lg:grid-cols-2 gap-12 items-center relative z-10">
         {/* Left Side - System Showcase */}
         <div className="hidden lg:flex flex-col space-y-8 animate-fade-in">
           {/* Logo & Title */}
@@ -442,12 +447,13 @@ const Auth: React.FC = () => {
                 { name: 'Inteligência IA', desc: '10 Agentes, Chat', icon: Brain, badge: '11' },
                 { name: 'Rastreamento', desc: 'AIS, SATCOM, IoT', icon: Satellite, badge: '8' },
                 { name: 'Compliance', desc: '12 Auditorias', icon: Shield, badge: '22' },
-              ].map((hub) => (
+              ].map((hub, index) => (
                 <div
                   key={hub.name}
-                  className="bg-card/50 border border-border/30 rounded-xl p-3 flex items-center gap-3 hover:bg-card/80 transition-colors duration-200"
+                  className="bg-card/50 border border-border/30 rounded-xl p-3 flex items-center gap-3 hover:bg-card/80 hover:border-primary/20 hover:shadow-premium-sm transition-all duration-300 group cursor-default"
+                  style={{ animationDelay: `${index * 100}ms` }}
                 >
-                  <hub.icon className="h-4 w-4 text-primary shrink-0" />
+                  <hub.icon className="h-4 w-4 text-primary shrink-0 group-hover:scale-110 transition-transform" />
                   <div className="min-w-0 flex-1">
                     <div className="flex items-center gap-1.5">
                       <span className="text-xs font-semibold truncate">{hub.name}</span>
@@ -731,7 +737,7 @@ const Auth: React.FC = () => {
           <div className="text-center mt-4">
             <Button
               variant="outline"
-              className="w-full max-w-md border-primary/30 text-primary hover:bg-primary/5"
+              className="w-full max-w-md border-primary/30 text-primary hover:bg-primary/10 hover:border-primary/50 hover:shadow-[0_0_15px_hsl(var(--primary)/0.15)] transition-all duration-300"
               onClick={() => {
                 enableDemoMode();
                 navigate('/command');
