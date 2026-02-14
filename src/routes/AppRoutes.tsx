@@ -313,6 +313,7 @@ export const AppRoutes = () => (
       {/* ======== ADMIN ======== */}
       <Route path="/admin" element={<Suspense fallback={<AppLoader />}><Pages.AdminRoute><Pages.Admin /></Pages.AdminRoute></Suspense>} />
       <Route path="/admin/dashboard" element={<Suspense fallback={<AppLoader />}><Pages.AdminRoute><Pages.AdminDashboard /></Pages.AdminRoute></Suspense>} />
+      <Route path="/admin/bi" element={<Suspense fallback={<AppLoader />}><Pages.AdminBI /></Suspense>} />
       <Route path="/admin/documents" element={<Suspense fallback={<AppLoader />}><Pages.AdminRoute><Pages.AdminDocumentList /></Pages.AdminRoute></Suspense>} />
       <Route path="/admin/documents/ai" element={<Suspense fallback={<AppLoader />}><Pages.AdminRoute><Pages.AdminAIEditor /></Pages.AdminRoute></Suspense>} />
       <Route path="/admin/documents/ai/templates" element={<Suspense fallback={<AppLoader />}><Pages.AdminRoute><Pages.AdminAITemplates /></Pages.AdminRoute></Suspense>} />

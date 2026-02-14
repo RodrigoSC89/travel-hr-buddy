@@ -84,10 +84,12 @@ export const SIDEBAR_ROUTES: SidebarGroup[] = [
     defaultOpen: true,
     items: [
       { label: "Command Center", path: "/command", icon: Compass, emoji: "📊", badge: "HUB" },
+      { label: "Analytics BI", path: "/admin/bi", icon: BarChart3, emoji: "📈", badge: "NEW", status: "new" as const },
       { label: "Operations", path: "/command?tab=operations", icon: Activity, emoji: "⚡" },
       { label: "Executive", path: "/command?tab=executive", icon: BarChart3, emoji: "📈" },
       { label: "NOC 24/7", path: "/command?tab=noc", icon: Eye, emoji: "🖥️" },
       { label: "SOC Security", path: "/command?tab=soc", icon: Shield, emoji: "🛡️" },
+      { label: "Client Portal", path: "/client-portal", icon: Globe, emoji: "🌐", badge: "NEW", status: "new" as const },
     ],
   },
 
