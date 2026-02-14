@@ -26,10 +26,10 @@ import { toast } from 'sonner';
 
 // Lazy load sub-components
 const DocumentCenterHub = lazy(() => import('@/pages/Documents'));
-const PeopleHub = lazy(() => import('@/pages/HRDashboardPage'));
+const PeopleHub = lazy(() => import('@/components/crew/CrewManagementPremium'));
 const FinanceHub = lazy(() => import('@/pages/VoyageAccountingPage'));
 const SystemHub = lazy(() => import('@/pages/Settings'));
-const TravelCommandPremium = lazy(() => import('@/pages/Documents'));
+const TravelCommandPremium = lazy(() => import('@/components/travel/TravelCommandPremium'));
 const CrewAIHub = lazy(() => import('@/components/crew/ai/CrewAIHub'));
 const FinanceAIHub = lazy(() => import('@/components/finance/ai/FinanceAIHub'));
 const DocumentsAIHub = lazy(() => import('@/components/documents/ai/DocumentsAIHub'));
