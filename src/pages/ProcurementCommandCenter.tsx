@@ -6,6 +6,9 @@
 
 import { useState, useEffect } from "react";
 import { logger } from "@/lib/logger";
+import { PurchaseOrdersManager } from '@/components/procurement/PurchaseOrdersManager';
+import { ApprovalWorkflow } from '@/components/procurement/ApprovalWorkflow';
+import { SupplierScorecard } from '@/components/procurement/SupplierScorecard';
 import { Helmet } from "react-helmet-async";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
@@ -627,6 +630,14 @@ export default function ProcurementCommandCenter() {
               <Truck className="h-4 w-4" />
               Pedidos
             </TabsTrigger>
+            <TabsTrigger value="approvals" className="gap-2">
+              <CheckCircle2 className="h-4 w-4" />
+              Aprovações
+            </TabsTrigger>
+            <TabsTrigger value="scorecard" className="gap-2">
+              <Award className="h-4 w-4" />
+              Scorecard
+            </TabsTrigger>
           </TabsList>
 
           {/* OVERVIEW TAB */}
@@ -1147,20 +1158,17 @@ export default function ProcurementCommandCenter() {
 
           {/* ORDERS TAB */}
           <TabsContent value="orders">
-            <Card className="border-border/50 bg-card/50 backdrop-blur">
-              <CardHeader>
-                <CardTitle>Pedidos de Compra</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="text-center py-12">
-                  <Truck className="h-16 w-16 text-muted-foreground/50 mx-auto mb-4" />
-                  <p className="text-muted-foreground">Gestão de pedidos integrada</p>
-                  <p className="text-sm text-muted-foreground/70 mt-1">
-                    Tracking de entregas, recebimentos e gestão de estoque
-                  </p>
-                </div>
-              </CardContent>
-            </Card>
+            <PurchaseOrdersManager />
+          </TabsContent>
+
+          {/* APPROVALS TAB */}
+          <TabsContent value="approvals">
+            <ApprovalWorkflow />
+          </TabsContent>
+
+          {/* SCORECARD TAB */}
+          <TabsContent value="scorecard">
+            <SupplierScorecard />
           </TabsContent>
         </Tabs>
 
