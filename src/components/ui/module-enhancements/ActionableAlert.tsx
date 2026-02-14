@@ -142,6 +142,8 @@ export const ActionableAlert: React.FC<ActionableAlertProps> = ({
                     size="icon"
                     className="h-6 w-6 shrink-0"
                     onClick={() => onDismiss(id)}
+                    aria-label="Dispensar alerta"
+                    title="Dispensar"
                   >
                     <X className="h-4 w-4" />
                   </Button>

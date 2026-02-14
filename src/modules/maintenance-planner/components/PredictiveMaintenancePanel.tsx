@@ -198,7 +198,7 @@ export default function PredictiveMaintenancePanel() {
                     ))}
                   </SelectContent>
                 </Select>
-                <Button variant="outline" size="icon" onClick={handleRefresh}>
+                <Button variant="outline" size="icon" onClick={handleRefresh} aria-label="Atualizar previsões" title="Atualizar">
                   <RefreshCcw className="h-4 w-4" />
                 </Button>
               </div>

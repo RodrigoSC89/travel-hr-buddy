@@ -126,6 +126,8 @@ export const OfflineIndicator = React.memo<OfflineIndicatorProps>(({
           size="icon"
           className="h-6 w-6 ml-1"
           onClick={() => triggerSync()}
+          aria-label="Sincronizar dados"
+          title="Sincronizar"
         >
           <RefreshCw className="h-3 w-3" />
         </Button>
@@ -138,6 +140,8 @@ export const OfflineIndicator = React.memo<OfflineIndicatorProps>(({
           size="icon"
           className="h-6 w-6 ml-1"
           onClick={() => setIsDismissed(true)}
+          aria-label="Fechar indicador"
+          title="Fechar"
         >
           <X className="h-3 w-3" />
         </Button>

@@ -1117,11 +1117,11 @@ export default function AcademyDashboard() {
                     </div>
                     <div className="flex gap-1">
                       {!notif.read && (
-                        <Button variant="ghost" size="icon" className="h-8 w-8" onClick={() => handleMarkAsRead(notif.id)}>
+                        <Button variant="ghost" size="icon" className="h-8 w-8" onClick={() => handleMarkAsRead(notif.id)} aria-label="Marcar como lida" title="Marcar como lida">
                           <Check className="h-4 w-4" />
                         </Button>
                       )}
-                      <Button variant="ghost" size="icon" className="h-8 w-8" onClick={() => handleDeleteNotification(notif.id)}>
+                      <Button variant="ghost" size="icon" className="h-8 w-8" onClick={() => handleDeleteNotification(notif.id)} aria-label="Excluir notificação" title="Excluir">
                         <Trash2 className="h-4 w-4" />
                       </Button>
                     </div>

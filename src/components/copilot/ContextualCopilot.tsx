@@ -259,6 +259,8 @@ export function ContextualCopilot({
                 size="icon" 
                 className="h-7 w-7"
                 onClick={() => setIsExpanded(!isExpanded)}
+                aria-label={isExpanded ? "Recolher copilot" : "Expandir copilot"}
+                title={isExpanded ? "Recolher" : "Expandir"}
               >
                 {isExpanded ? <ChevronDown className="h-4 w-4" /> : <ChevronUp className="h-4 w-4" />}
               </Button>
@@ -267,6 +269,8 @@ export function ContextualCopilot({
                 size="icon" 
                 className="h-7 w-7"
                 onClick={() => setIsMinimized(true)}
+                aria-label="Fechar copilot"
+                title="Fechar"
               >
                 <X className="h-4 w-4" />
               </Button>
@@ -366,6 +370,8 @@ export function ContextualCopilot({
                     className="shrink-0"
                     onClick={sendMessage}
                     disabled={!input.trim() || loading}
+                    aria-label="Enviar mensagem"
+                    title="Enviar"
                   >
                     <Send className="h-4 w-4" />
                   </Button>

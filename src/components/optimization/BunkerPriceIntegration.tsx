@@ -129,7 +129,7 @@ export function BunkerPriceIntegration({ onPriceSelect, selectedPort, className 
               VLSFO/MGO/HFO em USD/ton
             </CardDescription>
           </div>
-          <Button variant="ghost" size="icon" onClick={fetchPrices} disabled={isLoading}>
+          <Button variant="ghost" size="icon" onClick={fetchPrices} disabled={isLoading} aria-label="Atualizar preços" title="Atualizar preços">
             <RefreshCw className={`h-4 w-4 ${isLoading ? "animate-spin" : ""}`} />
           </Button>
         </div>

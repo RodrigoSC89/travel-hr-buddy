@@ -65,6 +65,7 @@ export default function DocumentEditorDemo() {
                   size="icon"
                   onClick={copyToClipboard}
                   title="Copy to clipboard"
+                  aria-label="Copiar para área de transferência"
                 >
                   <Copy className="h-4 w-4" />
                 </Button>
@@ -73,6 +74,7 @@ export default function DocumentEditorDemo() {
                   size="icon"
                   onClick={generateNewId}
                   title="Generate new ID"
+                  aria-label="Gerar novo ID"
                 >
                   <RefreshCw className="h-4 w-4" />
                 </Button>

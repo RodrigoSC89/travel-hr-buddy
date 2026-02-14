@@ -148,6 +148,8 @@ export function HRChatbot() {
         onClick={() => setIsOpen(true)}
         className="fixed bottom-24 right-4 md:bottom-6 h-14 w-14 rounded-full shadow-lg z-50"
         size="icon"
+        aria-label="Abrir assistente de RH"
+        title="Assistente de RH"
       >
         <MessageSquare className="h-6 w-6" />
       </Button>
@@ -172,10 +174,10 @@ export function HRChatbot() {
           <Badge variant="secondary" className="text-xs">Online 24/7</Badge>
         </div>
         <div className="flex gap-1">
-          <Button variant="ghost" size="icon" className="h-8 w-8" onClick={() => setIsMinimized(!isMinimized)}>
+          <Button variant="ghost" size="icon" className="h-8 w-8" onClick={() => setIsMinimized(!isMinimized)} aria-label={isMinimized ? "Expandir chat" : "Minimizar chat"} title={isMinimized ? "Expandir" : "Minimizar"}>
             {isMinimized ? <Maximize2 className="h-4 w-4" /> : <Minimize2 className="h-4 w-4" />}
           </Button>
-          <Button variant="ghost" size="icon" className="h-8 w-8" onClick={() => setIsOpen(false)}>
+          <Button variant="ghost" size="icon" className="h-8 w-8" onClick={() => setIsOpen(false)} aria-label="Fechar chat" title="Fechar">
             <X className="h-4 w-4" />
           </Button>
         </div>

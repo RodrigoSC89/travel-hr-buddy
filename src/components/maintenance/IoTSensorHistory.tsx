@@ -321,7 +321,7 @@ export function IoTSensorHistory() {
             </SelectContent>
           </Select>
 
-          <Button variant="outline" size="icon" onClick={fetchData}>
+          <Button variant="outline" size="icon" onClick={fetchData} aria-label="Atualizar dados do sensor" title="Atualizar">
             <RefreshCw className={cn("h-4 w-4", loading && "animate-spin")} />
           </Button>
         </div>

@@ -482,6 +482,7 @@ const ReportCard = ({
               size="icon"
               onClick={() => onToggle(report.id)}
               title={report.isActive ? 'Pausar' : 'Ativar'}
+              aria-label={report.isActive ? 'Pausar relatório' : 'Ativar relatório'}
             >
               {report.isActive ? <Pause className="w-4 h-4" /> : <Play className="w-4 h-4" />}
             </Button>
@@ -490,6 +491,7 @@ const ReportCard = ({
               size="icon"
               onClick={() => onDelete(report.id)}
               title="Excluir"
+              aria-label="Excluir relatório"
             >
               <Trash2 className="w-4 h-4 text-destructive" />
             </Button>

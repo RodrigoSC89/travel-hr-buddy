@@ -533,6 +533,7 @@ const WorkflowCard = ({
               size="icon"
               onClick={() => onToggle(workflow.id)}
               title={workflow.isActive ? 'Pausar' : 'Ativar'}
+              aria-label={workflow.isActive ? 'Pausar workflow' : 'Ativar workflow'}
             >
               {workflow.isActive ? <Pause className="w-4 h-4" /> : <Play className="w-4 h-4" />}
             </Button>
@@ -541,6 +542,7 @@ const WorkflowCard = ({
               size="icon"
               onClick={() => onDelete(workflow.id)}
               title="Excluir"
+              aria-label="Excluir workflow"
             >
               <Trash2 className="w-4 h-4 text-destructive" />
             </Button>

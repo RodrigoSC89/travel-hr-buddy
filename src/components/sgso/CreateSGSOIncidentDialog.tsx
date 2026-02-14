@@ -262,6 +262,8 @@ export const CreateSGSOIncidentDialog: FC<CreateSGSOIncidentDialogProps> = ({
                 size="icon"
                 onClick={captureGPS}
                 disabled={gpsLoading}
+                aria-label="Capturar localização GPS"
+                title="Capturar GPS"
               >
                 {gpsLoading ? <Loader2 className="h-4 w-4 animate-spin" /> : <MapPin className="h-4 w-4" />}
               </Button>

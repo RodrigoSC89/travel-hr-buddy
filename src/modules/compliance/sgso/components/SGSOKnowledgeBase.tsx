@@ -270,7 +270,7 @@ export const SGSOKnowledgeBase: React.FC = () => {
                       </div>
                       
                       {item.link && (
-                        <Button variant="ghost" size="icon" asChild>
+                        <Button variant="ghost" size="icon" asChild aria-label="Abrir link externo" title="Abrir link">
                           <a href={item.link} target="_blank" rel="noopener noreferrer">
                             <ExternalLink className="h-4 w-4" />
                           </a>
