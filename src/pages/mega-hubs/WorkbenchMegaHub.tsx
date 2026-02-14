@@ -33,6 +33,8 @@ const TravelCommandPremium = lazy(() => import('@/components/travel/TravelComman
 const CrewAIHub = lazy(() => import('@/components/crew/ai/CrewAIHub'));
 const FinanceAIHub = lazy(() => import('@/components/finance/ai/FinanceAIHub'));
 const DocumentsAIHub = lazy(() => import('@/components/documents/ai/DocumentsAIHub'));
+const CrewPoolPlanner = lazy(() => import('@/components/crew/CrewPoolPlanner'));
+const TravelItineraryBuilder = lazy(() => import('@/components/travel/TravelItineraryBuilder'));
 
 const LoadingSkeleton = () => (
   <div className="space-y-4 p-6">
@@ -54,7 +56,8 @@ const sectionConfig = [
   { id: 'finance', label: 'Finance', icon: DollarSign, color: 'yellow' },
   { id: 'approvals', label: 'Approvals', icon: DollarSign, color: 'yellow' },
   { id: 'travel', label: 'Travel', icon: Plane, color: 'purple' },
-  { id: 'system', label: 'System', icon: Settings, color: 'gray' },
+  { id: 'itinerary', label: 'Itinerário', icon: Calendar, color: 'purple' },
+  { id: 'crew-pool', label: 'Crew Pool', icon: Users, color: 'green' },
   { id: 'ai-crew', label: '🧠 Crew AI', icon: Heart, color: 'pink' },
   { id: 'ai-finance', label: '🧠 Finance AI', icon: Brain, color: 'indigo' },
   { id: 'ai-docs', label: '🧠 Docs AI', icon: Brain, color: 'cyan' },
@@ -486,6 +489,14 @@ export default function WorkbenchMegaHub() {
                 searchPlaceholder="Search bookings, crew travel..."
               />
               <TravelCommandPremium />
+            </TabsContent>
+
+            <TabsContent value="itinerary" className="mt-0">
+              <TravelItineraryBuilder />
+            </TabsContent>
+
+            <TabsContent value="crew-pool" className="mt-0">
+              <CrewPoolPlanner />
             </TabsContent>
             
             <TabsContent value="system" className="mt-0 space-y-6">

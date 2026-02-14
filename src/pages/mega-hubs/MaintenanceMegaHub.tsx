@@ -39,6 +39,7 @@ const WasteManagementPremium = lazy(() => import('@/pages/ESGEmissionsPremium'))
 const ESGEmissionsPremium = lazy(() => import('@/pages/ESGEmissionsPremium'));
 const MaintenanceAIHub = lazy(() => import('@/components/maintenance/ai/MaintenanceAIHub'));
 const SparePartsInventory = lazy(() => import('@/components/maintenance/SparePartsInventory'));
+const PMSEquipmentTree = lazy(() => import('@/components/maintenance/PMSEquipmentTree'));
 
 const LoadingSkeleton = () => (
   <div className="space-y-4 p-6">
@@ -54,8 +55,8 @@ const LoadingSkeleton = () => (
 
 const tabConfig = [
   { id: 'overview', label: 'Overview', icon: Wrench },
-  { id: 'planning', label: 'Planning', icon: Calendar },
-  { id: 'spare-parts', label: 'Spare Parts', icon: Shield },
+  { id: 'planning', label: 'PMS Calendar', icon: Calendar },
+  { id: 'equipment', label: 'Equipment Tree', icon: Cpu },
   { id: 'surveys', label: 'Class Surveys', icon: Shield },
   { id: 'predictive', label: 'Predictive', icon: Brain },
   { id: 'drydock', label: 'Drydock', icon: Anchor },
@@ -310,6 +311,10 @@ export default function MaintenanceMegaHub() {
               />
 
               {/* MaintenanceGanttCalendar removed */}
+            </TabsContent>
+            
+            <TabsContent value="equipment" className="mt-0">
+              <PMSEquipmentTree />
             </TabsContent>
             
             <TabsContent value="spare-parts" className="mt-0">
