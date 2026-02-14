@@ -16,20 +16,6 @@ import {
 } from 'lucide-react';
 import { useInventorySparesAI, InventoryItem, ReorderSuggestion } from '@/hooks/useInventorySparesAI';
 
-// Fallback data when API is unavailable
-const FALLBACK_INVENTORY = [
-  { partNumber: 'ENG-001', name: 'Oil Filter', stock: 12, min: 5, max: 20, criticality: 'essential', class: 'A' },
-  { partNumber: 'HYD-015', name: 'Hydraulic Seal', stock: 3, min: 10, max: 25, criticality: 'critical', class: 'A' },
-  { partNumber: 'ELE-042', name: 'Fuse 20A', stock: 45, min: 20, max: 100, criticality: 'standard', class: 'C' },
-  { partNumber: 'MEC-023', name: 'Bearing 6205', stock: 8, min: 6, max: 15, criticality: 'essential', class: 'B' },
-];
-
-const FALLBACK_REORDERS = [
-  { item: 'Hydraulic Seal', urgency: 'critical', quantity: 15, supplier: 'Maritime Supplies Co.', savings: 450 },
-  { item: 'Fuel Filter', urgency: 'high', quantity: 10, supplier: 'Global Marine Parts', savings: 120 },
-  { item: 'Gasket Set', urgency: 'medium', quantity: 5, supplier: 'Ship Parts Ltd', savings: 80 },
-];
-
 export default function InventorySparesAIPage() {
   const { 
     isLoading, 
@@ -42,8 +28,8 @@ export default function InventorySparesAIPage() {
   
   const [activeTab, setActiveTab] = useState('inventory');
   const [searchTerm, setSearchTerm] = useState('');
-  const [inventory, setInventory] = useState(FALLBACK_INVENTORY);
-  const [reorders, setReorders] = useState(FALLBACK_REORDERS);
+  const [inventory, setInventory] = useState<{ partNumber: string; name: string; stock: number; min: number; max: number; criticality: string; class: string }[]>([]);
+  const [reorders, setReorders] = useState<{ item: string; urgency: string; quantity: number; supplier: string; savings: number }[]>([]);
   const [loadingData, setLoadingData] = useState(true);
 
   // Load real data on mount

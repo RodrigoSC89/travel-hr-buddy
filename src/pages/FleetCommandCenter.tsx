@@ -289,27 +289,17 @@ const FleetAICopilot = ({ vessels, onToast }: { vessels: EnrichedVessel[]; onToa
   );
 };
 
-// Fallback data para gráficos (usado quando não há dados reais)
-const FALLBACK_FUEL_TREND = [
-  { day: "Seg", consumption: 245, efficiency: 92 },
-  { day: "Ter", consumption: 238, efficiency: 94 },
-  { day: "Qua", consumption: 252, efficiency: 90 },
-  { day: "Qui", consumption: 228, efficiency: 96 },
-  { day: "Sex", consumption: 235, efficiency: 93 },
-  { day: "Sáb", consumption: 242, efficiency: 91 },
-  { day: "Dom", consumption: 230, efficiency: 95 }
-];
-
-const FALLBACK_PERFORMANCE_METRICS = [
-  { metric: "Eficiência", value: 93 },
-  { metric: "Segurança", value: 96 },
-  { metric: "Pontualidade", value: 89 },
-  { metric: "Manutenção", value: 91 },
-  { metric: "Tripulação", value: 94 },
-  { metric: "Compliance", value: 97 }
-];
-
 // ============ COMPONENTE PRINCIPAL ============
+
+// Initial empty state - populated from Supabase
+const INITIAL_PERFORMANCE_METRICS = [
+  { metric: "Eficiência", value: 0 },
+  { metric: "Segurança", value: 0 },
+  { metric: "Pontualidade", value: 0 },
+  { metric: "Manutenção", value: 0 },
+  { metric: "Tripulação", value: 0 },
+  { metric: "Compliance", value: 0 }
+];
 
 export default function FleetCommandCenter() {
   const { toast } = useToast();
@@ -317,8 +307,8 @@ export default function FleetCommandCenter() {
   const [vessels, setVessels] = useState<any[]>([]);
   // eslint-disable-next-line @typescript-eslint/no-explicit-any -- dynamic maintenance rows  
   const [maintenance, setMaintenance] = useState<any[]>([]);
-  const [fuelTrend, setFuelTrend] = useState(FALLBACK_FUEL_TREND);
-  const [performanceMetrics, setPerformanceMetrics] = useState(FALLBACK_PERFORMANCE_METRICS);
+  const [fuelTrend, setFuelTrend] = useState<{ day: string; consumption: number; efficiency: number }[]>([]);
+  const [performanceMetrics, setPerformanceMetrics] = useState(INITIAL_PERFORMANCE_METRICS);
   const [loading, setLoading] = useState(true);
   const [showAddDialog, setShowAddDialog] = useState(false);
   const [showMissionDialog, setShowMissionDialog] = useState(false);
