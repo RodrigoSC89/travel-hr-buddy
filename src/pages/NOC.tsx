@@ -89,7 +89,7 @@ export default function NOC() {
   }, []);
 
   const acknowledgeAlert = async (alertId: string) => {
-    await supabase.from("soc_alerts").update({ status: "acknowledged" }).eq("id", alertId);
+    await supabase.from("soc_alerts").update({ acknowledged_at: new Date().toISOString(), acknowledged_by: (await supabase.auth.getUser()).data.user?.id || null }).eq("id", alertId);
     refetchAlerts();
   };
 

@@ -25,28 +25,35 @@ export default function AnalyticsFeedback() {
   const { data: metrics, isLoading } = useQuery({
     queryKey: ['app-metrics'],
     queryFn: async () => {
-      const [users, vessels, feedback] = await Promise.all([
-        supabase.from('profiles').count(),
-        supabase.from('vessels').count(),
-        supabase.from('app_feedback').select('*').order('created_at', { ascending: false }).limit(50)
+      const [usersRes, vesselsRes, feedbackRes] = await Promise.all([
+        supabase.from('profiles').select('id', { count: 'exact', head: true }),
+        supabase.from('vessels').select('id', { count: 'exact', head: true }),
+        supabase.from('ai_feedback_scores').select('*').order('created_at', { ascending: false }).limit(50)
       ]);
       return {
-        users: users.count || 0,
-        vessels: vessels.count || 0,
-        feedback: feedback.data || [],
-        nps: 75 // calculated or default
+        users: usersRes.count || 0,
+        vessels: vesselsRes.count || 0,
+        feedback: (feedbackRes.data || []).map((f: any) => ({
+          id: f.id,
+          type: f.command_type || 'feedback',
+          content: JSON.stringify(f.feedback_data || f.command_data || {}),
+          created_at: f.created_at,
+        })),
+        nps: 75
       };
     }
   });
 
   const submitMutation = useMutation({
     mutationFn: async () => {
-      const { error } = await supabase.from('app_feedback').insert({
-        type: feedbackType,
-        content: feedbackComment,
-        score: npsScore,
-        user_id: (await supabase.auth.getUser()).data.user?.id
-      } as any);
+      const userId = (await supabase.auth.getUser()).data.user?.id;
+      const { error } = await supabase.from('ai_feedback_scores').insert({
+        command_type: feedbackType,
+        command_data: { content: feedbackComment },
+        self_score: npsScore || 0,
+        feedback_data: { type: feedbackType, comment: feedbackComment },
+        user_id: userId
+      });
       if (error) throw error;
     },
     onSuccess: () => {
