@@ -1,4 +1,7 @@
 User-agent: *
 Allow: /
+Disallow: /api/
+Disallow: /auth/
+Disallow: /settings/
 
-Sitemap: https://nauti-one.app/sitemap.xml
+Sitemap: https://travel-hr-buddy.lovable.app/sitemap.xml

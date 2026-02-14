@@ -138,4 +138,40 @@ export const pageSEO = {
   }
 };
 
+// Pre-built JSON-LD generators
+export const jsonLdSchemas = {
+  softwareApp: () => ({
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
+    name: "Nauti One",
+    applicationCategory: "BusinessApplication",
+    operatingSystem: "Web",
+    description: "Plataforma de gestão marítima com IA integrada.",
+    inLanguage: "pt-BR",
+    offers: { "@type": "Offer", price: "0", priceCurrency: "BRL" },
+    creator: { "@type": "Organization", name: "Nauti One" },
+  }),
+
+  breadcrumb: (items: { name: string; url: string }[]) => ({
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: items.map((item, i) => ({
+      "@type": "ListItem",
+      position: i + 1,
+      name: item.name,
+      item: item.url,
+    })),
+  }),
+
+  faqPage: (faqs: { question: string; answer: string }[]) => ({
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: faqs.map((faq) => ({
+      "@type": "Question",
+      name: faq.question,
+      acceptedAnswer: { "@type": "Answer", text: faq.answer },
+    })),
+  }),
+};
+
 export default SEOHead;
