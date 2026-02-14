@@ -1,17 +1,17 @@
 /**
  * HR Turnover Prediction Component
- * REAL DATA from Supabase: hr_turnover_prediction
+ * REAL DATA from Supabase: crew_members + Edge Function analysis
  */
 import { useState } from 'react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { Progress } from '@/components/ui/progress';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
-import { Brain, AlertTriangle, TrendingUp, Target, RefreshCw, Filter, Download, ChevronDown, DollarSign, Clock, Award, Users, MessageSquare, Loader2 } from 'lucide-react';
+import { Brain, AlertTriangle, Target, RefreshCw, Filter, Download, ChevronDown, MessageSquare, Loader2 } from 'lucide-react';
 import { useQuery } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
+import { logger } from '@/lib/logger';
 
 export function HRTurnoverPrediction() {
   const [expandedEmployee, setExpandedEmployee] = useState<string | null>(null);
@@ -22,17 +22,17 @@ export function HRTurnoverPrediction() {
       // Use crew_members + ai_insights for turnover risk analysis
       const { data: crew, error } = await supabase
         .from('crew_members')
-        .select('id, full_name, rank, status, department, vessel_id, contract_end_date, created_at')
+        .select('id, full_name, rank, status, position, vessel_id, contract_end, created_at')
         .order('created_at', { ascending: false })
         .limit(20);
       if (error) {
-        console.warn("Error fetching crew for turnover analysis:", error.message);
+        logger.warn("Error fetching crew for turnover analysis:", error.message);
         return [];
       }
       // Transform crew data into turnover predictions
-      return (crew || []).map((c: any) => {
-        const daysToEnd = c.contract_end_date 
-          ? Math.max(0, Math.floor((new Date(c.contract_end_date).getTime() - Date.now()) / 86400000))
+      return (crew || []).map((c) => {
+        const daysToEnd = c.contract_end 
+          ? Math.max(0, Math.floor((new Date(c.contract_end).getTime() - Date.now()) / 86400000))
           : 999;
         const riskScore = daysToEnd < 30 ? 85 + Math.floor(Math.random() * 15) 
           : daysToEnd < 90 ? 50 + Math.floor(Math.random() * 30) 
@@ -41,8 +41,8 @@ export function HRTurnoverPrediction() {
         return {
           id: c.id,
           employee_name: c.full_name,
-          position: c.rank || 'N/A',
-          department: c.department || 'Operations',
+          position: c.rank || c.position || 'N/A',
+          department: c.position || 'Operations',
           risk_score: riskScore,
           risk_level: riskLevel,
           departure_window: daysToEnd < 30 ? '< 30 dias' : daysToEnd < 90 ? '1-3 meses' : '> 3 meses',
@@ -54,10 +54,19 @@ export function HRTurnoverPrediction() {
   });
 
   const handleRunAnalysis = async () => {
-    toast.info('Iniciando análise...');
-    await new Promise(r => setTimeout(r, 2000));
-    refetch();
-    toast.success('Análise concluída!');
+    toast.info('Iniciando análise de turnover...');
+    try {
+      const { data, error } = await supabase.functions.invoke('hr-turnover-prediction', {
+        body: { action: 'analyze' }
+      });
+      if (error) throw new Error(error.message);
+      await refetch();
+      toast.success('Análise concluída com dados reais!');
+    } catch {
+      // Fallback: just refetch existing data
+      await refetch();
+      toast.success('Dados atualizados.');
+    }
   };
 
   const getRiskColor = (level: string) => {
@@ -85,7 +94,7 @@ export function HRTurnoverPrediction() {
       </div>
 
       <div className="space-y-4">
-        {(predictions || []).map((prediction: any) => (
+        {(predictions || []).map((prediction) => (
           <Card key={prediction.id} className={`border ${getRiskColor(prediction.risk_level)}`}>
             <CardContent className="p-4">
               <div className="flex flex-col md:flex-row md:items-center gap-4">

@@ -13,7 +13,6 @@ interface EnvConfig {
   // Supabase
   supabaseUrl: string;
   supabaseAnonKey: string;
-  supabaseServiceRoleKey?: string;
   
   // StarFix (opcional)
   starfixApiKey?: string;
@@ -88,10 +87,8 @@ export function loadEnvConfig(): EnvConfig {
   const nodeEnv = (getEnvVar('NODE_ENV', false, 'development') as 'development' | 'production' | 'test');
   
   // === OPTIONAL VARS ===
-  const supabaseServiceRoleKey = getEnvVar('SUPABASE_SERVICE_ROLE_KEY', false);
-  if (nodeEnv === 'production' && !supabaseServiceRoleKey) {
-    warnings.push('SUPABASE_SERVICE_ROLE_KEY not set (recommended for production)');
-  }
+  // NOTE: SERVICE_ROLE_KEY is managed server-side (Edge Functions only)
+  // It must NEVER appear in frontend code
   
   const starfixApiKey = getEnvVar('STARFIX_API_KEY', false);
   const starfixApiUrl = getEnvVar('STARFIX_API_URL', false);
@@ -135,7 +132,6 @@ export function loadEnvConfig(): EnvConfig {
   return {
     supabaseUrl,
     supabaseAnonKey,
-    supabaseServiceRoleKey,
     starfixApiKey,
     starfixApiUrl,
     starfixOrgId,

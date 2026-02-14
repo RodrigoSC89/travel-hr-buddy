@@ -126,13 +126,14 @@ const customFetch = async (input: RequestInfo | URL, init?: RequestInit): Promis
             response = await fetch(input, cleanInit as RequestInit);
           } catch {
             // If native fetch fails immediately, try XHR
+            // Auth retry logging - intentionally using console.warn for pre-logger context
             // eslint-disable-next-line no-console
-            console.log('[Auth] Native fetch failed, switching to XHR fallback');
+            console.warn('[Auth] Native fetch failed, switching to XHR fallback');
             response = await xhrFetch(url, method, headers, bodyStr);
           }
         } else {
           // eslint-disable-next-line no-console
-          console.log(`[Auth] Retry ${attempt} using XHR fallback`);
+          console.warn(`[Auth] Retry ${attempt} using XHR fallback`);
           response = await xhrFetch(url, method, headers, bodyStr);
         }
         
@@ -147,7 +148,7 @@ const customFetch = async (input: RequestInfo | URL, init?: RequestInit): Promis
         if (attempt < MAX_AUTH_RETRIES - 1) {
           const delay = Math.pow(2, attempt) * 1500 + Math.random() * 500;
           // eslint-disable-next-line no-console
-          console.log(`[Auth] Attempt ${attempt + 1} failed, retrying in ${Math.round(delay)}ms...`);
+          console.warn(`[Auth] Attempt ${attempt + 1} failed, retrying in ${Math.round(delay)}ms...`);
           await new Promise(resolve => setTimeout(resolve, delay));
         } else {
           throw error;
