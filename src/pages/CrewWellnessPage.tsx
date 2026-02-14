@@ -9,7 +9,7 @@ export default function CrewWellnessPage() {
   return (
     <>
       <Helmet>
-        <title>Bem-Estar da Tripulação | Nautilus One</title>
+        <title>Bem-Estar da Tripulação | Nauti One</title>
       </Helmet>
       <div className="container mx-auto py-6 space-y-6">
         <div>

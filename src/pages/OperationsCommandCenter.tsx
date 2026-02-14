@@ -497,7 +497,7 @@ export default function OperationsCommandCenter() {
 
       doc.setFontSize(8);
       doc.setTextColor(128, 128, 128);
-      doc.text("Nautilus One - Operations Command Center", 20, doc.internal.pageSize.getHeight() - 10);
+      doc.text("Nauti One - Operations Command Center", 20, doc.internal.pageSize.getHeight() - 10);
 
       doc.save(`operations-command-${format(new Date(), "yyyy-MM-dd")}.pdf`);
       toast({ title: "PDF Gerado", description: "O relatório foi baixado com sucesso." });

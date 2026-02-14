@@ -361,7 +361,7 @@ const StrategicDashboard: React.FC = () => {
                   Dashboard Estratégico
                 </h1>
                 <p className="text-muted-foreground">
-                  Visão inteligente e personalizada do Nautilus One
+                  Visão inteligente e personalizada do Nauti One
                 </p>
               </div>
             </div>

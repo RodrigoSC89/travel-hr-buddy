@@ -247,7 +247,7 @@ export const TenantProvider: FC<{ children: ReactNode }> = ({ children }) => {
       const defaultBranding: TenantBranding = {
         id: "demo-branding",
         tenant_id: defaultTenant.id,
-        company_name: "Nautilus One (DEMO)",
+        company_name: "Nauti One (DEMO)",
         logo_url: "",
         favicon_url: "",
         primary_color: "#2563eb",

@@ -90,7 +90,7 @@ export default function InventorySparesAIPage() {
   return (
     <>
       <Helmet>
-        <title>Inventory & Spares AI | Nautilus One</title>
+        <title>Inventory & Spares AI | Nauti One</title>
       </Helmet>
       <div className="container mx-auto py-6 space-y-6">
         <div className="flex items-center justify-between">

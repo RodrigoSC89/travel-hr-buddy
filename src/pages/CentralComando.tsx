@@ -270,7 +270,7 @@ function CentralComandoContent() {
   return (
     <>
       <Helmet>
-        <title>Central de Comando | Nautilus One</title>
+        <title>Central de Comando | Nauti One</title>
         <meta name="description" content="Central de Comando Unificada - Dashboard, Operações, IA e Monitoramento em Tempo Real" />
         <link rel="canonical" href="/central-comando" />
       </Helmet>

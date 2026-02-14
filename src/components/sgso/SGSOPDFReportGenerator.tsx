@@ -218,7 +218,7 @@ export const SGSOPDFReportGenerator: React.FC = () => {
         doc.setTextColor(128, 128, 128);
         doc.text(`Página ${pageNum}`, pageWidth / 2, pageHeight - 10, { align: 'center' });
         doc.text(`Gerado em: ${new Date().toLocaleString('pt-BR')}`, 15, pageHeight - 10);
-        doc.text('Nautilus One - Sistema SGSO', pageWidth - 15, pageHeight - 10, { align: 'right' });
+        doc.text('Nauti One - Sistema SGSO', pageWidth - 15, pageHeight - 10, { align: 'right' });
         doc.setTextColor(0, 0, 0);
       };
 

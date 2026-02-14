@@ -198,7 +198,7 @@ export const APIStatus: React.FC = () => {
               Status das APIs
             </CardTitle>
             <CardDescription>
-              Integrações externas conectadas ao Nautilus One
+              Integrações externas conectadas ao Nauti One
             </CardDescription>
           </div>
           <div className="flex gap-2">

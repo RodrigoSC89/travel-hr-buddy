@@ -3,7 +3,7 @@
  * Unified AI Engine using Lovable AI for all AI operations
  * 
  * This engine provides AI capabilities with module-specific context awareness
- * for all Nautilus One modules.
+ * for all Nauti One modules.
  */
 
 import { supabase } from "@/integrations/supabase/client";

@@ -138,7 +138,7 @@ const AdminSGSO = () => {
         doc.setFontSize(8);
         doc.setTextColor(128, 128, 128);
         doc.text(
-          `Nautilus One - SGSO Report | Página ${i} de ${pageCount}`,
+          `Nauti One - SGSO Report | Página ${i} de ${pageCount}`,
           pageWidth / 2,
           doc.internal.pageSize.getHeight() - 10,
           { align: 'center' }

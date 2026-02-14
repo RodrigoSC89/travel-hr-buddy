@@ -211,8 +211,8 @@ export default function APIMonitor() {
   return (
     <>
       <Helmet>
-        <title>API Monitor | Nautilus One</title>
-        <meta name="description" content="Monitor de saúde das APIs externas integradas ao Nautilus One" />
+        <title>API Monitor | Nauti One</title>
+        <meta name="description" content="Monitor de saúde das APIs externas integradas ao Nauti One" />
       </Helmet>
 
       <div className="container mx-auto p-6 max-w-7xl">

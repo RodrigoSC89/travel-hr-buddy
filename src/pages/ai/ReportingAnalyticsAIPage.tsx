@@ -29,7 +29,7 @@ export default function ReportingAnalyticsAIPage() {
   return (
     <>
       <Helmet>
-        <title>Reporting & Analytics AI | Nautilus One</title>
+        <title>Reporting & Analytics AI | Nauti One</title>
       </Helmet>
       <div className="container mx-auto py-6 space-y-6">
         <div className="flex items-center justify-between">

@@ -218,7 +218,7 @@ export default function SecurityCenter() {
   return (
     <>
       <Helmet>
-        <title>Security Center | Nautilus One</title>
+        <title>Security Center | Nauti One</title>
         <meta name="description" content="Centro de segurança em tempo real com monitoramento de RLS, tokens e PII" />
       </Helmet>
 

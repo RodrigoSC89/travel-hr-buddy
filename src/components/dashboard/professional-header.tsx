@@ -103,7 +103,7 @@ export function ProfessionalHeader({
             >
               <img 
                 src={nautiLogo} 
-                alt="Nautilus One" 
+                alt="Nauti One" 
                 className="h-16 w-16 object-contain drop-shadow-2xl"
               />
             </motion.div>

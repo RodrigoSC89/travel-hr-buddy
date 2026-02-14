@@ -12,7 +12,7 @@ export default function PredictiveMaintenancePage() {
   return (
     <>
       <Helmet>
-        <title>Manutenção Preditiva | Nautilus One</title>
+        <title>Manutenção Preditiva | Nauti One</title>
         <meta name="description" content="Sistema de manutenção preditiva com ML e IA para análise de equipamentos marítimos" />
       </Helmet>
       

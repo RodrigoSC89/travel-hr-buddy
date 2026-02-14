@@ -80,7 +80,7 @@ const UserOnboardingCenter: React.FC = () => {
   const [trainingMaterials] = useState<TrainingMaterial[]>([
     {
       id: "1",
-      title: "Introdução ao Nautilus One",
+      title: "Introdução ao Nauti One",
       type: "video",
       duration: "15 min",
       completed: true
@@ -355,7 +355,7 @@ const UserOnboardingCenter: React.FC = () => {
                     <Label htmlFor="message">Mensagem Personalizada</Label>
                     <Textarea
                       id="message"
-                      placeholder="Bem-vindo ao Nautilus One..."
+                      placeholder="Bem-vindo ao Nauti One..."
                       value={newInvite.message}
                       onChange={(e) => setNewInvite(prev => ({ ...prev, message: e.target.value }))}
                       rows={3}

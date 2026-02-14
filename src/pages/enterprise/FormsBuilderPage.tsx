@@ -220,7 +220,7 @@ export default function FormsBuilderPage() {
   return (
     <>
       <Helmet>
-        <title>Forms & Checklists Builder | Nautilus One</title>
+        <title>Forms & Checklists Builder | Nauti One</title>
         <meta name="description" content="Construtor visual de formulários e checklists" />
       </Helmet>
 

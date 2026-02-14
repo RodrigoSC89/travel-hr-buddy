@@ -481,7 +481,7 @@ export default function ProcurementCommandCenter() {
   return (
     <>
       <Helmet>
-        <title>Procurement Command Center | Nautilus One</title>
+        <title>Procurement Command Center | Nauti One</title>
         <meta name="description" content="Central de comando de procurement com IA, gestão de fornecedores, inventário e compras automatizadas" />
       </Helmet>
 

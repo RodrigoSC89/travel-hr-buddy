@@ -59,7 +59,7 @@ export const SystemInfo: React.FC = () => {
               Informações do Sistema
             </CardTitle>
             <CardDescription>
-              Monitoramento em tempo real do Nautilus One
+              Monitoramento em tempo real do Nauti One
             </CardDescription>
           </div>
           <Button 

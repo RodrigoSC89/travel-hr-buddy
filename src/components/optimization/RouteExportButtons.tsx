@@ -88,7 +88,7 @@ export function RouteExportButtons({ route, routeName = "rota-otimizada", classN
       // Footer
       doc.setFontSize(8);
       doc.setTextColor(150, 150, 150);
-      doc.text("Nautilus One - Sistema de Otimização Marítima", 20, 285);
+      doc.text("Nauti One - Sistema de Otimização Marítima", 20, 285);
 
       doc.save(`${routeName}-${Date.now()}.pdf`);
       toast.success("PDF exportado com sucesso!");
@@ -146,14 +146,14 @@ export function RouteExportButtons({ route, routeName = "rota-otimizada", classN
       .join("\n");
 
     return `<?xml version="1.0" encoding="UTF-8"?>
-<gpx version="1.1" creator="Nautilus One - Quantum Router"
+<gpx version="1.1" creator="Nauti One - Quantum Router"
   xmlns="http://www.topografix.com/GPX/1/1"
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://www.topografix.com/GPX/1/1 http://www.topografix.com/GPX/1/1/gpx.xsd">
   <metadata>
     <name>${name}</name>
     <desc>Rota otimizada via Quantum Router QAOA</desc>
-    <author><name>Nautilus One</name></author>
+    <author><name>Nauti One</name></author>
     <time>${now}</time>
   </metadata>
 ${waypointElements}

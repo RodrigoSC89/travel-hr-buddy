@@ -79,7 +79,7 @@ export const MobileHome: React.FC = () => {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold text-foreground">Nautilus One</h1>
+          <h1 className="text-2xl font-bold text-foreground">Nauti One</h1>
           <p className="text-sm text-muted-foreground">Mobile Command Center</p>
         </div>
         <div className="flex items-center gap-2">

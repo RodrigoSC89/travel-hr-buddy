@@ -98,7 +98,7 @@ export default function SafetyIncidentAIPage() {
   return (
     <>
       <Helmet>
-        <title>Safety & Incident AI | Nautilus One</title>
+        <title>Safety & Incident AI | Nauti One</title>
       </Helmet>
       <div className="container mx-auto py-6 space-y-6">
         <div className="flex items-center justify-between">

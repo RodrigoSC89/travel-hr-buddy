@@ -9,7 +9,7 @@ import { FileText, Download, Calendar, Ship, AlertCircle, RefreshCw } from "luci
 import { toast } from "sonner";
 import { useSGSOIncidentsData } from "@/hooks/useSGSOIncidentsData";
 
-const VESSEL_NAME = "FPSO Nautilus One";
+const VESSEL_NAME = "FPSO Nauti One";
 
 export default function SGSOReportPage() {
   const reportRef = useRef<HTMLDivElement>(null);
@@ -206,7 +206,7 @@ export default function SGSOReportPage() {
             </div>
           </div>
           <div className="mt-8 text-center">
-            <p className="text-xs text-muted-foreground">Gerado automaticamente por Nautilus One - Sistema de Gestão Marítima</p>
+            <p className="text-xs text-muted-foreground">Gerado automaticamente por Nauti One - Sistema de Gestão Marítima</p>
             <p className="text-xs text-muted-foreground mt-1">Documento confidencial - Propriedade da empresa</p>
           </div>
         </div>

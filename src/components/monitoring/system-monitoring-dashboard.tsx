@@ -184,7 +184,7 @@ const SystemMonitoringDashboard: React.FC = () => {
                 </div>
                 <div>
                   <h1 className="text-4xl font-bold font-display mb-2 text-shimmer drop-shadow-lg">
-                    ✅ Sistema Nautilus One - AUDITORIA COMPLETA
+                    ✅ Sistema Nauti One - AUDITORIA COMPLETA
                   </h1>
                   <p className="text-xl opacity-95 drop-shadow-md font-semibold">
                     Sistema 100% operacional e otimizado
@@ -194,7 +194,7 @@ const SystemMonitoringDashboard: React.FC = () => {
               </div>
               
               <p className="text-lg opacity-95 mb-8 max-w-4xl drop-shadow-md font-medium">
-                🎉 <strong>AUDITORIA FINALIZADA COM SUCESSO!</strong> Sistema Nautilus One agora oferece experiência 
+                🎉 <strong>AUDITORIA FINALIZADA COM SUCESSO!</strong> Sistema Nauti One agora oferece experiência 
                 extraordinária com contraste perfeito, acessibilidade completa e funcionalidades revolucionárias.
               </p>
               
@@ -541,7 +541,7 @@ const SystemMonitoringDashboard: React.FC = () => {
                 </div>
                 <h2 className="text-3xl font-bold">🎉 Auditoria Concluída com Sucesso!</h2>
                 <p className="text-xl opacity-95 max-w-2xl mx-auto">
-                  O Sistema Nautilus One foi completamente auditado e otimizado. Todas as melhorias foram implementadas com sucesso, 
+                  O Sistema Nauti One foi completamente auditado e otimizado. Todas as melhorias foram implementadas com sucesso, 
                   resultando em uma experiência extraordinária para todos os usuários.
                 </p>
                 <div className="flex flex-wrap justify-center gap-4 mt-6">

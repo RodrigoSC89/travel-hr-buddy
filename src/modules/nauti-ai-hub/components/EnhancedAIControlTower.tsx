@@ -111,7 +111,7 @@ export const EnhancedAIControlTower: React.FC = () => {
       }
 
       setChatMessages([
-        { id: '1', role: 'assistant', content: 'Olá! Sou o assistente IA do Nautilus One. Como posso ajudá-lo hoje?', timestamp: new Date() }
+        { id: '1', role: 'assistant', content: 'Olá! Sou o assistente IA do Nauti One. Como posso ajudá-lo hoje?', timestamp: new Date() }
       ]);
 
     } catch (error) {

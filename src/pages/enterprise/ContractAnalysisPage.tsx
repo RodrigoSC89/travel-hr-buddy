@@ -197,7 +197,7 @@ export default function ContractAnalysisPage() {
   return (
     <>
       <Helmet>
-        <title>Contract Analysis AI | Nautilus One</title>
+        <title>Contract Analysis AI | Nauti One</title>
         <meta name="description" content="Análise inteligente de contratos com detecção de riscos" />
       </Helmet>
 

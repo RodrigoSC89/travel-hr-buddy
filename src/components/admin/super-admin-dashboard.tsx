@@ -233,7 +233,7 @@ export const SuperAdminDashboard: React.FC = () => {
       <div className="flex justify-between items-center">
         <div>
           <h1 className="text-3xl font-bold">Super Admin Dashboard</h1>
-          <p className="text-muted-foreground">Gerencie todas as organizações da plataforma Nautilus One SaaS</p>
+          <p className="text-muted-foreground">Gerencie todas as organizações da plataforma Nauti One SaaS</p>
         </div>
         <Dialog open={showCreateModal} onOpenChange={setShowCreateModal}>
           <DialogTrigger asChild>

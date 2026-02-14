@@ -127,7 +127,7 @@ export const EnhancedSettingsHub: React.FC = () => {
   
   const [settings, setSettings] = useState<SettingsData>({
     general: {
-      companyName: "Nautilus One",
+      companyName: "Nauti One",
       defaultLanguage: "pt-BR",
       timezone: "America/Sao_Paulo",
       systemTheme: "system",
@@ -333,7 +333,7 @@ export const EnhancedSettingsHub: React.FC = () => {
   const resetToDefaults = async () => {
     const defaultSettings: SettingsData = {
       general: {
-        companyName: "Nautilus One",
+        companyName: "Nauti One",
         defaultLanguage: "pt-BR",
         timezone: "America/Sao_Paulo",
         systemTheme: "system",
@@ -516,7 +516,7 @@ export const EnhancedSettingsHub: React.FC = () => {
   const shareSettings = async () => {
     try {
       const shareData = {
-        title: "Configurações Nautilus One",
+        title: "Configurações Nauti One",
         text: "Compartilhando configurações do sistema",
         url: window.location.href
       };
@@ -610,7 +610,7 @@ export const EnhancedSettingsHub: React.FC = () => {
                   Centro de Configurações
                 </h1>
                 <p className="text-muted-foreground">
-                  Controle completo e personalizado da plataforma Nautilus One
+                  Controle completo e personalizado da plataforma Nauti One
                 </p>
                 <div className="flex items-center gap-4 mt-2">
                   <div className="flex items-center gap-2">

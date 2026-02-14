@@ -172,7 +172,7 @@ export default function AIEnterpriseEnginesHub() {
   return (
     <>
       <Helmet>
-        <title>AI Enterprise Engines | Nautilus One</title>
+        <title>AI Enterprise Engines | Nauti One</title>
         <meta name="description" content="11 AI-powered specialized engines for maritime operations" />
       </Helmet>
 

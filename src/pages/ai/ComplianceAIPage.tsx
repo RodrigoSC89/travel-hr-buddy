@@ -53,7 +53,7 @@ export default function ComplianceAIPage() {
   return (
     <>
       <Helmet>
-        <title>Compliance AI | Nautilus One</title>
+        <title>Compliance AI | Nauti One</title>
       </Helmet>
       <div className="container mx-auto py-6 space-y-6">
         <div className="flex items-center justify-between">

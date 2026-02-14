@@ -45,7 +45,7 @@ const QualityDashboard: React.FC = () => {
   return (
     <>
       <Helmet>
-        <title>Quality Dashboard | Nautilus One</title>
+        <title>Quality Dashboard | Nauti One</title>
         <meta name="description" content="Dashboard de qualidade e conformidade para operações marítimas" />
       </Helmet>
       

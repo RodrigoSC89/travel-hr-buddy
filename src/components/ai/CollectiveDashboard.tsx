@@ -170,7 +170,7 @@ export const CollectiveDashboard: React.FC = () => {
       const doc = new jsPDF();
       
       doc.setFontSize(16);
-      doc.text("Dashboard Coletivo de IA - Nautilus One", 20, 20);
+      doc.text("Dashboard Coletivo de IA - Nauti One", 20, 20);
       doc.setFontSize(10);
       doc.text(`Gerado em: ${new Date().toLocaleString("pt-BR")}`, 20, 30);
       doc.text(`Total de Decisões: ${decisions.length}`, 20, 40);

@@ -453,7 +453,7 @@ export const OrganizationSetupWizard: React.FC = () => {
       <div className="mb-8">
         <h1 className="text-3xl font-bold mb-2">Configuração da Organização</h1>
         <p className="text-muted-foreground">
-          Configure sua organização para começar a usar o Nautilus One
+          Configure sua organização para começar a usar o Nauti One
         </p>
       </div>
 

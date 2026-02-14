@@ -172,7 +172,7 @@ export default function APICenter() {
   return (
     <div className="container mx-auto p-6 space-y-6">
       <Helmet>
-        <title>API Center | Nautilus One</title>
+        <title>API Center | Nauti One</title>
         <meta name="description" content="Central de gestão de APIs e integrações externas" />
       </Helmet>
 

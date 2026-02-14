@@ -62,7 +62,7 @@ export const LoginForm: React.FC = () => {
             <div className="w-20 h-20 rounded-xl bg-white flex items-center justify-center shadow-lg p-3">
               <img 
                 src={nautiLogo} 
-                alt="Nautilus One Logo" 
+                alt="Nauti One Logo" 
                 className="w-full h-full object-contain"
                 width={56}
                 height={56}
@@ -71,7 +71,7 @@ export const LoginForm: React.FC = () => {
             </div>
           </div>
           <CardTitle className="text-2xl font-bold bg-gradient-to-r from-primary to-primary/80 bg-clip-text text-transparent">
-            NAUTILUS ONE
+            NAUTI ONE
           </CardTitle>
           <CardDescription>
             Sistema Inteligente de Gestão Empresarial

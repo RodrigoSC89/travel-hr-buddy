@@ -9,7 +9,7 @@ export default function SecurityAuditCenterPage() {
   return (
     <>
       <Helmet>
-        <title>Centro de Auditoria de Segurança | Nautilus One</title>
+        <title>Centro de Auditoria de Segurança | Nauti One</title>
         <meta 
           name="description" 
           content="Centro de auditoria de segurança com logs, compliance, detecção de ameaças e relatórios de conformidade" 

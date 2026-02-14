@@ -28,7 +28,7 @@ export default function QualityManagementAIPage() {
   return (
     <>
       <Helmet>
-        <title>Quality Management AI | Nautilus One</title>
+        <title>Quality Management AI | Nauti One</title>
       </Helmet>
       <div className="container mx-auto py-6 space-y-6">
         <div className="flex items-center justify-between">

@@ -149,7 +149,7 @@ export default function OCRCenterPage() {
   return (
     <>
       <Helmet>
-        <title>OCR Multi-Engine Center | Nautilus One</title>
+        <title>OCR Multi-Engine Center | Nauti One</title>
         <meta name="description" content="Processamento de documentos com múltiplos motores OCR" />
       </Helmet>
 

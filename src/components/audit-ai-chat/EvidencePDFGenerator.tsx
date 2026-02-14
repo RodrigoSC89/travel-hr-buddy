@@ -223,7 +223,7 @@ export function EvidencePDFGenerator({ message, module, onClose }: EvidencePDFGe
                 id="vesselName"
                 value={vesselName}
                 onChange={(e) => setVesselName(e.target.value)}
-                placeholder="Ex: AHTS Nautilus One"
+                placeholder="Ex: AHTS Nauti One"
               />
             </div>
             <div className="space-y-2">

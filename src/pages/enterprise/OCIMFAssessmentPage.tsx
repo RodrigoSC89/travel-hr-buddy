@@ -235,7 +235,7 @@ export default function OCIMFAssessmentPage() {
   return (
     <>
       <Helmet>
-        <title>OCIMF OVMSA Self-Assessment | Nautilus One</title>
+        <title>OCIMF OVMSA Self-Assessment | Nauti One</title>
         <meta name="description" content="Auto-avaliação OCIMF OVMSA/TMSA com análise de gaps" />
       </Helmet>
 

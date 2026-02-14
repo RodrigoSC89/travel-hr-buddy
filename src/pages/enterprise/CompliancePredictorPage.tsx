@@ -177,7 +177,7 @@ export default function CompliancePredictorPage() {
   return (
     <>
       <Helmet>
-        <title>Compliance Predictor | Nautilus One</title>
+        <title>Compliance Predictor | Nauti One</title>
         <meta name="description" content="Predição de não conformidades com Machine Learning" />
       </Helmet>
 

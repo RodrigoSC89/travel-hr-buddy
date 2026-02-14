@@ -410,7 +410,7 @@ export default function NOC() {
               </span>
             </div>
             <div className="text-muted-foreground">
-              Nautilus One NOC v2.0 | Latência: 42ms
+              Nauti One NOC v2.0 | Latência: 42ms
             </div>
           </div>
         </div>
