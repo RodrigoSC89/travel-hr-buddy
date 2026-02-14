@@ -19,7 +19,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
 import { Badge } from '@/components/ui/badge';
-import { Shield, BarChart3, Bot, Award, Target, AlertTriangle, FileText, Lock, Plus, Download, ClipboardCheck, Wifi } from 'lucide-react';
+import { Shield, BarChart3, Bot, Award, Target, AlertTriangle, FileText, Lock, Plus, Download, ClipboardCheck, Wifi, Brain } from 'lucide-react';
 import { Skeleton } from '@/components/ui/skeleton';
 import type { LucideIcon } from 'lucide-react';
 import { EnhancedActionBar } from '@/components/ui/world-class/EnhancedActionBar';
@@ -42,6 +42,7 @@ const RiskMatrixV2 = lazy(() => import('@/pages/DiagnosticNCsPage'));
 const DiagnosticNCsPage = lazy(() => import('@/pages/DiagnosticNCsPage'));
 const RegulationsV2 = lazy(() => import('@/pages/ComplianceRoadmapPage'));
 const SecurityCenter = lazy(() => import('@/pages/SecurityCenter'));
+const ComplianceAIHub = lazy(() => import('@/components/compliance/ai/ComplianceAIHub'));
 
 // ═══════════════════════════════════════════════════════════
 // 12 AUDITORIAS MARÍTIMAS COMPLETAS - ZERO SUPRESSÃO
@@ -93,6 +94,7 @@ const tabConfig: TabConfig[] = [
   { id: 'ncs-capas', label: 'NCs & CAPAs', icon: AlertTriangle },
   { id: 'regulations', label: 'Regulations', icon: FileText },
   { id: 'security', label: 'Security', icon: Lock },
+  { id: 'ai-hub', label: '🧠 IA Compliance', icon: Brain },
 ];
 
 // ═══════════════════════════════════════════════════════════
@@ -388,6 +390,10 @@ export default function ComplianceMegaHub() {
             
             <TabsContent value="security" className="mt-0">
               <SecurityCenter />
+            </TabsContent>
+
+            <TabsContent value="ai-hub" className="mt-0">
+              <ComplianceAIHub />
             </TabsContent>
           </Suspense>
         </div>

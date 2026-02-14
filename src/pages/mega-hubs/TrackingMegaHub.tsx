@@ -14,7 +14,7 @@ import React, { Suspense, lazy, useMemo, useCallback } from 'react';
 import { useSearchParams, useNavigate } from 'react-router-dom';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Badge } from '@/components/ui/badge';
-import { Satellite, Activity, Ship, Radio, Cloud, AlertTriangle, Map, RefreshCw, Download, Filter, Wifi, Bell } from 'lucide-react';
+import { Satellite, Activity, Ship, Radio, Cloud, AlertTriangle, Map, RefreshCw, Download, Filter, Wifi, Bell, Brain } from 'lucide-react';
 import { Skeleton } from '@/components/ui/skeleton';
 import { EnhancedActionBar } from '@/components/ui/world-class/EnhancedActionBar';
 // RealTimeTrackingMap removed - world-class deleted
@@ -32,6 +32,7 @@ const SatcomDashboardEnhanced = lazy(() => import('@/pages/TelemetriaCommand'));
 const WeatherIntelligencePage = lazy(() => import('@/pages/advanced/WeatherIntelligencePage'));
 const AlertsCommandCenter = lazy(() => import('@/pages/TelemetriaCommand'));
 const PredictiveTelemetry = lazy(() => import('@/pages/TelemetriaCommand'));
+const TrackingAIHub = lazy(() => import('@/components/tracking/ai/TrackingAIHub'));
 
 const LoadingSkeleton = () => (
   <div className="space-y-4 p-6">
@@ -54,6 +55,7 @@ const tabConfig = [
   { id: 'weather', label: 'Weather AI', icon: Cloud },
   { id: 'predictive', label: 'Predictive', icon: Map },
   { id: 'alerts', label: 'Alerts', icon: AlertTriangle },
+  { id: 'ai-copilot', label: '🧠 IA Hub', icon: Brain },
 ];
 
 export default function TrackingMegaHub() {
@@ -336,6 +338,10 @@ export default function TrackingMegaHub() {
             
             <TabsContent value="alerts" className="mt-0">
               <AlertsCommandCenter />
+            </TabsContent>
+
+            <TabsContent value="ai-copilot" className="mt-0">
+              <TrackingAIHub />
             </TabsContent>
           </Suspense>
         </div>

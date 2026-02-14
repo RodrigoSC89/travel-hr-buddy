@@ -13,7 +13,7 @@ import { useSearchParams } from 'react-router-dom';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { Compass, Activity, BarChart3, Eye, Shield, Bell, Radio, RefreshCw, Wifi, WifiOff } from 'lucide-react';
+import { Compass, Activity, BarChart3, Eye, Shield, Bell, Radio, RefreshCw, Wifi, WifiOff, Brain } from 'lucide-react';
 import { Skeleton } from '@/components/ui/skeleton';
 import { EnhancedActionBar } from '@/components/ui/world-class/EnhancedActionBar';
 import { PremiumTimeline } from '@/components/ui/world-class/PremiumTimeline';
@@ -34,6 +34,7 @@ const NOC = lazy(() => import('@/pages/NOC'));
 const SOCPage = lazy(() => import('@/pages/NOC'));
 const CommunicationCommandCenter = lazy(() => import('@/pages/NOC'));
 const AlertsCommandCenter = lazy(() => import('@/pages/NOC'));
+const CommandAIHub = lazy(() => import('@/components/command/ai/CommandAIHub'));
 
 const LoadingSkeleton = () => (
   <div className="space-y-4 p-6">
@@ -55,6 +56,7 @@ const tabConfig = [
   { id: 'soc', label: 'SOC Security', icon: Shield, path: '/command/soc' },
   { id: 'comms', label: 'Comms', icon: Radio, path: '/command/comms' },
   { id: 'alerts', label: 'Alerts', icon: Bell, path: '/command/alerts' },
+  { id: 'ai-copilot', label: '🧠 IA Copiloto', icon: Brain, path: '/command/ai' },
 ];
 
 export default function CommandMegaHub() {
@@ -292,6 +294,10 @@ export default function CommandMegaHub() {
             
             <TabsContent value="alerts" className="mt-0">
               <AlertsCommandCenter />
+            </TabsContent>
+
+            <TabsContent value="ai-copilot" className="mt-0">
+              <CommandAIHub />
             </TabsContent>
           </Suspense>
         </div>
