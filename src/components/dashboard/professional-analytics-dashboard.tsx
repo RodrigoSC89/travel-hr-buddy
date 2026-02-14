@@ -1,101 +1,46 @@
 /**
- * Professional Analytics Dashboard
- * Dashboard de analytics com métricas avançadas e visualizações de BI
+ * Professional Analytics BI Dashboard
+ * Real-time analytics with drill-down using Supabase data
  */
-
 import { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Skeleton } from "@/components/ui/skeleton";
 import {
-  BarChart3,
-  TrendingUp,
-  Users,
-  DollarSign,
-  Target,
-  Zap,
-  Activity,
-  PieChart,
-  LineChart,
-  Download,
-  RefreshCw,
-  Calendar
+  BarChart3, TrendingUp, Users, Ship, Target, Zap, Activity,
+  PieChart, Download, RefreshCw, Calendar, Shield, AlertTriangle, Wrench
 } from "lucide-react";
-import { 
-  ComposedChart,
-  Line,
-  Bar,
-  Area,
-  XAxis,
-  YAxis,
-  CartesianGrid,
-  Tooltip,
-  Legend,
-  ResponsiveContainer,
-  ScatterChart,
-  Scatter,
-  ZAxis,
-  Cell
+import {
+  ComposedChart, Line, Bar, Area, XAxis, YAxis, CartesianGrid,
+  Tooltip, Legend, ResponsiveContainer, PieChart as RechartsPie, Pie, Cell
 } from "recharts";
 import { motion } from "framer-motion";
-import { ProfessionalHeader } from "./professional-header";
-import { ProfessionalKPICard } from "./professional-kpi-card";
+import { useAnalyticsBIData } from "@/hooks/useAnalyticsBIData";
+import { useCertificateAlerts } from "@/hooks/useCertificateAlerts";
+import { useQueryClient } from "@tanstack/react-query";
 
-const revenueData = [
-  { month: "Jan", revenue: 45000, costs: 28000, profit: 17000, transactions: 450 },
-  { month: "Fev", revenue: 52000, costs: 30000, profit: 22000, transactions: 520 },
-  { month: "Mar", revenue: 48000, costs: 29000, profit: 19000, transactions: 480 },
-  { month: "Abr", revenue: 61000, costs: 35000, profit: 26000, transactions: 610 },
-  { month: "Mai", revenue: 55000, costs: 32000, profit: 23000, transactions: 550 },
-  { month: "Jun", revenue: 70000, costs: 38000, profit: 32000, transactions: 700 }
+const COLORS = [
+  "hsl(var(--primary))", "hsl(var(--success))", "hsl(var(--warning))", "hsl(var(--destructive))",
+  "#6366f1", "#ec4899", "#14b8a6", "#f97316"
 ];
 
-const userGrowth = [
-  { month: "Jan", active: 1200, new: 150, churned: 45 },
-  { month: "Fev", active: 1305, new: 180, churned: 75 },
-  { month: "Mar", active: 1410, new: 165, churned: 60 },
-  { month: "Abr", active: 1515, new: 195, churned: 90 },
-  { month: "Mai", active: 1620, new: 170, churned: 65 },
-  { month: "Jun", active: 1725, new: 210, churned: 105 }
-];
-
-const performanceMetrics = [
-  { category: "Vendas", value: 850, benchmark: 800 },
-  { category: "Conversão", value: 920, benchmark: 850 },
-  { category: "Satisfação", value: 890, benchmark: 900 },
-  { category: "Retenção", value: 950, benchmark: 920 }
-];
-
-const scatterData = [
-  { x: 100, y: 200, z: 200, category: "A" },
-  { x: 120, y: 100, z: 260, category: "A" },
-  { x: 170, y: 300, z: 400, category: "B" },
-  { x: 140, y: 250, z: 280, category: "B" },
-  { x: 150, y: 400, z: 500, category: "C" },
-  { x: 110, y: 280, z: 200, category: "C" }
-];
-
-const COLORS = ["hsl(var(--primary))", "hsl(var(--success))", "hsl(var(--warning))", "hsl(var(--destructive))"];
-
-interface MetricCardProps {
+interface KPICardProps {
   title: string;
-  value: string;
+  value: string | number;
   change: number;
   icon: React.ElementType;
-  trend: string;
+  subtitle: string;
+  loading?: boolean;
 }
 
-const MetricCard = ({ title, value, change, icon: Icon, trend }: MetricCardProps) => {
+const KPICard = ({ title, value, change, icon: Icon, subtitle, loading }: KPICardProps) => {
+  if (loading) return <Skeleton className="h-32 rounded-lg" />;
   const isPositive = change >= 0;
-  
+
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      whileHover={{ y: -5 }}
-      transition={{ duration: 0.3 }}
-    >
+    <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} whileHover={{ y: -4 }} transition={{ duration: 0.3 }}>
       <Card className="relative overflow-hidden">
         <div className="absolute top-0 right-0 w-24 h-24 bg-gradient-to-br from-primary/10 to-transparent rounded-full -mr-12 -mt-12" />
         <CardHeader className="pb-2">
@@ -105,15 +50,13 @@ const MetricCard = ({ title, value, change, icon: Icon, trend }: MetricCardProps
           </CardTitle>
         </CardHeader>
         <CardContent>
-          <div className="space-y-1">
-            <p className="text-3xl font-bold font-playfair">{value}</p>
-            <p className="text-xs text-muted-foreground flex items-center gap-1">
-              <span className={isPositive ? "text-success" : "text-destructive"}>
-                {isPositive ? "↑" : "↓"} {Math.abs(change)}%
-              </span>
-              {trend}
-            </p>
-          </div>
+          <p className="text-3xl font-bold">{value}</p>
+          <p className="text-xs text-muted-foreground flex items-center gap-1 mt-1">
+            <span className={isPositive ? "text-success" : "text-destructive"}>
+              {isPositive ? "↑" : "↓"} {Math.abs(change)}%
+            </span>
+            {subtitle}
+          </p>
         </CardContent>
       </Card>
     </motion.div>
@@ -122,340 +65,276 @@ const MetricCard = ({ title, value, change, icon: Icon, trend }: MetricCardProps
 
 export function ProfessionalAnalyticsDashboard() {
   const [activeTab, setActiveTab] = useState("overview");
+  const { kpis, chartData, complianceBreakdown, insights, isLoading } = useAnalyticsBIData();
+  const { alerts, criticalCount, warningCount } = useCertificateAlerts();
+  const queryClient = useQueryClient();
+
+  const handleRefresh = () => {
+    queryClient.invalidateQueries({ queryKey: ["bi-vessels"] });
+    queryClient.invalidateQueries({ queryKey: ["bi-crew"] });
+    queryClient.invalidateQueries({ queryKey: ["bi-maintenance"] });
+    queryClient.invalidateQueries({ queryKey: ["bi-certifications"] });
+    queryClient.invalidateQueries({ queryKey: ["bi-insights"] });
+    queryClient.invalidateQueries({ queryKey: ["certificate-alerts"] });
+  };
+
+  const handleExport = () => {
+    const csvContent = [
+      "Métrica,Valor",
+      `Embarcações Ativas,${kpis.totalVessels}`,
+      `Tripulação Ativa,${kpis.activeCrew}`,
+      `Compliance Score,${kpis.complianceScore}%`,
+      `Manutenções Pendentes,${kpis.maintenancePending}`,
+      `Certificados Vencendo,${kpis.certificatesExpiring}`,
+    ].join("\n");
+
+    const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = `analytics-bi-${new Date().toISOString().split("T")[0]}.csv`;
+    link.click();
+    URL.revokeObjectURL(url);
+  };
+
+  const pieData = complianceBreakdown.map((item) => ({
+    name: item.category,
+    value: item.compliant,
+    total: item.total,
+  }));
 
   return (
     <div className="space-y-6 p-6">
       {/* Header */}
       <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
         <div>
-          <h1 className="text-4xl font-bold font-playfair bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
-            Analytics Avançado
+          <h1 className="text-4xl font-bold bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
+            Analytics BI
           </h1>
-          <p className="text-muted-foreground mt-1">
-            Inteligência de negócios e insights orientados por dados
-          </p>
+          <p className="text-muted-foreground mt-1">Inteligência operacional em tempo real</p>
         </div>
         <div className="flex items-center gap-2">
-          <Button variant="outline" size="sm" className="gap-2">
-            <Calendar className="h-4 w-4" />
-            Últimos 30 dias
-          </Button>
-          <Button variant="outline" size="sm">
+          {criticalCount > 0 && (
+            <Badge variant="destructive" className="gap-1">
+              <AlertTriangle className="h-3 w-3" />
+              {criticalCount} alertas críticos
+            </Badge>
+          )}
+          {warningCount > 0 && (
+            <Badge className="bg-warning text-warning-foreground gap-1">
+              <AlertTriangle className="h-3 w-3" />
+              {warningCount} avisos
+            </Badge>
+          )}
+          <Button variant="outline" size="sm" onClick={handleRefresh} aria-label="Atualizar dados">
             <RefreshCw className="h-4 w-4" />
           </Button>
-          <Button size="sm" className="gap-2">
+          <Button size="sm" className="gap-2" onClick={handleExport}>
             <Download className="h-4 w-4" />
-            Exportar
+            Exportar CSV
           </Button>
         </div>
       </div>
 
-      {/* KPI Metrics */}
+      {/* KPI Cards */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-        <MetricCard
-          title="Receita Total"
-          value="R$ 331K"
-          change={15.3}
-          icon={DollarSign}
-          trend="vs mês anterior"
-        />
-        <MetricCard
-          title="Usuários Ativos"
-          value="1,725"
-          change={8.7}
-          icon={Users}
-          trend="crescimento mensal"
-        />
-        <MetricCard
-          title="Taxa de Conversão"
-          value="24.8%"
-          change={3.2}
-          icon={Target}
-          trend="vs período anterior"
-        />
-        <MetricCard
-          title="Performance Score"
-          value="92.5"
-          change={5.1}
-          icon={Zap}
-          trend="índice geral"
-        />
+        <KPICard title="Embarcações Ativas" value={kpis.totalVessels} change={kpis.vesselsTrend} icon={Ship} subtitle="na frota" loading={isLoading} />
+        <KPICard title="Tripulação Ativa" value={kpis.activeCrew} change={kpis.crewTrend} icon={Users} subtitle="embarcados" loading={isLoading} />
+        <KPICard title="Compliance Score" value={`${kpis.complianceScore}%`} change={kpis.complianceTrend} icon={Shield} subtitle="certificações válidas" loading={isLoading} />
+        <KPICard title="Manutenções Pendentes" value={kpis.maintenancePending} change={-2.1} icon={Wrench} subtitle="aguardando execução" loading={isLoading} />
       </div>
 
-      {/* Main Content */}
+      {/* Main Tabs */}
       <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-4">
         <TabsList className="grid w-full grid-cols-4">
           <TabsTrigger value="overview">Overview</TabsTrigger>
-          <TabsTrigger value="revenue">Financeiro</TabsTrigger>
-          <TabsTrigger value="users">Usuários</TabsTrigger>
-          <TabsTrigger value="insights">Insights</TabsTrigger>
+          <TabsTrigger value="fleet">Frota</TabsTrigger>
+          <TabsTrigger value="compliance">Compliance</TabsTrigger>
+          <TabsTrigger value="insights">Insights IA</TabsTrigger>
         </TabsList>
 
+        {/* OVERVIEW */}
         <TabsContent value="overview" className="space-y-6">
           <Card>
             <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <BarChart3 className="h-5 w-5" />
-                Análise Multidimensional de Performance
-              </CardTitle>
-              <CardDescription>
-                Receita, custos e lucro com volume de transações
-              </CardDescription>
+              <CardTitle className="flex items-center gap-2"><BarChart3 className="h-5 w-5" />Evolução Operacional (6 meses)</CardTitle>
+              <CardDescription>Crescimento de frota, tripulação e manutenções</CardDescription>
             </CardHeader>
             <CardContent>
-              <ResponsiveContainer width="100%" height={400}>
-                <ComposedChart data={revenueData}>
-                  <defs>
-                    <linearGradient id="colorProfit" x1="0" y1="0" x2="0" y2="1">
-                      <stop offset="5%" stopColor="#10b981" stopOpacity={0.8}/>
-                      <stop offset="95%" stopColor="#10b981" stopOpacity={0.1}/>
-                    </linearGradient>
-                  </defs>
-                  <CartesianGrid strokeDasharray="3 3" />
-                  <XAxis dataKey="month" />
-                  <YAxis yAxisId="left" />
-                  <YAxis yAxisId="right" orientation="right" />
-                  <Tooltip />
-                  <Legend />
-                  <Bar yAxisId="left" dataKey="revenue" fill="hsl(var(--primary))" name="Receita" radius={[8, 8, 0, 0]} />
-                  <Bar yAxisId="left" dataKey="costs" fill="hsl(var(--destructive))" name="Custos" radius={[8, 8, 0, 0]} />
-                  <Area 
-                    yAxisId="left"
-                    type="monotone" 
-                    dataKey="profit" 
-                    fill="url(#colorProfit)" 
-                    stroke="hsl(var(--success))"
-                    name="Lucro"
-                  />
-                  <Line 
-                    yAxisId="right"
-                    type="monotone" 
-                    dataKey="transactions" 
-                    stroke="hsl(var(--warning))" 
-                    strokeWidth={3}
-                    name="Transações"
-                    dot={{ r: 4 }}
-                  />
-                </ComposedChart>
-              </ResponsiveContainer>
+              {isLoading ? (
+                <Skeleton className="h-[400px]" />
+              ) : (
+                <ResponsiveContainer width="100%" height={400}>
+                  <ComposedChart data={chartData}>
+                    <defs>
+                      <linearGradient id="colorCrew" x1="0" y1="0" x2="0" y2="1">
+                        <stop offset="5%" stopColor="hsl(var(--primary))" stopOpacity={0.8} />
+                        <stop offset="95%" stopColor="hsl(var(--primary))" stopOpacity={0.1} />
+                      </linearGradient>
+                    </defs>
+                    <CartesianGrid strokeDasharray="3 3" />
+                    <XAxis dataKey="label" />
+                    <YAxis yAxisId="left" />
+                    <YAxis yAxisId="right" orientation="right" />
+                    <Tooltip />
+                    <Legend />
+                    <Area yAxisId="left" type="monotone" dataKey="crew" fill="url(#colorCrew)" stroke="hsl(var(--primary))" name="Tripulação" />
+                    <Bar yAxisId="left" dataKey="vessels" fill="hsl(var(--success))" name="Embarcações" radius={[8, 8, 0, 0]} />
+                    <Line yAxisId="right" type="monotone" dataKey="maintenance" stroke="hsl(var(--warning))" strokeWidth={3} name="Manutenções" dot={{ r: 4 }} />
+                  </ComposedChart>
+                </ResponsiveContainer>
+              )}
             </CardContent>
           </Card>
+        </TabsContent>
 
+        {/* FLEET */}
+        <TabsContent value="fleet" className="space-y-6">
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2"><Ship className="h-5 w-5" />Performance da Frota</CardTitle>
+              <CardDescription>Métricas operacionais por embarcação</CardDescription>
+            </CardHeader>
+            <CardContent>
+              {isLoading ? (
+                <Skeleton className="h-[350px]" />
+              ) : (
+                <ResponsiveContainer width="100%" height={350}>
+                  <ComposedChart data={chartData}>
+                    <CartesianGrid strokeDasharray="3 3" />
+                    <XAxis dataKey="label" />
+                    <YAxis />
+                    <Tooltip />
+                    <Legend />
+                    <Bar dataKey="vessels" fill="hsl(var(--primary))" name="Embarcações" />
+                    <Line type="monotone" dataKey="maintenance" stroke="hsl(var(--destructive))" strokeWidth={2} name="Manutenções" />
+                  </ComposedChart>
+                </ResponsiveContainer>
+              )}
+            </CardContent>
+          </Card>
+        </TabsContent>
+
+        {/* COMPLIANCE */}
+        <TabsContent value="compliance" className="space-y-6">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
             <Card>
               <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <Target className="h-5 w-5" />
-                  Benchmarking de Performance
-                </CardTitle>
-                <CardDescription>
-                  Comparação com benchmarks de mercado
-                </CardDescription>
+                <CardTitle className="flex items-center gap-2"><PieChart className="h-5 w-5" />Distribuição de Compliance</CardTitle>
+                <CardDescription>Certificações válidas por categoria</CardDescription>
               </CardHeader>
               <CardContent>
-                <div className="space-y-4">
-                  {performanceMetrics.map((metric, idx) => {
-                    const percentage = (metric.value / metric.benchmark) * 100;
-                    const isAbove = percentage >= 100;
-                    
-                    return (
-                      <div key={metric.category} className="space-y-2">
-                        <div className="flex items-center justify-between">
-                          <span className="text-sm font-medium">{metric.category}</span>
-                          <div className="flex items-center gap-2">
-                            <span className="text-xs font-mono">{metric.value}</span>
-                            <Badge variant={isAbove ? "default" : "secondary"} className="text-xs">
-                              {percentage.toFixed(0)}%
-                            </Badge>
-                          </div>
-                        </div>
-                        <div className="relative h-2 bg-muted rounded-full overflow-hidden">
-                          <motion.div
-                            initial={{ width: 0 }}
-                            animate={{ width: `${Math.min(percentage, 100)}%` }}
-                            transition={{ duration: 1, ease: "easeOut" }}
-                            className={`absolute top-0 left-0 h-full rounded-full ${
-                              isAbove ? "bg-gradient-to-r from-success/80 to-success" : "bg-gradient-to-r from-warning/80 to-warning"
-                            }`}
-                          />
-                        </div>
-                      </div>
-                    );
-                  })}
-                </div>
+                {isLoading || pieData.length === 0 ? (
+                  <Skeleton className="h-[300px]" />
+                ) : (
+                  <ResponsiveContainer width="100%" height={300}>
+                    <RechartsPie>
+                      <Pie data={pieData} cx="50%" cy="50%" innerRadius={60} outerRadius={100} paddingAngle={5} dataKey="value" label={({ name, value }) => `${name}: ${value}`}>
+                        {pieData.map((_, index) => (
+                          <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                        ))}
+                      </Pie>
+                      <Tooltip />
+                    </RechartsPie>
+                  </ResponsiveContainer>
+                )}
               </CardContent>
             </Card>
 
             <Card>
               <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <PieChart className="h-5 w-5" />
-                  Análise de Correlação
-                </CardTitle>
-                <CardDescription>
-                  Relação entre métricas de negócio
-                </CardDescription>
+                <CardTitle className="flex items-center gap-2"><AlertTriangle className="h-5 w-5" />Certificados Vencendo</CardTitle>
+                <CardDescription>{alerts.length} certificados nos próximos 60 dias</CardDescription>
               </CardHeader>
               <CardContent>
-                <ResponsiveContainer width="100%" height={250}>
-                  <ScatterChart>
-                    <CartesianGrid strokeDasharray="3 3" />
-                    <XAxis type="number" dataKey="x" name="Investimento" />
-                    <YAxis type="number" dataKey="y" name="Retorno" />
-                    <ZAxis type="number" dataKey="z" range={[100, 500]} />
-                    <Tooltip cursor={{ strokeDasharray: "3 3" }} />
-                    <Scatter data={scatterData} fill="hsl(var(--primary))">
-                      {scatterData.map((entry, index) => (
-                        <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
-                      ))}
-                    </Scatter>
-                  </ScatterChart>
-                </ResponsiveContainer>
+                <div className="space-y-2 max-h-[280px] overflow-y-auto">
+                  {alerts.length === 0 ? (
+                    <p className="text-sm text-muted-foreground text-center py-8">Nenhum certificado vencendo nos próximos 60 dias ✅</p>
+                  ) : (
+                    alerts.slice(0, 10).map((alert) => (
+                      <div key={alert.id} className={`p-3 rounded-lg border-l-4 ${alert.severity === "critical" ? "border-l-destructive bg-destructive/5" : alert.severity === "warning" ? "border-l-warning bg-warning/5" : "border-l-primary bg-primary/5"}`}>
+                        <div className="flex items-center justify-between">
+                          <div>
+                            <p className="text-sm font-medium">{alert.certificationName}</p>
+                            <p className="text-xs text-muted-foreground">Vence em {alert.daysUntilExpiry} dias</p>
+                          </div>
+                          <Badge variant={alert.severity === "critical" ? "destructive" : "secondary"}>
+                            {alert.daysUntilExpiry}d
+                          </Badge>
+                        </div>
+                      </div>
+                    ))
+                  )}
+                </div>
               </CardContent>
             </Card>
           </div>
         </TabsContent>
 
-        <TabsContent value="revenue" className="space-y-6">
-          <Card>
-            <CardHeader>
-              <CardTitle>Detalhamento Financeiro</CardTitle>
-              <CardDescription>
-                Análise aprofundada de receitas e custos operacionais
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              <ResponsiveContainer width="100%" height={350}>
-                <ComposedChart data={revenueData}>
-                  <CartesianGrid strokeDasharray="3 3" />
-                  <XAxis dataKey="month" />
-                  <YAxis />
-                  <Tooltip />
-                  <Legend />
-                  <Bar dataKey="revenue" stackId="a" fill="hsl(var(--primary))" name="Receita" />
-                  <Bar dataKey="costs" stackId="a" fill="hsl(var(--destructive))" name="Custos" />
-                  <Line type="monotone" dataKey="profit" stroke="hsl(var(--success))" strokeWidth={3} name="Lucro Líquido" />
-                </ComposedChart>
-              </ResponsiveContainer>
-            </CardContent>
-          </Card>
-        </TabsContent>
-
-        <TabsContent value="users" className="space-y-6">
-          <Card>
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <Users className="h-5 w-5" />
-                Crescimento de Base de Usuários
-              </CardTitle>
-              <CardDescription>
-                Análise de aquisição, retenção e churn
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              <ResponsiveContainer width="100%" height={350}>
-                <ComposedChart data={userGrowth}>
-                  <defs>
-                    <linearGradient id="colorActive" x1="0" y1="0" x2="0" y2="1">
-                      <stop offset="5%" stopColor="#3b82f6" stopOpacity={0.8}/>
-                      <stop offset="95%" stopColor="#3b82f6" stopOpacity={0.1}/>
-                    </linearGradient>
-                  </defs>
-                  <CartesianGrid strokeDasharray="3 3" />
-                  <XAxis dataKey="month" />
-                  <YAxis />
-                  <Tooltip />
-                  <Legend />
-                    <Area 
-                    type="monotone" 
-                    dataKey="active" 
-                    fill="url(#colorActive)" 
-                    stroke="hsl(var(--primary))"
-                    name="Usuários Ativos"
-                  />
-                  <Bar dataKey="new" fill="hsl(var(--success))" name="Novos" radius={[8, 8, 0, 0]} />
-                  <Bar dataKey="churned" fill="hsl(var(--destructive))" name="Churn" radius={[8, 8, 0, 0]} />
-                </ComposedChart>
-              </ResponsiveContainer>
-            </CardContent>
-          </Card>
-        </TabsContent>
-
+        {/* INSIGHTS */}
         <TabsContent value="insights" className="space-y-6">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <Card>
               <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <Zap className="h-5 w-5" />
-                  Insights de IA
-                </CardTitle>
+                <CardTitle className="flex items-center gap-2"><Zap className="h-5 w-5" />Insights de IA</CardTitle>
               </CardHeader>
-              <CardContent className="space-y-4">
-                <div className="flex items-start gap-3 p-3 bg-success/10 rounded-lg border border-success/20">
-                  <Activity className="h-5 w-5 text-success mt-0.5" />
-                  <div>
-                    <p className="font-semibold text-sm">Tendência Positiva Detectada</p>
-                    <p className="text-xs text-muted-foreground">
-                      Receita cresceu 15.3% com redução de 3% nos custos operacionais
-                    </p>
-                  </div>
-                </div>
-
-                <div className="flex items-start gap-3 p-3 bg-primary/10 rounded-lg border border-primary/20">
-                  <TrendingUp className="h-5 w-5 text-primary mt-0.5" />
-                  <div>
-                    <p className="font-semibold text-sm">Projeção de Crescimento</p>
-                    <p className="text-xs text-muted-foreground">
-                      Com a taxa atual, esperamos atingir R$ 420K até fim do trimestre
-                    </p>
-                  </div>
-                </div>
-
-                <div className="flex items-start gap-3 p-3 bg-accent/50 rounded-lg border border-border">
-                  <Target className="h-5 w-5 text-foreground mt-0.5" />
-                  <div>
-                    <p className="font-semibold text-sm">Oportunidade de Otimização</p>
-                    <p className="text-xs text-muted-foreground">
-                      Taxa de conversão pode aumentar 5-8% com ajustes no funil
-                    </p>
-                  </div>
-                </div>
+              <CardContent className="space-y-3">
+                {isLoading ? (
+                  <div className="space-y-3">{[1, 2, 3].map((i) => <Skeleton key={i} className="h-20" />)}</div>
+                ) : insights.length === 0 ? (
+                  <p className="text-sm text-muted-foreground text-center py-8">Nenhum insight disponível no momento</p>
+                ) : (
+                  insights.slice(0, 5).map((insight) => (
+                    <div key={insight.id} className={`flex items-start gap-3 p-3 rounded-lg border ${insight.priority === "high" ? "bg-destructive/5 border-destructive/20" : insight.priority === "medium" ? "bg-warning/5 border-warning/20" : "bg-primary/5 border-primary/20"}`}>
+                      <Activity className={`h-5 w-5 mt-0.5 ${insight.priority === "high" ? "text-destructive" : insight.priority === "medium" ? "text-warning" : "text-primary"}`} />
+                      <div>
+                        <p className="font-semibold text-sm">{insight.title}</p>
+                        <p className="text-xs text-muted-foreground mt-1">{insight.description}</p>
+                        <div className="flex items-center gap-2 mt-2">
+                          <Badge variant="outline" className="text-xs">
+                            Confiança: {Math.round(insight.confidence * 100)}%
+                          </Badge>
+                          <Badge variant="outline" className="text-xs">{insight.category}</Badge>
+                        </div>
+                      </div>
+                    </div>
+                  ))
+                )}
               </CardContent>
             </Card>
 
             <Card>
               <CardHeader>
-                <CardTitle>Recomendações Estratégicas</CardTitle>
+                <CardTitle>Resumo Operacional</CardTitle>
               </CardHeader>
               <CardContent className="space-y-3">
                 <div className="p-3 border rounded-lg space-y-1">
                   <div className="flex items-center justify-between">
-                    <p className="text-sm font-medium">Aumentar investimento em Marketing</p>
-                    <Badge>Alta prioridade</Badge>
+                    <p className="text-sm font-medium">Embarcações na frota</p>
+                    <Badge>{kpis.totalVessels}</Badge>
                   </div>
-                  <p className="text-xs text-muted-foreground">
-                    ROI de 3.2x identificado em campanhas digitais
-                  </p>
                 </div>
-
                 <div className="p-3 border rounded-lg space-y-1">
                   <div className="flex items-center justify-between">
-                    <p className="text-sm font-medium">Otimizar processo de onboarding</p>
-                    <Badge variant="secondary">Média prioridade</Badge>
+                    <p className="text-sm font-medium">Tripulação total</p>
+                    <Badge variant="secondary">{kpis.activeCrew}</Badge>
                   </div>
-                  <p className="text-xs text-muted-foreground">
-                    Reduzir churn inicial em até 15%
-                  </p>
                 </div>
-
                 <div className="p-3 border rounded-lg space-y-1">
                   <div className="flex items-center justify-between">
-                    <p className="text-sm font-medium">Expandir base de clientes B2B</p>
-                    <Badge variant="outline">Longo prazo</Badge>
+                    <p className="text-sm font-medium">Certificados a vencer</p>
+                    <Badge variant={kpis.certificatesExpiring > 0 ? "destructive" : "default"}>
+                      {kpis.certificatesExpiring}
+                    </Badge>
                   </div>
-                  <p className="text-xs text-muted-foreground">
-                    Potencial de 40% aumento de receita
-                  </p>
+                </div>
+                <div className="p-3 border rounded-lg space-y-1">
+                  <div className="flex items-center justify-between">
+                    <p className="text-sm font-medium">Score de Compliance</p>
+                    <Badge className={kpis.complianceScore >= 90 ? "bg-success" : kpis.complianceScore >= 70 ? "bg-warning text-warning-foreground" : "bg-destructive"}>
+                      {kpis.complianceScore}%
+                    </Badge>
+                  </div>
                 </div>
               </CardContent>
             </Card>
@@ -465,3 +344,5 @@ export function ProfessionalAnalyticsDashboard() {
     </div>
   );
 }
+
+export default ProfessionalAnalyticsDashboard;

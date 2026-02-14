@@ -258,6 +258,7 @@ export const AppRoutes = () => (
       <Route path="/api-gateway" element={<Pages.IntegrationsCenter />} />
       <Route path="/collaboration" element={<Pages.Collaboration />} />
       <Route path="/roadmap" element={<Pages.LandingPage />} />
+      <Route path="/client-portal" element={<Pages.ClientPortalPage />} />
       
       {/* ======== ENTERPRISE INTELLIGENCE SUITE ======== */}
       <Route path="/enterprise/rag-assistant" element={<Pages.RAGAssistantPage />} />

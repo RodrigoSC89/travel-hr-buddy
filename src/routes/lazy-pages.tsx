@@ -265,6 +265,9 @@ export const AdminApiTester = lazy(() => import("@/pages/admin/api-tester"));
 // AIEnterpriseEnginesHub
 export const AIEnterpriseEnginesHub = lazy(() => import("@/pages/AIEnterpriseEnginesHub"));
 
+// Client Portal
+export const ClientPortalPage = lazy(() => import("@/pages/client-portal"));
+
 // AdminRoute (lazy-loaded RoleGuard)
 export const AdminRoute = lazy(() => import('@/components/auth/RoleGuard').then(mod => ({
   default: ({ children }: { children: React.ReactNode }) => (
