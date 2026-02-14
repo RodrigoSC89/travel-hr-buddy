@@ -348,7 +348,7 @@ Gere a resolução completa com análise de causa raiz, ações corretivas com p
                 <div className="space-y-2">
                   <p className="text-sm font-medium">Cadeia dos 5 Porquês:</p>
                   {resolution.root_cause_analysis.why_chain.map((why, i) => (
-                    <div key={i} className="flex items-start gap-2 ml-2">
+                    <div key={`why-${i}-${why.slice(0, 20)}`} className="flex items-start gap-2 ml-2">
                       <Badge variant="outline" className="shrink-0 text-xs">{i + 1}º</Badge>
                       <span className="text-sm">{why}</span>
                     </div>
@@ -359,7 +359,7 @@ Gere a resolução completa com análise de causa raiz, ações corretivas com p
                 <div>
                   <p className="text-sm font-medium mb-1">Fatores Contribuintes:</p>
                   {resolution.root_cause_analysis.contributing_factors.map((f, i) => (
-                    <p key={i} className="text-sm text-muted-foreground ml-2">• {f}</p>
+                    <p key={`factor-${i}-${f.slice(0, 20)}`} className="text-sm text-muted-foreground ml-2">• {f}</p>
                   ))}
                 </div>
               )}
@@ -376,7 +376,7 @@ Gere a resolução completa com análise de causa raiz, ações corretivas com p
             <CardContent>
               <div className="space-y-3">
                 {resolution.corrective_actions.map((action, i) => (
-                  <div key={i} className="p-4 border rounded-lg space-y-2">
+                  <div key={`action-${i}-${action.action?.slice(0, 20)}`} className="p-4 border rounded-lg space-y-2">
                     <div className="flex items-start justify-between gap-2">
                       <div className="flex items-start gap-2">
                         <Badge className={`shrink-0 ${getPriorityColor(action.priority)}`}>
@@ -426,7 +426,7 @@ Gere a resolução completa com análise de causa raiz, ações corretivas com p
               </CardHeader>
               <CardContent>
                 {resolution.evidence_checklist.map((ev, i) => (
-                  <div key={i} className="flex items-start gap-2 text-sm mb-2">
+                  <div key={`ev-${i}-${ev.slice(0, 20)}`} className="flex items-start gap-2 text-sm mb-2">
                     <CheckCircle className="h-3.5 w-3.5 text-muted-foreground shrink-0 mt-0.5" />
                     <span>{ev}</span>
                   </div>
@@ -439,7 +439,7 @@ Gere a resolução completa com análise de causa raiz, ações corretivas com p
               </CardHeader>
               <CardContent>
                 {resolution.preventive_actions.map((pa, i) => (
-                  <div key={i} className="flex items-start gap-2 text-sm mb-2">
+                  <div key={`pa-${i}-${pa.slice(0, 20)}`} className="flex items-start gap-2 text-sm mb-2">
                     <ArrowRight className="h-3.5 w-3.5 text-warning shrink-0 mt-0.5" />
                     <span>{pa}</span>
                   </div>
@@ -452,7 +452,7 @@ Gere a resolução completa com análise de causa raiz, ações corretivas com p
               </CardHeader>
               <CardContent>
                 {resolution.regulatory_references.map((ref, i) => (
-                  <Badge key={i} variant="outline" className="mr-1 mb-1 text-xs">{ref}</Badge>
+                  <Badge key={`ref-${i}-${ref}`} variant="outline" className="mr-1 mb-1 text-xs">{ref}</Badge>
                 ))}
                 {resolution.risk_if_unresolved && (
                   <div className="mt-3 p-2 rounded bg-destructive/5 border border-destructive/10">

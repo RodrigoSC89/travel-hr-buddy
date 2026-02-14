@@ -83,6 +83,7 @@ export default function SmartChecklistsPage() {
   const [selectedType, setSelectedType] = useState("all");
   const [selectedStatus, setSelectedStatus] = useState("all");
   const [activeTab, setActiveTab] = useState("list");
+  const [selectedDay, setSelectedDay] = useState<number | null>(null);
   
   // Dialog states
   const [showCreateDialog, setShowCreateDialog] = useState(false);
@@ -724,7 +725,7 @@ export default function SmartChecklistsPage() {
                     <div 
                       key={`cal-${i}`} 
                       className={`text-center py-3 rounded cursor-pointer hover:bg-accent ${day > 0 && day <= 31 ? '' : 'opacity-30'} ${hasChecklist ? 'bg-primary/10 border border-primary/30' : ''}`}
-                      onClick={() => day > 0 && day <= 31 && toast.info(`Dia ${day} selecionado. Veja os checklists na lista abaixo.`, { duration: 2000 })}
+                      onClick={() => day > 0 && day <= 31 && setSelectedDay(day)}
                     >
                       {day > 0 && day <= 31 ? day : ''}
                     </div>

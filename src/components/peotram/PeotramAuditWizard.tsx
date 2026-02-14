@@ -228,7 +228,7 @@ Gere o guia de preparação completo para este elemento.`
                                 <div>
                                   <p className="text-xs font-semibold mb-1 flex items-center gap-1"><FileText className="h-3 w-3 text-primary" /> Documentos a Reunir:</p>
                                   <ul className="space-y-0.5">{prep.documentsToGather.map((d, i) => (
-                                    <li key={i} className="text-xs text-muted-foreground flex items-start gap-1"><CheckCircle className="h-3 w-3 shrink-0 mt-0.5 text-muted-foreground" />{d}</li>
+                                    <li key={`doc-${i}-${d.slice(0, 15)}`} className="text-xs text-muted-foreground flex items-start gap-1"><CheckCircle className="h-3 w-3 shrink-0 mt-0.5 text-muted-foreground" />{d}</li>
                                   ))}</ul>
                                 </div>
                               )}
@@ -236,7 +236,7 @@ Gere o guia de preparação completo para este elemento.`
                                 <div>
                                   <p className="text-xs font-semibold mb-1 flex items-center gap-1"><Users className="h-3 w-3 text-warning" /> Perguntas para Entrevistas:</p>
                                   <ul className="space-y-0.5">{prep.interviewQuestions.map((q, i) => (
-                                    <li key={i} className="text-xs text-muted-foreground flex items-start gap-1"><ChevronRight className="h-3 w-3 shrink-0 mt-0.5" />{q}</li>
+                                    <li key={`iq-${i}-${q.slice(0, 15)}`} className="text-xs text-muted-foreground flex items-start gap-1"><ChevronRight className="h-3 w-3 shrink-0 mt-0.5" />{q}</li>
                                   ))}</ul>
                                 </div>
                               )}
@@ -244,7 +244,7 @@ Gere o guia de preparação completo para este elemento.`
                                 <div>
                                   <p className="text-xs font-semibold mb-1 flex items-center gap-1"><ListChecks className="h-3 w-3 text-success" /> Inspeções em Campo:</p>
                                   <ul className="space-y-0.5">{prep.fieldInspections.map((f, i) => (
-                                    <li key={i} className="text-xs text-muted-foreground flex items-start gap-1"><CheckCircle className="h-3 w-3 shrink-0 mt-0.5 text-success" />{f}</li>
+                                    <li key={`fi-${i}-${f.slice(0, 15)}`} className="text-xs text-muted-foreground flex items-start gap-1"><CheckCircle className="h-3 w-3 shrink-0 mt-0.5 text-success" />{f}</li>
                                   ))}</ul>
                                 </div>
                               )}
@@ -252,7 +252,7 @@ Gere o guia de preparação completo para este elemento.`
                                 <div>
                                   <p className="text-xs font-semibold mb-1 flex items-center gap-1"><AlertTriangle className="h-3 w-3 text-destructive" /> Achados Mais Comuns:</p>
                                   <ul className="space-y-0.5">{prep.commonFindings.map((c, i) => (
-                                    <li key={i} className="text-xs text-muted-foreground flex items-start gap-1"><AlertTriangle className="h-3 w-3 shrink-0 mt-0.5 text-destructive/60" />{c}</li>
+                                    <li key={`cf-${i}-${c.slice(0, 15)}`} className="text-xs text-muted-foreground flex items-start gap-1"><AlertTriangle className="h-3 w-3 shrink-0 mt-0.5 text-destructive/60" />{c}</li>
                                   ))}</ul>
                                 </div>
                               )}
@@ -260,7 +260,7 @@ Gere o guia de preparação completo para este elemento.`
                                 <div>
                                   <p className="text-xs font-semibold mb-1 flex items-center gap-1"><BookOpen className="h-3 w-3 text-primary" /> Boas Práticas (Nota 4):</p>
                                   <ul className="space-y-0.5">{prep.bestPractices.map((b, i) => (
-                                    <li key={i} className="text-xs text-muted-foreground flex items-start gap-1"><Sparkles className="h-3 w-3 shrink-0 mt-0.5 text-primary" />{b}</li>
+                                    <li key={`bp-${i}-${b.slice(0, 15)}`} className="text-xs text-muted-foreground flex items-start gap-1"><Sparkles className="h-3 w-3 shrink-0 mt-0.5 text-primary" />{b}</li>
                                   ))}</ul>
                                 </div>
                               )}

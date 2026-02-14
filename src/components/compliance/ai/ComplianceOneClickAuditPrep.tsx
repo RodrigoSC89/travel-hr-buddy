@@ -385,7 +385,7 @@ Analise e monte o pacote completo.`,
                 </CardHeader>
                 <CardContent className="pt-0">
                   {auditPackage.risk_areas.map((r, i) => (
-                    <div key={i} className="flex items-start gap-2 text-sm mb-1.5">
+                    <div key={`risk-${i}-${r.slice(0, 20)}`} className="flex items-start gap-2 text-sm mb-1.5">
                       <XCircle className="h-3.5 w-3.5 text-destructive shrink-0 mt-0.5" />
                       <span>{r}</span>
                     </div>
@@ -402,7 +402,7 @@ Analise e monte o pacote completo.`,
                 </CardHeader>
                 <CardContent className="pt-0">
                   {auditPackage.crew_briefing_points.map((p, i) => (
-                    <div key={i} className="flex items-start gap-2 text-sm mb-1.5">
+                    <div key={`brief-${i}-${p.slice(0, 20)}`} className="flex items-start gap-2 text-sm mb-1.5">
                       <ArrowRight className="h-3.5 w-3.5 text-primary shrink-0 mt-0.5" />
                       <span>{p}</span>
                     </div>

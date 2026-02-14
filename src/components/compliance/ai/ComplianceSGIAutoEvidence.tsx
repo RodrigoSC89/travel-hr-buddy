@@ -536,7 +536,7 @@ Analise os dados e gere a evidência. Se dados estiverem insuficientes, liste as
                     </p>
                     <div className="flex flex-wrap gap-1.5">
                       {evidence.data_sources_used.map((src, i) => (
-                        <Badge key={i} variant="secondary" className="text-xs">{src}</Badge>
+                        <Badge key={`src-${i}-${src}`} variant="secondary" className="text-xs">{src}</Badge>
                       ))}
                     </div>
                   </div>
@@ -552,7 +552,7 @@ Analise os dados e gere a evidência. Se dados estiverem insuficientes, liste as
                       </p>
                       <div className="space-y-1.5">
                         {evidence.gaps_found.map((gap, i) => (
-                          <div key={i} className="flex items-start gap-2 text-sm p-2 rounded bg-destructive/5 border border-destructive/10">
+                          <div key={`gap-${i}-${gap.slice(0, 20)}`} className="flex items-start gap-2 text-sm p-2 rounded bg-destructive/5 border border-destructive/10">
                             <AlertTriangle className="h-3.5 w-3.5 text-destructive shrink-0 mt-0.5" />
                             <span>{gap}</span>
                           </div>
@@ -572,7 +572,7 @@ Analise os dados e gere a evidência. Se dados estiverem insuficientes, liste as
                       </p>
                       <div className="space-y-1.5">
                         {evidence.recommendations.map((rec, i) => (
-                          <div key={i} className="flex items-start gap-2 text-sm">
+                          <div key={`rec-${i}-${rec.slice(0, 20)}`} className="flex items-start gap-2 text-sm">
                             <CheckCircle className="h-3.5 w-3.5 text-success shrink-0 mt-0.5" />
                             <span>{rec}</span>
                           </div>
@@ -587,7 +587,7 @@ Analise os dados e gere a evidência. Se dados estiverem insuficientes, liste as
                   <div className="flex flex-wrap gap-1.5">
                     <span className="text-xs text-muted-foreground mr-1">Referências:</span>
                     {evidence.normative_references.map((ref, i) => (
-                      <Badge key={i} variant="outline" className="text-xs">{ref}</Badge>
+                      <Badge key={`nref-${i}-${ref}`} variant="outline" className="text-xs">{ref}</Badge>
                     ))}
                   </div>
                 )}
@@ -711,8 +711,8 @@ Analise os dados e gere a evidência. Se dados estiverem insuficientes, liste as
               <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                 {(dataSources.length > 0 ? dataSources : SGI_DATA_SOURCES.map(s => ({
                   ...s, description: "Não escaneado", count: 0, relevantRecords: [], isLoading: false,
-                }))).map((src, i) => (
-                  <div key={i} className="flex items-center gap-3 p-3 border rounded-lg">
+                }))).map((src) => (
+                  <div key={src.label} className="flex items-center gap-3 p-3 border rounded-lg">
                     <div className="p-2 rounded bg-muted">{src.icon}</div>
                     <div className="flex-1">
                       <p className="text-sm font-medium">{src.label}</p>

@@ -309,10 +309,9 @@ class WatchdogService {
         metadata: { route }
       });
 
-      // Uses full page reload for reliability - router.navigate() would require
-      // passing router context through the class, which would complicate the API.
-      // This approach works universally and is acceptable for error recovery.
-      window.location.href = route;
+      // SPA-safe navigation preserves React state and query cache
+      const { spaNavigate } = await import('@/lib/navigation/spa-navigate');
+      spaNavigate(route);
 
       this.addEvent({
         type: "success",

@@ -353,8 +353,8 @@ Gere scores realistas baseados nos dados e compare com médias da indústria mar
               </CardHeader>
               <CardContent>
                 <div className="space-y-4">
-                  {benchmarkData.frameworks.map((fw, i) => (
-                    <div key={i} className="space-y-2">
+                  {benchmarkData.frameworks.map((fw) => (
+                    <div key={fw.name} className="space-y-2">
                       <div className="flex items-center justify-between">
                         <div className="flex items-center gap-2">
                           {getTrendIcon(fw.trend)}
@@ -410,7 +410,7 @@ Gere scores realistas baseados nos dados e compare com médias da indústria mar
                 <CardContent>
                   <div className="space-y-3">
                     {benchmarkData.improvement_priority.map((action, i) => (
-                      <div key={i} className="flex items-start gap-3 p-3 rounded-lg bg-warning/5 border border-warning/10">
+                      <div key={`prio-${i}-${action.slice(0, 20)}`} className="flex items-start gap-3 p-3 rounded-lg bg-warning/5 border border-warning/10">
                         <Badge className="bg-warning text-warning-foreground shrink-0 mt-0.5">{i + 1}</Badge>
                         <span className="text-sm">{action}</span>
                       </div>

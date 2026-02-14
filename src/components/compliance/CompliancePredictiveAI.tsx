@@ -175,8 +175,8 @@ Responda em JSON com a estrutura:
 
       {/* Risk Areas Grid */}
       <div className="grid grid-cols-2 md:grid-cols-5 gap-3">
-        {defaultRiskAreas.map((area, i) => (
-          <Card key={i}>
+        {defaultRiskAreas.map((area) => (
+          <Card key={area.name}>
             <CardContent className="pt-4 pb-3 px-3">
               <div className="flex items-center justify-between mb-1">
                 <p className="text-xs text-muted-foreground">{area.name}</p>
