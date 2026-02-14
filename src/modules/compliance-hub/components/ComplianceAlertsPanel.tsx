@@ -155,6 +155,8 @@ export function ComplianceAlertsPanel({
                       e.stopPropagation();
                       onMarkAsRead(alert.id);
                     }}
+                    aria-label="Dispensar alerta"
+                    title="Dispensar"
                   >
                     <X className="h-3 w-3" />
                   </Button>

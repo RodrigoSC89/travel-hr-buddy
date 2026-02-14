@@ -303,6 +303,8 @@ ${initialContext ? `\n📍 **Contexto:** ${initialContext}` : ''}
                           size="icon" 
                           className="h-5 w-5"
                           onClick={() => copyMessage(message.content)}
+                          aria-label="Copiar mensagem"
+                          title="Copiar"
                         >
                           <Copy className="h-3 w-3" />
                         </Button>
@@ -371,6 +373,8 @@ ${initialContext ? `\n📍 **Contexto:** ${initialContext}` : ''}
             disabled={!input.trim() || isLoading}
             size="icon"
             className="h-[44px] w-[44px] shrink-0"
+            aria-label="Enviar mensagem"
+            title="Enviar"
           >
             {isLoading ? (
               <Loader2 className="h-5 w-5 animate-spin" />

@@ -282,7 +282,7 @@ export default function FuelManagementPage() {
         <Card className="border-primary/50">
           <CardHeader className="flex flex-row items-center justify-between pb-3">
             <CardTitle className="text-lg">Registrar Operação de Bunker</CardTitle>
-            <Button variant="ghost" size="icon" onClick={() => setIsAddBunkerOpen(false)}><X className="h-4 w-4" /></Button>
+            <Button variant="ghost" size="icon" onClick={() => setIsAddBunkerOpen(false)} aria-label="Fechar formulário" title="Fechar"><X className="h-4 w-4" /></Button>
           </CardHeader>
           <CardContent>
             <form onSubmit={(e) => { e.preventDefault(); handleAddBunker(); }} className="grid grid-cols-2 md:grid-cols-4 gap-4">

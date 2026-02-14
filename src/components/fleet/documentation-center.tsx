@@ -122,7 +122,7 @@ const DocumentationCenter: React.FC = () => {
                     </div>
                     <div className="flex items-center gap-2">
                       <Badge variant={cert.computedStatus === "valid" ? "default" : cert.computedStatus === "expiring" ? "secondary" : "destructive"}>{cert.computedStatus === "valid" ? "Válido" : cert.computedStatus === "expiring" ? "Vencendo" : "Expirado"}</Badge>
-                      <Button variant="ghost" size="icon" className="text-destructive hover:text-destructive" onClick={() => { setSelectedId(cert.id); setIsDeleteOpen(true); }}><Trash2 className="h-4 w-4" /></Button>
+                      <Button variant="ghost" size="icon" className="text-destructive hover:text-destructive" onClick={() => { setSelectedId(cert.id); setIsDeleteOpen(true); }} aria-label="Excluir certificado" title="Excluir"><Trash2 className="h-4 w-4" /></Button>
                     </div>
                   </div>
                 ))}

@@ -275,6 +275,8 @@ const HRChatbot: React.FC = () => {
             variant="ghost"
             size="icon"
             onClick={() => setIsExpanded(!isExpanded)}
+            aria-label={isExpanded ? "Minimizar chat" : "Expandir chat"}
+            title={isExpanded ? "Minimizar" : "Expandir"}
           >
             {isExpanded ? <Minimize2 className="w-4 h-4" /> : <Maximize2 className="w-4 h-4" />}
           </Button>

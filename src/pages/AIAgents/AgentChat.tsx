@@ -275,6 +275,8 @@ function AgentChat() {
                 size="icon"
                 disabled={!input.trim() || isLoading}
                 className="shrink-0 h-[56px] w-[56px]"
+                aria-label="Enviar mensagem ao agente"
+                title="Enviar"
               >
                 {isLoading ? (
                   <Loader2 className="h-4 w-4 animate-spin" />

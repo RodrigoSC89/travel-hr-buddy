@@ -37,9 +37,9 @@ describe("ARIA Label Coverage for Icon Buttons", () => {
       for (let i = 0; i < lines.length; i++) {
         if (lines[i].includes('size="icon"')) {
           totalIconButtons++;
-          // Check surrounding lines (±5) for aria-label
-          const context = lines.slice(Math.max(0, i - 3), Math.min(lines.length, i + 6)).join("\n");
-          if (context.includes("aria-label")) {
+          // Check surrounding lines (±5) for aria-label or sr-only
+          const context = lines.slice(Math.max(0, i - 5), Math.min(lines.length, i + 8)).join("\n");
+          if (context.includes("aria-label") || context.includes("sr-only")) {
             withAriaLabel++;
           } else {
             violations.push(`${file}:${i + 1}`);
@@ -53,7 +53,7 @@ describe("ARIA Label Coverage for Icon Buttons", () => {
     console.log(`Remaining violations: ${violations.length}`);
     
     // Target: at least 60% coverage
-    expect(coverage).toBeGreaterThanOrEqual(60);
+    expect(coverage).toBeGreaterThanOrEqual(75);
   });
 
   it("should not have any new icon buttons without aria-label in core components", () => {
@@ -72,8 +72,8 @@ describe("ARIA Label Coverage for Icon Buttons", () => {
         const lines = content.split("\n");
         for (let i = 0; i < lines.length; i++) {
           if (lines[i].includes('size="icon"')) {
-            const context = lines.slice(Math.max(0, i - 3), Math.min(lines.length, i + 6)).join("\n");
-            if (!context.includes("aria-label")) {
+            const context = lines.slice(Math.max(0, i - 5), Math.min(lines.length, i + 8)).join("\n");
+            if (!context.includes("aria-label") && !context.includes("sr-only")) {
               violations.push(`${file}:${i + 1}: ${lines[i].trim().slice(0, 80)}`);
             }
           }
@@ -83,6 +83,6 @@ describe("ARIA Label Coverage for Icon Buttons", () => {
 
     console.log(`Core component violations: ${violations.length}`);
     violations.forEach(v => console.log(`  - ${v}`));
-    expect(violations.length).toBeLessThan(25);
+    expect(violations.length).toBeLessThan(10);
   });
 });

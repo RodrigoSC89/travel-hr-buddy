@@ -273,11 +273,13 @@ export function ComplianceVoiceChat({
             variant={isListening ? "destructive" : "outline"}
             onClick={toggleListening}
             disabled={isProcessing}
+            aria-label={isListening ? "Parar gravação" : "Iniciar gravação de voz"}
+            title={isListening ? "Parar" : "Gravar"}
           >
             {isListening ? <MicOff className="h-4 w-4" /> : <Mic className="h-4 w-4" />}
           </Button>
           {isSpeaking && (
-            <Button size="icon" variant="outline" onClick={() => window.speechSynthesis.cancel()}>
+            <Button size="icon" variant="outline" onClick={() => window.speechSynthesis.cancel()} aria-label="Parar narração" title="Parar narração">
               <VolumeX className="h-4 w-4" />
             </Button>
           )}
@@ -293,6 +295,8 @@ export function ComplianceVoiceChat({
             size="icon"
             onClick={() => handleSendMessage(textInput)}
             disabled={!textInput.trim() || isProcessing}
+            aria-label="Enviar mensagem"
+            title="Enviar"
           >
             <Send className="h-4 w-4" />
           </Button>

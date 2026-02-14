@@ -294,7 +294,8 @@ Faça sua pergunta sobre compliance, auditoria ou regulamentações!`);
                         {message.role === "assistant" && (
                           <div className="flex items-center gap-1 mt-1">
                             <Button variant="ghost" size="icon" className="h-6 w-6"
-                              onClick={() => handleCopyMessage(message.content)}>
+                              onClick={() => handleCopyMessage(message.content)}
+                              aria-label="Copiar mensagem" title="Copiar">
                               <Copy className="h-3 w-3" />
                             </Button>
                           </div>

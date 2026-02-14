@@ -137,8 +137,8 @@ export default function NOC() {
             <div className="flex items-center gap-2 text-xl font-mono bg-zinc-900 px-4 py-2 rounded-lg"><Clock className="h-5 w-5 text-primary" />{currentTime}</div>
             <div className="text-sm text-muted-foreground">Atualizado: {lastRefresh.toLocaleTimeString("pt-BR")}</div>
             <div className="flex items-center gap-2">
-              <Button variant="ghost" size="icon" onClick={() => setIsSoundEnabled(!isSoundEnabled)}>{isSoundEnabled ? <Volume2 className="h-5 w-5" /> : <VolumeX className="h-5 w-5" />}</Button>
-              <Button variant="ghost" size="icon" onClick={toggleFullscreen}>{isFullscreen ? <Minimize className="h-5 w-5" /> : <Maximize className="h-5 w-5" />}</Button>
+              <Button variant="ghost" size="icon" onClick={() => setIsSoundEnabled(!isSoundEnabled)} aria-label={isSoundEnabled ? "Desativar som" : "Ativar som"} title={isSoundEnabled ? "Desativar som" : "Ativar som"}>{isSoundEnabled ? <Volume2 className="h-5 w-5" /> : <VolumeX className="h-5 w-5" />}</Button>
+              <Button variant="ghost" size="icon" onClick={toggleFullscreen} aria-label={isFullscreen ? "Sair da tela cheia" : "Tela cheia"} title={isFullscreen ? "Sair da tela cheia" : "Tela cheia"}>{isFullscreen ? <Minimize className="h-5 w-5" /> : <Maximize className="h-5 w-5" />}</Button>
             </div>
           </div>
         </header>
