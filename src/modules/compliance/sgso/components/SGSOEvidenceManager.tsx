@@ -128,7 +128,7 @@ export const SGSOEvidenceManager: React.FC = () => {
                     <Badge variant="outline">{ev.practice_number}</Badge>
                   </div>
                 </div>
-                <Button variant="ghost" size="icon" onClick={() => handleDelete(ev.id)}>
+                <Button variant="ghost" size="icon" onClick={() => handleDelete(ev.id)} aria-label="Excluir evidência" title="Excluir">
                   <Trash2 className="h-4 w-4 text-destructive" />
                 </Button>
               </div>

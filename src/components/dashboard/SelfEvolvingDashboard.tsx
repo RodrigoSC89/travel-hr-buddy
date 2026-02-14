@@ -472,10 +472,10 @@ function WidgetCard({
             {widget.title}
           </CardTitle>
           <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
-            <Button variant="ghost" size="icon" className="h-6 w-6">
+            <Button variant="ghost" size="icon" className="h-6 w-6" aria-label="Arrastar widget" title="Arrastar">
               <GripVertical className="h-3 w-3" />
             </Button>
-            <Button variant="ghost" size="icon" className="h-6 w-6" onClick={onToggle}>
+            <Button variant="ghost" size="icon" className="h-6 w-6" onClick={onToggle} aria-label="Remover widget" title="Remover">
               <X className="h-3 w-3" />
             </Button>
           </div>

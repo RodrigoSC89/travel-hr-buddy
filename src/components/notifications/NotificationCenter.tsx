@@ -102,7 +102,7 @@ export function NotificationCenter({ open, onClose }: NotificationCenterProps) {
                     Marcar todas
                   </Button>
                 )}
-                <Button variant="ghost" size="icon" onClick={onClose}>
+                <Button variant="ghost" size="icon" onClick={onClose} aria-label="Fechar notificações" title="Fechar">
                   <X className="w-4 h-4" />
                 </Button>
               </div>

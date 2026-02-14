@@ -349,7 +349,7 @@ const TagsFilter: React.FC<{
           onChange={(e) => setInputValue(e.target.value)}
           onKeyDown={(e) => e.key === "Enter" && addTag()}
         />
-        <Button size="icon" variant="outline" onClick={addTag}>
+        <Button size="icon" variant="outline" onClick={addTag} aria-label="Adicionar tag" title="Adicionar">
           <Plus className="h-4 w-4" />
         </Button>
       </div>

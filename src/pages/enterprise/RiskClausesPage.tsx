@@ -115,7 +115,7 @@ export default function RiskClausesPage() {
                   <div className="flex items-center gap-4">
                     <div className="text-right">
                       <p className="font-bold">{a.overall_risk_score || 0}/100</p>
-                      <p className="text-sm text-muted-foreground">{((a.risk_clauses as any[]) || []).length} riscos</p>
+                      <p className="text-sm text-muted-foreground">{(Array.isArray(a.risk_clauses) ? a.risk_clauses : []).length} riscos</p>
                     </div>
                     <Button size="sm" variant="outline" className="gap-1"><Eye className="h-4 w-4" />Ver</Button>
                   </div>

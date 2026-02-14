@@ -109,7 +109,7 @@ export default function ProcurementInventory() {
               </Button>
 
               {/* Filters */}
-              <Button variant="outline" size="icon" onClick={() => setShowFilters(true)}>
+              <Button variant="outline" size="icon" onClick={() => setShowFilters(true)} aria-label="Filtros" title="Filtros">
                 <Filter className="h-4 w-4" />
               </Button>
 
@@ -129,7 +129,7 @@ export default function ProcurementInventory() {
               </Button>
 
               {/* Settings */}
-              <Button variant="outline" size="icon" onClick={() => setShowSettings(true)}>
+              <Button variant="outline" size="icon" onClick={() => setShowSettings(true)} aria-label="Configurações" title="Configurações">
                 <Settings className="h-4 w-4" />
               </Button>
 

@@ -4,6 +4,7 @@
  * Evaluates responses and provides coaching feedback
  */
 import React, { useState, useCallback, useRef, useEffect } from "react";
+import { getSpeechRecognitionAPI, type SpeechRecognitionInstance } from "@/types/speech-recognition";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -92,19 +93,18 @@ export function ComplianceInterviewSimulator({
   const [isEvaluating, setIsEvaluating] = useState(false);
   const [currentAnswer, setCurrentAnswer] = useState("");
   const [isListening, setIsListening] = useState(false);
-  const recognitionRef = useRef<any>(null);
+  const recognitionRef = useRef<SpeechRecognitionInstance | null>(null);
   const scrollRef = useRef<HTMLDivElement>(null);
 
   // Setup speech recognition
   useEffect(() => {
-    const w = window as any;
-    const SpeechRecognitionAPI = w.SpeechRecognition || w.webkitSpeechRecognition;
+    const SpeechRecognitionAPI = getSpeechRecognitionAPI();
     if (SpeechRecognitionAPI) {
       recognitionRef.current = new SpeechRecognitionAPI();
       recognitionRef.current.continuous = true;
       recognitionRef.current.interimResults = true;
       recognitionRef.current.lang = "pt-BR";
-      recognitionRef.current.onresult = (event: any) => {
+      recognitionRef.current.onresult = (event) => {
         let finalText = "";
         for (let i = 0; i < event.results.length; i++) {
           if (event.results[i].isFinal) {

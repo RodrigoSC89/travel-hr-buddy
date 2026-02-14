@@ -180,7 +180,7 @@ export const MapPanel: React.FC<MapPanelProps> = ({
         {layers.length > 0 && onLayerToggle && (
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Button variant="secondary" size="icon" className="shadow-lg">
+              <Button variant="secondary" size="icon" className="shadow-lg" aria-label="Camadas do mapa" title="Camadas">
                 <Layers className="w-4 h-4" />
               </Button>
             </DropdownMenuTrigger>
