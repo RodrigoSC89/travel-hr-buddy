@@ -334,9 +334,9 @@ export const AppRoutes = () => (
       <Route path="/admin/api-tester" element={<Suspense fallback={<AppLoader />}><Pages.AdminRoute><Pages.AdminApiTester /></Pages.AdminRoute></Suspense>} />
       
       {/* ======== DASHBOARD ALIASES ======== */}
-      <Route path="/dashboard" element={<Pages.CentralComando />} />
-      <Route path="/executive-dashboard" element={<Pages.CentralComando />} />
-      <Route path="/system-overview" element={<Pages.CentralComando />} />
+      <Route path="/dashboard" element={<Navigate to="/command" replace />} />
+      <Route path="/executive-dashboard" element={<Navigate to="/command" replace />} />
+      <Route path="/system-overview" element={<Navigate to="/command" replace />} />
       <Route path="/analytics" element={<Pages.AnalyticsCommandCenter />} />
       <Route path="/backup-audit" element={<Pages.SecurityAuditCenter />} />
       <Route path="/saas-manager" element={<Pages.Admin />} />
