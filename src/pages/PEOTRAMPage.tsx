@@ -18,6 +18,9 @@ import { ModulePageWrapper } from "@/components/ui/module-page-wrapper";
 import { ModuleHeader } from "@/components/ui/module-header";
 import ModuleActionButton from "@/components/ui/module-action-button";
 import { ProactiveComplianceMonitor } from "@/components/compliance/ProactiveComplianceMonitor";
+import { UnifiedEvidenceGenerator } from "@/components/compliance/advanced/UnifiedEvidenceGenerator";
+import { ComplianceVoiceChat } from "@/components/compliance/ComplianceVoiceChat";
+import { CompliancePredictiveAI } from "@/components/compliance/CompliancePredictiveAI";
 import { useMaritimeActions } from "@/hooks/useMaritimeActions";
 import { toast } from "sonner";
 import {
@@ -188,6 +191,18 @@ const PEOTRAMPage = () => {
           <TabsTrigger value="monitor" className="gap-2">
             <Activity className="h-4 w-4" />
             Monitor Proativo
+          </TabsTrigger>
+          <TabsTrigger value="ai-evidence" className="gap-2">
+            <Flame className="h-4 w-4" />
+            IA Evidências
+          </TabsTrigger>
+          <TabsTrigger value="ai-voice" className="gap-2">
+            <Siren className="h-4 w-4" />
+            Assistente Voz
+          </TabsTrigger>
+          <TabsTrigger value="ai-predictive" className="gap-2">
+            <TrendingUp className="h-4 w-4" />
+            IA Preditiva
           </TabsTrigger>
         </TabsList>
 
@@ -479,6 +494,43 @@ const PEOTRAMPage = () => {
         {/* PROACTIVE MONITOR */}
         <TabsContent value="monitor" className="space-y-4">
           <ProactiveComplianceMonitor />
+        </TabsContent>
+
+        {/* AI EVIDENCE GENERATOR */}
+        <TabsContent value="ai-evidence" className="space-y-4">
+          <UnifiedEvidenceGenerator />
+        </TabsContent>
+
+        {/* AI VOICE CHAT */}
+        <TabsContent value="ai-voice" className="space-y-4">
+          <ComplianceVoiceChat
+            moduleId="peotram"
+            moduleName="PEOTRAM"
+            moduleDescription="Assistente de voz com IA para auditoria PEOTRAM - 13 Elementos ANP"
+            systemContext="PEOTRAM é o Programa de Excelência Operacional em Transporte Marítimo da ANP/Petrobras com 13 elementos: Liderança, Política, Documentação, Riscos, Projeto, Operação/Manutenção, Gestão de Mudanças, Aquisição, Capacitação, Permissão de Trabalho, Integridade Mecânica, Investigação de Incidentes e Contingência."
+            suggestedQuestions={[
+              "Quais são os 13 elementos do PEOTRAM?",
+              "Como preparar uma auditoria PEOTRAM?",
+              "Quais NCs mais comuns no Elemento 9 (Capacitação)?",
+              "Gere um relatório de evidências para o Elemento 4 (Riscos)",
+            ]}
+          />
+        </TabsContent>
+
+        {/* AI PREDICTIVE */}
+        <TabsContent value="ai-predictive" className="space-y-4">
+          <CompliancePredictiveAI
+            moduleId="peotram"
+            moduleName="PEOTRAM"
+            moduleContext="Programa de Excelência Operacional em Transporte Marítimo (13 Elementos ANP). Análise de conformidade, tendências de NCs, previsão de riscos operacionais e recomendações para auditorias futuras."
+            riskAreas={[
+              { name: "Liderança", score: 95, trend: "up" },
+              { name: "Riscos", score: 78, trend: "down" },
+              { name: "Capacitação", score: 82, trend: "stable" },
+              { name: "Manutenção", score: 91, trend: "up" },
+              { name: "Contingência", score: 88, trend: "stable" },
+            ]}
+          />
         </TabsContent>
       </Tabs>
 

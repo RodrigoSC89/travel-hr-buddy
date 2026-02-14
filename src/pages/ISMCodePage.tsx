@@ -19,6 +19,9 @@ import { ModuleHeader } from "@/components/ui/module-header";
 import ModuleActionButton from "@/components/ui/module-action-button";
 import ISMChecklist from "@/components/compliance/ISMChecklist";
 import { ProactiveComplianceMonitor } from "@/components/compliance/ProactiveComplianceMonitor";
+import { ComplianceVoiceChat } from "@/components/compliance/ComplianceVoiceChat";
+import { CompliancePredictiveAI } from "@/components/compliance/CompliancePredictiveAI";
+import { ComplianceEvidenceGenerator } from "@/components/compliance/ComplianceEvidenceGenerator";
 import { useMaritimeActions } from "@/hooks/useMaritimeActions";
 import { toast } from "sonner";
 import {
@@ -167,6 +170,18 @@ const ISMCodePage = () => {
           <TabsTrigger value="monitor" className="gap-2">
             <Activity className="h-4 w-4" />
             Monitor Proativo
+          </TabsTrigger>
+          <TabsTrigger value="ai-evidence" className="gap-2">
+            <Target className="h-4 w-4" />
+            IA Evidências
+          </TabsTrigger>
+          <TabsTrigger value="ai-voice" className="gap-2">
+            <Users className="h-4 w-4" />
+            Assistente Voz
+          </TabsTrigger>
+          <TabsTrigger value="ai-predictive" className="gap-2">
+            <TrendingUp className="h-4 w-4" />
+            IA Preditiva
           </TabsTrigger>
         </TabsList>
 
@@ -435,6 +450,47 @@ const ISMCodePage = () => {
         {/* PROACTIVE MONITOR */}
         <TabsContent value="monitor" className="space-y-4">
           <ProactiveComplianceMonitor />
+        </TabsContent>
+
+        {/* AI EVIDENCE GENERATOR */}
+        <TabsContent value="ai-evidence" className="space-y-4">
+          <ComplianceEvidenceGenerator
+            moduleId="ism-code"
+            moduleName="ISM Code"
+            elements={ISM_CODE_ELEMENTS.map(e => ({ id: e.id, name: e.name }))}
+          />
+        </TabsContent>
+
+        {/* AI VOICE CHAT */}
+        <TabsContent value="ai-voice" className="space-y-4">
+          <ComplianceVoiceChat
+            moduleId="ism-code"
+            moduleName="ISM Code"
+            moduleDescription="Assistente de voz com IA para Safety Management System (SMS) - IMO"
+            systemContext="ISM Code (International Safety Management Code) - IMO Resolution A.741(18), SOLAS Chapter IX. 13 elementos: General, Safety Policy, Company Responsibilities, DPA, Master's Authority, Resources/Personnel, Shipboard Operations, Emergency Preparedness, NC Reports/Analysis, Maintenance, Documentation, Verification/Review, Certification."
+            suggestedQuestions={[
+              "Quais são os 13 elementos do ISM Code?",
+              "Qual o papel do DPA (Designated Person Ashore)?",
+              "Como preparar para uma auditoria DOC/SMC?",
+              "Quais NCs mais comuns em auditorias ISM?",
+            ]}
+          />
+        </TabsContent>
+
+        {/* AI PREDICTIVE */}
+        <TabsContent value="ai-predictive" className="space-y-4">
+          <CompliancePredictiveAI
+            moduleId="ism-code"
+            moduleName="ISM Code"
+            moduleContext="International Safety Management Code (ISM) - Sistema de Gestão de Segurança (SMS) conforme IMO. Análise de DOC/SMC, auditorias internas/externas, NCs de segurança, manutenção planejada e preparação para emergências."
+            riskAreas={[
+              { name: "SMS Policy", score: 95, trend: "up" },
+              { name: "Personnel", score: 80, trend: "down" },
+              { name: "Operations", score: 92, trend: "up" },
+              { name: "Emergency", score: 88, trend: "stable" },
+              { name: "Maintenance", score: 85, trend: "stable" },
+            ]}
+          />
         </TabsContent>
       </Tabs>
 
