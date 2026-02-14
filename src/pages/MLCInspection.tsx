@@ -15,6 +15,10 @@ const ComplianceAutoChecklistGenerator = lazy(() => import('@/components/complia
 const ComplianceDocCrossReference = lazy(() => import('@/components/compliance/ai/ComplianceDocCrossReference').then(m => ({ default: m.ComplianceDocCrossReference })));
 const ComplianceTimeline = lazy(() => import('@/components/compliance/ai/ComplianceTimeline').then(m => ({ default: m.ComplianceTimeline })));
 const ComplianceRegulatoryChangeTracker = lazy(() => import('@/components/compliance/ai/ComplianceRegulatoryChangeTracker').then(m => ({ default: m.ComplianceRegulatoryChangeTracker })));
+const ComplianceScoreBenchmark = lazy(() => import('@/components/compliance/ai/ComplianceScoreBenchmark').then(m => ({ default: m.ComplianceScoreBenchmark })));
+const ComplianceAutoNCResolver = lazy(() => import('@/components/compliance/ai/ComplianceAutoNCResolver').then(m => ({ default: m.ComplianceAutoNCResolver })));
+const CompliancePhotoEvidenceAI = lazy(() => import('@/components/compliance/ai/CompliancePhotoEvidenceAI').then(m => ({ default: m.CompliancePhotoEvidenceAI })));
+const CompliancePSCRiskPredictor = lazy(() => import('@/components/compliance/ai/CompliancePSCRiskPredictor').then(m => ({ default: m.CompliancePSCRiskPredictor })));
 
 const LoadingFallback = () => <div className="space-y-4"><Skeleton className="h-8 w-64" /><Skeleton className="h-64" /></div>;
 
@@ -57,6 +61,10 @@ const MLCInspection: FC = () => {
           <TabsTrigger value="checklist-gen" className="gap-1"><ClipboardCheck className="h-3 w-3" />Checklist IA</TabsTrigger>
           <TabsTrigger value="doc-crossref" className="gap-1"><FileSearch className="h-3 w-3" />Cross-Ref</TabsTrigger>
           <TabsTrigger value="timeline" className="gap-1"><Clock className="h-3 w-3" />Timeline</TabsTrigger>
+          <TabsTrigger value="score-benchmark" className="gap-1"><Scale className="h-3 w-3" />Benchmarking</TabsTrigger>
+          <TabsTrigger value="nc-resolver" className="gap-1"><Shield className="h-3 w-3" />NC Resolver</TabsTrigger>
+          <TabsTrigger value="photo-ai" className="gap-1"><Brain className="h-3 w-3" />Foto IA</TabsTrigger>
+          <TabsTrigger value="psc-risk" className="gap-1"><Globe className="h-3 w-3" />Risco PSC</TabsTrigger>
           <TabsTrigger value="reg-tracker" className="gap-1"><Globe className="h-3 w-3" />Regulatório</TabsTrigger>
         </TabsList>
 
@@ -71,6 +79,10 @@ const MLCInspection: FC = () => {
           <TabsContent value="doc-crossref"><ComplianceDocCrossReference moduleId="mlc" moduleName="MLC 2006" /></TabsContent>
           <TabsContent value="timeline"><ComplianceTimeline moduleId="mlc" moduleName="MLC 2006" /></TabsContent>
           <TabsContent value="reg-tracker"><ComplianceRegulatoryChangeTracker moduleId="mlc" moduleName="MLC 2006" /></TabsContent>
+          <TabsContent value="score-benchmark"><ComplianceScoreBenchmark moduleId="mlc" moduleName="MLC 2006" /></TabsContent>
+          <TabsContent value="nc-resolver"><ComplianceAutoNCResolver moduleId="mlc" moduleName="MLC 2006" /></TabsContent>
+          <TabsContent value="photo-ai"><CompliancePhotoEvidenceAI moduleId="mlc" moduleName="MLC 2006" /></TabsContent>
+          <TabsContent value="psc-risk"><CompliancePSCRiskPredictor moduleId="mlc" moduleName="MLC 2006" /></TabsContent>
         </Suspense>
       </Tabs>
     </ModulePageWrapper>

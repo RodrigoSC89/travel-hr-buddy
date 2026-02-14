@@ -17,6 +17,7 @@ const ComplianceRegulatoryChangeTracker = lazy(() => import('@/components/compli
 const CompliancePSCRiskPredictor = lazy(() => import('@/components/compliance/ai/CompliancePSCRiskPredictor').then(m => ({ default: m.CompliancePSCRiskPredictor })));
 const ComplianceAutoNCResolver = lazy(() => import('@/components/compliance/ai/ComplianceAutoNCResolver').then(m => ({ default: m.ComplianceAutoNCResolver })));
 const CompliancePhotoEvidenceAI = lazy(() => import('@/components/compliance/ai/CompliancePhotoEvidenceAI').then(m => ({ default: m.CompliancePhotoEvidenceAI })));
+const ComplianceScoreBenchmark = lazy(() => import('@/components/compliance/ai/ComplianceScoreBenchmark').then(m => ({ default: m.ComplianceScoreBenchmark })));
 
 const LoadingFallback = () => <div className="space-y-4"><Skeleton className="h-8 w-64" /><Skeleton className="h-64" /></div>;
 
@@ -60,6 +61,7 @@ const PSCPackagePage: FC = () => {
           <TabsTrigger value="psc-risk" className="gap-1"><AlertTriangle className="h-3 w-3" />Risco Detenção</TabsTrigger>
           <TabsTrigger value="nc-resolver" className="gap-1"><Zap className="h-3 w-3" />NC Resolver</TabsTrigger>
           <TabsTrigger value="photo-ai" className="gap-1"><Search className="h-3 w-3" />Foto IA</TabsTrigger>
+          <TabsTrigger value="score-benchmark" className="gap-1"><Brain className="h-3 w-3" />Benchmarking</TabsTrigger>
           <TabsTrigger value="reg-tracker" className="gap-1"><Globe className="h-3 w-3" />Regulatório</TabsTrigger>
         </TabsList>
 
@@ -75,6 +77,7 @@ const PSCPackagePage: FC = () => {
           <TabsContent value="psc-risk"><CompliancePSCRiskPredictor moduleId="psc" moduleName="PSC Readiness" /></TabsContent>
           <TabsContent value="nc-resolver"><ComplianceAutoNCResolver moduleId="psc" moduleName="PSC Readiness" /></TabsContent>
           <TabsContent value="photo-ai"><CompliancePhotoEvidenceAI moduleId="psc" moduleName="PSC Readiness" /></TabsContent>
+          <TabsContent value="score-benchmark"><ComplianceScoreBenchmark moduleId="psc" moduleName="PSC Readiness" /></TabsContent>
           <TabsContent value="reg-tracker"><ComplianceRegulatoryChangeTracker moduleId="psc" moduleName="PSC Readiness" /></TabsContent>
         </Suspense>
       </Tabs>
