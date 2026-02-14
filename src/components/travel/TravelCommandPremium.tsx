@@ -82,7 +82,7 @@ export default function TravelCommandPremium() {
       return (data || []).map((r): TravelRequest => ({
         id: r.id, traveler_name: r.title || 'N/A', destination: r.location || 'N/A',
         departure_date: r.start_date || '', return_date: r.end_date || '', purpose: r.notes || r.description || '',
-        status: mapStatus(r.status), total_budget: Number(r.total_amount) || 0,
+        status: mapStatus(r.status ?? ''), total_budget: Number(r.total_amount) || 0,
         actual_cost: Number(r.total_amount) || 0, travel_type: 'domestic', created_at: r.created_at || '',
       }));
     },

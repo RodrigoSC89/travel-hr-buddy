@@ -479,9 +479,9 @@ export default function CrewManagementPremium() {
                   <div><p className="text-xs text-muted-foreground">Nacionalidade</p><p className="text-sm font-medium">{(selectedCrew.nationality as string) || '—'}</p></div>
                   <div><p className="text-xs text-muted-foreground">Embarcação</p><p className="text-sm font-medium">{((selectedCrew.vessels as any)?.name) || 'Sem designação'}</p></div>
                   <div><p className="text-xs text-muted-foreground">ID</p><code className="text-xs bg-muted px-2 py-1 rounded">{(selectedCrew.employee_id as string) || '—'}</code></div>
-                  {selectedCrew.contract_end && (
-                    <div><p className="text-xs text-muted-foreground">Fim do Contrato</p><p className="text-sm font-medium">{new Date(selectedCrew.contract_end as string).toLocaleDateString('pt-BR')}</p></div>
-                  )}
+                  {selectedCrew.contract_end ? (
+                    <div><p className="text-xs text-muted-foreground">Fim do Contrato</p><p className="text-sm font-medium">{new Date(String(selectedCrew.contract_end)).toLocaleDateString('pt-BR')}</p></div>
+                  ) : null}
                 </div>
               </div>
               <DialogFooter><Button variant="outline" onClick={() => setSelectedCrew(null)}>Fechar</Button></DialogFooter>
