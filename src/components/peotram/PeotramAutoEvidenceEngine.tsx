@@ -26,10 +26,16 @@ interface GeneratedBatch {
   status: "pending" | "generating" | "done" | "error";
 }
 
-export function PeotramAutoEvidenceEngine() {
+interface PeotramAutoEvidenceEngineProps {
+  vesselName?: string;
+  auditorName?: string;
+  onEvidenceGenerated?: (itemId: string, evidence: string) => void;
+}
+
+export function PeotramAutoEvidenceEngine({ vesselName: propVessel, auditorName: propAuditor, onEvidenceGenerated }: PeotramAutoEvidenceEngineProps = {}) {
   const [selectedElement, setSelectedElement] = useState<string>("");
-  const [vesselName, setVesselName] = useState("");
-  const [auditorName, setAuditorName] = useState("");
+  const [vesselName, setVesselName] = useState(propVessel || "");
+  const [auditorName, setAuditorName] = useState(propAuditor || "");
   const [batchResults, setBatchResults] = useState<GeneratedBatch[]>([]);
   const [isRunning, setIsRunning] = useState(false);
   const [currentIdx, setCurrentIdx] = useState(0);
@@ -80,6 +86,7 @@ Embarcação: ${vesselName || "N/A"} | Auditor: ${auditorName || "N/A"}`,
         if (error) throw error;
         const text = data?.choices?.[0]?.message?.content || data?.response || "";
         setBatchResults(prev => prev.map((r, idx) => idx === i ? { ...r, content: text, status: "done" } : r));
+        onEvidenceGenerated?.(item.id, text);
       } catch (err) {
         logger.error(`[AutoEvidence] Error on item ${item.id}`, err);
         setBatchResults(prev => prev.map((r, idx) => idx === i ? { ...r, status: "error", content: "Erro ao gerar" } : r));

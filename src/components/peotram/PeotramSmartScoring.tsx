@@ -33,9 +33,15 @@ interface ScoredItem {
   status: "pending" | "analyzing" | "done" | "error";
 }
 
-export function PeotramSmartScoring() {
+interface PeotramSmartScoringProps {
+  vesselName?: string;
+  itemStates?: Record<string, { score: ScoreValue; observations: string; ncClassification: string | null }>;
+  onApplyScores?: (scores: Record<string, ScoreValue>) => void;
+}
+
+export function PeotramSmartScoring({ vesselName: propVesselName, itemStates: propItemStates, onApplyScores }: PeotramSmartScoringProps = {}) {
   const [selectedElement, setSelectedElement] = useState("");
-  const [vesselName, setVesselName] = useState("");
+  const [vesselName, setVesselName] = useState(propVesselName || "");
   const [lastAuditScore, setLastAuditScore] = useState("");
   const [scoredItems, setScoredItems] = useState<ScoredItem[]>([]);
   const [isRunning, setIsRunning] = useState(false);

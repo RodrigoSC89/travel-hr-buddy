@@ -23,11 +23,12 @@ interface PeotramAuditManagerProps {
   isLoading: boolean;
   onCreateAudit: (params: { vesselName: string; auditorName: string; auditDate: string; cycle: string }) => void;
   onLoadAudit: (auditId: string) => void;
+  onDeleteAudit?: (auditId: string) => void;
   isCreating: boolean;
 }
 
 export function PeotramAuditManager({
-  audits, currentAuditId, isLoading, onCreateAudit, onLoadAudit, isCreating,
+  audits, currentAuditId, isLoading, onCreateAudit, onLoadAudit, onDeleteAudit, isCreating,
 }: PeotramAuditManagerProps) {
   const [showCreate, setShowCreate] = useState(false);
   const [vesselName, setVesselName] = useState("");
@@ -151,6 +152,17 @@ export function PeotramAuditManager({
                     <Progress value={progress} className="mt-2 h-1.5" />
                     {audit.nc_count > 0 && (
                       <p className="text-[10px] text-destructive mt-1">{audit.nc_count} NCs identificadas</p>
+                    )}
+                    {onDeleteAudit && (
+                      <div className="flex justify-end mt-1">
+                        <Button
+                          size="sm" variant="ghost"
+                          className="h-6 text-[10px] text-destructive hover:text-destructive gap-1"
+                          onClick={(e) => { e.stopPropagation(); onDeleteAudit(audit.id); }}
+                        >
+                          <Trash2 className="h-3 w-3" /> Excluir
+                        </Button>
+                      </div>
                     )}
                   </div>
                 );

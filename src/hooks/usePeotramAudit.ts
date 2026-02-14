@@ -1,8 +1,8 @@
 /**
  * usePeotramAudit - Full CRUD hook for PEOTRAM audit persistence
- * Handles audit lifecycle: create, save progress, load, complete, compare cycles
+ * Handles audit lifecycle: create, save progress, load, complete, delete, compare cycles
  */
-import { useState, useCallback, useEffect } from "react";
+import { useState, useCallback, useEffect, useRef } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
@@ -327,6 +327,39 @@ export function usePeotramAudit() {
     }));
   }, []);
 
+  // Auto-save debounce (30s after last change)
+  const autoSaveTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  useEffect(() => {
+    if (!currentAuditId || Object.keys(itemStates).length === 0) return;
+    if (autoSaveTimerRef.current) clearTimeout(autoSaveTimerRef.current);
+    autoSaveTimerRef.current = setTimeout(() => {
+      saveProgress();
+    }, 30000);
+    return () => { if (autoSaveTimerRef.current) clearTimeout(autoSaveTimerRef.current); };
+  }, [itemStates, currentAuditId]);
+
+  // Delete audit
+  const deleteAudit = useMutation({
+    mutationFn: async (auditId: string) => {
+      // Delete responses first
+      await (supabase.from as Function)("peotram_audit_responses").delete().eq("audit_id", auditId);
+      const { error } = await (supabase.from as Function)("peotram_audits").delete().eq("id", auditId);
+      if (error) throw error;
+    },
+    onSuccess: (_, auditId) => {
+      if (currentAuditId === auditId) {
+        setCurrentAuditId(null);
+        setItemStates({});
+      }
+      queryClient.invalidateQueries({ queryKey: ["peotram-audits-list"] });
+      toast.success("Auditoria excluída");
+    },
+    onError: (err) => {
+      logger.error("[PeotramAudit] Delete error", err);
+      toast.error("Erro ao excluir auditoria");
+    },
+  });
+
   const currentAudit = audits.find(a => a.id === currentAuditId);
 
   return {
@@ -340,6 +373,7 @@ export function usePeotramAudit() {
     isSaving,
     // Actions
     createAudit,
+    deleteAudit,
     saveProgress,
     completeAudit,
     loadAudit,
