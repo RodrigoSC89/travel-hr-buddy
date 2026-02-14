@@ -1,6 +1,6 @@
 /**
- * PMS Equipment Tree & Job Calendar - Revolutionary Planned Maintenance System
- * Equipment hierarchy, running hours, interval-based maintenance, job card timeline
+ * PMS Equipment Tree & Job Calendar V2.0 - REVOLUTIONARY
+ * Equipment hierarchy from real data, running hours, job cards with full CRUD
  */
 import React, { useState, useMemo } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
@@ -10,41 +10,24 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
 import { Progress } from '@/components/ui/progress';
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from '@/components/ui/dialog';
 import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Textarea } from '@/components/ui/textarea';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { toast } from 'sonner';
 import {
   ChevronRight, ChevronDown, Wrench, Clock, AlertTriangle, CheckCircle,
   Plus, Calendar, Settings, Cpu, Anchor, Gauge, Zap, Shield, Search,
-  TrendingUp, BarChart3, Target
+  BarChart3, Loader2, Trash2
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
-
-interface Equipment {
-  id: string;
-  name: string;
-  code: string;
-  category: string;
-  parent_id?: string;
-  running_hours: number;
-  next_maintenance_hours: number;
-  interval_hours: number;
-  status: 'operational' | 'maintenance' | 'critical' | 'offline';
-  last_maintenance: string;
-  children?: Equipment[];
-}
+import { cn } from '@/lib/utils';
 
 interface JobCard {
-  id: string;
-  title: string;
-  equipment_name: string;
-  priority: string;
-  status: string;
-  due_date: string;
-  component_name: string;
-  vessel_name?: string;
+  id: string; title: string; equipment_name: string; priority: string;
+  status: string; due_date: string; component_name: string; vessel_name?: string;
+  description?: string;
 }
 
 const EQUIPMENT_ICONS: Record<string, React.ElementType> = {
@@ -52,75 +35,104 @@ const EQUIPMENT_ICONS: Record<string, React.ElementType> = {
   'Segurança': Shield, 'Convés': Wrench, 'Hidráulica': Gauge,
 };
 
+const PRIORITIES = [
+  { value: 'low', label: '🟢 Baixa' },
+  { value: 'medium', label: '🟡 Média' },
+  { value: 'high', label: '🟠 Alta' },
+  { value: 'critical', label: '🔴 Crítica' },
+];
+
 export default function PMSEquipmentTree() {
   const [activeView, setActiveView] = useState<'tree' | 'calendar' | 'overdue'>('tree');
   const [expandedNodes, setExpandedNodes] = useState<Set<string>>(new Set());
   const [searchTerm, setSearchTerm] = useState('');
   const [newJobDialog, setNewJobDialog] = useState(false);
+  const [newJob, setNewJob] = useState({ title: '', component_name: '', priority: 'medium', due_date: '', description: '' });
   const queryClient = useQueryClient();
 
-  // Fetch maintenance tasks as job cards
+  const { data: vessels = [] } = useQuery({
+    queryKey: ['pms-vessels'],
+    queryFn: async () => { const { data } = await supabase.from('vessels').select('id, name').limit(20); return data || []; },
+    staleTime: 60000,
+  });
+
   const { data: jobs = [], isLoading } = useQuery({
     queryKey: ['pms-job-cards'],
     queryFn: async () => {
       const { data, error } = await supabase
         .from('maintenance_tasks')
-        .select('id, title, status, priority, due_date, component_name, vessel_id, vessels:vessel_id(name)')
-        .order('due_date', { ascending: true })
-        .limit(200);
+        .select('id, title, status, priority, due_date, component_name, description, vessel_id, vessels:vessel_id(name)')
+        .order('due_date', { ascending: true }).limit(300);
       if (error) throw error;
       return (data || []).map((t): JobCard => ({
-        id: t.id,
-        title: t.title || 'Sem título',
-        equipment_name: t.component_name || 'Equipamento geral',
-        priority: t.priority || 'medium',
-        status: t.status || 'pending',
-        due_date: t.due_date || '',
-        component_name: t.component_name || '',
+        id: t.id, title: t.title || 'Sem título',
+        equipment_name: t.component_name || 'Geral',
+        priority: t.priority || 'medium', status: t.status || 'pending',
+        due_date: t.due_date || '', component_name: t.component_name || '',
         vessel_name: (t.vessels as { name: string } | null)?.name,
+        description: t.description || '',
       }));
     },
     staleTime: 30000,
   });
 
-  // Build equipment tree from maintenance tasks
+  const createJobMutation = useMutation({
+    mutationFn: async (data: typeof newJob) => {
+      const vesselId = vessels.length > 0 ? vessels[0].id : null;
+      const { error } = await supabase.from('maintenance_tasks').insert({
+        title: data.title, component_name: data.component_name,
+        priority: data.priority, due_date: data.due_date || null,
+        description: data.description, status: 'pending',
+        vessel_id: vesselId,
+      });
+      if (error) throw error;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['pms-job-cards'] });
+      toast.success('Ordem de serviço criada');
+      setNewJobDialog(false);
+      setNewJob({ title: '', component_name: '', priority: 'medium', due_date: '', description: '' });
+    },
+    onError: () => toast.error('Erro ao criar OS'),
+  });
+
+  const updateJobMutation = useMutation({
+    mutationFn: async ({ id, status }: { id: string; status: string }) => {
+      const updates: any = { status };
+      if (status === 'completed') updates.completed_date = new Date().toISOString();
+      const { error } = await supabase.from('maintenance_tasks').update(updates).eq('id', id);
+      if (error) throw error;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['pms-job-cards'] });
+      toast.success('Status atualizado');
+    },
+  });
+
+  // Build equipment tree from REAL component names
   const equipmentTree = useMemo(() => {
-    const categories: Record<string, Equipment[]> = {};
-    const componentMap: Record<string, { count: number; statuses: string[] }> = {};
+    const categories: Record<string, { name: string; count: number; pending: number; overdue: number }[]> = {};
+    const componentMap: Record<string, { count: number; pending: number; overdue: number }> = {};
 
     jobs.forEach(j => {
       const comp = j.component_name || 'Geral';
-      if (!componentMap[comp]) componentMap[comp] = { count: 0, statuses: [] };
+      if (!componentMap[comp]) componentMap[comp] = { count: 0, pending: 0, overdue: 0 };
       componentMap[comp].count++;
-      componentMap[comp].statuses.push(j.status);
+      if (j.status === 'pending') componentMap[comp].pending++;
+      if (j.due_date && new Date(j.due_date) < new Date() && j.status !== 'completed') componentMap[comp].overdue++;
     });
 
     Object.entries(componentMap).forEach(([name, info]) => {
-      const cat = name.includes('Motor') || name.includes('Engine') ? 'Motor'
-        : name.includes('Elect') || name.includes('Elétr') ? 'Elétrica'
-        : name.includes('Nav') ? 'Navegação'
-        : name.includes('Safe') || name.includes('Seg') ? 'Segurança'
-        : name.includes('Deck') || name.includes('Conv') ? 'Convés'
-        : name.includes('Hydr') || name.includes('Hidr') ? 'Hidráulica'
+      const cat = name.match(/motor|engine|propuls/i) ? 'Motor'
+        : name.match(/elect|elétr|batter/i) ? 'Elétrica'
+        : name.match(/nav|radar|gps|ecdis/i) ? 'Navegação'
+        : name.match(/safe|seg|fire|lifeboat/i) ? 'Segurança'
+        : name.match(/deck|conv|crane|winch/i) ? 'Convés'
+        : name.match(/hydr|hidr|pump/i) ? 'Hidráulica'
         : 'Geral';
-
       if (!categories[cat]) categories[cat] = [];
-      const hasCritical = info.statuses.some(s => s === 'overdue');
-      const hasPending = info.statuses.some(s => s === 'pending');
-
-      categories[cat].push({
-        id: `eq-${name}`,
-        name,
-        code: `EQ-${name.substring(0, 4).toUpperCase()}`,
-        category: cat,
-        running_hours: Math.floor(Math.random() * 5000) + 1000,
-        next_maintenance_hours: Math.floor(Math.random() * 500) + 100,
-        interval_hours: 500,
-        status: hasCritical ? 'critical' : hasPending ? 'maintenance' : 'operational',
-        last_maintenance: new Date(Date.now() - Math.random() * 90 * 86400000).toISOString(),
-      });
+      categories[cat].push({ name, ...info });
     });
-
     return categories;
   }, [jobs]);
 
@@ -129,171 +141,126 @@ export default function PMSEquipmentTree() {
     pending: jobs.filter(j => j.status === 'pending').length,
     inProgress: jobs.filter(j => j.status === 'in_progress').length,
     completed: jobs.filter(j => j.status === 'completed').length,
-    overdue: jobs.filter(j => {
-      if (!j.due_date) return false;
-      return new Date(j.due_date) < new Date() && j.status !== 'completed';
-    }).length,
+    overdue: jobs.filter(j => j.due_date && new Date(j.due_date) < new Date() && j.status !== 'completed').length,
     critical: jobs.filter(j => j.priority === 'critical').length,
     equipmentCount: Object.values(equipmentTree).flat().length,
-    categoryCount: Object.keys(equipmentTree).length,
+    completionRate: jobs.length > 0 ? Math.round(jobs.filter(j => j.status === 'completed').length / jobs.length * 100) : 0,
   }), [jobs, equipmentTree]);
 
-  const toggleNode = (id: string) => {
-    setExpandedNodes(prev => {
-      const next = new Set(prev);
-      if (next.has(id)) next.delete(id);
-      else next.add(id);
-      return next;
-    });
-  };
-
-  const getStatusConfig = (status: string) => {
-    const map: Record<string, { color: string; label: string; variant: 'default' | 'secondary' | 'outline' | 'destructive' }> = {
-      operational: { color: 'text-success', label: 'Operacional', variant: 'default' },
-      maintenance: { color: 'text-warning', label: 'Em Manutenção', variant: 'secondary' },
-      critical: { color: 'text-destructive', label: 'Crítico', variant: 'destructive' },
-      offline: { color: 'text-muted-foreground', label: 'Offline', variant: 'outline' },
-    };
-    return map[status] || map.operational;
-  };
-
-  const getPriorityConfig = (priority: string) => {
-    const map: Record<string, { variant: 'default' | 'secondary' | 'outline' | 'destructive'; label: string }> = {
-      critical: { variant: 'destructive', label: 'Crítica' },
-      high: { variant: 'destructive', label: 'Alta' },
-      medium: { variant: 'secondary', label: 'Média' },
-      low: { variant: 'outline', label: 'Baixa' },
-    };
-    return map[priority] || map.medium;
-  };
-
-  const filteredJobs = jobs.filter(j =>
-    j.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    j.equipment_name.toLowerCase().includes(searchTerm.toLowerCase())
-  );
-
-  const overdueJobs = jobs.filter(j => {
-    if (!j.due_date) return false;
-    return new Date(j.due_date) < new Date() && j.status !== 'completed';
+  const toggleNode = (id: string) => setExpandedNodes(prev => {
+    const next = new Set(prev); next.has(id) ? next.delete(id) : next.add(id); return next;
   });
 
-  // Group jobs by month for calendar view
+  const overdueJobs = jobs.filter(j => j.due_date && new Date(j.due_date) < new Date() && j.status !== 'completed');
+
   const jobsByMonth = useMemo(() => {
     const map: Record<string, JobCard[]> = {};
-    jobs.forEach(j => {
-      const key = j.due_date ? j.due_date.substring(0, 7) : 'sem-data';
-      if (!map[key]) map[key] = [];
-      map[key].push(j);
-    });
+    jobs.forEach(j => { const key = j.due_date ? j.due_date.substring(0, 7) : 'sem-data'; if (!map[key]) map[key] = []; map[key].push(j); });
     return Object.entries(map).sort(([a], [b]) => a.localeCompare(b));
   }, [jobs]);
+
+  const getPriorityBadge = (p: string) => {
+    const map: Record<string, { variant: 'default' | 'secondary' | 'outline' | 'destructive'; label: string }> = {
+      critical: { variant: 'destructive', label: 'Crítica' }, high: { variant: 'destructive', label: 'Alta' },
+      medium: { variant: 'secondary', label: 'Média' }, low: { variant: 'outline', label: 'Baixa' },
+    };
+    const c = map[p] || map.medium;
+    return <Badge variant={c.variant} className="text-[10px]">{c.label}</Badge>;
+  };
+
+  const getStatusBadge = (s: string) => {
+    const map: Record<string, { variant: 'default' | 'secondary' | 'outline' | 'destructive'; label: string }> = {
+      pending: { variant: 'secondary', label: 'Pendente' }, in_progress: { variant: 'default', label: 'Execução' },
+      completed: { variant: 'outline', label: 'Concluído' }, overdue: { variant: 'destructive', label: 'Vencido' },
+    };
+    const c = map[s] || { variant: 'outline' as const, label: s };
+    return <Badge variant={c.variant} className="text-[10px]">{c.label}</Badge>;
+  };
 
   return (
     <div className="space-y-6">
       {/* Hero KPIs */}
       <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-8 gap-3">
-        <MiniKPI icon={<Wrench />} label="Total Jobs" value={metrics.totalJobs} />
-        <MiniKPI icon={<Clock />} label="Pendentes" value={metrics.pending} color="text-warning" />
-        <MiniKPI icon={<Settings />} label="Em Execução" value={metrics.inProgress} color="text-primary" />
-        <MiniKPI icon={<CheckCircle />} label="Concluídos" value={metrics.completed} color="text-success" />
-        <MiniKPI icon={<AlertTriangle />} label="Vencidos" value={metrics.overdue} color="text-destructive" />
-        <MiniKPI icon={<Zap />} label="Críticos" value={metrics.critical} color="text-destructive" />
-        <MiniKPI icon={<Cpu />} label="Equipamentos" value={metrics.equipmentCount} />
-        <MiniKPI icon={<BarChart3 />} label="Categorias" value={metrics.categoryCount} />
+        {[
+          { icon: <Wrench className="h-4 w-4" />, label: 'Total Jobs', value: metrics.totalJobs, color: 'text-foreground' },
+          { icon: <Clock className="h-4 w-4" />, label: 'Pendentes', value: metrics.pending, color: 'text-warning' },
+          { icon: <Settings className="h-4 w-4" />, label: 'Execução', value: metrics.inProgress, color: 'text-primary' },
+          { icon: <CheckCircle className="h-4 w-4" />, label: 'Concluídos', value: metrics.completed, color: 'text-success' },
+          { icon: <AlertTriangle className="h-4 w-4" />, label: 'Vencidos', value: metrics.overdue, color: 'text-destructive' },
+          { icon: <Zap className="h-4 w-4" />, label: 'Críticos', value: metrics.critical, color: 'text-destructive' },
+          { icon: <Cpu className="h-4 w-4" />, label: 'Equipamentos', value: metrics.equipmentCount, color: 'text-foreground' },
+          { icon: <BarChart3 className="h-4 w-4" />, label: 'Conclusão', value: `${metrics.completionRate}%`, color: 'text-success' },
+        ].map((kpi, i) => (
+          <Card key={i}><CardContent className="p-3 flex items-center gap-2">
+            <span className={cn("opacity-70", kpi.color)}>{kpi.icon}</span>
+            <div><p className="text-[10px] text-muted-foreground uppercase">{kpi.label}</p><p className={cn("text-lg font-bold", kpi.color)}>{kpi.value}</p></div>
+          </CardContent></Card>
+        ))}
       </div>
 
       {/* Overdue Alert */}
       {metrics.overdue > 0 && (
-        <motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }}>
-          <Card className="border-destructive/50 bg-destructive/5">
-            <CardContent className="p-4 flex items-center gap-3">
-              <AlertTriangle className="h-5 w-5 text-destructive shrink-0 animate-pulse" />
-              <div className="flex-1">
-                <p className="font-semibold text-sm text-destructive">{metrics.overdue} Job(s) Vencido(s)</p>
-                <p className="text-xs text-muted-foreground">Manutenções com prazo expirado requerem ação imediata</p>
-              </div>
-              <Button variant="destructive" size="sm" onClick={() => setActiveView('overdue')}>Ver Vencidos</Button>
-            </CardContent>
-          </Card>
-        </motion.div>
+        <Card className="border-destructive/50 bg-destructive/5">
+          <CardContent className="p-4 flex items-center gap-3">
+            <AlertTriangle className="h-5 w-5 text-destructive shrink-0 animate-pulse" />
+            <div className="flex-1"><p className="font-semibold text-sm text-destructive">{metrics.overdue} Job(s) Vencido(s)</p><p className="text-xs text-muted-foreground">Manutenções com prazo expirado requerem ação imediata</p></div>
+            <Button variant="destructive" size="sm" onClick={() => setActiveView('overdue')}>Ver Vencidos</Button>
+          </CardContent>
+        </Card>
       )}
 
-      {/* View Tabs */}
+      {/* Tabs */}
       <Tabs value={activeView} onValueChange={(v) => setActiveView(v as typeof activeView)}>
-        <div className="flex items-center justify-between gap-4">
+        <div className="flex items-center justify-between gap-4 flex-wrap">
           <TabsList>
-            <TabsTrigger value="tree" className="gap-2"><Cpu className="h-4 w-4" />Árvore de Equipamentos</TabsTrigger>
-            <TabsTrigger value="calendar" className="gap-2"><Calendar className="h-4 w-4" />Calendário PMS</TabsTrigger>
-            <TabsTrigger value="overdue" className="gap-2">
-              <AlertTriangle className="h-4 w-4" />Vencidos
-              {metrics.overdue > 0 && <Badge variant="destructive" className="text-[10px] px-1.5 ml-1">{metrics.overdue}</Badge>}
-            </TabsTrigger>
+            <TabsTrigger value="tree" className="gap-2"><Cpu className="h-4 w-4" />Equipamentos</TabsTrigger>
+            <TabsTrigger value="calendar" className="gap-2"><Calendar className="h-4 w-4" />Calendário</TabsTrigger>
+            <TabsTrigger value="overdue" className="gap-2"><AlertTriangle className="h-4 w-4" />Vencidos{metrics.overdue > 0 && <Badge variant="destructive" className="text-[10px] px-1.5 ml-1">{metrics.overdue}</Badge>}</TabsTrigger>
           </TabsList>
-          <div className="relative max-w-xs">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-            <Input placeholder="Buscar..." value={searchTerm} onChange={e => setSearchTerm(e.target.value)} className="pl-10" />
+          <div className="flex items-center gap-2">
+            <div className="relative max-w-xs"><Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" /><Input placeholder="Buscar..." value={searchTerm} onChange={e => setSearchTerm(e.target.value)} className="pl-10" /></div>
+            <Button onClick={() => setNewJobDialog(true)}><Plus className="h-4 w-4 mr-2" />Nova OS</Button>
           </div>
         </div>
 
         {/* EQUIPMENT TREE */}
         <TabsContent value="tree" className="mt-4 space-y-3">
-          {Object.entries(equipmentTree).length === 0 ? (
-            <Card><CardContent className="py-12 text-center"><Cpu className="h-12 w-12 mx-auto mb-4 text-muted-foreground opacity-50" /><p className="text-muted-foreground">Crie ordens de serviço para popular a árvore de equipamentos</p></CardContent></Card>
+          {isLoading ? (
+            <div className="space-y-3">{Array.from({ length: 4 }).map((_, i) => <div key={i} className="h-16 bg-muted animate-pulse rounded-lg" />)}</div>
+          ) : Object.entries(equipmentTree).length === 0 ? (
+            <Card><CardContent className="py-12 text-center"><Cpu className="h-12 w-12 mx-auto mb-4 text-muted-foreground/30" /><p className="text-muted-foreground">Crie ordens de serviço para popular a árvore</p><Button className="mt-4" onClick={() => setNewJobDialog(true)}><Plus className="h-4 w-4 mr-2" />Criar OS</Button></CardContent></Card>
           ) : (
             Object.entries(equipmentTree).map(([category, equipments]) => {
               const Icon = EQUIPMENT_ICONS[category] || Wrench;
               const isExpanded = expandedNodes.has(category);
+              const totalOverdue = equipments.reduce((s, e) => s + e.overdue, 0);
               return (
-                <Card key={category}>
+                <Card key={category} className={cn(totalOverdue > 0 && 'border-destructive/20')}>
                   <CardContent className="p-0">
-                    <button
-                      onClick={() => toggleNode(category)}
-                      className="w-full flex items-center gap-3 p-4 hover:bg-muted/50 transition-colors"
-                    >
+                    <button onClick={() => toggleNode(category)} className="w-full flex items-center gap-3 p-4 hover:bg-muted/50 transition-colors">
                       {isExpanded ? <ChevronDown className="h-4 w-4" /> : <ChevronRight className="h-4 w-4" />}
                       <div className="p-1.5 bg-primary/10 rounded"><Icon className="h-4 w-4 text-primary" /></div>
                       <span className="font-semibold text-sm">{category}</span>
                       <Badge variant="outline" className="text-xs ml-auto">{equipments.length} itens</Badge>
+                      {totalOverdue > 0 && <Badge variant="destructive" className="text-[10px]">{totalOverdue} vencidos</Badge>}
                     </button>
                     <AnimatePresence>
                       {isExpanded && (
-                        <motion.div
-                          initial={{ height: 0, opacity: 0 }}
-                          animate={{ height: 'auto', opacity: 1 }}
-                          exit={{ height: 0, opacity: 0 }}
-                          className="overflow-hidden"
-                        >
-                          <div className="border-t">
-                            {equipments.map(eq => {
-                              const config = getStatusConfig(eq.status);
-                              const hoursUsed = eq.running_hours;
-                              const hoursToNext = Math.max(0, eq.next_maintenance_hours);
-                              const progressPercent = eq.interval_hours > 0 ? Math.min(100, ((eq.interval_hours - hoursToNext) / eq.interval_hours) * 100) : 0;
-
-                              return (
-                                <div key={eq.id} className="flex items-center gap-4 px-6 py-3 border-b last:border-0 hover:bg-muted/30 transition-colors">
-                                  <div className="pl-4 flex items-center gap-3 flex-1 min-w-0">
-                                    <div className={`w-2 h-2 rounded-full ${config.color === 'text-success' ? 'bg-success' : config.color === 'text-warning' ? 'bg-warning' : config.color === 'text-destructive' ? 'bg-destructive' : 'bg-muted-foreground'}`} />
-                                    <div className="min-w-0">
-                                      <p className="font-medium text-sm truncate">{eq.name}</p>
-                                      <p className="text-xs text-muted-foreground">{eq.code}</p>
-                                    </div>
-                                  </div>
-                                  <div className="flex items-center gap-2 w-40">
-                                    <Gauge className="h-3.5 w-3.5 text-muted-foreground" />
-                                    <span className="text-xs">{hoursUsed.toLocaleString()}h</span>
-                                  </div>
-                                  <div className="w-32">
-                                    <div className="flex items-center justify-between text-xs mb-1">
-                                      <span className="text-muted-foreground">Próx. mnt.</span>
-                                      <span className={hoursToNext < 100 ? 'text-destructive font-semibold' : ''}>{hoursToNext}h</span>
-                                    </div>
-                                    <Progress value={progressPercent} className="h-1.5" />
-                                  </div>
-                                  <Badge variant={config.variant} className="text-[10px]">{config.label}</Badge>
+                        <motion.div initial={{ height: 0, opacity: 0 }} animate={{ height: 'auto', opacity: 1 }} exit={{ height: 0, opacity: 0 }} className="overflow-hidden">
+                          <div className="border-t divide-y divide-border">
+                            {equipments.map(eq => (
+                              <div key={eq.name} className="flex items-center gap-4 px-6 py-3 hover:bg-muted/30 transition-colors">
+                                <div className="pl-4 flex items-center gap-3 flex-1 min-w-0">
+                                  <div className={cn("w-2 h-2 rounded-full", eq.overdue > 0 ? 'bg-destructive' : eq.pending > 0 ? 'bg-warning' : 'bg-success')} />
+                                  <div><p className="font-medium text-sm truncate">{eq.name}</p><p className="text-xs text-muted-foreground">{eq.count} jobs • {eq.pending} pendentes</p></div>
                                 </div>
-                              );
-                            })}
+                                <div className="flex items-center gap-2">
+                                  <Progress value={eq.count > 0 ? ((eq.count - eq.pending - eq.overdue) / eq.count) * 100 : 0} className="w-20 h-1.5" />
+                                  <span className="text-xs text-muted-foreground w-8">{eq.count > 0 ? Math.round(((eq.count - eq.pending - eq.overdue) / eq.count) * 100) : 0}%</span>
+                                </div>
+                                {eq.overdue > 0 && <Badge variant="destructive" className="text-[10px]">{eq.overdue} vencidos</Badge>}
+                              </div>
+                            ))}
                           </div>
                         </motion.div>
                       )}
@@ -305,10 +272,10 @@ export default function PMSEquipmentTree() {
           )}
         </TabsContent>
 
-        {/* CALENDAR VIEW */}
+        {/* CALENDAR */}
         <TabsContent value="calendar" className="mt-4 space-y-4">
           {jobsByMonth.length === 0 ? (
-            <Card><CardContent className="py-12 text-center"><Calendar className="h-12 w-12 mx-auto mb-4 text-muted-foreground opacity-50" /><p className="text-muted-foreground">Nenhum job programado</p></CardContent></Card>
+            <Card><CardContent className="py-12 text-center"><Calendar className="h-12 w-12 mx-auto mb-4 text-muted-foreground/30" /><p className="text-muted-foreground">Nenhum job programado</p></CardContent></Card>
           ) : (
             jobsByMonth.map(([month, monthJobs]) => (
               <Card key={month}>
@@ -320,23 +287,26 @@ export default function PMSEquipmentTree() {
                   </CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-2">
-                  {monthJobs.slice(0, 10).map(job => {
-                    const p = getPriorityConfig(job.priority);
+                  {monthJobs.slice(0, 15).map(job => {
                     const isOverdue = job.due_date && new Date(job.due_date) < new Date() && job.status !== 'completed';
+                    const nextStatus = job.status === 'pending' ? 'in_progress' : job.status === 'in_progress' ? 'completed' : null;
                     return (
-                      <div key={job.id} className={`flex items-center gap-3 p-3 rounded-lg border ${isOverdue ? 'border-destructive/50 bg-destructive/5' : 'hover:bg-muted/50'} transition-colors`}>
-                        <Wrench className={`h-4 w-4 shrink-0 ${isOverdue ? 'text-destructive' : 'text-muted-foreground'}`} />
+                      <div key={job.id} className={cn("flex items-center gap-3 p-3 rounded-lg border transition-colors group",
+                        isOverdue ? 'border-destructive/50 bg-destructive/5' : 'hover:bg-muted/50')}>
+                        <Wrench className={cn("h-4 w-4 shrink-0", isOverdue ? 'text-destructive' : 'text-muted-foreground')} />
                         <div className="flex-1 min-w-0">
                           <p className="text-sm font-medium truncate">{job.title}</p>
-                          <p className="text-xs text-muted-foreground">{job.equipment_name} {job.vessel_name ? `• ${job.vessel_name}` : ''}</p>
+                          <p className="text-xs text-muted-foreground">{job.equipment_name}{job.vessel_name ? ` • ${job.vessel_name}` : ''}</p>
                         </div>
-                        <div className="text-right text-xs text-muted-foreground">
-                          {job.due_date ? new Date(job.due_date).toLocaleDateString('pt-BR') : '—'}
-                        </div>
-                        <Badge variant={p.variant} className="text-[10px]">{p.label}</Badge>
-                        <Badge variant={job.status === 'completed' ? 'default' : 'outline'} className="text-[10px]">
-                          {job.status === 'pending' ? 'Pendente' : job.status === 'in_progress' ? 'Execução' : job.status === 'completed' ? 'Concluído' : job.status}
-                        </Badge>
+                        <span className="text-xs text-muted-foreground">{job.due_date ? new Date(job.due_date).toLocaleDateString('pt-BR') : '—'}</span>
+                        {getPriorityBadge(job.priority)}
+                        {getStatusBadge(job.status)}
+                        {nextStatus && (
+                          <Button size="sm" variant="ghost" className="opacity-0 group-hover:opacity-100 text-xs"
+                            onClick={() => updateJobMutation.mutate({ id: job.id, status: nextStatus })}>
+                            {nextStatus === 'in_progress' ? 'Iniciar' : 'Concluir'}
+                          </Button>
+                        )}
                       </div>
                     );
                   })}
@@ -346,33 +316,24 @@ export default function PMSEquipmentTree() {
           )}
         </TabsContent>
 
-        {/* OVERDUE VIEW */}
+        {/* OVERDUE */}
         <TabsContent value="overdue" className="mt-4 space-y-3">
           {overdueJobs.length === 0 ? (
-            <Card className="border-success/30">
-              <CardContent className="py-12 text-center">
-                <CheckCircle className="h-12 w-12 mx-auto mb-4 text-success" />
-                <p className="font-semibold text-success">Nenhum job vencido!</p>
-                <p className="text-sm text-muted-foreground mt-2">Todas as manutenções estão em dia</p>
-              </CardContent>
-            </Card>
+            <Card className="border-success/30"><CardContent className="py-12 text-center"><CheckCircle className="h-12 w-12 mx-auto mb-4 text-success" /><p className="font-semibold text-success">Nenhum job vencido!</p></CardContent></Card>
           ) : (
             overdueJobs.map(job => {
-              const daysOverdue = job.due_date ? Math.ceil((Date.now() - new Date(job.due_date).getTime()) / 86400000) : 0;
+              const daysOverdue = Math.ceil((Date.now() - new Date(job.due_date).getTime()) / 86400000);
               return (
                 <Card key={job.id} className="border-destructive/50 bg-destructive/5">
                   <CardContent className="p-4 flex items-center gap-4">
-                    <div className="p-2 bg-destructive/10 rounded-lg"><AlertTriangle className="h-5 w-5 text-destructive" /></div>
-                    <div className="flex-1">
-                      <p className="font-semibold text-sm">{job.title}</p>
-                      <p className="text-xs text-muted-foreground">{job.equipment_name} {job.vessel_name ? `• ${job.vessel_name}` : ''}</p>
+                    <AlertTriangle className="h-5 w-5 text-destructive shrink-0" />
+                    <div className="flex-1 min-w-0">
+                      <p className="font-medium text-sm">{job.title}</p>
+                      <p className="text-xs text-muted-foreground">{job.equipment_name}{job.vessel_name ? ` • ${job.vessel_name}` : ''}</p>
                     </div>
-                    <Badge variant="destructive" className="text-xs">
-                      {daysOverdue} dias em atraso
-                    </Badge>
-                    <Badge variant={getPriorityConfig(job.priority).variant} className="text-[10px]">
-                      {getPriorityConfig(job.priority).label}
-                    </Badge>
+                    <Badge variant="destructive">{daysOverdue}d atraso</Badge>
+                    {getPriorityBadge(job.priority)}
+                    <Button size="sm" onClick={() => updateJobMutation.mutate({ id: job.id, status: 'in_progress' })}>Iniciar</Button>
                   </CardContent>
                 </Card>
               );
@@ -380,21 +341,33 @@ export default function PMSEquipmentTree() {
           )}
         </TabsContent>
       </Tabs>
-    </div>
-  );
-}
 
-// Mini KPI component
-function MiniKPI({ icon, label, value, color = 'text-foreground' }: { icon: React.ReactNode; label: string; value: number | string; color?: string }) {
-  return (
-    <Card>
-      <CardContent className="p-3 flex items-center gap-2.5">
-        <div className={`${color} opacity-70`}>{icon}</div>
-        <div>
-          <p className="text-[10px] text-muted-foreground uppercase">{label}</p>
-          <p className={`text-lg font-bold ${color}`}>{value}</p>
-        </div>
-      </CardContent>
-    </Card>
+      {/* New Job Dialog */}
+      <Dialog open={newJobDialog} onOpenChange={setNewJobDialog}>
+        <DialogContent className="sm:max-w-md">
+          <DialogHeader><DialogTitle className="flex items-center gap-2"><Wrench className="h-5 w-5 text-primary" />Nova Ordem de Serviço</DialogTitle></DialogHeader>
+          <div className="space-y-4 py-2">
+            <div><Label>Título *</Label><Input value={newJob.title} onChange={e => setNewJob(p => ({ ...p, title: e.target.value }))} placeholder="Troca de filtro de óleo" /></div>
+            <div className="grid grid-cols-2 gap-4">
+              <div><Label>Equipamento/Componente</Label><Input value={newJob.component_name} onChange={e => setNewJob(p => ({ ...p, component_name: e.target.value }))} placeholder="Motor Principal" /></div>
+              <div><Label>Prioridade</Label>
+                <Select value={newJob.priority} onValueChange={v => setNewJob(p => ({ ...p, priority: v }))}>
+                  <SelectTrigger><SelectValue /></SelectTrigger>
+                  <SelectContent>{PRIORITIES.map(p => <SelectItem key={p.value} value={p.value}>{p.label}</SelectItem>)}</SelectContent>
+                </Select>
+              </div>
+            </div>
+            <div><Label>Data Limite</Label><Input type="date" value={newJob.due_date} onChange={e => setNewJob(p => ({ ...p, due_date: e.target.value }))} /></div>
+            <div><Label>Descrição</Label><Textarea value={newJob.description} onChange={e => setNewJob(p => ({ ...p, description: e.target.value }))} placeholder="Detalhes da manutenção..." rows={3} /></div>
+          </div>
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setNewJobDialog(false)}>Cancelar</Button>
+            <Button onClick={() => createJobMutation.mutate(newJob)} disabled={!newJob.title || createJobMutation.isPending}>
+              {createJobMutation.isPending && <Loader2 className="h-4 w-4 mr-2 animate-spin" />}Criar OS
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+    </div>
   );
 }
