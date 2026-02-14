@@ -32,6 +32,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { useToast } from "@/hooks/use-toast";
 import { useDocumentsCRUD } from "@/hooks/useDocumentsCRUD";
 import type { DocumentRecord, CreateDocumentInput } from "@/hooks/useDocumentsCRUD";
+import { createPDF } from "@/lib/pdf/lazy-pdf";
 
 // ==================== HELPERS ====================
 
@@ -145,6 +146,43 @@ export const WorldClassDocumentCenter: React.FC = () => {
     updateDocument.mutate({ id, status } as any);
   };
 
+  const handleExportDocsPDF = async () => {
+    try {
+      const doc = await createPDF('portrait');
+      doc.setFontSize(18);
+      doc.setFont('helvetica', 'bold');
+      doc.text('Nautilus One - Relatório de Documentos', 20, 20);
+      doc.setFontSize(10);
+      doc.setFont('helvetica', 'normal');
+      doc.text(`Gerado em: ${new Date().toLocaleDateString('pt-BR', { hour: '2-digit', minute: '2-digit' })}`, 20, 28);
+      doc.text(`Total: ${documents.length} documentos | Ativos: ${stats.active} | Expirados: ${stats.expired}`, 20, 35);
+
+      const tableData = documents.map((d, idx) => [
+        String(idx + 1),
+        d.title,
+        d.document_type,
+        getStatusConfig(d.status).label,
+        d.expiry_date ? new Date(d.expiry_date).toLocaleDateString('pt-BR') : '-',
+        formatFileSize(d.file_size),
+      ]);
+
+      (doc as any).autoTable({
+        startY: 42,
+        head: [['#', 'Título', 'Tipo', 'Status', 'Expira', 'Tamanho']],
+        body: tableData,
+        theme: 'striped',
+        headStyles: { fillColor: [0, 82, 136], textColor: 255, fontSize: 9 },
+        bodyStyles: { fontSize: 8 },
+        margin: { left: 20, right: 20 },
+      });
+
+      doc.save(`documentos-${new Date().toISOString().slice(0, 10)}.pdf`);
+      toast({ title: "📄 PDF exportado", description: `${documents.length} documentos exportados` });
+    } catch (err) {
+      toast({ title: "Erro ao gerar PDF", description: String(err), variant: "destructive" });
+    }
+  };
+
   // ==================== RENDER ====================
 
   if (error) {
@@ -188,6 +226,10 @@ export const WorldClassDocumentCenter: React.FC = () => {
             <Button variant="outline" size="sm" onClick={() => fileInputRef.current?.click()}>
               <Upload className="h-4 w-4 mr-1" />
               Upload Arquivo
+            </Button>
+            <Button variant="outline" size="sm" onClick={handleExportDocsPDF}>
+              <Download className="h-4 w-4 mr-1" />
+              Exportar PDF
             </Button>
             <Button onClick={() => setIsCreateOpen(true)}>
               <PlusCircle className="h-4 w-4 mr-1" />
