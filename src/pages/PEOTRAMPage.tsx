@@ -40,7 +40,7 @@ const PEOTRAMPage = () => {
 
   const {
     currentAuditId, currentAudit, audits, auditsLoading, isSaving,
-    createAudit, saveProgress, completeAudit, loadAudit,
+    createAudit, deleteAudit, saveProgress, completeAudit, loadAudit,
     uploadPhoto, getState, updateState, calculateScores, itemStates,
   } = usePeotramAudit();
 
@@ -188,6 +188,7 @@ const PEOTRAMPage = () => {
             isLoading={auditsLoading}
             onCreateAudit={(p) => createAudit.mutate(p)}
             onLoadAudit={loadAudit}
+            onDeleteAudit={(id: string) => deleteAudit.mutate(id)}
             isCreating={createAudit.isPending}
           />
           {/* Comparison section */}
@@ -253,12 +254,43 @@ const PEOTRAMPage = () => {
           )}
         </TabsContent>
 
-        <TabsContent value="smart-scoring"><PeotramSmartScoring /></TabsContent>
-        <TabsContent value="auto-evidence"><PeotramAutoEvidenceEngine /></TabsContent>
-        <TabsContent value="nc-generator"><PeotramNCAutoGenerator /></TabsContent>
-        <TabsContent value="report"><PeotramReportGenerator /></TabsContent>
+        <TabsContent value="smart-scoring">
+          <PeotramSmartScoring
+            vesselName={currentAudit?.vessel_name}
+            itemStates={itemStates as any}
+            onApplyScores={(applied) => {
+              for (const [id, score] of Object.entries(applied)) {
+                updateState(id, { score });
+              }
+              toast.success("Notas IA aplicadas ao checklist!");
+            }}
+          />
+        </TabsContent>
+        <TabsContent value="auto-evidence">
+          <PeotramAutoEvidenceEngine
+            vesselName={currentAudit?.vessel_name}
+            auditorName={currentAudit?.auditor_name || ""}
+            onEvidenceGenerated={(itemId, evidence) => updateState(itemId, { aiEvidence: evidence })}
+          />
+        </TabsContent>
+        <TabsContent value="nc-generator">
+          <PeotramNCAutoGenerator
+            vesselName={currentAudit?.vessel_name}
+            auditorName={currentAudit?.auditor_name || ""}
+            itemStates={itemStates as any}
+          />
+        </TabsContent>
+        <TabsContent value="report">
+          <PeotramReportGenerator
+            vesselName={currentAudit?.vessel_name}
+            auditorName={currentAudit?.auditor_name || ""}
+            auditDate={currentAudit?.audit_date}
+            cycle={currentAudit?.cycle || "2025"}
+            elementScores={scores.elementScores}
+          />
+        </TabsContent>
         <TabsContent value="audit-wizard"><PeotramAuditWizard /></TabsContent>
-
+        
         <TabsContent value="ai-voice">
           <ComplianceVoiceChat
             moduleId="peotram" moduleName="PEOTRAM"

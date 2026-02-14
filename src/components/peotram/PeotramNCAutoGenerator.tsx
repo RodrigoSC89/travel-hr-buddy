@@ -37,11 +37,21 @@ interface GeneratedNC {
   status: "pending" | "generating" | "done" | "error";
 }
 
-export function PeotramNCAutoGenerator() {
+interface PeotramNCAutoGeneratorProps {
+  vesselName?: string;
+  auditorName?: string;
+  itemStates?: Record<string, { score: ScoreValue; observations: string; ncClassification: string | null }>;
+}
+
+export function PeotramNCAutoGenerator({ vesselName: propVessel, auditorName: propAuditor, itemStates: propItemStates }: PeotramNCAutoGeneratorProps = {}) {
   const [selectedElement, setSelectedElement] = useState("");
-  const [vesselName, setVesselName] = useState("");
-  const [auditorName, setAuditorName] = useState("");
-  const [itemScores, setItemScores] = useState<Record<string, ScoreValue>>({});
+  const [vesselName, setVesselName] = useState(propVessel || "");
+  const [auditorName, setAuditorName] = useState(propAuditor || "");
+  // Use real scores from active audit if available
+  const externalScores: Record<string, ScoreValue> = propItemStates
+    ? Object.fromEntries(Object.entries(propItemStates).map(([k, v]) => [k, v.score]))
+    : {};
+  const [itemScores, setItemScores] = useState<Record<string, ScoreValue>>(externalScores);
   const [generatedNCs, setGeneratedNCs] = useState<GeneratedNC[]>([]);
   const [isRunning, setIsRunning] = useState(false);
   const [selectedNC, setSelectedNC] = useState<string | null>(null);

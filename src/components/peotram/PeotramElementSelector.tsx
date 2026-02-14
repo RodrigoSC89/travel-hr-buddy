@@ -12,7 +12,7 @@ interface PeotramElementSelectorProps {
   elements: PeotramElement[];
   selectedElementId: number | null;
   onSelectElement: (id: number) => void;
-  elementScores?: Record<number, number>;
+  elementScores?: Record<string | number, number>;
 }
 
 export function PeotramElementSelector({

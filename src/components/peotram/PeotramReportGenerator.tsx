@@ -21,11 +21,19 @@ import ReactMarkdown from "react-markdown";
 import { logger } from "@/lib/logger";
 import { PEOTRAM_ELEMENTS, SCORE_CRITERIA } from "@/data/peotram-elements-data";
 
-export function PeotramReportGenerator() {
-  const [vesselName, setVesselName] = useState("");
-  const [auditorName, setAuditorName] = useState("");
-  const [auditDate, setAuditDate] = useState(new Date().toISOString().split("T")[0]);
-  const [auditCycle, setAuditCycle] = useState("2025");
+interface PeotramReportGeneratorProps {
+  vesselName?: string;
+  auditorName?: string;
+  auditDate?: string;
+  cycle?: string;
+  elementScores?: Record<string, number>;
+}
+
+export function PeotramReportGenerator({ vesselName: propVessel, auditorName: propAuditor, auditDate: propDate, cycle: propCycle, elementScores }: PeotramReportGeneratorProps = {}) {
+  const [vesselName, setVesselName] = useState(propVessel || "");
+  const [auditorName, setAuditorName] = useState(propAuditor || "");
+  const [auditDate, setAuditDate] = useState(propDate || new Date().toISOString().split("T")[0]);
+  const [auditCycle, setAuditCycle] = useState(propCycle || "2025");
   const [reportContent, setReportContent] = useState("");
   const [isGenerating, setIsGenerating] = useState(false);
   const [generationProgress, setGenerationProgress] = useState(0);
