@@ -2,8 +2,12 @@
  * App.tsx - Clean entry point with providers only
  * All routes extracted to src/routes/
  */
+/**
+ * App.tsx - Clean entry point with providers only
+ * All routes extracted to src/routes/
+ */
 import * as React from "react";
-import { Suspense } from "react";
+import { Suspense, useEffect } from "react";
 import { BrowserRouter as Router } from "react-router-dom";
 import { QueryClientProvider, QueryClient } from "@tanstack/react-query";
 import { Toaster, toast } from "sonner";
@@ -14,6 +18,7 @@ import { LazyLoadErrorBoundary } from "@/components/error/LazyLoadErrorBoundary"
 import { logger } from "@/lib/logger";
 import { AppRoutes } from "@/routes/AppRoutes";
 import { AppLoader } from "@/routes/AppLoader";
+import { prefetchCriticalRoutes } from "@/lib/performance/route-prefetch";
 
 // ============================================
 // GLOBAL ERROR HANDLERS - Prevent white screens
@@ -42,15 +47,24 @@ if (typeof window !== 'undefined') {
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
-      staleTime: 1000 * 60 * 2,
+      staleTime: 1000 * 60 * 5,      // 5 min - reduce refetches
       retry: 1,
       refetchOnWindowFocus: false,
-      gcTime: 1000 * 60 * 10,
+      gcTime: 1000 * 60 * 15,         // 15 min - keep cache longer
+      refetchOnReconnect: 'always',    // Refetch on network recovery (maritime)
+    },
+    mutations: {
+      retry: 1,
     },
   },
 });
 
 function App() {
+  // Prefetch critical routes after initial render
+  useEffect(() => {
+    prefetchCriticalRoutes();
+  }, []);
+
   return (
     <QueryClientProvider client={queryClient}>
       <ThemeProvider defaultTheme="dark" storageKey="nautilus-ui-theme">
