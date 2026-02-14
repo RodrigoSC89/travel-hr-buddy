@@ -54,8 +54,14 @@ export const AppRoutes = () => (
       <Route path="/analytics-feedback" element={<Pages.AnalyticsFeedback />} />
       <Route path="/feedback" element={<Pages.AnalyticsFeedback />} />
       
-      {/* ======== CENTRAL DE COMANDO ======== */}
-      <Route path="/central-comando/*" element={<Pages.CentralComando />} />
+      {/* ======== CENTRAL DE COMANDO (redirect to standardized CommandMegaHub) ======== */}
+      <Route path="/central-comando" element={<Navigate to="/command" replace />} />
+      <Route path="/central-comando/visao-geral" element={<Navigate to="/command" replace />} />
+      <Route path="/central-comando/operacoes" element={<Navigate to="/command?tab=operations" replace />} />
+      <Route path="/central-comando/executivo" element={<Navigate to="/command?tab=executive" replace />} />
+      <Route path="/central-comando/ia" element={<Navigate to="/ai" replace />} />
+      <Route path="/central-comando/alertas" element={<Navigate to="/command?tab=alerts" replace />} />
+      <Route path="/central-comando/*" element={<Navigate to="/command" replace />} />
       <Route path="/noc" element={<Pages.NOC />} />
       <Route path="/health-monitor" element={<Pages.HealthMonitor />} />
       
