@@ -38,6 +38,7 @@ const DigitalTwinPage = lazy(() => import('@/pages/advanced/DigitalTwin3DPage'))
 const WasteManagementPremium = lazy(() => import('@/pages/ESGEmissionsPremium'));
 const ESGEmissionsPremium = lazy(() => import('@/pages/ESGEmissionsPremium'));
 const MaintenanceAIHub = lazy(() => import('@/components/maintenance/ai/MaintenanceAIHub'));
+const SparePartsInventory = lazy(() => import('@/components/maintenance/SparePartsInventory'));
 
 const LoadingSkeleton = () => (
   <div className="space-y-4 p-6">
@@ -54,6 +55,7 @@ const LoadingSkeleton = () => (
 const tabConfig = [
   { id: 'overview', label: 'Overview', icon: Wrench },
   { id: 'planning', label: 'Planning', icon: Calendar },
+  { id: 'spare-parts', label: 'Spare Parts', icon: Shield },
   { id: 'surveys', label: 'Class Surveys', icon: Shield },
   { id: 'predictive', label: 'Predictive', icon: Brain },
   { id: 'drydock', label: 'Drydock', icon: Anchor },
@@ -310,6 +312,10 @@ export default function MaintenanceMegaHub() {
               {/* MaintenanceGanttCalendar removed */}
             </TabsContent>
             
+            <TabsContent value="spare-parts" className="mt-0">
+              <SparePartsInventory />
+            </TabsContent>
+
             <TabsContent value="surveys" className="mt-0">
               <ClassSurveysPage />
             </TabsContent>
