@@ -1,6 +1,5 @@
-import React, { useState } from "react";
+import React, { useState, lazy, Suspense } from "react";
 import { useNavigate } from "react-router-dom";
-import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import ModuleActionButton from "@/components/ui/module-action-button";
 import { ModulePageWrapper } from "@/components/ui/module-page-wrapper";
@@ -11,91 +10,57 @@ import { useMaritimeActions } from "@/hooks/useMaritimeActions";
 import { CreateSGSOIncidentDialog } from "@/components/sgso/CreateSGSOIncidentDialog";
 import { toast } from "sonner";
 import {
-  Shield,
-  AlertTriangle,
-  FileCheck,
-  Bell,
-  Target,
-  TrendingUp,
-  Users,
-  BookOpen,
-  Activity,
-  Plus,
-  RefreshCw,
-  Download,
-  Eye
+  Shield, AlertTriangle, FileCheck, Bell, Target, Users, BookOpen, Activity, Plus, RefreshCw, Download, Eye, Search, Brain, ClipboardCheck, CheckCircle2, GitCompare, Calendar
 } from "lucide-react";
 
+const ComplianceSGIAutoEvidence = lazy(() => import('@/components/compliance/ai/ComplianceSGIAutoEvidence').then(m => ({ default: m.ComplianceSGIAutoEvidence })));
+const ComplianceGapAnalyzer = lazy(() => import('@/components/compliance/ai/ComplianceGapAnalyzer').then(m => ({ default: m.ComplianceGapAnalyzer })));
+const ComplianceInterviewSimulator = lazy(() => import('@/components/compliance/ai/ComplianceInterviewSimulator').then(m => ({ default: m.ComplianceInterviewSimulator })));
+const ComplianceOneClickAuditPrep = lazy(() => import('@/components/compliance/ai/ComplianceOneClickAuditPrep').then(m => ({ default: m.ComplianceOneClickAuditPrep })));
+const ComplianceRegulatoryChangeTracker = lazy(() => import('@/components/compliance/ai/ComplianceRegulatoryChangeTracker').then(m => ({ default: m.ComplianceRegulatoryChangeTracker })));
+const ComplianceAutoChecklistGenerator = lazy(() => import('@/components/compliance/ai/ComplianceAutoChecklistGenerator').then(m => ({ default: m.ComplianceAutoChecklistGenerator })));
+const ComplianceDocCrossReference = lazy(() => import('@/components/compliance/ai/ComplianceDocCrossReference').then(m => ({ default: m.ComplianceDocCrossReference })));
+const ComplianceTimeline = lazy(() => import('@/components/compliance/ai/ComplianceTimeline').then(m => ({ default: m.ComplianceTimeline })));
+
+const AILoader = () => <div className="flex items-center justify-center p-12"><div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary" /></div>;
+
+const SGSO_CHECKLIST_ITEMS = [
+  "Política de SGSO documentada e assinada",
+  "Identificação de perigos e avaliação de riscos",
+  "Objetivos, metas e programas definidos",
+  "Estrutura e responsabilidades documentadas",
+  "Competência e treinamento registrados",
+  "Documentação do manual SGSO atualizada",
+  "Controle operacional e procedimentos padronizados",
+  "Gerenciamento de mudanças implementado",
+  "Planejamento e resposta a emergências",
+  "Monitoramento e medição de indicadores",
+  "Investigação de incidentes e ações corretivas",
+  "Não conformidades tratadas e verificadas",
+  "Controle de registros organizado",
+  "Programa de auditoria interna implementado",
+  "Análise crítica pela direção realizada",
+  "Programa de melhoria contínua ativo",
+  "Canais de comunicação definidos e efetivos",
+];
+
 const SGSO = () => {
-  const { handleCreate, handleGenerateReport, handleExport, handleRefresh } = useMaritimeActions();
+  const { handleGenerateReport, handleExport, handleRefresh } = useMaritimeActions();
   const navigate = useNavigate();
   const [incidentDialogOpen, setIncidentDialogOpen] = useState(false);
 
-  // Real action handlers - navigate to tabs/sections in SgsoDashboard
   const handleViewPractices = () => {
-    // Click practices tab in SgsoDashboard
     const practicesTab = document.querySelector('[value="practices"]') as HTMLElement;
-    if (practicesTab) {
-      practicesTab.click();
-      toast.success("17 Práticas ANP", { description: "Navegando para gestão das práticas" });
-    } else {
-      const practicesEl = document.getElementById('sgso-practices');
-      if (practicesEl) practicesEl.scrollIntoView({ behavior: 'smooth' });
-      toast.success("17 Práticas ANP", { description: "Gestão das 17 práticas obrigatórias" });
-    }
+    if (practicesTab) { practicesTab.click(); toast.success("17 Práticas ANP", { description: "Navegando para gestão das práticas" }); }
+    else { const el = document.getElementById('sgso-practices'); if (el) el.scrollIntoView({ behavior: 'smooth' }); toast.success("17 Práticas ANP"); }
   };
-
-  const handleViewRiskMatrix = () => {
-    const risksTab = document.querySelector('[value="risks"]') as HTMLElement;
-    if (risksTab) {
-      risksTab.click();
-      toast.success("Matriz de Riscos", { description: "Navegando para matriz de riscos 5x5" });
-    } else {
-      toast.success("Matriz de Riscos", { description: "Matriz de riscos 5x5" });
-    }
-  };
-
-  const handleViewIncidents = () => {
-    const incidentsTab = document.querySelector('[value="incidents"]') as HTMLElement;
-    if (incidentsTab) {
-      incidentsTab.click();
-      toast.success("Gestão de Incidentes", { description: "Navegando para gestão de incidentes" });
-    } else {
-      toast.success("Gestão de Incidentes", { description: "Sistema de gestão de incidentes" });
-    }
-  };
-
-  const handleViewAudits = () => {
-    const auditsTab = document.querySelector('[value="audits"]') as HTMLElement;
-    if (auditsTab) {
-      auditsTab.click();
-      toast.success("Auditorias", { description: "Navegando para planejamento de auditorias" });
-    } else {
-      toast.success("Auditorias", { description: "Planejamento de auditorias" });
-    }
-  };
-
-  const handleViewTraining = () => {
-    const trainingTab = document.querySelector('[value="training"]') as HTMLElement;
-    if (trainingTab) {
-      trainingTab.click();
-      toast.success("Treinamentos", { description: "Navegando para gestão de treinamentos" });
-    } else {
-      toast.success("Treinamentos", { description: "Gestão de treinamentos" });
-    }
-  };
-
-  const handleANPReports = () => {
-    handleGenerateReport("Relatórios ANP");
-  };
-
-  const handlePDFReport = () => {
-    navigate("/sgso/report");
-  };
-
-  const handleNewIncident = () => {
-    setIncidentDialogOpen(true);
-  };
+  const handleViewRiskMatrix = () => { const t = document.querySelector('[value="risks"]') as HTMLElement; if (t) { t.click(); toast.success("Matriz de Riscos"); } };
+  const handleViewIncidents = () => { const t = document.querySelector('[value="incidents"]') as HTMLElement; if (t) { t.click(); toast.success("Gestão de Incidentes"); } };
+  const handleViewAudits = () => { const t = document.querySelector('[value="audits"]') as HTMLElement; if (t) { t.click(); toast.success("Auditorias"); } };
+  const handleViewTraining = () => { const t = document.querySelector('[value="training"]') as HTMLElement; if (t) { t.click(); toast.success("Treinamentos"); } };
+  const handleANPReports = () => handleGenerateReport("Relatórios ANP");
+  const handlePDFReport = () => navigate("/sgso/report");
+  const handleNewIncident = () => setIncidentDialogOpen(true);
 
   return (
     <ModulePageWrapper gradient="orange">
@@ -108,114 +73,81 @@ const SGSO = () => {
           { icon: FileCheck, label: "Compliance ANP" },
           { icon: Target, label: "17 Práticas" },
           { icon: Shield, label: "Segurança Total" },
-          { icon: Eye, label: "Monitor Proativo" }
+          { icon: Brain, label: "AI Suite" }
         ]}
       />
 
-      {/* Tabs for Dashboard and Compliance Monitor */}
       <Tabs defaultValue="dashboard" className="w-full">
-        <TabsList className="mb-4">
-          <TabsTrigger value="dashboard" className="gap-2">
-            <Activity className="h-4 w-4" />
-            Dashboard SGSO
-          </TabsTrigger>
-          <TabsTrigger value="compliance" className="gap-2">
-            <Shield className="h-4 w-4" />
-            Monitor de Conformidade
-          </TabsTrigger>
+        <TabsList className="flex flex-wrap gap-1 mb-4">
+          <TabsTrigger value="dashboard" className="gap-2"><Activity className="h-4 w-4" />Dashboard SGSO</TabsTrigger>
+          <TabsTrigger value="compliance" className="gap-2"><Shield className="h-4 w-4" />Monitor Conformidade</TabsTrigger>
+          <TabsTrigger value="sgi-evidence" className="gap-1"><Search className="h-3 w-3" />SGI Evidence</TabsTrigger>
+          <TabsTrigger value="gap-analyzer" className="gap-1"><AlertTriangle className="h-3 w-3" />Gap Analyzer</TabsTrigger>
+          <TabsTrigger value="interview-sim" className="gap-1"><Brain className="h-3 w-3" />Interview Sim</TabsTrigger>
+          <TabsTrigger value="audit-prep" className="gap-1"><ClipboardCheck className="h-3 w-3" />Audit Prep</TabsTrigger>
+          <TabsTrigger value="reg-tracker" className="gap-1"><BookOpen className="h-3 w-3" />Reg. Tracker</TabsTrigger>
+          <TabsTrigger value="checklist-gen" className="gap-1"><CheckCircle2 className="h-3 w-3" />Checklist Gen</TabsTrigger>
+          <TabsTrigger value="doc-crossref" className="gap-1"><GitCompare className="h-3 w-3" />Doc Cross-Ref</TabsTrigger>
+          <TabsTrigger value="timeline" className="gap-1"><Calendar className="h-3 w-3" />Timeline</TabsTrigger>
         </TabsList>
 
         <TabsContent value="dashboard">
-          <div id="sgso-practices">
-            <SgsoDashboard />
-          </div>
+          <div id="sgso-practices"><SgsoDashboard /></div>
         </TabsContent>
-
         <TabsContent value="compliance">
           <ProactiveComplianceMonitor />
         </TabsContent>
+
+        {/* AI Disruptive Suite */}
+        <TabsContent value="sgi-evidence">
+          <Suspense fallback={<AILoader />}><ComplianceSGIAutoEvidence moduleId="sgso" moduleName="SGSO ANP" /></Suspense>
+        </TabsContent>
+        <TabsContent value="gap-analyzer">
+          <Suspense fallback={<AILoader />}><ComplianceGapAnalyzer moduleId="sgso" moduleName="SGSO ANP" standards={["ANP Resolução 43/2007", "SGSO 17 Práticas", "ISO 45001", "OHSAS 18001"]} /></Suspense>
+        </TabsContent>
+        <TabsContent value="interview-sim">
+          <Suspense fallback={<AILoader />}><ComplianceInterviewSimulator moduleId="sgso" moduleName="SGSO ANP" standardContext="SGSO ANP Resolução 43/2007 cobrindo as 17 práticas obrigatórias: Política, Riscos, Objetivos, Estrutura, Competência, Documentação, Controle Operacional, Mudanças, Emergências, Monitoramento, Incidentes, NCs, Registros, Auditoria, Análise Crítica, Melhoria Contínua e Comunicação" /></Suspense>
+        </TabsContent>
+        <TabsContent value="audit-prep">
+          <Suspense fallback={<AILoader />}><ComplianceOneClickAuditPrep moduleId="sgso" moduleName="SGSO ANP" /></Suspense>
+        </TabsContent>
+        <TabsContent value="reg-tracker">
+          <Suspense fallback={<AILoader />}><ComplianceRegulatoryChangeTracker moduleId="sgso" moduleName="SGSO ANP" /></Suspense>
+        </TabsContent>
+        <TabsContent value="checklist-gen">
+          <Suspense fallback={<AILoader />}><ComplianceAutoChecklistGenerator moduleId="sgso" moduleName="SGSO ANP" /></Suspense>
+        </TabsContent>
+        <TabsContent value="doc-crossref">
+          <Suspense fallback={<AILoader />}><ComplianceDocCrossReference moduleId="sgso" moduleName="SGSO ANP" /></Suspense>
+        </TabsContent>
+        <TabsContent value="timeline">
+          <Suspense fallback={<AILoader />}><ComplianceTimeline moduleId="sgso" moduleName="SGSO ANP" /></Suspense>
+        </TabsContent>
       </Tabs>
 
-      {/* Module Action Button */}
       <ModuleActionButton
         moduleId="sgso"
         moduleName="SGSO"
         actions={[
-          {
-            id: "practices",
-            label: "17 Práticas ANP",
-            icon: <Shield className="h-3 w-3" />,
-            action: handleViewPractices
-          },
-          {
-            id: "risks",
-            label: "Matriz de Riscos",
-            icon: <AlertTriangle className="h-3 w-3" />,
-            action: handleViewRiskMatrix
-          },
-          {
-            id: "incidents",
-            label: "Gestão Incidentes",
-            icon: <Bell className="h-3 w-3" />,
-            action: handleViewIncidents
-          },
-          {
-            id: "audits",
-            label: "Auditorias",
-            icon: <FileCheck className="h-3 w-3" />,
-            action: handleViewAudits
-          },
-          {
-            id: "training",
-            label: "Treinamentos",
-            icon: <Users className="h-3 w-3" />,
-            action: handleViewTraining
-          },
-          {
-            id: "reports",
-            label: "Relatórios ANP",
-            icon: <BookOpen className="h-3 w-3" />,
-            action: handleANPReports
-          },
-          {
-            id: "pdf-report",
-            label: "Relatório PDF",
-            icon: <FileCheck className="h-3 w-3" />,
-            action: handlePDFReport,
-            variant: "default"
-          }
+          { id: "practices", label: "17 Práticas ANP", icon: <Shield className="h-3 w-3" />, action: handleViewPractices },
+          { id: "risks", label: "Matriz de Riscos", icon: <AlertTriangle className="h-3 w-3" />, action: handleViewRiskMatrix },
+          { id: "incidents", label: "Gestão Incidentes", icon: <Bell className="h-3 w-3" />, action: handleViewIncidents },
+          { id: "audits", label: "Auditorias", icon: <FileCheck className="h-3 w-3" />, action: handleViewAudits },
+          { id: "training", label: "Treinamentos", icon: <Users className="h-3 w-3" />, action: handleViewTraining },
+          { id: "reports", label: "Relatórios ANP", icon: <BookOpen className="h-3 w-3" />, action: handleANPReports },
+          { id: "pdf-report", label: "Relatório PDF", icon: <FileCheck className="h-3 w-3" />, action: handlePDFReport, variant: "default" }
         ]}
         quickActions={[
-          {
-            id: "new-incident",
-            label: "Novo Incidente",
-            icon: <Plus className="h-3 w-3" />,
-            action: handleNewIncident
-          },
-          {
-            id: "refresh",
-            label: "Atualizar",
-            icon: <RefreshCw className="h-3 w-3" />,
-            action: () => handleRefresh("SGSO"),
-            shortcut: "F5"
-          },
-          {
-            id: "export",
-            label: "Exportar",
-            icon: <Download className="h-3 w-3" />,
-            action: () => handleExport("SGSO")
-          }
+          { id: "new-incident", label: "Novo Incidente", icon: <Plus className="h-3 w-3" />, action: handleNewIncident },
+          { id: "refresh", label: "Atualizar", icon: <RefreshCw className="h-3 w-3" />, action: () => handleRefresh("SGSO"), shortcut: "F5" },
+          { id: "export", label: "Exportar", icon: <Download className="h-3 w-3" />, action: () => handleExport("SGSO") }
         ]}
       />
 
-      {/* Incident Creation Dialog */}
       <CreateSGSOIncidentDialog
         open={incidentDialogOpen}
         onOpenChange={setIncidentDialogOpen}
-        onSuccess={() => {
-          // Could trigger a refresh of the dashboard
-          toast.success("Dashboard atualizado");
-        }}
+        onSuccess={() => toast.success("Dashboard atualizado")}
       />
     </ModulePageWrapper>
   );
