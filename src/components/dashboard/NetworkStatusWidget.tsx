@@ -101,7 +101,7 @@ const NetworkStatusWidgetComponent: React.FC = () => {
             <Badge variant="default" className="text-xs font-semibold">
               Online
             </Badge>
-            <Button variant="ghost" size="icon" className="h-7 w-7" onClick={updateStats}>
+            <Button variant="ghost" size="icon" className="h-7 w-7" onClick={updateStats} aria-label="Atualizar status de rede" title="Atualizar">
               <RefreshCw className="h-3.5 w-3.5" />
             </Button>
           </div>

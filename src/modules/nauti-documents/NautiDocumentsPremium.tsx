@@ -318,14 +318,14 @@ function DocumentsDashboard() {
                       </Badge>
                     </div>
                     <div className="flex gap-1">
-                      <Button size="icon" variant="ghost" onClick={async () => {
+                      <Button size="icon" variant="ghost" aria-label="Visualizar documento" title="Visualizar" onClick={async () => {
                         const { data } = await supabase.storage.from('documents').createSignedUrl(doc.storage_path, 60);
                         if (data?.signedUrl) { window.open(data.signedUrl, '_blank'); }
                         else toast.error("Arquivo não encontrado");
                       }}>
                         <Eye className="h-4 w-4" />
                       </Button>
-                      <Button size="icon" variant="ghost" onClick={async () => {
+                      <Button size="icon" variant="ghost" aria-label="Baixar documento" title="Baixar" onClick={async () => {
                         const { data } = await supabase.storage.from('documents').createSignedUrl(doc.storage_path, 60);
                         if (data?.signedUrl) { window.open(data.signedUrl, '_blank'); toast.success("Download iniciado"); }
                         else toast.error("Arquivo não encontrado no storage");

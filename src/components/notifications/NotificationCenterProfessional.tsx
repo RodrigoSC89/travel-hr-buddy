@@ -696,6 +696,7 @@ export default function NotificationCenterProfessional() {
                                     size="icon"
                                     className="h-8 w-8"
                                     onClick={(e) => { e.stopPropagation(); handleToggleStar(notification.id); }}
+                                    aria-label={notification.isStarred ? 'Remover favorito' : 'Favoritar'}
                                   >
                                     <Star className={`h-4 w-4 ${notification.isStarred ? 'fill-yellow-500 text-yellow-500' : ''}`} />
                                   </Button>
@@ -713,6 +714,7 @@ export default function NotificationCenterProfessional() {
                                       e.stopPropagation(); 
                                       notification.isRead ? handleMarkAsUnread(notification.id) : handleMarkAsRead(notification.id); 
                                     }}
+                                    aria-label={notification.isRead ? 'Marcar como não lida' : 'Marcar como lida'}
                                   >
                                     {notification.isRead ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
                                   </Button>
@@ -730,6 +732,7 @@ export default function NotificationCenterProfessional() {
                                       e.stopPropagation(); 
                                       notification.isArchived ? handleUnarchive(notification.id) : handleArchive(notification.id);
                                     }}
+                                    aria-label={notification.isArchived ? 'Restaurar notificação' : 'Arquivar notificação'}
                                   >
                                     {notification.isArchived ? <ArchiveX className="h-4 w-4" /> : <Archive className="h-4 w-4" />}
                                   </Button>
@@ -1109,6 +1112,8 @@ export default function NotificationCenterProfessional() {
                   variant="outline" 
                   size="icon"
                   onClick={() => selectedNotification && handleToggleStar(selectedNotification.id)}
+                  aria-label="Favoritar notificação"
+                  title="Favoritar"
                 >
                   <Star className={`h-4 w-4 ${selectedNotification?.isStarred ? 'fill-yellow-500 text-yellow-500' : ''}`} />
                 </Button>
@@ -1116,6 +1121,8 @@ export default function NotificationCenterProfessional() {
                   variant="outline" 
                   size="icon"
                   onClick={() => selectedNotification && handleArchive(selectedNotification.id)}
+                  aria-label="Arquivar notificação"
+                  title="Arquivar"
                 >
                   <Archive className="h-4 w-4" />
                 </Button>
@@ -1124,6 +1131,8 @@ export default function NotificationCenterProfessional() {
                   size="icon"
                   className="text-destructive"
                   onClick={() => selectedNotification && handleDelete(selectedNotification)}
+                  aria-label="Excluir notificação"
+                  title="Excluir"
                 >
                   <Trash2 className="h-4 w-4" />
                 </Button>

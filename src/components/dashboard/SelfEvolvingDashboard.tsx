@@ -244,6 +244,8 @@ export function SelfEvolvingDashboard() {
                   size="icon"
                   className="h-5 w-5 ml-auto"
                   onClick={() => setShowAISuggestions(false)}
+                  aria-label="Fechar sugestões da IA"
+                  title="Fechar"
                 >
                   <X className="h-3 w-3" />
                 </Button>

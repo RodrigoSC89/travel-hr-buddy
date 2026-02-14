@@ -103,6 +103,8 @@ function PerformanceMonitorComponent() {
             size="icon" 
             className="h-7 w-7"
             onClick={collectMetrics}
+            aria-label="Atualizar métricas de performance"
+            title="Atualizar"
           >
             <RefreshCw className="h-3.5 w-3.5" />
           </Button>

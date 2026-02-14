@@ -205,6 +205,8 @@ export const AICopilot: React.FC = () => {
                   variant="ghost"
                   size="icon"
                   onClick={() => setIsMinimized(!isMinimized)}
+                  aria-label={isMinimized ? "Expandir copilot" : "Minimizar copilot"}
+                  title={isMinimized ? "Expandir" : "Minimizar"}
                 >
                   {isMinimized ? (
                     <Maximize2 className="h-4 w-4" />
@@ -216,6 +218,8 @@ export const AICopilot: React.FC = () => {
                   variant="ghost"
                   size="icon"
                   onClick={() => setIsOpen(false)}
+                  aria-label="Fechar copilot"
+                  title="Fechar"
                 >
                   <X className="h-4 w-4" />
                 </Button>
@@ -312,6 +316,8 @@ export const AICopilot: React.FC = () => {
                           onClick={handleSend}
                           disabled={isLoading || !input.trim()}
                           size="icon"
+                          aria-label="Enviar mensagem"
+                          title="Enviar"
                         >
                           {isLoading ? (
                             <Loader2 className="h-4 w-4 animate-spin" />

@@ -208,6 +208,7 @@ export function GlobalAIButton({ className, defaultModule = 'command' }: GlobalA
                   className={`h-7 w-7 ${isListening ? 'animate-pulse' : ''}`}
                   onClick={handleVoiceInput}
                   title={isListening ? "Parar gravação" : "Falar"}
+                  aria-label={isListening ? "Parar gravação de voz" : "Iniciar gravação de voz"}
                 >
                   {isListening ? <MicOff className="h-4 w-4" /> : <Mic className="h-4 w-4" />}
                 </Button>
@@ -216,6 +217,8 @@ export function GlobalAIButton({ className, defaultModule = 'command' }: GlobalA
                   className="h-7 w-7"
                   onClick={handleQuickSubmit}
                   disabled={!quickInput.trim()}
+                  aria-label="Enviar comando rápido"
+                  title="Enviar"
                 >
                   <Zap className="h-4 w-4" />
                 </Button>

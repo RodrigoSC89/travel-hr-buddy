@@ -485,6 +485,7 @@ export function VesselHistoryTimeline() {
           size="icon"
           onClick={() => setSortOrder(prev => prev === 'desc' ? 'asc' : 'desc')}
           title={sortOrder === 'desc' ? 'Mais recentes primeiro' : 'Mais antigos primeiro'}
+          aria-label={sortOrder === 'desc' ? 'Ordenar mais antigos primeiro' : 'Ordenar mais recentes primeiro'}
         >
           <Clock className={`h-4 w-4 ${sortOrder === 'asc' ? 'rotate-180' : ''} transition-transform`} />
         </Button>

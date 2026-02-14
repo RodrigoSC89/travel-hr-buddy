@@ -435,6 +435,8 @@ export function AILabPlayground() {
                             variant="ghost"
                             size="icon"
                             onClick={() => deleteAnalysis(analysis.id)}
+                            aria-label="Excluir análise"
+                            title="Excluir"
                           >
                             <Trash2 className="h-4 w-4 text-destructive" />
                           </Button>
