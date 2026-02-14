@@ -123,6 +123,8 @@ export const NotificationCenter: React.FC = () => {
         size="icon"
         onClick={() => setIsOpen(!isOpen)}
         className="relative"
+        aria-label="Notificações"
+        title="Notificações"
       >
         <Bell className="h-5 w-5" />
         {unreadCount > 0 && (
@@ -153,6 +155,8 @@ export const NotificationCenter: React.FC = () => {
                   variant="ghost"
                   size="icon"
                   onClick={() => setIsOpen(false)}
+                  aria-label="Fechar notificações"
+                  title="Fechar"
                 >
                   <X className="h-4 w-4" />
                 </Button>

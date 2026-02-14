@@ -122,7 +122,7 @@ export function HRAdmissionPipeline() {
               {activeAdmissions.length} admissões em andamento
             </p>
           </div>
-          <Button variant="ghost" size="icon" onClick={() => refetch()}>
+          <Button variant="ghost" size="icon" onClick={() => refetch()} aria-label="Atualizar pipeline" title="Atualizar">
             <RefreshCw className="h-4 w-4" />
           </Button>
         </div>

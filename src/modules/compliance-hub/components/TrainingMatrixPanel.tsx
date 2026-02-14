@@ -335,6 +335,8 @@ export function TrainingMatrixPanel({
                               size="icon"
                               onClick={() => handleGetRecommendation(training.crewMemberId)}
                               disabled={loadingRecommendation === training.crewMemberId}
+                              aria-label="Obter recomendação IA"
+                              title="Recomendação IA"
                             >
                               {loadingRecommendation === training.crewMemberId ? (
                                 <Loader2 className="h-4 w-4 animate-spin" />

@@ -186,6 +186,8 @@ export function ESGAIChat({ module, context, className }: ESGAIChatProps) {
             size="icon"
             onClick={() => handleSend()}
             disabled={!input.trim() || isLoading}
+            aria-label="Enviar mensagem"
+            title="Enviar"
           >
             {isLoading ? (
               <Loader2 className="h-4 w-4 animate-spin" />

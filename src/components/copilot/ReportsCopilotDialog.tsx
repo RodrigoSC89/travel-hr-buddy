@@ -175,6 +175,8 @@ export function ReportsCopilotDialog({
                     size="icon"
                     className="h-6 w-6 shrink-0"
                     onClick={() => handleExport(report.name)}
+                    aria-label="Exportar relatório"
+                    title="Exportar"
                   >
                     <Download className="h-3 w-3" />
                   </Button>

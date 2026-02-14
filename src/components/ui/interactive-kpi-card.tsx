@@ -289,6 +289,8 @@ export function InteractiveKPICard({
                   e.stopPropagation();
                   onDrillDown();
                 }}
+                aria-label="Ver detalhes"
+                title="Ver detalhes"
               >
                 <ChevronRight className="h-4 w-4" />
               </Button>

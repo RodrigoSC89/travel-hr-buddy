@@ -359,6 +359,8 @@ export function StatusTimeline({
               size="icon"
               onClick={onRefresh}
               disabled={isLoading}
+              aria-label="Atualizar timeline"
+              title="Atualizar"
             >
               <RefreshCcw className={cn("h-4 w-4", isLoading && "animate-spin")} />
             </Button>

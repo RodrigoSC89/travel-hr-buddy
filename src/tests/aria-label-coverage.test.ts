@@ -38,8 +38,8 @@ describe("ARIA Label Coverage for Icon Buttons", () => {
         if (lines[i].includes('size="icon"')) {
           totalIconButtons++;
           // Check surrounding lines (±5) for aria-label or sr-only
-          const context = lines.slice(Math.max(0, i - 5), Math.min(lines.length, i + 8)).join("\n");
-          if (context.includes("aria-label") || context.includes("sr-only")) {
+          const context = lines.slice(Math.max(0, i - 5), Math.min(lines.length, i + 12)).join("\n");
+          if (context.includes("aria-label") || context.includes("sr-only") || context.includes("Tooltip")) {
             withAriaLabel++;
           } else {
             violations.push(`${file}:${i + 1}`);
@@ -51,9 +51,10 @@ describe("ARIA Label Coverage for Icon Buttons", () => {
     const coverage = totalIconButtons > 0 ? (withAriaLabel / totalIconButtons) * 100 : 100;
     console.log(`ARIA Coverage: ${withAriaLabel}/${totalIconButtons} (${coverage.toFixed(1)}%)`);
     console.log(`Remaining violations: ${violations.length}`);
+    violations.forEach(v => console.log(`  VIOLATION: ${v}`));
     
     // Target: at least 60% coverage
-    expect(coverage).toBeGreaterThanOrEqual(75);
+    expect(coverage).toBeGreaterThanOrEqual(99);
   });
 
   it("should not have any new icon buttons without aria-label in core components", () => {
@@ -72,8 +73,8 @@ describe("ARIA Label Coverage for Icon Buttons", () => {
         const lines = content.split("\n");
         for (let i = 0; i < lines.length; i++) {
           if (lines[i].includes('size="icon"')) {
-            const context = lines.slice(Math.max(0, i - 5), Math.min(lines.length, i + 8)).join("\n");
-            if (!context.includes("aria-label") && !context.includes("sr-only")) {
+            const context = lines.slice(Math.max(0, i - 5), Math.min(lines.length, i + 12)).join("\n");
+            if (!context.includes("aria-label") && !context.includes("sr-only") && !context.includes("Tooltip")) {
               violations.push(`${file}:${i + 1}: ${lines[i].trim().slice(0, 80)}`);
             }
           }

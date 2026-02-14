@@ -456,6 +456,8 @@ export function AuditAIChatPage({ defaultModule = 'peotram' }: AuditAIChatPagePr
                   size="icon"
                   onClick={toggleListening}
                   disabled={isLoading}
+                  aria-label={isListening ? "Parar gravação" : "Gravar voz"}
+                  title={isListening ? "Parar" : "Gravar"}
                 >
                   {isListening ? <MicOff className="h-4 w-4" /> : <Mic className="h-4 w-4" />}
                 </Button>

@@ -75,8 +75,8 @@ export const AutoDocumentGenerationAI: React.FC = () => {
           </Button>
           {document && (
             <>
-              <Button variant="outline" size="icon"><Printer className="h-4 w-4" /></Button>
-              <Button variant="outline" size="icon"><Download className="h-4 w-4" /></Button>
+              <Button variant="outline" size="icon" aria-label="Imprimir documento" title="Imprimir"><Printer className="h-4 w-4" /></Button>
+              <Button variant="outline" size="icon" aria-label="Baixar documento" title="Baixar"><Download className="h-4 w-4" /></Button>
             </>
           )}
         </div>

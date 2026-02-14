@@ -193,6 +193,8 @@ export function AIInsightWidget({
               onClick={handleAsk}
               disabled={asking || !question.trim()}
               className="shrink-0"
+              aria-label="Enviar pergunta"
+              title="Enviar"
             >
               {asking ? (
                 <div className="h-4 w-4 animate-spin rounded-full border-2 border-white border-t-transparent" />

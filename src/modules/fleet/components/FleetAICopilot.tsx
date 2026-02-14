@@ -256,6 +256,8 @@ export const FleetAICopilot: React.FC<FleetAICopilotProps> = ({
           variant="ghost"
           size="icon"
           onClick={() => setIsExpanded(!isExpanded)}
+          aria-label={isExpanded ? "Minimizar copilot" : "Expandir copilot"}
+          title={isExpanded ? "Minimizar" : "Expandir"}
         >
           {isExpanded ? <Minimize2 className="h-4 w-4" /> : <Maximize2 className="h-4 w-4" />}
         </Button>

@@ -166,6 +166,8 @@ export default function CopilotV2() {
                 onClick={handleVoiceInput}
                 size="icon"
                 variant={isListening ? "destructive" : "outline"}
+                aria-label={isListening ? "Parar gravação" : "Gravar voz"}
+                title={isListening ? "Parar" : "Gravar"}
               >
                 <Mic className={`h-4 w-4 ${isListening ? 'animate-pulse' : ''}`} />
               </Button>

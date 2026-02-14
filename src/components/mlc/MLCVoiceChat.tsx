@@ -478,6 +478,8 @@ A Maritime Labour Convention 2006 estabelece direitos e condições mínimas de 
             size="icon"
             onClick={toggleListening}
             className="flex-shrink-0"
+            aria-label={isListening ? "Parar gravação" : "Gravar voz"}
+            title={isListening ? "Parar" : "Gravar"}
           >
             {isListening ? (
               <MicOff className="h-4 w-4 animate-pulse" />

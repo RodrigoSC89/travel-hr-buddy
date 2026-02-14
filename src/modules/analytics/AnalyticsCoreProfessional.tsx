@@ -1688,6 +1688,7 @@ Este relatório apresenta uma análise abrangente dos principais indicadores de 
                                     size="icon"
                                     onClick={() => markAsRead(notification.id)}
                                     title="Marcar como lida"
+                                    aria-label="Marcar notificação como lida"
                                   >
                                     <Check className="h-4 w-4" />
                                   </Button>
@@ -1697,6 +1698,7 @@ Este relatório apresenta uma análise abrangente dos principais indicadores de 
                                   size="icon"
                                   onClick={() => deleteNotification(notification.id)}
                                   title="Remover notificação"
+                                  aria-label="Remover notificação"
                                 >
                                   <X className="h-4 w-4" />
                                 </Button>

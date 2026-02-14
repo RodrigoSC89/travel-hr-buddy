@@ -76,7 +76,7 @@ export function ModuleWizard({
         <div className="flex items-center justify-between">
           <CardTitle className="text-lg">{title}</CardTitle>
           {onCancel && (
-            <Button variant="ghost" size="icon" onClick={onCancel}>
+            <Button variant="ghost" size="icon" onClick={onCancel} aria-label="Fechar wizard" title="Fechar">
               <X className="h-4 w-4" />
             </Button>
           )}

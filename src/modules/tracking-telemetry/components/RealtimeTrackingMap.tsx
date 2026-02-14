@@ -241,7 +241,7 @@ export default function RealtimeTrackingMap() {
                   <SelectItem value="nautical">Náutico</SelectItem>
                 </SelectContent>
               </Select>
-              <Button variant="outline" size="icon" onClick={() => setAutoRefresh(!autoRefresh)}>
+              <Button variant="outline" size="icon" onClick={() => setAutoRefresh(!autoRefresh)} aria-label={autoRefresh ? "Pausar atualização automática" : "Ativar atualização automática"} title={autoRefresh ? "Pausar" : "Auto-refresh"}>
                 <RefreshCw className={`h-4 w-4 ${autoRefresh ? "animate-spin" : ""}`} />
               </Button>
               <Button variant="outline" size="icon" aria-label="Tela cheia" title="Tela cheia">
@@ -302,8 +302,8 @@ export default function RealtimeTrackingMap() {
 
               {/* Zoom controls */}
               <div className="absolute bottom-4 right-4 flex flex-col gap-1">
-                <Button size="icon" variant="secondary" className="h-8 w-8"><ZoomIn className="h-4 w-4" /></Button>
-                <Button size="icon" variant="secondary" className="h-8 w-8"><ZoomOut className="h-4 w-4" /></Button>
+                <Button size="icon" variant="secondary" className="h-8 w-8" aria-label="Aumentar zoom" title="Zoom in"><ZoomIn className="h-4 w-4" /></Button>
+                <Button size="icon" variant="secondary" className="h-8 w-8" aria-label="Diminuir zoom" title="Zoom out"><ZoomOut className="h-4 w-4" /></Button>
               </div>
 
               <div className="absolute top-4 right-4 p-2 bg-background/90 backdrop-blur rounded-full">

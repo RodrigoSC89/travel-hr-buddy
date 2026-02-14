@@ -83,6 +83,8 @@ export function HROKRsManager() {
                   size="icon" 
                   className="h-8 w-8 shrink-0"
                   onClick={() => toggleExpand(okr.id)}
+                  aria-label={isExpanded ? "Recolher OKR" : "Expandir OKR"}
+                  title={isExpanded ? "Recolher" : "Expandir"}
                 >
                   {isExpanded ? (
                     <ChevronDown className="h-4 w-4" />

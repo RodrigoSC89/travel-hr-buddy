@@ -107,6 +107,8 @@ export function ChatHistory({
                         size="icon"
                         className="h-6 w-6"
                         onClick={(e) => e.stopPropagation()}
+                        aria-label="Excluir conversa"
+                        title="Excluir"
                       >
                         <Trash2 className="h-3 w-3 text-destructive" />
                       </Button>

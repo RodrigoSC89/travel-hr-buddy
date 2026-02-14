@@ -332,6 +332,8 @@ export const PreOVIDAIChat: React.FC<PreOVIDAIChatProps> = ({
             size="icon"
             onClick={toggleListening}
             disabled={isLoading}
+            aria-label={isListening ? "Parar gravação" : "Gravar voz"}
+            title={isListening ? "Parar" : "Gravar"}
           >
             {isListening ? <MicOff className="w-4 h-4" /> : <Mic className="w-4 h-4" />}
           </Button>

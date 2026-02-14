@@ -345,7 +345,7 @@ export default function FuelManagementPage() {
         <Card className="border-primary/50">
           <CardHeader className="flex flex-row items-center justify-between pb-3">
             <CardTitle className="text-lg">Registrar Consumo</CardTitle>
-            <Button variant="ghost" size="icon" onClick={() => setIsAddConsumptionOpen(false)}><X className="h-4 w-4" /></Button>
+            <Button variant="ghost" size="icon" onClick={() => setIsAddConsumptionOpen(false)} aria-label="Fechar formulário de consumo" title="Fechar"><X className="h-4 w-4" /></Button>
           </CardHeader>
           <CardContent>
             <form onSubmit={(e) => { e.preventDefault(); handleAddConsumption(); }} className="grid grid-cols-2 md:grid-cols-4 gap-4">
@@ -481,7 +481,7 @@ export default function FuelManagementPage() {
                             <p className="font-medium">{Number(op.quantity_mt).toLocaleString("pt-BR")} MT</p>
                             <p className="text-sm text-muted-foreground">${Number(op.price_per_mt || 0).toFixed(0)}/MT</p>
                           </div>
-                          <Button variant="ghost" size="icon" className="h-7 w-7 opacity-0 group-hover:opacity-100 text-destructive" onClick={() => handleDeleteRecord(op.id)}>
+                          <Button variant="ghost" size="icon" className="h-7 w-7 opacity-0 group-hover:opacity-100 text-destructive" onClick={() => handleDeleteRecord(op.id)} aria-label="Excluir operação" title="Excluir">
                             <Trash2 className="h-3 w-3" />
                           </Button>
                         </div>
@@ -639,7 +639,7 @@ export default function FuelManagementPage() {
                             <td className="px-4 py-3 text-sm text-right">${Number(op.price_per_mt || 0).toFixed(0)}</td>
                             <td className="px-4 py-3 text-sm text-right font-medium text-success">${Number(op.total_cost || 0).toLocaleString("pt-BR")}</td>
                             <td className="px-4 py-3">
-                              <Button variant="ghost" size="icon" className="h-7 w-7 opacity-0 group-hover:opacity-100 text-destructive" onClick={() => handleDeleteRecord(op.id)}>
+                              <Button variant="ghost" size="icon" className="h-7 w-7 opacity-0 group-hover:opacity-100 text-destructive" onClick={() => handleDeleteRecord(op.id)} aria-label="Excluir operação de bunker" title="Excluir">
                                 <Trash2 className="h-3 w-3" />
                               </Button>
                             </td>
@@ -698,7 +698,7 @@ export default function FuelManagementPage() {
                           <td className="px-4 py-3 text-sm capitalize">{(r.consumption_type || "").replace(/_/g, " ")}</td>
                           <td className="px-4 py-3 text-sm text-right font-medium">{Number(r.quantity_mt).toLocaleString("pt-BR")} MT</td>
                           <td className="px-4 py-3">
-                            <Button variant="ghost" size="icon" className="h-7 w-7 opacity-0 group-hover:opacity-100 text-destructive" onClick={() => handleDeleteRecord(r.id)}>
+                            <Button variant="ghost" size="icon" className="h-7 w-7 opacity-0 group-hover:opacity-100 text-destructive" onClick={() => handleDeleteRecord(r.id)} aria-label="Excluir registro de consumo" title="Excluir">
                               <Trash2 className="h-3 w-3" />
                             </Button>
                           </td>

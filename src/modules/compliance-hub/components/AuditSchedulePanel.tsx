@@ -169,8 +169,8 @@ export default function AuditSchedulePanel() {
               <CardDescription>{format(currentMonth, "MMMM yyyy", { locale: ptBR })}</CardDescription>
             </div>
             <div className="flex items-center gap-2">
-              <Button variant="outline" size="icon" onClick={() => setCurrentMonth(subMonths(currentMonth, 1))}><ChevronLeft className="h-4 w-4" /></Button>
-              <Button variant="outline" size="icon" onClick={() => setCurrentMonth(addMonths(currentMonth, 1))}><ChevronRight className="h-4 w-4" /></Button>
+              <Button variant="outline" size="icon" onClick={() => setCurrentMonth(subMonths(currentMonth, 1))} aria-label="Mês anterior" title="Mês anterior"><ChevronLeft className="h-4 w-4" /></Button>
+              <Button variant="outline" size="icon" onClick={() => setCurrentMonth(addMonths(currentMonth, 1))} aria-label="Próximo mês" title="Próximo mês"><ChevronRight className="h-4 w-4" /></Button>
               <Dialog open={showNewAudit} onOpenChange={setShowNewAudit}>
                 <DialogTrigger asChild><Button><Plus className="h-4 w-4 mr-2" />Nova Auditoria</Button></DialogTrigger>
                 <DialogContent>
