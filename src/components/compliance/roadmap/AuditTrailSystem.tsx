@@ -68,17 +68,17 @@ export const AuditTrailSystem = () => {
 
         if (error) throw error;
 
-        const mappedLogs: AuditLogEntry[] = (data || []).map((row: any) => ({
-          id: row.id,
-          timestamp: new Date(row.created_at),
-          userId: row.user_id || "system",
-          userName: row.user_email || row.user_role || "Sistema",
-          userRole: row.user_role || "N/A",
-          action: row.action || "UNKNOWN",
-          module: row.module || row.resource_type || "Sistema",
-          resource: row.resource_type || "",
-          resourceId: row.resource_name || row.resource_id || "",
-          status: row.severity === "critical" || row.severity === "warning" ? "warning" as const : "success" as const,
+        const mappedLogs: AuditLogEntry[] = (data || []).map((row) => ({
+          id: String(row.id),
+          timestamp: new Date(String(row.created_at)),
+          userId: String(row.user_id || "system"),
+          userName: String(row.user_email || row.user_role || "Sistema"),
+          userRole: String(row.user_role || "N/A"),
+          action: String(row.action || "UNKNOWN"),
+          module: String(row.module || row.resource_type || "Sistema"),
+          resource: String(row.resource_type || ""),
+          resourceId: String(row.resource_name || row.resource_id || ""),
+          status: (row.severity === "critical" || row.severity === "warning" ? "warning" : "success") as "success" | "warning",
           ipAddress: "—",
           details: (row.changes as Record<string, unknown>) || {},
           changes: undefined,

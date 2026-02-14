@@ -105,7 +105,7 @@ export function MLCInspectionOverview({
         .order("assessment_date", { ascending: false })
         .limit(50);
       if (!data?.length) return { crewSatisfaction: 85, workingHoursCompliance: 75 };
-      const avg = Math.round(data.reduce((a: number, d: any) => a + (d.overall_score || 0), 0) / data.length);
+      const avg = Math.round(data.reduce((a: number, d: { overall_score: number | null }) => a + (d.overall_score || 0), 0) / data.length);
       return { crewSatisfaction: avg, workingHoursCompliance: avg > 0 ? avg - 10 : 75 };
     },
   });
@@ -120,10 +120,10 @@ export function MLCInspectionOverview({
         .or("category.ilike.%MLC%,category.ilike.%labour%,category.ilike.%crew%")
         .order("created_at", { ascending: false })
         .limit(10);
-      return (data || []).map((nc: any) => ({
+      return (data || []).map((nc): Finding => ({
         id: nc.id,
         name: nc.title || nc.description?.substring(0, 40) || "Finding",
-        description: nc.description,
+        description: nc.description ?? undefined,
         category: nc.category || "Labor Standards",
         status: nc.status === "closed" ? "resolved" as const : "open" as const,
         correctiveAction: "Action required",
