@@ -372,16 +372,16 @@ export const AppRoutes = () => (
       <Route path="/communication" element={<Navigate to="/command" replace />} />
       <Route path="/communication-command" element={<Navigate to="/command" replace />} />
       <Route path="/intelligence" element={<Navigate to="/revolutionary-features" replace />} />
-      <Route path="/peotram" element={<Navigate to="/compliance" replace />} />
-      <Route path="/peotram-ai" element={<Navigate to="/compliance" replace />} />
+      <Route path="/peotram" element={<Navigate to="/compliance?standard=peotram" replace />} />
+      <Route path="/peotram-ai" element={<Navigate to="/compliance?standard=peotram" replace />} />
       <Route path="/gmud" element={<Navigate to="/compliance" replace />} />
       <Route path="/gmud-workflow" element={<Navigate to="/compliance" replace />} />
       <Route path="/responsibility-matrix" element={<Navigate to="/compliance" replace />} />
       <Route path="/safety-human-factors" element={<Navigate to="/compliance" replace />} />
-      <Route path="/safety-imca" element={<Navigate to="/compliance" replace />} />
-      <Route path="/imca-audit" element={<Navigate to="/compliance" replace />} />
-      <Route path="/isps-security" element={<Navigate to="/compliance" replace />} />
-      <Route path="/drill-simulator" element={<Navigate to="/compliance" replace />} />
+      <Route path="/safety-imca" element={<Navigate to="/compliance?standard=ism" replace />} />
+      <Route path="/imca-audit" element={<Navigate to="/compliance?standard=ism" replace />} />
+      <Route path="/isps-security" element={<Navigate to="/compliance?standard=isps" replace />} />
+      <Route path="/drill-simulator" element={<Navigate to="/compliance?standard=solas" replace />} />
       <Route path="/compliance-one" element={<Navigate to="/compliance" replace />} />
       <Route path="/compliance-hub" element={<Navigate to="/compliance" replace />} />
       <Route path="/regulations" element={<Navigate to="/compliance" replace />} />
