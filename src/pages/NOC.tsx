@@ -1,390 +1,197 @@
 /**
  * NOC (Network Operations Center) Page
- * PATCH NOC-1.0: Interface fullscreen para operadores 24/7
- * 
- * Features:
- * - Monitoramento em tempo real
- * - Alertas críticos em destaque
- * - Métricas ao vivo
- * - Modo escuro otimizado
- * - IA ativa para comandos
- * - Atualizações a cada 5s
+ * REAL DATA from Supabase: vessels, soc_alerts, maintenance_tasks, crew_members
  */
-
 import { useState, useEffect, useCallback } from "react";
 import { Helmet } from "react-helmet-async";
-import { 
-  AlertTriangle, 
-  Activity, 
-  Ship, 
-  Shield, 
-  Fuel, 
-  Users,
-  RefreshCw,
-  Volume2,
-  VolumeX,
-  Maximize,
-  Minimize,
-  Mic,
-  Clock,
-  TrendingUp,
-  AlertCircle,
-  CheckCircle2,
-  XCircle
-} from "lucide-react";
+import { useQuery } from "@tanstack/react-query";
+import { supabase } from "@/integrations/supabase/client";
+import { AlertTriangle, Activity, Ship, Shield, Fuel, Users, RefreshCw, Volume2, VolumeX, Maximize, Minimize, Mic, Clock, TrendingUp, AlertCircle, CheckCircle2, XCircle } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Progress } from "@/components/ui/progress";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { cn } from "@/lib/utils";
-const useVoiceCommands = (_opts?: Record<string, unknown>) => ({ isListening: false, isSupported: false, transcript: '', toggleVoice: () => {}, stopListening: () => {} });
 import { logger } from '@/lib/logger';
 
-// Types
-interface Alert {
-  id: string;
-  title: string;
-  description: string;
-  severity: "critical" | "warning" | "info";
-  timestamp: Date;
-  module: string;
-  acknowledged: boolean;
-}
-
-interface Metric {
-  id: string;
-  label: string;
-  value: number;
-  unit: string;
-  trend: "up" | "down" | "stable";
-  status: "good" | "warning" | "critical";
-}
-
-interface VesselStatus {
-  id: string;
-  name: string;
-  status: "operational" | "maintenance" | "alert" | "standby";
-  location: string;
-  lastUpdate: Date;
-}
-
-// Mock data generators
-const generateAlerts = (): Alert[] => [
-  {
-    id: "1",
-    title: "Manutenção Preventiva Vencida",
-    description: "Ocean Pioneer - Motor principal necessita inspeção",
-    severity: "critical",
-    timestamp: new Date(Date.now() - 300000),
-    module: "Manutenção",
-    acknowledged: false
-  },
-  {
-    id: "2",
-    title: "Certificado STCW Expirando",
-    description: "3 tripulantes com certificados vencendo em 15 dias",
-    severity: "warning",
-    timestamp: new Date(Date.now() - 600000),
-    module: "Compliance",
-    acknowledged: false
-  },
-  {
-    id: "3",
-    title: "Meta de Emissões Atingida",
-    description: "Redução de 12% nas emissões de CO2 este mês",
-    severity: "info",
-    timestamp: new Date(Date.now() - 900000),
-    module: "ESG",
-    acknowledged: true
-  }
-];
-
-const generateMetrics = (): Metric[] => [
-  { id: "1", label: "Uptime Frota", value: 94.5, unit: "%", trend: "up", status: "good" },
-  { id: "2", label: "Eficiência Operacional", value: 87, unit: "%", trend: "stable", status: "good" },
-  { id: "3", label: "Índice TRIR", value: 0.42, unit: "", trend: "down", status: "good" },
-  { id: "4", label: "Emissões CO2", value: -12, unit: "% vs meta", trend: "down", status: "good" },
-  { id: "5", label: "Disponibilidade", value: 83, unit: "%", trend: "stable", status: "warning" },
-  { id: "6", label: "Incidentes Abertos", value: 2, unit: "", trend: "stable", status: "warning" }
-];
-
-const generateVesselStatuses = (): VesselStatus[] => [
-  { id: "1", name: "Ocean Pioneer", status: "operational", location: "Santos, BR", lastUpdate: new Date() },
-  { id: "2", name: "Sea Guardian", status: "operational", location: "Rotterdam, NL", lastUpdate: new Date() },
-  { id: "3", name: "Atlantic Star", status: "maintenance", location: "Estaleiro Jurong", lastUpdate: new Date() },
-  { id: "4", name: "Pacific Voyager", status: "operational", location: "Singapore", lastUpdate: new Date() },
-  { id: "5", name: "Nordic Explorer", status: "alert", location: "Mar do Norte", lastUpdate: new Date() },
-  { id: "6", name: "Coastal Runner", status: "standby", location: "Rio de Janeiro, BR", lastUpdate: new Date() }
-];
-
-// Severity config
 const severityConfig = {
   critical: { bg: "bg-destructive/20", border: "border-destructive", text: "text-destructive", icon: XCircle },
   warning: { bg: "bg-warning/20", border: "border-warning", text: "text-warning", icon: AlertCircle },
-  info: { bg: "bg-info/20", border: "border-info", text: "text-info", icon: CheckCircle2 }
+  info: { bg: "bg-info/20", border: "border-info", text: "text-info", icon: CheckCircle2 },
 };
 
-const statusConfig = {
+const statusConfig: Record<string, { bg: string; text: string }> = {
   operational: { bg: "bg-success", text: "Operacional" },
+  active: { bg: "bg-success", text: "Operacional" },
   maintenance: { bg: "bg-warning", text: "Manutenção" },
   alert: { bg: "bg-destructive", text: "Alerta" },
-  standby: { bg: "bg-muted-foreground", text: "Standby" }
+  standby: { bg: "bg-muted-foreground", text: "Standby" },
+  inactive: { bg: "bg-muted-foreground", text: "Inativo" },
 };
 
 export default function NOC() {
-  const [alerts, setAlerts] = useState<Alert[]>(generateAlerts);
-  const [metrics, setMetrics] = useState<Metric[]>(generateMetrics);
-  const [vessels, setVessels] = useState<VesselStatus[]>(generateVesselStatuses);
   const [isFullscreen, setIsFullscreen] = useState(false);
   const [isSoundEnabled, setIsSoundEnabled] = useState(true);
   const [lastRefresh, setLastRefresh] = useState(new Date());
-  const [isRefreshing, setIsRefreshing] = useState(false);
 
-  // Voice commands
-  const { isListening, isSupported, transcript, toggleVoice } = useVoiceCommands({
-    onCommand: (command: string) => {
-      logger.debug("NOC Voice Command:", command);
-      // Process voice commands here
-    }
+  const { data: vessels } = useQuery({
+    queryKey: ["noc-vessels"],
+    queryFn: async () => {
+      const { data, error } = await supabase.from("vessels").select("id, name, status, vessel_type").limit(12);
+      if (error) throw error;
+      return data || [];
+    },
+    refetchInterval: 10000,
   });
 
-  // Auto-refresh every 5 seconds
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setIsRefreshing(true);
-      setMetrics(generateMetrics());
-      setLastRefresh(new Date());
-      setIsRefreshing(false);
-    }, 5000);
+  const { data: alerts, refetch: refetchAlerts } = useQuery({
+    queryKey: ["noc-alerts"],
+    queryFn: async () => {
+      const { data, error } = await supabase.from("soc_alerts").select("*").order("created_at", { ascending: false }).limit(20);
+      if (error) throw error;
+      return (data || []).map((a: any) => ({
+        ...a,
+        severity: a.severity || "info",
+        acknowledged: a.status === "acknowledged" || a.status === "resolved",
+      }));
+    },
+    refetchInterval: 5000,
+  });
 
+  const { data: crewCount } = useQuery({
+    queryKey: ["noc-crew-count"],
+    queryFn: async () => {
+      const { count, error } = await supabase.from("crew_members").select("id", { count: "exact", head: true }).eq("status", "active");
+      if (error) throw error;
+      return count || 0;
+    },
+    refetchInterval: 30000,
+  });
+
+  const { data: maintenanceCount } = useQuery({
+    queryKey: ["noc-maintenance-pending"],
+    queryFn: async () => {
+      const { count, error } = await supabase.from("maintenance_tasks").select("id", { count: "exact", head: true }).eq("status", "pending");
+      if (error) throw error;
+      return count || 0;
+    },
+    refetchInterval: 30000,
+  });
+
+  useEffect(() => {
+    const interval = setInterval(() => setLastRefresh(new Date()), 5000);
     return () => clearInterval(interval);
   }, []);
 
-  // Fullscreen toggle
   const toggleFullscreen = useCallback(() => {
-    if (!document.fullscreenElement) {
-      document.documentElement.requestFullscreen();
-      setIsFullscreen(true);
-    } else {
-      document.exitFullscreen();
-      setIsFullscreen(false);
-    }
+    if (!document.fullscreenElement) { document.documentElement.requestFullscreen(); setIsFullscreen(true); }
+    else { document.exitFullscreen(); setIsFullscreen(false); }
   }, []);
 
-  // Acknowledge alert
-  const acknowledgeAlert = (alertId: string) => {
-    setAlerts(prev => prev.map(a => 
-      a.id === alertId ? { ...a, acknowledged: true } : a
-    ));
+  const acknowledgeAlert = async (alertId: string) => {
+    await supabase.from("soc_alerts").update({ status: "acknowledged" }).eq("id", alertId);
+    refetchAlerts();
   };
 
-  const criticalAlerts = alerts.filter(a => a.severity === "critical" && !a.acknowledged);
+  const activeVessels = vessels?.filter((v: any) => v.status === "active" || v.status === "operational").length || 0;
+  const criticalAlerts = (alerts || []).filter((a: any) => a.severity === "critical" && !a.acknowledged);
   const currentTime = new Date().toLocaleTimeString("pt-BR", { hour: "2-digit", minute: "2-digit", second: "2-digit" });
+
+  const metrics = [
+    { id: "1", label: "Uptime Frota", value: vessels?.length ? Math.round((activeVessels / vessels.length) * 100) : 0, unit: "%", status: activeVessels === vessels?.length ? "good" : "warning" },
+    { id: "2", label: "Embarcações Ativas", value: activeVessels, unit: `/${vessels?.length || 0}`, status: "good" as const },
+    { id: "3", label: "Manutenções Pendentes", value: maintenanceCount || 0, unit: "", status: (maintenanceCount || 0) > 5 ? "warning" : "good" },
+    { id: "4", label: "Tripulação Ativa", value: crewCount || 0, unit: "", status: "good" as const },
+    { id: "5", label: "Alertas Abertos", value: (alerts || []).filter((a: any) => !a.acknowledged).length, unit: "", status: criticalAlerts.length > 0 ? "critical" : "good" },
+    { id: "6", label: "Alertas Críticos", value: criticalAlerts.length, unit: "", status: criticalAlerts.length > 0 ? "critical" : "good" },
+  ];
 
   return (
     <>
-      <Helmet>
-        <title>NOC 24/7 | Centro de Operações de Rede</title>
-        <meta name="description" content="Centro de Operações de Rede Nautilus - Monitoramento em tempo real 24/7" />
-      </Helmet>
-
+      <Helmet><title>NOC 24/7 | Centro de Operações</title></Helmet>
       <div className="min-h-screen bg-zinc-950 text-white p-4">
-        {/* Header */}
         <header className="flex items-center justify-between mb-4">
           <div className="flex items-center gap-4">
-            <h1 className="text-2xl font-bold flex items-center gap-2">
-              <Activity className="h-6 w-6 text-primary animate-pulse" />
-              NOC 24/7
-            </h1>
-            <Badge variant="outline" className="border-success text-success">
-              <span className="w-2 h-2 bg-success rounded-full mr-2 animate-pulse" />
-              ONLINE
-            </Badge>
+            <h1 className="text-2xl font-bold flex items-center gap-2"><Activity className="h-6 w-6 text-primary animate-pulse" />NOC 24/7</h1>
+            <Badge variant="outline" className="border-success text-success"><span className="w-2 h-2 bg-success rounded-full mr-2 animate-pulse" />ONLINE</Badge>
           </div>
-
           <div className="flex items-center gap-4">
-            {/* Current Time */}
-            <div className="flex items-center gap-2 text-xl font-mono bg-zinc-900 px-4 py-2 rounded-lg">
-              <Clock className="h-5 w-5 text-primary" />
-              {currentTime}
-            </div>
-
-            {/* Last Refresh */}
-            <div className="flex items-center gap-2 text-sm text-muted-foreground">
-              <RefreshCw className={cn("h-4 w-4", isRefreshing && "animate-spin")} />
-              Atualizado: {lastRefresh.toLocaleTimeString("pt-BR")}
-            </div>
-
-            {/* Controls */}
+            <div className="flex items-center gap-2 text-xl font-mono bg-zinc-900 px-4 py-2 rounded-lg"><Clock className="h-5 w-5 text-primary" />{currentTime}</div>
+            <div className="text-sm text-muted-foreground">Atualizado: {lastRefresh.toLocaleTimeString("pt-BR")}</div>
             <div className="flex items-center gap-2">
-              {isSupported && (
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  onClick={toggleVoice}
-                  className={cn(isListening && "bg-red-500/20 text-red-400")}
-                >
-                  <Mic className={cn("h-5 w-5", isListening && "animate-pulse")} />
-                </Button>
-              )}
-              <Button variant="ghost" size="icon" onClick={() => setIsSoundEnabled(!isSoundEnabled)}>
-                {isSoundEnabled ? <Volume2 className="h-5 w-5" /> : <VolumeX className="h-5 w-5" />}
-              </Button>
-              <Button variant="ghost" size="icon" onClick={toggleFullscreen}>
-                {isFullscreen ? <Minimize className="h-5 w-5" /> : <Maximize className="h-5 w-5" />}
-              </Button>
+              <Button variant="ghost" size="icon" onClick={() => setIsSoundEnabled(!isSoundEnabled)}>{isSoundEnabled ? <Volume2 className="h-5 w-5" /> : <VolumeX className="h-5 w-5" />}</Button>
+              <Button variant="ghost" size="icon" onClick={toggleFullscreen}>{isFullscreen ? <Minimize className="h-5 w-5" /> : <Maximize className="h-5 w-5" />}</Button>
             </div>
           </div>
         </header>
 
-        {/* Critical Alerts Banner */}
         {criticalAlerts.length > 0 && (
           <div className="mb-4 p-4 bg-destructive/20 border border-destructive rounded-lg animate-pulse">
-            <div className="flex items-center gap-2 text-destructive">
-              <AlertTriangle className="h-6 w-6" />
-              <span className="font-bold text-lg">
-                {criticalAlerts.length} ALERTA{criticalAlerts.length > 1 ? "S" : ""} CRÍTICO{criticalAlerts.length > 1 ? "S" : ""}
-              </span>
-            </div>
+            <div className="flex items-center gap-2 text-destructive"><AlertTriangle className="h-6 w-6" /><span className="font-bold text-lg">{criticalAlerts.length} ALERTA{criticalAlerts.length > 1 ? "S" : ""} CRÍTICO{criticalAlerts.length > 1 ? "S" : ""}</span></div>
           </div>
         )}
 
-        {/* Main Grid */}
         <div className="grid grid-cols-12 gap-4">
-          {/* Metrics Panel */}
           <div className="col-span-8">
             <Card className="bg-zinc-900 border-zinc-800">
-              <CardHeader className="pb-2">
-                <CardTitle className="flex items-center gap-2 text-lg">
-                  <TrendingUp className="h-5 w-5 text-primary" />
-                  Métricas em Tempo Real
-                </CardTitle>
-              </CardHeader>
+              <CardHeader className="pb-2"><CardTitle className="flex items-center gap-2 text-lg"><TrendingUp className="h-5 w-5 text-primary" />Métricas em Tempo Real</CardTitle></CardHeader>
               <CardContent>
                 <div className="grid grid-cols-3 gap-4">
                   {metrics.map((metric) => (
-                    <div
-                      key={metric.id}
-                      className={cn(
-                        "p-4 rounded-lg border",
-                        metric.status === "good" && "bg-success/10 border-success/30",
-                        metric.status === "warning" && "bg-warning/10 border-warning/30",
-                        metric.status === "critical" && "bg-destructive/10 border-destructive/30"
-                      )}
-                    >
+                    <div key={metric.id} className={cn("p-4 rounded-lg border", metric.status === "good" && "bg-success/10 border-success/30", metric.status === "warning" && "bg-warning/10 border-warning/30", metric.status === "critical" && "bg-destructive/10 border-destructive/30")}>
                       <div className="text-sm text-muted-foreground">{metric.label}</div>
-                      <div className="text-3xl font-bold mt-1">
-                        {metric.value}{metric.unit}
-                      </div>
-                      <div className={cn(
-                        "text-xs mt-1",
-                        metric.trend === "up" && "text-success",
-                        metric.trend === "down" && "text-destructive",
-                        metric.trend === "stable" && "text-muted-foreground"
-                      )}>
-                        {metric.trend === "up" && "↑"}
-                        {metric.trend === "down" && "↓"}
-                        {metric.trend === "stable" && "→"}
-                        {" "}{metric.trend === "up" ? "Subindo" : metric.trend === "down" ? "Descendo" : "Estável"}
-                      </div>
+                      <div className="text-3xl font-bold mt-1">{metric.value}{metric.unit}</div>
                     </div>
                   ))}
                 </div>
               </CardContent>
             </Card>
 
-            {/* Fleet Status */}
             <Card className="bg-zinc-900 border-zinc-800 mt-4">
-              <CardHeader className="pb-2">
-                <CardTitle className="flex items-center gap-2 text-lg">
-                  <Ship className="h-5 w-5 text-primary" />
-                  Status da Frota
-                </CardTitle>
-              </CardHeader>
+              <CardHeader className="pb-2"><CardTitle className="flex items-center gap-2 text-lg"><Ship className="h-5 w-5 text-primary" />Status da Frota</CardTitle></CardHeader>
               <CardContent>
                 <div className="grid grid-cols-3 gap-3">
-                  {vessels.map((vessel) => (
-                    <div
-                      key={vessel.id}
-                      className={cn(
-                        "p-3 rounded-lg border border-zinc-800 bg-zinc-800/50",
-                        vessel.status === "alert" && "border-destructive animate-pulse"
-                      )}
-                    >
-                      <div className="flex items-center justify-between mb-2">
-                        <span className="font-medium">{vessel.name}</span>
-                        <span className={cn(
-                          "w-2 h-2 rounded-full",
-                          statusConfig[vessel.status].bg
-                        )} />
+                  {(vessels || []).map((vessel: any) => {
+                    const st = statusConfig[vessel.status] || statusConfig.inactive;
+                    return (
+                      <div key={vessel.id} className={cn("p-3 rounded-lg border border-zinc-800 bg-zinc-800/50", vessel.status === "alert" && "border-destructive animate-pulse")}>
+                        <div className="flex items-center justify-between mb-2"><span className="font-medium">{vessel.name}</span><span className={cn("w-2 h-2 rounded-full", st.bg)} /></div>
+                        <div className="text-xs text-muted-foreground">Em trânsito</div>
+                        <Badge variant="outline" className="mt-2 text-xs">{st.text}</Badge>
                       </div>
-                      <div className="text-xs text-muted-foreground">{vessel.location}</div>
-                      <Badge variant="outline" className="mt-2 text-xs">
-                        {statusConfig[vessel.status].text}
-                      </Badge>
-                    </div>
-                  ))}
+                    );
+                  })}
                 </div>
               </CardContent>
             </Card>
           </div>
 
-          {/* Alerts Panel */}
           <div className="col-span-4">
             <Card className="bg-zinc-900 border-zinc-800 h-full">
-              <CardHeader className="pb-2">
-                <CardTitle className="flex items-center gap-2 text-lg">
-                  <AlertTriangle className="h-5 w-5 text-primary" />
-                  Central de Alertas
-                  <Badge variant="secondary" className="ml-auto">
-                    {alerts.filter(a => !a.acknowledged).length}
-                  </Badge>
-                </CardTitle>
-              </CardHeader>
+              <CardHeader className="pb-2"><CardTitle className="flex items-center gap-2 text-lg"><AlertTriangle className="h-5 w-5 text-primary" />Central de Alertas<Badge variant="secondary" className="ml-auto">{(alerts || []).filter((a: any) => !a.acknowledged).length}</Badge></CardTitle></CardHeader>
               <CardContent>
                 <ScrollArea className="h-[500px] pr-4">
                   <div className="space-y-3">
-                    {alerts.map((alert) => {
-                      const config = severityConfig[alert.severity];
+                    {(alerts || []).map((alert: any) => {
+                      const config = severityConfig[alert.severity as keyof typeof severityConfig] || severityConfig.info;
                       const Icon = config.icon;
                       return (
-                        <div
-                          key={alert.id}
-                          className={cn(
-                            "p-3 rounded-lg border",
-                            config.bg,
-                            config.border,
-                            alert.acknowledged && "opacity-50"
-                          )}
-                        >
+                        <div key={alert.id} className={cn("p-3 rounded-lg border", config.bg, config.border, alert.acknowledged && "opacity-50")}>
                           <div className="flex items-start gap-2">
                             <Icon className={cn("h-5 w-5 mt-0.5", config.text)} />
                             <div className="flex-1">
                               <div className={cn("font-medium", config.text)}>{alert.title}</div>
-                              <div className="text-sm text-muted-foreground mt-1">
-                                {alert.description}
-                              </div>
+                              <div className="text-sm text-muted-foreground mt-1">{alert.message}</div>
                               <div className="flex items-center justify-between mt-2">
-                                <Badge variant="outline" className="text-xs">
-                                  {alert.module}
-                                </Badge>
-                                {!alert.acknowledged && (
-                                  <Button
-                                    size="sm"
-                                    variant="ghost"
-                                    className="h-6 text-xs"
-                                    onClick={() => acknowledgeAlert(alert.id)}
-                                  >
-                                    Reconhecer
-                                  </Button>
-                                )}
+                                <Badge variant="outline" className="text-xs">{alert.source_module || "System"}</Badge>
+                                {!alert.acknowledged && <Button size="sm" variant="ghost" className="h-6 text-xs" onClick={() => acknowledgeAlert(alert.id)}>Reconhecer</Button>}
                               </div>
                             </div>
                           </div>
                         </div>
                       );
                     })}
+                    {(!alerts || alerts.length === 0) && <p className="text-muted-foreground text-center py-8">Sem alertas ativos ✅</p>}
                   </div>
                 </ScrollArea>
               </CardContent>
@@ -392,26 +199,14 @@ export default function NOC() {
           </div>
         </div>
 
-        {/* Bottom Status Bar */}
         <div className="fixed bottom-0 left-0 right-0 bg-sidebar border-t border-sidebar-border px-4 py-2">
           <div className="flex items-center justify-between text-sm">
             <div className="flex items-center gap-6">
-              <span className="flex items-center gap-2">
-                <Shield className="h-4 w-4 text-success" />
-                Segurança: OK
-              </span>
-              <span className="flex items-center gap-2">
-                <Fuel className="h-4 w-4 text-info" />
-                Combustível: Normal
-              </span>
-              <span className="flex items-center gap-2">
-                <Users className="h-4 w-4 text-secondary-foreground" />
-                Tripulação: 247 ativos
-              </span>
+              <span className="flex items-center gap-2"><Shield className="h-4 w-4 text-success" />Segurança: OK</span>
+              <span className="flex items-center gap-2"><Fuel className="h-4 w-4 text-info" />Combustível: Normal</span>
+              <span className="flex items-center gap-2"><Users className="h-4 w-4 text-secondary-foreground" />Tripulação: {crewCount} ativos</span>
             </div>
-            <div className="text-muted-foreground">
-              Nauti One NOC v2.0 | Latência: 42ms
-            </div>
+            <div className="text-muted-foreground">Nauti One NOC v2.0 | Real-time</div>
           </div>
         </div>
       </div>

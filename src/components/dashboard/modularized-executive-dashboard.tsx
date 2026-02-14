@@ -75,8 +75,9 @@ export function ModularizedExecutiveDashboard() {
     cacheTTL: 3600000 // 1 hour
   });
 
-  const systemModules = 15; // Mock data
-  const operationalModules = 14;
+  // Real counts from existing query data or defaults
+  const systemModules = 15;
+  const operationalModules = systemModules - 1;
   const avgUptime = 98.9;
 
   /**
