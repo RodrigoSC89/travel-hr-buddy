@@ -319,6 +319,8 @@ export function PeodpVoiceChat() {
               type="submit" 
               size="icon"
               disabled={isProcessing || isListening || !textInput.trim()}
+              aria-label="Enviar mensagem"
+              title="Enviar"
             >
               <Send className="h-4 w-4" />
             </Button>
@@ -332,6 +334,8 @@ export function PeodpVoiceChat() {
               onClick={isListening ? stopListening : startListening}
               disabled={isProcessing}
               className="rounded-full h-14 w-14"
+              aria-label={isListening ? "Parar gravação" : "Iniciar gravação de voz"}
+              title={isListening ? "Parar" : "Gravar"}
             >
               {isListening ? (
                 <MicOff className="h-6 w-6" />
@@ -345,6 +349,8 @@ export function PeodpVoiceChat() {
               size="icon"
               onClick={isSpeaking ? stopSpeaking : undefined}
               disabled={!isSpeaking}
+              aria-label={isSpeaking ? "Parar narração" : "Alto-falante"}
+              title={isSpeaking ? "Parar" : "Alto-falante"}
             >
               {isSpeaking ? (
                 <VolumeX className="h-4 w-4" />

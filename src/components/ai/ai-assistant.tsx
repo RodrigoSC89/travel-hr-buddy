@@ -381,6 +381,8 @@ export const AIAssistant: React.FC<AIAssistantProps> = ({
             size="icon"
             onClick={toggleListening}
             className={isListening ? "bg-status-error text-status-error-foreground" : ""}
+            aria-label={isListening ? "Parar gravação" : "Iniciar gravação de voz"}
+            title={isListening ? "Parar" : "Gravar"}
           >
             {isListening ? <MicOff className="w-4 h-4" /> : <Mic className="w-4 h-4" />}
           </Button>
@@ -389,6 +391,8 @@ export const AIAssistant: React.FC<AIAssistantProps> = ({
             onClick={handleSendMessage}
             disabled={!input.trim() || isLoading}
             size="icon"
+            aria-label="Enviar mensagem"
+            title="Enviar"
           >
             <Send className="w-4 h-4" />
           </Button>

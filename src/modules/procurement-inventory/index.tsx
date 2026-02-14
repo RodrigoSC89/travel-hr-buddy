@@ -104,6 +104,8 @@ export default function ProcurementInventory() {
                 size="icon"
                 onClick={() => setShowAIPanel(!showAIPanel)}
                 className="relative"
+                aria-label={showAIPanel ? "Fechar assistente IA" : "Abrir assistente IA"}
+                title="Assistente IA"
               >
                 <Brain className="h-4 w-4" />
               </Button>
@@ -119,6 +121,8 @@ export default function ProcurementInventory() {
                 size="icon"
                 onClick={() => setShowNotifications(true)}
                 className="relative"
+                aria-label="Notificações"
+                title="Notificações"
               >
                 <Bell className="h-4 w-4" />
                 {unreadCount > 0 && (

@@ -117,7 +117,7 @@ export default function CrewHealthTab() {
               className="pl-10"
             />
           </div>
-          <Button variant="outline" size="icon" onClick={() => setShowFilters(!showFilters)}>
+          <Button variant="outline" size="icon" onClick={() => setShowFilters(!showFilters)} aria-label={showFilters ? "Ocultar filtros" : "Mostrar filtros"} title="Filtros">
             <Filter className="h-4 w-4" />
           </Button>
         </div>

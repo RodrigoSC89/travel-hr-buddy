@@ -450,6 +450,8 @@ Métricas de Sistema:
               disabled={!input.trim() || isLoading}
               size="icon"
               className="h-10 w-10"
+              aria-label="Enviar mensagem"
+              title="Enviar"
             >
               <Send className="h-4 w-4" />
             </Button>

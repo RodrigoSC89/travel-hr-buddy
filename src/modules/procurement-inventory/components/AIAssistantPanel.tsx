@@ -277,7 +277,7 @@ export default function AIAssistantPanel({ onClose }: AIAssistantPanelProps) {
             disabled={isLoading}
             className="flex-1"
           />
-          <Button size="icon" onClick={handleSend} disabled={isLoading}>
+          <Button size="icon" onClick={handleSend} disabled={isLoading} aria-label="Enviar mensagem" title="Enviar">
             {isLoading ? <Loader2 className="h-4 w-4 animate-spin" /> : <Send className="h-4 w-4" />}
           </Button>
         </div>

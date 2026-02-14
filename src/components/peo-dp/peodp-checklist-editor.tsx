@@ -430,6 +430,8 @@ export function PEODPChecklistEditor({ onSave, existingVersion }: PEODPChecklist
                           variant="ghost"
                           size="icon"
                           onClick={() => setEditingReq(req)}
+                          aria-label="Editar requisito"
+                          title="Editar"
                         >
                           <Edit className="h-4 w-4" />
                         </Button>
@@ -437,6 +439,8 @@ export function PEODPChecklistEditor({ onSave, existingVersion }: PEODPChecklist
                           variant="ghost"
                           size="icon"
                           onClick={() => handleDeleteRequirement(req.id)}
+                          aria-label="Excluir requisito"
+                          title="Excluir"
                         >
                           <Trash2 className="h-4 w-4 text-destructive" />
                         </Button>

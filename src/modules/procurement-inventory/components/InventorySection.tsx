@@ -382,6 +382,8 @@ export default function InventorySection({ searchQuery }: InventorySectionProps)
                               setMovementType("in");
                               setShowMovement(true);
                             }}
+                            aria-label="Entrada de estoque"
+                            title="Entrada"
                           >
                             <ArrowDown className="h-4 w-4 text-success" />
                           </Button>
@@ -393,6 +395,8 @@ export default function InventorySection({ searchQuery }: InventorySectionProps)
                               setMovementType("out");
                               setShowMovement(true);
                             }}
+                            aria-label="Saída de estoque"
+                            title="Saída"
                           >
                             <ArrowUp className="h-4 w-4 text-destructive" />
                           </Button>

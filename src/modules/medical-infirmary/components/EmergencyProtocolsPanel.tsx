@@ -489,6 +489,8 @@ export default function EmergencyProtocolsPanel() {
                           e.stopPropagation();
                           toggleFavorite(protocol.id);
                         }}
+                        aria-label={favorites.includes(protocol.id) ? "Remover dos favoritos" : "Adicionar aos favoritos"}
+                        title={favorites.includes(protocol.id) ? "Remover favorito" : "Favoritar"}
                       >
                         <Star className={`h-4 w-4 ${favorites.includes(protocol.id) ? "fill-warning text-warning" : ""}`} />
                       </Button>
