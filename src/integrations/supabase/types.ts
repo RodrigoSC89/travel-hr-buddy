@@ -29256,6 +29256,62 @@ export type Database = {
           },
         ]
       }
+      peotram_audit_responses: {
+        Row: {
+          ai_evidence: string | null
+          audit_id: string
+          created_at: string
+          element_id: number
+          evidence_files: string[] | null
+          id: string
+          item_id: string
+          nc_classification: string | null
+          observations: string | null
+          photos: string[] | null
+          score: string | null
+          subelement_id: string
+          updated_at: string
+        }
+        Insert: {
+          ai_evidence?: string | null
+          audit_id: string
+          created_at?: string
+          element_id: number
+          evidence_files?: string[] | null
+          id?: string
+          item_id: string
+          nc_classification?: string | null
+          observations?: string | null
+          photos?: string[] | null
+          score?: string | null
+          subelement_id: string
+          updated_at?: string
+        }
+        Update: {
+          ai_evidence?: string | null
+          audit_id?: string
+          created_at?: string
+          element_id?: number
+          evidence_files?: string[] | null
+          id?: string
+          item_id?: string
+          nc_classification?: string | null
+          observations?: string | null
+          photos?: string[] | null
+          score?: string | null
+          subelement_id?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "peotram_audit_responses_audit_id_fkey"
+            columns: ["audit_id"]
+            isOneToOne: false
+            referencedRelation: "peotram_audits"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       peotram_audit_responses_2024: {
         Row: {
           audit_id: string | null
@@ -29331,17 +29387,24 @@ export type Database = {
           compliance_score: number | null
           created_at: string
           created_by: string
+          cycle: string | null
+          element_scores: Json | null
           final_score: number | null
           id: string
           metadata: Json | null
+          nc_count: number | null
           non_conformities_count: number | null
+          notes: string | null
           organization_id: string | null
           predicted_score: number | null
+          scored_items: number | null
           shore_location: string | null
           status: string
           template_id: string | null
+          total_items: number | null
           updated_at: string
           vessel_id: string | null
+          vessel_name: string | null
         }
         Insert: {
           audit_date: string
@@ -29351,17 +29414,24 @@ export type Database = {
           compliance_score?: number | null
           created_at?: string
           created_by: string
+          cycle?: string | null
+          element_scores?: Json | null
           final_score?: number | null
           id?: string
           metadata?: Json | null
+          nc_count?: number | null
           non_conformities_count?: number | null
+          notes?: string | null
           organization_id?: string | null
           predicted_score?: number | null
+          scored_items?: number | null
           shore_location?: string | null
           status?: string
           template_id?: string | null
+          total_items?: number | null
           updated_at?: string
           vessel_id?: string | null
+          vessel_name?: string | null
         }
         Update: {
           audit_date?: string
@@ -29371,17 +29441,24 @@ export type Database = {
           compliance_score?: number | null
           created_at?: string
           created_by?: string
+          cycle?: string | null
+          element_scores?: Json | null
           final_score?: number | null
           id?: string
           metadata?: Json | null
+          nc_count?: number | null
           non_conformities_count?: number | null
+          notes?: string | null
           organization_id?: string | null
           predicted_score?: number | null
+          scored_items?: number | null
           shore_location?: string | null
           status?: string
           template_id?: string | null
+          total_items?: number | null
           updated_at?: string
           vessel_id?: string | null
+          vessel_name?: string | null
         }
         Relationships: [
           {
