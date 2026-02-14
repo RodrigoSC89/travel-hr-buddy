@@ -1,13 +1,13 @@
 /**
  * Pre-SIRE 2.0 Inspection Page
  * OCIMF Ship Inspection Report Programme v2.0
- * P0 FIX: Connected to real Supabase backend
+ * With full AI Disruptive Suite (8 components)
  */
 import type { FC } from 'react';
-import { useState } from 'react';
+import { useState, lazy, Suspense } from 'react';
 import { ModulePageWrapper } from '@/components/ui/module-page-wrapper';
 import { ModuleHeader } from '@/components/ui/module-header';
-import { Ship, FileCheck, Brain, ClipboardCheck, AlertTriangle, CheckCircle2, Clock, BarChart3, Target, Shield, Plus, RefreshCw, Download } from 'lucide-react';
+import { Ship, FileCheck, Brain, ClipboardCheck, AlertTriangle, CheckCircle2, Clock, BarChart3, Target, Shield, Plus, RefreshCw, Download, Search, BookOpen, GitCompare, Calendar } from 'lucide-react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Button } from '@/components/ui/button';
@@ -17,16 +17,39 @@ import { useMaritimeAudits, useCreateMaritimeAudit, useMaritimeAuditExport, useM
 import { DataStateWrapper } from '@/components/ui/UXStates';
 import { toast } from 'sonner';
 
+// Lazy load AI components
+const ComplianceSGIAutoEvidence = lazy(() => import('@/components/compliance/ai/ComplianceSGIAutoEvidence').then(m => ({ default: m.ComplianceSGIAutoEvidence })));
+const ComplianceGapAnalyzer = lazy(() => import('@/components/compliance/ai/ComplianceGapAnalyzer').then(m => ({ default: m.ComplianceGapAnalyzer })));
+const ComplianceInterviewSimulator = lazy(() => import('@/components/compliance/ai/ComplianceInterviewSimulator').then(m => ({ default: m.ComplianceInterviewSimulator })));
+const ComplianceOneClickAuditPrep = lazy(() => import('@/components/compliance/ai/ComplianceOneClickAuditPrep').then(m => ({ default: m.ComplianceOneClickAuditPrep })));
+const ComplianceRegulatoryChangeTracker = lazy(() => import('@/components/compliance/ai/ComplianceRegulatoryChangeTracker').then(m => ({ default: m.ComplianceRegulatoryChangeTracker })));
+const ComplianceAutoChecklistGenerator = lazy(() => import('@/components/compliance/ai/ComplianceAutoChecklistGenerator').then(m => ({ default: m.ComplianceAutoChecklistGenerator })));
+const ComplianceDocCrossReference = lazy(() => import('@/components/compliance/ai/ComplianceDocCrossReference').then(m => ({ default: m.ComplianceDocCrossReference })));
+const ComplianceTimeline = lazy(() => import('@/components/compliance/ai/ComplianceTimeline').then(m => ({ default: m.ComplianceTimeline })));
+
+const AILoader = () => <div className="flex items-center justify-center p-12"><div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary" /></div>;
+
+const SIRE_CHECKLIST_ITEMS = [
+  "Navigation procedures and records",
+  "Cargo operations safety management",
+  "Mooring equipment condition",
+  "Safety management system documentation",
+  "Pollution prevention measures",
+  "Crew competency and training records",
+  "Structural condition assessment",
+  "Engine room maintenance records",
+  "Bridge equipment and procedures",
+  "Emergency preparedness drills",
+];
+
 const PreSIREInspection: FC = () => {
   const [activeTab, setActiveTab] = useState('dashboard');
   
-  // Real data from Supabase
   const { data: sireAudits, isLoading, error, refetch } = useMaritimeAudits('pre-sire');
   const { exportAudits, isExporting } = useMaritimeAuditExport('pre-sire');
   const createAudit = useCreateMaritimeAudit();
   const kpis = useMaritimeAuditKPIs();
 
-  // SIRE 2.0 category definitions (static structure)
   const sireCategories = [
     { id: 'nav', name: 'Navigation', questions: 127, completed: 98, score: 87 },
     { id: 'cargo', name: 'Cargo Operations', questions: 156, completed: 134, score: 92 },
@@ -38,7 +61,6 @@ const PreSIREInspection: FC = () => {
     { id: 'engine', name: 'Engine Room', questions: 167, completed: 145, score: 89 },
   ];
 
-  // Use real data for recent inspections or fallback to computed from audits
   const recentInspections = sireAudits?.slice(0, 5).map((audit: { vessel_name?: string; audit_date: string; compliance_score?: number; status: string; id: string }) => ({
     vessel: audit.vessel_name || 'Embarcação',
     date: audit.audit_date,
@@ -50,22 +72,13 @@ const PreSIREInspection: FC = () => {
   const overallScore = kpis.averageScore || Math.round(sireCategories.reduce((acc, cat) => acc + cat.score, 0) / sireCategories.length);
   
   const handleNewInspection = () => {
-    createAudit.mutate({
-      audit_type: 'pre-sire',
-      status: 'draft',
-      auditor_name: 'SIRE Inspector',
-    });
+    createAudit.mutate({ audit_type: 'pre-sire', status: 'draft', auditor_name: 'SIRE Inspector' });
   };
   
-  const handleRefresh = () => {
-    refetch();
-    toast.success('Dados atualizados');
-  };
+  const handleRefresh = () => { refetch(); toast.success('Dados atualizados'); };
   
   const handleExport = (format: 'csv' | 'excel' | 'pdf') => {
-    if (sireAudits) {
-      exportAudits(sireAudits, format);
-    }
+    if (sireAudits) exportAudits(sireAudits, format);
   };
 
   return (
@@ -78,20 +91,27 @@ const PreSIREInspection: FC = () => {
         badges={[
           { icon: ClipboardCheck, label: 'SIRE 2.0' },
           { icon: FileCheck, label: 'OCIMF' },
-          { icon: Brain, label: 'AI Analysis' },
+          { icon: Brain, label: 'AI Suite' },
         ]}
       />
 
       <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
-        <TabsList className="grid w-full grid-cols-4 lg:w-auto lg:inline-grid">
+        <TabsList className="flex flex-wrap gap-1">
           <TabsTrigger value="dashboard">Dashboard</TabsTrigger>
           <TabsTrigger value="categories">Categories</TabsTrigger>
           <TabsTrigger value="inspections">Inspections</TabsTrigger>
           <TabsTrigger value="ai-analysis">AI Analysis</TabsTrigger>
+          <TabsTrigger value="sgi-evidence" className="gap-1"><Search className="h-3 w-3" />SGI Evidence</TabsTrigger>
+          <TabsTrigger value="gap-analyzer" className="gap-1"><AlertTriangle className="h-3 w-3" />Gap Analyzer</TabsTrigger>
+          <TabsTrigger value="interview-sim" className="gap-1"><Brain className="h-3 w-3" />Interview Sim</TabsTrigger>
+          <TabsTrigger value="audit-prep" className="gap-1"><ClipboardCheck className="h-3 w-3" />Audit Prep</TabsTrigger>
+          <TabsTrigger value="reg-tracker" className="gap-1"><BookOpen className="h-3 w-3" />Reg. Tracker</TabsTrigger>
+          <TabsTrigger value="checklist-gen" className="gap-1"><CheckCircle2 className="h-3 w-3" />Checklist Gen</TabsTrigger>
+          <TabsTrigger value="doc-crossref" className="gap-1"><GitCompare className="h-3 w-3" />Doc Cross-Ref</TabsTrigger>
+          <TabsTrigger value="timeline" className="gap-1"><Calendar className="h-3 w-3" />Timeline</TabsTrigger>
         </TabsList>
 
         <TabsContent value="dashboard" className="space-y-6">
-          {/* KPI Cards */}
           <div className="grid gap-4 md:grid-cols-4">
             <Card>
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
@@ -137,7 +157,6 @@ const PreSIREInspection: FC = () => {
             </Card>
           </div>
 
-          {/* Category Overview */}
           <Card>
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
@@ -153,12 +172,8 @@ const PreSIREInspection: FC = () => {
                     <div className="flex items-center justify-between">
                       <span className="text-sm font-medium">{category.name}</span>
                       <div className="flex items-center gap-2">
-                        <span className="text-xs text-muted-foreground">
-                          {category.completed}/{category.questions}
-                        </span>
-                        <Badge variant={category.score >= 90 ? 'default' : category.score >= 80 ? 'secondary' : 'destructive'}>
-                          {category.score}%
-                        </Badge>
+                        <span className="text-xs text-muted-foreground">{category.completed}/{category.questions}</span>
+                        <Badge variant={category.score >= 90 ? 'default' : category.score >= 80 ? 'secondary' : 'destructive'}>{category.score}%</Badge>
                       </div>
                     </div>
                     <Progress value={category.score} className="h-2" />
@@ -180,14 +195,10 @@ const PreSIREInspection: FC = () => {
                 <CardContent>
                   <div className="flex items-center justify-between mb-2">
                     <span className="text-2xl font-bold">{category.score}%</span>
-                    <Badge variant={category.score >= 90 ? 'default' : 'secondary'}>
-                      {category.completed}/{category.questions}
-                    </Badge>
+                    <Badge variant={category.score >= 90 ? 'default' : 'secondary'}>{category.completed}/{category.questions}</Badge>
                   </div>
                   <Progress value={category.score} className="h-2" />
-                  <Button variant="outline" size="sm" className="w-full mt-4">
-                    View Details
-                  </Button>
+                  <Button variant="outline" size="sm" className="w-full mt-4">View Details</Button>
                 </CardContent>
               </Card>
             ))}
@@ -203,16 +214,13 @@ const PreSIREInspection: FC = () => {
               </div>
               <div className="flex gap-2">
                 <Button variant="outline" onClick={handleRefresh} disabled={isLoading}>
-                  <RefreshCw className={`h-4 w-4 mr-2 ${isLoading ? 'animate-spin' : ''}`} />
-                  Atualizar
+                  <RefreshCw className={`h-4 w-4 mr-2 ${isLoading ? 'animate-spin' : ''}`} />Atualizar
                 </Button>
                 <Button variant="outline" onClick={() => handleExport('excel')} disabled={isExporting}>
-                  <Download className="h-4 w-4 mr-2" />
-                  Exportar
+                  <Download className="h-4 w-4 mr-2" />Exportar
                 </Button>
                 <Button onClick={handleNewInspection} disabled={createAudit.isPending}>
-                  <Plus className="h-4 w-4 mr-2" />
-                  New Inspection
+                  <Plus className="h-4 w-4 mr-2" />New Inspection
                 </Button>
               </div>
             </CardHeader>
@@ -231,25 +239,22 @@ const PreSIREInspection: FC = () => {
                     {inspections.map((inspection: { id?: string; vessel?: string; date?: string; score?: number; status?: string }, index: number) => {
                       const inspScore = inspection.score ?? 0;
                       return (
-                      <div key={inspection.id || index} className="flex items-center justify-between p-4 border rounded-lg">
-                        <div className="flex items-center gap-4">
-                          <Ship className="h-8 w-8 text-muted-foreground" />
-                          <div>
-                            <p className="font-medium">{inspection.vessel}</p>
-                            <p className="text-sm text-muted-foreground">{inspection.date}</p>
+                        <div key={inspection.id || index} className="flex items-center justify-between p-4 border rounded-lg">
+                          <div className="flex items-center gap-4">
+                            <Ship className="h-8 w-8 text-muted-foreground" />
+                            <div>
+                              <p className="font-medium">{inspection.vessel}</p>
+                              <p className="text-sm text-muted-foreground">{inspection.date}</p>
+                            </div>
+                          </div>
+                          <div className="flex items-center gap-4">
+                            <Badge variant={inspScore >= 90 ? 'default' : 'secondary'}>Score: {inspScore}%</Badge>
+                            <Badge variant={inspection.status === 'approved' || inspection.status === 'completed' ? 'default' : 'outline'}>{inspection.status}</Badge>
+                            <Button variant="ghost" size="sm">View Report</Button>
                           </div>
                         </div>
-                        <div className="flex items-center gap-4">
-                          <Badge variant={inspScore >= 90 ? 'default' : 'secondary'}>
-                            Score: {inspScore}%
-                          </Badge>
-                          <Badge variant={inspection.status === 'approved' || inspection.status === 'completed' ? 'default' : 'outline'}>
-                            {inspection.status}
-                          </Badge>
-                          <Button variant="ghost" size="sm">View Report</Button>
-                        </div>
-                      </div>
-                    )})}
+                      );
+                    })}
                   </div>
                 )}
               </DataStateWrapper>
@@ -260,18 +265,12 @@ const PreSIREInspection: FC = () => {
         <TabsContent value="ai-analysis" className="space-y-6">
           <Card>
             <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <Brain className="h-5 w-5" />
-                AI-Powered SIRE 2.0 Analysis
-              </CardTitle>
+              <CardTitle className="flex items-center gap-2"><Brain className="h-5 w-5" />AI-Powered SIRE 2.0 Analysis</CardTitle>
               <CardDescription>Machine learning insights for inspection optimization</CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
               <div className="p-4 bg-blue-50 dark:bg-blue-950 rounded-lg border border-blue-200 dark:border-blue-800">
-                <h4 className="font-medium flex items-center gap-2 text-blue-900 dark:text-blue-100">
-                  <Shield className="h-4 w-4" />
-                  Key Recommendations
-                </h4>
+                <h4 className="font-medium flex items-center gap-2 text-blue-900 dark:text-blue-100"><Shield className="h-4 w-4" />Key Recommendations</h4>
                 <ul className="mt-2 space-y-2 text-sm text-blue-800 dark:text-blue-200">
                   <li>• Focus on Structural Condition category - lowest score at 85%</li>
                   <li>• 23 pending corrective actions require attention before next inspection</li>
@@ -282,19 +281,57 @@ const PreSIREInspection: FC = () => {
               <div className="grid gap-4 md:grid-cols-2">
                 <div className="p-4 border rounded-lg">
                   <h4 className="font-medium">Risk Prediction</h4>
-                  <p className="text-sm text-muted-foreground mt-1">
-                    Based on current scores, fleet has 92% probability of passing next SIRE inspection
-                  </p>
+                  <p className="text-sm text-muted-foreground mt-1">Based on current scores, fleet has 92% probability of passing next SIRE inspection</p>
                 </div>
                 <div className="p-4 border rounded-lg">
                   <h4 className="font-medium">Trend Analysis</h4>
-                  <p className="text-sm text-muted-foreground mt-1">
-                    Overall compliance improved by 3.2% compared to previous quarter
-                  </p>
+                  <p className="text-sm text-muted-foreground mt-1">Overall compliance improved by 3.2% compared to previous quarter</p>
                 </div>
               </div>
             </CardContent>
           </Card>
+        </TabsContent>
+
+        {/* AI Disruptive Suite */}
+        <TabsContent value="sgi-evidence">
+          <Suspense fallback={<AILoader />}>
+            <ComplianceSGIAutoEvidence moduleId="pre-sire" moduleName="Pre-SIRE 2.0" />
+          </Suspense>
+        </TabsContent>
+        <TabsContent value="gap-analyzer">
+          <Suspense fallback={<AILoader />}>
+            <ComplianceGapAnalyzer moduleId="pre-sire" moduleName="Pre-SIRE 2.0" standards={["OCIMF SIRE 2.0", "VIQ 7", "CDI", "TMSA 3"]} />
+          </Suspense>
+        </TabsContent>
+        <TabsContent value="interview-sim">
+          <Suspense fallback={<AILoader />}>
+            <ComplianceInterviewSimulator moduleId="pre-sire" moduleName="Pre-SIRE 2.0" standardContext="SIRE 2.0 VIQ inspection covering Navigation, Cargo, Mooring, Safety, Pollution Prevention, Crew, Structural and Engine Room" />
+          </Suspense>
+        </TabsContent>
+        <TabsContent value="audit-prep">
+          <Suspense fallback={<AILoader />}>
+            <ComplianceOneClickAuditPrep moduleId="pre-sire" moduleName="Pre-SIRE 2.0" />
+          </Suspense>
+        </TabsContent>
+        <TabsContent value="reg-tracker">
+          <Suspense fallback={<AILoader />}>
+            <ComplianceRegulatoryChangeTracker moduleId="pre-sire" moduleName="Pre-SIRE 2.0" />
+          </Suspense>
+        </TabsContent>
+        <TabsContent value="checklist-gen">
+          <Suspense fallback={<AILoader />}>
+            <ComplianceAutoChecklistGenerator moduleId="pre-sire" moduleName="Pre-SIRE 2.0" />
+          </Suspense>
+        </TabsContent>
+        <TabsContent value="doc-crossref">
+          <Suspense fallback={<AILoader />}>
+            <ComplianceDocCrossReference moduleId="pre-sire" moduleName="Pre-SIRE 2.0" />
+          </Suspense>
+        </TabsContent>
+        <TabsContent value="timeline">
+          <Suspense fallback={<AILoader />}>
+            <ComplianceTimeline moduleId="pre-sire" moduleName="Pre-SIRE 2.0" />
+          </Suspense>
         </TabsContent>
       </Tabs>
     </ModulePageWrapper>
