@@ -9,6 +9,8 @@ import { logger } from "@/lib/logger";
 import { PurchaseOrdersManager } from '@/components/procurement/PurchaseOrdersManager';
 import { ApprovalWorkflow } from '@/components/procurement/ApprovalWorkflow';
 import { SupplierScorecard } from '@/components/procurement/SupplierScorecard';
+import { lazy, Suspense } from "react";
+const SpendAnalyticsDashboard = lazy(() => import('@/components/procurement/SpendAnalyticsDashboard'));
 import { Helmet } from "react-helmet-async";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
@@ -638,6 +640,10 @@ export default function ProcurementCommandCenter() {
               <Award className="h-4 w-4" />
               Scorecard
             </TabsTrigger>
+            <TabsTrigger value="analytics" className="gap-2">
+              <BarChart3 className="h-4 w-4" />
+              Analytics
+            </TabsTrigger>
           </TabsList>
 
           {/* OVERVIEW TAB */}
@@ -1169,6 +1175,13 @@ export default function ProcurementCommandCenter() {
           {/* SCORECARD TAB */}
           <TabsContent value="scorecard">
             <SupplierScorecard />
+          </TabsContent>
+
+          {/* ANALYTICS TAB */}
+          <TabsContent value="analytics">
+            <Suspense fallback={<div className="h-64 bg-muted animate-pulse rounded-lg" />}>
+              <SpendAnalyticsDashboard />
+            </Suspense>
           </TabsContent>
         </Tabs>
 
