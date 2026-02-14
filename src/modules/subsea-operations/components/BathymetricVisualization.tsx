@@ -252,14 +252,14 @@ export function BathymetricVisualization() {
       {/* Controls */}
       <div className="flex flex-wrap items-center gap-3">
         <div className="flex items-center gap-1">
-          <Button variant="outline" size="icon" onClick={() => setZoom(Math.max(0.5, zoom - 0.25))}>
+          <Button variant="outline" size="icon" onClick={() => setZoom(Math.max(0.5, zoom - 0.25))} aria-label="Reduzir zoom" title="Reduzir">
             <ZoomOut className="h-4 w-4" />
           </Button>
           <Badge variant="secondary">{Math.round(zoom * 100)}%</Badge>
-          <Button variant="outline" size="icon" onClick={() => setZoom(Math.min(2.5, zoom + 0.25))}>
+          <Button variant="outline" size="icon" onClick={() => setZoom(Math.min(2.5, zoom + 0.25))} aria-label="Ampliar zoom" title="Ampliar">
             <ZoomIn className="h-4 w-4" />
           </Button>
-          <Button variant="outline" size="icon" onClick={() => setZoom(1)}>
+          <Button variant="outline" size="icon" onClick={() => setZoom(1)} aria-label="Resetar zoom" title="Resetar">
             <RotateCcw className="h-4 w-4" />
           </Button>
         </div>

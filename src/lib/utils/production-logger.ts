@@ -2,6 +2,7 @@
  * Production Logger - Replaces console.log with structured logging
  * PATCH: Console Log Cleanup - Production-safe logging
  */
+import * as Sentry from '@sentry/react';
 
 type LogLevel = "debug" | "info" | "warn" | "error";
 
@@ -129,9 +130,13 @@ class ProductionLogger {
     console.error(`[ERROR] ${message}`, error, context || "");
     this.sendToRemote(entry);
 
-    // Send to Sentry if available
-    if (typeof window !== "undefined" && (window as Window & { Sentry?: { captureException: (err: Error, opts: Record<string, unknown>) => void } }).Sentry && error instanceof Error) {
-      (window as Window & { Sentry?: { captureException: (err: Error, opts: Record<string, unknown>) => void } }).Sentry!.captureException(error, { extra: context });
+    // Send to Sentry
+    if (error instanceof Error) {
+      try {
+        Sentry.captureException(error, { extra: context });
+      } catch {
+        // Sentry not initialized
+      }
     }
   }
 

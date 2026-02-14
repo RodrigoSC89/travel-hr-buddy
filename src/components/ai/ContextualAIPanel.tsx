@@ -216,6 +216,7 @@ export function ContextualAIPanel({ defaultExpanded = true, className }: Context
           onClick={() => setIsExpanded(true)}
           className="h-10 w-10"
           aria-label="Expandir painel IA"
+          title="Expandir IA"
         >
           <ChevronLeft className="h-5 w-5" />
         </Button>

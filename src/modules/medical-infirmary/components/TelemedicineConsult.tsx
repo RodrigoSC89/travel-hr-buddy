@@ -175,6 +175,8 @@ function VideoCallInterface({ doctor, onEnd }: { doctor: Doctor; onEnd: () => vo
           size="icon"
           className="h-12 w-12 rounded-full"
           onClick={() => setIsMuted(!isMuted)}
+          aria-label={isMuted ? "Ativar microfone" : "Desativar microfone"}
+          title={isMuted ? "Ativar microfone" : "Desativar microfone"}
         >
           {isMuted ? <MicOff className="h-5 w-5" /> : <Mic className="h-5 w-5" />}
         </Button>
@@ -184,6 +186,8 @@ function VideoCallInterface({ doctor, onEnd }: { doctor: Doctor; onEnd: () => vo
           size="icon"
           className="h-12 w-12 rounded-full"
           onClick={() => setIsVideoOff(!isVideoOff)}
+          aria-label={isVideoOff ? "Ativar câmera" : "Desativar câmera"}
+          title={isVideoOff ? "Ativar câmera" : "Desativar câmera"}
         >
           {isVideoOff ? <CameraOff className="h-5 w-5" /> : <Camera className="h-5 w-5" />}
         </Button>
@@ -193,6 +197,8 @@ function VideoCallInterface({ doctor, onEnd }: { doctor: Doctor; onEnd: () => vo
           size="icon"
           className="h-14 w-14 rounded-full"
           onClick={onEnd}
+          aria-label="Encerrar chamada"
+          title="Encerrar chamada"
         >
           <PhoneOff className="h-6 w-6" />
         </Button>
@@ -201,6 +207,8 @@ function VideoCallInterface({ doctor, onEnd }: { doctor: Doctor; onEnd: () => vo
           variant="outline"
           size="icon"
           className="h-12 w-12 rounded-full"
+          aria-label="Chat de texto"
+          title="Chat"
         >
           <MessageSquare className="h-5 w-5" />
         </Button>
@@ -209,6 +217,8 @@ function VideoCallInterface({ doctor, onEnd }: { doctor: Doctor; onEnd: () => vo
           variant="outline"
           size="icon"
           className="h-12 w-12 rounded-full"
+          aria-label="Compartilhar arquivo"
+          title="Arquivo"
         >
           <FileText className="h-5 w-5" />
         </Button>

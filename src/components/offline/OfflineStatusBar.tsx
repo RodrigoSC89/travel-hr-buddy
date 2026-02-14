@@ -145,6 +145,8 @@ export function OfflineStatusBar({
                   size="icon"
                   className="h-8 w-8"
                   onClick={() => triggerSync()}
+                  aria-label="Sincronizar dados"
+                  title="Sincronizar"
                 >
                   <RefreshCw className="h-4 w-4" />
                 </Button>
@@ -157,6 +159,8 @@ export function OfflineStatusBar({
                   size="icon"
                   className="h-8 w-8"
                   onClick={() => setIsExpanded(!isExpanded)}
+                  aria-label={isExpanded ? "Recolher detalhes" : "Expandir detalhes"}
+                  title={isExpanded ? "Recolher" : "Expandir"}
                 >
                   {isExpanded ? (
                     <ChevronDown className="h-4 w-4" />
@@ -173,6 +177,8 @@ export function OfflineStatusBar({
                   size="icon"
                   className="h-8 w-8"
                   onClick={() => setIsDismissed(true)}
+                  aria-label="Fechar barra offline"
+                  title="Fechar"
                 >
                   <X className="h-4 w-4" />
                 </Button>

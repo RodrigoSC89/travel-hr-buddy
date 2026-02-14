@@ -4,18 +4,13 @@
  * Production-safe logging with structured context support.
  * - Debug/info logs only appear in development
  * - Errors are always logged and sent to monitoring
- * - Sentry integration for production error tracking
+ * - Sentry integration for production error tracking (via @sentry/react)
  * - ESLint compatible
  */
+import * as Sentry from '@sentry/react';
 
 const isDevelopment = import.meta.env.DEV;
 const isProduction = import.meta.env.PROD;
-
-// Type-safe environment variable
-const getSentryDsn = (): string | undefined => {
-  const dsn = import.meta.env.VITE_SENTRY_DSN;
-  return typeof dsn === "string" ? dsn : undefined;
-};
 
 interface LogContext {
   [key: string]: unknown;
@@ -101,20 +96,14 @@ export const logger = {
     }
 
     // Send to Sentry in production
-    if (isProduction && isError(error) && typeof window !== "undefined") {
+    if (isProduction && isError(error)) {
       try {
-        const Sentry = (window as unknown as Record<string, unknown>).Sentry as { captureException?: (err: Error, opts: Record<string, unknown>) => void } | undefined;
-        if (Sentry && getSentryDsn() && typeof Sentry.captureException === "function") {
-          Sentry.captureException(error, { 
-            extra: { message, ...(context || {}) },
-            tags: { source: "logger" }
-          });
-        }
-      } catch (sentryError) {
-        // Fail silently if Sentry is not available
-        if (isDevelopment) {
-          console.warn("Failed to send error to Sentry:", String(sentryError));
-        }
+        Sentry.captureException(error, { 
+          extra: { message, ...(context || {}) },
+          tags: { source: "logger" }
+        });
+      } catch {
+        // Fail silently if Sentry is not initialized
       }
     }
   },
@@ -138,20 +127,14 @@ export const logger = {
     }
 
     // Send to Sentry in production
-    if (isProduction && isError(error) && typeof window !== "undefined") {
+    if (isProduction && isError(error)) {
       try {
-        const Sentry = (window as unknown as Record<string, unknown>).Sentry as { captureException?: (err: Error, opts: Record<string, unknown>) => void } | undefined;
-        if (Sentry && getSentryDsn() && typeof Sentry.captureException === "function") {
-          Sentry.captureException(error, { 
-            extra: { message, ...context },
-            tags: { source: "logger" }
-          });
-        }
-      } catch (sentryError) {
-        // Fail silently if Sentry is not available
-        if (isDevelopment) {
-          console.warn("Failed to send error to Sentry:", String(sentryError));
-        }
+        Sentry.captureException(error, { 
+          extra: { message, ...context },
+          tags: { source: "logger" }
+        });
+      } catch {
+        // Fail silently if Sentry is not initialized
       }
     }
   },
