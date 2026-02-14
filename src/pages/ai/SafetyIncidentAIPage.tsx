@@ -16,19 +16,19 @@ import {
 import { useSafetyIncidentAI, SafetyMetrics } from '@/hooks/useSafetyIncidentAI';
 import { supabase } from '@/integrations/supabase/client';
 
-// Fallback metrics when API is unavailable
-const FALLBACK_METRICS = {
-  ltifr: 0.42,
-  trir: 1.8,
-  nearMisses: 12,
-  safetyObservations: 156,
-  drillsCompleted: 8,
-  drillsPlanned: 10,
-  riskScore: 72,
+// Initial empty metrics - populated from Supabase/AI
+const INITIAL_METRICS: SafetyMetrics = {
+  ltifr: 0,
+  trir: 0,
+  nearMisses: 0,
+  safetyObservations: 0,
+  drillsCompleted: 0,
+  drillsPlanned: 0,
+  riskScore: 0,
   period: 'month',
-  trainingHours: 240,
-  inspectionsCompleted: 45,
-  openActions: 8,
+  trainingHours: 0,
+  inspectionsCompleted: 0,
+  openActions: 0,
   trend: 'improving' as const
 };
 
@@ -42,7 +42,7 @@ export default function SafetyIncidentAIPage() {
   } = useSafetyIncidentAI();
   
   const [activeTab, setActiveTab] = useState('overview');
-  const [metrics, setMetrics] = useState<SafetyMetrics>(FALLBACK_METRICS);
+  const [metrics, setMetrics] = useState<SafetyMetrics>(INITIAL_METRICS);
   const [incidents, setIncidents] = useState<Array<{ id: string; title: string; severity: string; date: string; status: string }>>([]);
   const [loadingData, setLoadingData] = useState(true);
 
@@ -72,21 +72,9 @@ export default function SafetyIncidentAIPage() {
             date: new Date(i.created_at).toISOString().split('T')[0],
             status: i.status || 'investigating'
           })));
-        } else {
-          // Fallback incidents
-          setIncidents([
-            { id: '1', title: 'Near Miss - Crane Operation', severity: 'medium', date: '2024-01-28', status: 'investigating' },
-            { id: '2', title: 'Minor Injury - Slip on Deck', severity: 'low', date: '2024-01-25', status: 'closed' },
-            { id: '3', title: 'Equipment Damage - Winch', severity: 'high', date: '2024-01-20', status: 'resolved' },
-          ]);
         }
       } catch {
-        // Use fallback data
-        setIncidents([
-          { id: '1', title: 'Near Miss - Crane Operation', severity: 'medium', date: '2024-01-28', status: 'investigating' },
-          { id: '2', title: 'Minor Injury - Slip on Deck', severity: 'low', date: '2024-01-25', status: 'closed' },
-          { id: '3', title: 'Equipment Damage - Winch', severity: 'high', date: '2024-01-20', status: 'resolved' },
-        ]);
+        // Empty state on error - no fake data
       } finally {
         setLoadingData(false);
       }

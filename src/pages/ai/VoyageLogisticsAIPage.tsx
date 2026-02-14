@@ -17,18 +17,6 @@ import {
 import { useVoyageLogisticsAI } from '@/hooks/useVoyageLogisticsAI';
 import { supabase } from '@/integrations/supabase/client';
 
-// Fallback data when database is empty
-const FALLBACK_VOYAGES = [
-  { id: '1', vessel: 'MV Nautilus Star', origin: 'Santos', destination: 'Rotterdam', status: 'in_progress', eta: '2024-02-15', progress: 65 },
-  { id: '2', vessel: 'MV Ocean Pride', origin: 'Singapore', destination: 'Los Angeles', status: 'planned', eta: '2024-03-01', progress: 0 },
-  { id: '3', vessel: 'MV Atlantic Voyager', origin: 'Hamburg', destination: 'Shanghai', status: 'in_progress', eta: '2024-02-20', progress: 42 },
-];
-
-const FALLBACK_PORT_CALLS = [
-  { port: 'Rotterdam', vessel: 'MV Nautilus Star', arrival: '2024-02-15 08:00', operations: ['Unloading', 'Bunkering'], status: 'scheduled' },
-  { port: 'Singapore', vessel: 'MV Pacific Dream', arrival: '2024-02-10 14:00', operations: ['Loading'], status: 'in_progress' },
-];
-
 export default function VoyageLogisticsAIPage() {
   const { 
     isLoading, 
@@ -39,10 +27,10 @@ export default function VoyageLogisticsAIPage() {
   } = useVoyageLogisticsAI();
   
   const [activeTab, setActiveTab] = useState('routes');
-  const [voyages, setVoyages] = useState(FALLBACK_VOYAGES);
-  const [portCalls, setPortCalls] = useState(FALLBACK_PORT_CALLS);
+  const [voyages, setVoyages] = useState<{ id: string; vessel: string; origin: string; destination: string; status: string; eta: string; progress: number }[]>([]);
+  const [portCalls, setPortCalls] = useState<{ port: string; vessel: string; arrival: string; operations: string[]; status: string }[]>([]);
   const [loadingData, setLoadingData] = useState(true);
-  const [stats, setStats] = useState({ activeVoyages: 12, arrivingToday: 3, portCallsWeek: 8 });
+  const [stats, setStats] = useState({ activeVoyages: 0, arrivingToday: 0, portCallsWeek: 0 });
 
   // Load real data from database
   useEffect(() => {
@@ -88,7 +76,7 @@ export default function VoyageLogisticsAIPage() {
           })));
         }
       } catch {
-        // Use fallback data on error
+        // Empty state on error - no fake data
       } finally {
         setLoadingData(false);
       }
@@ -126,8 +114,8 @@ export default function VoyageLogisticsAIPage() {
               <CardTitle className="text-sm font-medium">Viagens Ativas</CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold">12</div>
-              <p className="text-xs text-muted-foreground">3 chegando hoje</p>
+              <div className="text-2xl font-bold">{stats.activeVoyages}</div>
+              <p className="text-xs text-muted-foreground">{stats.arrivingToday} chegando hoje</p>
             </CardContent>
           </Card>
           <Card>
@@ -135,7 +123,7 @@ export default function VoyageLogisticsAIPage() {
               <CardTitle className="text-sm font-medium">Port Calls</CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold">8</div>
+              <div className="text-2xl font-bold">{stats.portCallsWeek}</div>
               <p className="text-xs text-muted-foreground">Próximos 7 dias</p>
             </CardContent>
           </Card>

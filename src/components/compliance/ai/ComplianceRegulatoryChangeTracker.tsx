@@ -73,18 +73,7 @@ const mapRegulationToChange = (reg: {
   status: mapStatus(reg.status),
 });
 
-const FALLBACK_CHANGES: RegulatoryChange[] = [
-  {
-    id: "fallback-1",
-    source: "IMO MEPC 83",
-    title: "Sem dados disponíveis — verifique a conexão",
-    description: "Não foi possível carregar mudanças regulatórias do banco de dados.",
-    effectiveDate: new Date().toISOString().split("T")[0],
-    impactLevel: "low",
-    affectedAreas: ["Sistema"],
-    status: "new",
-  },
-];
+const EMPTY_CHANGES: RegulatoryChange[] = [];
 
 export function ComplianceRegulatoryChangeTracker({
   moduleId,
@@ -95,7 +84,7 @@ export function ComplianceRegulatoryChangeTracker({
   const [impactAnalysis, setImpactAnalysis] = useState<string>("");
   const [isAnalyzing, setIsAnalyzing] = useState(false);
 
-  const { data: changes = FALLBACK_CHANGES, isLoading: isLoadingData } = useQuery({
+  const { data: changes = EMPTY_CHANGES, isLoading: isLoadingData } = useQuery({
     queryKey: ["regulatory-changes", moduleId],
     queryFn: async () => {
       const { data, error } = await supabase
@@ -106,10 +95,10 @@ export function ComplianceRegulatoryChangeTracker({
 
       if (error) {
         logger.warn("Failed to fetch maritime_regulations", { error: error.message });
-        return FALLBACK_CHANGES;
+        return EMPTY_CHANGES;
       }
 
-      if (!data || data.length === 0) return FALLBACK_CHANGES;
+      if (!data || data.length === 0) return EMPTY_CHANGES;
       return data.map(mapRegulationToChange);
     },
     staleTime: 5 * 60 * 1000,
