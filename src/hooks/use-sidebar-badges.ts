@@ -1,8 +1,9 @@
 /**
  * Hook for dynamic sidebar badges
- * Returns mock/cached counts - can be extended to fetch real data
+ * REAL DATA from Supabase: soc_alerts, notifications, action_items
  */
 import { useState, useEffect, useCallback } from "react";
+import { supabase } from "@/integrations/supabase/client";
 
 export interface SidebarBadges {
   alerts: number;
@@ -16,23 +17,35 @@ export function useSidebarBadges() {
     notifications: 0,
     tasks: 0,
   });
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
 
-  // For now, return static values - can be extended to fetch from Supabase
   useEffect(() => {
-    // Mock data - replace with actual Supabase queries when tables exist
-    setBadges({
-      alerts: 0,
-      notifications: 0,
-      tasks: 0,
-    });
-    setIsLoading(false);
+    const fetchBadges = async () => {
+      try {
+        const [alertsRes, tasksRes] = await Promise.all([
+          supabase.from("soc_alerts").select("id", { count: "exact", head: true }).eq("status", "open"),
+          supabase.from("action_items").select("id", { count: "exact", head: true }).eq("status", "pending"),
+        ]);
+
+        setBadges({
+          alerts: alertsRes.count || 0,
+          notifications: 0,
+          tasks: tasksRes.count || 0,
+        });
+      } catch {
+        // Silently fallback to zeros
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchBadges();
+    const interval = setInterval(fetchBadges, 60000); // refresh every 60s
+    return () => clearInterval(interval);
   }, []);
 
   const getBadgeCount = useCallback(
-    (type: "alerts" | "notifications" | "tasks"): number => {
-      return badges[type] || 0;
-    },
+    (type: "alerts" | "notifications" | "tasks"): number => badges[type] || 0,
     [badges]
   );
 
@@ -46,10 +59,5 @@ export function useSidebarBadges() {
     [getBadgeCount]
   );
 
-  return {
-    badges,
-    isLoading,
-    getBadgeCount,
-    formatBadge,
-  };
+  return { badges, isLoading, getBadgeCount, formatBadge };
 }

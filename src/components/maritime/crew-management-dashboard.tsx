@@ -91,28 +91,24 @@ export const CrewManagementDashboard = () => {
 
       setCrewMembers(transformedCrew);
 
-      // Mock assignments data
-      const mockAssignments: CrewAssignment[] = [
-        {
-          id: "1",
-          crew_member_name: "João Silva",
-          vessel_name: "MV Atlantic Explorer",
-          position: "Capitão",
-          start_date: "2024-01-15",
-          status: "active"
-        },
-        {
-          id: "2",
-          crew_member_name: "Maria Santos",
-          vessel_name: "MS Ocean Pioneer",
-          position: "Imediato",
-          start_date: "2024-02-01",
-          end_date: "2024-06-01",
-          status: "scheduled"
-        }
-      ];
+      // Load real assignments from crew_assignments table
+      const { data: assignData } = await supabase
+        .from("crew_assignments")
+        .select("*, crew_members(full_name), vessels(name)")
+        .order("start_date", { ascending: false })
+        .limit(20);
 
-      setAssignments(mockAssignments);
+      const realAssignments: CrewAssignment[] = (assignData || []).map((a: any) => ({
+        id: a.id,
+        crew_member_name: a.crew_members?.full_name || "N/A",
+        vessel_name: a.vessels?.name || "N/A",
+        position: a.position || a.role || "N/A",
+        start_date: a.start_date || "",
+        end_date: a.end_date,
+        status: a.status === "active" ? "active" : a.status === "completed" ? "completed" : "scheduled",
+      }));
+
+      setAssignments(realAssignments);
     } catch (error) {
       toast({
         title: "Erro",
