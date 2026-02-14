@@ -22,7 +22,15 @@ import { ProactiveComplianceMonitor } from "@/components/compliance/ProactiveCom
 import { ComplianceVoiceChat } from "@/components/compliance/ComplianceVoiceChat";
 import { CompliancePredictiveAI } from "@/components/compliance/CompliancePredictiveAI";
 import { ComplianceEvidenceGenerator } from "@/components/compliance/ComplianceEvidenceGenerator";
-import { ComplianceSGIAutoEvidence, ComplianceGapAnalyzer, ComplianceInterviewSimulator, ComplianceOneClickAuditPrep } from "@/components/compliance/ai";
+import { 
+  ComplianceSGIAutoEvidence, 
+  ComplianceGapAnalyzer, 
+  ComplianceInterviewSimulator, 
+  ComplianceOneClickAuditPrep,
+  ComplianceScoreBenchmark,
+  ComplianceAutoNCResolver,
+  CompliancePhotoEvidenceAI
+} from "@/components/compliance/ai";
 import { useMaritimeActions } from "@/hooks/useMaritimeActions";
 import { toast } from "sonner";
 import {
@@ -203,6 +211,18 @@ const ISMCodePage = () => {
           <TabsTrigger value="ai-predictive" className="gap-2">
             <TrendingUp className="h-4 w-4" />
             IA Preditiva
+          </TabsTrigger>
+          <TabsTrigger value="ai-benchmark" className="gap-2">
+            <BarChart3 className="h-4 w-4" />
+            Benchmarking
+          </TabsTrigger>
+          <TabsTrigger value="ai-nc-resolver" className="gap-2">
+            <AlertTriangle className="h-4 w-4" />
+            NC Resolver
+          </TabsTrigger>
+          <TabsTrigger value="ai-photo" className="gap-2">
+            <Search className="h-4 w-4" />
+            Foto IA
           </TabsTrigger>
         </TabsList>
 

@@ -6,3 +6,7 @@ export { ComplianceRegulatoryChangeTracker } from "./ComplianceRegulatoryChangeT
 export { ComplianceAutoChecklistGenerator } from "./ComplianceAutoChecklistGenerator";
 export { ComplianceDocCrossReference } from "./ComplianceDocCrossReference";
 export { ComplianceTimeline } from "./ComplianceTimeline";
+export { ComplianceScoreBenchmark } from "./ComplianceScoreBenchmark";
+export { ComplianceAutoNCResolver } from "./ComplianceAutoNCResolver";
+export { CompliancePhotoEvidenceAI } from "./CompliancePhotoEvidenceAI";
+export { CompliancePSCRiskPredictor } from "./CompliancePSCRiskPredictor";
