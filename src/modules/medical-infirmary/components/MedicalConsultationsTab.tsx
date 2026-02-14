@@ -49,6 +49,8 @@ import { motion, AnimatePresence } from "framer-motion";
 import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
 import { ConsultationWizard } from "./ConsultationWizard";
+import { supabase } from "@/integrations/supabase/client";
+import { useQuery } from "@tanstack/react-query";
 
 interface Consultation {
   id: string;
@@ -75,64 +77,67 @@ interface Consultation {
   notes?: string;
 }
 
-// Fallback data
-const fallbackConsultations: Consultation[] = [
-  {
-    id: "1",
-    patient_name: "João Silva",
-    patient_role: "Marinheiro",
-    date: "2024-01-15",
-    time: "08:30",
-    chief_complaint: "Dor de cabeça persistente",
-    symptoms: ["Cefaleia", "Náusea leve", "Fotofobia"],
-    vital_signs: { temperature: 37.2, blood_pressure: "130/85", heart_rate: 78, oxygen_saturation: 98 },
-    diagnosis: "Cefaleia tensional",
-    treatment: "Repouso, hidratação, analgésico",
-    medications_prescribed: ["Paracetamol 500mg 8/8h"],
-    follow_up_required: true,
-    follow_up_date: "2024-01-17",
-    severity: "low",
-    status: "completed",
-    attending_officer: "Of. Médico Carlos",
-    notes: "Paciente orientado a retornar se sintomas persistirem",
-  },
-  {
-    id: "2",
-    patient_name: "Pedro Costa",
-    patient_role: "Cozinheiro",
-    date: "2024-01-14",
-    time: "14:15",
-    chief_complaint: "Queimadura no braço",
-    symptoms: ["Queimadura de 2º grau", "Dor local", "Edema"],
-    vital_signs: { temperature: 36.8, blood_pressure: "120/80", heart_rate: 88, oxygen_saturation: 99 },
-    diagnosis: "Queimadura térmica 2º grau em antebraço direito",
-    treatment: "Curativo oclusivo, analgesia, profilaxia antitetânica",
-    medications_prescribed: ["Dipirona 1g 6/6h", "Sulfadiazina de prata tópica"],
-    follow_up_required: true,
-    follow_up_date: "2024-01-16",
-    severity: "medium",
-    status: "follow_up",
-    attending_officer: "Of. Médico Carlos",
-    notes: "Curativo deve ser trocado diariamente",
-  },
-  {
-    id: "3",
-    patient_name: "Maria Santos",
-    patient_role: "Oficial de Convés",
-    date: "2024-01-14",
-    time: "10:00",
-    chief_complaint: "Mal estar e tontura",
-    symptoms: ["Tontura", "Palidez", "Hipotensão"],
-    vital_signs: { temperature: 36.5, blood_pressure: "100/60", heart_rate: 92, oxygen_saturation: 97 },
-    diagnosis: "Hipotensão ortostática - desidratação",
-    treatment: "Hidratação oral intensiva, repouso",
-    medications_prescribed: ["Soro de reidratação oral"],
-    follow_up_required: false,
-    severity: "medium",
-    status: "completed",
-    attending_officer: "Of. Médico Carlos",
-  },
-];
+// Real data hook
+function useMedicalConsultations() {
+  return useQuery({
+    queryKey: ["medical-consultations"],
+    queryFn: async (): Promise<Consultation[]> => {
+      const { data, error } = await (supabase.from as Function)("medical_consultations")
+        .select("*")
+        .order("created_at", { ascending: false })
+        .limit(100);
+
+      if (error || !data || data.length === 0) {
+        // Try medical_records as fallback source
+        const { data: records } = await supabase
+          .from("medical_records")
+          .select("*")
+          .order("created_at", { ascending: false })
+          .limit(50);
+
+        return (records || []).map((r: Record<string, unknown>) => ({
+          id: String(r.id),
+          patient_name: String(r.patient_name || r.crew_member_id || "Paciente"),
+          patient_role: String(r.department || "Tripulante"),
+          date: String(r.record_date || r.created_at || new Date().toISOString()).slice(0, 10),
+          time: String(r.created_at || "").slice(11, 16) || "00:00",
+          chief_complaint: String(r.chief_complaint || r.diagnosis || "Consulta de rotina"),
+          symptoms: Array.isArray(r.symptoms) ? r.symptoms.map(String) : [],
+          vital_signs: typeof r.vital_signs === "object" && r.vital_signs ? r.vital_signs as Consultation["vital_signs"] : {},
+          diagnosis: String(r.diagnosis || ""),
+          treatment: String(r.treatment || r.prescription || ""),
+          medications_prescribed: Array.isArray(r.medications) ? r.medications.map(String) : [],
+          follow_up_required: Boolean(r.follow_up_required || r.follow_up_date),
+          follow_up_date: r.follow_up_date ? String(r.follow_up_date) : undefined,
+          severity: (["low", "medium", "high", "critical"].includes(String(r.severity || "")) ? String(r.severity) : "low") as Consultation["severity"],
+          status: (["pending", "in_progress", "completed", "follow_up"].includes(String(r.status || "")) ? String(r.status) : "completed") as Consultation["status"],
+          attending_officer: String(r.attending_physician || r.doctor_name || "Oficial Médico"),
+          notes: r.notes ? String(r.notes) : undefined,
+        }));
+      }
+
+      return data.map((r: Record<string, unknown>) => ({
+        id: String(r.id),
+        patient_name: String(r.patient_name || "Paciente"),
+        patient_role: String(r.patient_role || "Tripulante"),
+        date: String(r.consultation_date || r.created_at || "").slice(0, 10),
+        time: String(r.consultation_time || String(r.created_at || "").slice(11, 16) || "00:00"),
+        chief_complaint: String(r.chief_complaint || ""),
+        symptoms: Array.isArray(r.symptoms) ? r.symptoms.map(String) : [],
+        vital_signs: typeof r.vital_signs === "object" && r.vital_signs ? r.vital_signs as Consultation["vital_signs"] : {},
+        diagnosis: String(r.diagnosis || ""),
+        treatment: String(r.treatment || ""),
+        medications_prescribed: Array.isArray(r.medications_prescribed) ? r.medications_prescribed.map(String) : [],
+        follow_up_required: Boolean(r.follow_up_required),
+        follow_up_date: r.follow_up_date ? String(r.follow_up_date) : undefined,
+        severity: (["low", "medium", "high", "critical"].includes(String(r.severity || "")) ? String(r.severity) : "low") as Consultation["severity"],
+        status: (["pending", "in_progress", "completed", "follow_up"].includes(String(r.status || "")) ? String(r.status) : "completed") as Consultation["status"],
+        attending_officer: String(r.attending_officer || "Oficial Médico"),
+        notes: r.notes ? String(r.notes) : undefined,
+      }));
+    },
+  });
+}
 
 const severityColors = {
   low: "bg-success/10 text-success border-success/30",
@@ -149,7 +154,9 @@ const statusLabels = {
 };
 
 export default function MedicalConsultationsTab() {
-  const [consultations, setConsultations] = useState<Consultation[]>(fallbackConsultations);
+  const { data: dbConsultations = [] } = useMedicalConsultations();
+  const [localConsultations, setLocalConsultations] = useState<Consultation[]>([]);
+  const consultations = [...localConsultations, ...dbConsultations];
   const [searchQuery, setSearchQuery] = useState("");
   const [statusFilter, setStatusFilter] = useState<string>("all");
   const [showWizard, setShowWizard] = useState(false);
@@ -179,7 +186,7 @@ export default function MedicalConsultationsTab() {
       time: format(new Date(), "HH:mm"),
       status: "completed",
     };
-    setConsultations((prev) => [newConsultation, ...prev]);
+    setLocalConsultations((prev) => [newConsultation, ...prev]);
     setShowWizard(false);
     toast.success("Atendimento registrado com sucesso!");
   };
