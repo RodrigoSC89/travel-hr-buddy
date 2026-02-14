@@ -141,7 +141,8 @@ export default defineConfig(({ mode }) => ({
   esbuild: {
     target: "esnext",
     legalComments: "none",
-    // Drop console.log in production (keep warn/error)
+    // Drop debugger in production, tree-shake console.log/debug/info (keep warn/error)
     drop: mode === "production" ? ["debugger"] : [],
+    pure: mode === "production" ? ["console.log", "console.debug", "console.info"] : [],
   },
 }));
