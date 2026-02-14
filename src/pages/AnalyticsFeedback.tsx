@@ -110,7 +110,7 @@ export default function AnalyticsFeedback() {
             <Card>
               <CardHeader><CardTitle>Enviar Feedback</CardTitle><CardDescription>Sua opinião nos ajuda a melhorar</CardDescription></CardHeader>
               <CardContent className="space-y-6">
-                <RadioGroup value={feedbackType} onValueChange={(v) => setFeedbackType(v as any)} className="flex gap-4">
+                <RadioGroup value={feedbackType} onValueChange={(v) => setFeedbackType(v as 'feedback' | 'bug' | 'feature')} className="flex gap-4">
                   <div className="flex items-center space-x-2"><RadioGroupItem value="feedback" id="feedback" /><Label htmlFor="feedback">Feedback</Label></div>
                   <div className="flex items-center space-x-2"><RadioGroupItem value="bug" id="bug" /><Label htmlFor="bug">Bug</Label></div>
                   <div className="flex items-center space-x-2"><RadioGroupItem value="feature" id="feature" /><Label htmlFor="feature">Sugestão</Label></div>

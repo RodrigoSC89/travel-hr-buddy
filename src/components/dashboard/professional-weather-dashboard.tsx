@@ -133,7 +133,7 @@ export function ProfessionalWeatherDashboard() {
           const Icon = alert.icon;
           const colorMap: Record<string, string> = { orange: "border-warning/30 bg-warning/5", blue: "border-info/30 bg-info/5", red: "border-destructive/30 bg-destructive/5" };
           return (
-            <Card key={index} className={`border ${colorMap[alert.color] || colorMap.blue}`}>
+            <Card key={`alert-${alert.message.slice(0, 20)}-${index}`} className={`border ${colorMap[alert.color] || colorMap.blue}`}>
               <CardContent className="pt-6">
                 <div className="flex items-start gap-3">
                   <div className={`p-2 rounded-lg ${alert.color === "orange" ? "bg-warning/10 text-warning" : alert.color === "red" ? "bg-destructive/10 text-destructive" : "bg-info/10 text-info"}`}>

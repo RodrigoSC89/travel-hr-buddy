@@ -477,7 +477,7 @@ export default function NotificationCenterProfessional() {
           <div className="flex items-center gap-2 flex-wrap">
             <Tooltip>
               <TooltipTrigger asChild>
-                <Button variant="outline" size="icon" onClick={handleRefresh} disabled={isRefreshing}>
+                <Button variant="outline" size="icon" onClick={handleRefresh} disabled={isRefreshing} aria-label="Atualizar notificações" title="Atualizar">
                   <RefreshCw className={`h-4 w-4 ${isRefreshing ? 'animate-spin' : ''}`} />
                 </Button>
               </TooltipTrigger>
@@ -486,7 +486,7 @@ export default function NotificationCenterProfessional() {
 
             <Tooltip>
               <TooltipTrigger asChild>
-                <Button variant="outline" size="icon" onClick={() => { setIsAiDialogOpen(true); handleAiAnalysis(); }}>
+                <Button variant="outline" size="icon" onClick={() => { setIsAiDialogOpen(true); handleAiAnalysis(); }} aria-label="Análise IA" title="Análise IA">
                   <Sparkles className="h-4 w-4" />
                 </Button>
               </TooltipTrigger>
@@ -739,7 +739,7 @@ export default function NotificationCenterProfessional() {
 
                               <DropdownMenu>
                                 <DropdownMenuTrigger asChild onClick={(e) => e.stopPropagation()}>
-                                  <Button variant="ghost" size="icon" className="h-8 w-8">
+                                  <Button variant="ghost" size="icon" className="h-8 w-8" aria-label="Mais opções" title="Mais opções">
                                     <MoreVertical className="h-4 w-4" />
                                   </Button>
                                 </DropdownMenuTrigger>

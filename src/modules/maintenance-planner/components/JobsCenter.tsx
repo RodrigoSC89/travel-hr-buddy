@@ -141,6 +141,7 @@ export const JobsCenter: React.FC<JobsCenterProps> = ({ onCreateJob }) => {
                 variant={viewMode === "grid" ? "secondary" : "ghost"}
                 size="icon"
                 onClick={() => setViewMode("grid")}
+                aria-label="Visualização em grade" title="Grade"
               >
                 <LayoutGrid className="h-4 w-4" />
               </Button>
@@ -148,6 +149,7 @@ export const JobsCenter: React.FC<JobsCenterProps> = ({ onCreateJob }) => {
                 variant={viewMode === "list" ? "secondary" : "ghost"}
                 size="icon"
                 onClick={() => setViewMode("list")}
+                aria-label="Visualização em lista" title="Lista"
               >
                 <List className="h-4 w-4" />
               </Button>

@@ -110,8 +110,8 @@ export function HRTurnoverPrediction() {
               </div>
               {expandedEmployee === prediction.id && (
                 <div className="mt-4 pt-4 border-t space-y-4">
-                  <div className="p-3 rounded-lg bg-destructive/5 border border-destructive/20"><h4 className="text-sm font-medium text-destructive mb-2 flex items-center gap-2"><AlertTriangle className="h-4 w-4" />Fatores de Risco</h4><ul className="space-y-1">{(prediction.factors || []).map((f: string, i: number) => <li key={i} className="text-sm">• {f}</li>)}</ul></div>
-                  <div className="p-3 rounded-lg bg-success/5 border border-success/20"><h4 className="text-sm font-medium text-success mb-2 flex items-center gap-2"><Target className="h-4 w-4" />Ações Recomendadas</h4><ul className="space-y-1">{(prediction.actions || []).map((a: string, i: number) => <li key={i} className="text-sm">{i + 1}. {a}</li>)}</ul></div>
+                  <div className="p-3 rounded-lg bg-destructive/5 border border-destructive/20"><h4 className="text-sm font-medium text-destructive mb-2 flex items-center gap-2"><AlertTriangle className="h-4 w-4" />Fatores de Risco</h4><ul className="space-y-1">{(prediction.factors || []).map((f: string) => <li key={f} className="text-sm">• {f}</li>)}</ul></div>
+                  <div className="p-3 rounded-lg bg-success/5 border border-success/20"><h4 className="text-sm font-medium text-success mb-2 flex items-center gap-2"><Target className="h-4 w-4" />Ações Recomendadas</h4><ul className="space-y-1">{(prediction.actions || []).map((a: string, actionIdx: number) => <li key={a} className="text-sm">{actionIdx + 1}. {a}</li>)}</ul></div>
                 </div>
               )}
             </CardContent>

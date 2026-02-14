@@ -325,6 +325,7 @@ export default function Payroll() {
                                 variant="ghost"
                                 size="icon"
                                 onClick={() => setSelectedEmployee(calc)}
+                                aria-label="Ver detalhes" title="Ver detalhes"
                               >
                                 <Eye className="h-4 w-4" />
                               </Button>
@@ -332,6 +333,7 @@ export default function Payroll() {
                                 variant="ghost"
                                 size="icon"
                                 onClick={() => handleGeneratePayslip(calc)}
+                                aria-label="Gerar contracheque" title="Gerar contracheque"
                               >
                                 <FileText className="h-4 w-4" />
                               </Button>

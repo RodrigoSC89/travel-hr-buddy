@@ -262,9 +262,9 @@ export function PeotramElementChecklist({
                                 <div>
                                   <p className="text-xs font-semibold text-muted-foreground mb-1">Fotos de Evidência:</p>
                                   <div className="flex gap-2 flex-wrap">
-                                    {state.photos.map((url, i) => (
-                                      <a key={i} href={url} target="_blank" rel="noopener noreferrer">
-                                        <img src={url} alt={`Evidência ${i + 1}`} className="w-16 h-16 object-cover rounded border hover:opacity-80 transition-opacity" />
+                                    {state.photos.map((url, photoIdx) => (
+                                      <a key={url} href={url} target="_blank" rel="noopener noreferrer">
+                                        <img src={url} alt={`Evidência ${photoIdx + 1}`} className="w-16 h-16 object-cover rounded border hover:opacity-80 transition-opacity" />
                                       </a>
                                     ))}
                                   </div>

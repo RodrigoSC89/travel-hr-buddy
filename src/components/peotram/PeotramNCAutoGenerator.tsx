@@ -327,16 +327,16 @@ Auditor: ${auditorName || "N/A"}`
                     {selected.correctiveActions.length > 0 && (
                       <div>
                         <p className="font-semibold mb-1 flex items-center gap-1"><XCircle className="h-3 w-3 text-destructive" /> Ações Corretivas:</p>
-                        <ul className="space-y-1">{selected.correctiveActions.map((a, i) => (
-                          <li key={i} className="text-muted-foreground flex items-start gap-1"><ArrowRight className="h-3 w-3 shrink-0 mt-0.5" />{a}</li>
+                        <ul className="space-y-1">{selected.correctiveActions.map((a) => (
+                          <li key={a} className="text-muted-foreground flex items-start gap-1"><ArrowRight className="h-3 w-3 shrink-0 mt-0.5" />{a}</li>
                         ))}</ul>
                       </div>
                     )}
                     {selected.preventiveActions.length > 0 && (
                       <div>
                         <p className="font-semibold mb-1 flex items-center gap-1"><CheckCircle className="h-3 w-3 text-success" /> Ações Preventivas:</p>
-                        <ul className="space-y-1">{selected.preventiveActions.map((a, i) => (
-                          <li key={i} className="text-muted-foreground flex items-start gap-1"><ArrowRight className="h-3 w-3 shrink-0 mt-0.5" />{a}</li>
+                        <ul className="space-y-1">{selected.preventiveActions.map((a) => (
+                          <li key={a} className="text-muted-foreground flex items-start gap-1"><ArrowRight className="h-3 w-3 shrink-0 mt-0.5" />{a}</li>
                         ))}</ul>
                       </div>
                     )}
