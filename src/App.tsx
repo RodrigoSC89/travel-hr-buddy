@@ -12,7 +12,6 @@ import { BrowserRouter as Router } from "react-router-dom";
 import { QueryClientProvider, QueryClient } from "@tanstack/react-query";
 import { Toaster, toast } from "sonner";
 import { AuthProvider } from "./contexts/AuthContext";
-import { DemoProvider } from "./contexts/DemoContext";
 import { TooltipProvider } from "./components/ui/tooltip";
 import { ThemeProvider } from "./components/layout/theme-provider";
 import { LazyLoadErrorBoundary } from "@/components/error/LazyLoadErrorBoundary";
@@ -75,20 +74,18 @@ function App() {
     <QueryClientProvider client={queryClient}>
       <ThemeProvider defaultTheme="dark" storageKey="nautilus-ui-theme">
         <AuthProvider>
-          <DemoProvider>
-            <Router>
+          <Router>
             <TooltipProvider>
-               <LazyLoadErrorBoundary>
+              <LazyLoadErrorBoundary>
                 <main id="main-content" role="main">
                   <Suspense fallback={<AppLoader />}>
                     <AppRoutes />
                   </Suspense>
                 </main>
-               </LazyLoadErrorBoundary>
+              </LazyLoadErrorBoundary>
               <Toaster />
             </TooltipProvider>
-            </Router>
-          </DemoProvider>
+          </Router>
         </AuthProvider>
       </ThemeProvider>
     </QueryClientProvider>

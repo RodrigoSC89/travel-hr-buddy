@@ -5,26 +5,21 @@
 import * as React from "react";
 import { Navigate } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
-import { useDemoMode } from "@/contexts/DemoContext";
 import { AppLoader } from "./AppLoader";
 
 export const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
   const { user, isLoading } = useAuth();
-  const { isDemoMode } = useDemoMode();
   const [showLoader, setShowLoader] = React.useState(false);
   
   React.useEffect(() => {
     let timeout: ReturnType<typeof setTimeout>;
-    if (isLoading && !isDemoMode) {
+    if (isLoading) {
       timeout = setTimeout(() => setShowLoader(true), 300);
     } else {
       setShowLoader(false);
     }
     return () => clearTimeout(timeout);
-  }, [isLoading, isDemoMode]);
-  
-  // Demo mode bypasses authentication
-  if (isDemoMode) return <>{children}</>;
+  }, [isLoading]);
   
   if (isLoading) {
     if (showLoader) return <AppLoader />;
