@@ -40,13 +40,43 @@ import { useQuery } from '@tanstack/react-query';
 import { useNautilusPeopleAI } from '../hooks/useNautilusPeopleAI';
 import type { Avaliacao, OKR, NineBoxPosition } from '../types';
 
-// Fetch evaluations - returns empty array as placeholder until real data exists
+// Fetch evaluations from crew_performance_reviews
 function useAvaliacoes() {
   return useQuery({
     queryKey: ['performance-avaliacoes'],
     queryFn: async (): Promise<Avaliacao[]> => {
-      // crew_performance table has different schema - return empty for now
-      return [];
+      const { data } = await (supabase.from as Function)("crew_performance_reviews")
+        .select("*, crew_members(full_name, rank, department)")
+        .order("review_date", { ascending: false })
+        .limit(50);
+
+      if (!data || data.length === 0) return [];
+
+      return (data as Array<Record<string, unknown>>).map((r) => {
+        const crew = r.crew_members as Record<string, unknown> | null;
+        const goals = Array.isArray(r.goals) ? r.goals : [];
+        const crewId = String(r.crew_member_id || r.id);
+        return {
+          id: String(r.id),
+          colaboradorId: crewId,
+          colaborador: String(crew?.full_name || r.reviewer_name || "Colaborador"),
+          cargo: String(crew?.rank || "Tripulante"),
+          departamento: String(crew?.department || "Operações"),
+          ciclo: String(r.review_period || "Q4 2025"),
+          status: r.status === "completed" ? "concluida" as const : r.status === "in_progress" ? "em_andamento" as const : "pendente" as const,
+          nota: Number(r.overall_score) || 0,
+          autoAvaliacao: Number(r.self_score || r.overall_score) || 0,
+          avaliacaoGestor: Number(r.manager_score || r.overall_score) || 0,
+          feedback360: Number(r.peer_score || r.overall_score) || 0,
+          metas: (goals as Array<Record<string, unknown>>).map((g, i) => ({
+            id: String(g.id || `goal-${i}`),
+            titulo: String(g.title || g.description || `Meta ${i + 1}`),
+            progresso: Number(g.progress || 0),
+            peso: Number(g.weight || g.peso || 1),
+            status: String(g.status || "em_andamento") as "pendente" | "em_andamento" | "concluida",
+          })),
+        };
+      });
     }
   });
 }

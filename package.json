@@ -146,6 +146,7 @@
     "@types/qrcode.react": "^1.0.5",
     "@types/react-signature-canvas": "^1.0.7",
     "@types/react-window": "^1.8.8",
+    "@types/three": "^0.182.0",
     "ai": "^5.0.76",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",

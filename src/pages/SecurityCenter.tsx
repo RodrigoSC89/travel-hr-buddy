@@ -163,13 +163,37 @@ export default function SecurityCenter() {
   const metrics = DEFAULT_METRICS;
 
   useEffect(() => {
-    // Generate static activity data (honest: no real-time source yet)
-    const data = Array.from({ length: 24 }, (_, i) => ({
-      time: `${String(i).padStart(2, "0")}:00`,
-      requests: 0,
-      threats: 0
-    }));
-    setActivityData(data);
+    // Fetch real activity data from access_logs grouped by hour
+    async function fetchActivityData() {
+      const { data: logs } = await supabase
+        .from("access_logs")
+        .select("timestamp, severity")
+        .gte("timestamp", new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString())
+        .order("timestamp", { ascending: true });
+
+      const hourBuckets: Record<string, { requests: number; threats: number }> = {};
+      for (let i = 0; i < 24; i++) {
+        hourBuckets[String(i).padStart(2, "0")] = { requests: 0, threats: 0 };
+      }
+
+      (logs || []).forEach((log: { timestamp: string; severity: string }) => {
+        const hour = new Date(log.timestamp).getHours().toString().padStart(2, "0");
+        if (hourBuckets[hour]) {
+          hourBuckets[hour].requests++;
+          if (["warning", "error", "critical"].includes(log.severity)) {
+            hourBuckets[hour].threats++;
+          }
+        }
+      });
+
+      setActivityData(
+        Object.entries(hourBuckets).map(([time, counts]) => ({
+          time: `${time}:00`,
+          ...counts,
+        }))
+      );
+    }
+    fetchActivityData();
   }, []);
 
   // Auto-refresh disabled: no real-time security telemetry source available
