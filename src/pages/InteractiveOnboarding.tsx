@@ -219,7 +219,7 @@ export default function InteractiveOnboarding() {
 
               <div className="space-y-4">
                 <h1 className="text-4xl font-bold bg-gradient-to-r from-primary to-primary/60 bg-clip-text text-transparent">
-                  Bem-vindo ao Nautilus One! 🚢
+                  Bem-vindo ao Nauti One! 🚢
                 </h1>
                 <p className="text-xl text-muted-foreground">
                   A plataforma completa de gestão marítima com IA integrada
@@ -284,7 +284,7 @@ export default function InteractiveOnboarding() {
               Tour Interativo
             </h1>
             <p className="text-muted-foreground">
-              Explore os módulos do Nautilus One
+              Explore os módulos do Nauti One
             </p>
           </div>
           <div className="flex items-center gap-4">
@@ -479,7 +479,7 @@ export default function InteractiveOnboarding() {
                 </div>
                 <h2 className="text-2xl font-bold">🎉 Tour Completo!</h2>
                 <p className="text-muted-foreground max-w-md mx-auto">
-                  Você explorou todos os módulos principais do Nautilus One.
+                  Você explorou todos os módulos principais do Nauti One.
                   Agora está pronto para gerenciar sua operação marítima!
                 </p>
                 <Button

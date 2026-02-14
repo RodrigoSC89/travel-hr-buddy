@@ -199,7 +199,7 @@ const UnifiedDashboard = () => {
         <div>
           <h1 className="text-3xl font-bold flex items-center gap-2">
             <LayoutDashboard className="w-8 h-8" />
-            Dashboard Principal - Nautilus One
+            Dashboard Principal - Nauti One
           </h1>
           <p className="text-muted-foreground">
             Bem-vindo de volta, {user?.email?.split("@")[0] || "Usuário"}! 

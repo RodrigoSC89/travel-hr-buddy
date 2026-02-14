@@ -372,7 +372,7 @@ export function ExecutiveComplianceDashboard() {
     
     doc.setFontSize(8);
     doc.setTextColor(128, 128, 128);
-    doc.text('Nautilus One - Maritime HR Management Platform', pageWidth / 2, 285, { align: 'center' });
+    doc.text('Nauti One - Maritime HR Management Platform', pageWidth / 2, 285, { align: 'center' });
     
     doc.save(`executive-compliance-${new Date().toISOString().split('T')[0]}.pdf`);
     toast.success('PDF exportado com sucesso');

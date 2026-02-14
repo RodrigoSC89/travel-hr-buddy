@@ -76,7 +76,7 @@ export default function IntegrationsCenter() {
       const response = await fetch(slackWebhook, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ text: "🧪 Teste de integração Nautilus One" })
+        body: JSON.stringify({ text: "🧪 Teste de integração Nauti One" })
       });
       if (!response.ok) throw new Error('Webhook failed');
       toast.success("Mensagem de teste enviada para o Slack!");

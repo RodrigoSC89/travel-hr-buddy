@@ -64,7 +64,7 @@ export const ModuleList: React.FC = () => {
               Módulos do Sistema (32)
             </CardTitle>
             <CardDescription>
-              Visão geral de todos os módulos do Nautilus One
+              Visão geral de todos os módulos do Nauti One
             </CardDescription>
           </div>
         </div>

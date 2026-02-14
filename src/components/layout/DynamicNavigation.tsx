@@ -149,7 +149,7 @@ export function DynamicNavigation({ className }: DynamicNavigationProps) {
         <div className="p-4 border-b border-sidebar-border">
           <h1 className="font-bold text-xl flex items-center gap-2">
             <Ship className="w-6 h-6 text-primary" />
-            🧭 Nautilus One
+            🧭 Nauti One
           </h1>
           <p className="text-xs text-muted-foreground mt-1">Sistema Corporativo - v177.0</p>
         </div>

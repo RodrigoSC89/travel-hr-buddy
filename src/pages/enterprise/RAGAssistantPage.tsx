@@ -202,7 +202,7 @@ export default function RAGAssistantPage() {
   return (
     <>
       <Helmet>
-        <title>RAG Knowledge Assistant | Nautilus One</title>
+        <title>RAG Knowledge Assistant | Nauti One</title>
         <meta name="description" content="Assistente de IA com acesso à base de conhecimento" />
       </Helmet>
 

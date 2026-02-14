@@ -197,7 +197,7 @@ export default function FatigueRiskPage() {
   return (
     <>
       <Helmet>
-        <title>Fatigue Risk Predictor | Nautilus One</title>
+        <title>Fatigue Risk Predictor | Nauti One</title>
         <meta name="description" content="Predição de fadiga da tripulação com ML + MLC 2006" />
       </Helmet>
 

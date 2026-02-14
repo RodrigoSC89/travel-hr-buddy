@@ -1,5 +1,5 @@
 /**
- * AI Hub Page - Central de IAs do Nautilus One
+ * AI Hub Page - Central de IAs do Nauti One
  * Acesso a todas as 16 IAs especializadas
  * PATCH AI-TRAINING v2.0
  */

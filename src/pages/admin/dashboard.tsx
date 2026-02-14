@@ -298,7 +298,7 @@ export default function AdminDashboard() {
           🚀 Painel Administrativo
         </h1>
         <p className="text-muted-foreground mt-2">
-          Central de controle e monitoramento — Nautilus One
+          Central de controle e monitoramento — Nauti One
         </p>
       </div>
 

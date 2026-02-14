@@ -71,7 +71,7 @@ const TimeTracking: React.FC = () => {
   return (
     <>
       <Helmet>
-        <title>Controle de Ponto | Nautilus One</title>
+        <title>Controle de Ponto | Nauti One</title>
         <meta name="description" content="Controle de ponto digital com geolocalização para gestão de tripulação marítima." />
       </Helmet>
 

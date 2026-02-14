@@ -64,7 +64,7 @@ Competências STCW cadastradas: ${stats.competencyCount}
   return (
     <>
       <Helmet>
-        <title>STCW & MLC Compliance | Nautilus One</title>
+        <title>STCW & MLC Compliance | Nauti One</title>
         <meta name="description" content="Centro de conformidade STCW e MLC 2006 com análise IA para certificação marítima" />
       </Helmet>
 

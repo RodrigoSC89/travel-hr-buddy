@@ -104,9 +104,9 @@ export function ModularizedExecutiveDashboard() {
       {/* Header with Logo */}
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-4">
-          <img src={nautilusLogo} alt="Nautilus One" className="h-16 w-16" />
+          <img src={nautilusLogo} alt="Nauti One" className="h-16 w-16" />
           <div>
-            <h1 className="text-4xl font-bold font-playfair">NAUTILUS ONE</h1>
+            <h1 className="text-4xl font-bold font-playfair">NAUTI ONE</h1>
             <p className="text-muted-foreground mt-1">
               Sistema Revolucionário de Gestão Marítima e IA Distribuída
             </p>

@@ -685,7 +685,7 @@ const AnalyticsCoreProfessional: React.FC = () => {
         doc.setFontSize(8);
         doc.setTextColor(150);
         doc.text(`Página ${i} de ${pageCount}`, 105, 290, { align: "center" });
-        doc.text("Nautilus One - Analytics Core", 20, 290);
+        doc.text("Nauti One - Analytics Core", 20, 290);
         doc.text(new Date().toLocaleDateString("pt-BR"), 180, 290);
       }
       

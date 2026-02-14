@@ -125,8 +125,8 @@ export const DashboardActions: React.FC<DashboardActionsProps> = ({
 
   const handleShare = useCallback(async () => {
     const shareData = {
-      title: "Dashboard Nautilus One",
-      text: "Confira o dashboard executivo do Nautilus One",
+      title: "Dashboard Nauti One",
+      text: "Confira o dashboard executivo do Nauti One",
       url: window.location.href
     };
 

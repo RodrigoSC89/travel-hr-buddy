@@ -124,7 +124,7 @@ export function ContextualCopilot({
   const context = MODULE_CONTEXTS[moduleContext] || {
     name: "Nautilus",
     icon: "🚢",
-    systemPrompt: "Você é o Copilot do Nautilus One. Ajude o usuário com qualquer dúvida sobre o sistema.",
+    systemPrompt: "Você é o Copilot do Nauti One. Ajude o usuário com qualquer dúvida sobre o sistema.",
     defaultSuggestions: []
   };
 

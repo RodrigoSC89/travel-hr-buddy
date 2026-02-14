@@ -29,7 +29,7 @@ export default function CrewingPayrollAIPage() {
   return (
     <>
       <Helmet>
-        <title>Crewing & Payroll AI | Nautilus One</title>
+        <title>Crewing & Payroll AI | Nauti One</title>
       </Helmet>
       <div className="container mx-auto py-6 space-y-6">
         <div className="flex items-center justify-between">

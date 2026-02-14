@@ -240,7 +240,7 @@ export const GeneralSettingsTab: React.FC<GeneralSettingsTabProps> = ({
               <Label className="text-sm font-medium text-muted-foreground">Versão</Label>
               <div className="text-lg font-semibold">2.1.4</div>
               <Badge variant="outline" className="text-xs">
-                Nautilus One
+                Nauti One
               </Badge>
             </div>
             

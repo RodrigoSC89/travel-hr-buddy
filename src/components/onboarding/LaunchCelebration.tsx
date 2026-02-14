@@ -1,6 +1,6 @@
 /**
  * Launch Celebration Component
- * Celebratory animation for Nautilus One official launch
+ * Celebratory animation for Nauti One official launch
  */
 import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
@@ -155,7 +155,7 @@ export const LaunchCelebration: React.FC = () => {
                 transition={{ delay: 0.3 }}
                 className="text-3xl md:text-4xl font-bold mb-4 bg-gradient-to-r from-primary via-cyan-500 to-purple-500 bg-clip-text text-transparent"
               >
-                🎉 Nautilus One Inaugurado!
+                🎉 Nauti One Inaugurado!
               </motion.h1>
 
               <motion.p

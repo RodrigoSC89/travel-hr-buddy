@@ -65,7 +65,7 @@ export const MMICopilot: React.FC<MMICopilotProps> = ({ onJobCreated, context })
     {
       id: "welcome",
       role: "assistant",
-      content: "Olá! Sou o Copilot de Manutenção do Nautilus One. Como posso ajudar com suas operações de manutenção hoje?",
+      content: "Olá! Sou o Copilot de Manutenção do Nauti One. Como posso ajudar com suas operações de manutenção hoje?",
       timestamp: new Date(),
     }
   ]);

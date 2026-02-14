@@ -200,7 +200,7 @@ export default function WorkflowCommandCenter() {
   return (
     <>
       <Helmet>
-        <title>Workflow Command Center | Nautilus One</title>
+        <title>Workflow Command Center | Nauti One</title>
         <meta name="description" content="Centro unificado de gestão e automação de workflows com IA" />
       </Helmet>
 

@@ -47,7 +47,7 @@ export default function HRChatbotPage() {
     {
       id: '1',
       role: 'assistant',
-      content: 'Olá! 👋 Sou o assistente virtual de RH do Nautilus One. Posso ajudar com dúvidas sobre férias, salário, benefícios, políticas da empresa e muito mais. Como posso ajudar você hoje?',
+      content: 'Olá! 👋 Sou o assistente virtual de RH do Nauti One. Posso ajudar com dúvidas sobre férias, salário, benefícios, políticas da empresa e muito mais. Como posso ajudar você hoje?',
       timestamp: new Date(),
     }
   ]);

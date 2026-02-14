@@ -111,7 +111,7 @@ export async function generateExecutivePDF(): Promise<Blob> {
   // Header
   doc.setFontSize(20);
   doc.setTextColor(30, 64, 175);
-  doc.text("Nautilus One - Relatório Executivo", 105, 20, { align: "center" });
+  doc.text("Nauti One - Relatório Executivo", 105, 20, { align: "center" });
   
   doc.setFontSize(12);
   doc.setTextColor(100);
@@ -185,7 +185,7 @@ export async function generateExecutivePDF(): Promise<Blob> {
   // Footer
   doc.setFontSize(8);
   doc.setTextColor(150);
-  doc.text("Nautilus One - Sistema de Gestão Marítima | Confidencial", 105, 285, { align: "center" });
+  doc.text("Nauti One - Sistema de Gestão Marítima | Confidencial", 105, 285, { align: "center" });
 
   return doc.output("blob");
 }

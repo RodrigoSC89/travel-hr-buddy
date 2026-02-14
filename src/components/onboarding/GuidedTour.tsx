@@ -1,6 +1,6 @@
 /**
  * Guided Tour Component using Driver.js
- * Interactive step-by-step tour of the Nautilus One system
+ * Interactive step-by-step tour of the Nauti One system
  */
 
 import { useEffect, useCallback, useState } from "react";

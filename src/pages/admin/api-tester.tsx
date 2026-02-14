@@ -230,7 +230,7 @@ const APITester = () => {
         <ModuleHeader
           icon={TestTube}
           title="API Tester"
-          description="Test all external API integrations connected to Nautilus One"
+          description="Test all external API integrations connected to Nauti One"
           gradient="purple"
           badges={[
             { icon: TestTube, label: `${totalCount} APIs` },

@@ -152,8 +152,8 @@ export default function AIObservabilityDashboard() {
   return (
     <>
       <Helmet>
-        <title>Observabilidade IA | Nautilus One</title>
-        <meta name="description" content="Dashboard de observabilidade e métricas de IA do Nautilus One" />
+        <title>Observabilidade IA | Nauti One</title>
+        <meta name="description" content="Dashboard de observabilidade e métricas de IA do Nauti One" />
       </Helmet>
 
       <div className="min-h-screen bg-background p-6">

@@ -60,7 +60,7 @@ const WelcomeStep: React.FC<{ data: OnboardingData; onNext: (data: StepData) => 
           <Sparkles className="w-8 h-8 text-primary" />
         </div>
         <div>
-          <h2 className="text-2xl font-bold">Bem-vindo ao Nautilus One!</h2>
+          <h2 className="text-2xl font-bold">Bem-vindo ao Nauti One!</h2>
           <p className="text-muted-foreground">
             Vamos configurar sua experiência personalizada em poucos passos
           </p>
@@ -433,7 +433,7 @@ export const SmartOnboardingWizard: React.FC = () => {
       await generateWelcomeAutomations(updatedData);
       toast({
         title: "Configuração concluída! 🎉",
-        description: "Seu Nautilus One está pronto. Automações personalizadas foram ativadas.",
+        description: "Seu Nauti One está pronto. Automações personalizadas foram ativadas.",
       });
     }
   };

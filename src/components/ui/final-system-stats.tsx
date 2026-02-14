@@ -53,7 +53,7 @@ export const FinalSystemStats: React.FC = () => {
             <Award className="w-8 h-8 text-azure-50" />
           </div>
           <CardTitle className="text-3xl font-bold text-azure-900 dark:text-azure-50">
-            Sistema Nautilus One
+            Sistema Nauti One
           </CardTitle>
           <CardDescription className="text-lg text-azure-600 dark:text-azure-300">
             Sistema completo e pronto para produção

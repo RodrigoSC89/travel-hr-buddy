@@ -66,7 +66,7 @@ export default function ComplianceRoadmapPage() {
   return (
     <>
       <Helmet>
-        <title>Compliance Roadmap - Nautilus One</title>
+        <title>Compliance Roadmap - Nauti One</title>
         <meta name="description" content="Dashboard avançado de conformidade com alertas inteligentes, scoring automático, workflow de NCs, análise preditiva com IA, integração de calendário e audit trail completo" />
       </Helmet>
 

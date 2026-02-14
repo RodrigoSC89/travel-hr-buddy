@@ -341,7 +341,7 @@ const EnhancedUnifiedDashboard = () => {
     }
   };
 
-  const displayName = currentBranding?.company_name || currentTenant?.name || "Nautilus One";
+  const displayName = currentBranding?.company_name || currentTenant?.name || "Nauti One";
   const userDisplayName = currentUser?.display_name || user?.email?.split("@")[0] || "Usuário";
 
   return (
@@ -380,7 +380,7 @@ const EnhancedUnifiedDashboard = () => {
                     <div className="relative p-4 rounded-2xl bg-white dark:bg-azure-900/50 shadow-glow backdrop-blur-sm">
                       <img 
                         src={nautilusLogoNew} 
-                        alt="Nautilus One"
+                        alt="Nauti One"
                         className="w-14 h-14 object-contain group-hover:scale-110 transition-transform duration-300"
                       />
                     </div>

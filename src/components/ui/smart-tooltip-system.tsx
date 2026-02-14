@@ -102,7 +102,7 @@ const SmartTooltipSystem: React.FC = () => {
     {
       id: "first-visit",
       trigger: "new_user",
-      title: "Bem-vindo ao Nautilus One!",
+      title: "Bem-vindo ao Nauti One!",
       message: "Detectamos que é sua primeira vez aqui. Gostaria de fazer um tour guiado pelas principais funcionalidades?",
       type: "info",
       actions: [

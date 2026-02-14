@@ -85,7 +85,7 @@ export const ProactiveComplianceMonitor: React.FC = () => {
         includeCrewData: true,
         format,
         digitalSignature: {
-          name: 'Sistema Nautilus One',
+          name: 'Sistema Nauti One',
           position: 'Geração Automática',
           timestamp: new Date(),
         },

@@ -26,7 +26,7 @@ interface OnboardingStep {
 const ONBOARDING_STEPS: OnboardingStep[] = [
   {
     id: "welcome",
-    title: "Bem-vindo ao Nautilus One",
+    title: "Bem-vindo ao Nauti One",
     description: "Sistema corporativo completo para gestão marítima com IA avançada, compliance e analytics em tempo real.",
     icon: Ship,
     color: "from-blue-500 to-cyan-500"

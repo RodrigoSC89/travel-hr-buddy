@@ -191,7 +191,7 @@ export const WebhookBuilder: React.FC = () => {
       "value": "{{timestamp}}"
     }, {
       "name": "System",
-      "value": "Nautilus One"
+      "value": "Nauti One"
     }]
   }]
 }`,

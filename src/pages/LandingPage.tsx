@@ -85,7 +85,7 @@ const LandingPage = () => {
       name: 'Carlos Silva',
       role: 'Gerente de RH',
       company: 'Navegação ABC',
-      content: 'Reduzimos 70% do tempo com processos de DP depois do Nautilus One.',
+      content: 'Reduzimos 70% do tempo com processos de DP depois do Nauti One.',
       rating: 5
     },
     {

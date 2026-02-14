@@ -40,7 +40,7 @@ export function SmartHeader() {
     <>
       <header role="banner" className="sticky top-0 z-30 flex items-center justify-between px-6 py-3 bg-card dark:bg-card text-foreground shadow-md border-b border-border">
         <h1 className="text-xl font-semibold flex items-center gap-2">
-          <span>🚀 Nautilus One</span>
+          <span>🚀 Nauti One</span>
         </h1>
 
         <div className="flex-1 max-w-md mx-auto">

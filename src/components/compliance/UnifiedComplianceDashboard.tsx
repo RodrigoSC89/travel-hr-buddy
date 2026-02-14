@@ -295,7 +295,7 @@ export function UnifiedComplianceDashboard() {
     // Footer
     doc.setFontSize(8);
     doc.setTextColor(128, 128, 128);
-    doc.text(`Gerado por Nautilus One - ${new Date().toLocaleString('pt-BR')}`, pageWidth / 2, 285, { align: 'center' });
+    doc.text(`Gerado por Nauti One - ${new Date().toLocaleString('pt-BR')}`, pageWidth / 2, 285, { align: 'center' });
     
     doc.save(`compliance-dashboard-${new Date().toISOString().split('T')[0]}.pdf`);
     toast.success("PDF exportado", { description: "Relatório de compliance salvo com sucesso" });

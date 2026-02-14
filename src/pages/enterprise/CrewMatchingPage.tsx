@@ -165,7 +165,7 @@ export default function CrewMatchingPage() {
   return (
     <>
       <Helmet>
-        <title>Crew Matching AI | Nautilus One</title>
+        <title>Crew Matching AI | Nauti One</title>
         <meta name="description" content="Sistema de matching inteligente para tripulação" />
       </Helmet>
 

@@ -21,7 +21,7 @@ export default function FinanceProcurementAIPage() {
   return (
     <>
       <Helmet>
-        <title>Finance & Procurement AI | Nautilus One</title>
+        <title>Finance & Procurement AI | Nauti One</title>
         <meta name="description" content="AI-powered financial management and procurement optimization" />
       </Helmet>
       
