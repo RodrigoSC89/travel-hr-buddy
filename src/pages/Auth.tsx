@@ -4,7 +4,7 @@
  */
 import React, { useState, useEffect } from "react";
 import { Navigate, useNavigate } from "react-router-dom";
-import { useDemoMode } from "@/contexts/DemoContext";
+
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -61,7 +61,7 @@ type ResetFormData = z.infer<typeof resetSchema>;
 const Auth: React.FC = () => {
   const navigate = useNavigate();
   const { user, isLoading: authLoading, clearSession } = useAuth();
-  const { enableDemoMode } = useDemoMode();
+  
   const [showPassword, setShowPassword] = useState(false);
   const [activeTab, setActiveTab] = useState("signin");
   const [isLoading, setIsLoading] = useState(false);
@@ -733,20 +733,6 @@ const Auth: React.FC = () => {
             </CardContent>
           </Card>
 
-          {/* Demo Access Button */}
-          <div className="text-center mt-4">
-            <Button
-              variant="outline"
-              className="w-full max-w-md border-primary/30 text-primary hover:bg-primary/10 hover:border-primary/50 hover:shadow-[0_0_15px_hsl(var(--primary)/0.15)] transition-all duration-300"
-              onClick={() => {
-                enableDemoMode();
-                navigate('/command');
-              }}
-            >
-              <BarChart3 className="mr-2 h-4 w-4" />
-              Ver Demo do Sistema (sem login)
-            </Button>
-          </div>
 
           {/* Footer */}
           <p className="text-center text-xs text-muted-foreground mt-4">
