@@ -54,25 +54,40 @@ export const AuditTrailSystem = () => {
   const [filterStatus, setFilterStatus] = useState<string>("all");
   const [generating, setGenerating] = useState(false);
 
-  // Fetch audit logs - using mock data with proper typing
+  // Fetch real audit logs from Supabase audit_trail table
   useEffect(() => {
     const fetchAuditLogs = async () => {
       try {
         setLoading(true);
         
-        // Mock data for demo - real integration uses audit_logs table
-        const mockLogs: AuditLogEntry[] = [
-          { id: "log-1", timestamp: new Date(), userId: "usr-001", userName: "Carlos Silva", userRole: "Auditor", action: "APPROVE", module: "NC Workflow", resource: "non_conformity", resourceId: "NC-2025-001", status: "success", ipAddress: "192.168.1.100", details: { approvalType: "Fechamento" } },
-          { id: "log-2", timestamp: new Date(Date.now() - 2 * 60 * 60 * 1000), userId: "usr-002", userName: "Maria Santos", userRole: "Gestor", action: "CREATE", module: "PEOTRAM", resource: "audit_session", resourceId: "AUD-2025-015", status: "success", ipAddress: "192.168.1.101", details: { auditType: "Semestral" } },
-          { id: "log-3", timestamp: new Date(Date.now() - 5 * 60 * 60 * 1000), userId: "usr-003", userName: "João Ferreira", userRole: "Capitão", action: "UPDATE", module: "Documentos", resource: "certificate", resourceId: "CERT-ISM-001", status: "success", ipAddress: "10.0.0.50", details: { documentType: "ISM" } },
-          { id: "log-4", timestamp: new Date(Date.now() - 24 * 60 * 60 * 1000), userId: "usr-004", userName: "Ana Costa", userRole: "Analista", action: "DELETE", module: "Evidências", resource: "evidence", resourceId: "EVD-2025-089", status: "warning", ipAddress: "192.168.1.102", details: { reason: "Duplicado" } },
-          { id: "log-5", timestamp: new Date(Date.now() - 48 * 60 * 60 * 1000), userId: "usr-005", userName: "Desconhecido", userRole: "N/A", action: "LOGIN_FAILED", module: "Sistema", resource: "auth", resourceId: "ATT-456", status: "failure", ipAddress: "203.0.113.50", details: { attempts: 3 } }
-        ];
+        const { data, error } = await supabase
+          .from("audit_trail")
+          .select("*")
+          .order("created_at", { ascending: false })
+          .limit(100);
 
-        setLogs(mockLogs);
+        if (error) throw error;
+
+        const mappedLogs: AuditLogEntry[] = (data || []).map((row: any) => ({
+          id: row.id,
+          timestamp: new Date(row.created_at),
+          userId: row.user_id || "system",
+          userName: row.user_email || row.user_role || "Sistema",
+          userRole: row.user_role || "N/A",
+          action: row.action || "UNKNOWN",
+          module: row.module || row.resource_type || "Sistema",
+          resource: row.resource_type || "",
+          resourceId: row.resource_name || row.resource_id || "",
+          status: row.severity === "critical" || row.severity === "warning" ? "warning" as const : "success" as const,
+          ipAddress: "—",
+          details: (row.changes as Record<string, unknown>) || {},
+          changes: undefined,
+        }));
+
+        setLogs(mappedLogs);
       } catch (error) {
         logger.error("Error fetching audit logs:", error);
-        toast.error("Erro ao carregar logs");
+        toast.error("Erro ao carregar logs de auditoria");
       } finally {
         setLoading(false);
       }
