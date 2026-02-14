@@ -290,6 +290,8 @@ export default function DevRoutesDashboard() {
                                   e.stopPropagation();
                                   handleCopy(route);
                                 }}
+                                aria-label="Copiar rota"
+                                title="Copiar"
                               >
                                 {copiedRoute === route ? (
                                   <Check className="h-3 w-3 text-green-500" />

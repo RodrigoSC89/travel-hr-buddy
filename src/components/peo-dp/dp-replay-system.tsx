@@ -345,19 +345,19 @@ export const DPReplaySystem: React.FC = () => {
 
                 {/* Controls */}
                 <div className="flex items-center justify-center gap-4">
-                  <Button variant="outline" size="icon" onClick={() => setCurrentTime(0)}>
+                  <Button variant="outline" size="icon" onClick={() => setCurrentTime(0)} aria-label="Ir para início" title="Início">
                     <SkipBack className="h-4 w-4" />
                   </Button>
-                  <Button variant="outline" size="icon" onClick={() => setCurrentTime(Math.max(0, currentTime - 300))}>
+                  <Button variant="outline" size="icon" onClick={() => setCurrentTime(Math.max(0, currentTime - 300))} aria-label="Retroceder" title="Retroceder">
                     <Rewind className="h-4 w-4" />
                   </Button>
-                  <Button size="lg" onClick={handlePlay} className="px-8">
+                  <Button size="lg" onClick={handlePlay} className="px-8" aria-label={isPlaying ? "Pausar" : "Reproduzir"} title={isPlaying ? "Pausar" : "Reproduzir"}>
                     {isPlaying ? <Pause className="h-5 w-5" /> : <Play className="h-5 w-5" />}
                   </Button>
-                  <Button variant="outline" size="icon" onClick={() => setCurrentTime(Math.min(selectedSession.duration, currentTime + 300))}>
+                  <Button variant="outline" size="icon" onClick={() => setCurrentTime(Math.min(selectedSession.duration, currentTime + 300))} aria-label="Avançar" title="Avançar">
                     <FastForward className="h-4 w-4" />
                   </Button>
-                  <Button variant="outline" size="icon" onClick={() => setCurrentTime(selectedSession.duration)}>
+                  <Button variant="outline" size="icon" onClick={() => setCurrentTime(selectedSession.duration)} aria-label="Ir para fim" title="Fim">
                     <SkipForward className="h-4 w-4" />
                   </Button>
                   

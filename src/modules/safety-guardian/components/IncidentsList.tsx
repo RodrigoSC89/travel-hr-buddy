@@ -105,6 +105,8 @@ export const IncidentsList: React.FC<IncidentsListProps> = ({
               size="icon"
               onClick={() => setShowFilters(!showFilters)}
               className={showFilters ? 'bg-primary/10' : ''}
+              aria-label={showFilters ? "Ocultar filtros" : "Mostrar filtros"}
+              title="Filtros"
             >
               <Filter className="h-4 w-4" />
             </Button>

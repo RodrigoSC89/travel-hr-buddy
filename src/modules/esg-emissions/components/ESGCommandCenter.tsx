@@ -469,7 +469,7 @@ export function ESGCommandCenter() {
                   className="flex-1"
                   disabled={isChatLoading}
                 />
-                <Button size="icon" onClick={handleSendMessage} disabled={isChatLoading} className="bg-emerald-500 hover:bg-emerald-600">
+                <Button size="icon" onClick={handleSendMessage} disabled={isChatLoading} className="bg-emerald-500 hover:bg-emerald-600" aria-label="Enviar mensagem" title="Enviar">
                   {isChatLoading ? <Loader2 className="h-4 w-4 animate-spin" /> : <Send className="h-4 w-4" />}
                 </Button>
               </div>

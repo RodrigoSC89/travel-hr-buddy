@@ -215,6 +215,7 @@ export const MapPanel: React.FC<MapPanelProps> = ({
             size="icon"
             onClick={onRecenter}
             className="shadow-lg"
+            aria-label="Recentralizar mapa"
             title="Recentralizar"
           >
             <Target className="w-4 h-4" />
@@ -229,6 +230,7 @@ export const MapPanel: React.FC<MapPanelProps> = ({
             onClick={onRefresh}
             disabled={isRefreshing}
             className="shadow-lg"
+            aria-label="Atualizar mapa"
             title="Atualizar"
           >
             <RefreshCw className={cn("w-4 h-4", isRefreshing && "animate-spin")} />
@@ -242,6 +244,7 @@ export const MapPanel: React.FC<MapPanelProps> = ({
             size="icon"
             onClick={onFullscreen}
             className="shadow-lg"
+            aria-label="Tela cheia"
             title="Tela Cheia"
           >
             <Maximize2 className="w-4 h-4" />

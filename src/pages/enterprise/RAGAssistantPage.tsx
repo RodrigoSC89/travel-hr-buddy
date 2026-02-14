@@ -242,6 +242,8 @@ export default function RAGAssistantPage() {
                           e.stopPropagation();
                           deleteConversation(conv.id);
                         }}
+                        aria-label="Excluir conversa"
+                        title="Excluir"
                       >
                         <Trash2 className="h-3 w-3 text-destructive" />
                       </Button>
@@ -340,6 +342,8 @@ export default function RAGAssistantPage() {
                               size="icon"
                               className="h-7 w-7"
                               onClick={() => copyToClipboard(message.content, message.id)}
+                              aria-label="Copiar resposta"
+                              title="Copiar"
                             >
                               {copiedId === message.id ? (
                                 <Check className="h-3 w-3 text-success" />
@@ -355,6 +359,8 @@ export default function RAGAssistantPage() {
                                 message.feedback === 'positive' && "text-success"
                               )}
                               onClick={() => provideFeedback(message.id, 'positive')}
+                              aria-label="Feedback positivo"
+                              title="Útil"
                             >
                               <ThumbsUp className="h-3 w-3" />
                             </Button>
@@ -366,6 +372,8 @@ export default function RAGAssistantPage() {
                                 message.feedback === 'negative' && "text-destructive"
                               )}
                               onClick={() => provideFeedback(message.id, 'negative')}
+                              aria-label="Feedback negativo"
+                              title="Não útil"
                             >
                               <ThumbsDown className="h-3 w-3" />
                             </Button>

@@ -412,6 +412,8 @@ export default function RequisitionsSection({ searchQuery }: RequisitionsSection
                             size="icon"
                             className="text-green-600 hover:text-green-700"
                             onClick={() => handleApprove(req)}
+                            aria-label="Aprovar requisição"
+                            title="Aprovar"
                           >
                             <ThumbsUp className="h-4 w-4" />
                           </Button>
@@ -420,6 +422,8 @@ export default function RequisitionsSection({ searchQuery }: RequisitionsSection
                             size="icon"
                             className="text-red-600 hover:text-red-700"
                             onClick={() => handleReject(req, "Requisição rejeitada pelo aprovador.")}
+                            aria-label="Rejeitar requisição"
+                            title="Rejeitar"
                           >
                             <ThumbsDown className="h-4 w-4" />
                           </Button>
@@ -442,6 +446,8 @@ export default function RequisitionsSection({ searchQuery }: RequisitionsSection
                           setSelectedRequisition(req);
                           setShowDetails(true);
                         }}
+                        aria-label="Ver detalhes da requisição"
+                        title="Ver detalhes"
                       >
                         <Eye className="h-4 w-4" />
                       </Button>
