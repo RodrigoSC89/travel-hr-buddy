@@ -734,6 +734,18 @@ const Auth: React.FC = () => {
           </Card>
 
 
+          {/* About System CTA */}
+          <div className="text-center mt-4">
+            <Button
+              variant="outline"
+              className="w-full max-w-md border-primary/30 text-primary hover:bg-primary/10 hover:border-primary/50 hover:shadow-[0_0_15px_hsl(var(--primary)/0.15)] transition-all duration-300"
+              onClick={() => navigate('/about')}
+            >
+              <Compass className="mr-2 h-4 w-4" />
+              Conheça o Sistema Nauti One
+            </Button>
+          </div>
+
           {/* Footer */}
           <p className="text-center text-xs text-muted-foreground mt-4">
             © {new Date().getFullYear()} Nauti One. Todos os direitos reservados.
