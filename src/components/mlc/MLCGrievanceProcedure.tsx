@@ -1,3 +1,8 @@
+/**
+ * MLC Grievance Procedure — Reg. 5.1.5
+ * 4-level escalation with SLA tracking
+ * PRODUCTION: Integrated with Supabase mlc_grievances
+ */
 import React, { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -7,20 +12,9 @@ import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Progress } from "@/components/ui/progress";
 import { AlertTriangle, CheckCircle, Clock, FileText, MessageSquare, Scale, Shield, Users, ArrowRight, Plus } from "lucide-react";
-
-interface Grievance {
-  id: string;
-  title: string;
-  complainant: string;
-  category: string;
-  status: "filed" | "level_1" | "level_2" | "level_3" | "flag_state" | "resolved" | "closed";
-  priority: "low" | "medium" | "high" | "critical";
-  filedDate: string;
-  lastUpdate: string;
-  description: string;
-  resolution?: string;
-  daysOpen: number;
-}
+import { toast } from "sonner";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { supabase } from "@/integrations/supabase/client";
 
 const ESCALATION_LEVELS = [
   { level: 1, title: "Supervisor Direto", sla: 7, description: "Resolução informal pelo supervisor imediato" },
@@ -33,30 +27,6 @@ const CATEGORIES = [
   "Condições de Trabalho", "Salários/Pagamentos", "Alimentação/Alojamento",
   "Assédio/Discriminação", "Segurança/Saúde", "Horas de Descanso",
   "Repatriação", "Contrato SEA", "Outros"
-];
-
-const INITIAL_GRIEVANCES: Grievance[] = [
-  {
-    id: "GRV-001", title: "Atraso no pagamento de horas extras",
-    complainant: "Marinheiro A. Silva", category: "Salários/Pagamentos",
-    status: "level_2", priority: "high", filedDate: "2026-02-01",
-    lastUpdate: "2026-02-10", description: "Horas extras de janeiro não creditadas conforme SEA.",
-    daysOpen: 14,
-  },
-  {
-    id: "GRV-002", title: "Ventilação inadequada no alojamento",
-    complainant: "Moço de Convés J. Santos", category: "Alimentação/Alojamento",
-    status: "level_1", priority: "medium", filedDate: "2026-02-08",
-    lastUpdate: "2026-02-12", description: "Sistema de ventilação no alojamento da popa inoperante há 5 dias.",
-    daysOpen: 7,
-  },
-  {
-    id: "GRV-003", title: "Violação de horas de descanso",
-    complainant: "3º Oficial R. Ferreira", category: "Horas de Descanso",
-    status: "resolved", priority: "critical", filedDate: "2026-01-15",
-    lastUpdate: "2026-02-05", description: "Menos de 6h contínuas de descanso em 3 dias consecutivos.",
-    resolution: "Escala ajustada e tripulante adicional embarcado.", daysOpen: 21,
-  },
 ];
 
 const statusConfig: Record<string, { label: string; color: string; level: number }> = {
@@ -77,30 +47,71 @@ const priorityColors: Record<string, string> = {
 };
 
 export const MLCGrievanceProcedure: React.FC = () => {
-  const [grievances, setGrievances] = useState<Grievance[]>(INITIAL_GRIEVANCES);
+  const queryClient = useQueryClient();
   const [showForm, setShowForm] = useState(false);
-  const [selectedGrievance, setSelectedGrievance] = useState<string | null>(null);
+  const [newForm, setNewForm] = useState({ title: "", complainant: "", category: "Condições de Trabalho", priority: "medium", description: "" });
 
-  const activeCount = grievances.filter(g => !["resolved", "closed"].includes(g.status)).length;
-  const resolvedCount = grievances.filter(g => g.status === "resolved").length;
-  const avgResolution = grievances.filter(g => g.status === "resolved").reduce((a, g) => a + g.daysOpen, 0) / (resolvedCount || 1);
-  const criticalCount = grievances.filter(g => g.priority === "critical" && g.status !== "resolved").length;
+  const { data: grievances = [], isLoading } = useQuery({
+    queryKey: ["mlc-grievances"],
+    queryFn: async () => {
+      const { data, error } = await (supabase.from as Function)("mlc_grievances")
+        .select("*")
+        .order("created_at", { ascending: false });
+      if (error) throw error;
+      return data || [];
+    },
+  });
 
-  const escalateGrievance = (id: string) => {
-    setGrievances(prev => prev.map(g => {
-      if (g.id !== id) return g;
-      const nextStatus: Record<string, Grievance["status"]> = {
-        filed: "level_1", level_1: "level_2", level_2: "level_3", level_3: "flag_state",
-      };
-      return { ...g, status: nextStatus[g.status] || g.status, lastUpdate: new Date().toISOString().split("T")[0] };
-    }));
+  const createMutation = useMutation({
+    mutationFn: async (g: Record<string, unknown>) => {
+      const count = grievances.length + 1;
+      const { error } = await (supabase.from as Function)("mlc_grievances").insert({
+        ...g,
+        grievance_number: `GRV-${String(count).padStart(3, "0")}`,
+        filed_date: new Date().toISOString().split("T")[0],
+        last_update: new Date().toISOString().split("T")[0],
+        status: "filed",
+        days_open: 0,
+      });
+      if (error) throw error;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["mlc-grievances"] });
+      setShowForm(false);
+      setNewForm({ title: "", complainant: "", category: "Condições de Trabalho", priority: "medium", description: "" });
+      toast.success("Reclamação registrada com sucesso");
+    },
+  });
+
+  const updateMutation = useMutation({
+    mutationFn: async ({ id, updates }: { id: string; updates: Record<string, unknown> }) => {
+      const { error } = await (supabase.from as Function)("mlc_grievances").update({ ...updates, last_update: new Date().toISOString().split("T")[0] }).eq("id", id);
+      if (error) throw error;
+    },
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: ["mlc-grievances"] }),
+  });
+
+  const escalate = (g: any) => {
+    const nextStatus: Record<string, string> = { filed: "level_1", level_1: "level_2", level_2: "level_3", level_3: "flag_state" };
+    const next = nextStatus[g.status];
+    if (next) {
+      const history = Array.isArray(g.escalation_history) ? g.escalation_history : [];
+      updateMutation.mutate({ id: g.id, updates: { status: next, escalation_history: [...history, { from: g.status, to: next, date: new Date().toISOString() }] } });
+      toast.info(`Reclamação escalada para ${statusConfig[next]?.label}`);
+    }
   };
 
-  const resolveGrievance = (id: string) => {
-    setGrievances(prev => prev.map(g =>
-      g.id === id ? { ...g, status: "resolved" as const, lastUpdate: new Date().toISOString().split("T")[0], resolution: "Resolvida conforme procedimento interno." } : g
-    ));
+  const resolve = (id: string) => {
+    updateMutation.mutate({ id, updates: { status: "resolved", resolution: "Resolvida conforme procedimento interno." } });
+    toast.success("Reclamação resolvida");
   };
+
+  const activeCount = grievances.filter((g: any) => !["resolved", "closed"].includes(g.status)).length;
+  const resolvedCount = grievances.filter((g: any) => g.status === "resolved").length;
+  const avgResolution = grievances.filter((g: any) => g.status === "resolved").reduce((a: number, g: any) => a + (g.days_open || 0), 0) / (resolvedCount || 1);
+  const criticalCount = grievances.filter((g: any) => g.priority === "critical" && g.status !== "resolved").length;
+
+  if (isLoading) return <div className="text-center py-8 text-muted-foreground">Carregando reclamações...</div>;
 
   return (
     <div className="space-y-6">
@@ -124,11 +135,10 @@ export const MLCGrievanceProcedure: React.FC = () => {
         </CardContent></Card>
       </div>
 
-      {/* Escalation Flowchart */}
+      {/* Escalation Flow */}
       <Card>
         <CardHeader className="pb-3">
           <CardTitle className="text-lg flex items-center gap-2"><Scale className="h-5 w-5 text-primary" />Fluxo de Escalonamento — MLC Reg. 5.1.5</CardTitle>
-          <CardDescription>Procedimento obrigatório em 4 níveis com SLAs definidos</CardDescription>
         </CardHeader>
         <CardContent>
           <div className="flex flex-wrap items-center justify-center gap-2">
@@ -152,16 +162,43 @@ export const MLCGrievanceProcedure: React.FC = () => {
           <div className="flex items-center justify-between">
             <div>
               <CardTitle className="text-lg flex items-center gap-2"><FileText className="h-5 w-5 text-primary" />Registro de Reclamações</CardTitle>
-              <CardDescription>Rastreamento completo com escalonamento automático</CardDescription>
+              <CardDescription>Rastreamento com escalonamento e persistência real</CardDescription>
             </div>
             <Button size="sm" onClick={() => setShowForm(!showForm)} className="gap-1"><Plus className="h-3 w-3" />Nova</Button>
           </div>
         </CardHeader>
         <CardContent className="space-y-3">
-          {grievances.map(g => {
-            const config = statusConfig[g.status];
+          {showForm && (
+            <div className="p-4 rounded-xl border bg-card/50 space-y-3">
+              <h4 className="text-sm font-semibold">Nova Reclamação</h4>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                <Input placeholder="Título" value={newForm.title} onChange={e => setNewForm(p => ({ ...p, title: e.target.value }))} />
+                <Input placeholder="Reclamante" value={newForm.complainant} onChange={e => setNewForm(p => ({ ...p, complainant: e.target.value }))} />
+                <Select value={newForm.category} onValueChange={v => setNewForm(p => ({ ...p, category: v }))}>
+                  <SelectTrigger><SelectValue /></SelectTrigger>
+                  <SelectContent>{CATEGORIES.map(c => <SelectItem key={c} value={c}>{c}</SelectItem>)}</SelectContent>
+                </Select>
+                <Select value={newForm.priority} onValueChange={v => setNewForm(p => ({ ...p, priority: v }))}>
+                  <SelectTrigger><SelectValue /></SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="low">Baixa</SelectItem>
+                    <SelectItem value="medium">Média</SelectItem>
+                    <SelectItem value="high">Alta</SelectItem>
+                    <SelectItem value="critical">Crítica</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+              <Textarea placeholder="Descrição detalhada..." value={newForm.description} onChange={e => setNewForm(p => ({ ...p, description: e.target.value }))} />
+              <Button size="sm" onClick={() => createMutation.mutate(newForm)} disabled={!newForm.title || !newForm.complainant || createMutation.isPending}>
+                Registrar Reclamação
+              </Button>
+            </div>
+          )}
+
+          {grievances.map((g: any) => {
+            const config = statusConfig[g.status] || statusConfig.filed;
             const slaLevel = ESCALATION_LEVELS.find(l => l.level === config.level);
-            const slaProgress = slaLevel ? Math.min((g.daysOpen / slaLevel.sla) * 100, 100) : 0;
+            const slaProgress = slaLevel ? Math.min(((g.days_open || 0) / slaLevel.sla) * 100, 100) : 0;
             const canEscalate = !["resolved", "closed", "flag_state"].includes(g.status);
 
             return (
@@ -169,35 +206,35 @@ export const MLCGrievanceProcedure: React.FC = () => {
                 <div className="flex items-start justify-between gap-3">
                   <div className="space-y-1 flex-1">
                     <div className="flex items-center gap-2 flex-wrap">
-                      <span className="text-xs font-mono text-muted-foreground">{g.id}</span>
+                      <span className="text-xs font-mono text-muted-foreground">{g.grievance_number}</span>
                       <Badge variant="outline" className={config.color}>{config.label}</Badge>
-                      <Badge variant="outline" className={priorityColors[g.priority]}>{g.priority}</Badge>
+                      <Badge variant="outline" className={priorityColors[g.priority] || ""}>{g.priority}</Badge>
                     </div>
                     <p className="font-medium">{g.title}</p>
                     <div className="flex items-center gap-3 text-xs text-muted-foreground">
                       <span className="flex items-center gap-1"><Users className="h-3 w-3" />{g.complainant}</span>
                       <span>{g.category}</span>
-                      <span>{g.daysOpen}d aberta</span>
+                      <span>{g.days_open || 0}d aberta</span>
                     </div>
                   </div>
                   <div className="flex gap-1">
                     {canEscalate && (
                       <>
-                        <Button size="sm" variant="outline" onClick={() => resolveGrievance(g.id)} className="gap-1 text-xs">
+                        <Button size="sm" variant="outline" onClick={() => resolve(g.id)} className="gap-1 text-xs">
                           <CheckCircle className="h-3 w-3" />Resolver
                         </Button>
-                        <Button size="sm" variant="destructive" onClick={() => escalateGrievance(g.id)} className="gap-1 text-xs">
+                        <Button size="sm" variant="destructive" onClick={() => escalate(g)} className="gap-1 text-xs">
                           <ArrowRight className="h-3 w-3" />Escalar
                         </Button>
                       </>
                     )}
                   </div>
                 </div>
-                {slaLevel && g.status !== "resolved" && (
+                {slaLevel && g.status !== "resolved" && g.status !== "closed" && (
                   <div className="space-y-1">
                     <div className="flex justify-between text-xs text-muted-foreground">
                       <span>SLA Nível {slaLevel.level}: {slaLevel.sla}d</span>
-                      <span className={slaProgress >= 80 ? "text-destructive" : ""}>{g.daysOpen}/{slaLevel.sla}d</span>
+                      <span className={slaProgress >= 80 ? "text-destructive" : ""}>{g.days_open || 0}/{slaLevel.sla}d</span>
                     </div>
                     <Progress value={slaProgress} className="h-1.5" />
                   </div>
@@ -210,6 +247,10 @@ export const MLCGrievanceProcedure: React.FC = () => {
               </div>
             );
           })}
+
+          {grievances.length === 0 && (
+            <p className="text-center py-4 text-muted-foreground text-sm">Nenhuma reclamação registrada. Use o botão "Nova" para criar.</p>
+          )}
         </CardContent>
       </Card>
 

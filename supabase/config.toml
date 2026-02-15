@@ -1469,3 +1469,7 @@ comment = "Generate DP audit documents (log report, FMEA, trial prep, evidence p
 [functions.generate-mlc-document]
 verify_jwt = false
 comment = "Generate MLC documents (DCM draft, work/rest report, wage register, PSC evidence pack)"
+
+[functions.compliance-scoring-engine]
+verify_jwt = false
+comment = "Unified compliance scoring engine for PEO-DP (IEODP), PEOTRAM (13 elements), and MLC (Titles 1-5)"
