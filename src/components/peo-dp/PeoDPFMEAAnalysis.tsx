@@ -1,5 +1,6 @@
 /**
  * PEO-DP FMEA/FMECA Analysis — PEO-DP 2026 (Revisão 5)
+ * ✅ INTEGRATED: Full CRUD with Supabase peodp_fmea_items table
  * Compliant with IMCA M 166, includes the 14 mandatory columns (item 1.10.1)
  * NPR = Detecção × Frequência × Severidade
  */
@@ -10,28 +11,31 @@ import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 import { Input } from "@/components/ui/input";
-import { AlertTriangle, CheckCircle, Plus, Download, Shield, Search, Filter, Brain } from "lucide-react";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
+import { Label } from "@/components/ui/label";
+import { AlertTriangle, CheckCircle, Plus, Download, Shield, Search, Filter, Brain, Loader2, Trash2, Edit } from "lucide-react";
 import { toast } from "sonner";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { supabase } from "@/integrations/supabase/client";
 
 interface FMECAItem {
   id: string;
-  // 14 campos obrigatórios PEO-DP 2026 (item 1.10.1)
-  sistema: string;           // 1. Sistema
-  subsistema: string;        // 2. Subsistema
-  componente: string;        // 3. Componente
-  funcao: string;            // 4. Função do componente
-  modoFalha: string;         // 5. Modo de falha
-  causaFalha: string;        // 6. Causa da falha
-  efeitosLocais: string;     // 7. Efeitos locais
-  efeitosGlobais: string;    // 8. Efeitos globais
-  tipoDeteccao: string;      // 9. Tipo de mecanismo de detecção da falha
-  capacidadeDeteccao: number;// 10. Capacidade de detecção (1-10)
-  frequencia: number;        // 11. Frequência/Probabilidade (1-10)
-  severidade: number;        // 12. Severidade do efeito (1-10)
-  npr: number;               // 13. NPR
-  acoes: string;             // 14. Ações/recomendações
+  sistema: string;
+  subsistema: string;
+  componente: string;
+  funcao: string;
+  modo_falha: string;
+  causa_falha: string;
+  efeitos_locais: string;
+  efeitos_globais: string;
+  tipo_deteccao: string;
+  capacidade_deteccao: number;
+  frequencia: number;
+  severidade: number;
+  npr: number;
+  acoes: string | null;
   status: "open" | "mitigated" | "accepted" | "monitoring";
-  gapStatus?: "atendeu" | "nao_atendeu" | "na";
+  gap_status?: string | null;
 }
 
 const DP_SYSTEMS = [
@@ -58,20 +62,79 @@ const SEVERITY_TABLE = [
   { level: 10, desc: "Catastrófica", effect: "Perda de posição/aproamento" },
 ];
 
-const INITIAL_ITEMS: FMECAItem[] = [
-  { id: "1", sistema: "Geração de Energia", subsistema: "Gerador Principal", componente: "Motor Diesel MG1", funcao: "Fornecer energia primária para barramento 1", modoFalha: "Parada não programada", causaFalha: "Falha mecânica / sobreaquecimento", efeitosLocais: "Perda de geração no barramento 1", efeitosGlobais: "Redução de redundância - CAM status Azul se apenas 1 gerador restante", tipoDeteccao: "PMS alarme automático + watchkeeping", capacidadeDeteccao: 2, frequencia: 3, severidade: 8, npr: 48, acoes: "Manutenção preditiva (vibração, termografia); Spare parts críticos a bordo", status: "mitigated" },
-  { id: "2", sistema: "Propulsão", subsistema: "Bow Thruster Azimutal", componente: "Motor Elétrico BT-AZ-1", funcao: "Prover empuxo lateral proa", modoFalha: "Seizure mecânica / congelamento azimute", causaFalha: "Desgaste rolamento / falha hidráulica azimute", efeitosLocais: "Perda de empuxo lateral proa", efeitosGlobais: "Possível perda de posição em condições ambientais adversas - Drift Off", tipoDeteccao: "Monitoramento vibração / alarme DP", capacidadeDeteccao: 3, frequencia: 3, severidade: 9, npr: 81, acoes: "Scaling anual de thrusters (Anexo M-1); Teste comando/feedback conforme 5.13.1", status: "open" },
-  { id: "3", sistema: "Referência de Posição", subsistema: "DGPS-1", componente: "Receptor DGPS primário", funcao: "Referência de posição absoluta", modoFalha: "Perda de sinal / correção diferencial", causaFalha: "Interferência ionosférica / falha hardware", efeitosLocais: "Perda de 1 referência de posição", efeitosGlobais: "Degradação accuracy se menos de 3 referências ativas", tipoDeteccao: "DP voting logic + alarme automático", capacidadeDeteccao: 2, frequencia: 4, severidade: 6, npr: 48, acoes: "Mínimo 3 sistemas referência ativos; DGPS + HPR + RADius", status: "mitigated" },
-  { id: "4", sistema: "Distribuição de Energia", subsistema: "Bus Tie", componente: "Disjuntor Bus Tie principal", funcao: "Interconexão/separação de barramentos", modoFalha: "Falha na abertura automática", causaFalha: "Defeito relé proteção / mecanismo travado", efeitosLocais: "Propagação de falha entre barramentos", efeitosGlobais: "Blackout total - Perda completa sistema DP", tipoDeteccao: "Teste funcional periódico relés proteção", capacidadeDeteccao: 4, frequencia: 2, severidade: 10, npr: 80, acoes: "Calibração quinquenal relés proteção (5.13.2); Teste funcional anual", status: "monitoring" },
-  { id: "5", sistema: "Resfriamento", subsistema: "Sea Water Cooling", componente: "Bomba SW principal lado BB", funcao: "Resfriar motores e geradores", modoFalha: "Perda de fluxo / falha bomba", causaFalha: "Incrustação / falha mecânica", efeitosLocais: "Sobreaquecimento equipamentos lado BB", efeitosGlobais: "Desligamento por proteção - possível perda de redundância", tipoDeteccao: "Alarme temperatura + pressão baixa", capacidadeDeteccao: 2, frequencia: 3, severidade: 7, npr: 42, acoes: "Interconexão de sistemas (crossover) testada regularmente conforme 5.10.a", status: "mitigated" },
-];
+const EMPTY_FORM = {
+  sistema: "", subsistema: "", componente: "", funcao: "", modo_falha: "",
+  causa_falha: "", efeitos_locais: "", efeitos_globais: "", tipo_deteccao: "",
+  capacidade_deteccao: 5, frequencia: 5, severidade: 5, acoes: "", status: "open" as "open" | "mitigated" | "accepted" | "monitoring",
+};
 
 export function PeoDPFMEAAnalysis() {
-  const [items, setItems] = useState<FMECAItem[]>(INITIAL_ITEMS);
+  const queryClient = useQueryClient();
   const [filterSystem, setFilterSystem] = useState("all");
   const [filterStatus, setFilterStatus] = useState("all");
   const [showAddForm, setShowAddForm] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
+  const [formData, setFormData] = useState(EMPTY_FORM);
+  const [editingId, setEditingId] = useState<string | null>(null);
+
+  // ✅ FETCH from Supabase
+  const { data: items = [], isLoading } = useQuery({
+    queryKey: ["peodp-fmea-items"],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("peodp_fmea_items")
+        .select("*")
+        .order("npr", { ascending: false });
+      if (error) throw error;
+      return (data || []) as FMECAItem[];
+    },
+  });
+
+  // ✅ CREATE mutation
+  const createMutation = useMutation({
+    mutationFn: async (item: typeof EMPTY_FORM) => {
+      const { error } = await supabase.from("peodp_fmea_items").insert({
+        sistema: item.sistema, subsistema: item.subsistema, componente: item.componente,
+        funcao: item.funcao, modo_falha: item.modo_falha, causa_falha: item.causa_falha,
+        efeitos_locais: item.efeitos_locais, efeitos_globais: item.efeitos_globais,
+        tipo_deteccao: item.tipo_deteccao, capacidade_deteccao: item.capacidade_deteccao,
+        frequencia: item.frequencia, severidade: item.severidade,
+        acoes: item.acoes, status: item.status,
+      });
+      if (error) throw error;
+    },
+    onSuccess: () => { queryClient.invalidateQueries({ queryKey: ["peodp-fmea-items"] }); toast.success("FMECA item criado com sucesso"); setShowAddForm(false); setFormData(EMPTY_FORM); },
+    onError: () => toast.error("Erro ao criar item FMECA"),
+  });
+
+  // ✅ UPDATE mutation
+  const updateMutation = useMutation({
+    mutationFn: async ({ id, ...updates }: { id: string } & Partial<typeof EMPTY_FORM>) => {
+      const { error } = await supabase.from("peodp_fmea_items").update(updates).eq("id", id);
+      if (error) throw error;
+    },
+    onSuccess: () => { queryClient.invalidateQueries({ queryKey: ["peodp-fmea-items"] }); toast.success("Item atualizado"); setShowAddForm(false); setEditingId(null); setFormData(EMPTY_FORM); },
+    onError: () => toast.error("Erro ao atualizar"),
+  });
+
+  // ✅ DELETE mutation
+  const deleteMutation = useMutation({
+    mutationFn: async (id: string) => {
+      const { error } = await supabase.from("peodp_fmea_items").delete().eq("id", id);
+      if (error) throw error;
+    },
+    onSuccess: () => { queryClient.invalidateQueries({ queryKey: ["peodp-fmea-items"] }); toast.success("Item removido"); },
+    onError: () => toast.error("Erro ao remover"),
+  });
+
+  // ✅ STATUS UPDATE
+  const updateStatus = useMutation({
+    mutationFn: async ({ id, status }: { id: string; status: string }) => {
+      const { error } = await supabase.from("peodp_fmea_items").update({ status }).eq("id", id);
+      if (error) throw error;
+    },
+    onSuccess: () => { queryClient.invalidateQueries({ queryKey: ["peodp-fmea-items"] }); toast.success("Status atualizado"); },
+  });
 
   const filtered = items.filter(i =>
     (filterSystem === "all" || i.sistema === filterSystem) &&
@@ -79,12 +142,42 @@ export function PeoDPFMEAAnalysis() {
     (searchTerm === "" || JSON.stringify(i).toLowerCase().includes(searchTerm.toLowerCase()))
   );
 
-  const avgNPR = filtered.length > 0 ? Math.round(filtered.reduce((a, i) => a + i.npr, 0) / filtered.length) : 0;
-  const criticalCount = filtered.filter(i => i.npr >= 80).length;
+  const avgNPR = filtered.length > 0 ? Math.round(filtered.reduce((a, i) => a + (i.npr || 0), 0) / filtered.length) : 0;
+  const criticalCount = filtered.filter(i => (i.npr || 0) >= 80).length;
   const mitigatedCount = filtered.filter(i => i.status === "mitigated").length;
 
   const getNPRColor = (npr: number) => npr >= 100 ? "text-destructive" : npr >= 60 ? "text-warning" : "text-success";
   const getNPRBadge = (npr: number): "destructive" | "secondary" | "outline" => npr >= 100 ? "destructive" : npr >= 60 ? "secondary" : "outline";
+
+  const handleSubmit = () => {
+    if (!formData.sistema || !formData.componente || !formData.modo_falha) {
+      toast.error("Preencha os campos obrigatórios"); return;
+    }
+    if (editingId) {
+      updateMutation.mutate({ id: editingId, ...formData });
+    } else {
+      createMutation.mutate(formData);
+    }
+  };
+
+  const handleEdit = (item: FMECAItem) => {
+    setFormData({
+      sistema: item.sistema, subsistema: item.subsistema, componente: item.componente,
+      funcao: item.funcao, modo_falha: item.modo_falha, causa_falha: item.causa_falha,
+      efeitos_locais: item.efeitos_locais, efeitos_globais: item.efeitos_globais,
+      tipo_deteccao: item.tipo_deteccao, capacidade_deteccao: item.capacidade_deteccao,
+      frequencia: item.frequencia, severidade: item.severidade,
+      acoes: item.acoes || "", status: item.status,
+    });
+    setEditingId(item.id);
+    setShowAddForm(true);
+  };
+
+  const selectedSubsystems = DP_SYSTEMS.find(s => s.sistema === formData.sistema)?.subsistemas || [];
+
+  if (isLoading) {
+    return <div className="flex items-center justify-center py-12"><Loader2 className="h-8 w-8 animate-spin text-primary" /><span className="ml-2">Carregando FMECA...</span></div>;
+  }
 
   return (
     <div className="space-y-4">
@@ -95,7 +188,7 @@ export function PeoDPFMEAAnalysis() {
             FMEA/FMECA — PEO-DP 2026
           </h3>
           <p className="text-sm text-muted-foreground">
-            14 campos obrigatórios • IMCA M 166 • NPR = Detecção × Frequência × Severidade
+            14 campos obrigatórios • IMCA M 166 • NPR = Detecção × Frequência × Severidade • <Badge variant="outline" className="text-xs">Supabase Live</Badge>
           </p>
         </div>
         <div className="flex gap-2 flex-wrap">
@@ -120,102 +213,112 @@ export function PeoDPFMEAAnalysis() {
               <SelectItem value="accepted">Aceito</SelectItem>
             </SelectContent>
           </Select>
-          <Button size="sm" onClick={() => setShowAddForm(!showAddForm)} className="gap-1 h-9"><Plus className="h-3 w-3" /> Adicionar</Button>
+          <Button size="sm" onClick={() => { setShowAddForm(true); setEditingId(null); setFormData(EMPTY_FORM); }} className="gap-1 h-9"><Plus className="h-3 w-3" /> Adicionar</Button>
           <Button size="sm" variant="outline" onClick={() => toast.success("FMECA exportado para PDF")} className="gap-1 h-9"><Download className="h-3 w-3" /> PDF</Button>
         </div>
       </div>
 
-      {/* Info Banner - 14 campos */}
+      {/* Info Banner */}
       <Card className="bg-gradient-to-r from-amber-500/5 to-amber-600/10 border-amber-500/20">
         <CardContent className="py-3">
-          <p className="text-xs font-semibold text-amber-700 dark:text-amber-400">
-            ⚡ FMECA como item de excelência (PEO-DP 2026, item 1.10.1):
-          </p>
-          <p className="text-xs text-muted-foreground mt-1">
-            14 colunas obrigatórias: Sistema • Subsistema • Componente • Função • Modo de Falha • Causa • Efeitos Locais • Efeitos Globais • Tipo Detecção • Capacidade Detecção • Frequência • Severidade • NPR • Ações/Recomendações
-          </p>
+          <p className="text-xs font-semibold text-amber-700 dark:text-amber-400">⚡ FMECA como item de excelência (PEO-DP 2026, item 1.10.1):</p>
+          <p className="text-xs text-muted-foreground mt-1">14 colunas obrigatórias: Sistema • Subsistema • Componente • Função • Modo de Falha • Causa • Efeitos Locais • Efeitos Globais • Tipo Detecção • Capacidade Detecção • Frequência • Severidade • NPR • Ações/Recomendações</p>
         </CardContent>
       </Card>
 
       {/* KPI Cards */}
       <div className="grid grid-cols-2 md:grid-cols-5 gap-3">
-        <Card><CardContent className="pt-4 text-center">
-          <p className="text-xs text-muted-foreground">Total Modos de Falha</p>
-          <p className="text-2xl font-bold">{filtered.length}</p>
-        </CardContent></Card>
-        <Card><CardContent className="pt-4 text-center">
-          <p className="text-xs text-muted-foreground">NPR Médio</p>
-          <p className={`text-2xl font-bold ${getNPRColor(avgNPR)}`}>{avgNPR}</p>
-        </CardContent></Card>
-        <Card className="border-destructive/20"><CardContent className="pt-4 text-center">
-          <p className="text-xs text-muted-foreground">Críticos (NPR ≥ 80)</p>
-          <p className="text-2xl font-bold text-destructive">{criticalCount}</p>
-        </CardContent></Card>
-        <Card className="border-success/20"><CardContent className="pt-4 text-center">
-          <p className="text-xs text-muted-foreground">Mitigados</p>
-          <p className="text-2xl font-bold text-success">{mitigatedCount}/{filtered.length}</p>
-        </CardContent></Card>
-        <Card><CardContent className="pt-4 text-center">
-          <p className="text-xs text-muted-foreground">Sistemas Cobertos</p>
-          <p className="text-2xl font-bold">{new Set(items.map(i => i.sistema)).size}/{DP_SYSTEMS.length}</p>
-        </CardContent></Card>
+        <Card><CardContent className="pt-4 text-center"><p className="text-xs text-muted-foreground">Total Modos de Falha</p><p className="text-2xl font-bold">{filtered.length}</p></CardContent></Card>
+        <Card><CardContent className="pt-4 text-center"><p className="text-xs text-muted-foreground">NPR Médio</p><p className={`text-2xl font-bold ${getNPRColor(avgNPR)}`}>{avgNPR}</p></CardContent></Card>
+        <Card className="border-destructive/20"><CardContent className="pt-4 text-center"><p className="text-xs text-muted-foreground">Críticos (NPR ≥ 80)</p><p className="text-2xl font-bold text-destructive">{criticalCount}</p></CardContent></Card>
+        <Card className="border-success/20"><CardContent className="pt-4 text-center"><p className="text-xs text-muted-foreground">Mitigados</p><p className="text-2xl font-bold text-success">{mitigatedCount}/{filtered.length}</p></CardContent></Card>
+        <Card><CardContent className="pt-4 text-center"><p className="text-xs text-muted-foreground">Sistemas Cobertos</p><p className="text-2xl font-bold">{new Set(items.map(i => i.sistema)).size}/{DP_SYSTEMS.length}</p></CardContent></Card>
       </div>
 
-      {/* FMECA Table with all 14 columns */}
-      <Card>
-        <CardContent className="pt-4">
-          <div className="overflow-x-auto">
-            <table className="w-full text-xs">
-              <thead>
-                <tr className="border-b text-left text-muted-foreground bg-muted/30">
-                  <th className="p-2 sticky left-0 bg-background z-10">Sistema</th>
-                  <th className="p-2">Subsistema</th>
-                  <th className="p-2">Componente</th>
-                  <th className="p-2 min-w-[120px]">Função</th>
-                  <th className="p-2 min-w-[120px]">Modo Falha</th>
-                  <th className="p-2 min-w-[120px]">Causa</th>
-                  <th className="p-2 min-w-[120px]">Efeitos Locais</th>
-                  <th className="p-2 min-w-[120px]">Efeitos Globais</th>
-                  <th className="p-2">Detecção</th>
-                  <th className="p-2 text-center">D</th>
-                  <th className="p-2 text-center">F</th>
-                  <th className="p-2 text-center">S</th>
-                  <th className="p-2 text-center font-bold">NPR</th>
-                  <th className="p-2 min-w-[150px]">Ações/Recomendações</th>
-                  <th className="p-2">Status</th>
-                </tr>
-              </thead>
-              <tbody>
-                {filtered.map(item => (
-                  <tr key={item.id} className="border-b last:border-0 hover:bg-muted/30">
-                    <td className="p-2 font-medium sticky left-0 bg-background z-10">{item.sistema}</td>
-                    <td className="p-2">{item.subsistema}</td>
-                    <td className="p-2 font-medium">{item.componente}</td>
-                    <td className="p-2">{item.funcao}</td>
-                    <td className="p-2 text-destructive">{item.modoFalha}</td>
-                    <td className="p-2">{item.causaFalha}</td>
-                    <td className="p-2">{item.efeitosLocais}</td>
-                    <td className="p-2 font-medium">{item.efeitosGlobais}</td>
-                    <td className="p-2">{item.tipoDeteccao}</td>
-                    <td className="p-2 text-center">{item.capacidadeDeteccao}</td>
-                    <td className="p-2 text-center">{item.frequencia}</td>
-                    <td className="p-2 text-center">{item.severidade}</td>
-                    <td className="p-2 text-center"><Badge variant={getNPRBadge(item.npr)} className="font-bold">{item.npr}</Badge></td>
-                    <td className="p-2">{item.acoes}</td>
-                    <td className="p-2">
-                      <Badge variant={item.status === "mitigated" ? "outline" : item.status === "open" ? "destructive" : "secondary"} className="text-xs whitespace-nowrap">
-                        {item.status === "mitigated" ? "✓ Mitigado" : item.status === "open" ? "⚠ Aberto" : item.status === "monitoring" ? "👁 Monitor." : "Aceito"}
-                      </Badge>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        </CardContent>
-      </Card>
+      {/* Empty State */}
+      {filtered.length === 0 && !isLoading && (
+        <Card><CardContent className="py-12 text-center">
+          <Shield className="h-12 w-12 mx-auto text-muted-foreground mb-3" />
+          <p className="text-lg font-medium">Nenhum item FMECA cadastrado</p>
+          <p className="text-sm text-muted-foreground mb-4">Clique em "Adicionar" para registrar o primeiro modo de falha</p>
+          <Button onClick={() => setShowAddForm(true)}><Plus className="h-4 w-4 mr-2" /> Adicionar Item</Button>
+        </CardContent></Card>
+      )}
 
-      {/* Severity Reference Table */}
+      {/* FMECA Table */}
+      {filtered.length > 0 && (
+        <Card>
+          <CardContent className="pt-4">
+            <div className="overflow-x-auto">
+              <table className="w-full text-xs">
+                <thead>
+                  <tr className="border-b text-left text-muted-foreground bg-muted/30">
+                    <th className="p-2 sticky left-0 bg-background z-10">Sistema</th>
+                    <th className="p-2">Subsistema</th>
+                    <th className="p-2">Componente</th>
+                    <th className="p-2 min-w-[120px]">Função</th>
+                    <th className="p-2 min-w-[120px]">Modo Falha</th>
+                    <th className="p-2 min-w-[120px]">Causa</th>
+                    <th className="p-2 min-w-[120px]">Efeitos Locais</th>
+                    <th className="p-2 min-w-[120px]">Efeitos Globais</th>
+                    <th className="p-2">Detecção</th>
+                    <th className="p-2 text-center">D</th>
+                    <th className="p-2 text-center">F</th>
+                    <th className="p-2 text-center">S</th>
+                    <th className="p-2 text-center font-bold">NPR</th>
+                    <th className="p-2 min-w-[150px]">Ações/Recomendações</th>
+                    <th className="p-2">Status</th>
+                    <th className="p-2">Ações</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {filtered.map(item => (
+                    <tr key={item.id} className="border-b last:border-0 hover:bg-muted/30">
+                      <td className="p-2 font-medium sticky left-0 bg-background z-10">{item.sistema}</td>
+                      <td className="p-2">{item.subsistema}</td>
+                      <td className="p-2 font-medium">{item.componente}</td>
+                      <td className="p-2">{item.funcao}</td>
+                      <td className="p-2 text-destructive">{item.modo_falha}</td>
+                      <td className="p-2">{item.causa_falha}</td>
+                      <td className="p-2">{item.efeitos_locais}</td>
+                      <td className="p-2 font-medium">{item.efeitos_globais}</td>
+                      <td className="p-2">{item.tipo_deteccao}</td>
+                      <td className="p-2 text-center">{item.capacidade_deteccao}</td>
+                      <td className="p-2 text-center">{item.frequencia}</td>
+                      <td className="p-2 text-center">{item.severidade}</td>
+                      <td className="p-2 text-center"><Badge variant={getNPRBadge(item.npr || 0)} className="font-bold">{item.npr}</Badge></td>
+                      <td className="p-2">{item.acoes}</td>
+                      <td className="p-2">
+                        <Select value={item.status} onValueChange={(v) => updateStatus.mutate({ id: item.id, status: v })}>
+                          <SelectTrigger className="h-7 text-xs w-28">
+                            <Badge variant={item.status === "mitigated" ? "outline" : item.status === "open" ? "destructive" : "secondary"} className="text-xs whitespace-nowrap">
+                              {item.status === "mitigated" ? "✓ Mitigado" : item.status === "open" ? "⚠ Aberto" : item.status === "monitoring" ? "👁 Monitor." : "Aceito"}
+                            </Badge>
+                          </SelectTrigger>
+                          <SelectContent>
+                            <SelectItem value="open">Aberto</SelectItem>
+                            <SelectItem value="mitigated">Mitigado</SelectItem>
+                            <SelectItem value="monitoring">Monitorando</SelectItem>
+                            <SelectItem value="accepted">Aceito</SelectItem>
+                          </SelectContent>
+                        </Select>
+                      </td>
+                      <td className="p-2">
+                        <div className="flex gap-1">
+                          <Button size="icon" variant="ghost" className="h-6 w-6" onClick={() => handleEdit(item)}><Edit className="h-3 w-3" /></Button>
+                          <Button size="icon" variant="ghost" className="h-6 w-6 text-destructive" onClick={() => deleteMutation.mutate(item.id)}><Trash2 className="h-3 w-3" /></Button>
+                        </div>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </CardContent>
+        </Card>
+      )}
+
+      {/* Severity Reference */}
       <Card>
         <CardHeader className="pb-2"><CardTitle className="text-sm">Tabela de Severidade — Referência PEO-DP 2026</CardTitle></CardHeader>
         <CardContent>
@@ -229,6 +332,62 @@ export function PeoDPFMEAAnalysis() {
           </div>
         </CardContent>
       </Card>
+
+      {/* Add/Edit Dialog */}
+      <Dialog open={showAddForm} onOpenChange={(o) => { setShowAddForm(o); if (!o) { setEditingId(null); setFormData(EMPTY_FORM); } }}>
+        <DialogContent className="max-w-2xl max-h-[80vh] overflow-y-auto">
+          <DialogHeader><DialogTitle>{editingId ? "Editar Item FMECA" : "Novo Item FMECA"}</DialogTitle></DialogHeader>
+          <div className="grid grid-cols-2 gap-3">
+            <div>
+              <Label className="text-xs">Sistema *</Label>
+              <Select value={formData.sistema} onValueChange={v => setFormData(p => ({ ...p, sistema: v, subsistema: "" }))}>
+                <SelectTrigger><SelectValue placeholder="Selecione" /></SelectTrigger>
+                <SelectContent>{DP_SYSTEMS.map(s => <SelectItem key={s.sistema} value={s.sistema}>{s.sistema}</SelectItem>)}</SelectContent>
+              </Select>
+            </div>
+            <div>
+              <Label className="text-xs">Subsistema *</Label>
+              <Select value={formData.subsistema} onValueChange={v => setFormData(p => ({ ...p, subsistema: v }))}>
+                <SelectTrigger><SelectValue placeholder="Selecione" /></SelectTrigger>
+                <SelectContent>{selectedSubsystems.map(s => <SelectItem key={s} value={s}>{s}</SelectItem>)}</SelectContent>
+              </Select>
+            </div>
+            <div><Label className="text-xs">Componente *</Label><Input value={formData.componente} onChange={e => setFormData(p => ({ ...p, componente: e.target.value }))} /></div>
+            <div><Label className="text-xs">Função *</Label><Input value={formData.funcao} onChange={e => setFormData(p => ({ ...p, funcao: e.target.value }))} /></div>
+            <div><Label className="text-xs">Modo de Falha *</Label><Input value={formData.modo_falha} onChange={e => setFormData(p => ({ ...p, modo_falha: e.target.value }))} /></div>
+            <div><Label className="text-xs">Causa da Falha</Label><Input value={formData.causa_falha} onChange={e => setFormData(p => ({ ...p, causa_falha: e.target.value }))} /></div>
+            <div className="col-span-2"><Label className="text-xs">Efeitos Locais</Label><Textarea value={formData.efeitos_locais} onChange={e => setFormData(p => ({ ...p, efeitos_locais: e.target.value }))} rows={2} /></div>
+            <div className="col-span-2"><Label className="text-xs">Efeitos Globais</Label><Textarea value={formData.efeitos_globais} onChange={e => setFormData(p => ({ ...p, efeitos_globais: e.target.value }))} rows={2} /></div>
+            <div className="col-span-2"><Label className="text-xs">Tipo de Detecção</Label><Input value={formData.tipo_deteccao} onChange={e => setFormData(p => ({ ...p, tipo_deteccao: e.target.value }))} /></div>
+            <div>
+              <Label className="text-xs">Capacidade Detecção (1-10)</Label>
+              <Input type="number" min={1} max={10} value={formData.capacidade_deteccao} onChange={e => setFormData(p => ({ ...p, capacidade_deteccao: Number(e.target.value) }))} />
+            </div>
+            <div>
+              <Label className="text-xs">Frequência (1-10)</Label>
+              <Input type="number" min={1} max={10} value={formData.frequencia} onChange={e => setFormData(p => ({ ...p, frequencia: Number(e.target.value) }))} />
+            </div>
+            <div>
+              <Label className="text-xs">Severidade (1-10)</Label>
+              <Input type="number" min={1} max={10} value={formData.severidade} onChange={e => setFormData(p => ({ ...p, severidade: Number(e.target.value) }))} />
+            </div>
+            <div>
+              <Label className="text-xs">NPR (calculado)</Label>
+              <div className="h-10 flex items-center px-3 rounded-md border bg-muted/50 font-bold text-lg">
+                {formData.capacidade_deteccao * formData.frequencia * formData.severidade}
+              </div>
+            </div>
+            <div className="col-span-2"><Label className="text-xs">Ações/Recomendações</Label><Textarea value={formData.acoes} onChange={e => setFormData(p => ({ ...p, acoes: e.target.value }))} rows={2} /></div>
+          </div>
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setShowAddForm(false)}>Cancelar</Button>
+            <Button onClick={handleSubmit} disabled={createMutation.isPending || updateMutation.isPending}>
+              {(createMutation.isPending || updateMutation.isPending) && <Loader2 className="h-4 w-4 mr-2 animate-spin" />}
+              {editingId ? "Salvar Alterações" : "Criar Item"}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }
