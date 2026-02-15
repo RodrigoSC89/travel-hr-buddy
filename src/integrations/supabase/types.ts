@@ -29777,6 +29777,122 @@ export type Database = {
           },
         ]
       }
+      peodp_cv_findings: {
+        Row: {
+          confidence: number | null
+          created_at: string
+          description: string
+          finding_type: string
+          id: string
+          inspection_id: string
+          location_height: number | null
+          location_width: number | null
+          location_x: number | null
+          location_y: number | null
+          recommendation: string | null
+          severity: string
+        }
+        Insert: {
+          confidence?: number | null
+          created_at?: string
+          description: string
+          finding_type: string
+          id?: string
+          inspection_id: string
+          location_height?: number | null
+          location_width?: number | null
+          location_x?: number | null
+          location_y?: number | null
+          recommendation?: string | null
+          severity?: string
+        }
+        Update: {
+          confidence?: number | null
+          created_at?: string
+          description?: string
+          finding_type?: string
+          id?: string
+          inspection_id?: string
+          location_height?: number | null
+          location_width?: number | null
+          location_x?: number | null
+          location_y?: number | null
+          recommendation?: string | null
+          severity?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "peodp_cv_findings_inspection_id_fkey"
+            columns: ["inspection_id"]
+            isOneToOne: false
+            referencedRelation: "peodp_cv_inspections"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      peodp_cv_inspections: {
+        Row: {
+          confidence: number | null
+          created_at: string
+          created_by: string | null
+          equipment: string
+          id: string
+          image_name: string
+          location: string
+          metadata: Json | null
+          organization_id: string | null
+          status: string
+          storage_path: string | null
+          updated_at: string
+          vessel_id: string | null
+        }
+        Insert: {
+          confidence?: number | null
+          created_at?: string
+          created_by?: string | null
+          equipment: string
+          id?: string
+          image_name: string
+          location: string
+          metadata?: Json | null
+          organization_id?: string | null
+          status?: string
+          storage_path?: string | null
+          updated_at?: string
+          vessel_id?: string | null
+        }
+        Update: {
+          confidence?: number | null
+          created_at?: string
+          created_by?: string | null
+          equipment?: string
+          id?: string
+          image_name?: string
+          location?: string
+          metadata?: Json | null
+          organization_id?: string | null
+          status?: string
+          storage_path?: string | null
+          updated_at?: string
+          vessel_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "peodp_cv_inspections_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "peodp_cv_inspections_vessel_id_fkey"
+            columns: ["vessel_id"]
+            isOneToOne: false
+            referencedRelation: "vessels"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       peodp_emergency_drills: {
         Row: {
           conclusion: string | null
@@ -30118,6 +30234,93 @@ export type Database = {
           },
           {
             foreignKeyName: "peodp_incidents_vessel_id_fkey"
+            columns: ["vessel_id"]
+            isOneToOne: false
+            referencedRelation: "vessels"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      peodp_logbook_entries: {
+        Row: {
+          created_at: string
+          created_by: string | null
+          description: string
+          dp_mode: string | null
+          dpo_name: string
+          event_type: string
+          excursion: number | null
+          heading: number | null
+          id: string
+          metadata: Json | null
+          organization_id: string | null
+          position_lat: string | null
+          position_lng: string | null
+          severity: string
+          thrusters_active: number | null
+          timestamp: string
+          title: string
+          updated_at: string
+          vessel_id: string | null
+          wave_height: number | null
+          wind_speed: number | null
+        }
+        Insert: {
+          created_at?: string
+          created_by?: string | null
+          description: string
+          dp_mode?: string | null
+          dpo_name: string
+          event_type: string
+          excursion?: number | null
+          heading?: number | null
+          id?: string
+          metadata?: Json | null
+          organization_id?: string | null
+          position_lat?: string | null
+          position_lng?: string | null
+          severity?: string
+          thrusters_active?: number | null
+          timestamp?: string
+          title: string
+          updated_at?: string
+          vessel_id?: string | null
+          wave_height?: number | null
+          wind_speed?: number | null
+        }
+        Update: {
+          created_at?: string
+          created_by?: string | null
+          description?: string
+          dp_mode?: string | null
+          dpo_name?: string
+          event_type?: string
+          excursion?: number | null
+          heading?: number | null
+          id?: string
+          metadata?: Json | null
+          organization_id?: string | null
+          position_lat?: string | null
+          position_lng?: string | null
+          severity?: string
+          thrusters_active?: number | null
+          timestamp?: string
+          title?: string
+          updated_at?: string
+          vessel_id?: string | null
+          wave_height?: number | null
+          wind_speed?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "peodp_logbook_entries_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "peodp_logbook_entries_vessel_id_fkey"
             columns: ["vessel_id"]
             isOneToOne: false
             referencedRelation: "vessels"

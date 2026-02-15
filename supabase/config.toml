@@ -1473,3 +1473,7 @@ comment = "Generate MLC documents (DCM draft, work/rest report, wage register, P
 [functions.compliance-scoring-engine]
 verify_jwt = false
 comment = "Unified compliance scoring engine for PEO-DP (IEODP), PEOTRAM (13 elements), and MLC (Titles 1-5)"
+
+[functions.dp-logbook-analytics]
+verify_jwt = false
+comment = "DP Logbook analytics and Computer Vision inspection statistics with operational readiness score"
