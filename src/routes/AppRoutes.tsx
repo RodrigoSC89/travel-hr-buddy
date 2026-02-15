@@ -338,6 +338,11 @@ export const AppRoutes = () => (
       <Route path="/admin/checklists/dashboard" element={<Suspense fallback={<RouteFallback />}><Pages.AdminRoute><Pages.AdminChecklistsDashboard /></Pages.AdminRoute></Suspense>} />
       <Route path="/admin/api-tester" element={<Suspense fallback={<RouteFallback />}><Pages.AdminRoute><Pages.AdminApiTester /></Pages.AdminRoute></Suspense>} />
       
+      {/* ======== NEW: CEO Dashboard & AI Predictive ======== */}
+      <Route path="/ceo-dashboard" element={<Navigate to="/command?tab=ceo" replace />} />
+      <Route path="/ai-predictive" element={<Navigate to="/ai?tab=predictive" replace />} />
+      <Route path="/approval-workflow" element={<Navigate to="/workbench?section=approvals" replace />} />
+      
       {/* ======== DASHBOARD ALIASES ======== */}
       <Route path="/dashboard" element={<Navigate to="/command" replace />} />
       <Route path="/executive-dashboard" element={<Navigate to="/command" replace />} />
