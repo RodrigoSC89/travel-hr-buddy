@@ -288,6 +288,7 @@ export const GamificationHub = lazy(() => import("@/pages/GamificationHub"));
 export const SecurityDashboardPage = lazy(() => import("@/pages/SecurityDashboardPage"));
 export const PerformanceMonitorPage = lazy(() => import("@/pages/PerformanceMonitorPage"));
 export const PremiumReportsPage = lazy(() => import("@/pages/PremiumReportsPage"));
+export const WhatsAppBotPage = lazy(() => import("@/pages/WhatsAppBotPage"));
 
 // AdminRoute (lazy-loaded RoleGuard)
 export const AdminRoute = lazy(() => import('@/components/auth/RoleGuard').then(mod => ({
