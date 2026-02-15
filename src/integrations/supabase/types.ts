@@ -31324,6 +31324,96 @@ export type Database = {
           },
         ]
       }
+      peodp_fmea_items: {
+        Row: {
+          acoes: string | null
+          capacidade_deteccao: number
+          causa_falha: string
+          componente: string
+          created_at: string
+          created_by: string | null
+          efeitos_globais: string
+          efeitos_locais: string
+          frequencia: number
+          funcao: string
+          gap_status: string | null
+          id: string
+          modo_falha: string
+          npr: number | null
+          organization_id: string | null
+          severidade: number
+          sistema: string
+          status: string
+          subsistema: string
+          tipo_deteccao: string
+          updated_at: string
+          vessel_id: string | null
+        }
+        Insert: {
+          acoes?: string | null
+          capacidade_deteccao?: number
+          causa_falha: string
+          componente: string
+          created_at?: string
+          created_by?: string | null
+          efeitos_globais: string
+          efeitos_locais: string
+          frequencia?: number
+          funcao: string
+          gap_status?: string | null
+          id?: string
+          modo_falha: string
+          npr?: number | null
+          organization_id?: string | null
+          severidade?: number
+          sistema: string
+          status?: string
+          subsistema: string
+          tipo_deteccao: string
+          updated_at?: string
+          vessel_id?: string | null
+        }
+        Update: {
+          acoes?: string | null
+          capacidade_deteccao?: number
+          causa_falha?: string
+          componente?: string
+          created_at?: string
+          created_by?: string | null
+          efeitos_globais?: string
+          efeitos_locais?: string
+          frequencia?: number
+          funcao?: string
+          gap_status?: string | null
+          id?: string
+          modo_falha?: string
+          npr?: number | null
+          organization_id?: string | null
+          severidade?: number
+          sistema?: string
+          status?: string
+          subsistema?: string
+          tipo_deteccao?: string
+          updated_at?: string
+          vessel_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "peodp_fmea_items_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "peodp_fmea_items_vessel_id_fkey"
+            columns: ["vessel_id"]
+            isOneToOne: false
+            referencedRelation: "vessels"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       peodp_incidents: {
         Row: {
           ciras_reference: string | null
@@ -43430,6 +43520,81 @@ export type Database = {
           valid_date?: string
         }
         Relationships: []
+      }
+      tracking_alerts: {
+        Row: {
+          alert_type: string
+          created_at: string
+          created_by: string | null
+          description: string | null
+          geofence_id: string | null
+          id: string
+          is_resolved: boolean
+          latitude: number | null
+          longitude: number | null
+          metadata: Json | null
+          organization_id: string | null
+          resolved_at: string | null
+          resolved_by: string | null
+          severity: string
+          title: string
+          updated_at: string
+          vessel_id: string | null
+        }
+        Insert: {
+          alert_type?: string
+          created_at?: string
+          created_by?: string | null
+          description?: string | null
+          geofence_id?: string | null
+          id?: string
+          is_resolved?: boolean
+          latitude?: number | null
+          longitude?: number | null
+          metadata?: Json | null
+          organization_id?: string | null
+          resolved_at?: string | null
+          resolved_by?: string | null
+          severity?: string
+          title: string
+          updated_at?: string
+          vessel_id?: string | null
+        }
+        Update: {
+          alert_type?: string
+          created_at?: string
+          created_by?: string | null
+          description?: string | null
+          geofence_id?: string | null
+          id?: string
+          is_resolved?: boolean
+          latitude?: number | null
+          longitude?: number | null
+          metadata?: Json | null
+          organization_id?: string | null
+          resolved_at?: string | null
+          resolved_by?: string | null
+          severity?: string
+          title?: string
+          updated_at?: string
+          vessel_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "tracking_alerts_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "tracking_alerts_vessel_id_fkey"
+            columns: ["vessel_id"]
+            isOneToOne: false
+            referencedRelation: "vessels"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       tracking_gnss_logs: {
         Row: {
