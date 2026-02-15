@@ -20,6 +20,7 @@ import { PeoDPSmartGapCloser } from "@/components/peo-dp/PeoDPSmartGapCloser";
 import { PeoDPOperationalWindow } from "@/components/peo-dp/PeoDPOperationalWindow";
 import { PeoDPLogbook } from "@/components/peo-dp/PeoDPLogbook";
 import { PeoDPCapabilityMatrix } from "@/components/peo-dp/PeoDPCapabilityMatrix";
+import { PeoDPSCEManager } from "@/components/peo-dp/PeoDPSCEManager";
 import { useMaritimeActions } from "@/hooks/useMaritimeActions";
 import { Skeleton } from "@/components/ui/skeleton";
 import {
@@ -70,6 +71,7 @@ const PEODP = () => {
           <TabsTrigger value="op-window" className="gap-1.5"><Activity className="h-3.5 w-3.5" /> Op. Window</TabsTrigger>
           <TabsTrigger value="logbook" className="gap-1.5"><BookOpen className="h-3.5 w-3.5" /> Logbook</TabsTrigger>
           <TabsTrigger value="capability" className="gap-1.5"><Grid3X3 className="h-3.5 w-3.5" /> Capability</TabsTrigger>
+          <TabsTrigger value="sce" className="gap-1.5"><Shield className="h-3.5 w-3.5" /> SCE</TabsTrigger>
           <TabsTrigger value="interview" className="gap-1.5"><Brain className="h-3.5 w-3.5" /> Simulador</TabsTrigger>
           <TabsTrigger value="checklist-ia" className="gap-1.5"><Zap className="h-3.5 w-3.5" /> Checklist IA</TabsTrigger>
         </TabsList>
@@ -91,6 +93,7 @@ const PEODP = () => {
         <TabsContent value="op-window"><PeoDPOperationalWindow /></TabsContent>
         <TabsContent value="logbook"><PeoDPLogbook /></TabsContent>
         <TabsContent value="capability"><PeoDPCapabilityMatrix /></TabsContent>
+        <TabsContent value="sce"><PeoDPSCEManager /></TabsContent>
         <Suspense fallback={<LoadingFallback />}>
           <TabsContent value="interview">
             <ComplianceInterviewSimulator

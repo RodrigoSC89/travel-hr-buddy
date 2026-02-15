@@ -17,6 +17,7 @@ import { MLCRepatriationTracker } from '@/components/mlc/MLCRepatriationTracker'
 import { MLCFoodCateringInspector } from '@/components/mlc/MLCFoodCateringInspector';
 import { MLCWageProtectionTracker } from '@/components/mlc/MLCWageProtectionTracker';
 import { MLCHealthSafetyTracker } from '@/components/mlc/MLCHealthSafetyTracker';
+import { MLCGrievanceProcedure } from '@/components/mlc/MLCGrievanceProcedure';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Skeleton } from '@/components/ui/skeleton';
 
@@ -81,6 +82,7 @@ const MLCInspection: FC = () => {
           <TabsTrigger value="food-catering" className="gap-1"><UtensilsCrossed className="h-3 w-3" />Alimentação</TabsTrigger>
           <TabsTrigger value="wages" className="gap-1"><DollarSign className="h-3 w-3" />Salários</TabsTrigger>
           <TabsTrigger value="health-safety" className="gap-1"><ShieldCheck className="h-3 w-3" />SST 4.3</TabsTrigger>
+          <TabsTrigger value="grievance" className="gap-1"><Scale className="h-3 w-3" />Grievance 5.1.5</TabsTrigger>
           <TabsTrigger value="sgi-evidence" className="gap-1"><Sparkles className="h-3 w-3" />Evidências</TabsTrigger>
           <TabsTrigger value="gap-analyzer" className="gap-1"><Search className="h-3 w-3" />Gap Analyzer</TabsTrigger>
           <TabsTrigger value="interview-sim" className="gap-1"><MessageSquare className="h-3 w-3" />Simulador</TabsTrigger>
@@ -106,6 +108,7 @@ const MLCInspection: FC = () => {
         <TabsContent value="food-catering"><MLCFoodCateringInspector /></TabsContent>
         <TabsContent value="wages"><MLCWageProtectionTracker /></TabsContent>
         <TabsContent value="health-safety"><MLCHealthSafetyTracker /></TabsContent>
+        <TabsContent value="grievance"><MLCGrievanceProcedure /></TabsContent>
 
         <Suspense fallback={<LoadingFallback />}>
           <TabsContent value="sgi-evidence"><ComplianceSGIAutoEvidence moduleId="mlc" moduleName="MLC 2006" checklistItems={MLC_ITEMS} /></TabsContent>
