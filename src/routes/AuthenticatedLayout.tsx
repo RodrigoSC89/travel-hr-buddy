@@ -1,6 +1,6 @@
 /**
- * AuthenticatedLayout - Main layout for authenticated users
- * Includes sidebar, header, mobile nav, and global overlays
+ * AuthenticatedLayout v11 - World-Class Maritime Platform Layout
+ * Premium layout with glassmorphism, health monitoring, and global overlays
  */
 import { Suspense, lazy } from "react";
 import { Outlet } from "react-router-dom";
@@ -42,13 +42,8 @@ const SpotlightSearch = lazy(() =>
 );
 
 export const AuthenticatedLayout = () => {
-  // Global real-time toast notifications for critical events
   useRealtimeToasts();
-  
-  // Smart prefetch for anticipated navigation
   useSmartPrefetch();
-  
-  // Autonomous AI monitoring - proactive alerts
   const { alerts, dismissAlert } = useAutonomousMonitor({ enabled: true });
 
   return (
@@ -57,8 +52,8 @@ export const AuthenticatedLayout = () => {
         <AppSidebar />
         <div className="flex-1 flex flex-col min-w-0 w-full">
           <Header />
-          {/* Health + Presence bar */}
-          <div className="flex items-center justify-between px-4 py-1.5 border-b border-border/40 bg-card/50">
+          {/* System status strip */}
+          <div className="flex items-center justify-between px-4 py-1 border-b border-border/30 bg-card/30 backdrop-blur-sm">
             <HealthStatusBar />
             <PresenceAvatars />
           </div>
