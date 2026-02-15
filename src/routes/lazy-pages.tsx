@@ -267,6 +267,13 @@ export const AdminApiTester = lazy(() => import("@/pages/admin/api-tester"));
 // AIEnterpriseEnginesHub
 export const AIEnterpriseEnginesHub = lazy(() => import("@/pages/AIEnterpriseEnginesHub"));
 
+// ============================================
+// WORLD-CLASS DISRUPTIVE FEATURES
+// ============================================
+export const ComputerVisionInspectorPage = lazy(() => import("@/pages/ComputerVisionInspectorPage"));
+export const CrewMarketplacePage = lazy(() => import("@/pages/CrewMarketplacePage"));
+export const IoTWearablesDashboardPage = lazy(() => import("@/pages/IoTWearablesDashboardPage"));
+
 // Client Portal
 export const ClientPortalPage = lazy(() => import("@/pages/client-portal"));
 
