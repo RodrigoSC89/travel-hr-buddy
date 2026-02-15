@@ -81,6 +81,8 @@ export const AppRoutes = () => (
       <Route path="/blockchain-compliance" element={<Pages.BlockchainCompliancePage />} />
       <Route path="/company-financials" element={<Pages.CompanyFinancialPage />} />
       <Route path="/satcom-dashboard" element={<Pages.SatcomDashboardEnhanced />} />
+      <Route path="/evidence-pack" element={<Pages.SmartEvidencePackPage />} />
+      <Route path="/voyage-optimizer" element={<Pages.SmartVoyageOptimizerPage />} />
       
       {/* Operações Submarinas (redirects) */}
       <Route path="/ocean-sonar" element={<Navigate to="/maritime-command" replace />} />
