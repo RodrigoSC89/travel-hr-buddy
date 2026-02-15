@@ -28,6 +28,12 @@ const InstallPrompt = lazy(() =>
 const UpdatePrompt = lazy(() => 
   import("@/components/pwa/UpdatePrompt").then(mod => ({ default: mod.UpdatePrompt }))
 );
+const KeyboardShortcutsPanel = lazy(() => 
+  import("@/components/shared/KeyboardShortcutsPanel").then(mod => ({ default: mod.KeyboardShortcutsPanel }))
+);
+const SpotlightSearch = lazy(() => 
+  import("@/components/shared/SpotlightSearch").then(mod => ({ default: mod.SpotlightSearch }))
+);
 
 export const AuthenticatedLayout = () => {
   // Global real-time toast notifications for critical events
@@ -59,6 +65,8 @@ export const AuthenticatedLayout = () => {
         <Suspense fallback={null}><GlobalAIAssistant /></Suspense>
         <Suspense fallback={null}><InstallPrompt /></Suspense>
         <Suspense fallback={null}><UpdatePrompt /></Suspense>
+        <Suspense fallback={null}><KeyboardShortcutsPanel /></Suspense>
+        <Suspense fallback={null}><SpotlightSearch /></Suspense>
       </div>
     </SidebarProvider>
   );
