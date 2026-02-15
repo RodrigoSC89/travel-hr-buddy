@@ -1,6 +1,6 @@
 /**
- * Smooth Page Transition - Cinematic Edition
- * Premium page transitions with spring physics
+ * Smooth Page Transition - Cinematic Edition v2
+ * World-class page transitions with spring physics, blur, and parallax
  */
 
 import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
@@ -15,9 +15,9 @@ interface SmoothPageTransitionProps {
 const pageVariants = {
   initial: {
     opacity: 0,
-    y: 12,
-    filter: "blur(4px)",
-    scale: 0.99,
+    y: 20,
+    filter: "blur(8px)",
+    scale: 0.97,
   },
   enter: {
     opacity: 1,
@@ -25,19 +25,20 @@ const pageVariants = {
     filter: "blur(0px)",
     scale: 1,
     transition: {
-      duration: 0.35,
-      ease: [0.25, 0.46, 0.45, 0.94],
-      staggerChildren: 0.05,
+      duration: 0.5,
+      ease: [0.22, 1, 0.36, 1], // Custom easeOutQuint
+      staggerChildren: 0.06,
+      when: "beforeChildren",
     },
   },
   exit: {
     opacity: 0,
-    y: -8,
-    filter: "blur(2px)",
-    scale: 0.995,
+    y: -12,
+    filter: "blur(6px)",
+    scale: 0.98,
     transition: {
-      duration: 0.2,
-      ease: [0.25, 0.46, 0.45, 0.94],
+      duration: 0.3,
+      ease: [0.22, 1, 0.36, 1],
     },
   },
 };
@@ -69,15 +70,15 @@ export function SmoothPageTransition({ children, className }: SmoothPageTransiti
 }
 
 /**
- * Fade transition with blur
+ * Fade transition with blur - enhanced
  */
 export function FadeTransition({ children, className }: SmoothPageTransitionProps) {
   return (
     <motion.div
-      initial={{ opacity: 0, filter: "blur(4px)" }}
-      animate={{ opacity: 1, filter: "blur(0px)" }}
-      exit={{ opacity: 0, filter: "blur(2px)" }}
-      transition={{ duration: 0.3, ease: [0.25, 0.46, 0.45, 0.94] }}
+      initial={{ opacity: 0, filter: "blur(8px)", scale: 0.98 }}
+      animate={{ opacity: 1, filter: "blur(0px)", scale: 1 }}
+      exit={{ opacity: 0, filter: "blur(4px)", scale: 0.99 }}
+      transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
       className={className}
     >
       {children}
@@ -86,15 +87,32 @@ export function FadeTransition({ children, className }: SmoothPageTransitionProp
 }
 
 /**
- * Slide transition with spring physics
+ * Slide transition with spring physics - enhanced
  */
 export function SlideTransition({ children, className }: SmoothPageTransitionProps) {
   return (
     <motion.div
-      initial={{ opacity: 0, x: 24, filter: "blur(4px)" }}
-      animate={{ opacity: 1, x: 0, filter: "blur(0px)" }}
-      exit={{ opacity: 0, x: -16, filter: "blur(2px)" }}
-      transition={{ type: "spring", stiffness: 300, damping: 30 }}
+      initial={{ opacity: 0, x: 30, filter: "blur(6px)", scale: 0.97 }}
+      animate={{ opacity: 1, x: 0, filter: "blur(0px)", scale: 1 }}
+      exit={{ opacity: 0, x: -20, filter: "blur(4px)", scale: 0.98 }}
+      transition={{ type: "spring", stiffness: 250, damping: 25, mass: 0.8 }}
+      className={className}
+    >
+      {children}
+    </motion.div>
+  );
+}
+
+/**
+ * Scale transition with spring bounce
+ */
+export function ScaleTransition({ children, className }: SmoothPageTransitionProps) {
+  return (
+    <motion.div
+      initial={{ opacity: 0, scale: 0.92, filter: "blur(10px)" }}
+      animate={{ opacity: 1, scale: 1, filter: "blur(0px)" }}
+      exit={{ opacity: 0, scale: 0.95, filter: "blur(6px)" }}
+      transition={{ type: "spring", stiffness: 200, damping: 20, mass: 0.6 }}
       className={className}
     >
       {children}
