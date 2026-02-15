@@ -20490,6 +20490,89 @@ export type Database = {
           },
         ]
       }
+      hull_integrity_records: {
+        Row: {
+          coating_condition: string | null
+          corrosion_type: string | null
+          created_at: string
+          created_by: string | null
+          diminution_percent: number | null
+          findings: string | null
+          id: string
+          inspection_date: string
+          inspection_type: string
+          inspector_name: string | null
+          location: string | null
+          next_inspection_date: string | null
+          organization_id: string | null
+          original_thickness_mm: number | null
+          photos: Json | null
+          plate_thickness_mm: number | null
+          recommended_action: string | null
+          severity: string | null
+          status: string | null
+          updated_at: string
+          vessel_id: string | null
+          zone: string | null
+        }
+        Insert: {
+          coating_condition?: string | null
+          corrosion_type?: string | null
+          created_at?: string
+          created_by?: string | null
+          diminution_percent?: number | null
+          findings?: string | null
+          id?: string
+          inspection_date?: string
+          inspection_type?: string
+          inspector_name?: string | null
+          location?: string | null
+          next_inspection_date?: string | null
+          organization_id?: string | null
+          original_thickness_mm?: number | null
+          photos?: Json | null
+          plate_thickness_mm?: number | null
+          recommended_action?: string | null
+          severity?: string | null
+          status?: string | null
+          updated_at?: string
+          vessel_id?: string | null
+          zone?: string | null
+        }
+        Update: {
+          coating_condition?: string | null
+          corrosion_type?: string | null
+          created_at?: string
+          created_by?: string | null
+          diminution_percent?: number | null
+          findings?: string | null
+          id?: string
+          inspection_date?: string
+          inspection_type?: string
+          inspector_name?: string | null
+          location?: string | null
+          next_inspection_date?: string | null
+          organization_id?: string | null
+          original_thickness_mm?: number | null
+          photos?: Json | null
+          plate_thickness_mm?: number | null
+          recommended_action?: string | null
+          severity?: string | null
+          status?: string | null
+          updated_at?: string
+          vessel_id?: string | null
+          zone?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "hull_integrity_records_vessel_id_fkey"
+            columns: ["vessel_id"]
+            isOneToOne: false
+            referencedRelation: "vessels"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       human_factors_assessments: {
         Row: {
           ai_analysis: Json | null
