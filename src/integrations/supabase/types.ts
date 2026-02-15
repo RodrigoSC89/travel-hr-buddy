@@ -26140,6 +26140,80 @@ export type Database = {
         }
         Relationships: []
       }
+      mlc_grievances: {
+        Row: {
+          assigned_officer: string | null
+          category: string
+          complainant: string
+          created_at: string
+          days_open: number | null
+          description: string | null
+          escalation_history: Json | null
+          filed_date: string
+          grievance_number: string
+          id: string
+          last_update: string | null
+          organization_id: string | null
+          priority: string | null
+          resolution: string | null
+          status: string
+          title: string
+          updated_at: string
+          vessel_id: string | null
+          vessel_name: string | null
+        }
+        Insert: {
+          assigned_officer?: string | null
+          category: string
+          complainant: string
+          created_at?: string
+          days_open?: number | null
+          description?: string | null
+          escalation_history?: Json | null
+          filed_date?: string
+          grievance_number: string
+          id?: string
+          last_update?: string | null
+          organization_id?: string | null
+          priority?: string | null
+          resolution?: string | null
+          status?: string
+          title: string
+          updated_at?: string
+          vessel_id?: string | null
+          vessel_name?: string | null
+        }
+        Update: {
+          assigned_officer?: string | null
+          category?: string
+          complainant?: string
+          created_at?: string
+          days_open?: number | null
+          description?: string | null
+          escalation_history?: Json | null
+          filed_date?: string
+          grievance_number?: string
+          id?: string
+          last_update?: string | null
+          organization_id?: string | null
+          priority?: string | null
+          resolution?: string | null
+          status?: string
+          title?: string
+          updated_at?: string
+          vessel_id?: string | null
+          vessel_name?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "mlc_grievances_vessel_id_fkey"
+            columns: ["vessel_id"]
+            isOneToOne: false
+            referencedRelation: "vessels"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       mlc_inspection_items: {
         Row: {
           ai_assisted: boolean | null
@@ -29703,6 +29777,92 @@ export type Database = {
           },
         ]
       }
+      peodp_emergency_drills: {
+        Row: {
+          conclusion: string | null
+          conducted_by: string | null
+          corrective_actions: string | null
+          created_at: string
+          description: string | null
+          dp_class: string | null
+          drill_date: string | null
+          evaluation: string | null
+          human_factors: string | null
+          id: string
+          observations: string | null
+          organization_id: string | null
+          participants: string | null
+          pre_discussion: string | null
+          results: string | null
+          scenario: string
+          scenario_id: string
+          status: string
+          time_minutes: number | null
+          timer_seconds: number | null
+          updated_at: string
+          vessel_id: string | null
+          vessel_name: string | null
+        }
+        Insert: {
+          conclusion?: string | null
+          conducted_by?: string | null
+          corrective_actions?: string | null
+          created_at?: string
+          description?: string | null
+          dp_class?: string | null
+          drill_date?: string | null
+          evaluation?: string | null
+          human_factors?: string | null
+          id?: string
+          observations?: string | null
+          organization_id?: string | null
+          participants?: string | null
+          pre_discussion?: string | null
+          results?: string | null
+          scenario: string
+          scenario_id: string
+          status?: string
+          time_minutes?: number | null
+          timer_seconds?: number | null
+          updated_at?: string
+          vessel_id?: string | null
+          vessel_name?: string | null
+        }
+        Update: {
+          conclusion?: string | null
+          conducted_by?: string | null
+          corrective_actions?: string | null
+          created_at?: string
+          description?: string | null
+          dp_class?: string | null
+          drill_date?: string | null
+          evaluation?: string | null
+          human_factors?: string | null
+          id?: string
+          observations?: string | null
+          organization_id?: string | null
+          participants?: string | null
+          pre_discussion?: string | null
+          results?: string | null
+          scenario?: string
+          scenario_id?: string
+          status?: string
+          time_minutes?: number | null
+          timer_seconds?: number | null
+          updated_at?: string
+          vessel_id?: string | null
+          vessel_name?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "peodp_emergency_drills_vessel_id_fkey"
+            columns: ["vessel_id"]
+            isOneToOne: false
+            referencedRelation: "vessels"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       peodp_equipment: {
         Row: {
           created_at: string | null
@@ -31412,6 +31572,86 @@ export type Database = {
         }
         Relationships: []
       }
+      peotram_moc_requests: {
+        Row: {
+          approvals: Json | null
+          change_type: string
+          created_at: string
+          days_open: number | null
+          description: string | null
+          element: string | null
+          id: string
+          impact_areas: string[] | null
+          implementation_notes: string | null
+          moc_number: string
+          organization_id: string | null
+          request_date: string | null
+          requested_by: string | null
+          risk_assessment: string | null
+          risk_level: string | null
+          status: string
+          target_date: string | null
+          title: string
+          updated_at: string
+          verification_notes: string | null
+          vessel_id: string | null
+        }
+        Insert: {
+          approvals?: Json | null
+          change_type?: string
+          created_at?: string
+          days_open?: number | null
+          description?: string | null
+          element?: string | null
+          id?: string
+          impact_areas?: string[] | null
+          implementation_notes?: string | null
+          moc_number: string
+          organization_id?: string | null
+          request_date?: string | null
+          requested_by?: string | null
+          risk_assessment?: string | null
+          risk_level?: string | null
+          status?: string
+          target_date?: string | null
+          title: string
+          updated_at?: string
+          verification_notes?: string | null
+          vessel_id?: string | null
+        }
+        Update: {
+          approvals?: Json | null
+          change_type?: string
+          created_at?: string
+          days_open?: number | null
+          description?: string | null
+          element?: string | null
+          id?: string
+          impact_areas?: string[] | null
+          implementation_notes?: string | null
+          moc_number?: string
+          organization_id?: string | null
+          request_date?: string | null
+          requested_by?: string | null
+          risk_assessment?: string | null
+          risk_level?: string | null
+          status?: string
+          target_date?: string | null
+          title?: string
+          updated_at?: string
+          verification_notes?: string | null
+          vessel_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "peotram_moc_requests_vessel_id_fkey"
+            columns: ["vessel_id"]
+            isOneToOne: false
+            referencedRelation: "vessels"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       peotram_nc_actions: {
         Row: {
           closed_at: string | null
@@ -31845,6 +32085,65 @@ export type Database = {
           year?: number
         }
         Relationships: []
+      }
+      peotram_vessel_scores: {
+        Row: {
+          audit_cycle: string | null
+          created_at: string
+          element_scores: Json | null
+          id: string
+          last_audit_date: string | null
+          organization_id: string | null
+          overall_score: number | null
+          ranking: number | null
+          trend: string | null
+          trend_value: number | null
+          updated_at: string
+          vessel_id: string | null
+          vessel_name: string
+          vessel_type: string | null
+        }
+        Insert: {
+          audit_cycle?: string | null
+          created_at?: string
+          element_scores?: Json | null
+          id?: string
+          last_audit_date?: string | null
+          organization_id?: string | null
+          overall_score?: number | null
+          ranking?: number | null
+          trend?: string | null
+          trend_value?: number | null
+          updated_at?: string
+          vessel_id?: string | null
+          vessel_name: string
+          vessel_type?: string | null
+        }
+        Update: {
+          audit_cycle?: string | null
+          created_at?: string
+          element_scores?: Json | null
+          id?: string
+          last_audit_date?: string | null
+          organization_id?: string | null
+          overall_score?: number | null
+          ranking?: number | null
+          trend?: string | null
+          trend_value?: number | null
+          updated_at?: string
+          vessel_id?: string | null
+          vessel_name?: string
+          vessel_type?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "peotram_vessel_scores_vessel_id_fkey"
+            columns: ["vessel_id"]
+            isOneToOne: false
+            referencedRelation: "vessels"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       peotram_voice_chats: {
         Row: {

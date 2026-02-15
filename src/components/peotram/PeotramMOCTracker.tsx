@@ -1,25 +1,20 @@
+/**
+ * PEOTRAM MOC Tracker — Management of Change (Elemento 9)
+ * 6-stage workflow with approval chain
+ * PRODUCTION: Integrated with Supabase peotram_moc_requests
+ */
 import React, { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Progress } from "@/components/ui/progress";
-import { AlertTriangle, ArrowRight, CheckCircle, Clock, FileText, GitBranch, Shield, Target, Users } from "lucide-react";
-
-interface MOCRequest {
-  id: string;
-  title: string;
-  description: string;
-  element: string;
-  changeType: "permanent" | "temporary" | "emergency";
-  riskLevel: "low" | "medium" | "high" | "critical";
-  status: "draft" | "risk_assessment" | "approval" | "implementation" | "verification" | "closed";
-  requestedBy: string;
-  requestDate: string;
-  targetDate: string;
-  daysOpen: number;
-  impactAreas: string[];
-  approvals: Array<{ role: string; status: "pending" | "approved" | "rejected"; date?: string }>;
-}
+import { AlertTriangle, ArrowRight, CheckCircle, Clock, FileText, GitBranch, Plus, Shield, Target, Users } from "lucide-react";
+import { toast } from "sonner";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { supabase } from "@/integrations/supabase/client";
 
 const FLOW_STEPS = [
   { key: "draft", label: "Solicitação", icon: FileText },
@@ -28,60 +23,6 @@ const FLOW_STEPS = [
   { key: "implementation", label: "Implementação", icon: Target },
   { key: "verification", label: "Verificação", icon: Shield },
   { key: "closed", label: "Encerrada", icon: CheckCircle },
-];
-
-const INITIAL_MOCS: MOCRequest[] = [
-  {
-    id: "MOC-2026-001", title: "Alteração do procedimento de purga de linhas de GLP",
-    description: "Inclusão de etapa de verificação cruzada com detector portátil antes da purga",
-    element: "Elem. 6 — Procedimentos Operacionais", changeType: "permanent", riskLevel: "high",
-    status: "approval", requestedBy: "Eng. de Processo C. Ribeiro",
-    requestDate: "2026-01-28", targetDate: "2026-03-01", daysOpen: 18,
-    impactAreas: ["Segurança de Processo", "Treinamento", "Manutenção"],
-    approvals: [
-      { role: "Supervisor Operação", status: "approved", date: "2026-02-01" },
-      { role: "Coord. SMS", status: "approved", date: "2026-02-05" },
-      { role: "Gerente Plataforma", status: "pending" },
-    ],
-  },
-  {
-    id: "MOC-2026-002", title: "Substituição temporária de sensor de pressão PT-4502",
-    description: "Uso de sensor analógico durante manutenção do digital (30 dias)",
-    element: "Elem. 10 — Integridade de Ativos", changeType: "temporary", riskLevel: "medium",
-    status: "implementation", requestedBy: "Téc. Instrumentação J. Moura",
-    requestDate: "2026-02-03", targetDate: "2026-03-05", daysOpen: 12,
-    impactAreas: ["Instrumentação", "Alarmes", "FMEA"],
-    approvals: [
-      { role: "Supervisor Manutenção", status: "approved", date: "2026-02-04" },
-      { role: "Coord. SMS", status: "approved", date: "2026-02-06" },
-      { role: "Gerente Plataforma", status: "approved", date: "2026-02-07" },
-    ],
-  },
-  {
-    id: "MOC-2026-003", title: "Bypass emergencial de válvula de alívio PSV-1201",
-    description: "Bypass temporário para permitir manutenção corretiva de emergência",
-    element: "Elem. 5 — Gestão de Riscos", changeType: "emergency", riskLevel: "critical",
-    status: "verification", requestedBy: "Plataformista Sênior A. Costa",
-    requestDate: "2026-02-10", targetDate: "2026-02-17", daysOpen: 5,
-    impactAreas: ["Segurança de Processo", "Integridade de Ativos", "Operação"],
-    approvals: [
-      { role: "Supervisor Operação", status: "approved", date: "2026-02-10" },
-      { role: "Coord. SMS", status: "approved", date: "2026-02-10" },
-      { role: "Gerente Plataforma", status: "approved", date: "2026-02-10" },
-    ],
-  },
-  {
-    id: "MOC-2026-004", title: "Atualização de matriz de treinamento para NR-34",
-    description: "Inclusão de novos requisitos de trabalho a quente conforme NR-34 revisada",
-    element: "Elem. 8 — Treinamento", changeType: "permanent", riskLevel: "low",
-    status: "risk_assessment", requestedBy: "Coord. Treinamento L. Pereira",
-    requestDate: "2026-02-12", targetDate: "2026-04-01", daysOpen: 3,
-    impactAreas: ["Treinamento", "Competência", "Documentação"],
-    approvals: [
-      { role: "Supervisor Treinamento", status: "pending" },
-      { role: "Coord. SMS", status: "pending" },
-    ],
-  },
 ];
 
 const changeTypeConfig: Record<string, { label: string; color: string }> = {
@@ -98,23 +39,70 @@ const riskColors: Record<string, string> = {
 };
 
 export const PeotramMOCTracker: React.FC = () => {
-  const [mocs, setMocs] = useState<MOCRequest[]>(INITIAL_MOCS);
+  const queryClient = useQueryClient();
+  const [showForm, setShowForm] = useState(false);
+  const [newForm, setNewForm] = useState({ title: "", description: "", element: "", change_type: "permanent", risk_level: "medium", requested_by: "", target_date: "" });
 
-  const activeCount = mocs.filter(m => m.status !== "closed").length;
-  const emergencyCount = mocs.filter(m => m.changeType === "emergency" && m.status !== "closed").length;
-  const pendingApproval = mocs.filter(m => m.status === "approval").length;
-  const avgDays = Math.round(mocs.reduce((a, m) => a + m.daysOpen, 0) / mocs.length);
+  const { data: mocs = [], isLoading } = useQuery({
+    queryKey: ["peotram-moc-requests"],
+    queryFn: async () => {
+      const { data, error } = await (supabase.from as Function)("peotram_moc_requests")
+        .select("*")
+        .order("created_at", { ascending: false });
+      if (error) throw error;
+      return data || [];
+    },
+  });
 
-  const advanceStatus = (id: string) => {
-    setMocs(prev => prev.map(m => {
-      if (m.id !== id) return m;
-      const flow: Record<string, MOCRequest["status"]> = {
-        draft: "risk_assessment", risk_assessment: "approval", approval: "implementation",
-        implementation: "verification", verification: "closed",
-      };
-      return { ...m, status: flow[m.status] || m.status };
-    }));
+  const createMutation = useMutation({
+    mutationFn: async (moc: Record<string, unknown>) => {
+      const count = mocs.length + 1;
+      const { error } = await (supabase.from as Function)("peotram_moc_requests").insert({
+        ...moc,
+        moc_number: `MOC-2026-${String(count).padStart(3, "0")}`,
+        request_date: new Date().toISOString().split("T")[0],
+        status: "draft",
+        days_open: 0,
+        approvals: [],
+      });
+      if (error) throw error;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["peotram-moc-requests"] });
+      setShowForm(false);
+      setNewForm({ title: "", description: "", element: "", change_type: "permanent", risk_level: "medium", requested_by: "", target_date: "" });
+      toast.success("MOC criada com sucesso");
+    },
+  });
+
+  const updateMutation = useMutation({
+    mutationFn: async ({ id, updates }: { id: string; updates: Record<string, unknown> }) => {
+      const { error } = await (supabase.from as Function)("peotram_moc_requests").update(updates).eq("id", id);
+      if (error) throw error;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["peotram-moc-requests"] });
+    },
+  });
+
+  const advanceStatus = (moc: any) => {
+    const flow: Record<string, string> = {
+      draft: "risk_assessment", risk_assessment: "approval", approval: "implementation",
+      implementation: "verification", verification: "closed",
+    };
+    const next = flow[moc.status];
+    if (next) {
+      updateMutation.mutate({ id: moc.id, updates: { status: next } });
+      toast.success(`MOC avançada para: ${FLOW_STEPS.find(s => s.key === next)?.label}`);
+    }
   };
+
+  const activeCount = mocs.filter((m: any) => m.status !== "closed").length;
+  const emergencyCount = mocs.filter((m: any) => m.change_type === "emergency" && m.status !== "closed").length;
+  const pendingApproval = mocs.filter((m: any) => m.status === "approval").length;
+  const avgDays = mocs.length > 0 ? Math.round(mocs.reduce((a: number, m: any) => a + (m.days_open || 0), 0) / mocs.length) : 0;
+
+  if (isLoading) return <div className="text-center py-8 text-muted-foreground">Carregando MOCs...</div>;
 
   return (
     <div className="space-y-6">
@@ -161,65 +149,102 @@ export const PeotramMOCTracker: React.FC = () => {
       {/* MOC List */}
       <Card>
         <CardHeader className="pb-3">
-          <CardTitle className="text-lg flex items-center gap-2"><FileText className="h-5 w-5 text-primary" />Registro de Mudanças</CardTitle>
-          <CardDescription>Gestão de Mudanças conforme Elemento 9 — PEOTRAM</CardDescription>
+          <div className="flex items-center justify-between">
+            <div>
+              <CardTitle className="text-lg flex items-center gap-2"><FileText className="h-5 w-5 text-primary" />Registro de Mudanças</CardTitle>
+              <CardDescription>Gestão de Mudanças conforme Elemento 9 — PEOTRAM</CardDescription>
+            </div>
+            <Button size="sm" onClick={() => setShowForm(!showForm)} className="gap-1"><Plus className="h-3 w-3" />Nova MOC</Button>
+          </div>
         </CardHeader>
         <CardContent className="space-y-3">
-          {mocs.map(moc => {
-            const ctCfg = changeTypeConfig[moc.changeType];
+          {showForm && (
+            <div className="p-4 rounded-xl border bg-card/50 space-y-3">
+              <h4 className="text-sm font-semibold">Nova Solicitação de Mudança</h4>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                <Input placeholder="Título" value={newForm.title} onChange={e => setNewForm(p => ({ ...p, title: e.target.value }))} />
+                <Input placeholder="Solicitante" value={newForm.requested_by} onChange={e => setNewForm(p => ({ ...p, requested_by: e.target.value }))} />
+                <Input placeholder="Elemento PEOTRAM" value={newForm.element} onChange={e => setNewForm(p => ({ ...p, element: e.target.value }))} />
+                <Input type="date" value={newForm.target_date} onChange={e => setNewForm(p => ({ ...p, target_date: e.target.value }))} />
+                <Select value={newForm.change_type} onValueChange={v => setNewForm(p => ({ ...p, change_type: v }))}>
+                  <SelectTrigger><SelectValue /></SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="permanent">Permanente</SelectItem>
+                    <SelectItem value="temporary">Temporária</SelectItem>
+                    <SelectItem value="emergency">Emergencial</SelectItem>
+                  </SelectContent>
+                </Select>
+                <Select value={newForm.risk_level} onValueChange={v => setNewForm(p => ({ ...p, risk_level: v }))}>
+                  <SelectTrigger><SelectValue /></SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="low">Baixo</SelectItem>
+                    <SelectItem value="medium">Médio</SelectItem>
+                    <SelectItem value="high">Alto</SelectItem>
+                    <SelectItem value="critical">Crítico</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+              <Textarea placeholder="Descrição da mudança..." value={newForm.description} onChange={e => setNewForm(p => ({ ...p, description: e.target.value }))} />
+              <Button size="sm" onClick={() => createMutation.mutate(newForm)} disabled={!newForm.title || createMutation.isPending}>
+                Criar MOC
+              </Button>
+            </div>
+          )}
+
+          {mocs.map((moc: any) => {
+            const ctCfg = changeTypeConfig[moc.change_type] || changeTypeConfig.permanent;
             const currentStep = FLOW_STEPS.findIndex(s => s.key === moc.status);
             const progress = ((currentStep + 1) / FLOW_STEPS.length) * 100;
+            const approvals = Array.isArray(moc.approvals) ? moc.approvals : [];
 
             return (
               <div key={moc.id} className="p-4 rounded-xl border bg-card/50 space-y-3">
                 <div className="flex items-start justify-between gap-3">
                   <div className="space-y-1 flex-1">
                     <div className="flex items-center gap-2 flex-wrap">
-                      <span className="text-xs font-mono text-muted-foreground">{moc.id}</span>
+                      <span className="text-xs font-mono text-muted-foreground">{moc.moc_number}</span>
                       <Badge variant="outline" className={ctCfg.color}>{ctCfg.label}</Badge>
-                      <Badge variant="outline" className={riskColors[moc.riskLevel]}>Risco: {moc.riskLevel}</Badge>
-                      <Badge variant="outline">{FLOW_STEPS[currentStep]?.label}</Badge>
+                      <Badge variant="outline" className={riskColors[moc.risk_level] || ""}>Risco: {moc.risk_level}</Badge>
+                      <Badge variant="outline">{FLOW_STEPS[currentStep]?.label || moc.status}</Badge>
                     </div>
                     <p className="font-medium">{moc.title}</p>
                     <p className="text-xs text-muted-foreground">{moc.description}</p>
                     <div className="flex items-center gap-3 text-xs text-muted-foreground flex-wrap">
-                      <span>{moc.element}</span>
-                      <span className="flex items-center gap-1"><Users className="h-3 w-3" />{moc.requestedBy}</span>
-                      <span className="flex items-center gap-1"><Clock className="h-3 w-3" />{moc.daysOpen}d</span>
+                      {moc.element && <span>{moc.element}</span>}
+                      {moc.requested_by && <span className="flex items-center gap-1"><Users className="h-3 w-3" />{moc.requested_by}</span>}
+                      <span className="flex items-center gap-1"><Clock className="h-3 w-3" />{moc.days_open || 0}d</span>
                     </div>
                   </div>
                   {moc.status !== "closed" && (
-                    <Button size="sm" variant="outline" onClick={() => advanceStatus(moc.id)} className="gap-1 text-xs shrink-0">
+                    <Button size="sm" variant="outline" onClick={() => advanceStatus(moc)} className="gap-1 text-xs shrink-0">
                       <ArrowRight className="h-3 w-3" />Avançar
                     </Button>
                   )}
                 </div>
 
-                {/* Impact Areas */}
-                <div className="flex flex-wrap gap-1">
-                  {moc.impactAreas.map(area => (
-                    <Badge key={area} variant="secondary" className="text-[10px]">{area}</Badge>
-                  ))}
-                </div>
+                {moc.impact_areas && moc.impact_areas.length > 0 && (
+                  <div className="flex flex-wrap gap-1">
+                    {moc.impact_areas.map((area: string) => (
+                      <Badge key={area} variant="secondary" className="text-[10px]">{area}</Badge>
+                    ))}
+                  </div>
+                )}
 
-                {/* Approval Chain */}
-                <div className="flex flex-wrap gap-2">
-                  {moc.approvals.map((ap, i) => (
-                    <div key={i} className={`flex items-center gap-1 px-2 py-1 rounded-lg border text-xs ${
-                      ap.status === "approved" ? "bg-success/5 border-success/20 text-success" :
-                      ap.status === "rejected" ? "bg-destructive/5 border-destructive/20 text-destructive" :
-                      "bg-muted/50 border-border text-muted-foreground"
-                    }`}>
-                      {ap.status === "approved" ? <CheckCircle className="h-3 w-3" /> :
-                       ap.status === "rejected" ? <AlertTriangle className="h-3 w-3" /> :
-                       <Clock className="h-3 w-3" />}
-                      <span>{ap.role}</span>
-                      {ap.date && <span className="text-[10px] opacity-60">{ap.date}</span>}
-                    </div>
-                  ))}
-                </div>
+                {approvals.length > 0 && (
+                  <div className="flex flex-wrap gap-2">
+                    {approvals.map((ap: any, i: number) => (
+                      <div key={i} className={`flex items-center gap-1 px-2 py-1 rounded-lg border text-xs ${
+                        ap.status === "approved" ? "bg-success/5 border-success/20 text-success" :
+                        ap.status === "rejected" ? "bg-destructive/5 border-destructive/20 text-destructive" :
+                        "bg-muted/50 border-border text-muted-foreground"
+                      }`}>
+                        {ap.status === "approved" ? <CheckCircle className="h-3 w-3" /> : <Clock className="h-3 w-3" />}
+                        <span>{ap.role}</span>
+                      </div>
+                    ))}
+                  </div>
+                )}
 
-                {/* Progress */}
                 <div className="space-y-1">
                   <div className="flex justify-between text-xs text-muted-foreground">
                     <span>Progresso</span>
@@ -230,6 +255,10 @@ export const PeotramMOCTracker: React.FC = () => {
               </div>
             );
           })}
+
+          {mocs.length === 0 && (
+            <p className="text-center py-4 text-muted-foreground text-sm">Nenhuma MOC registrada. Use o botão "Nova MOC" para criar.</p>
+          )}
         </CardContent>
       </Card>
     </div>
