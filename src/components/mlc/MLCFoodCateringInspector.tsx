@@ -1,17 +1,18 @@
 /**
  * MLC Food & Catering Inspector - Regulation 3.2 Compliance
- * Tracks galley inspections, cook certificates, food quality and storage
+ * Connected to Supabase for real persistence
  */
-import React, { useState } from "react";
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
+import React, { useState, useEffect } from "react";
+import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Textarea } from "@/components/ui/textarea";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { supabase } from "@/integrations/supabase/client";
+import { toast } from "sonner";
 import {
-  UtensilsCrossed, CheckCircle, AlertTriangle, ThermometerSun,
-  ClipboardCheck, Award, ShieldCheck, Calendar, XCircle
+  UtensilsCrossed, CheckCircle, AlertTriangle, XCircle, ClipboardCheck, Loader2
 } from "lucide-react";
 
 interface InspectionItem {
@@ -24,48 +25,83 @@ interface InspectionItem {
   critical: boolean;
 }
 
-const INSPECTION_ITEMS: InspectionItem[] = [
-  // Galley & Equipment
-  { id: "fc-1", category: "Galley", requirement: "Cozinha limpa e organizada, livre de pragas", regulation: "A3.2 §2(a)", status: "not_inspected", notes: "", critical: true },
-  { id: "fc-2", category: "Galley", requirement: "Equipamentos de cocção em bom estado de funcionamento", regulation: "A3.2 §2(b)", status: "not_inspected", notes: "", critical: false },
-  { id: "fc-3", category: "Galley", requirement: "Ventilação e exaustão adequadas na cozinha", regulation: "A3.2 §2(c)", status: "not_inspected", notes: "", critical: false },
-  { id: "fc-4", category: "Galley", requirement: "Superfícies de trabalho em material sanitário lavável", regulation: "A3.2 §2(d)", status: "not_inspected", notes: "", critical: true },
-  { id: "fc-5", category: "Galley", requirement: "Sistema de refrigeração operacional com termômetros", regulation: "A3.2 §3", status: "not_inspected", notes: "", critical: true },
-  // Food Storage
-  { id: "fc-6", category: "Armazenamento", requirement: "Paiol de mantimentos seco, ventilado e limpo", regulation: "A3.2 §4(a)", status: "not_inspected", notes: "", critical: false },
-  { id: "fc-7", category: "Armazenamento", requirement: "Alimentos perecíveis armazenados em temperatura adequada (≤5°C)", regulation: "A3.2 §4(b)", status: "not_inspected", notes: "", critical: true },
-  { id: "fc-8", category: "Armazenamento", requirement: "FIFO (First In First Out) implementado", regulation: "A3.2 §4(c)", status: "not_inspected", notes: "", critical: false },
-  { id: "fc-9", category: "Armazenamento", requirement: "Separação adequada entre alimentos crus e cozidos", regulation: "A3.2 §4(d)", status: "not_inspected", notes: "", critical: true },
-  { id: "fc-10", category: "Armazenamento", requirement: "Sem alimentos vencidos - registro de validade em dia", regulation: "A3.2 §4(e)", status: "not_inspected", notes: "", critical: true },
-  // Food Quality
-  { id: "fc-11", category: "Qualidade", requirement: "Cardápio variado atendendo necessidades nutricionais", regulation: "A3.2 §1", status: "not_inspected", notes: "", critical: false },
-  { id: "fc-12", category: "Qualidade", requirement: "Dietas especiais/religiosas acomodadas", regulation: "A3.2 §1(b)", status: "not_inspected", notes: "", critical: false },
-  { id: "fc-13", category: "Qualidade", requirement: "Água potável disponível 24h com qualidade testada", regulation: "A3.2 §5", status: "not_inspected", notes: "", critical: true },
-  { id: "fc-14", category: "Qualidade", requirement: "Quantidade suficiente de refeições (min. 3/dia)", regulation: "A3.2 §1(c)", status: "not_inspected", notes: "", critical: true },
-  // Personnel
-  { id: "fc-15", category: "Pessoal", requirement: "Cozinheiro com certificado de competência válido (STCW)", regulation: "A3.2 §3", status: "not_inspected", notes: "", critical: true },
-  { id: "fc-16", category: "Pessoal", requirement: "Treinamento em higiene alimentar documentado", regulation: "A3.2 §3(b)", status: "not_inspected", notes: "", critical: true },
-  { id: "fc-17", category: "Pessoal", requirement: "Exames de saúde dos manipuladores em dia", regulation: "A3.2 §3(c)", status: "not_inspected", notes: "", critical: true },
-  // Hygiene
-  { id: "fc-18", category: "Higiene", requirement: "Programa de limpeza documentado e seguido", regulation: "B3.2 §1", status: "not_inspected", notes: "", critical: false },
-  { id: "fc-19", category: "Higiene", requirement: "Registro de temperaturas de câmaras (diário)", regulation: "B3.2 §2", status: "not_inspected", notes: "", critical: true },
-  { id: "fc-20", category: "Higiene", requirement: "Programa de controle de pragas (dedetização) válido", regulation: "B3.2 §3", status: "not_inspected", notes: "", critical: true },
-  { id: "fc-21", category: "Higiene", requirement: "EPIs disponíveis para manipuladores (luvas, toucas)", regulation: "B3.2 §4", status: "not_inspected", notes: "", critical: false },
-  { id: "fc-22", category: "Higiene", requirement: "Lavatório com sabão e álcool na entrada da cozinha", regulation: "B3.2 §5", status: "not_inspected", notes: "", critical: true },
+const TEMPLATE_ITEMS: Omit<InspectionItem, "status" | "notes">[] = [
+  { id: "fc-1", category: "Galley", requirement: "Cozinha limpa e organizada, livre de pragas", regulation: "A3.2 §2(a)", critical: true },
+  { id: "fc-2", category: "Galley", requirement: "Equipamentos de cocção em bom estado", regulation: "A3.2 §2(b)", critical: false },
+  { id: "fc-3", category: "Galley", requirement: "Ventilação e exaustão adequadas", regulation: "A3.2 §2(c)", critical: false },
+  { id: "fc-4", category: "Galley", requirement: "Superfícies em material sanitário lavável", regulation: "A3.2 §2(d)", critical: true },
+  { id: "fc-5", category: "Galley", requirement: "Sistema de refrigeração com termômetros", regulation: "A3.2 §3", critical: true },
+  { id: "fc-6", category: "Armazenamento", requirement: "Paiol de mantimentos seco e ventilado", regulation: "A3.2 §4(a)", critical: false },
+  { id: "fc-7", category: "Armazenamento", requirement: "Perecíveis em temperatura ≤5°C", regulation: "A3.2 §4(b)", critical: true },
+  { id: "fc-8", category: "Armazenamento", requirement: "FIFO implementado", regulation: "A3.2 §4(c)", critical: false },
+  { id: "fc-9", category: "Armazenamento", requirement: "Separação crus/cozidos", regulation: "A3.2 §4(d)", critical: true },
+  { id: "fc-10", category: "Armazenamento", requirement: "Sem alimentos vencidos", regulation: "A3.2 §4(e)", critical: true },
+  { id: "fc-11", category: "Qualidade", requirement: "Cardápio variado e nutritivo", regulation: "A3.2 §1", critical: false },
+  { id: "fc-12", category: "Qualidade", requirement: "Dietas especiais/religiosas", regulation: "A3.2 §1(b)", critical: false },
+  { id: "fc-13", category: "Qualidade", requirement: "Água potável 24h", regulation: "A3.2 §5", critical: true },
+  { id: "fc-14", category: "Qualidade", requirement: "Min. 3 refeições/dia", regulation: "A3.2 §1(c)", critical: true },
+  { id: "fc-15", category: "Pessoal", requirement: "Cozinheiro com certificado STCW", regulation: "A3.2 §3", critical: true },
+  { id: "fc-16", category: "Pessoal", requirement: "Treinamento higiene documentado", regulation: "A3.2 §3(b)", critical: true },
+  { id: "fc-17", category: "Pessoal", requirement: "Exames de saúde em dia", regulation: "A3.2 §3(c)", critical: true },
+  { id: "fc-18", category: "Higiene", requirement: "Programa de limpeza documentado", regulation: "B3.2 §1", critical: false },
+  { id: "fc-19", category: "Higiene", requirement: "Registro de temperaturas diário", regulation: "B3.2 §2", critical: true },
+  { id: "fc-20", category: "Higiene", requirement: "Controle de pragas válido", regulation: "B3.2 §3", critical: true },
+  { id: "fc-21", category: "Higiene", requirement: "EPIs para manipuladores", regulation: "B3.2 §4", critical: false },
+  { id: "fc-22", category: "Higiene", requirement: "Lavatório com sabão na entrada", regulation: "B3.2 §5", critical: true },
 ];
 
 const statusConfig = {
-  compliant: { label: "Conforme", color: "text-green-500", icon: CheckCircle, badge: "default" as const },
-  non_compliant: { label: "Não Conforme", color: "text-destructive", icon: XCircle, badge: "destructive" as const },
-  observation: { label: "Observação", color: "text-warning", icon: AlertTriangle, badge: "secondary" as const },
-  not_inspected: { label: "Não Inspecionado", color: "text-muted-foreground", icon: ClipboardCheck, badge: "outline" as const },
+  compliant: { label: "Conforme", color: "text-success", icon: CheckCircle },
+  non_compliant: { label: "Não Conforme", color: "text-destructive", icon: XCircle },
+  observation: { label: "Observação", color: "text-warning", icon: AlertTriangle },
+  not_inspected: { label: "Não Inspecionado", color: "text-muted-foreground", icon: ClipboardCheck },
 };
 
 export const MLCFoodCateringInspector: React.FC = () => {
-  const [items, setItems] = useState<InspectionItem[]>(INSPECTION_ITEMS);
+  const queryClient = useQueryClient();
   const [activeCategory, setActiveCategory] = useState("all");
 
-  const categories = ["all", ...Array.from(new Set(items.map(i => i.category)))];
+  const { data: savedItems = [], isLoading } = useQuery({
+    queryKey: ["mlc-food-inspections"],
+    queryFn: async () => {
+      const { data, error } = await (supabase.from as Function)("mlc_food_inspections")
+        .select("*")
+        .order("item_id");
+      if (error) throw error;
+      return data as Array<Record<string, unknown>>;
+    },
+  });
+
+  // Merge template with saved data
+  const items: InspectionItem[] = TEMPLATE_ITEMS.map(t => {
+    const saved = savedItems.find((s: Record<string, unknown>) => String(s.item_id) === t.id);
+    return {
+      ...t,
+      status: saved ? (String(saved.status) as InspectionItem["status"]) : "not_inspected",
+      notes: saved ? String(saved.notes || "") : "",
+    };
+  });
+
+  const saveMutation = useMutation({
+    mutationFn: async ({ itemId, status, notes }: { itemId: string; status: string; notes: string }) => {
+      const template = TEMPLATE_ITEMS.find(t => t.id === itemId);
+      const { error } = await (supabase.from as Function)("mlc_food_inspections")
+        .upsert({
+          item_id: itemId,
+          status,
+          notes,
+          category: template?.category || "",
+          requirement: template?.requirement || "",
+          regulation: template?.regulation || "",
+          is_critical: template?.critical || false,
+          inspected_at: new Date().toISOString(),
+        } as never, { onConflict: "item_id" });
+      if (error) throw error;
+    },
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: ["mlc-food-inspections"] }),
+  });
+
+  const categories = ["all", ...Array.from(new Set(TEMPLATE_ITEMS.map(i => i.category)))];
   const filtered = activeCategory === "all" ? items : items.filter(i => i.category === activeCategory);
 
   const inspected = items.filter(i => i.status !== "not_inspected").length;
@@ -74,54 +110,38 @@ export const MLCFoodCateringInspector: React.FC = () => {
   const observations = items.filter(i => i.status === "observation").length;
   const score = inspected > 0 ? Math.round((compliant / inspected) * 100) : 0;
 
-  const updateItem = (id: string, update: Partial<InspectionItem>) => {
-    setItems(prev => prev.map(i => i.id === id ? { ...i, ...update } : i));
+  const updateItem = (id: string, status: string, notes?: string) => {
+    const current = items.find(i => i.id === id);
+    saveMutation.mutate({ itemId: id, status, notes: notes ?? current?.notes ?? "" });
   };
+
+  if (isLoading) return <div className="flex justify-center py-8"><Loader2 className="h-6 w-6 animate-spin text-muted-foreground" /></div>;
 
   return (
     <div className="space-y-6">
       {/* Header Stats */}
-      <Card className="border-green-500/30 bg-gradient-to-r from-green-500/5 to-emerald-500/5">
+      <Card className="border-success/30 bg-gradient-to-r from-success/5 to-emerald-500/5">
         <CardContent className="pt-6">
           <div className="flex items-center justify-between mb-4">
             <div className="flex items-center gap-3">
-              <div className="p-3 rounded-xl bg-green-500/10">
-                <UtensilsCrossed className="h-6 w-6 text-green-500" />
-              </div>
+              <div className="p-3 rounded-xl bg-success/10"><UtensilsCrossed className="h-6 w-6 text-success" /></div>
               <div>
                 <h3 className="text-xl font-bold">Inspeção Alimentação & Catering</h3>
-                <p className="text-sm text-muted-foreground">MLC 2006 Regulation 3.2 • Standard A3.2 & Guideline B3.2</p>
+                <p className="text-sm text-muted-foreground">MLC 2006 Regulation 3.2</p>
               </div>
             </div>
             <div className="text-right">
-              <span className={`text-4xl font-bold ${score >= 90 ? "text-green-500" : score >= 70 ? "text-warning" : "text-destructive"}`}>
-                {score}%
-              </span>
+              <span className={`text-4xl font-bold ${score >= 90 ? "text-success" : score >= 70 ? "text-warning" : "text-destructive"}`}>{score}%</span>
               <p className="text-xs text-muted-foreground">Score de Conformidade</p>
             </div>
           </div>
           <Progress value={(inspected / items.length) * 100} className="h-2 mb-3" />
           <div className="grid grid-cols-5 gap-3 text-center">
-            <div className="p-2 rounded-lg bg-muted/50">
-              <span className="text-lg font-bold">{items.length}</span>
-              <p className="text-[10px] text-muted-foreground">Total Itens</p>
-            </div>
-            <div className="p-2 rounded-lg bg-blue-500/10">
-              <span className="text-lg font-bold text-blue-500">{inspected}</span>
-              <p className="text-[10px] text-muted-foreground">Inspecionados</p>
-            </div>
-            <div className="p-2 rounded-lg bg-green-500/10">
-              <span className="text-lg font-bold text-green-500">{compliant}</span>
-              <p className="text-[10px] text-muted-foreground">Conformes</p>
-            </div>
-            <div className="p-2 rounded-lg bg-destructive/10">
-              <span className="text-lg font-bold text-destructive">{nonCompliant}</span>
-              <p className="text-[10px] text-muted-foreground">Não Conformes</p>
-            </div>
-            <div className="p-2 rounded-lg bg-warning/10">
-              <span className="text-lg font-bold text-warning">{observations}</span>
-              <p className="text-[10px] text-muted-foreground">Observações</p>
-            </div>
+            <div className="p-2 rounded-lg bg-muted/50"><span className="text-lg font-bold">{items.length}</span><p className="text-[10px] text-muted-foreground">Total</p></div>
+            <div className="p-2 rounded-lg bg-primary/10"><span className="text-lg font-bold text-primary">{inspected}</span><p className="text-[10px] text-muted-foreground">Inspecionados</p></div>
+            <div className="p-2 rounded-lg bg-success/10"><span className="text-lg font-bold text-success">{compliant}</span><p className="text-[10px] text-muted-foreground">Conformes</p></div>
+            <div className="p-2 rounded-lg bg-destructive/10"><span className="text-lg font-bold text-destructive">{nonCompliant}</span><p className="text-[10px] text-muted-foreground">NCs</p></div>
+            <div className="p-2 rounded-lg bg-warning/10"><span className="text-lg font-bold text-warning">{observations}</span><p className="text-[10px] text-muted-foreground">Observações</p></div>
           </div>
         </CardContent>
       </Card>
@@ -141,7 +161,7 @@ export const MLCFoodCateringInspector: React.FC = () => {
           const cfg = statusConfig[item.status];
           const StatusIcon = cfg.icon;
           return (
-            <Card key={item.id} className={`${item.status === "non_compliant" ? "border-destructive/30" : ""}`}>
+            <Card key={item.id} className={item.status === "non_compliant" ? "border-destructive/30" : ""}>
               <CardContent className="pt-4 pb-3">
                 <div className="flex items-start gap-3">
                   <StatusIcon className={`h-5 w-5 mt-0.5 flex-shrink-0 ${cfg.color}`} />
@@ -151,31 +171,21 @@ export const MLCFoodCateringInspector: React.FC = () => {
                       {item.critical && <Badge variant="destructive" className="text-[10px] px-1 py-0">Crítico</Badge>}
                       <Badge variant="outline" className="text-[10px] px-1 py-0">{item.regulation}</Badge>
                     </div>
-
-                    {/* Status Buttons */}
                     <div className="flex items-center gap-1.5 mt-2 flex-wrap">
                       {(["compliant", "observation", "non_compliant"] as const).map(s => {
                         const sc = statusConfig[s];
                         return (
-                          <Button
-                            key={s} size="sm" variant={item.status === s ? "default" : "outline"}
-                            className={`h-7 text-xs gap-1 ${item.status === s && s === "compliant" ? "bg-green-500 hover:bg-green-600" : ""} ${item.status === s && s === "non_compliant" ? "bg-destructive hover:bg-destructive/90" : ""}`}
-                            onClick={() => updateItem(item.id, { status: s })}
-                          >
+                          <Button key={s} size="sm" variant={item.status === s ? "default" : "outline"}
+                            className={`h-7 text-xs gap-1 ${item.status === s && s === "compliant" ? "bg-success hover:bg-success/90" : ""} ${item.status === s && s === "non_compliant" ? "bg-destructive hover:bg-destructive/90" : ""}`}
+                            onClick={() => updateItem(item.id, s)}>
                             <sc.icon className="h-3 w-3" /> {sc.label}
                           </Button>
                         );
                       })}
                     </div>
-
-                    {/* Notes */}
                     {item.status !== "not_inspected" && (
-                      <Textarea
-                        className="mt-2 text-xs h-16"
-                        placeholder="Observações da inspeção..."
-                        value={item.notes}
-                        onChange={e => updateItem(item.id, { notes: e.target.value })}
-                      />
+                      <Textarea className="mt-2 text-xs h-16" placeholder="Observações..." value={item.notes}
+                        onChange={e => updateItem(item.id, item.status, e.target.value)} />
                     )}
                   </div>
                 </div>
