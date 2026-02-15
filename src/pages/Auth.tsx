@@ -408,63 +408,87 @@ const Auth: React.FC = () => {
   );
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-background via-background to-primary/5 flex items-center justify-center p-4 overflow-hidden relative">
+     <div className="min-h-screen bg-gradient-to-br from-background via-background to-primary/10 flex items-center justify-center p-4 overflow-hidden relative">
       {/* Cinematic background - animated mesh gradient */}
       <div className="absolute inset-0 pointer-events-none overflow-hidden">
         {/* Primary orb - deep ocean pulse */}
         <motion.div
-          className="absolute top-1/4 left-1/4 w-[600px] h-[600px] rounded-full blur-[140px]"
-          style={{ background: 'radial-gradient(circle, hsla(214, 84%, 46%, 0.12) 0%, transparent 70%)' }}
+          className="absolute top-1/4 left-1/4 w-[700px] h-[700px] rounded-full blur-[100px]"
+          style={{ background: 'radial-gradient(circle, hsla(214, 84%, 46%, 0.35) 0%, hsla(214, 84%, 46%, 0.08) 50%, transparent 70%)' }}
           animate={{ 
-            scale: [1, 1.15, 1], 
-            x: [0, 40, 0], 
-            y: [0, -30, 0],
-            opacity: [0.6, 0.9, 0.6]
+            scale: [1, 1.2, 1], 
+            x: [0, 60, 0], 
+            y: [0, -40, 0],
+            opacity: [0.7, 1, 0.7]
           }}
-          transition={{ duration: 10, repeat: Infinity, ease: "easeInOut" }}
+          transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
         />
         {/* Secondary orb - cyan accent */}
         <motion.div
-          className="absolute bottom-1/3 right-1/4 w-[500px] h-[500px] rounded-full blur-[120px]"
-          style={{ background: 'radial-gradient(circle, hsla(190, 95%, 50%, 0.08) 0%, transparent 70%)' }}
+          className="absolute bottom-1/4 right-1/5 w-[600px] h-[600px] rounded-full blur-[90px]"
+          style={{ background: 'radial-gradient(circle, hsla(190, 95%, 50%, 0.25) 0%, hsla(190, 95%, 50%, 0.05) 50%, transparent 70%)' }}
           animate={{ 
-            scale: [1.1, 0.95, 1.1], 
-            x: [0, -30, 0], 
-            y: [0, 35, 0],
-            opacity: [0.5, 0.8, 0.5]
+            scale: [1.1, 0.9, 1.1], 
+            x: [0, -50, 0], 
+            y: [0, 50, 0],
+            opacity: [0.6, 1, 0.6]
           }}
-          transition={{ duration: 12, repeat: Infinity, ease: "easeInOut" }}
+          transition={{ duration: 10, repeat: Infinity, ease: "easeInOut" }}
         />
-        {/* Floating particles */}
-        {[...Array(6)].map((_, i) => (
+        {/* Tertiary orb - purple accent */}
+        <motion.div
+          className="absolute top-2/3 left-1/2 w-[400px] h-[400px] rounded-full blur-[80px]"
+          style={{ background: 'radial-gradient(circle, hsla(270, 70%, 55%, 0.15) 0%, transparent 70%)' }}
+          animate={{ 
+            scale: [0.9, 1.15, 0.9], 
+            x: [0, -40, 0], 
+            y: [0, -30, 0],
+            opacity: [0.4, 0.8, 0.4]
+          }}
+          transition={{ duration: 14, repeat: Infinity, ease: "easeInOut" }}
+        />
+        {/* Floating particles - larger and more visible */}
+        {[...Array(12)].map((_, i) => (
           <motion.div
             key={i}
-            className="absolute w-1 h-1 bg-primary/30 rounded-full"
+            className="absolute rounded-full"
             style={{
-              left: `${15 + i * 15}%`,
-              top: `${20 + (i % 3) * 25}%`,
+              left: `${8 + i * 8}%`,
+              top: `${10 + (i % 4) * 22}%`,
+              width: i % 3 === 0 ? 4 : 2,
+              height: i % 3 === 0 ? 4 : 2,
+              background: i % 2 === 0 
+                ? 'hsla(214, 84%, 56%, 0.6)' 
+                : 'hsla(190, 95%, 60%, 0.5)',
+              boxShadow: i % 3 === 0 
+                ? '0 0 8px 2px hsla(214, 84%, 56%, 0.3)' 
+                : 'none',
             }}
             animate={{
-              y: [0, -40, 0],
-              opacity: [0, 0.6, 0],
-              scale: [0.5, 1.2, 0.5],
+              y: [0, -(30 + i * 5), 0],
+              x: [0, (i % 2 === 0 ? 15 : -15), 0],
+              opacity: [0.1, 0.8, 0.1],
+              scale: [0.5, 1.5, 0.5],
             }}
             transition={{
-              duration: 4 + i * 0.7,
+              duration: 3 + i * 0.5,
               repeat: Infinity,
-              delay: i * 0.8,
+              delay: i * 0.6,
               ease: "easeInOut",
             }}
           />
         ))}
-        {/* Subtle grid overlay */}
+        {/* Grid overlay - visible */}
         <div 
-          className="absolute inset-0 opacity-[0.02]"
+          className="absolute inset-0 opacity-[0.06]"
           style={{
-            backgroundImage: `linear-gradient(hsl(var(--primary)) 1px, transparent 1px), linear-gradient(90deg, hsl(var(--primary)) 1px, transparent 1px)`,
-            backgroundSize: '60px 60px',
+            backgroundImage: `linear-gradient(hsl(var(--primary) / 0.4) 1px, transparent 1px), linear-gradient(90deg, hsl(var(--primary) / 0.4) 1px, transparent 1px)`,
+            backgroundSize: '50px 50px',
           }}
         />
+        {/* Horizon line glow */}
+        <div className="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-primary/30 to-transparent" />
+        <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-primary/5 to-transparent" />
       </div>
       <motion.div
         initial={{ opacity: 0, y: 30, filter: "blur(10px)" }}
@@ -482,9 +506,12 @@ const Auth: React.FC = () => {
           {/* Logo & Title */}
           <div className="flex items-center space-x-4">
             <motion.div 
-              className="w-16 h-16 rounded-2xl bg-card flex items-center justify-center shadow-premium-lg p-2.5 border border-border/50 ring-1 ring-primary/10"
-              whileHover={{ scale: 1.08, rotate: 3 }}
-              transition={{ type: "spring", stiffness: 400, damping: 15 }}
+              className="w-16 h-16 rounded-2xl bg-card flex items-center justify-center shadow-premium-lg p-2.5 border border-border/50 ring-1 ring-primary/20 animate-pulse-glow"
+              whileHover={{ scale: 1.12, rotate: 5 }}
+              whileTap={{ scale: 0.95 }}
+              initial={{ scale: 0, rotate: -15 }}
+              animate={{ scale: 1, rotate: 0 }}
+              transition={{ type: "spring", stiffness: 260, damping: 15, delay: 0.3 }}
             >
               <img src={nautiLogo} alt="Nauti One Logo" className="w-full h-full object-contain" width={44} height={44} />
             </motion.div>
@@ -580,9 +607,9 @@ const Auth: React.FC = () => {
           transition={{ duration: 0.9, delay: 0.25, ease: [0.25, 0.46, 0.45, 0.94] }}
           className="w-full max-w-md mx-auto"
         >
-          <Card className="shadow-premium-xl border-border/50 bg-card/95 backdrop-blur-xl relative overflow-hidden">
-            {/* Subtle top gradient line */}
-            <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-primary/50 to-transparent" />
+          <Card className="shadow-premium-xl border-border/50 bg-card/95 backdrop-blur-xl relative overflow-hidden animate-pulse-glow">
+            {/* Top gradient line - more visible */}
+            <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-primary/20 via-primary/60 to-primary/20" />
             <CardHeader className="space-y-1.5 text-center pb-4">
               {/* Mobile logo */}
               <div className="lg:hidden flex justify-center mb-5">
