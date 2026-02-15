@@ -1449,3 +1449,23 @@ comment = "Calculate MLC 2006 compliance score by Title (1-5)"
 [functions.simulate-psc-mlc]
 verify_jwt = false
 comment = "Simulate PSC MLC inspection with Paris/Tokyo MoU detention criteria"
+
+[functions.simulate-dp-audit]
+verify_jwt = false
+comment = "Simulate DPVOA/IMCA audit with 9 weighted questions"
+
+[functions.calculate-peotram-readiness]
+verify_jwt = false
+comment = "Calculate PEOTRAM readiness score based on IMCA S 081"
+
+[functions.check-mlc-violations]
+verify_jwt = false
+comment = "Check MLC Reg. 2.3 work/rest hour violations"
+
+[functions.generate-dp-document]
+verify_jwt = false
+comment = "Generate DP audit documents (log report, FMEA, trial prep, evidence pack)"
+
+[functions.generate-mlc-document]
+verify_jwt = false
+comment = "Generate MLC documents (DCM draft, work/rest report, wage register, PSC evidence pack)"

@@ -1,10 +1,11 @@
 import { useState } from "react";
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
+import { useQuery } from "@tanstack/react-query";
+import { supabase } from "@/integrations/supabase/client";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Progress } from "@/components/ui/progress";
 import { toast } from "sonner";
-import { Shield, AlertTriangle, CheckCircle, RefreshCw, Download, TrendingUp } from "lucide-react";
+import { Shield, AlertTriangle, CheckCircle, RefreshCw, Loader2 } from "lucide-react";
 
 interface TitleScore {
   key: string;
@@ -14,82 +15,54 @@ interface TitleScore {
   items: { name: string; status: "ok" | "warning" | "critical"; detail: string }[];
 }
 
-const MLC_TITLES: TitleScore[] = [
-  {
-    key: "title1", title: "Título 1 — Requisitos Mínimos para Trabalho a Bordo",
-    regulations: ["Reg. 1.1 Idade Mínima", "Reg. 1.2 Certificado Médico", "Reg. 1.3 Qualificações", "Reg. 1.4 Recrutamento"],
-    score: 92,
-    items: [
-      { name: "Idade mínima (16 anos)", status: "ok", detail: "Todos os marítimos acima de 18 anos" },
-      { name: "Certificados médicos válidos", status: "warning", detail: "2 certificados vencem em 30 dias" },
-      { name: "Certificados STCW", status: "ok", detail: "100% dos certificados válidos" },
-      { name: "Agências recrutamento licenciadas", status: "ok", detail: "3 agências com licença válida" },
-    ],
-  },
-  {
-    key: "title2", title: "Título 2 — Condições de Emprego",
-    regulations: ["Reg. 2.1 SEA", "Reg. 2.2 Salários", "Reg. 2.3 Horas Trabalho/Descanso", "Reg. 2.4 Férias", "Reg. 2.5 Repatriação", "Reg. 2.7 Manning"],
-    score: 85,
-    items: [
-      { name: "Contratos SEA assinados", status: "ok", detail: "22/22 CEMs válidos a bordo" },
-      { name: "Salário mínimo ITF ($673/mês)", status: "ok", detail: "Todos acima do mínimo" },
-      { name: "Registros horas trabalho/descanso", status: "warning", detail: "3 violações de descanso mínimo no último mês" },
-      { name: "Férias anuais (2.5 dias/mês)", status: "ok", detail: "Cálculos corretos para todos" },
-      { name: "Seguro repatriação", status: "ok", detail: "P&I Club coverage ativo" },
-      { name: "Certificado Safe Manning", status: "critical", detail: "Vencido há 15 dias — renovar urgente" },
-    ],
-  },
-  {
-    key: "title3", title: "Título 3 — Alojamento, Instalações Recreativas, Alimentação",
-    regulations: ["Reg. 3.1 Alojamento", "Reg. 3.2 Alimentação e Catering"],
-    score: 88,
-    items: [
-      { name: "Espaço mínimo por marítimo (3.6m²)", status: "ok", detail: "Todas as cabines em conformidade" },
-      { name: "Ventilação e iluminação", status: "ok", detail: "Última inspeção: conforme" },
-      { name: "Cozinheiro certificado", status: "ok", detail: "2 cozinheiros com certificado Ship Cook" },
-      { name: "Qualidade alimentar", status: "warning", detail: "Inspeção de galley pendente (vence em 7 dias)" },
-    ],
-  },
-  {
-    key: "title4", title: "Título 4 — Proteção da Saúde, Cuidados Médicos, Bem-Estar, Segurança Social",
-    regulations: ["Reg. 4.1 Medical Care", "Reg. 4.2 Shipowner Liability", "Reg. 4.3 H&S", "Reg. 4.4 Welfare"],
-    score: 91,
-    items: [
-      { name: "Hospital de bordo equipado", status: "ok", detail: "Medicamentos e equipamentos atualizados" },
-      { name: "Oficial médico designado", status: "ok", detail: "2nd Officer com STCW Medical First Aid" },
-      { name: "Seguro de responsabilidade", status: "ok", detail: "P&I Club coverage para doença e lesão" },
-      { name: "Comitê de segurança", status: "ok", detail: "Reuniões mensais documentadas" },
-      { name: "Área de lazer", status: "ok", detail: "Sala de convivência, internet, ginásio" },
-    ],
-  },
-  {
-    key: "title5", title: "Título 5 — Conformidade e Execução",
-    regulations: ["Reg. 5.1.1 Flag State", "Reg. 5.1.3 MLC Certificate/DMLC", "Reg. 5.1.5 Grievance", "Reg. 5.2 Port State"],
-    score: 78,
-    items: [
-      { name: "MLC Certificate válido", status: "ok", detail: "Válido até 2027-03-15" },
-      { name: "DMLC Parte I", status: "ok", detail: "Emitida pelo Flag State" },
-      { name: "DMLC Parte II", status: "warning", detail: "Última revisão há 14 meses — atualizar" },
-      { name: "Procedimento de queixas", status: "critical", detail: "Não traduzido para idioma de 4 marítimos filipinos" },
-      { name: "Inspeção interna anual", status: "ok", detail: "Realizada em 2025-11-20" },
-    ],
-  },
+const DEFAULT_TITLES: TitleScore[] = [
+  { key: "title1", title: "Título 1 — Requisitos Mínimos para Trabalho a Bordo", regulations: ["Reg. 1.1", "Reg. 1.2", "Reg. 1.3", "Reg. 1.4"], score: 0, items: [] },
+  { key: "title2", title: "Título 2 — Condições de Emprego", regulations: ["Reg. 2.1", "Reg. 2.2", "Reg. 2.3", "Reg. 2.5", "Reg. 2.7"], score: 0, items: [] },
+  { key: "title3", title: "Título 3 — Alojamento, Instalações Recreativas, Alimentação", regulations: ["Reg. 3.1", "Reg. 3.2"], score: 0, items: [] },
+  { key: "title4", title: "Título 4 — Proteção da Saúde, Cuidados Médicos, Bem-Estar", regulations: ["Reg. 4.1", "Reg. 4.2", "Reg. 4.3", "Reg. 4.4"], score: 0, items: [] },
+  { key: "title5", title: "Título 5 — Conformidade e Execução", regulations: ["Reg. 5.1.1", "Reg. 5.1.3", "Reg. 5.1.5", "Reg. 5.2"], score: 0, items: [] },
 ];
 
 export function MLCComplianceByTitle() {
-  const [titles, setTitles] = useState(MLC_TITLES);
   const [expandedTitle, setExpandedTitle] = useState<string | null>(null);
 
-  const overallScore = Math.round(titles.reduce((acc, t) => acc + t.score, 0) / titles.length);
+  const { data: mlcData, isLoading, refetch, isRefetching } = useQuery({
+    queryKey: ["mlc-compliance-score"],
+    queryFn: async () => {
+      const { data, error } = await supabase.functions.invoke("calculate-mlc-score", { body: {} });
+      if (error) throw error;
+      return data;
+    },
+    staleTime: 1000 * 60 * 5,
+  });
+
+  const titles: TitleScore[] = mlcData ? [
+    { ...DEFAULT_TITLES[0], score: mlcData.title1_min_requirements || 0, items: [
+      { name: "Certificados médicos válidos", status: (mlcData.title1_min_requirements || 0) >= 90 ? "ok" : "warning", detail: `Score: ${mlcData.title1_min_requirements || 0}%` },
+    ]},
+    { ...DEFAULT_TITLES[1], score: mlcData.title2_conditions_employment || 0, items: [
+      { name: "Contratos e salários", status: (mlcData.title2_conditions_employment || 0) >= 90 ? "ok" : (mlcData.title2_conditions_employment || 0) >= 70 ? "warning" : "critical", detail: `Score: ${mlcData.title2_conditions_employment || 0}%` },
+    ]},
+    { ...DEFAULT_TITLES[2], score: mlcData.title3_accommodation || 0, items: [
+      { name: "Alojamento e alimentação", status: (mlcData.title3_accommodation || 0) >= 80 ? "ok" : "warning", detail: `Score: ${mlcData.title3_accommodation || 0}%` },
+    ]},
+    { ...DEFAULT_TITLES[3], score: mlcData.title4_health_safety || 0, items: [
+      { name: "Saúde e segurança", status: (mlcData.title4_health_safety || 0) >= 80 ? "ok" : "warning", detail: `Score: ${mlcData.title4_health_safety || 0}%` },
+    ]},
+    { ...DEFAULT_TITLES[4], score: mlcData.title5_compliance || 0, items: [
+      { name: "DCM e certificados MLC", status: (mlcData.title5_compliance || 0) >= 80 ? "ok" : "critical", detail: mlcData.dcmExpiryDate ? `DCM válida até ${new Date(mlcData.dcmExpiryDate).toLocaleDateString("pt-BR")}` : "DCM não encontrada" },
+    ]},
+  ] : DEFAULT_TITLES;
+
+  const overallScore = mlcData?.overall || Math.round(titles.reduce((acc, t) => acc + t.score, 0) / titles.length);
   const criticalCount = titles.reduce((acc, t) => acc + t.items.filter(i => i.status === "critical").length, 0);
-  const warningCount = titles.reduce((acc, t) => acc + t.items.filter(i => i.status === "warning").length, 0);
+  const criticalNCs = mlcData?.criticalNonConformities || [];
 
   const scoreColor = (score: number) => score >= 90 ? "text-green-600" : score >= 70 ? "text-amber-600" : "text-red-600";
   const progressColor = (score: number) => score >= 90 ? "bg-green-500" : score >= 70 ? "bg-amber-500" : "bg-red-500";
 
   return (
     <div className="space-y-4">
-      {/* Overall Score Card */}
       <Card className="bg-gradient-to-br from-primary/10 to-primary/5 border-primary/20">
         <CardContent className="py-6">
           <div className="flex items-center justify-between">
@@ -97,62 +70,47 @@ export function MLCComplianceByTitle() {
               <p className="text-sm text-muted-foreground">Conformidade MLC 2006 — Score Geral</p>
               <p className="text-xs text-muted-foreground mt-1">Maritime Labour Convention 2006 — Tempo Real</p>
             </div>
-            <div className="text-right">
-              <p className={`text-5xl font-bold ${scoreColor(overallScore)}`}>
-                {overallScore}<span className="text-lg text-muted-foreground">/100</span>
-              </p>
+            <div className="flex items-center gap-4">
+              <Button size="sm" variant="outline" onClick={() => refetch()} disabled={isRefetching} className="gap-1">
+                {isRefetching ? <Loader2 className="h-3 w-3 animate-spin" /> : <RefreshCw className="h-3 w-3" />} Atualizar
+              </Button>
+              <div className="text-right">
+                <p className={`text-5xl font-bold ${scoreColor(overallScore)}`}>
+                  {isLoading ? "--" : overallScore}<span className="text-lg text-muted-foreground">/100</span>
+                </p>
+              </div>
             </div>
           </div>
-          <div className="flex gap-4 mt-4">
-            {criticalCount > 0 && (
-              <Badge variant="destructive" className="gap-1">
-                <AlertTriangle className="h-3 w-3" /> {criticalCount} Críticas
-              </Badge>
-            )}
-            {warningCount > 0 && (
-              <Badge variant="secondary" className="gap-1 border-warning text-warning">
-                <AlertTriangle className="h-3 w-3" /> {warningCount} Atenção
-              </Badge>
-            )}
-            {criticalCount === 0 && warningCount === 0 && (
-              <Badge variant="secondary" className="gap-1 border-green-500 text-green-600">
-                <CheckCircle className="h-3 w-3" /> Totalmente Conforme
-              </Badge>
-            )}
-          </div>
+          {mlcData?.totalCrew && (
+            <p className="text-xs text-muted-foreground mt-2">
+              {mlcData.totalCrew} tripulantes analisados • Calculado em {new Date(mlcData.calculatedAt).toLocaleString("pt-BR")}
+            </p>
+          )}
         </CardContent>
       </Card>
 
-      {/* Titles */}
       {titles.map(title => {
         const isExpanded = expandedTitle === title.key;
         return (
-          <Card key={title.key} className={`cursor-pointer transition-all ${title.items.some(i => i.status === "critical") ? "border-destructive/30" : ""}`}
-            onClick={() => setExpandedTitle(isExpanded ? null : title.key)}>
+          <Card key={title.key} className="cursor-pointer transition-all" onClick={() => setExpandedTitle(isExpanded ? null : title.key)}>
             <CardContent className="pt-4 pb-3 space-y-3">
               <div className="flex items-center justify-between">
                 <div className="flex-1">
                   <h4 className="font-semibold text-sm">{title.title}</h4>
                   <div className="flex flex-wrap gap-1 mt-1">
-                    {title.regulations.map(r => (
-                      <Badge key={r} variant="outline" className="text-xs">{r}</Badge>
-                    ))}
+                    {title.regulations.map(r => <Badge key={r} variant="outline" className="text-xs">{r}</Badge>)}
                   </div>
                 </div>
-                <div className="text-right ml-4">
-                  <p className={`text-2xl font-bold ${scoreColor(title.score)}`}>{title.score}%</p>
-                </div>
+                <p className={`text-2xl font-bold ml-4 ${scoreColor(title.score)}`}>{title.score}%</p>
               </div>
 
               <div className="flex items-center gap-2">
                 <div className="flex-1 bg-muted rounded-full h-2 overflow-hidden">
-                  <div className={`h-full rounded-full transition-all ${progressColor(title.score)}`}
-                    style={{ width: `${title.score}%` }} />
+                  <div className={`h-full rounded-full transition-all ${progressColor(title.score)}`} style={{ width: `${title.score}%` }} />
                 </div>
-                <span className="text-xs text-muted-foreground w-8">{title.score}%</span>
               </div>
 
-              {isExpanded && (
+              {isExpanded && title.items.length > 0 && (
                 <div className="space-y-2 pt-2 border-t" onClick={e => e.stopPropagation()}>
                   {title.items.map((item, i) => (
                     <div key={i} className={`flex items-start gap-2 p-2 rounded text-sm ${item.status === "critical" ? "bg-destructive/10" : item.status === "warning" ? "bg-warning/10" : "bg-green-500/5"}`}>
@@ -172,8 +130,7 @@ export function MLCComplianceByTitle() {
         );
       })}
 
-      {/* Critical NCs */}
-      {criticalCount > 0 && (
+      {criticalNCs.length > 0 && (
         <Card className="border-destructive/50 bg-destructive/5">
           <CardHeader className="pb-2">
             <CardTitle className="text-base flex items-center gap-2 text-destructive">
@@ -182,15 +139,11 @@ export function MLCComplianceByTitle() {
           </CardHeader>
           <CardContent>
             <ul className="space-y-2">
-              {titles.flatMap(t => t.items.filter(i => i.status === "critical").map(i => (
-                <li key={i.name} className="text-sm flex items-start gap-2">
-                  <span className="text-destructive mt-0.5">●</span>
-                  <div>
-                    <span className="font-medium">{i.name}</span>
-                    <span className="text-muted-foreground"> — {i.detail}</span>
-                  </div>
+              {criticalNCs.map((nc: string, i: number) => (
+                <li key={i} className="text-sm flex items-start gap-2">
+                  <span className="text-destructive mt-0.5">●</span> {nc}
                 </li>
-              )))}
+              ))}
             </ul>
           </CardContent>
         </Card>
