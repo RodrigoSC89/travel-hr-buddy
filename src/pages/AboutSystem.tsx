@@ -23,7 +23,7 @@ import {
   CheckCircle, ArrowRight, ChevronRight, Zap,
   Lock, Wifi, WifiOff, Clock, HeartPulse, Scale,
   Activity, TrendingUp, AlertTriangle, BookOpen,
-  UserPlus, ArrowLeft, Sparkles, Waves
+  UserPlus, ArrowLeft, Sparkles, Waves, Crown, Building2
 } from "lucide-react";
 import nautiLogo from "@/assets/nauti-one-logo.png";
 
@@ -77,9 +77,9 @@ export default function AboutSystem() {
               <ArrowLeft className="mr-1.5 h-4 w-4" />
               Voltar
             </Button>
-            <Button size="sm" className="shadow-lg shadow-primary/20" onClick={() => navigate("/auth")}>
-              <UserPlus className="mr-1.5 h-4 w-4" />
-              Criar Conta
+            <Button size="sm" className="shadow-lg shadow-primary/20" onClick={() => navigate("/auth?mode=signup")}>
+              <Sparkles className="mr-1.5 h-4 w-4" />
+              Testar 7 Dias Grátis
             </Button>
           </div>
         </div>
@@ -125,9 +125,9 @@ export default function AboutSystem() {
           
           <ScrollReveal delay={0.6}>
             <div className="mt-10 flex flex-col sm:flex-row items-center justify-center gap-4">
-              <Button size="lg" className="text-base px-8 h-12 shadow-xl shadow-primary/25 group" onClick={() => navigate("/auth")}>
-                <UserPlus className="mr-2 h-5 w-5" />
-                Começar Agora — Grátis
+              <Button size="lg" className="text-base px-8 h-12 shadow-xl shadow-primary/25 group" onClick={() => navigate("/auth?mode=signup")}>
+                <Sparkles className="mr-2 h-5 w-5" />
+                Testar 7 Dias Grátis
                 <ArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
               </Button>
               <Button variant="outline" size="lg" className="text-base px-8 h-12 backdrop-blur-sm" onClick={() => {
@@ -286,8 +286,139 @@ export default function AboutSystem() {
         </StaggerContainer>
       </section>
 
+      {/* Pricing Section */}
+      <section id="pricing" className="border-t border-border/30 bg-muted/20">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24">
+          <ScrollReveal className="text-center mb-16">
+            <Badge variant="outline" className="mb-4 border-primary/20">
+              <Zap className="mr-1.5 h-3.5 w-3.5 text-primary" />
+              Preços
+            </Badge>
+            <h2 className="text-3xl sm:text-4xl font-bold tracking-tight">
+              Planos para todos os tamanhos de operação
+            </h2>
+            <p className="mt-4 text-muted-foreground max-w-2xl mx-auto">
+              Teste grátis por 7 dias em todos os planos. Sem compromisso. Cancele quando quiser.
+            </p>
+          </ScrollReveal>
+
+          <StaggerContainer className="grid md:grid-cols-3 gap-6 max-w-5xl mx-auto" staggerDelay={0.1}>
+            {/* Starter */}
+            <StaggerItem>
+              <Card className="border-border/40 flex flex-col h-full">
+                <CardContent className="p-6 flex-1 flex flex-col">
+                  <div className="text-center mb-6">
+                    <div className="mx-auto mb-3 h-12 w-12 rounded-full bg-primary/10 flex items-center justify-center">
+                      <Zap className="h-6 w-6 text-primary" />
+                    </div>
+                    <h3 className="text-xl font-bold">Starter</h3>
+                    <p className="text-sm text-muted-foreground mt-1">Para pequenas frotas e operações costeiras</p>
+                    <div className="mt-4">
+                      <span className="text-4xl font-bold">R$ 497</span>
+                      <span className="text-muted-foreground">/mês</span>
+                    </div>
+                    <p className="text-xs text-muted-foreground mt-1">Até 5 embarcações • 50 tripulantes</p>
+                    <Badge variant="secondary" className="mt-3 text-xs">7 dias grátis para testar</Badge>
+                  </div>
+                  <div className="flex-1">
+                    <p className="text-xs font-semibold text-primary mb-3 uppercase tracking-wide">Módulos incluídos</p>
+                    <ul className="space-y-2 mb-4">
+                      {['Gestão de Tripulação', 'Controle de Ponto (PWA)', 'Portal do Colaborador', 'Dashboard Operacional', 'Document Hub (básico)', 'Alertas de Vencimento'].map((m) => (
+                        <li key={m} className="flex items-start gap-2 text-sm">
+                          <CheckCircle className="h-4 w-4 text-primary shrink-0 mt-0.5" />
+                          {m}
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                  <Button variant="outline" className="w-full mt-4" onClick={() => navigate("/auth?mode=signup")}>
+                    Testar 7 Dias Grátis <ChevronRight className="h-4 w-4 ml-1" />
+                  </Button>
+                </CardContent>
+              </Card>
+            </StaggerItem>
+
+            {/* Professional */}
+            <StaggerItem>
+              <Card className="border-primary shadow-xl shadow-primary/10 scale-105 z-10 relative flex flex-col h-full">
+                <Badge className="absolute -top-3 left-1/2 -translate-x-1/2 bg-primary shadow-lg">Mais Popular</Badge>
+                <CardContent className="p-6 flex-1 flex flex-col">
+                  <div className="text-center mb-6">
+                    <div className="mx-auto mb-3 h-12 w-12 rounded-full bg-primary/10 flex items-center justify-center">
+                      <Crown className="h-6 w-6 text-primary" />
+                    </div>
+                    <h3 className="text-xl font-bold">Professional</h3>
+                    <p className="text-sm text-muted-foreground mt-1">Para frotas médias com compliance</p>
+                    <div className="mt-4">
+                      <span className="text-4xl font-bold">R$ 1.297</span>
+                      <span className="text-muted-foreground">/mês</span>
+                    </div>
+                    <p className="text-xs text-muted-foreground mt-1">Até 25 embarcações • 300 tripulantes</p>
+                    <Badge variant="secondary" className="mt-3 text-xs">7 dias grátis para testar</Badge>
+                  </div>
+                  <div className="flex-1">
+                    <p className="text-xs font-semibold text-primary mb-3 uppercase tracking-wide">Módulos incluídos</p>
+                    <ul className="space-y-2 mb-4">
+                      {['Tudo do Starter +', 'Folha de Pagamento Marítima', 'Compliance MLC 2006 & STCW', 'IA Preditiva (Turnover & Riscos)', 'People Analytics', 'Academy (Treinamento)', 'Relatórios Avançados & BI', 'OCR de Documentos com IA', 'API REST completa', 'Escalas & Rotação Inteligente'].map((m) => (
+                        <li key={m} className="flex items-start gap-2 text-sm">
+                          <CheckCircle className="h-4 w-4 text-primary shrink-0 mt-0.5" />
+                          {m}
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                  <Button className="w-full mt-4 shadow-lg shadow-primary/20" onClick={() => navigate("/auth?mode=signup")}>
+                    Testar 7 Dias Grátis <ChevronRight className="h-4 w-4 ml-1" />
+                  </Button>
+                </CardContent>
+              </Card>
+            </StaggerItem>
+
+            {/* Enterprise */}
+            <StaggerItem>
+              <Card className="border-border/40 flex flex-col h-full">
+                <CardContent className="p-6 flex-1 flex flex-col">
+                  <div className="text-center mb-6">
+                    <div className="mx-auto mb-3 h-12 w-12 rounded-full bg-primary/10 flex items-center justify-center">
+                      <Building2 className="h-6 w-6 text-primary" />
+                    </div>
+                    <h3 className="text-xl font-bold">Enterprise</h3>
+                    <p className="text-sm text-muted-foreground mt-1">Para grandes armadores e offshore</p>
+                    <div className="mt-4">
+                      <span className="text-3xl font-bold">Sob consulta</span>
+                    </div>
+                    <p className="text-xs text-muted-foreground mt-1">Embarcações & tripulantes ilimitados</p>
+                    <Badge variant="secondary" className="mt-3 text-xs">Demonstração personalizada</Badge>
+                  </div>
+                  <div className="flex-1">
+                    <p className="text-xs font-semibold text-primary mb-3 uppercase tracking-wide">Módulos incluídos</p>
+                    <ul className="space-y-2 mb-4">
+                      {['Tudo do Professional +', 'Multi-tenant (várias empresas)', 'SSO / SAML / LDAP', 'Auditoria Blockchain (imutável)', 'IA Avançada com RAG personalizado', 'White-label & Personalização', 'Integrações ERP (SAP, Oracle, TOTVS)', 'On-premise / Cloud dedicado'].map((m) => (
+                        <li key={m} className="flex items-start gap-2 text-sm">
+                          <CheckCircle className="h-4 w-4 text-primary shrink-0 mt-0.5" />
+                          {m}
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                  <Button variant="outline" className="w-full mt-4" onClick={() => window.location.href = 'mailto:comercial@nautione.com.br?subject=Nauti Enterprise'}>
+                    Falar com Vendas <ChevronRight className="h-4 w-4 ml-1" />
+                  </Button>
+                </CardContent>
+              </Card>
+            </StaggerItem>
+          </StaggerContainer>
+
+          <ScrollReveal className="mt-12 text-center space-y-1">
+            <p className="text-sm text-muted-foreground">✓ 7 dias de teste grátis em todos os planos</p>
+            <p className="text-sm text-muted-foreground">✓ Cancele a qualquer momento sem compromisso</p>
+            <p className="text-sm text-muted-foreground">✓ Pagamento seguro via Stripe</p>
+          </ScrollReveal>
+        </div>
+      </section>
+
       {/* CTA Final */}
-      <section className="border-t border-border/30 relative overflow-hidden">
+      <section className="relative overflow-hidden">
         <GlowPulse className="w-[500px] h-[500px] top-[-200px] left-[30%]" />
         <div className="relative max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-24 text-center">
           <ScrollReveal>
@@ -295,13 +426,12 @@ export default function AboutSystem() {
               Pronto para transformar suas operações?
             </h2>
             <p className="mt-4 text-lg text-muted-foreground max-w-2xl mx-auto">
-              Crie sua conta gratuitamente e comece a utilizar a plataforma de gestão marítima 
-              mais completa do mercado.
+              Teste o sistema mais completo de gestão marítima do mundo por 7 dias, sem compromisso.
             </p>
             <div className="mt-8">
-              <Button size="lg" className="text-base px-10 h-13 shadow-xl shadow-primary/25 group" onClick={() => navigate("/auth")}>
+              <Button size="lg" className="text-base px-10 h-13 shadow-xl shadow-primary/25 group" onClick={() => navigate("/auth?mode=signup")}>
                 <Sparkles className="mr-2 h-5 w-5" />
-                Criar Conta Gratuitamente
+                Testar 7 Dias Grátis
                 <ArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
               </Button>
             </div>
