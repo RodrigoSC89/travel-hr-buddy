@@ -31,7 +31,7 @@ import { toast } from 'sonner';
 // Lazy load sub-components
 const MaintenanceHub = lazy(() => import('@/pages/MaintenanceCommandCenter'));
 const ClassSurveysPage = lazy(() => import('@/pages/maintenance/ClassSurveysPage'));
-const DrydockManagement = lazy(() => import('@/pages/MaintenanceCommandCenter'));
+const DrydockManagement = lazy(() => import('@/components/maintenance/DryDockPlanner').then(m => ({ default: () => React.createElement(m.DryDockPlanner) })));
 const PredictiveMaintenancePage = lazy(() => import('@/pages/PredictiveMaintenancePage'));
 const FuelManagementPage = lazy(() => import('@/pages/FuelManagementPage'));
 const DigitalTwinPage = lazy(() => import('@/pages/advanced/DigitalTwin3DPage'));
