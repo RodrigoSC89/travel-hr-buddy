@@ -267,6 +267,9 @@ export const AppRoutes = () => (
       <Route path="/computer-vision-inspector" element={<Pages.ComputerVisionInspectorPage />} />
       <Route path="/crew-marketplace" element={<Pages.CrewMarketplacePage />} />
       <Route path="/iot-wearables" element={<Pages.IoTWearablesDashboardPage />} />
+      <Route path="/voice-copilot" element={<Pages.VoiceCopilotPage />} />
+      <Route path="/crew-fatigue-predictor" element={<Pages.CrewFatiguePredictorPage />} />
+      <Route path="/fleet-benchmarking" element={<Pages.FleetBenchmarkingPage />} />
       
       {/* ======== ENTERPRISE INTELLIGENCE SUITE ======== */}
       <Route path="/enterprise/rag-assistant" element={<Pages.RAGAssistantPage />} />

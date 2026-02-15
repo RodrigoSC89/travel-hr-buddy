@@ -277,6 +277,13 @@ export const IoTWearablesDashboardPage = lazy(() => import("@/pages/IoTWearables
 // Client Portal
 export const ClientPortalPage = lazy(() => import("@/pages/client-portal"));
 
+// ============================================
+// WORLD-CLASS DISRUPTIVE FEATURES v2
+// ============================================
+export const VoiceCopilotPage = lazy(() => import("@/pages/VoiceCopilotPage"));
+export const CrewFatiguePredictorPage = lazy(() => import("@/pages/CrewFatiguePredictorPage"));
+export const FleetBenchmarkingPage = lazy(() => import("@/pages/FleetBenchmarkingPage"));
+
 // AdminRoute (lazy-loaded RoleGuard)
 export const AdminRoute = lazy(() => import('@/components/auth/RoleGuard').then(mod => ({
   default: ({ children }: { children: React.ReactNode }) => (
