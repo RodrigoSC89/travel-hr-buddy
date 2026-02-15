@@ -103,7 +103,15 @@ export function MARPOLCompliancePanel() {
     );
   }
 
-  const { annexData, vesselCompliance, pendingActions } = data!;
+  if (!data) {
+    return (
+      <div className="text-center py-12 text-muted-foreground">
+        <p>Nenhum dado de compliance MARPOL disponível.</p>
+      </div>
+    );
+  }
+
+  const { annexData, vesselCompliance, pendingActions } = data;
   const compliantCount = annexData.filter(a => a.status === "compliant").length;
   const pendingCount = annexData.filter(a => a.status === "pending").length;
   const atRiskCount = annexData.filter(a => a.status === "at_risk" || a.status === "non_compliant").length;
