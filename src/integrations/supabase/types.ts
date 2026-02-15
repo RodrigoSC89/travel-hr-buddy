@@ -11967,6 +11967,126 @@ export type Database = {
         }
         Relationships: []
       }
+      defect_work_requests: {
+        Row: {
+          assigned_department: string | null
+          assigned_to: string | null
+          capa_status: string | null
+          category: string | null
+          completed_date: string | null
+          converted_to_pms: boolean | null
+          corrective_action: string | null
+          created_at: string
+          defect_number: string | null
+          description: string | null
+          equipment_name: string | null
+          id: string
+          linked_capa_id: string | null
+          location_onboard: string | null
+          organization_id: string | null
+          photos: Json | null
+          pms_job_id: string | null
+          preventive_action: string | null
+          priority: string | null
+          reported_by: string | null
+          reported_by_name: string | null
+          reported_date: string
+          root_cause: string | null
+          source: string | null
+          source_reference_id: string | null
+          status: string | null
+          target_date: string | null
+          title: string
+          updated_at: string
+          verified_by: string | null
+          verified_date: string | null
+          vessel_id: string | null
+        }
+        Insert: {
+          assigned_department?: string | null
+          assigned_to?: string | null
+          capa_status?: string | null
+          category?: string | null
+          completed_date?: string | null
+          converted_to_pms?: boolean | null
+          corrective_action?: string | null
+          created_at?: string
+          defect_number?: string | null
+          description?: string | null
+          equipment_name?: string | null
+          id?: string
+          linked_capa_id?: string | null
+          location_onboard?: string | null
+          organization_id?: string | null
+          photos?: Json | null
+          pms_job_id?: string | null
+          preventive_action?: string | null
+          priority?: string | null
+          reported_by?: string | null
+          reported_by_name?: string | null
+          reported_date?: string
+          root_cause?: string | null
+          source?: string | null
+          source_reference_id?: string | null
+          status?: string | null
+          target_date?: string | null
+          title: string
+          updated_at?: string
+          verified_by?: string | null
+          verified_date?: string | null
+          vessel_id?: string | null
+        }
+        Update: {
+          assigned_department?: string | null
+          assigned_to?: string | null
+          capa_status?: string | null
+          category?: string | null
+          completed_date?: string | null
+          converted_to_pms?: boolean | null
+          corrective_action?: string | null
+          created_at?: string
+          defect_number?: string | null
+          description?: string | null
+          equipment_name?: string | null
+          id?: string
+          linked_capa_id?: string | null
+          location_onboard?: string | null
+          organization_id?: string | null
+          photos?: Json | null
+          pms_job_id?: string | null
+          preventive_action?: string | null
+          priority?: string | null
+          reported_by?: string | null
+          reported_by_name?: string | null
+          reported_date?: string
+          root_cause?: string | null
+          source?: string | null
+          source_reference_id?: string | null
+          status?: string | null
+          target_date?: string | null
+          title?: string
+          updated_at?: string
+          verified_by?: string | null
+          verified_date?: string | null
+          vessel_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "defect_work_requests_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "defect_work_requests_vessel_id_fkey"
+            columns: ["vessel_id"]
+            isOneToOne: false
+            referencedRelation: "vessels"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       distributed_decisions: {
         Row: {
           approved_by: string | null
@@ -27948,6 +28068,156 @@ export type Database = {
             columns: ["reviewed_by"]
             isOneToOne: false
             referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      noon_reports: {
+        Row: {
+          air_temp: number | null
+          approved_at: string | null
+          approved_by: string | null
+          consumption_hfo: number | null
+          consumption_mdo: number | null
+          consumption_mgo: number | null
+          course: number | null
+          created_at: string
+          distance_run: number | null
+          distance_to_go: number | null
+          draft_aft: number | null
+          draft_fwd: number | null
+          eta: string | null
+          id: string
+          latitude: number | null
+          longitude: number | null
+          me_load_percent: number | null
+          me_power: number | null
+          me_rpm: number | null
+          organization_id: string | null
+          remarks: string | null
+          report_date: string
+          report_time: string
+          rob_hfo: number | null
+          rob_lsfo: number | null
+          rob_mdo: number | null
+          rob_mgo: number | null
+          sea_state: number | null
+          sea_temp: number | null
+          speed_avg: number | null
+          speed_ordered: number | null
+          status: string | null
+          submitted_by: string | null
+          swell_height: number | null
+          trim: number | null
+          updated_at: string
+          vessel_id: string | null
+          vessel_status: string | null
+          visibility: string | null
+          voyage_id: string | null
+          wind_direction: string | null
+          wind_force: number | null
+        }
+        Insert: {
+          air_temp?: number | null
+          approved_at?: string | null
+          approved_by?: string | null
+          consumption_hfo?: number | null
+          consumption_mdo?: number | null
+          consumption_mgo?: number | null
+          course?: number | null
+          created_at?: string
+          distance_run?: number | null
+          distance_to_go?: number | null
+          draft_aft?: number | null
+          draft_fwd?: number | null
+          eta?: string | null
+          id?: string
+          latitude?: number | null
+          longitude?: number | null
+          me_load_percent?: number | null
+          me_power?: number | null
+          me_rpm?: number | null
+          organization_id?: string | null
+          remarks?: string | null
+          report_date?: string
+          report_time?: string
+          rob_hfo?: number | null
+          rob_lsfo?: number | null
+          rob_mdo?: number | null
+          rob_mgo?: number | null
+          sea_state?: number | null
+          sea_temp?: number | null
+          speed_avg?: number | null
+          speed_ordered?: number | null
+          status?: string | null
+          submitted_by?: string | null
+          swell_height?: number | null
+          trim?: number | null
+          updated_at?: string
+          vessel_id?: string | null
+          vessel_status?: string | null
+          visibility?: string | null
+          voyage_id?: string | null
+          wind_direction?: string | null
+          wind_force?: number | null
+        }
+        Update: {
+          air_temp?: number | null
+          approved_at?: string | null
+          approved_by?: string | null
+          consumption_hfo?: number | null
+          consumption_mdo?: number | null
+          consumption_mgo?: number | null
+          course?: number | null
+          created_at?: string
+          distance_run?: number | null
+          distance_to_go?: number | null
+          draft_aft?: number | null
+          draft_fwd?: number | null
+          eta?: string | null
+          id?: string
+          latitude?: number | null
+          longitude?: number | null
+          me_load_percent?: number | null
+          me_power?: number | null
+          me_rpm?: number | null
+          organization_id?: string | null
+          remarks?: string | null
+          report_date?: string
+          report_time?: string
+          rob_hfo?: number | null
+          rob_lsfo?: number | null
+          rob_mdo?: number | null
+          rob_mgo?: number | null
+          sea_state?: number | null
+          sea_temp?: number | null
+          speed_avg?: number | null
+          speed_ordered?: number | null
+          status?: string | null
+          submitted_by?: string | null
+          swell_height?: number | null
+          trim?: number | null
+          updated_at?: string
+          vessel_id?: string | null
+          vessel_status?: string | null
+          visibility?: string | null
+          voyage_id?: string | null
+          wind_direction?: string | null
+          wind_force?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "noon_reports_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "noon_reports_vessel_id_fkey"
+            columns: ["vessel_id"]
+            isOneToOne: false
+            referencedRelation: "vessels"
             referencedColumns: ["id"]
           },
         ]
