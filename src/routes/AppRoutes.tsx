@@ -23,6 +23,7 @@ export const AppRoutes = () => (
     <Route path="/pricing" element={<Pages.LandingPage />} />
     <Route path="/status" element={<Pages.LandingPage />} />
     <Route path="/demo" element={<Pages.AboutSystem />} />
+    <Route path="/home" element={<Pages.LandingPage />} />
     
     {/* ============================================ */}
     {/* AUTHENTICATED ROUTES */}
