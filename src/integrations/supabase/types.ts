@@ -6318,40 +6318,55 @@ export type Database = {
       }
       certificates: {
         Row: {
+          category: string | null
           certificate_number: string
           certificate_type: string
           created_at: string | null
           employee_id: string | null
           expiry_date: string
+          holder_name: string | null
           id: string
           issue_date: string
           issuing_authority: string
+          notes: string | null
           status: string | null
           updated_at: string | null
+          vessel_id: string | null
+          vessel_name: string | null
         }
         Insert: {
+          category?: string | null
           certificate_number: string
           certificate_type: string
           created_at?: string | null
           employee_id?: string | null
           expiry_date: string
+          holder_name?: string | null
           id?: string
           issue_date: string
           issuing_authority: string
+          notes?: string | null
           status?: string | null
           updated_at?: string | null
+          vessel_id?: string | null
+          vessel_name?: string | null
         }
         Update: {
+          category?: string | null
           certificate_number?: string
           certificate_type?: string
           created_at?: string | null
           employee_id?: string | null
           expiry_date?: string
+          holder_name?: string | null
           id?: string
           issue_date?: string
           issuing_authority?: string
+          notes?: string | null
           status?: string | null
           updated_at?: string | null
+          vessel_id?: string | null
+          vessel_name?: string | null
         }
         Relationships: [
           {
@@ -38615,6 +38630,54 @@ export type Database = {
           template_name?: string
           user_id?: string
           variables?: Json
+        }
+        Relationships: []
+      }
+      scheduled_reports: {
+        Row: {
+          ai_enabled: boolean
+          created_at: string
+          created_by: string | null
+          id: string
+          is_active: boolean
+          last_run: string | null
+          name: string
+          next_run: string | null
+          organization_id: string | null
+          recipients: string[]
+          report_type: string
+          schedule: string
+          updated_at: string
+        }
+        Insert: {
+          ai_enabled?: boolean
+          created_at?: string
+          created_by?: string | null
+          id?: string
+          is_active?: boolean
+          last_run?: string | null
+          name: string
+          next_run?: string | null
+          organization_id?: string | null
+          recipients?: string[]
+          report_type?: string
+          schedule?: string
+          updated_at?: string
+        }
+        Update: {
+          ai_enabled?: boolean
+          created_at?: string
+          created_by?: string | null
+          id?: string
+          is_active?: boolean
+          last_run?: string | null
+          name?: string
+          next_run?: string | null
+          organization_id?: string | null
+          recipients?: string[]
+          report_type?: string
+          schedule?: string
+          updated_at?: string
         }
         Relationships: []
       }
