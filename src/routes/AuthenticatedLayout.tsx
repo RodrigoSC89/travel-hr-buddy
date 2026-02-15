@@ -14,6 +14,8 @@ import { ModuleErrorBoundary } from "@/components/layout/module-error-boundary";
 import { PresenceAvatars } from "@/components/ui/PresenceAvatars";
 import { HealthStatusBar } from "@/components/ui/HealthStatusBar";
 import { useRealtimeToasts } from "@/hooks/useRealtimeToasts";
+import { useAutonomousMonitor } from "@/hooks/useAutonomousMonitor";
+import { ProactiveAlertsBanner } from "@/components/dashboard/ProactiveAlertsBanner";
 
 const OfflineStatusBar = lazy(() => 
   import("@/components/offline/OfflineStatusBar").then(mod => ({ default: mod.OfflineStatusBar }))
@@ -38,6 +40,9 @@ const SpotlightSearch = lazy(() =>
 export const AuthenticatedLayout = () => {
   // Global real-time toast notifications for critical events
   useRealtimeToasts();
+  
+  // Autonomous AI monitoring - proactive alerts
+  const { alerts, dismissAlert } = useAutonomousMonitor({ enabled: true });
 
   return (
     <SidebarProvider defaultOpen={true}>
@@ -51,6 +56,11 @@ export const AuthenticatedLayout = () => {
             <PresenceAvatars />
           </div>
           <main className="flex-1 overflow-auto px-3 pb-20 md:px-6 md:pb-6">
+            {alerts.length > 0 && (
+              <div className="mt-3 mb-1">
+                <ProactiveAlertsBanner alerts={alerts} onDismiss={dismissAlert} maxVisible={3} />
+              </div>
+            )}
             <ModuleErrorBoundary moduleName="Page">
               <SmoothPageTransition>
                 <Outlet />
