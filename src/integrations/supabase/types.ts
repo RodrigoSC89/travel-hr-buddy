@@ -25948,6 +25948,84 @@ export type Database = {
           },
         ]
       }
+      mlc_dmlc: {
+        Row: {
+          attachments: string[] | null
+          created_at: string | null
+          dmlc_part: string | null
+          expiry_date: string | null
+          id: string
+          issued_date: string | null
+          issuing_authority: string | null
+          last_inspection_date: string | null
+          next_inspection_date: string | null
+          organization_id: string | null
+          status: string | null
+          title_1_measures: Json | null
+          title_2_measures: Json | null
+          title_3_measures: Json | null
+          title_4_measures: Json | null
+          title_5_measures: Json | null
+          updated_at: string | null
+          vessel_id: string | null
+        }
+        Insert: {
+          attachments?: string[] | null
+          created_at?: string | null
+          dmlc_part?: string | null
+          expiry_date?: string | null
+          id?: string
+          issued_date?: string | null
+          issuing_authority?: string | null
+          last_inspection_date?: string | null
+          next_inspection_date?: string | null
+          organization_id?: string | null
+          status?: string | null
+          title_1_measures?: Json | null
+          title_2_measures?: Json | null
+          title_3_measures?: Json | null
+          title_4_measures?: Json | null
+          title_5_measures?: Json | null
+          updated_at?: string | null
+          vessel_id?: string | null
+        }
+        Update: {
+          attachments?: string[] | null
+          created_at?: string | null
+          dmlc_part?: string | null
+          expiry_date?: string | null
+          id?: string
+          issued_date?: string | null
+          issuing_authority?: string | null
+          last_inspection_date?: string | null
+          next_inspection_date?: string | null
+          organization_id?: string | null
+          status?: string | null
+          title_1_measures?: Json | null
+          title_2_measures?: Json | null
+          title_3_measures?: Json | null
+          title_4_measures?: Json | null
+          title_5_measures?: Json | null
+          updated_at?: string | null
+          vessel_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "mlc_dmlc_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "mlc_dmlc_vessel_id_fkey"
+            columns: ["vessel_id"]
+            isOneToOne: false
+            referencedRelation: "vessels"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       mlc_evidence: {
         Row: {
           captured_at: string | null
