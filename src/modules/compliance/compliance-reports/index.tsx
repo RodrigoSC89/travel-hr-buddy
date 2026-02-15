@@ -124,21 +124,13 @@ const ComplianceReports = () => {
       
       if (error) {
         logger.error("Error fetching compliance data:", error);
-        // Use mock data if table doesn't exist
-        setComplianceData([
-          { id: 1, category: "Safety", severity: "high", status: "open", title: "Safety inspection pending", created_at: new Date().toISOString() },
-          { id: 2, category: "Environmental", severity: "medium", status: "closed", title: "Environmental audit completed", created_at: new Date().toISOString() }
-        ]);
+        setComplianceData([]);
       } else {
         setComplianceData(data || []);
       }
     } catch (error) {
       logger.error("Error:", error);
-      // Use mock data on error
-      setComplianceData([
-        { id: 1, category: "Safety", severity: "high", status: "open", title: "Safety inspection pending", created_at: new Date().toISOString() },
-        { id: 2, category: "Environmental", severity: "medium", status: "closed", title: "Environmental audit completed", created_at: new Date().toISOString() }
-      ]);
+      setComplianceData([]);
     } finally {
       setLoading(false);
     }

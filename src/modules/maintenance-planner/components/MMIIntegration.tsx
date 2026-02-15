@@ -45,29 +45,8 @@ export const MMIIntegration: React.FC = () => {
         .limit(10);
 
       if (error || !data) {
-        // Mock data if table doesn't exist
-        setPredictions([
-          {
-            id: "1",
-            equipment_id: "EQ-001",
-            equipment_name: "Main Engine Turbocharger",
-            failure_type: "Bearing Wear",
-            probability: 0.78,
-            predicted_date: new Date(Date.now() + 15 * 24 * 60 * 60 * 1000).toISOString(),
-            recommended_action: "Schedule bearing replacement within 2 weeks",
-            confidence: 0.85,
-          },
-          {
-            id: "2",
-            equipment_id: "EQ-002",
-            equipment_name: "Generator #1",
-            failure_type: "Oil Pressure Drop",
-            probability: 0.65,
-            predicted_date: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString(),
-            recommended_action: "Monitor oil levels, schedule inspection",
-            confidence: 0.72,
-          },
-        ]);
+        // No data available - show empty state
+        setPredictions([]);
       } else {
         // Transform MMI data to predictions with deterministic values
         // eslint-disable-next-line @typescript-eslint/no-explicit-any -- dynamic table row shape

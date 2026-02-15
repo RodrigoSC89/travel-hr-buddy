@@ -112,11 +112,8 @@ export function useDischargeRecords() {
         });
       }
 
-      // Demo fallback
-      return [
-        { id: "demo-1", date: new Date().toISOString().split("T")[0], type: "Resíduos Sólidos", quantity: 120, unit: "kg", location: "Porto de Macaé", method: "Empresa credenciada", certificate: "CERT-2024-001" },
-        { id: "demo-2", date: new Date().toISOString().split("T")[0], type: "Esgoto Sanitário", quantity: 4500, unit: "L", location: "Porto de Macaé", method: "Caminhão limpa-fossa", certificate: "CERT-2024-002" },
-      ];
+      // No discharge records - return empty for EmptyState
+      return [];
     },
     staleTime: 1000 * 60 * 5,
     refetchOnWindowFocus: false,

@@ -65,43 +65,8 @@ export function useVagas() {
         }));
       }
 
-      // Demo fallback
-      return [
-        {
-          id: "demo-1",
-          titulo: "Capitão de Longo Curso",
-          departamento: "Navegação",
-          tipo: "CLT",
-          urgencia: "alta",
-          candidatos: 5,
-          status: "aberta",
-          dataAbertura: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString(),
-          descricao: "Buscamos Capitão experiente para embarcação offshore",
-          requisitos: ["STCW", "DP2", "5+ anos experiência"],
-        },
-        {
-          id: "demo-2",
-          titulo: "Engenheiro de Máquinas",
-          departamento: "Manutenção",
-          tipo: "CLT",
-          urgencia: "media",
-          candidatos: 8,
-          status: "aberta",
-          dataAbertura: new Date(Date.now() - 14 * 24 * 60 * 60 * 1000).toISOString(),
-          requisitos: ["CREA", "Certificação Marítima"],
-        },
-        {
-          id: "demo-3",
-          titulo: "Oficial de Segurança",
-          departamento: "QSMS",
-          tipo: "CLT",
-          urgencia: "critica",
-          candidatos: 3,
-          status: "aberta",
-          dataAbertura: new Date(Date.now() - 3 * 24 * 60 * 60 * 1000).toISOString(),
-          requisitos: ["NR-35", "SSO", "Inglês fluente"],
-        },
-      ];
+      // No data found - return empty for EmptyState
+      return [];
     },
     staleTime: 1000 * 60 * 5,
   });
@@ -141,49 +106,8 @@ export function useCandidatos() {
         });
       }
 
-      // Demo fallback
-      return [
-        {
-          id: "cand-1",
-          nome: "Carlos Oliveira",
-          email: "carlos@email.com",
-          etapa: "triagem",
-          matchScore: 85,
-          skills: ["STCW", "DP2", "Inglês"],
-          experiencia: "8 anos como oficial",
-          dataAplicacao: new Date().toISOString(),
-        },
-        {
-          id: "cand-2",
-          nome: "Ana Ferreira",
-          email: "ana@email.com",
-          etapa: "entrevista_rh",
-          matchScore: 92,
-          skills: ["Engenharia Naval", "CREA", "Gestão"],
-          experiencia: "12 anos em offshore",
-          dataAplicacao: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000).toISOString(),
-        },
-        {
-          id: "cand-3",
-          nome: "Roberto Lima",
-          email: "roberto@email.com",
-          etapa: "entrevista_tecnica",
-          matchScore: 78,
-          skills: ["NR-35", "SSO", "STCW"],
-          experiencia: "5 anos em segurança",
-          dataAplicacao: new Date(Date.now() - 5 * 24 * 60 * 60 * 1000).toISOString(),
-        },
-        {
-          id: "cand-4",
-          nome: "Juliana Souza",
-          email: "juliana@email.com",
-          etapa: "proposta",
-          matchScore: 95,
-          skills: ["Capitão", "DP3", "ISM"],
-          experiencia: "15 anos de comando",
-          dataAplicacao: new Date(Date.now() - 10 * 24 * 60 * 60 * 1000).toISOString(),
-        },
-      ];
+      // No candidates found - return empty for EmptyState
+      return [];
     },
     staleTime: 1000 * 60 * 5,
   });

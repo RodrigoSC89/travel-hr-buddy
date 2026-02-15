@@ -188,11 +188,8 @@ export function useMaintenanceData() {
         .order('name');
 
       if (error) {
-        // Return mock data if table doesn't exist
-        return [
-          { id: '1', partNumber: 'FLT-001', name: 'Filtro de Óleo', category: 'Filtros', quantity: 25, minStock: 10, location: 'Paiol A', unitCost: 150, lastRestocked: new Date(), supplier: 'Marine Parts', leadTimeDays: 7, status: 'in_stock' as const },
-          { id: '2', partNumber: 'BRG-002', name: 'Rolamento Principal', category: 'Mecânica', quantity: 4, minStock: 5, location: 'Paiol B', unitCost: 850, lastRestocked: new Date(), supplier: 'SKF Maritime', leadTimeDays: 14, status: 'low_stock' as const },
-        ];
+        // No inventory data - return empty for EmptyState
+        return [];
       }
 
       // eslint-disable-next-line @typescript-eslint/no-explicit-any -- inventory_items dynamic shape with nested property access

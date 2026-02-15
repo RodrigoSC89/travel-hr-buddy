@@ -75,18 +75,18 @@ export function useEmployeeProfile() {
       }
 
       if (!data) {
-        // Return demo profile
+        // No employee record found - create profile from auth user
         return {
-          id: 'demo-user',
-          full_name: user.email?.split('@')[0] || 'Colaborador',
+          id: user.id,
+          full_name: user.user_metadata?.full_name || user.email?.split('@')[0] || 'Colaborador',
           email: user.email || '',
-          position: 'Colaborador',
-          department: 'Geral',
+          position: 'Não cadastrado',
+          department: 'Pendente',
           hire_date: new Date().toISOString().split('T')[0],
           avatar_url: null,
-          vacation_balance: 30,
-          vacation_expiry: new Date(Date.now() + 365 * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
-          benefits: { vr_balance: 847.50, va_balance: 420.00, health_plan: true, dental_plan: true },
+          vacation_balance: 0,
+          vacation_expiry: null,
+          benefits: { vr_balance: 0, va_balance: 0, health_plan: false, dental_plan: false },
         };
       }
 
@@ -119,12 +119,7 @@ export function useEmployeePayslips() {
   return useQuery<Payslip[]>({
     queryKey: ['employee-payslips', profile?.id],
     queryFn: async () => {
-      if (!profile?.id || profile.id === 'demo-user') {
-        return [
-          { id: '1', reference_month: 1, reference_year: 2026, gross_salary: 12000, net_salary: 8420.18, inss_deduction: 1417.44, irrf_deduction: 1582.56, other_deductions: 579.82, overtime_amount: 0, created_at: '2026-01-05' },
-          { id: '2', reference_month: 12, reference_year: 2025, gross_salary: 12000, net_salary: 8420.18, inss_deduction: 1417.44, irrf_deduction: 1582.56, other_deductions: 579.82, overtime_amount: 500, created_at: '2025-12-05' },
-        ];
-      }
+      if (!profile?.id) return [];
 
       const { data, error } = await supabase
         .from('hr_payroll')
