@@ -13,7 +13,7 @@ import { useSearchParams } from 'react-router-dom';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { Compass, Activity, BarChart3, Eye, Shield, Bell, Radio, RefreshCw, Wifi, WifiOff, Brain, Ship, Users, FileText, Wrench, Plus, AlertTriangle } from 'lucide-react';
+import { Compass, Activity, BarChart3, Eye, Shield, Bell, Radio, RefreshCw, Wifi, WifiOff, Brain, Ship, Users, FileText, Wrench, Plus, AlertTriangle, Gauge } from 'lucide-react';
 import { Skeleton } from '@/components/ui/skeleton';
 import { EnhancedActionBar } from '@/components/ui/world-class/EnhancedActionBar';
 import { PremiumTimeline } from '@/components/ui/world-class/PremiumTimeline';
@@ -37,6 +37,9 @@ const AlertsCommandCenter = lazy(() => import('@/pages/NOC'));
 const CommandAIHub = lazy(() => import('@/components/command/ai/CommandAIHub'));
 const CeoCommandDashboard = lazy(() => import('@/components/dashboard/CeoCommandDashboard'));
 const CustomizableDashboardGrid = lazy(() => import('@/components/dashboard/CustomizableDashboardGrid'));
+const VesselDigitalTwin = lazy(() => import('@/components/three/VesselDigitalTwin').then(m => ({ default: m.VesselDigitalTwin })));
+const PerformanceMetrics = lazy(() => import('@/components/performance/PerformanceMetrics').then(m => ({ default: m.PerformanceMetrics })));
+const EnhancedPresence = lazy(() => import('@/components/collaboration/EnhancedPresence').then(m => ({ default: m.EnhancedPresence })));
 
 const LoadingSkeleton = () => (
   <div className="space-y-4 p-6">
@@ -54,6 +57,7 @@ const tabConfig = [
   { id: 'overview', label: 'Overview', icon: Compass, path: '/command' },
   { id: 'operations', label: 'Operations', icon: Activity, path: '/command/operations' },
   { id: 'executive', label: 'Executive', icon: BarChart3, path: '/command/executive' },
+  { id: 'digital-twin', label: '🚢 Digital Twin', icon: Ship, path: '/command/digital-twin' },
   { id: 'noc', label: 'NOC 24/7', icon: Eye, path: '/command/noc' },
   { id: 'soc', label: 'SOC Security', icon: Shield, path: '/command/soc' },
   { id: 'comms', label: 'Comms', icon: Radio, path: '/command/comms' },
@@ -61,6 +65,7 @@ const tabConfig = [
   { id: 'ai-copilot', label: '🧠 IA Copiloto', icon: Brain, path: '/command/ai' },
   { id: 'ceo', label: '👔 CEO Dashboard', icon: BarChart3, path: '/command/ceo' },
   { id: 'my-dashboard', label: '🎯 Meu Dashboard', icon: Activity, path: '/command/my-dashboard' },
+  { id: 'performance', label: '📊 Performance', icon: Gauge, path: '/command/performance' },
 ];
 
 export default function CommandMegaHub() {
@@ -332,6 +337,14 @@ export default function CommandMegaHub() {
 
             <TabsContent value="my-dashboard" className="mt-0">
               <CustomizableDashboardGrid />
+            </TabsContent>
+            <TabsContent value="digital-twin" className="mt-0 space-y-6">
+              <VesselDigitalTwin />
+              <EnhancedPresence />
+            </TabsContent>
+
+            <TabsContent value="performance" className="mt-0 space-y-6">
+              <PerformanceMetrics />
             </TabsContent>
           </Suspense>
         </div>
