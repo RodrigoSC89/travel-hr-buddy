@@ -2,7 +2,7 @@ import type { FC } from 'react';
 import { useState, Suspense, lazy } from 'react';
 import { ModulePageWrapper } from '@/components/ui/module-page-wrapper';
 import { ModuleHeader } from '@/components/ui/module-header';
-import { Shield, Brain, Scale, Globe, Sparkles, Search, MessageSquare, Zap, ClipboardCheck, FileSearch, Clock, Heart, Users, Calculator, FileText, AlertTriangle } from 'lucide-react';
+import { Shield, Brain, Scale, Globe, Sparkles, Search, MessageSquare, Zap, ClipboardCheck, FileSearch, Clock, Heart, Users, Calculator, FileText, AlertTriangle, Home, Plane } from 'lucide-react';
 import { MLCInspectionDashboardV2 } from '@/components/mlc/MLCInspectionDashboardV2';
 import { MLCWelfareScoring } from '@/components/mlc/MLCWelfareScoring';
 import { MLCDMLCChecklist } from '@/components/mlc/MLCDMLCChecklist';
@@ -12,6 +12,8 @@ import { MLCSEAManager } from '@/components/mlc/MLCSEAManager';
 import { MLCComplaintProcedures } from '@/components/mlc/MLCComplaintProcedures';
 import { MLCManningCalculator } from '@/components/mlc/MLCManningCalculator';
 import { MLCMedicalCareTracker } from '@/components/mlc/MLCMedicalCareTracker';
+import { MLCAccommodationInspector } from '@/components/mlc/MLCAccommodationInspector';
+import { MLCRepatriationTracker } from '@/components/mlc/MLCRepatriationTracker';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Skeleton } from '@/components/ui/skeleton';
 
@@ -71,6 +73,8 @@ const MLCInspection: FC = () => {
           <TabsTrigger value="complaints" className="gap-1"><AlertTriangle className="h-3 w-3" />Reclamações</TabsTrigger>
           <TabsTrigger value="manning" className="gap-1"><Users className="h-3 w-3" />Manning</TabsTrigger>
           <TabsTrigger value="medical" className="gap-1"><Heart className="h-3 w-3" />Medical Care</TabsTrigger>
+          <TabsTrigger value="accommodation" className="gap-1"><Home className="h-3 w-3" />Alojamento</TabsTrigger>
+          <TabsTrigger value="repatriation" className="gap-1"><Plane className="h-3 w-3" />Repatriação</TabsTrigger>
           <TabsTrigger value="sgi-evidence" className="gap-1"><Sparkles className="h-3 w-3" />Evidências</TabsTrigger>
           <TabsTrigger value="gap-analyzer" className="gap-1"><Search className="h-3 w-3" />Gap Analyzer</TabsTrigger>
           <TabsTrigger value="interview-sim" className="gap-1"><MessageSquare className="h-3 w-3" />Simulador</TabsTrigger>
@@ -91,6 +95,8 @@ const MLCInspection: FC = () => {
         <TabsContent value="complaints"><MLCComplaintProcedures /></TabsContent>
         <TabsContent value="manning"><MLCManningCalculator /></TabsContent>
         <TabsContent value="medical"><MLCMedicalCareTracker /></TabsContent>
+        <TabsContent value="accommodation"><MLCAccommodationInspector /></TabsContent>
+        <TabsContent value="repatriation"><MLCRepatriationTracker /></TabsContent>
 
         <Suspense fallback={<LoadingFallback />}>
           <TabsContent value="sgi-evidence"><ComplianceSGIAutoEvidence moduleId="mlc" moduleName="MLC 2006" checklistItems={MLC_ITEMS} /></TabsContent>
