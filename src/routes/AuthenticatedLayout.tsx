@@ -79,7 +79,7 @@ export const AuthenticatedLayout = () => {
         <Suspense fallback={null}><UpdatePrompt /></Suspense>
         <Suspense fallback={null}><KeyboardShortcutsPanel /></Suspense>
         <Suspense fallback={null}><SpotlightSearch /></Suspense>
-        <Suspense fallback={null}><GlobalAICopilot /></Suspense>
+        {/* GlobalAICopilot removed - GlobalAIAssistant already provides AI access */}
       </div>
     </SidebarProvider>
   );
