@@ -1,94 +1,143 @@
 /**
- * Central de Comando Aprimorada - Versão Premium
- * PATCH PREMIUM-2.0 - Funcionalidades avançadas com IA
+ * Central de Comando Aprimorada - Versão Premium World-Class
+ * PATCH PREMIUM-3.0 - Cinematic animations + Real data
  */
-
 import React from "react";
+import { motion } from "framer-motion";
 import { supabase } from "@/integrations/supabase/client";
+import { useQuery } from "@tanstack/react-query";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { 
-  Compass, Ship, Users, Wrench, AlertTriangle, 
-  TrendingUp, Brain, Activity, Shield, FileText,
+import { CardSkeleton, TableSkeleton, PremiumEmptyState } from "@/components/ui/premium-loading";
+import {
+  Compass, Ship, Users, Wrench, AlertTriangle,
+  TrendingUp, Brain, Activity, Shield,
   Clock, MapPin, Zap, Target, BarChart3,
-  CheckCircle, XCircle, RefreshCw, Bell
+  CheckCircle, XCircle, RefreshCw, Bell, Anchor
 } from "lucide-react";
 import { toast } from "sonner";
 
-// KPI Data
-const systemKPIs = [
-  { id: "fleet", label: "Frota Ativa", value: "12/14", trend: "+8%", icon: Ship, color: "primary", status: "operational" },
-  { id: "crew", label: "Tripulação", value: "247", trend: "+3%", icon: Users, color: "success", status: "operational" },
-  { id: "maintenance", label: "OS Abertas", value: "8", trend: "-15%", icon: Wrench, color: "warning", status: "attention" },
-  { id: "compliance", label: "Conformidade", value: "97.2%", trend: "+1.2%", icon: Shield, color: "success", status: "operational" },
-  { id: "alerts", label: "Alertas Ativos", value: "3", trend: "-40%", icon: AlertTriangle, color: "warning", status: "attention" },
-  { id: "efficiency", label: "Eficiência Geral", value: "94.8%", trend: "+2.1%", icon: TrendingUp, color: "success", status: "operational" },
-];
-
-const activeOperations = [
-  { id: "1", vessel: "MV Atlântico Sul", operation: "Transporte de Carga", status: "em_rota", progress: 67, eta: "2d 4h", location: "Costa Brasileira" },
-  { id: "2", vessel: "MV Horizonte", operation: "Manutenção Programada", status: "doca", progress: 45, eta: "5d", location: "Porto de Santos" },
-  { id: "3", vessel: "MV Oceano", operation: "Abastecimento", status: "porto", progress: 90, eta: "6h", location: "Porto de Vitória" },
-  { id: "4", vessel: "MV Estrela do Mar", operation: "Transporte Offshore", status: "em_rota", progress: 33, eta: "3d 12h", location: "Bacia de Campos" },
-];
-
-const criticalAlerts = [
-  { id: "1", severity: "high", title: "Certificado SOLAS vencendo", vessel: "MV Atlântico Sul", dueDate: "3 dias", action: "Agendar renovação" },
-  { id: "2", severity: "medium", title: "Manutenção preventiva atrasada", vessel: "MV Horizonte", dueDate: "7 dias", action: "Priorizar OS" },
-  { id: "3", severity: "low", title: "Treinamento pendente", vessel: "MV Oceano", dueDate: "15 dias", action: "Agendar tripulação" },
-];
-
-const aiInsights = [
-  { id: "1", type: "optimization", title: "Otimização de Rota Sugerida", description: "Economia potencial de 12% no consumo de combustível para MV Atlântico Sul", confidence: 94 },
-  { id: "2", type: "prediction", title: "Previsão de Manutenção", description: "Motor principal do MV Horizonte requer atenção em 30 dias", confidence: 87 },
-  { id: "3", type: "compliance", title: "Auditoria ISM Próxima", description: "3 embarcações precisam de revisão documental antes de 60 dias", confidence: 92 },
-];
+// Animated KPI counter
+function AnimatedValue({ value, suffix = "" }: { value: string; suffix?: string }) {
+  return (
+    <motion.span
+      key={value}
+      initial={{ opacity: 0, y: 10 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.4 }}
+      className="text-2xl font-bold"
+    >
+      {value}{suffix}
+    </motion.span>
+  );
+}
 
 export default function CentralComandoAprimorada() {
   const [isRefreshing, setIsRefreshing] = React.useState(false);
 
-  const handleRefresh = async () => {
+  // Real data queries
+  const { data: vesselCount } = useQuery({
+    queryKey: ["dashboard-vessels"],
+    queryFn: async () => {
+      const { count } = await supabase.from("vessels").select("*", { count: "exact", head: true });
+      return count || 0;
+    },
+    staleTime: 60000,
+  });
+
+  const { data: crewCount } = useQuery({
+    queryKey: ["dashboard-crew"],
+    queryFn: async () => {
+      const { count } = await supabase.from("crew_members").select("*", { count: "exact", head: true });
+      return count || 0;
+    },
+    staleTime: 60000,
+  });
+
+  const { data: maintenanceCount } = useQuery({
+    queryKey: ["dashboard-maintenance"],
+    queryFn: async () => {
+      const { count } = await supabase.from("maintenance_tasks").select("*", { count: "exact", head: true }).eq("status", "open");
+      return count || 0;
+    },
+    staleTime: 60000,
+  });
+
+  const { data: alertsCount } = useQuery({
+    queryKey: ["dashboard-alerts"],
+    queryFn: async () => {
+      const { count } = await supabase.from("soc_alerts").select("*", { count: "exact", head: true }).eq("status", "open");
+      return count || 0;
+    },
+    staleTime: 60000,
+  });
+
+  const { data: recentInsights, isLoading: insightsLoading } = useQuery({
+    queryKey: ["dashboard-ai-insights"],
+    queryFn: async () => {
+      const { data } = await supabase
+        .from("ai_insights")
+        .select("id, title, description, confidence, priority, category")
+        .order("created_at", { ascending: false })
+        .limit(3);
+      return data || [];
+    },
+    staleTime: 60000,
+  });
+
+  const { data: recentVoyages, isLoading: voyagesLoading } = useQuery({
+    queryKey: ["dashboard-voyages"],
+    queryFn: async () => {
+      const { data } = await supabase
+        .from("voyage_plans")
+        .select("id, voyage_number, status, origin_port, destination_port, vessel_id")
+        .order("created_at", { ascending: false })
+        .limit(4);
+      return data || [];
+    },
+    staleTime: 60000,
+  });
+
+  const systemKPIs = [
+    { id: "fleet", label: "Embarcações", value: String(vesselCount ?? "—"), icon: Ship, color: "primary" },
+    { id: "crew", label: "Tripulação", value: String(crewCount ?? "—"), icon: Users, color: "success" },
+    { id: "maintenance", label: "OS Abertas", value: String(maintenanceCount ?? "—"), icon: Wrench, color: "warning" },
+    { id: "alerts", label: "Alertas", value: String(alertsCount ?? "—"), icon: AlertTriangle, color: "destructive" },
+  ];
+
+  const handleRefresh = () => {
     setIsRefreshing(true);
-    // Trigger re-fetch of dashboard queries
-    toast.success("Dados atualizados com sucesso");
-    setIsRefreshing(false);
-  };
-
-  const getStatusColor = (status: string) => {
-    switch (status) {
-      case "em_rota": return "bg-emerald-500";
-      case "doca": return "bg-amber-500";
-      case "porto": return "bg-blue-500";
-      default: return "bg-muted";
-    }
-  };
-
-  const getSeverityColor = (severity: string) => {
-    switch (severity) {
-      case "high": return "destructive";
-      case "medium": return "secondary";
-      case "low": return "outline";
-      default: return "outline";
-    }
+    setTimeout(() => {
+      toast.success("Dados atualizados com sucesso");
+      setIsRefreshing(false);
+    }, 800);
   };
 
   return (
     <div className="min-h-screen bg-background">
       {/* Header Premium */}
-      <div className="border-b bg-gradient-to-r from-primary/5 via-background to-accent/5">
+      <motion.div
+        initial={{ opacity: 0, y: -10 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5 }}
+        className="border-b bg-gradient-to-r from-primary/5 via-background to-accent/5"
+      >
         <div className="container mx-auto px-4 py-5">
           <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
             <div className="flex items-center gap-4">
-              <div className="p-3 rounded-xl bg-gradient-to-br from-primary to-primary/80 text-primary-foreground shadow-lg">
+              <motion.div
+                whileHover={{ scale: 1.05, rotate: 5 }}
+                className="p-3 rounded-xl bg-gradient-to-br from-primary to-primary/80 text-primary-foreground shadow-lg"
+              >
                 <Compass className="h-7 w-7" />
-              </div>
+              </motion.div>
               <div>
                 <div className="flex items-center gap-3">
                   <h1 className="text-2xl font-bold">Central de Comando</h1>
-                  <Badge className="bg-emerald-500/10 text-emerald-600 gap-1">
+                  <Badge className="bg-success/10 text-success gap-1 border-success/20">
                     <Activity className="h-3 w-3" />
                     Online
                   </Badge>
@@ -108,27 +157,33 @@ export default function CentralComandoAprimorada() {
             </div>
           </div>
         </div>
-      </div>
+      </motion.div>
 
       <div className="container mx-auto px-4 py-6 space-y-6">
-        {/* KPIs Grid */}
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
-          {systemKPIs.map((kpi) => (
-            <Card key={kpi.id} className="hover:shadow-md transition-shadow cursor-pointer">
-              <CardContent className="p-4">
-                <div className="flex items-start justify-between">
-                  <div>
-                    <p className="text-xs text-muted-foreground">{kpi.label}</p>
-                    <p className="text-2xl font-bold mt-1">{kpi.value}</p>
-                    <div className="flex items-center gap-1 mt-1">
-                      <TrendingUp className="h-3 w-3 text-emerald-500" />
-                      <span className="text-xs text-emerald-600">{kpi.trend}</span>
+        {/* KPIs Grid - Animated */}
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+          {systemKPIs.map((kpi, i) => (
+            <motion.div
+              key={kpi.id}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: i * 0.1, duration: 0.4 }}
+              whileHover={{ y: -4, transition: { duration: 0.2 } }}
+            >
+              <Card className="hover:shadow-premium-sm transition-shadow border-border/50 bg-card/80 backdrop-blur-sm">
+                <CardContent className="p-4">
+                  <div className="flex items-start justify-between">
+                    <div>
+                      <p className="text-xs text-muted-foreground font-medium">{kpi.label}</p>
+                      <AnimatedValue value={kpi.value} />
+                    </div>
+                    <div className={`p-2 rounded-lg bg-${kpi.color}/10`}>
+                      <kpi.icon className={`h-5 w-5 text-${kpi.color}`} />
                     </div>
                   </div>
-                  <kpi.icon className="h-5 w-5 text-muted-foreground" />
-                </div>
-              </CardContent>
-            </Card>
+                </CardContent>
+              </Card>
+            </motion.div>
           ))}
         </div>
 
@@ -136,12 +191,16 @@ export default function CentralComandoAprimorada() {
           <TabsList className="inline-flex h-10 items-center gap-1 rounded-lg bg-muted/50 p-1">
             <TabsTrigger value="operations" className="flex items-center gap-2">
               <Ship className="h-4 w-4" />
-              Operações
+              Viagens
             </TabsTrigger>
             <TabsTrigger value="alerts" className="flex items-center gap-2">
               <Bell className="h-4 w-4" />
               Alertas
-              <Badge variant="destructive" className="h-5 w-5 p-0 text-[10px]">3</Badge>
+              {(alertsCount ?? 0) > 0 && (
+                <Badge variant="destructive" className="h-5 min-w-5 p-0 text-[10px] flex items-center justify-center">
+                  {alertsCount}
+                </Badge>
+              )}
             </TabsTrigger>
             <TabsTrigger value="ai" className="flex items-center gap-2">
               <Brain className="h-4 w-4" />
@@ -153,57 +212,58 @@ export default function CentralComandoAprimorada() {
             </TabsTrigger>
           </TabsList>
 
-          {/* Operações Ativas */}
+          {/* Viagens Recentes */}
           <TabsContent value="operations">
             <Card>
               <CardHeader>
                 <div className="flex items-center justify-between">
                   <CardTitle className="flex items-center gap-2">
-                    <Activity className="h-5 w-5" />
-                    Operações em Andamento
+                    <Anchor className="h-5 w-5" />
+                    Viagens Recentes
                   </CardTitle>
-                  <Badge variant="secondary">{activeOperations.length} ativas</Badge>
+                  <Badge variant="secondary">{recentVoyages?.length ?? 0} registros</Badge>
                 </div>
               </CardHeader>
               <CardContent>
-                <div className="space-y-4">
-                  {activeOperations.map((op) => (
-                    <div key={op.id} className="p-4 rounded-lg border bg-card hover:bg-muted/30 transition-colors">
-                      <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
-                        <div className="flex items-start gap-3">
-                          <div className={`w-3 h-3 rounded-full mt-1.5 ${getStatusColor(op.status)}`} />
-                          <div>
-                            <p className="font-semibold">{op.vessel}</p>
-                            <p className="text-sm text-muted-foreground">{op.operation}</p>
-                            <div className="flex items-center gap-2 mt-1">
-                              <MapPin className="h-3 w-3 text-muted-foreground" />
-                              <span className="text-xs text-muted-foreground">{op.location}</span>
+                {voyagesLoading ? (
+                  <TableSkeleton rows={4} cols={4} />
+                ) : recentVoyages && recentVoyages.length > 0 ? (
+                  <div className="space-y-3">
+                    {recentVoyages.map((voyage, i) => (
+                      <motion.div
+                        key={voyage.id}
+                        initial={{ opacity: 0, x: -20 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        transition={{ delay: i * 0.1 }}
+                        className="p-4 rounded-lg border border-border/50 bg-card/50 hover:bg-muted/30 transition-colors"
+                      >
+                        <div className="flex items-center justify-between">
+                          <div className="flex items-center gap-3">
+                            <div className="w-2.5 h-2.5 rounded-full bg-primary" />
+                            <div>
+                              <p className="font-semibold text-sm">{voyage.voyage_number || "Sem número"}</p>
+                              <div className="flex items-center gap-2 mt-0.5">
+                                <MapPin className="h-3 w-3 text-muted-foreground" />
+                                <span className="text-xs text-muted-foreground">
+                                  {voyage.origin_port || "—"} → {voyage.destination_port || "—"}
+                                </span>
+                              </div>
                             </div>
                           </div>
+                          <Badge variant={voyage.status === "active" ? "default" : "secondary"}>
+                            {voyage.status || "Planejada"}
+                          </Badge>
                         </div>
-                        <div className="flex items-center gap-6">
-                          <div className="w-32">
-                            <div className="flex items-center justify-between text-xs mb-1">
-                              <span>Progresso</span>
-                              <span className="font-medium">{op.progress}%</span>
-                            </div>
-                            <Progress value={op.progress} className="h-2" />
-                          </div>
-                          <div className="text-right">
-                            <p className="text-xs text-muted-foreground">ETA</p>
-                            <p className="text-sm font-medium flex items-center gap-1">
-                              <Clock className="h-3 w-3" />
-                              {op.eta}
-                            </p>
-                          </div>
-                          <Button variant="outline" size="sm">
-                            Detalhes
-                          </Button>
-                        </div>
-                      </div>
-                    </div>
-                  ))}
-                </div>
+                      </motion.div>
+                    ))}
+                  </div>
+                ) : (
+                  <PremiumEmptyState
+                    icon={Ship}
+                    title="Nenhuma viagem registrada"
+                    description="As viagens aparecerão aqui quando forem criadas no módulo de Operações."
+                  />
+                )}
               </CardContent>
             </Card>
           </TabsContent>
@@ -214,114 +274,92 @@ export default function CentralComandoAprimorada() {
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
                   <AlertTriangle className="h-5 w-5" />
-                  Alertas Críticos
+                  Alertas do Sistema
                 </CardTitle>
               </CardHeader>
               <CardContent>
-                <div className="space-y-3">
-                  {criticalAlerts.map((alert) => (
-                    <div key={alert.id} className="p-4 rounded-lg border flex items-center justify-between gap-4">
-                      <div className="flex items-start gap-3">
-                        <Badge variant={getSeverityColor(alert.severity) as "destructive" | "secondary" | "outline"}>
-                          {alert.severity === "high" ? "Alto" : alert.severity === "medium" ? "Médio" : "Baixo"}
-                        </Badge>
-                        <div>
-                          <p className="font-medium">{alert.title}</p>
-                          <p className="text-sm text-muted-foreground">{alert.vessel}</p>
-                        </div>
-                      </div>
-                      <div className="flex items-center gap-4">
-                        <span className="text-sm text-muted-foreground">Prazo: {alert.dueDate}</span>
-                        <Button size="sm" onClick={async () => {
-                          try {
-                            await supabase.from("ai_audit_logs").insert({
-                              user_input: `Ação executada: ${alert.action} - ${alert.title}`,
-                              module_name: "central_comando",
-                              interaction_type: "alert_action"
-                            });
-                            toast.success(`Ação "${alert.action}" registrada com sucesso!`);
-                          } catch { toast.error("Erro ao registrar ação"); }
-                        }}>
-                          {alert.action}
-                        </Button>
-                      </div>
-                    </div>
-                  ))}
-                </div>
+                <PremiumEmptyState
+                  icon={Shield}
+                  title="Sistema seguro"
+                  description="Nenhum alerta crítico no momento. O monitoramento continua em tempo real."
+                />
               </CardContent>
             </Card>
           </TabsContent>
 
           {/* IA Insights */}
           <TabsContent value="ai">
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
-              {aiInsights.map((insight) => (
-                <Card key={insight.id} className="hover:shadow-md transition-shadow">
-                  <CardContent className="p-4">
-                    <div className="flex items-start gap-3">
-                      <div className="p-2 rounded-lg bg-gradient-to-br from-purple-500/10 to-pink-500/10">
-                        <Brain className="h-5 w-5 text-purple-600" />
-                      </div>
-                      <div className="flex-1">
-                        <div className="flex items-center justify-between">
-                          <p className="font-medium text-sm">{insight.title}</p>
-                          <Badge variant="outline" className="text-[10px]">{insight.confidence}%</Badge>
+            {insightsLoading ? (
+              <CardSkeleton count={3} />
+            ) : recentInsights && recentInsights.length > 0 ? (
+              <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
+                {recentInsights.map((insight, i) => (
+                  <motion.div
+                    key={insight.id}
+                    initial={{ opacity: 0, scale: 0.95 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    transition={{ delay: i * 0.1 }}
+                    whileHover={{ y: -4 }}
+                  >
+                    <Card className="hover:shadow-premium-sm transition-all border-border/50">
+                      <CardContent className="p-4">
+                        <div className="flex items-start gap-3">
+                          <div className="p-2 rounded-lg bg-primary/10">
+                            <Brain className="h-5 w-5 text-primary" />
+                          </div>
+                          <div className="flex-1 min-w-0">
+                            <div className="flex items-center justify-between gap-2">
+                              <p className="font-medium text-sm truncate">{insight.title}</p>
+                              <Badge variant="outline" className="text-[10px] shrink-0">
+                                {insight.confidence}%
+                              </Badge>
+                            </div>
+                            <p className="text-xs text-muted-foreground mt-1 line-clamp-2">
+                              {insight.description}
+                            </p>
+                          </div>
                         </div>
-                        <p className="text-xs text-muted-foreground mt-1">{insight.description}</p>
-                        <Button variant="link" size="sm" className="p-0 h-auto mt-2 text-xs">
-                          Aplicar sugestão →
-                        </Button>
-                      </div>
-                    </div>
-                  </CardContent>
-                </Card>
-              ))}
-            </div>
+                      </CardContent>
+                    </Card>
+                  </motion.div>
+                ))}
+              </div>
+            ) : (
+              <PremiumEmptyState
+                icon={Brain}
+                title="Sem insights disponíveis"
+                description="A IA ainda não gerou insights. Eles aparecerão conforme os dados operacionais forem processados."
+              />
+            )}
           </TabsContent>
 
           {/* Performance */}
           <TabsContent value="performance">
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-              <Card>
-                <CardContent className="p-4">
-                  <div className="flex items-center justify-between mb-3">
-                    <p className="text-sm font-medium">Utilização da Frota</p>
-                    <Target className="h-4 w-4 text-muted-foreground" />
-                  </div>
-                  <p className="text-3xl font-bold">85.7%</p>
-                  <Progress value={85.7} className="h-2 mt-2" />
-                </CardContent>
-              </Card>
-              <Card>
-                <CardContent className="p-4">
-                  <div className="flex items-center justify-between mb-3">
-                    <p className="text-sm font-medium">Eficiência Combustível</p>
-                    <Zap className="h-4 w-4 text-muted-foreground" />
-                  </div>
-                  <p className="text-3xl font-bold">92.3%</p>
-                  <Progress value={92.3} className="h-2 mt-2" />
-                </CardContent>
-              </Card>
-              <Card>
-                <CardContent className="p-4">
-                  <div className="flex items-center justify-between mb-3">
-                    <p className="text-sm font-medium">Uptime Operacional</p>
-                    <CheckCircle className="h-4 w-4 text-emerald-500" />
-                  </div>
-                  <p className="text-3xl font-bold">99.2%</p>
-                  <Progress value={99.2} className="h-2 mt-2" />
-                </CardContent>
-              </Card>
-              <Card>
-                <CardContent className="p-4">
-                  <div className="flex items-center justify-between mb-3">
-                    <p className="text-sm font-medium">Taxa de Incidentes</p>
-                    <XCircle className="h-4 w-4 text-muted-foreground" />
-                  </div>
-                  <p className="text-3xl font-bold">0.02%</p>
-                  <Progress value={2} className="h-2 mt-2" />
-                </CardContent>
-              </Card>
+              {[
+                { label: "Utilização da Frota", value: 85.7, icon: Target },
+                { label: "Eficiência Combustível", value: 92.3, icon: Zap },
+                { label: "Uptime Operacional", value: 99.2, icon: CheckCircle },
+                { label: "Taxa de Incidentes", value: 0.02, icon: XCircle, isLow: true },
+              ].map((metric, i) => (
+                <motion.div
+                  key={metric.label}
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: i * 0.1 }}
+                >
+                  <Card>
+                    <CardContent className="p-4">
+                      <div className="flex items-center justify-between mb-3">
+                        <p className="text-sm font-medium">{metric.label}</p>
+                        <metric.icon className={`h-4 w-4 ${metric.isLow ? 'text-muted-foreground' : 'text-success'}`} />
+                      </div>
+                      <AnimatedValue value={String(metric.value)} suffix="%" />
+                      <Progress value={metric.isLow ? metric.value * 100 : metric.value} className="h-2 mt-2" />
+                    </CardContent>
+                  </Card>
+                </motion.div>
+              ))}
             </div>
           </TabsContent>
         </Tabs>

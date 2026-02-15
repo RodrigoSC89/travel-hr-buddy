@@ -2,8 +2,9 @@
  * Auth Page - PATCH v28 Production Login + Live System Metrics
  * Login, Signup, Password Recovery + OAuth + System Overview
  */
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { Navigate, useNavigate } from "react-router-dom";
+import { motion, AnimatePresence } from "framer-motion";
 
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -408,14 +409,37 @@ const Auth: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-background via-background to-primary/5 flex items-center justify-center p-4 overflow-hidden relative">
-      {/* Animated background particles */}
+      {/* Cinematic background orbs */}
       <div className="absolute inset-0 pointer-events-none overflow-hidden">
-        <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-primary/5 rounded-full blur-3xl animate-pulse" />
-        <div className="absolute bottom-1/4 right-1/4 w-80 h-80 bg-accent/5 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '1s' }} />
+        <motion.div
+          className="absolute top-1/4 left-1/4 w-[500px] h-[500px] bg-primary/8 rounded-full blur-[120px]"
+          animate={{ scale: [1, 1.2, 1], x: [0, 30, 0], y: [0, -20, 0] }}
+          transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
+        />
+        <motion.div
+          className="absolute bottom-1/4 right-1/4 w-[400px] h-[400px] bg-accent/8 rounded-full blur-[100px]"
+          animate={{ scale: [1.1, 1, 1.1], x: [0, -25, 0], y: [0, 25, 0] }}
+          transition={{ duration: 10, repeat: Infinity, ease: "easeInOut" }}
+        />
+        <motion.div
+          className="absolute top-1/2 left-1/2 w-[300px] h-[300px] bg-primary/5 rounded-full blur-[80px]"
+          animate={{ scale: [1, 1.3, 1], rotate: [0, 180, 360] }}
+          transition={{ duration: 15, repeat: Infinity, ease: "linear" }}
+        />
       </div>
-      <div className="w-full max-w-5xl grid lg:grid-cols-2 gap-12 items-center relative z-10">
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6, ease: "easeOut" }}
+        className="w-full max-w-5xl grid lg:grid-cols-2 gap-12 items-center relative z-10"
+      >
         {/* Left Side - System Showcase */}
-        <div className="hidden lg:flex flex-col space-y-8 animate-fade-in">
+        <motion.div
+          initial={{ opacity: 0, x: -40 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ duration: 0.7, delay: 0.2, ease: "easeOut" }}
+          className="hidden lg:flex flex-col space-y-8"
+        >
           {/* Logo & Title */}
           <div className="flex items-center space-x-4">
             <div className="w-16 h-16 rounded-2xl bg-card flex items-center justify-center shadow-premium-lg p-2.5 border border-border/50 ring-1 ring-primary/10">
@@ -448,10 +472,13 @@ const Auth: React.FC = () => {
                 { name: 'Rastreamento', desc: 'AIS, SATCOM, IoT', icon: Satellite, badge: '8' },
                 { name: 'Compliance', desc: '12 Auditorias', icon: Shield, badge: '22' },
               ].map((hub, index) => (
-                <div
+                <motion.div
                   key={hub.name}
-                  className="bg-card/50 border border-border/30 rounded-xl p-3 flex items-center gap-3 hover:bg-card/80 hover:border-primary/20 hover:shadow-premium-sm transition-all duration-300 group cursor-default"
-                  style={{ animationDelay: `${index * 100}ms` }}
+                  initial={{ opacity: 0, y: 15 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.4 + index * 0.08, duration: 0.4 }}
+                  whileHover={{ scale: 1.03, y: -2 }}
+                  className="bg-card/50 border border-border/30 rounded-xl p-3 flex items-center gap-3 hover:bg-card/80 hover:border-primary/20 hover:shadow-premium-sm transition-colors duration-300 group cursor-default"
                 >
                   <hub.icon className="h-4 w-4 text-primary shrink-0 group-hover:scale-110 transition-transform" />
                   <div className="min-w-0 flex-1">
@@ -463,7 +490,7 @@ const Auth: React.FC = () => {
                     </div>
                     <p className="text-[10px] text-muted-foreground truncate">{hub.desc}</p>
                   </div>
-                </div>
+                </motion.div>
               ))}
             </div>
           </div>
@@ -482,10 +509,15 @@ const Auth: React.FC = () => {
               </div>
             ))}
           </div>
-        </div>
+        </motion.div>
 
         {/* Right Side - Auth Forms */}
-        <div className="w-full max-w-md mx-auto animate-fade-in">
+        <motion.div
+          initial={{ opacity: 0, x: 40 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ duration: 0.7, delay: 0.3, ease: "easeOut" }}
+          className="w-full max-w-md mx-auto"
+        >
           <Card className="shadow-premium-xl border-border/50 bg-card/95 backdrop-blur-sm">
             <CardHeader className="space-y-1.5 text-center pb-4">
               {/* Mobile logo */}
@@ -750,8 +782,8 @@ const Auth: React.FC = () => {
           <p className="text-center text-xs text-muted-foreground mt-4">
             © {new Date().getFullYear()} Nauti One. Todos os direitos reservados.
           </p>
-        </div>
-      </div>
+        </motion.div>
+      </motion.div>
     </div>
   );
 };
