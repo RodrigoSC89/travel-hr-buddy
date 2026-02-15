@@ -146,7 +146,7 @@ export function HRChatbot() {
     return (
       <Button
         onClick={() => setIsOpen(true)}
-        className="fixed bottom-24 right-4 md:bottom-6 h-14 w-14 rounded-full shadow-lg z-50"
+        className="fixed bottom-36 right-4 md:bottom-20 h-14 w-14 rounded-full shadow-lg z-40"
         size="icon"
         aria-label="Abrir assistente de RH"
         title="Assistente de RH"
