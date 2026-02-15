@@ -28,6 +28,7 @@ import { PeotramSmartScoring } from "@/components/peotram/PeotramSmartScoring";
 import { PeotramNCAutoGenerator } from "@/components/peotram/PeotramNCAutoGenerator";
 import { PeotramNCActionPlan } from "@/components/peotram/PeotramNCActionPlan";
 import { PeotramAuditTimeline } from "@/components/peotram/PeotramAuditTimeline";
+import { PeotramBenchmarking } from "@/components/peotram/PeotramBenchmarking";
 import { PeotramReportGenerator } from "@/components/peotram/PeotramReportGenerator";
 import { PeotramAuditWizard } from "@/components/peotram/PeotramAuditWizard";
 import { PeotramRadarChart } from "@/components/peotram/PeotramRadarChart";
@@ -41,7 +42,7 @@ import { toast } from "sonner";
 import {
   Shield, Target, FileCheck, AlertTriangle, TrendingUp, CheckCircle,
   RefreshCw, Download, BarChart3, Activity, ClipboardCheck,
-  Brain, Zap, Mic, Wand2, FileText, Save, History,
+  Brain, Zap, Mic, Wand2, FileText, Save, History, Award,
 } from "lucide-react";
 
 const PEOTRAMPage = () => {
@@ -138,6 +139,7 @@ const PEOTRAMPage = () => {
           <TabsTrigger value="interview" className="gap-1.5"><Brain className="h-3.5 w-3.5" /> Simulador</TabsTrigger>
           <TabsTrigger value="checklist-ia" className="gap-1.5"><Zap className="h-3.5 w-3.5" /> Checklist IA</TabsTrigger>
           <TabsTrigger value="timeline" className="gap-1.5"><TrendingUp className="h-3.5 w-3.5" /> Timeline</TabsTrigger>
+          <TabsTrigger value="benchmarking" className="gap-1.5"><Award className="h-3.5 w-3.5" /> Benchmarking</TabsTrigger>
         </TabsList>
 
         {/* ============ OVERVIEW ============ */}
@@ -347,6 +349,7 @@ const PEOTRAMPage = () => {
 
         <TabsContent value="monitor"><ProactiveComplianceMonitor /></TabsContent>
         <TabsContent value="timeline"><PeotramAuditTimeline /></TabsContent>
+        <TabsContent value="benchmarking"><PeotramBenchmarking /></TabsContent>
 
         <Suspense fallback={<LoadingFallback />}>
           <TabsContent value="interview">
