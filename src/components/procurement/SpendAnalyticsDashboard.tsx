@@ -240,8 +240,8 @@ export default function SpendAnalyticsDashboard() {
                 <ResponsiveContainer width="50%" height={200}>
                   <RechartsPie>
                     <Pie data={analytics.categoryData} dataKey="value" nameKey="name" cx="50%" cy="50%" outerRadius={80} innerRadius={40}>
-                      {analytics.categoryData.map((_, i) => (
-                        <Cell key={i} fill={COLORS[i % COLORS.length]} />
+                      {analytics.categoryData.map((entry, i) => (
+                        <Cell key={entry.name} fill={COLORS[i % COLORS.length]} />
                       ))}
                     </Pie>
                     <Tooltip formatter={(v: number) => `R$ ${v.toLocaleString('pt-BR')}`} />
@@ -277,7 +277,7 @@ export default function SpendAnalyticsDashboard() {
           {analytics.topSuppliers.length > 0 ? (
             <div className="space-y-3">
               {analytics.topSuppliers.map((supplier, i) => (
-                <div key={i} className="flex items-center gap-4">
+                <div key={supplier.name} className="flex items-center gap-4">
                   <div className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center text-xs font-bold text-primary">
                     #{i + 1}
                   </div>

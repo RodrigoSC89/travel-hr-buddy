@@ -226,8 +226,8 @@ export function SupplierScorecard() {
 
                     {/* Categories */}
                     <div className="flex flex-wrap gap-1 mt-3">
-                      {(supplier.category || []).slice(0, 3).map((cat, i) => (
-                        <Badge key={i} variant="outline" className="text-[10px]">
+                      {(supplier.category || []).slice(0, 3).map((cat) => (
+                        <Badge key={cat} variant="outline" className="text-[10px]">
                           {cat}
                         </Badge>
                       ))}
@@ -354,8 +354,8 @@ export function SupplierScorecard() {
                   <div>
                     <p className="text-sm font-medium mb-2">Categorias</p>
                     <div className="flex flex-wrap gap-1">
-                      {(selectedSupplier.category || []).map((c, i) => (
-                        <Badge key={i} variant="outline">{c}</Badge>
+                      {(selectedSupplier.category || []).map((c) => (
+                        <Badge key={c} variant="outline">{c}</Badge>
                       ))}
                       {(selectedSupplier.category || []).length === 0 && <span className="text-sm text-muted-foreground">Não informado</span>}
                     </div>
@@ -363,8 +363,8 @@ export function SupplierScorecard() {
                   <div>
                     <p className="text-sm font-medium mb-2">Certificações</p>
                     <div className="flex flex-wrap gap-1">
-                      {(selectedSupplier.certifications || []).map((c, i) => (
-                        <Badge key={i} className="bg-primary/10 text-primary"><Shield className="h-3 w-3 mr-1" />{c}</Badge>
+                      {(selectedSupplier.certifications || []).map((c) => (
+                        <Badge key={c} className="bg-primary/10 text-primary"><Shield className="h-3 w-3 mr-1" />{c}</Badge>
                       ))}
                       {(selectedSupplier.certifications || []).length === 0 && <span className="text-sm text-muted-foreground">Nenhuma</span>}
                     </div>

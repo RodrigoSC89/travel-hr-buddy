@@ -48,7 +48,8 @@ export default function PredictiveMaintenanceAI() {
         .order("failure_probability", { ascending: false })
         .limit(20);
       if (error) throw error;
-      return (data || []).map((p: any) => ({
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Supabase join returns dynamic shape
+      return (data || []).map((p: Record<string, any>) => ({
         id: p.id,
         equipment: p.equipment_name,
         equipmentId: p.equipment_id,
@@ -76,7 +77,8 @@ export default function PredictiveMaintenanceAI() {
         .order("created_at", { ascending: false })
         .limit(20);
       if (error) throw error;
-      return (data || []).map((t: any) => {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Supabase join returns dynamic shape
+      return (data || []).map((t: Record<string, any>) => {
         const healthScore = t.status === "completed" ? 95 : t.priority === "critical" ? 35 : t.priority === "high" ? 55 : t.priority === "medium" ? 75 : 90;
         const riskLevel = healthScore < 50 ? "high" : healthScore < 70 ? "medium" : "low";
         return {
@@ -106,7 +108,7 @@ export default function PredictiveMaintenanceAI() {
       if (error) return [];
       // Group by month
       const months: Record<string, { total: number; completed: number }> = {};
-      (data || []).forEach((t: any) => {
+      (data || []).forEach((t) => {
         const month = new Date(t.created_at).toLocaleDateString("pt-BR", { month: "short" });
         if (!months[month]) months[month] = { total: 0, completed: 0 };
         months[month].total++;
