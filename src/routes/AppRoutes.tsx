@@ -18,7 +18,7 @@ export const AppRoutes = () => (
     {/* ============================================ */}
     <Route path="/auth" element={<Pages.Auth />} />
     <Route path="/auth/callback" element={<Pages.AuthCallback />} />
-    <Route path="/about" element={<Pages.AboutSystem />} />
+    <Route path="/about" element={<Pages.LandingPage />} />
     <Route path="/landing" element={<Pages.LandingPage />} />
     <Route path="/pricing" element={<Pages.LandingPage />} />
     <Route path="/status" element={<Pages.LandingPage />} />
