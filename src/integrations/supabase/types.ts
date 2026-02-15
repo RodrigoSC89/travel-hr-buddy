@@ -26089,6 +26089,57 @@ export type Database = {
           },
         ]
       }
+      mlc_food_inspections: {
+        Row: {
+          category: string | null
+          created_at: string | null
+          id: string
+          inspected_at: string | null
+          inspector_id: string | null
+          is_critical: boolean | null
+          item_id: string
+          notes: string | null
+          organization_id: string | null
+          regulation: string | null
+          requirement: string | null
+          status: string | null
+          updated_at: string | null
+          vessel_id: string | null
+        }
+        Insert: {
+          category?: string | null
+          created_at?: string | null
+          id?: string
+          inspected_at?: string | null
+          inspector_id?: string | null
+          is_critical?: boolean | null
+          item_id: string
+          notes?: string | null
+          organization_id?: string | null
+          regulation?: string | null
+          requirement?: string | null
+          status?: string | null
+          updated_at?: string | null
+          vessel_id?: string | null
+        }
+        Update: {
+          category?: string | null
+          created_at?: string | null
+          id?: string
+          inspected_at?: string | null
+          inspector_id?: string | null
+          is_critical?: boolean | null
+          item_id?: string
+          notes?: string | null
+          organization_id?: string | null
+          regulation?: string | null
+          requirement?: string | null
+          status?: string | null
+          updated_at?: string | null
+          vessel_id?: string | null
+        }
+        Relationships: []
+      }
       mlc_inspection_items: {
         Row: {
           ai_assisted: boolean | null
@@ -29745,6 +29796,66 @@ export type Database = {
         }
         Relationships: []
       }
+      peodp_simops: {
+        Row: {
+          conflicts_with: string[] | null
+          created_at: string | null
+          created_by: string | null
+          dp_requirements: string | null
+          end_time: string | null
+          id: string
+          operation_name: string
+          operation_type: string | null
+          organization_id: string | null
+          restrictions: string[] | null
+          risk_level: string | null
+          start_time: string | null
+          status: string | null
+          supervisor: string | null
+          updated_at: string | null
+          vessel_id: string | null
+          weather_limit: string | null
+        }
+        Insert: {
+          conflicts_with?: string[] | null
+          created_at?: string | null
+          created_by?: string | null
+          dp_requirements?: string | null
+          end_time?: string | null
+          id?: string
+          operation_name: string
+          operation_type?: string | null
+          organization_id?: string | null
+          restrictions?: string[] | null
+          risk_level?: string | null
+          start_time?: string | null
+          status?: string | null
+          supervisor?: string | null
+          updated_at?: string | null
+          vessel_id?: string | null
+          weather_limit?: string | null
+        }
+        Update: {
+          conflicts_with?: string[] | null
+          created_at?: string | null
+          created_by?: string | null
+          dp_requirements?: string | null
+          end_time?: string | null
+          id?: string
+          operation_name?: string
+          operation_type?: string | null
+          organization_id?: string | null
+          restrictions?: string[] | null
+          risk_level?: string | null
+          start_time?: string | null
+          status?: string | null
+          supervisor?: string | null
+          updated_at?: string | null
+          vessel_id?: string | null
+          weather_limit?: string | null
+        }
+        Relationships: []
+      }
       peotram_ai_analysis: {
         Row: {
           ai_model_used: string
@@ -29885,6 +29996,60 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      peotram_audit_milestones: {
+        Row: {
+          assignee: string | null
+          category: string | null
+          completed_date: string | null
+          created_at: string | null
+          created_by: string | null
+          description: string | null
+          due_date: string
+          element: string | null
+          id: string
+          organization_id: string | null
+          priority: string | null
+          progress: number | null
+          status: string | null
+          title: string
+          updated_at: string | null
+        }
+        Insert: {
+          assignee?: string | null
+          category?: string | null
+          completed_date?: string | null
+          created_at?: string | null
+          created_by?: string | null
+          description?: string | null
+          due_date: string
+          element?: string | null
+          id?: string
+          organization_id?: string | null
+          priority?: string | null
+          progress?: number | null
+          status?: string | null
+          title: string
+          updated_at?: string | null
+        }
+        Update: {
+          assignee?: string | null
+          category?: string | null
+          completed_date?: string | null
+          created_at?: string | null
+          created_by?: string | null
+          description?: string | null
+          due_date?: string
+          element?: string | null
+          id?: string
+          organization_id?: string | null
+          priority?: string | null
+          progress?: number | null
+          status?: string | null
+          title?: string
+          updated_at?: string | null
+        }
+        Relationships: []
       }
       peotram_audit_responses: {
         Row: {
@@ -30854,6 +31019,66 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      peotram_lessons_learned: {
+        Row: {
+          action_taken: string | null
+          benefit: string | null
+          created_at: string | null
+          created_by: string | null
+          date_identified: string | null
+          description: string | null
+          element_code: string | null
+          element_name: string | null
+          id: string
+          organization_id: string | null
+          severity: string | null
+          shared_with: string[] | null
+          source: string | null
+          status: string | null
+          title: string
+          updated_at: string | null
+          vessel_name: string | null
+        }
+        Insert: {
+          action_taken?: string | null
+          benefit?: string | null
+          created_at?: string | null
+          created_by?: string | null
+          date_identified?: string | null
+          description?: string | null
+          element_code?: string | null
+          element_name?: string | null
+          id?: string
+          organization_id?: string | null
+          severity?: string | null
+          shared_with?: string[] | null
+          source?: string | null
+          status?: string | null
+          title: string
+          updated_at?: string | null
+          vessel_name?: string | null
+        }
+        Update: {
+          action_taken?: string | null
+          benefit?: string | null
+          created_at?: string | null
+          created_by?: string | null
+          date_identified?: string | null
+          description?: string | null
+          element_code?: string | null
+          element_name?: string | null
+          id?: string
+          organization_id?: string | null
+          severity?: string | null
+          shared_with?: string[] | null
+          source?: string | null
+          status?: string | null
+          title?: string
+          updated_at?: string | null
+          vessel_name?: string | null
+        }
+        Relationships: []
       }
       peotram_non_conformities: {
         Row: {
