@@ -35,6 +35,7 @@ const FinanceAIHub = lazy(() => import('@/components/finance/ai/FinanceAIHub'));
 const DocumentsAIHub = lazy(() => import('@/components/documents/ai/DocumentsAIHub'));
 const CrewPoolPlanner = lazy(() => import('@/components/crew/CrewPoolPlanner'));
 const TravelItineraryBuilder = lazy(() => import('@/components/travel/TravelItineraryBuilder'));
+const ApprovalWorkflow = lazy(() => import('@/components/workflows/ApprovalWorkflow'));
 
 const LoadingSkeleton = () => (
   <div className="space-y-4 p-6">
@@ -459,7 +460,7 @@ export default function WorkbenchMegaHub() {
                 ]}
                 onRefresh={handleRefresh}
               />
-              {/* FinanceApprovalWorkflow removed */}
+              <ApprovalWorkflow />
             </TabsContent>
             
             <TabsContent value="travel" className="mt-0 space-y-6">

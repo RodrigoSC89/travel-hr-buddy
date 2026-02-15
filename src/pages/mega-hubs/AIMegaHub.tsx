@@ -47,6 +47,7 @@ const AgentMemoryPanel = lazy(() => import('@/components/ai/AgentMemoryPanel'));
 const MultiAgentConsensus = lazy(() => import('@/components/ai/MultiAgentConsensus'));
 const AgentAnalyticsPanel = lazy(() => import('@/components/ai/AgentAnalyticsPanel'));
 const ProactiveMonitoringPanel = lazy(() => import('@/components/ai/ProactiveMonitoringPanel'));
+const AIPredictiveInsights = lazy(() => import('@/components/ai/AIPredictiveInsights'));
 
 const LoadingSkeleton = () => (
   <div className="space-y-4 p-6">
@@ -85,6 +86,7 @@ const tabConfig = [
   { id: 'modules', label: '11 Modules', icon: Cpu },
   { id: 'intelligence', label: 'Intelligence', icon: FileText },
   { id: 'analytics', label: 'Analytics', icon: BarChart3 },
+  { id: 'predictive', label: '🔮 Predictive', icon: Activity },
 ];
 
 // Map old tab IDs to new grouped IDs for backward compatibility
@@ -440,6 +442,11 @@ export default function AIMegaHub() {
               {analyticsSubTab === 'analytics' && <AIAnalyticsDashboard />}
               {analyticsSubTab === 'agent-analytics' && <AgentAnalyticsPanel />}
               {analyticsSubTab === 'observability' && <AIObservabilityDashboard />}
+            </TabsContent>
+
+            {/* 9. Predictive Insights */}
+            <TabsContent value="predictive" className="mt-0">
+              <AIPredictiveInsights />
             </TabsContent>
           </Suspense>
         </div>
