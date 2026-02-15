@@ -11,13 +11,15 @@ import { PeoDPFMEAAnalysis } from "@/components/peo-dp/PeoDPFMEAAnalysis";
 import { PeoDPTrialsManager } from "@/components/peo-dp/PeoDPTrialsManager";
 import { PeoDPKPIDashboard } from "@/components/peo-dp/PeoDPKPIDashboard";
 import { PeoDPAuditPrep } from "@/components/peo-dp/PeoDPAuditPrep";
+import { PeoDPDocumentsManager } from "@/components/peo-dp/PeoDPDocumentsManager";
+import { PeoDPCalculatorPCLVC } from "@/components/peo-dp/PeoDPCalculatorPCLVC";
 import { useMaritimeActions } from "@/hooks/useMaritimeActions";
 import { Skeleton } from "@/components/ui/skeleton";
 import { toast } from "sonner";
 import {
   Shield, Anchor, Target, Brain, TrendingUp, Award, Zap, Globe,
   CheckCircle, Plus, RefreshCw, Download, Settings, Activity,
-  BarChart3, ClipboardCheck, AlertTriangle, FileText
+  BarChart3, ClipboardCheck, AlertTriangle, FileText, Calculator, FileCheck
 } from "lucide-react";
 
 const ComplianceInterviewSimulator = lazy(() => import('@/components/compliance/ai/ComplianceInterviewSimulator').then(m => ({ default: m.ComplianceInterviewSimulator })));
