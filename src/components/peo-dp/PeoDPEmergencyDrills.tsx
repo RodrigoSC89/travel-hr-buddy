@@ -4,6 +4,7 @@
  * PRODUCTION: Integrated with Supabase peodp_emergency_drills
  */
 import React, { useState, useEffect } from "react";
+import { quickExport } from "@/lib/export-utils";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -155,7 +156,7 @@ export function PeoDPEmergencyDrills() {
               Inicializar Cenários
             </Button>
           )}
-          <Button size="sm" variant="outline" className="gap-1 h-9" onClick={() => toast.success("Relatório exportado")}>
+          <Button size="sm" variant="outline" className="gap-1 h-9" onClick={() => quickExport(displayDrills, "PEO-DP Emergency Drills")}>
             <Download className="h-3 w-3" /> Exportar
           </Button>
         </div>

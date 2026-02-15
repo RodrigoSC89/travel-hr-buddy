@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { quickExport } from "@/lib/export-utils";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -166,7 +167,7 @@ export function DPAuditSimulator() {
           <Button variant="outline" onClick={handleReset} className="gap-1">
             <RotateCcw className="h-3.5 w-3.5" /> Nova Simulação
           </Button>
-          <Button className="gap-1" onClick={() => toast.success("Relatório exportado!")}>
+          <Button className="gap-1" onClick={() => quickExport(Object.entries(states).map(([id, s]) => ({ question: id, answer: s.answer, notes: s.notes })), "DP Audit Simulation")}>
             <Download className="h-3.5 w-3.5" /> Exportar Relatório
           </Button>
         </div>

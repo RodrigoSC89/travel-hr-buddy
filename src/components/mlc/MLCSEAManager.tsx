@@ -3,6 +3,7 @@
  * Connected to crew_members table for real contract data
  */
 import React, { useState, useMemo } from "react";
+import { quickExport } from "@/lib/export-utils";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -135,7 +136,7 @@ export function MLCSEAManager() {
           <p className="text-sm text-muted-foreground">MLC Reg. 2.1 • Standard A2.1 • {contracts.length} contratos • Dados em tempo real</p>
         </div>
         <div className="flex gap-2">
-          <Button size="sm" variant="outline" className="gap-1 h-9" onClick={() => toast.success("SEA records exportados")}>
+          <Button size="sm" variant="outline" className="gap-1 h-9" onClick={() => quickExport(contracts, "MLC SEA Contracts")}>
             <Download className="h-3 w-3" /> Exportar
           </Button>
           <Button size="sm" className="gap-1 h-9" onClick={() => toast.info("Novo contrato SEA")}>

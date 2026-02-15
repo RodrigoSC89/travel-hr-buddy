@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { quickExport } from "@/lib/export-utils";
 import { useMutation } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
@@ -149,7 +150,7 @@ export function MLCPSCSimulator() {
 
         <div className="flex gap-2">
           <Button variant="outline" onClick={handleReset} className="gap-1"><RotateCcw className="h-3.5 w-3.5" /> Nova Simulação</Button>
-          <Button className="gap-1" onClick={() => toast.success("Relatório PSC exportado!")}><Download className="h-3.5 w-3.5" /> Exportar</Button>
+          <Button className="gap-1" onClick={() => quickExport(result?.areas || [], "PSC Simulation")}><Download className="h-3.5 w-3.5" /> Exportar</Button>
         </div>
       </div>
     );

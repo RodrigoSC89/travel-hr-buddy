@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { quickExport } from "@/lib/export-utils";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -137,7 +138,7 @@ export function PeotramDiverCertManager() {
             </div>
           </DialogContent>
         </Dialog>
-        <Button size="sm" variant="outline" className="gap-1" onClick={() => toast.success("Relatório exportado!")}>
+        <Button size="sm" variant="outline" className="gap-1" onClick={() => quickExport(divers || [], "PEOTRAM Diver Certs")}>
           <Download className="h-3.5 w-3.5" /> Exportar
         </Button>
       </div>

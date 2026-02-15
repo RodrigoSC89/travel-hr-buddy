@@ -4,6 +4,7 @@
  * Comparable to DNV ShipManager / TM Master training module
  */
 import React, { useState, useMemo } from "react";
+import { quickExport } from "@/lib/export-utils";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -168,7 +169,7 @@ export function STCWTrainingMatrix() {
             {matrix.length} tripulantes × {STCW_CERTS.length} certificações • Conformidade: {stats.compliance}%
           </p>
         </div>
-        <Button size="sm" variant="outline" className="gap-1" onClick={() => toast.success("Training Matrix exportada")}>
+        <Button size="sm" variant="outline" className="gap-1" onClick={() => quickExport(matrix, "STCW Training Matrix")}>
           <Download className="h-3 w-3" /> Exportar
         </Button>
       </div>

@@ -4,6 +4,7 @@
  * No competitor in the world has this level of cross-framework visibility
  */
 import React, { useState, useMemo } from "react";
+import { quickExport } from "@/lib/export-utils";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -157,7 +158,7 @@ export function CrossFrameworkAuditDashboard() {
           </p>
         </div>
         <div className="flex gap-2">
-          <Button size="sm" variant="outline" className="gap-1" onClick={() => toast.success("Relatório cross-framework exportado")}>
+          <Button size="sm" variant="outline" className="gap-1" onClick={() => quickExport(FRAMEWORKS, "Cross Framework Audit")}>
             <Download className="h-3 w-3" /> Exportar
           </Button>
           <Button size="sm" className="gap-1" onClick={() => toast.info("AI Gap Analysis iniciada")}>

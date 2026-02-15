@@ -3,6 +3,7 @@
  * Work scope, budget tracking, timeline, yard selection
  */
 import React, { useState } from "react";
+import { quickExport } from "@/lib/export-utils";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -167,7 +168,7 @@ export function DryDockPlanner() {
           <p className="text-sm text-muted-foreground">Planejamento de docagem • Work scope • Budget • Classe</p>
         </div>
         <div className="flex gap-2">
-          <Button size="sm" variant="outline" className="gap-1" onClick={() => toast.success("Relatório exportado")}>
+          <Button size="sm" variant="outline" className="gap-1" onClick={() => quickExport(projects, "Dry Dock Planner")}>
             <Download className="h-3 w-3" /> Exportar
           </Button>
           <Button size="sm" className="gap-1" onClick={() => setAddDialog(true)}>

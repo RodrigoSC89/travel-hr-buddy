@@ -4,6 +4,7 @@
  * Tracks EBN submissions and Petrobras evaluations per PEO-DP 2026
  */
 import React, { useState, useMemo } from "react";
+import { quickExport } from "@/lib/export-utils";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -147,7 +148,7 @@ export function PeoDPAdherenceForm() {
               <SelectItem value="3">3ª Entrega</SelectItem>
             </SelectContent>
           </Select>
-          <Button size="sm" variant="outline" className="gap-1 h-9" onClick={() => toast.success("Formulário J-4 exportado")}>
+          <Button size="sm" variant="outline" className="gap-1 h-9" onClick={() => quickExport(REQUIREMENTS, "PEO-DP J4 Adherence")}>
             <Download className="h-3 w-3" /> Exportar
           </Button>
         </div>

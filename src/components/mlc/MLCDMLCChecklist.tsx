@@ -2,6 +2,7 @@
  * MLC DMLC Part I/II Checklist — Real Supabase persistence
  */
 import React, { useState } from "react";
+import { quickExport } from "@/lib/export-utils";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -118,7 +119,7 @@ export function MLCDMLCChecklist() {
               {saveMutation.isPending ? <Loader2 className="h-3 w-3 animate-spin" /> : <Save className="h-3 w-3" />} Salvar
             </Button>
           )}
-          <Button size="sm" variant="outline" onClick={() => toast.success("DMLC exportado")} className="gap-1">
+          <Button size="sm" variant="outline" onClick={() => quickExport(localItems || [], "MLC DMLC Checklist")} className="gap-1">
             <Download className="h-3 w-3" /> Exportar
           </Button>
         </div>
