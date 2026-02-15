@@ -24,6 +24,9 @@ const CommandPalette = lazy(() => import("@/components/shared/CommandPalette"));
 const GlobalAIAssistant = lazy(() => 
   import("@/components/ai/GlobalAIAssistant").then(mod => ({ default: mod.GlobalAIAssistant }))
 );
+const GlobalAICopilot = lazy(() => 
+  import("@/components/ai/GlobalAICopilot").then(mod => ({ default: mod.GlobalAICopilot }))
+);
 const InstallPrompt = lazy(() => 
   import("@/components/pwa/InstallPrompt").then(mod => ({ default: mod.InstallPrompt }))
 );
@@ -77,6 +80,7 @@ export const AuthenticatedLayout = () => {
         <Suspense fallback={null}><UpdatePrompt /></Suspense>
         <Suspense fallback={null}><KeyboardShortcutsPanel /></Suspense>
         <Suspense fallback={null}><SpotlightSearch /></Suspense>
+        <Suspense fallback={null}><GlobalAICopilot /></Suspense>
       </div>
     </SidebarProvider>
   );
