@@ -3,6 +3,6 @@
  */
 
 export { FinanceCommandCenter } from "./FinanceCommandCenter";
-export { default } from "./FinanceCommandCenter";
+export { FinanceCommandCenter as default } from "./FinanceCommandCenter";
 export { VoyagePnLManager } from "./VoyagePnLManager";
 export { CrewPayrollManager } from "./CrewPayrollManager";
