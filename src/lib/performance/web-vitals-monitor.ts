@@ -55,7 +55,7 @@ class WebVitalsMonitor {
     this.initialized = true;
 
     try {
-      const { onLCP, onFID, onCLS, onFCP, onTTFB, onINP } = await import('web-vitals');
+      const { onLCP, onCLS, onFCP, onTTFB, onINP } = await import('web-vitals');
 
       const record = (name: WebVitalMetric['name']) => (entry: { value: number }) => {
         const metric: WebVitalMetric = {
@@ -74,7 +74,6 @@ class WebVitalsMonitor {
       };
 
       onLCP(record('LCP'));
-      onFID(record('FID'));
       onCLS(record('CLS'));
       onFCP(record('FCP'));
       onTTFB(record('TTFB'));
