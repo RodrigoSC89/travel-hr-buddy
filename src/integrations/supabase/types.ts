@@ -35047,6 +35047,104 @@ export type Database = {
           },
         ]
       }
+      purchase_requisitions: {
+        Row: {
+          actual_total: number | null
+          approved_at: string | null
+          approved_by: string | null
+          attachments: Json | null
+          category: string | null
+          created_at: string
+          currency: string | null
+          delivery_date: string | null
+          delivery_port: string | null
+          department: string | null
+          description: string | null
+          estimated_total: number | null
+          id: string
+          items: Json | null
+          notes: string | null
+          organization_id: string | null
+          priority: string | null
+          requested_by: string | null
+          requested_by_id: string | null
+          requisition_number: string
+          status: string | null
+          supplier_contact: string | null
+          supplier_name: string | null
+          title: string
+          updated_at: string
+          vessel_id: string | null
+          vessel_name: string | null
+        }
+        Insert: {
+          actual_total?: number | null
+          approved_at?: string | null
+          approved_by?: string | null
+          attachments?: Json | null
+          category?: string | null
+          created_at?: string
+          currency?: string | null
+          delivery_date?: string | null
+          delivery_port?: string | null
+          department?: string | null
+          description?: string | null
+          estimated_total?: number | null
+          id?: string
+          items?: Json | null
+          notes?: string | null
+          organization_id?: string | null
+          priority?: string | null
+          requested_by?: string | null
+          requested_by_id?: string | null
+          requisition_number: string
+          status?: string | null
+          supplier_contact?: string | null
+          supplier_name?: string | null
+          title: string
+          updated_at?: string
+          vessel_id?: string | null
+          vessel_name?: string | null
+        }
+        Update: {
+          actual_total?: number | null
+          approved_at?: string | null
+          approved_by?: string | null
+          attachments?: Json | null
+          category?: string | null
+          created_at?: string
+          currency?: string | null
+          delivery_date?: string | null
+          delivery_port?: string | null
+          department?: string | null
+          description?: string | null
+          estimated_total?: number | null
+          id?: string
+          items?: Json | null
+          notes?: string | null
+          organization_id?: string | null
+          priority?: string | null
+          requested_by?: string | null
+          requested_by_id?: string | null
+          requisition_number?: string
+          status?: string | null
+          supplier_contact?: string | null
+          supplier_name?: string | null
+          title?: string
+          updated_at?: string
+          vessel_id?: string | null
+          vessel_name?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "purchase_requisitions_vessel_id_fkey"
+            columns: ["vessel_id"]
+            isOneToOne: false
+            referencedRelation: "vessels"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       push_subscriptions: {
         Row: {
           auth: string
