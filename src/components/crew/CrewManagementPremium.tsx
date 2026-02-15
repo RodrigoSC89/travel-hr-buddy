@@ -154,7 +154,10 @@ export default function CrewManagementPremium() {
 
   const exportCSV = () => {
     const csv = ['Nome,Cargo,Status,Nacionalidade,Embarcação,ID',
-      ...filteredCrew.map((c: any) => `${c.full_name},${c.rank || c.position},${c.status},${c.nationality},${(c.vessels as any)?.name || ''},${c.employee_id || ''}`)
+      ...filteredCrew.map((c) => {
+        const vessel = c.vessels as { name?: string } | null;
+        return `${c.full_name},${c.rank || c.position},${c.status},${c.nationality},${vessel?.name || ''},${c.employee_id || ''}`;
+      })
     ].join('\n');
     const blob = new Blob([csv], { type: 'text/csv' });
     const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = `crew-${new Date().toISOString().split('T')[0]}.csv`; a.click();
@@ -441,8 +444,9 @@ export default function CrewManagementPremium() {
               <CardContent className="space-y-3">
                 {(() => {
                   const vesselMap: Record<string, number> = {};
-                  crew.forEach((c: any) => {
-                    const name = (c.vessels as any)?.name || 'Pool Disponível';
+                  crew.forEach((c) => {
+                    const vessel = c.vessels as { name?: string } | null;
+                    const name = vessel?.name || 'Pool Disponível';
                     vesselMap[name] = (vesselMap[name] || 0) + 1;
                   });
                   return Object.entries(vesselMap).sort(([, a], [, b]) => b - a).slice(0, 8).map(([name, count]) => (
@@ -498,7 +502,7 @@ export default function CrewManagementPremium() {
                   <div><p className="text-xs text-muted-foreground">Cargo</p><p className="text-sm font-medium">{(selectedCrew.position as string) || (selectedCrew.rank as string) || '—'}</p></div>
                   <div><p className="text-xs text-muted-foreground">Status</p><div>{getStatusBadge((selectedCrew.status as string) || 'inactive')}</div></div>
                   <div><p className="text-xs text-muted-foreground">Nacionalidade</p><p className="text-sm font-medium">{(selectedCrew.nationality as string) || '—'}</p></div>
-                  <div><p className="text-xs text-muted-foreground">Embarcação</p><p className="text-sm font-medium">{((selectedCrew.vessels as any)?.name) || 'Sem designação'}</p></div>
+                  <div><p className="text-xs text-muted-foreground">Embarcação</p><p className="text-sm font-medium">{((selectedCrew.vessels as { name?: string } | null)?.name) || 'Sem designação'}</p></div>
                   <div><p className="text-xs text-muted-foreground">ID</p><code className="text-xs bg-muted px-2 py-1 rounded">{(selectedCrew.employee_id as string) || '—'}</code></div>
                   {selectedCrew.contract_end ? (
                     <div><p className="text-xs text-muted-foreground">Fim do Contrato</p><p className="text-sm font-medium">{new Date(String(selectedCrew.contract_end)).toLocaleDateString('pt-BR')}</p></div>
