@@ -64,11 +64,12 @@ export const ESGAnalyticsBenchmark: React.FC = () => {
       const insights = insightsRes.data || [];
 
       // Calculate scores
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any -- compliance_items dynamic select with category column
       const compliantCount = compliance.filter((c: any) => c.status === "compliant" || c.status === "active").length;
       const governanceScore = compliance.length > 0 ? Math.round((compliantCount / compliance.length) * 100) : 0;
-      const socialScore = wellbeing.length > 0 ? Math.round(wellbeing.reduce((s: number, w: any) => s + (w.overall_score || 0), 0) / wellbeing.length) : 0;
+      const socialScore = wellbeing.length > 0 ? Math.round(wellbeing.reduce((s, w) => s + (w.overall_score || 0), 0) / wellbeing.length) : 0;
 
-      const totalCO2 = emissions.reduce((s: number, e: any) => s + (e.co2_tons || e.amount || 0), 0);
+      const totalCO2 = emissions.reduce((s, e) => s + (e.co2_tonnes || 0), 0);
       const envScore = totalCO2 > 0 ? Math.max(0, Math.min(100, Math.round(100 - (totalCO2 / 100)))) : 75;
       const overallScore = Math.round((envScore + socialScore + governanceScore) / 3);
 

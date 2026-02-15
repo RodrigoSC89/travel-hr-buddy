@@ -39,7 +39,7 @@ interface PurchaseOrder {
   delivery_date: string | null;
   total_amount: number;
   currency: string;
-  items: any[] | null;
+  items: LineItem[] | null;
   vessel_id: string | null;
   approved_by: string | null;
   approved_at: string | null;
@@ -157,7 +157,7 @@ export function PurchaseOrdersManager() {
       if (error) throw error;
       return data;
     },
-    onSuccess: (data: any) => {
+    onSuccess: (data: PurchaseOrder) => {
       const isEmergency = newPO.order_type === 'emergency';
       toast.success(`Pedido ${data.order_number} criado!`, {
         description: isEmergency
@@ -172,7 +172,7 @@ export function PurchaseOrdersManager() {
 
   const updateStatusMutation = useMutation({
     mutationFn: async ({ id, status }: { id: string; status: string }) => {
-      const updates: any = { status };
+      const updates: Record<string, unknown> = { status };
       if (status === 'approved') updates.approved_at = new Date().toISOString();
       const { error } = await (supabase.from as Function)('procurement_orders').update(updates).eq('id', id);
       if (error) throw error;
@@ -215,7 +215,7 @@ export function PurchaseOrdersManager() {
       if (error) throw error;
       return data;
     },
-    onSuccess: (data: any) => {
+    onSuccess: (data: PurchaseOrder) => {
       toast.success(`Pedido duplicado: ${data.order_number}`);
       queryClient.invalidateQueries({ queryKey: ['procurement-orders-full'] });
     },
@@ -291,7 +291,7 @@ export function PurchaseOrdersManager() {
           { label: 'Valor Total', value: `$${(stats.totalValue / 1000).toFixed(0)}k`, icon: <DollarSign className="h-4 w-4" />, color: 'text-primary', gradient: 'from-primary/5' },
           { label: 'Ticket Médio', value: `$${(stats.avgValue / 1000).toFixed(1)}k`, icon: <TrendingUp className="h-4 w-4" />, color: 'text-accent-foreground', gradient: 'from-accent/5' },
         ].map((kpi, i) => (
-          <motion.div key={i} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.05 }}>
+          <motion.div key={kpi.label} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.05 }}>
             <Card className="relative overflow-hidden border-border/50 hover:shadow-md transition-shadow">
               <div className={`absolute inset-0 bg-gradient-to-br ${kpi.gradient} to-transparent`} />
               <CardContent className="p-4 relative">
@@ -464,8 +464,8 @@ export function PurchaseOrdersManager() {
                       <div>
                         <p className="text-sm font-medium mb-2">Itens do Pedido</p>
                         <div className="space-y-2">
-                          {selectedPO.items.map((item: any, i: number) => (
-                            <div key={i} className="flex items-center justify-between p-3 rounded-lg bg-muted/30 border">
+                          {selectedPO.items.map((item, i) => (
+                            <div key={`${item.description}-${i}`} className="flex items-center justify-between p-3 rounded-lg bg-muted/30 border">
                               <span className="text-sm">{item.description || 'Item'}</span>
                               <div className="flex items-center gap-4 text-sm">
                                 <span className="text-muted-foreground">{item.quantity || 1}x</span>
@@ -576,7 +576,7 @@ export function PurchaseOrdersManager() {
                 </div>
                 <div className="space-y-3">
                   {lineItems.map((item, idx) => (
-                    <div key={idx} className="grid grid-cols-12 gap-2 items-end">
+                    <div key={`line-${idx}-${item.description}`} className="grid grid-cols-12 gap-2 items-end">
                       <div className="col-span-5">
                         {idx === 0 && <Label className="text-xs text-muted-foreground">Descrição</Label>}
                         <Input placeholder="Descrição do item" value={item.description} onChange={e => updateLineItem(idx, 'description', e.target.value)} />
@@ -594,7 +594,7 @@ export function PurchaseOrdersManager() {
                         <Input type="number" min="0" step="0.01" value={item.unit_price} onChange={e => updateLineItem(idx, 'unit_price', Number(e.target.value))} />
                       </div>
                       <div className="col-span-1">
-                        {lineItems.length > 1 && <Button variant="ghost" size="icon" className="h-9 w-9" onClick={() => removeLineItem(idx)}><Trash2 className="h-3 w-3 text-destructive" /></Button>}
+                        {lineItems.length > 1 && <Button variant="ghost" size="icon" className="h-9 w-9" onClick={() => removeLineItem(idx)} aria-label="Remover item"><Trash2 className="h-3 w-3 text-destructive" /></Button>}
                       </div>
                     </div>
                   ))}

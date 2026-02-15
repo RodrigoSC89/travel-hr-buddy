@@ -27,6 +27,25 @@ import {
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
+interface CrewMember {
+  id: string;
+  full_name: string;
+  position?: string;
+  rank?: string;
+  nationality?: string;
+  status?: string;
+  employee_id?: string;
+  contract_end?: string;
+  vessels?: { name: string } | null;
+}
+
+interface CrewCertificate {
+  id: string;
+  certificate_type: string;
+  certificate_number?: string;
+  expiry_date?: string;
+}
+
 const RANKS = ['Master', 'Chief Officer', 'Second Officer', 'Third Officer', 'Chief Engineer', 'Second Engineer', 'Third Engineer', 'Bosun', 'AB', 'OS', 'Motorman', 'Cook', 'Steward', 'Cadet'];
 
 export default function CrewManagementPremium() {
@@ -34,7 +53,7 @@ export default function CrewManagementPremium() {
   const [searchTerm, setSearchTerm] = useState('');
   const [statusFilter, setStatusFilter] = useState('all');
   const [addDialog, setAddDialog] = useState(false);
-  const [selectedCrew, setSelectedCrew] = useState<Record<string, unknown> | null>(null);
+  const [selectedCrew, setSelectedCrew] = useState<CrewMember | null>(null);
   const queryClient = useQueryClient();
 
   const [newCrew, setNewCrew] = useState({
@@ -158,7 +177,7 @@ export default function CrewManagementPremium() {
           { icon: <ArrowRightLeft className="h-4 w-4" />, label: 'Rotação', value: metrics.pendingRotation, color: 'text-amber-500' },
           { icon: <Heart className="h-4 w-4" />, label: 'Bem-estar', value: metrics.avgWellness > 0 ? `${metrics.avgWellness}%` : '—', color: 'text-primary' },
         ].map((kpi, i) => (
-          <motion.div key={i} initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.03 }}>
+          <motion.div key={kpi.label} initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.03 }}>
             <Card className="hover:shadow-sm transition-shadow">
               <CardContent className="p-3 flex items-center gap-2">
                 <span className={cn("opacity-70", kpi.color)}>{kpi.icon}</span>
@@ -246,8 +265,9 @@ export default function CrewManagementPremium() {
                       <th className="text-center p-3 text-xs font-medium text-muted-foreground">ID</th>
                     </tr></thead>
                     <tbody>
-                      {filteredCrew.slice(0, 50).map((c: any, idx: number) => {
-                        const vessel = c.vessels as { name: string } | null;
+                      {filteredCrew.slice(0, 50).map((rawC, idx: number) => {
+                        const c = rawC as unknown as CrewMember;
+                        const vessel = c.vessels;
                         const contractEnd = c.contract_end ? new Date(c.contract_end) : null;
                         const daysLeft = contractEnd ? Math.max(0, Math.ceil((contractEnd.getTime() - Date.now()) / 86400000)) : null;
                         return (
@@ -256,7 +276,7 @@ export default function CrewManagementPremium() {
                             <td className="p-3">
                               <div className="flex items-center gap-3">
                                 <div className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center text-xs font-bold text-primary">
-                                  {(c.full_name || '').split(' ').map((n: string) => n[0]).join('').substring(0, 2)}
+                                  {(String(c.full_name || '')).split(' ').map((n: string) => n[0]).join('').substring(0, 2)}
                                 </div>
                                 <span className="font-medium text-sm">{c.full_name}</span>
                               </div>
@@ -298,7 +318,8 @@ export default function CrewManagementPremium() {
           ) : (
             <Card className="overflow-hidden">
               <CardContent className="p-0 divide-y divide-border">
-                {certificates.slice(0, 40).map((cert: any) => {
+                {certificates.slice(0, 40).map((rawCert) => {
+                  const cert = rawCert as unknown as CrewCertificate;
                   const expiryDate = cert.expiry_date ? new Date(cert.expiry_date) : null;
                   const isExpired = expiryDate && expiryDate < new Date();
                   const isExpiring = expiryDate && !isExpired && expiryDate <= new Date(Date.now() + 30 * 86400000);
@@ -358,8 +379,8 @@ export default function CrewManagementPremium() {
                       { rule: 'Descanso dividido em no máximo 2 períodos', status: true },
                       { rule: 'Um período de descanso ≥ 6h consecutivas', status: true },
                       { rule: 'Intervalo entre períodos de descanso ≤ 14h', status: true },
-                    ].map((item, i) => (
-                      <div key={i} className="flex items-center gap-2 text-sm">
+                    ].map((item) => (
+                      <div key={item.rule} className="flex items-center gap-2 text-sm">
                         <CheckCircle className="h-4 w-4 text-success shrink-0" />
                         <span>{item.rule}</span>
                       </div>
@@ -373,8 +394,8 @@ export default function CrewManagementPremium() {
                       { label: 'Risco Baixo', count: metrics.onboard, pct: 85, color: 'text-success' },
                       { label: 'Risco Médio', count: 0, pct: 12, color: 'text-warning' },
                       { label: 'Risco Alto', count: 0, pct: 3, color: 'text-destructive' },
-                    ].map((item, i) => (
-                      <div key={i}>
+                    ].map((item) => (
+                      <div key={item.label}>
                         <div className="flex justify-between text-sm mb-1">
                           <span className={item.color}>{item.label}</span>
                           <span className="text-muted-foreground">{item.pct}%</span>

@@ -345,7 +345,7 @@ export const WorldClassChecklistSystem: React.FC = () => {
                 ] as const).map(v => (
                   <Tooltip key={v.mode}>
                     <TooltipTrigger asChild>
-                      <Button variant={viewMode === v.mode ? "secondary" : "ghost"} size="icon" className="h-8 w-8" onClick={() => setViewMode(v.mode)}>
+                      <Button variant={viewMode === v.mode ? "secondary" : "ghost"} size="icon" className="h-8 w-8" onClick={() => setViewMode(v.mode)} aria-label={v.tip}>
                         {v.icon}
                       </Button>
                     </TooltipTrigger>

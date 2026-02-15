@@ -85,7 +85,7 @@ export default function NCPredictionPage() {
             <CardHeader><CardTitle className="flex items-center gap-2"><AlertTriangle className="h-5 w-5" />Predições de NC por Embarcação</CardTitle></CardHeader>
             <CardContent>
               <div className="space-y-4">
-                {(predictions || []).map((pred: any) => (
+                {(predictions || []).map((pred) => (
                   <div key={pred.id} className="p-4 border rounded-lg">
                     <div className="flex items-start justify-between mb-3">
                       <div className="flex items-center gap-3">

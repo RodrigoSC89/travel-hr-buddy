@@ -149,7 +149,7 @@ export default function ApprovalWorkflow() {
         <CardContent className="p-3">
           <div className="flex items-center gap-2 overflow-x-auto">
             {APPROVAL_THRESHOLDS.map((t, i) => (
-              <div key={i} className="flex items-center gap-1 shrink-0">
+              <div key={t.level} className="flex items-center gap-1 shrink-0">
                 <div className={`w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold ${i === 0 ? "bg-primary text-primary-foreground" : "bg-muted text-muted-foreground"}`}>
                   L{t.level}
                 </div>
