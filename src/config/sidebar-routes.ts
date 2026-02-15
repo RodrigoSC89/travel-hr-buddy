@@ -220,6 +220,7 @@ export const SIDEBAR_ROUTES: SidebarGroup[] = [
       { label: "🔒 Security Dashboard", path: "/security-dashboard", icon: Lock, emoji: "🔒", badge: "NEW", status: "new" as const },
       { label: "⚡ Performance", path: "/performance-monitor", icon: Activity, emoji: "⚡", badge: "NEW", status: "new" as const },
       { label: "📄 Premium Reports", path: "/premium-reports", icon: FileText, emoji: "📄", badge: "PDF", status: "new" as const },
+      { label: "📱 WhatsApp Bot", path: "/whatsapp-bot", icon: MessageSquare, emoji: "📱", badge: "NEW", status: "new" as const },
       { label: "🛠️ Dev Tools", path: "/workbench?section=system&view=dev", icon: Terminal, emoji: "🛠️", requiredRoles: ['admin'] },
     ],
   },

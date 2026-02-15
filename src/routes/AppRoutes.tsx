@@ -266,6 +266,7 @@ export const AppRoutes = () => (
       <Route path="/collaboration" element={<Pages.Collaboration />} />
       <Route path="/roadmap" element={<Pages.LandingPage />} />
       <Route path="/client-portal" element={<Pages.ClientPortalPage />} />
+      <Route path="/whatsapp-bot" element={<Pages.WhatsAppBotPage />} />
       
       {/* ======== WORLD-CLASS DISRUPTIVE FEATURES ======== */}
       <Route path="/computer-vision-inspector" element={<Pages.ComputerVisionInspectorPage />} />
