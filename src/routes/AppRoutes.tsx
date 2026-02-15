@@ -263,6 +263,11 @@ export const AppRoutes = () => (
       <Route path="/roadmap" element={<Pages.LandingPage />} />
       <Route path="/client-portal" element={<Pages.ClientPortalPage />} />
       
+      {/* ======== WORLD-CLASS DISRUPTIVE FEATURES ======== */}
+      <Route path="/computer-vision-inspector" element={<Pages.ComputerVisionInspectorPage />} />
+      <Route path="/crew-marketplace" element={<Pages.CrewMarketplacePage />} />
+      <Route path="/iot-wearables" element={<Pages.IoTWearablesDashboardPage />} />
+      
       {/* ======== ENTERPRISE INTELLIGENCE SUITE ======== */}
       <Route path="/enterprise/rag-assistant" element={<Pages.RAGAssistantPage />} />
       <Route path="/enterprise/ocr-center" element={<Pages.OCRCenterPage />} />
