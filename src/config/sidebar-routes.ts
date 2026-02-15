@@ -249,6 +249,8 @@ export const SIDEBAR_ROUTES: SidebarGroup[] = [
       { label: "Carbon Tracker", path: "/maintenance?tab=esg", icon: Leaf, emoji: "🌱", badge: "MAINT" },
       { label: "Monte Carlo Risk", path: "/compliance?standard=hub", icon: Target, emoji: "🎲", badge: "SIM" },
       { label: "Nauti Academy", path: "/nautilus-academy", icon: GraduationCap, emoji: "🎓" },
+      { label: "Evidence Pack", path: "/evidence-pack", icon: Package, emoji: "📦", badge: "PSC", status: "new" as const },
+      { label: "Voyage Optimizer", path: "/voyage-optimizer", icon: Map, emoji: "🗺️", badge: "AI", status: "new" as const },
     ],
   },
 ];

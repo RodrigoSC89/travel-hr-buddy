@@ -168,6 +168,8 @@ const ALL_MODULES: PaletteItem[] = [
   { id: 'fleet-bench', label: 'Fleet Benchmarking', aliases: ['KPIs', 'comparativo', 'indústria'], path: '/fleet-benchmarking', icon: Gauge, group: '🚀 Disruptive' },
   { id: 'blockchain', label: 'Blockchain Audit Trail', aliases: ['SHA-256', 'imutável', 'certificados'], path: '/blockchain-compliance', icon: Lock, group: '🚀 Disruptive', badge: 'Enterprise' },
   { id: 'monte-carlo', label: 'Monte Carlo Simulation', aliases: ['risco financeiro', 'simulação', 'probabilidade'], path: '/company-financials', icon: Calculator, group: '🚀 Disruptive' },
+  { id: 'evidence-pack', label: 'Smart Evidence Pack', aliases: ['evidências', 'pacote de auditoria', 'PSC documents', 'compliance pack'], path: '/evidence-pack', icon: Package, group: '🚀 Disruptive', badge: 'PSC' },
+  { id: 'voyage-optimizer', label: 'Voyage Optimizer AI', aliases: ['otimizador de rotas', 'route optimization', 'waypoints', 'fuel savings'], path: '/voyage-optimizer', icon: Map, group: '🚀 Disruptive', badge: 'AI' },
 
   // SYSTEM
   { id: 'system', label: 'System Hub', aliases: ['configurações', 'settings', 'sistema'], path: '/workbench?section=system', icon: Settings, group: 'System' },

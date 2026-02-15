@@ -16,6 +16,7 @@ import { HealthStatusBar } from "@/components/ui/HealthStatusBar";
 import { useRealtimeToasts } from "@/hooks/useRealtimeToasts";
 import { useAutonomousMonitor } from "@/hooks/useAutonomousMonitor";
 import { ProactiveAlertsBanner } from "@/components/dashboard/ProactiveAlertsBanner";
+import { useSmartPrefetch } from "@/lib/performance/smart-prefetch";
 
 const OfflineStatusBar = lazy(() => 
   import("@/components/offline/OfflineStatusBar").then(mod => ({ default: mod.OfflineStatusBar }))
@@ -43,6 +44,9 @@ const SpotlightSearch = lazy(() =>
 export const AuthenticatedLayout = () => {
   // Global real-time toast notifications for critical events
   useRealtimeToasts();
+  
+  // Smart prefetch for anticipated navigation
+  useSmartPrefetch();
   
   // Autonomous AI monitoring - proactive alerts
   const { alerts, dismissAlert } = useAutonomousMonitor({ enabled: true });
