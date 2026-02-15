@@ -4,14 +4,18 @@
  * PATCH: Todos os botões com ações reais (zero toast-only)
  */
 
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect, useCallback, lazy, Suspense } from "react";
 import { useNavigate } from "react-router-dom";
 import { useQueryClient } from "@tanstack/react-query";
 import { 
   Shield, LayoutDashboard, FileCheck, AlertTriangle, CheckCircle,
   Calendar, Users, Ship, Bot, FileText, Plus, Award, ClipboardCheck,
-  Download, Loader2
+  Download, Loader2, Radar, Grid3X3, Target
 } from "lucide-react";
+
+const PSCInspectionSimulator = lazy(() => import("@/components/compliance/world-class/PSCInspectionSimulator").then(m => ({ default: m.PSCInspectionSimulator })));
+const RegulatoryRadar = lazy(() => import("@/components/compliance/world-class/RegulatoryRadar").then(m => ({ default: m.RegulatoryRadar })));
+const CrossFrameworkMatrix = lazy(() => import("@/components/compliance/world-class/CrossFrameworkMatrix").then(m => ({ default: m.CrossFrameworkMatrix })));
 import { PremiumModuleShell } from "@/components/ui/premium-module-kit";
 import type { ModuleTab } from "@/components/ui/premium-module-kit/PremiumModuleShell";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
@@ -441,12 +445,37 @@ export default function ComplianceHubPremium() {
     toast.success("Relatório de conformidade exportado");
   };
 
+  const LoadingFallback = () => (
+    <div className="flex items-center justify-center py-12">
+      <Loader2 className="h-8 w-8 animate-spin text-primary" />
+    </div>
+  );
+
   const tabs: ModuleTab[] = [
     {
       id: "dashboard",
       label: "Dashboard",
       icon: LayoutDashboard,
       content: <ComplianceDashboard />
+    },
+    {
+      id: "psc-simulator",
+      label: "Simulador PSC",
+      icon: Target,
+      badge: "IA",
+      content: <Suspense fallback={<LoadingFallback />}><PSCInspectionSimulator /></Suspense>
+    },
+    {
+      id: "regulatory-radar",
+      label: "Radar Regulatório",
+      icon: Radar,
+      content: <Suspense fallback={<LoadingFallback />}><RegulatoryRadar /></Suspense>
+    },
+    {
+      id: "cross-framework",
+      label: "Matriz Cross-Framework",
+      icon: Grid3X3,
+      content: <Suspense fallback={<LoadingFallback />}><CrossFrameworkMatrix /></Suspense>
     },
     {
       id: "certificates",
