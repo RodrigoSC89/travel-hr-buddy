@@ -5825,6 +5825,75 @@ export type Database = {
           },
         ]
       }
+      cargo_claims: {
+        Row: {
+          cargo_operation_id: string | null
+          claim_amount: number | null
+          claim_type: string
+          claimant: string | null
+          created_at: string
+          created_by: string | null
+          currency: string | null
+          description: string | null
+          evidence: Json | null
+          id: string
+          organization_id: string | null
+          resolution: string | null
+          resolved_at: string | null
+          status: string
+          updated_at: string
+        }
+        Insert: {
+          cargo_operation_id?: string | null
+          claim_amount?: number | null
+          claim_type: string
+          claimant?: string | null
+          created_at?: string
+          created_by?: string | null
+          currency?: string | null
+          description?: string | null
+          evidence?: Json | null
+          id?: string
+          organization_id?: string | null
+          resolution?: string | null
+          resolved_at?: string | null
+          status?: string
+          updated_at?: string
+        }
+        Update: {
+          cargo_operation_id?: string | null
+          claim_amount?: number | null
+          claim_type?: string
+          claimant?: string | null
+          created_at?: string
+          created_by?: string | null
+          currency?: string | null
+          description?: string | null
+          evidence?: Json | null
+          id?: string
+          organization_id?: string | null
+          resolution?: string | null
+          resolved_at?: string | null
+          status?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "cargo_claims_cargo_operation_id_fkey"
+            columns: ["cargo_operation_id"]
+            isOneToOne: false
+            referencedRelation: "cargo_operations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "cargo_claims_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       cargo_operations: {
         Row: {
           ai_optimized: boolean | null
@@ -5893,6 +5962,126 @@ export type Database = {
           },
           {
             foreignKeyName: "cargo_operations_vessel_id_fkey"
+            columns: ["vessel_id"]
+            isOneToOne: false
+            referencedRelation: "vessels"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      cargo_shipments: {
+        Row: {
+          bl_number: string | null
+          cargo_type: string
+          commodity: string
+          consignee: string | null
+          created_at: string
+          created_by: string | null
+          demurrage_amount: number | null
+          demurrage_days: number | null
+          demurrage_rate: number | null
+          despatch_amount: number | null
+          discharge_date: string | null
+          discharge_port: string | null
+          documents: Json | null
+          freight_amount: number | null
+          freight_rate: number | null
+          hazmat_class: string | null
+          humidity_required: number | null
+          id: string
+          load_port: string | null
+          loading_date: string | null
+          notes: string | null
+          organization_id: string | null
+          quantity: number
+          shipper: string | null
+          status: string
+          stowage_plan: Json | null
+          temperature_required: number | null
+          un_number: string | null
+          unit: string
+          updated_at: string
+          vessel_id: string | null
+          voyage_id: string | null
+        }
+        Insert: {
+          bl_number?: string | null
+          cargo_type: string
+          commodity: string
+          consignee?: string | null
+          created_at?: string
+          created_by?: string | null
+          demurrage_amount?: number | null
+          demurrage_days?: number | null
+          demurrage_rate?: number | null
+          despatch_amount?: number | null
+          discharge_date?: string | null
+          discharge_port?: string | null
+          documents?: Json | null
+          freight_amount?: number | null
+          freight_rate?: number | null
+          hazmat_class?: string | null
+          humidity_required?: number | null
+          id?: string
+          load_port?: string | null
+          loading_date?: string | null
+          notes?: string | null
+          organization_id?: string | null
+          quantity?: number
+          shipper?: string | null
+          status?: string
+          stowage_plan?: Json | null
+          temperature_required?: number | null
+          un_number?: string | null
+          unit?: string
+          updated_at?: string
+          vessel_id?: string | null
+          voyage_id?: string | null
+        }
+        Update: {
+          bl_number?: string | null
+          cargo_type?: string
+          commodity?: string
+          consignee?: string | null
+          created_at?: string
+          created_by?: string | null
+          demurrage_amount?: number | null
+          demurrage_days?: number | null
+          demurrage_rate?: number | null
+          despatch_amount?: number | null
+          discharge_date?: string | null
+          discharge_port?: string | null
+          documents?: Json | null
+          freight_amount?: number | null
+          freight_rate?: number | null
+          hazmat_class?: string | null
+          humidity_required?: number | null
+          id?: string
+          load_port?: string | null
+          loading_date?: string | null
+          notes?: string | null
+          organization_id?: string | null
+          quantity?: number
+          shipper?: string | null
+          status?: string
+          stowage_plan?: Json | null
+          temperature_required?: number | null
+          un_number?: string | null
+          unit?: string
+          updated_at?: string
+          vessel_id?: string | null
+          voyage_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "cargo_shipments_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "cargo_shipments_vessel_id_fkey"
             columns: ["vessel_id"]
             isOneToOne: false
             referencedRelation: "vessels"
@@ -22642,6 +22831,198 @@ export type Database = {
           },
           {
             foreignKeyName: "iot_sensors_vessel_id_fkey"
+            columns: ["vessel_id"]
+            isOneToOne: false
+            referencedRelation: "vessels"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      isps_assessments: {
+        Row: {
+          area: string
+          assessor_name: string | null
+          created_at: string
+          created_by: string | null
+          evidence_files: Json | null
+          findings: number | null
+          id: string
+          last_assessment_date: string | null
+          next_assessment_date: string | null
+          notes: string | null
+          organization_id: string | null
+          score: number | null
+          status: string
+          updated_at: string
+          vessel_id: string | null
+        }
+        Insert: {
+          area: string
+          assessor_name?: string | null
+          created_at?: string
+          created_by?: string | null
+          evidence_files?: Json | null
+          findings?: number | null
+          id?: string
+          last_assessment_date?: string | null
+          next_assessment_date?: string | null
+          notes?: string | null
+          organization_id?: string | null
+          score?: number | null
+          status?: string
+          updated_at?: string
+          vessel_id?: string | null
+        }
+        Update: {
+          area?: string
+          assessor_name?: string | null
+          created_at?: string
+          created_by?: string | null
+          evidence_files?: Json | null
+          findings?: number | null
+          id?: string
+          last_assessment_date?: string | null
+          next_assessment_date?: string | null
+          notes?: string | null
+          organization_id?: string | null
+          score?: number | null
+          status?: string
+          updated_at?: string
+          vessel_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "isps_assessments_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "isps_assessments_vessel_id_fkey"
+            columns: ["vessel_id"]
+            isOneToOne: false
+            referencedRelation: "vessels"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      isps_cyber_threats: {
+        Row: {
+          created_at: string
+          description: string | null
+          detected_at: string
+          id: string
+          mitigation_actions: Json | null
+          organization_id: string | null
+          resolved_at: string | null
+          resolved_by: string | null
+          severity: string
+          source: string | null
+          status: string
+          threat_type: string
+          updated_at: string
+          vessel_id: string | null
+        }
+        Insert: {
+          created_at?: string
+          description?: string | null
+          detected_at?: string
+          id?: string
+          mitigation_actions?: Json | null
+          organization_id?: string | null
+          resolved_at?: string | null
+          resolved_by?: string | null
+          severity?: string
+          source?: string | null
+          status?: string
+          threat_type: string
+          updated_at?: string
+          vessel_id?: string | null
+        }
+        Update: {
+          created_at?: string
+          description?: string | null
+          detected_at?: string
+          id?: string
+          mitigation_actions?: Json | null
+          organization_id?: string | null
+          resolved_at?: string | null
+          resolved_by?: string | null
+          severity?: string
+          source?: string | null
+          status?: string
+          threat_type?: string
+          updated_at?: string
+          vessel_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "isps_cyber_threats_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "isps_cyber_threats_vessel_id_fkey"
+            columns: ["vessel_id"]
+            isOneToOne: false
+            referencedRelation: "vessels"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      isps_security_levels: {
+        Row: {
+          authority: string | null
+          created_at: string
+          created_by: string | null
+          effective_from: string
+          effective_until: string | null
+          id: string
+          ordered_by: string | null
+          organization_id: string | null
+          reason: string | null
+          security_level: number
+          vessel_id: string | null
+        }
+        Insert: {
+          authority?: string | null
+          created_at?: string
+          created_by?: string | null
+          effective_from?: string
+          effective_until?: string | null
+          id?: string
+          ordered_by?: string | null
+          organization_id?: string | null
+          reason?: string | null
+          security_level?: number
+          vessel_id?: string | null
+        }
+        Update: {
+          authority?: string | null
+          created_at?: string
+          created_by?: string | null
+          effective_from?: string
+          effective_until?: string | null
+          id?: string
+          ordered_by?: string | null
+          organization_id?: string | null
+          reason?: string | null
+          security_level?: number
+          vessel_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "isps_security_levels_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "isps_security_levels_vessel_id_fkey"
             columns: ["vessel_id"]
             isOneToOne: false
             referencedRelation: "vessels"
