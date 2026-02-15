@@ -382,7 +382,7 @@ const Auth: React.FC = () => {
   const TroubleshootingSection = () => (
     <div className="mt-4 p-4 bg-muted/50 rounded-lg space-y-3">
       <div className="flex items-center gap-2 text-sm font-medium">
-        <AlertCircle className="h-4 w-4 text-amber-500" />
+        <AlertCircle className="h-4 w-4 text-warning" />
         Problemas para entrar?
       </div>
       <div className="text-xs text-muted-foreground space-y-2">
@@ -409,47 +409,92 @@ const Auth: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-background via-background to-primary/5 flex items-center justify-center p-4 overflow-hidden relative">
-      {/* Cinematic background orbs */}
+      {/* Cinematic background - animated mesh gradient */}
       <div className="absolute inset-0 pointer-events-none overflow-hidden">
+        {/* Primary orb - deep ocean pulse */}
         <motion.div
-          className="absolute top-1/4 left-1/4 w-[500px] h-[500px] bg-primary/8 rounded-full blur-[120px]"
-          animate={{ scale: [1, 1.2, 1], x: [0, 30, 0], y: [0, -20, 0] }}
-          transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
-        />
-        <motion.div
-          className="absolute bottom-1/4 right-1/4 w-[400px] h-[400px] bg-accent/8 rounded-full blur-[100px]"
-          animate={{ scale: [1.1, 1, 1.1], x: [0, -25, 0], y: [0, 25, 0] }}
+          className="absolute top-1/4 left-1/4 w-[600px] h-[600px] rounded-full blur-[140px]"
+          style={{ background: 'radial-gradient(circle, hsla(214, 84%, 46%, 0.12) 0%, transparent 70%)' }}
+          animate={{ 
+            scale: [1, 1.15, 1], 
+            x: [0, 40, 0], 
+            y: [0, -30, 0],
+            opacity: [0.6, 0.9, 0.6]
+          }}
           transition={{ duration: 10, repeat: Infinity, ease: "easeInOut" }}
         />
+        {/* Secondary orb - cyan accent */}
         <motion.div
-          className="absolute top-1/2 left-1/2 w-[300px] h-[300px] bg-primary/5 rounded-full blur-[80px]"
-          animate={{ scale: [1, 1.3, 1], rotate: [0, 180, 360] }}
-          transition={{ duration: 15, repeat: Infinity, ease: "linear" }}
+          className="absolute bottom-1/3 right-1/4 w-[500px] h-[500px] rounded-full blur-[120px]"
+          style={{ background: 'radial-gradient(circle, hsla(190, 95%, 50%, 0.08) 0%, transparent 70%)' }}
+          animate={{ 
+            scale: [1.1, 0.95, 1.1], 
+            x: [0, -30, 0], 
+            y: [0, 35, 0],
+            opacity: [0.5, 0.8, 0.5]
+          }}
+          transition={{ duration: 12, repeat: Infinity, ease: "easeInOut" }}
+        />
+        {/* Floating particles */}
+        {[...Array(6)].map((_, i) => (
+          <motion.div
+            key={i}
+            className="absolute w-1 h-1 bg-primary/30 rounded-full"
+            style={{
+              left: `${15 + i * 15}%`,
+              top: `${20 + (i % 3) * 25}%`,
+            }}
+            animate={{
+              y: [0, -40, 0],
+              opacity: [0, 0.6, 0],
+              scale: [0.5, 1.2, 0.5],
+            }}
+            transition={{
+              duration: 4 + i * 0.7,
+              repeat: Infinity,
+              delay: i * 0.8,
+              ease: "easeInOut",
+            }}
+          />
+        ))}
+        {/* Subtle grid overlay */}
+        <div 
+          className="absolute inset-0 opacity-[0.02]"
+          style={{
+            backgroundImage: `linear-gradient(hsl(var(--primary)) 1px, transparent 1px), linear-gradient(90deg, hsl(var(--primary)) 1px, transparent 1px)`,
+            backgroundSize: '60px 60px',
+          }}
         />
       </div>
       <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.6, ease: "easeOut" }}
+        initial={{ opacity: 0, y: 30, filter: "blur(10px)" }}
+        animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+        transition={{ duration: 0.8, ease: [0.25, 0.46, 0.45, 0.94] }}
         className="w-full max-w-5xl grid lg:grid-cols-2 gap-12 items-center relative z-10"
       >
         {/* Left Side - System Showcase */}
         <motion.div
-          initial={{ opacity: 0, x: -40 }}
-          animate={{ opacity: 1, x: 0 }}
-          transition={{ duration: 0.7, delay: 0.2, ease: "easeOut" }}
+          initial={{ opacity: 0, x: -50, filter: "blur(8px)" }}
+          animate={{ opacity: 1, x: 0, filter: "blur(0px)" }}
+          transition={{ duration: 0.9, delay: 0.15, ease: [0.25, 0.46, 0.45, 0.94] }}
           className="hidden lg:flex flex-col space-y-8"
         >
           {/* Logo & Title */}
           <div className="flex items-center space-x-4">
-            <div className="w-16 h-16 rounded-2xl bg-card flex items-center justify-center shadow-premium-lg p-2.5 border border-border/50 ring-1 ring-primary/10">
+            <motion.div 
+              className="w-16 h-16 rounded-2xl bg-card flex items-center justify-center shadow-premium-lg p-2.5 border border-border/50 ring-1 ring-primary/10"
+              whileHover={{ scale: 1.08, rotate: 3 }}
+              transition={{ type: "spring", stiffness: 400, damping: 15 }}
+            >
               <img src={nautiLogo} alt="Nauti One Logo" className="w-full h-full object-contain" width={44} height={44} />
-            </div>
+            </motion.div>
             <div>
-              <h1 className="text-4xl font-bold tracking-tight bg-gradient-to-r from-primary to-azure-400 bg-clip-text text-transparent">
-                NAUTI ONE
+              <h1 className="text-4xl font-bold tracking-tight">
+                <span className="bg-gradient-to-r from-primary via-primary/80 to-primary-glow bg-clip-text text-transparent bg-[length:200%_auto] animate-[gradient-shift_3s_ease-in-out_infinite]">
+                  NAUTI ONE
+                </span>
               </h1>
-              <p className="text-xs text-muted-foreground font-medium tracking-widest uppercase mt-0.5">
+              <p className="text-xs text-muted-foreground font-medium tracking-[0.25em] uppercase mt-0.5">
                 Maritime Operations Platform
               </p>
             </div>
@@ -474,17 +519,20 @@ const Auth: React.FC = () => {
               ].map((hub, index) => (
                 <motion.div
                   key={hub.name}
-                  initial={{ opacity: 0, y: 15 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.4 + index * 0.08, duration: 0.4 }}
-                  whileHover={{ scale: 1.03, y: -2 }}
-                  className="bg-card/50 border border-border/30 rounded-xl p-3 flex items-center gap-3 hover:bg-card/80 hover:border-primary/20 hover:shadow-premium-sm transition-colors duration-300 group cursor-default"
+                  initial={{ opacity: 0, y: 15, scale: 0.95 }}
+                  animate={{ opacity: 1, y: 0, scale: 1 }}
+                  transition={{ delay: 0.4 + index * 0.08, duration: 0.5, ease: [0.25, 0.46, 0.45, 0.94] }}
+                  whileHover={{ scale: 1.04, y: -3, transition: { type: "spring", stiffness: 400, damping: 20 } }}
+                  className="bg-card/50 border border-border/30 rounded-xl p-3 flex items-center gap-3 hover:bg-card/80 hover:border-primary/20 hover:shadow-[0_0_20px_hsla(var(--primary)/0.1)] transition-all duration-300 group cursor-default backdrop-blur-sm"
                 >
-                  <hub.icon className="h-4 w-4 text-primary shrink-0 group-hover:scale-110 transition-transform" />
+                  <div className="relative">
+                    <hub.icon className="h-4 w-4 text-primary shrink-0 group-hover:scale-110 transition-transform duration-300" />
+                    <div className="absolute inset-0 bg-primary/20 rounded-full blur-md opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                  </div>
                   <div className="min-w-0 flex-1">
                     <div className="flex items-center gap-1.5">
                       <span className="text-xs font-semibold truncate">{hub.name}</span>
-                      <Badge variant="secondary" className="text-[9px] px-1.5 py-0 h-4 shrink-0 font-bold">
+                      <Badge variant="secondary" className="text-[9px] px-1.5 py-0 h-4 shrink-0 font-bold bg-primary/10 text-primary border-primary/20">
                         {hub.badge}
                       </Badge>
                     </div>
@@ -502,23 +550,39 @@ const Auth: React.FC = () => {
               "12 Auditorias marítimas (ISM, MLC, SIRE, PSC...)",
               "10 Agentes IA especializados",
               "Compliance STCW, MLC 2006 & MARPOL"
-            ].map((feature) => (
-              <div key={feature} className="flex items-center space-x-2.5">
-                <CheckCircle className="h-4 w-4 text-success shrink-0" />
+            ].map((feature, i) => (
+              <motion.div 
+                key={feature} 
+                className="flex items-center space-x-2.5"
+                initial={{ opacity: 0, x: -20 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ delay: 0.8 + i * 0.1, duration: 0.4 }}
+              >
+                <div className="relative">
+                  <CheckCircle className="h-4 w-4 text-success shrink-0" />
+                  <motion.div
+                    className="absolute inset-0 bg-success/30 rounded-full"
+                    initial={{ scale: 0 }}
+                    animate={{ scale: [0, 1.5, 0] }}
+                    transition={{ delay: 1.2 + i * 0.15, duration: 0.6 }}
+                  />
+                </div>
                 <span className="text-sm text-foreground/80">{feature}</span>
-              </div>
+              </motion.div>
             ))}
           </div>
         </motion.div>
 
         {/* Right Side - Auth Forms */}
         <motion.div
-          initial={{ opacity: 0, x: 40 }}
-          animate={{ opacity: 1, x: 0 }}
-          transition={{ duration: 0.7, delay: 0.3, ease: "easeOut" }}
+          initial={{ opacity: 0, x: 50, filter: "blur(8px)" }}
+          animate={{ opacity: 1, x: 0, filter: "blur(0px)" }}
+          transition={{ duration: 0.9, delay: 0.25, ease: [0.25, 0.46, 0.45, 0.94] }}
           className="w-full max-w-md mx-auto"
         >
-          <Card className="shadow-premium-xl border-border/50 bg-card/95 backdrop-blur-sm">
+          <Card className="shadow-premium-xl border-border/50 bg-card/95 backdrop-blur-xl relative overflow-hidden">
+            {/* Subtle top gradient line */}
+            <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-primary/50 to-transparent" />
             <CardHeader className="space-y-1.5 text-center pb-4">
               {/* Mobile logo */}
               <div className="lg:hidden flex justify-center mb-5">

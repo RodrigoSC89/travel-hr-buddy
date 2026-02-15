@@ -594,6 +594,22 @@ body.sidebar-open {
     animation: data-stream 3s linear infinite;
   }
 
+  /* Gradient shift for text animations */
+  @keyframes gradient-shift {
+    0%, 100% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+  }
+
+  /* Premium pulse glow */
+  @keyframes pulse-glow {
+    0%, 100% { box-shadow: 0 0 0 0 hsla(var(--primary), 0.4); }
+    50% { box-shadow: 0 0 20px 4px hsla(var(--primary), 0.15); }
+  }
+
+  .animate-pulse-glow {
+    animation: pulse-glow 3s ease-in-out infinite;
+  }
+
   /* Counter animation helper */
   .animate-count-up {
     animation: count-fade 0.5s ease-out;
