@@ -2,7 +2,7 @@ import type { FC } from 'react';
 import { useState, Suspense, lazy } from 'react';
 import { ModulePageWrapper } from '@/components/ui/module-page-wrapper';
 import { ModuleHeader } from '@/components/ui/module-header';
-import { Shield, Brain, Scale, Globe, Sparkles, Search, MessageSquare, Zap, ClipboardCheck, FileSearch, Clock, Heart, Users, Calculator, FileText, AlertTriangle, Home, Plane, UtensilsCrossed, DollarSign, ShieldCheck, Building2 } from 'lucide-react';
+import { Shield, Brain, Scale, Globe, Sparkles, Search, MessageSquare, Zap, ClipboardCheck, FileSearch, Clock, Heart, Users, Calculator, FileText, AlertTriangle, Home, Plane, UtensilsCrossed, DollarSign, ShieldCheck, Building2, BarChart3, Crosshair, FileDown } from 'lucide-react';
 import { MLCInspectionDashboardV2 } from '@/components/mlc/MLCInspectionDashboardV2';
 import { MLCWelfareScoring } from '@/components/mlc/MLCWelfareScoring';
 import { MLCDMLCChecklist } from '@/components/mlc/MLCDMLCChecklist';
@@ -19,6 +19,9 @@ import { MLCWageProtectionTracker } from '@/components/mlc/MLCWageProtectionTrac
 import { MLCHealthSafetyTracker } from '@/components/mlc/MLCHealthSafetyTracker';
 import { MLCGrievanceProcedure } from '@/components/mlc/MLCGrievanceProcedure';
 import { MLCRecruitmentCompliance } from '@/components/mlc/MLCRecruitmentCompliance';
+import { MLCComplianceByTitle } from '@/components/mlc/MLCComplianceByTitle';
+import { MLCPSCSimulator } from '@/components/mlc/MLCPSCSimulator';
+import { MLCDocumentGenerator } from '@/components/mlc/MLCDocumentGenerator';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Skeleton } from '@/components/ui/skeleton';
 
@@ -85,6 +88,9 @@ const MLCInspection: FC = () => {
           <TabsTrigger value="health-safety" className="gap-1"><ShieldCheck className="h-3 w-3" />SST 4.3</TabsTrigger>
           <TabsTrigger value="grievance" className="gap-1"><Scale className="h-3 w-3" />Grievance 5.1.5</TabsTrigger>
           <TabsTrigger value="recruitment" className="gap-1"><Building2 className="h-3 w-3" />Recrutamento 1.4</TabsTrigger>
+          <TabsTrigger value="compliance-titles" className="gap-1"><BarChart3 className="h-3 w-3" />Score por Título</TabsTrigger>
+          <TabsTrigger value="psc-simulator" className="gap-1"><Crosshair className="h-3 w-3" />Simulador PSC</TabsTrigger>
+          <TabsTrigger value="doc-generator" className="gap-1"><FileDown className="h-3 w-3" />Gerador Docs</TabsTrigger>
           <TabsTrigger value="sgi-evidence" className="gap-1"><Sparkles className="h-3 w-3" />Evidências</TabsTrigger>
           <TabsTrigger value="gap-analyzer" className="gap-1"><Search className="h-3 w-3" />Gap Analyzer</TabsTrigger>
           <TabsTrigger value="interview-sim" className="gap-1"><MessageSquare className="h-3 w-3" />Simulador</TabsTrigger>
@@ -112,6 +118,9 @@ const MLCInspection: FC = () => {
         <TabsContent value="health-safety"><MLCHealthSafetyTracker /></TabsContent>
         <TabsContent value="grievance"><MLCGrievanceProcedure /></TabsContent>
         <TabsContent value="recruitment"><MLCRecruitmentCompliance /></TabsContent>
+        <TabsContent value="compliance-titles"><MLCComplianceByTitle /></TabsContent>
+        <TabsContent value="psc-simulator"><MLCPSCSimulator /></TabsContent>
+        <TabsContent value="doc-generator"><MLCDocumentGenerator /></TabsContent>
 
         <Suspense fallback={<LoadingFallback />}>
           <TabsContent value="sgi-evidence"><ComplianceSGIAutoEvidence moduleId="mlc" moduleName="MLC 2006" checklistItems={MLC_ITEMS} /></TabsContent>
