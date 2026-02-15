@@ -30,6 +30,7 @@ import { PeotramNCActionPlan } from "@/components/peotram/PeotramNCActionPlan";
 import { PeotramAuditTimeline } from "@/components/peotram/PeotramAuditTimeline";
 import { PeotramBenchmarking } from "@/components/peotram/PeotramBenchmarking";
 import { PeotramLessonsLearned } from "@/components/peotram/PeotramLessonsLearned";
+import { PeotramNCEscalation } from "@/components/peotram/PeotramNCEscalation";
 import { PeotramReportGenerator } from "@/components/peotram/PeotramReportGenerator";
 import { PeotramAuditWizard } from "@/components/peotram/PeotramAuditWizard";
 import { PeotramRadarChart } from "@/components/peotram/PeotramRadarChart";
@@ -142,6 +143,7 @@ const PEOTRAMPage = () => {
           <TabsTrigger value="timeline" className="gap-1.5"><TrendingUp className="h-3.5 w-3.5" /> Timeline</TabsTrigger>
           <TabsTrigger value="benchmarking" className="gap-1.5"><Award className="h-3.5 w-3.5" /> Benchmarking</TabsTrigger>
           <TabsTrigger value="lessons" className="gap-1.5"><Lightbulb className="h-3.5 w-3.5" /> Lições</TabsTrigger>
+          <TabsTrigger value="nc-escalation" className="gap-1.5"><AlertTriangle className="h-3.5 w-3.5" /> Escalonamento</TabsTrigger>
         </TabsList>
 
         {/* ============ OVERVIEW ============ */}
@@ -353,6 +355,7 @@ const PEOTRAMPage = () => {
         <TabsContent value="timeline"><PeotramAuditTimeline /></TabsContent>
         <TabsContent value="benchmarking"><PeotramBenchmarking /></TabsContent>
         <TabsContent value="lessons"><PeotramLessonsLearned /></TabsContent>
+        <TabsContent value="nc-escalation"><PeotramNCEscalation /></TabsContent>
 
         <Suspense fallback={<LoadingFallback />}>
           <TabsContent value="interview">
