@@ -1,18 +1,16 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
+import { useQuery } from "@tanstack/react-query";
+import { supabase } from "@/integrations/supabase/client";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Alert, AlertDescription } from "@/components/ui/alert";
 import { 
-  Shield, AlertTriangle, CheckCircle, Eye, Lock, Key, Activity,
-  Users, Globe, Database, Wifi, Server, FileText, Clock,
-  TrendingUp, RefreshCw, Download, Settings
+  Shield, AlertTriangle, CheckCircle, Eye, Lock, Key,
+  Globe, Server, Clock, TrendingUp, RefreshCw, Download, Loader2
 } from "lucide-react";
-import { useAuth } from "@/contexts/AuthContext";
 import { useToast } from "@/hooks/use-toast";
-import { supabase } from "@/integrations/supabase/client";
 
 interface SecurityAlert {
   id: string;
@@ -25,173 +23,87 @@ interface SecurityAlert {
   affectedAssets: string[];
 }
 
-interface SecurityMetric {
-  name: string;
-  value: number;
-  target: number;
-  unit: string;
-  status: "good" | "warning" | "critical";
-  trend: "up" | "down" | "stable";
-}
-
-interface VulnerabilityReport {
-  id: string;
-  asset: string;
-  vulnerability: string;
-  cvss: number;
-  status: "open" | "patched" | "mitigated";
-  discoveredAt: Date;
-  priority: "low" | "medium" | "high" | "critical";
-}
-
-interface AccessLogRow {
-  id: string;
-  action: string;
-  result: string;
-  severity: string;
-  timestamp: string;
-  module_accessed: string;
-}
-
 export const AdvancedSecurityCenter: React.FC = () => {
-  const { user } = useAuth();
   const { toast } = useToast();
-  
-  const [alerts, setAlerts] = useState<SecurityAlert[]>([]);
-  const [metrics, setMetrics] = useState<SecurityMetric[]>([]);
-  const [vulnerabilities, setVulnerabilities] = useState<VulnerabilityReport[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
-  const [securityScore, setSecurityScore] = useState(0);
+  const [resolvedIds, setResolvedIds] = useState<Set<string>>(new Set());
 
-  const generateSecurityData = async () => {
-    try {
+  // Real security alerts from access_logs
+  const { data: alerts = [], isLoading, refetch } = useQuery({
+    queryKey: ["security-alerts"],
+    queryFn: async () => {
       const { data: logs } = await supabase
         .from("access_logs")
         .select("id, action, result, severity, timestamp, module_accessed")
         .order("timestamp", { ascending: false })
-        .limit(10);
+        .limit(50);
 
-      if (logs && logs.length > 0) {
-        const realAlerts: SecurityAlert[] = (logs as AccessLogRow[])
-          .filter((l) => l.severity === "high" || l.severity === "critical" || l.result === "failure")
-          .slice(0, 5)
-          .map((l) => ({
-            id: l.id,
-            type: l.result === "failure" ? "threat" as const : "policy" as const,
-            severity: l.severity === "critical" ? "critical" as const : l.severity === "high" ? "high" as const : "medium" as const,
-            title: `${l.action} - ${l.module_accessed}`,
-            description: `Evento de ${l.result} em ${l.module_accessed}`,
-            timestamp: new Date(l.timestamp),
-            status: "active" as const,
-            affectedAssets: [l.module_accessed]
-          }));
-        if (realAlerts.length > 0) setAlerts(realAlerts);
-      }
+      return (logs || [])
+        .filter((l) => l.severity === "high" || l.severity === "critical" || l.result === "failure")
+        .slice(0, 10)
+        .map((l): SecurityAlert => ({
+          id: l.id,
+          type: l.result === "failure" ? "threat" : "policy",
+          severity: l.severity === "critical" ? "critical" : l.severity === "high" ? "high" : "medium",
+          title: `${l.action} - ${l.module_accessed}`,
+          description: `Evento de ${l.result} em ${l.module_accessed}`,
+          timestamp: new Date(l.timestamp),
+          status: "active",
+          affectedAssets: [l.module_accessed],
+        }));
+    },
+    staleTime: 30000,
+  });
 
-      if (alerts.length === 0) {
-        setAlerts([
-          { id: "1", type: "threat", severity: "high", title: "Tentativa de Acesso Suspeito", description: "Múltiplas tentativas de login falharam", timestamp: new Date(Date.now() - 15 * 60000), status: "active", affectedAssets: ["Login System"] },
-          { id: "2", type: "vulnerability", severity: "medium", title: "Atualização de Segurança Disponível", description: "Nova versão corrige vulnerabilidades", timestamp: new Date(Date.now() - 2 * 60 * 60000), status: "investigating", affectedAssets: ["Web Application"] },
-        ]);
-      }
-    } catch {
-      setAlerts([
-        { id: "1", type: "threat", severity: "high", title: "Tentativa de Acesso Suspeito", description: "Múltiplas tentativas de login falharam", timestamp: new Date(Date.now() - 15 * 60000), status: "active", affectedAssets: ["Login System"] },
+  // Real metrics from access_logs and active_sessions
+  const { data: metrics } = useQuery({
+    queryKey: ["security-metrics"],
+    queryFn: async () => {
+      const [{ count: totalLogs }, { count: failedLogs }, { count: activeSessions }] = await Promise.all([
+        supabase.from("access_logs").select("*", { count: "exact", head: true }),
+        supabase.from("access_logs").select("*", { count: "exact", head: true }).eq("result", "failure"),
+        supabase.from("active_sessions").select("*", { count: "exact", head: true }).eq("is_active", true),
       ]);
-    }
 
-    const fallbackMetrics: SecurityMetric[] = [
-      { name: "Score de Segurança", value: 87, target: 95, unit: "%", status: "warning", trend: "up" },
-      { name: "Vulnerabilidades Críticas", value: 2, target: 0, unit: "unidades", status: "critical", trend: "down" },
-      { name: "Tentativas de Ataque Bloqueadas", value: 147, target: 0, unit: "unidades", status: "good", trend: "stable" },
-      { name: "Compliance Rate", value: 94, target: 100, unit: "%", status: "good", trend: "up" },
-      { name: "Tempo Médio de Resposta", value: 12, target: 15, unit: "min", status: "good", trend: "down" },
-      { name: "Uptime de Segurança", value: 99.8, target: 99.9, unit: "%", status: "good", trend: "stable" }
-    ];
+      const total = totalLogs || 1;
+      const failed = failedLogs || 0;
+      const successRate = Math.round(((total - failed) / total) * 100);
 
-    const fallbackVulnerabilities: VulnerabilityReport[] = [
-      { id: "1", asset: "Web Application", vulnerability: "Cross-Site Scripting (XSS)", cvss: 7.4, status: "open", discoveredAt: new Date(Date.now() - 3 * 24 * 60 * 60000), priority: "high" },
-      { id: "2", asset: "Database Server", vulnerability: "SQL Injection", cvss: 8.1, status: "patched", discoveredAt: new Date(Date.now() - 7 * 24 * 60 * 60000), priority: "critical" },
-    ];
+      return {
+        securityScore: Math.min(100, successRate),
+        totalEvents: total,
+        failedAttempts: failed,
+        activeSessions: activeSessions || 0,
+        successRate,
+      };
+    },
+    staleTime: 30000,
+  });
 
-    setMetrics(fallbackMetrics);
-    setVulnerabilities(fallbackVulnerabilities);
-    setSecurityScore(87);
-    setIsLoading(false);
-  };
-
-  useEffect(() => {
-    generateSecurityData();
-  }, []);
-
-  const getSeverityColor = (severity: string) => {
-    switch (severity) {
-    case "critical": return "bg-destructive";
-    case "high": return "bg-warning";
-    case "medium": return "bg-warning";
-    case "low": return "bg-info";
-    default: return "bg-muted";
-    }
-  };
-
-  const getSeverityIcon = (severity: string) => {
-    switch (severity) {
-    case "critical":
-    case "high":
-      return <AlertTriangle className="h-4 w-4 text-destructive" />;
-    case "medium":
-      return <AlertTriangle className="h-4 w-4 text-warning" />;
-    case "low":
-      return <CheckCircle className="h-4 w-4 text-info" />;
-    default:
-      return <CheckCircle className="h-4 w-4 text-muted-foreground" />;
-    }
-  };
-
-  const getStatusColor = (status: string) => {
-    switch (status) {
-    case "good": return "text-success";
-    case "warning": return "text-warning";
-    case "critical": return "text-destructive";
-    default: return "text-muted-foreground";
-    }
-  };
-
-  const getTrendIcon = (trend: string) => {
-    switch (trend) {
-    case "up": return <TrendingUp className="h-3 w-3 text-success" />;
-    case "down": return <TrendingUp className="h-3 w-3 text-destructive rotate-180" />;
-    default: return <div className="h-3 w-3" />;
-    }
-  };
-
-  const getScoreColor = (score: number) => {
-    if (score >= 90) return "text-success";
-    if (score >= 70) return "text-warning";
-    return "text-destructive";
-  };
+  const securityScore = metrics?.securityScore ?? 0;
 
   const handleResolveAlert = (alertId: string) => {
-    setAlerts(prev => prev.map(alert => 
-      alert.id === alertId ? { ...alert, status: "resolved" } : alert
-    ));
-    toast({ title: "Alerta resolvido", description: "O alerta de segurança foi marcado como resolvido." });
+    setResolvedIds(prev => new Set(prev).add(alertId));
+    toast({ title: "Alerta resolvido", description: "O alerta foi marcado como resolvido." });
   };
 
   const handleRunScan = () => {
-    setIsLoading(true);
-    // Generate data synchronously, no fake delay
-    generateSecurityData();
-    toast({ title: "Varredura concluída", description: "Nova análise de segurança foi executada com sucesso." });
+    refetch();
+    toast({ title: "Varredura concluída", description: "Dados de segurança atualizados." });
   };
 
+  const getSeverityIcon = (severity: string) => {
+    if (severity === "critical" || severity === "high") return <AlertTriangle className="h-4 w-4 text-destructive" />;
+    if (severity === "medium") return <AlertTriangle className="h-4 w-4 text-warning" />;
+    return <CheckCircle className="h-4 w-4 text-muted-foreground" />;
+  };
+
+  const getScoreColor = (score: number) => score >= 90 ? "text-success" : score >= 70 ? "text-warning" : "text-destructive";
+
   if (isLoading) {
-    return (
-      <div className="flex items-center justify-center h-96">
-        <RefreshCw className="h-8 w-8 animate-spin" />
-      </div>
-    );
+    return <div className="flex items-center justify-center h-96"><Loader2 className="h-8 w-8 animate-spin" /></div>;
   }
+
+  const activeAlerts = alerts.filter(a => !resolvedIds.has(a.id));
 
   return (
     <div className="space-y-6">
@@ -206,12 +118,9 @@ export const AdvancedSecurityCenter: React.FC = () => {
         </div>
       </div>
 
+      {/* Security Score */}
       <Card>
-        <CardHeader>
-          <CardTitle className="flex items-center space-x-2">
-            <Shield className="h-5 w-5" /><span>Score de Segurança</span>
-          </CardTitle>
-        </CardHeader>
+        <CardHeader><CardTitle className="flex items-center space-x-2"><Shield className="h-5 w-5" /><span>Score de Segurança</span></CardTitle></CardHeader>
         <CardContent>
           <div className="flex items-center space-x-6">
             <div className="text-center">
@@ -224,33 +133,26 @@ export const AdvancedSecurityCenter: React.FC = () => {
                 {securityScore >= 90 ? "Excelente" : securityScore >= 70 ? "Bom" : "Necessita Atenção"}
               </div>
             </div>
-            <div className="text-right">
-              <p className="text-sm text-muted-foreground">Última atualização</p>
-              <p className="text-sm font-medium">há 5 minutos</p>
-            </div>
           </div>
         </CardContent>
       </Card>
 
-      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-        {metrics.map((metric) => (
-          <Card key={metric.name}>
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">{metric.name}</CardTitle>
-              <div className="flex items-center space-x-1">{getTrendIcon(metric.trend)}</div>
-            </CardHeader>
-            <CardContent>
-              <div className={`text-2xl font-bold ${getStatusColor(metric.status)}`}>
-                {metric.value}{metric.unit === "%" ? "%" : metric.unit === "unidades" ? "" : metric.unit}
-              </div>
-              <div className="mt-2">
-                <div className="flex justify-between text-xs text-muted-foreground mb-1">
-                  <span>Meta: {metric.target}{metric.unit === "%" ? "%" : ""}</span>
-                  <Badge variant={metric.status === "good" ? "default" : metric.status === "warning" ? "secondary" : "destructive"}>
-                    {metric.status === "good" ? "OK" : metric.status === "warning" ? "Atenção" : "Crítico"}
-                  </Badge>
+      {/* Real Metrics */}
+      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+        {[
+          { name: "Eventos Totais", value: metrics?.totalEvents || 0, icon: <Server className="h-5 w-5" />, color: "text-primary" },
+          { name: "Tentativas Falhas", value: metrics?.failedAttempts || 0, icon: <AlertTriangle className="h-5 w-5" />, color: "text-destructive" },
+          { name: "Sessões Ativas", value: metrics?.activeSessions || 0, icon: <Eye className="h-5 w-5" />, color: "text-success" },
+          { name: "Taxa de Sucesso", value: `${metrics?.successRate || 0}%`, icon: <TrendingUp className="h-5 w-5" />, color: "text-primary" },
+        ].map(m => (
+          <Card key={m.name}>
+            <CardContent className="pt-4">
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-sm text-muted-foreground">{m.name}</p>
+                  <p className={`text-2xl font-bold ${m.color}`}>{m.value}</p>
                 </div>
-                {metric.target > 0 && <Progress value={Math.min((metric.value / metric.target) * 100, 100)} className="h-2" />}
+                <div className={m.color}>{m.icon}</div>
               </div>
             </CardContent>
           </Card>
@@ -259,89 +161,36 @@ export const AdvancedSecurityCenter: React.FC = () => {
 
       <Tabs defaultValue="alerts" className="space-y-4">
         <TabsList>
-          <TabsTrigger value="alerts">Alertas</TabsTrigger>
-          <TabsTrigger value="vulnerabilities">Vulnerabilidades</TabsTrigger>
+          <TabsTrigger value="alerts">Alertas ({activeAlerts.length})</TabsTrigger>
           <TabsTrigger value="compliance">Compliance</TabsTrigger>
-          <TabsTrigger value="monitoring">Monitoramento</TabsTrigger>
         </TabsList>
 
         <TabsContent value="alerts" className="space-y-4">
           <Card>
-            <CardHeader>
-              <CardTitle>Alertas de Segurança</CardTitle>
-              <CardDescription>Alertas ativos e recentes do sistema</CardDescription>
-            </CardHeader>
+            <CardHeader><CardTitle>Alertas de Segurança</CardTitle><CardDescription>Eventos de alta severidade e falhas de acesso</CardDescription></CardHeader>
             <CardContent>
-              <div className="space-y-4">
-                {alerts.map((alert) => (
-                  <div key={alert.id} className="flex items-start space-x-4 p-4 border border-border rounded-lg">
-                    <div className="flex items-center space-x-2">
+              {activeAlerts.length === 0 ? (
+                <div className="text-center py-12"><CheckCircle className="h-12 w-12 mx-auto mb-4 text-success/50" /><p className="text-muted-foreground">Nenhum alerta ativo</p></div>
+              ) : (
+                <div className="space-y-4">
+                  {activeAlerts.map((alert) => (
+                    <div key={alert.id} className="flex items-start space-x-4 p-4 border border-border rounded-lg">
                       {getSeverityIcon(alert.severity)}
-                      <div className={`w-2 h-2 rounded-full ${getSeverityColor(alert.severity)}`} />
-                    </div>
-                    <div className="flex-1">
-                      <div className="flex items-center justify-between mb-1">
-                        <h4 className="font-medium">{alert.title}</h4>
-                        <div className="flex items-center space-x-2">
-                          <Badge variant="outline" className="capitalize">{alert.type}</Badge>
-                          <Badge variant={alert.status === "resolved" ? "default" : alert.status === "investigating" ? "secondary" : "destructive"}>
-                            {alert.status === "resolved" ? "Resolvido" : alert.status === "investigating" ? "Investigando" : "Ativo"}
-                          </Badge>
+                      <div className="flex-1">
+                        <div className="flex items-center justify-between mb-1">
+                          <h4 className="font-medium">{alert.title}</h4>
+                          <Badge variant={alert.severity === "critical" ? "destructive" : "secondary"}>{alert.severity}</Badge>
                         </div>
-                      </div>
-                      <p className="text-sm text-muted-foreground mb-2">{alert.description}</p>
-                      <div className="flex items-center justify-between">
-                        <div className="flex items-center space-x-4 text-xs text-muted-foreground">
-                          <span className="flex items-center"><Clock className="h-3 w-3 mr-1" />{alert.timestamp.toLocaleString()}</span>
-                          <span className="flex items-center"><Server className="h-3 w-3 mr-1" />{alert.affectedAssets.length} ativos afetados</span>
-                        </div>
-                        {alert.status === "active" && (
+                        <p className="text-sm text-muted-foreground mb-2">{alert.description}</p>
+                        <div className="flex items-center justify-between">
+                          <span className="text-xs text-muted-foreground flex items-center"><Clock className="h-3 w-3 mr-1" />{alert.timestamp.toLocaleString('pt-BR')}</span>
                           <Button size="sm" variant="outline" onClick={() => handleResolveAlert(alert.id)}>Resolver</Button>
-                        )}
-                      </div>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </CardContent>
-          </Card>
-        </TabsContent>
-
-        <TabsContent value="vulnerabilities" className="space-y-4">
-          <Card>
-            <CardHeader>
-              <CardTitle>Relatório de Vulnerabilidades</CardTitle>
-              <CardDescription>Vulnerabilidades identificadas e seu status</CardDescription>
-            </CardHeader>
-            <CardContent>
-              <div className="space-y-4">
-                {vulnerabilities.map((vuln) => (
-                  <div key={vuln.id} className="flex items-center space-x-4 p-4 border border-border rounded-lg">
-                    <div className="flex items-center space-x-2">
-                      <div className={`w-3 h-3 rounded-full ${
-                        vuln.priority === "critical" ? "bg-destructive" :
-                          vuln.priority === "high" ? "bg-warning" :
-                            vuln.priority === "medium" ? "bg-warning" : "bg-info"
-                      }`} />
-                    </div>
-                    <div className="flex-1">
-                      <div className="flex items-center justify-between mb-1">
-                        <h4 className="font-medium">{vuln.vulnerability}</h4>
-                        <div className="flex items-center space-x-2">
-                          <Badge variant="outline">CVSS: {vuln.cvss}</Badge>
-                          <Badge variant={vuln.status === "patched" ? "default" : vuln.status === "mitigated" ? "secondary" : "destructive"}>
-                            {vuln.status === "patched" ? "Corrigido" : vuln.status === "mitigated" ? "Mitigado" : "Aberto"}
-                          </Badge>
                         </div>
                       </div>
-                      <div className="flex items-center justify-between text-sm text-muted-foreground">
-                        <span>Ativo: {vuln.asset}</span>
-                        <span>Descoberto: {vuln.discoveredAt.toLocaleDateString()}</span>
-                      </div>
                     </div>
-                  </div>
-                ))}
-              </div>
+                  ))}
+                </div>
+              )}
             </CardContent>
           </Card>
         </TabsContent>
@@ -349,10 +198,7 @@ export const AdvancedSecurityCenter: React.FC = () => {
         <TabsContent value="compliance" className="space-y-4">
           <div className="grid gap-4 md:grid-cols-2">
             <Card>
-              <CardHeader>
-                <CardTitle>Status de Compliance</CardTitle>
-                <CardDescription>Conformidade com regulamentações</CardDescription>
-              </CardHeader>
+              <CardHeader><CardTitle>Status de Compliance</CardTitle></CardHeader>
               <CardContent>
                 <div className="space-y-4">
                   {[
@@ -373,10 +219,7 @@ export const AdvancedSecurityCenter: React.FC = () => {
               </CardContent>
             </Card>
             <Card>
-              <CardHeader>
-                <CardTitle>Controles de Acesso</CardTitle>
-                <CardDescription>Políticas e permissões ativas</CardDescription>
-              </CardHeader>
+              <CardHeader><CardTitle>Controles de Acesso</CardTitle></CardHeader>
               <CardContent>
                 <div className="space-y-3">
                   {[
@@ -386,38 +229,13 @@ export const AdvancedSecurityCenter: React.FC = () => {
                     { label: "Auditoria Ativa", icon: <Eye className="h-4 w-4" />, active: true },
                   ].map((control) => (
                     <div key={control.label} className="flex items-center justify-between p-2 rounded border border-border">
-                      <div className="flex items-center space-x-2">
-                        {control.icon}
-                        <span className="text-sm">{control.label}</span>
-                      </div>
-                      <Badge variant={control.active ? "default" : "secondary"}>
-                        {control.active ? "Ativo" : "Inativo"}
-                      </Badge>
+                      <div className="flex items-center space-x-2">{control.icon}<span className="text-sm">{control.label}</span></div>
+                      <Badge variant={control.active ? "default" : "secondary"}>{control.active ? "Ativo" : "Inativo"}</Badge>
                     </div>
                   ))}
                 </div>
               </CardContent>
             </Card>
-          </div>
-        </TabsContent>
-
-        <TabsContent value="monitoring" className="space-y-4">
-          <div className="grid gap-4 md:grid-cols-3">
-            {[
-              { title: "Firewall", icon: <Shield className="h-5 w-5" />, status: "Ativo", connections: "2,847" },
-              { title: "IDS/IPS", icon: <Activity className="h-5 w-5" />, status: "Monitorando", events: "12,459" },
-              { title: "DLP", icon: <Database className="h-5 w-5" />, status: "Ativo", scans: "1,234" },
-            ].map((item) => (
-              <Card key={item.title}>
-                <CardHeader className="flex flex-row items-center space-x-2">
-                  {item.icon}
-                  <CardTitle className="text-sm">{item.title}</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <Badge variant="default">{item.status}</Badge>
-                </CardContent>
-              </Card>
-            ))}
           </div>
         </TabsContent>
       </Tabs>

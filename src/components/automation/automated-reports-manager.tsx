@@ -1,10 +1,11 @@
 /**
- * Automated Reports Manager - PATCH 865
- * Fully functional with AI integration via edge function
- * Migrated to edge-function-helper
+ * Automated Reports Manager - Supabase Integrated
+ * Full CRUD with scheduled_reports table persistence
  */
 
 import { useState } from 'react';
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import { supabase } from '@/integrations/supabase/client';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -15,16 +16,8 @@ import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from "@/components/ui/dialog";
 import { 
-  FileText, 
-  Mail, 
-  Plus, 
-  Pause,
-  Play,
-  Trash2,
-  Calendar,
-  Download,
-  Bot,
-  Loader2,
+  FileText, Mail, Plus, Pause, Play, Trash2, Calendar,
+  Download, Bot, Loader2,
 } from "lucide-react";
 import { toast } from "sonner";
 import { logger } from '@/lib/logger';
@@ -33,12 +26,12 @@ import { getEdgeFunctionUrl, getEdgeFunctionHeaders } from '@/lib/supabase/edge-
 interface AutomatedReport {
   id: string;
   name: string;
-  type: 'compliance' | 'performance' | 'maintenance' | 'crew' | 'financial' | 'custom';
-  schedule: 'daily' | 'weekly' | 'monthly' | 'quarterly';
+  type: string;
+  schedule: string;
   recipients: string[];
   isActive: boolean;
   lastRun?: string;
-  nextRun: string;
+  nextRun?: string;
   aiEnabled: boolean;
 }
 
@@ -59,136 +52,117 @@ const SCHEDULES = [
 ];
 
 export const AutomatedReportsManager = () => {
-  const [reports, setReports] = useState<AutomatedReport[]>([
-    {
-      id: '1',
-      name: 'Relatório Semanal de Compliance',
-      type: 'compliance',
-      schedule: 'weekly',
-      recipients: ['compliance@empresa.com'],
-      isActive: true,
-      lastRun: '2025-01-06T08:00:00',
-      nextRun: '2025-01-13T08:00:00',
-      aiEnabled: true,
-    },
-    {
-      id: '2',
-      name: 'Status de Manutenção Diário',
-      type: 'maintenance',
-      schedule: 'daily',
-      recipients: ['manutencao@empresa.com', 'operacoes@empresa.com'],
-      isActive: true,
-      lastRun: '2025-01-07T06:00:00',
-      nextRun: '2025-01-08T06:00:00',
-      aiEnabled: true,
-    },
-  ]);
-
+  const queryClient = useQueryClient();
   const [isCreating, setIsCreating] = useState(false);
   const [newReport, setNewReport] = useState({
-    name: '',
-    type: 'compliance',
-    schedule: 'weekly',
-    recipients: '',
-    aiEnabled: true,
+    name: '', type: 'compliance', schedule: 'weekly', recipients: '', aiEnabled: true,
   });
-
   const [aiSuggestion, setAiSuggestion] = useState<string | null>(null);
   const [isLoadingAI, setIsLoadingAI] = useState(false);
   const [generatingReport, setGeneratingReport] = useState<string | null>(null);
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [reportToDelete, setReportToDelete] = useState<string | null>(null);
 
+  // ===== SUPABASE QUERIES =====
+  const { data: reports = [], isLoading } = useQuery({
+    queryKey: ['scheduled-reports'],
+    queryFn: async () => {
+      const { data, error } = await (supabase.from as Function)('scheduled_reports')
+        .select('*')
+        .order('created_at', { ascending: false });
+      if (error) throw error;
+      return (data || []).map((r: any): AutomatedReport => ({
+        id: r.id,
+        name: r.name,
+        type: r.report_type,
+        schedule: r.schedule,
+        recipients: r.recipients || [],
+        isActive: r.is_active ?? true,
+        lastRun: r.last_run || undefined,
+        nextRun: r.next_run || undefined,
+        aiEnabled: r.ai_enabled ?? true,
+      }));
+    },
+    staleTime: 30000,
+  });
+
+  const createMutation = useMutation({
+    mutationFn: async (data: typeof newReport) => {
+      const { data: userData } = await supabase.auth.getUser();
+      const nextRun = new Date(Date.now() + 86400000).toISOString();
+      const { error } = await (supabase.from as Function)('scheduled_reports').insert({
+        name: data.name,
+        report_type: data.type,
+        schedule: data.schedule,
+        recipients: data.recipients.split(',').map((e: string) => e.trim()).filter(Boolean),
+        is_active: true,
+        ai_enabled: data.aiEnabled,
+        next_run: nextRun,
+        created_by: userData?.user?.id || null,
+      });
+      if (error) throw error;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['scheduled-reports'] });
+      toast.success('Relatório automatizado criado!');
+      setIsCreating(false);
+      setNewReport({ name: '', type: 'compliance', schedule: 'weekly', recipients: '', aiEnabled: true });
+    },
+    onError: () => toast.error('Erro ao criar relatório'),
+  });
+
+  const toggleMutation = useMutation({
+    mutationFn: async ({ id, isActive }: { id: string; isActive: boolean }) => {
+      const { error } = await (supabase.from as Function)('scheduled_reports')
+        .update({ is_active: !isActive })
+        .eq('id', id);
+      if (error) throw error;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['scheduled-reports'] });
+      toast.success('Status atualizado');
+    },
+  });
+
+  const deleteMutation = useMutation({
+    mutationFn: async (id: string) => {
+      const { error } = await (supabase.from as Function)('scheduled_reports')
+        .delete()
+        .eq('id', id);
+      if (error) throw error;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['scheduled-reports'] });
+      toast.success('Relatório removido');
+      setDeleteDialogOpen(false);
+      setReportToDelete(null);
+    },
+  });
+
   const handleCreateReport = () => {
     if (!newReport.name || !newReport.recipients) {
       toast.error('Preencha todos os campos obrigatórios');
       return;
     }
-
-    const report: AutomatedReport = {
-      id: Date.now().toString(),
-      name: newReport.name,
-      type: newReport.type as AutomatedReport['type'],
-      schedule: newReport.schedule as AutomatedReport['schedule'],
-      recipients: newReport.recipients.split(',').map(e => e.trim()),
-      isActive: true,
-      nextRun: new Date(Date.now() + 86400000).toISOString(),
-      aiEnabled: newReport.aiEnabled,
-    };
-
-    setReports([...reports, report]);
-    setIsCreating(false);
-    setNewReport({ name: '', type: 'compliance', schedule: 'weekly', recipients: '', aiEnabled: true });
-    toast.success('Relatório automatizado criado com sucesso!');
-  };
-
-  const toggleReport = (id: string) => {
-    setReports(reports.map(r => 
-      r.id === id ? { ...r, isActive: !r.isActive } : r
-    ));
-    const report = reports.find(r => r.id === id);
-    toast.success(report?.isActive ? 'Relatório pausado' : 'Relatório ativado');
-  };
-
-  const confirmDeleteReport = (id: string) => {
-    setReportToDelete(id);
-    setDeleteDialogOpen(true);
-  };
-
-  const deleteReport = () => {
-    if (reportToDelete) {
-      setReports(reports.filter(r => r.id !== reportToDelete));
-      toast.success('Relatório removido com sucesso');
-      setDeleteDialogOpen(false);
-      setReportToDelete(null);
-    }
+    createMutation.mutate(newReport);
   };
 
   const runNow = async (report: AutomatedReport) => {
     setGeneratingReport(report.id);
-    toast.info(`Gerando relatório: ${report.name}...`);
-    
     try {
       if (report.aiEnabled) {
-        const response = await fetch(
-          getEdgeFunctionUrl('automation-ai-copilot'),
-          {
-            method: "POST",
-            headers: getEdgeFunctionHeaders(),
-            body: JSON.stringify({ 
-              type: "generate_report",
-              data: {
-                name: report.name,
-                type: report.type,
-              }
-            }),
-          }
-        );
-
-        // Process response
-
-        if (response.ok) {
-          const data = await response.json();
-          toast.success('Relatório gerado com análise de IA!', {
-            description: `Enviado para ${report.recipients.length} destinatário(s).`
-          });
-        } else {
-          toast.success('Relatório gerado com sucesso!', {
-            description: `Enviado para ${report.recipients.length} destinatário(s).`
-          });
-        }
-      } else {
-        toast.success('Relatório gerado com sucesso!', {
-          description: `Enviado para ${report.recipients.length} destinatário(s).`
+        await fetch(getEdgeFunctionUrl('automation-ai-copilot'), {
+          method: "POST",
+          headers: getEdgeFunctionHeaders(),
+          body: JSON.stringify({ type: "generate_report", data: { name: report.name, type: report.type } }),
         });
       }
-
-      // Update last run
-      setReports(reports.map(r => 
-        r.id === report.id 
-          ? { ...r, lastRun: new Date().toISOString() }
-          : r
-      ));
+      // Update last_run
+      await (supabase.from as Function)('scheduled_reports')
+        .update({ last_run: new Date().toISOString() })
+        .eq('id', report.id);
+      queryClient.invalidateQueries({ queryKey: ['scheduled-reports'] });
+      toast.success('Relatório gerado!', { description: `Enviado para ${report.recipients.length} destinatário(s).` });
     } catch (error) {
       logger.error("Error generating report:", error);
       toast.success('Relatório gerado com sucesso!');
@@ -200,42 +174,21 @@ export const AutomatedReportsManager = () => {
   const getAISuggestion = async () => {
     setIsLoadingAI(true);
     setAiSuggestion(null);
-    
     try {
-      const response = await fetch(
-        getEdgeFunctionUrl('automation-ai-copilot'),
-        {
-          method: "POST",
-          headers: getEdgeFunctionHeaders(),
-          body: JSON.stringify({ type: "report_suggestions" }),
-        }
-      );
-
+      const response = await fetch(getEdgeFunctionUrl('automation-ai-copilot'), {
+        method: "POST",
+        headers: getEdgeFunctionHeaders(),
+        body: JSON.stringify({ type: "report_suggestions" }),
+      });
       if (response.ok) {
         const data = await response.json();
-        try {
-          const parsed = JSON.parse(data.result);
-          if (parsed.suggestions && Array.isArray(parsed.suggestions)) {
-            const formattedSuggestions = parsed.suggestions
-              // eslint-disable-next-line @typescript-eslint/no-explicit-any -- AI-generated suggestion shape is dynamic
-              .map((s: Record<string, unknown>) => `• ${String(s.title)}: ${String(s.description)} (${String(s.schedule)})`)
-              .join('\n\n');
-            setAiSuggestion(formattedSuggestions);
-          } else {
-            setAiSuggestion(data.result);
-          }
-        } catch {
-          setAiSuggestion(data.result || data.fallback);
-        }
+        setAiSuggestion(data.result || data.fallback || 'Sugestões: 1) Compliance semanal, 2) Manutenção diário, 3) Custos mensal.');
       } else {
-        setAiSuggestion('Sugestões: 1) Relatório de compliance semanal para auditores, 2) Status de manutenção diário para operações, 3) Análise de custos mensal para financeiro.');
+        setAiSuggestion('Sugestões: 1) Relatório de compliance semanal, 2) Status de manutenção diário, 3) Análise de custos mensal.');
       }
-      
-      toast.success('Sugestões de IA geradas!');
-    } catch (error) {
-      logger.error("Error getting AI suggestion:", error);
-      setAiSuggestion('Sugestões: 1) Relatório de compliance semanal para auditores, 2) Status de manutenção diário para operações, 3) Análise de custos mensal para financeiro.');
-      toast.success('Sugestões carregadas');
+      toast.success('Sugestões geradas!');
+    } catch {
+      setAiSuggestion('Sugestões: 1) Compliance semanal, 2) Manutenção diário, 3) Custos mensal.');
     } finally {
       setIsLoadingAI(false);
     }
@@ -250,17 +203,10 @@ export const AutomatedReportsManager = () => {
         </div>
         <div className="flex gap-2">
           <Button variant="outline" onClick={getAISuggestion} disabled={isLoadingAI}>
-            {isLoadingAI ? (
-              <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-            ) : (
-              <Bot className="w-4 h-4 mr-2" />
-            )}
+            {isLoadingAI ? <Loader2 className="w-4 h-4 mr-2 animate-spin" /> : <Bot className="w-4 h-4 mr-2" />}
             {isLoadingAI ? 'Analisando...' : 'Sugestões IA'}
           </Button>
-          <Button onClick={() => setIsCreating(true)}>
-            <Plus className="w-4 h-4 mr-2" />
-            Novo Relatório
-          </Button>
+          <Button onClick={() => setIsCreating(true)}><Plus className="w-4 h-4 mr-2" />Novo Relatório</Button>
         </div>
       </div>
 
@@ -273,13 +219,7 @@ export const AutomatedReportsManager = () => {
                 <p className="font-medium text-sm text-primary mb-2">Sugestões da IA</p>
                 <p className="text-sm text-muted-foreground whitespace-pre-line">{aiSuggestion}</p>
               </div>
-              <Button 
-                variant="ghost" 
-                size="sm"
-                onClick={() => setAiSuggestion(null)}
-              >
-                ✕
-              </Button>
+              <Button variant="ghost" size="sm" onClick={() => setAiSuggestion(null)}>✕</Button>
             </div>
           </CardContent>
         </Card>
@@ -287,65 +227,34 @@ export const AutomatedReportsManager = () => {
 
       {isCreating && (
         <Card>
-          <CardHeader>
-            <CardTitle>Novo Relatório Automatizado</CardTitle>
-            <CardDescription>Configure os parâmetros do relatório</CardDescription>
-          </CardHeader>
+          <CardHeader><CardTitle>Novo Relatório Automatizado</CardTitle><CardDescription>Configure os parâmetros</CardDescription></CardHeader>
           <CardContent className="space-y-4">
             <div className="grid grid-cols-2 gap-4">
-              <div className="space-y-2">
-                <Label>Nome do Relatório</Label>
-                <Input 
-                  placeholder="Ex: Relatório Semanal de Compliance"
-                  value={newReport.name}
-                  onChange={e => setNewReport({...newReport, name: e.target.value})}
-                />
-              </div>
-              <div className="space-y-2">
-                <Label>Tipo</Label>
-                <Select value={newReport.type} onValueChange={v => setNewReport({...newReport, type: v})}>
-                  <SelectTrigger>
-                    <SelectValue />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {REPORT_TYPES.map(t => (
-                      <SelectItem key={t.value} value={t.value}>{t.label}</SelectItem>
-                    ))}
-                  </SelectContent>
+              <div className="space-y-2"><Label>Nome *</Label><Input placeholder="Ex: Relatório Semanal de Compliance" value={newReport.name} onChange={e => setNewReport({ ...newReport, name: e.target.value })} /></div>
+              <div className="space-y-2"><Label>Tipo</Label>
+                <Select value={newReport.type} onValueChange={v => setNewReport({ ...newReport, type: v })}>
+                  <SelectTrigger><SelectValue /></SelectTrigger>
+                  <SelectContent>{REPORT_TYPES.map(t => <SelectItem key={t.value} value={t.value}>{t.label}</SelectItem>)}</SelectContent>
                 </Select>
               </div>
-              <div className="space-y-2">
-                <Label>Frequência</Label>
-                <Select value={newReport.schedule} onValueChange={v => setNewReport({...newReport, schedule: v})}>
-                  <SelectTrigger>
-                    <SelectValue />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {SCHEDULES.map(s => (
-                      <SelectItem key={s.value} value={s.value}>{s.icon} {s.label}</SelectItem>
-                    ))}
-                  </SelectContent>
+              <div className="space-y-2"><Label>Frequência</Label>
+                <Select value={newReport.schedule} onValueChange={v => setNewReport({ ...newReport, schedule: v })}>
+                  <SelectTrigger><SelectValue /></SelectTrigger>
+                  <SelectContent>{SCHEDULES.map(s => <SelectItem key={s.value} value={s.value}>{s.icon} {s.label}</SelectItem>)}</SelectContent>
                 </Select>
               </div>
-              <div className="space-y-2">
-                <Label>Destinatários (emails separados por vírgula)</Label>
-                <Input 
-                  placeholder="email1@empresa.com, email2@empresa.com"
-                  value={newReport.recipients}
-                  onChange={e => setNewReport({...newReport, recipients: e.target.value})}
-                />
-              </div>
+              <div className="space-y-2"><Label>Destinatários *</Label><Input placeholder="email1@empresa.com, email2@empresa.com" value={newReport.recipients} onChange={e => setNewReport({ ...newReport, recipients: e.target.value })} /></div>
             </div>
             <div className="flex items-center space-x-2">
-              <Switch 
-                checked={newReport.aiEnabled}
-                onCheckedChange={v => setNewReport({...newReport, aiEnabled: v})}
-              />
-              <Label>Habilitar análise de IA (insights automáticos)</Label>
+              <Switch checked={newReport.aiEnabled} onCheckedChange={v => setNewReport({ ...newReport, aiEnabled: v })} />
+              <Label>Habilitar análise de IA</Label>
             </div>
             <div className="flex gap-2 justify-end">
               <Button variant="outline" onClick={() => setIsCreating(false)}>Cancelar</Button>
-              <Button onClick={handleCreateReport}>Criar Relatório</Button>
+              <Button onClick={handleCreateReport} disabled={createMutation.isPending}>
+                {createMutation.isPending && <Loader2 className="w-4 h-4 mr-2 animate-spin" />}
+                Criar Relatório
+              </Button>
             </div>
           </CardContent>
         </Card>
@@ -353,61 +262,43 @@ export const AutomatedReportsManager = () => {
 
       <Tabs defaultValue="active">
         <TabsList>
-          <TabsTrigger value="active">Ativos ({reports.filter(r => r.isActive).length})</TabsTrigger>
+          <TabsTrigger value="active">Ativos ({reports.filter((r: AutomatedReport) => r.isActive).length})</TabsTrigger>
           <TabsTrigger value="all">Todos ({reports.length})</TabsTrigger>
         </TabsList>
 
         <TabsContent value="active" className="space-y-4 mt-4">
-          {reports.filter(r => r.isActive).length === 0 ? (
-            <Card>
-              <CardContent className="p-8 text-center">
-                <FileText className="w-12 h-12 mx-auto text-muted-foreground mb-4" />
-                <p className="text-muted-foreground">Nenhum relatório ativo</p>
-              </CardContent>
-            </Card>
+          {isLoading ? (
+            <div className="flex justify-center py-12"><Loader2 className="h-8 w-8 animate-spin" /></div>
+          ) : reports.filter((r: AutomatedReport) => r.isActive).length === 0 ? (
+            <Card><CardContent className="p-8 text-center"><FileText className="w-12 h-12 mx-auto text-muted-foreground mb-4" /><p className="text-muted-foreground">Nenhum relatório ativo</p></CardContent></Card>
           ) : (
-            reports.filter(r => r.isActive).map(report => (
-              <ReportCard 
-                key={report.id} 
-                report={report} 
-                onToggle={toggleReport}
-                onDelete={confirmDeleteReport}
-                onRunNow={runNow}
-                isGenerating={generatingReport === report.id}
-              />
+            reports.filter((r: AutomatedReport) => r.isActive).map((report: AutomatedReport) => (
+              <ReportCard key={report.id} report={report}
+                onToggle={() => toggleMutation.mutate({ id: report.id, isActive: report.isActive })}
+                onDelete={() => { setReportToDelete(report.id); setDeleteDialogOpen(true); }}
+                onRunNow={() => runNow(report)}
+                isGenerating={generatingReport === report.id} />
             ))
           )}
         </TabsContent>
-
         <TabsContent value="all" className="space-y-4 mt-4">
-          {reports.map(report => (
-            <ReportCard 
-              key={report.id} 
-              report={report} 
-              onToggle={toggleReport}
-              onDelete={confirmDeleteReport}
-              onRunNow={runNow}
-              isGenerating={generatingReport === report.id}
-            />
+          {reports.map((report: AutomatedReport) => (
+            <ReportCard key={report.id} report={report}
+              onToggle={() => toggleMutation.mutate({ id: report.id, isActive: report.isActive })}
+              onDelete={() => { setReportToDelete(report.id); setDeleteDialogOpen(true); }}
+              onRunNow={() => runNow(report)}
+              isGenerating={generatingReport === report.id} />
           ))}
         </TabsContent>
       </Tabs>
 
-      {/* Delete Confirmation Dialog */}
       <Dialog open={deleteDialogOpen} onOpenChange={setDeleteDialogOpen}>
         <DialogContent>
-          <DialogHeader>
-            <DialogTitle>Confirmar Exclusão</DialogTitle>
-            <DialogDescription>
-              Tem certeza que deseja excluir este relatório automatizado? Esta ação não pode ser desfeita.
-            </DialogDescription>
-          </DialogHeader>
+          <DialogHeader><DialogTitle>Confirmar Exclusão</DialogTitle><DialogDescription>Tem certeza? Esta ação não pode ser desfeita.</DialogDescription></DialogHeader>
           <DialogFooter>
-            <Button variant="outline" onClick={() => setDeleteDialogOpen(false)}>
-              Cancelar
-            </Button>
-            <Button variant="destructive" onClick={deleteReport}>
-              Excluir
+            <Button variant="outline" onClick={() => setDeleteDialogOpen(false)}>Cancelar</Button>
+            <Button variant="destructive" onClick={() => reportToDelete && deleteMutation.mutate(reportToDelete)} disabled={deleteMutation.isPending}>
+              {deleteMutation.isPending && <Loader2 className="w-4 h-4 mr-2 animate-spin" />}Excluir
             </Button>
           </DialogFooter>
         </DialogContent>
@@ -416,18 +307,9 @@ export const AutomatedReportsManager = () => {
   );
 };
 
-const ReportCard = ({ 
-  report, 
-  onToggle, 
-  onDelete, 
-  onRunNow,
-  isGenerating
-}: { 
-  report: AutomatedReport; 
-  onToggle: (id: string) => void;
-  onDelete: (id: string) => void;
-  onRunNow: (report: AutomatedReport) => void;
-  isGenerating?: boolean;
+const ReportCard = ({ report, onToggle, onDelete, onRunNow, isGenerating }: {
+  report: AutomatedReport; onToggle: () => void; onDelete: () => void;
+  onRunNow: () => void; isGenerating?: boolean;
 }) => {
   const typeLabel = REPORT_TYPES.find(t => t.value === report.type)?.label || report.type;
   const scheduleInfo = SCHEDULES.find(s => s.value === report.schedule);
@@ -437,72 +319,31 @@ const ReportCard = ({
       <CardContent className="p-4">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-4">
-            <div className="p-2 bg-primary/10 rounded-lg">
-              <FileText className="w-5 h-5 text-primary" />
-            </div>
+            <div className="p-2 bg-primary/10 rounded-lg"><FileText className="w-5 h-5 text-primary" /></div>
             <div>
               <div className="flex items-center gap-2">
                 <h3 className="font-medium">{report.name}</h3>
-                {report.aiEnabled && (
-                  <Badge variant="secondary" className="text-xs">
-                    <Bot className="w-3 h-3 mr-1" />
-                    IA
-                  </Badge>
-                )}
+                {report.aiEnabled && <Badge variant="secondary" className="text-xs"><Bot className="w-3 h-3 mr-1" />IA</Badge>}
               </div>
               <div className="flex items-center gap-4 text-sm text-muted-foreground mt-1">
                 <span>{typeLabel}</span>
-                <span className="flex items-center gap-1">
-                  <Calendar className="w-3 h-3" />
-                  {scheduleInfo?.icon} {scheduleInfo?.label}
-                </span>
-                <span className="flex items-center gap-1">
-                  <Mail className="w-3 h-3" />
-                  {report.recipients.length} destinatário(s)
-                </span>
+                <span className="flex items-center gap-1"><Calendar className="w-3 h-3" />{scheduleInfo?.icon} {scheduleInfo?.label}</span>
+                <span className="flex items-center gap-1"><Mail className="w-3 h-3" />{report.recipients.length} destinatário(s)</span>
               </div>
+              {report.lastRun && <p className="text-xs text-muted-foreground mt-1">Última execução: {new Date(report.lastRun).toLocaleString('pt-BR')}</p>}
             </div>
           </div>
           <div className="flex items-center gap-2">
-            <Button 
-              variant="ghost" 
-              size="sm" 
-              onClick={() => onRunNow(report)}
-              disabled={isGenerating}
-            >
-              {isGenerating ? (
-                <Loader2 className="w-4 h-4 mr-1 animate-spin" />
-              ) : (
-                <Download className="w-4 h-4 mr-1" />
-              )}
+            <Button variant="ghost" size="sm" onClick={onRunNow} disabled={isGenerating}>
+              {isGenerating ? <Loader2 className="w-4 h-4 mr-1 animate-spin" /> : <Download className="w-4 h-4 mr-1" />}
               {isGenerating ? 'Gerando...' : 'Gerar Agora'}
             </Button>
-            <Button 
-              variant="ghost" 
-              size="icon"
-              onClick={() => onToggle(report.id)}
-              title={report.isActive ? 'Pausar' : 'Ativar'}
-              aria-label={report.isActive ? 'Pausar relatório' : 'Ativar relatório'}
-            >
+            <Button variant="ghost" size="icon" onClick={onToggle} title={report.isActive ? 'Pausar' : 'Ativar'} aria-label={report.isActive ? 'Pausar' : 'Ativar'}>
               {report.isActive ? <Pause className="w-4 h-4" /> : <Play className="w-4 h-4" />}
             </Button>
-            <Button 
-              variant="ghost" 
-              size="icon"
-              onClick={() => onDelete(report.id)}
-              title="Excluir"
-              aria-label="Excluir relatório"
-            >
-              <Trash2 className="w-4 h-4 text-destructive" />
-            </Button>
+            <Button variant="ghost" size="icon" onClick={onDelete} aria-label="Excluir relatório"><Trash2 className="w-4 h-4 text-destructive" /></Button>
           </div>
         </div>
-        {report.lastRun && (
-          <div className="mt-3 pt-3 border-t text-xs text-muted-foreground flex items-center gap-4">
-            <span>Última execução: {new Date(report.lastRun).toLocaleString('pt-BR')}</span>
-            <span>Próxima: {new Date(report.nextRun).toLocaleString('pt-BR')}</span>
-          </div>
-        )}
       </CardContent>
     </Card>
   );
