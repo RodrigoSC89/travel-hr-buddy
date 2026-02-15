@@ -36,6 +36,7 @@ const CommunicationCommandCenter = lazy(() => import('@/pages/NOC'));
 const AlertsCommandCenter = lazy(() => import('@/pages/NOC'));
 const CommandAIHub = lazy(() => import('@/components/command/ai/CommandAIHub'));
 const CeoCommandDashboard = lazy(() => import('@/components/dashboard/CeoCommandDashboard'));
+const CustomizableDashboardGrid = lazy(() => import('@/components/dashboard/CustomizableDashboardGrid'));
 
 const LoadingSkeleton = () => (
   <div className="space-y-4 p-6">
@@ -59,6 +60,7 @@ const tabConfig = [
   { id: 'alerts', label: 'Alerts', icon: Bell, path: '/command/alerts' },
   { id: 'ai-copilot', label: '🧠 IA Copiloto', icon: Brain, path: '/command/ai' },
   { id: 'ceo', label: '👔 CEO Dashboard', icon: BarChart3, path: '/command/ceo' },
+  { id: 'my-dashboard', label: '🎯 Meu Dashboard', icon: Activity, path: '/command/my-dashboard' },
 ];
 
 export default function CommandMegaHub() {
@@ -326,6 +328,10 @@ export default function CommandMegaHub() {
 
             <TabsContent value="ceo" className="mt-0">
               <CeoCommandDashboard />
+            </TabsContent>
+
+            <TabsContent value="my-dashboard" className="mt-0">
+              <CustomizableDashboardGrid />
             </TabsContent>
           </Suspense>
         </div>
