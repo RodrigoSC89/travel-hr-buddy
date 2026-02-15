@@ -32,6 +32,9 @@ import { PeotramBenchmarking } from "@/components/peotram/PeotramBenchmarking";
 import { PeotramLessonsLearned } from "@/components/peotram/PeotramLessonsLearned";
 import { PeotramNCEscalation } from "@/components/peotram/PeotramNCEscalation";
 import { PeotramMOCTracker } from "@/components/peotram/PeotramMOCTracker";
+import { PeotramSATSystem } from "@/components/peotram/PeotramSATSystem";
+import { PeotramDiverCertManager } from "@/components/peotram/PeotramDiverCertManager";
+import { PeotramGasManagement } from "@/components/peotram/PeotramGasManagement";
 import { PeotramReportGenerator } from "@/components/peotram/PeotramReportGenerator";
 import { PeotramAuditWizard } from "@/components/peotram/PeotramAuditWizard";
 import { PeotramRadarChart } from "@/components/peotram/PeotramRadarChart";
@@ -46,6 +49,7 @@ import {
   Shield, Target, FileCheck, AlertTriangle, TrendingUp, CheckCircle,
   RefreshCw, Download, BarChart3, Activity, ClipboardCheck,
   Brain, Zap, Mic, Wand2, FileText, Save, History, Award, Lightbulb, GitBranch,
+  Waves, Users, Fuel,
 } from "lucide-react";
 
 const PEOTRAMPage = () => {
@@ -146,6 +150,9 @@ const PEOTRAMPage = () => {
           <TabsTrigger value="lessons" className="gap-1.5"><Lightbulb className="h-3.5 w-3.5" /> Lições</TabsTrigger>
           <TabsTrigger value="nc-escalation" className="gap-1.5"><AlertTriangle className="h-3.5 w-3.5" /> Escalonamento</TabsTrigger>
           <TabsTrigger value="moc" className="gap-1.5"><GitBranch className="h-3.5 w-3.5" /> MOC</TabsTrigger>
+          <TabsTrigger value="sat-system" className="gap-1.5"><Waves className="h-3.5 w-3.5" /> Sistema SAT</TabsTrigger>
+          <TabsTrigger value="divers" className="gap-1.5"><Users className="h-3.5 w-3.5" /> Mergulhadores</TabsTrigger>
+          <TabsTrigger value="gas" className="gap-1.5"><Fuel className="h-3.5 w-3.5" /> Gestão Gases</TabsTrigger>
         </TabsList>
 
         {/* ============ OVERVIEW ============ */}
@@ -359,6 +366,9 @@ const PEOTRAMPage = () => {
         <TabsContent value="lessons"><PeotramLessonsLearned /></TabsContent>
         <TabsContent value="nc-escalation"><PeotramNCEscalation /></TabsContent>
         <TabsContent value="moc"><PeotramMOCTracker /></TabsContent>
+        <TabsContent value="sat-system"><PeotramSATSystem /></TabsContent>
+        <TabsContent value="divers"><PeotramDiverCertManager /></TabsContent>
+        <TabsContent value="gas"><PeotramGasManagement /></TabsContent>
 
         <Suspense fallback={<LoadingFallback />}>
           <TabsContent value="interview">

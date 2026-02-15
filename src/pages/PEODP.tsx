@@ -22,12 +22,16 @@ import { PeoDPLogbook } from "@/components/peo-dp/PeoDPLogbook";
 import { PeoDPCapabilityMatrix } from "@/components/peo-dp/PeoDPCapabilityMatrix";
 import { PeoDPSCEManager } from "@/components/peo-dp/PeoDPSCEManager";
 import { PeoDPSIMOPSDashboard } from "@/components/peo-dp/PeoDPSIMOPSDashboard";
+import { DPEquipmentManager } from "@/components/peo-dp/DPEquipmentManager";
+import { DPAuditSimulator } from "@/components/peo-dp/DPAuditSimulator";
+import { DPIncidentsCIRAS } from "@/components/peo-dp/DPIncidentsCIRAS";
 import { useMaritimeActions } from "@/hooks/useMaritimeActions";
 import { Skeleton } from "@/components/ui/skeleton";
 import {
   Shield, Anchor, Target, Brain, TrendingUp,
   CheckCircle, RefreshCw, Download, Settings, Activity,
-  BarChart3, ClipboardCheck, AlertTriangle, FileText, Calculator, BookOpen, Zap, Grid3X3, Layers
+  BarChart3, ClipboardCheck, AlertTriangle, FileText, Calculator, BookOpen, Zap, Grid3X3, Layers,
+  Wrench, Crosshair, AlertCircle
 } from "lucide-react";
 
 const ComplianceInterviewSimulator = lazy(() => import('@/components/compliance/ai/ComplianceInterviewSimulator').then(m => ({ default: m.ComplianceInterviewSimulator })));
@@ -74,7 +78,10 @@ const PEODP = () => {
           <TabsTrigger value="capability" className="gap-1.5"><Grid3X3 className="h-3.5 w-3.5" /> Capability</TabsTrigger>
           <TabsTrigger value="sce" className="gap-1.5"><Shield className="h-3.5 w-3.5" /> SCE</TabsTrigger>
           <TabsTrigger value="simops" className="gap-1.5"><Layers className="h-3.5 w-3.5" /> SIMOPS</TabsTrigger>
-          <TabsTrigger value="interview" className="gap-1.5"><Brain className="h-3.5 w-3.5" /> Simulador</TabsTrigger>
+          <TabsTrigger value="equipment" className="gap-1.5"><Wrench className="h-3.5 w-3.5" /> Equipamentos</TabsTrigger>
+          <TabsTrigger value="audit-sim" className="gap-1.5"><Crosshair className="h-3.5 w-3.5" /> Simulador DPVOA</TabsTrigger>
+          <TabsTrigger value="incidents" className="gap-1.5"><AlertCircle className="h-3.5 w-3.5" /> CIRAS</TabsTrigger>
+          <TabsTrigger value="interview" className="gap-1.5"><Brain className="h-3.5 w-3.5" /> Entrevista IA</TabsTrigger>
           <TabsTrigger value="checklist-ia" className="gap-1.5"><Zap className="h-3.5 w-3.5" /> Checklist IA</TabsTrigger>
         </TabsList>
 
@@ -97,6 +104,9 @@ const PEODP = () => {
         <TabsContent value="capability"><PeoDPCapabilityMatrix /></TabsContent>
         <TabsContent value="sce"><PeoDPSCEManager /></TabsContent>
         <TabsContent value="simops"><PeoDPSIMOPSDashboard /></TabsContent>
+        <TabsContent value="equipment"><DPEquipmentManager /></TabsContent>
+        <TabsContent value="audit-sim"><DPAuditSimulator /></TabsContent>
+        <TabsContent value="incidents"><DPIncidentsCIRAS /></TabsContent>
         <Suspense fallback={<LoadingFallback />}>
           <TabsContent value="interview">
             <ComplianceInterviewSimulator
