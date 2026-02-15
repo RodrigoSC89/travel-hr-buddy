@@ -2,7 +2,7 @@ import type { FC } from 'react';
 import { useState, Suspense, lazy } from 'react';
 import { ModulePageWrapper } from '@/components/ui/module-page-wrapper';
 import { ModuleHeader } from '@/components/ui/module-header';
-import { Shield, Brain, Scale, Globe, Sparkles, Search, MessageSquare, Zap, ClipboardCheck, FileSearch, Clock, Heart, Users, Calculator, FileText, AlertTriangle, Home, Plane, UtensilsCrossed, DollarSign } from 'lucide-react';
+import { Shield, Brain, Scale, Globe, Sparkles, Search, MessageSquare, Zap, ClipboardCheck, FileSearch, Clock, Heart, Users, Calculator, FileText, AlertTriangle, Home, Plane, UtensilsCrossed, DollarSign, ShieldCheck } from 'lucide-react';
 import { MLCInspectionDashboardV2 } from '@/components/mlc/MLCInspectionDashboardV2';
 import { MLCWelfareScoring } from '@/components/mlc/MLCWelfareScoring';
 import { MLCDMLCChecklist } from '@/components/mlc/MLCDMLCChecklist';
@@ -16,6 +16,7 @@ import { MLCAccommodationInspector } from '@/components/mlc/MLCAccommodationInsp
 import { MLCRepatriationTracker } from '@/components/mlc/MLCRepatriationTracker';
 import { MLCFoodCateringInspector } from '@/components/mlc/MLCFoodCateringInspector';
 import { MLCWageProtectionTracker } from '@/components/mlc/MLCWageProtectionTracker';
+import { MLCHealthSafetyTracker } from '@/components/mlc/MLCHealthSafetyTracker';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Skeleton } from '@/components/ui/skeleton';
 
@@ -79,6 +80,7 @@ const MLCInspection: FC = () => {
           <TabsTrigger value="repatriation" className="gap-1"><Plane className="h-3 w-3" />Repatriação</TabsTrigger>
           <TabsTrigger value="food-catering" className="gap-1"><UtensilsCrossed className="h-3 w-3" />Alimentação</TabsTrigger>
           <TabsTrigger value="wages" className="gap-1"><DollarSign className="h-3 w-3" />Salários</TabsTrigger>
+          <TabsTrigger value="health-safety" className="gap-1"><ShieldCheck className="h-3 w-3" />SST 4.3</TabsTrigger>
           <TabsTrigger value="sgi-evidence" className="gap-1"><Sparkles className="h-3 w-3" />Evidências</TabsTrigger>
           <TabsTrigger value="gap-analyzer" className="gap-1"><Search className="h-3 w-3" />Gap Analyzer</TabsTrigger>
           <TabsTrigger value="interview-sim" className="gap-1"><MessageSquare className="h-3 w-3" />Simulador</TabsTrigger>
@@ -103,6 +105,7 @@ const MLCInspection: FC = () => {
         <TabsContent value="repatriation"><MLCRepatriationTracker /></TabsContent>
         <TabsContent value="food-catering"><MLCFoodCateringInspector /></TabsContent>
         <TabsContent value="wages"><MLCWageProtectionTracker /></TabsContent>
+        <TabsContent value="health-safety"><MLCHealthSafetyTracker /></TabsContent>
 
         <Suspense fallback={<LoadingFallback />}>
           <TabsContent value="sgi-evidence"><ComplianceSGIAutoEvidence moduleId="mlc" moduleName="MLC 2006" checklistItems={MLC_ITEMS} /></TabsContent>
