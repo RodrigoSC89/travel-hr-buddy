@@ -185,7 +185,7 @@ export default function TravelCommandPremium() {
           { icon: <CreditCard className="h-5 w-5" />, label: 'Despesas', value: `R$ ${(metrics.totalExpenses / 1000).toFixed(0)}k`, color: 'text-destructive', gradient: 'from-destructive/5' },
           { icon: <FileText className="h-5 w-5" />, label: 'Reemb. Pendentes', value: metrics.pendingExpenses, color: 'text-amber-500', gradient: 'from-amber-500/5' },
         ].map((kpi, i) => (
-          <motion.div key={i} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.05 }}>
+          <motion.div key={kpi.label} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.05 }}>
             <Card className="relative overflow-hidden hover:shadow-md transition-shadow">
               <div className={`absolute inset-0 bg-gradient-to-br ${kpi.gradient} to-transparent`} />
               <CardContent className="p-4 relative">

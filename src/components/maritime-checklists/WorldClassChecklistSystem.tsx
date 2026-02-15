@@ -231,7 +231,8 @@ export const WorldClassChecklistSystem: React.FC = () => {
         item.notes || '-',
       ]);
 
-      (doc as any).autoTable({
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any -- jsPDF-autotable plugin
+      (doc as unknown as { autoTable: (opts: Record<string, unknown>) => void }).autoTable({
         startY: 62,
         head: [['#', 'Item', 'Criticidade', 'Concluído', 'Observações']],
         body: tableData,
@@ -249,7 +250,7 @@ export const WorldClassChecklistSystem: React.FC = () => {
       });
 
       // Footer
-      const pageCount = (doc as any).getNumberOfPages?.() || 1;
+      const pageCount = doc.getNumberOfPages?.() || 1;
       for (let i = 1; i <= pageCount; i++) {
         doc.setPage(i);
         doc.setFontSize(8);
@@ -316,8 +317,8 @@ export const WorldClassChecklistSystem: React.FC = () => {
             { label: "Itens Totais", value: stats.totalItems, icon: <CheckSquare className="h-4 w-4" />, color: "text-primary" },
             { label: "Itens Feitos", value: stats.completedItems, icon: <CheckCircle2 className="h-4 w-4" />, color: "text-green-500" },
             { label: "Críticos Pend.", value: stats.criticalPending, icon: <AlertTriangle className="h-4 w-4" />, color: "text-destructive" },
-          ].map((kpi, i) => (
-            <Card key={i} className="p-3">
+          ].map((kpi) => (
+            <Card key={kpi.label} className="p-3">
               <div className="flex items-center gap-2 mb-1">
                 <span className={kpi.color}>{kpi.icon}</span>
                 <span className="text-xs text-muted-foreground">{kpi.label}</span>
