@@ -1433,3 +1433,19 @@ comment = "People Intelligence - Crew overview, wellbeing, scheduling, certifica
 [functions.finance-intelligence]
 verify_jwt = false
 comment = "Finance Intelligence - Financial overview, approvals, budgets, cost optimization, AI analysis"
+
+# ============================================
+# PEO-DP / PEOTRAM / MLC CORE FUNCTIONS
+# ============================================
+
+[functions.calculate-dp-readiness]
+verify_jwt = false
+comment = "Calculate DP readiness score based on IMCA M 166 / DPVOA criteria"
+
+[functions.calculate-mlc-score]
+verify_jwt = false
+comment = "Calculate MLC 2006 compliance score by Title (1-5)"
+
+[functions.simulate-psc-mlc]
+verify_jwt = false
+comment = "Simulate PSC MLC inspection with Paris/Tokyo MoU detention criteria"
