@@ -2,11 +2,14 @@ import type { FC } from 'react';
 import { useState, Suspense, lazy } from 'react';
 import { ModulePageWrapper } from '@/components/ui/module-page-wrapper';
 import { ModuleHeader } from '@/components/ui/module-header';
-import { Shield, Brain, Scale, Globe, Sparkles, Search, MessageSquare, Zap, ClipboardCheck, FileSearch, Clock, Heart, Users, Calculator } from 'lucide-react';
+import { Shield, Brain, Scale, Globe, Sparkles, Search, MessageSquare, Zap, ClipboardCheck, FileSearch, Clock, Heart, Users, Calculator, FileText, AlertTriangle } from 'lucide-react';
 import { MLCInspectionDashboardV2 } from '@/components/mlc/MLCInspectionDashboardV2';
 import { MLCWelfareScoring } from '@/components/mlc/MLCWelfareScoring';
 import { MLCDMLCChecklist } from '@/components/mlc/MLCDMLCChecklist';
 import { MLCWorkRestCalculator } from '@/components/mlc/MLCWorkRestCalculator';
+import { MLCWorkRestEntry } from '@/components/mlc/MLCWorkRestEntry';
+import { MLCSEAManager } from '@/components/mlc/MLCSEAManager';
+import { MLCComplaintProcedures } from '@/components/mlc/MLCComplaintProcedures';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Skeleton } from '@/components/ui/skeleton';
 
@@ -46,7 +49,7 @@ const MLCInspection: FC = () => {
       <ModuleHeader
         icon={Shield}
         title="MLC 2006 — Maritime Labour Convention"
-        description="Inspeção e Conformidade MLC • DMLC Part I/II • Work/Rest • Welfare Score"
+        description="Inspeção e Conformidade MLC • DMLC Part I/II • Work/Rest • Welfare • SEA • Reclamações"
         gradient="green"
         badges={[
           { icon: Scale, label: 'MLC 2006' },
@@ -59,8 +62,11 @@ const MLCInspection: FC = () => {
         <TabsList className="flex-wrap h-auto gap-1">
           <TabsTrigger value="dashboard">Dashboard</TabsTrigger>
           <TabsTrigger value="dmlc" className="gap-1"><ClipboardCheck className="h-3 w-3" />DMLC I/II</TabsTrigger>
-          <TabsTrigger value="work-rest" className="gap-1"><Clock className="h-3 w-3" />Work/Rest</TabsTrigger>
+          <TabsTrigger value="work-rest-entry" className="gap-1"><Clock className="h-3 w-3" />Work/Rest Grid</TabsTrigger>
+          <TabsTrigger value="work-rest" className="gap-1"><Clock className="h-3 w-3" />W/R Resumo</TabsTrigger>
+          <TabsTrigger value="sea" className="gap-1"><FileText className="h-3 w-3" />Contratos SEA</TabsTrigger>
           <TabsTrigger value="welfare" className="gap-1"><Heart className="h-3 w-3" />Welfare</TabsTrigger>
+          <TabsTrigger value="complaints" className="gap-1"><AlertTriangle className="h-3 w-3" />Reclamações</TabsTrigger>
           <TabsTrigger value="sgi-evidence" className="gap-1"><Sparkles className="h-3 w-3" />Evidências</TabsTrigger>
           <TabsTrigger value="gap-analyzer" className="gap-1"><Search className="h-3 w-3" />Gap Analyzer</TabsTrigger>
           <TabsTrigger value="interview-sim" className="gap-1"><MessageSquare className="h-3 w-3" />Simulador</TabsTrigger>
@@ -74,13 +80,16 @@ const MLCInspection: FC = () => {
 
         <TabsContent value="dashboard"><MLCInspectionDashboardV2 /></TabsContent>
         <TabsContent value="dmlc"><MLCDMLCChecklist /></TabsContent>
+        <TabsContent value="work-rest-entry"><MLCWorkRestEntry /></TabsContent>
         <TabsContent value="work-rest"><MLCWorkRestCalculator /></TabsContent>
+        <TabsContent value="sea"><MLCSEAManager /></TabsContent>
         <TabsContent value="welfare"><MLCWelfareScoring /></TabsContent>
+        <TabsContent value="complaints"><MLCComplaintProcedures /></TabsContent>
 
         <Suspense fallback={<LoadingFallback />}>
           <TabsContent value="sgi-evidence"><ComplianceSGIAutoEvidence moduleId="mlc" moduleName="MLC 2006" checklistItems={MLC_ITEMS} /></TabsContent>
           <TabsContent value="gap-analyzer"><ComplianceGapAnalyzer moduleId="mlc" moduleName="MLC 2006" standards={["MLC 2006 Title 1", "MLC 2006 Title 2", "MLC 2006 Title 3", "MLC 2006 Title 4", "MLC 2006 Title 5"]} /></TabsContent>
-          <TabsContent value="interview-sim"><ComplianceInterviewSimulator moduleId="mlc" moduleName="MLC 2006" standardContext="MLC 2006 inspection covering seafarer employment agreements, wages, hours of work/rest, accommodation, food/catering, medical care, health & safety, and social security. Focus on DMLC Part I/II compliance, work/rest hour records, crew welfare indicators, and onboard complaint procedures." /></TabsContent>
+          <TabsContent value="interview-sim"><ComplianceInterviewSimulator moduleId="mlc" moduleName="MLC 2006" standardContext="MLC 2006 inspection covering seafarer employment agreements (Reg. 2.1), wages (Reg. 2.2), hours of work/rest (Reg. 2.3, STCW A-VIII/1), accommodation (Standard A3.1), food/catering (Standard A3.2), medical care (Standard A4.1), health & safety (Standard A4.3), repatriation (Reg. 2.5), and onboard complaint procedures (Reg. 5.1.5). Focus on DMLC Part I/II compliance, work/rest hour records, crew welfare indicators, SEA mandatory content, and complaint escalation workflow." /></TabsContent>
           <TabsContent value="audit-prep"><ComplianceOneClickAuditPrep moduleId="mlc" moduleName="MLC 2006" /></TabsContent>
           <TabsContent value="checklist-gen"><ComplianceAutoChecklistGenerator moduleId="mlc" moduleName="MLC 2006" /></TabsContent>
           <TabsContent value="reg-tracker"><ComplianceRegulatoryChangeTracker moduleId="mlc" moduleName="MLC 2006" /></TabsContent>

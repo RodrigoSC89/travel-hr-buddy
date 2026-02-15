@@ -2,12 +2,17 @@
  * PEOTRAM Page - Complete module with persistence, radar chart, PDF export, photo upload
  * 13 Elements ANP/Petrobras with full audit lifecycle
  */
-import React, { useState, useMemo } from "react";
+import React, { useState, useMemo, lazy, Suspense } from "react";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ModulePageWrapper } from "@/components/ui/module-page-wrapper";
+import { Skeleton } from "@/components/ui/skeleton";
+
+const ComplianceInterviewSimulator = lazy(() => import('@/components/compliance/ai/ComplianceInterviewSimulator').then(m => ({ default: m.ComplianceInterviewSimulator })));
+const ComplianceAutoChecklistGenerator = lazy(() => import('@/components/compliance/ai/ComplianceAutoChecklistGenerator').then(m => ({ default: m.ComplianceAutoChecklistGenerator })));
+const LoadingFallback = () => <div className="space-y-4"><Skeleton className="h-8 w-64" /><Skeleton className="h-64" /></div>;
 import { ModuleHeader } from "@/components/ui/module-header";
 import ModuleActionButton from "@/components/ui/module-action-button";
 import { ProactiveComplianceMonitor } from "@/components/compliance/ProactiveComplianceMonitor";
@@ -123,6 +128,8 @@ const PEOTRAMPage = () => {
           <TabsTrigger value="correlation" className="gap-1.5"><Activity className="h-3.5 w-3.5" /> Correlação</TabsTrigger>
           <TabsTrigger value="countdown" className="gap-1.5"><Target className="h-3.5 w-3.5" /> Countdown</TabsTrigger>
           <TabsTrigger value="monitor" className="gap-1.5"><Activity className="h-3.5 w-3.5" /> Monitor</TabsTrigger>
+          <TabsTrigger value="interview" className="gap-1.5"><Brain className="h-3.5 w-3.5" /> Simulador</TabsTrigger>
+          <TabsTrigger value="checklist-ia" className="gap-1.5"><Zap className="h-3.5 w-3.5" /> Checklist IA</TabsTrigger>
         </TabsList>
 
         {/* ============ OVERVIEW ============ */}
@@ -328,6 +335,18 @@ const PEOTRAMPage = () => {
         <TabsContent value="countdown"><PeotramAuditCountdown /></TabsContent>
 
         <TabsContent value="monitor"><ProactiveComplianceMonitor /></TabsContent>
+
+        <Suspense fallback={<LoadingFallback />}>
+          <TabsContent value="interview">
+            <ComplianceInterviewSimulator
+              moduleId="peotram" moduleName="PEOTRAM"
+              standardContext="PEOTRAM 2024 audit simulation. 13 elements: 1-LGR (Liderança), 2-CL (Conformidade Legal), 3-GR (Gestão de Riscos), 4-OP (Operações - CRÍTICO), 5-ST (Saúde e Segurança), 6-MN (Meio Ambiente - CRÍTICO), 7-GM (Gestão de Mudanças), 8-AQ (Aquisição), 9-RH (Recursos Humanos), 10-GI (Gestão da Informação), 11-PE (Emergências - CRÍTICO), 12-AI (Análise de Incidentes - CRÍTICO), 13-MC (Melhoria Contínua). Scoring 0-4. NC classifications A(10d), B(15d), C(30d), D(60d). Focus on ANP/Petrobras requirements."
+            />
+          </TabsContent>
+          <TabsContent value="checklist-ia">
+            <ComplianceAutoChecklistGenerator moduleId="peotram" moduleName="PEOTRAM" />
+          </TabsContent>
+        </Suspense>
       </Tabs>
 
       <ModuleActionButton
