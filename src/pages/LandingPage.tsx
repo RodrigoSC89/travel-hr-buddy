@@ -22,17 +22,16 @@ import {
 } from 'lucide-react';
 
 const PRICING_TIERS = [
-  { id: 'free', name: 'Starter', price: 0, priceMonthly: 0, isFree: true, isEnterprise: false, recommended: false, description: 'Para pequenas operações', employeeLimit: 5, features: ['5 embarcações', 'Dashboard básico', 'Suporte por email'] },
-  { id: 'pro', name: 'Professional', price: 299, priceMonthly: 299, isFree: false, isEnterprise: false, recommended: true, description: 'Para operações em crescimento', employeeLimit: 25, features: ['25 embarcações', 'IA Avançada', 'API Access', 'Suporte prioritário', 'Compliance MLC', 'Relatórios avançados', 'Treinamento online', 'Integrações'] },
-  { id: 'business', name: 'Business', price: 599, priceMonthly: 599, isFree: false, isEnterprise: false, recommended: false, description: 'Para frotas médias', employeeLimit: 100, features: ['100 embarcações', 'Tudo do Pro', 'Multi-tenant', 'SSO/SAML', 'Auditoria completa'] },
-  { id: 'enterprise', name: 'Enterprise', price: 999, priceMonthly: 999, isFree: false, isEnterprise: true, recommended: false, description: 'Para grandes frotas', employeeLimit: 0, features: ['Ilimitado', 'IA + Compliance', 'White-label', 'Suporte 24/7', 'SLA Garantido', 'On-premise disponível'] },
+  { id: 'starter', name: 'Starter', price: 297, priceMonthly: 297, isFree: false, isEnterprise: false, recommended: false, description: 'Para pequenas frotas', employeeLimit: 30, features: ['Até 3 embarcações', 'Até 30 colaboradores', 'Dashboard básico', 'Suporte por email', '7 dias grátis para testar'] },
+  { id: 'pro', name: 'Professional', price: 697, priceMonthly: 697, isFree: false, isEnterprise: false, recommended: true, description: 'Para operações em crescimento', employeeLimit: 150, features: ['Até 25 embarcações', 'Até 150 colaboradores', 'IA Completa', 'People Analytics', 'API Access', 'Suporte prioritário', 'Compliance MLC', 'Relatórios avançados', '7 dias grátis para testar'] },
+  { id: 'enterprise', name: 'Enterprise', price: 0, priceMonthly: 0, isFree: false, isEnterprise: true, recommended: false, description: 'Para grandes frotas', employeeLimit: 0, features: ['Embarcações ilimitadas', 'Colaboradores ilimitados', 'IA Completa', 'SLA Dedicado', 'API completa', 'Suporte 24/7', 'White-label', 'On-premise disponível', '7 dias grátis para testar'] },
 ];
-const formatPrice = (price: number) => price === 0 ? 'Grátis' : `R$ ${price}`;
+const formatPrice = (price: number) => `R$ ${price}`;
 
 const LandingPage = () => {
   const navigate = useNavigate();
 
-  const tierIcons = { free: Gift, starter: Zap, professional: Crown, enterprise: Building2 };
+  const tierIcons = { starter: Zap, pro: Crown, enterprise: Building2 };
 
   const features = [
     { icon: Users, title: 'Gestão de Tripulação', description: 'Cadastro completo, documentação digital e histórico de embarques' },
@@ -60,7 +59,7 @@ const LandingPage = () => {
     <>
       <Helmet>
         <title>Nauti One - Sistema de RH Marítimo com IA | Gestão de Tripulação</title>
-        <meta name="description" content="Sistema completo de RH marítimo com IA. Gestão de tripulação, folha de pagamento, compliance MLC 2006 e STCW. Experimente grátis!" />
+        <meta name="description" content="Sistema completo de RH marítimo com IA. Gestão de tripulação, folha de pagamento, compliance MLC 2006 e STCW. Teste grátis por 7 dias!" />
         <meta name="keywords" content="RH marítimo, gestão tripulação, folha pagamento marítimo, MLC 2006, STCW, software marítimo, offshore" />
         <meta property="og:title" content="Nauti One - Sistema de RH Marítimo com IA" />
         <meta property="og:description" content="Gestão completa de tripulação, folha de pagamento e compliance para empresas marítimas." />
@@ -91,12 +90,12 @@ const LandingPage = () => {
               <Link to="/auth"><Button variant="ghost">Entrar</Button></Link>
               <Link to="/auth?mode=signup">
                 <Button className="gap-2 shadow-lg shadow-primary/20">
-                  Começar Grátis <ArrowRight className="h-4 w-4" />
-                </Button>
-              </Link>
-            </div>
-          </div>
-        </motion.header>
+                   Testar 7 Dias Grátis <ArrowRight className="h-4 w-4" />
+                 </Button>
+               </Link>
+             </div>
+           </div>
+         </motion.header>
 
         {/* Hero Section */}
         <section className="relative py-24 md:py-32 px-4 overflow-hidden">
@@ -131,13 +130,13 @@ const LandingPage = () => {
             
             <ScrollReveal delay={0.5}>
               <div className="flex flex-col sm:flex-row gap-4 justify-center mb-16">
-                <Link to="/auth?mode=signup">
-                  <Button size="lg" className="gap-2 text-lg px-8 shadow-xl shadow-primary/25 group">
-                    <Sparkles className="h-5 w-5" />
-                    Começar Grátis
-                    <ArrowRight className="h-4 w-4 group-hover:translate-x-1 transition-transform" />
-                  </Button>
-                </Link>
+                 <Link to="/auth?mode=signup">
+                   <Button size="lg" className="gap-2 text-lg px-8 shadow-xl shadow-primary/25 group">
+                     <Sparkles className="h-5 w-5" />
+                     Testar 7 Dias Grátis
+                     <ArrowRight className="h-4 w-4 group-hover:translate-x-1 transition-transform" />
+                   </Button>
+                 </Link>
                 <Button size="lg" variant="outline" className="gap-2 text-lg px-8 backdrop-blur-sm">
                   <Play className="h-5 w-5" />
                   Ver Demo
@@ -201,11 +200,11 @@ const LandingPage = () => {
                 Planos para todos os tamanhos de operação
               </h2>
               <p className="text-muted-foreground text-lg max-w-2xl mx-auto">
-                Comece grátis com até 5 colaboradores. Sem cartão de crédito.
+                Teste grátis por 7 dias. Todos os planos incluem período de avaliação sem compromisso.
               </p>
             </ScrollReveal>
 
-            <StaggerContainer className="grid md:grid-cols-2 lg:grid-cols-4 gap-6" staggerDelay={0.1}>
+            <StaggerContainer className="grid md:grid-cols-3 gap-6 max-w-5xl mx-auto" staggerDelay={0.1}>
               {PRICING_TIERS.map((tier) => {
                 const Icon = tierIcons[tier.id as keyof typeof tierIcons] || Zap;
                 return (
@@ -213,9 +212,6 @@ const LandingPage = () => {
                     <Card className={`relative flex flex-col h-full ${tier.recommended ? 'border-primary shadow-xl shadow-primary/10 scale-105 z-10' : 'border-border/40'}`}>
                       {tier.recommended && (
                         <Badge className="absolute -top-3 left-1/2 -translate-x-1/2 bg-primary shadow-lg">Mais Popular</Badge>
-                      )}
-                      {tier.isFree && (
-                        <Badge variant="secondary" className="absolute -top-3 left-1/2 -translate-x-1/2">Grátis para sempre</Badge>
                       )}
                       <CardHeader className="text-center pb-2">
                         <div className="mx-auto mb-4 p-3 rounded-full bg-primary/10">
@@ -263,7 +259,7 @@ const LandingPage = () => {
                             }
                           }}
                         >
-                          {tier.isFree ? 'Começar Grátis' : tier.isEnterprise ? 'Falar com Vendas' : 'Assinar Agora'}
+                          {tier.isEnterprise ? 'Falar com Vendas' : 'Testar 7 Dias Grátis'}
                           <ChevronRight className="h-4 w-4 ml-1" />
                         </Button>
                       </CardFooter>
@@ -274,8 +270,9 @@ const LandingPage = () => {
             </StaggerContainer>
 
             <ScrollReveal className="mt-12 text-center text-muted-foreground">
-              <p>✓ 14 dias de teste grátis em todos os planos pagos</p>
+              <p>✓ 7 dias de teste grátis em todos os planos</p>
               <p>✓ Cancele a qualquer momento sem compromisso</p>
+              <p>✓ Pagamento seguro via Stripe</p>
             </ScrollReveal>
           </div>
         </section>
@@ -321,17 +318,17 @@ const LandingPage = () => {
               <h2 className="text-3xl md:text-4xl font-bold mb-6">
                 Pronto para modernizar seu RH marítimo?
               </h2>
-              <p className="text-xl text-muted-foreground mb-8">
-                Comece grátis hoje mesmo. Sem cartão de crédito necessário.
-              </p>
+               <p className="text-xl text-muted-foreground mb-8">
+                 Teste grátis por 7 dias. Sem compromisso, cancele quando quiser.
+               </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                <Link to="/auth?mode=signup">
-                  <Button size="lg" className="gap-2 text-lg px-8 shadow-xl shadow-primary/25 group">
-                    <Sparkles className="h-5 w-5" />
-                    Criar Conta Grátis
-                    <ArrowRight className="h-4 w-4 group-hover:translate-x-1 transition-transform" />
-                  </Button>
-                </Link>
+                 <Link to="/auth?mode=signup">
+                   <Button size="lg" className="gap-2 text-lg px-8 shadow-xl shadow-primary/25 group">
+                     <Sparkles className="h-5 w-5" />
+                     Testar 7 Dias Grátis
+                     <ArrowRight className="h-4 w-4 group-hover:translate-x-1 transition-transform" />
+                   </Button>
+                 </Link>
                 <Button size="lg" variant="outline" className="gap-2 text-lg px-8" asChild>
                   <a href="mailto:comercial@nautione.com.br">Falar com Especialista</a>
                 </Button>
