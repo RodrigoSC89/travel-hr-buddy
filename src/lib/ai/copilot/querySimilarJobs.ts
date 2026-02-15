@@ -75,36 +75,7 @@ export const querySimilarJobs = async (
       matchCount 
     });
     
-    // Return mock data for development/testing
-    return [
-      {
-        id: "mock-1",
-        metadata: {
-          title: "Falha no gerador STBD",
-          component_id: "Gerador Diesel",
-          created_at: new Date().toISOString(),
-          ai_suggestion: "Gerador STBD apresentando ruído incomum. Recomenda-se inspeção do ventilador e limpeza de dutos.",
-          description: "Gerador com problemas de temperatura",
-          status: "completed",
-          priority: "high",
-          similarity: 0.85,
-        },
-        similarity: 0.85,
-      },
-      {
-        id: "mock-2",
-        metadata: {
-          title: "Manutenção bomba hidráulica",
-          component_id: "Sistema Hidráulico",
-          created_at: new Date().toISOString(),
-          ai_suggestion: "Bomba apresentando vibração excessiva. Substituir rolamentos e vedações.",
-          description: "Bomba com vibração anormal",
-          status: "completed",
-          priority: "medium",
-          similarity: 0.78,
-        },
-        similarity: 0.78,
-      },
-    ];
+    // Return empty on error - no mock data
+    return [];
   }
 };

@@ -14,6 +14,8 @@
  */
 
 import React, { useState } from "react";
+import { useQuery } from "@tanstack/react-query";
+import { supabase } from "@/integrations/supabase/client";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
@@ -78,46 +80,57 @@ const NautilusAIHub: React.FC = () => {
 
   const { invoke, isLoading } = useNautilusEnhancementAI();
 
-  // Mock data - em produção viria do Supabase
-  const [insights] = useState<AIInsight[]>([
-    {
-      id: "1",
-      title: "Otimização de Rota Detectada",
-      description: "A rota atual pode ser otimizada economizando 15% de combustível com desvio de 12nm",
-      category: "optimization",
-      priority: "high",
-      confidence: 94,
-      actionable: true,
-      timestamp: new Date()
+  // Real AI insights from Supabase
+  const { data: insightsData } = useQuery({
+    queryKey: ["ai-hub-insights"],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("ai_insights")
+        .select("*")
+        .order("created_at", { ascending: false })
+        .limit(10);
+      if (error || !data) return [];
+      return data.map((i) => ({
+        id: i.id,
+        title: i.title,
+        description: i.description,
+        category: i.category as AIInsight["category"],
+        priority: i.priority as AIInsight["priority"],
+        confidence: Math.round(i.confidence * 100),
+        actionable: i.actionable,
+        timestamp: new Date(i.created_at),
+      }));
     },
-    {
-      id: "2",
-      title: "Manutenção Preventiva Recomendada",
-      description: "Motor principal mostra padrões que indicam necessidade de manutenção em 7 dias",
-      category: "predictive",
-      priority: "medium",
-      confidence: 87,
-      actionable: true,
-      timestamp: new Date()
-    },
-    {
-      id: "3",
-      title: "Risco de Atraso em Porto",
-      description: "Condições meteorológicas podem causar atraso de 4-6 horas no porto de destino",
-      category: "risk",
-      priority: "medium",
-      confidence: 78,
-      actionable: false,
-      timestamp: new Date()
-    }
-  ]);
+    staleTime: 1000 * 60 * 5,
+  });
+  const insights = insightsData || [];
 
-  const [metrics] = useState<AIMetric[]>([
-    { name: "Taxa de Adoção IA", value: 78, change: 12, trend: "up", unit: "%" },
-    { name: "Precisão Preditiva", value: 92, change: 3, trend: "up", unit: "%" },
-    { name: "Insights Gerados", value: 234, change: 45, trend: "up", unit: "" },
-    { name: "Tempo Médio Resposta", value: 1.2, change: -0.3, trend: "down", unit: "s" }
-  ]);
+  // Real AI metrics from Supabase
+  const { data: metricsData } = useQuery({
+    queryKey: ["ai-hub-metrics"],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("ai_learning_metrics")
+        .select("*")
+        .order("period_end", { ascending: false })
+        .limit(1)
+        .maybeSingle();
+      if (error || !data) return [
+        { name: "Taxa de Adoção IA", value: 0, change: 0, trend: "up" as const, unit: "%" },
+        { name: "Precisão Preditiva", value: 0, change: 0, trend: "up" as const, unit: "%" },
+        { name: "Insights Gerados", value: 0, change: 0, trend: "up" as const, unit: "" },
+        { name: "Tempo Médio Resposta", value: 0, change: 0, trend: "up" as const, unit: "s" },
+      ];
+      return [
+        { name: "Taxa de Adoção IA", value: Math.round((data.accuracy_rate || 0) * 100), change: 0, trend: "up" as const, unit: "%" },
+        { name: "Precisão Preditiva", value: Math.round((data.average_confidence || 0) * 100), change: 0, trend: "up" as const, unit: "%" },
+        { name: "Insights Gerados", value: data.total_decisions || 0, change: 0, trend: "up" as const, unit: "" },
+        { name: "Tempo Médio Resposta", value: 1.2, change: 0, trend: "down" as const, unit: "s" },
+      ];
+    },
+    staleTime: 1000 * 60 * 10,
+  });
+  const metrics = metricsData || [];
 
   const [suggestions] = useState<WorkflowSuggestion[]>([
     {
