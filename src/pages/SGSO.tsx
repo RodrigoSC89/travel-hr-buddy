@@ -6,6 +6,7 @@ import { ModulePageWrapper } from "@/components/ui/module-page-wrapper";
 import { ModuleHeader } from "@/components/ui/module-header";
 import { SgsoDashboard } from "@/components/sgso/SgsoDashboard";
 import { ProactiveComplianceMonitor } from "@/components/compliance/ProactiveComplianceMonitor";
+import { SGSORiskHeatmap } from "@/components/sgso/SGSORiskHeatmap";
 import { useMaritimeActions } from "@/hooks/useMaritimeActions";
 import { CreateSGSOIncidentDialog } from "@/components/sgso/CreateSGSOIncidentDialog";
 import { toast } from "sonner";
@@ -84,6 +85,7 @@ const SGSO = () => {
       <Tabs defaultValue="dashboard" className="w-full">
         <TabsList className="flex flex-wrap gap-1 mb-4">
           <TabsTrigger value="dashboard" className="gap-2"><Activity className="h-4 w-4" />Dashboard SGSO</TabsTrigger>
+          <TabsTrigger value="risk-heatmap" className="gap-2"><AlertTriangle className="h-4 w-4" />Matriz de Riscos</TabsTrigger>
           <TabsTrigger value="compliance" className="gap-2"><Shield className="h-4 w-4" />Monitor Conformidade</TabsTrigger>
           <TabsTrigger value="sgi-evidence" className="gap-1"><Search className="h-3 w-3" />SGI Evidence</TabsTrigger>
           <TabsTrigger value="gap-analyzer" className="gap-1"><AlertTriangle className="h-3 w-3" />Gap Analyzer</TabsTrigger>
@@ -101,6 +103,9 @@ const SGSO = () => {
 
         <TabsContent value="dashboard">
           <div id="sgso-practices"><SgsoDashboard /></div>
+        </TabsContent>
+        <TabsContent value="risk-heatmap">
+          <SGSORiskHeatmap />
         </TabsContent>
         <TabsContent value="compliance">
           <ProactiveComplianceMonitor />
