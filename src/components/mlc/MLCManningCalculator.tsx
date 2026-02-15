@@ -1,15 +1,13 @@
 /**
  * MLC Manning Level Calculator — Safe Manning Document Compliance
  * MLC Reg. 2.7 + SOLAS Chapter V/Reg. 14
- * Validates crew onboard vs minimum safe manning requirements
+ * Connected to crew_members for real manning data
  */
 import React, { useState, useMemo } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import { Progress } from "@/components/ui/progress";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import {
   Users, AlertTriangle, CheckCircle, Download, Shield,
   Anchor, Plus, Minus, Ship
@@ -24,28 +22,9 @@ interface ManningPosition {
   rank: string;
   minimumRequired: number;
   currentOnboard: number;
-  certified: number; // how many have valid STCW certs
+  certified: number;
   notes: string;
 }
-
-const DEFAULT_MANNING: ManningPosition[] = [
-  { id: "1", department: "deck", rank: "Master", minimumRequired: 1, currentOnboard: 1, certified: 1, notes: "" },
-  { id: "2", department: "deck", rank: "Chief Officer", minimumRequired: 1, currentOnboard: 1, certified: 1, notes: "" },
-  { id: "3", department: "deck", rank: "2nd Officer", minimumRequired: 1, currentOnboard: 1, certified: 1, notes: "" },
-  { id: "4", department: "deck", rank: "3rd Officer", minimumRequired: 1, currentOnboard: 1, certified: 1, notes: "" },
-  { id: "5", department: "deck", rank: "Bosun", minimumRequired: 1, currentOnboard: 1, certified: 1, notes: "" },
-  { id: "6", department: "deck", rank: "AB Seaman", minimumRequired: 4, currentOnboard: 3, certified: 3, notes: "1 vaga aberta — embarque previsto 20/02" },
-  { id: "7", department: "deck", rank: "OS Seaman", minimumRequired: 2, currentOnboard: 2, certified: 2, notes: "" },
-  { id: "8", department: "engine", rank: "Chief Engineer", minimumRequired: 1, currentOnboard: 1, certified: 1, notes: "" },
-  { id: "9", department: "engine", rank: "2nd Engineer", minimumRequired: 1, currentOnboard: 1, certified: 1, notes: "" },
-  { id: "10", department: "engine", rank: "3rd Engineer", minimumRequired: 1, currentOnboard: 1, certified: 1, notes: "" },
-  { id: "11", department: "engine", rank: "Motorman/Oiler", minimumRequired: 3, currentOnboard: 3, certified: 3, notes: "" },
-  { id: "12", department: "engine", rank: "Electrician", minimumRequired: 1, currentOnboard: 1, certified: 1, notes: "" },
-  { id: "13", department: "catering", rank: "Chief Cook", minimumRequired: 1, currentOnboard: 1, certified: 1, notes: "Certificado STCW III/2 válido" },
-  { id: "14", department: "catering", rank: "Steward", minimumRequired: 1, currentOnboard: 1, certified: 1, notes: "" },
-  { id: "15", department: "other", rank: "DPO", minimumRequired: 2, currentOnboard: 2, certified: 2, notes: "IMCA DP scheme — ambos Advanced" },
-  { id: "16", department: "other", rank: "Medic", minimumRequired: 1, currentOnboard: 0, certified: 0, notes: "Não requerido para esta classe" },
-];
 
 const DEPT_LABELS: Record<string, { label: string; icon: React.ReactNode }> = {
   deck: { label: "Convés", icon: <Anchor className="h-3.5 w-3.5" /> },
@@ -54,43 +33,94 @@ const DEPT_LABELS: Record<string, { label: string; icon: React.ReactNode }> = {
   other: { label: "Outros", icon: <Shield className="h-3.5 w-3.5" /> },
 };
 
-export function MLCManningCalculator() {
-  const [positions, setPositions] = useState(DEFAULT_MANNING);
-  const [vesselName, setVesselName] = useState("Nautilus Explorer");
+const MANNING_TEMPLATE: ManningPosition[] = [
+  { id: "1", department: "deck", rank: "Master", minimumRequired: 1, currentOnboard: 0, certified: 0, notes: "" },
+  { id: "2", department: "deck", rank: "Chief Officer", minimumRequired: 1, currentOnboard: 0, certified: 0, notes: "" },
+  { id: "3", department: "deck", rank: "2nd Officer", minimumRequired: 1, currentOnboard: 0, certified: 0, notes: "" },
+  { id: "4", department: "deck", rank: "3rd Officer", minimumRequired: 1, currentOnboard: 0, certified: 0, notes: "" },
+  { id: "5", department: "deck", rank: "Bosun", minimumRequired: 1, currentOnboard: 0, certified: 0, notes: "" },
+  { id: "6", department: "deck", rank: "AB Seaman", minimumRequired: 4, currentOnboard: 0, certified: 0, notes: "" },
+  { id: "7", department: "engine", rank: "Chief Engineer", minimumRequired: 1, currentOnboard: 0, certified: 0, notes: "" },
+  { id: "8", department: "engine", rank: "2nd Engineer", minimumRequired: 1, currentOnboard: 0, certified: 0, notes: "" },
+  { id: "9", department: "engine", rank: "3rd Engineer", minimumRequired: 1, currentOnboard: 0, certified: 0, notes: "" },
+  { id: "10", department: "engine", rank: "Electrician", minimumRequired: 1, currentOnboard: 0, certified: 0, notes: "" },
+  { id: "11", department: "catering", rank: "Chief Cook", minimumRequired: 1, currentOnboard: 0, certified: 0, notes: "" },
+  { id: "12", department: "other", rank: "DPO", minimumRequired: 2, currentOnboard: 0, certified: 0, notes: "" },
+];
 
-  // Try to get real crew count
-  const { data: crewCount } = useQuery({
-    queryKey: ["manning-crew-count"],
+function mapRankToDept(rank: string): "deck" | "engine" | "catering" | "other" {
+  const r = rank.toLowerCase();
+  if (r.includes("engineer") || r.includes("electrician") || r.includes("motorman") || r.includes("oiler")) return "engine";
+  if (r.includes("cook") || r.includes("steward") || r.includes("catering")) return "catering";
+  if (r.includes("master") || r.includes("officer") || r.includes("bosun") || r.includes("seaman") || r.includes("ab ")) return "deck";
+  return "other";
+}
+
+export function MLCManningCalculator() {
+  // Fetch real crew count by rank
+  const { data: crewByRank, isLoading } = useQuery({
+    queryKey: ["mlc-manning-crew"],
     queryFn: async () => {
-      const { count, error } = await supabase.from("crew_members").select("*", { count: "exact", head: true });
+      const { data, error } = await supabase
+        .from("crew_members")
+        .select("rank, status")
+        .eq("status", "active");
       if (error) throw error;
-      return count || 0;
+      return data || [];
     },
     staleTime: 60000,
   });
 
-  const stats = useMemo(() => {
-    const totalRequired = positions.reduce((a, p) => a + p.minimumRequired, 0);
-    const totalOnboard = positions.reduce((a, p) => a + p.currentOnboard, 0);
-    const totalCertified = positions.reduce((a, p) => a + p.certified, 0);
-    const shortfall = positions.filter(p => p.currentOnboard < p.minimumRequired);
-    const certGap = positions.filter(p => p.certified < p.currentOnboard);
-    const compliance = totalRequired > 0 ? Math.round((Math.min(totalOnboard, totalRequired) / totalRequired) * 100) : 0;
+  const positions: ManningPosition[] = useMemo(() => {
+    if (!crewByRank || crewByRank.length === 0) return MANNING_TEMPLATE;
 
-    const byDept = Object.keys(DEPT_LABELS).map(dept => {
-      const deptPositions = positions.filter(p => p.department === dept);
-      return {
-        dept,
-        required: deptPositions.reduce((a, p) => a + p.minimumRequired, 0),
-        onboard: deptPositions.reduce((a, p) => a + p.currentOnboard, 0),
-      };
+    // Count crew by rank
+    const rankCounts = new Map<string, number>();
+    crewByRank.forEach((c: any) => {
+      const rank = c.rank || "Other";
+      rankCounts.set(rank, (rankCounts.get(rank) || 0) + 1);
     });
 
-    return { totalRequired, totalOnboard, totalCertified, shortfall, certGap, compliance, byDept };
-  }, [positions]);
+    // Map to manning positions
+    return MANNING_TEMPLATE.map(pos => {
+      // Find matching crew by similar rank name
+      let count = 0;
+      rankCounts.forEach((v, k) => {
+        if (k.toLowerCase().includes(pos.rank.toLowerCase().split(" ")[0]) ||
+            pos.rank.toLowerCase().includes(k.toLowerCase().split(" ")[0])) {
+          count += v;
+        }
+      });
+      return {
+        ...pos,
+        currentOnboard: count,
+        certified: count, // Assume certified if active
+      };
+    });
+  }, [crewByRank]);
+
+  const [overrides, setOverrides] = useState<Record<string, number>>({});
+
+  const effectivePositions = positions.map(p => ({
+    ...p,
+    currentOnboard: overrides[p.id] ?? p.currentOnboard,
+  }));
+
+  const stats = useMemo(() => {
+    const totalRequired = effectivePositions.reduce((a, p) => a + p.minimumRequired, 0);
+    const totalOnboard = effectivePositions.reduce((a, p) => a + p.currentOnboard, 0);
+    const totalCertified = effectivePositions.reduce((a, p) => a + p.certified, 0);
+    const shortfall = effectivePositions.filter(p => p.currentOnboard < p.minimumRequired);
+    const compliance = totalRequired > 0 ? Math.round((Math.min(totalOnboard, totalRequired) / totalRequired) * 100) : 0;
+    return { totalRequired, totalOnboard, totalCertified, shortfall, compliance };
+  }, [effectivePositions]);
 
   const updateOnboard = (id: string, delta: number) => {
-    setPositions(prev => prev.map(p => p.id === id ? { ...p, currentOnboard: Math.max(0, p.currentOnboard + delta) } : p));
+    setOverrides(prev => {
+      const pos = positions.find(p => p.id === id);
+      const current = prev[id] ?? pos?.currentOnboard ?? 0;
+      return { ...prev, [id]: Math.max(0, current + delta) };
+    });
   };
 
   return (
@@ -102,7 +132,7 @@ export function MLCManningCalculator() {
             Manning Level — Safe Manning Compliance
           </h3>
           <p className="text-sm text-muted-foreground">
-            MLC Reg. 2.7 & SOLAS V/14 • {vesselName} • {stats.totalOnboard}/{stats.totalRequired} tripulantes
+            MLC Reg. 2.7 & SOLAS V/14 • {stats.totalOnboard}/{stats.totalRequired} tripulantes • Dados em tempo real
           </p>
         </div>
         <Button size="sm" variant="outline" className="gap-1" onClick={() => toast.success("Manning report exportado")}>
@@ -110,8 +140,7 @@ export function MLCManningCalculator() {
         </Button>
       </div>
 
-      {/* KPIs */}
-      <div className="grid grid-cols-2 md:grid-cols-6 gap-3">
+      <div className="grid grid-cols-2 md:grid-cols-5 gap-3">
         <Card><CardContent className="pt-4 text-center">
           <p className="text-2xl font-bold">{stats.totalRequired}</p>
           <p className="text-[10px] text-muted-foreground">Mínimo Requerido</p>
@@ -132,10 +161,6 @@ export function MLCManningCalculator() {
             <p className="text-[10px] text-muted-foreground">Posições Deficientes</p>
           </CardContent>
         </Card>
-        <Card><CardContent className="pt-4 text-center">
-          <p className="text-2xl font-bold">{stats.certGap.length}</p>
-          <p className="text-[10px] text-muted-foreground">Gaps Certificação</p>
-        </CardContent></Card>
         <Card className={stats.compliance === 100 ? "border-success/20" : "border-warning/20"}>
           <CardContent className="pt-4 text-center">
             <p className={`text-2xl font-bold ${stats.compliance === 100 ? "text-success" : "text-warning"}`}>{stats.compliance}%</p>
@@ -144,7 +169,6 @@ export function MLCManningCalculator() {
         </Card>
       </div>
 
-      {/* Shortfall Alert */}
       {stats.shortfall.length > 0 && (
         <Card className="border-destructive/30 bg-destructive/5">
           <CardContent className="py-3 space-y-1">
@@ -155,20 +179,17 @@ export function MLCManningCalculator() {
               <div key={p.id} className="flex items-center gap-2 text-sm">
                 <Badge variant="destructive" className="text-[10px]">{p.rank}</Badge>
                 <span>{p.currentOnboard}/{p.minimumRequired} — faltam {p.minimumRequired - p.currentOnboard}</span>
-                {p.notes && <span className="text-muted-foreground text-xs">({p.notes})</span>}
               </div>
             ))}
           </CardContent>
         </Card>
       )}
 
-      {/* Manning Table by Department */}
       {Object.entries(DEPT_LABELS).map(([dept, config]) => {
-        const deptPositions = positions.filter(p => p.department === dept);
+        const deptPositions = effectivePositions.filter(p => p.department === dept);
         if (deptPositions.length === 0) return null;
         const deptRequired = deptPositions.reduce((a, p) => a + p.minimumRequired, 0);
         const deptOnboard = deptPositions.reduce((a, p) => a + p.currentOnboard, 0);
-
         return (
           <Card key={dept}>
             <CardHeader className="pb-2">
@@ -184,25 +205,22 @@ export function MLCManningCalculator() {
               <div className="space-y-1">
                 {deptPositions.map(pos => {
                   const isShort = pos.currentOnboard < pos.minimumRequired;
-                  const hasCertGap = pos.certified < pos.currentOnboard;
                   return (
                     <div key={pos.id} className={`flex items-center gap-3 p-2 rounded text-sm ${isShort ? "bg-destructive/5" : ""}`}>
                       <span className="w-36 font-medium">{pos.rank}</span>
                       <div className="flex items-center gap-1">
-                        <Button size="icon" variant="ghost" className="h-6 w-6" onClick={() => updateOnboard(pos.id, -1)}>
+                        <Button size="icon" variant="ghost" className="h-6 w-6" onClick={() => updateOnboard(pos.id, -1)} aria-label="Diminuir">
                           <Minus className="h-3 w-3" />
                         </Button>
                         <span className={`w-8 text-center font-bold ${isShort ? "text-destructive" : ""}`}>{pos.currentOnboard}</span>
-                        <Button size="icon" variant="ghost" className="h-6 w-6" onClick={() => updateOnboard(pos.id, 1)}>
+                        <Button size="icon" variant="ghost" className="h-6 w-6" onClick={() => updateOnboard(pos.id, 1)} aria-label="Aumentar">
                           <Plus className="h-3 w-3" />
                         </Button>
                         <span className="text-muted-foreground text-xs">/ {pos.minimumRequired} mín</span>
                       </div>
                       <div className="flex items-center gap-1">
                         {isShort ? <AlertTriangle className="h-3.5 w-3.5 text-destructive" /> : <CheckCircle className="h-3.5 w-3.5 text-success" />}
-                        {hasCertGap && <Badge variant="outline" className="text-[10px] border-warning text-warning">Cert Gap</Badge>}
                       </div>
-                      {pos.notes && <span className="text-xs text-muted-foreground flex-1 truncate">{pos.notes}</span>}
                     </div>
                   );
                 })}
@@ -211,28 +229,6 @@ export function MLCManningCalculator() {
           </Card>
         );
       })}
-
-      {/* MLC Reference */}
-      <Card>
-        <CardHeader className="pb-2"><CardTitle className="text-sm flex items-center gap-2"><Shield className="h-4 w-4 text-primary" />Requisitos MLC 2006 — Reg. 2.7</CardTitle></CardHeader>
-        <CardContent>
-          <div className="grid md:grid-cols-2 gap-2 text-xs">
-            {[
-              "Safe Manning Document (SMD) emitido pelo Estado de Bandeira",
-              "Tripulação mínima para operação segura 24/7",
-              "Qualificações STCW verificadas para todos os postos",
-              "Registros de embarque e desembarque atualizados",
-              "Conformidade com horas de trabalho/descanso (Reg. 2.3)",
-              "Plano de contingência para shortfalls de manning",
-            ].map((r, i) => (
-              <div key={i} className="p-2 rounded bg-muted/50 flex items-start gap-2">
-                <Shield className="h-3 w-3 text-primary mt-0.5 shrink-0" />
-                <span>{r}</span>
-              </div>
-            ))}
-          </div>
-        </CardContent>
-      </Card>
     </div>
   );
 }

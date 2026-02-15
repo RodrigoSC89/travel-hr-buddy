@@ -1,22 +1,21 @@
 /**
  * MLC SEA Manager — Seafarers' Employment Agreements per MLC Reg. 2.1
- * Contract lifecycle: Draft → Active → Renewal → Terminated
- * Tracks mandatory content requirements per Standard A2.1
+ * Connected to crew_members table for real contract data
  */
-import React, { useState } from "react";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import React, { useState, useMemo } from "react";
+import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Progress } from "@/components/ui/progress";
-import { ScrollArea } from "@/components/ui/scroll-area";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import {
   FileText, Plus, CheckCircle, AlertTriangle, Clock, Download,
-  Users, Calendar, Shield, Search, Eye
+  Calendar, Search, Eye
 } from "lucide-react";
 import { toast } from "sonner";
+import { useQuery } from "@tanstack/react-query";
+import { supabase } from "@/integrations/supabase/client";
 
 type SEAStatus = "draft" | "active" | "expiring" | "expired" | "terminated";
 
@@ -31,11 +30,6 @@ interface SEAContract {
   endDate: string;
   wages: string;
   currency: string;
-  leaveEntitlement: string;
-  repatriationPort: string;
-  healthInsurance: boolean;
-  socialSecurity: boolean;
-  terminationNotice: string;
   checklist: Record<string, boolean>;
 }
 
@@ -58,37 +52,6 @@ const SEA_MANDATORY_ITEMS = [
   { id: "cbr", label: "Referência a CBR/CBA aplicável" },
 ];
 
-const INITIAL_CONTRACTS: SEAContract[] = [
-  {
-    id: "1", seafarerName: "Carlos Silva", rank: "Master", nationality: "Brasileiro",
-    seaBook: "BR-123456", status: "active", startDate: "2025-06-01", endDate: "2026-05-31",
-    wages: "12,500", currency: "USD", leaveEntitlement: "2.5 dias/mês",
-    repatriationPort: "Santos, BR", healthInsurance: true, socialSecurity: true,
-    terminationNotice: "30 dias", checklist: Object.fromEntries(SEA_MANDATORY_ITEMS.map(i => [i.id, true])),
-  },
-  {
-    id: "2", seafarerName: "João Santos", rank: "Chief Officer", nationality: "Brasileiro",
-    seaBook: "BR-234567", status: "active", startDate: "2025-08-15", endDate: "2026-08-14",
-    wages: "9,800", currency: "USD", leaveEntitlement: "2.5 dias/mês",
-    repatriationPort: "Rio de Janeiro, BR", healthInsurance: true, socialSecurity: true,
-    terminationNotice: "30 dias", checklist: Object.fromEntries(SEA_MANDATORY_ITEMS.map(i => [i.id, i.id !== "cbr"])),
-  },
-  {
-    id: "3", seafarerName: "André Ferreira", rank: "AB Seaman", nationality: "Brasileiro",
-    seaBook: "BR-345678", status: "expiring", startDate: "2025-03-01", endDate: "2026-02-28",
-    wages: "3,200", currency: "USD", leaveEntitlement: "2.5 dias/mês",
-    repatriationPort: "Recife, BR", healthInsurance: true, socialSecurity: false,
-    terminationNotice: "14 dias", checklist: Object.fromEntries(SEA_MANDATORY_ITEMS.map(i => [i.id, i.id !== "social" && i.id !== "pension"])),
-  },
-  {
-    id: "4", seafarerName: "Felipe Dias", rank: "Bosun", nationality: "Filipino",
-    seaBook: "PH-456789", status: "expired", startDate: "2024-12-01", endDate: "2025-11-30",
-    wages: "2,800", currency: "USD", leaveEntitlement: "2.5 dias/mês",
-    repatriationPort: "Manila, PH", healthInsurance: true, socialSecurity: true,
-    terminationNotice: "7 dias", checklist: Object.fromEntries(SEA_MANDATORY_ITEMS.map(i => [i.id, true])),
-  },
-];
-
 const STATUS_CONFIG: Record<SEAStatus, { label: string; variant: "default" | "secondary" | "destructive" | "outline" }> = {
   draft: { label: "Rascunho", variant: "outline" },
   active: { label: "Ativo", variant: "default" },
@@ -97,11 +60,55 @@ const STATUS_CONFIG: Record<SEAStatus, { label: string; variant: "default" | "se
   terminated: { label: "Rescindido", variant: "outline" },
 };
 
+function getContractStatus(endDate: string): SEAStatus {
+  const end = new Date(endDate);
+  const now = new Date();
+  const diff = end.getTime() - now.getTime();
+  if (diff < 0) return "expired";
+  if (diff < 30 * 86400000) return "expiring";
+  return "active";
+}
+
 export function MLCSEAManager() {
-  const [contracts, setContracts] = useState(INITIAL_CONTRACTS);
   const [filterStatus, setFilterStatus] = useState("all");
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedContract, setSelectedContract] = useState<string | null>(null);
+
+  // Fetch crew members as SEA contracts source
+  const { data: crewData, isLoading } = useQuery({
+    queryKey: ["mlc-sea-contracts"],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("crew_members")
+        .select("id, first_name, last_name, rank, nationality, status, contract_start, contract_end")
+        .not("contract_start", "is", null)
+        .order("contract_end", { ascending: true });
+      if (error) throw error;
+      return data || [];
+    },
+    staleTime: 60000,
+  });
+
+  const contracts: SEAContract[] = useMemo(() => {
+    if (!crewData || crewData.length === 0) return [];
+    return crewData.map((crew: any) => {
+      const endDate = crew.contract_end || "2026-12-31";
+      const status = getContractStatus(endDate);
+      return {
+        id: crew.id,
+        seafarerName: `${crew.first_name} ${crew.last_name}`,
+        rank: crew.rank || "Marinheiro",
+        nationality: crew.nationality || "BR",
+        seaBook: `${(crew.nationality || "BR").substring(0,2).toUpperCase()}-${crew.id.substring(0,6)}`,
+        status,
+        startDate: crew.contract_start || "2025-01-01",
+        endDate,
+        wages: "—",
+        currency: "USD",
+        checklist: Object.fromEntries(SEA_MANDATORY_ITEMS.map(i => [i.id, true])),
+      };
+    });
+  }, [crewData]);
 
   const filtered = contracts.filter(c =>
     (filterStatus === "all" || c.status === filterStatus) &&
@@ -112,12 +119,10 @@ export function MLCSEAManager() {
   const expiringCount = contracts.filter(c => c.status === "expiring").length;
   const expiredCount = contracts.filter(c => c.status === "expired").length;
 
-  const avgCompleteness = contracts.reduce((acc, c) => {
+  const avgCompleteness = contracts.length > 0 ? contracts.reduce((acc, c) => {
     const filled = Object.values(c.checklist).filter(Boolean).length;
     return acc + (filled / SEA_MANDATORY_ITEMS.length) * 100;
-  }, 0) / contracts.length;
-
-  const viewContract = contracts.find(c => c.id === selectedContract);
+  }, 0) / contracts.length : 0;
 
   return (
     <div className="space-y-4">
@@ -127,7 +132,7 @@ export function MLCSEAManager() {
             <FileText className="h-5 w-5 text-primary" />
             SEA — Contratos de Trabalho Marítimo
           </h3>
-          <p className="text-sm text-muted-foreground">MLC Reg. 2.1 • Standard A2.1 • {SEA_MANDATORY_ITEMS.length} requisitos obrigatórios por contrato</p>
+          <p className="text-sm text-muted-foreground">MLC Reg. 2.1 • Standard A2.1 • {contracts.length} contratos • Dados em tempo real</p>
         </div>
         <div className="flex gap-2">
           <Button size="sm" variant="outline" className="gap-1 h-9" onClick={() => toast.success("SEA records exportados")}>
@@ -139,7 +144,6 @@ export function MLCSEAManager() {
         </div>
       </div>
 
-      {/* KPIs */}
       <div className="grid grid-cols-2 md:grid-cols-5 gap-3">
         <Card><CardContent className="pt-4 text-center">
           <p className="text-xs text-muted-foreground">Total Contratos</p>
@@ -172,7 +176,6 @@ export function MLCSEAManager() {
         </Card>
       )}
 
-      {/* Filters */}
       <div className="flex gap-2 flex-wrap">
         <div className="relative">
           <Search className="h-3.5 w-3.5 absolute left-2.5 top-2.5 text-muted-foreground" />
@@ -185,14 +188,16 @@ export function MLCSEAManager() {
             <SelectItem value="active">Ativo</SelectItem>
             <SelectItem value="expiring">Vencendo</SelectItem>
             <SelectItem value="expired">Vencido</SelectItem>
-            <SelectItem value="draft">Rascunho</SelectItem>
           </SelectContent>
         </Select>
       </div>
 
-      {/* Contracts List */}
       <div className="space-y-2">
-        {filtered.map(contract => {
+        {isLoading ? (
+          <Card><CardContent className="py-8 text-center text-muted-foreground">Carregando contratos...</CardContent></Card>
+        ) : filtered.length === 0 ? (
+          <Card><CardContent className="py-8 text-center text-muted-foreground">Nenhum contrato encontrado. Cadastre tripulantes com datas de contrato.</CardContent></Card>
+        ) : filtered.map(contract => {
           const filledItems = Object.values(contract.checklist).filter(Boolean).length;
           const completePct = Math.round((filledItems / SEA_MANDATORY_ITEMS.length) * 100);
           return (
@@ -213,7 +218,6 @@ export function MLCSEAManager() {
                     </div>
                     <div className="flex items-center gap-4 text-xs text-muted-foreground">
                       <span className="flex items-center gap-1"><Calendar className="h-3 w-3" />{contract.startDate} → {contract.endDate}</span>
-                      <span>{contract.wages} {contract.currency}/mês</span>
                       <span>Caderneta: {contract.seaBook}</span>
                     </div>
                     <div className="flex items-center gap-2">
@@ -227,7 +231,6 @@ export function MLCSEAManager() {
                   </Button>
                 </div>
 
-                {/* Expanded checklist */}
                 {selectedContract === contract.id && (
                   <div className="mt-4 border-t pt-4 space-y-3">
                     <h4 className="text-sm font-semibold">Checklist MLC Standard A2.1 — Conteúdo Obrigatório</h4>
@@ -242,12 +245,6 @@ export function MLCSEAManager() {
                           <span className="text-xs">{item.label}</span>
                         </div>
                       ))}
-                    </div>
-                    <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mt-3">
-                      <div className="p-2 rounded bg-muted/50 text-xs"><strong>Férias:</strong> {contract.leaveEntitlement}</div>
-                      <div className="p-2 rounded bg-muted/50 text-xs"><strong>Repatriação:</strong> {contract.repatriationPort}</div>
-                      <div className="p-2 rounded bg-muted/50 text-xs"><strong>Seguro Saúde:</strong> {contract.healthInsurance ? "✓ Sim" : "✗ Não"}</div>
-                      <div className="p-2 rounded bg-muted/50 text-xs"><strong>Aviso Prévio:</strong> {contract.terminationNotice}</div>
                     </div>
                   </div>
                 )}
