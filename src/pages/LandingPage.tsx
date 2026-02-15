@@ -1,6 +1,7 @@
 import React from 'react';
 import { Helmet } from 'react-helmet-async';
 import { Link, useNavigate } from 'react-router-dom';
+import { LanguageSelector } from '@/components/ui/LanguageSelector';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -172,6 +173,12 @@ const LandingPage = () => {
               <a href="#testimonials" className="text-muted-foreground hover:text-foreground transition-colors">Testimonials</a>
             </nav>
             <div className="flex items-center gap-2">
+              <LanguageSelector />
+              <Link to="/demo">
+                <Button variant="outline" size="sm" className="gap-1.5">
+                  <Play className="h-3 w-3" /> Demo
+                </Button>
+              </Link>
               <Link to="/auth"><Button variant="ghost" size="sm">Login</Button></Link>
               <Link to="/auth?mode=signup">
                 <Button size="sm" className="gap-1.5 shadow-lg shadow-primary/20">
