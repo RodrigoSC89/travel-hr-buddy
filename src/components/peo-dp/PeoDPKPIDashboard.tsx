@@ -4,6 +4,7 @@
  * Fórmula IEODP = (%EPP×1 + %EPA×1 + %EPPA×5 + %EBP×4 + %EBT×5 + %AREP×4 + %PCLVC×3) / 23
  */
 import React, { useState } from "react";
+import { quickExport } from "@/lib/export-utils";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -145,7 +146,7 @@ export function PeoDPKPIDashboard() {
               <SelectItem value="2025">2025</SelectItem>
             </SelectContent>
           </Select>
-          <Button size="sm" variant="outline" className="gap-1" onClick={() => toast.success("Relatório IEODP exportado")}>
+          <Button size="sm" variant="outline" className="gap-1" onClick={() => quickExport(KPI_ITEMS || [], "PEO-DP IEODP KPIs")}>
             <Download className="h-3 w-3" /> Exportar
           </Button>
         </div>

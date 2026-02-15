@@ -3,6 +3,7 @@
  * Tracks all required DP trial types with pass/fail criteria
  */
 import React, { useState } from "react";
+import { quickExport } from "@/lib/export-utils";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -64,7 +65,7 @@ export function PeoDPTrialsManager() {
           <h3 className="text-lg font-semibold">DP Annual Trials — IMCA M 190</h3>
           <p className="text-sm text-muted-foreground">Registro e acompanhamento de testes DP anuais obrigatórios</p>
         </div>
-        <Button size="sm" variant="outline" onClick={() => toast.success("Relatório de Trials exportado")} className="gap-1">
+        <Button size="sm" variant="outline" onClick={() => quickExport(trials, "DP Annual Trials")} className="gap-1">
           <Download className="h-3 w-3" /> Exportar Relatório
         </Button>
       </div>

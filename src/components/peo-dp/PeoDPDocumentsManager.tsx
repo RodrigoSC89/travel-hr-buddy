@@ -3,6 +3,7 @@
  * Tracking de entrega para DP1 e DP2 com prazos e status
  */
 import React, { useState } from "react";
+import { quickExport } from "@/lib/export-utils";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -120,7 +121,7 @@ export function PeoDPDocumentsManager() {
               <SelectItem value="rejected">Rejeitado</SelectItem>
             </SelectContent>
           </Select>
-          <Button size="sm" variant="outline" className="gap-1 h-9" onClick={() => toast.success("Checklist exportado")}>
+          <Button size="sm" variant="outline" className="gap-1 h-9" onClick={() => quickExport(DOCUMENTS, "PEO-DP Documents Checklist")}>
             <Download className="h-3 w-3" /> Exportar
           </Button>
         </div>

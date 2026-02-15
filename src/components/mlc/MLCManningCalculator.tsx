@@ -4,6 +4,7 @@
  * Connected to crew_members for real manning data
  */
 import React, { useState, useMemo } from "react";
+import { quickExport } from "@/lib/export-utils";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -135,7 +136,7 @@ export function MLCManningCalculator() {
             MLC Reg. 2.7 & SOLAS V/14 • {stats.totalOnboard}/{stats.totalRequired} tripulantes • Dados em tempo real
           </p>
         </div>
-        <Button size="sm" variant="outline" className="gap-1" onClick={() => toast.success("Manning report exportado")}>
+        <Button size="sm" variant="outline" className="gap-1" onClick={() => quickExport(positions, "MLC Manning Report")}>
           <Download className="h-3 w-3" /> Exportar
         </Button>
       </div>

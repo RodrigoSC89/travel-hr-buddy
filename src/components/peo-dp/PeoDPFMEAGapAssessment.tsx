@@ -4,6 +4,7 @@
  * Evaluation: A (omitted/errors), B (incomplete), C (satisfactory), D (N/A)
  */
 import React, { useState, useMemo } from "react";
+import { quickExport } from "@/lib/export-utils";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -190,7 +191,7 @@ export function PeoDPFMEAGapAssessment() {
             Avaliação conforme IMCA M 166 / M 103 / M 109 • PEO-DP 2026
           </p>
         </div>
-        <Button size="sm" variant="outline" className="gap-1 h-9" onClick={() => toast.success("GAP N-1 exportado")}>
+        <Button size="sm" variant="outline" className="gap-1 h-9" onClick={() => quickExport(categories, "PEO-DP GAP N1")}>
           <Download className="h-3 w-3" /> Exportar
         </Button>
       </div>

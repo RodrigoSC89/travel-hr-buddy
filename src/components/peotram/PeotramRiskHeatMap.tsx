@@ -4,6 +4,7 @@
  * Identifies highest-risk areas for audit preparation priority
  */
 import React, { useState, useMemo } from "react";
+import { quickExport } from "@/lib/export-utils";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -97,7 +98,7 @@ export function PeotramRiskHeatMap() {
             Matriz Probabilidade × Severidade — 13 Elementos ANP/Petrobras
           </p>
         </div>
-        <Button size="sm" variant="outline" className="gap-1" onClick={() => toast.success("Risk heat map exportado")}>
+        <Button size="sm" variant="outline" className="gap-1" onClick={() => quickExport(RISKS, "PEOTRAM Risk HeatMap")}>
           <Download className="h-3 w-3" /> Exportar
         </Button>
       </div>

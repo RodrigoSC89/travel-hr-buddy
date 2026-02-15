@@ -3,6 +3,7 @@
  * Conforme Anexo D-4 e Anexo E-4 do PEO-DP 2026
  */
 import React, { useState } from "react";
+import { quickExport } from "@/lib/export-utils";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -81,7 +82,7 @@ export function PeoDPCalculatorPCLVC() {
             </SelectContent>
           </Select>
           <Button size="sm" className="gap-1 h-9" onClick={addEntry}><Plus className="h-3 w-3" /> Embarcação</Button>
-          <Button size="sm" variant="outline" className="gap-1 h-9" onClick={() => toast.success("PCLVC exportado")}><Download className="h-3 w-3" /> PDF</Button>
+          <Button size="sm" variant="outline" className="gap-1 h-9" onClick={() => quickExport(entries, "PEO-DP PCLVC", "pdf")}><Download className="h-3 w-3" /> PDF</Button>
         </div>
       </div>
 

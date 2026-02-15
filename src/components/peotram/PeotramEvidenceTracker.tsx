@@ -4,6 +4,7 @@
  * Helps close audit preparation gaps fast
  */
 import React, { useState, useMemo } from "react";
+import { quickExport } from "@/lib/export-utils";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -122,7 +123,7 @@ export function PeotramEvidenceTracker() {
             {stats.complete}/{stats.total} evidências completas • {stats.criticalGaps} gaps críticos
           </p>
         </div>
-        <Button size="sm" variant="outline" className="gap-1" onClick={() => toast.success("Relatório de evidências exportado")}>
+        <Button size="sm" variant="outline" className="gap-1" onClick={() => quickExport(ELEMENTS, "PEOTRAM Evidence Tracker")}>
           <Download className="h-3 w-3" /> Exportar
         </Button>
       </div>

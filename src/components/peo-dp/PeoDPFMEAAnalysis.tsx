@@ -5,6 +5,7 @@
  * NPR = Detecção × Frequência × Severidade
  */
 import React, { useState } from "react";
+import { quickExport } from "@/lib/export-utils";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -214,7 +215,7 @@ export function PeoDPFMEAAnalysis() {
             </SelectContent>
           </Select>
           <Button size="sm" onClick={() => { setShowAddForm(true); setEditingId(null); setFormData(EMPTY_FORM); }} className="gap-1 h-9"><Plus className="h-3 w-3" /> Adicionar</Button>
-          <Button size="sm" variant="outline" onClick={() => toast.success("FMECA exportado para PDF")} className="gap-1 h-9"><Download className="h-3 w-3" /> PDF</Button>
+          <Button size="sm" variant="outline" onClick={() => quickExport(items || [], "PEO-DP FMECA", "pdf")} className="gap-1 h-9"><Download className="h-3 w-3" /> PDF</Button>
         </div>
       </div>
 

@@ -3,6 +3,7 @@
  * Onboard complaint tracking with resolution workflow — Real Supabase CRUD
  */
 import React, { useState } from "react";
+import { quickExport } from "@/lib/export-utils";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -133,7 +134,7 @@ export function MLCComplaintProcedures() {
           <p className="text-sm text-muted-foreground">MLC Reg. 5.1.5 • Dados reais Supabase</p>
         </div>
         <div className="flex gap-2">
-          <Button size="sm" variant="outline" className="gap-1 h-9" onClick={() => toast.success("Complaint log exportado")}>
+          <Button size="sm" variant="outline" className="gap-1 h-9" onClick={() => quickExport(complaints, "MLC Complaints")}>
             <Download className="h-3 w-3" /> Exportar
           </Button>
           <Button size="sm" className="gap-1 h-9" onClick={() => setShowNewForm(!showNewForm)}>
