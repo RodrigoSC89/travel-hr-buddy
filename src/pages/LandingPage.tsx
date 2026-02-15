@@ -22,9 +22,70 @@ import {
 } from 'lucide-react';
 
 const PRICING_TIERS = [
-  { id: 'starter', name: 'Starter', price: 297, priceMonthly: 297, isFree: false, isEnterprise: false, recommended: false, description: 'Para pequenas frotas', employeeLimit: 30, features: ['Até 3 embarcações', 'Até 30 colaboradores', 'Dashboard básico', 'Suporte por email', '7 dias grátis para testar'] },
-  { id: 'pro', name: 'Professional', price: 697, priceMonthly: 697, isFree: false, isEnterprise: false, recommended: true, description: 'Para operações em crescimento', employeeLimit: 150, features: ['Até 25 embarcações', 'Até 150 colaboradores', 'IA Completa', 'People Analytics', 'API Access', 'Suporte prioritário', 'Compliance MLC', 'Relatórios avançados', '7 dias grátis para testar'] },
-  { id: 'enterprise', name: 'Enterprise', price: 0, priceMonthly: 0, isFree: false, isEnterprise: true, recommended: false, description: 'Para grandes frotas', employeeLimit: 0, features: ['Embarcações ilimitadas', 'Colaboradores ilimitados', 'IA Completa', 'SLA Dedicado', 'API completa', 'Suporte 24/7', 'White-label', 'On-premise disponível', '7 dias grátis para testar'] },
+  {
+    id: 'starter',
+    name: 'Starter',
+    price: 497,
+    priceMonthly: 497,
+    isEnterprise: false,
+    recommended: false,
+    description: 'Para pequenas frotas e operações costeiras',
+    limits: { vessels: 5, crew: 50 },
+    modules: [
+      'Gestão de Tripulação',
+      'Controle de Ponto (PWA)',
+      'Portal do Colaborador',
+      'Dashboard Operacional',
+      'Document Hub (básico)',
+      'Alertas de Vencimento',
+    ],
+    extras: ['Suporte por email', 'Atualizações incluídas'],
+  },
+  {
+    id: 'pro',
+    name: 'Professional',
+    price: 1297,
+    priceMonthly: 1297,
+    isEnterprise: false,
+    recommended: true,
+    description: 'Para frotas médias com necessidades de compliance',
+    limits: { vessels: 25, crew: 300 },
+    modules: [
+      'Tudo do Starter +',
+      'Folha de Pagamento Marítima',
+      'Compliance MLC 2006 & STCW',
+      'IA Preditiva (Turnover & Riscos)',
+      'People Analytics',
+      'Academy (Treinamento & Certificações)',
+      'Relatórios Avançados & BI',
+      'OCR de Documentos com IA',
+      'API REST completa',
+      'Escalas & Rotação Inteligente',
+    ],
+    extras: ['Suporte prioritário', 'Onboarding dedicado', 'SLA 99.5%'],
+  },
+  {
+    id: 'enterprise',
+    name: 'Enterprise',
+    price: 0,
+    priceMonthly: 0,
+    isEnterprise: true,
+    recommended: false,
+    description: 'Para grandes armadores e operadores offshore',
+    limits: { vessels: 0, crew: 0 },
+    modules: [
+      'Tudo do Professional +',
+      'Embarcações & Tripulantes ilimitados',
+      'Multi-tenant (várias empresas)',
+      'SSO / SAML / LDAP',
+      'Auditoria Blockchain (imutável)',
+      'IA Avançada com RAG personalizado',
+      'White-label & Personalização total',
+      'Integrações ERP (SAP, Oracle, TOTVS)',
+      'On-premise / Cloud dedicado',
+    ],
+    extras: ['Suporte 24/7', 'SLA 99.99%', 'Gerente de conta dedicado', 'Treinamento presencial'],
+  },
 ];
 const formatPrice = (price: number) => `R$ ${price}`;
 
@@ -213,40 +274,48 @@ const LandingPage = () => {
                       {tier.recommended && (
                         <Badge className="absolute -top-3 left-1/2 -translate-x-1/2 bg-primary shadow-lg">Mais Popular</Badge>
                       )}
-                      <CardHeader className="text-center pb-2">
-                        <div className="mx-auto mb-4 p-3 rounded-full bg-primary/10">
-                          <Icon className="h-8 w-8 text-primary" />
-                        </div>
-                        <CardTitle className="text-2xl">{tier.name}</CardTitle>
-                        <CardDescription className="min-h-[40px]">{tier.description}</CardDescription>
-                      </CardHeader>
-                      <CardContent className="text-center flex-1">
-                        <div className="mb-6">
-                          {tier.isEnterprise ? (
-                            <span className="text-3xl font-bold">Sob consulta</span>
-                          ) : (
-                            <div>
-                              <span className="text-4xl font-bold">{formatPrice(tier.priceMonthly)}</span>
-                              {!tier.isFree && <span className="text-muted-foreground">/mês</span>}
-                            </div>
-                          )}
-                          <p className="text-sm text-muted-foreground mt-2">
-                            {tier.employeeLimit ? `Até ${tier.employeeLimit} colaboradores` : 'Colaboradores ilimitados'}
-                          </p>
-                        </div>
-                        <Separator className="mb-6" />
-                        <ul className="space-y-3 text-left">
-                          {tier.features.slice(0, 7).map((feature, idx) => (
-                            <li key={`feat-${idx}-${feature.slice(0, 15)}`} className="flex items-start gap-2">
-                              <Check className="h-5 w-5 text-primary shrink-0 mt-0.5" />
-                              <span className="text-sm">{feature}</span>
-                            </li>
-                          ))}
-                          {tier.features.length > 7 && (
-                            <li className="text-sm text-muted-foreground text-center">+ {tier.features.length - 7} funcionalidades</li>
-                          )}
-                        </ul>
-                      </CardContent>
+                       <CardHeader className="text-center pb-2">
+                         <div className="mx-auto mb-4 p-3 rounded-full bg-primary/10">
+                           <Icon className="h-8 w-8 text-primary" />
+                         </div>
+                         <CardTitle className="text-2xl">{tier.name}</CardTitle>
+                         <CardDescription className="min-h-[40px]">{tier.description}</CardDescription>
+                       </CardHeader>
+                       <CardContent className="text-center flex-1">
+                         <div className="mb-4">
+                           {tier.isEnterprise ? (
+                             <span className="text-3xl font-bold">Sob consulta</span>
+                           ) : (
+                             <div>
+                               <span className="text-4xl font-bold">{formatPrice(tier.priceMonthly)}</span>
+                               <span className="text-muted-foreground">/mês</span>
+                             </div>
+                           )}
+                           <p className="text-sm text-muted-foreground mt-2">
+                             {tier.limits.vessels ? `Até ${tier.limits.vessels} embarcações • ${tier.limits.crew} tripulantes` : 'Ilimitado'}
+                           </p>
+                           <Badge variant="secondary" className="mt-3 text-xs">7 dias grátis para testar</Badge>
+                         </div>
+                         <Separator className="mb-4" />
+                         <p className="text-xs font-semibold text-primary mb-3 uppercase tracking-wide">Módulos incluídos</p>
+                         <ul className="space-y-2 text-left mb-4">
+                           {tier.modules.map((mod: string, idx: number) => (
+                             <li key={`mod-${idx}`} className="flex items-start gap-2">
+                               <Check className="h-4 w-4 text-primary shrink-0 mt-0.5" />
+                               <span className="text-sm">{mod}</span>
+                             </li>
+                           ))}
+                         </ul>
+                         <Separator className="mb-3" />
+                         <ul className="space-y-1.5 text-left">
+                           {tier.extras.map((extra: string, idx: number) => (
+                             <li key={`ext-${idx}`} className="flex items-start gap-2">
+                               <Star className="h-3.5 w-3.5 text-warning shrink-0 mt-0.5" />
+                               <span className="text-xs text-muted-foreground">{extra}</span>
+                             </li>
+                           ))}
+                         </ul>
+                       </CardContent>
                       <CardFooter className="pt-0">
                         <Button
                           className={`w-full ${tier.recommended ? 'shadow-lg shadow-primary/20' : ''}`}
