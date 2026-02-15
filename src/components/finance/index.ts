@@ -1,8 +1,8 @@
 /**
  * Finance Components Index
- * Exports for financial management components
  */
 
 export { FinanceCommandCenter } from "./FinanceCommandCenter";
 export { default } from "./FinanceCommandCenter";
 export { VoyagePnLManager } from "./VoyagePnLManager";
+export { CrewPayrollManager } from "./CrewPayrollManager";

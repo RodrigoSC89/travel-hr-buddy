@@ -1,64 +1,32 @@
 /**
  * ISPS Module - Ship Security Plan, Assessments, Drills, Cybersecurity
+ * Full CRUD with Supabase persistence
  */
 
 import React, { useState } from "react";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { supabase } from "@/integrations/supabase/client";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Progress } from "@/components/ui/progress";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Textarea } from "@/components/ui/textarea";
 import {
-  Shield,
-  Lock,
-  AlertTriangle,
-  CheckCircle,
-  FileText,
-  Users,
-  Clock,
-  Calendar,
-  Ship,
-  Wifi,
-  Server,
-  Eye,
-  Target,
-  Zap,
-  RefreshCw,
-  Download,
-  Plus,
-  Settings
+  Shield, Lock, AlertTriangle, CheckCircle, FileText, Users, Clock,
+  Calendar, Ship, Wifi, Server, Eye, Target, Zap, RefreshCw, Download,
+  Plus, Settings
 } from "lucide-react";
 import { toast } from "sonner";
 import { PieChart, Pie, Cell, ResponsiveContainer, Legend, Tooltip } from "recharts";
+import { format } from "date-fns";
 
-interface SecurityAssessment {
-  id: string;
-  area: string;
-  status: "compliant" | "minor" | "major" | "critical";
-  lastAssessment: Date;
-  nextAssessment: Date;
-  findings: number;
-  score: number;
-}
-
-interface SecurityDrill {
-  id: string;
-  type: string;
-  date: Date;
-  participants: number;
-  result: "satisfactory" | "needs_improvement" | "failed";
-  notes: string;
-}
-
-interface CyberThreat {
-  id: string;
-  type: string;
-  severity: "low" | "medium" | "high" | "critical";
-  status: "detected" | "investigating" | "mitigated" | "resolved";
-  timestamp: Date;
-  source: string;
-}
+const COLORS = ["#22c55e", "#eab308", "#f97316", "#ef4444"];
 
 const SECURITY_LEVELS = [
   { level: 1, name: "Normal", description: "Operações normais, medidas mínimas de segurança", color: "bg-success" },
@@ -66,72 +34,163 @@ const SECURITY_LEVELS = [
   { level: 3, name: "Excepcional", description: "Medidas de segurança intensificadas por ameaça provável", color: "bg-destructive" }
 ];
 
-const COLORS = ["#22c55e", "#eab308", "#f97316", "#ef4444"];
+const ASSESSMENT_AREAS = [
+  "Access Control", "Cargo Handling", "Ship's Stores", "Unaccompanied Baggage",
+  "Ship Security Alert System", "Cybersecurity", "Communications", "Monitoring Equipment"
+];
 
 export function ISPSModule() {
-  const [currentSecurityLevel, setCurrentSecurityLevel] = useState(1);
+  const queryClient = useQueryClient();
   const [activeTab, setActiveTab] = useState("overview");
+  const [addAssessmentDialog, setAddAssessmentDialog] = useState(false);
+  const [addThreatDialog, setAddThreatDialog] = useState(false);
+  const [changeLevelDialog, setChangeLevelDialog] = useState(false);
 
-  const assessments: SecurityAssessment[] = [
-    { id: "a1", area: "Access Control", status: "compliant", lastAssessment: new Date(Date.now() - 30 * 24 * 60 * 60 * 1000), nextAssessment: new Date(Date.now() + 60 * 24 * 60 * 60 * 1000), findings: 0, score: 98 },
-    { id: "a2", area: "Cargo Handling", status: "minor", lastAssessment: new Date(Date.now() - 45 * 24 * 60 * 60 * 1000), nextAssessment: new Date(Date.now() + 45 * 24 * 60 * 60 * 1000), findings: 2, score: 85 },
-    { id: "a3", area: "Ship's Stores", status: "compliant", lastAssessment: new Date(Date.now() - 20 * 24 * 60 * 60 * 1000), nextAssessment: new Date(Date.now() + 70 * 24 * 60 * 60 * 1000), findings: 0, score: 92 },
-    { id: "a4", area: "Unaccompanied Baggage", status: "compliant", lastAssessment: new Date(Date.now() - 60 * 24 * 60 * 60 * 1000), nextAssessment: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000), findings: 1, score: 88 },
-    { id: "a5", area: "Ship Security Alert System", status: "compliant", lastAssessment: new Date(Date.now() - 15 * 24 * 60 * 60 * 1000), nextAssessment: new Date(Date.now() + 75 * 24 * 60 * 60 * 1000), findings: 0, score: 100 },
-    { id: "a6", area: "Cybersecurity", status: "major", lastAssessment: new Date(Date.now() - 10 * 24 * 60 * 60 * 1000), nextAssessment: new Date(Date.now() + 20 * 24 * 60 * 60 * 1000), findings: 4, score: 72 }
-  ];
+  // Fetch assessments from Supabase
+  const { data: assessments = [], isLoading: assessmentsLoading } = useQuery({
+    queryKey: ["isps-assessments"],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("isps_assessments")
+        .select("*")
+        .order("created_at", { ascending: false });
+      if (error) throw error;
+      return data;
+    },
+  });
 
-  const drills: SecurityDrill[] = [
-    { id: "d1", type: "Ship Security Alert", date: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000), participants: 24, result: "satisfactory", notes: "Tempo de resposta dentro do esperado" },
-    { id: "d2", type: "Bomb Threat", date: new Date(Date.now() - 30 * 24 * 60 * 60 * 1000), participants: 28, result: "satisfactory", notes: "Evacuação realizada em 12 minutos" },
-    { id: "d3", type: "Unauthorized Access", date: new Date(Date.now() - 45 * 24 * 60 * 60 * 1000), participants: 18, result: "needs_improvement", notes: "Comunicação entre equipes precisa melhorar" },
-    { id: "d4", type: "Cyber Attack Response", date: new Date(Date.now() - 60 * 24 * 60 * 60 * 1000), participants: 12, result: "satisfactory", notes: "Sistemas isolados em 5 minutos" }
-  ];
+  // Fetch security levels
+  const { data: securityLevels = [] } = useQuery({
+    queryKey: ["isps-security-levels"],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("isps_security_levels")
+        .select("*")
+        .order("created_at", { ascending: false })
+        .limit(10);
+      if (error) throw error;
+      return data;
+    },
+  });
 
-  const cyberThreats: CyberThreat[] = [
-    { id: "ct1", type: "Phishing Attempt", severity: "medium", status: "resolved", timestamp: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000), source: "Email" },
-    { id: "ct2", type: "Port Scan", severity: "low", status: "mitigated", timestamp: new Date(Date.now() - 5 * 24 * 60 * 60 * 1000), source: "External IP" },
-    { id: "ct3", type: "Malware Detection", severity: "high", status: "resolved", timestamp: new Date(Date.now() - 10 * 24 * 60 * 60 * 1000), source: "USB Device" },
-    { id: "ct4", type: "Unauthorized Login", severity: "medium", status: "investigating", timestamp: new Date(Date.now() - 1 * 24 * 60 * 60 * 1000), source: "VPN" }
-  ];
+  // Fetch cyber threats
+  const { data: cyberThreats = [], isLoading: threatsLoading } = useQuery({
+    queryKey: ["isps-cyber-threats"],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("isps_cyber_threats")
+        .select("*")
+        .order("detected_at", { ascending: false });
+      if (error) throw error;
+      return data;
+    },
+  });
 
+  const currentSecurityLevel = securityLevels[0]?.security_level || 1;
+
+  // Mutations
+  const addAssessment = useMutation({
+    mutationFn: async (data: { area: string; status: string; score: number; findings: number; assessor_name: string; notes: string }) => {
+      const { error } = await supabase.from("isps_assessments").insert({
+        area: data.area,
+        status: data.status,
+        score: data.score,
+        findings: data.findings,
+        assessor_name: data.assessor_name,
+        notes: data.notes,
+        last_assessment_date: new Date().toISOString(),
+        next_assessment_date: new Date(Date.now() + 90 * 24 * 60 * 60 * 1000).toISOString(),
+      });
+      if (error) throw error;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["isps-assessments"] });
+      toast.success("Avaliação registrada com sucesso");
+      setAddAssessmentDialog(false);
+    },
+  });
+
+  const changeSecurityLevel = useMutation({
+    mutationFn: async (data: { security_level: number; reason: string; ordered_by: string }) => {
+      const { error } = await supabase.from("isps_security_levels").insert(data);
+      if (error) throw error;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["isps-security-levels"] });
+      toast.success("Nível de segurança alterado");
+      setChangeLevelDialog(false);
+    },
+  });
+
+  const addThreat = useMutation({
+    mutationFn: async (data: { threat_type: string; severity: string; source: string; description: string }) => {
+      const { error } = await supabase.from("isps_cyber_threats").insert({ ...data, status: "detected" });
+      if (error) throw error;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["isps-cyber-threats"] });
+      toast.success("Ameaça registrada");
+      setAddThreatDialog(false);
+    },
+  });
+
+  const resolveThreat = useMutation({
+    mutationFn: async (id: string) => {
+      const { error } = await supabase.from("isps_cyber_threats").update({ status: "resolved", resolved_at: new Date().toISOString() }).eq("id", id);
+      if (error) throw error;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["isps-cyber-threats"] });
+      toast.success("Ameaça resolvida");
+    },
+  });
+
+  // Computed
+  const overallScore = assessments.length ? Math.round(assessments.reduce((s, a) => s + Number(a.score || 0), 0) / assessments.length) : 0;
   const complianceData = [
     { name: "Conforme", value: assessments.filter(a => a.status === "compliant").length },
     { name: "Menor", value: assessments.filter(a => a.status === "minor").length },
     { name: "Maior", value: assessments.filter(a => a.status === "major").length },
-    { name: "Crítico", value: assessments.filter(a => a.status === "critical").length }
+    { name: "Crítico", value: assessments.filter(a => a.status === "critical").length },
   ].filter(d => d.value > 0);
 
-  const getStatusBadge = (status: string) => {
-    switch (status) {
-      case "compliant": return <Badge className="bg-success/20 text-success">Conforme</Badge>;
-      case "minor": return <Badge className="bg-warning/20 text-warning">Menor</Badge>;
-      case "major": return <Badge className="bg-warning/20 text-warning">Maior</Badge>;
-      case "critical": return <Badge variant="destructive">Crítico</Badge>;
-      default: return <Badge variant="secondary">{status}</Badge>;
-    }
-  };
+  const activeThreatCount = cyberThreats.filter(t => t.status !== "resolved").length;
 
-  const getDrillResultBadge = (result: string) => {
-    switch (result) {
-      case "satisfactory": return <Badge className="bg-success/20 text-success">Satisfatório</Badge>;
-      case "needs_improvement": return <Badge className="bg-warning/20 text-warning">Precisa Melhorar</Badge>;
-      case "failed": return <Badge variant="destructive">Reprovado</Badge>;
-      default: return <Badge variant="secondary">{result}</Badge>;
-    }
+  const getStatusBadge = (status: string) => {
+    const map: Record<string, React.ReactNode> = {
+      compliant: <Badge className="bg-success/20 text-success">Conforme</Badge>,
+      minor: <Badge className="bg-warning/20 text-warning">Menor</Badge>,
+      major: <Badge className="bg-orange-500/20 text-orange-500">Maior</Badge>,
+      critical: <Badge variant="destructive">Crítico</Badge>,
+      pending: <Badge variant="secondary">Pendente</Badge>,
+    };
+    return map[status] || <Badge variant="secondary">{status}</Badge>;
   };
 
   const getSeverityBadge = (severity: string) => {
-    switch (severity) {
-      case "critical": return <Badge variant="destructive">Crítico</Badge>;
-      case "high": return <Badge className="bg-warning/20 text-warning">Alto</Badge>;
-      case "medium": return <Badge className="bg-warning/20 text-warning">Médio</Badge>;
-      case "low": return <Badge className="bg-success/20 text-success">Baixo</Badge>;
-      default: return <Badge variant="secondary">{severity}</Badge>;
-    }
+    const map: Record<string, React.ReactNode> = {
+      critical: <Badge variant="destructive">Crítico</Badge>,
+      high: <Badge className="bg-orange-500/20 text-orange-500">Alto</Badge>,
+      medium: <Badge className="bg-warning/20 text-warning">Médio</Badge>,
+      low: <Badge className="bg-success/20 text-success">Baixo</Badge>,
+    };
+    return map[severity] || <Badge variant="secondary">{severity}</Badge>;
   };
 
-  const overallScore = Math.round(assessments.reduce((sum, a) => sum + a.score, 0) / assessments.length);
+  const getThreatStatusBadge = (status: string) => {
+    const map: Record<string, React.ReactNode> = {
+      detected: <Badge variant="destructive">Detectado</Badge>,
+      investigating: <Badge className="bg-warning/20 text-warning">Investigando</Badge>,
+      mitigated: <Badge className="bg-primary/20 text-primary">Mitigado</Badge>,
+      resolved: <Badge className="bg-success/20 text-success">Resolvido</Badge>,
+    };
+    return map[status] || <Badge variant="secondary">{status}</Badge>;
+  };
+
+  // Form states
+  const [newAssessment, setNewAssessment] = useState({ area: ASSESSMENT_AREAS[0], status: "compliant", score: "90", findings: "0", assessor_name: "", notes: "" });
+  const [newLevel, setNewLevel] = useState({ security_level: "1", reason: "", ordered_by: "" });
+  const [newThreat, setNewThreat] = useState({ threat_type: "Phishing Attempt", severity: "medium", source: "", description: "" });
 
   return (
     <div className="space-y-6">
@@ -144,203 +203,110 @@ export function ISPSModule() {
           <div>
             <h2 className="text-xl font-bold flex items-center gap-2">
               ISPS Code Compliance
-              <Badge className="bg-gradient-to-r from-red-500 to-orange-500">
+              <Badge className="bg-gradient-to-r from-red-500 to-orange-500 text-white">
                 Security Level {currentSecurityLevel}
               </Badge>
             </h2>
-            <p className="text-sm text-muted-foreground">
-              Ship Security Plan • Assessments • Drills • Cybersecurity
-            </p>
+            <p className="text-sm text-muted-foreground">Ship Security Plan & Cybersecurity Management</p>
           </div>
         </div>
         <div className="flex gap-2">
-          <Button variant="outline" size="sm" onClick={async () => {
-            try {
-              const { jsPDF } = await import('jspdf');
-              const doc = new jsPDF();
-              doc.setFontSize(18);
-              doc.text('Ship Security Plan (SSP)', 20, 30);
-              doc.setFontSize(12);
-              doc.text(`Security Level: ${currentSecurityLevel}`, 20, 50);
-              doc.text(`Generated: ${new Date().toLocaleDateString('pt-BR')}`, 20, 60);
-              doc.text('ISPS Code Compliance Report', 20, 80);
-              doc.save('SSP-Report.pdf');
-              toast.success('SSP exportado com sucesso');
-            } catch {
-              toast.error('Erro ao gerar PDF do SSP');
-            }
-          }}>
-            <Download className="h-4 w-4 mr-2" />
-            Export SSP
+          <Button variant="outline" size="sm" onClick={() => setChangeLevelDialog(true)}>
+            <Settings className="h-4 w-4 mr-1" /> Alterar Nível
           </Button>
-          <Button onClick={() => {
-            window.location.assign('/compliance?tab=audits');
-            toast.success("Redirecionando para o módulo de Compliance Hub — Auditorias");
-          }} variant="outline">
-            <Plus className="h-4 w-4 mr-2" />
-            New Assessment
+          <Button size="sm" onClick={() => queryClient.invalidateQueries({ queryKey: ["isps-assessments"] })}>
+            <RefreshCw className="h-4 w-4 mr-1" /> Atualizar
           </Button>
         </div>
       </div>
 
-      {/* Security Level Banner */}
-      <Card className={`${SECURITY_LEVELS[currentSecurityLevel - 1].color}/10 border-${SECURITY_LEVELS[currentSecurityLevel - 1].color.replace("bg-", "")}/30`}>
-        <CardContent className="py-4">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-4">
-              <div className={`w-16 h-16 rounded-full ${SECURITY_LEVELS[currentSecurityLevel - 1].color} flex items-center justify-center`}>
-                <span className="text-white font-bold text-2xl">{currentSecurityLevel}</span>
-              </div>
-              <div>
-                <h3 className="font-bold text-lg">Security Level {currentSecurityLevel} - {SECURITY_LEVELS[currentSecurityLevel - 1].name}</h3>
-                <p className="text-sm text-muted-foreground">{SECURITY_LEVELS[currentSecurityLevel - 1].description}</p>
-              </div>
-            </div>
-            <div className="flex gap-2">
-              {[1, 2, 3].map((level) => (
-                <Button
-                  key={level}
-                  variant={currentSecurityLevel === level ? "default" : "outline"}
-                  size="sm"
-                  onClick={() => {
-                    setCurrentSecurityLevel(level);
-                    toast.success(`Nível de segurança alterado para ${level}`);
-                  }}
-                >
-                  Level {level}
-                </Button>
-              ))}
-            </div>
-          </div>
-        </CardContent>
-      </Card>
-
-      {/* KPI Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-        <Card>
-          <CardContent className="pt-4">
-            <div className="flex items-center gap-2">
-              <Target className="h-5 w-5 text-success" />
-              <div>
-                <p className="text-2xl font-bold">{overallScore}%</p>
-                <p className="text-xs text-muted-foreground">Overall Score</p>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardContent className="pt-4">
-            <div className="flex items-center gap-2">
-              <CheckCircle className="h-5 w-5 text-info" />
-              <div>
-                <p className="text-2xl font-bold">{assessments.filter(a => a.status === "compliant").length}/{assessments.length}</p>
-                <p className="text-xs text-muted-foreground">Áreas Conformes</p>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardContent className="pt-4">
-            <div className="flex items-center gap-2">
-              <Calendar className="h-5 w-5 text-warning" />
-              <div>
-                <p className="text-2xl font-bold">{drills.length}</p>
-                <p className="text-xs text-muted-foreground">Drills (90 dias)</p>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardContent className="pt-4">
-            <div className="flex items-center gap-2">
-              <AlertTriangle className="h-5 w-5 text-destructive" />
-              <div>
-                <p className="text-2xl font-bold">{cyberThreats.filter(t => t.status !== "resolved").length}</p>
-                <p className="text-xs text-muted-foreground">Ameaças Ativas</p>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
+      {/* KPIs */}
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+        <Card><CardContent className="p-4 text-center">
+          <Shield className="h-8 w-8 mx-auto mb-2 text-primary" />
+          <div className="text-2xl font-bold">{overallScore}%</div>
+          <div className="text-xs text-muted-foreground">Score Geral</div>
+        </CardContent></Card>
+        <Card><CardContent className="p-4 text-center">
+          <CheckCircle className="h-8 w-8 mx-auto mb-2 text-success" />
+          <div className="text-2xl font-bold">{assessments.filter(a => a.status === "compliant").length}</div>
+          <div className="text-xs text-muted-foreground">Áreas Conformes</div>
+        </CardContent></Card>
+        <Card><CardContent className="p-4 text-center">
+          <AlertTriangle className="h-8 w-8 mx-auto mb-2 text-warning" />
+          <div className="text-2xl font-bold">{assessments.filter(a => a.status !== "compliant").length}</div>
+          <div className="text-xs text-muted-foreground">Não-Conformidades</div>
+        </CardContent></Card>
+        <Card><CardContent className="p-4 text-center">
+          <Wifi className="h-8 w-8 mx-auto mb-2 text-destructive" />
+          <div className="text-2xl font-bold">{activeThreatCount}</div>
+          <div className="text-xs text-muted-foreground">Ameaças Ativas</div>
+        </CardContent></Card>
       </div>
 
-      {/* Main Tabs */}
+      {/* Security Level Status */}
+      <div className="grid grid-cols-3 gap-3">
+        {SECURITY_LEVELS.map(sl => (
+          <Card key={sl.level} className={currentSecurityLevel === sl.level ? "ring-2 ring-primary" : "opacity-50"}>
+            <CardContent className="p-4">
+              <div className="flex items-center gap-2 mb-1">
+                <div className={`w-3 h-3 rounded-full ${sl.color}`} />
+                <span className="font-bold">Nível {sl.level} - {sl.name}</span>
+              </div>
+              <p className="text-xs text-muted-foreground">{sl.description}</p>
+            </CardContent>
+          </Card>
+        ))}
+      </div>
+
       <Tabs value={activeTab} onValueChange={setActiveTab}>
-        <TabsList>
-          <TabsTrigger value="overview">
-            <Shield className="h-4 w-4 mr-2" />
-            Visão Geral
-          </TabsTrigger>
-          <TabsTrigger value="ssp">
-            <FileText className="h-4 w-4 mr-2" />
-            SSP
-          </TabsTrigger>
-          <TabsTrigger value="assessments">
-            <Target className="h-4 w-4 mr-2" />
-            Assessments
-          </TabsTrigger>
-          <TabsTrigger value="drills">
-            <Users className="h-4 w-4 mr-2" />
-            Drills
-          </TabsTrigger>
-          <TabsTrigger value="cyber">
-            <Lock className="h-4 w-4 mr-2" />
-            Cybersecurity
-          </TabsTrigger>
+        <TabsList className="grid grid-cols-3">
+          <TabsTrigger value="overview">Avaliações</TabsTrigger>
+          <TabsTrigger value="cyber">Cybersecurity</TabsTrigger>
+          <TabsTrigger value="history">Histórico</TabsTrigger>
         </TabsList>
 
-        {/* Overview Tab */}
+        {/* Assessments Tab */}
         <TabsContent value="overview" className="space-y-4">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <Card>
-              <CardHeader>
-                <CardTitle className="text-sm">Status de Compliance</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="h-64">
-                  <ResponsiveContainer width="100%" height="100%">
+          <div className="flex justify-between items-center">
+            <h3 className="font-semibold">Avaliações de Segurança</h3>
+            <Button size="sm" onClick={() => setAddAssessmentDialog(true)}><Plus className="h-4 w-4 mr-1" /> Nova Avaliação</Button>
+          </div>
+
+          <div className="grid md:grid-cols-2 gap-4">
+            {/* Chart */}
+            {complianceData.length > 0 && (
+              <Card>
+                <CardHeader className="pb-2"><CardTitle className="text-sm">Distribuição de Conformidade</CardTitle></CardHeader>
+                <CardContent>
+                  <ResponsiveContainer width="100%" height={200}>
                     <PieChart>
-                      <Pie
-                        data={complianceData}
-                        cx="50%"
-                        cy="50%"
-                        innerRadius={60}
-                        outerRadius={100}
-                        paddingAngle={5}
-                        dataKey="value"
-                      >
-                        {complianceData.map((entry, index) => (
-                          <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
-                        ))}
+                      <Pie data={complianceData} cx="50%" cy="50%" outerRadius={70} dataKey="value" label={({ name, value }) => `${name}: ${value}`}>
+                        {complianceData.map((_, i) => <Cell key={i} fill={COLORS[i % COLORS.length]} />)}
                       </Pie>
-                      <Tooltip />
-                      <Legend />
+                      <Tooltip /><Legend />
                     </PieChart>
                   </ResponsiveContainer>
-                </div>
-              </CardContent>
-            </Card>
+                </CardContent>
+              </Card>
+            )}
 
+            {/* List */}
             <Card>
-              <CardHeader>
-                <CardTitle className="text-sm">Próximas Atividades</CardTitle>
-              </CardHeader>
+              <CardHeader className="pb-2"><CardTitle className="text-sm">Áreas Avaliadas ({assessments.length})</CardTitle></CardHeader>
               <CardContent>
-                <ScrollArea className="h-64">
-                  <div className="space-y-3">
-                    {assessments
-                      .sort((a, b) => a.nextAssessment.getTime() - b.nextAssessment.getTime())
-                      .slice(0, 5)
-                      .map((assessment) => (
-                        <div key={assessment.id} className="flex items-center justify-between p-3 border rounded-lg">
-                          <div>
-                            <p className="font-medium text-sm">{assessment.area}</p>
-                            <p className="text-xs text-muted-foreground">
-                              Próxima: {assessment.nextAssessment.toLocaleDateString("pt-BR")}
-                            </p>
-                          </div>
-                          {getStatusBadge(assessment.status)}
+                <ScrollArea className="h-[200px]">
+                  <div className="space-y-2">
+                    {assessments.map(a => (
+                      <div key={a.id} className="flex items-center justify-between p-2 rounded-lg bg-muted/50">
+                        <div>
+                          <div className="font-medium text-sm">{a.area}</div>
+                          <div className="text-xs text-muted-foreground">Score: {a.score}% | {a.findings} findings</div>
                         </div>
-                      ))}
+                        {getStatusBadge(a.status)}
+                      </div>
+                    ))}
+                    {assessments.length === 0 && <p className="text-sm text-muted-foreground text-center py-4">Nenhuma avaliação registrada</p>}
                   </div>
                 </ScrollArea>
               </CardContent>
@@ -348,198 +314,158 @@ export function ISPSModule() {
           </div>
         </TabsContent>
 
-        {/* SSP Tab */}
-        <TabsContent value="ssp" className="space-y-4">
-          <Card>
-            <CardHeader>
-              <CardTitle>Ship Security Plan (SSP)</CardTitle>
-              <CardDescription>Plano de Segurança do Navio conforme ISPS Code</CardDescription>
-            </CardHeader>
-            <CardContent>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                {[
-                  { section: "1. Organization", status: "approved", lastReview: "2024-01-15" },
-                  { section: "2. Security Measures", status: "approved", lastReview: "2024-02-20" },
-                  { section: "3. Access Control", status: "approved", lastReview: "2024-03-10" },
-                  { section: "4. Restricted Areas", status: "under_review", lastReview: "2024-11-01" },
-                  { section: "5. Cargo Handling", status: "approved", lastReview: "2024-04-15" },
-                  { section: "6. Security Equipment", status: "approved", lastReview: "2024-05-20" },
-                  { section: "7. Training & Drills", status: "approved", lastReview: "2024-06-10" },
-                  { section: "8. Records & Reports", status: "approved", lastReview: "2024-07-01" }
-                ].map((section) => (
-                  <div key={section.section} className="p-4 border rounded-lg hover:bg-muted/50">
-                    <div className="flex items-center justify-between">
-                      <div>
-                        <p className="font-medium">{section.section}</p>
-                        <p className="text-xs text-muted-foreground">Última revisão: {section.lastReview}</p>
-                      </div>
-                      <Badge className={section.status === "approved" ? "bg-success/20 text-success" : "bg-warning/20 text-warning"}>
-                        {section.status === "approved" ? "Aprovado" : "Em Revisão"}
-                      </Badge>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </CardContent>
-          </Card>
-        </TabsContent>
-
-        {/* Assessments Tab */}
-        <TabsContent value="assessments" className="space-y-4">
-          <Card>
-            <CardHeader>
-              <div className="flex items-center justify-between">
-                <CardTitle>Security Assessments</CardTitle>
-                <Button size="sm" onClick={() => {
-                  window.location.assign('/compliance?tab=audits');
-                  toast.success("Redirecionando para Compliance Hub — Nova Auditoria");
-                }}>
-                  <Plus className="h-4 w-4 mr-2" />
-                  Nova Avaliação
-                </Button>
-              </div>
-            </CardHeader>
-            <CardContent>
-              <ScrollArea className="h-[400px]">
-                <div className="space-y-3">
-                  {assessments.map((assessment) => (
-                    <div key={assessment.id} className="p-4 border rounded-lg">
-                      <div className="flex items-center justify-between">
-                        <div>
-                          <div className="flex items-center gap-2">
-                            <span className="font-medium">{assessment.area}</span>
-                            {getStatusBadge(assessment.status)}
-                          </div>
-                          <div className="flex items-center gap-4 text-sm text-muted-foreground mt-1">
-                            <span>Score: {assessment.score}%</span>
-                            <span>Findings: {assessment.findings}</span>
-                            <span>Última: {assessment.lastAssessment.toLocaleDateString("pt-BR")}</span>
-                          </div>
-                        </div>
-                        <div className="text-right">
-                          <p className="text-sm">Próxima avaliação</p>
-                          <p className="font-medium">{assessment.nextAssessment.toLocaleDateString("pt-BR")}</p>
-                        </div>
-                      </div>
-                      <Progress value={assessment.score} className="h-2 mt-3" />
-                    </div>
-                  ))}
-                </div>
-              </ScrollArea>
-            </CardContent>
-          </Card>
-        </TabsContent>
-
-        {/* Drills Tab */}
-        <TabsContent value="drills" className="space-y-4">
-          <Card>
-            <CardHeader>
-              <div className="flex items-center justify-between">
-                <CardTitle>Security Drills</CardTitle>
-                <Button size="sm" onClick={() => {
-                  window.location.assign('/emergency-plans?action=new-drill');
-                  toast.success("Redirecionando para Planos de Emergência — Agendar Drill");
-                }}>
-                  <Plus className="h-4 w-4 mr-2" />
-                  Agendar Drill
-                </Button>
-              </div>
-            </CardHeader>
-            <CardContent>
-              <ScrollArea className="h-[400px]">
-                <div className="space-y-3">
-                  {drills.map((drill) => (
-                    <div key={drill.id} className="p-4 border rounded-lg">
-                      <div className="flex items-center justify-between">
-                        <div>
-                          <div className="flex items-center gap-2">
-                            <span className="font-medium">{drill.type}</span>
-                            {getDrillResultBadge(drill.result)}
-                          </div>
-                          <div className="flex items-center gap-4 text-sm text-muted-foreground mt-1">
-                            <span>{drill.participants} participantes</span>
-                            <span>{drill.date.toLocaleDateString("pt-BR")}</span>
-                          </div>
-                          <p className="text-sm mt-2">{drill.notes}</p>
-                        </div>
-                        <Button variant="outline" size="sm" onClick={async () => {
-                          try {
-                            const { jsPDF } = await import('jspdf');
-                            const doc = new jsPDF();
-                            doc.setFontSize(16);
-                            doc.text(`Drill Report: ${drill.type}`, 20, 30);
-                            doc.setFontSize(11);
-                            doc.text(`Date: ${drill.date.toLocaleDateString('pt-BR')}`, 20, 45);
-                            doc.text(`Participants: ${drill.participants}`, 20, 55);
-                            doc.text(`Result: ${drill.result}`, 20, 65);
-                            doc.text(`Notes: ${drill.notes}`, 20, 75);
-                            doc.save(`drill-report-${drill.type.replace(/\s/g, '-').toLowerCase()}.pdf`);
-                            toast.success('Relatório exportado com sucesso');
-                          } catch { toast.error('Erro ao gerar relatório'); }
-                        }}>
-                          Ver Relatório
-                        </Button>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </ScrollArea>
-            </CardContent>
-          </Card>
-        </TabsContent>
-
         {/* Cybersecurity Tab */}
         <TabsContent value="cyber" className="space-y-4">
-          <Card>
-            <CardHeader>
-              <div className="flex items-center justify-between">
-                <CardTitle className="flex items-center gap-2">
-                  <Lock className="h-5 w-5" />
-                  Maritime Cybersecurity
-                </CardTitle>
-                <Badge className="bg-success/20 text-success">
-                  <Wifi className="h-3 w-3 mr-1" />
-                  Systems Online
-                </Badge>
-              </div>
-            </CardHeader>
-            <CardContent>
-              <ScrollArea className="h-[400px]">
-                <div className="space-y-3">
-                  {cyberThreats.map((threat) => (
-                    <div key={threat.id} className="p-4 border rounded-lg">
-                      <div className="flex items-center justify-between">
-                        <div>
-                          <div className="flex items-center gap-2">
-                            {threat.status === "resolved" ? (
-                              <CheckCircle className="h-4 w-4 text-success" />
-                            ) : threat.status === "investigating" ? (
-                              <Eye className="h-4 w-4 text-warning" />
-                            ) : (
-                              <AlertTriangle className="h-4 w-4 text-warning" />
-                            )}
-                            <span className="font-medium">{threat.type}</span>
-                            {getSeverityBadge(threat.severity)}
-                          </div>
-                          <div className="flex items-center gap-4 text-sm text-muted-foreground mt-1">
-                            <span>Source: {threat.source}</span>
-                            <span>{threat.timestamp.toLocaleString("pt-BR")}</span>
-                          </div>
-                        </div>
-                        <Badge variant={threat.status === "resolved" ? "secondary" : "outline"}>
-                          {threat.status}
-                        </Badge>
+          <div className="flex justify-between items-center">
+            <h3 className="font-semibold">Ameaças Cibernéticas</h3>
+            <Button size="sm" onClick={() => setAddThreatDialog(true)}><Plus className="h-4 w-4 mr-1" /> Registrar Ameaça</Button>
+          </div>
+          <div className="space-y-3">
+            {cyberThreats.map(t => (
+              <Card key={t.id}>
+                <CardContent className="p-4">
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-3">
+                      <Server className="h-5 w-5 text-muted-foreground" />
+                      <div>
+                        <div className="font-medium">{t.threat_type}</div>
+                        <div className="text-xs text-muted-foreground">Fonte: {t.source || "N/A"} | {t.detected_at ? format(new Date(t.detected_at), "dd/MM/yyyy HH:mm") : ""}</div>
+                        {t.description && <div className="text-xs text-muted-foreground mt-1">{t.description}</div>}
                       </div>
                     </div>
-                  ))}
-                </div>
-              </ScrollArea>
-            </CardContent>
-          </Card>
+                    <div className="flex items-center gap-2">
+                      {getSeverityBadge(t.severity)}
+                      {getThreatStatusBadge(t.status)}
+                      {t.status !== "resolved" && (
+                        <Button variant="outline" size="sm" onClick={() => resolveThreat.mutate(t.id)}>Resolver</Button>
+                      )}
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            ))}
+            {cyberThreats.length === 0 && <p className="text-sm text-muted-foreground text-center py-8">Nenhuma ameaça registrada</p>}
+          </div>
+        </TabsContent>
+
+        {/* History Tab */}
+        <TabsContent value="history" className="space-y-4">
+          <h3 className="font-semibold">Histórico de Níveis de Segurança</h3>
+          <div className="space-y-2">
+            {securityLevels.map(sl => (
+              <Card key={sl.id}>
+                <CardContent className="p-4 flex items-center justify-between">
+                  <div className="flex items-center gap-3">
+                    <div className={`w-3 h-3 rounded-full ${SECURITY_LEVELS[sl.security_level - 1]?.color || "bg-muted"}`} />
+                    <div>
+                      <div className="font-medium">Nível {sl.security_level} - {SECURITY_LEVELS[sl.security_level - 1]?.name}</div>
+                      <div className="text-xs text-muted-foreground">{sl.reason || "Sem motivo informado"}</div>
+                    </div>
+                  </div>
+                  <div className="text-xs text-muted-foreground">{format(new Date(sl.effective_from), "dd/MM/yyyy HH:mm")}</div>
+                </CardContent>
+              </Card>
+            ))}
+            {securityLevels.length === 0 && <p className="text-sm text-muted-foreground text-center py-8">Sem histórico de alterações</p>}
+          </div>
         </TabsContent>
       </Tabs>
+
+      {/* Add Assessment Dialog */}
+      <Dialog open={addAssessmentDialog} onOpenChange={setAddAssessmentDialog}>
+        <DialogContent>
+          <DialogHeader><DialogTitle>Nova Avaliação de Segurança</DialogTitle></DialogHeader>
+          <div className="space-y-4">
+            <div><Label>Área</Label>
+              <Select value={newAssessment.area} onValueChange={v => setNewAssessment(p => ({ ...p, area: v }))}>
+                <SelectTrigger><SelectValue /></SelectTrigger>
+                <SelectContent>{ASSESSMENT_AREAS.map(a => <SelectItem key={a} value={a}>{a}</SelectItem>)}</SelectContent>
+              </Select>
+            </div>
+            <div><Label>Status</Label>
+              <Select value={newAssessment.status} onValueChange={v => setNewAssessment(p => ({ ...p, status: v }))}>
+                <SelectTrigger><SelectValue /></SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="compliant">Conforme</SelectItem>
+                  <SelectItem value="minor">Não-Conformidade Menor</SelectItem>
+                  <SelectItem value="major">Não-Conformidade Maior</SelectItem>
+                  <SelectItem value="critical">Crítico</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+            <div className="grid grid-cols-2 gap-4">
+              <div><Label>Score (%)</Label><Input type="number" value={newAssessment.score} onChange={e => setNewAssessment(p => ({ ...p, score: e.target.value }))} /></div>
+              <div><Label>Findings</Label><Input type="number" value={newAssessment.findings} onChange={e => setNewAssessment(p => ({ ...p, findings: e.target.value }))} /></div>
+            </div>
+            <div><Label>Avaliador</Label><Input value={newAssessment.assessor_name} onChange={e => setNewAssessment(p => ({ ...p, assessor_name: e.target.value }))} /></div>
+            <div><Label>Notas</Label><Textarea value={newAssessment.notes} onChange={e => setNewAssessment(p => ({ ...p, notes: e.target.value }))} /></div>
+            <Button className="w-full" onClick={() => addAssessment.mutate({ ...newAssessment, score: Number(newAssessment.score), findings: Number(newAssessment.findings) })} disabled={addAssessment.isPending}>
+              {addAssessment.isPending ? "Salvando..." : "Registrar Avaliação"}
+            </Button>
+          </div>
+        </DialogContent>
+      </Dialog>
+
+      {/* Change Security Level Dialog */}
+      <Dialog open={changeLevelDialog} onOpenChange={setChangeLevelDialog}>
+        <DialogContent>
+          <DialogHeader><DialogTitle>Alterar Nível de Segurança</DialogTitle></DialogHeader>
+          <div className="space-y-4">
+            <div><Label>Nível</Label>
+              <Select value={newLevel.security_level} onValueChange={v => setNewLevel(p => ({ ...p, security_level: v }))}>
+                <SelectTrigger><SelectValue /></SelectTrigger>
+                <SelectContent>
+                  {SECURITY_LEVELS.map(sl => <SelectItem key={sl.level} value={String(sl.level)}>Nível {sl.level} - {sl.name}</SelectItem>)}
+                </SelectContent>
+              </Select>
+            </div>
+            <div><Label>Motivo</Label><Textarea value={newLevel.reason} onChange={e => setNewLevel(p => ({ ...p, reason: e.target.value }))} /></div>
+            <div><Label>Ordenado por</Label><Input value={newLevel.ordered_by} onChange={e => setNewLevel(p => ({ ...p, ordered_by: e.target.value }))} /></div>
+            <Button className="w-full" onClick={() => changeSecurityLevel.mutate({ security_level: Number(newLevel.security_level), reason: newLevel.reason, ordered_by: newLevel.ordered_by })} disabled={changeSecurityLevel.isPending}>
+              {changeSecurityLevel.isPending ? "Salvando..." : "Confirmar Alteração"}
+            </Button>
+          </div>
+        </DialogContent>
+      </Dialog>
+
+      {/* Add Threat Dialog */}
+      <Dialog open={addThreatDialog} onOpenChange={setAddThreatDialog}>
+        <DialogContent>
+          <DialogHeader><DialogTitle>Registrar Ameaça Cibernética</DialogTitle></DialogHeader>
+          <div className="space-y-4">
+            <div><Label>Tipo</Label>
+              <Select value={newThreat.threat_type} onValueChange={v => setNewThreat(p => ({ ...p, threat_type: v }))}>
+                <SelectTrigger><SelectValue /></SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="Phishing Attempt">Phishing</SelectItem>
+                  <SelectItem value="Port Scan">Port Scan</SelectItem>
+                  <SelectItem value="Malware Detection">Malware</SelectItem>
+                  <SelectItem value="Unauthorized Login">Login Não Autorizado</SelectItem>
+                  <SelectItem value="DDoS Attack">DDoS</SelectItem>
+                  <SelectItem value="Ransomware">Ransomware</SelectItem>
+                  <SelectItem value="Man-in-the-Middle">Man-in-the-Middle</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+            <div><Label>Severidade</Label>
+              <Select value={newThreat.severity} onValueChange={v => setNewThreat(p => ({ ...p, severity: v }))}>
+                <SelectTrigger><SelectValue /></SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="low">Baixo</SelectItem>
+                  <SelectItem value="medium">Médio</SelectItem>
+                  <SelectItem value="high">Alto</SelectItem>
+                  <SelectItem value="critical">Crítico</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+            <div><Label>Fonte</Label><Input value={newThreat.source} onChange={e => setNewThreat(p => ({ ...p, source: e.target.value }))} placeholder="Ex: Email, VPN, USB" /></div>
+            <div><Label>Descrição</Label><Textarea value={newThreat.description} onChange={e => setNewThreat(p => ({ ...p, description: e.target.value }))} /></div>
+            <Button className="w-full" onClick={() => addThreat.mutate(newThreat)} disabled={addThreat.isPending}>
+              {addThreat.isPending ? "Salvando..." : "Registrar Ameaça"}
+            </Button>
+          </div>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }
-
-export default ISPSModule;
