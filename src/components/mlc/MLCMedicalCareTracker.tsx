@@ -1,19 +1,19 @@
 /**
  * MLC Medical Care Tracker — Reg. 4.1 Compliance
- * Medicine chest, medical equipment, medical officer, telemedicine
- * Critical for MLC inspections — one of top 5 deficiency areas
+ * Top 5 deficiency area in MLC inspections
  */
 import React, { useState, useMemo } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
-import { Checkbox } from "@/components/ui/checkbox";
 import {
   Heart, Pill, Stethoscope, CheckCircle, AlertTriangle, Clock,
-  Download, Shield, Phone, FileText, Calendar, Users, ThermometerSun
+  Download, Shield, Phone, Users
 } from "lucide-react";
 import { toast } from "sonner";
+import { useQuery } from "@tanstack/react-query";
+import { supabase } from "@/integrations/supabase/client";
 
 type ItemStatus = "compliant" | "non_compliant" | "expiring" | "na";
 
@@ -27,7 +27,6 @@ interface MedicalItem {
   quantity: number | null;
   requiredQuantity: number | null;
   lastChecked: string;
-  responsible: string;
   notes: string;
 }
 
@@ -39,34 +38,36 @@ const STATUS_CONFIG: Record<ItemStatus, { label: string; color: string }> = {
 };
 
 const MEDICAL_ITEMS: MedicalItem[] = [
-  // Medicine Chest
-  { id: "MC-01", category: "Farmácia de Bordo", item: "Analgésicos (Paracetamol, Ibuprofeno)", regulation: "MLC A4.1, ILO/WHO Guide", status: "compliant", expiryDate: "2027-03-15", quantity: 200, requiredQuantity: 100, lastChecked: "2026-02-01", responsible: "Enfermeiro", notes: "" },
-  { id: "MC-02", category: "Farmácia de Bordo", item: "Antibióticos (Amoxicilina, Ciprofloxacina)", regulation: "MLC A4.1", status: "compliant", expiryDate: "2026-09-30", quantity: 50, requiredQuantity: 30, lastChecked: "2026-02-01", responsible: "Enfermeiro", notes: "" },
-  { id: "MC-03", category: "Farmácia de Bordo", item: "Medicamentos cardíacos de emergência", regulation: "MLC A4.1", status: "expiring", expiryDate: "2026-04-15", quantity: 10, requiredQuantity: 10, lastChecked: "2026-02-01", responsible: "Enfermeiro", notes: "Reposição necessária em 60 dias" },
-  { id: "MC-04", category: "Farmácia de Bordo", item: "Antieméticos (Dimenidrinato)", regulation: "MLC A4.1", status: "compliant", expiryDate: "2027-01-20", quantity: 80, requiredQuantity: 40, lastChecked: "2026-02-01", responsible: "Enfermeiro", notes: "" },
-  { id: "MC-05", category: "Farmácia de Bordo", item: "Epinefrina (Adrenalina) auto-injetável", regulation: "MLC A4.1", status: "compliant", expiryDate: "2026-12-01", quantity: 4, requiredQuantity: 2, lastChecked: "2026-02-01", responsible: "Enfermeiro", notes: "" },
-  { id: "MC-06", category: "Farmácia de Bordo", item: "Morfina / Opioides controlados", regulation: "MLC A4.1", status: "compliant", expiryDate: "2027-06-30", quantity: 5, requiredQuantity: 5, lastChecked: "2026-02-01", responsible: "Médico", notes: "Controle de narcóticos — livro de registro atualizado" },
-  // Medical Equipment
-  { id: "ME-01", category: "Equipamentos Médicos", item: "Desfibrilador Externo Automático (DEA)", regulation: "MLC A4.1, SOLAS", status: "compliant", expiryDate: null, quantity: 2, requiredQuantity: 1, lastChecked: "2026-01-15", responsible: "Enfermeiro", notes: "Pads verificados e válidos" },
-  { id: "ME-02", category: "Equipamentos Médicos", item: "Kit de oxigênio e ressuscitação", regulation: "MLC A4.1", status: "compliant", expiryDate: "2027-01-01", quantity: 3, requiredQuantity: 2, lastChecked: "2026-02-01", responsible: "Enfermeiro", notes: "" },
-  { id: "ME-03", category: "Equipamentos Médicos", item: "Maca rígida e imobilizadores", regulation: "MLC A4.1", status: "compliant", expiryDate: null, quantity: 2, requiredQuantity: 2, lastChecked: "2026-01-20", responsible: "Enfermeiro", notes: "" },
-  { id: "ME-04", category: "Equipamentos Médicos", item: "Kit de sutura e material cirúrgico", regulation: "MLC A4.1", status: "non_compliant", expiryDate: "2025-08-01", quantity: 1, requiredQuantity: 2, lastChecked: "2025-12-10", responsible: "Enfermeiro", notes: "Kit vencido — substituição urgente" },
-  { id: "ME-05", category: "Equipamentos Médicos", item: "Esfigmomanômetro e estetoscópio", regulation: "MLC A4.1", status: "compliant", expiryDate: null, quantity: 2, requiredQuantity: 1, lastChecked: "2026-02-01", responsible: "Enfermeiro", notes: "" },
-  { id: "ME-06", category: "Equipamentos Médicos", item: "Termômetro digital e oxímetro", regulation: "MLC A4.1", status: "compliant", expiryDate: null, quantity: 3, requiredQuantity: 2, lastChecked: "2026-02-01", responsible: "Enfermeiro", notes: "" },
-  // Personnel & Training
-  { id: "MP-01", category: "Pessoal & Treinamento", item: "Oficial médico qualificado a bordo", regulation: "MLC A4.1.4(b)", status: "compliant", expiryDate: "2027-05-20", quantity: 1, requiredQuantity: 1, lastChecked: "2026-01-01", responsible: "RH", notes: "Certificado médico marítimo válido" },
-  { id: "MP-02", category: "Pessoal & Treinamento", item: "Tripulantes com First Aid training", regulation: "MLC A4.1, STCW A-VI/4", status: "compliant", expiryDate: "2026-11-30", quantity: 8, requiredQuantity: 5, lastChecked: "2026-01-10", responsible: "RH", notes: "" },
-  { id: "MP-03", category: "Pessoal & Treinamento", item: "Medical First Aid Provider (MFAP)", regulation: "STCW A-VI/4-1", status: "expiring", expiryDate: "2026-04-01", quantity: 2, requiredQuantity: 2, lastChecked: "2026-01-10", responsible: "RH", notes: "1 certificado vencendo — agendar recertificação" },
-  // Telemedicine & Records
-  { id: "TM-01", category: "Telemedicina & Registros", item: "Acesso a serviço TMAS (Telemedical)", regulation: "MLC A4.1.4(d)", status: "compliant", expiryDate: null, quantity: null, requiredQuantity: null, lastChecked: "2026-02-01", responsible: "Comandante", notes: "Contrato TMAS ativo — contato 24h" },
-  { id: "TM-02", category: "Telemedicina & Registros", item: "Livro de registros médicos a bordo", regulation: "MLC A4.1", status: "compliant", expiryDate: null, quantity: null, requiredQuantity: null, lastChecked: "2026-02-01", responsible: "Enfermeiro", notes: "Registro digital e físico em dia" },
-  { id: "TM-03", category: "Telemedicina & Registros", item: "Medical Chest Inspection Certificate", regulation: "Flag State requirement", status: "non_compliant", expiryDate: "2025-12-31", quantity: null, requiredQuantity: null, lastChecked: "2025-12-31", responsible: "DPA", notes: "Certificado de inspeção da farmácia vencido — reagendar com Authority" },
-  { id: "TM-04", category: "Telemedicina & Registros", item: "International Medical Guide for Ships", regulation: "MLC A4.1, WHO", status: "compliant", expiryDate: null, quantity: 1, requiredQuantity: 1, lastChecked: "2026-01-01", responsible: "Enfermeiro", notes: "Edição mais recente disponível" },
+  { id: "MC-01", category: "Farmácia de Bordo", item: "Analgésicos (Paracetamol, Ibuprofeno)", regulation: "MLC A4.1, ILO/WHO Guide", status: "compliant", expiryDate: "2027-03-15", quantity: 200, requiredQuantity: 100, lastChecked: "2026-02-01", notes: "" },
+  { id: "MC-02", category: "Farmácia de Bordo", item: "Antibióticos (Amoxicilina, Ciprofloxacina)", regulation: "MLC A4.1", status: "compliant", expiryDate: "2026-09-30", quantity: 50, requiredQuantity: 30, lastChecked: "2026-02-01", notes: "" },
+  { id: "MC-03", category: "Farmácia de Bordo", item: "Medicamentos cardíacos de emergência", regulation: "MLC A4.1", status: "expiring", expiryDate: "2026-04-15", quantity: 10, requiredQuantity: 10, lastChecked: "2026-02-01", notes: "Reposição necessária em 60 dias" },
+  { id: "MC-05", category: "Farmácia de Bordo", item: "Epinefrina auto-injetável", regulation: "MLC A4.1", status: "compliant", expiryDate: "2026-12-01", quantity: 4, requiredQuantity: 2, lastChecked: "2026-02-01", notes: "" },
+  { id: "ME-01", category: "Equipamentos Médicos", item: "Desfibrilador (DEA)", regulation: "MLC A4.1, SOLAS", status: "compliant", expiryDate: null, quantity: 2, requiredQuantity: 1, lastChecked: "2026-01-15", notes: "Pads verificados" },
+  { id: "ME-02", category: "Equipamentos Médicos", item: "Kit de oxigênio e ressuscitação", regulation: "MLC A4.1", status: "compliant", expiryDate: "2027-01-01", quantity: 3, requiredQuantity: 2, lastChecked: "2026-02-01", notes: "" },
+  { id: "ME-04", category: "Equipamentos Médicos", item: "Kit de sutura e material cirúrgico", regulation: "MLC A4.1", status: "non_compliant", expiryDate: "2025-08-01", quantity: 1, requiredQuantity: 2, lastChecked: "2025-12-10", notes: "Kit vencido — substituição urgente" },
+  { id: "MP-01", category: "Pessoal & Treinamento", item: "Oficial médico qualificado a bordo", regulation: "MLC A4.1.4(b)", status: "compliant", expiryDate: "2027-05-20", quantity: 1, requiredQuantity: 1, lastChecked: "2026-01-01", notes: "" },
+  { id: "MP-03", category: "Pessoal & Treinamento", item: "Medical First Aid Provider (MFAP)", regulation: "STCW A-VI/4-1", status: "expiring", expiryDate: "2026-04-01", quantity: 2, requiredQuantity: 2, lastChecked: "2026-01-10", notes: "1 certificado vencendo" },
+  { id: "TM-01", category: "Telemedicina & Registros", item: "Serviço TMAS 24h", regulation: "MLC A4.1.4(d)", status: "compliant", expiryDate: null, quantity: null, requiredQuantity: null, lastChecked: "2026-02-01", notes: "Contrato TMAS ativo" },
+  { id: "TM-03", category: "Telemedicina & Registros", item: "Medical Chest Inspection Certificate", regulation: "Flag State", status: "non_compliant", expiryDate: "2025-12-31", quantity: null, requiredQuantity: null, lastChecked: "2025-12-31", notes: "Certificado vencido — reagendar" },
 ];
 
 export function MLCMedicalCareTracker() {
   const [items, setItems] = useState(MEDICAL_ITEMS);
   const [filterCategory, setFilterCategory] = useState("all");
+
+  // Enrich with real crew medical data
+  const { data: medicalStaff } = useQuery({
+    queryKey: ["mlc-medical-staff"],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("crew_members")
+        .select("id, first_name, last_name, rank")
+        .or("rank.ilike.%medic%,rank.ilike.%nurse%,rank.ilike.%doctor%,rank.ilike.%enfermeiro%");
+      if (error) throw error;
+      return data || [];
+    },
+    staleTime: 120000,
+  });
 
   const categories = useMemo(() => [...new Set(items.map(i => i.category))], [items]);
   const filtered = filterCategory === "all" ? items : items.filter(i => i.category === filterCategory);
@@ -94,7 +95,7 @@ export function MLCMedicalCareTracker() {
             Medical Care — MLC Reg. 4.1
           </h3>
           <p className="text-sm text-muted-foreground">
-            Farmácia de bordo, equipamentos médicos, pessoal qualificado, telemedicina
+            Farmácia, equipamentos, pessoal ({medicalStaff?.length || 0} médicos cadastrados), telemedicina
           </p>
         </div>
         <Button size="sm" variant="outline" className="gap-1" onClick={() => toast.success("Medical report exportado")}>
@@ -102,7 +103,6 @@ export function MLCMedicalCareTracker() {
         </Button>
       </div>
 
-      {/* KPIs */}
       <div className="grid grid-cols-2 md:grid-cols-5 gap-3">
         <Card className={stats.score === 100 ? "border-success/20" : "border-warning/20"}><CardContent className="pt-4 text-center">
           <p className={`text-3xl font-bold ${stats.score >= 90 ? "text-success" : stats.score >= 70 ? "text-warning" : "text-destructive"}`}>{stats.score}%</p>
@@ -126,7 +126,6 @@ export function MLCMedicalCareTracker() {
         </CardContent></Card>
       </div>
 
-      {/* NC Alert */}
       {(stats.nonCompliant > 0 || stats.expiring > 0) && (
         <Card className="border-destructive/30 bg-destructive/5">
           <CardContent className="py-3 space-y-1">
@@ -135,15 +134,13 @@ export function MLCMedicalCareTracker() {
                 <AlertTriangle className={`h-3.5 w-3.5 ${item.status === "non_compliant" ? "text-destructive" : "text-warning"}`} />
                 <Badge variant={item.status === "non_compliant" ? "destructive" : "secondary"} className="text-[10px]">{item.category}</Badge>
                 <span className="font-medium">{item.item}</span>
-                {item.expiryDate && <span className="text-xs text-muted-foreground">Validade: {item.expiryDate}</span>}
-                <span className="text-xs text-muted-foreground">• {item.notes}</span>
+                {item.notes && <span className="text-xs text-muted-foreground">• {item.notes}</span>}
               </div>
             ))}
           </CardContent>
         </Card>
       )}
 
-      {/* Category Filter */}
       <div className="flex gap-1 flex-wrap">
         <Button size="sm" variant={filterCategory === "all" ? "default" : "outline"} className="text-xs h-8" onClick={() => setFilterCategory("all")}>Todos</Button>
         {categories.map(cat => (
@@ -151,13 +148,11 @@ export function MLCMedicalCareTracker() {
         ))}
       </div>
 
-      {/* Items by Category */}
       {categories.filter(cat => filterCategory === "all" || cat === filterCategory).map(cat => {
         const catItems = filtered.filter(i => i.category === cat);
         if (catItems.length === 0) return null;
         const catCompliant = catItems.filter(i => i.status === "compliant").length;
-        const catPct = catItems.length > 0 ? Math.round((catCompliant / catItems.length) * 100) : 0;
-
+        const catPct = Math.round((catCompliant / catItems.length) * 100);
         return (
           <Card key={cat}>
             <CardHeader className="pb-2">
@@ -180,14 +175,10 @@ export function MLCMedicalCareTracker() {
                    <AlertTriangle className="h-3.5 w-3.5 text-destructive shrink-0" />}
                   <div className="flex-1 min-w-0">
                     <span className="font-medium">{item.item}</span>
-                    {item.quantity !== null && (
-                      <span className="text-xs text-muted-foreground ml-2">
-                        ({item.quantity}/{item.requiredQuantity})
-                      </span>
-                    )}
+                    {item.quantity !== null && <span className="text-xs text-muted-foreground ml-2">({item.quantity}/{item.requiredQuantity})</span>}
                     {item.expiryDate && (
                       <span className={`text-xs ml-2 ${new Date(item.expiryDate) < new Date() ? "text-destructive font-medium" : new Date(item.expiryDate) < new Date(Date.now() + 90 * 86400000) ? "text-warning" : "text-muted-foreground"}`}>
-                        Validade: {item.expiryDate}
+                        Val: {item.expiryDate}
                       </span>
                     )}
                     {item.notes && <span className="text-xs text-muted-foreground block">{item.notes}</span>}
@@ -202,29 +193,6 @@ export function MLCMedicalCareTracker() {
           </Card>
         );
       })}
-
-      {/* MLC Reference */}
-      <Card>
-        <CardHeader className="pb-2"><CardTitle className="text-sm flex items-center gap-2"><Shield className="h-4 w-4 text-primary" />Referência MLC 2006 — Reg. 4.1</CardTitle></CardHeader>
-        <CardContent>
-          <div className="grid md:grid-cols-2 gap-2 text-xs">
-            {[
-              "Farmácia de bordo conforme requisitos do Estado de Bandeira",
-              "Equipamento médico e guia médico internacional (WHO/ILO)",
-              "Oficial médico qualificado em embarcações com 100+ tripulantes",
-              "Serviço TMAS (Telemedical Assistance) disponível 24/7",
-              "Inspeção periódica da farmácia por autoridade competente",
-              "Registros médicos confidenciais mantidos a bordo",
-              "Treinamento First Aid para tripulantes designados",
-              "Acesso a cuidados médicos em terra sem custo ao marítimo",
-            ].map((r, i) => (
-              <div key={i} className="p-2 rounded bg-muted/50 flex items-start gap-2">
-                <Shield className="h-3 w-3 text-primary mt-0.5 shrink-0" /><span>{r}</span>
-              </div>
-            ))}
-          </div>
-        </CardContent>
-      </Card>
     </div>
   );
 }

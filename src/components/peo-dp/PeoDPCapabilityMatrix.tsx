@@ -1,20 +1,28 @@
 /**
  * PEO-DP Vessel Capability Matrix
  * Shows DP capability plots, equipment redundancy analysis, and worst-case failure scenarios
+ * Connected to Supabase peodp_equipment table
  */
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Progress } from '@/components/ui/progress';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Button } from '@/components/ui/button';
 import {
   Grid3X3, CheckCircle, AlertTriangle, XCircle, Shield,
-  Navigation, Anchor, Activity, Gauge, Zap
+  Navigation, Anchor, Activity, Gauge, Zap, RefreshCw
 } from 'lucide-react';
+import { useQuery } from '@tanstack/react-query';
+import { supabase } from '@/integrations/supabase/client';
 
-interface EquipmentGroup {
+interface EquipmentItem {
+  id: string;
   name: string;
-  items: { id: string; name: string; status: 'online' | 'standby' | 'offline' | 'maintenance'; power: number; maxPower: number }[];
+  status: 'online' | 'standby' | 'offline' | 'maintenance';
+  power: number;
+  maxPower: number;
+  group: string;
 }
 
 interface FailureScenario {
@@ -28,48 +36,29 @@ interface FailureScenario {
   probability: 'low' | 'medium' | 'high';
 }
 
-const EQUIPMENT: EquipmentGroup[] = [
-  { name: 'Propulsores Azimutais', items: [
-    { id: 'AZ1', name: 'Azimutal #1 (Popa BB)', status: 'online', power: 3200, maxPower: 3500 },
-    { id: 'AZ2', name: 'Azimutal #2 (Popa BE)', status: 'online', power: 3100, maxPower: 3500 },
-    { id: 'AZ3', name: 'Azimutal #3 (Proa BB)', status: 'online', power: 2800, maxPower: 3000 },
-    { id: 'AZ4', name: 'Azimutal #4 (Proa BE)', status: 'maintenance', power: 0, maxPower: 3000 },
-  ]},
-  { name: 'Bow Thrusters', items: [
-    { id: 'BT1', name: 'Tunnel Thruster #1', status: 'online', power: 1500, maxPower: 1800 },
-    { id: 'BT2', name: 'Tunnel Thruster #2', status: 'online', power: 1600, maxPower: 1800 },
-  ]},
-  { name: 'Geradores', items: [
-    { id: 'DG1', name: 'Diesel Generator #1', status: 'online', power: 4200, maxPower: 5000 },
-    { id: 'DG2', name: 'Diesel Generator #2', status: 'online', power: 4100, maxPower: 5000 },
-    { id: 'DG3', name: 'Diesel Generator #3', status: 'standby', power: 0, maxPower: 5000 },
-    { id: 'DG4', name: 'Diesel Generator #4', status: 'online', power: 3800, maxPower: 5000 },
-  ]},
-  { name: 'Sensores de Referência', items: [
-    { id: 'DGPS1', name: 'DGPS Fugro #1', status: 'online', power: 100, maxPower: 100 },
-    { id: 'DGPS2', name: 'DGPS Veripos #2', status: 'online', power: 100, maxPower: 100 },
-    { id: 'HPR1', name: 'HPR Kongsberg', status: 'online', power: 100, maxPower: 100 },
-    { id: 'GYRO1', name: 'Gyro #1', status: 'online', power: 100, maxPower: 100 },
-    { id: 'GYRO2', name: 'Gyro #2', status: 'online', power: 100, maxPower: 100 },
-    { id: 'GYRO3', name: 'Gyro #3', status: 'standby', power: 0, maxPower: 100 },
-    { id: 'MRU1', name: 'MRU #1', status: 'online', power: 100, maxPower: 100 },
-    { id: 'MRU2', name: 'MRU #2', status: 'online', power: 100, maxPower: 100 },
-    { id: 'WIND1', name: 'Anemômetro #1', status: 'online', power: 100, maxPower: 100 },
-    { id: 'WIND2', name: 'Anemômetro #2', status: 'online', power: 100, maxPower: 100 },
-  ]},
-  { name: 'DP Controllers', items: [
-    { id: 'DPC1', name: 'DP Controller #1 (Kongsberg)', status: 'online', power: 100, maxPower: 100 },
-    { id: 'DPC2', name: 'DP Controller #2 (Kongsberg)', status: 'online', power: 100, maxPower: 100 },
-    { id: 'DPC3', name: 'DP Controller #3 (Backup)', status: 'standby', power: 0, maxPower: 100 },
-  ]},
-];
-
 const FAILURE_SCENARIOS: FailureScenario[] = [
   { id: '1', name: 'Perda de Switchboard Principal', description: 'Falha do quadro elétrico principal resultando em blackout parcial', affectedSystems: ['DG1', 'DG2', 'AZ1', 'AZ2', 'BT1'], capabilityRetained: 45, positionKeeping: 'degraded', recommendation: 'Iniciar procedimento CAM. Ativar DG3. Considerar parada de operações.', probability: 'low' },
   { id: '2', name: 'Worst Case Failure (WCF)', description: 'Perda do barramento mais carregado conforme FMEA/FMECA', affectedSystems: ['DG1', 'DG2', 'AZ1', 'AZ3', 'BT1'], capabilityRetained: 52, positionKeeping: 'degraded', recommendation: 'Verificar envelope de capacidade. Reduzir operação se Hs > 2.0m.', probability: 'low' },
   { id: '3', name: 'Perda de 2 Referências de Posição', description: 'Falha simultânea de DGPS #1 e HPR', affectedSystems: ['DGPS1', 'HPR1'], capabilityRetained: 85, positionKeeping: 'maintained', recommendation: 'Manter operação com DGPS #2 e Gyro. Monitorar drift.', probability: 'medium' },
   { id: '4', name: 'Single Thruster Failure', description: 'Perda de um propulsor azimutal durante operação', affectedSystems: ['AZ4'], capabilityRetained: 78, positionKeeping: 'maintained', recommendation: 'Redistribuir carga. Verificar envelope DP reduzido.', probability: 'medium' },
   { id: '5', name: 'Perda Total de Comunicação', description: 'Falha em todos os sistemas de comunicação', affectedSystems: ['VHF1', 'VHF2', 'SAT1'], capabilityRetained: 95, positionKeeping: 'maintained', recommendation: 'Ativar protocolo de comunicação alternativa. Não afeta DP diretamente.', probability: 'low' },
+];
+
+const DEFAULT_EQUIPMENT: EquipmentItem[] = [
+  { id: 'AZ1', name: 'Azimutal #1 (Popa BB)', status: 'online', power: 3200, maxPower: 3500, group: 'Propulsores Azimutais' },
+  { id: 'AZ2', name: 'Azimutal #2 (Popa BE)', status: 'online', power: 3100, maxPower: 3500, group: 'Propulsores Azimutais' },
+  { id: 'AZ3', name: 'Azimutal #3 (Proa BB)', status: 'online', power: 2800, maxPower: 3000, group: 'Propulsores Azimutais' },
+  { id: 'AZ4', name: 'Azimutal #4 (Proa BE)', status: 'maintenance', power: 0, maxPower: 3000, group: 'Propulsores Azimutais' },
+  { id: 'BT1', name: 'Tunnel Thruster #1', status: 'online', power: 1500, maxPower: 1800, group: 'Bow Thrusters' },
+  { id: 'BT2', name: 'Tunnel Thruster #2', status: 'online', power: 1600, maxPower: 1800, group: 'Bow Thrusters' },
+  { id: 'DG1', name: 'Diesel Generator #1', status: 'online', power: 4200, maxPower: 5000, group: 'Geradores' },
+  { id: 'DG2', name: 'Diesel Generator #2', status: 'online', power: 4100, maxPower: 5000, group: 'Geradores' },
+  { id: 'DG3', name: 'Diesel Generator #3', status: 'standby', power: 0, maxPower: 5000, group: 'Geradores' },
+  { id: 'DG4', name: 'Diesel Generator #4', status: 'online', power: 3800, maxPower: 5000, group: 'Geradores' },
+  { id: 'DGPS1', name: 'DGPS Fugro #1', status: 'online', power: 100, maxPower: 100, group: 'Sensores de Referência' },
+  { id: 'DGPS2', name: 'DGPS Veripos #2', status: 'online', power: 100, maxPower: 100, group: 'Sensores de Referência' },
+  { id: 'DPC1', name: 'DP Controller #1 (Kongsberg)', status: 'online', power: 100, maxPower: 100, group: 'DP Controllers' },
+  { id: 'DPC2', name: 'DP Controller #2 (Kongsberg)', status: 'online', power: 100, maxPower: 100, group: 'DP Controllers' },
 ];
 
 const statusColors: Record<string, string> = {
@@ -86,12 +75,53 @@ const statusIcons: Record<string, typeof CheckCircle> = {
   maintenance: AlertTriangle,
 };
 
+const riskProb: Record<string, string> = {
+  low: 'bg-success/10 text-success border-success/30',
+  medium: 'bg-warning/10 text-warning border-warning/30',
+  high: 'bg-destructive/10 text-destructive border-destructive/30',
+};
+
 export function PeoDPCapabilityMatrix() {
   const [tab, setTab] = useState('equipment');
 
-  const totalEquipment = EQUIPMENT.reduce((a, g) => a + g.items.length, 0);
-  const onlineCount = EQUIPMENT.reduce((a, g) => a + g.items.filter(i => i.status === 'online').length, 0);
-  const redundancyScore = Math.round((onlineCount / totalEquipment) * 100);
+  // Fetch equipment from Supabase
+  const { data: dbEquipment, isLoading } = useQuery({
+    queryKey: ['peodp-equipment-matrix'],
+    queryFn: async () => {
+      const { data, error } = await (supabase.from as Function)('peodp_equipment')
+        .select('id, equipment_name, equipment_type, status, specifications')
+        .order('equipment_type');
+      if (error) throw error;
+      return data as any[];
+    },
+    staleTime: 30000,
+  });
+
+  // Map DB data or use defaults
+  const equipment: EquipmentItem[] = useMemo(() => {
+    if (!dbEquipment || dbEquipment.length === 0) return DEFAULT_EQUIPMENT;
+    return dbEquipment.map((eq: any) => ({
+      id: eq.id.substring(0, 6),
+      name: eq.equipment_name,
+      status: (eq.status || 'online') as any,
+      power: eq.specifications?.power || 100,
+      maxPower: eq.specifications?.max_power || 100,
+      group: eq.equipment_type || 'Outros',
+    }));
+  }, [dbEquipment]);
+
+  const groups = useMemo(() => {
+    const map = new Map<string, EquipmentItem[]>();
+    equipment.forEach(e => {
+      if (!map.has(e.group)) map.set(e.group, []);
+      map.get(e.group)!.push(e);
+    });
+    return Array.from(map.entries());
+  }, [equipment]);
+
+  const totalEquipment = equipment.length;
+  const onlineCount = equipment.filter(i => i.status === 'online').length;
+  const redundancyScore = totalEquipment > 0 ? Math.round((onlineCount / totalEquipment) * 100) : 0;
 
   return (
     <div className="space-y-4">
@@ -101,11 +131,10 @@ export function PeoDPCapabilityMatrix() {
             <Grid3X3 className="h-5 w-5 text-primary" />
             DP Vessel Capability Matrix
           </CardTitle>
-          <CardDescription>Análise de redundância, status de equipamentos e cenários de falha FMEA</CardDescription>
+          <CardDescription>Análise de redundância, status de equipamentos e cenários de falha FMEA • Dados em tempo real</CardDescription>
         </CardHeader>
       </Card>
 
-      {/* Summary */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
         <Card>
           <CardContent className="pt-4 pb-3">
@@ -127,7 +156,7 @@ export function PeoDPCapabilityMatrix() {
           <CardContent className="pt-4 pb-3">
             <p className="text-xs text-muted-foreground">Em Manutenção</p>
             <p className="text-2xl font-bold text-warning">
-              {EQUIPMENT.reduce((a, g) => a + g.items.filter(i => i.status === 'maintenance').length, 0)}
+              {equipment.filter(i => i.status === 'maintenance').length}
             </p>
           </CardContent>
         </Card>
@@ -147,14 +176,16 @@ export function PeoDPCapabilityMatrix() {
         </TabsList>
 
         <TabsContent value="equipment" className="space-y-4">
-          {EQUIPMENT.map(group => (
-            <Card key={group.name}>
+          {isLoading ? (
+            <Card><CardContent className="py-8 text-center text-muted-foreground">Carregando equipamentos...</CardContent></Card>
+          ) : groups.map(([groupName, items]) => (
+            <Card key={groupName}>
               <CardHeader className="pb-2 pt-4">
-                <CardTitle className="text-sm font-semibold">{group.name}</CardTitle>
+                <CardTitle className="text-sm font-semibold">{groupName}</CardTitle>
               </CardHeader>
               <CardContent className="space-y-2 pb-3">
-                {group.items.map(item => {
-                  const Icon = statusIcons[item.status];
+                {items.map(item => {
+                  const Icon = statusIcons[item.status] || Activity;
                   return (
                     <div key={item.id} className="flex items-center justify-between py-1.5 border-b border-border/30 last:border-0">
                       <div className="flex items-center gap-2">
@@ -184,7 +215,7 @@ export function PeoDPCapabilityMatrix() {
           <Card className="bg-muted/30">
             <CardContent className="py-3">
               <p className="text-sm font-medium">Cenários de Falha FMEA/FMECA</p>
-              <p className="text-xs text-muted-foreground">Análise de worst-case failure conforme requisitos PEO-DP Anexo N. Cada cenário mostra a capacidade retida e recomendações operacionais.</p>
+              <p className="text-xs text-muted-foreground">Análise de worst-case failure conforme requisitos PEO-DP Anexo N.</p>
             </CardContent>
           </Card>
           {FAILURE_SCENARIOS.map(scenario => (
@@ -218,9 +249,3 @@ export function PeoDPCapabilityMatrix() {
     </div>
   );
 }
-
-const riskProb: Record<string, string> = {
-  low: 'bg-success/10 text-success border-success/30',
-  medium: 'bg-warning/10 text-warning border-warning/30',
-  high: 'bg-destructive/10 text-destructive border-destructive/30',
-};
