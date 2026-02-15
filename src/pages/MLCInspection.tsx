@@ -10,6 +10,7 @@ import { MLCWorkRestCalculator } from '@/components/mlc/MLCWorkRestCalculator';
 import { MLCWorkRestEntry } from '@/components/mlc/MLCWorkRestEntry';
 import { MLCSEAManager } from '@/components/mlc/MLCSEAManager';
 import { MLCComplaintProcedures } from '@/components/mlc/MLCComplaintProcedures';
+import { MLCManningCalculator } from '@/components/mlc/MLCManningCalculator';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Skeleton } from '@/components/ui/skeleton';
 
@@ -67,6 +68,7 @@ const MLCInspection: FC = () => {
           <TabsTrigger value="sea" className="gap-1"><FileText className="h-3 w-3" />Contratos SEA</TabsTrigger>
           <TabsTrigger value="welfare" className="gap-1"><Heart className="h-3 w-3" />Welfare</TabsTrigger>
           <TabsTrigger value="complaints" className="gap-1"><AlertTriangle className="h-3 w-3" />Reclamações</TabsTrigger>
+          <TabsTrigger value="manning" className="gap-1"><Users className="h-3 w-3" />Manning</TabsTrigger>
           <TabsTrigger value="sgi-evidence" className="gap-1"><Sparkles className="h-3 w-3" />Evidências</TabsTrigger>
           <TabsTrigger value="gap-analyzer" className="gap-1"><Search className="h-3 w-3" />Gap Analyzer</TabsTrigger>
           <TabsTrigger value="interview-sim" className="gap-1"><MessageSquare className="h-3 w-3" />Simulador</TabsTrigger>
@@ -85,6 +87,7 @@ const MLCInspection: FC = () => {
         <TabsContent value="sea"><MLCSEAManager /></TabsContent>
         <TabsContent value="welfare"><MLCWelfareScoring /></TabsContent>
         <TabsContent value="complaints"><MLCComplaintProcedures /></TabsContent>
+        <TabsContent value="manning"><MLCManningCalculator /></TabsContent>
 
         <Suspense fallback={<LoadingFallback />}>
           <TabsContent value="sgi-evidence"><ComplianceSGIAutoEvidence moduleId="mlc" moduleName="MLC 2006" checklistItems={MLC_ITEMS} /></TabsContent>
