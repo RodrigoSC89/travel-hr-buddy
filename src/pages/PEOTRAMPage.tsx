@@ -22,6 +22,7 @@ import { PeotramNCAutoGenerator } from "@/components/peotram/PeotramNCAutoGenera
 import { PeotramReportGenerator } from "@/components/peotram/PeotramReportGenerator";
 import { PeotramAuditWizard } from "@/components/peotram/PeotramAuditWizard";
 import { PeotramRadarChart } from "@/components/peotram/PeotramRadarChart";
+import { PeotramAuditCountdown } from "@/components/peotram/PeotramAuditCountdown";
 import { PeotramAuditManager } from "@/components/peotram/PeotramAuditManager";
 import { PeotramPDFExport } from "@/components/peotram/PeotramPDFExport";
 import { PEOTRAM_ELEMENTS } from "@/data/peotram-elements-data";
@@ -120,6 +121,7 @@ const PEOTRAMPage = () => {
           <TabsTrigger value="ai-voice" className="gap-1.5"><Mic className="h-3.5 w-3.5" /> Voz IA</TabsTrigger>
           <TabsTrigger value="ai-predictive" className="gap-1.5"><TrendingUp className="h-3.5 w-3.5" /> Preditiva</TabsTrigger>
           <TabsTrigger value="correlation" className="gap-1.5"><Activity className="h-3.5 w-3.5" /> Correlação</TabsTrigger>
+          <TabsTrigger value="countdown" className="gap-1.5"><Target className="h-3.5 w-3.5" /> Countdown</TabsTrigger>
           <TabsTrigger value="monitor" className="gap-1.5"><Activity className="h-3.5 w-3.5" /> Monitor</TabsTrigger>
         </TabsList>
 
@@ -322,6 +324,8 @@ const PEOTRAMPage = () => {
         <TabsContent value="correlation">
           <PeotramCorrelationMatrix elementScores={scores.elementScores} />
         </TabsContent>
+
+        <TabsContent value="countdown"><PeotramAuditCountdown /></TabsContent>
 
         <TabsContent value="monitor"><ProactiveComplianceMonitor /></TabsContent>
       </Tabs>
