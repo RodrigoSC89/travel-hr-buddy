@@ -35,7 +35,7 @@ const DrydockManagement = lazy(() => import('@/components/maintenance/DryDockPla
 const PredictiveMaintenancePage = lazy(() => import('@/pages/PredictiveMaintenancePage'));
 const FuelManagementPage = lazy(() => import('@/pages/FuelManagementPage'));
 const DigitalTwinPage = lazy(() => import('@/pages/advanced/DigitalTwin3DPage'));
-const WasteManagementPremium = lazy(() => import('@/pages/ESGEmissionsPremium'));
+const WasteManagementPremium = lazy(() => import('@/pages/advanced/MARPOLTrackerPage'));
 const ESGEmissionsPremium = lazy(() => import('@/pages/ESGEmissionsPremium'));
 const MaintenanceAIHub = lazy(() => import('@/components/maintenance/ai/MaintenanceAIHub'));
 const SparePartsInventory = lazy(() => import('@/components/maintenance/SparePartsInventory'));
