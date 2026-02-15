@@ -5,6 +5,7 @@ import { ThemeToggle } from "./theme-toggle";
 import { SidebarTrigger, useSidebar } from "@/components/ui/sidebar";
 import { RealTimeNotificationCenter } from "@/components/notifications/real-time-notification-center";
 import { UserMenu } from "@/components/auth/user-menu";
+import { LanguageSelector } from "@/components/ui/LanguageSelector";
 import { SimpleGlobalSearch } from "@/components/ui/simple-global-search";
 import { OrganizationSelector } from "@/components/admin/organization-selector";
 // SystemStatusIndicator & OfflineSyncIndicator removed during cleanup
@@ -79,6 +80,7 @@ export const Header: FC = () => {
             ) : (
               <>
                 {/* OfflineSyncIndicator & SystemStatusIndicator removed */}
+                <LanguageSelector />
                 <OrganizationSelector />
                 <RealTimeNotificationCenter />
                 
