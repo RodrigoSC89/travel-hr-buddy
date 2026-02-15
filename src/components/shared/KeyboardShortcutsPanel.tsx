@@ -98,15 +98,15 @@ export const KeyboardShortcutsPanel: React.FC = () => {
                 <div className="space-y-1">
                   {filteredShortcuts
                     .filter(s => s.category === category)
-                    .map((shortcut, i) => (
+                    .map((shortcut) => (
                       <div
-                        key={i}
+                        key={shortcut.description}
                         className="flex items-center justify-between py-1.5 px-2 rounded-md hover:bg-accent/50 transition-colors"
                       >
                         <span className="text-sm">{shortcut.description}</span>
                         <div className="flex items-center gap-1">
                           {shortcut.keys.map((key, ki) => (
-                            <React.Fragment key={ki}>
+                            <React.Fragment key={`${shortcut.description}-${key}`}>
                               {ki > 0 && <span className="text-xs text-muted-foreground">+</span>}
                               <Badge variant="outline" className="text-[10px] px-1.5 py-0 h-5 font-mono">
                                 {key}

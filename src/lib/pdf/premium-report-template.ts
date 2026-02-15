@@ -99,7 +99,8 @@ export async function generatePremiumReport(config: ReportConfig): Promise<Blob>
     config.columns.map((c) => String(row[c.key] ?? "—"))
   );
 
-  (doc as any).autoTable({
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- jsPDF-autotable plugin extends doc prototype
+  (doc as unknown as { autoTable: (opts: Record<string, unknown>) => void }).autoTable({
     startY: yPos,
     head: [headers],
     body,

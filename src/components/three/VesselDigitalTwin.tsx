@@ -96,8 +96,8 @@ function VesselHull({ status, heading }: { status: string; heading: number }) {
         <meshStandardMaterial color="#64748b" metalness={0.2} roughness={0.7} />
       </mesh>
       {/* Cargo holds */}
-      {[-0.8, 0.2, 1.2].map((z, i) => (
-        <mesh key={i} position={[0, 0.35, z]}>
+      {[-0.8, 0.2, 1.2].map((z) => (
+        <mesh key={`cargo-${z}`} position={[0, 0.35, z]}>
           <boxGeometry args={[0.6, 0.25, 0.5]} />
           <meshStandardMaterial color="#475569" metalness={0.3} roughness={0.6} />
         </mesh>

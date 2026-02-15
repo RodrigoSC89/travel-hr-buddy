@@ -327,7 +327,7 @@ export function PurchaseOrdersManager() {
             <SelectItem value="priority">Prioridade</SelectItem>
           </SelectContent>
         </Select>
-        <Button variant="outline" size="icon" onClick={exportCSV} title="Exportar CSV"><Download className="h-4 w-4" /></Button>
+        <Button variant="outline" size="icon" onClick={exportCSV} title="Exportar CSV" aria-label="Exportar CSV"><Download className="h-4 w-4" /></Button>
         <Button onClick={() => setShowNewPODialog(true)}><Plus className="h-4 w-4 mr-2" />Novo Pedido</Button>
       </div>
 

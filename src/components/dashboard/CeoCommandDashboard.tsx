@@ -273,7 +273,7 @@ export default function CeoCommandDashboard() {
                 <ResponsiveContainer width="100%" height={200}>
                   <PieChart>
                     <Pie data={fleetStatusData} dataKey="value" nameKey="name" cx="50%" cy="50%" outerRadius={70} innerRadius={40} paddingAngle={4}>
-                      {fleetStatusData.map((_, i) => <Cell key={i} fill={COLORS[i % COLORS.length]} />)}
+                      {fleetStatusData.map((entry, i) => <Cell key={`fleet-${entry.name}`} fill={COLORS[i % COLORS.length]} />)}
                     </Pie>
                     <Tooltip />
                     <Legend iconSize={8} wrapperStyle={{ fontSize: "11px" }} />
@@ -305,7 +305,7 @@ export default function CeoCommandDashboard() {
                 <ResponsiveContainer width="100%" height={200}>
                   <PieChart>
                     <Pie data={maintByPriority} dataKey="value" nameKey="name" cx="50%" cy="50%" outerRadius={70} innerRadius={40}>
-                      {maintByPriority.map((entry, i) => <Cell key={i} fill={entry.fill} />)}
+                      {maintByPriority.map((entry) => <Cell key={`maint-${entry.name}`} fill={entry.fill} />)}
                     </Pie>
                     <Tooltip />
                     <Legend iconSize={8} wrapperStyle={{ fontSize: "11px" }} />
@@ -322,8 +322,8 @@ export default function CeoCommandDashboard() {
               { label: "Crew Readiness", value: crewReadiness, icon: <Users className="h-4 w-4" /> },
               { label: "Compliance Score", value: complianceScore, icon: <Shield className="h-4 w-4" /> },
               { label: "Audit Score", value: Math.round(avgAuditScore), icon: <Gauge className="h-4 w-4" /> },
-            ].map((gauge, i) => (
-              <Card key={i}>
+            ].map((gauge) => (
+              <Card key={gauge.label}>
                 <CardContent className="p-4 text-center space-y-2">
                   <div className="flex items-center justify-center gap-2 text-muted-foreground">{gauge.icon}<span className="text-xs">{gauge.label}</span></div>
                   <p className={`text-3xl font-bold ${gauge.value >= 80 ? "text-green-500" : gauge.value >= 60 ? "text-yellow-500" : "text-red-500"}`}>{gauge.value}%</p>
