@@ -27,6 +27,7 @@ import { PeotramRiskHeatMap } from "@/components/peotram/PeotramRiskHeatMap";
 import { PeotramSmartScoring } from "@/components/peotram/PeotramSmartScoring";
 import { PeotramNCAutoGenerator } from "@/components/peotram/PeotramNCAutoGenerator";
 import { PeotramNCActionPlan } from "@/components/peotram/PeotramNCActionPlan";
+import { PeotramAuditTimeline } from "@/components/peotram/PeotramAuditTimeline";
 import { PeotramReportGenerator } from "@/components/peotram/PeotramReportGenerator";
 import { PeotramAuditWizard } from "@/components/peotram/PeotramAuditWizard";
 import { PeotramRadarChart } from "@/components/peotram/PeotramRadarChart";
@@ -136,6 +137,7 @@ const PEOTRAMPage = () => {
           <TabsTrigger value="monitor" className="gap-1.5"><Activity className="h-3.5 w-3.5" /> Monitor</TabsTrigger>
           <TabsTrigger value="interview" className="gap-1.5"><Brain className="h-3.5 w-3.5" /> Simulador</TabsTrigger>
           <TabsTrigger value="checklist-ia" className="gap-1.5"><Zap className="h-3.5 w-3.5" /> Checklist IA</TabsTrigger>
+          <TabsTrigger value="timeline" className="gap-1.5"><TrendingUp className="h-3.5 w-3.5" /> Timeline</TabsTrigger>
         </TabsList>
 
         {/* ============ OVERVIEW ============ */}
@@ -344,6 +346,7 @@ const PEOTRAMPage = () => {
         <TabsContent value="countdown"><PeotramAuditCountdown /></TabsContent>
 
         <TabsContent value="monitor"><ProactiveComplianceMonitor /></TabsContent>
+        <TabsContent value="timeline"><PeotramAuditTimeline /></TabsContent>
 
         <Suspense fallback={<LoadingFallback />}>
           <TabsContent value="interview">
