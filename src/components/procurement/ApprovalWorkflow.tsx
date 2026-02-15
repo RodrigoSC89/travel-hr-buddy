@@ -28,8 +28,10 @@ interface PendingApproval {
   priority: string;
   created_at: string;
   delivery_port: string | null;
-  items: any[] | null;
+  items: Record<string, unknown>[] | null;
   notes: string | null;
+  status?: string;
+  approved_at?: string | null;
 }
 
 const approvalThresholds = [
@@ -71,7 +73,7 @@ export function ApprovalWorkflow() {
         .order('approved_at', { ascending: false })
         .limit(10);
       if (error) throw error;
-      return (data || []) as any[];
+      return (data || []) as PendingApproval[];
     },
   });
 
@@ -160,7 +162,7 @@ export function ApprovalWorkflow() {
         <CardContent>
           <div className="flex gap-4 overflow-x-auto pb-1">
             {approvalThresholds.map((t, i) => (
-              <div key={i} className="flex items-center gap-2 text-sm whitespace-nowrap">
+              <div key={t.level} className="flex items-center gap-2 text-sm whitespace-nowrap">
                 <div className={cn(
                   "w-3 h-3 rounded-full",
                   t.autoApprove ? 'bg-success' : i === 1 ? 'bg-info' : i === 2 ? 'bg-warning' : 'bg-destructive'

@@ -143,7 +143,7 @@ export const WorldClassDocumentCenter: React.FC = () => {
   };
 
   const handleStatusUpdate = (id: string, status: string) => {
-    updateDocument.mutate({ id, status } as any);
+    updateDocument.mutate({ id, status } as unknown as Parameters<typeof updateDocument.mutate>[0]);
   };
 
   const handleExportDocsPDF = async () => {
@@ -166,7 +166,7 @@ export const WorldClassDocumentCenter: React.FC = () => {
         formatFileSize(d.file_size),
       ]);
 
-      (doc as any).autoTable({
+      (doc as unknown as { autoTable: (options: Record<string, unknown>) => void }).autoTable({
         startY: 42,
         head: [['#', 'Título', 'Tipo', 'Status', 'Expira', 'Tamanho']],
         body: tableData,
@@ -245,8 +245,8 @@ export const WorldClassDocumentCenter: React.FC = () => {
             { label: "Ativos", value: stats.active, icon: <FileCheck className="h-4 w-4" />, color: "text-green-500" },
             { label: "Expirados", value: stats.expired, icon: <FileWarning className="h-4 w-4" />, color: "text-destructive" },
             { label: "Certificados", value: stats.certificates, icon: <Shield className="h-4 w-4" />, color: "text-amber-500" },
-          ].map((kpi, i) => (
-            <Card key={i} className="p-3">
+          ].map((kpi) => (
+            <Card key={kpi.label} className="p-3">
               <div className="flex items-center gap-2 mb-1">
                 <span className={kpi.color}>{kpi.icon}</span>
                 <span className="text-xs text-muted-foreground">{kpi.label}</span>
@@ -300,10 +300,10 @@ export const WorldClassDocumentCenter: React.FC = () => {
                 </Select>
               )}
               <div className="flex items-center gap-1 bg-muted rounded-lg p-1">
-                <Button variant={viewMode === "list" ? "secondary" : "ghost"} size="icon" className="h-8 w-8" onClick={() => setViewMode("list")}>
+                <Button variant={viewMode === "list" ? "secondary" : "ghost"} size="icon" className="h-8 w-8" onClick={() => setViewMode("list")} aria-label="Visualização em lista" title="Lista">
                   <List className="h-4 w-4" />
                 </Button>
-                <Button variant={viewMode === "grid" ? "secondary" : "ghost"} size="icon" className="h-8 w-8" onClick={() => setViewMode("grid")}>
+                <Button variant={viewMode === "grid" ? "secondary" : "ghost"} size="icon" className="h-8 w-8" onClick={() => setViewMode("grid")} aria-label="Visualização em grade" title="Grade">
                   <LayoutGrid className="h-4 w-4" />
                 </Button>
               </div>
