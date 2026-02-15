@@ -1,38 +1,16 @@
 /**
  * MLC Work/Rest Hours Calculator - MLC Reg. 2.3 & STCW A-VIII/1
- * Visual calculator for compliance with work/rest hour rules
+ * Connected to mlc_work_rest_records table
  */
 import React, { useState } from "react";
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { AlertTriangle, CheckCircle, Clock, Users, Download, Shield } from "lucide-react";
 import { toast } from "sonner";
-
-interface CrewMember {
-  id: string;
-  name: string;
-  rank: string;
-  watchSchedule: string;
-  dailyWork: number;
-  dailyRest: number;
-  weeklyWork: number;
-  weeklyRest: number;
-  violations: string[];
-  status: "compliant" | "warning" | "violation";
-}
-
-const CREW_DATA: CrewMember[] = [
-  { id: "1", name: "Carlos Silva", rank: "Master", watchSchedule: "0800-1200 / 2000-0000", dailyWork: 8, dailyRest: 16, weeklyWork: 56, weeklyRest: 112, violations: [], status: "compliant" },
-  { id: "2", name: "João Santos", rank: "Chief Officer", watchSchedule: "0400-0800 / 1600-2000", dailyWork: 8, dailyRest: 16, weeklyWork: 56, weeklyRest: 112, violations: [], status: "compliant" },
-  { id: "3", name: "Pedro Oliveira", rank: "2nd Officer", watchSchedule: "0000-0400 / 1200-1600", dailyWork: 8, dailyRest: 16, weeklyWork: 56, weeklyRest: 112, violations: [], status: "compliant" },
-  { id: "4", name: "Miguel Costa", rank: "Chief Engineer", watchSchedule: "0800-1700 + on-call", dailyWork: 11, dailyRest: 13, weeklyWork: 71, weeklyRest: 97, violations: ["Approaching weekly limit (72h)"], status: "warning" },
-  { id: "5", name: "André Ferreira", rank: "AB Seaman", watchSchedule: "0600-1800 (port ops)", dailyWork: 14, dailyRest: 10, weeklyWork: 78, weeklyRest: 90, violations: ["Daily work > 14h", "Weekly work > 72h"], status: "violation" },
-  { id: "6", name: "Roberto Lima", rank: "Cook", watchSchedule: "0500-1100 / 1500-1900", dailyWork: 10, dailyRest: 14, weeklyWork: 70, weeklyRest: 98, violations: [], status: "compliant" },
-  { id: "7", name: "Felipe Dias", rank: "Bosun", watchSchedule: "0700-1200 / 1300-1800 + OT", dailyWork: 12, dailyRest: 12, weeklyWork: 74, weeklyRest: 94, violations: ["Weekly work > 72h"], status: "violation" },
-  { id: "8", name: "Lucas Martins", rank: "DPO", watchSchedule: "0000-0600 / 1200-1800", dailyWork: 12, dailyRest: 12, weeklyWork: 72, weeklyRest: 96, violations: ["At weekly limit (72h)"], status: "warning" },
-];
+import { useQuery } from "@tanstack/react-query";
+import { supabase } from "@/integrations/supabase/client";
 
 const MLC_RULES = [
   { rule: "Max 14 hours work in any 24h period", limit: 14, unit: "daily" },
@@ -44,13 +22,65 @@ const MLC_RULES = [
 ];
 
 export function MLCWorkRestCalculator() {
-  const [crew] = useState(CREW_DATA);
   const [selectedPeriod, setSelectedPeriod] = useState("current");
 
-  const compliantCount = crew.filter(c => c.status === "compliant").length;
-  const warningCount = crew.filter(c => c.status === "warning").length;
-  const violationCount = crew.filter(c => c.status === "violation").length;
-  const compliancePct = Math.round((compliantCount / crew.length) * 100);
+  const { data: records = [], isLoading } = useQuery({
+    queryKey: ["mlc-work-rest", selectedPeriod],
+    queryFn: async () => {
+      const now = new Date();
+      let startDate: string;
+      if (selectedPeriod === "current") {
+        const d = new Date(now);
+        d.setDate(d.getDate() - 7);
+        startDate = d.toISOString().split("T")[0];
+      } else if (selectedPeriod === "previous") {
+        const d = new Date(now);
+        d.setDate(d.getDate() - 14);
+        startDate = d.toISOString().split("T")[0];
+      } else {
+        const d = new Date(now);
+        d.setDate(d.getDate() - 30);
+        startDate = d.toISOString().split("T")[0];
+      }
+
+      const { data, error } = await (supabase.from as Function)("mlc_work_rest_records")
+        .select("*, crew_members(full_name, rank)")
+        .gte("record_date", startDate)
+        .order("record_date", { ascending: false });
+      if (error) throw error;
+      return data as any[];
+    },
+  });
+
+  // Aggregate by crew member
+  const crewMap = new Map<string, { name: string; rank: string; totalWork: number; totalRest: number; violations: string[]; records: number }>();
+  
+  for (const r of records) {
+    const key = r.crew_member_id;
+    const existing = crewMap.get(key) || { name: r.crew_members?.full_name || "Unknown", rank: r.crew_members?.rank || "", totalWork: 0, totalRest: 0, violations: [] as string[], records: 0 };
+    existing.totalWork += r.total_work_hours || 0;
+    existing.totalRest += r.total_rest_hours || 0;
+    existing.records += 1;
+    if (r.violations && Array.isArray(r.violations)) {
+      const mapped = (r.violations as any[]).map((v: any) => typeof v === "string" ? v : v.description || "Violation");
+      for (const m of mapped) existing.violations.push(m);
+    }
+    if (!r.is_compliant) existing.violations.push(`Non-compliant on ${r.record_date}`);
+    crewMap.set(key, existing);
+  }
+
+  const crewList = Array.from(crewMap.entries()).map(([id, data]) => ({
+    id,
+    ...data,
+    avgDailyWork: data.records > 0 ? Math.round(data.totalWork / data.records * 10) / 10 : 0,
+    avgDailyRest: data.records > 0 ? Math.round(data.totalRest / data.records * 10) / 10 : 0,
+    status: data.violations.length > 0 ? "violation" as const : data.records > 0 && (data.totalWork / data.records) > 12 ? "warning" as const : "compliant" as const,
+  }));
+
+  const compliantCount = crewList.filter(c => c.status === "compliant").length;
+  const warningCount = crewList.filter(c => c.status === "warning").length;
+  const violationCount = crewList.filter(c => c.status === "violation").length;
+  const compliancePct = crewList.length > 0 ? Math.round((compliantCount / crewList.length) * 100) : 100;
 
   return (
     <div className="space-y-4">
@@ -74,89 +104,64 @@ export function MLCWorkRestCalculator() {
         </div>
       </div>
 
-      {/* Summary Cards */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-        <Card><CardContent className="pt-4 text-center">
-          <Users className="h-5 w-5 mx-auto mb-1 text-muted-foreground" />
-          <p className="text-2xl font-bold">{crew.length}</p>
-          <p className="text-xs text-muted-foreground">Tripulantes</p>
-        </CardContent></Card>
-        <Card className="border-success/20"><CardContent className="pt-4 text-center">
-          <CheckCircle className="h-5 w-5 mx-auto mb-1 text-success" />
-          <p className="text-2xl font-bold text-success">{compliancePct}%</p>
-          <p className="text-xs text-muted-foreground">Conformidade</p>
-        </CardContent></Card>
-        <Card className="border-warning/20"><CardContent className="pt-4 text-center">
-          <Clock className="h-5 w-5 mx-auto mb-1 text-warning" />
-          <p className="text-2xl font-bold text-warning">{warningCount}</p>
-          <p className="text-xs text-muted-foreground">Alertas</p>
-        </CardContent></Card>
-        <Card className="border-destructive/20"><CardContent className="pt-4 text-center">
-          <AlertTriangle className="h-5 w-5 mx-auto mb-1 text-destructive" />
-          <p className="text-2xl font-bold text-destructive">{violationCount}</p>
-          <p className="text-xs text-muted-foreground">Violações</p>
-        </CardContent></Card>
+        <Card><CardContent className="pt-4 text-center"><Users className="h-5 w-5 mx-auto mb-1 text-muted-foreground" /><p className="text-2xl font-bold">{crewList.length}</p><p className="text-xs text-muted-foreground">Tripulantes</p></CardContent></Card>
+        <Card className="border-success/20"><CardContent className="pt-4 text-center"><CheckCircle className="h-5 w-5 mx-auto mb-1 text-success" /><p className="text-2xl font-bold text-success">{compliancePct}%</p><p className="text-xs text-muted-foreground">Conformidade</p></CardContent></Card>
+        <Card className="border-warning/20"><CardContent className="pt-4 text-center"><Clock className="h-5 w-5 mx-auto mb-1 text-warning" /><p className="text-2xl font-bold text-warning">{warningCount}</p><p className="text-xs text-muted-foreground">Alertas</p></CardContent></Card>
+        <Card className="border-destructive/20"><CardContent className="pt-4 text-center"><AlertTriangle className="h-5 w-5 mx-auto mb-1 text-destructive" /><p className="text-2xl font-bold text-destructive">{violationCount}</p><p className="text-xs text-muted-foreground">Violações</p></CardContent></Card>
       </div>
 
-      {/* MLC Rules Reference */}
       <Card>
-        <CardHeader className="pb-2">
-          <CardTitle className="text-sm">Regras MLC 2006 / STCW</CardTitle>
-        </CardHeader>
+        <CardHeader className="pb-2"><CardTitle className="text-sm">Regras MLC 2006 / STCW</CardTitle></CardHeader>
         <CardContent>
           <div className="grid md:grid-cols-3 gap-2">
             {MLC_RULES.map((r, i) => (
               <div key={i} className="p-2 rounded bg-muted/50 text-xs flex items-start gap-2">
-                <Shield className="h-3 w-3 text-primary mt-0.5 shrink-0" />
-                <span>{r.rule}</span>
+                <Shield className="h-3 w-3 text-primary mt-0.5 shrink-0" /><span>{r.rule}</span>
               </div>
             ))}
           </div>
         </CardContent>
       </Card>
 
-      {/* Crew Table */}
       <Card>
         <CardContent className="pt-4">
-          <div className="overflow-x-auto">
-            <table className="w-full text-sm">
-              <thead>
-                <tr className="border-b text-left text-muted-foreground text-xs">
-                  <th className="pb-2">Tripulante</th>
-                  <th className="pb-2">Função</th>
-                  <th className="pb-2">Escala</th>
-                  <th className="pb-2 text-center">Trab/24h</th>
-                  <th className="pb-2 text-center">Desc/24h</th>
-                  <th className="pb-2 text-center">Trab/7d</th>
-                  <th className="pb-2 text-center">Desc/7d</th>
-                  <th className="pb-2">Status</th>
-                </tr>
-              </thead>
-              <tbody>
-                {crew.map(c => (
-                  <tr key={c.id} className={`border-b last:border-0 ${c.status === "violation" ? "bg-destructive/5" : c.status === "warning" ? "bg-warning/5" : ""}`}>
-                    <td className="py-3 font-medium">{c.name}</td>
-                    <td className="py-3">{c.rank}</td>
-                    <td className="py-3 text-xs font-mono">{c.watchSchedule}</td>
-                    <td className={`py-3 text-center font-bold ${c.dailyWork > 14 ? "text-destructive" : c.dailyWork > 12 ? "text-warning" : ""}`}>{c.dailyWork}h</td>
-                    <td className={`py-3 text-center font-bold ${c.dailyRest < 10 ? "text-destructive" : c.dailyRest < 11 ? "text-warning" : ""}`}>{c.dailyRest}h</td>
-                    <td className={`py-3 text-center font-bold ${c.weeklyWork > 72 ? "text-destructive" : c.weeklyWork > 70 ? "text-warning" : ""}`}>{c.weeklyWork}h</td>
-                    <td className="py-3 text-center">{c.weeklyRest}h</td>
-                    <td className="py-3">
-                      <div className="space-y-1">
+          {isLoading ? (
+            <p className="text-center py-8 text-muted-foreground">Carregando registros...</p>
+          ) : crewList.length === 0 ? (
+            <p className="text-center py-8 text-muted-foreground">Nenhum registro de trabalho/descanso encontrado para o período selecionado.</p>
+          ) : (
+            <div className="overflow-x-auto">
+              <table className="w-full text-sm">
+                <thead>
+                  <tr className="border-b text-left text-muted-foreground text-xs">
+                    <th className="pb-2">Tripulante</th>
+                    <th className="pb-2">Função</th>
+                    <th className="pb-2 text-center">Registros</th>
+                    <th className="pb-2 text-center">Méd. Trab/dia</th>
+                    <th className="pb-2 text-center">Méd. Desc/dia</th>
+                    <th className="pb-2">Status</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {crewList.map(c => (
+                    <tr key={c.id} className={`border-b last:border-0 ${c.status === "violation" ? "bg-destructive/5" : c.status === "warning" ? "bg-warning/5" : ""}`}>
+                      <td className="py-3 font-medium">{c.name}</td>
+                      <td className="py-3">{c.rank}</td>
+                      <td className="py-3 text-center">{c.records}</td>
+                      <td className={`py-3 text-center font-bold ${c.avgDailyWork > 14 ? "text-destructive" : c.avgDailyWork > 12 ? "text-warning" : ""}`}>{c.avgDailyWork}h</td>
+                      <td className={`py-3 text-center font-bold ${c.avgDailyRest < 10 ? "text-destructive" : c.avgDailyRest < 11 ? "text-warning" : ""}`}>{c.avgDailyRest}h</td>
+                      <td className="py-3">
                         <Badge variant={c.status === "compliant" ? "outline" : c.status === "warning" ? "secondary" : "destructive"} className="text-xs">
                           {c.status === "compliant" ? "✓ OK" : c.status === "warning" ? "⚠ Alerta" : "✗ Violação"}
                         </Badge>
-                        {c.violations.map((v, i) => (
-                          <p key={i} className="text-xs text-destructive">{v}</p>
-                        ))}
-                      </div>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          )}
         </CardContent>
       </Card>
     </div>
