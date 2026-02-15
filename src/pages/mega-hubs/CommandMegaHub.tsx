@@ -35,7 +35,7 @@ const SOCPage = lazy(() => import('@/pages/NOC'));
 const CommunicationCommandCenter = lazy(() => import('@/pages/NOC'));
 const AlertsCommandCenter = lazy(() => import('@/pages/NOC'));
 const CommandAIHub = lazy(() => import('@/components/command/ai/CommandAIHub'));
-const CeoCommandDashboard = lazy(() => import('@/components/dashboard/CeoCommandDashboard'));
+const CeoCommandDashboard = lazy(() => import('@/components/dashboard/RevolutionaryCEODashboard'));
 const CustomizableDashboardGrid = lazy(() => import('@/components/dashboard/CustomizableDashboardGrid'));
 const VesselDigitalTwin = lazy(() => import('@/components/three/VesselDigitalTwin').then(m => ({ default: m.VesselDigitalTwin })));
 const PerformanceMetrics = lazy(() => import('@/components/performance/PerformanceMetrics').then(m => ({ default: m.PerformanceMetrics })));
