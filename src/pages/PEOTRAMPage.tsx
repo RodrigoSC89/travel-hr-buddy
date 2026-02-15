@@ -24,6 +24,7 @@ import { PeotramElementChecklist } from "@/components/peotram/PeotramElementChec
 import { PeotramAutoEvidenceEngine } from "@/components/peotram/PeotramAutoEvidenceEngine";
 import { PeotramSmartScoring } from "@/components/peotram/PeotramSmartScoring";
 import { PeotramNCAutoGenerator } from "@/components/peotram/PeotramNCAutoGenerator";
+import { PeotramNCActionPlan } from "@/components/peotram/PeotramNCActionPlan";
 import { PeotramReportGenerator } from "@/components/peotram/PeotramReportGenerator";
 import { PeotramAuditWizard } from "@/components/peotram/PeotramAuditWizard";
 import { PeotramRadarChart } from "@/components/peotram/PeotramRadarChart";
@@ -121,6 +122,7 @@ const PEOTRAMPage = () => {
           <TabsTrigger value="smart-scoring" className="gap-1.5"><Brain className="h-3.5 w-3.5" /> Scoring IA</TabsTrigger>
           <TabsTrigger value="auto-evidence" className="gap-1.5"><Zap className="h-3.5 w-3.5" /> Evidências</TabsTrigger>
           <TabsTrigger value="nc-generator" className="gap-1.5"><AlertTriangle className="h-3.5 w-3.5" /> NCs</TabsTrigger>
+          <TabsTrigger value="nc-action-plan" className="gap-1.5"><Target className="h-3.5 w-3.5" /> Plano Ação</TabsTrigger>
           <TabsTrigger value="report" className="gap-1.5"><FileText className="h-3.5 w-3.5" /> Relatório</TabsTrigger>
           <TabsTrigger value="audit-wizard" className="gap-1.5"><Wand2 className="h-3.5 w-3.5" /> Wizard</TabsTrigger>
           <TabsTrigger value="ai-voice" className="gap-1.5"><Mic className="h-3.5 w-3.5" /> Voz IA</TabsTrigger>
@@ -291,6 +293,7 @@ const PEOTRAMPage = () => {
             itemStates={itemStates}
           />
         </TabsContent>
+        <TabsContent value="nc-action-plan"><PeotramNCActionPlan /></TabsContent>
         <TabsContent value="report">
           <PeotramReportGenerator
             vesselName={currentAudit?.vessel_name}

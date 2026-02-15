@@ -15,6 +15,7 @@ import { PeoDPAdherenceForm } from "@/components/peo-dp/PeoDPAdherenceForm";
 import { PeoDPManualGapAnalysis } from "@/components/peo-dp/PeoDPManualGapAnalysis";
 import { PeoDPFMEAGapAssessment } from "@/components/peo-dp/PeoDPFMEAGapAssessment";
 import { PeoDPEmergencyDrills } from "@/components/peo-dp/PeoDPEmergencyDrills";
+import { DPOCompetenceTracker } from "@/components/peo-dp/DPOCompetenceTracker";
 import { useMaritimeActions } from "@/hooks/useMaritimeActions";
 import { Skeleton } from "@/components/ui/skeleton";
 import {
@@ -60,6 +61,7 @@ const PEODP = () => {
           <TabsTrigger value="pclvc" className="gap-1.5"><Calculator className="h-3.5 w-3.5" /> PCLVC</TabsTrigger>
           <TabsTrigger value="docs" className="gap-1.5"><FileText className="h-3.5 w-3.5" /> Docs I-4</TabsTrigger>
           <TabsTrigger value="audit-prep" className="gap-1.5"><ClipboardCheck className="h-3.5 w-3.5" /> Audit Prep</TabsTrigger>
+          <TabsTrigger value="dpo-competence" className="gap-1.5"><Target className="h-3.5 w-3.5" /> DPO Competence</TabsTrigger>
           <TabsTrigger value="interview" className="gap-1.5"><Brain className="h-3.5 w-3.5" /> Simulador</TabsTrigger>
           <TabsTrigger value="checklist-ia" className="gap-1.5"><Zap className="h-3.5 w-3.5" /> Checklist IA</TabsTrigger>
         </TabsList>
@@ -76,6 +78,7 @@ const PEODP = () => {
         <TabsContent value="pclvc"><PeoDPCalculatorPCLVC /></TabsContent>
         <TabsContent value="docs"><PeoDPDocumentsManager /></TabsContent>
         <TabsContent value="audit-prep"><PeoDPAuditPrep /></TabsContent>
+        <TabsContent value="dpo-competence"><DPOCompetenceTracker /></TabsContent>
         <Suspense fallback={<LoadingFallback />}>
           <TabsContent value="interview">
             <ComplianceInterviewSimulator
