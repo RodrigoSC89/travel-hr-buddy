@@ -16,6 +16,7 @@ import { TooltipProvider } from "./components/ui/tooltip";
 import { ThemeProvider } from "./components/layout/theme-provider";
 import { LazyLoadErrorBoundary } from "@/components/error/LazyLoadErrorBoundary";
 import { logger } from "@/lib/logger";
+import "@/lib/i18next-config";
 import { AppRoutes } from "@/routes/AppRoutes";
 import { AppLoader } from "@/routes/AppLoader";
 import { prefetchCriticalRoutes } from "@/lib/performance/route-prefetch";

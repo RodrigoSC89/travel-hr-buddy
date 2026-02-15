@@ -22,7 +22,7 @@ export const AppRoutes = () => (
     <Route path="/landing" element={<Pages.LandingPage />} />
     <Route path="/pricing" element={<Pages.LandingPage />} />
     <Route path="/status" element={<Pages.LandingPage />} />
-    <Route path="/demo" element={<Pages.AboutSystem />} />
+    <Route path="/demo" element={<Pages.DemoLauncher />} />
     <Route path="/home" element={<Pages.LandingPage />} />
     
     {/* ============================================ */}
