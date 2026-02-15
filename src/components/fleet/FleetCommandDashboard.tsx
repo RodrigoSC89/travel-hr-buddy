@@ -236,33 +236,54 @@ export function FleetCommandDashboard() {
   }), [vessels]);
 
   // Acknowledge alert
-  const acknowledgeAlert = useCallback((alertId: string) => {
+  // Acknowledge alert - persist to Supabase
+  const acknowledgeAlert = useCallback(async (alertId: string) => {
     setAlerts(prev => prev.map(a => 
       a.id === alertId 
         ? { ...a, acknowledged: true, acknowledgedBy: "Current User" }
         : a
     ));
+    // Persist acknowledgment
+    await supabase
+      .from("soc_alerts")
+      .update({ is_acknowledged: true, acknowledged_by: "current_user", acknowledged_at: new Date().toISOString() })
+      .eq("id", alertId);
     toast({
       title: "Alerta Reconhecido",
       description: "O alerta foi marcado como visualizado"
     });
   }, [toast]);
 
-  // Create action
-  const createAction = useCallback(() => {
+  // Create action - persist to Supabase action_items
+  const createAction = useCallback(async () => {
     if (!selectedVessel || !actionType) return;
 
-    const newAction: FleetAction = {
-      id: `act_${Date.now()}`,
-      vesselId: selectedVessel.id,
-      vesselName: selectedVessel.name,
-      action: actionType,
-      status: "pending",
-      createdAt: new Date(),
-      assignedTo: "Current User"
-    };
+    const { data, error } = await supabase
+      .from("action_items")
+      .insert({
+        title: actionType,
+        description: actionNotes || null,
+        vessel_id: selectedVessel.id,
+        status: "pending",
+        priority: "medium",
+        source_module: "fleet_command",
+      })
+      .select()
+      .single();
 
-    setActions(prev => [newAction, ...prev]);
+    if (!error && data) {
+      const newAction: FleetAction = {
+        id: data.id,
+        vesselId: selectedVessel.id,
+        vesselName: selectedVessel.name,
+        action: actionType,
+        status: "pending",
+        createdAt: new Date(),
+        assignedTo: "Current User"
+      };
+      setActions(prev => [newAction, ...prev]);
+    }
+
     setIsActionDialogOpen(false);
     setActionType("");
     setActionNotes("");
@@ -271,7 +292,7 @@ export function FleetCommandDashboard() {
       title: "Ação Criada",
       description: `${actionType} iniciada para ${selectedVessel.name}`
     });
-  }, [selectedVessel, actionType, toast]);
+  }, [selectedVessel, actionType, actionNotes, toast]);
 
   // Send message
   const sendMessage = useCallback(() => {
@@ -286,13 +307,18 @@ export function FleetCommandDashboard() {
     setMessageText("");
   }, [selectedVessel, messageText, toast]);
 
-  // Complete action
-  const completeAction = useCallback((actionId: string) => {
+  // Complete action - persist to Supabase
+  const completeAction = useCallback(async (actionId: string) => {
     setActions(prev => prev.map(a => 
       a.id === actionId 
         ? { ...a, status: "completed" as const, completedAt: new Date() }
         : a
     ));
+    // Persist completion
+    await supabase
+      .from("action_items")
+      .update({ status: "completed", completion_date: new Date().toISOString() })
+      .eq("id", actionId);
     toast({
       title: "Ação Concluída",
       description: "A ação foi marcada como concluída"
