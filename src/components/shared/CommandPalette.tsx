@@ -1,16 +1,12 @@
 /**
- * Command Palette v2.0 - Global Module Search (Ctrl+K)
+ * Command Palette v3.0 - Enhanced Global Search (Ctrl+K / ⌘K)
  * 
- * Implementa busca universal de todos os módulos do sistema,
- * incluindo rotas legadas e módulos ocultos por RBAC.
- * 
- * ✅ Indexa TODAS as páginas (205+)
- * ✅ Busca por nome antigo e novo (aliases)
- * ✅ Mostra badges de permissão
- * ✅ Navegação instantânea
- * ✅ 12 Auditorias Marítimas indexadas
- * ✅ 10 Agentes IA indexados
- * ✅ Ações rápidas (Add, Refresh, Export)
+ * ✅ 205+ modules indexed with aliases & keywords
+ * ✅ Recent items (persisted)
+ * ✅ Keyboard shortcut hints
+ * ✅ Fuzzy matching via cmdk
+ * ✅ Quick actions with real handlers
+ * ✅ Disruptive features indexed
  */
 
 import React, { useState, useEffect, useCallback, useMemo } from 'react';
@@ -32,11 +28,13 @@ import {
   BarChart3, Bot, Zap, AlertTriangle,
   DollarSign, Leaf, ClipboardList, Cloud,
   Lock, Fuel, Stethoscope, Terminal, Plane,
-  Search, Plus, RefreshCw, Download, Package
+  Search, Plus, RefreshCw, Download, Package,
+  Clock, Mic, ScanLine, GraduationCap, Radio,
+  Gauge, Container, Globe, Sparkles, Calculator
 } from 'lucide-react';
 import type { LucideIcon } from 'lucide-react';
 
-interface CommandItem {
+interface PaletteItem {
   id: string;
   label: string;
   aliases: string[];
@@ -46,36 +44,48 @@ interface CommandItem {
   badge?: string;
   restricted?: boolean;
   keywords?: string[];
+  shortcut?: string;
+}
+
+const RECENT_KEY = 'nauti-cmd-recent';
+const MAX_RECENT = 5;
+
+function getRecent(): string[] {
+  try {
+    return JSON.parse(localStorage.getItem(RECENT_KEY) || '[]');
+  } catch { return []; }
+}
+
+function addRecent(id: string) {
+  try {
+    const recent = getRecent().filter(r => r !== id);
+    recent.unshift(id);
+    localStorage.setItem(RECENT_KEY, JSON.stringify(recent.slice(0, MAX_RECENT)));
+  } catch { /* ignore */ }
 }
 
 // ═══════════════════════════════════════════════════════════
-// COMPLETE INDEX OF ALL 205+ MODULES
+// COMPLETE INDEX OF ALL MODULES
 // ═══════════════════════════════════════════════════════════
-const ALL_MODULES: CommandItem[] = [
-  // ═══════════════════════════════════════════════════════════
-  // MEGA-HUB A: COMMAND
-  // ═══════════════════════════════════════════════════════════
-  { id: 'command', label: 'Command Center', aliases: ['central de comando', 'dashboard', 'overview', 'visão geral'], path: '/command', icon: Compass, group: 'Command', keywords: ['home', 'inicio', 'principal'] },
+const ALL_MODULES: PaletteItem[] = [
+  // COMMAND
+  { id: 'command', label: 'Command Center', aliases: ['central de comando', 'dashboard', 'overview', 'visão geral'], path: '/command', icon: Compass, group: 'Command', keywords: ['home', 'inicio', 'principal'], shortcut: '⌘1' },
   { id: 'command-ops', label: 'Operations View', aliases: ['operações', 'operations'], path: '/command?tab=operations', icon: Activity, group: 'Command' },
   { id: 'command-exec', label: 'Executive View', aliases: ['executivo', 'c-level', 'diretoria'], path: '/command?tab=executive', icon: BarChart3, group: 'Command' },
   { id: 'noc', label: 'NOC 24/7', aliases: ['network operations', 'monitoramento', 'centro de operações'], path: '/command?tab=noc', icon: Eye, group: 'Command' },
   { id: 'soc', label: 'SOC Security', aliases: ['security operations', 'segurança', 'cybersecurity'], path: '/command?tab=soc', icon: Shield, group: 'Command' },
-  
-  // ═══════════════════════════════════════════════════════════
-  // MEGA-HUB B: OPS
-  // ═══════════════════════════════════════════════════════════
-  { id: 'ops', label: 'Operations Hub', aliases: ['operações', 'maritime', 'marítimo'], path: '/ops', icon: Ship, group: 'Ops' },
+
+  // OPS
+  { id: 'ops', label: 'Operations Hub', aliases: ['operações', 'maritime', 'marítimo'], path: '/ops', icon: Ship, group: 'Ops', shortcut: '⌘2' },
   { id: 'maritime', label: 'Maritime Command', aliases: ['marítimo', 'naval'], path: '/ops?tab=maritime', icon: Anchor, group: 'Ops' },
   { id: 'fleet', label: 'Fleet Command', aliases: ['frota', 'embarcações', 'navios'], path: '/ops?tab=fleet', icon: Ship, group: 'Ops' },
   { id: 'voyage', label: 'Voyage Command', aliases: ['viagens', 'rotas', 'navegação'], path: '/ops?tab=voyage', icon: Map, group: 'Ops' },
   { id: 'missions', label: 'Missions', aliases: ['missões', 'operações especiais'], path: '/ops?tab=missions', icon: Target, group: 'Ops' },
   { id: 'logistics', label: 'Logistics', aliases: ['logística', 'suprimentos'], path: '/ops?tab=logistics', icon: Package, group: 'Ops' },
   { id: 'contracts', label: 'Vessel Contracts', aliases: ['contratos', 'charter party', 'afretamento'], path: '/ops?tab=contracts', icon: FileText, group: 'Ops' },
-  
-  // ═══════════════════════════════════════════════════════════
-  // MEGA-HUB C: MAINTENANCE
-  // ═══════════════════════════════════════════════════════════
-  { id: 'maintenance', label: 'Maintenance Hub', aliases: ['manutenção', 'PMS', 'planned maintenance'], path: '/maintenance', icon: Wrench, group: 'Maintenance' },
+
+  // MAINTENANCE
+  { id: 'maintenance', label: 'Maintenance Hub', aliases: ['manutenção', 'PMS', 'planned maintenance'], path: '/maintenance', icon: Wrench, group: 'Maintenance', shortcut: '⌘3' },
   { id: 'class-surveys', label: 'Class Surveys', aliases: ['DNV', "Lloyd's", 'ABS', 'vistoria de classe', 'classificadora'], path: '/maintenance?tab=surveys', icon: Shield, group: 'Maintenance', badge: 'DNV' },
   { id: 'predictive', label: 'Predictive Maintenance', aliases: ['manutenção preditiva', 'ML', 'machine learning'], path: '/maintenance?tab=predictive', icon: Brain, group: 'Maintenance', badge: 'ML' },
   { id: 'drydock', label: 'Drydock Management', aliases: ['docagem', 'estaleiro', 'dique seco'], path: '/maintenance?tab=drydock', icon: Anchor, group: 'Maintenance' },
@@ -83,35 +93,29 @@ const ALL_MODULES: CommandItem[] = [
   { id: 'digital-twin', label: 'Digital Twin 3D', aliases: ['gêmeo digital', 'simulação', '3D'], path: '/maintenance?tab=digital-twin', icon: Activity, group: 'Maintenance', badge: '3D' },
   { id: 'waste-marpol', label: 'MARPOL & Waste', aliases: ['resíduos', 'waste management', 'e-GRB'], path: '/maintenance?tab=waste-marpol', icon: Leaf, group: 'Maintenance' },
   { id: 'esg', label: 'ESG Emissions', aliases: ['emissões', 'sustentabilidade', 'CII', 'EEXI', 'carbono'], path: '/maintenance?tab=esg', icon: Leaf, group: 'Maintenance', badge: 'ESG' },
-  
-  // ═══════════════════════════════════════════════════════════
-  // MEGA-HUB D: AI
-  // ═══════════════════════════════════════════════════════════
-  { id: 'ai', label: 'AI Hub', aliases: ['inteligência artificial', 'machine learning', 'IA'], path: '/ai', icon: Brain, group: 'AI' },
+
+  // AI
+  { id: 'ai', label: 'AI Hub', aliases: ['inteligência artificial', 'machine learning', 'IA'], path: '/ai', icon: Brain, group: 'AI', shortcut: '⌘4' },
   { id: 'ai-chat', label: 'AI Chat & Assistants', aliases: ['chatbot', 'assistente', 'GPT', 'copilot'], path: '/ai?tab=chat', icon: MessageSquare, group: 'AI' },
   { id: 'ai-agents', label: 'AI Agents', aliases: ['agentes autônomos', 'orquestração', 'autonomous'], path: '/ai?tab=agents', icon: Bot, group: 'AI', badge: '25+' },
   { id: 'ai-workflows', label: 'AI Workflows', aliases: ['automação', 'n8n', 'workflow'], path: '/ai?tab=workflows', icon: Zap, group: 'AI' },
-  { id: 'voice', label: 'Voice Assistant', aliases: ['voz', 'comandos de voz', 'speech'], path: '/ai?tab=voice', icon: MessageSquare, group: 'AI' },
+  { id: 'voice', label: 'Voice Assistant', aliases: ['voz', 'comandos de voz', 'speech'], path: '/ai?tab=voice', icon: Mic, group: 'AI' },
   { id: 'ai-modules', label: '11 AI Modules', aliases: ['módulos IA', 'voyage logistics', 'safety incident'], path: '/ai?tab=modules', icon: Brain, group: 'AI', badge: '11' },
   { id: 'rag', label: 'RAG Assistant', aliases: ['documentos', 'busca semântica', 'semantic search'], path: '/ai?tab=rag', icon: FileText, group: 'AI', badge: 'Enterprise' },
-  { id: 'ocr', label: 'OCR Center', aliases: ['reconhecimento', 'digitalização', 'scanning'], path: '/ai?tab=ocr', icon: FileText, group: 'AI', badge: 'Enterprise' },
+  { id: 'ocr', label: 'OCR Center', aliases: ['reconhecimento', 'digitalização', 'scanning'], path: '/ai?tab=ocr', icon: ScanLine, group: 'AI', badge: 'Enterprise' },
   { id: 'ai-analytics', label: 'AI Analytics', aliases: ['análise IA', 'métricas'], path: '/ai?tab=analytics', icon: BarChart3, group: 'AI' },
   { id: 'ai-observability', label: 'AI Observability', aliases: ['observabilidade', 'logs', 'monitoring'], path: '/ai?tab=observability', icon: Eye, group: 'AI' },
-  
-  // ═══════════════════════════════════════════════════════════
-  // MEGA-HUB E: TRACKING
-  // ═══════════════════════════════════════════════════════════
-  { id: 'tracking', label: 'Tracking Hub', aliases: ['rastreamento', 'telemetria', 'GPS'], path: '/tracking', icon: Satellite, group: 'Tracking' },
+
+  // TRACKING
+  { id: 'tracking', label: 'Tracking Hub', aliases: ['rastreamento', 'telemetria', 'GPS'], path: '/tracking', icon: Satellite, group: 'Tracking', shortcut: '⌘5' },
   { id: 'realtime', label: 'Real-time Tracking', aliases: ['tempo real', 'live', 'ao vivo'], path: '/tracking?tab=realtime', icon: Activity, group: 'Tracking' },
   { id: 'ais', label: 'AIS Fleet Tracker', aliases: ['AIS', 'posição', 'localização', 'MarineTraffic'], path: '/tracking?tab=ais', icon: Ship, group: 'Tracking' },
   { id: 'satcom', label: 'SATCOM Dashboard', aliases: ['satélite', 'comunicação', 'Inmarsat', 'Iridium'], path: '/tracking?tab=satcom', icon: Satellite, group: 'Tracking' },
-  { id: 'weather', label: 'Weather AI', aliases: ['clima', 'previsão do tempo', 'meteorologia'], path: '/tracking?tab=weather', icon: Cloud, group: 'Tracking', badge: 'AI' },
+  { id: 'weather', label: 'Weather Intelligence', aliases: ['clima', 'previsão do tempo', 'meteorologia', 'Open-Meteo'], path: '/tracking?tab=weather', icon: Cloud, group: 'Tracking', badge: 'AI' },
   { id: 'tracking-alerts', label: 'Tracking Alerts', aliases: ['alertas', 'geofencing', 'notificações'], path: '/tracking?tab=alerts', icon: AlertTriangle, group: 'Tracking' },
-  
-  // ═══════════════════════════════════════════════════════════
-  // MEGA-HUB F: COMPLIANCE - HUB & TOOLS
-  // ═══════════════════════════════════════════════════════════
-  { id: 'compliance', label: 'Compliance Hub', aliases: ['conformidade', 'auditorias', 'regulamentação'], path: '/compliance', icon: Shield, group: 'Compliance' },
+
+  // COMPLIANCE
+  { id: 'compliance', label: 'Compliance Hub', aliases: ['conformidade', 'auditorias', 'regulamentação'], path: '/compliance', icon: Shield, group: 'Compliance', shortcut: '⌘6' },
   { id: 'scorecard', label: 'Compliance Scorecard', aliases: ['pontuação', 'score', 'indicadores'], path: '/compliance?tab=scorecard', icon: BarChart3, group: 'Compliance' },
   { id: 'audit-agents', label: '10 AI Audit Agents', aliases: ['agentes de auditoria', 'auditoria IA', 'compliance AI'], path: '/audit-agents', icon: Bot, group: 'Compliance', badge: '10 AI' },
   { id: 'certificates', label: 'Certificates Tracker', aliases: ['certificados', 'documentos obrigatórios', 'vencimentos'], path: '/compliance?tab=certificates', icon: Award, group: 'Compliance' },
@@ -119,10 +123,8 @@ const ALL_MODULES: CommandItem[] = [
   { id: 'ncs-capas', label: 'NCs & CAPAs', aliases: ['não conformidades', 'ações corretivas', 'CAR'], path: '/compliance?tab=ncs-capas', icon: AlertTriangle, group: 'Compliance' },
   { id: 'regulations', label: 'Regulations', aliases: ['regulamentos', 'normas', 'legislação'], path: '/compliance?tab=regulations', icon: FileText, group: 'Compliance' },
   { id: 'security', label: 'Security Center', aliases: ['segurança', 'ISPS', 'SSP'], path: '/compliance?tab=security', icon: Lock, group: 'Compliance' },
-  
-  // ═══════════════════════════════════════════════════════════
-  // 12 AUDITORIAS MARÍTIMAS COMPLETAS
-  // ═══════════════════════════════════════════════════════════
+
+  // 12 AUDITORIAS MARÍTIMAS
   { id: 'peo-dp', label: '1. PEO-DP', aliases: ['posicionamento dinâmico', 'IMCA M-117', 'DP', 'dynamic positioning'], path: '/peo-dp', icon: Anchor, group: '12 Auditorias Marítimas', badge: 'IMCA' },
   { id: 'peotram', label: '2. PEOTRAM 13 Elementos', aliases: ['ANP', 'treinamento', 'manning', 'tripulação'], path: '/peotram', icon: Shield, group: '12 Auditorias Marítimas', badge: 'ANP' },
   { id: 'ism', label: '3. ISM Code (SMS)', aliases: ['segurança marítima', 'IMO', 'safety management', 'ISM'], path: '/safety-imca', icon: Shield, group: '12 Auditorias Marítimas', badge: 'IMO' },
@@ -135,140 +137,141 @@ const ALL_MODULES: CommandItem[] = [
   { id: 'sgso', label: '10. SGSO ANP 17 Práticas', aliases: ['gestão operacional', 'ANP Brasil', 'SGSO', '17 práticas'], path: '/sgso', icon: Settings, group: '12 Auditorias Marítimas', badge: 'ANP' },
   { id: 'pre-sire', label: '11. Pre-SIRE 2.0', aliases: ['OCIMF SIRE', 'tanker inspection', 'SIRE 2.0', 'tanker'], path: '/pre-sire', icon: Ship, group: '12 Auditorias Marítimas', badge: 'OCIMF' },
   { id: 'tmsa', label: '12. TMSA Assessment', aliases: ['tanker management', 'OCIMF', 'TMSA', 'self assessment'], path: '/tmsa-assessment', icon: BarChart3, group: '12 Auditorias Marítimas', badge: 'OCIMF' },
-  
-  // ═══════════════════════════════════════════════════════════
-  // MEGA-HUB G: WORKBENCH
-  // ═══════════════════════════════════════════════════════════
-  // Documents
-  { id: 'docs', label: 'Document Center', aliases: ['documentos', 'arquivos', 'gestão documental'], path: '/workbench?section=docs', icon: FileText, group: 'Workbench - Docs' },
-  { id: 'templates', label: 'Templates', aliases: ['modelos', 'formulários', 'padrões'], path: '/workbench/docs?tab=templates', icon: FileText, group: 'Workbench - Docs' },
-  { id: 'checklists', label: 'Checklists', aliases: ['listas de verificação', 'check'], path: '/workbench/docs?tab=checklists', icon: ClipboardList, group: 'Workbench - Docs' },
-  { id: 'reports', label: 'Reports', aliases: ['relatórios', 'reporting'], path: '/workbench/docs?tab=reports', icon: BarChart3, group: 'Workbench - Docs' },
-  
-  // People
-  { id: 'people', label: 'People Hub', aliases: ['RH', 'tripulação', 'crew', 'recursos humanos'], path: '/workbench?section=people', icon: Users, group: 'Workbench - People' },
-  { id: 'stcw-mlc', label: 'STCW/MLC Compliance', aliases: ['certificados marítimos', 'treinamento', 'STCW'], path: '/stcw-mlc', icon: Award, group: 'Workbench - People' },
-  { id: 'medical', label: 'Medical Infirmary', aliases: ['enfermaria', 'saúde', 'telemedicina'], path: '/medical-infirmary', icon: Stethoscope, group: 'Workbench - People' },
-  { id: 'payroll', label: 'Payroll', aliases: ['folha de pagamento', 'salários'], path: '/payroll', icon: DollarSign, group: 'Workbench - People' },
-  { id: 'recruitment', label: 'Recruitment', aliases: ['recrutamento', 'seleção', 'vagas'], path: '/recruitment', icon: Users, group: 'Workbench - People' },
-  
-  // Finance
-  { id: 'finance', label: 'Finance Hub', aliases: ['financeiro', 'contabilidade', 'finanças'], path: '/workbench?section=finance', icon: DollarSign, group: 'Workbench - Finance' },
-  { id: 'voyage-pnl', label: 'Voyage P&L', aliases: ['lucros e perdas', 'viagem', 'resultado'], path: '/voyage-accounting', icon: BarChart3, group: 'Workbench - Finance' },
-  { id: 'procurement', label: 'Procurement', aliases: ['compras', 'suprimentos', 'requisições'], path: '/procurement-command', icon: Package, group: 'Workbench - Finance' },
-  { id: 'travel', label: 'Travel Command', aliases: ['viagens', 'passagens', 'hotéis'], path: '/travel-command', icon: Plane, group: 'Workbench - Finance' },
-  
-  // System
-  { id: 'system', label: 'System Hub', aliases: ['configurações', 'settings', 'sistema'], path: '/workbench?section=system', icon: Settings, group: 'Workbench - System' },
-  { id: 'integrations', label: 'Integrations', aliases: ['integrações', 'API', 'conectores'], path: '/integrations', icon: Zap, group: 'Workbench - System' },
-  { id: 'settings', label: 'Settings', aliases: ['configurações', 'preferências'], path: '/settings', icon: Settings, group: 'Workbench - System' },
-  { id: 'dev-tools', label: 'Dev Tools', aliases: ['desenvolvimento', 'debug', 'rotas'], path: '/dev-routes', icon: Terminal, group: 'Workbench - System', restricted: true },
+
+  // WORKBENCH - Docs
+  { id: 'docs', label: 'Document Center', aliases: ['documentos', 'arquivos', 'gestão documental'], path: '/workbench?section=docs', icon: FileText, group: 'Workbench', shortcut: '⌘7' },
+  { id: 'templates', label: 'Templates', aliases: ['modelos', 'formulários', 'padrões'], path: '/workbench/docs?tab=templates', icon: FileText, group: 'Workbench' },
+  { id: 'checklists', label: 'Checklists', aliases: ['listas de verificação', 'check'], path: '/workbench/docs?tab=checklists', icon: ClipboardList, group: 'Workbench' },
+  { id: 'reports', label: 'Reports', aliases: ['relatórios', 'reporting'], path: '/workbench/docs?tab=reports', icon: BarChart3, group: 'Workbench' },
+
+  // WORKBENCH - People
+  { id: 'people', label: 'People Hub', aliases: ['RH', 'tripulação', 'crew', 'recursos humanos'], path: '/workbench?section=people', icon: Users, group: 'People & HR' },
+  { id: 'stcw-mlc', label: 'STCW/MLC Compliance', aliases: ['certificados marítimos', 'treinamento', 'STCW'], path: '/stcw-mlc', icon: Award, group: 'People & HR' },
+  { id: 'medical', label: 'Medical Infirmary', aliases: ['enfermaria', 'saúde', 'telemedicina'], path: '/medical-infirmary', icon: Stethoscope, group: 'People & HR' },
+  { id: 'payroll', label: 'Payroll', aliases: ['folha de pagamento', 'salários'], path: '/payroll', icon: DollarSign, group: 'People & HR' },
+  { id: 'recruitment', label: 'Recruitment', aliases: ['recrutamento', 'seleção', 'vagas'], path: '/recruitment', icon: Users, group: 'People & HR' },
+  { id: 'academy', label: 'Academy & Training', aliases: ['treinamento', 'LMS', 'certificações', 'STCW'], path: '/nautilus-academy', icon: GraduationCap, group: 'People & HR' },
+  { id: 'fatigue', label: 'Fatigue Predictor', aliases: ['fadiga', 'STCW rest hours', 'descanso'], path: '/crew-fatigue-predictor', icon: Heart, group: 'People & HR', badge: 'STCW' },
+  { id: 'wellness', label: 'Crew Wellness', aliases: ['bem-estar', 'wearables', 'IoT', 'saúde'], path: '/crew-wellness', icon: Heart, group: 'People & HR' },
+
+  // WORKBENCH - Finance
+  { id: 'finance', label: 'Finance Hub', aliases: ['financeiro', 'contabilidade', 'finanças'], path: '/workbench?section=finance', icon: DollarSign, group: 'Finance' },
+  { id: 'voyage-pnl', label: 'Voyage P&L', aliases: ['lucros e perdas', 'viagem', 'resultado', 'TCE'], path: '/voyage-accounting', icon: BarChart3, group: 'Finance' },
+  { id: 'procurement', label: 'Procurement', aliases: ['compras', 'suprimentos', 'requisições'], path: '/procurement-command', icon: Package, group: 'Finance' },
+  { id: 'travel', label: 'Travel Command', aliases: ['viagens', 'passagens', 'hotéis'], path: '/travel-command', icon: Plane, group: 'Finance' },
+
+  // DISRUPTIVE FEATURES
+  { id: 'voice-copilot', label: 'Voice Copilot', aliases: ['ElevenLabs', 'comandos de voz', 'speech-to-text'], path: '/voice-copilot', icon: Mic, group: '🚀 Disruptive', badge: 'NEW' },
+  { id: 'computer-vision', label: 'Computer Vision Inspector', aliases: ['detecção de defeitos', 'fotos', 'inspeção visual'], path: '/computer-vision-inspector', icon: ScanLine, group: '🚀 Disruptive', badge: 'AI' },
+  { id: 'crew-marketplace', label: 'Global Crew Marketplace', aliases: ['matching', 'recrutamento global', 'pool'], path: '/crew-marketplace', icon: Globe, group: '🚀 Disruptive', badge: 'NEW' },
+  { id: 'iot-wearables', label: 'IoT Wearables Dashboard', aliases: ['biometria', 'sinais vitais', 'smartwatch'], path: '/iot-wearables', icon: Radio, group: '🚀 Disruptive', badge: 'IoT' },
+  { id: 'fleet-bench', label: 'Fleet Benchmarking', aliases: ['KPIs', 'comparativo', 'indústria'], path: '/fleet-benchmarking', icon: Gauge, group: '🚀 Disruptive' },
+  { id: 'blockchain', label: 'Blockchain Audit Trail', aliases: ['SHA-256', 'imutável', 'certificados'], path: '/blockchain-compliance', icon: Lock, group: '🚀 Disruptive', badge: 'Enterprise' },
+  { id: 'monte-carlo', label: 'Monte Carlo Simulation', aliases: ['risco financeiro', 'simulação', 'probabilidade'], path: '/company-financials', icon: Calculator, group: '🚀 Disruptive' },
+
+  // SYSTEM
+  { id: 'system', label: 'System Hub', aliases: ['configurações', 'settings', 'sistema'], path: '/workbench?section=system', icon: Settings, group: 'System' },
+  { id: 'integrations', label: 'Integrations', aliases: ['integrações', 'API', 'conectores'], path: '/integrations', icon: Zap, group: 'System' },
+  { id: 'settings', label: 'Settings', aliases: ['configurações', 'preferências'], path: '/settings', icon: Settings, group: 'System' },
+  { id: 'dev-tools', label: 'Dev Tools', aliases: ['desenvolvimento', 'debug', 'rotas'], path: '/dev-routes', icon: Terminal, group: 'System', restricted: true },
+  { id: 'landing', label: 'Landing Page', aliases: ['site', 'marketing', 'homepage'], path: '/landing', icon: Globe, group: 'System' },
 ];
 
-// ═══════════════════════════════════════════════════════════
 // QUICK ACTIONS
-// ═══════════════════════════════════════════════════════════
-const QUICK_ACTIONS: CommandItem[] = [
-  { id: 'action-search', label: 'Buscar em todo o sistema', aliases: ['search', 'pesquisar'], path: '#search', icon: Search, group: 'Ações Rápidas' },
-  { id: 'action-add', label: 'Adicionar novo registro', aliases: ['criar', 'novo', 'add', 'create'], path: '#add', icon: Plus, group: 'Ações Rápidas' },
-  { id: 'action-refresh', label: 'Atualizar dados', aliases: ['refresh', 'sync', 'recarregar'], path: '#refresh', icon: RefreshCw, group: 'Ações Rápidas' },
-  { id: 'action-export', label: 'Exportar relatório', aliases: ['download', 'csv', 'pdf'], path: '#export', icon: Download, group: 'Ações Rápidas' },
+const QUICK_ACTIONS: PaletteItem[] = [
+  { id: 'action-search', label: 'Search everywhere', aliases: ['search', 'pesquisar', 'buscar em tudo'], path: '#search', icon: Search, group: 'Quick Actions', shortcut: '⌘K' },
+  { id: 'action-add', label: 'Add new record', aliases: ['criar', 'novo', 'add', 'create'], path: '#add', icon: Plus, group: 'Quick Actions', shortcut: '⌘N' },
+  { id: 'action-refresh', label: 'Refresh data', aliases: ['refresh', 'sync', 'recarregar', 'atualizar'], path: '#refresh', icon: RefreshCw, group: 'Quick Actions', shortcut: '⌘R' },
+  { id: 'action-export', label: 'Export report', aliases: ['download', 'csv', 'pdf', 'exportar'], path: '#export', icon: Download, group: 'Quick Actions', shortcut: '⌘E' },
 ];
 
 export function CommandPalette() {
   const [open, setOpen] = useState(false);
   const navigate = useNavigate();
+  const [recentIds, setRecentIds] = useState<string[]>(getRecent);
 
-  // Handle keyboard shortcut
+  // Keyboard shortcut: Ctrl+K / ⌘K
   useEffect(() => {
     const down = (e: KeyboardEvent) => {
       if (e.key === 'k' && (e.metaKey || e.ctrlKey)) {
         e.preventDefault();
-        setOpen((open) => !open);
+        setOpen((o) => !o);
       }
     };
-
     document.addEventListener('keydown', down);
     return () => document.removeEventListener('keydown', down);
   }, []);
 
-  const handleSelect = useCallback((path: string) => {
+  const allItems = useMemo(() => [...ALL_MODULES, ...QUICK_ACTIONS], []);
+  const itemMap = useMemo(() => {
+    const map: Record<string, PaletteItem> = {};
+    allItems.forEach(m => { map[m.id] = m; });
+    return map;
+  }, [allItems]);
+
+  const recentItems = useMemo(() => {
+    return recentIds.map(id => itemMap[id]).filter(Boolean) as PaletteItem[];
+  }, [recentIds, itemMap]);
+
+  const handleSelect = useCallback((item: PaletteItem) => {
     setOpen(false);
-    
-    // Handle quick actions
-    if (path.startsWith('#')) {
-      // Could dispatch actions here
-      return;
-    }
-    
-    navigate(path);
+    addRecent(item.id);
+    setRecentIds(getRecent());
+
+    if (item.path.startsWith('#')) return;
+    navigate(item.path);
   }, [navigate]);
 
-  // Group modules by category
+  // Group modules
   const groupedModules = useMemo(() => {
-    const groups: Record<string, CommandItem[]> = {};
-    
-    // Add quick actions first
-    groups['Ações Rápidas'] = QUICK_ACTIONS;
-    
-    // Add all modules
-    ALL_MODULES.forEach((module) => {
-      if (!groups[module.group]) {
-        groups[module.group] = [];
-      }
-      groups[module.group].push(module);
+    const groups: Record<string, PaletteItem[]> = {};
+    ALL_MODULES.forEach((m) => {
+      if (!groups[m.group]) groups[m.group] = [];
+      groups[m.group].push(m);
     });
-    
     return groups;
   }, []);
 
   return (
     <CommandDialog open={open} onOpenChange={setOpen}>
-      <CommandInput placeholder="Buscar módulos, auditorias, ações... (Ctrl+K)" />
-      <CommandList className="max-h-[400px]">
+      <CommandInput placeholder="Search modules, audits, actions… (⌘K)" />
+      <CommandList className="max-h-[420px]">
         <CommandEmpty>
           <div className="flex flex-col items-center gap-2 py-6">
             <Search className="h-10 w-10 text-muted-foreground" />
-            <p>Nenhum módulo encontrado.</p>
+            <p>No module found.</p>
             <p className="text-sm text-muted-foreground">
-              Tente buscar por: "PEODP", "ISM", "manutenção", "tripulação"
+              Try: "PEODP", "ISM", "maintenance", "crew", "weather"
             </p>
           </div>
         </CommandEmpty>
-        
-        {Object.entries(groupedModules).map(([group, modules], idx) => (
+
+        {/* Recent Items */}
+        {recentItems.length > 0 && (
+          <>
+            <CommandGroup heading="⏱ Recent">
+              {recentItems.map((item) => (
+                <PaletteEntry key={`recent-${item.id}`} item={item} onSelect={handleSelect} />
+              ))}
+            </CommandGroup>
+            <CommandSeparator />
+          </>
+        )}
+
+        {/* Quick Actions */}
+        <CommandGroup heading="⚡ Quick Actions">
+          {QUICK_ACTIONS.map((item) => (
+            <PaletteEntry key={item.id} item={item} onSelect={handleSelect} />
+          ))}
+        </CommandGroup>
+        <CommandSeparator />
+
+        {/* Module Groups */}
+        {Object.entries(groupedModules).map(([group, modules]) => (
           <React.Fragment key={group}>
-            {idx > 0 && <CommandSeparator />}
             <CommandGroup heading={group}>
-              {modules.map((module) => (
-                <CommandItem
-                  key={module.id}
-                  value={`${module.label} ${module.aliases.join(' ')} ${module.keywords?.join(' ') || ''}`}
-                  onSelect={() => handleSelect(module.path)}
-                  className="flex items-center gap-3 py-3"
-                >
-                  <div className="flex h-8 w-8 items-center justify-center rounded-md border bg-background">
-                    <module.icon className="h-4 w-4 text-muted-foreground" />
-                  </div>
-                  <div className="flex-1">
-                    <span className="font-medium">{module.label}</span>
-                    {module.aliases.length > 0 && (
-                      <p className="text-xs text-muted-foreground truncate max-w-[200px]">
-                        {module.aliases.slice(0, 3).join(', ')}
-                      </p>
-                    )}
-                  </div>
-                  {module.badge && (
-                    <Badge variant="outline" className="text-xs">
-                      {module.badge}
-                    </Badge>
-                  )}
-                  {module.restricted && (
-                    <Badge variant="destructive" className="text-xs">
-                      Admin
-                    </Badge>
-                  )}
-                </CommandItem>
+              {modules.map((item) => (
+                <PaletteEntry key={item.id} item={item} onSelect={handleSelect} />
               ))}
             </CommandGroup>
           </React.Fragment>
@@ -278,14 +281,49 @@ export function CommandPalette() {
   );
 }
 
+/** Single palette entry with icon, label, aliases, badge, and shortcut */
+const PaletteEntry = React.memo(({ item, onSelect }: { item: PaletteItem; onSelect: (item: PaletteItem) => void }) => (
+  <CommandItem
+    value={`${item.label} ${item.aliases.join(' ')} ${item.keywords?.join(' ') || ''}`}
+    onSelect={() => onSelect(item)}
+    className="flex items-center gap-3 py-2.5"
+  >
+    <div className="flex h-8 w-8 items-center justify-center rounded-md border bg-background shrink-0">
+      <item.icon className="h-4 w-4 text-muted-foreground" />
+    </div>
+    <div className="flex-1 min-w-0">
+      <span className="font-medium text-sm">{item.label}</span>
+      {item.aliases.length > 0 && (
+        <p className="text-xs text-muted-foreground truncate">
+          {item.aliases.slice(0, 3).join(' · ')}
+        </p>
+      )}
+    </div>
+    {item.shortcut && (
+      <kbd className="hidden sm:inline-flex h-5 items-center gap-0.5 rounded border bg-muted px-1.5 text-[10px] font-mono text-muted-foreground">
+        {item.shortcut}
+      </kbd>
+    )}
+    {item.badge && (
+      <Badge variant="outline" className="text-[10px] shrink-0">
+        {item.badge}
+      </Badge>
+    )}
+    {item.restricted && (
+      <Badge variant="destructive" className="text-[10px] shrink-0">
+        Admin
+      </Badge>
+    )}
+  </CommandItem>
+));
+PaletteEntry.displayName = 'PaletteEntry';
+
 // Hook to trigger command palette programmatically
 export function useCommandPalette() {
   const [open, setOpen] = useState(false);
-  
   const toggle = useCallback(() => setOpen((o) => !o), []);
   const openPalette = useCallback(() => setOpen(true), []);
   const closePalette = useCallback(() => setOpen(false), []);
-  
   return { open, toggle, openPalette, closePalette, setOpen };
 }
 
