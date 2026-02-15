@@ -128,7 +128,15 @@ export const ESGAnalyticsBenchmark: React.FC = () => {
     );
   }
 
-  const d = esgData!;
+  if (!esgData) {
+    return (
+      <div className="text-center py-12 text-muted-foreground">
+        <p>Nenhum dado ESG disponível para análise.</p>
+      </div>
+    );
+  }
+
+  const d = esgData;
 
   return (
     <div className="space-y-6">
