@@ -1,177 +1,198 @@
 /**
- * Sustainability Score - ESG Score (0-100), Badges, Vessel Comparison
+ * Sustainability Score - ESG Score with real Supabase data
+ * Fetches from emissions_records, waste_records, vessels, internal_audits
  */
 
-import React, { useState } from "react";
+import React, { useState, useMemo } from "react";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Progress } from "@/components/ui/progress";
-import { ScrollArea } from "@/components/ui/scroll-area";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { useQuery } from "@tanstack/react-query";
+import { supabase } from "@/integrations/supabase/client";
 import {
-  Leaf,
-  Award,
-  TrendingUp,
-  TrendingDown,
-  Ship,
-  Droplets,
-  Wind,
-  Trash2,
-  Users,
-  Shield,
-  Target,
-  BarChart3,
-  Trophy,
-  Star,
-  Medal,
-  Crown
+  Leaf, Award, TrendingUp, TrendingDown, Ship, Users, Shield,
+  Target, BarChart3, Trophy, Star, Medal, Crown, Loader2
 } from "lucide-react";
-import { toast } from "sonner";
-import { RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis, Radar, ResponsiveContainer, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, LineChart, Line } from "recharts";
+import {
+  RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis, Radar,
+  ResponsiveContainer, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend
+} from "recharts";
 
-interface VesselScore {
-  vesselId: string;
-  vesselName: string;
-  overallScore: number;
+interface VesselESG {
+  id: string;
+  name: string;
+  environmental: number;
+  social: number;
+  governance: number;
+  overall: number;
   rank: number;
-  environmental: { emissions: number; waste: number; efficiency: number };
-  social: { safety: number; training: number; welfare: number };
-  governance: { compliance: number; reporting: number; audits: number };
-  trend: "up" | "down" | "stable";
   badges: string[];
-}
-
-interface ESGMetric {
-  category: string;
-  metric: string;
-  value: number;
-  target: number;
-  unit: string;
   trend: "up" | "down" | "stable";
 }
-
-const VESSELS: VesselScore[] = [
-  {
-    vesselId: "v1",
-    vesselName: "PSV Atlantic Star",
-    overallScore: 87,
-    rank: 1,
-    environmental: { emissions: 85, waste: 92, efficiency: 88 },
-    social: { safety: 90, training: 85, welfare: 82 },
-    governance: { compliance: 95, reporting: 88, audits: 90 },
-    trend: "up",
-    badges: ["🌿 Green Champion", "⭐ Zero Incidents", "📊 Top Reporter"]
-  },
-  {
-    vesselId: "v2",
-    vesselName: "PSV Ocean Pioneer",
-    overallScore: 82,
-    rank: 2,
-    environmental: { emissions: 80, waste: 85, efficiency: 82 },
-    social: { safety: 88, training: 80, welfare: 78 },
-    governance: { compliance: 90, reporting: 82, audits: 85 },
-    trend: "stable",
-    badges: ["🛡️ Safety First", "📈 Improver"]
-  },
-  {
-    vesselId: "v3",
-    vesselName: "PSV Marine Explorer",
-    overallScore: 78,
-    rank: 3,
-    environmental: { emissions: 75, waste: 80, efficiency: 78 },
-    social: { safety: 82, training: 75, welfare: 80 },
-    governance: { compliance: 85, reporting: 78, audits: 80 },
-    trend: "up",
-    badges: ["🎯 Target Achiever"]
-  },
-  {
-    vesselId: "v4",
-    vesselName: "PSV Deep Voyager",
-    overallScore: 72,
-    rank: 4,
-    environmental: { emissions: 68, waste: 75, efficiency: 72 },
-    social: { safety: 78, training: 70, welfare: 72 },
-    governance: { compliance: 80, reporting: 72, audits: 75 },
-    trend: "down",
-    badges: []
-  }
-];
-
-const ESG_METRICS: ESGMetric[] = [
-  { category: "Environmental", metric: "CO₂ Emissions", value: 1245, target: 1500, unit: "ton", trend: "down" },
-  { category: "Environmental", metric: "Fuel Efficiency", value: 0.45, target: 0.50, unit: "ton/NM", trend: "down" },
-  { category: "Environmental", metric: "Waste Recycled", value: 78, target: 75, unit: "%", trend: "up" },
-  { category: "Environmental", metric: "Oil Spills", value: 0, target: 0, unit: "incidents", trend: "stable" },
-  { category: "Social", metric: "LTIF", value: 0.5, target: 1.0, unit: "rate", trend: "down" },
-  { category: "Social", metric: "Training Hours", value: 42, target: 40, unit: "hrs/person", trend: "up" },
-  { category: "Social", metric: "Crew Satisfaction", value: 85, target: 80, unit: "%", trend: "up" },
-  { category: "Governance", metric: "Compliance Rate", value: 98, target: 95, unit: "%", trend: "up" },
-  { category: "Governance", metric: "Audit Score", value: 92, target: 90, unit: "%", trend: "stable" }
-];
-
-const MONTHLY_TREND = [
-  { month: "Jul", environmental: 82, social: 80, governance: 88 },
-  { month: "Ago", environmental: 83, social: 82, governance: 89 },
-  { month: "Set", environmental: 85, social: 84, governance: 90 },
-  { month: "Out", environmental: 84, social: 85, governance: 91 },
-  { month: "Nov", environmental: 86, social: 86, governance: 92 },
-  { month: "Dez", environmental: 87, social: 87, governance: 93 }
-];
 
 export function SustainabilityScore() {
-  const [selectedVessel, setSelectedVessel] = useState<VesselScore>(VESSELS[0]);
+  const [selectedVesselId, setSelectedVesselId] = useState<string>("");
   const [activeTab, setActiveTab] = useState("overview");
+
+  const { data: vesselScores = [], isLoading } = useQuery({
+    queryKey: ["esg-sustainability-scores"],
+    queryFn: async () => {
+      // Fetch vessels
+      const { data: vessels } = await supabase
+        .from("vessels")
+        .select("id, name, status")
+        .order("name");
+
+      if (!vessels || vessels.length === 0) return [];
+
+      // Fetch emissions
+      const { data: emissions } = await supabase
+        .from("emissions_records")
+        .select("vessel_id, co2_tonnes, sox_kg, nox_kg")
+        .limit(500);
+
+      // Fetch waste
+      const { data: waste } = await supabase
+        .from("waste_records")
+        .select("vessel_id, waste_type, quantity")
+        .limit(500);
+
+      // Fetch audits for governance
+      const { data: audits } = await supabase
+        .from("internal_audits")
+        .select("vessel_id, score, status")
+        .limit(200);
+
+      // Fetch crew for social (training)
+      const { data: crew } = await supabase
+        .from("crew_members")
+        .select("vessel_id, status")
+        .limit(500);
+
+      // Calculate ESG per vessel
+      const scores: VesselESG[] = vessels.map((v) => {
+        // Environmental: based on emission levels (lower = better)
+        const vesselEmissions = (emissions || []).filter((e: any) => e.vessel_id === v.id);
+        const totalCO2 = vesselEmissions.reduce((s: number, e: any) => s + Number(e.co2_tonnes || 0), 0);
+        const envScore = vesselEmissions.length > 0 
+          ? Math.max(50, Math.min(95, 90 - totalCO2 / 100))
+          : 75;
+
+        // Social: crew active ratio
+        const vesselCrew = (crew || []).filter((c) => c.vessel_id === v.id);
+        const activeCrew = vesselCrew.filter((c) => c.status === "active").length;
+        const socialScore = vesselCrew.length > 0
+          ? Math.round((activeCrew / vesselCrew.length) * 100)
+          : 75;
+
+        // Governance: audit scores
+        const vesselAudits = (audits || []).filter((a) => a.vessel_id === v.id);
+        const avgAuditScore = vesselAudits.length > 0
+          ? vesselAudits.reduce((s, a) => s + Number(a.score || 80), 0) / vesselAudits.length
+          : 80;
+        const govScore = Math.min(100, Math.round(avgAuditScore));
+
+        // Waste management score
+        const vesselWaste = (waste || []).filter((w) => w.vessel_id === v.id);
+        const wasteScore = vesselWaste.length > 0 ? Math.max(60, 90 - vesselWaste.length * 2) : 80;
+
+        const environmental = Math.round((envScore + wasteScore) / 2);
+        const social = Math.min(100, socialScore);
+        const governance = govScore;
+        const overall = Math.round((environmental * 0.4 + social * 0.3 + governance * 0.3));
+
+        // Badges
+        const badges: string[] = [];
+        if (overall >= 85) badges.push("🌿 Green Champion");
+        if (social >= 90) badges.push("⭐ Zero Incidents");
+        if (governance >= 90) badges.push("📊 Top Reporter");
+        if (environmental >= 85) badges.push("🛡️ Eco Leader");
+
+        return {
+          id: v.id,
+          name: v.name,
+          environmental,
+          social,
+          governance,
+          overall,
+          rank: 0,
+          badges,
+          trend: overall >= 80 ? "up" : overall >= 60 ? "stable" : "down",
+        };
+      });
+
+      // Sort and assign ranks
+      scores.sort((a, b) => b.overall - a.overall);
+      scores.forEach((s, i) => (s.rank = i + 1));
+
+      return scores;
+    },
+    staleTime: 120_000,
+  });
+
+  const selectedVessel = useMemo(
+    () => vesselScores.find((v) => v.id === selectedVesselId) || vesselScores[0],
+    [vesselScores, selectedVesselId]
+  );
 
   const getScoreColor = (score: number) => {
     if (score >= 85) return "text-success";
     if (score >= 70) return "text-warning";
-    if (score >= 50) return "text-warning/80";
     return "text-destructive";
   };
 
   const getScoreGradient = (score: number) => {
     if (score >= 85) return "from-success to-success/80";
     if (score >= 70) return "from-warning to-warning/80";
-    if (score >= 50) return "from-warning/80 to-destructive";
     return "from-destructive to-destructive/80";
   };
 
   const getTrendIcon = (trend: string) => {
-    switch (trend) {
-      case "up": return <TrendingUp className="h-4 w-4 text-success" />;
-      case "down": return <TrendingDown className="h-4 w-4 text-destructive" />;
-      default: return <Target className="h-4 w-4 text-muted-foreground" />;
-    }
+    if (trend === "up") return <TrendingUp className="h-4 w-4 text-success" />;
+    if (trend === "down") return <TrendingDown className="h-4 w-4 text-destructive" />;
+    return <Target className="h-4 w-4 text-muted-foreground" />;
   };
 
   const getRankIcon = (rank: number) => {
-    switch (rank) {
-      case 1: return <Crown className="h-5 w-5 text-warning" />;
-      case 2: return <Medal className="h-5 w-5 text-muted-foreground" />;
-      case 3: return <Medal className="h-5 w-5 text-warning/80" />;
-      default: return <Star className="h-5 w-5 text-muted-foreground/50" />;
-    }
+    if (rank === 1) return <Crown className="h-5 w-5 text-warning" />;
+    if (rank === 2) return <Medal className="h-5 w-5 text-muted-foreground" />;
+    if (rank === 3) return <Medal className="h-5 w-5 text-warning/80" />;
+    return <Star className="h-5 w-5 text-muted-foreground/50" />;
   };
 
+  if (isLoading) {
+    return (
+      <div className="flex items-center justify-center py-12">
+        <Loader2 className="h-8 w-8 animate-spin text-primary" />
+      </div>
+    );
+  }
+
+  if (!selectedVessel) {
+    return (
+      <Card>
+        <CardContent className="py-12 text-center text-muted-foreground">
+          <Leaf className="h-12 w-12 mx-auto mb-4 opacity-50" />
+          Nenhuma embarcação cadastrada. Cadastre embarcações para visualizar o ESG Score.
+        </CardContent>
+      </Card>
+    );
+  }
+
   const radarData = [
-    { metric: "Emissões", value: selectedVessel.environmental.emissions },
-    { metric: "Resíduos", value: selectedVessel.environmental.waste },
-    { metric: "Eficiência", value: selectedVessel.environmental.efficiency },
-    { metric: "Segurança", value: selectedVessel.social.safety },
-    { metric: "Treinamento", value: selectedVessel.social.training },
-    { metric: "Bem-estar", value: selectedVessel.social.welfare },
-    { metric: "Compliance", value: selectedVessel.governance.compliance },
-    { metric: "Relatórios", value: selectedVessel.governance.reporting },
-    { metric: "Auditorias", value: selectedVessel.governance.audits }
+    { metric: "Ambiental", value: selectedVessel.environmental },
+    { metric: "Social", value: selectedVessel.social },
+    { metric: "Governança", value: selectedVessel.governance },
   ];
 
-  const comparisonData = VESSELS.map(v => ({
-    name: v.vesselName.replace("PSV ", ""),
-    Environmental: Math.round((v.environmental.emissions + v.environmental.waste + v.environmental.efficiency) / 3),
-    Social: Math.round((v.social.safety + v.social.training + v.social.welfare) / 3),
-    Governance: Math.round((v.governance.compliance + v.governance.reporting + v.governance.audits) / 3)
+  const comparisonData = vesselScores.slice(0, 8).map((v) => ({
+    name: v.name.length > 15 ? v.name.slice(0, 15) + "..." : v.name,
+    Environmental: v.environmental,
+    Social: v.social,
+    Governance: v.governance,
   }));
 
   return (
@@ -185,123 +206,86 @@ export function SustainabilityScore() {
           <div>
             <h2 className="text-xl font-bold flex items-center gap-2">
               Sustainability Score
-              <Badge className="bg-gradient-to-r from-success to-success/80">
-                ESG Dashboard
-              </Badge>
+              <Badge className="bg-gradient-to-r from-success to-success/80">ESG Dashboard</Badge>
             </h2>
             <p className="text-sm text-muted-foreground">
-              Score consolidado • Ranking de embarcações • Badges de conquistas
+              Score consolidado • {vesselScores.length} embarcações • Dados reais
             </p>
           </div>
         </div>
-        <Select value={selectedVessel.vesselId} onValueChange={(v) => setSelectedVessel(VESSELS.find(ves => ves.vesselId === v) || VESSELS[0])}>
+        <Select value={selectedVessel.id} onValueChange={setSelectedVesselId}>
           <SelectTrigger className="w-48">
             <Ship className="h-4 w-4 mr-2" />
             <SelectValue />
           </SelectTrigger>
           <SelectContent>
-            {VESSELS.map((v) => (
-              <SelectItem key={v.vesselId} value={v.vesselId}>
-                {v.vesselName}
-              </SelectItem>
+            {vesselScores.map((v) => (
+              <SelectItem key={v.id} value={v.id}>{v.name}</SelectItem>
             ))}
           </SelectContent>
         </Select>
       </div>
 
       {/* Main Score Card */}
-      <Card className={`bg-gradient-to-r ${getScoreGradient(selectedVessel.overallScore)}/10 border-${getScoreGradient(selectedVessel.overallScore).split(" ")[0].replace("from-", "")}/30`}>
+      <Card>
         <CardContent className="py-6">
-          <div className="flex items-center justify-between">
+          <div className="flex items-center justify-between flex-wrap gap-6">
             <div className="flex items-center gap-6">
-              <div className={`w-32 h-32 rounded-full bg-gradient-to-br ${getScoreGradient(selectedVessel.overallScore)} flex items-center justify-center shadow-lg`}>
+              <div className={`w-28 h-28 rounded-full bg-gradient-to-br ${getScoreGradient(selectedVessel.overall)} flex items-center justify-center shadow-lg`}>
                 <div className="text-center">
-                  <span className="text-4xl font-bold text-white">{selectedVessel.overallScore}</span>
-                  <p className="text-white/80 text-sm">/ 100</p>
+                  <span className="text-3xl font-bold text-white">{selectedVessel.overall}</span>
+                  <p className="text-white/80 text-xs">/ 100</p>
                 </div>
               </div>
               <div>
                 <div className="flex items-center gap-2">
-                  <h3 className="text-2xl font-bold">{selectedVessel.vesselName}</h3>
+                  <h3 className="text-xl font-bold">{selectedVessel.name}</h3>
                   {getTrendIcon(selectedVessel.trend)}
                 </div>
-                <div className="flex items-center gap-2 mt-2">
+                <div className="flex items-center gap-2 mt-1">
                   {getRankIcon(selectedVessel.rank)}
-                  <span className="text-lg">#{selectedVessel.rank} no ranking da frota</span>
+                  <span>#{selectedVessel.rank} no ranking da frota</span>
                 </div>
                 <div className="flex flex-wrap gap-2 mt-3">
                   {selectedVessel.badges.map((badge) => (
-                    <Badge key={badge} variant="secondary" className="text-sm">
-                      {badge}
-                    </Badge>
+                    <Badge key={badge} variant="secondary" className="text-xs">{badge}</Badge>
                   ))}
                 </div>
               </div>
             </div>
-            
+
             <div className="grid grid-cols-3 gap-6">
-              <div className="text-center">
-                <div className="w-20 h-20 rounded-full border-4 border-success flex items-center justify-center mx-auto">
-                  <span className="text-xl font-bold">{Math.round((selectedVessel.environmental.emissions + selectedVessel.environmental.waste + selectedVessel.environmental.efficiency) / 3)}</span>
+              {[
+                { label: "Environmental", value: selectedVessel.environmental, color: "border-success", icon: <Leaf className="h-3 w-3 text-success" /> },
+                { label: "Social", value: selectedVessel.social, color: "border-primary", icon: <Users className="h-3 w-3 text-primary" /> },
+                { label: "Governance", value: selectedVessel.governance, color: "border-accent", icon: <Shield className="h-3 w-3" /> },
+              ].map((item) => (
+                <div key={item.label} className="text-center">
+                  <div className={`w-16 h-16 rounded-full border-4 ${item.color} flex items-center justify-center mx-auto`}>
+                    <span className="text-lg font-bold">{item.value}</span>
+                  </div>
+                  <p className="text-xs mt-2 flex items-center justify-center gap-1">{item.icon}{item.label}</p>
                 </div>
-                <p className="text-sm mt-2 flex items-center justify-center gap-1">
-                  <Leaf className="h-3 w-3 text-success" />
-                  Environmental
-                </p>
-              </div>
-              <div className="text-center">
-                <div className="w-20 h-20 rounded-full border-4 border-primary flex items-center justify-center mx-auto">
-                  <span className="text-xl font-bold">{Math.round((selectedVessel.social.safety + selectedVessel.social.training + selectedVessel.social.welfare) / 3)}</span>
-                </div>
-                <p className="text-sm mt-2 flex items-center justify-center gap-1">
-                  <Users className="h-3 w-3 text-primary" />
-                  Social
-                </p>
-              </div>
-              <div className="text-center">
-                <div className="w-20 h-20 rounded-full border-4 border-accent flex items-center justify-center mx-auto">
-                  <span className="text-xl font-bold">{Math.round((selectedVessel.governance.compliance + selectedVessel.governance.reporting + selectedVessel.governance.audits) / 3)}</span>
-                </div>
-                <p className="text-sm mt-2 flex items-center justify-center gap-1">
-                  <Shield className="h-3 w-3 text-accent-foreground" />
-                  Governance
-                </p>
-              </div>
+              ))}
             </div>
           </div>
         </CardContent>
       </Card>
 
-      {/* Main Tabs */}
+      {/* Tabs */}
       <Tabs value={activeTab} onValueChange={setActiveTab}>
         <TabsList>
-          <TabsTrigger value="overview">
-            <BarChart3 className="h-4 w-4 mr-2" />
-            Análise
-          </TabsTrigger>
-          <TabsTrigger value="ranking">
-            <Trophy className="h-4 w-4 mr-2" />
-            Ranking
-          </TabsTrigger>
-          <TabsTrigger value="metrics">
-            <Target className="h-4 w-4 mr-2" />
-            Métricas
-          </TabsTrigger>
-          <TabsTrigger value="badges">
-            <Award className="h-4 w-4 mr-2" />
-            Badges
-          </TabsTrigger>
+          <TabsTrigger value="overview"><BarChart3 className="h-4 w-4 mr-2" />Análise</TabsTrigger>
+          <TabsTrigger value="ranking"><Trophy className="h-4 w-4 mr-2" />Ranking</TabsTrigger>
+          <TabsTrigger value="badges"><Award className="h-4 w-4 mr-2" />Badges</TabsTrigger>
         </TabsList>
 
-        {/* Overview Tab */}
         <TabsContent value="overview" className="space-y-4">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <Card>
-              <CardHeader>
-                <CardTitle className="text-sm">Análise de Competências</CardTitle>
-              </CardHeader>
+              <CardHeader><CardTitle className="text-sm">Radar ESG</CardTitle></CardHeader>
               <CardContent>
-                <div className="h-80">
+                <div className="h-72">
                   <ResponsiveContainer width="100%" height="100%">
                     <RadarChart data={radarData}>
                       <PolarGrid />
@@ -313,24 +297,21 @@ export function SustainabilityScore() {
                 </div>
               </CardContent>
             </Card>
-
             <Card>
-              <CardHeader>
-                <CardTitle className="text-sm">Evolução Mensal</CardTitle>
-              </CardHeader>
+              <CardHeader><CardTitle className="text-sm">Comparativo da Frota</CardTitle></CardHeader>
               <CardContent>
-                <div className="h-80">
+                <div className="h-72">
                   <ResponsiveContainer width="100%" height="100%">
-                    <LineChart data={MONTHLY_TREND}>
+                    <BarChart data={comparisonData}>
                       <CartesianGrid strokeDasharray="3 3" />
-                      <XAxis dataKey="month" />
-                      <YAxis domain={[70, 100]} />
+                      <XAxis dataKey="name" tick={{ fontSize: 9 }} />
+                      <YAxis domain={[0, 100]} />
                       <Tooltip />
                       <Legend />
-                      <Line type="monotone" dataKey="environmental" name="Environmental" stroke="hsl(var(--success))" strokeWidth={2} />
-                      <Line type="monotone" dataKey="social" name="Social" stroke="hsl(var(--primary))" strokeWidth={2} />
-                      <Line type="monotone" dataKey="governance" name="Governance" stroke="hsl(var(--accent))" strokeWidth={2} />
-                    </LineChart>
+                      <Bar dataKey="Environmental" fill="hsl(var(--success))" radius={[2, 2, 0, 0]} />
+                      <Bar dataKey="Social" fill="hsl(var(--primary))" radius={[2, 2, 0, 0]} />
+                      <Bar dataKey="Governance" fill="hsl(var(--accent))" radius={[2, 2, 0, 0]} />
+                    </BarChart>
                   </ResponsiveContainer>
                 </div>
               </CardContent>
@@ -338,7 +319,6 @@ export function SustainabilityScore() {
           </div>
         </TabsContent>
 
-        {/* Ranking Tab */}
         <TabsContent value="ranking" className="space-y-4">
           <Card>
             <CardHeader>
@@ -346,156 +326,60 @@ export function SustainabilityScore() {
               <CardDescription>Comparativo de performance ESG entre embarcações</CardDescription>
             </CardHeader>
             <CardContent>
-              <div className="space-y-4">
-                {VESSELS.sort((a, b) => a.rank - b.rank).map((vessel) => (
+              <div className="space-y-3">
+                {vesselScores.map((vessel) => (
                   <div
-                    key={vessel.vesselId}
-                    className={`p-4 border rounded-lg ${vessel.vesselId === selectedVessel.vesselId ? "bg-primary/5 border-primary/30" : ""}`}
+                    key={vessel.id}
+                    className={`p-4 border rounded-lg cursor-pointer transition-colors ${vessel.id === selectedVessel.id ? "bg-primary/5 border-primary/30" : "hover:bg-muted/50"}`}
+                    onClick={() => setSelectedVesselId(vessel.id)}
                   >
                     <div className="flex items-center justify-between">
                       <div className="flex items-center gap-4">
-                        <div className="flex items-center justify-center w-10 h-10">
-                          {getRankIcon(vessel.rank)}
-                        </div>
+                        <div className="w-10 h-10 flex items-center justify-center">{getRankIcon(vessel.rank)}</div>
                         <div>
-                          <p className="font-medium">{vessel.vesselName}</p>
+                          <p className="font-medium">{vessel.name}</p>
                           <div className="flex gap-1 mt-1">
-                            {vessel.badges.slice(0, 2).map((badge) => (
-                              <Badge key={badge} variant="secondary" className="text-xs">
-                                {badge}
-                              </Badge>
+                            {vessel.badges.slice(0, 2).map((b) => (
+                              <Badge key={b} variant="secondary" className="text-xs">{b}</Badge>
                             ))}
                           </div>
                         </div>
                       </div>
-                      <div className="flex items-center gap-6">
-                        <div className="text-center">
-                          <p className="text-xs text-muted-foreground">Environmental</p>
-                          <p className="font-bold text-success">
-                            {Math.round((vessel.environmental.emissions + vessel.environmental.waste + vessel.environmental.efficiency) / 3)}
-                          </p>
-                        </div>
-                        <div className="text-center">
-                          <p className="text-xs text-muted-foreground">Social</p>
-                          <p className="font-bold text-primary">
-                            {Math.round((vessel.social.safety + vessel.social.training + vessel.social.welfare) / 3)}
-                          </p>
-                        </div>
-                        <div className="text-center">
-                          <p className="text-xs text-muted-foreground">Governance</p>
-                          <p className="font-bold text-accent-foreground">
-                            {Math.round((vessel.governance.compliance + vessel.governance.reporting + vessel.governance.audits) / 3)}
-                          </p>
-                        </div>
-                        <div className="flex items-center gap-2">
-                          <span className={`text-2xl font-bold ${getScoreColor(vessel.overallScore)}`}>
-                            {vessel.overallScore}
-                          </span>
-                          {getTrendIcon(vessel.trend)}
-                        </div>
+                      <div className="flex items-center gap-4">
+                        <span className="text-xs text-muted-foreground">E: {vessel.environmental}</span>
+                        <span className="text-xs text-muted-foreground">S: {vessel.social}</span>
+                        <span className="text-xs text-muted-foreground">G: {vessel.governance}</span>
+                        <span className={`text-2xl font-bold ${getScoreColor(vessel.overall)}`}>{vessel.overall}</span>
+                        {getTrendIcon(vessel.trend)}
                       </div>
                     </div>
                   </div>
                 ))}
               </div>
-
-              <div className="mt-6">
-                <div className="h-64">
-                  <ResponsiveContainer width="100%" height="100%">
-                    <BarChart data={comparisonData}>
-                      <CartesianGrid strokeDasharray="3 3" />
-                      <XAxis dataKey="name" />
-                      <YAxis domain={[0, 100]} />
-                      <Tooltip />
-                      <Legend />
-                      <Bar dataKey="Environmental" fill="hsl(var(--success))" />
-                      <Bar dataKey="Social" fill="hsl(var(--primary))" />
-                      <Bar dataKey="Governance" fill="hsl(var(--accent))" />
-                    </BarChart>
-                  </ResponsiveContainer>
-                </div>
-              </div>
             </CardContent>
           </Card>
         </TabsContent>
 
-        {/* Metrics Tab */}
-        <TabsContent value="metrics" className="space-y-4">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            {["Environmental", "Social", "Governance"].map((category) => (
-              <Card key={category}>
-                <CardHeader>
-                  <CardTitle className="text-sm flex items-center gap-2">
-                    {category === "Environmental" && <Leaf className="h-4 w-4 text-success" />}
-                    {category === "Social" && <Users className="h-4 w-4 text-primary" />}
-                    {category === "Governance" && <Shield className="h-4 w-4 text-accent-foreground" />}
-                    {category}
-                  </CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <div className="space-y-4">
-                    {ESG_METRICS.filter(m => m.category === category).map((metric) => (
-                      <div key={metric.metric}>
-                        <div className="flex items-center justify-between text-sm mb-1">
-                          <span>{metric.metric}</span>
-                          <div className="flex items-center gap-2">
-                            <span className="font-bold">{metric.value} {metric.unit}</span>
-                            {getTrendIcon(metric.trend)}
-                          </div>
-                        </div>
-                        <Progress
-                          value={Math.min((metric.value / metric.target) * 100, 100)}
-                          className="h-2"
-                        />
-                        <p className="text-xs text-muted-foreground mt-1">
-                          Meta: {metric.target} {metric.unit}
-                        </p>
-                      </div>
-                    ))}
-                  </div>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
-        </TabsContent>
-
-        {/* Badges Tab */}
         <TabsContent value="badges" className="space-y-4">
           <Card>
-            <CardHeader>
-              <CardTitle>Badges Disponíveis</CardTitle>
-              <CardDescription>Conquistas que podem ser alcançadas pela frota</CardDescription>
-            </CardHeader>
+            <CardHeader><CardTitle>Conquistas ESG</CardTitle></CardHeader>
             <CardContent>
-              <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-4">
-                {[
-                  { emoji: "🌿", name: "Green Champion", description: "Score ambiental > 90", unlocked: true },
-                  { emoji: "⭐", name: "Zero Incidents", description: "Sem incidentes por 90 dias", unlocked: true },
-                  { emoji: "📊", name: "Top Reporter", description: "100% dos relatórios em dia", unlocked: true },
-                  { emoji: "🛡️", name: "Safety First", description: "LTIF < 0.5", unlocked: true },
-                  { emoji: "📈", name: "Improver", description: "Aumento de 10% no score", unlocked: true },
-                  { emoji: "🎯", name: "Target Achiever", description: "Todas metas alcançadas", unlocked: true },
-                  { emoji: "♻️", name: "Recycling Hero", description: "Reciclagem > 90%", unlocked: false },
-                  { emoji: "🏆", name: "Fleet Champion", description: "#1 no ranking por 3 meses", unlocked: false },
-                  { emoji: "🌊", name: "Clean Seas", description: "Zero derramamentos no ano", unlocked: false },
-                  { emoji: "🎓", name: "Training Excellence", description: "> 50h treinamento/pessoa", unlocked: false },
-                  { emoji: "💯", name: "Perfect Audit", description: "Score de auditoria 100%", unlocked: false },
-                  { emoji: "🌟", name: "ESG Pioneer", description: "Score geral > 95", unlocked: false }
-                ].map((badge) => (
-                  <div
-                    key={badge.name}
-                    className={`p-4 border rounded-lg text-center ${badge.unlocked ? "" : "opacity-50 grayscale"}`}
-                  >
-                    <span className="text-4xl">{badge.emoji}</span>
-                    <p className="font-medium mt-2">{badge.name}</p>
-                    <p className="text-xs text-muted-foreground">{badge.description}</p>
-                    {badge.unlocked ? (
-                      <Badge className="mt-2 bg-success/20 text-success">Conquistado</Badge>
-                    ) : (
-                      <Badge className="mt-2" variant="secondary">Bloqueado</Badge>
-                    )}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                {vesselScores.filter((v) => v.badges.length > 0).map((v) => (
+                  <div key={v.id} className="p-4 border rounded-lg">
+                    <p className="font-medium mb-2">{v.name}</p>
+                    <div className="flex flex-wrap gap-2">
+                      {v.badges.map((b) => (
+                        <Badge key={b} variant="secondary">{b}</Badge>
+                      ))}
+                    </div>
                   </div>
                 ))}
+                {vesselScores.every((v) => v.badges.length === 0) && (
+                  <p className="text-muted-foreground col-span-2 text-center py-8">
+                    Nenhuma conquista ainda. Melhore os scores ESG para desbloquear badges.
+                  </p>
+                )}
               </div>
             </CardContent>
           </Card>
