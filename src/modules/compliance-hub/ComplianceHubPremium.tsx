@@ -10,12 +10,15 @@ import { useQueryClient } from "@tanstack/react-query";
 import { 
   Shield, LayoutDashboard, FileCheck, AlertTriangle, CheckCircle,
   Calendar, Users, Ship, Bot, FileText, Plus, Award, ClipboardCheck,
-  Download, Loader2, Radar, Grid3X3, Target
+  Download, Loader2, Radar, Grid3X3, Target, Dices, Scale, Link2
 } from "lucide-react";
 
 const PSCInspectionSimulator = lazy(() => import("@/components/compliance/world-class/PSCInspectionSimulator").then(m => ({ default: m.PSCInspectionSimulator })));
 const RegulatoryRadar = lazy(() => import("@/components/compliance/world-class/RegulatoryRadar").then(m => ({ default: m.RegulatoryRadar })));
 const CrossFrameworkMatrix = lazy(() => import("@/components/compliance/world-class/CrossFrameworkMatrix").then(m => ({ default: m.CrossFrameworkMatrix })));
+const MonteCarloRiskSimulator = lazy(() => import("@/components/compliance/world-class/MonteCarloRiskSimulator").then(m => ({ default: m.MonteCarloRiskSimulator })));
+const AIContractGenerator = lazy(() => import("@/components/compliance/world-class/AIContractGenerator").then(m => ({ default: m.AIContractGenerator })));
+const BlockchainCertificateVerifier = lazy(() => import("@/components/compliance/world-class/BlockchainCertificateVerifier").then(m => ({ default: m.BlockchainCertificateVerifier })));
 import { PremiumModuleShell } from "@/components/ui/premium-module-kit";
 import type { ModuleTab } from "@/components/ui/premium-module-kit/PremiumModuleShell";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
@@ -478,22 +481,31 @@ export default function ComplianceHubPremium() {
       content: <Suspense fallback={<LoadingFallback />}><CrossFrameworkMatrix /></Suspense>
     },
     {
+      id: "monte-carlo",
+      label: "Monte Carlo",
+      icon: Dices,
+      badge: "NEW",
+      content: <Suspense fallback={<LoadingFallback />}><MonteCarloRiskSimulator /></Suspense>
+    },
+    {
+      id: "contract-gen",
+      label: "Contratos IA",
+      icon: Scale,
+      badge: "IA",
+      content: <Suspense fallback={<LoadingFallback />}><AIContractGenerator /></Suspense>
+    },
+    {
+      id: "blockchain",
+      label: "Blockchain",
+      icon: Link2,
+      badge: "NEW",
+      content: <Suspense fallback={<LoadingFallback />}><BlockchainCertificateVerifier /></Suspense>
+    },
+    {
       id: "certificates",
       label: "Certificados",
       icon: Award,
       badge: 3,
-      content: <ComplianceDashboard />
-    },
-    {
-      id: "audits",
-      label: "Auditorias",
-      icon: ClipboardCheck,
-      content: <ComplianceDashboard />
-    },
-    {
-      id: "mlc",
-      label: "MLC 2006",
-      icon: Users,
       content: <ComplianceDashboard />
     },
     {
