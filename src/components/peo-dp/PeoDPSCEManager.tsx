@@ -3,10 +3,14 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/com
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
-import { Shield, CheckCircle, AlertTriangle, Activity, Clock, Wrench, RefreshCw, Settings } from "lucide-react";
+import { Shield, CheckCircle, AlertTriangle, Activity, Clock, Wrench, RefreshCw, Settings, Loader2 } from "lucide-react";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { supabase } from "@/integrations/supabase/client";
+import { toast } from "sonner";
 
 interface SCElement {
   id: string;
+  dbId: string;
   name: string;
   category: "propulsion" | "power" | "positioning" | "control" | "safety";
   performanceStandard: string;
@@ -15,22 +19,9 @@ interface SCElement {
   lastVerified: string;
   nextDue: string;
   status: "verified" | "due_soon" | "overdue" | "degraded";
-  integrity: number; // 0-100
+  integrity: number;
   notes?: string;
 }
-
-const INITIAL_SCES: SCElement[] = [
-  { id: "SCE-001", name: "Main Thruster #1 (Bow)", category: "propulsion", performanceStandard: "100% thrust disponível em < 30s", verificationMethod: "Teste funcional + medição de empuxo", frequency: "Mensal", lastVerified: "2026-02-01", nextDue: "2026-03-01", status: "verified", integrity: 98 },
-  { id: "SCE-002", name: "Main Thruster #2 (Stern)", category: "propulsion", performanceStandard: "100% thrust disponível em < 30s", verificationMethod: "Teste funcional + medição de empuxo", frequency: "Mensal", lastVerified: "2026-01-15", nextDue: "2026-02-15", status: "due_soon", integrity: 95 },
-  { id: "SCE-003", name: "Generator #1 (Emergency)", category: "power", performanceStandard: "Start em < 45s, carga em < 60s", verificationMethod: "Blackout test + cronometragem", frequency: "Trimestral", lastVerified: "2025-12-01", nextDue: "2026-03-01", status: "verified", integrity: 100 },
-  { id: "SCE-004", name: "UPS — DP Control System", category: "power", performanceStandard: "Autonomia ≥ 30min a plena carga", verificationMethod: "Teste de descarga controlada", frequency: "Semestral", lastVerified: "2025-09-01", nextDue: "2026-03-01", status: "verified", integrity: 92 },
-  { id: "SCE-005", name: "DGPS #1 (Fugro)", category: "positioning", performanceStandard: "Precisão < 1.0m, uptime > 99.5%", verificationMethod: "Comparação com DGPS #2 + logs", frequency: "Semanal", lastVerified: "2026-02-10", nextDue: "2026-02-17", status: "verified", integrity: 99 },
-  { id: "SCE-006", name: "HPR Acoustic System", category: "positioning", performanceStandard: "Precisão < 2.0m, tracking contínuo", verificationMethod: "Calibração + comparação DGPS", frequency: "Mensal", lastVerified: "2026-01-20", nextDue: "2026-02-20", status: "due_soon", integrity: 88, notes: "Interferência acústica intermitente detectada" },
-  { id: "SCE-007", name: "DP Control Computer (A)", category: "control", performanceStandard: "Changeover < 5s, sem perda de posição", verificationMethod: "Changeover test A↔B", frequency: "Mensal", lastVerified: "2026-02-05", nextDue: "2026-03-05", status: "verified", integrity: 100 },
-  { id: "SCE-008", name: "Gyrocompass #1", category: "control", performanceStandard: "Drift < 0.5°/hr, settling < 4hr", verificationMethod: "Comparação com Gyro #2 e #3", frequency: "Semanal", lastVerified: "2026-02-12", nextDue: "2026-02-19", status: "verified", integrity: 97 },
-  { id: "SCE-009", name: "Fire & Gas Detection (DP Area)", category: "safety", performanceStandard: "Detecção em < 30s, alarme em < 5s", verificationMethod: "Teste com gás calibrado", frequency: "Trimestral", lastVerified: "2025-11-15", nextDue: "2026-02-15", status: "overdue", integrity: 85, notes: "2 detectores com resposta lenta" },
-  { id: "SCE-010", name: "ESD — Emergency Shutdown", category: "safety", performanceStandard: "Shutdown completo em < 15s", verificationMethod: "Teste parcial + simulação", frequency: "Semestral", lastVerified: "2025-10-01", nextDue: "2026-04-01", status: "verified", integrity: 100 },
-];
 
 const categoryConfig: Record<string, { label: string; color: string; icon: React.ElementType }> = {
   propulsion: { label: "Propulsão", color: "text-blue-400", icon: Activity },
@@ -47,21 +38,75 @@ const statusConfig: Record<string, { label: string; color: string }> = {
   degraded: { label: "Degradado", color: "bg-orange-500/10 text-orange-400 border-orange-500/30" },
 };
 
+const dynamicFrom = supabase.from as Function;
+
 export const PeoDPSCEManager: React.FC = () => {
-  const [sces, setSces] = useState<SCElement[]>(INITIAL_SCES);
   const [filter, setFilter] = useState<string>("all");
+  const queryClient = useQueryClient();
 
-  const filtered = filter === "all" ? sces : sces.filter(s => s.category === filter);
-  const verifiedCount = sces.filter(s => s.status === "verified").length;
-  const avgIntegrity = Math.round(sces.reduce((a, s) => a + s.integrity, 0) / sces.length);
-  const overdueCount = sces.filter(s => s.status === "overdue").length;
-  const overallReadiness = Math.round((verifiedCount / sces.length) * 100);
+  const { data: sces = [], isLoading } = useQuery({
+    queryKey: ["peodp-sces"],
+    queryFn: async () => {
+      const { data, error } = await dynamicFrom("peodp_equipment")
+        .select("*")
+        .order("created_at", { ascending: false });
+      if (error) throw error;
 
-  const verifyElement = (id: string) => {
-    setSces(prev => prev.map(s =>
-      s.id === id ? { ...s, status: "verified" as const, lastVerified: new Date().toISOString().split("T")[0], integrity: Math.min(s.integrity + 5, 100) } : s
-    ));
-  };
+      const now = new Date();
+      return (data || []).map((eq: any): SCElement => {
+        const nextDue = eq.next_test_date || eq.next_due;
+        const nextDueDate = nextDue ? new Date(nextDue) : null;
+        const daysUntilDue = nextDueDate ? Math.round((nextDueDate.getTime() - now.getTime()) / 86400000) : 999;
+
+        let status: SCElement["status"] = "verified";
+        if (daysUntilDue < 0) status = "overdue";
+        else if (daysUntilDue <= 7) status = "due_soon";
+        if (eq.status === "degraded" || eq.condition === "degraded") status = "degraded";
+
+        const validCategories = ["propulsion", "power", "positioning", "control", "safety"];
+        const category = validCategories.includes(eq.category) ? eq.category : "control";
+
+        return {
+          id: eq.equipment_id || eq.tag || eq.id?.slice(0, 8),
+          dbId: eq.id,
+          name: eq.name || eq.equipment_name || "SCE",
+          category: category as SCElement["category"],
+          performanceStandard: eq.performance_standard || eq.acceptance_criteria || "N/A",
+          verificationMethod: eq.verification_method || eq.test_method || "Inspeção visual",
+          frequency: eq.test_frequency || eq.frequency || "Mensal",
+          lastVerified: eq.last_test_date?.slice(0, 10) || eq.last_verified?.slice(0, 10) || "N/A",
+          nextDue: nextDue?.slice(0, 10) || "N/A",
+          status,
+          integrity: eq.integrity_score || eq.reliability_score || (status === "verified" ? 95 : status === "due_soon" ? 85 : 70),
+          notes: eq.notes || eq.remarks,
+        };
+      });
+    },
+  });
+
+  const verifyMutation = useMutation({
+    mutationFn: async (dbId: string) => {
+      const now = new Date().toISOString();
+      const { error } = await dynamicFrom("peodp_equipment")
+        .update({ last_test_date: now, status: "operational" })
+        .eq("id", dbId);
+      if (error) throw error;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["peodp-sces"] });
+      toast.success("Elemento verificado com sucesso");
+    },
+  });
+
+  const filtered = filter === "all" ? sces : sces.filter((s: SCElement) => s.category === filter);
+  const verifiedCount = sces.filter((s: SCElement) => s.status === "verified").length;
+  const avgIntegrity = sces.length > 0 ? Math.round(sces.reduce((a: number, s: SCElement) => a + s.integrity, 0) / sces.length) : 0;
+  const overdueCount = sces.filter((s: SCElement) => s.status === "overdue").length;
+  const overallReadiness = sces.length > 0 ? Math.round((verifiedCount / sces.length) * 100) : 0;
+
+  if (isLoading) {
+    return <div className="flex items-center justify-center p-12"><Loader2 className="h-8 w-8 animate-spin text-primary" /></div>;
+  }
 
   return (
     <div className="space-y-6">
@@ -102,15 +147,20 @@ export const PeoDPSCEManager: React.FC = () => {
       <Card>
         <CardHeader className="pb-3">
           <CardTitle className="text-lg flex items-center gap-2"><Shield className="h-5 w-5 text-primary" />Safety Critical Elements — Registro de Verificação</CardTitle>
-          <CardDescription>Elementos críticos de segurança conforme IMCA M 166 / FMECA</CardDescription>
+          <CardDescription>Elementos críticos de segurança conforme IMCA M 166 / FMECA — {sces.length} do Supabase</CardDescription>
         </CardHeader>
         <CardContent className="space-y-3">
-          {filtered.map(sce => {
-            const catCfg = categoryConfig[sce.category];
-            const stCfg = statusConfig[sce.status];
+          {filtered.length === 0 ? (
+            <div className="text-center py-8 text-muted-foreground">
+              <Shield className="h-10 w-10 mx-auto mb-2 opacity-50" />
+              <p>Nenhum SCE registrado no PEO-DP.</p>
+            </div>
+          ) : filtered.map((sce: SCElement) => {
+            const catCfg = categoryConfig[sce.category] || categoryConfig.control;
+            const stCfg = statusConfig[sce.status] || statusConfig.verified;
 
             return (
-              <div key={sce.id} className="p-4 rounded-xl border bg-card/50 space-y-3">
+              <div key={sce.dbId} className="p-4 rounded-xl border bg-card/50 space-y-3">
                 <div className="flex items-start justify-between gap-3">
                   <div className="space-y-1 flex-1">
                     <div className="flex items-center gap-2 flex-wrap">
@@ -131,7 +181,7 @@ export const PeoDPSCEManager: React.FC = () => {
                       <p>Próximo: {sce.nextDue}</p>
                     </div>
                     {sce.status !== "verified" && (
-                      <Button size="sm" variant="outline" onClick={() => verifyElement(sce.id)} className="gap-1 text-xs mt-1">
+                      <Button size="sm" variant="outline" onClick={() => verifyMutation.mutate(sce.dbId)} className="gap-1 text-xs mt-1">
                         <CheckCircle className="h-3 w-3" />Verificar
                       </Button>
                     )}

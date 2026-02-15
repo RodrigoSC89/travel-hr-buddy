@@ -1,9 +1,12 @@
-import React, { useState } from "react";
+import React from "react";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
-import { AlertTriangle, ArrowRight, CheckCircle, Clock, FileText, Shield, Target, TrendingUp, Users } from "lucide-react";
+import { AlertTriangle, ArrowRight, CheckCircle, Clock, FileText, Shield, Target, TrendingUp, Users, Loader2, Plus } from "lucide-react";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { supabase } from "@/integrations/supabase/client";
+import { toast } from "sonner";
 
 interface NCItem {
   id: string;
@@ -20,6 +23,7 @@ interface NCItem {
   actionPlan?: string;
   escalated: boolean;
   escalationLevel: number;
+  dbId?: string;
 }
 
 const CLASSIFICATIONS = {
@@ -37,69 +41,86 @@ const STATUS_FLOW = [
   { key: "closed", label: "Encerrada", icon: CheckCircle },
 ];
 
-const INITIAL_NCS: NCItem[] = [
-  {
-    id: "NC-2026-001", element: "Elem. 1 — Liderança e Compromisso", elementId: 1,
-    description: "Análise crítica pela alta direção não realizada no prazo estabelecido (semestral)",
-    classification: "A", status: "action_plan", responsible: "Gerente SMS",
-    openDate: "2026-01-10", dueDate: "2026-02-10", daysOpen: 36,
-    rootCause: "Agenda do Diretor conflitante, sem delegação formal",
-    actionPlan: "1) Designar representante formal. 2) Agendar reunião de análise crítica mensal. 3) Implementar ata padronizada.",
-    escalated: true, escalationLevel: 2,
-  },
-  {
-    id: "NC-2026-002", element: "Elem. 5 — Gestão de Riscos", elementId: 5,
-    description: "Matriz de riscos não atualizada após modificação operacional na planta",
-    classification: "B", status: "implementing", responsible: "Coord. de Riscos",
-    openDate: "2026-01-25", dueDate: "2026-03-25", daysOpen: 21,
-    rootCause: "Procedimento de MOC não acionado na modificação",
-    actionPlan: "1) Revisar matriz de riscos. 2) Integrar gatilho de MOC no sistema.",
-    escalated: false, escalationLevel: 0,
-  },
-  {
-    id: "NC-2026-003", element: "Elem. 8 — Treinamento", elementId: 8,
-    description: "3 operadores sem reciclagem obrigatória de operações de emergência",
-    classification: "B", status: "open", responsible: "Coord. Treinamento",
-    openDate: "2026-02-05", dueDate: "2026-04-05", daysOpen: 10,
-    escalated: false, escalationLevel: 0,
-  },
-  {
-    id: "NC-2026-004", element: "Elem. 12 — Auditorias Internas", elementId: 12,
-    description: "Programa de auditoria interna sem cobertura de 2 elementos no ciclo anterior",
-    classification: "C", status: "verification", responsible: "Coord. Qualidade",
-    openDate: "2025-12-15", dueDate: "2026-03-15", daysOpen: 62,
-    rootCause: "Indisponibilidade de auditores qualificados para elementos específicos",
-    actionPlan: "1) Qualificar 2 auditores adicionais. 2) Replanejar ciclo incluindo todos os 13 elementos.",
-    escalated: false, escalationLevel: 0,
-  },
-];
+const dynamicFrom = supabase.from as Function;
 
 export const PeotramNCEscalation: React.FC = () => {
-  const [ncs, setNcs] = useState<NCItem[]>(INITIAL_NCS);
+  const queryClient = useQueryClient();
 
-  const openCount = ncs.filter(nc => nc.status !== "closed").length;
-  const overdueCount = ncs.filter(nc => {
+  const { data: ncs = [], isLoading } = useQuery({
+    queryKey: ["peotram-ncs"],
+    queryFn: async () => {
+      const { data, error } = await dynamicFrom("peotram_nc_actions")
+        .select("*")
+        .order("created_at", { ascending: false });
+      if (error) throw error;
+
+      return (data || []).map((nc: any): NCItem => {
+        const openDate = new Date(nc.created_at || nc.opened_at || new Date());
+        const daysOpen = Math.round((Date.now() - openDate.getTime()) / 86400000);
+        const severity = (nc.severity || nc.classification || "C").toUpperCase();
+        const classification = ["A", "B", "C", "D"].includes(severity) ? severity : "C";
+
+        return {
+          id: nc.nc_number || nc.id?.slice(0, 8) || "NC-?",
+          dbId: nc.id,
+          element: nc.element_name || nc.area || `Elemento ${nc.element_id || "?"}`,
+          elementId: nc.element_id || 0,
+          description: nc.description || nc.finding || "Sem descrição",
+          classification: classification as NCItem["classification"],
+          status: (nc.status || "open") as NCItem["status"],
+          responsible: nc.responsible || nc.assigned_to || "Não atribuído",
+          openDate: openDate.toISOString().slice(0, 10),
+          dueDate: nc.due_date?.slice(0, 10) || new Date(openDate.getTime() + 60 * 86400000).toISOString().slice(0, 10),
+          daysOpen,
+          rootCause: nc.root_cause,
+          actionPlan: nc.action_plan || nc.corrective_action,
+          escalated: nc.escalated || false,
+          escalationLevel: nc.escalation_level || 0,
+        };
+      });
+    },
+  });
+
+  const updateNC = useMutation({
+    mutationFn: async ({ dbId, updates }: { dbId: string; updates: Record<string, any> }) => {
+      const { error } = await dynamicFrom("peotram_nc_actions")
+        .update(updates)
+        .eq("id", dbId);
+      if (error) throw error;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["peotram-ncs"] });
+    },
+  });
+
+  const openCount = ncs.filter((nc: NCItem) => nc.status !== "closed").length;
+  const overdueCount = ncs.filter((nc: NCItem) => {
     const due = new Date(nc.dueDate);
     return nc.status !== "closed" && due < new Date();
   }).length;
-  const escalatedCount = ncs.filter(nc => nc.escalated).length;
-  const closedRate = Math.round((ncs.filter(nc => nc.status === "closed").length / ncs.length) * 100);
+  const escalatedCount = ncs.filter((nc: NCItem) => nc.escalated).length;
+  const closedRate = ncs.length > 0 ? Math.round((ncs.filter((nc: NCItem) => nc.status === "closed").length / ncs.length) * 100) : 0;
 
-  const advanceStatus = (id: string) => {
-    setNcs(prev => prev.map(nc => {
-      if (nc.id !== id) return nc;
-      const flow: Record<string, NCItem["status"]> = {
-        open: "action_plan", action_plan: "implementing", implementing: "verification", verification: "closed",
-      };
-      return { ...nc, status: flow[nc.status] || nc.status };
-    }));
+  const advanceStatus = (nc: NCItem) => {
+    if (!nc.dbId) return;
+    const flow: Record<string, string> = {
+      open: "action_plan", action_plan: "implementing", implementing: "verification", verification: "closed",
+    };
+    const newStatus = flow[nc.status];
+    if (!newStatus) return;
+    updateNC.mutate({ dbId: nc.dbId, updates: { status: newStatus } });
+    toast.success(`NC ${nc.id} avançada para ${newStatus}`);
   };
 
-  const escalate = (id: string) => {
-    setNcs(prev => prev.map(nc =>
-      nc.id === id ? { ...nc, escalated: true, escalationLevel: nc.escalationLevel + 1 } : nc
-    ));
+  const escalate = (nc: NCItem) => {
+    if (!nc.dbId) return;
+    updateNC.mutate({ dbId: nc.dbId, updates: { escalated: true, escalation_level: nc.escalationLevel + 1 } });
+    toast.warning(`NC ${nc.id} escalonada para nível ${nc.escalationLevel + 1}`);
   };
+
+  if (isLoading) {
+    return <div className="flex items-center justify-center p-12"><Loader2 className="h-8 w-8 animate-spin text-primary" /></div>;
+  }
 
   return (
     <div className="space-y-6">
@@ -135,6 +156,7 @@ export const PeotramNCEscalation: React.FC = () => {
                 <div className="text-center p-3 rounded-xl border bg-card min-w-[110px]">
                   <step.icon className="h-5 w-5 mx-auto mb-1 text-primary" />
                   <p className="text-xs font-medium">{step.label}</p>
+                  <p className="text-lg font-bold">{ncs.filter((nc: NCItem) => nc.status === step.key).length}</p>
                 </div>
                 {i < STATUS_FLOW.length - 1 && <ArrowRight className="h-4 w-4 text-muted-foreground shrink-0" />}
               </React.Fragment>
@@ -159,18 +181,23 @@ export const PeotramNCEscalation: React.FC = () => {
       <Card>
         <CardHeader className="pb-3">
           <CardTitle className="text-lg flex items-center gap-2"><FileText className="h-5 w-5 text-primary" />Registro de Não Conformidades</CardTitle>
-          <CardDescription>Rastreamento com escalonamento automático por SLA</CardDescription>
+          <CardDescription>Rastreamento com escalonamento automático por SLA — {ncs.length} registros do Supabase</CardDescription>
         </CardHeader>
         <CardContent className="space-y-3">
-          {ncs.map(nc => {
-            const classCfg = CLASSIFICATIONS[nc.classification];
+          {ncs.length === 0 ? (
+            <div className="text-center py-8 text-muted-foreground">
+              <FileText className="h-10 w-10 mx-auto mb-2 opacity-50" />
+              <p>Nenhuma NC registrada no PEOTRAM.</p>
+            </div>
+          ) : ncs.map((nc: NCItem) => {
+            const classCfg = CLASSIFICATIONS[nc.classification as keyof typeof CLASSIFICATIONS];
             const currentStep = STATUS_FLOW.findIndex(s => s.key === nc.status);
             const progress = ((currentStep + 1) / STATUS_FLOW.length) * 100;
             const isOverdue = new Date(nc.dueDate) < new Date() && nc.status !== "closed";
             const slaUsed = Math.round((nc.daysOpen / classCfg.sla) * 100);
 
             return (
-              <div key={nc.id} className={`p-4 rounded-xl border space-y-3 ${isOverdue ? "border-destructive/30 bg-destructive/5" : "bg-card/50"}`}>
+              <div key={nc.dbId || nc.id} className={`p-4 rounded-xl border space-y-3 ${isOverdue ? "border-destructive/30 bg-destructive/5" : "bg-card/50"}`}>
                 <div className="flex items-start justify-between gap-3">
                   <div className="space-y-1 flex-1">
                     <div className="flex items-center gap-2 flex-wrap">
@@ -189,13 +216,13 @@ export const PeotramNCEscalation: React.FC = () => {
                     {nc.actionPlan && <p className="text-xs"><span className="font-medium">Plano:</span> {nc.actionPlan}</p>}
                   </div>
                   <div className="flex flex-col gap-1">
-                    {nc.status !== "closed" && (
+                    {nc.status !== "closed" && nc.dbId && (
                       <>
-                        <Button size="sm" variant="outline" onClick={() => advanceStatus(nc.id)} className="gap-1 text-xs">
+                        <Button size="sm" variant="outline" onClick={() => advanceStatus(nc)} className="gap-1 text-xs">
                           <ArrowRight className="h-3 w-3" />Avançar
                         </Button>
                         {!nc.escalated && (
-                          <Button size="sm" variant="destructive" onClick={() => escalate(nc.id)} className="gap-1 text-xs">
+                          <Button size="sm" variant="destructive" onClick={() => escalate(nc)} className="gap-1 text-xs">
                             <TrendingUp className="h-3 w-3" />Escalar
                           </Button>
                         )}

@@ -1,21 +1,16 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { 
-  Brain, 
-  TrendingUp, 
-  AlertTriangle,
-  Wrench,
-  Calendar,
-  BarChart3,
-  Target,
-  Clock,
-  CheckCircle,
-  XCircle
+  Brain, TrendingUp, AlertTriangle, Wrench, Calendar, BarChart3, 
+  Target, Clock, CheckCircle, XCircle, Plus, RefreshCw, Loader2
 } from "lucide-react";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { supabase } from "@/integrations/supabase/client";
+import { toast } from "sonner";
 
 interface MaintenancePrediction {
   id: string;
@@ -41,137 +36,128 @@ interface PerformanceMetric {
 }
 
 export const PredictiveMaintenanceSystem = () => {
-  const [predictions, setPredictions] = useState<MaintenancePrediction[]>([]);
-  const [metrics, setMetrics] = useState<PerformanceMetric[]>([]);
   const [selectedTimeframe, setSelectedTimeframe] = useState<"7d" | "30d" | "90d">("30d");
-  const [loading, setLoading] = useState(true);
+  const queryClient = useQueryClient();
 
-  useEffect(() => {
-    loadPredictiveData();
-  }, [selectedTimeframe]);
+  // Fetch predictions from ai_maintenance_predictions
+  const { data: predictions = [], isLoading } = useQuery({
+    queryKey: ["predictive-maintenance", selectedTimeframe],
+    queryFn: async () => {
+      const daysMap = { "7d": 7, "30d": 30, "90d": 90 };
+      const days = daysMap[selectedTimeframe];
+      const cutoff = new Date();
+      cutoff.setDate(cutoff.getDate() + days);
 
-  const loadPredictiveData = () => {
-    // Mock predictive maintenance data
-    const mockPredictions: MaintenancePrediction[] = [
-      {
-        id: "1",
-        component: "Motor Principal - Sistema de Resfriamento",
-        vesselId: "1",
-        vesselName: "MV Atlantic Explorer",
-        probability: 85,
-        timeframe: "7-14 dias",
-        priority: "high",
-        recommendation: "Verificar bombas de água e termostatos",
-        estimatedCost: 15000,
-        lastMaintenance: new Date("2024-10-15"),
-        nextScheduled: new Date("2024-12-20"),
-        riskFactors: ["Temperatura elevada", "Horas de operação", "Idade do componente"]
-      },
-      {
-        id: "2",
-        component: "Eixo Principal - Rolamentos",
-        vesselId: "1",
-        vesselName: "MV Atlantic Explorer",
-        probability: 72,
-        timeframe: "14-30 dias",
-        priority: "medium",
-        recommendation: "Inspeção de vibração e lubrificação",
-        estimatedCost: 25000,
-        lastMaintenance: new Date("2024-09-01"),
-        nextScheduled: new Date("2025-01-15"),
-        riskFactors: ["Vibração anormal", "Análise de óleo"]
-      },
-      {
-        id: "3",
-        component: "Sistema Elétrico - Gerador Auxiliar",
-        vesselId: "2",
-        vesselName: "MV Pacific Navigator",
-        probability: 65,
-        timeframe: "30-60 dias",
-        priority: "medium",
-        recommendation: "Teste de carga e verificação de conexões",
-        estimatedCost: 8000,
-        lastMaintenance: new Date("2024-11-01"),
-        nextScheduled: new Date("2025-02-01"),
-        riskFactors: ["Flutuação de tensão", "Tempo de operação"]
-      },
-      {
-        id: "4",
-        component: "Sistema Hidráulico - Bombas",
-        vesselId: "2",
-        vesselName: "MV Pacific Navigator",
-        probability: 45,
-        timeframe: "60-90 dias",
-        priority: "low",
-        recommendation: "Monitoramento contínuo de pressão",
-        estimatedCost: 5000,
-        lastMaintenance: new Date("2024-08-15"),
-        nextScheduled: new Date("2025-03-01"),
-        riskFactors: ["Perda de pressão gradual"]
-      }
-    ];
+      const { data: preds, error } = await supabase
+        .from("ai_maintenance_predictions")
+        .select("*, vessels(name)")
+        .order("failure_probability", { ascending: false });
+      if (error) throw error;
 
-    const mockMetrics: PerformanceMetric[] = [
-      { metric: "Eficiência Energética", current: 87, target: 90, trend: "up", unit: "%" },
-      { metric: "Disponibilidade", current: 94, target: 95, trend: "stable", unit: "%" },
-      { metric: "MTBF", current: 720, target: 800, trend: "up", unit: "h" },
-      { metric: "Custos de Manutenção", current: 125000, target: 100000, trend: "down", unit: "R$" },
-      { metric: "Consumo de Combustível", current: 18.5, target: 17.0, trend: "down", unit: "L/h" },
-      { metric: "Emissões CO2", current: 45, target: 40, trend: "down", unit: "kg/h" }
-    ];
+      return (preds || []).map((p: any): MaintenancePrediction => ({
+        id: p.id,
+        component: p.equipment_name || "Equipamento",
+        vesselId: p.vessel_id || "",
+        vesselName: p.vessels?.name || "N/A",
+        probability: Math.round((p.failure_probability || 0) * 100),
+        timeframe: p.predicted_failure_date
+          ? `${Math.max(1, Math.round((new Date(p.predicted_failure_date).getTime() - Date.now()) / 86400000))} dias`
+          : "N/A",
+        priority: p.failure_probability >= 0.8 ? "critical"
+          : p.failure_probability >= 0.6 ? "high"
+          : p.failure_probability >= 0.4 ? "medium" : "low",
+        recommendation: p.recommended_action || "Monitorar",
+        estimatedCost: 0,
+        lastMaintenance: new Date(),
+        nextScheduled: p.predicted_failure_date ? new Date(p.predicted_failure_date) : new Date(),
+        riskFactors: Array.isArray(p.risk_factors) ? p.risk_factors.map(String) : [],
+      }));
+    },
+  });
 
-    setPredictions(mockPredictions);
-    setMetrics(mockMetrics);
-    setLoading(false);
-  };
+  // Fetch performance metrics from maintenance_tasks
+  const { data: metrics = [] } = useQuery({
+    queryKey: ["maintenance-performance-metrics"],
+    queryFn: async () => {
+      const { count: totalTasks } = await supabase
+        .from("maintenance_tasks")
+        .select("*", { count: "exact", head: true });
+      const { count: completedTasks } = await supabase
+        .from("maintenance_tasks")
+        .select("*", { count: "exact", head: true })
+        .eq("status", "completed");
+      const { count: overdueTasks } = await supabase
+        .from("maintenance_tasks")
+        .select("*", { count: "exact", head: true })
+        .eq("status", "overdue");
+
+      const availability = totalTasks && totalTasks > 0
+        ? Math.round(((totalTasks - (overdueTasks || 0)) / totalTasks) * 100)
+        : 95;
+
+      return [
+        { metric: "Disponibilidade", current: availability, target: 95, trend: "up" as const, unit: "%" },
+        { metric: "Tarefas Completadas", current: completedTasks || 0, target: totalTasks || 0, trend: "stable" as const, unit: "" },
+        { metric: "Tarefas Pendentes", current: (totalTasks || 0) - (completedTasks || 0), target: 0, trend: "down" as const, unit: "" },
+        { metric: "Tarefas Vencidas", current: overdueTasks || 0, target: 0, trend: "down" as const, unit: "" },
+      ];
+    },
+  });
+
+  // Create prediction mutation
+  const createPrediction = useMutation({
+    mutationFn: async () => {
+      const { error } = await supabase.from("ai_maintenance_predictions").insert({
+        equipment_id: crypto.randomUUID(),
+        equipment_name: "Novo Equipamento",
+        failure_probability: 0.5,
+        recommended_action: "Inspeção recomendada",
+        status: "pending",
+      });
+      if (error) throw error;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["predictive-maintenance"] });
+      toast.success("Predição criada com sucesso");
+    },
+  });
 
   const getPriorityColor = (priority: string) => {
     switch (priority) {
-    case "critical": return "bg-red-100 text-red-800 border-red-200";
-    case "high": return "bg-orange-100 text-orange-800 border-orange-200";
-    case "medium": return "bg-yellow-100 text-yellow-800 border-yellow-200";
-    case "low": return "bg-green-100 text-green-800 border-green-200";
+    case "critical": return "bg-destructive/10 text-destructive border-destructive/30";
+    case "high": return "bg-orange-500/10 text-orange-400 border-orange-500/30";
+    case "medium": return "bg-warning/10 text-warning border-warning/30";
+    case "low": return "bg-success/10 text-success border-success/30";
     default: return "bg-secondary text-secondary-foreground border-border";
     }
   };
 
   const getProbabilityColor = (probability: number) => {
-    if (probability >= 80) return "text-red-600";
-    if (probability >= 60) return "text-yellow-600";
-    return "text-green-600";
+    if (probability >= 80) return "text-destructive";
+    if (probability >= 60) return "text-warning";
+    return "text-success";
   };
 
   const getTrendIcon = (trend: string) => {
     switch (trend) {
-    case "up": return <TrendingUp className="h-4 w-4 text-green-500" />;
-    case "down": return <TrendingUp className="h-4 w-4 text-red-500 rotate-180" />;
-    case "stable": return <BarChart3 className="h-4 w-4 text-blue-500" />;
+    case "up": return <TrendingUp className="h-4 w-4 text-success" />;
+    case "down": return <TrendingUp className="h-4 w-4 text-destructive rotate-180" />;
+    case "stable": return <BarChart3 className="h-4 w-4 text-primary" />;
     default: return <BarChart3 className="h-4 w-4 text-muted-foreground" />;
     }
   };
 
   const getMetricStatus = (current: number, target: number, metric: string) => {
-    const isGood = metric.includes("Custos") || metric.includes("Consumo") || metric.includes("Emissões")
+    const isGood = metric.includes("Custos") || metric.includes("Consumo") || metric.includes("Emissões") || metric.includes("Vencidas") || metric.includes("Pendentes")
       ? current <= target
       : current >= target;
     return isGood;
   };
 
-  if (loading) {
+  if (isLoading) {
     return (
-      <div className="space-y-6">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-          {[...Array(6)].map((_, i) => (
-            <Card key={`pred-maint-skel-${i}`}>
-              <CardContent className="p-6">
-                <div className="animate-pulse space-y-2">
-                  <div className="h-4 bg-gray-200 rounded w-3/4"></div>
-                  <div className="h-8 bg-gray-200 rounded w-1/2"></div>
-                </div>
-              </CardContent>
-            </Card>
-          ))}
-        </div>
+      <div className="flex items-center justify-center p-12">
+        <Loader2 className="h-8 w-8 animate-spin text-primary" />
       </div>
     );
   }
@@ -187,6 +173,9 @@ export const PredictiveMaintenanceSystem = () => {
           </p>
         </div>
         <div className="flex space-x-2">
+          <Button size="sm" variant="outline" onClick={() => queryClient.invalidateQueries({ queryKey: ["predictive-maintenance"] })}>
+            <RefreshCw className="h-4 w-4 mr-1" />Atualizar
+          </Button>
           {(["7d", "30d", "90d"] as const).map((timeframe) => (
             <Button
               key={timeframe}
@@ -200,300 +189,118 @@ export const PredictiveMaintenanceSystem = () => {
         </div>
       </div>
 
-      {/* Summary Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Alertas Críticos</CardTitle>
-            <AlertTriangle className="h-4 w-4 text-red-500" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold text-red-600">
-              {predictions.filter(p => p.priority === "critical" || p.priority === "high").length}
-            </div>
-            <p className="text-xs text-muted-foreground">
-              Requerem atenção imediata
-            </p>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Economia Projetada</CardTitle>
-            <Target className="h-4 w-4 text-green-500" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold text-green-600">R$ 180k</div>
-            <p className="text-xs text-muted-foreground">
-              Próximos 6 meses
-            </p>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Eficiência IA</CardTitle>
-            <Brain className="h-4 w-4 text-blue-500" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold text-blue-600">94%</div>
-            <p className="text-xs text-muted-foreground">
-              Precisão das previsões
-            </p>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Disponibilidade</CardTitle>
-            <Clock className="h-4 w-4 text-purple-500" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold text-purple-600">97.2%</div>
-            <p className="text-xs text-muted-foreground">
-              Uptime da frota
-            </p>
-          </CardContent>
-        </Card>
-      </div>
-
-      <Tabs defaultValue="predictions" className="w-full">
+      <Tabs defaultValue="predictions" className="space-y-4">
         <TabsList>
-          <TabsTrigger value="predictions">Previsões</TabsTrigger>
-          <TabsTrigger value="performance">Performance</TabsTrigger>
-          <TabsTrigger value="optimization">Otimização</TabsTrigger>
-          <TabsTrigger value="reports">Relatórios</TabsTrigger>
+          <TabsTrigger value="predictions" className="gap-2">
+            <Brain className="h-4 w-4" />Predições ({predictions.length})
+          </TabsTrigger>
+          <TabsTrigger value="metrics" className="gap-2">
+            <BarChart3 className="h-4 w-4" />Métricas
+          </TabsTrigger>
         </TabsList>
 
         <TabsContent value="predictions" className="space-y-4">
-          <div className="space-y-4">
-            {predictions.map((prediction) => (
-              <Card key={prediction.id}>
-                <CardHeader>
-                  <div className="flex items-center justify-between">
-                    <div>
-                      <CardTitle className="text-lg flex items-center gap-2">
-                        <Wrench className="h-5 w-5" />
-                        {prediction.component}
-                      </CardTitle>
-                      <CardDescription>
-                        {prediction.vesselName} • Última manutenção: {prediction.lastMaintenance.toLocaleDateString("pt-BR")}
-                      </CardDescription>
-                    </div>
-                    <div className="text-right">
-                      <Badge className={getPriorityColor(prediction.priority)}>
+          {/* KPIs */}
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+            <Card><CardContent className="pt-5">
+              <p className="text-xs text-muted-foreground">Total Predições</p>
+              <p className="text-2xl font-bold">{predictions.length}</p>
+            </CardContent></Card>
+            <Card><CardContent className="pt-5">
+              <p className="text-xs text-muted-foreground">Críticas</p>
+              <p className="text-2xl font-bold text-destructive">
+                {predictions.filter(p => p.priority === "critical").length}
+              </p>
+            </CardContent></Card>
+            <Card><CardContent className="pt-5">
+              <p className="text-xs text-muted-foreground">Alta Prioridade</p>
+              <p className="text-2xl font-bold text-warning">
+                {predictions.filter(p => p.priority === "high").length}
+              </p>
+            </CardContent></Card>
+            <Card><CardContent className="pt-5">
+              <p className="text-xs text-muted-foreground">Prob. Média</p>
+              <p className="text-2xl font-bold">
+                {predictions.length > 0 ? Math.round(predictions.reduce((a, p) => a + p.probability, 0) / predictions.length) : 0}%
+              </p>
+            </CardContent></Card>
+          </div>
+
+          {predictions.length === 0 ? (
+            <Card><CardContent className="p-8 text-center text-muted-foreground">
+              <Brain className="h-12 w-12 mx-auto mb-3 opacity-50" />
+              <p>Nenhuma predição de manutenção disponível.</p>
+              <Button className="mt-3" onClick={() => createPrediction.mutate()}>
+                <Plus className="h-4 w-4 mr-1" />Criar Predição
+              </Button>
+            </CardContent></Card>
+          ) : (
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              {predictions.map((prediction) => (
+                <Card key={prediction.id} className="hover:shadow-md transition-shadow">
+                  <CardHeader className="pb-2">
+                    <div className="flex justify-between items-start">
+                      <div>
+                        <CardTitle className="text-base">{prediction.component}</CardTitle>
+                        <CardDescription>{prediction.vesselName}</CardDescription>
+                      </div>
+                      <Badge variant="outline" className={getPriorityColor(prediction.priority)}>
                         {prediction.priority.toUpperCase()}
                       </Badge>
-                      <div className={`text-2xl font-bold mt-1 ${getProbabilityColor(prediction.probability)}`}>
+                    </div>
+                  </CardHeader>
+                  <CardContent className="space-y-3">
+                    <div className="flex items-center justify-between">
+                      <span className="text-sm text-muted-foreground">Probabilidade de Falha</span>
+                      <span className={`text-lg font-bold ${getProbabilityColor(prediction.probability)}`}>
                         {prediction.probability}%
-                      </div>
+                      </span>
                     </div>
-                  </div>
-                </CardHeader>
-                <CardContent>
-                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                    <div>
-                      <h4 className="font-medium mb-2">Prazo Estimado</h4>
-                      <p className="text-sm text-muted-foreground">{prediction.timeframe}</p>
-                      
-                      <h4 className="font-medium mt-3 mb-2">Custo Estimado</h4>
-                      <p className="text-sm font-semibold">R$ {prediction.estimatedCost.toLocaleString()}</p>
+                    <Progress value={prediction.probability} className="h-2" />
+                    <div className="grid grid-cols-2 gap-2 text-xs text-muted-foreground">
+                      <div className="flex items-center gap-1"><Clock className="h-3 w-3" />Prazo: {prediction.timeframe}</div>
+                      <div className="flex items-center gap-1"><Wrench className="h-3 w-3" />Ação: {prediction.recommendation}</div>
                     </div>
-                    
-                    <div>
-                      <h4 className="font-medium mb-2">Recomendação</h4>
-                      <p className="text-sm text-muted-foreground">{prediction.recommendation}</p>
-                    </div>
-                    
-                    <div>
-                      <h4 className="font-medium mb-2">Fatores de Risco</h4>
-                      <div className="space-y-1">
-                        {prediction.riskFactors.map((factor) => (
-                          <Badge key={factor} variant="outline" className="text-xs">
-                            {factor}
-                          </Badge>
+                    {prediction.riskFactors.length > 0 && (
+                      <div className="flex flex-wrap gap-1">
+                        {prediction.riskFactors.map((factor, i) => (
+                          <Badge key={i} variant="outline" className="text-xs">{factor}</Badge>
                         ))}
                       </div>
-                    </div>
-                  </div>
-                  
-                  <div className="flex justify-end space-x-2 mt-4">
-                    <Button variant="outline" size="sm">
-                      <Calendar className="h-4 w-4 mr-1" />
-                      Agendar
-                    </Button>
-                    <Button size="sm">
-                      Criar Ordem de Trabalho
-                    </Button>
-                  </div>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
+                    )}
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
+          )}
         </TabsContent>
 
-        <TabsContent value="performance" className="space-y-4">
+        <TabsContent value="metrics" className="space-y-4">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-            {metrics.map((metric) => (
-              <Card key={metric.metric}>
-                <CardHeader className="pb-3">
-                  <CardTitle className="text-base flex items-center justify-between">
-                    {metric.metric}
-                    {getTrendIcon(metric.trend)}
-                  </CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <div className="space-y-3">
-                    <div className="flex items-center justify-between">
-                      <span className="text-sm text-muted-foreground">Atual</span>
-                      <span className="text-lg font-bold">
-                        {metric.current.toLocaleString()} {metric.unit}
-                      </span>
+            {metrics.map((metric, index) => {
+              const isGood = getMetricStatus(metric.current, metric.target, metric.metric);
+              return (
+                <Card key={index}>
+                  <CardContent className="p-6">
+                    <div className="flex justify-between items-start mb-2">
+                      <p className="text-sm font-medium text-muted-foreground">{metric.metric}</p>
+                      {getTrendIcon(metric.trend)}
                     </div>
-                    
-                    <div className="flex items-center justify-between">
-                      <span className="text-sm text-muted-foreground">Meta</span>
-                      <span className="text-sm">
-                        {metric.target.toLocaleString()} {metric.unit}
-                      </span>
+                    <div className="flex items-baseline gap-1">
+                      <span className="text-2xl font-bold">{metric.current}</span>
+                      <span className="text-sm text-muted-foreground">{metric.unit}</span>
                     </div>
-                    
-                    <div className="space-y-1">
-                      <div className="flex justify-between text-xs">
-                        <span>Progresso</span>
-                        <span>
-                          {getMetricStatus(metric.current, metric.target, metric.metric) ? (
-                            <CheckCircle className="h-4 w-4 text-green-500" />
-                          ) : (
-                            <XCircle className="h-4 w-4 text-red-500" />
-                          )}
-                        </span>
-                      </div>
-                      <Progress 
-                        value={
-                          metric.metric.includes("Custos") || metric.metric.includes("Consumo") || metric.metric.includes("Emissões")
-                            ? Math.max(0, 100 - (metric.current / metric.target) * 100)
-                            : (metric.current / metric.target) * 100
-                        } 
-                        className="h-2" 
-                      />
+                    <div className="flex items-center gap-2 mt-2">
+                      <span className="text-xs text-muted-foreground">Meta: {metric.target}{metric.unit}</span>
+                      {isGood
+                        ? <CheckCircle className="h-4 w-4 text-success" />
+                        : <XCircle className="h-4 w-4 text-destructive" />
+                      }
                     </div>
-                  </div>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
-        </TabsContent>
-
-        <TabsContent value="optimization" className="space-y-4">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <Card>
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <Brain className="h-5 w-5" />
-                  Otimizações Recomendadas
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                <div className="p-4 bg-blue-50 rounded-lg">
-                  <h4 className="font-medium text-blue-800">Reagrupamento de Manutenções</h4>
-                  <p className="text-sm text-blue-600 mt-1">
-                    Combine 3 serviços no MV Atlantic Explorer para economizar R$ 12.000
-                  </p>
-                </div>
-                
-                <div className="p-4 bg-green-50 rounded-lg">
-                  <h4 className="font-medium text-green-800">Pré-pedido de Peças</h4>
-                  <p className="text-sm text-green-600 mt-1">
-                    Solicite rolamentos antecipadamente para reduzir tempo de parada em 40%
-                  </p>
-                </div>
-                
-                <div className="p-4 bg-purple-50 rounded-lg">
-                  <h4 className="font-medium text-purple-800">Rota Otimizada</h4>
-                  <p className="text-sm text-purple-600 mt-1">
-                    Ajuste rota do MV Pacific Navigator para coincidir com manutenção em porto
-                  </p>
-                </div>
-              </CardContent>
-            </Card>
-
-            <Card>
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <BarChart3 className="h-5 w-5" />
-                  Análise de Custos
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-4">
-                  <div>
-                    <div className="flex justify-between text-sm mb-1">
-                      <span>Manutenção Preventiva</span>
-                      <span>70%</span>
-                    </div>
-                    <Progress value={70} className="h-2" />
-                  </div>
-                  
-                  <div>
-                    <div className="flex justify-between text-sm mb-1">
-                      <span>Manutenção Corretiva</span>
-                      <span>25%</span>
-                    </div>
-                    <Progress value={25} className="h-2" />
-                  </div>
-                  
-                  <div>
-                    <div className="flex justify-between text-sm mb-1">
-                      <span>Emergências</span>
-                      <span>5%</span>
-                    </div>
-                    <Progress value={5} className="h-2" />
-                  </div>
-                  
-                  <div className="pt-3 border-t">
-                    <div className="text-center">
-                      <div className="text-2xl font-bold text-green-600">-23%</div>
-                      <div className="text-sm text-muted-foreground">Redução de custos vs ano anterior</div>
-                    </div>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-          </div>
-        </TabsContent>
-
-        <TabsContent value="reports" className="space-y-4">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-            <Card>
-              <CardHeader>
-                <CardTitle className="text-lg">Relatório Mensal</CardTitle>
-                <CardDescription>Análise completa de performance</CardDescription>
-              </CardHeader>
-              <CardContent>
-                <Button className="w-full">Gerar Relatório</Button>
-              </CardContent>
-            </Card>
-
-            <Card>
-              <CardHeader>
-                <CardTitle className="text-lg">Auditoria de IA</CardTitle>
-                <CardDescription>Validação das previsões</CardDescription>
-              </CardHeader>
-              <CardContent>
-                <Button className="w-full" variant="outline">Ver Auditoria</Button>
-              </CardContent>
-            </Card>
-
-            <Card>
-              <CardHeader>
-                <CardTitle className="text-lg">Benchmark</CardTitle>
-                <CardDescription>Comparação com indústria</CardDescription>
-              </CardHeader>
-              <CardContent>
-                <Button className="w-full" variant="outline">Comparar</Button>
-              </CardContent>
-            </Card>
+                  </CardContent>
+                </Card>
+              );
+            })}
           </div>
         </TabsContent>
       </Tabs>
