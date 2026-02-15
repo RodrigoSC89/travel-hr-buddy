@@ -17,6 +17,7 @@ import { PeoDPFMEAGapAssessment } from "@/components/peo-dp/PeoDPFMEAGapAssessme
 import { PeoDPEmergencyDrills } from "@/components/peo-dp/PeoDPEmergencyDrills";
 import { DPOCompetenceTracker } from "@/components/peo-dp/DPOCompetenceTracker";
 import { PeoDPSmartGapCloser } from "@/components/peo-dp/PeoDPSmartGapCloser";
+import { PeoDPOperationalWindow } from "@/components/peo-dp/PeoDPOperationalWindow";
 import { useMaritimeActions } from "@/hooks/useMaritimeActions";
 import { Skeleton } from "@/components/ui/skeleton";
 import {
@@ -64,6 +65,7 @@ const PEODP = () => {
           <TabsTrigger value="audit-prep" className="gap-1.5"><ClipboardCheck className="h-3.5 w-3.5" /> Audit Prep</TabsTrigger>
           <TabsTrigger value="dpo-competence" className="gap-1.5"><Target className="h-3.5 w-3.5" /> DPO Competence</TabsTrigger>
           <TabsTrigger value="gap-closer" className="gap-1.5"><Zap className="h-3.5 w-3.5" /> Gap Closer</TabsTrigger>
+          <TabsTrigger value="op-window" className="gap-1.5"><Activity className="h-3.5 w-3.5" /> Op. Window</TabsTrigger>
           <TabsTrigger value="interview" className="gap-1.5"><Brain className="h-3.5 w-3.5" /> Simulador</TabsTrigger>
           <TabsTrigger value="checklist-ia" className="gap-1.5"><Zap className="h-3.5 w-3.5" /> Checklist IA</TabsTrigger>
         </TabsList>
@@ -82,6 +84,7 @@ const PEODP = () => {
         <TabsContent value="audit-prep"><PeoDPAuditPrep /></TabsContent>
         <TabsContent value="dpo-competence"><DPOCompetenceTracker /></TabsContent>
         <TabsContent value="gap-closer"><PeoDPSmartGapCloser /></TabsContent>
+        <TabsContent value="op-window"><PeoDPOperationalWindow /></TabsContent>
         <Suspense fallback={<LoadingFallback />}>
           <TabsContent value="interview">
             <ComplianceInterviewSimulator
