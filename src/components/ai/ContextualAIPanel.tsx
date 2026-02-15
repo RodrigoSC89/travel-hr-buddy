@@ -181,7 +181,7 @@ export function ContextualAIPanel({ defaultExpanded = true, className }: Context
       <motion.div
         initial={{ opacity: 0, scale: 0.8 }}
         animate={{ opacity: 1, scale: 1 }}
-        className="fixed bottom-4 right-4 z-50"
+        className="fixed bottom-20 right-4 z-40"
       >
         <Button
           size="lg"

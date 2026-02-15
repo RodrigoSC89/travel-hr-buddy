@@ -68,7 +68,7 @@ export function AILevel3Wrapper({
           <motion.div
             initial={{ scale: 0 }}
             animate={{ scale: 1 }}
-            className="fixed bottom-4 right-4 z-50"
+            className="fixed bottom-20 right-4 z-40"
           >
             <Button
               onClick={() => setIsExpanded(true)}
@@ -80,7 +80,7 @@ export function AILevel3Wrapper({
         )}
 
         {isMinimized && isExpanded && (
-          <div className="fixed bottom-4 right-4 z-50">
+          <div className="fixed bottom-20 right-4 z-40">
             <Button
               onClick={() => setIsMinimized(false)}
               variant="outline"
@@ -122,7 +122,7 @@ export function AILevel3Wrapper({
         <motion.div
           initial={{ scale: 0 }}
           animate={{ scale: 1 }}
-          className="fixed bottom-4 right-4 z-50"
+          className="fixed bottom-20 right-4 z-40"
         >
           <Button
             onClick={() => setIsExpanded(true)}
@@ -134,7 +134,7 @@ export function AILevel3Wrapper({
       )}
 
       {isMinimized && isExpanded && (
-        <div className="fixed bottom-4 right-4 z-50">
+        <div className="fixed bottom-20 right-4 z-40">
           <Button
             onClick={() => setIsMinimized(false)}
             variant="outline"

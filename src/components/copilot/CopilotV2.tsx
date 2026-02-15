@@ -119,7 +119,7 @@ export default function CopilotV2() {
     <>
       {/* Floating Action Button */}
       <Button
-        className="fixed bottom-6 right-6 h-14 w-14 rounded-full shadow-lg"
+        className="fixed bottom-20 right-6 h-14 w-14 rounded-full shadow-lg z-40"
         onClick={() => setOpen(true)}
         size="icon"
         aria-label="Open Nautilus Copilot AI Assistant"

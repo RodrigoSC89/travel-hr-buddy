@@ -160,7 +160,7 @@ export const AICopilot: React.FC = () => {
         whileHover={{ scale: 1.1 }}
         whileTap={{ scale: 0.9 }}
         onClick={() => setIsOpen(true)}
-        className="fixed bottom-6 right-6 z-50 p-4 rounded-full bg-primary text-primary-foreground shadow-lg hover:shadow-xl transition-shadow"
+        className="fixed bottom-20 right-6 z-40 p-4 rounded-full bg-primary text-primary-foreground shadow-lg hover:shadow-xl transition-shadow"
       >
         <Bot className="h-6 w-6" />
         <span className="absolute -top-1 -right-1 flex h-4 w-4">

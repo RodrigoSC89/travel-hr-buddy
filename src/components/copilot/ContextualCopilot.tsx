@@ -219,7 +219,7 @@ export function ContextualCopilot({
       <motion.div
         initial={{ scale: 0.8, opacity: 0 }}
         animate={{ scale: 1, opacity: 1 }}
-        className="fixed bottom-6 right-6 z-50"
+        className="fixed bottom-20 right-6 z-40"
       >
         <Button
           size="lg"
@@ -237,7 +237,7 @@ export function ContextualCopilot({
       initial={{ x: 300, opacity: 0 }}
       animate={{ x: 0, opacity: 1 }}
       exit={{ x: 300, opacity: 0 }}
-      className="fixed bottom-6 right-6 z-50 w-96"
+      className="fixed bottom-20 right-6 z-40 w-96"
     >
       <Card className="shadow-2xl border-primary/20 bg-background/95 backdrop-blur">
         {/* Header */}
