@@ -13,6 +13,7 @@ import ModuleActionButton from "@/components/ui/module-action-button";
 import { ProactiveComplianceMonitor } from "@/components/compliance/ProactiveComplianceMonitor";
 import { ComplianceVoiceChat } from "@/components/compliance/ComplianceVoiceChat";
 import { CompliancePredictiveAI } from "@/components/compliance/CompliancePredictiveAI";
+import { PeotramCorrelationMatrix } from "@/components/peotram/PeotramCorrelationMatrix";
 import { PeotramElementSelector } from "@/components/peotram/PeotramElementSelector";
 import { PeotramElementChecklist } from "@/components/peotram/PeotramElementChecklist";
 import { PeotramAutoEvidenceEngine } from "@/components/peotram/PeotramAutoEvidenceEngine";
@@ -118,6 +119,7 @@ const PEOTRAMPage = () => {
           <TabsTrigger value="audit-wizard" className="gap-1.5"><Wand2 className="h-3.5 w-3.5" /> Wizard</TabsTrigger>
           <TabsTrigger value="ai-voice" className="gap-1.5"><Mic className="h-3.5 w-3.5" /> Voz IA</TabsTrigger>
           <TabsTrigger value="ai-predictive" className="gap-1.5"><TrendingUp className="h-3.5 w-3.5" /> Preditiva</TabsTrigger>
+          <TabsTrigger value="correlation" className="gap-1.5"><Activity className="h-3.5 w-3.5" /> Correlação</TabsTrigger>
           <TabsTrigger value="monitor" className="gap-1.5"><Activity className="h-3.5 w-3.5" /> Monitor</TabsTrigger>
         </TabsList>
 
@@ -315,6 +317,10 @@ const PEOTRAMPage = () => {
               trend: (scores.elementScores[String(e.id)] || 0) >= 80 ? "up" as const : "down" as const,
             }))}
           />
+        </TabsContent>
+
+        <TabsContent value="correlation">
+          <PeotramCorrelationMatrix elementScores={scores.elementScores} />
         </TabsContent>
 
         <TabsContent value="monitor"><ProactiveComplianceMonitor /></TabsContent>

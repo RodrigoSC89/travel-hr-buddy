@@ -1,10 +1,12 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, lazy, Suspense } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ModulePageWrapper } from "@/components/ui/module-page-wrapper";
 import { ModuleHeader } from "@/components/ui/module-header";
 import ModuleActionButton from "@/components/ui/module-action-button";
 import { PeoDpManager } from "@/components/peo-dp/peo-dp-manager";
+import { ASOGStatusBoard } from "@/components/peo-dp/ASOGStatusBoard";
 import { useMaritimeActions } from "@/hooks/useMaritimeActions";
 import { toast } from "sonner";
 import {
@@ -20,7 +22,8 @@ import {
   Plus,
   RefreshCw,
   Download,
-  Settings
+  Settings,
+  Activity
 } from "lucide-react";
 
 const PEODP = () => {
@@ -114,10 +117,21 @@ const PEODP = () => {
         ]}
       />
 
-      {/* PEO-DP Manager */}
-      <div id="peo-dp-plan">
-        <PeoDpManager />
-      </div>
+      {/* PEO-DP with ASOG */}
+      <Tabs defaultValue="plan" className="w-full">
+        <TabsList className="mb-4">
+          <TabsTrigger value="plan" className="gap-1.5"><Target className="h-3.5 w-3.5" /> Plano DP</TabsTrigger>
+          <TabsTrigger value="asog" className="gap-1.5"><Activity className="h-3.5 w-3.5" /> ASOG Status</TabsTrigger>
+        </TabsList>
+        <TabsContent value="plan">
+          <div id="peo-dp-plan">
+            <PeoDpManager />
+          </div>
+        </TabsContent>
+        <TabsContent value="asog">
+          <ASOGStatusBoard />
+        </TabsContent>
+      </Tabs>
 
       {/* Module Action Button */}
       <ModuleActionButton
