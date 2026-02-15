@@ -31,6 +31,7 @@ import { PeotramAuditTimeline } from "@/components/peotram/PeotramAuditTimeline"
 import { PeotramBenchmarking } from "@/components/peotram/PeotramBenchmarking";
 import { PeotramLessonsLearned } from "@/components/peotram/PeotramLessonsLearned";
 import { PeotramNCEscalation } from "@/components/peotram/PeotramNCEscalation";
+import { PeotramMOCTracker } from "@/components/peotram/PeotramMOCTracker";
 import { PeotramReportGenerator } from "@/components/peotram/PeotramReportGenerator";
 import { PeotramAuditWizard } from "@/components/peotram/PeotramAuditWizard";
 import { PeotramRadarChart } from "@/components/peotram/PeotramRadarChart";
@@ -44,7 +45,7 @@ import { toast } from "sonner";
 import {
   Shield, Target, FileCheck, AlertTriangle, TrendingUp, CheckCircle,
   RefreshCw, Download, BarChart3, Activity, ClipboardCheck,
-  Brain, Zap, Mic, Wand2, FileText, Save, History, Award, Lightbulb,
+  Brain, Zap, Mic, Wand2, FileText, Save, History, Award, Lightbulb, GitBranch,
 } from "lucide-react";
 
 const PEOTRAMPage = () => {
@@ -144,6 +145,7 @@ const PEOTRAMPage = () => {
           <TabsTrigger value="benchmarking" className="gap-1.5"><Award className="h-3.5 w-3.5" /> Benchmarking</TabsTrigger>
           <TabsTrigger value="lessons" className="gap-1.5"><Lightbulb className="h-3.5 w-3.5" /> Lições</TabsTrigger>
           <TabsTrigger value="nc-escalation" className="gap-1.5"><AlertTriangle className="h-3.5 w-3.5" /> Escalonamento</TabsTrigger>
+          <TabsTrigger value="moc" className="gap-1.5"><GitBranch className="h-3.5 w-3.5" /> MOC</TabsTrigger>
         </TabsList>
 
         {/* ============ OVERVIEW ============ */}
@@ -356,6 +358,7 @@ const PEOTRAMPage = () => {
         <TabsContent value="benchmarking"><PeotramBenchmarking /></TabsContent>
         <TabsContent value="lessons"><PeotramLessonsLearned /></TabsContent>
         <TabsContent value="nc-escalation"><PeotramNCEscalation /></TabsContent>
+        <TabsContent value="moc"><PeotramMOCTracker /></TabsContent>
 
         <Suspense fallback={<LoadingFallback />}>
           <TabsContent value="interview">
