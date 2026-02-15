@@ -258,6 +258,9 @@ export const AppRoutes = () => (
       <Route path="/quality-dashboard" element={<Pages.QualityDashboard />} />
       <Route path="/settings" element={<Pages.Settings />} />
       <Route path="/settings/security" element={<Pages.SecuritySettings />} />
+      <Route path="/security-dashboard" element={<Pages.SecurityDashboardPage />} />
+      <Route path="/performance-monitor" element={<Pages.PerformanceMonitorPage />} />
+      <Route path="/premium-reports" element={<Pages.PremiumReportsPage />} />
       <Route path="/integrations" element={<Pages.IntegrationsCenter />} />
       <Route path="/api-gateway" element={<Pages.IntegrationsCenter />} />
       <Route path="/collaboration" element={<Pages.Collaboration />} />
