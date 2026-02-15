@@ -46,34 +46,31 @@ export default function HullIntegrityManager() {
   const { data: inspections = [], isLoading } = useQuery({
     queryKey: ['hull-inspections'],
     queryFn: async () => {
-      const { data, error } = await (supabase.from as Function)('hull_inspections')
+      const { data, error } = await (supabase.from as Function)('hull_integrity_records')
         .select('*, vessels:vessel_id(name)')
         .order('inspection_date', { ascending: false }).limit(100);
       if (error) throw error;
-      return data || [];
+      return (data || []).map((r: Record<string, unknown>) => ({
+        ...r,
+        overall_condition: r.coating_condition || 'good',
+        class_requirement: false,
+      }));
     },
   });
 
-  const { data: findings = [] } = useQuery({
-    queryKey: ['hull-findings'],
-    queryFn: async () => {
-      const { data, error } = await (supabase.from as Function)('hull_findings')
-        .select('*').order('created_at', { ascending: false }).limit(200);
-      if (error) throw error;
-      return data || [];
-    },
-  });
+  // Findings are embedded in the same table — filter by severity
+  const findings = inspections.filter((i: Record<string, unknown>) => i.findings);
 
   const createInspMutation = useMutation({
     mutationFn: async (f: typeof inspForm) => {
-      const { error } = await (supabase.from as Function)('hull_inspections').insert({
+      const { error } = await (supabase.from as Function)('hull_integrity_records').insert({
         vessel_id: f.vessel_id || null,
         inspection_type: f.inspection_type,
         zone: f.zone,
         inspector_name: f.inspector_name || null,
-        overall_condition: f.overall_condition,
-        notes: f.notes || null,
-        class_requirement: f.class_requirement,
+        coating_condition: f.overall_condition,
+        findings: f.notes || null,
+        status: 'open',
       });
       if (error) throw error;
     },
@@ -83,7 +80,7 @@ export default function HullIntegrityManager() {
       setCreateOpen(false);
       setInspForm(defaultInspection);
     },
-    onError: (e: any) => toast.error(e.message),
+    onError: (e: Error) => toast.error(e.message),
   });
 
   const createFindingMutation = useMutation({
@@ -91,27 +88,28 @@ export default function HullIntegrityManager() {
       const wastage = f.original_thickness && f.thickness_reading
         ? (((Number(f.original_thickness) - Number(f.thickness_reading)) / Number(f.original_thickness)) * 100).toFixed(1)
         : null;
-      const { error } = await (supabase.from as Function)('hull_findings').insert({
-        inspection_id: inspectionId,
-        finding_type: f.finding_type,
+      const { error } = await (supabase.from as Function)('hull_integrity_records').insert({
+        inspection_type: 'thickness',
         zone: f.zone,
-        frame_number: f.frame_number || null,
-        thickness_reading: f.thickness_reading ? Number(f.thickness_reading) : null,
-        original_thickness: f.original_thickness ? Number(f.original_thickness) : null,
-        wastage_percent: wastage ? Number(wastage) : null,
-        priority: f.priority,
-        notes: f.notes || null,
-        repair_method: f.repair_method || null,
+        location: f.frame_number || null,
+        plate_thickness_mm: f.thickness_reading ? Number(f.thickness_reading) : null,
+        original_thickness_mm: f.original_thickness ? Number(f.original_thickness) : null,
+        diminution_percent: wastage ? Number(wastage) : null,
+        corrosion_type: f.finding_type,
+        severity: f.priority,
+        findings: f.notes || null,
+        recommended_action: f.repair_method || null,
+        status: 'open',
       });
       if (error) throw error;
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['hull-findings', 'hull-inspections'] });
+      queryClient.invalidateQueries({ queryKey: ['hull-inspections'] });
       toast.success('Achado registrado!');
       setFindingOpen(null);
       setFindForm(defaultFinding);
     },
-    onError: (e: any) => toast.error(e.message),
+    onError: (e: Error) => toast.error(e.message),
   });
 
   const conditionColor: Record<string, string> = { good: 'default', fair: 'secondary', poor: 'destructive', critical: 'destructive' };

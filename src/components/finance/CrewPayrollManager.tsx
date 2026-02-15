@@ -58,12 +58,31 @@ export function CrewPayrollManager() {
   const { data: payrolls = [], isLoading: payrollsLoading } = useQuery({
     queryKey: ["crew-payrolls"],
     queryFn: async () => {
-      const { data, error } = await supabase
-        .from("crew_payroll")
+      const { data, error } = await (supabase.from as Function)("crew_payroll")
         .select("*")
-        .order("payroll_period_start", { ascending: false });
+        .order("period_start", { ascending: false });
       if (error) throw error;
-      return data as CrewPayroll[];
+      return (data || []).map((p: Record<string, unknown>): CrewPayroll => ({
+        id: p.id as string,
+        crew_member_id: (p.crew_member_id as string) || '',
+        vessel_id: (p.vessel_id as string) || '',
+        payroll_period_start: (p.period_start as string) || '',
+        payroll_period_end: (p.period_end as string) || '',
+        base_salary: Number(p.base_salary) || 0,
+        currency: (p.currency as string) || 'USD',
+        days_onboard: 0,
+        overtime_hours: Number(p.overtime_hours) || 0,
+        overtime_amount: Number(p.overtime_amount) || 0,
+        bonuses: [],
+        deductions: Array.isArray(p.deductions) ? p.deductions : [],
+        allowances: Array.isArray(p.allowances) ? p.allowances : [],
+        gross_pay: Number(p.base_salary) + Number(p.overtime_amount) + Number(p.total_allowances),
+        net_pay: Number(p.net_pay) || 0,
+        tax_amount: Number(p.total_deductions) || 0,
+        pension_contribution: 0,
+        payment_status: (p.status as string) || 'draft',
+        payment_date: (p.paid_at as string) || null,
+      }));
     },
   });
 
@@ -90,7 +109,7 @@ export function CrewPayrollManager() {
   };
 
   // Filter payrolls
-  const filteredPayrolls = payrolls.filter(p => {
+  const filteredPayrolls = payrolls.filter((p: CrewPayroll) => {
     const crewName = getCrewName(p.crew_member_id).toLowerCase();
     const matchesSearch = crewName.includes(searchQuery.toLowerCase());
     const matchesStatus = filterStatus === "all" || p.payment_status === filterStatus;
@@ -99,13 +118,13 @@ export function CrewPayrollManager() {
 
   // Stats
   const stats = {
-    totalPayroll: payrolls.reduce((sum, p) => sum + (p.net_pay || 0), 0),
-    pending: payrolls.filter(p => p.payment_status === "pending").length,
-    paid: payrolls.filter(p => p.payment_status === "paid").length,
+    totalPayroll: payrolls.reduce((sum: number, p: CrewPayroll) => sum + (p.net_pay || 0), 0),
+    pending: payrolls.filter((p: CrewPayroll) => p.payment_status === "pending").length,
+    paid: payrolls.filter((p: CrewPayroll) => p.payment_status === "paid").length,
     avgSalary: payrolls.length > 0 
-      ? payrolls.reduce((sum, p) => sum + (p.base_salary || 0), 0) / payrolls.length 
+      ? payrolls.reduce((sum: number, p: CrewPayroll) => sum + (p.base_salary || 0), 0) / payrolls.length 
       : 0,
-    totalOvertime: payrolls.reduce((sum, p) => sum + (p.overtime_amount || 0), 0),
+    totalOvertime: payrolls.reduce((sum: number, p: CrewPayroll) => sum + (p.overtime_amount || 0), 0),
   };
 
   const formatCurrency = (amount: number, currency: string = "USD") => {
@@ -289,7 +308,7 @@ export function CrewPayrollManager() {
                   </tr>
                 </thead>
                 <tbody>
-                  {filteredPayrolls.map((payroll) => {
+                  {filteredPayrolls.map((payroll: CrewPayroll) => {
                     const config = statusConfig[payroll.payment_status];
                     const StatusIcon = config?.icon || Clock;
                     const deductions = (payroll.tax_amount || 0) + (payroll.pension_contribution || 0);
@@ -349,7 +368,7 @@ export function CrewPayrollManager() {
                       Total Líquido:
                     </td>
                     <td className="p-3 text-right font-bold text-lg text-foreground">
-                      {formatCurrency(filteredPayrolls.reduce((sum, p) => sum + (p.net_pay || 0), 0))}
+                      {formatCurrency(filteredPayrolls.reduce((sum: number, p: CrewPayroll) => sum + (p.net_pay || 0), 0))}
                     </td>
                     <td></td>
                   </tr>
