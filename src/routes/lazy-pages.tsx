@@ -284,6 +284,7 @@ export const ClientPortalPage = lazy(() => import("@/pages/client-portal"));
 export const VoiceCopilotPage = lazy(() => import("@/pages/VoiceCopilotPage"));
 export const CrewFatiguePredictorPage = lazy(() => import("@/pages/CrewFatiguePredictorPage"));
 export const FleetBenchmarkingPage = lazy(() => import("@/pages/FleetBenchmarkingPage"));
+export const GamificationHub = lazy(() => import("@/pages/GamificationHub"));
 
 // AdminRoute (lazy-loaded RoleGuard)
 export const AdminRoute = lazy(() => import('@/components/auth/RoleGuard').then(mod => ({

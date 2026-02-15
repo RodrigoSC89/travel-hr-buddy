@@ -459,7 +459,7 @@ export const AppRoutes = () => (
       <Route path="/supplier-portal" element={<Navigate to="/workbench" replace />} />
       <Route path="/iot-dashboard" element={<Navigate to="/command" replace />} />
       <Route path="/iot" element={<Navigate to="/command" replace />} />
-      <Route path="/gamification" element={<Navigate to="/command" replace />} />
+      <Route path="/gamification" element={<Suspense fallback={<RouteFallback />}><Pages.GamificationHub /></Suspense>} />
       <Route path="/production-deploy" element={<Navigate to="/command" replace />} />
       <Route path="/autonomous-command" element={<Navigate to="/ai" replace />} />
       <Route path="/advanced-search" element={<Navigate to="/documents" replace />} />
