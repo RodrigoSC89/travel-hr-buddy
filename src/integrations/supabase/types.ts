@@ -23113,6 +23113,82 @@ export type Database = {
           },
         ]
       }
+      job_applications: {
+        Row: {
+          candidate_email: string | null
+          candidate_name: string
+          certifications: string[] | null
+          created_at: string
+          crew_member_id: string | null
+          cv_url: string | null
+          experience_years: number | null
+          id: string
+          job_posting_id: string | null
+          match_score: number | null
+          notes: string | null
+          organization_id: string | null
+          rank_applied: string | null
+          status: string
+          updated_at: string
+        }
+        Insert: {
+          candidate_email?: string | null
+          candidate_name: string
+          certifications?: string[] | null
+          created_at?: string
+          crew_member_id?: string | null
+          cv_url?: string | null
+          experience_years?: number | null
+          id?: string
+          job_posting_id?: string | null
+          match_score?: number | null
+          notes?: string | null
+          organization_id?: string | null
+          rank_applied?: string | null
+          status?: string
+          updated_at?: string
+        }
+        Update: {
+          candidate_email?: string | null
+          candidate_name?: string
+          certifications?: string[] | null
+          created_at?: string
+          crew_member_id?: string | null
+          cv_url?: string | null
+          experience_years?: number | null
+          id?: string
+          job_posting_id?: string | null
+          match_score?: number | null
+          notes?: string | null
+          organization_id?: string | null
+          rank_applied?: string | null
+          status?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "job_applications_crew_member_id_fkey"
+            columns: ["crew_member_id"]
+            isOneToOne: false
+            referencedRelation: "crew_members"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "job_applications_job_posting_id_fkey"
+            columns: ["job_posting_id"]
+            isOneToOne: false
+            referencedRelation: "job_postings"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "job_applications_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       job_embeddings: {
         Row: {
           created_at: string
@@ -23193,6 +23269,87 @@ export type Database = {
           vessel_type?: string | null
         }
         Relationships: []
+      }
+      job_postings: {
+        Row: {
+          applicants_count: number | null
+          certifications_required: string[] | null
+          closes_at: string | null
+          created_at: string
+          currency: string | null
+          description: string | null
+          experience_min: number | null
+          id: string
+          location: string | null
+          organization_id: string | null
+          posted_by: string | null
+          rank_required: string
+          salary_range_max: number | null
+          salary_range_min: number | null
+          status: string
+          title: string
+          updated_at: string
+          vessel_id: string | null
+          vessel_type: string | null
+        }
+        Insert: {
+          applicants_count?: number | null
+          certifications_required?: string[] | null
+          closes_at?: string | null
+          created_at?: string
+          currency?: string | null
+          description?: string | null
+          experience_min?: number | null
+          id?: string
+          location?: string | null
+          organization_id?: string | null
+          posted_by?: string | null
+          rank_required: string
+          salary_range_max?: number | null
+          salary_range_min?: number | null
+          status?: string
+          title: string
+          updated_at?: string
+          vessel_id?: string | null
+          vessel_type?: string | null
+        }
+        Update: {
+          applicants_count?: number | null
+          certifications_required?: string[] | null
+          closes_at?: string | null
+          created_at?: string
+          currency?: string | null
+          description?: string | null
+          experience_min?: number | null
+          id?: string
+          location?: string | null
+          organization_id?: string | null
+          posted_by?: string | null
+          rank_required?: string
+          salary_range_max?: number | null
+          salary_range_min?: number | null
+          status?: string
+          title?: string
+          updated_at?: string
+          vessel_id?: string | null
+          vessel_type?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "job_postings_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "job_postings_vessel_id_fkey"
+            columns: ["vessel_id"]
+            isOneToOne: false
+            referencedRelation: "vessels"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       jobs: {
         Row: {
