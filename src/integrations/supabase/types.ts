@@ -5652,6 +5652,101 @@ export type Database = {
           },
         ]
       }
+      bunker_operations: {
+        Row: {
+          bdn_number: string | null
+          created_at: string
+          created_by: string | null
+          currency: string | null
+          density: number | null
+          fuel_type: string
+          id: string
+          notes: string | null
+          operation_date: string
+          operation_type: string
+          organization_id: string | null
+          port_name: string
+          quality_status: string | null
+          quantity_mt: number
+          rob_after: number | null
+          rob_before: number | null
+          sample_number: string | null
+          sulfur_content: number | null
+          supplier: string | null
+          temperature: number | null
+          total_cost: number | null
+          unit_price: number | null
+          updated_at: string
+          vessel_id: string | null
+          vessel_name: string
+          viscosity: number | null
+        }
+        Insert: {
+          bdn_number?: string | null
+          created_at?: string
+          created_by?: string | null
+          currency?: string | null
+          density?: number | null
+          fuel_type?: string
+          id?: string
+          notes?: string | null
+          operation_date?: string
+          operation_type?: string
+          organization_id?: string | null
+          port_name: string
+          quality_status?: string | null
+          quantity_mt?: number
+          rob_after?: number | null
+          rob_before?: number | null
+          sample_number?: string | null
+          sulfur_content?: number | null
+          supplier?: string | null
+          temperature?: number | null
+          total_cost?: number | null
+          unit_price?: number | null
+          updated_at?: string
+          vessel_id?: string | null
+          vessel_name: string
+          viscosity?: number | null
+        }
+        Update: {
+          bdn_number?: string | null
+          created_at?: string
+          created_by?: string | null
+          currency?: string | null
+          density?: number | null
+          fuel_type?: string
+          id?: string
+          notes?: string | null
+          operation_date?: string
+          operation_type?: string
+          organization_id?: string | null
+          port_name?: string
+          quality_status?: string | null
+          quantity_mt?: number
+          rob_after?: number | null
+          rob_before?: number | null
+          sample_number?: string | null
+          sulfur_content?: number | null
+          supplier?: string | null
+          temperature?: number | null
+          total_cost?: number | null
+          unit_price?: number | null
+          updated_at?: string
+          vessel_id?: string | null
+          vessel_name?: string
+          viscosity?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "bunker_operations_vessel_id_fkey"
+            columns: ["vessel_id"]
+            isOneToOne: false
+            referencedRelation: "vessels"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       calendar_events: {
         Row: {
           all_day: boolean | null
@@ -47222,6 +47317,122 @@ export type Database = {
           },
           {
             foreignKeyName: "voyage_plans_vessel_id_fkey"
+            columns: ["vessel_id"]
+            isOneToOne: false
+            referencedRelation: "vessels"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      voyage_pnl: {
+        Row: {
+          agency_fees: number | null
+          bunker_cost: number | null
+          canal_dues: number | null
+          cargo_quantity_mt: number | null
+          cargo_type: string | null
+          created_at: string
+          created_by: string | null
+          crew_cost: number | null
+          currency: string | null
+          demurrage_income: number | null
+          discharge_port: string | null
+          freight_rate: number | null
+          freight_revenue: number | null
+          id: string
+          insurance_cost: number | null
+          load_port: string | null
+          net_profit: number | null
+          organization_id: string | null
+          other_expenses: number | null
+          other_revenue: number | null
+          port_charges: number | null
+          port_days: number | null
+          route_description: string | null
+          sea_days: number | null
+          status: string | null
+          tce_rate: number | null
+          total_expenses: number | null
+          total_revenue: number | null
+          updated_at: string
+          vessel_id: string | null
+          vessel_name: string
+          voyage_days: number | null
+          voyage_id: string
+        }
+        Insert: {
+          agency_fees?: number | null
+          bunker_cost?: number | null
+          canal_dues?: number | null
+          cargo_quantity_mt?: number | null
+          cargo_type?: string | null
+          created_at?: string
+          created_by?: string | null
+          crew_cost?: number | null
+          currency?: string | null
+          demurrage_income?: number | null
+          discharge_port?: string | null
+          freight_rate?: number | null
+          freight_revenue?: number | null
+          id?: string
+          insurance_cost?: number | null
+          load_port?: string | null
+          net_profit?: number | null
+          organization_id?: string | null
+          other_expenses?: number | null
+          other_revenue?: number | null
+          port_charges?: number | null
+          port_days?: number | null
+          route_description?: string | null
+          sea_days?: number | null
+          status?: string | null
+          tce_rate?: number | null
+          total_expenses?: number | null
+          total_revenue?: number | null
+          updated_at?: string
+          vessel_id?: string | null
+          vessel_name: string
+          voyage_days?: number | null
+          voyage_id: string
+        }
+        Update: {
+          agency_fees?: number | null
+          bunker_cost?: number | null
+          canal_dues?: number | null
+          cargo_quantity_mt?: number | null
+          cargo_type?: string | null
+          created_at?: string
+          created_by?: string | null
+          crew_cost?: number | null
+          currency?: string | null
+          demurrage_income?: number | null
+          discharge_port?: string | null
+          freight_rate?: number | null
+          freight_revenue?: number | null
+          id?: string
+          insurance_cost?: number | null
+          load_port?: string | null
+          net_profit?: number | null
+          organization_id?: string | null
+          other_expenses?: number | null
+          other_revenue?: number | null
+          port_charges?: number | null
+          port_days?: number | null
+          route_description?: string | null
+          sea_days?: number | null
+          status?: string | null
+          tce_rate?: number | null
+          total_expenses?: number | null
+          total_revenue?: number | null
+          updated_at?: string
+          vessel_id?: string | null
+          vessel_name?: string
+          voyage_days?: number | null
+          voyage_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "voyage_pnl_vessel_id_fkey"
             columns: ["vessel_id"]
             isOneToOne: false
             referencedRelation: "vessels"
