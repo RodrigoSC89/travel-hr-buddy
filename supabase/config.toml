@@ -1481,3 +1481,7 @@ comment = "DP Logbook analytics and Computer Vision inspection statistics with o
 [functions.fleet-health-scoring]
 verify_jwt = false
 comment = "Real-time fleet health scoring engine aggregating maintenance, crew, safety, compliance and drill data"
+
+[functions.crew-analytics]
+verify_jwt = false
+comment = "Crew analytics: turnover risk, fatigue, certification gaps, rank distribution"
