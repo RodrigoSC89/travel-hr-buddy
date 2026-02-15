@@ -23,6 +23,7 @@ import { PeotramElementSelector } from "@/components/peotram/PeotramElementSelec
 import { PeotramElementChecklist } from "@/components/peotram/PeotramElementChecklist";
 import { PeotramAutoEvidenceEngine } from "@/components/peotram/PeotramAutoEvidenceEngine";
 import { PeotramEvidenceTracker } from "@/components/peotram/PeotramEvidenceTracker";
+import { PeotramRiskHeatMap } from "@/components/peotram/PeotramRiskHeatMap";
 import { PeotramSmartScoring } from "@/components/peotram/PeotramSmartScoring";
 import { PeotramNCAutoGenerator } from "@/components/peotram/PeotramNCAutoGenerator";
 import { PeotramNCActionPlan } from "@/components/peotram/PeotramNCActionPlan";
@@ -125,6 +126,7 @@ const PEOTRAMPage = () => {
           <TabsTrigger value="nc-generator" className="gap-1.5"><AlertTriangle className="h-3.5 w-3.5" /> NCs</TabsTrigger>
           <TabsTrigger value="nc-action-plan" className="gap-1.5"><Target className="h-3.5 w-3.5" /> Plano Ação</TabsTrigger>
           <TabsTrigger value="evidence-tracker" className="gap-1.5"><FileCheck className="h-3.5 w-3.5" /> Evidências Tracker</TabsTrigger>
+          <TabsTrigger value="risk-heatmap" className="gap-1.5"><AlertTriangle className="h-3.5 w-3.5" /> Mapa Riscos</TabsTrigger>
           <TabsTrigger value="report" className="gap-1.5"><FileText className="h-3.5 w-3.5" /> Relatório</TabsTrigger>
           <TabsTrigger value="audit-wizard" className="gap-1.5"><Wand2 className="h-3.5 w-3.5" /> Wizard</TabsTrigger>
           <TabsTrigger value="ai-voice" className="gap-1.5"><Mic className="h-3.5 w-3.5" /> Voz IA</TabsTrigger>
@@ -297,6 +299,7 @@ const PEOTRAMPage = () => {
         </TabsContent>
         <TabsContent value="nc-action-plan"><PeotramNCActionPlan /></TabsContent>
         <TabsContent value="evidence-tracker"><PeotramEvidenceTracker /></TabsContent>
+        <TabsContent value="risk-heatmap"><PeotramRiskHeatMap /></TabsContent>
         <TabsContent value="report">
           <PeotramReportGenerator
             vesselName={currentAudit?.vessel_name}
