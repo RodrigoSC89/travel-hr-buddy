@@ -13987,6 +13987,95 @@ export type Database = {
           },
         ]
       }
+      drill_records: {
+        Row: {
+          completed_objectives: Json | null
+          created_at: string | null
+          created_by: string | null
+          description: string | null
+          difficulty: string | null
+          duration_minutes: number | null
+          executed_at: string | null
+          findings: Json | null
+          id: string
+          metrics: Json | null
+          objectives: Json | null
+          organization_id: string | null
+          participants: Json | null
+          participants_count: number | null
+          passed: boolean | null
+          planned_date: string | null
+          planned_duration_minutes: number | null
+          recommendations: Json | null
+          scenario_name: string
+          scenario_type: string
+          score: number | null
+          status: string
+          updated_at: string | null
+          vessel_id: string | null
+        }
+        Insert: {
+          completed_objectives?: Json | null
+          created_at?: string | null
+          created_by?: string | null
+          description?: string | null
+          difficulty?: string | null
+          duration_minutes?: number | null
+          executed_at?: string | null
+          findings?: Json | null
+          id?: string
+          metrics?: Json | null
+          objectives?: Json | null
+          organization_id?: string | null
+          participants?: Json | null
+          participants_count?: number | null
+          passed?: boolean | null
+          planned_date?: string | null
+          planned_duration_minutes?: number | null
+          recommendations?: Json | null
+          scenario_name: string
+          scenario_type: string
+          score?: number | null
+          status?: string
+          updated_at?: string | null
+          vessel_id?: string | null
+        }
+        Update: {
+          completed_objectives?: Json | null
+          created_at?: string | null
+          created_by?: string | null
+          description?: string | null
+          difficulty?: string | null
+          duration_minutes?: number | null
+          executed_at?: string | null
+          findings?: Json | null
+          id?: string
+          metrics?: Json | null
+          objectives?: Json | null
+          organization_id?: string | null
+          participants?: Json | null
+          participants_count?: number | null
+          passed?: boolean | null
+          planned_date?: string | null
+          planned_duration_minutes?: number | null
+          recommendations?: Json | null
+          scenario_name?: string
+          scenario_type?: string
+          score?: number | null
+          status?: string
+          updated_at?: string | null
+          vessel_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "drill_records_vessel_id_fkey"
+            columns: ["vessel_id"]
+            isOneToOne: false
+            referencedRelation: "vessels"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       drill_responses: {
         Row: {
           ai_feedback: Json | null
@@ -14343,6 +14432,86 @@ export type Database = {
           },
           {
             foreignKeyName: "drydock_events_vessel_id_fkey"
+            columns: ["vessel_id"]
+            isOneToOne: false
+            referencedRelation: "vessels"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      drydock_projects: {
+        Row: {
+          budget_usd: number
+          class_completed: number
+          class_reqs: number
+          created_at: string | null
+          created_by: string | null
+          critical_path: Json | null
+          days_elapsed: number
+          days_planned: number
+          end_date: string
+          id: string
+          notes: string | null
+          organization_id: string | null
+          spent_usd: number
+          start_date: string
+          status: string
+          updated_at: string | null
+          vessel_id: string | null
+          vessel_name: string
+          work_items: Json | null
+          yard_location: string
+          yard_name: string
+        }
+        Insert: {
+          budget_usd?: number
+          class_completed?: number
+          class_reqs?: number
+          created_at?: string | null
+          created_by?: string | null
+          critical_path?: Json | null
+          days_elapsed?: number
+          days_planned?: number
+          end_date: string
+          id?: string
+          notes?: string | null
+          organization_id?: string | null
+          spent_usd?: number
+          start_date: string
+          status?: string
+          updated_at?: string | null
+          vessel_id?: string | null
+          vessel_name: string
+          work_items?: Json | null
+          yard_location?: string
+          yard_name: string
+        }
+        Update: {
+          budget_usd?: number
+          class_completed?: number
+          class_reqs?: number
+          created_at?: string | null
+          created_by?: string | null
+          critical_path?: Json | null
+          days_elapsed?: number
+          days_planned?: number
+          end_date?: string
+          id?: string
+          notes?: string | null
+          organization_id?: string | null
+          spent_usd?: number
+          start_date?: string
+          status?: string
+          updated_at?: string | null
+          vessel_id?: string | null
+          vessel_name?: string
+          work_items?: Json | null
+          yard_location?: string
+          yard_name?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "drydock_projects_vessel_id_fkey"
             columns: ["vessel_id"]
             isOneToOne: false
             referencedRelation: "vessels"
