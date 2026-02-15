@@ -41,6 +41,10 @@ export const AgentOrchestrationPage = lazy(() => import("@/pages/AgentOrchestrat
 export const BlockchainCompliancePage = lazy(() => import("@/pages/advanced/BlockchainCertificatesPage"));
 export const CompanyFinancialPage = lazy(() => import("@/pages/CompanyFinancialPage"));
 
+// Revolutionary Features
+export const SmartEvidencePackPage = lazy(() => import("@/pages/SmartEvidencePackPage"));
+export const SmartVoyageOptimizerPage = lazy(() => import("@/pages/SmartVoyageOptimizerPage"));
+
 // Módulos Completos
 export const MedicalInfirmary = lazy(() => import("@/modules/medical-infirmary"));
 export const EnhancedWasteManagement = lazy(() => import("@/pages/advanced/MARPOLTrackerPage"));
