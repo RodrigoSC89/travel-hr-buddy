@@ -5,29 +5,14 @@ import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { toast } from "sonner";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { supabase } from "@/integrations/supabase/client";
 import {
-  BookOpen,
-  Clock,
-  User,
-  AlertTriangle,
-  CheckCircle,
-  Activity,
-  Settings,
-  Download,
-  Plus,
-  Filter,
-  Search,
-  FileText,
-  Ship,
-  Anchor,
-  Zap,
-  RefreshCw,
-  Calendar,
-  MapPin
+  BookOpen, Clock, User, AlertTriangle, CheckCircle, Activity, Settings,
+  Download, Plus, Filter, Search, RefreshCw, Loader2
 } from "lucide-react";
 
 interface LogEntry {
@@ -38,96 +23,23 @@ interface LogEntry {
   description: string;
   operator: string;
   dpMode: string;
-  position?: { lat: number; lon: number };
-  heading?: number;
-  environmentalConditions?: {
-    windSpeed: number;
-    windDirection: number;
-    waveHeight: number;
-    current: number;
-  };
-  relatedAsog?: string;
   severity: "info" | "warning" | "critical";
   acknowledged: boolean;
   notes?: string;
 }
-
-const fallbackLogEntries: LogEntry[] = [
-  {
-    id: "LOG-001",
-    timestamp: "2024-12-04T08:00:00",
-    eventType: "watch_handover",
-    category: "Operacional",
-    description: "Watch handover - SDPO assumiu turno",
-    operator: "João Silva - SDPO",
-    dpMode: "Auto DP",
-    severity: "info",
-    acknowledged: true,
-    environmentalConditions: { windSpeed: 15, windDirection: 180, waveHeight: 1.2, current: 0.8 }
-  },
-  {
-    id: "LOG-002",
-    timestamp: "2024-12-04T08:30:00",
-    eventType: "mode_change",
-    category: "Sistema DP",
-    description: "Mudança de modo: Auto DP → TAM (Thruster Assisted Mooring)",
-    operator: "João Silva - SDPO",
-    dpMode: "TAM",
-    relatedAsog: "ASOG-2024-001",
-    severity: "warning",
-    acknowledged: true
-  },
-  {
-    id: "LOG-003",
-    timestamp: "2024-12-04T09:15:00",
-    eventType: "sensor",
-    category: "Sensores",
-    description: "Perda temporária de sinal MRU#1 - Fallback para MRU#2 ativo",
-    operator: "João Silva - SDPO",
-    dpMode: "TAM",
-    severity: "warning",
-    acknowledged: true,
-    notes: "Sinal restaurado após 45 segundos. Manutenção preventiva agendada."
-  },
-  {
-    id: "LOG-004",
-    timestamp: "2024-12-04T10:00:00",
-    eventType: "alarm",
-    category: "Alarmes",
-    description: "Alarme de corrente excedendo limite ASOG (1.3 kn → 1.5 kn atual)",
-    operator: "João Silva - SDPO",
-    dpMode: "TAM",
-    relatedAsog: "ASOG-2024-001",
-    severity: "critical",
-    acknowledged: false,
-    environmentalConditions: { windSpeed: 18, windDirection: 185, waveHeight: 1.5, current: 1.5 }
-  },
-  {
-    id: "LOG-005",
-    timestamp: "2024-12-04T10:30:00",
-    eventType: "operation",
-    category: "Operação",
-    description: "Início de operação ROV - Posição mantida dentro dos limites",
-    operator: "Maria Santos - JDPO",
-    dpMode: "Auto DP",
-    severity: "info",
-    acknowledged: true,
-    position: { lat: -22.9068, lon: -43.1729 }
-  }
-];
 
 const eventTypeConfig = {
   mode_change: { label: "Mudança de Modo", icon: RefreshCw, color: "bg-primary" },
   alarm: { label: "Alarme", icon: AlertTriangle, color: "bg-destructive" },
   sensor: { label: "Sensor", icon: Activity, color: "bg-warning" },
   watch_handover: { label: "Troca de Turno", icon: User, color: "bg-success" },
-  operation: { label: "Operação", icon: Anchor, color: "bg-accent" },
+  operation: { label: "Operação", icon: Settings, color: "bg-accent" },
   maintenance: { label: "Manutenção", icon: Settings, color: "bg-warning" },
-  incident: { label: "Incidente", icon: Zap, color: "bg-destructive" }
+  incident: { label: "Incidente", icon: AlertTriangle, color: "bg-destructive" }
 };
 
 export const SmartDPLogbook: React.FC = () => {
-  const [entries, setEntries] = useState<LogEntry[]>(fallbackLogEntries);
+  const queryClient = useQueryClient();
   const [searchTerm, setSearchTerm] = useState("");
   const [filterType, setFilterType] = useState<string>("all");
   const [filterSeverity, setFilterSeverity] = useState<string>("all");
@@ -136,6 +48,65 @@ export const SmartDPLogbook: React.FC = () => {
     eventType: "operation",
     severity: "info",
     dpMode: "Auto DP"
+  });
+
+  const { data: entries = [], isLoading } = useQuery({
+    queryKey: ["peodp-audit-trail"],
+    queryFn: async () => {
+      const { data, error } = await (supabase.from as Function)("peodp_audit_trail")
+        .select("*")
+        .order("created_at", { ascending: false })
+        .limit(200);
+      if (error) throw error;
+      return (data || []).map((row: Record<string, unknown>) => ({
+        id: row.id as string,
+        timestamp: row.created_at as string,
+        eventType: (row.event_type as string) || "operation",
+        category: (row.category as string) || "Geral",
+        description: (row.description as string) || "",
+        operator: (row.performed_by as string) || "",
+        dpMode: (row.dp_mode as string) || "Auto DP",
+        severity: (row.severity as string) || "info",
+        acknowledged: (row.acknowledged as boolean) ?? true,
+        notes: row.notes as string | undefined,
+      })) as LogEntry[];
+    },
+  });
+
+  const addMutation = useMutation({
+    mutationFn: async (entry: Partial<LogEntry>) => {
+      const { error } = await (supabase.from as Function)("peodp_audit_trail").insert({
+        event_type: entry.eventType,
+        category: eventTypeConfig[entry.eventType as keyof typeof eventTypeConfig]?.label || "Geral",
+        description: entry.description,
+        performed_by: entry.operator,
+        dp_mode: entry.dpMode,
+        severity: entry.severity,
+        acknowledged: true,
+        notes: entry.notes,
+      });
+      if (error) throw error;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["peodp-audit-trail"] });
+      setNewEntry({ eventType: "operation", severity: "info", dpMode: "Auto DP" });
+      setIsNewEntryOpen(false);
+      toast.success("Entrada registrada no logbook");
+    },
+    onError: () => toast.error("Erro ao registrar entrada"),
+  });
+
+  const ackMutation = useMutation({
+    mutationFn: async (id: string) => {
+      const { error } = await (supabase.from as Function)("peodp_audit_trail")
+        .update({ acknowledged: true })
+        .eq("id", id);
+      if (error) throw error;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["peodp-audit-trail"] });
+      toast.success("Entrada reconhecida");
+    },
   });
 
   const filteredEntries = entries.filter(entry => {
@@ -151,32 +122,10 @@ export const SmartDPLogbook: React.FC = () => {
       toast.error("Preencha todos os campos obrigatórios");
       return;
     }
-
-    const entry: LogEntry = {
-      id: `LOG-${String(entries.length + 1).padStart(3, "0")}`,
-      timestamp: new Date().toISOString(),
-      eventType: newEntry.eventType as LogEntry["eventType"],
-      category: eventTypeConfig[newEntry.eventType as keyof typeof eventTypeConfig]?.label || "Geral",
-      description: newEntry.description || "",
-      operator: newEntry.operator || "",
-      dpMode: newEntry.dpMode || "Auto DP",
-      severity: newEntry.severity as LogEntry["severity"],
-      acknowledged: true,
-      notes: newEntry.notes
-    };
-
-    setEntries([entry, ...entries]);
-    setNewEntry({ eventType: "operation", severity: "info", dpMode: "Auto DP" });
-    setIsNewEntryOpen(false);
-    toast.success("Entrada registrada no logbook");
+    addMutation.mutate(newEntry);
   };
 
-  const handleAcknowledge = (id: string) => {
-    setEntries(entries.map(e => e.id === id ? { ...e, acknowledged: true } : e));
-    toast.success("Entrada reconhecida");
-  };
-
-  const handleExportPDF = () => {
+  const handleExportCSV = () => {
     const csvRows = [
       "Timestamp;Tipo;Categoria;Descrição;Operador;Modo DP;Severidade;Reconhecido",
       ...entries.map(e =>
@@ -190,7 +139,7 @@ export const SmartDPLogbook: React.FC = () => {
     a.download = `dp-logbook-${new Date().toISOString().slice(0, 10)}.csv`;
     a.click();
     URL.revokeObjectURL(url);
-    toast.success("Logbook exportado com sucesso!");
+    toast.success("Logbook exportado!");
   };
 
   const getSeverityBadge = (severity: string) => {
@@ -203,6 +152,15 @@ export const SmartDPLogbook: React.FC = () => {
 
   const unacknowledgedCount = entries.filter(e => !e.acknowledged).length;
 
+  if (isLoading) {
+    return (
+      <div className="flex items-center justify-center py-12">
+        <Loader2 className="h-8 w-8 animate-spin text-primary" />
+        <span className="ml-2 text-muted-foreground">Carregando logbook...</span>
+      </div>
+    );
+  }
+
   return (
     <div className="space-y-6">
       {/* Header */}
@@ -213,7 +171,7 @@ export const SmartDPLogbook: React.FC = () => {
           </div>
           <div>
             <h2 className="text-2xl font-bold text-foreground">Smart DP Logbook</h2>
-            <p className="text-muted-foreground">Registro automatizado conforme IMCA M117</p>
+            <p className="text-muted-foreground">Registro automatizado conforme IMCA M117 • Dados reais Supabase</p>
           </div>
         </div>
         <div className="flex gap-2">
@@ -284,13 +242,16 @@ export const SmartDPLogbook: React.FC = () => {
                 </div>
                 <div className="flex justify-end gap-2 pt-4">
                   <Button variant="outline" onClick={() => setIsNewEntryOpen(false)}>Cancelar</Button>
-                  <Button onClick={handleAddEntry}>Registrar Entrada</Button>
+                  <Button onClick={handleAddEntry} disabled={addMutation.isPending}>
+                    {addMutation.isPending && <Loader2 className="w-4 h-4 mr-2 animate-spin" />}
+                    Registrar Entrada
+                  </Button>
                 </div>
               </div>
             </DialogContent>
           </Dialog>
-          <Button variant="outline" onClick={handleExportPDF}>
-            <Download className="w-4 h-4 mr-2" />Exportar PDF
+          <Button variant="outline" onClick={handleExportCSV}>
+            <Download className="w-4 h-4 mr-2" />Exportar CSV
           </Button>
         </div>
       </div>
@@ -380,13 +341,16 @@ export const SmartDPLogbook: React.FC = () => {
             <Clock className="h-5 w-5" />
             Entradas do Logbook
           </CardTitle>
-          <CardDescription>Últimos registros de operações DP</CardDescription>
+          <CardDescription>Registros de operações DP — dados reais</CardDescription>
         </CardHeader>
         <CardContent>
           <ScrollArea className="h-[500px]">
             <div className="space-y-3">
+              {filteredEntries.length === 0 && (
+                <p className="text-center text-muted-foreground py-8">Nenhuma entrada encontrada. Adicione a primeira entrada ao logbook.</p>
+              )}
               {filteredEntries.map((entry) => {
-                const config = eventTypeConfig[entry.eventType];
+                const config = eventTypeConfig[entry.eventType] || eventTypeConfig.operation;
                 const IconComponent = config.icon;
                 return (
                   <div key={entry.id} className={`p-4 rounded-lg border ${!entry.acknowledged ? "border-destructive/50 bg-destructive/5" : "border-border bg-card"}`}>
@@ -397,7 +361,6 @@ export const SmartDPLogbook: React.FC = () => {
                         </div>
                         <div className="space-y-1">
                           <div className="flex items-center gap-2">
-                            <span className="font-medium">{entry.id}</span>
                             <Badge variant="outline">{config.label}</Badge>
                             {getSeverityBadge(entry.severity)}
                             {!entry.acknowledged && <Badge variant="destructive">Não Reconhecido</Badge>}
@@ -406,22 +369,14 @@ export const SmartDPLogbook: React.FC = () => {
                           <div className="flex items-center gap-4 text-xs text-muted-foreground">
                             <span className="flex items-center gap-1"><Clock className="h-3 w-3" />{new Date(entry.timestamp).toLocaleString("pt-BR")}</span>
                             <span className="flex items-center gap-1"><User className="h-3 w-3" />{entry.operator}</span>
-                            <span className="flex items-center gap-1"><Anchor className="h-3 w-3" />{entry.dpMode}</span>
-                            {entry.relatedAsog && <span className="flex items-center gap-1"><FileText className="h-3 w-3" />{entry.relatedAsog}</span>}
+                            <span>Modo: {entry.dpMode}</span>
                           </div>
-                          {entry.environmentalConditions && (
-                            <div className="flex items-center gap-3 text-xs text-muted-foreground mt-1 p-2 bg-muted/50 rounded">
-                              <span>🌊 {entry.environmentalConditions.waveHeight}m</span>
-                              <span>💨 {entry.environmentalConditions.windSpeed}kn / {entry.environmentalConditions.windDirection}°</span>
-                              <span>🌀 {entry.environmentalConditions.current}kn</span>
-                            </div>
-                          )}
-                          {entry.notes && <p className="text-xs text-muted-foreground italic mt-1">Nota: {entry.notes}</p>}
+                          {entry.notes && <p className="text-xs text-muted-foreground italic mt-1">{entry.notes}</p>}
                         </div>
                       </div>
                       {!entry.acknowledged && (
-                        <Button size="sm" variant="outline" onClick={() => handleAcknowledge(entry.id)}>
-                          <CheckCircle className="w-4 h-4 mr-1" />Reconhecer
+                        <Button size="sm" variant="outline" onClick={() => ackMutation.mutate(entry.id)}>
+                          <CheckCircle className="h-4 w-4 mr-1" />Reconhecer
                         </Button>
                       )}
                     </div>

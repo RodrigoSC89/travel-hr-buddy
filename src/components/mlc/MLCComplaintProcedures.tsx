@@ -1,7 +1,6 @@
 /**
  * MLC Complaint Procedures — Reg. 5.1.5
- * Onboard complaint tracking with resolution workflow
- * Ensures fair, effective complaint handling without victimization
+ * Onboard complaint tracking with resolution workflow — Real Supabase CRUD
  */
 import React, { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -10,12 +9,13 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Progress } from "@/components/ui/progress";
 import {
-  MessageSquare, Plus, CheckCircle, AlertTriangle, Clock, Shield,
-  Download, Eye, ArrowRight, Users, FileText
+  MessageSquare, Plus, CheckCircle, Shield,
+  Download, ArrowRight, Loader2
 } from "lucide-react";
 import { toast } from "sonner";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { supabase } from "@/integrations/supabase/client";
 
 type ComplaintStatus = "received" | "investigating" | "resolved" | "escalated" | "closed";
 type ComplaintCategory = "wages" | "accommodation" | "food" | "hours" | "safety" | "discrimination" | "repatriation" | "other";
@@ -30,10 +30,9 @@ interface Complaint {
   status: ComplaintStatus;
   assignedTo: string;
   resolution: string;
-  escalationLevel: number; // 0=onboard, 1=company, 2=flag state, 3=port state
+  escalationLevel: number;
   daysOpen: number;
   confidential: boolean;
-  noVictimization: boolean;
 }
 
 const CATEGORY_LABELS: Record<ComplaintCategory, string> = {
@@ -52,22 +51,76 @@ const STATUS_CONFIG: Record<ComplaintStatus, { label: string; variant: "default"
 
 const ESCALATION_LABELS = ["Bordo (Comandante)", "Empresa (Armador)", "Estado de Bandeira", "Estado do Porto"];
 
-const INITIAL_COMPLAINTS: Complaint[] = [
-  { id: "C-001", date: "2026-02-01", complainant: "Anônimo", rank: "AB Seaman", category: "hours", description: "Registro de horas de descanso não reflete a realidade. Horas extras não são registradas adequadamente.", status: "investigating", assignedTo: "Chief Officer", resolution: "", escalationLevel: 0, daysOpen: 14, confidential: true, noVictimization: true },
-  { id: "C-002", date: "2026-01-20", complainant: "Cook - Roberto Lima", rank: "Cook", category: "accommodation", description: "Ar condicionado da cabine não funciona há 2 semanas. Temperatura acima de 30°C.", status: "resolved", assignedTo: "Chief Engineer", resolution: "Unidade de AC substituída em 25/01. Verificação de temperatura confirmou operação normal.", escalationLevel: 0, daysOpen: 5, confidential: false, noVictimization: true },
-  { id: "C-003", date: "2026-01-15", complainant: "Anônimo", rank: "Motorman", category: "safety", description: "EPIs de proteção respiratória insuficientes para trabalhos em espaços confinados.", status: "escalated", assignedTo: "Safety Officer", resolution: "", escalationLevel: 1, daysOpen: 31, confidential: true, noVictimization: true },
-];
-
 export function MLCComplaintProcedures() {
-  const [complaints, setComplaints] = useState(INITIAL_COMPLAINTS);
+  const queryClient = useQueryClient();
   const [showNewForm, setShowNewForm] = useState(false);
   const [filterStatus, setFilterStatus] = useState("all");
+  const [newComplaint, setNewComplaint] = useState({ complainant: "", rank: "", category: "other" as ComplaintCategory, description: "" });
+
+  const { data: complaints = [], isLoading } = useQuery({
+    queryKey: ["mlc-complaints"],
+    queryFn: async () => {
+      const { data, error } = await (supabase.from as Function)("mlc_complaints")
+        .select("*")
+        .order("created_at", { ascending: false });
+      if (error) throw error;
+      return (data || []).map((row: Record<string, unknown>) => ({
+        id: row.id as string,
+        date: (row.date as string) || (row.created_at as string),
+        complainant: (row.complainant as string) || "Anônimo",
+        rank: (row.rank as string) || "",
+        category: (row.category as ComplaintCategory) || "other",
+        description: (row.description as string) || "",
+        status: (row.status as ComplaintStatus) || "received",
+        assignedTo: (row.assigned_to as string) || "",
+        resolution: (row.resolution as string) || "",
+        escalationLevel: (row.escalation_level as number) || 0,
+        daysOpen: (row.days_open as number) || Math.ceil((Date.now() - new Date(row.created_at as string).getTime()) / 86400000),
+        confidential: (row.confidential as boolean) ?? true,
+      })) as Complaint[];
+    },
+  });
+
+  const addMutation = useMutation({
+    mutationFn: async (c: typeof newComplaint) => {
+      const { error } = await (supabase.from as Function)("mlc_complaints").insert({
+        complainant: c.complainant || "Anônimo",
+        rank: c.rank,
+        category: c.category,
+        description: c.description,
+        status: "received",
+        confidential: true,
+        escalation_level: 0,
+      });
+      if (error) throw error;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["mlc-complaints"] });
+      setShowNewForm(false);
+      setNewComplaint({ complainant: "", rank: "", category: "other", description: "" });
+      toast.success("Reclamação registrada com confidencialidade");
+    },
+    onError: () => toast.error("Erro ao registrar reclamação"),
+  });
+
+  const updateMutation = useMutation({
+    mutationFn: async ({ id, updates }: { id: string; updates: Record<string, unknown> }) => {
+      const { error } = await (supabase.from as Function)("mlc_complaints")
+        .update(updates).eq("id", id);
+      if (error) throw error;
+    },
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: ["mlc-complaints"] }),
+  });
 
   const filtered = filterStatus === "all" ? complaints : complaints.filter(c => c.status === filterStatus);
   const openCount = complaints.filter(c => c.status !== "resolved" && c.status !== "closed").length;
   const resolvedCount = complaints.filter(c => c.status === "resolved" || c.status === "closed").length;
   const escalatedCount = complaints.filter(c => c.status === "escalated").length;
   const avgDays = complaints.length > 0 ? Math.round(complaints.reduce((a, c) => a + c.daysOpen, 0) / complaints.length) : 0;
+
+  if (isLoading) {
+    return <div className="flex items-center justify-center py-12"><Loader2 className="h-8 w-8 animate-spin text-primary" /><span className="ml-2 text-muted-foreground">Carregando...</span></div>;
+  }
 
   return (
     <div className="space-y-4">
@@ -77,7 +130,7 @@ export function MLCComplaintProcedures() {
             <MessageSquare className="h-5 w-5 text-primary" />
             Procedimentos de Reclamação a Bordo
           </h3>
-          <p className="text-sm text-muted-foreground">MLC Reg. 5.1.5 • Standard A5.1.5 • Sem vitimização • Confidencial</p>
+          <p className="text-sm text-muted-foreground">MLC Reg. 5.1.5 • Dados reais Supabase</p>
         </div>
         <div className="flex gap-2">
           <Button size="sm" variant="outline" className="gap-1 h-9" onClick={() => toast.success("Complaint log exportado")}>
@@ -91,26 +144,11 @@ export function MLCComplaintProcedures() {
 
       {/* KPIs */}
       <div className="grid grid-cols-2 md:grid-cols-5 gap-3">
-        <Card><CardContent className="pt-4 text-center">
-          <p className="text-xs text-muted-foreground">Total</p>
-          <p className="text-2xl font-bold">{complaints.length}</p>
-        </CardContent></Card>
-        <Card className="border-warning/20"><CardContent className="pt-4 text-center">
-          <p className="text-xs text-muted-foreground">Abertas</p>
-          <p className="text-2xl font-bold text-warning">{openCount}</p>
-        </CardContent></Card>
-        <Card className="border-success/20"><CardContent className="pt-4 text-center">
-          <p className="text-xs text-muted-foreground">Resolvidas</p>
-          <p className="text-2xl font-bold text-success">{resolvedCount}</p>
-        </CardContent></Card>
-        <Card className="border-destructive/20"><CardContent className="pt-4 text-center">
-          <p className="text-xs text-muted-foreground">Escaladas</p>
-          <p className="text-2xl font-bold text-destructive">{escalatedCount}</p>
-        </CardContent></Card>
-        <Card><CardContent className="pt-4 text-center">
-          <p className="text-xs text-muted-foreground">Tempo Médio</p>
-          <p className="text-2xl font-bold">{avgDays}d</p>
-        </CardContent></Card>
+        <Card><CardContent className="pt-4 text-center"><p className="text-xs text-muted-foreground">Total</p><p className="text-2xl font-bold">{complaints.length}</p></CardContent></Card>
+        <Card className="border-warning/20"><CardContent className="pt-4 text-center"><p className="text-xs text-muted-foreground">Abertas</p><p className="text-2xl font-bold text-warning">{openCount}</p></CardContent></Card>
+        <Card className="border-success/20"><CardContent className="pt-4 text-center"><p className="text-xs text-muted-foreground">Resolvidas</p><p className="text-2xl font-bold text-success">{resolvedCount}</p></CardContent></Card>
+        <Card className="border-destructive/20"><CardContent className="pt-4 text-center"><p className="text-xs text-muted-foreground">Escaladas</p><p className="text-2xl font-bold text-destructive">{escalatedCount}</p></CardContent></Card>
+        <Card><CardContent className="pt-4 text-center"><p className="text-xs text-muted-foreground">Tempo Médio</p><p className="text-2xl font-bold">{avgDays}d</p></CardContent></Card>
       </div>
 
       {/* Escalation Flow */}
@@ -121,13 +159,9 @@ export function MLCComplaintProcedures() {
             {ESCALATION_LABELS.map((label, idx) => (
               <React.Fragment key={idx}>
                 <div className={`flex-1 text-center p-2 rounded text-xs font-medium ${
-                  idx === 0 ? "bg-primary/10 text-primary" :
-                  idx === 1 ? "bg-warning/10 text-warning" :
-                  idx === 2 ? "bg-orange-500/10 text-orange-600" :
-                  "bg-destructive/10 text-destructive"
+                  idx === 0 ? "bg-primary/10 text-primary" : idx === 1 ? "bg-warning/10 text-warning" : idx === 2 ? "bg-orange-500/10 text-orange-600" : "bg-destructive/10 text-destructive"
                 }`}>
-                  <p className="font-bold">Nível {idx + 1}</p>
-                  <p>{label}</p>
+                  <p className="font-bold">Nível {idx + 1}</p><p>{label}</p>
                 </div>
                 {idx < 3 && <ArrowRight className="h-4 w-4 text-muted-foreground shrink-0" />}
               </React.Fragment>
@@ -136,24 +170,25 @@ export function MLCComplaintProcedures() {
         </CardContent>
       </Card>
 
-      {/* New Complaint Form */}
+      {/* New Form */}
       {showNewForm && (
         <Card className="border-primary/30">
           <CardHeader className="pb-2"><CardTitle className="text-sm">Registrar Nova Reclamação</CardTitle></CardHeader>
           <CardContent className="space-y-3">
             <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
-              <Input placeholder="Nome (ou 'Anônimo')" className="h-9" />
-              <Input placeholder="Função/Posto" className="h-9" />
-              <Select><SelectTrigger className="h-9"><SelectValue placeholder="Categoria" /></SelectTrigger>
+              <Input placeholder="Nome (ou 'Anônimo')" className="h-9" value={newComplaint.complainant} onChange={e => setNewComplaint({ ...newComplaint, complainant: e.target.value })} />
+              <Input placeholder="Função/Posto" className="h-9" value={newComplaint.rank} onChange={e => setNewComplaint({ ...newComplaint, rank: e.target.value })} />
+              <Select value={newComplaint.category} onValueChange={v => setNewComplaint({ ...newComplaint, category: v as ComplaintCategory })}>
+                <SelectTrigger className="h-9"><SelectValue placeholder="Categoria" /></SelectTrigger>
                 <SelectContent>
                   {Object.entries(CATEGORY_LABELS).map(([k, v]) => <SelectItem key={k} value={k}>{v}</SelectItem>)}
                 </SelectContent>
               </Select>
             </div>
-            <Textarea placeholder="Descrição detalhada da reclamação..." rows={3} />
+            <Textarea placeholder="Descrição detalhada da reclamação..." rows={3} value={newComplaint.description} onChange={e => setNewComplaint({ ...newComplaint, description: e.target.value })} />
             <div className="flex gap-2">
-              <Button size="sm" onClick={() => { setShowNewForm(false); toast.success("Reclamação registrada com confidencialidade"); }}>
-                <Shield className="h-3 w-3 mr-1" /> Registrar (Confidencial)
+              <Button size="sm" onClick={() => addMutation.mutate(newComplaint)} disabled={addMutation.isPending || !newComplaint.description}>
+                {addMutation.isPending ? <Loader2 className="h-3 w-3 mr-1 animate-spin" /> : <Shield className="h-3 w-3 mr-1" />} Registrar (Confidencial)
               </Button>
               <Button size="sm" variant="outline" onClick={() => setShowNewForm(false)}>Cancelar</Button>
             </div>
@@ -174,20 +209,15 @@ export function MLCComplaintProcedures() {
       </Select>
 
       {/* Complaints List */}
+      {filtered.length === 0 && <p className="text-center text-muted-foreground py-8">Nenhuma reclamação registrada.</p>}
       <div className="space-y-2">
         {filtered.map(complaint => (
-          <Card key={complaint.id} className={
-            complaint.status === "escalated" ? "border-destructive/20" :
-            complaint.status === "resolved" ? "border-success/20" : ""
-          }>
+          <Card key={complaint.id} className={complaint.status === "escalated" ? "border-destructive/20" : complaint.status === "resolved" ? "border-success/20" : ""}>
             <CardContent className="pt-4 space-y-2">
               <div className="flex items-start justify-between gap-3">
                 <div className="flex-1 min-w-0 space-y-1">
                   <div className="flex items-center gap-2 flex-wrap">
-                    <Badge variant="outline" className="text-xs font-mono">{complaint.id}</Badge>
-                    <Badge variant={STATUS_CONFIG[complaint.status].variant} className="text-xs">
-                      {STATUS_CONFIG[complaint.status].label}
-                    </Badge>
+                    <Badge variant={STATUS_CONFIG[complaint.status].variant} className="text-xs">{STATUS_CONFIG[complaint.status].label}</Badge>
                     <Badge variant="secondary" className="text-xs">{CATEGORY_LABELS[complaint.category]}</Badge>
                     {complaint.confidential && <Badge variant="outline" className="text-xs"><Shield className="h-2.5 w-2.5 mr-0.5" />Confidencial</Badge>}
                     <Badge variant="outline" className="text-xs">Nível {complaint.escalationLevel + 1}</Badge>
@@ -195,27 +225,21 @@ export function MLCComplaintProcedures() {
                   <p className="text-sm">{complaint.description}</p>
                   <div className="flex items-center gap-4 text-xs text-muted-foreground">
                     <span>{complaint.complainant} ({complaint.rank})</span>
-                    <span>{complaint.date}</span>
-                    <span>{complaint.daysOpen} dias aberta</span>
-                    <span>→ {complaint.assignedTo}</span>
+                    <span>{new Date(complaint.date).toLocaleDateString("pt-BR")}</span>
+                    <span>{complaint.daysOpen} dias</span>
+                    {complaint.assignedTo && <span>→ {complaint.assignedTo}</span>}
                   </div>
                 </div>
                 <div className="flex gap-1 shrink-0">
                   {complaint.status === "investigating" && (
                     <Button size="sm" variant="default" className="gap-1 h-7 text-xs"
-                      onClick={() => {
-                        setComplaints(prev => prev.map(c => c.id === complaint.id ? { ...c, status: "resolved", resolution: "Resolvida pelo responsável" } : c));
-                        toast.success("Reclamação resolvida");
-                      }}>
+                      onClick={() => { updateMutation.mutate({ id: complaint.id, updates: { status: "resolved", resolution: "Resolvida pelo responsável" } }); toast.success("Resolvida"); }}>
                       <CheckCircle className="h-3 w-3" /> Resolver
                     </Button>
                   )}
                   {(complaint.status === "received" || complaint.status === "investigating") && (
                     <Button size="sm" variant="destructive" className="gap-1 h-7 text-xs"
-                      onClick={() => {
-                        setComplaints(prev => prev.map(c => c.id === complaint.id ? { ...c, status: "escalated", escalationLevel: Math.min(c.escalationLevel + 1, 3) } : c));
-                        toast.warning("Reclamação escalada ao próximo nível");
-                      }}>
+                      onClick={() => { updateMutation.mutate({ id: complaint.id, updates: { status: "escalated", escalation_level: Math.min(complaint.escalationLevel + 1, 3) } }); toast.warning("Escalada"); }}>
                       Escalar
                     </Button>
                   )}
