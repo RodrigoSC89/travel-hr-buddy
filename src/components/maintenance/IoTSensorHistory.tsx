@@ -346,9 +346,9 @@ export function IoTSensorHistory() {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-muted-foreground">Anomalias</p>
-                <p className="text-2xl font-bold text-amber-500">{stats.anomalyCount}</p>
+                <p className="text-2xl font-bold text-warning">{stats.anomalyCount}</p>
               </div>
-              <AlertTriangle className="h-8 w-8 text-amber-500" />
+              <AlertTriangle className="h-8 w-8 text-warning" />
             </div>
           </CardContent>
         </Card>
@@ -471,14 +471,14 @@ export function IoTSensorHistory() {
                         "p-3 rounded-lg border",
                         alert.severity === 'critical' 
                           ? "border-destructive/50 bg-destructive/5" 
-                          : "border-amber-500/50 bg-amber-500/5"
+                          : "border-warning/50 bg-warning/5"
                       )}
                     >
                       <div className="flex items-start justify-between">
                         <div className="flex items-center gap-2">
                           <Icon className={cn(
                             "h-4 w-4",
-                            alert.severity === 'critical' ? "text-destructive" : "text-amber-500"
+                            alert.severity === 'critical' ? "text-destructive" : "text-warning"
                           )} />
                           <div>
                             <p className="font-medium text-sm">{alert.equipment_name}</p>
@@ -492,7 +492,7 @@ export function IoTSensorHistory() {
                       <div className="mt-2 flex items-center justify-between text-sm">
                         <span className={cn(
                           "font-bold",
-                          alert.severity === 'critical' ? "text-destructive" : "text-amber-500"
+                          alert.severity === 'critical' ? "text-destructive" : "text-warning"
                         )}>
                           {alert.value} {alert.unit}
                         </span>
@@ -622,8 +622,8 @@ export function IoTSensorHistory() {
                     <p className={cn(
                       "text-3xl font-bold",
                       Math.abs(correlationCoefficient) > 0.7 ? "text-destructive" :
-                      Math.abs(correlationCoefficient) > 0.4 ? "text-amber-500" :
-                      "text-emerald-500"
+                      Math.abs(correlationCoefficient) > 0.4 ? "text-warning" :
+                      "text-success"
                     )}>
                       {correlationCoefficient.toFixed(3)}
                     </p>
