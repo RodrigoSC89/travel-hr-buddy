@@ -291,6 +291,15 @@ export const RegulatoryRadarPage = lazy(() => import("@/pages/RegulatoryRadarPag
 export const WarrantyClaimsPage = lazy(() => import("@/pages/WarrantyClaimsPage"));
 
 // ============================================
+// WORLD-CLASS GAP-CLOSING MODULES (vs IMOS, AMOS, Compas, CFM)
+// ============================================
+export const SparePartsPage = lazy(() => import("@/pages/SparePartsPage"));
+export const PortCostPage = lazy(() => import("@/pages/PortCostPage"));
+export const CrewCompetencyPage = lazy(() => import("@/pages/CrewCompetencyPage"));
+export const InsurancePIPage = lazy(() => import("@/pages/InsurancePIPage"));
+export const PoolDistributionPage = lazy(() => import("@/pages/PoolDistributionPage"));
+
+// ============================================
 // WORLD-CLASS DISRUPTIVE FEATURES
 // ============================================
 export const ComputerVisionInspectorPage = lazy(() => import("@/pages/ComputerVisionInspectorPage"));
