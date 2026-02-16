@@ -274,6 +274,11 @@ export const SIDEBAR_ROUTES: SidebarGroup[] = [
       { label: "Nauti Academy", path: "/nautilus-academy", icon: GraduationCap, emoji: "🎓" },
       { label: "Evidence Pack", path: "/evidence-pack", icon: Package, emoji: "📦", badge: "PSC", status: "new" as const },
       { label: "Voyage Optimizer", path: "/voyage-optimizer", icon: Map, emoji: "🗺️", badge: "AI", status: "new" as const },
+      { label: "Weather Routing", path: "/weather-routing", icon: Cloud, emoji: "⛈️", badge: "STORM", status: "new" as const },
+      { label: "Energy Efficiency", path: "/energy-efficiency", icon: Leaf, emoji: "⚡", badge: "CII", status: "new" as const },
+      { label: "Bunker Engine", path: "/bunker-optimization-engine", icon: Fuel, emoji: "⛽", badge: "FUEL", status: "new" as const },
+      { label: "Crew Doc Vault", path: "/crew-document-vault", icon: FileText, emoji: "🗂️", badge: "STCW", status: "new" as const },
+      { label: "Cargo Ops Adv", path: "/advanced-cargo", icon: Package, emoji: "📦", badge: "STS", status: "new" as const },
     ],
   },
 ];
