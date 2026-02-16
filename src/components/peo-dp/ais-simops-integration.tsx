@@ -172,19 +172,19 @@ export const AISSimopsIntegration: React.FC = () => {
   const getRiskBadge = (risk: string) => {
     switch (risk) {
       case "critical": return <Badge variant="destructive">Crítico</Badge>;
-      case "high": return <Badge className="bg-orange-500">Alto</Badge>;
-      case "medium": return <Badge className="bg-yellow-500 text-black">Médio</Badge>;
-      case "low": return <Badge className="bg-green-500">Baixo</Badge>;
+      case "high": return <Badge className="bg-warning text-warning-foreground">Alto</Badge>;
+      case "medium": return <Badge className="bg-warning/80 text-warning-foreground">Médio</Badge>;
+      case "low": return <Badge className="bg-success text-success-foreground">Baixo</Badge>;
       default: return <Badge variant="secondary">Nenhum</Badge>;
     }
   };
 
   const getStatusIcon = (status: string) => {
     switch (status) {
-      case "underway": return <Navigation className="h-4 w-4 text-green-500" />;
-      case "anchored": return <Anchor className="h-4 w-4 text-yellow-500" />;
-      case "moored": return <CircleDot className="h-4 w-4 text-blue-500" />;
-      default: return <AlertTriangle className="h-4 w-4 text-red-500" />;
+      case "underway": return <Navigation className="h-4 w-4 text-success" />;
+      case "anchored": return <Anchor className="h-4 w-4 text-warning" />;
+      case "moored": return <CircleDot className="h-4 w-4 text-info" />;
+      default: return <AlertTriangle className="h-4 w-4 text-destructive" />;
     }
   };
 
@@ -218,15 +218,15 @@ export const AISSimopsIntegration: React.FC = () => {
 
       {/* Active Alerts */}
       {activeAlerts.length > 0 && (
-        <Card className="border-yellow-500/50 bg-yellow-500/5">
+        <Card className="border-warning/50 bg-warning/5">
           <CardContent className="pt-4">
             <div className="flex items-start gap-3">
-              <Bell className="h-6 w-6 text-yellow-500 mt-0.5 animate-pulse" />
+              <Bell className="h-6 w-6 text-warning mt-0.5 animate-pulse" />
               <div className="flex-1">
-                <p className="font-medium text-yellow-600">Alertas Ativos ({activeAlerts.length})</p>
+                <p className="font-medium text-warning">Alertas Ativos ({activeAlerts.length})</p>
                 <div className="mt-2 space-y-2">
                   {activeAlerts.map(alert => (
-                    <div key={alert.id} className="flex items-center justify-between p-2 bg-yellow-500/10 rounded border border-yellow-500/20">
+                    <div key={alert.id} className="flex items-center justify-between p-2 bg-warning/10 rounded border border-warning/20">
                       <div>
                         <p className="text-sm font-medium">{alert.vesselName}</p>
                         <p className="text-xs text-muted-foreground">{alert.message}</p>
@@ -256,14 +256,14 @@ export const AISSimopsIntegration: React.FC = () => {
             </div>
           </CardContent>
         </Card>
-        <Card className="bg-red-500/5">
+        <Card className="bg-destructive/5">
           <CardContent className="pt-4">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-muted-foreground">Alto Risco</p>
-                <p className="text-2xl font-bold text-red-600">{highRiskVessels.length}</p>
+                <p className="text-2xl font-bold text-destructive">{highRiskVessels.length}</p>
               </div>
-              <AlertTriangle className="h-8 w-8 text-red-500" />
+              <AlertTriangle className="h-8 w-8 text-destructive" />
             </div>
           </CardContent>
         </Card>
@@ -283,9 +283,9 @@ export const AISSimopsIntegration: React.FC = () => {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-muted-foreground">Alertas Ativos</p>
-                <p className="text-2xl font-bold text-yellow-600">{activeAlerts.length}</p>
+                <p className="text-2xl font-bold text-warning">{activeAlerts.length}</p>
               </div>
-              <Bell className="h-8 w-8 text-yellow-500" />
+              <Bell className="h-8 w-8 text-warning" />
             </div>
           </CardContent>
         </Card>
@@ -338,11 +338,11 @@ export const AISSimopsIntegration: React.FC = () => {
                 const y = Math.sin(angle) * radius;
                 
                 const riskColors = {
-                  critical: "bg-red-500",
-                  high: "bg-orange-500",
-                  medium: "bg-yellow-500",
-                  low: "bg-green-500",
-                  none: "bg-blue-500"
+                  critical: "bg-destructive",
+                  high: "bg-warning",
+                  medium: "bg-warning/70",
+                  low: "bg-success",
+                  none: "bg-info"
                 };
 
                 return (
@@ -373,17 +373,17 @@ export const AISSimopsIntegration: React.FC = () => {
               <div className="absolute bottom-4 left-4 bg-background/80 backdrop-blur-sm rounded-lg p-3">
                 <p className="text-xs font-medium mb-2">Nível de Risco</p>
                 <div className="space-y-1 text-xs">
-                  <div className="flex items-center gap-2"><div className="w-3 h-3 rounded-full bg-red-500" /><span>Crítico</span></div>
-                  <div className="flex items-center gap-2"><div className="w-3 h-3 rounded-full bg-orange-500" /><span>Alto</span></div>
-                  <div className="flex items-center gap-2"><div className="w-3 h-3 rounded-full bg-yellow-500" /><span>Médio</span></div>
-                  <div className="flex items-center gap-2"><div className="w-3 h-3 rounded-full bg-green-500" /><span>Baixo</span></div>
+                  <div className="flex items-center gap-2"><div className="w-3 h-3 rounded-full bg-destructive" /><span>Crítico</span></div>
+                  <div className="flex items-center gap-2"><div className="w-3 h-3 rounded-full bg-warning" /><span>Alto</span></div>
+                  <div className="flex items-center gap-2"><div className="w-3 h-3 rounded-full bg-warning/70" /><span>Médio</span></div>
+                  <div className="flex items-center gap-2"><div className="w-3 h-3 rounded-full bg-success" /><span>Baixo</span></div>
                 </div>
               </div>
 
               {/* AIS status */}
               <div className="absolute top-4 right-4 bg-background/80 backdrop-blur-sm rounded-lg px-3 py-1">
                 <div className="flex items-center gap-2">
-                  <div className={`w-2 h-2 rounded-full ${isAISEnabled ? "bg-green-500 animate-pulse" : "bg-red-500"}`} />
+                  <div className={`w-2 h-2 rounded-full ${isAISEnabled ? "bg-success animate-pulse" : "bg-destructive"}`} />
                   <span className="text-xs">{isAISEnabled ? "AIS Ativo" : "AIS Desabilitado"}</span>
                 </div>
               </div>
@@ -495,7 +495,7 @@ export const AISSimopsIntegration: React.FC = () => {
               </div>
               <div>
                 <p className="text-xs text-muted-foreground">CPA</p>
-                <p className={selectedVessel.cpa < 500 ? "text-red-600 font-bold" : ""}>{selectedVessel.cpa}m</p>
+                <p className={selectedVessel.cpa < 500 ? "text-destructive font-bold" : ""}>{selectedVessel.cpa}m</p>
               </div>
               <div>
                 <p className="text-xs text-muted-foreground">TCPA</p>

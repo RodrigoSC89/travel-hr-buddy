@@ -129,11 +129,11 @@ export default function APIMonitor() {
   const getStatusIcon = (status: APIStatus["status"]) => {
     switch (status) {
       case "healthy":
-        return <CheckCircle2 className="h-5 w-5 text-green-500" />;
+        return <CheckCircle2 className="h-5 w-5 text-success" />;
       case "degraded":
-        return <AlertTriangle className="h-5 w-5 text-yellow-500" />;
+        return <AlertTriangle className="h-5 w-5 text-warning" />;
       case "down":
-        return <XCircle className="h-5 w-5 text-red-500" />;
+        return <XCircle className="h-5 w-5 text-destructive" />;
       default:
         return <HelpCircle className="h-5 w-5 text-muted-foreground" />;
     }
@@ -142,11 +142,11 @@ export default function APIMonitor() {
   const getStatusBadge = (status: APIStatus["status"]) => {
     switch (status) {
       case "healthy":
-        return <Badge className="bg-green-500/20 text-green-500 border-green-500/30">Operacional</Badge>;
+        return <Badge className="bg-success/20 text-success border-success/30">Operacional</Badge>;
       case "degraded":
-        return <Badge className="bg-yellow-500/20 text-yellow-500 border-yellow-500/30">Degradado</Badge>;
+        return <Badge className="bg-warning/20 text-warning border-warning/30">Degradado</Badge>;
       case "down":
-        return <Badge className="bg-red-500/20 text-red-500 border-red-500/30">Offline</Badge>;
+        return <Badge className="bg-destructive/20 text-destructive border-destructive/30">Offline</Badge>;
       default:
         return <Badge variant="secondary">Desconhecido</Badge>;
     }
@@ -157,9 +157,9 @@ export default function APIMonitor() {
       case "production":
         return <Badge variant="outline" className="text-xs">Produção</Badge>;
       case "sandbox":
-        return <Badge variant="outline" className="text-xs text-yellow-500 border-yellow-500/50">Sandbox</Badge>;
+        return <Badge variant="outline" className="text-xs text-warning border-warning/50">Sandbox</Badge>;
       case "demo":
-        return <Badge variant="outline" className="text-xs text-blue-500 border-blue-500/50">Demo</Badge>;
+        return <Badge variant="outline" className="text-xs text-info border-info/50">Demo</Badge>;
     }
   };
 

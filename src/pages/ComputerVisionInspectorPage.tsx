@@ -141,7 +141,7 @@ Responda em formato JSON válido com a estrutura:
     }
   };
 
-  const conditionColors = { good: "text-success", fair: "text-warning", poor: "text-orange-500", critical: "text-destructive" };
+  const conditionColors = { good: "text-success", fair: "text-warning", poor: "text-warning", critical: "text-destructive" };
   const conditionLabels = { good: "BOM", fair: "REGULAR", poor: "RUIM", critical: "CRÍTICO" };
   const severityVariants: Record<string, "default" | "secondary" | "destructive"> = { minor: "secondary", major: "default", critical: "destructive" };
 

@@ -120,9 +120,9 @@ export function DPAuditSimulator() {
   if (completed && result) {
     return (
       <div className="space-y-4">
-        <Card className={`border-2 ${result.passed ? "border-green-500/50 bg-green-500/5" : "border-red-500/50 bg-red-500/5"}`}>
+        <Card className={`border-2 ${result.passed ? "border-success/50 bg-success/5" : "border-destructive/50 bg-destructive/5"}`}>
           <CardContent className="py-8 text-center space-y-4">
-            {result.passed ? <CheckCircle className="h-16 w-16 mx-auto text-green-500" /> : <XCircle className="h-16 w-16 mx-auto text-red-500" />}
+            {result.passed ? <CheckCircle className="h-16 w-16 mx-auto text-success" /> : <XCircle className="h-16 w-16 mx-auto text-destructive" />}
             <h3 className="text-2xl font-bold">{result.passed ? "✅ APROVADO" : "❌ REPROVADO"}</h3>
             <p className="text-5xl font-bold">{result.score}<span className="text-lg text-muted-foreground">/100</span></p>
             <p className="text-sm text-muted-foreground">Tempo: {Math.floor(elapsed / 60)}min {elapsed % 60}s</p>
@@ -208,9 +208,9 @@ export function DPAuditSimulator() {
               <p className="text-xs text-muted-foreground italic">💡 {q.hint}</p>
               <div className="flex gap-2">
                 {([
-                  { val: "yes" as Answer, label: "✅ Sim", cls: "border-green-500 text-green-600 bg-green-500/10" },
-                  { val: "partial" as Answer, label: "⚠️ Parcial", cls: "border-amber-500 text-amber-600 bg-amber-500/10" },
-                  { val: "no" as Answer, label: "❌ Não", cls: "border-red-500 text-red-600 bg-red-500/10" },
+                  { val: "yes" as Answer, label: "✅ Sim", cls: "border-success text-success bg-success/10" },
+                  { val: "partial" as Answer, label: "⚠️ Parcial", cls: "border-warning text-warning bg-warning/10" },
+                  { val: "no" as Answer, label: "❌ Não", cls: "border-destructive text-destructive bg-destructive/10" },
                   { val: "na" as Answer, label: "N/A", cls: "border-muted text-muted-foreground" },
                 ]).map(opt => (
                   <Button key={opt.val} size="sm" variant="outline"

@@ -145,9 +145,9 @@ export const RegulatorPortal: React.FC = () => {
 
   const getStatusBadge = (status: string) => {
     switch (status) {
-      case "approved": return <Badge className="bg-green-500">Aprovado</Badge>;
-      case "submitted": return <Badge className="bg-blue-500">Enviado</Badge>;
-      case "under_review": return <Badge className="bg-yellow-500 text-black">Em Análise</Badge>;
+      case "approved": return <Badge className="bg-success text-success-foreground">Aprovado</Badge>;
+      case "submitted": return <Badge className="bg-info text-info-foreground">Enviado</Badge>;
+      case "under_review": return <Badge className="bg-warning text-warning-foreground">Em Análise</Badge>;
       case "rejected": return <Badge variant="destructive">Rejeitado</Badge>;
       default: return <Badge variant="secondary">Rascunho</Badge>;
     }
@@ -155,17 +155,17 @@ export const RegulatorPortal: React.FC = () => {
 
   const getDocStatusIcon = (status: string) => {
     switch (status) {
-      case "approved": return <CheckCircle className="h-4 w-4 text-green-500" />;
-      case "rejected": return <XCircle className="h-4 w-4 text-red-500" />;
-      case "expired": return <AlertTriangle className="h-4 w-4 text-orange-500" />;
-      default: return <Clock className="h-4 w-4 text-yellow-500" />;
+      case "approved": return <CheckCircle className="h-4 w-4 text-success" />;
+      case "rejected": return <XCircle className="h-4 w-4 text-destructive" />;
+      case "expired": return <AlertTriangle className="h-4 w-4 text-warning" />;
+      default: return <Clock className="h-4 w-4 text-muted-foreground" />;
     }
   };
 
   const getUserTypeBadge = (type: string) => {
     switch (type) {
-      case "regulator": return <Badge className="bg-purple-500">Regulador</Badge>;
-      case "client": return <Badge className="bg-blue-500">Cliente</Badge>;
+      case "regulator": return <Badge className="bg-accent text-accent-foreground">Regulador</Badge>;
+      case "client": return <Badge className="bg-info text-info-foreground">Cliente</Badge>;
       default: return <Badge variant="secondary">Interno</Badge>;
     }
   };
@@ -211,36 +211,36 @@ export const RegulatorPortal: React.FC = () => {
             </div>
           </CardContent>
         </Card>
-        <Card className="bg-green-500/5">
+        <Card className="bg-success/5">
           <CardContent className="pt-4">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-muted-foreground">Aprovados</p>
-                <p className="text-2xl font-bold text-green-600">{stats.approved}</p>
+                <p className="text-2xl font-bold text-success">{stats.approved}</p>
               </div>
-              <CheckCircle className="h-8 w-8 text-green-500" />
+              <CheckCircle className="h-8 w-8 text-success" />
             </div>
           </CardContent>
         </Card>
-        <Card className="bg-yellow-500/5">
+        <Card className="bg-warning/5">
           <CardContent className="pt-4">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-muted-foreground">Pendentes</p>
-                <p className="text-2xl font-bold text-yellow-600">{stats.pending}</p>
+                <p className="text-2xl font-bold text-warning">{stats.pending}</p>
               </div>
-              <Clock className="h-8 w-8 text-yellow-500" />
+              <Clock className="h-8 w-8 text-warning" />
             </div>
           </CardContent>
         </Card>
-        <Card className="bg-orange-500/5">
+        <Card className="bg-warning/5">
           <CardContent className="pt-4">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-muted-foreground">Expirando em 30d</p>
-                <p className="text-2xl font-bold text-orange-600">{stats.expiringSoon}</p>
+                <p className="text-2xl font-bold text-warning">{stats.expiringSoon}</p>
               </div>
-              <AlertTriangle className="h-8 w-8 text-orange-500" />
+              <AlertTriangle className="h-8 w-8 text-warning" />
             </div>
           </CardContent>
         </Card>
@@ -440,19 +440,19 @@ export const RegulatorPortal: React.FC = () => {
                     </div>
                     <div className="grid grid-cols-4 gap-2 text-sm">
                       <div className="flex items-center gap-2">
-                        <CheckCircle className="h-4 w-4 text-green-500" />
+                        <CheckCircle className="h-4 w-4 text-success" />
                         <span>Certificados</span>
                       </div>
                       <div className="flex items-center gap-2">
-                        <CheckCircle className="h-4 w-4 text-green-500" />
+                        <CheckCircle className="h-4 w-4 text-success" />
                         <span>Relatórios</span>
                       </div>
                       <div className="flex items-center gap-2">
-                        <CheckCircle className="h-4 w-4 text-green-500" />
+                        <CheckCircle className="h-4 w-4 text-success" />
                         <span>Auditorias</span>
                       </div>
                       <div className="flex items-center gap-2">
-                        <XCircle className="h-4 w-4 text-red-500" />
+                        <XCircle className="h-4 w-4 text-destructive" />
                         <span>Financeiro</span>
                       </div>
                     </div>

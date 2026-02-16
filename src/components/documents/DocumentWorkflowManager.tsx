@@ -264,12 +264,12 @@ export const DocumentWorkflowManager: React.FC = () => {
 
   const getCategoryBadge = (category: Document["category"]) => {
     const config = {
-      policy: { color: "bg-purple-500/20 text-purple-400", icon: FileText },
-      procedure: { color: "bg-blue-500/20 text-blue-400", icon: FileCheck },
-      form: { color: "bg-green-500/20 text-green-400", icon: FileText },
-      certificate: { color: "bg-yellow-500/20 text-yellow-400", icon: FileCheck },
-      report: { color: "bg-orange-500/20 text-orange-400", icon: FileText },
-      manual: { color: "bg-red-500/20 text-red-400", icon: FolderOpen }
+      policy: { color: "bg-accent/20 text-accent-foreground", icon: FileText },
+      procedure: { color: "bg-info/20 text-info", icon: FileCheck },
+      form: { color: "bg-success/20 text-success", icon: FileText },
+      certificate: { color: "bg-warning/20 text-warning", icon: FileCheck },
+      report: { color: "bg-warning/20 text-warning", icon: FileText },
+      manual: { color: "bg-destructive/20 text-destructive", icon: FolderOpen }
     };
     const { color } = config[category];
     return <Badge className={color}>{category.toUpperCase()}</Badge>;
@@ -277,11 +277,11 @@ export const DocumentWorkflowManager: React.FC = () => {
 
   const getStatusBadge = (status: Document["status"]) => {
     const config = {
-      draft: { color: "bg-gray-500/20 text-gray-400", icon: Edit, label: "Rascunho" },
-      pending_review: { color: "bg-yellow-500/20 text-yellow-400", icon: Clock, label: "Em Revisão" },
-      approved: { color: "bg-green-500/20 text-green-400", icon: CheckCircle2, label: "Aprovado" },
-      rejected: { color: "bg-red-500/20 text-red-400", icon: XCircle, label: "Rejeitado" },
-      archived: { color: "bg-gray-500/20 text-gray-400", icon: FolderOpen, label: "Arquivado" }
+      draft: { color: "bg-muted text-muted-foreground", icon: Edit, label: "Rascunho" },
+      pending_review: { color: "bg-warning/20 text-warning", icon: Clock, label: "Em Revisão" },
+      approved: { color: "bg-success/20 text-success", icon: CheckCircle2, label: "Aprovado" },
+      rejected: { color: "bg-destructive/20 text-destructive", icon: XCircle, label: "Rejeitado" },
+      archived: { color: "bg-muted text-muted-foreground", icon: FolderOpen, label: "Arquivado" }
     };
     const { color, icon: Icon, label } = config[status];
     return (
@@ -294,10 +294,10 @@ export const DocumentWorkflowManager: React.FC = () => {
 
   const getPriorityBadge = (priority: ApprovalRequest["priority"]) => {
     const config = {
-      low: { color: "bg-gray-500/20 text-gray-400" },
-      medium: { color: "bg-blue-500/20 text-blue-400" },
-      high: { color: "bg-orange-500/20 text-orange-400" },
-      urgent: { color: "bg-red-500/20 text-red-400" }
+      low: { color: "bg-muted text-muted-foreground" },
+      medium: { color: "bg-info/20 text-info" },
+      high: { color: "bg-warning/20 text-warning" },
+      urgent: { color: "bg-destructive/20 text-destructive" }
     };
     const { color } = config[priority];
     return <Badge className={color}>{priority.toUpperCase()}</Badge>;
@@ -333,50 +333,50 @@ export const DocumentWorkflowManager: React.FC = () => {
 
       {/* Stats Cards */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-        <Card className="bg-gradient-to-br from-blue-500/10 to-blue-600/5 border-blue-500/20">
+        <Card className="bg-gradient-to-br from-info/10 to-info/5 border-info/20">
           <CardContent className="p-4">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-muted-foreground">Total Documentos</p>
                 <p className="text-2xl font-bold">{totalDocs}</p>
               </div>
-              <FileText className="h-8 w-8 text-blue-400" />
+              <FileText className="h-8 w-8 text-info" />
             </div>
           </CardContent>
         </Card>
 
-        <Card className="bg-gradient-to-br from-green-500/10 to-green-600/5 border-green-500/20">
+        <Card className="bg-gradient-to-br from-success/10 to-success/5 border-success/20">
           <CardContent className="p-4">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-muted-foreground">Aprovados</p>
                 <p className="text-2xl font-bold">{approvedDocs}</p>
               </div>
-              <CheckCircle2 className="h-8 w-8 text-green-400" />
+              <CheckCircle2 className="h-8 w-8 text-success" />
             </div>
           </CardContent>
         </Card>
 
-        <Card className="bg-gradient-to-br from-yellow-500/10 to-yellow-600/5 border-yellow-500/20">
+        <Card className="bg-gradient-to-br from-warning/10 to-warning/5 border-warning/20">
           <CardContent className="p-4">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-muted-foreground">Pendentes</p>
                 <p className="text-2xl font-bold">{pendingDocs}</p>
               </div>
-              <Clock className="h-8 w-8 text-yellow-400" />
+              <Clock className="h-8 w-8 text-warning" />
             </div>
           </CardContent>
         </Card>
 
-        <Card className="bg-gradient-to-br from-purple-500/10 to-purple-600/5 border-purple-500/20">
+        <Card className="bg-gradient-to-br from-accent/10 to-accent/5 border-accent/20">
           <CardContent className="p-4">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-muted-foreground">Rascunhos</p>
                 <p className="text-2xl font-bold">{draftDocs}</p>
               </div>
-              <Edit className="h-8 w-8 text-purple-400" />
+              <Edit className="h-8 w-8 text-accent-foreground" />
             </div>
           </CardContent>
         </Card>
@@ -514,8 +514,8 @@ export const DocumentWorkflowManager: React.FC = () => {
                       className="flex items-center justify-between p-4 bg-muted/30 rounded-lg border hover:bg-muted/50 transition-colors"
                     >
                       <div className="flex items-center gap-4">
-                        <div className="p-2 bg-yellow-500/20 rounded-lg">
-                          <Clock className="h-5 w-5 text-yellow-400" />
+                        <div className="p-2 bg-warning/20 rounded-lg">
+                          <Clock className="h-5 w-5 text-warning" />
                         </div>
                         <div>
                           <div className="flex items-center gap-2">

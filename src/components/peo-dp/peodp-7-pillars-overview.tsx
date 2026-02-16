@@ -55,8 +55,8 @@ const PILLARS: PillarData[] = [
     name: "Gestão",
     code: "3.2",
     icon: Users,
-    color: "text-blue-600",
-    bgColor: "bg-blue-50 dark:bg-blue-950/20",
+    color: "text-info",
+    bgColor: "bg-info/5 dark:bg-info/10",
     description: "Gestão de riscos, plano de ação, indicadores e abrangência de falhas",
     objectives: [
       "Alinhar Gestão de Riscos com objetivos e cultura organizacional",
@@ -80,8 +80,8 @@ const PILLARS: PillarData[] = [
     name: "Treinamentos",
     code: "3.3",
     icon: GraduationCap,
-    color: "text-green-600",
-    bgColor: "bg-green-50 dark:bg-green-950/20",
+    color: "text-success",
+    bgColor: "bg-success/5 dark:bg-success/10",
     description: "Capacitação em DP, bow-ties, FMEA e competências técnicas/comportamentais",
     objectives: [
       "Levantar e tratar lacunas em treinamentos",
@@ -105,8 +105,8 @@ const PILLARS: PillarData[] = [
     name: "Procedimentos",
     code: "3.4",
     icon: FileText,
-    color: "text-purple-600",
-    bgColor: "bg-purple-50 dark:bg-purple-950/20",
+    color: "text-accent-foreground",
+    bgColor: "bg-accent/5 dark:bg-accent/10",
     description: "Análise de desvios, incidentes, bow-ties e manual de operações",
     objectives: [
       "Elaborar procedimento de análise de desvios e incidentes",
@@ -129,8 +129,8 @@ const PILLARS: PillarData[] = [
     name: "Operação",
     code: "3.5",
     icon: Radio,
-    color: "text-orange-600",
-    bgColor: "bg-orange-50 dark:bg-orange-950/20",
+    color: "text-warning",
+    bgColor: "bg-warning/5 dark:bg-warning/10",
     description: "Sistema DP, FMEA, configuração UTC, exercícios de blackout e ASOG",
     objectives: [
       "Identificar e tratar problemas no sistema de energia",
@@ -154,8 +154,8 @@ const PILLARS: PillarData[] = [
     name: "Manutenção",
     code: "3.6",
     icon: Wrench,
-    color: "text-red-600",
-    bgColor: "bg-red-50 dark:bg-red-950/20",
+    color: "text-destructive",
+    bgColor: "bg-destructive/5 dark:bg-destructive/10",
     description: "Plano anual de manutenção, software/hardware e sistemas críticos",
     objectives: [
       "Elaborar plano anual de manutenção preventiva",
@@ -206,18 +206,18 @@ export function PEODP7PillarsOverview() {
   const getStatusBadge = (status: PillarData["status"]) => {
     const variants = {
       pending: { label: "Pendente", className: "bg-muted text-muted-foreground" },
-      in_progress: { label: "Em Andamento", className: "bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-400" },
-      completed: { label: "Concluído", className: "bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400" },
-      review_needed: { label: "Revisão Necessária", className: "bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400" }
+      in_progress: { label: "Em Andamento", className: "bg-warning/20 text-warning" },
+      completed: { label: "Concluído", className: "bg-success/20 text-success" },
+      review_needed: { label: "Revisão Necessária", className: "bg-destructive/20 text-destructive" }
     };
     const variant = variants[status];
     return <Badge className={variant.className}>{variant.label}</Badge>;
   };
 
   const getScoreColor = (score: number) => {
-    if (score >= 90) return "text-green-600";
-    if (score >= 70) return "text-yellow-600";
-    return "text-red-600";
+    if (score >= 90) return "text-success";
+    if (score >= 70) return "text-warning";
+    return "text-destructive";
   };
 
   const handleViewDetails = (pillar: PillarData) => {
@@ -339,7 +339,7 @@ export function PEODP7PillarsOverview() {
                     <ul className="space-y-1">
                       {selectedPillar.objectives.map((obj) => (
                         <li key={obj} className="text-sm text-muted-foreground flex items-start gap-2">
-                          <CheckCircle className="h-4 w-4 text-green-500 shrink-0 mt-0.5" />
+                          <CheckCircle className="h-4 w-4 text-success shrink-0 mt-0.5" />
                           {obj}
                         </li>
                       ))}
@@ -360,7 +360,7 @@ export function PEODP7PillarsOverview() {
                               <span className="font-medium text-sm">{req.title}</span>
                             </div>
                             {req.mandatory && (
-                              <Badge className="bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400 text-xs">
+                              <Badge className="bg-destructive/20 text-destructive text-xs">
                                 Obrigatório
                               </Badge>
                             )}

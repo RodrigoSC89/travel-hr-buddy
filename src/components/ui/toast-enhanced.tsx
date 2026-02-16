@@ -96,10 +96,10 @@ export const EnhancedToast: React.FC<EnhancedToastProps> = ({
             transition={{ duration: duration / 1000, ease: 'linear' }}
             className={cn(
               'absolute bottom-0 left-0 right-0 h-1 origin-left rounded-b-lg',
-              type === 'success' && 'bg-green-500',
-              type === 'error' && 'bg-red-500',
-              type === 'warning' && 'bg-amber-500',
-              type === 'info' && 'bg-blue-500'
+              type === 'success' && 'bg-success',
+              type === 'error' && 'bg-destructive',
+              type === 'warning' && 'bg-warning',
+              type === 'info' && 'bg-info'
             )}
           />
         </motion.div>

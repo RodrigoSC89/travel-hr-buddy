@@ -406,7 +406,7 @@ const IntelligentDocumentManager = () => {
         <Card>
           <CardContent className="p-4">
             <div className="flex items-center gap-2">
-              <Brain className="w-4 h-4 text-purple-500" />
+              <Brain className="w-4 h-4 text-accent-foreground" />
               <span className="text-sm font-medium">IA Analisados</span>
             </div>
             <div className="text-2xl font-bold">
@@ -459,7 +459,7 @@ const IntelligentDocumentManager = () => {
                       </DropdownMenuItem>
                       <DropdownMenuItem 
                         onClick={() => deleteDocument(document.id)}
-                        className="text-red-600"
+                        className="text-destructive"
                       >
                         <Trash2 className="w-4 h-4 mr-2" />
                         Excluir
@@ -481,7 +481,7 @@ const IntelligentDocumentManager = () => {
                       onClick={() => toggleFavorite(document.id)}
                     >
                       {document.favorite ? 
-                        <Star className="w-4 h-4 fill-yellow-400 text-yellow-400" /> :
+                        <Star className="w-4 h-4 fill-warning text-warning" /> :
                         <StarOff className="w-4 h-4" />
                       }
                     </Button>
@@ -533,7 +533,7 @@ const IntelligentDocumentManager = () => {
                         {document.status}
                       </Badge>
                       {document.favorite && (
-                        <Star className="w-4 h-4 fill-yellow-400 text-yellow-400" />
+                        <Star className="w-4 h-4 fill-warning text-warning" />
                       )}
                     </div>
                     <div className="flex items-center gap-4 text-sm text-muted-foreground mt-1">

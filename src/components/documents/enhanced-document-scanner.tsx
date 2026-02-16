@@ -378,7 +378,7 @@ export const EnhancedDocumentScanner: React.FC = () => {
           <CardContent className="p-6">
             <div className="space-y-4">
               <div className="flex items-center gap-2">
-                <Zap className="h-5 w-5 animate-pulse text-blue-500" />
+                <Zap className="h-5 w-5 animate-pulse text-primary" />
                 <span className="font-medium">Processando documento...</span>
               </div>
               <Progress value={scanProgress} className="w-full" />
@@ -411,7 +411,7 @@ export const EnhancedDocumentScanner: React.FC = () => {
                         className="object-cover w-full h-full"
                       />
                       <div className="absolute top-2 right-2">
-                        <Badge className="bg-green-500 text-azure-50">
+                        <Badge className="bg-success text-success-foreground">
                           {result.confidence}%
                         </Badge>
                       </div>
