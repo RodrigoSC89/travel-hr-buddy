@@ -1,6 +1,7 @@
 /**
- * PEOTRAM Voice Assistant Hook v2
+ * Nauti Voice Assistant Hook v3
  * Speech recognition + TTS + text fallback
+ * Works across all modules, not just PEOTRAM
  */
 import { useState, useCallback, useRef, useMemo } from 'react';
 import { toast } from 'sonner';
@@ -45,7 +46,12 @@ export function usePEOTRAMVoice() {
       const { data, error } = await supabase.functions.invoke('peotram-ai-chat', {
         body: {
           messages: [{ role: 'user', content: text }],
-          action: 'voice_assistant'
+          action: 'voice_assistant',
+          systemPrompt: `Você é o assistente de voz do Nauti One, a plataforma líder em gestão marítima.
+Responda de forma concisa e direta (máximo 3 parágrafos) em português brasileiro.
+Você tem conhecimento em: operações de frota, compliance marítimo (ISM, MLC, STCW, MARPOL, SOLAS),
+manutenção preditiva, gestão de tripulação, voyage P&L, ESG/CII, PEOTRAM e SGSO.
+Forneça respostas práticas e acionáveis.`
         }
       });
 

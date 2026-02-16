@@ -1,19 +1,38 @@
 /**
- * PEOTRAM Voice Button Component v2
- * Floating voice assistant with text fallback
- * Works even when Web Speech API is unavailable (e.g., iframes)
+ * Nauti Voice Command Button v3
+ * Global voice assistant for all modules with text fallback
+ * Positioned to avoid collision with GlobalAIAssistant (right-4)
  */
 import { useState } from 'react';
-import { Mic, MicOff, Volume2, VolumeX, Loader2, Send, X, MessageSquare } from 'lucide-react';
+import { Mic, MicOff, Volume2, VolumeX, Loader2, Send, X, Sparkles } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { usePEOTRAMVoice } from '@/hooks/use-peotram-voice';
 import { motion, AnimatePresence } from 'framer-motion';
 import { cn } from '@/lib/utils';
+import { useLocation } from 'react-router-dom';
+
+// Context-aware quick suggestions per module
+const MODULE_SUGGESTIONS: Record<string, string[]> = {
+  '/command': ['Status da frota', 'Alertas críticos', 'KPIs do dia'],
+  '/ops': ['Viagens ativas', 'Próximas escalas', 'Consumo de combustível'],
+  '/compliance': ['Certificados vencendo', 'Score de compliance', 'Próximas auditorias'],
+  '/ai': ['Agentes ativos', 'Métricas de IA', 'Precisão dos modelos'],
+  '/maintenance': ['Manutenções pendentes', 'Previsões de falha', 'Peças em estoque'],
+  '/tracking': ['Posição da frota', 'Alertas AIS', 'Condições meteorológicas'],
+};
+
+function getModuleSuggestions(pathname: string): string[] {
+  for (const [prefix, suggestions] of Object.entries(MODULE_SUGGESTIONS)) {
+    if (pathname.startsWith(prefix)) return suggestions;
+  }
+  return ['Status geral do sistema', 'Quais são os alertas?', 'Resumo operacional'];
+}
 
 export function PEOTRAMVoiceButton() {
   const [isOpen, setIsOpen] = useState(false);
   const [textInput, setTextInput] = useState('');
+  const location = useLocation();
   const { 
     isListening, 
     isProcessing, 
@@ -28,6 +47,8 @@ export function PEOTRAMVoiceButton() {
     processText,
     reset
   } = usePEOTRAMVoice();
+
+  const suggestions = getModuleSuggestions(location.pathname);
 
   const handleToggle = () => {
     if (isOpen) {
@@ -54,6 +75,11 @@ export function PEOTRAMVoiceButton() {
     setTextInput('');
   };
 
+  const handleSuggestionClick = (suggestion: string) => {
+    if (isProcessing) return;
+    processText(suggestion);
+  };
+
   const handleKeyDown = (e: React.KeyboardEvent) => {
     if (e.key === 'Enter') handleTextSubmit();
   };
@@ -61,7 +87,7 @@ export function PEOTRAMVoiceButton() {
   const isActive = isListening || isProcessing || isSpeaking;
 
   return (
-    <div className="fixed bottom-24 right-20 z-50 md:bottom-6 flex flex-col items-end gap-2">
+    <div className="fixed bottom-24 right-[4.5rem] z-50 md:bottom-6 flex flex-col items-end gap-2">
       {/* Expanded Panel */}
       <AnimatePresence>
         {isOpen && (
@@ -69,38 +95,41 @@ export function PEOTRAMVoiceButton() {
             initial={{ opacity: 0, y: 10, scale: 0.9 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 10, scale: 0.9 }}
-            className="w-72 bg-card border border-border rounded-2xl shadow-2xl overflow-hidden"
+            className="w-80 bg-card border border-border rounded-2xl shadow-2xl overflow-hidden backdrop-blur-xl"
           >
             {/* Header */}
-            <div className="flex items-center justify-between px-3 py-2 bg-primary/10 border-b border-border/50">
+            <div className="flex items-center justify-between px-3 py-2.5 bg-gradient-to-r from-primary/10 to-accent/10 border-b border-border/50">
               <span className="text-xs font-semibold text-primary flex items-center gap-1.5">
-                <MessageSquare className="h-3.5 w-3.5" />
+                <Sparkles className="h-3.5 w-3.5" />
                 Nauti Voice Assistant
               </span>
-              <button onClick={handleToggle} className="text-muted-foreground hover:text-foreground">
+              <button onClick={handleToggle} className="text-muted-foreground hover:text-foreground transition-colors">
                 <X className="h-3.5 w-3.5" />
               </button>
             </div>
 
             {/* Content */}
-            <div className="p-3 space-y-2 max-h-60 overflow-y-auto">
+            <div className="p-3 space-y-2 max-h-64 overflow-y-auto">
               {/* Status Messages */}
               {isListening && (
-                <div className="flex items-center gap-2 text-xs text-destructive animate-pulse">
-                  <MicOff className="h-3.5 w-3.5" />
-                  🎤 Ouvindo... fale agora
+                <div className="flex items-center gap-2 text-xs text-primary font-medium">
+                  <span className="relative flex h-3 w-3">
+                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75" />
+                    <span className="relative inline-flex rounded-full h-3 w-3 bg-primary" />
+                  </span>
+                  Ouvindo... fale agora
                 </div>
               )}
               {isProcessing && (
-                <div className="flex items-center gap-2 text-xs text-warning">
+                <div className="flex items-center gap-2 text-xs text-amber-500 font-medium">
                   <Loader2 className="h-3.5 w-3.5 animate-spin" />
                   Processando sua pergunta...
                 </div>
               )}
               {isSpeaking && (
-                <div className="flex items-center gap-2 text-xs text-primary">
+                <div className="flex items-center gap-2 text-xs text-primary font-medium">
                   <Volume2 className="h-3.5 w-3.5" />
-                  🔊 Reproduzindo resposta...
+                  Reproduzindo resposta...
                   <button onClick={stopSpeaking} className="ml-auto text-muted-foreground hover:text-foreground">
                     <VolumeX className="h-3 w-3" />
                   </button>
@@ -109,15 +138,15 @@ export function PEOTRAMVoiceButton() {
 
               {/* Transcript */}
               {transcript && (
-                <div className="bg-muted/50 rounded-lg p-2">
-                  <p className="text-[10px] text-muted-foreground font-medium mb-0.5">Você disse:</p>
+                <div className="bg-muted/50 rounded-lg p-2.5">
+                  <p className="text-[10px] text-muted-foreground font-medium mb-0.5">Você perguntou:</p>
                   <p className="text-xs text-foreground">{transcript}</p>
                 </div>
               )}
 
               {/* Response */}
               {response && (
-                <div className="bg-primary/5 border border-primary/10 rounded-lg p-2">
+                <div className="bg-primary/5 border border-primary/10 rounded-lg p-2.5">
                   <p className="text-[10px] text-primary font-medium mb-0.5">🧠 Nauti AI:</p>
                   <p className="text-xs text-foreground leading-relaxed whitespace-pre-wrap">{response}</p>
                 </div>
@@ -125,25 +154,37 @@ export function PEOTRAMVoiceButton() {
 
               {/* Error */}
               {error && (
-                <div className="bg-destructive/10 border border-destructive/20 rounded-lg p-2">
+                <div className="bg-destructive/10 border border-destructive/20 rounded-lg p-2.5">
                   <p className="text-xs text-destructive">{error}</p>
                 </div>
               )}
 
-              {/* Empty state */}
+              {/* Empty state with suggestions */}
               {!isActive && !transcript && !response && !error && (
-                <p className="text-xs text-muted-foreground text-center py-2">
-                  {speechSupported 
-                    ? 'Clique no 🎤 para falar ou digite sua pergunta abaixo'
-                    : 'Digite sua pergunta abaixo para o assistente Nauti AI'
-                  }
-                </p>
+                <div className="space-y-2.5">
+                  <p className="text-xs text-muted-foreground text-center py-1">
+                    {speechSupported 
+                      ? 'Clique no 🎤 ou use as sugestões abaixo'
+                      : 'Digite ou use as sugestões abaixo'
+                    }
+                  </p>
+                  <div className="flex flex-wrap gap-1.5">
+                    {suggestions.map((s) => (
+                      <button
+                        key={s}
+                        onClick={() => handleSuggestionClick(s)}
+                        className="text-[10px] px-2.5 py-1 rounded-full bg-primary/10 text-primary hover:bg-primary/20 transition-colors border border-primary/20"
+                      >
+                        {s}
+                      </button>
+                    ))}
+                  </div>
+                </div>
               )}
             </div>
 
             {/* Input Area */}
             <div className="px-3 pb-3 pt-1 border-t border-border/30 space-y-2">
-              {/* Text input */}
               <div className="flex gap-1.5">
                 <Input
                   value={textInput}
@@ -158,12 +199,12 @@ export function PEOTRAMVoiceButton() {
                   onClick={handleTextSubmit}
                   disabled={!textInput.trim() || isProcessing}
                   className="h-8 w-8 p-0 shrink-0"
+                  aria-label="Enviar pergunta"
                 >
                   <Send className="h-3.5 w-3.5" />
                 </Button>
               </div>
 
-              {/* Voice + Reset buttons */}
               <div className="flex gap-1.5">
                 {speechSupported && (
                   <Button
