@@ -195,7 +195,7 @@ export default function TrackingAlerts() {
                           <CheckCircle className="h-4 w-4 mr-1" /> Resolver
                         </Button>
                       )}
-                      <Button size="icon" variant="ghost" className="text-destructive h-8 w-8" onClick={() => deleteMutation.mutate(String(alert.id))}>
+                      <Button size="icon" variant="ghost" className="text-destructive h-8 w-8" onClick={() => deleteMutation.mutate(String(alert.id))} aria-label="Excluir alerta" title="Excluir">
                         <Trash2 className="h-4 w-4" />
                       </Button>
                     </div>

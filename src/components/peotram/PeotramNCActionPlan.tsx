@@ -147,6 +147,7 @@ export function PeotramNCActionPlan() {
       evidence_count: 0,
       escalated: false,
       percent_complete: 0,
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Supabase dynamic columns not in generated types
     } as any);
   };
 

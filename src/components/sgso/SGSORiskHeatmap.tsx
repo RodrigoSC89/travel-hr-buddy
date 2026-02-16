@@ -180,7 +180,7 @@ export function SGSORiskHeatmap() {
               <div className="grid grid-cols-[1fr,auto,1fr,auto,1fr] gap-4 items-center py-6">
                 <div className="space-y-2">
                   <h4 className="text-sm font-bold text-emerald-600 flex items-center gap-1"><Shield className="h-4 w-4" /> Barreiras Preventivas</h4>
-                  {selectedRisk.barriers.length > 0 ? selectedRisk.barriers.map((b, i) => <div key={i} className="p-2 rounded bg-emerald-500/10 border border-emerald-500/30 text-sm">{b}</div>) : <p className="text-sm text-muted-foreground">Nenhuma barreira cadastrada</p>}
+                  {selectedRisk.barriers.length > 0 ? selectedRisk.barriers.map((b, i) => <div key={`barrier-${b.substring(0, 15)}-${i}`} className="p-2 rounded bg-emerald-500/10 border border-emerald-500/30 text-sm">{b}</div>) : <p className="text-sm text-muted-foreground">Nenhuma barreira cadastrada</p>}
                 </div>
                 <ArrowRight className="h-6 w-6 text-muted-foreground" />
                 <Card className="border-2 border-destructive bg-destructive/5">
@@ -199,11 +199,11 @@ export function SGSORiskHeatmap() {
                 <div className="space-y-4">
                   <div className="space-y-2">
                     <h4 className="text-sm font-bold text-blue-600 flex items-center gap-1"><Zap className="h-4 w-4" /> Controles Mitigatórios</h4>
-                    {selectedRisk.controls.length > 0 ? selectedRisk.controls.map((c, i) => <div key={i} className="p-2 rounded bg-blue-500/10 border border-blue-500/30 text-sm">{c}</div>) : <p className="text-sm text-muted-foreground">Nenhum controle</p>}
+                    {selectedRisk.controls.length > 0 ? selectedRisk.controls.map((c, i) => <div key={`ctrl-${c.substring(0, 15)}-${i}`} className="p-2 rounded bg-blue-500/10 border border-blue-500/30 text-sm">{c}</div>) : <p className="text-sm text-muted-foreground">Nenhum controle</p>}
                   </div>
                   <div className="space-y-2">
                     <h4 className="text-sm font-bold text-red-600 flex items-center gap-1"><AlertTriangle className="h-4 w-4" /> Consequências</h4>
-                    {selectedRisk.consequences.length > 0 ? selectedRisk.consequences.map((c, i) => <div key={i} className="p-2 rounded bg-red-500/10 border border-red-500/30 text-sm">{c}</div>) : <p className="text-sm text-muted-foreground">Nenhuma</p>}
+                    {selectedRisk.consequences.length > 0 ? selectedRisk.consequences.map((c, i) => <div key={`csq-${c.substring(0, 15)}-${i}`} className="p-2 rounded bg-red-500/10 border border-red-500/30 text-sm">{c}</div>) : <p className="text-sm text-muted-foreground">Nenhuma</p>}
                   </div>
                 </div>
               </div>

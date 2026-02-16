@@ -98,11 +98,13 @@ export default function NoonReportManager() {
       setCreateOpen(false);
       setForm(defaultForm);
     },
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any -- error type from mutation
     onError: (e: any) => toast.error(e.message),
   });
 
   const statusBadge = (s: string) => {
     const map: Record<string, string> = { draft: 'secondary', submitted: 'default', approved: 'default', rejected: 'destructive' };
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Badge variant from dynamic mapping
     return <Badge variant={(map[s] || 'secondary') as any}>{s}</Badge>;
   };
 

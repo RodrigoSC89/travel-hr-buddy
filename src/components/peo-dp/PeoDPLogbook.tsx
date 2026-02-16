@@ -326,7 +326,7 @@ export function PeoDPLogbook() {
                         {entry.excursion != null && <Badge variant="outline" className="text-[10px]">Excursion: {String(entry.excursion)}m</Badge>}
                       </div>
                     </div>
-                    <Button variant="ghost" size="icon" className="shrink-0 text-muted-foreground hover:text-destructive" onClick={() => deleteMutation.mutate(entry.id as string)}>
+                    <Button variant="ghost" size="icon" className="shrink-0 text-muted-foreground hover:text-destructive" onClick={() => deleteMutation.mutate(entry.id as string)} aria-label="Excluir entrada do logbook" title="Excluir">
                       <Trash2 className="h-4 w-4" />
                     </Button>
                   </div>

@@ -306,8 +306,8 @@ export function PeoDPFMEAAnalysis() {
                       </td>
                       <td className="p-2">
                         <div className="flex gap-1">
-                          <Button size="icon" variant="ghost" className="h-6 w-6" onClick={() => handleEdit(item)}><Edit className="h-3 w-3" /></Button>
-                          <Button size="icon" variant="ghost" className="h-6 w-6 text-destructive" onClick={() => deleteMutation.mutate(item.id)}><Trash2 className="h-3 w-3" /></Button>
+                          <Button size="icon" variant="ghost" className="h-6 w-6" onClick={() => handleEdit(item)} aria-label="Editar item FMEA" title="Editar"><Edit className="h-3 w-3" /></Button>
+                          <Button size="icon" variant="ghost" className="h-6 w-6 text-destructive" onClick={() => deleteMutation.mutate(item.id)} aria-label="Excluir item FMEA" title="Excluir"><Trash2 className="h-3 w-3" /></Button>
                         </div>
                       </td>
                     </tr>

@@ -48,6 +48,7 @@ export function DPIncidentsCIRAS() {
         .select("*")
         .order("incident_date", { ascending: false });
       if (error) throw error;
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Supabase dynamic table response
       return data as any[];
     },
   });

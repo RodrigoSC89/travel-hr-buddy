@@ -182,7 +182,7 @@ export default function SparePartsInventory() {
           <CardContent className="p-4 flex items-center gap-3">
             <AlertTriangle className="h-5 w-5 text-warning shrink-0" />
             <p className="text-sm"><strong>{metrics.lowStock} item(ns)</strong> com estoque abaixo do mínimo. Considere criar requisições de compra.</p>
-            <Button variant="outline" size="sm" className="ml-auto shrink-0" onClick={() => toast.info('Funcionalidade de requisição de compra será integrada com o módulo de Procurement')}>Criar Requisição</Button>
+            <Button variant="outline" size="sm" className="ml-auto shrink-0" onClick={() => { window.history.pushState({}, '', '/procurement'); window.dispatchEvent(new PopStateEvent('popstate')); }}>Criar Requisição</Button>
           </CardContent>
         </Card>
       )}

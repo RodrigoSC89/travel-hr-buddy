@@ -167,6 +167,7 @@ export function MLCWageProtectionTracker() {
       net_pay: netPay,
       pay_date: String(fd.get('pay_date')),
       status: 'pending',
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Supabase dynamic columns not in generated types
     } as any);
   };
 

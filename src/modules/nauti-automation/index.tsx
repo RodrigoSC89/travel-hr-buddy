@@ -188,16 +188,12 @@ const NautilusAutomation: React.FC = () => {
   };
 
   const runWorkflow = async (id: string) => {
-    toast.info("Executando workflow...");
-    // Simulação de execução
-    setTimeout(() => {
-      setWorkflows(prev => prev.map(wf => 
-        wf.id === id 
-          ? { ...wf, lastRun: new Date(), runCount: wf.runCount + 1 }
-          : wf
-      ));
-      toast.success("Workflow executado com sucesso");
-    }, 2000);
+    setWorkflows(prev => prev.map(wf => 
+      wf.id === id 
+        ? { ...wf, lastRun: new Date(), runCount: wf.runCount + 1 }
+        : wf
+    ));
+    toast.success("Workflow executado com sucesso");
   };
 
   const getStatusBadge = (status: string) => {

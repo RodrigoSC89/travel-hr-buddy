@@ -25,6 +25,7 @@ export function PeotramGasManagement() {
       const { data, error } = await (supabase.from as Function)("peotram_gas_inventory")
         .select("*").order("gas_type");
       if (error) throw error;
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Supabase dynamic table response
       return data as any[];
     },
   });
@@ -130,7 +131,11 @@ export function PeotramGasManagement() {
                   <div className="flex items-center gap-2 p-2 bg-destructive/20 rounded text-xs text-destructive">
                     <AlertTriangle className="h-4 w-4 shrink-0" />
                     <span className="font-medium">NÍVEL CRÍTICO — Solicitar reabastecimento!</span>
-                    <Button size="sm" variant="destructive" className="ml-auto text-xs h-6" onClick={() => { toast.success("Solicitação de reabastecimento registrada para " + GAS_LABELS[gas.gas_type]); }}>Solicitar</Button>
+                    <Button size="sm" variant="destructive" className="ml-auto text-xs h-6" onClick={async () => { 
+                      const { error } = await (supabase.from as Function)("peotram_gas_inventory").update({ status: "reorder_requested" }).eq("id", gas.id);
+                      if (!error) { queryClient.invalidateQueries({ queryKey: ["peotram-gas-inventory"] }); toast.success("Solicitação de reabastecimento registrada para " + GAS_LABELS[gas.gas_type]); }
+                      else toast.error("Erro ao solicitar reabastecimento");
+                    }}>Solicitar</Button>
                   </div>
                 )}
               </CardContent>

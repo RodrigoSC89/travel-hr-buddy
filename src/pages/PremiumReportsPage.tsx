@@ -33,7 +33,7 @@ const REPORT_TEMPLATES: Array<{
       title: "Fleet Overview Report",
       subtitle: "Relatório Executivo de Frota",
       module: "Fleet Command",
-      confidential: true,
+      /* eslint-disable @typescript-eslint/no-explicit-any -- Report template sections use mixed content types */
       sections: [
         { title: "Resumo Executivo", type: "text", content: "Relatório gerado automaticamente com dados em tempo real da frota marítima. Este documento contém informações confidenciais sobre operações e performance dos navios." },
         { title: "KPIs da Frota", type: "kpi-grid", content: [

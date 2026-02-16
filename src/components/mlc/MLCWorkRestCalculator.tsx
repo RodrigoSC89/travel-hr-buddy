@@ -49,6 +49,7 @@ export function MLCWorkRestCalculator() {
         .gte("record_date", startDate)
         .order("record_date", { ascending: false });
       if (error) throw error;
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Supabase dynamic table response
       return data as any[];
     },
   });
@@ -63,6 +64,7 @@ export function MLCWorkRestCalculator() {
     existing.totalRest += r.total_rest_hours || 0;
     existing.records += 1;
     if (r.violations && Array.isArray(r.violations)) {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any -- violations array has mixed types
       const mapped = (r.violations as any[]).map((v: any) => typeof v === "string" ? v : v.description || "Violation");
       for (const m of mapped) existing.violations.push(m);
     }
